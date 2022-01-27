@@ -2,82 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A9F49E348
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 14:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEEE49E3C6
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 14:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241849AbiA0NXE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 08:23:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241798AbiA0NXA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 08:23:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2A1C06174E;
-        Thu, 27 Jan 2022 05:22:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 776CBB82213;
-        Thu, 27 Jan 2022 13:22:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9863FC340E4;
-        Thu, 27 Jan 2022 13:22:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643289772;
-        bh=gw18Fbvfp/ZEQuA9OJdXjIR6yRIzDEoPY96pix/ilGQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D/idt8ra099XTl6YPGYstQELWlBsoUXLp9amRf+aqvj1IcC9/fD8ktbfl/zC+nPGk
-         oDoSzzufNCZLCwTITvC548tMScQNDXlGs81N7y19jcub9YNquaKkWXtJxmAC+G4zhS
-         EfIsahAmL1vV5aIUM/f66fTODwMzOGBQay+z183M=
-Date:   Thu, 27 Jan 2022 14:22:49 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/1] usbnet: add devlink support
-Message-ID: <YfKcqcq4Ii1qu2+8@kroah.com>
-References: <20220127110742.922752-1-o.rempel@pengutronix.de>
- <YfJ+ceEzvzMM1JsW@kroah.com>
- <20220127123152.GF9150@pengutronix.de>
+        id S233736AbiA0NnP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 08:43:15 -0500
+Received: from mga04.intel.com ([192.55.52.120]:11195 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229602AbiA0NnO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Jan 2022 08:43:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643290994; x=1674826994;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=T3jge4M1H+sDr7MteSE5XID5ZBBUEb8nGJFq+vwNK+8=;
+  b=Jvfadtvq6PDSKXbLx0zdAb9eLY8UYuNGSAH/f3TIbh8W+BcCdRbvjQYO
+   QbuCIc8xwJIY/iCjvm+9TlKzLTkSqHqWfNGQLSv0dHJh61w2yF0mxAVkI
+   PBOEcwxx5BDwxbrtF2laUbGggRZLHmJ/cXF+QvvWsT1egDzHwzfqhtV1c
+   ce+lE/n0g59DWp+nUpEOEVsmWPzmD6yM0tqgnA6tpH9HXDauayFnnoBxM
+   krViHLXwOeQQXrf89Hn1hVAJe1HYsIgu4TXtVYn4J2+AcKAc0UoGP4EhZ
+   i3toALQ+22MdWWRHKM6Z5Baq4wV/dsbWJADzXaNqMuZmKVsW3bLMdtODP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="245688934"
+X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
+   d="scan'208";a="245688934"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 05:43:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
+   d="scan'208";a="563786907"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 27 Jan 2022 05:43:11 -0800
+Subject: Re: [PATCH v5] xhci: re-initialize the HC during resume if HCE was
+ set
+To:     Puma Hsu <pumahsu@google.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org
+Cc:     s.shtylyov@omp.ru, albertccwang@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220119064013.1381172-1-pumahsu@google.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <e2baf3c5-0d80-9143-5fec-98a9e1474068@linux.intel.com>
+Date:   Thu, 27 Jan 2022 15:44:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127123152.GF9150@pengutronix.de>
+In-Reply-To: <20220119064013.1381172-1-pumahsu@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 01:31:52PM +0100, Oleksij Rempel wrote:
-> On Thu, Jan 27, 2022 at 12:13:53PM +0100, Greg KH wrote:
-> > On Thu, Jan 27, 2022 at 12:07:42PM +0100, Oleksij Rempel wrote:
-> > > The weakest link of usbnet devices is the USB cable.
-> > 
-> > The weakest link of any USB device is the cable, why is this somehow
-> > special to usbnet devices?
-> > 
-> > > Currently there is
-> > > no way to automatically detect cable related issues except of analyzing
-> > > kernel log, which would differ depending on the USB host controller.
-> > > 
-> > > The Ethernet packet counter could potentially show evidence of some USB
-> > > related issues, but can be Ethernet related problem as well.
-> > > 
-> > > To provide generic way to detect USB issues or HW issues on different
-> > > levels we need to make use of devlink.
-> > 
-> > Please make this generic to all USB devices, usbnet is not special here
-> > at all.
+On 19.1.2022 8.40, Puma Hsu wrote:
+> When HCE(Host Controller Error) is set, it means an internal
+> error condition has been detected. Software needs to re-initialize
+> the HC, so add this check in xhci resume.
 > 
-> Ok. I'll need some help. What is the best place to attach devlink
-> registration in the USB subsystem and the places to attach health
-> reporters?
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Puma Hsu <pumahsu@google.com>
+> ---
+> v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
+> v3: Add stable@vger.kernel.org for stable release.
+> v4: Refine the commit message.
+> v5: Add a debug log. Follow Mathias Nyman <mathias.nyman@linux.intel.com>'s comment.
+> 
+>  drivers/usb/host/xhci.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index dc357cabb265..41f594f0f73f 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -1146,8 +1146,10 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+>  		temp = readl(&xhci->op_regs->status);
+>  	}
+>  
+> -	/* If restore operation fails, re-initialize the HC during resume */
+> -	if ((temp & STS_SRE) || hibernated) {
+> +	/* If restore operation fails or HC error is detected, re-initialize the HC during resume */
+> +	if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
+> +		xhci_warn(xhci, "re-initialize HC during resume, USBSTS:%s\n",
+> +			  xhci_decode_usbsts(str, temp));
+>  
+>  		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+>  				!(xhci_all_ports_seen_u0(xhci))) {
+> 
 
-You tell us, you are the one that thinks this needs to be reported to
-userspace.  What is only being reported in kernel logs that userspace
-somehow needs to see?  And what will userspace do with that information?
+Tried to compile, something is missing in this patch:
 
-thanks,
+drivers/usb/host/xhci.c:1152:25: error: ‘str’ undeclared (first use in this function); did you mean ‘qstr’?
 
-greg k-h
+-Mathias
