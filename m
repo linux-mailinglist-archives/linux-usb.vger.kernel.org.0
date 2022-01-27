@@ -2,66 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0A6949DB49
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 08:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B22149DBD5
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 08:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237206AbiA0HQp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 02:16:45 -0500
-Received: from smtpbguseast3.qq.com ([54.243.244.52]:41422 "EHLO
-        smtpbguseast3.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbiA0HQf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 02:16:35 -0500
-X-QQ-mid: bizesmtp14t1643267787tzf13wi9
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 27 Jan 2022 15:16:21 +0800 (CST)
-X-QQ-SSF: 0140000000000090E000000A0000000
-X-QQ-FEAT: G+mSt178IQrJBHnxSZvES1j4qrJ+NGxhGYzW1xWPkjrC+2mDO3yDXx/OatzsP
-        rpFzB65yG8K96v0yHlz7OjzrsifQuZypfOFE97MwElGHAOZfXtaTHS8Xk9qSdTwdMHglGcc
-        KwGEsDeoLtsqRuXZmiZTAhYXd6OmLxYWE3nXl3F3GUkheEWU+3pT8lTLOb6ZbEGcjip0s9W
-        wptkp1q5CCd+dQFm3sqPY1mEXI5Ub+PYrKgz7o6yLT8dYGsw9+FPgaUosi2PwpxHUMO8AsS
-        pHImjPHS9H89Odjs5YU72qQIfj9AJF3TPMsqZK/D3POE43nPF3Vjz2Y5lI/Kjdr8aQjpk3V
-        AqMiae0vKwzi1j1E6OHUmCO4NLI9g==
-X-QQ-GoodBg: 1
-From:   tangmeng <tangmeng@uniontech.com>
-To:     Peter.Chen@nxp.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     tangmeng <tangmeng@uniontech.com>
-Subject: [PATCH] usb: udc: Fix typo in comment
-Date:   Thu, 27 Jan 2022 15:16:19 +0800
-Message-Id: <20220127071619.31812-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        id S237463AbiA0HqD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 02:46:03 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39166 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237459AbiA0HqB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 02:46:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7E0161A00
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 07:46:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3B24DC340E4
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 07:46:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643269560;
+        bh=/daDGQQlUfReSuoT80iYWoLAs46dDYz7tVKZ0T9kuyY=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=ZFz6RaF57fbf9AXMbrXmWs451ll0XAoSAt+YZj/MwfHmf0tYVT/FEZpHB6qgpfK5i
+         6wa55VXkBSdZ75jO10lHeTRuzkEyesfEkls6sZycirXYieaH1oOhmeaBNTLdyQYYTm
+         7QWhR8cBkkRk+0+zEJeobObX4GOxdbfiLi7q61UyaC75u1yWMWQKv7ZUjHdj+1hg0Z
+         7bbbFhZH38PRf3LYuK05LV3sJJ9Mh/FKN497hcszpBxAO2TR4YQs9gVTd+YvnMIDaQ
+         GfnH4QmQEWZ7Wte4bxVpn7cs2RubGK4oHnN1rbszw8yusBO1/SnpHd734gzbB3/wiF
+         R8bCPOKt03RIg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 1F93FCC13B2; Thu, 27 Jan 2022 07:46:00 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215361] SL-6000 zaurus USB error - 'bad CDC descriptors'
+Date:   Thu, 27 Jan 2022 07:45:59 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: low
+X-Bugzilla-Who: bids.7405@bigpond.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215361-208809-uc72ZkurZE@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215361-208809@https.bugzilla.kernel.org/>
+References: <bug-215361-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign2
-X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Replace disbale with disable
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
 
-Signed-off-by: tangmeng <tangmeng@uniontech.com>
+--- Comment #10 from Ross Maynard (bids.7405@bigpond.com) ---
+Hi Oliver,
+
+Please see attached: lsusb.txt
+
+Thanks
+
+On 27/1/22 5:00 pm, bugzilla-daemon@bugzilla.kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
+>
+> Oliver Neukum (oliver@neukum.org) changed:
+>
+>             What    |Removed                     |Added
+> -------------------------------------------------------------------------=
 ---
- drivers/usb/chipidea/udc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>                   CC|                            |oliver@neukum.org
+>
+> --- Comment #9 from Oliver Neukum (oliver@neukum.org) ---
+> The SL-6000 is explicitly listed with the device and vendor IDs given her=
+e.
+> Looks like multiple versions of the same device. Please give the output of
+> 'lsusb -v' for your device.
+>
 
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index f9ca5010f65b..dc6c96e04bcf 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -2152,7 +2152,7 @@ static void udc_id_switch_for_host(struct ci_hdrc *ci)
- {
- 	/*
- 	 * host doesn't care B_SESSION_VALID event
--	 * so clear and disbale BSV irq
-+	 * so clear and disable BSV irq
- 	 */
- 	if (ci->is_otg)
- 		hw_write_otgsc(ci, OTGSC_BSVIE | OTGSC_BSVIS, OTGSC_BSVIS);
--- 
-2.20.1
+--=20
+You may reply to this email to add a comment.
 
-
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
