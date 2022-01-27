@@ -2,130 +2,235 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8FA49E18B
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 12:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E24549E1CA
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 13:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240863AbiA0LsN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 06:48:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:44081 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240866AbiA0LsK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 06:48:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643284089;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=auNbphr0O+ZKEvruwSuBE0OHO47V2eSZrfO/lffC05E=;
-        b=jHD6QNPzgHtjTWhZ9HN+fxFuSQPVWtbqacVTu+9rETt6BqvxmjwrwIqfNZ+qjrlAOesjbK
-        xH/E6iC2DJqWbQNddvpw1I60qY7Euc1BE6dz1FMfDedaTKZwn+7NX2AuCidwBXbC1AQR4Q
-        b9TEgI5LzMMyiForwjwVVgHlFavt2sU=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-227-rIzG8kOwMu242OQ09iwj2A-1; Thu, 27 Jan 2022 06:48:08 -0500
-X-MC-Unique: rIzG8kOwMu242OQ09iwj2A-1
-Received: by mail-ed1-f69.google.com with SMTP id w23-20020a50d797000000b00406d33c039dso1293574edi.11
-        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 03:48:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=auNbphr0O+ZKEvruwSuBE0OHO47V2eSZrfO/lffC05E=;
-        b=Kow7eU7WeUl0oeXSf2mou9MBxz1pv+7p9gul6wpi+0nXH4mcpKCHvnSR84t944jEn5
-         Y33RtfDg34XQ5rCkp6114c/Zvrjse1lXwQuR9CtxZSEP0INOoFH30McdBrdso0aJnYmG
-         56ldKDgLkb/zKr02LFKRIkSAqGyxRvSToMcOoe8V1RMlaDgAlDBOqkfdaaJr+WJiJsDn
-         uhBRYyi1LKCA/KxBOzzHEhGBl6JQq944dYF8+OXfFh7VgYHqcqiwWZV+7FdFJuu3R/h1
-         CVCv4MWX/FqjlBbqRPFeW7ZqG7npeeTz0KM6eLAMUHmlvmSnzxuBZ/SvYjGGU5iE3b5I
-         oopQ==
-X-Gm-Message-State: AOAM533pNWukgDt3ZNtAj0MZdGti56CYsogDJ5SZ1repiL80fo7rXjQz
-        y6X72mK3tsI6ER59VVgc8bT+RI63pyyDPuSD0bKzou/7uzTCWMgoJnlKsS9n51KzBryvR6fTU1T
-        9Nahv0gbQgVje9W9jsHr9
-X-Received: by 2002:a17:907:3e9e:: with SMTP id hs30mr2562600ejc.763.1643284087329;
-        Thu, 27 Jan 2022 03:48:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxcEud1ZLU/PI2jZMnSrnzhoVD8CFiasTZqWCZy6IcKL/FlIahL6m2vDnUDCAwN3QlUsJj6SQ==
-X-Received: by 2002:a17:907:3e9e:: with SMTP id hs30mr2562575ejc.763.1643284087023;
-        Thu, 27 Jan 2022 03:48:07 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id a14sm11157077edx.96.2022.01.27.03.48.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 03:48:06 -0800 (PST)
-Message-ID: <c7531d52-62ba-cc4c-a8ea-2fd126e3b0b3@redhat.com>
-Date:   Thu, 27 Jan 2022 12:48:05 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 3/7] i2c: cht-wc: Use generic_handle_irq_safe().
-Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S232766AbiA0MAv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 07:00:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231532AbiA0MAu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 07:00:50 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749AEC061714
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 04:00:50 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nD3SE-000228-HS; Thu, 27 Jan 2022 13:00:42 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nD3SB-0001Rk-Jt; Thu, 27 Jan 2022 13:00:39 +0100
+Date:   Thu, 27 Jan 2022 13:00:39 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>
-References: <20220127113303.3012207-1-bigeasy@linutronix.de>
- <20220127113303.3012207-4-bigeasy@linutronix.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220127113303.3012207-4-bigeasy@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: Re: [PATCH net-next v1 4/4] usbnet: add support for label from
+ device tree
+Message-ID: <20220127120039.GE9150@pengutronix.de>
+References: <20220127104905.899341-1-o.rempel@pengutronix.de>
+ <20220127104905.899341-5-o.rempel@pengutronix.de>
+ <YfJ6lhZMAEmetdad@kroah.com>
+ <20220127112305.GC9150@pengutronix.de>
+ <YfKCTG7N86yy74q+@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YfKCTG7N86yy74q+@kroah.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:48:04 up 47 days, 20:33, 86 users,  load average: 0.02, 0.06,
+ 0.13
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 1/27/22 12:32, Sebastian Andrzej Siewior wrote:
-> Instead of manually disabling interrupts before invoking use
-> generic_handle_irq() which can be invoked with enabled and disabled
-> interrupts.
+On Thu, Jan 27, 2022 at 12:30:20PM +0100, Greg KH wrote:
+> On Thu, Jan 27, 2022 at 12:23:05PM +0100, Oleksij Rempel wrote:
+> > On Thu, Jan 27, 2022 at 11:57:26AM +0100, Greg KH wrote:
+> > > On Thu, Jan 27, 2022 at 11:49:05AM +0100, Oleksij Rempel wrote:
+> > > > Similar to the option to set a netdev name in device tree for switch
+> > > > ports by using the property "label" in the DSA framework, this patch
+> > > > adds this functionality to the usbnet infrastructure.
+> > > > 
+> > > > This will help to name the interfaces properly throughout supported
+> > > > devices. This provides stable interface names which are useful
+> > > > especially in embedded use cases.
+> > > 
+> > > Stable interface names are for userspace to set, not the kernel.
+> > > 
+> > > Why would USB care about this?  If you need something like this, get it
+> > > from the USB device itself, not DT, which should have nothing to do with
+> > > USB as USB is a dynamic, self-describing, bus.  Unlike DT.
+> > > 
+> > > So I do not think this is a good idea.
+> > 
+> > This is needed for embedded devices with integrated USB Ethernet
+> > controller. Currently I have following use cases to solve:
+> > - Board with one or multiple USB Ethernet controllers with external PHY.
+> >   The PHY need devicetree to describe IRQ, clock sources, label on board, etc.
 > 
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-> ---
->  drivers/i2c/busses/i2c-cht-wc.c | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
+> The phy is for the USB controller, not the Ethernet controller, right?
+> If for the ethernet controller, ugh, that's a crazy design and I would
+> argue a broken one.  But whatever, DT should not be used to describe a
+> USB device itself.
 > 
-> diff --git a/drivers/i2c/busses/i2c-cht-wc.c b/drivers/i2c/busses/i2c-cht-wc.c
-> index 1cf68f85b2e11..8ccf0c928bb44 100644
-> --- a/drivers/i2c/busses/i2c-cht-wc.c
-> +++ b/drivers/i2c/busses/i2c-cht-wc.c
-> @@ -99,15 +99,8 @@ static irqreturn_t cht_wc_i2c_adap_thread_handler(int id, void *data)
->  	 * interrupt handler as well, so running the client irq handler from
->  	 * this thread will cause things to lock up.
->  	 */
-> -	if (reg & CHT_WC_EXTCHGRIRQ_CLIENT_IRQ) {
-> -		/*
-> -		 * generic_handle_irq expects local IRQs to be disabled
-> -		 * as normally it is called from interrupt context.
-> -		 */
-> -		local_irq_disable();
-> -		generic_handle_irq(adap->client_irq);
-> -		local_irq_enable();
-> -	}
-> +	if (reg & CHT_WC_EXTCHGRIRQ_CLIENT_IRQ)
-> +		generic_handle_irq_safe(adap->client_irq);
->  
->  	return IRQ_HANDLED;
->  }
+> > - Board with USB Ethernet controller with DSA switch. The USB ethernet
+> >   controller is attached to the CPU port of DSA switch. In this case,
+> >   DSA switch is the sub-node of the USB device.
+> 
+> What do you mean exactly by "sub node"?  USB does not have such a term.
+
+Here are some examples:
+
+  - |
+    usb@11270000 {
+        reg = <0x11270000 0x1000>;
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        ethernet@1 {
+            compatible = "usb424,ec00";
+            reg = <1>;
+            label = "LAN0";
+	    // there is no internal eeprom, so MAC address is taken from
+	    // NVMEM of the SoC.
+            local-mac-address = [00 00 00 00 00 00];
+
+            mdio {
+		ethernet-phy@4 {
+			reg = <4>;
+			// Interrupt is attached to the SoC or the GPIO
+			// controller of the same USB devices.
+			interrupts-extended = <&gpio1 28 IRQ_TYPE_LEVEL_LOW>;
+			// same about reset. It is attached to the SoC
+			// or GPIO controller of the USB device.
+			reset-gpios = <&gpio3 31 GPIO_ACTIVE_LOW>;
+			reset-assert-us = <10000>;
+			reset-deassert-us = <1000>;
+			// some external clock provider
+			clocks = <&clk>
+			qca,smarteee-tw-us-1g = <24>;
+			qca,clk-out-frequency = <125000000>;
+		};
+            };
+        };
+    };
+  - |
+    usb@11270000 {
+        reg = <0x11270000 0x1000>;
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        usb1@1 {
+            compatible = "usb424,9514";
+            reg = <1>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+
+            eth0: ethernet@1 {
+               compatible = "usb424,ec00";
+               reg = <1>;
+               label = "cpu0";
+
+               fixed-link {
+                   speed = <1000>;
+                   full-duplex;
+               };
+
+               // managment interface of the switch is attached to the
+	       // MDIO bus of this USB device.
+               mdio {
+                switch@0 {
+                    compatible = "microchip,ksz9477";
+                    reg = <0>;
+		    // reset is controlled by the SoC or by the GPIO
+		    // controller of this USB device.
+                    reset-gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
+
+                    ethernet-ports {
+                        #address-cells = <1>;
+                        #size-cells = <0>;
+                        port@0 {
+                            reg = <0>;
+                            label = "lan1";
+                        };
+                        port@1 {
+                            reg = <1>;
+                            label = "lan2";
+                        };
+                        port@2 {
+                            reg = <2>;
+                            label = "lan3";
+                        };
+                        port@3 {
+                            reg = <3>;
+                            label = "lan4";
+                        };
+                        port@4 {
+                            reg = <4>;
+                            label = "lan5";
+                        };
+                        port@5 {
+                            reg = <5>;
+                            label = "cpu";
+                            ethernet = <&eth0>;
+                            fixed-link {
+                                speed = <1000>;
+                                full-duplex;
+                            };
+                        };
+                    };
+                };
+               };
+            };
+        };
+    };
+
+
+> >  The CPU port should have
+> >   stable name for all device related to this product.
+> 
+> name for who to use?  Userspace?  Or within the kernel?
+> 
+> Naming is done by userspace, as USB is NOT determinisitic in numbering /
+> naming the devices attached to it, by design.  If you need to have a
+> stable name, do so in userspace please, we have loads of tools that
+> already do this there today.  Let's not reinvent the wheel.
+> 
+> > Using user space tools to name interfaces would double the maintenance
+> > of similar information: DT - describing the HW + udev scripts describing
+> > same HW again.
+> 
+> Not for the network name of the device, that belongs in userspace.
+> 
+> Do not be listing USB device ids in a DT file, that way lies madness.
+> 
+> thanks,
+> 
+> greg k-h
 > 
 
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
