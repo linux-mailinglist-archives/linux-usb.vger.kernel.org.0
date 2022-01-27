@@ -2,243 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2391149DAF7
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 07:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D748A49DB00
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 07:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236915AbiA0Gps (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 01:45:48 -0500
-Received: from mga09.intel.com ([134.134.136.24]:65391 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229716AbiA0Gpr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Jan 2022 01:45:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643265947; x=1674801947;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=V8ZDt/nPacnynXibZVTQkrP/iR/INlRL5iKrsLjow80=;
-  b=nYgj9uyh5IYjlgURbS22C3vxCzn1Wl4AiHoBaclaciw6qhqKzoJJ7jOY
-   Y+RoeO3WZlKxHMbh6OirBbSGFWVIqHO8/ndhv4FD3jf9yDkANYzQVw/r0
-   ipIFASQ3BiKa9+91JiyY3XIwCLAM6JAxg//CBHROkXg5mo39+fZOPUwh+
-   SCsDXA0c1KYy1MPgmGeG0QQUTmKfpTamNIzyFzZlqHtyr1dzWIhcIN4Qs
-   oJPXEQBU7we0d+yEtPNjd7EXkOp419XP0DViyEGD5uM38bsJirPU5xf17
-   gggzId/K01rsAJNROFJo+6gYwnnNHy/xMFHEO7DWaVzWCP2SnyMuMt/jz
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="246544322"
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="246544322"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 22:45:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="696530906"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 Jan 2022 22:45:44 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCyXP-000MEs-Ue; Thu, 27 Jan 2022 06:45:43 +0000
-Date:   Thu, 27 Jan 2022 14:44:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 993a44fa85c1ea5989fb5c46236ca2e3cfd71b78
-Message-ID: <61f23f58.yGu4HcJXhvpvUqBh%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S236973AbiA0Gwh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 01:52:37 -0500
+Received: from smtpbguseast3.qq.com ([54.243.244.52]:59357 "EHLO
+        smtpbguseast3.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236970AbiA0Gwg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 01:52:36 -0500
+X-QQ-mid: bizesmtp40t1643266335tamrph7a
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 27 Jan 2022 14:52:03 +0800 (CST)
+X-QQ-SSF: 0140000000000080E000B00A0000000
+X-QQ-FEAT: 2vDQexJ/FkbCPcVh34DJWyrqgJQoXftLpjju8zpJmmDl16S8eciDAUOBgkzJs
+        T0aHwbB9ziLqNdKp9VMj0JoTTIvRHImMNXznEqlHYXEBIZgEtTp/KKfiY+Ss+euBgx6+lmj
+        4uVa1TI234Y+B9BmTy4UkxETxCAg0rjnCVfiJMJesXgQkDxkYDKdMLqyqUhFKJSNIetFQsX
+        RqdZ9Y4UxL4RK2o/dQZKYbHmI4SjcgTxDvWjDfsgRiQwXzq4S3gSdi9w17/6/xJcBxO4emV
+        aehgVXdLlYiEGorA+WUUrcccSwMtZS3JIN5Xxv5Uw4QY8fJS8LMsu8oLVtjPvwMLqYueXDv
+        7mnW0bvsnn001uVx7w=
+X-QQ-GoodBg: 2
+From:   tangmeng <tangmeng@uniontech.com>
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        airlied@linux.ie, daniel@ffwll.ch, jsarha@ti.com,
+        tomi.valkeinen@ti.com, linux@dominikbrodowski.net,
+        Peter.Chen@nxp.com, gregkh@linuxfoundation.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     tangmeng <tangmeng@uniontech.com>
+Subject: [PATCH] drivers: Fix typo in comment
+Date:   Thu, 27 Jan 2022 14:51:56 +0800
+Message-Id: <20220127065156.22372-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 993a44fa85c1ea5989fb5c46236ca2e3cfd71b78  usb: gadget: f_uac2: allow changing interface name via configfs
+Replace disbale with disable and replace unavaibale with unavailable.
 
-elapsed time: 865m
-
-configs tested: 167
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-i386                 randconfig-c001-20220124
-powerpc              randconfig-c003-20220124
-sparc64                          alldefconfig
-h8300                    h8300h-sim_defconfig
-arm                         nhk8815_defconfig
-powerpc                       ppc64_defconfig
-m68k                        stmark2_defconfig
-xtensa                  nommu_kc705_defconfig
-mips                         rt305x_defconfig
-arm                            zeus_defconfig
-nios2                         10m50_defconfig
-xtensa                              defconfig
-arc                        vdk_hs38_defconfig
-sh                          rsk7269_defconfig
-ia64                        generic_defconfig
-sh                           sh2007_defconfig
-um                                  defconfig
-xtensa                  audio_kc705_defconfig
-mips                         cobalt_defconfig
-powerpc                      makalu_defconfig
-sh                           se7722_defconfig
-m68k                          amiga_defconfig
-powerpc                      ppc6xx_defconfig
-arm                             ezx_defconfig
-arm                          pxa3xx_defconfig
-powerpc                      pasemi_defconfig
-m68k                       m5208evb_defconfig
-mips                             allmodconfig
-arm                        oxnas_v6_defconfig
-sh                   sh7724_generic_defconfig
-sparc                            allyesconfig
-arc                            hsdk_defconfig
-arm                            hisi_defconfig
-i386                             alldefconfig
-sh                             espt_defconfig
-m68k                         amcore_defconfig
-mips                 decstation_r4k_defconfig
-s390                          debug_defconfig
-m68k                        mvme16x_defconfig
-xtensa                       common_defconfig
-sh                            migor_defconfig
-openrisc                 simple_smp_defconfig
-powerpc                      tqm8xx_defconfig
-m68k                       m5249evb_defconfig
-h8300                            alldefconfig
-arm                           corgi_defconfig
-arm                          pxa910_defconfig
-powerpc                  iss476-smp_defconfig
-arm                  randconfig-c002-20220124
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-arc                                 defconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20220124
-x86_64               randconfig-a003-20220124
-x86_64               randconfig-a001-20220124
-x86_64               randconfig-a004-20220124
-x86_64               randconfig-a005-20220124
-x86_64               randconfig-a006-20220124
-i386                 randconfig-a002-20220124
-i386                 randconfig-a005-20220124
-i386                 randconfig-a003-20220124
-i386                 randconfig-a004-20220124
-i386                 randconfig-a001-20220124
-i386                 randconfig-a006-20220124
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                randconfig-r042-20220125
-arc                  randconfig-r043-20220125
-arc                  randconfig-r043-20220124
-s390                 randconfig-r044-20220125
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-arm                  randconfig-c002-20220124
-i386                 randconfig-c001-20220124
-powerpc              randconfig-c003-20220124
-arm                  colibri_pxa300_defconfig
-arm                          imote2_defconfig
-powerpc                      obs600_defconfig
-arm                            mmp2_defconfig
-mips                   sb1250_swarm_defconfig
-powerpc                   microwatt_defconfig
-arm                              alldefconfig
-arm                      pxa255-idp_defconfig
-hexagon                             defconfig
-mips                     loongson2k_defconfig
-arm                        neponset_defconfig
-powerpc                     kmeter1_defconfig
-powerpc                    socrates_defconfig
-arm                           omap1_defconfig
-powerpc                     skiroot_defconfig
-i386                             allyesconfig
-powerpc                      walnut_defconfig
-powerpc                        fsp2_defconfig
-powerpc                      katmai_defconfig
-riscv                          rv32_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64               randconfig-a011-20220124
-x86_64               randconfig-a013-20220124
-x86_64               randconfig-a015-20220124
-x86_64               randconfig-a016-20220124
-x86_64               randconfig-a014-20220124
-x86_64               randconfig-a012-20220124
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                 randconfig-a011-20220124
-i386                 randconfig-a016-20220124
-i386                 randconfig-a013-20220124
-i386                 randconfig-a014-20220124
-i386                 randconfig-a015-20220124
-i386                 randconfig-a012-20220124
-riscv                randconfig-r042-20220124
-hexagon              randconfig-r045-20220124
-hexagon              randconfig-r041-20220124
-s390                 randconfig-r044-20220124
-riscv                randconfig-r042-20220126
-hexagon              randconfig-r045-20220126
-hexagon              randconfig-r041-20220126
-
+Signed-off-by: tangmeng <tangmeng@uniontech.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/gpu/drm/amd/amdgpu/mxgpu_vi.c | 2 +-
+ drivers/gpu/drm/tilcdc/tilcdc_crtc.c  | 2 +-
+ drivers/pcmcia/rsrc_nonstatic.c       | 2 +-
+ drivers/usb/chipidea/udc.c            | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/mxgpu_vi.c b/drivers/gpu/drm/amd/amdgpu/mxgpu_vi.c
+index aef9d059ae52..a642c04cf17d 100644
+--- a/drivers/gpu/drm/amd/amdgpu/mxgpu_vi.c
++++ b/drivers/gpu/drm/amd/amdgpu/mxgpu_vi.c
+@@ -544,7 +544,7 @@ static int xgpu_vi_mailbox_rcv_irq(struct amdgpu_device *adev,
+ {
+ 	int r;
+ 
+-	/* trigger gpu-reset by hypervisor only if TDR disbaled */
++	/* trigger gpu-reset by hypervisor only if TDR disabled */
+ 	if (!amdgpu_gpu_recovery) {
+ 		/* see what event we get */
+ 		r = xgpu_vi_mailbox_rcv_msg(adev, IDH_FLR_NOTIFICATION);
+diff --git a/drivers/gpu/drm/tilcdc/tilcdc_crtc.c b/drivers/gpu/drm/tilcdc/tilcdc_crtc.c
+index 29890d704cb4..b986946b3b10 100644
+--- a/drivers/gpu/drm/tilcdc/tilcdc_crtc.c
++++ b/drivers/gpu/drm/tilcdc/tilcdc_crtc.c
+@@ -996,7 +996,7 @@ irqreturn_t tilcdc_crtc_irq(struct drm_crtc *crtc)
+ 	if (stat & LCDC_FRAME_DONE) {
+ 		tilcdc_crtc->frame_done = true;
+ 		wake_up(&tilcdc_crtc->frame_done_wq);
+-		/* rev 1 lcdc appears to hang if irq is not disbaled here */
++		/* rev 1 lcdc appears to hang if irq is not disabled here */
+ 		if (priv->rev == 1)
+ 			tilcdc_clear(dev, LCDC_RASTER_CTRL_REG,
+ 				     LCDC_V1_FRAME_DONE_INT_ENA);
+diff --git a/drivers/pcmcia/rsrc_nonstatic.c b/drivers/pcmcia/rsrc_nonstatic.c
+index 6b6c578b5f92..ad1141fddb4c 100644
+--- a/drivers/pcmcia/rsrc_nonstatic.c
++++ b/drivers/pcmcia/rsrc_nonstatic.c
+@@ -394,7 +394,7 @@ static int do_validate_mem(struct pcmcia_socket *s,
+  * do_mem_probe() checks a memory region for use by the PCMCIA subsystem.
+  * To do so, the area is split up into sensible parts, and then passed
+  * into the @validate() function. Only if @validate() and @fallback() fail,
+- * the area is marked as unavaibale for use by the PCMCIA subsystem. The
++ * the area is marked as unavailable for use by the PCMCIA subsystem. The
+  * function returns the size of the usable memory area.
+  */
+ static int do_mem_probe(struct pcmcia_socket *s, u_long base, u_long num,
+diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+index f9ca5010f65b..dc6c96e04bcf 100644
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -2152,7 +2152,7 @@ static void udc_id_switch_for_host(struct ci_hdrc *ci)
+ {
+ 	/*
+ 	 * host doesn't care B_SESSION_VALID event
+-	 * so clear and disbale BSV irq
++	 * so clear and disable BSV irq
+ 	 */
+ 	if (ci->is_otg)
+ 		hw_write_otgsc(ci, OTGSC_BSVIE | OTGSC_BSVIS, OTGSC_BSVIS);
+-- 
+2.20.1
+
+
+
