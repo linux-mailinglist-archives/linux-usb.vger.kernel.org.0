@@ -2,105 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06EE749E15F
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 12:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9407549E183
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jan 2022 12:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240722AbiA0Lnn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 06:43:43 -0500
-Received: from cable.insite.cz ([84.242.75.189]:60911 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235822AbiA0Lnl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Jan 2022 06:43:41 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 9ABD7A1A3D401;
-        Thu, 27 Jan 2022 12:43:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1643283818; bh=d3wb32EGapDm1K2TgBZKk9f4KEcNMWfD35sNfTDAwwQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pGeAUowFY+reERGUnDQ1lGg3WlkKQS9YjAO2KdFX4ZUsnBN4UnhQKKNKhqbe6tfni
-         7I6d66x0LZNpzqa/q67byZbsyrxF+QJdD4k4+HZ0jDFZsfU0FtndiMSn9oyhV8ZVgQ
-         W2NVcCThgSH39xqeleK10CmAlcsqAOG/pQvLVpDc=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id BszJVKdXbMRM; Thu, 27 Jan 2022 12:43:33 +0100 (CET)
-Received: from precision.doma (dustin.pilsfree.net [81.201.58.138])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 51992A1A3D404;
-        Thu, 27 Jan 2022 12:43:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1643283813; bh=d3wb32EGapDm1K2TgBZKk9f4KEcNMWfD35sNfTDAwwQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mklJG62kuO3iVjtdn+oGdDszJlcr7INAuTaghIDH3uCV7J7gLs4pGt3v4ZST55DOt
-         tVvf13mWHcL9UJ5gyOBpvxuFddsYS5bvjwEieK5h4E+jOw+kbMI7ouGGjO4Jn1IgsV
-         6VDQzy964xVdZaS16Dmpov7//44gTyM3KAuiHDOE=
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Julian Scheel <julian@jusst.de>,
-        John Keeping <john@metanate.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yunhao Tian <t123yh.xyz@gmail.com>
-Subject: [PATCH 4/4] usb: gadget: f_uac2: Add speed names to bInterval dbg/warn
-Date:   Thu, 27 Jan 2022 12:43:31 +0100
-Message-Id: <20220127114331.41367-5-pavel.hofman@ivitera.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220127114331.41367-1-pavel.hofman@ivitera.com>
-References: <20220127114331.41367-1-pavel.hofman@ivitera.com>
+        id S240851AbiA0LsG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 06:48:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52462 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240824AbiA0LsG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 06:48:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643284085;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HGE7gxF/PrZOO5rcFzZ+w+MYUdoGMxbWWIjy9mknwZE=;
+        b=i7jHfFD6GHIUq+GaqQH75gIOYuVAhNEoGoxpf4XsVhrkQuNpyQe9a3P55Q9djwgZjCYJIU
+        bv2VhUniS2H/Yx2v3W+EeGjrZbs5/r6pguZyWk+7spWldVDBhjmubI0RvNCdz7bM6gb1IP
+        WfhPjqd6oesvHid94oGYAVlfVboYxzs=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-626-_VnLyZHNPxyq0Sq57s4m_g-1; Thu, 27 Jan 2022 06:48:04 -0500
+X-MC-Unique: _VnLyZHNPxyq0Sq57s4m_g-1
+Received: by mail-ej1-f72.google.com with SMTP id lb14-20020a170907784e00b006aa178894fcso1225276ejc.6
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jan 2022 03:48:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HGE7gxF/PrZOO5rcFzZ+w+MYUdoGMxbWWIjy9mknwZE=;
+        b=uWEobuGhFPdkDxDzNrfuZ5Ni0oT6DfO52EhgFelo1xYA/ukAVllon6gGGW0B5u5d3r
+         FHGRHLz5sykKvy2TRMbiopI3imLUt2EX7q1YxR9RIjtMG1usav7Yv7fbmOMLgufq12Yb
+         DJl4EfdVMmjcI+aGud8tvBzUwZhlGCRx14W+DFj6H2rNbYYPZcJ0hDB/gXVjmynd4iUB
+         PT+ULg5weCoRtxqzhKvF6JWOnjZB9/xpuOMSuBSZPjFCxuyjo3tWZAabJEIdp6W/9WUM
+         HpwwPS1eIL+0gOEapQkIn6v+BOoPXovfioe/2iJ4NQZGcLXv9oAixr6rPXI5LcTAIodG
+         8qJA==
+X-Gm-Message-State: AOAM530fYhi4mmwh+qa9ThxsUNzYwC4QQsWK08BiomcTQs+awkTXvTRd
+        Zd0L1iv3pKi2Penr4cEGm1//Fu6Ei4lNK4I+tz4HNS7Zt1IyPbqDOgylWG/bFuS8SUqRgTug1fG
+        5kxOiZBAB26gXrOQJeqRy
+X-Received: by 2002:a17:907:7241:: with SMTP id ds1mr2705651ejc.199.1643284082711;
+        Thu, 27 Jan 2022 03:48:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxALJ4orODysCyzf5OM83HGtMr7Bi36PqNUiGN5jpHNx9oPF+XO/JirOr44geRnmCZ4NtbP3g==
+X-Received: by 2002:a17:907:7241:: with SMTP id ds1mr2705630ejc.199.1643284082537;
+        Thu, 27 Jan 2022 03:48:02 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id cf13sm8735609ejb.141.2022.01.27.03.48.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 03:48:02 -0800 (PST)
+Message-ID: <bd44bba7-de30-bb65-a328-1bc3c44b53eb@redhat.com>
+Date:   Thu, 27 Jan 2022 12:48:01 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 1/7] genirq: Provide generic_handle_irq_safe().
+Content-Language: en-US
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>
+References: <20220127113303.3012207-1-bigeasy@linutronix.de>
+ <20220127113303.3012207-2-bigeasy@linutronix.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220127113303.3012207-2-bigeasy@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add speed names for better clarity of dgb/warn messages from max packet
-size/bInterval checks.
+Hi,
 
-Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
----
- drivers/usb/gadget/function/f_uac2.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+On 1/27/22 12:32, Sebastian Andrzej Siewior wrote:
+> Provide generic_handle_irq_safe() which can be used can used from any
+> context.
+> 
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index 48d6fb26bb19..ce3ca7e62e2a 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -124,6 +124,16 @@ static struct usb_string strings_fn[] = {
- 	{ },
- };
- 
-+static const char *const speed_names[] = {
-+	[USB_SPEED_UNKNOWN] = "UNKNOWN",
-+	[USB_SPEED_LOW] = "LS",
-+	[USB_SPEED_FULL] = "FS",
-+	[USB_SPEED_HIGH] = "HS",
-+	[USB_SPEED_WIRELESS] = "W",
-+	[USB_SPEED_SUPER] = "SS",
-+	[USB_SPEED_SUPER_PLUS] = "SS+",
-+};
-+
- static struct usb_gadget_strings str_fn = {
- 	.language = 0x0409,	/* en-us */
- 	.strings = strings_fn,
-@@ -745,12 +755,12 @@ static int set_ep_max_packet_size_bint(struct device *dev, const struct f_uac2_o
- 
- 	if (max_size_bw <= max_size_ep)
- 		dev_dbg(dev,
--			"%s: Will use maxpctksize %d and bInterval %d\n",
--			dir, max_size_bw, bint);
-+			"%s %s: Would use maxpctksize %d and bInterval %d\n",
-+			speed_names[speed], dir, max_size_bw, bint);
- 	else {
- 		dev_warn(dev,
--			"%s: Req. maxpcktsize %d at bInterval %d > max ISOC %d, may drop data!\n",
--			dir, max_size_bw, bint, max_size_ep);
-+			"%s %s: Req. maxpcktsize %d at bInterval %d > max ISOC %d, may drop data!\n",
-+			speed_names[speed], dir, max_size_bw, bint, max_size_ep);
- 		max_size_bw = max_size_ep;
- 	}
- 
--- 
-2.25.1
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+> ---
+>  include/linux/irqdesc.h |  1 +
+>  kernel/irq/irqdesc.c    | 21 +++++++++++++++++++++
+>  2 files changed, 22 insertions(+)
+> 
+> diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
+> index 93d270ca0c567..a77584593f7d1 100644
+> --- a/include/linux/irqdesc.h
+> +++ b/include/linux/irqdesc.h
+> @@ -160,6 +160,7 @@ static inline void generic_handle_irq_desc(struct irq_desc *desc)
+>  
+>  int handle_irq_desc(struct irq_desc *desc);
+>  int generic_handle_irq(unsigned int irq);
+> +int generic_handle_irq_safe(unsigned int irq);
+>  
+>  #ifdef CONFIG_IRQ_DOMAIN
+>  /*
+> diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+> index 2267e6527db3c..97223df2f460e 100644
+> --- a/kernel/irq/irqdesc.c
+> +++ b/kernel/irq/irqdesc.c
+> @@ -662,6 +662,27 @@ int generic_handle_irq(unsigned int irq)
+>  }
+>  EXPORT_SYMBOL_GPL(generic_handle_irq);
+>  
+> +/**
+> + * generic_handle_irq_safe - Invoke the handler for a particular irq
+> + * @irq:	The irq number to handle
+> + *
+> + * Returns:	0 on success, or -EINVAL if conversion has failed
+> + *
+> + * This function must be called either from an IRQ context with irq regs
+> + * initialized or with care from any context.
+> + */
+> +int generic_handle_irq_safe(unsigned int irq)
+> +{
+> +	unsigned long flags;
+> +	int ret;
+> +
+> +	local_irq_save(flags);
+> +	ret = handle_irq_desc(irq_to_desc(irq));
+> +	local_irq_restore(flags);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(generic_handle_irq_safe);
+> +
+>  #ifdef CONFIG_IRQ_DOMAIN
+>  /**
+>   * generic_handle_domain_irq - Invoke the handler for a HW irq belonging
+> 
 
