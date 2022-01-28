@@ -2,120 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1060D49F1FF
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 04:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 004C049F25A
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 05:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345833AbiA1DtZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 22:49:25 -0500
-Received: from mailgw.kylinos.cn ([123.150.8.42]:40173 "EHLO nksmu.kylinos.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1345802AbiA1DtZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Jan 2022 22:49:25 -0500
-X-UUID: facb723e0da54eb09d073fef8ee6ec25-20220128
-X-CPASD-INFO: 70958ec4a68e43d3a33cd22ff1ff1fb9
-        @gIBzVWWXkWSNVnqxg3avbYFkY5OUXlK1qGuGll-
-        WjlmVhH5xTWJsXVKBfG5QZWNdYVN_eGpQYl9gZFB5i3-XblBgXoZgUZB3hnJzVWiTkw==
-X-CPASD-FEATURE: 0.0
-X-CLOUD-ID: 70958ec4a68e43d3a33cd22ff1ff1fb9
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,EXT:0.0,OB:0.0,URL:-5,T
-        VAL:143.0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:198.0,IP:-2.0,MAL:0.0,ATTNUM:0
-        .0,PHF:-5.0,PHC:-5.0,SPF:4.0,EDMS:-3,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CF
-        OB:0.0,SPC:0.0,SIG:-5,AUF:13,DUF:32000,ACD:177,DCD:279,SL:0,AG:0,CFC:0.231,CF
-        SR:0.192,UAT:0,RAF:2,VERSION:2.3.4
-X-CPASD-ID: facb723e0da54eb09d073fef8ee6ec25-20220128
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1, 1
-X-UUID: facb723e0da54eb09d073fef8ee6ec25-20220128
-X-User: xiehongyu1@kylinos.cn
-Received: from [172.20.4.10] [(116.128.244.169)] by nksmu.kylinos.cn
-        (envelope-from <xiehongyu1@kylinos.cn>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
-        with ESMTP id 1692616607; Fri, 28 Jan 2022 12:01:59 +0800
-Message-ID: <ce40f4cd-a110-80b1-f766-e94dd8cedc7e@kylinos.cn>
-Date:   Fri, 28 Jan 2022 11:48:34 +0800
+        id S1345973AbiA1ET7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 23:19:59 -0500
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:54766
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236875AbiA1ET4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 23:19:56 -0500
+Received: from [192.168.1.9] (unknown [222.129.35.96])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 6587341988;
+        Fri, 28 Jan 2022 04:19:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643343594;
+        bh=qJivR/0SfF6KYekc1Fj6mI+NGXa+UlyMrVTHUfa7zAc=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=hpseaTnQ9pHxaszHmm9QXlN3a3Hv3HapEBtlQzEy+ZnjdwAopDUhD6xZd9vQ2qhc6
+         wVv52sx1elMogbVW8/Q4nCoGvFS0EQB8qYvKO7na9uZ2ZkATYEvL5O3zUaupatU+Pt
+         WOGeJ8vK8gOA77pNoSH8WfW3ayyhi/hRWfMhLOHQiNhAIxqDuza4p/XNTtERhdPwPH
+         sU4As/zB8/mhJQGsIiHBPcAl5O/wDo22MIABFtvDuWnYcUP4gaSLwG88M9pEL4A/R9
+         VwBWShO0aCZnRzcII47CiBplGz6qd+9cWJJMFWl0Kq4kNBUP8/A+aPMsyMeOLoJfZq
+         Fa3O/OLNV4L0w==
+Message-ID: <e75d006c-c9ae-9479-28b4-4cdacf1c51db@canonical.com>
+Date:   Fri, 28 Jan 2022 12:19:38 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH -next] xhci: fix two places when dealing with return value
- of function xhci_check_args
+Subject: Re: [PATCH] net: usb: r8152: Add MAC passthrough support for
+ RTL8153BL
 Content-Language: en-US
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     Hongyu Xie <xy521521@gmail.com>, mathias.nyman@intel.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        125707942@qq.com, stable@vger.kernel.org
-References: <20220126094126.923798-1-xy521521@gmail.com>
- <YfEZFtf9K8pFC8Mw@kroah.com>
- <c7f6a8bb-76b6-cd2d-7551-b599a8276f5c@kylinos.cn>
- <YfEnbRW3oU0ouGqH@kroah.com>
- <e86972d3-e4a0-ad81-45ea-21137e3bfcb6@kylinos.cn>
- <7af5b318-b1ac-0c74-1782-04ba50a3b5fa@linux.intel.com>
-From:   =?UTF-8?B?6LCi5rOT5a6H?= <xiehongyu1@kylinos.cn>
-In-Reply-To: <7af5b318-b1ac-0c74-1782-04ba50a3b5fa@linux.intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Mario.Limonciello@amd.com, kuba@kernel.org,
+        henning.schild@siemens.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
+References: <20220127100109.12979-1-aaron.ma@canonical.com>
+ <YfKp81yJWd95Jrg7@lunn.ch>
+From:   Aaron Ma <aaron.ma@canonical.com>
+In-Reply-To: <YfKp81yJWd95Jrg7@lunn.ch>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
 
-On 2022/1/27 17:43, Mathias Nyman wrote:
-> On 26.1.2022 14.49, Hongyu Xie wrote:
->
->>> Anyway, why is this unique to this one driver?  Why does it not show up
->>> for any other driver?
->> The whole thing is not about a particular driver. The thing is xhci_urb_enqueue shouldn't change the return value of xhci_check_args from -ENODEV to -EINVAL. Many other drivers only check if the return value of xchi_check_args is <= 0.
-> Agree, lets return -ENODEV when appropriate.
->
->>>> The whole point is, if xhci_check_args returns value A, xhci_urb_enqueque
->>>> shouldn't return any
->>>> other value, because that will change some driver's behavior(like r8152.c).
->>> But you are changing how the code currently works.  Are you sure you
->>> want to have this "succeed" if this is on a root hub?
->> Yes, I'm changing how the code currently works but not on a root hub.
->>>> 2."So if 0 is returned, you will now return that here, is that ok?
->>>> That is a change in functionality.
->>>> But this can only ever be the case for a root hub, is that ok?"
->>>>
->>>> It's the same logic, but now xhci_urb_enqueue can return -ENODEV if xHC is
->>>> halted.
->>>> If it happens on a root hub,  xhci_urb_enqueue won't be called.
->>>>
->>>> 3."Again, this means all is good?  Why is this being called for a root hub?"
->>>>
->>>> It is the same logic with the old one, but now xhci_check_streams_endpoint
->>>> can return -ENODEV if xHC is halted.
->>> This still feels wrong to me, but I'll let the maintainer decide, as I
->>> don't understand why a root hub is special here.
->> Thanks please. usb_submit_urb will call usb_hcd_submit_urb. And usb_hcd_submit_urb will call rh_urb_enqueue if it's on a root hub instead of calling hcd->driver->urb_enqueue(which is xhci_urb_enqueue in this case).
-> xhci_urb_enqueue() shouldn't be called for roothub urbs, but if it is then we
-> should continue to return -EINVAL
+On 1/27/22 22:19, Andrew Lunn wrote:
+> On Thu, Jan 27, 2022 at 06:01:09PM +0800, Aaron Ma wrote:
+>> RTL8153-BL is used in Lenovo Thunderbolt4 dock.
+>> Add the support of MAC passthrough.
+>> This is ported from Realtek Outbox driver r8152.53.56-2.15.0.
+>>
+>> There are 2 kinds of rules for MAC passthrough of Lenovo products,
+>> 1st USB vendor ID belongs to Lenovo, 2nd the chip of RTL8153-BL
+>> is dedicated for Lenovo. Check the ocp data first then set ACPI object
+>> names.
+>>
+>> Suggested-by: Hayes Wang <hayeswang@realtek.com>
+>> Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
+>> ---
+>>   drivers/net/usb/r8152.c | 44 ++++++++++++++++++++++-------------------
+>>   1 file changed, 24 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+>> index ee41088c5251..df997b330ee4 100644
+>> --- a/drivers/net/usb/r8152.c
+>> +++ b/drivers/net/usb/r8152.c
+>> @@ -718,6 +718,7 @@ enum spd_duplex {
+>>   #define AD_MASK			0xfee0
+>>   #define BND_MASK		0x0004
+>>   #define BD_MASK			0x0001
+>> +#define BL_MASK                 BIT(3)
+> 
+> Just to be sure, this is defined by Realtek? This is not just Lenovo
+> just misusing a reserved bit?
+> 
 
-xhci_urb_enqueue() won't be called for roothub urbs, only for none 
-roothub urbs(see usb_hcd_submit_urb()).
+ From what I know, It's defined by Realtek to identify customized product.
+It shouldn't be misusing.
+Also it's used by Realtek outbox driver.
 
-So xhci_urb_enqueue() will not get 0 from xhci_check_args().
+Aaron
 
-Still return -EINVAL if xhci_check_args() returns 0 in xhci_urb_enqueue()?
-
->
-> xhci_check_args() should be rewritten later, but first we want a targeted fix
-> that can go to stable.
->
-> Your original patch would be ok after following modification:
-> if (ret <= 0)
-> 	return ret ? ret : -EINVAL;
-
-I have two questions:
-
-     1) Why return -EINVAL for roothub urbs?
-
-     2) Should I change all the return statements about 
-xhci_check_args() in drivers/usb/host/xhci.c?
-
-     There are 6 of them.
-
->
-> Thanks
-> -Mathias
+>       Andrew
