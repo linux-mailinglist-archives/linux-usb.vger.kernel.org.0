@@ -2,71 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7792349FFEC
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 19:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BA949FFFD
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 19:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350378AbiA1SGm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jan 2022 13:06:42 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:60702 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349942AbiA1SGj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 28 Jan 2022 13:06:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=vie3/PM7S4hVbkPSRtFZY3hP76QHnHKvCYyA6kNV6dY=; b=WIuD13vxJKoUJ4eVgvTbTJ6ut+
-        oAA80qW/+ZPzm03ymjDkmcDM3VyXhXp1Mosqldq2SObNh/kpPt4ESYvjzNU+6j831GaYkNXE1YTCo
-        3TPDnSv9Aei2ejqrcrGbrjfoad4D3cRAjRgABBSRWBXLo4khZX+QSU6broixrELOgGVY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nDVdn-003D2u-VR; Fri, 28 Jan 2022 19:06:31 +0100
-Date:   Fri, 28 Jan 2022 19:06:31 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Aaron Ma <aaron.ma@canonical.com>, Mario.Limonciello@amd.com,
-        kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
-Subject: Re: [PATCH v3] net: usb: r8152: Add MAC passthrough support for
- RTL8153BL
-Message-ID: <YfQwpy1Kkz3wheTi@lunn.ch>
-References: <20220127100109.12979-1-aaron.ma@canonical.com>
- <20220128043207.14599-1-aaron.ma@canonical.com>
- <20220128092103.1fa2a661@md1za8fc.ad001.siemens.net>
+        id S242176AbiA1SRW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jan 2022 13:17:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233898AbiA1SRT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jan 2022 13:17:19 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57C2C061714;
+        Fri, 28 Jan 2022 10:17:18 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id h7so18792107ejf.1;
+        Fri, 28 Jan 2022 10:17:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J8O3rGjC38oQUzyX/XJmlUBZVdUYy2/jQimRxEDGlr8=;
+        b=es7Bpri9Zwuwrxwo/wQ5YeVCjf59sgdN8no2PZlAC12u9GKRQbhzFix9s/7Tb6fdSp
+         JA+iNskxWfQdytT7+KKdx+b8pWuXNfswSFoCaL334qfvivPaGm9m++LPP2sjna8KOkKn
+         9copo2gJ0m7huB6j/mThrCh+ilbkzjwVvuRCmPgz5nQB87xw8HAkJMw6RpGcT1I5OqnM
+         6oDMAVTYdJ68J5vwgNuJsrEx2QZzTFpedSf25b93T3IX7KsB2mAXzQzHbmfHjxROJaDo
+         0hE86RrZAXo2E6p01eKT+Pk8DiZyY8gQamnHn6gy+9FNXI0I9hDEG0hne3iQhjqa7hPx
+         uxGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J8O3rGjC38oQUzyX/XJmlUBZVdUYy2/jQimRxEDGlr8=;
+        b=f+WyX+Afa0kFwYdn2DlBJ2H2KWBU2elOjRZr5K3ghF84JGYiVwvHpq+o4nk3VBUi+N
+         xfAT93PS0UPvKfiMqsnfk4FpW7TqbrbuXn3RYfzixdmBuvebj3bt4ImePUsOnBS3CTOP
+         WNdlinI6nhXZl5zaExo6z1ELK2PZN8W+2tDgVEINXwzAGsGDB6Yi8nhNMYgvwlfbJSV1
+         mn/4tGjoR1n1gVQKEeKIKFom+M4kBcGENgvh6w/5M98Rew+XbROnIdyty1CxoLrY5WSA
+         dQaP1+FVe9B4s0EhkbEojEVQzACgqhsGbSBkwHg/n7WXkFp2D18Ew4KHdZC057gaL1zz
+         O4iw==
+X-Gm-Message-State: AOAM533EY0lwS9HN4EaSAXGS1qAJoJQHFMou4nt0uJIpNYInOD8uEh4i
+        98Aws43RialjnZaWgL2tyRkXJ6EyEho=
+X-Google-Smtp-Source: ABdhPJyztTf8rpQnXUP4NO3iVfHd+BWSxR+UryNk4UFhdIZDpbvghmKsn5AGHz9dbYBjdiqyJMdrIw==
+X-Received: by 2002:a17:907:3f9f:: with SMTP id hr31mr7736927ejc.584.1643393837012;
+        Fri, 28 Jan 2022 10:17:17 -0800 (PST)
+Received: from tom-desktop.station (net-188-217-50-123.cust.vodafonedsl.it. [188.217.50.123])
+        by smtp.gmail.com with ESMTPSA id m13sm10219615eja.160.2022.01.28.10.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 10:17:16 -0800 (PST)
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     tomm.merciai@gmail.com, linuxfancy@googlegroups.com,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] usb: usb251xb: add boost-up property support
+Date:   Fri, 28 Jan 2022 19:17:13 +0100
+Message-Id: <20220128181713.96856-1-tomm.merciai@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128092103.1fa2a661@md1za8fc.ad001.siemens.net>
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 09:21:03AM +0100, Henning Schild wrote:
-> I am still very much against any patches in that direction. The feature
-> as the vendors envision it does not seem to be really understood or
-> even explained.
-> Just narrowing down the device matching caters for vendor lock-in and
-> confusion when that pass through is happening and when not. And seems
-> to lead to unmaintainable spaghetti-code. 
-> People that use this very dock today will see an unexpected mac-change
-> once they update to a kernel with this patch applied.
+Add support for boost-up register of usb251xb hub.
+boost-up property control USB electrical drive strength
+This register can be set:
 
-I've not yet been convinced by replies that the proposed code really
-does only match the given dock, and not random USB dongles. To be
-convinced i would probably like to see code which positively
-identifies the dock, and that the USB device is on the correct port of
-the USB hub within the dock. I doubt you can actually do that in a
-sane way inside an Ethernet driver. As you say, it will likely lead to
-unmaintainable spaghetti-code.
+ - Normal mode -> 0x00
+ - Low         -> 0x01
+ - Medium      -> 0x10
+ - High        -> 0x11
 
-I also don't really think the vendor would be keen on adding code
-which they know will get reverted as soon as it is shown to cause a
-regression.
+(Normal Default)
 
-So i would prefer to NACK this, and push it to udev rules where you
-have a complete picture of the hardware and really can identify with
-100% certainty it really is the docks NIC.
+References:
+ - http://www.mouser.com/catalog/specsheets/2514.pdf p29
 
-   Andrew
+Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+---
+Changes since v1:
+ - Fix patch as suggested by RLeitner
+
+Changes since v2:
+ - Fix commit body as suggested by Shtylyov
+ - Fix commit msg
+ - Fix patch as suggested by RLeitner and Shtylyov
+
+ drivers/usb/misc/usb251xb.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
+index 507deef1f709..04c4e3fed094 100644
+--- a/drivers/usb/misc/usb251xb.c
++++ b/drivers/usb/misc/usb251xb.c
+@@ -543,6 +543,9 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+ 	if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
+ 		hub->lang_id = USB251XB_DEF_LANGUAGE_ID;
+ 
++	if (of_property_read_u8(np, "boost-up", &hub->boost_up))
++		hub->boost_up = USB251XB_DEF_BOOST_UP;
++
+ 	cproperty_char = of_get_property(np, "manufacturer", NULL);
+ 	strlcpy(str, cproperty_char ? : USB251XB_DEF_MANUFACTURER_STRING,
+ 		sizeof(str));
+@@ -584,7 +587,6 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+ 	 * may be as soon as needed.
+ 	 */
+ 	hub->bat_charge_en = USB251XB_DEF_BATTERY_CHARGING_ENABLE;
+-	hub->boost_up = USB251XB_DEF_BOOST_UP;
+ 	hub->boost_57 = USB251XB_DEF_BOOST_57;
+ 	hub->boost_14 = USB251XB_DEF_BOOST_14;
+ 	hub->port_map12 = USB251XB_DEF_PORT_MAP_12;
+-- 
+2.25.1
+
