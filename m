@@ -2,126 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C3749F69E
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 10:47:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D83CD49F6EE
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 11:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347711AbiA1Jra (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jan 2022 04:47:30 -0500
-Received: from mga03.intel.com ([134.134.136.65]:15409 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238349AbiA1Jra (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 28 Jan 2022 04:47:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643363250; x=1674899250;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=Fq9sQu/cN/lUsmIqrFTexk8KVRNWRRIf2vdhORwEjNA=;
-  b=Qf3oLsjHRAf/su0eHffVmM+qMudN9axNyeuXp7+DAQV+kRHRJqrDie1n
-   sOIjpUUpqFhBPBK37gBj+78iRis4+AUZA8hi8XttIlKnF8tJgXN1B68eu
-   lNLmcBj6zo8aDfC6AidMgdWkRCfYFr+Ju9HgYHDsV21TGddo4CCRk9oDf
-   NE/NSyvhnZjjautVbn17kCmZZAizxh4yVIw6tHNcWKYmgHYy/ZMQHcvEk
-   6iUXZr93l3uw2qfF0OWX79N8JG60Na63Iu02Dc7dy5QGkeHVRsWMC5XGj
-   gZ9k/x+9NAbsHIY8T6t2FVCLlv7idYhs7fhv3Q07IPfjcVWdI6ljY4LYy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="247035970"
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="247035970"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 01:47:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="564147519"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 28 Jan 2022 01:47:26 -0800
-To:     =?UTF-8?B?6LCi5rOT5a6H?= <xiehongyu1@kylinos.cn>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     Hongyu Xie <xy521521@gmail.com>, mathias.nyman@intel.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        125707942@qq.com, stable@vger.kernel.org
-References: <20220126094126.923798-1-xy521521@gmail.com>
- <YfEZFtf9K8pFC8Mw@kroah.com>
- <c7f6a8bb-76b6-cd2d-7551-b599a8276f5c@kylinos.cn>
- <YfEnbRW3oU0ouGqH@kroah.com>
- <e86972d3-e4a0-ad81-45ea-21137e3bfcb6@kylinos.cn>
- <7af5b318-b1ac-0c74-1782-04ba50a3b5fa@linux.intel.com>
- <ce40f4cd-a110-80b1-f766-e94dd8cedc7e@kylinos.cn>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH -next] xhci: fix two places when dealing with return value
- of function xhci_check_args
-Message-ID: <6da59964-ce0e-c202-8a9c-a753a1908f3e@linux.intel.com>
-Date:   Fri, 28 Jan 2022 11:48:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S243320AbiA1KPD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 28 Jan 2022 05:15:03 -0500
+Received: from mx-relay97-hz1.antispameurope.com ([94.100.132.94]:54691 "EHLO
+        mx-relay97-hz1.antispameurope.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231378AbiA1KPD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jan 2022 05:15:03 -0500
+X-Greylist: delayed 331 seconds by postgrey-1.27 at vger.kernel.org; Fri, 28 Jan 2022 05:15:02 EST
+Received: from unknown ([185.80.187.2]) by mx-relay97-hz1.antispameurope.com;
+ Fri, 28 Jan 2022 11:09:30 +0100
+Received: from grp-ex01.Vivavis.int (192.168.17.53) by grp-ex01.Vivavis.int
+ (192.168.17.53) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Fri, 28 Jan
+ 2022 11:09:26 +0100
+Received: from grp-ex01.Vivavis.int ([::1]) by grp-ex01.Vivavis.int ([::1])
+ with mapi id 15.02.0986.015; Fri, 28 Jan 2022 11:09:26 +0100
+From:   "embedded (VIVAVIS AG)" <embedded@vivavis.com>
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: AW: ftdi_sio: Problem when changing the baud rate after a transfer
+Thread-Topic: ftdi_sio: Problem when changing the baud rate after a transfer
+Thread-Index: AdgGJbRPj9Lxv6TJRBW2/KYX/66liQN/alhw
+Date:   Fri, 28 Jan 2022 10:09:26 +0000
+Message-ID: <1ec54d4f592c46b7a14109df559072e4@vivavis.com>
+References: <5aae37a8029549d8a9ef28f2e39fe58f@vivavis.com>
+In-Reply-To: <5aae37a8029549d8a9ef28f2e39fe58f@vivavis.com>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.0.1]
+x-g-data-mailsecurity-for-exchange-state: 0
+x-g-data-mailsecurity-for-exchange-error: 0
+x-g-data-mailsecurity-for-exchange-sender: 23
+x-g-data-mailsecurity-for-exchange-server: 61419075-592b-4c8d-b7a0-bf1d145a8b8e
+x-c2processedorg: 2f045ba3-9b34-4118-a5bd-6c10d5957477
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-In-Reply-To: <ce40f4cd-a110-80b1-f766-e94dd8cedc7e@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-cloud-security-sender: embedded@vivavis.com
+X-cloud-security-recipient: linux-usb@vger.kernel.org
+X-cloud-security-crypt: load encryption module
+X-cloud-security-Virusscan: CLEAN
+X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay97-hz1.antispameurope.com with B8D9EDE6D96
+X-cloud-security-connect: unknown[185.80.187.2], TLS=1, IP=185.80.187.2
+X-cloud-security-Digest: b5cad2cde68c0d9b714a2c82db707d28
+X-cloud-security: scantime:1.698
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+> Gesendet: Montag, 10. Januar 2022 14:27
+> An: linux-usb@vger.kernel.org
+> Betreff: ftdi_sio: Problem when changing the baud rate after a transfer
+>
+> Hi,
+> there seems to be a problem with the ftdi_sio driver in conjunction with an FT2232C and changing the baud rate.
+> This behavior is observable at least on linux 4.19.190.
+> The following was done in order to observe this problem:
+> A transfer is started over one of the serial interfaces of the FT2232C at a lower baud rate, eg. 300 baud.
+> The code waits for the driver to empty the tx buffer by calling tcdrain(). After the call returns the code changes
+> the baud rate of the serial interface to a higher rate, eg. 4800 baud, and writes another stream of bytes.
+> Now the problem occurs: Looking at the TX pin of the used interface with an oscilloscope, one can see that
+> the last byte of the previous transfer, which is supposed to be transferred at 300 baud, is transferred at the
+> higher rate of 4800 baud. Even worse, it is not even the complete byte, but rather some of the last bits of
+> that last byte which are transferred at the new baud rate configured. This problem occurs independent of
+> whether the interface is opened in blocking or non-blocking mode.
+> I verified that the driver does in fact ask the hardware if it's tx buffer is empty when the hardware status is
+> reported. However, it seems that the reported status by the FT2232C does not check the status of it's shift
+> register (if that is even possible at all), which is clearly influenced by the changed baud rate.
+>
+> Can someone confirm this behavior and is there a proper way to fix it?
+>
+> Regards,
+> Yasin Morsli
+>
+>
+> PS: Here is an MWE to test this behavior:
+>
+> #include <stdio.h>
+> #include <fcntl.h>
+> #include <string.h>
+> #include <termios.h>
+>
+> const char* help_msg =
+>    "Usage: %s [tty] [data]\n"
+>    "  tty:  filepath to the tty\n"
+>    "  data: data to transfer\n";
+>
+> int error(const char* msg) {
+>    printf("Error: %s\n", msg);
+>    return -1;
+>}
+>
+>int setspeed(int fd_tty, int speed) {
+>   struct termios tty;
+>    if (tcgetattr(fd_tty, &tty) != 0) return error("tcgetattr failed");
+>
+>    cfsetospeed(&tty, speed);
+>    cfsetispeed(&tty, speed);
+>
+>    if (tcsetattr(fd_tty, TCSANOW, &tty) != 0) return error("tcsetattr failed");
+>
+>    return 0;
+>}
+>
+>int main(int argc, const char** argv) {
+>    if (argc < 3) {
+>        printf(help_msg, argv[0]);
+>        return 0;
+>    }
+>
+>    const char* path_tty = argv[1];
+>    const char* data_tty = argv[2];
+>
+>    int fd_tty = open(path_tty, O_RDWR | O_NOCTTY);
+>    if (fd_tty < 0) return error("open failed");
+>
+>    struct termios tty;
+>    if (tcgetattr(fd_tty, &tty) != 0) return error("tcgetattr failed");
+>
+>    tty.c_cflag &= ~(CSIZE  | PARENB | CRTSCTS);
+>    tty.c_cflag |=  (CS7 | CSTOPB);
+>    tty.c_iflag &= ~(IXON | IXOFF | IXANY | IGNBRK);
+>    tty.c_lflag = 0;
+>    tty.c_oflag = 0;
+>    tty.c_cc[VMIN] = 0;
+>
+>    if (tcsetattr(fd_tty, TCSANOW, &tty) != 0) return error("tcsetattr failed");
+>
+>    if (setspeed(fd_tty, B300) != 0) return error("setspeed failed");
+>    write(fd_tty, data_tty, strlen(data_tty));
+>    tcdrain(fd_tty);
+>
+>    if (setspeed(fd_tty, B4800) != 0) return error("setspeed failed");
+>    write(fd_tty, data_tty, strlen(data_tty));
+>    tcdrain(fd_tty);
+>
+>    close(fd_tty);
+>
+>    return 0;
+>}
 
-On 28.1.2022 5.48, 谢泓宇 wrote:
-> Hi Mathias,
-> 
->> xhci_urb_enqueue() shouldn't be called for roothub urbs, but if it is then we
->> should continue to return -EINVAL
-> 
-> xhci_urb_enqueue() won't be called for roothub urbs, only for none roothub urbs(see usb_hcd_submit_urb()).> 
-> So xhci_urb_enqueue() will not get 0 from xhci_check_args().
-> 
-> Still return -EINVAL if xhci_check_args() returns 0 in xhci_urb_enqueue()?
-> 
+I've found this older thread https://www.spinics.net/lists/linux-usb/msg71689.html.
+The proposed solution or patch with chars_in_buffer() function doesn't exist in more recent
+kernels (4.19 or newer), but the same functionality is achieved by ftdi_tx_empty(), which is
+indeed called, when tcdrain() is called from userspace.
+ftdi_tx_empty() calls ftdi_get_modem_status() and checks whether FTDI_RS_TEMPT flag is
+set. If set (i.e. shift register empty) ftdi_tx_empty() returns true.
 
-Yes. That is what it used to return. 
-This is more about code maintaining practice than this specific patch.
+But I wonder why FTDI_RS_THRE (transmit holding register empty) is not taken into account.
+Furthermore, I can not find any checks for tx-fifos. But possibly the FTDI chip has a guarantee
+that if FTDI_RS_TEMPT is set, the holding register and internal tx-fifos are empty, too.
 
-Only make the necessary change to fix a bug, especially if the patch is going
-to stable kernels. 
-The change to return success ("0") instead of -EINVAL in xhci_urb_enqueue() for 
-roothub URBs is irrelevant in fixing your issue.
+As Yasin stated above, it can be observed that the chip transmits data, even if the driver reports
+ftdi_tx_empty() == true. Possibly due to a bug in the driver or by poor chip design.
 
-Debugging future issues is a lot harder when there are small undocumented
-unrelated functional changes scattered around bugfixing patches.
+Any thoughts on this?
 
-Other reason is that even if you can be almost certain xhci_urb_enqueue() won't
-be called for roothub urbs for this kernel version, it's possible some old stable
-kernel code looks very different, and this change can break that stable version.
+Carsten
 
-Seemingly odd checks in code can indicate the old original code was flawed, and
-quickly worked around by adding the odd check.
-That kernel version might still depend on this odd check even if newer versions
-are fixed properly.
-
->>
->> xhci_check_args() should be rewritten later, but first we want a targeted fix
->> that can go to stable.
->>
->> Your original patch would be ok after following modification:
->> if (ret <= 0)
->>     return ret ? ret : -EINVAL;
-> 
-> I have two questions:
-> 
->     1) Why return -EINVAL for roothub urbs?
-
-- For all reasons stated above
-- Because it used to, and changing it doesn't fix anything
-- Because urbs sent to xhci_urb_enqueue() should have a valid urb->dev->parent,
-  if they don't have it then they are INVALID
-
-> 
->     2) Should I change all the return statements about xhci_check_args() in drivers/usb/host/xhci.c?
-> 
->     There are 6 of them.
-
-Only make sure your patch doesn't change the functionality unnecessarily.
-There are two places where we return -EINVAL if xhci_check_args() returns 0:
-xhci_urb_enqueue() and xhci_check_streams_endpoint()
-Keep that functionality.
-
-Thanks
-Mathias
