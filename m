@@ -2,80 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D1A4A03D9
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 23:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3894A04A7
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Jan 2022 00:53:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351699AbiA1Wnz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jan 2022 17:43:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344236AbiA1Wnz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jan 2022 17:43:55 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D9BC061714
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jan 2022 14:43:54 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id ah7so20717720ejc.4
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jan 2022 14:43:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=hldrX7DaK3vtFLdkulHs1OmsyUauWlphuBrfoAtGxSU=;
-        b=hG39/hc0seegWlYuEdAJcsv91aNLLA3Sa5Cy8+xfoBeV1OKyaXk4bw5kswGTqYJgxM
-         hp5w4Kh5i1Dapj/o+AwOWF6MkKb8FXdRnat3zRRCCUfDOMz7Gz6LVZjapq3NwdD0+QJf
-         LYzhImCfmV/ZU456RHxtv+XCIYdNASxKnc2COIhXpnlis9/HNQfnLlf6u7IMcbIPJ07p
-         8fDdEFWS8oxSXOlRAPUbce9FITP3kjtW0oT+pWJzqtx2D60S9v3aobAz4BexNlXhLkhb
-         CNU+0yOu6TD0vYnad86MsZqhs8L7XwiLvfOlZwg7ECpxTTMR30NNcA2M0z18ooPYPhbe
-         BBiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=hldrX7DaK3vtFLdkulHs1OmsyUauWlphuBrfoAtGxSU=;
-        b=ng4MYS3sDUCkTp3G9j7Sc/mm31B21wVaaZldBJ5XwXQi0BfupYRDcgVZ35JmBBl9J6
-         irrqCfNkfAtvo4jCQy77l5IFHbpkQKDMjGiu909ev/hO5+uWbpk/BmXx6LAhL3aip8KA
-         s9rcadiAe1o0ahvazUKwgslE3j8YPWnl1bZ3KaX1OAfDQjUC5ZHIAOF8J2E/OlZsIGQk
-         B/0KR/xxI04EFzjVhgY9bFIo4/ULYOplh9suwFoMFoMYiOWgr+ZbmbCFnc/jLxtskoNM
-         /gtcEV71DfZNRpQBmhx0D6OKozQixGzEsBLKGDVNeb28XamDUK1BW1m/CaZEiqzc+Y7S
-         LeAg==
-X-Gm-Message-State: AOAM531Si90KO9BE8mtuhrmKzulXN8skfT5fMoKMM7qS53pbcQNAykLZ
-        Y0NtzDAU6gFjmBv9SwbPZHhCpb3pE0YHsoJ/Ze0=
-X-Google-Smtp-Source: ABdhPJxlT2C9r0iS6u7kAlnBOh5H92FGKwVhSo4+mkiO1MTDsTvJSrCmYBBPXv5sfrL4c/tEb50vGT6rsi1kz6TU4m8=
-X-Received: by 2002:a17:906:6a05:: with SMTP id qw5mr8666903ejc.90.1643409833315;
- Fri, 28 Jan 2022 14:43:53 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a17:907:a04b:0:0:0:0 with HTTP; Fri, 28 Jan 2022 14:43:52
- -0800 (PST)
-Reply-To: dunawattara96@outlook.com
-From:   Mr Duna Wattara <drhajizongob@gmail.com>
-Date:   Fri, 28 Jan 2022 10:43:52 -1200
-Message-ID: <CAEgioX5kwZ8m0xCRcHQ=UCBftaETxmHTF_QHshNEfxDeNQpK5Q@mail.gmail.com>
-Subject: with due respect
-To:     undisclosed-recipients:;
+        id S1344717AbiA1XxL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jan 2022 18:53:11 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:47784 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344659AbiA1XwX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jan 2022 18:52:23 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 50AC2CE27E0
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jan 2022 23:52:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9A100C340E7
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jan 2022 23:52:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643413940;
+        bh=CxXoqBR3MMplYQKyoSSaPFLCXRwewZroyaTsXXlI10c=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=OjinJmAS+/1iofxyDvioPhpJN26jgwCeavw7IIuBoSdukW0i54Xfc5BpTHMfF40TT
+         trI14KfncZnREr/UlZHpTrGV23f5G2h1r0trPy9KBC2ATm6BgcyQrumAWJcq6DBtYs
+         1lSgnVx+TdhPww68iXwQGTwlSukBNjMT/Y+gBc41u4r8dX8NnziBOK2SDWnDJ5IRpu
+         ZIwgQngJ8TqNLn8PHUwtjDKQf7kIsElgKIgo8lYOQv1qsogE6eUaOgZ41EJo9k15E8
+         Q81YQ/XGuqhTRrxaHAXSKwwKhRqwf+iwSrWnlTKM/yU6NPIFo2GVftp1jgSBkt0+G0
+         zi5gKRsxWa7Dg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 7BE5BC05FD0; Fri, 28 Jan 2022 23:52:20 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215361] SL-6000 zaurus USB error - 'bad CDC descriptors'
+Date:   Fri, 28 Jan 2022 23:52:20 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: low
+X-Bugzilla-Who: bids.7405@bigpond.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215361-208809-nsWF7IAxAK@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215361-208809@https.bugzilla.kernel.org/>
+References: <bug-215361-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Friend,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
 
-I know that this mail will come to you as a surprise as we have never
-met before, but need not to worry as I am contacting you independently
-of my investigation and no one is informed of this communication.
+--- Comment #12 from Ross Maynard (bids.7405@bigpond.com) ---
+Hi Oliver,
 
-I need your urgent assistance in transferring the sum of $11.3million
-immediately to your private account.The money has been here in our
-Bank lying dormant for years now without anybody coming for the claim of it.
+I applied the patch, and was able to ping and ssh into my SL-6000.
 
-I want to release the money to you as the relative to our deceased
-customer (the account owner) who died a long with his supposed NEXT OF
-KIN since 16th October 2005. The Banking laws here does not allow such
-money to stay more than 16 years, because the money will be recalled
-to the Bank treasury account as unclaimed fund.
+Thanks!
 
-By indicating your interest I will send you the full details on how
-the business will be executed.
+On 28/1/22 2:50 am, bugzilla-daemon@bugzilla.kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
+>
+> --- Comment #11 from Oliver Neukum (oliver@neukum.org) ---
+> Created attachment 300340
+>    --> https://bugzilla.kernel.org/attachment.cgi?id=3D300340&action=3Ded=
+it
+> another special case
+>
+> Please try this patch
+>
 
-Please respond urgently and delete if you are not interested.
+--=20
+You may reply to this email to add a comment.
 
-Best Regards,
-Mr. Duna Wattara.
+You are receiving this mail because:
+You are watching the assignee of the bug.=
