@@ -2,120 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E98EC49FDB6
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 17:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EF449FE45
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 17:44:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349949AbiA1QK7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jan 2022 11:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        id S245623AbiA1Qom (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jan 2022 11:44:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238317AbiA1QK5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jan 2022 11:10:57 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6260DC061714
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jan 2022 08:10:57 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id m9so13101703oia.12
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jan 2022 08:10:57 -0800 (PST)
+        with ESMTP id S239249AbiA1Qom (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jan 2022 11:44:42 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2193C061714;
+        Fri, 28 Jan 2022 08:44:41 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id a25so9819588lji.9;
+        Fri, 28 Jan 2022 08:44:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2ZOiI6lazSl8B7vFlhNLXnNn9YbN5dBSdVRmogZ9Qao=;
-        b=hjhdyG10JLRh3r2QbHELSXx0g9SkUM2z/Q+WCHuTANvkPtMdpLI05LySB+0s+JNeqp
-         h/b/RovU8FRUhcx0nA4QiCU4Ec5haUTbAGkuQGE9WmVhGiyoGpO0AWlkitWbFTm3hNIv
-         WOwq4Y8p27sqs/QAU2fe4/VBlAh6g0zYXW14P2FE0EQZttByFC2XTRxGIJeX73i4V44W
-         2Ngm7qxAjRB/RtK/6RhGfNjkvIK0+bAKORcRzH3dZKXFD9zZEnLa3RJd8V5AK5acFM6l
-         3ASHEH7e5S3qhR+jLkF17TNwE7Mxb3F2u8ND1rKpgD305U4kf1hbMjbHxxYSsfySId0n
-         DuxA==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lGbJdBWOVm4Va2Wgu00QXQ6qBSeWp/5p1TodM7voG/M=;
+        b=gi8dnSZB6Jf3ARKxPcuzQilOA1X+IiqrSJpDqa0UwPNSbvxlAZhn7o27PEBX6T4Pt0
+         Yy6l0mN+LNiSyQQWHHAmf6parJzpyeXFAkkxL5K7luFmmIlaRL2LfjpG0L/TAIz1bTF9
+         i7uzFMuBqGG3XviwNlXn7b799D8RxFzBpjwSZmu3RWfi8ru7YbpoFcVo5g88KsceELfy
+         lIZuTKJyqdnQ59c2ztH/IFQSmsKWFYSWfk99sySz8rE0ttv6MHCV9Yo++nJdsP6ntQIH
+         zeq+MWJsiwRWavnQIl8R2mLwvpLx0V4yVwg82LUiDJWia8a5F0Ypj1Y64q0qvTav4zhX
+         BOPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2ZOiI6lazSl8B7vFlhNLXnNn9YbN5dBSdVRmogZ9Qao=;
-        b=E0nbw8CubR3se4xgkroppMsJsz6+woUzyGCcs0KNusCmSzhB5k6DCuozOX4b+xCzB7
-         XOxp+iyICf3R24BAlRcF7uVxbT7j24zAr29kSA2VDiU4lqRv681h++s/Cwxwm7rhkbBK
-         KbIT2O8gpP0gytNhGO/930aHhVqBeYXWegiXtenxX4aHgAS45rdVHAkWUbbPbYed8ny8
-         15vFkE6ANutduFdEnbY4t+ziSvN4fmChsw+IS+zJPxZA33w1FKtousI6xIu/XbCY4tNu
-         41onC3RVQ9TH/1Jbuh4PBeytwpmzWpuKhNLG4iUiaG8ENKuJnc1p8J8icGlFymwZM4uM
-         IN4g==
-X-Gm-Message-State: AOAM532Q0M9Ypy8B6to28XXpo8mFmK0gqDVlQ8eDH3dGPJ2hoKvbQRTH
-        LKu4Iw0N3cOV5bvuGYvrGYt8Qg==
-X-Google-Smtp-Source: ABdhPJx4HXeI26gB9vJZi3St+tQAaKLaM/tjSbjPY7Npv2+r+wxlghlN1mdUz3f7ObVBR1yYvKuEHA==
-X-Received: by 2002:a05:6808:f05:: with SMTP id m5mr8868453oiw.121.1643386256435;
-        Fri, 28 Jan 2022 08:10:56 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id m23sm10325469oos.6.2022.01.28.08.10.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 08:10:55 -0800 (PST)
-Date:   Fri, 28 Jan 2022 08:11:19 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
-        greg@kroah.com, robh@kernel.org, linux-kernel@vger.kernel.org,
-        quic_tsoni@quicinc.com, quic_psodagud@quicinc.com,
-        quic_satyap@quicinc.com, quic_pheragu@quicinc.com,
-        quic_rjendra@quicinc.com, quic_sibis@quicinc.com,
-        quic_saipraka@quicinc.com
-Subject: Re: [PATCH V4 3/6] soc: qcom: eud: Add driver support for Embedded
- USB Debugger(EUD)
-Message-ID: <YfQVpzZ42MdJkkZW@ripper>
-References: <cover.1642768837.git.quic_schowdhu@quicinc.com>
- <7ccee5ae484e6917f5838c8abde368680ec63d05.1642768837.git.quic_schowdhu@quicinc.com>
- <YfDSZTZOryQuWIlJ@builder.lan>
- <c072d162-e371-e44b-8160-d06a8a6c051c@quicinc.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lGbJdBWOVm4Va2Wgu00QXQ6qBSeWp/5p1TodM7voG/M=;
+        b=tNYMG9X7EI5m9Cv9JncQW26U+SWVjHCPvgCAWeV4Ql9HWW43NkTlB78bw/SeAMl3nC
+         O24Re4sezeKGKg0vG6W/mA5e1shfS72FzBuNtYVeQhD1lwkW2RyPVyxscr0rO1mZHG1d
+         0u7jq1QW21uxa0qAC06e/83ObjgyK1t81tJ0uM1gcFql3zkX7z7g8QP/8Fpp8uE9o6VK
+         nMyL6wjncxlzBB0Xesxrm733mfCV4jicTGgXScZneZhut45HT/JQyNw8PtPcHuDk5Ne+
+         n5NOAU/I/Td1gXUaPFes16F9ahWnhwN8c48sgfOtP7+njmTaFKrVT2+TE8oKSUoxWyad
+         htFw==
+X-Gm-Message-State: AOAM530mrqOil4iOD8HuOSeSyIjaAmJo+82gJCw/CZW3QnAKMH3T2vFc
+        7p9kaNjoidAPbmTxcnW1W7k=
+X-Google-Smtp-Source: ABdhPJyJ6jgjwOjzC8CzJQXbRwBcvXaRgKVo2AAd4HIFZT41VNXT41y1PVAPuiy0ARZx4En3ka4wwQ==
+X-Received: by 2002:a2e:b8d5:: with SMTP id s21mr6499514ljp.196.1643388279294;
+        Fri, 28 Jan 2022 08:44:39 -0800 (PST)
+Received: from [192.168.1.103] ([31.173.86.67])
+        by smtp.gmail.com with ESMTPSA id f9sm1988948lfm.166.2022.01.28.08.44.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jan 2022 08:44:38 -0800 (PST)
+Subject: Re: [PATCH 4/7] mfd: hi6421-spmi-pmic: Use generic_handle_irq_safe().
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>
+References: <20220127113303.3012207-1-bigeasy@linutronix.de>
+ <20220127113303.3012207-5-bigeasy@linutronix.de>
+ <44b42c37-67a4-1d20-e2ff-563d4f9bfae2@gmail.com>
+ <YfPwqfmrWEPm/9K0@google.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <d351e221-ddd4-eb34-5bbe-08314d26a2e0@gmail.com>
+Date:   Fri, 28 Jan 2022 19:44:36 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c072d162-e371-e44b-8160-d06a8a6c051c@quicinc.com>
+In-Reply-To: <YfPwqfmrWEPm/9K0@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu 27 Jan 04:01 PST 2022, Souradeep Chowdhury wrote:
+On 1/28/22 4:33 PM, Lee Jones wrote:
 
+>>> generic_handle_irq() is invoked from a regular interrupt service
+>>> routing. This handler will become a forced-threaded handler on
+>>
+>>    s/routing/routine/?
+>>
+>>> PREEMPT_RT and will be invoked with enabled interrupts. The
+>>> generic_handle_irq() must be invoked with disabled interrupts in order
+>>> to avoid deadlocks.
+>>>
+>>> Instead of manually disabling interrupts before invoking use
+>>> generic_handle_irq() which can be invoked with enabled and disabled
+>>> interrupts.
+>>>
+>>> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+>> [...]
+>>
+>> MBR, Sergey
 > 
-> On 1/26/2022 10:17 AM, Bjorn Andersson wrote:
-> > On Fri 21 Jan 07:53 CST 2022, Souradeep Chowdhury wrote:
-[..]
-> > > +		return PTR_ERR(chip->base);
-> > > +
-> > > +	chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> > > +	if (IS_ERR(chip->mode_mgr))
-> > > +		return PTR_ERR(chip->mode_mgr);
-> > > +
-> > > +	chip->irq = platform_get_irq(pdev, 0);
-> > > +	ret = devm_request_threaded_irq(&pdev->dev, chip->irq, handle_eud_irq,
-> > > +			handle_eud_irq_thread, IRQF_ONESHOT, NULL, chip);
-> > > +	if (ret)
-> > > +		return dev_err_probe(chip->dev, ret, "failed to allocate irq\n");
-> > > +
-> > > +	enable_irq_wake(chip->irq);
-> > > +
-> > > +	platform_set_drvdata(pdev, chip);
-> > > +
-> > > +	return 0;
-> > Per the updated binding, the EUD would now be a usb-role-switch as well
-> > and when not enabled should simply propagate the incoming requests. So I
-> > was expecting this to register as a usb_role_switch as well...
-> 
-> Can you please elaborate on this?
-> 
-> Do I need to define a separate 'usb_role_switch_desc' here and register
-> using 'usb_role_switch_register'?
-> 
-> Also what should be the set method in this case for usb_role_switch_desc?
-> 
+> What does that mean?
 
-My expectation is that in normal operation pmic_glink will provide role
-switching requests and then as you enable the EUD it will force the role
-to gadget.
+   Ah, you were asking about MBR! My best regards then. :-)
 
-So my suggestion was that you make eud a role-switch and as long as EUD
-is disabled you just pass through the role-switch vote from pmic_glink
-onto the dwc3.
-
-Perhaps I'm misunderstanding how this is really working.
-
-Regards,
-Bjorn
+MBR, Sergey
