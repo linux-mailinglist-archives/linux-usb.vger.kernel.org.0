@@ -2,79 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F11449FCCC
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 16:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE0849FCD9
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 16:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349539AbiA1P3C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jan 2022 10:29:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56892 "EHLO
+        id S1349558AbiA1Pba (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jan 2022 10:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349368AbiA1P3B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jan 2022 10:29:01 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D3BC061714;
-        Fri, 28 Jan 2022 07:29:01 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id p27so12549947lfa.1;
-        Fri, 28 Jan 2022 07:29:01 -0800 (PST)
+        with ESMTP id S1348350AbiA1Pb3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jan 2022 10:31:29 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CAFC061747;
+        Fri, 28 Jan 2022 07:31:28 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id b9so12486952lfq.6;
+        Fri, 28 Jan 2022 07:31:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=N4J//Mo9xUttrK0yF032bWbn0KZLi4C3IbfSaVZ898E=;
-        b=nMCCJwPleajqB6C9nJrLYmYyxvYJDjsPBaeAckGvpvNJDlogXVNDX5CMorLz8EkXwK
-         tOGGJLbUBQ5vVXgmuATMWVHVp6zRhthE/Z4c3fXvDzusCCvuSOLi2PeQqPPynXDiEqJa
-         wpkWD/KytYGfhbLSPodHYTZ193CEPYVnW8yYjqop2VUUI19OJJSNODw9+MHhdzD6OI8n
-         reTz6lWlg50Q6pG/G+MdGVZEs7E/JstVtaC73N7E3+wALEq524Y3vPRmf0zJQjvvlg5R
-         cR0EZAoEAIZxSDSUjdrrZQayHItW8C9PmvfUhNyD52CwO42YQFOTC1TF8xhvGNG+gp0E
-         rLPA==
+        bh=KHs6ffmXoNgB7PgAET8KZkcoI47YhdLdQfWEN1wdVIY=;
+        b=EGy5kBsZs7mue/dnKJkIJKYEb3NQuujucP9629Oezmt3hmr2Lda276tchLhN/H10cm
+         hSTdd88xh4xET4rO+9cz4tQYS8wqjSGbq9JQp3ayfHKoHp6RllbhpLfwA9/WieAp8Tu4
+         YG7RyoNJz/fdrgUu+ym8BUjRayCPZbZMT5jVMJFll74/40/smf4liERf4Owi7UpMCfmp
+         v1Y4AEREiPkDhWkBoKFU2J3Gi5G2838nldCF++lrZUyftLFNQMNkyzPtUO35hnzhCOfz
+         Y5+01YB4OO9SyWNPSfjTw8C1+FN/UXmCue4UiGMXKwoO3l8J/8EPp4YXhGO8Bo02eNSA
+         l06A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=N4J//Mo9xUttrK0yF032bWbn0KZLi4C3IbfSaVZ898E=;
-        b=ph2LkScdvjhnfKaTjEarW2R63Nvs8ycJqHuJIRLv5hUWHxGPa7c7gDEnwxsPW+UViA
-         +f7GrCVyKklqPXeux47iYZoLQJhnxO7qeGsVsNpQNpw68eRm4ZsuwmAYQpjALWj+recc
-         /lSmDgMhuXqo68QBjvJWU6ivOsYjb7U/BOwZyvJzhgQBCauAH3ux0HDQICP2lzB67YY7
-         8ElHfICV9jXMbdCqSWvQKbWY7HkN/KPf0HNmr99kZvRnyVGcP2oKNBH1l/jujgaJRMMY
-         N2sjGcsiU/ggS13Ciw3Sw2rTZxbR/T/8gzNUCJCWeQtVpOvIHcOsUidRvM7OqvjEDq0k
-         xoBw==
-X-Gm-Message-State: AOAM530RwKCIcHaPpXbjVRhkAtVBytlG62jJ7I3VQ3AREGp3y43wQ09m
-        01HARGi5SDaXnCifDeKBaQo=
-X-Google-Smtp-Source: ABdhPJyQ9v4PdBJzaie5bbiSmHbBxFsVgyJTcSUuDvUITdCGgIiqmLYFQd/isDs0HBzExLgZ/Z5wJg==
-X-Received: by 2002:a05:6512:3a96:: with SMTP id q22mr6579539lfu.521.1643383739523;
-        Fri, 28 Jan 2022 07:28:59 -0800 (PST)
+        bh=KHs6ffmXoNgB7PgAET8KZkcoI47YhdLdQfWEN1wdVIY=;
+        b=4IyRYXe6jAxtrM5xjlocPDt4hvCVWPOxI0ZEKYs0+OFxKWlidPhxNFOqQCE44eMOdg
+         Atx4Uc3/eyKEGUU4LJEDpgj6gVjvoxVTZLdSZj8qVRIiyGbcRNQ9aNsq5qIi5VVTWK0y
+         69KA9YRPlD4mMtpCjVrws78ODTAg7KF5WlY3mIT4gTasryuIb3CKuM4nvwCVExUnCFNY
+         M6qp54LSOZY0rhtjvAnjMYqAaJHqhbKJfZ7KjUI7KdXmidiRkw0kNfZZ/hNlDHcNRNYu
+         Y7lmSb/g/1kng+ej7sIXxeDMxAOSH+IC257J1QEw+ukPzaaONX8UJPggnpJ4y1Xn7Vay
+         KWAA==
+X-Gm-Message-State: AOAM5326Ed3QEvZ8UFGksjowgWH5tOOKJn8vv3zxMkpEHMYT90w4L2wN
+        I0m6/V2JiGzHbXpom8gJw+cG9plyHPo=
+X-Google-Smtp-Source: ABdhPJxVsONRJJAvcxhzc27gfPk/RvQsfat/2Ev+rmO3fwe+uwXQHNrZwU5ASImIhbDRO2lCZinLFQ==
+X-Received: by 2002:a05:6512:12d6:: with SMTP id p22mr6686448lfg.231.1643383886725;
+        Fri, 28 Jan 2022 07:31:26 -0800 (PST)
 Received: from [192.168.1.103] ([31.173.86.67])
-        by smtp.gmail.com with ESMTPSA id z11sm2563451lfu.106.2022.01.28.07.28.57
+        by smtp.gmail.com with ESMTPSA id t6sm2570898lfp.128.2022.01.28.07.31.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 07:28:58 -0800 (PST)
-Subject: Re: [PATCH 4/7] mfd: hi6421-spmi-pmic: Use generic_handle_irq_safe().
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Fri, 28 Jan 2022 07:31:26 -0800 (PST)
+Subject: Re: [PATCH] usb: usb251xb: add boost-up property support
+To:     Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     linuxfancy@googlegroups.com,
+        Richard Leitner <richard.leitner@skidata.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>
-References: <20220127113303.3012207-1-bigeasy@linutronix.de>
- <20220127113303.3012207-5-bigeasy@linutronix.de>
- <44b42c37-67a4-1d20-e2ff-563d4f9bfae2@gmail.com>
- <YfPwqfmrWEPm/9K0@google.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220121232612.7283-1-tomm.merciai@gmail.com>
 From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <0daa924f-790c-cdc7-a1c0-4eb91917e084@gmail.com>
-Date:   Fri, 28 Jan 2022 18:28:57 +0300
+Message-ID: <be1c8dcc-1136-f101-3129-4d6587b9204b@gmail.com>
+Date:   Fri, 28 Jan 2022 18:31:25 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
-In-Reply-To: <YfPwqfmrWEPm/9K0@google.com>
+In-Reply-To: <20220121232612.7283-1-tomm.merciai@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -82,29 +69,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1/28/22 4:33 PM, Lee Jones wrote:
+Hello!
 
->>> generic_handle_irq() is invoked from a regular interrupt service
->>> routing. This handler will become a forced-threaded handler on
->>
->>    s/routing/routine/?
->>
->>> PREEMPT_RT and will be invoked with enabled interrupts. The
->>> generic_handle_irq() must be invoked with disabled interrupts in order
->>> to avoid deadlocks.
->>>
->>> Instead of manually disabling interrupts before invoking use
->>> generic_handle_irq() which can be invoked with enabled and disabled
->>> interrupts.
->>>
->>> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
->> [...]
->>
->> MBR, Sergey
+On 1/22/22 2:26 AM, Tommaso Merciai wrote:
+
+> Add u8 property to support boost-up register of usb251xb hub.
+> boost-up property control USB electrical drive strenght
+
+  Strength.
+
+> This register can be set:
 > 
-> What does that mean?
+>  - Normal mode -> 0x00
+>  - Low         -> 0x01
+>  - Medium      -> 0x10
+>  - High        -> 0x11
+> 
+> (Normal Default)
+> 
+> References:
+>  - http://www.mouser.com/catalog/specsheets/2514.pdf p29
+> 
+> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> ---
+>  drivers/usb/misc/usb251xb.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
+> index 507deef1f709..74fd8ac0c303 100644
+> --- a/drivers/usb/misc/usb251xb.c
+> +++ b/drivers/usb/misc/usb251xb.c
+> @@ -543,6 +544,12 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+>  	if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
+>  		hub->lang_id = USB251XB_DEF_LANGUAGE_ID;
+>  
+> +	if (!of_property_read_u8(np, "boost-up", &property_u8)){
+> +		hub->boost_up = property_u8;
+> +	} else {
+> +		hub->boost_up = USB251XB_DEF_BOOST_UP;
+> +	}
 
-   That means that I think you had a typo in the word "routing".
-The s/// comes from vim, I think --where it means search and replace.
+   No need for {} here at all.
+
+[...]
 
 MBR, Sergey
