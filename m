@@ -2,49 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 004C049F25A
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 05:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5876749F263
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 05:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345973AbiA1ET7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jan 2022 23:19:59 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:54766
+        id S1345999AbiA1EU4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jan 2022 23:20:56 -0500
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:54824
         "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236875AbiA1ET4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 23:19:56 -0500
+        by vger.kernel.org with ESMTP id S240880AbiA1EU4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jan 2022 23:20:56 -0500
 Received: from [192.168.1.9] (unknown [222.129.35.96])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 6587341988;
-        Fri, 28 Jan 2022 04:19:50 +0000 (UTC)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 5BB7F3F051;
+        Fri, 28 Jan 2022 04:20:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643343594;
-        bh=qJivR/0SfF6KYekc1Fj6mI+NGXa+UlyMrVTHUfa7zAc=;
+        s=20210705; t=1643343654;
+        bh=dIUsbvJS0yr08KtexnYfpQvKUob/zoM+k9/hXRBANvY=;
         h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
          In-Reply-To:Content-Type;
-        b=hpseaTnQ9pHxaszHmm9QXlN3a3Hv3HapEBtlQzEy+ZnjdwAopDUhD6xZd9vQ2qhc6
-         wVv52sx1elMogbVW8/Q4nCoGvFS0EQB8qYvKO7na9uZ2ZkATYEvL5O3zUaupatU+Pt
-         WOGeJ8vK8gOA77pNoSH8WfW3ayyhi/hRWfMhLOHQiNhAIxqDuza4p/XNTtERhdPwPH
-         sU4As/zB8/mhJQGsIiHBPcAl5O/wDo22MIABFtvDuWnYcUP4gaSLwG88M9pEL4A/R9
-         VwBWShO0aCZnRzcII47CiBplGz6qd+9cWJJMFWl0Kq4kNBUP8/A+aPMsyMeOLoJfZq
-         Fa3O/OLNV4L0w==
-Message-ID: <e75d006c-c9ae-9479-28b4-4cdacf1c51db@canonical.com>
-Date:   Fri, 28 Jan 2022 12:19:38 +0800
+        b=WIS5+AJLCH4FWjTvlIUlroyecxA2xYnd07eBNPT2iabfBOkSvvIEAMmVtH0PghlqK
+         Ksi3JMfxFH7oMJekXT9wVo2N/wZ9vL5cU92+4sn7y6XYwF1Je+8JGTCbpZXSOfspWQ
+         itCT3Yll//KUMX71NpIWOVZlg951LMDg7gZ7Zs26obFuihx9Vf5y3RORa+7i8OeEka
+         loZxnY0jMtveDeFFOsE7MDQvJif5u4CTYx7D0o+zUhpY0d0mc6uHIv+dNZXUuLtvbu
+         DkVX/4Avt9pi2WT1j1j6pykV24cRkXhBFXfgjZrOSoGQfCLbfzDvcqI6MCC8s4GlQE
+         B+5zcP+TDO08A==
+Message-ID: <0a0c91c4-93f5-042f-fff0-eb7376470e2c@canonical.com>
+Date:   Fri, 28 Jan 2022 12:20:48 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Subject: Re: [PATCH] net: usb: r8152: Add MAC passthrough support for
  RTL8153BL
 Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Mario.Limonciello@amd.com, kuba@kernel.org,
-        henning.schild@siemens.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
+To:     Hayes Wang <hayeswang@realtek.com>,
+        "Mario.Limonciello@amd.com" <Mario.Limonciello@amd.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "henning.schild@siemens.com" <henning.schild@siemens.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "davem@davemloft.net" <davem@davemloft.net>,
+        "tiwai@suse.de" <tiwai@suse.de>
 References: <20220127100109.12979-1-aaron.ma@canonical.com>
- <YfKp81yJWd95Jrg7@lunn.ch>
+ <35834c36763b4c24a9f1ab8a292732b5@realtek.com>
 From:   Aaron Ma <aaron.ma@canonical.com>
-In-Reply-To: <YfKp81yJWd95Jrg7@lunn.ch>
+In-Reply-To: <35834c36763b4c24a9f1ab8a292732b5@realtek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -52,41 +56,17 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-On 1/27/22 22:19, Andrew Lunn wrote:
-> On Thu, Jan 27, 2022 at 06:01:09PM +0800, Aaron Ma wrote:
->> RTL8153-BL is used in Lenovo Thunderbolt4 dock.
->> Add the support of MAC passthrough.
->> This is ported from Realtek Outbox driver r8152.53.56-2.15.0.
->>
->> There are 2 kinds of rules for MAC passthrough of Lenovo products,
->> 1st USB vendor ID belongs to Lenovo, 2nd the chip of RTL8153-BL
->> is dedicated for Lenovo. Check the ocp data first then set ACPI object
->> names.
->>
->> Suggested-by: Hayes Wang <hayeswang@realtek.com>
->> Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
->> ---
->>   drivers/net/usb/r8152.c | 44 ++++++++++++++++++++++-------------------
->>   1 file changed, 24 insertions(+), 20 deletions(-)
->>
->> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
->> index ee41088c5251..df997b330ee4 100644
->> --- a/drivers/net/usb/r8152.c
->> +++ b/drivers/net/usb/r8152.c
->> @@ -718,6 +718,7 @@ enum spd_duplex {
->>   #define AD_MASK			0xfee0
->>   #define BND_MASK		0x0004
->>   #define BD_MASK			0x0001
->> +#define BL_MASK                 BIT(3)
-> 
-> Just to be sure, this is defined by Realtek? This is not just Lenovo
-> just misusing a reserved bit?
+On 1/27/22 19:07, Hayes Wang wrote:
+> I think the devices with the VID/PID of Lenovo, such as 0x17EF/0x3082 and 0x17EF/0xA387,
+> would always return -ENODEV here. Is it what you want?
 > 
 
- From what I know, It's defined by Realtek to identify customized product.
-It shouldn't be misusing.
-Also it's used by Realtek outbox driver.
+This was a mistake.
+Try to fix it in V3.
 
+Thanks,
 Aaron
 
->       Andrew
+> 
+> Best Regards,
+> Hayes
