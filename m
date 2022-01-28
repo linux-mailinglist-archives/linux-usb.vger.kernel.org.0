@@ -2,165 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D83CD49F6EE
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 11:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1629C49F71D
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jan 2022 11:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243320AbiA1KPD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 28 Jan 2022 05:15:03 -0500
-Received: from mx-relay97-hz1.antispameurope.com ([94.100.132.94]:54691 "EHLO
-        mx-relay97-hz1.antispameurope.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231378AbiA1KPD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jan 2022 05:15:03 -0500
-X-Greylist: delayed 331 seconds by postgrey-1.27 at vger.kernel.org; Fri, 28 Jan 2022 05:15:02 EST
-Received: from unknown ([185.80.187.2]) by mx-relay97-hz1.antispameurope.com;
- Fri, 28 Jan 2022 11:09:30 +0100
-Received: from grp-ex01.Vivavis.int (192.168.17.53) by grp-ex01.Vivavis.int
- (192.168.17.53) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Fri, 28 Jan
- 2022 11:09:26 +0100
-Received: from grp-ex01.Vivavis.int ([::1]) by grp-ex01.Vivavis.int ([::1])
- with mapi id 15.02.0986.015; Fri, 28 Jan 2022 11:09:26 +0100
-From:   "embedded (VIVAVIS AG)" <embedded@vivavis.com>
-To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: AW: ftdi_sio: Problem when changing the baud rate after a transfer
-Thread-Topic: ftdi_sio: Problem when changing the baud rate after a transfer
-Thread-Index: AdgGJbRPj9Lxv6TJRBW2/KYX/66liQN/alhw
-Date:   Fri, 28 Jan 2022 10:09:26 +0000
-Message-ID: <1ec54d4f592c46b7a14109df559072e4@vivavis.com>
-References: <5aae37a8029549d8a9ef28f2e39fe58f@vivavis.com>
-In-Reply-To: <5aae37a8029549d8a9ef28f2e39fe58f@vivavis.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.0.1]
-x-g-data-mailsecurity-for-exchange-state: 0
-x-g-data-mailsecurity-for-exchange-error: 0
-x-g-data-mailsecurity-for-exchange-sender: 23
-x-g-data-mailsecurity-for-exchange-server: 61419075-592b-4c8d-b7a0-bf1d145a8b8e
-x-c2processedorg: 2f045ba3-9b34-4118-a5bd-6c10d5957477
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1345674AbiA1KSZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jan 2022 05:18:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347703AbiA1KSU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jan 2022 05:18:20 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832ACC061748;
+        Fri, 28 Jan 2022 02:18:20 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id q22so8319252ljh.7;
+        Fri, 28 Jan 2022 02:18:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ix2P1Qb5ofQ32QsYkBPXKMooy+IhErtwFmSskoxD7SE=;
+        b=HeDUP1mJe5Wh7L3Q7OGU3bD0vrHT35bY3RPQL27RrmknbAcnZRL5iJpoWD+mFG2SV2
+         qh0YRbrARJJ+Qlu3XnBT6QX8t+1gBDwL6iyvf6B9E+4T8F+PH4dKJvdiJWG4ILQTdBFe
+         WMqyYiiSSKliFToRWugPWsxurGNdumszzo2nbc73NZRzcG9E8wj2bohO8yQKy+FwDFVN
+         eLW+xh6jHZCMB2dGEz7dsTfL/PX5Ckx7r27LBzA3/upqJrcE0BHt2zfGIqrd6PDx2sGS
+         1Mmpox9pvKYsUotNxW6VPOKYv03J3WHh2cViaiSQTjzDEyNOybPo+1gOWUf4iwgXJmaa
+         zZHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ix2P1Qb5ofQ32QsYkBPXKMooy+IhErtwFmSskoxD7SE=;
+        b=umT7Tx/4cEMUv8aAsrL6uD0nIaaoAHLWxLYGigqPPZRCcC7UAsr1o05REQXBh85mfL
+         GHKIkLsnfIFYE9ZJ+RRuRktOqYjY/he07KyactgmuSGZwMWYqZyJYgVsoZW+IVdfbDax
+         oWFN5gwRaXvu7Uwu8jqtP5asdC1pq+4KKf1DAwz6cNX4sFzsxmb2+D3WaoCP5sAf06ur
+         2Wo0yn11PB+vwhr6kmt6+jYt7yTBKs/rxxBn5srBopVGAPRmtOjJ1ge2Weu5pOf+KHRB
+         984sjNwLfjLxM58vQiJg3UKs4rVNCioZWit5h1zITMsLtZjZKCpI+nZLM5BJWMHL3pxE
+         GI5w==
+X-Gm-Message-State: AOAM531MpJv+vbLzSN5BG+383TBRWhMQ+G+djmafnJBGdar+KO1wwEY1
+        qZSXS0KPT5VPPDCnBA99KF4=
+X-Google-Smtp-Source: ABdhPJyB16VsXVJnNjJMJADy3aApl/JsRwD6PTo2A73BfnawYgkLg1UmTv6X0o3ez3H1uCaT+ZH+Ew==
+X-Received: by 2002:a2e:9f4a:: with SMTP id v10mr5239509ljk.233.1643365098684;
+        Fri, 28 Jan 2022 02:18:18 -0800 (PST)
+Received: from [192.168.1.103] ([31.173.81.83])
+        by smtp.gmail.com with ESMTPSA id j15sm1005692lfr.203.2022.01.28.02.18.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jan 2022 02:18:17 -0800 (PST)
+Subject: Re: [PATCH 1/7] genirq: Provide generic_handle_irq_safe().
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>
+References: <20220127113303.3012207-1-bigeasy@linutronix.de>
+ <20220127113303.3012207-2-bigeasy@linutronix.de>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <c26a4348-fa0c-6eb6-a571-7dbc454c05d0@gmail.com>
+Date:   Fri, 28 Jan 2022 13:18:14 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-cloud-security-sender: embedded@vivavis.com
-X-cloud-security-recipient: linux-usb@vger.kernel.org
-X-cloud-security-crypt: load encryption module
-X-cloud-security-Virusscan: CLEAN
-X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay97-hz1.antispameurope.com with B8D9EDE6D96
-X-cloud-security-connect: unknown[185.80.187.2], TLS=1, IP=185.80.187.2
-X-cloud-security-Digest: b5cad2cde68c0d9b714a2c82db707d28
-X-cloud-security: scantime:1.698
+In-Reply-To: <20220127113303.3012207-2-bigeasy@linutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> Gesendet: Montag, 10. Januar 2022 14:27
-> An: linux-usb@vger.kernel.org
-> Betreff: ftdi_sio: Problem when changing the baud rate after a transfer
->
-> Hi,
-> there seems to be a problem with the ftdi_sio driver in conjunction with an FT2232C and changing the baud rate.
-> This behavior is observable at least on linux 4.19.190.
-> The following was done in order to observe this problem:
-> A transfer is started over one of the serial interfaces of the FT2232C at a lower baud rate, eg. 300 baud.
-> The code waits for the driver to empty the tx buffer by calling tcdrain(). After the call returns the code changes
-> the baud rate of the serial interface to a higher rate, eg. 4800 baud, and writes another stream of bytes.
-> Now the problem occurs: Looking at the TX pin of the used interface with an oscilloscope, one can see that
-> the last byte of the previous transfer, which is supposed to be transferred at 300 baud, is transferred at the
-> higher rate of 4800 baud. Even worse, it is not even the complete byte, but rather some of the last bits of
-> that last byte which are transferred at the new baud rate configured. This problem occurs independent of
-> whether the interface is opened in blocking or non-blocking mode.
-> I verified that the driver does in fact ask the hardware if it's tx buffer is empty when the hardware status is
-> reported. However, it seems that the reported status by the FT2232C does not check the status of it's shift
-> register (if that is even possible at all), which is clearly influenced by the changed baud rate.
->
-> Can someone confirm this behavior and is there a proper way to fix it?
->
-> Regards,
-> Yasin Morsli
->
->
-> PS: Here is an MWE to test this behavior:
->
-> #include <stdio.h>
-> #include <fcntl.h>
-> #include <string.h>
-> #include <termios.h>
->
-> const char* help_msg =
->    "Usage: %s [tty] [data]\n"
->    "  tty:  filepath to the tty\n"
->    "  data: data to transfer\n";
->
-> int error(const char* msg) {
->    printf("Error: %s\n", msg);
->    return -1;
->}
->
->int setspeed(int fd_tty, int speed) {
->   struct termios tty;
->    if (tcgetattr(fd_tty, &tty) != 0) return error("tcgetattr failed");
->
->    cfsetospeed(&tty, speed);
->    cfsetispeed(&tty, speed);
->
->    if (tcsetattr(fd_tty, TCSANOW, &tty) != 0) return error("tcsetattr failed");
->
->    return 0;
->}
->
->int main(int argc, const char** argv) {
->    if (argc < 3) {
->        printf(help_msg, argv[0]);
->        return 0;
->    }
->
->    const char* path_tty = argv[1];
->    const char* data_tty = argv[2];
->
->    int fd_tty = open(path_tty, O_RDWR | O_NOCTTY);
->    if (fd_tty < 0) return error("open failed");
->
->    struct termios tty;
->    if (tcgetattr(fd_tty, &tty) != 0) return error("tcgetattr failed");
->
->    tty.c_cflag &= ~(CSIZE  | PARENB | CRTSCTS);
->    tty.c_cflag |=  (CS7 | CSTOPB);
->    tty.c_iflag &= ~(IXON | IXOFF | IXANY | IGNBRK);
->    tty.c_lflag = 0;
->    tty.c_oflag = 0;
->    tty.c_cc[VMIN] = 0;
->
->    if (tcsetattr(fd_tty, TCSANOW, &tty) != 0) return error("tcsetattr failed");
->
->    if (setspeed(fd_tty, B300) != 0) return error("setspeed failed");
->    write(fd_tty, data_tty, strlen(data_tty));
->    tcdrain(fd_tty);
->
->    if (setspeed(fd_tty, B4800) != 0) return error("setspeed failed");
->    write(fd_tty, data_tty, strlen(data_tty));
->    tcdrain(fd_tty);
->
->    close(fd_tty);
->
->    return 0;
->}
+On 1/27/22 2:32 PM, Sebastian Andrzej Siewior wrote:
 
-I've found this older thread https://www.spinics.net/lists/linux-usb/msg71689.html.
-The proposed solution or patch with chars_in_buffer() function doesn't exist in more recent
-kernels (4.19 or newer), but the same functionality is achieved by ftdi_tx_empty(), which is
-indeed called, when tcdrain() is called from userspace.
-ftdi_tx_empty() calls ftdi_get_modem_status() and checks whether FTDI_RS_TEMPT flag is
-set. If set (i.e. shift register empty) ftdi_tx_empty() returns true.
+> Provide generic_handle_irq_safe() which can be used can used from any
+                                          ^^^^^^^^^^^^^^^^^^^^
+   You're repeating yourself. :-)
 
-But I wonder why FTDI_RS_THRE (transmit holding register empty) is not taken into account.
-Furthermore, I can not find any checks for tx-fifos. But possibly the FTDI chip has a guarantee
-that if FTDI_RS_TEMPT is set, the holding register and internal tx-fifos are empty, too.
+> context.
+> 
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+[...]
 
-As Yasin stated above, it can be observed that the chip transmits data, even if the driver reports
-ftdi_tx_empty() == true. Possibly due to a bug in the driver or by poor chip design.
-
-Any thoughts on this?
-
-Carsten
-
+MBR, Sergey
