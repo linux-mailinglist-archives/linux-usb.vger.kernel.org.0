@@ -2,114 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F7C4A2DA9
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Jan 2022 11:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A8D4A2DC9
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Jan 2022 11:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237231AbiA2Kc1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 Jan 2022 05:32:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
+        id S231152AbiA2Kqv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 29 Jan 2022 05:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiA2Kc1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Jan 2022 05:32:27 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE7EC061714;
-        Sat, 29 Jan 2022 02:32:26 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id q22so12524378ljh.7;
-        Sat, 29 Jan 2022 02:32:26 -0800 (PST)
+        with ESMTP id S229484AbiA2Kqu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Jan 2022 05:46:50 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C95C061714;
+        Sat, 29 Jan 2022 02:46:50 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id p12so15518814edq.9;
+        Sat, 29 Jan 2022 02:46:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=M8KppXZwkQSQWhLcBO/fg1G7bhttmzdUMDjxY3POSRc=;
-        b=KYcUA2p/u0YUGwacjhosNfy6/MHCmvfyLeV7o9hkVTyZtzJe9N4W9DkjAJHmHCBpbD
-         4xcRPkZhMgS8zZsVFRqMRgjSJXNI3paToeVAX5Y6l5md3kVF3gejygqPx2A2fZx04Byy
-         0K28Y0EXQMvRSypEcGq780su83T2Wlkw5hvbhl2/J6dd7nyDdSvc2fhkQT+hKK0m1j37
-         uKGKAKDjt3HcHeuxtVUF4bfKWvElYsXUHBzFAs57ATbc4pPTXj/PqBAMjox2t41y1Eh+
-         YLDv/7FbANJF4pXnbMXEmw5hhHi1q+7ncSVFZrjRuFUOVG/mBa+YO6AUK0wKx7kf6qp2
-         Tkrw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=b5iXX4PB/mwNbdjG9vSOuv8c1Dz8slB0se+u0ibPUWA=;
+        b=mvb0wK2KZuNg6dB8VBg7cOwds5PSsv7eIGviTjCRSD5k3f2BKe0xunub+lkUjUiHGB
+         htLvexWtojJB3ds48xALX3Us6s1epJmKOA5RUHed+hTk7syKRRNBFI1o3gZBLTDtWHfL
+         TMO55PendjPseACGkpMiNnioSnVNhkMZMt9EMTQWshCfNxnsgMC0rFj3I9I9cm+elmv2
+         /q4QLAxLz7HLXbMSpbNuTXaye2A4/XsZ283aHXcvAUGLRx6+3VlURKqM73wQYIboHUaM
+         NM/mOIsWBTSTYXbVsyyBJiIjpnsJ+fEdMeGY2Jhyo/w81WJ+uyYkuRpYNGAGdHJOTq08
+         oUbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=M8KppXZwkQSQWhLcBO/fg1G7bhttmzdUMDjxY3POSRc=;
-        b=MUiqOU0o31L9+yMjoATN5Z/E5WdslIjfz8ew7CsWeFNXtw0Iz5qbyIjPRniQdsZlH9
-         /ETFffdnEpWMJe3bamXVzIkEM8IOtPzEYPLqNTM1/63YVxuFCGfHlCxvR0fuRA4Q6QVC
-         4npFvetjfQWJfl50dtQKC7r0nXz2metnd8u1MHOl0AzXP7+4pexRfkILPyQ9KGL6IIuK
-         c1/NeJi1Q3JntOyZJIvtJbKPszAZdtA4VDxPcHJbdIIFMhkMbR9jFjeno4YVcP20unlD
-         C6XMVNoZEDEXwYTzAD57u61hXP2LZf2ByHC3ZTY7UWIUt8MlsJj64qq3c29hqGz9Bx2b
-         Zq5A==
-X-Gm-Message-State: AOAM533/J6UkAc/46WlreFDnixaec2Yfbv1qXhmslqbSma8x6XLCu7ba
-        +5QgT1LQkspUFiS0I1EnB3SzzV89dk8=
-X-Google-Smtp-Source: ABdhPJwHr9BlhoIOQVT34MoP/cSFcrqcUz/v8macj0lwehEYlcwRDIrSo/596bJ42uJya5xVQysz/Q==
-X-Received: by 2002:a2e:9594:: with SMTP id w20mr7906708ljh.448.1643452344673;
-        Sat, 29 Jan 2022 02:32:24 -0800 (PST)
-Received: from [192.168.1.103] ([31.173.86.18])
-        by smtp.gmail.com with ESMTPSA id s18sm1705138ljs.115.2022.01.29.02.32.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Jan 2022 02:32:23 -0800 (PST)
-Subject: Re: [PATCH v2] usb: usb251xb: add boost-up property support
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=b5iXX4PB/mwNbdjG9vSOuv8c1Dz8slB0se+u0ibPUWA=;
+        b=dJdLXoeQ/ilbaJJ5RVr9XEJp9D2bL+BTNQpTqvDXrT34rttHUyQAl0NhjhMinYKETU
+         B+mmyjRfxlqDIO+OQNIoCGQ5gDkjBoT5U6QcjAzNXHLNB8cDRubvBXoSx/rDO6T5WAGw
+         DCNem6gL0GIRfuWgDEU4kvT9IRRtabY4TnXSKeJQiraOMnW4EBcQaU+1Ji6kdITLPv9b
+         u6rsCT9F9A29oqTbTM1qydxn+9xtMt/nMhXdiRgigamMty8VKGALn6Nx4ZrSJeN9URbK
+         Bc16TPw1r7yPpbPqZcSKOnSvZ3iEhFExkchYY5pfrreMBafBALhGsik5cUh8bFO9PNtV
+         B91w==
+X-Gm-Message-State: AOAM532MJLZG9oIpxHLCHmaK1vtUCN7iMzFBmAcQDiIG74gFjhzOTrIY
+        AHD4ge/CJAbGssOh1faiRS8=
+X-Google-Smtp-Source: ABdhPJx7f5+B15vH5QkFwKoy50w08J3WMx/78pt7LsUy4V5C913aHigLp/GqPUJIIai2w9Y0pBbUkA==
+X-Received: by 2002:a05:6402:84f:: with SMTP id b15mr5717956edz.206.1643453208679;
+        Sat, 29 Jan 2022 02:46:48 -0800 (PST)
+Received: from tom-desktop (net-188-217-50-123.cust.vodafonedsl.it. [188.217.50.123])
+        by smtp.gmail.com with ESMTPSA id rl11sm11130709ejb.15.2022.01.29.02.46.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Jan 2022 02:46:47 -0800 (PST)
+Date:   Sat, 29 Jan 2022 11:46:45 +0100
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
 Cc:     linuxfancy@googlegroups.com,
         Richard Leitner <richard.leitner@skidata.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: usb251xb: add boost-up property support
+Message-ID: <20220129104645.GA2196@tom-desktop>
 References: <20220127231437.10893-1-tomm.merciai@gmail.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <978bc09c-b963-566b-8fa4-a53f1e5c569b@gmail.com>
-Date:   Sat, 29 Jan 2022 13:32:21 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ <978bc09c-b963-566b-8fa4-a53f1e5c569b@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220127231437.10893-1-tomm.merciai@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <978bc09c-b963-566b-8fa4-a53f1e5c569b@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello again!
-
-On 1/28/22 2:14 AM, Tommaso Merciai wrote:
-
-> Add u8 property to support boost-up register of usb251xb hub.
-> boost-up property control USB electrical drive strenght
-
-   Strength.
-
-> This register can be set:
+On Sat, Jan 29, 2022 at 01:32:21PM +0300, Sergei Shtylyov wrote:
+> Hello again!
 > 
->  - Normal mode -> 0x00
->  - Low         -> 0x01
->  - Medium      -> 0x10
->  - High        -> 0x11
+> On 1/28/22 2:14 AM, Tommaso Merciai wrote:
 > 
-> (Normal Default)
+> > Add u8 property to support boost-up register of usb251xb hub.
+> > boost-up property control USB electrical drive strenght
 > 
-> References:
->  - http://www.mouser.com/catalog/specsheets/2514.pdf p29
+>    Strength.
 > 
-> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> ---
-> Changes since v1:
->  - Fix patch as suggested by RLeitner
+> > This register can be set:
+> > 
+> >  - Normal mode -> 0x00
+> >  - Low         -> 0x01
+> >  - Medium      -> 0x10
+> >  - High        -> 0x11
+> > 
+> > (Normal Default)
+> > 
+> > References:
+> >  - http://www.mouser.com/catalog/specsheets/2514.pdf p29
+> > 
+> > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> > ---
+> > Changes since v1:
+> >  - Fix patch as suggested by RLeitner
+> > 
+> >  drivers/usb/misc/usb251xb.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
+> > index 507deef1f709..b60ab148e6ac 100644
+> > --- a/drivers/usb/misc/usb251xb.c
+> > +++ b/drivers/usb/misc/usb251xb.c
+> > @@ -543,6 +543,8 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+> >  	if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
+> >  		hub->lang_id = USB251XB_DEF_LANGUAGE_ID;
+> >  
+> > +	of_property_read_u8(np, "boost-up", &hub->boost_up))
 > 
->  drivers/usb/misc/usb251xb.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-> index 507deef1f709..b60ab148e6ac 100644
-> --- a/drivers/usb/misc/usb251xb.c
-> +++ b/drivers/usb/misc/usb251xb.c
-> @@ -543,6 +543,8 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
->  	if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
->  		hub->lang_id = USB251XB_DEF_LANGUAGE_ID;
->  
-> +	of_property_read_u8(np, "boost-up", &hub->boost_up))
+>    Isn't it hub->boost_up left uninitialized if an error occurs here?
 
-   Isn't it hub->boost_up left uninitialized if an error occurs here?
+Hi Sergey,
+Thanks for your review. I invite you to check v3 of the patch.
 
-[...]
+ - https://lkml.org/lkml/2022/1/28/915
 
-MBR, Sergey
+Tommaso
+
+> 
+> [...]
+> 
+> MBR, Sergey
