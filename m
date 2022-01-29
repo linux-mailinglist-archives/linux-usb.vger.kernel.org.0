@@ -2,169 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 134E84A2B47
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Jan 2022 03:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86FB64A2D5C
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Jan 2022 10:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352201AbiA2CiC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jan 2022 21:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
+        id S232556AbiA2JXt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 29 Jan 2022 04:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240775AbiA2CiB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jan 2022 21:38:01 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B0AC061714;
-        Fri, 28 Jan 2022 18:38:01 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id e9so6884418pgb.3;
-        Fri, 28 Jan 2022 18:38:01 -0800 (PST)
+        with ESMTP id S232265AbiA2JXt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Jan 2022 04:23:49 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AF6C061748
+        for <linux-usb@vger.kernel.org>; Sat, 29 Jan 2022 01:23:49 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id z14-20020a17090ab10e00b001b6175d4040so7485764pjq.0
+        for <linux-usb@vger.kernel.org>; Sat, 29 Jan 2022 01:23:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Pioxi9XTP9GgEJF7NTcDbxGQkHi4pVDGFMqOd1k4jbE=;
-        b=fqIQEDEmnNNvfGcJNLOgbUPqxAGjiOG/dz4NnUSviMeFlU8lrwNI1Zket+SarsI0dg
-         qvFIEFVyEsL8dyISV2wgrfbDeFOikd4zLZQxc9RrhsRp2/KJszNwv8rOj3eXIwHbIhj/
-         9xc9SV/BJClk/Ab5xMMa/361rp5/9CK4FFit7euIbuKHburCPiQNiRr5dZJKiC7V0zr7
-         5Gw+ixs020omEckyLCfgtY87kH832cj/qeF3gcpGl8Mi+DzFNrHD6wzvIaHvk+oeJvfY
-         xCmd1etOR2Dsyr2vAzhq8fDTiVvV9wVlajbz6heJQecDfonE+JqcMX6ogENeuJ+tlkDM
-         IZ9Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=bqzBoRkDi8kVZLIMHecE3nTUwM1cKHwe7YhWSOKzDP4=;
+        b=s97mGS9tiPyBqXIXKy3aSh/N4MQ9p3JSjfDa3iVBO/Yre+GETk8gTsrVUntRjvG8/m
+         rQrNRXjXcrI0pnn6CapBI1VN2KoFgEQfUybFE0qXREGW7/Ct7OPgPDUzdb0iFQbg5Lok
+         GPiSGiEUkxt5e7FpuZofX6lubQiidNESe0CzO+sgmdijG9oXNeQT3Wh2eIlRUgiBEcNS
+         G1JfC8l3U2YHhQuvDFlTkIcZQskxd0h9YRiuPXbnanlukqx+0Bt105wGtXQkOAA5SpkV
+         pTFHnmpt6XZHRqqG6WQoU6w09u/PM1eStPysheNrb67/4Oj9WUDoVpjQSOb1oF95rTIr
+         zcWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Pioxi9XTP9GgEJF7NTcDbxGQkHi4pVDGFMqOd1k4jbE=;
-        b=SgirWxwAy4wYVOZmEfTUliHfakUKlIMGWCV+URlj9h9p9y/AQq3lh7iFVYa33MQSLl
-         INqmd2p1CNEvSTqbn6sJ/+1LQjKsaTwGpZsiD0AnymPpp2GY9YNEcUQVDs7Xsc8UZA7D
-         opzGcCLGXKHctaleF9klZN6TuxC8xE8mZHpNNEBwSILU7XZf3wCrOtWOFYozZeVbYjJT
-         0Fwg8XS/IKm/bcTj3BKM7d8cMQJGvHA+vA8E05H98awvlg8nQzRstpXkMk7QB5r+EKmM
-         vvlFDW2CdrAnQD0njZPQ9v9dCvWWoTBgM2oL6K9zpN2lS6EB7vCsBbDyhJE/n/r9cBqv
-         93Pw==
-X-Gm-Message-State: AOAM531P0HxguhTSnn98uzzsQO3YcC8ACZY/QC6f278pehkQnB8lVnyJ
-        5oNGMUqJ/1yG+CUfUx/HDHY=
-X-Google-Smtp-Source: ABdhPJyCUW1sZtFs0iVJMLp6277XtmgPSqbbDsK8AZ0+P1gHy5T+p2tdjXyjgTYqwpxf0NZDkI2lag==
-X-Received: by 2002:a05:6a00:16d4:: with SMTP id l20mr10795398pfc.5.1643423880800;
-        Fri, 28 Jan 2022 18:38:00 -0800 (PST)
-Received: from lxb-server.lan ([2605:52c0:2:32c::])
-        by smtp.gmail.com with ESMTPSA id ms14sm3787991pjb.15.2022.01.28.18.37.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 18:38:00 -0800 (PST)
-From:   Yunhao Tian <t123yh.xyz@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yunhao Tian <t123yh.xyz@gmail.com>
-Subject: [PATCH] usb: gadget: audio: fix indent
-Date:   Sat, 29 Jan 2022 10:37:53 +0800
-Message-Id: <20220129023753.1494755-1-t123yh.xyz@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bqzBoRkDi8kVZLIMHecE3nTUwM1cKHwe7YhWSOKzDP4=;
+        b=dM7k8rs5BqPkjEf9xsEysp04WTRWaGjb4g4bHIdn/M/pAvsFJ9gsAekSlW73c/p7p0
+         SPanq96AJYoYYxxCqKR6WiaJHZL6WAHRqJuNP5MlEjYMT8dHrbjDaZHhlm5tow5LTqJc
+         tQYvZek6lczpyVbx4Mu4sCZbH51rujt1Gg1nEF/Z2O3j7YDpe/LfUg9+0JYMp9TwHazX
+         gnvBWAEv9hlRliBe52ItWP8CLh0hbN1nW87nmOXo1ENUrawrQiPWUbxX1agiDYly+TKr
+         07X0TFQliTrYr6cmD1o0CmGJkZWZXGl4Vqh5+uRHKzDMF+EbhY16F5HVn1zeRr/h0Qo7
+         6nOA==
+X-Gm-Message-State: AOAM532tkkmFh2Q+dpEOw+DXs3oceqP2k5YUlPETlmYwRPHH4gRBDlQ2
+        J15DTzIBvoQlPoD9vRxBmTTT+Ju+vUZW6W9CoJRiIQjFK1mwOA==
+X-Google-Smtp-Source: ABdhPJxkwCr5AJ3CWlNsUJ2kZldTLSWl6JJt6MW+qo5eS2oZPFbsWd6uXO4KRJK6Arlc6JioXfqDrw3X/aq49qkQFHs=
+X-Received: by 2002:a17:90b:1881:: with SMTP id mn1mr23751902pjb.236.1643448228173;
+ Sat, 29 Jan 2022 01:23:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220119064013.1381172-1-pumahsu@google.com> <e2baf3c5-0d80-9143-5fec-98a9e1474068@linux.intel.com>
+In-Reply-To: <e2baf3c5-0d80-9143-5fec-98a9e1474068@linux.intel.com>
+From:   Puma Hsu <pumahsu@google.com>
+Date:   Sat, 29 Jan 2022 17:23:12 +0800
+Message-ID: <CAGCq0LbWSqTJ+M+jxryUmn44FefC7cmS5ouP8BLyFY9z1RePMA@mail.gmail.com>
+Subject: Re: [PATCH v5] xhci: re-initialize the HC during resume if HCE was set
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     mathias.nyman@intel.com, Greg KH <gregkh@linuxfoundation.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Albert Wang <albertccwang@google.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This fixes indents of f_uac2.c and u_audio.c introduced by
-previous commits.
+On Thu, Jan 27, 2022 at 9:43 PM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
+>
+> On 19.1.2022 8.40, Puma Hsu wrote:
+> > When HCE(Host Controller Error) is set, it means an internal
+> > error condition has been detected. Software needs to re-initialize
+> > the HC, so add this check in xhci resume.
+> >
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Puma Hsu <pumahsu@google.com>
+> > ---
+> > v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
+> > v3: Add stable@vger.kernel.org for stable release.
+> > v4: Refine the commit message.
+> > v5: Add a debug log. Follow Mathias Nyman <mathias.nyman@linux.intel.co=
+m>'s comment.
+> >
+> >  drivers/usb/host/xhci.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > index dc357cabb265..41f594f0f73f 100644
+> > --- a/drivers/usb/host/xhci.c
+> > +++ b/drivers/usb/host/xhci.c
+> > @@ -1146,8 +1146,10 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibe=
+rnated)
+> >               temp =3D readl(&xhci->op_regs->status);
+> >       }
+> >
+> > -     /* If restore operation fails, re-initialize the HC during resume=
+ */
+> > -     if ((temp & STS_SRE) || hibernated) {
+> > +     /* If restore operation fails or HC error is detected, re-initial=
+ize the HC during resume */
+> > +     if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
+> > +             xhci_warn(xhci, "re-initialize HC during resume, USBSTS:%=
+s\n",
+> > +                       xhci_decode_usbsts(str, temp));
+> >
+> >               if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+> >                               !(xhci_all_ports_seen_u0(xhci))) {
+> >
+>
+> Tried to compile, something is missing in this patch:
+>
+> drivers/usb/host/xhci.c:1152:25: error: =E2=80=98str=E2=80=99 undeclared =
+(first use in this function); did you mean =E2=80=98qstr=E2=80=99?
 
-Signed-off-by: Yunhao Tian <t123yh.xyz@gmail.com>
----
- drivers/usb/gadget/function/f_uac2.c  | 16 +++++++-------
- drivers/usb/gadget/function/u_audio.c | 30 +++++++++++++--------------
- 2 files changed, 23 insertions(+), 23 deletions(-)
+Sorry for missing the declaration, I will fix it.
 
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index 242824da55df..abe57f6de73a 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -785,15 +785,15 @@ static void setup_headers(struct f_uac2_opts *opts,
- 		headers[i++] = USBDHDR(&out_clk_src_desc);
- 		headers[i++] = USBDHDR(&usb_out_it_desc);
- 
--    if (FUOUT_EN(opts))
--      headers[i++] = USBDHDR(out_feature_unit_desc);
--  }
-+		if (FUOUT_EN(opts))
-+			headers[i++] = USBDHDR(out_feature_unit_desc);
-+	}
- 
- 	if (EPIN_EN(opts)) {
- 		headers[i++] = USBDHDR(&io_in_it_desc);
- 
--    if (FUIN_EN(opts))
--      headers[i++] = USBDHDR(in_feature_unit_desc);
-+		if (FUIN_EN(opts))
-+			headers[i++] = USBDHDR(in_feature_unit_desc);
- 
- 		headers[i++] = USBDHDR(&usb_in_ot_desc);
- 	}
-@@ -801,8 +801,8 @@ static void setup_headers(struct f_uac2_opts *opts,
- 	if (EPOUT_EN(opts))
- 		headers[i++] = USBDHDR(&io_out_ot_desc);
- 
--  if (FUOUT_EN(opts) || FUIN_EN(opts))
--      headers[i++] = USBDHDR(ep_int_desc);
-+	if (FUOUT_EN(opts) || FUIN_EN(opts))
-+		headers[i++] = USBDHDR(ep_int_desc);
- 
-   if (EPOUT_EN(opts)) {
- 		headers[i++] = USBDHDR(&std_as_out_if0_desc);
-@@ -1258,7 +1258,7 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
- 	agdev->params.fb_max = uac2_opts->fb_max;
- 
- 	if (FUOUT_EN(uac2_opts) || FUIN_EN(uac2_opts))
--    agdev->notify = afunc_notify;
-+		agdev->notify = afunc_notify;
- 
- 	ret = g_audio_setup(agdev, "UAC2 PCM", "UAC2_Gadget");
- 	if (ret)
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-index 2bb569895a90..889dec11bb19 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -1115,21 +1115,21 @@ static int u_audio_rate_get(struct snd_kcontrol *kcontrol,
- }
- 
- static struct snd_kcontrol_new u_audio_controls[]  = {
--  [UAC_FBACK_CTRL] {
--    .iface =        SNDRV_CTL_ELEM_IFACE_PCM,
--    .name =         "Capture Pitch 1000000",
--    .info =         u_audio_pitch_info,
--    .get =          u_audio_pitch_get,
--    .put =          u_audio_pitch_put,
--  },
-+	[UAC_FBACK_CTRL] {
-+		.iface =	SNDRV_CTL_ELEM_IFACE_PCM,
-+		.name =		"Capture Pitch 1000000",
-+		.info =		u_audio_pitch_info,
-+		.get =		u_audio_pitch_get,
-+		.put =		u_audio_pitch_put,
-+	},
- 	[UAC_P_PITCH_CTRL] {
--		.iface =        SNDRV_CTL_ELEM_IFACE_PCM,
--		.name =         "Playback Pitch 1000000",
--		.info =         u_audio_pitch_info,
--		.get =          u_audio_pitch_get,
--		.put =          u_audio_pitch_put,
-+		.iface =	SNDRV_CTL_ELEM_IFACE_PCM,
-+		.name =		"Playback Pitch 1000000",
-+		.info =		u_audio_pitch_info,
-+		.get =		u_audio_pitch_get,
-+		.put =		u_audio_pitch_put,
- 	},
--  [UAC_MUTE_CTRL] {
-+	[UAC_MUTE_CTRL] {
- 		.iface =	SNDRV_CTL_ELEM_IFACE_MIXER,
- 		.name =		"", /* will be filled later */
- 		.info =		u_audio_mute_info,
-@@ -1179,8 +1179,8 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
- 	if (c_chmask) {
- 		struct uac_rtd_params *prm = &uac->c_prm;
- 
--    spin_lock_init(&prm->lock);
--    uac->c_prm.uac = uac;
-+		spin_lock_init(&prm->lock);
-+		uac->c_prm.uac = uac;
- 		prm->max_psize = g_audio->out_ep_maxpsize;
- 		prm->srate = params->c_srates[0];
- 
--- 
-2.25.1
-
+> -Mathias
