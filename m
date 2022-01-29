@@ -2,111 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9214A31F4
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Jan 2022 21:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593F54A3249
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Jan 2022 23:06:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353191AbiA2Uzv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 Jan 2022 15:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        id S1353333AbiA2WFg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 29 Jan 2022 17:05:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353175AbiA2Uzu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Jan 2022 15:55:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8AEC061714;
-        Sat, 29 Jan 2022 12:55:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05870B827EE;
-        Sat, 29 Jan 2022 20:55:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70799C340E5;
-        Sat, 29 Jan 2022 20:55:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643489747;
-        bh=G7QA3HwNNoYI9kiXeIfPQ93Sb/zPUzr5kXx1E0dhgLk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R9PVyqGbtp/xs8vsBE3u0q9gmCJ488CGR5zUh2kI8qdeNPDDYneJF94TUBGZGKhjO
-         Cn/kEky5r6evcFCypJgBkw99FwyKJZUiP4lopntkzptCQOsknAUPbDATSGUImfkkFg
-         JCPQtvXt9LOCcKe3w8kWJkQSncE6zM5MhtbE/S+Ij8yuQ37C/u/11PgC0QJ1uAwOdE
-         Q7TtApBV37o57nA5QjGANyg/Sjs0qRXXJxBVDB3+BZLjC70QyEAwumkzZg558r+BkA
-         0h2Pkt9faxJSTCj4rvFH4MiTQahUtx4/LC/G2oriVEF5MJu/RjNEppzoGDj2Xg5fE5
-         o/uTghvVAhYHw==
-Date:   Sat, 29 Jan 2022 13:55:42 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Robert Hancock <robert.hancock@calian.com>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, michal.simek@xilinx.com,
-        manish.narani@xilinx.com, sean.anderson@seco.com,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        piyush.mehta@xilinx.com, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: xilinx: fix uninitialized return value
-Message-ID: <YfWpznEA95bH1Bvg@dev-arch.archlinux-ax161>
-References: <20220127221500.177021-1-robert.hancock@calian.com>
+        with ESMTP id S1353381AbiA2WF2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Jan 2022 17:05:28 -0500
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACA9C061753;
+        Sat, 29 Jan 2022 14:05:04 -0800 (PST)
+Date:   Sat, 29 Jan 2022 23:04:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1643493900;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n4D+U5HlMhytxF2oWJ6akeJdqZUw/giBlQQtt02lSdo=;
+        b=KoDi8BGMdKHj/IZ8Kam0jq/XfIKb1SjwVNTrk094cQArFm14cIEJ7sv5KPNPTn47neg/g9
+        ygizzb4Bssk54esqzhIcofiPW0yL2ZiKQzJsKOhVX9jkiMjpKtnzPLfXTWW/Nj5M82xVNz
+        vWgVIqkPag04UKdTQhw9vdwp26FUoDE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Richard Leitner <richard.leitner@linux.dev>
+To:     Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     linuxfancy@googlegroups.com,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb: usb251xb: add boost-up property support
+Message-ID: <YfW6B4LANy11X5TQ@ltleri2>
+References: <20220128181713.96856-1-tomm.merciai@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220127221500.177021-1-robert.hancock@calian.com>
+In-Reply-To: <20220128181713.96856-1-tomm.merciai@gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 04:15:00PM -0600, Robert Hancock wrote:
-> A previous patch to skip part of the initialization when a USB3 PHY was
-> not present could result in the return value being uninitialized in that
-> case, causing spurious probe failures. Initialize ret to 0 to avoid this.
+LGTM. Please feel free to add
+
+Reviewed-by: Richard Leitner <richard.leitner@linux.dev>
+
+On Fri, Jan 28, 2022 at 07:17:13PM +0100, Tommaso Merciai wrote:
+> Add support for boost-up register of usb251xb hub.
+> boost-up property control USB electrical drive strength
+> This register can be set:
 > 
-> Fixes: 9678f3361afc ("usb: dwc3: xilinx: Skip resets and USB3 register settings for USB2.0 mode")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-This resolves a clang warning that is now in mainline:
-
-$ make -sj"$(nproc)" ARCH=arm64 LLVM=1 allmodconfig drivers/usb/dwc3/dwc3-xilinx.o
-drivers/usb/dwc3/dwc3-xilinx.c:122:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-        if (!usb3_phy)
-            ^~~~~~~~~
-drivers/usb/dwc3/dwc3-xilinx.c:216:9: note: uninitialized use occurs here
-        return ret;
-               ^~~
-drivers/usb/dwc3/dwc3-xilinx.c:122:2: note: remove the 'if' if its condition is always false
-        if (!usb3_phy)
-        ^~~~~~~~~~~~~~
-drivers/usb/dwc3/dwc3-xilinx.c:102:11: note: initialize the variable 'ret' to silence this warning
-        int                     ret;
-                                   ^
-                                    = 0
-1 error generated.
-
-It might be worth moving the initialization into the if statement
-
-    if (!usb3_phy) {
-        ret = 0;
-        goto skip_usb3_phy;
-    }
-
-as that will avoid hiding warnings of this nature if someone forgets to
-set ret on an error path but that is ultimately up to the maintainer.
-
+>  - Normal mode -> 0x00
+>  - Low         -> 0x01
+>  - Medium      -> 0x10
+>  - High        -> 0x11
+> 
+> (Normal Default)
+> 
+> References:
+>  - http://www.mouser.com/catalog/specsheets/2514.pdf p29
+> 
+> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
 > ---
->  drivers/usb/dwc3/dwc3-xilinx.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes since v1:
+>  - Fix patch as suggested by RLeitner
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
-> index e14ac15e24c3..a6f3a9b38789 100644
-> --- a/drivers/usb/dwc3/dwc3-xilinx.c
-> +++ b/drivers/usb/dwc3/dwc3-xilinx.c
-> @@ -99,7 +99,7 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
->  	struct device		*dev = priv_data->dev;
->  	struct reset_control	*crst, *hibrst, *apbrst;
->  	struct phy		*usb3_phy;
-> -	int			ret;
-> +	int			ret = 0;
->  	u32			reg;
+> Changes since v2:
+>  - Fix commit body as suggested by Shtylyov
+>  - Fix commit msg
+>  - Fix patch as suggested by RLeitner and Shtylyov
+> 
+>  drivers/usb/misc/usb251xb.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
+> index 507deef1f709..04c4e3fed094 100644
+> --- a/drivers/usb/misc/usb251xb.c
+> +++ b/drivers/usb/misc/usb251xb.c
+> @@ -543,6 +543,9 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+>  	if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
+>  		hub->lang_id = USB251XB_DEF_LANGUAGE_ID;
 >  
->  	usb3_phy = devm_phy_optional_get(dev, "usb3-phy");
+> +	if (of_property_read_u8(np, "boost-up", &hub->boost_up))
+> +		hub->boost_up = USB251XB_DEF_BOOST_UP;
+> +
+>  	cproperty_char = of_get_property(np, "manufacturer", NULL);
+>  	strlcpy(str, cproperty_char ? : USB251XB_DEF_MANUFACTURER_STRING,
+>  		sizeof(str));
+> @@ -584,7 +587,6 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+>  	 * may be as soon as needed.
+>  	 */
+>  	hub->bat_charge_en = USB251XB_DEF_BATTERY_CHARGING_ENABLE;
+> -	hub->boost_up = USB251XB_DEF_BOOST_UP;
+>  	hub->boost_57 = USB251XB_DEF_BOOST_57;
+>  	hub->boost_14 = USB251XB_DEF_BOOST_14;
+>  	hub->port_map12 = USB251XB_DEF_PORT_MAP_12;
 > -- 
-> 2.31.1
-> 
+> 2.25.1
 > 
