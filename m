@@ -2,69 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4CB4A360D
-	for <lists+linux-usb@lfdr.de>; Sun, 30 Jan 2022 12:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F356F4A37BC
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Jan 2022 17:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344903AbiA3LuT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 30 Jan 2022 06:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
+        id S1355502AbiA3Ql3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 30 Jan 2022 11:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237006AbiA3LuR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Jan 2022 06:50:17 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4ABC061714
-        for <linux-usb@vger.kernel.org>; Sun, 30 Jan 2022 03:50:17 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id e9so15614505ljq.1
-        for <linux-usb@vger.kernel.org>; Sun, 30 Jan 2022 03:50:17 -0800 (PST)
+        with ESMTP id S230237AbiA3Ql3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Jan 2022 11:41:29 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CF6C061714;
+        Sun, 30 Jan 2022 08:41:28 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id b186so16082508oif.1;
+        Sun, 30 Jan 2022 08:41:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=zQkTUmYoTL+SMI6Wsd3fvGoSJtSFgIC/KqZ6cq0Rgvo=;
-        b=H2tKfC3O1ghRIfHDLyYbX8j2tBxpmmA3/Rs5BEpgvfxo/zG53c6MWMYfUKnqrLlP69
-         Kjo4m5nO1AgSeHTq87Ia8cS0PKa+4HwaIiB0o/PleT/EhMpjZOiWU0qzPeamA8QRKDFK
-         9trq9jkvy/2EPaW4I5Ez+fWeEnaSTIWT9R66iZHyMggdGjHo20gf7VgRA6eAecLzpjcw
-         QGsGYxxFZvaigRC4ITUUOSaCMOOuFPvkxIUocUbGySYECpxA5y0nBPL1Z3ikSWeU+ACa
-         JGX84wwPxX1mV5n3OxDP9d6HWCKCgJlQBPk7CVhDMsaaIYs30Jtg2JYh/4Rm2bkPmMma
-         pjUA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GSJQs/IyzQLIz6D/JkwR/pMK0+5qH35ZqrOipwQfRbE=;
+        b=BNEG3sMvVw+5dRyH2NUqiDzBbGLUCbz+EL0qAW1kPVqP2p+3NxMf4dV0gvxGjOG+Dw
+         viiqO1czFsd/KNQACN89OA6E9BzoE79XC+6uD5hTL9VQKetlY6i1DTc3LtQkwsXBHIOq
+         Djr60foYoV32hsZWbjmtJJMy76hS/Mxvsz/+9HAuwJ9z1zb7Vqd60qbK9ix1OBs0P/Pn
+         f0uh0VrunvIQhgR/MhbxTvojwRTsK7UGwn447LDIhfrGCq3mh9CIZ9PQErz0ndNCgt+w
+         +YkECkeZ/LN2hoICubEuk46s0fxXw+VloIjeRBCrCyHhPPT9jFlS5WRTS4131qEyGZWQ
+         hKew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=zQkTUmYoTL+SMI6Wsd3fvGoSJtSFgIC/KqZ6cq0Rgvo=;
-        b=mOo/4gn6qHUKa0qhh47dw8E7MNd9yOfOrSJmKCwsY6QYr2Do4/zqSOaCXrZh8La7fH
-         19M4HHMnf5R3+/jL0YKkEtlPH4lioD6FVQood9I948lFlG/zuOcVYt513bx6vE/pxlJb
-         SXaUh+356F1ik9sCZN7lLSJnDasA8oACOKR0TiR1spJK9tyj+zfIJOMaihYQnlHsMxED
-         ENbM0HoSEldLoD8eolpNY7IIyRAs14Ntv3FRM7Blxjz1eOEXknDWesl9JxBGE9XRy/Jc
-         od9oMATlZBw3UX4xUeDxo0CL4jExaKh3qZPZqBTFYxmNeiYKDjbbu6/iZxEmr7bU/Eul
-         Snkw==
-X-Gm-Message-State: AOAM532rObGfDBpaB40krQQuTJcpfYhe8WBX4ylGHTHlBu88xym6gsRU
-        gAZV4GMESgrqFHHX+rc2SFqlQiJU4za/3XpbZwE=
-X-Google-Smtp-Source: ABdhPJyL2cY3ld3hm86evTHatZLiZLLFJY5bIDbPR6dQmULlWIK6WIlUBOArPOoQ1gYTqxflH3hzs6zlGPsVKUIR7UM=
-X-Received: by 2002:a2e:98d7:: with SMTP id s23mr10352463ljj.106.1643543415722;
- Sun, 30 Jan 2022 03:50:15 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=GSJQs/IyzQLIz6D/JkwR/pMK0+5qH35ZqrOipwQfRbE=;
+        b=InvS2vx7AjFB2yUAZe+Xt9S1iTzy2DFodCPNQP65iomU8h7YGYPgTe74DGnRrVI46M
+         sH+YwysHFRqBYqvv5edPTX8QYd0MqOpyLp73YLGlDd6wjU2QYIOq6NWopqaB52Pj063Z
+         UGDcggRZvoMBY7YT2Hf0PNxi9SPN3q2IpuacTeytxreY/UoNqs9YXT5pFqEVgar+V+tP
+         WxlzRpZrzfCC5b8JJsYkvoGmhCwY1dFCXpJxVbpkvQqfMESjdVb42tdFLP3PwfElSzce
+         qfTkenHrieYvxmi+dTGdrrrZ8VDzBxcjyv1MfSO9dCtQ5yMmjHAdqN6oGsNmt32TkP4P
+         MO9w==
+X-Gm-Message-State: AOAM531GiVIjy4NwpxEyebYVif2iUxum92VY+zwvQbsx6s0PyaIvxiqb
+        aJmYxrTjneqCnihY5f+A0ak=
+X-Google-Smtp-Source: ABdhPJzGBiFaEait5pJ4MfY+hwG2HCLBSiW7il/ZXS2ZQbREAEcqeU5cYnn2KTp/XzGwj8WSg7506Q==
+X-Received: by 2002:aca:ab0d:: with SMTP id u13mr16126504oie.138.1643560888155;
+        Sun, 30 Jan 2022 08:41:28 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j11sm14457177otj.30.2022.01.30.08.41.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Jan 2022 08:41:27 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 30 Jan 2022 08:41:26 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/5] acpi: Store CRC-32 hash of the _PLD in struct
+ acpi_device
+Message-ID: <20220130164126.GA2942650@roeck-us.net>
+References: <20211223081620.45479-1-heikki.krogerus@linux.intel.com>
+ <20211223081620.45479-3-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-Reply-To: roslza294@gmail.com
-Sender: haman2015zakaraya@gmail.com
-Received: by 2002:a05:6520:428c:b0:158:bd6e:c205 with HTTP; Sun, 30 Jan 2022
- 03:50:15 -0800 (PST)
-From:   Roslinawati Zainal <roslinawatizainal@gmail.com>
-Date:   Sun, 30 Jan 2022 03:50:15 -0800
-X-Google-Sender-Auth: olao50O2U6TGUt56Of33okgVvYU
-Message-ID: <CAB_VX0ptnmwuUMzkzPvaOjwEcNyTmAx7dTKtRTGcpYQvY3TJuA@mail.gmail.com>
-Subject: HAPPY NEW YEAR.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211223081620.45479-3-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-HAPPY NEW YEAR.
+On Thu, Dec 23, 2021 at 11:16:17AM +0300, Heikki Krogerus wrote:
+> Storing CRC-32 hash of the Physical Location of Device
+> object (_PLD) with devices that have it. The hash is stored
+> to a new struct acpi_device member "pld_crc".
+> 
+> The hash makes it easier to find devices that share a
+> location, as there is no need to evaluate the entire object
+> every time. Knowledge about devices that share a location
+> can be used in device drivers that need to know the
+> connections to other components inside a system. USB3 ports
+> will for example always share their location with a USB2
+> port.
+> 
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-My name is Ms. Zainal from Malaysia. I am writing you this mail to
-solicit for your cooperation in a very confidential business
-transaction of $3.9 million, I will give you details of the
-transaction upon your positive reply.
+Building ia64:tinyconfig ... failed
 
+ia64-linux-ld: drivers/acpi/scan.o: in function `__acpi_device_add':
+scan.c:(.text+0x27e2): undefined reference to `crc32_le'
 
-Kind regards
-Ms Zainal.
+ACPI now depends on CRC32.
+
+#regzbot introduced: 882c982dada4d5
+
+Guenter
+
+> ---
+>  drivers/acpi/scan.c     | 16 ++++++++++++++++
+>  include/acpi/acpi_bus.h |  1 +
+>  2 files changed, 17 insertions(+)
+> 
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index 7ff55a197a583..113414c46b713 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/dma-map-ops.h>
+>  #include <linux/platform_data/x86/apple.h>
+>  #include <linux/pgtable.h>
+> +#include <linux/crc32.h>
+>  
+>  #include "internal.h"
+>  
+> @@ -667,6 +668,19 @@ static int acpi_tie_acpi_dev(struct acpi_device *adev)
+>  	return 0;
+>  }
+>  
+> +static void acpi_store_pld_crc(struct acpi_device *adev)
+> +{
+> +	struct acpi_pld_info *pld;
+> +	acpi_status status;
+> +
+> +	status = acpi_get_physical_device_location(adev->handle, &pld);
+> +	if (ACPI_FAILURE(status))
+> +		return;
+> +
+> +	adev->pld_crc = crc32(~0, pld, sizeof(*pld));
+> +	ACPI_FREE(pld);
+> +}
+> +
+>  static int __acpi_device_add(struct acpi_device *device,
+>  			     void (*release)(struct device *))
+>  {
+> @@ -725,6 +739,8 @@ static int __acpi_device_add(struct acpi_device *device,
+>  	if (device->wakeup.flags.valid)
+>  		list_add_tail(&device->wakeup_list, &acpi_wakeup_device_list);
+>  
+> +	acpi_store_pld_crc(device);
+> +
+>  	mutex_unlock(&acpi_device_lock);
+>  
+>  	if (device->parent)
+> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+> index 8e87ead2af341..f8c945418df23 100644
+> --- a/include/acpi/acpi_bus.h
+> +++ b/include/acpi/acpi_bus.h
+> @@ -360,6 +360,7 @@ struct acpi_gpio_mapping;
+>  
+>  /* Device */
+>  struct acpi_device {
+> +	u32 pld_crc;
+>  	int device_type;
+>  	acpi_handle handle;		/* no handle for fixed hardware */
+>  	struct fwnode_handle fwnode;
