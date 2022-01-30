@@ -2,77 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A364A3844
-	for <lists+linux-usb@lfdr.de>; Sun, 30 Jan 2022 19:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 234CE4A384A
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Jan 2022 19:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233200AbiA3Sug (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 30 Jan 2022 13:50:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiA3Suf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Jan 2022 13:50:35 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D3AC061714;
-        Sun, 30 Jan 2022 10:50:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=B1suBtW3lHIZdcZqiYA9O6jJfZ6qe3rMGVXedeEUrXQ=; b=k3DfgPnT6T+BrhRoOdpuwmKASc
-        mNUFoJjSnLPPoE4SZdiMG02cDoVKFBNs+5JY1iUQBy8gFv94BANGGjzSWhnivL8cjtV9ihPc7S5pb
-        +ITu43uaZJqyE5jTGSVM7+rsTflSWxQp7xYSWuZQ4T++AFKwP257i/IjdseXu+CDvzzzJ8axBBdZG
-        d11IUIAnXTT3BKq9dw4S+X85JvKC48T2E1QS82/990yj5HGbtU6m/ceIjjRdsU6B1JkJX9WwMwk5d
-        TGrznM6a4wdfRTHbAReLU3UXGD8Dh9xClkZ92vCT5k9/hO6RpmkzcIqdGGQt2ZkgOCI8ibYPdczo4
-        HrD/WdWg==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nEFHV-007Eak-Lj; Sun, 30 Jan 2022 18:50:33 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] usb: typec: mux: select not-visible INTEL_SCU_IPC
-Date:   Sun, 30 Jan 2022 10:50:32 -0800
-Message-Id: <20220130185032.29298-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        id S1354934AbiA3Szh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 30 Jan 2022 13:55:37 -0500
+Received: from titan58.planetwebservers.net ([51.79.1.102]:58333 "EHLO
+        titan58.planetwebservers.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229847AbiA3Szh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Jan 2022 13:55:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lockie.ca;
+        s=default; h=Content-Transfer-Encoding:Content-Type:Subject:From:To:
+        MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=hCDbqygtw+4lqQVSId0Xf0cYsHS1s3MjP7c4rkF8g3g=; b=rOl220AwMxgPSTfO+q8eVKNWt1
+        V1npIIZEwk3yts3Rtpc5LjGtpIYX095ivIeXYp1haXhlngZkItb5YfXyLqnB9kZdBMEN6FyOX6O1s
+        dKJHyy9bdARrd9J2G/Ld1GyDf8vzwK0gyo9Q4tCKLSlyRXkD2UFr0I4eFamDSLqp5NcrhS2mpXW9C
+        U/RH/66YMOeYFwqOsme96lLL6cxmSYg8/qZ+RhqmTt1oXrXknAJEFaU048TSciASAkDlUVgGGnwAz
+        pfM0EHNr7QO0dYmgcNDx/PYP7gDCbA9ytPlzE7Ajg2+PMQtDt+KS7i/Zz9wLyXOdhoSQ3XsQMQeVY
+        7nm5qSzQ==;
+Received: from [66.79.250.116] (port=55742 helo=[192.168.68.65])
+        by titan.planetwebservers.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <bjlockie@lockie.ca>)
+        id 1nEFMO-0005dA-GI
+        for linux-usb@vger.kernel.org; Mon, 31 Jan 2022 05:55:36 +1100
+Message-ID: <b83861ab-fd5e-3021-70d1-3647f7b8eeb0@lockie.ca>
+Date:   Sun, 30 Jan 2022 13:55:35 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     linux-usb <linux-usb@vger.kernel.org>
+From:   James <bjlockie@lockie.ca>
+Subject: what could cause a cmd cmplt err -2
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - titan.planetwebservers.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lockie.ca
+X-Get-Message-Sender-Via: titan.planetwebservers.net: authenticated_id: bjlockie@lockie.ca
+X-Authenticated-Sender: titan.planetwebservers.net: bjlockie@lockie.ca
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-From-Rewrite: unmodified, already matched
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use "select INTEL_SCU_IPC" instead of depending on it since it is
-not a visible Kconfig symbol and it may not otherwise be set/enabled.
+What do these mean?
+I get a lot of them in dmesg.
+sda is
 
-Fixes: b62851491a55 ("usb: typec: mux: Convert the Intel PMC Mux driver to use new SCU IPC API")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Lee Jones <lee.jones@linaro.org>
-Cc: linux-usb@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: kernel test robot <lkp@intel.com>
----
-v2: add dependency on X86_PLATFORM_DEVICES to fix build error that was
-    Reported_by: kernel test robot <lkp@intel.com>
+[885862.931385] usb 2-2.1: cmd cmplt err -2
+[885863.015996] usb 2-2.1: reset SuperSpeed USB device number 3 using 
+xhci_hcd
+[885863.040134] scsi host0: uas_eh_device_reset_handler success
+[893205.111118] sd 0:0:0:0: [sda] tag#1 uas_eh_abort_handler 0 uas-tag 4 
+inflight: CMD IN
+[893205.111147] sd 0:0:0:0: [sda] tag#1 CDB: Read(10) 28 00 51 20 ab 90 
+00 00 08 00
+[893205.127136] scsi host0: uas_eh_device_reset_handler start
 
- drivers/usb/typec/mux/Kconfig |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+sda is Bus 002 Device 003: ID 0bc2:ab5a Seagate RSS LLC One Touch HDD 
+USB3 hard drive.
+It's on a powered hub with the wireless adapter.
 
---- linux-next-20220128.orig/drivers/usb/typec/mux/Kconfig
-+++ linux-next-20220128/drivers/usb/typec/mux/Kconfig
-@@ -11,8 +11,8 @@ config TYPEC_MUX_PI3USB30532
- 
- config TYPEC_MUX_INTEL_PMC
- 	tristate "Intel PMC mux control"
--	depends on ACPI
--	depends on INTEL_SCU_IPC
-+	depends on ACPI && X86_PLATFORM_DEVICES
-+	select INTEL_SCU_IPC
- 	select USB_ROLE_SWITCH
- 	help
- 	  Driver for USB muxes controlled by Intel PMC FW. Intel PMC FW can
+
+$ lsusb -tv
+\/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
+     ID 1d6b:0003 Linux Foundation 3.0 root hub
+     |__ Port 2: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
+         ID 05e3:0612 Genesys Logic, Inc. Hub
+         |__ Port 1: Dev 3, If 0, Class=Mass Storage, Driver=uas, 5000M
+             ID 0bc2:ab5a Seagate RSS LLC
+         |__ Port 3: Dev 4, If 0, Class=Vendor Specific Class, 
+Driver=mt76x2u, 5000M
+             ID 0e8d:7612 MediaTek Inc. MT7612U 802.11a/b/g/n/ac 
+Wireless Adapter
