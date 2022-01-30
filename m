@@ -2,109 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D15B4A353E
-	for <lists+linux-usb@lfdr.de>; Sun, 30 Jan 2022 09:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4CB4A360D
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Jan 2022 12:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354405AbiA3Iya (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 30 Jan 2022 03:54:30 -0500
-Received: from mga05.intel.com ([192.55.52.43]:50060 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1354391AbiA3Iy3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 30 Jan 2022 03:54:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643532869; x=1675068869;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZM/9TReuyCVp2siJygg8nKwW3jkjj3ryvnrMx3Fa3+I=;
-  b=Q+/97jzjp0gbCDg5Cz6gZ3c4f0bhoor5frUShEBCdfcKWy6C1nJKEZSZ
-   DXeKFmyetA9AN0y5w8Ym69Vhzo26m+94yBcEyZVdvUORZgZ9xa9MHvCMX
-   SFKfoXV1SJgrjFcnp060201sGGYGGbvuxOkfqpmzBi2RxIWLtVsy6ybuf
-   ug6Ej86/Mk2aSuYM3HNgYjgpiAW3QkgrLvjkWaHImDEfE33cd1P/x3zlp
-   DsqTT1qKkhz2adQOWNQ8LrB4AHRyr69gttJ3ypnYD7jL3yHSxVhQSrLkV
-   +cFwp5Upv8saVtw7VbkW7fV9QUJIGDXbXG5hthb6X/ZBcvnNiuOZ6Irkj
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="333686865"
-X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
-   d="scan'208";a="333686865"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 00:54:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,328,1635231600"; 
-   d="scan'208";a="522212040"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 30 Jan 2022 00:54:26 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nE5yc-000QHO-4T; Sun, 30 Jan 2022 08:54:26 +0000
-Date:   Sun, 30 Jan 2022 16:53:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Randy Dunlap <rdunlap@infradead.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] usb: typec: mux: select not-visible INTEL_SCU_IPC
-Message-ID: <202201301532.7WyZkoRm-lkp@intel.com>
-References: <20220130041220.9968-1-rdunlap@infradead.org>
+        id S1344903AbiA3LuT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 30 Jan 2022 06:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237006AbiA3LuR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Jan 2022 06:50:17 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4ABC061714
+        for <linux-usb@vger.kernel.org>; Sun, 30 Jan 2022 03:50:17 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id e9so15614505ljq.1
+        for <linux-usb@vger.kernel.org>; Sun, 30 Jan 2022 03:50:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=zQkTUmYoTL+SMI6Wsd3fvGoSJtSFgIC/KqZ6cq0Rgvo=;
+        b=H2tKfC3O1ghRIfHDLyYbX8j2tBxpmmA3/Rs5BEpgvfxo/zG53c6MWMYfUKnqrLlP69
+         Kjo4m5nO1AgSeHTq87Ia8cS0PKa+4HwaIiB0o/PleT/EhMpjZOiWU0qzPeamA8QRKDFK
+         9trq9jkvy/2EPaW4I5Ez+fWeEnaSTIWT9R66iZHyMggdGjHo20gf7VgRA6eAecLzpjcw
+         QGsGYxxFZvaigRC4ITUUOSaCMOOuFPvkxIUocUbGySYECpxA5y0nBPL1Z3ikSWeU+ACa
+         JGX84wwPxX1mV5n3OxDP9d6HWCKCgJlQBPk7CVhDMsaaIYs30Jtg2JYh/4Rm2bkPmMma
+         pjUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=zQkTUmYoTL+SMI6Wsd3fvGoSJtSFgIC/KqZ6cq0Rgvo=;
+        b=mOo/4gn6qHUKa0qhh47dw8E7MNd9yOfOrSJmKCwsY6QYr2Do4/zqSOaCXrZh8La7fH
+         19M4HHMnf5R3+/jL0YKkEtlPH4lioD6FVQood9I948lFlG/zuOcVYt513bx6vE/pxlJb
+         SXaUh+356F1ik9sCZN7lLSJnDasA8oACOKR0TiR1spJK9tyj+zfIJOMaihYQnlHsMxED
+         ENbM0HoSEldLoD8eolpNY7IIyRAs14Ntv3FRM7Blxjz1eOEXknDWesl9JxBGE9XRy/Jc
+         od9oMATlZBw3UX4xUeDxo0CL4jExaKh3qZPZqBTFYxmNeiYKDjbbu6/iZxEmr7bU/Eul
+         Snkw==
+X-Gm-Message-State: AOAM532rObGfDBpaB40krQQuTJcpfYhe8WBX4ylGHTHlBu88xym6gsRU
+        gAZV4GMESgrqFHHX+rc2SFqlQiJU4za/3XpbZwE=
+X-Google-Smtp-Source: ABdhPJyL2cY3ld3hm86evTHatZLiZLLFJY5bIDbPR6dQmULlWIK6WIlUBOArPOoQ1gYTqxflH3hzs6zlGPsVKUIR7UM=
+X-Received: by 2002:a2e:98d7:: with SMTP id s23mr10352463ljj.106.1643543415722;
+ Sun, 30 Jan 2022 03:50:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220130041220.9968-1-rdunlap@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Reply-To: roslza294@gmail.com
+Sender: haman2015zakaraya@gmail.com
+Received: by 2002:a05:6520:428c:b0:158:bd6e:c205 with HTTP; Sun, 30 Jan 2022
+ 03:50:15 -0800 (PST)
+From:   Roslinawati Zainal <roslinawatizainal@gmail.com>
+Date:   Sun, 30 Jan 2022 03:50:15 -0800
+X-Google-Sender-Auth: olao50O2U6TGUt56Of33okgVvYU
+Message-ID: <CAB_VX0ptnmwuUMzkzPvaOjwEcNyTmAx7dTKtRTGcpYQvY3TJuA@mail.gmail.com>
+Subject: HAPPY NEW YEAR.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Randy,
+HAPPY NEW YEAR.
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on linux/master linus/master balbi-usb/testing/next peter-chen-usb/for-usb-next v5.17-rc1 next-20220128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Randy-Dunlap/usb-typec-mux-select-not-visible-INTEL_SCU_IPC/20220130-121346
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20220130/202201301532.7WyZkoRm-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/15c19e705dc558a4a954897a8a4d369164035341
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Randy-Dunlap/usb-typec-mux-select-not-visible-INTEL_SCU_IPC/20220130-121346
-        git checkout 15c19e705dc558a4a954897a8a4d369164035341
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/usb/typec/mux/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/usb/typec/mux/intel_pmc_mux.c:19:10: fatal error: asm/intel_scu_ipc.h: No such file or directory
-      19 | #include <asm/intel_scu_ipc.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for INTEL_SCU_IPC
-   Depends on X86 && X86_PLATFORM_DEVICES
-   Selected by
-   - TYPEC_MUX_INTEL_PMC && USB_SUPPORT && TYPEC && ACPI
+My name is Ms. Zainal from Malaysia. I am writing you this mail to
+solicit for your cooperation in a very confidential business
+transaction of $3.9 million, I will give you details of the
+transaction upon your positive reply.
 
 
-vim +19 drivers/usb/typec/mux/intel_pmc_mux.c
-
-6701adfa9693bd Heikki Krogerus 2020-03-02  18  
-b62851491a55bc Heikki Krogerus 2020-04-16 @19  #include <asm/intel_scu_ipc.h>
-6701adfa9693bd Heikki Krogerus 2020-03-02  20  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Kind regards
+Ms Zainal.
