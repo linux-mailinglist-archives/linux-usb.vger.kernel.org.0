@@ -2,102 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 593F54A3249
-	for <lists+linux-usb@lfdr.de>; Sat, 29 Jan 2022 23:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6D94A33A7
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Jan 2022 05:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353333AbiA2WFg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 Jan 2022 17:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
+        id S1354143AbiA3EMZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 29 Jan 2022 23:12:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353381AbiA2WF2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Jan 2022 17:05:28 -0500
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACA9C061753;
-        Sat, 29 Jan 2022 14:05:04 -0800 (PST)
-Date:   Sat, 29 Jan 2022 23:04:55 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1643493900;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n4D+U5HlMhytxF2oWJ6akeJdqZUw/giBlQQtt02lSdo=;
-        b=KoDi8BGMdKHj/IZ8Kam0jq/XfIKb1SjwVNTrk094cQArFm14cIEJ7sv5KPNPTn47neg/g9
-        ygizzb4Bssk54esqzhIcofiPW0yL2ZiKQzJsKOhVX9jkiMjpKtnzPLfXTWW/Nj5M82xVNz
-        vWgVIqkPag04UKdTQhw9vdwp26FUoDE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Richard Leitner <richard.leitner@linux.dev>
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     linuxfancy@googlegroups.com,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: usb251xb: add boost-up property support
-Message-ID: <YfW6B4LANy11X5TQ@ltleri2>
-References: <20220128181713.96856-1-tomm.merciai@gmail.com>
+        with ESMTP id S1353820AbiA3EMY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Jan 2022 23:12:24 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9110CC061714;
+        Sat, 29 Jan 2022 20:12:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=dNnTgGunISh6IkejeLTnvBS8rg0J0+ka5G45qlCqRVI=; b=aR+SGtya0LgPBO1+v6Rmz/gGiW
+        plaHy7iOoVw+9kt2Hkwji930xwcb6O1J7BojatR2Jmm6ZTc5+aHnmm1lz09Ty7a68OLbJKYHAXRO+
+        fFvfC/+UPcM4Hxi4y/8KBnJYeE721bqFvu/KceHfDGoCGxxPPgalO5s1Oe31RBSPwzUGtT4BgAn46
+        JltjowvNtUdd/y4rq+6luS3KhjAWPbkFythIKNHaC514Mq4h0+jlSAeyn68uQdTG3bPcNuQCDKHF3
+        CIpsOvJVksIuiFZjnRnhkZGL73XAJZ9mVPre6E4JcQCszD+MI93/FQteY0fPfP1QL+UtXKjNLNp8v
+        mowtgqSQ==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nE1Zd-005sK9-N6; Sun, 30 Jan 2022 04:12:22 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] usb: typec: mux: select not-visible INTEL_SCU_IPC
+Date:   Sat, 29 Jan 2022 20:12:20 -0800
+Message-Id: <20220130041220.9968-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128181713.96856-1-tomm.merciai@gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-LGTM. Please feel free to add
+Use "select INTEL_SCU_IPC" instead of depending on it since it is
+not a visible Kconfig symbol and it may not otherwise be set/enabled.
 
-Reviewed-by: Richard Leitner <richard.leitner@linux.dev>
+Fixes: b62851491a55 ("usb: typec: mux: Convert the Intel PMC Mux driver to use new SCU IPC API")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: linux-usb@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/typec/mux/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Fri, Jan 28, 2022 at 07:17:13PM +0100, Tommaso Merciai wrote:
-> Add support for boost-up register of usb251xb hub.
-> boost-up property control USB electrical drive strength
-> This register can be set:
-> 
->  - Normal mode -> 0x00
->  - Low         -> 0x01
->  - Medium      -> 0x10
->  - High        -> 0x11
-> 
-> (Normal Default)
-> 
-> References:
->  - http://www.mouser.com/catalog/specsheets/2514.pdf p29
-> 
-> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> ---
-> Changes since v1:
->  - Fix patch as suggested by RLeitner
-> 
-> Changes since v2:
->  - Fix commit body as suggested by Shtylyov
->  - Fix commit msg
->  - Fix patch as suggested by RLeitner and Shtylyov
-> 
->  drivers/usb/misc/usb251xb.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-> index 507deef1f709..04c4e3fed094 100644
-> --- a/drivers/usb/misc/usb251xb.c
-> +++ b/drivers/usb/misc/usb251xb.c
-> @@ -543,6 +543,9 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
->  	if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
->  		hub->lang_id = USB251XB_DEF_LANGUAGE_ID;
->  
-> +	if (of_property_read_u8(np, "boost-up", &hub->boost_up))
-> +		hub->boost_up = USB251XB_DEF_BOOST_UP;
-> +
->  	cproperty_char = of_get_property(np, "manufacturer", NULL);
->  	strlcpy(str, cproperty_char ? : USB251XB_DEF_MANUFACTURER_STRING,
->  		sizeof(str));
-> @@ -584,7 +587,6 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
->  	 * may be as soon as needed.
->  	 */
->  	hub->bat_charge_en = USB251XB_DEF_BATTERY_CHARGING_ENABLE;
-> -	hub->boost_up = USB251XB_DEF_BOOST_UP;
->  	hub->boost_57 = USB251XB_DEF_BOOST_57;
->  	hub->boost_14 = USB251XB_DEF_BOOST_14;
->  	hub->port_map12 = USB251XB_DEF_PORT_MAP_12;
-> -- 
-> 2.25.1
-> 
+--- linux-next-20220128.orig/drivers/usb/typec/mux/Kconfig
++++ linux-next-20220128/drivers/usb/typec/mux/Kconfig
+@@ -12,7 +12,7 @@ config TYPEC_MUX_PI3USB30532
+ config TYPEC_MUX_INTEL_PMC
+ 	tristate "Intel PMC mux control"
+ 	depends on ACPI
+-	depends on INTEL_SCU_IPC
++	select INTEL_SCU_IPC
+ 	select USB_ROLE_SWITCH
+ 	help
+ 	  Driver for USB muxes controlled by Intel PMC FW. Intel PMC FW can
