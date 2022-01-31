@@ -2,258 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6FE4A518D
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 22:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6EF94A51BF
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 22:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358028AbiAaVhw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jan 2022 16:37:52 -0500
-Received: from mga02.intel.com ([134.134.136.20]:61228 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1358076AbiAaVhv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:37:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643665071; x=1675201071;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=soxKhWAWSZcnLnluHvwKTzwegcLbojstOS+Qr8cnjX8=;
-  b=a9d2fboF49kErvzj1R4BgiP712CM7UblFemD/AQgYMNIGj6DV0mDqW7Q
-   TiTKvp1odxPutNvFcfYEiw+awlDHX5wqW/VNqdk64rSSm3KX68dPOoo0Z
-   GsUnQPO9UeUmTlzFb8YrDYXTFRvIkz0sB1pW0Xb9b9FC1d8IwcLFTYyya
-   +2ldBf7yrvmk6IIFEZVdURDGFRE1niOyXbhPvzlue9Mg/rYDUk1zqIDmH
-   Wq4MQUZJnXrCd841RTc1VaHZ9eiRtY41kEE04Q3Y5VTCag0vKhjmSpVfp
-   QAW412nE2d/UKLQZ6kH7F9YtfpbTtmHNMnN5jmK1XomCDa/vd1Gc7jw3R
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="234948015"
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="234948015"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 13:37:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="479362250"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 31 Jan 2022 13:37:49 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEeMu-000SLg-Qx; Mon, 31 Jan 2022 21:37:48 +0000
-Date:   Tue, 01 Feb 2022 05:37:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 60c250a98d4ca12a34a89a498cb05d4d221f2f19
-Message-ID: <61f85696.wk8Ct+kVWIiWyRZN%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1381246AbiAaVlJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jan 2022 16:41:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381250AbiAaVjA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 16:39:00 -0500
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE97C061775
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jan 2022 13:38:21 -0800 (PST)
+Received: by mail-oi1-x243.google.com with SMTP id 4so4947904oil.11
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jan 2022 13:38:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
+        b=dEuqzCa7Zlz6s4mRGbRbRWXXanD59qsT+xmKk7tBbCVL8shmNgt9pnuL3r3GZQALql
+         Y63DqHUGCnZO0yzAtzp7ZNS2CuC8pMKUMaMtNqE3s9gB45FDt9/C7CdeYDqwmv7HZJbj
+         h6fZit5aG7dGp8FvXKTscfcGshyIKAGZl/Y4NFvWe+GDkg5MDDBzPsbgzyvzZ7B1mfX4
+         ltlQ0tRJrdsWlCdvxMPpvS+PhwNDM1Zp7MYHnfnHzWMTP4bbhrhxbQSB0Xw9LPR0gSp/
+         L2Vas/DZH4ZiZyplfhihUfOHaOD2GjtH1tg3ZI6lVgxDcwRnl8d4U3qCI5tj+07J/ZXk
+         SzvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
+        b=tRkko9PSIDuv/PIFFC7uBTLXTdJM/N2cLCv19xHbBVdA0tTX0SGYwRonueOQAWYKAP
+         K3rvUEB/1/xrcl9wea8U3c16M9iBX7JNp6GKR6eXqbzYaXBc/bl2Iwg65WGBpP8/dkhR
+         omFQnzypj8JeNo7WyNHlGUpXilfY+1m5dc9kTnxrHg/+liR06C9ZREI8xw5i4tNwkzcj
+         pDUJeg2yXz+EcL43wLmV6Br3CXEvz8N26obyfuVFg0Si7jbDE1ZIFie8rmtTeGthVHoG
+         GbSJKLQJgdwhmnlGJO7nsBtzmA1EUami5Cbhkn70JQzBUK6TvX7msKz1yx6EbJNsA4XN
+         HYQg==
+X-Gm-Message-State: AOAM533TrqgbKm07kJGcx1Bfmie8F3zS4XnNIGvo2YKn/cXGTzhHQXkk
+        CTzh5VYss5VFH3AVAKOB3pmfWCfcbTlqz9VRCFhaffEriPHrug==
+X-Google-Smtp-Source: ABdhPJzjG4nHBnpm1YeRsvfpKVsM6nmNJIeFJaztEJrNHMe+iyJctx1iGavTAT23A2IhS4j6LtYbunRiUquAn1xj08o=
+X-Received: by 2002:a54:4490:: with SMTP id v16mr14818764oiv.157.1643665089421;
+ Mon, 31 Jan 2022 13:38:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a4a:c30d:0:0:0:0:0 with HTTP; Mon, 31 Jan 2022 13:38:09
+ -0800 (PST)
+Reply-To: westerunion909@gmail.com
+From:   "Antonia Lloyd." <anthonylloydatmxxx04@gmail.com>
+Date:   Mon, 31 Jan 2022 13:38:09 -0800
+Message-ID: <CAExPwBBpihjV-rv_-+hYqb1WD3wpSWx81B_Q3ES15U3TXSPsyw@mail.gmail.com>
+Subject: Dear Email ID Owner.(USD$4000 IMF COMPENSATION FUND TO PICK UP TODAY).
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: 60c250a98d4ca12a34a89a498cb05d4d221f2f19  Merge tag 'v5.17-rc2' into usb-next
+Dear Email ID Owner.
 
-elapsed time: 729m
+The IMF is compensating all the email address that was funds as one of
+the ward win Victims and your email address and your name is among the
+listed one of approved to pay the sum of $3.6 million U.S Dollars. We
+have concluded to effect your own payment through Western Union Money
+Transfer for easy pick-up of those funds in good condition,$4000 twice
+daily,till the $3.6 million is completely transferred to you.We now
+need your information where we will be sending the funds,such
+as;Receiver name(Your full Name)address and phone number.Contact
+Western Union agent with this Email: ( westerunion995@gmail.com  ) for
+your payment fund.
 
-configs tested: 182
-configs skipped: 3
+Ms.Maria Zatto
+E-mail:westerunion995@gmail.com
+Telephone: +229 682 97 169
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Contact Ms.Maria,immediately you get this mail through western union
+email address above to enable her speed-up.your payment and release
+the $4000 dollars MTCN today for you to pick up the payment OK.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220131
-i386                          randconfig-c001
-arc                                 defconfig
-arm                           u8500_defconfig
-ia64                         bigsur_defconfig
-arm                          simpad_defconfig
-sh                          rsk7203_defconfig
-mips                           xway_defconfig
-um                               alldefconfig
-powerpc                 mpc834x_mds_defconfig
-sh                          urquell_defconfig
-arm                       imx_v6_v7_defconfig
-arc                            hsdk_defconfig
-powerpc                     taishan_defconfig
-mips                             allmodconfig
-arm                           stm32_defconfig
-sparc                       sparc32_defconfig
-h8300                               defconfig
-sh                        edosk7705_defconfig
-sh                 kfr2r09-romimage_defconfig
-arm                        spear6xx_defconfig
-mips                       capcella_defconfig
-sh                          polaris_defconfig
-arm                     eseries_pxa_defconfig
-powerpc                 mpc8540_ads_defconfig
-m68k                       m5208evb_defconfig
-powerpc                  storcenter_defconfig
-powerpc                       ppc64_defconfig
-parisc                           allyesconfig
-sh                               alldefconfig
-arm                          pxa910_defconfig
-arm                          lpd270_defconfig
-mips                 decstation_r4k_defconfig
-arm                          pxa3xx_defconfig
-nds32                               defconfig
-powerpc                      mgcoge_defconfig
-m68k                        m5272c3_defconfig
-powerpc64                        alldefconfig
-sh                          rsk7269_defconfig
-powerpc                    klondike_defconfig
-powerpc                      ppc40x_defconfig
-powerpc                 mpc837x_rdb_defconfig
-xtensa                         virt_defconfig
-sh                  sh7785lcr_32bit_defconfig
-mips                         cobalt_defconfig
-m68k                       m5475evb_defconfig
-parisc                           alldefconfig
-sh                      rts7751r2d1_defconfig
-powerpc                 mpc834x_itx_defconfig
-arm                           tegra_defconfig
-xtensa                           allyesconfig
-arc                    vdk_hs38_smp_defconfig
-powerpc                 mpc837x_mds_defconfig
-h8300                     edosk2674_defconfig
-sh                           se7206_defconfig
-powerpc                      pasemi_defconfig
-mips                         bigsur_defconfig
-mips                            gpr_defconfig
-mips                        vocore2_defconfig
-powerpc                     asp8347_defconfig
-arm                      footbridge_defconfig
-powerpc                     redwood_defconfig
-sh                            hp6xx_defconfig
-sh                          kfr2r09_defconfig
-sh                           se7724_defconfig
-ia64                        generic_defconfig
-sh                           se7343_defconfig
-sh                             shx3_defconfig
-powerpc                        warp_defconfig
-sh                          lboxre2_defconfig
-sh                            migor_defconfig
-sh                        sh7757lcr_defconfig
-sh                        edosk7760_defconfig
-x86_64                           alldefconfig
-xtensa                  nommu_kc705_defconfig
-powerpc                       maple_defconfig
-powerpc                     pq2fads_defconfig
-powerpc                      bamboo_defconfig
-arm                       omap2plus_defconfig
-sh                        apsh4ad0a_defconfig
-arm                            mps2_defconfig
-arm                  randconfig-c002-20220130
-arm                  randconfig-c002-20220131
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20220131
-x86_64               randconfig-a003-20220131
-x86_64               randconfig-a001-20220131
-x86_64               randconfig-a006-20220131
-x86_64               randconfig-a005-20220131
-x86_64               randconfig-a002-20220131
-i386                 randconfig-a006-20220131
-i386                 randconfig-a005-20220131
-i386                 randconfig-a003-20220131
-i386                 randconfig-a002-20220131
-i386                 randconfig-a001-20220131
-i386                 randconfig-a004-20220131
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                randconfig-r042-20220130
-arc                  randconfig-r043-20220130
-s390                 randconfig-r044-20220130
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+You are expected to provide us with the details as prescribed below to
+enable safe and easy release of your funds today.
 
-clang tested configs:
-riscv                randconfig-c006-20220130
-x86_64                        randconfig-c007
-arm                  randconfig-c002-20220130
-powerpc              randconfig-c003-20220130
-mips                 randconfig-c004-20220130
-i386                          randconfig-c001
-mips                     loongson2k_defconfig
-powerpc               mpc834x_itxgp_defconfig
-riscv                             allnoconfig
-powerpc                          allyesconfig
-arm                             mxs_defconfig
-arm                        spear3xx_defconfig
-x86_64                           allyesconfig
-powerpc                 mpc8313_rdb_defconfig
-powerpc                   bluestone_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                    ge_imp3a_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64               randconfig-a013-20220131
-x86_64               randconfig-a015-20220131
-x86_64               randconfig-a014-20220131
-x86_64               randconfig-a016-20220131
-x86_64               randconfig-a011-20220131
-x86_64               randconfig-a012-20220131
-i386                 randconfig-a011-20220131
-i386                 randconfig-a013-20220131
-i386                 randconfig-a014-20220131
-i386                 randconfig-a012-20220131
-i386                 randconfig-a015-20220131
-i386                 randconfig-a016-20220131
-riscv                randconfig-r042-20220131
-hexagon              randconfig-r045-20220130
-hexagon              randconfig-r045-20220131
-hexagon              randconfig-r041-20220130
-hexagon              randconfig-r041-20220131
+(1)Your Full name:
+(2)Your Phone number:
+(3)Your Country:
+(4)Your Age:
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thank you,
+Dr.Antonia Lloyd.
+Contact Dir.Western Union Money Transfer,
+Cotonou-Benin Republic.
