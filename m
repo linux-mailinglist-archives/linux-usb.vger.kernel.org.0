@@ -2,97 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF164A4BED
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 17:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FE44A4D2D
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 18:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380318AbiAaQ0t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jan 2022 11:26:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
+        id S1380913AbiAaR1a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jan 2022 12:27:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380319AbiAaQ0n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 11:26:43 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070D4C06173D;
-        Mon, 31 Jan 2022 08:26:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=GEwATrS8QyZwxwEyKt9LncyWi/r/xnwpQIPKwhOCdNw=; b=mYrisjOodfhbzF6aT3BqYPvfVx
-        arCZ2gkbDftYehgG2gkPMXIZu4PoPMjnZZ6jyfFbKhAaE8AlOWtBozklCVRheAehK9CzSHvZnkk8K
-        czb74/oMM0iO3ZqTSaOar+C4lYmiSTgocCKNo1+/SozcpltwXiOl9WmJv/iclw6lVIwnR8bsTVHC/
-        Gfk6o/Z1X0zrEYwqzMIm/1F/M07a32o/4i83b4iQjiRuSuiCxY5FVIxttNyCygudd1Djz4EGQUa6p
-        zITnsVExJ5bgfFAs4b7rf3JG0rqHI9mcC98AA7TXW88AzbOtscZVf8Qmx2EI3f3fWX+WXjRg4Ba1f
-        HOHH5guQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nEZVn-00A8Vj-Jk; Mon, 31 Jan 2022 16:26:40 +0000
-Message-ID: <bc370384-f852-eedf-5bd8-ed39bf671aba@infradead.org>
-Date:   Mon, 31 Jan 2022 08:26:36 -0800
+        with ESMTP id S1380085AbiAaR13 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 12:27:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5191EC061714;
+        Mon, 31 Jan 2022 09:27:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1FA760F54;
+        Mon, 31 Jan 2022 17:27:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C87E2C340EE;
+        Mon, 31 Jan 2022 17:27:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643650048;
+        bh=70SOn0z0ogL8vCvmugDM/5HPUyynbxERc7b9LIltGbM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KwClkgagBONQH+84EQ5eYxtHVL5SMg2dD/CkCSS7NrDEPZTrFzeLN/QWUNm3HK52q
+         fHzCTGqHqRTWlC85x4KBK1CrD5YbC3+S4bcJDTdpeMz1YosJiU/kxZL2mW1O5bJGML
+         /XyUUNZL/9S0iUlzHzK/6q6S4O9WWh2pqZUdnFB13MTRIuXzmKWosHMZBZat4ljhO2
+         j8R5/BpKpe7ntq4c01G0f0ThKIRw2iQwlkdE4M082GGLXT/fOcT/LWbh18LbQoM4sf
+         a348Hc8NXHBrlRqFdL4alqNT7MHtfGFSu3/DrdPTE51yeJ9K4hPDl+8lzA1PqHG1JX
+         ca/hELTVD2Fww==
+Date:   Mon, 31 Jan 2022 09:27:26 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jan Kiszka <jan.kiszka@siemens.com>
+Cc:     Georgi Valkov <gvalkov@abv.bg>,
+        Greg KH <gregkh@linuxfoundation.org>, <davem@davemloft.net>,
+        <mhabets@solarflare.com>, <luc.vanoostenryck@gmail.com>,
+        <snelson@pensando.io>, <mst@redhat.com>,
+        <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <corsac@corsac.net>,
+        <matti.vuorela@bitfactor.fi>, <stable@vger.kernel.org>
+Subject: Re: ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
+Message-ID: <20220131092726.3864b19f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <80a13e9b-e026-1238-39ed-32deb5ff17b0@siemens.com>
+References: <B60B8A4B-92A0-49B3-805D-809A2433B46C@abv.bg>
+        <20210720122215.54abaf53@cakuba>
+        <5D0CFF83-439B-4A10-A276-D2D17B037704@abv.bg>
+        <YPa4ZelG2k8Z826E@kroah.com>
+        <C6AA954F-8382-461D-835F-E5CA03363D84@abv.bg>
+        <YPbHoScEo8ZJyox6@kroah.com>
+        <AEC79E3B-FA7F-4A36-95CE-B6D0F3063DF8@abv.bg>
+        <80a13e9b-e026-1238-39ed-32deb5ff17b0@siemens.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] usb: typec: mux: select not-visible INTEL_SCU_IPC
-Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel test robot <lkp@intel.com>
-References: <20220130185032.29298-1-rdunlap@infradead.org>
- <Yfeg96P3no1FhWE5@kuha.fi.intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Yfeg96P3no1FhWE5@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 1/31/22 00:42, Heikki Krogerus wrote:
-> On Sun, Jan 30, 2022 at 10:50:32AM -0800, Randy Dunlap wrote:
->> Use "select INTEL_SCU_IPC" instead of depending on it since it is
->> not a visible Kconfig symbol and it may not otherwise be set/enabled.
->>
->> Fixes: b62851491a55 ("usb: typec: mux: Convert the Intel PMC Mux driver to use new SCU IPC API")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
->> Cc: Lee Jones <lee.jones@linaro.org>
->> Cc: linux-usb@vger.kernel.org
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: kernel test robot <lkp@intel.com>
->> ---
->> v2: add dependency on X86_PLATFORM_DEVICES to fix build error that was
->>     Reported_by: kernel test robot <lkp@intel.com>
->>
->>  drivers/usb/typec/mux/Kconfig |    4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> --- linux-next-20220128.orig/drivers/usb/typec/mux/Kconfig
->> +++ linux-next-20220128/drivers/usb/typec/mux/Kconfig
->> @@ -11,8 +11,8 @@ config TYPEC_MUX_PI3USB30532
->>  
->>  config TYPEC_MUX_INTEL_PMC
->>  	tristate "Intel PMC mux control"
->> -	depends on ACPI
->> -	depends on INTEL_SCU_IPC
->> +	depends on ACPI && X86_PLATFORM_DEVICES
->> +	select INTEL_SCU_IPC
->>  	select USB_ROLE_SWITCH
->>  	help
->>  	  Driver for USB muxes controlled by Intel PMC FW. Intel PMC FW can
+On Mon, 31 Jan 2022 10:45:23 +0100 Jan Kiszka wrote:
+> On 20.07.21 15:12, Georgi Valkov wrote:
+> > Thank you, Greg!
+> > 
+> > git send-email drivers/net/0001-ipheth-fix-EOVERFLOW-in-ipheth_rcvbulk_callback.patch
+> > ...
+> > Result: OK
+> > 
+> > I hope I got right. I added most of the e-mail addresses, and also tried adding Message-Id.
+> > I have not received the e-mail yet, so I cannot confirm if it worked or not.
+> >   
 > 
-> This will cause the driver to fail at probe time if there are no SCU
-> device drivers enabled.
+> What happened here afterwards?
 > 
-> The idea is that the SCU device drivers select the SCU IPC library,
-> not the users of the library like this mux driver.
+> I just found out the hard way that this patch is still not in mainline 
+> but really needed.
 
-OK. Thanks.
-
--- 
-~Randy
+I have not seen the repost :(
