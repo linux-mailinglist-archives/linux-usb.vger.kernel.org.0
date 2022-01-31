@@ -2,79 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA674A40ED
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 12:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E809C4A4234
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 12:11:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358736AbiAaLBI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jan 2022 06:01:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358446AbiAaLAR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 06:00:17 -0500
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A163CC06176F
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jan 2022 02:59:31 -0800 (PST)
-Received: by mail-io1-xd43.google.com with SMTP id i62so16362190ioa.1
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jan 2022 02:59:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
-        b=Hy4QzdJnSxdg5GIgw0nCwmi0gjML3n5cny2gld+5/rI5196yLd12xvP6N7LBmx65/n
-         qILZMxYOlb+VBzjZrCg896+CVlR2SLc6f+WpN6lyRLTkfyWxlYA63cI2QUMsEgTIYq1c
-         VRL4HNNC2kIyU16xAe6VyoHlNhIHv9mczE1zssIxdDBygn6D2BPwo/XAWJNqRMASZ2Dq
-         yZxWrv8DUbv+uMJverpu1MhsgcV4b3vRNoXa2uyn5bo25Pb/5p2hQlMsoWmYebCBDCJD
-         GjDhDoBcmmXgZL74zftZAkr0Rw6FLwL0/jzp5kj/UR37sO8Js0t8mGwGyrpI2mLOPNpu
-         0GuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
-        b=ik/SbtUaNr9uEk+74NoxLTi4qaWBEnGdb0xXXxiE/GBiO0g+23TBZlYUg3d+LxhRSE
-         MqMGjLAtDxkjSl/OpjsdQ+zQIon2k2W3KmGq6VkpbdOG6rJLjDgOlJ/uHXvGF2nkypPc
-         Q7Lqj82MPTU7jq7iMeS2PqTay1BWmCdlJu3F0O0taqbuzN6pfo5N18+a2+nPwWcU9Kvs
-         4qk/aGGTmMjskv8zSSyPmulZU7xNhujef2cnB3Nz7+b3nNvoR3PRtZzjYKMDqyWII33d
-         YDHz0PZC908MnIlvFiTEQJpqM5rsf5mgW6krTLCnpbzIfNBGV+PlXbQP+bJnJqYMv355
-         hkDQ==
-X-Gm-Message-State: AOAM531/uuguwijvJm3vHGMgCHpNgh2W8Y0NUEF/V8roZIylH+4QA6vm
-        LJEHsgfb6KKKCFuqVHagawf3I/MLi8vD3n4f25k=
-X-Google-Smtp-Source: ABdhPJyia9VIjicXafubC2VjGdU01tny+88l0Ycxe3DKaKeOyUTFlA4LLKTxDKWWNigVvRhiFi9kYx5K7cHHm0s8/hs=
-X-Received: by 2002:a02:aa09:: with SMTP id r9mr10286804jam.199.1643626771044;
- Mon, 31 Jan 2022 02:59:31 -0800 (PST)
+        id S1359249AbiAaLLE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jan 2022 06:11:04 -0500
+Received: from mga17.intel.com ([192.55.52.151]:43467 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1377760AbiAaLK0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 31 Jan 2022 06:10:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643627426; x=1675163426;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MTbZzQ/DP2PxsKTY28GWtpAfua/z0STB6221mcyAUO8=;
+  b=D0xKtBN3yddUCw0tMOvBKW51d09x8R5KDZSnbC3YR+nogE0YtuaJZ01a
+   edS2LHp+3PYcX0TVW5k+5Nq4XEsCVkzB+toyzqWOT9wxLSHyINzf1IT91
+   KoLEIA46ELGTuy+psz0fhnptyn7Mq6Z3YfsIGivqsrVrY4bHMB0jr/4Yn
+   EobEzfZQJt7o5L4i97AZYAlfVYMtvkgPDjSgFM8G92mDvH5qzQreE3NXm
+   G8cUYOBbTdRs3S9D73pNgDNAD757gD7B0382FXf5R9BbMLI7+mvD7wNlD
+   wAT4tkLbCkDYf+IPQGmQqVbFOUqJlsjiCH0ibmhBRGdpSB1+140ClWTQf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="228101803"
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="228101803"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 03:07:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="675694134"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 31 Jan 2022 03:07:14 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 31 Jan 2022 13:07:13 +0200
+Date:   Mon, 31 Jan 2022 13:07:13 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] usb: ulpi: Move of_node_put to ulpi_dev_release
+Message-ID: <YffC4a1GUVp4wk+g@kuha.fi.intel.com>
+References: <20220127190004.1446909-1-sean.anderson@seco.com>
+ <20220127190004.1446909-2-sean.anderson@seco.com>
 MIME-Version: 1.0
-Reply-To: daniellakyle60@gmail.com
-Sender: drdanielmorris11111@gmail.com
-Received: by 2002:a05:6638:1248:0:0:0:0 with HTTP; Mon, 31 Jan 2022 02:59:30
- -0800 (PST)
-From:   Mrs daniell akyle <daniellakyle60@gmail.com>
-Date:   Mon, 31 Jan 2022 11:59:30 +0100
-X-Google-Sender-Auth: 5pmMZCS9vXWmOwBoU1Dt2uIUmsw
-Message-ID: <CAKFcj-MtTareGvTX3Yo749sS2d4H56Fxx0cF0uKGPGQc=0xqUA@mail.gmail.com>
-Subject: Ahoj
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127190004.1446909-2-sean.anderson@seco.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Pozdravy
-Jmenuji se pan=C3=AD Daniella Kyleov=C3=A1, je mi 58 let
-Filip=C3=ADny. V sou=C4=8Dasn=C3=A9 dob=C4=9B jsem hospitalizov=C3=A1n na F=
-ilip=C3=ADn=C3=A1ch, kde jsem
-podstupuje l=C3=A9=C4=8Dbu akutn=C3=ADho karcinomu j=C3=ADcnu. jsem um=C3=
-=ADraj=C3=ADc=C3=AD,
-vdova, kter=C3=A1 se rozhodla darovat =C4=8D=C3=A1st sv=C3=A9ho majetku spo=
-lehliv=C3=A9 osob=C4=9B
-kter=C3=A1 tyto pen=C3=ADze pou=C5=BEije na pomoc chud=C3=BDm a m=C3=A9n=C4=
-=9B privilegovan=C3=BDm. Chci
-poskytnout dar ve v=C3=BD=C5=A1i 3 700 000 =C2=A3 na sirotky nebo charitati=
-vn=C3=AD organizace
-ve va=C5=A1=C3=AD oblasti. Zvl=C3=A1dne=C5=A1 to? Pokud jste ochotni tuto n=
-ab=C3=ADdku p=C5=99ijmout
-a ud=C4=9Blejte p=C5=99esn=C4=9B tak, jak v=C3=A1m =C5=99=C3=ADk=C3=A1m, pa=
-k se mi vra=C5=A5te pro dal=C5=A1=C3=AD vysv=C4=9Btlen=C3=AD.
-pozdravy
-Pan=C3=AD Daniella Kyleov=C3=A1
+On Thu, Jan 27, 2022 at 02:00:02PM -0500, Sean Anderson wrote:
+> Drivers are not unbound from the device when ulpi_unregister_interface
+> is called. Move of_node-freeing code to ulpi_dev_release which is called
+> only after all users are gone.
+> 
+> Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+> 
+> Changes in v3:
+> - Use separate patch for moving of_node_put from unregister to release
+> 
+>  drivers/usb/common/ulpi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+> index 4169cf40a03b..c90a1ab705a3 100644
+> --- a/drivers/usb/common/ulpi.c
+> +++ b/drivers/usb/common/ulpi.c
+> @@ -127,6 +127,7 @@ static const struct attribute_group *ulpi_dev_attr_groups[] = {
+>  
+>  static void ulpi_dev_release(struct device *dev)
+>  {
+> +	of_node_put(dev->of_node);
+>  	kfree(to_ulpi_dev(dev));
+>  }
+>  
+> @@ -296,7 +297,6 @@ EXPORT_SYMBOL_GPL(ulpi_register_interface);
+>   */
+>  void ulpi_unregister_interface(struct ulpi *ulpi)
+>  {
+> -	of_node_put(ulpi->dev.of_node);
+>  	device_unregister(&ulpi->dev);
+>  }
+>  EXPORT_SYMBOL_GPL(ulpi_unregister_interface);
+> -- 
+> 2.25.1
+
+thanks,
+
+-- 
+heikki
