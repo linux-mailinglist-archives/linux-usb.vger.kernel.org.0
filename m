@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DF74A3F96
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 10:57:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 625194A3FAC
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 10:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242542AbiAaJ5x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jan 2022 04:57:53 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:57744 "EHLO
+        id S1357943AbiAaJ7a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jan 2022 04:59:30 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:57762 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242276AbiAaJ5x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 04:57:53 -0500
+        with ESMTP id S1358007AbiAaJ7Z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 04:59:25 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id E429F1F42EBB
+        with ESMTPSA id D88A11F4304D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643623071;
-        bh=EEi29dsWai5AtPWSIO5AT3qqVcaOhrIJ5p08/cthRIQ=;
+        s=mail; t=1643623164;
+        bh=+hm6ZImxvBGa+HA0+ijccYU5XbKiUj9BJvCO0RBev24=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BaVHoXjRJWFx7OC5C42/hLgEuAvv+qcmn2tFaG1/BDyCT6qZFgUIBicbgzhNXKXMR
-         HvQzs2GUzlYTDPXmDYyBjvLBIeuCVW5lhF9dbHfuX5nYNPU2gavZ6WhKXxZARlGThN
-         Vvfo7obqK3vipniGOOiTV7cKBgOr1hNCY7QT+QUc9B5SUYooMPoMAeQkYkdGADMJOb
-         eXKqbSioyGQ/WeuW6ii71EiQr3yjicqgj1IQ2+QsFOKw5Wfsf4NbCptgwVo7N/GuvG
-         xIwMvcP758TRuw5jAFLBWX3ere6Dws0GQ8aHDd614QoTG5vU24VIKRLygnQmY0kX+x
-         8bCZ/ndGJ7gDw==
-Message-ID: <2b5e6475-97db-b6b8-363a-7b33857a436b@collabora.com>
-Date:   Mon, 31 Jan 2022 10:57:48 +0100
+        b=mrObOY6JAhNU2uhmAWi5fG6Rt2KWM/8j1W+HN7v5pTEawV1ZAPXHOw7XfVhFiB/ZX
+         NHrvmOpbG3NsxjYtHSi5U/0negLFEps2UHQAL97qEr8VRI7SLc4PuLB2thGq/5eLps
+         zWkTCfcdq3/nZdohiMzZhz6/dLqxF67+rKsMd7y3mmJZbB4IfgBjJWD64/fO+RsxT6
+         saJFZ+k21/Mpiwr2y7LmrqMvycfCfCurDXcCqpA1BM+bVFhZFkwTRo5b1MFjc7ZrTk
+         Atcgl9/rkXu2DN232INqORjE7nXB44dvIA6b2FXykn4u6ahqnfe5shbCFzXhW4iahf
+         Gk/Kg0UBwM+rA==
+Message-ID: <6707a581-b42c-de13-c8d6-0528955d0218@collabora.com>
+Date:   Mon, 31 Jan 2022 10:59:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.1
-Subject: Re: [PATCH v2 3/4] arm64: dts: mediatek: mt8195: add efuse node and
- cells
+Subject: Re: [PATCH v2 4/4] arm64: dts: mediatek: mt8195: enable usb remote
+ wakeup
 Content-Language: en-US
 To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -43,10 +43,10 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Tianping Fang <tianping.fang@mediatek.com>,
         Eddie Hung <eddie.hung@mediatek.com>
 References: <20220128062902.26273-1-chunfeng.yun@mediatek.com>
- <20220128062902.26273-3-chunfeng.yun@mediatek.com>
+ <20220128062902.26273-4-chunfeng.yun@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220128062902.26273-3-chunfeng.yun@mediatek.com>
+In-Reply-To: <20220128062902.26273-4-chunfeng.yun@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -54,7 +54,7 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 Il 28/01/22 07:29, Chunfeng Yun ha scritto:
-> Add efuse node and cells used by t-phy to fix the bit shift issue
+> Enable USB remote wakeup of all four xHCI controllers
 > 
 > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
