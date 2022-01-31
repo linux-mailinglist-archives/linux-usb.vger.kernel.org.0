@@ -2,128 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBA94A3C66
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 02:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5564A3C88
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 03:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357258AbiAaBBb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 30 Jan 2022 20:01:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52526 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiAaBB3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Jan 2022 20:01:29 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7F7C061714;
-        Sun, 30 Jan 2022 17:01:29 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id s13so37591663ejy.3;
-        Sun, 30 Jan 2022 17:01:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ym89J5ppYsLafTCgQLu95aNd6tvgqMgguKVHierPn/o=;
-        b=F1HXOcuPEx+vjvjYiS9jZnO+S87abpMto09OwPLdD61GB+TPrwM8pDPTRPvzQeQKIR
-         JHo/u6YABWDwYBawEZNAhW8HDOrtyHPKPLciTJK0YPI6qws5wCTFUNTNL8zRn7Dziu6T
-         dZl30ZGyOJMzdz/RQrAxFVs4wniY8ki9n6c1kkO6ZhLqf4dWEo+Wb0VM9ObMU/qk05f3
-         WmVQQRQpnM0ChT3GiDDOAXQNG5tMKR0HrBdFXpIEJCjKNhfnJNcpl10eNNdj8KObXrTt
-         RspTiy0BRKWZUnlF7zeESfIPz+08QnsyfWGWLftiiNM9QCn/jN7R1hZ1EnlLtmDkolav
-         QWvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ym89J5ppYsLafTCgQLu95aNd6tvgqMgguKVHierPn/o=;
-        b=NXoPD0euXXqKcTDlu20+9rKe7lnCjxmITNPDw/sw40pTh4VtsALYgevhJV0R1+Q3Z7
-         6uLdq8kyMosApb8i/K3elMZNNb8RdflK81Zf5V5fLnwvRXIcEAna+NuYqj+6Do7pxwMN
-         OEgTHcqPIooezmI1MO0ZjKu/ncDTMbyt6fJTYY0vtTgI1VsZLsK4rSgpk6mW0u/68/9C
-         G1c4ZlCxncgWkLnGlzQMB/XRDBRwlw7TTlQ0Ya3pTt6cgMh6LGRm70VgBHC/DWGYKbEg
-         xCBR5nXeYf0TyJ6f4RNQsyFnhwD8HLMS2HCBeM5vqisn5d1uGYbaRIIMnUkAgfJkPMSa
-         kD4g==
-X-Gm-Message-State: AOAM532l0XupfYyOSYwmqomwgI3JFUMt4/LfN+wnP91atAwzsyWw/+cf
-        SJcMYrk6S1uC4+I0twE6CaK3qzVboGa59Pgmz0A=
-X-Google-Smtp-Source: ABdhPJzG76M5wdheyjOk+cbnhKZ/LTUItQR589njdDqxoD/D453M6HFUTfNY6sLWTIL5D9Bq0qda/XJf19hUOWcX8/0=
-X-Received: by 2002:a17:907:8a05:: with SMTP id sc5mr14934095ejc.316.1643590887228;
- Sun, 30 Jan 2022 17:01:27 -0800 (PST)
+        id S1357349AbiAaCIr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 30 Jan 2022 21:08:47 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:41331 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1357336AbiAaCIq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Jan 2022 21:08:46 -0500
+Received: (qmail 259863 invoked by uid 1000); 30 Jan 2022 21:08:44 -0500
+Date:   Sun, 30 Jan 2022 21:08:44 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     James <bjlockie@lockie.ca>
+Cc:     linux-usb <linux-usb@vger.kernel.org>
+Subject: Re: what could cause a cmd cmplt err -2
+Message-ID: <YfdErJ/SyFB2I5UA@rowland.harvard.edu>
+References: <b83861ab-fd5e-3021-70d1-3647f7b8eeb0@lockie.ca>
 MIME-Version: 1.0
-References: <20220128223603.2362621-1-aford173@gmail.com> <TYBPR01MB53418BE9FC9E11B901DF561DD8259@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-In-Reply-To: <TYBPR01MB53418BE9FC9E11B901DF561DD8259@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Sun, 30 Jan 2022 19:01:16 -0600
-Message-ID: <CAHCN7xJ491qfvkZCY6iSSXFNXbFdKnN6RUhb5df2x3P8oeQ0qQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: Fix host to USB_ROLE_NONE transition
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "cstevens@beaconembedded.com" <cstevens@beaconembedded.com>,
-        "aford@beaconembedded.com" <aford@beaconembedded.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b83861ab-fd5e-3021-70d1-3647f7b8eeb0@lockie.ca>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 6:23 PM Yoshihiro Shimoda
-<yoshihiro.shimoda.uh@renesas.com> wrote:
->
-> Hi Adam-san,
->
-> Thank you for the patch!
->
-> > From: Adam Ford, Sent: Saturday, January 29, 2022 7:36 AM
-> >
-> > The support the external role switch a variety of situations were
-> > addressed, but the transition from USB_ROLE_HOST to USB_ROLE_NONE
-> > leaves the host up which can cause some error messages when
-> > switching from host to none, to gadget, to none, and then back
-> > to host again.
->
-> I think so. An external role switch in this driver is possible to
-> enter the role to USB_ROLE_NONE. (Just a record for me: in other words,
-> the "internal" role switch didn't enter the role to USB_ROLE_NONE.)
->
-> >  xhci-hcd ee000000.usb: Abort failed to stop command ring: -110
-> >  xhci-hcd ee000000.usb: xHCI host controller not responding, assume dead
-> >  xhci-hcd ee000000.usb: HC died; cleaning up
-> >  usb 4-1: device not accepting address 6, error -108
-> >  usb usb4-port1: couldn't allocate usb_device
-> >
-> > After this happens it will not act as a host again.
-> > Fix this by releasing the host mode when transitioning to USB_ROLE_NONE.
-> >
-> > Fixes: 0604160d8c0b ("usb: gadget: udc: renesas_usb3: Enhance role switch support")
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> >
-> > diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
-> > index 57d417a7c3e0..601829a6b4ba 100644
-> > --- a/drivers/usb/gadget/udc/renesas_usb3.c
-> > +++ b/drivers/usb/gadget/udc/renesas_usb3.c
-> > @@ -2378,6 +2378,8 @@ static void handle_ext_role_switch_states(struct device *dev,
-> >       switch (role) {
-> >       case USB_ROLE_NONE:
-> >               usb3->connection_state = USB_ROLE_NONE;
-> > +             if (cur_role == USB_ROLE_HOST)
-> > +                     device_release_driver(host);
->
-> The handle_ext_role_switch_states() with role = USB_ROLE_NONE seems
-> to be called multiple times. So, we have to avoid multiple calling of
-> device_release_driver() somehow.
+On Sun, Jan 30, 2022 at 01:55:35PM -0500, James wrote:
+> What do these mean?
+> I get a lot of them in dmesg.
+> sda is
+> 
+> [885862.931385] usb 2-2.1: cmd cmplt err -2
 
-From what I can tell, it appears that device_release_driver ultimately
-calls __device_release_driver which checks for a NULL, and during the
-release sets it to NULL, so subsequent releases should just get
-ignored.  Maybe I am missing something.
+This means a data transfer was cancelled (probably because the device 
+didn't respond after 30 seconds or so).
 
-adam
->
-> Best regards,
-> Yoshihiro Shimoda
->
-> >               if (usb3->driver)
-> >                       usb3_disconnect(usb3);
-> >               usb3_vbus_out(usb3, false);
-> > --
-> > 2.32.0
->
+> [885863.015996] usb 2-2.1: reset SuperSpeed USB device number 3 using
+> xhci_hcd
+> [885863.040134] scsi host0: uas_eh_device_reset_handler success
+> [893205.111118] sd 0:0:0:0: [sda] tag#1 uas_eh_abort_handler 0 uas-tag 4
+> inflight: CMD IN
+> [893205.111147] sd 0:0:0:0: [sda] tag#1 CDB: Read(10) 28 00 51 20 ab 90 00
+> 00 08 00
+> [893205.127136] scsi host0: uas_eh_device_reset_handler start
+
+The command that was cancelled was a READ(10).  After the cancellation, 
+the device was reset so that it ought to be ready to accept a new 
+command.
+
+It's not easy to tell why the command timed out.  Maybe the drive 
+encountered a problem and therefore wasn't able to execute the command.  
+Or maybe it did execute the command but the response message going back 
+to the computer got lost.
+
+Alan Stern
+
+> sda is Bus 002 Device 003: ID 0bc2:ab5a Seagate RSS LLC One Touch HDD USB3
+> hard drive.
+> It's on a powered hub with the wireless adapter.
+> 
+> 
+> $ lsusb -tv
+> \/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
+>     ID 1d6b:0003 Linux Foundation 3.0 root hub
+>     |__ Port 2: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
+>         ID 05e3:0612 Genesys Logic, Inc. Hub
+>         |__ Port 1: Dev 3, If 0, Class=Mass Storage, Driver=uas, 5000M
+>             ID 0bc2:ab5a Seagate RSS LLC
+>         |__ Port 3: Dev 4, If 0, Class=Vendor Specific Class,
+> Driver=mt76x2u, 5000M
+>             ID 0e8d:7612 MediaTek Inc. MT7612U 802.11a/b/g/n/ac Wireless
+> Adapter
