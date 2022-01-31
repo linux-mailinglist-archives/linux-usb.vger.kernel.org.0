@@ -2,89 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B00934A4087
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 11:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA674A40ED
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 12:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239145AbiAaKzl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jan 2022 05:55:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45498 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233361AbiAaKzl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 05:55:41 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A3FAB82A5A;
-        Mon, 31 Jan 2022 10:55:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 538DBC340E8;
-        Mon, 31 Jan 2022 10:55:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643626538;
-        bh=ZFijXYZeA8Sx8Dqr0g78Ity9WlbxMZadItAKk6t+V9c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ec7xxarGg8npkeLLxb2KZkx1zs/DUFgyyNkAwkoCkwz+CZ07zAB+WQ2hmyRPWlKaA
-         +dnwMbnoMa1lpSvJ/gxa4BTxrrKdpZCqgepOcAO6gjamOEMKwQvWvFiDNHql8mU0tM
-         SK4VkE+HbqCklVdVC7taEX9H3tPBmGZ/sy9tgaoKaFCtsGF0ywJKXxIog1k5n5IYwn
-         6VaptzThZJ09QLYYV3zs42D0JrnAggO0pNjDd3WRxzndgmKsOrB8DCZ+RksPbHCQTF
-         3NEW1aw1CDf9Oq+ldtE/Gjpo5GpA6uIGoA86mGStmp6r4vl/pY62jc7g6ZnVQBXrEe
-         2VC2taVVMqsow==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nEULD-0006rQ-WD; Mon, 31 Jan 2022 11:55:24 +0100
-Date:   Mon, 31 Jan 2022 11:55:23 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Pawel Dembicki <paweldembicki@gmail.com>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add ZTE MF286D modem
-Message-ID: <YffAG4uBD2y1zjV2@hovoldconsulting.com>
-References: <20220111221205.14662-1-paweldembicki@gmail.com>
+        id S1358736AbiAaLBI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jan 2022 06:01:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358446AbiAaLAR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 06:00:17 -0500
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A163CC06176F
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jan 2022 02:59:31 -0800 (PST)
+Received: by mail-io1-xd43.google.com with SMTP id i62so16362190ioa.1
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jan 2022 02:59:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
+        b=Hy4QzdJnSxdg5GIgw0nCwmi0gjML3n5cny2gld+5/rI5196yLd12xvP6N7LBmx65/n
+         qILZMxYOlb+VBzjZrCg896+CVlR2SLc6f+WpN6lyRLTkfyWxlYA63cI2QUMsEgTIYq1c
+         VRL4HNNC2kIyU16xAe6VyoHlNhIHv9mczE1zssIxdDBygn6D2BPwo/XAWJNqRMASZ2Dq
+         yZxWrv8DUbv+uMJverpu1MhsgcV4b3vRNoXa2uyn5bo25Pb/5p2hQlMsoWmYebCBDCJD
+         GjDhDoBcmmXgZL74zftZAkr0Rw6FLwL0/jzp5kj/UR37sO8Js0t8mGwGyrpI2mLOPNpu
+         0GuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
+        b=ik/SbtUaNr9uEk+74NoxLTi4qaWBEnGdb0xXXxiE/GBiO0g+23TBZlYUg3d+LxhRSE
+         MqMGjLAtDxkjSl/OpjsdQ+zQIon2k2W3KmGq6VkpbdOG6rJLjDgOlJ/uHXvGF2nkypPc
+         Q7Lqj82MPTU7jq7iMeS2PqTay1BWmCdlJu3F0O0taqbuzN6pfo5N18+a2+nPwWcU9Kvs
+         4qk/aGGTmMjskv8zSSyPmulZU7xNhujef2cnB3Nz7+b3nNvoR3PRtZzjYKMDqyWII33d
+         YDHz0PZC908MnIlvFiTEQJpqM5rsf5mgW6krTLCnpbzIfNBGV+PlXbQP+bJnJqYMv355
+         hkDQ==
+X-Gm-Message-State: AOAM531/uuguwijvJm3vHGMgCHpNgh2W8Y0NUEF/V8roZIylH+4QA6vm
+        LJEHsgfb6KKKCFuqVHagawf3I/MLi8vD3n4f25k=
+X-Google-Smtp-Source: ABdhPJyia9VIjicXafubC2VjGdU01tny+88l0Ycxe3DKaKeOyUTFlA4LLKTxDKWWNigVvRhiFi9kYx5K7cHHm0s8/hs=
+X-Received: by 2002:a02:aa09:: with SMTP id r9mr10286804jam.199.1643626771044;
+ Mon, 31 Jan 2022 02:59:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111221205.14662-1-paweldembicki@gmail.com>
+Reply-To: daniellakyle60@gmail.com
+Sender: drdanielmorris11111@gmail.com
+Received: by 2002:a05:6638:1248:0:0:0:0 with HTTP; Mon, 31 Jan 2022 02:59:30
+ -0800 (PST)
+From:   Mrs daniell akyle <daniellakyle60@gmail.com>
+Date:   Mon, 31 Jan 2022 11:59:30 +0100
+X-Google-Sender-Auth: 5pmMZCS9vXWmOwBoU1Dt2uIUmsw
+Message-ID: <CAKFcj-MtTareGvTX3Yo749sS2d4H56Fxx0cF0uKGPGQc=0xqUA@mail.gmail.com>
+Subject: Ahoj
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 11:12:05PM +0100, Pawel Dembicki wrote:
-> Modem from ZTE MF286D is an Qualcomm MDM9250 based 3G/4G modem.
-> 
-> T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
-> D:  Ver= 3.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-> P:  Vendor=19d2 ProdID=1485 Rev=52.87
-> S:  Manufacturer=ZTE,Incorporated
-> S:  Product=ZTE Technologies MSM
-> S:  SerialNumber=MF286DZTED000000
-> C:* #Ifs= 7 Cfg#= 1 Atr=80 MxPwr=896mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=ff Driver=rndis_host
-> E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-> E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-> E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-> E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=89(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> 
-> Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
-
-Now applied, thanks.
-
-Johan
+Pozdravy
+Jmenuji se pan=C3=AD Daniella Kyleov=C3=A1, je mi 58 let
+Filip=C3=ADny. V sou=C4=8Dasn=C3=A9 dob=C4=9B jsem hospitalizov=C3=A1n na F=
+ilip=C3=ADn=C3=A1ch, kde jsem
+podstupuje l=C3=A9=C4=8Dbu akutn=C3=ADho karcinomu j=C3=ADcnu. jsem um=C3=
+=ADraj=C3=ADc=C3=AD,
+vdova, kter=C3=A1 se rozhodla darovat =C4=8D=C3=A1st sv=C3=A9ho majetku spo=
+lehliv=C3=A9 osob=C4=9B
+kter=C3=A1 tyto pen=C3=ADze pou=C5=BEije na pomoc chud=C3=BDm a m=C3=A9n=C4=
+=9B privilegovan=C3=BDm. Chci
+poskytnout dar ve v=C3=BD=C5=A1i 3 700 000 =C2=A3 na sirotky nebo charitati=
+vn=C3=AD organizace
+ve va=C5=A1=C3=AD oblasti. Zvl=C3=A1dne=C5=A1 to? Pokud jste ochotni tuto n=
+ab=C3=ADdku p=C5=99ijmout
+a ud=C4=9Blejte p=C5=99esn=C4=9B tak, jak v=C3=A1m =C5=99=C3=ADk=C3=A1m, pa=
+k se mi vra=C5=A5te pro dal=C5=A1=C3=AD vysv=C4=9Btlen=C3=AD.
+pozdravy
+Pan=C3=AD Daniella Kyleov=C3=A1
