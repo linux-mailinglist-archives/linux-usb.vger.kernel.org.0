@@ -2,89 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3712E4A4757
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 13:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EAD4A476B
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 13:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378408AbiAaMez (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jan 2022 07:34:55 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:59550 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377753AbiAaMek (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 07:34:40 -0500
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643632478;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=45fS8vZOqc3z6GIbrRMqB22H177VtG9qYEYyo0HBgug=;
-        b=s7WadyoZF5Sm9aaIEUp7kcaweY2hKcBKO88OOavIAopkRL10Nt7FOV5J+c23vnEm9z/o/V
-        NY0FQv7nQoJnqUHyedftx6xK+BjgEnZv1lUidebwgEF8yfbwzhuQH6aeLDsMIByAjuBCa6
-        Qsl2cNjhZ5tHzwi8dTpL7rPOdrFw/Iicfku5w+YCglwtxBQqCubQ7OMR8Q4Cu016Bw8px0
-        AIeREKk2CwpO5uWITVZac8FKU+W/4X47EEyEx+SJ+92R5Ra67j+E5M8z95Rv7BAepyNiEn
-        Y2kKvSlmlpCeWxZux585HWzFHAhckLmJlZd4ktSvL/PAf/G8zIU7tlo31EwSPQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643632478;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=45fS8vZOqc3z6GIbrRMqB22H177VtG9qYEYyo0HBgug=;
-        b=N7JagwoELEftXltgPzO9ztt5Cb2k5Lk3suG9RV9lzuvY1GsaRGr3uEvMh+UpZduAJed78V
-        4uxodkd49PAOXABg==
-To:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH v2 7/7] staging: greybus: gpio: Use generic_handle_irq_safe().
-Date:   Mon, 31 Jan 2022 13:34:04 +0100
-Message-Id: <20220131123404.175438-8-bigeasy@linutronix.de>
-In-Reply-To: <20220131123404.175438-1-bigeasy@linutronix.de>
-References: <20220131123404.175438-1-bigeasy@linutronix.de>
+        id S241128AbiAaMni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jan 2022 07:43:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234026AbiAaMng (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 07:43:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF28DC061714
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jan 2022 04:43:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0C5B61175
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jan 2022 12:43:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB115C340E8;
+        Mon, 31 Jan 2022 12:43:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643633014;
+        bh=NjRVVJ5JSZ40aKWpgWapNcQntF6k3u0Rdqtz434OqXc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p+dWpSJubbF0QumjsU/H/ruNQqHKMCEcuWG1ScO7y7WQ9Sbu/GCcLwmmn/pj9Nkm0
+         YDQGVu+sfXnGUwr/fl6mGqV92Juxgl5tqhTK3U5VpZQtXPrdQM1BQUJNCWxWfWYQBe
+         S8qp1KPYRnKBGAh4HFeu0+V/APElDhDAFDbtntdk=
+Date:   Mon, 31 Jan 2022 13:43:31 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Michael Grzeschik <mgr@pengutronix.de>,
+        linux-usb@vger.kernel.org, balbi@kernel.org,
+        paul.elder@ideasonboard.com, laurent.pinchart@ideasonboard.com,
+        kernel@pengutronix.de, nicolas@ndufresne.ca
+Subject: Re: [PATCH] dummy_hcd: add isoc support
+Message-ID: <YffZc90SSVrcBWxL@kroah.com>
+References: <164154749753.1224575.16682991529695492259@Monstersaurus>
+ <20220126132249.2133168-1-m.grzeschik@pengutronix.de>
+ <YfFyM9Dadim3t88s@rowland.harvard.edu>
+ <20220126183138.GB6506@pengutronix.de>
+ <164363090018.533872.2376373763275566038@Monstersaurus>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164363090018.533872.2376373763275566038@Monstersaurus>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Instead of manually disabling interrupts before invoking use
-generic_handle_irq_safe() which can be invoked with enabled and disabled
-interrupts.
+On Mon, Jan 31, 2022 at 12:08:20PM +0000, Kieran Bingham wrote:
+> Hi Michael, Alan,
+> 
+> Quoting Michael Grzeschik (2022-01-26 18:31:38)
+> > On Wed, Jan 26, 2022 at 11:09:23AM -0500, Alan Stern wrote:
+> > >On Wed, Jan 26, 2022 at 02:22:49PM +0100, Michael Grzeschik wrote:
+> > >> With this patch, the dummy_hcd gains first support for isoc transfers.
+> > >> It will complete the whole urb with all packages.
+> > >
+> > >"packets", not "packages".
+> > 
+> > Right.
+> > 
+> > >>  Even if the gadget
+> > >> side did not enqueue any request, the urb will be handled.
+> > >>
+> > >> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> > >
+> > >I don't like this idea.  If support for isochronous transfers is added,
+> > >it should be done correctly.  That is, the implementation should support
+> > >scheduling of transfers, periodic bandwidth reservation, high-bandwidth
+> > >transfers, and so on.
+> > >
+> > >The whole point of dummy-hcd is to emulate a real host controller as
+> > >closely as possible.  Real isochronous transfers do not complete all at
+> > >once.
+> 
+> Being able to at least test uvc-gadget in a virtual environment would
+> already be a big benefit. As this is emulation, not simulation is it
+> essential that an exact mapping of the hardware is in place?
 
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- drivers/staging/greybus/gpio.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Bindly being a sink for all data is not emulation for drivers that
+require some sort of feedback loop.
 
-diff --git a/drivers/staging/greybus/gpio.c b/drivers/staging/greybus/gpio.c
-index 7e6347fe93f99..8a7cf1d0e9688 100644
---- a/drivers/staging/greybus/gpio.c
-+++ b/drivers/staging/greybus/gpio.c
-@@ -391,10 +391,7 @@ static int gb_gpio_request_handler(struct gb_operation=
- *op)
- 		return -EINVAL;
- 	}
-=20
--	local_irq_disable();
--	ret =3D generic_handle_irq(irq);
--	local_irq_enable();
--
-+	ret =3D generic_handle_irq_safe(irq);
- 	if (ret)
- 		dev_err(dev, "failed to invoke irq handler\n");
-=20
---=20
-2.34.1
+> Is there anything we can do to support the progression of this
+> development?
+> 
+> I.e. could we support this method first with a 
+>   WARN_ONCE("This does not fully emulate Isochronous support");
 
+That would instantly trigger syzbot to send us reports for no good
+reason.  Please don't do that :(
+
+thanks,
+
+greg k-h
