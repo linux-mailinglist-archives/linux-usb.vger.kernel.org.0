@@ -2,49 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D31504A4F2F
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 20:07:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4222F4A4F52
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 20:21:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358996AbiAaTGz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jan 2022 14:06:55 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:59261 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1358822AbiAaTGy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 14:06:54 -0500
-Received: (qmail 282309 invoked by uid 1000); 31 Jan 2022 14:06:53 -0500
-Date:   Mon, 31 Jan 2022 14:06:53 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     root <brice.chatelan@erems.fr>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Looking for usbip driver
-Message-ID: <YfgzTZFP8MXjZHgI@rowland.harvard.edu>
-References: <20220131181200.E183645E00D0@ere-mx2.erems.fr>
+        id S1343996AbiAaTVd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jan 2022 14:21:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235454AbiAaTVc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 14:21:32 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85ADBC061714;
+        Mon, 31 Jan 2022 11:21:32 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id s16so13034293pgs.13;
+        Mon, 31 Jan 2022 11:21:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=z4fgthDT3x2CEIImte/CKnYW9ye9UcnzsCmxp0s9Vks=;
+        b=kOrsCyFpAdlSWDG167+C7QFyFhW+7sBYPpoG7/XQNbD+9GZndgkz0z77mTGVNW1cq1
+         EUhG+hkVFqOp0nZrZNtaBifFQ09Wg8VjHs/c2eXSb7XqHGh1QPW7wnabEXLko9U7RBC5
+         PSPOtWzlkL9I61L5OeD0sgGYYlyyaXmMUsK1dnYSdP5nApm/D/8gwmGz9/rYrkZ4kba9
+         YRmJZZA80yAIA/3PHjemRIbzOPfXAb/gU9n10q2I/jNKt2iuBkY4zPzBma0ySwrjxoko
+         U3032YumaOeEZ52NqHiGcrUAYq0wOCVmKfJXY+D+3GqLAQGG3SUkAHRSB5Hg/Tr54Xju
+         aPgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=z4fgthDT3x2CEIImte/CKnYW9ye9UcnzsCmxp0s9Vks=;
+        b=X65hg26yvdi8cE6xiH+BBhYXzsondylB3OK3Kxaemokci4plX5uR8rVCW48/6QelZ9
+         NkzfAnDwyBMiykDYr4wyqB3MLpIb1ntXOJmP149MW+03HdaM4XF1DnJ+ag7Pzk2VoVqK
+         hYv20JxT36A/O2N4ZhdUtStg/iACFAvyo09ZDQUkwxsKwSI7h0cKPzcld3PkQrSm5rEQ
+         H1Xs+2lM6+3X/xOF7Ta6YUkSyD7uoEzPJHm4L6gnmckPjS5SYsjPYRndtQHWuSgJa8Zw
+         +eJLqV7Q1C1AijMHSBGUuwdOBzjvK+xrJV6BjN32WfAyuLjv47Y9p28u2PJ0TGa/7B+y
+         o1Gw==
+X-Gm-Message-State: AOAM530yrnejVWVe7XWIslpeMDlN97qX6tSP6vqQzLzY0ErqgnI9Sbry
+        l5S3HUXtbxUVlHFaPvPHBBpOsA5sx+I=
+X-Google-Smtp-Source: ABdhPJz0bFZQaFHN5cN/+A5kKAOeKb3894s7s0ePyGNqTjez/HVKmyHjmkHluopPQ5990K4WlN5fqg==
+X-Received: by 2002:a65:6296:: with SMTP id f22mr17602402pgv.320.1643656891836;
+        Mon, 31 Jan 2022 11:21:31 -0800 (PST)
+Received: from charizard.lan (c-67-165-113-11.hsd1.wa.comcast.net. [67.165.113.11])
+        by smtp.gmail.com with ESMTPSA id n2sm29791218pga.39.2022.01.31.11.21.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 11:21:31 -0800 (PST)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc3: Prioritize extcon over USB role switching API
+Date:   Mon, 31 Jan 2022 11:21:02 -0800
+Message-Id: <20220131192102.4115473-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131181200.E183645E00D0@ere-mx2.erems.fr>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 07:12:00PM +0100, root wrote:
-> Hello,
-> 
-> I have an old equipment on the international space station running a linux 2.4 kernel (RedHat).
-> I need to connect the USB1000IP to it to use standard devices: mass storage and cameras.
-> The usbip device driver for linux seems to be the right package to handle this hardware.
-> If you agree with this, where can I find the complete source code of my 2.4 kernel (otherwise 2.6)?
+It is necessary that:
 
-I don't agree, but I'll answer your question anyway.  However, if you 
-want the source code for Red Hat's 2.4 Linux kernels then you really 
-should ask on a Red Hat mailing list.
+   ROLE_SWITCH && device_property_read_bool(dwc->dev, "usb-role-switch")
 
-The generic Linux kernel source code is available at:
+is true in order for dwc3_get_dr_mode() to _not_ force us from OTG to
+PERIPHERAL mode here:
 
-	https://mirrors.edge.kernel.org/pub/linux/kernel/v2.4/
+   if (mode == USB_DR_MODE_OTG &&
+       (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+        !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
+	!DWC3_VER_IS_PRIOR(DWC3, 330A))
+	mode = USB_DR_MODE_PERIPHERAL;
 
-but this is not the same as what Red Hat distributed (they made their 
-own additions and changes).  Also, note that this web page includes 
-source code for kernel versions 2.4.0 up to 2.4.37.9.
+and dwc3_drd_init() to be called later in dwc3_core_init_mode(). So,
+to avoid always ignoring extcon device returned by dwc3_get_extcon()
+change dwc3_drd_init() to check and use it first, before checking if
+dwc3_setup_role_switch() should be called.
 
-Alan Stern
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Thinh Nguyen <thinhn@synopsys.com>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+---
+
+Hopefully I didn't miss something important making this patch
+unnecessary. Don't know if this is a good solution or not, part of me
+thinks than maybe changing the aforementioned code in
+dwc3_get_dr_mode() to account for extcon wopuld be
+simpler/better. Happy to rework this.
+
+ drivers/usb/dwc3/drd.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index e2b68bb770d1..835bd0be87d5 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -579,12 +579,7 @@ int dwc3_drd_init(struct dwc3 *dwc)
+ 	if (IS_ERR(dwc->edev))
+ 		return PTR_ERR(dwc->edev);
+
+-	if (ROLE_SWITCH &&
+-	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
+-		ret = dwc3_setup_role_switch(dwc);
+-		if (ret < 0)
+-			return ret;
+-	} else if (dwc->edev) {
++	if (dwc->edev) {
+ 		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
+ 		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
+ 					       &dwc->edev_nb);
+@@ -594,6 +589,11 @@ int dwc3_drd_init(struct dwc3 *dwc)
+ 		}
+
+ 		dwc3_drd_update(dwc);
++	} else if (ROLE_SWITCH &&
++		   device_property_read_bool(dwc->dev, "usb-role-switch")) {
++		ret = dwc3_setup_role_switch(dwc);
++		if (ret < 0)
++			return ret;
+ 	} else {
+ 		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_OTG);
+ 		dwc->current_dr_role = DWC3_GCTL_PRTCAP_OTG;
+--
+2.25.1
