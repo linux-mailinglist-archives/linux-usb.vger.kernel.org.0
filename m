@@ -2,199 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA044A3E62
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 08:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 278144A3EBF
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 09:42:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237459AbiAaHzn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jan 2022 02:55:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234839AbiAaHzl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 02:55:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F62EC061714
-        for <linux-usb@vger.kernel.org>; Sun, 30 Jan 2022 23:55:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 334C5B8279A
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jan 2022 07:55:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4536C340E8;
-        Mon, 31 Jan 2022 07:55:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643615736;
-        bh=NxyrW7fRgG1Bg/vVAeHCBH6ZL9dky7+z2y4TSsX1cHw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SZGr8gJbi4/jj+8nYnSY31iufxm20D3tOy2K2lCBTPuVaE3iZgTKmy9aKDLnBhK15
-         Iy5iRR2XXP2vER8TmuPwfiVoMN7WBSeKdB1Sfg2DLio/8nrMooaFppdHlrdU2QwFgO
-         pi+7VwtsT8mN5Q0C94Z/SzYwJ4ZZ64whn3J+8ksFnEHVrDICUhzQTdQoz1s+AKqr+5
-         V8cbdf2kJGv6zLCPxOVCI8xTvZxtjk3UhFr2SrVfSsZ/Uw+ZoBxGXrrmkOVsDYO+KJ
-         7dQej7pSIebeXPV8/zm5O6axRfAau87DhHo5s5V4Q0xvqCrMADUFi3/7mQvgF8KcxT
-         PwqnWX7TmbTJg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nERWz-0001gd-Ft; Mon, 31 Jan 2022 08:55:21 +0100
-Date:   Mon, 31 Jan 2022 08:55:21 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     "embedded (VIVAVIS AG)" <embedded@vivavis.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: ftdi_sio: Problem when changing the baud rate after a transfer
-Message-ID: <YfeV6f6hnz7Cgrt/@hovoldconsulting.com>
-References: <5aae37a8029549d8a9ef28f2e39fe58f@vivavis.com>
- <1ec54d4f592c46b7a14109df559072e4@vivavis.com>
+        id S1344482AbiAaImi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jan 2022 03:42:38 -0500
+Received: from mga07.intel.com ([134.134.136.100]:48485 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344458AbiAaImh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 31 Jan 2022 03:42:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643618557; x=1675154557;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nSRR41iCdd3beXRbCXNgN9ZSboYXpnyQtwxxNPrpg2s=;
+  b=Q4nFdauLJo0TngGzEQ7AJsvBXlwpRPkFotRLs1kk2toJDoJiUdMHZJxg
+   l6gJhFvcZVymPYsAlTFDR3sLqX6XzWeoYK9CUOzBFxUEpfNrWhYGAEnry
+   G5DBJ3rlwM7gRGLwQXT3Xc0ONiLvC9vb03pal8g/Kq1hV6onW1I0K3fOg
+   m1PE9e0rRXDC9wfsqWsmgcumM4j/XKoCBsYE4S/1ptR6GbPwz6l2lwIai
+   +1/pj7O2MEU+B1TC/q42nRN2KiNoGeJtGWZ/MQSg4/ff+lpK51/S1OPt5
+   ucTYXCe+8BgvJmXE9gprrHy8rmdQYunrjuBmJVfZKp920QY4k6b3z4tL1
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="310732878"
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="310732878"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 00:42:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
+   d="scan'208";a="675667925"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 31 Jan 2022 00:42:32 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 31 Jan 2022 10:42:31 +0200
+Date:   Mon, 31 Jan 2022 10:42:31 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] usb: typec: mux: select not-visible INTEL_SCU_IPC
+Message-ID: <Yfeg96P3no1FhWE5@kuha.fi.intel.com>
+References: <20220130185032.29298-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1ec54d4f592c46b7a14109df559072e4@vivavis.com>
+In-Reply-To: <20220130185032.29298-1-rdunlap@infradead.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Please wrap your lines at 72 column or so. I've tried to reflow you mail
-below.
-
-On Fri, Jan 28, 2022 at 10:09:26AM +0000, embedded (VIVAVIS AG) wrote:
-> > Gesendet: Montag, 10. Januar 2022 14:27
-> > An: linux-usb@vger.kernel.org
-> > Betreff: ftdi_sio: Problem when changing the baud rate after a transfer
-> >
-> > Hi,
-> > there seems to be a problem with the ftdi_sio driver in conjunction
-> > with an FT2232C and changing the baud rate.
-> > This behavior is observable at least on linux 4.19.190.
-
-You need to reproduce any issues you have with a more recent kernel such
-as 5.16.
-
-> > The following was done in order to observe this problem:
-> > A transfer is started over one of the serial interfaces of the
-> > FT2232C at a lower baud rate, eg. 300 baud.
-> > The code waits for the driver to empty the tx buffer by calling
-> > tcdrain(). After the call returns the code changes
-> > the baud rate of the serial interface to a higher rate, eg. 4800
-> > baud, and writes another stream of bytes.
-> > Now the problem occurs: Looking at the TX pin of the used interface
-> > with an oscilloscope, one can see that the last byte of the previous
-> > transfer, which is supposed to be transferred at 300 baud, is
-> > transferred at the higher rate of 4800 baud. Even worse, it is not
-> > even the complete byte, but rather some of the last bits of that
-> > last byte which are transferred at the new baud rate configured.
-> > This problem occurs independent of whether the interface is opened
-> > in blocking or non-blocking mode.
-> > I verified that the driver does in fact ask the hardware if it's tx
-> > buffer is empty when the hardware status is reported.
-
-How exactly did you verify that?
-
-> > However, it seems that the reported status by the FT2232C does not
-> > check the status of it's shift register (if that is even possible at
-> > all), which is clearly influenced by the changed baud rate.
-
-If it really is a hardware issue, then it's not much we can do, but see
-below first.
-
-> > Can someone confirm this behavior and is there a proper way to fix it?
-> >
-> > Regards,
-> > Yasin Morsli
-> >
-> >
-> > PS: Here is an MWE to test this behavior:
-> >
-> > #include <stdio.h>
-> > #include <fcntl.h>
-> > #include <string.h>
-> > #include <termios.h>
-> >
-> > const char* help_msg =
-> >    "Usage: %s [tty] [data]\n"
-> >    "  tty:  filepath to the tty\n"
-> >    "  data: data to transfer\n";
-> >
-> > int error(const char* msg) {
-> >    printf("Error: %s\n", msg);
-> >    return -1;
-> >}
-> >
-> >int setspeed(int fd_tty, int speed) {
-> >   struct termios tty;
-> >    if (tcgetattr(fd_tty, &tty) != 0) return error("tcgetattr failed");
-> >
-> >    cfsetospeed(&tty, speed);
-> >    cfsetispeed(&tty, speed);
-> >
-> >    if (tcsetattr(fd_tty, TCSANOW, &tty) != 0) return error("tcsetattr failed");
-
-Unless you use TCSADRAIN (or TCSAFLUSH) the driver is not supposed to
-wait for the outgoing buffer to drain.
-
-Please confirm if changing this fixes the problem you're seeing.
-
-> >
-> >    return 0;
-> >}
-> >
-> >int main(int argc, const char** argv) {
-> >    if (argc < 3) {
-> >        printf(help_msg, argv[0]);
-> >        return 0;
-> >    }
-> >
-> >    const char* path_tty = argv[1];
-> >    const char* data_tty = argv[2];
-> >
-> >    int fd_tty = open(path_tty, O_RDWR | O_NOCTTY);
-> >    if (fd_tty < 0) return error("open failed");
-> >
-> >    struct termios tty;
-> >    if (tcgetattr(fd_tty, &tty) != 0) return error("tcgetattr failed");
-> >
-> >    tty.c_cflag &= ~(CSIZE  | PARENB | CRTSCTS);
-> >    tty.c_cflag |=  (CS7 | CSTOPB);
-> >    tty.c_iflag &= ~(IXON | IXOFF | IXANY | IGNBRK);
-> >    tty.c_lflag = 0;
-> >    tty.c_oflag = 0;
-> >    tty.c_cc[VMIN] = 0;
-> >
-> >    if (tcsetattr(fd_tty, TCSANOW, &tty) != 0) return error("tcsetattr failed");
-> >
-> >    if (setspeed(fd_tty, B300) != 0) return error("setspeed failed");
-> >    write(fd_tty, data_tty, strlen(data_tty));
-> >    tcdrain(fd_tty);
-> >
-> >    if (setspeed(fd_tty, B4800) != 0) return error("setspeed failed");
-> >    write(fd_tty, data_tty, strlen(data_tty));
-> >    tcdrain(fd_tty);
-> >
-> >    close(fd_tty);
-> >
-> >    return 0;
-> >}
+On Sun, Jan 30, 2022 at 10:50:32AM -0800, Randy Dunlap wrote:
+> Use "select INTEL_SCU_IPC" instead of depending on it since it is
+> not a visible Kconfig symbol and it may not otherwise be set/enabled.
 > 
-> I've found this older thread
-> https://www.spinics.net/lists/linux-usb/msg71689.html.  The proposed
-> solution or patch with chars_in_buffer() function doesn't exist in
-> more recent kernels (4.19 or newer), but the same functionality is
-> achieved by ftdi_tx_empty(), which is indeed called, when tcdrain() is
-> called from userspace.  ftdi_tx_empty() calls ftdi_get_modem_status()
-> and checks whether FTDI_RS_TEMPT flag is set. If set (i.e. shift
-> register empty) ftdi_tx_empty() returns true.
+> Fixes: b62851491a55 ("usb: typec: mux: Convert the Intel PMC Mux driver to use new SCU IPC API")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: kernel test robot <lkp@intel.com>
+> ---
+> v2: add dependency on X86_PLATFORM_DEVICES to fix build error that was
+>     Reported_by: kernel test robot <lkp@intel.com>
 > 
-> But I wonder why FTDI_RS_THRE (transmit holding register empty) is not
-> taken into account.  Furthermore, I can not find any checks for
-> tx-fifos. But possibly the FTDI chip has a guarantee that if
-> FTDI_RS_TEMPT is set, the holding register and internal tx-fifos are
-> empty, too.
-
-That's the way it's supposed to work, yes (i.e. FTDI_RS_TEMPT implies
-FTDI_RS_THRE). 
-
-> As Yasin stated above, it can be observed that the chip transmits
-> data, even if the driver reports ftdi_tx_empty() == true. Possibly due
-> to a bug in the driver or by poor chip design.
+>  drivers/usb/typec/mux/Kconfig |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Any thoughts on this?
+> --- linux-next-20220128.orig/drivers/usb/typec/mux/Kconfig
+> +++ linux-next-20220128/drivers/usb/typec/mux/Kconfig
+> @@ -11,8 +11,8 @@ config TYPEC_MUX_PI3USB30532
+>  
+>  config TYPEC_MUX_INTEL_PMC
+>  	tristate "Intel PMC mux control"
+> -	depends on ACPI
+> -	depends on INTEL_SCU_IPC
+> +	depends on ACPI && X86_PLATFORM_DEVICES
+> +	select INTEL_SCU_IPC
+>  	select USB_ROLE_SWITCH
+>  	help
+>  	  Driver for USB muxes controlled by Intel PMC FW. Intel PMC FW can
 
-Please try using TCSADRAIN first.
+This will cause the driver to fail at probe time if there are no SCU
+device drivers enabled.
 
-Johan
+The idea is that the SCU device drivers select the SCU IPC library,
+not the users of the library like this mux driver.
+
+thanks,
+
+-- 
+heikki
