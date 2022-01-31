@@ -2,128 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 800CC4A4B05
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 16:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF164A4BED
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 17:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379910AbiAaPyI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jan 2022 10:54:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+        id S1380318AbiAaQ0t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jan 2022 11:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245307AbiAaPyH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 10:54:07 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A245C06173B
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jan 2022 07:54:07 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id e2so26362074wra.2
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jan 2022 07:54:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=7Gy5UW1fWfYNjiBYU6VT4K4G1ACnF1QWzkEUjeRjyVM=;
-        b=QC8Hbp3YDZL1XPZQtcsDsq3tgT37d1hv4VhJGbgqIYCUyf8N8FD7u9yJxnhJVb3Mtr
-         zfVcqhkaxtb1/jyAPQFInfEyWQMxQRgGKibIR0sIERVHoXCf0+28dGENmQvyeLw1t/eU
-         J/Jd5gnNokoM+9G31GufeEjj+RhMvR9EoV8iwvDnV0NvPvqAdgej3b6kKbzI3wNNEQcG
-         VuSJlNx7P5lj2MUxXNI56MjeGtAaIKKtex68om4cEDGqKLuAx26xnWV2rousTmXXI7QH
-         sgpXPhsde06UtIx4gOTALN8K+7YfHLHJh7QzbBNTkLp9oUWVXOPRVuXhdJ7PUJgAd7Qd
-         FJZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=7Gy5UW1fWfYNjiBYU6VT4K4G1ACnF1QWzkEUjeRjyVM=;
-        b=sBNzTDUPcW7waml8Q/snJbWed4HeSSJo8iDIS97r6mFmGWzWLA40QJfkkbTa1bHY0R
-         TEcSqmoPHAE+/SCfJM5zjEeWbvqpSGZsAoGR5prbgnq1LPV2uYGk0CnMVxYLnnLZLk3G
-         vtF37LilupLQWZIPoDBdpRJ7OFHWuO2jK09mz7SiPEdw8dG8NrhTH5iYt1RqQdZwBV0f
-         3BPRChrcwykbJg72w715idV0DFsLEJWVPvO/o4JFlMg4e2sILuG7nhqs5YwFCm8X6cJH
-         1avxxrfme0nWjCZ1alQ/VoHfu6ppG1IZWS7YwTe+UUZs0rus8GGBAS3sr9nZ3WqezyTG
-         d7EA==
-X-Gm-Message-State: AOAM531ucm7TvdJYHgAhz5VJNKuXQsGOZuPad/SQi79ygUB85ljkwxpD
-        8wSpcJf7iz7AnjNDYtA1ptJRTQ==
-X-Google-Smtp-Source: ABdhPJwR5vQXkMM6SlNUC6W39RCaocup+suVldKGwB3rvUuLoX1E9Y2tm0+t3CiCdEKCpzkvw5fsaw==
-X-Received: by 2002:a05:6000:15c5:: with SMTP id y5mr17937388wry.94.1643644445795;
-        Mon, 31 Jan 2022 07:54:05 -0800 (PST)
-Received: from google.com (cpc106310-bagu17-2-0-cust853.1-3.cable.virginm.net. [86.15.223.86])
-        by smtp.gmail.com with ESMTPSA id f14sm9743053wmq.40.2022.01.31.07.54.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 07:54:05 -0800 (PST)
-Date:   Mon, 31 Jan 2022 15:54:03 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: Re: [PATCH v2 4/7] mfd: hi6421-spmi-pmic: Use
- generic_handle_irq_safe().
-Message-ID: <YfgGG0v/zhQp41tr@google.com>
-References: <20220131123404.175438-1-bigeasy@linutronix.de>
- <20220131123404.175438-5-bigeasy@linutronix.de>
+        with ESMTP id S1380319AbiAaQ0n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jan 2022 11:26:43 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070D4C06173D;
+        Mon, 31 Jan 2022 08:26:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=GEwATrS8QyZwxwEyKt9LncyWi/r/xnwpQIPKwhOCdNw=; b=mYrisjOodfhbzF6aT3BqYPvfVx
+        arCZ2gkbDftYehgG2gkPMXIZu4PoPMjnZZ6jyfFbKhAaE8AlOWtBozklCVRheAehK9CzSHvZnkk8K
+        czb74/oMM0iO3ZqTSaOar+C4lYmiSTgocCKNo1+/SozcpltwXiOl9WmJv/iclw6lVIwnR8bsTVHC/
+        Gfk6o/Z1X0zrEYwqzMIm/1F/M07a32o/4i83b4iQjiRuSuiCxY5FVIxttNyCygudd1Djz4EGQUa6p
+        zITnsVExJ5bgfFAs4b7rf3JG0rqHI9mcC98AA7TXW88AzbOtscZVf8Qmx2EI3f3fWX+WXjRg4Ba1f
+        HOHH5guQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nEZVn-00A8Vj-Jk; Mon, 31 Jan 2022 16:26:40 +0000
+Message-ID: <bc370384-f852-eedf-5bd8-ed39bf671aba@infradead.org>
+Date:   Mon, 31 Jan 2022 08:26:36 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220131123404.175438-5-bigeasy@linutronix.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] usb: typec: mux: select not-visible INTEL_SCU_IPC
+Content-Language: en-US
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel test robot <lkp@intel.com>
+References: <20220130185032.29298-1-rdunlap@infradead.org>
+ <Yfeg96P3no1FhWE5@kuha.fi.intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <Yfeg96P3no1FhWE5@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 31 Jan 2022, Sebastian Andrzej Siewior wrote:
 
-> generic_handle_irq() is invoked from a regular interrupt service
-> routine. This handler will become a forced-threaded handler on
-> PREEMPT_RT and will be invoked with enabled interrupts. The
-> generic_handle_irq() must be invoked with disabled interrupts in order
-> to avoid deadlocks.
+
+On 1/31/22 00:42, Heikki Krogerus wrote:
+> On Sun, Jan 30, 2022 at 10:50:32AM -0800, Randy Dunlap wrote:
+>> Use "select INTEL_SCU_IPC" instead of depending on it since it is
+>> not a visible Kconfig symbol and it may not otherwise be set/enabled.
+>>
+>> Fixes: b62851491a55 ("usb: typec: mux: Convert the Intel PMC Mux driver to use new SCU IPC API")
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+>> Cc: Lee Jones <lee.jones@linaro.org>
+>> Cc: linux-usb@vger.kernel.org
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Cc: kernel test robot <lkp@intel.com>
+>> ---
+>> v2: add dependency on X86_PLATFORM_DEVICES to fix build error that was
+>>     Reported_by: kernel test robot <lkp@intel.com>
+>>
+>>  drivers/usb/typec/mux/Kconfig |    4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> --- linux-next-20220128.orig/drivers/usb/typec/mux/Kconfig
+>> +++ linux-next-20220128/drivers/usb/typec/mux/Kconfig
+>> @@ -11,8 +11,8 @@ config TYPEC_MUX_PI3USB30532
+>>  
+>>  config TYPEC_MUX_INTEL_PMC
+>>  	tristate "Intel PMC mux control"
+>> -	depends on ACPI
+>> -	depends on INTEL_SCU_IPC
+>> +	depends on ACPI && X86_PLATFORM_DEVICES
+>> +	select INTEL_SCU_IPC
+>>  	select USB_ROLE_SWITCH
+>>  	help
+>>  	  Driver for USB muxes controlled by Intel PMC FW. Intel PMC FW can
 > 
-> Instead of manually disabling interrupts before invoking use
-> generic_handle_irq_safe() which can be invoked with enabled and disabled
-> interrupts.
+> This will cause the driver to fail at probe time if there are no SCU
+> device drivers enabled.
 > 
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> ---
->  drivers/misc/hi6421v600-irq.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> The idea is that the SCU device drivers select the SCU IPC library,
+> not the users of the library like this mux driver.
 
-The subject line should be "misc".
-
-> diff --git a/drivers/misc/hi6421v600-irq.c b/drivers/misc/hi6421v600-irq.c
-> index 1c763796cf1fa..caa3de37698b0 100644
-> --- a/drivers/misc/hi6421v600-irq.c
-> +++ b/drivers/misc/hi6421v600-irq.c
-> @@ -117,8 +117,8 @@ static irqreturn_t hi6421v600_irq_handler(int irq, void *__priv)
->  			 * If both powerkey down and up IRQs are received,
->  			 * handle them at the right order
->  			 */
-> -			generic_handle_irq(priv->irqs[POWERKEY_DOWN]);
-> -			generic_handle_irq(priv->irqs[POWERKEY_UP]);
-> +			generic_handle_irq_safe(priv->irqs[POWERKEY_DOWN]);
-> +			generic_handle_irq_safe(priv->irqs[POWERKEY_UP]);
->  			pending &= ~HISI_IRQ_POWERKEY_UP_DOWN;
->  		}
->  
-> @@ -126,7 +126,7 @@ static irqreturn_t hi6421v600_irq_handler(int irq, void *__priv)
->  			continue;
->  
->  		for_each_set_bit(offset, &pending, BITS_PER_BYTE) {
-> -			generic_handle_irq(priv->irqs[offset + i * BITS_PER_BYTE]);
-> +			generic_handle_irq_safe(priv->irqs[offset + i * BITS_PER_BYTE]);
->  		}
->  	}
->  
+OK. Thanks.
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+~Randy
