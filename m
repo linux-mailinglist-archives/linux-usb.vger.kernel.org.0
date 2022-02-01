@@ -2,279 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BED4A56FF
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Feb 2022 06:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4E84A5752
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Feb 2022 07:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232648AbiBAFiV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Feb 2022 00:38:21 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:37666 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232265AbiBAFiU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Feb 2022 00:38:20 -0500
-Received: by mail-il1-f198.google.com with SMTP id 20-20020a056e020cb400b002b93016fbccso11064556ilg.4
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jan 2022 21:38:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=anJUKQ2whukBlfrjgT5cEyfetmkKWRrMvSyM2oDT9dE=;
-        b=C0+BBGuv0Plu7KV2sEjL5QcW16wpznqraqYSq5clypu2HeRu12/E4dQzlHtvsp2mQl
-         JMu97cPJC8iOJnM2siWZ3hQd9P2XNyKtDXb0jtsgBQIbZaCk0T6jC1JoMuiiU1V14Z5h
-         xGQyp846GVgZOsNUjBu3ch01e2Hwd+YblAxT7p57Ad+fd0xWI56aUF/wosJD3NoqFZRs
-         XtfDm7kEaGXOb3vcgA6qYZOCAGz0nXtQS/Y1qzw3ntwCVFvC3Ywthtmp/psh6KMBqPJy
-         kJdZ9UNYvAQ3eDNK0JcOb0HUkrOHP1xn4/yxhTjkjmTnSVzrOUUTivkIcBQM4Dd/sEt9
-         r9+g==
-X-Gm-Message-State: AOAM530tN3wXIKMcS4S0ltu6dRuVHHm5rF+A5llrLCLhlMs1F9sYQO+Q
-        VMAnom9IFfpt8st1J8+eh32DwlYz33loQFgiH4ykKRzBkiSh
-X-Google-Smtp-Source: ABdhPJyuWZidjUECtTaMLkYN802AUurGmR1Q/gUNMLrDzbrBOuaZa3WKCXqfocyT+JqkwHuk/2N2JcvPYudcAykjlVEdrCh4TQpE
+        id S234248AbiBAGok (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Feb 2022 01:44:40 -0500
+Received: from mail-eopbgr40076.outbound.protection.outlook.com ([40.107.4.76]:21886
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233800AbiBAGoj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Feb 2022 01:44:39 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C2QsBHiA/4szjhQ4i3WhIgPav6X5tcRHkMdp2L9CzoVUmlblpWMLkW03iooD1aMQLKlEFhVaUuMU12tNjbBck0pG5Xbyd5rl5svNkN9rPv+MOZskQ9bU0MBRGVb8qRw2b5xg2a3Pv9B4vOaUrD5oNkJc2mvZanjvMK94SjQATyDqGKpyHN+VY+0wy2S/rI/mmzyIM2TgkFETiXOtN6ZaaYM360YVAU/LvU6egmYNc4TvrNxYw3zRF5T4S29/k1pFnLOciLzE5IFQwcAkussi8RKem2Ob2PcP1f117n8pokd9ul4dUs8yQGkdL2S7fMtb1k3uVy+D3akH2YoEnRkbYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Oq2IMpF61QUGcxy1dJBPW9IH9fgJCW3fc+auXUwcE10=;
+ b=OuODX7VrGGUOgDNQ8qMHgrYpznmJoVxV+lf91RE7kcKI9l/tMiezHPqd/+3q2nbvHn9yNOdUY2+yS/Ztv3OGQjDx+7AQxl6D5HrG+CbhNX0q1eXN0GHwknoP6Rz23J2a+3k+/ZZ/tlfBDd3eqsOUmlI2ozIY1F7Z/HxVnvBOAqeVqJnR0zOjbrVtE6aWbV1+yep9zHnBWT1iW3uBXVimoxcgZxwdmdspg/277HVxmE1gOpty5iktE5SE1eJsU8NM8qrpeXvjeQHeQkXzQe0l+NBrB7qa5hKw1bLVLhlmqExjmKqeHrtSLD/W80u4ihwjDQP6puH99X/uP1y7r3IJbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.73) smtp.rcpttodomain=kernel.org smtp.mailfrom=siemens.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Oq2IMpF61QUGcxy1dJBPW9IH9fgJCW3fc+auXUwcE10=;
+ b=UjteLeZpXKTAcRKz0Y6TUMjE+RGmP1rhHiyR0Ns2SoI7DhFz5icTfVuw0IvymGPUAdLXJu8Khk8xGGMr9vHmzq8vhCN3fHfq7ovlhVpbNAS2Erg61kFddhuCnGoR2J+yLCspdKFVZpBJ1Dbc6IVFFJLEoDk0vaNeewKah0vNhW4Tb8h4QSB4nBMK4CjekUZHAUoLF6+8cG9eOBoQyfoQokNqdhb28zczZFWH2viVMLUSQzaceKI/yYtHqHURUpq/CgXb5C+ArF+Z5u7+9wTwkiFWB6M1Nb6MzF/k+/Ndy/YqBXCB3uxDlWIPz+wanwNKNBVyjs39F+4tYoLQV3o/vQ==
+Received: from SV0P279CA0050.NORP279.PROD.OUTLOOK.COM (2603:10a6:f10:13::19)
+ by AM6PR10MB3400.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:d6::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Tue, 1 Feb
+ 2022 06:44:36 +0000
+Received: from HE1EUR01FT064.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:f10:13:cafe::1e) by SV0P279CA0050.outlook.office365.com
+ (2603:10a6:f10:13::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15 via Frontend
+ Transport; Tue, 1 Feb 2022 06:44:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.73)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.73 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.73; helo=hybrid.siemens.com;
+Received: from hybrid.siemens.com (194.138.21.73) by
+ HE1EUR01FT064.mail.protection.outlook.com (10.152.1.31) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4930.15 via Frontend Transport; Tue, 1 Feb 2022 06:44:36 +0000
+Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
+ DEMCHDC9SNA.ad011.siemens.net (194.138.21.73) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Tue, 1 Feb 2022 07:44:35 +0100
+Received: from [167.87.1.21] (167.87.1.21) by DEMCHDC8A0A.ad011.siemens.net
+ (139.25.226.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 1 Feb
+ 2022 07:44:35 +0100
+Message-ID: <21e7c87a-7680-bdf0-5290-90126741935f@siemens.com>
+Date:   Tue, 1 Feb 2022 07:44:33 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a92:ca45:: with SMTP id q5mr13982285ilo.55.1643693899952;
- Mon, 31 Jan 2022 21:38:19 -0800 (PST)
-Date:   Mon, 31 Jan 2022 21:38:19 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000006b92e05d6ee4fce@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in ath9k_hif_usb_reg_in_cb (3)
-From:   syzbot <syzbot+b05dabaed0b1f0b0a5e4@syzkaller.appspotmail.com>
-To:     ath9k-devel@qca.qualcomm.com, davem@davemloft.net, kuba@kernel.org,
-        kvalo@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Georgi Valkov <gvalkov@abv.bg>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux Netdev List <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <2f001839-2628-cf80-f5e3-415e7492e206@siemens.com>
+ <20220131211428.07cc4aa9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+In-Reply-To: <20220131211428.07cc4aa9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.87.1.21]
+X-ClientProxiedBy: DEMCHDC89YA.ad011.siemens.net (139.25.226.104) To
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 814f2bd9-e325-4175-65c4-08d9e54e5024
+X-MS-TrafficTypeDiagnostic: AM6PR10MB3400:EE_
+X-Microsoft-Antispam-PRVS: <AM6PR10MB3400B773192D1DB190821DEC95269@AM6PR10MB3400.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tYGW3ePxKu4ovIQAw077zqhfBgpEvxZiiY19xQhRXRgPUrJqaOJe79Xf+ajM1Pw2gD4lv93S9WeiHBBhlGIlL0evRyjhJ66w8Jhutfa81EEugYEsBcov8DB9VwAqrhdz8CZkMhCO8ffkZti86iXAf0ApRHhJSdGdJ1fZcsZ2hPsvDqKepGRYLtKOq+6TRA1/iVbTCHmIlAGWYBIsKjNTWf0X7cJ/i21Pby4giODnVoQn7A7qcCg1JBKapOYmT3OZJeVE0q12wuryzpeChH/kZIqk2TEONBLil9qD2DnYgBNIxCwD3W8rXmh3IWF8X3M1johit5jVbopAQnLg+V94LsOZ/lNV4Q7g7eiAT7LURIWt+SUtaHFy6Fa0FoiS9Zxv5G6xy/F0n90N8/YVEbuuzIgQxrqj/LohQyxppfDwkUxcOI3aONDuCpLY28ur8YeQeYh3Yfz8Du1Fzm+MbdjhfmSz1vcaiUmhqHgaEs4EhFxbKxNcGWVLseuNATZKF15aTSPUY9wzgHI8k8GnGwUiMomnd7NFlcPdcTXJDiQJ0XA3fDmpr2sZcK4TijVFtkr23+hBmXHQakW5Hbe3OMrch+PbWRs1dAlUI3FVVwZa4kYoDw+hm+JYRB7yJn/oQEktqEjx5aLmNKidVnyztSVAM1gVzUttzs05xnoMep503OUO3YNu0X8+MexdKTpVmU+S6T5l5kwnm+TkgBhNxuZ3kj0wNJzusf15VpUhMmQjvovuS+xMqthLLvD0BoLoRZtd8JMIbEEQBRtrRXXjZ6PaRw==
+X-Forefront-Antispam-Report: CIP:194.138.21.73;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(53546011)(5660300002)(26005)(16526019)(186003)(83380400001)(336012)(36860700001)(82310400004)(44832011)(956004)(2616005)(2906002)(8936002)(47076005)(31696002)(86362001)(16576012)(316002)(40460700003)(31686004)(6916009)(6706004)(54906003)(508600001)(82960400001)(356005)(4326008)(8676002)(70206006)(70586007)(81166007)(36756003)(3940600001)(43740500002)(36900700001)(20210929001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 06:44:36.3619
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 814f2bd9-e325-4175-65c4-08d9e54e5024
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.73];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT064.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR10MB3400
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 01.02.22 06:14, Jakub Kicinski wrote:
+> On Mon, 31 Jan 2022 19:58:14 +0100 Jan Kiszka wrote:
+>> From: Georgi Valkov <gvalkov@abv.bg>
+>>
+>> When rx_buf is allocated we need to account for IPHETH_IP_ALIGN,
+>> which reduces the usable size by 2 bytes. Otherwise we have 1512
+>> bytes usable instead of 1514, and if we receive more than 1512
+>> bytes, ipheth_rcvbulk_callback is called with status -EOVERFLOW,
+>> after which the driver malfunctiones and all communication stops.
+>>
+>> Resolves ipheth 2-1:4.2: ipheth_rcvbulk_callback: urb status: -75
+>>
+>> Fixes: f33d9e2b48a3 ("usbnet: ipheth: fix connectivity with iOS 14")
+>> Signed-off-by: Georgi Valkov <gvalkov@abv.bg>
+>> Tested-by: Jan Kiszka <jan.kiszka@siemens.com>
+> 
+> Hm, I'm starting to suspect this patch is cursed..
+> 
+>> diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
+>> index cd33955df0b6..6a769df0b421 100644
+>> --- a/drivers/net/usb/ipheth.c
+>> +++ b/drivers/net/usb/ipheth.c
+>> @@ -121,7 +121,7 @@ static int ipheth_alloc_urbs(struct ipheth_device *iphone)
+>>    	if (tx_buf == NULL)
+> 
+> There is an extra space character at the start of each line of context.
+> 
+>>    		goto free_rx_urb;
+>>    
+>> -	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE,
+> 
+> But not on the changed lines.
+> 
+>> +	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN,
+>>    				    GFP_KERNEL, &rx_urb->transfer_dma);
+>>    	if (rx_buf == NULL)
+>>    		goto free_tx_buf;
+>> @@ -146,7 +146,7 @@ static int ipheth_alloc_urbs(struct ipheth_device *iphone)
+>>    
+>>    static void ipheth_free_urbs(struct ipheth_device *iphone)
+>>    {
+>> -	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->rx_buf,
+> 
+> Pretty clear here in how the opening bracket does not align after the -.
+> 
+>> +	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN, iphone->rx_buf,
+>>    			  iphone->rx_urb->transfer_dma);
+>>    	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->tx_buf,
+>>    			  iphone->tx_urb->transfer_dma);
+>> @@ -317,7 +317,7 @@ static int ipheth_rx_submit(struct ipheth_device *dev, gfp_t mem_flags)
+>>    
+>>    	usb_fill_bulk_urb(dev->rx_urb, udev,
+>>    			  usb_rcvbulkpipe(udev, dev->bulk_in),
+>> -			  dev->rx_buf, IPHETH_BUF_SIZE,
+>> +			  dev->rx_buf, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN,
+>>    			  ipheth_rcvbulk_callback,
+>>    			  dev);
+>>    	dev->rx_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+> 
 
-syzbot found the following issue on:
+Sorry, a submission tool regressed here unnoticed (grrrr!). Will resend.
 
-HEAD commit:    993a44fa85c1 usb: gadget: f_uac2: allow changing interface..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=149215e4700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7d7c811a1a4d0135
-dashboard link: https://syzkaller.appspot.com/bug?extid=b05dabaed0b1f0b0a5e4
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Jan
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b05dabaed0b1f0b0a5e4@syzkaller.appspotmail.com
-
-usb 1-1: ath: unknown panic pattern!
-==================================================================
-BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:71 [inline]
-BUG: KASAN: use-after-free in atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
-BUG: KASAN: use-after-free in refcount_read include/linux/refcount.h:147 [inline]
-BUG: KASAN: use-after-free in skb_unref include/linux/skbuff.h:1098 [inline]
-BUG: KASAN: use-after-free in kfree_skb_reason+0x33/0x400 net/core/skbuff.c:772
-Read of size 4 at addr ffff88810feac35c by task swapper/0/0
-
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-syzkaller-00028-g993a44fa85c1 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x8d/0x336 mm/kasan/report.c:255
- __kasan_report mm/kasan/report.c:442 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read include/linux/instrumented.h:71 [inline]
- atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
- refcount_read include/linux/refcount.h:147 [inline]
- skb_unref include/linux/skbuff.h:1098 [inline]
- kfree_skb_reason+0x33/0x400 net/core/skbuff.c:772
- kfree_skb include/linux/skbuff.h:1114 [inline]
- ath9k_hif_usb_reg_in_cb+0x4c2/0x630 drivers/net/wireless/ath/ath9k/hif_usb.c:771
- __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1663
- usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1733
- dummy_timer+0x11f9/0x32b0 drivers/usb/gadget/udc/dummy_hcd.c:1987
- call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
- expire_timers kernel/time/timer.c:1466 [inline]
- __run_timers.part.0+0x67c/0xa30 kernel/time/timer.c:1734
- __run_timers kernel/time/timer.c:1715 [inline]
- run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1747
- __do_softirq+0x288/0x9a5 kernel/softirq.c:558
- invoke_softirq kernel/softirq.c:432 [inline]
- __irq_exit_rcu+0x113/0x170 kernel/softirq.c:637
- irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
- sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1097
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:638
-RIP: 0010:native_save_fl arch/x86/include/asm/irqflags.h:29 [inline]
-RIP: 0010:arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
-RIP: 0010:arch_irqs_disabled arch/x86/include/asm/irqflags.h:130 [inline]
-RIP: 0010:acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
-RIP: 0010:acpi_idle_do_entry+0x1c6/0x250 drivers/acpi/processor_idle.c:551
-Code: 89 de e8 6d 8c 6e fb 84 db 75 ac e8 84 88 6e fb e8 af c3 74 fb eb 0c e8 78 88 6e fb 0f 00 2d 91 1f 75 00 e8 6c 88 6e fb fb f4 <9c> 5b 81 e3 00 02 00 00 fa 31 ff 48 89 de e8 e7 8a 6e fb 48 85 db
-RSP: 0018:ffffffff87607d60 EFLAGS: 00000293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffffffff87652680 RSI: ffffffff85d51c94 RDI: 0000000000000000
-RBP: ffff888100378864 R08: 0000000000000001 R09: 0000000000000001
-R10: ffffffff8149e068 R11: 0000000000000000 R12: 0000000000000001
-R13: ffff888100378800 R14: ffff888100378864 R15: ffff88810a1b3004
- acpi_idle_enter+0x361/0x500 drivers/acpi/processor_idle.c:687
- cpuidle_enter_state+0x1b1/0xc80 drivers/cpuidle/cpuidle.c:237
- cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:351
- call_cpuidle kernel/sched/idle.c:158 [inline]
- cpuidle_idle_call kernel/sched/idle.c:239 [inline]
- do_idle+0x3e8/0x590 kernel/sched/idle.c:306
- cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:403
- start_kernel+0x47a/0x49b init/main.c:1138
- secondary_startup_64_no_verify+0xc3/0xcb
- </TASK>
-
-Allocated by task 11515:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- __kasan_slab_alloc+0x66/0x80 mm/kasan/common.c:469
- kasan_slab_alloc include/linux/kasan.h:260 [inline]
- slab_post_alloc_hook mm/slab.h:732 [inline]
- slab_alloc_node mm/slub.c:3230 [inline]
- kmem_cache_alloc_node+0x25e/0x4b0 mm/slub.c:3266
- __alloc_skb+0x215/0x340 net/core/skbuff.c:414
- alloc_skb include/linux/skbuff.h:1158 [inline]
- ath9k_hif_usb_alloc_reg_in_urbs drivers/net/wireless/ath/ath9k/hif_usb.c:964 [inline]
- ath9k_hif_usb_alloc_urbs+0x91d/0x1040 drivers/net/wireless/ath/ath9k/hif_usb.c:1023
- ath9k_hif_usb_dev_init drivers/net/wireless/ath/ath9k/hif_usb.c:1109 [inline]
- ath9k_hif_usb_firmware_cb+0x148/0x530 drivers/net/wireless/ath/ath9k/hif_usb.c:1242
- request_firmware_work_func+0x12c/0x230 drivers/base/firmware_loader/main.c:1022
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2ef/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-Freed by task 0:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free mm/kasan/common.c:328 [inline]
- __kasan_slab_free+0xfa/0x130 mm/kasan/common.c:374
- kasan_slab_free include/linux/kasan.h:236 [inline]
- slab_free_hook mm/slub.c:1728 [inline]
- slab_free_freelist_hook mm/slub.c:1754 [inline]
- slab_free mm/slub.c:3509 [inline]
- kmem_cache_free+0xd7/0x3c0 mm/slub.c:3526
- kfree_skbmem+0xef/0x1b0 net/core/skbuff.c:700
- __kfree_skb net/core/skbuff.c:757 [inline]
- kfree_skb_reason net/core/skbuff.c:776 [inline]
- kfree_skb_reason+0x145/0x400 net/core/skbuff.c:770
- kfree_skb include/linux/skbuff.h:1114 [inline]
- ath9k_htc_rx_msg+0x1ed/0xb70 drivers/net/wireless/ath/ath9k/htc_hst.c:451
- ath9k_hif_usb_reg_in_cb+0x1ac/0x630 drivers/net/wireless/ath/ath9k/hif_usb.c:740
- __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1663
- usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1733
- dummy_timer+0x11f9/0x32b0 drivers/usb/gadget/udc/dummy_hcd.c:1987
- call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
- expire_timers kernel/time/timer.c:1466 [inline]
- __run_timers.part.0+0x67c/0xa30 kernel/time/timer.c:1734
- __run_timers kernel/time/timer.c:1715 [inline]
- run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1747
- __do_softirq+0x288/0x9a5 kernel/softirq.c:558
-
-The buggy address belongs to the object at ffff88810feac280
- which belongs to the cache skbuff_head_cache of size 232
-The buggy address is located 220 bytes inside of
- 232-byte region [ffff88810feac280, ffff88810feac368)
-The buggy address belongs to the page:
-page:ffffea00043fab00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x10feac
-flags: 0x200000000000200(slab|node=0|zone=2)
-raw: 0200000000000200 ffffea00044de700 dead000000000003 ffff8881003d3640
-raw: 0000000000000000 00000000000c000c 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112a20(GFP_ATOMIC|__GFP_NOWARN|__GFP_NORETRY|__GFP_HARDWALL), pid 1269, ts 548051559679, free_ts 548051333117
- prep_new_page mm/page_alloc.c:2434 [inline]
- get_page_from_freelist+0x122d/0x2940 mm/page_alloc.c:4165
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2271
- alloc_slab_page mm/slub.c:1799 [inline]
- allocate_slab mm/slub.c:1944 [inline]
- new_slab+0x28a/0x3b0 mm/slub.c:2004
- ___slab_alloc+0x81a/0xe60 mm/slub.c:3018
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3105
- slab_alloc_node mm/slub.c:3196 [inline]
- slab_alloc mm/slub.c:3238 [inline]
- kmem_cache_alloc+0x3bb/0x480 mm/slub.c:3243
- skb_clone+0x170/0x3c0 net/core/skbuff.c:1519
- dev_queue_xmit_nit+0x38c/0xa90 net/core/dev.c:2211
- xmit_one net/core/dev.c:3468 [inline]
- dev_hard_start_xmit+0xad/0x920 net/core/dev.c:3489
- sch_direct_xmit+0x25b/0x7a0 net/sched/sch_generic.c:342
- __dev_xmit_skb net/core/dev.c:3700 [inline]
- __dev_queue_xmit+0x11b0/0x3200 net/core/dev.c:4081
- neigh_hh_output include/net/neighbour.h:525 [inline]
- neigh_output include/net/neighbour.h:539 [inline]
- ip_finish_output2+0x143f/0x20c0 net/ipv4/ip_output.c:221
- __ip_finish_output.part.0+0x1b7/0x350 net/ipv4/ip_output.c:299
- __ip_finish_output net/ipv4/ip_output.c:287 [inline]
- ip_finish_output net/ipv4/ip_output.c:309 [inline]
- NF_HOOK_COND include/linux/netfilter.h:296 [inline]
- ip_output+0x2ed/0x5f0 net/ipv4/ip_output.c:423
- dst_output include/net/dst.h:451 [inline]
- ip_local_out net/ipv4/ip_output.c:126 [inline]
- __ip_queue_xmit+0x984/0x1b80 net/ipv4/ip_output.c:525
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1352 [inline]
- free_pcp_prepare+0x361/0x760 mm/page_alloc.c:1404
- free_unref_page_prepare mm/page_alloc.c:3325 [inline]
- free_unref_page+0x19/0x580 mm/page_alloc.c:3404
- __put_single_page mm/swap.c:99 [inline]
- __put_page+0x103/0x140 mm/swap.c:130
- folio_put include/linux/mm.h:1199 [inline]
- put_page include/linux/mm.h:1237 [inline]
- anon_pipe_buf_release+0x1d9/0x280 fs/pipe.c:138
- pipe_buf_release include/linux/pipe_fs_i.h:203 [inline]
- pipe_read+0x6e4/0x11b0 fs/pipe.c:323
- call_read_iter include/linux/fs.h:2068 [inline]
- new_sync_read+0x5c2/0x6e0 fs/read_write.c:400
- vfs_read+0x35c/0x600 fs/read_write.c:481
- ksys_read+0x1ee/0x250 fs/read_write.c:619
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Memory state around the buggy address:
- ffff88810feac200: fb fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc
- ffff88810feac280: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88810feac300: fb fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc
-                                                    ^
- ffff88810feac380: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
- ffff88810feac400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-----------------
-Code disassembly (best guess):
-   0:	89 de                	mov    %ebx,%esi
-   2:	e8 6d 8c 6e fb       	callq  0xfb6e8c74
-   7:	84 db                	test   %bl,%bl
-   9:	75 ac                	jne    0xffffffb7
-   b:	e8 84 88 6e fb       	callq  0xfb6e8894
-  10:	e8 af c3 74 fb       	callq  0xfb74c3c4
-  15:	eb 0c                	jmp    0x23
-  17:	e8 78 88 6e fb       	callq  0xfb6e8894
-  1c:	0f 00 2d 91 1f 75 00 	verw   0x751f91(%rip)        # 0x751fb4
-  23:	e8 6c 88 6e fb       	callq  0xfb6e8894
-  28:	fb                   	sti
-  29:	f4                   	hlt
-* 2a:	9c                   	pushfq <-- trapping instruction
-  2b:	5b                   	pop    %rbx
-  2c:	81 e3 00 02 00 00    	and    $0x200,%ebx
-  32:	fa                   	cli
-  33:	31 ff                	xor    %edi,%edi
-  35:	48 89 de             	mov    %rbx,%rsi
-  38:	e8 e7 8a 6e fb       	callq  0xfb6e8b24
-  3d:	48 85 db             	test   %rbx,%rbx
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+Siemens AG, Technology
+Competence Center Embedded Linux
