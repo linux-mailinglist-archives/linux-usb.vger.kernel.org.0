@@ -2,119 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6B74A6028
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Feb 2022 16:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C984A60FF
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Feb 2022 17:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240363AbiBAPbD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Feb 2022 10:31:03 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:42839 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S232988AbiBAPbB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Feb 2022 10:31:01 -0500
-Received: (qmail 308126 invoked by uid 1000); 1 Feb 2022 10:31:01 -0500
-Date:   Tue, 1 Feb 2022 10:31:01 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Arnd Bergmann <arnd@kernel.org>
+        id S240841AbiBAQIf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Feb 2022 11:08:35 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41878 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234704AbiBAQId (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Feb 2022 11:08:33 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 789726150D;
+        Tue,  1 Feb 2022 16:08:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCCFFC340EB;
+        Tue,  1 Feb 2022 16:08:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643731712;
+        bh=LYkQIZRdd7F2uIoAPFnJqBxGFTDPHifWmC0kphwydIk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Mc44WwDdggfnOKb2YcVDXJjFUYp3qUUF3GymEtcwPk4DR2XktERGmIh5XV2Xu4ARi
+         /oPUn4Ebfzwl7/V2qnocj8ywsSpMjEWqG/C2uo5xtquj8kHp098+iujuFTNGcDZKUD
+         DxWzGpc8dCRdm2Rn89oo3vViy1DN5vNw8eyZTrQT2ssMCeEmFKbjew1We8Ny16jEvf
+         ryfA4LLaXxS2PYwmF9wc32w2fkJ9+Fsc1c5ab/N7V15l5Waz/WEd0qw0NfzZlRJroN
+         yMRsCoeduUd5AQ+wl0Lqg4YDReQdyNgUYuQ47mSc25XeQphfxQkD8AtP4Q6aofi/KA
+         eCuh+9rDUiC/A==
+Received: by mail-oi1-f182.google.com with SMTP id e81so34198418oia.6;
+        Tue, 01 Feb 2022 08:08:32 -0800 (PST)
+X-Gm-Message-State: AOAM533Y+GKlaqLRrxpgLTsPuEUJe8Lur0/Tbw8CP8zxug4Db56lIk3X
+        SstTk4tprjUvgQ0taLZN2d/YoKsji+Uet48JtCU=
+X-Google-Smtp-Source: ABdhPJwGwRRmdd4QCEB6IP8oQPo2IqFKHmeSL4cqMhkamDEclF2NS8VqdEVXFb+FteZjR4DIcDqjJbmNSCUC3lMBNLk=
+X-Received: by 2002:a05:6808:1a26:: with SMTP id bk38mr1636034oib.291.1643731712169;
+ Tue, 01 Feb 2022 08:08:32 -0800 (PST)
+MIME-Version: 1.0
+References: <20220201150339.1028032-1-arnd@kernel.org> <YflSNQQvignxL4PA@rowland.harvard.edu>
+In-Reply-To: <YflSNQQvignxL4PA@rowland.harvard.edu>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 1 Feb 2022 17:08:15 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1DghU4fm_6OA8=_SG_ODYsnrw0J_Z-kmC9ay1hH=Gqwg@mail.gmail.com>
+Message-ID: <CAK8P3a1DghU4fm_6OA8=_SG_ODYsnrw0J_Z-kmC9ay1hH=Gqwg@mail.gmail.com>
+Subject: Re: [RFC] ARM: sa1100/assabet: move dmabounce hack to ohci driver
+To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     Russell King <linux@armlinux.org.uk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>,
         Christoph Hellwig <hch@infradead.org>,
         Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC] ARM: sa1100/assabet: move dmabounce hack to ohci driver
-Message-ID: <YflSNQQvignxL4PA@rowland.harvard.edu>
-References: <20220201150339.1028032-1-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201150339.1028032-1-arnd@kernel.org>
+        USB list <linux-usb@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 04:02:48PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The sa1111 platform is one of the two remaining users of the old Arm
-> specific "dmabounce" code, which is an earlier implementation of the
-> generic swiotlb.
-> 
-> Linus Walleij submitted a patch that removes dmabounce support from
-> the ixp4xx, and I had a look at the other user, which is the sa1111
-> companion chip.
-> 
-> Looking at how dmabounce is used, I could narrow it down to one driver
-> one one machine:
-> 
->  - dmabounce is only initialized on assabet and pfs168, but not on
->    any other sa1100 or pxa platform using sa1111.
-> 
->  - pfs168 is not supported in mainline Linux.
-> 
->  - only the OHCI and audio devices on sa1111 support DMA
-> 
->  - There is no audio driver for this hardware
-> 
-> In the OHCI code, I noticed that two other platforms already have
-> a local bounce buffer support in the form of the "local_mem"
-> allocator. Specifically, TMIO and SM501 use this on a few other ARM
-> boards with 16KB or 128KB of local SRAM that can be accessed from the
-> OHCI and from the CPU.
-> 
-> While this is not the same problem as on sa1111, I could not find a
-> reason why we can't re-use the existing implementation but replace the
-> physical SRAM address mapping with a locally allocated DMA buffer.
-> 
-> There are two main downsides:
-> 
->  - rather than using a dynamically sized pool, this buffer needs
->    to be allocated at probe time using a fixed size. Without
->    having any idea of what it should be, I picked a size of
->    64KB, which is between what the other two OHCI front-ends use
->    in their SRAM. If anyone has a better idea what that size
->    is reasonable, this can be trivially changed.
-> 
->  - Previously, only USB transfers to the second memory bank
->    on Assabet needed to go through the bounce buffer, now all
->    of them do, which may impact runtime performance, depending
->    on what type of device is attached.
-> 
-> On the upside, the local_mem support uses write-combining
-> buffers, which should be a bit faster for transfers to the device
-> compared to normal uncached coherent memory as used in dmabounce.
-> 
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Christoph Hellwig <hch@infradead.org>
-> Cc: Laurentiu Tudor <laurentiu.tudor@nxp.com>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> I don't have this hardware, so the patch is not tested at all.
+On Tue, Feb 1, 2022 at 4:31 PM Alan Stern <stern@rowland.harvard.edu> wrote:
 
+> > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> > index 3c7c64ff3c0a..5f2fa46c7958 100644
+> > --- a/drivers/usb/core/hcd.c
+> > +++ b/drivers/usb/core/hcd.c
+> > @@ -1260,7 +1260,8 @@ void usb_hcd_unlink_urb_from_ep(struct usb_hcd *hcd, struct urb *urb)
+> >  EXPORT_SYMBOL_GPL(usb_hcd_unlink_urb_from_ep);
+> >
+> >  /*
+> > - * Some usb host controllers can only perform dma using a small SRAM area.
+> > + * Some usb host controllers can only perform dma using a small SRAM area,
+> > + * or that have restrictions in addressable DRAM.
+>
+> s/that //
+> s/in/on/
 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index 3c7c64ff3c0a..5f2fa46c7958 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -1260,7 +1260,8 @@ void usb_hcd_unlink_urb_from_ep(struct usb_hcd *hcd, struct urb *urb)
->  EXPORT_SYMBOL_GPL(usb_hcd_unlink_urb_from_ep);
->  
->  /*
-> - * Some usb host controllers can only perform dma using a small SRAM area.
-> + * Some usb host controllers can only perform dma using a small SRAM area,
-> + * or that have restrictions in addressable DRAM.
+Fixed now.
 
-s/that //
-s/in/on/
+> Otherwise the USB parts of this look okay to me.  I don't have suitable
+> hardware to test either.  (I wonder if anyone is still using this
+> platform...)
 
-Otherwise the USB parts of this look okay to me.  I don't have suitable 
-hardware to test either.  (I wonder if anyone is still using this 
-platform...)
+I assumed Russell was still using the Assabet, but his last upstream
+commits for sa1100 are from 2016 (merged in 2019), so that may have
+changed in the meantime.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Alan Stern
+Thanks!
+
+       Arnd
