@@ -2,109 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE754A62EB
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Feb 2022 18:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D80A4A6302
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Feb 2022 18:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241751AbiBARsk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Feb 2022 12:48:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
+        id S233943AbiBARxF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Feb 2022 12:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241743AbiBARsh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Feb 2022 12:48:37 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E60C06173B;
-        Tue,  1 Feb 2022 09:48:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xJjdKO+w4KNIcTldRLc+m4pi8LsT5xMjo6sZOkgNjrs=; b=YpEeb5rxmcXyef8rWQs/BHg9PF
-        GUx11+Ygka7ZBf8LOy5fqVGa6j5NN5f9ISBIzCsMS8KIQFi+hPy+JAud3eP3vcj0AJaFbtXv4hMC+
-        N/wy6/p0xFZO3u5U30Ngv6RZQd0UXgGfuCwjmMlwhHU41N/2mqwqmKpn4131pLlO9JQN2WfN4Rxp8
-        cceXa/inVYk+9NjnUwdOsYt6fm5nDlHARiU1k4dCWWiMrwwJREg39kJQ5i42VG2JuT+kLw00hEort
-        iC7FchAQa+zHsdTWv/iyHfoUQFhPXuCI8fPNhDq/wd04Vwla+7R3V1D1tGioJwVM6uGggzNVb6bnO
-        fU+lNEUg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56976)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nExGV-0000uP-Oh; Tue, 01 Feb 2022 17:48:27 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nExGR-0002GH-Mq; Tue, 01 Feb 2022 17:48:23 +0000
-Date:   Tue, 1 Feb 2022 17:48:23 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC] ARM: sa1100/assabet: move dmabounce hack to ohci driver
-Message-ID: <YflyZytGG49kbvV9@shell.armlinux.org.uk>
-References: <20220201150339.1028032-1-arnd@kernel.org>
- <90333cef-9ad1-bbf5-5c46-86083c1f5b24@arm.com>
+        with ESMTP id S233966AbiBARxE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Feb 2022 12:53:04 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16CEC061714
+        for <linux-usb@vger.kernel.org>; Tue,  1 Feb 2022 09:53:04 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id v13so33466614wrv.10
+        for <linux-usb@vger.kernel.org>; Tue, 01 Feb 2022 09:53:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=XYCO9K2z20trHg1Tdi9Bnb5Asig2IkwBEdxVkkKkXMU=;
+        b=pfFXDjW1AUhXPW4fFRMaCk1MnShdiV13lspD5U/Iw7JdfAQXX+/Kg6TuMekugF+nOv
+         FcuciBHpnMT4IX1Hlnvb6Yctuy28Tjmpb8wsDwXcxPfVOnWjuL0ruSLLMPquoqPEqvFU
+         asEBzhET9h+gPDPH+5Z+oWTEp9a0wBiuoOkX7/misKvM11wOxXY9ozKH7ZADbxEa3Mah
+         zz9KBEqFj0maUpm8iBNrbWdDagoKkaCmXbMjrPtp7oufOkKeFljisZZ3+EE88+IALdpZ
+         TqjMWpv9lhM8EuFevWk4SphFo3BCXgpcvUxQrxMPc9vnfVa9sN0YtmqUBB0N+u9iU8U2
+         4tuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=XYCO9K2z20trHg1Tdi9Bnb5Asig2IkwBEdxVkkKkXMU=;
+        b=1o7UtHa9ayL2BSuRve8BjWjWy6FcQrbiiiuFllsSIBAvLLv3I/6f5/DBc1dIdC/JY7
+         +tiMJ65kC69ElRaYhX+HqK27f0n6OL7eH1tzT2fikL8IK88u8lTVAjbGWP0mhHjAtHM6
+         fufLG6/N+1DsjOf9ztVrppKeb7s0mwS6AEmzPusgV3BfEdBonDlWjJwMTXi+ifBUZzSJ
+         WH9AnsGsvOCXVtwwqnyqqmNIjMbBw+LK4rD/SofT84vqy+LibsQf10O+uYWqc2DACb9O
+         ohGYIo+8DsF5xM4aBiu1+ROKvnpXCEeUJst08/LP/rPz3E6+/RejcDHsTgfY+WXRS6MG
+         nHDQ==
+X-Gm-Message-State: AOAM530fYtHlpO6E+P6JxxCxrHRU9gxWt1R460cSCHOOPrpq9WTjCGiw
+        ZyKD5JhanMDuO3C0dpCZxm1lImvm67BmBkFfV0g=
+X-Google-Smtp-Source: ABdhPJxmNFF2rXF4C47g9z67fbLxifVK/luySXdJTCabpVH4H9PyzNbNaBV4ASRDtCE6151hhIjfl6yLvlxWPNn2bZ4=
+X-Received: by 2002:adf:e884:: with SMTP id d4mr1758303wrm.640.1643737983106;
+ Tue, 01 Feb 2022 09:53:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <90333cef-9ad1-bbf5-5c46-86083c1f5b24@arm.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Sender: rahaalimusa2016@gmail.com
+Received: by 2002:a5d:522d:0:0:0:0:0 with HTTP; Tue, 1 Feb 2022 09:53:02 -0800 (PST)
+From:   "Mrs. Rita Hassan" <ritahassan02@gmail.com>
+Date:   Tue, 1 Feb 2022 17:53:02 +0000
+X-Google-Sender-Auth: wn3_i_gdJl5t51Q_aNPdwceAEd8
+Message-ID: <CAD5CN8yCGNa=bCDJ1r_Z+ATkq=TO9VsAoaXQR5EqFkuB-8=fNw@mail.gmail.com>
+Subject: Very Urgent.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 05:10:38PM +0000, Robin Murphy wrote:
-> On 2022-02-01 15:02, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > The sa1111 platform is one of the two remaining users of the old Arm
-> > specific "dmabounce" code, which is an earlier implementation of the
-> > generic swiotlb.
-> > 
-> > Linus Walleij submitted a patch that removes dmabounce support from
-> > the ixp4xx, and I had a look at the other user, which is the sa1111
-> > companion chip.
-> > 
-> > Looking at how dmabounce is used, I could narrow it down to one driver
-> > one one machine:
-> > 
-> >   - dmabounce is only initialized on assabet and pfs168, but not on
-> >     any other sa1100 or pxa platform using sa1111.
-> 
-> Hmm, my reading of it was different. AFAICS it should affect all platforms
-> with CONFIG_ARCH_SA1100 + CONFIG_SA1111 - the bus notifier from
-> sa1111_init() will initialise dmabounce for everything where
-> sa1111_configure_smc() has punched a hole in the DMA mask to handle the
-> addressing erratum. sa1111_needs_bounce() looks to be a further
-> consideration for platforms where DMA *additionally* cannot target an entire
-> bank of memory at all.
+Please forgive me for stressing you with my predicaments as I know
+that this letter may come to you as big surprise. Actually, I came
+across your E-mail from my personal search afterward I decided to
+email you directly believing that you will be honest to fulfill my
+final wish before i die.
 
-Correct. The SA1111 companion can only access one SDRAM bank, whereas
-the SA1110 SoC can address up to four SDRAM banks. On platforms where
-there is only one bank of SDRAM, there is no issue. However, on the
-Assabet there is one SDRAM bank, and on the Neponset daughter board
-with the SA1111, there is a second bank. As explained in the commentry,
-the SA1111 can be hardware-configured via resistive jumpers to access
-either bank, but we only support the factory-shipped configuration,
-which is bank 0 (the lowest addressable bank.)
+Meanwhile, I am Mrs. Rita Hassan,  62 years old,I am suffering from a
+long time cancer and from all indication my condition is really
+deteriorating As a matter of fact, registered nurse by profession
+while my husband was dealing on Gold Dust and Gold Dory Bars till his
+sudden death the year 2019 then I took over his business till date. In
+fact,at this moment I have a deposit sum of $5.5million dollars with
+one of the leading bank.
 
-The SA1111 also has an issue that one of its address lines doesn't
-behave correctly, and depending on the SDRAM columns/rows, this
-punches multiple holes in the SDRAM address space it can access,
-which is what the sa1111_dma_mask[] array is about, and we end up
-with every alternate megabyte of physical address space being
-inaccessible.
+Therefore, I want you to receive the money and take 30% to take care
+of yourself and family while 70% should be use basically on
+humanitarian purposes mostly to orphanages home, Motherless babies
+home,contact me for more details on this email.
+(ritahassan02@gmail.com )
 
-The DMA mask, along with the logic in dmabounce (which truely uses the
-DMA mask as, erm, a *mask* rather than the misnamed *limit* that it
-has been) know about both of these issues.
+Yours Faithfully
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Mrs. Rita Hassan.
