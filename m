@@ -2,172 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4E84A5752
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Feb 2022 07:44:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7DDB4A5793
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Feb 2022 08:16:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234248AbiBAGok (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Feb 2022 01:44:40 -0500
-Received: from mail-eopbgr40076.outbound.protection.outlook.com ([40.107.4.76]:21886
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        id S234635AbiBAHQd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Feb 2022 02:16:33 -0500
+Received: from mail-eopbgr30062.outbound.protection.outlook.com ([40.107.3.62]:29925
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233800AbiBAGoj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Feb 2022 01:44:39 -0500
+        id S234551AbiBAHQc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Feb 2022 02:16:32 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C2QsBHiA/4szjhQ4i3WhIgPav6X5tcRHkMdp2L9CzoVUmlblpWMLkW03iooD1aMQLKlEFhVaUuMU12tNjbBck0pG5Xbyd5rl5svNkN9rPv+MOZskQ9bU0MBRGVb8qRw2b5xg2a3Pv9B4vOaUrD5oNkJc2mvZanjvMK94SjQATyDqGKpyHN+VY+0wy2S/rI/mmzyIM2TgkFETiXOtN6ZaaYM360YVAU/LvU6egmYNc4TvrNxYw3zRF5T4S29/k1pFnLOciLzE5IFQwcAkussi8RKem2Ob2PcP1f117n8pokd9ul4dUs8yQGkdL2S7fMtb1k3uVy+D3akH2YoEnRkbYA==
+ b=Z+HBwXzHXB2B3Mzeex1Qk5XFoBO4khm6gf80k0sFOL0tPaZ5StGCjZgAGKUo3szh+9BCjGW01qviLYquI9WNwo4MeHAKRwM98+x/e2/A7SwD7HeLx/KpgEn2vkEeA/3xyJW7aUcTmXD5UZoYJD0Nvr4MdT2q0TG99BQzlwHeqgXggevswkHSwzwFOcqL+NxK35DVAAvQIY4twpUbUxvBDU84v9T5Pq1P5OyqMxDlBZAIyCuPI+XRSxy9lV1EAefHBiP/d9zrGXlJt1cJZwSU9WmlFPbbYrgkqqHgdKG0froveEhT7tQC8n/BbUHDxSTihqtPQqIxC0YTqDgXOUBTmw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Oq2IMpF61QUGcxy1dJBPW9IH9fgJCW3fc+auXUwcE10=;
- b=OuODX7VrGGUOgDNQ8qMHgrYpznmJoVxV+lf91RE7kcKI9l/tMiezHPqd/+3q2nbvHn9yNOdUY2+yS/Ztv3OGQjDx+7AQxl6D5HrG+CbhNX0q1eXN0GHwknoP6Rz23J2a+3k+/ZZ/tlfBDd3eqsOUmlI2ozIY1F7Z/HxVnvBOAqeVqJnR0zOjbrVtE6aWbV1+yep9zHnBWT1iW3uBXVimoxcgZxwdmdspg/277HVxmE1gOpty5iktE5SE1eJsU8NM8qrpeXvjeQHeQkXzQe0l+NBrB7qa5hKw1bLVLhlmqExjmKqeHrtSLD/W80u4ihwjDQP6puH99X/uP1y7r3IJbQ==
+ bh=qktoBEk+PBVVfcIFKrSYG+XBLORJezyLPV01s1TU3fk=;
+ b=CvmD2t0sjcUPM0k+XXaIJel2DVpWm9j4RgMofN/0dk2Mr8wRc2E43WEqukGv6lZ0iUq90Y6M3Hr35Su6SE2eamndG9zZvSRPmZFAaCiCn9oVrkJsAb4STmTzXjMeFeOuYDeyp2y0J8Wuk40HyfBuTC4y91I4nJwBNReFHX97enXcqne+tL6oZN5VwrEpDhSv3gy7KrrgmT3IIEyxoFjua25VUt9MWphXfS7VBVMVpIbOLIsxmQz2TWt+6k4WWVlEKUiUug2OS0U6CQ1/kMZDI3DnnNfkXL3qUOrtTLs93yJ/dPsAzRT/LB5LdCfdBnw+Galw4PddmJZii/z/u4RaPg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.73) smtp.rcpttodomain=kernel.org smtp.mailfrom=siemens.com;
+ 194.138.21.71) smtp.rcpttodomain=kernel.org smtp.mailfrom=siemens.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Oq2IMpF61QUGcxy1dJBPW9IH9fgJCW3fc+auXUwcE10=;
- b=UjteLeZpXKTAcRKz0Y6TUMjE+RGmP1rhHiyR0Ns2SoI7DhFz5icTfVuw0IvymGPUAdLXJu8Khk8xGGMr9vHmzq8vhCN3fHfq7ovlhVpbNAS2Erg61kFddhuCnGoR2J+yLCspdKFVZpBJ1Dbc6IVFFJLEoDk0vaNeewKah0vNhW4Tb8h4QSB4nBMK4CjekUZHAUoLF6+8cG9eOBoQyfoQokNqdhb28zczZFWH2viVMLUSQzaceKI/yYtHqHURUpq/CgXb5C+ArF+Z5u7+9wTwkiFWB6M1Nb6MzF/k+/Ndy/YqBXCB3uxDlWIPz+wanwNKNBVyjs39F+4tYoLQV3o/vQ==
-Received: from SV0P279CA0050.NORP279.PROD.OUTLOOK.COM (2603:10a6:f10:13::19)
- by AM6PR10MB3400.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:d6::22) with
+ bh=qktoBEk+PBVVfcIFKrSYG+XBLORJezyLPV01s1TU3fk=;
+ b=KL7/+zUB6t7PhXaTtG/44u0OQU8QrFwA9GLTyrfQDSupkS6D2hUhi4qPxjaw2q1UzAsEA3TYrw31FJyMHVDqAX03K4MJY5HRq3OlnAzWygy9SqdJv42yOli450q7D8p8dYNh182TkUyEIhEyA/WJwu7/6ST/iPE7TlRYDHfOTl88jnnnf+zZm8ff29CurKq2R03Uj82+mSkY7114V6ojm4TeI7s+RmFpUV+EhyhchdWHi9dx/3HF3KBwkURj1WsMjbeMi24TSVkJGSCC+GrNq4Kc/nz81ybutMkT3zurRODMf/ZdVlOX1HIvkYTBqcJsYe6cSPzY2SrqxTYiuLH2NQ==
+Received: from AM6PR08CA0018.eurprd08.prod.outlook.com (2603:10a6:20b:b2::30)
+ by DB8PR10MB3241.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:115::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Tue, 1 Feb
- 2022 06:44:36 +0000
-Received: from HE1EUR01FT064.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:f10:13:cafe::1e) by SV0P279CA0050.outlook.office365.com
- (2603:10a6:f10:13::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.18; Tue, 1 Feb
+ 2022 07:16:30 +0000
+Received: from HE1EUR01FT056.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:20b:b2:cafe::f4) by AM6PR08CA0018.outlook.office365.com
+ (2603:10a6:20b:b2::30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15 via Frontend
- Transport; Tue, 1 Feb 2022 06:44:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.73)
+ Transport; Tue, 1 Feb 2022 07:16:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.71)
  smtp.mailfrom=siemens.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=siemens.com;
 Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.73 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.73; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.73) by
- HE1EUR01FT064.mail.protection.outlook.com (10.152.1.31) with Microsoft SMTP
+ 194.138.21.71 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.71; helo=hybrid.siemens.com;
+Received: from hybrid.siemens.com (194.138.21.71) by
+ HE1EUR01FT056.mail.protection.outlook.com (10.152.0.229) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4930.15 via Frontend Transport; Tue, 1 Feb 2022 06:44:36 +0000
+ 15.20.4930.15 via Frontend Transport; Tue, 1 Feb 2022 07:16:29 +0000
 Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
- DEMCHDC9SNA.ad011.siemens.net (194.138.21.73) with Microsoft SMTP Server
+ DEMCHDC9SKA.ad011.siemens.net (194.138.21.71) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Tue, 1 Feb 2022 07:44:35 +0100
-Received: from [167.87.1.21] (167.87.1.21) by DEMCHDC8A0A.ad011.siemens.net
- (139.25.226.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 1 Feb
- 2022 07:44:35 +0100
-Message-ID: <21e7c87a-7680-bdf0-5290-90126741935f@siemens.com>
-Date:   Tue, 1 Feb 2022 07:44:33 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Georgi Valkov <gvalkov@abv.bg>,
-        linux-usb <linux-usb@vger.kernel.org>,
+ 15.1.2375.18; Tue, 1 Feb 2022 08:16:29 +0100
+Received: from md1q0hnc.ad001.siemens.net (167.87.32.84) by
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 1 Feb 2022 08:16:28 +0100
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Georgi Valkov <gvalkov@abv.bg>
+CC:     linux-usb <linux-usb@vger.kernel.org>,
         Linux Netdev List <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <2f001839-2628-cf80-f5e3-415e7492e206@siemens.com>
- <20220131211428.07cc4aa9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-In-Reply-To: <20220131211428.07cc4aa9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.87.1.21]
-X-ClientProxiedBy: DEMCHDC89YA.ad011.siemens.net (139.25.226.104) To
+        "stable @ vger . kernel . org" <stable@vger.kernel.org>,
+        Yves-Alexis Perez <corsac@corsac.net>
+Subject: [PATCH v2 0/1] ipheth URB overflow fix
+Date:   Tue, 1 Feb 2022 08:16:17 +0100
+Message-ID: <cover.1643699778.git.jan.kiszka@siemens.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [167.87.32.84]
+X-ClientProxiedBy: DEMCHDC89XA.ad011.siemens.net (139.25.226.103) To
  DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 814f2bd9-e325-4175-65c4-08d9e54e5024
-X-MS-TrafficTypeDiagnostic: AM6PR10MB3400:EE_
-X-Microsoft-Antispam-PRVS: <AM6PR10MB3400B773192D1DB190821DEC95269@AM6PR10MB3400.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Office365-Filtering-Correlation-Id: de7e0cbd-c1f3-4d6e-2b55-08d9e552c4b2
+X-MS-TrafficTypeDiagnostic: DB8PR10MB3241:EE_
+X-Microsoft-Antispam-PRVS: <DB8PR10MB324192F64AA6C0B35EDDEB9A95269@DB8PR10MB3241.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tYGW3ePxKu4ovIQAw077zqhfBgpEvxZiiY19xQhRXRgPUrJqaOJe79Xf+ajM1Pw2gD4lv93S9WeiHBBhlGIlL0evRyjhJ66w8Jhutfa81EEugYEsBcov8DB9VwAqrhdz8CZkMhCO8ffkZti86iXAf0ApRHhJSdGdJ1fZcsZ2hPsvDqKepGRYLtKOq+6TRA1/iVbTCHmIlAGWYBIsKjNTWf0X7cJ/i21Pby4giODnVoQn7A7qcCg1JBKapOYmT3OZJeVE0q12wuryzpeChH/kZIqk2TEONBLil9qD2DnYgBNIxCwD3W8rXmh3IWF8X3M1johit5jVbopAQnLg+V94LsOZ/lNV4Q7g7eiAT7LURIWt+SUtaHFy6Fa0FoiS9Zxv5G6xy/F0n90N8/YVEbuuzIgQxrqj/LohQyxppfDwkUxcOI3aONDuCpLY28ur8YeQeYh3Yfz8Du1Fzm+MbdjhfmSz1vcaiUmhqHgaEs4EhFxbKxNcGWVLseuNATZKF15aTSPUY9wzgHI8k8GnGwUiMomnd7NFlcPdcTXJDiQJ0XA3fDmpr2sZcK4TijVFtkr23+hBmXHQakW5Hbe3OMrch+PbWRs1dAlUI3FVVwZa4kYoDw+hm+JYRB7yJn/oQEktqEjx5aLmNKidVnyztSVAM1gVzUttzs05xnoMep503OUO3YNu0X8+MexdKTpVmU+S6T5l5kwnm+TkgBhNxuZ3kj0wNJzusf15VpUhMmQjvovuS+xMqthLLvD0BoLoRZtd8JMIbEEQBRtrRXXjZ6PaRw==
-X-Forefront-Antispam-Report: CIP:194.138.21.73;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(53546011)(5660300002)(26005)(16526019)(186003)(83380400001)(336012)(36860700001)(82310400004)(44832011)(956004)(2616005)(2906002)(8936002)(47076005)(31696002)(86362001)(16576012)(316002)(40460700003)(31686004)(6916009)(6706004)(54906003)(508600001)(82960400001)(356005)(4326008)(8676002)(70206006)(70586007)(81166007)(36756003)(3940600001)(43740500002)(36900700001)(20210929001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 3r5r24gCFgcpBIyHeGIijTRiXM9aneQYWKPbm5tTb9B/H7kcdXh5qovnwK40C2AIGmohwYEmtYdMu3YElh67hVfx+pQ6diITkd75JqbUyeDxRBrg/VHNBv8T5Sz2QOQf0/qouusDTjSPijYcyNOcb5XmIAn56rxtPuFJH0fMmuqcfwIuext1zMiEW4B298mW/Gqq9gXEc/S3zBoDW0M5sLdJ+4aQDHQ87JeBh7+4mklHVV9ApKJ1kpDUPvXMEphWBCVjcaLSVlDdCtol+EO/rhRyZ+1ST7VUPma5fuqyr1/Q29sQ6F0zWnyfX6mDTv3URmCouhCxb08Ltx8ka0wTiOjVGjxt4cVyp3BQ5J8+MUtnhT5PDwebwsWSAhzcI8ZidOBOfDFVDwJ3j67hKTazazP722OOqPErTSh546Pqf2/DKewflJQuAtep4KW70PxXgdhB40Z557+oCPzAB4YSPdZ6tRKTeXAwuDivjTtbyVd9hzudjb6v3cJ3/zdfze/TH3cbcLt8VWyk10RaA/pRY5kfReMqa7k0gXfnOpdE8CdaJkRjAT+z2VcXUMpcmZ/6cKXPwIIWkoyhDwVNTt68e3dUDlxr4qHClFSAIKSa8Q02uKRVyhDP/Hx4I5QawfixSN5L+/GnGYUrEvfoPxBzLE3xN0k41BE5BYtmTFCXQFBibGEVKXv12beKoYywAAt7xJ+mrZgiqub7pdiX704htQ==
+X-Forefront-Antispam-Report: CIP:194.138.21.71;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(336012)(54906003)(83380400001)(558084003)(6666004)(82310400004)(110136005)(8676002)(86362001)(508600001)(186003)(16526019)(26005)(8936002)(70586007)(4326008)(316002)(70206006)(956004)(2616005)(36756003)(82960400001)(81166007)(356005)(40460700003)(5660300002)(44832011)(47076005)(2906002)(36860700001)(36900700001)(20210929001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 06:44:36.3619
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 07:16:29.6391
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 814f2bd9-e325-4175-65c4-08d9e54e5024
+X-MS-Exchange-CrossTenant-Network-Message-Id: de7e0cbd-c1f3-4d6e-2b55-08d9e552c4b2
 X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.73];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT064.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.71];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT056.eop-EUR01.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR10MB3400
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3241
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 01.02.22 06:14, Jakub Kicinski wrote:
-> On Mon, 31 Jan 2022 19:58:14 +0100 Jan Kiszka wrote:
->> From: Georgi Valkov <gvalkov@abv.bg>
->>
->> When rx_buf is allocated we need to account for IPHETH_IP_ALIGN,
->> which reduces the usable size by 2 bytes. Otherwise we have 1512
->> bytes usable instead of 1514, and if we receive more than 1512
->> bytes, ipheth_rcvbulk_callback is called with status -EOVERFLOW,
->> after which the driver malfunctiones and all communication stops.
->>
->> Resolves ipheth 2-1:4.2: ipheth_rcvbulk_callback: urb status: -75
->>
->> Fixes: f33d9e2b48a3 ("usbnet: ipheth: fix connectivity with iOS 14")
->> Signed-off-by: Georgi Valkov <gvalkov@abv.bg>
->> Tested-by: Jan Kiszka <jan.kiszka@siemens.com>
-> 
-> Hm, I'm starting to suspect this patch is cursed..
-> 
->> diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
->> index cd33955df0b6..6a769df0b421 100644
->> --- a/drivers/net/usb/ipheth.c
->> +++ b/drivers/net/usb/ipheth.c
->> @@ -121,7 +121,7 @@ static int ipheth_alloc_urbs(struct ipheth_device *iphone)
->>    	if (tx_buf == NULL)
-> 
-> There is an extra space character at the start of each line of context.
-> 
->>    		goto free_rx_urb;
->>    
->> -	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE,
-> 
-> But not on the changed lines.
-> 
->> +	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN,
->>    				    GFP_KERNEL, &rx_urb->transfer_dma);
->>    	if (rx_buf == NULL)
->>    		goto free_tx_buf;
->> @@ -146,7 +146,7 @@ static int ipheth_alloc_urbs(struct ipheth_device *iphone)
->>    
->>    static void ipheth_free_urbs(struct ipheth_device *iphone)
->>    {
->> -	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->rx_buf,
-> 
-> Pretty clear here in how the opening bracket does not align after the -.
-> 
->> +	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN, iphone->rx_buf,
->>    			  iphone->rx_urb->transfer_dma);
->>    	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->tx_buf,
->>    			  iphone->tx_urb->transfer_dma);
->> @@ -317,7 +317,7 @@ static int ipheth_rx_submit(struct ipheth_device *dev, gfp_t mem_flags)
->>    
->>    	usb_fill_bulk_urb(dev->rx_urb, udev,
->>    			  usb_rcvbulkpipe(udev, dev->bulk_in),
->> -			  dev->rx_buf, IPHETH_BUF_SIZE,
->> +			  dev->rx_buf, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN,
->>    			  ipheth_rcvbulk_callback,
->>    			  dev);
->>    	dev->rx_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
-> 
+Resent (v1 was mangled).
 
-Sorry, a submission tool regressed here unnoticed (grrrr!). Will resend.
+Note that the "Fixes:" tag is a strong assumption of mine. Speak up if
+you think that is wrong.
 
 Jan
 
+Georgi Valkov (1):
+  ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
+
+ drivers/net/usb/ipheth.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
 -- 
-Siemens AG, Technology
-Competence Center Embedded Linux
+2.34.1
+
