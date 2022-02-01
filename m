@@ -2,125 +2,218 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 435BD4A51E5
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jan 2022 22:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3654A5550
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Feb 2022 03:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351186AbiAaVwo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jan 2022 16:52:44 -0500
-Received: from pop31.abv.bg ([194.153.145.221]:52612 "EHLO pop31.abv.bg"
+        id S232577AbiBACkG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jan 2022 21:40:06 -0500
+Received: from mga17.intel.com ([192.55.52.151]:61778 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1376500AbiAaVwo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:52:44 -0500
-X-Greylist: delayed 514 seconds by postgrey-1.27 at vger.kernel.org; Mon, 31 Jan 2022 16:52:42 EST
-Received: from smtp.abv.bg (localhost [127.0.0.1])
-        by pop31.abv.bg (Postfix) with ESMTP id 698A3180AA91;
-        Mon, 31 Jan 2022 23:43:58 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abv.bg; s=smtp-out;
-        t=1643665438; bh=iWjdHNIDwdz1nE3eZyu9fh57i4nneBCZfkedFsbdT+w=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=R2VKrYYtGHF5MBJ0WVuFEY2D3T94n180PVbGEOfvGkBFfz1KZb7Bp5EKbjept1XSo
-         t+iP1ccWRlHWkZkWf8kmIHuzmJkzkt2i0DLZIaJ2/Rk6+U2lB6eGf/8rWv3HmeM7de
-         oSCn2EQAWStyRxZHge4JZBAd2hsll1GeL3F3eDo0=
-X-HELO: smtpclient.apple
-Authentication-Results: smtp.abv.bg; auth=pass (plain) smtp.auth=gvalkov@abv.bg
-Received: from 212-39-89-254.ip.btc-net.bg (HELO smtpclient.apple) (212.39.89.254)
- by smtp.abv.bg (qpsmtpd/0.96) with ESMTPSA (ECDHE-RSA-AES256-GCM-SHA384 encrypted); Mon, 31 Jan 2022 23:43:58 +0200
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
-From:   Georgi Valkov <gvalkov@abv.bg>
-In-Reply-To: <6108f260-36bf-0059-ccb9-8189f4a2d0c1@siemens.com>
-Date:   Mon, 31 Jan 2022 23:43:52 +0200
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>, davem@davemloft.net,
-        mhabets@solarflare.com, luc.vanoostenryck@gmail.com,
-        snelson@pensando.io, mst@redhat.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corsac@corsac.net, matti.vuorela@bitfactor.fi,
-        stable@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <FF6FFC1F-0AE9-4253-B55E-755BB90C4DBA@abv.bg>
-References: <B60B8A4B-92A0-49B3-805D-809A2433B46C@abv.bg>
- <20210720122215.54abaf53@cakuba>
- <5D0CFF83-439B-4A10-A276-D2D17B037704@abv.bg> <YPa4ZelG2k8Z826E@kroah.com>
- <C6AA954F-8382-461D-835F-E5CA03363D84@abv.bg> <YPbHoScEo8ZJyox6@kroah.com>
- <AEC79E3B-FA7F-4A36-95CE-B6D0F3063DF8@abv.bg>
- <80a13e9b-e026-1238-39ed-32deb5ff17b0@siemens.com>
- <20220131092726.3864b19f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <6108f260-36bf-0059-ccb9-8189f4a2d0c1@siemens.com>
-To:     Jan Kiszka <jan.kiszka@siemens.com>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
+        id S232574AbiBACkF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 31 Jan 2022 21:40:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643683205; x=1675219205;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=56n50xudwjsZKNNlNlAM5agdD5HeI7mpB+bMAriIZuk=;
+  b=G7O2GZMJFEAnie2ZYgzVGSOVAvTX+Y0xkG9hpbgp1qagbcgR/KFsva1o
+   HBGuGB8MaUdiFaGLo4PDFM8tDDS2jyW78U4kP2TKHQk19y4QOsHsF21Xo
+   P92ntwS/seGNZsj4gX5HU0gsCGftW4+AT+CDjMwtimOkgjGGDhjpS7vmt
+   VWkvvyeui5FE1NxL71SE0oQ6NbPcG1/I8RsZ981G9vOsywLfZp8wRFG9/
+   N4qgGCXWQeiTReY3vzIhgkY3527BsL33PhthHkH+S5ATK+R3Bwf+LwwrT
+   m/iv2ztuMHbzgSk2XrXCto1BCUi4M9XmwDJx6SQbvUjNCCxLh5xmKQM3T
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="228269284"
+X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
+   d="scan'208";a="228269284"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 18:39:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
+   d="scan'208";a="482032965"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 31 Jan 2022 18:39:09 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nEj4X-000Sdy-5r; Tue, 01 Feb 2022 02:39:09 +0000
+Date:   Tue, 01 Feb 2022 10:38:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 554237f2bb62c4fcf01372e4c63d3e0062f27bac
+Message-ID: <61f89d12.MmSr09V7Wz4nUwDi%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 554237f2bb62c4fcf01372e4c63d3e0062f27bac  usb: gadget: f_uac2: Add speed names to bInterval dbg/warn
 
+elapsed time: 727m
 
-> On 2022-01-31, at 7:35 PM, Jan Kiszka <jan.kiszka@siemens.com> wrote:
->=20
-> On 31.01.22 18:27, Jakub Kicinski wrote:
->> On Mon, 31 Jan 2022 10:45:23 +0100 Jan Kiszka wrote:
->>> On 20.07.21 15:12, Georgi Valkov wrote:
->>>> Thank you, Greg!
->>>>=20
->>>> git send-email =
-drivers/net/0001-ipheth-fix-EOVERFLOW-in-ipheth_rcvbulk_callback.patch
->>>> ...
->>>> Result: OK
->>>>=20
->>>> I hope I got right. I added most of the e-mail addresses, and also =
-tried adding Message-Id.
->>>> I have not received the e-mail yet, so I cannot confirm if it =
-worked or not.
->>>>  =20
->>>=20
->>> What happened here afterwards?
->>>=20
->>> I just found out the hard way that this patch is still not in =
-mainline
->>> but really needed.
->> I have not seen the repost :(
->=20
-> Would it help if I do that on behalf of Georgi? Meanwhile, I can add a =
-tested-by to it, after almost a full working day with it applied.
+configs tested: 145
+configs skipped: 4
 
-Yes, please do it! The faster it gets mainline, the more people will =
-benefit from the fix. As far as I recall, some months ago someone asked =
-me to submit the patch using git mail or something like that, which I =
-did for the first time. It command reported success, but I did not get =
-any replays since then from anyone. I intended to resubmit it the =
-following week, but got overwhelmed by tasks, and the time passed. =
-Meanwhile I still keep the patch in GitHub/httpstorm/openwrt, brach =
-gvalkov. No changes are required since the original e-mail, so it can be =
-submitted to mainline.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-There is another issue with my iPhone 7 Plus, which is unrelated to this =
-patch:
-If an iPhone is tethered to a MacBook, the next time it gets connected =
-to an OpenWRT router the USB Ethernet interface appears, but there is no =
-communication. Hence I would assume this unrelated issue also has to be =
-fixed in another patch. I can confirm that in this state macOS and =
-Windows are able to use USB tethering, only OpenWRT is affected. So far =
-I found the following workarounds:
-* reboot the phone or run:
-* usbreset 002/002 && /etc/init.d/usbmuxd restart
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20220131
+sh                          rsk7203_defconfig
+mips                           xway_defconfig
+um                               alldefconfig
+powerpc                 mpc834x_mds_defconfig
+sh                          urquell_defconfig
+arm                       imx_v6_v7_defconfig
+arc                            hsdk_defconfig
+powerpc                     taishan_defconfig
+mips                             allmodconfig
+m68k                       m5475evb_defconfig
+powerpc                mpc7448_hpc2_defconfig
+sh                        sh7763rdp_defconfig
+mips                         mpc30x_defconfig
+sh                 kfr2r09-romimage_defconfig
+sh                               alldefconfig
+arm                          pxa910_defconfig
+arm                          lpd270_defconfig
+m68k                       m5208evb_defconfig
+mips                 decstation_r4k_defconfig
+powerpc                        warp_defconfig
+arm                        oxnas_v6_defconfig
+sh                          rsk7269_defconfig
+powerpc                    klondike_defconfig
+powerpc                      ppc40x_defconfig
+powerpc                 mpc837x_rdb_defconfig
+parisc                           alldefconfig
+xtensa                           allyesconfig
+arc                    vdk_hs38_smp_defconfig
+powerpc                 mpc837x_mds_defconfig
+arm                           stm32_defconfig
+sh                  sh7785lcr_32bit_defconfig
+powerpc                     asp8347_defconfig
+arm                      footbridge_defconfig
+mips                         cobalt_defconfig
+sh                          lboxre2_defconfig
+arc                                 defconfig
+m68k                          sun3x_defconfig
+mips                      maltasmvp_defconfig
+openrisc                         alldefconfig
+mips                         db1xxx_defconfig
+arm                       omap2plus_defconfig
+mips                       capcella_defconfig
+sh                        apsh4ad0a_defconfig
+arm                            mps2_defconfig
+arm                  randconfig-c002-20220131
+arm                  randconfig-c002-20220130
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a004-20220131
+x86_64               randconfig-a003-20220131
+x86_64               randconfig-a001-20220131
+x86_64               randconfig-a002-20220131
+x86_64               randconfig-a006-20220131
+x86_64               randconfig-a005-20220131
+i386                 randconfig-a006-20220131
+i386                 randconfig-a005-20220131
+i386                 randconfig-a003-20220131
+i386                 randconfig-a002-20220131
+i386                 randconfig-a001-20220131
+i386                 randconfig-a004-20220131
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-The same happens if the phone reboots due to extreme cold temperatures =
-while tethered. Finally there is also a bug or possible =
-hardware/baseband fault in my phone where every few days the modem =
-reboots: the LTE icon disappears for a few seconds, and tethering is =
-turned off. Either way, running the commands mentioned above re-enable =
-tethering and restore the communication instantly. It would be nice if a =
-watchdog is integrated in ipheth to trigger recovery automatically.
+clang tested configs:
+riscv                randconfig-c006-20220130
+x86_64                        randconfig-c007
+arm                  randconfig-c002-20220130
+powerpc              randconfig-c003-20220130
+mips                 randconfig-c004-20220130
+i386                          randconfig-c001
+powerpc                          allyesconfig
+arm                             mxs_defconfig
+arm                        spear3xx_defconfig
+arm                           sama7_defconfig
+powerpc                     kilauea_defconfig
+mips                           ip22_defconfig
+powerpc                  mpc866_ads_defconfig
+arm                          pcm027_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64               randconfig-a013-20220131
+x86_64               randconfig-a015-20220131
+x86_64               randconfig-a014-20220131
+x86_64               randconfig-a016-20220131
+x86_64               randconfig-a011-20220131
+x86_64               randconfig-a012-20220131
+i386                 randconfig-a011-20220131
+i386                 randconfig-a013-20220131
+i386                 randconfig-a014-20220131
+i386                 randconfig-a012-20220131
+i386                 randconfig-a015-20220131
+i386                 randconfig-a016-20220131
+riscv                randconfig-r042-20220131
+hexagon              randconfig-r045-20220130
+hexagon              randconfig-r045-20220131
+hexagon              randconfig-r041-20220130
+hexagon              randconfig-r041-20220131
 
-Georgi Valkov
-
-
-> Jan
->=20
-> --=20
-> Siemens AG, Technology
-> Competence Center Embedded Linux
->=20
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
