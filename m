@@ -2,81 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4874A64B6
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Feb 2022 20:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0F34A66D9
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Feb 2022 22:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242261AbiBATMe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Feb 2022 14:12:34 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:59334 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbiBATMd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Feb 2022 14:12:33 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id 413eb53da59d4c8b; Tue, 1 Feb 2022 20:12:32 +0100
-Received: from kreacher.localnet (unknown [213.134.162.64])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 8288C66B3BC;
-        Tue,  1 Feb 2022 20:12:31 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH] thunderbolt: Replace acpi_bus_get_device()
-Date:   Tue, 01 Feb 2022 20:12:30 +0100
-Message-ID: <1883502.PYKUYFuaPT@kreacher>
+        id S237201AbiBAVKP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Feb 2022 16:10:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241177AbiBAVKO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Feb 2022 16:10:14 -0500
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFA0C061714;
+        Tue,  1 Feb 2022 13:10:13 -0800 (PST)
+Received: from localhost ([127.0.0.1] helo=flow.W.breakpoint.cc)
+        by Chamillionaire.breakpoint.cc with esmtp (Exim 4.92)
+        (envelope-from <sebastian@breakpoint.cc>)
+        id 1nF0Pc-0006wn-06; Tue, 01 Feb 2022 22:10:04 +0100
+From:   Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+To:     linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH 0/2] Add scsi_done_direct() to complete request directly.
+Date:   Tue,  1 Feb 2022 22:09:52 +0100
+Message-Id: <20220201210954.570896-1-sebastian@breakpoint.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.162.64
-X-CLIENT-HOSTNAME: 213.134.162.64
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrgeefgdduvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhgedtffejheekgeeljeevvedtuefgffeiieejuddutdekgfejvdehueejjeetvdenucfkphepvddufedrudefgedrudeivddrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeivddrieegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheprghnughrvggrshdrnhhovghvvghrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhhitghhrggvlhdrjhgrmhgvthesihhnthgvlhdrtghomhdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepjggvhhgviihkvghlufhhueesghhmrghilhdrtghomhdprhgtphhtthhopehl
- ihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+Content-Transfer-Encoding: quoted-printable
+X-Breakpoint-Spam-Score: -1.0
+X-Breakpoint-Spam-Level: -
+X-Breakpoint-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+This mini series adds scsi_done_direct() in order to complete scsi
+requests directly via blk_mq_complete_request_direct(). This used by the
+usb-storage driver.
 
-Replace acpi_bus_get_device() that is going to be dropped with
-acpi_fetch_acpi_dev().
-
-No intentional functional impact.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thunderbolt/acpi.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-Index: linux-pm/drivers/thunderbolt/acpi.c
-===================================================================
---- linux-pm.orig/drivers/thunderbolt/acpi.c
-+++ linux-pm/drivers/thunderbolt/acpi.c
-@@ -14,15 +14,15 @@
- static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
- 				    void **return_value)
- {
-+	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
- 	struct fwnode_reference_args args;
- 	struct fwnode_handle *fwnode;
- 	struct tb_nhi *nhi = data;
--	struct acpi_device *adev;
- 	struct pci_dev *pdev;
- 	struct device *dev;
- 	int ret;
- 
--	if (acpi_bus_get_device(handle, &adev))
-+	if (!adev)
- 		return AE_OK;
- 
- 	fwnode = acpi_fwnode_handle(adev);
-
+Sebastian
 
 
