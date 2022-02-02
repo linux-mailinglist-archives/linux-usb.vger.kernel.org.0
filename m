@@ -2,86 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A384A704D
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 12:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D2C4A71D5
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 14:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbiBBLuT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Feb 2022 06:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiBBLuS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Feb 2022 06:50:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38F0C061714
-        for <linux-usb@vger.kernel.org>; Wed,  2 Feb 2022 03:50:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D19AB8306A
-        for <linux-usb@vger.kernel.org>; Wed,  2 Feb 2022 11:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3B375C004E1
-        for <linux-usb@vger.kernel.org>; Wed,  2 Feb 2022 11:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643802615;
-        bh=LzoCcBKC4vEeup4nBlU764ZL3gJJprot6Pgq8Zq+x60=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=GL9mnXBYanZ8sN3x2ieCQCQmyF3SBvefXXl/GQkE7sLg8LGJ570uG9sM7x9tb+A1k
-         sFgiQ7SSlC3pZwpRg/WWGGhHUAXYKx0hOdQ/eJlX8wES4H38DNI8cKivNtaCQ9BrcG
-         nP5Rj3nKy/LR38jwoU5CjJBoW3KDd8LA/D4zxLL/HB8ww8QjyhV7ZISm0uB5g/A7pe
-         3FNzvqqdvN/If47sW4j8HH9CDcXiQUd3It/5jQjcVAfcgT2hyhrXi7LiYm+ETw6zA2
-         b5L451/hIOZE/laq/8iIlXs5o5yYBKbKNftj15GIglMRfgiOBmoZACjcONSrNRb0ad
-         Mk9N8zm17WFKw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 27DAAC05FD2; Wed,  2 Feb 2022 11:50:15 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215561] snd-usb-audio:reset_resume error -22 after suspend
-Date:   Wed, 02 Feb 2022 11:50:14 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mark.blakeney@bullet-systems.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-215561-208809-aL5gcRLcSI@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215561-208809@https.bugzilla.kernel.org/>
-References: <bug-215561-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1344415AbiBBNqj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Feb 2022 08:46:39 -0500
+Received: from mail-yb1-f178.google.com ([209.85.219.178]:38735 "EHLO
+        mail-yb1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236971AbiBBNqi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Feb 2022 08:46:38 -0500
+Received: by mail-yb1-f178.google.com with SMTP id i62so61086523ybg.5;
+        Wed, 02 Feb 2022 05:46:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WMfXKNSp/PKEJRO6B8MpNpobz40F/YsHkwSpV9zn3C8=;
+        b=lDqyTDS5h04JRpKy+KaxHIxkqDVNYL2ign6cPmvv/oVsOHXWny1rk2quPCveTw/dqy
+         87MBTH9DJsImL3DoMaNFsVvFqPIsbFrCuJDC36/Apda355+2AkasQq0TWkPkJPmSMmFb
+         ntfufLgaVN3RqOysSnvu8kKei1xjEQcloqM8gpC+crsTM+ks+8Dl5Dh6iQc/WiS1mSnB
+         6i39ESgEeIBUlZu5mh3yjV/hpL+z+2RtzPY6Tt349otU7ZZUIC7uN05jwFanS88dIt+h
+         OrHvHoIBQ+ugpuvOi7dQSMcpNwhLfVrVl5QoVBpVAPWwc0/FDBwXNTGxfjpxs8ZTLp/G
+         B+xA==
+X-Gm-Message-State: AOAM5300xRBPp/fFoTuQgAvzZL6535Ump5KMG8KGsgdBH4VHCU95e/NA
+        wpSGS5TJm0qMYyfCw+4GOH3iRRes2++DVq24Nuw=
+X-Google-Smtp-Source: ABdhPJxGneqVqvLbtm22adzeDHhuQjRs9yliiA/EmP362d17O6riUVorP/6DSgn9/SzfH5eCOLT679ieDKIMN3uNb7Q=
+X-Received: by 2002:a25:cc97:: with SMTP id l145mr4526945ybf.272.1643809597658;
+ Wed, 02 Feb 2022 05:46:37 -0800 (PST)
 MIME-Version: 1.0
+References: <1883502.PYKUYFuaPT@kreacher> <YfpQlQ6CH5eoRjuD@lahna>
+In-Reply-To: <YfpQlQ6CH5eoRjuD@lahna>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 2 Feb 2022 14:46:26 +0100
+Message-ID: <CAJZ5v0ifQJ=XxXHUSnACzd2cTLRB+ncwEFrwLP0ybuivX2ORAg@mail.gmail.com>
+Subject: Re: [PATCH] thunderbolt: Replace acpi_bus_get_device()
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215561
+On Wed, Feb 2, 2022 at 10:36 AM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> On Tue, Feb 01, 2022 at 08:12:30PM +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Replace acpi_bus_get_device() that is going to be dropped with
+> > acpi_fetch_acpi_dev().
+> >
+> > No intentional functional impact.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>
+> Let me know if you want me to pick this up.
 
-Mark Blakeney (mark.blakeney@bullet-systems.net) changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mark.blakeney@bullet-system
-                   |                            |s.net
-
---- Comment #1 from Mark Blakeney (mark.blakeney@bullet-systems.net) ---
-To be explicit, this bug started on Arch at the release of 5.16 and has exi=
-sted
-in all of 5.16.1, .2, .3, .4, and .5 releases so far. I get this bug every =
-time
-if I suspend while my dock is plugged in.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Yes, please, if you can.
