@@ -2,159 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DEE4A788A
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 20:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD0D4A7901
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 20:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346884AbiBBTL0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Feb 2022 14:11:26 -0500
-Received: from mga04.intel.com ([192.55.52.120]:65517 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346879AbiBBTLZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Feb 2022 14:11:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643829085; x=1675365085;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=04YNTjZ52QYkffJs25AZu4KFLG44YowR5bbPOEbkOxY=;
-  b=fvswi80sqpszEaJLDJFDoWf8+UPMIq2HxB8MKfdXSmP5y7UGulvMFEcv
-   xTD+4odI1ZafhhzykCniq4KDr7iJK5TNw9TqkjcZh70i8PceNACii8IaV
-   h++XMLbOsu1XyuILD9YTgXlc2zcjpdaQHjAMKiiuz5EwroyNSOOMGU8ut
-   EpXfqFst+f0ueZ5eIVegwFsbZQZhx+sjgyv4Wnsm+Q+z6f4TTc9UIfwS6
-   AdmSrKeR6s727GBi5a0Rq48KncaORV7Ya+kMB8Sa9RTU7vKzc/hpKST1w
-   dq8o6X9w7QYbCQe/i63657bA/i8sh3aY5igU3RKsWuOmANuxgv1PeYYVU
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="246834634"
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="246834634"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 11:11:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="566126434"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 02 Feb 2022 11:11:20 -0800
-To:     Puma Hsu <pumahsu@google.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     s.shtylyov@omp.ru, albertccwang@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20220129093036.488231-1-pumahsu@google.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v6] xhci: re-initialize the HC during resume if HCE was
- set
-Message-ID: <413ce7e5-1c35-c3d0-a89e-a3c7f03b4db7@linux.intel.com>
-Date:   Wed, 2 Feb 2022 21:12:53 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S1347047AbiBBTxG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Feb 2022 14:53:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233513AbiBBTxF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Feb 2022 14:53:05 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03EDC061714;
+        Wed,  2 Feb 2022 11:53:05 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id y23so319997oia.13;
+        Wed, 02 Feb 2022 11:53:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KAapnjqdupg9fXil76Py0BtdEYN3g3+SW5GIOZidvYY=;
+        b=CDBJpW2r1wf4eigdGkr2V3IrvGBF1xzJPfbz1cW8hvexOIc3Bqqe2/aFWwOiZhIob7
+         RfmtODcRYQU9+t+pXV5KC+16mpLpvgFFM5bBgmyDMjzeTayORc8VAAxcAiLcyst9P+lW
+         LNP8llOOPsky8AS5TlwYipDYeti9NR7W6RJXTG7oFxkO9/krL9RfkSFZ/Wiju7HRuICK
+         g8HabQbbuwEICZ/yuQAJ1p4tt45PJxg2T7E925GUcuNAFcn4mTHbBUpKcAe4derklUOn
+         9o/QA6wojlmX6EC4x/7nP+OT99lV+r50AjkCvEhtiJuFpic1nIM+VGgtLGHHWydu69jO
+         9wIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=KAapnjqdupg9fXil76Py0BtdEYN3g3+SW5GIOZidvYY=;
+        b=1/fOapZxFirxd77fkIxFtUPzl5vASO8BuLZYrqTGpkpFTXJx4n5zcKpmiwvotCI50B
+         DtkFlO+qzYKaFwWurpOKvLyAMHOr20CvvlfErOToyZV9RR9F+m054D53shr7N2kpW98C
+         Zl1kJ56Z0Xl0Vi3HAvwFDW1iklNYpAxABl2+knkI+slM7+fQRESY2dk2hGb0UxvTq+Sx
+         7Xg3cpbeUM0Ud2LZCUU7GxA0PwuThAYyhZz1in1U21H/pvMB7RaHGbaFzjNvCoiYnAFK
+         wjVyTV4UZedjlg+76SipSH1DHuQT5c04HoryZ2nQAxGQookb3+34aH9p9SeETdGhnJbv
+         P0/Q==
+X-Gm-Message-State: AOAM530NAOnxRDFfT2D9V1JB/IqCz6UUK8cg6KLWwdCfN+weZoXqokdx
+        81N7BMlHKoFERIROrZyjbaAAPY2qtsPxMQ==
+X-Google-Smtp-Source: ABdhPJxvw0En4YbOUz5a0ijavlnDr7FTM+Drf8Cy32SojnkMJ1wqRLvIcSilLwtGWf55xTxvUfQkOA==
+X-Received: by 2002:a05:6808:1490:: with SMTP id e16mr5756692oiw.8.1643831585077;
+        Wed, 02 Feb 2022 11:53:05 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l38sm17889158otl.45.2022.02.02.11.53.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 11:53:04 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 2 Feb 2022 11:53:03 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] usb: typec: Factor out non-PD fwnode properties
+Message-ID: <20220202195303.GE2346468@roeck-us.net>
+References: <20220201032440.5196-3-samuel@sholland.org>
+ <202202021458.xcH4F4SQ-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220129093036.488231-1-pumahsu@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202202021458.xcH4F4SQ-lkp@intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 29.1.2022 11.30, Puma Hsu wrote:
-> When HCE(Host Controller Error) is set, it means an internal
-> error condition has been detected. Software needs to re-initialize
-> the HC, so add this check in xhci resume.
+On Wed, Feb 02, 2022 at 02:22:27PM +0800, kernel test robot wrote:
+> Hi Samuel,
 > 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Puma Hsu <pumahsu@google.com>
-> ---
-> v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
-> v3: Add stable@vger.kernel.org for stable release.
-> v4: Refine the commit message.
-> v5: Add a debug log. Follow Mathias Nyman <mathias.nyman@linux.intel.com>'s comment.
-> v6: Fix the missing declaration for str.
+> Thank you for the patch! Perhaps something to improve:
 > 
->  drivers/usb/host/xhci.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+> [auto build test WARNING on usb/usb-testing]
+> [also build test WARNING on robh/for-next v5.17-rc2 next-20220202]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
 > 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index dc357cabb265..6f1198068004 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -1091,6 +1091,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
->  	int			retval = 0;
->  	bool			comp_timer_running = false;
->  	bool			pending_portevent = false;
-> +	char			str[XHCI_MSG_MAX];
->  
->  	if (!hcd->state)
->  		return 0;
-> @@ -1146,8 +1147,10 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
->  		temp = readl(&xhci->op_regs->status);
->  	}
->  
-> -	/* If restore operation fails, re-initialize the HC during resume */
-> -	if ((temp & STS_SRE) || hibernated) {
-> +	/* If restore operation fails or HC error is detected, re-initialize the HC during resume */
-> +	if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
-> +		xhci_warn(xhci, "re-initialize HC during resume, USBSTS:%s\n",
-> +			  xhci_decode_usbsts(str, temp));
->  
->  		if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
->  				!(xhci_all_ports_seen_u0(xhci))) {
+> url:    https://github.com/0day-ci/linux/commits/Samuel-Holland/dt-bindings-vendor-prefixes-Add-willsemi/20220201-112541
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> config: openrisc-randconfig-m031-20220201 (https://download.01.org/0day-ci/archive/20220202/202202021458.xcH4F4SQ-lkp@intel.com/config)
+> compiler: or1k-linux-gcc (GCC) 11.2.0
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> smatch warnings:
+> drivers/usb/typec/class.c:1919 typec_get_fw_cap() warn: unsigned 'cap->type' is never less than zero.
+> drivers/usb/typec/class.c:1926 typec_get_fw_cap() warn: unsigned 'cap->data' is never less than zero.
 > 
 
-Ended up modifying this patch a bit more than I first intended,
-- don't print warning in hibernation case, only error.
-- maybe using a lot of stack for a debug string isn't really needed.
-- make sure we read the usbsts register before checking for the HCE bit.
+Ah yes, there was a reason to assign the return values to 'ret' first
+and only afterwards to the actual capabilities. Please fix and resubmit.
 
-Does the below work for you? If yes, and you agree I'll apply it instead
-
----
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index dc357cabb265..04ec2de158bf 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1091,6 +1091,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
-        int                     retval = 0;
-        bool                    comp_timer_running = false;
-        bool                    pending_portevent = false;
-+       bool                    reinit_xhc = false;
- 
-        if (!hcd->state)
-                return 0;
-@@ -1107,10 +1108,11 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
-        set_bit(HCD_FLAG_HW_ACCESSIBLE, &xhci->shared_hcd->flags);
- 
-        spin_lock_irq(&xhci->lock);
--       if ((xhci->quirks & XHCI_RESET_ON_RESUME) || xhci->broken_suspend)
--               hibernated = true;
- 
--       if (!hibernated) {
-+       if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME || xhci->broken_suspend)
-+               reinit_xhc = true;
-+
-+       if (!reinit_xhc) {
-                /*
-                 * Some controllers might lose power during suspend, so wait
-                 * for controller not ready bit to clear, just as in xHC init.
-@@ -1143,12 +1145,17 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
-                        spin_unlock_irq(&xhci->lock);
-                        return -ETIMEDOUT;
-                }
--               temp = readl(&xhci->op_regs->status);
-        }
- 
--       /* If restore operation fails, re-initialize the HC during resume */
--       if ((temp & STS_SRE) || hibernated) {
-+       temp = readl(&xhci->op_regs->status);
-+
-+       /* re-initialize the HC on Restore Error, or Host Controller Error */
-+       if (temp & (STS_SRE | STS_HCE)) {
-+               reinit_xhc = true;
-+               xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
-+       }
- 
-+       if (reinit_xhc) {
-                if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
-                                !(xhci_all_ports_seen_u0(xhci))) {
-                        del_timer_sync(&xhci->comp_mode_recovery_timer);
-
+Guenter
