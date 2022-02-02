@@ -2,96 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBD44A6EE0
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 11:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3334A6F57
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 12:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234638AbiBBKlC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Feb 2022 05:41:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiBBKlB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Feb 2022 05:41:01 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7E0C061714;
-        Wed,  2 Feb 2022 02:41:01 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id i132so47479wma.1;
-        Wed, 02 Feb 2022 02:41:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kroW8T87ODh2aoNqqwf6ZNFEi9qAb1WRvnyNc4fg4XE=;
-        b=N4c/iBWEAtqS3U7P8xZFi+tlzeZJLjGcNeZgbo6ADkEGv0MuD5TqNilOphkGQBDE6w
-         dLXZrSjBAcik0hXhEKYkev0NeQpVBk5P5XPeqYszZwDKRrn6218+vLbZwQaURPxFDNsm
-         N/IErhS+glWd3lPjW3Sfo+P0/8KfW8sA0cn+EIoNaE5LKEh2mFDP5oDBUcZG422foTM1
-         2dFTNKgVK/xMuDWOg4yri5kgwH1vYpd7xLiqe1HSDRnHlvTgqCL9/OQIYYUUnyntpr5v
-         0RsdWQO66ivewIUyleRzW7mnNmKDZp5y5jUcAg9T/edLigNYhNheiMJRVLLa87D/ZA04
-         KYAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kroW8T87ODh2aoNqqwf6ZNFEi9qAb1WRvnyNc4fg4XE=;
-        b=0Bstl8tupLdxFf95xLuUcZwxjSSUhc66Ut4eoXaSNhl1YiCpA6IrWvDbsNqGY3xxgk
-         CzHOet4mBxTLDtGYmHi/GinggCucwxxxAOtv5CRlsnhyaCyz3LP6EIBMfqIYyk+X2SX6
-         n1ubmnMizx8tvgWxPEgMZRyFYcf2uBQ5wcqrnWmhZzPy6KodyO+5ydkze3DyL/QJMnzp
-         zMa1a68uotW2EgZB/SIGI7z0HEW62cb7XAwkqJaLN4ppY214xuOfe3rtdBeFs/SCCFVl
-         g8ryah4hUKrCrSo435pdBAAC7F8uH6HJE7SvPWTMWP2oJjmirAKfCgmYzMj7eK4YnNKP
-         qxlQ==
-X-Gm-Message-State: AOAM530Skwqsr2oUR+H4brIsFhaJiU9Z4wijV4CgbcqRHhDUjowsU8aR
-        L5ZoEbX3OQ8OOFWSN8Rm5Jw=
-X-Google-Smtp-Source: ABdhPJx7p4wOpsEBAPYzyrvAoma6a4T+0aDPLPPoyIX1M+383SaQQ4szMhJ31g7lvB33K8d1J9W9Kw==
-X-Received: by 2002:a05:600c:364f:: with SMTP id y15mr5611580wmq.125.1643798459967;
-        Wed, 02 Feb 2022 02:40:59 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id 1sm20324550wry.52.2022.02.02.02.40.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 02:40:59 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pawel Laszczak <pawell@cadence.com>, linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pavel.hofman@ivitera.com
-Subject: [PATCH][next][V2] usb: gadget: f_uac2: change maxpctksize/maxpcktsize to wMaxPacketSize
-Date:   Wed,  2 Feb 2022 10:40:58 +0000
-Message-Id: <20220202104058.590312-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        id S1343643AbiBBLCK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Feb 2022 06:02:10 -0500
+Received: from mga17.intel.com ([192.55.52.151]:35186 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1343632AbiBBLCJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 2 Feb 2022 06:02:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643799729; x=1675335729;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EAq08HSGiQ6pIJJAMlN5vhb3L/MWH6Lf/XUFM0/SaAk=;
+  b=UzhhIe4vWc5nzlHmu9J9OGplGo96SKu8bCPwO0qOmSEFLmlHJyeRTx30
+   3Dwy/6l3wROOSJCqCUcGOGMhIml+G0JsHxDl0XpLqBgaaiFCB0MHl8lLL
+   g4zHbX7w9sxiPpXKj/UhyOIG25jFEyvq9Ms+Ee2LkFKSsgWZ8NInP1w+M
+   RhLI7WSTT55zf39Y7VFe+UYkqMhDaooCMQ7cBCqi9wFsLTxrtnKbbexk5
+   7bVY2UmodP2J6cFU6Vsm/SJGmNbU+qAYVLMLarf4oaNy6wHLfNQ2ebsRW
+   CM3e9Ty8uVDNVUIJs/0x/i4Zm61BjL6MCppQV7C/FM7rpHsoJxtHeGR9Q
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="228547147"
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="228547147"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 03:02:09 -0800
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="480066111"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 03:02:06 -0800
+Received: by lahna (sSMTP sendmail emulation); Wed, 02 Feb 2022 12:59:55 +0200
+Date:   Wed, 2 Feb 2022 12:59:55 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>
+Subject: Re: [PATCH 0/3] thunderbolt: Improvements for Alpine and Titan Ridge
+ devices
+Message-ID: <YfpkK7o1aDV5fZI3@lahna>
+References: <20220126141653.28092-1-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126141653.28092-1-mika.westerberg@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The spelling of maxpctksize and maxpcktsize is inconsistent, rename them
-both to wMaxPacketSize instead.
+On Wed, Jan 26, 2022 at 05:16:50PM +0300, Mika Westerberg wrote:
+> Hi all,
+> 
+> The first two patches implement flows that are needed to bring up the
+> internal xHCI controller when there is USB device connected to the
+> downstream Thunderbolt port of the the router. The last patch disables
+> LTTPR (LT-tunable PHY Repeater, DisplayPort term) when Titan Ridge device
+> router is connected to avoid tunneling issues.
+> 
+> Mika Westerberg (3):
+>   thunderbolt: Add missing device ID to tb_switch_is_alpine_ridge()
+>   thunderbolt: Add internal xHCI connect flows for Thunderbolt 3 devices
+>   thunderbolt: Disable LTTPR on Intel Titan Ridge
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
-V2: change both strings to wMaxPacketSize
----
- drivers/usb/gadget/function/f_uac2.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index f2237bcdba7c..2bc63e577b3b 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -755,11 +755,11 @@ static int set_ep_max_packet_size_bint(struct device *dev, const struct f_uac2_o
- 
- 	if (max_size_bw <= max_size_ep)
- 		dev_dbg(dev,
--			"%s %s: Would use maxpctksize %d and bInterval %d\n",
-+			"%s %s: Would use wMaxPacketSize %d and bInterval %d\n",
- 			speed_names[speed], dir, max_size_bw, bint);
- 	else {
- 		dev_warn(dev,
--			"%s %s: Req. maxpcktsize %d at bInterval %d > max ISOC %d, may drop data!\n",
-+			"%s %s: Req. wMaxPacketSize %d at bInterval %d > max ISOC %d, may drop data!\n",
- 			speed_names[speed], dir, max_size_bw, bint, max_size_ep);
- 		max_size_bw = max_size_ep;
- 	}
--- 
-2.34.1
-
+Fixed the typo pointed out by Lukas and applied to thunderbolt.git/next.
