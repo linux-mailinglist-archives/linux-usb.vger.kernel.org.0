@@ -2,87 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BE54A6DAA
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 10:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B60D4A6DE3
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 10:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245417AbiBBJTh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Feb 2022 04:19:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244541AbiBBJTg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Feb 2022 04:19:36 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2388C061714;
-        Wed,  2 Feb 2022 01:19:35 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id m26so8471223wms.0;
-        Wed, 02 Feb 2022 01:19:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p2wQ8mV586mhuZL4frfEIcmzmgyOteCfGDcIoUviviw=;
-        b=HMR0fQk+43OprJJQhoAWA1vrzxeJ7K9GuusGqJmhmn9qrV4FPNQCuVfQ/EgN6JDuOV
-         ItTGUF5Dgkbzrc0BP3kf4o8RgtuRJDgBUVW2u7ujycRXWXGbP3sHMT+FhVxbYKuCOhUP
-         NuSPhvF73lzYGN6aw9bRp1rufqZXbJGUxmm6uPoLSTgZUOtZAjVsr1FSgFWPnupx0W4b
-         QYCi6oFWCkLwseF/2urpLefcj+NlbRotNyjlgHlzqx/szIH6zrT6aE2x4G4PLXd/L5nc
-         x9Kik9/cIQ5FNFy9P66gMqEm3mpfzY1DYnOAXovJIggmVKx+xv+7Fa+WVJENIfcnY/oU
-         aS6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p2wQ8mV586mhuZL4frfEIcmzmgyOteCfGDcIoUviviw=;
-        b=blXgJgCx/zGIRD2KucgcrJpP2HDMlIwVY6FAHr+LGdWHT76DI12W+G2JqekKnpBG1r
-         Mhiu+iDaBwypZS7uBhANgeYJ+3neSPBNREQO1FeT0tYMbVNhoQquPJR384iT1XqHPsCk
-         u+BGN/ZPa4aqMHbGKUfEBqjZ6Q9P/8GoHm5gY+oMuSFJQRxPRhaZFLSxjxNpB61Dycer
-         LAtcT4RjAqXa3q4LldA3nNhQw8g3EcIrXBlWeznzVNge61Pe96EvISMKyYT5mVEn2Qx4
-         WWHKXAh8u3haA14DB/pAX62LLhUmye+zXEdtGL0mSwYLZLzwe9fLdPzm9//feNWbf6e4
-         GIuQ==
-X-Gm-Message-State: AOAM5301MlghIuKOgrReWiXVuOJNUBoU5LZCfchwbhOslS0gR7rT0fS+
-        y0LYF/wN7ICjt3VLRguUaxU=
-X-Google-Smtp-Source: ABdhPJwM4L2i3gC4Fnib4qik/6mxnjQrjp2xywymmmJ4lMG28PscLkUb49xWC14FbXhvYlXRHY8BSw==
-X-Received: by 2002:a05:600c:35c4:: with SMTP id r4mr5271109wmq.29.1643793574508;
-        Wed, 02 Feb 2022 01:19:34 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id n22sm4561639wmc.27.2022.02.02.01.19.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 01:19:34 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] usb: gadget: f_uac2: Fix spelling mistake "maxpctksize" -> "maxpcktsize"
-Date:   Wed,  2 Feb 2022 09:19:33 +0000
-Message-Id: <20220202091933.580713-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        id S239851AbiBBJg1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Feb 2022 04:36:27 -0500
+Received: from mga02.intel.com ([134.134.136.20]:23217 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233108AbiBBJg1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 2 Feb 2022 04:36:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643794587; x=1675330587;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aGOR40E//2wKW+FbAQsqESY03jgYlxNctka/YDN7FLE=;
+  b=EM1DF3SVoMev8MwxrfiKW/oVMBuawXrI0KBPia1CvV8scuvi+1JUipY/
+   vB4ghhKll/GxAmlP2LEX9D3xgmcERmOAD2OD3hmU4nV9M2Z88d34Ij62C
+   kRKx7YP9+6hD8YF8OP17eU7P/EVvxhbbMzq4D0F3Ur9Xc6hjnkyc0GzYc
+   1/1WyIu7Jk7RNYDKK/Uzf7Lu3zskLBIcd/gGH2R9osfMYJglSGksuTL/Y
+   DtVCs5T4yQEBaZY3OGL1zEOBwKKwFEhzXEHcpVHvKQ52YeJid2ROPg7YX
+   fFrK6XKxcyQ8I735sBV7mKanGqAeD4NBQg5pplm6furxBTx6gH/TbqqTu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="235277853"
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="235277853"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 01:36:26 -0800
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="630863516"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 01:36:23 -0800
+Received: by lahna (sSMTP sendmail emulation); Wed, 02 Feb 2022 11:36:21 +0200
+Date:   Wed, 2 Feb 2022 11:36:21 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: Replace acpi_bus_get_device()
+Message-ID: <YfpQlQ6CH5eoRjuD@lahna>
+References: <1883502.PYKUYFuaPT@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1883502.PYKUYFuaPT@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is a spelling mistake in a deb_dbg message. Fix it.
+On Tue, Feb 01, 2022 at 08:12:30PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Replace acpi_bus_get_device() that is going to be dropped with
+> acpi_fetch_acpi_dev().
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/usb/gadget/function/f_uac2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index f2237bcdba7c..c9b8d11f9870 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -755,7 +755,7 @@ static int set_ep_max_packet_size_bint(struct device *dev, const struct f_uac2_o
- 
- 	if (max_size_bw <= max_size_ep)
- 		dev_dbg(dev,
--			"%s %s: Would use maxpctksize %d and bInterval %d\n",
-+			"%s %s: Would use maxpcktsize %d and bInterval %d\n",
- 			speed_names[speed], dir, max_size_bw, bint);
- 	else {
- 		dev_warn(dev,
--- 
-2.34.1
-
+Let me know if you want me to pick this up.
