@@ -2,68 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B60D4A6DE3
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 10:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF5A4A6E3E
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 10:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239851AbiBBJg1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Feb 2022 04:36:27 -0500
-Received: from mga02.intel.com ([134.134.136.20]:23217 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233108AbiBBJg1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:36:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643794587; x=1675330587;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aGOR40E//2wKW+FbAQsqESY03jgYlxNctka/YDN7FLE=;
-  b=EM1DF3SVoMev8MwxrfiKW/oVMBuawXrI0KBPia1CvV8scuvi+1JUipY/
-   vB4ghhKll/GxAmlP2LEX9D3xgmcERmOAD2OD3hmU4nV9M2Z88d34Ij62C
-   kRKx7YP9+6hD8YF8OP17eU7P/EVvxhbbMzq4D0F3Ur9Xc6hjnkyc0GzYc
-   1/1WyIu7Jk7RNYDKK/Uzf7Lu3zskLBIcd/gGH2R9osfMYJglSGksuTL/Y
-   DtVCs5T4yQEBaZY3OGL1zEOBwKKwFEhzXEHcpVHvKQ52YeJid2ROPg7YX
-   fFrK6XKxcyQ8I735sBV7mKanGqAeD4NBQg5pplm6furxBTx6gH/TbqqTu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="235277853"
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="235277853"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 01:36:26 -0800
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="630863516"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 01:36:23 -0800
-Received: by lahna (sSMTP sendmail emulation); Wed, 02 Feb 2022 11:36:21 +0200
-Date:   Wed, 2 Feb 2022 11:36:21 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Replace acpi_bus_get_device()
-Message-ID: <YfpQlQ6CH5eoRjuD@lahna>
-References: <1883502.PYKUYFuaPT@kreacher>
+        id S245676AbiBBJ5F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Feb 2022 04:57:05 -0500
+Received: from relay.hostedemail.com ([64.99.140.27]:25200 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235997AbiBBJ5F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Feb 2022 04:57:05 -0500
+Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay13.hostedemail.com (Postfix) with ESMTP id 0E224601EA;
+        Wed,  2 Feb 2022 09:57:04 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id DD81E80009;
+        Wed,  2 Feb 2022 09:56:41 +0000 (UTC)
+Message-ID: <358563808e6cad1b003e4c5488cf65ff1267f1d8.camel@perches.com>
+Subject: Re: [PATCH][next] usb: gadget: f_uac2: Fix spelling mistake
+ "maxpctksize" -> "maxpcktsize"
+From:   Joe Perches <joe@perches.com>
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 02 Feb 2022 01:57:01 -0800
+In-Reply-To: <20220202091933.580713-1-colin.i.king@gmail.com>
+References: <20220202091933.580713-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1883502.PYKUYFuaPT@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: DD81E80009
+X-Spam-Status: No, score=1.60
+X-Stat-Signature: 8s9f1roqfggujywr3xzpjx5e6wm4xc68
+X-Rspamd-Server: rspamout02
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+ZFAGlReJmYZL2admrM2pyTvRcuBbmLaA=
+X-HE-Tag: 1643795801-100853
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 08:12:30PM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Replace acpi_bus_get_device() that is going to be dropped with
-> acpi_fetch_acpi_dev().
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, 2022-02-02 at 09:19 +0000, Colin Ian King wrote:
+> There is a spelling mistake in a deb_dbg message. Fix it.
+[]
+> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+[]
+> @@ -755,7 +755,7 @@ static int set_ep_max_packet_size_bint(struct device *dev, const struct f_uac2_o
+>  
+>  	if (max_size_bw <= max_size_ep)
+>  		dev_dbg(dev,
+> -			"%s %s: Would use maxpctksize %d and bInterval %d\n",
+> +			"%s %s: Would use maxpcktsize %d and bInterval %d\n",
 
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+why not just spell it out? or use wMaxPacketSize from the uapi include?
+---
+ drivers/usb/gadget/function/f_uac2.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Let me know if you want me to pick this up.
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index f2237bcdba7c0..13b59128121a2 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -755,12 +755,12 @@ static int set_ep_max_packet_size_bint(struct device *dev, const struct f_uac2_o
+ 
+ 	if (max_size_bw <= max_size_ep)
+ 		dev_dbg(dev,
+-			"%s %s: Would use maxpctksize %d and bInterval %d\n",
++			"%s %s: Would use wMaxPacketSize %d and bInterval %d\n",
+ 			speed_names[speed], dir, max_size_bw, bint);
+ 	else {
+ 		dev_warn(dev,
+-			"%s %s: Req. maxpcktsize %d at bInterval %d > max ISOC %d, may drop data!\n",
+-			speed_names[speed], dir, max_size_bw, bint, max_size_ep);
++			 "%s %s: Req. wMaxPacketSize %d at bInterval %d > max ISOC %d, may drop data!\n",
++			 speed_names[speed], dir, max_size_bw, bint, max_size_ep);
+ 		max_size_bw = max_size_ep;
+ 	}
+ 
+
+
