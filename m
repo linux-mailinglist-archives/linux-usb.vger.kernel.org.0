@@ -2,98 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD0D4A7901
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 20:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D9F4A79C0
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 21:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347047AbiBBTxG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Feb 2022 14:53:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbiBBTxF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Feb 2022 14:53:05 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03EDC061714;
-        Wed,  2 Feb 2022 11:53:05 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id y23so319997oia.13;
-        Wed, 02 Feb 2022 11:53:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KAapnjqdupg9fXil76Py0BtdEYN3g3+SW5GIOZidvYY=;
-        b=CDBJpW2r1wf4eigdGkr2V3IrvGBF1xzJPfbz1cW8hvexOIc3Bqqe2/aFWwOiZhIob7
-         RfmtODcRYQU9+t+pXV5KC+16mpLpvgFFM5bBgmyDMjzeTayORc8VAAxcAiLcyst9P+lW
-         LNP8llOOPsky8AS5TlwYipDYeti9NR7W6RJXTG7oFxkO9/krL9RfkSFZ/Wiju7HRuICK
-         g8HabQbbuwEICZ/yuQAJ1p4tt45PJxg2T7E925GUcuNAFcn4mTHbBUpKcAe4derklUOn
-         9o/QA6wojlmX6EC4x/7nP+OT99lV+r50AjkCvEhtiJuFpic1nIM+VGgtLGHHWydu69jO
-         9wIA==
+        id S1347285AbiBBUtT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Feb 2022 15:49:19 -0500
+Received: from mail-pj1-f45.google.com ([209.85.216.45]:46991 "EHLO
+        mail-pj1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231168AbiBBUtS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Feb 2022 15:49:18 -0500
+Received: by mail-pj1-f45.google.com with SMTP id oa14-20020a17090b1bce00b001b61aed4a03so723476pjb.5;
+        Wed, 02 Feb 2022 12:49:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=KAapnjqdupg9fXil76Py0BtdEYN3g3+SW5GIOZidvYY=;
-        b=1/fOapZxFirxd77fkIxFtUPzl5vASO8BuLZYrqTGpkpFTXJx4n5zcKpmiwvotCI50B
-         DtkFlO+qzYKaFwWurpOKvLyAMHOr20CvvlfErOToyZV9RR9F+m054D53shr7N2kpW98C
-         Zl1kJ56Z0Xl0Vi3HAvwFDW1iklNYpAxABl2+knkI+slM7+fQRESY2dk2hGb0UxvTq+Sx
-         7Xg3cpbeUM0Ud2LZCUU7GxA0PwuThAYyhZz1in1U21H/pvMB7RaHGbaFzjNvCoiYnAFK
-         wjVyTV4UZedjlg+76SipSH1DHuQT5c04HoryZ2nQAxGQookb3+34aH9p9SeETdGhnJbv
-         P0/Q==
-X-Gm-Message-State: AOAM530NAOnxRDFfT2D9V1JB/IqCz6UUK8cg6KLWwdCfN+weZoXqokdx
-        81N7BMlHKoFERIROrZyjbaAAPY2qtsPxMQ==
-X-Google-Smtp-Source: ABdhPJxvw0En4YbOUz5a0ijavlnDr7FTM+Drf8Cy32SojnkMJ1wqRLvIcSilLwtGWf55xTxvUfQkOA==
-X-Received: by 2002:a05:6808:1490:: with SMTP id e16mr5756692oiw.8.1643831585077;
-        Wed, 02 Feb 2022 11:53:05 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l38sm17889158otl.45.2022.02.02.11.53.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 11:53:04 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Feb 2022 11:53:03 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] usb: typec: Factor out non-PD fwnode properties
-Message-ID: <20220202195303.GE2346468@roeck-us.net>
-References: <20220201032440.5196-3-samuel@sholland.org>
- <202202021458.xcH4F4SQ-lkp@intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ySgLiv/89N7mZb1C2sJVu/EoRPqGfXaA+CdN6XIMoeM=;
+        b=ysUV3+AQSp7alZyZmbvmwxEzqpDolTUTd3RamaOkY53csWYuK6U53+iaAPG40t9S5w
+         XI36ChJ0o2eZXbPeoNKiRBnudcnFwS+Rk/G95ezncA4DY3JhcK+/8fhraeeShsiUhAuO
+         8XH5Kcg9LGRo/MgNyFD+1MDghpg07xwqImVXiluKC/ebALoz55RhX1yxJFkkeNcz0SqQ
+         eoUaVPhzf27st5I4Y+2gAAJgDd+sOzE6J4fJMwg14OJewYUq3H8OB/yzdnwgA9uep2AV
+         gSc4ELn0lB1aNkz3IlJNmOZvmvxEuEhhhJ8eWrUcJtDtrsyeVVfGIGvcigPyf40ParDQ
+         jVCg==
+X-Gm-Message-State: AOAM531WCxDyo1AmjILqG6DIm2hYmPDbkEwnjMxuszIkxxYD3VlSksCb
+        ux0gaTg1Lj6HuXtfeo6/fkc=
+X-Google-Smtp-Source: ABdhPJwPgnITJtTST9fAxQEGMJGSaFt6NzzvRocKvr0EBV7POi+dS5F32GWpFQwuHzFWiqF4KZ30hQ==
+X-Received: by 2002:a17:90a:eac9:: with SMTP id ev9mr9971160pjb.166.1643834958107;
+        Wed, 02 Feb 2022 12:49:18 -0800 (PST)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id lp17sm7857231pjb.25.2022.02.02.12.49.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 12:49:17 -0800 (PST)
+Message-ID: <c8402f76-7397-77c3-232c-c825c52ea826@acm.org>
+Date:   Wed, 2 Feb 2022 12:49:16 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202202021458.xcH4F4SQ-lkp@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] scsi: Add scsi_done_direct() for immediate
+ completion.
+Content-Language: en-US
+To:     Sebastian Andrzej Siewior <sebastian@breakpoint.cc>,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20220201210954.570896-1-sebastian@breakpoint.cc>
+ <20220201210954.570896-2-sebastian@breakpoint.cc>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220201210954.570896-2-sebastian@breakpoint.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 02:22:27PM +0800, kernel test robot wrote:
-> Hi Samuel,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on usb/usb-testing]
-> [also build test WARNING on robh/for-next v5.17-rc2 next-20220202]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Samuel-Holland/dt-bindings-vendor-prefixes-Add-willsemi/20220201-112541
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> config: openrisc-randconfig-m031-20220201 (https://download.01.org/0day-ci/archive/20220202/202202021458.xcH4F4SQ-lkp@intel.com/config)
-> compiler: or1k-linux-gcc (GCC) 11.2.0
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> smatch warnings:
-> drivers/usb/typec/class.c:1919 typec_get_fw_cap() warn: unsigned 'cap->type' is never less than zero.
-> drivers/usb/typec/class.c:1926 typec_get_fw_cap() warn: unsigned 'cap->data' is never less than zero.
-> 
+On 2/1/22 13:09, Sebastian Andrzej Siewior wrote:
+> -void scsi_done(struct scsi_cmnd *cmd)
+> +static bool scsi_done_need_blk_compl(struct scsi_cmnd *cmd)
 
-Ah yes, there was a reason to assign the return values to 'ret' first
-and only afterwards to the actual capabilities. Please fix and resubmit.
+I'm not happy about the name of this function. The word "need" in the 
+function name suggests that this function does not modify any state. 
+However, the body of the function shows that it may complete a SCSI 
+command. How about renaming the existing scsi_done() function into 
+scsi_done_internal() or so and adding a "bool complete_directly" 
+argument to that function?
 
-Guenter
+BTW, I only received patch 1/2 but not patch 2/2. Please Cc the 
+linux-scsi mailing list for the entire patch series when reposting the 
+patch series.
+
+Thanks,
+
+Bart.
