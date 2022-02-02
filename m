@@ -2,148 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDADD4A6860
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 00:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D1A4A6971
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 01:58:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiBAXKZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Feb 2022 18:10:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45046 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiBAXKY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Feb 2022 18:10:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ABBCBB82FD8;
-        Tue,  1 Feb 2022 23:10:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C993C340F1;
-        Tue,  1 Feb 2022 23:10:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643757022;
-        bh=gi5o6dpz7na3yVLbzTMfa4s0kn8nCEfsUwJHFYwxi08=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pU7qVWUbnSynUPL1v+Dmhh4lCiROtG51BOLCypsP8S6aI6bg6hIX2YGrwlRxA4zGb
-         Hh3U5MqfBXbMyH2Pl6Rgthp6D7f8MgFQywGRlWdHdqLWCfLZyF5iHYAFCk/2VBVqJ2
-         DBn7fEtt1d48Wuo57V9srRF/qmepxT3PoM5DNz+1eMweK3odHSFA53ILeBKuiaUnYt
-         /mepOV0uWAqgwJA2JYHH08ArVI6paf5O4XdkThlE13a7dmG5jry9Jg4yMO21x6fq9g
-         HLPT61Ev8j56c4pDlQlRGZ5S6K2qQHQMZrhInbHmDgXMbUzMrUkleOoDhR1xpIMiQ3
-         b1gXg/kpW/iQg==
-Received: by mail-oi1-f179.google.com with SMTP id r27so14262340oiw.4;
-        Tue, 01 Feb 2022 15:10:22 -0800 (PST)
-X-Gm-Message-State: AOAM531ELpD+uskS5uvpAJtOeJ64Zvcia5L0mgnYM/f2dmsvs5ayX87y
-        99130h7pGPg9F6Bv11TBsItWpormcXTY4fN4glU=
-X-Google-Smtp-Source: ABdhPJx5g206As8cpZBYqv6w80xI5VEhOIz0J1a+u8x+FqaOVX3lKBBdEl3+H731tsMzyLepBKrMl7KGoCBuHXlv4bg=
-X-Received: by 2002:aca:2b16:: with SMTP id i22mr2545030oik.128.1643757021480;
- Tue, 01 Feb 2022 15:10:21 -0800 (PST)
+        id S243363AbiBBA6o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Feb 2022 19:58:44 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:33397 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229994AbiBBA6o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Feb 2022 19:58:44 -0500
+Received: by mail-oi1-f175.google.com with SMTP id x193so36972109oix.0;
+        Tue, 01 Feb 2022 16:58:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yzfs4LNIKjvTvq/VJT/9v6I3gbO+hNt8P5WQ2zknsck=;
+        b=2qLp1IlDHHga962zSpoiv18iNyG6GLgFx9DJOfQzWLZM7QgCxwUFRG6DlnzLdBrGJZ
+         dq03Gy0j5LilWCKJHXPlSH4Lunyjq1Xbjfi6OPLKLlJpO+s67Oy9yjPhHRouxP7mtisc
+         fXxWfc0clMMvNW0zw5Yl26K6B+hWGLBCGi20H6PvdYvPfs1MtiCllbFhfD5xN47iQN54
+         dF+TcO3HMf6Sv5SSSqGW+1tTHsRgKpVMTFSnHZ1Yl7AXctaZEjhuvYuS6KQhYVudGsj+
+         lxDsM+D2rxieLMg6yeN5P2RP9wcIPQuLy0vPCcFIwYA/I1ASQZ0VLz4iuwCOsO4ZQD/V
+         eEAw==
+X-Gm-Message-State: AOAM530CgUcEOgqEQEppYG9aglaNyA7IqqNk2M65w7vAXUhdtuDM2PMV
+        +OvshPojXNqcF+m7975/SPGTdDFP/Q==
+X-Google-Smtp-Source: ABdhPJwKJ4qi7HZXj0JZZjlNCdAZoxORfThV50l0jUgTfCjV4wtw3+Enm9o8cNcsvwr8HraUDQ2MaQ==
+X-Received: by 2002:aca:2304:: with SMTP id e4mr3133590oie.167.1643763523866;
+        Tue, 01 Feb 2022 16:58:43 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id s13sm746674ooh.43.2022.02.01.16.58.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 16:58:43 -0800 (PST)
+Received: (nullmailer pid 1099482 invoked by uid 1000);
+        Wed, 02 Feb 2022 00:58:42 -0000
+Date:   Tue, 1 Feb 2022 18:58:42 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Robert Hancock <robert.hancock@calian.com>
+Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
+        gregkh@linuxfoundation.org, michal.simek@xilinx.com,
+        manish.narani@xilinx.com, sean.anderson@seco.com,
+        devicetree@vger.kernel.org, piyush.mehta@xilinx.com
+Subject: Re: [PATCH v8 2/3] dt-bindings: usb: dwc3-xilinx: Added reset-gpios
+Message-ID: <YfnXQumE1TOWur5p@robh.at.kernel.org>
+References: <20220126234017.3619108-1-robert.hancock@calian.com>
+ <20220126234017.3619108-3-robert.hancock@calian.com>
 MIME-Version: 1.0
-References: <20220201150339.1028032-1-arnd@kernel.org> <90333cef-9ad1-bbf5-5c46-86083c1f5b24@arm.com>
- <YflyZytGG49kbvV9@shell.armlinux.org.uk>
-In-Reply-To: <YflyZytGG49kbvV9@shell.armlinux.org.uk>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 2 Feb 2022 00:10:04 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0jFMhtajAA9L6u56fbFRxBXhhsfMrfGisHdoP8qCFKMg@mail.gmail.com>
-Message-ID: <CAK8P3a0jFMhtajAA9L6u56fbFRxBXhhsfMrfGisHdoP8qCFKMg@mail.gmail.com>
-Subject: Re: [RFC] ARM: sa1100/assabet: move dmabounce hack to ohci driver
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126234017.3619108-3-robert.hancock@calian.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 6:48 PM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
-> On Tue, Feb 01, 2022 at 05:10:38PM +0000, Robin Murphy wrote:
-> >
-> > Hmm, my reading of it was different. AFAICS it should affect all platforms
-> > with CONFIG_ARCH_SA1100 + CONFIG_SA1111 - the bus notifier from
-> > sa1111_init() will initialise dmabounce for everything where
-> > sa1111_configure_smc() has punched a hole in the DMA mask to handle the
-> > addressing erratum. sa1111_needs_bounce() looks to be a further
-> > consideration for platforms where DMA *additionally* cannot target an entire
-> > bank of memory at all.
->
-> Correct. The SA1111 companion can only access one SDRAM bank, whereas
-> the SA1110 SoC can address up to four SDRAM banks. On platforms where
-> there is only one bank of SDRAM, there is no issue. However, on the
-> Assabet there is one SDRAM bank, and on the Neponset daughter board
-> with the SA1111, there is a second bank. As explained in the commentry,
-> the SA1111 can be hardware-configured via resistive jumpers to access
-> either bank, but we only support the factory-shipped configuration,
-> which is bank 0 (the lowest addressable bank.)
+On Wed, Jan 26, 2022 at 05:40:16PM -0600, Robert Hancock wrote:
+> Update DT binding to reflect new reset-gpios property.
+> 
+> Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+> ---
+>  Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> index f77c16e203d5..823ce731e95f 100644
+> --- a/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> +++ b/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
+> @@ -59,6 +59,10 @@ properties:
+>        - const: usb_hibrst
+>        - const: usb_apbrst
+>  
+> +  reset-gpios:
+> +    description: Optional GPIO connected to ULPI PHY reset line.
+> +    maxItems: 1
 
-Ok, so this is the part that I think my patch gets right.
+Reset for the PHY belongs in the PHY node.
 
-> The SA1111 also has an issue that one of its address lines doesn't
-> behave correctly, and depending on the SDRAM columns/rows, this
-> punches multiple holes in the SDRAM address space it can access,
-> which is what the sa1111_dma_mask[] array is about, and we end up
-> with every alternate megabyte of physical address space being
-> inaccessible.
->
-> The DMA mask, along with the logic in dmabounce (which truely uses the
-> DMA mask as, erm, a *mask* rather than the misnamed *limit* that it
-> has been) know about both of these issues.
-
-while this part would not work if dma_alloc_flags() ends up getting
-memory that is not accessible. At the minimum I need to drop the
-machine_is_assabet() check and always allocate a safe buffer to
-back hcd->local_mem regardless of the machine.
-
-After reading through the dmabounce code again, my interpretation
-is that the safe buffer it uses for bounces ultimately relies on
-dma_alloc_coherent() allocating physical pages using GFP_DMA,
-which in turn is sized to 1MB on the machines that need it.
-
-If I'm not missing something else, using dmam_alloc_flags() in the
-local_mem code should work with the same address restrictions, so
-I hope I only need to update the changelog text plus the trivial change
-below.
-
-         Arnd
-
-@@ -207,6 +207,14 @@ static int ohci_hcd_sa1111_probe(struct sa1111_dev *dev)
-        }
-
-        /*
-+        * According to the "Intel StrongARM SA-1111 Microprocessor Companion
-+        * Chip Specification Update" (June 2000), erratum #7, there is a
-+        * significant bug in the SA1111 SDRAM shared memory controller.  If
-+        * an access to a region of memory above 1MB relative to the bank base,
-+        * it is important that address bit 10 _NOT_ be asserted. Depending
-+        * on the configuration of the RAM, bit 10 may correspond to one
-+        * of several different (processor-relative) address bits.
-+        *
-         * Section 4.6 of the "Intel StrongARM SA-1111 Development Module
-         * User's Guide" mentions that jumpers R51 and R52 control the
-         * target of SA-1111 DMA (either SDRAM bank 0 on Assabet, or
-@@ -214,13 +222,14 @@ static int ohci_hcd_sa1111_probe(struct sa1111_dev *dev)
-         * Assabet, so any address in bank 1 is necessarily invalid.
-         *
-         * As a workaround, use a bounce buffer in addressable memory
--        * as local_mem.
-+        * as local_mem, relying on ZONE_DMA to provide an area that
-+        * fits within the above constraints.
-+        *
-+        * SZ_64K is an estimate for what size this might need.
-         */
--       if (machine_is_assabet()) {
--               ret = usb_hcd_setup_local_mem(hcd, 0, 0, SZ_64K);
--               if (ret)
--                       goto out_err1;
--       }
-+       ret = usb_hcd_setup_local_mem(hcd, 0, 0, SZ_64K);
-+       if (ret)
-+               goto out_err1;
-
-        if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len, hcd_name)) {
-                dev_dbg(&dev->dev, "request_mem_region failed\n");
+> +
+>    phys:
+>      minItems: 1
+>      maxItems: 2
+> -- 
+> 2.31.1
+> 
+> 
