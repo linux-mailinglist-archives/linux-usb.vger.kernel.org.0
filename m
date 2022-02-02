@@ -2,154 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CACF4A6ED6
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 11:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBD44A6EE0
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Feb 2022 11:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343570AbiBBKfo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Feb 2022 05:35:44 -0500
-Received: from pop36.abv.bg ([194.153.145.227]:47376 "EHLO pop36.abv.bg"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343559AbiBBKfn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:35:43 -0500
-Received: from smtp.abv.bg (localhost [127.0.0.1])
-        by pop36.abv.bg (Postfix) with ESMTP id 7A4AB1805D2D;
-        Wed,  2 Feb 2022 12:35:35 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abv.bg; s=smtp-out;
-        t=1643798135; bh=LJ2bSPclt4CDkpG3k+w2M34FMl19qOebAQleIeO3j9I=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=mX8csLmiBLqAAq7f88AoxyszlnFNhZIKKrGKCG04QORhP9NJMwsELUUyo0pIFkACm
-         YtcTYzdqtwNyvBVqEpTOrA+xRt3qLNZbxllNGQUNgnaFBX561+RK1x3JFZxb4uWQkm
-         LlvNEBg9ev7115kZbxC0C9aJCULDxDKHiWaCO/f4=
-X-HELO: smtpclient.apple
-Authentication-Results: smtp.abv.bg; auth=pass (plain) smtp.auth=gvalkov@abv.bg
-Received: from 212-39-89-111.ip.btc-net.bg (HELO smtpclient.apple) (212.39.89.111)
- by smtp.abv.bg (qpsmtpd/0.96) with ESMTPSA (ECDHE-RSA-AES256-GCM-SHA384 encrypted); Wed, 02 Feb 2022 12:35:35 +0200
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH v2 0/1] ipheth URB overflow fix
-From:   Georgi Valkov <gvalkov@abv.bg>
-In-Reply-To: <0414e435e29d4ddf53d189d86fae2c55ed0f81ac.camel@corsac.net>
-Date:   Wed, 2 Feb 2022 12:35:31 +0200
-Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Linux Netdev List <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "stable @ vger . kernel . org" <stable@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <CE7AE1A3-51E9-45CE-A4EE-DACB03B96D9C@abv.bg>
-References: <cover.1643699778.git.jan.kiszka@siemens.com>
- <0414e435e29d4ddf53d189d86fae2c55ed0f81ac.camel@corsac.net>
-To:     Yves-Alexis Perez <corsac@corsac.net>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
+        id S234638AbiBBKlC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Feb 2022 05:41:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231252AbiBBKlB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Feb 2022 05:41:01 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7E0C061714;
+        Wed,  2 Feb 2022 02:41:01 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id i132so47479wma.1;
+        Wed, 02 Feb 2022 02:41:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kroW8T87ODh2aoNqqwf6ZNFEi9qAb1WRvnyNc4fg4XE=;
+        b=N4c/iBWEAtqS3U7P8xZFi+tlzeZJLjGcNeZgbo6ADkEGv0MuD5TqNilOphkGQBDE6w
+         dLXZrSjBAcik0hXhEKYkev0NeQpVBk5P5XPeqYszZwDKRrn6218+vLbZwQaURPxFDNsm
+         N/IErhS+glWd3lPjW3Sfo+P0/8KfW8sA0cn+EIoNaE5LKEh2mFDP5oDBUcZG422foTM1
+         2dFTNKgVK/xMuDWOg4yri5kgwH1vYpd7xLiqe1HSDRnHlvTgqCL9/OQIYYUUnyntpr5v
+         0RsdWQO66ivewIUyleRzW7mnNmKDZp5y5jUcAg9T/edLigNYhNheiMJRVLLa87D/ZA04
+         KYAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kroW8T87ODh2aoNqqwf6ZNFEi9qAb1WRvnyNc4fg4XE=;
+        b=0Bstl8tupLdxFf95xLuUcZwxjSSUhc66Ut4eoXaSNhl1YiCpA6IrWvDbsNqGY3xxgk
+         CzHOet4mBxTLDtGYmHi/GinggCucwxxxAOtv5CRlsnhyaCyz3LP6EIBMfqIYyk+X2SX6
+         n1ubmnMizx8tvgWxPEgMZRyFYcf2uBQ5wcqrnWmhZzPy6KodyO+5ydkze3DyL/QJMnzp
+         zMa1a68uotW2EgZB/SIGI7z0HEW62cb7XAwkqJaLN4ppY214xuOfe3rtdBeFs/SCCFVl
+         g8ryah4hUKrCrSo435pdBAAC7F8uH6HJE7SvPWTMWP2oJjmirAKfCgmYzMj7eK4YnNKP
+         qxlQ==
+X-Gm-Message-State: AOAM530Skwqsr2oUR+H4brIsFhaJiU9Z4wijV4CgbcqRHhDUjowsU8aR
+        L5ZoEbX3OQ8OOFWSN8Rm5Jw=
+X-Google-Smtp-Source: ABdhPJx7p4wOpsEBAPYzyrvAoma6a4T+0aDPLPPoyIX1M+383SaQQ4szMhJ31g7lvB33K8d1J9W9Kw==
+X-Received: by 2002:a05:600c:364f:: with SMTP id y15mr5611580wmq.125.1643798459967;
+        Wed, 02 Feb 2022 02:40:59 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id 1sm20324550wry.52.2022.02.02.02.40.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 02:40:59 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pawel Laszczak <pawell@cadence.com>, linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pavel.hofman@ivitera.com
+Subject: [PATCH][next][V2] usb: gadget: f_uac2: change maxpctksize/maxpcktsize to wMaxPacketSize
+Date:   Wed,  2 Feb 2022 10:40:58 +0000
+Message-Id: <20220202104058.590312-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The spelling of maxpctksize and maxpcktsize is inconsistent, rename them
+both to wMaxPacketSize instead.
 
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+V2: change both strings to wMaxPacketSize
+---
+ drivers/usb/gadget/function/f_uac2.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> On 2022-02-02, at 10:09 AM, Yves-Alexis Perez <corsac@corsac.net> =
-wrote:
->=20
-> On Tue, 2022-02-01 at 08:16 +0100, Jan Kiszka wrote:
->> Georgi Valkov (1):
->>   ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
->>=20
->>  drivers/net/usb/ipheth.c | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> Hi,
->=20
-> sorry for the extra-long delay. I finally tested the patch, and it =
-seems to
-> work fine. I've tried it on my laptop for few hours without issue, but =
-to be
-> fair it was working just fine before, I never experienced the =
-EOVERFLOW
-> myself.
-
-Thank you for testing and committing the patch!
-
-Hi Yves!
-In order to experience the EOVERFLOW, the iPhone has to receive a large =
-packet
-of size 1514 bytes. Note that it is common for ISPs to limit the MTU, =
-which results
-in dropping large packets before they arrive at the iPhone. For example =
-if I run
-
-mtr 8.8.8.8 -n
-
- 1. 172.20.10.1
- 2. (waiting for reply)
- 3. 10.98.8.1
- 4. 10.98.8.253
- 5. 46.10.207.99
- 6. 212.39.69.106
- 7. 212.39.66.222
- 8. 216.239.59.239
- 9. 74.125.251.185
-10. 8.8.8.8
-
-Host 5 drops large packets, while 3 and 4 replay. Now run
-ping 10.98.8.1 -D -s 1472
-
-Without the patch I get EOVERFLOW and there is no further communication.
-It would be nice if a failsafe mechanism is implemented to recover from =
-faults
-like that or in the event that no communication is detected over a =
-certain period.
-With the patch applied, everything works fine:
-1480 bytes from 10.98.8.1: icmp_seq=3D0 ttl=3D253 time=3D50.234 ms
-
-There is another issue with my iPhone 7 Plus, which is unrelated to this =
-patch:
-If an iPhone is tethered to a MacBook, the next time it gets connected =
-to an
-OpenWRT router the USB Ethernet interface appears, but there is no
-communication. Hence I would assume this issue has to be fixed in =
-another
-patch. I can confirm that in this state macOS and Windows are able to =
-use
-USB tethering, only OpenWRT is affected. So far I found the following
-workarounds:
-* reboot the phone or run:
-* usbreset 002/002 && /etc/init.d/usbmuxd restart
-* or in macOS disable the USB Ethernet interface, before the iPhone is
-unplugged: e.g. Settings, Network, iPhone USB: check Disable unless =
-needed,
-then connect over wifi. The USB interface gets disabled.
-* the same effect can also be achieved using QuickTime, File,
-New Movie Recording. Selecting the iPhone, causes the USB Ethernet =
-interface
-to disappear. If we unplug and tether to OpenWRT now, it works fine. =
-This looks
-like an incomplete initialisation, likely in usbmuxd or ipheth, which =
-needs to switch
-the iPhone to the proper mode.
-
-The same happens if the phone is powered off, and then restarted while =
-tethered,
-or if it reboots due to extreme cold temperatures or low battery. =
-Finally there is
-also a bug or possible hardware/baseband fault in my phone where every =
-few
-days the modem reboots: the LTE icon disappears for a few seconds, and
-tethering is turned off. In the last case Personal Hotspot disappears in =
-Settings,
-but can still be accessed under Mobile Data. This is likely another iOS =
-bug.
-
-Either way, running the commands mentioned above re-enable tethering and
-restore the communication instantly. There is no need to unlock the =
-iPhone with
-a passcode after it restarts. It would be nice if a watchdog is =
-integrated
-in ipheth to trigger recovery automatically.
-
-Any ideas how to implement a watchdog to fix this separate issue?
---
-Georgi Valkov
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index f2237bcdba7c..2bc63e577b3b 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -755,11 +755,11 @@ static int set_ep_max_packet_size_bint(struct device *dev, const struct f_uac2_o
+ 
+ 	if (max_size_bw <= max_size_ep)
+ 		dev_dbg(dev,
+-			"%s %s: Would use maxpctksize %d and bInterval %d\n",
++			"%s %s: Would use wMaxPacketSize %d and bInterval %d\n",
+ 			speed_names[speed], dir, max_size_bw, bint);
+ 	else {
+ 		dev_warn(dev,
+-			"%s %s: Req. maxpcktsize %d at bInterval %d > max ISOC %d, may drop data!\n",
++			"%s %s: Req. wMaxPacketSize %d at bInterval %d > max ISOC %d, may drop data!\n",
+ 			speed_names[speed], dir, max_size_bw, bint, max_size_ep);
+ 		max_size_bw = max_size_ep;
+ 	}
+-- 
+2.34.1
 
