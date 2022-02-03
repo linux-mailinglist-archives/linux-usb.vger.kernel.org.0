@@ -2,94 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5724A7FAF
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 08:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFBAB4A7FF2
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 08:42:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349330AbiBCHVj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Feb 2022 02:21:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242617AbiBCHVi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Feb 2022 02:21:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B51C061714;
-        Wed,  2 Feb 2022 23:21:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1349421AbiBCHmI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Feb 2022 02:42:08 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:50828
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230204AbiBCHmG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Feb 2022 02:42:06 -0500
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5BD57B83354;
-        Thu,  3 Feb 2022 07:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 820C0C340E4;
-        Thu,  3 Feb 2022 07:21:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643872896;
-        bh=Wc1U0tbe2ibHH0w4+Qtr585voPPI/RVu2gM/lTVVp30=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OCsO81bWXEyVOSsQDSn6r2rzxOR3JpBSoWjBg9sy1shtFudtP50cDmN5973rXbl2M
-         WSotlCODFoun5BN4etxANerKTcAfUDtbSDwOcGdshWNp211MGoRUSFS9DlxRAmvgLl
-         ei4hGgEBWHhAkhek4CQb3L7EFl2kflZY3ZSvAgaY=
-Date:   Thu, 3 Feb 2022 08:21:25 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>, "J . Avila" <elavila@google.com>
-Subject: Re: [PATCH 0/3] support USB offload feature
-Message-ID: <YfuCdfClfxh9S2Np@kroah.com>
-References: <CGME20220203030000epcas2p2a924a55a5ae60e8685cd62b66a5482f3@epcas2p2.samsung.com>
- <1643857054-112415-1-git-send-email-dh10.jung@samsung.com>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D5FE940031
+        for <linux-usb@vger.kernel.org>; Thu,  3 Feb 2022 07:41:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643874119;
+        bh=69oC9K6bP5zXfYZ3RPqGsmz6Po3E4WX3hDMRIgEHu/M=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=uv+mn65kDEtHu+z8C5Nh82vWkuM23QNrQSUPmlHWe19KEL8qdCGnM0rqxa8nff7BZ
+         Li1ChQBJAAcKWyOCKY5925ZMYVtV/nvC1v1fZKq+cAQX4QQxfwMc3g+AQkQjXjZYHO
+         i3qdb+kS5cKwEXgI8HWuk46QAt1ugSBvsPWlHhtvXzxEo71HV/nD9rkOYG9Ky5HFIC
+         q8iY3Qnt97XuMX1FVz5QCHcAHZ0Y2FNJkXW1K0cYG8iZzytnfnJAv/EAecMzgBch7u
+         3KDmzaGNpQtQxvHoFIV+aU1BQ1yL1MDyiePL57v4PHwYOWgDlwKJk2dff8+VG/h1aB
+         ja8WDDiMpnkOQ==
+Received: by mail-wr1-f70.google.com with SMTP id r2-20020adfa142000000b001e176ac1ec3so354405wrr.3
+        for <linux-usb@vger.kernel.org>; Wed, 02 Feb 2022 23:41:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=69oC9K6bP5zXfYZ3RPqGsmz6Po3E4WX3hDMRIgEHu/M=;
+        b=SAN7N7hXhUbWGF32Rjl6V57uW/U10jYGuzxNAOX1c3iC9BaDN4Xwe9GpdYpPxjFqRF
+         Jt7vCBVyYcxJKO+lvSbrtOnro+e8xGQO4EPzpjd9N4xkM7CCdpmAmBFf2M0ItlfNYNgX
+         j2GmuJQc0cewTAuxUoBOK7VkHtf2g26/y9Y5uMEh3ktClPzIGlLVnnO+QlJWkt2cp5pc
+         wiz8c8dJteUlOTCrlRmeUE29C4MfEoMeFcjWm+Cmw1aLhiuFKol7Ox2LjOUWMB+5FaGZ
+         pTSi38mZRnbf3IJ1yrBfzvWOAHchfwazGbP5llDjmIE/VyK3JC4PziwiBHWRGZAydh4q
+         1Pww==
+X-Gm-Message-State: AOAM531mgKHwyBniHkIiZa61ui8e5+uGDHDNwiYgZLlVHuIHsB/7hFzt
+        AsTArKm3D8FzOJMAxFpoCjVdCOZo4zwinZo/gNvCTGUY1oD8olAP9qAQCn2jB1xs8zqT870aYl+
+        Ydmf+anKW2AdTUzZYR8AnZ04qbPVZB/ORyB+Nbg==
+X-Received: by 2002:a05:6000:10cf:: with SMTP id b15mr28156914wrx.70.1643874119534;
+        Wed, 02 Feb 2022 23:41:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwInkGYx0bCKYBNdkDDYX+ptQNyAD6vMUiS8CqzI/xYfseOfTNCURA5lpsX4JtSbcPIAvyzjw==
+X-Received: by 2002:a05:6000:10cf:: with SMTP id b15mr28156886wrx.70.1643874119363;
+        Wed, 02 Feb 2022 23:41:59 -0800 (PST)
+Received: from [192.168.0.80] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id t18sm19832712wri.34.2022.02.02.23.41.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 23:41:58 -0800 (PST)
+Message-ID: <1d549a00-b9f5-d60f-2d5b-798e92139f86@canonical.com>
+Date:   Thu, 3 Feb 2022 08:41:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1643857054-112415-1-git-send-email-dh10.jung@samsung.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] HPE BMC GXP SUPPORT
+Content-Language: en-US
+To:     nick.hawkins@hpe.com, verdun@hpe.com
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Corey Minyard <minyard@acm.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Hao Fang <fanghao11@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <nick.hawkins@hpe.com>
+ <20220202165315.18282-1-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220202165315.18282-1-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 11:57:31AM +0900, Daehwan Jung wrote:
-> This patchset is for USB offload feature, which makes Co-processor to use
-> some memories of xhci. Especially it's useful for USB Audio scenario.
-> Audio stream would get shortcut because Co-processor directly write/read
-> data in xhci memories. It could get speed-up using faster memory like SRAM.
-> That's why this also gives vendors flexibilty of memory management.
-> Below pathches have been merged in AOSP kernel(android12-5.10) and I put
-> together and split into 3 patches.
+On 02/02/2022 17:52, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> ANDROID: usb: host: fix slab-out-of-bounds in xhci_vendor_get_ops
-> ANDROID: usb: export built-in tracepoint functions
-> ANDROID: usb: host: Use old init scheme when hook unavailable
-> ANDROID: usb: host: free the offload TR by vendor hook
-> ANDROID: usb: host: xhci: provide function prototype for xhci_address_device
-> ANDROID: usb: host: add bus_suspend/bus_resume to xhci overrides
-> ANDROID: usb: host: add address_device to xhci overrides
-> ANDROID: usb: host: add max packet parameter on alloc_transfer_ring hook
-> ANDROID: usb: host: add xhci hooks for vendor specific container context
-> ANDROID: usb: host: export xhci symbols for ring management
-> ANDROID: usb: host: export additional xhci symbols for ring management
-> FROMLIST: usb: xhci-plat: add xhci_plat_priv_overwrite
-> FROMLIST: usb: host: export symbols for xhci hooks usage
-> FROMLIST: usb: host: add xhci hooks for USB offload
+> GXP is the name of the HPE SoC.
+> This SoC is used to implement BMC features of HPE servers
+> (all ProLiant, Synergy, and many Apollo, and Superdome machines)
+> It does support many features including:
+> 	ARMv7 architecture, and it is based on a Cortex A9 core
+> 	Use an AXI bus to which
+> 		a memory controller is attached, as well as
+>                  multiple SPI interfaces to connect boot flash,
+>                  and ROM flash, a 10/100/1000 Mac engine which
+>                  supports SGMII (2 ports) and RMII
+> 		Multiple I2C engines to drive connectivity with a host infrastructure
+> 		A video engine which support VGA and DP, as well as
+>                  an hardware video encoder
+> 		Multiple PCIe ports
+> 		A PECI interface, and LPC eSPI
+> 		Multiple UART for debug purpose, and Virtual UART for host connectivity
+> 		A GPIO engine
+> This Patch Includes:
+> 	Documentation for device tree bindings
+> 	Device Tree Bindings
+> 	GXP Timer Support
+> 	GXP Architecture Support
 > 
-> Below are owners of patches.
-> 
-> Howard Yen <howardyen@google.com>
-> Jack Pham <jackp@codeaurora.org>
-> Puma Hsu <pumahsu@google.com>
-> J. Avila <elavila@google.com>
-> chihhao.chen <chihhao.chen@mediatek.com>)
-> 
-> Daehwan Jung (3):
->   usb: host: export symbols for xhci hooks usage
->   usb: host: add xhci hooks for USB offload
->   usb: host: add some to xhci overrides for USB offload
 
-We need a user for these offload hooks, can you also submit them at the
-same time?  Otherwise for obvious reaons, I can not take these without
-any user.
+1. Please version your patchses and document the changes under ---.
 
-thanks,
+2. With your v1 I responded what has to be separate patch. This was
+totally ignored here, so no. You have to follow this.
 
-greg k-h
+3. Please run checkpatch and be sure there are no warnings.
+
+4. Bindings in dtschema, not in text.
+
+Best regards,
+Krzysztof
+
+Best regards,
+Krzysztof
