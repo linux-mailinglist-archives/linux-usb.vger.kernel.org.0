@@ -2,74 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE714A90B3
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 23:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 603304A90D7
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 23:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355644AbiBCWaq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Feb 2022 17:30:46 -0500
-Received: from mail-pg1-f181.google.com ([209.85.215.181]:36451 "EHLO
-        mail-pg1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiBCWaq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Feb 2022 17:30:46 -0500
-Received: by mail-pg1-f181.google.com with SMTP id h125so3470881pgc.3;
-        Thu, 03 Feb 2022 14:30:46 -0800 (PST)
+        id S1355878AbiBCWsb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Feb 2022 17:48:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355873AbiBCWsa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Feb 2022 17:48:30 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46703C06173D;
+        Thu,  3 Feb 2022 14:48:30 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id i62so5266838ioa.1;
+        Thu, 03 Feb 2022 14:48:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=NPWueLzrJFboH2nkL8a0Kt0j0fw6ZnAd3HPnO4FSgfI=;
+        b=nNf9+fu88OwLVGrq/dioOKFvP8s5k1wgcmIA0VUpL0g/hy3TXFhPHc3wyxof87N4DL
+         S9dL8n744p7DgMvaszLhpk9UVzZlvM5uJiSCAVoNXKxZRhHRCZ5usgYm+ADuK5wBJ7S+
+         ZoQ5hbKvmmwCIaIw1VDnkp23h88AIQsgGO3ay9gXodcD/FyRXW5eWSQ90mj7/VLn2pw3
+         +kJE5ubZEPHAr4k25BXA/C6+fQBvBdlewAVTX4AYxKrxeu25bhW/gpAK1IjjTJkq43AV
+         3qwzE/xtfapMQtuJxxyieb3Bv4dnGSY36SyNzXCnQqwQebVz2GG0UPbms3eFfpfeVZDe
+         Zj8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=7laOSOTRIKfgB81WkljSRpQ1Qs5RJtS6DOO8SbNq8dc=;
-        b=BpCsZUz/REWiArgCBhrtz9TK5CEWRkECOccUnxyK8n29TywMgI1ZAmvktvvRxOY5Do
-         4x+VSUl/nhbVl+1LgP7ewIb8GVvJtS1TOM7QPnRmi3xGubgH0P2V4vCPkjiEfOjV3AXZ
-         6+eUH9bmeSX4VQDndXoJYAvfTmAmIi9j7tRPrjL56TvZjLn+cbcWKxP3jF8MpRb9GZ3l
-         TnkuLOxsKeEjupabhKiVaidsHVTkoguEZ9ujFVlhSfOw/faMUWzBIhG083LkIeJLvG7J
-         s8qswxPKmXokcNxBeCvcoi+lFVTaLSvgpoFEsOqm3S9hVNk6wrASeEsM/ivpt+k3yW59
-         QCYw==
-X-Gm-Message-State: AOAM531K3y5IDWqkcPByk/xUAsP6FYVOEPjX25bsKU8EXHMV+byZa16k
-        rxeXfBI9dCPrXk5S4jbMA1OkrkH1W7k=
-X-Google-Smtp-Source: ABdhPJwsmUgNHSp9NKx8vcK4gareU4i+aBqbeCkiE0fyUloViWGqIdpZzEwCDfLPGyVjD0z8dWE/+A==
-X-Received: by 2002:a05:6a00:228e:: with SMTP id f14mr244581pfe.16.1643927445629;
-        Thu, 03 Feb 2022 14:30:45 -0800 (PST)
-Received: from [192.168.51.110] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id f3sm43443pfe.43.2022.02.03.14.30.44
+        bh=NPWueLzrJFboH2nkL8a0Kt0j0fw6ZnAd3HPnO4FSgfI=;
+        b=T+7P1yUOKJOH3grwPntv8eRb+GSdk8oFsPAz915c083Ga8edww92z2mQBfAvFF6OXd
+         hBTvJl57/poULFw9gvJoolJN2TIDdBm8eMQsHbsBuFGHQyVAnCBAjGqxT0THfqKEYy+A
+         aoHki1mRVTq+yDSUTgFOJ0LcaEbpLsqJ6ncbY/OpiTNKb4uptyojaYKlw0UWqeSSx4Rb
+         I/xgd+0FmQCt70HaflyQNXE9YRJZiIGspuLyixMCm3oUoQvw8t1Ka32Xoq7H++1b51cV
+         DIusnwtzcaTprV2WRYDJdx5OMwd/DGXL+GiAPVjKxeX7DwqxcjaJPsDl+PxflteqI053
+         Dg0Q==
+X-Gm-Message-State: AOAM532IzcMknInscxo2gwISd9VL+/Ma8YSSHgzMiSjlii2QqW5Fmqep
+        3GUbeQjp0UFjs6Mv5M0rNu75p01dU6Y=
+X-Google-Smtp-Source: ABdhPJzLaSuHyHZqPOm0OepBhbWkNuI2kyqYoTEolXQTeVDEglvTAlTZmmCRq7UGOlLTNrZN6aVkfw==
+X-Received: by 2002:a02:6d5a:: with SMTP id e26mr77543jaf.262.1643928509716;
+        Thu, 03 Feb 2022 14:48:29 -0800 (PST)
+Received: from ?IPV6:2601:282:800:dc80:8870:ce19:2c7:3513? ([2601:282:800:dc80:8870:ce19:2c7:3513])
+        by smtp.googlemail.com with ESMTPSA id x14sm106528ilj.33.2022.02.03.14.48.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 14:30:45 -0800 (PST)
-Message-ID: <086ce37e-22d1-a07e-7de5-7cfd927a5c8d@acm.org>
-Date:   Thu, 3 Feb 2022 14:30:43 -0800
+        Thu, 03 Feb 2022 14:48:29 -0800 (PST)
+Message-ID: <df19b376-49a3-1ef2-0664-a23a48e128dc@gmail.com>
+Date:   Thu, 3 Feb 2022 15:48:28 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/2] scsi: Add scsi_done_direct() for immediate
- completion.
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH net-next] net: don't include ndisc.h from ipv6.h
 Content-Language: en-US
-To:     Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-Cc:     linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20220201210954.570896-1-sebastian@breakpoint.cc>
- <20220201210954.570896-2-sebastian@breakpoint.cc>
- <c8402f76-7397-77c3-232c-c825c52ea826@acm.org> <YfwxJPUFCo5/55yI@flow>
- <Yfw7JaszshmfYa1d@flow>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <Yfw7JaszshmfYa1d@flow>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Cc:     netdev@vger.kernel.org, j.vosburgh@gmail.com, vfalico@gmail.com,
+        andy@greyhouse.net, oliver@neukum.org, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, alex.aring@gmail.com,
+        jukka.rissanen@linux.intel.com, stefan@datenfreihafen.org,
+        jk@codeconstruct.com.au, matt@codeconstruct.com.au,
+        linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org
+References: <20220203043457.2222388-1-kuba@kernel.org>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20220203043457.2222388-1-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2/3/22 12:29, Sebastian Andrzej Siewior wrote:
-> Let me see what I can do.
-> 
-> Something like this perhaps? The compiler not inline
-> scsi_done_internal() so we maybe provide scsi_done() / _direct() as
-> static inlines?
+On 2/2/22 9:34 PM, Jakub Kicinski wrote:
+> diff --git a/include/net/ipv6.h b/include/net/ipv6.h
+> index 082f30256f59..cda1f205f391 100644
+> --- a/include/net/ipv6.h
+> +++ b/include/net/ipv6.h
+> @@ -15,7 +15,6 @@
+>  #include <linux/refcount.h>
+>  #include <linux/jump_label_ratelimit.h>
+>  #include <net/if_inet6.h>
+> -#include <net/ndisc.h>
+>  #include <net/flow.h>
+>  #include <net/flow_dissector.h>
+>  #include <net/snmp.h>
+> diff --git a/include/net/ipv6_frag.h b/include/net/ipv6_frag.h
+> index 0a4779175a52..5052c66e22d2 100644
+> --- a/include/net/ipv6_frag.h
+> +++ b/include/net/ipv6_frag.h
+> @@ -1,6 +1,7 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+>  #ifndef _IPV6_FRAG_H
+>  #define _IPV6_FRAG_H
+> +#include <linux/icmpv6.h>
+>  #include <linux/kernel.h>
+>  #include <net/addrconf.h>
+>  #include <net/ipv6.h>
+> diff --git a/include/net/ndisc.h b/include/net/ndisc.h
+> index 53cb8de0e589..07d48bd6c0bd 100644
+> --- a/include/net/ndisc.h
+> +++ b/include/net/ndisc.h
+> @@ -71,7 +71,6 @@ do {								\
+>  
+>  struct ctl_table;
+>  struct inet6_dev;
+> -struct net_device;
 
-In general declaring a static function inline in a .c file is frowned 
-upon but I think in this case we should do that. With that change 
-applied, feel free to add:
+ndisc_parse_options references net_device. This part seems unrelated to
+the patch intent.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+>  struct net_proto_family;
+>  struct sk_buff;
+>  struct prefix_info;
+
+
