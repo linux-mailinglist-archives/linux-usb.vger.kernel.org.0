@@ -2,95 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 986694A8ED9
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 21:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9702A4A90AC
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 23:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355792AbiBCUjK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Feb 2022 15:39:10 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43340 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355097AbiBCUhG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Feb 2022 15:37:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F0E260C7D;
-        Thu,  3 Feb 2022 20:37:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7628C340F0;
-        Thu,  3 Feb 2022 20:37:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643920624;
-        bh=js+fuAM4/WE8FT7Gl8fPuy4DPVo7Bz7KVm+bzuIfYAM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ugfd+oeupTvIqjhGBTAUjsccNsPf6h78Wtb+aUcMFU3ecH8HatUDn1NBD88tyzOVj
-         IPO3sRtH+bb8wn5X6Ia3jCELPbCo5+/uSoA7ulX84SNQU7wvck6WrJax3LJZFyy5rQ
-         hYrJGlB5YGfwrk7uz7ti2YHQmXr1YlkoX7Oh0WDEjT4vhw1Yvi1aDPmF7ZzlbYcflh
-         1n6nGjwaAJcS8s7nHSUmLFisRIvxk5aq4I5xXIzFFw35m8tr896JqRGflPlSxJ2YiZ
-         rrHrv3qeJfy9dH9WnKAViJ2rBP/n+AcVUt1uq9Lm/mu6WohHlPHVymJlFdRKvhT5Xa
-         KOqPqekp4UP2Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, hminas@synopsys.com,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 7/7] usb: dwc2: gadget: don't try to disable ep0 in dwc2_hsotg_suspend
-Date:   Thu,  3 Feb 2022 15:36:51 -0500
-Message-Id: <20220203203651.5158-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220203203651.5158-1-sashal@kernel.org>
-References: <20220203203651.5158-1-sashal@kernel.org>
+        id S1349519AbiBCW2C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Feb 2022 17:28:02 -0500
+Received: from mail-pj1-f44.google.com ([209.85.216.44]:39733 "EHLO
+        mail-pj1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230362AbiBCW2B (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Feb 2022 17:28:01 -0500
+Received: by mail-pj1-f44.google.com with SMTP id s61-20020a17090a69c300b001b4d0427ea2so11338604pjj.4;
+        Thu, 03 Feb 2022 14:28:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=duGMxGsB/QuPA1bGwv9ppb+K/mMk4EUk821rVNi53dg=;
+        b=iZxWByy6GVPYkvikPlaL5Z/m3rDjRSYQ/jXiqD1WNgRKfOeSpZZkydnbHtAzcGA+UM
+         XdDfnCcYuqO7iuG3vh1M1K8KqeoWbyoXEx83fESi8OxPJ8xBLBGl8ZvtnKTGYXt3EVAz
+         B8BMkyuwEbYd1Kwny2cI6Vn5zsyqaEL/v8ITCfa+54Nx7rpetoVIS424ylCwHXMSunIc
+         G2zU+RPwr+Kdry05AzcnQT/bxYFHHPKWCJFzxlFuog2RnUOh5T2j9VZqlaYCjWNfRx7j
+         p4HZPJxCh2HflkFkSmlNnCayjOkPOa50wKBak1jYAn+aUAEJUzqF2rcUKOX2Mt2dUZgQ
+         p/xA==
+X-Gm-Message-State: AOAM532xfW9QCbV8Rat16ebZxfWxPksS+X/LeoevQFk9VIVXyzW9gwpl
+        6EXRVniajL1XAKioGFuLiRU=
+X-Google-Smtp-Source: ABdhPJw39uPY/9UWfY02QkgFnEA8TScYvODGhpxt/GorKORgIIEj3g5vP9N6YeBH7YakcAl5Rozokg==
+X-Received: by 2002:a17:902:7fc9:: with SMTP id t9mr38122072plb.53.1643927281364;
+        Thu, 03 Feb 2022 14:28:01 -0800 (PST)
+Received: from [192.168.51.110] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id h21sm32407pfv.135.2022.02.03.14.27.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 14:28:00 -0800 (PST)
+Message-ID: <62b6c21c-7dde-0eba-7fae-a63ec168e766@acm.org>
+Date:   Thu, 3 Feb 2022 14:27:58 -0800
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] scsi: Add scsi_done_direct() for immediate
+ completion.
+Content-Language: en-US
+To:     Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+Cc:     linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20220201210954.570896-1-sebastian@breakpoint.cc>
+ <20220201210954.570896-2-sebastian@breakpoint.cc>
+ <c8402f76-7397-77c3-232c-c825c52ea826@acm.org> <YfwxJPUFCo5/55yI@flow>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <YfwxJPUFCo5/55yI@flow>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+On 2/3/22 11:46, Sebastian Andrzej Siewior wrote:
+> On 2022-02-02 12:49:16 [-0800], Bart Van Assche wrote:
+>> On 2/1/22 13:09, Sebastian Andrzej Siewior wrote:
+>>> -void scsi_done(struct scsi_cmnd *cmd)
+>>> +static bool scsi_done_need_blk_compl(struct scsi_cmnd *cmd)
+>>
+>> I'm not happy about the name of this function. The word "need" in the
+>> function name suggests that this function does not modify any state.
+>> However, the body of the function shows that it may complete a SCSI command.
+>> How about renaming the existing scsi_done() function into
+>> scsi_done_internal() or so and adding a "bool complete_directly" argument to
+>> that function?
+> 
+> Let me see what I can do.
+> 
+>> BTW, I only received patch 1/2 but not patch 2/2. Please Cc the linux-scsi
+>> mailing list for the entire patch series when reposting the patch series.
+> 
+> I did and based on lore's archive it made it to the list:
+> 	https://lore.kernel.org/linux-scsi/20220201210954.570896-1-sebastian@breakpoint.cc/
 
-[ Upstream commit ac55d163855924aa5af9f1560977da8f346963c8 ]
+I agree that patch 2/2 seems to have made it to the linux-scsi list. 
+However, I can't find that patch in my mailbox nor in my spam folder. I 
+think this is the first time that I did not receive a patch sent to the 
+linux-scsi mailing list. Weird ...
 
-Calling dwc2_hsotg_ep_disable on ep0 (in/out) will lead to the following
-logs before returning -EINVAL:
-dwc2 49000000.usb-otg: dwc2_hsotg_ep_disable: called for ep0
-dwc2 49000000.usb-otg: dwc2_hsotg_ep_disable: called for ep0
-
-To avoid these two logs while suspending, start disabling the endpoint
-from the index 1, as done in dwc2_hsotg_udc_stop:
-
-	/* all endpoints should be shutdown */
-	for (ep = 1; ep < hsotg->num_of_eps; ep++) {
-		if (hsotg->eps_in[ep])
-			dwc2_hsotg_ep_disable_lock(&hsotg->eps_in[ep]->ep);
-		if (hsotg->eps_out[ep])
-			dwc2_hsotg_ep_disable_lock(&hsotg->eps_out[ep]->ep);
-	}
-
-Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Link: https://lore.kernel.org/r/20211207130101.270314-1-amelie.delaunay@foss.st.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/dwc2/gadget.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index e7ad3ae4ea6bd..65bcbbad6d545 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -3979,7 +3979,7 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
- 		hsotg->gadget.speed = USB_SPEED_UNKNOWN;
- 		spin_unlock_irqrestore(&hsotg->lock, flags);
- 
--		for (ep = 0; ep < hsotg->num_of_eps; ep++) {
-+		for (ep = 1; ep < hsotg->num_of_eps; ep++) {
- 			if (hsotg->eps_in[ep])
- 				dwc2_hsotg_ep_disable(&hsotg->eps_in[ep]->ep);
- 			if (hsotg->eps_out[ep])
--- 
-2.34.1
-
+Bart.
