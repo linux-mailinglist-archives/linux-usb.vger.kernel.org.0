@@ -2,90 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8F94A8273
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 11:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9EA4A82FC
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 12:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350100AbiBCKgL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Feb 2022 05:36:11 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:38630 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349980AbiBCKgK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Feb 2022 05:36:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643884570; x=1675420570;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=ijsmehNMI2+B/KXb/s5HerwlB555lt5C7U7VoLIaUvQ=;
-  b=G8J4PdJLC8PrXWSbQSwid6/B9zH6J9NcKxTLb25oqJJV3ul3iNxla9Nx
-   3jqct0ahtG4p/K2vED2dV3utrB8kXra8/EBCAuoGfqU4hA2LPt00U13/A
-   HlRZbEu9UtKh6aZ5j2Yj5BlavicMSI1dP+pXny11cDR/afgFe+uehzhHq
-   o=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 03 Feb 2022 02:36:09 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 02:36:08 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 3 Feb 2022 02:36:07 -0800
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 3 Feb 2022 02:36:02 -0800
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
-        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
-        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
-        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
-        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>,
-        <quic_schowdhu@quicinc.com>
-Subject: [PATCH V5 6/6] MAINTAINERS: Add maintainer entry for EUD
-Date:   Thu, 3 Feb 2022 16:04:35 +0530
-Message-ID: <a3f8925e46d88babb22879ab9e7266615ff26d12.1643880577.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1643880577.git.quic_schowdhu@quicinc.com>
+        id S1350131AbiBCLOS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Feb 2022 06:14:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229819AbiBCLOR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Feb 2022 06:14:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B30C061714;
+        Thu,  3 Feb 2022 03:14:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB9A1B8339D;
+        Thu,  3 Feb 2022 11:14:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 972EEC340E4;
+        Thu,  3 Feb 2022 11:14:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643886853;
+        bh=xxX4dF6cL1yEzfRoG5JgXgyt5SDxjS+u7/4N/BpW34M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ImqxT46rAnVZrt5hcN/zy2mlvNnko3+3zMKU27gPdgKtrPGhdX0rweY5FIWulSzr8
+         1Sz80hxI4579YtYsbpSDl3H50NiAJCcljmJ1YmrT5ocgB135k3S5GyNGwKhy++yR7S
+         Xh1OlybGBPf7Grq8JwelBa0IJBvre8wjz6uPf0XE=
+Date:   Thu, 3 Feb 2022 12:14:10 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
+        bjorn.andersson@linaro.org, robh@kernel.org,
+        linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com,
+        quic_psodagud@quicinc.com, quic_satyap@quicinc.com,
+        quic_pheragu@quicinc.com, quic_rjendra@quicinc.com,
+        quic_sibis@quicinc.com, quic_saipraka@quicinc.com
+Subject: Re: [PATCH V5 3/6] usb: common: eud: Add driver support for Embedded
+ USB Debugger(EUD)
+Message-ID: <Yfu5Aq7U6ZT1KzcJ@kroah.com>
 References: <cover.1643880577.git.quic_schowdhu@quicinc.com>
+ <8dab5fd0df59e057793ac0f2264be31f561b07c3.1643880577.git.quic_schowdhu@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8dab5fd0df59e057793ac0f2264be31f561b07c3.1643880577.git.quic_schowdhu@quicinc.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the entry for maintainer for EUD driver
-and other associated files.
+On Thu, Feb 03, 2022 at 04:04:32PM +0530, Souradeep Chowdhury wrote:
+> Add support for control peripheral of EUD (Embedded USB Debugger) to
+> listen to events such as USB attach/detach, pet EUD to indicate software
+> is functional.Reusing the platform device kobj, sysfs entry 'enable' is
+> created to enable or disable EUD.
+> 
+> To enable the eud the following needs to be done
+> echo 1 > /sys/bus/platform/.../enable
+> 
+> To disable eud, following is the command
+> echo 0 > /sys/bus/platform/.../enable
+> 
+> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> ---
+>  Documentation/ABI/testing/sysfs-driver-eud |   9 ++
+>  drivers/usb/common/Kconfig                 |  10 ++
+>  drivers/usb/common/Makefile                |   1 +
+>  drivers/usb/common/qcom_eud.c              | 251 +++++++++++++++++++++++++++++
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+This really should be drivers/usb/misc/ right?  No other code uses
+anything from this driver which is what "common" is for.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b84e2d5..f86ec0e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7227,6 +7227,14 @@ F:	include/uapi/linux/mdio.h
- F:	include/uapi/linux/mii.h
- F:	net/core/of_net.c
- 
-+QCOM EMBEDDED USB DEBUGGER(EUD)
-+M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/ABI/testing/sysfs-driver-eud
-+F:	Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-+F:	drivers/usb/common/qcom_eud.c
-+
- EXEC & BINFMT API
- R:	Eric Biederman <ebiederm@xmission.com>
- R:	Kees Cook <keescook@chromium.org>
--- 
-2.7.4
+thanks,
 
+greg k-h
