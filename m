@@ -2,99 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D688D4A7D55
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 02:11:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3994A7DDF
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 03:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348801AbiBCBLH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Feb 2022 20:11:07 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:40036 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348666AbiBCBLF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Feb 2022 20:11:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=5hB4xZfLGfPF68sFnaphimiyN3Dvoyj649Ifdg6NzMk=; b=2650jDKWUISCHWTrw+2qSb29hf
-        Eg0kIWNamRCUEsMC3LfeWZNitulODz/nCXrDMPmXFPMUE72VH61hPSx5uwNVoOZnrOvRJe9UHfori
-        IRhH/NKpS6Y8uLmfet+KJgbH4rzTYuyCthmjEIni6imLGrzK8nnQnLlUntVfmlaQkEJ0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nFQdR-0042dQ-Py; Thu, 03 Feb 2022 02:10:05 +0100
-Date:   Thu, 3 Feb 2022 02:10:05 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     nick.hawkins@hpe.com
-Cc:     verdun@hpe.com, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Corey Minyard <minyard@acm.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
+        id S245284AbiBCCUl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Feb 2022 21:20:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231708AbiBCCUk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Feb 2022 21:20:40 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C04C061714;
+        Wed,  2 Feb 2022 18:20:40 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id n15so2685694uaq.5;
+        Wed, 02 Feb 2022 18:20:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tWvcpRyL+bk3Xxu49uwybu4k8QPczRdqaC57dr6g/JM=;
+        b=SEi/OKvcrBc9qFDvZIBqAaQXwyFe/aBBjMQ/D/fXPqsKqwaqJ0WZ/W8Pwnm0HEoHfu
+         kYoqExEfyxPLioE9hMsbC8lEK1y55FIUSYAr2OdfCpERm6WN03Ey6VNFuSZLtK0Hi+iC
+         5QlTljl2NvT+JZjlmNSgba1c+pAAgrijGM0lCNRST1yfdlQtu+ox+d7b3kbl8C34ezYC
+         rTBR8RFzYm/ONejmB2hjA/5o/5JwqalninyC2HvPS9eMoFU6VNBfJvrFbL/HQAXQYHa0
+         Xt4i6KCt1olYgrvgMwCuGjkUmriy7i1ic0DKU8/2y1PBsTKXmD1ElOxbPG1BU5l243xe
+         /RxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tWvcpRyL+bk3Xxu49uwybu4k8QPczRdqaC57dr6g/JM=;
+        b=ymTaBqWhaS1DrlG1RukOtF/yF0bko02oBdv0j6kW/YdX/Q8R681s5okqdTuVVGesxY
+         ATkZcd3JtiQGt2npyl1S4lIzvljDFYuaaj4TLNfnlVPjg4jkkcVcrIHcO3q2CjTBUAnz
+         oD8jPEBASj9X8fpfKOqOvc56Jdac0ebEfZictgNy8LKz21MYCps32bFM8dXgImCQ1s7y
+         ITMikr+jhCL5kFxHQ9ErBpGtWB6Gj1rdN0a3AaSRFxj1Zgfv1mZgyCBLq/IgyK2RRUC/
+         ohblbecYjFsaixzOAinWxW+xMmyqt5XFWcjq2RUHpjkm4d/nOViJCVkIDJ6ztYcgwijC
+         6iyw==
+X-Gm-Message-State: AOAM5300U9x3goSMXB9QSv+YVMOZSo9qV+G75/hvDSBaChB05CKRK5qO
+        gGp1fwX50spA9msqpSeCe6RadgzY1VUeU72rlYA=
+X-Google-Smtp-Source: ABdhPJwD7hVjiKofWegP6ZZsLhWTmXz9k3fWDttPfDYs4unrIUMHCuO2GXKyG+Sixkk3szRYjrugagxk2U97bZ4CLjw=
+X-Received: by 2002:a05:6102:38d1:: with SMTP id k17mr12641123vst.50.1643854839175;
+ Wed, 02 Feb 2022 18:20:39 -0800 (PST)
+MIME-Version: 1.0
+References: <20220127104905.899341-1-o.rempel@pengutronix.de>
+ <20220127104905.899341-5-o.rempel@pengutronix.de> <YfJ6lhZMAEmetdad@kroah.com>
+ <20220127112305.GC9150@pengutronix.de> <YfKCTG7N86yy74q+@kroah.com>
+ <20220127120039.GE9150@pengutronix.de> <YfKcYXjfhVKUKfzY@kroah.com>
+In-Reply-To: <YfKcYXjfhVKUKfzY@kroah.com>
+From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Date:   Thu, 3 Feb 2022 05:20:34 +0300
+Message-ID: <CAHNKnsTY0cV4=V7t0Q3p4-hO5t9MbWWM-X0MJFRKCZ1SG0ucUg@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 4/4] usbnet: add support for label from device tree
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Oliver Neukum <oneukum@suse.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Hao Fang <fanghao11@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] HPE BMC GXP SUPPORT
-Message-ID: <YfsrbcgPb5de3Bvw@lunn.ch>
-References: <nick.hawkins@hpe.com>
- <20220202165315.18282-1-nick.hawkins@hpe.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202165315.18282-1-nick.hawkins@hpe.com>
+        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->  .../bindings/display/hpe,gxp-thumbnail.txt    |  21 +
->  .../devicetree/bindings/gpio/hpe,gxp-gpio.txt |  16 +
->  .../devicetree/bindings/i2c/hpe,gxp-i2c.txt   |  19 +
->  .../bindings/ipmi/hpegxp-kcs-bmc-cfg.txt      |  13 +
->  .../bindings/ipmi/hpegxp-kcs-bmc.txt          |  21 +
+Hello Greg,
 
-Hi Nick
+if I may be allowed, I would like to make a couple of points about
+specifying network interface names in DT. As in previous mail, not to
+defend this particular patch, but to talk about names assignment in
+general.
 
-In addiiton to the other feedback also given, for new bindings you
-should be using yaml, not txt. You then gain validation of the
-bindings.
+I may be totally wrong, so consider my words as a request for
+discussion. I have been thinking about an efficient way for network
+device names assignment for routers with a fixed configuration and
+have always come to a conclusion that DT is a good place for names
+storage. Recent DSA capability to assign names from labels and this
+patch by Oleksij show that I am not alone.
 
-	Andrew
+On Fri, Jan 28, 2022 at 3:34 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> And again, pick your names in userspace, embedded is not "special" here.
 
+Embedded is not a special case, but fixed configuration is.
+
+> You can do persistant network device names in a very trivial shell
+> script if needed, we used to do it that way 18 years ago :)
+
+Network device name is not a solely userspace entity. It is part of
+the interface between the kernel and userspace software.
+
+Sure, persistent names can be established with a userspace script. But
+this implies the device renaming, which is a complex and race prone
+task. Once I even found a comment in the kernel code that only network
+devices could be renamed and this is a headache. As for userspace, it
+is possible to workaround the device renaming issues. But this
+requires a lot of code in many programs and sometimes even special
+conventions on a programs interaction. E.g. consider a case where a
+service would like to bind to a network interface, which is in the
+middle of renaming by udev. On the other hand, we have the kernel that
+could provide predictable names from the beginning for all software on
+a host. So this is a desired option.
+
+As for DT, this is an excellent database with perfectly established
+relations to hardware configuration. And if we try to implement a
+userspace storage with the network device names, then we will just
+duplicate the DT in the userspace, as already was mentioned by
+Oleksij. To me, implementation of a names database in userspace looks
+more like reinventing the  DT (wheel) than adding device names to the
+DT.
+
+To summarize, we (developers of embedded software) have two related needs:
+1) the need for persistent names provided by the kernel,
+2) using the DT as a source of persistent names for (1).
+
+Greg, what do you think about device names storing in DeviceTree in
+the above context? Does it still make no sense?
+
+-- 
+Sergey
