@@ -2,118 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D3F4A8255
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 11:32:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 786CE4A8264
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 11:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349769AbiBCKbv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Feb 2022 05:31:51 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:37059 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbiBCKbr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Feb 2022 05:31:47 -0500
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nFZKe-0003rg-Qk; Thu, 03 Feb 2022 11:27:16 +0100
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nFZKX-00DAH6-3F; Thu, 03 Feb 2022 11:27:09 +0100
-Date:   Thu, 3 Feb 2022 11:27:09 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH net-next v1 0/4] usbnet: add "label" support
-Message-ID: <Yfut/RbMAoaIhx41@pengutronix.de>
-References: <20220127104905.899341-1-o.rempel@pengutronix.de>
- <YfJ6tZ3hJLbTeaDr@kroah.com>
- <41599e9d-20c0-d1ed-d793-cd7037013718@suse.com>
+        id S240052AbiBCKfn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Feb 2022 05:35:43 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:31276 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349894AbiBCKfl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Feb 2022 05:35:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643884541; x=1675420541;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=DPW1zRNgWsuV6eLK6ZnJNgLShUOjqEOCEDL/fcyJFdE=;
+  b=KzGxEr0TrFqANEJuK3/Cd61hLZ9nF0cTMQFDe8RwJ3XZKXc5R6uY7j6e
+   NA1Q80W0TAfjFTK88QPt3yYh5KESpOOuL6K86bsGXePDzMISzoMwfaKPi
+   k6cU+cNQf2++frc5WTydr7Eho+ktDQRUAAY+Uciap2TwdNTFBGQh2REyJ
+   Y=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 03 Feb 2022 02:35:40 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 02:35:40 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 3 Feb 2022 02:35:39 -0800
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 3 Feb 2022 02:35:34 -0800
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
+        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
+        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
+        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
+        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>,
+        <quic_schowdhu@quicinc.com>
+Subject: [PATCH V5 0/6] Add Embedded USB Debugger (EUD) driver
+Date:   Thu, 3 Feb 2022 16:04:29 +0530
+Message-ID: <cover.1643880577.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <41599e9d-20c0-d1ed-d793-cd7037013718@suse.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 11:08:31 up 98 days, 16:35, 87 users,  load average: 2.02, 3.35,
- 2.95
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 10:34:25AM +0100, Oliver Neukum wrote:
-> 
-> On 27.01.22 11:57, Greg KH wrote:
-> > On Thu, Jan 27, 2022 at 11:49:01AM +0100, Oleksij Rempel wrote:
-> >> Add devicetree label property for usbnet devices and related yaml
-> >> schema.
-> > That says _what_ you are doing, but not _why_ you would want to do such
-> > a crazy thing, nor what problem you are attempting to solve here.
-> 
-> could you at least describe what kind of systems we are talking
-> about? Is this for a limited set of embedded devices?
-> Are we talking about devices embedded on a motherboard,
-> which happen to be connected by USB?
+This is a series of patches that implements a driver for the control
+peripheral, EUD (Embedded USB Debugger). The EUD is a mini-USB hub
+implemented on chip to support the USB-based debug and trace capabilities.
+Apart from debug capabilities, EUD has a control peripheral. Control
+Peripheral is on when EUD is on and gets signals like USB attach, pet
+EUD etc. EUD driver listens to events like USB attach or detach and then
+informs the USB about these events via ROLE-SWITCH. At regular intervals,
+the EUD driver receives an interrupt to pet the driver indicating that
+the software is functional.
 
-In this particular use case there is a PCB with a imx6 SoC with hard
-wired USB attached USB-Ethernet-MAC adapters. One of these adapters is
-connected in the same PCB to an Ethernet switch chip. There is a DSA
-driver for the switch, so we want to describe the whole boards in a DT.
-Putting a label in the DT that renames the network interface is "nice to
-have" but not so important.
+Changes in V5
 
-As the DT DSA bindings rely on linking a MAC phandle to the switch we
-need to describe the USB Ethernet adapter in the DT, this is more
-important. See this discussion:
+* Added the review tags and implemented comments on V4 of the patch.
 
-https://lore.kernel.org/all/20220127120039.GE9150@pengutronix.de/
+Changes in V4
 
-> That is, are we talking about another kind of firmware
-> we are to take information about devices from?
+* Aligned the device tree node structure of EUD as per discussion.
 
-There is no other firmware involved. The switch chip is attached via
-RGMII to the USB/MAC and with SPI to the CPU for the configuration
-interface. (I2C to the CPU or MDIO to the USB/MAC would be another
-option for the configuration interface.)
+* Changes to usb-connector.yaml is no longer required and is not 
+  included in the patch series.
+  
+* Implemented the rest of the comments on Version 3 of the patch.  
 
-> And if so, why are you proposing to solve this on the
-> USB driver level?
-> It looks to me like those devices are addressed by
-> their USB path. But still there is no reason that a USB
-> driver should actively interpret firmware stuff that
-> comes from a source that tells us nothing about USB
-> properties.
-> In other words it looks to me like you are trying to put
-> a generic facility for getting device properties into
-> a specific driver. The question whether device names
-> should be read out of firmware is not a USB question.
-> 
-> I would suggest you implement a generic facility
-> in the network layer and if everybody is happy with that
-> obviously usbnet can pass through a pointer for that
-> to operate on. Frankly, it looks to me like you are
-> implementing only a subset of what device tree
-> could contain for your specific use case.
+Changes in V3
 
-Sounds good, but we'll focus on the DSA use case, as this is more
-important. So patches 1 and 2 of this patches set have highest prio for
-us.
+* Removed the patch for registration of EUD connector as it is no longer
+  required.
+  
+* Added the description to include EUD in usb-connector.yaml  
 
-Regards,
-Oleksij & Marc
+* Implemented comments on V2 of the patch.
+
+Changes in V2
+
+* Fixed the yaml issue and also implemented comments on yaml in V1.
+
+Changes in V1
+
+* EUD has now been mapped as a separate DT node as it is an independent QCOM IP.
+
+* EUD is attached to the connector child of dwc3 via port end point since EUD
+  driver needs the connector for role-switching.
+
+* EUD driver has been moved now to drivers/soc/qcom/qcom_eud.c.
+
+* All the comments from version 0 of the patch has been implemented.
+
+Souradeep Chowdhury (6):
+  dt-bindings: Add the yaml bindings for EUD
+  bindings: usb: dwc3: Update dwc3 properties for EUD connector
+  usb: common: eud: Add driver support for Embedded USB Debugger(EUD)
+  arm64: dts: qcom: sc7280: Add EUD dt node and dwc3 connector
+  arm64: dts: qcom: sc7280: Set the default dr_mode for usb2
+  MAINTAINERS: Add maintainer entry for EUD
+
+ Documentation/ABI/testing/sysfs-driver-eud         |   9 +
+ .../devicetree/bindings/soc/qcom/qcom,eud.yaml     |  77 +++++++
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |   6 +
+ MAINTAINERS                                        |   8 +
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts            |   4 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  36 +++
+ drivers/usb/common/Kconfig                         |  10 +
+ drivers/usb/common/Makefile                        |   1 +
+ drivers/usb/common/qcom_eud.c                      | 251 +++++++++++++++++++++
+ 9 files changed, 402 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-eud
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+ create mode 100644 drivers/usb/common/qcom_eud.c
+
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.7.4
+
