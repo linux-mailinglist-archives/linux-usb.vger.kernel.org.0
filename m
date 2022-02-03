@@ -2,32 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841844A8E5A
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 21:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7623D4A8E84
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 21:37:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241384AbiBCUge (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Feb 2022 15:36:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36608 "EHLO
+        id S1355301AbiBCUho (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Feb 2022 15:37:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38022 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355003AbiBCUeK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Feb 2022 15:34:10 -0500
+        with ESMTP id S1355331AbiBCUfn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Feb 2022 15:35:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A3A5B835B5;
-        Thu,  3 Feb 2022 20:34:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FC5CC340EF;
-        Thu,  3 Feb 2022 20:34:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2CF2B835B4;
+        Thu,  3 Feb 2022 20:35:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B812FC36AE2;
+        Thu,  3 Feb 2022 20:35:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643920448;
-        bh=7Wh51CxNRkFsP+UxkO1n+8BoQxcYRbLgccZ/aypOW70=;
+        s=k20201202; t=1643920539;
+        bh=ROdNpk6GGl3zwq7T6WvJRSyShTsDYOP5Ert8FCnHo9w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Eau2CuT4LpWAdFDkPtz2aVBmKQ5caiVyPF5fFvMPBAR5jRfzbeKboi5UD9wjknjz5
-         x31yAsQQU+WhV+Kwdoe3eH+6il+no7NOcvy/Jmq2dswEPTFSgccs+y3Pix9KvRDMe7
-         V56xFo4j0yFFcMcU/+9gV6v5m7CzCPnSTQzGU2ip3G0yr0XWoRRqGza3fvUWQhSPsG
-         ytuI2PdOTV5p30GRaqBDE7ooWiMGpV5qS59CH1qp8B1CnxpkNvpnf4+lhhRFC2ApI1
-         D4QyRQxdY/BlVLw9UMn9wFwMhrfZz6EqJbjB30I8StFgfmWzzQ7m8YecF3Ud4NN0S/
-         2qBv3uR7Q+org==
+        b=HcViLvuJNBAifFsgmGc5Lhy/guEcejz7OA0M1TwPX3QwlWiFUW/PEj3riaUWjeV1U
+         NEZM4T3SPS404oWgln+e8DhOeAj2FHOYmMy5wBk+4dK8oklS9TF/BtVn+T4/QjzFUQ
+         D+TZQqk9o6dlX0/HzCWcBljppF0VMj2IJ0bJhhZPd5pHnbftcNDtInLV7DBjUmGknA
+         BveboFqtg1Fckl17cfOlhsIulIk52G1Ogu+PXSn3u3vhQLn+p4i1mvjex6WxqPXZot
+         rkMeIO6KO9fPU8pNul/8pivuZNu9earKGm85B1HV7NF1IC8YcOgjrHgnnoq0CbVCnP
+         RVpkLwR3hokcw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Amelie Delaunay <amelie.delaunay@foss.st.com>,
@@ -35,12 +35,12 @@ Cc:     Amelie Delaunay <amelie.delaunay@foss.st.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, hminas@synopsys.com,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 36/41] usb: dwc2: gadget: don't try to disable ep0 in dwc2_hsotg_suspend
-Date:   Thu,  3 Feb 2022 15:32:40 -0500
-Message-Id: <20220203203245.3007-36-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 22/25] usb: dwc2: gadget: don't try to disable ep0 in dwc2_hsotg_suspend
+Date:   Thu,  3 Feb 2022 15:34:43 -0500
+Message-Id: <20220203203447.3570-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220203203245.3007-1-sashal@kernel.org>
-References: <20220203203245.3007-1-sashal@kernel.org>
+In-Reply-To: <20220203203447.3570-1-sashal@kernel.org>
+References: <20220203203447.3570-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -79,10 +79,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index ea0d2d6139a68..0909b088a284b 100644
+index 449f19c3633c2..ec54971063f8f 100644
 --- a/drivers/usb/dwc2/gadget.c
 +++ b/drivers/usb/dwc2/gadget.c
-@@ -5096,7 +5096,7 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
+@@ -5032,7 +5032,7 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
  		hsotg->gadget.speed = USB_SPEED_UNKNOWN;
  		spin_unlock_irqrestore(&hsotg->lock, flags);
  
