@@ -2,88 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA904A860A
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 15:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D635A4A86D5
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Feb 2022 15:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351103AbiBCOUt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Feb 2022 09:20:49 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55648 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235184AbiBCOUt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Feb 2022 09:20:49 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E673E6195E;
-        Thu,  3 Feb 2022 14:20:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12FF0C340E4;
-        Thu,  3 Feb 2022 14:20:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643898048;
-        bh=2K348VVBG3EKLps4xUCnPyJaENsvksstznkGipAYxcc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ir5Pqa/efkNbEd5D7nv1SqhVwnPhocstxD3uwQg3haSqEGtUCsyeP08LZggEwvO/a
-         aQiOtcFL3agtdM8tHaFAZltYKRqsXZEoXpIKdxgXPZuic0YCZ9kZXE99XXQtr1gTMY
-         P3r+Q/Y/ygMYBfEAufBxubScuxMBaC4+4er9hUOQ=
-Date:   Thu, 3 Feb 2022 15:20:44 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>
-Subject: Re: [PATCH net-next v1 4/4] usbnet: add support for label from
- device tree
-Message-ID: <YfvkvO37IsoVNiV9@kroah.com>
-References: <20220127104905.899341-1-o.rempel@pengutronix.de>
- <20220127104905.899341-5-o.rempel@pengutronix.de>
- <YfJ6lhZMAEmetdad@kroah.com>
- <20220127112305.GC9150@pengutronix.de>
- <YfKCTG7N86yy74q+@kroah.com>
- <20220127120039.GE9150@pengutronix.de>
- <YfKcYXjfhVKUKfzY@kroah.com>
- <CAHNKnsTY0cV4=V7t0Q3p4-hO5t9MbWWM-X0MJFRKCZ1SG0ucUg@mail.gmail.com>
- <YfvS3F6kHUyxs6D0@lunn.ch>
+        id S1351320AbiBCOqr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Feb 2022 09:46:47 -0500
+Received: from mga06.intel.com ([134.134.136.31]:37909 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351282AbiBCOqq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Feb 2022 09:46:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643899606; x=1675435606;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=G1NEaO4YfV+ndngmjLH9H1KfbSPd0dgTl8bo+81+nzU=;
+  b=kuMXRLy42m+amXIIullowRFx9hzSQRmtexgGFvHp4/qqE3eC9kT+Ud18
+   c9Ixo3eh4RXw04dwznRQ1ben1p9/hfKy+Ta4rDuGVaYpeDhsqNWJGDXXT
+   y7cWxUqILflAsM/fSC2iIyQF+7Lwfz5GC/Qfc29+5a2WmrJtNwgqoeXZ3
+   tyQyQIxX/YlsOwHsFxrnTudKvZ6PTm0dZYEdfhM+Ja4ToDpBgzNy9I9Fq
+   5rATs2TES7v043tbW6n2PKCs30KtMWtrZCEdOhAXTPaArwU7vRwQpUDSt
+   GSkwhI2IrR+onens0BzxTLg5HoZwhntdQ/oPZ37WlPAVe9aeU5fUDTmfD
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="308882989"
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="308882989"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 06:46:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="676788140"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 03 Feb 2022 06:46:43 -0800
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Jameson Thies <jthies@google.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/3] usb: typec: Separate sysfs directory for all USB PD objects
+Date:   Thu,  3 Feb 2022 17:46:54 +0300
+Message-Id: <20220203144657.16527-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfvS3F6kHUyxs6D0@lunn.ch>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 02:04:28PM +0100, Andrew Lunn wrote:
-> On Thu, Feb 03, 2022 at 05:20:34AM +0300, Sergey Ryazanov wrote:
-> > Hello Greg,
-> > 
-> > if I may be allowed, I would like to make a couple of points about
-> > specifying network interface names in DT. As in previous mail, not to
-> > defend this particular patch, but to talk about names assignment in
-> > general.
-> > 
-> > I may be totally wrong, so consider my words as a request for
-> > discussion. I have been thinking about an efficient way for network
-> > device names assignment for routers with a fixed configuration and
-> > have always come to a conclusion that DT is a good place for names
-> > storage. Recent DSA capability to assign names from labels and this
-> > patch by Oleksij show that I am not alone.
-> 
-> DSA doing this is not recent. The first patch implementing DSA in 2008
-> had the ability to set the interface names. This was long before the
-> idea that userspace should set interface names became the 'correct'
-> way to do this.
+Hi,
 
-udev came out in 2003, and we had the goal of having userspace do all of
-the device naming way back then, so DSA was late to the game :)
+Ideally after this there should be no need to add any new USB Power
+Delivery specific attribute files directly to the USB Type-C devices
+in sysfs. They now have their own directory.
+
+The idea of the series is that any device (so not just USB Type-C
+connectors and the partners attached to them) that supports USB Power
+Delivery can have this separate sub-directory "usb_power_delivery" in
+sysfs, and that sub-directory will have all the USB Power Delivery
+objects and all the other USB Power Delivery details.
+
+There are already ways that allow us to read the USB Power Delivery
+capabilities from potentially any USB PD capable USB device attached
+to the bus - one way is defined in the USB Type-C Bridge
+Specification.
+
+Initially the Capability Messages (i.e. PDOs) are exposed.
+
+This is an example (tree view) of the capabilities that the ports on a
+normal x86 system advertise to the partner. First you have the message
+directory (source_capabilities and sink_capabilities), and that will
+have a sub-directory for each PDO that capability message has. The PDO
+sub-directories are named by their type. The number in front of the
+name is the object position of the PDO:
+
+/sys/class/typec/port0/usb_power_delivery
+|-- revision
+|-- sink_capabilities/
+|   |-- 1:fixed_supply/
+|   |   |-- dual_role_data
+|   |   |-- dual_role_power
+|   |   |-- fast_role_swap_current
+|   |   |-- operational_current
+|   |   |-- unchunked_extended_messages_supported
+|   |   |-- unconstrained_power
+|   |   |-- usb_communication_capable
+|   |   |-- usb_suspend_supported
+|   |   `-- voltage
+|   |-- 2:variable_supply/
+|   |   |-- maximum_voltage
+|   |   |-- minimum_voltage
+|   |   `-- operational_current
+|   `-- 3:battery/
+|       |-- maximum_voltage
+|       |-- minimum_voltage
+|       `-- operational_power
+`-- source_capabilities/
+    `-- 1:fixed_supply/
+        |-- dual_role_data
+        |-- dual_role_power
+        |-- maximum_current
+        |-- unchunked_extended_messages_supported
+        |-- unconstrained_power
+        |-- usb_communication_capable
+        |-- usb_suspend_supported
+        `-- voltage
+
+And these are the capabilities of my Thunderbolt3 dock:
+
+/sys/class/typec/port0-partner/usb_power_delivery
+|-- revision
+|-- sink_capabilities/
+|   `-- 1:fixed_supply/
+|       |-- dual_role_data
+|       |-- dual_role_power
+|       |-- fast_role_swap_current
+|       |-- operational_current
+|       |-- unchunked_extended_messages_supported
+|       |-- unconstrained_power
+|       |-- usb_communication_capable
+|       |-- usb_suspend_supported
+|       `-- voltage
+`-- source_capabilities/
+    |-- 1:fixed_supply/
+    |   |-- dual_role_data
+    |   |-- dual_role_power
+    |   |-- maximum_current
+    |   |-- unchunked_extended_messages_supported
+    |   |-- unconstrained_power
+    |   |-- usb_communication_capable
+    |   |-- usb_suspend_supported
+    |   `-- voltage
+    |-- 2:fixed_supply/
+    |   |-- maximum_current
+    |   `-- voltage
+    |-- 3:fixed_supply/
+    |   |-- maximum_current
+    |   `-- voltage
+    |-- 4:fixed_supply/
+    |   |-- maximum_current
+    |   `-- voltage
+    `-- 5:fixed_supply/
+        |-- maximum_current
+        `-- voltage
 
 thanks,
 
-greg k-h
+Heikki Krogerus (3):
+  usb: typec: Separate USB Power Delivery from USB Type-C
+  usb: typec: Functions for USB PD capabilities registration
+  usb: typec: ucsi: Register USB Power Delivery Capabilities
+
+ Documentation/ABI/testing/sysfs-class-typec   |  22 +
+ .../testing/sysfs-devices-usb_power_delivery  | 273 ++++++++
+ drivers/usb/typec/Makefile                    |   2 +-
+ drivers/usb/typec/class.c                     | 328 +++++++++
+ drivers/usb/typec/class.h                     |   8 +
+ drivers/usb/typec/pd.c                        | 651 ++++++++++++++++++
+ drivers/usb/typec/pd.h                        |  39 ++
+ drivers/usb/typec/ucsi/ucsi.c                 | 128 +++-
+ drivers/usb/typec/ucsi/ucsi.h                 |   8 +
+ include/linux/usb/pd.h                        |  30 +
+ include/linux/usb/typec.h                     |  25 +
+ 11 files changed, 1502 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-usb_power_delivery
+ create mode 100644 drivers/usb/typec/pd.c
+ create mode 100644 drivers/usb/typec/pd.h
+
+-- 
+2.34.1
+
