@@ -2,201 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 267944A9AA9
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Feb 2022 15:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6394A9A99
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Feb 2022 15:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358946AbiBDOGp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Feb 2022 09:06:45 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56468 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358899AbiBDOGn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Feb 2022 09:06:43 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D454EB83738;
-        Fri,  4 Feb 2022 14:06:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1DC1C004E1;
-        Fri,  4 Feb 2022 14:06:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643983600;
-        bh=UgZT237cW6cNc4wyNt2ygtpF0D/EQeuwNmT7ZY2vqeA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kk290TYcfTXyCVPijD3DpfrCGXz3yHWOHSsArAMM2IgGPSUMSD6LPsjeXyUvo6E8A
-         JX5bBQcinGRGV8jf51U504XQ3aizznM9mrKPA1qqq21oUDk8kRklPoTcbd8wqtyIb0
-         fRImWv9Mwa7nEABQzEbOaSMryeS8D1CAS9xcY0Xk=
-Date:   Fri, 4 Feb 2022 14:59:26 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Jameson Thies <jthies@google.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] usb: typec: Separate USB Power Delivery from USB
- Type-C
-Message-ID: <Yf0xPr957MxtaqBn@kroah.com>
-References: <20220203144657.16527-1-heikki.krogerus@linux.intel.com>
- <20220203144657.16527-2-heikki.krogerus@linux.intel.com>
- <Yfvs13vpsWULIVWu@kroah.com>
- <Yfz6OUbDBXVtQzrb@kuha.fi.intel.com>
+        id S230122AbiBDOCV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Feb 2022 09:02:21 -0500
+Received: from relay.hostedemail.com ([64.99.140.27]:36582 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359191AbiBDOCV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Feb 2022 09:02:21 -0500
+Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay02.hostedemail.com (Postfix) with ESMTP id C1E642183A;
+        Fri,  4 Feb 2022 14:02:07 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id A72A11B;
+        Fri,  4 Feb 2022 14:01:08 +0000 (UTC)
+Message-ID: <7cb1ce88cbf977801f2519178c270c1271100ac6.camel@perches.com>
+Subject: Re: [PATCH] HPE BMC GXP SUPPORT
+From:   Joe Perches <joe@perches.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     nick.hawkins@hpe.com, verdun@hpe.com,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Corey Minyard <minyard@acm.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Hao Fang <fanghao11@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Fri, 04 Feb 2022 06:01:44 -0800
+In-Reply-To: <Yf0cihUQ1byjnh3d@shell.armlinux.org.uk>
+References: <nick.hawkins@hpe.com>
+         <20220202165315.18282-1-nick.hawkins@hpe.com>
+         <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
+         <ad56e88206a8d66b715035362abe16ece0bde7d3.camel@perches.com>
+         <Yf0cihUQ1byjnh3d@shell.armlinux.org.uk>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yfz6OUbDBXVtQzrb@kuha.fi.intel.com>
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: A72A11B
+X-Spam-Status: No, score=-2.03
+X-Stat-Signature: c3yzg6zcu4cpdcebaczubogb94ck3gqq
+X-Rspamd-Server: rspamout07
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+KwoOMBfXWPFnO9qh3WITIVuG9hjhnLgA=
+X-HE-Tag: 1643983268-605794
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 12:04:41PM +0200, Heikki Krogerus wrote:
-> Hi Greg,
-> 
-> On Thu, Feb 03, 2022 at 03:55:19PM +0100, Greg Kroah-Hartman wrote:
-> > On Thu, Feb 03, 2022 at 05:46:55PM +0300, Heikki Krogerus wrote:
-> > > +/* These additional details are only available with vSafe5V supplies */
-> > > +static struct kobj_attribute dual_role_power_attr = __ATTR_RO(dual_role_power);
-> > > +static struct kobj_attribute usb_suspend_supported_attr = __ATTR_RO(usb_suspend_supported);
-> > > +static struct kobj_attribute unconstrained_power_attr = __ATTR_RO(unconstrained_power);
-> > > +static struct kobj_attribute usb_communication_capable_attr = __ATTR_RO(usb_communication_capable);
-> > > +static struct kobj_attribute dual_role_data_attr = __ATTR_RO(dual_role_data);
-> > > +static struct kobj_attribute
-> > > +unchunked_extended_messages_supported_attr = __ATTR_RO(unchunked_extended_messages_supported);
+On Fri, 2022-02-04 at 12:31 +0000, Russell King (Oracle) wrote:
+> On Fri, Feb 04, 2022 at 04:18:24AM -0800, Joe Perches wrote:
+> > On Fri, 2022-02-04 at 12:05 +0000, Russell King (Oracle) wrote:
+> > > On Wed, Feb 02, 2022 at 10:52:50AM -0600, nick.hawkins@hpe.com wrote:
+> > > > +	if (readb_relaxed(timer->control) & MASK_TCS_TC) {
+> > > > +		writeb_relaxed(MASK_TCS_TC, timer->control);
+> > > > +
+> > > > +		event_handler = READ_ONCE(timer->evt.event_handler);
+> > > > +		if (event_handler)
+> > > > +			event_handler(&timer->evt);
+> > > > +		return IRQ_HANDLED;
+> > > > +	} else {
+> > > > +		return IRQ_NONE;
+> > > > +	}
+> > > > +}
 > > 
-> > Note, no 'struct device' should ever have a "raw" kobject hanging off of
-> > it.  If so, something went wrong.
+> > It's also less indented code and perhaps clearer to reverse the test
 > > 
-> > If you do this, userspace will never be notified of the attributes and
-> > any userspace representation of the tree will be messed up.
-> > 
-> > Please, use an attribute directory with a name, or if you really need to
-> > go another level deep, use a real 'struct device'.  As-is here, I can't
-> > take it.
+> > 	if (!readb_relaxed(timer->control) & MASK_TCS_TC)
 > 
-> OK, got it. I don't think we can avoid the deeper levels, not without
-> making this really cryptic, and not really usable in all cases. These
-> objects are trying to represent (parts) of the protocol - the
-> messages, the objects in those messages, and later the responses to
-> those messages.
+> This will need to be:
 > 
-> But I'm also trying to avoid having to claim that these objects are
-> "devices", because honestly, claiming that the packages used in
-> communication are devices is confusing, and just wrong. If we take
-> that road, then we really should redefine what struct device is
-> supposed to represent, and rename it also.
+>  	if (!(readb_relaxed(timer->control) & MASK_TCS_TC))
 
-Fair enough, this isn't really a device, it's an "attribute" of your
-device you are wanting to show.  It's just that you are really "deep".
-
-You asked for:
-
-/sys/class/typec/port0/usb_power_delivery
-|-- revision
-|-- sink_capabilities/
-|   |-- 1:fixed_supply/
-|   |   |-- dual_role_data
-|   |   |-- dual_role_power
-|   |   |-- fast_role_swap_current
-|   |   |-- operational_current
-|   |   |-- unchunked_extended_messages_supported
-|   |   |-- unconstrained_power
-|   |   |-- usb_communication_capable
-|   |   |-- usb_suspend_supported
-|   |   `-- voltage
-|   |-- 2:variable_supply/
-|   |   |-- maximum_voltage
-|   |   |-- minimum_voltage
-|   |   `-- operational_current
-|   `-- 3:battery/
-|       |-- maximum_voltage
-|       |-- minimum_voltage
-|       `-- operational_power
-`-- source_capabilities/
-    `-- 1:fixed_supply/
-        |-- dual_role_data
-        |-- dual_role_power
-        |-- maximum_current
-        |-- unchunked_extended_messages_supported
-        |-- unconstrained_power
-        |-- usb_communication_capable
-        |-- usb_suspend_supported
-        `-- voltage
+right, thanks.
 
 
-To start with, your "attribute" is really "usb_power_delivery" here, so
-you can just use an attribute group name to get the "revision" file.
-
-But then the later ones could be flat in that directory as well, using a
-':' to split as you did already, and the above could turn into:
-
-/sys/class/typec/port0/usb_power_delivery
-|-- revision
-|-- sink_capabilites:1:fixed_supply:dual_role_data
-|-- sink_capabilites:1:fixed_supply:dual_role_power
-|-- sink_capabilites:1:fixed_supply:fase_role_swap_current
-....
-|-- sink_capabilites:2:variable_supply:maximum_voltage
-|-- sink_capabilites:2:variable_supply:minimum_voltage
-...
-|-- source_capabilities:1:fixed_supply:dual_role_data
-|-- source_capabilities:1:fixed_supply:dual_role_power
-|-- source_capabilities:1:fixed_supply:maximum_current
-...
-
-But ick, that's also a mess as you are now forced to parse filenames in
-userspace in a different way than "normal".
-
-Is there anything special about the number here?  It's the "position"
-which will be unique.  So make that position a device, as that's kind of
-what it is (like usb endpoints are devices)
-
-Then you could make a bus for the positions and all would be good, and
-you could turn this into:
-
-
-/sys/class/typec/port0/usb_power_delivery
-|-- revision
-|-- sink_capabilities:1/
-|   `-- fixed_supply/
-|       |-- dual_role_data
-|       |-- dual_role_power
-|       |-- fast_role_swap_current
-|       |-- operational_current
-|       |-- unchunked_extended_messages_supported
-|       |-- unconstrained_power
-|       |-- usb_communication_capable
-|       |-- usb_suspend_supported
-|       `-- voltage
-|-- sink_capabilities:2/
-|   `-- variable_supply/
-|       |-- maximum_voltage
-|       |-- minimum_voltage
-|       `-- operational_current
-|-- sink_capabilities:3/
-|   `-- battery/
-|       |-- maximum_voltage
-|       |-- minimum_voltage
-|       `-- operational_power
-`-- source_capabilities:1/
-    `-- fixed_supply/
-        |-- dual_role_data
-        |-- dual_role_power
-        |-- maximum_current
-        |-- unchunked_extended_messages_supported
-        |-- unconstrained_power
-        |-- usb_communication_capable
-        |-- usb_suspend_supported
-        `-- voltage
-
-Would that work?
-
-> So would it be OK that, instead of registering these objects as
-> devices, we just introduce a kset where we can group them
-> (/sys/kernel/usb_power_delivery)?
-
-You want to show this as attched to a specific port somehow, so that
-location is not going to work.
-
-thanks,
-
-greg k-h
