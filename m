@@ -1,74 +1,172 @@
 Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A684AA03B
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Feb 2022 20:39:27 +0100 (CET)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id CD77A4AA17A
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Feb 2022 21:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234384AbiBDTj0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Feb 2022 14:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
+        id S238929AbiBDU5y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Feb 2022 15:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbiBDTjZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Feb 2022 14:39:25 -0500
-Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B68BC061714
-        for <linux-usb@vger.kernel.org>; Fri,  4 Feb 2022 11:39:25 -0800 (PST)
-Received: by mail-qv1-xf42.google.com with SMTP id s7so3518358qvb.0
-        for <linux-usb@vger.kernel.org>; Fri, 04 Feb 2022 11:39:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=L77wWZOzoJ83FWnS0rTBXLliJsYhOTdAIZIl+/oApzA=;
-        b=jmxc1VHkuYNPEqrVmbBBeuTvYodmvUYf6OAafsrCWNLTEpuIDWJJZKuKmZ6o2S6Io7
-         peyVwGXgQl1KfYNT6F3k6O4nYcMwPfTjMgjaBzP+nVBfqrfzPbnFaSJKSDoAYImDl3sp
-         aQnA8B1nLyN7ujWHee3j0E4uXwrI9nn7Hh84g5cp49FN7tGPurMsDECZurGi2jT5l73V
-         zhsWPmBsqPwDyjaPxdWb0/4NeWiOzs6lY/T2Gm9qzsW3YD6XQgacamNRHzr34p+v2dfT
-         +3yBIYZGwjQTdExAx236QGKvD/ftxqJL0aaU3ZJvJ3PisvXoEdh2KFyMt9zvbc3hS4wh
-         VfVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=L77wWZOzoJ83FWnS0rTBXLliJsYhOTdAIZIl+/oApzA=;
-        b=Oj8spffvf6oVmPpl+bCey+D2GjskdbhNzfHNKjR+pZ2Ul9yaYO1czO2JXmisrAECZ0
-         t68TYqEYiRty79nkEfodOkMbAxWeMu6PoVkVNmPiPgGkAJTq8wElzzLW6hGx79OKWOV4
-         Prmc403PNuGy5u1WRhFV62ZvBYUnlqgbCGhM5xFyUpPgWwUn68Jgps2N3qtO2EexX8dA
-         bGFKvRoJSYzQv00HhUkpeRvCITmiMxuRN5pJnauxmZWD5+Zi6zCZJVh4EBngi66yhxW+
-         0QbVUC6k54PhRPrlez4Go4/ZAdObNN4Zn/PpyBPkRpJ5Ah/s/nwZ1gcSzPC1pLM8dp9E
-         1JTw==
-X-Gm-Message-State: AOAM532pcr1S7IOhmwWx7QqbSJ1rDKVAnpxBuWliDvSLTEa51LfGOrDO
-        FzcHg5p4DK0uD1sK4Xg2ccJKmcxwbGENJB0Kowg=
-X-Google-Smtp-Source: ABdhPJxJApCc9l6GFvKcU/Dz87VcEXZ0P4wayjaLhHK0LEpnbUYUiwCPw14aFYD726QIJIJ7rVddzwZ8vLf2+B5E9tk=
-X-Received: by 2002:ad4:5baf:: with SMTP id 15mr3011394qvq.111.1644003564466;
- Fri, 04 Feb 2022 11:39:24 -0800 (PST)
+        with ESMTP id S232318AbiBDU5w (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Feb 2022 15:57:52 -0500
+Received: from mirix.in-vpn.de (mirix.in-vpn.de [IPv6:2001:67c:1407:a0::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE09AC061714;
+        Fri,  4 Feb 2022 12:57:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mirix.org;
+        s=43974b1a7d21b2cf; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=4sEKZN7XRHzrBz/3nmumg6dygxdUwMPL/7KJ35y81FM=; b=hQnSfxwrB1thTrhI2d/95Z5sB+
+        oioa9C+mUNvdq5aOrPkM9DGRTCrYXaW40eg3bEBn4Jz1pQisFukBkr+NHG8kjXYtqcGH62dVJCV8j
+        CVkvi5WpKi3wqaVDDvsufKJEzMMBTJUbCczshxjOIV5gS7TK5k6BgpIveqlUpWs/iIS5gySsSsvEE
+        xaF6JN8vG72+i9zfznlZzAs7VDVfZdPuitFoP+/8R+I+idC2hjq8Z3fEuBHH2sVm44m8xyyngBaqa
+        Y9skUcBiZ6GSOru/AjeGQAmDRM368RJydzQ2HpE3AdeTe2tqW+kOMYXf7XSYbj83MLSld2ua5f/+8
+        smedLBiw==;
+Received: from [::1] (helo=localhost.localdomain)
+        by mirix.in-vpn.de with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+        (Exim)
+        id 1nG5eJ-0007PX-R3; Fri, 04 Feb 2022 20:57:43 +0000
+Message-ID: <be5e9de7-8a71-43a9-5c99-80e318fda42b@mirix.org>
+Date:   Fri, 4 Feb 2022 21:57:41 +0100
 MIME-Version: 1.0
-Received: by 2002:ac8:7d04:0:0:0:0:0 with HTTP; Fri, 4 Feb 2022 11:39:24 -0800 (PST)
-Reply-To: gabrieledgal47@gmail.com
-From:   Gabriel Edgal <kangnigold@gmail.com>
-Date:   Fri, 4 Feb 2022 11:39:24 -0800
-Message-ID: <CABZhTgwCMSODqL8Aectidox+KGB8Q4+rnT6cNhWN73=nCQkciA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] net: usb: pegasus: Request Ethernet FCS from hardware
+Content-Language: en-US
+From:   Matthias-Christian Ott <ott@mirix.org>
+To:     petkan@nucleusys.com
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org
+References: <20211226132502.7056-1-ott@mirix.org>
+ <YciSJYMgyHtvyPc6@karbon.k.g>
+ <6029432c-5f85-b727-ed90-dca1a52b3775@mirix.org>
+ <Ycjov4ulEM3HqV/9@karbon.k.g>
+ <c43f26e6-67bd-f403-2866-ee078632d9c9@mirix.org>
+In-Reply-To: <c43f26e6-67bd-f403-2866-ee078632d9c9@mirix.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-Dear friend.
+On 26/12/2021 23:17, Matthias-Christian Ott wrote:
+> On 26/12/2021 23:12, Petko Manolov wrote:
+>> On 21-12-26 17:12:24, Matthias-Christian Ott wrote:
+>>> On 26/12/2021 17:02, Petko Manolov wrote:
+>>>> On 21-12-26 14:25:02, Matthias-Christian Ott wrote:
+>>>>> Commit 1a8deec09d12 ("pegasus: fixes reported packet length") tried to
+>>>>> configure the hardware to not include the FCS/CRC of Ethernet frames.
+>>>>> Unfortunately, this does not work with the D-Link DSB-650TX (USB IDs
+>>>>> 2001:4002 and 2001:400b): the transferred "packets" (in the terminology
+>>>>> of the hardware) still contain 4 additional octets. For IP packets in
+>>>>> Ethernet this is not a problem as IP packets contain their own lengths
+>>>>> fields but other protocols also see Ethernet frames that include the FCS
+>>>>> in the payload which might be a problem for some protocols.
+>>>>>
+>>>>> I was not able to open the D-Link DSB-650TX as the case is a very tight
+>>>>> press fit and opening it would likely destroy it. However, according to
+>>>>> the source code the earlier revision of the D-Link DSB-650TX (USB ID
+>>>>> 2001:4002) is a Pegasus (possibly AN986) and not Pegasus II (AN8511)
+>>>>> device. I also tried it with the later revision of the D-Link DSB-650TX
+>>>>> (USB ID 2001:400b) which is a Pegasus II device according to the source
+>>>>> code and had the same results. Therefore, I'm not sure whether the RXCS
+>>>>> (rx_crc_sent) field of the EC0 (Ethernet control_0) register has any
+>>>>> effect or in which revision of the hardware it is usable and has an
+>>>>> effect. As a result, it seems best to me to revert commit
+>>>>> 1a8deec09d12 ("pegasus: fixes reported packet length") and to set the
+>>>>> RXCS (rx_crc_sent) field of the EC0 (Ethernet control_0) register so
+>>>>> that the FCS/CRC is always included.
+>>>>>
+>>>>> Fixes: 1a8deec09d12 ("pegasus: fixes reported packet length")
+>>>>> Signed-off-by: Matthias-Christian Ott <ott@mirix.org>
+>>>>> ---
+>>>>>   drivers/net/usb/pegasus.c | 15 ++++++++++++++-
+>>>>>   1 file changed, 14 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
+>>>>> index c4cd40b090fd..140d11ae6688 100644
+>>>>> --- a/drivers/net/usb/pegasus.c
+>>>>> +++ b/drivers/net/usb/pegasus.c
+>>>>> @@ -422,7 +422,13 @@ static int enable_net_traffic(struct net_device *dev, struct usb_device *usb)
+>>>>>   	ret = read_mii_word(pegasus, pegasus->phy, MII_LPA, &linkpart);
+>>>>>   	if (ret < 0)
+>>>>>   		goto fail;
+>>>>> -	data[0] = 0xc8; /* TX & RX enable, append status, no CRC */
+>>>>> +	/* At least two hardware revisions of the D-Link DSB-650TX (USB IDs
+>>>>> +	 * 2001:4002 and 2001:400b) include the Ethernet FCS in the packets,
+>>>>> +	 * even if RXCS is set to 0 in the EC0 register and the hardware is
+>>>>> +	 * instructed to not include the Ethernet FCS in the packet.Therefore,
+>>>>> +	 * it seems best to set RXCS to 1 and later ignore the Ethernet FCS.
+>>>>> +	 */
+>>>>> +	data[0] = 0xc9; /* TX & RX enable, append status, CRC */
+>>>>>   	data[1] = 0;
+>>>>>   	if (linkpart & (ADVERTISE_100FULL | ADVERTISE_10FULL))
+>>>>>   		data[1] |= 0x20;	/* set full duplex */
+>>>>> @@ -513,6 +519,13 @@ static void read_bulk_callback(struct urb *urb)
+>>>>>   		pkt_len = buf[count - 3] << 8;
+>>>>>   		pkt_len += buf[count - 4];
+>>>>>   		pkt_len &= 0xfff;
+>>>>> +		/* The FCS at the end of the packet is ignored. So subtract
+>>>>> +		 * its length to ignore it.
+>>>>> +		 */
+>>>>> +		pkt_len -= ETH_FCS_LEN;
+>>>>> +		/* Subtract the length of the received status at the end of the
+>>>>> +		 * packet as it is not part of the Ethernet frame.
+>>>>> +		 */
+>>>>>   		pkt_len -= 4;
+>>>>>   	}
+>>>>
+>>>> Nice catch.  However, changing these constants for all devices isn't such a
+>>>> good idea.  I'd rather use vendor and device IDs to distinguish these two
+>>>> cases in the above code.
+>>>
+>>> I don't think that it would hurt to include the FCS for all devices. I only
+>>> have the datasheets for the ADM8511/X and the ADM8513 but it seems that all
+>>> devices that are supported by the driver also include the RXCS field in EC0.
+>>> This was also the previous behaviour before commit 1a8deec09d12 and seemed to
+>>> have worked. It also only adds four octet that have to be transferred and it
+>>> seems to avoid exceptions for different devices which seems to be a good idea,
+>>> in particular, because it is not easy to acquire all of the supported devices
+>>> as they are no longer sold or manufactured.
+>>
+>> The fix that commit 1a8deec09d12 introduces is real (the commit message makes
+>> sense) and i don't feel confident to revert it so lightly.  I think i have all
+>> relevant datasheets somewhere, along with a couple of old "pegasus I" devices,
+>> which i could use for testing. Not at home right now, the aforementioned testing
+>> will have to wait a couple of days.
+>>
+>>> That being said, if you are going to veto this change otherwise, I can of
+>>> course just add the FCS back for the two USB IDs, even though it likely
+>>> affects other devices as well.
+>>
+>> Like i said, i don't want to hurry up and revert something that looks like a
+>> valid fix.  Especially after five years worth of kernel releases and no
+>> complaints related to 1a8deec09d12.  This should mean two things: a) the driver
+>> isn't used anymore, or b) this commit fixes a real problem.
+>>
+>> However, if it turn out that your fix is the right one, it goes in without fuss.
+>> So lets see what it is...
+> 
+> I agree. It is not my intention to break something. Take your time to
+> test it when you find the time and let me know of the results. We are
+> not in a hurry. I have my private fork of the driver for the longterm
+> kernel.
 
-I'm Mr. Gabriel Edgal, I'm the chief internal auditor of Btci Bank, I have
-an abandoned fund $ 9.5 million dollars to transfer to you, as we shall
-parts 50:50. You will only stand as a relative of my deceased client as
-bears the same surname as you, the fund was deposited in our bank for
-many years back by my deceased client who died with his whole
-family in a car accident in 2010. I would like to invite you as a foreigner
-partner to stand as the next of kin of the deceased client, so that we
-will place a claim on the deposited fund and divide it between the two
-of
-us 50:50 each. I want you to answer me immediately for more information
+I imported a LinkSys EtherFast 10/100 USB Network Adapter with model 
+number USB100TX, FCC ID MQ4UFF1KA and revision B1 from the USA. 
+According to the FCC photos and the source code of the driver, it is a 
+pegasus I device. It also includes the FCS.
 
+I can provide Ethernet and USB captures in private correspondence if 
+someone is interested.
 
-With best regards,
-Mr. Gabriel Edgal
+Kind regards,
+Matthias-Christian Ott
