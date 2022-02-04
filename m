@@ -2,92 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4B04A9444
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Feb 2022 08:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 213D64A9578
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Feb 2022 09:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348080AbiBDHEO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Feb 2022 02:04:14 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:43954 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347683AbiBDHEN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Feb 2022 02:04:13 -0500
+        id S1355309AbiBDItq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Feb 2022 03:49:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347611AbiBDItp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Feb 2022 03:49:45 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F573C061749
+        for <linux-usb@vger.kernel.org>; Fri,  4 Feb 2022 00:49:44 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id y5-20020a17090aca8500b001b8127e3d3aso5510869pjt.3
+        for <linux-usb@vger.kernel.org>; Fri, 04 Feb 2022 00:49:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643958253; x=1675494253;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=SXVd4S8bE3teYbIWM81qv90z0xH1B1evYSMVHt82/K0=;
-  b=OMGsRCrEUS6b4rzewT/cr4xeZnPV7EXcx1EiKAIcTEomf/6yIoLTroxB
-   uXe5H4tBOQ4+LV5XaVPVWT+9gBLE2JenPyjKHIgnK2mx4p3a4N+guGBt+
-   8TFZFgbOJiCE53NDLzfdecPHkrcdFI/LSS99YljQZcbzpRMMQiDF6tKmX
-   k=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 03 Feb 2022 23:04:13 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 23:04:13 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 3 Feb 2022 23:04:12 -0800
-Received: from [10.50.21.95] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 3 Feb 2022
- 23:04:07 -0800
-Message-ID: <c9c1bcb8-74d6-9049-f4ab-e3fdb8a0ae5e@quicinc.com>
-Date:   Fri, 4 Feb 2022 12:33:30 +0530
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=c5+oKL89+Al8opwNLgJ+ACvlbdVu/5l2SU8tvvvRvuM=;
+        b=CDFSOFN0ES/B21wE3c/wSpquNkr793M5PFrOQdCJsxTevf9i4PDztomaGoFpyfgVno
+         bWMxeKABDqYZHlD1Rb2n/ylkqnXcckhO0jMWmg+nR8AEMovcxRNNZMK/E36Qm213NNhW
+         AzcrLxoc2uFKz4xLEd7UlwJNet939wgy0A8noSqeMah08kcZIViRrwE7OWm9OliMPH+1
+         cHLqFBGCgkfT6tBx4ZtIw30xfapxf++bMutcYO6jZ8GvdXuYdu+tTVlsGw+yiut20gu3
+         6s3l3XxmAORLWaKSTmlxPsCdYrxDWH0jCnbJz7wvXMtMuo4bGmmobtvUnCXmRHy++MJK
+         zaOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=c5+oKL89+Al8opwNLgJ+ACvlbdVu/5l2SU8tvvvRvuM=;
+        b=tT8s0YNtZl2cF9dtPH53z9QNYnJhXMM02M2REA4ToUCDSBsN5ZejfWIJROX/PK8Wmp
+         qh81uAQKO9X1LMx9ezBiVHbDDQ1+uWBvOa/lg3hf4KrmFEUeF4wUmyVdR4lKGDoWTliK
+         3Yl9i8i8YgHu9+webEQ3jPn+eygrvqcMGaqdZucRq2xaHrieNnRYWNTV6FSpiCgODJIu
+         OPgVMeXjD4KURVcMTkcFmwME4hToIIgj80tMGy4L6KtCBjwNozthlKmsf4hGZdYAUwKe
+         32XoVAWCYNWEAxqnrbhM1sExw4j5+SWb7lNNN/cT6pc+7GeaSJjb75y0wZezlPY6HRaq
+         9qOQ==
+X-Gm-Message-State: AOAM530mqFrNlEuomatDskKyXSV/0J5qNVGeAanqnbRDYUNB1k4YHmO+
+        Zz8IFoYMHR5l7r9cI3A2/HIfnZZYzuYnnph7DnzTgAoxCcE=
+X-Google-Smtp-Source: ABdhPJzBgJIWkxUgthIez0XVIVkawXypuSIwGbHqkMZJABOuvTAWPPs+EiyrqGbcJvlvGhCi4Co1YsBkhVs8U601hYQ=
+X-Received: by 2002:a17:902:c206:: with SMTP id 6mr1947976pll.153.1643964573397;
+ Fri, 04 Feb 2022 00:49:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH V5 3/6] usb: common: eud: Add driver support for Embedded
- USB Debugger(EUD)
-Content-Language: en-CA
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
-        <bjorn.andersson@linaro.org>, <robh@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
-        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
-        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
-        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>
-References: <cover.1643880577.git.quic_schowdhu@quicinc.com>
- <8dab5fd0df59e057793ac0f2264be31f561b07c3.1643880577.git.quic_schowdhu@quicinc.com>
- <Yfu5Aq7U6ZT1KzcJ@kroah.com>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <Yfu5Aq7U6ZT1KzcJ@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Sender: bankcoris7@gmail.com
+Received: by 2002:a05:6a10:8ecc:0:0:0:0 with HTTP; Fri, 4 Feb 2022 00:49:32
+ -0800 (PST)
+From:   komi zongo <komizongo2020@gmail.com>
+Date:   Fri, 4 Feb 2022 08:49:32 +0000
+X-Google-Sender-Auth: DJ4IyUdVph8-23fUkF90YeQoGWo
+Message-ID: <CAF8uSvrUQL-7NJvmhBd5s-_YOWh6oBUNPdfHFBiSEKCB_vZFyw@mail.gmail.com>
+Subject: Very Very Urgent.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+I NEED TRUST.
 
-On 2/3/2022 4:44 PM, Greg KH wrote:
-> On Thu, Feb 03, 2022 at 04:04:32PM +0530, Souradeep Chowdhury wrote:
->> Add support for control peripheral of EUD (Embedded USB Debugger) to
->> listen to events such as USB attach/detach, pet EUD to indicate software
->> is functional.Reusing the platform device kobj, sysfs entry 'enable' is
->> created to enable or disable EUD.
->>
->> To enable the eud the following needs to be done
->> echo 1 > /sys/bus/platform/.../enable
->>
->> To disable eud, following is the command
->> echo 0 > /sys/bus/platform/.../enable
->>
->> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->> ---
->>   Documentation/ABI/testing/sysfs-driver-eud |   9 ++
->>   drivers/usb/common/Kconfig                 |  10 ++
->>   drivers/usb/common/Makefile                |   1 +
->>   drivers/usb/common/qcom_eud.c              | 251 +++++++++++++++++++++++++++++
-> This really should be drivers/usb/misc/ right?  No other code uses
-> anything from this driver which is what "common" is for.
-Ack
->
-> thanks,
->
-> greg k-h
+Hope you are in good health with your family.
+
+I am Mr.Komi Zongo.  I work as the Foreign Operations Manager with
+one of the international banks here in Burkina Faso. Although the
+world is a very small place and hard place to meet people because you
+don't know who to trust or believe, as I have developed trust in you
+after my fasting and praying,  I made up my mind to confide this
+confidential business suggestion to you.
+
+There is an overdue unclaimed sum of Ten Million Five Hundred Thousand
+United States Dollars ($10,500,000.00) in my bank, belonging to one of
+our dead foreign customers. There were no beneficiaries stated
+concerning these funds. Therefore, your request as a foreigner is
+necessary to apply for the claim and release of the fund smoothly into
+your reliable bank account  as the Foreign Business Partner to the
+deceased.
+
+On the transfer of this fund in your account, you will take 40% as
+your share from the total fund, 5% will be shared to Charitable
+Organizations while Motherless Babies homes, disabled helpless as the
+balance of 55% will be for me. If you are really sure of your
+integrity, trustworthy, and confidentiality, reply urgently and to
+prove that, include your particulars as follows.
+
+Please get back to me through this Email Address komizongo2020@gmail.com
+
+please fill in your personal information as indicated below and as
+soon as i receive this information below i will forward you a text of an
+application which you will fill and send to the bank for the claim of the
+fund as i will direct you on what to do.
+
+Your name in full.......................... ........
+Your country....................... ..................
+Your age........................... ....................
+Your cell phone......................... ...........
+Your occupation.................... ...............
+Your sex........................... ....................
+Your marital status........................ .......
+Your id card or passport...........................
+
+Best Regards,
+
+Mr.Komi Zongo.
