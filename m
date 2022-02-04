@@ -2,101 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A774A9FFD
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Feb 2022 20:26:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A684AA03B
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Feb 2022 20:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233066AbiBDT0C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Feb 2022 14:26:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
+        id S234384AbiBDTj0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Feb 2022 14:39:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbiBDT0B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Feb 2022 14:26:01 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D31BC061714;
-        Fri,  4 Feb 2022 11:26:01 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id k25so22043171ejp.5;
-        Fri, 04 Feb 2022 11:26:01 -0800 (PST)
+        with ESMTP id S232813AbiBDTjZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Feb 2022 14:39:25 -0500
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B68BC061714
+        for <linux-usb@vger.kernel.org>; Fri,  4 Feb 2022 11:39:25 -0800 (PST)
+Received: by mail-qv1-xf42.google.com with SMTP id s7so3518358qvb.0
+        for <linux-usb@vger.kernel.org>; Fri, 04 Feb 2022 11:39:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JAQgvbZbf+Jfe1NVQF7RjZIKqkwocaNR3cyKrpFomR4=;
-        b=owghA3Xndpxd94nD/h6IzdWdp0xrg1RVr+Zha1xgMLjA9Ph84hd/n2QKTNu1MmaXwY
-         HVkKsCkGp60Fol3RO/0l690OrxtuvszvVxoiVX7DIM+vJAzQlGnGPndZV78Eq7zgNKyw
-         o4tNDdNlIJzb9PJ/+hCSv9XMapRlPiHjO5yx1SKmHNSLVTjQOKP3GnSqkLFjTc3PRzvD
-         QCxzmeMobuUAewI6iNZttTzFcF65BbcpIZ3l50SYInjdTeMXkifcJB0dW3PtlfZ5HC1t
-         bmO1xdWYLbZDd4XE/Cb2qe8RnN8zx6kJNfBEB89fAddWv0/liji2kb2vkc/mGR1OIoXP
-         1hLw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=L77wWZOzoJ83FWnS0rTBXLliJsYhOTdAIZIl+/oApzA=;
+        b=jmxc1VHkuYNPEqrVmbBBeuTvYodmvUYf6OAafsrCWNLTEpuIDWJJZKuKmZ6o2S6Io7
+         peyVwGXgQl1KfYNT6F3k6O4nYcMwPfTjMgjaBzP+nVBfqrfzPbnFaSJKSDoAYImDl3sp
+         aQnA8B1nLyN7ujWHee3j0E4uXwrI9nn7Hh84g5cp49FN7tGPurMsDECZurGi2jT5l73V
+         zhsWPmBsqPwDyjaPxdWb0/4NeWiOzs6lY/T2Gm9qzsW3YD6XQgacamNRHzr34p+v2dfT
+         +3yBIYZGwjQTdExAx236QGKvD/ftxqJL0aaU3ZJvJ3PisvXoEdh2KFyMt9zvbc3hS4wh
+         VfVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JAQgvbZbf+Jfe1NVQF7RjZIKqkwocaNR3cyKrpFomR4=;
-        b=3fV0LD9vKnS0+PGuw+3h3+kqubSxLIovlmMupZD7dIyNc41F38tx/7s69a7uwlaQJ9
-         EbmV6cds98NrIKWLlAEkUilsp+74yb8tzrIBUDIGVZZvVM7TX0pC8COuqYPlB4ebGKGr
-         C9HJA8q0AaBr9gJ9aLL9fGiY+JPLfYz/ugyYy41YRN4OGgMmGONIvD0zOc1ieuBJCFQC
-         D/58p8NY+7yPf36VfPCfWiQcOT/gRZQrCc+72LNb0Km1FoyNWHLhS6H3CbwZGuA/lgD1
-         T4W1YNVwZBrf5vGeDOpbXPO2DZoT0IszwFlUNRBReboAXu4+XNnVf52UsB/Rn4e0uuXP
-         ohdw==
-X-Gm-Message-State: AOAM531UPtWTn9U69bCadFyrYEqq91yH4Ea6zYYHJeamKTUzadgqUfD7
-        npDtENu7ls5QkKSeOgObbCDzN3ZWN7MAejDaazDwoe2z7i0=
-X-Google-Smtp-Source: ABdhPJycWwkrN9pRI1l8a4JkOF7Pd2UBIsMZmMJz06bpanLSRDjpU0LssTFChDe6TekuDdGU1tMD98Brd8Knw+/S0rI=
-X-Received: by 2002:a17:906:c14d:: with SMTP id dp13mr387025ejc.132.1644002759637;
- Fri, 04 Feb 2022 11:25:59 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=L77wWZOzoJ83FWnS0rTBXLliJsYhOTdAIZIl+/oApzA=;
+        b=Oj8spffvf6oVmPpl+bCey+D2GjskdbhNzfHNKjR+pZ2Ul9yaYO1czO2JXmisrAECZ0
+         t68TYqEYiRty79nkEfodOkMbAxWeMu6PoVkVNmPiPgGkAJTq8wElzzLW6hGx79OKWOV4
+         Prmc403PNuGy5u1WRhFV62ZvBYUnlqgbCGhM5xFyUpPgWwUn68Jgps2N3qtO2EexX8dA
+         bGFKvRoJSYzQv00HhUkpeRvCITmiMxuRN5pJnauxmZWD5+Zi6zCZJVh4EBngi66yhxW+
+         0QbVUC6k54PhRPrlez4Go4/ZAdObNN4Zn/PpyBPkRpJ5Ah/s/nwZ1gcSzPC1pLM8dp9E
+         1JTw==
+X-Gm-Message-State: AOAM532pcr1S7IOhmwWx7QqbSJ1rDKVAnpxBuWliDvSLTEa51LfGOrDO
+        FzcHg5p4DK0uD1sK4Xg2ccJKmcxwbGENJB0Kowg=
+X-Google-Smtp-Source: ABdhPJxJApCc9l6GFvKcU/Dz87VcEXZ0P4wayjaLhHK0LEpnbUYUiwCPw14aFYD726QIJIJ7rVddzwZ8vLf2+B5E9tk=
+X-Received: by 2002:ad4:5baf:: with SMTP id 15mr3011394qvq.111.1644003564466;
+ Fri, 04 Feb 2022 11:39:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20220127200636.1456175-1-sean.anderson@seco.com>
- <20220127200636.1456175-6-sean.anderson@seco.com> <CAHp75Vc--RYW7P0wLA8Jcr53xKSkphJV=wTeZiPC-AYu4sGYFA@mail.gmail.com>
- <2c1832a5-1e13-1423-2be8-e31b5ec5195a@seco.com> <CAHp75VfGFNFqOU0BymNwh_FWKVw+rSyJJRDSKOinWY_Z39qaGA@mail.gmail.com>
- <928f7c83-281c-b995-1bf5-be35b7539de6@seco.com>
-In-Reply-To: <928f7c83-281c-b995-1bf5-be35b7539de6@seco.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 4 Feb 2022 21:24:25 +0200
-Message-ID: <CAHp75VeDs6f7euqsZ2fmD42V2M6eWf1_CQPXyr-GfF0HVWA+Vg@mail.gmail.com>
-Subject: Re: [PATCH v3 5/7] usb: dwc3: Add snps,ref-clock-frequency-hz
- property for ACPI
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Balaji Prakash J <bjagadee@codeaurora.org>
+Received: by 2002:ac8:7d04:0:0:0:0:0 with HTTP; Fri, 4 Feb 2022 11:39:24 -0800 (PST)
+Reply-To: gabrieledgal47@gmail.com
+From:   Gabriel Edgal <kangnigold@gmail.com>
+Date:   Fri, 4 Feb 2022 11:39:24 -0800
+Message-ID: <CABZhTgwCMSODqL8Aectidox+KGB8Q4+rnT6cNhWN73=nCQkciA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 8:44 PM Sean Anderson <sean.anderson@seco.com> wrote:
-> On 2/4/22 1:38 PM, Andy Shevchenko wrote:
-> > On Fri, Feb 4, 2022 at 6:00 PM Sean Anderson <sean.anderson@seco.com> wrote:
-> >> On 2/4/22 7:54 AM, Andy Shevchenko wrote:
-> >> > On Thursday, January 27, 2022, Sean Anderson <sean.anderson@seco.com <mailto:sean.anderson@seco.com>> wrote:
-
-...
-
-> > In order to have more or less unified APIs in the future I would
-> > suggest using 'clock-frequency' for the "main" functional clock. For
-> > example, 8250_dw uses it for the baud rate generator, while it also
-> > utilizes auxiliary clock(s) on some platforms.
->
-> OK, I had a look though that driver, and it seems like it uses
-> clock-frequency only for the baudclk, and e.g. apb_pclk has no
-> corresponding frequency property. For this driver, it would mean that
-> the suspend clock would only be configurable through device tree. Is
-> that the approach you recommend?
-
-
-What I meant is to use the "clock-frequency" property as it is kinda
-standard de facto for the "main'' functional clock. The rest is up to
-the individual drivers. From the API perspective I would expect a
-common helper in the future that takes clock name and returns rate
-based on clock (if found) or "clock-frequency" property. We may also
-extend in far future to support any combinations of the [clock name,
-property name] to get a clock rated either via Device Tree or via
-ACPI.
-
 -- 
-With Best Regards,
-Andy Shevchenko
+Dear friend.
+
+I'm Mr. Gabriel Edgal, I'm the chief internal auditor of Btci Bank, I have
+an abandoned fund $ 9.5 million dollars to transfer to you, as we shall
+parts 50:50. You will only stand as a relative of my deceased client as
+bears the same surname as you, the fund was deposited in our bank for
+many years back by my deceased client who died with his whole
+family in a car accident in 2010. I would like to invite you as a foreigner
+partner to stand as the next of kin of the deceased client, so that we
+will place a claim on the deposited fund and divide it between the two
+of
+us 50:50 each. I want you to answer me immediately for more information
+
+
+With best regards,
+Mr. Gabriel Edgal
