@@ -2,178 +2,275 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC4E94A959C
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Feb 2022 09:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E6A4A95BD
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Feb 2022 10:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353461AbiBDIw2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Feb 2022 03:52:28 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:36910
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232586AbiBDIwZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Feb 2022 03:52:25 -0500
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 36F9440327
-        for <linux-usb@vger.kernel.org>; Fri,  4 Feb 2022 08:52:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643964744;
-        bh=iqZrLHxxMKYXcwDk+JH/xBRKoG0uPSeGw2pYz3/v6kY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=qnPp9d4xFaxTg3mjbDdwampcBXqqfo8DgkBf3yT/Edg/I4LN6PG/4BlRLSTKOk+yL
-         iMlPX/FYl0tcjL790Q2ZD8tAn8JF4m4GJo2fMB4GVQg4DDH0dFtu0Le3/tE3FBel/5
-         AKBrh1u8NG9PLNOvZOWPZHfsb8YJtRl7G4w3fDgf+gFCAntwq26Ef43atxjovTutxJ
-         wEc7NH1a5pVVQ59uIG1n7f840Ywhyr6HeOuQ68NyCo+ziLdt8raXl9UVhQmAC+jrSF
-         TXTsfNhWA28SR38YNHj26zj03cekT0C9/iwbiBx4c+qcvQXtWF85t/v+dt5swWFz5G
-         CY8qwSYtILxkw==
-Received: by mail-lf1-f71.google.com with SMTP id i28-20020a056512007c00b00437f0f6da15so2802605lfo.16
-        for <linux-usb@vger.kernel.org>; Fri, 04 Feb 2022 00:52:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iqZrLHxxMKYXcwDk+JH/xBRKoG0uPSeGw2pYz3/v6kY=;
-        b=FwZLoHGfTVXF4GSGFvH86z/r3gAD+t1imtWiJ5e1DvmkANunh8iCoc3bm5BEonNW96
-         Sf171rO9vSwMPHWRFXr9XGSrvOKKgkAi2uxdL8T0X5yC8gSroOAEUNksekkmmEpAIufW
-         7VShL0MfqmND2/aGdDiUtY7T1KdoPq0TAV0c85zcvvFVR9TDUSha3slVAd0IrTsva85G
-         Z1xZ4bzMeDrm/rZbHGgpFt0WnXXPmreWy6tO8kE/cwNYB4xiN+s4g1j/SfuqQrtznp+G
-         nzxXwh30WED589Rb8kccCQUFyNlCsG3LhCuPwsoL73txC78ctbcYpvvb/fm1EtKCUvWt
-         Giig==
-X-Gm-Message-State: AOAM533t9X1sBz+r0hwA/2VhtbuZzlADxqdmByxKLtdLjpf1dBCKHcds
-        CuAJIE+UBcLoF3g+zYBhmwtc8aXBCryo/ymhruNiCdb5/iKDGds4AD4V9MAE9UJpN2IXkvF6CD1
-        w4K+xNO3zBdGoez+wO7u8AbEEnO+GZEKRZ735lg==
-X-Received: by 2002:a05:6402:3492:: with SMTP id v18mr1976640edc.345.1643964732824;
-        Fri, 04 Feb 2022 00:52:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwVcZDvspQCzKUyW5YG8zjDVQmYqY/DEAG3sfjKSfnQIzLHqmc3NlVf9LlkkFskfuUgLPJavA==
-X-Received: by 2002:a05:6402:3492:: with SMTP id v18mr1976597edc.345.1643964732578;
-        Fri, 04 Feb 2022 00:52:12 -0800 (PST)
-Received: from [192.168.0.81] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id z8sm418238ejc.197.2022.02.04.00.52.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 00:52:11 -0800 (PST)
-Message-ID: <ed615fdb-5c30-697e-f197-a3a93c5336b9@canonical.com>
-Date:   Fri, 4 Feb 2022 09:52:10 +0100
+        id S244700AbiBDJJV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Feb 2022 04:09:21 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:26478 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238145AbiBDJJU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Feb 2022 04:09:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643965760; x=1675501760;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IRjzanswBzjAm60aLuF3d9IM+kPu6rXJjhnKLMitYaU=;
+  b=nvlHU4TNFDQiabU4NyIkh5uT25XPrL6XsRGsQfPvLORKKI/fUTl2Gy6e
+   XfsCxTG0HhpZWuEI7hs+O/zlE4MLT3P5WcQKIRqW9Y0hflHqJY01j3Z2k
+   tl+MGoeJHrsP12f3fCoBG0s35oF64J+3olHw/nIr+vCbr7jYQdkb6bx7C
+   8=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 04 Feb 2022 01:09:20 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 01:09:19 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 4 Feb 2022 01:09:18 -0800
+Received: from [10.216.5.78] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Fri, 4 Feb 2022
+ 01:09:12 -0800
+Message-ID: <aa76b548-0fad-90ff-47f2-57257ae959f0@quicinc.com>
+Date:   Fri, 4 Feb 2022 14:39:09 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] HPE BMC GXP SUPPORT
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: usb: qcom,dwc3: Add multi-pd bindings
+ for dwc3 qcom
 Content-Language: en-US
-To:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Viresh Kumar <viresh.kumar@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Corey Minyard <minyard@acm.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        SoC Team <soc@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Hao Fang <fanghao11@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "openipmi-developer@lists.sourceforge.net" 
-        <openipmi-developer@lists.sourceforge.net>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-References: <nick.hawkins@hpe.com>
- <20220202165315.18282-1-nick.hawkins@hpe.com>
- <CAL_Jsq+K2t5WYE056so1iZgZr7CBKvDEjAwnJVTyUFQcK-VFSA@mail.gmail.com>
- <e79133f2-f872-3ed6-4038-526e94e84909@canonical.com>
- <1FEAAC19-1DD7-40D7-98FD-30C2659E7C0F@hpe.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <1FEAAC19-1DD7-40D7-98FD-30C2659E7C0F@hpe.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Felipe Balbi <balbi@kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>
+References: <1635152851-23660-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1635152851-23660-2-git-send-email-quic_c_sanm@quicinc.com>
+ <YXcBK7zqny0s4gd4@ripper>
+ <CAE-0n51k8TycXjEkH7rHYo0j7cYbKJOnOn1keVhx2yyTcBNnvg@mail.gmail.com>
+ <YXck+xCJQBRGqTCw@ripper>
+ <CAE-0n530M3eft-o0qB+yEzGjZgCLMgY==ZgdvwiVCwqqCAVxxA@mail.gmail.com>
+ <YXdsYlLWnjopyMn/@ripper>
+ <CAE-0n51C4dm6bhds=ZZyje-Pcejxjm4MMa3m-VHjFgq7GZGrLw@mail.gmail.com>
+ <YXjbs3Bv6Y3d87EC@yoga>
+ <CAPDyKFrWQdvZX4ukHZoGz73JPfQSgqVrG_4ShMp_GrxL0NKLvg@mail.gmail.com>
+ <da877712-dac9-e9d0-0bfc-25bef450eb65@codeaurora.org>
+ <0153c297-f648-25d1-7f0f-2114f07ef12b@quicinc.com>
+ <7514ff7f-9979-e308-486e-def51ca8e943@quicinc.com>
+ <36dce74e-f2c8-bd5b-f75e-be4d80537535@quicinc.com>
+From:   Rajendra Nayak <quic_rjendra@quicinc.com>
+In-Reply-To: <36dce74e-f2c8-bd5b-f75e-be4d80537535@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 03/02/2022 18:07, Verdun, Jean-Marie wrote:
-> 
->    > Maybe it does not look like, but this is actually a v2. Nick was asked
->    > to change the naming for the nodes already in v1. Unfortunately it did
->    > not happen, so we have vuart, spifi, vic and more.
-> 
->    > It is a waste of reviewers' time to ask them to perform the same review
->    > twice or to ignore their comments.
-> 
->     Hi Krysztof,
-> 
->     Accept our apologies if you think you lose your time, it is clearly not our
->     intent. 
-> 
->     This is the first time that we (I mean the team) introduce a new arch into
->     the linux kernel and I must admit that we had hard time to understand
->     from which angle we needed to start.
-> 
->     I will probably write a Documentation afterward, as it is easy to find doc
->     on how to introduce a patch or a driver, but not when you want to 
->     introduce a new chip. 
-> 
->     We are trying to do our best, and clearly want to follow all of your inputs.
->     Mistakes happen and they are clearly not intentional and not driven in 
->     a way to make you lose your time.
-> 
->     Helping others, and teaching something new is definitely a way to 
->     optimize your time and this is what you are currently doing with us.
-> 
->     We appreciate it and hope you will too.
 
-I understand, I also maybe over-reacted on this. Just please go through
-the comments you got for first submission and either apply them or
-respond why you disagree.
+On 1/31/2022 10:34 AM, Sandeep Maheswaram wrote:
+> 
+> On 1/19/2022 4:31 PM, Rajendra Nayak wrote:
+>>
+>>
+>> On 1/17/2022 11:33 AM, Sandeep Maheswaram wrote:
+>>> Hi Rajendra,
+>>>
+>>> On 10/28/2021 9:26 AM, Rajendra Nayak wrote:
+>>>>
+>>>>
+>>>> On 10/27/2021 7:54 PM, Ulf Hansson wrote:
+>>>>> On Wed, 27 Oct 2021 at 06:55, Bjorn Andersson
+>>>>> <bjorn.andersson@linaro.org> wrote:
+>>>>>>
+>>>>>> On Tue 26 Oct 19:48 CDT 2021, Stephen Boyd wrote:
+>>>>>>
+>>>>>>> +Rajendra
+>>>>>>>
+>>>>>>> Quoting Bjorn Andersson (2021-10-25 19:48:02)
+>>>>>>>> On Mon 25 Oct 15:41 PDT 2021, Stephen Boyd wrote:
+>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> When the binding was introduced I recall we punted on the parent child
+>>>>>>>>> conversion stuff. One problem at a time. There's also the possibility
+>>>>>>>>> for a power domain to be parented by multiple power domains so
+>>>>>>>>> translation tables need to account for that.
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>> But for this case - and below display case - the subdomain (the device's
+>>>>>>>> power-domain) is just a dumb gate. So there is no translation, the given
+>>>>>>>> performance_state applies to the parent. Or perhaps such implicitness
+>>>>>>>> will come back and bite us?
+>>>>>>>
+>>>>>>> In the gate case I don't see how the implicitness will ever be a
+>>>>>>> problem.
+>>>>>>>
+>>>>>>>>
+>>>>>>>> I don't think we allow a power-domain to be a subdomain of two
+>>>>>>>> power-domains - and again it's not applicable to USB or display afaict.
+>>>>>>>
+>>>>>>> Ah maybe. I always confuse power domains and genpd.
+>>>>>>>
+>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>>> Or we may need to make another part of the OPP binding to indicate the
+>>>>>>>>>>> relationship between the power domain and the OPP and the parent of
+>>>>>>>>>>> the power domain.
+>>>>>>>>>>
+>>>>>>>>>> I suspect this would be useful if a power-domain provider needs to
+>>>>>>>>>> translate a performance_state into a different supply-performance_state.
+>>>>>>>>>> Not sure if we have such case currently; these examples are all an
+>>>>>>>>>> adjustable power-domain with "gating" subdomains.
+>>>>>>>>>
+>>>>>>>>> Even for this case, we should be able to have the GDSC map the on state
+>>>>>>>>> to some performance state in the parent domain. Maybe we need to add
+>>>>>>>>> some code to the gdsc.c file to set a performance state on the parent
+>>>>>>>>> domain when it is turned on. I'm not sure where the value for that perf
+>>>>>>>>> state comes from. I guess we can hardcode it in the driver for now and
+>>>>>>>>> if it needs to be multiple values based on the clk frequency we can push
+>>>>>>>>> it out to an OPP table or something like that.
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>> For the GDSC I believe we only have 1:1 mapping, so implementing
+>>>>>>>> set_performance_state to just pass that on to the parent might do the
+>>>>>>>> trick (although I haven't thought this through).
+>>>>>>>>
+>>>>>>>> Conceptually I guess this would be like calling clk_set_rate() on a
+>>>>>>>> clock gate, relying on it being propagated upwards. The problem here is
+>>>>>>>> that the performance_state is just a "random" integer without a well
+>>>>>>>> defined unit.
+>>>>>>>>
+>>>>>>>
+>>>>>>> Right. Ideally it would be in the core code somehow so that if there
+>>>>>>> isn't a set_performance_state function we go to the parent or some
+>>>>>>> special return value from the function says "call it on my parent". The
+>>>>>>> translation scheme could come later so we can translate the "random"
+>>>>>>> integer between parent-child domains.
+>>>>>>
+>>>>>> As a proof of concept it should be sufficient to just add an
+>>>>>> implementation of sc->pd.set_performance_state in gdsc.c. But I agree
+>>>>>> that it would be nice to push this into some framework code, perhaps
+>>>>>> made opt-in by some GENPD_FLAG_xyz.
+>>>>>>
+>>>>>>> At the end of the day the device
+>>>>>>> driver wants to set a frequency or runtime pm get the device and let the
+>>>>>>> OPP table or power domain code figure out what the level is supposed to
+>>>>>>> be.
+>>>>>>>
+>>>>>>
+>>>>>> Yes and this is already working for the non-nested case - where the
+>>>>>> single power-domain jumps between performance states as the opp code
+>>>>>> switches from one opp to another.
+>>>>>>
+>>>>>> So if we can list only the child power-domain (i.e. the GDSC) and have
+>>>>>> the performance_stat requests propagate up to the parent rpmhpd resource
+>>>>>> I think we're good.
+>>>>>>
+>>>>>>
+>>>>>> Let's give this a spin and confirm that this is the case...
+>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> The one case where I believe we talked about having different mapping
+>>>>>>>> between the performance_state levels was in the relationship between CX
+>>>>>>>> and MX. But I don't think we ever did anything about that...
+>>>>>>>
+>>>>>>> Hmm alright. I think there's a constraint but otherwise nobody really
+>>>>>>> wants to change both at the same time.
+>>>>>>>
+>>>>>>>>>
+>>>>>>>>> Yes, a GDSC is really a gate on a parent power domain like CX or MMCX,
+>>>>>>>>> etc. Is the display subsystem an example of different clk frequencies
+>>>>>>>>> wanting to change the perf state of CX? If so it's a good place to work
+>>>>>>>>> out the translation scheme for devices that aren't listing the CX power
+>>>>>>>>> domain in DT.
+>>>>>>>>
+>>>>>>>> Yes, the various display components sits in MDSS_GDSC but the opp-tables
+>>>>>>>> needs to change the performance_state of MDSS_GDSC->parent (i.e. CX or
+>>>>>>>> MMCX, depending on platform).
+>>>>>>>>
+>>>>>>>> As I said, today we hack this by trusting that the base drm/msm driver
+>>>>>>>> will keep MDSS_GDSC on and listing MMCX (or CX) as power-domain for each
+>>>>>>>> of these components.
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> So if we solve this, then that seems to directly map to the static case
+>>>>>>>> for USB as well.
+>>>>>>>>
+>>>>>>>
+>>>>>>> Got it. So in this case we could have the various display components
+>>>>>>> that are in the mdss gdsc domain set their frequency via OPP and then
+>>>>>>> have that translate to a level in CX or MMCX. How do we parent the power
+>>>>>>> domains outside of DT? I'm thinking that we'll need to do that if MMCX
+>>>>>>> is parented by CX or something like that and the drivers for those two
+>>>>>>> power domains are different. Is it basic string matching?
+>>>>>>
+>>>>>> In one way or another we need to invoke pm_genpd_add_subdomain() to link
+>>>>>> the two power-domains (actually genpds) together, like what was done in
+>>>>>> 3652265514f5 ("clk: qcom: gdsc: enable optional power domain support").
+>>>>>>
+>>>>>> In the case of MMCX and CX, my impression of the documentation is that
+>>>>>> they are independent - but if we need to express that CX is parent of
+>>>>>> MMCX, they are both provided by rpmhpd which already supports this by
+>>>>>> just specifying .parent on mmcx to point to cx.
+>>>>>
+>>>>> I was trying to follow the discussion, but it turned out to be a bit
+>>>>> complicated to catch up and answer all things. In any case, let me
+>>>>> just add a few overall comments, perhaps that can help to move things
+>>>>> forward.
+>>>>>
+>>>>> First, one domain can have two parent domains. Both from DT and from
+>>>>> genpd point of view, just to make this clear.
+>>>>>
+>>>>> Although, it certainly looks questionable to me, to hook up the USB
+>>>>> device to two separate power domains, one to control power and one to
+>>>>> control performance. Especially, if it's really the same piece of HW
+>>>>> that is managing both things. 
+>>>> []..
+>>>>> Additionally, if it's correct to model
+>>>>> the USB GDSC power domain as a child to the CX power domain from HW
+>>>>> point of view, we should likely do that.
+>>>>
+>>>> I think this would still require a few things in genpd, since
+>>>> CX and USB GDSC are power domains from different providers.
+>>>> Perhaps a pm_genpd_add_subdomain_by_name()?
+>>>>
+>>> Tried with the changes provided by you  where USB GDSC power domains added as a child to the CX power domain
+>>>
+>>> But cx shutdown is not happening  during sytem suspend as we need to keep USB GDSC active in host mode .
+>>
+>> In the USB driver suspend when you check for this condition, in order to keep the GDSC active, you would
+>> perhaps have to drop the performance state vote and re-vote in resume.
+>> I don;t think the genpd core can handle this in any way.
+>>
+> CX shutdown is not happening even after dropping the performance state in USB driver suspend.
 
-The next submissions (patchset split into several commits) should be a
-v3, preferably with cover letter (git format-patch --cover-letter -v3
-...) where you can document also changes you did to the patchset.
+Thats perhaps because you leave the gdsc enabled, which then means that GCC will not drop the CX vote to RPMh
 
-It looks for example like this:
-https://lore.kernel.org/linux-samsung-soc/31da451b-a36c-74fb-5667-d4193284c6cd@canonical.com/T/#mf98d2ac27a8481dc69dd110f9861c8318cade252
+> Tried even without USB nodes in device tree cx shutdown is not happening
 
-or like this (where changelogs are in each patch, although ordering is
-not correct because dt-bindings should be the first in the series):
-https://lore.kernel.org/all/20220103233948.198119-1-Mr.Bossman075@gmail.com/
+Perhaps some other gdsc is left enabled too other than usb?
 
+> Adding CX as a power-domain for GCC  along with below patch
+> 
+> https://lore.kernel.org/all/20210829154757.784699-6-dmitry.baryshkov@linaro.org/ preventing CX shutdown.
 
-Best regards,
-Krzysztof
+Dmitry/Bjorn, can you confirm this is by design that if a gdsc is left enabled the CX vote would not be dropped?
+What this means is that in usecases where usb leaves its gdsc enabled in system suspend (to make sure its possible
+for it to wakeup the system), we would be burning a lot more power.
