@@ -2,73 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFC14AA453
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Feb 2022 00:25:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9474AA540
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Feb 2022 02:16:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378178AbiBDXZA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Feb 2022 18:25:00 -0500
-Received: from mail-oo1-f49.google.com ([209.85.161.49]:41916 "EHLO
-        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378194AbiBDXYr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Feb 2022 18:24:47 -0500
-Received: by mail-oo1-f49.google.com with SMTP id q145-20020a4a3397000000b002e85c7234b1so6372390ooq.8;
-        Fri, 04 Feb 2022 15:24:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1ZaYRcdSZdo6Oa13Vl/HHQCYryUzGAHNP8vDkNDtJms=;
-        b=trTXqKcxuY7XmJe4LRm5DWksXlIa93P4lL80Us/HjS1rAq0F2OoG5NljRWkyZiJ/dt
-         8IwVoQ2NriMZOC5x3k8yMSFqX15kH0gM3NmqghOCGsraWPgQlUkcRna+mEmewO32PNHH
-         +h5cK9eIdxr4TETr/5sgqhBTtKGNATMUYSCswLXHPaJXXheB1rx9U35cB7/s1ZYjKhiJ
-         TkJ5LWZa3y8M0eiqUDea/9ntFIM44UHBFlzkhRsaKeeyv2uoii/h5FzoCfdieM9dxaVE
-         SlHn1CZ2UluCgfxxZ6xeAgT9GWxdI1eJVZj+yylocEtZ+KqXjLYQkdx/FD6OrmxqI6Qf
-         0vBw==
-X-Gm-Message-State: AOAM533JvovrZKChdRObSK6z0ITEQNvbx50tkB3zMflGM1r+B2srxy2r
-        8TReFYe9xbmjO+oUtFiUCw==
-X-Google-Smtp-Source: ABdhPJxVPj3BlLoqiBjDStnm9FyIHTizRlnQ3Nwgh0J9YHIs/duo4qNr2ZTwmSjfUWji1qE8dUp81A==
-X-Received: by 2002:a05:6870:b7a9:: with SMTP id ed41mr363158oab.222.1644017086516;
-        Fri, 04 Feb 2022 15:24:46 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d22sm1236894otp.79.2022.02.04.15.24.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 15:24:45 -0800 (PST)
-Received: (nullmailer pid 3377981 invoked by uid 1000);
-        Fri, 04 Feb 2022 23:24:44 -0000
-Date:   Fri, 4 Feb 2022 17:24:44 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>, Li Jun <jun.li@nxp.com>
-Subject: Re: [PATCH v4 2/4] dt-bindings: usb: dwc3-imx8mp: Add imx8mp
- specific flags
-Message-ID: <Yf21vFi/gFYyrS3t@robh.at.kernel.org>
-References: <20220126141340.234125-1-alexander.stein@ew.tq-group.com>
- <20220126141340.234125-3-alexander.stein@ew.tq-group.com>
+        id S238206AbiBEBQk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Feb 2022 20:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233537AbiBEBQj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Feb 2022 20:16:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCB9C061345
+        for <linux-usb@vger.kernel.org>; Fri,  4 Feb 2022 17:16:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35DF061D54
+        for <linux-usb@vger.kernel.org>; Sat,  5 Feb 2022 01:16:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 97BA3C340F3
+        for <linux-usb@vger.kernel.org>; Sat,  5 Feb 2022 01:16:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644023794;
+        bh=SzHun6fNa0uhqx9sWEWCm2QvYiyj8bL9v+HqeQhvp1g=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=pasOeSKT+ouEoEcXOZClcjEe2OIRvV8uoQxF0qBZfZbLo3GPgaoJ/Av5WY0mH4jwV
+         qqHh3OgTpEhU5rr+o8EiOdnCBTB9a66wQq+fvy1CEcnj5ABzjQLYjzfEyqBPryUQU1
+         xg/QftBJWv2g3PnxdnBiRlPNrNkl4/ErPvdaaccuDcdTLMme/RTOvzvIgMOa5Hp2ph
+         dIysClToy9W7cUAR/y3MZr/pAXuasHPulrHyydcxJ3HCxubFT1ZesezeBMz8+I5USW
+         ZRYFxqdHcWcPCnAwtAMBvLNUgOLgo24Bpo6kY9FYFUGTNDwUOy2ioQrZNOJmk1ixt2
+         1zo2P6n2Bz9fQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 7B7C4CC13A6; Sat,  5 Feb 2022 01:16:34 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210425] Plugging in or unplugging power cord while system is
+ suspended does not trigger updates
+Date:   Sat, 05 Feb 2022 01:16:34 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: rubin@starset.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-210425-208809-FWavTZcYTI@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
+References: <bug-210425-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126141340.234125-3-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 26 Jan 2022 15:13:38 +0100, Alexander Stein wrote:
-> This adds bindings for features in the USB glue block. They allow
-> setting polarity of PWR and OC as well as disabling port power control.
-> Also permanently attached can be annotated as well.
-> Additional IO address and clock are needed.
-> 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
->  .../bindings/usb/fsl,imx8mp-dwc3.yaml         | 31 ++++++++++++++++---
->  1 file changed, 27 insertions(+), 4 deletions(-)
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Rubin Abdi (rubin@starset.net) changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |rubin@starset.net
+
+--- Comment #8 from Rubin Abdi (rubin@starset.net) ---
+Still an issue with 5.15.0. ThinkPad T480s, Debian Sid.
+
+$ uname -a
+Linux lines 5.15.0-3-amd64 #1 SMP Debian 5.15.15-1 (2022-01-18) x86_64
+GNU/Linux
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
