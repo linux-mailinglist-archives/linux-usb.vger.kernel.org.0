@@ -2,92 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9474AA540
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Feb 2022 02:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0814AA5B8
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Feb 2022 03:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238206AbiBEBQk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Feb 2022 20:16:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233537AbiBEBQj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Feb 2022 20:16:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCB9C061345
-        for <linux-usb@vger.kernel.org>; Fri,  4 Feb 2022 17:16:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35DF061D54
-        for <linux-usb@vger.kernel.org>; Sat,  5 Feb 2022 01:16:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 97BA3C340F3
-        for <linux-usb@vger.kernel.org>; Sat,  5 Feb 2022 01:16:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644023794;
-        bh=SzHun6fNa0uhqx9sWEWCm2QvYiyj8bL9v+HqeQhvp1g=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=pasOeSKT+ouEoEcXOZClcjEe2OIRvV8uoQxF0qBZfZbLo3GPgaoJ/Av5WY0mH4jwV
-         qqHh3OgTpEhU5rr+o8EiOdnCBTB9a66wQq+fvy1CEcnj5ABzjQLYjzfEyqBPryUQU1
-         xg/QftBJWv2g3PnxdnBiRlPNrNkl4/ErPvdaaccuDcdTLMme/RTOvzvIgMOa5Hp2ph
-         dIysClToy9W7cUAR/y3MZr/pAXuasHPulrHyydcxJ3HCxubFT1ZesezeBMz8+I5USW
-         ZRYFxqdHcWcPCnAwtAMBvLNUgOLgo24Bpo6kY9FYFUGTNDwUOy2ioQrZNOJmk1ixt2
-         1zo2P6n2Bz9fQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 7B7C4CC13A6; Sat,  5 Feb 2022 01:16:34 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210425] Plugging in or unplugging power cord while system is
- suspended does not trigger updates
-Date:   Sat, 05 Feb 2022 01:16:34 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: rubin@starset.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-210425-208809-FWavTZcYTI@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
-References: <bug-210425-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S243335AbiBEC1U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Feb 2022 21:27:20 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:38444 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236832AbiBEC1T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Feb 2022 21:27:19 -0500
+Received: by mail-oi1-f176.google.com with SMTP id u13so10669412oie.5;
+        Fri, 04 Feb 2022 18:27:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WNwkkIEk6nRKmulDkMvX+n5bN8drj3YdUVmvLLda57E=;
+        b=wqQ66cCrpHX1+wyzAr4xNwIL4otXiCpinjhNKTTlU46KW6ERDZ9pr8x8rdJSdLTkpC
+         RMATWx/yeVsSk2UA4ciFTiu+EnAjMKiqG24xcQRl3oxOVuvQhj1rdEH2JUU1BX105a9U
+         2TtXPKJugBhi+hSHW1OI6o7V3TnuDodadSPdJ+pN/8LhFoO3vf7gatUTynx/LLoXNYFQ
+         o6mClm591o8XdELmbmq0CPZGx3kwBE3sm1J2H8TWfoUfWg0AiYRPTowCpW/7dVnVIzTb
+         q15MNmSik54Ql8nPOcgYafPiSSI8rpMEUiVJdV+9xplJ8OYlJASuqMmG40Kx0PnY9Q7H
+         XRQw==
+X-Gm-Message-State: AOAM533FvzWn6BwtCPtsI9W+7ey+LnDOYyxLn2BZKl0DUaOXgtK4tHz1
+        ht+4oEtOULByOpkqwJc5jz6EEXK4rQ==
+X-Google-Smtp-Source: ABdhPJy16m5SteHRuJQ3WB7ERG1gtj3NB/98hs8UODPsf0AwmR0N+op2pmHZdgA0H1jo4Ijf6X2org==
+X-Received: by 2002:a05:6808:e87:: with SMTP id k7mr2729190oil.34.1644028038744;
+        Fri, 04 Feb 2022 18:27:18 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id x22sm1377230ooq.27.2022.02.04.18.27.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 18:27:18 -0800 (PST)
+Received: (nullmailer pid 3637443 invoked by uid 1000);
+        Sat, 05 Feb 2022 02:27:17 -0000
+Date:   Fri, 4 Feb 2022 20:27:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Xin Ji <xji@analogixsemi.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        qwen@analogixsemi.com, linux-usb@vger.kernel.org,
+        bliang@analogixsemi.com, jli@analogixsemi.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: Add analogix anx7411 PD binding
+Message-ID: <Yf3ghczy+I2ZMcvt@robh.at.kernel.org>
+References: <20220121061856.2038958-1-xji@analogixsemi.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121061856.2038958-1-xji@analogixsemi.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+On Fri, 21 Jan 2022 14:18:55 +0800, Xin Ji wrote:
+> Add analogix PD chip anx7411 device binding
+> 
+> Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> ---
+>  .../bindings/usb/analogix,anx7411.yaml        | 76 +++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+> 
 
-Rubin Abdi (rubin@starset.net) changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |rubin@starset.net
-
---- Comment #8 from Rubin Abdi (rubin@starset.net) ---
-Still an issue with 5.15.0. ThinkPad T480s, Debian Sid.
-
-$ uname -a
-Linux lines 5.15.0-3-amd64 #1 SMP Debian 5.15.15-1 (2022-01-18) x86_64
-GNU/Linux
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Reviewed-by: Rob Herring <robh@kernel.org>
