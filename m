@@ -2,68 +2,218 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368F44AB0C6
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Feb 2022 17:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2470A4AB0EF
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Feb 2022 18:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245655AbiBFQ6J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Feb 2022 11:58:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51652 "EHLO
+        id S1344095AbiBFRXi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Feb 2022 12:23:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236977AbiBFQ6J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Feb 2022 11:58:09 -0500
-Received: from mail.mathconsult.ch (gate.mathconsult.ch [185.41.77.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDD1C06173B
-        for <linux-usb@vger.kernel.org>; Sun,  6 Feb 2022 08:58:07 -0800 (PST)
-Received: from arcturus.mathconsult.ch (arcturus.mathconsult.ch [192.168.100.12])
-        (authenticated bits=0)
-        by mail.mathconsult.ch (8.14.7/8.14.7) with ESMTP id 216Gw6ID024933
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
-        for <linux-usb@vger.kernel.org>; Sun, 6 Feb 2022 17:58:06 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mathconsult.ch;
-        s=mcag201304m; t=1644166686;
-        bh=iu6dt8mXZuiWkmYluaCi9sneYRQy0+y74mpaJ75cdqI=;
-        h=From:To:Subject:Date;
-        b=b36S/t1p8ShlSfYf78VGEMIgthGhPkdVhTkgz7OTfNW7MDf7O74RIe06lguEBAVlb
-         TTpMPWMuZpcuxZgWSMGaVBGzT8Aec14oKGRfvfOBMZk4Pj50eQbxYhpo6656T4Wbr8
-         1kYhvbdCedRWVh3zRQIDJlsKwf0W1oY29RjKkqjM=
-From:   Roman =?ISO-8859-1?Q?M=E4der?= <maeder@mathconsult.ch>
-To:     linux-usb@vger.kernel.org
-Subject: Re: USB xhci crash under load on 5.14-rc3
-Date:   Sun, 06 Feb 2022 17:58:06 +0100
-Message-ID: <2539255.4GrNK473di@arcturus.mathconsult.ch>
+        with ESMTP id S230187AbiBFRXi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Feb 2022 12:23:38 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3267C06173B;
+        Sun,  6 Feb 2022 09:23:36 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b9so22656376lfq.6;
+        Sun, 06 Feb 2022 09:23:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=DZ5wjKqdD4TOpUJAi2NdV3t9go691za/EKfx/PAIrRE=;
+        b=ke/mkrDrFNo/Hys09oQTVDx/tPAMh8uwUaeWxjMUi9yAqTMBjeqcRSZqI1FLkfjmbq
+         KPQX8oeXfbq5K+Vxi2H5MiZHZSRQI4dCm2z4pLEHh4FkGttMdfrpveAGjeIHDAqGGwDd
+         /5Zxv66RdSa21j9lGSh0es1OYkJpqKiA8a9QDzYKWRT0CH6NuWmRjOgfDwdVwavNdU4z
+         Z4FFleRc3v+wOs1iNmcXKF6Cw0BFh/YBnj0LEq9yQe45zXHRewEqjwH+HiE6JHNKRD+h
+         bM4GWAiMljukALizvHG4DEFNLFAzlO2yOvpHdmvTN2n0f6lI7wBv80oqVh4zmqqq33n0
+         oZOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DZ5wjKqdD4TOpUJAi2NdV3t9go691za/EKfx/PAIrRE=;
+        b=Bgp+SX2tf2sSAKmMJO4/b/TugssM40Uj4UQnQb9ia5MG/1nv+ywL0J21Pbr8IVSvs8
+         kieS5dBLpoo+/lIymITBiiGJWOb+YfiSZEBjv/jtV0CdDMP6mhruUa8lukmZDZmrdUWk
+         5osvnn2KGeSRTkMCYdeaSE3zP3HNKtXc05gvVGoaA5xY9kPpVxOdoBhoGccX+9TzxFFt
+         MvvE/HMhhIDEu2VKFyvNJ9TycLXLpTqOPk0QuET2HYLbU5juoI1Onut0FTKw2TaaNBU7
+         Thi3GZo2ykuRIqnT+aBqPvhjZjeTA/reua9eukKWq+je6gwNyCHpjEI5j7IaRduI4Dfm
+         Sd8Q==
+X-Gm-Message-State: AOAM531CQSrNwpFu/yG7Ur70p/Pt22bu9rnJ5RvOT6jAzI+wl74XHs7v
+        PN9dqAMnkD99poNgiynKbIFKg9ywwFDJ+g==
+X-Google-Smtp-Source: ABdhPJyI2INFDQ9ECmeCNbGeCgArPLiJ4rd3qowK0jikNBNRB1r6KD0EMtuhM06s+RxJ/XYHE3wxeQ==
+X-Received: by 2002:ac2:5e64:: with SMTP id a4mr5874900lfr.674.1644168214696;
+        Sun, 06 Feb 2022 09:23:34 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.224.201])
+        by smtp.gmail.com with ESMTPSA id t12sm1276573ljc.97.2022.02.06.09.23.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Feb 2022 09:23:34 -0800 (PST)
+Message-ID: <7dbe85db-92b8-68bd-d008-33a4be9a55b9@gmail.com>
+Date:   Sun, 6 Feb 2022 20:23:32 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH RFT] net: asix: add proper error handling of usb read
+ errors
+Content-Language: en-US
+To:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
+        andrew@lunn.ch, oneukum@suse.com, robert.foss@collabora.com,
+        freddy@asix.com.tw
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
+References: <20220105131952.15693-1-paskripkin@gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220105131952.15693-1-paskripkin@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-this is a reply to a post on linux-usb of Wed, 4 Aug 2021
-(https://www.spinics.net/lists/linux-usb/msg215253.html)
+On 1/5/22 16:19, Pavel Skripkin wrote:
+> Syzbot once again hit uninit value in asix driver. The problem still the
+> same -- asix_read_cmd() reads less bytes, than was requested by caller.
+> 
+> Since all read requests are performed via asix_read_cmd() let's catch
+> usb related error there and add __must_check notation to be sure all
+> callers actually check return value.
+> 
+> So, this patch adds sanity check inside asix_read_cmd(), that simply
+> checks if bytes read are not less, than was requested and adds missing
+> error handling of asix_read_cmd() all across the driver code.
+> 
+> Fixes: d9fe64e51114 ("net: asix: Add in_pm parameter")
+> Reported-and-tested-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
 
-In case this problem is still relevant:
+gentle ping :)
 
-I ran into a similar issue with kernel 5.10.0 (Debian Bullseye) and a Fantec
-external HDD enclosure connected via USB3.1.
-I set up a raidz2 with 7 disks, and after a few minutes of heavy use always got:
+>   drivers/net/usb/asix.h         |  4 ++--
+>   drivers/net/usb/asix_common.c  | 19 +++++++++++++------
+>   drivers/net/usb/asix_devices.c | 21 ++++++++++++++++++---
+>   3 files changed, 33 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
+> index 2a1e31defe71..4334aafab59a 100644
+> --- a/drivers/net/usb/asix.h
+> +++ b/drivers/net/usb/asix.h
+> @@ -192,8 +192,8 @@ extern const struct driver_info ax88172a_info;
+>   /* ASIX specific flags */
+>   #define FLAG_EEPROM_MAC		(1UL << 0)  /* init device MAC from eeprom */
+>   
+> -int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> -		  u16 size, void *data, int in_pm);
+> +int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> +			       u16 size, void *data, int in_pm);
+>   
+>   int asix_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+>   		   u16 size, void *data, int in_pm);
+> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+> index 71682970be58..524805285019 100644
+> --- a/drivers/net/usb/asix_common.c
+> +++ b/drivers/net/usb/asix_common.c
+> @@ -11,8 +11,8 @@
+>   
+>   #define AX_HOST_EN_RETRIES	30
+>   
+> -int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> -		  u16 size, void *data, int in_pm)
+> +int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> +			       u16 size, void *data, int in_pm)
+>   {
+>   	int ret;
+>   	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
+> @@ -27,9 +27,12 @@ int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+>   	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+>   		 value, index, data, size);
+>   
+> -	if (unlikely(ret < 0))
+> +	if (unlikely(ret < size)) {
+> +		ret = ret < 0 ? ret : -ENODATA;
+> +
+>   		netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
+>   			    index, ret);
+> +	}
+>   
+>   	return ret;
+>   }
+> @@ -79,7 +82,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
+>   				    0, 0, 1, &smsr, in_pm);
+>   		if (ret == -ENODEV)
+>   			break;
+> -		else if (ret < sizeof(smsr))
+> +		else if (ret < 0)
+>   			continue;
+>   		else if (smsr & AX_HOST_EN)
+>   			break;
+> @@ -579,8 +582,12 @@ int asix_mdio_read_nopm(struct net_device *netdev, int phy_id, int loc)
+>   		return ret;
+>   	}
+>   
+> -	asix_read_cmd(dev, AX_CMD_READ_MII_REG, phy_id,
+> -		      (__u16)loc, 2, &res, 1);
+> +	ret = asix_read_cmd(dev, AX_CMD_READ_MII_REG, phy_id,
+> +			    (__u16)loc, 2, &res, 1);
+> +	if (ret < 0) {
+> +		mutex_unlock(&dev->phy_mutex);
+> +		return ret;
+> +	}
+>   	asix_set_hw_mii(dev, 1);
+>   	mutex_unlock(&dev->phy_mutex);
+>   
+> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+> index 4514d35ef4c4..6b2fbdf4e0fd 100644
+> --- a/drivers/net/usb/asix_devices.c
+> +++ b/drivers/net/usb/asix_devices.c
+> @@ -755,7 +755,12 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+>   	priv->phy_addr = ret;
+>   	priv->embd_phy = ((priv->phy_addr & 0x1f) == 0x10);
+>   
+> -	asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
+> +	ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
+> +	if (ret < 0) {
+> +		netdev_dbg(dev->net, "Failed to read STATMNGSTS_REG: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+>   	chipcode &= AX_CHIPCODE_MASK;
+>   
+>   	ret = (chipcode == AX_AX88772_CHIPCODE) ? ax88772_hw_reset(dev, 0) :
+> @@ -920,11 +925,21 @@ static int ax88178_reset(struct usbnet *dev)
+>   	int gpio0 = 0;
+>   	u32 phyid;
+>   
+> -	asix_read_cmd(dev, AX_CMD_READ_GPIOS, 0, 0, 1, &status, 0);
+> +	ret = asix_read_cmd(dev, AX_CMD_READ_GPIOS, 0, 0, 1, &status, 0);
+> +	if (ret < 0) {
+> +		netdev_dbg(dev->net, "Failed to read GPIOS: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+>   	netdev_dbg(dev->net, "GPIO Status: 0x%04x\n", status);
+>   
+>   	asix_write_cmd(dev, AX_CMD_WRITE_ENABLE, 0, 0, 0, NULL, 0);
+> -	asix_read_cmd(dev, AX_CMD_READ_EEPROM, 0x0017, 0, 2, &eeprom, 0);
+> +	ret = asix_read_cmd(dev, AX_CMD_READ_EEPROM, 0x0017, 0, 2, &eeprom, 0);
+> +	if (ret < 0) {
+> +		netdev_dbg(dev->net, "Failed to read EEPROM: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+>   	asix_write_cmd(dev, AX_CMD_WRITE_DISABLE, 0, 0, 0, NULL, 0);
+>   
+>   	netdev_dbg(dev->net, "EEPROM index 0x17 is 0x%04x\n", eeprom);
 
-Feb  6 12:37:29 andromeda kernel: [932663.635942] xhci_hcd 0000:45:00.1: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x002e address=0xffffffe00000 flags=0x0000]
-
-and all connected devices would go away, leaving zfs rather puzzled.
-
-This link, https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1844858
-suggested a conflict with the IOMMU.
-The controller is
-Advanced Micro Devices, Inc. [AMD] Matisse USB 3.0 Host Controller (prog-if 30 [XHCI]) on an ASRock TRX40 Creator
-
-After disabling the IOMMU in the BIOS, the problem went away so far.
-
-Roman
 
 
 
+With regards,
+Pavel Skripkin
