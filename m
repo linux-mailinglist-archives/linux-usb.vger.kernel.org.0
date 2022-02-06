@@ -2,106 +2,213 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E604AB116
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Feb 2022 18:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6724AB126
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Feb 2022 19:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345361AbiBFRyh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Feb 2022 12:54:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
+        id S237802AbiBFSF3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Feb 2022 13:05:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbiBFRyf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Feb 2022 12:54:35 -0500
-X-Greylist: delayed 315 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 09:54:33 PST
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FECC043184;
-        Sun,  6 Feb 2022 09:54:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644170072;
-        bh=yn5JeOkppnD0tGfSCvueihPF+e+1FFRHsDAP44tpu0A=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=DndPjgzVbgVlCdctnu+YOe0OBCZQ5U+9xrRQWL3E7EsIpH+uqMz6vGi15Jt6NVTPs
-         SxDoA6HfPxR6bs0fvXg76U2uMVljQGysoMbC+wry0pnJvgjiCPiFoiFJN06yQtQSq0
-         mKE/0lPjrqPRFxF77UJbNu/RnvcEILriVe1zGNDI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.86.27] ([95.91.192.147]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MAwXr-1nS4Kj3eEz-00BHk2; Sun, 06
- Feb 2022 18:49:01 +0100
-Message-ID: <f676e339-5808-2163-2afd-ea254cfb2684@rempel-privat.de>
-Date:   Sun, 6 Feb 2022 18:48:56 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH RFT] net: asix: add proper error handling of usb read
- errors
-Content-Language: en-US
-To:     Pavel Skripkin <paskripkin@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, andrew@lunn.ch, oneukum@suse.com,
-        robert.foss@collabora.com, freddy@asix.com.tw
+        with ESMTP id S230490AbiBFSF1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Feb 2022 13:05:27 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA5FC06173B;
+        Sun,  6 Feb 2022 10:05:26 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id i34so22874859lfv.2;
+        Sun, 06 Feb 2022 10:05:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=HVLXdAwoia/uG4i6iYCt7vD4rrzfysYRtbhIPKSduwc=;
+        b=MRk04SIii12Xd/32wsZ9l0EXld/OflwnHr3juzzS8W268O/OJuXrMIegCs0ebIHPhZ
+         SEmmAsnXuGBk70nvnTBuUeN5lBBdqwZ5L77lNOzAsZyd6FnDlQ3LyJyYL1hM7EtTUjah
+         jN4eYVyqOnNjdOMFycWNkAGv2HCAA1h5XL00apkEviHrxzBS6o/lSCVy6Uss9KZ+0LVE
+         3qAhVl6zlPsHG9THPwK6X74td9TXHMnJh7FRg5Ov6DyHc2HtBe/e/SdHUCDnmveClzUI
+         g0luzJ5elU5SfViU1bRQ+1rZ3hvTtsrliyj01f8VqaCKvqm80lHH2gRT+nchjzLhT1OV
+         Gg5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HVLXdAwoia/uG4i6iYCt7vD4rrzfysYRtbhIPKSduwc=;
+        b=kaIm+15Gm44Q7Jt1dl0lpVvu7iNWpkzcMnrdt91Jq96w3CsFo7W8tX24YxNqGTrBHP
+         isa1Drw4iBjPuLoPb01N9J01MjhDlHr3ZWfyf/i6LprCLH+O976/8zNL+9MesKDTyt0a
+         nDy+4yFMVSILgqwDG7qO2XYVcKQw9rDQRM5EP7ly7nexhBlS/u7s3ZIZApSM9yZZIn/T
+         LYpbhWrQP3qoa8tUUFWbTeuPpzxi0JCWIPOQrVCJADBednyohRfgFa2ozNvg34IG1kMD
+         D1UGPwUDT32vOZCe1QuMwNoAXXVBxXCPNkVi1yi6dGfG6M16BOD1zTX9ekrbaFg5eM+N
+         Qh4Q==
+X-Gm-Message-State: AOAM530KFJkHU9HzXFsxRYnVp2WqY26+Idi9PCtVOaQlRBuHuNNtTo1j
+        NoqE6ZKc354pss1aZEbQNOw=
+X-Google-Smtp-Source: ABdhPJyi4XUFhtj4XnNn7IucicTXWdV1tScDiza80PA/Ie2czqv5/uRgpbbsFo4/V12A3bhGOuG+Ig==
+X-Received: by 2002:a05:6512:a95:: with SMTP id m21mr5989955lfu.546.1644170724245;
+        Sun, 06 Feb 2022 10:05:24 -0800 (PST)
+Received: from localhost.localdomain ([94.103.224.201])
+        by smtp.gmail.com with ESMTPSA id d13sm1172712lfn.137.2022.02.06.10.05.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Feb 2022 10:05:23 -0800 (PST)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
+        andrew@lunn.ch, oneukum@suse.com, robert.foss@collabora.com
 Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
-References: <20220105131952.15693-1-paskripkin@gmail.com>
- <7dbe85db-92b8-68bd-d008-33a4be9a55b9@gmail.com>
-From:   Oleksij Rempel <linux@rempel-privat.de>
-In-Reply-To: <7dbe85db-92b8-68bd-d008-33a4be9a55b9@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ogiNkPRfVD7er2HY8jDw3fJHT8IWv+jZw7C4hxqJgCNurxo4kxX
- 7P2drfrdw826WnAmJddx9xLl2//DEGJaqCarPLrbmpJsqFHwrSn8YbT8+54WZnz6gbB4rwp
- +/vG9O7weJJEEkm+Wd9LH0D0o73uAV9jGpPgUQ8LiZJ3bT8wgTV6Nf7qEaldbooz+2btQQe
- VuNfi/PIt4wgAKN9Nyk5A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:sDslPLSxVgE=:irwCf0SrJagZK9QOHvtnQL
- LN1VWkoEgE/tYd+SfKWKJIX9WDMKAI/Gy595HT7w953fB8s4/2JGD7TzQSeZBiKpUl1LlYuuM
- Q5RtrI4vZypV9zj/J0fzzLU2cIzumf1NzmKyJQNR4tZzIJHoy6pRdM3JAwu62xvQqJDLYISfE
- ZPRUSE2RwoN2Ripo4lW1ZDJH0zCX4lkqrC7qGfzjHavjDWLDSj8kShaXBWwHPIW+2uVTGdqw3
- vJlrbPeoATjjrXGEtj3n1fLXI/KXcUKu7ELqbIuJp0eMK+6ko0admp7qlXUGUsyASfaOGw8q1
- 8PESRaeNFcS2KYiO1Ddv+LQXO2Xni0TX+unlECS6fsJdX3MzbQaZy2lYepdMvBQnchiKytwTP
- MXkzksuGxTsdHL3/IMkNNr5HxmVCSaDCObRQZ8PvNGnrMAPWgnNutizjRjPgtLWY0OatBp8Y3
- Dnx+rYILWDC/N4RUPKztz+7BeVLaqwDS/mUypBfw7y7aVa59vNvpJ8kwbQpywifOCnoStmEzC
- aGDLcjK4MVk0ANs+Kw2nMM7TFxANrWxGuSK2hBK7FBPRNv+si7J6mLHeSVhUrFxf3BaNR+D7D
- E9Gi/rkeFUOayIkaaehhOpiu4b1eM8LFiCX9p42vBrdpy8fJZsrdC+RAkbM2T7/v+EqMOBnuU
- gsDjnATVcS+nojo2dk+KB1zVYUK6NoVSjsUUWfYspTA9+xA3klyPwYc4g8EOnGuXNpbmVTxTm
- d2VrpNCiJjjelhRF3JqJe5DpboQYHtJ/2RaR3vMwamn0Poq31EdRCQgA5py4O493qxneXqy/4
- hu/f0+aEWGXk4IJAgZ4nPq0aQ9kiM/9ec+Z/uL226yz+2g5Dmm/6rBs0ymJcY7YffPRrB1Iji
- tIWC/5hbB7r25UFZZtRIO5eicgjTtkPMEB+9sB631iUJ2OkAF5nQ3QNm9TdIhBJO9IE2iZW6S
- 9WERGkpdBU9uLQ+lSoKSIE3mD4Cd07lh8qq70s7xv8d5bkbCPxWPcc3gxD914JRyRib3FFLLy
- O2Ayz5xdlqWFr8M4Vkkuet8SsCuK2KxsDz1qE8rpzprjatM8o/23bo7gaWOi6p+HEe7nE3y3c
- gR56gg4X3AhT2g=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH net-next] net: asix: add proper error handling of usb read errors
+Date:   Sun,  6 Feb 2022 21:05:16 +0300
+Message-Id: <20220206180516.28439-1-paskripkin@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <f676e339-5808-2163-2afd-ea254cfb2684@rempel-privat.de>
+References: <f676e339-5808-2163-2afd-ea254cfb2684@rempel-privat.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am 06.02.22 um 18:23 schrieb Pavel Skripkin:
-> On 1/5/22 16:19, Pavel Skripkin wrote:
->> Syzbot once again hit uninit value in asix driver. The problem still th=
-e
->> same -- asix_read_cmd() reads less bytes, than was requested by caller.
->>
->> Since all read requests are performed via asix_read_cmd() let's catch
->> usb related error there and add __must_check notation to be sure all
->> callers actually check return value.
->>
->> So, this patch adds sanity check inside asix_read_cmd(), that simply
->> checks if bytes read are not less, than was requested and adds missing
->> error handling of asix_read_cmd() all across the driver code.
->>
->> Fixes: d9fe64e51114 ("net: asix: Add in_pm parameter")
->> Reported-and-tested-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotma=
-il.com
->> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
->> ---
->
-> gentle ping :)
+Syzbot once again hit uninit value in asix driver. The problem still the
+same -- asix_read_cmd() reads less bytes, than was requested by caller.
 
-Please resend patch against latest net-next with "net-next" tag instead of=
- "RFT".
+Since all read requests are performed via asix_read_cmd() let's catch
+usb related error there and add __must_check notation to be sure all
+callers actually check return value.
 
-=2D-
-Regards,
-Oleksij
+So, this patch adds sanity check inside asix_read_cmd(), that simply
+checks if bytes read are not less, than was requested and adds missing
+error handling of asix_read_cmd() all across the driver code.
+
+Fixes: d9fe64e51114 ("net: asix: Add in_pm parameter")
+Reported-and-tested-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+
+Changes since RFT:
+	- Added Tested-by: tag
+
+---
+ drivers/net/usb/asix.h         |  4 ++--
+ drivers/net/usb/asix_common.c  | 19 +++++++++++++------
+ drivers/net/usb/asix_devices.c | 21 ++++++++++++++++++---
+ 3 files changed, 33 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
+index 2a1e31def..4334aafab 100644
+--- a/drivers/net/usb/asix.h
++++ b/drivers/net/usb/asix.h
+@@ -192,8 +192,8 @@ extern const struct driver_info ax88172a_info;
+ /* ASIX specific flags */
+ #define FLAG_EEPROM_MAC		(1UL << 0)  /* init device MAC from eeprom */
+ 
+-int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+-		  u16 size, void *data, int in_pm);
++int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
++			       u16 size, void *data, int in_pm);
+ 
+ int asix_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+ 		   u16 size, void *data, int in_pm);
+diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+index 71682970b..524805285 100644
+--- a/drivers/net/usb/asix_common.c
++++ b/drivers/net/usb/asix_common.c
+@@ -11,8 +11,8 @@
+ 
+ #define AX_HOST_EN_RETRIES	30
+ 
+-int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+-		  u16 size, void *data, int in_pm)
++int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
++			       u16 size, void *data, int in_pm)
+ {
+ 	int ret;
+ 	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
+@@ -27,9 +27,12 @@ int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+ 	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+ 		 value, index, data, size);
+ 
+-	if (unlikely(ret < 0))
++	if (unlikely(ret < size)) {
++		ret = ret < 0 ? ret : -ENODATA;
++
+ 		netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
+ 			    index, ret);
++	}
+ 
+ 	return ret;
+ }
+@@ -79,7 +82,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
+ 				    0, 0, 1, &smsr, in_pm);
+ 		if (ret == -ENODEV)
+ 			break;
+-		else if (ret < sizeof(smsr))
++		else if (ret < 0)
+ 			continue;
+ 		else if (smsr & AX_HOST_EN)
+ 			break;
+@@ -579,8 +582,12 @@ int asix_mdio_read_nopm(struct net_device *netdev, int phy_id, int loc)
+ 		return ret;
+ 	}
+ 
+-	asix_read_cmd(dev, AX_CMD_READ_MII_REG, phy_id,
+-		      (__u16)loc, 2, &res, 1);
++	ret = asix_read_cmd(dev, AX_CMD_READ_MII_REG, phy_id,
++			    (__u16)loc, 2, &res, 1);
++	if (ret < 0) {
++		mutex_unlock(&dev->phy_mutex);
++		return ret;
++	}
+ 	asix_set_hw_mii(dev, 1);
+ 	mutex_unlock(&dev->phy_mutex);
+ 
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index 9b72334aa..6ea44e537 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -755,7 +755,12 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+ 	priv->phy_addr = ret;
+ 	priv->embd_phy = ((priv->phy_addr & 0x1f) == 0x10);
+ 
+-	asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
++	ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
++	if (ret < 0) {
++		netdev_dbg(dev->net, "Failed to read STATMNGSTS_REG: %d\n", ret);
++		return ret;
++	}
++
+ 	chipcode &= AX_CHIPCODE_MASK;
+ 
+ 	ret = (chipcode == AX_AX88772_CHIPCODE) ? ax88772_hw_reset(dev, 0) :
+@@ -919,11 +924,21 @@ static int ax88178_reset(struct usbnet *dev)
+ 	int gpio0 = 0;
+ 	u32 phyid;
+ 
+-	asix_read_cmd(dev, AX_CMD_READ_GPIOS, 0, 0, 1, &status, 0);
++	ret = asix_read_cmd(dev, AX_CMD_READ_GPIOS, 0, 0, 1, &status, 0);
++	if (ret < 0) {
++		netdev_dbg(dev->net, "Failed to read GPIOS: %d\n", ret);
++		return ret;
++	}
++
+ 	netdev_dbg(dev->net, "GPIO Status: 0x%04x\n", status);
+ 
+ 	asix_write_cmd(dev, AX_CMD_WRITE_ENABLE, 0, 0, 0, NULL, 0);
+-	asix_read_cmd(dev, AX_CMD_READ_EEPROM, 0x0017, 0, 2, &eeprom, 0);
++	ret = asix_read_cmd(dev, AX_CMD_READ_EEPROM, 0x0017, 0, 2, &eeprom, 0);
++	if (ret < 0) {
++		netdev_dbg(dev->net, "Failed to read EEPROM: %d\n", ret);
++		return ret;
++	}
++
+ 	asix_write_cmd(dev, AX_CMD_WRITE_DISABLE, 0, 0, 0, NULL, 0);
+ 
+ 	netdev_dbg(dev->net, "EEPROM index 0x17 is 0x%04x\n", eeprom);
+-- 
+2.34.1
+
