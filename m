@@ -2,91 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB634AC82F
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Feb 2022 19:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FB54ACB45
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Feb 2022 22:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232862AbiBGSDd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Feb 2022 13:03:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
+        id S239169AbiBGV2D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Feb 2022 16:28:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241525AbiBGR5H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Feb 2022 12:57:07 -0500
-X-Greylist: delayed 597 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 09:57:04 PST
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2903C0401EC;
-        Mon,  7 Feb 2022 09:57:04 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id D94412800985A;
-        Mon,  7 Feb 2022 18:47:03 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id BA79D28774D; Mon,  7 Feb 2022 18:47:03 +0100 (CET)
-Date:   Mon, 7 Feb 2022 18:47:03 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: Re: [PATCH 0/2] Mark USB4 controllers as is_thunderbolt
-Message-ID: <20220207174703.GA25761@wunner.de>
-References: <20220204182820.130339-1-mario.limonciello@amd.com>
- <YgC/NQFN7yOffKv3@lahna>
- <BL1PR12MB5144B3A3F70AE921721E1397F72C9@BL1PR12MB5144.namprd12.prod.outlook.com>
- <YgE+g9JOJE6foThi@lahna>
- <BL1PR12MB51442184B407A747E4C487F1F72C9@BL1PR12MB5144.namprd12.prod.outlook.com>
+        with ESMTP id S232695AbiBGV2C (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Feb 2022 16:28:02 -0500
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19930C06173B;
+        Mon,  7 Feb 2022 13:28:02 -0800 (PST)
+Received: by mail-oi1-f179.google.com with SMTP id u3so2611695oiv.12;
+        Mon, 07 Feb 2022 13:28:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=n9pAeqwk/+hM83DMbi7HFjbGQbsE/DtiBYjgwQKfGtg=;
+        b=JYWycLwV/li88/WY+jQoa2wWevfuXcNJPZn5TDs6ln0IbXMV/h5nz36llCzRhRForr
+         1nJGJuSNnlHAIIA54/LxRC9/1bjEWTs7uzMUtNGAY13qKk0njUzro+7MX8hjocHrYKoQ
+         PsvkZ+Z81WotpajudZOLRlWpMCFulLLpkrhCvGuqgFY1bzVvNJAumufWrqyoEYjuE+R6
+         RfkxfdFFc0nO48P4CNOFHtQOE/c3d7rAuFpkoDo6rfT4WJk6aL0lsiuILUcWNS6oTmVq
+         kITlkwsNfYwSg/J/cBqefkiPEAHHKk7DdcISsJ8WdqCjF0W42l5ptYh5fLHHwWpvtwiR
+         8Ywg==
+X-Gm-Message-State: AOAM531Z78lBARqvl3KwaTet/ssCFg0kEBWD+U0wI//n2GmMZYsySmo5
+        Z+7vr3GNGbLBTNIwqEhJdg==
+X-Google-Smtp-Source: ABdhPJxXLUuMcr12LFMDdmrB3gIOlRDQH/trqcAdajudte+rbKkJCKUyVVrNilUiqqIvgor/GUiohw==
+X-Received: by 2002:a05:6808:1154:: with SMTP id u20mr418567oiu.169.1644269281308;
+        Mon, 07 Feb 2022 13:28:01 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bg10sm248465oib.33.2022.02.07.13.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 13:28:00 -0800 (PST)
+Received: (nullmailer pid 953189 invoked by uid 1000);
+        Mon, 07 Feb 2022 21:27:59 -0000
+Date:   Mon, 7 Feb 2022 15:27:59 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     linux-usb@vger.kernel.org,
+        Balaji Prakash J <bjagadee@codeaurora.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH v3 1/7] dt-bindings: usb: dwc3: Deprecate
+ snps,ref-clock-period-ns
+Message-ID: <YgGO3zsusqNv2RGD@robh.at.kernel.org>
+References: <20220127200636.1456175-1-sean.anderson@seco.com>
+ <20220127200636.1456175-2-sean.anderson@seco.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BL1PR12MB51442184B407A747E4C487F1F72C9@BL1PR12MB5144.namprd12.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220127200636.1456175-2-sean.anderson@seco.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 03:52:13PM +0000, Deucher, Alexander wrote:
-> > From: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > The other option is to look for ACPI companion (ACPI_COMPANION()) of the
-> > device. AFAICT dGPUs don't have one (as the BIOS does not know in advance
-> > what will be connected to the hotplug ports) whereas internal does typically
-> > have one.
+On Thu, 27 Jan 2022 15:06:30 -0500, Sean Anderson wrote:
+> This property is redundant because we can determine the correct value for
+> REFCLKPER based on the "ref" clock. Deprecate it, and encourage users to
+> provide a clock instead. This also restricts the minimum and maximum to the
+> values documented in the register reference [1].
 > 
-> Yeah, this is probably the right way to do this.
+> [1] https://www.xilinx.com/html_docs/registers/ug1087/usb3_xhci___guctl.html
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> ---
+> 
+> (no changes since v1)
+> 
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
 
-No, that doesn't work.  At least Apple represents the first few devices
-in the Thunderbolt daisy-chain in the ACPI namespace, so IIUC you'd find
-an ACPI companion for those but not for the remainder of the daisy-chain.
-This is from a 2019/2020 MacBookPro16,1:
-
-$ grep 'Device ' acpidump/mbp161/ssdt6.dsl
-            Device (UPSB)
-                Device (DSB0)
-                    Device (NHI0)
-                Device (DSB1)
-                    Device (UPS0)
-                        Device (DSB0)
-                            Device (DEV0)
-                        Device (DSB3)
-                            Device (UPS0)
-                                Device (DSB0)
-                                    Device (DEV0)
-                                Device (DSB3)
-                                    Device (DEV0)
-            ...
-
-There's a *reason* why I introduced the is_thunderbolt flag,
-there is no other reliable way to detect externally attached devices.
-
-Thanks,
-
-Lukas
+Reviewed-by: Rob Herring <robh@kernel.org>
