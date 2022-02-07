@@ -2,341 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517054ACC19
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Feb 2022 23:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 320524ACD5F
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 02:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244073AbiBGWiu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Feb 2022 17:38:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
+        id S234066AbiBHBGN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Feb 2022 20:06:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241970AbiBGWit (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Feb 2022 17:38:49 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598E4C0612A4
-        for <linux-usb@vger.kernel.org>; Mon,  7 Feb 2022 14:38:48 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id bx2so17065528edb.11
-        for <linux-usb@vger.kernel.org>; Mon, 07 Feb 2022 14:38:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gQTLwdFqZWSPqjLuZ8bkwP4E9IYeu/IAczrgRf3hPDw=;
-        b=tYGYk22m9UeQuMH+SOtxtZdnWjU50/aae2zy5xxBcRoknaz7Xzfkkuj2OL1fmyyOXn
-         0zeeGZgqnuVZVSmz4D/MoUlBCefNnle65bOBen4zy+RdU9FCwdGjGmqQ28CxgX2CFM1l
-         6J8425xrAchHuiKWY2GLaqwBNI1Sd7ZNBiwYGUDPKVEmMBFu2u+tpomcgKUEgrzQ13Yn
-         Jp/nnbwfByo981IT0pP98vo3ezYyXcOnVTMTw9xOtzRu+cKfr7+qdR5BwEhIe4OLi0tO
-         DmHxzP1WDutEdChT4QLCopeRGOwHI2H2LQK9hIgrFTr3v0EOxTydDsiqY3EOcDOduaWo
-         GNJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gQTLwdFqZWSPqjLuZ8bkwP4E9IYeu/IAczrgRf3hPDw=;
-        b=Xyb0GtGrYNsUePWzDszdzQKDYjkO9jwjkPaZNYzpgMnkk8xAuEKWGseBJwn5LCoRpB
-         97bl/df+X7NEK3jHaD6OXSEAP4Xyr8RYy2qiJ6lQYRqCR5adamD3xJtIFX4KAkKsCNwQ
-         prSMUdosQj7rFZKZE1QRbp8+HIp7OcBB78wTCwCi4kxvxDp9WX53RCYxVdEdZcAKe0VQ
-         OKZxF6kiDbED+vPhEgZiO+msgCoMRxCCktPVsgs62xIb4JwkTaWGuyCzMrR+MxU1I+NL
-         oEceCRulv6TDpM/+gz7xcefRnVXNDLRFI57Kc3bb4cFojx9cJlKo7hwljb/68PV+RmUO
-         XkVQ==
-X-Gm-Message-State: AOAM532Iwq/XBes4MQSYspYnPU3HsdREHY6A76NusO7A18MXoAlYYSM8
-        e601c6k2VE1fB04bacJHCU/NUZfvqQjUh8pROD/Ryg==
-X-Google-Smtp-Source: ABdhPJzkb/peMR69wwqjZgqUcG4uDjwOmmVlLy04NjOMGG3AyXhtxXbm50gQme61S6vzMEmIiXNJ0Lny66ufWYhgmZg=
-X-Received: by 2002:a50:ee16:: with SMTP id g22mr1629536eds.434.1644273526659;
- Mon, 07 Feb 2022 14:38:46 -0800 (PST)
+        with ESMTP id S239465AbiBGXnR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Feb 2022 18:43:17 -0500
+X-Greylist: delayed 512 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 15:43:15 PST
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E4BC061355;
+        Mon,  7 Feb 2022 15:43:14 -0800 (PST)
+Received: from relay12.mail.gandi.net (unknown [217.70.178.232])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 12681C6E58;
+        Mon,  7 Feb 2022 23:34:44 +0000 (UTC)
+Received: (Authenticated sender: ash@heyquark.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 02369200002;
+        Mon,  7 Feb 2022 23:34:32 +0000 (UTC)
+Message-ID: <0020d47c-0e23-822c-33f5-ccb7ea4c1072@heyquark.com>
+Date:   Tue, 8 Feb 2022 10:34:29 +1100
 MIME-Version: 1.0
-References: <20220207043907.2758424-1-badhri@google.com> <YgDk8M3N8VEZK5Sk@kuha.fi.intel.com>
-In-Reply-To: <YgDk8M3N8VEZK5Sk@kuha.fi.intel.com>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Mon, 7 Feb 2022 14:38:09 -0800
-Message-ID: <CAPTae5KG5iJSkB352KnUwtp741kFocnugfqHGKvtGzRTCPeP2w@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] usb: typec: Introduce typec attributes for
- limiting source current
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kyle Tso <kyletso@google.com>, Benson Leung <bleung@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-US
+To:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        j.ne@posteo.net, linkmauve@linkmauve.fr
+From:   Ash Logan <ash@heyquark.com>
+Subject: [RFC] Upstreaming Linux for Nintendo Wii U
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 1:23 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> +Benson
->
-> On Sun, Feb 06, 2022 at 08:39:06PM -0800, Badhri Jagan Sridharan wrote:
-> > This change introduces the following two attributes to the
-> > typec sysfs class which allows userspace to limit the power
-> > advertised while acting as source. This is useful to mitigate
-> > battery drain in portable devices when the battery SOC is low.
-> >
-> > New attibutes introduced:
-> > 1. limit_src_current_active
-> > 2. limit_src_current_ma
-> >
-> > The port while in PD contract and acting as source would
-> > only advertise vSafe5V fixed PDO with current set through
-> > limit_src_current_ma when limit_src_current_active is set
-> > to 1. When limit_src_current_active is set to 0, the port
-> > would publish the default source capabilities.
-> > limit_src_current_ma would limit the current to the
-> > Maximum current published by vSafe5V fixed pdo of the default
-> > source capabilities of the port.
->
-> This competes with Benson's idea of having "sets" of capabilites from
-> which to choose the ones that we advertise to the partner. You could
-> also use that idea to cover this case as well. You just have two
-> source capabilities sets defined - one where you only have the vSafe5V
-> and another for everything.
+Hello,
 
-Agree. I was actually wondering whether there were any follow-ups for
-the proposal.
-Happy to make use of the interface additions that you are exposing through your
-patchset.  Thanks for sending them out !
+I'm the lead dev on a downstream kernel with support for the Wii U[1],
+Nintendo's previous-gen game console. You might have seen Emmanuel
+<linkmauve@linkmauve.fr> submitting some of the more self-contained
+drivers recently[2][3]. I've gotten to the point where I'd like to look
+at upstreaming the platform. Since we need to refactor all the patches
+for upstreaming anyway, I thought it would be good to talk to the
+experts ahead of time ;)
 
->
-> Benson's idea also seems to be something what we can support with UCSI
-> and some native USB PD controller host interfaces, but limiting the
-> source capabitites to only vSafe5V is something that we can't do. I
-> means, on some platforms we may have a source capabilities "set" that
-> we can choose that only exposes the vSafe5V, but there is no guarantee
-> that we always have it (and it's unlikely that we ever have it). It's
-> up to some firmware that we have no control over.
+Some quick details about the platform:
+- Tri-core PowerPC "Espresso" (750CL) @ 1.24GHz
+- 2GiB DDR3-1600 (and a little over 32MiB of SRAM)
+- "Latte" proprietary SoC with USB, SDIO, SATA, crypto, ARM9
+coprocessor, Radeon R7xx GPU
+- Curiously, the entire graphics pipeline from the original Wii, usually
+powered off
 
-Given that all pd sources should
-mandatorily support vSafe5V and the patch only "reduces" the maximum
-current exposed by default, there are no new additional capabilities
-that the source
-should support. So not sure why this would be not supportable though.
+The bulk of the interesting work for Linux is in the SoC, which is
+pretty similar to the original Wii's in layout (we expect to share a lot
+of drivers), with the addition of some more modern blocks.
 
->
-> So this is the wrong way and Benson's idea is the right way IMO.
->
-> I already prepared a proposal for adding support for Benson's idea:
-> https://lore.kernel.org/linux-usb/20220203144657.16527-1-heikki.krogerus@linux.intel.com/
->
-> This patch adds the attributes that you can use to choose the
-> capabilities that are advertised to the partner:
-> https://lore.kernel.org/linux-usb/20220203144657.16527-3-heikki.krogerus@linux.intel.com/
->
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > ---
-> >  Documentation/ABI/testing/sysfs-class-typec | 25 ++++++
-> >  drivers/usb/typec/class.c                   | 99 +++++++++++++++++++++
-> >  drivers/usb/typec/class.h                   |  5 ++
-> >  include/linux/usb/typec.h                   |  4 +
-> >  4 files changed, 133 insertions(+)
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> > index 75088ecad202..dd2240632172 100644
-> > --- a/Documentation/ABI/testing/sysfs-class-typec
-> > +++ b/Documentation/ABI/testing/sysfs-class-typec
-> > @@ -141,6 +141,31 @@ Description:
-> >               - "reverse": CC2 orientation
-> >               - "unknown": Orientation cannot be determined.
-> >
-> > +What:                /sys/class/typec/<port>/limit_src_current_active
-> > +Date:                February 2022
-> > +Contact:     Badhri Jagan Sridharan <badhri@google.com>
-> > +Description:
-> > +             This attribute can be used to make the port only publish
-> > +             vSafe5V fixed pdo with Maximum current limited to the
-> > +             current limit set by limit_src_current_ma when the port
-> > +             is acting as source.
-> > +             Valid values:
-> > +             - write(2) "1" limits source capabilities to vSafe5V
-> > +               with max current specified by limit_src_current_ma
-> > +             - write(2) "0" publishes the default source capabilities
-> > +               of the port.
-> > +
-> > +What:                /sys/class/typec/<port>/limit_src_current_ma
-> > +Date:                February 2022
-> > +Contact:     Badhri Jagan Sridharan <badhri@google.com>
-> > +Description:
-> > +             This attribute allows write(2) to set the Maximum
-> > +             current published when limit_src_current_active is set
-> > +             to 1. When limit_src_current_active is already set
-> > +             to 1, if the port is already acting as source with
-> > +             explicit contract in place, write(2) will make the port
-> > +             renegotiate the pd contract.
-> > +
-> >  USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
-> >
-> >  What:                /sys/class/typec/<port>-partner/accessory_mode
-> > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> > index 45a6f0c807cb..3b3c7b080ad1 100644
-> > --- a/drivers/usb/typec/class.c
-> > +++ b/drivers/usb/typec/class.c
-> > @@ -1403,6 +1403,102 @@ port_type_show(struct device *dev, struct device_attribute *attr,
-> >  }
-> >  static DEVICE_ATTR_RW(port_type);
-> >
-> > +static ssize_t
-> > +limit_src_current_active_store(struct device *dev, struct device_attribute *attr, const char *buf,
-> > +                            size_t size)
-> > +{
-> > +     struct typec_port *port = to_typec_port(dev);
-> > +     int ret;
-> > +     u8 active;
-> > +
-> > +     if (port->cap->type == TYPEC_PORT_SNK || !port->ops || !port->ops->limit_src_current_set ||
-> > +         !port->cap->pd_revision) {
-> > +             dev_dbg(dev, "Limiting source current not supported\n");
-> > +             return -EOPNOTSUPP;
-> > +     }
-> > +
-> > +     if (kstrtou8(buf, 0, &active))
-> > +             return -EINVAL;
-> > +
-> > +     if (active != 1 && active != 0)
-> > +             return -EINVAL;
-> > +
-> > +     mutex_lock(&port->limit_src_current_lock);
-> > +
-> > +     if (port->limit_src_current_active == (bool)active) {
-> > +             ret = size;
-> > +             goto unlock_and_ret;
-> > +     }
-> > +
-> > +     ret = port->ops->limit_src_current_set(port, port->limit_src_current_ma, active);
-> > +     if (ret)
-> > +             goto unlock_and_ret;
-> > +
-> > +     port->limit_src_current_active = active;
-> > +     ret = size;
-> > +
-> > +unlock_and_ret:
-> > +     mutex_unlock(&port->limit_src_current_lock);
-> > +     return ret;
-> > +}
-> > +
-> > +static ssize_t
-> > +limit_src_current_active_show(struct device *dev, struct device_attribute *attr, char *buf)
-> > +{
-> > +     struct typec_port *port = to_typec_port(dev);
-> > +
-> > +     return sysfs_emit(buf, "%d\n", port->limit_src_current_active ? 1 : 0);
-> > +}
-> > +static DEVICE_ATTR_RW(limit_src_current_active);
-> > +
-> > +static ssize_t
-> > +limit_src_current_ma_store(struct device *dev, struct device_attribute *attr, const char *buf,
-> > +                        size_t size)
-> > +{
-> > +     struct typec_port *port = to_typec_port(dev);
-> > +     int ret;
-> > +     u32 src_current_ma;
-> > +
-> > +     if (port->cap->type == TYPEC_PORT_SNK || !port->ops || !port->ops->limit_src_current_set ||
-> > +         !port->cap->pd_revision) {
-> > +             dev_dbg(dev, "Limiting source current not supported\n");
-> > +             return -EOPNOTSUPP;
-> > +     }
-> > +
-> > +     if (kstrtou32(buf, 0, &src_current_ma))
-> > +             return -EINVAL;
-> > +
-> > +     mutex_lock(&port->limit_src_current_lock);
-> > +
-> > +     if (port->limit_src_current_ma == src_current_ma) {
-> > +             ret = size;
-> > +             goto unlock_and_ret;
-> > +     }
-> > +
-> > +     if (port->limit_src_current_active) {
-> > +             ret = port->ops->limit_src_current_set(port, src_current_ma,
-> > +                                                    port->limit_src_current_active);
-> > +             if (ret)
-> > +                     goto unlock_and_ret;
-> > +     }
-> > +
-> > +     port->limit_src_current_ma = src_current_ma;
-> > +     ret = size;
-> > +
-> > +unlock_and_ret:
-> > +     mutex_unlock(&port->limit_src_current_lock);
-> > +     return ret;
-> > +}
-> > +
-> > +static ssize_t
-> > +limit_src_current_ma_show(struct device *dev, struct device_attribute *attr, char *buf)
-> > +{
-> > +     struct typec_port *port = to_typec_port(dev);
-> > +
-> > +     return sysfs_emit(buf, "%u\n", port->limit_src_current_ma);
-> > +}
-> > +static DEVICE_ATTR_RW(limit_src_current_ma);
-> > +
-> >  static const char * const typec_pwr_opmodes[] = {
-> >       [TYPEC_PWR_MODE_USB]    = "default",
-> >       [TYPEC_PWR_MODE_1_5A]   = "1.5A",
-> > @@ -1536,6 +1632,8 @@ static struct attribute *typec_attrs[] = {
-> >       &dev_attr_vconn_source.attr,
-> >       &dev_attr_port_type.attr,
-> >       &dev_attr_orientation.attr,
-> > +     &dev_attr_limit_src_current_active.attr,
-> > +     &dev_attr_limit_src_current_ma.attr,
-> >       NULL,
-> >  };
-> >
-> > @@ -2039,6 +2137,7 @@ struct typec_port *typec_register_port(struct device *parent,
-> >
-> >       ida_init(&port->mode_ids);
-> >       mutex_init(&port->port_type_lock);
-> > +     mutex_init(&port->limit_src_current_lock);
-> >
-> >       port->id = id;
-> >       port->ops = cap->ops;
-> > diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
-> > index 0f1bd6d19d67..3856bc058444 100644
-> > --- a/drivers/usb/typec/class.h
-> > +++ b/drivers/usb/typec/class.h
-> > @@ -54,6 +54,11 @@ struct typec_port {
-> >
-> >       const struct typec_capability   *cap;
-> >       const struct typec_operations   *ops;
-> > +
-> > +     /* lock to protect limit_src_current_*_store operation */
-> > +     struct mutex                    limit_src_current_lock;
-> > +     u32                             limit_src_current_ma;
-> > +     bool                            limit_src_current_active;
-> >  };
-> >
-> >  #define to_typec_port(_dev_) container_of(_dev_, struct typec_port, dev)
-> > diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> > index 7ba45a97eeae..1b1958ae4c16 100644
-> > --- a/include/linux/usb/typec.h
-> > +++ b/include/linux/usb/typec.h
-> > @@ -213,6 +213,8 @@ struct typec_partner_desc {
-> >   * @pr_set: Set Power Role
-> >   * @vconn_set: Source VCONN
-> >   * @port_type_set: Set port type
-> > + * @limit_src_current_set: Used to limit source current advertisement while
-> > + *                         acting as source
-> >   */
-> >  struct typec_operations {
-> >       int (*try_role)(struct typec_port *port, int role);
-> > @@ -221,6 +223,8 @@ struct typec_operations {
-> >       int (*vconn_set)(struct typec_port *port, enum typec_role role);
-> >       int (*port_type_set)(struct typec_port *port,
-> >                            enum typec_port_type type);
-> > +     int (*limit_src_current_set)(struct typec_port *port, u32 limit_src_current_ma,
-> > +                                  bool enable);
-> >  };
-> >
-> >  enum usb_pd_svdm_ver {
-> > --
-> > 2.35.0.263.gb82422642f-goog
->
-> --
-> heikki
+The state of the downstream work:
+- Basic platform init works, "easy" drivers like SDIO, SATA, accelerated
+cryptography, etc. all here - some are even upstreamed already.
+- Bootloader duties are performed by linux-loader[4], a small firmware
+for the ARM coprocessor that idles once Linux starts.
+- linux-loader handles a dtbImage right now and has a hardcoded memory
+area to pass commandline parameters, parsed from a config file. I don't
+expect that to be acceptable, eventually I'd like to move it to loading
+vmlinuz directly and pulling the dtb off the SD card, similar to the
+Raspberry Pi. Alternatively, petitboot, but kexec doesn't seem to work
+right now.
+- Linux itself runs tolerably (though given the hardware it should be
+faster), with framebuffer graphics and basic support for most hardware,
+with the notable exceptions of the WiFi card and the GPU.
+- No SMP - will cover this later.
+
+That's about the state of things. I'm not sure how much is or isn't
+upstreamable, but right now I'm only thinking about getting the basic
+platform support up and some core hardware. On that front, there are a
+few decisions that need to be made and help that needs to be had, which
+is where I hope you all can give some insight:
+
+- USB only works with patches to the USB core[5] that appear to have
+failed upstreaming before[6]. I don't really understand these well
+enough to say what particular hardware restriction they're working
+around. I do know that there's a curious restriction on DMA addressing
+where most SoC blocks (including USB) can't see the SRAM at address 0,
+but we worked around this using reserved-mem in the devicetree. Almost
+all of the peripherals on Wii U are connected over USB, so having a
+working stack is pretty important.
+- The Radeon, despite being a mostly standard card, has its GPUF0MMReg
+area mapped into the SoC's mmio, with no PCI bus in sight. The Linux
+drivers (radeon, too old for amdgpu) seem to expect PCI, so some pretty
+extensive patching would be needed to get that moving - not to mention
+things like the proprietary HDMI encoder, which seems similar to the
+PS4's[7]. Downstream, we have an fbdev driver, which I obviously don't
+expect to get accepted.
+- Both of those issues together means I'm not convinced an initial port
+would have any viable output device. I would like to fix USB, though
+barring that we could use a flat framebuffer that linux-loader leaves
+enabled.
+- Right now I've made a new platform (like ps3) rather than joining the
+GameCube and Wii in embedded6xx, since that is marked as BROKEN_ON_SMP.
+The Wii U is a 3-core system, though a CPU bug[8] prevents existing
+userspaces working with it. Bit of a "cross that bridge when we get
+there" situation, though I'm reluctant to prevent that possibility by
+using a BROKEN_ON_SMP platform.
+- Like the Wii before it, the Wii U has a small amount of RAM at address
+zero, a gap, then a large amount of RAM at a higher address. Instead of
+the "map everything and reserve the gap" approach of the Wii, we loop
+over each memblock and map only true RAM[9]. This seems to work, but as
+far as I can tell is unique amongst powerpc32 platforms, so it's worth
+pointing out. (Note: I've been told this doesn't work anymore after some
+KUAP changes[10], so this point might be moot; haven't investigated)
+- Due to the aformentioned DMA restrictions and possibly a fatal
+bytemasking bug on uncached mappings[11], I have been wondering if it'd
+be better to just give up on the SRAM at address 0 altogether and use it
+as VRAM or something, loading the kernel at a higher address.
+- Like the Wii, the Wii U also takes a bit of a loose approach to cache
+coherency, and has several SoC peripherals with big-endian registers,
+requiring driver patching. USB already has devicetree quirks, but others
+require more drastic measures. I expect we'll take that on a
+driver-by-driver basis.
+
+In terms of platform bringup, the key issue is whether to be embedded6xx
+or not and what output device to use. Beyond that it's just things like
+IRQ controller drivers, should be pretty straightforward. I think on our
+end, we'll start rebasing to 5.15 (LTS) and start sending patches from
+there. I know getting closer to HEAD is preferable, this project has
+just moved very slowly in the past and being on LTS has been a lifesaver.
+
+Please let me know your thoughts, suggestions and questions, I'm new to
+this and want to make sure we're sending you the best submissions we can.
+
+Thanks,
+Ash
+https://heyquark.com/aboutme
+
+[1] https://linux-wiiu.org
+[2] https://lkml.org/lkml/2021/5/19/391
+[3] https://lkml.org/lkml/2021/10/14/1150
+[4] https://gitlab.com/linux-wiiu/linux-loader
+[5] https://gitlab.com/linux-wiiu/linux-wiiu/-/merge_requests/8/diffs
+[6] https://lists.ozlabs.org/pipermail/linuxppc-dev/2010-March/080705.html
+[7]
+https://github.com/eeply/ps4-linux/commit/b2e54fcc05d4ed77bcea4ba3f3bdc33cb3b318e0
+[8]
+https://fail0verflow.com/blog/2014/console-hacking-2013-omake/#espresso
+(3rd paragraph, "In fact, the SMPization of the 750 in the Espresso is
+not perfect...")
+[9]
+https://gitlab.com/linux-wiiu/linux-wiiu/-/blob/fabcfd93d47ba0d2105eec7f3b5d7785f2a69445/arch/powerpc/mm/pgtable_32.c#L273-L282
+[10] https://lkml.org/lkml/2021/6/3/204
+[11] https://bugs.dolphin-emu.org/issues/12565
