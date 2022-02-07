@@ -2,320 +2,247 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCB54AB7B3
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Feb 2022 10:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9854AB87F
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Feb 2022 11:15:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235017AbiBGJda (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Feb 2022 04:33:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
+        id S239624AbiBGKNr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Feb 2022 05:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344147AbiBGJYT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Feb 2022 04:24:19 -0500
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 01:24:18 PST
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71763C043181;
-        Mon,  7 Feb 2022 01:24:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644225858; x=1675761858;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1z1k3NFAvHcc9e0Mx/KGHH5k0M0yUJtCdBjP4j5K64g=;
-  b=Vb9ljBKYKJAFMifEoZUMTglM7IWED37lNbYNdPY3j4F/9lpYbAVInL2c
-   dBdyz4pVFsBqGBng7TUOCX5i6aZc7fvNkVs7iCHGse/6Z6pgOpAC8SWjl
-   rNW0lJEw+RGyeY4waKvhkx+pDXpEGFwK8VN+ZleVmFkaRKg0g9UykDEA7
-   pMSvAizPtJLkPQJcKlbatk+/vXM2JGuf9pNPcuA/zAA+R6iQE7pmGOJsk
-   FZc5oeh8vnZ0S1SyNetTkH+NozpxBsxCA8QqZP7bNrFlIIuth3+6l74Qu
-   hzp0fO7+wTqcAHHvBlAJRxp5YvEMbncFP6G1L9YtT1cA96uCZsoeD7KbA
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="311977638"
-X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="311977638"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 01:23:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
-   d="scan'208";a="677704920"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 07 Feb 2022 01:22:57 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 07 Feb 2022 11:22:56 +0200
-Date:   Mon, 7 Feb 2022 11:22:56 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>, Benson Leung <bleung@google.com>
-Subject: Re: [PATCH v1 1/2] usb: typec: Introduce typec attributes for
- limiting source current
-Message-ID: <YgDk8M3N8VEZK5Sk@kuha.fi.intel.com>
-References: <20220207043907.2758424-1-badhri@google.com>
+        with ESMTP id S1352325AbiBGKA0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Feb 2022 05:00:26 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB025C043181;
+        Mon,  7 Feb 2022 02:00:24 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 47D961F43D76
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644228021;
+        bh=C6ahXcGBr3wYvchAhyVsk7tAn1/VzH+lrX2SOz7k5LU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=en+A+ujlU32xmni49UHQs2C5/vrYE7HalLjBIO4xXfMDnYOj1bjpDYOcdDTb+c/Ob
+         2sBZ/f9AwZ7mkzWoCOTVsPVDTUnY8msojKcGtlc48aH0RCKoyW/a6gUvXHiboufPdQ
+         u4kK/FepuqLnObZd9EljObZL5xhbKAsd/F4pN4wwEb+KCLAlFVY4Yj7OWKsfHWxHgs
+         ZJuJMeQlHnLzRpkVLs+dyzr7+gVShpHsF8Cpm4aFbHBTJGcjzNgfMbzUQ9cbzz1g0k
+         wIopPqak1XVIJNxkat+Y81V3Cvp+SjMuz/+D4exsoe8NRa6pgtRy7piosNJ5tWowwN
+         z31K2vKS3GHFg==
+Message-ID: <02d0dba2-ffc8-1bf1-d8a7-f7fa19f2c7ed@collabora.com>
+Date:   Mon, 7 Feb 2022 11:00:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207043907.2758424-1-badhri@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] usb: host: xhci-mtk: Simplify supplies handling with
+ regulator_bulk
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        matthias.bgg@gmail.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220118133348.111860-1-angelogioacchino.delregno@collabora.com>
+ <91bb8078e2d0824c325eb3819e59cdcb65b68a4e.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <91bb8078e2d0824c325eb3819e59cdcb65b68a4e.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-+Benson
-
-On Sun, Feb 06, 2022 at 08:39:06PM -0800, Badhri Jagan Sridharan wrote:
-> This change introduces the following two attributes to the
-> typec sysfs class which allows userspace to limit the power
-> advertised while acting as source. This is useful to mitigate
-> battery drain in portable devices when the battery SOC is low.
+Il 20/01/22 07:50, Chunfeng Yun ha scritto:
+> On Tue, 2022-01-18 at 14:33 +0100, AngeloGioacchino Del Regno wrote:
+>> Remove the custom functions xhci_mtk_ldos_{enable,disable}() by
+>> switching to using regulator_bulk to perform the very same thing,
+>> as the regulators are always either both enabled or both disabled.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <
+>> angelogioacchino.delregno@collabora.com>
+>> ---
+>>   drivers/usb/host/xhci-mtk.c | 56 ++++++++++++-----------------------
+>> --
+>>   drivers/usb/host/xhci-mtk.h |  4 +--
+>>   2 files changed, 20 insertions(+), 40 deletions(-)
+>>
+>> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-
+>> mtk.c
+>> index 62c835d446be..3b81931e5b77 100644
+>> --- a/drivers/usb/host/xhci-mtk.c
+>> +++ b/drivers/usb/host/xhci-mtk.c
+>> @@ -395,31 +395,6 @@ static int xhci_mtk_clks_get(struct xhci_hcd_mtk
+>> *mtk)
+>>   	return devm_clk_bulk_get_optional(mtk->dev, BULK_CLKS_NUM,
+>> clks);
+>>   }
+>>   
+>> -static int xhci_mtk_ldos_enable(struct xhci_hcd_mtk *mtk)
+>> -{
+>> -	int ret;
+>> -
+>> -	ret = regulator_enable(mtk->vbus);
+>> -	if (ret) {
+>> -		dev_err(mtk->dev, "failed to enable vbus\n");
+>> -		return ret;
+>> -	}
+>> -
+>> -	ret = regulator_enable(mtk->vusb33);
+>> -	if (ret) {
+>> -		dev_err(mtk->dev, "failed to enable vusb33\n");
+>> -		regulator_disable(mtk->vbus);
+>> -		return ret;
+>> -	}
+>> -	return 0;
+>> -}
+>> -
+>> -static void xhci_mtk_ldos_disable(struct xhci_hcd_mtk *mtk)
+>> -{
+>> -	regulator_disable(mtk->vbus);
+>> -	regulator_disable(mtk->vusb33);
+>> -}
+>> -
+>>   static void xhci_mtk_quirks(struct device *dev, struct xhci_hcd
+>> *xhci)
+>>   {
+>>   	struct usb_hcd *hcd = xhci_to_hcd(xhci);
+>> @@ -475,6 +450,10 @@ static int xhci_mtk_setup(struct usb_hcd *hcd)
+>>   	return ret;
+>>   }
+>>   
+>> +static const char * const xhci_mtk_supply_names[] = {
+>> +	"vusb33", "vbus",
+>> +};
+>> +
+>>   static const struct xhci_driver_overrides xhci_mtk_overrides
+>> __initconst = {
+>>   	.reset = xhci_mtk_setup,
+>>   	.add_endpoint = xhci_mtk_add_ep,
+>> @@ -507,17 +486,18 @@ static int xhci_mtk_probe(struct
+>> platform_device *pdev)
+>>   		return -ENOMEM;
+>>   
+>>   	mtk->dev = dev;
+>> -	mtk->vbus = devm_regulator_get(dev, "vbus");
+>> -	if (IS_ERR(mtk->vbus)) {
+>> -		dev_err(dev, "fail to get vbus\n");
+>> -		return PTR_ERR(mtk->vbus);
+>> -	}
+>> +	mtk->num_supplies = ARRAY_SIZE(xhci_mtk_supply_names);
+>> +	mtk->supplies = devm_kcalloc(dev, mtk->num_supplies,
+>> +				     sizeof(*mtk->supplies),
+>> GFP_KERNEL);
+>> +	if (!mtk->supplies)
+>> +		return -ENOMEM;
+>>   
+>> -	mtk->vusb33 = devm_regulator_get(dev, "vusb33");
+>> -	if (IS_ERR(mtk->vusb33)) {
+>> -		dev_err(dev, "fail to get vusb33\n");
+>> -		return PTR_ERR(mtk->vusb33);
+>> -	}
+>> +	regulator_bulk_set_supply_names(mtk->supplies,
+>> xhci_mtk_supply_names,
+>> +					mtk->num_supplies);
+>> +
+>> +	ret = devm_regulator_bulk_get(dev, mtk->num_supplies, mtk-
+>>> supplies);
+>> +	if (ret)
+>> +		return dev_err_probe(dev, ret, "Failed to get
+>> regulators\n");
+>>   
+>>   	ret = xhci_mtk_clks_get(mtk);
+>>   	if (ret)
+>> @@ -558,7 +538,7 @@ static int xhci_mtk_probe(struct platform_device
+>> *pdev)
+>>   	pm_runtime_enable(dev);
+>>   	pm_runtime_get_sync(dev);
+>>   
+>> -	ret = xhci_mtk_ldos_enable(mtk);
+>> +	ret = regulator_bulk_enable(mtk->num_supplies, mtk->supplies);
+>>   	if (ret)
+>>   		goto disable_pm;
+>>   
+>> @@ -667,7 +647,7 @@ static int xhci_mtk_probe(struct platform_device
+>> *pdev)
+>>   	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
+>>   
+>>   disable_ldos:
+>> -	xhci_mtk_ldos_disable(mtk);
+>> +	regulator_bulk_disable(mtk->num_supplies, mtk->supplies);
+>>   
+>>   disable_pm:
+>>   	pm_runtime_put_noidle(dev);
+>> @@ -695,7 +675,7 @@ static int xhci_mtk_remove(struct platform_device
+>> *pdev)
+>>   	usb_put_hcd(hcd);
+>>   	xhci_mtk_sch_exit(mtk);
+>>   	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
+>> -	xhci_mtk_ldos_disable(mtk);
+>> +	regulator_bulk_disable(mtk->num_supplies, mtk->supplies);
+>>   
+>>   	pm_runtime_disable(dev);
+>>   	pm_runtime_put_noidle(dev);
+>> diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-
+>> mtk.h
+>> index 4b1ea89f959a..9b78cd2ba0ac 100644
+>> --- a/drivers/usb/host/xhci-mtk.h
+>> +++ b/drivers/usb/host/xhci-mtk.h
+>> @@ -150,9 +150,9 @@ struct xhci_hcd_mtk {
+>>   	int num_u3_ports;
+>>   	int u2p_dis_msk;
+>>   	int u3p_dis_msk;
+>> -	struct regulator *vusb33;
+>> -	struct regulator *vbus;
+>>   	struct clk_bulk_data clks[BULK_CLKS_NUM];
+>> +	struct regulator_bulk_data *supplies;
+>> +	u8 num_supplies;
+> Could you please help to change it like as clock bulk?
 > 
-> New attibutes introduced:
-> 1. limit_src_current_active
-> 2. limit_src_current_ma
+> 1. #define BULK_REGULATORS_NUM 2; then define @supplies array,
 > 
-> The port while in PD contract and acting as source would
-> only advertise vSafe5V fixed PDO with current set through
-> limit_src_current_ma when limit_src_current_active is set
-> to 1. When limit_src_current_active is set to 0, the port
-> would publish the default source capabilities.
-> limit_src_current_ma would limit the current to the
-> Maximum current published by vSafe5V fixed pdo of the default
-> source capabilities of the port.
-
-This competes with Benson's idea of having "sets" of capabilites from
-which to choose the ones that we advertise to the partner. You could
-also use that idea to cover this case as well. You just have two
-source capabilities sets defined - one where you only have the vSafe5V
-and another for everything.
-
-Benson's idea also seems to be something what we can support with UCSI
-and some native USB PD controller host interfaces, but limiting the
-source capabitites to only vSafe5V is something that we can't do. I
-means, on some platforms we may have a source capabilities "set" that
-we can choose that only exposes the vSafe5V, but there is no guarantee
-that we always have it (and it's unlikely that we ever have it). It's
-up to some firmware that we have no control over.
-
-So this is the wrong way and Benson's idea is the right way IMO.
-
-I already prepared a proposal for adding support for Benson's idea:
-https://lore.kernel.org/linux-usb/20220203144657.16527-1-heikki.krogerus@linux.intel.com/
-
-This patch adds the attributes that you can use to choose the
-capabilities that are advertised to the partner:
-https://lore.kernel.org/linux-usb/20220203144657.16527-3-heikki.krogerus@linux.intel.com/
-
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
->  Documentation/ABI/testing/sysfs-class-typec | 25 ++++++
->  drivers/usb/typec/class.c                   | 99 +++++++++++++++++++++
->  drivers/usb/typec/class.h                   |  5 ++
->  include/linux/usb/typec.h                   |  4 +
->  4 files changed, 133 insertions(+)
+>          struct regulator_bulk_data supplies[BULK_REGULATORS_NUM];
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> index 75088ecad202..dd2240632172 100644
-> --- a/Documentation/ABI/testing/sysfs-class-typec
-> +++ b/Documentation/ABI/testing/sysfs-class-typec
-> @@ -141,6 +141,31 @@ Description:
->  		- "reverse": CC2 orientation
->  		- "unknown": Orientation cannot be determined.
->  
-> +What:		/sys/class/typec/<port>/limit_src_current_active
-> +Date:		February 2022
-> +Contact:	Badhri Jagan Sridharan <badhri@google.com>
-> +Description:
-> +		This attribute can be used to make the port only publish
-> +		vSafe5V fixed pdo with Maximum current limited to the
-> +		current limit set by limit_src_current_ma when the port
-> +		is acting as source.
-> +		Valid values:
-> +		- write(2) "1" limits source capabilities to vSafe5V
-> +		  with max current specified by limit_src_current_ma
-> +		- write(2) "0" publishes the default source capabilities
-> +		  of the port.
-> +
-> +What:		/sys/class/typec/<port>/limit_src_current_ma
-> +Date:		February 2022
-> +Contact:	Badhri Jagan Sridharan <badhri@google.com>
-> +Description:
-> +		This attribute allows write(2) to set the Maximum
-> +		current published when limit_src_current_active is set
-> +		to 1. When limit_src_current_active is already set
-> +		to 1, if the port is already acting as source with
-> +		explicit contract in place, write(2) will make the port
-> +		renegotiate the pd contract.
-> +
->  USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
->  
->  What:		/sys/class/typec/<port>-partner/accessory_mode
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 45a6f0c807cb..3b3c7b080ad1 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -1403,6 +1403,102 @@ port_type_show(struct device *dev, struct device_attribute *attr,
->  }
->  static DEVICE_ATTR_RW(port_type);
->  
-> +static ssize_t
-> +limit_src_current_active_store(struct device *dev, struct device_attribute *attr, const char *buf,
-> +			       size_t size)
-> +{
-> +	struct typec_port *port = to_typec_port(dev);
-> +	int ret;
-> +	u8 active;
-> +
-> +	if (port->cap->type == TYPEC_PORT_SNK || !port->ops || !port->ops->limit_src_current_set ||
-> +	    !port->cap->pd_revision) {
-> +		dev_dbg(dev, "Limiting source current not supported\n");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	if (kstrtou8(buf, 0, &active))
-> +		return -EINVAL;
-> +
-> +	if (active != 1 && active != 0)
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&port->limit_src_current_lock);
-> +
-> +	if (port->limit_src_current_active == (bool)active) {
-> +		ret = size;
-> +		goto unlock_and_ret;
-> +	}
-> +
-> +	ret = port->ops->limit_src_current_set(port, port->limit_src_current_ma, active);
-> +	if (ret)
-> +		goto unlock_and_ret;
-> +
-> +	port->limit_src_current_active = active;
-> +	ret = size;
-> +
-> +unlock_and_ret:
-> +	mutex_unlock(&port->limit_src_current_lock);
-> +	return ret;
-> +}
-> +
-> +static ssize_t
-> +limit_src_current_active_show(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +	struct typec_port *port = to_typec_port(dev);
-> +
-> +	return sysfs_emit(buf, "%d\n", port->limit_src_current_active ? 1 : 0);
-> +}
-> +static DEVICE_ATTR_RW(limit_src_current_active);
-> +
-> +static ssize_t
-> +limit_src_current_ma_store(struct device *dev, struct device_attribute *attr, const char *buf,
-> +			   size_t size)
-> +{
-> +	struct typec_port *port = to_typec_port(dev);
-> +	int ret;
-> +	u32 src_current_ma;
-> +
-> +	if (port->cap->type == TYPEC_PORT_SNK || !port->ops || !port->ops->limit_src_current_set ||
-> +	    !port->cap->pd_revision) {
-> +		dev_dbg(dev, "Limiting source current not supported\n");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	if (kstrtou32(buf, 0, &src_current_ma))
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&port->limit_src_current_lock);
-> +
-> +	if (port->limit_src_current_ma == src_current_ma) {
-> +		ret = size;
-> +		goto unlock_and_ret;
-> +	}
-> +
-> +	if (port->limit_src_current_active) {
-> +		ret = port->ops->limit_src_current_set(port, src_current_ma,
-> +						       port->limit_src_current_active);
-> +		if (ret)
-> +			goto unlock_and_ret;
-> +	}
-> +
-> +	port->limit_src_current_ma = src_current_ma;
-> +	ret = size;
-> +
-> +unlock_and_ret:
-> +	mutex_unlock(&port->limit_src_current_lock);
-> +	return ret;
-> +}
-> +
-> +static ssize_t
-> +limit_src_current_ma_show(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +	struct typec_port *port = to_typec_port(dev);
-> +
-> +	return sysfs_emit(buf, "%u\n", port->limit_src_current_ma);
-> +}
-> +static DEVICE_ATTR_RW(limit_src_current_ma);
-> +
->  static const char * const typec_pwr_opmodes[] = {
->  	[TYPEC_PWR_MODE_USB]	= "default",
->  	[TYPEC_PWR_MODE_1_5A]	= "1.5A",
-> @@ -1536,6 +1632,8 @@ static struct attribute *typec_attrs[] = {
->  	&dev_attr_vconn_source.attr,
->  	&dev_attr_port_type.attr,
->  	&dev_attr_orientation.attr,
-> +	&dev_attr_limit_src_current_active.attr,
-> +	&dev_attr_limit_src_current_ma.attr,
->  	NULL,
->  };
->  
-> @@ -2039,6 +2137,7 @@ struct typec_port *typec_register_port(struct device *parent,
->  
->  	ida_init(&port->mode_ids);
->  	mutex_init(&port->port_type_lock);
-> +	mutex_init(&port->limit_src_current_lock);
->  
->  	port->id = id;
->  	port->ops = cap->ops;
-> diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
-> index 0f1bd6d19d67..3856bc058444 100644
-> --- a/drivers/usb/typec/class.h
-> +++ b/drivers/usb/typec/class.h
-> @@ -54,6 +54,11 @@ struct typec_port {
->  
->  	const struct typec_capability	*cap;
->  	const struct typec_operations   *ops;
-> +
-> +	/* lock to protect limit_src_current_*_store operation */
-> +	struct mutex			limit_src_current_lock;
-> +	u32				limit_src_current_ma;
-> +	bool				limit_src_current_active;
->  };
->  
->  #define to_typec_port(_dev_) container_of(_dev_, struct typec_port, dev)
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index 7ba45a97eeae..1b1958ae4c16 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -213,6 +213,8 @@ struct typec_partner_desc {
->   * @pr_set: Set Power Role
->   * @vconn_set: Source VCONN
->   * @port_type_set: Set port type
-> + * @limit_src_current_set: Used to limit source current advertisement while
-> + *                         acting as source
->   */
->  struct typec_operations {
->  	int (*try_role)(struct typec_port *port, int role);
-> @@ -221,6 +223,8 @@ struct typec_operations {
->  	int (*vconn_set)(struct typec_port *port, enum typec_role role);
->  	int (*port_type_set)(struct typec_port *port,
->  			     enum typec_port_type type);
-> +	int (*limit_src_current_set)(struct typec_port *port, u32 limit_src_current_ma,
-> +				     bool enable);
->  };
->  
->  enum usb_pd_svdm_ver {
-> -- 
-> 2.35.0.263.gb82422642f-goog
+> 2. also add a helper to get regulator bulk; e.g.
+> 
+> static int xhci_mtk_regulators_get(struct xhci_hcd_mtk *mtk)
+> {
+>      struct regulator_bulk_data *supplies = mtk->supplies;
+> 
+>      supplies[0].supply = "vusb33";
+>      supplies[1].supply = "vbus";
+> 
+>      return devm_regulator_bulk_get(mtk->dev, BUL
+> K_REGULATORS_NUM, supplies);
+> }
 
--- 
-heikki
+Hello Chunfeng,
+I chose to go for this way to enhance the implementation flexibility: like that,
+any future SoC that needs different regulators (more vregs, less, different names)
+will simply need a new array of vreg names, like:
+
+static const char * const xhci_mtk_mtxxxx_supply_names[] = {
+	"vusb33", "vbus", "another-supply", "and-another-one",
+};
+
+Other than enhancing flexibility, this will also make sure that we don't allocate
+more regulator_bulk_data entries than needed, enhancing memory usage.
+
+Your proposal, though, is valid if you are sure that future SoCs will have only
+and always these two power supplies and nothing else...
+
+Regards,
+Angelo
+
+> 
+> Thanks a lot
+> 
+> 
+>>   	unsigned int has_ippc:1;
+>>   	unsigned int lpm_support:1;
+>>   	unsigned int u2_lpm_disable:1;
+> 
