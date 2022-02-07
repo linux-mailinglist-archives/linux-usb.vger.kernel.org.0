@@ -2,132 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451E94AB8EA
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Feb 2022 11:43:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5B94ABF28
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Feb 2022 14:23:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235294AbiBGKiq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Feb 2022 05:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S1385504AbiBGMs6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Feb 2022 07:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245021AbiBGK1b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Feb 2022 05:27:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5B6C043181;
-        Mon,  7 Feb 2022 02:27:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6221D612F0;
-        Mon,  7 Feb 2022 10:27:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9849C004E1;
-        Mon,  7 Feb 2022 10:27:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644229649;
-        bh=Ea/XgchYNUyDyZnHDIWZphGznZHyvYvoO3mp+EI+3DM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gxp6gjMooNt+0+/sJ9licDOZQh2gXK56cR44iURJCiAjpMcitNE0Aih4wIENC7p9I
-         BbflIonrJj5D1ZzJ2gx2qEc/kPc71t9MOMV3BUtqaSyDQsP5XfEALcUifa0EUXJzyK
-         PfhC6PqMQEAMbdf/uwsA+Deqy8S4ZPQRJXFUfgu4=
-Date:   Mon, 7 Feb 2022 11:27:26 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
-        andrew@lunn.ch, oneukum@suse.com, robert.foss@collabora.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH net-next] net: asix: add proper error handling of usb
- read errors
-Message-ID: <YgD0Dln2R0dPJX/L@kroah.com>
-References: <f676e339-5808-2163-2afd-ea254cfb2684@rempel-privat.de>
- <20220206180516.28439-1-paskripkin@gmail.com>
+        with ESMTP id S1386658AbiBGLfR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Feb 2022 06:35:17 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB15C043188
+        for <linux-usb@vger.kernel.org>; Mon,  7 Feb 2022 03:35:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644233716; x=1675769716;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=INFWVmw4ej4Dv6BBxsYk089kJARY4yN7pRH+2wVAQ1I=;
+  b=AUiorgFvq5qTxf4zy2zWhjw+tTtoKo5Cmar7Jpw1O8RxRtXAxcfK3SBf
+   WY/hw1HbVlP6cYxM19bDqEbhy3OURrFewjuW/yfrtQ6pbB3tK2zLol/nd
+   z9NBG/0+Lh+EG4hGZd7kjk1wqAxIr3fin9ysqOw55WBaZL3V2iFuPYm5X
+   xVPtq4xPcKzn1AgsDecQn+O4ZnuiJHRLBSoR8rtkIIfQ13CIJ5g2/pq+d
+   61P4nN+tRq8gZeCwyFu/mZGgZFZxLqh5L16cXYc51w2jXPsUSEbS76xvt
+   NE1UcJIWyL8JCmMTQY9gQRnuUY3aPAaa5ILUmzRkBPp5unWrDggQauxUx
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="273216188"
+X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
+   d="scan'208";a="273216188"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 03:35:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
+   d="scan'208";a="677731080"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 07 Feb 2022 03:35:12 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 07 Feb 2022 13:35:11 +0200
+Date:   Mon, 7 Feb 2022 13:35:11 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-usb <linux-usb@vger.kernel.org>
+Subject: Re: long ucsi_acpi_platform_driver_init
+Message-ID: <YgED7x4tylyFzvsR@kuha.fi.intel.com>
+References: <b9993432-0192-f546-bf67-bb462f51e209@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220206180516.28439-1-paskripkin@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <b9993432-0192-f546-bf67-bb462f51e209@infradead.org>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Feb 06, 2022 at 09:05:16PM +0300, Pavel Skripkin wrote:
-> Syzbot once again hit uninit value in asix driver. The problem still the
-> same -- asix_read_cmd() reads less bytes, than was requested by caller.
+On Sun, Feb 06, 2022 at 05:28:48PM -0800, Randy Dunlap wrote:
+> Hi,
 > 
-> Since all read requests are performed via asix_read_cmd() let's catch
-> usb related error there and add __must_check notation to be sure all
-> callers actually check return value.
+> On my custom 5.16, 5.17-rc1, and 5.17-rc2 kernels I am seeing
+> ucsi_acpi_platform_driver_init() take around 60 seconds.
 > 
-> So, this patch adds sanity check inside asix_read_cmd(), that simply
-> checks if bytes read are not less, than was requested and adds missing
-> error handling of asix_read_cmd() all across the driver code.
-> 
-> Fixes: d9fe64e51114 ("net: asix: Add in_pm parameter")
-> Reported-and-tested-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
-> 
-> Changes since RFT:
-> 	- Added Tested-by: tag
-> 
-> ---
->  drivers/net/usb/asix.h         |  4 ++--
->  drivers/net/usb/asix_common.c  | 19 +++++++++++++------
->  drivers/net/usb/asix_devices.c | 21 ++++++++++++++++++---
->  3 files changed, 33 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
-> index 2a1e31def..4334aafab 100644
-> --- a/drivers/net/usb/asix.h
-> +++ b/drivers/net/usb/asix.h
-> @@ -192,8 +192,8 @@ extern const struct driver_info ax88172a_info;
->  /* ASIX specific flags */
->  #define FLAG_EEPROM_MAC		(1UL << 0)  /* init device MAC from eeprom */
->  
-> -int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> -		  u16 size, void *data, int in_pm);
-> +int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> +			       u16 size, void *data, int in_pm);
->  
->  int asix_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->  		   u16 size, void *data, int in_pm);
-> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-> index 71682970b..524805285 100644
-> --- a/drivers/net/usb/asix_common.c
-> +++ b/drivers/net/usb/asix_common.c
-> @@ -11,8 +11,8 @@
->  
->  #define AX_HOST_EN_RETRIES	30
->  
-> -int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> -		  u16 size, void *data, int in_pm)
-> +int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> +			       u16 size, void *data, int in_pm)
->  {
->  	int ret;
->  	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
-> @@ -27,9 +27,12 @@ int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->  	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
->  		 value, index, data, size);
->  
-> -	if (unlikely(ret < 0))
-> +	if (unlikely(ret < size)) {
-> +		ret = ret < 0 ? ret : -ENODATA;
-> +
+> [    2.733138] calling  ucsi_acpi_platform_driver_init+0x0/0x1000 [ucsi_acpi] @ 470
+> [   64.603126] initcall ucsi_acpi_platform_driver_init+0x0/0x1000 [ucsi_acpi] returned 0 after 58690601 usecs
 
-Didn't I suggest using the proper USB core functions for this instead of
-rolling your own functions?  We now have usb_control_msg_read() and
-usb_control_msg_send() that prevents this type of thing from happening.
+I don't have any ideas what could be causing it to take that long?
+That driver does not really do anything else except it queues a work
+that then actually initialises the UCSI interface. The probe() in that
+driver (ucsi_acpi) does not stay and wait for the initialisation to
+finish.
 
-Ah, it's a bit more tangled up than that it seems, the number of layers
-of abstractions here is odd and deep.  This change looks fine for now to
-keep syzbot happy:
+Can you check are the USB Type-C devices appearing under
+/sys/class/typec faster then that?
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Also, if the driver is a module, can you check does it always take
+that long if you unload and the reload the module (ucsi_acpi.ko)?
+
+> Did I miss some other (needed) Kconfig option or is something missing in
+> my system's ACPI tables e.g.?
+
+There shouldn't be any dependencies that are missing, but it would not
+hurt to take a look at your acpi tables. Can you send acpidump?
+
+Though, I doubt there is anything missing from there either.
+
+> DMI: Dell Inc. Inspiron 15 5510/076F7Y, BIOS 2.4.1 11/05/2021
+
+thanks,
+
+-- 
+heikki
