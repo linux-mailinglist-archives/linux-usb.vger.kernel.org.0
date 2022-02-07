@@ -2,114 +2,294 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D914AB46D
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Feb 2022 07:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E8C4AB46B
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Feb 2022 07:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232867AbiBGGNW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Feb 2022 01:13:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
+        id S244668AbiBGGNU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Feb 2022 01:13:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239559AbiBGE2S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Feb 2022 23:28:18 -0500
-X-Greylist: delayed 122 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 20:28:17 PST
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489A9C043181;
-        Sun,  6 Feb 2022 20:28:16 -0800 (PST)
+        with ESMTP id S1351822AbiBGEjQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Feb 2022 23:39:16 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A23C043181
+        for <linux-usb@vger.kernel.org>; Sun,  6 Feb 2022 20:39:13 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id z15-20020a25bb0f000000b00613388c7d99so26043798ybg.8
+        for <linux-usb@vger.kernel.org>; Sun, 06 Feb 2022 20:39:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644208097; x=1675744097;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=fderG4Gz8z+WaznEGhLQ9NMtlL+AgXDhS7nYzmK/IC8=;
-  b=GI1IwDBcDB/T/wFTAbD3moQWyNUK4MgJ4LeQ2coHlliDaQW1vOZ+Idwd
-   cNkHNy6RaKe+Sft1eyw2stKts4Q3YIFKK14jP9Td/xFYEA++dgKPyRRIg
-   GeZvk8jKxAKYM/WnUOd4enFkKZ519/hCRvQKL/9JlnQhQiFnHwVY69ZP0
-   w=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Feb 2022 20:26:14 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 20:26:13 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Sun, 6 Feb 2022 20:26:13 -0800
-Received: from ugoswami-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Sun, 6 Feb 2022 20:26:09 -0800
-From:   Udipto Goswami <quic_ugoswami@quicinc.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>
-Subject: [PATCH] usb: dwc3: gadget: Prevent core from processing stale TRBs
-Date:   Mon, 7 Feb 2022 09:55:58 +0530
-Message-ID: <1644207958-18287-1-git-send-email-quic_ugoswami@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ZGBcS7JWV4jEm41Ieg0bh/DWDMa+jid9L2vZwRwLPsQ=;
+        b=hTi2MIRuc/XCPJdsJ8EBR8xE/nfUcnqO/pcV2L0/Vx4Muy05JpQDhrmhezGgIVhPV8
+         G6etzRvhkLJ/XS074ODg978oyePc62d5Hwywtt24jXa5rivawKxCYakQnlJOdTZdMWbp
+         S1bO7TV0OaXcoTVKm6WBLjTfYvhKrZ3lQJMEZw1+59aZhZR8ogcuHZpwn7zAWGo0nvJj
+         D1mF1Ch86HwaduTjHGN9jlHC3MYC/bkEeWtDbmwzRmpqZGCLbiAnL5xPJcFQ2qpE8ksY
+         WWs2wyHZ5LKrq0VY5TefuETmU0Ui72bJJ4aoXZY/WeoF6WUFzkHYqaRQleJ7vKTeu2Q1
+         x5aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ZGBcS7JWV4jEm41Ieg0bh/DWDMa+jid9L2vZwRwLPsQ=;
+        b=5go+JEigJ/Vd5q4jhplbcQp4g/BHzZcZqniB4PFA7dlsjCkW0JRPhYMH1IKOMdQqKf
+         zSrNXVF4jZ6y8lY5xtIJChxnLCzPpjAIhkftTNbkRGF3gzixRkVXge3J120E62z5TMqs
+         bjtibNBFNexRDBAPR9yfEQLMlBwBTZuFDJSvmzvX7asdCShtbrQafxOsnVyboZhFUYdN
+         2c47Py+fJ4iX7f5p/ZzEWfyJNGppMGR2a8TAtMRgENcxMR1JouvS8Qm23rBQAUEg92lj
+         SP15mFAS9iuz/EmG/HX0v+AF2Nr45We91eH7LV8s2luJl931Lzxk76BftT4C9jPa6XeG
+         +hfw==
+X-Gm-Message-State: AOAM5306m09BoBgI5Aa+7VhBeS8LdCWZkb2FluwTZPGlb1Pmd8uHYjhx
+        oUlhX5vNRvi3HP2wMuU6fwTckXLg5zg=
+X-Google-Smtp-Source: ABdhPJyKen1NvGRKRRF5JJSfuC0xiMhzV6FqmDa7uRHf2FY/+bd89jMaurQm8wBzbpZx9FYb+xTlwVIwGvs=
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:55d1:a045:9816:1433])
+ (user=badhri job=sendgmr) by 2002:a5b:bcd:: with SMTP id c13mr251353ybr.303.1644208752853;
+ Sun, 06 Feb 2022 20:39:12 -0800 (PST)
+Date:   Sun,  6 Feb 2022 20:39:06 -0800
+Message-Id: <20220207043907.2758424-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
+Subject: [PATCH v1 1/2] usb: typec: Introduce typec attributes for limiting
+ source current
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-With CPU re-ordering on write instructions, there might
-be a chance that the HWO is set before the TRB is updated
-with the new mapped buffer address.
-And in the case where core is processing a list of TRBs
-it is possible that it fetched the TRBs when the HWO is set
-but before the buffer address is updated.
-Prevent this by adding a memory barrier before the HWO
-is updated to ensure that the core always process the
-updated TRBs.
+This change introduces the following two attributes to the
+typec sysfs class which allows userspace to limit the power
+advertised while acting as source. This is useful to mitigate
+battery drain in portable devices when the battery SOC is low.
 
-Fixes: f6bafc6a1c9 ("usb: dwc3: convert TRBs into bitshifts")
-Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+New attibutes introduced:
+1. limit_src_current_active
+2. limit_src_current_ma
+
+The port while in PD contract and acting as source would
+only advertise vSafe5V fixed PDO with current set through
+limit_src_current_ma when limit_src_current_active is set
+to 1. When limit_src_current_active is set to 0, the port
+would publish the default source capabilities.
+limit_src_current_ma would limit the current to the
+Maximum current published by vSafe5V fixed pdo of the default
+source capabilities of the port.
+
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 ---
-v1: For an ep the trbs can be reused, and if cpu re-ordering also
-takes place, there is a change that the HWO will get set even before
-the trb bpl/bph are updated which will lead controller to access a
-stale buffer address from the previous transactions.
+ Documentation/ABI/testing/sysfs-class-typec | 25 ++++++
+ drivers/usb/typec/class.c                   | 99 +++++++++++++++++++++
+ drivers/usb/typec/class.h                   |  5 ++
+ include/linux/usb/typec.h                   |  4 +
+ 4 files changed, 133 insertions(+)
 
- drivers/usb/dwc3/gadget.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 520031b..183b909 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1291,6 +1291,19 @@ static void __dwc3_prepare_one_trb(struct dwc3_ep *dep, struct dwc3_trb *trb,
- 	if (usb_endpoint_xfer_bulk(dep->endpoint.desc) && dep->stream_capable)
- 		trb->ctrl |= DWC3_TRB_CTRL_SID_SOFN(stream_id);
+diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+index 75088ecad202..dd2240632172 100644
+--- a/Documentation/ABI/testing/sysfs-class-typec
++++ b/Documentation/ABI/testing/sysfs-class-typec
+@@ -141,6 +141,31 @@ Description:
+ 		- "reverse": CC2 orientation
+ 		- "unknown": Orientation cannot be determined.
  
-+	/*
-+	 * As per data book 4.2.3.2TRB Control Bit Rules section
-+	 *
-+	 * The controller autonomously checks the HWO field of a TRB to determine if the
-+	 * entire TRB is valid. Therefore, software must ensure that the rest of the TRB
-+	 * is valid before setting the HWO field to '1'. In most systems, this means that
-+	 * software must update the fourth DWORD of a TRB last.
-+	 *
-+	 * However there is a possibility of CPU re-ordering here which can cause
-+	 * controller to observe the HWO bit set prematurely.
-+	 * Add a write memory barrier to prevent CPU re-ordering.
-+	 */
-+	wmb();
- 	trb->ctrl |= DWC3_TRB_CTRL_HWO;
++What:		/sys/class/typec/<port>/limit_src_current_active
++Date:		February 2022
++Contact:	Badhri Jagan Sridharan <badhri@google.com>
++Description:
++		This attribute can be used to make the port only publish
++		vSafe5V fixed pdo with Maximum current limited to the
++		current limit set by limit_src_current_ma when the port
++		is acting as source.
++		Valid values:
++		- write(2) "1" limits source capabilities to vSafe5V
++		  with max current specified by limit_src_current_ma
++		- write(2) "0" publishes the default source capabilities
++		  of the port.
++
++What:		/sys/class/typec/<port>/limit_src_current_ma
++Date:		February 2022
++Contact:	Badhri Jagan Sridharan <badhri@google.com>
++Description:
++		This attribute allows write(2) to set the Maximum
++		current published when limit_src_current_active is set
++		to 1. When limit_src_current_active is already set
++		to 1, if the port is already acting as source with
++		explicit contract in place, write(2) will make the port
++		renegotiate the pd contract.
++
+ USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
  
- 	dwc3_ep_inc_enq(dep);
+ What:		/sys/class/typec/<port>-partner/accessory_mode
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index 45a6f0c807cb..3b3c7b080ad1 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -1403,6 +1403,102 @@ port_type_show(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RW(port_type);
+ 
++static ssize_t
++limit_src_current_active_store(struct device *dev, struct device_attribute *attr, const char *buf,
++			       size_t size)
++{
++	struct typec_port *port = to_typec_port(dev);
++	int ret;
++	u8 active;
++
++	if (port->cap->type == TYPEC_PORT_SNK || !port->ops || !port->ops->limit_src_current_set ||
++	    !port->cap->pd_revision) {
++		dev_dbg(dev, "Limiting source current not supported\n");
++		return -EOPNOTSUPP;
++	}
++
++	if (kstrtou8(buf, 0, &active))
++		return -EINVAL;
++
++	if (active != 1 && active != 0)
++		return -EINVAL;
++
++	mutex_lock(&port->limit_src_current_lock);
++
++	if (port->limit_src_current_active == (bool)active) {
++		ret = size;
++		goto unlock_and_ret;
++	}
++
++	ret = port->ops->limit_src_current_set(port, port->limit_src_current_ma, active);
++	if (ret)
++		goto unlock_and_ret;
++
++	port->limit_src_current_active = active;
++	ret = size;
++
++unlock_and_ret:
++	mutex_unlock(&port->limit_src_current_lock);
++	return ret;
++}
++
++static ssize_t
++limit_src_current_active_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct typec_port *port = to_typec_port(dev);
++
++	return sysfs_emit(buf, "%d\n", port->limit_src_current_active ? 1 : 0);
++}
++static DEVICE_ATTR_RW(limit_src_current_active);
++
++static ssize_t
++limit_src_current_ma_store(struct device *dev, struct device_attribute *attr, const char *buf,
++			   size_t size)
++{
++	struct typec_port *port = to_typec_port(dev);
++	int ret;
++	u32 src_current_ma;
++
++	if (port->cap->type == TYPEC_PORT_SNK || !port->ops || !port->ops->limit_src_current_set ||
++	    !port->cap->pd_revision) {
++		dev_dbg(dev, "Limiting source current not supported\n");
++		return -EOPNOTSUPP;
++	}
++
++	if (kstrtou32(buf, 0, &src_current_ma))
++		return -EINVAL;
++
++	mutex_lock(&port->limit_src_current_lock);
++
++	if (port->limit_src_current_ma == src_current_ma) {
++		ret = size;
++		goto unlock_and_ret;
++	}
++
++	if (port->limit_src_current_active) {
++		ret = port->ops->limit_src_current_set(port, src_current_ma,
++						       port->limit_src_current_active);
++		if (ret)
++			goto unlock_and_ret;
++	}
++
++	port->limit_src_current_ma = src_current_ma;
++	ret = size;
++
++unlock_and_ret:
++	mutex_unlock(&port->limit_src_current_lock);
++	return ret;
++}
++
++static ssize_t
++limit_src_current_ma_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct typec_port *port = to_typec_port(dev);
++
++	return sysfs_emit(buf, "%u\n", port->limit_src_current_ma);
++}
++static DEVICE_ATTR_RW(limit_src_current_ma);
++
+ static const char * const typec_pwr_opmodes[] = {
+ 	[TYPEC_PWR_MODE_USB]	= "default",
+ 	[TYPEC_PWR_MODE_1_5A]	= "1.5A",
+@@ -1536,6 +1632,8 @@ static struct attribute *typec_attrs[] = {
+ 	&dev_attr_vconn_source.attr,
+ 	&dev_attr_port_type.attr,
+ 	&dev_attr_orientation.attr,
++	&dev_attr_limit_src_current_active.attr,
++	&dev_attr_limit_src_current_ma.attr,
+ 	NULL,
+ };
+ 
+@@ -2039,6 +2137,7 @@ struct typec_port *typec_register_port(struct device *parent,
+ 
+ 	ida_init(&port->mode_ids);
+ 	mutex_init(&port->port_type_lock);
++	mutex_init(&port->limit_src_current_lock);
+ 
+ 	port->id = id;
+ 	port->ops = cap->ops;
+diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
+index 0f1bd6d19d67..3856bc058444 100644
+--- a/drivers/usb/typec/class.h
++++ b/drivers/usb/typec/class.h
+@@ -54,6 +54,11 @@ struct typec_port {
+ 
+ 	const struct typec_capability	*cap;
+ 	const struct typec_operations   *ops;
++
++	/* lock to protect limit_src_current_*_store operation */
++	struct mutex			limit_src_current_lock;
++	u32				limit_src_current_ma;
++	bool				limit_src_current_active;
+ };
+ 
+ #define to_typec_port(_dev_) container_of(_dev_, struct typec_port, dev)
+diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+index 7ba45a97eeae..1b1958ae4c16 100644
+--- a/include/linux/usb/typec.h
++++ b/include/linux/usb/typec.h
+@@ -213,6 +213,8 @@ struct typec_partner_desc {
+  * @pr_set: Set Power Role
+  * @vconn_set: Source VCONN
+  * @port_type_set: Set port type
++ * @limit_src_current_set: Used to limit source current advertisement while
++ *                         acting as source
+  */
+ struct typec_operations {
+ 	int (*try_role)(struct typec_port *port, int role);
+@@ -221,6 +223,8 @@ struct typec_operations {
+ 	int (*vconn_set)(struct typec_port *port, enum typec_role role);
+ 	int (*port_type_set)(struct typec_port *port,
+ 			     enum typec_port_type type);
++	int (*limit_src_current_set)(struct typec_port *port, u32 limit_src_current_ma,
++				     bool enable);
+ };
+ 
+ enum usb_pd_svdm_ver {
 -- 
-2.7.4
+2.35.0.263.gb82422642f-goog
 
