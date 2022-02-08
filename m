@@ -2,131 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEC04AD1B2
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 07:42:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 586D24AD1F6
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 08:12:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243803AbiBHGmJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Feb 2022 01:42:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
+        id S1347944AbiBHHL7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Feb 2022 02:11:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233449AbiBHGmF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 01:42:05 -0500
-X-Greylist: delayed 122 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 22:42:04 PST
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FABCC0401EF;
-        Mon,  7 Feb 2022 22:42:03 -0800 (PST)
+        with ESMTP id S232395AbiBHHL5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 02:11:57 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C34C0401F2
+        for <linux-usb@vger.kernel.org>; Mon,  7 Feb 2022 23:11:56 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id p22-20020a17090adf9600b001b8783b2647so1280721pjv.5
+        for <linux-usb@vger.kernel.org>; Mon, 07 Feb 2022 23:11:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644302524; x=1675838524;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iqtNpA9tQzu6yJkZwnRGduJChMwjXon6hNRj5nmETJQ=;
-  b=cbUA0RV9dvcQbdXgm9nAvFpJNGjMr1XdZSic1nHMw2zHqJxqnvqmRfIs
-   9aTge8+kUGeJHiB/2D6yvg7okA5hR0HhykI+5U4JgwJSn+lM3m+9VEkv+
-   eOtqRXKWL5PQ+tyD5ZMqO36QmZYAOLlhYyhHfa4mV9aGlDHH+vq8tbKIu
-   Q=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 07 Feb 2022 22:40:01 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 22:40:00 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 7 Feb 2022 22:40:00 -0800
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 7 Feb 2022 22:39:56 -0800
-Date:   Tue, 8 Feb 2022 12:09:52 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Udipto Goswami <quic_ugoswami@quicinc.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: Re: [PATCH] usb: dwc3: gadget: Prevent core from processing stale
- TRBs
-Message-ID: <20220208063952.GB22194@hu-pkondeti-hyd.qualcomm.com>
-References: <1644207958-18287-1-git-send-email-quic_ugoswami@quicinc.com>
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AzT2zSb2THNUuyQZXITuwOuNUzZi7qz7YcPLPaKf/rI=;
+        b=Lhm693r23Ti8wAB6bYk3E1Q2q3lTbPPIe+OT0/XGp/NvM3hMz6KA9q0SB7rouXhXdf
+         7aEzUb+JY9J2Mg77bkN5Oyj5qsYnl1jUHVVPP3Fyf9yWXYCxYlYcVTwHx2M0eTv0Ve7/
+         AWQKoZi56HQ1Ea63v4l4bx2UHAYM2awxgpMaDa/3GJxgeKWM6vDhmhi/sM56Ov58gOyZ
+         BncDRnnBa/9tV1DFDdme4f8v72+zodrFDj8X0yFVPgFtoGDpT0RurTr9U+r/+WXtM3su
+         +oydKlnkCLVo6d7ii1ktaTPqSbihzH5wpKPTIE1otKbBrTRWAbgdasf7C1HPdR/yb2hs
+         5WPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AzT2zSb2THNUuyQZXITuwOuNUzZi7qz7YcPLPaKf/rI=;
+        b=Es/tlTemOtUwbBAx1b0v5MgOT1vdH6+72X+ix7zh3efKLz+PKc+cwBy6eM4wEKuX95
+         fACwagxEa/LioYt2kDMT0+jyy2gHxxfqRO8JahE3+RDnkkh07cwEu61HPpDM/vXAdbNo
+         PWSDcThvynYpHCvHBeGvnIH6EuhiDY/eKvpwbzc2ObonzC8tplV27nYIadSBjFKSQVKw
+         qCxclfVa6pYJOuQbuEPxnwai7d3c9mK8Cbrngr26oCnrM5AYAtE1uFBq+POyNb0+uo6D
+         XI6S/r9VrvgeYqivjuhaR8lIcD20hrm4zC7epKEUFgOISKigYcgL4NTltmHT/09OLzW/
+         BsvQ==
+X-Gm-Message-State: AOAM531J0BUNyzLFTW/VY8VqskHhnCBtkl8kWGzEtZ3oPpYeWNBMEHAy
+        7SrgeZ4zIpYU+tEru1zTKXavNOFFodjxHamf2MtbPDwJGVA=
+X-Google-Smtp-Source: ABdhPJyE+FvacCbFr+U5+PSFkIVoti6qzgI8AF6+tnabk9G2exslpk9RmMoKfrI9b9ZZoHaVkUk+ZWm5v74HlT1gFUU=
+X-Received: by 2002:a17:90b:4d92:: with SMTP id oj18mr2896123pjb.236.1644304315799;
+ Mon, 07 Feb 2022 23:11:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1644207958-18287-1-git-send-email-quic_ugoswami@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220129093036.488231-1-pumahsu@google.com> <413ce7e5-1c35-c3d0-a89e-a3c7f03b4db7@linux.intel.com>
+In-Reply-To: <413ce7e5-1c35-c3d0-a89e-a3c7f03b4db7@linux.intel.com>
+From:   Puma Hsu <pumahsu@google.com>
+Date:   Tue, 8 Feb 2022 15:11:19 +0800
+Message-ID: <CAGCq0La83AKrdk4w2b6wJLZVB0oKB7_AH3iqc4R0K1vDnqrX9A@mail.gmail.com>
+Subject: Re: [PATCH v6] xhci: re-initialize the HC during resume if HCE was set
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     mathias.nyman@intel.com, Greg KH <gregkh@linuxfoundation.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Albert Wang <albertccwang@google.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 09:55:58AM +0530, Udipto Goswami wrote:
-> With CPU re-ordering on write instructions, there might
-> be a chance that the HWO is set before the TRB is updated
-> with the new mapped buffer address.
-> And in the case where core is processing a list of TRBs
-> it is possible that it fetched the TRBs when the HWO is set
-> but before the buffer address is updated.
-> Prevent this by adding a memory barrier before the HWO
-> is updated to ensure that the core always process the
-> updated TRBs.
-> 
-> Fixes: f6bafc6a1c9 ("usb: dwc3: convert TRBs into bitshifts")
-> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+On Thu, Feb 3, 2022 at 3:11 AM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
+>
+> On 29.1.2022 11.30, Puma Hsu wrote:
+> > When HCE(Host Controller Error) is set, it means an internal
+> > error condition has been detected. Software needs to re-initialize
+> > the HC, so add this check in xhci resume.
+> >
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Puma Hsu <pumahsu@google.com>
+> > ---
+> > v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
+> > v3: Add stable@vger.kernel.org for stable release.
+> > v4: Refine the commit message.
+> > v5: Add a debug log. Follow Mathias Nyman <mathias.nyman@linux.intel.com>'s comment.
+> > v6: Fix the missing declaration for str.
+> >
+> >  drivers/usb/host/xhci.c | 7 +++++--
+> >  1 file changed, 5 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > index dc357cabb265..6f1198068004 100644
+> > --- a/drivers/usb/host/xhci.c
+> > +++ b/drivers/usb/host/xhci.c
+> > @@ -1091,6 +1091,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+> >       int                     retval = 0;
+> >       bool                    comp_timer_running = false;
+> >       bool                    pending_portevent = false;
+> > +     char                    str[XHCI_MSG_MAX];
+> >
+> >       if (!hcd->state)
+> >               return 0;
+> > @@ -1146,8 +1147,10 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+> >               temp = readl(&xhci->op_regs->status);
+> >       }
+> >
+> > -     /* If restore operation fails, re-initialize the HC during resume */
+> > -     if ((temp & STS_SRE) || hibernated) {
+> > +     /* If restore operation fails or HC error is detected, re-initialize the HC during resume */
+> > +     if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
+> > +             xhci_warn(xhci, "re-initialize HC during resume, USBSTS:%s\n",
+> > +                       xhci_decode_usbsts(str, temp));
+> >
+> >               if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+> >                               !(xhci_all_ports_seen_u0(xhci))) {
+> >
+>
+> Ended up modifying this patch a bit more than I first intended,
+> - don't print warning in hibernation case, only error.
+> - maybe using a lot of stack for a debug string isn't really needed.
+> - make sure we read the usbsts register before checking for the HCE bit.
+>
+> Does the below work for you? If yes, and you agree I'll apply it instead
+
+Hi Mathias,
+Yes, your patch works for me, thanks!
+Will you submit a new patch? or should I update to a new version?
+Thanks.
+
 > ---
-> v1: For an ep the trbs can be reused, and if cpu re-ordering also
-> takes place, there is a change that the HWO will get set even before
-> the trb bpl/bph are updated which will lead controller to access a
-> stale buffer address from the previous transactions.
-> 
->  drivers/usb/dwc3/gadget.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 520031b..183b909 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -1291,6 +1291,19 @@ static void __dwc3_prepare_one_trb(struct dwc3_ep *dep, struct dwc3_trb *trb,
->  	if (usb_endpoint_xfer_bulk(dep->endpoint.desc) && dep->stream_capable)
->  		trb->ctrl |= DWC3_TRB_CTRL_SID_SOFN(stream_id);
->  
-> +	/*
-> +	 * As per data book 4.2.3.2TRB Control Bit Rules section
-> +	 *
-> +	 * The controller autonomously checks the HWO field of a TRB to determine if the
-> +	 * entire TRB is valid. Therefore, software must ensure that the rest of the TRB
-> +	 * is valid before setting the HWO field to '1'. In most systems, this means that
-> +	 * software must update the fourth DWORD of a TRB last.
-> +	 *
-> +	 * However there is a possibility of CPU re-ordering here which can cause
-> +	 * controller to observe the HWO bit set prematurely.
-> +	 * Add a write memory barrier to prevent CPU re-ordering.
-> +	 */
-> +	wmb();
->  	trb->ctrl |= DWC3_TRB_CTRL_HWO;
->  
-
-Looks good to me. FWIW,
-
-Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-
-It is very similar to what we have in xHC during TRB preparation.
-
-commit 576667bad341516edc4e18eb85acb0a2b4c9c9d9
-Author: Mathias Nyman <mathias.nyman@linux.intel.com>
-Date:   Fri Jan 15 18:19:06 2021 +0200
-
-xhci: make sure TRB is fully written before giving it to the controller
-
-Thanks,
-Pavan
+>
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index dc357cabb265..04ec2de158bf 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -1091,6 +1091,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+>         int                     retval = 0;
+>         bool                    comp_timer_running = false;
+>         bool                    pending_portevent = false;
+> +       bool                    reinit_xhc = false;
+>
+>         if (!hcd->state)
+>                 return 0;
+> @@ -1107,10 +1108,11 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+>         set_bit(HCD_FLAG_HW_ACCESSIBLE, &xhci->shared_hcd->flags);
+>
+>         spin_lock_irq(&xhci->lock);
+> -       if ((xhci->quirks & XHCI_RESET_ON_RESUME) || xhci->broken_suspend)
+> -               hibernated = true;
+>
+> -       if (!hibernated) {
+> +       if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME || xhci->broken_suspend)
+> +               reinit_xhc = true;
+> +
+> +       if (!reinit_xhc) {
+>                 /*
+>                  * Some controllers might lose power during suspend, so wait
+>                  * for controller not ready bit to clear, just as in xHC init.
+> @@ -1143,12 +1145,17 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+>                         spin_unlock_irq(&xhci->lock);
+>                         return -ETIMEDOUT;
+>                 }
+> -               temp = readl(&xhci->op_regs->status);
+>         }
+>
+> -       /* If restore operation fails, re-initialize the HC during resume */
+> -       if ((temp & STS_SRE) || hibernated) {
+> +       temp = readl(&xhci->op_regs->status);
+> +
+> +       /* re-initialize the HC on Restore Error, or Host Controller Error */
+> +       if (temp & (STS_SRE | STS_HCE)) {
+> +               reinit_xhc = true;
+> +               xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
+> +       }
+>
+> +       if (reinit_xhc) {
+>                 if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+>                                 !(xhci_all_ports_seen_u0(xhci))) {
+>                         del_timer_sync(&xhci->comp_mode_recovery_timer);
+>
