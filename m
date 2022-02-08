@@ -2,98 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97BED4AD6FF
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 12:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DDE4AD731
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 12:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349455AbiBHLbX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Feb 2022 06:31:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        id S1356389AbiBHLcI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Feb 2022 06:32:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348998AbiBHKQr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 05:16:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C16C03FEC0
-        for <linux-usb@vger.kernel.org>; Tue,  8 Feb 2022 02:16:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A06EB81897
-        for <linux-usb@vger.kernel.org>; Tue,  8 Feb 2022 10:16:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DD8C004E1;
-        Tue,  8 Feb 2022 10:16:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644315404;
-        bh=1DW+eeqCHXv0FSmxanpGUJnuximgL+CngSZZI05z9OU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bJ5OoiZDS+FIgTMyexCFo+0ZLCYtPwTIz3Hq2zUZDu83OLXhOpk2J7nKqsC1bsCn6
-         JRFNnflwEDfefPQ2Sn89JG0CMF4gtSX019Ndw5EuoiRXe26Ez70rvxBAmoPfHpUgYP
-         pXauRbT6JTc6RgzIb9926PT0NJ5l4VeGME7Sctug=
-Date:   Tue, 8 Feb 2022 11:16:41 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Christopher Rutherford <chrisrutherford@protonmail.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Neoway Technology N27 NB-IoT/eMTC/EGPRS module
-Message-ID: <YgJDCZl8Z7XgKY6u@kroah.com>
-References: <KX3y23_c5OPlneretDRhw4_4oqxJ1tXAwYfYb99nLhF8jWCLgWNuhotDR3ehKZ7bPqfDP4aocSpkn8IHccmKt6flhO4CqVxtR9wbidlaTEQ=@protonmail.com>
+        with ESMTP id S239900AbiBHKRX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 05:17:23 -0500
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B739DC03FEC0;
+        Tue,  8 Feb 2022 02:17:19 -0800 (PST)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 218A8sLM044192;
+        Tue, 8 Feb 2022 18:08:54 +0800 (GMT-8)
+        (envelope-from neal_liu@aspeedtech.com)
+Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 8 Feb
+ 2022 18:17:02 +0800
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Neal Liu <neal_liu@aspeedtech.com>,
+        Tao Ren <rentao.bupt@gmail.com>, <BMC-SW@aspeedtech.com>
+Subject: [PATCH v2] usb: ehci: add pci device support for Aspeed platforms
+Date:   Tue, 8 Feb 2022 18:16:57 +0800
+Message-ID: <20220208101657.76459-1-neal_liu@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <KX3y23_c5OPlneretDRhw4_4oqxJ1tXAwYfYb99nLhF8jWCLgWNuhotDR3ehKZ7bPqfDP4aocSpkn8IHccmKt6flhO4CqVxtR9wbidlaTEQ=@protonmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.10.10]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 218A8sLM044192
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 02:36:05PM +0000, Christopher Rutherford wrote:
-> Hi,
-> 
-> As per the dmesg log, please add the Neoway N27 to a proper driver.
-> 
-> lsusb
-> Bus 001 Device 014: ID 2949:8620 Qualcomm, Incorporated Qualcomm CDMA Technologies MSM
-> 
-> sudo modprobe usbserial vendor=0x2949 product=0x8620
-> 
-> [1989329.151331] usbcore: registered new interface driver usbserial_generic
-> [1989329.151336] usbserial: USB Serial support registered for generic
-> [1989329.151346] usbserial_generic 1-11:1.0: The "generic" usb-serial driver is only for testing and one-off prototypes.
-> [1989329.151347] usbserial_generic 1-11:1.0: Tell linux-usb@vger.kernel.org to add your device to a proper driver.
-> [1989329.151348] usbserial_generic 1-11:1.0: generic converter detected
-> [1989329.151429] usb 1-11: generic converter now attached to ttyUSB0
-> [1989329.151451] usbserial_generic 1-11:1.1: The "generic" usb-serial driver is only for testing and one-off prototypes.
-> [1989329.151451] usbserial_generic 1-11:1.1: Tell linux-usb@vger.kernel.org to add your device to a proper driver.
-> [1989329.151452] usbserial_generic 1-11:1.1: generic converter detected
-> [1989329.151486] usb 1-11: generic converter now attached to ttyUSB1
-> [1989329.151499] usbserial_generic 1-11:1.2: The "generic" usb-serial driver is only for testing and one-off prototypes.
-> [1989329.151500] usbserial_generic 1-11:1.2: Tell linux-usb@vger.kernel.org to add your device to a proper driver.
-> [1989329.151501] usbserial_generic 1-11:1.2: generic converter detected
-> [1989329.151526] usb 1-11: generic converter now attached to ttyUSB2
-> [1989329.151536] usbserial_generic 1-11:1.3: The "generic" usb-serial driver is only for testing and one-off prototypes.
-> [1989329.151537] usbserial_generic 1-11:1.3: Tell linux-usb@vger.kernel.org to add your device to a proper driver.
-> [1989329.151538] usbserial_generic 1-11:1.3: generic converter detected
-> [1989329.151567] usb 1-11: generic converter now attached to ttyUSB3
-> 
-> miniterm  /dev/ttyUSB1
-> --- Miniterm on /dev/ttyUSB1  9600,8,N,1 ---
-> --- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
-> at
-> OK
-> at
-> OK
-> 
-> Best regards,
-> 
-> Christopher
+Enable Aspeed quirks in commit 7f2d73788d90 ("usb: ehci:
+handshake CMD_RUN instead of STS_HALT") to support Aspeed
+ehci-pci device.
 
-What type of device is this?  A modem connection?
+Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+---
+ drivers/usb/host/ehci-pci.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Can you provide the output of 'lsusb -v -d 2949:8620' for this device?
+diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+index e87cf3a00fa4..638f03b89739 100644
+--- a/drivers/usb/host/ehci-pci.c
++++ b/drivers/usb/host/ehci-pci.c
+@@ -21,6 +21,9 @@ static const char hcd_name[] = "ehci-pci";
+ /* defined here to avoid adding to pci_ids.h for single instance use */
+ #define PCI_DEVICE_ID_INTEL_CE4100_USB	0x2e70
+ 
++#define PCI_VENDOR_ID_ASPEED		0x1a03
++#define PCI_DEVICE_ID_ASPEED_EHCI	0x2603
++
+ /*-------------------------------------------------------------------------*/
+ #define PCI_DEVICE_ID_INTEL_QUARK_X1000_SOC		0x0939
+ static inline bool is_intel_quark_x1000(struct pci_dev *pdev)
+@@ -222,6 +225,12 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+ 			ehci->has_synopsys_hc_bug = 1;
+ 		}
+ 		break;
++	case PCI_VENDOR_ID_ASPEED:
++		if (pdev->device == PCI_DEVICE_ID_ASPEED_EHCI) {
++			ehci_info(ehci, "applying Aspeed HC workaround\n");
++			ehci->is_aspeed = 1;
++		}
++		break;
+ 	}
+ 
+ 	/* optional debug port, normally in the first BAR */
+-- 
+2.25.1
 
-thanks,
-
-greg k-h
