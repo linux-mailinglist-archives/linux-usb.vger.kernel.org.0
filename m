@@ -2,160 +2,241 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384F14AD03B
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 05:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE884AD0BA
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 06:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346813AbiBHEPa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Feb 2022 23:15:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45226 "EHLO
+        id S244382AbiBHFcU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Feb 2022 00:32:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346775AbiBHEP3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Feb 2022 23:15:29 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA782C0401DC;
-        Mon,  7 Feb 2022 20:15:28 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2182W8JF004446;
-        Tue, 8 Feb 2022 04:15:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2021-07-09;
- bh=g5uVrvTpwVAKDyO9CmKHQQrCM9nE/ptjIJal5M27AsY=;
- b=dcep8tAwUBqkutUw5iI83bk428Fr+k4AhHbSlXACRJZNsxWt44/2D63XIpN7akx2nlK4
- 4jrCveqkL2mXrFsOy3pSVz2OuCgjx24ETYzjLZYD7c590HUIcrLGOPhUsWSZwNCEgFwA
- VmcbxX3exGeInz4naxv97cTF89iWpzOYHgUKOfM2++8pHuVl0fMa//4mMRXOmH7yeaKf
- wXk1APn+T5Yb5P0QD2qCfoBQYSYUNO7C9s3ouAIbxpiBGaMtSi781SNuL41UGhlJklUr
- ZNlcnPMWw57yjWBiDJ4ozPblRQXeR9L69C0qyYncd/jjD/wuVg4TSJ8UDF9KGv4YfSBs OQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e1g13r8nd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 08 Feb 2022 04:15:05 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21844wBG146724;
-        Tue, 8 Feb 2022 04:15:04 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
-        by userp3020.oracle.com with ESMTP id 3e1jpprmkf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 08 Feb 2022 04:15:04 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YEVTYZUFxUGOKMXUNJfTouF5f2nAiXctn+QNlJuaoznFu/ifCNGJCNCJBFEWTCQCCYuHreR/NDWpSQptHi4pzTqGhPpoKAalbbdowIyBuHfkFD4KA62EpPLOPlLgNn7Ynd1T+7daM2aGIQovCjL0sro0CV934OAajjdgks6+gOK5eoGtwdueoVrpLSzWugcUNcYeaSqbUOc16lIdFtVx+qPqnFtviKx4CyGIuQph+avKE3W95rBT93STcL6hcmxUDqsC+AAUeAMKJQN9lpZPCJLLluRNw3Jqxm2mJLsEJfg9lfuG4ct33/moJs4sKt1BmPJodBRNgsj6Mxx9jNNHkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g5uVrvTpwVAKDyO9CmKHQQrCM9nE/ptjIJal5M27AsY=;
- b=MO4O52eUkQyZK1JdjLCurs1JmOCdeSlkdyhncrdsbB+ixHLTzKqbsnlfNWncazR+LxrYFqmCek2DbBk64M/kjm2e7kiW0r1K6k1R/PEeQdVbAByjc+DAiGxJYMn8ToQMW1IInUNSBIU5Ru6l3hNDFSuxKe7JXU8Hn0XEHL4u/GrvXfC0u4/aRCoGIHEByPWm3bu1xmj5HiDs8kKN2WgHG+Mb3nzy0gPgK5H9I6c7xPjjefmuId3kd/S0HqD0p7gPMlptpsSFAlKDheIBPGCVyYzvMTjDIJYMC2qS+/3DW30jzIIfYh4OdJ5uSQbEIJ5afwlVurt2+iN/bwqQjELbKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
+        with ESMTP id S1346973AbiBHElL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Feb 2022 23:41:11 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0440C0401E9
+        for <linux-usb@vger.kernel.org>; Mon,  7 Feb 2022 20:41:09 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id s6-20020a0568301e0600b0059ea5472c98so12405049otr.11
+        for <linux-usb@vger.kernel.org>; Mon, 07 Feb 2022 20:41:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g5uVrvTpwVAKDyO9CmKHQQrCM9nE/ptjIJal5M27AsY=;
- b=c/M3V/QOWe3gsCdgITm+uKNVja1YWAsOt2eWklSV1xXaVQDJh4hD2YHPwTLJ4MHySlK3nUyk8fQaKxQ4w3vXhUfcYPLBTsTYroxI+hAwgZ3CzuiHE1FRO63LOzbRprCsolYa/l8iWMjXHDZ/Kq55tEsyZeUBUp5WBgOKnO+4eiM=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by DM6PR10MB4299.namprd10.prod.outlook.com (2603:10b6:5:216::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.16; Tue, 8 Feb
- 2022 04:15:01 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::2d45:d1bd:ebb9:48d1]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::2d45:d1bd:ebb9:48d1%4]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
- 04:15:01 +0000
-To:     Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-Cc:     linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 0/2] Add scsi_done_direct() to complete request directly.
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq135kuxadi.fsf@ca-mkp.ca.oracle.com>
-References: <20220201210954.570896-1-sebastian@breakpoint.cc>
-Date:   Mon, 07 Feb 2022 23:14:59 -0500
-In-Reply-To: <20220201210954.570896-1-sebastian@breakpoint.cc> (Sebastian
-        Andrzej Siewior's message of "Tue, 1 Feb 2022 22:09:52 +0100")
-Content-Type: text/plain
-X-ClientProxiedBy: SA0PR11CA0054.namprd11.prod.outlook.com
- (2603:10b6:806:d0::29) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=esjcw5J1950tYULEo1Mi5rlx0creI3trE/Z1yqFmq9U=;
+        b=ip03ry5nqNDMKLD/txk0cpnpGu1BvjmtduHQhiYMDZpn5vJRKhomQqMBgVAUV9p5PV
+         3xrn4cnCiRNPB/VaCfnqZhPnd6KJm6T6p/Qwoo2K8DYmR59WBKOjBe05u/COnPxqKiJu
+         EqlHzDIxVCoDeopGi4kwr0th6q3BXHzubpSmeCksw9GLws5mb3eY4eRv5Z4+QKWjOS0Y
+         KPeWUeFJFh6xDAyoWwt5pNIypf7EQ2wDAripNLU9/qsxjaW8t6yQrxYqf/j41O4nfDV+
+         Y+mDQYBT/pqa9wJDrE85riLOVO73QXylarUrOvwHg7M7L1Kpu8vh4YtdNTS7uY5knGR9
+         pv/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=esjcw5J1950tYULEo1Mi5rlx0creI3trE/Z1yqFmq9U=;
+        b=0BHcy9xdtUcXmfhYfqVvwcxyLu47UH7cowDSlfxJrpWUKifZ7kr8VEyqgJ2IbBhQgi
+         BC3nQi820ac6i6lh1Gu5mrtT97nv6znxMNJLbcgfQiNxBSOnwLogVPK0qL0kjQBdUEN8
+         t0nI+9M1CvfxzERGgcTrYrskrZorXwkibrhNza8mAFtp1wwtaR9WSMId2CjTLJpLxc+U
+         LylJlVWHXld8cJlV6yMaBmdHsZlsOiMxuL9tJrR3H2z6xYNxAd7bgTy3K1hsIoYIJ4zH
+         IYqY5u9rs/4CS/zssv4aqSg2R5L58SvQThQAtVWZawgx+hnig2m9yL0df413VNjnXTyT
+         4k/g==
+X-Gm-Message-State: AOAM532Y6bABZTq6QVTPhRbFvw1goSe1RFRBEqnOqDC6wFpvkf0pYmzp
+        X9a+gdesqV8YGzXGX1NYkfQ69g==
+X-Google-Smtp-Source: ABdhPJweY3q0vp0/f4DbyZgWE7ZXp0PpJrKT96m0Flrtcs1E/0Ff8vVW1yzoCSR4VtmcCjJaJS6RUQ==
+X-Received: by 2002:a9d:2c28:: with SMTP id f37mr1162716otb.65.1644295269183;
+        Mon, 07 Feb 2022 20:41:09 -0800 (PST)
+Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id l14sm4709367ooq.12.2022.02.07.20.41.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 20:41:08 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
+Subject: [PATCH 1/2] drm: Add HPD state to drm_connector_oob_hotplug_event()
+Date:   Mon,  7 Feb 2022 20:43:27 -0800
+Message-Id: <20220208044328.588860-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 07cb4a99-39d3-4678-50ba-08d9eab993a7
-X-MS-TrafficTypeDiagnostic: DM6PR10MB4299:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR10MB42997B1D10493D31004508EA8E2D9@DM6PR10MB4299.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 55P0+2Mk8yADWHxbnUQN40jDHFaiaA6Mnw96rkGhW2F2IHXWE8CMVcDaBUzjc+31QEJfJajdvexl64BmNo2dmw+c/db/eRVmxpdwhBmmrqdcpvCIvEyRxdc7wJzPlKBARIBEnr/jNb9RcH8XygtIH4RM+7P0c5bKXccrsz3Di1+4ekzqd8NBUCHD1/1F9pNIVPgKQvJoBHtbqsQQwUdCtzWFqfHI7WaeBPKGevd6ZnxzCJrF9/BLzqVz221yyfOdfYNRxUhTgkghG/dBh6kJ/SWZtf569aZ4iNF4/y/akRIqvY/bgf1+G56hvHskJG1RWRz4EW+xMbtE7lUHSaaBuJmdECV6jajdTb/P99fKxKxIiLTTvPcD6oBQDpDmiG3M1pDNFHdPMh+ftEI776e3POg9/N7qomxwoi3nn/NmAB0/uIB1pr56qRcbUfN+tFbl3WRXwwfK5zcm6UTZYjK9NlLuo4izj9usjSAiB2bBFR0F9yx0PEZ9tVIpEBFoWd/XU03IH/aKny8ZTn0HB4jiBxSpP9BbvasGnl3CbKD2nVoieka9aNZtWwxM2EfN++n66MxXiTQ1nVMUKPTsNhoZDVr+WiTMdw7FTA+xXp0uFQtOJeuvUP8F1dyZf0d3VahGENjEbe4MFPLcbQZRKU2ORnUdyXdF0DgkkTOJFlO4JB20uIhvrB+AAl0dgOS14BJiP34Wq5WcSXziM+5JwhUvbA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38350700002)(508600001)(2906002)(86362001)(6486002)(186003)(26005)(316002)(36916002)(6512007)(52116002)(558084003)(6506007)(6916009)(54906003)(66946007)(8936002)(8676002)(4326008)(83380400001)(38100700002)(5660300002)(66476007)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?szUpiIdMx3h/Abfxv73XIGLowlmUV/oFlr26yZ1VxMsuVduYvEPA8sQaCmYG?=
- =?us-ascii?Q?JceKPysKM6NYOtIkKxSMPfRhJfcmpk3qCE7YWfvPCckx01nUycI7y+IjeR4i?=
- =?us-ascii?Q?6jEy6iCAhBTW+Wk86mSBhARVYfoD7hde5XYpENmzuymgrCJyOzf5JOZTZtXP?=
- =?us-ascii?Q?pqmd4XxgxOR0z9S+p5iOW/KFWC7gEMVCr8MD22TZKZei4kDr1lA1V3rv78Bf?=
- =?us-ascii?Q?Ff4tK3lza9XLgkhTGxOAXCMjvRJWIxlaAbTsywbKw+R8nE8OvHfBPhD7mAEO?=
- =?us-ascii?Q?G6W8tNZHO9BuiMDZamglCj62wbcYILhQXxwYfUl9bsxeMZqymV5xLfxKIDqP?=
- =?us-ascii?Q?tsI3SFgiCxm8oAFVCLiSJ2cjUv8JmszQk3ua54lDQbLZK/WQWrtvrqXxahYr?=
- =?us-ascii?Q?2opsuXgGvKtjxNhXAOzO9T79z9izkz+P2poHpXRfVHg3IV5YWH1PgfjHz+85?=
- =?us-ascii?Q?iIFG40CF2wEfdkcDUcLt06WwYAG82oZX5LEmc+Y7uLEuDLtqfAi3oGU69Ifg?=
- =?us-ascii?Q?7pau5XS0LRQAEF9k5IJ3QUkXFF4pUxUFoukLWVB5zBNORQGVXKxdzi1NIUkw?=
- =?us-ascii?Q?j/Ftsiq1pz5HpsldYql+fYTth+ylY5EHYAFHBI8EtNsi95S1DRBLhSY0DqdT?=
- =?us-ascii?Q?p8wlkuFrXCDyNXxge4AMqCNKNkv5FI1UP0YYEHCecACEMqjz8cENTSvRcbay?=
- =?us-ascii?Q?gNfmeXOwPoCpcmLooyeAkKMbC1JkOea1UymzzfIbvCIDbKduFNUTuw7vNHQC?=
- =?us-ascii?Q?4VCF4iM3mByFe1TagR9algmJUj3JslLhUFRdXRSeO42ZhQHdxul2zFtKTcNU?=
- =?us-ascii?Q?13mRNVoU1RLOaLHcaHtgXeSaB7IeW3HXYZDKZaE5sO98GLJcVkmCc4LMpsoY?=
- =?us-ascii?Q?A6f5p14aEKzuqEpg4hsOSQOQ+W4C3hdafRFA+wpZhRM1C0iZKCzPzQsaG9Hz?=
- =?us-ascii?Q?1pbiJsHVqLf4pT+55e3K+1kLiVjC3qyTnupct1ZcynOHKnRdEorLFIDz8UQG?=
- =?us-ascii?Q?PXRkl86g9OJpoRbUtZJ9lLNOrXGIEzAxMV2j7J26BfyOhUeSpMIawxu2Bqn4?=
- =?us-ascii?Q?nChguZhin59XNRKUyCm+j02ywB+5ibFWKFaF/c2VQcgqRSN50Dy8zKAu6NlQ?=
- =?us-ascii?Q?b0+wNJallVQDyikf6Dc9YxoNOyDKJpI0tIM3bffwfsxGCeNQqffxXUTjUmqt?=
- =?us-ascii?Q?8v93rm6o7qNl0t/URQwGrmsUSfah+LcF/BN646JO6K/upqBU9zpVf1B335+3?=
- =?us-ascii?Q?CvgGEvaguOCy+OWZ3U/f+8CsVt8Tp9mDlXsg9QlJFHPb8uUIdhs+II8lRwjo?=
- =?us-ascii?Q?IazfbxXjmeR4zPJDEwoTdhostObPbGqA/WVlLwcgqb9mLgN6mWZZ5XkyNWzO?=
- =?us-ascii?Q?5f9BsOl2Bcm8NHgWDSpPuxpXTg6ouj81lvOKUJ2MNc/q/5Fzatd8TMKF7jUW?=
- =?us-ascii?Q?gLbn987wWyzNHg4YNn57nPNeoEsa6UJDc6pBPBXe801xjxDvqZLJ0nQpRaHP?=
- =?us-ascii?Q?WZOmxdngNjAWPrQ17X1f8GEcLSiOGY4Pe9xcEhm8SKw8CiTHTeFm/URHEkDo?=
- =?us-ascii?Q?GkQ/r5cCSNonLtskEey6wCY83Y5yVGjrFNKaeyCmqSaiGB2CLz3+sl/uV7Cl?=
- =?us-ascii?Q?RVblUGpj72EHr++dQd4d5LMoEK4Bii0a5C34ew/sPyOA8d265ZOQmkUSJT9L?=
- =?us-ascii?Q?ntOYRA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07cb4a99-39d3-4678-50ba-08d9eab993a7
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 04:15:01.7810
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GD23x/SlnfXGx18tbvnPcN2PSsPNQQ1Nax4sYxV9BHVzE2VXE7vCJG2nzRhQqLe9vXATS0W8eQ7p2ZJt/w4Ds9jcPV0wxhQSCeOoIJYNLMc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4299
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10251 signatures=673430
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=746 mlxscore=0 bulkscore=0
- malwarescore=0 suspectscore=0 phishscore=0 adultscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202080021
-X-Proofpoint-GUID: gBRfFV9qYBFTjrkWDUwYXaP_pfGFt8Ck
-X-Proofpoint-ORIG-GUID: gBRfFV9qYBFTjrkWDUwYXaP_pfGFt8Ck
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+In some implementations, such as the Qualcomm platforms, the display
+driver has no way to query the current HPD state and as such it's
+impossible to distinguish between disconnect and attention events.
 
-Sebastian,
+Add a parameter to drm_connector_oob_hotplug_event() to pass the HPD
+state.
 
-> This mini series adds scsi_done_direct() in order to complete scsi
-> requests directly via blk_mq_complete_request_direct(). This used by
-> the usb-storage driver.
+Also push the test for unchanged state in the displayport altmode driver
+into the i915 driver, to allow other drivers to act upon each update.
 
-Applied to 5.18/scsi-staging, thanks!
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
 
+Note that the Intel driver has only been compile tested with this patch.
+
+ drivers/gpu/drm/drm_connector.c          |  6 ++++--
+ drivers/gpu/drm/i915/display/intel_dp.c  | 14 +++++++++++---
+ drivers/gpu/drm/i915/i915_drv.h          |  3 +++
+ drivers/usb/typec/altmodes/displayport.c |  9 ++-------
+ include/drm/drm_connector.h              |  5 +++--
+ 5 files changed, 23 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+index a50c82bc2b2f..ad7295597c0f 100644
+--- a/drivers/gpu/drm/drm_connector.c
++++ b/drivers/gpu/drm/drm_connector.c
+@@ -2825,6 +2825,7 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
+ /**
+  * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
+  * @connector_fwnode: fwnode_handle to report the event on
++ * @hpd_state: number of data lanes available
+  *
+  * On some hardware a hotplug event notification may come from outside the display
+  * driver / device. An example of this is some USB Type-C setups where the hardware
+@@ -2834,7 +2835,8 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
+  * This function can be used to report these out-of-band events after obtaining
+  * a drm_connector reference through calling drm_connector_find_by_fwnode().
+  */
+-void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
++void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
++				     bool hpd_state)
+ {
+ 	struct drm_connector *connector;
+ 
+@@ -2843,7 +2845,7 @@ void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
+ 		return;
+ 
+ 	if (connector->funcs->oob_hotplug_event)
+-		connector->funcs->oob_hotplug_event(connector);
++		connector->funcs->oob_hotplug_event(connector, hpd_state);
+ 
+ 	drm_connector_put(connector);
+ }
+diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
+index 146b83916005..00520867d37b 100644
+--- a/drivers/gpu/drm/i915/display/intel_dp.c
++++ b/drivers/gpu/drm/i915/display/intel_dp.c
+@@ -4816,15 +4816,23 @@ static int intel_dp_connector_atomic_check(struct drm_connector *conn,
+ 	return intel_modeset_synced_crtcs(state, conn);
+ }
+ 
+-static void intel_dp_oob_hotplug_event(struct drm_connector *connector)
++static void intel_dp_oob_hotplug_event(struct drm_connector *connector, bool hpd_state)
+ {
+ 	struct intel_encoder *encoder = intel_attached_encoder(to_intel_connector(connector));
+ 	struct drm_i915_private *i915 = to_i915(connector->dev);
++	bool need_work = false;
+ 
+ 	spin_lock_irq(&i915->irq_lock);
+-	i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
++	if (hpd_state != i915->hotplug.oob_hotplug_state) {
++		i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
++
++		i915->hotplug.oob_hotplug_state = hpd_state;
++		need_work = true;
++	}
+ 	spin_unlock_irq(&i915->irq_lock);
+-	queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
++
++	if (need_work)
++		queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
+ }
+ 
+ static const struct drm_connector_funcs intel_dp_connector_funcs = {
+diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
+index 8c1706fd81f9..543ebf1cfcf4 100644
+--- a/drivers/gpu/drm/i915/i915_drv.h
++++ b/drivers/gpu/drm/i915/i915_drv.h
+@@ -149,6 +149,9 @@ struct i915_hotplug {
+ 	/* Whether or not to count short HPD IRQs in HPD storms */
+ 	u8 hpd_short_storm_enabled;
+ 
++	/* Last state reported by oob_hotplug_event */
++	bool oob_hotplug_state;
++
+ 	/*
+ 	 * if we get a HPD irq from DP and a HPD irq from non-DP
+ 	 * the non-DP HPD could block the workqueue on a mode config
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+index c1d8c23baa39..a4596be4d34a 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -59,7 +59,6 @@ struct dp_altmode {
+ 	struct typec_displayport_data data;
+ 
+ 	enum dp_state state;
+-	bool hpd;
+ 
+ 	struct mutex lock; /* device lock */
+ 	struct work_struct work;
+@@ -143,10 +142,7 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
+ 		if (!ret)
+ 			dp->state = DP_STATE_CONFIGURE;
+ 	} else {
+-		if (dp->hpd != hpd) {
+-			drm_connector_oob_hotplug_event(dp->connector_fwnode);
+-			dp->hpd = hpd;
+-		}
++		drm_connector_oob_hotplug_event(dp->connector_fwnode, hpd);
+ 	}
+ 
+ 	return ret;
+@@ -573,8 +569,7 @@ void dp_altmode_remove(struct typec_altmode *alt)
+ 	cancel_work_sync(&dp->work);
+ 
+ 	if (dp->connector_fwnode) {
+-		if (dp->hpd)
+-			drm_connector_oob_hotplug_event(dp->connector_fwnode);
++		drm_connector_oob_hotplug_event(dp->connector_fwnode, false);
+ 
+ 		fwnode_handle_put(dp->connector_fwnode);
+ 	}
+diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+index 64cf5f88c05b..7c90b8eb2ace 100644
+--- a/include/drm/drm_connector.h
++++ b/include/drm/drm_connector.h
+@@ -1141,7 +1141,7 @@ struct drm_connector_funcs {
+ 	 * This will get called when a hotplug-event for a drm-connector
+ 	 * has been received from a source outside the display driver / device.
+ 	 */
+-	void (*oob_hotplug_event)(struct drm_connector *connector);
++	void (*oob_hotplug_event)(struct drm_connector *connector, bool hpd_state);
+ };
+ 
+ /**
+@@ -1742,7 +1742,8 @@ drm_connector_is_unregistered(struct drm_connector *connector)
+ 		DRM_CONNECTOR_UNREGISTERED;
+ }
+ 
+-void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode);
++void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
++				     bool hpd_state);
+ const char *drm_get_connector_type_name(unsigned int connector_type);
+ const char *drm_get_connector_status_name(enum drm_connector_status status);
+ const char *drm_get_subpixel_order_name(enum subpixel_order order);
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.33.1
+
