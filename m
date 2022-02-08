@@ -2,31 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BE44AE246
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 20:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C184AE24B
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 20:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386082AbiBHTbp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Feb 2022 14:31:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
+        id S1353240AbiBHTdf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Feb 2022 14:33:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233618AbiBHTbo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 14:31:44 -0500
-Received: from mxout04.lancloud.ru (mxout04.lancloud.ru [45.84.86.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB704C0612C0
-        for <linux-usb@vger.kernel.org>; Tue,  8 Feb 2022 11:31:40 -0800 (PST)
+        with ESMTP id S1352499AbiBHTde (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 14:33:34 -0500
+Received: from mxout02.lancloud.ru (mxout02.lancloud.ru [45.84.86.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5E8C0613CB
+        for <linux-usb@vger.kernel.org>; Tue,  8 Feb 2022 11:33:33 -0800 (PST)
 Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 345AE20A9827
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 6DECB2077B66
 Received: from LanCloud
 Received: from LanCloud
 Received: from LanCloud
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        <"Greg Kroah-Hartman <gregkh"@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>
 From:   Sergey Shtylyov <s.shtylyov@omp.ru>
 Subject: [PATCH] usb: host: xhci: drop redundant checks
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Organization: Open Mobile Platform
-Message-ID: <af8665f5-bc6e-2770-0f7f-750e804511d6@omp.ru>
-Date:   Tue, 8 Feb 2022 22:31:36 +0300
+Message-ID: <35e4ec57-f718-d4fb-2269-bf112530ee62@omp.ru>
+Date:   Tue, 8 Feb 2022 22:33:30 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
@@ -34,7 +34,7 @@ Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
  LFEX1907.lancloud.ru (fd00:f066::207)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
@@ -54,6 +54,8 @@ analysis tool.
 Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
 ---
+Resending with correct  Greg KH's address, hopefully... :-)
+
  drivers/usb/host/xhci.c |    4 ----
  1 file changed, 4 deletions(-)
 
