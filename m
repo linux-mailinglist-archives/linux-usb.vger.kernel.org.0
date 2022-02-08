@@ -2,302 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1F84AD724
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 12:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFF34AD728
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 12:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245189AbiBHLb3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Feb 2022 06:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
+        id S1357627AbiBHLb7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Feb 2022 06:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344266AbiBHKUF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 05:20:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FB1C03FEC0;
-        Tue,  8 Feb 2022 02:20:03 -0800 (PST)
+        with ESMTP id S1349055AbiBHKey (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 05:34:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED055C03FEC0
+        for <linux-usb@vger.kernel.org>; Tue,  8 Feb 2022 02:34:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BA1861559;
-        Tue,  8 Feb 2022 10:20:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1930BC004E1;
-        Tue,  8 Feb 2022 10:20:01 +0000 (UTC)
-Date:   Tue, 8 Feb 2022 11:19:59 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v2] ARM: sa1100/assabet: move dmabounce hack to ohci
- driver
-Message-ID: <YgJDz6UdVwvyCSvq@kroah.com>
-References: <20220203083658.559803-1-arnd@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CEF361562
+        for <linux-usb@vger.kernel.org>; Tue,  8 Feb 2022 10:34:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E6D1C004E1;
+        Tue,  8 Feb 2022 10:34:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644316487;
+        bh=tpnD5ProEcoCxpcedaIL/JDOI9oCt3z6+CGq3zlZPw8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ItL5R4sDnGoUjQCjsyaHPW1Vh9xJKb6yH6YLmbDXk/yO6cmF7daNDFZQ+xmzaTtlX
+         RdQDqxJru8qjjaEiC4Uxo4W/zGXViheB5/Fcon849mbyl+QOzkwNKQ4xx8tmPcq63c
+         Vx72hhzeAI7Bo2fZilIN0TO5i3SixIoFTdr+6c2k=
+Date:   Tue, 8 Feb 2022 11:34:44 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jan-Niklas Burfeind <kernel@aiyionpri.me>,
+        Dmytro Bagrii <dimich.dmb@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] Revert "USB: serial: ch341: add new Product ID for
+ CH341A"
+Message-ID: <YgJHRKQHQheKTwjU@kroah.com>
+References: <20220207000822.697343-1-dimich.dmb@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220203083658.559803-1-arnd@kernel.org>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220207000822.697343-1-dimich.dmb@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 09:36:33AM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The sa1111 platform is one of the two remaining users of the old Arm
-> specific "dmabounce" code, which is an earlier implementation of the
-> generic swiotlb.
-> 
-> Linus Walleij submitted a patch that removes dmabounce support from
-> the ixp4xx, and I had a look at the other user, which is the sa1111
-> companion chip.
-> 
-> Looking at how dmabounce is used, I could narrow it down to one driver
-> one three machines:
-> 
->  - dmabounce is only initialized on assabet/neponset, jornada720 and
->    badge4, which are the platforms that have an sa1111 and support
->    DMA on it.
-> 
->  - All three of these suffer from "erratum #7" that requires only
->    doing DMA to half the memory sections based on one of the address
->    lines, in addition, the neponset also can't DMA to the RAM that
->    is connected to sa1111 itself.
-> 
->  - the pxa lubbock machine also has sa1111, but does not support DMA
->    on it and does not set dmabounce.
-> 
->  - only the OHCI and audio devices on sa1111 support DMA, but as
->    there is no audio driver for this hardware, only OHCI remains.
-> 
-> In the OHCI code, I noticed that two other platforms already have
-> a local bounce buffer support in the form of the "local_mem"
-> allocator. Specifically, TMIO and SM501 use this on a few other ARM
-> boards with 16KB or 128KB of local SRAM that can be accessed from the
-> OHCI and from the CPU.
-> 
-> While this is not the same problem as on sa1111, I could not find a
-> reason why we can't re-use the existing implementation but replace the
-> physical SRAM address mapping with a locally allocated DMA buffer.
-> 
-> There are two main downsides:
-> 
->  - rather than using a dynamically sized pool, this buffer needs
->    to be allocated at probe time using a fixed size. Without
->    having any idea of what it should be, I picked a size of
->    64KB, which is between what the other two OHCI front-ends use
->    in their SRAM. If anyone has a better idea what that size
->    is reasonable, this can be trivially changed.
-> 
->  - Previously, only USB transfers to unaddressable memory needed
->    to go through the bounce buffer, now all of them do, which may
->    impact runtime performance for USB endpoints that do a lot of
->    transfers.
-> 
-> On the upside, the local_mem support uses write-combining buffers,
-> which should be a bit faster for transfers to the device compared to
-> normal uncached coherent memory as used in dmabounce.
-> 
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Christoph Hellwig <hch@infradead.org>
-> Cc: Laurentiu Tudor <laurentiu.tudor@nxp.com>
-> Cc: linux-usb@vger.kernel.org
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Mon, Feb 07, 2022 at 02:08:23AM +0200, Dmytro Bagrii wrote:
+> This reverts commit 46ee4abb10a07bd8f8ce910ee6b4ae6a947d7f63.
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+You forgot to cc: the author of that commit, why?
 
-> ---
-> Changes in v2:
+Also forgot to cc: the maintainer of the driver/subsytem?
+
+> CH341A has three different modes of operation selectable either by
+> hardware pin connections or by external EEPROM configuration. Each
+> mode is represented by corresponding product ID:
 > 
->  - drop check for assabet, as bounce buffers are required on
->    all sa1100 machines
->  - select CONFIG_ZONE_DMA again
->  - update comments and changelog text based on discussion
-> ---
->  arch/arm/common/Kconfig        |  2 +-
->  arch/arm/common/sa1111.c       | 64 ----------------------------------
->  drivers/usb/core/hcd.c         | 17 +++++++--
->  drivers/usb/host/ohci-sa1111.c | 25 +++++++++++++
->  4 files changed, 40 insertions(+), 68 deletions(-)
+> 0x5523: Asyncronous Serial Interface
+> 0x5584: Parallel Printer Interface
+> 0x5512: EPP/MEM Interface
+
+That does not corrispond with what Jan-Niklas said in the original
+commit.
+
 > 
-> diff --git a/arch/arm/common/Kconfig b/arch/arm/common/Kconfig
-> index c8e198631d41..bc158fd227e1 100644
-> --- a/arch/arm/common/Kconfig
-> +++ b/arch/arm/common/Kconfig
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  config SA1111
->  	bool
-> -	select DMABOUNCE if !ARCH_PXA
-> +	select ZONE_DMA if ARCH_SA1100
->  
->  config DMABOUNCE
->  	bool
-> diff --git a/arch/arm/common/sa1111.c b/arch/arm/common/sa1111.c
-> index 7df003b149c6..a00915883f78 100644
-> --- a/arch/arm/common/sa1111.c
-> +++ b/arch/arm/common/sa1111.c
-> @@ -1391,70 +1391,9 @@ void sa1111_driver_unregister(struct sa1111_driver *driver)
->  }
->  EXPORT_SYMBOL(sa1111_driver_unregister);
->  
-> -#ifdef CONFIG_DMABOUNCE
-> -/*
-> - * According to the "Intel StrongARM SA-1111 Microprocessor Companion
-> - * Chip Specification Update" (June 2000), erratum #7, there is a
-> - * significant bug in the SA1111 SDRAM shared memory controller.  If
-> - * an access to a region of memory above 1MB relative to the bank base,
-> - * it is important that address bit 10 _NOT_ be asserted. Depending
-> - * on the configuration of the RAM, bit 10 may correspond to one
-> - * of several different (processor-relative) address bits.
-> - *
-> - * This routine only identifies whether or not a given DMA address
-> - * is susceptible to the bug.
-> - *
-> - * This should only get called for sa1111_device types due to the
-> - * way we configure our device dma_masks.
-> - */
-> -static int sa1111_needs_bounce(struct device *dev, dma_addr_t addr, size_t size)
-> -{
-> -	/*
-> -	 * Section 4.6 of the "Intel StrongARM SA-1111 Development Module
-> -	 * User's Guide" mentions that jumpers R51 and R52 control the
-> -	 * target of SA-1111 DMA (either SDRAM bank 0 on Assabet, or
-> -	 * SDRAM bank 1 on Neponset). The default configuration selects
-> -	 * Assabet, so any address in bank 1 is necessarily invalid.
-> -	 */
-> -	return (machine_is_assabet() || machine_is_pfs168()) &&
-> -		(addr >= 0xc8000000 || (addr + size) >= 0xc8000000);
-> -}
-> -
-> -static int sa1111_notifier_call(struct notifier_block *n, unsigned long action,
-> -	void *data)
-> -{
-> -	struct sa1111_dev *dev = to_sa1111_device(data);
-> -
-> -	switch (action) {
-> -	case BUS_NOTIFY_ADD_DEVICE:
-> -		if (dev->dev.dma_mask && dev->dma_mask < 0xffffffffUL) {
-> -			int ret = dmabounce_register_dev(&dev->dev, 1024, 4096,
-> -					sa1111_needs_bounce);
-> -			if (ret)
-> -				dev_err(&dev->dev, "failed to register with dmabounce: %d\n", ret);
-> -		}
-> -		break;
-> -
-> -	case BUS_NOTIFY_DEL_DEVICE:
-> -		if (dev->dev.dma_mask && dev->dma_mask < 0xffffffffUL)
-> -			dmabounce_unregister_dev(&dev->dev);
-> -		break;
-> -	}
-> -	return NOTIFY_OK;
-> -}
-> -
-> -static struct notifier_block sa1111_bus_notifier = {
-> -	.notifier_call = sa1111_notifier_call,
-> -};
-> -#endif
-> -
->  static int __init sa1111_init(void)
->  {
->  	int ret = bus_register(&sa1111_bus_type);
-> -#ifdef CONFIG_DMABOUNCE
-> -	if (ret == 0)
-> -		bus_register_notifier(&sa1111_bus_type, &sa1111_bus_notifier);
-> -#endif
->  	if (ret == 0)
->  		platform_driver_register(&sa1111_device_driver);
->  	return ret;
-> @@ -1463,9 +1402,6 @@ static int __init sa1111_init(void)
->  static void __exit sa1111_exit(void)
->  {
->  	platform_driver_unregister(&sa1111_device_driver);
-> -#ifdef CONFIG_DMABOUNCE
-> -	bus_unregister_notifier(&sa1111_bus_type, &sa1111_bus_notifier);
-> -#endif
->  	bus_unregister(&sa1111_bus_type);
->  }
->  
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index 3c7c64ff3c0a..8417baedc89c 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -1260,7 +1260,8 @@ void usb_hcd_unlink_urb_from_ep(struct usb_hcd *hcd, struct urb *urb)
->  EXPORT_SYMBOL_GPL(usb_hcd_unlink_urb_from_ep);
->  
->  /*
-> - * Some usb host controllers can only perform dma using a small SRAM area.
-> + * Some usb host controllers can only perform dma using a small SRAM area,
-> + * or have restrictions on addressable DRAM.
->   * The usb core itself is however optimized for host controllers that can dma
->   * using regular system memory - like pci devices doing bus mastering.
->   *
-> @@ -3095,8 +3096,18 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
->  	if (IS_ERR(hcd->localmem_pool))
->  		return PTR_ERR(hcd->localmem_pool);
->  
-> -	local_mem = devm_memremap(hcd->self.sysdev, phys_addr,
-> -				  size, MEMREMAP_WC);
-> +	/*
-> +	 * if a physical SRAM address was passed, map it, otherwise
-> +	 * allocate system memory as a buffer.
-> +	 */
-> +	if (phys_addr)
-> +		local_mem = devm_memremap(hcd->self.sysdev, phys_addr,
-> +					  size, MEMREMAP_WC);
-> +	else
-> +		local_mem = dmam_alloc_attrs(hcd->self.sysdev, size, &dma,
-> +					     GFP_KERNEL,
-> +					     DMA_ATTR_WRITE_COMBINE);
-> +
->  	if (IS_ERR(local_mem))
->  		return PTR_ERR(local_mem);
->  
-> diff --git a/drivers/usb/host/ohci-sa1111.c b/drivers/usb/host/ohci-sa1111.c
-> index 137f66f6977f..0da2badf0658 100644
-> --- a/drivers/usb/host/ohci-sa1111.c
-> +++ b/drivers/usb/host/ohci-sa1111.c
-> @@ -206,6 +206,31 @@ static int ohci_hcd_sa1111_probe(struct sa1111_dev *dev)
->  		goto err1;
->  	}
->  
-> +	/*
-> +	 * According to the "Intel StrongARM SA-1111 Microprocessor Companion
-> +	 * Chip Specification Update" (June 2000), erratum #7, there is a
-> +	 * significant bug in the SA1111 SDRAM shared memory controller.  If
-> +	 * an access to a region of memory above 1MB relative to the bank base,
-> +	 * it is important that address bit 10 _NOT_ be asserted. Depending
-> +	 * on the configuration of the RAM, bit 10 may correspond to one
-> +	 * of several different (processor-relative) address bits.
-> +	 *
-> +	 * Section 4.6 of the "Intel StrongARM SA-1111 Development Module
-> +	 * User's Guide" mentions that jumpers R51 and R52 control the
-> +	 * target of SA-1111 DMA (either SDRAM bank 0 on Assabet, or
-> +	 * SDRAM bank 1 on Neponset). The default configuration selects
-> +	 * Assabet, so any address in bank 1 is necessarily invalid.
-> +	 *
-> +	 * As a workaround, use a bounce buffer in addressable memory
-> +	 * as local_mem, relying on ZONE_DMA to provide an area that
-> +	 * fits within the above constraints.
-> +	 *
-> +	 * SZ_64K is an estimate for what size this might need.
-> +	 */
-> +	ret = usb_hcd_setup_local_mem(hcd, 0, 0, SZ_64K);
-> +	if (ret)
-> +		goto err1;
-> +
->  	if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len, hcd_name)) {
->  		dev_dbg(&dev->dev, "request_mem_region failed\n");
->  		ret = -EBUSY;
-> -- 
-> 2.29.2
+> (See "5.3.Function configuration" in datasheet at wch-ic.com/downloads/CH341DS1_PDF.html)
 > 
+> When CH341A is configured as EPP/MEM Interface it appears as 1a86:5512 and being mistakenly
+> handled by ch341 USB serial driver.
+> 
+> It is possible to use CH341A in EPP/MEM mode only if ch341 module is blacklisted, but it must be
+> unblacklisted every time to use CH341A as a serial converter. Also obviously it is impossible
+> to use two CH341A boards in different modes simoultaneously.
+
+Please wrap your lines at 72 columns.
+
+thanks,
+
+greg k-h
