@@ -2,127 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180054AD20E
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 08:18:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7AEF4AD25A
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 08:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348012AbiBHHSb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 8 Feb 2022 02:18:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
+        id S1348424AbiBHHh6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Feb 2022 02:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347170AbiBHHSX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 02:18:23 -0500
-X-Greylist: delayed 140 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 23:18:21 PST
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0245C0401F5;
-        Mon,  7 Feb 2022 23:18:21 -0800 (PST)
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 2187F78w8002212, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 2187F78w8002212
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 8 Feb 2022 15:15:07 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 8 Feb 2022 15:15:06 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Feb 2022 15:15:06 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
- RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
- 15.01.2308.020; Tue, 8 Feb 2022 15:15:06 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Henning Schild <henning.schild@siemens.com>
-CC:     Aaron Ma <aaron.ma@canonical.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "tiwai@suse.de" <tiwai@suse.de>
-Subject: RE: [PATCH v3] net: usb: r8152: Add MAC passthrough support for RTL8153BL
-Thread-Topic: [PATCH v3] net: usb: r8152: Add MAC passthrough support for
- RTL8153BL
-Thread-Index: AQHYFAANjLdOSvtCR0KlGk2k9pQgE6x3kd2AgACjlICAAAm2AIARBXOA
-Date:   Tue, 8 Feb 2022 07:15:06 +0000
-Message-ID: <780d5453fbd24f61bb10f6e8f0acbda1@realtek.com>
-References: <20220127100109.12979-1-aaron.ma@canonical.com>
- <20220128043207.14599-1-aaron.ma@canonical.com>
- <20220128092103.1fa2a661@md1za8fc.ad001.siemens.net>
- <YfQwpy1Kkz3wheTi@lunn.ch>
- <BL1PR12MB515773B15441F5BC375E452DE2229@BL1PR12MB5157.namprd12.prod.outlook.com>
-In-Reply-To: <BL1PR12MB515773B15441F5BC375E452DE2229@BL1PR12MB5157.namprd12.prod.outlook.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.203]
-x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/2/8_=3F=3F_02:24:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        with ESMTP id S1346472AbiBHHh6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 02:37:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96248C0401F4;
+        Mon,  7 Feb 2022 23:37:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25AC0615DC;
+        Tue,  8 Feb 2022 07:37:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D15AEC340ED;
+        Tue,  8 Feb 2022 07:37:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644305876;
+        bh=jCqEF148ccWzh0I4aTqkCNTCIq5H5g9nqJjNydsQbQ8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uN9p3WazGl53qw4M9VNwJO8ZRkgkySxIicVKaGBLXUeXK86MhKCG6J/ThjV6oubzY
+         R4yk5KKIXmf3ad7kE4UB6L9T+k1HPwQDEOt/xTbWZ4ME/B7p4rq1owyeB7cTAPVn+n
+         8kC3lY7qWJKFK5d991L6XEoK9/nrECqWnAxbyLYU=
+Date:   Tue, 8 Feb 2022 08:37:52 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Neal Liu <neal_liu@aspeedtech.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Tao Ren <rentao.bupt@gmail.com>, BMC-SW@aspeedtech.com
+Subject: Re: [PATCH] usb: ehci: add pci device support for Aspeed platforms
+Message-ID: <YgId0AhvRAmIcEA0@kroah.com>
+References: <20220208062927.3527137-1-neal_liu@aspeedtech.com>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220208062927.3527137-1-neal_liu@aspeedtech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Limonciello, Mario <Mario.Limonciello@amd.com>
-> Sent: Saturday, January 29, 2022 2:41 AM
-[...]
-> > I've not yet been convinced by replies that the proposed code really
-> > does only match the given dock, and not random USB dongles.
+On Tue, Feb 08, 2022 at 02:29:27PM +0800, Neal Liu wrote:
+> Enable Aspeed quirks in commit 7f2d73788d90 ("usb: ehci:
+> handshake CMD_RUN instead of STS_HALT") to support Aspeed
+> ehci-pci device.
 > 
-> Didn't Realtek confirm this bit is used to identify the Lenovo devices?
+> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> ---
+>  drivers/usb/host/ehci-pci.c | 6 ++++++
+>  include/linux/pci_ids.h     | 3 +++
+>  2 files changed, 9 insertions(+)
+> 
+> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+> index e87cf3a00fa4..a91b25d216ae 100644
+> --- a/drivers/usb/host/ehci-pci.c
+> +++ b/drivers/usb/host/ehci-pci.c
+> @@ -222,6 +222,12 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+>  			ehci->has_synopsys_hc_bug = 1;
+>  		}
+>  		break;
+> +	case PCI_VENDOR_ID_ASPEED:
+> +		if (pdev->device == PCI_DEVICE_ID_ASPEED_EHCI) {
+> +			ehci_info(ehci, "applying Aspeed HC workaround\n");
+> +			ehci->is_aspeed = 1;
+> +		}
+> +		break;
+>  	}
+>  
+>  	/* optional debug port, normally in the first BAR */
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index aad54c666407..410b395fe56c 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -3096,4 +3096,7 @@
+>  
+>  #define PCI_VENDOR_ID_NCUBE		0x10ff
+>  
+> +#define PCI_VENDOR_ID_ASPEED		0x1a03
+> +#define PCI_DEVICE_ID_ASPEED_EHCI	0x2603
 
-Excuse me. Last week is our vacation of Chinese New Year.
-Realtek confirms that bit is used to identify the Lenovo devices.
-We use different bits for specific customers.
-For RTL8153B, bit 0 and 2 of USB OCP 0xD81F are for Dell. Bit 3 is for Lenovo.
-However, Realtek couldn't answer if the Lenovo devices are used on docks only.
+Please read the top of this file, this does not need to be added here.
 
-Best Regards,
-Hayes
+thanks,
 
-> > To be
-> > convinced i would probably like to see code which positively
-> > identifies the dock, and that the USB device is on the correct port of
-> > the USB hub within the dock. I doubt you can actually do that in a
-> > sane way inside an Ethernet driver. As you say, it will likely lead to
-> > unmaintainable spaghetti-code.
-> >
-> > I also don't really think the vendor would be keen on adding code
-> > which they know will get reverted as soon as it is shown to cause a
-> > regression.
-> >
-> > So i would prefer to NACK this, and push it to udev rules where you
-> > have a complete picture of the hardware and really can identify with
-> > 100% certainty it really is the docks NIC.
-> 
-> I remember when I did the Dell implementation I tried userspace first.
-> 
-> Pushing this out to udev has a few other implications I remember hitting:
-> 1) You need to also get the value you're supposed to use from ACPI BIOS
->      exported some way in userland too.
-> 2) You can run into race conditions with other device or MAC renaming rules.
->     My first try I did it with NM and hit that continually.  So you would
-> probably
->     need to land this in systemd or so.
-> 
-> >
-> >    Andrew------Please consider the environment before printing this e-mail.
+greg k-h
