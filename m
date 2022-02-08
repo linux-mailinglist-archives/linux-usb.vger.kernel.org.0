@@ -2,45 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4634AD9F3
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 14:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 507EC4AD9F9
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 14:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347564AbiBHNeg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Feb 2022 08:34:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
+        id S1344003AbiBHNgI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Feb 2022 08:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244856AbiBHNeb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 08:34:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EA9C03FECE
-        for <linux-usb@vger.kernel.org>; Tue,  8 Feb 2022 05:34:31 -0800 (PST)
+        with ESMTP id S1350440AbiBHNgC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 08:36:02 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C57C03FED0;
+        Tue,  8 Feb 2022 05:36:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D44CB61772
-        for <linux-usb@vger.kernel.org>; Tue,  8 Feb 2022 13:34:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C570FC004E1;
-        Tue,  8 Feb 2022 13:34:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644327270;
-        bh=+rjcny99FKVkUzx4YFp88+hReSpFEJH+/00VXhRIg0Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vy+oR2cEaAbCICRl0YPQYlXp/4XoCet8+1DwSuWvOJlFzK98jsTYIYm8yusURnhT6
-         H8CWqpV/a3XumU6eXVSSK3VoQLqwKK6foK2utQsiAUTc9iu2mYOaNVu1kN/tq5ag4C
-         t3hU0N2rdhmTGUMFw4D96/0t5gzR5KsjkVDPZtNg=
-Date:   Tue, 8 Feb 2022 14:34:27 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: core: use sysfs_emit() instead of sprintf()
-Message-ID: <YgJxYxH9S/wiNPEp@kroah.com>
-References: <4248804f-d9eb-5e00-563f-28815cd42b65@omp.ru>
- <YgJSI8gbhKeVkgi3@kroah.com>
- <fe7888bd-5181-c4fe-3cee-7baec3d6ac71@omp.ru>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3D8E3CE1A3E;
+        Tue,  8 Feb 2022 13:35:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0F36C340F3;
+        Tue,  8 Feb 2022 13:35:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644327356;
+        bh=u79a7xGuIOnAI0hmeTWqkoFHjcZXOZRDz+/R4oy2k1k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mynva61oT3uZHMDFA069MvSDpcsyx1yMlXE/p+xa6vXqTHok4+/N7a/xNVtabTCFm
+         In2iYnW4vzK/uESK3I9urNHZtMxi1fB9fkN2IQf4jAamEuLuzovvObTU+FDDg+9BTs
+         s+qv+o6otTmMXtoMALrySTUxZXad4qLAAb6wOk9YCwCRtHkqQg7+WviieSIok1mneq
+         SH3auuQApRKdyj6gH7VRcPUx3pUkHuOLQ/vnqX/jNGXFsCXQ4u8uTjmuqI03rYsrKZ
+         AN8XP8Flm/7UjqWFefbbpP2ihy7dJvOKg+3rWDopxCX+nhVpYy8fWA4YmcgXU1ukT8
+         uRh9tnDM5k9/A==
+Received: by mail-wm1-f41.google.com with SMTP id v129so8644702wme.2;
+        Tue, 08 Feb 2022 05:35:56 -0800 (PST)
+X-Gm-Message-State: AOAM533RApj/RWWQhmah+WlKoQLAQcnWgW4vx5N7uFLZklkjcuqax0YA
+        ZuoSqeS51eAlSo81K3b1TvIiXHHL0y9GDJCwZC4=
+X-Google-Smtp-Source: ABdhPJwhL/oOOSs5ddtm4cjVywRdX/vv8D4K4D7Cs1AgelJH4RPgbhf1fkVoFXF1pKq0071dZJCgc6DVhHV7AxenYm4=
+X-Received: by 2002:a05:600c:4f84:: with SMTP id n4mr1204593wmq.106.1644327354967;
+ Tue, 08 Feb 2022 05:35:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fe7888bd-5181-c4fe-3cee-7baec3d6ac71@omp.ru>
+References: <20220203083658.559803-1-arnd@kernel.org> <CAMj1kXG5W4nTXP5fXLmWhNfsQ_WigKbhdZz5yh1MNqE_VcD1TA@mail.gmail.com>
+ <CAK8P3a1GeHV4Mj6rcnAY7y0351r-A7imsyWevKfE_qwHMz0D1g@mail.gmail.com>
+In-Reply-To: <CAK8P3a1GeHV4Mj6rcnAY7y0351r-A7imsyWevKfE_qwHMz0D1g@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 8 Feb 2022 14:35:43 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEB95mWGMNDC0LsOXm4o89tbAK83wF1ZBfK5jEozGw9ZA@mail.gmail.com>
+Message-ID: <CAMj1kXEB95mWGMNDC0LsOXm4o89tbAK83wF1ZBfK5jEozGw9ZA@mail.gmail.com>
+Subject: Re: [PATCH] [v2] ARM: sa1100/assabet: move dmabounce hack to ohci driver
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -51,45 +68,54 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 02:49:37PM +0300, Sergey Shtylyov wrote:
-> On 2/8/22 2:21 PM, Greg Kroah-Hartman wrote:
-> 
-> >> sprintf() (still used in the USB core for the sysfs output) is vulnerable
-> >> to the buffer overflow.
-> > 
-> > Really?  Where?  If we have potential overflows, let's fix them as bug
-> > fixes and properly backport the fixes where needed.
-> 
->    I must admit I didn't found any real overflows in my quick triage...
+On Tue, 8 Feb 2022 at 13:49, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> On Thu, Feb 3, 2022 at 9:47 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > On Thu, 3 Feb 2022 at 09:38, Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > > There are two main downsides:
+> > >
+> > >  - rather than using a dynamically sized pool, this buffer needs
+> > >    to be allocated at probe time using a fixed size. Without
+> > >    having any idea of what it should be, I picked a size of
+> > >    64KB, which is between what the other two OHCI front-ends use
+> > >    in their SRAM. If anyone has a better idea what that size
+> > >    is reasonable, this can be trivially changed.
+> > >
+> >
+> > I suppose this is a problem if the driver falls back to ordinary DRAM
+> > once the allocation runs out?
+>
+> From what I can tell, there is no such fallback. If the localmem_pool
+> runs out, the allocation fails, which may cause other problems, but
+> it never falls back to the wrong DMA address.
+>
 
-Then please do not scare people by saying otherwise.
+OK that is the least bad outcome I suppose.
 
-> 
-> > If these really are just using the "old-style" functions instead, then
-> > that's something totally different and you should not say "vulnerable"
-> > if it really is not at all.
-> 
->    Isn't sprint() generally considered harmful? :-)
+> > >  - Previously, only USB transfers to unaddressable memory needed
+> > >    to go through the bounce buffer, now all of them do, which may
+> > >    impact runtime performance for USB endpoints that do a lot of
+> > >    transfers.
+> > >
+> > > On the upside, the local_mem support uses write-combining buffers,
+> > > which should be a bit faster for transfers to the device compared to
+> > > normal uncached coherent memory as used in dmabounce.
+> > >
+> >
+> > Talking from past experience using this trick on a NXP ARM9 SoC ~10
+> > years ago, using on-chip SRAM for USB DMA likely results in a
+> > significant performance boost, even without write combining, although
+> > the exact scenario obviously matters.
+>
+> Right, that makes sense, but it won't help here because there is
+> no SRAM. One detail  I noticed is that the localmem pool normally
+> gets mapped as WC, which is what I did in the new code as well, but
+> dma_alloc_flags(..., DMA_ATTR_WRITE_COMBINE) does not always
+> honor this flag. I think it will do it here because a GFP_KERNEL
+> allocation should be served by the remap_allocator, while
+> GFP_ATOMIC allocations would be served by pool_allocator_alloc(),
+> which ignores the flag.
+>
 
-For sysfs files that have a known size (PAGE_SIZE) with a single value
-like this, no, it's not harmful.
-
-> >> Use the new-fangled sysfs_emit() instead.
-> >>
-> >> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
-> >> analysis tool.
-> > 
-> > You mean coccinelle, right?
-> 
->    Do you think coccinelle is the only code analyzer in this world? :-)
-
-No, but it has a built-in rule for this already, why not just use that
-to find these types of things?
-
->    I told you I was using SVACE (made by Russian Institute of the System Programming).
-
-Nice, where is the rule for this with that tool?
-
-thanks,
-
-greg k-h
+Ah yes, ignore me. For some reason, I thought this was about on-chip SRAM.
