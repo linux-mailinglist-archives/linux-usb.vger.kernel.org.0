@@ -2,88 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DDE4AD731
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 12:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B5B4AD72A
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 12:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356389AbiBHLcI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Feb 2022 06:32:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
+        id S1357173AbiBHLcA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Feb 2022 06:32:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239900AbiBHKRX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 05:17:23 -0500
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B739DC03FEC0;
-        Tue,  8 Feb 2022 02:17:19 -0800 (PST)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 218A8sLM044192;
-        Tue, 8 Feb 2022 18:08:54 +0800 (GMT-8)
-        (envelope-from neal_liu@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 8 Feb
- 2022 18:17:02 +0800
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Neal Liu <neal_liu@aspeedtech.com>,
-        Tao Ren <rentao.bupt@gmail.com>, <BMC-SW@aspeedtech.com>
-Subject: [PATCH v2] usb: ehci: add pci device support for Aspeed platforms
-Date:   Tue, 8 Feb 2022 18:16:57 +0800
-Message-ID: <20220208101657.76459-1-neal_liu@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1349567AbiBHKRu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 05:17:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC92C03FEC0
+        for <linux-usb@vger.kernel.org>; Tue,  8 Feb 2022 02:17:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 658E9B819D0
+        for <linux-usb@vger.kernel.org>; Tue,  8 Feb 2022 10:17:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F7EC004E1;
+        Tue,  8 Feb 2022 10:17:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644315467;
+        bh=V2mCjXhYbB6Af2dp/glEIndekerPAjDepUYFve0LBfk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wCTSsmHE34kSksrUx2zvHdKZUwmeUIi0c2ctip7L+nuI9rG4Ci0L3U32Mu/Bewzta
+         4zRj4v9+qSNUwUrPrC0XPE1dmhBPk+8f3CQw9TAyJAPoJcprfoEKia3H+YPhAJyRse
+         gbJvELsbBr0Rw+z3PdKY/KlGufjgWHDnxlQg+5zQ=
+Date:   Tue, 8 Feb 2022 11:17:43 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Oliver Neukum <oliver@neukum.org>,
+        Ross Maynard <bids.7405@bigpond.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: SL-6000 Zaurus not supported since v3.0.0-rc4 kernel
+Message-ID: <YgJDR0ThpPHnHOER@kroah.com>
+References: <ed1a0173-5bd8-e6ac-5bd1-593b687e3e17@bigpond.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.10.10]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 218A8sLM044192
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ed1a0173-5bd8-e6ac-5bd1-593b687e3e17@bigpond.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable Aspeed quirks in commit 7f2d73788d90 ("usb: ehci:
-handshake CMD_RUN instead of STS_HALT") to support Aspeed
-ehci-pci device.
+On Thu, Jan 27, 2022 at 09:35:17AM +1100, Ross Maynard wrote:
+> Support for the SL-6000 Zaurus broke after the following patch was added to
+> zaurus.c:
+> 
+> [16adf5d07987d93675945f3cecf0e33706566005] usbnet: Remove over-broad module
+> alias from zaurus.
+> 
+> I was directed here by Greg Kroah-Hartman:
+> https://bugzilla.kernel.org/show_bug.cgi?id=215361#c7
+> 
+> Thanks
+> 
 
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
----
- drivers/usb/host/ehci-pci.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Oliver, can you turn your suggested patch here into a real one and send
+it to us for submission?
 
-diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-index e87cf3a00fa4..638f03b89739 100644
---- a/drivers/usb/host/ehci-pci.c
-+++ b/drivers/usb/host/ehci-pci.c
-@@ -21,6 +21,9 @@ static const char hcd_name[] = "ehci-pci";
- /* defined here to avoid adding to pci_ids.h for single instance use */
- #define PCI_DEVICE_ID_INTEL_CE4100_USB	0x2e70
- 
-+#define PCI_VENDOR_ID_ASPEED		0x1a03
-+#define PCI_DEVICE_ID_ASPEED_EHCI	0x2603
-+
- /*-------------------------------------------------------------------------*/
- #define PCI_DEVICE_ID_INTEL_QUARK_X1000_SOC		0x0939
- static inline bool is_intel_quark_x1000(struct pci_dev *pdev)
-@@ -222,6 +225,12 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
- 			ehci->has_synopsys_hc_bug = 1;
- 		}
- 		break;
-+	case PCI_VENDOR_ID_ASPEED:
-+		if (pdev->device == PCI_DEVICE_ID_ASPEED_EHCI) {
-+			ehci_info(ehci, "applying Aspeed HC workaround\n");
-+			ehci->is_aspeed = 1;
-+		}
-+		break;
- 	}
- 
- 	/* optional debug port, normally in the first BAR */
--- 
-2.25.1
+thanks,
 
+greg k-h
