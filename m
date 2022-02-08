@@ -2,164 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6074ADC91
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 16:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B2A4ADE7B
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 17:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380392AbiBHP0M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Feb 2022 10:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
+        id S1352219AbiBHQl4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Feb 2022 11:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380168AbiBHP0C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 10:26:02 -0500
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948EDC0612B9;
-        Tue,  8 Feb 2022 07:25:59 -0800 (PST)
-Received: by mail-oo1-xc2c.google.com with SMTP id f11-20020a4abb0b000000b002e9abf6bcbcso17936516oop.0;
-        Tue, 08 Feb 2022 07:25:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v+HG5AG509udiPdf4BbsPVUGkODFt7xt8GFthycqDiw=;
-        b=n9OrIeg0JbTsKqYhfSoL7aOmHBxhHJOBZT3Nf+McGU4HY/ifvP7QLdcLGmQJwmjcMq
-         etKBJK8lBatTtV6Ahy+4SC5KVAlljP26qriG5qcO4ZqGC9mZz78KBsD8nbjnCMNssWAi
-         llLr4bsundwoZvMa2IWwUG28hF3jUWLPqfnn37VMcvq5Oosi+8ElyKHI7Y3Q892qAnDX
-         eCRUYX7DH3RM9XBHWJCfw8xy7NIkIp12yLytR0jW6vy2Xi13KJrVKmPIVStlN9g1yfDy
-         +zhRxEtvuIEsVSJ9po64vWsTts/bmUV8NDdF93SrlSGS9AfiV65Kaca5pUz9XPGsBTlS
-         f9Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v+HG5AG509udiPdf4BbsPVUGkODFt7xt8GFthycqDiw=;
-        b=hyzYokMoGIMJfLe67pJh7qcQbWt6FLJr/Lz0utovcD2amVrDaSqIUaVRLccEBiMxej
-         AxZe/bYMI6RHFnG9lrwVJOhdbzVlTMs7+O2KmKDrWkWNv0ZHu0HKZ/gn5rPs1rDgH3EF
-         J7CgkGdsqQScb3/AAW3vxA2spVDj7+P6BPUuSTeIa2picoCQUdf3H46uK/mRQ70vosUz
-         2b8avIxfLCnGZHkoU6v8yZir43oeGEQ8OmWDJtb/PkidCeZ0IvwqkCtsVkQ9QnGnjYHJ
-         YiWRgdhvCun/m2zk2ALpxAQu19QEpBj9x7ArGQrmgdzu5X+Ug24hkZ1k2BuT6bOptTO9
-         j5Wg==
-X-Gm-Message-State: AOAM533E2GC3zFRRIcUWAVVDdSyLU4T+BauFd5dn+LmyI8bEyZDuCkGj
-        Ko17EVyYiCzpvDc3YQXU3yISOTR80IzzMg==
-X-Google-Smtp-Source: ABdhPJxp0s0F3y7NWA4W6wkqFG5FSCdF/0he8UTd6McrYoTifTToLYQCwsCH3TksFjauFdFLaC46YQ==
-X-Received: by 2002:a05:6870:3655:: with SMTP id v21mr523749oak.302.1644333958441;
-        Tue, 08 Feb 2022 07:25:58 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 1sm4725791oab.16.2022.02.08.07.25.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 07:25:57 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <106b27d7-6845-ed3c-411e-9ef5aee7f224@roeck-us.net>
-Date:   Tue, 8 Feb 2022 07:25:56 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/2] usb: typec: tcpm: add interface for passing
- supported_pd_rev from tcpc_dev
-Content-Language: en-US
+        with ESMTP id S232725AbiBHQlz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 11:41:55 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C47C061576;
+        Tue,  8 Feb 2022 08:41:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644338514; x=1675874514;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N5a5FotoyVjq0TaWifYoMNeqBAy4e57dcE6SNhAW5dQ=;
+  b=lKvqUYGxS0iYlYQz9za1Y5jsuzi13dI/FP3AnlODKPFLskbuSlGMrK/V
+   8gE6F8m6cCE9C3IAiuuyQPC3dh8wWE1oiVI7G/FEcT01lj4WrXKQetgsH
+   Jc1FgjmQCK6erP4s9tMt4OakgM/esavvjoikypUinIPD+vgoCvzmY04Ad
+   hKdu53lWZyHyLznVbMAGB0lNoop6pGpl8QmLTiB5XrpI+ln+rcGNYr5Mu
+   7QFk8nW/BwU4Dl4YQlyaZd85X02LYix3Y1Sh8NHnOqg8/Lq6C9wnoJBvh
+   Tcm57kICRQvhoE7T8OSGZfUUdyWlMKadjvs4DBD76ZFtQU6G3fGTfNQAx
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="232555566"
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="232555566"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 08:41:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,353,1635231600"; 
+   d="scan'208";a="499623247"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 08 Feb 2022 08:41:51 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHTYt-0000Rz-4W; Tue, 08 Feb 2022 16:41:51 +0000
+Date:   Wed, 9 Feb 2022 00:41:07 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Potin Lai <potin.lai@quantatw.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Patrick Williams <patrick@stwcx.xyz>
-References: <20220208082026.4855-1-potin.lai@quantatw.com>
- <20220208112226.9108-1-potin.lai@quantatw.com>
- <20220208112226.9108-2-potin.lai@quantatw.com>
-From:   Guenter Roeck <linux@roeck-us.net>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>
+Subject: Re: [PATCH v2 1/2] usb: typec: tcpm: add interface for passing
+ supported_pd_rev from tcpc_dev
+Message-ID: <202202090006.YLbevIuT-lkp@intel.com>
+References: <20220208112226.9108-2-potin.lai@quantatw.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20220208112226.9108-2-potin.lai@quantatw.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2/8/22 03:22, Potin Lai wrote:
-> Current TCPM allways assume using PD_MAX_REV for negotiation,
-> but for some USB controller only support PD 2.0, adding an interface
-> for passing supported_pd_rev from tcpc_dev.
-> 
+Hi Potin,
 
-The PD revision supported by the usb controller is a constant.
-I don't see why this would need a callback function. Other
-capabilitied are passed to tcpm using the fwnode pointer.
-I don't see why this capability would have to be handled
-differently.
+Thank you for the patch! Perhaps something to improve:
 
-Guenter
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on v5.17-rc3 next-20220208]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
-> ---
->   drivers/usb/typec/tcpm/tcpm.c | 14 ++++++++++++--
->   include/linux/usb/tcpm.h      |  4 ++++
->   2 files changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 59d4fa2443f2..22e7d226826e 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -571,6 +571,16 @@ static bool tcpm_port_is_disconnected(struct tcpm_port *port)
->   				    port->cc2 == TYPEC_CC_OPEN)));
->   }
->   
-> +static u32 tcpm_pd_supported_rev(struct tcpm_port *port)
-> +{
-> +	u32 rev = PD_MAX_REV;
-> +
-> +	if (port->tcpc->supported_pd_rev)
-> +		rev = port->tcpc->supported_pd_rev(port->tcpc);
-> +
-> +	return min(rev, PD_MAX_REV);
-> +}
-> +
->   /*
->    * Logging
->    */
-> @@ -3932,7 +3942,7 @@ static void run_state_machine(struct tcpm_port *port)
->   		typec_set_pwr_opmode(port->typec_port, opmode);
->   		port->pwr_opmode = TYPEC_PWR_MODE_USB;
->   		port->caps_count = 0;
-> -		port->negotiated_rev = PD_MAX_REV;
-> +		port->negotiated_rev = tcpm_pd_supported_rev(port);
->   		port->message_id = 0;
->   		port->rx_msgid = -1;
->   		port->explicit_contract = false;
-> @@ -4167,7 +4177,7 @@ static void run_state_machine(struct tcpm_port *port)
->   					      port->cc2 : port->cc1);
->   		typec_set_pwr_opmode(port->typec_port, opmode);
->   		port->pwr_opmode = TYPEC_PWR_MODE_USB;
-> -		port->negotiated_rev = PD_MAX_REV;
-> +		port->negotiated_rev = tcpm_pd_supported_rev(port);
->   		port->message_id = 0;
->   		port->rx_msgid = -1;
->   		port->explicit_contract = false;
-> diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
-> index bffc8d3e14ad..36282b2a9d9c 100644
-> --- a/include/linux/usb/tcpm.h
-> +++ b/include/linux/usb/tcpm.h
-> @@ -114,6 +114,9 @@ enum tcpm_transmit_type {
->    *              Optional; The USB Communications Capable bit indicates if port
->    *              partner is capable of communication over the USB data lines
->    *              (e.g. D+/- or SS Tx/Rx). Called to notify the status of the bit.
-> + * @supported_pd_rev:
-> + *              Optional; TCPM call this function to get supported PD revesion
-> + *              from lower level driver.
->    */
->   struct tcpc_dev {
->   	struct fwnode_handle *fwnode;
-> @@ -148,6 +151,7 @@ struct tcpc_dev {
->   						 bool pps_active, u32 requested_vbus_voltage);
->   	bool (*is_vbus_vsafe0v)(struct tcpc_dev *dev);
->   	void (*set_partner_usb_comm_capable)(struct tcpc_dev *dev, bool enable);
-> +	u32 (*supported_pd_rev)(struct tcpc_dev *dev);
->   };
->   
->   struct tcpm_port;
+url:    https://github.com/0day-ci/linux/commits/Potin-Lai/usb-typec-tcpm-add-interface-for-passing-supported_pd_rev-from-tcpc_dev/20220208-202246
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: hexagon-randconfig-r034-20220208 (https://download.01.org/0day-ci/archive/20220209/202202090006.YLbevIuT-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/322696594704fa918e63d1c80fa6d346a02e9a28
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Potin-Lai/usb-typec-tcpm-add-interface-for-passing-supported_pd_rev-from-tcpc_dev/20220208-202246
+        git checkout 322696594704fa918e63d1c80fa6d346a02e9a28
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/typec/tcpm/
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/typec/tcpm/tcpm.c:581:9: warning: comparison of distinct pointer types ('typeof (rev) *' (aka 'unsigned int *') and 'typeof (2) *' (aka 'int *')) [-Wcompare-distinct-pointer-types]
+           return min(rev, PD_MAX_REV);
+                  ^~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +581 drivers/usb/typec/tcpm/tcpm.c
+
+   573	
+   574	static u32 tcpm_pd_supported_rev(struct tcpm_port *port)
+   575	{
+   576		u32 rev = PD_MAX_REV;
+   577	
+   578		if (port->tcpc->supported_pd_rev)
+   579			rev = port->tcpc->supported_pd_rev(port->tcpc);
+   580	
+ > 581		return min(rev, PD_MAX_REV);
+   582	}
+   583	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
