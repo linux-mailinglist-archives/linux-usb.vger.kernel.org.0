@@ -2,140 +2,197 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7406C4AE44C
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Feb 2022 23:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F79A4AE612
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 01:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387474AbiBHWYR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Feb 2022 17:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39788 "EHLO
+        id S240110AbiBIAem (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Feb 2022 19:34:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386943AbiBHVZt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 16:25:49 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id CBABEC0612B8
-        for <linux-usb@vger.kernel.org>; Tue,  8 Feb 2022 13:25:46 -0800 (PST)
-Received: (qmail 541937 invoked by uid 1000); 8 Feb 2022 16:25:46 -0500
-Date:   Tue, 8 Feb 2022 16:25:46 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Ingo Rohloff <ingo.rohloff@lauterbach.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] USB: usbfs: Use a spinlock instead of atomic
- accesses to tally used memory.
-Message-ID: <YgLf2nIHIaFEo6Qw@rowland.harvard.edu>
-References: <20220208204858.3406-1-ingo.rohloff@lauterbach.com>
- <20220208204858.3406-2-ingo.rohloff@lauterbach.com>
+        with ESMTP id S240105AbiBIAel (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 19:34:41 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8BDC06157B
+        for <linux-usb@vger.kernel.org>; Tue,  8 Feb 2022 16:34:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644366881; x=1675902881;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rw2pi3WS0W9MzIK7OghkM75IwW/czoMvFHWvyCxMito=;
+  b=ldYvtOxNw25EyRaNKdmkuMYj+pOJZLk/TMiwGaV+KFQ7MD3LmjoP/T6c
+   dwFMu0dIyckS4RZyKU4t1n97EsKhrN42St+8pRUy7bXUNWMpUm46AzVNs
+   vnC+VBrH+Txb9BJ69MtVTTS488ZuifnQeC9AFMU/Y5h9vv3xfkeWQ3tzF
+   8f0vn9YJvNXWgxClwjZM3Cv5rYqaRknchsYdOV4aEVa5xwto+Wnaz9r8D
+   xAX+I0YEtIWQgKAzhApXxy2qpAcq7/1PE2v02YMljg2nerogYyRqKm9VK
+   1jpxMFhM6RD4Zy1NA9ID3T4tv4l028SGP0GQrDifVQaubpnK8+GimJy9r
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="273618717"
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="273618717"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 16:34:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="633036219"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 08 Feb 2022 16:34:19 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHaw6-00010B-9n; Wed, 09 Feb 2022 00:34:18 +0000
+Date:   Wed, 09 Feb 2022 08:33:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 117b4e96c7f362eb6459543883fc07f77662472c
+Message-ID: <62030bf1.jIChFn9ogzpM1SdQ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208204858.3406-2-ingo.rohloff@lauterbach.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 09:48:58PM +0100, Ingo Rohloff wrote:
-> While the fromer code imposes a limit on the used memory, it might be over
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 117b4e96c7f362eb6459543883fc07f77662472c  usb: dwc3: gadget: Prevent core from processing stale TRBs
 
-By "fromer", you probably mean "former".  But that's an uncommon usage which 
-might confuse people (I was confused when I first read it).  It would be 
-better to say "existing code".
+elapsed time: 732m
 
-> pessimistic (even if this is unlikely).
-> 
-> Example scenario:
-> 8 threads running in parallel, all entering
-> "usbfs_increase_memory_usage()" at the same time.
-> The atomic accesses in "usbfs_increase_memory_usage()" could be
-> serialized like this:
->   8 x "atomic64_add"
->   8 x "atomic64_read"
-> If the 8 x "atomic64_add" raise "usbfs_memory_usage" above the limit,
-> then all 8 calls of "usbfs_increase_memory_usage()" will return with
-> -ENOMEM.  If you instead serialize over the whole access to
-> "usbfs_memory_usage" by using a spinlock, some of these calls will
-> succeed.
-> 
-> Signed-off-by: Ingo Rohloff <ingo.rohloff@lauterbach.com>
-> ---
->  drivers/usb/core/devio.c | 35 ++++++++++++++++++++++++-----------
->  1 file changed, 24 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-> index fa66e6e58792..522b170c42de 100644
-> --- a/drivers/usb/core/devio.c
-> +++ b/drivers/usb/core/devio.c
-> @@ -139,30 +139,43 @@ MODULE_PARM_DESC(usbfs_memory_mb,
->  /* Hard limit, necessary to avoid arithmetic overflow */
->  #define USBFS_XFER_MAX         (UINT_MAX / 2 - 1000000)
->  
-> -static atomic64_t usbfs_memory_usage;	/* Total memory currently allocated */
-> +static DEFINE_SPINLOCK(usbfs_memory_usage_lock);
-> +static u64 usbfs_memory_usage;	/* Total memory currently allocated */
->  
->  /* Check whether it's okay to allocate more memory for a transfer */
->  static int usbfs_increase_memory_usage(u64 amount)
->  {
-> -	u64 lim;
-> +	u64 lim, total_mem;
-> +	unsigned long flags;
-> +	int ret;
->  
-> -	lim = READ_ONCE(usbfs_memory_mb);
-> +	lim = usbfs_memory_mb;
+configs tested: 113
+configs skipped: 4
 
-Don't eliminate this READ_ONCE().  It is needed because usbfs_memory_mb is a 
-writable module parameter.  If the value is changed by another process at 
-the same time you read it, you could get a nonsense value unless you use 
-READ_ONCE().
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->  	lim <<= 20;
->  
-> -	atomic64_add(amount, &usbfs_memory_usage);
-> -
-> -	if (lim > 0 && atomic64_read(&usbfs_memory_usage) > lim) {
-> -		atomic64_sub(amount, &usbfs_memory_usage);
-> -		return -ENOMEM;
-> -	}
-> +	ret = 0;
-> +	spin_lock_irqsave(&usbfs_memory_usage_lock, flags);
-> +	total_mem = usbfs_memory_usage + amount;
-> +	if (lim > 0 && total_mem > lim)
-> +		ret = -ENOMEM;
-> +	else
-> +		usbfs_memory_usage = total_mem;
-> +	spin_unlock_irqrestore(&usbfs_memory_usage_lock, flags);
->  
-> -	return 0;
-> +	return ret;
->  }
->  
->  /* Memory for a transfer is being deallocated */
->  static void usbfs_decrease_memory_usage(u64 amount)
->  {
-> -	atomic64_sub(amount, &usbfs_memory_usage);
-> +	u64 total_mem;
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&usbfs_memory_usage_lock, flags);
-> +	total_mem = usbfs_memory_usage;
-> +	if (amount > total_mem)
-> +		amount = total_mem;
-> +	usbfs_memory_usage = total_mem - amount;
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                    sam440ep_defconfig
+arm                         cm_x300_defconfig
+h8300                            alldefconfig
+sh                          sdk7780_defconfig
+sh                         apsh4a3a_defconfig
+ia64                             alldefconfig
+powerpc                 mpc837x_rdb_defconfig
+sh                           se7750_defconfig
+openrisc                         alldefconfig
+sparc                       sparc64_defconfig
+m68k                        m5272c3_defconfig
+mips                     decstation_defconfig
+sh                               j2_defconfig
+sh                           se7712_defconfig
+arm                        mini2440_defconfig
+nios2                            allyesconfig
+powerpc                     taishan_defconfig
+xtensa                  audio_kc705_defconfig
+arm                          iop32x_defconfig
+arm                      jornada720_defconfig
+powerpc                     tqm8541_defconfig
+mips                      fuloong2e_defconfig
+mips                        bcm47xx_defconfig
+xtensa                  nommu_kc705_defconfig
+parisc                           alldefconfig
+m68k                        m5407c3_defconfig
+powerpc                     tqm8548_defconfig
+sh                           se7780_defconfig
+powerpc                       maple_defconfig
+riscv                    nommu_k210_defconfig
+sh                           se7619_defconfig
+arc                          axs103_defconfig
+arm                  randconfig-c002-20220208
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                          rv32_defconfig
+riscv                               defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
 
-As a matter of personal taste, I prefer:
+clang tested configs:
+riscv                randconfig-c006-20220208
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220208
+mips                 randconfig-c004-20220208
+arm                  randconfig-c002-20220208
+riscv                             allnoconfig
+mips                        qi_lb60_defconfig
+arm                          ixp4xx_defconfig
+powerpc                   bluestone_defconfig
+powerpc                          allyesconfig
+arm                          ep93xx_defconfig
+mips                      bmips_stb_defconfig
+arm                        spear3xx_defconfig
+arm                         hackkit_defconfig
+powerpc                     mpc512x_defconfig
+i386                          randconfig-a004
+i386                          randconfig-a002
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+x86_64                        randconfig-a003
+hexagon              randconfig-r045-20220208
+hexagon              randconfig-r041-20220208
+riscv                randconfig-r042-20220208
 
-	if (amount > usbfs_memory_usage)
-		usbfs_memory_usage = 0;
-	else
-		usbfs_memory_usage -= amount;
-
-> +	spin_unlock_irqrestore(&usbfs_memory_usage_lock, flags);
->  }
->  
->  static int connected(struct usb_dev_state *ps)
-
-Alan Stern
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
