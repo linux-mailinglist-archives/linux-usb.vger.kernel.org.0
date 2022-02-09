@@ -2,81 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E05024AF887
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 18:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3109A4AF802
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 18:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbiBIRac (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Feb 2022 12:30:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58852 "EHLO
+        id S238126AbiBIRZP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Feb 2022 12:25:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238359AbiBIRa3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 12:30:29 -0500
-X-Greylist: delayed 307 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 09:30:29 PST
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.160])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A287C05CB82
-        for <linux-usb@vger.kernel.org>; Wed,  9 Feb 2022 09:30:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1644427464;
-    s=strato-dkim-0002; d=aiyionpri.me;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=zegMAOBqMAaR2HLWXgZZq8DYKMi+V+WFbIvnTOcf/+A=;
-    b=VF9HZ9heWI8VMyEXGBItlfP2uSMqsBvhNer3/Y5tOwZQs8KofOSiRQbC91c2oks9v9
-    HhWPLI7QQ6xaCxAjfG+IFcdrHS5tZSeYhshhKzN6exchIh5NDA3sjMClr71dImoVfkjV
-    N9rBUao8zgBqKD5dsyrOo6nz1I/2jvXveZ3z/ZyWNL6QvV7NG4U5M7VQAWixUuN04GxS
-    HSwyLvwixF2VE7H1+NvJrpLms0gnnM3ag1KYL9Nypf4wEYzq40OeSXzKiOWmrJ6nhMya
-    fjM1wKzlVvGqpNusp71xiN2gKesw/MHX/0O71haPzIEQwmxDpeAUhryzQX+kVUIT7Y6P
-    VwHA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":IWkkdEmxcvCtRDtHUQOu48a0Nfy9hOkbpbRt4aM2x33iJsZ8F6ZSMCbAg3MdK/jjao1X9Kc4ERQQiBN20bbZsYRxt40KoK3n"
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2003:e7:9f15:774:28d7:7c3d:aa55:264e]
-    by smtp.strato.de (RZmta 47.39.0 AUTH)
-    with ESMTPSA id 0eaed6y19HOOfVd
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 9 Feb 2022 18:24:24 +0100 (CET)
-Message-ID: <73db8832-7824-9aab-5c2a-d678806da5a4@aiyionpri.me>
-Date:   Wed, 9 Feb 2022 18:24:23 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] Revert "USB: serial: ch341: add new Product ID for
- CH341A"
-Content-Language: de-DE
-To:     Johan Hovold <johan@kernel.org>,
-        Dmytro Bagrii <dimich.dmb@gmail.com>,
-        Jan-Niklas Burfeind <kernel@aiyionpri.me>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        Frank A Kingswood <frank@kingswood-consulting.co.uk>,
-        Frank Zago <frank@zago.net>
-References: <20220207000822.697343-1-dimich.dmb@gmail.com>
- <YgJHRKQHQheKTwjU@kroah.com> <6df2c9e6-8757-d5e4-0c27-d47f53bee2e1@gmail.com>
- <YgPNK1v541ohUMtv@hovoldconsulting.com>
-From:   Jan-Niklas Burfeind <kernel@aiyionpri.me>
-In-Reply-To: <YgPNK1v541ohUMtv@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S237350AbiBIRZN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 12:25:13 -0500
+Received: from smtp1.lauterbach.com (smtp1.lauterbach.com [62.154.241.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFC9C05CB86
+        for <linux-usb@vger.kernel.org>; Wed,  9 Feb 2022 09:25:15 -0800 (PST)
+Received: (qmail 6855 invoked by uid 484); 9 Feb 2022 17:25:14 -0000
+X-Qmail-Scanner-Diagnostics: from ingpc2.intern.lauterbach.com by smtp1.lauterbach.com (envelope-from <ingo.rohloff@lauterbach.com>, uid 484) with qmail-scanner-2.11 
+ (mhr: 1.0. clamdscan: 0.99/21437. spamassassin: 3.4.0.  
+ Clear:RC:1(10.2.10.44):. 
+ Processed in 0.362476 secs); 09 Feb 2022 17:25:14 -0000
+Received: from ingpc2.intern.lauterbach.com (Authenticated_SSL:irohloff@[10.2.10.44])
+          (envelope-sender <ingo.rohloff@lauterbach.com>)
+          by smtp1.lauterbach.com (qmail-ldap-1.03) with TLS_AES_256_GCM_SHA384 encrypted SMTP
+          for <gregkh@linuxfoundation.org>; 9 Feb 2022 17:25:12 -0000
+From:   Ingo Rohloff <ingo.rohloff@lauterbach.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org,
+        Ingo Rohloff <ingo.rohloff@lauterbach.com>
+Subject: [PATCH v3 0/1] Zerocopy for USB Gadget FunctionFS
+Date:   Wed,  9 Feb 2022 18:25:06 +0100
+Message-Id: <20220209172507.97659-1-ingo.rohloff@lauterbach.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I'm sorry, I did not notice this earlier;
-will look into it tomorrow morning.
+The commit f7d34b445abc00e979b7 ("USB: Add support for usbfs zerocopy.")
+added support for zerocopy operations for an USB Host via devio.c
 
-Thanks
-Jan-Niklas Burfeind
+The idea is to mmap buffers into user space, which are then filled
+with data (either by the kernel for reads or by the user for writes).
 
-On 2/9/22 15:18, Johan Hovold wrote:
+Using these mmapped buffers avoids copying data between kernel space
+and user space.
 
-> 
-> It would be good if Jan-Niklas could chime in too and confirm if he's
-> able to use the device in UART mode instead.
-> 
-> Johan
+The patch proposed here, tries to do the same for a USB Gadget and a
+user space application using USB Gaget FunctionFS.
+
+Note: As long as you do not use mmap and/or libaio, FunctionFS should
+behave exactly as before.
+
+If you want to try out, user space demonstration code is here:
+
+   https://github.com/trace32/test_usb_ffs
+
+
+
+V3:
+As requested: Use a spinlock instead of atomic64 to
+tally the amount of used kernel memory by mmap calls.
+
+ADDITIONALLY (compared to V2, meaning of limit == 0 changed):
+The amount of memory user space processes might mmap, is per default
+limited to 16 MiB per FunctionFS mount point.
+
+This limit can be modified at the time FunctionFS is mounted, by using
+the mount option "mmap_memory_mb=<value>", specifying the allowed mmap
+space in MiB.  Example:
+
+   mount -t functionfs -ommap_memory_mb=1 usb0 /usbfunc
+
+In V3, a value of 0 for "mmap_memory_mb", means that mmap functionality
+is DISABLED: All calls to mmap will return with -ENOMEM.
+
+Rationale:
+I can't think of a reason, why you should ever want to have UNLIMITED
+mmap calls (this just means user-space can easily force the kernel to
+kmalloc all space available).
+Additionally: If you want a real high limit, just use
+  mmap_memory_mb=1000000
+or some similar big number.
+
+In contrast: I think being able to forbid mmap might be useful.
+So for V3: "mmap_memory_mb=0" means no mmap allowed (will always return
+-ENOMEM).
+
+
+
+
+V2:
+The mmapped buffers are now associated with a "struct file *".
+
+This is achieved by adding another in-between 
+"struct ffs_ep_listener", which is allocated per "struct file *".
+
+I believe I botched that up in the previous V1 proposal;
+
+It seems using a list of mmapped segments associated to a 
+"struct file *" is the right approach?
+
+
+
+Ingo Rohloff (1):
+  usb: gadget: f_fs: Support zerocopy transfers via mmap.
+
+ drivers/usb/gadget/function/f_fs.c | 280 ++++++++++++++++++++++++++++-
+ drivers/usb/gadget/function/u_fs.h |   7 +
+ 2 files changed, 281 insertions(+), 6 deletions(-)
+
+-- 
+2.17.1
+
