@@ -2,121 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2AD54AE7A5
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 04:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 611994AE786
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 04:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244784AbiBIDDc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Feb 2022 22:03:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
+        id S242507AbiBIDId (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Feb 2022 22:08:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232662AbiBICwr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 21:52:47 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F17C0613CC;
-        Tue,  8 Feb 2022 18:52:47 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id v5-20020a17090a4ec500b001b8b702df57so3792263pjl.2;
-        Tue, 08 Feb 2022 18:52:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2whpxl+iWHDZgmDT6i5bR2ewH2KRNqLgWWFYpzHxiLY=;
-        b=dDW0LZ7dNOnFLGGCp0CcwhMtoHjLcJvd3dOUCh6PqTWY4vDWMz1UvdZNN2iDb38cyE
-         KwDnG8zRHUI9812Fu4fXDo/H2NVXQowotVvnIjgPeRC9UeQM04otNeSj3fQhuUwUMlt1
-         fH6k2QIqg+Q53spcCa+gTlrdk9CS9+7GvDQlAMr4CfkTeySC4o9nOIi6WMgxBo1z4+yk
-         J2L6URa37qwD9pKz8IeXHL0WUDxuWMSfxgnN/2G427QdBhAGXiBi5hWWxhH2L5MQNldi
-         ME0bb3BvP2lT09b5ir6raQ9bDxoGGYV5tQg1SwGskEIf+8cC76k8R7YEnk4J6ZehSa1R
-         wYMw==
+        with ESMTP id S1347986AbiBIDGW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 22:06:22 -0500
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8C1C0302E8;
+        Tue,  8 Feb 2022 19:05:04 -0800 (PST)
+Received: by mail-oi1-f178.google.com with SMTP id t199so1143627oie.10;
+        Tue, 08 Feb 2022 19:05:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2whpxl+iWHDZgmDT6i5bR2ewH2KRNqLgWWFYpzHxiLY=;
-        b=vvIs8eqVbjwpTw3uhgGiJOew7hUoyg2SEoCuZPmPFh27XDiPmvxB+WUXOMSv/m/FOr
-         fxdjXeiztrqI41aSGVZEdz2KfGXceQlWz1m338IQiXw14SSXxG5C29dxEVO5bCrE0qR7
-         jo8CTCLu8HDrqDlrpS2zrad2IPihNU5fpqXGBbJf2kf1YaKoMwvV0uP17JhzLm+ygv5h
-         UTudZ0PzlIibwwX+e2vsi4GVhx68CVsx4OhYyqddE3VfiMOj1NEozv62WcmaJiU2Ucw6
-         LjFKlVK64TeIJ4B4Uo/CPsj9J1Xv6tvZKeBe8Ei1rCth9V1AXYmao8nKMB1NiUgiMShM
-         uFNQ==
-X-Gm-Message-State: AOAM532SWV56bqml1oZBg4EBESfNaik457+6bPPixLDNoUm5e/zWVnuN
-        j/z1o7RN4YGpMSZTf/eE6Gw/JjmA2dSgr9vvh7s=
-X-Google-Smtp-Source: ABdhPJzQHsBfd4wlS1+EyrLw3I0I8GL3iXcN+u4lP4qQem2tMb0q6+WSy0DY+8e/CKm4fmL3rOWc1g==
-X-Received: by 2002:a17:902:ea06:: with SMTP id s6mr92442plg.163.1644375166589;
-        Tue, 08 Feb 2022 18:52:46 -0800 (PST)
-Received: from jason-ThinkPad-T14-Gen-1.lan ([66.187.5.142])
-        by smtp.gmail.com with ESMTPSA id q2sm4017176pjj.32.2022.02.08.18.52.42
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9SICioeHep4TWtT/qww/zgThNzMf9twws3N+ad7OYVE=;
+        b=O27jQTfOLQZZjRbN6yqUEMsnpjAnVx7Qj8AqsF7uOSCypp2hYUFNTfyjjm4J9oMYvO
+         BOgN/1mxALzixxSmLuC4Opuk9rm6E1qQSP+tiIQ6MpFGzb75kXNn4d8CPPDxx1QE+k64
+         0/Fh/PTWSYDqFc2Gn/kynDip86Az1U4mllo2vf40qYglApJ9F2kNa2zrGhXpCeoaQBcy
+         3vjA0OS/XBWoYjGp/fUYrOtX58Q+Tm/shRej6bbP67jsDsi61vhxKvKpzaDc+m3T1pRQ
+         lDKfPG2fCUFfvg/jy5JgTpdFf9qedV0+/wnhn7QGotRh8OtOGJjgc9fdWrmssdgdMTUY
+         AeKg==
+X-Gm-Message-State: AOAM531vhEzBy4Urgdq8vecdScEp3eM2sQAnQV4uiOi7orlQ+7WzGeuq
+        r4+tkThdKw9eJfsZTObk/Q==
+X-Google-Smtp-Source: ABdhPJyi/x6jit4hCoZBlLoQ2fkA51bgTeDVYoLfGZn2ooJlh4b5KrSykYY6YiQA6lZZuMKzvu1c5A==
+X-Received: by 2002:aca:6509:: with SMTP id m9mr94672oim.76.1644375902857;
+        Tue, 08 Feb 2022 19:05:02 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id m15sm5994060otr.37.2022.02.08.19.05.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 18:52:46 -0800 (PST)
-From:   Hongyu Xie <xy521521@gmail.com>
-To:     gregkh@linuxfoundation.org, mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hongyu Xie <xiehongyu1@kylinos.cn>, stable@vger.kernel.org
-Subject: [PATCH -next v2] xhci: fix two places when dealing with return value of function xhci_check_args
-Date:   Wed,  9 Feb 2022 10:52:34 +0800
-Message-Id: <20220209025234.25230-1-xy521521@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 08 Feb 2022 19:05:01 -0800 (PST)
+Received: (nullmailer pid 3543787 invoked by uid 1000);
+        Wed, 09 Feb 2022 03:05:01 -0000
+Date:   Tue, 8 Feb 2022 21:05:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/12] dt-bindings: usb: samsung,exynos-dwc3: convert to
+ dtschema
+Message-ID: <YgMvXTZvQ/7hgUSJ@robh.at.kernel.org>
+References: <20220123111644.25540-1-krzysztof.kozlowski@canonical.com>
+ <20220123111644.25540-12-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220123111644.25540-12-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Hongyu Xie <xiehongyu1@kylinos.cn>
+On Sun, 23 Jan 2022 12:16:43 +0100, Krzysztof Kozlowski wrote:
+> Convert the Samsung Exynos SoC USB 3.0 DWC3 Controller bindings to DT
+> schema format.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  .../devicetree/bindings/usb/exynos-usb.txt    |  49 -------
+>  .../bindings/usb/samsung,exynos-dwc3.yaml     | 129 ++++++++++++++++++
+>  2 files changed, 129 insertions(+), 49 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
+> 
 
-xhci_check_args returns 4 types of value, -ENODEV, -EINVAL, 1 and 0.
-xhci_urb_enqueue and xhci_check_streams_endpoint return -EINVAL if
-the return value of xhci_check_args <= 0.
-This will cause a problem.
-For example, r8152_submit_rx calling usb_submit_urb in
-drivers/net/usb/r8152.c.
-r8152_submit_rx will never get -ENODEV after submiting an urb
-when xHC is halted,
-because xhci_urb_enqueue returns -EINVAL in the very beginning.
-
-Fixes: 203a86613fb3 ("xhci: Avoid NULL pointer deref when host dies.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
----
-
-v2: keep return value to -EINVAL for roothub urbs
-
- drivers/usb/host/xhci.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index dc357cabb265..948546b98af0 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1604,9 +1604,12 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
- 	struct urb_priv	*urb_priv;
- 	int num_tds;
- 
--	if (!urb || xhci_check_args(hcd, urb->dev, urb->ep,
--					true, true, __func__) <= 0)
-+	if (!urb)
- 		return -EINVAL;
-+	ret = xhci_check_args(hcd, urb->dev, urb->ep,
-+					true, true, __func__);
-+	if (ret <= 0)
-+		return ret ? ret : -EINVAL;
- 
- 	slot_id = urb->dev->slot_id;
- 	ep_index = xhci_get_endpoint_index(&urb->ep->desc);
-@@ -3323,7 +3326,7 @@ static int xhci_check_streams_endpoint(struct xhci_hcd *xhci,
- 		return -EINVAL;
- 	ret = xhci_check_args(xhci_to_hcd(xhci), udev, ep, 1, true, __func__);
- 	if (ret <= 0)
--		return -EINVAL;
-+		return ret ? ret : -EINVAL;
- 	if (usb_ss_max_streams(&ep->ss_ep_comp) == 0) {
- 		xhci_warn(xhci, "WARN: SuperSpeed Endpoint Companion"
- 				" descriptor for ep 0x%x does not support streams\n",
--- 
-2.25.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
