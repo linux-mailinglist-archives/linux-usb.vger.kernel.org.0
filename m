@@ -2,47 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECEB54AE81E
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 05:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AD54AE7A5
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 04:11:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344704AbiBIEHj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Feb 2022 23:07:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
+        id S244784AbiBIDDc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Feb 2022 22:03:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346828AbiBIDiy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 22:38:54 -0500
-Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA077C043188;
-        Tue,  8 Feb 2022 19:33:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=P6YRM
-        vZrszN+VySkNSrGHtGd3i/66fEQ9oe+G3JBq3c=; b=PtMAVONpTzf0raGf7V42m
-        jcs9M/IbShvr0zwBAUMYYK5BFl5XvgU3EBZyiNAZVZfYGcwjsZdXrxmCGbY4eLb0
-        n2sMQS2g/zwh+GLHhMVoImLK1LNp/YjFbfxa76WiDiAYYiz6ltr5UTimd6FIuxTS
-        R/Kt+39kz9Gg9KbY/YiCpI=
-Received: from localhost.localdomain (unknown [112.97.82.107])
-        by smtp4 (Coremail) with SMTP id HNxpCgC3pRo4KwNiKHlaBg--.26133S2;
-        Wed, 09 Feb 2022 10:47:24 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     bjorn@mork.no, davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH net] net: usb: qmi_wwan: Add support for Dell DW5829e
-Date:   Wed,  9 Feb 2022 10:47:17 +0800
-Message-Id: <20220209024717.8564-1-slark_xiao@163.com>
+        with ESMTP id S232662AbiBICwr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 21:52:47 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F17C0613CC;
+        Tue,  8 Feb 2022 18:52:47 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id v5-20020a17090a4ec500b001b8b702df57so3792263pjl.2;
+        Tue, 08 Feb 2022 18:52:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2whpxl+iWHDZgmDT6i5bR2ewH2KRNqLgWWFYpzHxiLY=;
+        b=dDW0LZ7dNOnFLGGCp0CcwhMtoHjLcJvd3dOUCh6PqTWY4vDWMz1UvdZNN2iDb38cyE
+         KwDnG8zRHUI9812Fu4fXDo/H2NVXQowotVvnIjgPeRC9UeQM04otNeSj3fQhuUwUMlt1
+         fH6k2QIqg+Q53spcCa+gTlrdk9CS9+7GvDQlAMr4CfkTeySC4o9nOIi6WMgxBo1z4+yk
+         J2L6URa37qwD9pKz8IeXHL0WUDxuWMSfxgnN/2G427QdBhAGXiBi5hWWxhH2L5MQNldi
+         ME0bb3BvP2lT09b5ir6raQ9bDxoGGYV5tQg1SwGskEIf+8cC76k8R7YEnk4J6ZehSa1R
+         wYMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2whpxl+iWHDZgmDT6i5bR2ewH2KRNqLgWWFYpzHxiLY=;
+        b=vvIs8eqVbjwpTw3uhgGiJOew7hUoyg2SEoCuZPmPFh27XDiPmvxB+WUXOMSv/m/FOr
+         fxdjXeiztrqI41aSGVZEdz2KfGXceQlWz1m338IQiXw14SSXxG5C29dxEVO5bCrE0qR7
+         jo8CTCLu8HDrqDlrpS2zrad2IPihNU5fpqXGBbJf2kf1YaKoMwvV0uP17JhzLm+ygv5h
+         UTudZ0PzlIibwwX+e2vsi4GVhx68CVsx4OhYyqddE3VfiMOj1NEozv62WcmaJiU2Ucw6
+         LjFKlVK64TeIJ4B4Uo/CPsj9J1Xv6tvZKeBe8Ei1rCth9V1AXYmao8nKMB1NiUgiMShM
+         uFNQ==
+X-Gm-Message-State: AOAM532SWV56bqml1oZBg4EBESfNaik457+6bPPixLDNoUm5e/zWVnuN
+        j/z1o7RN4YGpMSZTf/eE6Gw/JjmA2dSgr9vvh7s=
+X-Google-Smtp-Source: ABdhPJzQHsBfd4wlS1+EyrLw3I0I8GL3iXcN+u4lP4qQem2tMb0q6+WSy0DY+8e/CKm4fmL3rOWc1g==
+X-Received: by 2002:a17:902:ea06:: with SMTP id s6mr92442plg.163.1644375166589;
+        Tue, 08 Feb 2022 18:52:46 -0800 (PST)
+Received: from jason-ThinkPad-T14-Gen-1.lan ([66.187.5.142])
+        by smtp.gmail.com with ESMTPSA id q2sm4017176pjj.32.2022.02.08.18.52.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 18:52:46 -0800 (PST)
+From:   Hongyu Xie <xy521521@gmail.com>
+To:     gregkh@linuxfoundation.org, mathias.nyman@intel.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hongyu Xie <xiehongyu1@kylinos.cn>, stable@vger.kernel.org
+Subject: [PATCH -next v2] xhci: fix two places when dealing with return value of function xhci_check_args
+Date:   Wed,  9 Feb 2022 10:52:34 +0800
+Message-Id: <20220209025234.25230-1-xy521521@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgC3pRo4KwNiKHlaBg--.26133S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxur4UJrW5XrykCr47JF4DXFb_yoW5Xryfpr
-        1UAr17AFyUJF12vFykAF1xZryF9an7Wr9rtasF9an7WFWIvrs7t3yDtF9rZF1Iga1fK3WD
-        tFs8Kr47Kwn5GFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRpHqsUUUUU=
-X-Originating-IP: [112.97.82.107]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRwGhZFc7VzxTYQABs3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,57 +67,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dell DW5829e same as DW5821e except the CAT level.
-DW5821e supports CAT16 but DW5829e supports CAT9.
-Also, DW5829e includes normal and eSIM type.
-Please see below test evidence:
+From: Hongyu Xie <xiehongyu1@kylinos.cn>
 
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  5 Spd=5000 MxCh= 0
-D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=413c ProdID=81e6 Rev=03.18
-S:  Manufacturer=Dell Inc.
-S:  Product=DW5829e Snapdragon X20 LTE
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+xhci_check_args returns 4 types of value, -ENODEV, -EINVAL, 1 and 0.
+xhci_urb_enqueue and xhci_check_streams_endpoint return -EINVAL if
+the return value of xhci_check_args <= 0.
+This will cause a problem.
+For example, r8152_submit_rx calling usb_submit_urb in
+drivers/net/usb/r8152.c.
+r8152_submit_rx will never get -ENODEV after submiting an urb
+when xHC is halted,
+because xhci_urb_enqueue returns -EINVAL in the very beginning.
 
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  7 Spd=5000 MxCh= 0
-D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=413c ProdID=81e4 Rev=03.18
-S:  Manufacturer=Dell Inc.
-S:  Product=DW5829e-eSIM Snapdragon X20 LTE
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Fixes: 203a86613fb3 ("xhci: Avoid NULL pointer deref when host dies.")
+Cc: stable@vger.kernel.org
+Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
 ---
- drivers/net/usb/qmi_wwan.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 37e5f3495362..3353e761016d 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1400,6 +1400,8 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x413c, 0x81d7, 0)},	/* Dell Wireless 5821e */
- 	{QMI_FIXED_INTF(0x413c, 0x81d7, 1)},	/* Dell Wireless 5821e preproduction config */
- 	{QMI_FIXED_INTF(0x413c, 0x81e0, 0)},	/* Dell Wireless 5821e with eSIM support*/
-+	{QMI_FIXED_INTF(0x413c, 0x81e4, 0)},	/* Dell Wireless 5829e with eSIM support*/
-+	{QMI_FIXED_INTF(0x413c, 0x81e6, 0)},	/* Dell Wireless 5829e */
- 	{QMI_FIXED_INTF(0x03f0, 0x4e1d, 8)},	/* HP lt4111 LTE/EV-DO/HSPA+ Gobi 4G Module */
- 	{QMI_FIXED_INTF(0x03f0, 0x9d1d, 1)},	/* HP lt4120 Snapdragon X5 LTE */
- 	{QMI_QUIRK_SET_DTR(0x22de, 0x9051, 2)}, /* Hucom Wireless HM-211S/K */
+v2: keep return value to -EINVAL for roothub urbs
+
+ drivers/usb/host/xhci.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index dc357cabb265..948546b98af0 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1604,9 +1604,12 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+ 	struct urb_priv	*urb_priv;
+ 	int num_tds;
+ 
+-	if (!urb || xhci_check_args(hcd, urb->dev, urb->ep,
+-					true, true, __func__) <= 0)
++	if (!urb)
+ 		return -EINVAL;
++	ret = xhci_check_args(hcd, urb->dev, urb->ep,
++					true, true, __func__);
++	if (ret <= 0)
++		return ret ? ret : -EINVAL;
+ 
+ 	slot_id = urb->dev->slot_id;
+ 	ep_index = xhci_get_endpoint_index(&urb->ep->desc);
+@@ -3323,7 +3326,7 @@ static int xhci_check_streams_endpoint(struct xhci_hcd *xhci,
+ 		return -EINVAL;
+ 	ret = xhci_check_args(xhci_to_hcd(xhci), udev, ep, 1, true, __func__);
+ 	if (ret <= 0)
+-		return -EINVAL;
++		return ret ? ret : -EINVAL;
+ 	if (usb_ss_max_streams(&ep->ss_ep_comp) == 0) {
+ 		xhci_warn(xhci, "WARN: SuperSpeed Endpoint Companion"
+ 				" descriptor for ep 0x%x does not support streams\n",
 -- 
 2.25.1
 
