@@ -2,190 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E19094AF087
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 13:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CA84AF1AD
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 13:31:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbiBIMAu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Feb 2022 07:00:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56978 "EHLO
+        id S233023AbiBIMbb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Feb 2022 07:31:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbiBIL67 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 06:58:59 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40ADE00F7FB;
-        Wed,  9 Feb 2022 03:55:51 -0800 (PST)
+        with ESMTP id S229701AbiBIMba (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 07:31:30 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAB8C0613CA;
+        Wed,  9 Feb 2022 04:31:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644407751; x=1675943751;
+  t=1644409893; x=1675945893;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ldRegzxx4MqZ33e5eDdwL59Yst9wpfymoOupa1NIuxA=;
-  b=HATw4rcPKevZfPRj5edOb8uC7a2YLN52g9j43Dhxyj2pkf7WCE1GWpVo
-   T6dcYqwp2xfOoi7R0+3O9rK9oaFuaeumN2DZU7Ia+zX0gH9zaXwOqbkIn
-   ORny5tOWjaLqJIogj+uBP08RJKssqXSNFVtbGv1vWRk1rk+nGXI08mAbp
-   8DkweR2ENwENUODumpUc9CCPWnWlhgBj949iTEAEt0ddMljMMz/oaSY5s
-   NIbPSOTe78opO6rZscWMpcvgGbX3fsStOXK3Id3ZX1xvQnSmk1c5kFnbJ
-   RCMEsne6Q1HY1AY8zqlIr18zZ/zDMajrQPK7ADGKzcUnk59DVwAB6XL9a
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="246771011"
+  bh=soo0nB22WJPviBpDRfEsLQcVnBjoM627TI0/ktDLbTA=;
+  b=DIJvvN1fahCLSOlJKbUbt7CYREFfjB8FFrh0GhrgYu3pS0H0AntDOr/n
+   UJKll2uyur+6Fp2DMwjiTCT55WJ+/Xa7Hd6W8dr7ICJLaG8A7ctGNOSg/
+   3CeHCkZd/E+d2L0VCBK9Nm96juLZvKpPIMeSw1I3g57PDAA52OO4McLpF
+   owT/Dcg353xM+perKlvEoBpGUMOp8s2+0MO+U4YT+dZAhNpNLYXAPpX7b
+   s74rukMfa+Oeq90J0v1c3UjAPBkv6qisqyn5CNXlCZg4hSv6KRpOYAcT9
+   vHFrpTgL3fEXH1OcU7CPb/4Sbzo+F5ZX9IL4OwsramGMyfAR8q/QTLiOe
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="248026147"
 X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="246771011"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 03:55:42 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="248026147"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 04:31:33 -0800
 X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="678549160"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 09 Feb 2022 03:55:39 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 09 Feb 2022 13:55:39 +0200
-Date:   Wed, 9 Feb 2022 13:55:38 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] usb: typec: Support the WUSB3801 port controller
-Message-ID: <YgOruoTJSybLweNC@kuha.fi.intel.com>
-References: <20220202221948.5690-1-samuel@sholland.org>
- <20220202221948.5690-5-samuel@sholland.org>
+   d="scan'208";a="622261908"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 04:31:30 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nHm7E-002bvg-8W;
+        Wed, 09 Feb 2022 14:30:32 +0200
+Date:   Wed, 9 Feb 2022 14:30:32 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v2 1/6] device property: Helper to match multiple
+ connections
+Message-ID: <YgOz6K55Oi2Si4pU@smile.fi.intel.com>
+References: <20220208031944.3444-1-bjorn.andersson@linaro.org>
+ <20220208031944.3444-2-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220202221948.5690-5-samuel@sholland.org>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220208031944.3444-2-bjorn.andersson@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 04:19:47PM -0600, Samuel Holland wrote:
-> WUSB3801 features a configurable port type, accessory detection, and
-> plug orientation detection. It provides a hardware "ID" pin output for
-> compatibility with USB 2.0 OTG PHYs. Add a typec class driver for it.
+On Mon, Feb 07, 2022 at 07:19:39PM -0800, Bjorn Andersson wrote:
+> In some cases multiple connections with the same connection id
+> needs to be resolved from a fwnode graph.
 > 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
+> One such example is when separate hardware is used for performing muxing
+> and/or orientation switching of the SuperSpeed and SBU lines in a USB-C
+
+USB Type-C ?
+
+> connector. In this case the connector needs to belong to a graph with
+> multiple matching remote endpoints, and the TypeC controller needs to be
+
+Type-C ?
+
+> able to resolve them both.
 > 
-> Changes in v2:
->  - License the driver as GPL 2 only; probably best anyway as I used a
->    lot of other drivers/usb/typec code as inspiration
->  - Don't try to be clever; use `default` instead of `unreachable`
->  - Free the IRQ before unregistering the partner/port
+> Add a new API that allows this kind of lookup.
 > 
->  drivers/usb/typec/Kconfig    |  10 +
->  drivers/usb/typec/Makefile   |   1 +
->  drivers/usb/typec/wusb3801.c | 445 +++++++++++++++++++++++++++++++++++
->  3 files changed, 456 insertions(+)
->  create mode 100644 drivers/usb/typec/wusb3801.c
+> Given that the match() callback returns an opaque reference to something
+> provided by the client it's not possible for the implementation to
+> release the returned object and as such it's not possible to handle
+> errors, which in turn means that it's not possible to query the number
+> of elements or dynamically grow the results array. It's however expected
+> that the number of matches will be reasonably low and that the worst
+> case is known by the caller before hand.
 
-This looked mostly OK to me. One nitpick below.
+...
 
-> +static int wusb3801_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct fwnode_handle *connector;
-> +	unsigned int device_id, test01;
-> +	struct wusb3801 *wusb3801;
-> +	const char *cap_str;
-> +	int ret;
+> +	fwnode_graph_for_each_endpoint(fwnode, ep) {
+> +		if (count >= matches_len) {
+> +			fwnode_handle_put(ep);
+> +			return count;
+> +		}
 > +
-> +	wusb3801 = devm_kzalloc(dev, sizeof(*wusb3801), GFP_KERNEL);
-> +	if (!wusb3801)
-> +		return -ENOMEM;
+> +		node = fwnode_graph_get_remote_port_parent(ep);
+> +		if (!fwnode_device_is_available(node)) {
+> +			fwnode_handle_put(node);
+> +			continue;
+> +		}
 > +
-> +	i2c_set_clientdata(client, wusb3801);
-> +
-> +	wusb3801->dev = dev;
-> +
-> +	wusb3801->regmap = devm_regmap_init_i2c(client, &config);
-> +	if (IS_ERR(wusb3801->regmap))
-> +		return PTR_ERR(wusb3801->regmap);
-> +
-> +	regmap_read(wusb3801->regmap, WUSB3801_REG_DEVICE_ID, &device_id);
-> +	regmap_read(wusb3801->regmap, WUSB3801_REG_TEST01, &test01);
-> +	dev_info(dev, "Vendor ID: %ld, Version ID: %ld, Vendor SubID: 0x%02lx\n",
-> +		 device_id & WUSB3801_DEVICE_ID_VENDOR_ID,
-> +		 (device_id & WUSB3801_DEVICE_ID_VERSION_ID) >> 3,
-> +		 test01 & WUSB3801_TEST01_VENDOR_SUB_ID);
+> +		ret = match(node, con_id, data);
+> +		fwnode_handle_put(node);
 
-That is just noise.
+> +
 
-> +	wusb3801->vbus_supply = devm_regulator_get(dev, "vbus");
-> +	if (IS_ERR(wusb3801->vbus_supply))
-> +		return PTR_ERR(wusb3801->vbus_supply);
-> +
-> +	connector = device_get_named_child_node(dev, "connector");
-> +	if (!connector)
-> +		return -ENODEV;
-> +
-> +	ret = typec_get_fw_cap(&wusb3801->cap, connector);
+Redundant blank line (it seems the current style w/o this).
+Ditto for the below function.
 
-One note here: Don't use fw_devlink_purge_absent_suppliers() here
-either unless you really see some problem yourself!
-
-That function is broken like I said. What ever it's fixing, it's doing
-it wrong. That function seems to be just a broken hack that most
-likely covered some individual case that was reported at the time.
-Instead of hacks like that, we need to figure out a solution for the
-core problem, what ever that might be.
-
-> +	if (ret)
-> +		goto err_put_connector;
-> +	wusb3801->port_type = wusb3801->cap.type;
-> +
-> +	ret = fwnode_property_read_string(connector, "typec-power-opmode", &cap_str);
-> +	if (ret)
-> +		goto err_put_connector;
-> +
-> +	ret = typec_find_pwr_opmode(cap_str);
-> +	if (ret < 0 || ret == TYPEC_PWR_MODE_PD)
-> +		goto err_put_connector;
-> +	wusb3801->pwr_opmode = ret;
-> +
-> +	/* Initialize the hardware with the devicetree settings. */
-> +	ret = wusb3801_hw_init(wusb3801);
-> +	if (ret)
-> +		return ret;
-> +
-> +	wusb3801->cap.revision		= USB_TYPEC_REV_1_2;
-> +	wusb3801->cap.accessory[0]	= TYPEC_ACCESSORY_AUDIO;
-> +	wusb3801->cap.accessory[1]	= TYPEC_ACCESSORY_DEBUG;
-> +	wusb3801->cap.orientation_aware	= true;
-> +	wusb3801->cap.driver_data	= wusb3801;
-> +	wusb3801->cap.ops		= &wusb3801_typec_ops;
-> +
-> +	wusb3801->port = typec_register_port(dev, &wusb3801->cap);
-> +	if (IS_ERR(wusb3801->port)) {
-> +		ret = PTR_ERR(wusb3801->port);
-> +		goto err_put_connector;
+> +		if (ret)
+> +			matches[count++] = ret;
 > +	}
+
+...
+
+> +/**
+> + * fwnode_connection_find_matches - Find connections from a device node
+> + * @fwnode: Device node with the connection
+> + * @con_id: Identifier for the connection
+> + * @data: Data for the match function
+> + * @match: Function to check and convert the connection description
+> + * @matches: Array of pointers to fill with matches
+> + * @matches_len: Length of @matches
+> + *
+> + * Find up to @matches_len connections with unique identifier @con_id between
+> + * @fwnode and other device nodes. @match will be used to convert the
+> + * connection description to data the caller is expecting to be returned
+> + * through the @matches array.
+> + *
+> + * Return: Number of matches resolved, of negative errno.
+
+s/of/or/ ?
+
+> + */
+> +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
+> +				   const char *con_id, void *data,
+> +				   devcon_match_fn_t match,
+> +				   void **matches, unsigned int matches_len)
+> +{
+> +	unsigned int count;
 > +
-> +	/* Initialize the port attributes from the hardware state. */
-> +	wusb3801_hw_update(wusb3801);
+> +	if (!fwnode || !match || !matches)
+
+!matches case may be still useful to get the count and allocate memory by
+caller. Please, consider this case.
+
+> +		return -EINVAL;
 > +
-> +	ret = request_threaded_irq(client->irq, NULL, wusb3801_irq,
-> +				   IRQF_ONESHOT, dev_name(dev), wusb3801);
-> +	if (ret)
-> +		goto err_unregister_port;
+> +	count = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
+> +					    matches, matches_len);
 > +
-> +	fwnode_handle_put(connector);
-> +
-> +	return 0;
-> +
-> +err_unregister_port:
-> +	typec_unregister_port(wusb3801->port);
-> +err_put_connector:
-> +	fwnode_handle_put(connector);
-> +
-> +	return ret;
+> +	return count + fwnode_devcon_matches(fwnode, con_id, data, match,
+> +					     matches + count,
+> +					     matches_len - count);
+
+I haven't found any explanation what the difference between two counts. Also
+can you define two count variables with distinct names and do something like
+
+	count_A = ...
+
+	matches += count;
+	matches_len -= count;
+
+	count_B = ...
+
+	return count_A + count_B;
+
+?
+
 > +}
 
-thanks,
-
 -- 
-heikki
+With Best Regards,
+Andy Shevchenko
+
+
