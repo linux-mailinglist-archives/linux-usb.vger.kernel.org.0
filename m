@@ -2,128 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F6E4AF375
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 15:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2B74AF386
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 15:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234624AbiBIOAM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Feb 2022 09:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
+        id S234648AbiBIOCl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Feb 2022 09:02:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233068AbiBIOAL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 09:00:11 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3434C0613CA;
-        Wed,  9 Feb 2022 06:00:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644415215; x=1675951215;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LTbCfpgirvkiiJVXS3/W8u/E1X2goTKOFUcS9d7EBkM=;
-  b=PJhwBJlts/W1pEilta32d+zV2310fWCR+h3BkwXwj5+VHsYxmkyd/1Yb
-   XiocS0NTnlwIDERuN7lEq0grC5qGjeO8Rh30i/503wNEIsGrnjvAWlzkq
-   peoMtP5BnDlkVNTvtSOYIXs07QNJYAv2934VsDNRyIVms9gPg3pWNPDTg
-   AvT2Tn6DwdXutUlnpKn2iWgeR82QFrOi628kAUbhqLwg8CaD8ww7OSMDX
-   KV1r+nGmBcxj2B1iYXJLMJmnivoLUL9qyO67mWTS4+lG8YGBFJYhMOFHV
-   Z3Kny5WqN763YNKtRUswa+PN3cAQ7ZPTTSyKPum8qlXkdqHtMuRmSSFa/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="229855628"
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="229855628"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 06:00:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="678598062"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 09 Feb 2022 06:00:10 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 09 Feb 2022 16:00:09 +0200
-Date:   Wed, 9 Feb 2022 16:00:09 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
-Subject: Re: [PATCH] usb: core: Unregister device on component_add() failure
-Message-ID: <YgPI6RQd/9I4/51p@kuha.fi.intel.com>
-References: <20220208170048.24718-1-fmdefrancesco@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208170048.24718-1-fmdefrancesco@gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S233068AbiBIOCk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 09:02:40 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DD0C0612BE;
+        Wed,  9 Feb 2022 06:02:43 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id x3so2289296pll.3;
+        Wed, 09 Feb 2022 06:02:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=J542ENssTjaGGW4CVV2vnDWua5d5FY//rGPfnPmL/oY=;
+        b=nXH6+i8Ii06LAgl6pIr3JPZBPHZZ3B62MXT95LBsvTlgA0izpO9apIHSoIjyEI8cFg
+         pVYu5RhsCLUuCewp6SNkiiM52AGofKrT9oZ/wmNUUohLMEn33QyJZwugGe68x9khpAvh
+         LMh26rcuC/QggARFUli5/ebC8/DBQxrs5D6hHW6Dnuycs7GBQ9ayk98r6QuQcsS3jcuI
+         gsv4DCNMGX6UR+f0Nj+e9jarpS1ClpYUHwl+DsT2luOR7Enk78OUxRLXDfxWhJrus4o6
+         E3iGV0JlKxuAoSiHCh8KkyYkKqia+5y526za6Baiz6NzWEhEFacPluQSWkWMb4dlwFzM
+         2e+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=J542ENssTjaGGW4CVV2vnDWua5d5FY//rGPfnPmL/oY=;
+        b=rgyNfEIm6QEEnj4ahEaGjdmZ4dAHZ9aNOfymYCDo26l5auBVKj1YjANv6+bVl/EdcY
+         fu4JBcjl7p08WiOVRMCgjML5ZgdpgUPvzJy9txKSSQ0kcToOhBXMLA6OMdlSesMz7H6t
+         I95DT/GMORwYGvVTxikRJXpMK+bzrBVk55ZGMwfxPZf4JIlo+IHfxvtHAskAvT5mBBCi
+         A2nlu1g3jj+1N1EiuPuZc9Gp2Ao/jG1yQRL4gEMRkbm/8jLwwzMYP6j3E+uxMZo8cNMc
+         VbSZ7pdUkPu6L75/mRakMQPTKMKZgzNLZBm2k9HjNPSMJH0pRDPdR22tCjrRi/V3U8iF
+         9BLw==
+X-Gm-Message-State: AOAM5313AgZ85BsNNC6fQE98hUVCa9Lrx85VenMWo5U5UkxGblBB/WuU
+        tQJiY0J/GuxE54LyxE7Qkb8=
+X-Google-Smtp-Source: ABdhPJw6RBG3nG0UiqpUixEVJCO3iIQFduZrk1e2LovUPiP0ysQjwpiYRCN1rNDzEwXqlABwnQlSAQ==
+X-Received: by 2002:a17:902:a512:: with SMTP id s18mr2178777plq.51.1644415362450;
+        Wed, 09 Feb 2022 06:02:42 -0800 (PST)
+Received: from localhost.localdomain (1-171-21-84.dynamic-ip.hinet.net. [1.171.21.84])
+        by smtp.gmail.com with ESMTPSA id j8sm6177178pjc.11.2022.02.09.06.02.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 09 Feb 2022 06:02:41 -0800 (PST)
+From:   cy_huang <u0084500@gmail.com>
+To:     robh+dt@kernel.org, heikki.krogerus@linux.intel.com
+Cc:     gregkh@linuxfoundation.org, cy_huang@richtek.com,
+        will_lin@richtek.com, th_chuang@richtek.com,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] Add Richtek RT1719 USBPD controller support
+Date:   Wed,  9 Feb 2022 22:02:33 +0800
+Message-Id: <1644415355-24490-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 06:00:48PM +0100, Fabio M. De Francesco wrote:
-> Commit 8c67d06f3fd9 ("usb: Link the ports to the connectors they are
-> attached to") creates a link to the USB Type-C connector for every new
-> port that is added when possible. If component_add() fails,
-> usb_hub_create_port_device() prints a warning but does not unregister
-> the device and does not return errors to the callers.
-> 
-> Syzbot reported a "WARNING in component_del()".
-> 
-> Fix this issue in usb_hub_create_port_device by calling device_unregister()
-> and returning the errors from component_add().
-> 
-> Reported-by: syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
-> Fixes: 8c67d06f3fd9 ("usb: Link the ports to the connectors they are attached to")
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->  drivers/usb/core/port.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-> index c2bbf97a79be..8455b235976a 100644
-> --- a/drivers/usb/core/port.c
-> +++ b/drivers/usb/core/port.c
-> @@ -605,8 +605,11 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
->  	find_and_link_peer(hub, port1);
->  
->  	retval = component_add(&port_dev->dev, &connector_ops);
-> -	if (retval)
-> +	if (retval) {
->  		dev_warn(&port_dev->dev, "failed to add component\n");
-> +		device_unregister(&port_dev->dev);
-> +		return retval;
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-You didn't remove the peer links. Either remove them here separately,
-or alternatively you can also just shuffle the code so that you only
-create those links after the component_add() call:
+Since v4:
+1. Add Reviewed-by in dt-binding patch.
+2. Remove fw_devlink_purge_absent_suppliers.
+3. Change MODULE_LICENSE from 'GPL v2' to 'GPL'.
 
-diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-index c2bbf97a79bec..d5bc36ca5b1f7 100644
---- a/drivers/usb/core/port.c
-+++ b/drivers/usb/core/port.c
-@@ -602,11 +602,14 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
-                return retval;
-        }
- 
--       find_and_link_peer(hub, port1);
--
-        retval = component_add(&port_dev->dev, &connector_ops);
--       if (retval)
-+       if (retval) {
-                dev_warn(&port_dev->dev, "failed to add component\n");
-+               device_unregister(&port_dev->dev);
-+               return retval;
-+       }
-+
-+       find_and_link_peer(hub, port1);
- 
-        /*
-         * Enable runtime pm and hold a refernce that hub_configure()
+Since v3:
+1. Fix checkpatch.pl consistent space error in line 332.
+2. Refine some error codes to more appropriate one.
+3. In psy_set_property, except prop VOLTAGE_NOW, directly return -EINVAL.
+4. Use devm_kasprintf to replace devm_kzalloc and snprintf in psy_register function.
 
-thanks,
+Since v2:
+1. Fix below kernel test robot build warning.
+>> drivers/usb/typec/rt1719.c:492:65: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+     492 |                                  RT1719_EVALMODE_MASK | src_sel + 1);
+         |                                                         ~~~~~~~~^~~
+
+ChiYuan Huang (2):
+  dt-bindings: usb: rt1719: Add binding for Richtek RT1719
+  usb: typec: rt1719: Add support for Richtek RT1719
+
+ .../devicetree/bindings/usb/richtek,rt1719.yaml    |  85 ++
+ drivers/usb/typec/Kconfig                          |  12 +
+ drivers/usb/typec/Makefile                         |   1 +
+ drivers/usb/typec/rt1719.c                         | 961 +++++++++++++++++++++
+ 4 files changed, 1059 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/richtek,rt1719.yaml
+ create mode 100644 drivers/usb/typec/rt1719.c
 
 -- 
-heikki
+2.7.4
+
