@@ -2,76 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D660F4AEA02
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 07:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B46364AEAA5
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 07:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233598AbiBIGGB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Feb 2022 01:06:01 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51866 "EHLO
+        id S235341AbiBIGya (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Feb 2022 01:54:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234279AbiBIGBM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 01:01:12 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22F6C050CC2;
-        Tue,  8 Feb 2022 22:01:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644386474; x=1675922474;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4peUR/FlwKBQOuJfd2ZZpHK3WkZEECAcE1WpoWtMvdg=;
-  b=FOjcW4zE2r5tgp4QWaTHBUPV5Q+BLMpaJMdoH+RAzvZCjVzA/8ATbbp9
-   3N2VMZ7m+R/NjI48FcBEU5kHB+Q7/za/1fN31j+VlnRQOepcd1y27R+GY
-   69VLUE7FL7QBJk6UQy/ffLhtcKI1Rp5AdgRORXFOlau7Uf9+A+34dx3nI
-   o=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 08 Feb 2022 22:01:14 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 22:01:14 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 8 Feb 2022 22:01:13 -0800
-Received: from [10.216.51.153] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 8 Feb 2022
- 22:01:10 -0800
-Message-ID: <d0048456-eb0a-cf91-fc28-f1dda69c1432@quicinc.com>
-Date:   Wed, 9 Feb 2022 11:31:06 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk for
- DWC3 controller
-Content-Language: en-US
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        with ESMTP id S235333AbiBIGya (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 01:54:30 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64457C05CB85;
+        Tue,  8 Feb 2022 22:54:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644389673; x=1675925673;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qo/ffmlCcS58q+JxMXvgEK1N8bRkvNy+6yQLFamMA5w=;
+  b=CrHvT1ojVzpW6VeWWD1POrMlDgvn5Ua+lY6EoJ4UZgtYKL/HzVu3cvit
+   snjChFD72OK+19oPHEUpymYWFhnP5oKUbFTnmKq8xTn54ctJ9Hl11TVzD
+   pYx0E5EbyJ1NUkqCdoU8nvaiNRB6DyMyBbqbhTQ4WkG7jN9ecr1YT8MB6
+   ckzbvwH9GPOxYB+e1uhfqG6EBRTjAXCgwpQaHi5nCY9swqmw1fICtwJaO
+   QAITgjs6t5dQF63g7+UdplN1e6dZM77u5ndv+tS5JfDQG4yaS6pnkcOtc
+   PlF09vw6a2YS59I5R+bl1gMAXLtfUaKK28Zcsk2VVFXdJznq8GdTZCMNK
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="247971746"
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="247971746"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 22:54:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="568138924"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 08 Feb 2022 22:54:30 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHgs1-0001Mp-Vh; Wed, 09 Feb 2022 06:54:29 +0000
+Date:   Wed, 9 Feb 2022 14:53:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Potin Lai <potin.lai@quantatw.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Doug Anderson" <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>
-References: <1640153383-21036-1-git-send-email-quic_c_sanm@quicinc.com>
- <Ydb79/twbxLDJB8/@kroah.com>
- <d17330f1-d85e-b8c2-9e87-10d109c25abb@quicinc.com>
- <YfE9s06CIv1P3bA/@kroah.com>
- <f45f5952-e31c-5e9d-2560-064199beb29f@quicinc.com>
- <ca306d7c-d816-3cbd-8c65-2c3619739d47@quicinc.com>
- <YgJB6bGm/y7C0oo/@kroah.com>
- <20220209055352.GA22550@hu-pkondeti-hyd.qualcomm.com>
-From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-In-Reply-To: <20220209055352.GA22550@hu-pkondeti-hyd.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>
+Subject: Re: [PATCH v2 1/2] usb: typec: tcpm: add interface for passing
+ supported_pd_rev from tcpc_dev
+Message-ID: <202202091453.L5BVOjcx-lkp@intel.com>
+References: <20220208112226.9108-2-potin.lai@quantatw.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220208112226.9108-2-potin.lai@quantatw.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,109 +68,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Potin,
 
-On 2/9/2022 11:23 AM, Pavan Kondeti wrote:
-> On Tue, Feb 08, 2022 at 11:11:53AM +0100, Greg Kroah-Hartman wrote:
->> On Tue, Feb 08, 2022 at 03:34:22PM +0530, Sandeep Maheswaram wrote:
->>> Hi Greg,
->>>
->>> On 1/27/2022 10:28 AM, Sandeep Maheswaram wrote:
->>>> On 1/26/2022 5:55 PM, Greg Kroah-Hartman wrote:
->>>>> On Fri, Jan 07, 2022 at 10:27:59AM +0530, Sandeep Maheswaram wrote:
->>>>>> On 1/6/2022 7:55 PM, Greg Kroah-Hartman wrote:
->>>>>>> On Wed, Dec 22, 2021 at 11:39:43AM +0530, Sandeep Maheswaram wrote:
->>>>>>>> Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
->>>>>>>> Runtime suspend of phy drivers was failing from DWC3
->>>>>>>> driver as runtime
->>>>>>>> usage value is 2 because the phy is initialized from
->>>>>>>> DWC3 and HCD core.
->>>>>>>> DWC3 manages phy in their core drivers. Set this quirk to avoid phy
->>>>>>>> initialization in HCD core.
->>>>>>>>
->>>>>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>>>>>>> ---
->>>>>>>> v5:
->>>>>>>> Added comment to explain the change done.
->>>>>>>> v4:
->>>>>>>> Changed pdev->dev.parent->of_node to sysdev->of_node
->>>>>>>>
->>>>>>>>     drivers/usb/host/xhci-plat.c | 8 ++++++++
->>>>>>>>     1 file changed, 8 insertions(+)
->>>>>>>>
->>>>>>>> diff --git a/drivers/usb/host/xhci-plat.c
->>>>>>>> b/drivers/usb/host/xhci-plat.c
->>>>>>>> index c1edcc9..e6014d4 100644
->>>>>>>> --- a/drivers/usb/host/xhci-plat.c
->>>>>>>> +++ b/drivers/usb/host/xhci-plat.c
->>>>>>>> @@ -327,6 +327,14 @@ static int xhci_plat_probe(struct
->>>>>>>> platform_device *pdev)
->>>>>>>>                          &xhci->imod_interval);
->>>>>>>>         }
->>>>>>>> +    /*
->>>>>>>> +     * Set XHCI_SKIP_PHY_INIT quirk to avoid phy
->>>>>>>> initialization twice.
->>>>>>>> +     * DWC3 manages phy in their core drivers. Set this
->>>>>>>> quirk to avoid phy
->>>>>>>> +     * initialization in HCD core.
->>>>>>>> +     */
->>>>>>>> +    if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
->>>>>>>> +        xhci->quirks |= XHCI_SKIP_PHY_INIT;
->>>>>>>> +
->>>>>>> Why is this function caring about dwc3 stuff?  Shoudn't this be a
->>>>>>> "generic" device property instead of this device-specific one?
->>>>>>>
->>>>>>> thanks,
->>>>>>>
->>>>>>> greg k-h
->>>>>> This quirk is set only if required for some controllers (eg:
->>>>>> dwc3 & cdns3).
->>>>>>
->>>>>> Please check below commit.
->>>>>>
->>>>>> https://lore.kernel.org/all/20200918131752.16488-5-mathias.nyman@linux.intel.com/
->>>>>>
->>>>> That commit has nothing to do with a specific "dwc3" quirk anywhere.
->>>>> Why not set this flag in the specific platform xhci driver instead where
->>>>> it belongs?
->>>>>
->>>>> thanks,
->>>>>
->>>>> greg k-h
->>>> There is no specific xhci platform driver for dwc3 controllers.
->>>>
->>>> dwc3 controllers use xhci-plat driver .
->>>>
->>>> We can add this quirk in usb/dwc3/host.c as cdns3 does but that requires
->>>> tying dwc3 and xhci driver .
->>>>
->>>> https://patchwork.kernel.org/project/linux-arm-msm/patch/1633946518-13906-1-git-send-email-sanm@codeaurora.org/
->>>>
->>>>
->>>> Regards
->>>>
->>>> Sandeep
->>>>
->>>>
->>> Can you suggest any other method to set this quirk for dwc3 controllers.
->> No idea, sorry.
-> Sandeep,
->
-> I agree with Greg's comments here. The compatible based check to detect dwc3
-> controller is not elegant. Your proposal of adding a device tree param is
-> overkill, I believe.
->
-> Greg already gave us a pointer here [1] which I feel is the best approach going
-> forward. We know that xhci-plat is being used by drivers like dwc3, cdns3 and
-> these drivers need to expose their xhci quirks. As Greg suggested, why can't
-> we move xhci quirks definition to include/linux/usb/xhci-quriks.h and directly
-> access from the glue drivers? The attached is the patch (completely untested)
-> for your reference. It will prepare the setup for you to add the private data
-> and quirks in the dwc3 host glue driver.
->
-> Thanks,
-> Pavan
->
-> [1]
-> https://patchwork.kernel.org/project/linux-arm-msm/patch/1633946518-13906-1-git-send-email-sanm@codeaurora.org/
->
-Thanks Pavan..will test the patch.
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on v5.17-rc3 next-20220208]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Potin-Lai/usb-typec-tcpm-add-interface-for-passing-supported_pd_rev-from-tcpc_dev/20220208-202246
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: arm64-randconfig-s031-20220208 (https://download.01.org/0day-ci/archive/20220209/202202091453.L5BVOjcx-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/322696594704fa918e63d1c80fa6d346a02e9a28
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Potin-Lai/usb-typec-tcpm-add-interface-for-passing-supported_pd_rev-from-tcpc_dev/20220208-202246
+        git checkout 322696594704fa918e63d1c80fa6d346a02e9a28
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/usb/typec/tcpm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/usb/typec/tcpm/tcpm.c:581:16: sparse: sparse: incompatible types in comparison expression (different signedness):
+>> drivers/usb/typec/tcpm/tcpm.c:581:16: sparse:    unsigned int *
+>> drivers/usb/typec/tcpm/tcpm.c:581:16: sparse:    int *
+
+vim +581 drivers/usb/typec/tcpm/tcpm.c
+
+   573	
+   574	static u32 tcpm_pd_supported_rev(struct tcpm_port *port)
+   575	{
+   576		u32 rev = PD_MAX_REV;
+   577	
+   578		if (port->tcpc->supported_pd_rev)
+   579			rev = port->tcpc->supported_pd_rev(port->tcpc);
+   580	
+ > 581		return min(rev, PD_MAX_REV);
+   582	}
+   583	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
