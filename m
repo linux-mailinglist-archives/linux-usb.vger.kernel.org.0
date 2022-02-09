@@ -2,90 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1553F4AEF94
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 11:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB2C4AF050
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 12:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiBIKzt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Feb 2022 05:55:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
+        id S231706AbiBIL5m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Feb 2022 06:57:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiBIKzr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 05:55:47 -0500
-Received: from mxout04.lancloud.ru (mxout04.lancloud.ru [45.84.86.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF343E16FC98
-        for <linux-usb@vger.kernel.org>; Wed,  9 Feb 2022 02:33:56 -0800 (PST)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru C7C4F20D1C67
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: Re: [PATCH] usb: common: usb-otg-fsm: drop unreachable code in
- otg_statemachine()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Peter Chen <peter.chen@kernel.org>, <linux-usb@vger.kernel.org>
-References: <5c923258-67c3-bae1-80d1-87a187202a4c@omp.ru>
- <YgNSkY/Hd811Vhu1@kroah.com>
-Organization: Open Mobile Platform
-Message-ID: <aa29a5b5-f45a-c08c-a955-4f48bd9e4920@omp.ru>
-Date:   Wed, 9 Feb 2022 13:33:53 +0300
+        with ESMTP id S231818AbiBIL4G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 06:56:06 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AAEE03E231;
+        Wed,  9 Feb 2022 02:56:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644404201; x=1675940201;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=W/ACr337dCWxZ64atnDXrvUA4xLsoa1IEFVrCd8GQkg=;
+  b=Gzx/SQzb6dbXgj88lUo6DajTK4slC/uXScqj3biG0Vge3JEzC98lC3uk
+   RM2GYo5571PRBN9RwVtx0VD/Zu7WiRloIPkNoFeRlN8JtljFAx198I6VW
+   ltHWBkLe0aK2sufNjV0tqLSV4rcvQfcRWdNOG1tf+kfBSLuwSeORYeEem
+   87bOw3zvNE9OKWgM8SCJ6Ucw/ssvF98WbuN4qrkfgHBRC6xTGvuWBULcq
+   rDqZBigRTrB4jItnlnqMfnOkjgi6co1gMqefMDPQKoIdVkle1ce2CkT3m
+   MhOtr35XzYIpObiBcynOqcF/wtnighFDJA4JVEk9D3mAVo0raJ425kCUd
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="229135463"
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="229135463"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 01:27:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="568178958"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 09 Feb 2022 01:27:47 -0800
+To:     Hongyu Xie <xy521521@gmail.com>, gregkh@linuxfoundation.org,
+        mathias.nyman@intel.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hongyu Xie <xiehongyu1@kylinos.cn>, stable@vger.kernel.org
+References: <20220209025234.25230-1-xy521521@gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH -next v2] xhci: fix two places when dealing with return
+ value of function xhci_check_args
+Message-ID: <89d59749-8ca3-b30b-4da6-a6e567528d1b@linux.intel.com>
+Date:   Wed, 9 Feb 2022 11:29:22 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <YgNSkY/Hd811Vhu1@kroah.com>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20220209025234.25230-1-xy521521@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2/9/22 8:35 AM, Greg Kroah-Hartman wrote:
-
->> The *switch* statement in otg_statemachine() does handle all possible OTG
->> states explicitly, so the *default* label is unreachable.
->>
->> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
->> analysis tool.
->>
->> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->>
->> ---
->> This patch is against the 'usb-next' branch of Greg KH's 'usb.git' repo.
->> Peter Chen's 'usb.git' repo seems outdated, so I chose to ignore it...
->>
->>  drivers/usb/common/usb-otg-fsm.c |    2 --
->>  1 file changed, 2 deletions(-)
->>
->> Index: usb/drivers/usb/common/usb-otg-fsm.c
->> ===================================================================
->> --- usb.orig/drivers/usb/common/usb-otg-fsm.c
->> +++ usb/drivers/usb/common/usb-otg-fsm.c
->> @@ -440,8 +440,6 @@ int otg_statemachine(struct otg_fsm *fsm
->>  		if (fsm->id || fsm->a_bus_drop || fsm->a_clr_err)
->>  			otg_set_state(fsm, OTG_STATE_A_WAIT_VFALL);
->>  		break;
->> -	default:
->> -		break;
->>  	}
->>  	mutex_unlock(&fsm->lock);
->>  
+On 9.2.2022 4.52, Hongyu Xie wrote:
+> From: Hongyu Xie <xiehongyu1@kylinos.cn>
 > 
-> There is nothing wrong with leaving lines like this in the code to
-> handle any potential bugs.
-> Why do you think it needs to be removed?  What benefit does this patch
-> have?
+> xhci_check_args returns 4 types of value, -ENODEV, -EINVAL, 1 and 0.
+> xhci_urb_enqueue and xhci_check_streams_endpoint return -EINVAL if
+> the return value of xhci_check_args <= 0.
+> This will cause a problem.
+> For example, r8152_submit_rx calling usb_submit_urb in
+> drivers/net/usb/r8152.c.
+> r8152_submit_rx will never get -ENODEV after submiting an urb
+> when xHC is halted,
+> because xhci_urb_enqueue returns -EINVAL in the very beginning.
+> 
+> Fixes: 203a86613fb3 ("xhci: Avoid NULL pointer deref when host dies.")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+> ---
 
-   These lines as they are bring no value at all.
-   Note that (as I said)  all the values of 'enum usb_otg_state' are
-already handled with explicit *case* label...
+Thanks, added to queue.
+Changed the commit message and header a bit:
 
-MBR, Sergey
+"xhci: Prevent futile URB re-submissions due to incorrect return value.
+    
+The -ENODEV return value from xhci_check_args() is incorrectly changed
+to -EINVAL in a couple places before propagated further.
+    
+xhci_check_args() returns 4 types of value, -ENODEV, -EINVAL, 1 and 0.
+xhci_urb_enqueue and xhci_check_streams_endpoint return -EINVAL if
+the return value of xhci_check_args <= 0.
+This causes problems for example r8152_submit_rx, calling usb_submit_urb
+in drivers/net/usb/r8152.c.
+r8152_submit_rx will never get -ENODEV after submiting an urb when xHC
+is halted because xhci_urb_enqueue returns -EINVAL in the very beginning."
+
+Let me know if you disagree with this.
+
+Thanks
+-Mathias
