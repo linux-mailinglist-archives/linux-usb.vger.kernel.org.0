@@ -2,128 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 750AB4AF6B3
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 17:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5339B4AF71C
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 17:45:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236980AbiBIQa1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Feb 2022 11:30:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
+        id S234807AbiBIQpM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Feb 2022 11:45:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236981AbiBIQa0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 11:30:26 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AD4C0612BE;
-        Wed,  9 Feb 2022 08:30:29 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id f17so5077864wrx.1;
-        Wed, 09 Feb 2022 08:30:29 -0800 (PST)
+        with ESMTP id S234808AbiBIQpK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 11:45:10 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0024DC05CB87;
+        Wed,  9 Feb 2022 08:45:07 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id k1so5076763wrd.8;
+        Wed, 09 Feb 2022 08:45:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TCekoNAsz0CKcPwcVF/KWz963J+qSXSU1YJ6x+zUwaM=;
-        b=qh+PJYTJ5oyXPzeL3E+0rzGxo+DHUp8jHmCfBnUKrl6PG9xlEQ25rYzA2jk1QPOukq
-         +I+EibDd6oMU7hK4k+RRuf0eTvc5gEPc0G+8oVZHX1caq94TIhDCviljMlnXB1QJuN0c
-         0aYxJVQly/6XnjB3b9u9OlOw0lOBhQnpL4unuv0Z394CNxDTt1DXm1IycCS+tcwVTtFu
-         UApfxpTYtTmbLPHYngbjvg1g3RTL8G0jeK+IInbnUIPf56JY7DVOZH04ZuWOgDQ/vkiD
-         MVM4x49Rcc5JDhMqdvwcC3iJhA+B3CmXPLxfgzJ1qHY2858YRx8AnACnUtL4ZsH65rw+
-         PD8w==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IIKca+pgE+DVR8rhfxr5EKDskUZ9sxowEB3ikdxaCSI=;
+        b=BRR/+prTqcPyhKOcNxACxLffWRrU10IAtO7nXjNVk8BQH5ARgPn9oNqrEEbq+EZ8g2
+         TAEzzKZBf2AwrP0hBMlRmIuH+AEBm1yq6Iva7Pd/qZd8j8Eli/X5HiGN5V4RedwM1/v2
+         0V92ufudv4BZNu21iXM0tlN1ZqWZCSQlFY34Z4BtX+/A/i2521NM61zQjsb3fL/z4F6Y
+         /jrobhHCnIz8WE+/VOWqC9mPJfGCuwGB4YVHNEQBbO7o+G8wHxp2DeePQS/f4HFNER0r
+         tAJPQkfrkwOPIRTTn2fr0gVqigmPJ2dUV8tOF85Fj9t5feNSQrRjMtgOsKXHuyNY12Fx
+         4VMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TCekoNAsz0CKcPwcVF/KWz963J+qSXSU1YJ6x+zUwaM=;
-        b=NoSSFCw/olXR2C45lciqO6Hc9YEwNlyA/+YzKbXjdi5i9UxkUsR9mSuAdv4tseB0E5
-         Bq7IbOIB0TnM8UHMUS+DplyB7amN+92W4uMDzEGPyOTnHpzI4N6brg78niAtwv4UGLgG
-         nvCkchQJLeqSt18gQbmCmeGAIix2XVBNqV1bhaRDc3fK4vuDi+GOm/89Bh/yhDhMsXFM
-         LpIFeH+Z2iMB1W5YSt2OlW9blvyIPU6MwtOw8SHtPh37HVM8ySP/D2TJKDhtE8swoa/O
-         1sPNvGReevL4iLpCpDPHvygfhKFWxBvkRKw+NXLzNg+R6Dln6weRUNRUlE2ZYnDLX+NB
-         twSQ==
-X-Gm-Message-State: AOAM531QvuXvAdPFmL3pkOfNJtEpuliz4TO3s4lBFe6hgospQAdD4JyF
-        HtlUslvej2tQq50UMW7Vvd8=
-X-Google-Smtp-Source: ABdhPJxWLblgDOqQhOcUPkMpyv6/T7RSuVsXksjpUA3MctF2Nhiv8NtQEHbPtDFW2x4ojiq8ZRbr8g==
-X-Received: by 2002:adf:dd50:: with SMTP id u16mr2776373wrm.696.1644424228349;
-        Wed, 09 Feb 2022 08:30:28 -0800 (PST)
-Received: from leap.localnet (host-95-245-2-16.retail.telecomitalia.it. [95.245.2.16])
-        by smtp.gmail.com with ESMTPSA id p7sm5228901wmq.20.2022.02.09.08.30.26
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IIKca+pgE+DVR8rhfxr5EKDskUZ9sxowEB3ikdxaCSI=;
+        b=m2pY50vukyHaIwqW9fdf5+sbrKIEa+2ZcQ5CGjRSje8KpaRDho+0ILb2P+n6Sy7SJh
+         FVnO8jgpTbcTlyFLNqPAYh2M8H0i8u+Rt0EyjZARj6cP47Ke3WE7tKDtC6+CUMUPgDjY
+         D7TSAEGUUF59+6osbNQOuhNcGVuKkdlme4gM0k+uTvmCoHy3XZwOm1JuB462akHULQmR
+         ydFl3atuWr7Mke4rg2nAq3ewjYveGinN3c0orN5ViHr85UIni2LtmFeFWmJSJqn3OhFP
+         cZrBiFfe8eILXuKb/oDVCicuw8Dib5gRSEII4sB0hp1WCkbEV5llQk9O6r7cyTTCMVcU
+         5n8Q==
+X-Gm-Message-State: AOAM532bq4kTyjcMG5XsTgBel28tcljfTtXkrVpVSxQe6hlyskeisrVP
+        z82rWDArHNAeFd91NIruK0U=
+X-Google-Smtp-Source: ABdhPJyJhWDwdLFyIBIOyECqRXorSDaAx7tY8q9+77tiisyrSwclQOfW+GFKU0IdaPcdfvfQCR2PAQ==
+X-Received: by 2002:a05:6000:38e:: with SMTP id u14mr2766963wrf.638.1644425106542;
+        Wed, 09 Feb 2022 08:45:06 -0800 (PST)
+Received: from localhost.localdomain (host-95-245-2-16.retail.telecomitalia.it. [95.245.2.16])
+        by smtp.gmail.com with ESMTPSA id u15sm15948056wrs.18.2022.02.09.08.45.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 08:30:27 -0800 (PST)
+        Wed, 09 Feb 2022 08:45:05 -0800 (PST)
 From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
         syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
-Subject: Re: [PATCH] usb: core: Unregister device on component_add() failure
-Date:   Wed, 09 Feb 2022 17:30:24 +0100
-Message-ID: <2094517.irdbgypaU6@leap>
-In-Reply-To: <YgPI6RQd/9I4/51p@kuha.fi.intel.com>
-References: <20220208170048.24718-1-fmdefrancesco@gmail.com> <YgPI6RQd/9I4/51p@kuha.fi.intel.com>
+Subject: [PATCH v2] usb: core: Unregister device on component_add() failure
+Date:   Wed,  9 Feb 2022 17:45:00 +0100
+Message-Id: <20220209164500.8769-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On mercoled? 9 febbraio 2022 15:00:09 CET Heikki Krogerus wrote:
-> On Tue, Feb 08, 2022 at 06:00:48PM +0100, Fabio M. De Francesco wrote:
-> > Commit 8c67d06f3fd9 ("usb: Link the ports to the connectors they are
-> > attached to") creates a link to the USB Type-C connector for every new
-> > port that is added when possible. If component_add() fails,
-> > usb_hub_create_port_device() prints a warning but does not unregister
-> > the device and does not return errors to the callers.
-> > 
-> > Syzbot reported a "WARNING in component_del()".
-> > 
-> > Fix this issue in usb_hub_create_port_device by calling device_unregister()
-> > and returning the errors from component_add().
-> > 
-> > Reported-by: syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
-> > Fixes: 8c67d06f3fd9 ("usb: Link the ports to the connectors they are attached to")
-> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > ---
-> >  drivers/usb/core/port.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > [...]
-> >
-> You didn't remove the peer links. Either remove them here separately,
-> or alternatively you can also just shuffle the code so that you only
-> create those links after the component_add() call:
->
-> [...]
-> 
+Commit 8c67d06f3fd9 ("usb: Link the ports to the connectors they are
+attached to") creates a link to the USB Type-C connector for every new
+port that is added when possible. If component_add() fails,
+usb_hub_create_port_device() prints a warning but does not unregister
+the device and does not return errors to the callers.
 
-Hello Heikki,
+Syzbot reported a "WARNING in component_del()".
 
-Thanks for your review and suggestion. I think that I'll use the second of the
-two possible solutions (shuffle the code).
+Fix this issue in usb_hub_create_port_device by calling device_unregister()
+and returning the errors from component_add().
 
-I had to spend some time to understand the code of usb_hub_create_port_device(),
-component_add() and component_del(). Unfortunately, the USB core is very far from
-the usual things I look at or care of. Therefore I missed that find_and_link_peer()
-does some work that must be either unwound or simply postponed. I agree with you 
-that the latter is the best solution.
+Reported-and-tested-by: syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
+Fixes: 8c67d06f3fd9 ("usb: Link the ports to the connectors they are attached to")
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
 
-I need some minutes to submit v2.
+v1->v2: Move find_and_link_peer() soon after the 'if' test for "retval", 
+	as suggested by Heikki Krogerus with his review of v1.
 
-Again, thanks,
+ drivers/usb/core/port.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Fabio
-
-> thanks,
-> 
-> -- 
-> heikki
-> 
-
-
-
+diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+index c2bbf97a79be..d5bc36ca5b1f 100644
+--- a/drivers/usb/core/port.c
++++ b/drivers/usb/core/port.c
+@@ -602,11 +602,14 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
+ 		return retval;
+ 	}
+ 
+-	find_and_link_peer(hub, port1);
+-
+ 	retval = component_add(&port_dev->dev, &connector_ops);
+-	if (retval)
++	if (retval) {
+ 		dev_warn(&port_dev->dev, "failed to add component\n");
++		device_unregister(&port_dev->dev);
++		return retval;
++	}
++
++	find_and_link_peer(hub, port1);
+ 
+ 	/*
+ 	 * Enable runtime pm and hold a refernce that hub_configure()
+-- 
+2.34.1
 
