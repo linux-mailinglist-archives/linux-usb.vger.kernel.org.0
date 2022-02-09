@@ -2,104 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE6B4AE830
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 05:07:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 998A74AE827
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 05:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345704AbiBIEHs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Feb 2022 23:07:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
+        id S1345154AbiBIEHo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Feb 2022 23:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347515AbiBIDvD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 22:51:03 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A910C061578;
-        Tue,  8 Feb 2022 19:51:00 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id n32so1991213pfv.11;
-        Tue, 08 Feb 2022 19:51:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:subject:to:cc:message-id:date:user-agent:mime-version
-         :content-transfer-encoding:content-language;
-        bh=HRdPwXuWMTu44Hbd31o0zplR0BavrSo2F1orInPcfp8=;
-        b=cW5KWjK/tnZxVtckN0ujtQlJnhull6OIFZNKosetMnPdwE3H1iHp35lk8pXmEtdHEV
-         byHtfb+A8nHQgRGmpr9C5QwBE9eSRLSNK/To89h9+2xa9GU3cCWOwhWOXxgPjzdfEio/
-         V/WaMj8/bN97MTF7j8qqtR0b1SBdJV/acCBcSu42VfIMtqqf3EZGZmnDw+fs36NLdQ2O
-         pH09il0jwei6t2ONP3qNwmZODxET3tkPE753IrZxdnJdFqUhuusWZyl40Dz2LLV1cqzL
-         42iei88+m0MEnaDOgLqP7erD8jxup0bFVLWS5+Fyv0OyGSTgCJKLAxOTyPldsxOMPlzv
-         Pj9A==
+        with ESMTP id S1347529AbiBIDvV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Feb 2022 22:51:21 -0500
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34864C061578;
+        Tue,  8 Feb 2022 19:51:20 -0800 (PST)
+Received: by mail-oi1-f177.google.com with SMTP id m10so1288243oie.2;
+        Tue, 08 Feb 2022 19:51:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
-         :mime-version:content-transfer-encoding:content-language;
-        bh=HRdPwXuWMTu44Hbd31o0zplR0BavrSo2F1orInPcfp8=;
-        b=W1ntQnitLKzXp1YglWH0S7k49Dz5nHeLkjuocS3RN5hJ2MLlYm78TnxBnDy08REkBS
-         oWipfeJIkD+y623aQuLlXR/E0WWPt0qbn4tfpclWzav65b07oHgsx4wjzZsU+ovukO+z
-         fSXb8QolqCrqWQJbyccUYfjuerdg5af8k10/BvmGh+OKCZ4pqAKk1Ywr4NhRf0gHuFry
-         W4gBzCtdWtserL08wZG3lV/4A2xLOJRKCL7HzidpLXSilY4XrVofIwp95RsZ0YSkQOhT
-         g/oyDsFZkXVvZaDuzuhna6w5ZWBU69iNj6x9X0IZKNIIZBSZsMQj+fkokA7iEs77kdRM
-         RZ7g==
-X-Gm-Message-State: AOAM531EknoYgk+qEVSHEXSTkA9TA1dnvVM37+c31J03IurShDiRUygg
-        1U27BYA6WoMj8q3+Pr0/ikcecxvaBJY=
-X-Google-Smtp-Source: ABdhPJymSo30+5Ud2M4FxOnfKpR4Yr9Ce08b2ReafFmvyQjEDUryhQkWvhHck/SXLVaOE/vnQBaFVQ==
-X-Received: by 2002:a63:2c05:: with SMTP id s5mr430675pgs.106.1644378660080;
-        Tue, 08 Feb 2022 19:51:00 -0800 (PST)
-Received: from [10.73.0.6] ([45.128.198.44])
-        by smtp.gmail.com with ESMTPSA id l2sm4216426pju.52.2022.02.08.19.50.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 19:50:59 -0800 (PST)
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [BUG] usb: typec: ucsi: possible deadlock in ucsi_pr_swap() and
- ucsi_handle_connector_change()
-To:     heikki.krogerus@linux.intel.com,
-        Greg KH <gregkh@linuxfoundation.org>, kyletso@google.com,
-        jackp@codeaurora.org, andy.shevchenko@gmail.com,
-        unixbhaskar@gmail.com, subbaram@codeaurora.org,
-        mrana@codeaurora.org
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <037de7ac-e210-bdf5-ec7a-8c0c88a0be20@gmail.com>
-Date:   Wed, 9 Feb 2022 11:50:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=B5PZKrvUUieFothgb+vZlRFtusXfP8pySB7FuMjMx4Q=;
+        b=yXb2/1f5Db0nsEZF7LBkjH8h6mnEGmixFAlx003cA3VLzs89n8CQ0PSn07LojiR5ST
+         WABfP3BwggkROzLaV6boLFq12UBnQ9WGUYC5AyAMZJkHX2MpK5zI/TKn/KL2P/rXk8fE
+         /niDJJ3rsfARcOr9XS2RWy1M4Ncxuzhbm07Vvi0d4oQkCyZhnuLd5VjM7rsghFuqYq6p
+         I8zcPWSjhq9CoDdxgCNLdtz+NQymxVTbr5dJFZyNp8ypJYU3zszhvXFYYkhrPlzATo1i
+         YDOtl/HjjPCNBRIn7HoiqAUtVjdFyARK3CU64dyTQVF1FeaRFfgnp5TjYGfx2AMTulxA
+         CgYQ==
+X-Gm-Message-State: AOAM532acmIyM0+C/C0sCAZGB297ZTTQ14L6ZpIQu1PG3EqpiQedV+sG
+        GU5kzngugOx3wnv/OsGeAQ==
+X-Google-Smtp-Source: ABdhPJxbreGzMUi6G1HWnwJEd4pBS64kXe9J+H9ATYzK8Wijsk523xyxrMpsEDFzmW/yeFuN+T4jpw==
+X-Received: by 2002:a05:6808:30a4:: with SMTP id bl36mr514560oib.136.1644378679489;
+        Tue, 08 Feb 2022 19:51:19 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id y15sm6106902oof.37.2022.02.08.19.51.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 19:51:18 -0800 (PST)
+Received: (nullmailer pid 3614192 invoked by uid 1000);
+        Wed, 09 Feb 2022 03:51:17 -0000
+Date:   Tue, 8 Feb 2022 21:51:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v1 3/4] dt-bindings: net: add "label" property
+ for all usbnet Ethernet controllers
+Message-ID: <YgM6NZ2pji01YeMl@robh.at.kernel.org>
+References: <20220127104905.899341-1-o.rempel@pengutronix.de>
+ <20220127104905.899341-4-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127104905.899341-4-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Thu, Jan 27, 2022 at 11:49:04AM +0100, Oleksij Rempel wrote:
+> For hard wired Ethernet controllers it is helpful to assign name related
+> to port description on the board. Or name, related to the special
+> internal function, if the USB ethernet controller attached to the CPU
+> port of some DSA switch.
 
-My static analysis tool reports a possible deadlock in the ucsi driver 
-in Linux 5.16:
+Yes, so add 'label' to ethernet-controller.yaml.
 
-ucsi_pr_swap()
-   mutex_lock(&con->lock); --> Line 962 (Lock A)
-   wait_for_completion_timeout(&con->complete, ...) --> Line 981 (Wait X)
+Then I don't think usbnet.yaml is needed.
 
-ucsi_handle_connector_change()
-   mutex_lock(&con->lock); --> Line 763 (Lock A)
-   complete(&con->complete); --> Line 782 (Wake X)
-   complete(&con->complete); --> Line 807 (Wake X)
-
-When ucsi_pr_swap() is executed, "Wait X" is performed by holding "Lock 
-A". If ucsi_handle_connector_change() is executed at this time, "Wake X" 
-cannot be performed to wake up "Wait X" in 
-ucsi_handle_connector_change(), because "Lock A" has been already held 
-by ucsi_handle_connector_change(), causing a possible deadlock.
-I find that "Wait X" is performed with a timeout, to relieve the 
-possible deadlock; but I think this timeout can cause inefficient execution.
-
-I am not quite sure whether this possible problem is real.
-Any feedback would be appreciated, thanks :)
-
-
-Best wishes,
-Jia-Ju Bai
+> 
+> This patch provides documentation for "label" property, reusable for all
+> usbnet controllers.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  .../devicetree/bindings/net/asix,ax88178.yaml |  4 ++-
+>  .../bindings/net/microchip,lan95xx.yaml       |  4 ++-
+>  .../devicetree/bindings/net/usbnet.yaml       | 36 +++++++++++++++++++
+>  3 files changed, 42 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/usbnet.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/asix,ax88178.yaml b/Documentation/devicetree/bindings/net/asix,ax88178.yaml
+> index 74b6806006e3..c8ad767a2e45 100644
+> --- a/Documentation/devicetree/bindings/net/asix,ax88178.yaml
+> +++ b/Documentation/devicetree/bindings/net/asix,ax88178.yaml
+> @@ -13,7 +13,7 @@ description: |
+>    Device tree properties for hard wired USB Ethernet devices.
+>  
+>  allOf:
+> -  - $ref: ethernet-controller.yaml#
+> +  - $ref: usbnet.yaml#
+>  
+>  properties:
+>    compatible:
+> @@ -58,6 +58,7 @@ properties:
+>            - usb6189,182d  # Sitecom LN-029
+>  
+>    reg: true
+> +  label: true
+>    local-mac-address: true
+>    mac-address: true
+>  
+> @@ -77,6 +78,7 @@ examples:
+>          ethernet@1 {
+>              compatible = "usbdb0,a877";
+>              reg = <1>;
+> +            label = "LAN0";
+>              local-mac-address = [00 00 00 00 00 00];
+>          };
+>      };
+> diff --git a/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
+> index b185c7068a8a..259879bba3a0 100644
+> --- a/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
+> +++ b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
+> @@ -14,7 +14,7 @@ description: |
+>    controller.
+>  
+>  allOf:
+> -  - $ref: ethernet-controller.yaml#
+> +  - $ref: usbnet.yaml#
+>  
+>  properties:
+>    compatible:
+> @@ -40,6 +40,7 @@ properties:
+>            - usb424,ec00   # SMSC9512/9514 USB Hub & Ethernet Device
+>  
+>    reg: true
+> +  label: true
+>    local-mac-address: true
+>    mac-address: true
+>  
+> @@ -59,6 +60,7 @@ examples:
+>          ethernet@1 {
+>              compatible = "usb424,ec00";
+>              reg = <1>;
+> +            label = "LAN0";
+>              local-mac-address = [00 00 00 00 00 00];
+>          };
+>      };
+> diff --git a/Documentation/devicetree/bindings/net/usbnet.yaml b/Documentation/devicetree/bindings/net/usbnet.yaml
+> new file mode 100644
+> index 000000000000..fe0848433263
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/usbnet.yaml
+> @@ -0,0 +1,36 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/usbnet.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: The device tree bindings for the USB Ethernet controllers
+> +
+> +maintainers:
+> +  - Oleksij Rempel <o.rempel@pengutronix.de>
+> +
+> +description: |
+> +  Device tree properties for hard wired USB Ethernet devices.
+> +
+> +allOf:
+> +  - $ref: ethernet-controller.yaml#
+> +
+> +properties:
+> +  compatible: true
+> +
+> +  reg:
+> +    description: Port number
+> +
+> +  label:
+> +    description:
+> +      Describes the label associated with this port, which will become
+> +      the netdev name
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: true
+> +
+> +...
+> -- 
+> 2.30.2
+> 
+> 
