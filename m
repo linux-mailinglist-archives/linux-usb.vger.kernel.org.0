@@ -2,101 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0B54AF4C9
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 16:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3BD4AF511
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 16:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235507AbiBIPIF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Feb 2022 10:08:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
+        id S234920AbiBIPU5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Feb 2022 10:20:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiBIPID (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 10:08:03 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8F2C06157B;
-        Wed,  9 Feb 2022 07:08:05 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id x23so4871513lfc.0;
-        Wed, 09 Feb 2022 07:08:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=sZuSabn0QbPYa54gWbxUvv8juq6yvTZRiZO+ivNIJxo=;
-        b=oOTfBjeMgZVrZqF+jNzMpkNyg/aIpMmvkJR6Q6yy6N+UgGAJu9kaB0F172BnP+Qpui
-         4hHKQYg9wT2yNprBHQsRqQyKWc8nwgOM8IhXHjvRi8rDt4r8LnzEVObbLmGsNlDEJW+5
-         9+/njMHqJ8cudUi6fofEBme53/m4slVQqlairCKvqQv4e67a9DhLL97HC6CJcZjLt0gv
-         ks37KXYTtnIVXauj5DegTnze5iDZ0Ggc8QmOqxpBn5e+ciYCK2YcGX5QDik3OzvNF7rA
-         bRWAXwKU1esxZs6bRroxrhlYnAdl/J3s15+XPZc/c2DXG+skIa8AM3RvbmKu1vA9L2im
-         NcUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=sZuSabn0QbPYa54gWbxUvv8juq6yvTZRiZO+ivNIJxo=;
-        b=z8uQ7mhPNeXs3zM8IMTw/u6ss0vVpJpdOD4I8xOW2Q06V/7t010EREd9NbX3QXe6LA
-         VWDzGGBmYmB3vK+ajetprjMydwNUBv90Vj/6jJ40L51nRGsRY2zYFLKKW6Uo0qKKHXC6
-         gO9jliAmvpGQpjoimaUGj1gVRT/TfnT3Zhz1S38nLi3AkTy5+47mZY4s8hPRfNa3yKsP
-         zvZcCHP0uQEJGyyfHxi2PHlAGE5eaqJu/3k/gWF1606GFPs2GjHPD9a70umC7LfyXX9Y
-         YUX5N814wwia4ZWAg5yklSXe/9MOVt8O+Opsr3mpR3gw5ESzeGuNRV/76c6TIOGABm4M
-         KoKw==
-X-Gm-Message-State: AOAM533h4m2odLmkvk1f4aRDklkw+zQwd5Fi5pKw/wITL4Z4fJR+yN1W
-        q9M0nXx/VpWXTzq80Smku96FxE/T9veGXeO5t9/gno0f
-X-Google-Smtp-Source: ABdhPJzLVWTVFbwwe6JN9rlEF0EDcw+knWnGuMm9EFOgUB0hFe2UqOWg4++mfopuj+m5N+mT8qDXoMRBeOMvB6aRBlU=
-X-Received: by 2002:a05:6512:118a:: with SMTP id g10mr1918497lfr.356.1644419283500;
- Wed, 09 Feb 2022 07:08:03 -0800 (PST)
+        with ESMTP id S235732AbiBIPUy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 10:20:54 -0500
+Received: from mxout04.lancloud.ru (mxout04.lancloud.ru [45.84.86.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25220C06157B
+        for <linux-usb@vger.kernel.org>; Wed,  9 Feb 2022 07:20:52 -0800 (PST)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 7C3FE208D0A6
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH v2] usb: host: xhci: drop redundant checks
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <4faac4cb-7940-9133-6255-ff9df13bf87d@omp.ru>
+ <31067327-08fd-1de6-c011-9e17aec40fa8@linux.intel.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <4655f83d-04e4-ed12-9ec5-1b969876752c@omp.ru>
+Date:   Wed, 9 Feb 2022 18:20:48 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <1644415355-24490-1-git-send-email-u0084500@gmail.com>
- <YgPOz6pfpFcPmHms@kroah.com> <YgPQgtcO22W3vZDw@kuha.fi.intel.com> <YgPWLselefw3nGb8@kuha.fi.intel.com>
-In-Reply-To: <YgPWLselefw3nGb8@kuha.fi.intel.com>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Wed, 9 Feb 2022 23:07:51 +0800
-Message-ID: <CADiBU38AYNBpoF=Ez+Bubk10-f4Yf2_TtXeVjVQM=K8a5zhkkA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/2] Add Richtek RT1719 USBPD controller support
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        cy_huang <cy_huang@richtek.com>, will_lin@richtek.com,
-        th_chuang@richtek.com,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SCC_BODY_URI_ONLY,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <31067327-08fd-1de6-c011-9e17aec40fa8@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, Greg, Heikki:
-Heikki Krogerus <heikki.krogerus@linux.intel.com> =E6=96=BC 2022=E5=B9=B42=
-=E6=9C=889=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=8810:56=E5=AF=AB=E9=
-=81=93=EF=BC=9A
->
-> On Wed, Feb 09, 2022 at 04:32:38PM +0200, Heikki Krogerus wrote:
-> > On Wed, Feb 09, 2022 at 03:25:19PM +0100, Greg KH wrote:
-> > > On Wed, Feb 09, 2022 at 10:02:33PM +0800, cy_huang wrote:
-> > > > 3. Change MODULE_LICENSE from 'GPL v2' to 'GPL'.
-> > >
-> > > Why?  Either is fine, any specific reason you changed this?
-> >
-> > Because I proposed it. I believe everything scripts/checkpatch.pl
-> > tells me.
->
-> It looks like the preference on "GPL" is pretty resent. Check commit
-> bf7fbeeae6db ("module: Cure the MODULE_LICENSE "GPL" vs. "GPL v2"
-> bogosity").
->
-> thanks,
->
-It seems to revert it back to 'GPL v2' is proper.
-I'll resend the v5 to change the license back to 'GPL v2'.
-And add the Reviewed-by tags.
-Thanks.
-> --
-> heikki
+On 2/9/22 3:40 PM, Mathias Nyman wrote:
+
+>> In xhci_endpoint_{disable|reset}() the expression '&vdev->eps[ep_index]'
+>> just cannot be NULL, so the checks have no sense at all...
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+>> analysis tool.
+>>
+>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> 
+> True, adding this
+
+   At least SVACE was good for smething. :-)
+
+> Thanks
+> -Mathias
+
+MBR, Sergey
