@@ -2,203 +2,378 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0D24AF8C7
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 18:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD6A4AFCD9
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Feb 2022 20:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238414AbiBIRuu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Feb 2022 12:50:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
+        id S234215AbiBITEV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Feb 2022 14:04:21 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbiBIRut (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 12:50:49 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3F4C0613C9;
-        Wed,  9 Feb 2022 09:50:52 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id r27so3269819oiw.4;
-        Wed, 09 Feb 2022 09:50:52 -0800 (PST)
+        with ESMTP id S241733AbiBITDD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 14:03:03 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD39FC03FEEE;
+        Wed,  9 Feb 2022 11:01:51 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 219HFudE017462;
+        Wed, 9 Feb 2022 19:01:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=LRiwtWhQndIo/qhzD6BU0k1FMJGILxcumxx+QPczmQ8=;
+ b=gczDKEwidFiX2hin2toRVWtrUyHLJjIc2u7nfGgncGMiUoGzqyi8g9pUClI2Al6dFdLc
+ Q1iMhToEmJfeDII7QvasQAMcCJIzu03l0sNRWJqPNcB5sErbidTIWDQIABewZLajNznP
+ XSgM+SeXbgwCZ7Tp/YefP/SdRZj2ReUfgweRFXrvuy/nCxEhxp2FDJGFvbVQZzhIvIDm
+ ym24YcEGyTUwNzoQ++w1xgApUkGVoDj/OnqOOJgg/0OsjYslQWOtm4JhXLihO129s4/v
+ h3sCCBVMi2woH43U55Kx0FV3g8JH7avXiqpXvy5Qo0xpQjFm+RXUfY3Jo4G5IEofhx1O 9g== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e3h28nfct-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 09 Feb 2022 19:01:22 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 219IptNl018269;
+        Wed, 9 Feb 2022 19:01:20 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2045.outbound.protection.outlook.com [104.47.66.45])
+        by userp3030.oracle.com with ESMTP id 3e1ec38140-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 09 Feb 2022 19:01:20 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mpTZJIMGwwLe+ItJ2EQbpF3YAeXFnXHrGHqJocUqhGkWRAxKjDLYqwyyQtmHyVd2MkoW6O2Cu1WyCNnx8/1HRiFDX7JVCjg0/JljPEnRafVvg4S6XHZvQ1woo/1opors3uxAQTI/WJ2MSM4WOOc105muOFxXKCYkVSHLggcwOcZbDXKaH/qA04zPrMdEDBCdHQEUwwT87/0hd8ApRC2Mp1UrsABYKcEWK8eVcPMepSJdsLCCM4ch8AUnzNTv9a/e3yImZXBS0PiJ9edffBi2DXFG3e/EfXDhijYGyd7ZO+5583khTbQWeMUFXo5Nb5bVN2U0K5KSLReLW0511vR4Xw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LRiwtWhQndIo/qhzD6BU0k1FMJGILxcumxx+QPczmQ8=;
+ b=BHtl72GC0Ca+DomyGnwfuN0wYegL4MZt98kHnjFqfRGygyqk3XMPKVU1kVC8F5n7trjeqkj+Ii68koBnE2lnF3MCcl7GwXbVDkiofXn+kUYaowarJFFpa33UWmac1vPkfhwiSOh4cfA8nltaQG/0VIJJhcp/osH/AGCWCynQ1IAuzM4eFqaExpxBpDRiHCRGM8kvRXbvWoBzKw2AQ6+aYrbYJqz7tZUr5y1nckOH70s+qFTVqSaEtl88zZUV4fiokDSkg01Wwg2K7fU6SuCZlQDkU6OHzVfna1edpvg9byjRtPs71iK/vBvHtOApOnWkR9a6bKqOh+r6MAGZkN4TKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=gC34qLnBgCo9feYyVVLxVtmeO/7MUjN69gDKe+4Rb2M=;
-        b=WCaMTO/bVpIwPYXwn07zmiZRhVh+LUzR3Lgf5RQHB/KQmovntZcaMMgSlXrfhU24fg
-         EZll0YoCRoztDvcboG4AN9lY/ciwKtZ0QxPd02X9uNUqzzu/zrPd2lE3/zpqrW/AGqkO
-         1mTdwHbZFhFMuak5shCCiDof/pvJ68rkaQDMtma0Oc7QZFemqBqlhWSRnjZJZZjxeVI8
-         H71fh1wlGqdVQcFsDZYi77HS7BcRVmvy310Wza+K6xO5sIMmjh5Omp1hb3R9qm5iqGS3
-         lXo/bvpyTiGvEN6nCECHb8f/MoicGdobyI2LHXDp5jN3fcwzxj9FZk3bEAcbJdi6vIgT
-         oeDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=gC34qLnBgCo9feYyVVLxVtmeO/7MUjN69gDKe+4Rb2M=;
-        b=2FTTpdMUMUm18cByYq+7JbjkMlBsGt3Kxh35CUsQ5G8AZlSnqSTob53KU6FLTDeqsb
-         ArC34EDqZh6V8WLmvFe/kWHDeB3v2ghTZerkodc1oXqIukimAaZTHOjb/TVR3ybvN+CD
-         hK1CYKVvL/rsPtE0UG4H8ILFtkdTtYwhKky6scu1ARuvw1eddwn4Ot2Q2c1xRFxlFqpq
-         z40PRFP9baWt8JXH6zsXjiEZgyIGL1doRmt4nc/yOWwH5+mjp8IG7ekKJewFrhsmXFxo
-         KO8T1JbDuAOkhH1XVyjHODL9QqYUsd5JTZdsbh5XQ1PzVfygcB4WVKsLEDj7vz1gKdeU
-         EPZw==
-X-Gm-Message-State: AOAM5317kKU54a/dgBIm85TmmEdo/o3jVNMZPem09CoAzcM19Fb1RpNl
-        qpuK7fVaA+l83fcS+APSLgM=
-X-Google-Smtp-Source: ABdhPJxcWkHWNFQS6nhcBDl7n7JPql/gG7nO3d6ZkEP/oMjOboygk886qnKhgGisxAYVK2CuIUGkLQ==
-X-Received: by 2002:a05:6808:1590:: with SMTP id t16mr1761606oiw.232.1644429051634;
-        Wed, 09 Feb 2022 09:50:51 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r41sm6107035oap.2.2022.02.09.09.50.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 09:50:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e2aec7c6-2d73-6446-89c9-797850f9402f@roeck-us.net>
-Date:   Wed, 9 Feb 2022 09:50:49 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LRiwtWhQndIo/qhzD6BU0k1FMJGILxcumxx+QPczmQ8=;
+ b=ONmeW/U17blazCaSWSvIhNXcDyP3MxZwU2OUfFh1jweILpvq+OkK40Oe/qUx4iK2I7bDGj3pfgpFecSY66Uk8AEBOKJJf0W1+3prQS/Aetr9UMEEZ5oTQnTvvCqAfP3NYZuH+W40jiCJlciL3NlYJ907A3wiD0KI2U3hEfyhfxQ=
+Received: from SN6PR10MB2943.namprd10.prod.outlook.com (2603:10b6:805:d4::19)
+ by SN4PR10MB5800.namprd10.prod.outlook.com (2603:10b6:806:20f::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Wed, 9 Feb
+ 2022 19:01:17 +0000
+Received: from SN6PR10MB2943.namprd10.prod.outlook.com
+ ([fe80::755b:8fbf:706a:858]) by SN6PR10MB2943.namprd10.prod.outlook.com
+ ([fe80::755b:8fbf:706a:858%4]) with mapi id 15.20.4951.019; Wed, 9 Feb 2022
+ 19:01:17 +0000
+From:   Himanshu Madhani <himanshu.madhani@oracle.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+CC:     Martin Petersen <martin.petersen@oracle.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v2 40/44] scsi: usb: Stop using the SCSI pointer
+Thread-Topic: [PATCH v2 40/44] scsi: usb: Stop using the SCSI pointer
+Thread-Index: AQHYHRFFAtJoDnCtS0e7IP97pdjGDqyLlLEA
+Date:   Wed, 9 Feb 2022 19:01:17 +0000
+Message-ID: <E3686D41-6609-4CA9-86BC-C49D39656889@oracle.com>
+References: <20220208172514.3481-1-bvanassche@acm.org>
+ <20220208172514.3481-41-bvanassche@acm.org>
+In-Reply-To: <20220208172514.3481-41-bvanassche@acm.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Potin Lai <potin.lai@quantatw.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Patrick Williams <patrick@stwcx.xyz>
-References: <20220208082026.4855-1-potin.lai@quantatw.com>
- <20220208112226.9108-1-potin.lai@quantatw.com>
- <20220208112226.9108-3-potin.lai@quantatw.com>
- <1acc1733-da53-6255-5cad-15f79850f44f@roeck-us.net>
- <fed6bad9-bf9b-90b5-57fd-083401f6c990@quantatw.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/2] usb: typec: fusb302: add support of
- supported_pd_rev
-In-Reply-To: <fed6bad9-bf9b-90b5-57fd-083401f6c990@quantatw.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3693.40.0.1.81)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 26001f15-b1c4-4c72-4c3e-08d9ebfe8d45
+x-ms-traffictypediagnostic: SN4PR10MB5800:EE_
+x-microsoft-antispam-prvs: <SN4PR10MB58003E95A8BA495A97E011F3E62E9@SN4PR10MB5800.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2150;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: muuc0ClQcq30Q73Y7p4wgdri0q7a0a/ZbKv0upK1rCZsYgsgWzOt4G2iVJ0H8TBchVbGd3EFa0hPfI7wmB8e0iLHB2PH4V3cnRSpaDyZkVDalopSrxUrymOBBarHXPzvJ2jOAkKfliVNF4EufckJ8y3doUW6d6lDBpeLgjMAo8F1+YX7yIhV2fqHGr8rDcSAucG32Jy1U6OYg2N7BUEK+85G8Erz8pk9YAtjXqc63DehzuCnQ0Pb+mp9H/LDOemLYVOH2ve2vICkq8KbTV0c1nKgvf9M8LsoJH05c8Rh1fJ5LI+tY1DYM6Nudfny8XuBSLjkUIgu9Xg8SIb2bTBpNC4OTBFWe1IJhurBAMDbDcZSmAPkn94HRO7kTi6DvAwvytJhKV5XOnPKeOStWfooE+2wXhofXJXQ92N14XpjNLLByXibpjGXya/UWN45KIjHUSLFqLRKnLUiBuVGDIS6QGxVeHC2PQTuvgtPuEXTath3ZzqGehVK6lTKjUDaOVsDu2eoFUuWE8MaFQ6Sbu3+5B4o5GAhwYiXHoaYhrA9E5VJeoYFeKNcVj/6ymUeg3787mjTvHIiH4DAE9qbw+VLfZfsPbY+0is2TEhD4P9GmSwxX5P8UW1jehOuZDME3SKLR+40wSFZdjhpoojVVQt37VrWbU3nJMcN8HBu2drlPBe3wVy0e7iWv9w4RvtdiAk+YmdeWaRQJwirsOobVNk2ZAJV3ek4ob4FQGUPxfFXDVw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB2943.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(6512007)(36756003)(66476007)(2906002)(66556008)(4326008)(38100700002)(122000001)(5660300002)(2616005)(6506007)(71200400001)(66946007)(6486002)(64756008)(66446008)(76116006)(33656002)(6916009)(8676002)(53546011)(54906003)(8936002)(508600001)(186003)(38070700005)(44832011)(86362001)(83380400001)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?2zw9KHHTPNXMSR+yBt8kWOL3pYciQhkuOXuBsDHACw3JBcU1jOF4M9Z+NXGC?=
+ =?us-ascii?Q?1AmD52aq/pftRGX0uzZNAkWPGWL5wakP+EMUhclevktluuOyL2c10fVvAXFd?=
+ =?us-ascii?Q?vTDAkz6UryyuldLEfJcjRZ2XgwuUsf75F4ydquiNb7axHQ9mqK2J7eoSOM5f?=
+ =?us-ascii?Q?tbYQ/vQnRtptafk1433oFs00ALQTaIijJOQpLS5PAlgy6+1+lWzrBoSev219?=
+ =?us-ascii?Q?8p4Ur6D11VGjmzBaLUrh4Jz4VIDwarBl6UagTTklQXDvvmhGyGqxZnV4I5b1?=
+ =?us-ascii?Q?Q90D1Z5q7AdUwqRZ+Skng+TmR2Rbo6vH0J12AM1rcD+PNz91L0YBjP1ygT9b?=
+ =?us-ascii?Q?px8Q7msio90nw4kgtOQn+p8BxBd0aDg056qklkOUhGs8E+SJMRxyIq+ui4V7?=
+ =?us-ascii?Q?FY4k0LkKlz9JgdRZ0xEaS6wl2Mv4OvLtqcJsd7ZWDzonrS6GyTptei5odBpE?=
+ =?us-ascii?Q?DqeJbxUS5/JsGli4ugc2Z6bN6eOXkD56j4qgHzgV5u0A2qmMUbWT6nKzD0D+?=
+ =?us-ascii?Q?ZLiSL8GA0K1BbPilKPCVEBmf9XmRk2csubm0oiAnkUOLCEWDuK+gYRD3fn5G?=
+ =?us-ascii?Q?yWWl5jP7pYsNl7Jx6NRO4HoRlvNC8rAkjhE9RzcqGvgY4os3NWu9J8OT+0Zp?=
+ =?us-ascii?Q?aCzTb4SpyKvdyjqubodU4IDKcjYdOwUQynCkK0yDQ6s6OX6EoUhWvOmp/hFk?=
+ =?us-ascii?Q?LrFDzIMDPVyVa425Fp/8A5felrnVr579IAyHMLGqOP3hufJSo2vfzGy1prWp?=
+ =?us-ascii?Q?o3Abe69it39WOUrdz9vRKTRsIrpQdrcPufNZX6zoW4dSmmaYUJ+0FF2pQRBl?=
+ =?us-ascii?Q?nrkLSgIFo7AJkIpTFLAgfaNBb/KqNrssLaL9iGSjdrBFPo9JTpHAtOT9gour?=
+ =?us-ascii?Q?UR2GB4RYgVIGaEH0KHEm9am+6Vn2AF0FGyyG4s6FfqpZ7ra4get9Fq6IEkYv?=
+ =?us-ascii?Q?Osy0we1CrUOFITjv3ILhVnAT1c901QOy7oqF8PxiZ7I87MoSiR7wyv0eSRUw?=
+ =?us-ascii?Q?WRipM5/KMO0qwID2GDTC0b7/4Sxh9G0HvvBAMGnoAp6gIzfaBNg3GjwZP77u?=
+ =?us-ascii?Q?i3DFe87hr912LG8ljsie0Mk79fx97VvuiNZ5+BObjjyIxm4DEYJrwIvh7fj8?=
+ =?us-ascii?Q?pBDP/0Xka/fnPGErWKJCu83oN8//KlnRQXIzdOYXw6OTPjzfutIYjleuUDRQ?=
+ =?us-ascii?Q?J8nRDNY+ksorNg39iGOo9g8ff9/2VjcDPAMURC6eSS6sT5g/GndbHl7WMqtd?=
+ =?us-ascii?Q?5PNT1L5Q2SL/3UPhTVGkXXPFciQEO+q1Ymv252AppLcnq3/Tn5gDk2alge7u?=
+ =?us-ascii?Q?5vcPfpx3NKRGpNjo7iwFL18AnuunDnMSTISVGIFJBoxcM5tZdY7rmIVh8mXf?=
+ =?us-ascii?Q?Aqvvx+BCRB7Nbj1Xq/ocqegOvxqT88PTFcjSe048U3T8pmDuN6Ip04OwnMce?=
+ =?us-ascii?Q?dd4aKLhrgeMnT9waGQes75998OVyuKUjbU1BdwuUGKRR00sItVZwhLSZM7Rl?=
+ =?us-ascii?Q?it2EdeuPayo6s74eEotbe5ryMVEAzz5ILrUuSHuT8qNR0vE3FrG344FhJK9X?=
+ =?us-ascii?Q?R0wye0aJPTA2z6EhMt41wlvwLNPT7/RLZfIPbYfXbgVeQTA9wP1uH28717da?=
+ =?us-ascii?Q?7w26gfdEfpxmxJVHpiUuItDsUJ/3JklHr7bofzYg04/ifIpXngz6VqzPMWt0?=
+ =?us-ascii?Q?lSxCWlHYv1kjl7+xo+Q2r30hthBwydZGLWzq0VwvxqBbtmHk?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <217AD80DFA90EC438797482E56AB8BF0@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB2943.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26001f15-b1c4-4c72-4c3e-08d9ebfe8d45
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2022 19:01:17.2891
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fFAZRaTwVwsj5hlBLoxdhk8RrFn5sYbMoKos+i2CrSBIK/OpWfamvbTtmZ/Kq2mvjBPltQ1yXGi9mBEKoonZ7UHmt2N/Imny/reHboi7R38=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR10MB5800
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10253 signatures=673431
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 suspectscore=0
+ mlxlogscore=999 mlxscore=0 adultscore=0 malwarescore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202090099
+X-Proofpoint-ORIG-GUID: tV-GlXLqDf2pJ5JSkm3a-PpC03DgudQ1
+X-Proofpoint-GUID: tV-GlXLqDf2pJ5JSkm3a-PpC03DgudQ1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2/8/22 19:34, Potin Lai wrote:
-> 
-> Guenter Roeck 於 2022/2/8 下午 11:22 寫道:
->> On 2/8/22 03:22, Potin Lai wrote:
->>> Add support for passing supported PD rev to TCPM.
->>> If "supported-pd-rev" property exist, then return supported_pd_rev as
->>> defined value in DTS, otherwise return PD_MAX_REV
->>>
->>> Example of DTS:
->>>
->>> fusb302: typec-portc@22 {
->>>      compatible = "fcs,fusb302";
->>>      reg = <0x22>;
->>>      ...
->>>      supported-pd-rev=<1>; // PD_REV20
->>>      ...
->>> };
->>>
->>
->> The new property needs to be documented. However, I am not entirely sure
->> I understand why it is needed. Wouldn't the supported PD revision
->> be a chip (fusb302) specific constant ? If so, why does it need a
->> devicetree property ? I think that needs some additional explanation.
->>
->> Thanks,
->> Guenter
->>
-> 
-> My initially intend was adding flexibility for developer to decided which PD revision
-> they want to use for negotiation.
-> 
 
-I may be missing something, but I don't think that "flexibility for developer
-to decide which PD revision they want to use for negotiation" is entirely appropriate.
-This should be a chip property, not something a developer should decide. As written,
-the code does accept PC version 3 for FUSB302 by default, which seems odd and unusual.
-If the chip supports PD version 3, why artificially limit it to earlier PD revisions ?
 
-I think this requires a detailed description of the use case. Is fusb302 indeed not able
-to support a specific version of the power delivery specification ? If yes,
-what is the limitation, and why would it need to be configurable with a devicetree
-property ?
+> On Feb 8, 2022, at 9:25 AM, Bart Van Assche <bvanassche@acm.org> wrote:
+>=20
+> Set scsi_host_template.cmd_size instead of using the SCSI pointer for
+> storing driver-private data. Change the type of the argument of
+> uas_add_work() from struct uas_cmd_info * into struct scsi_cmnd * because
+> it is easier to convert a SCSI command pointer into a uas_cmd_info pointe=
+r
+> than the other way around.
+>=20
+> This patch prepares for removal of the SCSI pointer from struct scsi_cmnd=
+.
+>=20
+> Cc: linux-usb@vger.kernel.org
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Acked-by: Oliver Neukum <oneukum@suse.com>
+> Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> ---
+> drivers/usb/storage/uas.c | 43 ++++++++++++++++++---------------------
+> 1 file changed, 20 insertions(+), 23 deletions(-)
+>=20
+> diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+> index 7f2944729ecd..84dc270f6f73 100644
+> --- a/drivers/usb/storage/uas.c
+> +++ b/drivers/usb/storage/uas.c
+> @@ -113,7 +113,7 @@ static void uas_do_work(struct work_struct *work)
+> 			continue;
+>=20
+> 		cmnd =3D devinfo->cmnd[i];
+> -		cmdinfo =3D (void *)&cmnd->SCp;
+> +		cmdinfo =3D scsi_cmd_priv(cmnd);
+>=20
+> 		if (!(cmdinfo->state & IS_IN_WORK_LIST))
+> 			continue;
+> @@ -139,10 +139,9 @@ static void uas_scan_work(struct work_struct *work)
+> 	dev_dbg(&devinfo->intf->dev, "scan complete\n");
+> }
+>=20
+> -static void uas_add_work(struct uas_cmd_info *cmdinfo)
+> +static void uas_add_work(struct scsi_cmnd *cmnd)
+> {
+> -	struct scsi_pointer *scp =3D (void *)cmdinfo;
+> -	struct scsi_cmnd *cmnd =3D container_of(scp, struct scsi_cmnd, SCp);
+> +	struct uas_cmd_info *cmdinfo =3D scsi_cmd_priv(cmnd);
+> 	struct uas_dev_info *devinfo =3D cmnd->device->hostdata;
+>=20
+> 	lockdep_assert_held(&devinfo->lock);
+> @@ -163,7 +162,7 @@ static void uas_zap_pending(struct uas_dev_info *devi=
+nfo, int result)
+> 			continue;
+>=20
+> 		cmnd =3D devinfo->cmnd[i];
+> -		cmdinfo =3D (void *)&cmnd->SCp;
+> +		cmdinfo =3D scsi_cmd_priv(cmnd);
+> 		uas_log_cmd_state(cmnd, __func__, 0);
+> 		/* Sense urbs were killed, clear COMMAND_INFLIGHT manually */
+> 		cmdinfo->state &=3D ~COMMAND_INFLIGHT;
+> @@ -200,15 +199,14 @@ static void uas_sense(struct urb *urb, struct scsi_=
+cmnd *cmnd)
+> static void uas_log_cmd_state(struct scsi_cmnd *cmnd, const char *prefix,
+> 			      int status)
+> {
+> -	struct uas_cmd_info *ci =3D (void *)&cmnd->SCp;
+> -	struct uas_cmd_info *cmdinfo =3D (void *)&cmnd->SCp;
+> +	struct uas_cmd_info *ci =3D scsi_cmd_priv(cmnd);
+>=20
+> 	if (status =3D=3D -ENODEV) /* too late */
+> 		return;
+>=20
+> 	scmd_printk(KERN_INFO, cmnd,
+> 		    "%s %d uas-tag %d inflight:%s%s%s%s%s%s%s%s%s%s%s%s ",
+> -		    prefix, status, cmdinfo->uas_tag,
+> +		    prefix, status, ci->uas_tag,
+> 		    (ci->state & SUBMIT_STATUS_URB)     ? " s-st"  : "",
+> 		    (ci->state & ALLOC_DATA_IN_URB)     ? " a-in"  : "",
+> 		    (ci->state & SUBMIT_DATA_IN_URB)    ? " s-in"  : "",
+> @@ -231,7 +229,7 @@ static void uas_free_unsubmitted_urbs(struct scsi_cmn=
+d *cmnd)
+> 	if (!cmnd)
+> 		return;
+>=20
+> -	cmdinfo =3D (void *)&cmnd->SCp;
+> +	cmdinfo =3D scsi_cmd_priv(cmnd);
+>=20
+> 	if (cmdinfo->state & SUBMIT_CMD_URB)
+> 		usb_free_urb(cmdinfo->cmd_urb);
+> @@ -245,7 +243,7 @@ static void uas_free_unsubmitted_urbs(struct scsi_cmn=
+d *cmnd)
+>=20
+> static int uas_try_complete(struct scsi_cmnd *cmnd, const char *caller)
+> {
+> -	struct uas_cmd_info *cmdinfo =3D (void *)&cmnd->SCp;
+> +	struct uas_cmd_info *cmdinfo =3D scsi_cmd_priv(cmnd);
+> 	struct uas_dev_info *devinfo =3D (void *)cmnd->device->hostdata;
+>=20
+> 	lockdep_assert_held(&devinfo->lock);
+> @@ -263,13 +261,13 @@ static int uas_try_complete(struct scsi_cmnd *cmnd,=
+ const char *caller)
+> static void uas_xfer_data(struct urb *urb, struct scsi_cmnd *cmnd,
+> 			  unsigned direction)
+> {
+> -	struct uas_cmd_info *cmdinfo =3D (void *)&cmnd->SCp;
+> +	struct uas_cmd_info *cmdinfo =3D scsi_cmd_priv(cmnd);
+> 	int err;
+>=20
+> 	cmdinfo->state |=3D direction | SUBMIT_STATUS_URB;
+> 	err =3D uas_submit_urbs(cmnd, cmnd->device->hostdata);
+> 	if (err) {
+> -		uas_add_work(cmdinfo);
+> +		uas_add_work(cmnd);
+> 	}
+> }
+>=20
+> @@ -329,7 +327,7 @@ static void uas_stat_cmplt(struct urb *urb)
+> 	}
+>=20
+> 	cmnd =3D devinfo->cmnd[idx];
+> -	cmdinfo =3D (void *)&cmnd->SCp;
+> +	cmdinfo =3D scsi_cmd_priv(cmnd);
+>=20
+> 	if (!(cmdinfo->state & COMMAND_INFLIGHT)) {
+> 		uas_log_cmd_state(cmnd, "unexpected status cmplt", 0);
+> @@ -394,7 +392,7 @@ static void uas_stat_cmplt(struct urb *urb)
+> static void uas_data_cmplt(struct urb *urb)
+> {
+> 	struct scsi_cmnd *cmnd =3D urb->context;
+> -	struct uas_cmd_info *cmdinfo =3D (void *)&cmnd->SCp;
+> +	struct uas_cmd_info *cmdinfo =3D scsi_cmd_priv(cmnd);
+> 	struct uas_dev_info *devinfo =3D (void *)cmnd->device->hostdata;
+> 	struct scsi_data_buffer *sdb =3D &cmnd->sdb;
+> 	unsigned long flags;
+> @@ -446,7 +444,7 @@ static struct urb *uas_alloc_data_urb(struct uas_dev_=
+info *devinfo, gfp_t gfp,
+> 				      enum dma_data_direction dir)
+> {
+> 	struct usb_device *udev =3D devinfo->udev;
+> -	struct uas_cmd_info *cmdinfo =3D (void *)&cmnd->SCp;
+> +	struct uas_cmd_info *cmdinfo =3D scsi_cmd_priv(cmnd);
+> 	struct urb *urb =3D usb_alloc_urb(0, gfp);
+> 	struct scsi_data_buffer *sdb =3D &cmnd->sdb;
+> 	unsigned int pipe =3D (dir =3D=3D DMA_FROM_DEVICE)
+> @@ -468,7 +466,7 @@ static struct urb *uas_alloc_sense_urb(struct uas_dev=
+_info *devinfo, gfp_t gfp,
+> 				       struct scsi_cmnd *cmnd)
+> {
+> 	struct usb_device *udev =3D devinfo->udev;
+> -	struct uas_cmd_info *cmdinfo =3D (void *)&cmnd->SCp;
+> +	struct uas_cmd_info *cmdinfo =3D scsi_cmd_priv(cmnd);
+> 	struct urb *urb =3D usb_alloc_urb(0, gfp);
+> 	struct sense_iu *iu;
+>=20
+> @@ -496,7 +494,7 @@ static struct urb *uas_alloc_cmd_urb(struct uas_dev_i=
+nfo *devinfo, gfp_t gfp,
+> {
+> 	struct usb_device *udev =3D devinfo->udev;
+> 	struct scsi_device *sdev =3D cmnd->device;
+> -	struct uas_cmd_info *cmdinfo =3D (void *)&cmnd->SCp;
+> +	struct uas_cmd_info *cmdinfo =3D scsi_cmd_priv(cmnd);
+> 	struct urb *urb =3D usb_alloc_urb(0, gfp);
+> 	struct command_iu *iu;
+> 	int len;
+> @@ -558,7 +556,7 @@ static struct urb *uas_submit_sense_urb(struct scsi_c=
+mnd *cmnd, gfp_t gfp)
+> static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+> 			   struct uas_dev_info *devinfo)
+> {
+> -	struct uas_cmd_info *cmdinfo =3D (void *)&cmnd->SCp;
+> +	struct uas_cmd_info *cmdinfo =3D scsi_cmd_priv(cmnd);
+> 	struct urb *urb;
+> 	int err;
+>=20
+> @@ -637,12 +635,10 @@ static int uas_queuecommand_lck(struct scsi_cmnd *c=
+mnd)
+> {
+> 	struct scsi_device *sdev =3D cmnd->device;
+> 	struct uas_dev_info *devinfo =3D sdev->hostdata;
+> -	struct uas_cmd_info *cmdinfo =3D (void *)&cmnd->SCp;
+> +	struct uas_cmd_info *cmdinfo =3D scsi_cmd_priv(cmnd);
+> 	unsigned long flags;
+> 	int idx, err;
+>=20
+> -	BUILD_BUG_ON(sizeof(struct uas_cmd_info) > sizeof(struct scsi_pointer))=
+;
+> -
+> 	/* Re-check scsi_block_requests now that we've the host-lock */
+> 	if (cmnd->device->host->host_self_blocked)
+> 		return SCSI_MLQUEUE_DEVICE_BUSY;
+> @@ -712,7 +708,7 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmn=
+d)
+> 			spin_unlock_irqrestore(&devinfo->lock, flags);
+> 			return SCSI_MLQUEUE_DEVICE_BUSY;
+> 		}
+> -		uas_add_work(cmdinfo);
+> +		uas_add_work(cmnd);
+> 	}
+>=20
+> 	devinfo->cmnd[idx] =3D cmnd;
+> @@ -730,7 +726,7 @@ static DEF_SCSI_QCMD(uas_queuecommand)
+>  */
+> static int uas_eh_abort_handler(struct scsi_cmnd *cmnd)
+> {
+> -	struct uas_cmd_info *cmdinfo =3D (void *)&cmnd->SCp;
+> +	struct uas_cmd_info *cmdinfo =3D scsi_cmd_priv(cmnd);
+> 	struct uas_dev_info *devinfo =3D (void *)cmnd->device->hostdata;
+> 	struct urb *data_in_urb =3D NULL;
+> 	struct urb *data_out_urb =3D NULL;
+> @@ -910,6 +906,7 @@ static struct scsi_host_template uas_host_template =
+=3D {
+> 	.this_id =3D -1,
+> 	.skip_settle_delay =3D 1,
+> 	.dma_boundary =3D PAGE_SIZE - 1,
+> +	.cmd_size =3D sizeof(struct uas_cmd_info),
+> };
+>=20
+> #define UNUSUAL_DEV(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax, \
 
-Thanks,
-Guenter
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 
-> I saw your reply in another patch,  I agree with you, it will be simple and consistent if
-> move "supported-pd-rev" to tcpm fwnode as other capabilities.
-> 
-> Just want to double confirm, is "usb-connector.yaml" right place to put documentation
-> if adding "supported-pd-rev" in fwnode?
-> 
-> Thanks,
-> Potin
-> 
->>> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
->>> ---
->>>   drivers/usb/typec/tcpm/fusb302.c | 20 ++++++++++++++++++++
->>>   1 file changed, 20 insertions(+)
->>>
->>> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
->>> index 72f9001b0792..8cff92d58b96 100644
->>> --- a/drivers/usb/typec/tcpm/fusb302.c
->>> +++ b/drivers/usb/typec/tcpm/fusb302.c
->>> @@ -109,6 +109,9 @@ struct fusb302_chip {
->>>       enum typec_cc_status cc2;
->>>       u32 snk_pdo[PDO_MAX_OBJECTS];
->>>   +    /* supported pd rev */
->>> +    u32 supported_pd_rev;
->>> +
->>>   #ifdef CONFIG_DEBUG_FS
->>>       struct dentry *dentry;
->>>       /* lock for log buffer access */
->>> @@ -1056,6 +1059,13 @@ static int tcpm_pd_transmit(struct tcpc_dev *dev, enum tcpm_transmit_type type,
->>>       return ret;
->>>   }
->>>   +static u32 tcpm_supported_pd_rev(struct tcpc_dev *dev)
->>> +{
->>> +    struct fusb302_chip *chip = container_of(dev, struct fusb302_chip,
->>> +                         tcpc_dev);
->>> +    return chip->supported_pd_rev;
->>> +}
->>> +
->>>   static enum typec_cc_status fusb302_bc_lvl_to_cc(u8 bc_lvl)
->>>   {
->>>       if (bc_lvl == FUSB_REG_STATUS0_BC_LVL_1230_MAX)
->>> @@ -1129,6 +1139,7 @@ static void init_tcpc_dev(struct tcpc_dev *fusb302_tcpc_dev)
->>>       fusb302_tcpc_dev->set_roles = tcpm_set_roles;
->>>       fusb302_tcpc_dev->start_toggling = tcpm_start_toggling;
->>>       fusb302_tcpc_dev->pd_transmit = tcpm_pd_transmit;
->>> +    fusb302_tcpc_dev->supported_pd_rev = tcpm_supported_pd_rev;
->>>   }
->>>     static const char * const cc_polarity_name[] = {
->>> @@ -1683,6 +1694,7 @@ static int fusb302_probe(struct i2c_client *client,
->>>       struct fusb302_chip *chip;
->>>       struct i2c_adapter *adapter = client->adapter;
->>>       struct device *dev = &client->dev;
->>> +    struct device_node *np = dev->of_node;
->>>       const char *name;
->>>       int ret = 0;
->>>   @@ -1756,6 +1768,14 @@ static int fusb302_probe(struct i2c_client *client,
->>>           dev_err(dev, "cannot request IRQ for GPIO Int_N, ret=%d", ret);
->>>           goto tcpm_unregister_port;
->>>       }
->>> +
->>> +    if (of_property_read_u32(np, "supported-pd-rev",
->>> +                &chip->supported_pd_rev) < 0) {
->>> +        chip->supported_pd_rev = PD_MAX_REV;
->>> +    } else if (chip->supported_pd_rev > PD_MAX_REV) {
->>> +        chip->supported_pd_rev = PD_MAX_REV;
->>> +    }
->>
->> The else part is also checked in the tcpm code and thus seems
->> to be redundant.
->>
->>> +
->>>       enable_irq_wake(chip->gpio_int_n_irq);
->>>       i2c_set_clientdata(client, chip);
->>
+--
+Himanshu Madhani	 Oracle Linux Engineering
 
