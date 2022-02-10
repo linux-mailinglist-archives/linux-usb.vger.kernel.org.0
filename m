@@ -2,126 +2,218 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C754B061C
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Feb 2022 07:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 893C54B067D
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Feb 2022 07:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234828AbiBJGLk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Feb 2022 01:11:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55526 "EHLO
+        id S235406AbiBJGmC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Feb 2022 01:42:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234038AbiBJGLj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Feb 2022 01:11:39 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647DF10CB
-        for <linux-usb@vger.kernel.org>; Wed,  9 Feb 2022 22:11:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=D0GvVMhwp2o7VNeroeOQSD9yjzvlbNbfjJ9MkBkzfnw=; b=nksprf82BgcZueOm7WCsrLvwJy
-        B9VJyWPDAAKHtw2AEme/ztKF06sztRXSHkygAjD+MdQiyvR8/CugZIh2V9NgVfVsAz0XYmi+Tscrh
-        bA2J9VrvLNKOixIzrs2CGGlG/xq0zOhRDde+Pq6llcuqgEkgOva2DLAnZSO1KfMpZxsF2O+Hi6P0V
-        tgsbvHAfX8QIntA7WOqS9S1iH19ZC1tBVEqwE7rsn9RnpsQwgS0skHlcP3WoCDZW98ebZqxH5JEvi
-        vpEdiVYKjVAP/pM4javwrRyXxbcjm095ixSaL384b/NExCRwMxq0p4oUi4rplwoWVQe+9Qz1SN5Cq
-        0d8ue5rw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nI2g5-008cro-TO; Thu, 10 Feb 2022 06:11:38 +0000
-Message-ID: <6256a6e5-cb82-48d9-3012-76750bedab3f@infradead.org>
-Date:   Wed, 9 Feb 2022 22:11:30 -0800
+        with ESMTP id S235384AbiBJGmA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Feb 2022 01:42:00 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECBC10AD;
+        Wed,  9 Feb 2022 22:42:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644475322; x=1676011322;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=fvee1abFfi+F3OUQ6XwujWZeP2UCx/GT5KX8hazMnzg=;
+  b=sK0S+zz5QTbL7CH8nbMosMj97Cif6Cq7rpmzH1UUqC/xWsM5s/DDQFjC
+   CSwplmQCVBzT483ihL4+iFjwYcvZ+Q5TK2G0y+9sPPMhKZHBdHQwWCtNq
+   C7a4wrhWjOJvZh96RE5H36XxMcfGRreAalqJ2r9VhZ2sdHRkv/2+Qf9HZ
+   4=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 09 Feb 2022 22:42:02 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 22:42:01 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 9 Feb 2022 22:42:01 -0800
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 9 Feb 2022 22:41:57 -0800
+Date:   Thu, 10 Feb 2022 12:11:53 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>
+Subject: Re: [PATCH v5] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk
+ for DWC3 controller
+Message-ID: <20220210064153.GA15114@hu-pkondeti-hyd.qualcomm.com>
+References: <1640153383-21036-1-git-send-email-quic_c_sanm@quicinc.com>
+ <Ydb79/twbxLDJB8/@kroah.com>
+ <d17330f1-d85e-b8c2-9e87-10d109c25abb@quicinc.com>
+ <YfE9s06CIv1P3bA/@kroah.com>
+ <f45f5952-e31c-5e9d-2560-064199beb29f@quicinc.com>
+ <ca306d7c-d816-3cbd-8c65-2c3619739d47@quicinc.com>
+ <YgJB6bGm/y7C0oo/@kroah.com>
+ <20220209055352.GA22550@hu-pkondeti-hyd.qualcomm.com>
+ <d0048456-eb0a-cf91-fc28-f1dda69c1432@quicinc.com>
+ <825a62d8-dc09-fed1-7e33-00d2192a91d5@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: long ucsi_acpi_platform_driver_init
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-usb <linux-usb@vger.kernel.org>
-References: <b9993432-0192-f546-bf67-bb462f51e209@infradead.org>
- <YgED7x4tylyFzvsR@kuha.fi.intel.com>
- <7702d384-a0ce-51a5-221d-9241a9453d5e@infradead.org>
- <YgPROWZkZlIo0ZnU@kuha.fi.intel.com>
- <4c7bb41f-2639-2acc-1b35-e16c0fb9dad2@infradead.org>
-In-Reply-To: <4c7bb41f-2639-2acc-1b35-e16c0fb9dad2@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <825a62d8-dc09-fed1-7e33-00d2192a91d5@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi again,
+Hi Sandeep,
 
-On 2/9/22 09:14, Randy Dunlap wrote:
-> Hi,
+On Thu, Feb 10, 2022 at 11:18:19AM +0530, Sandeep Maheswaram wrote:
+> Hi Pavan,
 > 
-> On 2/9/22 06:35, Heikki Krogerus wrote:
->> On Mon, Feb 07, 2022 at 09:01:50AM -0800, Randy Dunlap wrote:
->>>
->>>
->>> On 2/7/22 03:35, Heikki Krogerus wrote:
->>>> On Sun, Feb 06, 2022 at 05:28:48PM -0800, Randy Dunlap wrote:
->>>>> Hi,
->>>>>
->>>>> On my custom 5.16, 5.17-rc1, and 5.17-rc2 kernels I am seeing
->>>>> ucsi_acpi_platform_driver_init() take around 60 seconds.
->>>>>
->>>>> [    2.733138] calling  ucsi_acpi_platform_driver_init+0x0/0x1000 [ucsi_acpi] @ 470
->>>>> [   64.603126] initcall ucsi_acpi_platform_driver_init+0x0/0x1000 [ucsi_acpi] returned 0 after 58690601 usecs
->>>>
->>>> I don't have any ideas what could be causing it to take that long?
->>>> That driver does not really do anything else except it queues a work
->>>> that then actually initialises the UCSI interface. The probe() in that
->>>> driver (ucsi_acpi) does not stay and wait for the initialisation to
->>>> finish.
->>>>
->>>> Can you check are the USB Type-C devices appearing under
->>>> /sys/class/typec faster then that?
->>>
->>> One entry there:
->>>
->>> lrwxrwxrwx 1 root root 0 Feb  7 08:57 port0 -> ../../devices/platform/USBC000:00/typec/port0/
->>>
->>> Do you want more than that?
->>
->> You should have a port there for every physical USB Type-C
->> port on you system.
+> On 2/9/2022 11:31 AM, Sandeep Maheswaram wrote:
+> >
+> >On 2/9/2022 11:23 AM, Pavan Kondeti wrote:
+> >>On Tue, Feb 08, 2022 at 11:11:53AM +0100, Greg Kroah-Hartman wrote:
+> >>>On Tue, Feb 08, 2022 at 03:34:22PM +0530, Sandeep Maheswaram wrote:
+> >>>>Hi Greg,
+> >>>>
+> >>>>On 1/27/2022 10:28 AM, Sandeep Maheswaram wrote:
+> >>>>>On 1/26/2022 5:55 PM, Greg Kroah-Hartman wrote:
+> >>>>>>On Fri, Jan 07, 2022 at 10:27:59AM +0530, Sandeep Maheswaram wrote:
+> >>>>>>>On 1/6/2022 7:55 PM, Greg Kroah-Hartman wrote:
+> >>>>>>>>On Wed, Dec 22, 2021 at 11:39:43AM +0530, Sandeep Maheswaram
+> >>>>>>>>wrote:
+> >>>>>>>>>Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
+> >>>>>>>>>Runtime suspend of phy drivers was failing from DWC3
+> >>>>>>>>>driver as runtime
+> >>>>>>>>>usage value is 2 because the phy is initialized from
+> >>>>>>>>>DWC3 and HCD core.
+> >>>>>>>>>DWC3 manages phy in their core drivers. Set this quirk to
+> >>>>>>>>>avoid phy
+> >>>>>>>>>initialization in HCD core.
+> >>>>>>>>>
+> >>>>>>>>>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> >>>>>>>>>---
+> >>>>>>>>>v5:
+> >>>>>>>>>Added comment to explain the change done.
+> >>>>>>>>>v4:
+> >>>>>>>>>Changed pdev->dev.parent->of_node to sysdev->of_node
+> >>>>>>>>>
+> >>>>>>>>>    drivers/usb/host/xhci-plat.c | 8 ++++++++
+> >>>>>>>>>    1 file changed, 8 insertions(+)
+> >>>>>>>>>
+> >>>>>>>>>diff --git a/drivers/usb/host/xhci-plat.c
+> >>>>>>>>>b/drivers/usb/host/xhci-plat.c
+> >>>>>>>>>index c1edcc9..e6014d4 100644
+> >>>>>>>>>--- a/drivers/usb/host/xhci-plat.c
+> >>>>>>>>>+++ b/drivers/usb/host/xhci-plat.c
+> >>>>>>>>>@@ -327,6 +327,14 @@ static int xhci_plat_probe(struct
+> >>>>>>>>>platform_device *pdev)
+> >>>>>>>>>&xhci->imod_interval);
+> >>>>>>>>>        }
+> >>>>>>>>>+    /*
+> >>>>>>>>>+     * Set XHCI_SKIP_PHY_INIT quirk to avoid phy
+> >>>>>>>>>initialization twice.
+> >>>>>>>>>+     * DWC3 manages phy in their core drivers. Set this
+> >>>>>>>>>quirk to avoid phy
+> >>>>>>>>>+     * initialization in HCD core.
+> >>>>>>>>>+     */
+> >>>>>>>>>+    if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
+> >>>>>>>>>+        xhci->quirks |= XHCI_SKIP_PHY_INIT;
+> >>>>>>>>>+
+> >>>>>>>>Why is this function caring about dwc3 stuff? Shoudn't this be a
+> >>>>>>>>"generic" device property instead of this device-specific one?
+> >>>>>>>>
+> >>>>>>>>thanks,
+> >>>>>>>>
+> >>>>>>>>greg k-h
+> >>>>>>>This quirk is set only if required for some controllers (eg:
+> >>>>>>>dwc3 & cdns3).
+> >>>>>>>
+> >>>>>>>Please check below commit.
+> >>>>>>>
+> >>>>>>>https://lore.kernel.org/all/20200918131752.16488-5-mathias.nyman@linux.intel.com/
+> >>>>>>>
+> >>>>>>>
+> >>>>>>That commit has nothing to do with a specific "dwc3" quirk anywhere.
+> >>>>>>Why not set this flag in the specific platform xhci driver
+> >>>>>>instead where
+> >>>>>>it belongs?
+> >>>>>>
+> >>>>>>thanks,
+> >>>>>>
+> >>>>>>greg k-h
+> >>>>>There is no specific xhci platform driver for dwc3 controllers.
+> >>>>>
+> >>>>>dwc3 controllers use xhci-plat driver .
+> >>>>>
+> >>>>>We can add this quirk in usb/dwc3/host.c as cdns3 does but that
+> >>>>>requires
+> >>>>>tying dwc3 and xhci driver .
+> >>>>>
+> >>>>>https://patchwork.kernel.org/project/linux-arm-msm/patch/1633946518-13906-1-git-send-email-sanm@codeaurora.org/
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>Regards
+> >>>>>
+> >>>>>Sandeep
+> >>>>>
+> >>>>>
+> >>>>Can you suggest any other method to set this quirk for dwc3
+> >>>>controllers.
+> >>>No idea, sorry.
+> >>Sandeep,
+> >>
+> >>I agree with Greg's comments here. The compatible based check to detect
+> >>dwc3
+> >>controller is not elegant. Your proposal of adding a device tree param
+> >>is
+> >>overkill, I believe.
+> >>
+> >>Greg already gave us a pointer here [1] which I feel is the best
+> >>approach going
+> >>forward. We know that xhci-plat is being used by drivers like dwc3,
+> >>cdns3 and
+> >>these drivers need to expose their xhci quirks. As Greg suggested, why
+> >>can't
+> >>we move xhci quirks definition to include/linux/usb/xhci-quriks.h and
+> >>directly
+> >>access from the glue drivers? The attached is the patch (completely
+> >>untested)
+> >>for your reference. It will prepare the setup for you to add the private
+> >>data
+> >>and quirks in the dwc3 host glue driver.
+> >>
+> >>Thanks,
+> >>Pavan
+> >>
+> >>[1]
+> >>https://patchwork.kernel.org/project/linux-arm-msm/patch/1633946518-13906-1-git-send-email-sanm@codeaurora.org/
+> >>
+> >>
+> >Thanks Pavan..will test the patch.
 > 
-> Yes, I have only one Type-C port.
-> 
->> I can't really tell from that was the port registered before
->> ucsi_acpi_platform_driver_init() finished or not.
-> 
-> Sorry, I didn't understand the first time...
-> 
-> I rebooted and checked /sys/class/typec multiple times. It was empty until
-> the end of ucsi_acpi_platform_driver_init() roughly 55 seconds later.
+> Tested your patch. It is working fine along with the attached changes.
 > 
 
-Good news. Pretty sure that it's not a problem with ucsi_acpi code.
+Your patch looks good to me. Feel free to send the two patches together.
 
-I noticed that there were a few kernel log messages about firmware loading
-near the ucsi_acpi init messages so I looked at my kernel's config options.
-
-I had this one set/enabled:
-
-config FW_LOADER_USER_HELPER_FALLBACK
-	bool "Force the firmware sysfs fallback mechanism when possible"
-	depends on FW_LOADER_USER_HELPER
-	help
-...
-	  If you are unsure about this, say N here.
-
-After disabling it, there is no significant delay in ucsi_acpi_platform_driver_init.
-
-I'm happy to blame it on this kernel config option.
-
-
-cheers.
--- 
-~Randy
+Thanks,
+Pavan
