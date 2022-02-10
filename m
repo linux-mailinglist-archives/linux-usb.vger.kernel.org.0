@@ -2,120 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107FA4B07F8
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Feb 2022 09:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4C44B0A21
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Feb 2022 11:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237274AbiBJIR4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Feb 2022 03:17:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54042 "EHLO
+        id S239260AbiBJKA7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Feb 2022 05:00:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237266AbiBJIRs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Feb 2022 03:17:48 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D075DA9;
-        Thu, 10 Feb 2022 00:17:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644481070; x=1676017070;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=oy1isJLYwtuPuNrEw0LtVuMelYGGRN0YXlD3NuT4aUc=;
-  b=W0KuWYrJOfARnNftxF3GKLkUKlp6SY2VhXeUU+6oYOMM20nFsVW2LMFa
-   5pxlFhm4Rve8hFXtjbCuceDg41pxlsgiOQ/d+pWLChjJGWG+dUKkXSVN2
-   ZjQ7Ybo74wEDftJu7C9x1ruHnbkE/HSSQ/46VCF2eFwiKCjURNR5CK1YS
-   G6D7Ei5pbc/seVcompwdQyWkFx22H7dXKhDX8IR3RN8kIjV2OnlL8W4VA
-   OMQyNkkLMix/PbcdIWTMARyq7oEV69t3+66R2E7Snw4nkDw7hXmMQkZmD
-   tnLlTDcfff0Akzb71e7bG2dNeA1gq5X7pvzKzcR/SyOshbYlWUaY7fxXh
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="229407980"
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="229407980"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 00:17:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="568562945"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 10 Feb 2022 00:17:24 -0800
-Subject: Re: [PATCH -next v2] xhci: fix two places when dealing with return
- value of function xhci_check_args
-To:     =?UTF-8?B?6LCi5rOT5a6H?= <xiehongyu1@kylinos.cn>,
-        Hongyu Xie <xy521521@gmail.com>, gregkh@linuxfoundation.org,
-        mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20220209025234.25230-1-xy521521@gmail.com>
- <89d59749-8ca3-b30b-4da6-a6e567528d1b@linux.intel.com>
- <59231732-82a3-3a0c-db0c-eec252b35d3b@kylinos.cn>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <1e4bdc41-abcf-a082-140a-3dcead7073c6@linux.intel.com>
-Date:   Thu, 10 Feb 2022 10:18:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        with ESMTP id S239233AbiBJKA6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Feb 2022 05:00:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76531C02
+        for <linux-usb@vger.kernel.org>; Thu, 10 Feb 2022 02:00:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644487258;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j6iG/zRSXBJr0V+KQL6qsWdT16lcc2ezAm1Oyf7IUXI=;
+        b=F1FQTSpv8TfYIcVmibJX+UszlxwUkqwnZnJBYkLxlHdocWC+UY1cebpq1+gOCjnt9xLkaN
+        FELRDC4haOiCBdukmuP/4s7c24rekpytAJmlqck9HQOWr3E808TvT+FZtA6sN7ysYvuyeD
+        nPiAmv4auYFwiZ0gfFukU2DbQlfDJmU=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-624-8XyamXItPj-4g-KAQn73Aw-1; Thu, 10 Feb 2022 05:00:57 -0500
+X-MC-Unique: 8XyamXItPj-4g-KAQn73Aw-1
+Received: by mail-ej1-f69.google.com with SMTP id ka12-20020a170907990c00b006c41c582397so2472405ejc.11
+        for <linux-usb@vger.kernel.org>; Thu, 10 Feb 2022 02:00:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=j6iG/zRSXBJr0V+KQL6qsWdT16lcc2ezAm1Oyf7IUXI=;
+        b=3S5N/24AA5QE9S0YMK/lOZV5PWSBrXeSJ+ACx7J61A8YSBu55wuhbdtZ7FG60Ndco0
+         4uwQ2UPTcJOEAneeS9C8hLAGCEwXaJaLv9YznMaDpK0XotKT3l60jSa9m7kjk3IiR28A
+         Ks7MNtt01UWjAVktcKlPxbAVX+t/cpVhp07VZdqrMorF03CTvkITJxnFcgeQh0UePTS7
+         CCiR2Z2A3TXUT8vHtkEFeAjYR/eVoqFiPdXKoTWxD8fga4TNu1atSkwxghaIyfjQNsJg
+         n/XlarItU+vBkLEfRve5jgsxihL7YnvAsUmMH6V4zm6Q1/HbjaGyaGm3J9lIGqCkJ55b
+         oZ1g==
+X-Gm-Message-State: AOAM532TpNTt5PpXAD0CX74n42844JAwfIGNmx9Q2JkomhTGMgaZBDTY
+        qRxHKyC7G7BMjYo4n0cEEb/cZAV9pTRssBb/KsaI5TUtKhMg4FdCtpbf7W4p2t4kVxRwhOg9XRa
+        GpvaV0PUHD/xzwPY7J1wa
+X-Received: by 2002:a50:ed89:: with SMTP id h9mr7693434edr.130.1644487256278;
+        Thu, 10 Feb 2022 02:00:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy29EIF5dLlj4EgzKveWm+vfQmoyV88rAwDkSQcW7lKexRy8Kajda6TOEEQq/JheLqpWVvS1Q==
+X-Received: by 2002:a50:ed89:: with SMTP id h9mr7693422edr.130.1644487256142;
+        Thu, 10 Feb 2022 02:00:56 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id f28sm2053275ejl.46.2022.02.10.02.00.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 02:00:55 -0800 (PST)
+Message-ID: <da0f5804-559a-1efd-373f-93eb87196255@redhat.com>
+Date:   Thu, 10 Feb 2022 11:00:54 +0100
 MIME-Version: 1.0
-In-Reply-To: <59231732-82a3-3a0c-db0c-eec252b35d3b@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 0/6] typec: mux: Introduce support for multiple TypeC
+ muxes
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+References: <20220208031944.3444-1-bjorn.andersson@linaro.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220208031944.3444-1-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10.2.2022 3.04, 谢泓宇 wrote:
-> Hi,
+Hi,
+
+On 2/8/22 04:19, Bjorn Andersson wrote:
+> This series introduces a level of indirection between the controller's view of
+> a typec_mux/switch and the implementation and then expands that to support
+> multiple drivers.
 > 
-> On 2022/2/9 17:29, Mathias Nyman wrote:
->> On 9.2.2022 4.52, Hongyu Xie wrote:
->>> From: Hongyu Xie <xiehongyu1@kylinos.cn>
->>>
->>> xhci_check_args returns 4 types of value, -ENODEV, -EINVAL, 1 and 0.
->>> xhci_urb_enqueue and xhci_check_streams_endpoint return -EINVAL if
->>> the return value of xhci_check_args <= 0.
->>> This will cause a problem.
->>> For example, r8152_submit_rx calling usb_submit_urb in
->>> drivers/net/usb/r8152.c.
->>> r8152_submit_rx will never get -ENODEV after submiting an urb
->>> when xHC is halted,
->>> because xhci_urb_enqueue returns -EINVAL in the very beginning.
->>>
->>> Fixes: 203a86613fb3 ("xhci: Avoid NULL pointer deref when host dies.")
->>> Cc: stable@vger.kernel.org
->>> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
->>> ---
->> Thanks, added to queue.
->> Changed the commit message and header a bit:
->>
->> "xhci: Prevent futile URB re-submissions due to incorrect return value.
->>      The -ENODEV return value from xhci_check_args() is incorrectly changed
->> to -EINVAL in a couple places before propagated further.
->>      xhci_check_args() returns 4 types of value, -ENODEV, -EINVAL, 1 and 0.
->> xhci_urb_enqueue and xhci_check_streams_endpoint return -EINVAL if
->> the return value of xhci_check_args <= 0.
->> This causes problems for example r8152_submit_rx, calling usb_submit_urb
->> in drivers/net/usb/r8152.c.
->> r8152_submit_rx will never get -ENODEV after submiting an urb when xHC
->> is halted because xhci_urb_enqueue returns -EINVAL in the very beginning."
->>
->> Let me know if you disagree with this.
->>
->> Thanks
->> -Mathias
+> This is needed in order to support devices such as the Qualcomm Snapdragon 888
+> HDK, which does muxing and orientation handling in the QMP (USB+DP) PHY and SBU
+> muxing in the external FSA4480 chip.
 > 
-> Sounds good to me.
+> Included in the series is a the new FSA4480 driver. This is done to deal with
+> the renaming of the driver-side typec_mux -> typec_mux_dev.
+
+I have tested patches 1-4 on a GPD win which uses a fusb302 TCPM with a pi3usb30532
+mux and superspeed orientation switching as well as DP over Type-C still works fine
+there, so you may add my:
+
+Tested-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+
+
+
 > 
-> Do I have to send another patch with commit message and header changed?
+> Changes since v1:
+> - Omitted QMP changes from this series, as the muxing implementation needs a
+>   little bit more debugging.
 > 
-> Thanks
+> Bjorn Andersson (6):
+>   device property: Helper to match multiple connections
+>   device property: Use multi-connection matchers for single case
+>   typec: mux: Introduce indirection
+>   typec: mux: Allow multiple mux_devs per mux
+>   dt-bindings: usb: Add binding for fcs,fsa4480
+>   usb: typec: mux: Add On Semi fsa4480 driver
 > 
-> Hongyu Xie
+>  .../devicetree/bindings/usb/fcs,fsa4480.yaml  |  72 +++++
+>  drivers/base/property.c                       |  85 ++++--
+>  drivers/usb/typec/bus.c                       |   2 +-
+>  drivers/usb/typec/mux.c                       | 261 +++++++++++++-----
+>  drivers/usb/typec/mux.h                       |  12 +-
+>  drivers/usb/typec/mux/Kconfig                 |   9 +
+>  drivers/usb/typec/mux/Makefile                |   1 +
+>  drivers/usb/typec/mux/fsa4480.c               | 220 +++++++++++++++
+>  drivers/usb/typec/mux/intel_pmc_mux.c         |   8 +-
+>  drivers/usb/typec/mux/pi3usb30532.c           |   8 +-
+>  include/linux/property.h                      |   5 +
+>  include/linux/usb/typec_mux.h                 |  22 +-
+>  12 files changed, 595 insertions(+), 110 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+>  create mode 100644 drivers/usb/typec/mux/fsa4480.c
 > 
 
-No need, I'll submit it.
-
--Mathias
