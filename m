@@ -2,72 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893C54B067D
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Feb 2022 07:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B374B0799
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Feb 2022 08:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235406AbiBJGmC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Feb 2022 01:42:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50286 "EHLO
+        id S236727AbiBJH4P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Feb 2022 02:56:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235384AbiBJGmA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Feb 2022 01:42:00 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECBC10AD;
-        Wed,  9 Feb 2022 22:42:02 -0800 (PST)
+        with ESMTP id S235869AbiBJH4N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Feb 2022 02:56:13 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D8BBAE;
+        Wed,  9 Feb 2022 23:56:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644475322; x=1676011322;
+  t=1644479774; x=1676015774;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=fvee1abFfi+F3OUQ6XwujWZeP2UCx/GT5KX8hazMnzg=;
-  b=sK0S+zz5QTbL7CH8nbMosMj97Cif6Cq7rpmzH1UUqC/xWsM5s/DDQFjC
-   CSwplmQCVBzT483ihL4+iFjwYcvZ+Q5TK2G0y+9sPPMhKZHBdHQwWCtNq
-   C7a4wrhWjOJvZh96RE5H36XxMcfGRreAalqJ2r9VhZ2sdHRkv/2+Qf9HZ
-   4=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 09 Feb 2022 22:42:02 -0800
+   mime-version:in-reply-to;
+  bh=d8UgR787ewrZS9tOQpQFXRDaJVesqcuVUgUYSZ5cedQ=;
+  b=qJBi7hHsQkaMz6umMjIaWSYzs690HqNVplGCvGbMIupT75iG49bWOx5x
+   CZz6iTnPTB7ELOqS+DGy1lsocwE5/o+4SFj0JlhImvT1nIAOoQyF2/5r3
+   cbkRPzFz68jHDnmT2gtylsc9q588+4S0+Q4Aq+H+fqgNNsfVEi40a6Abw
+   8=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Feb 2022 23:56:14 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 22:42:01 -0800
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 23:56:14 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 9 Feb 2022 22:42:01 -0800
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ 15.2.922.19; Wed, 9 Feb 2022 23:56:13 -0800
+Received: from jackp-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 9 Feb 2022 22:41:57 -0800
-Date:   Thu, 10 Feb 2022 12:11:53 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>
-Subject: Re: [PATCH v5] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk
- for DWC3 controller
-Message-ID: <20220210064153.GA15114@hu-pkondeti-hyd.qualcomm.com>
-References: <1640153383-21036-1-git-send-email-quic_c_sanm@quicinc.com>
- <Ydb79/twbxLDJB8/@kroah.com>
- <d17330f1-d85e-b8c2-9e87-10d109c25abb@quicinc.com>
- <YfE9s06CIv1P3bA/@kroah.com>
- <f45f5952-e31c-5e9d-2560-064199beb29f@quicinc.com>
- <ca306d7c-d816-3cbd-8c65-2c3619739d47@quicinc.com>
- <YgJB6bGm/y7C0oo/@kroah.com>
- <20220209055352.GA22550@hu-pkondeti-hyd.qualcomm.com>
- <d0048456-eb0a-cf91-fc28-f1dda69c1432@quicinc.com>
- <825a62d8-dc09-fed1-7e33-00d2192a91d5@quicinc.com>
+ 15.2.922.19; Wed, 9 Feb 2022 23:56:13 -0800
+Date:   Wed, 9 Feb 2022 23:56:11 -0800
+From:   Jack Pham <quic_jackp@quicinc.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Jameson Thies <jthies@google.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 3/3] usb: typec: ucsi: Register USB Power Delivery
+ Capabilities
+Message-ID: <20220210075611.GC13801@jackp-linux.qualcomm.com>
+References: <20220203144657.16527-1-heikki.krogerus@linux.intel.com>
+ <20220203144657.16527-4-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <825a62d8-dc09-fed1-7e33-00d2192a91d5@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20220203144657.16527-4-heikki.krogerus@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
@@ -81,139 +70,250 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Sandeep,
+Hi Heikki,
 
-On Thu, Feb 10, 2022 at 11:18:19AM +0530, Sandeep Maheswaram wrote:
-> Hi Pavan,
+On Thu, Feb 03, 2022 at 05:46:57PM +0300, Heikki Krogerus wrote:
+> UCSI allows the USB PD capabilities to be read with the
+> GET_PDO command. This will register those capabilities, and
+> that way make them visible to the user space.
 > 
-> On 2/9/2022 11:31 AM, Sandeep Maheswaram wrote:
-> >
-> >On 2/9/2022 11:23 AM, Pavan Kondeti wrote:
-> >>On Tue, Feb 08, 2022 at 11:11:53AM +0100, Greg Kroah-Hartman wrote:
-> >>>On Tue, Feb 08, 2022 at 03:34:22PM +0530, Sandeep Maheswaram wrote:
-> >>>>Hi Greg,
-> >>>>
-> >>>>On 1/27/2022 10:28 AM, Sandeep Maheswaram wrote:
-> >>>>>On 1/26/2022 5:55 PM, Greg Kroah-Hartman wrote:
-> >>>>>>On Fri, Jan 07, 2022 at 10:27:59AM +0530, Sandeep Maheswaram wrote:
-> >>>>>>>On 1/6/2022 7:55 PM, Greg Kroah-Hartman wrote:
-> >>>>>>>>On Wed, Dec 22, 2021 at 11:39:43AM +0530, Sandeep Maheswaram
-> >>>>>>>>wrote:
-> >>>>>>>>>Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
-> >>>>>>>>>Runtime suspend of phy drivers was failing from DWC3
-> >>>>>>>>>driver as runtime
-> >>>>>>>>>usage value is 2 because the phy is initialized from
-> >>>>>>>>>DWC3 and HCD core.
-> >>>>>>>>>DWC3 manages phy in their core drivers. Set this quirk to
-> >>>>>>>>>avoid phy
-> >>>>>>>>>initialization in HCD core.
-> >>>>>>>>>
-> >>>>>>>>>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> >>>>>>>>>---
-> >>>>>>>>>v5:
-> >>>>>>>>>Added comment to explain the change done.
-> >>>>>>>>>v4:
-> >>>>>>>>>Changed pdev->dev.parent->of_node to sysdev->of_node
-> >>>>>>>>>
-> >>>>>>>>>    drivers/usb/host/xhci-plat.c | 8 ++++++++
-> >>>>>>>>>    1 file changed, 8 insertions(+)
-> >>>>>>>>>
-> >>>>>>>>>diff --git a/drivers/usb/host/xhci-plat.c
-> >>>>>>>>>b/drivers/usb/host/xhci-plat.c
-> >>>>>>>>>index c1edcc9..e6014d4 100644
-> >>>>>>>>>--- a/drivers/usb/host/xhci-plat.c
-> >>>>>>>>>+++ b/drivers/usb/host/xhci-plat.c
-> >>>>>>>>>@@ -327,6 +327,14 @@ static int xhci_plat_probe(struct
-> >>>>>>>>>platform_device *pdev)
-> >>>>>>>>>&xhci->imod_interval);
-> >>>>>>>>>        }
-> >>>>>>>>>+    /*
-> >>>>>>>>>+     * Set XHCI_SKIP_PHY_INIT quirk to avoid phy
-> >>>>>>>>>initialization twice.
-> >>>>>>>>>+     * DWC3 manages phy in their core drivers. Set this
-> >>>>>>>>>quirk to avoid phy
-> >>>>>>>>>+     * initialization in HCD core.
-> >>>>>>>>>+     */
-> >>>>>>>>>+    if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
-> >>>>>>>>>+        xhci->quirks |= XHCI_SKIP_PHY_INIT;
-> >>>>>>>>>+
-> >>>>>>>>Why is this function caring about dwc3 stuff? Shoudn't this be a
-> >>>>>>>>"generic" device property instead of this device-specific one?
-> >>>>>>>>
-> >>>>>>>>thanks,
-> >>>>>>>>
-> >>>>>>>>greg k-h
-> >>>>>>>This quirk is set only if required for some controllers (eg:
-> >>>>>>>dwc3 & cdns3).
-> >>>>>>>
-> >>>>>>>Please check below commit.
-> >>>>>>>
-> >>>>>>>https://lore.kernel.org/all/20200918131752.16488-5-mathias.nyman@linux.intel.com/
-> >>>>>>>
-> >>>>>>>
-> >>>>>>That commit has nothing to do with a specific "dwc3" quirk anywhere.
-> >>>>>>Why not set this flag in the specific platform xhci driver
-> >>>>>>instead where
-> >>>>>>it belongs?
-> >>>>>>
-> >>>>>>thanks,
-> >>>>>>
-> >>>>>>greg k-h
-> >>>>>There is no specific xhci platform driver for dwc3 controllers.
-> >>>>>
-> >>>>>dwc3 controllers use xhci-plat driver .
-> >>>>>
-> >>>>>We can add this quirk in usb/dwc3/host.c as cdns3 does but that
-> >>>>>requires
-> >>>>>tying dwc3 and xhci driver .
-> >>>>>
-> >>>>>https://patchwork.kernel.org/project/linux-arm-msm/patch/1633946518-13906-1-git-send-email-sanm@codeaurora.org/
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>>Regards
-> >>>>>
-> >>>>>Sandeep
-> >>>>>
-> >>>>>
-> >>>>Can you suggest any other method to set this quirk for dwc3
-> >>>>controllers.
-> >>>No idea, sorry.
-> >>Sandeep,
-> >>
-> >>I agree with Greg's comments here. The compatible based check to detect
-> >>dwc3
-> >>controller is not elegant. Your proposal of adding a device tree param
-> >>is
-> >>overkill, I believe.
-> >>
-> >>Greg already gave us a pointer here [1] which I feel is the best
-> >>approach going
-> >>forward. We know that xhci-plat is being used by drivers like dwc3,
-> >>cdns3 and
-> >>these drivers need to expose their xhci quirks. As Greg suggested, why
-> >>can't
-> >>we move xhci quirks definition to include/linux/usb/xhci-quriks.h and
-> >>directly
-> >>access from the glue drivers? The attached is the patch (completely
-> >>untested)
-> >>for your reference. It will prepare the setup for you to add the private
-> >>data
-> >>and quirks in the dwc3 host glue driver.
-> >>
-> >>Thanks,
-> >>Pavan
-> >>
-> >>[1]
-> >>https://patchwork.kernel.org/project/linux-arm-msm/patch/1633946518-13906-1-git-send-email-sanm@codeaurora.org/
-> >>
-> >>
-> >Thanks Pavan..will test the patch.
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 128 +++++++++++++++++++++++++++++++---
+>  drivers/usb/typec/ucsi/ucsi.h |   8 +++
+>  2 files changed, 125 insertions(+), 11 deletions(-)
 > 
-> Tested your patch. It is working fine along with the attached changes.
-> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index f0c2fa19f3e0f..5149001093c7f 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -568,8 +568,8 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
+>  	}
+>  }
+>  
+> -static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
+> -			 u32 *pdos, int offset, int num_pdos)
+> +static int ucsi_read_pdos(struct ucsi_connector *con, enum typec_role role, int is_partner,
+> +			  u32 *pdos, int offset, int num_pdos)
+>  {
+>  	struct ucsi *ucsi = con->ucsi;
+>  	u64 command;
+> @@ -579,7 +579,7 @@ static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
+>  	command |= UCSI_GET_PDOS_PARTNER_PDO(is_partner);
+>  	command |= UCSI_GET_PDOS_PDO_OFFSET(offset);
+>  	command |= UCSI_GET_PDOS_NUM_PDOS(num_pdos - 1);
+> -	command |= UCSI_GET_PDOS_SRC_PDOS;
+> +	command |= is_source(role) ? UCSI_GET_PDOS_SRC_PDOS : 0;
+>  	ret = ucsi_send_command(ucsi, command, pdos + offset,
+>  				num_pdos * sizeof(u32));
+>  	if (ret < 0 && ret != -ETIMEDOUT)
+> @@ -590,26 +590,39 @@ static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
+>  	return ret;
+>  }
+>  
+> -static int ucsi_get_src_pdos(struct ucsi_connector *con)
+> +static int ucsi_get_pdos(struct ucsi_connector *con, enum typec_role role,
+> +			 int is_partner, u32 *pdos)
+>  {
+> +	u8 num_pdos;
+>  	int ret;
+>  
+>  	/* UCSI max payload means only getting at most 4 PDOs at a time */
+> -	ret = ucsi_get_pdos(con, 1, con->src_pdos, 0, UCSI_MAX_PDOS);
+> +	ret = ucsi_read_pdos(con, role, is_partner, pdos, 0, UCSI_MAX_PDOS);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	con->num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
+> -	if (con->num_pdos < UCSI_MAX_PDOS)
+> -		return 0;
+> +	num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
+> +	if (num_pdos < UCSI_MAX_PDOS)
+> +		return num_pdos;
+>  
+>  	/* get the remaining PDOs, if any */
+> -	ret = ucsi_get_pdos(con, 1, con->src_pdos, UCSI_MAX_PDOS,
+> -			    PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
+> +	ret = ucsi_read_pdos(con, role, is_partner, pdos, UCSI_MAX_PDOS,
+> +			     PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return ret / sizeof(u32) + num_pdos;
+> +}
+> +
+> +static int ucsi_get_src_pdos(struct ucsi_connector *con)
+> +{
+> +	int ret;
+> +
+> +	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 1, con->src_pdos);
 
-Your patch looks good to me. Feel free to send the two patches together.
+This issues the GET_PDOS command to PPM to get the source PDOs of the
+partner...
+
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	con->num_pdos += ret / sizeof(u32);
+> +	con->num_pdos += ret;
+>  
+>  	ucsi_port_psy_changed(con);
+>  
+> @@ -638,6 +651,60 @@ static int ucsi_check_altmodes(struct ucsi_connector *con)
+>  	return ret;
+>  }
+>  
+> +static int ucsi_register_partner_pdos(struct ucsi_connector *con)
+> +{
+> +	struct pd_desc desc = { con->ucsi->cap.pd_version };
+> +	struct pd_capabilities *cap;
+> +	struct pd_caps_desc caps;
+> +	int ret;
+> +
+> +	con->partner_pd = typec_partner_register_pd(con->partner, &desc);
+> +	if (IS_ERR(con->partner_pd))
+> +		return PTR_ERR(con->partner_pd);
+> +
+> +	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 1, caps.pdo);
+
+... and also here.
+
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (ret < PDO_MAX_OBJECTS)
+> +		caps.pdo[ret] = 0;
+> +	caps.role = TYPEC_SOURCE;
+> +
+> +	cap = pd_register_capabilities(con->partner_pd, &caps);
+> +	if (IS_ERR(cap))
+> +		return PTR_ERR(cap);
+> +
+> +	ret = typec_partner_set_pd_capabilities(con->partner, cap);
+> +	if (ret) {
+> +		pd_unregister_capabilities(cap);
+> +		return ret;
+> +	}
+> +
+> +	con->partner_source_caps = cap;
+> +
+> +	ret = ucsi_get_pdos(con, TYPEC_SINK, 1, caps.pdo);
+> +	if (ret <= 0)
+> +		return ret;
+> +
+> +	if (ret < PDO_MAX_OBJECTS)
+> +		caps.pdo[ret] = 0;
+> +	caps.role = TYPEC_SINK;
+> +
+> +	cap = pd_register_capabilities(con->partner_pd, &caps);
+> +	if (IS_ERR(cap))
+> +		return PTR_ERR(cap);
+> +
+> +	ret = typec_partner_set_pd_capabilities(con->partner, cap);
+> +	if (ret) {
+> +		pd_unregister_capabilities(cap);
+> +		return ret;
+> +	}
+> +
+> +	con->partner_sink_caps = cap;
+> +
+> +	return 0;
+> +}
+> +
+>  static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
+>  {
+>  	switch (UCSI_CONSTAT_PWR_OPMODE(con->status.flags)) {
+> @@ -646,6 +713,7 @@ static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
+>  		typec_set_pwr_opmode(con->port, TYPEC_PWR_MODE_PD);
+>  		ucsi_partner_task(con, ucsi_get_src_pdos, 30, 0);
+>  		ucsi_partner_task(con, ucsi_check_altmodes, 30, 0);
+> +		ucsi_partner_task(con, ucsi_register_partner_pdos, 1, HZ);
+
+And, both ucsi_get_src_pdos() and ucsi_register_partner_pdos() are
+scheduled to run here...
+
+>  		break;
+>  	case UCSI_CONSTAT_PWR_OPMODE_TYPEC1_5:
+>  		con->rdo = 0;
+> @@ -704,6 +772,17 @@ static void ucsi_unregister_partner(struct ucsi_connector *con)
+>  	if (!con->partner)
+>  		return;
+>  
+> +	typec_partner_unset_pd_capabilities(con->partner, TYPEC_SINK);
+> +	pd_unregister_capabilities(con->partner_sink_caps);
+> +	con->partner_sink_caps = NULL;
+> +
+> +	typec_partner_unset_pd_capabilities(con->partner, TYPEC_SOURCE);
+> +	pd_unregister_capabilities(con->partner_source_caps);
+> +	con->partner_source_caps = NULL;
+> +
+> +	typec_partner_unregister_pd(con->partner);
+> +	con->partner_pd = NULL;
+> +
+>  	ucsi_unregister_altmodes(con, UCSI_RECIPIENT_SOP);
+>  	typec_unregister_partner(con->partner);
+>  	con->partner = NULL;
+> @@ -1037,6 +1116,8 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  	u64 command;
+>  	char *name;
+>  	int ret;
+> +	struct pd_desc desc = { ucsi->cap.pd_version };
+> +	struct pd_caps_desc caps;
+>  
+>  	name = kasprintf(GFP_KERNEL, "%s-con%d", dev_name(ucsi->dev), con->num);
+>  	if (!name)
+> @@ -1103,6 +1184,24 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  		goto out;
+>  	}
+>  
+> +	con->pd = typec_port_register_pd(con->port, &desc);
+> +
+> +	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 0, caps.pdo);
+> +	if (ret > 0) {
+> +		caps.pdo[ret] = 0;
+> +		caps.role = TYPEC_SOURCE;
+> +		con->source_caps = pd_register_capabilities(con->pd, &caps);
+> +		typec_port_set_pd_capabilities(con->port, con->source_caps);
+> +	}
+> +
+> +	ret = ucsi_get_pdos(con, TYPEC_SINK, 0, caps.pdo);
+> +	if (ret > 0) {
+> +		caps.pdo[ret] = 0;
+> +		caps.role = TYPEC_SINK;
+> +		con->sink_caps = pd_register_capabilities(con->pd, &caps);
+> +		typec_port_set_pd_capabilities(con->port, con->sink_caps);
+> +	}
+> +
+>  	/* Alternate modes */
+>  	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_CON);
+>  	if (ret) {
+> @@ -1169,6 +1268,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  	    UCSI_CONSTAT_PWR_OPMODE_PD) {
+>  		ucsi_get_src_pdos(con);
+>  		ucsi_check_altmodes(con);
+> +		ucsi_register_partner_pdos(con);
+
+... as well as here.
+
+So wouldn't this result in the PPM issuing the same PD Get_Source_Cap
+message twice to the port partner (in either case of initial port
+registration or op mode change)?  Could we just consolidate them to just
+issue GET_PDOS only once and take care of populating the partner's
+Source Caps for both the pd_capabilties as well as power_supply purposes
+from a single helper?
+
+Another aside, thinking back to a previous patch [1] I had proposed a
+few months ago, another question I had is whether it is proper to even
+issue a Get_Source_Cap message to sink-only devices, as we did encounter
+certain DisplayPort adapters that don't like when that happens.
+Wondering if it could be possible to limit calling the GET_PDOS command
+unless we know the partner is capable of operating in that particular
+power role.  e.g. don't call get_src_pdos() if partner is sink-only.
+Or is this the kind of thing that the PPM is supposed to be able to
+figure out and allow OPM to naively issue the command regardless, and
+just get an error/empty return?
+
+[1] https://lore.kernel.org/all/20211027064842.6901-1-quic_jackp@quicinc.com/
 
 Thanks,
-Pavan
+Jack
