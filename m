@@ -2,130 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F16D34B1027
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Feb 2022 15:20:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B4C4B1069
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Feb 2022 15:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242766AbiBJOUo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Feb 2022 09:20:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38052 "EHLO
+        id S242930AbiBJO31 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Feb 2022 09:29:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238969AbiBJOUo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Feb 2022 09:20:44 -0500
-Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.109.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19014F9
-        for <linux-usb@vger.kernel.org>; Thu, 10 Feb 2022 06:20:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1644502843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FU3FeccL/jKBexQ5LIcXSqco/tRRzJi4qbSjbsgUYHQ=;
-        b=S9NdXSOEJLGfMDtsT9DCw+3MhnN6xrTGsJifGJ4QzbCk65b6Rb19U1fu7c9B2GnmeNVTLx
-        oT9YtuAxL58nA+xkHWGXVgogJOvjQUj1IIG8nNbcbs29dMkCHEbUeWZSw1GH2VB/WoxWXO
-        HZQCR9pu+XHDA8lCmHMPP/z2leyFTL8=
-Received: from EUR02-VE1-obe.outbound.protection.outlook.com
- (mail-ve1eur02lp2050.outbound.protection.outlook.com [104.47.6.50]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-39-H5XpV4osMbikkxiDM6x6dQ-1; Thu, 10 Feb 2022 15:20:42 +0100
-X-MC-Unique: H5XpV4osMbikkxiDM6x6dQ-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oZLLjmubt5oDt+XRQ7h5NUwH5NWOEC9ClXKYCxSPueDBBVubj3F6eAzoyLwLhzDNTuP1qXrqXOxHk5J/ewCTLMmCjjAhDy7elO/pxtMRzFfTLTqxKKAYAHZgtXBfF3pExR8/d2ROyb2uYCe7Rn6KsRPutRiIM2OMiIg9HRYlTh/qC1qvjghkpXI+x1vevQ397lu/sSSTBWvb+Db0UOQOOtOQZjYkyWudIs1ykWhQBgQ77niE65qb1uc2zoXLATNbfBuKQHdXNMNVXo2TAyrsD/Q95vQuQ8yHp+f3/5U7itDv1CcWkkaM4tReIQ7HdoOHKsuXXaQLJG478RtdigGp7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CFQ+NPR2ss3iqgU1rnvxfdIuglc1wNgOf8ZdqZIQzgs=;
- b=mglbhwFpeTXcE183WKAaI3qTjWnzcxkZyfsrc3Lfc8qp4+OQHBaDA9ZqTbyRa+MWzPD8DkvLfeLHMiP/burA3m1Ca2eWsgNV74rkUlGYcYlwWGhCmo6sZOxrjkgDxSYU8azxY6rQvczo67Lt1XDYbj5uTTg/41lPfMNUqkOnfKiuSWrjq6B3SYs4LxBhrbuXJ3RP2B5NQZhq30Q29Qm7bjOSppPmHOw4Z3Bxt8uuMJRYUdhdLYZpzUCWvGWEpczgNE3E5ImRojeG3uaC1oxAVjKZXXDiz39G1toGBeDxMYZWVuDH+rZ9VCgWJhtgb/wYSQLCegTYrWeUks5cTIIAQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com (2603:10a6:10:22::23)
- by PA4PR04MB7646.eurprd04.prod.outlook.com (2603:10a6:102:f3::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Thu, 10 Feb
- 2022 14:20:40 +0000
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::24bf:3192:1d1c:4115]) by DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::24bf:3192:1d1c:4115%3]) with mapi id 15.20.4951.018; Thu, 10 Feb 2022
- 14:20:40 +0000
-Message-ID: <118c84c8-d3aa-c3cb-06f4-c088e49c416f@suse.com>
-Date:   Thu, 10 Feb 2022 15:20:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] USB: zaurus: support another broken Zaurus
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>
-CC:     bids.7405@bigpond.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org
-References: <20220210122643.12274-1-oneukum@suse.com>
- <YgUL6y4F34ZgC2K/@kroah.com> <6d5a8cb4-1823-cecb-a31e-2118a95c96a6@suse.com>
- <YgUei+MqkHAE2Oet@kroah.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <YgUei+MqkHAE2Oet@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: AM6PR04CA0047.eurprd04.prod.outlook.com
- (2603:10a6:20b:f0::24) To DB7PR04MB5050.eurprd04.prod.outlook.com
- (2603:10a6:10:22::23)
+        with ESMTP id S242915AbiBJO30 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Feb 2022 09:29:26 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67838101;
+        Thu, 10 Feb 2022 06:29:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644503367; x=1676039367;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ldfob0iUwpW+sD1QtLB1wQCoH5pBOWlJ1e0MYKcYAbw=;
+  b=OkJgK8/Qwj+MPnX2jGTGNH0sz/U1O6zTdH9x+4Pyx/X/XCt1ScdpuxcJ
+   THmpDMfA+oRK+bgiD1o4KliTLo4kyc3lt1Ox+8Ur3L5UK2fp73xQGH9GW
+   rwAehpFkdL5O/z4ulboGbp0ihEQxAEHUqNuR23sksrobjJxFJ6vj39JQN
+   WTeExKGQa7CfGXruKFDaHqpdIALCFsa+Ma3b1QvXi9CUbT/7WWaFLUFEE
+   7LOlA+xtFTZiyO+3FhDWiHE6NxV/q8uXbmJm6aEA/dxwFbWTZkXW8UR7d
+   03FD1aLjL+PmPENEFqvqLnjdkR0IXspWKpcVatEq4ZeEzPxxhp41Dp916
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="249252349"
+X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
+   d="scan'208";a="249252349"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 06:29:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
+   d="scan'208";a="679163079"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 10 Feb 2022 06:29:23 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 10 Feb 2022 16:29:22 +0200
+Date:   Thu, 10 Feb 2022 16:29:22 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2] usb: core: Unregister device on component_add()
+ failure
+Message-ID: <YgUhQqGryhEnp5B7@kuha.fi.intel.com>
+References: <20220209164500.8769-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b80cc6b1-32bb-4172-8945-08d9eca083c4
-X-MS-TrafficTypeDiagnostic: PA4PR04MB7646:EE_
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-Microsoft-Antispam-PRVS: <PA4PR04MB7646CBF24BC776D8046AA3F7C72F9@PA4PR04MB7646.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QixJslC6fmyqR8YEce5+vval+63NmuSdbQsa8E9bjskHu29htftxv2wBeU3B8b5oGY0/SVMmRhtdyPISqJsZgrSUV+A5Y8Red/OLmlaTGNbHcUaEw3DbP5hf8ELtqSktSSRn6oOPibhnR97pzjjjqakQYOHeQQ+3rYTfwgb2X8QdPV0eQGXe6hYRSlz4a+ovJrCIZYXS+sVWQcviaMQkEfON75+AdPWe5BalijJ7lBUS6MkezoiDyG3PQk7Bkdws4JObt0zNvDvNbBnkhjrfpyZLN//wud8ig+8pKT9+2bAT27r2FelrvkbnVjwjplKX8KxlQV+VKMnzzt5+GdH4axoyWsGUTwn0XnMhnQ0M04NLOX01pTboxSmh2PrJk22V45l7TdgZPb5cWEwARrf+M/TKFCTukAFwaxVp68RBtCPGA7KtIjCSTt2nsKNCNgwjOemK0LUF4cqF8fUJ/FjRDmHl1LYrTp5EP3XKvkxG6FIMZOQ2DFeics7uKuz60wm57xknbWc8L62SYqKM2gkYbM3tToyFe0V4sDc1k4pT6svkpJmqQ8dXYjbqFcjev267c7w4sHcC1CxEBtmp4sncHf1ZKAi3L9eVOKdBaD3WjYsCNTARRZxhHuwIjeNT+e2+Of4N3C5cTm0W4y7vjLVZqWI8CCdvVn3dHaRcjkhnwz33F3yLRj47PSCiPMQldQcmhURPQkeY2IzmEwNF90aUUCeJZ3TV+e410eMGEpgj6zg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5050.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(53546011)(186003)(6506007)(6512007)(2616005)(2906002)(4744005)(8936002)(5660300002)(66476007)(66946007)(8676002)(508600001)(110136005)(66556008)(6486002)(31686004)(86362001)(38100700002)(4326008)(316002)(36756003)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?afjoy7w4OwmGiY6/B+wl8e1ZUC/zdGKKQt4t1bBjrXE5fllCzPYy4ceO3z12?=
- =?us-ascii?Q?BunCHijXXbri84AVTs/qPxS20OR3zsD9LZ3243df4P3Ovp/UzmHPmIFTTPBA?=
- =?us-ascii?Q?Mw3uxvoIcNrS3lyKbN3/yt+CqgnInnGP677P4rTU7iLazIneJdIM3vq1IaRS?=
- =?us-ascii?Q?02umMGZLDPGrSIL7qj3cKEracryIpF9dyKmIXaw2sgpgAxaqhUvfJi1thgao?=
- =?us-ascii?Q?XX6KY/gIMzcZ3w/QKLbdKmtlrHEFmUFdJw0a1UT77c1oBQBjw6aKGjuveazC?=
- =?us-ascii?Q?E45nzZ9JhlUMZ0aJh9wbSgq2UkVHUwiE5orT9vkjxP9WEn7+cpx1HpJO+Oh9?=
- =?us-ascii?Q?aXuTpb7l5PUXMnpyW2SgymSUFyg7S3kMGbaZEPzsM1Kjl8jpQxwyrMAyojMb?=
- =?us-ascii?Q?tBsc2G5OHv9n5mJo6pa7eSlscPoWDnzW5lxwD4awkB5S9p5GPjc1lOXbK7xK?=
- =?us-ascii?Q?m8Yu9JXUFrr5kjsDB6hEkvPTj10Jeeyi4aBzWIFdkCD6aQDCddkvv24YQv0/?=
- =?us-ascii?Q?56oM4wAYCsfEFD/vmhXbvIzkenh+BgI9vLk7CZf9RYbQNxLTaEpZYjNtObZf?=
- =?us-ascii?Q?HfNHUP2XX3svanU1K5eWfgdOPpplPB3aGzCV0MasQBZHiswkoQ3el6fCpggN?=
- =?us-ascii?Q?ZozsxVvl9kRqYc1xXvIA8SesV/GYFkzJqTMB8f4MJ80vjBWvjTZiVNqQY632?=
- =?us-ascii?Q?gUwW5cw7AB/8oryUDxrQh27YXSYAa33j54vDmgfDqM1pGyquukevz7rTTdl5?=
- =?us-ascii?Q?TJwcNLEFz8+CoAltCQe0h018nAS7Q0Znj6B4pDC1HBnhoOL6OkcT9amtQpsH?=
- =?us-ascii?Q?bTE/5eGlNc0n2w1EWnyzsYcwW60ZIJIF4PdwdFD/2mJa+16/MosFEPFqfwH9?=
- =?us-ascii?Q?NlVpuco/Iff+nuz0EN3tLpVE1Yx8Ym2Ced9W9DJm1CwGfEWhVZLfvMYRVHeT?=
- =?us-ascii?Q?UZyGlT96jxY/MuJprFrMtLniakvGoe7cWbjXAhrabZ2SgceOyWezTeGa7CYo?=
- =?us-ascii?Q?m7JblFplVYh1sQ9NmVWEQV5ZbOr9u/nFb0aDSsa3yddt6gWuuxFRKsjbgsiA?=
- =?us-ascii?Q?m8Ak0YqwUXinPjjg6iNYd6kKJYz5nOoRgAJPDw5WKMEE0KwMOclrXY+fNQI1?=
- =?us-ascii?Q?nfroOgr964ye6pcV/6m0/L3NzXbqk7iGPOo07HXN2FO73mqQbREHadtylxPH?=
- =?us-ascii?Q?9iirjXhQcugy8+KfXWWySDlyRbK5KcXqm8oqUftXw0YdkkQaukeypoXvBsgZ?=
- =?us-ascii?Q?XNGvrjsPLmtvckj5JsZKwi8TJjPDinYtQuu2KWOSSJai305ZNcf/sYw2Rw7m?=
- =?us-ascii?Q?uwOGYrYce6ayoQ+wttZNfMNXe3g1TYaMww00/UuKPkIwCiedqGq4sVZ7TnG3?=
- =?us-ascii?Q?3OoGM8l8HHC95z8ysbTB+EC20tMaD3Wwu8MinkIvnquhFqXEHe5156rniuCQ?=
- =?us-ascii?Q?9ROQlw/lHr87ph3+rKFxs+t00q0oVtulP7pXH8yBxp4CT02101D9FbMnB4Qm?=
- =?us-ascii?Q?k/R1RyobAsT5grKzQOAZ8teWImI/QupglmGjxZdT8jswDmDAH9gMebF20cs+?=
- =?us-ascii?Q?4U6v2BqovgiWHjADgzM2HnOUuP7UOHYjObE0qvXo99PAxAL08enGj43XvKPi?=
- =?us-ascii?Q?vY50Re/C9tiKruIkrqgWLOkpCO6BxHcgZa4ZMhsXn56FvhG9yzIAikDWTEm8?=
- =?us-ascii?Q?c4zQe8jHRh8oLCNxTGOh8uaPNd4=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b80cc6b1-32bb-4172-8945-08d9eca083c4
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5050.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 14:20:40.1284
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PQ4W11VUPXC2hALJwtbU8GrFv9t3JR7Mb204rl4faaqe4sX167GTxn1+J/Mi5NVLJRkcitmWf0+ldj6vtA5TkQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7646
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209164500.8769-1-fmdefrancesco@gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,21 +64,58 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, Feb 09, 2022 at 05:45:00PM +0100, Fabio M. De Francesco wrote:
+> Commit 8c67d06f3fd9 ("usb: Link the ports to the connectors they are
+> attached to") creates a link to the USB Type-C connector for every new
+> port that is added when possible. If component_add() fails,
+> usb_hub_create_port_device() prints a warning but does not unregister
+> the device and does not return errors to the callers.
+> 
+> Syzbot reported a "WARNING in component_del()".
+> 
+> Fix this issue in usb_hub_create_port_device by calling device_unregister()
+> and returning the errors from component_add().
+> 
+> Reported-and-tested-by: syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
+> Fixes: 8c67d06f3fd9 ("usb: Link the ports to the connectors they are attached to")
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-On 10.02.22 15:17, Greg KH wrote:
-> On Thu, Feb 10, 2022 at 03:13:49PM +0100, Oliver Neukum wrote:
->>
->>> And isn't there a needed "Reported-by:" for this one as it came from a
->>> bug report?
->> Do we do these for reports by the kernel.org bugzilla?
-> We should, why not?
+FWIW:
 
-Hi,
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
+> ---
+> 
+> v1->v2: Move find_and_link_peer() soon after the 'if' test for "retval", 
+> 	as suggested by Heikki Krogerus with his review of v1.
+> 
+>  drivers/usb/core/port.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+> index c2bbf97a79be..d5bc36ca5b1f 100644
+> --- a/drivers/usb/core/port.c
+> +++ b/drivers/usb/core/port.c
+> @@ -602,11 +602,14 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
+>  		return retval;
+>  	}
+>  
+> -	find_and_link_peer(hub, port1);
+> -
+>  	retval = component_add(&port_dev->dev, &connector_ops);
+> -	if (retval)
+> +	if (retval) {
+>  		dev_warn(&port_dev->dev, "failed to add component\n");
+> +		device_unregister(&port_dev->dev);
+> +		return retval;
+> +	}
+> +
+> +	find_and_link_peer(hub, port1);
+>  
+>  	/*
+>  	 * Enable runtime pm and hold a refernce that hub_configure()
+> -- 
+> 2.34.1
 
-because it sort of implies that it was reported to a mailing list.
-If there is a bugzilla for it, shouldn't we reference it?
-
-=C2=A0=C2=A0=C2=A0 Regards
-=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
-
+-- 
+heikki
