@@ -2,65 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A394B1688
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Feb 2022 20:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 986FA4B174A
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Feb 2022 21:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbiBJTqY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Feb 2022 14:46:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48624 "EHLO
+        id S1344422AbiBJUyp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Feb 2022 15:54:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232904AbiBJTqW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Feb 2022 14:46:22 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD9325D1;
-        Thu, 10 Feb 2022 11:46:22 -0800 (PST)
+        with ESMTP id S245263AbiBJUyo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Feb 2022 15:54:44 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A08F1090
+        for <linux-usb@vger.kernel.org>; Thu, 10 Feb 2022 12:54:45 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id u3so7297514oiv.12
+        for <linux-usb@vger.kernel.org>; Thu, 10 Feb 2022 12:54:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644522382; x=1676058382;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uzy2kSSy/fcP4PGpMnT5ocmzeNzJHhEsZFk9PUmz+bY=;
-  b=DjfTqJ1K7bowUplgP22///638EuAYDRyOKo7n3yZxOiubE1iv+vAHlJP
-   QKiTlQAFbDwoQfGPHDaAj5r/6AhWqhHyVr8hQMLo35vJJP7rbMkEXIAoK
-   fe75OHajqLUbBejnibl+0S26xg2C3OSoMfLtvbauFVGma7y8BfKj4o041
-   o=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 10 Feb 2022 11:46:22 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 11:46:21 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 10 Feb 2022 11:46:21 -0800
-Received: from [10.110.35.184] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 10 Feb
- 2022 11:46:20 -0800
-Message-ID: <2d0fd690-4ab0-bc88-946d-c621792721d4@quicinc.com>
-Date:   Thu, 10 Feb 2022 11:46:15 -0800
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XLC7rhh5NWo/WWk0O+SWaGHHQvQbuSaZ+SOvjKjiyak=;
+        b=S/ZVi6aZogePykP4WzPvz135cApU38G9kkJk+rkiAEcoS/w2r//E8ItPqJc2GRWq+H
+         pQ6yPCFJMbtK6K8za2CPDTvWTaXGfNOIsIBi0MjmKEj3KJZxX5+4xNVARqUFkHTM4npU
+         yc1Ha0B6xY7JadBd1lr/z1PN14lVrcSRpRpEhDSsly/KTAK7E4nb1XZRLCe48o31/gbk
+         UBem2H6pF5kVE31MJwEo3gzshelyxhgQhO6ip0VogNXw7kj8Rwjhw08CxAzPzrvZQojd
+         lNwcJna8rK568xBSK+4uZFyOQqybmjnGIicz7OPSexn1AZuHP99R/wsymF4Dv0iM8fhc
+         q4aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XLC7rhh5NWo/WWk0O+SWaGHHQvQbuSaZ+SOvjKjiyak=;
+        b=4zNpn1/Gow0ehdlyqflsZ9vX7AQ3M5OJZ+8PPz6JL83i3tTExlx6yk/OBJNKhinM5k
+         0DszL67qzQ/5NbUma6LQMMXMBTm7XE3aBMzGS5KUWlVw2Fzqi2xI17ZRlTb9NyhflU88
+         Xxqjbn6TQLJAoXMpMRfkdV0hWn7v0Uq3qX0iuAkOr1WzI5cHqahSE5d90wBJOByrOWcT
+         Ya9uKps4oIyKORNrp4YfcxF9VliPM70Yqe9vL9K7z/WVQ4BPlPeLCt7Rjp0eARr4zkqC
+         WTQW+n7Izj3/axalYm1gaWAl4A/L4yIo3J1nX0jJftt4lSdlFBiOGx5KyCT2fDXr/i3+
+         qmwQ==
+X-Gm-Message-State: AOAM531F8P85QjiPrmM6lG7kzzi+O97pOkXet/OBrCxobZwLzvRPsQL4
+        DaxEl0xweq+r754cPeQWHCzmLw==
+X-Google-Smtp-Source: ABdhPJxc/ajzBm0o0PKtQ2wiTHPfpY7+clG0ZxhfX1lnt+A9CBRTQGEfc6eSIyduKTQAZi46f3TcVw==
+X-Received: by 2002:a05:6808:1b26:: with SMTP id bx38mr1833146oib.267.1644526484397;
+        Thu, 10 Feb 2022 12:54:44 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id d14sm8516012ooh.44.2022.02.10.12.54.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 12:54:43 -0800 (PST)
+Date:   Thu, 10 Feb 2022 12:56:59 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/2] drm: Add HPD state to
+ drm_connector_oob_hotplug_event()
+Message-ID: <YgV8GyK9G0gbWAaq@ripper>
+References: <20220208044328.588860-1-bjorn.andersson@linaro.org>
+ <YgJISIIacBnFyTLq@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH 1/3] usb: dwc3: Flush pending SETUP data during stop
- active xfers
-Content-Language: en-US
-To:     Jack Pham <quic_jackp@quicinc.com>
-CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <Thinh.Nguyen@synopsys.com>
-References: <20220203080017.27339-1-quic_wcheng@quicinc.com>
- <20220203080017.27339-2-quic_wcheng@quicinc.com>
- <20220208173355.GB13801@jackp-linux.qualcomm.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <20220208173355.GB13801@jackp-linux.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgJISIIacBnFyTLq@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,258 +86,173 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jack,
+On Tue 08 Feb 02:39 PST 2022, Greg Kroah-Hartman wrote:
 
-On 2/8/2022 9:33 AM, Jack Pham wrote:
-> Hi Wesley,
+> On Mon, Feb 07, 2022 at 08:43:27PM -0800, Bjorn Andersson wrote:
+> > In some implementations, such as the Qualcomm platforms, the display
+> > driver has no way to query the current HPD state and as such it's
+> > impossible to distinguish between disconnect and attention events.
+> > 
+> > Add a parameter to drm_connector_oob_hotplug_event() to pass the HPD
+> > state.
+> > 
+> > Also push the test for unchanged state in the displayport altmode driver
+> > into the i915 driver, to allow other drivers to act upon each update.
+> > 
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > ---
+> > 
+> > Note that the Intel driver has only been compile tested with this patch.
+> > 
+> >  drivers/gpu/drm/drm_connector.c          |  6 ++++--
+> >  drivers/gpu/drm/i915/display/intel_dp.c  | 14 +++++++++++---
+> >  drivers/gpu/drm/i915/i915_drv.h          |  3 +++
+> >  drivers/usb/typec/altmodes/displayport.c |  9 ++-------
+> >  include/drm/drm_connector.h              |  5 +++--
+> >  5 files changed, 23 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+> > index a50c82bc2b2f..ad7295597c0f 100644
+> > --- a/drivers/gpu/drm/drm_connector.c
+> > +++ b/drivers/gpu/drm/drm_connector.c
+> > @@ -2825,6 +2825,7 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
+> >  /**
+> >   * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
+> >   * @connector_fwnode: fwnode_handle to report the event on
+> > + * @hpd_state: number of data lanes available
 > 
-> On Thu, Feb 03, 2022 at 12:00:15AM -0800, Wesley Cheng wrote:
->> While running the pullup disable sequence, if there are pending SETUP
->> transfers stored in the controller, then the endxfer commands will
+> "number"?
 > 
-> Should mention specifically that the endxfer commands *on non-EP0*
-> endpoints will time out.
+> >   *
+> >   * On some hardware a hotplug event notification may come from outside the display
+> >   * driver / device. An example of this is some USB Type-C setups where the hardware
+> > @@ -2834,7 +2835,8 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
+> >   * This function can be used to report these out-of-band events after obtaining
+> >   * a drm_connector reference through calling drm_connector_find_by_fwnode().
+> >   */
+> > -void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
+> > +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
+> > +				     bool hpd_state)
 > 
-Thanks for the feedback and initial review.  Done.
+> This is a boolean, how can it be a number?
 > 
-> Also let's use the same terminology as defined by the macros, i.e.
-> 
-> endxfer/ENDXFER -> ENDTRANSFER
-> STARTXFER -> STARTTRANSFER
-> 
->> fail w/ ETIMEDOUT.  As a suggestion from SNPS, in order to drain the
->> SETUP packets, SW needs to issue a STARTXFER command.  After issuing
->                                                     ^^^^ on EP0.
-> 
-Sure will add explicit EP0 statement.
 
->> the STARTXFER, and retrying the ENDXFER, the command should succeed.
->> Else, if the endpoints are not properly stopped, the controller halt
->> sequence will fail as well.
->>
->> One limitation is that the current logic will drop the SETUP data
->> being received (ie dropping the SETUP packet), however, it should be
->> acceptable in the pullup disable case, as the device is eventually
->> going to disconnect from the host.
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->> ---
->>  drivers/usb/dwc3/core.h   |  7 +++++++
->>  drivers/usb/dwc3/ep0.c    | 21 ++++++++++++--------
->>  drivers/usb/dwc3/gadget.c | 42 ++++++++++++++++++++++++++++++++++-----
->>  3 files changed, 57 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->> index e1cc3f7398fb..a124694c0038 100644
->> --- a/drivers/usb/dwc3/core.h
->> +++ b/drivers/usb/dwc3/core.h
->> @@ -1546,6 +1546,8 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
->>  int dwc3_send_gadget_generic_command(struct dwc3 *dwc, unsigned int cmd,
->>  		u32 param);
->>  void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc);
->> +void dwc3_ep0_stall_and_restart(struct dwc3 *dwc);
->> +void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep);
->>  #else
->>  static inline int dwc3_gadget_init(struct dwc3 *dwc)
->>  { return 0; }
->> @@ -1567,6 +1569,11 @@ static inline int dwc3_send_gadget_generic_command(struct dwc3 *dwc,
->>  { return 0; }
->>  static inline void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc)
->>  { }
->> +static inline void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
->> +{ }
->> +static inline void dwc3_ep0_end_control_data(struct dwc3 *dwc,
->> +					     struct dwc3_ep *dep)
->> +{ }
->>  #endif
->>  
->>  #if IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
->> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
->> index 658739410992..eb677b888610 100644
->> --- a/drivers/usb/dwc3/ep0.c
->> +++ b/drivers/usb/dwc3/ep0.c
->> @@ -197,7 +197,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
->>  	int				ret;
->>  
->>  	spin_lock_irqsave(&dwc->lock, flags);
->> -	if (!dep->endpoint.desc || !dwc->pullups_connected) {
->> +	if (!dep->endpoint.desc || !dwc->pullups_connected || !dwc->connected) {
->>  		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
->>  				dep->name);
->>  		ret = -ESHUTDOWN;
->> @@ -218,19 +218,21 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
->>  	return ret;
->>  }
->>  
->> -static void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
->> +void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
->>  {
->>  	struct dwc3_ep		*dep;
->>  
->>  	/* reinitialize physical ep1 */
->>  	dep = dwc->eps[1];
->>  	dep->flags = DWC3_EP_ENABLED;
->> +	dep->trb_enqueue = 0;
->>  
->>  	/* stall is always issued on EP0 */
->>  	dep = dwc->eps[0];
->>  	__dwc3_gadget_ep_set_halt(dep, 1, false);
->>  	dep->flags = DWC3_EP_ENABLED;
->>  	dwc->delayed_status = false;
->> +	dep->trb_enqueue = 0;
->>  
->>  	if (!list_empty(&dep->pending_list)) {
->>  		struct dwc3_request	*req;
->> @@ -240,7 +242,9 @@ static void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
->>  	}
->>  
->>  	dwc->ep0state = EP0_SETUP_PHASE;
->> -	dwc3_ep0_out_start(dwc);
->> +	complete(&dwc->ep0_in_setup);
->> +	if (dwc->softconnect)
->> +		dwc3_ep0_out_start(dwc);
->>  }
->>  
->>  int __dwc3_gadget_ep0_set_halt(struct usb_ep *ep, int value)
->> @@ -272,8 +276,6 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
->>  	struct dwc3_ep			*dep;
->>  	int				ret;
->>  
->> -	complete(&dwc->ep0_in_setup);
->> -
->>  	dep = dwc->eps[0];
->>  	dwc3_ep0_prepare_one_trb(dep, dwc->ep0_trb_addr, 8,
->>  			DWC3_TRBCTL_CONTROL_SETUP, false);
->> @@ -922,7 +924,9 @@ static void dwc3_ep0_complete_status(struct dwc3 *dwc,
->>  		dwc->setup_packet_pending = true;
->>  
->>  	dwc->ep0state = EP0_SETUP_PHASE;
->> -	dwc3_ep0_out_start(dwc);
->> +	complete(&dwc->ep0_in_setup);
->> +	if (dwc->softconnect)
->> +		dwc3_ep0_out_start(dwc);
->>  }
->>  
->>  static void dwc3_ep0_xfer_complete(struct dwc3 *dwc,
->> @@ -1073,7 +1077,7 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
->>  	__dwc3_ep0_do_control_status(dwc, dwc->eps[direction]);
->>  }
->>  
->> -static void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
->> +void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
->>  {
->>  	struct dwc3_gadget_ep_cmd_params params;
->>  	u32			cmd;
->> @@ -1083,7 +1087,8 @@ static void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
->>  		return;
->>  
->>  	cmd = DWC3_DEPCMD_ENDTRANSFER;
->> -	cmd |= DWC3_DEPCMD_CMDIOC;
->> +	cmd |= dwc->connected ? 0 : DWC3_DEPCMD_HIPRI_FORCERM;
->> +	cmd |= dwc->connected ? DWC3_DEPCMD_CMDIOC : 0;
-> 
-> Can this be combined?
-> 
-Agreed. Will combine them.
+The kerneldoc wasn't appropriately updated as this went from being
+"number of data lanes" to "the hot plug detect (hpd) state".
 
-Thanks
-Wesley Cheng
-
-> 	cmd |= dwc->connected ? DWC3_DEPCMD_CMDIOC : DWC3_DEPCMD_HIPRI_FORCERM;
+> And having a "flag" like this is a pain, how do you know what the
+> parameter really means?
 > 
->>  	cmd |= DWC3_DEPCMD_PARAM(dep->resource_index);
->>  	memset(&params, 0, sizeof(params));
->>  	ret = dwc3_send_gadget_ep_cmd(dep, cmd, &params);
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 520031ba38aa..19b8d837e9d0 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -885,12 +885,13 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
->>  		reg |= DWC3_DALEPENA_EP(dep->number);
->>  		dwc3_writel(dwc->regs, DWC3_DALEPENA, reg);
->>  
->> -		if (usb_endpoint_xfer_control(desc))
->> -			goto out;
->> -
->>  		/* Initialize the TRB ring */
->>  		dep->trb_dequeue = 0;
->>  		dep->trb_enqueue = 0;
->> +
->> +		if (usb_endpoint_xfer_control(desc))
->> +			goto out;
->> +
->>  		memset(dep->trb_pool, 0,
->>  		       sizeof(struct dwc3_trb) * DWC3_TRB_NUM);
->>  
->> @@ -2463,7 +2464,8 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>  	 * Per databook, when we want to stop the gadget, if a control transfer
->>  	 * is still in process, complete it and get the core into setup phase.
->>  	 */
->> -	if (!is_on && dwc->ep0state != EP0_SETUP_PHASE) {
->> +	if ((!is_on && (dwc->ep0state != EP0_SETUP_PHASE ||
->> +	     dwc->ep0_next_event != DWC3_EP0_COMPLETE))) {
->>  		reinit_completion(&dwc->ep0_in_setup);
->>  
->>  		ret = wait_for_completion_timeout(&dwc->ep0_in_setup,
->> @@ -2506,6 +2508,17 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>  		u32 count;
->>  
->>  		dwc->connected = false;
->> +
->> +		/*
->> +		 * Ensure no pending data/setup stages, and disable ep0 to
->> +		 * block further EP0 transactions before stopping pending
->> +		 * transfers.
->> +		 */
->> +		dwc3_ep0_end_control_data(dwc, dwc->eps[1]);
->> +		dwc3_ep0_stall_and_restart(dwc);
->> +		__dwc3_gadget_ep_disable(dwc->eps[0]);
->> +		__dwc3_gadget_ep_disable(dwc->eps[1]);
->> +
->>  		/*
->>  		 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
->>  		 * Section 4.1.8 Table 4-7, it states that for a device-initiated
->> @@ -3587,8 +3600,10 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
->>  	bool interrupt)
->>  {
->>  	struct dwc3_gadget_ep_cmd_params params;
->> +	struct dwc3 *dwc = dep->dwc;
->>  	u32 cmd;
->>  	int ret;
->> +	int retries = 1;
->>  
->>  	if (!(dep->flags & DWC3_EP_TRANSFER_STARTED) ||
->>  	    (dep->flags & DWC3_EP_END_TRANSFER_PENDING))
->> @@ -3620,7 +3635,7 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
->>  	 *
->>  	 * This mode is NOT available on the DWC_usb31 IP.
->>  	 */
->> -
->> +retry:
->>  	cmd = DWC3_DEPCMD_ENDTRANSFER;
->>  	cmd |= force ? DWC3_DEPCMD_HIPRI_FORCERM : 0;
->>  	cmd |= interrupt ? DWC3_DEPCMD_CMDIOC : 0;
->> @@ -3628,6 +3643,23 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
->>  	memset(&params, 0, sizeof(params));
->>  	ret = dwc3_send_gadget_ep_cmd(dep, cmd, &params);
->>  	WARN_ON_ONCE(ret);
->> +	if (ret == -ETIMEDOUT) {
->> +		if (!dwc->connected) {
->> +			/*
->> +			 * While the controller is in an active setup/control
->> +			 * transfer, the HW is unable to service other eps
->> +			 * potentially leading to an endxfer command timeout.
->> +			 * It was recommended to ensure that there are no
->> +			 * pending/cached setup packets stored in internal
->> +			 * memory.  Only way to achieve this is to issue another
->> +			 * start transfer, and retry.
->> +			 */
->> +			if (retries--) {
->> +				dwc3_ep0_out_start(dwc);
->> +				goto retry;
->> +			}
->> +		}
->> +	}
->>  	dep->resource_index = 0;
->>  
->>  	if (!interrupt)
+
+You're right, "state" isn't a boolean property, let's rename it
+"hpd_high" to clarify it.
+
+> >  {
+> >  	struct drm_connector *connector;
+> >  
+> > @@ -2843,7 +2845,7 @@ void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
+> >  		return;
+> >  
+> >  	if (connector->funcs->oob_hotplug_event)
+> > -		connector->funcs->oob_hotplug_event(connector);
+> > +		connector->funcs->oob_hotplug_event(connector, hpd_state);
+> >  
+> >  	drm_connector_put(connector);
+> >  }
+> > diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
+> > index 146b83916005..00520867d37b 100644
+> > --- a/drivers/gpu/drm/i915/display/intel_dp.c
+> > +++ b/drivers/gpu/drm/i915/display/intel_dp.c
+> > @@ -4816,15 +4816,23 @@ static int intel_dp_connector_atomic_check(struct drm_connector *conn,
+> >  	return intel_modeset_synced_crtcs(state, conn);
+> >  }
+> >  
+> > -static void intel_dp_oob_hotplug_event(struct drm_connector *connector)
+> > +static void intel_dp_oob_hotplug_event(struct drm_connector *connector, bool hpd_state)
+> >  {
+> >  	struct intel_encoder *encoder = intel_attached_encoder(to_intel_connector(connector));
+> >  	struct drm_i915_private *i915 = to_i915(connector->dev);
+> > +	bool need_work = false;
+> >  
+> >  	spin_lock_irq(&i915->irq_lock);
+> > -	i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
+> > +	if (hpd_state != i915->hotplug.oob_hotplug_state) {
+> > +		i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
+> > +
+> > +		i915->hotplug.oob_hotplug_state = hpd_state;
+> > +		need_work = true;
+> > +	}
+> >  	spin_unlock_irq(&i915->irq_lock);
+> > -	queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
+> > +
+> > +	if (need_work)
+> > +		queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
+> >  }
+> >  
+> >  static const struct drm_connector_funcs intel_dp_connector_funcs = {
+> > diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
+> > index 8c1706fd81f9..543ebf1cfcf4 100644
+> > --- a/drivers/gpu/drm/i915/i915_drv.h
+> > +++ b/drivers/gpu/drm/i915/i915_drv.h
+> > @@ -149,6 +149,9 @@ struct i915_hotplug {
+> >  	/* Whether or not to count short HPD IRQs in HPD storms */
+> >  	u8 hpd_short_storm_enabled;
+> >  
+> > +	/* Last state reported by oob_hotplug_event */
+> > +	bool oob_hotplug_state;
+> > +
+> >  	/*
+> >  	 * if we get a HPD irq from DP and a HPD irq from non-DP
+> >  	 * the non-DP HPD could block the workqueue on a mode config
+> > diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> > index c1d8c23baa39..a4596be4d34a 100644
+> > --- a/drivers/usb/typec/altmodes/displayport.c
+> > +++ b/drivers/usb/typec/altmodes/displayport.c
+> > @@ -59,7 +59,6 @@ struct dp_altmode {
+> >  	struct typec_displayport_data data;
+> >  
+> >  	enum dp_state state;
+> > -	bool hpd;
+> >  
+> >  	struct mutex lock; /* device lock */
+> >  	struct work_struct work;
+> > @@ -143,10 +142,7 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
+> >  		if (!ret)
+> >  			dp->state = DP_STATE_CONFIGURE;
+> >  	} else {
+> > -		if (dp->hpd != hpd) {
+> > -			drm_connector_oob_hotplug_event(dp->connector_fwnode);
+> > -			dp->hpd = hpd;
+> > -		}
+> > +		drm_connector_oob_hotplug_event(dp->connector_fwnode, hpd);
+> >  	}
+> >  
+> >  	return ret;
+> > @@ -573,8 +569,7 @@ void dp_altmode_remove(struct typec_altmode *alt)
+> >  	cancel_work_sync(&dp->work);
+> >  
+> >  	if (dp->connector_fwnode) {
+> > -		if (dp->hpd)
+> > -			drm_connector_oob_hotplug_event(dp->connector_fwnode);
+> > +		drm_connector_oob_hotplug_event(dp->connector_fwnode, false);
+> 
+> See, what does "false" here mean?
+> 
+> Name the function for what it does, do not have random flags as
+> parameters, that makes it impossible to understand what the code is
+> doing when you are reading it, without having to jump around and figure
+> out what the flags are saying.
+> 
+> And here they just don't even seem to be right :(
+> 
+
+Both the old and new code will signal to the DRM driver that the cable
+was removed, the change is that we're carrying the level in the call
+rather than just indicating that the state has changed.
+
+We could introduce some HPD_HIGH/HPD_LOW defines to make it easier to
+read. But the various places I'm looking at just represented the hpd
+state as a bool.
+
+Regards,
+Bjorn
