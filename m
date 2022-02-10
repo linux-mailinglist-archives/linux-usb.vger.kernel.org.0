@@ -2,155 +2,195 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1954B040A
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Feb 2022 04:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C97E4B0597
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Feb 2022 06:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232934AbiBJDnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Feb 2022 22:43:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33222 "EHLO
+        id S234191AbiBJFnI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Feb 2022 00:43:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbiBJDnN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Feb 2022 22:43:13 -0500
-X-Greylist: delayed 914 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 19:43:13 PST
-Received: from m13101.mail.163.com (m13101.mail.163.com [220.181.13.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B29DC23BF6;
-        Wed,  9 Feb 2022 19:43:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=c85HH
-        iv/NNEvYmRAHu1FxIBJCC6ptXYLNbFxD5zqy/Y=; b=XF+4k8ofwDlWT6dL+rV3t
-        d8peBguI8sr7WxTMIRYVKGthPHWNoCQhGFUUZB7oPDCdaCYDPp67b4RSdTzyuOCK
-        g7UL043+SmtRAMBQvgRQ1sPOBrdhkU9h9YY8La5WoV0bDn5vVaFnIRpUs8UqaqW5
-        iUL95OjSLZngWLPJ5whm2c=
-Received: from slark_xiao$163.com ( [112.97.49.191] ) by
- ajax-webmail-wmsvr101 (Coremail) ; Thu, 10 Feb 2022 11:27:45 +0800 (CST)
-X-Originating-IP: [112.97.49.191]
-Date:   Thu, 10 Feb 2022 11:27:45 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     "Johan Hovold" <johan@kernel.org>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH] USB: serial: option: add support for DW5829e
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <YgPPNVzyg7Gypzv9@hovoldconsulting.com>
-References: <20220209031535.9668-1-slark_xiao@163.com>
- <YgPPNVzyg7Gypzv9@hovoldconsulting.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        with ESMTP id S234435AbiBJFmM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Feb 2022 00:42:12 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E2B2604
+        for <linux-usb@vger.kernel.org>; Wed,  9 Feb 2022 21:41:26 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id h8so5088339lfj.10
+        for <linux-usb@vger.kernel.org>; Wed, 09 Feb 2022 21:41:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7k/rFBBX963wt54wcPAs8b7rJd9JaUNfh769iSm1U8Y=;
+        b=SAbivp1NoqZ+jC7hIWAFn/QvNwIVuqPg5wn+dvKyxhzLbhFzF9i7HBvVFVycMNtogf
+         Oh0g/UkUaa4pg28Kpb9GzOZe8Eg0olbklDug29n602qprInmQpa7bKb3uCBELPLRcBNx
+         GvEDbQtkxm1DyBdSqLvBmiqsk1/4RjiNhB4BUyMIQh55eaXC4XZqVtqiJQVI5ezxWZnl
+         EDlhBZCZJapIRS8pzdCOiclKMPXHyB/GVoUs9vs4vqbDQZJcWequ0evn3idMFnCb5oHh
+         dsb8IHg84PmTycgNxR5/qTWcAYrZzSI6OgaVeAhtZCcNuPskC07gIhc49spuBVZP57V6
+         5g3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7k/rFBBX963wt54wcPAs8b7rJd9JaUNfh769iSm1U8Y=;
+        b=D4GWCahkfvhIL/5bJhwldKj9AuRYO0QUCi9Uzam844pmkMcN3BHpZDw6U00hCOraCe
+         VGALKmWgLET1yPI8wzvDYwdvekdcAor87TxEp5Kaq27pNbL1d4fjmqqaq9AlhM5k8bRU
+         09DIC/33y9/R1+/1Ydzk9qRTlwO3Bw0SEhyZWRffeSYdTZGoCTBwpNLM5kEMSvxJmsUw
+         JUQ5+4hjmcGFL8zHvs+V3kzNivIrA5mS1B04EzqCdEKRCBRg1BNLroyzpahbUQlDQqsp
+         jmwDFYUTT+V8YVQ0hxIRX7UnhkHwG0yLmD9UxKBXeu7hiKDx4RlR/9DQ1Wqan8F8O2VL
+         ZCFw==
+X-Gm-Message-State: AOAM531hG6zXp2w2VcCwaue2yx1n65Y9rOIYfneU3OBvkVrByq/8EIP5
+        P7WIBFjOhP8kLeif3a6th+Tyo/biBk00lQ==
+X-Google-Smtp-Source: ABdhPJySQQj+pLwbKSks3BT0dOd89zXedOzQWsXQWO95AjxsRdK2mrf12hXPEZYYr9x6oYzdfHdmHg==
+X-Received: by 2002:a19:dc4b:: with SMTP id f11mr4339709lfj.152.1644471684997;
+        Wed, 09 Feb 2022 21:41:24 -0800 (PST)
+Received: from [159.224.14.39] ([159.224.14.39])
+        by smtp.gmail.com with ESMTPSA id f11sm987171lfh.69.2022.02.09.21.41.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 21:41:24 -0800 (PST)
+Message-ID: <02efa491-39fe-e4f3-d617-a6f17ceba6a5@gmail.com>
+Date:   Thu, 10 Feb 2022 07:41:22 +0200
 MIME-Version: 1.0
-Message-ID: <62feaf3.248f.17ee1ac3017.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: ZcGowACXTmkyhgRizC8jAA--.29194W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiow+jZFUMa6bjEgACsM
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] Revert "USB: serial: ch341: add new Product ID for
+ CH341A"
+Content-Language: en-US-large
+To:     Johan Hovold <johan@kernel.org>,
+        Jan-Niklas Burfeind <kernel@aiyionpri.me>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        Frank A Kingswood <frank@kingswood-consulting.co.uk>,
+        Frank Zago <frank@zago.net>
+References: <20220207000822.697343-1-dimich.dmb@gmail.com>
+ <YgJHRKQHQheKTwjU@kroah.com> <6df2c9e6-8757-d5e4-0c27-d47f53bee2e1@gmail.com>
+ <YgPNK1v541ohUMtv@hovoldconsulting.com>
+From:   Dmytro Bagrii <dimich.dmb@gmail.com>
+In-Reply-To: <YgPNK1v541ohUMtv@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-CgpBdCAyMDIyLTAyLTA5IDIyOjI3OjAxLCAiSm9oYW4gSG92b2xkIiA8am9oYW5Aa2VybmVsLm9y
-Zz4gd3JvdGU6Cgo+T24gV2VkLCBGZWIgMDksIDIwMjIgYXQgMTE6MTU6MzVBTSArMDgwMCwgU2xh
-cmsgWGlhbyB3cm90ZToKPj4gRGVsbCBEVzU4MjllIHNhbWUgYXMgRFc1ODIxZSBleGNlcHQgQ0FU
-IGxldmVsLgo+PiBEVzU4MjFlIHN1cHBvcnRzIENBVDE2IGJ1dCBEVzU4MjllIHN1cHBvcnRzIENB
-VDkuCj4+IFRoZXJlIGFyZSAyIHR5cGVzIHByb2R1Y3Qgb2YgRFc1ODI5ZTogbm9ybWFsIGFuZCBl
-U0lNLgo+PiBTbyB3ZSB3aWxsIGFkZCAyIFBJRCBmb3IgRFc1ODI5ZS4KPj4gQW5kIGZvciBlYWNo
-IFBJRCwgaXQgc3VwcG9ydCBNQklNIG9yIFJNTkVULgo+PiBMZXQncyBzZWUgdGVzdCBldmlkZW5j
-ZSBhcyBiZWxvdzoKPj4gCj4+IERXNTgyOWUgTUJJTSBtb2RlOgo+PiBUOiAgQnVzPTA0IExldj0w
-MSBQcm50PTAxIFBvcnQ9MDEgQ250PTAxIERldiM9ICA0IFNwZD01MDAwIE14Q2g9IDAKPj4gRDog
-IFZlcj0gMy4xMCBDbHM9ZWYobWlzYyApIFN1Yj0wMiBQcm90PTAxIE14UFM9IDkgI0NmZ3M9ICAy
-Cj4+IFA6ICBWZW5kb3I9NDEzYyBQcm9kSUQ9ODFlNiBSZXY9MDMuMTgKPj4gUzogIE1hbnVmYWN0
-dXJlcj1EZWxsIEluYy4KPj4gUzogIFByb2R1Y3Q9RFc1ODI5ZSBTbmFwZHJhZ29uIFgyMCBMVEUK
-Pj4gUzogIFNlcmlhbE51bWJlcj0wMTIzNDU2Nzg5QUJDREVGCj4+IEM6ICAjSWZzPSA3IENmZyM9
-IDIgQXRyPWEwIE14UHdyPTg5Nm1BCj4+IEk6ICBJZiM9MHgwIEFsdD0gMCAjRVBzPSAxIENscz0w
-Mihjb21tYykgU3ViPTBlIFByb3Q9MDAgRHJpdmVyPWNkY19tYmltCj4+IEk6ICBJZiM9MHgxIEFs
-dD0gMSAjRVBzPSAyIENscz0wYShkYXRhICkgU3ViPTAwIFByb3Q9MDIgRHJpdmVyPWNkY19tYmlt
-Cj4+IEk6ICBJZiM9MHgyIEFsdD0gMCAjRVBzPSAzIENscz1mZih2ZW5kLikgU3ViPTAwIFByb3Q9
-MDAgRHJpdmVyPW9wdGlvbgo+PiBJOiAgSWYjPTB4MyBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVu
-ZC4pIFN1Yj0wMCBQcm90PTAwIERyaXZlcj1vcHRpb24KPj4gSTogIElmIz0weDQgQWx0PSAwICNF
-UHM9IDMgQ2xzPWZmKHZlbmQuKSBTdWI9MDAgUHJvdD0wMCBEcml2ZXI9b3B0aW9uCj4+IEk6ICBJ
-ZiM9MHg1IEFsdD0gMCAjRVBzPSAyIENscz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYgRHJpdmVy
-PW9wdGlvbgo+PiBJOiAgSWYjPTB4NiBBbHQ9IDAgI0VQcz0gMSBDbHM9ZmYodmVuZC4pIFN1Yj1m
-ZiBQcm90PWZmIERyaXZlcj0obm9uZSkKPj4gCj4+IERXNTgyOWUgUk1ORVQgbW9kZToKPj4gVDog
-IEJ1cz0wNCBMZXY9MDEgUHJudD0wMSBQb3J0PTAxIENudD0wMSBEZXYjPSAgNSBTcGQ9NTAwMCBN
-eENoPSAwCj4+IEQ6ICBWZXI9IDMuMTAgQ2xzPWVmKG1pc2MgKSBTdWI9MDIgUHJvdD0wMSBNeFBT
-PSA5ICNDZmdzPSAgMQo+PiBQOiAgVmVuZG9yPTQxM2MgUHJvZElEPTgxZTYgUmV2PTAzLjE4Cj4+
-IFM6ICBNYW51ZmFjdHVyZXI9RGVsbCBJbmMuCj4+IFM6ICBQcm9kdWN0PURXNTgyOWUgU25hcGRy
-YWdvbiBYMjAgTFRFCj4+IFM6ICBTZXJpYWxOdW1iZXI9MDEyMzQ1Njc4OUFCQ0RFRgo+PiBDOiAg
-I0lmcz0gNiBDZmcjPSAxIEF0cj1hMCBNeFB3cj04OTZtQQo+PiBJOiAgSWYjPTB4MCBBbHQ9IDAg
-I0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj1mZiBQcm90PWZmIERyaXZlcj1xbWlfd3dhbgo+PiBJ
-OiAgSWYjPTB4MSBBbHQ9IDAgI0VQcz0gMSBDbHM9MDMoSElEICApIFN1Yj0wMCBQcm90PTAwIERy
-aXZlcj11c2JoaWQKPj4gSTogIElmIz0weDIgQWx0PSAwICNFUHM9IDMgQ2xzPWZmKHZlbmQuKSBT
-dWI9MDAgUHJvdD0wMCBEcml2ZXI9b3B0aW9uCj4+IEk6ICBJZiM9MHgzIEFsdD0gMCAjRVBzPSAz
-IENscz1mZih2ZW5kLikgU3ViPTAwIFByb3Q9MDAgRHJpdmVyPW9wdGlvbgo+PiBJOiAgSWYjPTB4
-NCBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj0wMCBQcm90PTAwIERyaXZlcj1vcHRp
-b24KPj4gSTogIElmIz0weDUgQWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYgUHJv
-dD1mZiBEcml2ZXI9b3B0aW9uCj4+IAo+PiBEVzU4MjllLWVTSU0gTUJJTSBtb2RlOgo+PiBUOiAg
-QnVzPTA0IExldj0wMSBQcm50PTAxIFBvcnQ9MDEgQ250PTAxIERldiM9ICA2IFNwZD01MDAwIE14
-Q2g9IDAKPj4gRDogIFZlcj0gMy4xMCBDbHM9ZWYobWlzYyApIFN1Yj0wMiBQcm90PTAxIE14UFM9
-IDkgI0NmZ3M9ICAyCj4+IFA6ICBWZW5kb3I9NDEzYyBQcm9kSUQ9ODFlNCBSZXY9MDMuMTgKPj4g
-UzogIE1hbnVmYWN0dXJlcj1EZWxsIEluYy4KPj4gUzogIFByb2R1Y3Q9RFc1ODI5ZS1lU0lNIFNu
-YXBkcmFnb24gWDIwIExURQo+PiBTOiAgU2VyaWFsTnVtYmVyPTAxMjM0NTY3ODlBQkNERUYKPj4g
-QzogICNJZnM9IDcgQ2ZnIz0gMiBBdHI9YTAgTXhQd3I9ODk2bUEKPj4gSTogIElmIz0weDAgQWx0
-PSAwICNFUHM9IDEgQ2xzPTAyKGNvbW1jKSBTdWI9MGUgUHJvdD0wMCBEcml2ZXI9Y2RjX21iaW0K
-Pj4gSTogIElmIz0weDEgQWx0PSAxICNFUHM9IDIgQ2xzPTBhKGRhdGEgKSBTdWI9MDAgUHJvdD0w
-MiBEcml2ZXI9Y2RjX21iaW0KPj4gSTogIElmIz0weDIgQWx0PSAwICNFUHM9IDMgQ2xzPWZmKHZl
-bmQuKSBTdWI9MDAgUHJvdD0wMCBEcml2ZXI9b3B0aW9uCj4+IEk6ICBJZiM9MHgzIEFsdD0gMCAj
-RVBzPSAzIENscz1mZih2ZW5kLikgU3ViPTAwIFByb3Q9MDAgRHJpdmVyPW9wdGlvbgo+PiBJOiAg
-SWYjPTB4NCBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj0wMCBQcm90PTAwIERyaXZl
-cj1vcHRpb24KPj4gSTogIElmIz0weDUgQWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9
-ZmYgUHJvdD1mZiBEcml2ZXI9b3B0aW9uCj4+IEk6ICBJZiM9MHg2IEFsdD0gMCAjRVBzPSAxIENs
-cz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYgRHJpdmVyPShub25lKQo+PiAKPj4gRFc1ODI5ZS1l
-U0lNIFJNTkVUIG1vZGU6Cj4+IFQ6ICBCdXM9MDQgTGV2PTAxIFBybnQ9MDEgUG9ydD0wMSBDbnQ9
-MDEgRGV2Iz0gIDcgU3BkPTUwMDAgTXhDaD0gMAo+PiBEOiAgVmVyPSAzLjEwIENscz1lZihtaXNj
-ICkgU3ViPTAyIFByb3Q9MDEgTXhQUz0gOSAjQ2Zncz0gIDEKPj4gUDogIFZlbmRvcj00MTNjIFBy
-b2RJRD04MWU0IFJldj0wMy4xOAo+PiBTOiAgTWFudWZhY3R1cmVyPURlbGwgSW5jLgo+PiBTOiAg
-UHJvZHVjdD1EVzU4MjllLWVTSU0gU25hcGRyYWdvbiBYMjAgTFRFCj4+IFM6ICBTZXJpYWxOdW1i
-ZXI9MDEyMzQ1Njc4OUFCQ0RFRgo+PiBDOiAgI0lmcz0gNiBDZmcjPSAxIEF0cj1hMCBNeFB3cj04
-OTZtQQo+PiBJOiAgSWYjPTB4MCBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj1mZiBQ
-cm90PWZmIERyaXZlcj1xbWlfd3dhbgo+PiBJOiAgSWYjPTB4MSBBbHQ9IDAgI0VQcz0gMSBDbHM9
-MDMoSElEICApIFN1Yj0wMCBQcm90PTAwIERyaXZlcj11c2JoaWQKPj4gSTogIElmIz0weDIgQWx0
-PSAwICNFUHM9IDMgQ2xzPWZmKHZlbmQuKSBTdWI9MDAgUHJvdD0wMCBEcml2ZXI9b3B0aW9uCj4+
-IEk6ICBJZiM9MHgzIEFsdD0gMCAjRVBzPSAzIENscz1mZih2ZW5kLikgU3ViPTAwIFByb3Q9MDAg
-RHJpdmVyPW9wdGlvbgo+PiBJOiAgSWYjPTB4NCBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4p
-IFN1Yj0wMCBQcm90PTAwIERyaXZlcj1vcHRpb24KPj4gSTogIElmIz0weDUgQWx0PSAwICNFUHM9
-IDIgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYgUHJvdD1mZiBEcml2ZXI9b3B0aW9uCj4+IAo+PiBCVFcs
-IHRoZSBpbnRlcmZhY2UgMHg2IG9mIE1CSU0gbW9kZSBpcyBHTlNTIHBvcnQsIHdoaWNoIG5vdCBz
-YW1lIGFzIE5NRUEKPj4gcG9ydC4gU28gaXQncyBiYW5uZWQgZnJvbSBzZXJpYWwgb3B0aW9uIGRy
-aXZlci4KPj4gVGhlIHJlbWFpbmluZyBpbnRlcmZhY2VzIDB4Mi0weDUgYXJlOiBNT0RFTSwgTU9E
-RU0sIE5NRUEsIERJQUcuCj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBTbGFyayBYaWFvIDxzbGFya194
-aWFvQDE2My5jb20+Cj4KPlRoYW5rcyBmb3IgcHJvdmlkaW5nIGFsbCB0aGUgbmVjZXNzYXJ5IGRl
-dGFpbHMuCj4KPj4gLS0tCj4+ICBkcml2ZXJzL3VzYi9zZXJpYWwvb3B0aW9uLmMgfCA2ICsrKysr
-Kwo+PiAgMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKQo+PiAKPj4gZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvdXNiL3NlcmlhbC9vcHRpb24uYyBiL2RyaXZlcnMvdXNiL3NlcmlhbC9vcHRpb24u
-Ywo+PiBpbmRleCA5NjJlOTk0M2ZjMjAuLmI0N2JhZDgxMGVlYyAxMDA2NDQKPj4gLS0tIGEvZHJp
-dmVycy91c2Ivc2VyaWFsL29wdGlvbi5jCj4+ICsrKyBiL2RyaXZlcnMvdXNiL3NlcmlhbC9vcHRp
-b24uYwo+PiBAQCAtMTk4LDYgKzE5OCw4IEBAIHN0YXRpYyB2b2lkIG9wdGlvbl9pbnN0YXRfY2Fs
-bGJhY2soc3RydWN0IHVyYiAqdXJiKTsKPj4gIAo+PiAgI2RlZmluZSBERUxMX1BST0RVQ1RfNTgy
-MUUJCQkweDgxZDcKPj4gICNkZWZpbmUgREVMTF9QUk9EVUNUXzU4MjFFX0VTSU0JCQkweDgxZTAK
-Pj4gKyNkZWZpbmUgREVMTF9QUk9EVUNUXzU4MjlFCQkJMHg4MWU2Cj4+ICsjZGVmaW5lIERFTExf
-UFJPRFVDVF81ODI5RV9FU0lNCQkJMHg4MWU0Cj4KPlBsZWFzZSBrZWVwIHRoZSBkZWZpbmVzIHNv
-cnRlZCBieSBQSUQuCj4KT0ssIEkgd2lsbCB1cGRhdGUgaXQgaW4gVjIgdmVyc2lvbi4KCj4+ICAj
-ZGVmaW5lIEtZT0NFUkFfVkVORE9SX0lECQkJMHgwYzg4Cj4+ICAjZGVmaW5lIEtZT0NFUkFfUFJP
-RFVDVF9LUEM2NTAJCQkweDE3ZGEKPj4gQEAgLTEwNjMsNiArMTA2NSwxMCBAQCBzdGF0aWMgY29u
-c3Qgc3RydWN0IHVzYl9kZXZpY2VfaWQgb3B0aW9uX2lkc1tdID0gewo+PiAgCSAgLmRyaXZlcl9p
-bmZvID0gUlNWRCgwKSB8IFJTVkQoMSkgfCBSU1ZEKDYpIH0sCj4+ICAJeyBVU0JfREVWSUNFKERF
-TExfVkVORE9SX0lELCBERUxMX1BST0RVQ1RfNTgyMUVfRVNJTSksCj4+ICAJICAuZHJpdmVyX2lu
-Zm8gPSBSU1ZEKDApIHwgUlNWRCgxKSB8IFJTVkQoNikgfSwKPj4gKwl7IFVTQl9ERVZJQ0VfSU5U
-RVJGQUNFX0NMQVNTKERFTExfVkVORE9SX0lELCBERUxMX1BST0RVQ1RfNTgyOUUsIDB4ZmYpLAo+
-PiArCSAgLmRyaXZlcl9pbmZvID0gUlNWRCg2KSB9LAo+PiArCXsgVVNCX0RFVklDRV9JTlRFUkZB
-Q0VfQ0xBU1MoREVMTF9WRU5ET1JfSUQsIERFTExfUFJPRFVDVF81ODI5RV9FU0lNLCAweGZmKSwK
-Pj4gKwkgIC5kcml2ZXJfaW5mbyA9IFJTVkQoNikgfSwKPgo+SXQgbG9va3MgbGlrZSB0aGVzZSBl
-bnRyaWVzIHdpbGwgY2F1c2UgdGhlIGRyaXZlciB0byBiaW5kIGFsc28gdG8gdGhlCj5RTUkgcG9y
-dCBob3dldmVyLgo+CkFjdHVhbGx5IG5vdCwgIGN1cnJlbnRseSBSTU5FVCBwb3J0IHdvdWxkIGxv
-YWQgdGhlIHFtaV93d2FuIGRyaXZlciBzdWNjZXNzZnVsbHkgZXZlbiB0aGUgY2xhc3Mgb2YgUU1J
-IGlzIGFsc28gMHhmZi4KRG8geW91IG1lYW4gSSBzaG91bGQgYWRkIFJTVkQoMCkgdG8gcmVkdWNl
-IGNvbmZ1c2lvbj8KCj4+ICAJeyBVU0JfREVWSUNFKEFOWURBVEFfVkVORE9SX0lELCBBTllEQVRB
-X1BST0RVQ1RfQURVX0UxMDBBKSB9LAkvKiBBRFUtRTEwMCwgQURVLTMxMCAqLwo+PiAgCXsgVVNC
-X0RFVklDRShBTllEQVRBX1ZFTkRPUl9JRCwgQU5ZREFUQV9QUk9EVUNUX0FEVV81MDBBKSB9LAo+
-PiAgCXsgVVNCX0RFVklDRShBTllEQVRBX1ZFTkRPUl9JRCwgQU5ZREFUQV9QUk9EVUNUX0FEVV82
-MjBVVykgfSwKPgo+Sm9oYW4K
+On 09.02.22 16:18, Johan Hovold wrote:
+> On Tue, Feb 08, 2022 at 03:34:19PM +0200, Dmytro Bagrii wrote:
+>> On 08.02.22 12:34, Greg KH wrote:
+>>> On Mon, Feb 07, 2022 at 02:08:23AM +0200, Dmytro Bagrii wrote:
+>>>> This reverts commit 46ee4abb10a07bd8f8ce910ee6b4ae6a947d7f63.
+> 
+>>>> CH341A has three different modes of operation selectable either by
+>>>> hardware pin connections or by external EEPROM configuration. Each
+>>>> mode is represented by corresponding product ID:
+>>>>
+>>>> 0x5523: Asyncronous Serial Interface
+>>>> 0x5584: Parallel Printer Interface
+>>>> 0x5512: EPP/MEM Interface
+>>>
+>>> That does not corrispond with what Jan-Niklas said in the original
+>>> commit.
+>>
+>> The page mentioned in the original commit is unavailable for me for some 
+>> reason.
+>>
+>> I refer to the chip manufacturer documentation from here: 
+>> http://wch-ic.com/downloads/CH341DS1_PDF.html.
+>>
+>> I have this kind of CH341A programmer: 
+>> http://www.chinalctech.com/cpzx/Programmer/Serial_Module/266.html
+>>
+>> When mode selection jumper is set to UART:
+>>
+>> [52206.834474] usb 1-4.1: new full-speed USB device number 10 using xhci_hcd
+>> [52206.925482] usb 1-4.1: New USB device found, idVendor=1a86, 
+>> idProduct=5523, bcdDevice= 3.04
+>> [52206.925494] usb 1-4.1: New USB device strings: Mfr=0, Product=0, 
+>> SerialNumber=0
+>> [52206.973701] usbcore: registered new interface driver ch341
+>> [52206.973710] usbserial: USB Serial support registered for ch341-uart
+>> [52206.973720] ch341 1-4.1:1.0: ch341-uart converter detected
+>> [52206.974424] usb 1-4.1: ch341-uart converter now attached to ttyUSB0
+>>
+>> ch341 creates /dev/ttyUSB0 and it works as a serial port, as expected.
+>>
+>> When mode selection jumper is set to I2C/SPI (it uses EPP/MEM Interface):
+>>
+>> [52413.942116] usb 1-4.1: new full-speed USB device number 11 using xhci_hcd
+>> [52414.033085] usb 1-4.1: New USB device found, idVendor=1a86, 
+>> idProduct=5512, bcdDevice= 3.04
+>> [52414.033097] usb 1-4.1: New USB device strings: Mfr=0, Product=0, 
+>> SerialNumber=0
+>> [52414.040928] ch341 1-4.1:1.0: ch341-uart converter detected
+>> [52414.041930] usb 1-4.1: ch341-uart converter now attached to ttyUSB0
+>>
+>> ch341 creates /dev/ttyUSB0 but it doesn't work.
+>>
+>> To use CH341A programmer as I2C/SPI converter either external module is 
+>> required or userspace tools must be used. But they don't work until 
+>> ch341 handles 1a86:5512.
+>>
+>> If unbind device from ch341 module:
+>>
+>> # echo 1-4.1:1.0 > /sys/bus/usb/drivers/ch341/unbind
+>>
+>> I2C/SPI tools start to work correctly.
+>>
+>>>> (See "5.3.Function configuration" in datasheet at wch-ic.com/downloads/CH341DS1_PDF.html)
+>>>>
+>>>> When CH341A is configured as EPP/MEM Interface it appears as 1a86:5512 and being mistakenly
+>>>> handled by ch341 USB serial driver.
+>>>>
+>>>> It is possible to use CH341A in EPP/MEM mode only if ch341 module is blacklisted, but it must be
+>>>> unblacklisted every time to use CH341A as a serial converter. Also obviously it is impossible
+>>>> to use two CH341A boards in different modes simoultaneously.
+>>>
+>>> Please wrap your lines at 72 columns.
+>>
+>> Sure. Should i submit new patch verіon then?
+> 
+> Please do so. But make sure you read this thread first if you haven't
+> already:
+> 
+> 	https://lore.kernel.org/r/YJ0OCS/sh+1ifD/q@hovoldconsulting.com
+
+Thanks. After i saw this patch i figured it out to remove and blacklist 
+ch341 module to get CH341A working as I2C/SPI converter with i2c-ch341 
+and spi-ch341-usb drivers.
+
+I can confirm, CH341A works as serial converter with ch341 driver when it 
+is configured as UART and has PID 5523. It can't work as I2C/SPI converter 
+when configured as I2C/SPI and has PID5512 unless ch341 module is removed 
+and blacklisted.
+
+> I don't remember all the details, but judging from a quick look it seems
+> we're just waiting for someone to resend the revert with a proper
+> explanation.
+> 
+> It would be good if Jan-Niklas could chime in too and confirm if he's
+> able to use the device in UART mode instead.
+
+I'd like to take a look at that keeyees device from original commit 
+message to see if it has EEPROM chip. I can hypothesize that some 
+manufacturer of a CH341-based programmer could use external configuration 
+EEPROM and mixed-up PID value. I haven't experiment with configuring 
+CH341A with EEPROM but suppose it's possible to burn any custom VID:PID 
+there. I don't think ch341 driver has to handle any of such custom 
+VID/PID, especially if it conflicts with an original VID/PID assigned by 
+chip manufacturer. In case of some peculiar devices it's possible to bind 
+custom VID:PID to the driver via sysfs.
+
+But it's just my hypothetical assumption how ch341-based device with PID 
+5512 could work as UART in that case.
+
+I just checked if CH341 that i have can work as UART when configured as 
+I2C/SPI (PID 5512). I doesn't work: no output signal on TX pin, no 
+loopback echo when RX connected to self TX.
+
+-- 
+Best Regards,
+Dmytro Bagrii.
