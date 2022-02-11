@@ -2,111 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BC94B2F55
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 22:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D294B2F6D
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 22:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245119AbiBKVXu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Feb 2022 16:23:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46744 "EHLO
+        id S1353737AbiBKVfO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Feb 2022 16:35:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349514AbiBKVXt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 16:23:49 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4C62F2E7
-        for <linux-usb@vger.kernel.org>; Fri, 11 Feb 2022 13:23:47 -0800 (PST)
-Received: (qmail 646920 invoked by uid 1000); 11 Feb 2022 16:23:46 -0500
-Date:   Fri, 11 Feb 2022 16:23:46 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com>
-Cc:     gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-input@vger.kernel.org, noralf@tronnes.org,
-        syzkaller-bugs@googlegroups.com, tzimmermann@suse.de
-Subject: Re: [syzbot] memory leak in hub_event (3)
-Message-ID: <YgbT4uqSIVY9ku10@rowland.harvard.edu>
-References: <0000000000005cacef05d7c3c10d@google.com>
+        with ESMTP id S235404AbiBKVfN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 16:35:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC95EC61;
+        Fri, 11 Feb 2022 13:35:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 637E560DD6;
+        Fri, 11 Feb 2022 21:35:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE38C340E9;
+        Fri, 11 Feb 2022 21:35:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644615309;
+        bh=Uym5sGm/byYDXRVkQyzO2iV7FqTMXRqkyIiYcfpzlP4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=YMqf8I2TxkIM3DEZj6iM1MmjbgUusob+8/FI95vCfgUfq5iSZNrRpNPcCLzrMXZb+
+         SawqBBMkKqlctHHt8RppXVvm+0BApxF91qvAhMj7/l4cNJVHD/G9nPgNGoDDDwMk0V
+         4bddRM+pfjc/JHr6PhKj6ouPdW2Fu90xCXZvUkb1QRtL6SB+CtkmywJeFpRTB/3oIF
+         womnOG9reE9D28OU8zT/KKSvXp6fqPzF0jxkZuO7nVBx9SZqpT5hwnDIOjCo5UfdaR
+         tcQ+/5Vk6HTZYJVHhpc/QUYQKb8sro31plektm+Wjj6TKtTV9eBQ3Q5hxP6FFgHT/Z
+         QOdt4HBo9SbAw==
+Date:   Fri, 11 Feb 2022 15:35:08 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+        "open list:RADEON and AMDGPU DRM DRIVERS" 
+        <amd-gfx@lists.freedesktop.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
+        <nouveau@lists.freedesktop.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Alexander.Deucher@amd.com, Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>
+Subject: Re: [PATCH v3 03/12] PCI: Move check for old Apple Thunderbolt
+ controllers into a quirk
+Message-ID: <20220211213508.GA736191@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0000000000005cacef05d7c3c10d@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220211193250.1904843-4-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 12:17:26PM -0800, syzbot wrote:
-> Hello,
+On Fri, Feb 11, 2022 at 01:32:41PM -0600, Mario Limonciello wrote:
+> `pci_bridge_d3_possible` currently checks explicitly for a Thunderbolt
+> controller to indicate that D3 is possible.  As this is used solely
+> for older Apple systems, move it into a quirk that enumerates across
+> all Intel TBT controllers.
 > 
-> syzbot found the following issue on:
+> Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/pci/pci.c    | 12 +++++-----
+>  drivers/pci/quirks.c | 53 ++++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 60 insertions(+), 5 deletions(-)
 > 
-> HEAD commit:    dfd42facf1e4 Linux 5.17-rc3
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14b4ef7c700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=48b71604a367da6e
-> dashboard link: https://syzkaller.appspot.com/bug?extid=8caaaec4e7a55d75e243
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1396902c700000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1466e662700000
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 9ecce435fb3f..5002e214c9a6 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -1064,7 +1064,13 @@ static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
+>  	if (pci_use_mid_pm())
+>  		return false;
+>  
+> -	return acpi_pci_bridge_d3(dev);
+> +	if (acpi_pci_bridge_d3(dev))
+> +		return true;
+> +
+> +	if (device_property_read_bool(&dev->dev, "HotPlugSupportInD3"))
+> +		return true;
+
+Why do we need this?  acpi_pci_bridge_d3() already looks for
+"HotPlugSupportInD3".
+
+> +	return false;
+>  }
+>  
+>  /**
+> @@ -2954,10 +2960,6 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
+>  		if (pci_bridge_d3_force)
+>  			return true;
+>  
+> -		/* Even the oldest 2010 Thunderbolt controller supports D3. */
+> -		if (bridge->is_thunderbolt)
+> -			return true;
+> -
+>  		/* Platform might know better if the bridge supports D3 */
+>  		if (platform_pci_bridge_d3(bridge))
+>  			return true;
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index 6d3c88edde00..aaf098ca7d54 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -3756,6 +3756,59 @@ DECLARE_PCI_FIXUP_SUSPEND_LATE(PCI_VENDOR_ID_INTEL,
+>  			       quirk_apple_poweroff_thunderbolt);
+>  #endif
+>  
+> +/* Apple machines as old as 2010 can do D3 with Thunderbolt controllers, but don't specify
+> + * it in the ACPI tables
+
+Wrap to fit in 80 columns like the rest of the file.  Also use the:
+
+  /*
+   * comment ...
+   */
+
+style if it's more than one line.
+
+I don't think "as old as 2010" is helpful here -- I assume 2010 is
+there because there *were* no Thunderbolt controllers before 2010, but
+the code doesn't check any dates, so we basically assume all Apple
+machines of any age with the listed controllers can do this.
+
+> + */
+> +static void quirk_apple_d3_thunderbolt(struct pci_dev *dev)
+> +{
+> +	struct property_entry properties[] = {
+> +		PROPERTY_ENTRY_BOOL("HotPlugSupportInD3"),
+> +		{},
+> +	};
+> +
+> +	if (!x86_apple_machine)
+> +		return;
+
+The current code doesn't check x86_apple_machine, so this needs some
+justification.  How do I know this works the same as before?
+
+> +
+> +	if (device_create_managed_software_node(&dev->dev, properties, NULL))
+> +		pci_warn(dev, "could not add HotPlugSupportInD3 property");
+> +}
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LIGHT_RIDGE,
+> +			quirk_apple_d3_thunderbolt);
+
+The current code assumes *all* Thunderbolt controllers support D3, so
+it would assume a controller released next year would support D3, but
+this code would assume the opposite.  Are we supposed to add
+everything to this list, or do newer machines supply
+HotPlugSupportInD3, or ...?
+
+How did you derive this list?  (Question for the commit log and/or
+comments here.)
+
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_EAGLE_RIDGE,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LIGHT_PEAK,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_2C,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PORT_RIDGE,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_REDWOOD_RIDGE_2C_NHI,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_REDWOOD_RIDGE_2C_BRIDGE,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_REDWOOD_RIDGE_4C_NHI,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_REDWOOD_RIDGE_4C_BRIDGE,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_NHI,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_BRIDGE,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_NHI,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_BRIDGE,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_NHI,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_BRIDGE,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_4C_NHI,
+> +			quirk_apple_d3_thunderbolt);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_4C_BRIDGE,
+> +			quirk_apple_d3_thunderbolt);
+> +
+>  /*
+>   * Following are device-specific reset methods which can be used to
+>   * reset a single function if other methods (e.g. FLR, PM D0->D3) are
+> -- 
+> 2.34.1
 > 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com
-> 
-> BUG: memory leak
-> unreferenced object 0xffff88810d49e800 (size 2048):
->   comm "kworker/1:1", pid 25, jiffies 4294954629 (age 16.460s)
->   hex dump (first 32 bytes):
->     ff ff ff ff 31 00 00 00 00 00 00 00 00 00 00 00  ....1...........
->     00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00  ................
->   backtrace:
->     [<ffffffff82c87a62>] kmalloc include/linux/slab.h:581 [inline]
->     [<ffffffff82c87a62>] kzalloc include/linux/slab.h:715 [inline]
->     [<ffffffff82c87a62>] usb_alloc_dev+0x32/0x450 drivers/usb/core/usb.c:582
->     [<ffffffff82c91a47>] hub_port_connect drivers/usb/core/hub.c:5260 [inline]
->     [<ffffffff82c91a47>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
->     [<ffffffff82c91a47>] port_event drivers/usb/core/hub.c:5660 [inline]
->     [<ffffffff82c91a47>] hub_event+0x1097/0x21a0 drivers/usb/core/hub.c:5742
->     [<ffffffff8126c3ef>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
->     [<ffffffff8126ccd9>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
->     [<ffffffff81276765>] kthread+0x125/0x160 kernel/kthread.c:377
->     [<ffffffff810022ff>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-There's a refcount leak in the probe-failure path of the hid-elo driver.  
-(You can see that this is the relevant driver in the console output.)  
-It doesn't need the refcount anyway, because the elo_priv structure is 
-always deallocated synchronously before the elo_remove routine returns.
-
-(Syzbot isn't always all that great at deducing where the real problem 
-lies when something goes wrong.)
-
-Alan Stern
-
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v5.17-rc3
-
-Index: usb-devel/drivers/hid/hid-elo.c
-===================================================================
---- usb-devel.orig/drivers/hid/hid-elo.c
-+++ usb-devel/drivers/hid/hid-elo.c
-@@ -239,7 +239,7 @@ static int elo_probe(struct hid_device *
- 
- 	INIT_DELAYED_WORK(&priv->work, elo_work);
- 	udev = interface_to_usbdev(to_usb_interface(hdev->dev.parent));
--	priv->usbdev = usb_get_dev(udev);
-+	priv->usbdev = udev;
- 
- 	hid_set_drvdata(hdev, priv);
- 
-@@ -270,8 +270,6 @@ static void elo_remove(struct hid_device
- {
- 	struct elo_priv *priv = hid_get_drvdata(hdev);
- 
--	usb_put_dev(priv->usbdev);
--
- 	hid_hw_stop(hdev);
- 	cancel_delayed_work_sync(&priv->work);
- 	kfree(priv);
