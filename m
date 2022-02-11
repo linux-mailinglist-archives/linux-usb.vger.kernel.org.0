@@ -2,266 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9AA14B30A8
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 23:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F754B313C
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Feb 2022 00:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354169AbiBKWeu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Feb 2022 17:34:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34594 "EHLO
+        id S1354120AbiBKXZz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Feb 2022 18:25:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354159AbiBKWek (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 17:34:40 -0500
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE91D53;
-        Fri, 11 Feb 2022 14:34:38 -0800 (PST)
-Received: by mail-pj1-f49.google.com with SMTP id n19-20020a17090ade9300b001b9892a7bf9so813418pjv.5;
-        Fri, 11 Feb 2022 14:34:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=efotMu/0Uf1dkcc1uJu6R6InV4FTKLkaJ5+cOM9IBjM=;
-        b=17TpFTml2b05/5mfD6Z01Ps5YD3+ghtkXinb35s+NM2wfRqyzCiDQPttAwCRneRI6j
-         d9d4IHJz9nXx4eu1NVSuAqTQruoC//EEwdgX4yns64hrMYDe9tZuGvdl9paYy9nquiie
-         IevN7O2Jxw68jA+67G/DDLWA3Ywb5+Oy4fXhsz40hWwleIHm+WkwncY+5TG+Bgsf/Fui
-         xyNV1pNKfU0eVH0kv18HU/ntPG32uwqB6CwMCFYUgYzQCU60X9hj/t3w03BJkrVrwRp7
-         Kyg32dOKzdHhcoP5RHu3HlAaYnqDHCgj4Y/vbne9u+2+VgvzqXRXDCJgSZyt18CqJHyJ
-         VNCQ==
-X-Gm-Message-State: AOAM532jtNrLRt1a3yhagz3ZrALagn6BaZav6y/KvDiSA1CQ6Nczs+1Z
-        oMq10aeMMZPI8xmbu4Xgu94=
-X-Google-Smtp-Source: ABdhPJxbWjAZr7UkuWMmvXxUU540U7D0f2rG7iWnQXIIauw/lyxKEmcdiwKqVaCBINL49y7JS4CQfQ==
-X-Received: by 2002:a17:90b:4d8c:: with SMTP id oj12mr2567165pjb.111.1644618877802;
-        Fri, 11 Feb 2022 14:34:37 -0800 (PST)
-Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id n13sm6296733pjq.13.2022.02.11.14.34.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 14:34:37 -0800 (PST)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH v3 44/48] scsi: usb: Stop using the SCSI pointer
-Date:   Fri, 11 Feb 2022 14:32:43 -0800
-Message-Id: <20220211223247.14369-45-bvanassche@acm.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220211223247.14369-1-bvanassche@acm.org>
-References: <20220211223247.14369-1-bvanassche@acm.org>
+        with ESMTP id S1354103AbiBKXZy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 18:25:54 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC19ACEE;
+        Fri, 11 Feb 2022 15:25:52 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21BIuv6G015600;
+        Fri, 11 Feb 2022 23:25:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=5R0nsiliDgL0ynUW40gdfiEgZXxp7s7CGGFe6zRPCfc=;
+ b=M3rbcvnSSjA2N11naVIyEBLilMF8F66q3I5z/RIXOO3bJn8sved0enuTBWoQb4u6y8Nk
+ 5xj05F8KN4lTqHDjYT5Ut/0sNGWtvWWkuV7RYaOcc19/yhsE/G8tJ+URPm8y8zXZ8Rss
+ 6gGprkIYuNRYnzMrkdLLua/XzsXN4Gyoz2QtdJSDNKOAUvB7o9fVsxwNV2NWz/x4iY33
+ BzVkCt7TLJqYcS+nyW9t4GazJSbrs7GZNgBNv7QjmsS95mwzZ2DVv6LJJRfYIIo5SA6D
+ Uv7jzpBKbPDmLNiIgGF1MF19AJdm1iR/gPB+TyAJC33BRuwuVuiuB/Q7neshmR928xyz oA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e5g98ace7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Feb 2022 23:25:35 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21BNG7nB020793;
+        Fri, 11 Feb 2022 23:25:34 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3020.oracle.com with ESMTP id 3e1jpykk3j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Feb 2022 23:25:34 +0000
+Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 21BNPTtF094578;
+        Fri, 11 Feb 2022 23:25:33 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by userp3020.oracle.com with ESMTP id 3e1jpykk0v-4;
+        Fri, 11 Feb 2022 23:25:33 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     linux-usb@vger.kernel.org,
+        Sebastian Andrzej Siewior <sebastian@breakpoint.cc>,
+        linux-scsi@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 0/2] Add scsi_done_direct() to complete request directly.
+Date:   Fri, 11 Feb 2022 18:25:27 -0500
+Message-Id: <164462189850.7606.17045798542627013831.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220201210954.570896-1-sebastian@breakpoint.cc>
+References: <20220201210954.570896-1-sebastian@breakpoint.cc>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Proofpoint-GUID: 4b-r61w-vgKInF0RZh4svTxDheC53G27
+X-Proofpoint-ORIG-GUID: 4b-r61w-vgKInF0RZh4svTxDheC53G27
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Set scsi_host_template.cmd_size instead of using the SCSI pointer for
-storing driver-private data. Change the type of the argument of
-uas_add_work() from struct uas_cmd_info * into struct scsi_cmnd * because
-it is easier to convert a SCSI command pointer into a uas_cmd_info pointer
-than the other way around.
+On Tue, 1 Feb 2022 22:09:52 +0100, Sebastian Andrzej Siewior wrote:
 
-This patch prepares for removal of the SCSI pointer from struct scsi_cmnd.
+> This mini series adds scsi_done_direct() in order to complete scsi
+> requests directly via blk_mq_complete_request_direct(). This used by the
+> usb-storage driver.
+> 
+> Sebastian
+> 
 
-Cc: linux-usb@vger.kernel.org
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Acked-by: Oliver Neukum <oneukum@suse.com>
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/usb/storage/uas.c | 43 ++++++++++++++++++---------------------
- 1 file changed, 20 insertions(+), 23 deletions(-)
+Applied to 5.18/scsi-queue, thanks!
 
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index 7f2944729ecd..84dc270f6f73 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -113,7 +113,7 @@ static void uas_do_work(struct work_struct *work)
- 			continue;
- 
- 		cmnd = devinfo->cmnd[i];
--		cmdinfo = (void *)&cmnd->SCp;
-+		cmdinfo = scsi_cmd_priv(cmnd);
- 
- 		if (!(cmdinfo->state & IS_IN_WORK_LIST))
- 			continue;
-@@ -139,10 +139,9 @@ static void uas_scan_work(struct work_struct *work)
- 	dev_dbg(&devinfo->intf->dev, "scan complete\n");
- }
- 
--static void uas_add_work(struct uas_cmd_info *cmdinfo)
-+static void uas_add_work(struct scsi_cmnd *cmnd)
- {
--	struct scsi_pointer *scp = (void *)cmdinfo;
--	struct scsi_cmnd *cmnd = container_of(scp, struct scsi_cmnd, SCp);
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct uas_dev_info *devinfo = cmnd->device->hostdata;
- 
- 	lockdep_assert_held(&devinfo->lock);
-@@ -163,7 +162,7 @@ static void uas_zap_pending(struct uas_dev_info *devinfo, int result)
- 			continue;
- 
- 		cmnd = devinfo->cmnd[i];
--		cmdinfo = (void *)&cmnd->SCp;
-+		cmdinfo = scsi_cmd_priv(cmnd);
- 		uas_log_cmd_state(cmnd, __func__, 0);
- 		/* Sense urbs were killed, clear COMMAND_INFLIGHT manually */
- 		cmdinfo->state &= ~COMMAND_INFLIGHT;
-@@ -200,15 +199,14 @@ static void uas_sense(struct urb *urb, struct scsi_cmnd *cmnd)
- static void uas_log_cmd_state(struct scsi_cmnd *cmnd, const char *prefix,
- 			      int status)
- {
--	struct uas_cmd_info *ci = (void *)&cmnd->SCp;
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *ci = scsi_cmd_priv(cmnd);
- 
- 	if (status == -ENODEV) /* too late */
- 		return;
- 
- 	scmd_printk(KERN_INFO, cmnd,
- 		    "%s %d uas-tag %d inflight:%s%s%s%s%s%s%s%s%s%s%s%s ",
--		    prefix, status, cmdinfo->uas_tag,
-+		    prefix, status, ci->uas_tag,
- 		    (ci->state & SUBMIT_STATUS_URB)     ? " s-st"  : "",
- 		    (ci->state & ALLOC_DATA_IN_URB)     ? " a-in"  : "",
- 		    (ci->state & SUBMIT_DATA_IN_URB)    ? " s-in"  : "",
-@@ -231,7 +229,7 @@ static void uas_free_unsubmitted_urbs(struct scsi_cmnd *cmnd)
- 	if (!cmnd)
- 		return;
- 
--	cmdinfo = (void *)&cmnd->SCp;
-+	cmdinfo = scsi_cmd_priv(cmnd);
- 
- 	if (cmdinfo->state & SUBMIT_CMD_URB)
- 		usb_free_urb(cmdinfo->cmd_urb);
-@@ -245,7 +243,7 @@ static void uas_free_unsubmitted_urbs(struct scsi_cmnd *cmnd)
- 
- static int uas_try_complete(struct scsi_cmnd *cmnd, const char *caller)
- {
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct uas_dev_info *devinfo = (void *)cmnd->device->hostdata;
- 
- 	lockdep_assert_held(&devinfo->lock);
-@@ -263,13 +261,13 @@ static int uas_try_complete(struct scsi_cmnd *cmnd, const char *caller)
- static void uas_xfer_data(struct urb *urb, struct scsi_cmnd *cmnd,
- 			  unsigned direction)
- {
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	int err;
- 
- 	cmdinfo->state |= direction | SUBMIT_STATUS_URB;
- 	err = uas_submit_urbs(cmnd, cmnd->device->hostdata);
- 	if (err) {
--		uas_add_work(cmdinfo);
-+		uas_add_work(cmnd);
- 	}
- }
- 
-@@ -329,7 +327,7 @@ static void uas_stat_cmplt(struct urb *urb)
- 	}
- 
- 	cmnd = devinfo->cmnd[idx];
--	cmdinfo = (void *)&cmnd->SCp;
-+	cmdinfo = scsi_cmd_priv(cmnd);
- 
- 	if (!(cmdinfo->state & COMMAND_INFLIGHT)) {
- 		uas_log_cmd_state(cmnd, "unexpected status cmplt", 0);
-@@ -394,7 +392,7 @@ static void uas_stat_cmplt(struct urb *urb)
- static void uas_data_cmplt(struct urb *urb)
- {
- 	struct scsi_cmnd *cmnd = urb->context;
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct uas_dev_info *devinfo = (void *)cmnd->device->hostdata;
- 	struct scsi_data_buffer *sdb = &cmnd->sdb;
- 	unsigned long flags;
-@@ -446,7 +444,7 @@ static struct urb *uas_alloc_data_urb(struct uas_dev_info *devinfo, gfp_t gfp,
- 				      enum dma_data_direction dir)
- {
- 	struct usb_device *udev = devinfo->udev;
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct urb *urb = usb_alloc_urb(0, gfp);
- 	struct scsi_data_buffer *sdb = &cmnd->sdb;
- 	unsigned int pipe = (dir == DMA_FROM_DEVICE)
-@@ -468,7 +466,7 @@ static struct urb *uas_alloc_sense_urb(struct uas_dev_info *devinfo, gfp_t gfp,
- 				       struct scsi_cmnd *cmnd)
- {
- 	struct usb_device *udev = devinfo->udev;
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct urb *urb = usb_alloc_urb(0, gfp);
- 	struct sense_iu *iu;
- 
-@@ -496,7 +494,7 @@ static struct urb *uas_alloc_cmd_urb(struct uas_dev_info *devinfo, gfp_t gfp,
- {
- 	struct usb_device *udev = devinfo->udev;
- 	struct scsi_device *sdev = cmnd->device;
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct urb *urb = usb_alloc_urb(0, gfp);
- 	struct command_iu *iu;
- 	int len;
-@@ -558,7 +556,7 @@ static struct urb *uas_submit_sense_urb(struct scsi_cmnd *cmnd, gfp_t gfp)
- static int uas_submit_urbs(struct scsi_cmnd *cmnd,
- 			   struct uas_dev_info *devinfo)
- {
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct urb *urb;
- 	int err;
- 
-@@ -637,12 +635,10 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmnd)
- {
- 	struct scsi_device *sdev = cmnd->device;
- 	struct uas_dev_info *devinfo = sdev->hostdata;
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	unsigned long flags;
- 	int idx, err;
- 
--	BUILD_BUG_ON(sizeof(struct uas_cmd_info) > sizeof(struct scsi_pointer));
--
- 	/* Re-check scsi_block_requests now that we've the host-lock */
- 	if (cmnd->device->host->host_self_blocked)
- 		return SCSI_MLQUEUE_DEVICE_BUSY;
-@@ -712,7 +708,7 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmnd)
- 			spin_unlock_irqrestore(&devinfo->lock, flags);
- 			return SCSI_MLQUEUE_DEVICE_BUSY;
- 		}
--		uas_add_work(cmdinfo);
-+		uas_add_work(cmnd);
- 	}
- 
- 	devinfo->cmnd[idx] = cmnd;
-@@ -730,7 +726,7 @@ static DEF_SCSI_QCMD(uas_queuecommand)
-  */
- static int uas_eh_abort_handler(struct scsi_cmnd *cmnd)
- {
--	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
-+	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
- 	struct uas_dev_info *devinfo = (void *)cmnd->device->hostdata;
- 	struct urb *data_in_urb = NULL;
- 	struct urb *data_out_urb = NULL;
-@@ -910,6 +906,7 @@ static struct scsi_host_template uas_host_template = {
- 	.this_id = -1,
- 	.skip_settle_delay = 1,
- 	.dma_boundary = PAGE_SIZE - 1,
-+	.cmd_size = sizeof(struct uas_cmd_info),
- };
- 
- #define UNUSUAL_DEV(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax, \
+[1/2] scsi: Add scsi_done_direct() for immediate completion.
+      https://git.kernel.org/mkp/scsi/c/b84b6ec0f976
+[2/2] usb: storage: Complete the scsi request directly.
+      https://git.kernel.org/mkp/scsi/c/23fe075519c6
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
