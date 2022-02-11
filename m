@@ -2,161 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E39374B2F4B
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 22:20:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BC94B2F55
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 22:23:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353598AbiBKVUb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Feb 2022 16:20:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44746 "EHLO
+        id S245119AbiBKVXu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Feb 2022 16:23:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353556AbiBKVUb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 16:20:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5E0C59;
-        Fri, 11 Feb 2022 13:20:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4A2960B80;
-        Fri, 11 Feb 2022 21:20:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0B2EC340ED;
-        Fri, 11 Feb 2022 21:20:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644614427;
-        bh=UfUFmaXMeBVMDhEvq/Ay84fjFn6Fp13Zs7ea6/QFMhs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=neQsFRKavHKvFU9Ki8tBnVfqQK3sczt5cs5C/VXEoOoR6DppL4XbHf1XAcSRYZ/ql
-         SgNgB0ecY41GNDmsDr6LaaaNLZAWshMiXYxc7zm5HPreA+xxv71qCg4XrNp1L8H5hc
-         JZuymM65S13/NP0NbDbY2ysAvxtNeh+SxkwHoHeMXATaChYLdFGwmr7YpzkDCxOYTE
-         m8IhkZQ9KP5DxPoWFkea8SM7pVJquATf+ISUhTKK2qJqQktxszuZKo+//dNDQY1FjA
-         +Dhd7YMXLqljO+Auwvc8rFWsKTIols4vbWShD2XzZxYzka/XkK9nqaCSpDI7KFslO/
-         EiJnvwjovmZhw==
-Date:   Fri, 11 Feb 2022 15:20:25 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        "open list:RADEON and AMDGPU DRM DRIVERS" 
-        <amd-gfx@lists.freedesktop.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
-        <nouveau@lists.freedesktop.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Alexander.Deucher@amd.com, Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>
-Subject: Re: [PATCH v3 02/12] PCI: Move `is_thunderbolt` check for lack of
- command completed to a quirk
-Message-ID: <20220211212025.GA735312@bhelgaas>
+        with ESMTP id S1349514AbiBKVXt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 16:23:49 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4C62F2E7
+        for <linux-usb@vger.kernel.org>; Fri, 11 Feb 2022 13:23:47 -0800 (PST)
+Received: (qmail 646920 invoked by uid 1000); 11 Feb 2022 16:23:46 -0500
+Date:   Fri, 11 Feb 2022 16:23:46 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com>
+Cc:     gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-input@vger.kernel.org, noralf@tronnes.org,
+        syzkaller-bugs@googlegroups.com, tzimmermann@suse.de
+Subject: Re: [syzbot] memory leak in hub_event (3)
+Message-ID: <YgbT4uqSIVY9ku10@rowland.harvard.edu>
+References: <0000000000005cacef05d7c3c10d@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220211193250.1904843-3-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0000000000005cacef05d7c3c10d@google.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Update subject to something like:
-
-  PCI: pciehp: Quirk broken Command Completed support on Intel Thunderbolt controllers
-
-On Fri, Feb 11, 2022 at 01:32:40PM -0600, Mario Limonciello wrote:
-> The `is_thunderbolt` check is currently used to indicate the lack of
-> command completed support for a number of older Thunderbolt devices.
+On Fri, Feb 11, 2022 at 12:17:26PM -0800, syzbot wrote:
+> Hello,
 > 
-> This however is heavy handed and should have been done via a quirk.  Move
-> the affected devices outlined in commit 493fb50e958c ("PCI: pciehp: Assume
-> NoCompl+ for Thunderbolt ports") into pci quirks.
+> syzbot found the following issue on:
 > 
-> Suggested-by: Lukas Wunner <lukas@wunner.de>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/pci/hotplug/pciehp_hpc.c |  6 +-----
->  drivers/pci/quirks.c             | 17 +++++++++++++++++
->  include/linux/pci.h              |  2 ++
->  3 files changed, 20 insertions(+), 5 deletions(-)
+> HEAD commit:    dfd42facf1e4 Linux 5.17-rc3
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14b4ef7c700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=48b71604a367da6e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8caaaec4e7a55d75e243
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1396902c700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1466e662700000
 > 
-> diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
-> index 1c1ebf3dad43..e4c42b24aba8 100644
-> --- a/drivers/pci/hotplug/pciehp_hpc.c
-> +++ b/drivers/pci/hotplug/pciehp_hpc.c
-> @@ -996,11 +996,7 @@ struct controller *pcie_init(struct pcie_device *dev)
->  	if (pdev->hotplug_user_indicators)
->  		slot_cap &= ~(PCI_EXP_SLTCAP_AIP | PCI_EXP_SLTCAP_PIP);
->  
-> -	/*
-> -	 * We assume no Thunderbolt controllers support Command Complete events,
-> -	 * but some controllers falsely claim they do.
-> -	 */
-> -	if (pdev->is_thunderbolt)
-> +	if (pdev->no_cmd_complete)
->  		slot_cap |= PCI_EXP_SLTCAP_NCCS;
->  
->  	ctrl->slot_cap = slot_cap;
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index d2dd6a6cda60..6d3c88edde00 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -3675,6 +3675,23 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PORT_RIDGE,
->  			quirk_thunderbolt_hotplug_msi);
-
-Please add a comment above to the effect that PCI_EXP_SLTCAP_NCCS
-being clear means the controller generates a Command Completed software
-notification when it completes a command, and these controllers don't
-generate those notifications even though PCI_EXP_SLTCAP_NCCS is clear
-(PCIe r6.0, sec 7.5.3.9).
-
-> +static void quirk_thunderbolt_command_completed(struct pci_dev *pdev)
-
-Rename to quirk_no_command_completed().  This doesn't have anything to
-do with Thunderbolt; it's just that the affected devices happen to be
-Thunderbolt controllers.
-
-> +{
-> +	pdev->no_cmd_complete = 1;
-> +}
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LIGHT_RIDGE,
-> +			quirk_thunderbolt_command_completed);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_EAGLE_RIDGE,
-> +			quirk_thunderbolt_command_completed);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LIGHT_PEAK,
-> +			quirk_thunderbolt_command_completed);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C,
-> +			quirk_thunderbolt_command_completed);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_2C,
-> +			quirk_thunderbolt_command_completed);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PORT_RIDGE,
-> +			quirk_thunderbolt_command_completed);
-
-Can we put these in drivers/pci/hotplug/pciehp_hpc.c?  We already
-have a few similar quirks there.
-
->  #ifdef CONFIG_ACPI
->  /*
->   * Apple: Shutdown Cactus Ridge Thunderbolt controller.
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 8253a5413d7c..1e5b769e42fc 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -443,6 +443,8 @@ struct pci_dev {
->  	unsigned int	is_hotplug_bridge:1;
->  	unsigned int	shpc_managed:1;		/* SHPC owned by shpchp */
->  	unsigned int	is_thunderbolt:1;	/* Thunderbolt controller */
-> +	unsigned int	no_cmd_complete:1;	/* Lies about command completed events */
-> +
->  	/*
->  	 * Devices marked being untrusted are the ones that can potentially
->  	 * execute DMA attacks and similar. They are typically connected
-> -- 
-> 2.34.1
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com
 > 
+> BUG: memory leak
+> unreferenced object 0xffff88810d49e800 (size 2048):
+>   comm "kworker/1:1", pid 25, jiffies 4294954629 (age 16.460s)
+>   hex dump (first 32 bytes):
+>     ff ff ff ff 31 00 00 00 00 00 00 00 00 00 00 00  ....1...........
+>     00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00  ................
+>   backtrace:
+>     [<ffffffff82c87a62>] kmalloc include/linux/slab.h:581 [inline]
+>     [<ffffffff82c87a62>] kzalloc include/linux/slab.h:715 [inline]
+>     [<ffffffff82c87a62>] usb_alloc_dev+0x32/0x450 drivers/usb/core/usb.c:582
+>     [<ffffffff82c91a47>] hub_port_connect drivers/usb/core/hub.c:5260 [inline]
+>     [<ffffffff82c91a47>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+>     [<ffffffff82c91a47>] port_event drivers/usb/core/hub.c:5660 [inline]
+>     [<ffffffff82c91a47>] hub_event+0x1097/0x21a0 drivers/usb/core/hub.c:5742
+>     [<ffffffff8126c3ef>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
+>     [<ffffffff8126ccd9>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
+>     [<ffffffff81276765>] kthread+0x125/0x160 kernel/kthread.c:377
+>     [<ffffffff810022ff>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+There's a refcount leak in the probe-failure path of the hid-elo driver.  
+(You can see that this is the relevant driver in the console output.)  
+It doesn't need the refcount anyway, because the elo_priv structure is 
+always deallocated synchronously before the elo_remove routine returns.
+
+(Syzbot isn't always all that great at deducing where the real problem 
+lies when something goes wrong.)
+
+Alan Stern
+
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v5.17-rc3
+
+Index: usb-devel/drivers/hid/hid-elo.c
+===================================================================
+--- usb-devel.orig/drivers/hid/hid-elo.c
++++ usb-devel/drivers/hid/hid-elo.c
+@@ -239,7 +239,7 @@ static int elo_probe(struct hid_device *
+ 
+ 	INIT_DELAYED_WORK(&priv->work, elo_work);
+ 	udev = interface_to_usbdev(to_usb_interface(hdev->dev.parent));
+-	priv->usbdev = usb_get_dev(udev);
++	priv->usbdev = udev;
+ 
+ 	hid_set_drvdata(hdev, priv);
+ 
+@@ -270,8 +270,6 @@ static void elo_remove(struct hid_device
+ {
+ 	struct elo_priv *priv = hid_get_drvdata(hdev);
+ 
+-	usb_put_dev(priv->usbdev);
+-
+ 	hid_hw_stop(hdev);
+ 	cancel_delayed_work_sync(&priv->work);
+ 	kfree(priv);
