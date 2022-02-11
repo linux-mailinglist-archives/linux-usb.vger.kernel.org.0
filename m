@@ -2,62 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D294B2F6D
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 22:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 723784B2F70
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 22:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353737AbiBKVfO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Feb 2022 16:35:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50608 "EHLO
+        id S1353741AbiBKVgL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Feb 2022 16:36:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235404AbiBKVfN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 16:35:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC95EC61;
-        Fri, 11 Feb 2022 13:35:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 637E560DD6;
-        Fri, 11 Feb 2022 21:35:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE38C340E9;
-        Fri, 11 Feb 2022 21:35:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644615309;
-        bh=Uym5sGm/byYDXRVkQyzO2iV7FqTMXRqkyIiYcfpzlP4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=YMqf8I2TxkIM3DEZj6iM1MmjbgUusob+8/FI95vCfgUfq5iSZNrRpNPcCLzrMXZb+
-         SawqBBMkKqlctHHt8RppXVvm+0BApxF91qvAhMj7/l4cNJVHD/G9nPgNGoDDDwMk0V
-         4bddRM+pfjc/JHr6PhKj6ouPdW2Fu90xCXZvUkb1QRtL6SB+CtkmywJeFpRTB/3oIF
-         womnOG9reE9D28OU8zT/KKSvXp6fqPzF0jxkZuO7nVBx9SZqpT5hwnDIOjCo5UfdaR
-         tcQ+/5Vk6HTZYJVHhpc/QUYQKb8sro31plektm+Wjj6TKtTV9eBQ3Q5hxP6FFgHT/Z
-         QOdt4HBo9SbAw==
-Date:   Fri, 11 Feb 2022 15:35:08 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        "open list:RADEON and AMDGPU DRM DRIVERS" 
-        <amd-gfx@lists.freedesktop.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
-        <nouveau@lists.freedesktop.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Alexander.Deucher@amd.com, Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>
-Subject: Re: [PATCH v3 03/12] PCI: Move check for old Apple Thunderbolt
- controllers into a quirk
-Message-ID: <20220211213508.GA736191@bhelgaas>
+        with ESMTP id S242027AbiBKVgK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 16:36:10 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CBEC61
+        for <linux-usb@vger.kernel.org>; Fri, 11 Feb 2022 13:36:09 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id m3-20020a056e02158300b002b6e3d1f97cso6752134ilu.19
+        for <linux-usb@vger.kernel.org>; Fri, 11 Feb 2022 13:36:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=uZFH8v5hdkuD13HWKXbwlKXOFU1tLj/1KgXaqFsCP+w=;
+        b=7qpsYNZ14Us1bLYYImbDODDgF2BOOApI461D3J3+U3Di+Waiy+imaAIKb2qrx4lM38
+         EL9RwaBt5jjcuOLDYcQzHwcMPVsHGBZlOyXMF2pIgsDvtxc99lF1F2heAZudxTNkNALd
+         yWcM+GX5+ks73rLbDoF2lJKJaxrc7k/a86kETuvs+uTrEJa8zqVlD+TJd7IGN5Fj9lTY
+         y7aFJO7VOn0+9IQL4cH0d6YBlUbHNcuKQdVZn6LhoL0k64nFt8h4b/6QWigjekt6M1mN
+         rGIYqZTnVewA+IB2CqBt5U1k8oki4+aAUse0GcW9EV507AYCo0EPBi72/AV97zJILpwR
+         myzQ==
+X-Gm-Message-State: AOAM531NId1jKtEcyiTfYZ9ovCofOUIleaxFLwAr8xaBRzYTihq3h+Wz
+        fgiN4TQBMpOCzpTEx8b19d30z15Nb4OnOPJJvzrqu49H1xXf
+X-Google-Smtp-Source: ABdhPJxIMl3Dj6whKaFjTGnZrRnkr5JcDWjIWAL80oKZ7CA90a6/GGlca6MO6Yn7/LWch5SH1DLI8BFkEEZ5aN7OR35Og6xECnE3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220211193250.1904843-4-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:164f:: with SMTP id a15mr1964678jat.272.1644615368382;
+ Fri, 11 Feb 2022 13:36:08 -0800 (PST)
+Date:   Fri, 11 Feb 2022 13:36:08 -0800
+In-Reply-To: <YgbT4uqSIVY9ku10@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d31cac05d7c4da7e@google.com>
+Subject: Re: [syzbot] memory leak in hub_event (3)
+From:   syzbot <syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com>
+To:     benjamin.tissoires@redhat.com, gregkh@linuxfoundation.org,
+        heikki.krogerus@linux.intel.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, noralf@tronnes.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
+        tzimmermann@suse.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,144 +57,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 01:32:41PM -0600, Mario Limonciello wrote:
-> `pci_bridge_d3_possible` currently checks explicitly for a Thunderbolt
-> controller to indicate that D3 is possible.  As this is used solely
-> for older Apple systems, move it into a quirk that enumerates across
-> all Intel TBT controllers.
-> 
-> Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/pci/pci.c    | 12 +++++-----
->  drivers/pci/quirks.c | 53 ++++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 60 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 9ecce435fb3f..5002e214c9a6 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -1064,7 +1064,13 @@ static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
->  	if (pci_use_mid_pm())
->  		return false;
->  
-> -	return acpi_pci_bridge_d3(dev);
-> +	if (acpi_pci_bridge_d3(dev))
-> +		return true;
-> +
-> +	if (device_property_read_bool(&dev->dev, "HotPlugSupportInD3"))
-> +		return true;
+Hello,
 
-Why do we need this?  acpi_pci_bridge_d3() already looks for
-"HotPlugSupportInD3".
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> +	return false;
->  }
->  
->  /**
-> @@ -2954,10 +2960,6 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
->  		if (pci_bridge_d3_force)
->  			return true;
->  
-> -		/* Even the oldest 2010 Thunderbolt controller supports D3. */
-> -		if (bridge->is_thunderbolt)
-> -			return true;
-> -
->  		/* Platform might know better if the bridge supports D3 */
->  		if (platform_pci_bridge_d3(bridge))
->  			return true;
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index 6d3c88edde00..aaf098ca7d54 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -3756,6 +3756,59 @@ DECLARE_PCI_FIXUP_SUSPEND_LATE(PCI_VENDOR_ID_INTEL,
->  			       quirk_apple_poweroff_thunderbolt);
->  #endif
->  
-> +/* Apple machines as old as 2010 can do D3 with Thunderbolt controllers, but don't specify
-> + * it in the ACPI tables
+Reported-and-tested-by: syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com
 
-Wrap to fit in 80 columns like the rest of the file.  Also use the:
+Tested on:
 
-  /*
-   * comment ...
-   */
+commit:         dfd42fac Linux 5.17-rc3
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v5.17-rc3
+kernel config:  https://syzkaller.appspot.com/x/.config?x=48b71604a367da6e
+dashboard link: https://syzkaller.appspot.com/bug?extid=8caaaec4e7a55d75e243
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=121f0f78700000
 
-style if it's more than one line.
-
-I don't think "as old as 2010" is helpful here -- I assume 2010 is
-there because there *were* no Thunderbolt controllers before 2010, but
-the code doesn't check any dates, so we basically assume all Apple
-machines of any age with the listed controllers can do this.
-
-> + */
-> +static void quirk_apple_d3_thunderbolt(struct pci_dev *dev)
-> +{
-> +	struct property_entry properties[] = {
-> +		PROPERTY_ENTRY_BOOL("HotPlugSupportInD3"),
-> +		{},
-> +	};
-> +
-> +	if (!x86_apple_machine)
-> +		return;
-
-The current code doesn't check x86_apple_machine, so this needs some
-justification.  How do I know this works the same as before?
-
-> +
-> +	if (device_create_managed_software_node(&dev->dev, properties, NULL))
-> +		pci_warn(dev, "could not add HotPlugSupportInD3 property");
-> +}
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LIGHT_RIDGE,
-> +			quirk_apple_d3_thunderbolt);
-
-The current code assumes *all* Thunderbolt controllers support D3, so
-it would assume a controller released next year would support D3, but
-this code would assume the opposite.  Are we supposed to add
-everything to this list, or do newer machines supply
-HotPlugSupportInD3, or ...?
-
-How did you derive this list?  (Question for the commit log and/or
-comments here.)
-
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_EAGLE_RIDGE,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LIGHT_PEAK,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_2C,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PORT_RIDGE,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_REDWOOD_RIDGE_2C_NHI,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_REDWOOD_RIDGE_2C_BRIDGE,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_REDWOOD_RIDGE_4C_NHI,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_REDWOOD_RIDGE_4C_BRIDGE,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_NHI,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_BRIDGE,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_NHI,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_BRIDGE,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_NHI,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_BRIDGE,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_4C_NHI,
-> +			quirk_apple_d3_thunderbolt);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_4C_BRIDGE,
-> +			quirk_apple_d3_thunderbolt);
-> +
->  /*
->   * Following are device-specific reset methods which can be used to
->   * reset a single function if other methods (e.g. FLR, PM D0->D3) are
-> -- 
-> 2.34.1
-> 
+Note: testing is done by a robot and is best-effort only.
