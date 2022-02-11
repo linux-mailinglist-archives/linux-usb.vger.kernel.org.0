@@ -2,232 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECEB14B2DD3
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 20:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA9A4B2E51
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 21:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349626AbiBKThp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Feb 2022 14:37:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52400 "EHLO
+        id S1346939AbiBKUR3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Feb 2022 15:17:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352932AbiBKThn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 14:37:43 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2073.outbound.protection.outlook.com [40.107.220.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41B4D4C;
-        Fri, 11 Feb 2022 11:37:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GRjEfTJ+tWHSgS17ppVB/MR6QWNvYJoCX4gs19ZDrioRbHlCgHnj8u/vHM12za4Ni3/jA3sGHQ4oQW6CMxoRu4NqF/1DNRkGNxsDqFqE65HBMuqjO3WJZuFVALc4KBAUVwTxRZv4k4KkUlj4QiTjLNX9WxJ05po0iSPLi9WbcU9TpXWjMthQguEmmqEvvuqV6l0o8YnG+OdGRgfIoNJWEvFF0MmomzWKoLYqPi3WqiGtdCZVstvh2tLjnolgs1f6NVr2gk7Tka2G/MVi8zBCUSnQho3OWlKjDuOC0H4MeXsGhPkgURHYRsH0BGzvniFZpaKPu+ygUzpYMIPj/fKxzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WfH6vbe3dKkRLxJkYPwVJ0B/v09u5ZfrefLqdxBLN6Y=;
- b=lo3HHBUNB+sMRbQGaBTC+OfDCOexxHQkdf8jQRDVgjjHF4qc4b9QQN6mdNa0VOUxbhwksNUUAdX4qii1Qb5Q8GJGl4zp8bv/w3n51pCaL/GX3ZevrN5FfFML5ClNKrUWqh09yen0ExlTbWCcO45Mk7feGDs9FpBSbAELDOOxsRXzw2+t2hADSt6ubyQlRYwdTh7Bdr5n1TJJMbetMj3UMcwdhkIhrY2+xBiz6WmjUmQRfwd1Sqb9GsxozELyxgZ/N9EsCLEftjJVbD2sQbo4vpnruIUCA5Oo1s9qFthUftSfoXo6ny033/tSuFdM1v42/mRdkf5GZ3D19zE8p4bixg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WfH6vbe3dKkRLxJkYPwVJ0B/v09u5ZfrefLqdxBLN6Y=;
- b=hMgnPenDRFdedDL0BIvNOuM+VCCKAINnKFLdVEwXxbQF81Myn5T7urh6rZYLxfN3kiyQjGI/reaU00TCHavm8xKoEUQRQHD1S75uYQ+P7I5d8mooHMDoGaNp54ghVmt8OW7Pr17BOCVFohMUwTR3LpN01nKlFenIAms6mo4AI7g=
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
- by MN2PR12MB2910.namprd12.prod.outlook.com (2603:10b6:208:af::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.18; Fri, 11 Feb
- 2022 19:37:37 +0000
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::42f:534d:e82:b59f]) by BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::42f:534d:e82:b59f%4]) with mapi id 15.20.4951.019; Fri, 11 Feb 2022
- 19:37:37 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-CC:     Bjorn Helgaas <bhelgaas@google.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        "open list:RADEON and AMDGPU DRM DRIVERS" 
-        <amd-gfx@lists.freedesktop.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
-        <nouveau@lists.freedesktop.org>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Subject: RE: [PATCH v2 3/9] PCI: drop `is_thunderbolt` attribute
-Thread-Topic: [PATCH v2 3/9] PCI: drop `is_thunderbolt` attribute
-Thread-Index: AQHYHs+rqrcOwCEkLEGfPlnD8b3/PqyOJU2AgACaUSA=
-Date:   Fri, 11 Feb 2022 19:37:37 +0000
-Message-ID: <BL1PR12MB515776D8AA3AA375D914B395E2309@BL1PR12MB5157.namprd12.prod.outlook.com>
-References: <20220210224329.2793-1-mario.limonciello@amd.com>
- <20220210224329.2793-4-mario.limonciello@amd.com> <YgY5N1eVWmi0Xyuw@lahna>
-In-Reply-To: <YgY5N1eVWmi0Xyuw@lahna>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-02-11T19:36:12Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=a8c4bf60-0637-402c-98bc-4918107473ad;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-02-11T19:37:35Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 991f3e06-952e-4cc8-96d1-55e85a8acc38
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2754d213-e478-42ed-af33-08d9ed95f55f
-x-ms-traffictypediagnostic: MN2PR12MB2910:EE_
-x-microsoft-antispam-prvs: <MN2PR12MB29105ED26735536709401A02E2309@MN2PR12MB2910.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HATeOplR9/UVEZB6QhH7+wZOVk+BHl2kxjYvH4ydkmeLOHOgvjJl3+OMU+C5PPTOY4GJni5+VVVPEb+MTjmwwmeDBCc+77wxX/dkOPbL4ozYv7MWPyDJQy4WtZQ8JFaH6y5HNVzg2Tkyx6VGOVjPCXIropBbT6W9jDYvDDCHLFsJU8fBgW274O3gZly6FG3U+/ks71LrM7oKCSiR0ouq7iDPf4hUh8R+n0Eo43NS3lwzmaOadADEOx4l0ceLSjELcTAFRj46My9mt3FXdSrxGfd5r44yTXTzealXcgKYeHxEpZGYimJTgzqv+EBiDlB5HQMyAVHev8f+YdfDBX9XHY6fmu0+fR0t49SVdof4dyBihJkQk5z/KXeMDnFOJ9eUlwPjZOVxj98vfPSHWGrjrtNfLKr6TL+/9zTyr2Xvxv5t94tWsmqUnWsnhMEwQqfZvJ5SnQfV2iYHHTEQkRYYunR9wCSkIjbbFlPCeiBeXtZgVFuz0CShf2NatMiOP/J5W/n7V9D4eOzzkqPUswA0KMy9ryc07Zdoeerhk3nxZREYcsgNiZlI/yuaiUhDwBjBRPNIkCfGp//fINOsoUnNE14fbwT7wRlQHVbtcWIzEdrLt/FlSF6CKCRkaDCYn7uppOCaiK8PzLNJBfYQsqmm13xdkx7BIYCMATAl1i5KCmxBVdPh/nKurYm0kVWbX/jg3quogT65WPcukTSG99LqfQTuTk/RlLqsHQtb+RKAQ5g=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(54906003)(6916009)(6506007)(53546011)(316002)(7696005)(9686003)(508600001)(66476007)(38070700005)(55016003)(33656002)(4326008)(5660300002)(66556008)(66946007)(66446008)(64756008)(76116006)(8676002)(8936002)(2906002)(52536014)(7416002)(83380400001)(26005)(186003)(38100700002)(71200400001)(122000001)(81973001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0VmqsmL5RqurP58AzCEQ/4oOOMCuuLqbTKhExemuwTaNpy+ip59ZrGY/ZqtC?=
- =?us-ascii?Q?w8Vln/HoukPXRbQzD7L/3fIN/9Z8gjEmk1Jb4uaXMndt+3nhmfRHZatuY6vJ?=
- =?us-ascii?Q?LMd5Ka/KdsXKb3u565Na/1cp4GaxtS0k3pAEUbmYrvlGVyeCEe9lKfy9+5Qf?=
- =?us-ascii?Q?8YZ5e7zScOQ1QGaaT+wSHuJuT0RtUu3XbjTGNN5W+0j+Eg2WV/JUL1YdrrmS?=
- =?us-ascii?Q?lGrl2QS5Z5esbKyKQ0BOvfIzOwEAHNx7zIMGPdfjCq0OupbMK4XuPqYN8rHL?=
- =?us-ascii?Q?HlC0DXMzSQV1E8itxR8uwT/2fczYzTvqBYKhJAjeVdcMQYk5ZnI8MXreYF2g?=
- =?us-ascii?Q?0Qg5fLQwpZdttCACI1AOmLcShgVFi9WUQvFCmQlueL1E7ma3xBOvqK64NZvQ?=
- =?us-ascii?Q?rLxyTh8lQu/VA5P4frYHlUYnNyYOT5ZZgLvx6xIKjpv9RCfvoiVp0n3V0LTv?=
- =?us-ascii?Q?kcM7Srk30GvlB2rSfdDkVW52TwKBRKNjjHT/SAjDLP2LJ7cRpZdhwwWa3cbi?=
- =?us-ascii?Q?h9m8Dc1g4i5TEfvLGNPiqGEBhxVXcDB8mgc7DbIe0LIA1FujmpJ5TNLleg28?=
- =?us-ascii?Q?VrMile10L3V5LgnBa8EkgW0pNqzd5EnPO8n/oIc2biXNsedXnylHagwCN6PK?=
- =?us-ascii?Q?exhRtC8iMqWs21x2+3gE9UkPf8/Uw4Dq/Tx7tj/9j39jYEnn06HQVUVOXyL/?=
- =?us-ascii?Q?mY3qJrxRLABJ7V1P1bdnIpyicVxfts2vMMn2fwcCbgsTOLHaZwof/ztw8JA2?=
- =?us-ascii?Q?4oZ6elugsBY1mtllR++GNxPTjsna02/sy7gFtp8NuKaQ6bbl1HHdSDmVYn2s?=
- =?us-ascii?Q?0qFSiQadjDCk0NmLD+4thDnyTXbwxR5A+K2IJF3cVRCfI9gwak+C2HIuPekM?=
- =?us-ascii?Q?/Gc1XxSL18HsSM+BMpI0TFLIesdOjsUq9z7O11c2LJUAbbjxSWGBzh1s4ko5?=
- =?us-ascii?Q?fGGdFqCt54rGrxT2216fsytW64td5vSccQ6GJKverR47XVEnl6kSLlELhsT2?=
- =?us-ascii?Q?UV4NC4icejsH9pUUzDyHZcJ7Yq5jIq/+Pa5dtB04h713xXPQDsRn3Zbkp9Gr?=
- =?us-ascii?Q?QWl58uiT5IeWSYnqZlsLmgoatBBU6jBQnKxZRENMH463iKUo3hNXUeTeBH66?=
- =?us-ascii?Q?BUgdKLo/IrvcJbg2OyCd64QzQFr5joklpBa/yH4qtQsGWoCz+Xcf7MWskfQ8?=
- =?us-ascii?Q?rtOgj7/DhdqczfW5lAuMftWOvkRQUEBpOf5HOg9jJtXTaWZj1Nm3BQie6gKe?=
- =?us-ascii?Q?ohyxu2lvwMXje/bn6L0WZBh0KXByhC65+GAAqAEuybK6d8bccb8jaAsbUoow?=
- =?us-ascii?Q?J1FpRTtf4oL/Fh4o8NrPp5eQv6m1eiAIOZ2ogRnpSWLdHVt6kmXM3isJ+1mX?=
- =?us-ascii?Q?KnU7X7uWsySl5gp4595ur38OL58dkl/i4/T/svQUPRVtU7//ELMcJEUgdMrp?=
- =?us-ascii?Q?4d02T2gFeB8H38oIRyoiJfQo7plAsB3Vo04c8/nQT9k53Jobd1cJ9ocOuJZx?=
- =?us-ascii?Q?IiXvZ4cEog1P0OoNBkfEW4KABnz0J6ZIR/f1VxVuVg5sU5dQYVqmh/rKXNBV?=
- =?us-ascii?Q?gGcu8QIDLptNLclhGi3ElG5smrBNoOTDDgijPDslpqwXxz3W9GvPJfYFNY/2?=
- =?us-ascii?Q?in/e08++b7EV9Sno4/Paz2c=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S241049AbiBKUR2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 15:17:28 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D55CF9
+        for <linux-usb@vger.kernel.org>; Fri, 11 Feb 2022 12:17:27 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id y4-20020a056602200400b006101b618529so7106215iod.19
+        for <linux-usb@vger.kernel.org>; Fri, 11 Feb 2022 12:17:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Xz1I+Xbcjqae8KA5fHK4lIyHe9puGRVstIsWlkTfrRs=;
+        b=fPNZcuS3ZYoFLWY1VOzPRQPUONihfl1WHNKSKQPIBbgOQXeDiQscUxbl8bBYrL605c
+         ra3gfgh0wFO0uV2wjIazriVxSOGK4v9k8PYVD8NSXyLQ+xuoUa0/LcR7Cxt3snAAPifR
+         McnVefNaC6qZPNWhGxhGdjg7vE5Qvbhj3Zj5VugA8arMo3nWxaUGDXcF1z6b4y8c+5Yh
+         WSzD4Yz8Q610sFQYQHmQIHMoW9wsRPjiqQjG7OOJLEKcVM/78ROR220OwLrrj7R+3ugJ
+         vge2dTMjV6GMnrRM0U4OPdNu2884rzXakb5zLKIJ9PwyBPH6uzh4/ApdMeo41ytFesSA
+         tzEQ==
+X-Gm-Message-State: AOAM531lSzI0mvs+fupaKp+Wnr4k9S/qFu6QyPYAHjEA20WYySui7IV4
+        JzE+vtbGizUJ4PVnhC4FyFvlz/2j0T4AFokIFCopf31QidlH
+X-Google-Smtp-Source: ABdhPJwMw2Vqqid+0jG6nPmh+IC1qUUWXUyJR37yGE12sb0XQlZSlAZQ74KXxZFhgyE/KWnUJoUfbzywKoCguWZ8ReI+j5oIkThr
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2754d213-e478-42ed-af33-08d9ed95f55f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Feb 2022 19:37:37.1297
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: X34UvYA9nrRyoP8VqHVcHg+k6hvlT2XHsWy7fxuS1JhX0SMeVw0KjYGX9EvOlFcg7Mwj7krVxJJIZ5kUjUuaug==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB2910
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c681:: with SMTP id o1mr1838769ilg.72.1644610646222;
+ Fri, 11 Feb 2022 12:17:26 -0800 (PST)
+Date:   Fri, 11 Feb 2022 12:17:26 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005cacef05d7c3c10d@google.com>
+Subject: [syzbot] memory leak in hub_event (3)
+From:   syzbot <syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        noralf@tronnes.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com, tzimmermann@suse.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[Public]
+Hello,
 
-> -----Original Message-----
-> From: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Sent: Friday, February 11, 2022 04:24
-> To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>; Andreas Noever
-> <andreas.noever@gmail.com>; open list:PCI SUBSYSTEM <linux-
-> pci@vger.kernel.org>; open list:THUNDERBOLT DRIVER <linux-
-> usb@vger.kernel.org>; open list:RADEON and AMDGPU DRM DRIVERS <amd-
-> gfx@lists.freedesktop.org>; open list:DRM DRIVERS <dri-
-> devel@lists.freedesktop.org>; open list:DRM DRIVER FOR NVIDIA
-> GEFORCE/QUADRO GPUS <nouveau@lists.freedesktop.org>; open list:X86
-> PLATFORM DRIVERS <platform-driver-x86@vger.kernel.org>; Michael Jamet
-> <michael.jamet@intel.com>; Yehezkel Bernat <YehezkelShB@gmail.com>;
-> Lukas Wunner <lukas@wunner.de>; Deucher, Alexander
-> <Alexander.Deucher@amd.com>
-> Subject: Re: [PATCH v2 3/9] PCI: drop `is_thunderbolt` attribute
->=20
-> Hi Mario,
->=20
-> On Thu, Feb 10, 2022 at 04:43:23PM -0600, Mario Limonciello wrote:
-> > The `is_thunderbolt` attribute is currently a dumping ground for a
-> > variety of things.
-> >
-> > Instead use the driver core removable attribute to indicate the
-> > detail a device is attached to a thunderbolt or USB4 chain.
-> >
-> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > ---
-> >  drivers/pci/pci.c                 |  2 +-
-> >  drivers/pci/probe.c               | 20 +++++++-------------
-> >  drivers/platform/x86/apple-gmux.c |  2 +-
-> >  include/linux/pci.h               |  5 ++---
-> >  4 files changed, 11 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > index 9ecce435fb3f..1264984d5e6d 100644
-> > --- a/drivers/pci/pci.c
-> > +++ b/drivers/pci/pci.c
-> > @@ -2955,7 +2955,7 @@ bool pci_bridge_d3_possible(struct pci_dev *bridg=
-e)
-> >  			return true;
-> >
-> >  		/* Even the oldest 2010 Thunderbolt controller supports D3. */
-> > -		if (bridge->is_thunderbolt)
-> > +		if (dev_is_removable(&bridge->dev))
->=20
-> For this, I'm not entirely sure this is what we want. The purpose of
-> this check is to enable port power management of Apple systems with
-> Intel Thunderbolt controller and therefore checking for "removable" here
-> is kind of misleading IMHO.
->=20
-> I wonder if we could instead remove the check completely here and rely
-> on the below:
->=20
-> 	if (platform_pci_bridge_d3(bridge))
-> 		return true;
->=20
-> and that would then look like:
->=20
-> static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
-> {
-> 	if (pci_use_mid_pm())
-> 		return false;
->=20
-> 	if (acpi_pci_bridge_d3(dev))
-> 		return true;
->=20
-> 	if (device_property_read_bool(&dev->dev, "HotPlugSupportInD3"))
-> 		return true;
->=20
-> 	return false;
-> }
->=20
-> and then make a quirk in quirks.c that adds the software node property
-> for the Apple systems? Or something along those lines.
->=20
-> @Lukas, what do you think?
+syzbot found the following issue on:
 
-I took a stab at doing this for V3, but I'm unsure whether ALL of the TBT c=
-ontrollers
-in pci_ids.h have been used in Apple laptops, so it might be a bit wasteful=
- of a quirk
-list.  If there is a known list somewhere that is shorter than that, it may=
- be possible
-to pare down.  Lukas, if you can please look closely at patch 3 of v3.
+HEAD commit:    dfd42facf1e4 Linux 5.17-rc3
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14b4ef7c700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=48b71604a367da6e
+dashboard link: https://syzkaller.appspot.com/bug?extid=8caaaec4e7a55d75e243
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1396902c700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1466e662700000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff88810d49e800 (size 2048):
+  comm "kworker/1:1", pid 25, jiffies 4294954629 (age 16.460s)
+  hex dump (first 32 bytes):
+    ff ff ff ff 31 00 00 00 00 00 00 00 00 00 00 00  ....1...........
+    00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00  ................
+  backtrace:
+    [<ffffffff82c87a62>] kmalloc include/linux/slab.h:581 [inline]
+    [<ffffffff82c87a62>] kzalloc include/linux/slab.h:715 [inline]
+    [<ffffffff82c87a62>] usb_alloc_dev+0x32/0x450 drivers/usb/core/usb.c:582
+    [<ffffffff82c91a47>] hub_port_connect drivers/usb/core/hub.c:5260 [inline]
+    [<ffffffff82c91a47>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+    [<ffffffff82c91a47>] port_event drivers/usb/core/hub.c:5660 [inline]
+    [<ffffffff82c91a47>] hub_event+0x1097/0x21a0 drivers/usb/core/hub.c:5742
+    [<ffffffff8126c3ef>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
+    [<ffffffff8126ccd9>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
+    [<ffffffff81276765>] kthread+0x125/0x160 kernel/kthread.c:377
+    [<ffffffff810022ff>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+BUG: memory leak
+unreferenced object 0xffff88810f5bd660 (size 32):
+  comm "kworker/1:1", pid 25, jiffies 4294954629 (age 16.460s)
+  hex dump (first 32 bytes):
+    31 2d 31 00 00 00 00 00 00 00 00 00 00 00 00 00  1-1.............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff822cae8c>] kvasprintf+0x6c/0xf0 lib/kasprintf.c:25
+    [<ffffffff822caf68>] kvasprintf_const+0x58/0x110 lib/kasprintf.c:49
+    [<ffffffff823c074b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:289
+    [<ffffffff826ae353>] dev_set_name+0x63/0x90 drivers/base/core.c:3193
+    [<ffffffff82c87c20>] usb_alloc_dev+0x1f0/0x450 drivers/usb/core/usb.c:650
+    [<ffffffff82c91a47>] hub_port_connect drivers/usb/core/hub.c:5260 [inline]
+    [<ffffffff82c91a47>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+    [<ffffffff82c91a47>] port_event drivers/usb/core/hub.c:5660 [inline]
+    [<ffffffff82c91a47>] hub_event+0x1097/0x21a0 drivers/usb/core/hub.c:5742
+    [<ffffffff8126c3ef>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
+    [<ffffffff8126ccd9>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
+    [<ffffffff81276765>] kthread+0x125/0x160 kernel/kthread.c:377
+    [<ffffffff810022ff>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+BUG: memory leak
+unreferenced object 0xffff888109944200 (size 256):
+  comm "kworker/1:1", pid 25, jiffies 4294954683 (age 15.920s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 08 42 94 09 81 88 ff ff  .........B......
+    08 42 94 09 81 88 ff ff f0 e3 6a 82 ff ff ff ff  .B........j.....
+  backtrace:
+    [<ffffffff826b3d9b>] kmalloc include/linux/slab.h:581 [inline]
+    [<ffffffff826b3d9b>] kzalloc include/linux/slab.h:715 [inline]
+    [<ffffffff826b3d9b>] device_private_init drivers/base/core.c:3249 [inline]
+    [<ffffffff826b3d9b>] device_add+0x89b/0xdf0 drivers/base/core.c:3299
+    [<ffffffff8439de0c>] usb_new_device.cold+0x10f/0x58e drivers/usb/core/hub.c:2566
+    [<ffffffff82c91d14>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
+    [<ffffffff82c91d14>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+    [<ffffffff82c91d14>] port_event drivers/usb/core/hub.c:5660 [inline]
+    [<ffffffff82c91d14>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
+    [<ffffffff8126c3ef>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
+    [<ffffffff8126ccd9>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
+    [<ffffffff81276765>] kthread+0x125/0x160 kernel/kthread.c:377
+    [<ffffffff810022ff>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
