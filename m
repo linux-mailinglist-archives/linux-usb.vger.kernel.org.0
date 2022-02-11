@@ -2,50 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33EA64B244C
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 12:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D562F4B2595
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 13:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349450AbiBKL3x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Feb 2022 06:29:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47644 "EHLO
+        id S1349962AbiBKMY2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Feb 2022 07:24:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349451AbiBKL3x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 06:29:53 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C7AE8E
-        for <linux-usb@vger.kernel.org>; Fri, 11 Feb 2022 03:29:51 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JwBGr2lfdz4xRB;
-        Fri, 11 Feb 2022 22:29:40 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1644578982;
-        bh=jVoIClN15+OtLQuv2Kdtn7rJzhfibLfv/3zw6QaPCWg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=aA2uFoAhqcTnM5aYJUTHpBDSIhoHEqhd+F+G/yoE8Ifa9EFZJdFmdbWvwgvc21ZUd
-         In/GxrGv/88X/cuscJlxnjiOmxH1ej2HLJwJKyrx5A7O+JtU5XD8ifQTpyVnqoC8vI
-         W+YP1aXhw6Q2XxbtBgGSY7eaIVFoQt1UKjkaOJAi61/Vf2/pSMmCGuNl5FoeiGJyZ3
-         /zjZtGC3wrdPnYya2Ne7T9bsbs3IETUmLeXirke52q5RRuH5G+bUlvy02T3jiLsU4J
-         13qggON3Is8nx6XbvdckUtKyWDPor+2vJSbuluNC1Z87h6mN3sPR76f9p20mACdFm8
-         Zf/xetor5pTUw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Ash Logan <ash@heyquark.com>, benh@kernel.crashing.org,
-        paulus@samba.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        j.ne@posteo.net, linkmauve@linkmauve.fr
-Subject: Re: [RFC] Upstreaming Linux for Nintendo Wii U
-In-Reply-To: <0020d47c-0e23-822c-33f5-ccb7ea4c1072@heyquark.com>
-References: <0020d47c-0e23-822c-33f5-ccb7ea4c1072@heyquark.com>
-Date:   Fri, 11 Feb 2022 22:29:36 +1100
-Message-ID: <87ee49sktb.fsf@mpe.ellerman.id.au>
+        with ESMTP id S1349957AbiBKMY2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 07:24:28 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7574ADC3;
+        Fri, 11 Feb 2022 04:24:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644582266; x=1676118266;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=u0NFQSqU8nFRCacBmC6t3+7/vZNIdJqiy1WnYmvJT2E=;
+  b=OnocrvH6198AAB4hbENghshtnMOZ+D+AdohIpYa+TK5WfSBXcM5Xr1kT
+   MAozqHKWNxQMfg8KNrYgri5wZ/YcO5iJ1XFhS/XtrA1HJ3fqIOQ3FIn+r
+   I8qBEBODFlJ85TOfAozQ3TGUXHD4GUJ8+bCBzrMcWSF8eIOCptkX8vNcN
+   U=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Feb 2022 04:24:26 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 04:24:25 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 11 Feb 2022 04:24:25 -0800
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 11 Feb 2022 04:24:20 -0800
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
+        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
+        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
+        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
+        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>,
+        <quic_schowdhu@quicinc.com>
+Subject: [PATCH V7] MAINTAINERS: Add maintainer entry for EUD
+Date:   Fri, 11 Feb 2022 17:53:44 +0530
+Message-ID: <b7a9d113f610e2edf67c6a813fc173b1857b9919.1644580972.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,67 +64,81 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Ash Logan <ash@heyquark.com> writes:
-> Hello,
+Add the entry for maintainer for EUD driver
+and other associated files.
 
-Hi Ash,
+Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
 
-I can't really answer all your questions, but I can chime in on one or
-two things ...
+Changes in V7
 
-> - Right now I've made a new platform (like ps3) rather than joining the
-> GameCube and Wii in embedded6xx, since that is marked as BROKEN_ON_SMP.
-> The Wii U is a 3-core system, though a CPU bug[8] prevents existing
-> userspaces working with it. Bit of a "cross that bridge when we get
-> there" situation, though I'm reluctant to prevent that possibility by
-> using a BROKEN_ON_SMP platform.
+* Added the Maintainer entry in the sorted order.
 
-I'm happy for it to be a new platform. I'd almost prefer it to be a
-separate platform, that way you can make changes in your platform code
-without worrying (as much) about breaking other platforms.
+Changes in V6
 
-> - Like the Wii before it, the Wii U has a small amount of RAM at address
-> zero, a gap, then a large amount of RAM at a higher address. Instead of
-> the "map everything and reserve the gap" approach of the Wii, we loop
-> over each memblock and map only true RAM[9]. This seems to work, but as
-> far as I can tell is unique amongst powerpc32 platforms, so it's worth
-> pointing out. (Note: I've been told this doesn't work anymore after some
-> KUAP changes[10], so this point might be moot; haven't investigated)
+* Added the review tags from V5 and moved qcom_eud.c to drivers/usb/misc.
 
-We'd need more detail on that I guess. Currently all the 32-bit
-platforms use the flat memory model, which assumes RAM is a single
-contiguous block. Though that doesn't mean it all has to be used or
-mapped, like the Wii does. To properly support your layout you should be
-using sparsemem, but it's possible that's more trouble than it's worth,
-I'm not sure. How far apart are the low and high blocks of RAM, and what
-are their sizes?
+Changes in V5
 
-> - Due to the aformentioned DMA restrictions and possibly a fatal
-> bytemasking bug on uncached mappings[11], I have been wondering if it'd
-> be better to just give up on the SRAM at address 0 altogether and use it
-> as VRAM or something, loading the kernel at a higher address.
+* Added the review tags and implemented comments on V4 of the patch.
 
-Don't you have exceptions entering down at low addresses? Even so you
-could possibly trampoline them up to the kernel at a high address.
- 
-> In terms of platform bringup, the key issue is whether to be embedded6xx
-> or not and what output device to use. Beyond that it's just things like
-> IRQ controller drivers, should be pretty straightforward. I think on our
-> end, we'll start rebasing to 5.15 (LTS) and start sending patches from
-> there. I know getting closer to HEAD is preferable, this project has
-> just moved very slowly in the past and being on LTS has been a lifesaver.
+Changes in V4
 
-As I said I'm happy for it to be a new platform. If there ends up being
-a lot of shared code we can always refactor, but embedded6xx is only
-~1500 LOC anyway.
+* Aligned the device tree node structure of EUD as per discussion.
 
-One thing that has come up with previous console port submissions is the
-requirement for patches to be signed off. The docs are here if you
-aren't familiar with them:
-  https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
+* Changes to usb-connector.yaml is no longer required and is not
+  included in the patch series.
 
-Otherwise your plan sounds good to me, 4.19 is pretty old so getting up
-to 5.15 would be a good start. Then submit whatever bits you can and
-chip away at it.
+* Implemented the rest of the comments on Version 3 of the patch.
 
-cheers
+Changes in V3
+
+* Removed the patch for registration of EUD connector as it is no longer
+  required.
+
+* Added the description to include EUD in usb-connector.yaml
+
+* Implemented comments on V2 of the patch.
+
+Changes in V2
+
+* Fixed the yaml issue and also implemented comments on yaml in V1.
+
+Changes in V1
+
+* EUD has now been mapped as a separate DT node as it is an independent QCOM IP.
+
+* EUD is attached to the connector child of dwc3 via port end point since EUD
+  driver needs the connector for role-switching.
+
+* EUD driver has been moved now to drivers/soc/qcom/qcom_eud.c.
+
+* All the comments from version 0 of the patch has been implemented.
+
+---
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 68f21d4..fe43371 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13981,6 +13981,14 @@ L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+ S:	Supported
+ F:	sound/soc/qcom/
+
++QCOM EMBEDDED USB DEBUGGER(EUD)
++M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
++L:	linux-arm-msm@vger.kernel.org
++S:	Maintained
++F:	Documentation/ABI/testing/sysfs-driver-eud
++F:	Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
++F:	drivers/usb/misc/qcom_eud.c
++
+ QCOM IPA DRIVER
+ M:	Alex Elder <elder@kernel.org>
+ L:	netdev@vger.kernel.org
+--
+2.7.4
+
