@@ -2,83 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7464B23EF
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 12:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33EA64B244C
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 12:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349322AbiBKLGE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Feb 2022 06:06:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35538 "EHLO
+        id S1349450AbiBKL3x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Feb 2022 06:29:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbiBKLGD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 06:06:03 -0500
-X-Greylist: delayed 303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 03:06:02 PST
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B29DDD;
-        Fri, 11 Feb 2022 03:06:02 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 3FF945802DE;
-        Fri, 11 Feb 2022 06:00:56 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 11 Feb 2022 06:00:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=eTq08rTzfj5KkcaJxtUYdNoUyR1h3Gj7HSsSPr
-        JULK8=; b=JekeCQkcPUuaB4oTYa2ThcM1ktzDr8IZ3F17aQJsZAfd44RY+H3mvR
-        4PBBxRGZawhzeq9DpMNNkcYVyPbyVKClFWho5gsadPQExfXBuR10ukiCn+cd7zUX
-        kmU/jESuZ3Ravq859m0Z3LVHHBXR/a798bGqlo/Fhf4IL2kpoFYCrkuLitSSnYh5
-        JAlc+eaU/1EHEyoyL7Kl1wn/EMPdXOxibBqgYf918PN8WzjrpUaZSakvjgZE14M4
-        Wp6w6N/iYLCS+WMV2BBdnvp/YPDb5moI9opgRVrkczws8BxzlaiW41a7eh5WscXZ
-        gArTobkc1/Pg2EHUENcFcTlbh7B0n5BA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=eTq08rTzfj5KkcaJx
-        tUYdNoUyR1h3Gj7HSsSPrJULK8=; b=Se8UFglJyvJEwTyLT4CIzb0hVo27tMdFv
-        Rg490LB3tY0VTNjBpNMf4G5fDirdaSDwHfmTA2PW2q+SaBUSIg3l2/etPg6cz/Vx
-        lb37OYp50Jj+NlFIWHmdVxAPoGTe8gEn1eDcKvRfkLOS2ur6VyKuvbVLgV9sPYYo
-        nGLBTDSA/grwlTkv9Q1AleoumvWFChXc8XexsDFuCMVYRxSatvqihcqIBP/pSyNv
-        rlFi+k1JXtxAwQ4HKr5XY7vkKscBx3NxGkCsPQS1mWsj+zs9Dk0bKRJgu5wINOdN
-        fk+8gTisOoIqtZJZ/7Ejx7UXwTt6HxvU0fFiYOu0v89ChGIiftC/g==
-X-ME-Sender: <xms:50EGYpit175PhntoWGSnoL7iTOgfC02A66WBdjWA8BmYLzY-1SREew>
-    <xme:50EGYuCV4Sc-JWeKCXsBthjskzi2Uius3mDDRwrkh_MVx_c1ExV9-0ZDV6vEZ1R-i
-    s8PnwDMZfgN4g>
-X-ME-Received: <xmr:50EGYpFolAnnkTyA2T8ImawgmE8hT2SPwa1Xzjk6FxDxyTmNeFRAymtUu51NSQYCuaDDhhA2HSXZOKifeWpnMmgxkK0c9Udm>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrieefgddvudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvffukfhfgggtuggjsehttdertd
-    dttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeen
-    ucggtffrrghtthgvrhhnpeevueehjefgfffgiedvudekvdektdelleelgefhleejieeuge
-    egveeuuddukedvteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
-    fhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:50EGYuQ3stLp0XVWz0NwbphnIA-rya3fzFrb6SV4rkt_IUhNVTT1bg>
-    <xmx:50EGYmxojE5JTx9ZzhVfRTXOqQ0fXDLVHid7_FSWyGW1xiLb2JFVdg>
-    <xmx:50EGYk4aEAQwtdyNLiAA8lXXQWFy_GurtIn69WfRYLWxlhmRkDYOOg>
-    <xmx:6EEGYudPd94MrZgRoyBviUxZQxKD3oGYPtV58Fo2zA0_pVf2KL-ciQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 11 Feb 2022 06:00:55 -0500 (EST)
-Date:   Fri, 11 Feb 2022 12:00:52 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
-        bjorn.andersson@linaro.org, robh@kernel.org,
-        linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com,
-        quic_psodagud@quicinc.com, quic_satyap@quicinc.com,
-        quic_pheragu@quicinc.com, quic_rjendra@quicinc.com,
-        quic_sibis@quicinc.com, quic_saipraka@quicinc.com
-Subject: Re: [PATCH V6 6/6] MAINTAINERS: Add maintainer entry for EUD
-Message-ID: <YgZB5AM9rOPvA9fm@kroah.com>
-References: <cover.1644339918.git.quic_schowdhu@quicinc.com>
- <50cc73b4432c3d118361e6c9d47a9b0f7682e8ae.1644339918.git.quic_schowdhu@quicinc.com>
+        with ESMTP id S1349451AbiBKL3x (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 06:29:53 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C7AE8E
+        for <linux-usb@vger.kernel.org>; Fri, 11 Feb 2022 03:29:51 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JwBGr2lfdz4xRB;
+        Fri, 11 Feb 2022 22:29:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1644578982;
+        bh=jVoIClN15+OtLQuv2Kdtn7rJzhfibLfv/3zw6QaPCWg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=aA2uFoAhqcTnM5aYJUTHpBDSIhoHEqhd+F+G/yoE8Ifa9EFZJdFmdbWvwgvc21ZUd
+         In/GxrGv/88X/cuscJlxnjiOmxH1ej2HLJwJKyrx5A7O+JtU5XD8ifQTpyVnqoC8vI
+         W+YP1aXhw6Q2XxbtBgGSY7eaIVFoQt1UKjkaOJAi61/Vf2/pSMmCGuNl5FoeiGJyZ3
+         /zjZtGC3wrdPnYya2Ne7T9bsbs3IETUmLeXirke52q5RRuH5G+bUlvy02T3jiLsU4J
+         13qggON3Is8nx6XbvdckUtKyWDPor+2vJSbuluNC1Z87h6mN3sPR76f9p20mACdFm8
+         Zf/xetor5pTUw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Ash Logan <ash@heyquark.com>, benh@kernel.crashing.org,
+        paulus@samba.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        j.ne@posteo.net, linkmauve@linkmauve.fr
+Subject: Re: [RFC] Upstreaming Linux for Nintendo Wii U
+In-Reply-To: <0020d47c-0e23-822c-33f5-ccb7ea4c1072@heyquark.com>
+References: <0020d47c-0e23-822c-33f5-ccb7ea4c1072@heyquark.com>
+Date:   Fri, 11 Feb 2022 22:29:36 +1100
+Message-ID: <87ee49sktb.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50cc73b4432c3d118361e6c9d47a9b0f7682e8ae.1644339918.git.quic_schowdhu@quicinc.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,31 +53,67 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 11:24:29PM +0530, Souradeep Chowdhury wrote:
-> Add the entry for maintainer for EUD driver
-> and other associated files.
-> 
-> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  MAINTAINERS | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b84e2d5..f86ec0e 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -7227,6 +7227,14 @@ F:	include/uapi/linux/mdio.h
->  F:	include/uapi/linux/mii.h
->  F:	net/core/of_net.c
-> 
-> +QCOM EMBEDDED USB DEBUGGER(EUD)
-> +M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> +L:	linux-arm-msm@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/ABI/testing/sysfs-driver-eud
-> +F:	Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-> +F:	drivers/usb/misc/qcom_eud.c
+Ash Logan <ash@heyquark.com> writes:
+> Hello,
 
-This needs to be in sorted order :(
+Hi Ash,
 
+I can't really answer all your questions, but I can chime in on one or
+two things ...
+
+> - Right now I've made a new platform (like ps3) rather than joining the
+> GameCube and Wii in embedded6xx, since that is marked as BROKEN_ON_SMP.
+> The Wii U is a 3-core system, though a CPU bug[8] prevents existing
+> userspaces working with it. Bit of a "cross that bridge when we get
+> there" situation, though I'm reluctant to prevent that possibility by
+> using a BROKEN_ON_SMP platform.
+
+I'm happy for it to be a new platform. I'd almost prefer it to be a
+separate platform, that way you can make changes in your platform code
+without worrying (as much) about breaking other platforms.
+
+> - Like the Wii before it, the Wii U has a small amount of RAM at address
+> zero, a gap, then a large amount of RAM at a higher address. Instead of
+> the "map everything and reserve the gap" approach of the Wii, we loop
+> over each memblock and map only true RAM[9]. This seems to work, but as
+> far as I can tell is unique amongst powerpc32 platforms, so it's worth
+> pointing out. (Note: I've been told this doesn't work anymore after some
+> KUAP changes[10], so this point might be moot; haven't investigated)
+
+We'd need more detail on that I guess. Currently all the 32-bit
+platforms use the flat memory model, which assumes RAM is a single
+contiguous block. Though that doesn't mean it all has to be used or
+mapped, like the Wii does. To properly support your layout you should be
+using sparsemem, but it's possible that's more trouble than it's worth,
+I'm not sure. How far apart are the low and high blocks of RAM, and what
+are their sizes?
+
+> - Due to the aformentioned DMA restrictions and possibly a fatal
+> bytemasking bug on uncached mappings[11], I have been wondering if it'd
+> be better to just give up on the SRAM at address 0 altogether and use it
+> as VRAM or something, loading the kernel at a higher address.
+
+Don't you have exceptions entering down at low addresses? Even so you
+could possibly trampoline them up to the kernel at a high address.
+ 
+> In terms of platform bringup, the key issue is whether to be embedded6xx
+> or not and what output device to use. Beyond that it's just things like
+> IRQ controller drivers, should be pretty straightforward. I think on our
+> end, we'll start rebasing to 5.15 (LTS) and start sending patches from
+> there. I know getting closer to HEAD is preferable, this project has
+> just moved very slowly in the past and being on LTS has been a lifesaver.
+
+As I said I'm happy for it to be a new platform. If there ends up being
+a lot of shared code we can always refactor, but embedded6xx is only
+~1500 LOC anyway.
+
+One thing that has come up with previous console port submissions is the
+requirement for patches to be signed off. The docs are here if you
+aren't familiar with them:
+  https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
+
+Otherwise your plan sounds good to me, 4.19 is pretty old so getting up
+to 5.15 would be a good start. Then submit whatever bits you can and
+chip away at it.
+
+cheers
