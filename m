@@ -2,77 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3834B22EF
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 11:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 806254B2316
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 11:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348832AbiBKKRS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Feb 2022 05:17:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48276 "EHLO
+        id S1348879AbiBKK12 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Feb 2022 05:27:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiBKKRS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 05:17:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA611B6B;
-        Fri, 11 Feb 2022 02:17:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8419D61E27;
-        Fri, 11 Feb 2022 10:17:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C861C340E9;
-        Fri, 11 Feb 2022 10:17:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644574637;
-        bh=b/ngfDkWDiw92226G+pIpM2EYFAMFZ6kYeblSJjHKcw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X1oYqHjxxMeI0aCEVvuYhGZFdUSQqWrbJrLweRZKnNQIRTIY32yx3KISfiv+s3rnb
-         otFF/DNL2yUw74LDPqu1bXcPLIgVBrvV/p4otbzTGWZUj5etdykV2LbHf/If67tZ92
-         T2/ijeW26wnEOJzyGmb7ULn0BW2TCm2kblySPlN0=
-Date:   Fri, 11 Feb 2022 11:17:14 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: Re: [PATCH v2 3/4] arm64: dts: mediatek: mt8195: add efuse node and
- cells
-Message-ID: <YgY3qvAy5lW1tEdG@kroah.com>
-References: <20220128062902.26273-1-chunfeng.yun@mediatek.com>
- <20220128062902.26273-3-chunfeng.yun@mediatek.com>
+        with ESMTP id S238663AbiBKK11 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 05:27:27 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6084DE47;
+        Fri, 11 Feb 2022 02:27:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644575247; x=1676111247;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RCuCxhjV4esmnxdab6oU2vPqQ9Idnpu43es31WIDuUM=;
+  b=mUtE7WikhP45LXtbdFLzf/K6XNii7C2kuabCpio2HB7JA/9zpHhHUTNs
+   Lr0ejHOf9VO1gBNkkpylSYZlCBmqsth3xo/z71iD2vj9yc+pjpwI7ZUh/
+   njLwJKDEYMM+eIz19Fi4k+SAq6K2nn/l6SCr6jbydAFAOmj09sIVUDo0x
+   RKeO16rYPY1lD+M6QakVDI+LLeStHxUJyK0tmoU/5UWkLa406nm+TdCEw
+   baW6qWY9cbND1xCLMR7aBoSe/yZ36TYoQQTNsyhW8lc4zCpQ4yIokyaAA
+   WO0vtmkmVwdHkhdMibuhH2HFoZHZAmVSgVJBBmlxkUQIt5mYxQLUomhfV
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="312990242"
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="312990242"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 02:27:13 -0800
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="542034263"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 02:27:08 -0800
+Received: by lahna (sSMTP sendmail emulation); Fri, 11 Feb 2022 12:23:51 +0200
+Date:   Fri, 11 Feb 2022 12:23:51 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+        "open list:RADEON and AMDGPU DRM DRIVERS" 
+        <amd-gfx@lists.freedesktop.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
+        <nouveau@lists.freedesktop.org>,
+        "open list:X86 PLATFORM DRIVERS" 
+        <platform-driver-x86@vger.kernel.org>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>, Alexander.Deucher@amd.com
+Subject: Re: [PATCH v2 3/9] PCI: drop `is_thunderbolt` attribute
+Message-ID: <YgY5N1eVWmi0Xyuw@lahna>
+References: <20220210224329.2793-1-mario.limonciello@amd.com>
+ <20220210224329.2793-4-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220128062902.26273-3-chunfeng.yun@mediatek.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220210224329.2793-4-mario.limonciello@amd.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 02:29:01PM +0800, Chunfeng Yun wrote:
-> Add efuse node and cells used by t-phy to fix the bit shift issue
+Hi Mario,
+
+On Thu, Feb 10, 2022 at 04:43:23PM -0600, Mario Limonciello wrote:
+> The `is_thunderbolt` attribute is currently a dumping ground for a
+> variety of things.
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Instead use the driver core removable attribute to indicate the
+> detail a device is attached to a thunderbolt or USB4 chain.
+> 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
-> v2: use hw auto load for u2phy which has no this issue
+>  drivers/pci/pci.c                 |  2 +-
+>  drivers/pci/probe.c               | 20 +++++++-------------
+>  drivers/platform/x86/apple-gmux.c |  2 +-
+>  include/linux/pci.h               |  5 ++---
+>  4 files changed, 11 insertions(+), 18 deletions(-)
 > 
-> Note:
-> 
->  depend on the reviewing patch:
-> 
-> [v9,3/3] arm64: dts: Add mediatek SoC mt8195 and evaluation board
-> https://patchwork.kernel.org/patch/12711296
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 9ecce435fb3f..1264984d5e6d 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -2955,7 +2955,7 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
+>  			return true;
+>  
+>  		/* Even the oldest 2010 Thunderbolt controller supports D3. */
+> -		if (bridge->is_thunderbolt)
+> +		if (dev_is_removable(&bridge->dev))
 
-As I don't have that in my tree, I can only take the first 2 patches
-here now, thanks.
+For this, I'm not entirely sure this is what we want. The purpose of
+this check is to enable port power management of Apple systems with
+Intel Thunderbolt controller and therefore checking for "removable" here
+is kind of misleading IMHO.
 
-greg k-h
+I wonder if we could instead remove the check completely here and rely
+on the below:
+
+	if (platform_pci_bridge_d3(bridge))
+		return true;
+
+and that would then look like:
+
+static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
+{
+	if (pci_use_mid_pm())
+		return false;
+
+	if (acpi_pci_bridge_d3(dev))
+		return true;
+
+	if (device_property_read_bool(&dev->dev, "HotPlugSupportInD3"))
+		return true;
+
+	return false;
+}
+
+and then make a quirk in quirks.c that adds the software node property
+for the Apple systems? Or something along those lines.
+
+@Lukas, what do you think?
