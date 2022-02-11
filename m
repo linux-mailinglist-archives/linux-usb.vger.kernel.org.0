@@ -2,54 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723784B2F70
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 22:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 118C64B2FB7
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Feb 2022 22:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353741AbiBKVgL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Feb 2022 16:36:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50900 "EHLO
+        id S243421AbiBKVpv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Feb 2022 16:45:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242027AbiBKVgK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 16:36:10 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CBEC61
-        for <linux-usb@vger.kernel.org>; Fri, 11 Feb 2022 13:36:09 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id m3-20020a056e02158300b002b6e3d1f97cso6752134ilu.19
-        for <linux-usb@vger.kernel.org>; Fri, 11 Feb 2022 13:36:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=uZFH8v5hdkuD13HWKXbwlKXOFU1tLj/1KgXaqFsCP+w=;
-        b=7qpsYNZ14Us1bLYYImbDODDgF2BOOApI461D3J3+U3Di+Waiy+imaAIKb2qrx4lM38
-         EL9RwaBt5jjcuOLDYcQzHwcMPVsHGBZlOyXMF2pIgsDvtxc99lF1F2heAZudxTNkNALd
-         yWcM+GX5+ks73rLbDoF2lJKJaxrc7k/a86kETuvs+uTrEJa8zqVlD+TJd7IGN5Fj9lTY
-         y7aFJO7VOn0+9IQL4cH0d6YBlUbHNcuKQdVZn6LhoL0k64nFt8h4b/6QWigjekt6M1mN
-         rGIYqZTnVewA+IB2CqBt5U1k8oki4+aAUse0GcW9EV507AYCo0EPBi72/AV97zJILpwR
-         myzQ==
-X-Gm-Message-State: AOAM531NId1jKtEcyiTfYZ9ovCofOUIleaxFLwAr8xaBRzYTihq3h+Wz
-        fgiN4TQBMpOCzpTEx8b19d30z15Nb4OnOPJJvzrqu49H1xXf
-X-Google-Smtp-Source: ABdhPJxIMl3Dj6whKaFjTGnZrRnkr5JcDWjIWAL80oKZ7CA90a6/GGlca6MO6Yn7/LWch5SH1DLI8BFkEEZ5aN7OR35Og6xECnE3
+        with ESMTP id S231754AbiBKVpu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Feb 2022 16:45:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A31C65;
+        Fri, 11 Feb 2022 13:45:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE33560B84;
+        Fri, 11 Feb 2022 21:45:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD758C340E9;
+        Fri, 11 Feb 2022 21:45:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644615948;
+        bh=2KgOn/RZzkXwEjZXA2P3mRTuQv6sRwGGGOoktFxh1d4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=kPdw7gJdeNgRqZ0bF0QfcOqrx72tFbaJ7hD6DvQ1Rb0gU0TCdCB/BPQS/brppXP+l
+         FToWaDqfReFE8zu4Il9ynRR+Gwhd0s03bclaI0GgUOfSqtoBWU2aaOEp9q1X/aeVlh
+         T8vp3E6RfwW9HsLAxJKQXYSBZaS2qa6AkMAEXCOZ72wOgShaOqGCjIBbr+MDQNzd/1
+         IMhMnhWEBINIulUeLcXAwUNc/vGTno3Nidyjuialc6CrHAsC9mYm2BqIoFeeX1y5hP
+         bk4le6RS1casf3+ljFu7eM9r9Bfu2irb4h38bqiKUMqzYuGzr8IXH7TQsysYbgj0DJ
+         LsPYmzVolLiwQ==
+Date:   Fri, 11 Feb 2022 15:45:46 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+        "open list:RADEON and AMDGPU DRM DRIVERS" 
+        <amd-gfx@lists.freedesktop.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
+        <nouveau@lists.freedesktop.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Alexander.Deucher@amd.com, Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>
+Subject: Re: [PATCH v3 05/12] PCI: Detect root port of internal USB4 devices
+ by `usb4-host-interface`
+Message-ID: <20220211214546.GA737137@bhelgaas>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:164f:: with SMTP id a15mr1964678jat.272.1644615368382;
- Fri, 11 Feb 2022 13:36:08 -0800 (PST)
-Date:   Fri, 11 Feb 2022 13:36:08 -0800
-In-Reply-To: <YgbT4uqSIVY9ku10@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d31cac05d7c4da7e@google.com>
-Subject: Re: [syzbot] memory leak in hub_event (3)
-From:   syzbot <syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com>
-To:     benjamin.tissoires@redhat.com, gregkh@linuxfoundation.org,
-        heikki.krogerus@linux.intel.com, jikos@kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, noralf@tronnes.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
-        tzimmermann@suse.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220211193250.1904843-6-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,19 +65,89 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Fri, Feb 11, 2022 at 01:32:43PM -0600, Mario Limonciello wrote:
+> The root port used for PCIe tunneling should be marked as removable to
+> ensure that the entire chain is marked removable.
+> 
+> This can be done by looking for the device property specified in
+> the ACPI tables `usb4-host-interface`.
+> 
+> Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Link: https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#mapping-native-protocols-pcie-displayport-tunneled-through-usb4-to-usb4-host-routers
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/pci/pci-acpi.c | 10 ++++++++++
+>  drivers/pci/pci.h      |  5 +++++
+>  drivers/pci/probe.c    |  1 +
+>  3 files changed, 16 insertions(+)
+> 
+> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> index a42dbf448860..6368e5633b1b 100644
+> --- a/drivers/pci/pci-acpi.c
+> +++ b/drivers/pci/pci-acpi.c
+> @@ -1391,6 +1391,16 @@ void pci_acpi_cleanup(struct device *dev, struct acpi_device *adev)
+>  	}
+>  }
+>  
+> +bool pci_acpi_is_usb4(struct pci_dev *dev)
+> +{
+> +	struct acpi_device *adev = ACPI_COMPANION(&dev->dev);
+> +
+> +	if (!adev)
+> +		return false;
+> +	return fwnode_property_present(acpi_fwnode_handle(adev),
+> +				       "usb4-host-interface");
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Maybe it's obvious to everybody but me that "USB4" means this device
+is removable.  The Microsoft reference above doesn't say anything
+about removability.
 
-Reported-and-tested-by: syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com
+My expectation is that "USB" (like "PCI" and "PCIe") tells me
+something about how a device is electrically connected and how
+software can operate it.  It doesn't really tell me anything about
+whether those electrical connections are permanent, made through an
+internal slot, or made through an external connector and cable.
 
-Tested on:
-
-commit:         dfd42fac Linux 5.17-rc3
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v5.17-rc3
-kernel config:  https://syzkaller.appspot.com/x/.config?x=48b71604a367da6e
-dashboard link: https://syzkaller.appspot.com/bug?extid=8caaaec4e7a55d75e243
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=121f0f78700000
-
-Note: testing is done by a robot and is best-effort only.
+> +}
+> +
+>  static struct fwnode_handle *(*pci_msi_get_fwnode_cb)(struct device *dev);
+>  
+>  /**
+> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> index 3d60cabde1a1..359607c0542d 100644
+> --- a/drivers/pci/pci.h
+> +++ b/drivers/pci/pci.h
+> @@ -695,6 +695,7 @@ void acpi_pci_refresh_power_state(struct pci_dev *dev);
+>  int acpi_pci_wakeup(struct pci_dev *dev, bool enable);
+>  bool acpi_pci_need_resume(struct pci_dev *dev);
+>  pci_power_t acpi_pci_choose_state(struct pci_dev *pdev);
+> +bool pci_acpi_is_usb4(struct pci_dev *dev);
+>  #else
+>  static inline int pci_dev_acpi_reset(struct pci_dev *dev, bool probe)
+>  {
+> @@ -734,6 +735,10 @@ static inline pci_power_t acpi_pci_choose_state(struct pci_dev *pdev)
+>  {
+>  	return PCI_POWER_ERROR;
+>  }
+> +static inline bool pci_acpi_is_usb4(struct pci_dev *dev)
+> +{
+> +	return false;
+> +}
+>  #endif
+>  
+>  #ifdef CONFIG_PCIEASPM
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index e41656cdd8f0..2693211d31cf 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -1610,6 +1610,7 @@ static void pci_set_removable(struct pci_dev *dev)
+>  	 * exposed as "removable" to userspace.
+>  	 */
+>  	if (vsec ||
+> +	    pci_acpi_is_usb4(dev) ||
+>  	    (parent &&
+>  	    (parent->external_facing || dev_is_removable(&parent->dev))))
+>  		dev_set_removable(&dev->dev, DEVICE_REMOVABLE);
+> -- 
+> 2.34.1
+> 
