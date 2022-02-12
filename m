@@ -2,149 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E3E4B3438
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Feb 2022 11:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC354B3518
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Feb 2022 14:04:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbiBLKaa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 12 Feb 2022 05:30:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37872 "EHLO
+        id S235170AbiBLNE7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Feb 2022 08:04:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiBLKaa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Feb 2022 05:30:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AE02611C;
-        Sat, 12 Feb 2022 02:30:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E657660B6A;
-        Sat, 12 Feb 2022 10:30:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4129C340E7;
-        Sat, 12 Feb 2022 10:30:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644661826;
-        bh=Li/ATbW+lmxvZ/cSftvODxa3jlx5aR8zqID/6gfHd1A=;
-        h=Date:From:To:Cc:Subject:From;
-        b=teSGSFa9Ho5OPPRwZTTiOPku8bTRBs1BshwPir9DGkd1lI4xGs9kpQqbxcmWNxsPv
-         O58h1eXXlAt9wfZ56ruKZutfBX8smrKmn1ca/rC+7HD3+fYbMmHCoSPnipCjTPmQJp
-         V/At+H2UOUSIaSvzaCQIe823KC7vx4gE65cKUOfk=
-Date:   Sat, 12 Feb 2022 11:30:23 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 5.17-rc4
-Message-ID: <YgeMP/kEFRI1Aq6T@kroah.com>
+        with ESMTP id S235157AbiBLNE6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Feb 2022 08:04:58 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4B926543;
+        Sat, 12 Feb 2022 05:04:53 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id y7so6823539plp.2;
+        Sat, 12 Feb 2022 05:04:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Htr9RxdeLjFIZPTJ97Vma8YsNeZOTaEf0nGAdLmzKEw=;
+        b=W+jHBfgysMFj725GDWlUkGdkV3URmuShiEPFeTQbRPYgrnqewta1eqjml4p8lhUPL4
+         s4nOqTeKNlYRK/J78WwEEh8p2/3j9fMw4y1riBK8lHcoFkevS1CWDwBEHP/GPXhShm57
+         Pcwl33LxHq0jBAhsQR/4DGOfBVuuwCZSy1jRla73BDZoeCg/ntCS5zANNfzlTcqQnVy/
+         o63CoE4srgTZHzAdYplS8KpAUSZc2ufiRbF25DNy+WUMv9nA8ioYyPqGr78/dD+9ccqr
+         U8YhyAsW5jll8krGl1n4On61g53dwh9Aehv/vKBxXI96AfUmTA9wTE8dYzYU1wU2TncT
+         kKkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Htr9RxdeLjFIZPTJ97Vma8YsNeZOTaEf0nGAdLmzKEw=;
+        b=1fLmVvugmCC96GrzGF6+JmCJoouTzSqq68rUtOTh5E0enEuSc4+VjZTU/++cZuj8TL
+         HYBz+Lx+7MAuyqjCnfFSeCHfXbfJvGQYWnWfhNbAGUaAOvW46oQM06sDmJ0Nh1RN/zhK
+         QkIGqxq4iSzuZhPuAVJ5Qb0LPffYceHvqQiRkVRQM+DQA/K6DdOvt3m5pr12HAVicUNG
+         D9eDiFc6IQdI7lEiVZH3mulNd2MIJ2oZ5QUvcPEgyflbP/rltGZW7sKP/qebELG+ln0C
+         MlhyimZDNUIR9YfkPHZzeiVAgc8DkUYhAFL+K7ukKx5j+c1iDIi8iHADAa37gHisUCoS
+         hShg==
+X-Gm-Message-State: AOAM531sLcFmP8vJuou9u+XJ/PYg+tRFL+fbc4qy2TOtP3igqNXybAFQ
+        e7qKZnf1LUbhcSm8LEmRWBs=
+X-Google-Smtp-Source: ABdhPJyDib6YwgUQVwXX2lSBrfldvstQ60Nk6SZeBTDTIhe0B1qTUW/BbE7Gu4/XhdZRFdw6l/1DrQ==
+X-Received: by 2002:a17:902:8205:: with SMTP id x5mr5830233pln.40.1644671092630;
+        Sat, 12 Feb 2022 05:04:52 -0800 (PST)
+Received: from localhost.localdomain ([2402:4000:2380:2a17:a7f8:71f:713f:850b])
+        by smtp.gmail.com with ESMTPSA id me18sm5584106pjb.39.2022.02.12.05.04.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Feb 2022 05:04:52 -0800 (PST)
+From:   Husni Faiz <ahamedhusni73@gmail.com>
+To:     b-liu@ti.com, gregkh@linuxfoundation.org
+Cc:     Husni Faiz <ahamedhusni73@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] usb: Fix Trailing Whitespace Coding Style Error
+Date:   Sat, 12 Feb 2022 18:34:45 +0530
+Message-Id: <20220212130445.503294-1-ahamedhusni73@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
+Removed Trailing whitespace.
 
-  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
+Signed-off-by: Husni Faiz <ahamedhusni73@gmail.com>
+---
+V2 -> V3: describe what has changed between the V1 and V2 patch.
+V1 -> V2: Added descriptive commit message.
 
-are available in the Git repository at:
+ drivers/usb/musb/musb_host.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.17-rc4
+diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
+index 9ff7d891b4b7..cf25a2b7e3bb 100644
+--- a/drivers/usb/musb/musb_host.c
++++ b/drivers/usb/musb/musb_host.c
+@@ -563,7 +563,7 @@ musb_rx_reinit(struct musb *musb, struct musb_qh *qh, u8 epnum)
+ 	ep->rx_reinit = 0;
+ }
+ 
+-static void musb_tx_dma_set_mode_mentor(struct musb_hw_ep *hw_ep, 
++static void musb_tx_dma_set_mode_mentor(struct musb_hw_ep *hw_ep,
+ 					struct musb_qh *qh,
+ 					u32 *length, u8 *mode)
+ {
+-- 
+2.25.1
 
-for you to fetch changes up to 736e8d89044c1c330967fb938fa766cd9e0d8af0:
-
-  Revert "usb: dwc2: drd: fix soft connect when gadget is unconfigured" (2022-02-12 10:08:54 +0100)
-
-----------------------------------------------------------------
-USB fixes for 5.17-rc4
-
-Here are some small USB driver fixes for 5.17-rc4 that resolve some
-reported issues and add new device ids:
-	- usb-serial new device ids
-	- ulpi cleanup fixes
-	- f_fs use-after-free fix
-	- dwc3 driver fixes
-	- ax88179_178a usb network driver fix
-	- usb gadget fixes
-
-There is a revert at the end of this series to resolve a build problem
-that 0-day found yesterday.  Most of these have been in linux-next,
-except for the last few, and all have now passed 0-day tests.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Adam Ford (1):
-      usb: gadget: udc: renesas_usb3: Fix host to USB_ROLE_NONE transition
-
-Cameron Williams (1):
-      USB: serial: ftdi_sio: add support for Brainboxes US-159/235/320
-
-Fabio M. De Francesco (1):
-      usb: core: Unregister device on component_add() failure
-
-Fabrice Gasnier (1):
-      usb: dwc2: drd: fix soft connect when gadget is unconfigured
-
-Greg Kroah-Hartman (3):
-      usb: gadget: rndis: check size of RNDIS_MSG_SET command
-      Merge tag 'usb-serial-5.17-rc4' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
-      Revert "usb: dwc2: drd: fix soft connect when gadget is unconfigured"
-
-Jann Horn (2):
-      usb: raw-gadget: fix handling of dual-direction-capable endpoints
-      net: usb: ax88179_178a: Fix out-of-bounds accesses in RX fixup
-
-Johan Hovold (2):
-      USB: serial: cp210x: add NCR Retail IO box id
-      USB: serial: cp210x: add CPI Bulk Coin Recycler id
-
-Pavel Hofman (1):
-      usb: gadget: f_uac2: Define specific wTerminalType
-
-Pawel Dembicki (1):
-      USB: serial: option: add ZTE MF286D modem
-
-Robert Hancock (1):
-      usb: dwc3: xilinx: fix uninitialized return value
-
-Sean Anderson (2):
-      usb: ulpi: Move of_node_put to ulpi_dev_release
-      usb: ulpi: Call of_node_put correctly
-
-Stephan Brunner (1):
-      USB: serial: ch341: add support for GW Instek USB2.0-Serial devices
-
-Szymon Heidrich (1):
-      USB: gadget: validate interface OS descriptor requests
-
-Tommaso Merciai (1):
-      usb: usb251xb: add boost-up property support
-
-Udipto Goswami (2):
-      usb: f_fs: Fix use-after-free for epfile
-      usb: dwc3: gadget: Prevent core from processing stale TRBs
-
- drivers/net/usb/ax88179_178a.c         | 68 +++++++++++++++++++---------------
- drivers/usb/common/ulpi.c              | 10 +++--
- drivers/usb/core/port.c                |  9 +++--
- drivers/usb/dwc3/dwc3-xilinx.c         |  2 +-
- drivers/usb/dwc3/gadget.c              | 13 +++++++
- drivers/usb/gadget/composite.c         |  3 ++
- drivers/usb/gadget/function/f_fs.c     | 56 +++++++++++++++++++++-------
- drivers/usb/gadget/function/f_uac2.c   |  4 +-
- drivers/usb/gadget/function/rndis.c    |  9 +++--
- drivers/usb/gadget/legacy/raw_gadget.c |  2 +-
- drivers/usb/gadget/udc/renesas_usb3.c  |  2 +
- drivers/usb/misc/usb251xb.c            |  4 +-
- drivers/usb/serial/ch341.c             |  1 +
- drivers/usb/serial/cp210x.c            |  2 +
- drivers/usb/serial/ftdi_sio.c          |  3 ++
- drivers/usb/serial/ftdi_sio_ids.h      |  3 ++
- drivers/usb/serial/option.c            |  2 +
- 17 files changed, 136 insertions(+), 57 deletions(-)
