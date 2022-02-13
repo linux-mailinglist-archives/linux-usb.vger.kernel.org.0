@@ -2,110 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E2D4B3B46
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Feb 2022 13:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C03A64B3B7A
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Feb 2022 14:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbiBMMQv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Feb 2022 07:16:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37398 "EHLO
+        id S233737AbiBMNFq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Feb 2022 08:05:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiBMMQu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Feb 2022 07:16:50 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96025C874
-        for <linux-usb@vger.kernel.org>; Sun, 13 Feb 2022 04:16:45 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id s6-20020a0568301e0600b0059ea5472c98so9700564otr.11
-        for <linux-usb@vger.kernel.org>; Sun, 13 Feb 2022 04:16:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=fswMWXGbRop3SHxbdRy9T894WQ0ceSdMaZ2xSNZDeR8=;
-        b=HICOoutDMi75rnboL2wfhZhgMhOTHslI/6SXOaNhPbUjc3A3mug1k27eAz8kAHkKWE
-         +iQnVz/NkrfzOQHd2x3fE5fcbSb9cewFXb4tTg+JrouXHLC1ZRLU6y4PIP7OGxy36Igs
-         k1XF3JcdsBFcmSMLUoTrkdEt2dm4OIUqD3gWJOX0cCZrmOSEDly/V6zAmMIWVdHEZTGM
-         UpvLTVZuyABDj3lp6Ivvhdw5y98tN6/X/tk7MmIBIQ4DtbUzyZbFBRwCsq+o3vRvzqwa
-         6R+ydvBVLPE6VeIhZ8HlQ+NX0FwvZqzRYyp1oZvnH/4K+D+6J0KMTS4G4HsUOpeoKLNs
-         6cRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=fswMWXGbRop3SHxbdRy9T894WQ0ceSdMaZ2xSNZDeR8=;
-        b=Kut56V6NxcTqDQParVNHIfa6UIt4jEcnPImEOkot+SJj4m5Dl9k0G8CejPwKA3PExV
-         LPYUBCMdiDK5DFL2q7vl/BobPsvnjQSU7sh9cZX/mqUoU1Xq765qtBLNcVv8m5zwzINo
-         eOpEeb5bbpgeicqGogywfxyOwufx75kJoBPE3c5PN/6lgBr1h6Fp/yr/igQxBiwZ+ggx
-         xuctrB3b789v6yQZZTzOLJCw96NU8/KERbkYVDgBi+XVcnBb6UAEBKJ/RWn2ckvD1mtc
-         v+3LE0I3oS4zfILTXUulMpGjEDJ3E7b8Bt+d3gk0U1LpSXCxAQaCAEHYAOI8dwhaxyHC
-         vFxQ==
-X-Gm-Message-State: AOAM531Y2wq76KGArxM/Vb5oZCGIm/FBuOANmYXu+OnPxpdC8xRgVAZi
-        JCjewDgMeIBUj11dNaFcVBQrCWYkfBv1UZJAATM=
-X-Google-Smtp-Source: ABdhPJzyfxUjdWuNn7Im04qKiRFennyeGZsNx3bu1kBeQxaaN/PHG6GI71lfyCn4oQ+YcUhxNho+J+4LSHL6t7ElsRI=
-X-Received: by 2002:a05:6830:1696:: with SMTP id k22mr3503017otr.180.1644754605218;
- Sun, 13 Feb 2022 04:16:45 -0800 (PST)
+        with ESMTP id S231652AbiBMNFl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Feb 2022 08:05:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 845E95B88E
+        for <linux-usb@vger.kernel.org>; Sun, 13 Feb 2022 05:05:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644757535;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Ohq2A62q6iZea97Y7Wsr23In+WCCgPO+rrzdK8oCfDg=;
+        b=ZnTBSIa3jGjYRcK9ecHuaRix4LHWw68NbL6GJ95YYbT0kJ0kxeFFnF72UgBPGewy5iLR4y
+        d0Rmb0/dJh2QHOLbGzieohmqptqdbOXX057dE1PpakO2YlForBS2hX6K39133AIaYGNbuQ
+        bd+yASEkHZ87UfMyQutdC3D9NSjH1i8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-70-Hl9fi6KeM6qFduMqyds0Ww-1; Sun, 13 Feb 2022 08:05:32 -0500
+X-MC-Unique: Hl9fi6KeM6qFduMqyds0Ww-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 18CC21091DA0;
+        Sun, 13 Feb 2022 13:05:31 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.192.92])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BD90C7B9DD;
+        Sun, 13 Feb 2022 13:05:25 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
+Subject: [PATCH v2 0/9] usb/dwc3 / phy/tusb1210: Add TUSB1211 charger detection
+Date:   Sun, 13 Feb 2022 14:05:15 +0100
+Message-Id: <20220213130524.18748-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:ac9:7044:0:0:0:0:0 with HTTP; Sun, 13 Feb 2022 04:16:44
- -0800 (PST)
-From:   Jennifer Oyinna <chizaramjennifer7@gmail.com>
-Date:   Sun, 13 Feb 2022 13:16:44 +0100
-Message-ID: <CABNtvDLQi5sKjbWuaePer5EJ9QZwZvhhK8Nn4VBS6LWV4LkjMw@mail.gmail.com>
-Subject: =?UTF-8?B?0KXQntCg0J7QqNCY0Jkg0JTQldCd0Kw=?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-0J/RgNC40LLRltGCINC00YDRg9C20LUsDQrQr9C6INGC0LLQvtGXINGB0L/RgNCw0LLQuCDRgdGM
-0L7Qs9C+0LTQvdGWPyDQryDQm9C+0YLQsNGA0ZbQviDQnNCw0L3RhNGA0LXQtNC+INCQ0LvQtdC6
-0YHRltGBLCDRgdC/0ZbQstGA0L7QsdGW0YLQvdC40LogVUJJDQpCYW5jYSwg0IbRgtCw0LvRltGP
-LiDQryDQt9Cy4oCZ0Y/Qt9GD0Y7RgdGMINC3INCy0LDQvNC4INGJ0L7QtNC+INC/0L7QvNC10YDQ
-u9C+0LPQviDQutC70ZbRlNC90YLQsCwg0Y/QutC40Lkg0LfQsNCz0LjQvdGD0LINCtGDINCw0LLR
-gtC+0LrQsNGC0LDRgdGC0YDQvtGE0ZYg0L/RltC0INGH0LDRgSDRgdCy0L7Qs9C+INGI0LvRj9GF
-0YMg0LTQviDQnNGW0LvQsNC90LAsINCG0YLQsNC70ZbRjywg0YMgMjAwNCDRgNC+0YbRliwNCtCy
-0ZbQvSDQsdGD0LIg0LzQvtGX0Lwg0LLRltC00L7QvNC40Lwg0LrQu9GW0ZTQvdGC0L7QvC4NCtCf
-0LXRgNC10LQg0YHQvNC10YDRgtGOINC80ZbQuSDQutC70ZbRlNC90YIg0LLQvdGW0YEgKDQyMCAz
-NDYsMDAg0ZTQstGA0L4pINGDINGB0YXQvtCy0LjRidGWINC80L7RlNGXDQrRhNGW0L3QsNC90YHQ
-vtCy0L7RlyDRg9GB0YLQsNC90L7QstC4INGC0YPRgiwg0YMg0KDQuNC80ZYsINCG0YLQsNC70ZbR
-jywg0LTQvtC60YPQvNC10L3RgtCw0YbRltGPINGJ0L7QtNC+INGG0ZbRlNGXDQrRgtGA0LDQvdGB
-0LDQutGG0ZbRlyDQstC60LDQt9GD0ZQg0L3QsCDRgtC1LCDRidC+INC/0YDQtdGC0LXQvdC30ZbR
-lyDQvNC+0LbRg9GC0Ywg0L/RgNC10LTigJnRj9Cy0LvRj9GC0Lgg0LvQuNGI0LUg0LnQvtCz0L4N
-CtC90LDQudCx0LvQuNC20YfRliDRgNC+0LTQuNGH0ZYuINCd0LAg0LbQsNC70YwsINC90LAg0LzQ
-vtC80LXQvdGCINGB0LzQtdGA0YLRliDRgyDQvdGM0L7Qs9C+INC90LUg0LHRg9C70L4g0LfQsNC/
-0L7QstGW0YLRgy4NCtCj0YHRliDQt9GA0L7QsdC70LXQvdGWINC30YPRgdC40LvQu9GPINC90LUg
-0LLQuNGP0LLQuNC70Lgg0LbQvtC00L3QvtCz0L4g0LfQsuKAmdGP0LfQutGDINC3INC60LjQvNC+
-0YHRjCDRltC3INGH0LvQtdC90ZbQsg0K0LnQvtCz0L4g0YDQvtC00LjQvdC4LiDQn9GA0L7RgtC1
-LCDQvdC+0LLQtSDRltGC0LDQu9GW0LnRgdGM0LrQtSDQv9GA0LDQstC+INC/0YDQviDRgdC/0LDQ
-tNC60YPQstCw0L3QvdGPL9C/0L7Qt9C40LLQuC/RhNC+0L3QtA0K0LLQutCw0LfRg9GUINGC0LXR
-gNC80ZbQvSwg0L/RgNC+0YLRj9Cz0L7QvCDRj9C60L7Qs9C+INGC0LDQutGWINC/0L7Qt9C+0LLQ
-uCDQvNC+0LbRg9GC0Ywg0LHRg9GC0Lgg0LTQvtC/0YPRgdGC0LjQvNC40LzQuC4NCtCk0ZbQvdCw
-0L3RgdC+0LLQsCDRg9GB0YLQsNC90L7QstCwINC00L7RgNGD0YfQuNC70LAg0LzQtdC90ZYg0L/R
-gNC10LTRgdGC0LDQstC40YLQuCDQvdCw0LnQsdC70LjQttGH0LjRhSDRgNC+0LTQuNGH0ZbQsiwg
-0Y/QutGWDQrQstC40LzQsNCz0LDRgtC40LzRg9GC0Ywg0LrQvtGI0YLQuCwg0ZYg0Y/QutGJ0L4g
-0L3QtSDQstGW0LTQv9C+0LLRltGB0YLQuCDQvdCwINGG0LXQuSDRg9C70YzRgtC40LzQsNGC0YPQ
-vCwg0YTRltC90LDQvdGB0L7QstCwDQrRg9GB0YLQsNC90L7QstCwINGO0YDQuNC00LjRh9C90L4g
-0LTQvtC30LLQvtC70LjRgtGMINC30LLRltGC0YPQstCw0YLQuCDQv9GA0L4g0YbRliDQutC+0YjR
-gtC4INC00L4gQmFuY2EgZCdJdGFsaWENCijQptC10L3RgtGA0LDQu9GM0L3QuNC5INCx0LDQvdC6
-INCG0YLQsNC70ZbRlykg0Y/QuiDQv9GA0L4g0L3QtdC30LDRgtGA0LXQsdGD0LLQsNC90ZYg0LrQ
-vtGI0YLQuC4NCtCvINGWINC80ZbQuSDQutC+0LvQtdCz0LAg0LLRgdGC0LDQvdC+0LLQuNC70Lgg
-0LLRgdGWINC90LXQvtCx0YXRltC00L3RliDQstC40LzQvtCz0Lgg0YnQvtC00L4g0LLQuNCy0ZbQ
-u9GM0L3QtdC90L3RjyDRhtC40YUNCtC60L7RiNGC0ZbQsiwg0ZYg0Y8g0LzQsNGOINC90LDQvNGW
-0YAg0L/RgNC10LTRgdGC0LDQstC40YLQuCDRhtGOINC80L7QttC70LjQstGW0YHRgtGMINCy0LDQ
-vCwg0Y/QuiDQsdC10L3QtdGE0ZbRhtGW0LDRgNGDLg0K0JfQstC10YDQvdGW0YLRjCDRg9Cy0LDQ
-s9GDLCDRidC+INGO0YDQuNC00LjRh9C90L4g0Y8g0LzQsNGOINCy0YHRjiDQvdC10L7QsdGF0ZbQ
-tNC90YMNCtGW0L3RhNC+0YDQvNCw0YbRltGOL9C00L7QutGD0LzQtdC90YLQsNGG0ZbRjiDRidC+
-0LTQviDRhtGM0L7Qs9C+INGE0L7QvdC00YMuINCR0YPQtNGMINC70LDRgdC60LAsINC30LLigJnR
-j9C20ZbRgtGM0YHRjyDQt9GWDQrRgdCy0L7RlNGOINC00YPQvNC60L7Rjiwg0L3QsNC00ZbRgdC7
-0LDQstGI0Lgg0LLRltC00L/QvtCy0ZbQtNGMINC90LAg0LzQvtGOINC+0YHQvtCx0LjRgdGC0YMg
-0LXQu9C10LrRgtGA0L7QvdC90YMg0LDQtNGA0LXRgdGDOg0KbWFuZnJlZG8uYWxleGlzMTRAZ21h
-aWwuY29tDQoNCtCXINC/0L7QstCw0LPQvtGODQrQnNCw0L3RhNGA0LXQtNC+INCQ0LvQtdC60YHR
-ltGBDQrQntCk0IbQptCV0KAg0JHQkNCd0JrQhtCS0KHQrNCa0J7Qk9CeINCg0JDQpdCj0J3QmtCj
-DQo=
+Hi All,
+
+Here is v2 of the patchs-series to add support for USB charger-type
+(SDP/DCP) detection using a tusb1210 phy connected to a dwc3 controller.
+
+Changes in v2:
+[PATCH v2 9/9] phy: ti: tusb1210: Add charger detection:
+- Add an online attribute to the registered power_supply class device,
+  otherwise upower thinks it is an extra system battery
+- Add tusb1210_remove_charger_detect() function to properly unregister
+  the tusb->psy_nb notifier and to cancel tusb->chg_det_work
+
+v1 cover-letter:
+
+Some Android x86 tablets with a Bay Trail (BYT) SoC (with DWC3 UDC)
+and a Crystal Cove PMIC, which does not support charger-detection,
+rely on a TUSB1211 phy for charger-detection.
+
+This series adds support for this, it starts with some dwc3 bug-fixes
+for issues hit while developing this, as well as adding support to
+the dwc3 code to set a special property checked by the tusb1210 driver
+to signal that it needs to enable charger-detection.
+
+The 2nd half of the series does some refactoring / fixes to the
+tusb1210 driver and adds the charger-detection support.
+
+Regards,
+
+Hans
+
+
+Hans de Goede (8):
+  usb: dwc3: pci: Add "snps,dis_u2_susphy_quirk" for Intel Bay Trail
+  usb: dwc3: pci: Fix Bay Trail phy GPIO mappings
+  usb: dwc3: pci: Set the swnode from inside dwc3_pci_quirks()
+  usb: dwc3: pci: Set "linux,phy_charger_detect" property on some Bay
+    Trail boards
+  usb: dwc3: pci: Also apply Bay Trail GPIO mappings to ulpi-device
+  phy: ti: tusb1210: Improve ulpi_read()/_write() error checking
+  phy: ti: tusb1210: Drop tusb->vendor_specific2 != 0 check from
+    tusb1210_power_on()
+  phy: ti: tusb1210: Add a delay between power-on and restoring the
+    phy-parameters
+
+Stephan Gerhold (1):
+  phy: ti: tusb1210: Add charger detection
+
+ drivers/phy/ti/phy-tusb1210.c | 439 ++++++++++++++++++++++++++++++++--
+ drivers/usb/dwc3/dwc3-pci.c   |  60 ++++-
+ 2 files changed, 467 insertions(+), 32 deletions(-)
+
+-- 
+2.33.1
+
