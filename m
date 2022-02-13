@@ -2,132 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438584B39F4
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Feb 2022 08:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2564B3A21
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Feb 2022 09:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234203AbiBMHkU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Feb 2022 02:40:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52904 "EHLO
+        id S234386AbiBMI3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Feb 2022 03:29:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234158AbiBMHkT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Feb 2022 02:40:19 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5FD5E760
-        for <linux-usb@vger.kernel.org>; Sat, 12 Feb 2022 23:40:13 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id g14-20020a056e021e0e00b002a26cb56bd4so9121286ila.14
-        for <linux-usb@vger.kernel.org>; Sat, 12 Feb 2022 23:40:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=oRfpPTSGOsdyO99LvTMXgGpDnyRQBC34+PfjrxCsCL8=;
-        b=hKcUj67jCsr062nCaCc1/7UfKD3lAOhwpL2uJz05MBqSHtZJEdFk0DlmPoVK6kOyUq
-         7UcojVwnWq0UXtC2viULwkg3p52e62pwwlVDbpmzaV5MZydhhw5S3vAEUcGY4fVIdBIQ
-         6N0iNEPhxcnt8FwQ5PyJNejDddrrhbsv0fLHlWEpca8Ew7OrfhsZOmghOgG4OuL6KzEE
-         hfQUzNn/5ShBcMBnvw87+CSiVutUvnhmhPxxTblfoCezLI5M41JowfqjRwfbwAJb2GYd
-         4HMKfpWXSouaBI/5wWZHO1IT6hi4JwJAiOWVVZDGOIDx1scmESbI3yZbyCaIlFBlCdzP
-         GXMw==
-X-Gm-Message-State: AOAM532HrFeVa5HZ108JpzdHCl8xEASOvtWeMlP8YT9YthHIO02WkEgb
-        mV0dKRO6RiLxggXtmoqYB+gewI3uaOJWBbILi9nea3+1HhWj
-X-Google-Smtp-Source: ABdhPJz9HAJzXkTEwapHXTCFyMFvf2SBJ2EidvqzyEttUSeWpKTsupkH/5O/ZZSA5uV6DkS2MUYFxGWPI9jL1Wlgb7qhczf2DvEE
+        with ESMTP id S229555AbiBMI3c (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Feb 2022 03:29:32 -0500
+X-Greylist: delayed 507 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 13 Feb 2022 00:29:27 PST
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5395E77A
+        for <linux-usb@vger.kernel.org>; Sun, 13 Feb 2022 00:29:27 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 5BEDA300002A0;
+        Sun, 13 Feb 2022 09:20:56 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 496B22E6C05; Sun, 13 Feb 2022 09:20:56 +0100 (CET)
+Date:   Sun, 13 Feb 2022 09:20:56 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+        "open list:RADEON and AMDGPU DRM DRIVERS" 
+        <amd-gfx@lists.freedesktop.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
+        <nouveau@lists.freedesktop.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Alexander.Deucher@amd.com, Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH v3 04/12] PCI: Drop the `is_thunderbolt` attribute from
+ PCI core
+Message-ID: <20220213082056.GA23572@wunner.de>
+References: <20220211193250.1904843-1-mario.limonciello@amd.com>
+ <20220211193250.1904843-5-mario.limonciello@amd.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:174b:: with SMTP id y11mr5025528ill.185.1644738013286;
- Sat, 12 Feb 2022 23:40:13 -0800 (PST)
-Date:   Sat, 12 Feb 2022 23:40:13 -0800
-In-Reply-To: <20220213073017.1092-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000007d82605d7e16949@google.com>
-Subject: Re: [syzbot] INFO: task hung in usb_get_descriptor
-From:   syzbot <syzbot+31ae6d17d115e980fd14@syzkaller.appspotmail.com>
-To:     brouer@redhat.com, gregkh@linuxfoundation.org, hdanton@sina.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        skhan@linuxfoundation.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220211193250.1904843-5-mario.limonciello@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Fri, Feb 11, 2022 at 01:32:42PM -0600, Mario Limonciello wrote:
+> The `is_thunderbolt` attribute is currently a dumping ground for a
+> variety of things.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: null-ptr-deref Write in vhci_shutdown_connection
-
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_write include/linux/instrumented.h:71 [inline]
-BUG: KASAN: null-ptr-deref in atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
-BUG: KASAN: null-ptr-deref in refcount_add include/linux/refcount.h:201 [inline]
-BUG: KASAN: null-ptr-deref in refcount_inc include/linux/refcount.h:241 [inline]
-BUG: KASAN: null-ptr-deref in get_task_struct include/linux/sched/task.h:104 [inline]
-BUG: KASAN: null-ptr-deref in kthread_stop+0x90/0x810 kernel/kthread.c:591
-Write of size 4 at addr 000000000000001c by task kworker/u4:4/186
-
-CPU: 0 PID: 186 Comm: kworker/u4:4 Not tainted 5.9.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usbip_event event_handler
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x107/0x16e lib/dump_stack.c:118
- __kasan_report mm/kasan/report.c:517 [inline]
- kasan_report.cold+0x5/0x37 mm/kasan/report.c:530
- check_memory_region_inline mm/kasan/generic.c:186 [inline]
- check_memory_region+0x13d/0x180 mm/kasan/generic.c:192
- instrument_atomic_write include/linux/instrumented.h:71 [inline]
- atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
- refcount_add include/linux/refcount.h:201 [inline]
- refcount_inc include/linux/refcount.h:241 [inline]
- get_task_struct include/linux/sched/task.h:104 [inline]
- kthread_stop+0x90/0x810 kernel/kthread.c:591
- vhci_shutdown_connection+0x17f/0x360 drivers/usb/usbip/vhci_hcd.c:1015
- event_handler+0x1f0/0x4f0 drivers/usb/usbip/usbip_event.c:78
- process_one_work+0x86c/0x16a0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x3b5/0x4a0 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-==================================================================
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 186 Comm: kworker/u4:4 Tainted: G    B             5.9.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usbip_event event_handler
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x107/0x16e lib/dump_stack.c:118
- panic+0x393/0x7d3 kernel/panic.c:231
- end_report+0x4d/0x53 mm/kasan/report.c:104
- __kasan_report mm/kasan/report.c:520 [inline]
- kasan_report.cold+0xd/0x37 mm/kasan/report.c:530
- check_memory_region_inline mm/kasan/generic.c:186 [inline]
- check_memory_region+0x13d/0x180 mm/kasan/generic.c:192
- instrument_atomic_write include/linux/instrumented.h:71 [inline]
- atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
- refcount_add include/linux/refcount.h:201 [inline]
- refcount_inc include/linux/refcount.h:241 [inline]
- get_task_struct include/linux/sched/task.h:104 [inline]
- kthread_stop+0x90/0x810 kernel/kthread.c:591
- vhci_shutdown_connection+0x17f/0x360 drivers/usb/usbip/vhci_hcd.c:1015
- event_handler+0x1f0/0x4f0 drivers/usb/usbip/usbip_event.c:78
- process_one_work+0x86c/0x16a0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x3b5/0x4a0 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+It's not as arbitrary as it may seem.  Quite a bit of thought went into
+the current design.
 
 
-Tested on:
+> Instead use the driver core removable attribute to indicate the
+> detail a device is attached to a thunderbolt or USB4 chain.
 
-commit:         d3d45f82 Merge tag 'pinctrl-v5.9-2' of git://git.kerne..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=125b4faa700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c4f7c05cb42b5045
-dashboard link: https://syzkaller.appspot.com/bug?extid=31ae6d17d115e980fd14
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1359552c700000
+You're missing the point that "is_thunderbolt" is set on the *controller*
+(i.e. its upstream and downstream ports).
 
+The controller itself is *not* removable if it's the host controller.
+
+However a device can be assumed to be removable if it has an ancestor
+which has the "is_thunderbolt" flag set.
+
+
+>  static void pci_set_removable(struct pci_dev *dev)
+>  {
+>  	struct pci_dev *parent = pci_upstream_bridge(dev);
+> +	u16 vsec;
+> +
+> +	/* Is the device a Thunderbolt controller? */
+> +	vsec = pci_find_vsec_capability(dev, PCI_VENDOR_ID_INTEL, PCI_VSEC_ID_INTEL_TBT);
+
+This doesn't make any sense because the host controller is not
+removable.
+
+
+> @@ -1860,7 +1855,6 @@ int pci_setup_device(struct pci_dev *dev)
+>  	dev->cfg_size = pci_cfg_space_size(dev);
+>  
+>  	/* Need to have dev->cfg_size ready */
+> -	set_pcie_thunderbolt(dev);
+>  
+>  	set_pcie_untrusted(dev);
+
+Either drop the blank line or drop the code comment if set_pcie_untrusted()
+doesn't need dev->cfg_size.
+
+
+> diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
+> index 57553f9b4d1d..04232fbc7d56 100644
+> --- a/drivers/platform/x86/apple-gmux.c
+> +++ b/drivers/platform/x86/apple-gmux.c
+> @@ -596,7 +596,7 @@ static int gmux_resume(struct device *dev)
+>  
+>  static int is_thunderbolt(struct device *dev, void *data)
+>  {
+> -	return to_pci_dev(dev)->is_thunderbolt;
+> +	return pci_is_thunderbolt_attached(to_pci_dev(dev));
+>  }
+
+No, the gmux driver changes its behavior if a Thunderbolt host
+controller is present.  Not if there's a Thunderbolt-attached
+device present.
+
+Thanks,
+
+Lukas
