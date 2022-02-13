@@ -2,65 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F14B4B3A8F
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Feb 2022 10:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E2D4B3B46
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Feb 2022 13:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234757AbiBMJVK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Feb 2022 04:21:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48312 "EHLO
+        id S232257AbiBMMQv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Feb 2022 07:16:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiBMJVJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Feb 2022 04:21:09 -0500
-X-Greylist: delayed 101 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 13 Feb 2022 01:21:04 PST
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8FF5C35B;
-        Sun, 13 Feb 2022 01:21:03 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 4C3952800B3F6;
-        Sun, 13 Feb 2022 10:21:02 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 444AE2E6C05; Sun, 13 Feb 2022 10:21:02 +0100 (CET)
-Date:   Sun, 13 Feb 2022 10:21:02 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        "open list:RADEON and AMDGPU DRM DRIVERS" 
-        <amd-gfx@lists.freedesktop.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
-        <nouveau@lists.freedesktop.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Alexander.Deucher@amd.com, Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v3 03/12] PCI: Move check for old Apple Thunderbolt
- controllers into a quirk
-Message-ID: <20220213092102.GA1246@wunner.de>
-References: <20220211193250.1904843-1-mario.limonciello@amd.com>
- <20220211193250.1904843-4-mario.limonciello@amd.com>
- <20220213091920.GA15535@wunner.de>
+        with ESMTP id S229806AbiBMMQu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Feb 2022 07:16:50 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96025C874
+        for <linux-usb@vger.kernel.org>; Sun, 13 Feb 2022 04:16:45 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id s6-20020a0568301e0600b0059ea5472c98so9700564otr.11
+        for <linux-usb@vger.kernel.org>; Sun, 13 Feb 2022 04:16:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=fswMWXGbRop3SHxbdRy9T894WQ0ceSdMaZ2xSNZDeR8=;
+        b=HICOoutDMi75rnboL2wfhZhgMhOTHslI/6SXOaNhPbUjc3A3mug1k27eAz8kAHkKWE
+         +iQnVz/NkrfzOQHd2x3fE5fcbSb9cewFXb4tTg+JrouXHLC1ZRLU6y4PIP7OGxy36Igs
+         k1XF3JcdsBFcmSMLUoTrkdEt2dm4OIUqD3gWJOX0cCZrmOSEDly/V6zAmMIWVdHEZTGM
+         UpvLTVZuyABDj3lp6Ivvhdw5y98tN6/X/tk7MmIBIQ4DtbUzyZbFBRwCsq+o3vRvzqwa
+         6R+ydvBVLPE6VeIhZ8HlQ+NX0FwvZqzRYyp1oZvnH/4K+D+6J0KMTS4G4HsUOpeoKLNs
+         6cRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=fswMWXGbRop3SHxbdRy9T894WQ0ceSdMaZ2xSNZDeR8=;
+        b=Kut56V6NxcTqDQParVNHIfa6UIt4jEcnPImEOkot+SJj4m5Dl9k0G8CejPwKA3PExV
+         LPYUBCMdiDK5DFL2q7vl/BobPsvnjQSU7sh9cZX/mqUoU1Xq765qtBLNcVv8m5zwzINo
+         eOpEeb5bbpgeicqGogywfxyOwufx75kJoBPE3c5PN/6lgBr1h6Fp/yr/igQxBiwZ+ggx
+         xuctrB3b789v6yQZZTzOLJCw96NU8/KERbkYVDgBi+XVcnBb6UAEBKJ/RWn2ckvD1mtc
+         v+3LE0I3oS4zfILTXUulMpGjEDJ3E7b8Bt+d3gk0U1LpSXCxAQaCAEHYAOI8dwhaxyHC
+         vFxQ==
+X-Gm-Message-State: AOAM531Y2wq76KGArxM/Vb5oZCGIm/FBuOANmYXu+OnPxpdC8xRgVAZi
+        JCjewDgMeIBUj11dNaFcVBQrCWYkfBv1UZJAATM=
+X-Google-Smtp-Source: ABdhPJzyfxUjdWuNn7Im04qKiRFennyeGZsNx3bu1kBeQxaaN/PHG6GI71lfyCn4oQ+YcUhxNho+J+4LSHL6t7ElsRI=
+X-Received: by 2002:a05:6830:1696:: with SMTP id k22mr3503017otr.180.1644754605218;
+ Sun, 13 Feb 2022 04:16:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220213091920.GA15535@wunner.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
+Received: by 2002:ac9:7044:0:0:0:0:0 with HTTP; Sun, 13 Feb 2022 04:16:44
+ -0800 (PST)
+From:   Jennifer Oyinna <chizaramjennifer7@gmail.com>
+Date:   Sun, 13 Feb 2022 13:16:44 +0100
+Message-ID: <CABNtvDLQi5sKjbWuaePer5EJ9QZwZvhhK8Nn4VBS6LWV4LkjMw@mail.gmail.com>
+Subject: =?UTF-8?B?0KXQntCg0J7QqNCY0Jkg0JTQldCd0Kw=?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Feb 13, 2022 at 10:19:20AM +0100, Lukas Wunner wrote:
-> Apple had been using its own scheme to put Thunderbolt controllers
-> into D3cold when nothing is plugged in, about a decade before Microsoft
-> defined the ACPI property.
-
-I meant to say "half a decade", sorry.
+0J/RgNC40LLRltGCINC00YDRg9C20LUsDQrQr9C6INGC0LLQvtGXINGB0L/RgNCw0LLQuCDRgdGM
+0L7Qs9C+0LTQvdGWPyDQryDQm9C+0YLQsNGA0ZbQviDQnNCw0L3RhNGA0LXQtNC+INCQ0LvQtdC6
+0YHRltGBLCDRgdC/0ZbQstGA0L7QsdGW0YLQvdC40LogVUJJDQpCYW5jYSwg0IbRgtCw0LvRltGP
+LiDQryDQt9Cy4oCZ0Y/Qt9GD0Y7RgdGMINC3INCy0LDQvNC4INGJ0L7QtNC+INC/0L7QvNC10YDQ
+u9C+0LPQviDQutC70ZbRlNC90YLQsCwg0Y/QutC40Lkg0LfQsNCz0LjQvdGD0LINCtGDINCw0LLR
+gtC+0LrQsNGC0LDRgdGC0YDQvtGE0ZYg0L/RltC0INGH0LDRgSDRgdCy0L7Qs9C+INGI0LvRj9GF
+0YMg0LTQviDQnNGW0LvQsNC90LAsINCG0YLQsNC70ZbRjywg0YMgMjAwNCDRgNC+0YbRliwNCtCy
+0ZbQvSDQsdGD0LIg0LzQvtGX0Lwg0LLRltC00L7QvNC40Lwg0LrQu9GW0ZTQvdGC0L7QvC4NCtCf
+0LXRgNC10LQg0YHQvNC10YDRgtGOINC80ZbQuSDQutC70ZbRlNC90YIg0LLQvdGW0YEgKDQyMCAz
+NDYsMDAg0ZTQstGA0L4pINGDINGB0YXQvtCy0LjRidGWINC80L7RlNGXDQrRhNGW0L3QsNC90YHQ
+vtCy0L7RlyDRg9GB0YLQsNC90L7QstC4INGC0YPRgiwg0YMg0KDQuNC80ZYsINCG0YLQsNC70ZbR
+jywg0LTQvtC60YPQvNC10L3RgtCw0YbRltGPINGJ0L7QtNC+INGG0ZbRlNGXDQrRgtGA0LDQvdGB
+0LDQutGG0ZbRlyDQstC60LDQt9GD0ZQg0L3QsCDRgtC1LCDRidC+INC/0YDQtdGC0LXQvdC30ZbR
+lyDQvNC+0LbRg9GC0Ywg0L/RgNC10LTigJnRj9Cy0LvRj9GC0Lgg0LvQuNGI0LUg0LnQvtCz0L4N
+CtC90LDQudCx0LvQuNC20YfRliDRgNC+0LTQuNGH0ZYuINCd0LAg0LbQsNC70YwsINC90LAg0LzQ
+vtC80LXQvdGCINGB0LzQtdGA0YLRliDRgyDQvdGM0L7Qs9C+INC90LUg0LHRg9C70L4g0LfQsNC/
+0L7QstGW0YLRgy4NCtCj0YHRliDQt9GA0L7QsdC70LXQvdGWINC30YPRgdC40LvQu9GPINC90LUg
+0LLQuNGP0LLQuNC70Lgg0LbQvtC00L3QvtCz0L4g0LfQsuKAmdGP0LfQutGDINC3INC60LjQvNC+
+0YHRjCDRltC3INGH0LvQtdC90ZbQsg0K0LnQvtCz0L4g0YDQvtC00LjQvdC4LiDQn9GA0L7RgtC1
+LCDQvdC+0LLQtSDRltGC0LDQu9GW0LnRgdGM0LrQtSDQv9GA0LDQstC+INC/0YDQviDRgdC/0LDQ
+tNC60YPQstCw0L3QvdGPL9C/0L7Qt9C40LLQuC/RhNC+0L3QtA0K0LLQutCw0LfRg9GUINGC0LXR
+gNC80ZbQvSwg0L/RgNC+0YLRj9Cz0L7QvCDRj9C60L7Qs9C+INGC0LDQutGWINC/0L7Qt9C+0LLQ
+uCDQvNC+0LbRg9GC0Ywg0LHRg9GC0Lgg0LTQvtC/0YPRgdGC0LjQvNC40LzQuC4NCtCk0ZbQvdCw
+0L3RgdC+0LLQsCDRg9GB0YLQsNC90L7QstCwINC00L7RgNGD0YfQuNC70LAg0LzQtdC90ZYg0L/R
+gNC10LTRgdGC0LDQstC40YLQuCDQvdCw0LnQsdC70LjQttGH0LjRhSDRgNC+0LTQuNGH0ZbQsiwg
+0Y/QutGWDQrQstC40LzQsNCz0LDRgtC40LzRg9GC0Ywg0LrQvtGI0YLQuCwg0ZYg0Y/QutGJ0L4g
+0L3QtSDQstGW0LTQv9C+0LLRltGB0YLQuCDQvdCwINGG0LXQuSDRg9C70YzRgtC40LzQsNGC0YPQ
+vCwg0YTRltC90LDQvdGB0L7QstCwDQrRg9GB0YLQsNC90L7QstCwINGO0YDQuNC00LjRh9C90L4g
+0LTQvtC30LLQvtC70LjRgtGMINC30LLRltGC0YPQstCw0YLQuCDQv9GA0L4g0YbRliDQutC+0YjR
+gtC4INC00L4gQmFuY2EgZCdJdGFsaWENCijQptC10L3RgtGA0LDQu9GM0L3QuNC5INCx0LDQvdC6
+INCG0YLQsNC70ZbRlykg0Y/QuiDQv9GA0L4g0L3QtdC30LDRgtGA0LXQsdGD0LLQsNC90ZYg0LrQ
+vtGI0YLQuC4NCtCvINGWINC80ZbQuSDQutC+0LvQtdCz0LAg0LLRgdGC0LDQvdC+0LLQuNC70Lgg
+0LLRgdGWINC90LXQvtCx0YXRltC00L3RliDQstC40LzQvtCz0Lgg0YnQvtC00L4g0LLQuNCy0ZbQ
+u9GM0L3QtdC90L3RjyDRhtC40YUNCtC60L7RiNGC0ZbQsiwg0ZYg0Y8g0LzQsNGOINC90LDQvNGW
+0YAg0L/RgNC10LTRgdGC0LDQstC40YLQuCDRhtGOINC80L7QttC70LjQstGW0YHRgtGMINCy0LDQ
+vCwg0Y/QuiDQsdC10L3QtdGE0ZbRhtGW0LDRgNGDLg0K0JfQstC10YDQvdGW0YLRjCDRg9Cy0LDQ
+s9GDLCDRidC+INGO0YDQuNC00LjRh9C90L4g0Y8g0LzQsNGOINCy0YHRjiDQvdC10L7QsdGF0ZbQ
+tNC90YMNCtGW0L3RhNC+0YDQvNCw0YbRltGOL9C00L7QutGD0LzQtdC90YLQsNGG0ZbRjiDRidC+
+0LTQviDRhtGM0L7Qs9C+INGE0L7QvdC00YMuINCR0YPQtNGMINC70LDRgdC60LAsINC30LLigJnR
+j9C20ZbRgtGM0YHRjyDQt9GWDQrRgdCy0L7RlNGOINC00YPQvNC60L7Rjiwg0L3QsNC00ZbRgdC7
+0LDQstGI0Lgg0LLRltC00L/QvtCy0ZbQtNGMINC90LAg0LzQvtGOINC+0YHQvtCx0LjRgdGC0YMg
+0LXQu9C10LrRgtGA0L7QvdC90YMg0LDQtNGA0LXRgdGDOg0KbWFuZnJlZG8uYWxleGlzMTRAZ21h
+aWwuY29tDQoNCtCXINC/0L7QstCw0LPQvtGODQrQnNCw0L3RhNGA0LXQtNC+INCQ0LvQtdC60YHR
+ltGBDQrQntCk0IbQptCV0KAg0JHQkNCd0JrQhtCS0KHQrNCa0J7Qk9CeINCg0JDQpdCj0J3QmtCj
+DQo=
