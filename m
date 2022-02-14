@@ -2,59 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257794B4E73
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 12:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4AFF4B4E8C
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 12:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237648AbiBNL2G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Feb 2022 06:28:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57320 "EHLO
+        id S1351382AbiBNLa3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Feb 2022 06:30:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351340AbiBNL14 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 06:27:56 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255987092A;
-        Mon, 14 Feb 2022 03:04:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644836672; x=1676372672;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=X7QB/5ocd9eTWpaSxg9A+irnC81s5hPMRWP18JitWno=;
-  b=GYCDeh3XWPVCrsNj5dgq7o+bDsmS0N+2k/F8CeTPrYd+HURoIoTcx7yA
-   KYg8LGbdfQ7PXYSvzmZ+1jXiWQABPOEE7UAkFGDw4REmCLZYx8ijOxUoY
-   cWXFrlARqnYt9W/zyckdfWmliVdJDk81b9kSaSV4I2HlnkOpIndvxHx3y
-   M=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 14 Feb 2022 03:04:32 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 03:04:32 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 14 Feb 2022 03:04:31 -0800
-Received: from quicinc.com (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 14 Feb
- 2022 03:04:28 -0800
-From:   Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Sarah Sharp <sarah.a.sharp@linux.intel.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ugoswami@quicinc.com>, Jung Daehwan <dh10.jung@samsung.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Subject: [PATCH] xhci: reduce xhci_handshake timeout in xhci_reset
-Date:   Mon, 14 Feb 2022 16:34:23 +0530
-Message-ID: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S1351650AbiBNLaH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 06:30:07 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1E96578D;
+        Mon, 14 Feb 2022 03:11:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644837065; x=1676373065;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fqstnbilWmleOnIjJb3aDPlLE84EFgpMrS7YjBM/2dk=;
+  b=Q/CnuJHJ+C/XUicMcV3MvkDpTd8wEDQFoAh1eSRxMVo3vTIFecIlCcaO
+   wFfrs0GXUZQLKXxEJAfpbQRYuc7a9ccP0SBrXS9C71l+aAGqGo2vgw6hb
+   EOTst43rgDrvQIxGfDt6mits7HuSSDYKOHgg+L/zpK2sHhQnRS1Hz3lMP
+   s9TYgbnFgwyWC74TYkg84BqB7Q3kUfxJpOImnpyYUPpPZzFg30dw+vnn8
+   Y/SnJq0ZBP6k9v8FvQn/JWyaSYG89wRnpw6RaUT7rF/lbEjEelGLxqS5I
+   AATFlt50ghPw217yGalq2wri+ktuv2Y9zM86IluhDkHinbt/mJiQVymrp
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="313347381"
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="313347381"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 03:11:05 -0800
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="501730787"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 03:10:58 -0800
+Received: by lahna (sSMTP sendmail emulation); Mon, 14 Feb 2022 13:08:26 +0200
+Date:   Mon, 14 Feb 2022 13:08:26 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+        "open list:RADEON and AMDGPU DRM DRIVERS" 
+        <amd-gfx@lists.freedesktop.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
+        <nouveau@lists.freedesktop.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Alexander.Deucher@amd.com,
+        Andreas Noever <andreas.noever@gmail.com>
+Subject: Re: [PATCH v3 05/12] PCI: Detect root port of internal USB4 devices
+ by `usb4-host-interface`
+Message-ID: <Ygo1eoVe8D0b80QF@lahna>
+References: <20220211193250.1904843-6-mario.limonciello@amd.com>
+ <20220211214546.GA737137@bhelgaas>
+ <YgoGAkjZgCob8Mdl@lahna>
+ <20220214085202.GA21533@wunner.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214085202.GA21533@wunner.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,42 +77,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Daehwan Jung <dh10.jung@samsung.com>
+On Mon, Feb 14, 2022 at 09:52:02AM +0100, Lukas Wunner wrote:
+> On Mon, Feb 14, 2022 at 09:34:26AM +0200, Mika Westerberg wrote:
+> > On Fri, Feb 11, 2022 at 03:45:46PM -0600, Bjorn Helgaas wrote:
+> > > My expectation is that "USB" (like "PCI" and "PCIe") tells me
+> > > something about how a device is electrically connected and how
+> > > software can operate it.  It doesn't really tell me anything about
+> > > whether those electrical connections are permanent, made through an
+> > > internal slot, or made through an external connector and cable.
+> > 
+> > It is used to identify "tunneled" ports (whether PCIe, USB 3.x or
+> > DisplayPort). Tunnels are created by software (in Linux it is the
+> > Thunderbolt driver) and are dynamic in nature. The USB4 links go over
+> > USB Type-C cable which also is something user can plug/unplug freely.
+> > 
+> > I would say it is reasonable expectation that anything behind these
+> > ports can be assumed as "removable".
+> 
+> USB gadgets may be soldered to the mainboard.  Those cannot be
+> unplugged freely.  It is common practice to solder USB Ethernet
+> or USB FTDI serial ports and nothing's preventing a vendor to solder
+> USB4/Thunderbolt gadgets.
 
-xhci_reset() is called with interrupts disabled. Waiting 10 seconds for
-controller reset and controller ready operations can be fatal to the
-system when controller is timed out. Reduce the timeout to 1 second
-and print a error message when the time out happens.
-
-Fixes: 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
-Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
----
- drivers/usb/host/xhci.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index dc357ca..ec4df72 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -196,7 +196,7 @@ int xhci_reset(struct xhci_hcd *xhci)
- 		udelay(1000);
- 
- 	ret = xhci_handshake(&xhci->op_regs->command,
--			CMD_RESET, 0, 10 * 1000 * 1000);
-+			CMD_RESET, 0, 1 * 1000 * 1000);
- 	if (ret)
- 		return ret;
- 
-@@ -210,7 +210,7 @@ int xhci_reset(struct xhci_hcd *xhci)
- 	 * than status until the "Controller Not Ready" flag is cleared.
- 	 */
- 	ret = xhci_handshake(&xhci->op_regs->status,
--			STS_CNR, 0, 10 * 1000 * 1000);
-+			STS_CNR, 0, 1 * 1000 * 1000);
- 
- 	xhci->usb2_rhub.bus_state.port_c_suspend = 0;
- 	xhci->usb2_rhub.bus_state.suspended_ports = 0;
--- 
-2.7.4
-
+Right, that's why I say it is "reasonable expectation" that anything
+behind these ports can be assumed "removable" :) Of course they don't
+have to be but if we assume that in the driver where this actually
+matters we should be on the safe side, no?
