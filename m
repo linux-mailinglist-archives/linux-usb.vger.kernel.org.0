@@ -2,52 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A224B4EFB
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 12:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4734B4F1A
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 12:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352887AbiBNLmY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Feb 2022 06:42:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43198 "EHLO
+        id S237760AbiBNLok (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Feb 2022 06:44:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353779AbiBNLmA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 06:42:00 -0500
+        with ESMTP id S1349397AbiBNLoE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 06:44:04 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279FA66CB3;
-        Mon, 14 Feb 2022 03:33:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA176476;
+        Mon, 14 Feb 2022 03:36:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1CF4B80E63;
-        Mon, 14 Feb 2022 11:33:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ACC4C340EF;
-        Mon, 14 Feb 2022 11:33:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2306FB80E63;
+        Mon, 14 Feb 2022 11:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 346BFC340E9;
+        Mon, 14 Feb 2022 11:36:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644838390;
-        bh=mB4W/H/vrB0d77K6nBnjaR9o/mXDf3g7YMz3F6i2XPs=;
+        s=korg; t=1644838609;
+        bh=TlEzTKDzz5YLQbPZsQhzfVGSadqt4B9CIscYLj+LK0g=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P9eOPxoPwj3QMg77pz+4V2ZXKrBN0sxp4V6IAZ7lW13IoezGtFUAgvvOXD+9lnTma
-         FkRvZrj6JM1DJxfvX3OP9mVNfVwJ5iasyMQRi33pnY7/KFrfyOHH6GDblmX+gkpFJH
-         MgdN3dGv0EUn/wSaNy7fi2uuEjGz4Fhb/NaCO+Wk=
-Date:   Mon, 14 Feb 2022 12:33:07 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     =?utf-8?B?5pa96YyV6bS7?= <vincent.sunplus@gmail.com>
-Cc:     stern@rowland.harvard.edu, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, wells.lu@sunplus.com
-Subject: Re: [PATCH v1 1/2] usb: host: ehci-sunplus: Add driver for ehci in
- Sunplus SP7021
-Message-ID: <Ygo980Tg3aZdDQDH@kroah.com>
-References: <1644827562-17244-1-git-send-email-vincent.sunplus@gmail.com>
- <1644827562-17244-2-git-send-email-vincent.sunplus@gmail.com>
- <YgoVBv/z1uCsR1Y0@kroah.com>
- <CAPvp3Rhtb-g1A5FG6_1irzX2fG-VACU3T4tST1Xo99cnnL==MQ@mail.gmail.com>
- <Ygodd+TFQGnhki6A@kroah.com>
- <CAPvp3RiPVkonTtAdTcLqQuPggg6zw8yNEPf-mR0+1bbtSsdtEg@mail.gmail.com>
+        b=kugVbjDXHW+279ffyykAIl+lm4lroL1fP+sYFb5z/GkuL+jLxnZCzK674q5/Wn6C2
+         xjUNWDD19u30ntzVU9q9KxkAOE/zR2OxqMnT0xcEPJwLjnF29KIH0D9ip0npLUDbGW
+         R3XlYJIIsEZ2ipmVcjVXYSMxP6KajNa5BHU9VzG0=
+Date:   Mon, 14 Feb 2022 12:36:47 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Sarah Sharp <sarah.a.sharp@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_ugoswami@quicinc.com, Jung Daehwan <dh10.jung@samsung.com>
+Subject: Re: [PATCH] xhci: reduce xhci_handshake timeout in xhci_reset
+Message-ID: <Ygo+zxEu0gVh4THE@kroah.com>
+References: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPvp3RiPVkonTtAdTcLqQuPggg6zw8yNEPf-mR0+1bbtSsdtEg@mail.gmail.com>
+In-Reply-To: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,36 +52,50 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 05:48:20PM +0800, 施錕鴻 wrote:
-> Greg KH <gregkh@linuxfoundation.org> 於 2022年2月14日 週一 下午5:14寫道：
-> >
-> > On Mon, Feb 14, 2022 at 05:03:00PM +0800, 施錕鴻 wrote:
-> > > Hi, Greg
-> > >     About this issue, my colleague Hammer Hsieh has explained it to
-> > > you recently in the mail of "[PATCH v7 2/2] serial: sunplus-uart: Add
-> > > Sunplus
-> > > SoC UART Driver". The ehci driver and uart one are in the same Sunplus Soc.
-> >
-> > I do not know what you are referring to, sorry.  Remember we get
-> > thousands of emails a week.
-> >
-> > Please be explicit and make the code work properly for each patch you
-> > submit.
-> >
-> > thanks,
-> >
-> > greg k-h
+On Mon, Feb 14, 2022 at 04:34:23PM +0530, Pavankumar Kondeti wrote:
+> From: Daehwan Jung <dh10.jung@samsung.com>
 > 
-> Hi, Greg
->     About data incoherence issue between memory bus and peripheral bus.
-> In case of AXI bus, use non-posted write can avoid data incoherence issue.
->     What if in case of post write:
-> Send a specific command after last write command. SDCTRL identify specific
-> command, means previous write command done. Then send the interrupt
-> signal to interrupt controller. And then interrupt controller sends done signal
-> to Master. Master receives done signal, means write command done. Then
-> issue a interrupt or proceed next write command.
+> xhci_reset() is called with interrupts disabled. Waiting 10 seconds for
+> controller reset and controller ready operations can be fatal to the
+> system when controller is timed out. Reduce the timeout to 1 second
+> and print a error message when the time out happens.
+> 
+> Fixes: 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
+> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> ---
+>  drivers/usb/host/xhci.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index dc357ca..ec4df72 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -196,7 +196,7 @@ int xhci_reset(struct xhci_hcd *xhci)
+>  		udelay(1000);
+>  
+>  	ret = xhci_handshake(&xhci->op_regs->command,
+> -			CMD_RESET, 0, 10 * 1000 * 1000);
+> +			CMD_RESET, 0, 1 * 1000 * 1000);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -210,7 +210,7 @@ int xhci_reset(struct xhci_hcd *xhci)
+>  	 * than status until the "Controller Not Ready" flag is cleared.
+>  	 */
+>  	ret = xhci_handshake(&xhci->op_regs->status,
+> -			STS_CNR, 0, 10 * 1000 * 1000);
+> +			STS_CNR, 0, 1 * 1000 * 1000);
+>  
+>  	xhci->usb2_rhub.bus_state.port_c_suspend = 0;
+>  	xhci->usb2_rhub.bus_state.suspended_ports = 0;
+> -- 
+> 2.7.4
+> 
 
-I do not understand what you are referring to here as I have no context
-:(
+I do not see any "print an error message" change here.  Where is that
+addition?
 
+confused,
+
+greg k-h
