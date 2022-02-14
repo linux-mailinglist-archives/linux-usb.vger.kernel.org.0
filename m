@@ -2,67 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF69A4B69E4
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 11:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4089E4B6CB8
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 13:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236816AbiBOKzl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 05:55:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48468 "EHLO
+        id S237940AbiBOMvp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 07:51:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236828AbiBOKzj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 05:55:39 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF80DD8852
-        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 02:55:27 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nJvTx-0001Ed-JO; Tue, 15 Feb 2022 11:54:53 +0100
-Received: from pengutronix.de (unknown [195.138.59.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0933833A8B;
-        Tue, 15 Feb 2022 10:54:51 +0000 (UTC)
-Date:   Tue, 15 Feb 2022 11:54:47 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Scott Branden <sbranden@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org, kernel@pengutronix.de,
-        linux-tegra@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 1/8] dt-bindings: net: add schema for ASIX USB
- Ethernet controllers
-Message-ID: <20220215105447.vimwbnyabyfxyl4v@pengutronix.de>
-References: <20220215100018.2306046-1-o.rempel@pengutronix.de>
- <20220215100018.2306046-2-o.rempel@pengutronix.de>
+        with ESMTP id S237936AbiBOMvp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 07:51:45 -0500
+X-Greylist: delayed 18689 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 04:51:33 PST
+Received: from mail.housing.co.ke (unknown [41.206.50.126])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id CDF2F1AF2E
+        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 04:51:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=housing.co.ke;
+        s=housing; t=1644875646;
+        bh=QAimaxXg10MB2257UWw27B4tog5lNux9WU8xbWADVUg=;
+        h=Subject:To:From:Date:Reply-To;
+        b=shO5XPHtE1zU2FNssc3zfP9nyTHf1nkPsUq4ugp8sSIxbvLiualr8sURVknkTgT1+
+         tYiLxdNYmTOXRUoy9oCXAcIKfKrAjNlMNi7Uv42FMV/1fPz9rP36ydg+xzw8kNRXvj
+         rQiAbINx6ibgtAF0J2DdwNlIBlMYBN4WqnLcCEWEgc64f66FflRXLsTkpctx4pyyGd
+         txy83D8QOxURMcZ5vfmQAKrwfNaBd21qSKerdqx/FM7Y+pFRBRaFrrHt3w+trbx/VL
+         It0ffTijrEUmGc6KND1BbW8idDWrVFvh2M9xwvZ7tksIw3IjIm5qNAD1rJkRStvZ2q
+         l8Rzq8cS4i+JA==
+Received: from [2.56.59.106] (Not Verified[10.96.10.4]) by mail.housing.co.ke with Trustwave SEG (v8,2,4,11170) (using TLS: TLSv1, AES256-SHA)
+        id <B620acf7a0001>; Tue, 15 Feb 2022 00:54:06 +0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ifqdzi4p4d6arjx2"
-Content-Disposition: inline
-In-Reply-To: <20220215100018.2306046-2-o.rempel@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Urgent Massage
+To:     Recipients <salesrecruitment@housing.co.ke>
+From:   "Lynn Page" <salesrecruitment@housing.co.ke>
+Date:   Mon, 14 Feb 2022 13:53:58 -0800
+Reply-To: lynnpage@citromail.hu
+Message-ID: <10cit7mjtgxu.56n38d3tsfyv@mail.housing.co.ke>
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=MPUeZ/Rl c=1 sm=1 tr=0 p=_Idse3d-WQUrpSSPbRUA:9 a=X0+2TktVTXS8RlTfCcnDNw==:117 a=talbyYMMdGoA:10 a=8nJEP1OIZ-IA:10 a=oGFeUVbbRNcA:10 a=x7bEGLp0ZPQA:10 a=wPNLvfGTeEIA:10
+X-SEG-SpamProfiler-Score: 100
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,40 +51,16 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---ifqdzi4p4d6arjx2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Good day,
 
-On 15.02.2022 11:00:11, Oleksij Rempel wrote:
-> Create schema for ASIX USB Ethernet controllers and import some of
-> currently supported USB IDs form drivers/net/usb/asix_devices.c
->=20
-> This devices are already used in some of DTs. So, this schema makes it of=
-ficial.
-These
+This email will come to your as suprise, i will like to discuss Business =
+Proposal with u Kindly get back to me asap
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ifqdzi4p4d6arjx2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmILhnUACgkQrX5LkNig
-0127EAf8CJJABhnS+oUjbFpBGUxKQ7ySwvBPYhNMil097GqJDDjXWk8nLPgGs0PV
-kXT/pRPTBDeVWP9o48FVVyOLtWRgK/8mqia24ZAvb6MqXEUTVVOV5xQi7nQsChwp
-B6coQO7Py9d1yOw61MNEj/QR33O5qP3E4GqY4d0UE1p7DNVyeX9apoWDI5xRdZrL
-NV5wzDHIE45Cdgm0Gry8x9UVy8kMbPFV4wqiZo4OS9Ct7b+JkjM6dCFL3gvv7EuK
-kpaJSV2hefMCyrevDo4S6s0laNbec69cXTso9FXJVeWmZfz7L4xbiU3hRBXdyYNH
-kK3tvNuH8nP8Rw0vJyzQlK027HRKCw==
-=unWf
------END PGP SIGNATURE-----
-
---ifqdzi4p4d6arjx2--
+Mrs.Lynn Page
+#########################################################################=
+############
+Scanned by the Trustwave Secure Email Gateway - Trustwave's comprehensive=
+=20email content security solution.=20
+Download a free evaluation of Trustwave SEG at www.trustwave.com
+#########################################################################=
+############
