@@ -2,71 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F24F4B42F8
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 08:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 507CD4B42EA
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 08:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbiBNHgR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Feb 2022 02:36:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53636 "EHLO
+        id S241420AbiBNHfS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Feb 2022 02:35:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiBNHgQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 02:36:16 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21BB593BE;
-        Sun, 13 Feb 2022 23:36:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644824169; x=1676360169;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TtIgUTAIsXJ4XGN4YguPnu9VZqX5t+e944YjPkCfnAQ=;
-  b=SwRK8zVWJgEMXtJtpBLzZy1BsUZKzdZ+4NjbisNZaDzXs889iWGOHqSd
-   GOonLu/QM7tAGFVRmW+FDlBJvZGgBbfFVfQ4U7dZDo0RDcdusIwtAohQY
-   fd6aWPIchooNH8JYKbF6byvkhmh6IOfSK8jD3iB+b+UTq0Z7P0gzYCS5T
-   LxLb7neO5XXg+OsWvtnsx3+lUZF1a+Ww9vNQg5F2eY/3XkfER6+wEj+nb
-   mWEpZEUnyA+YMMSMLuQSrzq6BPcGfD+zG9TwCjb/De75gRDyW2G3hdXZH
-   7TNGJXADQ+P3UJMbzWPhXJuNu+0TVa13kvmUD1tISvFskC37ptitYU+hm
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="247628389"
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="247628389"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 23:36:09 -0800
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="772875545"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 23:36:04 -0800
-Received: by lahna (sSMTP sendmail emulation); Mon, 14 Feb 2022 09:34:26 +0200
-Date:   Mon, 14 Feb 2022 09:34:26 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        "open list:RADEON and AMDGPU DRM DRIVERS" 
-        <amd-gfx@lists.freedesktop.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
-        <nouveau@lists.freedesktop.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Alexander.Deucher@amd.com, Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>
-Subject: Re: [PATCH v3 05/12] PCI: Detect root port of internal USB4 devices
- by `usb4-host-interface`
-Message-ID: <YgoGAkjZgCob8Mdl@lahna>
-References: <20220211193250.1904843-6-mario.limonciello@amd.com>
- <20220211214546.GA737137@bhelgaas>
+        with ESMTP id S241418AbiBNHfR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 02:35:17 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36081593BE;
+        Sun, 13 Feb 2022 23:35:10 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id w10so7030700edd.11;
+        Sun, 13 Feb 2022 23:35:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BPMoOiTX8uhktr57VJs3WIaSpE/usyir89O3lLj+lKA=;
+        b=miBQct4ykY+vbmEVJ64ZeI4mok/yeMfTa5Xgg7xNSKl+cgHF75goZ5BxPCX+RUSfQ/
+         Wxk5D+4/MCGOwQsFh5tiRbQAIkDJ0a0D2wtae6kCEhzLu/oG34Jq39De+biMGaGFCNUe
+         hCwVjtEjSlMbM8PyiViG0L1eBrnNnKabGzPOq8i+bHTVYKeR+mxx4y3XkM4svzzv1Yl8
+         zIBmOh++lHDPJCVkiZJHR2LiWlp7Kz9QiTfgqjTG7iTUFHQM8cncagV7iKIQJanGAl0c
+         lA2OmufbKW9aA4qdzb1UDmRTSeV9eCB5LVVDDX8J6TT07GHgqouYpa9LP3CyoraqxkDl
+         8ERA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BPMoOiTX8uhktr57VJs3WIaSpE/usyir89O3lLj+lKA=;
+        b=1A9k4cHxWBNu6b6TW1AnUkejkllyL1LQF9ZNUEDRBYUcaEi2x7+Z4sbRCCLHdJGe/B
+         KGtpnKBdZrJlKl+100F3+emEdrW2KByqW3TtcFmKPCG+5ktlAFbBOHzPQIiMnNfj9Ui1
+         lpvZlS2BTqdDQ90t/QHe3E8x86TfOgAuXHucDueJKWyaFzb29QvDIuCkci8hq8JkwT23
+         1k3ngGhtyWmtwM2AK0rhe41km1X/msflxDTFGry+7+n3xD0tNMNPtoCbAXciMG8/SRRJ
+         JBxQbEtRDk6deQ6JkBHJNZ0j5nkL12AadVKATtFcI2KWykvwTamb1CJwla01dXqP8ARo
+         6q0Q==
+X-Gm-Message-State: AOAM533iXc5CG5NA7jfqNFFywKo7u6KJ6PZ0DrwPNeTxN2SNmPnHEh4b
+        qwhx/lM7+WhbIUS/uVwTNdGmohqIRxVBhx3sxhE=
+X-Google-Smtp-Source: ABdhPJzVjvVy2RBbYtMO6kXM3DtAJlx+UtHI76se4RaET7nGGx2WdsjvO8lSyEYHvdI9UVvgWeYlIaDGAxmpVyfr8iA=
+X-Received: by 2002:a05:6402:4254:: with SMTP id g20mr14572669edb.281.1644824108676;
+ Sun, 13 Feb 2022 23:35:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220211214546.GA737137@bhelgaas>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <YgbT4uqSIVY9ku10@rowland.harvard.edu> <000000000000d31cac05d7c4da7e@google.com>
+ <YgcSbUwiALbmoTvL@rowland.harvard.edu>
+In-Reply-To: <YgcSbUwiALbmoTvL@rowland.harvard.edu>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Mon, 14 Feb 2022 15:34:42 +0800
+Message-ID: <CAD-N9QX6kTf-Fagz8W00KOM1REhoqQvfTckqZZttMcdSCHmSag@mail.gmail.com>
+Subject: Re: [PATCH] HID: elo: Fix refcount leak in elo_probe()
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     benjamin.tissoires@redhat.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
+        noralf@tronnes.org,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        tzimmermann@suse.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,56 +68,96 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bjorn,
+On Sat, Feb 12, 2022 at 9:50 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> Syzbot identified a refcount leak in the hid-elo driver:
+>
+> BUG: memory leak
+> unreferenced object 0xffff88810d49e800 (size 2048):
+>   comm "kworker/1:1", pid 25, jiffies 4294954629 (age 16.460s)
+>   hex dump (first 32 bytes):
+>     ff ff ff ff 31 00 00 00 00 00 00 00 00 00 00 00  ....1...........
+>     00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00  ................
+>   backtrace:
+>     [<ffffffff82c87a62>] kmalloc include/linux/slab.h:581 [inline]
+>     [<ffffffff82c87a62>] kzalloc include/linux/slab.h:715 [inline]
+>     [<ffffffff82c87a62>] usb_alloc_dev+0x32/0x450 drivers/usb/core/usb.c:582
+>     [<ffffffff82c91a47>] hub_port_connect drivers/usb/core/hub.c:5260 [inline]
+>     [<ffffffff82c91a47>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+>     [<ffffffff82c91a47>] port_event drivers/usb/core/hub.c:5660 [inline]
+>     [<ffffffff82c91a47>] hub_event+0x1097/0x21a0 drivers/usb/core/hub.c:5742
+>     [<ffffffff8126c3ef>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
+>     [<ffffffff8126ccd9>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
+>     [<ffffffff81276765>] kthread+0x125/0x160 kernel/kthread.c:377
+>     [<ffffffff810022ff>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+>
+> Not shown in the bug report but present in the console log:
+>
+> [  182.014764][ T3257] elo 0003:04E7:0030.0006: item fetching failed at offset 0/1
+> [  182.022255][ T3257] elo 0003:04E7:0030.0006: parse failed
+> [  182.027904][ T3257] elo: probe of 0003:04E7:0030.0006 failed with error -22
+> [  182.214767][ T3257] usb 1-1: USB disconnect, device number 7
+> [  188.090199][ T3604] kmemleak: 3 new suspected memory leaks (see /sys/kernel/debug/kmemleak)
+> BUG: memory leak
+>
+> which points to hid-elo as the buggy driver.
+>
+> The leak is caused by elo_probe() failing to release the reference it
+> holds to the struct usb_device in its failure pathway.  In the end the
+> driver doesn't need to take this reference at all, because the
 
-On Fri, Feb 11, 2022 at 03:45:46PM -0600, Bjorn Helgaas wrote:
-> On Fri, Feb 11, 2022 at 01:32:43PM -0600, Mario Limonciello wrote:
-> > The root port used for PCIe tunneling should be marked as removable to
-> > ensure that the entire chain is marked removable.
-> > 
-> > This can be done by looking for the device property specified in
-> > the ACPI tables `usb4-host-interface`.
-> > 
-> > Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Link: https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#mapping-native-protocols-pcie-displayport-tunneled-through-usb4-to-usb4-host-routers
-> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > ---
-> >  drivers/pci/pci-acpi.c | 10 ++++++++++
-> >  drivers/pci/pci.h      |  5 +++++
-> >  drivers/pci/probe.c    |  1 +
-> >  3 files changed, 16 insertions(+)
-> > 
-> > diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-> > index a42dbf448860..6368e5633b1b 100644
-> > --- a/drivers/pci/pci-acpi.c
-> > +++ b/drivers/pci/pci-acpi.c
-> > @@ -1391,6 +1391,16 @@ void pci_acpi_cleanup(struct device *dev, struct acpi_device *adev)
-> >  	}
-> >  }
-> >  
-> > +bool pci_acpi_is_usb4(struct pci_dev *dev)
-> > +{
-> > +	struct acpi_device *adev = ACPI_COMPANION(&dev->dev);
-> > +
-> > +	if (!adev)
-> > +		return false;
-> > +	return fwnode_property_present(acpi_fwnode_handle(adev),
-> > +				       "usb4-host-interface");
-> 
-> Maybe it's obvious to everybody but me that "USB4" means this device
-> is removable.  The Microsoft reference above doesn't say anything
-> about removability.
-> 
-> My expectation is that "USB" (like "PCI" and "PCIe") tells me
-> something about how a device is electrically connected and how
-> software can operate it.  It doesn't really tell me anything about
-> whether those electrical connections are permanent, made through an
-> internal slot, or made through an external connector and cable.
+Hi Alan,
 
-It is used to identify "tunneled" ports (whether PCIe, USB 3.x or
-DisplayPort). Tunnels are created by software (in Linux it is the
-Thunderbolt driver) and are dynamic in nature. The USB4 links go over
-USB Type-C cable which also is something user can plug/unplug freely.
+My patch "[PATCH] hid: elo: fix memory leak in elo_probe" is merged
+several weeks ago.
 
-I would say it is reasonable expectation that anything behind these
-ports can be assumed as "removable".
+However, I fix this bug by modifying the error handling code in
+elo_probe. If you think the refcount is not necessary, maybe a new
+patch to remove the refcount is better.
+
+> elo_priv structure is always deallocated synchronously when the driver
+> unbinds from the interface.
+>
+> Therefore this patch fixes the reference leak by not taking the
+> reference in the first place.
+>
+> Reported-and-tested-by: syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> CC: <stable@vger.kernel.org>
+>
+> ---
+>
+>
+> [as1971]
+>
+>
+>  drivers/hid/hid-elo.c |    4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> Index: usb-devel/drivers/hid/hid-elo.c
+> ===================================================================
+> --- usb-devel.orig/drivers/hid/hid-elo.c
+> +++ usb-devel/drivers/hid/hid-elo.c
+> @@ -239,7 +239,7 @@ static int elo_probe(struct hid_device *
+>
+>         INIT_DELAYED_WORK(&priv->work, elo_work);
+>         udev = interface_to_usbdev(to_usb_interface(hdev->dev.parent));
+> -       priv->usbdev = usb_get_dev(udev);
+> +       priv->usbdev = udev;
+>
+>         hid_set_drvdata(hdev, priv);
+>
+> @@ -270,8 +270,6 @@ static void elo_remove(struct hid_device
+>  {
+>         struct elo_priv *priv = hid_get_drvdata(hdev);
+>
+> -       usb_put_dev(priv->usbdev);
+> -
+>         hid_hw_stop(hdev);
+>         cancel_delayed_work_sync(&priv->work);
+>         kfree(priv);
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/YgcSbUwiALbmoTvL%40rowland.harvard.edu.
