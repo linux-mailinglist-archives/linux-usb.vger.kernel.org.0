@@ -2,70 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEEA4B593C
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 18:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E538B4B5A13
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 19:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357306AbiBNR7u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Feb 2022 12:59:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51148 "EHLO
+        id S232224AbiBNSl3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Feb 2022 13:41:29 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357304AbiBNR7o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 12:59:44 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97C8652C4;
-        Mon, 14 Feb 2022 09:59:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644861576; x=1676397576;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=h2nLBru7ddRK3E/s9FlkhXeaiYmRggwF6jnGtDIawQM=;
-  b=Sloqki10VqDXu7WjcYfWp/ghAEDGs/sr7tcTOBgoi+zrXMpDHcyqcqL1
-   PUlKE5hIs7UGernl6VnpKSJ/hWsGm1CXBCqmB6ph5PRgFopkuhytnZ6su
-   PzN+TWQjFyTVsuAwQsqIT2+r4ePIQ+Xv39f93CGisgqLwK/wj09U0VyfY
-   QtROqf9dSSZOz1OpuuY6eDNQh3iXioHt2Ba/Qzs8ZL3nBggmRYKBwkmwr
-   10mN4QEJu5DdBThhhxmQ+NZaBC6Jz3TswNEXCkRQCLQHM3GNjmgW5hGYB
-   agDNmKD/0zwEYsoEaf/15yDRnytWSqreuwU9Tvt7XoAZkjdWeOXLYKU8S
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="247744026"
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="247744026"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 09:59:36 -0800
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="703210237"
-Received: from ideak-desk.fi.intel.com ([10.237.68.141])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 09:59:31 -0800
-Date:   Mon, 14 Feb 2022 19:59:27 +0200
-From:   Imre Deak <imre.deak@intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        freedreno@lists.freedesktop.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        intel-gfx@lists.freedesktop.org, linux-usb@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Sean Paul <sean@poorly.run>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] drm: Add HPD state to
- drm_connector_oob_hotplug_event()
-Message-ID: <20220214175927.GA594729@ideak-desk.fi.intel.com>
-References: <20220208044328.588860-1-bjorn.andersson@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208044328.588860-1-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        with ESMTP id S229527AbiBNSl2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 13:41:28 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF59B6662C
+        for <linux-usb@vger.kernel.org>; Mon, 14 Feb 2022 10:41:16 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id i205-20020a2522d6000000b00622c778ac7cso8086195ybi.3
+        for <linux-usb@vger.kernel.org>; Mon, 14 Feb 2022 10:41:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=E45zQdBr6ruTkHcurHw8uDayMscfawE8DFtULZi8yRk=;
+        b=gZbjmGVm8EuQ8SomnRmsmkxtfLLgZyQ7xWTM+SX/+3zcvXM81s+VNJxWA2JW2hEBuY
+         JE+viXW20aaBu6y1sb15LLAhkVv6BJCDdQiI2KezUt1NaVHSIEC1MmjrP7Bl97fox/TB
+         ip4uCcyerutLejtb2QA7abs1XupJwJZDncVgueBWTKBLv/hvxBvGydehRgL6nRZ7WKDy
+         PeXAx/BdhsN0mpRfllEeobwFP7GODRdYiXvA3ibRIqldNZzMMjYUzU8Ks22XMnFyWbga
+         UIcCNjIVQHhbjYZJWEuAkowcBonRvFoxo4iUrM0mXQ7LbI+Rk67dWPxv2e6fHnvUMOam
+         5a9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=E45zQdBr6ruTkHcurHw8uDayMscfawE8DFtULZi8yRk=;
+        b=gi2DXYU9DTZlsNKHyS9yA5Y/MWXYBD5EgBwCnikza0spQoEjvAufxPq0AnySPWmo1A
+         oAQVEYoIS/lGzj49W3GZ3qw46D1C953w7NMyFHZwZ+2V1alduUC5He9q4rbfQcges5PY
+         eh7SIOhnhIYBiB+ksz9vupo6doM49BQi/ol09mpoRDHUTYkhhharGzV1qh/OFtMQx9AS
+         aJR5iVqsXrZlP/OnAYrAVCrPv0VM2HYeC8qIElVKu5rSR9r12evluSgfquK2KeUEPAfd
+         bQAE2nCXlyH2TMv1f2J7k0XD2BbNF+Mo4qgPoMQKcpnVEcwJFH+z12ia8pu16P/B9fF2
+         yrVg==
+X-Gm-Message-State: AOAM533JujdPXPMUrwMg4EyueC1j2AF6DhGsLNoxXSnxwGSJiQ/hxhRc
+        ln4E/MJruMErWxa4T9ruboNYCBTdWHHcwg==
+X-Google-Smtp-Source: ABdhPJzKFWSRk14MngihAAnQtbORLt/Ao2wF5HvVoHEIqs9ChhrlhtlbhelcPLHm4KOwzZCf2kDpcABwhgOtPA==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:c25b:4e93:9d4c:bbf6])
+ (user=dlatypov job=sendgmr) by 2002:a25:d88e:: with SMTP id
+ p136mr391659ybg.716.1644864076043; Mon, 14 Feb 2022 10:41:16 -0800 (PST)
+Date:   Mon, 14 Feb 2022 10:41:04 -0800
+Message-Id: <20220214184104.1710107-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [PATCH] thunderbolt: test: get running under UML, add kunitconfig
+From:   Daniel Latypov <dlatypov@google.com>
+To:     mika.westerberg@linux.intel.com
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-usb@vger.kernel.org, Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,166 +63,122 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 08:43:27PM -0800, Bjorn Andersson wrote:
-> In some implementations, such as the Qualcomm platforms, the display
-> driver has no way to query the current HPD state and as such it's
-> impossible to distinguish between disconnect and attention events.
-> 
-> Add a parameter to drm_connector_oob_hotplug_event() to pass the HPD
-> state.
-> 
-> Also push the test for unchanged state in the displayport altmode driver
-> into the i915 driver, to allow other drivers to act upon each update.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
-> 
-> Note that the Intel driver has only been compile tested with this patch.
-> 
->  drivers/gpu/drm/drm_connector.c          |  6 ++++--
->  drivers/gpu/drm/i915/display/intel_dp.c  | 14 +++++++++++---
->  drivers/gpu/drm/i915/i915_drv.h          |  3 +++
->  drivers/usb/typec/altmodes/displayport.c |  9 ++-------
->  include/drm/drm_connector.h              |  5 +++--
->  5 files changed, 23 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-> index a50c82bc2b2f..ad7295597c0f 100644
-> --- a/drivers/gpu/drm/drm_connector.c
-> +++ b/drivers/gpu/drm/drm_connector.c
-> @@ -2825,6 +2825,7 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
->  /**
->   * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
->   * @connector_fwnode: fwnode_handle to report the event on
-> + * @hpd_state: number of data lanes available
->   *
->   * On some hardware a hotplug event notification may come from outside the display
->   * driver / device. An example of this is some USB Type-C setups where the hardware
-> @@ -2834,7 +2835,8 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
->   * This function can be used to report these out-of-band events after obtaining
->   * a drm_connector reference through calling drm_connector_find_by_fwnode().
->   */
-> -void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
-> +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
-> +				     bool hpd_state)
->  {
->  	struct drm_connector *connector;
->  
-> @@ -2843,7 +2845,7 @@ void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
->  		return;
->  
->  	if (connector->funcs->oob_hotplug_event)
-> -		connector->funcs->oob_hotplug_event(connector);
-> +		connector->funcs->oob_hotplug_event(connector, hpd_state);
->  
->  	drm_connector_put(connector);
->  }
-> diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
-> index 146b83916005..00520867d37b 100644
-> --- a/drivers/gpu/drm/i915/display/intel_dp.c
-> +++ b/drivers/gpu/drm/i915/display/intel_dp.c
-> @@ -4816,15 +4816,23 @@ static int intel_dp_connector_atomic_check(struct drm_connector *conn,
->  	return intel_modeset_synced_crtcs(state, conn);
->  }
->  
-> -static void intel_dp_oob_hotplug_event(struct drm_connector *connector)
-> +static void intel_dp_oob_hotplug_event(struct drm_connector *connector, bool hpd_state)
->  {
->  	struct intel_encoder *encoder = intel_attached_encoder(to_intel_connector(connector));
->  	struct drm_i915_private *i915 = to_i915(connector->dev);
-> +	bool need_work = false;
->  
->  	spin_lock_irq(&i915->irq_lock);
-> -	i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
-> +	if (hpd_state != i915->hotplug.oob_hotplug_state) {
+These tests didn't work under the normal `kunit.py run` command since
+they require CONFIG_PCI=y, which could not be set on ARCH=um.
 
-hpd_state is speific to the encoder (pin) so similarly to event_bits
-oob_hotplug_state should be a bitmask as well.
+Commit 68f5d3f3b654 ("um: add PCI over virtio emulation driver") lets us
+do so. To make it so people don't have to figure out how to do so, we
+add a drivers/thunderbolt/.kunitconfig.
 
-> +		i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
-> +
-> +		i915->hotplug.oob_hotplug_state = hpd_state;
-> +		need_work = true;
-> +	}
->  	spin_unlock_irq(&i915->irq_lock);
-> -	queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
-> +
-> +	if (need_work)
-> +		queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
->  }
->  
->  static const struct drm_connector_funcs intel_dp_connector_funcs = {
-> diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
-> index 8c1706fd81f9..543ebf1cfcf4 100644
-> --- a/drivers/gpu/drm/i915/i915_drv.h
-> +++ b/drivers/gpu/drm/i915/i915_drv.h
-> @@ -149,6 +149,9 @@ struct i915_hotplug {
->  	/* Whether or not to count short HPD IRQs in HPD storms */
->  	u8 hpd_short_storm_enabled;
->  
-> +	/* Last state reported by oob_hotplug_event */
-> +	bool oob_hotplug_state;
-> +
->  	/*
->  	 * if we get a HPD irq from DP and a HPD irq from non-DP
->  	 * the non-DP HPD could block the workqueue on a mode config
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index c1d8c23baa39..a4596be4d34a 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -59,7 +59,6 @@ struct dp_altmode {
->  	struct typec_displayport_data data;
->  
->  	enum dp_state state;
-> -	bool hpd;
->  
->  	struct mutex lock; /* device lock */
->  	struct work_struct work;
-> @@ -143,10 +142,7 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
->  		if (!ret)
->  			dp->state = DP_STATE_CONFIGURE;
->  	} else {
-> -		if (dp->hpd != hpd) {
-> -			drm_connector_oob_hotplug_event(dp->connector_fwnode);
-> -			dp->hpd = hpd;
-> -		}
-> +		drm_connector_oob_hotplug_event(dp->connector_fwnode, hpd);
->  	}
->  
->  	return ret;
-> @@ -573,8 +569,7 @@ void dp_altmode_remove(struct typec_altmode *alt)
->  	cancel_work_sync(&dp->work);
->  
->  	if (dp->connector_fwnode) {
-> -		if (dp->hpd)
-> -			drm_connector_oob_hotplug_event(dp->connector_fwnode);
-> +		drm_connector_oob_hotplug_event(dp->connector_fwnode, false);
->  
->  		fwnode_handle_put(dp->connector_fwnode);
->  	}
-> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-> index 64cf5f88c05b..7c90b8eb2ace 100644
-> --- a/include/drm/drm_connector.h
-> +++ b/include/drm/drm_connector.h
-> @@ -1141,7 +1141,7 @@ struct drm_connector_funcs {
->  	 * This will get called when a hotplug-event for a drm-connector
->  	 * has been received from a source outside the display driver / device.
->  	 */
-> -	void (*oob_hotplug_event)(struct drm_connector *connector);
-> +	void (*oob_hotplug_event)(struct drm_connector *connector, bool hpd_state);
->  };
->  
->  /**
-> @@ -1742,7 +1742,8 @@ drm_connector_is_unregistered(struct drm_connector *connector)
->  		DRM_CONNECTOR_UNREGISTERED;
->  }
->  
-> -void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode);
-> +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
-> +				     bool hpd_state);
->  const char *drm_get_connector_type_name(unsigned int connector_type);
->  const char *drm_get_connector_status_name(enum drm_connector_status status);
->  const char *drm_get_subpixel_order_name(enum subpixel_order order);
-> -- 
-> 2.33.1
-> 
+Can now run these tests using
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/thunderbolt
+
+Potentially controversial bits:
+1. this .kunitconfig is UML-specific, can't do this for example
+$ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kunitconfig=drivers/thunderbolt
+2. this removes the manual call to __kunit_test_suites_init(), which
+   allowed us to control exactly when the tests got run.
+
+The main motivation for both is convenience.
+
+For #1, we could drop the UML specific options, but then users would
+always have to set --arch. Since UML is a bit faster and there's less to
+type when running it with kunit.py, let's make it work by default.
+Users can manually edit the .kunitconfig to run under x86_64.
+
+For #2, running our suite separately prevents kunit.py from picking up
+results properly as it only parses one set of KUnit results. I.e.
+there's an assumption that __kunit_test_suites_init() only gets called
+once. Since the tests seem to run fine when kunit runs them, giving up
+this control seems fine.
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ drivers/thunderbolt/.kunitconfig |  7 +++++++
+ drivers/thunderbolt/domain.c     |  3 ---
+ drivers/thunderbolt/tb.h         |  8 --------
+ drivers/thunderbolt/test.c       | 12 +-----------
+ 4 files changed, 8 insertions(+), 22 deletions(-)
+ create mode 100644 drivers/thunderbolt/.kunitconfig
+
+diff --git a/drivers/thunderbolt/.kunitconfig b/drivers/thunderbolt/.kunitconfig
+new file mode 100644
+index 000000000000..c8c9467bc144
+--- /dev/null
++++ b/drivers/thunderbolt/.kunitconfig
+@@ -0,0 +1,7 @@
++CONFIG_PCI=y
++CONFIG_VIRTIO_UML=y
++CONFIG_UML_PCI_OVER_VIRTIO=y
++
++CONFIG_KUNIT=y
++CONFIG_USB4=y
++CONFIG_USB4_KUNIT_TEST=y
+diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
+index 7018d959f775..dedc2866f51b 100644
+--- a/drivers/thunderbolt/domain.c
++++ b/drivers/thunderbolt/domain.c
+@@ -878,7 +878,6 @@ int tb_domain_init(void)
+ {
+ 	int ret;
+ 
+-	tb_test_init();
+ 	tb_debugfs_init();
+ 	tb_acpi_init();
+ 
+@@ -896,7 +895,6 @@ int tb_domain_init(void)
+ err_acpi:
+ 	tb_acpi_exit();
+ 	tb_debugfs_exit();
+-	tb_test_exit();
+ 
+ 	return ret;
+ }
+@@ -909,5 +907,4 @@ void tb_domain_exit(void)
+ 	tb_xdomain_exit();
+ 	tb_acpi_exit();
+ 	tb_debugfs_exit();
+-	tb_test_exit();
+ }
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 74d3b14f004e..db54f8a27ba8 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -1261,12 +1261,4 @@ static inline void tb_service_debugfs_init(struct tb_service *svc) { }
+ static inline void tb_service_debugfs_remove(struct tb_service *svc) { }
+ #endif
+ 
+-#ifdef CONFIG_USB4_KUNIT_TEST
+-int tb_test_init(void);
+-void tb_test_exit(void);
+-#else
+-static inline int tb_test_init(void) { return 0; }
+-static inline void tb_test_exit(void) { }
+-#endif
+-
+ #endif
+diff --git a/drivers/thunderbolt/test.c b/drivers/thunderbolt/test.c
+index 1f69bab236ee..601c04aaa7d9 100644
+--- a/drivers/thunderbolt/test.c
++++ b/drivers/thunderbolt/test.c
+@@ -2725,14 +2725,4 @@ static struct kunit_suite tb_test_suite = {
+ 	.test_cases = tb_test_cases,
+ };
+ 
+-static struct kunit_suite *tb_test_suites[] = { &tb_test_suite, NULL };
+-
+-int tb_test_init(void)
+-{
+-	return __kunit_test_suites_init(tb_test_suites);
+-}
+-
+-void tb_test_exit(void)
+-{
+-	return __kunit_test_suites_exit(tb_test_suites);
+-}
++kunit_test_suites(&tb_test_suite);
+
+base-commit: 754e0b0e35608ed5206d6a67a791563c631cec07
+-- 
+2.35.1.265.g69c8d7142f-goog
+
