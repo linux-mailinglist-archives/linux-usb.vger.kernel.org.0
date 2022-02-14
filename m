@@ -2,159 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4F14B3F37
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 03:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B71004B4051
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 04:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237423AbiBNCO3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Feb 2022 21:14:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38832 "EHLO
+        id S237217AbiBNDdD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Feb 2022 22:33:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233848AbiBNCO2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Feb 2022 21:14:28 -0500
-Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9051154BF2;
-        Sun, 13 Feb 2022 18:14:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=k6Uaj
-        ZoyCi0UmItco9AZjqbpBfgkEe5ddfucxhJK6GI=; b=nTKTD6JcVEd/1DWJZFqpD
-        uC0o6Ke9nOlVfflhuz2S0yjJutznrDQdODrDUr+eCLZZ3XWAg3JX37vmT3aOqnqF
-        +zVweWgiw9/y2tlDjzKfhES8JcLYgFBugyh5vIGZH3ypKZVsREtis0tLHW1GKbDY
-        b2IZapuUbJbHS4WsAu1lKg=
-Received: from localhost.localdomain (unknown [112.97.60.177])
-        by smtp2 (Coremail) with SMTP id GtxpCgDHkUjqugli2GUbCQ--.19954S2;
-        Mon, 14 Feb 2022 10:14:04 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org
+        with ESMTP id S231682AbiBNDdD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Feb 2022 22:33:03 -0500
+X-Greylist: delayed 369 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 13 Feb 2022 19:32:53 PST
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0E29955499
+        for <linux-usb@vger.kernel.org>; Sun, 13 Feb 2022 19:32:53 -0800 (PST)
+Received: from jleng.ambarella.net (unknown [116.246.37.178])
+        by mail-app3 (Coremail) with SMTP id cC_KCgBnv6XQywliDz43DQ--.64695S2;
+        Mon, 14 Feb 2022 11:26:13 +0800 (CST)
+From:   3090101217@zju.edu.cn
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        ruslan.bilovol@gmail.com, pavel.hofman@ivitera.com,
+        jbrunet@baylibre.com, jackp@codeaurora.org, colin.king@intel.com,
+        pawell@cadence.com
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH v2] USB: serial: option: add support for DW5829e
-Date:   Mon, 14 Feb 2022 10:14:01 +0800
-Message-Id: <20220214021401.6264-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GtxpCgDHkUjqugli2GUbCQ--.19954S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3WF13ur43ZFyUZrWUWFW3KFg_yoW7Gw4Dpr
-        n8Ar17XFyDJr4rZF97tFn7AryS9wsaqFy7X3WDCanxWFWIvrs7t34aya4DZFnagws3KrnF
-        yrs8G3y7Ka4kGrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Una9fUUUUU=
-X-Originating-IP: [112.97.60.177]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBrQ2nZF75do58tQAAs1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Jing Leng <jleng@ambarella.com>
+Subject: [PATCH] usb: gadget: f_uac2: fix superspeed transfer
+Date:   Mon, 14 Feb 2022 11:26:06 +0800
+Message-Id: <20220214032606.17227-1-3090101217@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgBnv6XQywliDz43DQ--.64695S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw48Jr1DWryfArW3Ar1UZFb_yoW5AFyfpw
+        n8C39rtr45Ar4Yga1rAr4kAr43AFWIyayYkrWIv34avFsaq34ktF1Iyr1YkFyUAFyYyw10
+        vF4Ykw47u3W7ur7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBEb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2vYz4IE4I80cI0F6IAv
+        xc0EwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
+        Av7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
+        6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7M4kE6xkIj40Ew7
+        xC0wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
+        6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2
+        Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
+        Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
+        IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jeBT5UUUUU
+        =
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwQRBVNG3FHYyQAIsS
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dell DW5829e same as DW5821e except CAT level.
-DW5821e supports CAT16 but DW5829e supports CAT9.
-There are 2 types product of DW5829e: normal and eSIM.
-So we will add 2 PID for DW5829e.
-And for each PID, it support MBIM or RMNET.
-Let's see test evidence as below:
+From: Jing Leng <jleng@ambarella.com>
 
-DW5829e MBIM mode:
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
-D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  2
-P:  Vendor=413c ProdID=81e6 Rev=03.18
-S:  Manufacturer=Dell Inc.
-S:  Product=DW5829e Snapdragon X20 LTE
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 7 Cfg#= 2 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-I:  If#=0x6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+ss_ep_int_desc endpoint doesn't have 'SuperSpeed Endpoint
+Companion Descriptor', so we should add it.
 
-DW5829e RMNET mode:
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  5 Spd=5000 MxCh= 0
-D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=413c ProdID=81e6 Rev=03.18
-S:  Manufacturer=Dell Inc.
-S:  Product=DW5829e Snapdragon X20 LTE
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-
-DW5829e-eSIM MBIM mode:
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  6 Spd=5000 MxCh= 0
-D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  2
-P:  Vendor=413c ProdID=81e4 Rev=03.18
-S:  Manufacturer=Dell Inc.
-S:  Product=DW5829e-eSIM Snapdragon X20 LTE
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 7 Cfg#= 2 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-I:  If#=0x6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-
-DW5829e-eSIM RMNET mode:
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  7 Spd=5000 MxCh= 0
-D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=413c ProdID=81e4 Rev=03.18
-S:  Manufacturer=Dell Inc.
-S:  Product=DW5829e-eSIM Snapdragon X20 LTE
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-
-BTW, the interface 0x6 of MBIM mode is GNSS port, which not same as NMEA
-port. So it's banned from serial option driver.
-The remaining interfaces 0x2-0x5 are: MODEM, MODEM, NMEA, DIAG.
-
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Signed-off-by: Jing Leng <jleng@ambarella.com>
 ---
-v2: (1). sorted by PID  (2). reduce the conflict possibility between
-QMI and serial driver.
----
- drivers/usb/serial/option.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/usb/gadget/function/f_uac2.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 962e9943fc20..f612805222b6 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -198,6 +198,8 @@ static void option_instat_callback(struct urb *urb);
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index 097a709549d6..a6fc492f9148 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -282,6 +282,14 @@ static struct usb_endpoint_descriptor ss_ep_int_desc = {
+ 	.bInterval = 4,
+ };
  
- #define DELL_PRODUCT_5821E			0x81d7
- #define DELL_PRODUCT_5821E_ESIM			0x81e0
-+#define DELL_PRODUCT_5829E_ESIM			0x81e4
-+#define DELL_PRODUCT_5829E			0x81e6
++static struct usb_ss_ep_comp_descriptor ss_ep_int_desc_comp = {
++	.bLength = sizeof(ss_ep_int_desc_comp),
++	.bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
++	.bMaxBurst = 0,
++	.bmAttributes = 0,
++	.wBytesPerInterval = cpu_to_le16(6),
++};
++
+ /* Audio Streaming OUT Interface - Alt0 */
+ static struct usb_interface_descriptor std_as_out_if0_desc = {
+ 	.bLength = sizeof std_as_out_if0_desc,
+@@ -595,7 +603,8 @@ static struct usb_descriptor_header *ss_audio_desc[] = {
+ 	(struct usb_descriptor_header *)&in_feature_unit_desc,
+ 	(struct usb_descriptor_header *)&io_out_ot_desc,
  
- #define KYOCERA_VENDOR_ID			0x0c88
- #define KYOCERA_PRODUCT_KPC650			0x17da
-@@ -1063,6 +1065,10 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
- 	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5821E_ESIM),
- 	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
-+	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5829E),
-+	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
-+	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5829E_ESIM),
-+	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
- 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_E100A) },	/* ADU-E100, ADU-310 */
- 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_500A) },
- 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_620UW) },
+-  (struct usb_descriptor_header *)&ss_ep_int_desc,
++	(struct usb_descriptor_header *)&ss_ep_int_desc,
++	(struct usb_descriptor_header *)&ss_ep_int_desc_comp,
+ 
+ 	(struct usb_descriptor_header *)&std_as_out_if0_desc,
+ 	(struct usb_descriptor_header *)&std_as_out_if1_desc,
+@@ -657,6 +666,7 @@ static int set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
+ 
+ 	case USB_SPEED_HIGH:
+ 	case USB_SPEED_SUPER:
++	case USB_SPEED_SUPER_PLUS:
+ 		max_size_ep = 1024;
+ 		factor = 8000;
+ 		break;
+@@ -723,6 +733,7 @@ static void setup_headers(struct f_uac2_opts *opts,
+ 	struct usb_ss_ep_comp_descriptor *epout_desc_comp = NULL;
+ 	struct usb_ss_ep_comp_descriptor *epin_desc_comp = NULL;
+ 	struct usb_ss_ep_comp_descriptor *epin_fback_desc_comp = NULL;
++	struct usb_ss_ep_comp_descriptor *ep_int_desc_comp = NULL;
+ 	struct usb_endpoint_descriptor *epout_desc;
+ 	struct usb_endpoint_descriptor *epin_desc;
+ 	struct usb_endpoint_descriptor *epin_fback_desc;
+@@ -750,6 +761,7 @@ static void setup_headers(struct f_uac2_opts *opts,
+ 		epin_fback_desc = &ss_epin_fback_desc;
+ 		epin_fback_desc_comp = &ss_epin_fback_desc_comp;
+ 		ep_int_desc = &ss_ep_int_desc;
++		ep_int_desc_comp = &ss_ep_int_desc_comp;
+ 	}
+ 
+ 	i = 0;
+@@ -778,8 +790,11 @@ static void setup_headers(struct f_uac2_opts *opts,
+ 	if (EPOUT_EN(opts))
+ 		headers[i++] = USBDHDR(&io_out_ot_desc);
+ 
+-	if (FUOUT_EN(opts) || FUIN_EN(opts))
++	if (FUOUT_EN(opts) || FUIN_EN(opts)) {
+ 		headers[i++] = USBDHDR(ep_int_desc);
++		if (ep_int_desc_comp)
++			headers[i++] = USBDHDR(ep_int_desc_comp);
++	}
+ 
+ 	if (EPOUT_EN(opts)) {
+ 		headers[i++] = USBDHDR(&std_as_out_if0_desc);
 -- 
-2.25.1
+2.17.1
 
