@@ -2,93 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387974B5133
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 14:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 675334B5184
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 14:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244408AbiBNNJc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Feb 2022 08:09:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55326 "EHLO
+        id S1353968AbiBNNTV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Feb 2022 08:19:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233014AbiBNNJb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 08:09:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719DD4EA0F
-        for <linux-usb@vger.kernel.org>; Mon, 14 Feb 2022 05:09:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D230614AC
-        for <linux-usb@vger.kernel.org>; Mon, 14 Feb 2022 13:09:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 68E73C340F2
-        for <linux-usb@vger.kernel.org>; Mon, 14 Feb 2022 13:09:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644844163;
-        bh=0Rq/4oIuLUdCb9eDMj2LoWB6Fkohu4I++KvT6HcvgmU=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=CWqHBqDsc2Srg78JkgabMiaG5Us2WI1bknKE7LJnaoE1+r3PCA0HCdJyAOZ9KYepM
-         VgmN/VQ0H1yYR44+lSUOhUrqO5xV5cspS0ycjVMJlYoqQFeCEyglsg9lunuU+Eyxnq
-         cVU3vy5SPwyPjNfg/eIAEU1nNY5Vlx2/k/nKBcl3ksp+/0zRgqzdiXTgySQQSrJ99B
-         wFai4y+2tMmUWt4xjgOM2vLcevZ8LjJAHg5UXBCGvAXwbV3FjJ/WDGeKD4+h5y4+p5
-         LFpCJ3oLEBa6OGSXa4Uos7MYRLiuR6dADPrzzG0hBj6vYMQxwXliroQ77SYUK4Bogh
-         wqCbUZmE7Nvsg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 53A86CC13A6; Mon, 14 Feb 2022 13:09:23 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215561] snd-usb-audio:reset_resume error -22 after suspend
-Date:   Mon, 14 Feb 2022 13:09:23 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: tiwai@suse.de
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: CODE_FIX
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-215561-208809-ej8Sp0xM47@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215561-208809@https.bugzilla.kernel.org/>
-References: <bug-215561-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S1353800AbiBNNTU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 08:19:20 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4380C48388;
+        Mon, 14 Feb 2022 05:19:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644844752; x=1676380752;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3Diwd0EY/7PAtVxvigWXKiOU92Qi73gDqKE8+uKzDHY=;
+  b=c2r3cNMc3Ut9nxmqTXISqNZSBIFbK6QpbT0+px3nnrcbAOmo6D5d78ii
+   a8Hm6Q0tC9AEHis0b46/6EGuN4xIUk1U9lgXdibSRtsNI7RDt8yKBbfcl
+   BSA0fwiKth0f/FMPnw/fwKrwVqTuB3VCJpHS7V0xH1L7eZRLevQCoJRlw
+   s=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Feb 2022 05:19:11 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 05:19:11 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 14 Feb 2022 05:19:10 -0800
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 14 Feb 2022 05:19:08 -0800
+Date:   Mon, 14 Feb 2022 18:49:04 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ugoswami@quicinc.com>, Jung Daehwan <dh10.jung@samsung.com>
+Subject: Re: [PATCH v2] xhci: reduce xhci_handshake timeout in xhci_reset
+Message-ID: <20220214131904.GB31021@hu-pkondeti-hyd.qualcomm.com>
+References: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
+ <1644841216-1468-1-git-send-email-quic_pkondeti@quicinc.com>
+ <YgpLGGYI0W9mL2gg@kroah.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YgpLGGYI0W9mL2gg@kroah.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215561
+On Mon, Feb 14, 2022 at 01:29:12PM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Feb 14, 2022 at 05:50:16PM +0530, Pavankumar Kondeti wrote:
+> > From: Daehwan Jung <dh10.jung@samsung.com>
+> > 
+> > xhci_reset() is called with interrupts disabled. Waiting 10 seconds for
+> > controller reset and controller ready operations can be fatal to the
+> > system when controller is timed out. Reduce the timeout to 1 second
+> > and print a error message when the time out happens.
+> > 
+> > Fixes: 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
+> > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> > Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> > ---
+> > 
+> > v2:
+> > - Add error print statements in the code that change log refers to
+> > 
+> >  drivers/usb/host/xhci.c | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > index dc357ca..bb9ea3f 100644
+> > --- a/drivers/usb/host/xhci.c
+> > +++ b/drivers/usb/host/xhci.c
+> > @@ -196,9 +196,11 @@ int xhci_reset(struct xhci_hcd *xhci)
+> >  		udelay(1000);
+> >  
+> >  	ret = xhci_handshake(&xhci->op_regs->command,
+> > -			CMD_RESET, 0, 10 * 1000 * 1000);
+> > -	if (ret)
+> > +			CMD_RESET, 0, 1 * 1000 * 1000);
+> > +	if (ret) {
+> > +		xhci_err(xhci, "Host controller reset timed out\n");
+> 
+> A timeout is not the only error that could have happened here.  So why
+> claim that all errors are timeout errors?
 
-Takashi Iwai (tiwai@suse.de) changed:
+Thanks for pointing this out. xhci_handshake() can return an error code
+other than -ETIMEDOUT. ret == -ETIMEDOUT check needs to be added or
+just print the ret error in the print message.
+> 
+> How did you test this?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |CODE_FIX
+This is a hard to reproduce issue. So I have hacked the code to use 1 usec
+instead of 1 sec as timeout and see running into the timeout issue. I know
+this is not a perfect test. The test patch is included below.
 
---- Comment #15 from Takashi Iwai (tiwai@suse.de) ---
-Good to hear.
+Thanks,
+Pavan
 
-The fix patch was submitted and merged to sound.git tree for the next PR:
-  https://lore.kernel.org/r/20220214125711.20531-1-tiwai@suse.de
 
-It'll be backported to stable tree once after it gets merged to Linus tree.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index e95a5bc..6147544 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -37,6 +37,9 @@ static unsigned long long quirks;
+ module_param(quirks, ullong, S_IRUGO);
+ MODULE_PARM_DESC(quirks, "Bit flags for quirks to be enabled as default");
+ 
++static int reset_error;
++module_param(reset_error, int, S_IRUGO | S_IWUSR);
++
+ static bool td_on_ring(struct xhci_td *td, struct xhci_ring *ring)
+ {
+ 	struct xhci_segment *seg = ring->first_seg;
+@@ -195,8 +198,15 @@ int xhci_reset(struct xhci_hcd *xhci)
+ 	if (xhci->quirks & XHCI_INTEL_HOST)
+ 		udelay(1000);
+ 
+-	ret = xhci_handshake(&xhci->op_regs->command,
+-			CMD_RESET, 0, 1 * 1000 * 1000);
++	if (reset_error) {
++		xhci_err(xhci, "forcing timeout\n");
++		ret = xhci_handshake(&xhci->op_regs->command,
++				CMD_RESET, 0, 1); /* 1 usec */
++	} else {
++		ret = xhci_handshake(&xhci->op_regs->command,
++				CMD_RESET, 0, 1 * 1000 * 1000);
++	}
++
+ 	if (ret) {
+ 		xhci_err(xhci, "Host controller reset timed out\n");
+ 		return ret;
