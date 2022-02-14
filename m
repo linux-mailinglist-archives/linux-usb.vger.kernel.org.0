@@ -2,112 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7598A4B4183
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 06:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 479074B41EB
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 07:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240564AbiBNFxQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Feb 2022 00:53:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44172 "EHLO
+        id S240802AbiBNGXL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Feb 2022 01:23:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240561AbiBNFxO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 00:53:14 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F1C5007A;
-        Sun, 13 Feb 2022 21:53:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644817987; x=1676353987;
+        with ESMTP id S240761AbiBNGXK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 01:23:10 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDF64E389;
+        Sun, 13 Feb 2022 22:23:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644819783; x=1676355783;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=G1w/3HQfAzk9kDPixP2ODj7i3Qd2EPVt0FxpEGfaxRI=;
-  b=hYu/pQ73W4mQ85tnCpWgqKpH+b5hnvxDQgZ/WLettH7TeafcBUkyNs31
-   vWXj6uTshIgd7ZSSXo51R2rGkE2wLClZckRd3DrtjPu+ZvpsjiALDdsCb
-   GYBTxASEdZzIRJfOxfdjIkVcDR/uq1IFwRMu5zimGY/ceT0m1qSEF2Q7O
-   U=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Feb 2022 21:53:06 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 21:53:06 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Sun, 13 Feb 2022 21:53:06 -0800
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Sun, 13 Feb 2022 21:53:03 -0800
-Date:   Mon, 14 Feb 2022 11:22:59 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Jung Daehwan <dh10.jung@samsung.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ugoswami@quicinc.com>
-Subject: Re: usb: host: Reduce xhci_handshake timeout in xhci_reset
-Message-ID: <20220214055259.GA19990@hu-pkondeti-hyd.qualcomm.com>
-References: <1624361096-41282-1-git-send-email-dh10.jung@samsung.com>
- <YNJAZDwuFmEoTJHe@kroah.com>
- <20210628022548.GA69289@ubuntu>
- <YNlxzj7KXG43Uyrp@kroah.com>
- <20210628065553.GA83203@ubuntu>
- <496c9d86-70d7-1050-5bbb-9f841e4b464a@intel.com>
- <20220211064630.GA20567@hu-pkondeti-hyd.qualcomm.com>
- <20220211074331.GA12625@hu-pkondeti-hyd.qualcomm.com>
- <20220214040838.GA8039@hu-pkondeti-hyd.qualcomm.com>
- <YgnnCOwmrPprkWoJ@kroah.com>
+  bh=ogk0u9WIs4rRYT5evD6jDJdiJEu7Wt/pIAhA9485lVQ=;
+  b=dn49Hn+Z6bxmQOSRDt5xmyCRU7Sfjd3Vhufz8JBluKH8SDoN/ekx/zw2
+   xFVAivJgTkMucveliOkX1GZvQFV5VnSiAVMR5PQJ2ldphIwvyaFsp5ijv
+   Qahtab4KWBG4RB5nCJdBAoUmm8wvYJYvlbwEa892WNZvgINmuFwUNE8ut
+   io2gqqvj7gPN0z8uKJKUoorXXcVTUpqjRs6O/qNNNxMAzH96CVYYnJ49j
+   5FEj/AE5sVEZvfLAvejrnGnrrWOTcix5FgsNtIq+s7+vJj98AZIJl44g2
+   921uSU+7fcvfuoXrDa8zOBAIb97/VvWo4J5RST6tkxNXZDYeQsfBtNy7Y
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="247618611"
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="247618611"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 22:23:03 -0800
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="527922292"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 22:22:59 -0800
+Received: by lahna (sSMTP sendmail emulation); Mon, 14 Feb 2022 08:22:56 +0200
+Date:   Mon, 14 Feb 2022 08:22:56 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+        "open list:RADEON and AMDGPU DRM DRIVERS" 
+        <amd-gfx@lists.freedesktop.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
+        <nouveau@lists.freedesktop.org>,
+        "open list:X86 PLATFORM DRIVERS" 
+        <platform-driver-x86@vger.kernel.org>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Alexander.Deucher@amd.com
+Subject: Re: [PATCH v2 3/9] PCI: drop `is_thunderbolt` attribute
+Message-ID: <Ygn1QHF3aGsHpkS9@lahna>
+References: <20220210224329.2793-1-mario.limonciello@amd.com>
+ <20220210224329.2793-4-mario.limonciello@amd.com>
+ <YgY5N1eVWmi0Xyuw@lahna>
+ <20220213083928.GB23572@wunner.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YgnnCOwmrPprkWoJ@kroah.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220213083928.GB23572@wunner.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+Hi,
 
-On Mon, Feb 14, 2022 at 06:22:16AM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Feb 14, 2022 at 09:38:38AM +0530, Pavan Kondeti wrote:
-> > Hi Greg,
+On Sun, Feb 13, 2022 at 09:39:28AM +0100, Lukas Wunner wrote:
+> On Fri, Feb 11, 2022 at 12:23:51PM +0200, Mika Westerberg wrote:
+> > On Thu, Feb 10, 2022 at 04:43:23PM -0600, Mario Limonciello wrote:
+> > > @@ -2955,7 +2955,7 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
+> > >  			return true;
+> > >  
+> > >  		/* Even the oldest 2010 Thunderbolt controller supports D3. */
+> > > -		if (bridge->is_thunderbolt)
+> > > +		if (dev_is_removable(&bridge->dev))
 > > 
-> > On Fri, Feb 11, 2022 at 01:13:31PM +0530, Pavan Kondeti wrote:
-> > > Sorry for the spam. I have added an incorrect email address in my previous
-> > > email.
-> > > 
-> > > On Fri, Feb 11, 2022 at 12:16:30PM +0530, Pavan Kondeti wrote:
-> > > > On Mon, Jun 28, 2021 at 10:49:00AM +0300, Mathias Nyman wrote:
-> > > > > On 28.6.2021 9.55, Jung Daehwan wrote:
-> > > > > > On Mon, Jun 28, 2021 at 08:53:02AM +0200, Greg Kroah-Hartman wrote:
-> > > > > >> On Mon, Jun 28, 2021 at 11:25:48AM +0900, Jung Daehwan wrote:
-> > > > > >>> On Tue, Jun 22, 2021 at 09:56:20PM +0200, Greg Kroah-Hartman wrote:
-> > > > > >>>> On Tue, Jun 22, 2021 at 08:24:56PM +0900, Daehwan Jung wrote:
+> > For this, I'm not entirely sure this is what we want. The purpose of
+> > this check is to enable port power management of Apple systems with
+> > Intel Thunderbolt controller and therefore checking for "removable" here
+> > is kind of misleading IMHO.
+> [...]
+> > and then make a quirk in quirks.c that adds the software node property
+> > for the Apple systems? Or something along those lines.
 > 
-> <snip>
+> Honestly, that feels wrong to me.
 > 
-> > Can you please consider including this change? Let us know if you want this
-> > patch to be resent again with error message and Fixes tag included.
+> There are non-Apple products with Thunderbolt controllers,
+> e.g. Supermicro X10SAT was a Xeon board with Redwood Ridge
+> which was introduced in 2013.  This was way before Microsoft
+> came up with the HotPlugSupportInD3 property.  It was also way
+> before the 2015 BIOS cut-off date that we use to disable
+> power management on older boards.
 > 
-> You are responding to an email thread from 6 months ago, without any
-> change in it at all, so I have no idea what you are referring to here,
-> sorry.
-> 
-> Please resend any patch you wish to have reviewed, as obviously it is no
-> longer in our queue and might not even be relevant anymore (you have
-> tested 5.17-rc4, right?)
+> Still, we currently whitelist the Thunderbolt ports on that
+> board for D3 because we know it works.  What if products like
+> this one use their own power management scheme and we'd cause
+> a power regression if we needlessly disable D3 for them now?
 
-Thanks Greg for the reply. We will test the patch on the latest tree and
-resend it.
-
-Thanks,
-Pavan
+All the non-Apple Thunderbolt products before "HotPlugSupportInD3" use
+ACPI "assisted" hotplug which means all the PM is done in the BIOS.
+Essentially it means the controller is only present if there is anything
+connected and in that case it is always in D0. Unplugging the device
+makes the controller to be hot-removed (ACPI hotplug) too and that's the
+only way early Thunderbolt used to save energy.
