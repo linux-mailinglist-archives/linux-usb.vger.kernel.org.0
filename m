@@ -2,99 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB1C4B4E91
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 12:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5454B4E72
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 12:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351380AbiBNLcL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Feb 2022 06:32:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56464 "EHLO
+        id S1351902AbiBNLeE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Feb 2022 06:34:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351619AbiBNLaT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 06:30:19 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6447066AF7;
-        Mon, 14 Feb 2022 03:12:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644837121; x=1676373121;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uhliuFcKaGT4XB0ts+0U1iHxKFUOKpgSPOQ3kJVrBqw=;
-  b=UlwnlLd7Kt5onKh/gt6YHt4vaeoAv2mfWKHqiMKJlm0XTlFhmNw8farZ
-   smdR5+QtyKGbtW7hRkyBc22mcd9/nIIHf5jjH0joZJH4gBnydiSdGudJm
-   e614cm02q6eDo8QYtwzHc4S5SCG1ww1tqv0Tkzz0xUe/k2gUBPYRglBOR
-   Rclx2Besk9IKaDHTaKfKSdo9sVIpJN6vYMOQ6LU92vGA/ROQaQ21LKE+1
-   +Y+zyeUxZPv9lVyADmfhMUC+FV8fxGe6Jy6HhhNJbLIbtf4sJWUYt1LRT
-   8qD3jX5Q8Sx2De/8GCD90ncDaPmjz/QVITQLazrUSAHprVIp0OPE1MGI8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="248901060"
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="248901060"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 03:12:01 -0800
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="538542216"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 03:11:56 -0800
-Received: by lahna (sSMTP sendmail emulation); Mon, 14 Feb 2022 13:11:54 +0200
-Date:   Mon, 14 Feb 2022 13:11:54 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        "open list:RADEON and AMDGPU DRM DRIVERS" 
-        <amd-gfx@lists.freedesktop.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
-        <nouveau@lists.freedesktop.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Alexander.Deucher@amd.com,
-        Andreas Noever <andreas.noever@gmail.com>
-Subject: Re: [PATCH v3 05/12] PCI: Detect root port of internal USB4 devices
- by `usb4-host-interface`
-Message-ID: <Ygo4+sfeHhQeSUEa@lahna>
-References: <20220211193250.1904843-6-mario.limonciello@amd.com>
- <20220211214546.GA737137@bhelgaas>
- <YgoGAkjZgCob8Mdl@lahna>
- <20220214085202.GA21533@wunner.de>
- <Ygo1eoVe8D0b80QF@lahna>
+        with ESMTP id S1351885AbiBNLdo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 06:33:44 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAB366F8B;
+        Mon, 14 Feb 2022 03:19:11 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id B45B01F43669
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644837550;
+        bh=/yHhoGENnp5DfoA0yF/nUh7Mr9NPuMCSmEyusu4kgtU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=K2W0/12Y8kOeoV2TERja1cvvfaN0KlIkfleL8X5BjzFguAx6YDhkDwqELmUFhjtLI
+         MZJDiACq4O7v2rhXDmMIiVGdvThbpe1k2nuYz5DqbFeqUBOuLGCdDW5R9+nq60FA+K
+         cUvKWgJAzlV9YUvGTOjGB//MB4v4LFrlKz0t/cV0BkRVhiYEhetMW3W3lo/zo664uI
+         WM0IvxY+JQKPO1V932VQ6LwHqocInM6EiIO2QhQeoAuB0lJa3momVeIaE9yQgPIfcs
+         BBAU7O74zn9E46R7UXhUOS71px58s2Hdxn7rPpmLrpVeg7G1KDTAh9WXXM1RK2hnga
+         IIKcFl8/1SSSA==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     chunfeng.yun@mediatek.com
+Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        matthias.bgg@gmail.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2] usb: host: xhci-mtk: Simplify supplies handling with regulator_bulk
+Date:   Mon, 14 Feb 2022 12:19:05 +0100
+Message-Id: <20220214111905.77903-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ygo1eoVe8D0b80QF@lahna>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 01:11:05PM +0200, Mika Westerberg wrote:
-> > > It is used to identify "tunneled" ports (whether PCIe, USB 3.x or
-> > > DisplayPort). Tunnels are created by software (in Linux it is the
-> > > Thunderbolt driver) and are dynamic in nature. The USB4 links go over
-> > > USB Type-C cable which also is something user can plug/unplug freely.
-> > > 
-> > > I would say it is reasonable expectation that anything behind these
-> > > ports can be assumed as "removable".
-> > 
-> > USB gadgets may be soldered to the mainboard.  Those cannot be
-> > unplugged freely.  It is common practice to solder USB Ethernet
-> > or USB FTDI serial ports and nothing's preventing a vendor to solder
-> > USB4/Thunderbolt gadgets.
-> 
-> Right, that's why I say it is "reasonable expectation" that anything
-> behind these ports can be assumed "removable" :) Of course they don't
-> have to be but if we assume that in the driver where this actually
-> matters we should be on the safe side, no?
+Remove the custom functions xhci_mtk_ldos_{enable,disable}() by
+switching to using regulator_bulk to perform the very same thing,
+as the regulators are always either both enabled or both disabled.
 
-Also the tunnels are not permanent anyway.
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+
+v2: Change dynamic vregs array to static definition with new xhci_mtk_vregs_get()
+    helper as requested by Chunfeng
+
+ drivers/usb/host/xhci-mtk.c | 44 ++++++++++---------------------------
+ drivers/usb/host/xhci-mtk.h |  5 +++--
+ 2 files changed, 14 insertions(+), 35 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+index e25bad0894cf..b89b4f159a4d 100644
+--- a/drivers/usb/host/xhci-mtk.c
++++ b/drivers/usb/host/xhci-mtk.c
+@@ -401,29 +401,14 @@ static int xhci_mtk_clks_get(struct xhci_hcd_mtk *mtk)
+ 	return devm_clk_bulk_get_optional(mtk->dev, BULK_CLKS_NUM, clks);
+ }
+ 
+-static int xhci_mtk_ldos_enable(struct xhci_hcd_mtk *mtk)
++static int xhci_mtk_vregs_get(struct xhci_hcd_mtk *mtk)
+ {
+-	int ret;
++	struct regulator_bulk_data *supplies = mtk->supplies;
+ 
+-	ret = regulator_enable(mtk->vbus);
+-	if (ret) {
+-		dev_err(mtk->dev, "failed to enable vbus\n");
+-		return ret;
+-	}
+-
+-	ret = regulator_enable(mtk->vusb33);
+-	if (ret) {
+-		dev_err(mtk->dev, "failed to enable vusb33\n");
+-		regulator_disable(mtk->vbus);
+-		return ret;
+-	}
+-	return 0;
+-}
++	supplies[0].supply = "vbus";
++	supplies[1].supply = "vusb33";
+ 
+-static void xhci_mtk_ldos_disable(struct xhci_hcd_mtk *mtk)
+-{
+-	regulator_disable(mtk->vbus);
+-	regulator_disable(mtk->vusb33);
++	return devm_regulator_bulk_get(mtk->dev, BULK_VREGS_NUM, supplies);
+ }
+ 
+ static void xhci_mtk_quirks(struct device *dev, struct xhci_hcd *xhci)
+@@ -513,17 +498,10 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	mtk->dev = dev;
+-	mtk->vbus = devm_regulator_get(dev, "vbus");
+-	if (IS_ERR(mtk->vbus)) {
+-		dev_err(dev, "fail to get vbus\n");
+-		return PTR_ERR(mtk->vbus);
+-	}
+ 
+-	mtk->vusb33 = devm_regulator_get(dev, "vusb33");
+-	if (IS_ERR(mtk->vusb33)) {
+-		dev_err(dev, "fail to get vusb33\n");
+-		return PTR_ERR(mtk->vusb33);
+-	}
++	ret = xhci_mtk_vregs_get(mtk);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to get regulators\n");
+ 
+ 	ret = xhci_mtk_clks_get(mtk);
+ 	if (ret)
+@@ -564,7 +542,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(dev);
+ 	pm_runtime_get_sync(dev);
+ 
+-	ret = xhci_mtk_ldos_enable(mtk);
++	ret = regulator_bulk_enable(BULK_VREGS_NUM, mtk->supplies);
+ 	if (ret)
+ 		goto disable_pm;
+ 
+@@ -673,7 +651,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+ 	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
+ 
+ disable_ldos:
+-	xhci_mtk_ldos_disable(mtk);
++	regulator_bulk_disable(BULK_VREGS_NUM, mtk->supplies);
+ 
+ disable_pm:
+ 	pm_runtime_put_noidle(dev);
+@@ -701,7 +679,7 @@ static int xhci_mtk_remove(struct platform_device *pdev)
+ 	usb_put_hcd(hcd);
+ 	xhci_mtk_sch_exit(mtk);
+ 	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
+-	xhci_mtk_ldos_disable(mtk);
++	regulator_bulk_disable(BULK_VREGS_NUM, mtk->supplies);
+ 
+ 	pm_runtime_disable(dev);
+ 	pm_runtime_put_noidle(dev);
+diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
+index 4b1ea89f959a..ffd4b493b4ba 100644
+--- a/drivers/usb/host/xhci-mtk.h
++++ b/drivers/usb/host/xhci-mtk.h
+@@ -11,10 +11,12 @@
+ 
+ #include <linux/clk.h>
+ #include <linux/hashtable.h>
++#include <linux/regulator/consumer.h>
+ 
+ #include "xhci.h"
+ 
+ #define BULK_CLKS_NUM	5
++#define BULK_VREGS_NUM	2
+ 
+ /* support at most 64 ep, use 32 size hash table */
+ #define SCH_EP_HASH_BITS	5
+@@ -150,9 +152,8 @@ struct xhci_hcd_mtk {
+ 	int num_u3_ports;
+ 	int u2p_dis_msk;
+ 	int u3p_dis_msk;
+-	struct regulator *vusb33;
+-	struct regulator *vbus;
+ 	struct clk_bulk_data clks[BULK_CLKS_NUM];
++	struct regulator_bulk_data supplies[BULK_VREGS_NUM];
+ 	unsigned int has_ippc:1;
+ 	unsigned int lpm_support:1;
+ 	unsigned int u2_lpm_disable:1;
+-- 
+2.33.1
+
