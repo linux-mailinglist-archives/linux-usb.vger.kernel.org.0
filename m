@@ -2,137 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71004B4051
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 04:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2934B409E
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Feb 2022 05:08:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237217AbiBNDdD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Feb 2022 22:33:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57902 "EHLO
+        id S240170AbiBNEIx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Feb 2022 23:08:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbiBNDdD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Feb 2022 22:33:03 -0500
-X-Greylist: delayed 369 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 13 Feb 2022 19:32:53 PST
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0E29955499
-        for <linux-usb@vger.kernel.org>; Sun, 13 Feb 2022 19:32:53 -0800 (PST)
-Received: from jleng.ambarella.net (unknown [116.246.37.178])
-        by mail-app3 (Coremail) with SMTP id cC_KCgBnv6XQywliDz43DQ--.64695S2;
-        Mon, 14 Feb 2022 11:26:13 +0800 (CST)
-From:   3090101217@zju.edu.cn
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        ruslan.bilovol@gmail.com, pavel.hofman@ivitera.com,
-        jbrunet@baylibre.com, jackp@codeaurora.org, colin.king@intel.com,
-        pawell@cadence.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jing Leng <jleng@ambarella.com>
-Subject: [PATCH] usb: gadget: f_uac2: fix superspeed transfer
-Date:   Mon, 14 Feb 2022 11:26:06 +0800
-Message-Id: <20220214032606.17227-1-3090101217@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgBnv6XQywliDz43DQ--.64695S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZw48Jr1DWryfArW3Ar1UZFb_yoW5AFyfpw
-        n8C39rtr45Ar4Yga1rAr4kAr43AFWIyayYkrWIv34avFsaq34ktF1Iyr1YkFyUAFyYyw10
-        vF4Ykw47u3W7ur7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBEb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2vYz4IE4I80cI0F6IAv
-        xc0EwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
-        Av7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
-        6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7M4kE6xkIj40Ew7
-        xC0wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
-        6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2
-        Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
-        Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
-        IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jeBT5UUUUU
-        =
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwQRBVNG3FHYyQAIsS
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229994AbiBNEIx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Feb 2022 23:08:53 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B004EA3F;
+        Sun, 13 Feb 2022 20:08:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644811726; x=1676347726;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=u+W1tN9usZWjsj5/mAQPYbtm+xXSxWfMP0GXHrsmeik=;
+  b=oomvviUnZgpSLb/Px2S6ydX6siTh9GmAOGB+kb3HJdTHYelRywb/vm9F
+   s4ZcwSCfDC4n0X2KXdj/zx/+qLb7gIfavLHSPc8vbS2V7W79Yh2SbT/7L
+   SGElqIvZY+6qaytmfrWaS9KK1C4Tpzf6D18NZLWKYkBfXHUgNb1IM8A7i
+   M=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 13 Feb 2022 20:08:46 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 20:08:45 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Sun, 13 Feb 2022 20:08:45 -0800
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Sun, 13 Feb 2022 20:08:42 -0800
+Date:   Mon, 14 Feb 2022 09:38:38 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
+        Jung Daehwan <dh10.jung@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ugoswami@quicinc.com>
+Subject: Re: usb: host: Reduce xhci_handshake timeout in xhci_reset
+Message-ID: <20220214040838.GA8039@hu-pkondeti-hyd.qualcomm.com>
+References: <CGME20210622113915epcas2p284c61291fc9d83487f6dfebb65fd4e9b@epcas2p2.samsung.com>
+ <1624361096-41282-1-git-send-email-dh10.jung@samsung.com>
+ <YNJAZDwuFmEoTJHe@kroah.com>
+ <20210628022548.GA69289@ubuntu>
+ <YNlxzj7KXG43Uyrp@kroah.com>
+ <20210628065553.GA83203@ubuntu>
+ <496c9d86-70d7-1050-5bbb-9f841e4b464a@intel.com>
+ <20220211064630.GA20567@hu-pkondeti-hyd.qualcomm.com>
+ <20220211074331.GA12625@hu-pkondeti-hyd.qualcomm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220211074331.GA12625@hu-pkondeti-hyd.qualcomm.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
+Hi Greg,
 
-ss_ep_int_desc endpoint doesn't have 'SuperSpeed Endpoint
-Companion Descriptor', so we should add it.
+On Fri, Feb 11, 2022 at 01:13:31PM +0530, Pavan Kondeti wrote:
+> Sorry for the spam. I have added an incorrect email address in my previous
+> email.
+> 
+> On Fri, Feb 11, 2022 at 12:16:30PM +0530, Pavan Kondeti wrote:
+> > On Mon, Jun 28, 2021 at 10:49:00AM +0300, Mathias Nyman wrote:
+> > > On 28.6.2021 9.55, Jung Daehwan wrote:
+> > > > On Mon, Jun 28, 2021 at 08:53:02AM +0200, Greg Kroah-Hartman wrote:
+> > > >> On Mon, Jun 28, 2021 at 11:25:48AM +0900, Jung Daehwan wrote:
+> > > >>> On Tue, Jun 22, 2021 at 09:56:20PM +0200, Greg Kroah-Hartman wrote:
+> > > >>>> On Tue, Jun 22, 2021 at 08:24:56PM +0900, Daehwan Jung wrote:
+> > > >>>>> It seems 10 secs timeout is too long in general case. A core would wait for
+> > > >>>>> 10 secs without doing other task and it can be happended on every device.
+> > > >>>>
+> > > >>>> Only if the handshake does not come back sooner, right?
+> > > >>>
+> > > >>> Yes, right.
+> > > >>>
+> > > >>>> What is causing your device to timeout here?
+> > > >>>
+> > > >>> Host Controller doesn't respond handshake. I don't know why and I ask HW team
+> > > >>> to debug it.
+> > > >>
+> > > >> Please work to fix your hardware, that feels like the root of the
+> > > >> problem here.  If you require the timeout for xhci_reset() to happen,
+> > > >> then how do you know that the hardware really did reset properly in the
+> > > >> reduced amount of time you just provided?
+> > > >>
+> > > > 
+> > > > I continue fixing this issue with hardware engineer, but currently just
+> > > > host controller can crash whole system and that's why I want to fix it.
+> > > > How about adding some error logs in this situation for recognizing this issue?
+> > > > We can add error log in xhci_stop as xhci_reset can returns error like below.
+> > > > 
+> > > > static void xhci_stop(struct usb_hcd *hcd)
+> > > > {
+> > > >         u32 temp;
+> > > >         struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+> > > > +       int ret;
+> > > > 
+> > > >         mutex_lock(&xhci->mutex);
+> > > > 
+> > > > @@ -733,6 +734,9 @@ static void xhci_stop(struct usb_hcd *hcd)
+> > > >         xhci->cmd_ring_state = CMD_RING_STATE_STOPPED;
+> > > >         xhci_halt(xhci);
+> > > >         xhci_reset(xhci);
+> > > > +       if (ret)
+> > > > +               xhci_err(xhci, "%s: Error while reset xhci Host controller - ret = %d\n"
+> > > > +                       , __func__, ret);
+> > > >         spin_unlock_irq(&xhci->lock);
+> > > > 
+> > > 
+> > > We can check the xhci_reset() return value here and print a message, makes sense.
+> > > 
+> > > The original reason for the 10 second timeout was because a host actually took 9 seconds:
+> > > 
+> > > commit 22ceac191211cf6688b1bf6ecd93c8b6bf80ed9b
+> > > 
+> > >     xhci: Increase reset timeout for Renesas 720201 host.
+> > >     
+> > >     The NEC/Renesas 720201 xHCI host controller does not complete its reset
+> > >     within 250 milliseconds.  In fact, it takes about 9 seconds to reset the
+> > >     host controller, and 1 second for the host to be ready for doorbell
+> > >     rings.  Extend the reset and CNR polling timeout to 10 seconds each.
+> > > 
+> > Agreed.
+> > 
+> > We also run into the similar issue (very very rarely reproduced) on
+> > our platforms like SM8450. The issue happens when host mode is de-activated
+> > (type-c cable disconnected). Since xhci_reset() is called with interrupts
+> > disabled, a timeout of 10 seconds is fatal to the system.
 
-Signed-off-by: Jing Leng <jleng@ambarella.com>
----
- drivers/usb/gadget/function/f_uac2.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+Can you please consider including this change? Let us know if you want this
+patch to be resent again with error message and Fixes tag included.
 
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index 097a709549d6..a6fc492f9148 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -282,6 +282,14 @@ static struct usb_endpoint_descriptor ss_ep_int_desc = {
- 	.bInterval = 4,
- };
- 
-+static struct usb_ss_ep_comp_descriptor ss_ep_int_desc_comp = {
-+	.bLength = sizeof(ss_ep_int_desc_comp),
-+	.bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
-+	.bMaxBurst = 0,
-+	.bmAttributes = 0,
-+	.wBytesPerInterval = cpu_to_le16(6),
-+};
-+
- /* Audio Streaming OUT Interface - Alt0 */
- static struct usb_interface_descriptor std_as_out_if0_desc = {
- 	.bLength = sizeof std_as_out_if0_desc,
-@@ -595,7 +603,8 @@ static struct usb_descriptor_header *ss_audio_desc[] = {
- 	(struct usb_descriptor_header *)&in_feature_unit_desc,
- 	(struct usb_descriptor_header *)&io_out_ot_desc,
- 
--  (struct usb_descriptor_header *)&ss_ep_int_desc,
-+	(struct usb_descriptor_header *)&ss_ep_int_desc,
-+	(struct usb_descriptor_header *)&ss_ep_int_desc_comp,
- 
- 	(struct usb_descriptor_header *)&std_as_out_if0_desc,
- 	(struct usb_descriptor_header *)&std_as_out_if1_desc,
-@@ -657,6 +666,7 @@ static int set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
- 
- 	case USB_SPEED_HIGH:
- 	case USB_SPEED_SUPER:
-+	case USB_SPEED_SUPER_PLUS:
- 		max_size_ep = 1024;
- 		factor = 8000;
- 		break;
-@@ -723,6 +733,7 @@ static void setup_headers(struct f_uac2_opts *opts,
- 	struct usb_ss_ep_comp_descriptor *epout_desc_comp = NULL;
- 	struct usb_ss_ep_comp_descriptor *epin_desc_comp = NULL;
- 	struct usb_ss_ep_comp_descriptor *epin_fback_desc_comp = NULL;
-+	struct usb_ss_ep_comp_descriptor *ep_int_desc_comp = NULL;
- 	struct usb_endpoint_descriptor *epout_desc;
- 	struct usb_endpoint_descriptor *epin_desc;
- 	struct usb_endpoint_descriptor *epin_fback_desc;
-@@ -750,6 +761,7 @@ static void setup_headers(struct f_uac2_opts *opts,
- 		epin_fback_desc = &ss_epin_fback_desc;
- 		epin_fback_desc_comp = &ss_epin_fback_desc_comp;
- 		ep_int_desc = &ss_ep_int_desc;
-+		ep_int_desc_comp = &ss_ep_int_desc_comp;
- 	}
- 
- 	i = 0;
-@@ -778,8 +790,11 @@ static void setup_headers(struct f_uac2_opts *opts,
- 	if (EPOUT_EN(opts))
- 		headers[i++] = USBDHDR(&io_out_ot_desc);
- 
--	if (FUOUT_EN(opts) || FUIN_EN(opts))
-+	if (FUOUT_EN(opts) || FUIN_EN(opts)) {
- 		headers[i++] = USBDHDR(ep_int_desc);
-+		if (ep_int_desc_comp)
-+			headers[i++] = USBDHDR(ep_int_desc_comp);
-+	}
- 
- 	if (EPOUT_EN(opts)) {
- 		headers[i++] = USBDHDR(&std_as_out_if0_desc);
--- 
-2.17.1
-
+Thanks,
+Pavan
