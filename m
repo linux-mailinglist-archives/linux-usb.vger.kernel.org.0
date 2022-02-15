@@ -2,141 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC434B6302
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 06:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F864B6348
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 07:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbiBOFnX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 00:43:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49368 "EHLO
+        id S234334AbiBOGLM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 01:11:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiBOFnW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 00:43:22 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2135.outbound.protection.outlook.com [40.107.96.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F26370304;
-        Mon, 14 Feb 2022 21:43:12 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pbr0o5o8jqtFmOPcArbe0obENiv/etXUCzz0gEYhGhqU6V5kDmhUX+C59R6fW9HP34TUZi4UMh3etx8akrbybe3NNQvQug2tDIe3SVmYB9sFz2hb4ush+Nh7rYA1pPiN1dIeIwPwscictzBfWafAhHWg0iKqOoALvvPTB95Qretqo3PI7X4Khw3t3RoaX+nAL938RVC+N5/eA6QQmPOyqXcy+f4KasPtJ2ealubyiUVidyB1GjDxnVz+vrtsPatotYya5k0toeyS7A6GDksVoWykLC3innCwj5THa6Gl3jxdSCP8DK4H4U+hupusgRrAVNXfP80S1doX8T5lrmR/0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CPXiqKadVX+B69D+QbkWIyH4Z/xnASJS0OZE3aHuZV8=;
- b=lOuqPYfbknetQaZ4mGUBSUXpmNYPc/YS/etPrhUwhkKxWwLY+BTXumxlUOkzsdMqJWFrKvJXt6/Bim4p+uAbKhMzN+V6r54YWpiYebFDnJsckX+8AlQfJ1EhvuYZj2YiyarNeEasQHIDyzPcSEy396ZF6irk4dq3mVSki2MgGNmujFB9ErMtaewDZAF6fioAuLshMIUE4ed1DNWwE5LwlfijsHzRSOn7i4uqzUGb2l5MA6q6N+DYUDWpZ5gp65c2EaTRFvRDk9nkXc7BCvAKGtnBjMa3vdomYDbiUROApScHJbrDV6B6tg9ByQ4NgMWmqTkL6l7U/UqvXaVxsOFQqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CPXiqKadVX+B69D+QbkWIyH4Z/xnASJS0OZE3aHuZV8=;
- b=rbcUUodBMAyV/sJ5EfJ+z5FhdlgSGKde0gA7+n0c9Eu7tNEuhsW1IcayROp2BtNHTVXj9iiBLdUMpEqtpRaPf3o5O2rp02Lim8LPt6huZ372mhmdP8bbya6fQuU9/WHt/D027oYhp/LFJOwidmfWo6cNG1AYFTEJUtgGiDJbow8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-Received: from CH2PR04MB6741.namprd04.prod.outlook.com (2603:10b6:610:96::19)
- by SN6PR04MB4861.namprd04.prod.outlook.com (2603:10b6:805:94::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Tue, 15 Feb
- 2022 05:43:09 +0000
-Received: from CH2PR04MB6741.namprd04.prod.outlook.com
- ([fe80::75ac:2247:75c4:e65d]) by CH2PR04MB6741.namprd04.prod.outlook.com
- ([fe80::75ac:2247:75c4:e65d%6]) with mapi id 15.20.4975.014; Tue, 15 Feb 2022
- 05:43:09 +0000
-Date:   Tue, 15 Feb 2022 13:43:00 +0800
-From:   Xin Ji <xji@analogixsemi.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] usb: typec: anx7411: Add Analogix PD ANX7411
- support
-Message-ID: <20220215054300.GA3752727@anxtwsw-Precision-3640-Tower>
-References: <20220208091621.3680427-1-xji@analogixsemi.com>
- <20220208091621.3680427-2-xji@analogixsemi.com>
- <YgPCLopskwyQ6F4K@kuha.fi.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgPCLopskwyQ6F4K@kuha.fi.intel.com>
-X-ClientProxiedBy: SGBP274CA0015.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::27)
- To CH2PR04MB6741.namprd04.prod.outlook.com (2603:10b6:610:96::19)
+        with ESMTP id S234321AbiBOGLK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 01:11:10 -0500
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57764F1188
+        for <linux-usb@vger.kernel.org>; Mon, 14 Feb 2022 22:11:01 -0800 (PST)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220215061058epoutp033ad5a5c76cee80e922fb04891d750331~T4MyrJZw_2542925429epoutp03P
+        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 06:10:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220215061058epoutp033ad5a5c76cee80e922fb04891d750331~T4MyrJZw_2542925429epoutp03P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1644905458;
+        bh=NTyW/hdAfUjA6iQMQHXUxa9Lo11qEZpBXPgW2wxx4zo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=S0oXg1psdYQJVDtuoW5IOb8iV/I4lw6z7OSi3rNCJxlPw6MXEOOVAWlWZ6VEMjtDR
+         K+ageFud1Ksd/yoExy/XdlLghmUssY121btywEAZDsjGdOXbEbSxCrcpD9BhV70D+1
+         OkU0uw3pW7vqI+NxME5rDzYTfDotCPvwqKkR5amk=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20220215061057epcas2p49de0f293f9b4ced03147eed7451c7f53~T4MxmFDgv2792727927epcas2p4C;
+        Tue, 15 Feb 2022 06:10:57 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.99]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4JyW1B54d6z4x9Q5; Tue, 15 Feb
+        2022 06:10:54 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        88.18.12141.5D34B026; Tue, 15 Feb 2022 15:10:29 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220215061050epcas2p476733a589249d4d82b5a4add161edb22~T4MrPgJEQ2792727927epcas2p4v;
+        Tue, 15 Feb 2022 06:10:50 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220215061050epsmtrp25b9dd3ebef9b6c2bc9d257b827a3ea1a~T4MrOZH_L3155431554epsmtrp2I;
+        Tue, 15 Feb 2022 06:10:50 +0000 (GMT)
+X-AuditID: b6c32a48-d73ff70000002f6d-c8-620b43d5da11
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        31.9D.29871.AE34B026; Tue, 15 Feb 2022 15:10:50 +0900 (KST)
+Received: from ubuntu (unknown [12.36.155.120]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220215061050epsmtip2038bb7739a11dd2af44b0215e47c01d5~T4MrE1duP0764107641epsmtip2c;
+        Tue, 15 Feb 2022 06:10:50 +0000 (GMT)
+Date:   Tue, 15 Feb 2022 15:08:36 +0900
+From:   Jung Daehwan <dh10.jung@samsung.com>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        quic_jackp@quicinc.com, Thinh.Nguyen@synopsys.com
+Subject: Re: [PATCH v1 1/2] usb: dwc3: Not set DWC3_EP_END_TRANSFER_PENDING
+ in ep cmd fails
+Message-ID: <20220215060836.GB144890@ubuntu>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4b70e386-7398-4ad1-2a36-08d9f0460bfc
-X-MS-TrafficTypeDiagnostic: SN6PR04MB4861:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR04MB4861E7661CAC9D72C2DE7487C7349@SN6PR04MB4861.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Xs1GQEap6n1o0M8fRKIw4h2PRToAmB2KZ3Ef9CvikVIjsQzFmlm0sABPlyhQY+LISSgkd1LMCTW0NO/xtiUg9DRmfq+mx/8s6VKaCpKTBvs8nkLuxtmJQL9lJdqlsrI/9gSGLI7mPmoyR7d7q75fIqrYookY/+DY47PoiAwWljP/KtUDy6pDdbftdliAEXH01Nt2CGVBinSW3GF3kpz+YnYNf1gop1UQ0LCU2i3fl+QlvOi+P1uXR+7nG/seRVp9TZKHfhcCtX366IINq3LDR4/X6JodotIm2P75F1G6fuPE0M0Tx6tfopofMW9wyDDQjj8BedgMW85GHx5W2xRA5W84SZnN3oIbcfrK9eatpH4121aA7PmuzjMJKR5buZrEDMx/GcEfh7tKoHuJy5YMzDVxbRkpA7M50r/LcOA2oTUzxpEXJWF87PjP0pDGLQgDjkKNpht271Wj+2WkGPp9SizK5HI1hslAg8E+Gt+20hkAjGpwQ/fnpDlGAga2Pg1cBydA0Jmo7as8dFzBE3dNFsoeYLxSxBKBiVlX8/O7KYaeNwvfUCIslIaR4KK6zaJObckssVsOsbtSBJkiuNnZAX3sYbINL3gNkokb6yUqgDZn4n4PUhYS9WYL2DJIJLZI4gVUvgyQT8/XCc/3aJiGEdy01YHqJEsEb86ijVxwg2LXviwcmp3Ub2tb2b2TB1De+rGfm0T/LNC4s3F8PO6Pdg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR04MB6741.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(6512007)(9686003)(55236004)(33716001)(52116002)(6506007)(508600001)(6486002)(186003)(6916009)(38100700002)(4326008)(8676002)(86362001)(66946007)(8936002)(66556008)(4744005)(26005)(1076003)(5660300002)(33656002)(2906002)(6666004)(316002)(38350700002)(66476007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QL3PLQi90wB1yoFmAJ8ltx7OT+kjagLOJd/TwIeipIrXV0M387fggKqBnM9H?=
- =?us-ascii?Q?3+YkjjzlLKFS6xCBrK2TPga4gPaSUnV+enYkWTTXUMDrJPHT/rn4+vi9lEn2?=
- =?us-ascii?Q?8bU9rer+6xDzSGW97onjSj4kehGBO7byqauJSjS9EDxRRTIYTe3DhmSQUj+Q?=
- =?us-ascii?Q?+a4Y4Q5xnI/yeYgy/WKFubNlmbMW9RCqUzvzxO0Es0nhce7NRRabaUtNqF5I?=
- =?us-ascii?Q?wJZFVmAhORQXg6f2UGYKaSxV11CD233aCSTBs7yG3nO/t1risNWjmRKXn553?=
- =?us-ascii?Q?P1OY7rgeSF1To7hKOIkOfJryn0u+bc/5S1bgI1LJ2kWd0Jxca4S9QO5OrUQZ?=
- =?us-ascii?Q?uIJPvFzbG5J2UJHXqsSwse6DfVUup9V+PuwlyEBTqC6aueB2vOpiHPsVRjOW?=
- =?us-ascii?Q?4Jo3KvbZ+0k6F70FlcvqCjEFeB6PTx12mBiBNFlxe9ZR0E3GmMO6oyD9VpAF?=
- =?us-ascii?Q?1bJxsaMw6F3+cx65i8FzomzKdibrVB04IsvC6WazYaKVwJ6VV5tIC3QVoOVD?=
- =?us-ascii?Q?mWxiw+EDS7q8w2+kri/mv+gnhVMfG0XTVf1Fx9ULYeZPKED0wrEMQ0wBsAjX?=
- =?us-ascii?Q?wINI7Zy8DOllycx19zHuUmCqJndfkjhm80Y+jn2d2acoxdoSoGu9U1ymGfBA?=
- =?us-ascii?Q?K0ZTjhjEEq3/1R7vl1yNFfLoRJEfojkDeiVzeOlnmrao28kVfUbiX5lQP8S5?=
- =?us-ascii?Q?96DLWi3tUMtkNvifj7ikXJetKnK86lcXloGoswMpqBOwXNgQPu1hldtQ6ntn?=
- =?us-ascii?Q?IkD/FryxeIBxQVzEUtfde6V7eC9N/0sP8js0fD2TPyHzqzF6aWwFekJU0bLI?=
- =?us-ascii?Q?eputQ9NZ8M1LUvFdok0ciiFCeSEzsE6c/5TSpnZAByRdogjLvQGMwG09hLRP?=
- =?us-ascii?Q?Nb88I/PQpkdiAjzYf9rBLKc4C+5138ONFW4XYgdZEXKzjnRYxweEb8thlFpG?=
- =?us-ascii?Q?7SJoOejH0MXqGTaJ8ASUJa4LTtLcn2GP5IlB9ICLys9nnamwEvvdbzA3+zcW?=
- =?us-ascii?Q?kSTsdCIofKfEtTXcHp3co6lggYlMQHVz4TeE/dOspTLRX5BrWlqFzjqR/aTc?=
- =?us-ascii?Q?IO0RiDhcdDo33HZdNgHC/n+9IzIzvTRYg5FcI1nIq2SeheD9NB7R0LlJedR6?=
- =?us-ascii?Q?c0mkZdo6WsQ4fetMz2dAPyzLAChMbY0/dWbZxHEvlNfIsdS+kJkclmA8/Wgq?=
- =?us-ascii?Q?liDJCneQKEMS4vI7sBXTopY580Ot2DtXXfVhA5/6C5EDtC9PsSblLklehyhZ?=
- =?us-ascii?Q?AkqMNmg/8IuzaXdaWrB7yQHXF4AwZEjsJAm4a7L4twDPY7n1oKBBMP+Kjn6O?=
- =?us-ascii?Q?nSsX54pu5EylOENvSb6AiQ+O5UmToSxKjR+UFpfadZV9PjP998qxXouXRtHP?=
- =?us-ascii?Q?KWL6qGy5CUdv3Cxls7JOYmR4AvUwuwZZMnRl94ghspolSeUt4DBW6RvqGRF5?=
- =?us-ascii?Q?IcnlRkdq6OjI6O0ESfLnsGhmHdsq309PM6p9WhLRYy61/sAni6HUkzuuZuC6?=
- =?us-ascii?Q?+LlruJ9c3fkjFCHT2czAnwdWnJ8xMr6XnK8OC6566J/cqSkXIQU0nMB1Ychg?=
- =?us-ascii?Q?1GzvnOxp4T5yT0fQ/3+vAPZjJiIeBac+/oVCjX8ZmYMfxmhPzsbYh+ZX8/kh?=
- =?us-ascii?Q?VmWPSN8Or3Yc7BT8v3OwMw4=3D?=
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b70e386-7398-4ad1-2a36-08d9f0460bfc
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR04MB6741.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 05:43:09.1587
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0RckdBGafd+x8ofTc1dTOId64iJR2s9ak4ynGFU2MaK2WzqPoOIqox/Ot9iLHASpccN6oqGTxPuik5fwPC7DPg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4861
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e4b18b77-ab33-bd70-c239-b009210c3864@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprCJsWRmVeSWpSXmKPExsWy7bCmue5VZ+4kg3kdPBbH2p6wWzQvXs9m
+        cXnXHDaLRctamS12/VvEZLFpdx+rxaoFB9gd2D02repk89g/dw27x8Q9dR5b9n9m9Pi8SS6A
+        NSrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfoCiWF
+        ssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgXmBXnFibnFpXrpeXmqJlaGBgZEpUGFC
+        dsbBK/IF1yUqTj/ew9rAOEeki5GTQ0LAROLqqq9sXYxcHEICOxgljuyZygySEBL4xCix84kl
+        ROIbo8SOc59ZYDoWdv6E6tgL1DFnJROE84RR4trpi2wgVSwCqhK/bh9iB7HZBLQk7v04ATZW
+        BMi+M+c+I0gDs8AlRondT24CORwcwgKxEj1LpEBqeAV0JHrf72OFsAUlTs58AraZU8BeYktj
+        B1i5qICKxKuD9SBjJAR+skt8WbOCHSQuIeAisf5RHsShwhKvjm9hh7ClJD6/28sGYRdL7PrU
+        ygTR28Ao0fgA4jYJAWOJWc/aGUFsZoEMiQ9r5jBCzFSWOHKLBSLMJ9Fx+C/UKl6JjjYhiE5l
+        iemXJ7BC2JISB1+fg5roIfF9/h9oWPUwSaw48YVxAqP8LCSfzUKyDcLWkViw+xPbLKAVzALS
+        Esv/cUCYmhLrd+kvYGRdxSiWWlCcm55abFRgAo/q5PzcTYzg5KnlsYNx9tsPeocYmTgYDzFK
+        cDArifDGneVMEuJNSaysSi3Kjy8qzUktPsRoCoymicxSosn5wPSdVxJvaGJpYGJmZmhuZGpg
+        riTO65WyIVFIID2xJDU7NbUgtQimj4mDU6qBSe7XNl7lZWtPcoqv2SZ3Vf3/11kHi4/03Pue
+        /+n3q2U7rIX4e1YqXtJaxHe6R471tXUW6/aV0YdW7b9VemH/90m6WaJyZ+t+beec0Bjzz2OF
+        92mliccWn7nx7b9Cyc6gZtXQVxOi+9/WlIpcyGU4x/4ldMXsg8o5lmHLt5dklIZPeHDU4wmL
+        ts/fuaevhSmE7bern/KZqaA94b6bvGBzicraq6bB7Zc1d3VKvFgYdiDW9cI0kZmvrpi1NkmJ
+        rfpj+YzjY8D+pfkHlwoIMCxO53B4u+WpnkDc5E8v0j/LXT/6InJB9O5ysflCH3nTyk81N3t2
+        687pjQ9ZW79cuKLI/TdD7h/fkJ5nEzbu0XD1PKrEUpyRaKjFXFScCABzS3vGJwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDLMWRmVeSWpSXmKPExsWy7bCSvO4rZ+4kg8nv5CyOtT1ht2hevJ7N
+        4vKuOWwWi5a1Mlvs+reIyWLT7j5Wi1ULDrA7sHtsWtXJ5rF/7hp2j4l76jy27P/M6PF5k1wA
+        axSXTUpqTmZZapG+XQJXRsv0NraC6WIVHTOXMjYwfhXsYuTkkBAwkVjY+ZOti5GLQ0hgN6PE
+        8f0nWCESkhJL595gh7CFJe63HGGFKHrEKNE64Q4bSIJFQFXi1+1DYEVsAloS936cYAaxRYDs
+        O3PuM4I0MAtcYpTYfmcKSxcjB4ewQKxEzxIpkBpeAR2J3vf7oIb2MElsWtHADpEQlDg58wkL
+        iM0MNOjGv5dMIL3MAtISy/9xgIQ5BewltjR2MIKERQVUJF4drJ/AKDgLSfMsJM2zEJoXMDKv
+        YpRMLSjOTc8tNiwwzEst1ytOzC0uzUvXS87P3cQIjgAtzR2M21d90DvEyMTBeIhRgoNZSYQ3
+        7ixnkhBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHeC10n44UE0hNLUrNTUwtSi2CyTBycUg1MLFzT
+        pF31PhfPDMlKDJ782fK0hFNW4d48/oDqG301LnfWnXd9YK40a4GYXlPFd5+dC91eVLcEX7nr
+        ukjViHHuGT7Onqnfmxj62NKrbCp4xEterJTfsezq/cTEtFU/I82u2z6YdKIuab6zUgbHsna5
+        rBnX2M4rRkypO3d16Qn3lpNSsQ/O1nuHtTKt8+f/U7ch90Gdg6ntt61a7w8trjA8+M9F0XVX
+        XEn/gq0JU8r4vBsfqNb0quzgMCqUiw7kLTVNbgv95rDpjX7C7RfyZyMvpm3QuK3UYNrlKihg
+        3TCp6Wr27d1dB+OlF3t1iuWu2XaD3SXnocbTStXeXcsS83uCzvLqNFQp+SqedDOcqMRSnJFo
+        qMVcVJwIANZ0uh/vAgAA
+X-CMS-MailID: 20220215061050epcas2p476733a589249d4d82b5a4add161edb22
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----2fH_v7u-qooQo7zMtxxTw1wUndVpTJhY--Wv6pszNQmaZVXq=_e8433_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220214094041epcas2p2ec37c252dd5f9508454e9449c95e6c7a
+References: <1644831438-125403-1-git-send-email-dh10.jung@samsung.com>
+        <CGME20220214094041epcas2p2ec37c252dd5f9508454e9449c95e6c7a@epcas2p2.samsung.com>
+        <1644831438-125403-2-git-send-email-dh10.jung@samsung.com>
+        <e4b18b77-ab33-bd70-c239-b009210c3864@quicinc.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 03:31:26PM +0200, Heikki Krogerus wrote:
-> On Tue, Feb 08, 2022 at 05:16:21PM +0800, Xin Ji wrote:
-> > Add driver for analogix ANX7411 USB Type-C DRP port controller.
-> 
-> We already have the driver drivers/usb/typec/tcpm/tcpci.c for port
-> controllers.
-> 
-> If you need a glue layer - if there is something specific that you
-> need to do with ANX7411 that is not completely TCPC compliant - use
-> drivers/usb/typec/tcpm/tcpci_*.c as examples.
-Hi heikki, ANX7411 PD controller has 2 applications, the one has embeded
-internal firmware, the other is not have. The currently upstream patch
-is for the first way, driver mustn't use TCPCI framework(embeded firmware
-will control all the TCPCI register). The second way(erased internaly
-firmware) can work under TCPCI framework.
+------2fH_v7u-qooQo7zMtxxTw1wUndVpTJhY--Wv6pszNQmaZVXq=_e8433_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-Thanks,
-Xin
+On Mon, Feb 14, 2022 at 10:53:14AM -0800, Wesley Cheng wrote:
+> Hi Daehwan,
 > 
-> thanks,
+> On 2/14/2022 1:37 AM, Daehwan Jung wrote:
+> > It always sets DWC3_EP_END_TRANSFER_PENDING in dwc3_stop_active_transfer
+> > even if dwc3_send_gadget_ep_cmd fails. It can cause some problems like
+> > skipping clear stall commmand or giveback from dequeue. We fix to set it
+> > only when ep cmd success. Additionally, We clear DWC3_EP_TRANSFER_STARTED
+> > for next trb to start transfer not update transfer.
+> > 
+> > Change-Id: I2e6b58acc99f385e467e8b639a3792a5e5f4d2bb
+> > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> > ---
+> >  drivers/usb/dwc3/gadget.c | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index 183b90923f51..3ad3bc5813ca 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -2044,6 +2044,12 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+> >  				dwc3_gadget_move_cancelled_request(r,
+> >  						DWC3_REQUEST_STATUS_DEQUEUED);
+> >  
+> > +			/* If ep cmd fails, then force to giveback cancelled requests here */
+> > +			if (!(dep->flags & DWC3_EP_END_TRANSFER_PENDING)) {
+> > +				dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
+> > +				dwc3_gadget_ep_cleanup_cancelled_requests(dep);
+> > +			}
+> > +
+> What I realized when looking at the endxfer command fail due to TIMEOUT,
+> was that it would lead to subsequent controller halt failures as well
+> (during pullup disable case).  It might not be safe to forcefully unmap
+> the request buffers if the controller may still be "working" on it.
+>
+Hi Wesley,
+
+I agree with your opinion that the controller may still be "working" on
+it.
+
+> I found some interesting quirks with regards to endxfer timeouts as
+> well, which I'm trying to get some more feedback on [1].  What is the
+> end issue being seen that requires this change? (we may have run into
+> the same issue as well.
 > 
-> -- 
-> heikki
+> [1] -
+> https://protect2.fireeye.com/v1/url?k=9d423b69-fc3fd32e-9d43b026-74fe485fff30-77a099b52659410d&q=1&e=20b4d9f5-2599-4f57-8b6a-7c4ec167d228&u=https%3A%2F%2Flore.kernel.org%2Flinux-usb%2F20220203080017.27339-1-quic_wcheng%40quicinc.com%2F
+
+I had adb hung issue if ep cmd timeout occurs. I also think we may have
+run into the same issue. I'm going to see your patches.
+Thanks for your comment.
+
+Best Regards,
+Jung Daehwan
+
+> 
+> Thanks
+> Wesley Cheng
+> >  			dep->flags &= ~DWC3_EP_WAIT_TRANSFER_COMPLETE;
+> >  
+> >  			goto out;
+> > @@ -3645,7 +3651,7 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+> >  
+> >  	if (!interrupt)
+> >  		dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
+> > -	else
+> > +	else if (!ret)
+> >  		dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
+> >  }
+> >  
+> 
+
+------2fH_v7u-qooQo7zMtxxTw1wUndVpTJhY--Wv6pszNQmaZVXq=_e8433_
+Content-Type: text/plain; charset="utf-8"
+
+
+------2fH_v7u-qooQo7zMtxxTw1wUndVpTJhY--Wv6pszNQmaZVXq=_e8433_--
