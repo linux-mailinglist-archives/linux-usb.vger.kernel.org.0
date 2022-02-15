@@ -2,49 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30FD4B7234
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 17:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0BD84B7253
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 17:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240743AbiBOPhw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 10:37:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46196 "EHLO
+        id S240802AbiBOPhx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 10:37:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240714AbiBOPf1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 10:35:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BE0C12C7;
-        Tue, 15 Feb 2022 07:31:09 -0800 (PST)
+        with ESMTP id S240674AbiBOPfg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 10:35:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC08B52;
+        Tue, 15 Feb 2022 07:31:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7282E615FD;
-        Tue, 15 Feb 2022 15:31:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2883C340F2;
-        Tue, 15 Feb 2022 15:31:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60CE8B8185B;
+        Tue, 15 Feb 2022 15:31:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E485C340EB;
+        Tue, 15 Feb 2022 15:31:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644939068;
-        bh=LLlU9Yz0qJd6M5GUEcjm4rSHGKVK6e1eS2D9+IWEWIg=;
+        s=k20201202; t=1644939080;
+        bh=DFsLvK0i3BObqF26aZZdRrDS2/spMsYEUdcIUmBugTU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tSW52LtcdnxtdwX+2+8Q/Ku/hsgId3rQxCoKQUn9LKzV2FcF2Peu20wfQlTHAddD2
-         8SwllK5Oc79/pI65y3OD3qGU5bo3yh0A43Uumol8xND0InrVJ7Xo/Bba8RQhWB4byL
-         6+Cjb/ETrbnG85vM0y8ztDeTig7QlPWG5c3FNzdABNkQj1ml28Wf0kVuPPnop6YdAH
-         RhZds3SPBoYVE/mUv2Z+Ac0VPs82ufBfQzuIizRYKCfbs0Lt+5ABkyXHkE/v45zA+M
-         z98hm59rSdx7wAoW2iellA2mKp2uWdp350w/AEK+ktVbTOjIvgA+vvN5jJUozJVf+3
-         kOVIyMGzQAPhA==
+        b=iLyC01idrBolzeqAy6JoE2pvaZ8glDcT35nwH0wU5MGdtfEMAhlvDHgplfhDrYHXR
+         6iF44/7x7KBfr4Ns8wxUSFGnCyEuEDBAgmGwPY2j5j3e5Dpw2HD0+vWNyVBnOeAAha
+         2jDC8Y4EMAw4gyFj8MJExbJ7+W69Apsd/BD4tRBD8BSINwsrerT3pRjh36r5dWom5v
+         LJTzeqXqrpMpJuWCuksgXWv1V+8/B+Y21slSHsXTJdKYIJK6j0iEPXOC0xGC3bJhLt
+         /SG2f7TKWSy103BJSDXGmLVz964pasfWkFuPDL22nOtE7fTMq9VxWf0s2DzamuTKe8
+         BNGx5YyFbUGEg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tommaso Merciai <tomm.merciai@gmail.com>,
-        Richard Leitner <richard.leitner@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, richard.leitner@skidata.com,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 02/11] usb: usb251xb: add boost-up property support
-Date:   Tue, 15 Feb 2022 10:30:55 -0500
-Message-Id: <20220215153104.581786-2-sashal@kernel.org>
+Cc:     Slark Xiao <slark_xiao@163.com>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 10/11] net: usb: qmi_wwan: Add support for Dell DW5829e
+Date:   Tue, 15 Feb 2022 10:31:03 -0500
+Message-Id: <20220215153104.581786-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220215153104.581786-1-sashal@kernel.org>
 References: <20220215153104.581786-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -58,55 +59,65 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Tommaso Merciai <tomm.merciai@gmail.com>
+From: Slark Xiao <slark_xiao@163.com>
 
-[ Upstream commit 5c2b9c61ae5d8ad0a196d33b66ce44543be22281 ]
+[ Upstream commit 8ecbb179286cbc91810c16caeb3396e06305cd0c ]
 
-Add support for boost-up register of usb251xb hub.
-boost-up property control USB electrical drive strength
-This register can be set:
+Dell DW5829e same as DW5821e except the CAT level.
+DW5821e supports CAT16 but DW5829e supports CAT9.
+Also, DW5829e includes normal and eSIM type.
+Please see below test evidence:
 
- - Normal mode -> 0x00
- - Low         -> 0x01
- - Medium      -> 0x10
- - High        -> 0x11
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  5 Spd=5000 MxCh= 0
+D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+P:  Vendor=413c ProdID=81e6 Rev=03.18
+S:  Manufacturer=Dell Inc.
+S:  Product=DW5829e Snapdragon X20 LTE
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
 
-(Normal Default)
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  7 Spd=5000 MxCh= 0
+D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+P:  Vendor=413c ProdID=81e4 Rev=03.18
+S:  Manufacturer=Dell Inc.
+S:  Product=DW5829e-eSIM Snapdragon X20 LTE
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
 
-References:
- - http://www.mouser.com/catalog/specsheets/2514.pdf p29
-
-Reviewed-by: Richard Leitner <richard.leitner@linux.dev>
-Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-Link: https://lore.kernel.org/r/20220128181713.96856-1-tomm.merciai@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Acked-by: Bjørn Mork <bjorn@mork.no>
+Link: https://lore.kernel.org/r/20220209024717.8564-1-slark_xiao@163.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/misc/usb251xb.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/usb/qmi_wwan.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-index 5f7734c729b1d..8444b92f9737f 100644
---- a/drivers/usb/misc/usb251xb.c
-+++ b/drivers/usb/misc/usb251xb.c
-@@ -510,6 +510,9 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
- 	if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
- 		hub->lang_id = USB251XB_DEF_LANGUAGE_ID;
- 
-+	if (of_property_read_u8(np, "boost-up", &hub->boost_up))
-+		hub->boost_up = USB251XB_DEF_BOOST_UP;
-+
- 	cproperty_char = of_get_property(np, "manufacturer", NULL);
- 	strlcpy(str, cproperty_char ? : USB251XB_DEF_MANUFACTURER_STRING,
- 		sizeof(str));
-@@ -543,7 +546,6 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
- 	 * may be as soon as needed.
- 	 */
- 	hub->bat_charge_en = USB251XB_DEF_BATTERY_CHARGING_ENABLE;
--	hub->boost_up = USB251XB_DEF_BOOST_UP;
- 	hub->boost_57 = USB251XB_DEF_BOOST_57;
- 	hub->boost_14 = USB251XB_DEF_BOOST_14;
- 	hub->port_swap = USB251XB_DEF_PORT_SWAP;
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 54b37a30df18b..c2e872f926f1c 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1358,6 +1358,8 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x413c, 0x81d7, 0)},	/* Dell Wireless 5821e */
+ 	{QMI_FIXED_INTF(0x413c, 0x81d7, 1)},	/* Dell Wireless 5821e preproduction config */
+ 	{QMI_FIXED_INTF(0x413c, 0x81e0, 0)},	/* Dell Wireless 5821e with eSIM support*/
++	{QMI_FIXED_INTF(0x413c, 0x81e4, 0)},	/* Dell Wireless 5829e with eSIM support*/
++	{QMI_FIXED_INTF(0x413c, 0x81e6, 0)},	/* Dell Wireless 5829e */
+ 	{QMI_FIXED_INTF(0x03f0, 0x4e1d, 8)},	/* HP lt4111 LTE/EV-DO/HSPA+ Gobi 4G Module */
+ 	{QMI_FIXED_INTF(0x03f0, 0x9d1d, 1)},	/* HP lt4120 Snapdragon X5 LTE */
+ 	{QMI_FIXED_INTF(0x22de, 0x9061, 3)},	/* WeTelecom WPD-600N */
 -- 
 2.34.1
 
