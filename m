@@ -2,79 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944974B71C1
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 17:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE834B71CA
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 17:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241071AbiBOPrg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 10:47:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35516 "EHLO
+        id S241529AbiBOQVc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 11:21:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241269AbiBOPrW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 10:47:22 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E82CFBA4;
-        Tue, 15 Feb 2022 07:46:12 -0800 (PST)
-Date:   Tue, 15 Feb 2022 16:46:09 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644939970;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qEoj4mtlQVRRs6/6d8GaUUFXpcwiomjAL9sone681ow=;
-        b=X6gZDDvzy0Gw2Py/F4ZZoB+hsDF5zDkWf7v971/LigaPKniUQS9BxooEKi3qlcTq0f193Z
-        CZxTojO+cQrmdhEA8CRFICdpq0BO75E3qthBj42SqEKI1hjUPiIrJ7lf9tz3kddCuESPP6
-        rqH7Pn/mlXpAlnJZuWF/LMSj1oUdnJdtQbIsmb4p/KqFElPxNDP46Q/0fm46RciJzL32DY
-        ylg8/zeKzuKvYkJuZ4zafaXtui/p2e+iZVE6T3DJnHn2CYnm9rKK2KMF2jZWLPFN0rEIUa
-        v/3g8mtYoT2OEhbtl55rZD3PhB+XqzewGsHq0w1R3Ft90LWNorPKUpR7bxG7qw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644939970;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qEoj4mtlQVRRs6/6d8GaUUFXpcwiomjAL9sone681ow=;
-        b=biMHfMQ835e1UpRnlTmHgGmqBm5gQcME2t7bLKWswSicWiCwflGxTeRUn8J1nxOLr0sS1U
-        0FmWvII7n7PGbABw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: Re: [PATCH v4 0/7] Provide and use generic_handle_irq_safe() where
- appropriate.
-Message-ID: <YgvKwd525feJkBHV@linutronix.de>
-References: <20220211181500.1856198-1-bigeasy@linutronix.de>
- <Ygu6UewoPbYC9yPa@google.com>
- <Ygu9xtrMxxq36FRH@linutronix.de>
- <YgvD1HpN2oyalDmj@google.com>
- <YgvH4ROUQVgusBdA@linutronix.de>
- <YgvJ1fCUYmaV0Mbx@google.com>
+        with ESMTP id S237603AbiBOQVb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 11:21:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF66BDE73;
+        Tue, 15 Feb 2022 08:21:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D8F6617BF;
+        Tue, 15 Feb 2022 16:21:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BE0DC340EB;
+        Tue, 15 Feb 2022 16:21:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644942080;
+        bh=6MeCX5n6vxfuO90hTY0X9RyPSUCRNFFayrn7BSsgECc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rGAbU5fDzsl8gpOvFM6erp2AkW2Y9MnkhmB0sc2JnsMBTCGQk9eYrV/Xxd19W3X+6
+         DSqwn65xytNhSufu+kfnhpX5FSq2kNa8XsbrEA7/tnrLYIO+JyWeIlEn9oUxSXijow
+         SuxN9LT4nSf5MBTHQrIveIMHMGh47VdwQ/9v0YuI=
+Date:   Tue, 15 Feb 2022 17:21:17 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Tommaso Merciai <tomm.merciai@gmail.com>,
+        Richard Leitner <richard.leitner@linux.dev>,
+        richard.leitner@skidata.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.16 06/34] usb: usb251xb: add boost-up property
+ support
+Message-ID: <YgvS/f/iq00UCsUI@kroah.com>
+References: <20220215152657.580200-1-sashal@kernel.org>
+ <20220215152657.580200-6-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YgvJ1fCUYmaV0Mbx@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220215152657.580200-6-sashal@kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2022-02-15 15:42:13 [+0000], Lee Jones wrote:
-> So there aren't any hard dependencies between the driver changes?
+On Tue, Feb 15, 2022 at 10:26:29AM -0500, Sasha Levin wrote:
+> From: Tommaso Merciai <tomm.merciai@gmail.com>
+> 
+> [ Upstream commit 5c2b9c61ae5d8ad0a196d33b66ce44543be22281 ]
+> 
+> Add support for boost-up register of usb251xb hub.
+> boost-up property control USB electrical drive strength
+> This register can be set:
+> 
+>  - Normal mode -> 0x00
+>  - Low         -> 0x01
+>  - Medium      -> 0x10
+>  - High        -> 0x11
+> 
+> (Normal Default)
+> 
+> References:
+>  - http://www.mouser.com/catalog/specsheets/2514.pdf p29
+> 
+> Reviewed-by: Richard Leitner <richard.leitner@linux.dev>
+> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> Link: https://lore.kernel.org/r/20220128181713.96856-1-tomm.merciai@gmail.com
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  drivers/usb/misc/usb251xb.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-Correct. #2 - #7 depend on #1. The order of #2+ is not relevant.
+This isn't needed in any stable tree, please drop it from all AUTOSEL
+branches.
 
-Sebastian
+thanks,
+
+greg k-h
