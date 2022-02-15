@@ -2,203 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F864B6348
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 07:11:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B39DE4B63A3
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 07:37:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234334AbiBOGLM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 01:11:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44444 "EHLO
+        id S234498AbiBOGfZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 01:35:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234321AbiBOGLK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 01:11:10 -0500
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57764F1188
-        for <linux-usb@vger.kernel.org>; Mon, 14 Feb 2022 22:11:01 -0800 (PST)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220215061058epoutp033ad5a5c76cee80e922fb04891d750331~T4MyrJZw_2542925429epoutp03P
-        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 06:10:58 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220215061058epoutp033ad5a5c76cee80e922fb04891d750331~T4MyrJZw_2542925429epoutp03P
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1644905458;
-        bh=NTyW/hdAfUjA6iQMQHXUxa9Lo11qEZpBXPgW2wxx4zo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=S0oXg1psdYQJVDtuoW5IOb8iV/I4lw6z7OSi3rNCJxlPw6MXEOOVAWlWZ6VEMjtDR
-         K+ageFud1Ksd/yoExy/XdlLghmUssY121btywEAZDsjGdOXbEbSxCrcpD9BhV70D+1
-         OkU0uw3pW7vqI+NxME5rDzYTfDotCPvwqKkR5amk=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20220215061057epcas2p49de0f293f9b4ced03147eed7451c7f53~T4MxmFDgv2792727927epcas2p4C;
-        Tue, 15 Feb 2022 06:10:57 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.99]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4JyW1B54d6z4x9Q5; Tue, 15 Feb
-        2022 06:10:54 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        88.18.12141.5D34B026; Tue, 15 Feb 2022 15:10:29 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220215061050epcas2p476733a589249d4d82b5a4add161edb22~T4MrPgJEQ2792727927epcas2p4v;
-        Tue, 15 Feb 2022 06:10:50 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220215061050epsmtrp25b9dd3ebef9b6c2bc9d257b827a3ea1a~T4MrOZH_L3155431554epsmtrp2I;
-        Tue, 15 Feb 2022 06:10:50 +0000 (GMT)
-X-AuditID: b6c32a48-d73ff70000002f6d-c8-620b43d5da11
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        31.9D.29871.AE34B026; Tue, 15 Feb 2022 15:10:50 +0900 (KST)
-Received: from ubuntu (unknown [12.36.155.120]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220215061050epsmtip2038bb7739a11dd2af44b0215e47c01d5~T4MrE1duP0764107641epsmtip2c;
-        Tue, 15 Feb 2022 06:10:50 +0000 (GMT)
-Date:   Tue, 15 Feb 2022 15:08:36 +0900
-From:   Jung Daehwan <dh10.jung@samsung.com>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        quic_jackp@quicinc.com, Thinh.Nguyen@synopsys.com
-Subject: Re: [PATCH v1 1/2] usb: dwc3: Not set DWC3_EP_END_TRANSFER_PENDING
- in ep cmd fails
-Message-ID: <20220215060836.GB144890@ubuntu>
+        with ESMTP id S232976AbiBOGfY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 01:35:24 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E7EAFF4D
+        for <linux-usb@vger.kernel.org>; Mon, 14 Feb 2022 22:35:15 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id o24so27694162wro.3
+        for <linux-usb@vger.kernel.org>; Mon, 14 Feb 2022 22:35:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qT6yxinj09ioIYi96VMC3u3FH5FEeGj0marKTng5IG4=;
+        b=S6Q7iHtrbDrBIlYZ5FG2bdDh6KIjIIkHcQ4EwPwsBbVGTDt/7DVRtQD1cOTfnxvMhv
+         A5h9aKCQtiX+NRYp0x1nraWnCQ6ZLg2zWhUNr5rHGjBcmlHbZtFSVPXI+uYdx/xl0EzV
+         5X98zOk3QHcQ1G0DCoZd4K0CxygFukNIWFwuveaD2PbuxXp0aAGnMMgZoG58tJrNZ87i
+         iTNdS6BvDh6Twr02cFNVR0FmRoZ+KgC4bbZQb34g7c8C2iuczlJuEavBe7o5R85qTxf/
+         SMOCkdyvQIesrPOVb6w/cfAkMqObHrjbWRSeAQuC0dU8HOML2OqoLuQxCL5KfDCZ3yit
+         SUcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qT6yxinj09ioIYi96VMC3u3FH5FEeGj0marKTng5IG4=;
+        b=2Q2/C3fDwh18tEPVcs3huZscCCRO/Ulb5yY76ssC/HP/AuzvoTvLOF9Q0XRXQaaO+I
+         S7f98QHDeTahBGn+/GW/ENuALpc3nkiHOq9XuX1vDVDFXbIxrGVI/jSSe4b3m8mDJBHF
+         ENgviw4EqubyH4bgpZ44ceyVdM+/6FXf/U3IrDnC6bHyHsPHRGgyeJ9M2INZqLkmq8t3
+         yjzlPSsnOLs5TszEYpMpOOa3IcZx4yHVg9nwoFjAJqv2MWHCLzQ78jh7208OQsExG0U/
+         AbKU7r4eaAYQd6q07CUSQ9kM/qGBXZcBKzyp0pyfASZKp6GqOZj62qLC7w9v5v3D10Zj
+         xh+A==
+X-Gm-Message-State: AOAM530tJHLp2c+BcfFRV/mDn+k8IKSXjEv+8KrQGnkKrQTyItPJJQKh
+        cHf8QlJG0OA0c6iRS8P5iMAygxpsfkgdp2+TnZLaaw==
+X-Google-Smtp-Source: ABdhPJyk/qzkp4damkEqIplL8JEOfgr2FYd7kfW3aJOOZo+2rBq2t9wEM7qMVbhRlHertdSfWL4+2QfLuh8shnSAVKo=
+X-Received: by 2002:adf:fb05:: with SMTP id c5mr1925652wrr.220.1644906913801;
+ Mon, 14 Feb 2022 22:35:13 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <e4b18b77-ab33-bd70-c239-b009210c3864@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprCJsWRmVeSWpSXmKPExsWy7bCmue5VZ+4kg3kdPBbH2p6wWzQvXs9m
-        cXnXHDaLRctamS12/VvEZLFpdx+rxaoFB9gd2D02repk89g/dw27x8Q9dR5b9n9m9Pi8SS6A
-        NSrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfoCiWF
-        ssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgXmBXnFibnFpXrpeXmqJlaGBgZEpUGFC
-        dsbBK/IF1yUqTj/ew9rAOEeki5GTQ0LAROLqqq9sXYxcHEICOxgljuyZygySEBL4xCix84kl
-        ROIbo8SOc59ZYDoWdv6E6tgL1DFnJROE84RR4trpi2wgVSwCqhK/bh9iB7HZBLQk7v04ATZW
-        BMi+M+c+I0gDs8AlRondT24CORwcwgKxEj1LpEBqeAV0JHrf72OFsAUlTs58AraZU8BeYktj
-        B1i5qICKxKuD9SBjJAR+skt8WbOCHSQuIeAisf5RHsShwhKvjm9hh7ClJD6/28sGYRdL7PrU
-        ygTR28Ao0fgA4jYJAWOJWc/aGUFsZoEMiQ9r5jBCzFSWOHKLBSLMJ9Fx+C/UKl6JjjYhiE5l
-        iemXJ7BC2JISB1+fg5roIfF9/h9oWPUwSaw48YVxAqP8LCSfzUKyDcLWkViw+xPbLKAVzALS
-        Esv/cUCYmhLrd+kvYGRdxSiWWlCcm55abFRgAo/q5PzcTYzg5KnlsYNx9tsPeocYmTgYDzFK
-        cDArifDGneVMEuJNSaysSi3Kjy8qzUktPsRoCoymicxSosn5wPSdVxJvaGJpYGJmZmhuZGpg
-        riTO65WyIVFIID2xJDU7NbUgtQimj4mDU6qBSe7XNl7lZWtPcoqv2SZ3Vf3/11kHi4/03Pue
-        /+n3q2U7rIX4e1YqXtJaxHe6R471tXUW6/aV0YdW7b9VemH/90m6WaJyZ+t+beec0Bjzz2OF
-        92mliccWn7nx7b9Cyc6gZtXQVxOi+9/WlIpcyGU4x/4ldMXsg8o5lmHLt5dklIZPeHDU4wmL
-        ts/fuaevhSmE7bern/KZqaA94b6bvGBzicraq6bB7Zc1d3VKvFgYdiDW9cI0kZmvrpi1NkmJ
-        rfpj+YzjY8D+pfkHlwoIMCxO53B4u+WpnkDc5E8v0j/LXT/6InJB9O5ysflCH3nTyk81N3t2
-        687pjQ9ZW79cuKLI/TdD7h/fkJ5nEzbu0XD1PKrEUpyRaKjFXFScCABzS3vGJwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDLMWRmVeSWpSXmKPExsWy7bCSvO4rZ+4kg8nv5CyOtT1ht2hevJ7N
-        4vKuOWwWi5a1Mlvs+reIyWLT7j5Wi1ULDrA7sHtsWtXJ5rF/7hp2j4l76jy27P/M6PF5k1wA
-        axSXTUpqTmZZapG+XQJXRsv0NraC6WIVHTOXMjYwfhXsYuTkkBAwkVjY+ZOti5GLQ0hgN6PE
-        8f0nWCESkhJL595gh7CFJe63HGGFKHrEKNE64Q4bSIJFQFXi1+1DYEVsAloS936cYAaxRYDs
-        O3PuM4I0MAtcYpTYfmcKSxcjB4ewQKxEzxIpkBpeAR2J3vf7oIb2MElsWtHADpEQlDg58wkL
-        iM0MNOjGv5dMIL3MAtISy/9xgIQ5BewltjR2MIKERQVUJF4drJ/AKDgLSfMsJM2zEJoXMDKv
-        YpRMLSjOTc8tNiwwzEst1ytOzC0uzUvXS87P3cQIjgAtzR2M21d90DvEyMTBeIhRgoNZSYQ3
-        7ixnkhBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHeC10n44UE0hNLUrNTUwtSi2CyTBycUg1MLFzT
-        pF31PhfPDMlKDJ782fK0hFNW4d48/oDqG301LnfWnXd9YK40a4GYXlPFd5+dC91eVLcEX7nr
-        ukjViHHuGT7Onqnfmxj62NKrbCp4xEterJTfsezq/cTEtFU/I82u2z6YdKIuab6zUgbHsna5
-        rBnX2M4rRkypO3d16Qn3lpNSsQ/O1nuHtTKt8+f/U7ch90Gdg6ntt61a7w8trjA8+M9F0XVX
-        XEn/gq0JU8r4vBsfqNb0quzgMCqUiw7kLTVNbgv95rDpjX7C7RfyZyMvpm3QuK3UYNrlKihg
-        3TCp6Wr27d1dB+OlF3t1iuWu2XaD3SXnocbTStXeXcsS83uCzvLqNFQp+SqedDOcqMRSnJFo
-        qMVcVJwIANZ0uh/vAgAA
-X-CMS-MailID: 20220215061050epcas2p476733a589249d4d82b5a4add161edb22
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----2fH_v7u-qooQo7zMtxxTw1wUndVpTJhY--Wv6pszNQmaZVXq=_e8433_"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220214094041epcas2p2ec37c252dd5f9508454e9449c95e6c7a
-References: <1644831438-125403-1-git-send-email-dh10.jung@samsung.com>
-        <CGME20220214094041epcas2p2ec37c252dd5f9508454e9449c95e6c7a@epcas2p2.samsung.com>
-        <1644831438-125403-2-git-send-email-dh10.jung@samsung.com>
-        <e4b18b77-ab33-bd70-c239-b009210c3864@quicinc.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220214184104.1710107-1-dlatypov@google.com> <CAGS_qxomM_mGzvFokZH5dnf7L3kCitB3dWD8JH56fPcDSb6PeA@mail.gmail.com>
+In-Reply-To: <CAGS_qxomM_mGzvFokZH5dnf7L3kCitB3dWD8JH56fPcDSb6PeA@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 15 Feb 2022 14:35:02 +0800
+Message-ID: <CABVgOS=VF9tJKppbpkbLBxThXMStsQz808m_w2g9CRXLiv1LBQ@mail.gmail.com>
+Subject: Re: [PATCH] thunderbolt: test: get running under UML, add kunitconfig
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        linux-usb@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000004f8c8905d808bcad"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-------2fH_v7u-qooQo7zMtxxTw1wUndVpTJhY--Wv6pszNQmaZVXq=_e8433_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+--0000000000004f8c8905d808bcad
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Feb 14, 2022 at 10:53:14AM -0800, Wesley Cheng wrote:
-> Hi Daehwan,
-> 
-> On 2/14/2022 1:37 AM, Daehwan Jung wrote:
-> > It always sets DWC3_EP_END_TRANSFER_PENDING in dwc3_stop_active_transfer
-> > even if dwc3_send_gadget_ep_cmd fails. It can cause some problems like
-> > skipping clear stall commmand or giveback from dequeue. We fix to set it
-> > only when ep cmd success. Additionally, We clear DWC3_EP_TRANSFER_STARTED
-> > for next trb to start transfer not update transfer.
-> > 
-> > Change-Id: I2e6b58acc99f385e467e8b639a3792a5e5f4d2bb
-> > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> > ---
-> >  drivers/usb/dwc3/gadget.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index 183b90923f51..3ad3bc5813ca 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -2044,6 +2044,12 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
-> >  				dwc3_gadget_move_cancelled_request(r,
-> >  						DWC3_REQUEST_STATUS_DEQUEUED);
-> >  
-> > +			/* If ep cmd fails, then force to giveback cancelled requests here */
-> > +			if (!(dep->flags & DWC3_EP_END_TRANSFER_PENDING)) {
-> > +				dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
-> > +				dwc3_gadget_ep_cleanup_cancelled_requests(dep);
-> > +			}
-> > +
-> What I realized when looking at the endxfer command fail due to TIMEOUT,
-> was that it would lead to subsequent controller halt failures as well
-> (during pullup disable case).  It might not be safe to forcefully unmap
-> the request buffers if the controller may still be "working" on it.
+On Tue, Feb 15, 2022 at 10:39 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-Hi Wesley,
+> On Mon, Feb 14, 2022 at 10:41 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > These tests didn't work under the normal `kunit.py run` command since
+> > they require CONFIG_PCI=y, which could not be set on ARCH=um.
+> >
+> > Commit 68f5d3f3b654 ("um: add PCI over virtio emulation driver") lets us
+> > do so. To make it so people don't have to figure out how to do so, we
+> > add a drivers/thunderbolt/.kunitconfig.
+> >
+> > Can now run these tests using
+> > $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/thunderbolt
+> >
+> > Potentially controversial bits:
+> > 1. this .kunitconfig is UML-specific, can't do this for example
+> > $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kunitconfig=drivers/thunderbolt
+> > 2. this removes the manual call to __kunit_test_suites_init(), which
+> >    allowed us to control exactly when the tests got run.
+>
+> kernel-test-robot points out something I had forgotten.
+> Doing this prevents us from being able to build this test as a module.
+>
+> kunit_test_suites() defines an init_module() which conflicts with the
+> existing ones.
+>
+> There's some relevant discussion about reworking how kunit modules
+> work here, https://lore.kernel.org/linux-kselftest/e5fa413ed59083ca63f3479d507b972380da0dcf.camel@codeconstruct.com.au/
+>
+> So I think we have two options for this patch:
+> a) proceed, but disable building the test as a module for now (tristate => bool)
+> b) wait on this patch until kunit module support is refactored
+>
+> Basically the question is: does this slightly easier way of running
+> the test seem worth losing the ability to test as a module in the
+> short-term?
 
-I agree with your opinion that the controller may still be "working" on
-it.
+Since this was originally changed to support modules (so clearly,
+they're being used), I don't think breaking module support (even
+temporarily) is going to be worth it:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2c6ea4e2cefe2e86af782a5b8e1070f4d434f2f2
 
-> I found some interesting quirks with regards to endxfer timeouts as
-> well, which I'm trying to get some more feedback on [1].  What is the
-> end issue being seen that requires this change? (we may have run into
-> the same issue as well.
-> 
-> [1] -
-> https://protect2.fireeye.com/v1/url?k=9d423b69-fc3fd32e-9d43b026-74fe485fff30-77a099b52659410d&q=1&e=20b4d9f5-2599-4f57-8b6a-7c4ec167d228&u=https%3A%2F%2Flore.kernel.org%2Flinux-usb%2F20220203080017.27339-1-quic_wcheng%40quicinc.com%2F
+Obviously, when module support is improved, then this fix will make a
+lot of sense.
 
-I had adb hung issue if ep cmd timeout occurs. I also think we may have
-run into the same issue. I'm going to see your patches.
-Thanks for your comment.
+I do think adding the .kunitconfig file is worth doing (though
+obviously there are some small problems with the way results show up
+separately from any other tests due to the issue above).
 
-Best Regards,
-Jung Daehwan
+Cheers,
+-- David
 
-> 
-> Thanks
-> Wesley Cheng
-> >  			dep->flags &= ~DWC3_EP_WAIT_TRANSFER_COMPLETE;
-> >  
-> >  			goto out;
-> > @@ -3645,7 +3651,7 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
-> >  
-> >  	if (!interrupt)
-> >  		dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
-> > -	else
-> > +	else if (!ret)
-> >  		dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
-> >  }
-> >  
-> 
+--0000000000004f8c8905d808bcad
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-------2fH_v7u-qooQo7zMtxxTw1wUndVpTJhY--Wv6pszNQmaZVXq=_e8433_
-Content-Type: text/plain; charset="utf-8"
-
-
-------2fH_v7u-qooQo7zMtxxTw1wUndVpTJhY--Wv6pszNQmaZVXq=_e8433_--
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
+2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
+dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
+jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
+ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
+QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAz
+ebumZlZfA7gKUMbzsxHJAIWF9a5olNmGTcG4Z0PseDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjAyMTUwNjM1MTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAPET7LlrBF68fwTG4x1kM
+BhH3byKL+S+QxnST2OFBmtwVvBrIh1i2Ab9/ZlQuLNnbik1FYNqq1paXxuBbmnuol6Lg1U9IRj/5
+Kk0/zz7rpPr11Yq2fmB1J6WgCXDa1Zzz8f+cX01P1oqFPAZt8KKA+kskJ+ALfoVcCK3CoegXhhES
+PxlNmwuYZbev7aWa7nd4ZQ7I2ujpGL0MNX8oTRBh8yBb2ef3xvR49AJmLH4j3Xq12S6573ANfy/0
+agX1GQpM3PvpgkRXWs3vRwR+lb4P2NQDyivJrU3ddSqpb+xUaLmUUE6HNJFm28S+1PFOiymHbA4Q
+gy9RdCYNy3jMT1GWWg==
+--0000000000004f8c8905d808bcad--
