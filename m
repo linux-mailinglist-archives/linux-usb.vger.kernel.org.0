@@ -2,54 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EE94B6471
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 08:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F914B654D
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 09:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234857AbiBOHh2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 02:37:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59918 "EHLO
+        id S235147AbiBOIKL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 03:10:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiBOHh0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 02:37:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501E7657A1;
-        Mon, 14 Feb 2022 23:37:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECF55B817DF;
-        Tue, 15 Feb 2022 07:37:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29254C340EC;
-        Tue, 15 Feb 2022 07:37:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644910634;
-        bh=MS4a2sCHLZDfgiTN71t3s65oVZd6bxNMNM0atcJwRWY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pS+1F9Sj4fbMu0Y2QNh0UNCUsswFlNNCkvOQCsYb86ZoSrdbKstuOh/vHEnPYQ6N5
-         KuBooyEaeTAaFvi/dqpcY6FEHzIRR0/K3BYlCekjIP398Q3y9OIiQ9ngiiWLFGF1ku
-         HNB67wXhckx/Ila2/JHhITi6G7iQ7nRk+FkdPtg8=
-Date:   Tue, 15 Feb 2022 08:37:11 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jung Daehwan <dh10.jung@samsung.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
-        Thinh.Nguyen@synopsys.com
-Subject: Re: [PATCH v2 1/2] usb: dwc3: Not set DWC3_EP_END_TRANSFER_PENDING
- in ep cmd fails
-Message-ID: <YgtYJ544YsvKTaxS@kroah.com>
-References: <1644836933-141376-1-git-send-email-dh10.jung@samsung.com>
- <CGME20220214111149epcas2p1a1faeda037991885fd6f2f026fa44ec5@epcas2p1.samsung.com>
- <1644836933-141376-2-git-send-email-dh10.jung@samsung.com>
- <Ygo9LZg8lxitTE8J@kroah.com>
- <20220215065826.GD144890@ubuntu>
+        with ESMTP id S235125AbiBOIKI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 03:10:08 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E8C72DAAE
+        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 00:09:59 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nJsu4-0002EE-5h; Tue, 15 Feb 2022 09:09:40 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nJsu2-009Ukl-3n; Tue, 15 Feb 2022 09:09:38 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Scott Branden <sbranden@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH v3 1/8] dt-bindings: net: add schema for ASIX USB Ethernet controllers
+Date:   Tue, 15 Feb 2022 09:09:30 +0100
+Message-Id: <20220215080937.2263111-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220215065826.GD144890@ubuntu>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,40 +60,93 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 03:58:26PM +0900, Jung Daehwan wrote:
-> On Mon, Feb 14, 2022 at 12:29:49PM +0100, Greg Kroah-Hartman wrote:
-> > On Mon, Feb 14, 2022 at 08:08:52PM +0900, Daehwan Jung wrote:
-> > > It always sets DWC3_EP_END_TRANSFER_PENDING in dwc3_stop_active_transfer
-> > > even if dwc3_send_gadget_ep_cmd fails. It can cause some problems like
-> > > skipping clear stall commmand or giveback from dequeue. We fix to set it
-> > > only when ep cmd success. Additionally, We clear DWC3_EP_TRANSFER_STARTED
-> > > for next trb to start transfer not update transfer.
-> > 
-> > So is this two different changes?
-> > 
-> > > 
-> > > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> > 
-> > What commit id does this fix?
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> > 
-> 
-> Hi greg,
-> 
-> Below is commit id to fix.
-> 
-> commit c58d8bfc77a2c7f6ff6339b58c9fca7ae6f57e70
-> Author: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> Date:   Wed Dec 18 18:14:44 2019 -0800
+Create schema for ASIX USB Ethernet controllers and import some of
+currently supported USB IDs form drivers/net/usb/asix_devices.c
 
-<snip>
+This devices are already used in some of DTs. So, this schema makes it official.
+NOTE: there was no previously documented txt based DT binding for this
+controllers.
 
-Then please properly put that as a "Fixes:" tag in the signed-off-by
-area when you resubmit this.
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ .../devicetree/bindings/net/asix,ax88178.yaml | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/asix,ax88178.yaml
 
-thanks,
+diff --git a/Documentation/devicetree/bindings/net/asix,ax88178.yaml b/Documentation/devicetree/bindings/net/asix,ax88178.yaml
+new file mode 100644
+index 000000000000..1af52358de4c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/asix,ax88178.yaml
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/asix,ax88178.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: The device tree bindings for the USB Ethernet controllers
++
++maintainers:
++  - Oleksij Rempel <o.rempel@pengutronix.de>
++
++description: |
++  Device tree properties for hard wired USB Ethernet devices.
++
++allOf:
++  - $ref: ethernet-controller.yaml#
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - usbb95,1720   # ASIX AX88172
++          - usbb95,172a   # ASIX AX88172A
++          - usbb95,1780   # ASIX AX88178
++          - usbb95,7720   # ASIX AX88772
++          - usbb95,772a   # ASIX AX88772A
++          - usbb95,772b   # ASIX AX88772B
++          - usbb95,7e2b   # ASIX AX88772B
++
++  reg: true
++  local-mac-address: true
++  mac-address: true
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    usb {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        ethernet@1 {
++            compatible = "usbb95,7e2b";
++            reg = <1>;
++            local-mac-address = [00 00 00 00 00 00];
++        };
++    };
++  - |
++    usb {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        usb1@1 {
++            compatible = "usb1234,5678";
++            reg = <1>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            ethernet@1 {
++               compatible = "usbb95,772b";
++               reg = <1>;
++            };
++        };
++    };
+-- 
+2.30.2
 
-greg k-h
