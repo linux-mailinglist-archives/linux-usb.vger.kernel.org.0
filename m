@@ -2,50 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3E34B6E5B
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 15:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B41B4B6F17
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 15:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238536AbiBOOIv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 09:08:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41014 "EHLO
+        id S238716AbiBOOgR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 09:36:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238534AbiBOOIu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 09:08:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D720E6C968;
-        Tue, 15 Feb 2022 06:08:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E211B819E4;
-        Tue, 15 Feb 2022 14:08:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4E9DC340EB;
-        Tue, 15 Feb 2022 14:08:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644934117;
-        bh=2a2WgalEeiELEcZIgFaEbv0GOqcKw+xpRsYr5cJFSDs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HztFqtJLPHvCezQO1GD5iRpPCr7Ta7PLfWgDt7fFYSlQVJm2xV+hZECStnXYjL8xN
-         s91ZHZBMU07zNpIJo/kd3ArBWpd3SAxSV7/sPwKNfN4Cb5e+K3Qggn6fsEvSedXqw7
-         VTg2EA2tExjDlNTci909HZyTiDhHpWffXBfBsZHM=
-Date:   Tue, 15 Feb 2022 15:08:34 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     3090101217@zju.edu.cn
-Cc:     balbi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, pavel.hofman@ivitera.com,
-        ruslan.bilovol@gmail.com, Jing Leng <jleng@ambarella.com>
-Subject: Re: [PATCH v3] usb: gadget: f_uac1: add different speed transfers
- support
-Message-ID: <Yguz4hOBYTXRL35t@kroah.com>
-References: <YgprpGbtBpojsCmQ@kroah.com>
- <20220215030848.5709-1-3090101217@zju.edu.cn>
+        with ESMTP id S237716AbiBOOgQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 09:36:16 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8B2102405
+        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 06:36:05 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id d27so28690722wrb.5
+        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 06:36:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=MUUf+pXkN05JwdwuQzd9Pvh+Bteaj3c62ygRM6bt9Qk=;
+        b=mudgwYtlwGFKHg2+iOKPcYtEENCpxIIfMw819BpddxPUCVCqMHj2+IeOBJM0X4iUpB
+         GxtARny1Df2jwq3YqCemRhpibF1+gTiMw17Vuz0eueDZwShUR7fDR/zggpssLn9xYNBq
+         qmwZJpwpMUokt7zNMHN46J+C38KBJPlHJMDFItwUmRn5U5LqxKHWe2Npafb0ihV4xtkj
+         L+3NqEKaGGzN7pgAtibj2nHTis9XKdKJf6zUacBd0Zu+nAIceQOhrYA9xH0g3wno+CJ9
+         iJvrc6sjhbNWiNFpFCIA2K3W2z8zBDgBSMIyKlwYzwwPQWg0KkqaO/xNG5dYbZsPVPPK
+         A1pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=MUUf+pXkN05JwdwuQzd9Pvh+Bteaj3c62ygRM6bt9Qk=;
+        b=GF7YUVkkaLQsRwNEaffThUEnw0dk6pflSGCA5kyvvkn7ZTSRqDfc6K2DeWm6oeDYcC
+         NV4lpJyrx+2vmMkNKMYi2Qd/iJyhe1GVm+D8glpYLdy8CR2/vMTOAkEd/4u+S2TDFqrz
+         cBEWcP0/BH25SmqILo0HtnwCUTA0Y2BBNfh2ehNPFAT8tly/Gb6BXNlwEx5MVdtTsvUy
+         lki1mMgEeIfE40Rw5nf95Xh1DuAND5ieg58Y5VZSt4kkMDMMOZ3R/Ky1j5N2jzU4NkiP
+         IApKo4Of4HUyk6Est4DT0zDmrGGmw6FlyHFLBbv8XbGU7sH1LrCI+GN3cjy7pkVNdQJ3
+         1sTA==
+X-Gm-Message-State: AOAM533rMex5eGf4UQsniN2yFJ8IUymWyZ1J4iPA+r/fI2EU2Ryp/9U0
+        6JgMxOG1rwAQeIR3DV6TsctcJA==
+X-Google-Smtp-Source: ABdhPJxdzZWSPAfu5kiJHsgXoaKlEMHyoO7bf7BXdQ3G1AR5Pr3gbsP/kmzkmb0nxmt6dWCFQ9iT3w==
+X-Received: by 2002:a5d:5381:: with SMTP id d1mr3487021wrv.559.1644935763754;
+        Tue, 15 Feb 2022 06:36:03 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id n7sm15182386wmd.30.2022.02.15.06.36.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 06:36:03 -0800 (PST)
+Date:   Tue, 15 Feb 2022 14:36:01 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>
+Subject: Re: [PATCH v4 0/7] Provide and use generic_handle_irq_safe() where
+ appropriate.
+Message-ID: <Ygu6UewoPbYC9yPa@google.com>
+References: <20220211181500.1856198-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220215030848.5709-1-3090101217@zju.edu.cn>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220211181500.1856198-1-bigeasy@linutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,63 +83,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 11:08:48AM +0800, 3090101217@zju.edu.cn wrote:
-> From: Jing Leng <jleng@ambarella.com>
+On Fri, 11 Feb 2022, Sebastian Andrzej Siewior wrote:
+
+> handler/ interrupt controller entry). It is low level code and the
+> function expects that interrupts are disabled at entry point.
 > 
-> On page 61 of the UAC1 specification (
-> https://www.usb.org/sites/default/files/audio10.pdf),
-> bInterval is interval for polling endpoint for data transfers
-> expressed in milliseconds, must be set to 1.
+> This isn't the case for invocations from tasklets, workqueues or the
+> primary interrupt handler on PREEMPT_RT. Once this gets noticed a
+> "local_irq_disable|safe()" is added. To avoid further confusion this
+> series adds generic_handle_irq_safe() which can be used from any context
+> and adds a few user.
 > 
-> On page 47 of the USB2.0 specification (
-> https://www.usb.org/sites/default/files/usb_20_20211008.zip),
-> An isochronous endpoint must specify its required bus access period.
-> Full-/high-speed endpoints must specify a desired period as
-> (2^(bInterval-1)) x F, where bInterval is in the range one to
-> (and including) 16 and F is 125 μs for high-speed and 1ms for full-speed.
+> v2…v4:
+>   - Correct kernel doc for generic_handle_irq_safe() as per Wolfram Sang.
+>   - Use "misc" instead of "mfd" for the hi6421-spmi-pmic driver.
 > 
-> On page 362 of the USB3.2 specification (
-> https://usb.org/sites/default/files/usb_32_20210125.zip),
-> The 'SuperSpeed Endpoint Companion Descriptor' shall only be
-> returned by Enhanced SuperSpeed devices that are operating at Gen X speed.
-> Each endpoint described in an interface is followed by a 'SuperSpeed
-> Endpoint Companion Descriptor'.
-> 
-> Currently uac1 driver doesn't set bInterval to 1 in full speed transfer
-> and doesn't have a 'SuperSpeed Endpoint Companion Descriptor' behind
-> 'Standard Endpoint Descriptor'.
-> 
-> So we should set bInterval to 1 in full speed transfer and set it to 4
-> in other speed transfers, and we should add 'SuperSpeed Endpoint Companion
-> Descriptor' behind 'Standard Endpoint Descriptor' for superspeed transfer.
-> 
-> Signed-off-by: Jing Leng <jleng@ambarella.com>
-> ---
->  drivers/usb/gadget/function/f_uac1.c | 276 ++++++++++++++++++++++-----
->  1 file changed, 225 insertions(+), 51 deletions(-)
+> v2…v1:
+>  https://lore.kernel.org/all/20220131123404.175438-1-bigeasy@linutronix.de/
+>  - Redo kernel-doc for generic_handle_irq_safe() in #1.
+>  - Use generic_handle_irq_safe() instead of generic_handle_irq() in the
+>    patch description where I accidently used the wrong one.
+> v1:
+>  https://lore.kernel.org/all/20220127113303.3012207-1-bigeasy@linutronix.de/
 
-Where is the patch version information?
+Please use the official cover-letter format (--cover-letter).
 
-> +static struct usb_ss_ep_comp_descriptor as_out_ep_desc_comp = {
-> +	.bLength		= sizeof(as_out_ep_desc_comp),
-> +	.bDescriptorType	= USB_DT_SS_ENDPOINT_COMP,
-> +	.bMaxBurst		= 0,
-> +	.bmAttributes		= 0,
+It would have been nice to at least find a diff stat here.
 
-Why are you setting values to 0 when you do not have to as that is the
-default value?
+...
 
-> @@ -891,7 +1098,6 @@ static int f_audio_get_alt(struct usb_function *f, unsigned intf)
->  	return -EINVAL;
->  }
->  
-> -
->  static void f_audio_disable(struct usb_function *f)
->  {
->  	struct f_uac1 *uac1 = func_to_uac1(f);
+Do we really need to coordinate this series cross-subsystem?
 
-The above change is not needed here.
+Can we first apply the API, then have each of the subsystems adapted
+separately?  Does the change-over all need to happen concurrently?
 
-thanks,
+If the latter is the case, is this set bisectable?
 
-greg k-h
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
