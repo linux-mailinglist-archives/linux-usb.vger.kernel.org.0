@@ -2,79 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B41B4B6F17
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 15:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1564B6F2B
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 15:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238716AbiBOOgR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 09:36:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41384 "EHLO
+        id S238803AbiBOOk2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 09:40:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237716AbiBOOgQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 09:36:16 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8B2102405
-        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 06:36:05 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id d27so28690722wrb.5
-        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 06:36:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=MUUf+pXkN05JwdwuQzd9Pvh+Bteaj3c62ygRM6bt9Qk=;
-        b=mudgwYtlwGFKHg2+iOKPcYtEENCpxIIfMw819BpddxPUCVCqMHj2+IeOBJM0X4iUpB
-         GxtARny1Df2jwq3YqCemRhpibF1+gTiMw17Vuz0eueDZwShUR7fDR/zggpssLn9xYNBq
-         qmwZJpwpMUokt7zNMHN46J+C38KBJPlHJMDFItwUmRn5U5LqxKHWe2Npafb0ihV4xtkj
-         L+3NqEKaGGzN7pgAtibj2nHTis9XKdKJf6zUacBd0Zu+nAIceQOhrYA9xH0g3wno+CJ9
-         iJvrc6sjhbNWiNFpFCIA2K3W2z8zBDgBSMIyKlwYzwwPQWg0KkqaO/xNG5dYbZsPVPPK
-         A1pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=MUUf+pXkN05JwdwuQzd9Pvh+Bteaj3c62ygRM6bt9Qk=;
-        b=GF7YUVkkaLQsRwNEaffThUEnw0dk6pflSGCA5kyvvkn7ZTSRqDfc6K2DeWm6oeDYcC
-         NV4lpJyrx+2vmMkNKMYi2Qd/iJyhe1GVm+D8glpYLdy8CR2/vMTOAkEd/4u+S2TDFqrz
-         cBEWcP0/BH25SmqILo0HtnwCUTA0Y2BBNfh2ehNPFAT8tly/Gb6BXNlwEx5MVdtTsvUy
-         lki1mMgEeIfE40Rw5nf95Xh1DuAND5ieg58Y5VZSt4kkMDMMOZ3R/Ky1j5N2jzU4NkiP
-         IApKo4Of4HUyk6Est4DT0zDmrGGmw6FlyHFLBbv8XbGU7sH1LrCI+GN3cjy7pkVNdQJ3
-         1sTA==
-X-Gm-Message-State: AOAM533rMex5eGf4UQsniN2yFJ8IUymWyZ1J4iPA+r/fI2EU2Ryp/9U0
-        6JgMxOG1rwAQeIR3DV6TsctcJA==
-X-Google-Smtp-Source: ABdhPJxdzZWSPAfu5kiJHsgXoaKlEMHyoO7bf7BXdQ3G1AR5Pr3gbsP/kmzkmb0nxmt6dWCFQ9iT3w==
-X-Received: by 2002:a5d:5381:: with SMTP id d1mr3487021wrv.559.1644935763754;
-        Tue, 15 Feb 2022 06:36:03 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id n7sm15182386wmd.30.2022.02.15.06.36.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 06:36:03 -0800 (PST)
-Date:   Tue, 15 Feb 2022 14:36:01 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: Re: [PATCH v4 0/7] Provide and use generic_handle_irq_safe() where
- appropriate.
-Message-ID: <Ygu6UewoPbYC9yPa@google.com>
-References: <20220211181500.1856198-1-bigeasy@linutronix.de>
+        with ESMTP id S238776AbiBOOk2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 09:40:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6F610242B;
+        Tue, 15 Feb 2022 06:40:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D34CEB81A6B;
+        Tue, 15 Feb 2022 14:40:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 97BE9C340FE;
+        Tue, 15 Feb 2022 14:40:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644936011;
+        bh=BTyAeRKUCX4nKPYoAM+bIom35KvgaYtL0Oy8gSmCoDE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YejL76nfui5aLYADmVTo96nTaPeaEnTJ02HyrUARC4v5zor6etUqN0+K5WStyL5fE
+         3YooPk6lOcE8aRNvxIgvP893jhsYIBli59Lcnvx5PU1eazIjC63IywLGcuj/7uwIy7
+         2+1QhDI8a7OypWcHU2u3HocIEQKpIQ4dCuvaK9qcqmHvfBrVHH8Y9sSRdbYCoRHuje
+         snAEwJiGXKX2+VxznNVy2WhwEDeRaco8oca11+B8L3O0gQvBacpphbP8jPkKbAOAx6
+         etIhHrL6ZdS5IiQsnnjM04DNNyLFA1Ksc/mt/OXW1Jd68LoVeIEZHmvWX6d0w9rjxL
+         WfaVPfm5yosWg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 84E5EE6D447;
+        Tue, 15 Feb 2022 14:40:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220211181500.1856198-1-bigeasy@linutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH] net: hso: Use GFP_KERNEL instead of GFP_ATOMIC when possible
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164493601153.31968.17892021066503340871.git-patchwork-notify@kernel.org>
+Date:   Tue, 15 Feb 2022 14:40:11 +0000
+References: <93e4c78983de9a20b1f9009d79116591f20fd1c2.1644865733.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <93e4c78983de9a20b1f9009d79116591f20fd1c2.1644865733.git.christophe.jaillet@wanadoo.fr>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,44 +57,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 11 Feb 2022, Sebastian Andrzej Siewior wrote:
+Hello:
 
-> handler/ interrupt controller entry). It is low level code and the
-> function expects that interrupts are disabled at entry point.
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Mon, 14 Feb 2022 20:09:06 +0100 you wrote:
+> hso_create_device() is only called from function that already use
+> GFP_KERNEL. And all the callers are called from the probe function.
 > 
-> This isn't the case for invocations from tasklets, workqueues or the
-> primary interrupt handler on PREEMPT_RT. Once this gets noticed a
-> "local_irq_disable|safe()" is added. To avoid further confusion this
-> series adds generic_handle_irq_safe() which can be used from any context
-> and adds a few user.
+> So there is no need here to explicitly require a GFP_ATOMIC when
+> allocating memory.
 > 
-> v2…v4:
->   - Correct kernel doc for generic_handle_irq_safe() as per Wolfram Sang.
->   - Use "misc" instead of "mfd" for the hi6421-spmi-pmic driver.
+> Use GFP_KERNEL instead.
 > 
-> v2…v1:
->  https://lore.kernel.org/all/20220131123404.175438-1-bigeasy@linutronix.de/
->  - Redo kernel-doc for generic_handle_irq_safe() in #1.
->  - Use generic_handle_irq_safe() instead of generic_handle_irq() in the
->    patch description where I accidently used the wrong one.
-> v1:
->  https://lore.kernel.org/all/20220127113303.3012207-1-bigeasy@linutronix.de/
+> [...]
 
-Please use the official cover-letter format (--cover-letter).
+Here is the summary with links:
+  - net: hso: Use GFP_KERNEL instead of GFP_ATOMIC when possible
+    https://git.kernel.org/netdev/net-next/c/25ce79db8042
 
-It would have been nice to at least find a diff stat here.
-
-...
-
-Do we really need to coordinate this series cross-subsystem?
-
-Can we first apply the API, then have each of the subsystems adapted
-separately?  Does the change-over all need to happen concurrently?
-
-If the latter is the case, is this set bisectable?
-
+You are awesome, thank you!
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
