@@ -2,91 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBD74B6C7B
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 13:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1064B6D79
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 14:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237939AbiBOMoI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 07:44:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56370 "EHLO
+        id S238297AbiBONbG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 08:31:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237944AbiBOMoA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 07:44:00 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADC7193E8;
-        Tue, 15 Feb 2022 04:43:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644929005; x=1676465005;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yvmj8JjhwTJn4uYxWDD3+eNoUbMnV/p5cwCro3/3IKs=;
-  b=QZcMMbLaaQOIVl++D8aCBNz3vrmhuX1a/UypNp5yXlxu4p2z50IA1rBA
-   zmYtolLP8L88TdtmwoC90Zsqo9m5BDhmdYuKytwj1HarSxLJcXjCfjMVc
-   IUc40H4vnMODEzmZqLeYSjoHwKXnXQw4QlgR7SCs6ev+IFL7YpxGWuk7T
-   tfBsVhqLaFWDdORTmLhFRMs+4ova+GYln0JVeX+y/M+DO8j9tPYEy5TOa
-   +I4FRT1fkVvSfz22+VSP5AvlvqqqJx0CgLWkyONGjeVK9+6cBcX0qm7JY
-   lyKH+HyEdGAICIoo0OqcOmoq4k1i+enNYPr3AvGRILANhMBgUHGTq1s8W
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="230306049"
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="230306049"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 04:43:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="681015719"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 15 Feb 2022 04:43:18 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 15 Feb 2022 14:43:17 +0200
-Date:   Tue, 15 Feb 2022 14:43:17 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, linux-kernel@vger.kernel.org,
+        with ESMTP id S236089AbiBONbF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 08:31:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351A2106B0E;
+        Tue, 15 Feb 2022 05:30:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7BBEB819C7;
+        Tue, 15 Feb 2022 13:30:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2847C340EB;
+        Tue, 15 Feb 2022 13:30:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644931852;
+        bh=SGwiNnAFsMNuAXfkYvqfCtWSIiMbagOqHSBujmw9Ntc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NC/gbd/rINWKSV+WAACc5+rd5EBgu251vktYAYJE86giJTlrvUEtxbtniVnOv5civ
+         7Z/Ht4DtxAnne6YZnTGvZ5I2ix7SwPiH4ybM3Zj+U2a4H+86i97Qw2RC1R2NVMuht2
+         x1T/UOC2JnehTeow5jlKbZ+ObAZdxb8p1gc/FduY=
+Date:   Tue, 15 Feb 2022 14:30:49 +0100
+From:   Greg KH <gregKH@linuxfoundation.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] usb: typec: anx7411: Add Analogix PD ANX7411
- support
-Message-ID: <Yguf5bwRkqolW0+/@kuha.fi.intel.com>
-References: <20220208091621.3680427-1-xji@analogixsemi.com>
- <20220208091621.3680427-2-xji@analogixsemi.com>
- <YgPCLopskwyQ6F4K@kuha.fi.intel.com>
- <20220215054300.GA3752727@anxtwsw-Precision-3640-Tower>
+Subject: Re: [PATCH] CDC-NCM: avoid overflow in sanity checking
+Message-ID: <YgurCSqIL/VkaBmR@kroah.com>
+References: <20220215103547.29599-1-oneukum@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220215054300.GA3752727@anxtwsw-Precision-3640-Tower>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220215103547.29599-1-oneukum@suse.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 01:43:00PM +0800, Xin Ji wrote:
-> On Wed, Feb 09, 2022 at 03:31:26PM +0200, Heikki Krogerus wrote:
-> > On Tue, Feb 08, 2022 at 05:16:21PM +0800, Xin Ji wrote:
-> > > Add driver for analogix ANX7411 USB Type-C DRP port controller.
-> > 
-> > We already have the driver drivers/usb/typec/tcpm/tcpci.c for port
-> > controllers.
-> > 
-> > If you need a glue layer - if there is something specific that you
-> > need to do with ANX7411 that is not completely TCPC compliant - use
-> > drivers/usb/typec/tcpm/tcpci_*.c as examples.
-> Hi heikki, ANX7411 PD controller has 2 applications, the one has embeded
-> internal firmware, the other is not have. The currently upstream patch
-> is for the first way, driver mustn't use TCPCI framework(embeded firmware
-> will control all the TCPCI register). The second way(erased internaly
-> firmware) can work under TCPCI framework.
+On Tue, Feb 15, 2022 at 11:35:47AM +0100, Oliver Neukum wrote:
+> A broken device may give an extreme offset like 0xFFF0
+> and a reasonable length for a fragment. In the sanity
+> check as formulated now, this will create an integer
+> overflow, defeating the sanity check. Both offset
+> and offset + len need to be checked in such a manner
+> that no overflow can occur.
+> And those quantities should be unsigned.
+> 
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> ---
+>  drivers/net/usb/cdc_ncm.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+> index e303b522efb5..15f91d691bba 100644
+> --- a/drivers/net/usb/cdc_ncm.c
+> +++ b/drivers/net/usb/cdc_ncm.c
+> @@ -1715,10 +1715,10 @@ int cdc_ncm_rx_fixup(struct usbnet *dev, struct sk_buff *skb_in)
+>  {
+>  	struct sk_buff *skb;
+>  	struct cdc_ncm_ctx *ctx = (struct cdc_ncm_ctx *)dev->data[0];
+> -	int len;
+> +	unsigned int len;
+>  	int nframes;
+>  	int x;
+> -	int offset;
+> +	unsigned int offset;
+>  	union {
+>  		struct usb_cdc_ncm_ndp16 *ndp16;
+>  		struct usb_cdc_ncm_ndp32 *ndp32;
+> @@ -1790,8 +1790,8 @@ int cdc_ncm_rx_fixup(struct usbnet *dev, struct sk_buff *skb_in)
+>  			break;
+>  		}
+>  
+> -		/* sanity checking */
+> -		if (((offset + len) > skb_in->len) ||
+> +		/* sanity checking - watch out for integer wrap*/
+> +		if ((offset > skb_in->len) || (len > skb_in->len - offset) ||
+>  				(len > ctx->rx_max) || (len < ETH_HLEN)) {
+>  			netif_dbg(dev, rx_err, dev->net,
+>  				  "invalid frame detected (ignored) offset[%u]=%u, length=%u, skb=%p\n",
+> -- 
+> 2.34.1
+> 
 
-Ah, so it has a microcontroller. Fair enough. I'll take another
-look at your patch.
-
-thanks,
-
--- 
-heikki
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable <stable@vger.kernel.org>
