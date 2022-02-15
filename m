@@ -2,89 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE834B71CA
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 17:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7A84B785D
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 21:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241529AbiBOQVc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 11:21:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42524 "EHLO
+        id S237408AbiBOQs7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 11:48:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237603AbiBOQVb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 11:21:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF66BDE73;
-        Tue, 15 Feb 2022 08:21:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D8F6617BF;
-        Tue, 15 Feb 2022 16:21:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BE0DC340EB;
-        Tue, 15 Feb 2022 16:21:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644942080;
-        bh=6MeCX5n6vxfuO90hTY0X9RyPSUCRNFFayrn7BSsgECc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rGAbU5fDzsl8gpOvFM6erp2AkW2Y9MnkhmB0sc2JnsMBTCGQk9eYrV/Xxd19W3X+6
-         DSqwn65xytNhSufu+kfnhpX5FSq2kNa8XsbrEA7/tnrLYIO+JyWeIlEn9oUxSXijow
-         SuxN9LT4nSf5MBTHQrIveIMHMGh47VdwQ/9v0YuI=
-Date:   Tue, 15 Feb 2022 17:21:17 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Tommaso Merciai <tomm.merciai@gmail.com>,
-        Richard Leitner <richard.leitner@linux.dev>,
-        richard.leitner@skidata.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.16 06/34] usb: usb251xb: add boost-up property
- support
-Message-ID: <YgvS/f/iq00UCsUI@kroah.com>
-References: <20220215152657.580200-1-sashal@kernel.org>
- <20220215152657.580200-6-sashal@kernel.org>
+        with ESMTP id S235228AbiBOQs5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 11:48:57 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 75228C2E49
+        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 08:48:47 -0800 (PST)
+Received: (qmail 754088 invoked by uid 1000); 15 Feb 2022 11:48:46 -0500
+Date:   Tue, 15 Feb 2022 11:48:46 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: host: ehci-platform: Update brcm, xgs-iproc-ehci
+ workaround
+Message-ID: <YgvZblgRiqzi6QlI@rowland.harvard.edu>
+References: <20220215000813.1779032-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220215152657.580200-6-sashal@kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220215000813.1779032-1-chris.packham@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 10:26:29AM -0500, Sasha Levin wrote:
-> From: Tommaso Merciai <tomm.merciai@gmail.com>
+On Tue, Feb 15, 2022 at 01:08:13PM +1300, Chris Packham wrote:
+> The original workaround was added prior to commit e4788edc730a ("USB:
+> EHCI: Add alias for Broadcom INSNREG"). Now that brcm_insnreg exists in
+> struct ehci_regs we can use that instead of having a local definition.
 > 
-> [ Upstream commit 5c2b9c61ae5d8ad0a196d33b66ce44543be22281 ]
-> 
-> Add support for boost-up register of usb251xb hub.
-> boost-up property control USB electrical drive strength
-> This register can be set:
-> 
->  - Normal mode -> 0x00
->  - Low         -> 0x01
->  - Medium      -> 0x10
->  - High        -> 0x11
-> 
-> (Normal Default)
-> 
-> References:
->  - http://www.mouser.com/catalog/specsheets/2514.pdf p29
-> 
-> Reviewed-by: Richard Leitner <richard.leitner@linux.dev>
-> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> Link: https://lore.kernel.org/r/20220128181713.96856-1-tomm.merciai@gmail.com
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > ---
->  drivers/usb/misc/usb251xb.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
 
-This isn't needed in any stable tree, please drop it from all AUTOSEL
-branches.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-thanks,
-
-greg k-h
+>  drivers/usb/host/ehci-platform.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
+> index c3dc906274d9..1115431a255d 100644
+> --- a/drivers/usb/host/ehci-platform.c
+> +++ b/drivers/usb/host/ehci-platform.c
+> @@ -43,7 +43,6 @@
+>  #define hcd_to_ehci_priv(h) ((struct ehci_platform_priv *)hcd_to_ehci(h)->priv)
+>  
+>  #define BCM_USB_FIFO_THRESHOLD	0x00800040
+> -#define bcm_iproc_insnreg01	hostpc[0]
+>  
+>  struct ehci_platform_priv {
+>  	struct clk *clks[EHCI_MAX_CLKS];
+> @@ -81,7 +80,7 @@ static int ehci_platform_reset(struct usb_hcd *hcd)
+>  
+>  	if (of_device_is_compatible(pdev->dev.of_node, "brcm,xgs-iproc-ehci"))
+>  		ehci_writel(ehci, BCM_USB_FIFO_THRESHOLD,
+> -			    &ehci->regs->bcm_iproc_insnreg01);
+> +			    &ehci->regs->brcm_insnreg[1]);
+>  
+>  	return 0;
+>  }
