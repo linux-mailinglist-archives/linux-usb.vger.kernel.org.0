@@ -2,121 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC9F4B62D8
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 06:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1564B62F4
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 06:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbiBOFdJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 00:33:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60346 "EHLO
+        id S233352AbiBOFiz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 00:38:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233567AbiBOFch (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 00:32:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734FF91341
-        for <linux-usb@vger.kernel.org>; Mon, 14 Feb 2022 21:32:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A3DBB817C3
-        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 05:32:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C5D85C340F6
-        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 05:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644903141;
-        bh=un6uh0qxxiQY4puQDKXyigmGDs9iYXOCf7Jn2Ew0Bcc=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=FVvdWflb0q3MRhj3hjJcttXKWama2cuPp4w6rauzd+m4KniZNwhhN409e5IPpEEu2
-         gGyIKenbf8Imj3q2zEuWkNy6nSyN5S/E7sXg2gjZl+fq9ZXISDxXd4av6SSC8UlFL5
-         Jw9uhl+zAtazELfBvfJ7q+xOpWAXxfs99yhJA0jUmV54O/eusevA3nf963RJFcDyj/
-         ZXB9IR0XSnx4bjPQuKJ00mPlpp1xNrihz7yFEG3xu1mBFnc0uxIDore3xLSUfC3KWQ
-         DmQ9IL4lF9ZomIn1zajEplGxGnoVx18jtYcN36jNG2IaKPu9BbJhSuTnPGnYE1YqIL
-         Jhwb/wrOwARIA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id A86FDC05FCE; Tue, 15 Feb 2022 05:32:21 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210425] Plugging in or unplugging power cord while system is
- suspended does not trigger updates
-Date:   Tue, 15 Feb 2022 05:32:19 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bernie@codewiz.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-210425-208809-g9Ntgq03o9@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
-References: <bug-210425-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S231736AbiBOFix (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 00:38:53 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629EC14014;
+        Mon, 14 Feb 2022 21:38:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644903521; x=1676439521;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=ndUMctv6RUFJ6MTBZVT4QO3AbPfxMnqRottuMmn9rjk=;
+  b=bMiG8wUsHrnSTBhJnQ9gWX5A1+eTOdsbNL5lmpxj0EEyCjoFpLgka+Yy
+   5K2Z87+TMGPz6A9B/SBkXV70UJDZEeqj7P9cTmyzOfVwdO7/tLyPm1uRO
+   W3vqOSWNwIl9pgY7ygl0FRrsYFX4tDwDGma6VqkKycKdL3RWjPX3AVyje
+   k=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Feb 2022 21:38:41 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 21:38:40 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 14 Feb 2022 21:38:40 -0800
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 14 Feb 2022 21:38:36 -0800
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
+        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <quic_rjendra@quicinc.com>,
+        <quic_saipraka@quicinc.com>, <quic_schowdhu@quicinc.com>
+Subject: [PATCH V1] arm64: dts: qcom: sc7280: Set the default dr_mode for usb2 to enable EUD.
+Date:   Tue, 15 Feb 2022 11:08:08 +0530
+Message-ID: <1644903488-20557-1-git-send-email-quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+Update the dr_mode for usb2 to 'otg' from 'host' to enable role switch for Embedded USB
+Debugger(EUD) Node.
 
-Bernie Innocenti (bernie@codewiz.org) changed:
+Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+---
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |bernie@codewiz.org
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+index a7be133..6d3ff80 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+@@ -90,7 +90,7 @@
+ };
 
---- Comment #10 from Bernie Innocenti (bernie@codewiz.org) ---
-Still happening on 5.17.0 on a Thinkpad X1 Gen 7.
+ &usb_2_dwc3 {
+-	dr_mode = "host";
++	dr_mode = "otg";
+ };
 
-Steps to reproduce:
+ &usb_2_hsphy {
+--
+2.7.4
 
-1. Unplug USB-C charger
-
-2. Correctly detected as unplugged:
-   % cat /sys/class/power_supply/ucsi-source-psy-USBC000:002/online
-   0
-
-3. plug USB-C charger
-
-4. Correctly detected as plugged:
-   % cat /sys/class/power_supply/ucsi-source-psy-USBC000:002/online
-   1
-
-5. Close the lid and wait for the laptop to sleep
-
-6. Unplug USB-C charger while the laptop is suspended
-
-7. Wake up the laptop
-
-8. BUG: Still detected as plugged!
-   % cat /sys/class/power_supply/ucsi-source-psy-USBC000:002/online
-   1
-
-
-Info:
-
-  % uname -a
-  Linux giskard 5.17.0-0.rc3.89.fc36.x86_64 #1 SMP PREEMPT Mon Feb 7 14:58:=
-45
-UTC 2022=20
-x86_64 x86_64 x86_64 GNU/Linux
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
