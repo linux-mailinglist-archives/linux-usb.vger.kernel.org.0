@@ -2,213 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDBD4B63B7
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 07:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F514B63B2
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 07:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbiBOGmA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 01:42:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52074 "EHLO
+        id S234576AbiBOGln (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 01:41:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234583AbiBOGl7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 01:41:59 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830F8C24B1
-        for <linux-usb@vger.kernel.org>; Mon, 14 Feb 2022 22:41:49 -0800 (PST)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220215064147epoutp01755789525e1a6448947d7ab09758ec68~T4nsi1EzC2543225432epoutp01G
-        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 06:41:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220215064147epoutp01755789525e1a6448947d7ab09758ec68~T4nsi1EzC2543225432epoutp01G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1644907307;
-        bh=uYuVoc8TLG5pnyaXF/S+/Ss83yCwqhKJwuUxsFkXcD4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OZOGjYPbRrM1u60ro5V+x1GJI2VYxsqRqqk667N16j9+bLu1bLE39wuNW7kX2+4TM
-         5w+46K9FrCP4IjF5dU9LubU6A6nuNASsSKEKUlkdRyejXaoFj3/c6CSSC+twaSAZQX
-         w+so1Q/0jbwhUuytDQijuqPFg5SZlAi+7/FA2di4=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220215064147epcas2p2ad99f62b76f65789911defc7de98304a~T4nsKogGf2025620256epcas2p2Y;
-        Tue, 15 Feb 2022 06:41:47 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.69]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4JyWhm1XXqz4x9Q3; Tue, 15 Feb
-        2022 06:41:44 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1A.52.35137.16A4B026; Tue, 15 Feb 2022 15:38:25 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220215064139epcas2p4669383cd1a2937ce5884335856be457d~T4nlaJU6z2843428434epcas2p4N;
-        Tue, 15 Feb 2022 06:41:39 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220215064139epsmtrp20c7fd16c90eb1427795db762e37dc096~T4nlYtDWi1742317423epsmtrp2D;
-        Tue, 15 Feb 2022 06:41:39 +0000 (GMT)
-X-AuditID: b6c32a46-da1ff70000018941-18-620b4a612069
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        80.53.08738.32B4B026; Tue, 15 Feb 2022 15:41:39 +0900 (KST)
-Received: from ubuntu (unknown [12.36.155.120]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220215064139epsmtip14d824f0e0cbc8c6cd20bd524ae674f66~T4nlPr6Di1847318473epsmtip1k;
-        Tue, 15 Feb 2022 06:41:39 +0000 (GMT)
-Date:   Tue, 15 Feb 2022 15:39:25 +0900
-From:   Jung Daehwan <dh10.jung@samsung.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-Subject: Re: [PATCH v2 1/2] usb: dwc3: Not set DWC3_EP_END_TRANSFER_PENDING
- in ep cmd fails
-Message-ID: <20220215063925.GC144890@ubuntu>
+        with ESMTP id S229517AbiBOGlm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 01:41:42 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278BCB7C50;
+        Mon, 14 Feb 2022 22:41:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644907293; x=1676443293;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VJFlrD9QjYOIRicWbxzby4C9BObMKUSbQQt8X0A9Bkw=;
+  b=XUeu/+rtVEYHH65v6ahpoQLpn03KUsnayWiTmZ5q3xFKm24CSiujd9Mp
+   MzB/ZUNSrUTBrdcDPi5uyRIkRIaIRT4erj2o0jOvMFmYs6N3QR81C4SiS
+   CtJXwh9NxWGCS82S9pInMflYirqqT2UW6meJvTg1bgaIlEMdVWs76GjGx
+   92P622K/VX8QQARyn890FXcOG6ZwGLD9eUcAGrB/HZF+BdWRKFsIafh/D
+   9OeE36KSwXnF6GRC213XivJzmoEs5WuJIPeCvviGNTNgzPrVUsXXQ3YoD
+   pO0JYUwY03vMLrwzmuyAYpKq8J/8N49J+RZ2Ti18IWosem0JqYqZvHh3e
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="247857020"
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="247857020"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 22:41:32 -0800
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="635654634"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 22:41:30 -0800
+Received: by lahna (sSMTP sendmail emulation); Tue, 15 Feb 2022 08:41:27 +0200
+Date:   Tue, 15 Feb 2022 08:41:27 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: test: get running under UML, add kunitconfig
+Message-ID: <YgtLFwORwGggQ7M2@lahna>
+References: <20220214184104.1710107-1-dlatypov@google.com>
+ <CAGS_qxomM_mGzvFokZH5dnf7L3kCitB3dWD8JH56fPcDSb6PeA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <ff604504-00df-0c1b-673e-892e42737f7a@synopsys.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOJsWRmVeSWpSXmKPExsWy7bCmmW6iF3eSwcE1JhbH2p6wWzQvXs9m
-        cXnXHDaLRctamS12/VvEZLFpdx+rxaoFB9gd2D02repk89g/dw27x8Q9dR5b9n9m9Pi8SS6A
-        NSrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfoCiWF
-        ssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgXmBXnFibnFpXrpeXmqJlaGBgZEpUGFC
-        dsadCZ+YCuZJVPTsvsDWwHhTuIuRk0NCwETi3/mnTF2MXBxCAjsYJW7f3MEI4XxilPi/4xAb
-        SJWQwGdGiWsXA2A6eqZfhCraxSjxfksjK4TzhFGi4fBOsA4WAVWJN1c/MYLYbAJaEvd+nGAG
-        sUUEdCQOnDgPto9ZYDmTRMf5k2AJYYFYiQvb2sCaeYGKJrVMYIawBSVOznzCAmJzCjhITOh9
-        ARTn4BAVUJF4dbAeZI6EwF92iTOHDzNDnOcisffmKlYIW1ji1fEt7BC2lMTnd3vZIOxiiV2f
-        WpkgmhsYJRofnIBqNpaY9awd7GpmgQyJvoZpLCDLJASUJY7cYoEI80l0HP7LDhHmlehoE4Lo
-        VJaYfnkC1FpJiYOvz0FN9JD43bsIGr69TBIrrvYyT2CUn4XktVlItkHYOhILdn9imwW0gllA
-        WmL5Pw4IU1Ni/S79BYysqxjFUguKc9NTi40KjOCxnZyfu4kRnEK13HYwTnn7Qe8QIxMH4yFG
-        CQ5mJRHeuLOcSUK8KYmVValF+fFFpTmpxYcYTYERNZFZSjQ5H5jE80riDU0sDUzMzAzNjUwN
-        zJXEeb1SNiQKCaQnlqRmp6YWpBbB9DFxcEo1MO22a/eaFWxumpoUcWmBsoP7dVNehS8L5opo
-        XZh6t8fqhIl94oSbE670Ch7+tUrjB+fEsz4LXD3LOj8oLxTV5X2ttGtHaJOqgPlEnn0dL223
-        8/XFb77j/jvog8rJ1abd7zco//vOv9rS/FHZ5xVPJJqXX9uzjDXhzzxlpfqoNbc2/Stwc5Ey
-        W7U7YFX0FMuiqJmcX3wiAgQm9JYf/nOyI97XRXLJO5XAzbZRdhqXerwfbgmcZinKsZir5dL+
-        yV1FaUq1J9tYNCX2/lKWeRFiEh3w7Y75N+dNUnvZlsZuVGu6Iq+W9uU+pwNfg/1MBvOPz1LC
-        X26YkLI79O2yuSlxBR1eMXfCf8vfl5GsvqfwUImlOCPRUIu5qDgRAMUnHnMqBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLLMWRmVeSWpSXmKPExsWy7bCSnK6yN3eSwZ8jGhbH2p6wWzQvXs9m
-        cXnXHDaLRctamS12/VvEZLFpdx+rxaoFB9gd2D02repk89g/dw27x8Q9dR5b9n9m9Pi8SS6A
-        NYrLJiU1J7MstUjfLoErY/LKS4wF90QrVvz/xNTAuEmwi5GTQ0LARKJn+kXGLkYuDiGBHYwS
-        Hx+9Y4RISEosnXuDHcIWlrjfcoQVougRo8SxfavAEiwCqhJvrn4Ca2AT0JK49+MEM4gtIqAj
-        ceDEeSaQBmaBlUwSU7vmsoIkhAViJS5sa2MDsXmBiia1TGCGmNrLJLH+1ERWiISgxMmZT1hA
-        bGagqTf+vQSaxAFkS0ss/8cBEuYUcJCY0PuCGSQsKqAi8epg/QRGwVlImmchaZ6F0LyAkXkV
-        o2RqQXFuem6xYYFRXmq5XnFibnFpXrpecn7uJkZwDGhp7WDcs+qD3iFGJg7GQ4wSHMxKIrxx
-        ZzmThHhTEiurUovy44tKc1KLDzFKc7AoifNe6DoZLySQnliSmp2aWpBaBJNl4uCUamDKYLP9
-        Oql3YtYdKdOEW73hXAfVd8lNemW5vdBnJ4PJpzdN5f29Yq0r+z8qduzk1VZgtPoUuM5Lep78
-        Fkdjb9FrqtbNmxTmf91dUj7ft4iRcVYyixrr+pnPJGOlBP5+4Tqo5nXQWnST1TTXe0L/62Zf
-        jNtneH3bruD1XE4/Ol6wab+sYeX1LDytbHCvW2bXujt7SqPD1wl3d6/L9DCJmPzV4uapQ9VL
-        n+efWh4TPnft440dzzwZzLae1tdStd6yfc3DkxOX5S2SYrTQe8Qhyvn4XtLE49f5HBbsSLGr
-        2Ko77+JRC8PfTY5rn59MzvT4KLq5KKloZUxnd+fEwv6f3h23Fj79lKHx+/x6pVyxFR+VWIoz
-        Eg21mIuKEwFJTdE08AIAAA==
-X-CMS-MailID: 20220215064139epcas2p4669383cd1a2937ce5884335856be457d
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----.rW42XXn7_Ji6OxwuAF4RAMbP.qed.OeqKlvEhSLhB3noATS=_e8880_"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220214111149epcas2p1a1faeda037991885fd6f2f026fa44ec5
-References: <1644836933-141376-1-git-send-email-dh10.jung@samsung.com>
-        <CGME20220214111149epcas2p1a1faeda037991885fd6f2f026fa44ec5@epcas2p1.samsung.com>
-        <1644836933-141376-2-git-send-email-dh10.jung@samsung.com>
-        <ff604504-00df-0c1b-673e-892e42737f7a@synopsys.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGS_qxomM_mGzvFokZH5dnf7L3kCitB3dWD8JH56fPcDSb6PeA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-------.rW42XXn7_Ji6OxwuAF4RAMbP.qed.OeqKlvEhSLhB3noATS=_e8880_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+Hi Daniel,
 
-Hi Thinh,
+On Mon, Feb 14, 2022 at 06:39:25PM -0800, Daniel Latypov wrote:
+> On Mon, Feb 14, 2022 at 10:41 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > These tests didn't work under the normal `kunit.py run` command since
+> > they require CONFIG_PCI=y, which could not be set on ARCH=um.
+> >
+> > Commit 68f5d3f3b654 ("um: add PCI over virtio emulation driver") lets us
+> > do so. To make it so people don't have to figure out how to do so, we
+> > add a drivers/thunderbolt/.kunitconfig.
+> >
+> > Can now run these tests using
+> > $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/thunderbolt
+> >
+> > Potentially controversial bits:
+> > 1. this .kunitconfig is UML-specific, can't do this for example
+> > $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kunitconfig=drivers/thunderbolt
+> > 2. this removes the manual call to __kunit_test_suites_init(), which
+> >    allowed us to control exactly when the tests got run.
+> 
+> kernel-test-robot points out something I had forgotten.
+> Doing this prevents us from being able to build this test as a module.
+> 
+> kunit_test_suites() defines an init_module() which conflicts with the
+> existing ones.
+> 
+> There's some relevant discussion about reworking how kunit modules
+> work here, https://lore.kernel.org/linux-kselftest/e5fa413ed59083ca63f3479d507b972380da0dcf.camel@codeconstruct.com.au/
+> 
+> So I think we have two options for this patch:
+> a) proceed, but disable building the test as a module for now (tristate => bool)
+> b) wait on this patch until kunit module support is refactored
+> 
+> Basically the question is: does this slightly easier way of running
+> the test seem worth losing the ability to test as a module in the
+> short-term?
 
-On Mon, Feb 14, 2022 at 06:44:33PM +0000, Thinh Nguyen wrote:
-> Hi,
-> 
-> Daehwan Jung wrote:
-> > It always sets DWC3_EP_END_TRANSFER_PENDING in dwc3_stop_active_transfer
-> > even if dwc3_send_gadget_ep_cmd fails. It can cause some problems like
-> 
-> How does it fail? Timed out?
+I would like to keep the module option available.
 
-Yes, timed out.
-> 
-> > skipping clear stall commmand or giveback from dequeue. We fix to set it
-> > only when ep cmd success. Additionally, We clear DWC3_EP_TRANSFER_STARTED
-> > for next trb to start transfer not update transfer.
-> 
-> We shouldn't do this. Things will be out of sync. It may work for 1
-> scenario, but it won't work for others.
-> 
-> Please help me understand a few things:
-> 
-> 1) What is the scenario that triggers this? Is it random?
-> 
-ep cmd timeout occurs on dequeue request from user side. End Transfer command
-would be sent in dwc3_stop_active transfer.
-
-> 2) Are there other traffics pending while issuing the End Transfer
-> command? If so, what transfer type(s)?
-> 
-I haven't checked it yet. 
-
-> 3) Have you tried increasing the timeout?
-> 
-No, I haven't.
-> BR,
-> Thinh
-> 
-
-This issue occurs very rarely on customer. I only have restricted
-information. That's why I've been trying to reproduce it.
-
-Wesley may have run into same issue and you can see this issue in detail.
-https://protect2.fireeye.com/v1/url?k=9d423b69-fc3fd32e-9d43b026-74fe485fff30-77a099b52659410d&q=1&e=20b4d9f5-2599-4f57-8b6a-7c4ec167d228&u=https%3A%2F%2Flore.kernel.org%2Flinux-usb%2F20220203080017.27339-1-quic_wcheng%40quicinc.com%2F
-
-Best Regards,
-Jung Daehwan
-> 
-> > 
-> > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> > ---
-> >  drivers/usb/dwc3/gadget.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index 183b90923f51..3ad3bc5813ca 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -2044,6 +2044,12 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
-> >  				dwc3_gadget_move_cancelled_request(r,
-> >  						DWC3_REQUEST_STATUS_DEQUEUED);
-> >  
-> > +			/* If ep cmd fails, then force to giveback cancelled requests here */
-> > +			if (!(dep->flags & DWC3_EP_END_TRANSFER_PENDING)) {
-> > +				dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
-> > +				dwc3_gadget_ep_cleanup_cancelled_requests(dep);
-> > +			}
-> > +
-> >  			dep->flags &= ~DWC3_EP_WAIT_TRANSFER_COMPLETE;
-> >  
-> >  			goto out;
-> > @@ -3645,7 +3651,7 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
-> >  
-> >  	if (!interrupt)
-> >  		dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
-> > -	else
-> > +	else if (!ret)
-> >  		dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
-> >  }
-> >  
-> 
-
-------.rW42XXn7_Ji6OxwuAF4RAMbP.qed.OeqKlvEhSLhB3noATS=_e8880_
-Content-Type: text/plain; charset="utf-8"
-
-
-------.rW42XXn7_Ji6OxwuAF4RAMbP.qed.OeqKlvEhSLhB3noATS=_e8880_--
+For me, I can just continue running this under QEMU for now so let's
+wait until the reworking has been done. Thanks for looking into this,
+though! :)
