@@ -2,159 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0104B5EB7
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 01:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F754B5ED3
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 01:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbiBOAEi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Feb 2022 19:04:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54932 "EHLO
+        id S232425AbiBOAIm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Feb 2022 19:08:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232363AbiBOAEg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 19:04:36 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2088.outbound.protection.outlook.com [40.107.236.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65627A9BB;
-        Mon, 14 Feb 2022 16:04:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QdgdN7h2PgDth7zICPStagOzypgEU5198WUJa8n2PvC353IsVqN4vyUeH3mCHVwomSSnW3upzQQlT8aG88Gq67js+l0r0Pi56/LFVwVUWEcWsKUHhoD1NzL981CnjPgw3+wHjGZcwSH8ZkGxQxIqHt2qIFOzZSzluvn7LM95+goW5nxCm9f97azFo0nDpGBz3QYCShR+YBSMTjFA8+3V6vxJD6/VZW8tvjMSPR149vOjkiH9QmHfIVBC/7RJFLezIP3sYoOh7xa3wTqUIZqkuTqbewHjVlw9/PPT5gyfIerT9M4gH9zqJI8a2pGB/WV0Jdope/R4iXd/U1mjQ3p8lQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4CJsbT/uQNbCLg3zijkw2HtWNygmK8JRosfQfMJvjsA=;
- b=Im5nUSC8vLb/k4c49Tt1AGH5EXWfZOtNq5NRIiMeZBY00GFpDtniojrDLkRCRgZ8VDdICyPc64cZ4dLZWN5BizNGLwySpyioLgDmtVMjZOwklLci0ELkDG2GFLdqeK1dIm4wlshshUGjNuozHDiOs/EqAlTk4HY/t9hRO6JK7FR6U/z0lgV8EYJ1FXFHpTHhAqIfTXFAEoVijtYSZAYQtT+6xy/86VyiIki11G6r5vRVcZ3VNXXUg2MiToKiMDcod/0eGt59mDjvYUILGwPL0B4FdW+GSgCOZgiTiHxJD7LqjRHNATHLaf3lmhIuSOlz+0/NeXrSLIZIXtUMjWHhPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4CJsbT/uQNbCLg3zijkw2HtWNygmK8JRosfQfMJvjsA=;
- b=CA+NBKqYgJK9y0zqatUIdnZe/qz9Z4QRyRAxdYqNI171HLqLWmmR156hddnnGlXR9nd0tvvlnAvnBkC027NOLMbgiYXQ+C27DxQYK965fHLB9PmZ5B6DzZqRN+ocMLoMw/01i9VB2MeBmCFe1GOloZlqSF783s3tpS/H0TU+jHY=
-Received: from MWHPR12CA0038.namprd12.prod.outlook.com (2603:10b6:301:2::24)
- by BN8PR12MB3267.namprd12.prod.outlook.com (2603:10b6:408:9e::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.17; Tue, 15 Feb
- 2022 00:04:24 +0000
-Received: from CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
- (2603:10b6:301:2:cafe::16) by MWHPR12CA0038.outlook.office365.com
- (2603:10b6:301:2::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.12 via Frontend
- Transport; Tue, 15 Feb 2022 00:04:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT015.mail.protection.outlook.com (10.13.175.130) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4975.11 via Frontend Transport; Tue, 15 Feb 2022 00:04:23 +0000
-Received: from localhost.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 14 Feb
- 2022 18:04:18 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        "open list:RADEON and AMDGPU DRM DRIVERS" 
-        <amd-gfx@lists.freedesktop.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
-        <nouveau@lists.freedesktop.org>
-CC:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "Lukas Wunner" <lukas@wunner.de>, <Alexander.Deucher@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v4 10/10] PCI: drop `pci_is_thunderbolt_attached`
-Date:   Mon, 14 Feb 2022 18:02:00 -0600
-Message-ID: <20220215000200.242799-11-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220215000200.242799-1-mario.limonciello@amd.com>
-References: <20220215000200.242799-1-mario.limonciello@amd.com>
+        with ESMTP id S232409AbiBOAIi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 19:08:38 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC12997BB8
+        for <linux-usb@vger.kernel.org>; Mon, 14 Feb 2022 16:08:26 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A4B572C0C53;
+        Tue, 15 Feb 2022 00:08:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1644883703;
+        bh=gPwrPAgNGK0ENjZaVwmkgXwqjgAIhSwb6KNoN1gsLaE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nHXkNQHU3yHsMfbmdO7V0bciwBRugsWCDiwoJlrIXNwSmKH9w49K5xfBXx2n2NrQF
+         KqcW2yApjY67AAGQmH44LBBmhima1RSwWIHSZe9KfP/E1QPz7Zf0KbJ8Bw6JIbUoEa
+         yphVDggtmjZLh2pEbqLW4HT5eUFmJuGaDXQSupSQnt3SjC8SRX+GzfKlXqLPggkt9N
+         2WXdoomxUcRbbzrrejmGLkh3gMuH2vKMpVESZXFP2DHy9tAj4amR6Kx65jcJKFpDcT
+         R/5O0zBWe1xsdGNbEEyVMlC1Ysx5ofUglUYRK6+qduI1q+iC9iajnTx04p2kgF8Vev
+         BnkV3LPoWw3pw==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B620aeef70000>; Tue, 15 Feb 2022 13:08:23 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id 750BA13EE1E;
+        Tue, 15 Feb 2022 13:08:23 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 1B9132A00D0; Tue, 15 Feb 2022 13:08:19 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] usb: host: ehci-platform: Update brcm, xgs-iproc-ehci workaround
+Date:   Tue, 15 Feb 2022 13:08:13 +1300
+Message-Id: <20220215000813.1779032-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 826b7417-dd46-4f74-c994-08d9f016b914
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3267:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB32676935BE62DD71FC4A72ECE2349@BN8PR12MB3267.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4BU0upFeyyulbVyS1/GE2fwcgOcMTMu6li28j7s3SS5R6feUSq3F2u4pIFnuidmXuA3Kmohq5HzncZswcJ4D9oKh+VHPJSYDVfh0uE2fbzE5vRNtE2gBfDiL6keLyYaHJSwwd5H0d2gXJrCCPLxoU4F2MFePWyaMM0nIg7NFqMU/xL4Z/VodvTo3vhVb+7woLx+WNWb4C9dGp4qco98h+6/2OEjEEZpGJxL7SKf00VHo4IKZWmL16Lo5KMXCjcQlBfDlASBCSASmKF0c2ZJUtcuzCNHVf2PvpJUgunPyzfjCImp9KpEW5/mEH3+huejT8yhjmcq5DYX0Dgyf7GEOUFXmFTyrxqW+DwxXuaLotQoTAfkEmE+tF44UuxjhI8YDGJ7y6WfQkRRK9z3JdoM4ODbBRMeZpYjZRDwoImivOA9cAzR4zPsEG+Wwx4TOGUXKLN5pvnBKZVZ5g4js0KMA55yuBbfA3iUz2XLh0/FvbSsMaUBHiYkBSq00t1qSa2EwAMyayUIHSD06QrDz/ZJ96dqroiDEoR9vMaLX7dnxjL6ftFlMrD4DGEhYu+/umcCoFhJI7SScjnRuNaAw1JEIn4HjbdyqavgUY4UO3Zyvw0v/UPJtEtLTNMbI/4DJrTlrEfyobLaqraix81BTaMowZpMYsobdKm3nMD214WlEp5IHsoepoxjZUH/GBFbHviZ4oLVGoGDjC/tQF8kBfjOscozIVSMRfdSQ9GoKf0Pk7fs=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(86362001)(2906002)(8676002)(6666004)(82310400004)(7416002)(5660300002)(8936002)(44832011)(83380400001)(47076005)(40460700003)(54906003)(110136005)(508600001)(36860700001)(356005)(2616005)(81166007)(4326008)(36756003)(316002)(70586007)(70206006)(26005)(1076003)(16526019)(426003)(336012)(186003)(81973001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 00:04:23.3167
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 826b7417-dd46-4f74-c994-08d9f016b914
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3267
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=c43Vvi1l c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=oGFeUVbbRNcA:10 a=PL-y3ZX0Tm02xq-3140A:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently `pci_is_thunderbolt_attached` is used to indicate a device
-is connected externally.
+The original workaround was added prior to commit e4788edc730a ("USB:
+EHCI: Add alias for Broadcom INSNREG"). Now that brcm_insnreg exists in
+struct ehci_regs we can use that instead of having a local definition.
 
-As all drivers now look at the removable attribute, drop this function.
-
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 ---
- include/linux/pci.h | 22 ----------------------
- 1 file changed, 22 deletions(-)
+ drivers/usb/host/ehci-platform.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index d9719eb14654..089e7e36a0d9 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -2434,28 +2434,6 @@ static inline bool pci_ari_enabled(struct pci_bus *bus)
- 	return bus->self && bus->self->ari_enabled;
+diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-pla=
+tform.c
+index c3dc906274d9..1115431a255d 100644
+--- a/drivers/usb/host/ehci-platform.c
++++ b/drivers/usb/host/ehci-platform.c
+@@ -43,7 +43,6 @@
+ #define hcd_to_ehci_priv(h) ((struct ehci_platform_priv *)hcd_to_ehci(h)=
+->priv)
+=20
+ #define BCM_USB_FIFO_THRESHOLD	0x00800040
+-#define bcm_iproc_insnreg01	hostpc[0]
+=20
+ struct ehci_platform_priv {
+ 	struct clk *clks[EHCI_MAX_CLKS];
+@@ -81,7 +80,7 @@ static int ehci_platform_reset(struct usb_hcd *hcd)
+=20
+ 	if (of_device_is_compatible(pdev->dev.of_node, "brcm,xgs-iproc-ehci"))
+ 		ehci_writel(ehci, BCM_USB_FIFO_THRESHOLD,
+-			    &ehci->regs->bcm_iproc_insnreg01);
++			    &ehci->regs->brcm_insnreg[1]);
+=20
+ 	return 0;
  }
- 
--/**
-- * pci_is_thunderbolt_attached - whether device is on a Thunderbolt daisy chain
-- * @pdev: PCI device to check
-- *
-- * Walk upwards from @pdev and check for each encountered bridge if it's part
-- * of a Thunderbolt controller.  Reaching the host bridge means @pdev is not
-- * Thunderbolt-attached.  (But rather soldered to the mainboard usually.)
-- */
--static inline bool pci_is_thunderbolt_attached(struct pci_dev *pdev)
--{
--	struct pci_dev *parent = pdev;
--
--	if (dev_is_removable(&pdev->dev))
--		return true;
--
--	while ((parent = pci_upstream_bridge(parent)))
--		if (dev_is_removable(&parent->dev))
--			return true;
--
--	return false;
--}
--
- #if defined(CONFIG_PCIEPORTBUS) || defined(CONFIG_EEH)
- void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
- #endif
--- 
-2.34.1
+--=20
+2.35.1
 
