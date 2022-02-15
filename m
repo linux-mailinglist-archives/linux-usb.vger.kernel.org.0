@@ -2,169 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CBB4B5E65
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 00:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E43B94B5E9C
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 01:04:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbiBNXpt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Feb 2022 18:45:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59128 "EHLO
+        id S231922AbiBOAE0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Feb 2022 19:04:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiBNXpt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 18:45:49 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776CEDE
-        for <linux-usb@vger.kernel.org>; Mon, 14 Feb 2022 15:45:40 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id q8so19148817oiw.7
-        for <linux-usb@vger.kernel.org>; Mon, 14 Feb 2022 15:45:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nfkpfrdZAC9ghbfxseXAYQsgB3vdZOFr69e3ZKi13c4=;
-        b=kcVU4KcsIwWEakkJ4QgJhDkta9FeYTTYt2h1CHNWCqpC2RAIclfeNBea9HfXg8SYyb
-         RboH0P8Zp89ol7ajti2fAJ2pEoNuqBe7UpSjGEhzz0MrcrTJEiKvMX2Z3ndR/cL89Xdq
-         b5bcsENSxzX7NRsM5TUx0AXygT/DdAGeG6N9/FLXt6yDZPgVSWd8cNlEnJN0+6QZYrqQ
-         yZXHa/EGMHRLNTdJnP+v9pNZGr7sY2aPTn0SWDLxnnUjb9Pj8ZucXMMeAB8JaKXuj4p/
-         Qb2pbFmtWfpzshJVpq0W8G7s0UZs/Xs8eO/ESHCq0Z+a64c99E19h3GhVie8U1oHe+Zw
-         XVAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nfkpfrdZAC9ghbfxseXAYQsgB3vdZOFr69e3ZKi13c4=;
-        b=l+ySz797RWxm2Y70cIXsmVI2Wks+Twy53DD0O4i+YgMOzRRPOe/JRfoxRxyhBUQhqz
-         lS4I65lcqarozMWV2JOLNu1expQXDYsQgl27gZOSHgHqm5+pGDCajfpOWMV2WjA/Gk0f
-         eEEXHudMj3nlllsXOdfcXm80j1noxosmQVx5geMQp3J1a26k8Rutegkzqe5SnLudF1YB
-         d388LPOTXJKckGoT3dUL3lc9oCabSNJCqCMoRsqNXPhi3Am9xwRK4Av5MDklFRSlpXPr
-         0mfPbFaX9TTrRE/1ZMplwdRhtXGJTUjflwVvhriaGRIq43gE1XV2FQ92iKmSLi6dM4ge
-         cTAQ==
-X-Gm-Message-State: AOAM533L5APm1d2tZmXsV0FXm0/MjwexXJZQPRFjxPQiQpABsU3ovzOk
-        ZUynJpQx3fZZxPIP19EzXM8k0g==
-X-Google-Smtp-Source: ABdhPJz3yU4E+ybCVsol7Wn304FwHzzIReMzm5hg9IcI2Z0QH3avCApLTbKhHMGhbYBfsICiMMbu/g==
-X-Received: by 2002:aca:5e0b:0:b0:2d0:e2c:9968 with SMTP id s11-20020aca5e0b000000b002d00e2c9968mr561613oib.206.1644882339654;
-        Mon, 14 Feb 2022 15:45:39 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id e192sm13623894oob.11.2022.02.14.15.45.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 15:45:39 -0800 (PST)
-Date:   Mon, 14 Feb 2022 15:47:49 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Imre Deak <imre.deak@intel.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        freedreno@lists.freedesktop.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        intel-gfx@lists.freedesktop.org, linux-usb@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Sean Paul <sean@poorly.run>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] drm: Add HPD state to
- drm_connector_oob_hotplug_event()
-Message-ID: <YgrqJS6gsQJYqWQg@ripper>
-References: <20220208044328.588860-1-bjorn.andersson@linaro.org>
- <20220214175927.GA594729@ideak-desk.fi.intel.com>
+        with ESMTP id S231996AbiBOAEY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Feb 2022 19:04:24 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2083.outbound.protection.outlook.com [40.107.94.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB5274600;
+        Mon, 14 Feb 2022 16:04:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QzKnIpYVpHTmkG7mAYHg9IhJkx9SpPTyKdezHmkJj33oNkDvLmrq+hRhaN4pLNzEClP9UHbV19T0FQfUk3CI1LurOHbzDNz5OizvvMCUZ7YtZCnqkr7Si1WwEd7EqXrN5pEm66y0EaBY681nLkwU7RE+0Yrms4ilpu6KiriHpFqMARg7hYqOSzabXuV9Qy4AQXCyBASi8iEjYtm9aNlvm4STe73KjTdMxEuIuBKdaMC9BzGIzOzJ2SBx18rsZaZPAkevN7fri/vINt2dWVcPWYp7Ma5EoJKCntn/hJyss6U3v4WfDUocohkXNPTbFiEVa1mvoShI80kQy//YosdP5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0r2CnN15zVFpDkwJ73WqME1OerqdolvIkatytM1wABo=;
+ b=HS13m9iZOd+5AFO1RVYiU9b2+FK/lFJX/utd4djlpwGFShnhR00KCtgoA8/KeQwoE1FWRbjtWpTukj+3zDauzajIcHR6OtKMF1EHYj8mNhHW7T83a4eP1GOB0XAfGYuA8IDD685jOD6KJ9l2G31mUs+Krh3nFsCi+w4XPQ4jE+HphA16qwcwybrwgnvYKad1XrItmfKxGlXuZrowvivJdCbS1V/viBGM0Syz8gFceS59MjJjaEkXc4ZAjLJ6IMTl+Q5z3c0cr/TLDeiwBjuED+De5g4plQXzXcWd3qGn5tJEWLZF8/Y4bscAawHfepRr4TxgFZANBCrp3k9dt5j4VA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0r2CnN15zVFpDkwJ73WqME1OerqdolvIkatytM1wABo=;
+ b=rznaQmaxzuqzcMKJGX5uS2GB1c4q9FuPanTgItUbnwl4PXd9j9l4O3AUR53PjpEpJME32+SG1oC3bVe8RNJUi2EQXnOAk22JEzoYh9TWrHABgpfkCCS4N6PlnttPftpJTDZ31uWYzm5qrs7Q8ySwzS96XZvEU+aCX88fPGWpF08=
+Received: from MWHPR12CA0027.namprd12.prod.outlook.com (2603:10b6:301:2::13)
+ by DM6PR12MB4402.namprd12.prod.outlook.com (2603:10b6:5:2a5::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Tue, 15 Feb
+ 2022 00:04:13 +0000
+Received: from CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:301:2:cafe::14) by MWHPR12CA0027.outlook.office365.com
+ (2603:10b6:301:2::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11 via Frontend
+ Transport; Tue, 15 Feb 2022 00:04:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT015.mail.protection.outlook.com (10.13.175.130) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4975.11 via Frontend Transport; Tue, 15 Feb 2022 00:04:13 +0000
+Received: from localhost.localdomain (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 14 Feb
+ 2022 18:04:11 -0600
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+        "open list:RADEON and AMDGPU DRM DRIVERS" 
+        <amd-gfx@lists.freedesktop.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
+        <nouveau@lists.freedesktop.org>
+CC:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "Lukas Wunner" <lukas@wunner.de>, <Alexander.Deucher@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v4 00/10] Overhaul `is_thunderbolt`
+Date:   Mon, 14 Feb 2022 18:01:50 -0600
+Message-ID: <20220215000200.242799-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220214175927.GA594729@ideak-desk.fi.intel.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b4adcd3b-fc52-4f00-0f11-08d9f016b313
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4402:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB4402CD5AF54F7501EE06B570E2349@DM6PR12MB4402.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3276;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XuvFkHc9z2+2Nl7dokC9kjkVycMVwn5fvbECYcTNdAEuoPxZkOlTPZFPoJmIQ0d/K2n6eZCk4mWjvVOelR51FdtZR1u01BEqZsm5r33WpZESayh8BpfI+hB0T/NoMxuY8IrAyn9oIhJdOFxn/mfUWZEIGg6ZkAE3mCy9FarUmI5zPlQZhAPzjyOwP2N1C3oHbR7OpiOFqvxnmeDENT1mg5JJnHsblbjz5R898BKPtyfZ3dqaUS3F6WVSvvRyyYQhLc6R3NG5zWBt/3kUJ5sQwfnBs6jDgmgzj0p/Aicjk1K/2nZrsewvR3A71J0Wt3KwxygfVUaB84V6h7HvKGjfAlZE8xBRB9ov3P1G6j+NPZM9uu9nGpbQK+rqCgg1tgpS8qpvfjwh0xWlIB8bXKphc0mvidImOP6WEg3/miGzS+OifqWcjWugoBZbPMP6I2JwBTo9n9uGZL2nnDVhf3byJZjbj4bv06Uey40+dWlqe77HmYQJVcADWtu9zP2mCyNZxC/dbBduhJW6bsqk1lSMKWEgBQ1vvkq7hyqPnQyacNM8qEtgmCCSuXNkSxpQgMWg1BFMLtYsB+slFPRSKgSggsZLZpEvPrB+m9dP6tDbI9G+dLVOmzzYj5XyQPzSF/0LYvGNJZ8G7PJFw+ZWPNkQznhxn1wYSCSM9ODXW+WBARxFNzBzszU3nomYq42g3THOEOkPHwuRGr/PHRaqWm8tzwde6gDkGitHzceswEKNrSU=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(110136005)(82310400004)(6666004)(316002)(8676002)(70586007)(70206006)(4326008)(47076005)(508600001)(83380400001)(54906003)(44832011)(36756003)(2906002)(5660300002)(2616005)(7416002)(16526019)(26005)(36860700001)(186003)(1076003)(86362001)(356005)(40460700003)(8936002)(81166007)(336012)(426003)(81973001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2022 00:04:13.2390
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4adcd3b-fc52-4f00-0f11-08d9f016b313
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4402
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 14 Feb 09:59 PST 2022, Imre Deak wrote:
+Various drivers in the kernel use `is_thunderbolt` or
+`pci_is_thunderbolt_attached` to designate behaving differently
+from a device that is internally in the machine. This relies upon checks
+for a specific capability only set on Intel controllers.
 
-> On Mon, Feb 07, 2022 at 08:43:27PM -0800, Bjorn Andersson wrote:
-> > In some implementations, such as the Qualcomm platforms, the display
-> > driver has no way to query the current HPD state and as such it's
-> > impossible to distinguish between disconnect and attention events.
-> > 
-> > Add a parameter to drm_connector_oob_hotplug_event() to pass the HPD
-> > state.
-> > 
-> > Also push the test for unchanged state in the displayport altmode driver
-> > into the i915 driver, to allow other drivers to act upon each update.
-> > 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> > 
-> > Note that the Intel driver has only been compile tested with this patch.
-> > 
-> >  drivers/gpu/drm/drm_connector.c          |  6 ++++--
-> >  drivers/gpu/drm/i915/display/intel_dp.c  | 14 +++++++++++---
-> >  drivers/gpu/drm/i915/i915_drv.h          |  3 +++
-> >  drivers/usb/typec/altmodes/displayport.c |  9 ++-------
-> >  include/drm/drm_connector.h              |  5 +++--
-> >  5 files changed, 23 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-> > index a50c82bc2b2f..ad7295597c0f 100644
-> > --- a/drivers/gpu/drm/drm_connector.c
-> > +++ b/drivers/gpu/drm/drm_connector.c
-> > @@ -2825,6 +2825,7 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
-> >  /**
-> >   * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
-> >   * @connector_fwnode: fwnode_handle to report the event on
-> > + * @hpd_state: number of data lanes available
-> >   *
-> >   * On some hardware a hotplug event notification may come from outside the display
-> >   * driver / device. An example of this is some USB Type-C setups where the hardware
-> > @@ -2834,7 +2835,8 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
-> >   * This function can be used to report these out-of-band events after obtaining
-> >   * a drm_connector reference through calling drm_connector_find_by_fwnode().
-> >   */
-> > -void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
-> > +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
-> > +				     bool hpd_state)
-> >  {
-> >  	struct drm_connector *connector;
-> >  
-> > @@ -2843,7 +2845,7 @@ void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
-> >  		return;
-> >  
-> >  	if (connector->funcs->oob_hotplug_event)
-> > -		connector->funcs->oob_hotplug_event(connector);
-> > +		connector->funcs->oob_hotplug_event(connector, hpd_state);
-> >  
-> >  	drm_connector_put(connector);
-> >  }
-> > diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
-> > index 146b83916005..00520867d37b 100644
-> > --- a/drivers/gpu/drm/i915/display/intel_dp.c
-> > +++ b/drivers/gpu/drm/i915/display/intel_dp.c
-> > @@ -4816,15 +4816,23 @@ static int intel_dp_connector_atomic_check(struct drm_connector *conn,
-> >  	return intel_modeset_synced_crtcs(state, conn);
-> >  }
-> >  
-> > -static void intel_dp_oob_hotplug_event(struct drm_connector *connector)
-> > +static void intel_dp_oob_hotplug_event(struct drm_connector *connector, bool hpd_state)
-> >  {
-> >  	struct intel_encoder *encoder = intel_attached_encoder(to_intel_connector(connector));
-> >  	struct drm_i915_private *i915 = to_i915(connector->dev);
-> > +	bool need_work = false;
-> >  
-> >  	spin_lock_irq(&i915->irq_lock);
-> > -	i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
-> > +	if (hpd_state != i915->hotplug.oob_hotplug_state) {
-> 
-> hpd_state is speific to the encoder (pin) so similarly to event_bits
-> oob_hotplug_state should be a bitmask as well.
-> 
+Non-Intel USB4 designs should also match this designation so that they
+can be treated the same regardless of the host they're connected to.
 
-That makes sense, thanks for point it out!
+As part of adding the generic USB4 controller code, it was realized that
+`is_thunderbolt` and `pcie_is_thunderbolt_attached` have been overloaded.
 
-Regards,
-Bjorn
+Instead migrate to using removable attribute from device core.
+
+Changes from v3->v4:
+- Add tags from last review where applicable
+- Update titles of different patches
+- Add more comments and commit messages to various patches to address
+  comments raised in review
+- Re-order the patch series, moving more contentious patches later
+- Drop patch marking NHI removable
+- Drop patch changing gmux on it's own, roll into patch to drop
+  `is_thunderbolt`
+- Modify patch to mark integrated USB4 tunnel PCIe root ports as
+  "external" instead of removable.
+- Modify patch to mark discrete USB4 tunnel root ports as "external"
+  instead of removable.
+- Fix bit mask error in discrete USB4 tunnel patch
+- Fix USB IF vendor designation location in pci_ids.h
+
+Changes from v2->v3:
+- Add various tags for patches that haven't changed from v2->v3
+- Add new patches for Mika's suggestions:
+  * Moving Apple Thunderbolt D3 declaration into quirks
+  * Detect PCIe root port used for PCIe tunneling on integrated
+    controllers using `usb4-host-interface`
+  * Detect PCIe root port used for PCIe tunneling on discrete
+    controllers using the USB4 DVSEC specification
+
+Changes from v1->v2:
+- Add Alex's tag to first patch
+- Move lack of command completion into a quirk (Lukas)
+- Drop `is_thunderbolt` attribute and `pci_is_thunderbolt_attached` and
+  use device core removable attribute instead
+- Adjust all consumers of old attribute to use removable
+
+Note: this spans USB/DRM/platform-x86/PCI trees.
+As a majority of the changes are in PCI, it should probably come through
+that tree if possible.
+
+Mario Limonciello (10):
+  PCI: Add USB4 class definition
+  PCI: Move `is_thunderbolt` check for lack of command completed to a
+    quirk
+  PCI: Detect root port of internal USB4 controllers
+  PCI: Detect PCIe root ports for discrete USB4 controllers
+  PCI: Move check for old Apple Thunderbolt controllers into a quirk
+  PCI: Drop the `is_thunderbolt` attribute from PCI core
+  drm/amd: drop the use of `pci_is_thunderbolt_attached`
+  drm/nouveau: drop the use of `pci_is_thunderbolt_attached`
+  drm/radeon: drop the use of `pci_is_thunderbolt_attached`
+  PCI: drop `pci_is_thunderbolt_attached`
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c |  2 +-
+ drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c  |  2 +-
+ drivers/gpu/drm/nouveau/nouveau_vga.c   |  4 +-
+ drivers/gpu/drm/radeon/radeon_device.c  |  4 +-
+ drivers/gpu/drm/radeon/radeon_kms.c     |  2 +-
+ drivers/pci/hotplug/pciehp_hpc.c        |  6 +-
+ drivers/pci/pci-acpi.c                  | 15 ++++-
+ drivers/pci/pci.c                       | 17 +++--
+ drivers/pci/probe.c                     | 52 ++++++++++++++-
+ drivers/pci/quirks.c                    | 84 +++++++++++++++++++++++++
+ drivers/platform/x86/apple-gmux.c       |  2 +-
+ drivers/thunderbolt/nhi.h               |  2 -
+ include/linux/pci.h                     | 25 +-------
+ include/linux/pci_ids.h                 |  3 +
+ 14 files changed, 173 insertions(+), 47 deletions(-)
+
+-- 
+2.34.1
+
