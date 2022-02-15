@@ -2,124 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83964B79E3
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 22:50:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E204B7AB6
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 23:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244255AbiBOVB0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 16:01:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59980 "EHLO
+        id S243497AbiBOWuD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 17:50:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235440AbiBOVBY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 16:01:24 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFC927FE3;
-        Tue, 15 Feb 2022 13:01:14 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id c4so282622pfl.7;
-        Tue, 15 Feb 2022 13:01:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wTa2P1MgBvk9m62qPWIOit490TSiIyPTgJSzWGel9bY=;
-        b=Rs1oCdwMxQfYIGJWKXdRuZnB1Ma80VhEoTYeNZtsDwRds0jVEX5HUNouyWNpmnPRKb
-         HrTm06k3tzmIkSplIDIRp684mUUaOheiW/2QtnudPz20P9C8zBxZYOByhkQ4IovjwnNm
-         gHmN6sHkkNbAviSAEYQRkXI65xNnpBRvYb9v2CvjUk5LzL6CqNDk13QeIt9g9sdrQMO/
-         B/bhfV5Cd2A4UTggseJf4bvZj70EpYruSXaUY9s1t+/VjpfyHxIpuR9qWDQvNJXHl2NT
-         wKbWwhiOGuuRMHGLMGPAETmWCZpAijdKjM52I71SuZ9GXDQYgLSEykguUq2mYOQQClOn
-         tfng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wTa2P1MgBvk9m62qPWIOit490TSiIyPTgJSzWGel9bY=;
-        b=gttvPXs0JJzkW2KEzGutEgF+BslUPfMQ794H4Q+zItntEQ5UYM3uEyryDtJWItXLWz
-         U4tJrhiosY66N2NN8RNT3xcPWbTpIkB++gwCMXQqs2kkIJ1bYWAqA2qksmN3SFu/FevE
-         8DJH5RB8BsIq50M5KdTyOcdOsXflEKn/8rUbUrrlR3O3zs7+9KUzj2IHMG5lpZ460epa
-         avIBEm4XepWqL5eOLuIIJpr0eobfq5OgdfkA2cNf+1ORZolTkduW9keJGDFAo+AgSQNi
-         L84RlZHie2adCSQx1u8D/lQUws9IFMCtDU23+jsSOkYpXniGustZzDMMfkpUnG9Nm2oP
-         ucYA==
-X-Gm-Message-State: AOAM5327KHvc+TjiEVXGHNTbezky5tkculQHv+y9MLAhHBpxq6YPwTok
-        3g6z4Ia3BIInsauGWQ3x7ynOX1SRwYQ=
-X-Google-Smtp-Source: ABdhPJxyQSAmCDE8WPMyCfUAI8JQM4Z7dyqZXvdtO7dYQTgEBuIQYkUh24QMtAyo8fvuDu2mO6aCAw==
-X-Received: by 2002:a63:234d:: with SMTP id u13mr628141pgm.128.1644958873451;
-        Tue, 15 Feb 2022 13:01:13 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id w12sm3306242pgl.64.2022.02.15.13.01.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 13:01:12 -0800 (PST)
-Subject: Re: [PATCH v3 4/8] ARM: dts: bcm283x: fix ethernet node name
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Scott Branden <sbranden@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     kernel@pengutronix.de, bcm-kernel-feedback-list@broadcom.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20220215080937.2263111-1-o.rempel@pengutronix.de>
- <20220215080937.2263111-4-o.rempel@pengutronix.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <f5ea3375-0306-e37f-5847-e1472164d7b7@gmail.com>
-Date:   Tue, 15 Feb 2022 13:01:06 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20220215080937.2263111-4-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S236941AbiBOWuC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 17:50:02 -0500
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26855D5F4D
+        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 14:49:52 -0800 (PST)
+Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id BFE3042165;
+        Tue, 15 Feb 2022 22:49:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1644965392; bh=qNVtGEGsNSUZgmZS0YARhqrD6TkH8GNPHnxVaBqLtK4=;
+        h=Date:From:Subject:To:Cc:From;
+        b=FgcBZ/aOaHBBqNR+hcpdOsZxg96+pWP6Yuy9AaFFcuCTFW0Wl27iVYFvG0CxnP0xq
+         JQhjQr1MlaO9JPnRHKt1bbFSB0wiOzFy8xWXCNrhJSEf+n/w8nGXIkkR1OjuyufClR
+         WWRRjXA2jnjN+sRv+JX3Z9uGegr+koXc5hpJZ52aEX38lMkcrYyMQ5fYmOuTV1rTu6
+         yZeCjgj0FnnAR+8slfQc1Krr9Kl1eVRFLx8k4cByVqWRu5eXg6n871iiObUN3KCAqY
+         aCfhxAJICWX2k6/4nWq2gVIbIVjsG3lS5PihXXH8jsGxBREcxO73QIwkj8fqQjGVP5
+         RSPxQ1xtxIrTQ==
+Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 22AF0A0062;
+        Tue, 15 Feb 2022 22:49:48 +0000 (UTC)
+Received: by te-lab16-v2 (sSMTP sendmail emulation); Tue, 15 Feb 2022 14:49:48 -0800
+Date:   Tue, 15 Feb 2022 14:49:48 -0800
+Message-Id: <9f15580ad5810b1e5f31c241b35ebedfbfc30a3f.1644964864.git.Thinh.Nguyen@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH] usb: dwc3: drd: Don't check against CONFIG_OF
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2/15/22 12:09 AM, Oleksij Rempel wrote:
-> It should be "ethernet@x" instead of "usbether@x"
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+The CONFIG_OF maybe set, but it may not be applicable to a device. In
+such case, checking against that can cause the device fail to
+initialize. Check against the device node (device->of_node) instead.
 
-This looks like, a quick grep on the u-boot source code seems to suggest
-that only one file is assuming that 'usbether@1' is to be used as a node
-name and the error message does not even match the code it is patching:
+Fixes: a102f07e4edf ("usb: dwc3: drd: Add support for usb-conn-gpio based usb-role-switch")
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+Note: This patch should go on Greg's "usb-testing" branch as the commit it
+fixes is not in mainline yet.
 
-board/liebherr/xea/xea.c:
-  #ifdef CONFIG_OF_BOARD_SETUP
-  static int fdt_fixup_l2switch(void *blob)
-  {
-          u8 ethaddr[6];
-          int ret;
+ drivers/usb/dwc3/drd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-          if (eth_env_get_enetaddr("ethaddr", ethaddr)) {
-                  ret = fdt_find_and_setprop(blob,
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index 25f322e62d3f..b60b5f7b6dff 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -560,7 +560,7 @@ static int dwc3_setup_role_switch(struct dwc3 *dwc)
+ 	if (IS_ERR(dwc->role_sw))
+ 		return PTR_ERR(dwc->role_sw);
+ 
+-	if (IS_ENABLED(CONFIG_OF)) {
++	if (dwc->dev->of_node) {
+ 		/* populate connector entry */
+ 		int ret = devm_of_platform_populate(dwc->dev);
+ 
 
-"/ahb@80080000/switch@800f0000",
-                                             "local-mac-address",
-ethaddr, 6, 1);
-                  if (ret < 0)
-                          printf("%s: can't find usbether@1 node: %d\n",
-                                 __func__, ret);
-          }
-
-          return 0;
-  }
-
-I will wait for the other maintainers on the other patches to provide
-some feedback, but if all is well, will apply this one soon.
+base-commit: 9902951f536c00b7f20c26fd98baa5432bb3c731
 -- 
-Florian
+2.28.0
+
