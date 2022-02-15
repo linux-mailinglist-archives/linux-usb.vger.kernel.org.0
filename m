@@ -2,136 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B6F4B72A4
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 17:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFD94B70D5
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 17:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240136AbiBOPp7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 10:45:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32840 "EHLO
+        id S241110AbiBOPqG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 10:46:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240972AbiBOPpd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 10:45:33 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54A148E7B
-        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 07:42:17 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id k3-20020a1ca103000000b0037bdea84f9cso1670250wme.1
-        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 07:42:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Gtjf9sYNQ8tWBLlDu3878tO9bOueSPSIdgfErkYWlBY=;
-        b=DfOm8aL3XIsw72i/aZu6TaMC/vPWGMQcXFr7OkI4Sf4eJrfk085WYNEhE+YixC1q9B
-         URdh8F77SUPEgJZQr5QXaHqX6CdKz9yrjFxWzIH9q9JALAqMZjdtzp+dEb7tENQ3uRxk
-         b5kqYhOXOH+exRGXHZDAmKVw7O4YZFqXS1BLFZJYFX2I522dxdj6NmQEpOt4DD5vOHbV
-         s9hW+Om+CoGgk8pR5NXkxcrG1j9UEir00MQhC9r1fQsVR1EBoJcI4eirTOn19do2+TIf
-         Lx2dj12+PPeEMK9mjKSkkEACHehbDAl6CMbg0vXb+oLop+OXpJ9jkc7JqBtqUT33J+wP
-         zpRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Gtjf9sYNQ8tWBLlDu3878tO9bOueSPSIdgfErkYWlBY=;
-        b=CJByL5NhcObIEnonz6Gl89kcZ81RdYofEdcZhfvGNspalHY3ulFc85CmyuGY98I6V2
-         c9qXf9uXSfePXvx38xCDeocjAOfw6E3J9z/wptKhkpks8TfT44Q9GVCD/9aOs2XI+TEt
-         YkETq6DH6odYYCxY/Pp8K3i7b44rdyIb/GZxUlzs4sCPYTjaIugBz3a5TH4MtMlhrf6N
-         cw65DRhHXdiAHOeYhGUR3unDBu1/ZzUDgZvZ8WrKJ3nUPREmMw3pakw/BdAD1o3JJEdu
-         kabCbK3sq5Iy2Tnxt7QOB8L2v8uX6X+DGaGvnbrovRLoNIJPTyl3f9x4qmPgimqe6mEw
-         zqow==
-X-Gm-Message-State: AOAM530TzXiWqXm6YL7ecof+FoRiy1jo5x6auOJQw/v7XRkD3dve0Qxl
-        se5FM4kMEnXxOJT2U3601l1zvw==
-X-Google-Smtp-Source: ABdhPJwnCjLd1r+f0841f6Uaydm3Kuy4F+zJ0sUGx8wUMnwu4nP1nVBSXBIog2dMKdF/OUO+qbc42A==
-X-Received: by 2002:a05:600c:2301:b0:37b:de9e:226d with SMTP id 1-20020a05600c230100b0037bde9e226dmr3567367wmo.78.1644939736406;
-        Tue, 15 Feb 2022 07:42:16 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id g8sm19421269wrd.9.2022.02.15.07.42.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 07:42:16 -0800 (PST)
-Date:   Tue, 15 Feb 2022 15:42:13 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: Re: [PATCH v4 0/7] Provide and use generic_handle_irq_safe() where
- appropriate.
-Message-ID: <YgvJ1fCUYmaV0Mbx@google.com>
-References: <20220211181500.1856198-1-bigeasy@linutronix.de>
- <Ygu6UewoPbYC9yPa@google.com>
- <Ygu9xtrMxxq36FRH@linutronix.de>
- <YgvD1HpN2oyalDmj@google.com>
- <YgvH4ROUQVgusBdA@linutronix.de>
+        with ESMTP id S241141AbiBOPpz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 10:45:55 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0984CEA1E;
+        Tue, 15 Feb 2022 07:42:51 -0800 (PST)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21FBXjgK004249;
+        Tue, 15 Feb 2022 16:42:47 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=1NItCu9SWalObc1QZs2qiIgpnRXaojBJO4YO8ejOjmI=;
+ b=L/4Yqbzg9bqm2rYdZJhrMvEDpSO4BWfHIpp3kxOHSFnzFubcPJhOtpOex5wIP8Zany8S
+ wcanTfGQOYdFT9w/B2DnG1yW+5PheFRifbEIuyLEIvhxB16lIgsFIs/XtDOaSxc+VL/h
+ 7+EWDesYKSYnCRxRhR062ixSLLek4gPeSJth5ue06Oq+yIwaIlj7zXPS9SsSqfKaPjFE
+ soccpTzGukTC+W1PJzIP84iR5PQQQRIm4ZioR6s6Q2qor1A1ZYQX48MpWlT3QldOsEEz
+ zsKpOOZB6ndnHFDaYgMK7lzwogi1YC/PmMj+h41wyNX2RxAftSX2vxm5+X+nbC4UF29r XQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e87me31fj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 16:42:47 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5312D10002A;
+        Tue, 15 Feb 2022 16:42:47 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 46AA222D161;
+        Tue, 15 Feb 2022 16:42:47 +0100 (CET)
+Received: from [10.48.1.238] (10.75.127.51) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 15 Feb
+ 2022 16:42:46 +0100
+Subject: Re: [PATCH v2] usb: dwc2: drd: fix soft connect when gadget is
+ unconfigured
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <hminas@synopsys.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>
+References: <1644923059-3619-1-git-send-email-fabrice.gasnier@foss.st.com>
+ <Yguy5OMW477VmMuv@kroah.com>
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Message-ID: <dab7c8fe-0cf5-66a6-bf84-25fe84b4a221@foss.st.com>
+Date:   Tue, 15 Feb 2022 16:42:46 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YgvH4ROUQVgusBdA@linutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yguy5OMW477VmMuv@kroah.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 15 Feb 2022, Sebastian Andrzej Siewior wrote:
-
-> On 2022-02-15 15:16:36 [+0000], Lee Jones wrote:
-> > On Tue, 15 Feb 2022, Sebastian Andrzej Siewior wrote:
-> > 
-> > > On 2022-02-15 14:36:01 [+0000], Lee Jones wrote:
-> > > > Do we really need to coordinate this series cross-subsystem?
-> > > 
-> > > I would suggest to merge it via irq subsystem but I leave the logistics
-> > > to tglx.
-> > 
-> > Could you answer by other questions too please?
+On 2/15/22 3:04 PM, Greg KH wrote:
+> On Tue, Feb 15, 2022 at 12:04:19PM +0100, Fabrice Gasnier wrote:
+>> When the gadget driver hasn't been (yet) configured, and the cable is
+>> connected to a HOST, the SFTDISCON gets cleared unconditionally, so the
+>> HOST tries to enumerate it.
+>> At the host side, this can result in a stuck USB port or worse. When
+>> getting lucky, some dmesg can be observed at the host side:
+>>  new high-speed USB device number ...
+>>  device descriptor read/64, error -110
+>>
+>> Fix it in drd, by checking the enabled flag before calling
+>> dwc2_hsotg_core_connect(). It will be called later, once configured,
+>> by the normal flow:
+>> - udc_bind_to_driver
+>>  - usb_gadget_connect
+>>    - dwc2_hsotg_pullup
+>>      - dwc2_hsotg_core_connect
+>>
+>> Fixes: 17f934024e84 ("usb: dwc2: override PHY input signals with usb role switch support")
+>> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+>> ---
+>> Changes in v2:
+>> - Fix build error: 'struct dwc2_hsotg' has no member named 'enabled';
+>>   as reported by the kernel test robot.
+>>   https://lore.kernel.org/all/202202112236.AwoOTtHO-lkp@intel.com/
+>>   Add dwc2_is_device_enabled() macro to handle this.
+>> ---
+>>  drivers/usb/dwc2/core.h | 2 ++
+>>  drivers/usb/dwc2/drd.c  | 6 ++++--
+>>  2 files changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+>> index 8a63da3..8a7751b 100644
+>> --- a/drivers/usb/dwc2/core.h
+>> +++ b/drivers/usb/dwc2/core.h
+>> @@ -1418,6 +1418,7 @@ void dwc2_hsotg_core_connect(struct dwc2_hsotg *hsotg);
+>>  void dwc2_hsotg_disconnect(struct dwc2_hsotg *dwc2);
+>>  int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg, int testmode);
+>>  #define dwc2_is_device_connected(hsotg) (hsotg->connected)
+>> +#define dwc2_is_device_enabled(hsotg) ((hsotg)->enabled)
 > 
-> I don't think that I can answer them. I said I leave the logistics to
-> tglx.
+> Why the extra ()?  dwc2_is_device_connected does not have it, so this
+> one probably should not either, right?
+
+Hi Greg,
+
+I was wondering the same, checkpatch complains without it:
+
+CHECK: Macro argument 'hsotg' may be better as '(hsotg)' to avoid
+precedence issues
+
+I can remove the extra () in a v3 if you wish ?
+
+Thanks for reviewing,
+Best Regards,
+Fabrice
+
 > 
-> This can go via one merge via irq. This can also go differently i.e.
-> feature branch on top of 5.17-rc1 (with 1/7) which is merge into each
-> subsystem and then the "feature" on top.
-
-Apologies for the confusion.
-
-I'm not asking you about merge strategies.
-
-We can handle that without issue.
-
-> Either way it remains bisect-able since each driver is changed
-> individually. There is no need to merge them in one go but since it is
-> that small it probably makes sense. But I don't do the logistics here.
-
-Okay, this is what I was asking.
-
-So there aren't any hard dependencies between the driver changes?
-
-Only the drivers are dependent on the API.
-
-So, if we choose to do so, we can merge the API and then subsequently
-add the users one by one into their respective subsystem, in any
-order.  This would save on creating an immutable topic branch which we
-all pull from.
-
-What is your preference Thomas?
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> thanks,
+> 
+> greg k-h
+> 
