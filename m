@@ -2,51 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56AF4B7796
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 21:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4194B7769
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 21:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242435AbiBORTh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 12:19:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49166 "EHLO
+        id S237145AbiBORzT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 12:55:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240580AbiBORTg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 12:19:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E145D1AF33;
-        Tue, 15 Feb 2022 09:19:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DBCCB81BD1;
-        Tue, 15 Feb 2022 17:19:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD143C340EB;
-        Tue, 15 Feb 2022 17:19:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644945563;
-        bh=+n6mRRBEYWRJAd6xR7iQWKIB+Wl/GVSfhc9EU4PluQ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JjF7ZVnX9OMxBAIgrWHui3/2VLDtgcJF5du3s1ed48kTCTZdfqvCcT4ai8AGVVKea
-         kKqvO1K4VR8WN3RT6H59DMHGQ/HwxhNNN2/UKjajgLMYelGR9kHKle+VuzQKVyWpiM
-         A0UqbTJ3lL5BqdxZT36RoxRrPEpVD6RmJyU3PfiY=
-Date:   Tue, 15 Feb 2022 18:19:19 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     hminas@synopsys.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        amelie.delaunay@foss.st.com, alexandre.torgue@foss.st.com
-Subject: Re: [PATCH v2] usb: dwc2: drd: fix soft connect when gadget is
- unconfigured
-Message-ID: <Ygvgl1SXevlyzz8t@kroah.com>
-References: <1644923059-3619-1-git-send-email-fabrice.gasnier@foss.st.com>
- <Yguy5OMW477VmMuv@kroah.com>
- <dab7c8fe-0cf5-66a6-bf84-25fe84b4a221@foss.st.com>
+        with ESMTP id S233741AbiBORzT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 12:55:19 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EB3FEB34
+        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 09:55:08 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id z7so15420080ilb.6
+        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 09:55:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=11TTvYS0k6LfV7xNa4WvisJePciPnHEL/Fmk4Jio8z8=;
+        b=YVwlmBEkCqlHds72W2w+Ed9UWX2W0ynjWOpTRpsb9s5aVJwsy2f6rrbyAKW+J1Kp1C
+         KeBT2Io2ki5FzrhBGgcdXM/NKYi+KkaPKbJ+mfqBh4A5ygDXUhxw5OAi80283QibccE1
+         XhL2vQCq4WOt4NhC0nHObNEEhCpKVGMdUybN8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=11TTvYS0k6LfV7xNa4WvisJePciPnHEL/Fmk4Jio8z8=;
+        b=mtAxXMcdgMsZgG/jwuoQ5P4Loq9CMhNGELWmBRSuEljIsGsbZ55GCIMpAWqdVb+iIJ
+         nXW93eUPFkAKxAV+zFI+f7er38ZxAO7d91+ZDjMN48qC0IVJOZgG07mHVxNE3YOmam1g
+         H6DvM/sVm7WCfPuLrdrMP/Eiy/1ltEHIF3n+C1/1L6bNj9Pxv6O4g+FObC5YSw4gRh8i
+         nv57gg/aXsNHJsEQ1MLYon0Cn02hOtZaGv2uY0jMAQMx5if51iUoq6GWciT94e3HynQw
+         8lSaV3g2uHviA+O1151UmPV/RKMS8GB9T3bFcAGZ51BHSAHvAD7SRpeyn2YXJi6uFvTw
+         8rxg==
+X-Gm-Message-State: AOAM531qBZOQJ2L2TupFn3DYK1Nkkxmfhu9f+YdkWi6iHTbFzxXNhGDa
+        VdZQSJtS6aiCwO4wCF6VXcNwmN09ppni+A==
+X-Google-Smtp-Source: ABdhPJwcuFBeXHrguZxtvTwasWl5EJmZDkGHWQx6XBcgz0rRQCJQdh9hViLjdy+csLflAx9pTpl0eA==
+X-Received: by 2002:a05:6e02:198d:: with SMTP id g13mr147032ilf.274.1644947707481;
+        Tue, 15 Feb 2022 09:55:07 -0800 (PST)
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com. [209.85.166.174])
+        by smtp.gmail.com with ESMTPSA id i17sm19382759ilq.19.2022.02.15.09.55.06
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 09:55:06 -0800 (PST)
+Received: by mail-il1-f174.google.com with SMTP id z7so15420014ilb.6
+        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 09:55:06 -0800 (PST)
+X-Received: by 2002:a05:6e02:1bed:: with SMTP id y13mr141154ilv.27.1644947705606;
+ Tue, 15 Feb 2022 09:55:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dab7c8fe-0cf5-66a6-bf84-25fe84b4a221@foss.st.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220119204345.3769662-1-mka@chromium.org> <20220119124327.v20.5.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
+ <YgJMkFAxjazkUDZd@kroah.com> <YgLCswtX/0THkzXT@google.com>
+In-Reply-To: <YgLCswtX/0THkzXT@google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 15 Feb 2022 09:54:54 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WMP8M5HTRNv9_scvrytbpE0iBdUack=XaHoypGNLJeVA@mail.gmail.com>
+Message-ID: <CAD=FV=WMP8M5HTRNv9_scvrytbpE0iBdUack=XaHoypGNLJeVA@mail.gmail.com>
+Subject: Re: [PATCH v20 5/5] arm64: dts: qcom: sc7180-trogdor: Add nodes for
+ onboard USB hub
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,65 +91,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 04:42:46PM +0100, Fabrice Gasnier wrote:
-> On 2/15/22 3:04 PM, Greg KH wrote:
-> > On Tue, Feb 15, 2022 at 12:04:19PM +0100, Fabrice Gasnier wrote:
-> >> When the gadget driver hasn't been (yet) configured, and the cable is
-> >> connected to a HOST, the SFTDISCON gets cleared unconditionally, so the
-> >> HOST tries to enumerate it.
-> >> At the host side, this can result in a stuck USB port or worse. When
-> >> getting lucky, some dmesg can be observed at the host side:
-> >>  new high-speed USB device number ...
-> >>  device descriptor read/64, error -110
-> >>
-> >> Fix it in drd, by checking the enabled flag before calling
-> >> dwc2_hsotg_core_connect(). It will be called later, once configured,
-> >> by the normal flow:
-> >> - udc_bind_to_driver
-> >>  - usb_gadget_connect
-> >>    - dwc2_hsotg_pullup
-> >>      - dwc2_hsotg_core_connect
-> >>
-> >> Fixes: 17f934024e84 ("usb: dwc2: override PHY input signals with usb role switch support")
-> >> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> >> ---
-> >> Changes in v2:
-> >> - Fix build error: 'struct dwc2_hsotg' has no member named 'enabled';
-> >>   as reported by the kernel test robot.
-> >>   https://lore.kernel.org/all/202202112236.AwoOTtHO-lkp@intel.com/
-> >>   Add dwc2_is_device_enabled() macro to handle this.
-> >> ---
-> >>  drivers/usb/dwc2/core.h | 2 ++
-> >>  drivers/usb/dwc2/drd.c  | 6 ++++--
-> >>  2 files changed, 6 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-> >> index 8a63da3..8a7751b 100644
-> >> --- a/drivers/usb/dwc2/core.h
-> >> +++ b/drivers/usb/dwc2/core.h
-> >> @@ -1418,6 +1418,7 @@ void dwc2_hsotg_core_connect(struct dwc2_hsotg *hsotg);
-> >>  void dwc2_hsotg_disconnect(struct dwc2_hsotg *dwc2);
-> >>  int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg, int testmode);
-> >>  #define dwc2_is_device_connected(hsotg) (hsotg->connected)
-> >> +#define dwc2_is_device_enabled(hsotg) ((hsotg)->enabled)
-> > 
-> > Why the extra ()?  dwc2_is_device_connected does not have it, so this
-> > one probably should not either, right?
-> 
-> Hi Greg,
-> 
-> I was wondering the same, checkpatch complains without it:
-> 
-> CHECK: Macro argument 'hsotg' may be better as '(hsotg)' to avoid
-> precedence issues
+Hi,
 
-checkpatch is wrong here, this is a structure pointer, not anything you
-could ever use that could be evaluated any other way.
+On Tue, Feb 8, 2022 at 11:21 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+>
+> On Tue, Feb 08, 2022 at 11:57:20AM +0100, Greg Kroah-Hartman wrote:
+> > On Wed, Jan 19, 2022 at 12:43:45PM -0800, Matthias Kaehlcke wrote:
+> > > Add nodes for the onboard USB hub on trogdor devices. Remove the
+> > > 'always-on' property from the hub regulator, since the regulator
+> > > is now managed by the onboard_usb_hub driver.
+> > >
+> > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > > Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> > > Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> > > ---
+> >
+> > No DT maintainer approval yet?  :(
+>
+> Bjorn usually just picks DT changes into the QCOM tree when they are
+> ready, so I wouldn't interpret anything into the lack of an explicit
+> Ack.
 
-> I can remove the extra () in a v3 if you wish ?
+Right, so the expectation is that this patch wouldn't land through the
+USB tree but would instead land through the Qualcomm tree, probably a
+revision after the code lands in the USB tree to avoid dependency
+problems.
 
-Please do.
-
-thanks,
-
-greg k-h
+-Doug
