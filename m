@@ -2,46 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED02D4B6E51
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 15:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3E34B6E5B
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 15:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238509AbiBOOHQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 09:07:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33758 "EHLO
+        id S238536AbiBOOIv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 09:08:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238508AbiBOOHP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 09:07:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C916F6A39D;
-        Tue, 15 Feb 2022 06:07:05 -0800 (PST)
+        with ESMTP id S238534AbiBOOIu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 09:08:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D720E6C968;
+        Tue, 15 Feb 2022 06:08:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63D986175E;
-        Tue, 15 Feb 2022 14:07:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65811C340ED;
-        Tue, 15 Feb 2022 14:07:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E211B819E4;
+        Tue, 15 Feb 2022 14:08:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4E9DC340EB;
+        Tue, 15 Feb 2022 14:08:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644934024;
-        bh=npFLVpEh73ePajA6yVLxydXgeScMGNmeCsTfKW2ZvBw=;
+        s=korg; t=1644934117;
+        bh=2a2WgalEeiELEcZIgFaEbv0GOqcKw+xpRsYr5cJFSDs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J6f7RqcCqaIWC2zar2P4aZoHHUpVYwvbbNCkvhUI+Bk2qaObnXF1hnRPqH/Kb3zaM
-         2/+FUF26wif66N77ZP6bDQSU511RTeSQYm5P/xN+E90Rd/5uNwWs7xi3BT/CN5AKi3
-         FVr+s7ByYLfSG0sh+f/1TeGis2dKA341gf4nnyN8=
-Date:   Tue, 15 Feb 2022 15:07:02 +0100
+        b=HztFqtJLPHvCezQO1GD5iRpPCr7Ta7PLfWgDt7fFYSlQVJm2xV+hZECStnXYjL8xN
+         s91ZHZBMU07zNpIJo/kd3ArBWpd3SAxSV7/sPwKNfN4Cb5e+K3Qggn6fsEvSedXqw7
+         VTg2EA2tExjDlNTci909HZyTiDhHpWffXBfBsZHM=
+Date:   Tue, 15 Feb 2022 15:08:34 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     3090101217@zju.edu.cn
-Cc:     balbi@kernel.org, jleng@ambarella.com,
-        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: f_uvc: fix superspeedplus transfer
-Message-ID: <Yguzht2JJtF+8N76@kroah.com>
-References: <Ygow+EB1P84VflBb@kroah.com>
- <20220215021647.4316-1-3090101217@zju.edu.cn>
+Cc:     balbi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, pavel.hofman@ivitera.com,
+        ruslan.bilovol@gmail.com, Jing Leng <jleng@ambarella.com>
+Subject: Re: [PATCH v3] usb: gadget: f_uac1: add different speed transfers
+ support
+Message-ID: <Yguz4hOBYTXRL35t@kroah.com>
+References: <YgprpGbtBpojsCmQ@kroah.com>
+ <20220215030848.5709-1-3090101217@zju.edu.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220215021647.4316-1-3090101217@zju.edu.cn>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220215030848.5709-1-3090101217@zju.edu.cn>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,44 +54,62 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 10:16:47AM +0800, 3090101217@zju.edu.cn wrote:
+On Tue, Feb 15, 2022 at 11:08:48AM +0800, 3090101217@zju.edu.cn wrote:
 > From: Jing Leng <jleng@ambarella.com>
 > 
-> UVC driver doesn't set ssp_descriptors in struct usb_function,
-> If UVC uses superspeedplus UDC (e.g. cdnsp), when
-> config_ep_by_speed_and_alt is called, the g->speed is
-> USB_SPEED_SUPER_PLUS, and f->ssp_descriptors is NULL,
-> So kernel will access NULL pointer of speed_desc.
+> On page 61 of the UAC1 specification (
+> https://www.usb.org/sites/default/files/audio10.pdf),
+> bInterval is interval for polling endpoint for data transfers
+> expressed in milliseconds, must be set to 1.
 > 
-> Call trace:
->  config_ep_by_speed_and_alt+0x3c/0x2a0 [libcomposite]
->  uvc_function_set_alt+0xd4/0x2e8 [usb_f_uvc]
->  set_config.constprop.0+0x154/0x3a0 [libcomposite]
->  composite_setup+0x314/0xb44 [libcomposite]
->  configfs_composite_setup+0x84/0xb0 [libcomposite]
->  cdnsp_ep0_std_request+0x25c/0x470 [cdns3]
->  cdnsp_setup_analyze+0x94/0x25c [cdns3]
->  cdnsp_handle_event+0xe8/0x23c [cdns3]
->  cdnsp_thread_irq_handler+0x58/0xe8 [cdns3]
->  irq_thread_fn+0x2c/0xa0
->  irq_thread+0x164/0x280
->  kthread+0x128/0x134
->  ret_from_fork+0x10/0x40
-
-What does "call trace" here mean?  Is this an error?  Something else?
-
+> On page 47 of the USB2.0 specification (
+> https://www.usb.org/sites/default/files/usb_20_20211008.zip),
+> An isochronous endpoint must specify its required bus access period.
+> Full-/high-speed endpoints must specify a desired period as
+> (2^(bInterval-1)) x F, where bInterval is in the range one to
+> (and including) 16 and F is 125 μs for high-speed and 1ms for full-speed.
+> 
+> On page 362 of the USB3.2 specification (
+> https://usb.org/sites/default/files/usb_32_20210125.zip),
+> The 'SuperSpeed Endpoint Companion Descriptor' shall only be
+> returned by Enhanced SuperSpeed devices that are operating at Gen X speed.
+> Each endpoint described in an interface is followed by a 'SuperSpeed
+> Endpoint Companion Descriptor'.
+> 
+> Currently uac1 driver doesn't set bInterval to 1 in full speed transfer
+> and doesn't have a 'SuperSpeed Endpoint Companion Descriptor' behind
+> 'Standard Endpoint Descriptor'.
+> 
+> So we should set bInterval to 1 in full speed transfer and set it to 4
+> in other speed transfers, and we should add 'SuperSpeed Endpoint Companion
+> Descriptor' behind 'Standard Endpoint Descriptor' for superspeed transfer.
 > 
 > Signed-off-by: Jing Leng <jleng@ambarella.com>
 > ---
->  drivers/usb/gadget/function/f_uvc.c | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
+>  drivers/usb/gadget/function/f_uac1.c | 276 ++++++++++++++++++++++-----
+>  1 file changed, 225 insertions(+), 51 deletions(-)
 
-You did not read the information that my bot told you to read, for how
-to properly version your patches :(
+Where is the patch version information?
 
-Please go back and do so when you resend all of them.
+> +static struct usb_ss_ep_comp_descriptor as_out_ep_desc_comp = {
+> +	.bLength		= sizeof(as_out_ep_desc_comp),
+> +	.bDescriptorType	= USB_DT_SS_ENDPOINT_COMP,
+> +	.bMaxBurst		= 0,
+> +	.bmAttributes		= 0,
 
-Also this is not a patch series?  Why not?
+Why are you setting values to 0 when you do not have to as that is the
+default value?
+
+> @@ -891,7 +1098,6 @@ static int f_audio_get_alt(struct usb_function *f, unsigned intf)
+>  	return -EINVAL;
+>  }
+>  
+> -
+>  static void f_audio_disable(struct usb_function *f)
+>  {
+>  	struct f_uac1 *uac1 = func_to_uac1(f);
+
+The above change is not needed here.
 
 thanks,
 
