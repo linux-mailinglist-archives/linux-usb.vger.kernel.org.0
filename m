@@ -2,135 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD384B6A34
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 12:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7F14B6A5B
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 12:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236844AbiBOLGD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 06:06:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57048 "EHLO
+        id S236956AbiBOLKb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 06:10:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiBOLGC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 06:06:02 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6585B1074F0;
-        Tue, 15 Feb 2022 03:05:52 -0800 (PST)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21F9Uwof001961;
-        Tue, 15 Feb 2022 12:05:46 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=BzGYCWiuAmnqSDxwbjn+OcaBHSUNhwIWqEfHFMygnKs=;
- b=kgsIoG3L/Uw+MAzaT9hI1A//b5+RnXoRzBJpfo58PjKcBZYXX7loGSVo3Puldfs/H6Eb
- 2NpMsoI7RQUgnCG3dQrkkQH2CcYbOE/x1voY/qWJoOzbMgjey1VYQQDbGFeSKCLbnrJq
- 64v+7/swPPd0gOo0CQUnzxrbLyqCbDZNToYDWKfLE6y6iZ0bTwgFoBJWS2MVUranJbnc
- bgJlbC4KdH+mHSVe0TYBYlCJ1vkibMkeTk+iYZjCP4TMTMEn44C/mKsv+aZYA/h/XbGy
- OeEkf8eOuQiqAaXloBBesxBhMuAnd7WU82YwlryVZCn5Z8elOKfg9sMUQtffojF8lQD5 ww== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e7pj7pbrj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 12:05:46 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0BBB610002A;
-        Tue, 15 Feb 2022 12:05:45 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 78C3021D3EC;
-        Tue, 15 Feb 2022 12:05:45 +0100 (CET)
-Received: from localhost (10.75.127.46) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 15 Feb 2022 12:05:45
- +0100
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>,
-        <fabrice.gasnier@foss.st.com>
-Subject: [PATCH v2] usb: dwc2: drd: fix soft connect when gadget is unconfigured
-Date:   Tue, 15 Feb 2022 12:04:19 +0100
-Message-ID: <1644923059-3619-1-git-send-email-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S236943AbiBOLKa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 06:10:30 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534E4107D14
+        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 03:10:20 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id a18-20020a923312000000b002b384dccc91so13221256ilf.1
+        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 03:10:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=HlCRe0snkQy/+hDudsrhVi6HrHTIwYgHHKD60hKLOUY=;
+        b=Sb1U4v23npjh1G3n/TJxtS91tIQD6Jm2DAamrX0cSPZt3MPl4VLPiLV1TymdARFC57
+         45pvVxgc/DDcNMEnuw1qGr9byEfBio/9ejuZAZGJ1sjrNp1qaW1jCfjz/AuKsjEGlIW4
+         o+kV1vLhzyb3IZna4H5GOlpxrBTOpnE0FZEg+rtPzII8Ea4NPV4Ufi9lzPRTH93hEuzZ
+         rMpCdhd6eRJ630gDmAjWpeSq4YNL3EZbRv6EfcjeaW7/bwswRNhOQrVcnj5DmYgG+IKz
+         LHscOEtYaGcK6eAB1BTWKofz+nzIsYh7W9ayL+GbT6paCEkDgSsBsauOhRymS5n5uPDw
+         XA3Q==
+X-Gm-Message-State: AOAM533lqbMGb56WE++wznyP8oGdzNkgaxiOJ9MQt80uZynj07j1VfES
+        GpDKOEwxD5UE19GGbx40VJuxPMxDkZVoAkkJx6l5yIwkEeSE
+X-Google-Smtp-Source: ABdhPJxOWYGBpkLr8EdIQagvabFo5COZYg08isyBEHSg2ydDelnsvXsA3AokzVzwpzupWlD1y4GdGMv2i6HQIm+hfcb4cun9KvRG
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1ca8:: with SMTP id x8mr2235559ill.89.1644923419655;
+ Tue, 15 Feb 2022 03:10:19 -0800 (PST)
+Date:   Tue, 15 Feb 2022 03:10:19 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001c844905d80c946c@google.com>
+Subject: [syzbot] general protection fault in __media_entity_remove_link
+From:   syzbot <syzbot+3a40339fb2628236d307@syzkaller.appspotmail.com>
+To:     laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When the gadget driver hasn't been (yet) configured, and the cable is
-connected to a HOST, the SFTDISCON gets cleared unconditionally, so the
-HOST tries to enumerate it.
-At the host side, this can result in a stuck USB port or worse. When
-getting lucky, some dmesg can be observed at the host side:
- new high-speed USB device number ...
- device descriptor read/64, error -110
+Hello,
 
-Fix it in drd, by checking the enabled flag before calling
-dwc2_hsotg_core_connect(). It will be called later, once configured,
-by the normal flow:
-- udc_bind_to_driver
- - usb_gadget_connect
-   - dwc2_hsotg_pullup
-     - dwc2_hsotg_core_connect
+syzbot found the following issue on:
 
-Fixes: 17f934024e84 ("usb: dwc2: override PHY input signals with usb role switch support")
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+HEAD commit:    c3c9cee59282 usb: ehci: add pci device support for Aspeed ..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=12899ef8700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e3639fddee516775
+dashboard link: https://syzkaller.appspot.com/bug?extid=3a40339fb2628236d307
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3a40339fb2628236d307@syzkaller.appspotmail.com
+
+dvb-usb: could not initialize remote control.
+dvb-usb: PCTV 2002e SE successfully initialized and connected.
+usb 4-1: USB disconnect, device number 52
+general protection fault, probably for non-canonical address 0xdffffc0000000003: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
+CPU: 0 PID: 4783 Comm: kworker/0:5 Not tainted 5.17.0-rc2-syzkaller-00044-gc3c9cee59282 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:__media_entity_remove_link+0x53/0xa10 drivers/media/mc/mc-entity.c:590
+Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 14 09 00 00 48 b8 00 00 00 00 00 fc ff df 49 8b 5e 30 48 8d 7b 20 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 e7 08 00 00 4c 8b 7b 20 4c 3b 7c 24 18 0f 84 84
+RSP: 0018:ffffc900018a7448 EFLAGS: 00010207
+RAX: dffffc0000000000 RBX: ffffffffffffffff RCX: ffffc900075fe000
+RDX: 0000000000000003 RSI: ffffffff84110f6b RDI: 000000000000001f
+RBP: ffffffffffffffff R08: 0000000000000001 R09: ffffffff8a7e87af
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff88810fed4300
+R13: ffff88810fed4350 R14: ffff88820fed4330 R15: ffff88820fed4330
+FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000555556290af8 CR3: 000000012ddec000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __media_entity_remove_links+0x86/0x160 drivers/media/mc/mc-entity.c:768
+ __media_device_unregister_entity+0x187/0x300 drivers/media/mc/mc-device.c:597
+ media_device_unregister_entity+0x49/0x70 drivers/media/mc/mc-device.c:689
+ dvb_media_device_free+0x1d5/0x680 drivers/media/dvb-core/dvbdev.c:216
+ dvb_remove_device.part.0+0x9c/0x260 drivers/media/dvb-core/dvbdev.c:558
+ dvb_remove_device drivers/media/dvb-core/dvbdev.c:551 [inline]
+ dvb_unregister_device+0x1b/0x60 drivers/media/dvb-core/dvbdev.c:580
+ dvb_dmxdev_release+0x1c9/0x630 drivers/media/dvb-core/dmxdev.c:1462
+ dvb_usb_adapter_dvb_exit+0x93/0x230 drivers/media/usb/dvb-usb/dvb-usb-dvb.c:224
+ dvb_usb_adapter_exit drivers/media/usb/dvb-usb/dvb-usb-init.c:126 [inline]
+ dvb_usb_exit drivers/media/usb/dvb-usb/dvb-usb-init.c:141 [inline]
+ dvb_usb_device_exit+0x20a/0x510 drivers/media/usb/dvb-usb/dvb-usb-init.c:336
+ usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
+ __device_release_driver+0x5d7/0x700 drivers/base/dd.c:1206
+ device_release_driver_internal drivers/base/dd.c:1237 [inline]
+ device_release_driver+0x26/0x40 drivers/base/dd.c:1260
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:529
+ device_del+0x502/0xd50 drivers/base/core.c:3592
+ usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1419
+ usb_disconnect.cold+0x27a/0x78e drivers/usb/core/hub.c:2228
+ hub_port_connect drivers/usb/core/hub.c:5206 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5506 [inline]
+ port_event drivers/usb/core/hub.c:5664 [inline]
+ hub_event+0x1e39/0x44d0 drivers/usb/core/hub.c:5746
+ process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+ process_scheduled_works kernel/workqueue.c:2370 [inline]
+ worker_thread+0x833/0x1110 kernel/workqueue.c:2456
+ kthread+0x2ef/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__media_entity_remove_link+0x53/0xa10 drivers/media/mc/mc-entity.c:590
+Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 14 09 00 00 48 b8 00 00 00 00 00 fc ff df 49 8b 5e 30 48 8d 7b 20 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 e7 08 00 00 4c 8b 7b 20 4c 3b 7c 24 18 0f 84 84
+RSP: 0018:ffffc900018a7448 EFLAGS: 00010207
+RAX: dffffc0000000000 RBX: ffffffffffffffff RCX: ffffc900075fe000
+RDX: 0000000000000003 RSI: ffffffff84110f6b RDI: 000000000000001f
+RBP: ffffffffffffffff R08: 0000000000000001 R09: ffffffff8a7e87af
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff88810fed4300
+R13: ffff88810fed4350 R14: ffff88820fed4330 R15: ffff88820fed4330
+FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000555556290af8 CR3: 000000012ddec000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	48 89 fa             	mov    %rdi,%rdx
+   3:	48 c1 ea 03          	shr    $0x3,%rdx
+   7:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   b:	0f 85 14 09 00 00    	jne    0x925
+  11:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  18:	fc ff df
+  1b:	49 8b 5e 30          	mov    0x30(%r14),%rbx
+  1f:	48 8d 7b 20          	lea    0x20(%rbx),%rdi
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 e7 08 00 00    	jne    0x91b
+  34:	4c 8b 7b 20          	mov    0x20(%rbx),%r15
+  38:	4c 3b 7c 24 18       	cmp    0x18(%rsp),%r15
+  3d:	0f                   	.byte 0xf
+  3e:	84                   	.byte 0x84
+  3f:	84                   	.byte 0x84
+
+
 ---
-Changes in v2:
-- Fix build error: 'struct dwc2_hsotg' has no member named 'enabled';
-  as reported by the kernel test robot.
-  https://lore.kernel.org/all/202202112236.AwoOTtHO-lkp@intel.com/
-  Add dwc2_is_device_enabled() macro to handle this.
----
- drivers/usb/dwc2/core.h | 2 ++
- drivers/usb/dwc2/drd.c  | 6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 8a63da3..8a7751b 100644
---- a/drivers/usb/dwc2/core.h
-+++ b/drivers/usb/dwc2/core.h
-@@ -1418,6 +1418,7 @@ void dwc2_hsotg_core_connect(struct dwc2_hsotg *hsotg);
- void dwc2_hsotg_disconnect(struct dwc2_hsotg *dwc2);
- int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg, int testmode);
- #define dwc2_is_device_connected(hsotg) (hsotg->connected)
-+#define dwc2_is_device_enabled(hsotg) ((hsotg)->enabled)
- int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg);
- int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wakeup);
- int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg);
-@@ -1454,6 +1455,7 @@ static inline int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg,
- 					   int testmode)
- { return 0; }
- #define dwc2_is_device_connected(hsotg) (0)
-+#define dwc2_is_device_enabled(hsotg) (0)
- static inline int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg)
- { return 0; }
- static inline int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg,
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index 1b39c47..d8d6493 100644
---- a/drivers/usb/dwc2/drd.c
-+++ b/drivers/usb/dwc2/drd.c
-@@ -130,8 +130,10 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
- 		already = dwc2_ovr_avalid(hsotg, true);
- 	} else if (role == USB_ROLE_DEVICE) {
- 		already = dwc2_ovr_bvalid(hsotg, true);
--		/* This clear DCTL.SFTDISCON bit */
--		dwc2_hsotg_core_connect(hsotg);
-+		if (dwc2_is_device_enabled(hsotg)) {
-+			/* This clear DCTL.SFTDISCON bit */
-+			dwc2_hsotg_core_connect(hsotg);
-+		}
- 	} else {
- 		if (dwc2_is_device_mode(hsotg)) {
- 			if (!dwc2_ovr_bvalid(hsotg, false))
--- 
-2.7.4
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
