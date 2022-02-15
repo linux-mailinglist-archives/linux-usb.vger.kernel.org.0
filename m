@@ -2,65 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4089E4B6CB8
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 13:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AFB4B6A27
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 12:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237940AbiBOMvp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 07:51:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53668 "EHLO
+        id S235165AbiBOLC5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 06:02:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237936AbiBOMvp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 07:51:45 -0500
-X-Greylist: delayed 18689 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 04:51:33 PST
-Received: from mail.housing.co.ke (unknown [41.206.50.126])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id CDF2F1AF2E
-        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 04:51:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=housing.co.ke;
-        s=housing; t=1644875646;
-        bh=QAimaxXg10MB2257UWw27B4tog5lNux9WU8xbWADVUg=;
-        h=Subject:To:From:Date:Reply-To;
-        b=shO5XPHtE1zU2FNssc3zfP9nyTHf1nkPsUq4ugp8sSIxbvLiualr8sURVknkTgT1+
-         tYiLxdNYmTOXRUoy9oCXAcIKfKrAjNlMNi7Uv42FMV/1fPz9rP36ydg+xzw8kNRXvj
-         rQiAbINx6ibgtAF0J2DdwNlIBlMYBN4WqnLcCEWEgc64f66FflRXLsTkpctx4pyyGd
-         txy83D8QOxURMcZ5vfmQAKrwfNaBd21qSKerdqx/FM7Y+pFRBRaFrrHt3w+trbx/VL
-         It0ffTijrEUmGc6KND1BbW8idDWrVFvh2M9xwvZ7tksIw3IjIm5qNAD1rJkRStvZ2q
-         l8Rzq8cS4i+JA==
-Received: from [2.56.59.106] (Not Verified[10.96.10.4]) by mail.housing.co.ke with Trustwave SEG (v8,2,4,11170) (using TLS: TLSv1, AES256-SHA)
-        id <B620acf7a0001>; Tue, 15 Feb 2022 00:54:06 +0300
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S233453AbiBOLC5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 06:02:57 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53221074F0;
+        Tue, 15 Feb 2022 03:02:47 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 647241F382;
+        Tue, 15 Feb 2022 11:02:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644922966; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=rPolAolb2PgOG+R2zG2Qjmk5p7rupUy2s7DLLjc/lak=;
+        b=FR0JMPn+H9SSk2tufXAmRIXecTquuuhO45nsTpe8057awYWBPCFcs5HGEFh0gYCF4ATSIo
+        /rU4OOetHZzsuPnFYjTcnhVUicl38CqSn6D24V9mBMZ7RRx1YwD0ccvNBaFJCsleX52DlY
+        /SjLgIoZx38sj2yBhjCMKh9ZMQBgIrk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 25A7313C55;
+        Tue, 15 Feb 2022 11:02:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NTaLB1aIC2L2MAAAMHmgww
+        (envelope-from <oneukum@suse.com>); Tue, 15 Feb 2022 11:02:46 +0000
+From:   Oliver Neukum <oneukum@suse.com>
+To:     dmitry.bezrukov@aquantia.com, igor.russkikh@aquantia.com,
+        meissner@suse.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [RFC] aqc111: check for valid header length before parsing
+Date:   Tue, 15 Feb 2022 12:02:43 +0100
+Message-Id: <20220215110243.30468-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Urgent Massage
-To:     Recipients <salesrecruitment@housing.co.ke>
-From:   "Lynn Page" <salesrecruitment@housing.co.ke>
-Date:   Mon, 14 Feb 2022 13:53:58 -0800
-Reply-To: lynnpage@citromail.hu
-Message-ID: <10cit7mjtgxu.56n38d3tsfyv@mail.housing.co.ke>
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=MPUeZ/Rl c=1 sm=1 tr=0 p=_Idse3d-WQUrpSSPbRUA:9 a=X0+2TktVTXS8RlTfCcnDNw==:117 a=talbyYMMdGoA:10 a=8nJEP1OIZ-IA:10 a=oGFeUVbbRNcA:10 a=x7bEGLp0ZPQA:10 a=wPNLvfGTeEIA:10
-X-SEG-SpamProfiler-Score: 100
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The received package must be checked for being long
+enough to contain the header to be parsed, or garbage
+may be parsed during fixup.
 
-Good day,
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/net/usb/aqc111.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-This email will come to your as suprise, i will like to discuss Business =
-Proposal with u Kindly get back to me asap
+diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
+index ea06d10e1c21..7848fe941a36 100644
+--- a/drivers/net/usb/aqc111.c
++++ b/drivers/net/usb/aqc111.c
+@@ -1084,10 +1084,10 @@ static int aqc111_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 	if (!skb)
+ 		goto err;
+ 
+-	if (skb->len == 0)
++	skb_len = skb->len;
++	if (skb_len < sizeof(desc_hdr))
+ 		goto err;
+ 
+-	skb_len = skb->len;
+ 	/* RX Descriptor Header */
+ 	skb_trim(skb, skb->len - sizeof(desc_hdr));
+ 	desc_hdr = le64_to_cpup((u64 *)skb_tail_pointer(skb));
+-- 
+2.34.1
 
-Mrs.Lynn Page
-#########################################################################=
-############
-Scanned by the Trustwave Secure Email Gateway - Trustwave's comprehensive=
-=20email content security solution.=20
-Download a free evaluation of Trustwave SEG at www.trustwave.com
-#########################################################################=
-############
