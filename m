@@ -2,89 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B03E4B76C4
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 21:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 188144B799A
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Feb 2022 22:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237305AbiBOUJi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 15:09:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44068 "EHLO
+        id S243661AbiBOV2e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 16:28:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiBOUJh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 15:09:37 -0500
-Received: from mxout03.lancloud.ru (mxout03.lancloud.ru [45.84.86.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A59AB10A6
-        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 12:09:25 -0800 (PST)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 2442F2061799
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: [PATCH] usb: host: xhci: make 'usec' parameter of xhci_handshake()
- *unsigned*
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Organization: Open Mobile Platform
-Message-ID: <e8e27f4c-489e-08c2-7495-7bfe07bf6f97@omp.ru>
-Date:   Tue, 15 Feb 2022 23:09:21 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S233069AbiBOV2d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 16:28:33 -0500
+X-Greylist: delayed 1885 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 13:28:21 PST
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA51CC24A9;
+        Tue, 15 Feb 2022 13:28:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=keg/iMk+UdaNfyy0BZm+iDOzuvq0G4cjTusXA9Hp92k=; b=CAkseX/Qyh+FIx8oj8t3veXNKf
+        UKyx6v1rPPeE7gNSMBgBfKGoC0Yi6enZ8NhlM1sTilCU+NodZ4d8ft4POAS992JSNuPDdt6ZG8am+
+        w+FwWzbH0q1dp0OqCSHkFnaLXFtmo/c81EZlMzbsdwPVNZ/IfR35QWsvVNInmaVq9sSE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nK4sU-0067XH-Bw; Tue, 15 Feb 2022 21:56:50 +0100
+Date:   Tue, 15 Feb 2022 21:56:50 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Tony Lindgren <tony@atomide.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Jakub Kicinski <kuba@kernel.org>, devicetree@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Scott Branden <sbranden@broadcom.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, Shawn Guo <shawnguo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v3 5/8] ARM: dts: exynos: fix ethernet node name for
+ different odroid boards
+Message-ID: <YgwTkr1UIGH6hgJ6@lunn.ch>
+References: <20220215080937.2263111-1-o.rempel@pengutronix.de>
+ <20220215080937.2263111-5-o.rempel@pengutronix.de>
+ <20220215081240.hhie4niqnc5tuka2@pengutronix.de>
+ <20220215081645.GD672@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220215081645.GD672@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The negative timeouts hardly make sense, and the 'usec' parameter of
-xhci_handshake() gets assigned to a 'u64' typed local variable in
-readl_poll_timeout_atomic() anyways...
+> > > -	ethernet: usbether@2 {
+> > > -		compatible = "usb0424,9730";
+> > > +	ethernet: ethernet@2 {
+> > > +		compatible = "usb424,9730";
+> > 
+> > The change of the compatible is not mentioned in the patch description.
+> > Is this intentional?
+> 
+> No, I forgot to mentione it. According to the USB schema 0 should be
+> removed. So, this compatible was incorrect as well. With leading zero
+> present yaml schema was not able to detect and validate this node.
 
-Found by Linux Verification Center (linuxtesting.org) with the SVACE static
-analysis tool.
+Does the current code not actually care about a leading 0? It will
+match with or without it? It would be good to mention that as well in
+the commit message, otherwise somebody like me is going to ask if this
+breaks backwards compatibility, since normally compatible is an exact
+string match.
 
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+And i actually think this is the sort of change which should be as a
+patch of its own. If this causes a regression, a git bisect would then
+tell you if it is the change of usbether -> ethernet, or 0424 to
+424. That is part of why we ask for lots of small changes.
 
----
-This patch is against the 'usb-next' branch of Greg KH's 'usb.git' repo.
 
- drivers/usb/host/xhci.c |    2 +-
- drivers/usb/host/xhci.h |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-Index: usb/drivers/usb/host/xhci.c
-===================================================================
---- usb.orig/drivers/usb/host/xhci.c
-+++ usb/drivers/usb/host/xhci.c
-@@ -65,7 +65,7 @@ static bool td_on_ring(struct xhci_td *t
-  * handshake done).  There are two failure modes:  "usec" have passed (major
-  * hardware flakeout), or the register reads as all-ones (hardware removed).
-  */
--int xhci_handshake(void __iomem *ptr, u32 mask, u32 done, int usec)
-+int xhci_handshake(void __iomem *ptr, u32 mask, u32 done, unsigned int usec)
- {
- 	u32	result;
- 	int	ret;
-Index: usb/drivers/usb/host/xhci.h
-===================================================================
---- usb.orig/drivers/usb/host/xhci.h
-+++ usb/drivers/usb/host/xhci.h
-@@ -2083,7 +2083,7 @@ void xhci_free_container_ctx(struct xhci
- 
- /* xHCI host controller glue */
- typedef void (*xhci_get_quirks_t)(struct device *, struct xhci_hcd *);
--int xhci_handshake(void __iomem *ptr, u32 mask, u32 done, int usec);
-+int xhci_handshake(void __iomem *ptr, u32 mask, u32 done, unsigned int usec);
- void xhci_quiesce(struct xhci_hcd *xhci);
- int xhci_halt(struct xhci_hcd *xhci);
- int xhci_start(struct xhci_hcd *xhci);
+       Andrew
