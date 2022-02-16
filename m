@@ -2,80 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 935C84B83FC
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE5A4B8492
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231876AbiBPJUb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Feb 2022 04:20:31 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:41814 "EHLO
+        id S232330AbiBPJi7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Feb 2022 04:38:59 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232058AbiBPJU3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:20:29 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A1823BF3D
-        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:20:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645003212; x=1676539212;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=ShIPmTfVzvntrJk67MCNZndHO1BKVvxUJzbaSmWFgqQ=;
-  b=mZ3jm1WIhvsMZLTOBxf9mgdt7xNQ92vh78IKDAHAz0DsOUmNu0Kh+4lA
-   BU2FuPE2BhzLyaGYXyD2S5x6x116d5ql9eJa7hv7kf7lLlk2r96PKYA2l
-   MDWZFpV63g6AgIlykx/OToSxGloUY4w6GFQZHcveTBJa14GJPGlo7WAZ6
-   5uT0Uri7HvykBZMMOujA3e4SCLjsFNwYqkn7HrlktuJUnZnHLyVI4miHJ
-   0g1D3Vy4CQchz2jra0fsOMkE6uE1yJvzw9EMROO1eAGsVUA2+9tZLfw85
-   hXGnhqWmMqHAE7LDrEbI6Vc4+d5l0bxAU2jD0azxYKoPxUknYRTQygWre
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="248157323"
-X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="248157323"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 01:20:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="571194223"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 16 Feb 2022 01:20:10 -0800
-Subject: Re: [PATCH 0/9] xhci and hub features for usb-next
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org
-References: <20220216090938.1260899-1-mathias.nyman@linux.intel.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <4dc2f796-abfe-651e-3ec2-974455e3b6b0@linux.intel.com>
-Date:   Wed, 16 Feb 2022 11:21:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        with ESMTP id S232340AbiBPJiz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:38:55 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F98E44AE;
+        Wed, 16 Feb 2022 01:38:40 -0800 (PST)
+X-UUID: abd4d364babd48a0942d93fefd5053ce-20220216
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:CC:To:Subject; bh=KXmXiao3N/LP6EYmXpUlj7b1IEb9SBtcb1jEDOaHX2o=;
+        b=ik6B1RLvtWETkn3Disuxr0/CgmPU13YEJoZGYkA0gpG7EB3Ub8IwBJMYKXHZrKyobZbEe/sTnTJEBhLSI/aqV23Y/Hd/+CNEFD04aFujwxrBE3gH28dPnumcezRQbIjuE0lhojClVJPZujjrkEJcu5azKV/0bh6fCz1YTQoX6lo=;
+X-UUID: abd4d364babd48a0942d93fefd5053ce-20220216
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2005764580; Wed, 16 Feb 2022 17:38:36 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 16 Feb 2022 17:38:35 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 16 Feb
+ 2022 17:38:34 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Feb 2022 17:38:34 +0800
+Subject: Re: [PATCH v2 3/4] arm64: dts: mediatek: mt8195: add efuse node and
+ cells
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+References: <20220128062902.26273-1-chunfeng.yun@mediatek.com>
+ <20220128062902.26273-3-chunfeng.yun@mediatek.com>
+ <YgY3qvAy5lW1tEdG@kroah.com>
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+Message-ID: <6e26f483-f4b6-0d0f-7cca-cfa19a39b10a@mediatek.com>
+Date:   Wed, 16 Feb 2022 17:38:34 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20220216090938.1260899-1-mathias.nyman@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <YgY3qvAy5lW1tEdG@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 16.2.2022 11.09, Mathias Nyman wrote:
-> Hi Greg
-> 
-> This series mostly adds support for running xhci DbC on more than one
-> xHC controller in a setup at the same time.
-> 
-> There are also some link power management changes, of which one touches
-> usb core hub code, removing an extra LPM disable before device reset.
-> 
-> Thanks
-> -Mathias
+DQoNCk9uIDIvMTEvMjIgNjoxNyBQTSwgR3JlZyBLcm9haC1IYXJ0bWFuIHdyb3RlOg0KPiBPbiBG
+cmksIEphbiAyOCwgMjAyMiBhdCAwMjoyOTowMVBNICswODAwLCBDaHVuZmVuZyBZdW4gd3JvdGU6
+DQo+PiBBZGQgZWZ1c2Ugbm9kZSBhbmQgY2VsbHMgdXNlZCBieSB0LXBoeSB0byBmaXggdGhlIGJp
+dCBzaGlmdCBpc3N1ZQ0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZl
+bmcueXVuQG1lZGlhdGVrLmNvbT4NCj4+IC0tLQ0KPj4gdjI6IHVzZSBodyBhdXRvIGxvYWQgZm9y
+IHUycGh5IHdoaWNoIGhhcyBubyB0aGlzIGlzc3VlDQo+Pg0KPj4gTm90ZToNCj4+DQo+PiAgIGRl
+cGVuZCBvbiB0aGUgcmV2aWV3aW5nIHBhdGNoOg0KPj4NCj4+IFt2OSwzLzNdIGFybTY0OiBkdHM6
+IEFkZCBtZWRpYXRlayBTb0MgbXQ4MTk1IGFuZCBldmFsdWF0aW9uIGJvYXJkDQo+PiBodHRwczov
+L3VybGRlZmVuc2UuY29tL3YzL19faHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wYXRjaC8x
+MjcxMTI5Nl9fOyEhQ1RSTktBOXdNZzBBUmJ3ITBKZzhrTE40a0J3MExjYmlBSDFIWVRxMnVRNVZ3
+aUQtQ0U4eW9GQkQ3b0FwbjhZTlNkbVZwd1NkWTFxMkM3THZZNmMkDQo+IA0KPiBBcyBJIGRvbid0
+IGhhdmUgdGhhdCBpbiBteSB0cmVlLCBJIGNhbiBvbmx5IHRha2UgdGhlIGZpcnN0IDIgcGF0Y2hl
+cw0KPiBoZXJlIG5vdywgdGhhbmtzLg0KPiANCj4gZ3JlZyBrLWgNCj4gDQo+IF9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQo+IExpbnV4LW1lZGlhdGVrIG1h
+aWxpbmcgbGlzdA0KPiBMaW51eC1tZWRpYXRla0BsaXN0cy5pbmZyYWRlYWQub3JnDQo+IGh0dHBz
+Oi8vdXJsZGVmZW5zZS5jb20vdjMvX19odHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFu
+L2xpc3RpbmZvL2xpbnV4LW1lZGlhdGVrX187ISFDVFJOS0E5d01nMEFSYnchMEpnOGtMTjRrQncw
+TGNiaUFIMUhZVHEydVE1VndpRC1DRTh5b0ZCRDdvQXBuOFlOU2RtVnB3U2RZMXEyWk1EWG1HNCQN
+Cj4gDQoNCkp1c3QgYSBnZW50bGUgcmVtaW5kZXIgdGhhdCB0aGVyZSBpcyBuZXcgdjEwIHZlcnNp
+b24NCg0KWzFdIFtQQVRDSCB2MTAgMy8zXSBhcm02NDogZHRzOiBBZGQgbWVkaWF0ZWsgU29DIG10
+ODE5NSBhbmQgZXZhbHVhdGlvbiANCmJvYXJkDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9sa21s
+LzIwMjIwMTMwMDIzMjA5LjE2Mjc1LTQtdGluZ2hhbi5zaGVuQG1lZGlhdGVrLmNvbS9ULyNtYWU3
+ZmNlNjBhZTU0MDJlN2E1ZDA0NGZiMjdjZTA3ZDlmMGRiMDNjZQ0KDQpDb21lIGFsb25nIHdpdGgg
+dGhpcyBwYXRjaCBzZXQgaXMgc3RpbGwgdW5kZXIgcmV2aWV3aW5nLg0KWzJdIFtQQVRDSCB2MTAg
+MC8zXSBBZGQgYmFzaWMgU29DIHN1cHBvcnQgZm9yIG1lZGlhdGVrIG10ODE5NQ0KaHR0cHM6Ly9s
+b3JlLmtlcm5lbC5vcmcvbGttbC8yMDIyMDEzMDAyMzIwOS4xNjI3NS00LXRpbmdoYW4uc2hlbkBt
+ZWRpYXRlay5jb20vVC8NCg0KV2hpbGUgdGhlIHYxMCBbUEFUQ0ggMi8zXSBpbmNsdWRlZCBpbiB2
+MTAgcGF0Y2hzZXQgWzJdIGlzIHJlcXVpcmVkIGZvciANCnRoaXMgcmV2aWV3IGZlZWRiYWNrLg0K
+WzNdIGh0dHBzOi8vbGttbC5vcmcvbGttbC8yMDIyLzEvMjkvNDAxDQoNClRoYW5rcyENCk1hY3Bh
+dWwgTGlu
 
-
-Argh, ignore this. Merged DbC patches from wrong branch
-
-Will resend v2
-
--Mathias
