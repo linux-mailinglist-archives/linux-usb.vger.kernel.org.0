@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3964B83A3
+	by mail.lfdr.de (Postfix) with ESMTP id 1E88A4B83A1
 	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbiBPJIm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Feb 2022 04:08:42 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52192 "EHLO
+        id S231896AbiBPJIq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Feb 2022 04:08:46 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbiBPJIl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:08:41 -0500
+        with ESMTP id S231890AbiBPJIp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:08:45 -0500
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6621ADB6
-        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:08:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1161EC73
+        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:08:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645002502; x=1676538502;
+  t=1645002508; x=1676538508;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=PBLkYmXgLBPWb45Aq4s73UkFNW9PvYkS1NLym+UDp10=;
-  b=mIv0K4NA7LLH4dMinNXR6zLTk4eY1Lfc4GfmBfMQluarbHFOX2z41f8x
-   0ILeMnTQdRaaEmm9lwEYaxtm2PXYd+Lef74SwyURfEmJbO12hzKYHyW0z
-   yUzd/Z3olGx/C+2ZqcxjsxD5SZ64jMXG9G0w1kZb/QgljwE2h4W5yGLos
-   dP3wKGO6+SGfnVaA2mll0an+f/Y4G/SRHJHt/Zg4yR49gVI+TS5BW58sn
-   vMCWlKnKIewH6sgP119rveiEuCDGpqw6Mw3gkE2rMBtOGbtGp2R5A2CE7
-   +ZoBbNWuBvFKNuDDHdj43fzWjBFEiMcGOP5HUuSy3kaF8h279hciXEeJQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="275138033"
+  bh=rvCCsufddA+kAOKlClpMx59Cz9OFvn49q/s6jaaq37A=;
+  b=R+gd++8bW6j2x3bPEFpccKJfVRHoWGAZ7wkBezTa3FGGU46DdoGXC/Aa
+   o+VGwX33Y6bVU9W2UGgIDbHZr4dCh0dQminwus6GeLV4xpIwwdkrCV8Ko
+   X84XHkTze9WfkevdB49PfjlsR+wEueNB5690y/76yjTwMLaVEM5CgHd56
+   DpW5CMYyklg8GYfiZSnSLRfXQygtnf2SWntYkL2WS8R4zpglbvEbNjc4F
+   rUz4P9hQITYvAtoaKuMSqXGVezrSFadv2khy94zMIcVRkQkM+N7DSV694
+   YW9b7iGhmarhs8cVh9kMl30VjtqpneFAtRIAQP9DcdkLeOfLzHNYlWLg2
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="275138039"
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="275138033"
+   d="scan'208";a="275138039"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 01:08:14 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 01:08:16 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="571190350"
+   d="scan'208";a="571190363"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 16 Feb 2022 01:08:13 -0800
+  by orsmga001.jf.intel.com with ESMTP; 16 Feb 2022 01:08:15 -0800
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 To:     <gregkh@linuxfoundation.org>
 Cc:     <linux-usb@vger.kernel.org>,
         Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5/9] xhci: dbgtty: use IDR to support several dbc instances.
-Date:   Wed, 16 Feb 2022 11:09:34 +0200
-Message-Id: <20220216090938.1260899-6-mathias.nyman@linux.intel.com>
+Subject: [PATCH 6/9] xhci: Allocate separate command structures for each LPM command
+Date:   Wed, 16 Feb 2022 11:09:35 +0200
+Message-Id: <20220216090938.1260899-7-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220216090938.1260899-1-mathias.nyman@linux.intel.com>
 References: <20220216090938.1260899-1-mathias.nyman@linux.intel.com>
@@ -59,161 +59,127 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-To support systems with several xhci controllers with active
-dbc on each xhci we need to use IDR to identify and give
-an index to each port.
+Every lpm commmand, both for USB 2 and USB 3 devies used the same
+xhci->lpm_command structure to change max exit latency.
 
-Avoid using global struct tty_driver.driver_state for storing
-dbc port pointer as it won't work with several dbc ports
+xhci->lpm_command is only protected by a hcd->bandwidth mutex, which is
+not enoungh as USB 2 and USB 3 devices are behind separate HCDs.
+
+Simplify code and avoid unnecessary locking risks by allocating
+separate command structures for each lpm command, just like with
+all other commands.
 
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-dbgcap.h |  1 +
- drivers/usb/host/xhci-dbgtty.c | 46 ++++++++++++++++++++++++++++------
- 2 files changed, 40 insertions(+), 7 deletions(-)
+ drivers/usb/host/xhci-mem.c |  7 -------
+ drivers/usb/host/xhci.c     | 21 ++++++++-------------
+ drivers/usb/host/xhci.h     |  2 --
+ 3 files changed, 8 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-dbgcap.h b/drivers/usb/host/xhci-dbgcap.h
-index 5f3304a06591..ca04192fdab1 100644
---- a/drivers/usb/host/xhci-dbgcap.h
-+++ b/drivers/usb/host/xhci-dbgcap.h
-@@ -100,6 +100,7 @@ struct dbc_ep {
- struct dbc_port {
- 	struct tty_port			port;
- 	spinlock_t			port_lock;	/* port access */
-+	int				minor;
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 0e312066c5c6..7a2dce730e9a 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1846,9 +1846,6 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
+ 	xhci->event_ring = NULL;
+ 	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Freed event ring");
  
- 	struct list_head		read_pool;
- 	struct list_head		read_queue;
-diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
-index ad1db371e38d..39a71bdc8d32 100644
---- a/drivers/usb/host/xhci-dbgtty.c
-+++ b/drivers/usb/host/xhci-dbgtty.c
-@@ -10,11 +10,14 @@
- #include <linux/slab.h>
- #include <linux/tty.h>
- #include <linux/tty_flip.h>
-+#include <linux/idr.h>
+-	if (xhci->lpm_command)
+-		xhci_free_command(xhci, xhci->lpm_command);
+-	xhci->lpm_command = NULL;
+ 	if (xhci->cmd_ring)
+ 		xhci_ring_free(xhci, xhci->cmd_ring);
+ 	xhci->cmd_ring = NULL;
+@@ -2488,10 +2485,6 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+ 			"// Setting command ring address to 0x%016llx", val_64);
+ 	xhci_write_64(xhci, val_64, &xhci->op_regs->cmd_ring);
  
- #include "xhci.h"
- #include "xhci-dbgcap.h"
- 
- static struct tty_driver *dbc_tty_driver;
-+static struct idr dbc_tty_minors;
-+static DEFINE_MUTEX(dbc_tty_minors_lock);
- 
- static inline struct dbc_port *dbc_to_port(struct xhci_dbc *dbc)
- {
-@@ -177,7 +180,14 @@ xhci_dbc_free_requests(struct list_head *head)
- 
- static int dbc_tty_install(struct tty_driver *driver, struct tty_struct *tty)
- {
--	struct dbc_port		*port = driver->driver_state;
-+	struct dbc_port		*port;
-+
-+	mutex_lock(&dbc_tty_minors_lock);
-+	port = idr_find(&dbc_tty_minors, tty->index);
-+	mutex_unlock(&dbc_tty_minors_lock);
-+
-+	if (!port)
-+		return -ENXIO;
- 
- 	tty->driver_data = port;
- 
-@@ -406,6 +416,15 @@ static int xhci_dbc_tty_register_device(struct xhci_dbc *dbc)
- 
- 	xhci_dbc_tty_init_port(dbc, port);
- 
-+	mutex_lock(&dbc_tty_minors_lock);
-+	port->minor = idr_alloc(&dbc_tty_minors, port, 0, 64, GFP_KERNEL);
-+	mutex_unlock(&dbc_tty_minors_lock);
-+
-+	if (port->minor < 0) {
-+		ret = port->minor;
-+		goto err_idr;
-+	}
-+
- 	ret = kfifo_alloc(&port->write_fifo, DBC_WRITE_BUF_SIZE, GFP_KERNEL);
- 	if (ret)
- 		goto err_exit_port;
-@@ -421,7 +440,7 @@ static int xhci_dbc_tty_register_device(struct xhci_dbc *dbc)
- 		goto err_free_requests;
- 
- 	tty_dev = tty_port_register_device(&port->port,
--					   dbc_tty_driver, 0, NULL);
-+					   dbc_tty_driver, port->minor, NULL);
- 	if (IS_ERR(tty_dev)) {
- 		ret = PTR_ERR(tty_dev);
- 		goto err_free_requests;
-@@ -437,6 +456,8 @@ static int xhci_dbc_tty_register_device(struct xhci_dbc *dbc)
- err_free_fifo:
- 	kfifo_free(&port->write_fifo);
- err_exit_port:
-+	idr_remove(&dbc_tty_minors, port->minor);
-+err_idr:
- 	xhci_dbc_tty_exit_port(port);
- 
- 	dev_err(dbc->dev, "can't register tty port, err %d\n", ret);
-@@ -450,10 +471,14 @@ static void xhci_dbc_tty_unregister_device(struct xhci_dbc *dbc)
- 
- 	if (!port->registered)
- 		return;
--	tty_unregister_device(dbc_tty_driver, 0);
-+	tty_unregister_device(dbc_tty_driver, port->minor);
- 	xhci_dbc_tty_exit_port(port);
- 	port->registered = false;
- 
-+	mutex_lock(&dbc_tty_minors_lock);
-+	idr_remove(&dbc_tty_minors, port->minor);
-+	mutex_unlock(&dbc_tty_minors_lock);
-+
- 	kfifo_free(&port->write_fifo);
- 	xhci_dbc_free_requests(&port->read_pool);
- 	xhci_dbc_free_requests(&port->read_queue);
-@@ -478,9 +503,8 @@ int xhci_dbc_tty_probe(struct device *dev, void __iomem *base, struct xhci_hcd *
- 	if (!port)
- 		return -ENOMEM;
- 
--	dbc_tty_driver->driver_state = port;
+-	xhci->lpm_command = xhci_alloc_command_with_ctx(xhci, true, flags);
+-	if (!xhci->lpm_command)
+-		goto fail;
 -
- 	dbc = xhci_alloc_dbc(dev, base, &dbc_driver);
-+
- 	if (!dbc) {
- 		status = -ENOMEM;
- 		goto out2;
-@@ -514,10 +538,14 @@ int dbc_tty_init(void)
- {
- 	int		ret;
+ 	/* Reserve one command ring TRB for disabling LPM.
+ 	 * Since the USB core grabs the shared usb_bus bandwidth mutex before
+ 	 * disabling LPM, we only need to reserve one TRB for all devices.
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 17a561abfab7..2a58677d9b7a 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -4344,6 +4344,10 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
+ 	unsigned long flags;
+ 	int ret;
  
--	dbc_tty_driver = tty_alloc_driver(1, TTY_DRIVER_REAL_RAW |
-+	idr_init(&dbc_tty_minors);
++	command = xhci_alloc_command_with_ctx(xhci, true, GFP_KERNEL);
++	if (!command)
++		return -ENOMEM;
 +
-+	dbc_tty_driver = tty_alloc_driver(64, TTY_DRIVER_REAL_RAW |
- 					  TTY_DRIVER_DYNAMIC_DEV);
--	if (IS_ERR(dbc_tty_driver))
-+	if (IS_ERR(dbc_tty_driver)) {
-+		idr_destroy(&dbc_tty_minors);
- 		return PTR_ERR(dbc_tty_driver);
-+	}
+ 	spin_lock_irqsave(&xhci->lock, flags);
  
- 	dbc_tty_driver->driver_name = "dbc_serial";
- 	dbc_tty_driver->name = "ttyDBC";
-@@ -536,7 +564,9 @@ int dbc_tty_init(void)
- 	if (ret) {
- 		pr_err("Can't register dbc tty driver\n");
- 		tty_driver_kref_put(dbc_tty_driver);
-+		idr_destroy(&dbc_tty_minors);
+ 	virt_dev = xhci->devs[udev->slot_id];
+@@ -4360,10 +4364,10 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
  	}
+ 
+ 	/* Attempt to issue an Evaluate Context command to change the MEL. */
+-	command = xhci->lpm_command;
+ 	ctrl_ctx = xhci_get_input_control_ctx(command->in_ctx);
+ 	if (!ctrl_ctx) {
+ 		spin_unlock_irqrestore(&xhci->lock, flags);
++		xhci_free_command(xhci, command);
+ 		xhci_warn(xhci, "%s: Could not get input context, bad type.\n",
+ 				__func__);
+ 		return -ENOMEM;
+@@ -4390,6 +4394,9 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
+ 		virt_dev->current_mel = max_exit_latency;
+ 		spin_unlock_irqrestore(&xhci->lock, flags);
+ 	}
++
++	xhci_free_command(xhci, command);
 +
  	return ret;
  }
  
-@@ -547,4 +577,6 @@ void dbc_tty_exit(void)
- 		tty_driver_kref_put(dbc_tty_driver);
- 		dbc_tty_driver = NULL;
- 	}
-+
-+	idr_destroy(&dbc_tty_minors);
- }
+@@ -4510,18 +4517,8 @@ static int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
+ 			exit_latency = xhci_besl_encoding[hird];
+ 			spin_unlock_irqrestore(&xhci->lock, flags);
+ 
+-			/* USB 3.0 code dedicate one xhci->lpm_command->in_ctx
+-			 * input context for link powermanagement evaluate
+-			 * context commands. It is protected by hcd->bandwidth
+-			 * mutex and is shared by all devices. We need to set
+-			 * the max ext latency in USB 2 BESL LPM as well, so
+-			 * use the same mutex and xhci_change_max_exit_latency()
+-			 */
+-			mutex_lock(hcd->bandwidth_mutex);
+ 			ret = xhci_change_max_exit_latency(xhci, udev,
+ 							   exit_latency);
+-			mutex_unlock(hcd->bandwidth_mutex);
+-
+ 			if (ret < 0)
+ 				return ret;
+ 			spin_lock_irqsave(&xhci->lock, flags);
+@@ -4549,9 +4546,7 @@ static int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
+ 		readl(pm_addr);
+ 		if (udev->usb2_hw_lpm_besl_capable) {
+ 			spin_unlock_irqrestore(&xhci->lock, flags);
+-			mutex_lock(hcd->bandwidth_mutex);
+ 			xhci_change_max_exit_latency(xhci, udev, 0);
+-			mutex_unlock(hcd->bandwidth_mutex);
+ 			readl_poll_timeout(ports[port_num]->addr, pm_val,
+ 					   (pm_val & PORT_PLS_MASK) == XDEV_U0,
+ 					   100, 10000);
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 5a75fe563123..8a0026ee9524 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1812,8 +1812,6 @@ struct xhci_hcd {
+ 	/* slot enabling and address device helpers */
+ 	/* these are not thread safe so use mutex */
+ 	struct mutex mutex;
+-	/* For USB 3.0 LPM enable/disable. */
+-	struct xhci_command		*lpm_command;
+ 	/* Internal mirror of the HW's dcbaa */
+ 	struct xhci_virt_device	*devs[MAX_HC_SLOTS];
+ 	/* For keeping track of bandwidth domains per roothub. */
 -- 
 2.25.1
 
