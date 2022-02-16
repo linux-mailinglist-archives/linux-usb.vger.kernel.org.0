@@ -2,136 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00B74B813B
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 08:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9884B81AF
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 08:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiBPHRJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Feb 2022 02:17:09 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:32830 "EHLO
+        id S230321AbiBPHhw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Feb 2022 02:37:52 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiBPHRI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 02:17:08 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD94C1141;
-        Tue, 15 Feb 2022 23:16:52 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id e6so1426670vsa.8;
-        Tue, 15 Feb 2022 23:16:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=q/fqjdbDD2fyY7moizdQvW5LN8SHN1B18vYdIVedr2w=;
-        b=lp4WomsRpPzMzCV/F2J6D885OSY301v5mrj611CFTqGbzXRTf+SOBP2PYLYgRC9yUa
-         WHIOS/IaZpxaWjwMyQNPP/9enFryKTvsQ0ZMikeEusLJA0mZ/LlWh7KlRi10hz8Z+RIL
-         GznNlJKDuCITsaNcZvzAxeMUIoGnrF4YfIXqanmI/2ZO19eRR7XLy89qEyHoFVhp/9Qg
-         SeJezPoz026JuHNhAkvI+OuDnyNA8WLJK/hPCBNkXcAM7M7psQ9IQHuCgkvgYToCgeiC
-         PehWZyz96DUuVYvnaIVQPDTjFoAX0pXwtgBSGevn4WmxIeP4hn0EfLocbzNVnKg3CkO1
-         qRVg==
+        with ESMTP id S230273AbiBPHhu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 02:37:50 -0500
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03E1174D5E;
+        Tue, 15 Feb 2022 23:37:16 -0800 (PST)
+Received: by mail-wm1-f44.google.com with SMTP id m126-20020a1ca384000000b0037bb8e379feso3047147wme.5;
+        Tue, 15 Feb 2022 23:37:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=q/fqjdbDD2fyY7moizdQvW5LN8SHN1B18vYdIVedr2w=;
-        b=3R3/jcUkl6qwjTcCaC0HnwP//4iN74ndUsQWa/mKP6n8NGgT0m/7rQRTIMsAnQN/LF
-         fYmKTVodbJwZvXkwmfv6jixHrtZU8GCjNwi3v7cIpcXnEuijeFveGSz1uipnXPsJy790
-         HafaGGUnGwVkkaPvsn3M1EJXgW/0W6fgjl0/Ixhw53KMJ6wYRq/tgXggVsJAtPM4VRtO
-         fOp5lwMukvJzOWNPHRU/uGS5lDQQKbAE68iS1FOcsgCzeoTh/4Yjv3mVZInInsV5ytYh
-         iZS0Tnm7upUFNV4rz/jTdN+gY4ZBclprJ8K71zct/Kn4dUjEg3NrwcomoViLqRX8+xn3
-         CB1g==
-X-Gm-Message-State: AOAM532YG0jaAi49DDqbxAj8nPq5qUR7j9f/vLk/XZyqKmrbD2ZHYKSw
-        krNcdG/e0xsj08nMqB2LU4qfnFeH7hu98w1glkE=
-X-Google-Smtp-Source: ABdhPJwkuPRp9kDdAIfjm6S9WYhpNKDD1u0NOmPXCGk5CMYW9JB8JYSJ0QQwATAMp2BprXSLKzO08xHwljc4VfAujKc=
-X-Received: by 2002:a05:6102:74c:b0:31b:a815:a83b with SMTP id
- v12-20020a056102074c00b0031ba815a83bmr480903vsg.17.1644995811769; Tue, 15 Feb
- 2022 23:16:51 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fcjsuPNQ/ElKKZzWhCUTEeBa9hiEJc7LibQjJR9rEeU=;
+        b=5N719t1feMXZOgvg84T9FuHEPutLoMBmmUZsxUQD0kDpTkHHZ4Ty6oGtKxqmbIWGWR
+         WDSNOwQsgHIdF08F+ZoALZEzyhvSVtLJyK+LtWzpRYJKdOXS0m1Wu3OWJ/+NQWlB8fVS
+         bVyL1qvMEGzltoKFvfSCth7oyd0DkXYaRM2+03EL4h2tRz8tYZyZsGLF7SB/6SsCRpgA
+         amV4IL2h51nMNZQjhUlLev+qXVEKs0mfKEgoSDRRI30KFNulkwMC7FyF5Hdb2vIkIrUI
+         y0Aa8K2c0icBjYHu8UOtCWElD0w9/t93KBde8VE3AB7lDuJuYzar+xfPaHjeIz6NqLAB
+         r9gw==
+X-Gm-Message-State: AOAM530VmqNSl3/dxc4C8d7monoeo3o5Skl2LSwGefLZCzQbQh3i6dny
+        8f2SS1zeRW6H1USeNyaSpx8=
+X-Google-Smtp-Source: ABdhPJxbJNyEQzvIiDNrzD+g+pa+pXUcVq/akn8wbE/JG08QWrXf4nvoSo157dY8BbsGvojheUtgow==
+X-Received: by 2002:a05:600c:414c:b0:37b:c80e:e3dc with SMTP id h12-20020a05600c414c00b0037bc80ee3dcmr314007wmm.116.1644997009856;
+        Tue, 15 Feb 2022 23:36:49 -0800 (PST)
+Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.googlemail.com with ESMTPSA id z5sm21400842wmp.10.2022.02.15.23.36.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 23:36:48 -0800 (PST)
+Message-ID: <99b0e568-ee2d-bbd0-dfd0-fb0953cd556c@kernel.org>
+Date:   Wed, 16 Feb 2022 08:36:47 +0100
 MIME-Version: 1.0
-References: <1644949454-814-1-git-send-email-quic_c_sanm@quicinc.com> <1644949454-814-3-git-send-email-quic_c_sanm@quicinc.com>
-In-Reply-To: <1644949454-814-3-git-send-email-quic_c_sanm@quicinc.com>
-From:   Jun Li <lijun.kernel@gmail.com>
-Date:   Wed, 16 Feb 2022 15:16:40 +0800
-Message-ID: <CAKgpwJWEZ7275LihHqxg50cWNVNxUcGR8e7pM-V2bH=aodL7YA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] usb: dwc: host: add xhci_plat_priv quirk XHCI_SKIP_PHY_INIT
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v20 5/5] arm64: dts: qcom: sc7180-trogdor: Add nodes for
+ onboard USB hub
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Doug Anderson <dianders@chromium.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
         Mathias Nyman <mathias.nyman@intel.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-arm-msm@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
         Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Bastien Nocera <hadess@hadess.net>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+References: <20220119204345.3769662-1-mka@chromium.org>
+ <20220119124327.v20.5.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
+ <YgJMkFAxjazkUDZd@kroah.com> <YgLCswtX/0THkzXT@google.com>
+ <CAD=FV=WMP8M5HTRNv9_scvrytbpE0iBdUack=XaHoypGNLJeVA@mail.gmail.com>
+ <Ygv3FSDS/fq1oePy@kroah.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <Ygv3FSDS/fq1oePy@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Sandeep Maheswaram <quic_c_sanm@quicinc.com> =E4=BA=8E2022=E5=B9=B42=E6=9C=
-=8816=E6=97=A5=E5=91=A8=E4=B8=89 14:58=E5=86=99=E9=81=93=EF=BC=9A
->
-> dwc3 manages PHY by own DRD driver, so skip the management by
-> HCD core.
-> During runtime suspend phy was not getting suspend because
-> runtime_usage value is 2.
->
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> ---
->  drivers/usb/dwc3/host.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index eda8719..4a035a8 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -13,6 +13,14 @@
->  #include <linux/platform_device.h>
->
->  #include "core.h"
-> +#include <linux/usb/hcd.h>
-> +#include <linux/usb/xhci-plat.h>
-> +#include <linux/usb/xhci-quirks.h>
-> +
-> +
-> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci =3D {
-> +       .quirks =3D XHCI_SKIP_PHY_INIT,
-> +};
+On 15/02/2022 19:55, Greg Kroah-Hartman wrote:
+> On Tue, Feb 15, 2022 at 09:54:54AM -0800, Doug Anderson wrote:
+>> Hi,
+>>
+>> On Tue, Feb 8, 2022 at 11:21 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+>>>
+>>> On Tue, Feb 08, 2022 at 11:57:20AM +0100, Greg Kroah-Hartman wrote:
+>>>> On Wed, Jan 19, 2022 at 12:43:45PM -0800, Matthias Kaehlcke wrote:
+>>>>> Add nodes for the onboard USB hub on trogdor devices. Remove the
+>>>>> 'always-on' property from the hub regulator, since the regulator
+>>>>> is now managed by the onboard_usb_hub driver.
+>>>>>
+>>>>> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+>>>>> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+>>>>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>>>>> ---
+>>>>
+>>>> No DT maintainer approval yet?  :(
+>>>
+>>> Bjorn usually just picks DT changes into the QCOM tree when they are
+>>> ready, so I wouldn't interpret anything into the lack of an explicit
+>>> Ack.
+>>
+>> Right, so the expectation is that this patch wouldn't land through the
+>> USB tree but would instead land through the Qualcomm tree, probably a
+>> revision after the code lands in the USB tree to avoid dependency
+>> problems.
+> 
+> But our tools pick up the whole series.  I can't just do "i will pick
+> patches 1-4 only" easily, and neither can any other maintainer.
 
-It's better to create this xhci_plat_priv by each dwc3 glue layer,
-with that, we can use this priv to pass other flags and possibly
-override APIs by each glue driver which may not apply to all dwc3
-platforms.
+I don't have problems picking individual patches - either b4 am on each
+patch or on entire series and dropping later unneeded commits.
 
-thanks
-Li Jun
->
->  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
->                                         int irq, char *name)
-> @@ -122,6 +130,13 @@ int dwc3_host_init(struct dwc3 *dwc)
->                 }
->         }
->
-> +       ret =3D platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
-> +                       sizeof(struct xhci_plat_priv));
-> +       if (ret) {
-> +               dev_err(dwc->dev, "failed to add data to xHCI\n");
-> +               goto err;
-> +       }
-> +
->         ret =3D platform_device_add(xhci);
->         if (ret) {
->                 dev_err(dwc->dev, "failed to register xHCI device\n");
-> --
-> 2.7.4
->
+> 
+> Why not just get their ack so that I know it can come through the USB
+> tree?  That's what normally happens for other changes like this where a
+> driver change is required first.
+
+DTS is a description of the hardware and we take it via separate
+branches of SoC-fami0ly repositories. These are always separated from
+the driver changes. Always. For several reasons:
+1. By convention,
+2. To be sure there is no dependency on driver code thus an ABI break,
+3. To have a nice and clean history of DTS changes, properly organized.
+
+What is more, if this was coming via my Samsung SoC tree towards SoC
+folks, I could not take it in one branch. I would need to physically
+split it, otherwise Arnd/Olof would bounce back my pull request saying I
+am mixing DTS with driver. Of course you do not have such requirement -
+I am just saying that splitting DTS is quite common and proper way.
+
+
+Best regards,
+Krzysztof
