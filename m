@@ -2,184 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0254B84ED
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8666F4B84F2
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232506AbiBPJvU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S232513AbiBPJvU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Wed, 16 Feb 2022 04:51:20 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:48352 "EHLO
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:48378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232458AbiBPJvT (ORCPT
+        with ESMTP id S232501AbiBPJvT (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:51:19 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3122B3ADE
-        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:50:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D862B4058
+        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:50:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645005058; x=1676541058;
+  t=1645005059; x=1676541059;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=rvCCsufddA+kAOKlClpMx59Cz9OFvn49q/s6jaaq37A=;
-  b=dkQeb/a5kZHudmujGcd0btAbWHvhQ/T1Z1Xunr3ebrU9eL3HE9CX4O4E
-   6xOvcSZLQ0ntM9Da2Gje1esik4WVxvc0Jd3GcvoBj8Tjr2O1Is4M2Q2d2
-   nDwG00uuGpAToBI8WrXy9AwfgYYuaOl1Nv7zBvokLqsFV0i5f6+L54K0v
-   jeGi3Kw9KhNe4vxo2o+w6/5b1SMTyW8Aw0KluU5bE6zWSXA7+9w2NAYRi
-   07xqsbAw+5b94roHSDQ7AWL1noKYupS2m2zP4r9V1bvmBSot0Zk4yX8yf
-   m/vocni5eXFdQMBiCds1WM40Nn3zP0syycKZIv0nDUGbUsAJSZGhFTUaL
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="249396965"
+  bh=V+9dCm9T0wjt9iMjw7yZlCUH+2thn4xfYDYfF7VO+oY=;
+  b=KU5uKaA+kVJzgd7MqJkhoIxi48Cv9XYH387aUAde+lpJN7lOoj94oG5x
+   mwG6w4QyPwlK326n51DbvSmJETt3M5PeztYJCo01+zAoX5HC+FoFzPWNp
+   Fys9568PSwrIvR/puCk0OODazcId6xsvK78aRO3XBYssWeudoiep9IfBq
+   NmfVfPi3Xc0yvhH7ARcpl6uA1O7Ptg75TKBMCCWE1V4vGRLohC3moCS7h
+   rCwwsgYO+irfEg4Ru2zHH68lWI+ofhE6X+ow0Zro8TRwSwnCLsBI6PV3j
+   vuwJbxf/en0hzwCGWuNkPU8rEX+EKjXhAdRkwYSciZHkcePkNKdIZ2t/r
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="249396968"
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="249396965"
+   d="scan'208";a="249396968"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 01:50:30 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 01:50:32 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="636410353"
+   d="scan'208";a="636410361"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 16 Feb 2022 01:50:29 -0800
+  by orsmga004.jf.intel.com with ESMTP; 16 Feb 2022 01:50:30 -0800
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 To:     <gregkh@linuxfoundation.org>
 Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH v2 6/9] xhci: Allocate separate command structures for each LPM command
-Date:   Wed, 16 Feb 2022 11:51:50 +0200
-Message-Id: <20220216095153.1303105-7-mathias.nyman@linux.intel.com>
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH v2 7/9] usb: remove Link Powermanagement (LPM) disable before port reset.
+Date:   Wed, 16 Feb 2022 11:51:51 +0200
+Message-Id: <20220216095153.1303105-8-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220216095153.1303105-1-mathias.nyman@linux.intel.com>
 References: <20220216095153.1303105-1-mathias.nyman@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_NONE,TVD_SUBJ_WIPE_DEBT,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Every lpm commmand, both for USB 2 and USB 3 devies used the same
-xhci->lpm_command structure to change max exit latency.
+Trying to disable Link Powermanagement (LPM) before port reset is
+unnecessary and can cause additional delay if host can't communicate
+with the device, which is often the reason why device is reset in the
+first place.
 
-xhci->lpm_command is only protected by a hcd->bandwidth mutex, which is
-not enoungh as USB 2 and USB 3 devices are behind separate HCDs.
+usb_disable_lpm() will
+- zero usb U1/U2 timeouts for the hub downstream port
+- send ENABLE U1/U2 clear feature requests to the connected device.
+- increase internal reference count for udev->lpm_disable_count
 
-Simplify code and avoid unnecessary locking risks by allocating
-separate command structures for each lpm command, just like with
-all other commands.
+There is no need to zero U1/U2 hub port timeouts, or clearing the
+U1/U2 enable for the connected device before reset. These are set
+to default by the reset.
 
+USB 3.1 section 10.2.2 "HUB Downstream port U1/U2 timers" states that:
+"the U1 and U2 timeout values for a downstream port reset to the default
+values when the port receives a SetPortFeature request for a port reset"
+
+Set the udev->lpm_disable_count to "1" after port reset, which is the
+default lpm_disable_count value when allocating udev, representing
+disabled LPM.
+
+Cc: Alan Stern <stern@rowland.harvard.edu>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-mem.c |  7 -------
- drivers/usb/host/xhci.c     | 21 ++++++++-------------
- drivers/usb/host/xhci.h     |  2 --
- 3 files changed, 8 insertions(+), 22 deletions(-)
+ drivers/usb/core/hub.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 0e312066c5c6..7a2dce730e9a 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -1846,9 +1846,6 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
- 	xhci->event_ring = NULL;
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Freed event ring");
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 47a1c8bddf86..b8853219833a 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -5005,6 +5005,7 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+ 		retval = usb_get_bos_descriptor(udev);
+ 		if (!retval) {
+ 			udev->lpm_capable = usb_device_supports_lpm(udev);
++			udev->lpm_disable_count = 1;
+ 			usb_set_lpm_parameters(udev);
+ 		}
+ 	}
+@@ -5928,16 +5929,6 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+ 	 */
+ 	usb_disable_usb2_hardware_lpm(udev);
  
--	if (xhci->lpm_command)
--		xhci_free_command(xhci, xhci->lpm_command);
--	xhci->lpm_command = NULL;
- 	if (xhci->cmd_ring)
- 		xhci_ring_free(xhci, xhci->cmd_ring);
- 	xhci->cmd_ring = NULL;
-@@ -2488,10 +2485,6 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 			"// Setting command ring address to 0x%016llx", val_64);
- 	xhci_write_64(xhci, val_64, &xhci->op_regs->cmd_ring);
- 
--	xhci->lpm_command = xhci_alloc_command_with_ctx(xhci, true, flags);
--	if (!xhci->lpm_command)
--		goto fail;
+-	/* Disable LPM while we reset the device and reinstall the alt settings.
+-	 * Device-initiated LPM, and system exit latency settings are cleared
+-	 * when the device is reset, so we have to set them up again.
+-	 */
+-	ret = usb_unlocked_disable_lpm(udev);
+-	if (ret) {
+-		dev_err(&udev->dev, "%s Failed to disable LPM\n", __func__);
+-		goto re_enumerate_no_bos;
+-	}
 -
- 	/* Reserve one command ring TRB for disabling LPM.
- 	 * Since the USB core grabs the shared usb_bus bandwidth mutex before
- 	 * disabling LPM, we only need to reserve one TRB for all devices.
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 17a561abfab7..2a58677d9b7a 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -4344,6 +4344,10 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
- 	unsigned long flags;
- 	int ret;
+ 	bos = udev->bos;
+ 	udev->bos = NULL;
  
-+	command = xhci_alloc_command_with_ctx(xhci, true, GFP_KERNEL);
-+	if (!command)
-+		return -ENOMEM;
-+
- 	spin_lock_irqsave(&xhci->lock, flags);
- 
- 	virt_dev = xhci->devs[udev->slot_id];
-@@ -4360,10 +4364,10 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
- 	}
- 
- 	/* Attempt to issue an Evaluate Context command to change the MEL. */
--	command = xhci->lpm_command;
- 	ctrl_ctx = xhci_get_input_control_ctx(command->in_ctx);
- 	if (!ctrl_ctx) {
- 		spin_unlock_irqrestore(&xhci->lock, flags);
-+		xhci_free_command(xhci, command);
- 		xhci_warn(xhci, "%s: Could not get input context, bad type.\n",
- 				__func__);
- 		return -ENOMEM;
-@@ -4390,6 +4394,9 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
- 		virt_dev->current_mel = max_exit_latency;
- 		spin_unlock_irqrestore(&xhci->lock, flags);
- 	}
-+
-+	xhci_free_command(xhci, command);
-+
- 	return ret;
+@@ -6042,8 +6033,6 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+ re_enumerate:
+ 	usb_release_bos_descriptor(udev);
+ 	udev->bos = bos;
+-re_enumerate_no_bos:
+-	/* LPM state doesn't matter when we're about to destroy the device. */
+ 	hub_port_logical_disconnect(parent_hub, port1);
+ 	return -ENODEV;
  }
- 
-@@ -4510,18 +4517,8 @@ static int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
- 			exit_latency = xhci_besl_encoding[hird];
- 			spin_unlock_irqrestore(&xhci->lock, flags);
- 
--			/* USB 3.0 code dedicate one xhci->lpm_command->in_ctx
--			 * input context for link powermanagement evaluate
--			 * context commands. It is protected by hcd->bandwidth
--			 * mutex and is shared by all devices. We need to set
--			 * the max ext latency in USB 2 BESL LPM as well, so
--			 * use the same mutex and xhci_change_max_exit_latency()
--			 */
--			mutex_lock(hcd->bandwidth_mutex);
- 			ret = xhci_change_max_exit_latency(xhci, udev,
- 							   exit_latency);
--			mutex_unlock(hcd->bandwidth_mutex);
--
- 			if (ret < 0)
- 				return ret;
- 			spin_lock_irqsave(&xhci->lock, flags);
-@@ -4549,9 +4546,7 @@ static int xhci_set_usb2_hardware_lpm(struct usb_hcd *hcd,
- 		readl(pm_addr);
- 		if (udev->usb2_hw_lpm_besl_capable) {
- 			spin_unlock_irqrestore(&xhci->lock, flags);
--			mutex_lock(hcd->bandwidth_mutex);
- 			xhci_change_max_exit_latency(xhci, udev, 0);
--			mutex_unlock(hcd->bandwidth_mutex);
- 			readl_poll_timeout(ports[port_num]->addr, pm_val,
- 					   (pm_val & PORT_PLS_MASK) == XDEV_U0,
- 					   100, 10000);
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 5a75fe563123..8a0026ee9524 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1812,8 +1812,6 @@ struct xhci_hcd {
- 	/* slot enabling and address device helpers */
- 	/* these are not thread safe so use mutex */
- 	struct mutex mutex;
--	/* For USB 3.0 LPM enable/disable. */
--	struct xhci_command		*lpm_command;
- 	/* Internal mirror of the HW's dcbaa */
- 	struct xhci_virt_device	*devs[MAX_HC_SLOTS];
- 	/* For keeping track of bandwidth domains per roothub. */
 -- 
 2.25.1
 
