@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C154B7D1F
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 03:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E77E04B7D2A
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 03:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343582AbiBPCNi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Feb 2022 21:13:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59522 "EHLO
+        id S1343618AbiBPCPj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Feb 2022 21:15:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343574AbiBPCNc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 21:13:32 -0500
+        with ESMTP id S238422AbiBPCPi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Feb 2022 21:15:38 -0500
 Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D975325EA1
-        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 18:13:20 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so905361ooi.2
-        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 18:13:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FD5F47E8
+        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 18:15:26 -0800 (PST)
+Received: by mail-oo1-xc32.google.com with SMTP id x6-20020a4a4106000000b003193022319cso902377ooa.4
+        for <linux-usb@vger.kernel.org>; Tue, 15 Feb 2022 18:15:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:in-reply-to:references:from:user-agent:date:message-id
          :subject:to:cc;
-        bh=taHbG7vguVUZGIRIt0xRnIiEKtB/IGIttgv3NTDr6gs=;
-        b=h2UalFiYpNDlTDki+0A62tKmSWsYYNjV6hmMaPMU+3FpXazninHX/6hheyBNbTxxZl
-         gymYvx/OspLZBOPsQO169uYqB3bhtHeh9CfE3YrAupjKc7rF505e6mTSvbL0NhmgjaGN
-         NvxV6F0nhliU4tVjhgsJUwgghCPfZpjxD9tFs=
+        bh=M7OCdt9OzJxfB2Eo4t5fobnAZWbhP5SYktbi2Ug/8kQ=;
+        b=P6PKoHakA6KYKz3cdvpY0YVGXknfuiYcdWALAvEgODfjlyyz9V2N2Qb+RA/j57AqC5
+         MyDHHo+SFf8ceLcBfKsrx1sUSZWZYE75EpkTtv9vvuxiGNR9REIUwJFV9Aj262rh1A64
+         UJl8/iQXseryz4zkOzIRF9PdKjwtCIG8ztnxg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:in-reply-to:references:from
          :user-agent:date:message-id:subject:to:cc;
-        bh=taHbG7vguVUZGIRIt0xRnIiEKtB/IGIttgv3NTDr6gs=;
-        b=evTRypKmNDLKAQEMIewzo7C24XX1V2Fl2xTQ5/7MuXMN01pDwRQpEVNSbEsvDt8LQ7
-         12p+nqwFp7GRRWL3UkSG2isqQjrTXJPXs1x5/5smdGE2eJgiopuDbr6bzLj0kOHWAjYx
-         e8KiVc/By9hEq62ucVN6pY3+fCfNBuTrXhxkFJZHYpjp0h78rxcyw+4/JAPtJvWWSeBR
-         4IbUzs3LJ1ZHgQBkrMkoZXL0hSXw7zQTLzBAKyQ1tO+weXrtTpyfIzo+yeeMM3CBvXkJ
-         0OCgDw97YfrEW/OFoeRWH/RC1QGHpZWkxQEL8gnnkE05iCryRbg7gU0f8imeoQbuEmtZ
-         E4LQ==
-X-Gm-Message-State: AOAM530qNZq7G9CpeP/atTfk9G3f/nS54DQ697fsuLHhcEgDQ9/IqQEf
-        5l0yyCCw0ecm6u+ju6/ebCUkMHdzuTykpNxdmw5xKA==
-X-Google-Smtp-Source: ABdhPJxWIA5NJGfvSR96eXmNG+KkosKCT5zXWtFTw3F3O/ohr//+bginiELxGFqcnrY10SPLW//S8meYeB0ReME7oJA=
-X-Received: by 2002:a4a:a9cf:0:b0:2e9:5c75:e242 with SMTP id
- h15-20020a4aa9cf000000b002e95c75e242mr220837oon.25.1644977599258; Tue, 15 Feb
- 2022 18:13:19 -0800 (PST)
+        bh=M7OCdt9OzJxfB2Eo4t5fobnAZWbhP5SYktbi2Ug/8kQ=;
+        b=yWskNAbwRby4GJsDNhmvnpDoa3aFpqplxljUIpzAnPD8uhh02onNp7LTi2shUrk3C3
+         ylHzTBsk3w4ouIb3qZTYNuoFqbYr2DMnscsF9HTN3V0jW+Gr/KeiHA7NDKMzQcbNEgzr
+         gG5RsT6KwLJEKuNWhAQ1d4rjke2/mMvfwmKnlT83BygcHKhbYObQIVkbuBoixdRbgVWH
+         Rk2MQksOqODsE1bP+XF1d0u6qv5xCfKBSoTBXfCJIgGGLfbX9JMu52E1j1ypfey40gop
+         tRwozard7jRPTxjOtzDfaMhX9fgl8d3wvUwS3j9HI/oGK1dM02I6ICmnzxIA1bi3AOZf
+         MNbw==
+X-Gm-Message-State: AOAM533PLA7eaCgNjOh2vGbcjaZpO/o901U8TQZuYrZCj60VJNfXwNEI
+        5AM23oNUiYd20rT9QjbkE4NFXOD2aCwW+3DjnkM2Zw==
+X-Google-Smtp-Source: ABdhPJzPATiuExoyJI2H1AD/d5xpqqZ+VPI/gySpnVVnoVd6/9h8G/2Com+9XnHedjC/slziZx/LKHdClY23tEw+INo=
+X-Received: by 2002:a05:6870:5829:b0:c8:9f42:f919 with SMTP id
+ r41-20020a056870582900b000c89f42f919mr296465oap.54.1644977725284; Tue, 15 Feb
+ 2022 18:15:25 -0800 (PST)
 Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 15 Feb 2022 18:13:18 -0800
+ HTTPREST; Tue, 15 Feb 2022 18:15:24 -0800
 MIME-Version: 1.0
-In-Reply-To: <1644949454-814-2-git-send-email-quic_c_sanm@quicinc.com>
-References: <1644949454-814-1-git-send-email-quic_c_sanm@quicinc.com> <1644949454-814-2-git-send-email-quic_c_sanm@quicinc.com>
+In-Reply-To: <1644949454-814-3-git-send-email-quic_c_sanm@quicinc.com>
+References: <1644949454-814-1-git-send-email-quic_c_sanm@quicinc.com> <1644949454-814-3-git-send-email-quic_c_sanm@quicinc.com>
 From:   Stephen Boyd <swboyd@chromium.org>
 User-Agent: alot/0.10
-Date:   Tue, 15 Feb 2022 18:13:18 -0800
-Message-ID: <CAE-0n522ctciYfxCxKqF0p3QFWcZU03nP5HoKsc=uKnokg7BCQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] usb: xhci: refactor quirks and plat private data
+Date:   Tue, 15 Feb 2022 18:15:24 -0800
+Message-ID: <CAE-0n52WuP68V6jCs1oBud3Tj08TUSXkdSVRNu327EqVprEN8g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] usb: dwc: host: add xhci_plat_priv quirk XHCI_SKIP_PHY_INIT
 To:     Aswath Govindraju <a-govindraju@ti.com>,
         Doug Anderson <dianders@chromium.org>,
         Felipe Balbi <balbi@kernel.org>,
@@ -75,47 +75,60 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Sandeep Maheswaram (2022-02-15 10:24:13)
-> From: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Quoting Sandeep Maheswaram (2022-02-15 10:24:14)
+> dwc3 manages PHY by own DRD driver, so skip the management by
+> HCD core.
+> During runtime suspend phy was not getting suspend because
+> runtime_usage value is 2.
 >
-> This refactoring allows drivers like dwc3 host glue driver to
-> specify their xhci quirks.
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+
+Any Fixes tag?
+
+> ---
+>  drivers/usb/dwc3/host.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 >
-> Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-
-Your SoB should be here as well.
-
-> diff --git a/include/linux/usb/xhci-plat.h b/include/linux/usb/xhci-plat.h
-> new file mode 100644
-> index 0000000..58a56ae
-> --- /dev/null
-> +++ b/include/linux/usb/xhci-plat.h
-> @@ -0,0 +1,24 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * xhci-plat.h - xHCI host controller driver platform Bus Glue.
-> + *
-> + * Copyright (C) 2015 Renesas Electronics Corporation
-> + */
-> +
-> +#ifndef _XHCI_PLAT_H
-> +#define _XHCI_PLAT_H
-> +
-> +#include <linux/types.h>
+> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> index eda8719..4a035a8 100644
+> --- a/drivers/usb/dwc3/host.c
+> +++ b/drivers/usb/dwc3/host.c
+> @@ -13,6 +13,14 @@
+>  #include <linux/platform_device.h>
+>
+>  #include "core.h"
 > +#include <linux/usb/hcd.h>
 
-It would be great to remove this include and forward declare struct
-usb_hcd instead to avoid include hell. Maybe a followup patch?
+What is this include used for now?
 
+> +#include <linux/usb/xhci-plat.h>
+> +#include <linux/usb/xhci-quirks.h>
 > +
-> +struct xhci_plat_priv {
-> +       const char *firmware_name;
-> +       unsigned long long quirks;
-> +       int (*plat_setup)(struct usb_hcd *hcd);
-> +       void (*plat_start)(struct usb_hcd *hcd);
-> +       int (*init_quirk)(struct usb_hcd *hcd);
-> +       int (*suspend_quirk)(struct usb_hcd *hcd);
-> +       int (*resume_quirk)(struct usb_hcd *hcd);
+> +
+
+Nitpick: Remove one newline.
+
+> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
+> +       .quirks = XHCI_SKIP_PHY_INIT,
 > +};
+>
+>  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+>                                         int irq, char *name)
+> @@ -122,6 +130,13 @@ int dwc3_host_init(struct dwc3 *dwc)
+>                 }
+>         }
+>
+> +       ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
+> +                       sizeof(struct xhci_plat_priv));
+
+Nitpick: sizeof(xhci_plat_dwc3_xhci) so the type can change without
+changing this line.
+
+> +       if (ret) {
+> +               dev_err(dwc->dev, "failed to add data to xHCI\n");
+> +               goto err;
+> +       }
 > +
-> +#endif /* _XHCI_PLAT_H */
+>         ret = platform_device_add(xhci);
+>         if (ret) {
+>                 dev_err(dwc->dev, "failed to register xHCI device\n");
