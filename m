@@ -2,169 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C6A4B84C0
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F97D4B84F4
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232401AbiBPJrj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Feb 2022 04:47:39 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54884 "EHLO
+        id S232556AbiBPJwa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Feb 2022 04:52:30 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbiBPJri (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:47:38 -0500
-Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.140.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30AD6E2A2
-        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:47:26 -0800 (PST)
+        with ESMTP id S232583AbiBPJw0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:52:26 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A8A13EA6
+        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:51:59 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id i5so1874803oih.1
+        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:51:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
-  t=1645004846; x=1645609646;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=6hwKoa0ikMC0BcrvOTcS0+EPtfeogcHz2gWOFdmtxfQ=;
-  b=FmfQZ0qo8ug6H+Gd9HzONffOkNV0S+4Jj7Zesn0IM/bxvKkUwap3LWdC
-   AW0B6WtOnVcLHM/RHoUOzDAoGdi0zggMiv7uV8seAH85QWu3fVMfocdAU
-   egtdDGmG2jNTOgv6pAUw7zsa7D9Yxjx1iIVr8kgK3d+Oonkv3aP/XreR0
-   U=;
-Received: from mail-co1nam11lp2172.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) ([104.47.56.172])
-  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 09:47:25 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UiAuLwaTnS9Gnur1sNjA21O8ZmTATX81henny5N6n1zlGgEWjFZiiU+jfXxrp2ZjPKIQrgKvzeVXYHyoJUH1eiVxlNcaGzvl3n+gSWL08Er/QXVbnXUxBSFKLLYgIoabtfALsaO9aymf7bqx9NuaWxYsgk/xvRoVG/Cam7O8WMrc+b5j/81eG786/aFj2u9b8O7yjw/G2cDITQ/U5jFHPb8uM2GsqSgoD4E8I4qJk0DymIvRuujHMYtE2yYNnppU6gC2/f4rkh1p2rbX0y+uNmfgs47w144oLSfjmwrCvuN4gQiOYVw3jhvHR0OaGO6sbarzTPweOnRgAOKKXcsDLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6hwKoa0ikMC0BcrvOTcS0+EPtfeogcHz2gWOFdmtxfQ=;
- b=YgluPTVaSCg0lhG1KVEqbc4UpSzc/W1pKGzkKN4AixnVFSzToUQuWBRCHx6bC4KLsWoSMGxW3rZDEjnEWiUvUHTJ/SpD/bU6HMDVwNu/h17u4JHXcdkNO7gscvEOu0om8+o0s4ZhVgpuRJbCesFA1aQsq5KxME8jeG/mIz0E6EdYSEx+9+W3HUy/sgRgKmW1uDlTQ6/0HEkX6UN8+q13M5EyjZLg2x5E+ALo9/sCXuWisavFG8qggz/sIuHwTJUhtIFY2849EuLFYcM3Y33gnBlRfSC2sBnabyRBN/tWZGZ8UIzyGlaUDoysuTcvdJZOM/6B0aFqlJbqR8ZmVDEdmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from DM8PR02MB8198.namprd02.prod.outlook.com (2603:10b6:8:4::7) by
- BL0PR02MB4929.namprd02.prod.outlook.com (2603:10b6:208:54::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4975.12; Wed, 16 Feb 2022 09:47:23 +0000
-Received: from DM8PR02MB8198.namprd02.prod.outlook.com
- ([fe80::4436:2dce:bdd5:f36b]) by DM8PR02MB8198.namprd02.prod.outlook.com
- ([fe80::4436:2dce:bdd5:f36b%6]) with mapi id 15.20.4975.019; Wed, 16 Feb 2022
- 09:47:23 +0000
-From:   "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Jack Pham (QUIC)" <quic_jackp@quicinc.com>
-Subject: RE: [PATCH 1/5] usb: host: xhci: use ffs() in xhci_mem_init()
-Thread-Topic: [PATCH 1/5] usb: host: xhci: use ffs() in xhci_mem_init()
-Thread-Index: AQHYIwK9k1QFHIs6WkKkI3ydjpIoXKyWcu2A//97FUA=
-Date:   Wed, 16 Feb 2022 09:47:22 +0000
-Message-ID: <DM8PR02MB819861F71713D5539EF66D12E3359@DM8PR02MB8198.namprd02.prod.outlook.com>
-References: <1644994755-12975-1-git-send-email-quic_linyyuan@quicinc.com>
- <1644994755-12975-2-git-send-email-quic_linyyuan@quicinc.com>
- <4688f5bb-c0fd-bbce-de1f-a554d543ed03@gmail.com>
-In-Reply-To: <4688f5bb-c0fd-bbce-de1f-a554d543ed03@gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=quicinc.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f1c3e105-e6d6-42f1-845c-08d9f13154f8
-x-ms-traffictypediagnostic: BL0PR02MB4929:EE_
-x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-microsoft-antispam-prvs: <BL0PR02MB4929CC1E05A9B0FB19FBF22A9F359@BL0PR02MB4929.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1923;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sXxQ2pU1V/w/tQ2iJG6oa46KSVyNIOMDcPBBC/NNo27h6NKHJWJRkg1Dko4C+ThuXINTYviqi603UlfNyAKvQNjXbEuSWdSblYi4RxYtqyH7E/XU+hWqoRZE3ufzFGa/mxg8ES3EGM1cavam1el0D+YG0S+dNUcQQjWMUST9x8TbizJitcVmib1yftEn1oDpP2uLaHgaAtb4V20VKzlskm0ar+yxSzmi49dASan6Gcrgyrp3P9oLuUi/F3Ypj5lSLkMbUa0G0a/I2LgZYnWrBpTRhpF4GRh9Zyo1E8POsloBN1d0XCx6FffU2eYh7FWOSedlRfsADxQQyJql4VnS4OioejcfyYBROKUwHBWuQXMdMkFY7jcVh5g9OgW1utcX4kbWzQ1p58DZXZ1serfq6HknQB2DQ74Pfq4tyqA5dT/iVVdNEwVJY7LCMKEBxxQ1Q1XBv1D8omufv8y9hUDbqm2iaPNbnt7sgdN0SKbCBwtECsYBwEmI/YEmNfYoXLMtMuiqGllVHr7HgwGiTKzxk3YH5dURiVzGjtSqk0WgELCqWgqD3gZwPxWhUPVkLBbSNePoVXoS3ZHdQTpFsn+xs63GNwK85WLEcBIJax5Gvvz6qQJ/1TAyGG6g8nWNgX17ZBggzZfwaMZjubMIwYzwoGWRDE5fSr2G8sxeB1zFwWKbU7ZlaClElBZs02HT4JtI3w4+ba+qmAhcpt4Ixm2hAQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR02MB8198.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(7696005)(53546011)(6506007)(71200400001)(9686003)(26005)(5660300002)(122000001)(83380400001)(107886003)(186003)(66476007)(8936002)(55016003)(52536014)(508600001)(54906003)(110136005)(8676002)(66446008)(76116006)(64756008)(4326008)(38070700005)(316002)(66556008)(86362001)(38100700002)(66946007)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cU9jNmlEbGRRTUFZV2NKRXh2TVRnNmQ1elVjcy9KWDBFb0JaMW5PRituY3kw?=
- =?utf-8?B?aWVDRkNkUzlYVGZPUWZhN3pqbURKTm96N3R3ZnA5OXZDcmU4elg1ekY4V2ZJ?=
- =?utf-8?B?TWpnMXI3RDlEd2dkOEIzMHZZY1VBeXZpdjdQVm9uRHN2R0QybjFQeWVmRWFn?=
- =?utf-8?B?NXp3RFBLdUE3a2JDMWxNQlRBaC94RU9OTWtYTkNVRndXVUZIYkk4TGNtemNh?=
- =?utf-8?B?MDlPUzB4Wlg1R1dtKzc0TFlXdktNeHVFWmREUlZZS1hCQzFpa1BWRGhXZ2Zj?=
- =?utf-8?B?S0x4eUpicEdUUk1sZ1VhK3BGdnJHb1lvekpZdTZvU2RQYkd3dnBKTGFsSm50?=
- =?utf-8?B?dVBudmtLV0x2N2NETFZNbVRtcnNOb1p2dXpkWWYwTlhLaURqRGtMekpXV0FS?=
- =?utf-8?B?ZndKOTI1bGUyV2Fmek9UeWxzK1pZT1pzenFkT2RYWVErUDFLRkFndWVjMnhq?=
- =?utf-8?B?S3Rndys0WjB3ZndyeUFTWHhGbHVUWk1qNXViaGZ6aE1mTVpUeUxiOWNPeWI0?=
- =?utf-8?B?VFZmelFEQXJsR3Jqcmkzdnllc1d6ZENMLzZ1MGNyOEFGZE1OQ0hrMG4yMU9Q?=
- =?utf-8?B?WFgxYm1mU0JWZ212NGFkM2RqRTc2UjNqeXlJUFdpTFZZdDdjSUJuSkFvQVFQ?=
- =?utf-8?B?Y2RuRWdYWE5pWFJnSEtGMlg1RjJLSHBNL2I3eWQxcjRsazQ4UHlaV0VaNnZM?=
- =?utf-8?B?d2pwTXI4YnhYcitxWXMrQ3NESWFCVHBrOUx2YlQ1SG5kN3hqaEJBaThBR05P?=
- =?utf-8?B?Wk1KZ2IzRVBWZllrZzJ6WW1oRDRvUUZyaUpmVXFQUlFMamZIVWxvOWFsWnVk?=
- =?utf-8?B?dTBuT0tCU29XcFBaQ0JybzFLT1FTR0Q1aW5Vdm83ZjdOa1BLRWZpZkpxcHJX?=
- =?utf-8?B?ZVcrdThSY0cyV1pOaVlpd1p4RTZQbnhlNmZ0VUtMRm9vdzVpSGFSYnprQ2pv?=
- =?utf-8?B?aXZwVkFncWVXdUJ5eEl5bHNWMi9IcWRCVmF4MHpRNE53N1VnN2JkOGh6UUJR?=
- =?utf-8?B?QkN3VnpCOTdHVXhSKzVDQ29VVUtHQ2VOV25SSXpKdG5CM3ZlL0MyMHhTQTFh?=
- =?utf-8?B?RnRqa0MwYkE3eE02WU96M01iME42YTRhbS9vYnFEblNSejhJSStuTjN3MEdK?=
- =?utf-8?B?MU9tK2p5MVhvc0Z2djEvbG1VaDNuZ3JnZW45eHZObWVCUHp1eENXVUNVdTY3?=
- =?utf-8?B?T3VDMUtFUGd5RzRlRzVUV05jWk1GdjA0ZWlTVXFDdGpYVmJwbGRTNDFobVIz?=
- =?utf-8?B?VEswMHZBeForN2VUSlhkQk1lZUVhWU9ZMEo3dFRJdjNTOUpNc0c4WmY0Z0w1?=
- =?utf-8?B?TjRzN2tNQWRGQWg2L1J3TU1qQ2RhNmwxZ2ZyUlV5Mng4R0wvSE5qdlBnNXhj?=
- =?utf-8?B?UEJiZWIzejVPMCtCVnlBZDZYZE9GTnN4aUlHQnFHb3VJajd6M3dCaVFXM01N?=
- =?utf-8?B?K21CZTh0NUdUZjdteGszUWNSS3NaRllFbHlFVTI1S0xJVFdNUTdyQ2R2OEYr?=
- =?utf-8?B?MFhBYzh5cmQ1WC9XQVNPeG16b2xwaXZKUnNnL2o4VzdURFFtcS9lQzdoTjlv?=
- =?utf-8?B?WDA5K3ZLSldHaHV4VFdnZkkvRS9EZ2FEWC9Lc2dsN0UvMFptamNjYWgxbzJH?=
- =?utf-8?B?eFJOaW50R05XNmxpUG03K0MyMGdOQ3Zzb3A1Z1owdzNEeEpLN2R1cmFVVTRF?=
- =?utf-8?B?V09DODRweURnSjgxK0kyL2hubXpDTUk3Y0hEKzBDRW9SMy90NFVjUWd6TEJD?=
- =?utf-8?B?QXJ2L1JXM3pDS2lkdnFoYmozY0JVcmVDQVZYNU96N2orbXo2RGlBaThoZ0lk?=
- =?utf-8?B?WEY1SXVMWTRnb3VrU0I0QU9yTFEwU0d4NzJuMGJLUmNVSlhicXRnU1ZUM3lJ?=
- =?utf-8?B?YnJEQ0NGc1ozU1FZdzJncnBQZi9KUTJNR2QzSm1KUnU2T0RrSUtMdmdGTnFT?=
- =?utf-8?B?eFJyS2I2QlJZcFQzNklaclhURFUzWWZnMWJ0R1d3UFgzMW5Ed1Q2K0FQYzZz?=
- =?utf-8?B?UElWdVdieEl2R2tuNkpVT2dnK0o3MlJwY29hRlI5MXNvYTJINGJwdWJrRjZJ?=
- =?utf-8?B?SWdTek9SeDB1dVdCLzlXQ2VkZkVFUUtOYVNwVzUvWitmVVBaUHcrZEROWkVX?=
- =?utf-8?B?ZldHSGFEQTdZeVFIaFBzaDBnMjJsVDBKQVdMR3c4RC9LeFRoWENzU1ZxeHlZ?=
- =?utf-8?B?dDhlQnc0QUNmQW10TGIzYTltOVBkcUdCVUw2S2d1K2l2bTlMelhJcThrVVpy?=
- =?utf-8?B?V0UwR3NzbDNVSnN0Sk4rM3EyTnNRPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=kali.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=idK/WPsNn9ovkHFdsU7Sif7/eTWJW74G0kzJx4BCAZk=;
+        b=oWhRr51VmZU2S2gYaR5kbbLcR2oXecbmfKsZjko7tJ8FT7VDZbsbDpzlXUSHGGZE2R
+         OCD3N5//IxagJbjaThbI3lobLqGexsB2KenC9HSrf4i9MBD65cK/kpSzy2HWdrqNZ5Is
+         Nu62dR40mf/Edvdo7eW3xe2jHPksS/QIpKevTsyiNmGKhTguFs17sCXWQ5J3/+mhtLa+
+         9PKQQLnuQn/H790sO1tDsu5Yr1lBmLXa7HP54dfazNtxFOCfMRMXx1MxO4pWhehIRlIr
+         Yb4DmxqjB9nD+wHD/KEZlpoiCFlEK6aUVt6Tt1nivmpzvrC17wOYBnpIf4dIoR0ni0Cy
+         fhTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=idK/WPsNn9ovkHFdsU7Sif7/eTWJW74G0kzJx4BCAZk=;
+        b=UaBBDOSwnGSd6whjYXtu9Jps6R656rY8BFaSkEYHp6R6XR7nTdWnC14+T8WIyeVgB4
+         8YY7+tYiB5duQpHaC6bioUx43aSjYSQCgMi/FRU89djzPVOR1CChDPxmrGynJs5IJR5S
+         /zcqt/DXV4XozJdt87+EBfl4fcFfZq8tHS6yzxKrR1Gq54bk+hMWyu08FP8+ehm1fqGI
+         aRPLvFH29RbcfN/EVb5T/D5JqmrSvSqhLku+loXwLVe6U8i+BBqaAZJq3C0KuS7yhpeD
+         dj+hwyWHxF7EdQJ4Bql+1qFfk9z0xII2W94B8YzvwXFJnDiwp1Zl67ZJTFW1fwrRsafM
+         wpBA==
+X-Gm-Message-State: AOAM530cisedKB1t/QXCw5aZTGTiw8meqdyWXp88qKfdFl12kDYBtA+f
+        RNsi0/RQcbGny0MN8NfeOYiU7A==
+X-Google-Smtp-Source: ABdhPJwIrThB4NcxBobY13FmQry+UoAcN8imJp73VfgJGon0wEf9Bswt2u/KdjQIAJpntb8vjP7PSw==
+X-Received: by 2002:aca:b585:0:b0:2ca:e90c:3b59 with SMTP id e127-20020acab585000000b002cae90c3b59mr286602oif.80.1645005101046;
+        Wed, 16 Feb 2022 01:51:41 -0800 (PST)
+Received: from [192.168.11.51] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
+        by smtp.gmail.com with ESMTPSA id t192sm1520931oie.14.2022.02.16.01.51.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 01:51:40 -0800 (PST)
+Message-ID: <55aa0436-64f5-1ecb-d95d-721e45f6fb95@kali.org>
+Date:   Wed, 16 Feb 2022 03:51:38 -0600
 MIME-Version: 1.0
-X-OriginatorOrg: quicinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR02MB8198.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1c3e105-e6d6-42f1-845c-08d9f13154f8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Feb 2022 09:47:22.9805
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pwcKxBkbsoL1smKd+VHgSI4Jx4i8V3JUxHPjfXZrX/TUVeNrOywT6FX0V74z3MLbWmJRXeLw2WrSHvPsYX3AvBfuEv5hTTsJXul/MGFUFVs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB4929
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH v10 6/6] usb: dwc3: qcom: Enable the interrupts during
+ probe
+Content-Language: en-US
+To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com
+References: <1642398248-21753-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1642398248-21753-7-git-send-email-quic_c_sanm@quicinc.com>
+ <93b68251-7e7e-ac92-fb47-346c410744b2@kali.org>
+ <20220118095255.GB11385@hu-pkondeti-hyd.qualcomm.com>
+ <78c90e46-666b-bc9b-235d-ae4c69e19929@quicinc.com>
+ <601cdc74-392f-dd4f-7ea0-8e65c6b6d7e2@quicinc.com>
+ <52b37547-3e78-b18c-307d-7eedf5baab0d@kali.org>
+ <0e006cc0-2760-195a-35b9-0a2f6e8452c5@quicinc.com>
+ <47ae3e73-5880-bfb7-fc14-7dd95a75ce14@kali.org>
+ <bb36a205-fbfe-536e-5bf6-4a717ffd4e6e@quicinc.com>
+From:   Steev Klimaszewski <steev@kali.org>
+In-Reply-To: <bb36a205-fbfe-536e-5bf6-4a717ffd4e6e@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VGhhbmtzLA0KdGhhdCdzIGNvcnJlY3QsICBmcm9tIG15IHZpZXcsIG9uZSBsaW5lIGlzIGdvb2Qs
-DQoNCldoYXQncyB5b3VyIHN1Z2dlc3Rpb24gPyB0d28gbGluZXMgPw0KDQotLS0tLU9yaWdpbmFs
-IE1lc3NhZ2UtLS0tLQ0KRnJvbTogU2VyZ2VpIFNodHlseW92IDxzZXJnZWkuc2h0eWx5b3ZAZ21h
-aWwuY29tPiANClNlbnQ6IFdlZG5lc2RheSwgRmVicnVhcnkgMTYsIDIwMjIgNTo0MiBQTQ0KVG86
-IExpbnl1IFl1YW4gKFFVSUMpIDxxdWljX2xpbnl5dWFuQHF1aWNpbmMuY29tPjsgTWF0aGlhcyBO
-eW1hbiA8bWF0aGlhcy5ueW1hbkBpbnRlbC5jb20+OyBHcmVnIEtyb2FoLUhhcnRtYW4gPGdyZWdr
-aEBsaW51eGZvdW5kYXRpb24ub3JnPg0KQ2M6IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc7IEph
-Y2sgUGhhbSAoUVVJQykgPHF1aWNfamFja3BAcXVpY2luYy5jb20+DQpTdWJqZWN0OiBSZTogW1BB
-VENIIDEvNV0gdXNiOiBob3N0OiB4aGNpOiB1c2UgZmZzKCkgaW4geGhjaV9tZW1faW5pdCgpDQoN
-CkhlbGxvIQ0KDQpPbiAyLzE2LzIyIDk6NTkgQU0sIExpbnl1IFl1YW4gd3JvdGU6DQoNCj4gVGhl
-IGZvciBsb29wIHRvIGZpbmQgcGFnZSBzaXplIGJpdCBjYW4gYmUgcmVwbGFjZWQgd2l0aCBmZnMo
-KS4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IExpbnl1IFl1YW4gPHF1aWNfbGlueXl1YW5AcXVpY2lu
-Yy5jb20+DQo+IC0tLQ0KPiAgZHJpdmVycy91c2IvaG9zdC94aGNpLW1lbS5jIHwgNyArLS0tLS0t
-DQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDYgZGVsZXRpb25zKC0pDQo+IA0K
-PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvaG9zdC94aGNpLW1lbS5jIGIvZHJpdmVycy91c2Iv
-aG9zdC94aGNpLW1lbS5jDQo+IGluZGV4IDBlMzEyMDYuLjNjYmM3ZjIgMTAwNjQ0DQo+IC0tLSBh
-L2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tZW0uYw0KPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L3ho
-Y2ktbWVtLmMNCj4gQEAgLTIzOTUsMTIgKzIzOTUsNyBAQCBpbnQgeGhjaV9tZW1faW5pdChzdHJ1
-Y3QgeGhjaV9oY2QgKnhoY2ksIGdmcF90IGZsYWdzKQ0KPiAgCXBhZ2Vfc2l6ZSA9IHJlYWRsKCZ4
-aGNpLT5vcF9yZWdzLT5wYWdlX3NpemUpOw0KPiAgCXhoY2lfZGJnX3RyYWNlKHhoY2ksIHRyYWNl
-X3hoY2lfZGJnX2luaXQsDQo+ICAJCQkiU3VwcG9ydGVkIHBhZ2Ugc2l6ZSByZWdpc3RlciA9IDB4
-JXgiLCBwYWdlX3NpemUpOw0KPiAtCWZvciAoaSA9IDA7IGkgPCAxNjsgaSsrKSB7DQo+IC0JCWlm
-ICgoMHgxICYgcGFnZV9zaXplKSAhPSAwKQ0KPiAtCQkJYnJlYWs7DQo+IC0JCXBhZ2Vfc2l6ZSA9
-IHBhZ2Vfc2l6ZSA+PiAxOw0KPiAtCX0NCj4gLQlpZiAoaSA8IDE2KQ0KPiArCWlmICgoaSA9IGZm
-cyhwYWdlX3NpemUpKSA8IDE2KQ0KDQogICBBbHdheXMgcnVuIHlvdXIgcGF0Y2hlcyB0aHJ1IHNj
-cmlwdHMvY2hlY2twYXRjaC5wbCAtLSBpbiB0aGlzIGNhc2UgaXQgd2lsbCBjb21wbGFpbg0Kb2Yg
-YW4gYXNzaWdubWVudCBpbiB0aGUgKmlmKiBleHByZXNzaW9uLi4uDQoNClsuLi5dDQoNCk1OUiwg
-U2VyZ2V5DQo=
+Hi Sandeep,
+
+On 2/16/22 12:27 AM, Sandeep Maheswaram wrote:
+> Hi Steev
+>
+> On 2/16/2022 8:52 AM, Steev Klimaszewski wrote:
+>> Hi Sandeep,
+>>
+>> On 2/15/22 3:40 AM, Sandeep Maheswaram wrote:
+>>> Hi Steev,
+>>>
+>>>>>>
+>>>>> Can you try with IRQ_TYPE_EDGE_BOTH in your device tree and see if 
+>>>>> you are getting the issue.
+>>>>>
+>>>>> Regards
+>>>>>
+>>>>> Sandeep
+>>>>>
+>>>> I just tested here, changing both of the IRQ_TYPE_LEVEL_HIGH in the 
+>>>> yoga's dts to EDGE_BOTH and I still do not get a booting system.
+>>>>
+>>>> -- Steev
+>>>>
+>>> Please let us know what devices are connected to your setup and 
+>>> share the device tree file you are using.
+>>>
+>>> Please share the failure logs also,
+>>>
+>>> Regards
+>>>
+>>> Sandeep
+>>>
+>> The setup is a Lenovo Yoga C630 (Windows on ARM laptop).  I do not 
+>> have any sort of serial console access to the device, unfortunately.  
+>> Even when taking it apart, it seems to have some sort of 26pin debug 
+>> adapter port that I've never seen before which you can see on the far 
+>> right in this picture of the motherboard at 
+>> https://i.ebayimg.com/images/g/a2EAAOSwwzZiCxPM/s-l1600.jpg
+>>
+>> I do not have anything plugged in to the USB ports (sometimes the 
+>> power adapter, but I have tried both on mains as well as off.)
+>>
+>> Which I added as a commit to my kernel tree, and pushed so you can 
+>> see the full dts here: 
+>> https://github.com/steev/linux/blob/c8234e664491e35e3edcd211f3b78c04436402b0/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
+>>
+>> I am booting with the command line arguments of
+>>
+>> clk_ignore_unused verbose module_blacklist=msm video=efifb 
+>> earlyconsole=efifb
+>>
+>> I can't provide a boot log, because I'm not actually getting 
+>> anything.  Booting a different kernel, and it doesn't appear that 
+>> anything is logged at all.
+>>
+>>
+>> -- steev
+>>
+> Can you try with below change
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi 
+> b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index 0d6286d..0a9c0f7 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -3796,8 +3796,8 @@
+>
+>                         interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
+>                                      <GIC_SPI 486 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 488 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 489 IRQ_TYPE_LEVEL_HIGH>;
+> +                                    <GIC_SPI 488 IRQ_TYPE_EDGE_BOTH>,
+> +                                    <GIC_SPI 489 IRQ_TYPE_EDGE_BOTH>;
+>                         interrupt-names = "hs_phy_irq", "ss_phy_irq",
+>                                           "dm_hs_phy_irq", 
+> "dp_hs_phy_irq";
+>
+> @@ -3844,8 +3844,8 @@
+>
+>                         interrupts = <GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>,
+>                                      <GIC_SPI 487 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 490 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 491 IRQ_TYPE_LEVEL_HIGH>;
+> +                                    <GIC_SPI 490 IRQ_TYPE_EDGE_BOTH>,
+> +                                    <GIC_SPI 491 IRQ_TYPE_EDGE_BOTH>;
+>                         interrupt-names = "hs_phy_irq", "ss_phy_irq",
+>                                           "dm_hs_phy_irq", 
+> "dp_hs_phy_irq";
+>
+> Regards
+>
+> Sandeep
+
+That does allow it to boot, however.... it breaks USB.
+
+[    2.013325] genirq: Setting trigger mode 3 for irq 35 failed 
+(gic_set_type+0x0/0x1b0)
+[    2.014063] dwc3-qcom a6f8800.usb: dp_hs_phy_irq failed: -22
+[    2.014134] dwc3-qcom a6f8800.usb: failed to setup IRQs, err=-22
+[    2.014351] dwc3-qcom: probe of a6f8800.usb failed with error -22
+[    2.018496] genirq: Setting trigger mode 3 for irq 39 failed 
+(gic_set_type+0x0/0x1b0)
+[    2.019124] dwc3-qcom a8f8800.usb: dp_hs_phy_irq failed: -22
+[    2.019193] dwc3-qcom a8f8800.usb: failed to setup IRQs, err=-22
+[    2.019372] dwc3-qcom: probe of a8f8800.usb failed with error -22
+
+steev@limitless:~$ lsusb
+steev@limitless:~$
+
+
+-- steev
+
