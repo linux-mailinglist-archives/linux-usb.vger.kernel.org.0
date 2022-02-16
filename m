@@ -2,92 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1FB4B84EF
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB934B84F6
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232520AbiBPJvf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Feb 2022 04:51:35 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49000 "EHLO
+        id S232564AbiBPJxj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Feb 2022 04:53:39 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232478AbiBPJvb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:51:31 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA19A29C103
-        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:51:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645005068; x=1676541068;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=99YnMQbApcc0QAzHaMFoAdEXgK/fCyyygtJXRBUm/tc=;
-  b=WQXsblzsf6t+Hq6tYh8HLLlZVruf6bilJBq+OXERPCd2LghY+S+mMUkj
-   Dqn/ut3g4SrnKa3IqBbcC+C90+v/w2d9NV5FzQ6Ed+19ObNP6xwXC3B2j
-   p3Foz/QJpOhD+7DlbFK9uMYQQQJilEYl8qzKBchznl5S/2u7y3oiYH1Ty
-   LbUCmHiHTTMQB1uC3fsi5vuYzxIsvK3uh4b1OsbCRnl2i+ZAulTpTM9bq
-   lM343t5BqYOVhoedQStpmEJ+p8hyZFEr3cI31oB/dhdFMKrhBrOAUZpHl
-   QdMEhwlDHYEm4ZMIGFRWvvhCcIc1QdyadXTv/E8oBRBhvRd38L/4fqz8D
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="249396978"
-X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="249396978"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 01:50:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="636410414"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 16 Feb 2022 01:50:34 -0800
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>, kernel test robot <lkp@intel.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH v2 9/9] usb: xhci: fix minmax.cocci warnings
-Date:   Wed, 16 Feb 2022 11:51:53 +0200
-Message-Id: <20220216095153.1303105-10-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220216095153.1303105-1-mathias.nyman@linux.intel.com>
-References: <20220216095153.1303105-1-mathias.nyman@linux.intel.com>
+        with ESMTP id S232537AbiBPJxi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:53:38 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4117316AA70
+        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:53:20 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id o6so2449621ljp.3
+        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:53:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4Zh+UK3xgjO5SoOMhPZUkkx32vK2cN4Br44t/LBsUUs=;
+        b=Pa5nylMuOEN9v7R5r1CHEkJx+eQHb59NATsfiOTPpXO0xXH5fwRe3SvRpd5dXifIq/
+         WkGoXj+sW/9pbMmyizTR5gybBrs/EoxsWG5v8mV6DgR9VlGqejMPEOBreOz02rBqJOIS
+         3RIud1AmZBAAv5ut2yootmTphYTkv54BaWbbn74VJTekE4Uk91og8Kj5h7s6jOVLD71s
+         ZkLwEWODxkM97L0epmjkHkQcmTECk5MIf1CgJ42hRUhEfH9ViQAGTDY4qaD6BXrtFUC8
+         s1FWybV7/TYBYg/IB+smDK1S2XzkV+KwKfOICqwesWqofflLaIt9T5JmUZSGB6CB30Dw
+         RoQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4Zh+UK3xgjO5SoOMhPZUkkx32vK2cN4Br44t/LBsUUs=;
+        b=KOUJPAbJq53N0Prz9Tn2MwtmUBCol0HeDy3udv3LcDyFgcRX2cBT09iiDeA5eia00u
+         wgdnzyFMUBcFBMPKGcytiw7q4XjdtKdc55/q3wYiw9yLj4caBxd9NqFsNOa+BLIMnYWQ
+         Fqdf9wVxZjWvOowvBShGXyVl6H0sPqHW/12YtwlMlXA50OJOMn8PNQlo9aO9+gkpTyNq
+         Vy6eQaKTxyO93dDQaS0/QDHXFyoqnYEfAzg6mPf6eqVSyczP/djByINYt3kdLpsPGUVZ
+         XYlgvLSRiSBUFhEd23B2YrUhldv9nWH7ycu8cqIia18XQNwTXJrH8btW69a9iArQte4a
+         2gYQ==
+X-Gm-Message-State: AOAM531tdc0bQ0weG2E0iq8z19Y88/g0s6z9J3w0kbqu1qwGLbsBQQ6q
+        oJr8t+g7NyNBOz30l3KVZAA=
+X-Google-Smtp-Source: ABdhPJxKsQzpCzi70RPLybFkz0itadVmX7T3tu+Kqun5s3ZiVol3i5fiNAVLBg5345tK+SdgtmZklw==
+X-Received: by 2002:a05:651c:1784:b0:243:d87d:445a with SMTP id bn4-20020a05651c178400b00243d87d445amr1453331ljb.522.1645005190173;
+        Wed, 16 Feb 2022 01:53:10 -0800 (PST)
+Received: from [192.168.1.103] ([31.173.81.81])
+        by smtp.gmail.com with ESMTPSA id s2sm1180582lfi.90.2022.02.16.01.53.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 01:53:09 -0800 (PST)
+Subject: Re: [PATCH 1/5] usb: host: xhci: use ffs() in xhci_mem_init()
+To:     "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Jack Pham (QUIC)" <quic_jackp@quicinc.com>
+References: <1644994755-12975-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1644994755-12975-2-git-send-email-quic_linyyuan@quicinc.com>
+ <4688f5bb-c0fd-bbce-de1f-a554d543ed03@gmail.com>
+ <DM8PR02MB819861F71713D5539EF66D12E3359@DM8PR02MB8198.namprd02.prod.outlook.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <c6cf661b-b3df-281f-3cb0-8899c95f9ce2@gmail.com>
+Date:   Wed, 16 Feb 2022 12:53:08 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <DM8PR02MB819861F71713D5539EF66D12E3359@DM8PR02MB8198.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: kernel test robot <lkp@intel.com>
+On 2/16/22 12:47 PM, Linyu Yuan (QUIC) wrote:
 
-Simplify the code using max().
+> that's correct,  from my view, one line is good,
+> 
+> What's your suggestion ? two lines ?
 
-Generated by: scripts/coccinelle/misc/minmax.cocci
+   Yes, and it is not just my suggestion -- it's the kernel coding style.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-mem.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+[...]
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 7a2dce730e9a..f8c2b6c79543 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -433,8 +433,7 @@ int xhci_ring_expansion(struct xhci_hcd *xhci, struct xhci_ring *ring,
- 				(TRBS_PER_SEGMENT - 1);
- 
- 	/* Allocate number of segments we needed, or double the ring size */
--	num_segs = ring->num_segs > num_segs_needed ?
--			ring->num_segs : num_segs_needed;
-+	num_segs = max(ring->num_segs, num_segs_needed);
- 
- 	ret = xhci_alloc_segments_for_ring(xhci, &first, &last,
- 			num_segs, ring->cycle_state, ring->type,
--- 
-2.25.1
-
+MBR, Sergey
