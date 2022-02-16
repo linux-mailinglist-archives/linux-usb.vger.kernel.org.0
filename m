@@ -2,109 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2D44B84A0
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B23F4B84AE
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbiBPJmI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Feb 2022 04:42:08 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50698 "EHLO
+        id S232397AbiBPJoD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Feb 2022 04:44:03 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiBPJmG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:42:06 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B49E0AEB
-        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:41:52 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id e17so2395208ljk.5
-        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:41:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=QaNwt9SQ6DzRbNAGLtqtMU6nrQKeqSfmU6yrI7LzU0Y=;
-        b=KkCea7osivyB9FSw2DaT9jDfa0MzzKtbLlXCAJy8GXyJITuiG0eo3WV7Bij2TNY98v
-         DeBBrjIxibIEV0CMaOHYfhc/a7pbRjrSHvTCNW7pvUdb+wEYuguQnmN4sx1d+TGAnXQS
-         r4yzCe08uAbJT9W5ewyH1vBeWSCz/Tz1smB9M/mhId7LOj5KWgZJmVnq7agZdIAa/xSr
-         JW+exTCxPF18fCokPVF30Ox+V80Ss9miet9nx/c2OCKmaS0Uxt9QKTsjSRjKpd2TX3iE
-         P5SziC1mdPRXtG/kADH1lUVVdMkD7n+wEv8fmxdxrPDvjfd04JfpFiVUlNtiG7ZJCNBH
-         23jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=QaNwt9SQ6DzRbNAGLtqtMU6nrQKeqSfmU6yrI7LzU0Y=;
-        b=ZdoPieEJiUpUb0HU6hmGOABKpWeMo+7eCX126jI10xFg6DI3/yXF4AAGtxIZJShV1q
-         TbiyiWwggXdmOTiId9pkUay3qvqYE8nr56jQxkkkKCAnxvFVnEaQhvVIYepR5OkRGmOo
-         fM3og3LHpnDn6kyO8pYCCz6si+W/n93Lk7MlvhubcPDrgivV2qfQu4YTkkBBDpQNFvaU
-         QpHpEPDYxTg/4oa74hnuvC07T7PIxaQYeyhORsqgkMcW2czR7OVOyzUN3czORWtNRqa3
-         HNGIiodtp8wuBWltouJkPIM/ymOIYcsp4+AWZZBd9RSc3GRz13oQ5uAMlnoYWBEqLyn7
-         PS5w==
-X-Gm-Message-State: AOAM530agbtqu5UAD/zST1+EaGyY/VW/V7Q9Iv15/or1CO5CMz+PyL4J
-        8DMWV34h4J4AZN5xpg58R54=
-X-Google-Smtp-Source: ABdhPJw4H6I7xWX0In3K8NmI6N1uXmUrxifxlgx9dKyUQkLTy1zmdHIQ2CEZjgb9nNINRinI8w1Zrg==
-X-Received: by 2002:a2e:3c06:0:b0:245:a3b8:aacf with SMTP id j6-20020a2e3c06000000b00245a3b8aacfmr1362819lja.241.1645004510933;
-        Wed, 16 Feb 2022 01:41:50 -0800 (PST)
-Received: from [192.168.1.103] ([31.173.81.81])
-        by smtp.gmail.com with ESMTPSA id t15sm164562lfp.91.2022.02.16.01.41.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 01:41:50 -0800 (PST)
-Subject: Re: [PATCH 1/5] usb: host: xhci: use ffs() in xhci_mem_init()
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>
-References: <1644994755-12975-1-git-send-email-quic_linyyuan@quicinc.com>
- <1644994755-12975-2-git-send-email-quic_linyyuan@quicinc.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <4688f5bb-c0fd-bbce-de1f-a554d543ed03@gmail.com>
-Date:   Wed, 16 Feb 2022 12:41:49 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <1644994755-12975-2-git-send-email-quic_linyyuan@quicinc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232284AbiBPJoC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:44:02 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id C9A902A4A04;
+        Wed, 16 Feb 2022 01:43:39 -0800 (PST)
+Received: from jleng.ambarella.net (unknown [180.169.129.130])
+        by mail-app2 (Coremail) with SMTP id by_KCgAX_nApxwxi+HTtAQ--.38282S2;
+        Wed, 16 Feb 2022 17:43:11 +0800 (CST)
+From:   3090101217@zju.edu.cn
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        ruslan.bilovol@gmail.com, pavel.hofman@ivitera.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jing Leng <jleng@ambarella.com>
+Subject: [PATCH] usb: gadget: f_uac1: add set requests support
+Date:   Wed, 16 Feb 2022 17:43:01 +0800
+Message-Id: <20220216094301.2448-1-3090101217@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgAX_nApxwxi+HTtAQ--.38282S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWr4UKF4kKry5Zw1fKF13XFb_yoW5trWrpF
+        4UCayayrs8J34qqr1xJr4rZFW3C3yxA39xKryDt343Wrn3Jwn0yF4jyF9a9FW3Aas5Cr4x
+        XF4Ygr1ruw1j9rDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBSb7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2vYz4IE4I80cI0F6IAv
+        xc0EwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
+        Av7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
+        6r1j6r4UM4x0Y48IcxkI7VAKI48JM4kE6xkIj40Ew7xC0wCY02Avz4vE14v_GFWl42xK82
+        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
+        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMI
+        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF
+        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
+        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUxBHqUUUUU
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIDBVNG3Fih1gACsj
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+From: Jing Leng <jleng@ambarella.com>
 
-On 2/16/22 9:59 AM, Linyu Yuan wrote:
+Currently the f_uac1 driver only supports UAC_SET_CUR request.
 
-> The for loop to find page size bit can be replaced with ffs().
-> 
-> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
-> ---
->  drivers/usb/host/xhci-mem.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index 0e31206..3cbc7f2 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -2395,12 +2395,7 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
->  	page_size = readl(&xhci->op_regs->page_size);
->  	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
->  			"Supported page size register = 0x%x", page_size);
-> -	for (i = 0; i < 16; i++) {
-> -		if ((0x1 & page_size) != 0)
-> -			break;
-> -		page_size = page_size >> 1;
-> -	}
-> -	if (i < 16)
-> +	if ((i = ffs(page_size)) < 16)
+But when uac1 device is plugged to Ubuntu 20.04 PC, at the stage
+of setup, the PC will send UAC_SET_RES request, If the device
+doesn't respond to the request, the PC will abort the setup process
+and uac1 device can't be recognized on Ubuntu 20.04 PC.
 
-   Always run your patches thru scripts/checkpatch.pl -- in this case it will complain
-of an assignment in the *if* expression...
+So f_uac1 driver should handle other set requests.
 
-[...]
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+---
+ drivers/usb/gadget/function/f_uac1.c | 44 +++++++++++++++++++++++-----
+ 1 file changed, 36 insertions(+), 8 deletions(-)
 
-MNR, Sergey
+diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
+index 03f50643fbba..c9d8ec4fdf22 100644
+--- a/drivers/usb/gadget/function/f_uac1.c
++++ b/drivers/usb/gadget/function/f_uac1.c
+@@ -589,7 +589,7 @@ in_rq_res(struct usb_function *fn, const struct usb_ctrlrequest *cr)
+ }
+ 
+ static void
+-out_rq_cur_complete(struct usb_ep *ep, struct usb_request *req)
++out_rq_complete(struct usb_ep *ep, struct usb_request *req)
+ {
+ 	struct g_audio *audio = req->context;
+ 	struct usb_composite_dev *cdev = audio->func.config->cdev;
+@@ -614,9 +614,11 @@ out_rq_cur_complete(struct usb_ep *ep, struct usb_request *req)
+ 			is_playback = 1;
+ 
+ 		if (control_selector == UAC_FU_MUTE) {
+-			u8 mute = *(u8 *)req->buf;
++			if (cr->bRequest == UAC_SET_CUR) {
++				u8 mute = *(u8 *)req->buf;
+ 
+-			u_audio_set_mute(audio, is_playback, mute);
++				u_audio_set_mute(audio, is_playback, mute);
++			}
+ 
+ 			return;
+ 		} else if (control_selector == UAC_FU_VOLUME) {
+@@ -624,7 +626,34 @@ out_rq_cur_complete(struct usb_ep *ep, struct usb_request *req)
+ 			s16 volume;
+ 
+ 			volume = le16_to_cpu(*c);
+-			u_audio_set_volume(audio, is_playback, volume);
++
++			switch (cr->bRequest) {
++			case UAC_SET_CUR:
++				u_audio_set_volume(audio, is_playback, volume);
++				break;
++			case UAC_SET_MIN:
++				if (is_playback)
++					opts->p_volume_min = volume;
++				else
++					opts->c_volume_min = volume;
++				break;
++			case UAC_SET_MAX:
++				if (is_playback)
++					opts->p_volume_max = volume;
++				else
++					opts->c_volume_max = volume;
++				break;
++			case UAC_SET_RES:
++				if (is_playback)
++					opts->p_volume_res = volume;
++				else
++					opts->c_volume_res = volume;
++				break;
++			case UAC_SET_MEM:
++				break;
++			default:
++				break;
++			}
+ 
+ 			return;
+ 		} else {
+@@ -643,7 +672,7 @@ out_rq_cur_complete(struct usb_ep *ep, struct usb_request *req)
+ }
+ 
+ static int
+-out_rq_cur(struct usb_function *fn, const struct usb_ctrlrequest *cr)
++ac_rq_out(struct usb_function *fn, const struct usb_ctrlrequest *cr)
+ {
+ 	struct usb_request *req = fn->config->cdev->req;
+ 	struct g_audio *audio = func_to_g_audio(fn);
+@@ -659,7 +688,7 @@ out_rq_cur(struct usb_function *fn, const struct usb_ctrlrequest *cr)
+ 			(FUOUT_EN(opts) && (entity_id == USB_OUT_FU_ID))) {
+ 		memcpy(&uac1->setup_cr, cr, sizeof(*cr));
+ 		req->context = audio;
+-		req->complete = out_rq_cur_complete;
++		req->complete = out_rq_complete;
+ 
+ 		return w_length;
+ 	} else {
+@@ -789,8 +818,7 @@ f_audio_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
+ 		value = audio_get_endpoint_req(f, ctrl);
+ 		break;
+ 	case USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE:
+-		if (ctrl->bRequest == UAC_SET_CUR)
+-			value = out_rq_cur(f, ctrl);
++		value = ac_rq_out(f, ctrl);
+ 		break;
+ 	case USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_INTERFACE:
+ 		value = ac_rq_in(f, ctrl);
+-- 
+2.17.1
+
