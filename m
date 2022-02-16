@@ -2,99 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9238C4B83A0
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F99C4B83B6
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbiBPJIm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Feb 2022 04:08:42 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52222 "EHLO
+        id S231904AbiBPJJV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Feb 2022 04:09:21 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbiBPJIl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:08:41 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBEC1C123
-        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:08:23 -0800 (PST)
+        with ESMTP id S231903AbiBPJJU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:09:20 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050A1255AF
+        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:09:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645002503; x=1676538503;
+  t=1645002549; x=1676538549;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=L9IoCPdVPu8QzPwB9ZH3k81wJN+NTTltzRqmgvJF9Y4=;
-  b=A49lUQ+VbO44zYawsxqK9Ywu+/8TL1KDRygz+FFte1HhTKCJqCUFel9F
-   nLJIDacpZ+LiQdVv1O3aHNjgeNn1bpXr0CiJ3LWIMcSS4jnd1WhdRyXPk
-   dMNfKPSRc49sl0KF5CUNkEo3Hj2ehtebxs+1idqc640Ifu9hPKnaeRgqn
-   gCS1ceXo9SNSzQCuahSCw1YkvvkGO/jYoPntWKmBYohfgR0ubi3e4V0YM
-   lcUYcugCBh3hQJtXGt3sM2fu1tHmJzaAbQaaokihplzq8CJLfnbgQ5DDy
-   KfM/ihFcaARDJsYURrhag8IhGwhq+dy7BEaVXGbk4L/rOjRSq2GCY7Dco
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="250296051"
+  bh=99YnMQbApcc0QAzHaMFoAdEXgK/fCyyygtJXRBUm/tc=;
+  b=j4gHnwg8D4KEuB/c/xSGNz4P80PCf3/7HHruMEdjsC2hIoad5FHl1CKe
+   nVY39vyqNKqP2L6FdSRNkmin+Dy4bPDV0MqX0wi7Xx934psUiLuucjb7j
+   76EIMbdMIaUN+HfwskpivAS9w3RLjFweMLkt0g+AwR86UfP7MQGvoGkro
+   bxtBY9EBE1wx+R0Henx3kRvVhOMvNEYCrqpGlBJMd6BfKb2fijfzNYpVQ
+   S9V1O5MO2dd0A1YafZHeMAwNKphVZa+QCcqVHwsWBpdfuxau+3ZgUqs8W
+   mERh11W6M6XwXxNtKoelkds/hF1O+KxAUeLoZA56yfeyUV+DE1dfKiIMF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="313831511"
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="250296051"
+   d="scan'208";a="313831511"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 01:08:20 -0800
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 01:08:22 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="571190388"
+   d="scan'208";a="571190425"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 16 Feb 2022 01:08:18 -0800
+  by orsmga001.jf.intel.com with ESMTP; 16 Feb 2022 01:08:20 -0800
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>,
+Cc:     <linux-usb@vger.kernel.org>, kernel test robot <lkp@intel.com>,
+        Julia Lawall <julia.lawall@inria.fr>,
         Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 8/9] usb: host: xhci: drop redundant checks
-Date:   Wed, 16 Feb 2022 11:09:37 +0200
-Message-Id: <20220216090938.1260899-9-mathias.nyman@linux.intel.com>
+Subject: [PATCH 9/9] usb: xhci: fix minmax.cocci warnings
+Date:   Wed, 16 Feb 2022 11:09:38 +0200
+Message-Id: <20220216090938.1260899-10-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220216090938.1260899-1-mathias.nyman@linux.intel.com>
 References: <20220216090938.1260899-1-mathias.nyman@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
+From: kernel test robot <lkp@intel.com>
 
-In xhci_endpoint_{disable|reset}() the expression '&vdev->eps[ep_index]'
-just cannot be NULL, so the checks have no sense at all...
+Simplify the code using max().
 
-Found by Linux Verification Center (linuxtesting.org) with the SVACE static
-analysis tool.
+Generated by: scripts/coccinelle/misc/minmax.cocci
 
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/usb/host/xhci-mem.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 2a58677d9b7a..33bae434aa94 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3150,8 +3150,6 @@ static void xhci_endpoint_disable(struct usb_hcd *hcd,
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 7a2dce730e9a..f8c2b6c79543 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -433,8 +433,7 @@ int xhci_ring_expansion(struct xhci_hcd *xhci, struct xhci_ring *ring,
+ 				(TRBS_PER_SEGMENT - 1);
  
- 	ep_index = xhci_get_endpoint_index(&host_ep->desc);
- 	ep = &vdev->eps[ep_index];
--	if (!ep)
--		goto done;
+ 	/* Allocate number of segments we needed, or double the ring size */
+-	num_segs = ring->num_segs > num_segs_needed ?
+-			ring->num_segs : num_segs_needed;
++	num_segs = max(ring->num_segs, num_segs_needed);
  
- 	/* wait for hub_tt_work to finish clearing hub TT */
- 	if (ep->ep_state & EP_CLEARING_TT) {
-@@ -3209,8 +3207,6 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
- 		return;
- 	ep_index = xhci_get_endpoint_index(&host_ep->desc);
- 	ep = &vdev->eps[ep_index];
--	if (!ep)
--		return;
- 
- 	/* Bail out if toggle is already being cleared by a endpoint reset */
- 	spin_lock_irqsave(&xhci->lock, flags);
+ 	ret = xhci_alloc_segments_for_ring(xhci, &first, &last,
+ 			num_segs, ring->cycle_state, ring->type,
 -- 
 2.25.1
 
