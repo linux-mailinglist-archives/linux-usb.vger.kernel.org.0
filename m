@@ -2,79 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0FD4B8386
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1D94B83A8
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbiBPI6y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Feb 2022 03:58:54 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38732 "EHLO
+        id S230491AbiBPJFq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Feb 2022 04:05:46 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:40038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbiBPI6y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 03:58:54 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0D82ABD1F;
-        Wed, 16 Feb 2022 00:58:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645001922; x=1676537922;
+        with ESMTP id S231879AbiBPJFn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:05:43 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484BC140F8;
+        Wed, 16 Feb 2022 01:05:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645002332; x=1676538332;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=4y71aus8Ob7SpkYYykXhuO5i7j3UaPqtGgLoekb6pW8=;
-  b=FnKSofJjr8nx6/ik2wBUPfPdtszWqWhUMBl/WIGpvXgXEMIvSqosb5h5
-   y900Rb91wV6E5GW/sWjmgVIq4kEdeTtzGeRkFalq4pF3rbIgMDfXx8Xzv
-   FEihIu8OBwgKubSlK/U5IdAqo8eMJFV8dpU+kx6EwFH9Zwr1YXpfepCnF
-   8=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 Feb 2022 00:58:41 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 00:58:41 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 16 Feb 2022 00:58:41 -0800
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 16 Feb 2022 00:58:35 -0800
-Date:   Wed, 16 Feb 2022 14:28:31 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Jun Li <lijun.kernel@gmail.com>
-CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>, Li Jun <jun.li@nxp.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>
-Subject: Re: [PATCH 2/2] usb: dwc: host: add xhci_plat_priv quirk
- XHCI_SKIP_PHY_INIT
-Message-ID: <20220216085831.GA15957@hu-pkondeti-hyd.qualcomm.com>
-References: <1644949454-814-1-git-send-email-quic_c_sanm@quicinc.com>
- <1644949454-814-3-git-send-email-quic_c_sanm@quicinc.com>
- <CAKgpwJWEZ7275LihHqxg50cWNVNxUcGR8e7pM-V2bH=aodL7YA@mail.gmail.com>
- <20220216080028.GA13793@hu-pkondeti-hyd.qualcomm.com>
- <CAKgpwJVwTDd40ZR3tKOgVpRTNs1OjE5ssMM+Lj-Ak0CHPSAWQQ@mail.gmail.com>
+   mime-version:in-reply-to;
+  bh=qL6XVUtQhDi8JNPHMmUbZrI0/tv/ETzCR2da60ToTa4=;
+  b=H2bJkXOqyf/wIXwm8/6nv5EzonTkxAPsPh1PGQrCRI4m72L6Wucvhk/L
+   FFEv+OWi0Lj7tTd2B9xp/F7wkGKMsqXm3VeKtCgw/rxaYH54WzntXx01I
+   FezeDlBZyIE5mpX6NaenXH4xfJWVAHgEBDJMmi7xoPdB+QUPix7wYwUNz
+   bJJIK7hSsjGWVSHsknSUSymwXf5BCHj2OYufbL8S9j9zMP1n/njDpiQEh
+   5UwdOtZFbqBcd95r4Q+iStoNp7AA1eVKPaKygc0karyHNyeqQWhwL11FN
+   GqnZ8es5In+ZEcHB4wr83jkr73JQRgOVmeeQFZMcLIV27xXJRbkSuBAis
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="249389777"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="249389777"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 01:05:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="681420548"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 16 Feb 2022 01:05:29 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 16 Feb 2022 11:05:28 +0200
+Date:   Wed, 16 Feb 2022 11:05:28 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] usb: typec: Factor out non-PD fwnode properties
+Message-ID: <Ygy+WOhXNLKjZQfA@kuha.fi.intel.com>
+References: <20220214050118.61015-1-samuel@sholland.org>
+ <20220214050118.61015-4-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKgpwJVwTDd40ZR3tKOgVpRTNs1OjE5ssMM+Lj-Ak0CHPSAWQQ@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220214050118.61015-4-samuel@sholland.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,71 +62,157 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 04:49:32PM +0800, Jun Li wrote:
-> Pavan Kondeti <quic_pkondeti@quicinc.com> 于2022年2月16日周三 16:00写道：
-> >
-> > On Wed, Feb 16, 2022 at 03:16:40PM +0800, Jun Li wrote:
-> > > Sandeep Maheswaram <quic_c_sanm@quicinc.com> 于2022年2月16日周三 14:58写道：
-> > > >
-> > > > dwc3 manages PHY by own DRD driver, so skip the management by
-> > > > HCD core.
-> > > > During runtime suspend phy was not getting suspend because
-> > > > runtime_usage value is 2.
-> > > >
-> > > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > > > ---
-> > > >  drivers/usb/dwc3/host.c | 15 +++++++++++++++
-> > > >  1 file changed, 15 insertions(+)
-> > > >
-> > > > diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> > > > index eda8719..4a035a8 100644
-> > > > --- a/drivers/usb/dwc3/host.c
-> > > > +++ b/drivers/usb/dwc3/host.c
-> > > > @@ -13,6 +13,14 @@
-> > > >  #include <linux/platform_device.h>
-> > > >
-> > > >  #include "core.h"
-> > > > +#include <linux/usb/hcd.h>
-> > > > +#include <linux/usb/xhci-plat.h>
-> > > > +#include <linux/usb/xhci-quirks.h>
-> > > > +
-> > > > +
-> > > > +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
-> > > > +       .quirks = XHCI_SKIP_PHY_INIT,
-> > > > +};
-> > >
-> > > It's better to create this xhci_plat_priv by each dwc3 glue layer,
-> > > with that, we can use this priv to pass other flags and possibly
-> > > override APIs by each glue driver which may not apply to all dwc3
-> > > platforms.
-> > >
-> >
-> > Do you see a need for any glue driver to know about this xHC platform data?
+On Sun, Feb 13, 2022 at 11:01:16PM -0600, Samuel Holland wrote:
+> Basic programmable non-PD Type-C port controllers do not need the full
+> TCPM library, but they share the same devicetree binding and the same
+> typec_capability structure. Factor out a helper for parsing those
+> properties which map to fields in struct typec_capability, so the code
+> can be shared between TCPM and basic non-TCPM drivers.
 > 
-> Yes. I have some xhci quirks which are specifix to NXP iMX platforms.
-> 
-> > AFAICT, glue driver has no direction connection with the dwc3 core. All
-> > the required data is coming from dT on ARM based boards. Adding a private
-> > interface between dwc3 core and glue for passing xhci platform data seems
-> > to be overkill. If there is a pressing need, why not?
-> 
-> And looking at xhci_plat_priv members
-> 
-> -struct xhci_plat_priv {
-> -       const char *firmware_name;
-> -       unsigned long long quirks;
-> -       int (*plat_setup)(struct usb_hcd *);
-> -       void (*plat_start)(struct usb_hcd *);
-> -       int (*init_quirk)(struct usb_hcd *);
-> -       int (*suspend_quirk)(struct usb_hcd *);
-> -       int (*resume_quirk)(struct usb_hcd *);
-> -};
-> 
-> Are we going to share the same all those quirks and APIs
-> implementation across all dwc3 platforms?
-> 
-Currently Yes. Thats why I am asking if there is a pressing need to
-make this more complex than it needs to be..
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-Thanks,
-Pavan
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+> 
+> Changes in v3:
+>  - Leave the call to fw_devlink_purge_absent_suppliers in its original
+>    place in the TCPM code. It is not needed by the new driver.
+>  - Remove unused variable from TCPM function.
+> 
+> Changes in v2:
+>  - Always put the return values from typec_find_* in a signed variable
+>    for error checking.
+> 
+>  drivers/usb/typec/class.c     | 43 +++++++++++++++++++++++++++++++++++
+>  drivers/usb/typec/tcpm/tcpm.c | 24 +------------------
+>  include/linux/usb/typec.h     |  3 +++
+>  3 files changed, 47 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 45a6f0c807cb..ee0e520707dd 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -1894,6 +1894,49 @@ void *typec_get_drvdata(struct typec_port *port)
+>  }
+>  EXPORT_SYMBOL_GPL(typec_get_drvdata);
+>  
+> +int typec_get_fw_cap(struct typec_capability *cap,
+> +		     struct fwnode_handle *fwnode)
+> +{
+> +	const char *cap_str;
+> +	int ret;
+> +
+> +	cap->fwnode = fwnode;
+> +
+> +	ret = fwnode_property_read_string(fwnode, "power-role", &cap_str);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = typec_find_port_power_role(cap_str);
+> +	if (ret < 0)
+> +		return ret;
+> +	cap->type = ret;
+> +
+> +	/* USB data support is optional */
+> +	ret = fwnode_property_read_string(fwnode, "data-role", &cap_str);
+> +	if (ret == 0) {
+> +		ret = typec_find_port_data_role(cap_str);
+> +		if (ret < 0)
+> +			return ret;
+> +		cap->data = ret;
+> +	}
+> +
+> +	/* Get the preferred power role for a DRP */
+> +	if (cap->type == TYPEC_PORT_DRP) {
+> +		cap->prefer_role = TYPEC_NO_PREFERRED_ROLE;
+> +
+> +		ret = fwnode_property_read_string(fwnode, "try-power-role", &cap_str);
+> +		if (ret == 0) {
+> +			ret = typec_find_power_role(cap_str);
+> +			if (ret < 0)
+> +				return ret;
+> +			cap->prefer_role = ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(typec_get_fw_cap);
+> +
+>  /**
+>   * typec_port_register_altmode - Register USB Type-C Port Alternate Mode
+>   * @port: USB Type-C Port that supports the alternate mode
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 5fce795b69c7..3bc2f4ebd1fe 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -5928,7 +5928,6 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>  			    struct fwnode_handle *fwnode)
+>  {
+>  	const char *opmode_str;
+> -	const char *cap_str;
+>  	int ret;
+>  	u32 mw, frs_current;
+>  
+> @@ -5944,23 +5943,10 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>  	 */
+>  	fw_devlink_purge_absent_suppliers(fwnode);
+>  
+> -	/* USB data support is optional */
+> -	ret = fwnode_property_read_string(fwnode, "data-role", &cap_str);
+> -	if (ret == 0) {
+> -		ret = typec_find_port_data_role(cap_str);
+> -		if (ret < 0)
+> -			return ret;
+> -		port->typec_caps.data = ret;
+> -	}
+> -
+> -	ret = fwnode_property_read_string(fwnode, "power-role", &cap_str);
+> +	ret = typec_get_fw_cap(&port->typec_caps, fwnode);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	ret = typec_find_port_power_role(cap_str);
+> -	if (ret < 0)
+> -		return ret;
+> -	port->typec_caps.type = ret;
+>  	port->port_type = port->typec_caps.type;
+>  	port->pd_supported = !fwnode_property_read_bool(fwnode, "pd-disable");
+>  
+> @@ -5997,14 +5983,6 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>  	if (port->port_type == TYPEC_PORT_SRC)
+>  		return 0;
+>  
+> -	/* Get the preferred power role for DRP */
+> -	ret = fwnode_property_read_string(fwnode, "try-power-role", &cap_str);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	port->typec_caps.prefer_role = typec_find_power_role(cap_str);
+> -	if (port->typec_caps.prefer_role < 0)
+> -		return -EINVAL;
+>  sink:
+>  	port->self_powered = fwnode_property_read_bool(fwnode, "self-powered");
+>  
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index 7ba45a97eeae..fdf737d48b3b 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -295,6 +295,9 @@ int typec_set_mode(struct typec_port *port, int mode);
+>  
+>  void *typec_get_drvdata(struct typec_port *port);
+>  
+> +int typec_get_fw_cap(struct typec_capability *cap,
+> +		     struct fwnode_handle *fwnode);
+> +
+>  int typec_find_pwr_opmode(const char *name);
+>  int typec_find_orientation(const char *name);
+>  int typec_find_port_power_role(const char *name);
+> -- 
+> 2.33.1
+
+thanks,
+
+-- 
+heikki
