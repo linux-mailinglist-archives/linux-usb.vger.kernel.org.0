@@ -2,101 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE5A4B8492
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2D44B84A0
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Feb 2022 10:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbiBPJi7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Feb 2022 04:38:59 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34778 "EHLO
+        id S232239AbiBPJmI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Feb 2022 04:42:08 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232340AbiBPJiz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:38:55 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F98E44AE;
-        Wed, 16 Feb 2022 01:38:40 -0800 (PST)
-X-UUID: abd4d364babd48a0942d93fefd5053ce-20220216
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:CC:To:Subject; bh=KXmXiao3N/LP6EYmXpUlj7b1IEb9SBtcb1jEDOaHX2o=;
-        b=ik6B1RLvtWETkn3Disuxr0/CgmPU13YEJoZGYkA0gpG7EB3Ub8IwBJMYKXHZrKyobZbEe/sTnTJEBhLSI/aqV23Y/Hd/+CNEFD04aFujwxrBE3gH28dPnumcezRQbIjuE0lhojClVJPZujjrkEJcu5azKV/0bh6fCz1YTQoX6lo=;
-X-UUID: abd4d364babd48a0942d93fefd5053ce-20220216
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2005764580; Wed, 16 Feb 2022 17:38:36 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 16 Feb 2022 17:38:35 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 16 Feb
- 2022 17:38:34 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Feb 2022 17:38:34 +0800
-Subject: Re: [PATCH v2 3/4] arm64: dts: mediatek: mt8195: add efuse node and
- cells
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S229660AbiBPJmG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 04:42:06 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B49E0AEB
+        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:41:52 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id e17so2395208ljk.5
+        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 01:41:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=QaNwt9SQ6DzRbNAGLtqtMU6nrQKeqSfmU6yrI7LzU0Y=;
+        b=KkCea7osivyB9FSw2DaT9jDfa0MzzKtbLlXCAJy8GXyJITuiG0eo3WV7Bij2TNY98v
+         DeBBrjIxibIEV0CMaOHYfhc/a7pbRjrSHvTCNW7pvUdb+wEYuguQnmN4sx1d+TGAnXQS
+         r4yzCe08uAbJT9W5ewyH1vBeWSCz/Tz1smB9M/mhId7LOj5KWgZJmVnq7agZdIAa/xSr
+         JW+exTCxPF18fCokPVF30Ox+V80Ss9miet9nx/c2OCKmaS0Uxt9QKTsjSRjKpd2TX3iE
+         P5SziC1mdPRXtG/kADH1lUVVdMkD7n+wEv8fmxdxrPDvjfd04JfpFiVUlNtiG7ZJCNBH
+         23jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=QaNwt9SQ6DzRbNAGLtqtMU6nrQKeqSfmU6yrI7LzU0Y=;
+        b=ZdoPieEJiUpUb0HU6hmGOABKpWeMo+7eCX126jI10xFg6DI3/yXF4AAGtxIZJShV1q
+         TbiyiWwggXdmOTiId9pkUay3qvqYE8nr56jQxkkkKCAnxvFVnEaQhvVIYepR5OkRGmOo
+         fM3og3LHpnDn6kyO8pYCCz6si+W/n93Lk7MlvhubcPDrgivV2qfQu4YTkkBBDpQNFvaU
+         QpHpEPDYxTg/4oa74hnuvC07T7PIxaQYeyhORsqgkMcW2czR7OVOyzUN3czORWtNRqa3
+         HNGIiodtp8wuBWltouJkPIM/ymOIYcsp4+AWZZBd9RSc3GRz13oQ5uAMlnoYWBEqLyn7
+         PS5w==
+X-Gm-Message-State: AOAM530agbtqu5UAD/zST1+EaGyY/VW/V7Q9Iv15/or1CO5CMz+PyL4J
+        8DMWV34h4J4AZN5xpg58R54=
+X-Google-Smtp-Source: ABdhPJw4H6I7xWX0In3K8NmI6N1uXmUrxifxlgx9dKyUQkLTy1zmdHIQ2CEZjgb9nNINRinI8w1Zrg==
+X-Received: by 2002:a2e:3c06:0:b0:245:a3b8:aacf with SMTP id j6-20020a2e3c06000000b00245a3b8aacfmr1362819lja.241.1645004510933;
+        Wed, 16 Feb 2022 01:41:50 -0800 (PST)
+Received: from [192.168.1.103] ([31.173.81.81])
+        by smtp.gmail.com with ESMTPSA id t15sm164562lfp.91.2022.02.16.01.41.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 01:41:50 -0800 (PST)
+Subject: Re: [PATCH 1/5] usb: host: xhci: use ffs() in xhci_mem_init()
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>,
         Mathias Nyman <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-References: <20220128062902.26273-1-chunfeng.yun@mediatek.com>
- <20220128062902.26273-3-chunfeng.yun@mediatek.com>
- <YgY3qvAy5lW1tEdG@kroah.com>
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-Message-ID: <6e26f483-f4b6-0d0f-7cca-cfa19a39b10a@mediatek.com>
-Date:   Wed, 16 Feb 2022 17:38:34 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>
+References: <1644994755-12975-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1644994755-12975-2-git-send-email-quic_linyyuan@quicinc.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <4688f5bb-c0fd-bbce-de1f-a554d543ed03@gmail.com>
+Date:   Wed, 16 Feb 2022 12:41:49 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-In-Reply-To: <YgY3qvAy5lW1tEdG@kroah.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <1644994755-12975-2-git-send-email-quic_linyyuan@quicinc.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCk9uIDIvMTEvMjIgNjoxNyBQTSwgR3JlZyBLcm9haC1IYXJ0bWFuIHdyb3RlOg0KPiBPbiBG
-cmksIEphbiAyOCwgMjAyMiBhdCAwMjoyOTowMVBNICswODAwLCBDaHVuZmVuZyBZdW4gd3JvdGU6
-DQo+PiBBZGQgZWZ1c2Ugbm9kZSBhbmQgY2VsbHMgdXNlZCBieSB0LXBoeSB0byBmaXggdGhlIGJp
-dCBzaGlmdCBpc3N1ZQ0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZl
-bmcueXVuQG1lZGlhdGVrLmNvbT4NCj4+IC0tLQ0KPj4gdjI6IHVzZSBodyBhdXRvIGxvYWQgZm9y
-IHUycGh5IHdoaWNoIGhhcyBubyB0aGlzIGlzc3VlDQo+Pg0KPj4gTm90ZToNCj4+DQo+PiAgIGRl
-cGVuZCBvbiB0aGUgcmV2aWV3aW5nIHBhdGNoOg0KPj4NCj4+IFt2OSwzLzNdIGFybTY0OiBkdHM6
-IEFkZCBtZWRpYXRlayBTb0MgbXQ4MTk1IGFuZCBldmFsdWF0aW9uIGJvYXJkDQo+PiBodHRwczov
-L3VybGRlZmVuc2UuY29tL3YzL19faHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wYXRjaC8x
-MjcxMTI5Nl9fOyEhQ1RSTktBOXdNZzBBUmJ3ITBKZzhrTE40a0J3MExjYmlBSDFIWVRxMnVRNVZ3
-aUQtQ0U4eW9GQkQ3b0FwbjhZTlNkbVZwd1NkWTFxMkM3THZZNmMkDQo+IA0KPiBBcyBJIGRvbid0
-IGhhdmUgdGhhdCBpbiBteSB0cmVlLCBJIGNhbiBvbmx5IHRha2UgdGhlIGZpcnN0IDIgcGF0Y2hl
-cw0KPiBoZXJlIG5vdywgdGhhbmtzLg0KPiANCj4gZ3JlZyBrLWgNCj4gDQo+IF9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQo+IExpbnV4LW1lZGlhdGVrIG1h
-aWxpbmcgbGlzdA0KPiBMaW51eC1tZWRpYXRla0BsaXN0cy5pbmZyYWRlYWQub3JnDQo+IGh0dHBz
-Oi8vdXJsZGVmZW5zZS5jb20vdjMvX19odHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFu
-L2xpc3RpbmZvL2xpbnV4LW1lZGlhdGVrX187ISFDVFJOS0E5d01nMEFSYnchMEpnOGtMTjRrQncw
-TGNiaUFIMUhZVHEydVE1VndpRC1DRTh5b0ZCRDdvQXBuOFlOU2RtVnB3U2RZMXEyWk1EWG1HNCQN
-Cj4gDQoNCkp1c3QgYSBnZW50bGUgcmVtaW5kZXIgdGhhdCB0aGVyZSBpcyBuZXcgdjEwIHZlcnNp
-b24NCg0KWzFdIFtQQVRDSCB2MTAgMy8zXSBhcm02NDogZHRzOiBBZGQgbWVkaWF0ZWsgU29DIG10
-ODE5NSBhbmQgZXZhbHVhdGlvbiANCmJvYXJkDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9sa21s
-LzIwMjIwMTMwMDIzMjA5LjE2Mjc1LTQtdGluZ2hhbi5zaGVuQG1lZGlhdGVrLmNvbS9ULyNtYWU3
-ZmNlNjBhZTU0MDJlN2E1ZDA0NGZiMjdjZTA3ZDlmMGRiMDNjZQ0KDQpDb21lIGFsb25nIHdpdGgg
-dGhpcyBwYXRjaCBzZXQgaXMgc3RpbGwgdW5kZXIgcmV2aWV3aW5nLg0KWzJdIFtQQVRDSCB2MTAg
-MC8zXSBBZGQgYmFzaWMgU29DIHN1cHBvcnQgZm9yIG1lZGlhdGVrIG10ODE5NQ0KaHR0cHM6Ly9s
-b3JlLmtlcm5lbC5vcmcvbGttbC8yMDIyMDEzMDAyMzIwOS4xNjI3NS00LXRpbmdoYW4uc2hlbkBt
-ZWRpYXRlay5jb20vVC8NCg0KV2hpbGUgdGhlIHYxMCBbUEFUQ0ggMi8zXSBpbmNsdWRlZCBpbiB2
-MTAgcGF0Y2hzZXQgWzJdIGlzIHJlcXVpcmVkIGZvciANCnRoaXMgcmV2aWV3IGZlZWRiYWNrLg0K
-WzNdIGh0dHBzOi8vbGttbC5vcmcvbGttbC8yMDIyLzEvMjkvNDAxDQoNClRoYW5rcyENCk1hY3Bh
-dWwgTGlu
+Hello!
 
+On 2/16/22 9:59 AM, Linyu Yuan wrote:
+
+> The for loop to find page size bit can be replaced with ffs().
+> 
+> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> ---
+>  drivers/usb/host/xhci-mem.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+> index 0e31206..3cbc7f2 100644
+> --- a/drivers/usb/host/xhci-mem.c
+> +++ b/drivers/usb/host/xhci-mem.c
+> @@ -2395,12 +2395,7 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+>  	page_size = readl(&xhci->op_regs->page_size);
+>  	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+>  			"Supported page size register = 0x%x", page_size);
+> -	for (i = 0; i < 16; i++) {
+> -		if ((0x1 & page_size) != 0)
+> -			break;
+> -		page_size = page_size >> 1;
+> -	}
+> -	if (i < 16)
+> +	if ((i = ffs(page_size)) < 16)
+
+   Always run your patches thru scripts/checkpatch.pl -- in this case it will complain
+of an assignment in the *if* expression...
+
+[...]
+
+MNR, Sergey
