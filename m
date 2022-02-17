@@ -2,72 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938184BA44A
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 16:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8AD4BA44D
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 16:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242416AbiBQPYe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Feb 2022 10:24:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55774 "EHLO
+        id S240005AbiBQPZV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Feb 2022 10:25:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242417AbiBQPYd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Feb 2022 10:24:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF252B048B;
-        Thu, 17 Feb 2022 07:24:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE45461E95;
-        Thu, 17 Feb 2022 15:24:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BD09C340E8;
-        Thu, 17 Feb 2022 15:24:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645111457;
-        bh=FBqwSWBXUXomjXzUKJZlVmUAZw3lBOhKHlaoNTeSfm4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CZCZUhRRU/AJWb01q+xecMAm9xmz1yzYvju9J4z3GgwqWrxIPDVtlfALC2b5Ji2QK
-         4eptDuQsFf91TeGYE+AeRx5Jm2iiS2emQUt9eXJkxbj2kJZWyVA3JKtumlTq/rGLS+
-         YBTvDVSSn2u0aps7COr3zprorgYK/27YmjiKvqKs=
-Date:   Thu, 17 Feb 2022 16:24:14 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jing Leng <3090101217@zju.edu.cn>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Jing Leng <jleng@ambarella.com>, ruslan.bilovol@gmail.com,
-        jbrunet@baylibre.com, pavel.hofman@ivitera.com, pawell@cadence.com,
-        jackp@codeaurora.org, balbi@kernel.org, colin.king@intel.com
-Subject: Re: [PATCH v3] usb: gadget: f_uac2: fix superspeed transfer
-Message-ID: <Yg5onoldRY3ygW7v@kroah.com>
-References: <YgpruynyO1AJr7bn@kroah.com>
- <20220217055503.8057-1-3090101217@zju.edu.cn>
- <258cfffe.b20d3.17f064d6977.Coremail.3090101217@zju.edu.cn>
+        with ESMTP id S235082AbiBQPZU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Feb 2022 10:25:20 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 70DBA2B1020
+        for <linux-usb@vger.kernel.org>; Thu, 17 Feb 2022 07:25:03 -0800 (PST)
+Received: (qmail 821319 invoked by uid 1000); 17 Feb 2022 10:25:02 -0500
+Date:   Thu, 17 Feb 2022 10:25:02 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Dan Carpenter <dan.carpenter@oracle.com>, Greg KH <greg@kroah.com>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        Salah Triki <salah.triki@gmail.com>,
+        benjamin.tissoires@redhat.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
+        noralf@tronnes.org,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        tzimmermann@suse.de
+Subject: Re: [PATCH] HID: elo: Fix refcount leak in elo_probe()
+Message-ID: <Yg5ozvWf0T+NTWPz@rowland.harvard.edu>
+References: <YgbT4uqSIVY9ku10@rowland.harvard.edu>
+ <000000000000d31cac05d7c4da7e@google.com>
+ <YgcSbUwiALbmoTvL@rowland.harvard.edu>
+ <CAD-N9QX6kTf-Fagz8W00KOM1REhoqQvfTckqZZttMcdSCHmSag@mail.gmail.com>
+ <YgpqHEb1CuhIElIP@rowland.harvard.edu>
+ <20220217080459.GB2407@kadam>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <258cfffe.b20d3.17f064d6977.Coremail.3090101217@zju.edu.cn>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220217080459.GB2407@kadam>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 02:10:10PM +0800, Jing Leng wrote:
-> Hi Greg KH,
+On Thu, Feb 17, 2022 at 11:04:59AM +0300, Dan Carpenter wrote:
+> Salah sent a bunch of these.  The reasoning was explained in this email.
 > 
-> 1. Old version kernel can support superspeed transfer, the problem
-> was introduced by the following modification:
->  commit eaf6cbe0992052a46d93047dc122fad5126aa3bd
->  Author: Ruslan Bilovol <ruslan.bilovol@gmail.com>
->  Date:   Mon Jul 12 14:55:28 2021 +0200
->  
->      usb: gadget: f_uac2: add volume and mute support
+> https://www.spinics.net/lists/kernel/msg4026672.html
+> 
+> When he resent the patch, Greg said that taking the reference wasn't
+> needed so the patch wasn't applied.  (Also it had the same reference
+> leak so that's a second reason it wasn't applied).
 
-Then put this as a Fixes: tag in the changelog text like the
-documentation asks to.
+Indeed, the kerneldoc for usb_get_intf() does say that each reference 
+held by a driver must be refcounted.  And there's nothing wrong with 
+doing that, _provided_ you do it correctly.
 
-thanks,
+But if you know the extra refcount will never be needed (because the 
+reference will be dropped before the usb_interface in question is 
+removed), fiddling with the reference count is unnecessary.  I guess 
+whether or not to do it could be considered a matter of taste.
 
-greg k-h
+On the other hand, it wouldn't hurt to update the kerneldoc for 
+usb_get_intf() (and usb_get_dev() also).  We could point out that if a 
+driver does not access the usb_interface structure after its disconnect 
+routine returns, incrementing the refcount isn't mandatory.
+
+Greg, any opinion on this?
+
+Alan Stern
