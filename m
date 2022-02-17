@@ -2,89 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715DE4BA45E
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 16:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 394744BA478
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 16:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242473AbiBQP3G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Feb 2022 10:29:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38582 "EHLO
+        id S242444AbiBQPgM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Feb 2022 10:36:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242461AbiBQP3G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Feb 2022 10:29:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2612AB508;
-        Thu, 17 Feb 2022 07:28:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DD3561E9F;
-        Thu, 17 Feb 2022 15:28:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ABFFC340E8;
-        Thu, 17 Feb 2022 15:28:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645111731;
-        bh=ru4JYpuY+BIPB6TA0dGc9lns/k0eZgQxIgm7/e+BfO0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U8Xn12Sz0aqZ0kUd9SIDuRVaNIFErQA7sEq0vQ93pD1F9eGNfLhDxZyq+YKJ8AEAJ
-         56zIF669Xc4GtDNb0wnI9Kq5/LvUGUP6qaYzCvD7mAA4BBOx6NdHNW0CB5GetivmQJ
-         ChmoP8uBazLnjAm2cSULKoV+JPxOcbE4I5wlLnPA=
-Date:   Thu, 17 Feb 2022 16:28:48 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jing Leng <3090101217@zju.edu.cn>
-Cc:     balbi@kernel.org, ruslan.bilovol@gmail.com,
-        pavel.hofman@ivitera.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jing Leng <jleng@ambarella.com>
-Subject: Re: [PATCH] usb: gadget: f_uac1: add set requests support
-Message-ID: <Yg5psAzBNrVvOpGc@kroah.com>
-References: <20220216094301.2448-1-3090101217@zju.edu.cn>
- <YgzTsLV/nSKp7FWP@kroah.com>
- <770c0d3f.ab34b.17f0557e359.Coremail.3090101217@zju.edu.cn>
+        with ESMTP id S229562AbiBQPgL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Feb 2022 10:36:11 -0500
+X-Greylist: delayed 364 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 07:35:56 PST
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3BA2B2C6F;
+        Thu, 17 Feb 2022 07:35:56 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id A1B112B00557;
+        Thu, 17 Feb 2022 10:29:47 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 17 Feb 2022 10:29:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=vPxH7aW8wFaF6FXxK1Tw28k9hOtTqlkQkEM3+5
+        o6jE0=; b=SKicWjolSaPozz4NfRffQADKTRa8SEffMe5aQcKtd5lFyBpLDt9rpx
+        lRP2rE4ApYRhmgKVpBfH7BUfvPtPeaJqlUxO7tea12zpdpDY04X0Rk4Wzvm/0ZoS
+        bM9ZPdq+YzX2qwCpaqoxi8rUS8mWLsHS3RlcExLv5/3ezauOwd/jsbJecAE12du8
+        t0TwYYglg+xQPo2d4HFvarzzsJZS79QlNHYHbKk7DjiHpaPyDAjibY/lwvxKNOrP
+        2mTuYEEbdEr9xbkt4ABKNRgumz+7xR3u2AvNV/WpV81e6RdcsqN7YcjuSf0aSA+E
+        OFfXdUGkZgDjeaCidXwp22AujZB4RykA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=vPxH7aW8wFaF6FXxK
+        1Tw28k9hOtTqlkQkEM3+5o6jE0=; b=oJYseGpVhw6dopA1gjS4mMuicF/26jeNc
+        jTj1bCOqJtkD1BhBSWRNk9gTswXHBj7WJriUFIpasbTYniqKRPPi0h5uz56Fw2eA
+        zYu/fU9u5WfyghNUJA7eYYayFsjBWEJaGwKBwGGuAXcFfyHhcKjvW3Qzu8pXCkaU
+        Hmvpkve1IT5oBvwaa84AllJ/sL+fLiiSXeCJ58FNYn913ZMxq6ozepcxzKBGUS+7
+        GG2QQlI+7fOUC8SLI7L8Cw1gleON+e9EJQh3QOC72pG4QUlK6XxgSolAd6D2KQ4m
+        i0hZYhkaSQqnDvquoNuNotHLEGJcZ3oIhXiWP9VqwaCgSDG3yBRqQ==
+X-ME-Sender: <xms:6mkOYlse3lyINLCZgOGstWHLrrOqs40UFtvdUFY263AwJZ-zPmjnng>
+    <xme:6mkOYufKskfIV7amhqoAKjXRah1-kcUfPnn3LhN1XFp2JpzkNt0wQYfdd0HySmjeF
+    GuSn9bVDhMsNw>
+X-ME-Received: <xmr:6mkOYoxGwH-ylT7PGvPu8_tuSXwwsL6U-WT7_ZAty5oZP_FxuDsKxAxvp2Nd557noGnntn5I9zhXcpXsg3Z-f3PIQtWQiM-g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeekgdejhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvffukfhfgggtuggjsehttdertd
+    dttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeen
+    ucggtffrrghtthgvrhhnpeevueehjefgfffgiedvudekvdektdelleelgefhleejieeuge
+    egveeuuddukedvteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
+    fhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:6mkOYsM9M9puVPWvhJy0JQlkQpq5OhzTFeFQLlqLUQ-BVYTV4TRmWw>
+    <xmx:6mkOYl9CVjfu6xx8VC6Nr-bu-ghoA49QksuqCsEOTZVF3TgfF8VzZg>
+    <xmx:6mkOYsU41iGpazbSrPqas-haUyoVCHVL8UxnAHkDsxP3oaOLjKOfyg>
+    <xmx:62kOYo0cg8oz0wLBN43MwFWvllnjYuYMP_AUuaVxt_aKFTi8CJNgWErSeqU>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 17 Feb 2022 10:29:46 -0500 (EST)
+Date:   Thu, 17 Feb 2022 16:29:39 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
+        bjorn.andersson@linaro.org, robh@kernel.org,
+        linux-kernel@vger.kernel.org, quic_rjendra@quicinc.com,
+        quic_saipraka@quicinc.com
+Subject: Re: [PATCH V1] arm64: dts: qcom: sc7280: Set the default dr_mode for
+ usb2 to enable EUD.
+Message-ID: <Yg5p45LkdsAtFFKV@kroah.com>
+References: <1644903488-20557-1-git-send-email-quic_schowdhu@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <770c0d3f.ab34b.17f0557e359.Coremail.3090101217@zju.edu.cn>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1644903488-20557-1-git-send-email-quic_schowdhu@quicinc.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 09:42:00AM +0800, Jing Leng wrote:
-> Hi Greg KH,
-> 
-> > So is this a bug in the Host side to not do stuff like this?  Why not
-> > fix it there instead?
-> > 
-> > Where is the requirement that this command must be handled by the
-> > device?
-> > 
-> 
-> First we need to clarify two issues.
-> 
-> 1. Does the Ubuntu go beyond the UAC1 specification?
-> No. 
-> On page 66 of the UAC1 specification (
-> https://www.usb.org/sites/default/files/audio10.pdf):
-> The bRequest can be SET_CUR, SET_MIN, SET_MAX, SET_RES or SET_MEM.
-> In most cases, only the CUR and MEM attribute will be supported for
-> the Set request. However, this specification does not prevent a
-> designer from making other attributes programmable.
-> Supplement: Windows 10 only sends SET_CUR request.
-> 
-> 2. Does the old version kernel have the problem on the Ubuntu?
-> NO. (e.g. linux-5.10)
-> The problem is introduced by the following modification:
->     commit 0356e6283c7177391d144612f4b12986ed5c4f6e
->     Author: Ruslan Bilovol <ruslan.bilovol@gmail.com>
->     Date:   Mon Jul 12 14:55:29 2021 +0200
-> 
->         usb: gadget: f_uac1: add volume and mute support
+On Tue, Feb 15, 2022 at 11:08:08AM +0530, Souradeep Chowdhury wrote:
+> Update the dr_mode for usb2 to 'otg' from 'host' to enable role switch for Embedded USB
+> Debugger(EUD) Node.
 
-Then please add this commit id as a "Fixes:" tag in the changelog area.
+Please properly wrap your changelog at 72 columns.
 
 thanks,
 
