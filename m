@@ -2,133 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47724B964E
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 04:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 350704B9660
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 04:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbiBQDEF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Feb 2022 22:04:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47196 "EHLO
+        id S232392AbiBQDLO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Feb 2022 22:11:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiBQDEE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 22:04:04 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA9523BF2B;
-        Wed, 16 Feb 2022 19:03:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645067031; x=1676603031;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RhyL2jS7+HJqsAu/LNZglEPwWlKDeA0PnF0rf3RKWIE=;
-  b=LBdqe75HzcKWXh88Tf03GMmhEx1yoOZUVua/ymKWjdh2u3f6gNg7uvzx
-   lfQQOlA9D7yrp01Uad7EQgzAQtOeWHtotUwQ3cZ/UMFC8QE3ERhh7JwyM
-   bPoMCz7/bpCOkfDE9OY0hbALJeMrnsaSShZkpdmNCqBCDnd5xSpMEU2P6
-   4=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 Feb 2022 19:03:51 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 19:03:51 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 16 Feb 2022 19:03:50 -0800
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 16 Feb 2022 19:03:47 -0800
-Date:   Thu, 17 Feb 2022 08:33:43 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ugoswami@quicinc.com>, Jung Daehwan <dh10.jung@samsung.com>,
-        "Sergey Shtylyov" <s.shtylyov@omp.ru>
-Subject: Re: [PATCH v2] xhci: reduce xhci_handshake timeout in xhci_reset
-Message-ID: <20220217030343.GA32039@hu-pkondeti-hyd.qualcomm.com>
-References: <1644836663-29220-1-git-send-email-quic_pkondeti@quicinc.com>
- <1644841216-1468-1-git-send-email-quic_pkondeti@quicinc.com>
- <d82746d2-4096-1477-42dd-fd393e0ff827@linux.intel.com>
- <20220214135310.GC31021@hu-pkondeti-hyd.qualcomm.com>
- <1b9e7641-2ae9-0f81-2ad9-18340d5e148f@linux.intel.com>
- <20220215104920.GE31021@hu-pkondeti-hyd.qualcomm.com>
- <20220215170718.GF31021@hu-pkondeti-hyd.qualcomm.com>
- <70ebdb8c-1ea5-1a3e-046e-5e457f54726d@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <70ebdb8c-1ea5-1a3e-046e-5e457f54726d@linux.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S231329AbiBQDLO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 22:11:14 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 35AAE23D5D9;
+        Wed, 16 Feb 2022 19:10:58 -0800 (PST)
+Received: from jleng.ambarella.net (unknown [180.169.129.130])
+        by mail-app2 (Coremail) with SMTP id by_KCgBHTISsvA1itbXyAQ--.43101S2;
+        Thu, 17 Feb 2022 11:10:42 +0800 (CST)
+From:   3090101217@zju.edu.cn
+To:     gregkh@linuxfoundation.org, balbi@kernel.org,
+        laurent.pinchart@ideasonboard.com
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Jing Leng <jleng@ambarella.com>
+Subject: [PATCH v3] usb: gadget: f_uvc: add superspeed plus transfer support
+Date:   Thu, 17 Feb 2022 11:10:35 +0800
+Message-Id: <20220217031035.6150-1-3090101217@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <e3311c8.a65f5.17f059d63df.Coremail.3090101217@zju.edu.cn>
+References: <e3311c8.a65f5.17f059d63df.Coremail.3090101217@zju.edu.cn>
+X-CM-TRANSID: by_KCgBHTISsvA1itbXyAQ--.43101S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFyftw4DZw17ZF45GFyUJrb_yoW5Xw4Upa
+        15A3Z5Ary5JFn5J34UJan5Cry3XF4SvayDKFZFq3yY9rW3tas5Ar9Fyr1rKa47XFsxZr40
+        yFnrA3yIkw10krJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBSb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2vYz4IE4I80cI0F6IAv
+        xc0EwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
+        Av7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
+        6r1j6r4UM4x0Y48IcxkI7VAKI48JM4kE6xkIj40Ew7xC0wCY02Avz4vE14v_Gr4l42xK82
+        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
+        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMI
+        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
+        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
+        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUxeHqDUUUU
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIEBVNG3FjlrQABsY
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+From: Jing Leng <jleng@ambarella.com>
 
-On Wed, Feb 16, 2022 at 05:58:15PM +0200, Mathias Nyman wrote:
-> On 15.2.2022 19.07, Pavan Kondeti wrote:
-> >>>>
-> >>>> The crash reports I have seen are pointing to
-> >>>>
-> >>>> usb_remove_hcd()->xhci_stop()->xhci_reset()
-> >>>
-> >>> Ok, so xhci_stop() and xhci_shutdown() both may call xhci_reset() with interrupts
-> >>> disabled and spinlock held. In both these cases we're not that interested in the
-> >>> outcome of xhci_reset().
-> >>>
-> >>> But during probe we call xhci_reset() with interrupts enabled without spinlock,
-> >>> and here we really care about it succeeding.
-> >>> I'm also guessing reset could take a longer time during probe due to possible recent
-> >>> BIOS handover, or firmware loading etc.
-> >>>
-> >>> So how about passing a timeout value to xhci_reset()?
-> >>> Give it 10 seconds during probe, and 250ms in the other cases.
-> >>>
-> >>
-> >> Thanks for this suggestion.
-> >>
-> >> This sounds better compared to the quirks approach. xhci_resume() also seems
-> >> to be calling xhci_reset() in the hibernation path, I believe we should treat
-> >> this like probe()/startup case and give larger timeout.
-> >>
-> > I will test the below patch as per Mathias suggestion.
-> > 
-> > Thanks,
-> > Pavan
-> > 
-> > diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-> > index df3522d..031fe90 100644
-> > --- a/drivers/usb/host/xhci-hub.c
-> > +++ b/drivers/usb/host/xhci-hub.c
-> > @@ -762,7 +762,7 @@ static int xhci_exit_test_mode(struct xhci_hcd *xhci)
-> >  	}
-> >  	pm_runtime_allow(xhci_to_hcd(xhci)->self.controller);
-> >  	xhci->test_mode = 0;
-> > -	return xhci_reset(xhci);
-> > +	return xhci_reset(xhci, false);
-> 
-> Maybe just pass the timeout value directly to xhci_reset().
-> Looks like readl_poll_timeout_atomic() uses u64 for timeout_us,
-> makes sense to use the same.
-> 
-> Sergey also pointed out xhci_handshake() incorrectly uses a signed integer for timeouts.
-> This could be changed to u64 as well.
-> 
-> I'll write a patch that does all above
-> 
-Thank you. I will look forward to your patch and provide the test results with
-it.
+UVC driver doesn't set ssp_descriptors in struct usb_function,
+it doesn't support USB_SPEED_SUPER_PLUS transfer. So we can
+refer to USB_SPEED_SUPER to realize the support of
+USB_SPEED_SUPER_PLUS.
 
-Thanks,
-Pavan
+If users use a USB device controller that speed can be up to
+USB_SPEED_SUPER_PLUS (10 Gbps), downgrading to USB_SPEED_SUPER
+(5 Gbps) is not a good performance. In addition, it triggers a
+warning "configfs-gadget gadget: uvc doesn't hold the descriptors
+for current speed".
+
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+---
+ChangeLog v2->v3:
+- Modify the title and description of the PATCH
+- It is a feature but not a bug
+ChangeLog v1->v2:
+- Update more detailed description of the PATCH
+---
+ drivers/usb/gadget/function/f_uvc.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 71bb5e477dba..8fc9b035481e 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -478,6 +478,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+ 	void *mem;
+ 
+ 	switch (speed) {
++	case USB_SPEED_SUPER_PLUS:
+ 	case USB_SPEED_SUPER:
+ 		uvc_control_desc = uvc->desc.ss_control;
+ 		uvc_streaming_cls = uvc->desc.ss_streaming;
+@@ -521,7 +522,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+ 	      + uvc_control_ep.bLength + uvc_control_cs_ep.bLength
+ 	      + uvc_streaming_intf_alt0.bLength;
+ 
+-	if (speed == USB_SPEED_SUPER) {
++	if (speed == USB_SPEED_SUPER || speed == USB_SPEED_SUPER_PLUS) {
+ 		bytes += uvc_ss_control_comp.bLength;
+ 		n_desc = 6;
+ 	} else {
+@@ -565,7 +566,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+ 	uvc_control_header->baInterfaceNr[0] = uvc->streaming_intf;
+ 
+ 	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_control_ep);
+-	if (speed == USB_SPEED_SUPER)
++	if (speed == USB_SPEED_SUPER || speed == USB_SPEED_SUPER_PLUS)
+ 		UVC_COPY_DESCRIPTOR(mem, dst, &uvc_ss_control_comp);
+ 
+ 	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_control_cs_ep);
+@@ -727,6 +728,15 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+ 		}
+ 	}
+ 
++	if (gadget_is_superspeed_plus(c->cdev->gadget)) {
++		f->ssp_descriptors = uvc_copy_descriptors(uvc, USB_SPEED_SUPER_PLUS);
++		if (IS_ERR(f->ssp_descriptors)) {
++			ret = PTR_ERR(f->ssp_descriptors);
++			f->ssp_descriptors = NULL;
++			goto error;
++		}
++	}
++
+ 	/* Preallocate control endpoint request. */
+ 	uvc->control_req = usb_ep_alloc_request(cdev->gadget->ep0, GFP_KERNEL);
+ 	uvc->control_buf = kmalloc(UVC_MAX_REQUEST_SIZE, GFP_KERNEL);
+-- 
+2.17.1
+
