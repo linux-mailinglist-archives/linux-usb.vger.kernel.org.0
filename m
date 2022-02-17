@@ -2,55 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431ED4B981A
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 06:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D05E24B9876
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 06:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234173AbiBQFUh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Feb 2022 00:20:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39730 "EHLO
+        id S231532AbiBQFzD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Feb 2022 00:55:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234157AbiBQFUg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Feb 2022 00:20:36 -0500
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4372E2A598B;
-        Wed, 16 Feb 2022 21:20:18 -0800 (PST)
-Received: from jleng.ambarella.net (unknown [180.169.129.130])
-        by mail-app4 (Coremail) with SMTP id cS_KCgCXD4P52g1i4jM9CQ--.26372S2;
-        Thu, 17 Feb 2022 13:19:59 +0800 (CST)
-From:   3090101217@zju.edu.cn
-To:     gregkh@linuxfoundation.org, balbi@kernel.org,
-        pavel.hofman@ivitera.com, ruslan.bilovol@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Jing Leng <jleng@ambarella.com>
-Subject: [PATCH v4] usb: gadget: f_uac1: add different speed transfers support
-Date:   Thu, 17 Feb 2022 13:19:51 +0800
-Message-Id: <20220217051951.7466-1-3090101217@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <649b6b8a.a6d4b.17f06169537.Coremail.3090101217@zju.edu.cn>
-References: <649b6b8a.a6d4b.17f06169537.Coremail.3090101217@zju.edu.cn>
+        with ESMTP id S229569AbiBQFzC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Feb 2022 00:55:02 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EBA2838E7
+        for <linux-usb@vger.kernel.org>; Wed, 16 Feb 2022 21:54:46 -0800 (PST)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220217055440epoutp04630c7cc7b35ffc441216684742cb15be~UfRH2tZKs2654226542epoutp049
+        for <linux-usb@vger.kernel.org>; Thu, 17 Feb 2022 05:54:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220217055440epoutp04630c7cc7b35ffc441216684742cb15be~UfRH2tZKs2654226542epoutp049
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1645077280;
+        bh=fE01e/NtX+AjCnJ40sfy/JMNDKNIr5kI5yo/skDy1Sw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=INNWaamUzeQW+8xkk5GRTT3QS4BST+YmG1d7bRkBkfbAff1URLHCHGd+ZX8vd4OH2
+         60gddQkLKkCayz2GrIC5Awhdd8YZg+/qHskkxVB1m7/15PVT10/pXNS0PCXzJK2ePh
+         UkH3kqxVymoCWAMw7+I5Js48IIwPYSvUEbn3gzuM=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220217055439epcas2p1b2a0d0dba45bf0e108a3aa5877e75106~UfRHTxurH2809228092epcas2p1G;
+        Thu, 17 Feb 2022 05:54:39 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.91]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4JzkYT4V4zz4x9Pq; Thu, 17 Feb
+        2022 05:54:37 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E8.DB.25540.0D0ED026; Thu, 17 Feb 2022 14:44:48 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220217055434epcas2p3b85d195b91d2bbb4dcfea2787d50039b~UfRDFrghV1402214022epcas2p3S;
+        Thu, 17 Feb 2022 05:54:34 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220217055434epsmtrp1432962b2c003b6df428bf4a23d2f711e~UfRDEqb591385113851epsmtrp1T;
+        Thu, 17 Feb 2022 05:54:34 +0000 (GMT)
+X-AuditID: b6c32a47-81bff700000063c4-85-620de0d03253
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1B.D3.08738.A13ED026; Thu, 17 Feb 2022 14:54:34 +0900 (KST)
+Received: from ubuntu (unknown [12.36.155.120]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220217055434epsmtip13561f8415a14f506e3e88d704e67e51d~UfRCzxXJ10186201862epsmtip1I;
+        Thu, 17 Feb 2022 05:54:34 +0000 (GMT)
+Date:   Thu, 17 Feb 2022 14:52:14 +0900
+From:   Jung Daehwan <dh10.jung@samsung.com>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_jackp@quicinc.com, Thinh.Nguyen@synopsys.com
+Subject: Re: [RFC PATCH v2 3/3] usb: dwc3: Issue core soft reset before
+ enabling run/stop
+Message-ID: <20220217055214.GA152781@ubuntu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cS_KCgCXD4P52g1i4jM9CQ--.26372S2
-X-Coremail-Antispam: 1UD129KBjvAXoW3CrW7JF4fAw4fZF43Xr4fZrb_yoW8Ww15Zo
-        WDJFsYy34FqF1UXry8GF18WF18ZF1xCFsxXry5Jr9xZ3yI934Y9asrC3WDWa13JF1fC3WD
-        Wa4UWa1DZa97Gr48n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UjIYCTnIWjp_UUUYt7k0a2IF6w4kM7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0
-        x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj4
-        1l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0
-        I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWlnxkEFVCFx7IYxxCE
-        VcI25VAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lw4CEc2x0rVAKj4xxMxkIecxEwVAFwVW8WwCF04
-        k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
-        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr4
-        1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
-        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
-        A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07b5WrAUUUUU=
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIEBVNG3FjlrQADsa
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <20220216000835.25400-4-quic_wcheng@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOJsWRmVeSWpSXmKPExsWy7bCmue6FB7xJBt/brS2OtT1ht2hevJ7N
+        4vKuOWwWi5a1Mlvs+reIyWLT7j5Wi1ULDrA7sHtsWtXJ5rF/7hp2j4l76jy27P/M6PF5k1wA
+        a1S2TUZqYkpqkUJqXnJ+SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QFUoK
+        ZYk5pUChgMTiYiV9O5ui/NKSVIWM/OISW6XUgpScAvMCveLE3OLSvHS9vNQSK0MDAyNToMKE
+        7Ixjs76wFzRIVjQvimlgvCrSxcjJISFgIjHjSidzFyMXh5DADkaJD6vPMUI4nxglru/9zA7h
+        fGaUWH7pChNMS1/vciaIxC5GiaeXfrNBOE8YJfb9bWAEqWIRUJXYe7gdrINNQEvi3o8TzCC2
+        CJB9Z859sB3MAgsYJS5OuMAGkhAWiJZY0nQLrIhXQEfi24EeJghbUOLkzCcsIDangK3Ey/Y/
+        QHEODlEBFYlXB+tB5kgIfGWXWHhnMtR5LhL7du+HsoUlXh3fwg5hS0m87G+Dsosldn1qZYJo
+        bmCUaHwAcZ2EgLHErGftYB8wC2RIvJ3dxQiyTEJAWeLILRaIMJ9Ex+G/7BBhXomONiGITmWJ
+        6ZcnsELYkhIHX5+DmughsejRQ2hoHWaUeLJnO+MERvlZSF6bhWQbhK0jsWD3J7ZZQCuYBaQl
+        lv/jgDA1Jdbv0l/AyLqKUSy1oDg3PbXYqMAYHtvJ+bmbGMEpVMt9B+OMtx/0DjEycTAeYpTg
+        YFYS4f1wkDdJiDclsbIqtSg/vqg0J7X4EKMpMKImMkuJJucDk3heSbyhiaWBiZmZobmRqYG5
+        kjivV8qGRCGB9MSS1OzU1ILUIpg+Jg5OqQamTv57XUs3/33VeStnJUvKpA/TLJX3rzZp2X1b
+        p7hqvVk10+EPxxfwZyVOSbsj2KSx973UtdW1ajfuJvM8VlnnNK/FdT7r4g0tCumrlvFXrvsX
+        ZLPrpafp73e/NhufZ59Uc8Zp86w4l0U8sx263yXNTd68VuHjfzkN7mlWrQ8fzuLp/xUQ8PEj
+        S15v6cONOv5+5z+mTrhYVulSuOf2eTcVk+vSQkI2B1b+Ezx92KCKPcGE5c+fJ/o/2RhXv/FN
+        DFc+3Sn0vz3glYqYfsKaoO9sm/YpWYuIsXEUHdqyU3txZdjKmvgZyaeOTRPPNp/ybfrjJpMT
+        Lo1lMl2Na4szM3Le+69+HO0j8MuA+XvvXaZbSizFGYmGWsxFxYkAltmHfSoEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDLMWRmVeSWpSXmKPExsWy7bCSnK7UY94kgyNLtCyOtT1ht2hevJ7N
+        4vKuOWwWi5a1Mlvs+reIyWLT7j5Wi1ULDrA7sHtsWtXJ5rF/7hp2j4l76jy27P/M6PF5k1wA
+        axSXTUpqTmZZapG+XQJXxpZLn9kLDohV7OsQaWBcJ9TFyMkhIWAi0de7nKmLkYtDSGAHo8TK
+        le3sEAlJiaVzb0DZwhL3W46wQhQ9YpT4+fQ7M0iCRUBVYu/hdiYQm01AS+LejxNgcREg+86c
+        +4wgDcwCCxglLk64wAaSEBaIlljSdAusiFdAR+LbgR6o1YcZJXZsbGGDSAhKnJz5hAXEZgaa
+        dOPfS6AiDiBbWmL5Pw6QMKeArcTL9j9gYVEBFYlXB+snMArOQtI8C0nzLITmBYzMqxglUwuK
+        c9Nziw0LjPJSy/WKE3OLS/PS9ZLzczcxgiNAS2sH455VH/QOMTJxMB5ilOBgVhLh/XCQN0mI
+        NyWxsiq1KD++qDQntfgQozQHi5I474Wuk/FCAumJJanZqakFqUUwWSYOTqkGJocF1z/KimvX
+        +fEeWikRn31wGseqCoXH5rI/cmeJ9V0sN2vROOmfYrj4UZtnLX/k9XnSokV/PCRY5lYd/hDe
+        w3fiiRjvwlX2ja6x3x7UBQe0sVac+iJ0plMwafax2RdCdqy8/FusQsBfnWPZgeTb/+4t3s7v
+        nK2yPfLPzXlyHyO703o3XPhZIe3w6FpEjkCS2BTljX76palBxVrb1YRSBM50imdvF5udH885
+        r3TepSMbp8m/kjnGtUrrRhLHuwPGDt8inpVfVbtU16hVP+fR/oKHVXsefz4552zkra7+LQ3f
+        t/LWFfWXmjD0n5ANW7ksNESpZZ630p7/JnGBbBkxholKUrcPmp3atC+aw/ebEktxRqKhFnNR
+        cSIAAS8eB+8CAAA=
+X-CMS-MailID: 20220217055434epcas2p3b85d195b91d2bbb4dcfea2787d50039b
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----mwmExhcEqaTMgLyfw452.zc-R1ZLcLBBgXcQdqrDAhnQ.X2v=_fe3cf_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220216000912epcas2p419fb5d4f7044389451e28802dd471c5e
+References: <20220216000835.25400-1-quic_wcheng@quicinc.com>
+        <CGME20220216000912epcas2p419fb5d4f7044389451e28802dd471c5e@epcas2p4.samsung.com>
+        <20220216000835.25400-4-quic_wcheng@quicinc.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,441 +117,92 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
+------mwmExhcEqaTMgLyfw452.zc-R1ZLcLBBgXcQdqrDAhnQ.X2v=_fe3cf_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-On page 61 of the UAC1 specification (
-https://www.usb.org/sites/default/files/audio10.pdf),
-bInterval is interval for polling endpoint for data transfers
-expressed in milliseconds, must be set to 1.
+Hi wesley,
 
-On page 47 of the USB2.0 specification (
-https://www.usb.org/sites/default/files/usb_20_20211008.zip),
-An isochronous endpoint must specify its required bus access period.
-Full-/high-speed endpoints must specify a desired period as
-(2^(bInterval-1)) x F, where bInterval is in the range one to
-(and including) 16 and F is 125 μs for high-speed and 1ms for full-speed.
+On Tue, Feb 15, 2022 at 04:08:35PM -0800, Wesley Cheng wrote:
+> It is recommended by the Synopsis databook to issue a DCTL.CSftReset
+> when reconnecting from a device-initiated disconnect routine.  This
+> resolves issues with enumeration during fast composition switching
+> cases, which result in an unknown device on the host.
+> 
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+>  drivers/usb/dwc3/core.c   |  4 +---
+>  drivers/usb/dwc3/core.h   |  2 ++
+>  drivers/usb/dwc3/gadget.c | 11 +++++++++++
+>  3 files changed, 14 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 18adddfba3da..02d10e1cb774 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -115,8 +115,6 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
+>  	dwc->current_dr_role = mode;
+>  }
+>  
+> -static int dwc3_core_soft_reset(struct dwc3 *dwc);
+> -
+>  static void __dwc3_set_mode(struct work_struct *work)
+>  {
+>  	struct dwc3 *dwc = work_to_dwc(work);
+> @@ -261,7 +259,7 @@ u32 dwc3_core_fifo_space(struct dwc3_ep *dep, u8 type)
+>   * dwc3_core_soft_reset - Issues core soft reset and PHY reset
+>   * @dwc: pointer to our context structure
+>   */
+> -static int dwc3_core_soft_reset(struct dwc3 *dwc)
+> +int dwc3_core_soft_reset(struct dwc3 *dwc)
+>  {
+>  	u32		reg;
+>  	int		retries = 1000;
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index 00348d6d479b..b27ad8dad317 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -1532,6 +1532,8 @@ bool dwc3_has_imod(struct dwc3 *dwc);
+>  int dwc3_event_buffers_setup(struct dwc3 *dwc);
+>  void dwc3_event_buffers_cleanup(struct dwc3 *dwc);
+>  
+> +int dwc3_core_soft_reset(struct dwc3 *dwc);
+> +
+>  #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+>  int dwc3_host_init(struct dwc3 *dwc);
+>  void dwc3_host_exit(struct dwc3 *dwc);
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 0c89baedf220..788889f924f9 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -2585,6 +2585,17 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>  						dwc->ev_buf->length;
+>  		}
+>  	} else {
+> +		/*
+> +		 * In the Synopsis DesignWare Cores USB3 Databook Rev. 1.90a
+> +		 * Section 4.1.9, it specifies that for a reconnect after a
+> +		 * device-initiated disconnect requires a core soft reset
+> +		 * (DCTL.CSftRst) before enabling the run/stop bit.
+> +		 */
+> +		spin_unlock_irqrestore(&dwc->lock, flags);
+> +		dwc3_core_soft_reset(dwc);
+> +		spin_lock_irqsave(&dwc->lock, flags);
+> +
+> +		dwc3_event_buffers_setup(dwc);
 
-On page 362 of the USB3.2 specification (
-https://usb.org/sites/default/files/usb_32_20210125.zip),
-The 'SuperSpeed Endpoint Companion Descriptor' shall only be
-returned by Enhanced SuperSpeed devices that are operating at Gen X speed.
-Each endpoint described in an interface is followed by a 'SuperSpeed
-Endpoint Companion Descriptor'.
+Could you tell me why you add dwc3_event_buffer_setup?
 
-Currently uac1 driver doesn't set bInterval to 1 in full speed transfer
-and doesn't have a 'SuperSpeed Endpoint Companion Descriptor' behind
-'Standard Endpoint Descriptor'.
+Best Regards,
+Jung Daehwan
 
-So we should set bInterval to 1 in full speed transfer and set it to 4
-in other speed transfers, and we should add 'SuperSpeed Endpoint Companion
-Descriptor' behind 'Standard Endpoint Descriptor' for superspeed transfer.
+>  		__dwc3_gadget_start(dwc);
+>  	}
+>  
+> 
 
-Signed-off-by: Jing Leng <jleng@ambarella.com>
----
-ChangeLog v3->v4:
-- Remove static variables which are explicitly initialized to 0
-ChangeLog v2->v3:
-- Add 'static' before 'struct usb_ss_ep_comp_descriptor ac_int_ep_desc_comp'.
-ChangeLog v1->v2:
-- Modify the title of the PATCH
-- Update more detailed description of the PATCH
----
- drivers/usb/gadget/function/f_uac1.c | 269 ++++++++++++++++++++++-----
- 1 file changed, 219 insertions(+), 50 deletions(-)
+------mwmExhcEqaTMgLyfw452.zc-R1ZLcLBBgXcQdqrDAhnQ.X2v=_fe3cf_
+Content-Type: text/plain; charset="utf-8"
 
-diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-index 03f50643fbba..d03d4ce048b6 100644
---- a/drivers/usb/gadget/function/f_uac1.c
-+++ b/drivers/usb/gadget/function/f_uac1.c
-@@ -123,6 +123,15 @@ static struct uac_feature_unit_descriptor *in_feature_unit_desc;
- static struct uac_feature_unit_descriptor *out_feature_unit_desc;
- 
- /* AC IN Interrupt Endpoint */
-+static struct usb_endpoint_descriptor fs_int_ep_desc = {
-+	.bLength = USB_DT_ENDPOINT_SIZE,
-+	.bDescriptorType = USB_DT_ENDPOINT,
-+	.bEndpointAddress = USB_DIR_IN,
-+	.bmAttributes = USB_ENDPOINT_XFER_INT,
-+	.wMaxPacketSize = cpu_to_le16(2),
-+	.bInterval = 1,
-+};
-+
- static struct usb_endpoint_descriptor ac_int_ep_desc = {
- 	.bLength = USB_DT_ENDPOINT_SIZE,
- 	.bDescriptorType = USB_DT_ENDPOINT,
-@@ -132,6 +141,12 @@ static struct usb_endpoint_descriptor ac_int_ep_desc = {
- 	.bInterval = 4,
- };
- 
-+static struct usb_ss_ep_comp_descriptor ac_int_ep_desc_comp = {
-+	.bLength = sizeof(ac_int_ep_desc_comp),
-+	.bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
-+	.wBytesPerInterval = cpu_to_le16(2),
-+};
-+
- /* B.4.1  Standard AS Interface Descriptor */
- static struct usb_interface_descriptor as_out_interface_alt_0_desc = {
- 	.bLength =		USB_DT_INTERFACE_SIZE,
-@@ -201,6 +216,16 @@ static struct uac_format_type_i_discrete_descriptor_1 as_out_type_i_desc = {
- };
- 
- /* Standard ISO OUT Endpoint Descriptor */
-+static struct usb_endpoint_descriptor fs_out_ep_desc  = {
-+	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
-+	.bDescriptorType =	USB_DT_ENDPOINT,
-+	.bEndpointAddress =	USB_DIR_OUT,
-+	.bmAttributes =		USB_ENDPOINT_SYNC_ADAPTIVE
-+				| USB_ENDPOINT_XFER_ISOC,
-+	.wMaxPacketSize	=	cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
-+	.bInterval =		1,
-+};
-+
- static struct usb_endpoint_descriptor as_out_ep_desc  = {
- 	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
- 	.bDescriptorType =	USB_DT_ENDPOINT,
-@@ -211,6 +236,12 @@ static struct usb_endpoint_descriptor as_out_ep_desc  = {
- 	.bInterval =		4,
- };
- 
-+static struct usb_ss_ep_comp_descriptor as_out_ep_desc_comp = {
-+	.bLength		= sizeof(as_out_ep_desc_comp),
-+	.bDescriptorType	= USB_DT_SS_ENDPOINT_COMP,
-+	.wBytesPerInterval	= cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
-+};
-+
- /* Class-specific AS ISO OUT Endpoint Descriptor */
- static struct uac_iso_endpoint_descriptor as_iso_out_desc = {
- 	.bLength =		UAC_ISO_ENDPOINT_DESC_SIZE,
-@@ -231,7 +262,17 @@ static struct uac_format_type_i_discrete_descriptor_1 as_in_type_i_desc = {
- 	.bSamFreqType =		1,
- };
- 
--/* Standard ISO OUT Endpoint Descriptor */
-+/* Standard ISO IN Endpoint Descriptor */
-+static struct usb_endpoint_descriptor fs_in_ep_desc  = {
-+	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
-+	.bDescriptorType =	USB_DT_ENDPOINT,
-+	.bEndpointAddress =	USB_DIR_IN,
-+	.bmAttributes =		USB_ENDPOINT_SYNC_ASYNC
-+				| USB_ENDPOINT_XFER_ISOC,
-+	.wMaxPacketSize	=	cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
-+	.bInterval =		1,
-+};
-+
- static struct usb_endpoint_descriptor as_in_ep_desc  = {
- 	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
- 	.bDescriptorType =	USB_DT_ENDPOINT,
-@@ -242,6 +283,12 @@ static struct usb_endpoint_descriptor as_in_ep_desc  = {
- 	.bInterval =		4,
- };
- 
-+static struct usb_ss_ep_comp_descriptor as_in_ep_desc_comp = {
-+	.bLength		= sizeof(as_in_ep_desc_comp),
-+	.bDescriptorType	= USB_DT_SS_ENDPOINT_COMP,
-+	.wBytesPerInterval	= cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
-+};
-+
- /* Class-specific AS ISO OUT Endpoint Descriptor */
- static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
- 	.bLength =		UAC_ISO_ENDPOINT_DESC_SIZE,
-@@ -252,7 +299,75 @@ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
- 	.wLockDelay =		0,
- };
- 
--static struct usb_descriptor_header *f_audio_desc[] = {
-+static struct usb_descriptor_header *fs_audio_desc[] = {
-+	(struct usb_descriptor_header *)&ac_interface_desc,
-+	(struct usb_descriptor_header *)&ac_header_desc,
-+
-+	(struct usb_descriptor_header *)&usb_out_it_desc,
-+	(struct usb_descriptor_header *)&io_out_ot_desc,
-+	(struct usb_descriptor_header *)&out_feature_unit_desc,
-+
-+	(struct usb_descriptor_header *)&io_in_it_desc,
-+	(struct usb_descriptor_header *)&usb_in_ot_desc,
-+	(struct usb_descriptor_header *)&in_feature_unit_desc,
-+
-+	(struct usb_descriptor_header *)&fs_int_ep_desc,
-+
-+	(struct usb_descriptor_header *)&as_out_interface_alt_0_desc,
-+	(struct usb_descriptor_header *)&as_out_interface_alt_1_desc,
-+	(struct usb_descriptor_header *)&as_out_header_desc,
-+
-+	(struct usb_descriptor_header *)&as_out_type_i_desc,
-+
-+	(struct usb_descriptor_header *)&fs_out_ep_desc,
-+	(struct usb_descriptor_header *)&as_iso_out_desc,
-+
-+	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
-+	(struct usb_descriptor_header *)&as_in_interface_alt_1_desc,
-+	(struct usb_descriptor_header *)&as_in_header_desc,
-+
-+	(struct usb_descriptor_header *)&as_in_type_i_desc,
-+
-+	(struct usb_descriptor_header *)&fs_in_ep_desc,
-+	(struct usb_descriptor_header *)&as_iso_in_desc,
-+	NULL,
-+};
-+
-+static struct usb_descriptor_header *hs_audio_desc[] = {
-+	(struct usb_descriptor_header *)&ac_interface_desc,
-+	(struct usb_descriptor_header *)&ac_header_desc,
-+
-+	(struct usb_descriptor_header *)&usb_out_it_desc,
-+	(struct usb_descriptor_header *)&io_out_ot_desc,
-+	(struct usb_descriptor_header *)&out_feature_unit_desc,
-+
-+	(struct usb_descriptor_header *)&io_in_it_desc,
-+	(struct usb_descriptor_header *)&usb_in_ot_desc,
-+	(struct usb_descriptor_header *)&in_feature_unit_desc,
-+
-+	(struct usb_descriptor_header *)&ac_int_ep_desc,
-+
-+	(struct usb_descriptor_header *)&as_out_interface_alt_0_desc,
-+	(struct usb_descriptor_header *)&as_out_interface_alt_1_desc,
-+	(struct usb_descriptor_header *)&as_out_header_desc,
-+
-+	(struct usb_descriptor_header *)&as_out_type_i_desc,
-+
-+	(struct usb_descriptor_header *)&as_out_ep_desc,
-+	(struct usb_descriptor_header *)&as_iso_out_desc,
-+
-+	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
-+	(struct usb_descriptor_header *)&as_in_interface_alt_1_desc,
-+	(struct usb_descriptor_header *)&as_in_header_desc,
-+
-+	(struct usb_descriptor_header *)&as_in_type_i_desc,
-+
-+	(struct usb_descriptor_header *)&as_in_ep_desc,
-+	(struct usb_descriptor_header *)&as_iso_in_desc,
-+	NULL,
-+};
-+
-+static struct usb_descriptor_header *ss_audio_desc[] = {
- 	(struct usb_descriptor_header *)&ac_interface_desc,
- 	(struct usb_descriptor_header *)&ac_header_desc,
- 
-@@ -265,6 +380,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
- 	(struct usb_descriptor_header *)&in_feature_unit_desc,
- 
- 	(struct usb_descriptor_header *)&ac_int_ep_desc,
-+	(struct usb_descriptor_header *)&ac_int_ep_desc_comp,
- 
- 	(struct usb_descriptor_header *)&as_out_interface_alt_0_desc,
- 	(struct usb_descriptor_header *)&as_out_interface_alt_1_desc,
-@@ -273,6 +389,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
- 	(struct usb_descriptor_header *)&as_out_type_i_desc,
- 
- 	(struct usb_descriptor_header *)&as_out_ep_desc,
-+	(struct usb_descriptor_header *)&as_out_ep_desc_comp,
- 	(struct usb_descriptor_header *)&as_iso_out_desc,
- 
- 	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
-@@ -282,6 +399,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
- 	(struct usb_descriptor_header *)&as_in_type_i_desc,
- 
- 	(struct usb_descriptor_header *)&as_in_ep_desc,
-+	(struct usb_descriptor_header *)&as_in_ep_desc_comp,
- 	(struct usb_descriptor_header *)&as_iso_in_desc,
- 	NULL,
- };
-@@ -329,6 +447,89 @@ static struct usb_gadget_strings *uac1_strings[] = {
- 	NULL,
- };
- 
-+/* Use macro to overcome line length limitation */
-+#define USBDHDR(p) ((struct usb_descriptor_header *)(p))
-+
-+static void setup_headers(struct f_uac1_opts *opts,
-+			  struct usb_descriptor_header **headers,
-+			  enum usb_device_speed speed)
-+{
-+	struct usb_ss_ep_comp_descriptor *epout_desc_comp = NULL;
-+	struct usb_ss_ep_comp_descriptor *epin_desc_comp = NULL;
-+	struct usb_ss_ep_comp_descriptor *ep_int_desc_comp = NULL;
-+	struct usb_endpoint_descriptor *epout_desc;
-+	struct usb_endpoint_descriptor *epin_desc;
-+	struct usb_endpoint_descriptor *ep_int_desc;
-+	int i;
-+
-+	switch (speed) {
-+	case USB_SPEED_FULL:
-+		epout_desc = &fs_out_ep_desc;
-+		epin_desc = &fs_in_ep_desc;
-+		ep_int_desc = &fs_int_ep_desc;
-+		break;
-+	case USB_SPEED_HIGH:
-+		epout_desc = &as_out_ep_desc;
-+		epin_desc = &as_in_ep_desc;
-+		ep_int_desc = &ac_int_ep_desc;
-+		break;
-+	default:
-+		epout_desc = &as_out_ep_desc;
-+		epout_desc_comp = &as_out_ep_desc_comp;
-+		epin_desc = &as_in_ep_desc;
-+		epin_desc_comp = &as_in_ep_desc_comp;
-+		ep_int_desc = &ac_int_ep_desc;
-+		ep_int_desc_comp = &ac_int_ep_desc_comp;
-+		break;
-+	}
-+
-+	i = 0;
-+	headers[i++] = USBDHDR(&ac_interface_desc);
-+	headers[i++] = USBDHDR(ac_header_desc);
-+
-+	if (EPOUT_EN(opts)) {
-+		headers[i++] = USBDHDR(&usb_out_it_desc);
-+		headers[i++] = USBDHDR(&io_out_ot_desc);
-+		if (FUOUT_EN(opts))
-+			headers[i++] = USBDHDR(out_feature_unit_desc);
-+	}
-+
-+	if (EPIN_EN(opts)) {
-+		headers[i++] = USBDHDR(&io_in_it_desc);
-+		headers[i++] = USBDHDR(&usb_in_ot_desc);
-+		if (FUIN_EN(opts))
-+			headers[i++] = USBDHDR(in_feature_unit_desc);
-+	}
-+
-+	if (FUOUT_EN(opts) || FUIN_EN(opts)) {
-+		headers[i++] = USBDHDR(ep_int_desc);
-+		if (ep_int_desc_comp)
-+			headers[i++] = USBDHDR(ep_int_desc_comp);
-+	}
-+
-+	if (EPOUT_EN(opts)) {
-+		headers[i++] = USBDHDR(&as_out_interface_alt_0_desc);
-+		headers[i++] = USBDHDR(&as_out_interface_alt_1_desc);
-+		headers[i++] = USBDHDR(&as_out_header_desc);
-+		headers[i++] = USBDHDR(&as_out_type_i_desc);
-+		headers[i++] = USBDHDR(epout_desc);
-+		if (epout_desc_comp)
-+			headers[i++] = USBDHDR(epout_desc_comp);
-+		headers[i++] = USBDHDR(&as_iso_out_desc);
-+	}
-+	if (EPIN_EN(opts)) {
-+		headers[i++] = USBDHDR(&as_in_interface_alt_0_desc);
-+		headers[i++] = USBDHDR(&as_in_interface_alt_1_desc);
-+		headers[i++] = USBDHDR(&as_in_header_desc);
-+		headers[i++] = USBDHDR(&as_in_type_i_desc);
-+		headers[i++] = USBDHDR(epin_desc);
-+		if (epin_desc_comp)
-+			headers[i++] = USBDHDR(epin_desc_comp);
-+		headers[i++] = USBDHDR(&as_iso_in_desc);
-+	}
-+	headers[i] = NULL;
-+}
-+
- /*
-  * This function is an ALSA sound card following USB Audio Class Spec 1.0.
-  */
-@@ -957,9 +1158,6 @@ uac1_ac_header_descriptor *build_ac_header_desc(struct f_uac1_opts *opts)
- 	return ac_desc;
- }
- 
--/* Use macro to overcome line length limitation */
--#define USBDHDR(p) (struct usb_descriptor_header *)(p)
--
- static void setup_descriptor(struct f_uac1_opts *opts)
- {
- 	/* patch descriptors */
-@@ -1015,44 +1213,9 @@ static void setup_descriptor(struct f_uac1_opts *opts)
- 		ac_header_desc->wTotalLength = cpu_to_le16(len);
- 	}
- 
--	i = 0;
--	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
--	f_audio_desc[i++] = USBDHDR(ac_header_desc);
--
--	if (EPOUT_EN(opts)) {
--		f_audio_desc[i++] = USBDHDR(&usb_out_it_desc);
--		f_audio_desc[i++] = USBDHDR(&io_out_ot_desc);
--		if (FUOUT_EN(opts))
--			f_audio_desc[i++] = USBDHDR(out_feature_unit_desc);
--	}
--
--	if (EPIN_EN(opts)) {
--		f_audio_desc[i++] = USBDHDR(&io_in_it_desc);
--		f_audio_desc[i++] = USBDHDR(&usb_in_ot_desc);
--		if (FUIN_EN(opts))
--			f_audio_desc[i++] = USBDHDR(in_feature_unit_desc);
--	}
--
--	if (FUOUT_EN(opts) || FUIN_EN(opts))
--		f_audio_desc[i++] = USBDHDR(&ac_int_ep_desc);
--
--	if (EPOUT_EN(opts)) {
--		f_audio_desc[i++] = USBDHDR(&as_out_interface_alt_0_desc);
--		f_audio_desc[i++] = USBDHDR(&as_out_interface_alt_1_desc);
--		f_audio_desc[i++] = USBDHDR(&as_out_header_desc);
--		f_audio_desc[i++] = USBDHDR(&as_out_type_i_desc);
--		f_audio_desc[i++] = USBDHDR(&as_out_ep_desc);
--		f_audio_desc[i++] = USBDHDR(&as_iso_out_desc);
--	}
--	if (EPIN_EN(opts)) {
--		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_0_desc);
--		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_1_desc);
--		f_audio_desc[i++] = USBDHDR(&as_in_header_desc);
--		f_audio_desc[i++] = USBDHDR(&as_in_type_i_desc);
--		f_audio_desc[i++] = USBDHDR(&as_in_ep_desc);
--		f_audio_desc[i++] = USBDHDR(&as_iso_in_desc);
--	}
--	f_audio_desc[i] = NULL;
-+	setup_headers(opts, fs_audio_desc, USB_SPEED_FULL);
-+	setup_headers(opts, hs_audio_desc, USB_SPEED_HIGH);
-+	setup_headers(opts, ss_audio_desc, USB_SPEED_SUPER);
- }
- 
- static int f_audio_validate_opts(struct g_audio *audio, struct device *dev)
-@@ -1264,7 +1427,6 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 		if (!ep)
- 			goto err_free_fu;
- 		uac1->int_ep = ep;
--		uac1->int_ep->desc = &ac_int_ep_desc;
- 
- 		ac_interface_desc.bNumEndpoints = 1;
- 	}
-@@ -1275,7 +1437,6 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 		if (!ep)
- 			goto err_free_fu;
- 		audio->out_ep = ep;
--		audio->out_ep->desc = &as_out_ep_desc;
- 	}
- 
- 	if (EPIN_EN(audio_opts)) {
-@@ -1283,19 +1444,27 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 		if (!ep)
- 			goto err_free_fu;
- 		audio->in_ep = ep;
--		audio->in_ep->desc = &as_in_ep_desc;
- 	}
- 
-+	/* FS endpoint addresses are copied from autoconfigured HS descriptors */
-+	fs_int_ep_desc.bEndpointAddress = ac_int_ep_desc.bEndpointAddress;
-+	fs_out_ep_desc.bEndpointAddress = as_out_ep_desc.bEndpointAddress;
-+	fs_in_ep_desc.bEndpointAddress = as_in_ep_desc.bEndpointAddress;
-+
- 	setup_descriptor(audio_opts);
- 
- 	/* copy descriptors, and track endpoint copies */
--	status = usb_assign_descriptors(f, f_audio_desc, f_audio_desc, NULL,
--					NULL);
-+	status = usb_assign_descriptors(f, fs_audio_desc, hs_audio_desc,
-+					ss_audio_desc, ss_audio_desc);
- 	if (status)
- 		goto err_free_fu;
- 
--	audio->out_ep_maxpsize = le16_to_cpu(as_out_ep_desc.wMaxPacketSize);
--	audio->in_ep_maxpsize = le16_to_cpu(as_in_ep_desc.wMaxPacketSize);
-+	audio->out_ep_maxpsize = max_t(u16,
-+				le16_to_cpu(fs_out_ep_desc.wMaxPacketSize),
-+				le16_to_cpu(as_out_ep_desc.wMaxPacketSize));
-+	audio->in_ep_maxpsize = max_t(u16,
-+				le16_to_cpu(fs_in_ep_desc.wMaxPacketSize),
-+				le16_to_cpu(as_in_ep_desc.wMaxPacketSize));
- 	audio->params.c_chmask = audio_opts->c_chmask;
- 	audio->params.c_srate = audio_opts->c_srate;
- 	audio->params.c_ssize = audio_opts->c_ssize;
--- 
-2.17.1
 
+------mwmExhcEqaTMgLyfw452.zc-R1ZLcLBBgXcQdqrDAhnQ.X2v=_fe3cf_--
