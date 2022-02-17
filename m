@@ -2,129 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350704B9660
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 04:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 458F94B96CC
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 04:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232392AbiBQDLO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Feb 2022 22:11:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39640 "EHLO
+        id S232921AbiBQDpI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Feb 2022 22:45:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbiBQDLO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 22:11:14 -0500
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 35AAE23D5D9;
-        Wed, 16 Feb 2022 19:10:58 -0800 (PST)
-Received: from jleng.ambarella.net (unknown [180.169.129.130])
-        by mail-app2 (Coremail) with SMTP id by_KCgBHTISsvA1itbXyAQ--.43101S2;
-        Thu, 17 Feb 2022 11:10:42 +0800 (CST)
-From:   3090101217@zju.edu.cn
-To:     gregkh@linuxfoundation.org, balbi@kernel.org,
-        laurent.pinchart@ideasonboard.com
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Jing Leng <jleng@ambarella.com>
-Subject: [PATCH v3] usb: gadget: f_uvc: add superspeed plus transfer support
-Date:   Thu, 17 Feb 2022 11:10:35 +0800
-Message-Id: <20220217031035.6150-1-3090101217@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <e3311c8.a65f5.17f059d63df.Coremail.3090101217@zju.edu.cn>
-References: <e3311c8.a65f5.17f059d63df.Coremail.3090101217@zju.edu.cn>
-X-CM-TRANSID: by_KCgBHTISsvA1itbXyAQ--.43101S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGFyftw4DZw17ZF45GFyUJrb_yoW5Xw4Upa
-        15A3Z5Ary5JFn5J34UJan5Cry3XF4SvayDKFZFq3yY9rW3tas5Ar9Fyr1rKa47XFsxZr40
-        yFnrA3yIkw10krJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBSb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2vYz4IE4I80cI0F6IAv
-        xc0EwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
-        Av7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
-        6r1j6r4UM4x0Y48IcxkI7VAKI48JM4kE6xkIj40Ew7xC0wCY02Avz4vE14v_Gr4l42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMI
-        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
-        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
-        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUxeHqDUUUU
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIEBVNG3FjlrQABsY
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232910AbiBQDpI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Feb 2022 22:45:08 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D116829C137;
+        Wed, 16 Feb 2022 19:44:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=QKExgNQWp3Zssh/nqG6fZnwPbmQE7iVXyRjvlEzqCoM=; b=F55Xyk13rPLqv1D0CWn92CH/go
+        LF2wtY8At3qADfgJr/QBA9S0q/xNksDEWXHlT149de660uf8Bu628/FJjVgRF5DvHycjQ/Jj6NuaZ
+        8AkXiOLnrNiXlrJNtSR02rB6CVWOGtUYmGxqG7Z+z58s9qkvEh5Bh6Q4zkmbuhZhPPSa6B+S74ZqY
+        mlUwQ2AQgz1h4fCmVVOgAJ+rJ5g2IfhewPR2fzipz9jQHzI7jmJ9AAzZHYbqMMc1tSz7SmhXVssAa
+        YBtn8SWkOS/MtBbLXid3p3mr0/9oCT9T4JTt4XEgRPlrLUG0sTZmzFv5l214mrNUsuTr8vFvxjJIl
+        PFXqMU1Q==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKXij-00FHCo-1j; Thu, 17 Feb 2022 03:44:41 +0000
+Message-ID: <3f657ffc-e137-de8f-c89e-90676bc42448@infradead.org>
+Date:   Wed, 16 Feb 2022 19:44:35 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: earlyprintk=xdbc seems broken
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+References: <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
+ <972a0e28-ad63-9766-88da-02743f80181b@intel.com> <Yao35lElOkwtBYEb@kroah.com>
+ <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
+ <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
+ <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
+ <YeE4rtq6t73OxOi+@hirez.programming.kicks-ass.net>
+ <cd534ff9-e500-c7ea-426a-347ac2b0830b@linux.intel.com>
+ <YeLxE3zQ7Vexk3gv@hirez.programming.kicks-ass.net>
+ <dfb311e3-1a83-31a2-3c82-fd982c0757f6@linux.intel.com>
+ <Ye/w/lOf4f8+8fDt@hirez.programming.kicks-ass.net>
+ <yt9dbl00rmgx.fsf@linux.ibm.com>
+ <a34be5ca-47e7-95a6-602f-da054e409e85@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <a34be5ca-47e7-95a6-602f-da054e409e85@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
 
-UVC driver doesn't set ssp_descriptors in struct usb_function,
-it doesn't support USB_SPEED_SUPER_PLUS transfer. So we can
-refer to USB_SPEED_SUPER to realize the support of
-USB_SPEED_SUPER_PLUS.
 
-If users use a USB device controller that speed can be up to
-USB_SPEED_SUPER_PLUS (10 Gbps), downgrading to USB_SPEED_SUPER
-(5 Gbps) is not a good performance. In addition, it triggers a
-warning "configfs-gadget gadget: uvc doesn't hold the descriptors
-for current speed".
+On 1/25/22 08:24, Dave Hansen wrote:
+> On 1/25/22 05:09, Sven Schnelle wrote:
+>>> Now the documentation states we need this super speed A<->A cable, but
+>>> could you also update the documentation for usb-c ? There's a fair
+>>> number of usb-c only devices out there now.
+>> Stupid beginners question: Would every USB3 A-A cable work, or are the
+>> debug cables special? I've read the RX/TX pairs have to be swapped, but
+>> to me it looks like that's always the case?
+> 
+> My understanding is that the 5v line is disconnected.  Here's one cable I have:
+> 
+>> https://designintools.intel.com/SVT_DCI_DbC2_3_A_to_A_Debug_Cable_1_Meter_p/itpdciamam1m.htm
+> 
+> I think they snip that line to prevent any chance of current flowing between devices.  The cable isn't expensive, but I do remember being astounded at how much Intel charged itself for shipping it. ;)
 
-Signed-off-by: Jing Leng <jleng@ambarella.com>
----
-ChangeLog v2->v3:
-- Modify the title and description of the PATCH
-- It is a feature but not a bug
-ChangeLog v1->v2:
-- Update more detailed description of the PATCH
----
- drivers/usb/gadget/function/f_uvc.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 71bb5e477dba..8fc9b035481e 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -478,6 +478,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
- 	void *mem;
- 
- 	switch (speed) {
-+	case USB_SPEED_SUPER_PLUS:
- 	case USB_SPEED_SUPER:
- 		uvc_control_desc = uvc->desc.ss_control;
- 		uvc_streaming_cls = uvc->desc.ss_streaming;
-@@ -521,7 +522,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
- 	      + uvc_control_ep.bLength + uvc_control_cs_ep.bLength
- 	      + uvc_streaming_intf_alt0.bLength;
- 
--	if (speed == USB_SPEED_SUPER) {
-+	if (speed == USB_SPEED_SUPER || speed == USB_SPEED_SUPER_PLUS) {
- 		bytes += uvc_ss_control_comp.bLength;
- 		n_desc = 6;
- 	} else {
-@@ -565,7 +566,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
- 	uvc_control_header->baInterfaceNr[0] = uvc->streaming_intf;
- 
- 	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_control_ep);
--	if (speed == USB_SPEED_SUPER)
-+	if (speed == USB_SPEED_SUPER || speed == USB_SPEED_SUPER_PLUS)
- 		UVC_COPY_DESCRIPTOR(mem, dst, &uvc_ss_control_comp);
- 
- 	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_control_cs_ep);
-@@ -727,6 +728,15 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 		}
- 	}
- 
-+	if (gadget_is_superspeed_plus(c->cdev->gadget)) {
-+		f->ssp_descriptors = uvc_copy_descriptors(uvc, USB_SPEED_SUPER_PLUS);
-+		if (IS_ERR(f->ssp_descriptors)) {
-+			ret = PTR_ERR(f->ssp_descriptors);
-+			f->ssp_descriptors = NULL;
-+			goto error;
-+		}
-+	}
-+
- 	/* Preallocate control endpoint request. */
- 	uvc->control_req = usb_ep_alloc_request(cdev->gadget->ep0, GFP_KERNEL);
- 	uvc->control_buf = kmalloc(UVC_MAX_REQUEST_SIZE, GFP_KERNEL);
+This one works OK:
+https://www.datapro.net/products/usb-3-0-super-speed-a-a-debugging-cable.html
+
+> That said, I've also used the same cable Peter has: just a cheap A-to-A cable I had lying around.  It surely has VBUS connected, so I usually plumb it through a USB hub with a power switch.  This surely isn't the "right" way to do it, but it does seem to work in some situations.
+
 -- 
-2.17.1
-
+~Randy
