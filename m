@@ -2,51 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580E74BA3E9
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 16:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F004BA418
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 16:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242291AbiBQPAb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Feb 2022 10:00:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53870 "EHLO
+        id S242363AbiBQPQW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Feb 2022 10:16:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238532AbiBQPA2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Feb 2022 10:00:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DFC63B9;
-        Thu, 17 Feb 2022 07:00:12 -0800 (PST)
+        with ESMTP id S242355AbiBQPQV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Feb 2022 10:16:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E832AE2B4
+        for <linux-usb@vger.kernel.org>; Thu, 17 Feb 2022 07:16:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B9ADB821FA;
-        Thu, 17 Feb 2022 15:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 046F7C340EC;
-        Thu, 17 Feb 2022 15:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645110010;
-        bh=7g5K1tyQnpYpzj8EjNVVkumgeZTHpZWDqLo+7Cv7jL0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=sbBz2r9YUUg8qn6HEQgAKgBgfqj/ThCkWpoN4HRI7J9S1SwzNMjM/gMKXdiuLXvfW
-         As5UfKEiYs0SP2SMF9C0a15i9lFuFK9qPYh5rqD5kAvhT7sGliy1iXh0AFpsvyoGlU
-         Ro9WUocNib3Y2tdcpiyx4kqYiM/K2DK29gBs9USRvgbWKxA7D8Ue8OdveRWCpA7eim
-         TWRGI3K65bsKPbGMmtyOkQrCCM/YzcC1+I7PUZzYu0Q/hxMEMMxTqm0lb6i/zv90g/
-         1vqXHmIabxetooC3IXxJsUP31hnCjsFU6Y5j9m06rhq7tBGC6q2AhoPDCAvxQAB0NL
-         qwy3Li+8v9AQA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E1006E7BB07;
-        Thu, 17 Feb 2022 15:00:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7753061E90
+        for <linux-usb@vger.kernel.org>; Thu, 17 Feb 2022 15:16:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53A5FC340E8;
+        Thu, 17 Feb 2022 15:16:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645110964;
+        bh=kuK/h04e07dmrdHUytDl1MN/GrKqmcZyFaIdDpQQTdw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oE5Yv952iPUJe0pvLzeIRF5VQyH6V7CioC5Tch+fvpyTXSBsm36drGrBl8FOo3rDx
+         JJtB0jIjFCYLWVBhtUeY6TWQ9r/500kqPaQZe+rRRWFylWVV4eQ4EukZ0XS2imjL2y
+         B34OkFn9m4/HPt2Xw4yvwdVHF88pVe29jVM10H8w=
+Date:   Thu, 17 Feb 2022 16:16:02 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 5/9] xhci: dbgtty: use IDR to support several dbc
+ instances.
+Message-ID: <Yg5msgveDOAaYh5u@kroah.com>
+References: <20220216095153.1303105-1-mathias.nyman@linux.intel.com>
+ <20220216095153.1303105-6-mathias.nyman@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/1] net: usb: cdc_mbim: avoid altsetting toggling for Telit
- FN990
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164511000991.15414.17501136834263839066.git-patchwork-notify@kernel.org>
-Date:   Thu, 17 Feb 2022 15:00:09 +0000
-References: <20220215111335.26703-1-dnlplm@gmail.com>
-In-Reply-To: <20220215111335.26703-1-dnlplm@gmail.com>
-To:     Daniele Palmas <dnlplm@gmail.com>
-Cc:     oliver@neukum.org, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216095153.1303105-6-mathias.nyman@linux.intel.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,27 +51,54 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Tue, 15 Feb 2022 12:13:35 +0100 you wrote:
-> Add quirk CDC_MBIM_FLAG_AVOID_ALTSETTING_TOGGLE for Telit FN990
-> 0x1071 composition in order to avoid bind error.
+On Wed, Feb 16, 2022 at 11:51:49AM +0200, Mathias Nyman wrote:
+> To support systems with several xhci controllers with active
+> dbc on each xhci we need to use IDR to identify and give
+> an index to each port.
 > 
-> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+> Avoid using global struct tty_driver.driver_state for storing
+> dbc port pointer as it won't work with several dbc ports
+> 
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 > ---
->  drivers/net/usb/cdc_mbim.c | 5 +++++
->  1 file changed, 5 insertions(+)
+>  drivers/usb/host/xhci-dbgcap.h |  1 +
+>  drivers/usb/host/xhci-dbgtty.c | 46 ++++++++++++++++++++++++++++------
+>  2 files changed, 40 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-dbgcap.h b/drivers/usb/host/xhci-dbgcap.h
+> index 5f3304a06591..ca04192fdab1 100644
+> --- a/drivers/usb/host/xhci-dbgcap.h
+> +++ b/drivers/usb/host/xhci-dbgcap.h
+> @@ -100,6 +100,7 @@ struct dbc_ep {
+>  struct dbc_port {
+>  	struct tty_port			port;
+>  	spinlock_t			port_lock;	/* port access */
+> +	int				minor;
+>  
+>  	struct list_head		read_pool;
+>  	struct list_head		read_queue;
+> diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
+> index 059b58f48e3a..d3acc0829ee5 100644
+> --- a/drivers/usb/host/xhci-dbgtty.c
+> +++ b/drivers/usb/host/xhci-dbgtty.c
+> @@ -10,11 +10,14 @@
+>  #include <linux/slab.h>
+>  #include <linux/tty.h>
+>  #include <linux/tty_flip.h>
+> +#include <linux/idr.h>
+>  
+>  #include "xhci.h"
+>  #include "xhci-dbgcap.h"
+>  
+>  static struct tty_driver *dbc_tty_driver;
+> +static struct idr dbc_tty_minors;
+> +static DEFINE_MUTEX(dbc_tty_minors_lock);
 
-Here is the summary with links:
-  - [1/1] net: usb: cdc_mbim: avoid altsetting toggling for Telit FN990
-    https://git.kernel.org/netdev/net/c/21e8a96377e6
+Why not just use an ida instead?  That way you do not need another lock
+and it becomes a tiny bit simpler overall.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I'll take this now, but in the future it might be worth to change this.
 
+thanks,
 
+greg k-h
