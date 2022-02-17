@@ -2,131 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF3B4B9D40
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 11:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F7E4B9D84
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 11:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239144AbiBQKfd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Feb 2022 05:35:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42822 "EHLO
+        id S236024AbiBQKrM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Feb 2022 05:47:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237677AbiBQKfb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Feb 2022 05:35:31 -0500
-Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.109.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A559227FBB7
-        for <linux-usb@vger.kernel.org>; Thu, 17 Feb 2022 02:35:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1645093836;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=msTEMNJZLitu29lKEW+OQmN57Js4hhDffm8mV43g1C0=;
-        b=jaCjoaAGdpSZL3eyP9HMwFpMn4F6Er2kulGcvpSjVOPtfGgb3mKADKBm2VvOZDgWxckk/R
-        LNuya+/YiAmrp9OfB9xEHkB74j5pS2nV6QXZDp9uQjPtsPsPkXYZtDOwTaIiaUcwSPOYPP
-        Wbdri1RPdwFUCFaD5wvALXEaLbxQ+JA=
-Received: from EUR02-VE1-obe.outbound.protection.outlook.com
- (mail-ve1eur02lp2050.outbound.protection.outlook.com [104.47.6.50]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-39-j63jX1L0PsmQNmMii42YPA-1; Thu, 17 Feb 2022 11:35:13 +0100
-X-MC-Unique: j63jX1L0PsmQNmMii42YPA-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GhRY3aAx2CB+oHCd5Bbj3FqKis3tXeD311UtDG3TQQrKCIIh1oS6K+F0K8iGswp3On9ZJmWcv2HVe02m8JVxcTl3tI3Iqx+ykyGijhfbWSeuQIXxffB1y/d5/PPLxAmP+j1Mlcp6D8exv1FBJSQdGT3prVsTZNF8YuW0vfccwUINKkOiVajORehhEbtHS95OWRNTUaAO0wJyff84xr7XBa+3yOmuWa5YGfWmpg/ZP8b7C/Ksz1JFHe7NpIe480MQG+ARLxEi3Vj1JzaMQG5tOlxN0Uz3P98p+9BlurpP7JFSggqEvyVuplBvWEKE0aep2byGcvKoL6B1TU0uZS88cA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SE1PKJT2qCfegbyo+70SURGSg0s6SkCNFBwtcDU3p50=;
- b=Id2upOQkeXHk2F1MTYjI61EOexToH2iA0CznSFsCz94k/Bx4jwV51jjwKgUf1jvin2+Z2NsiiimV7q1n6eiG26X/qQSFc1uoNK3tv24EFvuCYTt6PVYa53yyOsvHZukvyXYqFB238zeVf0CnSA4mji0tLwKyyUUlLcSEoCFizQVlkdqYhHxKEozAmnjiCOVmXtWgYkvjTdwx9flRBV6Qefm9nsAz4b9ylPRPiSschenmRtWvBOz7r2o2hS0w/kvjqjK2PkXbiNwg+fgAx1wZ/W93wWVc/5WbiLzeWIhTJ1NQgtKtL+cToLQWGg0LmiVyyhjD2D/vfAeyHxjnaHMDPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com (2603:10a6:10:22::23)
- by AS8PR04MB8802.eurprd04.prod.outlook.com (2603:10a6:20b:42d::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.17; Thu, 17 Feb
- 2022 10:35:12 +0000
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::98e0:cb7:30fd:254f]) by DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::98e0:cb7:30fd:254f%5]) with mapi id 15.20.4995.016; Thu, 17 Feb 2022
- 10:35:12 +0000
-Message-ID: <0642f910-bccf-103c-c176-d77cc75e6a25@suse.com>
-Date:   Thu, 17 Feb 2022 11:35:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: malicious devices causing unaligned accesses [v2]
-Content-Language: en-US
-To:     =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>,
-        Oliver Neukum <oneukum@suse.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stern@rowland.harvard.edu, USB list <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Giuliano Belinassi <giuliano.belinassi@suse.com>
-References: <281493dd-4b3c-3c99-8491-f5e6b0af602f@suse.com>
- <87sfshaiuc.fsf@miraculix.mork.no>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <87sfshaiuc.fsf@miraculix.mork.no>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: AS8PR04CA0116.eurprd04.prod.outlook.com
- (2603:10a6:20b:31e::31) To DB7PR04MB5050.eurprd04.prod.outlook.com
- (2603:10a6:10:22::23)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 70788d3c-887d-482c-71ee-08d9f2012d46
-X-MS-TrafficTypeDiagnostic: AS8PR04MB8802:EE_
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-Microsoft-Antispam-PRVS: <AS8PR04MB8802773C0D6C1F0EC6CCA784C7369@AS8PR04MB8802.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: W7fqtbMCfGKaRbxgsu2KYCQXCAyAsClb1yKq/bgKZmDkT+XlT1U+zVCjetLORm8Kwf4HpGydzAF1oGL5hSzimiUG718o3FGM1BdAyC0veG8VXyM/of6wtiSwsEcr7aAPwrnAGv5EukuHZ7vPYr9sPC/jhaV1uQKosvrT1Y9fOhW4e6prFOF16M5ULl+WLe17xHvVt/QHyWXtNFWLbT7rFFzLEfQUC+8w1ou6OzrsG4nZIxtn09QQxo7xUSNpZu564Tr0p29yPCs6Ts5yd6bsufmkxK+VzxXYdppJqdnLGkEjw859jqq6vMJhwnUhlmCg1oP+l8LIbu5L+vqPAJZdZ+SCg/TLjf0cw63gQ6tbPA8g3qmuG7Gkjqyb45cv+cbBAkLa6KF8sHIALW1iUFhy/qtI4zUIQE3WkV5XjAvMHJcpcVyD54L2HW6RDSy4y5yuFgwnTPyKokDPGqi7X63NOrzwdJ04wK1H0hRzyr4pLDI98z0lbSSb5dhXI1NEp2CJ2DyCooeVdr3zO3iB3YWY2sCPSHAfDwe8psOFQi+SeLKTy8Gs6Joed72Igw/9AaWRYoVNL2NCsQTw4UYBVzWeVBrTxr3nvs8+zo7ovfxZfR3H6OCv1Nbfy4ihtdF1wXQJZxcmJYvUCtnI8SY3b2GNFo6N8B7ypRs4ubhbNlzxLmcnOoAjT5LhNfb7DTwA9xMdzvT3aPeq0hJfyMvDixQWueLKdTmbYsEQ/AP3uCOeO9U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5050.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66946007)(53546011)(66556008)(4326008)(66476007)(6506007)(186003)(8676002)(83380400001)(107886003)(2906002)(2616005)(5660300002)(66574015)(86362001)(31696002)(6512007)(8936002)(6486002)(54906003)(110136005)(36756003)(316002)(508600001)(31686004)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LUviuftLLEKKobnqpMU8g/wVYMvpizkcPX97y65SkKTZg42e5DrC1B89Bwb8?=
- =?us-ascii?Q?PdzHh9j1ly9ZWYK256mqgesXUqVHWyI5FnB3kV4VAV7pUEiiiCpy6PTcxrFU?=
- =?us-ascii?Q?M8iMCTSBrSLDyQpk1Vb2Ll+MuKpqxG6Ko5Gv1xRzLLJ2pbMbZG0uLJ4I9tQH?=
- =?us-ascii?Q?A/g3hPvTgGR2ZK4Ifvf/vgZ9iqJTU+HjFXj+TG+Vs7TcIhOA9Euw6Q2jtzvd?=
- =?us-ascii?Q?a6djnODjIakbbe2eKS6RSGaRivQxe1W8xOCiTstZjSsWl+zOe6nKRXw/hrF8?=
- =?us-ascii?Q?KWu1VtxYA+1Xv2nHv0Xc01FDgJ9Yzby6dfpMQgtjejp6DqLb0YKCgnOccHWT?=
- =?us-ascii?Q?Yi4jNrYmsQDdPqilrsRJgC9jOAubfZ6/O7gQHYf1BIdfq6KUo+YYy7Fzl121?=
- =?us-ascii?Q?dO7ayMfOKr2cQN7siNvH5OegFkHhZi/ej97P/EkHRPApZKI0b11Y7NBZ/AJg?=
- =?us-ascii?Q?IZuwkXZzriBgeBpfTf6+b6XfrFENJkpfnOs1RMsCPxbPXcN3v58VJfgcXlkG?=
- =?us-ascii?Q?6NMGCSzyrTzsbmVtrpwG7YIkBAC7G8lzcE6wYsVJn4oAnV0C8U9kb2cVyLhd?=
- =?us-ascii?Q?q56Ik2mp7APjDz8w/3sfIo3js51BGCmgKduKdA/28ycB3miagt51nB1wZLjs?=
- =?us-ascii?Q?Ln5RTcRdqGoxAoENP5p119Nos+tkADAd04MnSVdSiydO2V1w2tGJaVQbgkl3?=
- =?us-ascii?Q?BTbtcpFzPiBimNx+KFNUOt5/Up7nXlIQcuiYF+XzEdIiVgMdpRBKgyJLTyuq?=
- =?us-ascii?Q?vUzRHufNdPqnDtYaV6fXefPWpQr4dOzsydw8BYhtUSKAXJLBcR22WiSJX9e0?=
- =?us-ascii?Q?YLThkS35p6llA2c/EZLku8vNCPbsyVyoUlImWCbgo0D1XBDQxTnS5QAWTnU1?=
- =?us-ascii?Q?nESL5EH/H+a/QA5wc/Lgr63gS1iuk+83M0Z1vCmMuU+Nx/zo0AQcghfqIb7z?=
- =?us-ascii?Q?bqq+bkkRwzsaaHHjIB2KV6Rm3+z9sr7kCn2jj8ky4nOr1zkW0GGWk2pdbJDJ?=
- =?us-ascii?Q?NZkzhHjQQLXyokqiZqAIcuynV+wOPeZbX6qFrgFndrlqtdERqO+xxi6XaF8z?=
- =?us-ascii?Q?OUfS7g1mOYHGI+B3PobcqdxCe/cAc92IOc5PsNDT+h0gRNUM5z8Cb84dEYCr?=
- =?us-ascii?Q?HUlp8eBwav6tNA+PgCN9GfPYNMoJ5YAHF+erI5M4ht8I5FL4GXnLczKh0wUx?=
- =?us-ascii?Q?i5na25bdgcQudadtq+tOj3OZ4BWK0aeOben0QflltT8aBP8bZduUxw9gvQEL?=
- =?us-ascii?Q?OL0DRl+a4/0BvrAEe8xofJZzb5r/Eo/sweNyKSMdBE4Puz46BIj1ywac2+jO?=
- =?us-ascii?Q?X2PEHy2NhvwMST5t9u3tieW7K9/ldPBFNjWmegZ+Xc1Uo2uX+NrrUH2i97NE?=
- =?us-ascii?Q?NS9pPU3/QLJkJ5TsCvTuQ6qjH33I0FjJiLoh/wNXhQGheoKxyJ13shf+nd/E?=
- =?us-ascii?Q?JMcnbuMwXPxp4r+9eInK8PTWZUz8f9UboIVKvuoA3Y+HeuK8K8a3kkSqWhmX?=
- =?us-ascii?Q?eSwQublDF+pwpXbeNG1Y3bs9n4XJdq7wjrgK2BoLW/Xh/4X/iiqzWeRdNFcZ?=
- =?us-ascii?Q?Zj1GbYUziYEebNMIakLA9Kf1MrRcqadLzttTr5HRAGhbl3UwiPC5JwiWXi8A?=
- =?us-ascii?Q?/znTECbb5mAiMvgH5Ivl0LgSMHDg27eWcnC2fOiHqp+6nStVpM7OWjq8y50a?=
- =?us-ascii?Q?7jfAh1JSwR+3qBfnKjtJwlZxzLw=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 70788d3c-887d-482c-71ee-08d9f2012d46
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5050.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 10:35:12.0303
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UZj5wBXGLPuvkqSgXwtdAO2rN07+WF1LSvUe1SjeLgfYHTJx5YwxTq8NR37ei+6FXgPAxAeEHhGpiovVHitXhQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8802
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        with ESMTP id S230033AbiBQKrM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Feb 2022 05:47:12 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2B313CB928;
+        Thu, 17 Feb 2022 02:46:52 -0800 (PST)
+Received: from jleng.ambarella.net (unknown [180.169.129.130])
+        by mail-app3 (Coremail) with SMTP id cC_KCgB3f_MkJw5ipx9pDQ--.14217S2;
+        Thu, 17 Feb 2022 18:44:57 +0800 (CST)
+From:   3090101217@zju.edu.cn
+To:     gregkh@linuxfoundation.org, balbi@kernel.org, bilbao@vt.edu,
+        corbet@lwn.net, laurent.pinchart@ideasonboard.com,
+        mchehab+huawei@kernel.org, pawell@cadence.com,
+        rdunlap@infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Jing Leng <jleng@ambarella.com>
+Subject: [PATCH v2] usb: gadget: uvc: add framebased stream support
+Date:   Thu, 17 Feb 2022 18:44:50 +0800
+Message-Id: <20220217104450.14372-1-3090101217@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220216081651.9089-1-3090101217@zju.edu.cn>
+References: <20220216081651.9089-1-3090101217@zju.edu.cn>
+X-CM-TRANSID: cC_KCgB3f_MkJw5ipx9pDQ--.14217S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3uw1UKrWrXF4UAr4UJr47urg_yoW8JrWfCo
+        WftwnY9ry8ZryrAFyktrnaga48Zr1q9r15Jw4rGw1DWwnIvr45GryFya1jganYqr43KF4j
+        qanaqrn8Aaykt3Z5n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUOF7k0a2IF6w1UM7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0
+        x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj4
+        1l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0
+        I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWlnxkEFVCFx7IYxxCE
+        VcI25VAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+        xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lw4CEc2x0rV
+        AKj4xxMxkIecxEwVAFwVW8twCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8
+        JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1V
+        AFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4
+        A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU
+        0xZFpf9x07jYfOwUUUUU=
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIEBVNG3FjlrQAGsf
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -135,63 +58,328 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Jing Leng <jleng@ambarella.com>
 
+Currently the uvc gadget can't support H264/HEVC transport, After
+adding framebased stream support, the driver can support them.
 
-On 17.02.22 11:27, Bj=C3=B8rn Mork wrote:
-> Oliver Neukum <oneukum@suse.com> writes:
->
->> Hi,
->>
->> going through the USB network drivers looking for ways
->> a malicious device could do us harm I found drivers taking
->> the alignment coming from the device for granted.
->>
->> An example can be seen in qmi_wwan:
->>
->> while (offset + qmimux_hdr_sz < skb->len) {
->> =C2=A0=C2=A0=C2=A0 hdr =3D (struct qmimux_hdr*)(skb->data + offset);
->> =C2=A0=C2=A0=C2=A0 len =3D be16_to_cpu(hdr->pkt_len);
->>
->> As you can see the driver accesses stuff coming from the device with the
->> expectation
->> that it keep to natural alignment. On some architectures that is a way a
->> device could use to do bad things to a host. What is to be done about
->> that?
-> We can deal with this the same way we deal with hostile hot-plugged CPUs
-> or memory modules.
-Yes. That is a basic decision that needs to be made
-> Yes, the aligment should probably be verified.  But there are so many
-> ways a hostile network adapter can mess with us than I don't buy the
-> "malicious device" argument...
-Sure, so what is the level of damage that is acceptable?
->
-> FWIW, the more recent rmnet demuxing implementation from Qualcomm seems
-> to suffer from the same problem.
->
->
-> struct sk_buff *rmnet_map_deaggregate(struct sk_buff *skb,
-> 				      struct rmnet_port *port)
-> {
-> 	struct rmnet_map_header *maph;
-> 	struct sk_buff *skbn;
-> 	u32 packet_len;
->
-> 	if (skb->len =3D=3D 0)
-> 		return NULL;
->
-> 	maph =3D (struct rmnet_map_header *)skb->data;
-> 	packet_len =3D ntohs(maph->pkt_len) + sizeof(struct rmnet_map_header);
->
->
-> (this implementation moves skb->data by packet_len instead of doing the
-> offset calculation, but I don't think that makes any difference?)
->
-> I guess there is no alignment guarantee here, whether the device is
-> malicious or not. So we probably have to deal with unaligned accesses to
-> maph/hdr->pkt_len?
-Yes, as far as I can tell a device is fully in spec if it sends frames as
-tightly packed as possible, so this is simply a bug, not a security issue.
+Framebased stream is a little different from uncompressed stream.
+So we can support framebased stream on the basis of uncompressed stream.
 
-=C2=A0=C2=A0=C2=A0 Regards
-=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
+Here are the differences:
+
+1. For the format, framebased format has an extra member (
+__u8 bVariableSize) than uncompressed format.
+
+2. For the frame, the layout of last three members of framebased frame
+is different from uncompressed frame.
+a. Last three members of uncompressed frame are:
+  u32	dw_max_video_frame_buffer_size;
+  u32	dw_default_frame_interval;
+  u8	b_frame_interval_type;
+b. Last three members of framebased frame are:
+  u32	dw_default_frame_interval;
+  u8	b_frame_interval_type;
+  u32	dw_bytes_perline;
+
+Here is an example of configuring H264:
+
+cd /sys/kernel/config/usb_gadget/g1
+ndir=functions/uvc.usb0/streaming/uncompressed/$NAME
+mkdir -p $ndir
+echo -n "H264" > $ndir/guidFormat  # H264 or HEVC
+echo 0 > $ndir/bBitsPerPixel
+echo 1 > $ndir/bVariableSize
+wdir=functions/uvc.usb0/streaming/uncompressed/$NAME/${HEIGHT}p
+mkdir -p $wdir
+echo 0 > $wdir/dwBytesPerLine
+echo $WIDTH  > $wdir/wWidth
+echo $HEIGHT > $wdir/wHeight
+echo 29491200 > $wdir/dwMinBitRate
+echo 29491200 > $wdir/dwMaxBitRate
+cat <<EOF > $wdir/dwFrameInterval
+$INTERVAL
+EOF
+
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+---
+ChangeLog v1->v2:
+- Use another way to handle frames, previous implementation within
+- using union has a warning. (Reported-by: kernel test robot <lkp@intel.com>)
+---
+ .../ABI/testing/configfs-usb-gadget-uvc       | 13 +++-
+ drivers/usb/gadget/function/uvc_configfs.c    | 67 +++++++++++++++++--
+ drivers/usb/gadget/function/uvc_v4l2.c        |  2 +
+ include/uapi/linux/usb/video.h                |  3 +
+ 4 files changed, 75 insertions(+), 10 deletions(-)
+
+diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+index 889ed45be4ca..2bf515dad516 100644
+--- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
++++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+@@ -243,7 +243,7 @@ Description:	Uncompressed format descriptors
+ What:		/config/usb-gadget/gadget/functions/uvc.name/streaming/uncompressed/name
+ Date:		Dec 2014
+ KernelVersion:	4.0
+-Description:	Specific uncompressed format descriptors
++Description:	Specific uncompressed/framebased format descriptors
+ 
+ 		==================	=======================================
+ 		bFormatIndex		unique id for this format descriptor;
+@@ -264,12 +264,15 @@ Description:	Specific uncompressed format descriptors
+ 					frame
+ 		guidFormat		globally unique id used to identify
+ 					stream-encoding format
++		bVariableSize		whether the data within the frame is of
++					variable length from frame to frame (
++					only for framebased format)
+ 		==================	=======================================
+ 
+ What:		/config/usb-gadget/gadget/functions/uvc.name/streaming/uncompressed/name/name
+ Date:		Dec 2014
+ KernelVersion:	4.0
+-Description:	Specific uncompressed frame descriptors
++Description:	Specific uncompressed/framebased frame descriptors
+ 
+ 		=========================  =====================================
+ 		bFrameIndex		   unique id for this framedescriptor;
+@@ -283,7 +286,11 @@ Description:	Specific uncompressed frame descriptors
+ 					   like to use as default
+ 		dwMaxVideoFrameBufferSize  the maximum number of bytes the
+ 					   compressor will produce for a video
+-					   frame or still image
++					   frame or still image (only for
++					   uncompressed frame)
++		dwBytesPerLine		   the per-line bytes of the framebased
++					   frame, e.g. H264 or HEVC (only for
++					   framebased frame)
+ 		dwMaxBitRate		   the maximum bit rate at the shortest
+ 					   frame interval in bps
+ 		dwMinBitRate		   the minimum bit rate at the longest
+diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+index 77d64031aa9c..695f9b68290f 100644
+--- a/drivers/usb/gadget/function/uvc_configfs.c
++++ b/drivers/usb/gadget/function/uvc_configfs.c
+@@ -11,6 +11,7 @@
+  */
+ 
+ #include <linux/sort.h>
++#include <linux/videodev2.h>
+ 
+ #include "u_uvc.h"
+ #include "uvc_configfs.h"
+@@ -782,6 +783,8 @@ struct uvcg_format {
+ 	__u8			bmaControls[UVCG_STREAMING_CONTROL_SIZE];
+ };
+ 
++static u8 uvcg_uncompressed_subtype(struct uvcg_format *fmt);
++
+ static struct uvcg_format *to_uvcg_format(struct config_item *item)
+ {
+ 	return container_of(to_config_group(item), struct uvcg_format, group);
+@@ -1072,9 +1075,23 @@ struct uvcg_frame {
+ 		u16	w_height;
+ 		u32	dw_min_bit_rate;
+ 		u32	dw_max_bit_rate;
++
++		/*
++		 * The layout of last three members of framebased frame
++		 * is different from uncompressed frame.
++		 *   Last three members of uncompressed frame are:
++		 *     u32	dw_max_video_frame_buffer_size;
++		 *     u32	dw_default_frame_interval;
++		 *     u8	b_frame_interval_type;
++		 *   Last three members of framebased frame are:
++		 *     u32	dw_default_frame_interval;
++		 *     u8	b_frame_interval_type;
++		 *     u32	dw_bytes_perline;
++		 */
+ 		u32	dw_max_video_frame_buffer_size;
+ 		u32	dw_default_frame_interval;
+ 		u8	b_frame_interval_type;
++		u32	dw_bytes_perline;
+ 	} __attribute__((packed)) frame;
+ 	u32 *dw_frame_interval;
+ };
+@@ -1185,6 +1202,7 @@ UVCG_FRAME_ATTR(dw_min_bit_rate, dwMinBitRate, 32);
+ UVCG_FRAME_ATTR(dw_max_bit_rate, dwMaxBitRate, 32);
+ UVCG_FRAME_ATTR(dw_max_video_frame_buffer_size, dwMaxVideoFrameBufferSize, 32);
+ UVCG_FRAME_ATTR(dw_default_frame_interval, dwDefaultFrameInterval, 32);
++UVCG_FRAME_ATTR(dw_bytes_perline, dwBytesPerLine, 32);
+ 
+ #undef UVCG_FRAME_ATTR
+ 
+@@ -1329,6 +1347,7 @@ static struct configfs_attribute *uvcg_frame_attrs[] = {
+ 	&uvcg_frame_attr_dw_max_video_frame_buffer_size,
+ 	&uvcg_frame_attr_dw_default_frame_interval,
+ 	&uvcg_frame_attr_dw_frame_interval,
++	&uvcg_frame_attr_dw_bytes_perline,
+ 	NULL,
+ };
+ 
+@@ -1358,6 +1377,7 @@ static struct config_item *uvcg_frame_make(struct config_group *group,
+ 	h->frame.dw_max_bit_rate		= 55296000;
+ 	h->frame.dw_max_video_frame_buffer_size	= 460800;
+ 	h->frame.dw_default_frame_interval	= 666666;
++	h->frame.dw_bytes_perline		= 0;
+ 
+ 	opts_item = group->cg_item.ci_parent->ci_parent->ci_parent;
+ 	opts = to_f_uvc_opts(opts_item);
+@@ -1365,7 +1385,10 @@ static struct config_item *uvcg_frame_make(struct config_group *group,
+ 	mutex_lock(&opts->lock);
+ 	fmt = to_uvcg_format(&group->cg_item);
+ 	if (fmt->type == UVCG_UNCOMPRESSED) {
+-		h->frame.b_descriptor_subtype = UVC_VS_FRAME_UNCOMPRESSED;
++		if (uvcg_uncompressed_subtype(fmt) == UVC_VS_FORMAT_UNCOMPRESSED)
++			h->frame.b_descriptor_subtype = UVC_VS_FRAME_UNCOMPRESSED;
++		else
++			h->frame.b_descriptor_subtype = UVC_VS_FRAME_FRAME_BASED;
+ 		h->fmt_type = UVCG_UNCOMPRESSED;
+ 	} else if (fmt->type == UVCG_MJPEG) {
+ 		h->frame.b_descriptor_subtype = UVC_VS_FRAME_MJPEG;
+@@ -1425,6 +1448,14 @@ struct uvcg_uncompressed {
+ 	struct uvc_format_uncompressed	desc;
+ };
+ 
++static u8 uvcg_uncompressed_subtype(struct uvcg_format *fmt)
++{
++	struct uvcg_uncompressed *ch = container_of(fmt,
++					struct uvcg_uncompressed, fmt);
++
++	return ch->desc.bDescriptorSubType;
++}
++
+ static struct uvcg_uncompressed *to_uvcg_uncompressed(struct config_item *item)
+ {
+ 	return container_of(
+@@ -1466,6 +1497,7 @@ static ssize_t uvcg_uncompressed_guid_format_store(struct config_item *item,
+ 	struct f_uvc_opts *opts;
+ 	struct config_item *opts_item;
+ 	struct mutex *su_mutex = &ch->fmt.group.cg_subsys->su_mutex;
++	u32 fcc;
+ 	int ret;
+ 
+ 	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
+@@ -1481,7 +1513,17 @@ static ssize_t uvcg_uncompressed_guid_format_store(struct config_item *item,
+ 
+ 	memcpy(ch->desc.guidFormat, page,
+ 	       min(sizeof(ch->desc.guidFormat), len));
+-	ret = sizeof(ch->desc.guidFormat);
++	ret = len;
++
++	fcc = v4l2_fourcc(ch->desc.guidFormat[0], ch->desc.guidFormat[1],
++		ch->desc.guidFormat[2], ch->desc.guidFormat[3]);
++	if (fcc == V4L2_PIX_FMT_H264 || fcc == V4L2_PIX_FMT_HEVC) {
++		ch->desc.bLength		= UVC_DT_FORMAT_FRAMEBASED_SIZE;
++		ch->desc.bDescriptorSubType	= UVC_VS_FORMAT_FRAME_BASED;
++	} else {
++		ch->desc.bLength		= UVC_DT_FORMAT_UNCOMPRESSED_SIZE;
++		ch->desc.bDescriptorSubType	= UVC_VS_FORMAT_UNCOMPRESSED;
++	}
+ 
+ end:
+ 	mutex_unlock(&opts->lock);
+@@ -1581,6 +1623,7 @@ UVCG_UNCOMPRESSED_ATTR(b_default_frame_index, bDefaultFrameIndex, 8);
+ UVCG_UNCOMPRESSED_ATTR_RO(b_aspect_ratio_x, bAspectRatioX, 8);
+ UVCG_UNCOMPRESSED_ATTR_RO(b_aspect_ratio_y, bAspectRatioY, 8);
+ UVCG_UNCOMPRESSED_ATTR_RO(bm_interface_flags, bmInterfaceFlags, 8);
++UVCG_UNCOMPRESSED_ATTR(b_variable_size, bVariableSize, 8);
+ 
+ #undef UVCG_UNCOMPRESSED_ATTR
+ #undef UVCG_UNCOMPRESSED_ATTR_RO
+@@ -1611,6 +1654,7 @@ static struct configfs_attribute *uvcg_uncompressed_attrs[] = {
+ 	&uvcg_uncompressed_attr_b_aspect_ratio_y,
+ 	&uvcg_uncompressed_attr_bm_interface_flags,
+ 	&uvcg_uncompressed_attr_bma_controls,
++	&uvcg_uncompressed_attr_b_variable_size,
+ 	NULL,
+ };
+ 
+@@ -1644,6 +1688,7 @@ static struct config_group *uvcg_uncompressed_make(struct config_group *group,
+ 	h->desc.bAspectRatioY		= 0;
+ 	h->desc.bmInterfaceFlags	= 0;
+ 	h->desc.bCopyProtect		= 0;
++	h->desc.bVariableSize		= 0;
+ 
+ 	h->fmt.type = UVCG_UNCOMPRESSED;
+ 	config_group_init_type_name(&h->fmt.group, name,
+@@ -2038,7 +2083,7 @@ static int __uvcg_cnt_strm(void *priv1, void *priv2, void *priv3, int n,
+ 				container_of(fmt, struct uvcg_uncompressed,
+ 					     fmt);
+ 
+-			*size += sizeof(u->desc);
++			*size += u->desc.bLength;
+ 		} else if (fmt->type == UVCG_MJPEG) {
+ 			struct uvcg_mjpeg *m =
+ 				container_of(fmt, struct uvcg_mjpeg, fmt);
+@@ -2053,7 +2098,7 @@ static int __uvcg_cnt_strm(void *priv1, void *priv2, void *priv3, int n,
+ 		struct uvcg_frame *frm = priv1;
+ 		int sz = sizeof(frm->dw_frame_interval);
+ 
+-		*size += sizeof(frm->frame);
++		*size += sizeof(frm->frame) - 4;
+ 		*size += frm->frame.b_frame_interval_type * sz;
+ 	}
+ 	break;
+@@ -2108,8 +2153,8 @@ static int __uvcg_fill_strm(void *priv1, void *priv2, void *priv3, int n,
+ 
+ 			u->desc.bFormatIndex = n + 1;
+ 			u->desc.bNumFrameDescriptors = fmt->num_frames;
+-			memcpy(*dest, &u->desc, sizeof(u->desc));
+-			*dest += sizeof(u->desc);
++			memcpy(*dest, &u->desc, u->desc.bLength);
++			*dest += u->desc.bLength;
+ 		} else if (fmt->type == UVCG_MJPEG) {
+ 			struct uvcg_mjpeg *m =
+ 				container_of(fmt, struct uvcg_mjpeg, fmt);
+@@ -2127,8 +2172,16 @@ static int __uvcg_fill_strm(void *priv1, void *priv2, void *priv3, int n,
+ 		struct uvcg_frame *frm = priv1;
+ 		struct uvc_descriptor_header *h = *dest;
+ 
+-		sz = sizeof(frm->frame);
++		sz = sizeof(frm->frame) - 4;
+ 		memcpy(*dest, &frm->frame, sz);
++		/*
++		 * Framebased frame doesn't have dw_max_video_frame_buffer_size,
++		 * and has dw_bytes_perline, so we should handle the last three
++		 * members of frame descriptor.
++		 */
++		if (frm->frame.b_descriptor_subtype == UVC_VS_FRAME_FRAME_BASED)
++			memcpy((u8 *)*dest + 17, (u8 *)&frm->frame + 21, 9);
++
+ 		*dest += sz;
+ 		sz = frm->frame.b_frame_interval_type *
+ 			sizeof(*frm->dw_frame_interval);
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index a2c78690c5c2..3d6217328c50 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -58,6 +58,8 @@ struct uvc_format {
+ static struct uvc_format uvc_formats[] = {
+ 	{ 16, V4L2_PIX_FMT_YUYV  },
+ 	{ 0,  V4L2_PIX_FMT_MJPEG },
++	{ 0,  V4L2_PIX_FMT_H264 },
++	{ 0,  V4L2_PIX_FMT_HEVC },
+ };
+ 
+ static int
+diff --git a/include/uapi/linux/usb/video.h b/include/uapi/linux/usb/video.h
+index bfdae12cdacf..383980bc9618 100644
+--- a/include/uapi/linux/usb/video.h
++++ b/include/uapi/linux/usb/video.h
+@@ -468,9 +468,12 @@ struct uvc_format_uncompressed {
+ 	__u8  bAspectRatioY;
+ 	__u8  bmInterfaceFlags;
+ 	__u8  bCopyProtect;
++	/* bVariableSize is only for framebased format. */
++	__u8  bVariableSize;
+ } __attribute__((__packed__));
+ 
+ #define UVC_DT_FORMAT_UNCOMPRESSED_SIZE			27
++#define UVC_DT_FORMAT_FRAMEBASED_SIZE			28
+ 
+ /* Uncompressed Payload - 3.1.2. Uncompressed Video Frame Descriptor */
+ struct uvc_frame_uncompressed {
+-- 
+2.17.1
 
