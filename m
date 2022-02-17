@@ -2,51 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE41D4BA468
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 16:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 225A34BA724
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 18:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242521AbiBQPbe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Feb 2022 10:31:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39846 "EHLO
+        id S243732AbiBQRao (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Feb 2022 12:30:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242517AbiBQPbc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Feb 2022 10:31:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72682B2C73
-        for <linux-usb@vger.kernel.org>; Thu, 17 Feb 2022 07:31:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 546E361EC6
-        for <linux-usb@vger.kernel.org>; Thu, 17 Feb 2022 15:31:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F39B3C340E8;
-        Thu, 17 Feb 2022 15:31:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645111876;
-        bh=sVtS9yh28F1Fnko4xbrtn/2OLrArPuSPTSdZ57vWlN4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f913LM/znHsrVvU+TJ8WFBJ5TFGiEvHqLev1UmO0at6dZ0yFrRViCEVdUzbxx+RUb
-         /QoMs3SQnzxbQrbyisQlIEnCvdZ9KqeVCJurSGt2Y9JYQPyMsdP3/+1iAUC86iDZbu
-         MoeRLgJqvDY5zBb8Bdg4SAJvwcwHTre0guaQCgIc=
-Date:   Thu, 17 Feb 2022 16:31:13 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
-Subject: Re: [PATCH v2 0/9] usb/dwc3 / phy/tusb1210: Add TUSB1211 charger
- detection
-Message-ID: <Yg5qQXUFd/Takm7V@kroah.com>
-References: <20220213130524.18748-1-hdegoede@redhat.com>
+        with ESMTP id S234264AbiBQRae (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Feb 2022 12:30:34 -0500
+Received: from mxout04.lancloud.ru (mxout04.lancloud.ru [45.84.86.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DFF2731C2
+        for <linux-usb@vger.kernel.org>; Thu, 17 Feb 2022 09:30:17 -0800 (PST)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru EA35C209D4F2
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: [PATCH v2] usb: host: ehci-q: make qtd_fill() return *unsigned int*
+To:     <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Organization: Open Mobile Platform
+Message-ID: <8c64fdeb-5857-8cb3-cfd8-0c248a14b909@omp.ru>
+Date:   Thu, 17 Feb 2022 20:30:13 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220213130524.18748-1-hdegoede@redhat.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,33 +45,52 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Feb 13, 2022 at 02:05:15PM +0100, Hans de Goede wrote:
-> Hi All,
-> 
-> Here is v2 of the patchs-series to add support for USB charger-type
-> (SDP/DCP) detection using a tusb1210 phy connected to a dwc3 controller.
-> 
-> Changes in v2:
-> [PATCH v2 9/9] phy: ti: tusb1210: Add charger detection:
-> - Add an online attribute to the registered power_supply class device,
->   otherwise upower thinks it is an extra system battery
-> - Add tusb1210_remove_charger_detect() function to properly unregister
->   the tusb->psy_nb notifier and to cancel tusb->chg_det_work
-> 
-> v1 cover-letter:
-> 
-> Some Android x86 tablets with a Bay Trail (BYT) SoC (with DWC3 UDC)
-> and a Crystal Cove PMIC, which does not support charger-detection,
-> rely on a TUSB1211 phy for charger-detection.
-> 
-> This series adds support for this, it starts with some dwc3 bug-fixes
-> for issues hit while developing this, as well as adding support to
-> the dwc3 code to set a special property checked by the tusb1210 driver
-> to signal that it needs to enable charger-detection.
-> 
-> The 2nd half of the series does some refactoring / fixes to the
-> tusb1210 driver and adds the charger-detection support.
+At the end of qtd_fill(), we assign the 'int count' variable to the 'size_t
+length' field of 'struct ehci_qtd' -- which implies a problematic type cast.
+Let's make that variable and the function's result *unsigned int* instead...
 
-The first 4 are all in my usb trees now, thanks.
+Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+analysis tool.
 
-greg k-h
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+
+---
+This patch is against the 'usb-next' branch of Greg KH's 'usb.git' repo.
+
+Changes in version 2:
+- changed 'u16' to *unsigned int* everywhere, repordering the declarations;
+- updated the type of the 'this_qtd_len' local variable qh_urb_transaction();
+- rewrote the patch description.
+
+ drivers/usb/host/ehci-q.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+Index: usb/drivers/usb/host/ehci-q.c
+===================================================================
+--- usb.orig/drivers/usb/host/ehci-q.c
++++ usb/drivers/usb/host/ehci-q.c
+@@ -33,12 +33,13 @@
+ 
+ /* fill a qtd, returning how much of the buffer we were able to queue up */
+ 
+-static int
++static unsigned int
+ qtd_fill(struct ehci_hcd *ehci, struct ehci_qtd *qtd, dma_addr_t buf,
+ 		  size_t len, int token, int maxpacket)
+ {
+-	int	i, count;
++	unsigned int count;
+ 	u64	addr = buf;
++	int	i;
+ 
+ 	/* one buffer entry per 4K ... first might be short or unaligned */
+ 	qtd->hw_buf[0] = cpu_to_hc32(ehci, (u32)addr);
+@@ -652,7 +653,7 @@ qh_urb_transaction (
+ 	 * and may serve as a control status ack
+ 	 */
+ 	for (;;) {
+-		int this_qtd_len;
++		unsigned int this_qtd_len;
+ 
+ 		this_qtd_len = qtd_fill(ehci, qtd, buf, this_sg_len, token,
+ 				maxpacket);
