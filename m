@@ -2,74 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3524D4B9C17
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 10:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C114B9C56
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Feb 2022 10:46:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238723AbiBQJdb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Feb 2022 04:33:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59174 "EHLO
+        id S238812AbiBQJqe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Feb 2022 04:46:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238649AbiBQJda (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Feb 2022 04:33:30 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C9B996B9;
-        Thu, 17 Feb 2022 01:33:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645090396; x=1676626396;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aK1+Q/gQ7IRjnFowKiBbew/57gZX+Oj3JZ/5IP7bGqU=;
-  b=VsVRdtipIrnRGpjERKeNEHk9QKOq6dpUeoJbt1tz0M4L1lhCZ6KMVH5J
-   hfY2zpWGTvYyAdd0wFVPVK5MzBlmFQWTcltX7JWhJfTWUamv9mfpRUvvk
-   GiOzAAPX4mb3TUbrYFTS2SaKWUl9oZA0iCcwKfWfbuoJJY3iVZjl//YBO
-   OaZCOz4H3TILNfhBY+p56wAKaNw0n2GCzTu9WsaztB4CzDp/EqzEHCtQu
-   kK/VFUSk5dLaXo+ZphwWpqd6zKoGktl7Cgpb7ngAVgYKB0E52ILub5nw4
-   ISHJ/wu0bpUY8es5o1RRP/Xcm8DR+458ZgltGGqMsH14ylNkVovnL2fkV
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="231459228"
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="231459228"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 01:33:15 -0800
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="704711274"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 01:33:11 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 17 Feb 2022 11:33:09 +0200
-Date:   Thu, 17 Feb 2022 11:33:09 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        "open list:RADEON and AMDGPU DRM DRIVERS" 
-        <amd-gfx@lists.freedesktop.org>,
-        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
-        <nouveau@lists.freedesktop.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Subject: Re: [PATCH v4 00/10] Overhaul `is_thunderbolt`
-Message-ID: <Yg4WVXw84aLK5Knp@lahna>
-References: <20220215000200.242799-1-mario.limonciello@amd.com>
- <20220215072911.GA13892@wunner.de>
- <3078823e-4ab4-27b6-b1c7-c6552fbfdb2e@amd.com>
- <Yg0LaujhftM0b8N/@lahna>
- <CADnq5_Ov3T9WH29MjgC2byqgTGkn-ux7iUaK3z5s2v4At_b3Ow@mail.gmail.com>
- <8da992ac-c241-1fe2-41a9-579c845608db@amd.com>
+        with ESMTP id S238762AbiBQJqd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Feb 2022 04:46:33 -0500
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0494817053
+        for <linux-usb@vger.kernel.org>; Thu, 17 Feb 2022 01:46:17 -0800 (PST)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220217094614epoutp032da11a104f5be66f82485c08e3eed388~UibUGZE5T0319203192epoutp03M
+        for <linux-usb@vger.kernel.org>; Thu, 17 Feb 2022 09:46:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220217094614epoutp032da11a104f5be66f82485c08e3eed388~UibUGZE5T0319203192epoutp03M
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1645091174;
+        bh=YtIs6HfKgm2suQmqonwEnnMUyJ6x6ufYGCqDDJ4lONs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NC/ghVqyClo0RFx4GhzkD7drcdLLp0eaINnDdJmSOcqGybgUWvGLjQA1+IvNPqc5I
+         3f5sEmVUjpZkisf80TnvwVFy8/BAt0zIbNbZJgoH2nU5RdSFdavBnfp3py5ETyihta
+         OH1N+BOFsxUXZTQNjV8m0dwK0pUP07LmCpsHv/wk=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220217094613epcas2p1a31e86bb83f74b755bd23c393a6245d0~UibTaWa_q1972619726epcas2p1t;
+        Thu, 17 Feb 2022 09:46:13 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.99]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4Jzqhh0V7Jz4x9Q7; Thu, 17 Feb
+        2022 09:46:12 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0C.B0.12141.1F81E026; Thu, 17 Feb 2022 18:44:17 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220217094611epcas2p135157769acb0262a71533bad35abebc1~UibRblKun0379003790epcas2p1J;
+        Thu, 17 Feb 2022 09:46:11 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220217094611epsmtrp2dcacb285fae860020f4d262f791b99d2~UibRa19lR1108811088epsmtrp2G;
+        Thu, 17 Feb 2022 09:46:11 +0000 (GMT)
+X-AuditID: b6c32a48-d73ff70000002f6d-2d-620e18f122bf
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AE.E5.08738.3691E026; Thu, 17 Feb 2022 18:46:11 +0900 (KST)
+Received: from ubuntu (unknown [12.36.155.120]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220217094611epsmtip26ec2678ee27e63d0f6fc877c3a1bce91~UibRSPVLU2129621296epsmtip2Q;
+        Thu, 17 Feb 2022 09:46:11 +0000 (GMT)
+Date:   Thu, 17 Feb 2022 18:43:54 +0900
+From:   Jung Daehwan <dh10.jung@samsung.com>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_jackp@quicinc.com, Thinh.Nguyen@synopsys.com
+Subject: Re: [RFC PATCH v2 3/3] usb: dwc3: Issue core soft reset before
+ enabling run/stop
+Message-ID: <20220217094354.GB152781@ubuntu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8da992ac-c241-1fe2-41a9-579c845608db@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220217055214.GA152781@ubuntu>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGJsWRmVeSWpSXmKPExsWy7bCmme5HCb4kg2fXFC2OtT1ht2hevJ7N
+        4vKuOWwWi5a1Mlvs+reIyWLT7j5Wi1ULDrA7sHtsWtXJ5rF/7hp2j4l76jy27P/M6PF5k1wA
+        a1S2TUZqYkpqkUJqXnJ+SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QFUoK
+        ZYk5pUChgMTiYiV9O5ui/NKSVIWM/OISW6XUgpScAvMCveLE3OLSvHS9vNQSK0MDAyNToMKE
+        7IwVCx4yFpyUrvizdxNrA+NysS5GTg4JAROJJ4+es3UxcnEICexglOj4+ZcNJCEk8IlR4shH
+        c4jEZ0aJrd8XMsJ0fGpewQSR2MUo8e/EFRYI5wmjxPmHb1hBqlgEVCUmtu8DG8UmoCVx78cJ
+        ZhBbBMi+M+c+I0gDs8ACRomLEy6AFQkLREssaboFVsQroCOx8t1NRghbUOLkzCcsIDangK7E
+        jd9NQDYHh6iAisSrg/UgcyQEfrJL3PkPc56LxKOvXewQtrDEq+NboGwpic/v9rJB2MUSuz61
+        MkE0NzBKND6AuE5CwFhi1rN2sEHMApkSXyftZAVZJiGgLHHkFgtEmE+i4/Bfdogwr0RHmxBE
+        p7LE9MsTWCFsSYmDr89BTfSQWPToIRMkSJ8xSpz7kTyBUX4Wks9mIVkGYetILNj9iW0W0AZm
+        AWmJ5f84IExNifW79Bcwsq5iFEstKM5NTy02KjCBR3Zyfu4mRnAC1fLYwTj77Qe9Q4xMHIyH
+        GCU4mJVEeD8c5E0S4k1JrKxKLcqPLyrNSS0+xGgKjKeJzFKiyfnAFJ5XEm9oYmlgYmZmaG5k
+        amCuJM7rlbIhUUggPbEkNTs1tSC1CKaPiYNTqoGp+EzFJ03m6A8z4o5JOPjorZIou/sorKhi
+        zSJrvwiv7SobfVcy/P7+vMDC/RCbxMmAKUZpMpW+EnbnY8snz8tapWasvsO4wjVoltiS5c3b
+        v3p/5b/nHHar3Ng9wjvBuuB3n7rMGv+U6yUJXzI2XNqzOudf55IUp2kqy1J+iBpofNL9YPP6
+        3mXW2Ltr0791Tmxh+yvqpPbKzlDggrD/nca3jnPSnn/e+FPMUip5Sve2Eta5y47/c9eq/O09
+        /8h23aibFqH/5qRIW2U92vGn5Yu6zKffB48dipitppx4X6BH92Lb7/IuThGOY7ft5of+j1Mu
+        mH5/R/VvX8WDOp5iU3f9efn2xH4Bd/ePh+pvbZqvxFKckWioxVxUnAgAxppbeykEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDLMWRmVeSWpSXmKPExsWy7bCSvG6yJF+SwcZ7ihbH2p6wWzQvXs9m
+        cXnXHDaLRctamS12/VvEZLFpdx+rxaoFB9gd2D02repk89g/dw27x8Q9dR5b9n9m9Pi8SS6A
+        NYrLJiU1J7MstUjfLoEr4/PLJ8wFbZIVE/+FNDD+Fe5i5OSQEDCR+NS8gqmLkYtDSGAHo8Tl
+        HfvZIRKSEkvn3oCyhSXutxxhhSh6xCjx/vRPVpAEi4CqxMT2fWwgNpuAlsS9HyeYQWwRIPvO
+        nPuMIA3MAgsYJS5OuABWJCwQLbGk6RZYEa+AjsTKdzcZIaY+Y5SYs3w3C0RCUOLkzCdgNjPQ
+        pBv/XgLdxwFkS0ss/8cBEuYU0JW48buJBSQsKqAi8epg/QRGwVlImmchaZ6F0LyAkXkVo2Rq
+        QXFuem6xYYFRXmq5XnFibnFpXrpecn7uJkZwBGhp7WDcs+qD3iFGJg7GQ4wSHMxKIrwfDvIm
+        CfGmJFZWpRblxxeV5qQWH2KU5mBREue90HUyXkggPbEkNTs1tSC1CCbLxMEp1cCUOsUpe8PG
+        3yf3zT18+uWcmDmHpN35Z7Y0GMQVxorWvqnov+kzW3JdBq+c8oOQD4v+nJhlFfp1lWHDx/mX
+        BeSKz108/JJdJHH38WiHY7bnctyUG/ySJE7eksiuf5G613T31+Wla+c/fb/suOytA0JzT0Rp
+        VHHmte3LXXQ8xW+BsbTP1+gZb732/n6wVLjj778jJhO9lX4453Brr1jgO7M8Wd8vSmlq7BoX
+        IVm5kP1nlycu4udQS9sZN6+icer5yvNflmi9VxYynPTTZ0fNIol36zdG8rwIO7nvjdfxUzor
+        jVxuLfsoL3x/14LezvX6smKlyZ6e3G9nilZ+59r5cLtIxtt13Z25627KFbmIZEo0K7EUZyQa
+        ajEXFScCAKabbuzvAgAA
+X-CMS-MailID: 20220217094611epcas2p135157769acb0262a71533bad35abebc1
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----.rW42XXn7_Ji6OxwuAF4RAMbP.qed.OeqKlvEhSLhB3noATS=_100ab0_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220216000912epcas2p419fb5d4f7044389451e28802dd471c5e
+References: <20220216000835.25400-1-quic_wcheng@quicinc.com>
+        <CGME20220216000912epcas2p419fb5d4f7044389451e28802dd471c5e@epcas2p4.samsung.com>
+        <20220216000835.25400-4-quic_wcheng@quicinc.com>
+        <20220217055214.GA152781@ubuntu>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,139 +119,101 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mario,
+------.rW42XXn7_Ji6OxwuAF4RAMbP.qed.OeqKlvEhSLhB3noATS=_100ab0_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-On Wed, Feb 16, 2022 at 10:50:31AM -0600, Limonciello, Mario wrote:
-> On 2/16/2022 08:44, Alex Deucher wrote:
-> > On Wed, Feb 16, 2022 at 9:34 AM Mika Westerberg
-> > <mika.westerberg@linux.intel.com> wrote:
-> > > 
-> > > Hi all,
-> > > 
-> > > On Tue, Feb 15, 2022 at 01:07:00PM -0600, Limonciello, Mario wrote:
-> > > > On 2/15/2022 01:29, Lukas Wunner wrote:
-> > > > > On Mon, Feb 14, 2022 at 06:01:50PM -0600, Mario Limonciello wrote:
-> > > > > >    drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c |  2 +-
-> > > > > >    drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c  |  2 +-
-> > > > > >    drivers/gpu/drm/nouveau/nouveau_vga.c   |  4 +-
-> > > > > >    drivers/gpu/drm/radeon/radeon_device.c  |  4 +-
-> > > > > >    drivers/gpu/drm/radeon/radeon_kms.c     |  2 +-
-> > > > > >    drivers/pci/hotplug/pciehp_hpc.c        |  6 +-
-> > > > > >    drivers/pci/pci-acpi.c                  | 15 ++++-
-> > > > > >    drivers/pci/pci.c                       | 17 +++--
-> > > > > >    drivers/pci/probe.c                     | 52 ++++++++++++++-
-> > > > > >    drivers/pci/quirks.c                    | 84 +++++++++++++++++++++++++
-> > > > > >    drivers/platform/x86/apple-gmux.c       |  2 +-
-> > > > > >    drivers/thunderbolt/nhi.h               |  2 -
-> > > > > >    include/linux/pci.h                     | 25 +-------
-> > > > > >    include/linux/pci_ids.h                 |  3 +
-> > > > > >    14 files changed, 173 insertions(+), 47 deletions(-)
-> > > > > 
-> > > > > That's an awful lot of additional LoC for what is primarily
-> > > > > a refactoring job with the intent to simplify things.
-> > > > 
-> > > > You may recall the first version of this series was just for adding
-> > > > USB4 matches to the existing code paths, and that's when it was noted
-> > > > that is_thunderbolt is a bit overloaded.
-> > > > 
-> > > > > 
-> > > > > Honestly this looks like an attempt to fix something that
-> > > > > isn't broken.  Specifically, the is_thunderbolt bit apparently
-> > > > > can't be removed without adding new bits to struct pci_dev.
-> > > > > Not sure if that can be called progress. >
-> > > > > Thanks,
-> > > > > 
-> > > > > Lukas
-> > > > 
-> > > > Within this series there are two new material patches; setting up root ports
-> > > > for both integrated and discrete USB4 controllers to behave well with all
-> > > > the existing drivers that rely upon a hint of how they're connected to
-> > > > configure devices differently.
-> > > > 
-> > > > If y'all collectively prefer this direction to not refactor is_thunderbolt
-> > > > and push into quirks, a simpler version of this series would be to leave all
-> > > > the quirks in place, just drop dev->is_thunderbolt, and set
-> > > > dev->external_facing on all 3 cases:
-> > > > 
-> > > > * Intel TBT controller
-> > > > * USB4 integrated PCIe tunneling root port/XHCI tunneling root port
-> > > > * USB4 disctete PCIe tunneling root port/XHCI tunneling root port
-> > > > 
-> > > > All the other drivers and symbols can stay the same then.
-> > > 
-> > > If I understand correctly the original intention of this patch series is
-> > > to be able to differentiate whether the device is "permanently"
-> > > connected to the motherboard, or it is connected over some hot-pluggable
-> > > bus (PCIe, USB, USB4 for example but I'm sure there are other buses that
-> > > fit into this picture too). Specifically this is needed for discrete
-> > > GPUs because of power management differences or so (please correct me if
-> > > I'm mistaken).
+On Thu, Feb 17, 2022 at 02:52:14PM +0900, Jung Daehwan wrote:
+> Hi wesley,
 > 
-> Correct.  It might be possible to drop the patch for the integrated case
-> (patch 3) because I do think that by Microsoft having the _DSD for
-> "ExternalFacingPort" it's very likely that most implementations will have
-> used it for the appropriate PCIe root ports.  If something shows up in the
-> wild that this isn't the case it could be revisited.  If it's found
-> pre-production presumably the OEM can still fix it and if it's post
-> production and there are problems we can dust it off then.
-
-Yeah, that's most likely the case.
-
-> The discrete USB4 controller I would be more concerned that this isn't
-> populated, and that (patch 4) should be more important to let the driver
-> core set it removable.
-
-Agreed.
-
-[I actually only now noticed that the PCI core actually already marks
- devices connected to external facing ports as "removable" in
- pci_set_removable().]
-
-> > > If we set the is_thunderbolt debate aside and concentrate on that issue,
-> > > I think the way to do this is to check whether the root port the GPU is
-> > > connected to has an ACPI power resource (returned from _PR3() method).
-> > > IF it is present then most likely the platform has provided all the
-> > > necessary wiring to move the GPU into D3cold (and the BIOS knows this).
-> > > If it is not present then the device cannot even go into D3cold as there
-> > > is not means to power of the device in PCIe spec.
-> > > 
-> > > Perhaps we can simply use pci_pr3_present() here as nouveau is already
-> > > doing? Granted it is not too elegant solution either but better than
-> > > using is_thunderbolt IMHO. Since this seem to be common for many GPUs,
-> > > perhaps we can have a helper in DRM core that handles this.
+> On Tue, Feb 15, 2022 at 04:08:35PM -0800, Wesley Cheng wrote:
+> > It is recommended by the Synopsis databook to issue a DCTL.CSftReset
+> > when reconnecting from a device-initiated disconnect routine.  This
+> > resolves issues with enumeration during fast composition switching
+> > cases, which result in an unknown device on the host.
 > > 
-> > The tricky part is that there were AMD and NVIDIA specific proprietary
-> > _PR3-like ACPI methods (plus whatever Apple did) prior to GPU power
-> > control standardizing on _PR3.  Currently those methods are handled in
-> > the drivers directly, sort of tangled up with vga_switcheroo.  I think
-> > ideally that logic would move to the ACPI core and be handled the same
-> > way as _PR3, but I'm not sure how well that would work because of the
-> > various bios date checks around _PR3 and the lack of general _PR3
-> > support in those older platforms.  So I think we still need some sort
-> > of "is this soldered in" check.
+> > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> > ---
+> >  drivers/usb/dwc3/core.c   |  4 +---
+> >  drivers/usb/dwc3/core.h   |  2 ++
+> >  drivers/usb/dwc3/gadget.c | 11 +++++++++++
+> >  3 files changed, 14 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 18adddfba3da..02d10e1cb774 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -115,8 +115,6 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
+> >  	dwc->current_dr_role = mode;
+> >  }
+> >  
+> > -static int dwc3_core_soft_reset(struct dwc3 *dwc);
+> > -
+> >  static void __dwc3_set_mode(struct work_struct *work)
+> >  {
+> >  	struct dwc3 *dwc = work_to_dwc(work);
+> > @@ -261,7 +259,7 @@ u32 dwc3_core_fifo_space(struct dwc3_ep *dep, u8 type)
+> >   * dwc3_core_soft_reset - Issues core soft reset and PHY reset
+> >   * @dwc: pointer to our context structure
+> >   */
+> > -static int dwc3_core_soft_reset(struct dwc3 *dwc)
+> > +int dwc3_core_soft_reset(struct dwc3 *dwc)
+> >  {
+> >  	u32		reg;
+> >  	int		retries = 1000;
+> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > index 00348d6d479b..b27ad8dad317 100644
+> > --- a/drivers/usb/dwc3/core.h
+> > +++ b/drivers/usb/dwc3/core.h
+> > @@ -1532,6 +1532,8 @@ bool dwc3_has_imod(struct dwc3 *dwc);
+> >  int dwc3_event_buffers_setup(struct dwc3 *dwc);
+> >  void dwc3_event_buffers_cleanup(struct dwc3 *dwc);
+> >  
+> > +int dwc3_core_soft_reset(struct dwc3 *dwc);
+> > +
+> >  #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+> >  int dwc3_host_init(struct dwc3 *dwc);
+> >  void dwc3_host_exit(struct dwc3 *dwc);
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index 0c89baedf220..788889f924f9 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -2585,6 +2585,17 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+> >  						dwc->ev_buf->length;
+> >  		}
+> >  	} else {
+> > +		/*
+> > +		 * In the Synopsis DesignWare Cores USB3 Databook Rev. 1.90a
+> > +		 * Section 4.1.9, it specifies that for a reconnect after a
+> > +		 * device-initiated disconnect requires a core soft reset
+> > +		 * (DCTL.CSftRst) before enabling the run/stop bit.
+> > +		 */
+> > +		spin_unlock_irqrestore(&dwc->lock, flags);
+> > +		dwc3_core_soft_reset(dwc);
+> > +		spin_lock_irqsave(&dwc->lock, flags);
+> > +
+> > +		dwc3_event_buffers_setup(dwc);
 > 
-> Considering that limitation if `dev->external_facing` already exists in PCI
-> core may as well use it for this instead of `is_thunderbolt`.
-
-Indeed.
-
-> > Alex
-> > 
-> > 
-> > > 
-> > > Then going back to is_thunderbolt debate :) I really don't think the
-> > > drivers should care whether they are connected over a tunnel or not.
-> > > They should work regardless of the underlying transport of the native
-> > > protocol. They should also be prepared for the fact that the hardware
-> > > can vanish under them at any point (e.g user unplugs the device). For
-> > > this reason I don't really like to see is_thunderbolt to be used more
-> > > and prefer to get rid if it completely if possible at all. If there is
-> > > still need to differentiate whether the device can be hot-removed or
-> > > not, I think "removable" in the driver core is the way to go. That is
-> > > not dependent on any single transport.
+> Could you tell me why you add dwc3_event_buffer_setup?
 > 
-> Hopefully that is what the patch series does right now as of v4. As I
+> Best Regards,
+> Jung Daehwan
+> 
 
-It does yes. I think the detection of internal and discrete tunneled
-ports can be dropped from this series for now to make this leaner. We
-can add those later when needed.
+I'm sorry I misunderstood databook then. It seems to be needed.
+
+Best Regrards,
+Jung Daehwan
+
+> >  		__dwc3_gadget_start(dwc);
+> >  	}
+> >  
+> > 
+
+
+
+------.rW42XXn7_Ji6OxwuAF4RAMbP.qed.OeqKlvEhSLhB3noATS=_100ab0_
+Content-Type: text/plain; charset="utf-8"
+
+
+------.rW42XXn7_Ji6OxwuAF4RAMbP.qed.OeqKlvEhSLhB3noATS=_100ab0_--
