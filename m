@@ -2,50 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665764BB5EE
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 10:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68CD4BB609
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 11:01:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233791AbiBRJuu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Feb 2022 04:50:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48908 "EHLO
+        id S233792AbiBRKAt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Feb 2022 05:00:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233820AbiBRJur (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 04:50:47 -0500
+        with ESMTP id S229993AbiBRKAs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 05:00:48 -0500
 Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id CED8926A2C1;
-        Fri, 18 Feb 2022 01:50:27 -0800 (PST)
-Received: from jleng.ambarella.net (unknown [116.246.37.178])
-        by mail-app2 (Coremail) with SMTP id by_KCgCnrYW8aw9ink_8AQ--.55562S2;
-        Fri, 18 Feb 2022 17:49:55 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id D456B2AEDB8;
+        Fri, 18 Feb 2022 02:00:30 -0800 (PST)
+Received: from jleng.ambarella.net (unknown [180.169.129.130])
+        by mail-app3 (Coremail) with SMTP id cC_KCgDXv_IXbg9iV4Z4DQ--.27261S2;
+        Fri, 18 Feb 2022 17:59:56 +0800 (CST)
 From:   3090101217@zju.edu.cn
 To:     gregkh@linuxfoundation.org
-Cc:     balbi@kernel.org, jleng@ambarella.com, pavel.hofman@ivitera.com,
+Cc:     balbi@kernel.org, colin.king@intel.com, jackp@codeaurora.org,
+        jbrunet@baylibre.com, jleng@ambarella.com,
+        pavel.hofman@ivitera.com, pawell@cadence.com,
         ruslan.bilovol@gmail.com, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: [PATCH v2] usb: gadget: f_uac1: add set requests support
-Date:   Fri, 18 Feb 2022 17:49:47 +0800
-Message-Id: <20220218094947.3835-1-3090101217@zju.edu.cn>
+Subject: [PATCH v4] usb: gadget: f_uac2: fix superspeed transfer
+Date:   Fri, 18 Feb 2022 17:59:48 +0800
+Message-Id: <20220218095948.4077-1-3090101217@zju.edu.cn>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <Yg5psAzBNrVvOpGc@kroah.com>
-References: <Yg5psAzBNrVvOpGc@kroah.com>
-X-CM-TRANSID: by_KCgCnrYW8aw9ink_8AQ--.55562S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWr4UKF4kKry5Zw1fZFWfAFb_yoW5KF1DpF
-        4UCayayrs8J34qqr17Jr4rZFW3C3yxA39xKr1Dt343Wrn3Jwn0yF4jyF9a9Fy3Aas5Cr4x
-        XF45Wr1rZw1j9rDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9vb7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+In-Reply-To: <Yg5onoldRY3ygW7v@kroah.com>
+References: <Yg5onoldRY3ygW7v@kroah.com>
+X-CM-TRANSID: cC_KCgDXv_IXbg9iV4Z4DQ--.27261S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXw1UWFWxtFykAF1UGryxAFb_yoWrGrW3pw
+        n8C39rtrW5Ar1a9a1rAr48Ar43AFWIyayYkw4Ivw1YvF4Sq34ktF1IyryYkFyDAFyjyw10
+        vF4jkw47u3Zrur7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUPGb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
         0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
         A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
         jxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
         8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2vYz4IE4I80cI0F6IAv
         xc0EwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
         Av7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
-        6r1j6r4UM4x0Y48IcxkI7VAKI48JM4kE6xkIj40Ew7xC0wCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr
-        0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8La93UUUUU==
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwMFBVNG3FklugAAsP
+        6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7M4kE6xkIj40Ew7
+        xC0wCY02Avz4vE14v_GFWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l
+        x2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14
+        v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IY
+        x2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
+        Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIF
+        yTuYvjxUx189DUUUU
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwMFBVNG3FklugABsO
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -57,115 +60,93 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Jing Leng <jleng@ambarella.com>
 
-Currently the f_uac1 driver only supports UAC_SET_CUR request.
+On page 362 of the USB3.2 specification (
+https://usb.org/sites/default/files/usb_32_20210125.zip),
+The 'SuperSpeed Endpoint Companion Descriptor' shall only be returned
+by Enhanced SuperSpeed devices that are operating at Gen X speed.
+Each endpoint described in an interface is followed by a 'SuperSpeed
+Endpoint Companion Descriptor'.
 
-But when uac1 device is plugged to Ubuntu 20.04 PC, at the stage
-of setup, the PC will send UAC_SET_RES request, If the device
-doesn't respond to the request, the PC will abort the setup process
-and uac1 device can't be recognized on Ubuntu 20.04 PC.
+If users use SuperSpeed UDC, host can't recognize the device if endpoint
+doesn't have 'SuperSpeed Endpoint Companion Descriptor' followed.
 
-So f_uac1 driver should handle other set requests.
+Currently in the uac2 driver code:
+1. ss_epout_desc_comp follows ss_epout_desc;
+2. ss_epin_fback_desc_comp follows ss_epin_fback_desc;
+3. ss_epin_desc_comp follows ss_epin_desc;
+4. Only ss_ep_int_desc endpoint doesn't have 'SuperSpeed Endpoint
+Companion Descriptor' followed, so we should add it.
 
-Fixes: 0356e6283c71 ("usb: gadget: f_uac1: add volume and mute support")
+Fixes: eaf6cbe09920 ("usb: gadget: f_uac2: add volume and mute support")
 Signed-off-by: Jing Leng <jleng@ambarella.com>
 ---
-ChangeLog v1->v2:
+ChangeLog v3->v4:
 - Add "Fixes:" tag in the changelog area
+ChangeLog v2->v3:
+- Remove static variables which are explicitly initialized to 0
+- Remove redundant modification "case USB_SPEED_SUPER_PLUS:"
+ChangeLog v1->v2:
+- Update more detailed description of the PATCH
 ---
- drivers/usb/gadget/function/f_uac1.c | 44 +++++++++++++++++++++++-----
- 1 file changed, 36 insertions(+), 8 deletions(-)
+ drivers/usb/gadget/function/f_uac2.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-index 03f50643fbba..c9d8ec4fdf22 100644
---- a/drivers/usb/gadget/function/f_uac1.c
-+++ b/drivers/usb/gadget/function/f_uac1.c
-@@ -589,7 +589,7 @@ in_rq_res(struct usb_function *fn, const struct usb_ctrlrequest *cr)
- }
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index 097a709549d6..b5baefe14013 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -282,6 +282,12 @@ static struct usb_endpoint_descriptor ss_ep_int_desc = {
+ 	.bInterval = 4,
+ };
  
- static void
--out_rq_cur_complete(struct usb_ep *ep, struct usb_request *req)
-+out_rq_complete(struct usb_ep *ep, struct usb_request *req)
- {
- 	struct g_audio *audio = req->context;
- 	struct usb_composite_dev *cdev = audio->func.config->cdev;
-@@ -614,9 +614,11 @@ out_rq_cur_complete(struct usb_ep *ep, struct usb_request *req)
- 			is_playback = 1;
- 
- 		if (control_selector == UAC_FU_MUTE) {
--			u8 mute = *(u8 *)req->buf;
-+			if (cr->bRequest == UAC_SET_CUR) {
-+				u8 mute = *(u8 *)req->buf;
- 
--			u_audio_set_mute(audio, is_playback, mute);
-+				u_audio_set_mute(audio, is_playback, mute);
-+			}
- 
- 			return;
- 		} else if (control_selector == UAC_FU_VOLUME) {
-@@ -624,7 +626,34 @@ out_rq_cur_complete(struct usb_ep *ep, struct usb_request *req)
- 			s16 volume;
- 
- 			volume = le16_to_cpu(*c);
--			u_audio_set_volume(audio, is_playback, volume);
++static struct usb_ss_ep_comp_descriptor ss_ep_int_desc_comp = {
++	.bLength = sizeof(ss_ep_int_desc_comp),
++	.bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
++	.wBytesPerInterval = cpu_to_le16(6),
++};
 +
-+			switch (cr->bRequest) {
-+			case UAC_SET_CUR:
-+				u_audio_set_volume(audio, is_playback, volume);
-+				break;
-+			case UAC_SET_MIN:
-+				if (is_playback)
-+					opts->p_volume_min = volume;
-+				else
-+					opts->c_volume_min = volume;
-+				break;
-+			case UAC_SET_MAX:
-+				if (is_playback)
-+					opts->p_volume_max = volume;
-+				else
-+					opts->c_volume_max = volume;
-+				break;
-+			case UAC_SET_RES:
-+				if (is_playback)
-+					opts->p_volume_res = volume;
-+				else
-+					opts->c_volume_res = volume;
-+				break;
-+			case UAC_SET_MEM:
-+				break;
-+			default:
-+				break;
-+			}
+ /* Audio Streaming OUT Interface - Alt0 */
+ static struct usb_interface_descriptor std_as_out_if0_desc = {
+ 	.bLength = sizeof std_as_out_if0_desc,
+@@ -595,7 +601,8 @@ static struct usb_descriptor_header *ss_audio_desc[] = {
+ 	(struct usb_descriptor_header *)&in_feature_unit_desc,
+ 	(struct usb_descriptor_header *)&io_out_ot_desc,
  
- 			return;
- 		} else {
-@@ -643,7 +672,7 @@ out_rq_cur_complete(struct usb_ep *ep, struct usb_request *req)
- }
+-  (struct usb_descriptor_header *)&ss_ep_int_desc,
++	(struct usb_descriptor_header *)&ss_ep_int_desc,
++	(struct usb_descriptor_header *)&ss_ep_int_desc_comp,
  
- static int
--out_rq_cur(struct usb_function *fn, const struct usb_ctrlrequest *cr)
-+ac_rq_out(struct usb_function *fn, const struct usb_ctrlrequest *cr)
- {
- 	struct usb_request *req = fn->config->cdev->req;
- 	struct g_audio *audio = func_to_g_audio(fn);
-@@ -659,7 +688,7 @@ out_rq_cur(struct usb_function *fn, const struct usb_ctrlrequest *cr)
- 			(FUOUT_EN(opts) && (entity_id == USB_OUT_FU_ID))) {
- 		memcpy(&uac1->setup_cr, cr, sizeof(*cr));
- 		req->context = audio;
--		req->complete = out_rq_cur_complete;
-+		req->complete = out_rq_complete;
+ 	(struct usb_descriptor_header *)&std_as_out_if0_desc,
+ 	(struct usb_descriptor_header *)&std_as_out_if1_desc,
+@@ -723,6 +730,7 @@ static void setup_headers(struct f_uac2_opts *opts,
+ 	struct usb_ss_ep_comp_descriptor *epout_desc_comp = NULL;
+ 	struct usb_ss_ep_comp_descriptor *epin_desc_comp = NULL;
+ 	struct usb_ss_ep_comp_descriptor *epin_fback_desc_comp = NULL;
++	struct usb_ss_ep_comp_descriptor *ep_int_desc_comp = NULL;
+ 	struct usb_endpoint_descriptor *epout_desc;
+ 	struct usb_endpoint_descriptor *epin_desc;
+ 	struct usb_endpoint_descriptor *epin_fback_desc;
+@@ -750,6 +758,7 @@ static void setup_headers(struct f_uac2_opts *opts,
+ 		epin_fback_desc = &ss_epin_fback_desc;
+ 		epin_fback_desc_comp = &ss_epin_fback_desc_comp;
+ 		ep_int_desc = &ss_ep_int_desc;
++		ep_int_desc_comp = &ss_ep_int_desc_comp;
+ 	}
  
- 		return w_length;
- 	} else {
-@@ -789,8 +818,7 @@ f_audio_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
- 		value = audio_get_endpoint_req(f, ctrl);
- 		break;
- 	case USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE:
--		if (ctrl->bRequest == UAC_SET_CUR)
--			value = out_rq_cur(f, ctrl);
-+		value = ac_rq_out(f, ctrl);
- 		break;
- 	case USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_INTERFACE:
- 		value = ac_rq_in(f, ctrl);
+ 	i = 0;
+@@ -778,8 +787,11 @@ static void setup_headers(struct f_uac2_opts *opts,
+ 	if (EPOUT_EN(opts))
+ 		headers[i++] = USBDHDR(&io_out_ot_desc);
+ 
+-	if (FUOUT_EN(opts) || FUIN_EN(opts))
++	if (FUOUT_EN(opts) || FUIN_EN(opts)) {
+ 		headers[i++] = USBDHDR(ep_int_desc);
++		if (ep_int_desc_comp)
++			headers[i++] = USBDHDR(ep_int_desc_comp);
++	}
+ 
+ 	if (EPOUT_EN(opts)) {
+ 		headers[i++] = USBDHDR(&std_as_out_if0_desc);
 -- 
 2.17.1
 
