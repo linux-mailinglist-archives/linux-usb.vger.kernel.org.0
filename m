@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 496944BBC29
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 16:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE254BBC24
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 16:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237002AbiBRP1h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S237004AbiBRP1h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Fri, 18 Feb 2022 10:27:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57706 "EHLO
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232694AbiBRP1g (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 10:27:36 -0500
+        with ESMTP id S237000AbiBRP1h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 10:27:37 -0500
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432531C9184;
-        Fri, 18 Feb 2022 07:27:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807EE253BD6;
+        Fri, 18 Feb 2022 07:27:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1645198038; x=1676734038;
+  t=1645198040; x=1676734040;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5hszIpACq830CHAc9LWqRkaIQSuXCBv2ejSsmu6cIA4=;
-  b=DWfOAKFLfJHWum2aYOrFX/UGX0DhuI2rZ6IJ8+UjkpTu1iGfXNLe+QhH
-   XE+Fhpa4WqBr3da3C2Ykwano5wwf7QNcGcDwdyn0+bFVk6nAa4pAGb6er
-   QiVP+vl0F1rxVeKNa65j0NkWGH1SMBcwrxS9462fTjjS5oM0KFIWiT9Bx
-   Amqt0GjB4QB3iDItbgh3bB0bKgILzuPOTIK4wAfCyeEPTRjajqS/xbS/B
-   BXltlpVp2MWOslSLetWhp0LZz1P70TViAbMMXcU4cxGvL7IlTs3vjBAt0
-   ngXujb0qzk41WhpzZE+xOKL/Iei4PPYuBO8b2cQjWIqDcgJT4ow0n506Q
-   Q==;
+  bh=NUNBthkSzGU6hGyMwUVYeSCWLjIWKGHnzMfDpZUB7Zw=;
+  b=qXsACdo6tb5q1h9aKNrION6kQC8AIdFxSx36eyBr1q74BviYCrio44kl
+   38UeDnuVmrV4rX1ZMFfPGKQByPulXQue56ecsScORtFdCx7grvl3YSUQH
+   XPDlmkFtlSIA8hl/+/1sA99Z75dM3VdpipRrRc71EVr1il4CKSYY+fJcR
+   7IguykOc84hFXQ007q2/Nbza2sTIGJ8tO8PleNZzuETlP5MUkAv24Kws0
+   29KLxpS61oCETUBCJW/DvpX8DSQeUcgWTb8d9m8iuLyVKmOZ0w7Dkc1YD
+   JLIxnXrFCUV4M3W3/CeUbc9KDr24Im4Er+KLfdFnROKXIOZRIIDD0uwL4
+   A==;
 X-IronPort-AV: E=Sophos;i="5.88,379,1635199200"; 
-   d="scan'208";a="22181139"
+   d="scan'208";a="22181141"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 18 Feb 2022 16:27:14 +0100
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -41,22 +41,22 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1645198034; x=1676734034;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5hszIpACq830CHAc9LWqRkaIQSuXCBv2ejSsmu6cIA4=;
-  b=iuB/VtaX5bOz1Bmss91Pxd4EgEFopCoBwgwKnIZdZcnZuITiYfwu0Y5D
-   P08aiDj1BmjDQfcNuhiJqTLuzZ6StFfoNZiD8MOr2GeKy5BQaHBdqUQlI
-   u4FgYBTaVDDDmdpUWrexRgOKLRStZazLFNysiHYKhu3NCXArlYYOtDHr2
-   7SUMKqSZIxwa3nJLMlPcLv4t2FtmDt3JXzq0Xb/efE0m3NEAcWS5RNZOB
-   31u+dtDMyppskSUo+A/KdpXV4l72dTZXoY+g+ef2BYCaR/QPmJYnSLTeI
-   7FIZzU/3ZNkOCtqTehbKs4eR8lCTa7X7OqP34/J/260wvVWMxm5uXdxor
+  bh=NUNBthkSzGU6hGyMwUVYeSCWLjIWKGHnzMfDpZUB7Zw=;
+  b=iql3kk7dHSssCmzUkrvVXEcvLKSegqKIlpcVDihjlJ2VkX31T73s4Sh9
+   M0vvDkx5RIHJ+vLqNndwbj62sbIQQ71PJZmdzeF/4bgADiIR1Xx3x0zNU
+   HY6O17pxrpDaU4GpjySn2drt6ZgvoL9HS22opQUJGb3QwUh5xK6BYIVu1
+   N/XdYWrrkv+beFM3DNi8t4XSJUFdr+tgr9jxaAUXroo5+MgksFdgWXbos
+   wh/kgKsZatxX40JkqQEeTxQDMn4b9eE24citD1sbSyB2n5rkLGD15lxai
+   /Ct6whkbYpZKXw/ouzp+KVpOykeUz8ehE3LhsOydDhbe72GB20yUgjUlK
    A==;
 X-IronPort-AV: E=Sophos;i="5.88,379,1635199200"; 
-   d="scan'208";a="22181138"
+   d="scan'208";a="22181140"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 18 Feb 2022 16:27:14 +0100
 Received: from steina-w.tq-net.de (unknown [10.123.49.12])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 4D50A280075;
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 81693280065;
         Fri, 18 Feb 2022 16:27:14 +0100 (CET)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -67,10 +67,11 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Li Jun <jun.li@nxp.com>
-Subject: [PATCH v5 1/4] usb: dwc3: imx8mp: rename iomem base pointer
-Date:   Fri, 18 Feb 2022 16:27:04 +0100
-Message-Id: <20220218152707.2198357-2-alexander.stein@ew.tq-group.com>
+        linux-arm-kernel@lists.infradead.org, Li Jun <jun.li@nxp.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v5 2/4] dt-bindings: usb: dwc3-imx8mp: Add imx8mp specific flags
+Date:   Fri, 18 Feb 2022 16:27:05 +0100
+Message-Id: <20220218152707.2198357-3-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220218152707.2198357-1-alexander.stein@ew.tq-group.com>
 References: <20220218152707.2198357-1-alexander.stein@ew.tq-group.com>
@@ -85,74 +86,76 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Until now the iomem used is not USB glue as the name suggests, but
-HSIO BLK_CTL. Rename the struct member accordingly. This is a preparing
-patch for when USB glue is actually used.
+This adds bindings for features in the USB glue block. They allow
+setting polarity of PWR and OC as well as disabling port power control.
+Also permanently attached can be annotated as well.
+Additional IO address and clock are needed.
 
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Reviewed-by: Li Jun <jun.li@nxp.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 Changes in v5:
-* Added Reviewed-by: Li Jun
+* Added Reviewed-by: Rob Herring
 
- drivers/usb/dwc3/dwc3-imx8mp.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ .../bindings/usb/fsl,imx8mp-dwc3.yaml         | 31 ++++++++++++++++---
+ 1 file changed, 27 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-imx8mp.c b/drivers/usb/dwc3/dwc3-imx8mp.c
-index d328d20abfbc..1c8fe657b3a9 100644
---- a/drivers/usb/dwc3/dwc3-imx8mp.c
-+++ b/drivers/usb/dwc3/dwc3-imx8mp.c
-@@ -39,7 +39,7 @@
- struct dwc3_imx8mp {
- 	struct device			*dev;
- 	struct platform_device		*dwc3;
--	void __iomem			*glue_base;
-+	void __iomem			*hsio_blk_base;
- 	struct clk			*hsio_clk;
- 	struct clk			*suspend_clk;
- 	int				irq;
-@@ -55,7 +55,7 @@ static void dwc3_imx8mp_wakeup_enable(struct dwc3_imx8mp *dwc3_imx)
- 	if (!dwc3)
- 		return;
+diff --git a/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
+index 974032b1fda0..01ab0f922ae8 100644
+--- a/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
+@@ -15,9 +15,9 @@ properties:
+     const: fsl,imx8mp-dwc3
  
--	val = readl(dwc3_imx->glue_base + USB_WAKEUP_CTRL);
-+	val = readl(dwc3_imx->hsio_blk_base + USB_WAKEUP_CTRL);
+   reg:
+-    maxItems: 1
+-    description: Address and length of the register set for the wrapper of
+-      dwc3 core on the SOC.
++    items:
++      - description: Address and length of the register set for HSIO Block Control
++      - description: Address and length of the register set for the wrapper of dwc3 core on the SOC.
  
- 	if ((dwc3->current_dr_role == DWC3_GCTL_PRTCAP_HOST) && dwc3->xhci)
- 		val |= USB_WAKEUP_EN | USB_WAKEUP_SS_CONN |
-@@ -64,16 +64,16 @@ static void dwc3_imx8mp_wakeup_enable(struct dwc3_imx8mp *dwc3_imx)
- 		val |= USB_WAKEUP_EN | USB_WAKEUP_VBUS_EN |
- 		       USB_WAKEUP_VBUS_SRC_SESS_VAL;
+   "#address-cells":
+     enum: [ 1, 2 ]
+@@ -49,6 +49,28 @@ properties:
+       - const: hsio
+       - const: suspend
  
--	writel(val, dwc3_imx->glue_base + USB_WAKEUP_CTRL);
-+	writel(val, dwc3_imx->hsio_blk_base + USB_WAKEUP_CTRL);
- }
++  fsl,permanently-attached:
++    type: boolean
++    description:
++      Indicates if the device atached to a downstream port is
++      permanently attached.
++
++  fsl,disable-port-power-control:
++    type: boolean
++    description:
++      Indicates whether the host controller implementation includes port
++      power control. Defines Bit 3 in capability register (HCCPARAMS).
++
++  fsl,over-current-active-low:
++    type: boolean
++    description:
++      Over current signal polarity is active low.
++
++  fsl,power-active-low:
++    type: boolean
++    description:
++      Power pad (PWR) polarity is active low.
++
+ # Required child node:
  
- static void dwc3_imx8mp_wakeup_disable(struct dwc3_imx8mp *dwc3_imx)
- {
- 	u32 val;
- 
--	val = readl(dwc3_imx->glue_base + USB_WAKEUP_CTRL);
-+	val = readl(dwc3_imx->hsio_blk_base + USB_WAKEUP_CTRL);
- 	val &= ~(USB_WAKEUP_EN | USB_WAKEUP_EN_MASK);
--	writel(val, dwc3_imx->glue_base + USB_WAKEUP_CTRL);
-+	writel(val, dwc3_imx->hsio_blk_base + USB_WAKEUP_CTRL);
- }
- 
- static irqreturn_t dwc3_imx8mp_interrupt(int irq, void *_dwc3_imx)
-@@ -115,9 +115,9 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
- 
- 	dwc3_imx->dev = dev;
- 
--	dwc3_imx->glue_base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(dwc3_imx->glue_base))
--		return PTR_ERR(dwc3_imx->glue_base);
-+	dwc3_imx->hsio_blk_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(dwc3_imx->hsio_blk_base))
-+		return PTR_ERR(dwc3_imx->hsio_blk_base);
- 
- 	dwc3_imx->hsio_clk = devm_clk_get(dev, "hsio");
- 	if (IS_ERR(dwc3_imx->hsio_clk)) {
+ patternProperties:
+@@ -74,7 +96,8 @@ examples:
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+     usb3_0: usb@32f10100 {
+       compatible = "fsl,imx8mp-dwc3";
+-      reg = <0x32f10100 0x8>;
++      reg = <0x32f10100 0x8>,
++            <0x381f0000 0x20>;
+       clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
+                <&clk IMX8MP_CLK_USB_ROOT>;
+       clock-names = "hsio", "suspend";
 -- 
 2.25.1
 
