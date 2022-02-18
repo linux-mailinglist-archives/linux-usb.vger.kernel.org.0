@@ -2,96 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04F34BB3CF
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 09:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7DF4BB41B
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 09:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232304AbiBRICm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Feb 2022 03:02:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37896 "EHLO
+        id S232516AbiBRIZc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Feb 2022 03:25:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbiBRICm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 03:02:42 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA7621FECA;
-        Fri, 18 Feb 2022 00:02:26 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id D591658017F;
-        Fri, 18 Feb 2022 03:02:25 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 18 Feb 2022 03:02:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=qxZlwWOELa9hmMK2f9JovpGKkCVtpGkOBIhzWj
-        Bu+6c=; b=EU+lGG0AouUc2YwgXrf0qG3sULD7uitvucLCLyk/FJgIy5+McCYhMl
-        2wfyuKjcHU9p2SUFtlOEXdFaPo01ZZ62RKPgXW+W6t/uH70oY2q1SKwxV4bw3hiB
-        zEmRO9q/u1ETcm3a6Hlpea4aq1NFcdLnmiKIjdlIirI6RNgVMSiKFwl7OTl/5a0R
-        3rclXsjJwT8Bv8JSZTsjaTkUL581s8cEzs64CB5NvgxUpfh5eWGw7K95aE6chxhn
-        JR5GtHqNrRRgis+RJmOHv/NJWHEmMmJVwXVwgOpGMhsLi4hSTIi7+0hyRgw/U32y
-        RGbXK6LEquTSTRdSqeERYJjYA87IXZsQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=qxZlwWOELa9hmMK2f
-        9JovpGKkCVtpGkOBIhzWjBu+6c=; b=fV+EzLTDenA5LvW5gpb7A1xqet9sFHlNE
-        Nzt+VZIXwPesZcDkR97unfOPXBZ0h7CB5CejKCxvn3yeOFidyPUFU8pJnFOReDn6
-        bwEm/f4YavHqOSX1278qT2SqgKwhwwb8/Hsxo2mjFNgC5mNZsU0J3F9BUDNJIH8h
-        gW/Ptp/U60JfdI+IOsqhNmDO2JrOvUblVcaHSDj2AAA6xvuufTyL0WgzN62YLFGB
-        OEYKxXapPRQKgcGMMD8AMUgv6PEHDAs/KxC+Yj5S6dHp7wMSFKQ71B83w7EMA4Pk
-        9cM0wQExrRCtzVlgbI5+yyZV1uEzEvH7SkOeKQKn67OPfJ9MuKWog==
-X-ME-Sender: <xms:kVIPYrDiTY7bEBPNw0J5kfIoFeIxVQ1OyIU_3KATrIt2xUEDUCPEdg>
-    <xme:kVIPYhjBCXN1hkI8A0vskJKdfTfPfeN4czDTU31NUTqm9XvV_SUxabvR-WnSWzf3J
-    LTiy9lRG9z-9Q>
-X-ME-Received: <xmr:kVIPYmkfI4gjgUF_O_2-WmiiCr5yZDVTa-5-3fXNVfs-0u8vKbt7pduCOR6jjqMTchF3ZeYCdaru9VxmjhstWzUbivavgOgB>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeelgdduudehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujgesthdtre
-    dttddtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheq
-    necuggftrfgrthhtvghrnhepveeuheejgfffgfeivddukedvkedtleelleeghfeljeeiue
-    eggeevueduudekvdetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghi
-    lhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:kVIPYtwh3Myk2UKJ464OMqKG3XOGSyOENTmqS4zqKbgnhsbZVDSRyg>
-    <xmx:kVIPYgTXOTvkdgU7dg6IZeL-o4i6_SpVl_8Euv6PgIIrrMd6hXaDrQ>
-    <xmx:kVIPYgbBZF9wBUwBXvSlvb6udO-K7IUqKcsRk04Qv4D2oyZvNLoffg>
-    <xmx:kVIPYhJc-g0DblSGl1v5-zFoNefX4wW0nnwEmqfF70aL_kaf9cICmg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Feb 2022 03:02:25 -0500 (EST)
-Date:   Fri, 18 Feb 2022 09:02:23 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
-        bjorn.andersson@linaro.org, robh@kernel.org,
-        linux-kernel@vger.kernel.org, quic_rjendra@quicinc.com,
-        quic_saipraka@quicinc.com
-Subject: Re: [PATCH V1 1/2] Revert "arm64: dts: qcom: sc7280: Set the default
- dr_mode for usb2"
-Message-ID: <Yg9Sj508nRsE1B+o@kroah.com>
-References: <cover.1645168567.git.quic_schowdhu@quicinc.com>
- <9a2f9da9fdc1893863f70b4294c7011bf739dd92.1645168567.git.quic_schowdhu@quicinc.com>
+        with ESMTP id S232507AbiBRIZa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 03:25:30 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94DA22F759
+        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 00:25:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645172714; x=1676708714;
+  h=subject:to:references:cc:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=lS1cssRX93CoQ7VaH1rcN5jfchIDMXz8nO1qij6Qa1Y=;
+  b=iFAhmXevcdpbBArlJDnooj5j/TxcFNklYLcWd2/xcv/baiHSToWbrGMo
+   YOY9dUOX6hhkEXV71wBqQdbJc+dZ/QicZgrZ6SFo/FgAuvkUO2+GmLbBQ
+   magWjdcj+Pzf9kVHl3dc3ZvJAH3ZDYnjU/qAfkDM9v7gT1tzO4EqQIHfU
+   wuuz3AfeLVZOivN93U7Y/zYCZuzH2IBW7gnRA9/Jpps4Opftce+lOZyM8
+   HnxFRoABC4aE44y/wiDhZyIjGy4gtkkhWy7egCXVmkOEjAzxMIgqA/sPe
+   bl1UsY34Zl4oj3j9pyllY3qk9mMA9UJBr+EJcZiLNHMSCzwCL2+IqaFY5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="251278942"
+X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
+   d="scan'208";a="251278942"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 00:25:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
+   d="scan'208";a="572217347"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 18 Feb 2022 00:25:07 -0800
+Subject: Re: [PATCH] xhci: omit mem read just after allocation of trb
+To:     Oliver Neukum <oneukum@suse.com>, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org
+References: <20220217133549.27961-1-oneukum@suse.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <4632126f-97da-65c9-a240-b86f4490afe0@linux.intel.com>
+Date:   Fri, 18 Feb 2022 10:26:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9a2f9da9fdc1893863f70b4294c7011bf739dd92.1645168567.git.quic_schowdhu@quicinc.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220217133549.27961-1-oneukum@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 01:21:35PM +0530, Souradeep Chowdhury wrote:
-> Revert the change to set the dr_mode for usb2 in case
-> of Embedded USB Debugger(EUD).
-> ---
->  arch/arm64/boot/dts/qcom/sc7280-idp.dts | 4 ----
->  1 file changed, 4 deletions(-)
+On 17.2.2022 15.35, Oliver Neukum wrote:
+> This has been allocated just a few lines earlier with a
+> zalloc(). The value is known and "|=" is a waste of memory
+> cycles.
+> 
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
 
-Also, please use the normal format for reverting a change with the git
-id and the like.  This is an odd style :(
+Thanks
 
-greg k-h
+In case Greg wants to pick this up now directly:
+Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+
+Otherwise I'll submit it later with other small changes
+
+-Mathias
+
+
