@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE254BBC24
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 16:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FD14BBC2A
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 16:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237004AbiBRP1h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Feb 2022 10:27:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57796 "EHLO
+        id S237012AbiBRP1j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Feb 2022 10:27:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237000AbiBRP1h (ORCPT
+        with ESMTP id S237005AbiBRP1h (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 10:27:37 -0500
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807EE253BD6;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E150253BD9;
         Fri, 18 Feb 2022 07:27:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
   t=1645198040; x=1676734040;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NUNBthkSzGU6hGyMwUVYeSCWLjIWKGHnzMfDpZUB7Zw=;
-  b=qXsACdo6tb5q1h9aKNrION6kQC8AIdFxSx36eyBr1q74BviYCrio44kl
-   38UeDnuVmrV4rX1ZMFfPGKQByPulXQue56ecsScORtFdCx7grvl3YSUQH
-   XPDlmkFtlSIA8hl/+/1sA99Z75dM3VdpipRrRc71EVr1il4CKSYY+fJcR
-   7IguykOc84hFXQ007q2/Nbza2sTIGJ8tO8PleNZzuETlP5MUkAv24Kws0
-   29KLxpS61oCETUBCJW/DvpX8DSQeUcgWTb8d9m8iuLyVKmOZ0w7Dkc1YD
-   JLIxnXrFCUV4M3W3/CeUbc9KDr24Im4Er+KLfdFnROKXIOZRIIDD0uwL4
-   A==;
+  bh=cKH/8pwhILIis99bJhobtYEPCEo3mcbqkmGBQ4adkvE=;
+  b=iVjKxyvkdcRUrwdxOpxOGCYAhimo6WIMUm2b83Vd/xNqbYg2R4EMt+CD
+   /T2ow88CNmQbu5kOBwSu4cACBA5bGNxAS8O+EStRTNVyPtiNz6sZqCTeD
+   awG6Hd/HV/pkhNoM8Ni1la1+zTjdBMB0StnwpLY4ho8K5PYia0oqsJVHr
+   lJ+BPFrBz/qo6KVoe24MiwqMcnZKD2QPPOe8fIsyIPD+fewLi2tsTtAnr
+   v8UuKqbB8qWsxqH2qpWJrrXm5976i4giGlQ1s8hs5WPUCW7TiOW+g1wYO
+   F9Z8gqjynxgHOL+X0ahwHsSJvdh6wK0xQamXuXQcxFdern8RacwUk4ShX
+   g==;
 X-IronPort-AV: E=Sophos;i="5.88,379,1635199200"; 
-   d="scan'208";a="22181141"
+   d="scan'208";a="22181143"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 18 Feb 2022 16:27:14 +0100
 Received: from mx1.tq-group.com ([192.168.6.7])
   by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 18 Feb 2022 16:27:14 +0100
+  Fri, 18 Feb 2022 16:27:15 +0100
 X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 18 Feb 2022 16:27:14 +0100
+        by tq-pgp-pr1.tq-net.de on Fri, 18 Feb 2022 16:27:15 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
   t=1645198034; x=1676734034;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NUNBthkSzGU6hGyMwUVYeSCWLjIWKGHnzMfDpZUB7Zw=;
-  b=iql3kk7dHSssCmzUkrvVXEcvLKSegqKIlpcVDihjlJ2VkX31T73s4Sh9
-   M0vvDkx5RIHJ+vLqNndwbj62sbIQQ71PJZmdzeF/4bgADiIR1Xx3x0zNU
-   HY6O17pxrpDaU4GpjySn2drt6ZgvoL9HS22opQUJGb3QwUh5xK6BYIVu1
-   N/XdYWrrkv+beFM3DNi8t4XSJUFdr+tgr9jxaAUXroo5+MgksFdgWXbos
-   wh/kgKsZatxX40JkqQEeTxQDMn4b9eE24citD1sbSyB2n5rkLGD15lxai
-   /Ct6whkbYpZKXw/ouzp+KVpOykeUz8ehE3LhsOydDhbe72GB20yUgjUlK
-   A==;
+  bh=cKH/8pwhILIis99bJhobtYEPCEo3mcbqkmGBQ4adkvE=;
+  b=SdbMFvp3/8yD5frMLAAQathkAk+J+j1TTfeFAzpTXKoqb+x7CrHYhFKm
+   DTj67waR4vWBWDY7hLD932c/lA+zHBxsY3pPzm7sluQEmXJxUTII6h0OQ
+   9/byj4QXrdriAw0gcFIYrKrqyUxyHEFjVbMm9c5IehzuPcAfqlOTnSex2
+   rHlNKL3GUEz+Np9eiUNARyeqERFwiKyDRhSyX5tiCCdlZXZLk8YR4mm/m
+   zcXAXkPkad8sdv6xXXHHFeKfvJ6jI5ZUOTOsGYp/F+HN2xOZuKaV+vsKy
+   I9w2JFRBXOUTVupjGKy+AGu+5mo24Fk9wq2P0Thh6LrnLP9UYotd0pNnH
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.88,379,1635199200"; 
-   d="scan'208";a="22181140"
+   d="scan'208";a="22181142"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 18 Feb 2022 16:27:14 +0100
 Received: from steina-w.tq-net.de (unknown [10.123.49.12])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 81693280065;
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id BB235280075;
         Fri, 18 Feb 2022 16:27:14 +0100 (CET)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -67,11 +67,10 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Li Jun <jun.li@nxp.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 2/4] dt-bindings: usb: dwc3-imx8mp: Add imx8mp specific flags
-Date:   Fri, 18 Feb 2022 16:27:05 +0100
-Message-Id: <20220218152707.2198357-3-alexander.stein@ew.tq-group.com>
+        linux-arm-kernel@lists.infradead.org, Li Jun <jun.li@nxp.com>
+Subject: [PATCH v5 3/4] usb: dwc3: imx8mp: Add support for setting SOC specific flags
+Date:   Fri, 18 Feb 2022 16:27:06 +0100
+Message-Id: <20220218152707.2198357-4-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220218152707.2198357-1-alexander.stein@ew.tq-group.com>
 References: <20220218152707.2198357-1-alexander.stein@ew.tq-group.com>
@@ -86,76 +85,137 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This adds bindings for features in the USB glue block. They allow
-setting polarity of PWR and OC as well as disabling port power control.
-Also permanently attached can be annotated as well.
-Additional IO address and clock are needed.
+The i.MX8MP glue layer has support for the following flags:
+* over-current polarity
+* PWR pad polarity
+* controlling PPC flag in HCCPARAMS register
+* permanent port attach for usb2 & usb3 port
+
+Allow setting these flags by supporting specific flags in the glue node.
+In order to get this to work an additional IORESOURCE_MEM and clock is
+necessary. For backward compatibility this is purely optional.
 
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 Changes in v5:
-* Added Reviewed-by: Rob Herring
+* Added comment why reprogramming is necessary in resume
 
- .../bindings/usb/fsl,imx8mp-dwc3.yaml         | 31 ++++++++++++++++---
- 1 file changed, 27 insertions(+), 4 deletions(-)
+ drivers/usb/dwc3/dwc3-imx8mp.c | 63 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
-index 974032b1fda0..01ab0f922ae8 100644
---- a/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
-@@ -15,9 +15,9 @@ properties:
-     const: fsl,imx8mp-dwc3
+diff --git a/drivers/usb/dwc3/dwc3-imx8mp.c b/drivers/usb/dwc3/dwc3-imx8mp.c
+index 1c8fe657b3a9..174f07614318 100644
+--- a/drivers/usb/dwc3/dwc3-imx8mp.c
++++ b/drivers/usb/dwc3/dwc3-imx8mp.c
+@@ -36,10 +36,22 @@
  
-   reg:
--    maxItems: 1
--    description: Address and length of the register set for the wrapper of
--      dwc3 core on the SOC.
-+    items:
-+      - description: Address and length of the register set for HSIO Block Control
-+      - description: Address and length of the register set for the wrapper of dwc3 core on the SOC.
+ #define USB_WAKEUP_EN_MASK		GENMASK(5, 0)
  
-   "#address-cells":
-     enum: [ 1, 2 ]
-@@ -49,6 +49,28 @@ properties:
-       - const: hsio
-       - const: suspend
++/* USB glue registers */
++#define USB_CTRL0		0x00
++#define USB_CTRL1		0x04
++
++#define USB_CTRL0_PORTPWR_EN	BIT(12) /* 1 - PPC enabled (default) */
++#define USB_CTRL0_USB3_FIXED	BIT(22) /* 1 - USB3 permanent attached */
++#define USB_CTRL0_USB2_FIXED	BIT(23) /* 1 - USB2 permanent attached */
++
++#define USB_CTRL1_OC_POLARITY	BIT(16) /* 0 - HIGH / 1 - LOW */
++#define USB_CTRL1_PWR_POLARITY	BIT(17) /* 0 - HIGH / 1 - LOW */
++
+ struct dwc3_imx8mp {
+ 	struct device			*dev;
+ 	struct platform_device		*dwc3;
+ 	void __iomem			*hsio_blk_base;
++	void __iomem			*glue_base;
+ 	struct clk			*hsio_clk;
+ 	struct clk			*suspend_clk;
+ 	int				irq;
+@@ -47,6 +59,42 @@ struct dwc3_imx8mp {
+ 	bool				wakeup_pending;
+ };
  
-+  fsl,permanently-attached:
-+    type: boolean
-+    description:
-+      Indicates if the device atached to a downstream port is
-+      permanently attached.
++static void imx8mp_configure_glue(struct dwc3_imx8mp *dwc3_imx)
++{
++	struct device *dev = dwc3_imx->dev;
++	u32 value;
 +
-+  fsl,disable-port-power-control:
-+    type: boolean
-+    description:
-+      Indicates whether the host controller implementation includes port
-+      power control. Defines Bit 3 in capability register (HCCPARAMS).
++	if (!dwc3_imx->glue_base)
++		return;
 +
-+  fsl,over-current-active-low:
-+    type: boolean
-+    description:
-+      Over current signal polarity is active low.
++	value = readl(dwc3_imx->glue_base + USB_CTRL0);
 +
-+  fsl,power-active-low:
-+    type: boolean
-+    description:
-+      Power pad (PWR) polarity is active low.
++	if (device_property_read_bool(dev, "fsl,permanently-attached"))
++		value |= (USB_CTRL0_USB2_FIXED | USB_CTRL0_USB3_FIXED);
++	else
++		value &= ~(USB_CTRL0_USB2_FIXED | USB_CTRL0_USB3_FIXED);
 +
- # Required child node:
++	if (device_property_read_bool(dev, "fsl,disable-port-power-control"))
++		value &= ~(USB_CTRL0_PORTPWR_EN);
++	else
++		value |= USB_CTRL0_PORTPWR_EN;
++
++	writel(value, dwc3_imx->glue_base + USB_CTRL0);
++
++	value = readl(dwc3_imx->glue_base + USB_CTRL1);
++	if (device_property_read_bool(dev, "fsl,over-current-active-low"))
++		value |= USB_CTRL1_OC_POLARITY;
++	else
++		value &= ~USB_CTRL1_OC_POLARITY;
++
++	if (device_property_read_bool(dev, "fsl,power-active-low"))
++		value |= USB_CTRL1_PWR_POLARITY;
++	else
++		value &= ~USB_CTRL1_PWR_POLARITY;
++
++	writel(value, dwc3_imx->glue_base + USB_CTRL1);
++}
++
+ static void dwc3_imx8mp_wakeup_enable(struct dwc3_imx8mp *dwc3_imx)
+ {
+ 	struct dwc3	*dwc3 = platform_get_drvdata(dwc3_imx->dwc3);
+@@ -100,6 +148,7 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
+ 	struct device		*dev = &pdev->dev;
+ 	struct device_node	*dwc3_np, *node = dev->of_node;
+ 	struct dwc3_imx8mp	*dwc3_imx;
++	struct resource		*res;
+ 	int			err, irq;
  
- patternProperties:
-@@ -74,7 +96,8 @@ examples:
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
-     usb3_0: usb@32f10100 {
-       compatible = "fsl,imx8mp-dwc3";
--      reg = <0x32f10100 0x8>;
-+      reg = <0x32f10100 0x8>,
-+            <0x381f0000 0x20>;
-       clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
-                <&clk IMX8MP_CLK_USB_ROOT>;
-       clock-names = "hsio", "suspend";
+ 	if (!node) {
+@@ -119,6 +168,15 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
+ 	if (IS_ERR(dwc3_imx->hsio_blk_base))
+ 		return PTR_ERR(dwc3_imx->hsio_blk_base);
+ 
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
++	if (!res) {
++		dev_warn(dev, "Base address for glue layer missing. Continuing without, some features are missing though.");
++	} else {
++		dwc3_imx->glue_base = devm_ioremap_resource(dev, res);
++		if (IS_ERR(dwc3_imx->glue_base))
++			return PTR_ERR(dwc3_imx->glue_base);
++	}
++
+ 	dwc3_imx->hsio_clk = devm_clk_get(dev, "hsio");
+ 	if (IS_ERR(dwc3_imx->hsio_clk)) {
+ 		err = PTR_ERR(dwc3_imx->hsio_clk);
+@@ -152,6 +210,8 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
+ 	}
+ 	dwc3_imx->irq = irq;
+ 
++	imx8mp_configure_glue(dwc3_imx);
++
+ 	pm_runtime_set_active(dev);
+ 	pm_runtime_enable(dev);
+ 	err = pm_runtime_get_sync(dev);
+@@ -252,6 +312,9 @@ static int __maybe_unused dwc3_imx8mp_resume(struct dwc3_imx8mp *dwc3_imx,
+ 	dwc3_imx8mp_wakeup_disable(dwc3_imx);
+ 	dwc3_imx->pm_suspended = false;
+ 
++	/* Upon power loss any previous configuration is lost, restore it */
++	imx8mp_configure_glue(dwc3_imx);
++
+ 	if (dwc3_imx->wakeup_pending) {
+ 		dwc3_imx->wakeup_pending = false;
+ 		if (dwc->current_dr_role == DWC3_GCTL_PRTCAP_DEVICE) {
 -- 
 2.25.1
 
