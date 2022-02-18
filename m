@@ -2,69 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF6C4BBD31
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6954BBD2E
 	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 17:15:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237602AbiBRQPz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Feb 2022 11:15:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38052 "EHLO
+        id S237603AbiBRQPy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Feb 2022 11:15:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237586AbiBRQPt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 11:15:49 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D2B2B2E3C
-        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 08:15:33 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        with ESMTP id S237576AbiBRQPs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 11:15:48 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D232B2FC8
+        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 08:15:32 -0800 (PST)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8D231405BC
-        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 16:15:29 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0DAA04003C
+        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 16:15:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645200929;
-        bh=Fdez1AmqlsBKbf0sdm0whcYqGiEOg3dPughdxsguAXI=;
+        s=20210705; t=1645200931;
+        bh=eXTf6CI7XtqvYApoORACvc6rPyUPKkXor1yJtlktlDc=;
         h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=NXI4erxcLg4wnIgsuHh0kFmU5I2lWf8FCMhIVgrGw8TBrb6T5DFUUGDfwyW5M5+oz
-         ULtAfAVKWlILygLKj5zQ4L+10h8RgQHxNRWrNgWmKo3ov1kfoJV6hLULvMk6ZEWP9v
-         ttra0hLl1n/I+E/GUF/TEDoheWpD7u1PluBhd08q9wh34/o5fLQaw64QKKXWuAzx9i
-         0GmIkW56z8e1ADl40PeWqlO+XfNqCLNIWW8PP9bdjeA9yvA5rPXHQ6aJ47+Bxh2d/Y
-         iq5PFOXIDK480EasAOcBLII3u12EhylNxRid+p8YC5fTIv7I6ejS9Uzq6PoGiSOBMh
-         A+TOvXSYo/awA==
-Received: by mail-ed1-f70.google.com with SMTP id bq19-20020a056402215300b0040f276105a4so5805473edb.2
-        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 08:15:29 -0800 (PST)
+        b=q8JH+mx0ZEKAm+LT0TpgTdfgGC2f2BsfEF0pdQZ1qiCetFcHX5IUivpa/Qxv1juyj
+         U++5t+kVq4rxgzvsEgsIwiEeWZn9GVqtUoBdtpzOG7s2PwU1NvfR8rb7YWSQXbtUhd
+         5aIYthhwHbyOjS792MqmVLfIKB8rjkt/YQt0PKgLDraUY0tsHjl3+gZyB7voLyaKoQ
+         +VUR2hYY8FLbOBNVyawyHRWyVm5ooD28OfWeLCgq+HhOUhhVj49iQjWJFACCswZ38A
+         06q/SobftYblfoe8Jquphy610SV4FvXjoX4vOlsMJjCyD1loIMKnU7vNE9DMyudivv
+         tnz6VjL0sok8g==
+Received: by mail-ej1-f70.google.com with SMTP id q3-20020a17090676c300b006a9453c33b0so3240989ejn.13
+        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 08:15:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Fdez1AmqlsBKbf0sdm0whcYqGiEOg3dPughdxsguAXI=;
-        b=eJyZcSvOHZxVsaNbQAhuDvkuUaajFqEZf1PG6L360Ni9e9tSZZi7JrOkgJEvW71R60
-         BsDOJhdy5w18b/puHY3NenCpomQwofo+CkVHkG4+Tr0F3SmlyxEqyWq061pfE0f4U4sR
-         e2/WIC0yybvIpzWNBi+1bsLp956WUuF4aCH80UplcNiaxtj4c+Det5HXofuV54Sd3yRY
-         miSg26gAaK+tHe/ujOEJ7cbenVBlUWksOYauBRxbzmQfa+WSCISUAQSsYRtgaVqSSmmz
-         4oBcTF2DYxJQA+K51k3Z4D9OV7oQotyGqvL4OepdYVORsX+p5Cae7JlHRsImMNKnWyO8
-         90Gg==
-X-Gm-Message-State: AOAM533Nm2c/1PEiIjMpoMFFW/PdJ5ctFCMLPrLTI7vKayc65nvVlK6s
-        ijAaxJr3DiRc+ic9EW3F2a3QTqUgqT71GtsqKxX77olTzvul0v4/9fjFTxkM2twMUyS5B0hiuLm
-        S1i+GBNcx/xJmN682MgIBdCcNu3G36M0WTda3oA==
-X-Received: by 2002:a17:907:7053:b0:6a6:b835:dbd3 with SMTP id ws19-20020a170907705300b006a6b835dbd3mr6755944ejb.190.1645200928925;
-        Fri, 18 Feb 2022 08:15:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxif3aG4j6jnGHwS6RzVrgD+2IJjpK+S4H+3CmJ2oLVH02iXXbrxboKEJzUTsWoN3HnciK9Tg==
-X-Received: by 2002:a17:907:7053:b0:6a6:b835:dbd3 with SMTP id ws19-20020a170907705300b006a6b835dbd3mr6755917ejb.190.1645200928644;
-        Fri, 18 Feb 2022 08:15:28 -0800 (PST)
+        bh=eXTf6CI7XtqvYApoORACvc6rPyUPKkXor1yJtlktlDc=;
+        b=crop64V9FBsb23ZalLYIBxc9dPcAyoTurbgG/8CDZ4dVMXD6F0KnjPmnYEPB8sFTgS
+         LBlinpau+0BuDCWvcpK0PP5cYkuGE7/r6Nh7X7tAwbzQ1o8e7HATUy/7zCKmQcH/OjUB
+         ko5dVG2e3eUxNThdu19try8HpflKWVUsdrroIBGjkBuCHZatZ4h/1a3QlxQfEBLuxnsj
+         e5mLWX4nPa54qb+K6qVH7qlAyvXpFcJZOZh2Oqr0k3dZtX5iP2IX/V3Fp23aUlM3dWMa
+         LM68Axf5aXeVNS3zJ+M7ETpOWxGD/H6jIETa1LcMcCvsdxFqTBKRl+jtZMS2Uexf5mgZ
+         RZ4w==
+X-Gm-Message-State: AOAM530DGMlTVzDz0SbaEAi8zwAh+YDuWGcGS4P/WTicarQZMqDt9gL8
+        dYKLuRAI5jCeaWk63aXtzrImRkUTGTFqUg9/uWEXbztH33B3vhT5+BCuy/FiXWoALjy1ImNAIdo
+        +gaM3llGh1Njf7XFFzfYmwfwA1tJ5wet+kgAEcQ==
+X-Received: by 2002:a05:6402:1d8d:b0:408:4a31:9790 with SMTP id dk13-20020a0564021d8d00b004084a319790mr9100873edb.92.1645200930748;
+        Fri, 18 Feb 2022 08:15:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwdswzoYMv9GT1AsPyCy429Vy5ZKlXY8hiNZQFBnkjJI6JAvV6mE8WIdoqyTzwBSbyUSRKGRA==
+X-Received: by 2002:a05:6402:1d8d:b0:408:4a31:9790 with SMTP id dk13-20020a0564021d8d00b004084a319790mr9100856edb.92.1645200930559;
+        Fri, 18 Feb 2022 08:15:30 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id y21sm2325572ejq.185.2022.02.18.08.15.27
+        by smtp.gmail.com with ESMTPSA id y21sm2325572ejq.185.2022.02.18.08.15.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 08:15:28 -0800 (PST)
+        Fri, 18 Feb 2022 08:15:29 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Dinh Nguyen <dinguyen@kernel.org>, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] dt-bindings: usb: dwc2: add disable-over-current
-Date:   Fri, 18 Feb 2022 17:15:21 +0100
-Message-Id: <20220218161522.52044-3-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 4/4] arm64: dts: agilex/stratix10: add clock-names to USB DWC2 node
+Date:   Fri, 18 Feb 2022 17:15:22 +0100
+Message-Id: <20220218161522.52044-4-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220218161522.52044-1-krzysztof.kozlowski@canonical.com>
 References: <20220218161522.52044-1-krzysztof.kozlowski@canonical.com>
@@ -72,7 +72,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,30 +80,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver parses disable-over-current protection and some
-implementations use it (e.g. Altera Stratix10), so document it in the
-bindings.
+USB DWC2 requires clock-names:
+
+  arm64/boot/dts/altera/socfpga_stratix10_socdk_nand.dt.yaml:
+    usb@ffb00000: 'clock-names' is a required property
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- Documentation/devicetree/bindings/usb/dwc2.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi | 1 +
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi     | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
-index 1ba96706bbcb..1addab83f4fd 100644
---- a/Documentation/devicetree/bindings/usb/dwc2.yaml
-+++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
-@@ -68,6 +68,10 @@ properties:
-     items:
-       - const: otg
- 
-+  disable-over-current:
-+    type: boolean
-+    description: whether to disable detection of over-current condition.
-+
-   iommus:
-     maxItems: 1
- 
+diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+index 3ec301bd08a9..d7d1918ae471 100644
+--- a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
++++ b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+@@ -484,6 +484,7 @@ usb0: usb@ffb00000 {
+ 			resets = <&rst USB0_RESET>, <&rst USB0_OCP_RESET>;
+ 			reset-names = "dwc2", "dwc2-ecc";
+ 			clocks = <&clkmgr STRATIX10_USB_CLK>;
++			clock-names = "otg";
+ 			iommus = <&smmu 6>;
+ 			status = "disabled";
+ 		};
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+index f4270cf18996..984c71b850c9 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+@@ -510,6 +510,7 @@ usb0: usb@ffb00000 {
+ 			resets = <&rst USB0_RESET>, <&rst USB0_OCP_RESET>;
+ 			reset-names = "dwc2", "dwc2-ecc";
+ 			clocks = <&clkmgr AGILEX_USB_CLK>;
++			clock-names = "otg";
+ 			iommus = <&smmu 6>;
+ 			status = "disabled";
+ 		};
 -- 
 2.32.0
 
