@@ -2,113 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7907E4BBE74
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 18:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCB14BBFF2
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 19:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238625AbiBRRdH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Feb 2022 12:33:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46132 "EHLO
+        id S234757AbiBRSvb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Feb 2022 13:51:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236830AbiBRRdG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 12:33:06 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFAFC2B4D9A;
-        Fri, 18 Feb 2022 09:32:49 -0800 (PST)
-Date:   Fri, 18 Feb 2022 18:32:45 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1645205567;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=g2CWKBvUgnW8+rhv+YuxoDA1gTBduF4DcHc2yTMdEzA=;
-        b=0Q0L8bxs+BmGckvx/nkNo81zL4oRAgOtitETMEuGBvmyUbb/N9wBwRdnZS/sIsH8Rm5ddM
-        fZ6xQ2gbq6pPc202A9jbw6/tIZ1ZZsnyoIGJeUudZ3X8YZLN4R0IrmG4oYaStVgkwNoVXA
-        TV29qJdP6Jcp4NOe3d91G7sQCdqUZ/AbbOPLR+IglVXAFf5igATeCG58d7Wes+Hb1Hx73P
-        UT78YS9aPGwD2bVGlbkMaLKaW/hkDugyeixWQiE8Oh6dJ1mZgjbkmD6NkNE2hJL+/KVA2r
-        lGJOM1JE25ZgDoQtgmhFc9A5XDF7NDIqz7YgJhKe6sDm6BRDCbamOCnUlmrMQA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1645205567;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=g2CWKBvUgnW8+rhv+YuxoDA1gTBduF4DcHc2yTMdEzA=;
-        b=zOTVEQFe+owllU86mgiL+jBSRUVoYjZY/iNPrDE0Y1+oHyWl4kCbVc3/kb0vhd+fHCj42Q
-        Mry87Li7RjxKFLDA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: [PATCH] usb: dwc3: gadget: Let the interrupt handler disable bottom
- halves.
-Message-ID: <Yg/YPejVQH3KkRVd@linutronix.de>
+        with ESMTP id S231140AbiBRSv2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 13:51:28 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB1D4F9D1
+        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 10:51:11 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id w63so52684ybe.10
+        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 10:51:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=O0sM+7/S+fBCCZUg+/YEGNIX6w68DP/DhEZWAgILhyI=;
+        b=Cj7dGSeyB4hwreR941XOTfCnwxfccJ6bT6Saa+jXyT+t0uLcjJVPUrkeglx8/nJlxA
+         ha+h94Orleiir6L3qt0bkssXF3Ztql5yIOQ70+u9yMq0hXXtq1CfZ9jJfNBYw+3T2y8i
+         Mxu9YKUUGVNjT/uv/k47hdUpMFClnltwF5GNlGnnxbn3RNjxaQxhwuFiqVkWRi+TXCk1
+         VUv/k1nZ/FW4MdMKfNDDukqE5H+JU4YOIfrX0ZE71j9ZV0vslnQ61KdKa4Nf7t2p8jI7
+         NiL2NfEGH8eHdJUdVBugRDMK3CwR1GeTnQVshGqgbRMuLuFggoZ4RdqeifMYRRWJCydS
+         aGdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=O0sM+7/S+fBCCZUg+/YEGNIX6w68DP/DhEZWAgILhyI=;
+        b=cF5m+F3gZLhsjD1HY/rQ5Pr4Lu4LtI/HGjBUz+d6FJsrKI8olCr4nHx8A6aT4W/c9S
+         5MPPoWi7ivIrU8GCXhAiX3fj7Jy5n2na4b0pzUlV+6bkk7DLVPCJmjbY8Sxri+mZ1PZN
+         sm5cPZ1rOxVWqe/puucTGouon+Ba3ZgZjHzhi3UxEk8iRf3S4fjPiIXUT226SVofsMXt
+         01bkWbN856KA4O3dAAZtE1cR6SRFPLccW78n2bI7hF/06gYjZdFOQIAIM2ZcQ5zM1YTf
+         lzT6WmRBIiZvujITEnodJJln0VADzGFAtXPE2TdoF2+NLitrXwTS7nFjOp+Xhixd6J+d
+         IliA==
+X-Gm-Message-State: AOAM5302HTMsma32r6zaaiQNT+iPNoYkeVlcBKyylmlSJHIxTxIwIWGS
+        o1oWkuZ1goczdd09FzWvjuuO0T7ePo5qZ+niNLM=
+X-Google-Smtp-Source: ABdhPJzo3YZqYryg/tPOb2hYftZDMiI2C+tHNgXUsFwRro4lLDX2YSwdXeU8LrV0UYkfXpO5OMZfp72o5aBIm2iRCwg=
+X-Received: by 2002:a25:545:0:b0:623:a41a:7263 with SMTP id
+ 66-20020a250545000000b00623a41a7263mr8570045ybf.163.1645210271021; Fri, 18
+ Feb 2022 10:51:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6900:2a8a:0:0:0:0 with HTTP; Fri, 18 Feb 2022 10:51:10
+ -0800 (PST)
+Reply-To: jeai2nasri@yahoo.com
+From:   james nasri <jamesnassri@gmail.com>
+Date:   Fri, 18 Feb 2022 18:51:10 +0000
+Message-ID: <CAHCfg3RJva9z4J1JmwHciGydZ+qKRZXGFfhRk49aWaO6VoO_gA@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The interrupt service routine registered for the gadget is a primary
-handler which mask the interrupt source and a threaded handler which
-handles the source of the interrupt. Since the threaded handler is
-voluntary threaded, the IRQ-core does not disable bottom halves before
-invoke the handler like it does for the forced-threaded handler.
-
-Due to changes in networking it became visible that a network gadget's
-completions handler may schedule a softirq which remains unprocessed.
-The gadget's completion handler is usually invoked either in hard-IRQ or
-soft-IRQ context. In this context it is enough to just raise the softirq
-because the softirq itself will be handled once that context is left.
-In the case of the voluntary threaded handler, there is nothing that
-will process pending softirqs. Which means it remain queued until
-another random interrupt (on this CPU) fires and handles it on its exit
-path or another thread locks and unlocks a lock with the bh suffix.
-Worst case is that the CPU goes idle and the NOHZ complains about
-unhandled softirqs.
-
-Disable bottom halves before acquiring the lock (and disabling
-interrupts) and enable them after dropping the lock. This ensures that
-any pending softirqs will handled right away.
-
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Link: https://lkml.kernel.org/r/c2a64979-73d1-2c22-e048-c275c9f81558@samsung.com
-Fixes: e5f68b4a3e7b0 ("Revert "usb: dwc3: gadget: remove unnecessary _irqsave()"")
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- drivers/usb/dwc3/gadget.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 183b90923f51b..a0c883f19a417 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4160,9 +4160,11 @@ static irqreturn_t dwc3_thread_interrupt(int irq, void *_evt)
- 	unsigned long flags;
- 	irqreturn_t ret = IRQ_NONE;
- 
-+	local_bh_disable();
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	ret = dwc3_process_event_buf(evt);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
-+	local_bh_enable();
- 
- 	return ret;
- }
--- 
-2.34.1
-
+Hello
+Do you have an account to receive donation money? Please reply for
+further explanation
+Nasri
