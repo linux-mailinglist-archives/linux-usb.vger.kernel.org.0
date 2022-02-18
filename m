@@ -2,215 +2,266 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A78B84BC008
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 19:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D26C94BC0B4
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 20:53:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbiBRS67 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Feb 2022 13:58:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59086 "EHLO
+        id S238748AbiBRTxn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Feb 2022 14:53:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234789AbiBRS66 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 13:58:58 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89463F897
-        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 10:58:40 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id j2so4067935oie.7
-        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 10:58:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KpCzVne1Gz58N6SARjxbFTCJz302oRTwstbeXMAdM6Q=;
-        b=bdbTuvm8EhR7ibTXIWua4NuoDT4JYpbH8sHlb7TYbrfJ/Mixb7A27r726gOZ7bY/Be
-         un3LIIxds0kLC/KCIlmd5Z6CEs3qEymVveKT4xTZo0WX9LqbaLGyWPj8swHeQNp5tIFW
-         gW71m8qGKsRhYqBfU/l59Ng2TFw1bupL4Q+t+FX9eBpIC/uKfIKSPHYj2s1MQ4GSz5qS
-         0+nLY4RYnyGM5N9ajfP8pPIEAKsEyVcH6zU4JBVPnj3lh3s5H9u4uj0vX9aZ2bJCumC4
-         sUNKYQHDQKDNoVup872h/87P5kvDLrcI5U81XFM368cBTGqsQPiKa44939zeM1btmRy7
-         R+eg==
+        with ESMTP id S238771AbiBRTxb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 14:53:31 -0500
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C409293B6F;
+        Fri, 18 Feb 2022 11:53:11 -0800 (PST)
+Received: by mail-pg1-f170.google.com with SMTP id z4so8723336pgh.12;
+        Fri, 18 Feb 2022 11:53:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KpCzVne1Gz58N6SARjxbFTCJz302oRTwstbeXMAdM6Q=;
-        b=DGoKyYIRnIHohjjbkKoHklx7XxlDSjwvl7Kh4ntmAW4dLiRp2jyYJAqwkXG998idab
-         dsCVZftlIj3GgeXE5yLRAmYH2+ZDEHhsRelTsqJXL+zLfVeyc6WY7LE+0DKqx/SwFBxB
-         4LIWeUL28FXOTjN49qQaIaQmDFA5WSLA1G9w9qB0g+LKMx7vol3mwzK6c/hAoItn2Cb8
-         DXfvuMV2ZwMluu/FU2mqJvL+tawq6BeauGkg5FyrGfxJ6NbFbwiWrqdjjgo/fZmIRhxC
-         9HK9MqxL7w2T3qSFq02wzGsQYw3yL87DRxzr9sKdQS0hQyx/YbMG8Xx6abH9G0L3kkAI
-         Z6OA==
-X-Gm-Message-State: AOAM533qZV4twIsTYRlqDn3kl/8F7fbh5v1z1YDZB0Pn8Eyq8P0bJwBY
-        1bmV1n2u/XrCFn/hH52Y84QLzPGzSTcF3A==
-X-Google-Smtp-Source: ABdhPJyJJ0FUxp/4FKsJBvxsI8qBwR+/9DIHJHiIGkTECSA06MCw5JbT7Xw12pC7tWwnJNkgXJC6kg==
-X-Received: by 2002:a05:6808:209f:b0:2cd:f37:c722 with SMTP id s31-20020a056808209f00b002cd0f37c722mr4195900oiw.45.1645210719989;
-        Fri, 18 Feb 2022 10:58:39 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id be19sm2749956oib.31.2022.02.18.10.58.39
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=efotMu/0Uf1dkcc1uJu6R6InV4FTKLkaJ5+cOM9IBjM=;
+        b=H6JU+gsrnDLzhBJ9DVjp7UBHpB7Q3ZYrWMv2rTBl0WNgQ2EV+map6sDtB3U49R9s63
+         IWn0YbxHgqlx09l7BO8oyQV/sN9oLC7EMVIAGXEB0p8quHQK3VX+mhFfxotO/uuYMg4D
+         ynIMzdK5c9Dsr5RZmFLrEFeuw9IWcQPCcKv0y2eaENXtJ3VTr0Lb3uwLQP4R9bO9WBWZ
+         gTySoHQYZfBDnKHFcWj4iO7yrVMgIzjE7O76nMayFoFxis4lXd60OMrTjS87FDj+7PZR
+         QZDonnLlVxYkVFhNfbbnXsakcCbKe5t1T6vOaCy7c/iKfQIvZPRzl+27NVgaz2dSnKSc
+         Pveg==
+X-Gm-Message-State: AOAM53314Ip2pwEkLEKA7pv77lMa2THBruNPERCZCX9NG+CCCSE6rhtn
+        7A2LmyTY8ptykDcXsubraEM=
+X-Google-Smtp-Source: ABdhPJzBC5Pa9LwZNXPNUveABs1udiNNXyHxFEbOi46N2HbfL5blS4HnAACiJ1rFGZwQXIFy2OLNLg==
+X-Received: by 2002:a63:6782:0:b0:342:7457:69a4 with SMTP id b124-20020a636782000000b00342745769a4mr7378106pgc.410.1645213990878;
+        Fri, 18 Feb 2022 11:53:10 -0800 (PST)
+Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id e15sm3930523pfv.104.2022.02.18.11.53.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 10:58:39 -0800 (PST)
-Date:   Fri, 18 Feb 2022 11:00:45 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v2 1/6] device property: Helper to match multiple
- connections
-Message-ID: <Yg/s3eKB2wLEQTgY@ripper>
-References: <20220208031944.3444-1-bjorn.andersson@linaro.org>
- <20220208031944.3444-2-bjorn.andersson@linaro.org>
- <YgOz6K55Oi2Si4pU@smile.fi.intel.com>
+        Fri, 18 Feb 2022 11:53:10 -0800 (PST)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH v5 45/49] scsi: usb: Stop using the SCSI pointer
+Date:   Fri, 18 Feb 2022 11:51:13 -0800
+Message-Id: <20220218195117.25689-46-bvanassche@acm.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220218195117.25689-1-bvanassche@acm.org>
+References: <20220218195117.25689-1-bvanassche@acm.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgOz6K55Oi2Si4pU@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed 09 Feb 04:30 PST 2022, Andy Shevchenko wrote:
+Set scsi_host_template.cmd_size instead of using the SCSI pointer for
+storing driver-private data. Change the type of the argument of
+uas_add_work() from struct uas_cmd_info * into struct scsi_cmnd * because
+it is easier to convert a SCSI command pointer into a uas_cmd_info pointer
+than the other way around.
 
-> On Mon, Feb 07, 2022 at 07:19:39PM -0800, Bjorn Andersson wrote:
-> > In some cases multiple connections with the same connection id
-> > needs to be resolved from a fwnode graph.
-> > 
-> > One such example is when separate hardware is used for performing muxing
-> > and/or orientation switching of the SuperSpeed and SBU lines in a USB-C
-> 
-> USB Type-C ?
-> 
-> > connector. In this case the connector needs to belong to a graph with
-> > multiple matching remote endpoints, and the TypeC controller needs to be
-> 
-> Type-C ?
-> 
-> > able to resolve them both.
-> > 
-> > Add a new API that allows this kind of lookup.
-> > 
-> > Given that the match() callback returns an opaque reference to something
-> > provided by the client it's not possible for the implementation to
-> > release the returned object and as such it's not possible to handle
-> > errors, which in turn means that it's not possible to query the number
-> > of elements or dynamically grow the results array. It's however expected
-> > that the number of matches will be reasonably low and that the worst
-> > case is known by the caller before hand.
-> 
-> ...
-> 
-> > +	fwnode_graph_for_each_endpoint(fwnode, ep) {
-> > +		if (count >= matches_len) {
-> > +			fwnode_handle_put(ep);
-> > +			return count;
-> > +		}
-> > +
-> > +		node = fwnode_graph_get_remote_port_parent(ep);
-> > +		if (!fwnode_device_is_available(node)) {
-> > +			fwnode_handle_put(node);
-> > +			continue;
-> > +		}
-> > +
-> > +		ret = match(node, con_id, data);
-> > +		fwnode_handle_put(node);
-> 
-> > +
-> 
-> Redundant blank line (it seems the current style w/o this).
-> Ditto for the below function.
-> 
-> > +		if (ret)
-> > +			matches[count++] = ret;
-> > +	}
-> 
-> ...
-> 
-> > +/**
-> > + * fwnode_connection_find_matches - Find connections from a device node
-> > + * @fwnode: Device node with the connection
-> > + * @con_id: Identifier for the connection
-> > + * @data: Data for the match function
-> > + * @match: Function to check and convert the connection description
-> > + * @matches: Array of pointers to fill with matches
-> > + * @matches_len: Length of @matches
-> > + *
-> > + * Find up to @matches_len connections with unique identifier @con_id between
-> > + * @fwnode and other device nodes. @match will be used to convert the
-> > + * connection description to data the caller is expecting to be returned
-> > + * through the @matches array.
-> > + *
-> > + * Return: Number of matches resolved, of negative errno.
-> 
-> s/of/or/ ?
-> 
-> > + */
-> > +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
-> > +				   const char *con_id, void *data,
-> > +				   devcon_match_fn_t match,
-> > +				   void **matches, unsigned int matches_len)
-> > +{
-> > +	unsigned int count;
-> > +
-> > +	if (!fwnode || !match || !matches)
-> 
-> !matches case may be still useful to get the count and allocate memory by
-> caller. Please, consider this case.
-> 
+This patch prepares for removal of the SCSI pointer from struct scsi_cmnd.
 
-As discussed in previous version, and described in the commit message,
-the returned value of "match" is a opaque pointer to something which
-has to be passed back to the caller in order to be cleaned up.
+Cc: linux-usb@vger.kernel.org
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Acked-by: Oliver Neukum <oneukum@suse.com>
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/usb/storage/uas.c | 43 ++++++++++++++++++---------------------
+ 1 file changed, 20 insertions(+), 23 deletions(-)
 
-E.g. the typec mux code returns a pointer to a typec_mux/switch object
-with a refcounted struct device within, or an ERR_PTR().
-
-So unfortunately we can must gather the results into matches and pass it
-back to the caller to take consume or clean up.
-
-
-Thanks for your review, I'll update the patches according to the
-other feedback.
-
-Regards,
-Bjorn
-
-> > +		return -EINVAL;
-> > +
-> > +	count = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
-> > +					    matches, matches_len);
-> > +
-> > +	return count + fwnode_devcon_matches(fwnode, con_id, data, match,
-> > +					     matches + count,
-> > +					     matches_len - count);
-> 
-> I haven't found any explanation what the difference between two counts. Also
-> can you define two count variables with distinct names and do something like
-> 
-> 	count_A = ...
-> 
-> 	matches += count;
-> 	matches_len -= count;
-> 
-> 	count_B = ...
-> 
-> 	return count_A + count_B;
-> 
-> ?
-> 
-> > +}
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index 7f2944729ecd..84dc270f6f73 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -113,7 +113,7 @@ static void uas_do_work(struct work_struct *work)
+ 			continue;
+ 
+ 		cmnd = devinfo->cmnd[i];
+-		cmdinfo = (void *)&cmnd->SCp;
++		cmdinfo = scsi_cmd_priv(cmnd);
+ 
+ 		if (!(cmdinfo->state & IS_IN_WORK_LIST))
+ 			continue;
+@@ -139,10 +139,9 @@ static void uas_scan_work(struct work_struct *work)
+ 	dev_dbg(&devinfo->intf->dev, "scan complete\n");
+ }
+ 
+-static void uas_add_work(struct uas_cmd_info *cmdinfo)
++static void uas_add_work(struct scsi_cmnd *cmnd)
+ {
+-	struct scsi_pointer *scp = (void *)cmdinfo;
+-	struct scsi_cmnd *cmnd = container_of(scp, struct scsi_cmnd, SCp);
++	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
+ 	struct uas_dev_info *devinfo = cmnd->device->hostdata;
+ 
+ 	lockdep_assert_held(&devinfo->lock);
+@@ -163,7 +162,7 @@ static void uas_zap_pending(struct uas_dev_info *devinfo, int result)
+ 			continue;
+ 
+ 		cmnd = devinfo->cmnd[i];
+-		cmdinfo = (void *)&cmnd->SCp;
++		cmdinfo = scsi_cmd_priv(cmnd);
+ 		uas_log_cmd_state(cmnd, __func__, 0);
+ 		/* Sense urbs were killed, clear COMMAND_INFLIGHT manually */
+ 		cmdinfo->state &= ~COMMAND_INFLIGHT;
+@@ -200,15 +199,14 @@ static void uas_sense(struct urb *urb, struct scsi_cmnd *cmnd)
+ static void uas_log_cmd_state(struct scsi_cmnd *cmnd, const char *prefix,
+ 			      int status)
+ {
+-	struct uas_cmd_info *ci = (void *)&cmnd->SCp;
+-	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
++	struct uas_cmd_info *ci = scsi_cmd_priv(cmnd);
+ 
+ 	if (status == -ENODEV) /* too late */
+ 		return;
+ 
+ 	scmd_printk(KERN_INFO, cmnd,
+ 		    "%s %d uas-tag %d inflight:%s%s%s%s%s%s%s%s%s%s%s%s ",
+-		    prefix, status, cmdinfo->uas_tag,
++		    prefix, status, ci->uas_tag,
+ 		    (ci->state & SUBMIT_STATUS_URB)     ? " s-st"  : "",
+ 		    (ci->state & ALLOC_DATA_IN_URB)     ? " a-in"  : "",
+ 		    (ci->state & SUBMIT_DATA_IN_URB)    ? " s-in"  : "",
+@@ -231,7 +229,7 @@ static void uas_free_unsubmitted_urbs(struct scsi_cmnd *cmnd)
+ 	if (!cmnd)
+ 		return;
+ 
+-	cmdinfo = (void *)&cmnd->SCp;
++	cmdinfo = scsi_cmd_priv(cmnd);
+ 
+ 	if (cmdinfo->state & SUBMIT_CMD_URB)
+ 		usb_free_urb(cmdinfo->cmd_urb);
+@@ -245,7 +243,7 @@ static void uas_free_unsubmitted_urbs(struct scsi_cmnd *cmnd)
+ 
+ static int uas_try_complete(struct scsi_cmnd *cmnd, const char *caller)
+ {
+-	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
++	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
+ 	struct uas_dev_info *devinfo = (void *)cmnd->device->hostdata;
+ 
+ 	lockdep_assert_held(&devinfo->lock);
+@@ -263,13 +261,13 @@ static int uas_try_complete(struct scsi_cmnd *cmnd, const char *caller)
+ static void uas_xfer_data(struct urb *urb, struct scsi_cmnd *cmnd,
+ 			  unsigned direction)
+ {
+-	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
++	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
+ 	int err;
+ 
+ 	cmdinfo->state |= direction | SUBMIT_STATUS_URB;
+ 	err = uas_submit_urbs(cmnd, cmnd->device->hostdata);
+ 	if (err) {
+-		uas_add_work(cmdinfo);
++		uas_add_work(cmnd);
+ 	}
+ }
+ 
+@@ -329,7 +327,7 @@ static void uas_stat_cmplt(struct urb *urb)
+ 	}
+ 
+ 	cmnd = devinfo->cmnd[idx];
+-	cmdinfo = (void *)&cmnd->SCp;
++	cmdinfo = scsi_cmd_priv(cmnd);
+ 
+ 	if (!(cmdinfo->state & COMMAND_INFLIGHT)) {
+ 		uas_log_cmd_state(cmnd, "unexpected status cmplt", 0);
+@@ -394,7 +392,7 @@ static void uas_stat_cmplt(struct urb *urb)
+ static void uas_data_cmplt(struct urb *urb)
+ {
+ 	struct scsi_cmnd *cmnd = urb->context;
+-	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
++	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
+ 	struct uas_dev_info *devinfo = (void *)cmnd->device->hostdata;
+ 	struct scsi_data_buffer *sdb = &cmnd->sdb;
+ 	unsigned long flags;
+@@ -446,7 +444,7 @@ static struct urb *uas_alloc_data_urb(struct uas_dev_info *devinfo, gfp_t gfp,
+ 				      enum dma_data_direction dir)
+ {
+ 	struct usb_device *udev = devinfo->udev;
+-	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
++	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
+ 	struct urb *urb = usb_alloc_urb(0, gfp);
+ 	struct scsi_data_buffer *sdb = &cmnd->sdb;
+ 	unsigned int pipe = (dir == DMA_FROM_DEVICE)
+@@ -468,7 +466,7 @@ static struct urb *uas_alloc_sense_urb(struct uas_dev_info *devinfo, gfp_t gfp,
+ 				       struct scsi_cmnd *cmnd)
+ {
+ 	struct usb_device *udev = devinfo->udev;
+-	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
++	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
+ 	struct urb *urb = usb_alloc_urb(0, gfp);
+ 	struct sense_iu *iu;
+ 
+@@ -496,7 +494,7 @@ static struct urb *uas_alloc_cmd_urb(struct uas_dev_info *devinfo, gfp_t gfp,
+ {
+ 	struct usb_device *udev = devinfo->udev;
+ 	struct scsi_device *sdev = cmnd->device;
+-	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
++	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
+ 	struct urb *urb = usb_alloc_urb(0, gfp);
+ 	struct command_iu *iu;
+ 	int len;
+@@ -558,7 +556,7 @@ static struct urb *uas_submit_sense_urb(struct scsi_cmnd *cmnd, gfp_t gfp)
+ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+ 			   struct uas_dev_info *devinfo)
+ {
+-	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
++	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
+ 	struct urb *urb;
+ 	int err;
+ 
+@@ -637,12 +635,10 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmnd)
+ {
+ 	struct scsi_device *sdev = cmnd->device;
+ 	struct uas_dev_info *devinfo = sdev->hostdata;
+-	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
++	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
+ 	unsigned long flags;
+ 	int idx, err;
+ 
+-	BUILD_BUG_ON(sizeof(struct uas_cmd_info) > sizeof(struct scsi_pointer));
+-
+ 	/* Re-check scsi_block_requests now that we've the host-lock */
+ 	if (cmnd->device->host->host_self_blocked)
+ 		return SCSI_MLQUEUE_DEVICE_BUSY;
+@@ -712,7 +708,7 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmnd)
+ 			spin_unlock_irqrestore(&devinfo->lock, flags);
+ 			return SCSI_MLQUEUE_DEVICE_BUSY;
+ 		}
+-		uas_add_work(cmdinfo);
++		uas_add_work(cmnd);
+ 	}
+ 
+ 	devinfo->cmnd[idx] = cmnd;
+@@ -730,7 +726,7 @@ static DEF_SCSI_QCMD(uas_queuecommand)
+  */
+ static int uas_eh_abort_handler(struct scsi_cmnd *cmnd)
+ {
+-	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
++	struct uas_cmd_info *cmdinfo = scsi_cmd_priv(cmnd);
+ 	struct uas_dev_info *devinfo = (void *)cmnd->device->hostdata;
+ 	struct urb *data_in_urb = NULL;
+ 	struct urb *data_out_urb = NULL;
+@@ -910,6 +906,7 @@ static struct scsi_host_template uas_host_template = {
+ 	.this_id = -1,
+ 	.skip_settle_delay = 1,
+ 	.dma_boundary = PAGE_SIZE - 1,
++	.cmd_size = sizeof(struct uas_cmd_info),
+ };
+ 
+ #define UNUSUAL_DEV(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax, \
