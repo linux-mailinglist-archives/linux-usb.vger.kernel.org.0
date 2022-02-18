@@ -2,82 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD7AF4BB7CE
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 12:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F104BB7DF
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 12:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234477AbiBRLKe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Feb 2022 06:10:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36102 "EHLO
+        id S231926AbiBRLOA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Feb 2022 06:14:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233933AbiBRLKd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 06:10:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1782B4611;
-        Fri, 18 Feb 2022 03:10:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0D62B825D6;
-        Fri, 18 Feb 2022 11:10:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7DD84C340EB;
-        Fri, 18 Feb 2022 11:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645182610;
-        bh=lp7cghyXAebWMJKIuCyhowwplg9kOkL9uCDs5vCYHQ4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=I2d8DAE0RZTwk/xl2i5NpXx4JJiznECeOgOSW0Tcf3tTHGothSEYihWnNwKyZ0Heu
-         DP76tP6kC35xG1M9NLoELYMZdYJswfQkZAgUYiFdRuAP8Pee3JAOsORE+2P7TkZ/Rt
-         JtKJeWGEruqhdRZefJUxfpThEsGJPFa4Xn+NdEfp5yjAAsiI7JKP0qRa242nEoqNQL
-         13oE79ddhwBxmvxyMWkvmpS8S30kYTzlzwHTeC8TFzlnIr/ooFAv5i7VXC0TawweJ5
-         MZoLelwj8Le7z3DqefckL8Vtu1BYv37jJi272sJ7ETgo04TrHCMkgTzaNxPmZdYsUW
-         aBAQEYPYQyhPw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6A12DE5D07D;
-        Fri, 18 Feb 2022 11:10:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230475AbiBRLN7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 06:13:59 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E0A23BF35
+        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 03:13:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645182822; x=1676718822;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=K3r/8Qmjtox1KoZ5zPzFl0Mdj2eJMVuKIhUpINrUIo4=;
+  b=h4ueFel4xhXIyTLAOkgxN9RlGpQvj8lry5R4TeJxaVhArNUn68/EVP5f
+   JnRVWPRtN4qHgFIxirXookqDUzDo50rQbGktFrVNPXMJ1OTCHsa5gArIg
+   1EFY+7MRBI2oV+3VE3m2qv29B6yC5LxifBLYGR7C0J0cG6mEeKPBabJ1p
+   xJaxaIdyTBhfJ7N3KiNXRV6sRR7aBmww1Vl66kRU/nrZvUf/IaZwDAkYI
+   Dvn8hL854yfjTFIHOQtHMYItjmgwhz+2WLLUFFvuvDRb3YIgjTRH4TB6H
+   ZDCfZ5ld5N4y8yiUvrrS6rtHTmFqBtUNDeAYirrfYF3Xmn4Olk2EN2qGG
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="337551262"
+X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
+   d="scan'208";a="337551262"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 03:13:42 -0800
+X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
+   d="scan'208";a="605522732"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 03:13:39 -0800
+Received: by lahna (sSMTP sendmail emulation); Fri, 18 Feb 2022 13:13:37 +0200
+Date:   Fri, 18 Feb 2022 13:13:37 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Sanjay R Mehta <Sanju.Mehta@amd.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, Basavaraj.Natikar@amd.com,
+        jagadish.hadimani@amd.com, sachinkumar.butte@amd.com,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: Retain host router DP IN resources during
+ suspend
+Message-ID: <Yg9/YWrk4qMhoEut@lahna>
+References: <1645168285-126273-1-git-send-email-Sanju.Mehta@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] sr9700: sanity check for packet length
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164518261043.25032.13889771767086361342.git-patchwork-notify@kernel.org>
-Date:   Fri, 18 Feb 2022 11:10:10 +0000
-References: <20220217131044.26983-1-oneukum@suse.com>
-In-Reply-To: <20220217131044.26983-1-oneukum@suse.com>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, grundler@chromium.org,
-        andrew@lunn.ch, jgg@ziepe.ca, linux-usb@vger.kernel.org,
-        arnd@arndb.de, netdev@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1645168285-126273-1-git-send-email-Sanju.Mehta@amd.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
+Hi Sanjay,
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 17 Feb 2022 14:10:44 +0100 you wrote:
-> A malicious device can leak heap data to user space
-> providing bogus frame lengths. Introduce a sanity check.
+On Fri, Feb 18, 2022 at 01:11:25AM -0600, Sanjay R Mehta wrote:
+> From: Sanjay R Mehta <sanju.mehta@amd.com>
 > 
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> ---
->  drivers/net/usb/sr9700.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> All DP resources are released during suspend and while
+> resuming back DP IN resource is not available, therefore
+> unable to find DP pair to re-establish the DP tunnel.
 
-Here is the summary with links:
-  - sr9700: sanity check for packet length
-    https://git.kernel.org/netdev/net/c/e9da0b56fe27
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+It should get plug event for the DP IN adapters once the router comes
+back from sleep. Is that not happening here?
