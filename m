@@ -2,315 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7184BB954
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 13:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2874BBA47
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 14:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235314AbiBRMin (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Feb 2022 07:38:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54596 "EHLO
+        id S235832AbiBRNqZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Feb 2022 08:46:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234830AbiBRMij (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 07:38:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49441738F2;
-        Fri, 18 Feb 2022 04:38:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D27EB8261C;
-        Fri, 18 Feb 2022 12:38:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38114C340E9;
-        Fri, 18 Feb 2022 12:37:52 +0000 (UTC)
-Message-ID: <c70113dc-d017-b5bc-1466-02530f4707e2@xs4all.nl>
-Date:   Fri, 18 Feb 2022 13:37:50 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 5/5] spi: make remove callback a void function
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>
-Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Emma Anholt <emma@anholt.net>,
-        David Lechner <david@lechnology.com>,
-        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dan Robertson <dan@dlrobertson.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Kent Gustavsson <kent@minoris.se>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Charles-Antoine Couret <charles-antoine.couret@nexvision.fr>,
-        Antti Palosaari <crope@iki.fi>,
-        Lee Jones <lee.jones@linaro.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        with ESMTP id S231408AbiBRNqY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 08:46:24 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F33898CC
+        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 05:46:07 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id a23so15199762eju.3
+        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 05:46:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=8Rgx+5ksIswrRAZGrWzLO6Z/++Gmp5E8CGNbb61JSfA=;
+        b=MO1it2kxAUfsyDdyRNeDpNQgkUTvwXVamH+y9A8ZEiQ34YIXjH4Ut+kJqpVL76adq9
+         XlBAzTd6H/M6jz1IJjr+kG7arsoDn3aj4lBQKRrRidSqXw30el+Mhe187uHzHXsuE7F+
+         zaih3QQmi3PXTdPSoQ/b6+oOrlhERIeHVg+FNafyczVB0UiJAXnyHd7Wtw+JCAiYsR4+
+         8rNhHnzXZ0AeSDqv1+XYmZ6FEMbuIEtKF5G+2Phu3SSwKYtqiqu16geD+hxy/xTYoejk
+         GmRf5CD8kwM5/5gENGNmItOgtx35sR/mlAe3UmjfXq3h4OXJZ4XYtBjVuUktbCjoK/x3
+         yNDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=8Rgx+5ksIswrRAZGrWzLO6Z/++Gmp5E8CGNbb61JSfA=;
+        b=sNmgJuzt77nCcgQAqnJo8Jts0olKbJMKqZSmkVqs4WqguKcdnxoKSZy7/1XJgcH0mo
+         UUSmFzxZ/tii3cphyAjU9m92ghE/ZYA7fc1esiFQ1HbDZ5ASdTfrEV2T18rWqe3rr1XT
+         l2gwN2yJSH4UiRTDrDqgRKzosQP8NhlxV75DbKYqiG/Qs3cBG2CfBgRi0afAsBUOYa6O
+         QLTE6RzpJZExDz0/udcwEkdmsNRagTe/wHrhIQWUAx6Fucwi3odwVI131iMIrl5BzOGk
+         ZK71Hs0ZaCAmjaPsbcHeEqC0zIs7EaKhkVwacqCtzC9orydO9U+iOQxE/BzgQkTVvLm3
+         WQlQ==
+X-Gm-Message-State: AOAM530jCl0VE+ObYNSfQJjtY1VuOoo5+O1ABiALIrJHC1yNOim1s9Zu
+        KHRhGgVQfdNN+hCWG1CLinLEuWTxxGM=
+X-Google-Smtp-Source: ABdhPJwOr0Rp3UE1ysbNVHWnpFRPutOfmg1e8fvfbf+x44cAY0s85vLF49VCesnDMTA74QQ2rAEstQ==
+X-Received: by 2002:a17:906:35d5:b0:6b7:faf7:9611 with SMTP id p21-20020a17090635d500b006b7faf79611mr6577819ejb.537.1645191965860;
+        Fri, 18 Feb 2022 05:46:05 -0800 (PST)
+Received: from LABNL-ITC-SW01.tmt.telital.com (static-82-85-31-68.clienti.tiscali.it. [82.85.31.68])
+        by smtp.gmail.com with ESMTPSA id b4sm2080130edu.105.2022.02.18.05.46.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 05:46:05 -0800 (PST)
+From:   Daniele Palmas <dnlplm@gmail.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eric Piel <eric.piel@tremplin-utc.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Harry Morris <h.morris@cascoda.com>,
-        Varka Bhadram <varkabhadram@gmail.com>,
-        Xue Liu <liuxuenetmail@gmail.com>, Alan Ott <alan@signal11.us>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ajay Singh <ajay.kathat@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Solomon Peachy <pizza@shaftnet.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Mark Greer <mgreer@animalcreek.com>,
-        Benson Leung <bleung@chromium.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Antoniu Miclaus <antoniu.miclaus@analog.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        =?UTF-8?Q?Ronald_Tschal=c3=a4r?= <ronald@innovation.ch>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Heiko Schocher <hs@denx.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Matt Kline <matt@bitbashing.io>,
-        Torin Cooper-Bennun <torin@maxiluxsystems.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nanyong Sun <sunnanyong@huawei.com>,
-        Yang Shen <shenyang39@huawei.com>,
-        dingsenjie <dingsenjie@yulong.com>,
-        Aditya Srivastava <yashsri421@gmail.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michael Walle <michael@walle.cc>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        wengjianfeng <wengjianfeng@yulong.com>,
-        Sidong Yang <realwakka@gmail.com>,
-        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
-        Davidlohr Bueso <dbueso@suse.de>, Claudius Heine <ch@denx.de>,
-        Jiri Prchal <jiri.prchal@aksignal.cz>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
-        linux-wireless@vger.kernel.org, libertas-dev@lists.infradead.org,
-        platform-driver-x86@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        kernel@pengutronix.de
-References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
- <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Daniele Palmas <dnlplm@gmail.com>
+Subject: [PATCH 1/1] USB: serial: option: add Telit LE910R1 compositions
+Date:   Fri, 18 Feb 2022 14:45:52 +0100
+Message-Id: <20220218134552.4051-1-dnlplm@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23/01/2022 18:52, Uwe Kleine-König wrote:
-> The value returned by an spi driver's remove function is mostly ignored.
-> (Only an error message is printed if the value is non-zero that the
-> error is ignored.)
-> 
-> So change the prototype of the remove function to return no value. This
-> way driver authors are not tempted to assume that passing an error to
-> the upper layer is a good idea. All drivers are adapted accordingly.
-> There is no intended change of behaviour, all callbacks were prepared to
-> return 0 before.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/bus/moxtet.c                                  |  4 +---
->  drivers/char/tpm/st33zp24/spi.c                       |  4 +---
->  drivers/char/tpm/tpm_tis_spi_main.c                   |  3 +--
->  drivers/clk/clk-lmk04832.c                            |  4 +---
->  drivers/gpio/gpio-74x164.c                            |  4 +---
->  drivers/gpio/gpio-max3191x.c                          |  4 +---
->  drivers/gpio/gpio-max7301.c                           |  4 +---
->  drivers/gpio/gpio-mc33880.c                           |  4 +---
->  drivers/gpio/gpio-pisosr.c                            |  4 +---
->  drivers/gpu/drm/panel/panel-abt-y030xx067a.c          |  4 +---
->  drivers/gpu/drm/panel/panel-ilitek-ili9322.c          |  4 +---
->  drivers/gpu/drm/panel/panel-ilitek-ili9341.c          |  3 +--
->  drivers/gpu/drm/panel/panel-innolux-ej030na.c         |  4 +---
->  drivers/gpu/drm/panel/panel-lg-lb035q02.c             |  4 +---
->  drivers/gpu/drm/panel/panel-lg-lg4573.c               |  4 +---
->  drivers/gpu/drm/panel/panel-nec-nl8048hl11.c          |  4 +---
->  drivers/gpu/drm/panel/panel-novatek-nt39016.c         |  4 +---
->  drivers/gpu/drm/panel/panel-samsung-db7430.c          |  3 +--
->  drivers/gpu/drm/panel/panel-samsung-ld9040.c          |  4 +---
->  drivers/gpu/drm/panel/panel-samsung-s6d27a1.c         |  3 +--
->  drivers/gpu/drm/panel/panel-samsung-s6e63m0-spi.c     |  3 +--
->  drivers/gpu/drm/panel/panel-sitronix-st7789v.c        |  4 +---
->  drivers/gpu/drm/panel/panel-sony-acx565akm.c          |  4 +---
->  drivers/gpu/drm/panel/panel-tpo-td028ttec1.c          |  4 +---
->  drivers/gpu/drm/panel/panel-tpo-td043mtea1.c          |  4 +---
->  drivers/gpu/drm/panel/panel-tpo-tpg110.c              |  3 +--
->  drivers/gpu/drm/panel/panel-widechips-ws2401.c        |  3 +--
->  drivers/gpu/drm/tiny/hx8357d.c                        |  4 +---
->  drivers/gpu/drm/tiny/ili9163.c                        |  4 +---
->  drivers/gpu/drm/tiny/ili9225.c                        |  4 +---
->  drivers/gpu/drm/tiny/ili9341.c                        |  4 +---
->  drivers/gpu/drm/tiny/ili9486.c                        |  4 +---
->  drivers/gpu/drm/tiny/mi0283qt.c                       |  4 +---
->  drivers/gpu/drm/tiny/repaper.c                        |  4 +---
->  drivers/gpu/drm/tiny/st7586.c                         |  4 +---
->  drivers/gpu/drm/tiny/st7735r.c                        |  4 +---
->  drivers/hwmon/adcxx.c                                 |  4 +---
->  drivers/hwmon/adt7310.c                               |  3 +--
->  drivers/hwmon/max1111.c                               |  3 +--
->  drivers/hwmon/max31722.c                              |  4 +---
->  drivers/iio/accel/bma400_spi.c                        |  4 +---
->  drivers/iio/accel/bmc150-accel-spi.c                  |  4 +---
->  drivers/iio/accel/bmi088-accel-spi.c                  |  4 +---
->  drivers/iio/accel/kxsd9-spi.c                         |  4 +---
->  drivers/iio/accel/mma7455_spi.c                       |  4 +---
->  drivers/iio/accel/sca3000.c                           |  4 +---
->  drivers/iio/adc/ad7266.c                              |  4 +---
->  drivers/iio/adc/ltc2496.c                             |  4 +---
->  drivers/iio/adc/mcp320x.c                             |  4 +---
->  drivers/iio/adc/mcp3911.c                             |  4 +---
->  drivers/iio/adc/ti-adc12138.c                         |  4 +---
->  drivers/iio/adc/ti-ads7950.c                          |  4 +---
->  drivers/iio/adc/ti-ads8688.c                          |  4 +---
->  drivers/iio/adc/ti-tlc4541.c                          |  4 +---
->  drivers/iio/amplifiers/ad8366.c                       |  4 +---
->  drivers/iio/common/ssp_sensors/ssp_dev.c              |  4 +---
->  drivers/iio/dac/ad5360.c                              |  4 +---
->  drivers/iio/dac/ad5380.c                              |  4 +---
->  drivers/iio/dac/ad5446.c                              |  4 +---
->  drivers/iio/dac/ad5449.c                              |  4 +---
->  drivers/iio/dac/ad5504.c                              |  4 +---
->  drivers/iio/dac/ad5592r.c                             |  4 +---
->  drivers/iio/dac/ad5624r_spi.c                         |  4 +---
->  drivers/iio/dac/ad5686-spi.c                          |  4 +---
->  drivers/iio/dac/ad5761.c                              |  4 +---
->  drivers/iio/dac/ad5764.c                              |  4 +---
->  drivers/iio/dac/ad5791.c                              |  4 +---
->  drivers/iio/dac/ad8801.c                              |  4 +---
->  drivers/iio/dac/ltc1660.c                             |  4 +---
->  drivers/iio/dac/ltc2632.c                             |  4 +---
->  drivers/iio/dac/mcp4922.c                             |  4 +---
->  drivers/iio/dac/ti-dac082s085.c                       |  4 +---
->  drivers/iio/dac/ti-dac7311.c                          |  3 +--
->  drivers/iio/frequency/adf4350.c                       |  4 +---
->  drivers/iio/gyro/bmg160_spi.c                         |  4 +---
->  drivers/iio/gyro/fxas21002c_spi.c                     |  4 +---
->  drivers/iio/health/afe4403.c                          |  4 +---
->  drivers/iio/magnetometer/bmc150_magn_spi.c            |  4 +---
->  drivers/iio/magnetometer/hmc5843_spi.c                |  4 +---
->  drivers/iio/potentiometer/max5487.c                   |  4 +---
->  drivers/iio/pressure/ms5611_spi.c                     |  4 +---
->  drivers/iio/pressure/zpa2326_spi.c                    |  4 +---
->  drivers/input/keyboard/applespi.c                     |  4 +---
->  drivers/input/misc/adxl34x-spi.c                      |  4 +---
->  drivers/input/touchscreen/ads7846.c                   |  4 +---
->  drivers/input/touchscreen/cyttsp4_spi.c               |  4 +---
->  drivers/input/touchscreen/tsc2005.c                   |  4 +---
->  drivers/leds/leds-cr0014114.c                         |  4 +---
->  drivers/leds/leds-dac124s085.c                        |  4 +---
->  drivers/leds/leds-el15203000.c                        |  4 +---
->  drivers/leds/leds-spi-byte.c                          |  4 +---
->  drivers/media/spi/cxd2880-spi.c                       |  4 +---
->  drivers/media/spi/gs1662.c                            |  4 +---
->  drivers/media/tuners/msi001.c                         |  3 +--
+Add support for the following Telit LE910R1 compositions:
 
-A bit late, but for drivers/media:
+0x701a: rndis, tty, tty, tty
+0x701b: ecm, tty, tty, tty
+0x9201: tty
 
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+---
+Hi Johan,
 
-Thanks!
+following the output of usb-devices for the compositions:
 
-	Hans
+T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#=  6 Spd=480 MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=701a Rev=01.00
+S:  Manufacturer=Marvell
+S:  Product=Mobile Composite Device Bus
+S:  SerialNumber=200806006809080000
+C:  #Ifs= 5 Cfg#= 1 Atr=c0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
+I:  If#=0x1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+
+T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#=  8 Spd=480 MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=701b Rev=01.00
+S:  Manufacturer=ASRMicro
+S:  Product=Mobile Composite Device Bus
+S:  SerialNumber=200806006809080000
+C:  #Ifs= 5 Cfg#= 1 Atr=c0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
+I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+
+T:  Bus=01 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
+D:  Ver= 1.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=9201 Rev=01.00
+S:  Manufacturer=Marvell
+S:  Product=Telit Download Port
+S:  SerialNumber=200806006809080000
+C:  #Ifs= 1 Cfg#= 1 Atr=c0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+
+Thanks,
+Daniele
+---
+ drivers/usb/serial/option.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 962e9943fc20..fa1ad626f9fb 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1273,10 +1273,16 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = NCTRL(2) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x7011, 0xff),	/* Telit LE910-S1 (ECM) */
+ 	  .driver_info = NCTRL(2) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x701a, 0xff),	/* Telit LE910R1 (RNDIS) */
++	  .driver_info = NCTRL(2) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x701b, 0xff),	/* Telit LE910R1 (ECM) */
++	  .driver_info = NCTRL(2) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x9010),				/* Telit SBL FN980 flashing device */
+ 	  .driver_info = NCTRL(0) | ZLP },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x9200),				/* Telit LE910S1 flashing device */
+ 	  .driver_info = NCTRL(0) | ZLP },
++	{ USB_DEVICE(TELIT_VENDOR_ID, 0x9201),				/* Telit LE910R1 flashing device */
++	  .driver_info = NCTRL(0) | ZLP },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, ZTE_PRODUCT_MF622, 0xff, 0xff, 0xff) }, /* ZTE WCDMA products */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x0002, 0xff, 0xff, 0xff),
+ 	  .driver_info = RSVD(1) },
+-- 
+2.32.0
+
