@@ -2,94 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB08F4BBA91
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 15:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0DD4BBC21
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 16:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236003AbiBROZ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Feb 2022 09:25:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56834 "EHLO
+        id S236996AbiBRP1e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Feb 2022 10:27:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233235AbiBROZ5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 09:25:57 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154E64CD70
-        for <linux-usb@vger.kernel.org>; Fri, 18 Feb 2022 06:25:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645194340; x=1676730340;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qL0/m0eHftpJYv/EXf7DlgPHfScPS/xKSP+cfqqVBYI=;
-  b=Yiczlan9f5zyj7oTXoQAEaGFUSJD2CwuIlKzaLjTeMXg4uMUqXerej18
-   zpX08f5jeJ5cqKf7yeH3jObF4eQOwmINgUK4S6rnrDE6WER8ouEEtdFYv
-   Xlbfunlh8G8J0/SuADdfHmKN9LypoX5k1QV6TRLpMv1INUQLnDcEeJ6vG
-   jfjxgY9aAXQKwplSrKYA1SDe4AoAZbFoct9jnhs3IVz4Z2NUqqqETz5jo
-   PJvpexbeF9O4xxLqvTFaGcfxUhia72/qip9FIaJHjb7pRqP7SEpU6eeOG
-   erlELF5UzGCjUUSnczaBPZz9ZSAIp9DU8cZj11HJ4EstmEjYtCSQCchAP
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="251076353"
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="251076353"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 06:25:39 -0800
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="626644705"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 06:25:36 -0800
-Received: by lahna (sSMTP sendmail emulation); Fri, 18 Feb 2022 16:25:33 +0200
-Date:   Fri, 18 Feb 2022 16:25:33 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Sanjay R Mehta <sanmehta@amd.com>
-Cc:     Sanjay R Mehta <Sanju.Mehta@amd.com>, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        Basavaraj.Natikar@amd.com, jagadish.hadimani@amd.com,
-        sachinkumar.butte@amd.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Retain host router DP IN resources during
- suspend
-Message-ID: <Yg+sXedW1RFa65SE@lahna>
-References: <1645168285-126273-1-git-send-email-Sanju.Mehta@amd.com>
- <Yg9/YWrk4qMhoEut@lahna>
- <ac90de2a-2d13-ed0f-2d75-8cc3e5a882f1@amd.com>
+        with ESMTP id S232694AbiBRP1d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 10:27:33 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C35D1C9184;
+        Fri, 18 Feb 2022 07:27:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1645198036; x=1676734036;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xNvgASNarDT9ed14HXz7RJ5hb5rKEVJQcOKfD5ZmM7w=;
+  b=OTbC9dJ8lt8Gd5wMPq6JXjY0wmI2YO2yc+d+/+PHzoiFSNQTtqD0NJf/
+   k6CHcAB3y1RHMhbONxO+1VbxgZujjYZ3wzviBvJvSO7KiaCEh67WW/I8g
+   e01NfORmZ2GNmIQpKY6LqQnL8eMzeVlTlUi8fR20eFxmR/+vpdBrBPnd2
+   JSdJsoEF04QdouY+C/qly3HUBVKViF4r68SMPzxZpDvpxsm4p3Px5lXRJ
+   LvHIhp6JX6z30OgZyZZV80hfBftGERqG2TyKAzuv8/kS3T67gi9WdYgOF
+   KY406FQKjQt+y2KBqygxEcyQYL/pWzJosBnCx88s5QyP0C4QqEXqxMT9r
+   w==;
+X-IronPort-AV: E=Sophos;i="5.88,379,1635199200"; 
+   d="scan'208";a="22181137"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 18 Feb 2022 16:27:14 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 18 Feb 2022 16:27:14 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 18 Feb 2022 16:27:14 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1645198034; x=1676734034;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xNvgASNarDT9ed14HXz7RJ5hb5rKEVJQcOKfD5ZmM7w=;
+  b=a89efCNpHrGO7oFt7MkCsCSKsoatWKFiD+xJ74NHKyA+lJUsNOHj2y1T
+   4E/sh8vK3s9EP9fvvO4MFHva/SVdJaknCjFpbTmPIQyUf39DOkgBVp97P
+   oh9x3bpHAnT4bfa4h824WSYTXSGpzpicd75yHpglpfLaXM80tmjMFtEYX
+   8X5MSofpbnQaffR+ukYPVEh/2ubObydK2dOiFDquiXy1mxFf08xBcUeac
+   nHWGCsokrwqerdC2HF2yIQFXBXnwZ7v9q00V+mrhvmf+WUQQHtSHmClO9
+   8bFDSIDfXuGyc5ed1O9zFJxBRuJzMI+LsI6/RaS8pDcD7dUqjw71h31Z8
+   g==;
+X-IronPort-AV: E=Sophos;i="5.88,379,1635199200"; 
+   d="scan'208";a="22181136"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 18 Feb 2022 16:27:14 +0100
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 1B988280065;
+        Fri, 18 Feb 2022 16:27:14 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Li Jun <jun.li@nxp.com>
+Subject: [PATCH v5 0/4] i.MX8MP: more USB3 glue layer feature support
+Date:   Fri, 18 Feb 2022 16:27:03 +0100
+Message-Id: <20220218152707.2198357-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ac90de2a-2d13-ed0f-2d75-8cc3e5a882f1@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 07:38:23PM +0530, Sanjay R Mehta wrote:
-> 
-> 
-> On 2/18/2022 4:43 PM, Mika Westerberg wrote:
-> > Hi Sanjay,
-> > 
-> > On Fri, Feb 18, 2022 at 01:11:25AM -0600, Sanjay R Mehta wrote:
-> >> From: Sanjay R Mehta <sanju.mehta@amd.com>
-> >>
-> >> All DP resources are released during suspend and while
-> >> resuming back DP IN resource is not available, therefore
-> >> unable to find DP pair to re-establish the DP tunnel.
-> > 
-> > It should get plug event for the DP IN adapters once the router comes
-> > back from sleep. Is that not happening here?
-> 
-> Yes, plug event is not happening for the DP IN adapter after resume.
-> 
-> The DP In resources are put into tcm->dp_resources list as part  of host
-> router enumeration. But when it resumes from sleep, there is no plug
-> event happening for DP IN, hence DP IN resource will not be in
-> tcm->dp_resources list.
+Hi all,
 
-Right but if I understand the spec correctly you should get a new
-hotplug event for the DP IN adapters once the host router is moved back
-to "enumerated" state. This is how Intel hardware works at least (and
-this is the understanding I have from the USB4 spec too). Do you see
-anything in the log wrt. this when you resume the domain?
+Thanks for the feedback on v4 [1].
+
+This patchset aims to support flags for e.g. over-current active low or port
+permanantly attached which are provided in the USB3 glue layer.
+
+In v4 the patchset depends on Lucas' i.MX8MP power-domains patchset [2].
+Because of that the 'phy' clock usage can be dropped, as now power domains
+take care of the clocks. Due to powering up/down the glue layer settings
+will have to be reapplied during resume.
+
+Changes in v5:
+* Added Reviewed-by: Li Jun to PATCH 1 & 4
+* Added Reviewed-by: Rob Herring to PATCH 2
+* Added comment in PATCH 3 why reprogramming is necessary in resume
+
+Changes in v4:
+* Depends on Lucas' i.MX8MP power-domains patchset
+* removed 'phy' clock usage from dwc3-imx8mp.c
+* Reapply glue layer settings upon resume
+
+Changes in v3:
+* Rename existing member for clarity
+* Moved feature implementation from phy-fsl-imx8mq-usb.c to dwc3-imx8mp.c
+
+[1] https://patchwork.kernel.org/project/linux-arm-kernel/cover/20220126141340.234125-1-alexander.stein@ew.tq-group.com/
+[2] https://patchwork.kernel.org/project/linux-arm-kernel/cover/20220119134027.2931945-1-l.stach@pengutronix.de/
+
+Alexander Stein (4):
+  usb: dwc3: imx8mp: rename iomem base pointer
+  dt-bindings: usb: dwc3-imx8mp: Add imx8mp specific flags
+  usb: dwc3: imx8mp: Add support for setting SOC specific flags
+  arm64: dts: imx8mp: Add memory for USB3 glue layer to usb3 nodes
+
+ .../bindings/usb/fsl,imx8mp-dwc3.yaml         | 31 +++++++-
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi     |  6 +-
+ drivers/usb/dwc3/dwc3-imx8mp.c                | 77 +++++++++++++++++--
+ 3 files changed, 101 insertions(+), 13 deletions(-)
+
+-- 
+2.25.1
+
