@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975364BB2BC
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 07:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6E44BB2BF
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 07:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbiBRG5z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Feb 2022 01:57:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60852 "EHLO
+        id S231197AbiBRG7F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Feb 2022 01:59:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiBRG5y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 01:57:54 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60062.outbound.protection.outlook.com [40.107.6.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82BC340C5;
-        Thu, 17 Feb 2022 22:57:35 -0800 (PST)
+        with ESMTP id S229862AbiBRG7D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 01:59:03 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60060.outbound.protection.outlook.com [40.107.6.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289C0B86B;
+        Thu, 17 Feb 2022 22:58:47 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JAgykhCAcn3D3Z5nTo56rcxwbZOpddsxVv+1NSR++EIKmTE53ea2Mp9n7U1vtB1Z06lJmaERlQQYAJ+a9SuyRK9XOBPCNe6mATTZqQc6lumA/V5LvZgG2rSfP0Suf9grq2JZEeXg5PvuR4BOcsQnMkkRzrNPV/tLywSCXcWRSY0YGHerIgUBUMglGnDDybysRdklpXVuIRTa/71TZzr2QDS8Hgridgk43lpL+zX4wRNxQHQKvm/RS6ax1M79/6LXPDZZfB7RKnHdrS95BHhCna9N8Kmh5wlvfk/v+Miy0sab++wLPHNSOFmLQnCdTkoxFWM/Rhqt6SQF5HUl4uS7AQ==
+ b=Sz6899pePSpQCSJMscCL2v2wMhD9Z5CCpqbvYpVq0WpNZ2CCJWDGa4lPd7tHdSjyrt9Bx5/47p50jtN/G8aQDKeIY6YH6C/VwWnH8fFHgqXgVEAfBG+m9rF4iwRWIXTWiAFUPqe8Mv+jrC+AsG7kyg1oFRUoWFjW7tSvlxqT495j9SslJvZ8/r4HUKy7C/cuFIJDf9k9xKi08Z+rdJpaM9z/2AqrP7VmmiEnITiMmHDh63oJM4zZke/gNvKp0B0D+vEU1vxwF+dGnO5eD8C2RUbY5FYKTmH/VRl6+kpAg8G9IeYNuSW4xhEkKhJSiucsHOM9sJZLn3TEGTMMtz1YuA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+kyN1YNU+1qcRAMMQDHYg2hrke2hEAr0uHGPxPmGOGE=;
- b=COXNvX1R7YafVlEBSUCwHf4HUxrOzTOZg53D0+n4Xtj6nKpHgIxQ+HQI4hgzsC2rT1QpKOrzmhVjC9G6o5Qlc2DCYxFQRoZxNND/nAl2LWRmXnHGU8vMcWPQqmjs9+CTID9R1iEi3Ie90ObeQxBad5xQwItkswLh6UIjXtpjJXhKKik7ni3UQrlyLoIMlqV57oGN5M6JXKypWDlHEI9TXoKwtJTojgxsYqXZQ4zCgsxmMe0eg6Ofl3go0tvGIvCWhXe/EL1HjlQA2QmUIBo0w+1Yj0P0YFzpWNhH6anXPRFhBJFaQigGEzLJLa9eRS3PKtM+J2zMOvhkG3thSw3hdw==
+ bh=+BRSDk9pJXddZQybC2sL7vQGfJpZKZ2M6eoqtznlH7A=;
+ b=E7n4Ve7P7dNibdiBzbnwk/cucvzRUigHgZDdxH+jCBJdz5atH65Um7aN/NZ1IPZqMz9N2zBgroXntjMA0aQfnkfm5oOuR79dr0musxI0L9VC82+0R2TuRhytmSVbDlJhmDLH1RyPqwZWZR00nt6oqheemArmRUqtLvLy1kAlvf7riWHDvVlFeGWRaJh4kio8Tu7tvShmDXKDF7p2KNhAjRfc+yf+D2e2C+K5lwJfMmr9yGihbgZoBaJSN39BeM/zOzfO8dOWv/1md8UgpiOJ2gu+TyFQaJ8R7jlCVwP9VivFCnT9bNR4SLQA6Xog7BYdxroPkGJZityQoe1lft/BzQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+kyN1YNU+1qcRAMMQDHYg2hrke2hEAr0uHGPxPmGOGE=;
- b=qz25CDoWxWWqy1TUIMnZxYtaLlt3AV/U5hdL6/vTI6qlK/0eEm71nb6ajHW0jk2bSCOZA8gK5IIDIgha2/TFTSa7FswmVpu1az6IzII2UP2Ckm0UXoBYdlxTGrEP7o6w8MD/FlwyhBaTyCXghsaVcqv2FUgNYT6bfpNROc95yfo=
+ bh=+BRSDk9pJXddZQybC2sL7vQGfJpZKZ2M6eoqtznlH7A=;
+ b=W0ABe5zBeO+p2vxegN/mXzhmk7XNyAOs8yx1ErkKF3wxkLO+PC3p6J8OHXnTKZcSFk4p9ED96oa8Hd2IBzIA4x5gXdaLDIEdT+JL5GEdu2D3Rs/iIt4XfZ3mQ6vj0LFGMbEwjTMiLnzBwV8L311iaPt/ehQLRehzLw/IFiD19Ro=
 Received: from VI1PR04MB4333.eurprd04.prod.outlook.com (2603:10a6:803:49::27)
  by AM5PR04MB3074.eurprd04.prod.outlook.com (2603:10a6:206:4::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.19; Fri, 18 Feb
- 2022 06:57:33 +0000
+ 2022 06:58:45 +0000
 Received: from VI1PR04MB4333.eurprd04.prod.outlook.com
  ([fe80::f54b:2953:6266:2f0b]) by VI1PR04MB4333.eurprd04.prod.outlook.com
  ([fe80::f54b:2953:6266:2f0b%2]) with mapi id 15.20.4995.016; Fri, 18 Feb 2022
- 06:57:33 +0000
+ 06:58:44 +0000
 From:   Jun Li <jun.li@nxp.com>
 To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -49,16 +49,16 @@ CC:     dl-linux-imx <linux-imx@nxp.com>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH v4 3/4] usb: dwc3: imx8mp: Add support for setting SOC
- specific flags
-Thread-Topic: [PATCH v4 3/4] usb: dwc3: imx8mp: Add support for setting SOC
- specific flags
-Thread-Index: AQHYEr71XyqVFT1XIEuCD4dPbKt3KqyY4T4Q
-Date:   Fri, 18 Feb 2022 06:57:33 +0000
-Message-ID: <VI1PR04MB4333E4CB42DF67C8703F42AC89379@VI1PR04MB4333.eurprd04.prod.outlook.com>
+Subject: RE: [PATCH v4 4/4] arm64: dts: imx8mp: Add memory for USB3 glue layer
+ to usb3 nodes
+Thread-Topic: [PATCH v4 4/4] arm64: dts: imx8mp: Add memory for USB3 glue
+ layer to usb3 nodes
+Thread-Index: AQHYEr71mpge0IWmXESgBKC5yjC7bqyZBD3g
+Date:   Fri, 18 Feb 2022 06:58:44 +0000
+Message-ID: <VI1PR04MB4333761CE7919F6CC0CBB47E89379@VI1PR04MB4333.eurprd04.prod.outlook.com>
 References: <20220126141340.234125-1-alexander.stein@ew.tq-group.com>
- <20220126141340.234125-4-alexander.stein@ew.tq-group.com>
-In-Reply-To: <20220126141340.234125-4-alexander.stein@ew.tq-group.com>
+ <20220126141340.234125-5-alexander.stein@ew.tq-group.com>
+In-Reply-To: <20220126141340.234125-5-alexander.stein@ew.tq-group.com>
 Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -66,56 +66,56 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: afda3a35-8bb5-4a54-c8ca-08d9f2abf03f
+x-ms-office365-filtering-correlation-id: 2f5ab228-aef0-4b42-300f-08d9f2ac1ae4
 x-ms-traffictypediagnostic: AM5PR04MB3074:EE_
-x-microsoft-antispam-prvs: <AM5PR04MB30746067A9EB45D82E53497F89379@AM5PR04MB3074.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5516;
+x-microsoft-antispam-prvs: <AM5PR04MB3074B8EA02C48538F6A0F1DA89379@AM5PR04MB3074.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: RPAZO8FPUSdCPLB9uI71ViJnOfXS0fhllRYBh/bYkRkslj49a9qgQOW4WaHSjTPmeN/9pNxKUj+D9W0NK2zWdPanoPkM1a5pxYyTjhfFNtN1yDjOOdr3mzr978SYJkr+pniYG1s99J9YEyacCejjHGtV45tgQtZgvNhUEnfe3pKgrUauOt5cUj23rjANsfQavIVaNC6ulHX5+dEWGSxdApDxscoHS04NHfzK4PInnnNhxifiec/qtimJCWMC3z3KTfiJOl3IniwlFkcjRmTvUsrMhvTp/DHSpBqND+cjIhJFhwrsNHzS7T5DbPS/F6WXMJLTFgQrbD446d8rym0z5dzmC64nrp3gKaE1IR7wamsmrGs7NrHpPiBc80L5oj41s3ewPjTjJ3gPTZExTVsqdycYumgi1uwiX1E14FjO5E9tjS5+fX1ig33uI7117Inbm6PwrKvvBRCHpi5AA+0kxK3eFDDUJGNVPTvq1fOjAyAB6TA2JK8457JquC7FunaykiBLffewMY/AhxDQHrsTjAdMsFzoGVD0Fq5DAAKC2e8R3jX1zilYnmF5ZsRRsR21vy9efTRP0HGx84Gnahbl+DaqkyS1KvND99D4RTxN3kyKBrA+Sj3lYzu4GuuFv4hzGK9p0gHlY/OE0smrO9O6TsO9Md8pmgI8En53mxZg3mSZ4AN4HsEHZLHcALoNQAWYOx7X2QOZ7dyjnq6R704QOYCUUdDGbO9k1B5gqPail78=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4333.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(83380400001)(44832011)(26005)(186003)(52536014)(53546011)(4326008)(55016003)(6506007)(7696005)(122000001)(508600001)(86362001)(9686003)(2906002)(38100700002)(316002)(110136005)(54906003)(66446008)(64756008)(66476007)(66946007)(66556008)(38070700005)(76116006)(71200400001)(5660300002)(33656002)(8676002)(32563001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: xBj42kWFk/YHtAi50qc3JQwz2HYodnRTfsr+haVsnJQhRRdh/lWVVaH5UHoT0FbK+VprnN4kWaW6I1b5fnsuJ9j6IN6s7e5AE0Hlogi2bOFULT4gtt+8CXqBSTVW4ENcAdLbslph/fv4jY5XUzkTSRQLkYsYXrWQj+xXPXSPGWaXSy6o2yBS9t6vLYif19p+4wwAoQW8LADgIUs5GoLYeNdwXgxsM76WLsWeE+87SVXvxBsuQx5WBzvp82prUUvv9piV87Rsf4RdeFpsowLQKotOe0VDJyvjddE7H14Wc+tKmm4JHXmp0h8gnBvBHghDDBY0DlIl5c+Pf7ppj9vT4uC2ElU+Q56zG9gtAxzzuO9fhBgkl77FYcscvaRq634FXaOe1SrogTA9N+yzux8yUT1Cf2AU2XVXZWxkoRglII83X7w9y3bEsLkZ9UNOFk19vcVffj5i1OP3XtCp04iZB81bFlR+rdJicxGK7+hJIPmAPBN896m+rmginLT/T/cWs+071BdQNFwh03VKopB7BhJqLM8us2Zi2sJIyGJlYwHqCmv7lgk5JsirdFx+vUgGorRPvgx3xzVfG6PbyeGDaN5gsv2TpKHMdgkDAtIOHKLITR0tQm4FVlQfToBL6lC4E8JylPIAmCScGG0NMKygvLTNuN6vKqeg1s4Yp7SdyWqbny5wJ4N25cerA/6a7HPJCsNNiYq7DnaKUxosJR8ccD/l5EmC+iCYBbQqYimP8PY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4333.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(38100700002)(54906003)(110136005)(86362001)(9686003)(508600001)(2906002)(33656002)(8676002)(38070700005)(76116006)(66446008)(64756008)(66476007)(66946007)(66556008)(5660300002)(71200400001)(4326008)(53546011)(8936002)(83380400001)(44832011)(26005)(186003)(52536014)(55016003)(122000001)(6506007)(7696005)(32563001);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?GI8xdECb4Qw+fGEFTYaGsC0fjJvTxH+z/Csl7cCuiNBGtukbF1B8slA3o6g3?=
- =?us-ascii?Q?btpkYdejDJKZRM3s7H0z8Uj86JHd64+SW7xilV+oUfS5lgKZcj4oYygDm4tt?=
- =?us-ascii?Q?sHHaHdit553g8WNzvPisb9WR+t8q+o2i/EY+9JcD9XGUoI6q4MfFi11b+7oh?=
- =?us-ascii?Q?ljsc3E0qxhd2SWfv/SQry2MaWEhrGz8mWR7BhhSKMOUOk2njZafYkftUySxV?=
- =?us-ascii?Q?nPWI7b8sckZtUi73a0tSLuKt4afHmPac2obXd2w2NE3Q6Fw4KjE5CbaGQg0q?=
- =?us-ascii?Q?Sw4g9wNdd8BUMwKnDnU3l+OQgFgfXB2Ifd5qU27+HywB7UL/QQLrwNvm8Ltb?=
- =?us-ascii?Q?khVRuTtOwuWCEOLkUwrN84Do3rnpV4t4322XlNMxWEjU8QvizGhAMC88gwgv?=
- =?us-ascii?Q?BuMDd1z/I0wXhEUCyPauQjG1dkot4s1le4uKfHGywEyc3ZgzlWrwnh7e477N?=
- =?us-ascii?Q?D2rC/rAGAvL4YkZOaFnHAajlv/eVjnjI+pOakb+hxsV1iscbriLv649HniRx?=
- =?us-ascii?Q?JIYu7EAjuNGJVafK9VKpQQtvfmIQ/bfuuBYoAzQnnV/s7hEijkeon/9UILFS?=
- =?us-ascii?Q?CvOSaD517csIUTPrmzPh3b1TeMyF+Zb7uLHlJcep+1Dely7qwEmIQW31mHx8?=
- =?us-ascii?Q?8H84qDHsVe9K2mby0feRiYbepNaEDfvgFVKSiMg4QMLbvdbe7/St5UI8VD0C?=
- =?us-ascii?Q?MuB79N7dQyruel+mzWBtXZqkrOvzvM5kNQziUAOqbE7t+8fwwGllcUuWU3qV?=
- =?us-ascii?Q?dsBBW6/zWBdpLY4JqXF0rhF7tMMAWYxwse44W1/IG+HymTChH83tcQdNojyu?=
- =?us-ascii?Q?ztsmYZhAx4xArdd7I1+9MXvXwxVqgja1/YGyYnaOXSH5LxHZjvASTVsh8dSr?=
- =?us-ascii?Q?YvdmXZmq5Cgm6CALpqEg3Pq8yP0+LOBCQiH1i7KI9/JZBuHol1OQL1iTYDvM?=
- =?us-ascii?Q?hbBZiM507fEc3W8p/qcT2ZfPTN7iLZvcDq+WVKQUvpm14P5xLNL8FTVg3uFR?=
- =?us-ascii?Q?GUKzUP461CXHX7o87LjXnT24aFv4xgw1/xG6GuEjn6A/L/wC1nIEchY6/ZKr?=
- =?us-ascii?Q?poJHVTMMSannTAMkIzybLoPI7NIChBjDJm/6W0ZtGQgk5BuPmk2ZtNW5que5?=
- =?us-ascii?Q?MONGZ/+IpNJSPw0+Pfb98VaJigHb70Csmmh+RGM+tVhIxqT3FNQH9RP6CL+x?=
- =?us-ascii?Q?Io68AqXWoi3Wk1z8Wg4tlU/RxU8TE43wWIyXz6CKxcazstD+ZItPRcT0JaIO?=
- =?us-ascii?Q?WpzMKmkbGnyEA3eDTNZmcyH/h08Pe1sFP9XMuRsQMdZwmdG4s6PK7qHbZXMI?=
- =?us-ascii?Q?2DlODKr/DTi468rFpDgNEPuPDr3aCMsfo+O2fdUNty9qLxa7zRfQXwNpIeuG?=
- =?us-ascii?Q?5buORS1PBJK2SO9SnmaGfjj1xcW0P8g9zUR6sN+Lhkno/dZzxoOd3xGvwhTR?=
- =?us-ascii?Q?uqI7+Pif8t1QEcS/XKod3OMBGuFlL6ZtXZn6m7FUzPcFaZqiCiCTbWFBZrZy?=
- =?us-ascii?Q?yiaRq06CtdJZJNRuOG4Rsl/OC2xvyXlgz1dnbB6VgusrCNwyo9ELwwUugg?=
- =?us-ascii?Q?=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?b6J8GNkE5cRqJ5LCBY0gp3wUb1/Bnou7iKT5GAtMfzmM76qns94VKaL8hC2G?=
+ =?us-ascii?Q?OC55XodGj4ucM2h+NCClPsSHG6XhLSozs1whJA7sbWgXBYLeaeX2x3Kcv/A6?=
+ =?us-ascii?Q?RVyzHVXXvfZYu4kAOzOEgCmIIt++QtZTX6gS7hlFJ13OoczZwgMSyvWEblb7?=
+ =?us-ascii?Q?ZoHY7/oD+lh/VssEoTyHHqmhITnnZWVmOYcFG36kbfuBHiQDo1U7Uw1DNa82?=
+ =?us-ascii?Q?ow1BY6Ms4tPdYsVlWN1T4lMt1Y8MECXJmmv5gv1/iqmqV5P6gDBh2E49111W?=
+ =?us-ascii?Q?t2h4Drfo2v2fEgpqbYWgN7CjsPlG+JFDk9+LZo/bHTkiPgrdqDZHRzMJTgE9?=
+ =?us-ascii?Q?vYf0GKchmqfqY7F9V0NFiOOJFzGKKDieGnD4uAQ1nARDgjcPBWcur95gwmJb?=
+ =?us-ascii?Q?icfuYoQfOHUwwgaZZwb83fZvq1dXEvo6+ZvIdaGt1Im0kumYxDhR/kYk80DV?=
+ =?us-ascii?Q?l6i2rg6aNVvOh8Am+ijvYkqS9q22vjdILfalkDdX9bzyQQdR5Urn8pBAG2Yj?=
+ =?us-ascii?Q?kUvBSNkpWWoJENBHU9UgOih4NkZI6C4xmDnrpPWzMN3NsNBUIQpVbqf0dEyf?=
+ =?us-ascii?Q?tWC+IgPw+xZiOwdyRGOzZ3UZDeOP1c24axYYRnpLVJzycg3t8bQ2BYZ+6pPE?=
+ =?us-ascii?Q?U2/l4vdw+r00RgN2+4beAsQ1365BMGPjLlAMSiSl1I0NY9WYWRPFWY9Tesfw?=
+ =?us-ascii?Q?5qbNx79Wwz0+zVV1V3X0sxqdtOAKXHs8GCk5JMcVuA8MpaMVWMcu5fEqnDUr?=
+ =?us-ascii?Q?yUbxdUz1zVR9VKQL4KBGI6uCi7bNiq90NgDKgniE0Q4EFUYpP0IiEDBvzjhX?=
+ =?us-ascii?Q?80SHRVRzNQWKI4QDbIzirpG73kL4/1oNuKeKxqfeRO1ko1PMd8f+6/k30b9X?=
+ =?us-ascii?Q?/O6ApFr4PC2bgjzcksuP/0J5lNQmbyeXWM3RcKqA2D+EinzCexMXI57R9QtQ?=
+ =?us-ascii?Q?7tk3cbvcASiQ3CDz6ZuGXxcpln1FkWrnvtAKhd+ewoYIY6v8ArMX33cGboeK?=
+ =?us-ascii?Q?/FO2DZgpBN5tEFDHG5PiQ7oAHJjeQA93I9qaGgXquPKGKhmQ7GRhJhE9xb8B?=
+ =?us-ascii?Q?6SGzWRqzkJT0og5EsAk/I3nXXR7IT1ic4CMci4zMo+c5YeA+QNCWP1Z1zrJi?=
+ =?us-ascii?Q?NQldmxb40I3mZaAWznwlP7Nq+s45Qo+d/8j1NhI/q2f/1+BBMfeaJrL3WaiH?=
+ =?us-ascii?Q?k2Q9LWgA8t3t4JlJR7gR6i9yGx4EX2YFx9dlPPz3bG0kNIriNzSJ7a8Ahqp1?=
+ =?us-ascii?Q?nU+Hv8zOPkJiVurQIk3E0eIsILfjIBXUtMr4ACfPxOrfqRZc/YD2u8Yr7ABc?=
+ =?us-ascii?Q?r+TuesTZBn6uODApToRTvW7CBKdlrnUW3bRhf6ziecEP+gwbCw3mEwK5oK6G?=
+ =?us-ascii?Q?D7k2/U0OXrzUvu+poke0szSLrcVYQySSdIYT/xjPAhk56A7+OuiZI77KmkiM?=
+ =?us-ascii?Q?UB5ksQquyCmpLqTXcx/9dkXyu5wUt/42JbdzqIB0LvOPuC4z3wJL/h0JPLn0?=
+ =?us-ascii?Q?sMXgNybEJdpzB9qlgYR0D2MmFGnzjh7DG6fkGjP2Zyq/qNvv7he9WnmJUmIT?=
+ =?us-ascii?Q?8FtN01qPLESQcx5eAcE=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4333.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: afda3a35-8bb5-4a54-c8ca-08d9f2abf03f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Feb 2022 06:57:33.2427
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f5ab228-aef0-4b42-300f-08d9f2ac1ae4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Feb 2022 06:58:44.7688
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XdUGG6/7ZJstX54KHMnM4UOa7qBrmf5FsgCDLwiz3zwBd1GuRkCRCECXB5SPh9uF
+X-MS-Exchange-CrossTenant-userprincipalname: P2ZZ9WOmaHAPrmHv6FhvHLjuy3B/cPzVQOz4sOt35GoSRBl4Kgf6weH6Bu8hJ7LN
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR04MB3074
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -139,156 +139,52 @@ X-Mailing-List: linux-usb@vger.kernel.org
 > <linux-imx@nxp.com>; linux-usb@vger.kernel.org;
 > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; Jun Li
 > <jun.li@nxp.com>
-> Subject: [PATCH v4 3/4] usb: dwc3: imx8mp: Add support for setting SOC
-> specific flags
+> Subject: [PATCH v4 4/4] arm64: dts: imx8mp: Add memory for USB3 glue laye=
+r
+> to usb3 nodes
 >=20
-> The i.MX8MP glue layer has support for the following flags:
-> * over-current polarity
-> * PWR pad polarity
-> * controlling PPC flag in HCCPARAMS register
-> * permanent port attach for usb2 & usb3 port
+> The USB3 glue layer has 2 areas in the register set, see RM Rev.1 section
+> 11.2.5.2.1 GLUE_usb3 memory map:
+> * USB3 control/status
+> * PHY control/status
 >=20
-> Allow setting these flags by supporting specific flags in the glue node.
-> In order to get this to work an additional IORESOURCE_MEM and clock is
-> necessary. For backward compatibility this is purely optional.
+> Provide the memory area to the usb3 nodes for accessing the features in t=
+he
+> USB3 control area.
 >=20
 > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+
+Reviewed-by: Li Jun <jun.li@nxp.com>
+
 > ---
->  drivers/usb/dwc3/dwc3-imx8mp.c | 62 ++++++++++++++++++++++++++++++++++
->  1 file changed, 62 insertions(+)
+>  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >=20
-> diff --git a/drivers/usb/dwc3/dwc3-imx8mp.c
-> b/drivers/usb/dwc3/dwc3-imx8mp.c
-> index 1c8fe657b3a9..5a96b66bf237 100644
-> --- a/drivers/usb/dwc3/dwc3-imx8mp.c
-> +++ b/drivers/usb/dwc3/dwc3-imx8mp.c
-> @@ -36,10 +36,22 @@
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> index e61ac5f136ad..d4aadb434d36 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> @@ -1030,7 +1030,8 @@ usb3_phy0: usb-phy@381f0040 {
 >=20
->  #define USB_WAKEUP_EN_MASK		GENMASK(5, 0)
+>  		usb3_0: usb@32f10100 {
+>  			compatible =3D "fsl,imx8mp-dwc3";
+> -			reg =3D <0x32f10100 0x8>;
+> +			reg =3D <0x32f10100 0x8>,
+> +			      <0x381f0000 0x20>;
+>  			clocks =3D <&clk IMX8MP_CLK_HSIO_ROOT>,
+>  				 <&clk IMX8MP_CLK_USB_ROOT>;
+>  			clock-names =3D "hsio", "suspend";
+> @@ -1070,7 +1071,8 @@ usb3_phy1: usb-phy@382f0040 {
 >=20
-> +/* USB glue registers */
-> +#define USB_CTRL0		0x00
-> +#define USB_CTRL1		0x04
-> +
-> +#define USB_CTRL0_PORTPWR_EN	BIT(12) /* 1 - PPC enabled (default) */
-> +#define USB_CTRL0_USB3_FIXED	BIT(22) /* 1 - USB3 permanent attached */
-> +#define USB_CTRL0_USB2_FIXED	BIT(23) /* 1 - USB2 permanent attached */
-> +
-> +#define USB_CTRL1_OC_POLARITY	BIT(16) /* 0 - HIGH / 1 - LOW */
-> +#define USB_CTRL1_PWR_POLARITY	BIT(17) /* 0 - HIGH / 1 - LOW */
-> +
->  struct dwc3_imx8mp {
->  	struct device			*dev;
->  	struct platform_device		*dwc3;
->  	void __iomem			*hsio_blk_base;
-> +	void __iomem			*glue_base;
->  	struct clk			*hsio_clk;
->  	struct clk			*suspend_clk;
->  	int				irq;
-> @@ -47,6 +59,42 @@ struct dwc3_imx8mp {
->  	bool				wakeup_pending;
->  };
->=20
-> +static void imx8mp_configure_glue(struct dwc3_imx8mp *dwc3_imx)
-> +{
-> +	struct device *dev =3D dwc3_imx->dev;
-> +	u32 value;
-> +
-> +	if (!dwc3_imx->glue_base)
-> +		return;
-> +
-> +	value =3D readl(dwc3_imx->glue_base + USB_CTRL0);
-> +
-> +	if (device_property_read_bool(dev, "fsl,permanently-attached"))
-> +		value |=3D (USB_CTRL0_USB2_FIXED | USB_CTRL0_USB3_FIXED);
-> +	else
-> +		value &=3D ~(USB_CTRL0_USB2_FIXED | USB_CTRL0_USB3_FIXED);
-> +
-> +	if (device_property_read_bool(dev,
-> "fsl,disable-port-power-control"))
-> +		value &=3D ~(USB_CTRL0_PORTPWR_EN);
-> +	else
-> +		value |=3D USB_CTRL0_PORTPWR_EN;
-> +
-> +	writel(value, dwc3_imx->glue_base + USB_CTRL0);
-> +
-> +	value =3D readl(dwc3_imx->glue_base + USB_CTRL1);
-> +	if (device_property_read_bool(dev, "fsl,over-current-active-low"))
-> +		value |=3D USB_CTRL1_OC_POLARITY;
-> +	else
-> +		value &=3D ~USB_CTRL1_OC_POLARITY;
-> +
-> +	if (device_property_read_bool(dev, "fsl,power-active-low"))
-> +		value |=3D USB_CTRL1_PWR_POLARITY;
-> +	else
-> +		value &=3D ~USB_CTRL1_PWR_POLARITY;
-
-I think you don't need a value update&write if property is not present.
-
-> +
-> +	writel(value, dwc3_imx->glue_base + USB_CTRL1);
-> +}
-> +
->  static void dwc3_imx8mp_wakeup_enable(struct dwc3_imx8mp *dwc3_imx)
->  {
->  	struct dwc3	*dwc3 =3D platform_get_drvdata(dwc3_imx->dwc3);
-> @@ -100,6 +148,7 @@ static int dwc3_imx8mp_probe(struct platform_device
-> *pdev)
->  	struct device		*dev =3D &pdev->dev;
->  	struct device_node	*dwc3_np, *node =3D dev->of_node;
->  	struct dwc3_imx8mp	*dwc3_imx;
-> +	struct resource		*res;
-
-Looks like this is not used anywhere, remove it.
-
->  	int			err, irq;
->=20
->  	if (!node) {
-> @@ -119,6 +168,15 @@ static int dwc3_imx8mp_probe(struct platform_device
-> *pdev)
->  	if (IS_ERR(dwc3_imx->hsio_blk_base))
->  		return PTR_ERR(dwc3_imx->hsio_blk_base);
->=20
-> +	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> +	if (!res) {
-> +		dev_warn(dev, "Base address for glue layer missing. Continuing
-> without, some features are missing though.");
-> +	} else {
-> +		dwc3_imx->glue_base =3D devm_ioremap_resource(dev, res);
-> +		if (IS_ERR(dwc3_imx->glue_base))
-> +			return PTR_ERR(dwc3_imx->glue_base);
-> +	}
-> +
->  	dwc3_imx->hsio_clk =3D devm_clk_get(dev, "hsio");
->  	if (IS_ERR(dwc3_imx->hsio_clk)) {
->  		err =3D PTR_ERR(dwc3_imx->hsio_clk);
-> @@ -152,6 +210,8 @@ static int dwc3_imx8mp_probe(struct platform_device
-> *pdev)
->  	}
->  	dwc3_imx->irq =3D irq;
->=20
-> +	imx8mp_configure_glue(dwc3_imx);
-> +
->  	pm_runtime_set_active(dev);
->  	pm_runtime_enable(dev);
->  	err =3D pm_runtime_get_sync(dev);
-> @@ -252,6 +312,8 @@ static int __maybe_unused dwc3_imx8mp_resume(struct
-> dwc3_imx8mp *dwc3_imx,
->  	dwc3_imx8mp_wakeup_disable(dwc3_imx);
->  	dwc3_imx->pm_suspended =3D false;
->=20
-> +	imx8mp_configure_glue(dwc3_imx);
-> +
-
-I guess this is to restore the settings if we experienced a power lost,
-Please add some comments.
-
-thanks
-Li Jun
-
->  	if (dwc3_imx->wakeup_pending) {
->  		dwc3_imx->wakeup_pending =3D false;
->  		if (dwc->current_dr_role =3D=3D DWC3_GCTL_PRTCAP_DEVICE) {
+>  		usb3_1: usb@32f10108 {
+>  			compatible =3D "fsl,imx8mp-dwc3";
+> -			reg =3D <0x32f10108 0x8>;
+> +			reg =3D <0x32f10108 0x8>,
+> +			      <0x382f0000 0x20>;
+>  			clocks =3D <&clk IMX8MP_CLK_HSIO_ROOT>,
+>  				 <&clk IMX8MP_CLK_USB_ROOT>;
+>  			clock-names =3D "hsio", "suspend";
 > --
 > 2.25.1
 
