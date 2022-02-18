@@ -2,121 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6E44BB2BF
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 07:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D407A4BB2FA
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 08:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiBRG7F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Feb 2022 01:59:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37644 "EHLO
+        id S231639AbiBRHMF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Feb 2022 02:12:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiBRG7D (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 01:59:03 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60060.outbound.protection.outlook.com [40.107.6.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289C0B86B;
-        Thu, 17 Feb 2022 22:58:47 -0800 (PST)
+        with ESMTP id S230301AbiBRHME (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 02:12:04 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2075.outbound.protection.outlook.com [40.107.237.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449D8DFA4
+        for <linux-usb@vger.kernel.org>; Thu, 17 Feb 2022 23:11:47 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Sz6899pePSpQCSJMscCL2v2wMhD9Z5CCpqbvYpVq0WpNZ2CCJWDGa4lPd7tHdSjyrt9Bx5/47p50jtN/G8aQDKeIY6YH6C/VwWnH8fFHgqXgVEAfBG+m9rF4iwRWIXTWiAFUPqe8Mv+jrC+AsG7kyg1oFRUoWFjW7tSvlxqT495j9SslJvZ8/r4HUKy7C/cuFIJDf9k9xKi08Z+rdJpaM9z/2AqrP7VmmiEnITiMmHDh63oJM4zZke/gNvKp0B0D+vEU1vxwF+dGnO5eD8C2RUbY5FYKTmH/VRl6+kpAg8G9IeYNuSW4xhEkKhJSiucsHOM9sJZLn3TEGTMMtz1YuA==
+ b=dei3ddVMxUhmoZFnm3ds6HtbVMJjyO0VIhWZHKI43lshweU/QF2iP6P5kefb/xEhQtsIaEeENX5+GPwHhC8k5336bkgNEQaZsP36Rr7Bl48P7I3ErVlIz/RfPGLYp6Q4CLcBf240Pv90xIQm1eJRp5wc2+AgtyGDcpUvm5worRDHVE+fJQ1dU8kG0hDM5reKgZxym6WQcmhMPxuOrpGZj/oMjpGnWkTtJ9/Ql6gSBF06lXEsBUURs+H6E2//dWizXEBHmShw1JIW+1zLRX1P2ukkuMjpM8yXloWjuwA11ZA60HgfXAneliKnqgcWIXjhJf3y5lkAA9BpL7RS3DX53g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+BRSDk9pJXddZQybC2sL7vQGfJpZKZ2M6eoqtznlH7A=;
- b=E7n4Ve7P7dNibdiBzbnwk/cucvzRUigHgZDdxH+jCBJdz5atH65Um7aN/NZ1IPZqMz9N2zBgroXntjMA0aQfnkfm5oOuR79dr0musxI0L9VC82+0R2TuRhytmSVbDlJhmDLH1RyPqwZWZR00nt6oqheemArmRUqtLvLy1kAlvf7riWHDvVlFeGWRaJh4kio8Tu7tvShmDXKDF7p2KNhAjRfc+yf+D2e2C+K5lwJfMmr9yGihbgZoBaJSN39BeM/zOzfO8dOWv/1md8UgpiOJ2gu+TyFQaJ8R7jlCVwP9VivFCnT9bNR4SLQA6Xog7BYdxroPkGJZityQoe1lft/BzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ bh=3iEDxKWukD2RGs1gmeDVEAM5NUAitcGGZgCZ3E1Y4ME=;
+ b=lHK9UqjZyW5p8JCfCmVBpoV0NIdiek+nO6QQJ4sd0Qwf4UY4lEvd1KLz2Bo83lYRhB+LRzKzhjJqINQXkDrcb6iyb7pjlSlwIfbJXp3n9ABvRp3u5uLoH7XO9qLRNq/fD5xTjp4owbwZTd6I7J5U2XDprT09dUcWuMW1bmLBuopwhZLI87z8TKTuZM5bs8Flm07YyzLIu8U95QsZAOmegMaxKETOqcAaA9MeeooiQYJlRZNZkNYhea3hMgmaTQPruXyQALBDPvyKFxrXL13LdpSrFUFz0qupASlJIhxYGv5HQzxNgGgMdStjy93VwswLCWZaikfYIGbjCa09eF739A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+BRSDk9pJXddZQybC2sL7vQGfJpZKZ2M6eoqtznlH7A=;
- b=W0ABe5zBeO+p2vxegN/mXzhmk7XNyAOs8yx1ErkKF3wxkLO+PC3p6J8OHXnTKZcSFk4p9ED96oa8Hd2IBzIA4x5gXdaLDIEdT+JL5GEdu2D3Rs/iIt4XfZ3mQ6vj0LFGMbEwjTMiLnzBwV8L311iaPt/ehQLRehzLw/IFiD19Ro=
-Received: from VI1PR04MB4333.eurprd04.prod.outlook.com (2603:10a6:803:49::27)
- by AM5PR04MB3074.eurprd04.prod.outlook.com (2603:10a6:206:4::16) with
+ bh=3iEDxKWukD2RGs1gmeDVEAM5NUAitcGGZgCZ3E1Y4ME=;
+ b=vI62ZeQ+5vvKwKZqwMg/lVvfjoBB5uhkUCf97t6FUljP/KALFq6n51AIaS2C53IlTiUCvnoeaUPto31V2UaReT/HNKPT5VgQOfwNwRlUuscxo919S9S8WsTzOMwT+CPZa+p/WzI1sCiUMckEg2vlSmaBat8RYFaEK7/1cPxuS6A=
+Received: from BN6PR16CA0026.namprd16.prod.outlook.com (2603:10b6:405:14::12)
+ by BN8PR12MB3538.namprd12.prod.outlook.com (2603:10b6:408:96::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.19; Fri, 18 Feb
- 2022 06:58:45 +0000
-Received: from VI1PR04MB4333.eurprd04.prod.outlook.com
- ([fe80::f54b:2953:6266:2f0b]) by VI1PR04MB4333.eurprd04.prod.outlook.com
- ([fe80::f54b:2953:6266:2f0b%2]) with mapi id 15.20.4995.016; Fri, 18 Feb 2022
- 06:58:44 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-CC:     dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH v4 4/4] arm64: dts: imx8mp: Add memory for USB3 glue layer
- to usb3 nodes
-Thread-Topic: [PATCH v4 4/4] arm64: dts: imx8mp: Add memory for USB3 glue
- layer to usb3 nodes
-Thread-Index: AQHYEr71mpge0IWmXESgBKC5yjC7bqyZBD3g
-Date:   Fri, 18 Feb 2022 06:58:44 +0000
-Message-ID: <VI1PR04MB4333761CE7919F6CC0CBB47E89379@VI1PR04MB4333.eurprd04.prod.outlook.com>
-References: <20220126141340.234125-1-alexander.stein@ew.tq-group.com>
- <20220126141340.234125-5-alexander.stein@ew.tq-group.com>
-In-Reply-To: <20220126141340.234125-5-alexander.stein@ew.tq-group.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2f5ab228-aef0-4b42-300f-08d9f2ac1ae4
-x-ms-traffictypediagnostic: AM5PR04MB3074:EE_
-x-microsoft-antispam-prvs: <AM5PR04MB3074B8EA02C48538F6A0F1DA89379@AM5PR04MB3074.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xBj42kWFk/YHtAi50qc3JQwz2HYodnRTfsr+haVsnJQhRRdh/lWVVaH5UHoT0FbK+VprnN4kWaW6I1b5fnsuJ9j6IN6s7e5AE0Hlogi2bOFULT4gtt+8CXqBSTVW4ENcAdLbslph/fv4jY5XUzkTSRQLkYsYXrWQj+xXPXSPGWaXSy6o2yBS9t6vLYif19p+4wwAoQW8LADgIUs5GoLYeNdwXgxsM76WLsWeE+87SVXvxBsuQx5WBzvp82prUUvv9piV87Rsf4RdeFpsowLQKotOe0VDJyvjddE7H14Wc+tKmm4JHXmp0h8gnBvBHghDDBY0DlIl5c+Pf7ppj9vT4uC2ElU+Q56zG9gtAxzzuO9fhBgkl77FYcscvaRq634FXaOe1SrogTA9N+yzux8yUT1Cf2AU2XVXZWxkoRglII83X7w9y3bEsLkZ9UNOFk19vcVffj5i1OP3XtCp04iZB81bFlR+rdJicxGK7+hJIPmAPBN896m+rmginLT/T/cWs+071BdQNFwh03VKopB7BhJqLM8us2Zi2sJIyGJlYwHqCmv7lgk5JsirdFx+vUgGorRPvgx3xzVfG6PbyeGDaN5gsv2TpKHMdgkDAtIOHKLITR0tQm4FVlQfToBL6lC4E8JylPIAmCScGG0NMKygvLTNuN6vKqeg1s4Yp7SdyWqbny5wJ4N25cerA/6a7HPJCsNNiYq7DnaKUxosJR8ccD/l5EmC+iCYBbQqYimP8PY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4333.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(38100700002)(54906003)(110136005)(86362001)(9686003)(508600001)(2906002)(33656002)(8676002)(38070700005)(76116006)(66446008)(64756008)(66476007)(66946007)(66556008)(5660300002)(71200400001)(4326008)(53546011)(8936002)(83380400001)(44832011)(26005)(186003)(52536014)(55016003)(122000001)(6506007)(7696005)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?b6J8GNkE5cRqJ5LCBY0gp3wUb1/Bnou7iKT5GAtMfzmM76qns94VKaL8hC2G?=
- =?us-ascii?Q?OC55XodGj4ucM2h+NCClPsSHG6XhLSozs1whJA7sbWgXBYLeaeX2x3Kcv/A6?=
- =?us-ascii?Q?RVyzHVXXvfZYu4kAOzOEgCmIIt++QtZTX6gS7hlFJ13OoczZwgMSyvWEblb7?=
- =?us-ascii?Q?ZoHY7/oD+lh/VssEoTyHHqmhITnnZWVmOYcFG36kbfuBHiQDo1U7Uw1DNa82?=
- =?us-ascii?Q?ow1BY6Ms4tPdYsVlWN1T4lMt1Y8MECXJmmv5gv1/iqmqV5P6gDBh2E49111W?=
- =?us-ascii?Q?t2h4Drfo2v2fEgpqbYWgN7CjsPlG+JFDk9+LZo/bHTkiPgrdqDZHRzMJTgE9?=
- =?us-ascii?Q?vYf0GKchmqfqY7F9V0NFiOOJFzGKKDieGnD4uAQ1nARDgjcPBWcur95gwmJb?=
- =?us-ascii?Q?icfuYoQfOHUwwgaZZwb83fZvq1dXEvo6+ZvIdaGt1Im0kumYxDhR/kYk80DV?=
- =?us-ascii?Q?l6i2rg6aNVvOh8Am+ijvYkqS9q22vjdILfalkDdX9bzyQQdR5Urn8pBAG2Yj?=
- =?us-ascii?Q?kUvBSNkpWWoJENBHU9UgOih4NkZI6C4xmDnrpPWzMN3NsNBUIQpVbqf0dEyf?=
- =?us-ascii?Q?tWC+IgPw+xZiOwdyRGOzZ3UZDeOP1c24axYYRnpLVJzycg3t8bQ2BYZ+6pPE?=
- =?us-ascii?Q?U2/l4vdw+r00RgN2+4beAsQ1365BMGPjLlAMSiSl1I0NY9WYWRPFWY9Tesfw?=
- =?us-ascii?Q?5qbNx79Wwz0+zVV1V3X0sxqdtOAKXHs8GCk5JMcVuA8MpaMVWMcu5fEqnDUr?=
- =?us-ascii?Q?yUbxdUz1zVR9VKQL4KBGI6uCi7bNiq90NgDKgniE0Q4EFUYpP0IiEDBvzjhX?=
- =?us-ascii?Q?80SHRVRzNQWKI4QDbIzirpG73kL4/1oNuKeKxqfeRO1ko1PMd8f+6/k30b9X?=
- =?us-ascii?Q?/O6ApFr4PC2bgjzcksuP/0J5lNQmbyeXWM3RcKqA2D+EinzCexMXI57R9QtQ?=
- =?us-ascii?Q?7tk3cbvcASiQ3CDz6ZuGXxcpln1FkWrnvtAKhd+ewoYIY6v8ArMX33cGboeK?=
- =?us-ascii?Q?/FO2DZgpBN5tEFDHG5PiQ7oAHJjeQA93I9qaGgXquPKGKhmQ7GRhJhE9xb8B?=
- =?us-ascii?Q?6SGzWRqzkJT0og5EsAk/I3nXXR7IT1ic4CMci4zMo+c5YeA+QNCWP1Z1zrJi?=
- =?us-ascii?Q?NQldmxb40I3mZaAWznwlP7Nq+s45Qo+d/8j1NhI/q2f/1+BBMfeaJrL3WaiH?=
- =?us-ascii?Q?k2Q9LWgA8t3t4JlJR7gR6i9yGx4EX2YFx9dlPPz3bG0kNIriNzSJ7a8Ahqp1?=
- =?us-ascii?Q?nU+Hv8zOPkJiVurQIk3E0eIsILfjIBXUtMr4ACfPxOrfqRZc/YD2u8Yr7ABc?=
- =?us-ascii?Q?r+TuesTZBn6uODApToRTvW7CBKdlrnUW3bRhf6ziecEP+gwbCw3mEwK5oK6G?=
- =?us-ascii?Q?D7k2/U0OXrzUvu+poke0szSLrcVYQySSdIYT/xjPAhk56A7+OuiZI77KmkiM?=
- =?us-ascii?Q?UB5ksQquyCmpLqTXcx/9dkXyu5wUt/42JbdzqIB0LvOPuC4z3wJL/h0JPLn0?=
- =?us-ascii?Q?sMXgNybEJdpzB9qlgYR0D2MmFGnzjh7DG6fkGjP2Zyq/qNvv7he9WnmJUmIT?=
- =?us-ascii?Q?8FtN01qPLESQcx5eAcE=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Fri, 18 Feb
+ 2022 07:11:45 +0000
+Received: from BN8NAM11FT061.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:405:14:cafe::29) by BN6PR16CA0026.outlook.office365.com
+ (2603:10b6:405:14::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.24 via Frontend
+ Transport; Fri, 18 Feb 2022 07:11:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT061.mail.protection.outlook.com (10.13.177.144) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4995.15 via Frontend Transport; Fri, 18 Feb 2022 07:11:45 +0000
+Received: from sanjuamdntb2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 18 Feb
+ 2022 01:11:41 -0600
+From:   Sanjay R Mehta <Sanju.Mehta@amd.com>
+To:     <mika.westerberg@linux.intel.com>, <andreas.noever@gmail.com>,
+        <michael.jamet@intel.com>, <YehezkelShB@gmail.com>
+CC:     <Basavaraj.Natikar@amd.com>, <jagadish.hadimani@amd.com>,
+        <sachinkumar.butte@amd.com>, <linux-usb@vger.kernel.org>,
+        Sanjay R Mehta <sanju.mehta@amd.com>
+Subject: [PATCH] thunderbolt: Retain host router DP IN resources during suspend
+Date:   Fri, 18 Feb 2022 01:11:25 -0600
+Message-ID: <1645168285-126273-1-git-send-email-Sanju.Mehta@amd.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4333.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f5ab228-aef0-4b42-300f-08d9f2ac1ae4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Feb 2022 06:58:44.7688
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b3490987-ae7c-4007-8efe-08d9f2adec04
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3538:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR12MB353881CEF6A4A78C4A20A614E5379@BN8PR12MB3538.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MwNwH3dinsQgbuR8qCu4ctYpHLEYRcp/4BSBcs1XjJQx6JI78QbAh0U4KRhj9VtywpxNCsm5r95U4vBwRWHtoOi4i6Owl5XVFQutefm/czCXaWguEXH/18Tth+ynO0Ro+69INo7kZGmCdJPeykMkRwp0mZC7EtZV+aZ0Ey7WsF+iJ5YiR1el+smhrVFd50NtcT2D/7tju+EekRw7tgQVLM1MR1jm4pf/SQSXEMelqlfQBa2DJLhr60rI1Pv7L++9YhAaOc8apD79GaRvvghbBJ+aVTznImme+Xw64UjG4tvhXWAy4hGLYPOcCnyuVAMr29XgSC476SePRkOZK37OKNZsrmhUNJDWrBx3oAjRAEJBtY08IPEdChjV0YlrvgOpKiT+m6Lc5xkoeDVS4Ey+m4uiLBbWrEf0FZrPtwHMKjbr5ug0Q1r3iRxWUp+rdaufH1Acb0xq95Gb37y9TA7d+xjYq0oFgdy0ylFtC1Ap0UOa9pX/wdUUiK8oNHxd8iUuLqoEEQ5OafcIHM94gkVV4VppheOioW0CBIm6yUsqXnQAkQaXSluFnrp6xKjpazDw1codx4B8EPAp+0kzwXt0vqeg8rTYeWJ5lhW6rGMGBvBUB59eElJmdXlH24YC/ZzvX2oBcSPVS4CWH/LdCns5uxP1RJO7n625U1/7kcDH+ZMxt8nr7oFMgosK5tsft4iYnI6eRnJMeYNMEKnUUm3d0Q==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(508600001)(36860700001)(356005)(110136005)(36756003)(81166007)(54906003)(316002)(47076005)(2616005)(2906002)(86362001)(8676002)(70586007)(70206006)(82310400004)(15650500001)(40460700003)(186003)(426003)(4326008)(336012)(7696005)(26005)(8936002)(5660300002)(83380400001)(16526019)(6666004)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2022 07:11:45.1996
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: P2ZZ9WOmaHAPrmHv6FhvHLjuy3B/cPzVQOz4sOt35GoSRBl4Kgf6weH6Bu8hJ7LN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR04MB3074
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3490987-ae7c-4007-8efe-08d9f2adec04
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT061.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3538
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -127,64 +100,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Sanjay R Mehta <sanju.mehta@amd.com>
 
+All DP resources are released during suspend and while
+resuming back DP IN resource is not available, therefore
+unable to find DP pair to re-establish the DP tunnel.
 
-> -----Original Message-----
-> From: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Sent: Wednesday, January 26, 2022 10:14 PM
-> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Rob Herring
-> <robh+dt@kernel.org>; Shawn Guo <shawnguo@kernel.org>; Sascha Hauer
-> <s.hauer@pengutronix.de>; Fabio Estevam <festevam@gmail.com>
-> Cc: Alexander Stein <alexander.stein@ew.tq-group.com>; dl-linux-imx
-> <linux-imx@nxp.com>; linux-usb@vger.kernel.org;
-> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; Jun Li
-> <jun.li@nxp.com>
-> Subject: [PATCH v4 4/4] arm64: dts: imx8mp: Add memory for USB3 glue laye=
-r
-> to usb3 nodes
->=20
-> The USB3 glue layer has 2 areas in the register set, see RM Rev.1 section
-> 11.2.5.2.1 GLUE_usb3 memory map:
-> * USB3 control/status
-> * PHY control/status
->=20
-> Provide the memory area to the usb3 nodes for accessing the features in t=
-he
-> USB3 control area.
->=20
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Hence preserve host routers DP IN resources and
+release all other DP resources during suspend.
 
-Reviewed-by: Li Jun <jun.li@nxp.com>
+Suggested-by: Jagadish Hadimani <jagadish.hadimani@amd.com>
+Suggested-by: Sachinkumar Butte <sachinkumar.butte@amd.com>
+Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
+Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+---
+ drivers/thunderbolt/tb.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-> ---
->  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> index e61ac5f136ad..d4aadb434d36 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> @@ -1030,7 +1030,8 @@ usb3_phy0: usb-phy@381f0040 {
->=20
->  		usb3_0: usb@32f10100 {
->  			compatible =3D "fsl,imx8mp-dwc3";
-> -			reg =3D <0x32f10100 0x8>;
-> +			reg =3D <0x32f10100 0x8>,
-> +			      <0x381f0000 0x20>;
->  			clocks =3D <&clk IMX8MP_CLK_HSIO_ROOT>,
->  				 <&clk IMX8MP_CLK_USB_ROOT>;
->  			clock-names =3D "hsio", "suspend";
-> @@ -1070,7 +1071,8 @@ usb3_phy1: usb-phy@382f0040 {
->=20
->  		usb3_1: usb@32f10108 {
->  			compatible =3D "fsl,imx8mp-dwc3";
-> -			reg =3D <0x32f10108 0x8>;
-> +			reg =3D <0x32f10108 0x8>,
-> +			      <0x382f0000 0x20>;
->  			clocks =3D <&clk IMX8MP_CLK_HSIO_ROOT>,
->  				 <&clk IMX8MP_CLK_USB_ROOT>;
->  			clock-names =3D "hsio", "suspend";
-> --
-> 2.25.1
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index cbd0ad8..a11710e 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -1022,6 +1022,7 @@ static void tb_disconnect_and_release_dp(struct tb *tb)
+ {
+ 	struct tb_cm *tcm = tb_priv(tb);
+ 	struct tb_tunnel *tunnel, *n;
++	struct tb_port *port, *tmp;
+ 
+ 	/*
+ 	 * Tear down all DP tunnels and release their resources. They
+@@ -1032,11 +1033,10 @@ static void tb_disconnect_and_release_dp(struct tb *tb)
+ 			tb_deactivate_and_free_tunnel(tunnel);
+ 	}
+ 
+-	while (!list_empty(&tcm->dp_resources)) {
+-		struct tb_port *port;
+-
+-		port = list_first_entry(&tcm->dp_resources,
+-					struct tb_port, list);
++	list_for_each_entry_safe(port, tmp, &tcm->dp_resources, list) {
++		/* Preserve root switch DP IN resource */
++		if (!tb_route(port->sw) && tb_port_is_dpin(port))
++			continue;
+ 		list_del_init(&port->list);
+ 	}
+ }
+-- 
+2.7.4
 
