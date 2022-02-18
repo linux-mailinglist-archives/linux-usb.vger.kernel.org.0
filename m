@@ -2,133 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5F04BB725
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 11:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AAAD4BB7B5
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Feb 2022 12:08:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234128AbiBRKpd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Feb 2022 05:45:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33370 "EHLO
+        id S234059AbiBRLJI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Feb 2022 06:09:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234126AbiBRKpc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 05:45:32 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5352325AE46;
-        Fri, 18 Feb 2022 02:45:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645181116; x=1676717116;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=zW0AZsu39b4f+1YC4ZeAlYe6MISkArojOSGR+yvIKRg=;
-  b=pEh7jZJi37JzU7USZrWd+hjmeTRNho0U/NU9NLKkq8ZMukkyEwIFa9Oy
-   D98hKdUnA1C4Q0pelLAkGZrEurlaICjOgKyWkWya38zrreu4YMTc7qL0o
-   HMh8Zn1Detb/s/uJJWZ4XPmKQmAMZ1z+6M7QA2H1LSUKHlMlDzxnrfXYY
-   g=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 Feb 2022 02:45:15 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 02:45:15 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 18 Feb 2022 02:45:15 -0800
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 18 Feb 2022 02:45:11 -0800
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
-        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <quic_rjendra@quicinc.com>,
-        <quic_saipraka@quicinc.com>, <quic_schowdhu@quicinc.com>
-Subject: [Resend PATCH V1 2/2] Revert "arm64: dts: qcom: sc7280: Add EUD dt node and dwc3 connector"
-Date:   Fri, 18 Feb 2022 16:13:46 +0530
-Message-ID: <2bf8d74c1871b0e06de53f800fb77484677e610a.1645177190.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1645177190.git.quic_schowdhu@quicinc.com>
-References: <cover.1645177190.git.quic_schowdhu@quicinc.com>
+        with ESMTP id S232384AbiBRLJI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Feb 2022 06:09:08 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9D6902AED93;
+        Fri, 18 Feb 2022 03:08:48 -0800 (PST)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Fri, 18 Feb 2022 19:08:01
+ +0800 (GMT+08:00)
+X-Originating-IP: [180.169.129.130]
+Date:   Fri, 18 Feb 2022 19:08:01 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   "Jing Leng" <3090101217@zju.edu.cn>
+To:     "kernel test robot" <lkp@intel.com>
+Cc:     laurent.pinchart@ideasonboard.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, corbet@lwn.net,
+        mchehab+huawei@kernel.org, rdunlap@infradead.org, bilbao@vt.edu,
+        pawell@cadence.com, llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        "Jing Leng" <jleng@ambarella.com>
+Subject: Re: Re: [PATCH] usb: gadget: uvc: add framebased stream support
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <202202170211.van9U4Ha-lkp@intel.com>
+References: <20220216081651.9089-1-3090101217@zju.edu.cn>
+ <202202170211.van9U4Ha-lkp@intel.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-ID: <f182e7e.aba73.17f0c847394.Coremail.3090101217@zju.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID: cC_KCgDnX_MRfg9izEJ5DQ--.8248W
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwMFBVNG3FklugADsM
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This reverts commit a0c68e493007a8c72b6b00f6ac95590a86edc937.
-
-Revert all the changes to add the Embedded USB Debugger(EUD) Node
-in the device tree, the connector node and also changes to usb2 Node
-associated with this.
-
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 36 ------------------------------------
- 1 file changed, 36 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 96917fe..937c2e0 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2583,12 +2583,6 @@
- 				phys = <&usb_2_hsphy>;
- 				phy-names = "usb2-phy";
- 				maximum-speed = "high-speed";
--				usb-role-switch;
--				port {
--					usb2_role_switch: endpoint {
--						remote-endpoint = <&eud_ep>;
--					};
--				};
- 			};
- 		};
- 
-@@ -2630,36 +2624,6 @@
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
--		eud: eud@88e0000 {
--			compatible = "qcom,sc7280-eud","qcom,eud";
--			reg = <0 0x88e0000 0 0x2000>,
--			      <0 0x88e2000 0 0x1000>;
--			interrupts-extended = <&pdc 11 IRQ_TYPE_LEVEL_HIGH>;
--			ports {
--				port@0 {
--					eud_ep: endpoint {
--						remote-endpoint = <&usb2_role_switch>;
--					};
--				};
--				port@1 {
--					eud_con: endpoint {
--						remote-endpoint = <&con_eud>;
--					};
--				};
--			};
--		};
--
--		eud_typec: connector {
--			compatible = "usb-c-connector";
--			ports {
--				port@0 {
--					con_eud: endpoint {
--						remote-endpoint = <&eud_con>;
--					};
--				};
--			};
--		};
--
- 		nsp_noc: interconnect@a0c0000 {
- 			reg = <0 0x0a0c0000 0 0x10000>;
- 			compatible = "qcom,sc7280-nsp-noc";
--- 
-2.7.4
-
+SGkgR3JlZyBLSCwKCj4gV2h5IG5vdCB1c2UgYSB1bmlvbiBoZXJlIGFzIHRoaXMgaXMgY29taW5n
+IGZyb20gdGhlIGhhcmR3YXJlLCByaWdodD8KPgoKSSB1c2VkIHVuaW9uIGluIFBBVENIIHYxLCBJ
+IGNvbXBpbGVkIGl0IHRvIGFybTY0IGJpbmFyeSB3aXRoIEdDQyAxMS4yLjEsIAp0aGUgYmluYXJ5
+IHdvcmtzIHByb3Blcmx5LgpCdXQgImtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPiIg
+cmVwb3J0ZWQgYSB3YXJuaW5nczoKID4+IGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91dmNf
+Y29uZmlnZnMuYzoxMDkxOjM6IHdhcm5pbmc6IAogZmllbGQgIHdpdGhpbiAnc3RydWN0IHV2Y2df
+ZnJhbWU6Oih1bm5hbWVkIGF0IGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91dmNfY29uZmln
+ZnMuYzoxMDY4OjIpJyAKIGlzIGxlc3MgYWxpZ25lZCB0aGFuICd1bmlvbiB1dmNnX2ZyYW1lOjoo
+YW5vbnltb3VzIGF0IGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91dmNfY29uZmlnZnMuYzox
+MDkxOjMpJyAKIGFuZCBpcyB1c3VhbGx5IGR1ZSB0byAnc3RydWN0IHV2Y2dfZnJhbWU6Oih1bm5h
+bWVkIGF0IGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91dmNfY29uZmlnZnMuYzoxMDY4OjIp
+JyAKIGJlaW5nIHBhY2tlZCwgd2hpY2ggY2FuIGxlYWQgdG8gdW5hbGlnbmVkIGFjY2Vzc2VzIFst
+V3VuYWxpZ25lZC1hY2Nlc3NdCiAgICAgICAgICAgICAgICAgICB1bmlvbiB7CiAgICAgICAgICAg
+ICAgICAgICBeCiAgIDEgd2FybmluZyBnZW5lcmF0ZWQuClNvIEkgdXNlIGFub3RoZXIgd2F5IHRv
+IGhhbmRsZSB0aGUgZnJhbWUgc3RydWN0dXJlLgoKPiBXaHkgaXMgdGhpcyB3cml0YWJsZSwgYnV0
+IHRoZSBvdGhlciB2YXJpYWJsZXMgYXJlIG5vdD8KPiAKCjEuIGJGb3JtYXRJbmRleCBpcyBhdXRv
+bWF0aWMgYXV0byBjYWxjdWxhdGVkIGJ5IHRoZSBkcml2ZXIuCiAgIFNvIGl0IGlzIHJlYWQtb25s
+eS4KMi4gSSBkb24ndCBrbm93IHdoeSAiYl9hc3BlY3RfcmF0aW9feCAvIGJfYXNwZWN0X3JhdGlv
+X3kgLyBibV9pbnRlcmZhY2VfZmxhZ3MiCiAgIGFyZSByZWFkLW9ubHksIFBlcmhhcHMgdGhlc2Ug
+cGFyYW1ldGVycyBjYW4gYmUgb2J0YWluZWQgZGlyZWN0bHkgZnJvbSBhY3R1YWwgc3RyZWFtLgog
+ICBzbyBkcml2ZXIgZG9lcyBub3QgbmVlZCB0byBjYXJlIGFib3V0IHRoZXNlIHBhcmFtZXRlcnMu
+CjMuIElmIGJWYXJpYWJsZVNpemUgaXMgMSwgdGhlbiBkd0J5dGVzUGVyTGluZSBtdXN0IGJlIHNl
+dCB0byB6ZXJvICgwKS4KICAgSWYgYlZhcmlhYmxlU2l6ZSBpcyAwLCB0aGVuIGR3Qnl0ZXNQZXJM
+aW5lIGNhbiBiZSBzZXR0ZWQgdG8gb3RoZXIgdmFsdWUuCiAgIFNvIGl0IGlzIHdyaXRhYmxlLgoK
+PiA+IC0JCSpzaXplICs9IHNpemVvZihmcm0tPmZyYW1lKTsKPiA+ICsJCSpzaXplICs9IHNpemVv
+Zihmcm0tPmZyYW1lKSAtIDQ7Cj4gCj4gV2hlcmUgZGlkICI0IiBjb21lIGZyb20/Cj4KClVuY29t
+cHJlc3NlZCBmcmFtZSBkb2Vzbid0IGhhdmUgInUzMiBkd19ieXRlc19wZXJsaW5lIi4KRnJhbWVi
+YXNlZCBmcmFtZSBkb2Vzbid0IGhhdmUgInUzMiBkd19tYXhfdmlkZW9fZnJhbWVfYnVmZmVyX3Np
+emUiLgpJZiB3ZSB1c2UgdW5pb24sIHRoZXJlJ3Mgbm8gbmVlZCB0byBkbyB0aGlzLgpNYXliZSB3
+ZSBjYW4gYWRkICIjZGVmaW5lIFVWQ0dfU1VCX0ZSQU1FX1BBWUxPQURfTEVOR1RIIDI2IiwgYW5k
+IHVzZQoiVVZDR19TVUJfRlJBTUVfUEFZTE9BRF9MRU5HVEgiIHRvIHJlcGxhY2UgInNpemVvZihm
+cm0tPmZyYW1lKSAtIDQiLgoKPiA+ICsJLyogYlZhcmlhYmxlU2l6ZSBpcyBvbmx5IGZvciBmcmFt
+ZWJhc2VkIGZvcm1hdC4gKi8KPiA+ICsJX191OCAgYlZhcmlhYmxlU2l6ZTsKPiAKPiBUaGlzIGp1
+c3QgY2hhbmdlZCBhIHVzZXIgdmlzYWJsZSBzdHJ1Y3R1cmUgc2l6ZS4gIFdoYXQgYnJva2Ugd2hl
+biBkb2luZwo+IHRoaXM/ICBXaGF0IHRvb2wgdXNlcyB0aGlzPwo+IAoKQXMgbG9uZyBhcyB1c2Vy
+cyB1c2UgIlVWQ19EVF9GT1JNQVRfVU5DT01QUkVTU0VEX1NJWkUiIGluc3RlYWQgb2YKInNpemVv
+ZihzdHJ1Y3QgdXZjX2Zvcm1hdF91bmNvbXByZXNzZWQpIiB0byBnZXQgdGhlIGxlbmd0aCwgdGhl
+cmUgaXMKbm8gcHJvYmxlbS4gU28gSSBoYXZlIHRoZSBmb2xsb3dpbmcgbW9kaWZpY2F0aW9uczoK
+ICAgIC0JCQkqc2l6ZSArPSBzaXplb2YodS0+ZGVzYyk7CiAgICArCQkJKnNpemUgKz0gdS0+ZGVz
+Yy5iTGVuZ3RoOwoKQ3VycmVudGx5IHRoaXMgY2hhbmdlIGRvZXMgbm90IGJyZWFrIHRoZSBrZXJu
+ZWwsIGFuZCB1dmMgc3RyZWFtIEFQUApiYXNlZCBvbiBVVkMgZ2FkZ2V0IGRvZXNuJ3QgbmVlZCB0
+byB1c2UgInN0cnVjdCB1dmNfZm9ybWF0X3VuY29tcHJlc3NlZCIuCgpUaGVyZSBtYXkgYmUgc29t
+ZSB0b29scyB0aGF0IHVzZSBpdCwgVGhleSBjYW4gdXNlICJVVkNfRFRfRk9STUFUX1VOQ09NUFJF
+U1NFRF9TSVpFIgp0byBjb3ZlciB0aGUgbW9kaWZpY2F0aW9uLgoKV2UgZG9uJ3QgbmVlZCAiY29w
+eSBhbGwgdW5jb21wcmVzc2VkIGNvZGUsIHJlbmFtZQp1bmNvbXByZXNzZWQgYXMgZnJhbWViYXNl
+ZCwgbWFrZSBhIGxpdHRsZSBjaGFuZ2UiIHRvIGFjY2VzcyBmcmFtZWJhc2VkCnN0cmVhbSBzdXBw
+b3J0LgoKVGhhbmtzLApKaW5nIExlbmc=
