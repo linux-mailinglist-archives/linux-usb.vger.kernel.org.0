@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7189F4BC818
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Feb 2022 12:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F4A4BC7D3
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Feb 2022 12:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236333AbiBSLLs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 19 Feb 2022 06:11:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41572 "EHLO
+        id S236554AbiBSLLx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 19 Feb 2022 06:11:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiBSLLr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 19 Feb 2022 06:11:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B65340E5
-        for <linux-usb@vger.kernel.org>; Sat, 19 Feb 2022 03:11:27 -0800 (PST)
+        with ESMTP id S229657AbiBSLLx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 19 Feb 2022 06:11:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A9E1C914
+        for <linux-usb@vger.kernel.org>; Sat, 19 Feb 2022 03:11:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A7DDB8013B
-        for <linux-usb@vger.kernel.org>; Sat, 19 Feb 2022 11:11:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3D512C340EB
-        for <linux-usb@vger.kernel.org>; Sat, 19 Feb 2022 11:11:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3260560CBA
+        for <linux-usb@vger.kernel.org>; Sat, 19 Feb 2022 11:11:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9AC3BC340EF
+        for <linux-usb@vger.kernel.org>; Sat, 19 Feb 2022 11:11:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645269085;
-        bh=WzTiSPFimVNPZFvAns0vGg2jSgQs4+Y9rbI0bV8X0sk=;
+        s=k20201202; t=1645269092;
+        bh=2FA5ZvIW3HXZNF4k19lpxMuHM+760UoX9hx4Bn4in0A=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Z6HlDDrdkOSTJUIabTJxHBukA8CanWknGew/1QPHfVgpTkQufkd5frHa1dIlaxFMz
-         Mi5FQ2OUM6Obl00H3OKzkKfkQs4UvxdL0peBp/VxcB7LunaNLv0AnWpDKt3EDPb029
-         3hFkoC29OxccYv6YOpO5ZmGCHMF2MU8jtclQ02Thea+zksRFZoxzuk16XcApDh8uia
-         bLJEzwTUjeqCvsAY/oWTcdvyz4WUghUC3oXR+4zbb5M693n+obfuAXhjjHxz0wP9Tc
-         HS+wjNi8e1vUMXNjEuVtHUbXiTztdYzTbUCOaZCy8nEPMhF6RmFrxbMYirm38tPBJh
-         frpmwAwDts3vQ==
+        b=OXPiw3YKIuA3wHo4KBHXB0Md0Ip4zZU3KV3SwQ0qAx6fN8bAhmejrxri2McgvkLS9
+         phXevnhnZgtZKFI+5sWmEdaGAlHgYXIwKGah7L5MAW8mElaf+xdHV/nIBShea5gXIZ
+         WS51Eo1zjNj8+JJsgB9P7maNNSQt3ROCxM6yv+pUGuQJwzOhjc/SCOGSNyBNGkHTP5
+         riRSYJ+HoVpKA6YTQ0CNGNemBjM+07JIEBHWq/B/Bcvh/nww7fcN+q7+uHyqduYnr5
+         JJzG5W4Ege3u5aTxZFvm8oO2zQW7b3A57lU7fk7oLiKI4x+54H8enXW0GToJM56mh4
+         1kgqyL88oQmow==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 20F5CC05FD2; Sat, 19 Feb 2022 11:11:25 +0000 (UTC)
+        id 8AA95CAC6E2; Sat, 19 Feb 2022 11:11:32 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 209555] dwc2 driver stops working after sudden disconnect
-Date:   Sat, 19 Feb 2022 11:11:24 +0000
+Date:   Sat, 19 Feb 2022 11:11:32 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -52,7 +52,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-209555-208809-q9vNW3qWMy@https.bugzilla.kernel.org/>
+Message-ID: <bug-209555-208809-MonAkoCMUH@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-209555-208809@https.bugzilla.kernel.org/>
 References: <bug-209555-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -72,7 +72,7 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D209555
 
---- Comment #32 from Yunhao Tian (t123yh@outlook.com) ---
+--- Comment #33 from Yunhao Tian (t123yh@outlook.com) ---
 Hi,
 
 Just discovered the real issue of my case. dwc2_gadget_enter_clock_gating
