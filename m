@@ -2,62 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869E94BCF88
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Feb 2022 16:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC5C4BD16F
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Feb 2022 21:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244198AbiBTPix (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Feb 2022 10:38:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42434 "EHLO
+        id S242088AbiBTU12 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Feb 2022 15:27:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244118AbiBTPis (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Feb 2022 10:38:48 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27C840A06
-        for <linux-usb@vger.kernel.org>; Sun, 20 Feb 2022 07:38:27 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id y24so1858788lfg.1
-        for <linux-usb@vger.kernel.org>; Sun, 20 Feb 2022 07:38:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=ymEpgIXl54yuSlZg88NLeYK1RJf0YDtYgXWD/9J1GQ0=;
-        b=degv64KeFtdi2zbjsMqCg99XUBwRsWWRsat8pVSE1dsJMyLEQebzW+u8gL6CBfEQQn
-         TR573CG7WA+9vnEdvbzyisLdqVfd2L7tW255YjXAv70Nz6z7oKmPah1XlxlqBd5nDgXH
-         ePUhHpcz6Nz3MIgpiiVSbZwwadbd4mnHSGmsNzIMifS2uWsr5SlJ5m2rsNUPByoI5zhb
-         SR83azGcCTW//SbmgQ0y+vLGSla0uKvjbMIVO2C3U/MToeM9d3wUPHwP8BDBVACmWkyb
-         mbrrj1iz1ehyoQ1IJSYmVaPjfehHwDHBxgq0J/uzM167cyMcPy58BK3LuVjr98uUFJPh
-         U0VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=ymEpgIXl54yuSlZg88NLeYK1RJf0YDtYgXWD/9J1GQ0=;
-        b=3MXj4TILnnzKcyEFBM8Ab4iLHVnRaHn3aqq5G8bJbLlC5geltojGOYm9IQQ86smZip
-         8kmfmwCZzRvNjy9K//2k28S6wGLUhXrinDjnuUZsutQF6VaL7KB8f+4N5ZCdHc4zqQoL
-         /5/lYrngHY5kcNQ61vTlBsD1QHbGB4MIV39QtE4qpm9VZBSK/RQgueoLSgL3aLWPiDFs
-         ZVXAbSV7xGenFDTuimkUzCT7yOwCf+gYIu851Pr9DV0JQgbZtOY8EhSf8F2QtnOIL7p2
-         JIF67WuADkdC1qzkgZWgl02p8oETodUErsN0WOdtk/JEuIKCrrXMMy8Rf0TZof/vRxRN
-         +ZtA==
-X-Gm-Message-State: AOAM530Gh9FMnBdYo8lS2olmSU3Z2VCddrl2R/szfbDBX990XGkApJY8
-        2Hq9i9Qd5fP13wxIjcyVGxWCQrqq0gY1bz5FW2NjXw2hWIM=
-X-Google-Smtp-Source: ABdhPJz0AN7o9No0fhs6xZEm8hzyX6WOZhNi8B3U8PCYdBi3itNU8MBgMEdAbbMqhnsTf7H9NACa5LH5MJlqKIgsin0=
-X-Received: by 2002:aa7:ce92:0:b0:40f:b89c:18fe with SMTP id
- y18-20020aa7ce92000000b0040fb89c18femr17517323edv.67.1645371495858; Sun, 20
- Feb 2022 07:38:15 -0800 (PST)
+        with ESMTP id S232742AbiBTU11 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Feb 2022 15:27:27 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65D63F33A;
+        Sun, 20 Feb 2022 12:27:05 -0800 (PST)
+Received: from localhost.localdomain (ip-213-127-118-180.ip.prioritytelecom.net [213.127.118.180])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 0A706C6D5A;
+        Sun, 20 Feb 2022 20:19:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1645388380; bh=m6+0G7kMhIz7HsIPX/lDQc+bJdPk1YftvzsitotuDew=;
+        h=From:To:Cc:Subject:Date;
+        b=K+bXim3X2qVn78qrWNwVF9x83UOent1HzpLSuC/FDJoIX49K2/c5PhDo4MoB1TP8y
+         S7vJZBjFwYXS6DMDqnEX7HQJI6o5iBi+qD0z2XrABZ/6AH4dmnhDpZaNVs26MHuvod
+         CiZk15Ff0Lx4+HzTTqircIuMJ8xfHsdXtFRXRYZQ=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Amit Kucheria <amitk@kernel.org>,
+        Bartosz Dudziak <bartosz.dudziak@snejp.pl>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hector Martin <marcan@marcan.st>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Rob Herring <robh@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v2 00/10] Initial MSM8953 & Fairphone 3 support
+Date:   Sun, 20 Feb 2022 21:18:53 +0100
+Message-Id: <20220220201909.445468-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Received: by 2002:a54:38c1:0:0:0:0:0 with HTTP; Sun, 20 Feb 2022 07:38:15
- -0800 (PST)
-Reply-To: fatibaro01@yahoo.com
-From:   Fatimah Baro <imanosose@gmail.com>
-Date:   Sun, 20 Feb 2022 16:38:15 +0100
-Message-ID: <CAFEyOE7M=ZUrSROmPGAE3yrv-g10xHU=UARo1h+trJF7vepfMA@mail.gmail.com>
-Subject: Business invitation
-To:     imanosose <imanosose@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.8 required=5.0 tests=ADVANCE_FEE_3_NEW,BAYES_50,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,9 +61,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greetings from Burkina Faso,
-Please pardon me if my request offend your person; I need you to stand
-as my foreign partner for investment in your country. Please reply
-immediately if you are interested, so that I can give you more
-information.
-Fatimah Baro
+This series adds initial support for MSM8953 (and SDM632 which is based
+on MSM8953) and the Fairphone 3 smartphone.
+
+Only relatively basic functionality is supported like storage, volume
+keys and USB.
+
+There is currently close-to-mainline support for other components for
+this SoC including GPU, WiFi and audio, this series adds only basic
+support so that the other components can start getting upstreamed
+easier.
+
+Changes in v2:
+- rebase on linux-next and drop already applied patches
+- drop msm8953-pm8953.dtsi patch: integrate changes into FP3 patch
+- for individual patches for other changes
+
+Luca Weiss (7):
+  dt-bindings: mfd: qcom,tcsr: Document msm8953 compatible
+  dt-bindings: thermal: tsens: Add msm8953 compatible
+  dt-bindings: usb: qcom,dwc3: Add msm8953 compatible
+  dt-bindings: arm: cpus: Add Kryo 250 CPUs
+  rpmsg: smd: allow opening rpm_requests even if already opened
+  dt-bindings: arm: qcom: Document sdm632 and fairphone,fp3 board
+  arm64: dts: qcom: sdm632: Add device tree for Fairphone 3
+
+Vladimir Lypak (3):
+  arm64: dts: qcom: Add MSM8953 device tree
+  arm64: dts: qcom: Add PM8953 PMIC
+  arm64: dts: qcom: Add SDM632 device tree
+
+ .../devicetree/bindings/arm/cpus.yaml         |    1 +
+ .../devicetree/bindings/arm/qcom.yaml         |    6 +
+ .../devicetree/bindings/mfd/qcom,tcsr.txt     |    1 +
+ .../bindings/thermal/qcom-tsens.yaml          |    1 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |    1 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ arch/arm64/boot/dts/qcom/msm8953.dtsi         | 1326 +++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8953.dtsi          |   90 ++
+ .../boot/dts/qcom/sdm632-fairphone-fp3.dts    |  183 +++
+ arch/arm64/boot/dts/qcom/sdm632.dtsi          |   81 +
+ drivers/rpmsg/qcom_smd.c                      |    5 +-
+ 11 files changed, 1695 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8953.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8953.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm632.dtsi
+
+-- 
+2.35.1
+
