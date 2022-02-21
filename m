@@ -2,52 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66AE74BE462
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 18:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1468E4BE19E
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 18:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353292AbiBUKSs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Feb 2022 05:18:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47474 "EHLO
+        id S1353319AbiBUKU0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Feb 2022 05:20:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353232AbiBUKRi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 05:17:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CADCF6;
-        Mon, 21 Feb 2022 01:37:32 -0800 (PST)
+        with ESMTP id S1353310AbiBUKUL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 05:20:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C467C3BA64;
+        Mon, 21 Feb 2022 01:39:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DC32B80EB5;
-        Mon, 21 Feb 2022 09:37:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AB07C340E9;
-        Mon, 21 Feb 2022 09:37:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60271B80EBB;
+        Mon, 21 Feb 2022 09:39:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25F56C340E9;
+        Mon, 21 Feb 2022 09:39:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645436250;
-        bh=2nbjOpE9zmPxYH13Z1D0YQfu2xXpZIXk2Ir5r88/Ckk=;
+        s=k20201202; t=1645436396;
+        bh=rhiY1Uq54BfvApTWrJAP4qVMye7jLI87y2X4/jm+Vn0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H9hy0puJZI5Bm7ywRlVCyRWBMQDR+AcNBlH5CmjyoUwUsNjRh7nhTdaYlc79Y9WXh
-         uK/SLH/rJbpK+XhHzULudnZGpw0TQKZRoN+0LsLnaITPHwjaEbyyt+EfWSOgmn20ZR
-         VJzYBtCa46mtgb/Hn4TriItD/+AxE5v/y+XW8DYirNIHLgJwVJd/rhUQ16Y1f9t2Ok
-         CeJsmAntWCEuc9raor8TtJhZZUvV9/Cmb0aASnhaElo+4lHdlrt9yUCpfQxbQIBonc
-         mfmAKos1TBkYLdnyUizI2KToM3IjL/O79POFKpWuwLLneLVxzfSnM2/ffINB64aXq0
-         JwPgFUrELVz8g==
+        b=rV8/iIeI2gv4XgE5LeP87TlJApRVoyK2FYzsywB4zrAAHp2p+pRLdRJ0mdMZXkmac
+         h4eTgming5tDRtu68iz8N0wmblJSWVtAvxpP4lPZ5pdlVmwvYCi+7RKc8Ra7tPbi78
+         f/pOnxe09KtJv33UWdOIy69fBbpuP9N3il9OXLvKKQWeEDTqgu0IgSLqC3GXtvL2Ar
+         ipuXH2YL2A+mvDOsjAiceQSKdahuOmYvyUmr5xaHFUIajkLV05zedkm6TiTW1wyexG
+         bdEIc5e/CH2js960foduTAXQ1e04HV5aM8d5MwJt38fXuA2otJ/AAEyHol7z5Y6kgA
+         XPlqa4+xhSQAg==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1nM58I-00079Y-HK; Mon, 21 Feb 2022 10:37:27 +0100
-Date:   Mon, 21 Feb 2022 10:37:26 +0100
+        id 1nM5Af-0007A3-8o; Mon, 21 Feb 2022 10:39:53 +0100
+Date:   Mon, 21 Feb 2022 10:39:53 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Husni Faiz <ahamedhusni73@gmail.com>
 Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] usb: serial: Fix Space Prohibited Coding Style
- Errors
-Message-ID: <YhNdVtrXnIehZzfy@hovoldconsulting.com>
+Subject: Re: [PATCH v2 2/2] usb: serial: Fix Coding Style Error Around
+ Ternary Operator
+Message-ID: <YhNd6R3WtSIfjnY8@hovoldconsulting.com>
 References: <20220212175510.521072-1-ahamedhusni73@gmail.com>
- <20220220131339.179648-1-ahamedhusni73@gmail.com>
+ <20220220131405.179732-1-ahamedhusni73@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220220131339.179648-1-ahamedhusni73@gmail.com>
+In-Reply-To: <20220220131405.179732-1-ahamedhusni73@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,49 +58,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Feb 20, 2022 at 06:43:39PM +0530, Husni Faiz wrote:
-> This patch fixes "space prohibited before that ','"  checkpatch error.
-> Removed the space after the function argument value "8".
+On Sun, Feb 20, 2022 at 06:44:05PM +0530, Husni Faiz wrote:
+> This patch fixes "spaces required around that '?'"  checkpatch error
+> Added a space before the "?" ternary operator.
 > 
 > Signed-off-by: Husni Faiz <ahamedhusni73@gmail.com>
 > ---
 > V1->V2 : Separated the style changes into multiple patches.
-
-As Greg mentioned, please work in drivers/staging if you want to submit
-these kind of patches.
-
-checkpatch.pl is great for checking your own patches before submission,
-but it shouldn't be run on code that's already in the tree, and where
-fixing a white space issue like this one has essentially no value.
-
-And as your staging/greybus submission showed, using the output of tools
-like checkpatch.pl even risks breaking things if you take it too
-literally and don't use your own judgement.
-
->  drivers/usb/serial/iuu_phoenix.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/serial/iuu_phoenix.c b/drivers/usb/serial/iuu_phoenix.c
-> index 0be3b5e1eaf3..2f7784572c4d 100644
-> --- a/drivers/usb/serial/iuu_phoenix.c
-> +++ b/drivers/usb/serial/iuu_phoenix.c
-> @@ -360,7 +360,7 @@ static void iuu_led_activity_on(struct urb *urb)
->  	usb_fill_bulk_urb(port->write_urb, port->serial->dev,
->  			  usb_sndbulkpipe(port->serial->dev,
->  					  port->bulk_out_endpointAddress),
-> -			  port->write_urb->transfer_buffer, 8 ,
-> +			  port->write_urb->transfer_buffer, 8,
->  			  iuu_rxcmd, port);
->  	usb_submit_urb(port->write_urb, GFP_ATOMIC);
->  }
-> @@ -380,7 +380,7 @@ static void iuu_led_activity_off(struct urb *urb)
->  	usb_fill_bulk_urb(port->write_urb, port->serial->dev,
->  			  usb_sndbulkpipe(port->serial->dev,
->  					  port->bulk_out_endpointAddress),
-> -			  port->write_urb->transfer_buffer, 8 ,
-> +			  port->write_urb->transfer_buffer, 8,
->  			  iuu_rxcmd, port);
->  	usb_submit_urb(port->write_urb, GFP_ATOMIC);
->  }
+>  drivers/usb/serial/cp210x.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+> index 8a60c0d56863..1fcdfb7d118c 100644
+> --- a/drivers/usb/serial/cp210x.c
+> +++ b/drivers/usb/serial/cp210x.c
+> @@ -1403,7 +1403,7 @@ static int cp210x_tiocmget(struct tty_struct *tty)
+>  		|((control & CONTROL_RTS) ? TIOCM_RTS : 0)
+>  		|((control & CONTROL_CTS) ? TIOCM_CTS : 0)
+>  		|((control & CONTROL_DSR) ? TIOCM_DSR : 0)
+> -		|((control & CONTROL_RING)? TIOCM_RI  : 0)
+> +		|((control & CONTROL_RING) ? TIOCM_RI  : 0)
+>  		|((control & CONTROL_DCD) ? TIOCM_CD  : 0);
+
+I'm pretty sure the author intended the TIOCM arguments to be aligned
+here.
+
+But in any case, I'm not taking checkpatch.pl clean ups unless you're
+also doing real changes to the code in question.
+
+>  	dev_dbg(&port->dev, "%s - control = 0x%02x\n", __func__, control);
 
 Johan
