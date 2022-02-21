@@ -2,175 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2325B4BE27F
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 18:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 182F84BE605
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 19:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351333AbiBUJsv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Feb 2022 04:48:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42568 "EHLO
+        id S232484AbiBUJst (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Feb 2022 04:48:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352300AbiBUJrT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 04:47:19 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC76C31347;
-        Mon, 21 Feb 2022 01:19:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 102C1CE0E8B;
-        Mon, 21 Feb 2022 09:19:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D89AC340EB;
-        Mon, 21 Feb 2022 09:19:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645435159;
-        bh=y/fovhg2SrSjIop/da0hcjHxQGhI87uhw9/cjMwETww=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UaR6FWg439BUCjrohVcf6NonY4BanAy1Q1sRSfgYMaPO36QhYrbEQbVOm2HiYtiN4
-         duihRIgXjMhSEuUScJD/frv2fyDQNkxlQw+6cSPZ5I/maZ1L1Fom6tx2YokHxu7CBS
-         qFEpGnIfNk9lF+v/hZs8H+JFQkIhRvmgIjcCmYeWk+C72/zppUtkC8iiTW7qHd8KYP
-         QhQnu5bzHB/TTBV7RZhoVEgX2C6vXuslM18N8b2k0YUvMMXx1Xf0wwfrriV2zxvjFM
-         BSTJHRL7jH73PRkrYGdxWJhz4iGRPyIMVuVX8CLD1PA+qx4Csh/o5nwVBm4I8s+Y46
-         mHyyply0pXwPg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nM4qh-00061f-NU; Mon, 21 Feb 2022 10:19:16 +0100
-Date:   Mon, 21 Feb 2022 10:19:15 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Slark Xiao <slark_xiao@163.com>
+        with ESMTP id S1352873AbiBUJr7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 04:47:59 -0500
+Received: from m13114.mail.163.com (m13114.mail.163.com [220.181.13.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2107212AD1;
+        Mon, 21 Feb 2022 01:20:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=21K6b
+        QK4EXcP3BVHdL/u5JSVHo7V8smrScHkWUXOPzA=; b=iz1g4SJzVmBsTIvOgZIpG
+        BR9jPGFeHtMH5ZsqJYje0RSSzN6flZoIQ2KMl+gm+ALyOfkU0HxggVXvV4MM2hws
+        cfVjhGq31lOQd3V67F6VOKZCD03dbMDHd1K/uV5gf/vqwp+PHWMKlwYEAlrJTWiY
+        sGwnT2IP9pjcpoQCnLmEKQ=
+Received: from slark_xiao$163.com ( [112.97.59.12] ) by
+ ajax-webmail-wmsvr114 (Coremail) ; Mon, 21 Feb 2022 17:20:05 +0800 (CST)
+X-Originating-IP: [112.97.59.12]
+Date:   Mon, 21 Feb 2022 17:20:05 +0800 (CST)
+From:   "Slark Xiao" <slark_xiao@163.com>
+To:     "Johan Hovold" <johan@kernel.org>
 Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] USB: serial: option: add support for DW5829e
-Message-ID: <YhNZE4m66Qb7jdeZ@hovoldconsulting.com>
-References: <20220214021401.6264-1-slark_xiao@163.com>
+Subject: Re:Re: Re: [PATCH] USB: serial: option: add support for DW5829e
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <YhNWV5lXm0d7lyfL@hovoldconsulting.com>
+References: <20220209031535.9668-1-slark_xiao@163.com>
+ <YgPPNVzyg7Gypzv9@hovoldconsulting.com>
+ <62feaf3.248f.17ee1ac3017.Coremail.slark_xiao@163.com>
+ <YhNWV5lXm0d7lyfL@hovoldconsulting.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220214021401.6264-1-slark_xiao@163.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <14f5bdc0.3675.17f1b94b947.Coremail.slark_xiao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: csGowADHytBGWRNi3mYUAA--.52023W
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRwSuZFc7V+6LlAABsC
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 10:14:01AM +0800, Slark Xiao wrote:
-> Dell DW5829e same as DW5821e except CAT level.
-> DW5821e supports CAT16 but DW5829e supports CAT9.
-> There are 2 types product of DW5829e: normal and eSIM.
-> So we will add 2 PID for DW5829e.
-> And for each PID, it support MBIM or RMNET.
-> Let's see test evidence as below:
-> 
-> DW5829e MBIM mode:
-> T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
-> D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  2
-> P:  Vendor=413c ProdID=81e6 Rev=03.18
-> S:  Manufacturer=Dell Inc.
-> S:  Product=DW5829e Snapdragon X20 LTE
-> S:  SerialNumber=0123456789ABCDEF
-> C:  #Ifs= 7 Cfg#= 2 Atr=a0 MxPwr=896mA
-> I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-> I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> I:  If#=0x6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-> 
-> DW5829e RMNET mode:
-> T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  5 Spd=5000 MxCh= 0
-> D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-> P:  Vendor=413c ProdID=81e6 Rev=03.18
-> S:  Manufacturer=Dell Inc.
-> S:  Product=DW5829e Snapdragon X20 LTE
-> S:  SerialNumber=0123456789ABCDEF
-> C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-> I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-> I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> 
-> DW5829e-eSIM MBIM mode:
-> T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  6 Spd=5000 MxCh= 0
-> D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  2
-> P:  Vendor=413c ProdID=81e4 Rev=03.18
-> S:  Manufacturer=Dell Inc.
-> S:  Product=DW5829e-eSIM Snapdragon X20 LTE
-> S:  SerialNumber=0123456789ABCDEF
-> C:  #Ifs= 7 Cfg#= 2 Atr=a0 MxPwr=896mA
-> I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-> I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> I:  If#=0x6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-> 
-> DW5829e-eSIM RMNET mode:
-> T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  7 Spd=5000 MxCh= 0
-> D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-> P:  Vendor=413c ProdID=81e4 Rev=03.18
-> S:  Manufacturer=Dell Inc.
-> S:  Product=DW5829e-eSIM Snapdragon X20 LTE
-> S:  SerialNumber=0123456789ABCDEF
-> C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-> I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-> I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> 
-> BTW, the interface 0x6 of MBIM mode is GNSS port, which not same as NMEA
-> port. So it's banned from serial option driver.
-> The remaining interfaces 0x2-0x5 are: MODEM, MODEM, NMEA, DIAG.
-> 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-> ---
-> v2: (1). sorted by PID  (2). reduce the conflict possibility between
-> QMI and serial driver.
-
-Thanks for the update. 
-
-> ---
->  drivers/usb/serial/option.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 962e9943fc20..f612805222b6 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -198,6 +198,8 @@ static void option_instat_callback(struct urb *urb);
->  
->  #define DELL_PRODUCT_5821E			0x81d7
->  #define DELL_PRODUCT_5821E_ESIM			0x81e0
-> +#define DELL_PRODUCT_5829E_ESIM			0x81e4
-> +#define DELL_PRODUCT_5829E			0x81e6
->  
->  #define KYOCERA_VENDOR_ID			0x0c88
->  #define KYOCERA_PRODUCT_KPC650			0x17da
-> @@ -1063,6 +1065,10 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
->  	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5821E_ESIM),
->  	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
-> +	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5829E),
-> +	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
-> +	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5829E_ESIM),
-> +	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
-
-I see now that the previous two entries also reserved interface 1 even
-though it's unnecessary as that interface does not have vendor class in
-any configuration.
-
-I dropped the RSVD(1) from the new entries before applying.
-
->  	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_E100A) },	/* ADU-E100, ADU-310 */
->  	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_500A) },
->  	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_620UW) },
-
-Johan
+CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjItMDItMjEgMTc6MDc6MzUsICJKb2hhbiBIb3ZvbGQiIDxq
+b2hhbkBrZXJuZWwub3JnPiB3cm90ZToKPk9uIFRodSwgRmViIDEwLCAyMDIyIGF0IDExOjI3OjQ1
+QU0gKzA4MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4+IEF0IDIwMjItMDItMDkgMjI6Mjc6MDEsICJK
+b2hhbiBIb3ZvbGQiIDxqb2hhbkBrZXJuZWwub3JnPiB3cm90ZToKPj4gPk9uIFdlZCwgRmViIDA5
+LCAyMDIyIGF0IDExOjE1OjM1QU0gKzA4MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4KPj4gPj4gRFc1
+ODI5ZSBSTU5FVCBtb2RlOgo+PiA+PiBUOiAgQnVzPTA0IExldj0wMSBQcm50PTAxIFBvcnQ9MDEg
+Q250PTAxIERldiM9ICA1IFNwZD01MDAwIE14Q2g9IDAKPj4gPj4gRDogIFZlcj0gMy4xMCBDbHM9
+ZWYobWlzYyApIFN1Yj0wMiBQcm90PTAxIE14UFM9IDkgI0NmZ3M9ICAxCj4+ID4+IFA6ICBWZW5k
+b3I9NDEzYyBQcm9kSUQ9ODFlNiBSZXY9MDMuMTgKPj4gPj4gUzogIE1hbnVmYWN0dXJlcj1EZWxs
+IEluYy4KPj4gPj4gUzogIFByb2R1Y3Q9RFc1ODI5ZSBTbmFwZHJhZ29uIFgyMCBMVEUKPj4gPj4g
+UzogIFNlcmlhbE51bWJlcj0wMTIzNDU2Nzg5QUJDREVGCj4+ID4+IEM6ICAjSWZzPSA2IENmZyM9
+IDEgQXRyPWEwIE14UHdyPTg5Nm1BCj4+ID4+IEk6ICBJZiM9MHgwIEFsdD0gMCAjRVBzPSAzIENs
+cz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYgRHJpdmVyPXFtaV93d2FuCj4+ID4+IEk6ICBJZiM9
+MHgxIEFsdD0gMCAjRVBzPSAxIENscz0wMyhISUQgICkgU3ViPTAwIFByb3Q9MDAgRHJpdmVyPXVz
+YmhpZAo+PiA+PiBJOiAgSWYjPTB4MiBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj0w
+MCBQcm90PTAwIERyaXZlcj1vcHRpb24KPj4gPj4gSTogIElmIz0weDMgQWx0PSAwICNFUHM9IDMg
+Q2xzPWZmKHZlbmQuKSBTdWI9MDAgUHJvdD0wMCBEcml2ZXI9b3B0aW9uCj4+ID4+IEk6ICBJZiM9
+MHg0IEFsdD0gMCAjRVBzPSAzIENscz1mZih2ZW5kLikgU3ViPTAwIFByb3Q9MDAgRHJpdmVyPW9w
+dGlvbgo+PiA+PiBJOiAgSWYjPTB4NSBBbHQ9IDAgI0VQcz0gMiBDbHM9ZmYodmVuZC4pIFN1Yj1m
+ZiBQcm90PWZmIERyaXZlcj1vcHRpb24KPgo+PiA+PiBEVzU4MjllLWVTSU0gUk1ORVQgbW9kZToK
+Pj4gPj4gVDogIEJ1cz0wNCBMZXY9MDEgUHJudD0wMSBQb3J0PTAxIENudD0wMSBEZXYjPSAgNyBT
+cGQ9NTAwMCBNeENoPSAwCj4+ID4+IEQ6ICBWZXI9IDMuMTAgQ2xzPWVmKG1pc2MgKSBTdWI9MDIg
+UHJvdD0wMSBNeFBTPSA5ICNDZmdzPSAgMQo+PiA+PiBQOiAgVmVuZG9yPTQxM2MgUHJvZElEPTgx
+ZTQgUmV2PTAzLjE4Cj4+ID4+IFM6ICBNYW51ZmFjdHVyZXI9RGVsbCBJbmMuCj4+ID4+IFM6ICBQ
+cm9kdWN0PURXNTgyOWUtZVNJTSBTbmFwZHJhZ29uIFgyMCBMVEUKPj4gPj4gUzogIFNlcmlhbE51
+bWJlcj0wMTIzNDU2Nzg5QUJDREVGCj4+ID4+IEM6ICAjSWZzPSA2IENmZyM9IDEgQXRyPWEwIE14
+UHdyPTg5Nm1BCj4+ID4+IEk6ICBJZiM9MHgwIEFsdD0gMCAjRVBzPSAzIENscz1mZih2ZW5kLikg
+U3ViPWZmIFByb3Q9ZmYgRHJpdmVyPXFtaV93d2FuCj4+ID4+IEk6ICBJZiM9MHgxIEFsdD0gMCAj
+RVBzPSAxIENscz0wMyhISUQgICkgU3ViPTAwIFByb3Q9MDAgRHJpdmVyPXVzYmhpZAo+PiA+PiBJ
+OiAgSWYjPTB4MiBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj0wMCBQcm90PTAwIERy
+aXZlcj1vcHRpb24KPj4gPj4gSTogIElmIz0weDMgQWx0PSAwICNFUHM9IDMgQ2xzPWZmKHZlbmQu
+KSBTdWI9MDAgUHJvdD0wMCBEcml2ZXI9b3B0aW9uCj4+ID4+IEk6ICBJZiM9MHg0IEFsdD0gMCAj
+RVBzPSAzIENscz1mZih2ZW5kLikgU3ViPTAwIFByb3Q9MDAgRHJpdmVyPW9wdGlvbgo+PiA+PiBJ
+OiAgSWYjPTB4NSBBbHQ9IDAgI0VQcz0gMiBDbHM9ZmYodmVuZC4pIFN1Yj1mZiBQcm90PWZmIERy
+aXZlcj1vcHRpb24KPgo+PiA+PiAgI2RlZmluZSBLWU9DRVJBX1ZFTkRPUl9JRAkJCTB4MGM4OAo+
+PiA+PiAgI2RlZmluZSBLWU9DRVJBX1BST0RVQ1RfS1BDNjUwCQkJMHgxN2RhCj4+ID4+IEBAIC0x
+MDYzLDYgKzEwNjUsMTAgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCB1c2JfZGV2aWNlX2lkIG9wdGlv
+bl9pZHNbXSA9IHsKPj4gPj4gIAkgIC5kcml2ZXJfaW5mbyA9IFJTVkQoMCkgfCBSU1ZEKDEpIHwg
+UlNWRCg2KSB9LAo+PiA+PiAgCXsgVVNCX0RFVklDRShERUxMX1ZFTkRPUl9JRCwgREVMTF9QUk9E
+VUNUXzU4MjFFX0VTSU0pLAo+PiA+PiAgCSAgLmRyaXZlcl9pbmZvID0gUlNWRCgwKSB8IFJTVkQo
+MSkgfCBSU1ZEKDYpIH0sCj4+ID4+ICsJeyBVU0JfREVWSUNFX0lOVEVSRkFDRV9DTEFTUyhERUxM
+X1ZFTkRPUl9JRCwgREVMTF9QUk9EVUNUXzU4MjlFLCAweGZmKSwKPj4gPj4gKwkgIC5kcml2ZXJf
+aW5mbyA9IFJTVkQoNikgfSwKPj4gPj4gKwl7IFVTQl9ERVZJQ0VfSU5URVJGQUNFX0NMQVNTKERF
+TExfVkVORE9SX0lELCBERUxMX1BST0RVQ1RfNTgyOUVfRVNJTSwgMHhmZiksCj4+ID4+ICsJICAu
+ZHJpdmVyX2luZm8gPSBSU1ZEKDYpIH0sCj4+ID4KPj4gPkl0IGxvb2tzIGxpa2UgdGhlc2UgZW50
+cmllcyB3aWxsIGNhdXNlIHRoZSBkcml2ZXIgdG8gYmluZCBhbHNvIHRvIHRoZQo+PiA+UU1JIHBv
+cnQgaG93ZXZlci4KPj4gPgo+Cj4+IEFjdHVhbGx5IG5vdCwgIGN1cnJlbnRseSBSTU5FVCBwb3J0
+IHdvdWxkIGxvYWQgdGhlIHFtaV93d2FuIGRyaXZlcgo+PiBzdWNjZXNzZnVsbHkgZXZlbiB0aGUg
+Y2xhc3Mgb2YgUU1JIGlzIGFsc28gMHhmZi4KPgo+VGhhdCdzIG5vdCBndWFyYW50ZWVkIHNvIFJN
+TkVUIG1vZGUgY291bGQgYnJlYWsgZGVwZW5kaW5nIG9uIHByb2JlCj5vcmRlciB3aXRoIHRoZSBh
+Ym92ZSBlbnRyaWVzLgo+Cj4+IERvIHlvdSBtZWFuIEkgc2hvdWxkIGFkZCBSU1ZEKDApIHRvIHJl
+ZHVjZSBjb25mdXNpb24/Cj4KPllvdSBuZWVkIHRvIHJlc2VydmUgaXQgZm9yIGNvcnJlY3RuZXNz
+IChvciByZXN0cnVjdHVyZSB0aGUgZW50cmllcyBpbgo+c29tZSBvdGhlciB3YXkgdG8gYWNoaWV2
+ZSB0aGUgc2FtZSByZXN1bHQpLgo+IApZZXMsIHNvIEkgcmUtc2VuZCBhIFYyIHZlcnNpb24gdG8g
+cmVzZXJ2ZSBpbnRlcmZhY2UgMCwxLDYuIFBsZWFzZSBoZWxwIHRha2UgYSBsb29rIG9uIHRoYXQu
+ClRoYW5rcy4KPj4gPj4gIAl7IFVTQl9ERVZJQ0UoQU5ZREFUQV9WRU5ET1JfSUQsIEFOWURBVEFf
+UFJPRFVDVF9BRFVfRTEwMEEpIH0sCS8qIEFEVS1FMTAwLCBBRFUtMzEwICovCj4+ID4+ICAJeyBV
+U0JfREVWSUNFKEFOWURBVEFfVkVORE9SX0lELCBBTllEQVRBX1BST0RVQ1RfQURVXzUwMEEpIH0s
+Cj4+ID4+ICAJeyBVU0JfREVWSUNFKEFOWURBVEFfVkVORE9SX0lELCBBTllEQVRBX1BST0RVQ1Rf
+QURVXzYyMFVXKSB9LAo+Cj5Kb2hhbgo=
