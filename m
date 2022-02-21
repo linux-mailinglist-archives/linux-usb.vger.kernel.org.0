@@ -2,96 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60344BE371
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 18:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F9D4BE070
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 18:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356472AbiBULd2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Feb 2022 06:33:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52300 "EHLO
+        id S1356652AbiBULoy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Feb 2022 06:44:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356454AbiBULd1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 06:33:27 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CB2DF35;
-        Mon, 21 Feb 2022 03:33:04 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1645443182;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DDK33/3302m/AxEjlqU7JR5WuOZd5Q+b5EdJBto11HM=;
-        b=4YWj9EREiqE/4z9lRjzJiDCe2ileZomSn6vZTDKEA8y5hupG1tPoR9ME40N7lwiDuHKnd6
-        bcQu7W7k5DaojT3yK5NmzHCUrcF1n8VlVruftElI4NfwOO8ZQPS3UnAfpZb8xa/xHf/iqP
-        i5I/K0uVgBgff9mnMZa0DYj/Kapi0TG3lgoiu+44QmimuDoQM3430lXOiok7/pUQia5GpH
-        Ylj14nB7AMUylwdSAC/roiPE0FO9S6u7A7esTSu4jHDP9twbIL+yA6N2rmuvblNGmoKJTQ
-        ZVXctRztuqb5og+i/uU7LPW3OfyMcFO7dLcu04vjiF2XKZMsKMpzgB5Ud+K9Fw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1645443182;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DDK33/3302m/AxEjlqU7JR5WuOZd5Q+b5EdJBto11HM=;
-        b=DzX8bC47wbA5MEoCl2FNLvxhuTBdRP0FKtqmoDsNab1UVrwMOS5/w3bVrPlaMJTRrjXqJy
-        jWEr89tMGCNNl/DA==
-To:     Lee Jones <lee.jones@linaro.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: Re: [PATCH v4 0/7] Provide and use generic_handle_irq_safe() where
- appropriate.
-In-Reply-To: <87a6ekleye.ffs@tglx>
-References: <20220211181500.1856198-1-bigeasy@linutronix.de>
- <Ygu6UewoPbYC9yPa@google.com> <Ygu9xtrMxxq36FRH@linutronix.de>
- <YgvD1HpN2oyalDmj@google.com> <YgvH4ROUQVgusBdA@linutronix.de>
- <YgvJ1fCUYmaV0Mbx@google.com> <87a6ekleye.ffs@tglx>
-Date:   Mon, 21 Feb 2022 12:33:02 +0100
-Message-ID: <875yp8laj5.ffs@tglx>
+        with ESMTP id S237647AbiBULov (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 06:44:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B94B62;
+        Mon, 21 Feb 2022 03:44:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3189BB810BC;
+        Mon, 21 Feb 2022 11:44:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BD5EC340E9;
+        Mon, 21 Feb 2022 11:44:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645443861;
+        bh=IBom9Eu3lVELkJ39OqeKcPJlsmG5cMU0pi2xUvG/CyQ=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=Xjidhh7aD1/P/5YPfBAyvJAtDfSaH1188oX3P7AVV2M7l8lDFKBghWpmLsjOfZqXZ
+         gAxIpA0kxLjXAbghi6N9S8CTCtfu3xJRpGe7kdV89WPFrE/+vI3nOhx2ZsjUoeWP9b
+         WjcdiqS+vq97U2Xp/KAqp2htftRO6ztm6xCVVVBIMax/LbL4IRRs3vpxOZzU1/yLRD
+         0RNrJioY6XbJ+DCa7CGqJayGSgWK8cYc3prl7SdoJhDi5OiAXzchhQ2Bfj4qk+vFfj
+         o1JYqfZ6Q+LiU1wSrg6V7TxEfA5fq3JP5dGRioRHl9U7/uIiAasKS2kvvlnReFLe8U
+         gCJ+Lf8UIitTw==
+Message-ID: <2e33c00b-8460-3d85-92aa-2c3257725c2c@kernel.org>
+Date:   Mon, 21 Feb 2022 13:44:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] dt-bindings: update Roger Quadros email
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+References: <20220221100701.48593-1-krzysztof.kozlowski@canonical.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20220221100701.48593-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Lee & al!
+On 21/02/2022 12:07, Krzysztof Kozlowski wrote:
+> Emails to Roger Quadros TI account bounce with:
+>   550 Invalid recipient <rogerq@ti.com> (#5.1.1)
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-On Mon, Feb 21 2022 at 10:57, Thomas Gleixner wrote:
-> On Tue, Feb 15 2022 at 15:42, Lee Jones wrote:
->> What is your preference Thomas?
->
-> I suggest doing it the following way:
->
->  1) I apply 1/7 on top of -rc5 and tag it
+Thanks so much!
 
-That's what I did now. The tag to pull from is:
+Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> 
+> ---
+> 
+> Roger,
+> You should also add a mailmap entry for your inactive emails.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-api-2022-02-21
+OK. I will send out a patch for this. Thanks for the hint. :)
 
->  2) Driver maintainers who want to merge via their trees pull that tag
->     apply the relevant driver changes
->
->  3) I collect the leftovers and merge them via irq/core
+cheers,
+-roger
 
-So everyone who wants to merge the relevant driver changes, please pull
-and let me know which driver patch(es) you merged. I'll pick up the
-leftovers after -rc6.
-
-Thanks,
-
-        tglx
+> 
+> Best regards,
+> Krzysztof
+> ---
+>  .../devicetree/bindings/mfd/ti,j721e-system-controller.yaml     | 2 +-
+>  Documentation/devicetree/bindings/phy/ti,omap-usb2.yaml         | 2 +-
+>  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml         | 2 +-
+>  Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml     | 2 +-
+>  4 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+> index 272832e9f8f2..fa86691ebf16 100644
+> --- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+> @@ -20,7 +20,7 @@ description: |
+>  
+>  maintainers:
+>    - Kishon Vijay Abraham I <kishon@ti.com>
+> -  - Roger Quadros <rogerq@ti.com
+> +  - Roger Quadros <rogerq@kernel.org>
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/phy/ti,omap-usb2.yaml b/Documentation/devicetree/bindings/phy/ti,omap-usb2.yaml
+> index 51c8a36e61f0..8694b9eb52f9 100644
+> --- a/Documentation/devicetree/bindings/phy/ti,omap-usb2.yaml
+> +++ b/Documentation/devicetree/bindings/phy/ti,omap-usb2.yaml
+> @@ -8,7 +8,7 @@ title: OMAP USB2 PHY
+>  
+>  maintainers:
+>    - Kishon Vijay Abraham I <kishon@ti.com>
+> -  - Roger Quadros <rogerq@ti.com>
+> +  - Roger Quadros <rogerq@kernel.org>
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> index a634774c537c..eedde385d299 100644
+> --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> @@ -7,7 +7,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>  title: Bindings for the TI wrapper module for the Cadence USBSS-DRD controller
+>  
+>  maintainers:
+> -  - Roger Quadros <rogerq@ti.com>
+> +  - Roger Quadros <rogerq@kernel.org>
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml b/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
+> index f6e91a5fd8fe..4f7a212fddd3 100644
+> --- a/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: TI Keystone Soc USB Controller
+>  
+>  maintainers:
+> -  - Roger Quadros <rogerq@ti.com>
+> +  - Roger Quadros <rogerq@kernel.org>
+>  
+>  properties:
+>    compatible:
