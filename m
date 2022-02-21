@@ -2,115 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182F84BE605
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 19:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F0F4BE190
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 18:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbiBUJst (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Feb 2022 04:48:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43806 "EHLO
+        id S1351919AbiBUJym (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Feb 2022 04:54:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352873AbiBUJr7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 04:47:59 -0500
-Received: from m13114.mail.163.com (m13114.mail.163.com [220.181.13.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2107212AD1;
-        Mon, 21 Feb 2022 01:20:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=21K6b
-        QK4EXcP3BVHdL/u5JSVHo7V8smrScHkWUXOPzA=; b=iz1g4SJzVmBsTIvOgZIpG
-        BR9jPGFeHtMH5ZsqJYje0RSSzN6flZoIQ2KMl+gm+ALyOfkU0HxggVXvV4MM2hws
-        cfVjhGq31lOQd3V67F6VOKZCD03dbMDHd1K/uV5gf/vqwp+PHWMKlwYEAlrJTWiY
-        sGwnT2IP9pjcpoQCnLmEKQ=
-Received: from slark_xiao$163.com ( [112.97.59.12] ) by
- ajax-webmail-wmsvr114 (Coremail) ; Mon, 21 Feb 2022 17:20:05 +0800 (CST)
-X-Originating-IP: [112.97.59.12]
-Date:   Mon, 21 Feb 2022 17:20:05 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     "Johan Hovold" <johan@kernel.org>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re:Re: Re: [PATCH] USB: serial: option: add support for DW5829e
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <YhNWV5lXm0d7lyfL@hovoldconsulting.com>
-References: <20220209031535.9668-1-slark_xiao@163.com>
- <YgPPNVzyg7Gypzv9@hovoldconsulting.com>
- <62feaf3.248f.17ee1ac3017.Coremail.slark_xiao@163.com>
- <YhNWV5lXm0d7lyfL@hovoldconsulting.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        with ESMTP id S1352121AbiBUJwv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 04:52:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BDC369C0
+        for <linux-usb@vger.kernel.org>; Mon, 21 Feb 2022 01:23:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3522B80EBA
+        for <linux-usb@vger.kernel.org>; Mon, 21 Feb 2022 09:23:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97521C340FB;
+        Mon, 21 Feb 2022 09:23:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645435395;
+        bh=GBXlz6C4MFXKmAKwLpDwWCjQ5X7yqCSN2uGtA2Tvmls=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GZSgE99SirUnJ0AdVuaZemkOsTxiSOiCoGJfetlCHSC/byT+9e/WcJPX6xIzNGbTj
+         Jj3NZMxOyd/qUjvEuzuuK4LRBsKZLzvlTYpkr8qeHlaVUrZ6rz/E6LjHyM+/T+zlLO
+         /Ho08cKbLw+O4zcwbJDf025MKJWWxht1Ou4wrAA22XkhnV8YXAm6XCMNHsukdOeHEc
+         tLowSDWOYNrsKMhua08usNcOiI4m4Mu+Z751NFvKqMIHQgrYW9ZsiL8Zz4/zFFH5ev
+         UutE5HhrNcz8GZKfDE/hwC9W3xz2QclrFxVKrKQISLypz7G4XX9yImOr9EH6L4B6CW
+         jyKoCniwkO/dA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nM4uW-00072m-Uj; Mon, 21 Feb 2022 10:23:13 +0100
+Date:   Mon, 21 Feb 2022 10:23:12 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Daniele Palmas <dnlplm@gmail.com>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 1/1] USB: serial: option: add Telit LE910R1 compositions
+Message-ID: <YhNaACfBD+Q1Dy9r@hovoldconsulting.com>
+References: <20220218134552.4051-1-dnlplm@gmail.com>
 MIME-Version: 1.0
-Message-ID: <14f5bdc0.3675.17f1b94b947.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: csGowADHytBGWRNi3mYUAA--.52023W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRwSuZFc7V+6LlAABsC
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218134552.4051-1-dnlplm@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjItMDItMjEgMTc6MDc6MzUsICJKb2hhbiBIb3ZvbGQiIDxq
-b2hhbkBrZXJuZWwub3JnPiB3cm90ZToKPk9uIFRodSwgRmViIDEwLCAyMDIyIGF0IDExOjI3OjQ1
-QU0gKzA4MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4+IEF0IDIwMjItMDItMDkgMjI6Mjc6MDEsICJK
-b2hhbiBIb3ZvbGQiIDxqb2hhbkBrZXJuZWwub3JnPiB3cm90ZToKPj4gPk9uIFdlZCwgRmViIDA5
-LCAyMDIyIGF0IDExOjE1OjM1QU0gKzA4MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4KPj4gPj4gRFc1
-ODI5ZSBSTU5FVCBtb2RlOgo+PiA+PiBUOiAgQnVzPTA0IExldj0wMSBQcm50PTAxIFBvcnQ9MDEg
-Q250PTAxIERldiM9ICA1IFNwZD01MDAwIE14Q2g9IDAKPj4gPj4gRDogIFZlcj0gMy4xMCBDbHM9
-ZWYobWlzYyApIFN1Yj0wMiBQcm90PTAxIE14UFM9IDkgI0NmZ3M9ICAxCj4+ID4+IFA6ICBWZW5k
-b3I9NDEzYyBQcm9kSUQ9ODFlNiBSZXY9MDMuMTgKPj4gPj4gUzogIE1hbnVmYWN0dXJlcj1EZWxs
-IEluYy4KPj4gPj4gUzogIFByb2R1Y3Q9RFc1ODI5ZSBTbmFwZHJhZ29uIFgyMCBMVEUKPj4gPj4g
-UzogIFNlcmlhbE51bWJlcj0wMTIzNDU2Nzg5QUJDREVGCj4+ID4+IEM6ICAjSWZzPSA2IENmZyM9
-IDEgQXRyPWEwIE14UHdyPTg5Nm1BCj4+ID4+IEk6ICBJZiM9MHgwIEFsdD0gMCAjRVBzPSAzIENs
-cz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYgRHJpdmVyPXFtaV93d2FuCj4+ID4+IEk6ICBJZiM9
-MHgxIEFsdD0gMCAjRVBzPSAxIENscz0wMyhISUQgICkgU3ViPTAwIFByb3Q9MDAgRHJpdmVyPXVz
-YmhpZAo+PiA+PiBJOiAgSWYjPTB4MiBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj0w
-MCBQcm90PTAwIERyaXZlcj1vcHRpb24KPj4gPj4gSTogIElmIz0weDMgQWx0PSAwICNFUHM9IDMg
-Q2xzPWZmKHZlbmQuKSBTdWI9MDAgUHJvdD0wMCBEcml2ZXI9b3B0aW9uCj4+ID4+IEk6ICBJZiM9
-MHg0IEFsdD0gMCAjRVBzPSAzIENscz1mZih2ZW5kLikgU3ViPTAwIFByb3Q9MDAgRHJpdmVyPW9w
-dGlvbgo+PiA+PiBJOiAgSWYjPTB4NSBBbHQ9IDAgI0VQcz0gMiBDbHM9ZmYodmVuZC4pIFN1Yj1m
-ZiBQcm90PWZmIERyaXZlcj1vcHRpb24KPgo+PiA+PiBEVzU4MjllLWVTSU0gUk1ORVQgbW9kZToK
-Pj4gPj4gVDogIEJ1cz0wNCBMZXY9MDEgUHJudD0wMSBQb3J0PTAxIENudD0wMSBEZXYjPSAgNyBT
-cGQ9NTAwMCBNeENoPSAwCj4+ID4+IEQ6ICBWZXI9IDMuMTAgQ2xzPWVmKG1pc2MgKSBTdWI9MDIg
-UHJvdD0wMSBNeFBTPSA5ICNDZmdzPSAgMQo+PiA+PiBQOiAgVmVuZG9yPTQxM2MgUHJvZElEPTgx
-ZTQgUmV2PTAzLjE4Cj4+ID4+IFM6ICBNYW51ZmFjdHVyZXI9RGVsbCBJbmMuCj4+ID4+IFM6ICBQ
-cm9kdWN0PURXNTgyOWUtZVNJTSBTbmFwZHJhZ29uIFgyMCBMVEUKPj4gPj4gUzogIFNlcmlhbE51
-bWJlcj0wMTIzNDU2Nzg5QUJDREVGCj4+ID4+IEM6ICAjSWZzPSA2IENmZyM9IDEgQXRyPWEwIE14
-UHdyPTg5Nm1BCj4+ID4+IEk6ICBJZiM9MHgwIEFsdD0gMCAjRVBzPSAzIENscz1mZih2ZW5kLikg
-U3ViPWZmIFByb3Q9ZmYgRHJpdmVyPXFtaV93d2FuCj4+ID4+IEk6ICBJZiM9MHgxIEFsdD0gMCAj
-RVBzPSAxIENscz0wMyhISUQgICkgU3ViPTAwIFByb3Q9MDAgRHJpdmVyPXVzYmhpZAo+PiA+PiBJ
-OiAgSWYjPTB4MiBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj0wMCBQcm90PTAwIERy
-aXZlcj1vcHRpb24KPj4gPj4gSTogIElmIz0weDMgQWx0PSAwICNFUHM9IDMgQ2xzPWZmKHZlbmQu
-KSBTdWI9MDAgUHJvdD0wMCBEcml2ZXI9b3B0aW9uCj4+ID4+IEk6ICBJZiM9MHg0IEFsdD0gMCAj
-RVBzPSAzIENscz1mZih2ZW5kLikgU3ViPTAwIFByb3Q9MDAgRHJpdmVyPW9wdGlvbgo+PiA+PiBJ
-OiAgSWYjPTB4NSBBbHQ9IDAgI0VQcz0gMiBDbHM9ZmYodmVuZC4pIFN1Yj1mZiBQcm90PWZmIERy
-aXZlcj1vcHRpb24KPgo+PiA+PiAgI2RlZmluZSBLWU9DRVJBX1ZFTkRPUl9JRAkJCTB4MGM4OAo+
-PiA+PiAgI2RlZmluZSBLWU9DRVJBX1BST0RVQ1RfS1BDNjUwCQkJMHgxN2RhCj4+ID4+IEBAIC0x
-MDYzLDYgKzEwNjUsMTAgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCB1c2JfZGV2aWNlX2lkIG9wdGlv
-bl9pZHNbXSA9IHsKPj4gPj4gIAkgIC5kcml2ZXJfaW5mbyA9IFJTVkQoMCkgfCBSU1ZEKDEpIHwg
-UlNWRCg2KSB9LAo+PiA+PiAgCXsgVVNCX0RFVklDRShERUxMX1ZFTkRPUl9JRCwgREVMTF9QUk9E
-VUNUXzU4MjFFX0VTSU0pLAo+PiA+PiAgCSAgLmRyaXZlcl9pbmZvID0gUlNWRCgwKSB8IFJTVkQo
-MSkgfCBSU1ZEKDYpIH0sCj4+ID4+ICsJeyBVU0JfREVWSUNFX0lOVEVSRkFDRV9DTEFTUyhERUxM
-X1ZFTkRPUl9JRCwgREVMTF9QUk9EVUNUXzU4MjlFLCAweGZmKSwKPj4gPj4gKwkgIC5kcml2ZXJf
-aW5mbyA9IFJTVkQoNikgfSwKPj4gPj4gKwl7IFVTQl9ERVZJQ0VfSU5URVJGQUNFX0NMQVNTKERF
-TExfVkVORE9SX0lELCBERUxMX1BST0RVQ1RfNTgyOUVfRVNJTSwgMHhmZiksCj4+ID4+ICsJICAu
-ZHJpdmVyX2luZm8gPSBSU1ZEKDYpIH0sCj4+ID4KPj4gPkl0IGxvb2tzIGxpa2UgdGhlc2UgZW50
-cmllcyB3aWxsIGNhdXNlIHRoZSBkcml2ZXIgdG8gYmluZCBhbHNvIHRvIHRoZQo+PiA+UU1JIHBv
-cnQgaG93ZXZlci4KPj4gPgo+Cj4+IEFjdHVhbGx5IG5vdCwgIGN1cnJlbnRseSBSTU5FVCBwb3J0
-IHdvdWxkIGxvYWQgdGhlIHFtaV93d2FuIGRyaXZlcgo+PiBzdWNjZXNzZnVsbHkgZXZlbiB0aGUg
-Y2xhc3Mgb2YgUU1JIGlzIGFsc28gMHhmZi4KPgo+VGhhdCdzIG5vdCBndWFyYW50ZWVkIHNvIFJN
-TkVUIG1vZGUgY291bGQgYnJlYWsgZGVwZW5kaW5nIG9uIHByb2JlCj5vcmRlciB3aXRoIHRoZSBh
-Ym92ZSBlbnRyaWVzLgo+Cj4+IERvIHlvdSBtZWFuIEkgc2hvdWxkIGFkZCBSU1ZEKDApIHRvIHJl
-ZHVjZSBjb25mdXNpb24/Cj4KPllvdSBuZWVkIHRvIHJlc2VydmUgaXQgZm9yIGNvcnJlY3RuZXNz
-IChvciByZXN0cnVjdHVyZSB0aGUgZW50cmllcyBpbgo+c29tZSBvdGhlciB3YXkgdG8gYWNoaWV2
-ZSB0aGUgc2FtZSByZXN1bHQpLgo+IApZZXMsIHNvIEkgcmUtc2VuZCBhIFYyIHZlcnNpb24gdG8g
-cmVzZXJ2ZSBpbnRlcmZhY2UgMCwxLDYuIFBsZWFzZSBoZWxwIHRha2UgYSBsb29rIG9uIHRoYXQu
-ClRoYW5rcy4KPj4gPj4gIAl7IFVTQl9ERVZJQ0UoQU5ZREFUQV9WRU5ET1JfSUQsIEFOWURBVEFf
-UFJPRFVDVF9BRFVfRTEwMEEpIH0sCS8qIEFEVS1FMTAwLCBBRFUtMzEwICovCj4+ID4+ICAJeyBV
-U0JfREVWSUNFKEFOWURBVEFfVkVORE9SX0lELCBBTllEQVRBX1BST0RVQ1RfQURVXzUwMEEpIH0s
-Cj4+ID4+ICAJeyBVU0JfREVWSUNFKEFOWURBVEFfVkVORE9SX0lELCBBTllEQVRBX1BST0RVQ1Rf
-QURVXzYyMFVXKSB9LAo+Cj5Kb2hhbgo=
+On Fri, Feb 18, 2022 at 02:45:52PM +0100, Daniele Palmas wrote:
+> Add support for the following Telit LE910R1 compositions:
+> 
+> 0x701a: rndis, tty, tty, tty
+> 0x701b: ecm, tty, tty, tty
+> 0x9201: tty
+> 
+> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+
+Applied, thanks!
+
+Johan
