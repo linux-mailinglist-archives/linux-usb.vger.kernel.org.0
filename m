@@ -2,112 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394944BE045
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 18:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E67404BE74A
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 19:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357563AbiBUPK3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Feb 2022 10:10:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51954 "EHLO
+        id S1381618AbiBURUn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Feb 2022 12:20:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378840AbiBUPK3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 10:10:29 -0500
-X-Greylist: delayed 69 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Feb 2022 07:10:03 PST
-Received: from mx-relay84-hz1.antispameurope.com (mx-relay84-hz1.antispameurope.com [94.100.133.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7411A399
-        for <linux-usb@vger.kernel.org>; Mon, 21 Feb 2022 07:10:03 -0800 (PST)
-Received: from unknown ([185.80.187.2]) by mx-relay84-hz1.antispameurope.com;
- Mon, 21 Feb 2022 16:08:51 +0100
-Received: from grp-ex01.Vivavis.int (192.168.17.53) by grp-ex01.Vivavis.int
- (192.168.17.53) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Mon, 21 Feb
- 2022 16:08:44 +0100
-Received: from grp-ex01.Vivavis.int ([::1]) by grp-ex01.Vivavis.int ([::1])
- with mapi id 15.02.0986.015; Mon, 21 Feb 2022 16:08:44 +0100
-From:   "embedded (VIVAVIS AG)" <embedded@vivavis.com>
-To:     Johan Hovold <johan@kernel.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: AW: ftdi_sio: Problem when changing the baud rate after a transfer
-Thread-Topic: ftdi_sio: Problem when changing the baud rate after a transfer
-Thread-Index: AdgGJbRPj9Lxv6TJRBW2/KYX/66liQN/alhwAJMJcYAEMVYX0A==
-Date:   Mon, 21 Feb 2022 15:08:43 +0000
-Message-ID: <73e3d18172e24f6092ecb6e3998d6b9c@vivavis.com>
-References: <5aae37a8029549d8a9ef28f2e39fe58f@vivavis.com>
- <1ec54d4f592c46b7a14109df559072e4@vivavis.com>
- <YfeV6f6hnz7Cgrt/@hovoldconsulting.com>
-In-Reply-To: <YfeV6f6hnz7Cgrt/@hovoldconsulting.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.7.170]
-x-g-data-mailsecurity-for-exchange-state: 0
-x-g-data-mailsecurity-for-exchange-error: 0
-x-g-data-mailsecurity-for-exchange-sender: 23
-x-g-data-mailsecurity-for-exchange-server: 61419075-592b-4c8d-b7a0-bf1d145a8b8e
-x-c2processedorg: 2f045ba3-9b34-4118-a5bd-6c10d5957477
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S1381608AbiBURUl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 12:20:41 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206D5C5E;
+        Mon, 21 Feb 2022 09:20:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645464018; x=1677000018;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=d5MBD6jseNDfERr7Px+b+BKh2csyDhPOjHVWEWXUWp0=;
+  b=PMNt1bh2YdTAgOcfTGN5Higc428uAc7YoEcSlhJaAsU55sUBY76cEALN
+   fo2/VUyJh3jokrQYzihp4YW7CRNx5hPC81Huv/LjDCj39F3A8asExt2B0
+   /4CkL5Oj9U/iPOUTu7pcb2GIkP33Ph6zX5nVDfPV+06s73FO6D9XOs0zD
+   CICNNTPSmktZ4vZr/50bGrCqFAMyD7TaBjyTPPdIrtJRXQxSjfgwbBgpW
+   p+krrkk2tfID6lJNqambxdWUBJwD2k0Trdu1YVeLAeU17UVkoxi9dtRl7
+   V5hRHbBakNDrQvEpxh3snDAkI79dQCLRgWt2ZRJYCXAdRfhKOdzV/6WJl
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="251729331"
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="251729331"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 09:20:17 -0800
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="490502556"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 09:20:14 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nMCLK-006rcp-SM;
+        Mon, 21 Feb 2022 19:19:22 +0200
+Date:   Mon, 21 Feb 2022 19:19:22 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v2 1/6] device property: Helper to match multiple
+ connections
+Message-ID: <YhPJmiFSH8s94il7@smile.fi.intel.com>
+References: <20220208031944.3444-1-bjorn.andersson@linaro.org>
+ <20220208031944.3444-2-bjorn.andersson@linaro.org>
+ <YgOz6K55Oi2Si4pU@smile.fi.intel.com>
+ <Yg/s3eKB2wLEQTgY@ripper>
+ <YhIjHjMrhUpM0ucV@smile.fi.intel.com>
+ <YhMbLsvF8p/ce+mg@ripper>
 MIME-Version: 1.0
-X-cloud-security-sender: embedded@vivavis.com
-X-cloud-security-recipient: linux-usb@vger.kernel.org
-X-cloud-security-crypt: load encryption module
-X-cloud-security-Virusscan: CLEAN
-X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay84-hz1.antispameurope.com with 9EFE11724DE6
-X-cloud-security-connect: unknown[185.80.187.2], TLS=1, IP=185.80.187.2
-X-cloud-security-Digest: bba412970e2abb44c37b4e1b94158c5b
-X-cloud-security: scantime:2.192
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=vivavis.com; h=from:to
-        :cc:subject:date:message-id:references:in-reply-to:content-type
-        :content-transfer-encoding:mime-version; s=hse1; bh=v8ES2GCd1Bh5
-        oFij7K8A6Xfvh/gOg79aZKiW5tWRfZ4=; b=fiE+L9mtuCRR1bYeFOjHII2oZPYv
-        Q9M6N4c3ZH50qseWWaxiFVrHFprB9TBgyMS1X04xV8hQbVyZW84ljokhT76J67QL
-        P7LiP2r7ixOKAt1rtPYfKFn98TrkN5a+jbLFZUq2atmQz3+i2v4nOytpS4biHcj1
-        HyK5ptdXCMMvwikJ01G9mJy0CxRbdi4uoYbPjgpNPdNm0Gv75+Bsg2vg1W83B/Sh
-        6+YlqWiiEtQxdCVD5/4m4aJWIkty70Ej1nDALWtp1UKpYEHvA3ZaQWOBevqemsGn
-        z4uo3Ng+6NijVzgKRgK8MfDhQj/+h2U5vDN4vSJzTUaZFDClPRZAyF0ZsA==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhMbLsvF8p/ce+mg@ripper>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-thanks for the suggestion.
+On Sun, Feb 20, 2022 at 08:55:10PM -0800, Bjorn Andersson wrote:
+> On Sun 20 Feb 03:16 PST 2022, Andy Shevchenko wrote:
+> > On Fri, Feb 18, 2022 at 11:00:45AM -0800, Bjorn Andersson wrote:
+> > > On Wed 09 Feb 04:30 PST 2022, Andy Shevchenko wrote:
+> > > > On Mon, Feb 07, 2022 at 07:19:39PM -0800, Bjorn Andersson wrote:
 
-> > > Hi,
-> > > there seems to be a problem with the ftdi_sio driver in conjunction=20
-> > > with an FT2232C and changing the baud rate.
-> > > This behavior is observable at least on linux 4.19.190.
->=20
-> You need to reproduce any issues you have with a more recent kernel such =
-as 5.16.
-Unfortunately, I cannot use a more recent kernel due to restrictions
-with the development environment I am using. I did compare the code of
-the ftdi_sio driver in version 4.19.190 with code included in a more
-recent kernel release. I did not spot any fundamental changes that would
-suggest that the problem was fixed.
+...
 
-> > > I verified that the driver does in fact ask the hardware if it's tx=20
-> > > buffer is empty when the hardware status is reported.
->=20
-> How exactly did you verify that?
-I checked the code of the ftdi_sio driver, which captures the state of
-the tx empty flag that is reported by the IC every time a specific USB
-message is sent to it.
+> > > > > +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
+> > > > > +				   const char *con_id, void *data,
+> > > > > +				   devcon_match_fn_t match,
+> > > > > +				   void **matches, unsigned int matches_len)
+> > > > > +{
+> > > > > +	unsigned int count;
+> > > > > +
+> > > > > +	if (!fwnode || !match || !matches)
+> > > > 
+> > > > !matches case may be still useful to get the count and allocate memory by
+> > > > caller. Please, consider this case.
+> > > 
+> > > As discussed in previous version, and described in the commit message,
+> > > the returned value of "match" is a opaque pointer to something which
+> > > has to be passed back to the caller in order to be cleaned up.
+> > > 
+> > > E.g. the typec mux code returns a pointer to a typec_mux/switch object
+> > > with a refcounted struct device within, or an ERR_PTR().
+> > > 
+> > > So unfortunately we can must gather the results into matches and pass it
+> > > back to the caller to take consume or clean up.
+> > 
+> > It's fine. You have **matches, means pointer of an opaque pointer.
+> > What I'm talking about is memory allocation for and array of _pointers_.
+> > That's what caller very much aware of and can allocate on heap. So, please
+> > consider this case.
+> 
+> I'm sorry, but I'm not sure what you're looking for.
+> 
+> 
+> I still interpret your comment as that it would be nice to be able to do
+> something like:
+> 
+> count = fwnode_connection_find_matches(fwnode, "orientation-switch",
+> 				       NULL, typec_switch_match, NULL, 0);
+> 
+> based on the returned value the caller could allocate an array of
+> "count" pointers and then call the function again to actually fill out
+> the count elements.
 
-> Unless you use TCSADRAIN (or TCSAFLUSH) the driver is not supposed to wai=
-t for the outgoing buffer to drain.
->=20
-> Please confirm if changing this fixes the problem you're seeing.
-I can still observe the same behavior, even after changing the calls
-to tcsetattr to use TCSADRAIN instead of TCSANOW. The last byte of a
-transfer is still being shifted out with the wrong baud rate.
-Is there anything else that can be done in software to possibly prevent thi=
-s behavior?
+Yes, that's what I want from the generic fwnode APIs.
+(Keyword: generic)
 
-Thanks and regards,
-Yasin Morsli
+> The problem with this is that, typec_switch_match() does:
+
+As you stated, the problem is in the typec_switch_match(). So, it's not related
+to the fwnode, but how you are using it.
+
+> void *typec_switch_match(fwnode, id, data) {
+> 	struct device *dev = find_struct_device(fwnode, id);
+> 	if (!dev)
+> 		return NULL;
+> 	get_device(dev);
+> 	return container_of(dev, struct typec_switch, dev);
+> }
+> 
+> So if we call the match function and if that finds a "dev" it will
+> return a struct typec_switch with a refcounted struct device within.
+
+fwnode (as being an abstraction on top of the others) has no knowledge
+about this. And more important should not know that.
+
+> We can see if that's NULL or not and will be able to return a "count",
+> but we have no way of releasing the reference acquired - we must return
+> the void pointer back to the client, so that it can release it.
+
+The caller (if it wants to!) may create different callbacks for count and real
+matching, no?
+
+> My claim is that this is not a problem, because this works fine with any
+> reasonable size of fwnode graphs we might run into - and the client will
+> in general have a sense of the worst case number of matches (in this
+> series its 3, as there's 3 types of lanes that can be switched/muxed
+> coming out of a USB connector).
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
