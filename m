@@ -2,82 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38D94BD172
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Feb 2022 21:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E4BA4BD4DE
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 05:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232742AbiBTU13 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Feb 2022 15:27:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35108 "EHLO
+        id S1344070AbiBUExe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Feb 2022 23:53:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233790AbiBTU11 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Feb 2022 15:27:27 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E661240A03
-        for <linux-usb@vger.kernel.org>; Sun, 20 Feb 2022 12:27:05 -0800 (PST)
-Received: from localhost.localdomain (ip-213-127-118-180.ip.prioritytelecom.net [213.127.118.180])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 4431CC83D7;
-        Sun, 20 Feb 2022 20:19:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1645388382; bh=9OYW+loB/KxKEKTnZd3UPEzKjUF84vAHUmN4R1cjTM4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=podZpP85tJRH5OaCLS4HsiDyF51UEMQXVapBD6G5t+x/YG0YIQtEJYYksfse58iMp
-         oEWpCnvZWfx1iez5flU0UuhsH8FmyZRnrbynxR+cp0EtHJC77TE5PzSWZZYTa8FB5N
-         BzcO4MkxEDGCiYAk3I8/uDJBmx4GDm6YGblqSdF0=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Manu Gautam <mgautam@codeaurora.org>,
+        with ESMTP id S1344060AbiBUExd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Feb 2022 23:53:33 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B010517EF
+        for <linux-usb@vger.kernel.org>; Sun, 20 Feb 2022 20:53:09 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id z7so6652805oid.4
+        for <linux-usb@vger.kernel.org>; Sun, 20 Feb 2022 20:53:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=U9guWiEcPMV7PWzSzfcCTMB5YDev3KLGmnMGaqiDx+0=;
+        b=rx94dO90CjQ8ANnCwpTq4fW8qzvkh1TM5mwcJUm3S0DciuQfHg+tqccg/KMa76WVaX
+         fgcht9DjQJ6KMnTI1S9evOQih/k0sq8/dCMvFyzQS8jTZ6pEDLVOs3vcTTR2wT4vTIxT
+         X+yrVpOtyrb0TJxrYaKMLtChBmwwunPx53xjZBCfNZ2d7NR9jkRUF0tpwugsDMytNsmr
+         GxB97w2U1aXNbZGswcEm6L1Cs9eIn0oVpfydKaHVtBHdJyIgTcy2FEarX2wIfPbPl+Rq
+         JqIPq995H7n+0/IAmORhljAcPae/VaARwqRl5E0t8jmBsjtVlPHZCr4Tw0zmvb2mhVgL
+         hMQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U9guWiEcPMV7PWzSzfcCTMB5YDev3KLGmnMGaqiDx+0=;
+        b=t+WmGYEmbcqCSnd722htPn8GEDPa2D3bQQFtf2tBCyUcLkFIClIc7YpCio/JREk9vo
+         50R4tLacbcC1wlr4sm5oaArTe8452k/tIk061skfLq69sjSFYhEHDBxyGt3ND1JrsiKK
+         iljkgwh2VruBSTsc+uyYTknNuUlBKk9Upcx6aMb2v8H/09mJUjqC4RsNY0Tp++Wlbw1G
+         b7u8o78KLygMm4TCySZWxh8ZJkylcsGGUjc6gour7icrlg2u9h80FiaIZ9JbqvBWePQl
+         jHXCfhvlhWHnl/lxFdGgUChZ9mwk4XnEo7mnguTPjI5zlM0dFvlO5D/L3yvKzDDXG3ks
+         siDQ==
+X-Gm-Message-State: AOAM531r5z4POe94NyHzVa+ZmREaaE4EL4jSo4COFQzU/DiZB7Q8q/kc
+        J2XzbgQGSZyvQkFZ/27vgH9Jng==
+X-Google-Smtp-Source: ABdhPJwLpaRqy77tse+QFPujJ1+fkFgfK7d1zSVnK9L9wQyNlSWzfzxJ4NBsuc5FdSiTPDSTr6TCCA==
+X-Received: by 2002:aca:368a:0:b0:2d3:fc60:937f with SMTP id d132-20020aca368a000000b002d3fc60937fmr9426236oia.182.1645419188539;
+        Sun, 20 Feb 2022 20:53:08 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id w4sm4405549oor.30.2022.02.20.20.53.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Feb 2022 20:53:08 -0800 (PST)
+Date:   Sun, 20 Feb 2022 20:55:10 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 03/10] dt-bindings: usb: qcom,dwc3: Add msm8953 compatible
-Date:   Sun, 20 Feb 2022 21:18:56 +0100
-Message-Id: <20220220201909.445468-4-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220220201909.445468-1-luca@z3ntu.xyz>
-References: <20220220201909.445468-1-luca@z3ntu.xyz>
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v2 1/6] device property: Helper to match multiple
+ connections
+Message-ID: <YhMbLsvF8p/ce+mg@ripper>
+References: <20220208031944.3444-1-bjorn.andersson@linaro.org>
+ <20220208031944.3444-2-bjorn.andersson@linaro.org>
+ <YgOz6K55Oi2Si4pU@smile.fi.intel.com>
+ <Yg/s3eKB2wLEQTgY@ripper>
+ <YhIjHjMrhUpM0ucV@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhIjHjMrhUpM0ucV@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Document the compatible string for the DWC3 controller in msm8953.
+On Sun 20 Feb 03:16 PST 2022, Andy Shevchenko wrote:
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Acked-by: Rob Herring <robh@kernel.org>
----
-Changes in v2:
-- no changes
+> On Fri, Feb 18, 2022 at 11:00:45AM -0800, Bjorn Andersson wrote:
+> > On Wed 09 Feb 04:30 PST 2022, Andy Shevchenko wrote:
+> > > On Mon, Feb 07, 2022 at 07:19:39PM -0800, Bjorn Andersson wrote:
+> 
+> ...
+> 
+> > > > +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
+> > > > +				   const char *con_id, void *data,
+> > > > +				   devcon_match_fn_t match,
+> > > > +				   void **matches, unsigned int matches_len)
+> > > > +{
+> > > > +	unsigned int count;
+> > > > +
+> > > > +	if (!fwnode || !match || !matches)
+> > > 
+> > > !matches case may be still useful to get the count and allocate memory by
+> > > caller. Please, consider this case.
+> > > 
+> > 
+> > As discussed in previous version, and described in the commit message,
+> > the returned value of "match" is a opaque pointer to something which
+> > has to be passed back to the caller in order to be cleaned up.
+> > 
+> > E.g. the typec mux code returns a pointer to a typec_mux/switch object
+> > with a refcounted struct device within, or an ERR_PTR().
+> > 
+> > So unfortunately we can must gather the results into matches and pass it
+> > back to the caller to take consume or clean up.
+> 
+> 
+> It's fine. You have **matches, means pointer of an opaque pointer.
+> What I'm talking about is memory allocation for and array of _pointers_.
+> That's what caller very much aware of and can allocate on heap. So, please
+> consider this case.
+> 
 
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
- 1 file changed, 1 insertion(+)
+I'm sorry, but I'm not sure what you're looking for.
 
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index 2d23a4ff702f..ce252db2aab3 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -16,6 +16,7 @@ properties:
-           - qcom,ipq4019-dwc3
-           - qcom,ipq6018-dwc3
-           - qcom,ipq8064-dwc3
-+          - qcom,msm8953-dwc3
-           - qcom,msm8996-dwc3
-           - qcom,msm8998-dwc3
-           - qcom,sc7180-dwc3
--- 
-2.35.1
 
+I still interpret your comment as that it would be nice to be able to do
+something like:
+
+count = fwnode_connection_find_matches(fwnode, "orientation-switch",
+				       NULL, typec_switch_match, NULL, 0);
+
+based on the returned value the caller could allocate an array of
+"count" pointers and then call the function again to actually fill out
+the count elements.
+
+
+The problem with this is that, typec_switch_match() does:
+
+void *typec_switch_match(fwnode, id, data) {
+	struct device *dev = find_struct_device(fwnode, id);
+	if (!dev)
+		return NULL;
+	get_device(dev);
+	return container_of(dev, struct typec_switch, dev);
+}
+
+So if we call the match function and if that finds a "dev" it will
+return a struct typec_switch with a refcounted struct device within.
+
+We can see if that's NULL or not and will be able to return a "count",
+but we have no way of releasing the reference acquired - we must return
+the void pointer back to the client, so that it can release it.
+
+
+My claim is that this is not a problem, because this works fine with any
+reasonable size of fwnode graphs we might run into - and the client will
+in general have a sense of the worst case number of matches (in this
+series its 3, as there's 3 types of lanes that can be switched/muxed
+coming out of a USB connector).
+
+
+But that's perhaps not what you're referring to? Or perhaps I'm missing
+something else?
+
+Regards,
+Bjorn
