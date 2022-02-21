@@ -2,185 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015BC4BD6E3
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 08:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10BC64BD7CC
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 09:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345892AbiBUHHD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Feb 2022 02:07:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50984 "EHLO
+        id S243060AbiBUIXC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Feb 2022 03:23:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345854AbiBUHHA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 02:07:00 -0500
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B971D624C
-        for <linux-usb@vger.kernel.org>; Sun, 20 Feb 2022 23:06:33 -0800 (PST)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220221070624euoutp0135b372526b6c742ec3e29f436a320fce~Vu06HKk-k1195111951euoutp01h
-        for <linux-usb@vger.kernel.org>; Mon, 21 Feb 2022 07:06:24 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220221070624euoutp0135b372526b6c742ec3e29f436a320fce~Vu06HKk-k1195111951euoutp01h
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1645427184;
-        bh=0dH+tWf9bUEYBNi19OrTLWtCpcSKrJmFASt/PVSIL5c=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=ERxIMgNG11aaHmxtiKD1JEmFz8vDl1EdFVIEB+7Cbw2CRezo34SRU58qhzJqJHyJA
-         Zo7rNjc64w9jFzFQ9jJ7XHHMMBiMUwNX81u/2BKh+3UhybxKp4dotYAJIFbRLUrbu9
-         5MIruT0f+lSwHOCDxON9Jk11WvQDQSWxq7bQh+OA=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220221070624eucas1p14fdd434ade459fa67b96ea5880d3e73c~Vu05w-wjv3227832278eucas1p1d;
-        Mon, 21 Feb 2022 07:06:24 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id AE.2A.10009.2F933126; Mon, 21
-        Feb 2022 07:06:26 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220221070624eucas1p1f57ff155fbfc8d41c315fcaf9dec2a12~Vu05Yt4Bp0574605746eucas1p1-;
-        Mon, 21 Feb 2022 07:06:24 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220221070624eusmtrp18a084bb0bc33c08f7ca660e772c5fc95~Vu05XyQNu1904719047eusmtrp1M;
-        Mon, 21 Feb 2022 07:06:24 +0000 (GMT)
-X-AuditID: cbfec7f2-e7fff70000002719-c9-621339f29017
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id F5.D5.09404.2F933126; Mon, 21
-        Feb 2022 07:06:26 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220221070623eusmtip1456d4f670842c2d0bf6597c92059a222~Vu04jx8__0702807028eusmtip1d;
-        Mon, 21 Feb 2022 07:06:23 +0000 (GMT)
-Message-ID: <37eade3b-ad3e-7f89-aae1-8376b8f9e172@samsung.com>
-Date:   Mon, 21 Feb 2022 08:06:25 +0100
+        with ESMTP id S242676AbiBUIXA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 03:23:00 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91D3E6D
+        for <linux-usb@vger.kernel.org>; Mon, 21 Feb 2022 00:22:34 -0800 (PST)
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id AA3C63F4B4
+        for <linux-usb@vger.kernel.org>; Mon, 21 Feb 2022 08:22:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645431753;
+        bh=hlIj3vhV71SSbB5w21H5u6H9YDo8YKgOZoNaxfo50oc=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=tWuQMxuDLtOko3MVlZFpEAluxgt4GdeT8Hxbp7mNL6TwPjkG9p1wzQOs8a0ndnXZU
+         deFoH2rBYOcMtLeiFTl54NX3ZnR1v9qY8SZVX8rI2Fi4JpCCrBWEydIUJD7aS9in9i
+         t34tHGWaxP8vfncI8rfPDaAhSQMZq2tRT7pxdARCjnYdd1u7tJMJjdAS/jdv0Fb9al
+         EXA1xmEyr6mS2PEc1SJx9AglT21Zc708Xc4y9ViYQm6ukUwbmAHQ+jYXwh69Y3vC2D
+         oAy6vsUVLdI+moRkr5WqJmhk8hijbytmZToTA3YbQby/baDPolTKwTibNehfrwjSxx
+         9Oe7/TrHTosEg==
+Received: by mail-wr1-f69.google.com with SMTP id u9-20020adfae49000000b001e89793bcb0so5588573wrd.17
+        for <linux-usb@vger.kernel.org>; Mon, 21 Feb 2022 00:22:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hlIj3vhV71SSbB5w21H5u6H9YDo8YKgOZoNaxfo50oc=;
+        b=ZuJYOFY89hScQq1xtKBCbA9OzCL9RiUU3wOO4F3tLjmY2CE8sEgCVEGq9taxTU5yq1
+         PnNCrj3eBqztdC0+xlqXYKARCJVHibUTMD1/VM5tLRZMipV0JYrvItpgM7ZsNrSxD5p+
+         k297MDrA8DLqNFSz1gL86TI7saYXNjuNc/+yhb4sgWk1xKgS/Luq6j0amrsSxGf/9lTv
+         owUZOrcJdWsJAL0wRUiT428h7D54yCHAvaoDfXVTp6rSQIEsf2p0XO5nJncvwEeaRV7Z
+         fFe0AKpE2xohZUJffva7ZAkHN3ncO8VPSugSrsK1/qHnDAEFoCJAJhgzUsJrXxOsw2kz
+         rutg==
+X-Gm-Message-State: AOAM532MwTXsyud7z5TFgTkjDIcrJh0qJ+LOOyfTJoAQlubfbWLCLD+x
+        bDgmpvd/qqsCl/G5umZpePYzDQslhyTgrfkRFDdP92+zxWPk+Oy8aYfTHx8nTOo23yxGufEBZ0T
+        czxLwE293VG3ujP4pOrJgU8dqKk+sTpqbfgDmzg==
+X-Received: by 2002:a5d:64cc:0:b0:1e8:f4ad:bf85 with SMTP id f12-20020a5d64cc000000b001e8f4adbf85mr13862938wri.630.1645431753282;
+        Mon, 21 Feb 2022 00:22:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJykaiGNU5Li3aG1FyjXURj4iFwPk3GA+YI6LrQsfKHNOWgUmrUefkO9/8NaVDTBak7lyE72kw==
+X-Received: by 2002:a5d:64cc:0:b0:1e8:f4ad:bf85 with SMTP id f12-20020a5d64cc000000b001e8f4adbf85mr13862922wri.630.1645431753107;
+        Mon, 21 Feb 2022 00:22:33 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id j5-20020a05600c410500b0037bc3e4b526sm6727615wmi.7.2022.02.21.00.22.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 00:22:32 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Roger Quadros <rogerq@ti.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wei Xu <xuwei5@hisilicon.com>, David Heidelberg <david@ixit.cz>
+Subject: [PATCH 1/3] dt-bindings: vendor-prefixes: add second HiSilicon prefix
+Date:   Mon, 21 Feb 2022 09:22:26 +0100
+Message-Id: <20220221082228.34407-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH] usb: dwc3: gadget: Let the interrupt handler disable
- bottom halves.
-Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rg?= =?UTF-8?Q?ensen?= 
-        <toke@toke.dk>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgense?= =?UTF-8?Q?n?= 
-        <toke@redhat.com>, Felipe Balbi <balbi@kernel.org>,
-        linux-usb@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <Yg/YPejVQH3KkRVd@linutronix.de>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrIKsWRmVeSWpSXmKPExsWy7djPc7qfLIWTDG6+0rb48vM2u8Wxtifs
-        FtMuTmK2+HzkOJvF4oXfmC3mnG9hsXh67BG7RfPi9WwWe9q3M1s07VjBZHFhWx+rxaJlrcwW
-        xxaIWWzeNJXZ4tLhRywWW9+vYHcQ8Niy8iaTx85Zd9k9Fmwq9ei6cYnZY9OqTjaPd+fOsXvs
-        n7uG3eP9vqtsHlsOXWTz+LxJLoArissmJTUnsyy1SN8ugSvjzaEt7AV/hSr2f5nC1MB4mb+L
-        kZNDQsBEYuuKTSxdjFwcQgIrGCVezDoE5XxhlJiy4iyU85lR4ui7CywwLXdmtDFDJJYzSqz7
-        uZYVJCEk8JFRYv/yJBCbV8BOYmdPKxOIzSKgKnF401FWiLigxMmZT4AGcXCICiRJLNrmDmIK
-        C0RJPGq2B6lgFhCXuPVkPliniECGxK5lm5lAVjELHGeROLTgDtgNbAKGEl1vu9hAbE4BXYme
-        c22MEM3yEtvfzgG7TULgMKfE36U/mSGOdpG4tG46G4QtLPHq+BZ2CFtG4vTkHhaIhmZGiYfn
-        1rJDOD2MEpebZjBCVFlL3Dn3iw3kVGYBTYn1u/Qhwo4SbyfvZgYJSwjwSdx4KwhxBJ/EpG3T
-        ocK8Eh1tQhDVahKzjq+DW3vwwiXmCYxKs5BCZRaS/2cheWcWwt4FjCyrGMVTS4tz01OLDfNS
-        y/WKE3OLS/PS9ZLzczcxAlPh6X/HP+1gnPvqo94hRiYOxkOMEhzMSiK8d9iFk4R4UxIrq1KL
-        8uOLSnNSiw8xSnOwKInzJmduSBQSSE8sSc1OTS1ILYLJMnFwSjUwyapax1ydzfU/tEzRPWZX
-        xDoHi3S2PbsbXAv1xbQt2O4+WtPOe+NPqtBmrtMcObNePj2oHrPq3yfBBpdF1ztOzHu+y/bn
-        hJm7rK+XZV5Uyy3t8YlctfKb23W5TRXXu4RtlKbvfiz477+Rc+PbOqbHoYt5VL/9XCyyVdPz
-        XmV/oQ1vx0/XxEsc9W7b7iTmX65P+yehFnd2RmXzkvh3wv+8/EucYveeDP28ZJttw6EJXicn
-        Pbi17kfWlD3TcuqPfJR4fNdwpwffnv2fQpaITfYTWLGlcMYa5ucnl99eYWnruzBxySblzeZv
-        fdsiaud9WSUsx7Xw9tvtPPdPRmn/36bGmqUwPeEpm6V0Bv+k9ybOf5RYijMSDbWYi4oTAU6E
-        ZTn0AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrKIsWRmVeSWpSXmKPExsVy+t/xu7qfLIWTDObPFrb48vM2u8Wxtifs
-        FtMuTmK2+HzkOJvF4oXfmC3mnG9hsXh67BG7RfPi9WwWe9q3M1s07VjBZHFhWx+rxaJlrcwW
-        xxaIWWzeNJXZ4tLhRywWW9+vYHcQ8Niy8iaTx85Zd9k9Fmwq9ei6cYnZY9OqTjaPd+fOsXvs
-        n7uG3eP9vqtsHlsOXWTz+LxJLoArSs+mKL+0JFUhI7+4xFYp2tDCSM/Q0kLPyMRSz9DYPNbK
-        yFRJ384mJTUnsyy1SN8uQS/jzaEt7AV/hSr2f5nC1MB4mb+LkZNDQsBE4s6MNuYuRi4OIYGl
-        jBJT1zezQyRkJE5Oa2CFsIUl/lzrYoMoes8osXDZSbAiXgE7iZ09rUwgNouAqsThTUdZIeKC
-        EidnPmEBsUUFkiTWTZ8PtIGDQ1ggSuJRsz1ImFlAXOLWk/lgrSICGRKbt+9mAZnPLHCaReLL
-        u+lQFzUwSnydvAWsik3AUKLrLcgVnBycAroSPefaGCEmmUl0be2CsuUltr+dwzyBUWgWkjtm
-        IVk4C0nLLCQtCxhZVjGKpJYW56bnFhvpFSfmFpfmpesl5+duYgTG/7ZjP7fsYFz56qPeIUYm
-        DsZDjBIczEoivHfYhZOEeFMSK6tSi/Lji0pzUosPMZoCA2Mis5Rocj4wAeWVxBuaGZgamphZ
-        GphamhkrifN6FnQkCgmkJ5akZqemFqQWwfQxcXBKNTC5cQfz13A5JO2oeb30ohfjzumPO8p1
-        G/slJh00jemeWOtyR1d2N0/Tieuens3Tlscei6m5Okt3tlD9Ub0juivqxKumVQemBN2KjFXy
-        72esDPhbPt1RXUvW3GGe7J+f35anXXkkpvlR71HrkishMgp/i3NOrAlddPbq2VuXri1Z9KUz
-        5/eV6WttDbrX8C3+vOyqo1zo9833RdZFPOBtEmG+P0f8ffoZ8QrXgzMPf1/OJ7Xmf/Tzogo2
-        3fdL8+3eqwV0tLqsNJA9/OQYzylT6dPtz71NBc9y3IrcoOL1ZXfc/puaxS4vAx41/vANcmB9
-        kzotqatza8y0iZNWHGmWipuV+adyXmFtHeeh9Dn37HqUWIozEg21mIuKEwGEAU0iiAMAAA==
-X-CMS-MailID: 20220221070624eucas1p1f57ff155fbfc8d41c315fcaf9dec2a12
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220218173252eucas1p19c1191ede0e9b6af41e5f6bc6ac23fe5
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220218173252eucas1p19c1191ede0e9b6af41e5f6bc6ac23fe5
-References: <CGME20220218173252eucas1p19c1191ede0e9b6af41e5f6bc6ac23fe5@eucas1p1.samsung.com>
-        <Yg/YPejVQH3KkRVd@linutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+There are few boards DTS using "hisi,rst-syscon" property -
+undocumented "hisi" prefix.  The property will not be changed in DTS to
+non-deprecated one, because of compatibility reasons.  Add deprecated
+"hisi" prefix to silence DT schema warnings.
 
-On 18.02.2022 18:32, Sebastian Andrzej Siewior wrote:
-> The interrupt service routine registered for the gadget is a primary
-> handler which mask the interrupt source and a threaded handler which
-> handles the source of the interrupt. Since the threaded handler is
-> voluntary threaded, the IRQ-core does not disable bottom halves before
-> invoke the handler like it does for the forced-threaded handler.
->
-> Due to changes in networking it became visible that a network gadget's
-> completions handler may schedule a softirq which remains unprocessed.
-> The gadget's completion handler is usually invoked either in hard-IRQ or
-> soft-IRQ context. In this context it is enough to just raise the softirq
-> because the softirq itself will be handled once that context is left.
-> In the case of the voluntary threaded handler, there is nothing that
-> will process pending softirqs. Which means it remain queued until
-> another random interrupt (on this CPU) fires and handles it on its exit
-> path or another thread locks and unlocks a lock with the bh suffix.
-> Worst case is that the CPU goes idle and the NOHZ complains about
-> unhandled softirqs.
->
-> Disable bottom halves before acquiring the lock (and disabling
-> interrupts) and enable them after dropping the lock. This ensures that
-> any pending softirqs will handled right away.
->
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Link: https://lkml.kernel.org/r/c2a64979-73d1-2c22-e048-c275c9f81558@samsung.com
-> Fixes: e5f68b4a3e7b0 ("Revert "usb: dwc3: gadget: remove unnecessary _irqsave()"")
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
->   drivers/usb/dwc3/gadget.c | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 183b90923f51b..a0c883f19a417 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -4160,9 +4160,11 @@ static irqreturn_t dwc3_thread_interrupt(int irq, void *_evt)
->   	unsigned long flags;
->   	irqreturn_t ret = IRQ_NONE;
->   
-> +	local_bh_disable();
->   	spin_lock_irqsave(&dwc->lock, flags);
->   	ret = dwc3_process_event_buf(evt);
->   	spin_unlock_irqrestore(&dwc->lock, flags);
-> +	local_bh_enable();
->   
->   	return ret;
->   }
+Cc: Wei Xu <xuwei5@hisilicon.com>
+Cc: David Heidelberg <david@ixit.cz>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Best regards
+---
+
+See:
+https://lore.kernel.org/all/61AF1E3B.5060706@hisilicon.com/
+https://www.spinics.net/lists/arm-kernel/msg887577.html
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index ebe294516937..79a172eaaaee 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -505,6 +505,9 @@ patternProperties:
+     description: Himax Technologies, Inc.
+   "^hirschmann,.*":
+     description: Hirschmann Automation and Control GmbH
++  "^hisi,.*":
++    description: HiSilicon Limited (deprecated, use hisilicon)
++    deprecated: true
+   "^hisilicon,.*":
+     description: HiSilicon Limited.
+   "^hit,.*":
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.32.0
 
