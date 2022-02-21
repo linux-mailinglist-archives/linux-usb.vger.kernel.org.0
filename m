@@ -2,96 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2132B4BDD70
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 18:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 910804BE2B2
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 18:55:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354709AbiBUKXu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Feb 2022 05:23:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56048 "EHLO
+        id S1355144AbiBUKgY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Feb 2022 05:36:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354666AbiBUKXL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 05:23:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2684E60AA8;
-        Mon, 21 Feb 2022 01:43:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A45CB611DF;
-        Mon, 21 Feb 2022 09:43:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B612C340E9;
-        Mon, 21 Feb 2022 09:43:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645436585;
-        bh=8T3rysmCgKhyEMuBv35XJTIZyAHXxJuTW7V46yHSUCE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mU6czVroTn5L8wCZ2EbeWasitEeMgRoNiRni5rHEl9Z9hUMaykW1QndZ9aBDmV1tw
-         yJB+Md8nlmPUjJocgl8MzXBO/zhziaBvg++WM9aVnE6MFKDiAjc7Vl6bWVF1F6g4b0
-         6JemQ59+8bV2hgsXy9ncO0dJfRrzzY5uSXFzESRTccc0cuYGrmu+lzeItE9BoxFr3d
-         F4DGYx+W3B6XEsOy/Rtgsv7vapdg80NFROwjKMc9BRYPa/QrDyBWoqfcJG0dEct92B
-         pERWMi4B8jGh2cH1PsYhxHIlkLLEc631Ny2WU1tO2kYtuu90/oYc49QM1bju7gZgol
-         2lFIUW9LjHOrw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nM5Di-0007Ai-DT; Mon, 21 Feb 2022 10:43:02 +0100
-Date:   Mon, 21 Feb 2022 10:43:02 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Re: Re: [PATCH] USB: serial: option: add support for DW5829e
-Message-ID: <YhNepjwXJQH+Koof@hovoldconsulting.com>
-References: <20220209031535.9668-1-slark_xiao@163.com>
- <YgPPNVzyg7Gypzv9@hovoldconsulting.com>
- <62feaf3.248f.17ee1ac3017.Coremail.slark_xiao@163.com>
- <YhNWV5lXm0d7lyfL@hovoldconsulting.com>
- <14f5bdc0.3675.17f1b94b947.Coremail.slark_xiao@163.com>
+        with ESMTP id S1355182AbiBUKf7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 05:35:59 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1191140EF;
+        Mon, 21 Feb 2022 01:57:32 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1645437450;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CbvypUV4PljgvnNET61NtCqtxN9TG2dxR/pcJjN8TKk=;
+        b=Z1PtO3+o0SylAySoCVISwmJoQ/VDToBIk/QWBbSsyPUPxvKz4lEmz/FtewIfJxUP1WFSgX
+        CkPsHINPU/jaMa09H51sIvO35dc7q6pgc+CLG/k14SsmA9PDo0wDmvtM2ejAXjdfL4C/6c
+        Q66kJqhzEMb0cY1wnZPkgBQ7+t4LcIZwAT7aMaSY8qYLeWGYlMrLPufSNep14AgxtCOmiR
+        EIMwZ8zVAFh4lWS0wPv/IT7833I40UFZIJ6KPlh6GpS1sEKf+LGHXVOvkDI7Dww4Vk0tRy
+        6hPW2W5UPBPLteNTnx+gu78G6NU3TiQ7b2fAaD/Bjm1XtACv4i4WSg7JhQaIZg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1645437450;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CbvypUV4PljgvnNET61NtCqtxN9TG2dxR/pcJjN8TKk=;
+        b=y78lXjA5DpGSvbgDzZAMDOKwtFxAoVIuHQELT/smmXEPXBj9QptRh1I2zqMkiPUhfbxDSR
+        ux63licBrEo4dvCQ==
+To:     Lee Jones <lee.jones@linaro.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>
+Subject: Re: [PATCH v4 0/7] Provide and use generic_handle_irq_safe() where
+ appropriate.
+In-Reply-To: <YgvJ1fCUYmaV0Mbx@google.com>
+References: <20220211181500.1856198-1-bigeasy@linutronix.de>
+ <Ygu6UewoPbYC9yPa@google.com> <Ygu9xtrMxxq36FRH@linutronix.de>
+ <YgvD1HpN2oyalDmj@google.com> <YgvH4ROUQVgusBdA@linutronix.de>
+ <YgvJ1fCUYmaV0Mbx@google.com>
+Date:   Mon, 21 Feb 2022 10:57:29 +0100
+Message-ID: <87a6ekleye.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <14f5bdc0.3675.17f1b94b947.Coremail.slark_xiao@163.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 05:20:05PM +0800, Slark Xiao wrote:
+Lee,
 
- >> >> @@ -1063,6 +1065,10 @@ static const struct usb_device_id option_ids[] = {
-> >> >>  	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
-> >> >>  	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5821E_ESIM),
-> >> >>  	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
-> >> >> +	{ USB_DEVICE_INTERFACE_CLASS(DELL_VENDOR_ID, DELL_PRODUCT_5829E, 0xff),
-> >> >> +	  .driver_info = RSVD(6) },
-> >> >> +	{ USB_DEVICE_INTERFACE_CLASS(DELL_VENDOR_ID, DELL_PRODUCT_5829E_ESIM, 0xff),
-> >> >> +	  .driver_info = RSVD(6) },
-> >> >
-> >> >It looks like these entries will cause the driver to bind also to the
-> >> >QMI port however.
-> >> >
-> >
-> >> Actually not,  currently RMNET port would load the qmi_wwan driver
-> >> successfully even the class of QMI is also 0xff.
-> >
-> >That's not guaranteed so RMNET mode could break depending on probe
-> >order with the above entries.
-> >
-> >> Do you mean I should add RSVD(0) to reduce confusion?
-> >
-> >You need to reserve it for correctness (or restructure the entries in
-> >some other way to achieve the same result).
-> > 
-> Yes, so I re-send a V2 version to reserve interface 0,1,6. Please help take a look on that.
+On Tue, Feb 15 2022 at 15:42, Lee Jones wrote:
+> On Tue, 15 Feb 2022, Sebastian Andrzej Siewior wrote:
+>> Either way it remains bisect-able since each driver is changed
+>> individually. There is no need to merge them in one go but since it is
+>> that small it probably makes sense. But I don't do the logistics here.
+>
+> Okay, this is what I was asking.
+>
+> So there aren't any hard dependencies between the driver changes?
+>
+> Only the drivers are dependent on the API.
 
-There's no need to reserve interface 1 since it's not vendor class in
-any configuration. I've already fixed up and applied your v2.
+Correct.
 
-Also, in the future, please make sure to wrap the lines of your mails at
-72 column or so.
+> So, if we choose to do so, we can merge the API and then subsequently
+> add the users one by one into their respective subsystem, in any
+> order.  This would save on creating an immutable topic branch which we
+> all pull from.
+>
+> What is your preference Thomas?
 
-Johan
+I suggest doing it the following way:
+
+ 1) I apply 1/7 on top of -rc5 and tag it
+
+ 2) Driver maintainers who want to merge via their trees pull that tag
+    apply the relevant driver changes
+
+ 3) I collect the leftovers and merge them via irq/core
+
+Does that make sense?
+
+Thanks,
+
+        tglx
