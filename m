@@ -2,181 +2,260 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B075D4BEB08
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 20:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A044BEA78
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 20:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbiBUTG6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Feb 2022 14:06:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40704 "EHLO
+        id S232950AbiBUTVP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Feb 2022 14:21:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232607AbiBUTGv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 14:06:51 -0500
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7357713D0B
-        for <linux-usb@vger.kernel.org>; Mon, 21 Feb 2022 11:06:27 -0800 (PST)
-Received: by mail-oo1-xc33.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso14421346ooi.1
-        for <linux-usb@vger.kernel.org>; Mon, 21 Feb 2022 11:06:27 -0800 (PST)
+        with ESMTP id S229596AbiBUTVM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 14:21:12 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9796B65BA;
+        Mon, 21 Feb 2022 11:20:48 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id ay3so4834216plb.1;
+        Mon, 21 Feb 2022 11:20:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mKYaMuXCaSDbgjwH5cDbyrb4SD5Y9F+pgT6HwHOAhw4=;
-        b=UayZoVpBKx73lHes9iSu/MRvaEOhZYEQ0s336NxWMNl0hTE8xxqgGUfeNvZRpbJdno
-         bOXRl6PkW8QImlSkKym03EpeC3YUqykYUDzXJEAjDMnB7u6ql+oPbHK9HEsdVwtY/+C/
-         nmuUkEiG2Sl3O+QCGNRlSv3D/YOZKHwFp6gT5CNkRsSapZG88rQf7n6cwMhEw/em7yHn
-         tP6rxY2fRy05sFM6IvlXbTZRYrjvqNN6/WHXbLLxKES1yx+79e8gfw9mp/jIgZeDAFZV
-         xBs2Ud8HzCJrTLNVQ1+x/cMlh8ji2v4uhcUQHMGrv+jYpYKwGMCo4jD4zxHD8X1dwqjB
-         z7IQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PmMzc3Va1w+KOBN2YdFqKkIyR6yiUL/sLdp9Unbsylo=;
+        b=f0xildKewdHi4utTJZUwE8qCDIi54z0LidIMmFtBlNw+NrmMGGagzGP9Rch76Eh1Ay
+         jHUL0z8nt1yZbadIO4YpR2nHR8X/xK4kZtP1/zxrqLcmBUbp0dwQXHjsrtfwESOAYar4
+         bUet/s+X2rcg4y7effLxUpg77gq7xqIbflbFE1acJw+mCvbe8+rt3va+NIFvzgj/OEHL
+         jxSFKgxvWLly3Kq9rtLpEM9khIFTfoERC/3ikqMNfGLJyPjPXBrsThNFuZaG9HtDPJ87
+         VbIbvGLDSJeSC5ua8ByBOzsTOfmZfKFxGSOdt7UBg4cWwpNVY4OBRVAouqw+zszDhBO3
+         vWfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mKYaMuXCaSDbgjwH5cDbyrb4SD5Y9F+pgT6HwHOAhw4=;
-        b=M/NeHuT3LDPk+A4M8BAd3s14Cqs4W3D8hkTwxXKdOI5PIsRb3a6CxGHlDIFPnMkV5V
-         xwIurNMwx3aNlmWOx+Y7bQLGhM9/xDhdJ4ZhkJxzhpM3Evlj9Br8g6B9YYueDm4c6Sqw
-         w5hayXbH4lM7H9KvhMBU5W/iob6rbyCjspbaVPYt2UIkc9t/NtIfRhxF0VGHJMnP/RZW
-         WDQouwlkm5U5hV4vs58ooBpsDgGl1P6eDY7I3wqKU7omPJXwpCFr4+bGh8bMBnhSVLBR
-         3T+7HQoprqBmjclQ+lCxe8n0n7IBqCAuDCwYwoX13ta4ioS5AA9fagDTqcCoAD0wfgl5
-         w73A==
-X-Gm-Message-State: AOAM531Copv3r69AUpLoK8etHuSddFJW0T+tEOWewwU8W0nSgIRBUDUQ
-        9e9sYlAD788i8hBnSIvGgAObVA==
-X-Google-Smtp-Source: ABdhPJxZkhpfXyfMIR6pZATfsUiV6WfNFnMWVkBrVLoHBjm225+ktGOVREx1Vzzq++JUcijZyrDVVQ==
-X-Received: by 2002:a4a:1506:0:b0:2da:ee84:9759 with SMTP id 6-20020a4a1506000000b002daee849759mr6514311oon.65.1645470386741;
-        Mon, 21 Feb 2022 11:06:26 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id j32sm4357309ota.59.2022.02.21.11.06.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PmMzc3Va1w+KOBN2YdFqKkIyR6yiUL/sLdp9Unbsylo=;
+        b=xG6mkZM2PgcsY5LoAjFrIJJuxVx4EEiDuG0I/lR1GPMtirJWx9LOs5hGhBP2UIyD5w
+         Cuefc3pfgGtOOcVi22W+CfbOdqt23BkG40Wqc7IG+b9pDMv62vQiTkWNgZbX7djXESsA
+         mafKXztTa+vahhJt4ETZnq0lLRjQpWAQfDLhYvYC4IRi5lxP+w2YVhuc4dxZM06wH9ZF
+         m7gFkbJCcAPwx8CEHcraHnl0vS9Qw4Brnd911Z2/PMzc34Vi4P9A+gNVmS0PAElaD6ZH
+         FtnjmIaiq6v8pPcsN0atDyPSQROawJ3tc1peiYFUyTIAtnwbj0jt5zzDezty1lrfJNak
+         JjKQ==
+X-Gm-Message-State: AOAM5304QP4988TXtcKyxzb1gFbD/6aQmc2NpxyrQt13ynWiRBEwD3EA
+        BlhvSYJ57bdqK1dgDHxKLt0=
+X-Google-Smtp-Source: ABdhPJz0L6P/4hrPZYEYfASRtyboDkYRiDSLuAez2Gcq+DsWPP36PhCWKehrTZ+zYdEiAYbeXfiMSg==
+X-Received: by 2002:a17:903:2352:b0:14c:ba3c:2eae with SMTP id c18-20020a170903235200b0014cba3c2eaemr19719032plh.80.1645471247882;
+        Mon, 21 Feb 2022 11:20:47 -0800 (PST)
+Received: from charizard.lan (c-67-165-113-11.hsd1.wa.comcast.net. [67.165.113.11])
+        by smtp.gmail.com with ESMTPSA id 6-20020a17090a030600b001bc62ecad28sm113490pje.41.2022.02.21.11.20.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 11:06:25 -0800 (PST)
-Date:   Mon, 21 Feb 2022 11:08:28 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v2 1/6] device property: Helper to match multiple
- connections
-Message-ID: <YhPjLOJchd4l+095@ripper>
-References: <20220208031944.3444-1-bjorn.andersson@linaro.org>
- <20220208031944.3444-2-bjorn.andersson@linaro.org>
- <YgOz6K55Oi2Si4pU@smile.fi.intel.com>
- <Yg/s3eKB2wLEQTgY@ripper>
- <YhIjHjMrhUpM0ucV@smile.fi.intel.com>
- <YhMbLsvF8p/ce+mg@ripper>
- <YhPJmiFSH8s94il7@smile.fi.intel.com>
+        Mon, 21 Feb 2022 11:20:47 -0800 (PST)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH v2] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
+Date:   Mon, 21 Feb 2022 11:20:20 -0800
+Message-Id: <20220221192020.346622-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhPJmiFSH8s94il7@smile.fi.intel.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 21 Feb 09:19 PST 2022, Andy Shevchenko wrote:
+If the extcon device exists, get the mode from the extcon device. If
+the controller is DRD and the driver is unable to determine the mode,
+only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
 
-> On Sun, Feb 20, 2022 at 08:55:10PM -0800, Bjorn Andersson wrote:
-> > On Sun 20 Feb 03:16 PST 2022, Andy Shevchenko wrote:
-> > > On Fri, Feb 18, 2022 at 11:00:45AM -0800, Bjorn Andersson wrote:
-> > > > On Wed 09 Feb 04:30 PST 2022, Andy Shevchenko wrote:
-> > > > > On Mon, Feb 07, 2022 at 07:19:39PM -0800, Bjorn Andersson wrote:
-> 
-> ...
-> 
-> > > > > > +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
-> > > > > > +				   const char *con_id, void *data,
-> > > > > > +				   devcon_match_fn_t match,
-> > > > > > +				   void **matches, unsigned int matches_len)
-> > > > > > +{
-> > > > > > +	unsigned int count;
-> > > > > > +
-> > > > > > +	if (!fwnode || !match || !matches)
-> > > > > 
-> > > > > !matches case may be still useful to get the count and allocate memory by
-> > > > > caller. Please, consider this case.
-> > > > 
-> > > > As discussed in previous version, and described in the commit message,
-> > > > the returned value of "match" is a opaque pointer to something which
-> > > > has to be passed back to the caller in order to be cleaned up.
-> > > > 
-> > > > E.g. the typec mux code returns a pointer to a typec_mux/switch object
-> > > > with a refcounted struct device within, or an ERR_PTR().
-> > > > 
-> > > > So unfortunately we can must gather the results into matches and pass it
-> > > > back to the caller to take consume or clean up.
-> > > 
-> > > It's fine. You have **matches, means pointer of an opaque pointer.
-> > > What I'm talking about is memory allocation for and array of _pointers_.
-> > > That's what caller very much aware of and can allocate on heap. So, please
-> > > consider this case.
-> > 
-> > I'm sorry, but I'm not sure what you're looking for.
-> > 
-> > 
-> > I still interpret your comment as that it would be nice to be able to do
-> > something like:
-> > 
-> > count = fwnode_connection_find_matches(fwnode, "orientation-switch",
-> > 				       NULL, typec_switch_match, NULL, 0);
-> > 
-> > based on the returned value the caller could allocate an array of
-> > "count" pointers and then call the function again to actually fill out
-> > the count elements.
-> 
-> Yes, that's what I want from the generic fwnode APIs.
-> (Keyword: generic)
-> 
-> > The problem with this is that, typec_switch_match() does:
-> 
-> As you stated, the problem is in the typec_switch_match(). So, it's not related
-> to the fwnode, but how you are using it.
-> 
-> > void *typec_switch_match(fwnode, id, data) {
-> > 	struct device *dev = find_struct_device(fwnode, id);
-> > 	if (!dev)
-> > 		return NULL;
-> > 	get_device(dev);
-> > 	return container_of(dev, struct typec_switch, dev);
-> > }
-> > 
-> > So if we call the match function and if that finds a "dev" it will
-> > return a struct typec_switch with a refcounted struct device within.
-> 
-> fwnode (as being an abstraction on top of the others) has no knowledge
-> about this. And more important should not know that.
-> 
-> > We can see if that's NULL or not and will be able to return a "count",
-> > but we have no way of releasing the reference acquired - we must return
-> > the void pointer back to the client, so that it can release it.
-> 
-> The caller (if it wants to!) may create different callbacks for count and real
-> matching, no?
-> 
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Thinh Nguyen <thinhn@synopsys.com>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+---
 
-Ahh, yeah you're right, we can shift this responsibility onto the caller
-and thereby allow them to implement the count as well. Makes sense!
+v1 of the patch:
 
-Thanks,
-Bjorn
+https://lore.kernel.org/linux-usb/20220206014532.372109-1-andrew.smirnov@gmail.com/T/#u
 
-> > My claim is that this is not a problem, because this works fine with any
-> > reasonable size of fwnode graphs we might run into - and the client will
-> > in general have a sense of the worst case number of matches (in this
-> > series its 3, as there's 3 types of lanes that can be switched/muxed
-> > coming out of a USB connector).
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+previons discussion:
+
+https://lore.kernel.org/linux-usb/20220131192102.4115473-1-andrew.smirnov@gmail.com/
+
+
+ drivers/usb/dwc3/core.c | 56 ++++++++++++++++++++++++++++++++++++++++-
+ drivers/usb/dwc3/drd.c  | 50 ------------------------------------
+ 2 files changed, 55 insertions(+), 51 deletions(-)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index f2448d0a9d39..09f283288ce7 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -23,6 +23,7 @@
+ #include <linux/delay.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/of.h>
++#include <linux/of_graph.h>
+ #include <linux/acpi.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/reset.h>
+@@ -84,7 +85,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
+ 		 * mode. If the controller supports DRD but the dr_mode is not
+ 		 * specified or set to OTG, then set the mode to peripheral.
+ 		 */
+-		if (mode == USB_DR_MODE_OTG &&
++		if (mode == USB_DR_MODE_OTG && !dwc->edev &&
+ 		    (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+ 		     !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
+ 		    !DWC3_VER_IS_PRIOR(DWC3, 330A))
+@@ -1462,6 +1463,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
+ 	}
+ }
+
++static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
++{
++	struct device *dev = dwc->dev;
++	struct device_node *np_phy;
++	struct extcon_dev *edev = NULL;
++	const char *name;
++
++	if (device_property_read_bool(dev, "extcon"))
++		return extcon_get_edev_by_phandle(dev, 0);
++
++	/*
++	 * Device tree platforms should get extcon via phandle.
++	 * On ACPI platforms, we get the name from a device property.
++	 * This device property is for kernel internal use only and
++	 * is expected to be set by the glue code.
++	 */
++	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
++		edev = extcon_get_extcon_dev(name);
++		if (!edev)
++			return ERR_PTR(-EPROBE_DEFER);
++
++		return edev;
++	}
++
++	/*
++	 * Try to get an extcon device from the USB PHY controller's "port"
++	 * node. Check if it has the "port" node first, to avoid printing the
++	 * error message from underlying code, as it's a valid case: extcon
++	 * device (and "port" node) may be missing in case of "usb-role-switch"
++	 * or OTG mode.
++	 */
++	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
++	if (of_graph_is_present(np_phy)) {
++		struct device_node *np_conn;
++
++		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
++		if (np_conn)
++			edev = extcon_find_edev_by_node(np_conn);
++		of_node_put(np_conn);
++	}
++	of_node_put(np_phy);
++
++	return edev;
++}
++
+ static int dwc3_probe(struct platform_device *pdev)
+ {
+ 	struct device		*dev = &pdev->dev;
+@@ -1561,6 +1607,14 @@ static int dwc3_probe(struct platform_device *pdev)
+ 		goto err2;
+ 	}
+
++	dwc->edev = dwc3_get_extcon(dwc);
++	if (IS_ERR(dwc->edev)) {
++		ret = PTR_ERR(dwc->edev);
++		dev_err_probe(dwc->dev, ret, "failed to get extcon");
++
++		goto err3;
++	}
++
+ 	ret = dwc3_get_dr_mode(dwc);
+ 	if (ret)
+ 		goto err3;
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index e2b68bb770d1..9a414edc439a 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -8,7 +8,6 @@
+  */
+
+ #include <linux/extcon.h>
+-#include <linux/of_graph.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+
+@@ -438,51 +437,6 @@ static int dwc3_drd_notifier(struct notifier_block *nb,
+ 	return NOTIFY_DONE;
+ }
+
+-static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+-{
+-	struct device *dev = dwc->dev;
+-	struct device_node *np_phy;
+-	struct extcon_dev *edev = NULL;
+-	const char *name;
+-
+-	if (device_property_read_bool(dev, "extcon"))
+-		return extcon_get_edev_by_phandle(dev, 0);
+-
+-	/*
+-	 * Device tree platforms should get extcon via phandle.
+-	 * On ACPI platforms, we get the name from a device property.
+-	 * This device property is for kernel internal use only and
+-	 * is expected to be set by the glue code.
+-	 */
+-	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+-		edev = extcon_get_extcon_dev(name);
+-		if (!edev)
+-			return ERR_PTR(-EPROBE_DEFER);
+-
+-		return edev;
+-	}
+-
+-	/*
+-	 * Try to get an extcon device from the USB PHY controller's "port"
+-	 * node. Check if it has the "port" node first, to avoid printing the
+-	 * error message from underlying code, as it's a valid case: extcon
+-	 * device (and "port" node) may be missing in case of "usb-role-switch"
+-	 * or OTG mode.
+-	 */
+-	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
+-	if (of_graph_is_present(np_phy)) {
+-		struct device_node *np_conn;
+-
+-		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
+-		if (np_conn)
+-			edev = extcon_find_edev_by_node(np_conn);
+-		of_node_put(np_conn);
+-	}
+-	of_node_put(np_phy);
+-
+-	return edev;
+-}
+-
+ #if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
+ #define ROLE_SWITCH 1
+ static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
+@@ -575,10 +529,6 @@ int dwc3_drd_init(struct dwc3 *dwc)
+ {
+ 	int ret, irq;
+
+-	dwc->edev = dwc3_get_extcon(dwc);
+-	if (IS_ERR(dwc->edev))
+-		return PTR_ERR(dwc->edev);
+-
+ 	if (ROLE_SWITCH &&
+ 	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
+ 		ret = dwc3_setup_role_switch(dwc);
+--
+2.25.1
