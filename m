@@ -2,50 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F0F4BE190
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 18:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66AE74BE462
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Feb 2022 18:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351919AbiBUJym (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Feb 2022 04:54:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48422 "EHLO
+        id S1353292AbiBUKSs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Feb 2022 05:18:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352121AbiBUJwv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 04:52:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BDC369C0
-        for <linux-usb@vger.kernel.org>; Mon, 21 Feb 2022 01:23:18 -0800 (PST)
+        with ESMTP id S1353232AbiBUKRi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Feb 2022 05:17:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CADCF6;
+        Mon, 21 Feb 2022 01:37:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3522B80EBA
-        for <linux-usb@vger.kernel.org>; Mon, 21 Feb 2022 09:23:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97521C340FB;
-        Mon, 21 Feb 2022 09:23:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DC32B80EB5;
+        Mon, 21 Feb 2022 09:37:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AB07C340E9;
+        Mon, 21 Feb 2022 09:37:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645435395;
-        bh=GBXlz6C4MFXKmAKwLpDwWCjQ5X7yqCSN2uGtA2Tvmls=;
+        s=k20201202; t=1645436250;
+        bh=2nbjOpE9zmPxYH13Z1D0YQfu2xXpZIXk2Ir5r88/Ckk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GZSgE99SirUnJ0AdVuaZemkOsTxiSOiCoGJfetlCHSC/byT+9e/WcJPX6xIzNGbTj
-         Jj3NZMxOyd/qUjvEuzuuK4LRBsKZLzvlTYpkr8qeHlaVUrZ6rz/E6LjHyM+/T+zlLO
-         /Ho08cKbLw+O4zcwbJDf025MKJWWxht1Ou4wrAA22XkhnV8YXAm6XCMNHsukdOeHEc
-         tLowSDWOYNrsKMhua08usNcOiI4m4Mu+Z751NFvKqMIHQgrYW9ZsiL8Zz4/zFFH5ev
-         UutE5HhrNcz8GZKfDE/hwC9W3xz2QclrFxVKrKQISLypz7G4XX9yImOr9EH6L4B6CW
-         jyKoCniwkO/dA==
+        b=H9hy0puJZI5Bm7ywRlVCyRWBMQDR+AcNBlH5CmjyoUwUsNjRh7nhTdaYlc79Y9WXh
+         uK/SLH/rJbpK+XhHzULudnZGpw0TQKZRoN+0LsLnaITPHwjaEbyyt+EfWSOgmn20ZR
+         VJzYBtCa46mtgb/Hn4TriItD/+AxE5v/y+XW8DYirNIHLgJwVJd/rhUQ16Y1f9t2Ok
+         CeJsmAntWCEuc9raor8TtJhZZUvV9/Cmb0aASnhaElo+4lHdlrt9yUCpfQxbQIBonc
+         mfmAKos1TBkYLdnyUizI2KToM3IjL/O79POFKpWuwLLneLVxzfSnM2/ffINB64aXq0
+         JwPgFUrELVz8g==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1nM4uW-00072m-Uj; Mon, 21 Feb 2022 10:23:13 +0100
-Date:   Mon, 21 Feb 2022 10:23:12 +0100
+        id 1nM58I-00079Y-HK; Mon, 21 Feb 2022 10:37:27 +0100
+Date:   Mon, 21 Feb 2022 10:37:26 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Daniele Palmas <dnlplm@gmail.com>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 1/1] USB: serial: option: add Telit LE910R1 compositions
-Message-ID: <YhNaACfBD+Q1Dy9r@hovoldconsulting.com>
-References: <20220218134552.4051-1-dnlplm@gmail.com>
+To:     Husni Faiz <ahamedhusni73@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] usb: serial: Fix Space Prohibited Coding Style
+ Errors
+Message-ID: <YhNdVtrXnIehZzfy@hovoldconsulting.com>
+References: <20220212175510.521072-1-ahamedhusni73@gmail.com>
+ <20220220131339.179648-1-ahamedhusni73@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220218134552.4051-1-dnlplm@gmail.com>
+In-Reply-To: <20220220131339.179648-1-ahamedhusni73@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,15 +58,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 02:45:52PM +0100, Daniele Palmas wrote:
-> Add support for the following Telit LE910R1 compositions:
+On Sun, Feb 20, 2022 at 06:43:39PM +0530, Husni Faiz wrote:
+> This patch fixes "space prohibited before that ','"  checkpatch error.
+> Removed the space after the function argument value "8".
 > 
-> 0x701a: rndis, tty, tty, tty
-> 0x701b: ecm, tty, tty, tty
-> 0x9201: tty
-> 
-> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+> Signed-off-by: Husni Faiz <ahamedhusni73@gmail.com>
+> ---
+> V1->V2 : Separated the style changes into multiple patches.
 
-Applied, thanks!
+As Greg mentioned, please work in drivers/staging if you want to submit
+these kind of patches.
+
+checkpatch.pl is great for checking your own patches before submission,
+but it shouldn't be run on code that's already in the tree, and where
+fixing a white space issue like this one has essentially no value.
+
+And as your staging/greybus submission showed, using the output of tools
+like checkpatch.pl even risks breaking things if you take it too
+literally and don't use your own judgement.
+
+>  drivers/usb/serial/iuu_phoenix.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/iuu_phoenix.c b/drivers/usb/serial/iuu_phoenix.c
+> index 0be3b5e1eaf3..2f7784572c4d 100644
+> --- a/drivers/usb/serial/iuu_phoenix.c
+> +++ b/drivers/usb/serial/iuu_phoenix.c
+> @@ -360,7 +360,7 @@ static void iuu_led_activity_on(struct urb *urb)
+>  	usb_fill_bulk_urb(port->write_urb, port->serial->dev,
+>  			  usb_sndbulkpipe(port->serial->dev,
+>  					  port->bulk_out_endpointAddress),
+> -			  port->write_urb->transfer_buffer, 8 ,
+> +			  port->write_urb->transfer_buffer, 8,
+>  			  iuu_rxcmd, port);
+>  	usb_submit_urb(port->write_urb, GFP_ATOMIC);
+>  }
+> @@ -380,7 +380,7 @@ static void iuu_led_activity_off(struct urb *urb)
+>  	usb_fill_bulk_urb(port->write_urb, port->serial->dev,
+>  			  usb_sndbulkpipe(port->serial->dev,
+>  					  port->bulk_out_endpointAddress),
+> -			  port->write_urb->transfer_buffer, 8 ,
+> +			  port->write_urb->transfer_buffer, 8,
+>  			  iuu_rxcmd, port);
+>  	usb_submit_urb(port->write_urb, GFP_ATOMIC);
+>  }
 
 Johan
