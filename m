@@ -2,97 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A504BF268
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Feb 2022 08:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B87D04BF4AB
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Feb 2022 10:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiBVHIo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Feb 2022 02:08:44 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:57418 "EHLO
+        id S230163AbiBVJ1y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Feb 2022 04:27:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbiBVHIo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Feb 2022 02:08:44 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B564B0EBC;
-        Mon, 21 Feb 2022 23:08:18 -0800 (PST)
-Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K2qrz1GCDzZfbC;
-        Tue, 22 Feb 2022 15:03:47 +0800 (CST)
-Received: from [127.0.0.1] (10.67.102.125) by dggeme758-chm.china.huawei.com
- (10.3.19.104) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.21; Tue, 22
- Feb 2022 15:08:16 +0800
-Message-ID: <62148BE0.7060501@hisilicon.com>
-Date:   Tue, 22 Feb 2022 15:08:16 +0800
-From:   Wei Xu <xuwei5@hisilicon.com>
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
+        with ESMTP id S230166AbiBVJ1t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Feb 2022 04:27:49 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952CEB0C47;
+        Tue, 22 Feb 2022 01:27:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645522044; x=1677058044;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LFQp/ZxtUokCWlxkpsscjeCoS50+fMvujr/3gkeQpGM=;
+  b=mFGAVa8g/gQUw/mvB2CQsMC3iKo56IwLVyYU9cYH5jEm9X6y8ik6i7Sr
+   Rrw1marApJddHVVAqMlmkp3fQOOM/DxFIvC8OtBrwIMim1HRrTHBUgxhr
+   QtXy8tZKHbhbPLX7pYkJn27ZqsT5mgQ4leVxefqEVed1fSv82IXJDKaQx
+   0=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 22 Feb 2022 01:27:24 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 01:27:23 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 22 Feb 2022 01:27:23 -0800
+Received: from [10.216.35.124] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Tue, 22 Feb
+ 2022 01:27:18 -0800
+Message-ID: <efd3c978-6d37-a386-4953-758df73e1e1f@quicinc.com>
+Date:   Tue, 22 Feb 2022 14:57:14 +0530
 MIME-Version: 1.0
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] usb: xhci: refactor quirks and plat private data
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Roger Quadros <rogerq@ti.com>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     David Heidelberg <david@ixit.cz>, <xuwei5@hisilicon.com>
-Subject: Re: [PATCH 1/3] dt-bindings: vendor-prefixes: add second HiSilicon
- prefix
-References: <20220221082228.34407-1-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220221082228.34407-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.125]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggeme758-chm.china.huawei.com (10.3.19.104)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        "Mathias Nyman" <mathias.nyman@intel.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>
+References: <1644949454-814-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1644949454-814-2-git-send-email-quic_c_sanm@quicinc.com>
+ <CAE-0n522ctciYfxCxKqF0p3QFWcZU03nP5HoKsc=uKnokg7BCQ@mail.gmail.com>
+From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+In-Reply-To: <CAE-0n522ctciYfxCxKqF0p3QFWcZU03nP5HoKsc=uKnokg7BCQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krzysztof,
 
-On 2022/2/21 16:22, Krzysztof Kozlowski wrote:
-> There are few boards DTS using "hisi,rst-syscon" property -
-> undocumented "hisi" prefix.  The property will not be changed in DTS to
-> non-deprecated one, because of compatibility reasons.  Add deprecated
-> "hisi" prefix to silence DT schema warnings.
-> 
-> Cc: Wei Xu <xuwei5@hisilicon.com>
-> Cc: David Heidelberg <david@ixit.cz>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-Thanks!
-Reviewed-by: Wei Xu <xuwei5@hisilicon.com>
-
-Best Regards,
-Wei
-
-> 
-> ---
-> 
-> See:
-> https://lore.kernel.org/all/61AF1E3B.5060706@hisilicon.com/
-> https://www.spinics.net/lists/arm-kernel/msg887577.html
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index ebe294516937..79a172eaaaee 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -505,6 +505,9 @@ patternProperties:
->      description: Himax Technologies, Inc.
->    "^hirschmann,.*":
->      description: Hirschmann Automation and Control GmbH
-> +  "^hisi,.*":
-> +    description: HiSilicon Limited (deprecated, use hisilicon)
-> +    deprecated: true
->    "^hisilicon,.*":
->      description: HiSilicon Limited.
->    "^hit,.*":
-> 
-
+On 2/16/2022 7:43 AM, Stephen Boyd wrote:
+> Quoting Sandeep Maheswaram (2022-02-15 10:24:13)
+>> From: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+>>
+>> This refactoring allows drivers like dwc3 host glue driver to
+>> specify their xhci quirks.
+>>
+>> Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> Your SoB should be here as well.
+okay. Will add in next version.
+>
+>> diff --git a/include/linux/usb/xhci-plat.h b/include/linux/usb/xhci-plat.h
+>> new file mode 100644
+>> index 0000000..58a56ae
+>> --- /dev/null
+>> +++ b/include/linux/usb/xhci-plat.h
+>> @@ -0,0 +1,24 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * xhci-plat.h - xHCI host controller driver platform Bus Glue.
+>> + *
+>> + * Copyright (C) 2015 Renesas Electronics Corporation
+>> + */
+>> +
+>> +#ifndef _XHCI_PLAT_H
+>> +#define _XHCI_PLAT_H
+>> +
+>> +#include <linux/types.h>
+>> +#include <linux/usb/hcd.h>
+> It would be great to remove this include and forward declare struct
+> usb_hcd instead to avoid include hell. Maybe a followup patch?
+okay.  Will do in next version.
+>> +
+>> +struct xhci_plat_priv {
+>> +       const char *firmware_name;
+>> +       unsigned long long quirks;
+>> +       int (*plat_setup)(struct usb_hcd *hcd);
+>> +       void (*plat_start)(struct usb_hcd *hcd);
+>> +       int (*init_quirk)(struct usb_hcd *hcd);
+>> +       int (*suspend_quirk)(struct usb_hcd *hcd);
+>> +       int (*resume_quirk)(struct usb_hcd *hcd);
+>> +};
+>> +
+>> +#endif /* _XHCI_PLAT_H */
