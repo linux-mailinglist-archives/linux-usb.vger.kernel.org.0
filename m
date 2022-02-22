@@ -2,81 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3034BF1D4
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Feb 2022 07:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A504BF268
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Feb 2022 08:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiBVGBl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Feb 2022 01:01:41 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47668 "EHLO
+        id S230380AbiBVHIo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Feb 2022 02:08:44 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:57418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiBVGBj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Feb 2022 01:01:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233A08E18E;
-        Mon, 21 Feb 2022 22:01:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFFA8B817F8;
-        Tue, 22 Feb 2022 06:01:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0FADC340E8;
-        Tue, 22 Feb 2022 06:01:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645509670;
-        bh=09W0kiFTYRx8O9n+/pH16GuSjI8QB2q8R+DFiAvdlUU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=holBWmQq1wkOcBz7FJdWMzwWM54Fd7zV9wNUgEfX3JYUeM6Iedj9d9g80oz98b3L6
-         VutkZj2xuv0LE1aV6w8+Ai1eCb1lDfOteUtZt7cfLVVXjGHBdX3gTwQV8hMeoiOnjm
-         VnyQ6pk3ZvLBGh5YosKKLQD/6+Fjl0C37eKo+Qro=
-Date:   Tue, 22 Feb 2022 07:01:06 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH v2] usb: dwc3: Don't switch OTG -> peripheral if extcon
- is present
-Message-ID: <YhR8IvgiyStkDbyc@kroah.com>
-References: <20220221192020.346622-1-andrew.smirnov@gmail.com>
+        with ESMTP id S230369AbiBVHIo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Feb 2022 02:08:44 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B564B0EBC;
+        Mon, 21 Feb 2022 23:08:18 -0800 (PST)
+Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K2qrz1GCDzZfbC;
+        Tue, 22 Feb 2022 15:03:47 +0800 (CST)
+Received: from [127.0.0.1] (10.67.102.125) by dggeme758-chm.china.huawei.com
+ (10.3.19.104) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.21; Tue, 22
+ Feb 2022 15:08:16 +0800
+Message-ID: <62148BE0.7060501@hisilicon.com>
+Date:   Tue, 22 Feb 2022 15:08:16 +0800
+From:   Wei Xu <xuwei5@hisilicon.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221192020.346622-1-andrew.smirnov@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Roger Quadros <rogerq@ti.com>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     David Heidelberg <david@ixit.cz>, <xuwei5@hisilicon.com>
+Subject: Re: [PATCH 1/3] dt-bindings: vendor-prefixes: add second HiSilicon
+ prefix
+References: <20220221082228.34407-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220221082228.34407-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.125]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggeme758-chm.china.huawei.com (10.3.19.104)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 11:20:20AM -0800, Andrey Smirnov wrote:
-> If the extcon device exists, get the mode from the extcon device. If
-> the controller is DRD and the driver is unable to determine the mode,
-> only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
+Hi Krzysztof,
+
+On 2022/2/21 16:22, Krzysztof Kozlowski wrote:
+> There are few boards DTS using "hisi,rst-syscon" property -
+> undocumented "hisi" prefix.  The property will not be changed in DTS to
+> non-deprecated one, because of compatibility reasons.  Add deprecated
+> "hisi" prefix to silence DT schema warnings.
 > 
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: Thinh Nguyen <thinhn@synopsys.com>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> Cc: Wei Xu <xuwei5@hisilicon.com>
+> Cc: David Heidelberg <david@ixit.cz>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+Thanks!
+Reviewed-by: Wei Xu <xuwei5@hisilicon.com>
+
+Best Regards,
+Wei
+
+> 
 > ---
 > 
-> v1 of the patch:
+> See:
+> https://lore.kernel.org/all/61AF1E3B.5060706@hisilicon.com/
+> https://www.spinics.net/lists/arm-kernel/msg887577.html
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> https://lore.kernel.org/linux-usb/20220206014532.372109-1-andrew.smirnov@gmail.com/T/#u
-> 
-> previons discussion:
-> 
-> https://lore.kernel.org/linux-usb/20220131192102.4115473-1-andrew.smirnov@gmail.com/
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index ebe294516937..79a172eaaaee 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -505,6 +505,9 @@ patternProperties:
+>      description: Himax Technologies, Inc.
+>    "^hirschmann,.*":
+>      description: Hirschmann Automation and Control GmbH
+> +  "^hisi,.*":
+> +    description: HiSilicon Limited (deprecated, use hisilicon)
+> +    deprecated: true
+>    "^hisilicon,.*":
+>      description: HiSilicon Limited.
+>    "^hit,.*":
 > 
 
-You forgot to say what changed in this version.
-
-thanks,
-
-greg k-h
