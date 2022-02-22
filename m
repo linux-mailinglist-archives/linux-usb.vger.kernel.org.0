@@ -2,177 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FE34C03F1
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Feb 2022 22:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F7C4C0437
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Feb 2022 23:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235058AbiBVViK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Feb 2022 16:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
+        id S235919AbiBVWAk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Feb 2022 17:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235774AbiBVViH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Feb 2022 16:38:07 -0500
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CD6132951;
-        Tue, 22 Feb 2022 13:37:41 -0800 (PST)
-Received: by mail-oi1-f174.google.com with SMTP id s5so16092350oic.10;
-        Tue, 22 Feb 2022 13:37:41 -0800 (PST)
+        with ESMTP id S232172AbiBVWAj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Feb 2022 17:00:39 -0500
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D8AD1080;
+        Tue, 22 Feb 2022 14:00:14 -0800 (PST)
+Received: by mail-ot1-f48.google.com with SMTP id w3-20020a056830060300b005ad10e3becaso10635297oti.3;
+        Tue, 22 Feb 2022 14:00:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=cXzrOGya6tN3gFI6L58elClfCWU6odCJWFzgIBKYq+8=;
-        b=6HdbLMxCPtHipxUizzTaJb5ZK/ps9WX0qY2BiH1P6NoTKTeMuZNcCkSHCzhwHXc8s4
-         n1JtBFWEyWgxeDy91MieRAJxfICZYdqfVi74zCodh3YEwiCD5LOLIM/CxaVfMFT/HAFI
-         YRYSQ+COqNUYeLFIbaAoCRuujXxSEQOWOx1J97+96csZWa+Vs2S0XT2rH5P8cTdWg02L
-         9uJAdBkirUyDeE1ipT586B78kfZVkeRX9mteyf8UjgILMkO0kbzYdO6dDLkBrm2oKHs8
-         UMswP5kAZSl9fOsvK57/s3bxWHSWved6i0iQQ7QMVOlUGw5bv3y2UEQf5g4EGsovMdcX
-         UMig==
-X-Gm-Message-State: AOAM530CtNvSeviL2sdXb+NfLgtDwkWdL7q0s2ZZZlqXe6slETfGDqDP
-        dKIYYjsKJkg+kt89b3CzDg==
-X-Google-Smtp-Source: ABdhPJxngm2fJ51vOZUaLLY7s23uNLNgAhRgPzkmHNenfe7VdwGXm/FUkqDQ3EcNB89kcIYFP/JtYA==
-X-Received: by 2002:a05:6808:bcb:b0:2d2:9c26:d089 with SMTP id o11-20020a0568080bcb00b002d29c26d089mr3083949oik.25.1645565860965;
-        Tue, 22 Feb 2022 13:37:40 -0800 (PST)
+        bh=2xQgEbwRpIbRoiFzstIKSG/wc8HUtiCQcZKqTWizciw=;
+        b=6nrH97Q8GV8KMxa5+xM0gRhOZ8sSV6LEtFF0aU+Q/oDWImvNkdno+WOG0QrbqSL3qK
+         4xWoLRri+1rfaPyK2viFG7s1j9tbU46zr3H/k/GdVXffD9rq/SNUng2By5qMSiFSest/
+         C+lbqbBUCH/KxDcgKZ0KqDzep2wHNM+nomL0sDAOi34ce02Rdt5x31l0vO4HjDPb7BlC
+         SlMrNi+vQg9+/YVYNY7GOzl9hDPhvhOjDidUl0Ns8Z1+VdBVOv6AFCW/ZOyIchvkrAiu
+         21SMDarTSXCeRAKEZD2xy3r3BBe5qUv2KT31UFiFNGuDpcUf+9Hp5K3XGlfi0H3uXdTV
+         ZLdw==
+X-Gm-Message-State: AOAM531+1nxoQyztDBq6qv/915PBZgm0uDD9zAxa8GrhEI3zR83DUDiQ
+        zNlr5jAqyn38g2Ds4OXdRzGE3qLqXQ==
+X-Google-Smtp-Source: ABdhPJzwef2sHCF2I+BS0cb2XFASLhaqr5vZykT9+sZ6EXKqJ2FpytLTMnC74l8RPAIO/nuAg/CyeQ==
+X-Received: by 2002:a05:6830:243a:b0:594:cdbd:6ec7 with SMTP id k26-20020a056830243a00b00594cdbd6ec7mr8885035ots.39.1645567213296;
+        Tue, 22 Feb 2022 14:00:13 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 63sm6847693oog.10.2022.02.22.13.37.39
+        by smtp.gmail.com with ESMTPSA id a32sm2324783oaf.10.2022.02.22.14.00.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 13:37:40 -0800 (PST)
-Received: (nullmailer pid 3631820 invoked by uid 1000);
-        Tue, 22 Feb 2022 21:37:39 -0000
-Date:   Tue, 22 Feb 2022 15:37:39 -0600
+        Tue, 22 Feb 2022 14:00:12 -0800 (PST)
+Received: (nullmailer pid 3664795 invoked by uid 1000);
+        Tue, 22 Feb 2022 22:00:11 -0000
+Date:   Tue, 22 Feb 2022 16:00:11 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Vincent Shih <vincent.sunplus@gmail.com>
-Cc:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, wells.lu@sunplus.com
-Subject: Re: [PATCH v1 2/2] dt-bindings: usb: Add bindings doc for Sunplus
- EHCI driver
-Message-ID: <YhVXo1K/asHgGVda@robh.at.kernel.org>
-References: <1644827562-17244-1-git-send-email-vincent.sunplus@gmail.com>
- <1644827562-17244-3-git-send-email-vincent.sunplus@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     linux-usb@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/4] dt-bindings: usb: dwc2: fix compatible of Intel
+ Agilex
+Message-ID: <YhVc67mlzBkZRHTE@robh.at.kernel.org>
+References: <20220218161522.52044-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1644827562-17244-3-git-send-email-vincent.sunplus@gmail.com>
+In-Reply-To: <20220218161522.52044-1-krzysztof.kozlowski@canonical.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 04:32:42PM +0800, Vincent Shih wrote:
-> Add bindings doc for Sunplus EHCI driver
+On Fri, 18 Feb 2022 17:15:19 +0100, Krzysztof Kozlowski wrote:
+> Intel Agilex USB DWC2 node is used as compatible with generic snps,dwc2
+> (just like Altera's Stratix10).
 > 
-> Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  .../bindings/usb/sunplus,sp7021-usb-ehci.yaml      | 69 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 70 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml
+>  Documentation/devicetree/bindings/usb/dwc2.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml
-> new file mode 100644
-> index 0000000..299f7b7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml
-> @@ -0,0 +1,69 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Co., Ltd. 2021
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/sunplus,sp7021-usb-ehci.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sunplus SP7021 EHCI Device Tree bindings for ehci0/ehci1
-> +
-> +maintainers:
-> +  - Vincent Shih <vincent.sunplus@gmail.com>
-> +
-> +allOf:
-> +  - $ref: usb-hcd.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sunplus,sp7021-usb-ehci0
-> +      - sunplus,sp7021-usb-ehci1
-> +
-> +  clocks:
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    items:
-> +      - const: USB2_USBC0
-> +      - const: USB2_UPHY0
 
-This doesn't match what the driver looks for, though the 0 or 1 on the 
-end is wrong. You obviously have not tested this against your actual dts 
-file(s).
-
-The 'USB2_' part is redundant. You only need enough information to 
-distinguish clocks within a h/w block.
-
-> +
-> +  reg:
-> +    maxItems: 4
-
-You have to define each entry.
-
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  nvmem-cell-names:
-> +    description: names corresponding to the nvmem cells of disconnect voltage
-> +    const: disc_vol
-> +
-> +  nvmem-cells:
-> +    description: nvmem cell address of disconnect voltage
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - reg
-> +  - interrupts
-> +  - nvmem-cell-names
-> +  - nvmem-cells
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    sp_ehci0: usb@9c102100 {
-> +      compatible = "sunplus,sp7021-usb-ehci0";
-> +      clocks = <&clkc 0x3a>, <&clkc 0x3d>;
-> +      clock-names = "USB2_USBC0", "USB2_UPHY0";
-> +      reg = <0x9c102100 0x68>, <0x9c004a80 0x80>,
-> +               <0x9c000000 0x80>, <0x9c000200 0x80>;
-> +      interrupt-parent = <&intc>;
-> +      interrupts = <14 IRQ_TYPE_LEVEL_HIGH>;
-> +      nvmem-cell-names = "disc_vol";
-> +      nvmem-cells = <&disc_vol>;
-> +    };
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 6c2faf3..49702c4 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17951,6 +17951,7 @@ SUNPLUS USB EHCI DRIVER
->  M:	Vincent Shih <vincent.sunplus@gmail.com>
->  L:	linux-usb@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml
->  F:	drivers/usb/host/ehci-sunplus.c
->  
->  SUPERH
-> -- 
-> 2.7.4
-> 
-> 
+Acked-by: Rob Herring <robh@kernel.org>
