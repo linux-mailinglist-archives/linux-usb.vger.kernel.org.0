@@ -2,134 +2,210 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D7F4C0F39
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Feb 2022 10:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1543B4C103D
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Feb 2022 11:24:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239257AbiBWJar (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Feb 2022 04:30:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
+        id S239473AbiBWKYp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Feb 2022 05:24:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234747AbiBWJaq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Feb 2022 04:30:46 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1471410FF8
-        for <linux-usb@vger.kernel.org>; Wed, 23 Feb 2022 01:30:19 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id i17-20020a925411000000b002bf4c9c4142so12235350ilb.6
-        for <linux-usb@vger.kernel.org>; Wed, 23 Feb 2022 01:30:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=rOgWpFzlzfDic7PPkkbTbM91/9giJy4YgpDa5cNJ1TM=;
-        b=45CkH9bCRFCLdrc0Vk+CY33e72zZ7yLzxpuZfgGE4bJuuIk+2xA8LHi/d1WqHHna9C
-         bgxxXRmI+aVB5S++uXVXOsvN/O3DCOCrlPG7KkHlmvfM/C9zfmBYQTktdlv1edIgYRts
-         v7f9IGRv1BnzNCpr/2mU6tHYc1EyzQLdgBTW5TJb6/WFTlqcVLRmhimbEcukkPbjoQbQ
-         Vfj48xaISev8hODECP1aMhBW/6z3P9drltBzafkI7KS7IAj/VAsVwV/NDqyX8luAtlNo
-         a6P9qCZYc20XNF1wDoIbZp7mhUxPzEvEy1vNz3OzvCvjpVBn1D+FF2rD+pnk0x5VgnSA
-         5vCA==
-X-Gm-Message-State: AOAM5301MtwrpM4SZfwoMhZsdegs+GcZK1G6I/avAV5hKSMNZ3CKgJyp
-        JPZFmOk84/d9a9NCXRC2nKdRPZZKeOa89fyEkwJIlehpW5us
-X-Google-Smtp-Source: ABdhPJyGbs/d0DzgEhO+2h4MPKAwNX1W6TCt+NastddY0kCx+EpZlh5lo+m1HiWBuZ3H6FFLBNHEiwGioei+ALB6ZDn+PKSTupWv
+        with ESMTP id S230447AbiBWKYo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Feb 2022 05:24:44 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2113.outbound.protection.outlook.com [40.107.220.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263DC8BF71;
+        Wed, 23 Feb 2022 02:24:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gYaKUtrRNJTUW9X3aFIdPTPSz+O0CDPgBodB5r5Rv61YimM/Lb48Ufs/r+zoC/btSKfO11lJJ4k8+Z5mhmENk8jAhlX77qEXmSRwvcSkbdWeVQSVEmLFvXk/3S1EKu/46x7hFh/r16UPNy20ug7w/jJbsoTjHE2bQUTGBP0FwNZagPy7X1vljpY9PIADQG4HuIXljOk/+92qhhrOA//nxvbhUidqXsiOvMi90TaEsb1sfiSrlSnjh4ULX8oXy+Ql2waqKibd58LvM4l9k42moTawhip3vEys0gTR2HqbM4svMxyxOQ5uucqDdBsDsc37qcTAJzhvNzyOlhWV4WI6Tg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3AE8IR/Q35SjIum4hi0AsFqvQnEf1l/8fXca+rNHjMk=;
+ b=MSgoSfbbMXGIWVH4r89hBLYaMTebQFIViS1VzMtv9jfDBY6Ks5InZ9vbO95GAOpJjrum+81mzQCuTjT1jx6aPwsE43doEHU7altruXNjeSOKarGNz7qg25HnQsPWt6yRn6iT7RXJ4mrCxHTN8VOdGQkO/Q+Q8FbG3Vvuw/whDD9IwyFf/zdNo5vTBgPqwO+3P0SSN36eS+Z3HrDVZscf/ndQ/AI7+KGE/4sFUe5RILEE4Y8Xr6Ra2k+67IihUkO6qbcxvgRqD5b0TYohz3ylwcYdVQfk9LVy5S4WxoXx3FjqDT3eGrUQCqy0OHliwLLRXs1zpUwwZiir7YPwvH+Xvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3AE8IR/Q35SjIum4hi0AsFqvQnEf1l/8fXca+rNHjMk=;
+ b=vwrYfIlRvITqusEh3jk1y+ZmduC4kHGVC8fvLgmYnfyYQlHkBfJhgpXA5UVDkft0lkTE9fmkYRMHFuQTnh1sI7LeN0gPEBinxKK+UQ9EjGRrwPAfuNPUA0hj2LmxgvsClxmV2CTykCBMoiKgWcwwIB696LYG+T0iiMJoOdCk2mg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by DM6PR04MB5898.namprd04.prod.outlook.com (2603:10b6:5:161::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Wed, 23 Feb
+ 2022 10:24:15 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::a865:6d10:c4a9:1142]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::a865:6d10:c4a9:1142%8]) with mapi id 15.20.5017.022; Wed, 23 Feb 2022
+ 10:24:15 +0000
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>
+Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, Rob Herring <robh@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 1/2] dt-bindings: usb: Add analogix anx7411 PD binding
+Date:   Wed, 23 Feb 2022 18:23:51 +0800
+Message-Id: <20220223102353.3833578-1-xji@analogixsemi.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR04CA0048.apcprd04.prod.outlook.com
+ (2603:1096:202:14::16) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-X-Received: by 2002:a92:b0b:0:b0:2c2:74db:9630 with SMTP id
- b11-20020a920b0b000000b002c274db9630mr2822578ilf.170.1645608618466; Wed, 23
- Feb 2022 01:30:18 -0800 (PST)
-Date:   Wed, 23 Feb 2022 01:30:18 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000024a1f805d8ac1da3@google.com>
-Subject: [syzbot] KMSAN: uninit-value in asix_check_host_enable
-From:   syzbot <syzbot+8f5f07bb9d6935e2f8d9@syzkaller.appspotmail.com>
-To:     andrew@lunn.ch, davem@davemloft.net, glider@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux@rempel-privat.de,
-        netdev@vger.kernel.org, paskripkin@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c33593b7-80a2-4b47-ec22-08d9f6b6a45a
+X-MS-TrafficTypeDiagnostic: DM6PR04MB5898:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR04MB5898BB4DC232E6B9624A09E0C73C9@DM6PR04MB5898.namprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tW/rwlAoMxZytpbCnZJ3lw4n7QK/yZ+VY1OWBxF3WT096wnt9OLriZVW1hUD8efxUxX8RHxnjUA8nP0JUksZhHYqfNUZ7kOW/V092Jt+5JNQvsVrUtykgmjEVazHmBUjq1wJqQ09WIa/I2WVlCCoHambpiwOOhRHWhX36YYCUv30NYqwO6riwBvDKFO204kqoLzpBXZQtLgn2CSm+ctntgf1ajHkThkHPAzeuyRHo1BMvheP9m5SVuKzNSgGh0u6wnh5fHSXVR8YFz7oMcltqJg+mkeC4fiwxbH9Mmid5x8zCqSOnJOXKDujJqRdM84XOVZgNVhwmjtzcED0oCSZdZ1AA+XnGwlRs5SzROxi05Pe1tEKGtFKztVK7GGmQiFs/ayl5DPK+r2rPh5XaB9G748pb5ktCzR28J7JVdx899L45047WMw4R28wJqEH0yZnThk2fDmuEXJpZGhrmkiK2S50rZY7EfRQbw/shfCB+qpI7Y+DKwPGHhfKiqoQPYupPVtPyFXDxG8sgpzhywmh5++IA/3EfL+fdo3MmIXMs5WSAPwaT8SYEOFGyzKae0wprO0EAFf09G4pQAG71bj89dgZ2m3YDgRqMX5GQDBjvcgm9tnkYjBXLTPawGxf+JdRdQHGGgjTWWHZpt85WSYkxkF6AcbKkubbLLvZIUQH22/yAA4Y3ZSk9Wl21/6JVEG/JhOuXfSeCoP1lXt0gYt+/0bjjSLNZTQ0I4U/GNS52zJyt4ZlyH8d+HLPw7JL5I4NP3QmtriktDM1YAVA7nRib59JuYMrdFDzzuIDHJAGFLQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(52116002)(186003)(26005)(55236004)(66476007)(66556008)(6512007)(66946007)(6506007)(6666004)(6486002)(316002)(1076003)(110136005)(86362001)(508600001)(2616005)(7049001)(8676002)(4326008)(38100700002)(38350700002)(5660300002)(8936002)(2906002)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WmGTdCSKcK9Og+wq3C9Jrm6jPTjHoc36VBPNfOkdmp0zJGKT0/5hjnKwVfKR?=
+ =?us-ascii?Q?g1eWMDHgubBssy52evWY/sgie0nA2pSU9GHt7l6v+e8wuFvf1Iwhh5rVL6xg?=
+ =?us-ascii?Q?CfZ0YcCnisn1g4TgjfVs2cz4DBuBwJdbLF0uUz8hmPLYH0484PplsDG0iKYr?=
+ =?us-ascii?Q?heAdvDtX9gsu2Vrz5OxpZFycBH3nVjds/sZNuphzVMA1VmsU5w1/8GjdBKBy?=
+ =?us-ascii?Q?7rQ3SI/qKsaPjP7zjeD6o3z60qP/SU9v3V1lhvCSVA3Pm7OlRi5Bws9ezAd0?=
+ =?us-ascii?Q?SeHaRJ1PQrnnNCxZiwObDCA9AxIQQhkRdHc7eHMC5ptu+9fczHXsKHaTOF1Z?=
+ =?us-ascii?Q?DKroS13tRmGTaMdtSXMo88rO69QML2gV8YtKVEfmrWeu0hcMrj7BY0tBDvuX?=
+ =?us-ascii?Q?fTzpIoXQBo4LhCG/8NcgTBlWSyWOaJZ4J9xqWCOB+z5IozcIbII2FU8JCvKb?=
+ =?us-ascii?Q?skH3iLsqbmbc9ClOLT2rY9epjiZIanUSk+5FQHNbr3nx+muvO9VVWlHJgRqH?=
+ =?us-ascii?Q?ZPzfqVa82uJBEcOyFQXtMvamc8xXwJKrbd9Hj+BTaQP5OCxuVHI48M7kQU77?=
+ =?us-ascii?Q?griomk7p18hQd8YnlIMAuDUY5NeodK47c1IT3Xv4PjYAxsOe5i1cu1lCTmgV?=
+ =?us-ascii?Q?ygMCIHtCo0U1UIG0KLAvTTlUptAheWb8lMRUoNiCSvXfgYo36ITgvO2QmLKw?=
+ =?us-ascii?Q?gPB9aPMFD30lJQueih2Mo5qjaJU4tTUHwH5wHV7OGH6EFTjNI9TIGd4tN4Lz?=
+ =?us-ascii?Q?vTo0e/QVsnwKA41RV3Pjr6/scoKc8dgz1lBUSw34i4ZlAlTWdQwjxzQctV40?=
+ =?us-ascii?Q?15EZv3TbaqnonkXW9Fjhx2hfe05f2bZN8Z12hW6ElduPae6XJrUjbm7EnfYX?=
+ =?us-ascii?Q?aZ88a8F/wGPMnZHq+gq/JTd40DcbC07RRyzMMSq14pwYhqi6cV23gi/dShon?=
+ =?us-ascii?Q?I4CYGKk90Xi0n0dIOPEAe2dh8DnNqDbokv4Iv0j4gcWas5dWn+NBDD7sAeKr?=
+ =?us-ascii?Q?60yWqWcn0AYqaBxia8cmcQ+Oxa062OdEguZn7UHSIdJnye5n/STPCmC+W/+o?=
+ =?us-ascii?Q?GB1Q6AjROgS0NvaVZmx0W/YQ6BklPY8yvDXINXGYzX8je3Z1fm6oDnajaBdM?=
+ =?us-ascii?Q?ox4Y7y3+enrjQP0AiwOqwRRa4Tozuia4mYsdvDu0LJoxxXaX8SpmrdReMNFU?=
+ =?us-ascii?Q?bzY23dc5K7L9j3BUvEdS24yZ5pxAEKQXFeMSwD/4y4FhbNjCb7p5D2joGP4L?=
+ =?us-ascii?Q?CQW4v7DBwMIRqx2FIFkbi9Kc3wgmK7Ihcvcd8T88YRhkpERKe5Z622tlnJEP?=
+ =?us-ascii?Q?ltRhFyI2g4FidCa8/DR6z8YRmRttBLI+8NFoI+/XiBzMz0WB9DcH+qxk79Nq?=
+ =?us-ascii?Q?ZilORkRZ52tvlJn5hicjeaAtI40Lij9Fp/TnJ5i+I97Cn8LFchijJIzxwTds?=
+ =?us-ascii?Q?81WWd6dPBCUuJ7S38qhNaTVJgO+7yTG+lxFauc3AYo+ozyhPwef2DgU7Qdhx?=
+ =?us-ascii?Q?XeX1pj5fQy4EcGYo25KamOz+vrS/aySoL4LJUJBz0xB0WKBcwNiGyWYIu70a?=
+ =?us-ascii?Q?wgYtBEFfHpNFnwB8p3f5OJGsvNzscFgFOTMW+Q0rkmoSxy3v4kXg5K9eewR9?=
+ =?us-ascii?Q?XNy18Aq0O89iVT0RHhtSWtY=3D?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c33593b7-80a2-4b47-ec22-08d9f6b6a45a
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2022 10:24:15.2801
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fB5+bs0AvfKL0gtm2JSoaum5BmFSfKPvEoVG2GwxFDIMlfXm+Iu3m2xbvh0Sc9vqfVMOTfyIebKS035fS0Lt3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB5898
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Add analogix PD chip anx7411 device binding
 
-syzbot found the following issue on:
-
-HEAD commit:    724946410067 x86: kmsan: enable KMSAN builds for x86
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=11c85246700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=76f99026248b24e4
-dashboard link: https://syzkaller.appspot.com/bug?extid=8f5f07bb9d6935e2f8d9
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11674fe2700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1497324c700000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8f5f07bb9d6935e2f8d9@syzkaller.appspotmail.com
-
-asix 1-1:0.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0000: -71
-asix 1-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
-asix 1-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
-=====================================================
-BUG: KMSAN: uninit-value in asix_check_host_enable+0x289/0x330 drivers/net/usb/asix_common.c:84
- asix_check_host_enable+0x289/0x330 drivers/net/usb/asix_common.c:84
- __asix_mdio_write+0x10d/0x5c0 drivers/net/usb/asix_common.c:532
- asix_mdio_write+0xad/0xc0 drivers/net/usb/asix_common.c:550
- asix_phy_reset+0xd5/0x2e0 drivers/net/usb/asix_devices.c:208
- ax88172_bind+0x738/0x9d0 drivers/net/usb/asix_devices.c:275
- usbnet_probe+0x1251/0x4160 drivers/net/usb/usbnet.c:1747
- usb_probe_interface+0xf19/0x1600 drivers/usb/core/driver.c:396
- really_probe+0x653/0x14b0 drivers/base/dd.c:596
- __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
- driver_probe_device drivers/base/dd.c:782 [inline]
- __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
- bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
- __device_attach+0x593/0x8e0 drivers/base/dd.c:970
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
- bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
- device_add+0x1fff/0x26e0 drivers/base/core.c:3405
- usb_set_configuration+0x37e9/0x3ed0 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0x13c/0x300 drivers/usb/core/generic.c:238
- usb_probe_device+0x309/0x570 drivers/usb/core/driver.c:293
- really_probe+0x653/0x14b0 drivers/base/dd.c:596
- __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
- driver_probe_device drivers/base/dd.c:782 [inline]
- __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
- bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
- __device_attach+0x593/0x8e0 drivers/base/dd.c:970
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
- bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
- device_add+0x1fff/0x26e0 drivers/base/core.c:3405
- usb_new_device+0x1b8e/0x2950 drivers/usb/core/hub.c:2566
- hub_port_connect drivers/usb/core/hub.c:5358 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
- port_event drivers/usb/core/hub.c:5660 [inline]
- hub_event+0x58e3/0x89e0 drivers/usb/core/hub.c:5742
- process_one_work+0xdb6/0x1820 kernel/workqueue.c:2307
- worker_thread+0x10b3/0x21e0 kernel/workqueue.c:2454
- kthread+0x3c7/0x500 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30
-
-Local variable smsr created at:
- asix_check_host_enable+0x66/0x330
- __asix_mdio_write+0x10d/0x5c0 drivers/net/usb/asix_common.c:532
-
-CPU: 1 PID: 34 Comm: kworker/1:1 Not tainted 5.17.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-=====================================================
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Xin Ji <xji@analogixsemi.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ .../bindings/usb/analogix,anx7411.yaml        | 76 +++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+new file mode 100644
+index 000000000000..c5c6d5a9dc17
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/usb/analogix,anx7411.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Analogix ANX7411 Type-C controller bindings
++
++maintainers:
++  - Xin Ji <xji@analogixsemi.com>
++
++properties:
++  compatible:
++    enum:
++      - analogix,anx7411
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  connector:
++    type: object
++
++    allOf:
++      - $ref: ../connector/usb-connector.yaml
++
++    properties:
++      compatible:
++        const: usb-c-connector
++
++      power-role: true
++
++      data-role: true
++
++      try-power-role: true
++
++    required:
++      - compatible
++
++required:
++  - compatible
++  - reg
++  - connector
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c1 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        typec: anx7411@2C {
++            compatible = "analogix,anx7411";
++            reg = <0x2C>;
++            interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
++            interrupt-parent = <&gpio0>;
++
++            typec_con: connector {
++                compatible = "usb-c-connector";
++                power-role = "dual";
++                data-role = "dual";
++                try-power-role = "source";
++
++                port {
++                    typec_con_ep: endpoint {
++                        remote-endpoint = <&usbotg_hs_ep>;
++                    };
++                };
++            };
++        };
++    };
++...
+-- 
+2.25.1
+
