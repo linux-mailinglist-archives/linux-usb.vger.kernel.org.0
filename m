@@ -2,310 +2,265 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3624C09C4
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Feb 2022 03:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E47FF4C0A39
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Feb 2022 04:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235469AbiBWC7w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Feb 2022 21:59:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
+        id S237865AbiBWDaG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Feb 2022 22:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233316AbiBWC7u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Feb 2022 21:59:50 -0500
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39B053E13;
-        Tue, 22 Feb 2022 18:59:22 -0800 (PST)
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 8E436C2297;
-        Wed, 23 Feb 2022 02:59:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1645585162; bh=KUYGJEEXoLHwSOsAsjKMSzckiLP2JzomW0yc3XYOAaw=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=SkNi1gwH30tjSe3+ioR5PrGKsTi9zMnR28eBUFLHTqudpZw4hdO2St5xUkIrlw0WT
-         +0dJ76CwkhNKd503xG7fC0y3GOcbxai0jHnLnCi0r+tGjsXPKYKrHxAl4sxpmakeGY
-         MVe1V/kxhan8W/MoWA4XXoRq/46/LYiMeOMbjxi2LRKBB1/3MEjthh8sghZS8dKbOS
-         BpgjbzCnqKpmLY5yY+o0Q0SKETHnKon8PWDSjY9VS6zeTNhLckKA+TnzwaQHd/FVHy
-         X+Rj9rds+BKA4nWOokjzvETuw74J+6ZlOuSByYtoCw06V9pQWVGssXQYOb26OyF8ho
-         bJozH7zVCc2/g==
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 1BF09A0070;
-        Wed, 23 Feb 2022 02:59:19 +0000 (UTC)
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2106.outbound.protection.outlook.com [104.47.70.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 415F58014D;
-        Wed, 23 Feb 2022 02:59:17 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="KY32uMAp";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NfE34JL6ifhnTwvH1OyfpkWlT64RGevjSvMgDdof4Z3d31ax8Ba/8ktk/ahFz+++Ie+fDjEmZ3qfVNHc3ipXShwLeZTTj9Sgg11T3C6ZSfxGXYis3ddU+5Lr851jd3Cr9N84Q1xC7i4edNBQA0JZpY1UmbaRUL9tx0UFufnEwpbRtbOVk4PJ51OL7m08ySc8Q3KG0MzLkPd9vCzgJBBdaZapbBlwL69D/KKHKX9Art1j1BM/hnBBm8NdClpzYGHCZbBLsFYnMLj7edAYpq6/5UvfOPy8pXWowfiwO1lO8Zbos2q1P6gxiyoNleWQ7YOHa8ZELVDFdejqmil+GKoGLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KUYGJEEXoLHwSOsAsjKMSzckiLP2JzomW0yc3XYOAaw=;
- b=VJVvjIlguYlkI9JvmCmrSuxz1q/RjiRRu+dCuyH8NAckYAa0T/pmY/0GyXIdhOAb7dvZspyR98pBvBwcNoOQTa8f9rUPAVRG1qUfcr6HETQDSZuY6bbc1e0EjbIifg0fr5wDgXaA01US442rye2pnWXgn6KMLRKVB4vazpUwpk/gljgdqXLD7X6w04tGRqVbGuzcBlBnC5c/kZD9wfUDFFCUCvo8089vo6BW0roQnAqEh2N6SPeGJG/HUqym8HaNO5qGR0KfdXm+5wU5VF1+Hy4nlFHnbzNvf/dVxBguGr1hrWG9lASslOca8/RxpgNCZoACd1w0Ffgs8zo3WusPUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KUYGJEEXoLHwSOsAsjKMSzckiLP2JzomW0yc3XYOAaw=;
- b=KY32uMAp6I0/gSlMiQkd+VFVeWkIwmdDf2Wv66kQg3RjXBfrI/4XSHLINeR0xTBRzlwT2OWJO9pIRXe2FWOiEqyB1PHawg/WukoqxYmmjnEBLNm9R/wZt019hyTFa1odFeqHUjBDS92loqWvcqQjhlAmSpCegmQYywef14ae6Fw=
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
- by BYAPR12MB3509.namprd12.prod.outlook.com (2603:10b6:a03:13b::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.24; Wed, 23 Feb
- 2022 02:59:14 +0000
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::c5f4:5df4:b5bf:b13e]) by BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::c5f4:5df4:b5bf:b13e%3]) with mapi id 15.20.4995.027; Wed, 23 Feb 2022
- 02:59:14 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Wesley Cheng <wcheng@codeaurora.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Jung Daehwan <dh10.jung@samsung.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-Subject: Re: [PATCH v2 1/2] usb: dwc3: Not set DWC3_EP_END_TRANSFER_PENDING in
- ep cmd fails
-Thread-Topic: [PATCH v2 1/2] usb: dwc3: Not set DWC3_EP_END_TRANSFER_PENDING
- in ep cmd fails
-Thread-Index: AQHYIZOvXlHACGixbUGMAnHCl5PyK6yTYqcAgADHvYCAALGHgIADVGEAgAA82ACAB34VgIAAlEuA
-Date:   Wed, 23 Feb 2022 02:59:14 +0000
-Message-ID: <894d54ad-b6f9-b942-be99-fe3ad102051b@synopsys.com>
-References: <1644836933-141376-1-git-send-email-dh10.jung@samsung.com>
- <CGME20220214111149epcas2p1a1faeda037991885fd6f2f026fa44ec5@epcas2p1.samsung.com>
- <1644836933-141376-2-git-send-email-dh10.jung@samsung.com>
- <ff604504-00df-0c1b-673e-892e42737f7a@synopsys.com>
- <20220215063925.GC144890@ubuntu>
- <63c8c9d1-9b07-a9f2-3639-a38641e19a7a@synopsys.com>
- <6a1322c4-9589-f4de-d42c-d38af2e12e82@quicinc.com>
- <e3332511-82d3-2892-ad72-a0c167273174@synopsys.com>
- <01c4d42e-93cd-d293-f4e3-8c136049d87c@codeaurora.org>
-In-Reply-To: <01c4d42e-93cd-d293-f4e3-8c136049d87c@codeaurora.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synopsys.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1113c6e8-29c6-462f-7df3-08d9f67879b4
-x-ms-traffictypediagnostic: BYAPR12MB3509:EE_
-x-microsoft-antispam-prvs: <BYAPR12MB3509581B6C6B8937B3F6EDE7AA3C9@BYAPR12MB3509.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0GLxk6vim0iuAu4T+2tMS1XznsSwTOCSG7UAOuS9kv/dl4VYuaS63parFKet0kHrX34Q+zHtr5MurzQrpNSgOKVKtGbfubdgNLdaFQFLpBT492d5zGofOiBaH22FV0kVYEMcHxNc08DUanvUVRX3bTMPmrT6qebUSU1So8SDOrBubksoXxJKWG+RasUuJaY9238S7mc8pazvYa+koNn5/V5EizCFylb6IJ0N4qdx61y3Ai39tr1kqHCLE3QNzN7PiBVCf4LDEVjx2ddCz1En84V9ySrBMOphNWBKej/GrzPOJoWJ5uU5QpuaDx9qq7NHiE05kdkmIfyTtgaKkujvXxBj6XnO1s8krj7PJfoh8ay24isEkk9kl7vntCkPoOxCpZNIvp3QjVjBJBqIiL9s3yh06k1+Rd69Cju4DjiWB+YZ+AKoOMG6nw7GyNMhHdhNuUFidY3nMosuxU6Gug67WATmuyUyeHWgDdd4Q467eBjnSLMjBi1tOQA6nm/ZAeZB9vGySYXYB7o4JvSknuvS9fYTjcoaO8tPTE0jUxEOG4kyQPZFI5RRsRNY5sh2R5Q2mUn3AB1mbzwsHyn6KuojTUFlxLe4SgWvPyIIvLGjXZ0gI7OfeQntuQ8RFnd+hYru0TLimGN9KlhOfSsxTpYnfwVX778N8cO2qesAieLPCwJTkKBl7YJyva3YtBnnaiCIgy3JhE8Z7ZHtL1WFVD7wXjXDkNlLdMiCOI0jfAMLv19wcXnTOZ8/AckyLoWxR86e2c1U4AjzPuPfz8Z/f3zpDC3DCwnRo2rlSd+whP/ahmiXkDXwbAYeFa0bdjwnmzaySk8j4APO0WholtiUitwzMRUNiemNfg3KXWlPTrtxBBg=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(26005)(66556008)(6512007)(66946007)(76116006)(6506007)(2616005)(53546011)(966005)(6486002)(31696002)(86362001)(54906003)(508600001)(66446008)(316002)(110136005)(64756008)(8676002)(71200400001)(66476007)(122000001)(38070700005)(83380400001)(4326008)(38100700002)(5660300002)(31686004)(2906002)(8936002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eEpMVllsY3FJVXRaZmpMdHVlRXQvQUFGWmxhblpsOVBZK1hTL3poL2lXeS9x?=
- =?utf-8?B?WHhxODI3cjdZZ0pEQXlST3Rqazh5ODc1RXZtV2ZEOFpDN2FnR0JRTHdzSDdq?=
- =?utf-8?B?MkY2WlpsY0ozYjdUQkhUSmYwcE1SMGx3S29yN2lyUFRzaVRnVC9yOWJXVXhu?=
- =?utf-8?B?aEFPSTdMd2FuOTJHa0lYdWpTRkUrd2xRRGxTdklDRGFOYlc3TWZIeElMcHpG?=
- =?utf-8?B?RWFtRy9YNU82RE11dkpNU3lBc3U5bmd0WjgxcXFCUkl4MlQ4NUlxRldGeUdT?=
- =?utf-8?B?UkUrSXpaaThMUW5vTk9kTlo4Z29IQjBNNE5hUllxcm94dFY0alVvUTJaV2RD?=
- =?utf-8?B?Z3J1Tnl3QmpFT3lJUFlWM2xhT3NXSUtGWnZCajRUemhha3RER1d2eVcyeGIy?=
- =?utf-8?B?QnpBRm5LRm5xVW0wemR3NHY2WDhFUTZab2Z2NUNKdERkOGQzaGJ4cEs2cjJq?=
- =?utf-8?B?RE9icDVpczFYYjdTQzVRRHdxS0ViRTB5WGNlMVRVSEJLOUNoL0RHYmZ1cVVI?=
- =?utf-8?B?UVgyUE9FR0ZvQnhFSlU3RllHRVhQdkVsd3NXZmNaYkllSWhOdmNUTG9sYTVl?=
- =?utf-8?B?MzBNdmhwNnBVekVOS29saDY2ZHBLdkJTYW1za0hqeXhnNnJXTmxRQy83Skw4?=
- =?utf-8?B?UmRIRXFMOUl0MDVBeWJ0YUtsWXlZVEI3QnVCK0U4U2JkOTdyZk94dmpMM3Jr?=
- =?utf-8?B?d2djSVV5UDYyWEo1cHcxMmNtTVErYlJ6VG8xcXN6OUdXVEJVZG0ra1I5ZDJR?=
- =?utf-8?B?dUlSK0UrRCtlNDh6RTIya3piN1VFMkd1VXlTV25HZ2tJeVZUWjQxblI1azdh?=
- =?utf-8?B?NVRPRUJvaW5MWUNkMkpoL0FFM0F4S2pUNkF5VGlRSXlaZVpPNXRUc3N0eDdS?=
- =?utf-8?B?dGRRK29yaldmRTV0M2dEd0RjYTBYLzRpWmU0UWJ0SkRiNHM2S3l1MVR0K016?=
- =?utf-8?B?c3k3YUM0WVdYZWJ4cWE2N3d0azg3VnBJZ0VlRW4yNzFMTU83djRST28vckNP?=
- =?utf-8?B?TEVmY3Iyc0RjbmRncmt2NmN6eDJlWHZJUitYbmt3bUw3a0tpVi9FWmYybXZD?=
- =?utf-8?B?OXk2MUtRcVZQTjhYWkhEN3crMlpTOWowUkNzVWNWSkpIZzl6UDJVcUNLaXNr?=
- =?utf-8?B?dTBoTXhyeUhPcmh6TnNkVncrLzJuNDJmZFh1NDI0dEhkMFI0MUFjYWVXNC90?=
- =?utf-8?B?TUhvTnMvaVpmK1RYa05PK2ZpS2hRRkZIaGZydERxSVdRUXJKL3pnVjYwNk0r?=
- =?utf-8?B?Nzk0OXhxWFJYNWpuVzRyRGtTODBmbXZVUXpsZGsvWnNrZm0rWGJ5ZUxZbHc1?=
- =?utf-8?B?OVpwRnF2VUk3Zzh1UEJSdzJrZ1lmK3BrZnphU05KRkZxbkNnM3Qxdk5udVJ6?=
- =?utf-8?B?ZkVTTWgxQURLVDFGYXJEV2pHWTFTekFvSVFPVlpFU2hVazNpZ2dQVTZmb0JT?=
- =?utf-8?B?ZG1rY1VxYzlSbmJrY24zZ1JYMUx0WHZHNURuUFZSUXEvQ1NvbDQ0RnhrL1lI?=
- =?utf-8?B?M3ZGdUdzUTAzUmpOSE9UUExuSldqUkdXRmtZUy9YbHR1Q0dBbS9TMkRaa0Jl?=
- =?utf-8?B?UzdsblFSMUM2S2lWdmVkeHlIam9sUWJhb0laR0xQVTN1Z05OZjVTRzFDayt0?=
- =?utf-8?B?Z1k4UVFhZGJmVUtnSnpBd0RqOUFINnRkYmVhMTFNZ3VNYmVSei9pQ0xDcU5K?=
- =?utf-8?B?MVd0OVJObXhQZXFEUFl1bTVzVVhaUmxYWExuUTEwNDZLN3JCbmFEQ0hJWVRZ?=
- =?utf-8?B?U1ZVcEQ2Ynl0YWlNV0J3bEM5dkl3ZS84Q2VYcnFENmRZT3lXWktiRUlMcWlX?=
- =?utf-8?B?RzhaUEt5SlR0OVFZcHQzV2xKN3cyakE5MmFTWVZmY0hJbzVjL2sxOW1uLzdw?=
- =?utf-8?B?VWJiMHh5MFkvUmJidWdJNlE3N0NlTVVZYkR0dnV2dHpHR2hQOERDMzNPeDRY?=
- =?utf-8?B?Q3o3cWtyem8vbUZQcjhpQVdHR0lRSDlvWFYwWHUzMUxGcDhpZW0ycUJDTm1m?=
- =?utf-8?B?ZGppQldNNU0zSm5sdWdvTnJ2S1hSazAyUm44NHZlclRia2Z1ZWZWK0VXWE91?=
- =?utf-8?B?anEyNFN6SFMwN01IMnJhZ2JNNXlVcTVMbm5ZVC9sT3hURGtLcUVCbHZsaWNr?=
- =?utf-8?B?MXlMam5MNk9DZEVSemZ5MnBURnZSNDRySjR0MVZVTy9pWkxsbk4rb3I3Vk1I?=
- =?utf-8?Q?2qsj0r5Txi+du0zdQ6eWsYs=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DED5F632E3135A448CAE6ED50827FA4F@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1113c6e8-29c6-462f-7df3-08d9f67879b4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2022 02:59:14.4578
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JPHXXT6WGhfe1wN6rupYODqunmgAv8BUABd7iB/9IrEgcDxQM++WoYOpQnQ6SuzkTRzugyyH7nH382Liu2wcWQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3509
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S230404AbiBWDaG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Feb 2022 22:30:06 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id C242738DB9;
+        Tue, 22 Feb 2022 19:29:36 -0800 (PST)
+Received: from jleng.ambarella.net (unknown [180.169.129.130])
+        by mail-app3 (Coremail) with SMTP id cC_KCgBnv2n1qRViIae6DQ--.54040S2;
+        Wed, 23 Feb 2022 11:28:58 +0800 (CST)
+From:   3090101217@zju.edu.cn
+To:     laurent.pinchart@ideasonboard.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, peter.chen@kernel.org,
+        pawell@cadence.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jing Leng <jleng@ambarella.com>
+Subject: [PATCH] usb: gadget: uvc: add different uvc versions support
+Date:   Wed, 23 Feb 2022 11:28:52 +0800
+Message-Id: <20220223032852.24304-1-3090101217@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgBnv2n1qRViIae6DQ--.54040S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3XF4fCw1xury3ur43KF1rWFg_yoW3Zw1Upr
+        Z8C3yYkF15Jw43uw1fJ3ykur43Ga93JF9rCay2g3yFgryaka4UXF9rtryFkFyrAa15ArWF
+        vF4kJw129ws7ZrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWlnxkEFVCFx7IYxxCEVcI2
+        5VAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lw4CEc2x0rVAKj4xxMxkIecxEwVAFwVW8GwCF04k20x
+        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07bw9a9UUUUU=
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIKBVNG3FoMdQAAsk
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgV2VzbGV5LA0KDQpXZXNsZXkgQ2hlbmcgd3JvdGU6DQo+IEhpIFRoaW5oLA0KPiANCj4gT24g
-Mi8xNy8yMDIyIDM6NDMgUE0sIFRoaW5oIE5ndXllbiB3cm90ZToNCj4+IFdlc2xleSBDaGVuZyB3
-cm90ZToNCj4+PiBIaSBUaGluaCwNCj4+Pg0KPj4+IE9uIDIvMTUvMjAyMiA5OjE0IEFNLCBUaGlu
-aCBOZ3V5ZW4gd3JvdGU6DQo+Pj4+IEp1bmcgRGFlaHdhbiB3cm90ZToNCj4+Pj4+IEhpIFRoaW5o
-LA0KPj4+Pj4NCj4+Pj4+IE9uIE1vbiwgRmViIDE0LCAyMDIyIGF0IDA2OjQ0OjMzUE0gKzAwMDAs
-IFRoaW5oIE5ndXllbiB3cm90ZToNCj4+Pj4+PiBIaSwNCj4+Pj4+Pg0KPj4+Pj4+IERhZWh3YW4g
-SnVuZyB3cm90ZToNCj4+Pj4+Pj4gSXQgYWx3YXlzIHNldHMgRFdDM19FUF9FTkRfVFJBTlNGRVJf
-UEVORElORyBpbiBkd2MzX3N0b3BfYWN0aXZlX3RyYW5zZmVyDQo+Pj4+Pj4+IGV2ZW4gaWYgZHdj
-M19zZW5kX2dhZGdldF9lcF9jbWQgZmFpbHMuIEl0IGNhbiBjYXVzZSBzb21lIHByb2JsZW1zIGxp
-a2UNCj4+Pj4+Pg0KPj4+Pj4+IEhvdyBkb2VzIGl0IGZhaWw/IFRpbWVkIG91dD8NCj4+Pj4+DQo+
-Pj4+PiBZZXMsIHRpbWVkIG91dC4NCj4+Pj4+Pg0KPj4+Pj4+PiBza2lwcGluZyBjbGVhciBzdGFs
-bCBjb21tbWFuZCBvciBnaXZlYmFjayBmcm9tIGRlcXVldWUuIFdlIGZpeCB0byBzZXQgaXQNCj4+
-Pj4+Pj4gb25seSB3aGVuIGVwIGNtZCBzdWNjZXNzLiBBZGRpdGlvbmFsbHksIFdlIGNsZWFyIERX
-QzNfRVBfVFJBTlNGRVJfU1RBUlRFRA0KPj4+Pj4+PiBmb3IgbmV4dCB0cmIgdG8gc3RhcnQgdHJh
-bnNmZXIgbm90IHVwZGF0ZSB0cmFuc2Zlci4NCj4+Pj4+Pg0KPj4+Pj4+IFdlIHNob3VsZG4ndCBk
-byB0aGlzLiBUaGluZ3Mgd2lsbCBiZSBvdXQgb2Ygc3luYy4gSXQgbWF5IHdvcmsgZm9yIDENCj4+
-Pj4+PiBzY2VuYXJpbywgYnV0IGl0IHdvbid0IHdvcmsgZm9yIG90aGVycy4NCj4+Pj4+Pg0KPj4+
-Pj4+IFBsZWFzZSBoZWxwIG1lIHVuZGVyc3RhbmQgYSBmZXcgdGhpbmdzOg0KPj4+Pj4+DQo+Pj4+
-Pj4gMSkgV2hhdCBpcyB0aGUgc2NlbmFyaW8gdGhhdCB0cmlnZ2VycyB0aGlzPyBJcyBpdCByYW5k
-b20/DQo+Pj4+Pj4NCj4+Pj4+IGVwIGNtZCB0aW1lb3V0IG9jY3VycyBvbiBkZXF1ZXVlIHJlcXVl
-c3QgZnJvbSB1c2VyIHNpZGUuIEVuZCBUcmFuc2ZlciBjb21tYW5kDQo+Pj4+PiB3b3VsZCBiZSBz
-ZW50IGluIGR3YzNfc3RvcF9hY3RpdmUgdHJhbnNmZXIuDQo+Pj4+DQo+Pj4+IEF0IHRoZSBoaWdo
-IGxldmVsLCB3aGF0J3MgdHJpZ2dlcmluZyB0aGUgcmVxdWVzdCBkZXF1ZXVlPyBJcyBpdCBmcm9t
-IGENCj4+Pj4gZGlzY29ubmVjdCwgY2hhbmdlIG9mIGludGVyZmFjZSwgb3Igc2ltcGx5IGZ1bmN0
-aW9uIGRyaXZlciBwcm90b2NvbCB0aGF0DQo+Pj4+IGNoYW5nZXMgaXQuDQo+Pj4+DQo+Pj4+IFdo
-YXQgYXBwbGljYXRpb24gd2FzIHVzZWQgdG8gdHJpZ2dlciB0aGlzPw0KPj4+Pg0KPj4+IFNvcnJ5
-IGZvciBqdW1waW5nIGluIGhlcmUsIGJ1dCBsb29rcyBsaWtlIERhZWh3YW4gaXMgcnVubmluZyBp
-bnRvIGENCj4+PiBzaW1pbGFyIGlzc3VlIEkgYW0gc2VlaW5nIGFzIHdlbGwuDQo+Pj4NCj4+PiBB
-dCBsZWFzdCBpbiBteSBzY2VuYXJpbywgdGhlIGRlcXVldWUgaXMgY29taW5nIGZyb20gYSBmdW5j
-dGlvbiBkcml2ZXINCj4+PiB3aGljaCBleHBvc2VzIGEgZGV2aWNlIHRvIHVzZXJzcGFjZS4gIE9u
-Y2UgdGhhdCBkZXZpY2UgaXMgY2xvc2VkLCBpdA0KPj4+IHdpbGwgaXNzdWUgYSBkZXF1ZXVlIG9u
-IGFsbCBwZW5kaW5nL3N1Ym1pdHRlZCByZXF1ZXN0cy4NCj4+DQo+PiBEZXF1ZXVpbmcgcmVxdWVz
-dCBpcyBjb21pbmcgZnJvbSB0aGUgZnVuY3Rpb24gZHJpdmVyLCBidXQgd2hhdCBjYXVzZXMNCj4+
-IHRoZSBkZXF1ZXVlLiBGb3IgZXhhbXBsZSwgdGhlIEVuZCBUcmFuc2ZlciBjb21tYW5kIGR1ZSB0
-byBhIGRpc2Nvbm5lY3QNCj4+IG1heSBnaXZlIGEgZGlmZmVyZW50IGNsdWVzIHRoYW4gYSBkZXF1
-ZXVlIGZyb20gYSBjaGFuZ2Ugb2YgaW50ZXJmYWNlLg0KPj4NCj4gRm9yIHVzLCBvbmNlIHRoZSBh
-cHBsaWNhdGlvbiBleGl0cywgdGhlIGNvcnJlc3BvbmRpbmcgdXNlcnNwYWNlDQo+IGRldmljZS9w
-b3J0IGlzIGNsb3NlZC4gIFRoaXMgdHJpZ2dlcnMgdGhlIGZ1bmN0aW9uIGRyaXZlciB0byBjbGVh
-biB1cA0KPiBhbnkgcGVuZGluZy9xdWV1ZWQgVVNCIHJlcXVlc3RzLiAgSXQgZG9lc24ndCBoYXZl
-IGFueSBhc3NvY2lhdGlvbiB3LyBhbnkNCj4gVVNCIGNhYmxlIGRpc2Nvbm5lY3QsIG9yIGludGVy
-ZmFjZSBjaGFuZ2UgaW4gdGhpcyBjYXNlLCBpdCBpcyBjb250cm9sbGVkDQo+IHNvbGVseSBvbiB0
-aGUgYXBwbGljYXRpb24gZXhpdGluZy9zdG9wcGVkLg0KPj4+DQo+Pj4+Pg0KPj4+Pj4+IDIpIEFy
-ZSB0aGVyZSBvdGhlciB0cmFmZmljcyBwZW5kaW5nIHdoaWxlIGlzc3VpbmcgdGhlIEVuZCBUcmFu
-c2Zlcg0KPj4+Pj4+IGNvbW1hbmQ/IElmIHNvLCB3aGF0IHRyYW5zZmVyIHR5cGUocyk/DQo+Pj4+
-Pj4NCj4+Pj4+IEkgaGF2ZW4ndCBjaGVja2VkIGl0IHlldC4gDQo+Pj4+DQo+Pj4+IENhbiB5b3Ug
-Y2hlY2s/DQo+Pj4+DQo+Pj4gRm9yIHRoZSBjYXNlcyB3aGVyZSB3ZSd2ZSBjb2xsZWN0ZWQgYSBj
-cmFzaCBsb2csIHdlIGNhbiBzZWUgdGhhdCBkdXJpbmcNCj4+PiB0aGUgRU5EIHRyYW5zZmVyIHRp
-bWVvdXRzIHRoZXJlIHdhcyBhbHdheXMgYSBwZW5kaW5nIEVQMCB0cmFuc2FjdGlvbi4NCj4+PiBX
-ZSBoYWQgcmVhY2hlZCBvdXQgdG8gb3VyIGludGVybmFsIEhXIGZvbGtzIHRvIGdldCBzb21lIGlu
-cHV0cyBvbiB3aGF0DQo+Pj4gY291bGQgYmUgY2F1c2luZyB0aGlzIGtpbmQgb2YgaXNzdWUsIGFu
-ZCB3ZSB3ZXJlIGFibGUgdG8gZ2V0IHNvbWUNCj4+PiByZWNvbW1lbmRhdGlvbnMgZnJvbSB0aGVp
-ciBTeW5vcHNpcyBQT0NzLg0KPj4NCj4+IEl0J3MgIlN5bm9wc3lzIiA6KQ0KPj4NCj4gU29ycnkh
-IDopDQo+Pj4NCj4+PiBJdCB3YXMgbWVudGlvbmVkIHRoYXQgaWYgdGhlcmUgd2FzIGFuIGFjdGl2
-ZSBFUDAgdHJhbnNmZXIsIGFuIGVuZA0KPj4+IHRyYW5zZmVyIGNvbW1hbmQgb24gYSBub24tY29u
-dHJvbCBFUCBjYW4gZmFpbCB3LyB0aW1lZCBvdXQuDQo+Pj4NCj4+DQo+PiBXaGF0IGNvbnRyb2xs
-ZXIgdmVyc2lvbiBhcmUgeW91IHVzaW5nPyBBbmQgd2hhdCB2ZXJzaW9uIGlzIEp1bmcgdXNpbmc/
-DQo+PiBEbyB5b3UgaGF2ZSB0aGUgU1RBUiBudW1iZXIgb2YgdGhlIGlzc3VlLiBJZiB5b3UncmUg
-dXNpbmcgYSBkaWZmZXJlbnQNCj4+IHZlcnNpb24gdGhhbiBKdW5nJ3MsIHRoZW4gaXQgbWF5IG5v
-dCBiZSB0aGUgc2FtZSBpc3N1ZS4NCj4+DQo+IFdlJ3JlIHVzaW5nIDEuOTBhLg0KPiANCj4+Pj4+
-DQo+Pj4+Pj4gMykgSGF2ZSB5b3UgdHJpZWQgaW5jcmVhc2luZyB0aGUgdGltZW91dD8NCj4+Pj4+
-Pg0KPj4+Pj4gTm8sIEkgaGF2ZW4ndC4NCj4+Pj4NCj4+Pj4gQ2FuIHlvdSB0cnkgdXAgdG8gMTAg
-c2Vjb25kcyAoanVzdCBmb3IgZXhwZXJpbWVudCkNCj4+Pj4NCj4+PiBJJ3ZlIHRyaWVkIHRoaXMg
-dG9vLCBhbmQgaXQgZGlkIG5vdCBoZWxwLg0KPj4+DQo+Pj4+Pj4gQlIsDQo+Pj4+Pj4gVGhpbmgN
-Cj4+Pj4+Pg0KPj4+Pj4NCj4+Pj4+IFRoaXMgaXNzdWUgb2NjdXJzIHZlcnkgcmFyZWx5IG9uIGN1
-c3RvbWVyLiBJIG9ubHkgaGF2ZSByZXN0cmljdGVkDQo+Pj4+PiBpbmZvcm1hdGlvbi4gVGhhdCdz
-IHdoeSBJJ3ZlIGJlZW4gdHJ5aW5nIHRvIHJlcHJvZHVjZSBpdC4NCj4+Pj4NCj4+Pj4gSG93IGRp
-ZCB5b3UgdGVzdCB5b3VyIGZpeCBpZiB5b3UgY2FuJ3QgcmVwcm9kdWNlIGl0Pw0KPj4+Pg0KPj4+
-Pj4NCj4+Pj4+IFdlc2xleSBtYXkgaGF2ZSBydW4gaW50byBzYW1lIGlzc3VlIGFuZCB5b3UgY2Fu
-IHNlZSB0aGlzIGlzc3VlIGluIGRldGFpbC4NCj4+Pj4+IGh0dHBzOi8vdXJsZGVmZW5zZS5jb20v
-djMvX19odHRwczovL3Byb3RlY3QyLmZpcmVleWUuY29tL3YxL3VybD9rPTlkNDIzYjY5LWZjM2Zk
-MzJlLTlkNDNiMDI2LTc0ZmU0ODVmZmYzMC03N2EwOTliNTI2NTk0MTBkJnE9MSZlPTIwYjRkOWY1
-LTI1OTktNGY1Ny04YjZhLTdjNGVjMTY3ZDIyOCZ1PWh0dHBzKjNBKjJGKjJGbG9yZS5rZXJuZWwu
-b3JnKjJGbGludXgtdXNiKjJGMjAyMjAyMDMwODAwMTcuMjczMzktMS1xdWljX3djaGVuZyo0MHF1
-aWNpbmMuY29tKjJGX187SlNVbEpTVWxKUSEhQTRGMlI5R19wZyFKV1B6TkxvTzNCRlhfSVpDVnpt
-SFB0eHE2ZnJyX1ZGYlNOTmF4U1F5bHVudDFZNEVhdVRPZWZ0aDJMQ0ljVkV1VHg4RSQgDQo+Pj4+
-Pg0KPj4+Pg0KPj4+PiBJIGNhbiB0YWtlIGEgbG9vaywgYnV0IHBsZWFzZSBwcm92aWRlIHRoZSB0
-cmFjZXBvaW50cyBvZiB0aGUgZmFpbHVyZSBpZg0KPj4+PiB5b3UgY2FuIHJlcHJvZHVjZSBpdC4N
-Cj4+Pj4NCj4+PiBMZXQgbWUgc2VlIGlmIEkgaGF2ZSBhbnkgcHJldmlvdXMgdHJhY2VzIEkgY2Fu
-IHNoYXJlLiAgSWYgbm90LCBJIGhhdmUgYQ0KPj4+IHByZXR0eSByZWxpYWJsZSByZXBybyBzZXQg
-dXAgSSBjYW4gY29sbGVjdCBhIHRyYWNlIGZvciB5b3UuICBGb3Igbm93LCBJDQo+Pj4gd2lsbCBm
-b2N1cyBvbiBqdXN0IGdldHRpbmcgdGhlIGVuZHhmZXIgdGltZW91dCBzZWVuIGR1cmluZyBlcCBk
-ZXF1ZXVlLg0KPj4+IEFzIG1lbnRpb25lZCBvbiBteSBwYXRjaHNldCwgdGhpcyBjYW4gaGFwcGVu
-IGR1cmluZyBkZXZpY2UtaW5pdGlhdGVkDQo+Pj4gZGlzY29ubmVjdCBhcyB3ZWxsLg0KPj4+DQo+
-Pg0KPj4gWW91ciBwYXRjaCBzZXQgaXMgc3RpbGwgb24gbXkgdG9kbyBsaXN0LiBJIGhhdmVuJ3Qg
-cmV2aWV3ZWQgaXQuIFRoZXJlJ3MNCj4+IHNvbWUgY29uY2VybiBsb29raW5nIGF0IGl0IGZyb20g
-YSBmaXJzdCBnbGFuY2UsIEknbGwgY2hlY2sgaXQgb3V0IG1vcmUNCj4+IHRob3JvdWdobHkgbGF0
-ZXIuDQo+Pg0KPj4gQ2FuIHlvdSBwcm92aWRlIHRoZSB0cmFjZXBvaW50cz8NCj4+DQo+IEkgY2Fu
-IHByb3ZpZGUgdGhlIGZ1bGwgdHJhY2UgaWYgeW91IG5lZWQgaXQsIGp1c3QgbGV0IG1lIGtub3cu
-ICBIb3dldmVyDQo+IGhlcmUgaXMgYSBxdWljayBzbmlwcGV0Og0KPiANCj4gWyAxODY1LjA3MDM5
-NzY3MCAgICAgICAweDg3MjRlMmYxOF0gICBkYmdfc2VuZF9lcF9jbWQ6IGVwMmluOiBjbWQNCj4g
-J1VwZGF0ZSBUcmFuc2ZlcicgWzUwMDA3XSBwYXJhbXMgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAw
-MDAgLS0+IHN0YXR1czoNCj4gU3VjY2Vzc2Z1bA0KPiBbIDE4NjUuMDcwNDQ5Mzg5ICAgICAgIDB4
-ODcyNGUzMmZhXSAgIGRiZ19lcF9xdWV1ZTogZXAyaW46IHJlcQ0KPiBmZmZmZmY4N2EzNmJkMzAw
-IGxlbmd0aCAwLzY1NTM2IHpzSSA9PT4gLTExNQ0KPiBbIDE4NjUuMDcwNDgwMjIyICAgICAgIDB4
-ODcyNGUzNTQ5XSAgIGRiZ19zZW5kX2VwX2NtZDogZXAyaW46IGNtZA0KPiAnVXBkYXRlIFRyYW5z
-ZmVyJyBbNTAwMDddIHBhcmFtcyAwMDAwMDAwMCAwMDAwMDAwMCAwMDAwMDAwMCAtLT4gc3RhdHVz
-Og0KPiBTdWNjZXNzZnVsDQo+IFsgMTg2NS4wNzA1Mjk5NjIgICAgICAgMHg4NzI0ZTM5MDRdICAg
-ZGJnX2VwX3F1ZXVlOiBlcDJpbjogcmVxDQo+IGZmZmZmZjg4NzA4ZGZjMDAgbGVuZ3RoIDAvNjU1
-MzYgenNJID09PiAtMTE1DQo+IFsgMTg2NS4wNzA1NTk1NDUgICAgICAgMHg4NzI0ZTNiM2NdICAg
-ZGJnX3NlbmRfZXBfY21kOiBlcDJpbjogY21kDQo+ICdVcGRhdGUgVHJhbnNmZXInIFs1MDAwN10g
-cGFyYW1zIDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAwIC0tPiBzdGF0dXM6DQo+IFN1Y2Nlc3Nm
-dWwNCj4gWyAxODY1LjA3MDYxMDYzOSAgICAgICAweDg3MjRlM2YxMV0gICBkYmdfZXBfcXVldWU6
-IGVwMmluOiByZXENCj4gZmZmZmZmODA0MmE5ODIwMCBsZW5ndGggMC82NTUzNiB6c0kgPT0+IC0x
-MTUNCj4gWyAxODY1LjA3MDY0MDY5MSAgICAgICAweDg3MjRlNDE1Ml0gICBkYmdfc2VuZF9lcF9j
-bWQ6IGVwMmluOiBjbWQNCj4gJ1VwZGF0ZSBUcmFuc2ZlcicgWzUwMDA3XSBwYXJhbXMgMDAwMDAw
-MDAgMDAwMDAwMDAgMDAwMDAwMDAgLS0+IHN0YXR1czoNCj4gU3VjY2Vzc2Z1bA0KPiBbIDE4NjUu
-MDcwNjkyOTgzICAgICAgIDB4ODcyNGU0NTNlXSAgIGRiZ19lcF9xdWV1ZTogZXAyaW46IHJlcQ0K
-PiBmZmZmZmY4MDQyYTk4OTAwIGxlbmd0aCAwLzY1NTM2IHpzSSA9PT4gLTExNQ0KPiBbIDE4NjUu
-MDcwNzI4OTcyICAgICAgIDB4ODcyNGU0N2YxXSAgIGRiZ19zZW5kX2VwX2NtZDogZXAyaW46IGNt
-ZA0KPiAnVXBkYXRlIFRyYW5zZmVyJyBbNTAwMDddIHBhcmFtcyAwMDAwMDAwMCAwMDAwMDAwMCAw
-MDAwMDAwMCAtLT4gc3RhdHVzOg0KPiBTdWNjZXNzZnVsDQo+IA0KPiAvL0VQIGhhbHQgc2V0dXAg
-cGFja2V0IGlzIHJlY2VpdmVkIGZyb20gdGhlIFBDDQo+IFsgMTg2NS4xNjY1NzkyMzMgICAgICAg
-MHg4NzI2YTVjYjddICAgZGJnX3RyYWNlX2xvZ19jdHJsOiBDbGVhciBFbmRwb2ludA0KPiBGZWF0
-dXJlKEhhbHQgZXA2aW4pDQo+IFsgMTg2NS4xNjY3MTY3ODUgICAgICAgMHg4NzI2YTY3MDhdICAg
-ZGJnX3NlbmRfZXBfY21kOiBlcDZpbjogY21kICdDbGVhcg0KPiBTdGFsbCcgWzQwNV0gcGFyYW1z
-IDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAwIC0tPiBzdGF0dXM6IFN1Y2Nlc3NmdWwNCj4gDQo+
-IC8vVGhpcyBzaG91bGQgYmUgdGhlIEVQMCBzdGF0dXMgcGhhc2UsIGFzIGl0IGlzIG9uIGVwMGlu
-DQo+IFsgMTg2NS4xNjY4NDk1OTggICAgICAgMHg4NzI2YTcwZmRdICAgZGJnX3NlbmRfZXBfY21k
-OiBlcDBpbjogY21kICdTdGFydA0KPiBUcmFuc2ZlcicgWzQwNl0gcGFyYW1zIDAwMDAwMDAwIGVm
-ZmZhMDAwIDAwMDAwMDAwIC0tPiBzdGF0dXM6IFN1Y2Nlc3NmdWwNCj4gWyAxODY1LjE3MzY2ODgx
-NyAgICAgICAweDg3MjZjNzA2ZV0gICBkYmdfZXBfZGVxdWV1ZTogZXAyaW46IHJlcQ0KPiBmZmZm
-ZmY4ODVmMjkzZjAwIGxlbmd0aCAwLzYyODQ4IHpzSSA9PT4gLTExNQ0KPiANCj4gLy9EZXF1ZXVl
-IHRpbWVvdXQgb2NjdXJzIGhlcmUNCj4gWyAxODY1LjE5MjQyMDkwMCAgICAgICAweDg3MjcxZWVk
-Nl0gICBkYmdfc2VuZF9lcF9jbWQ6IGVwMmluOiBjbWQgJ0VuZA0KPiBUcmFuc2ZlcicgWzUwZDA4
-XSBwYXJhbXMgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgLS0+IHN0YXR1czogVGltZWQgT3V0
-DQo+IA0KDQpDYW4geW91IHByb3ZpZGUgYSBmdWxsIHRyYWNlPw0KDQpCdHcsIHdoZW4geW91IGV4
-cGVyaW1lbnQgd2l0aCBpbmNyZWFzaW5nIHRoZSB0aW1lb3V0IHRvIDEwIHNlY29uZHMsIGRpZA0K
-eW91IHVzZSB0aGUgbWRlbGF5KCkgaW4gZWFjaCBsb29wPyBUaGUgZGVsdGEgdGltZSBmb3IgRW5k
-IFRyYW5zZmVyDQp0aW1lb3V0IGhlcmUgc2VlbXMgdmVyeSBzbWFsbC4NCg0KTm90ZTogVGhlIEVu
-ZCBUcmFuc2ZlciBjb21tYW5kIHNob3VsZCBfb25seV8gZ2V0cyBzdHVjayBpZiB0aGUgRE1BIGZv
-ciBhDQp0aGUgU2V0dXAgcGFja2V0IGlzbuKAmXQgY29tcGxldGVkLCB3aGljaCBzaG91bGQgYmUg
-YSBzaG9ydCB0aW1lLiBJdA0KZG9lc24ndCBsb29rIGxpa2UgdGhlIGNhc2UgaGVyZS4gKEhvcGVm
-dWxseSB0aGUgZnVsbCBkcml2ZXIgdHJhY2Vwb2ludA0KZ2l2ZSBtb3JlIGNsdWVzKS4NCg0KVGhh
-bmtzLA0KVGhpbmgNCg==
+From: Jing Leng <jleng@ambarella.com>
+
+Currently UVC specification has three different versions
+(1.0 1.1 and 1.5), they are a little different:
+
+1. UVC 1.5 adds three new selectors in "Camera Terminal Control".
+2. UVC 1.5 adds one new selector in "Processing Unit Control".
+3. In the "Processing Unit Descriptor", bControlSize is fixed to be 3 in
+   UVC 1.5 and is configurable in UVC 1.0/1.1. In addition, UVC 1.1 adds
+   an extra member "bmVideoStandards".
+4. In the "Video Probe and Commit Controls", the number of the members
+   is different in different UVC versions. The length of the structure
+   is 26/34/48 in UVC 1.0/1.1/1.5.
+
+Currently, even we can configure the uvc version via bcdUVC, there is no
+different processings for UVC 1.0/1.1, and it doesn't have new definitions
+of UVC 1.5.
+we can simply modify the driver according to the UVC 1.0/1.1/1.5
+specifications to support different version UVCs.
+
+Here is an example how to configure the UVC version:
+ VERSION=$(( 0x0150 )) # 0x0100 or 0x0110 or 0x0150
+ mkdir functions/uvc.usb0/control/header/h
+ cd functions/uvc.usb0/control/
+ echo $VERSION > header/h/bcdUVC # change the version
+ ln -s header/h class/fs
+ ln -s header/h class/ss
+
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+---
+ drivers/usb/gadget/function/f_uvc.c        | 17 ++++++++++++--
+ drivers/usb/gadget/function/uvc_configfs.c |  2 +-
+ drivers/usb/gadget/legacy/webcam.c         |  7 +++---
+ include/uapi/linux/usb/video.h             | 27 ++++++++++++++++++++--
+ 4 files changed, 45 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 71bb5e477dba..a39f20b952ce 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -589,6 +589,9 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+ 	struct usb_composite_dev *cdev = c->cdev;
+ 	struct uvc_device *uvc = to_uvc(f);
+ 	struct usb_string *us;
++	struct uvc_processing_unit_descriptor *pd;
++	struct uvc_descriptor_header **ctl_cls;
++	struct uvc_header_descriptor *desc;
+ 	unsigned int max_packet_mult;
+ 	unsigned int max_packet_size;
+ 	struct usb_ep *ep;
+@@ -598,6 +601,15 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+ 	uvcg_info(f, "%s()\n", __func__);
+ 
+ 	opts = fi_to_f_uvc_opts(f->fi);
++
++	/* Handle the length of Processing Unit for different UVC versions */
++	ctl_cls = opts->uvc_ss_control_cls;
++	desc = (struct uvc_header_descriptor *)ctl_cls[0];
++	if (desc) {
++		pd = &opts->uvc_processing;
++		pd->bLength = UVC_DT_PROCESSING_UNIT_SIZE(desc->bcdUVC, 3);
++	}
++
+ 	/* Sanity check the streaming endpoint module parameters.
+ 	 */
+ 	opts->streaming_interval = clamp(opts->streaming_interval, 1U, 16U);
+@@ -814,15 +826,16 @@ static struct usb_function_instance *uvc_alloc_inst(void)
+ 	cd->bmControls[2]		= 0;
+ 
+ 	pd = &opts->uvc_processing;
+-	pd->bLength			= UVC_DT_PROCESSING_UNIT_SIZE(2);
++	pd->bLength			= UVC_DT_PROCESSING_UNIT_SIZE(UVC_VERSION_DEFAULT, 3);
+ 	pd->bDescriptorType		= USB_DT_CS_INTERFACE;
+ 	pd->bDescriptorSubType		= UVC_VC_PROCESSING_UNIT;
+ 	pd->bUnitID			= 2;
+ 	pd->bSourceID			= 1;
+ 	pd->wMaxMultiplier		= cpu_to_le16(16*1024);
+-	pd->bControlSize		= 2;
++	pd->bControlSize		= 3;
+ 	pd->bmControls[0]		= 1;
+ 	pd->bmControls[1]		= 0;
++	pd->bmControls[2]		= 0;
+ 	pd->iProcessing			= 0;
+ 	pd->bmVideoStandards		= 0;
+ 
+diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+index 77d64031aa9c..f4cee41b66f0 100644
+--- a/drivers/usb/gadget/function/uvc_configfs.c
++++ b/drivers/usb/gadget/function/uvc_configfs.c
+@@ -231,7 +231,7 @@ static struct config_item *uvcg_control_header_make(struct config_group *group,
+ 	h->desc.bLength			= UVC_DT_HEADER_SIZE(1);
+ 	h->desc.bDescriptorType		= USB_DT_CS_INTERFACE;
+ 	h->desc.bDescriptorSubType	= UVC_VC_HEADER;
+-	h->desc.bcdUVC			= cpu_to_le16(0x0110);
++	h->desc.bcdUVC			= cpu_to_le16(UVC_VERSION_DEFAULT);
+ 	h->desc.dwClockFrequency	= cpu_to_le32(48000000);
+ 
+ 	config_item_init_type_name(&h->item, name, &uvcg_control_header_type);
+diff --git a/drivers/usb/gadget/legacy/webcam.c b/drivers/usb/gadget/legacy/webcam.c
+index 94e22867da1d..f5f13d39e770 100644
+--- a/drivers/usb/gadget/legacy/webcam.c
++++ b/drivers/usb/gadget/legacy/webcam.c
+@@ -90,7 +90,7 @@ static const struct UVC_HEADER_DESCRIPTOR(1) uvc_control_header = {
+ 	.bLength		= UVC_DT_HEADER_SIZE(1),
+ 	.bDescriptorType	= USB_DT_CS_INTERFACE,
+ 	.bDescriptorSubType	= UVC_VC_HEADER,
+-	.bcdUVC			= cpu_to_le16(0x0110),
++	.bcdUVC			= cpu_to_le16(UVC_VERSION_DEFAULT),
+ 	.wTotalLength		= 0, /* dynamic */
+ 	.dwClockFrequency	= cpu_to_le32(48000000),
+ 	.bInCollection		= 0, /* dynamic */
+@@ -115,15 +115,16 @@ static const struct uvc_camera_terminal_descriptor uvc_camera_terminal = {
+ };
+ 
+ static const struct uvc_processing_unit_descriptor uvc_processing = {
+-	.bLength		= UVC_DT_PROCESSING_UNIT_SIZE(2),
++	.bLength		= UVC_DT_PROCESSING_UNIT_SIZE(UVC_VERSION_DEFAULT, 3),
+ 	.bDescriptorType	= USB_DT_CS_INTERFACE,
+ 	.bDescriptorSubType	= UVC_VC_PROCESSING_UNIT,
+ 	.bUnitID		= 2,
+ 	.bSourceID		= 1,
+ 	.wMaxMultiplier		= cpu_to_le16(16*1024),
+-	.bControlSize		= 2,
++	.bControlSize		= 3,
+ 	.bmControls[0]		= 1,
+ 	.bmControls[1]		= 0,
++	.bmControls[2]		= 0,
+ 	.iProcessing		= 0,
+ 	.bmVideoStandards	= 0,
+ };
+diff --git a/include/uapi/linux/usb/video.h b/include/uapi/linux/usb/video.h
+index bfdae12cdacf..edd1bbde2290 100644
+--- a/include/uapi/linux/usb/video.h
++++ b/include/uapi/linux/usb/video.h
+@@ -21,6 +21,12 @@
+  * UVC constants
+  */
+ 
++/* UVC Protocol Version */
++#define UVC_VERSION_1_0					0x0100
++#define UVC_VERSION_1_1					0x0110
++#define UVC_VERSION_1_5					0x0150
++#define UVC_VERSION_DEFAULT				UVC_VERSION_1_1
++
+ /* A.2. Video Interface Subclass Codes */
+ #define UVC_SC_UNDEFINED				0x00
+ #define UVC_SC_VIDEOCONTROL				0x01
+@@ -104,6 +110,9 @@
+ #define UVC_CT_ROLL_ABSOLUTE_CONTROL			0x0f
+ #define UVC_CT_ROLL_RELATIVE_CONTROL			0x10
+ #define UVC_CT_PRIVACY_CONTROL				0x11
++#define UVC_CT_FOCUS_SIMPLE_CONTROL			0x12
++#define UVC_CT_WINDOW_CONTROL				0x13
++#define UVC_CT_REGION_OF_INTEREST_CONTROL		0x14
+ 
+ /* A.9.5. Processing Unit Control Selectors */
+ #define UVC_PU_CONTROL_UNDEFINED			0x00
+@@ -125,6 +134,7 @@
+ #define UVC_PU_HUE_AUTO_CONTROL				0x10
+ #define UVC_PU_ANALOG_VIDEO_STANDARD_CONTROL		0x11
+ #define UVC_PU_ANALOG_LOCK_STATUS_CONTROL		0x12
++#define UVC_PU_CONTRAST_AUTO_CONTROL			0x13
+ 
+ /* A.9.7. VideoStreaming Interface Control Selectors */
+ #define UVC_VS_CONTROL_UNDEFINED			0x00
+@@ -300,12 +310,14 @@ struct uvc_processing_unit_descriptor {
+ 	__u8   bSourceID;
+ 	__le16 wMaxMultiplier;
+ 	__u8   bControlSize;
+-	__u8   bmControls[2];
++	__u8   bmControls[3];
+ 	__u8   iProcessing;
++	/* UVC 1.1 adds the following member */
+ 	__u8   bmVideoStandards;
+ } __attribute__((__packed__));
+ 
+-#define UVC_DT_PROCESSING_UNIT_SIZE(n)			(10+(n))
++#define UVC_DT_PROCESSING_UNIT_SIZE(v, n)		((__u8) \
++	(((v) == UVC_VERSION_1_0) ? (9+(n)) : ((10+(n)))))
+ 
+ /* 3.7.2.6. Extension Unit Descriptor */
+ struct uvc_extension_unit_descriptor {
+@@ -447,13 +459,24 @@ struct uvc_streaming_control {
+ 	__u16 wDelay;
+ 	__u32 dwMaxVideoFrameSize;
+ 	__u32 dwMaxPayloadTransferSize;
++	/* UVC 1.1 adds the following members */
+ 	__u32 dwClockFrequency;
+ 	__u8  bmFramingInfo;
+ 	__u8  bPreferedVersion;
+ 	__u8  bMinVersion;
+ 	__u8  bMaxVersion;
++	/* UVC 1.5 adds the following members */
++	__u8  bUsage;
++	__u8  bBitDepthLuma;
++	__u8  bmSettings;
++	__u8  bMaxNumberOfRefFramesPlus1;
++	__u16 bmRateControlModes;
++	__u16 bmLayoutPerStream[4];
+ } __attribute__((__packed__));
+ 
++#define UVC_STREAMING_CONTROL_SIZE(v)			\
++	(((v) == UVC_VERSION_1_0) ? 26 : (((v) == UVC_VERSION_1_1) ? 34 : 48))
++
+ /* Uncompressed Payload - 3.1.1. Uncompressed Video Format Descriptor */
+ struct uvc_format_uncompressed {
+ 	__u8  bLength;
+-- 
+2.17.1
+
