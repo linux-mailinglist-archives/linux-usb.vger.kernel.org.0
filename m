@@ -2,265 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47FF4C0A39
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Feb 2022 04:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF6B4C0B51
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Feb 2022 06:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237865AbiBWDaG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Feb 2022 22:30:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
+        id S229670AbiBWFAr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Feb 2022 00:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbiBWDaG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Feb 2022 22:30:06 -0500
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id C242738DB9;
-        Tue, 22 Feb 2022 19:29:36 -0800 (PST)
-Received: from jleng.ambarella.net (unknown [180.169.129.130])
-        by mail-app3 (Coremail) with SMTP id cC_KCgBnv2n1qRViIae6DQ--.54040S2;
-        Wed, 23 Feb 2022 11:28:58 +0800 (CST)
-From:   3090101217@zju.edu.cn
-To:     laurent.pinchart@ideasonboard.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, peter.chen@kernel.org,
-        pawell@cadence.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jing Leng <jleng@ambarella.com>
-Subject: [PATCH] usb: gadget: uvc: add different uvc versions support
-Date:   Wed, 23 Feb 2022 11:28:52 +0800
-Message-Id: <20220223032852.24304-1-3090101217@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgBnv2n1qRViIae6DQ--.54040S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3XF4fCw1xury3ur43KF1rWFg_yoW3Zw1Upr
-        Z8C3yYkF15Jw43uw1fJ3ykur43Ga93JF9rCay2g3yFgryaka4UXF9rtryFkFyrAa15ArWF
-        vF4kJw129ws7ZrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWlnxkEFVCFx7IYxxCEVcI2
-        5VAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lw4CEc2x0rVAKj4xxMxkIecxEwVAFwVW8GwCF04k20x
-        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07bw9a9UUUUU=
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIKBVNG3FoMdQAAsk
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229456AbiBWFAq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Feb 2022 00:00:46 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDB060CC3;
+        Tue, 22 Feb 2022 21:00:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645592419; x=1677128419;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XE2uJRgDNx1OqsKYkWTFHuk32gD01FUaPfvkpmgVI78=;
+  b=ggDz6njMq/Fiid8b+k1K8Wd8trrkLHt/aiVxU1imIrk3cx/y+VSTIygV
+   2ng7E1WyxAIU8Yd2VZD8ed6bgzHFVzuDdhSuGOv99vbEs8Hq1pY/YVUxW
+   FaB+VLs6uspL8sAWCr4erX4hYV2xUok4Z5PKt+82J0gYI8KoPg/4c7lSJ
+   A=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 22 Feb 2022 21:00:19 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 21:00:18 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 22 Feb 2022 21:00:17 -0800
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 22 Feb 2022 21:00:14 -0800
+Date:   Wed, 23 Feb 2022 10:30:10 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Daehwan Jung <dh10.jung@samsung.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: usb: gadget: rndis: add spinlock for rndis response list
+Message-ID: <20220223050010.GA20891@hu-pkondeti-hyd.qualcomm.com>
+References: <CGME20220222053200epcas2p4eddfc8f1083a9d998456164259004b36@epcas2p4.samsung.com>
+ <1645507768-77687-1-git-send-email-dh10.jung@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1645507768-77687-1-git-send-email-dh10.jung@samsung.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
+On Tue, Feb 22, 2022 at 02:29:28PM +0900, Daehwan Jung wrote:
+> There's no lock for rndis response list. It could cause list corruption
+> if there're two different list_add at the same time like below.
+> It's better to add in rndis_add_response / rndis_free_response
+> / rndis_get_next_response to prevent any race condition on response list.
+> 
+> [  361.894299] [1:   irq/191-dwc3:16979] list_add corruption.
+> next->prev should be prev (ffffff80651764d0),
+> but was ffffff883dc36f80. (next=ffffff80651764d0).
+> 
+> [  361.904380] [1:   irq/191-dwc3:16979] Call trace:
+> [  361.904391] [1:   irq/191-dwc3:16979]  __list_add_valid+0x74/0x90
+> [  361.904401] [1:   irq/191-dwc3:16979]  rndis_msg_parser+0x168/0x8c0
+> [  361.904409] [1:   irq/191-dwc3:16979]  rndis_command_complete+0x24/0x84
+> [  361.904417] [1:   irq/191-dwc3:16979]  usb_gadget_giveback_request+0x20/0xe4
+> [  361.904426] [1:   irq/191-dwc3:16979]  dwc3_gadget_giveback+0x44/0x60
+> [  361.904434] [1:   irq/191-dwc3:16979]  dwc3_ep0_complete_data+0x1e8/0x3a0
+> [  361.904442] [1:   irq/191-dwc3:16979]  dwc3_ep0_interrupt+0x29c/0x3dc
+> [  361.904450] [1:   irq/191-dwc3:16979]  dwc3_process_event_entry+0x78/0x6cc
+> [  361.904457] [1:   irq/191-dwc3:16979]  dwc3_process_event_buf+0xa0/0x1ec
+> [  361.904465] [1:   irq/191-dwc3:16979]  dwc3_thread_interrupt+0x34/0x5c
+> 
 
-Currently UVC specification has three different versions
-(1.0 1.1 and 1.5), they are a little different:
+This is just one context. what about the other contexts? Interested to see the
+different contexts under which this list is being manipulated. From the
+f_rndis perspective, this  list is touched from setup and disconnect
+callbacks. so are those two contexts not serialized from the UDC? not saying
+we don't need lock, but would be good to record that information in the change
+log.
 
-1. UVC 1.5 adds three new selectors in "Camera Terminal Control".
-2. UVC 1.5 adds one new selector in "Processing Unit Control".
-3. In the "Processing Unit Descriptor", bControlSize is fixed to be 3 in
-   UVC 1.5 and is configurable in UVC 1.0/1.1. In addition, UVC 1.1 adds
-   an extra member "bmVideoStandards".
-4. In the "Video Probe and Commit Controls", the number of the members
-   is different in different UVC versions. The length of the structure
-   is 26/34/48 in UVC 1.0/1.1/1.5.
+> Fixes: f6281af9d62e ("usb: gadget: rndis: use list_for_each_entry_safe")
+> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> ---
+>  drivers/usb/gadget/function/rndis.c | 8 ++++++++
+>  drivers/usb/gadget/function/rndis.h | 1 +
+>  2 files changed, 9 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/function/rndis.c b/drivers/usb/gadget/function/rndis.c
+> index 431d5a7..79fd994 100644
+> --- a/drivers/usb/gadget/function/rndis.c
+> +++ b/drivers/usb/gadget/function/rndis.c
+> @@ -919,6 +919,7 @@ struct rndis_params *rndis_register(void (*resp_avail)(void *v), void *v)
+>  	params->resp_avail = resp_avail;
+>  	params->v = v;
+>  	INIT_LIST_HEAD(&params->resp_queue);
+> +	spin_lock_init(&params->resp_lock);
+>  	pr_debug("%s: configNr = %d\n", __func__, i);
+>  
+>  	return params;
+> @@ -1012,12 +1013,14 @@ void rndis_free_response(struct rndis_params *params, u8 *buf)
+>  {
+>  	rndis_resp_t *r, *n;
+>  
+> +	spin_lock(&params->resp_lock);
+>  	list_for_each_entry_safe(r, n, &params->resp_queue, list) {
+>  		if (r->buf == buf) {
+>  			list_del(&r->list);
+>  			kfree(r);
+>  		}
+>  	}
+> +	spin_unlock(&params->resp_lock);
+>  }
+>  EXPORT_SYMBOL_GPL(rndis_free_response);
 
-Currently, even we can configure the uvc version via bcdUVC, there is no
-different processings for UVC 1.0/1.1, and it doesn't have new definitions
-of UVC 1.5.
-we can simply modify the driver according to the UVC 1.0/1.1/1.5
-specifications to support different version UVCs.
+Are you sure that this lock is not acquired from any interrupt context from
+other contexts? Also would it be true for all UDC? some UDC may call setup
+from hadirq context and disconnect in process context etc or vice versa. we
+don't want to acquire lock without disabling interrupts in that case.
 
-Here is an example how to configure the UVC version:
- VERSION=$(( 0x0150 )) # 0x0100 or 0x0110 or 0x0150
- mkdir functions/uvc.usb0/control/header/h
- cd functions/uvc.usb0/control/
- echo $VERSION > header/h/bcdUVC # change the version
- ln -s header/h class/fs
- ln -s header/h class/ss
-
-Signed-off-by: Jing Leng <jleng@ambarella.com>
----
- drivers/usb/gadget/function/f_uvc.c        | 17 ++++++++++++--
- drivers/usb/gadget/function/uvc_configfs.c |  2 +-
- drivers/usb/gadget/legacy/webcam.c         |  7 +++---
- include/uapi/linux/usb/video.h             | 27 ++++++++++++++++++++--
- 4 files changed, 45 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 71bb5e477dba..a39f20b952ce 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -589,6 +589,9 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 	struct usb_composite_dev *cdev = c->cdev;
- 	struct uvc_device *uvc = to_uvc(f);
- 	struct usb_string *us;
-+	struct uvc_processing_unit_descriptor *pd;
-+	struct uvc_descriptor_header **ctl_cls;
-+	struct uvc_header_descriptor *desc;
- 	unsigned int max_packet_mult;
- 	unsigned int max_packet_size;
- 	struct usb_ep *ep;
-@@ -598,6 +601,15 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 	uvcg_info(f, "%s()\n", __func__);
- 
- 	opts = fi_to_f_uvc_opts(f->fi);
-+
-+	/* Handle the length of Processing Unit for different UVC versions */
-+	ctl_cls = opts->uvc_ss_control_cls;
-+	desc = (struct uvc_header_descriptor *)ctl_cls[0];
-+	if (desc) {
-+		pd = &opts->uvc_processing;
-+		pd->bLength = UVC_DT_PROCESSING_UNIT_SIZE(desc->bcdUVC, 3);
-+	}
-+
- 	/* Sanity check the streaming endpoint module parameters.
- 	 */
- 	opts->streaming_interval = clamp(opts->streaming_interval, 1U, 16U);
-@@ -814,15 +826,16 @@ static struct usb_function_instance *uvc_alloc_inst(void)
- 	cd->bmControls[2]		= 0;
- 
- 	pd = &opts->uvc_processing;
--	pd->bLength			= UVC_DT_PROCESSING_UNIT_SIZE(2);
-+	pd->bLength			= UVC_DT_PROCESSING_UNIT_SIZE(UVC_VERSION_DEFAULT, 3);
- 	pd->bDescriptorType		= USB_DT_CS_INTERFACE;
- 	pd->bDescriptorSubType		= UVC_VC_PROCESSING_UNIT;
- 	pd->bUnitID			= 2;
- 	pd->bSourceID			= 1;
- 	pd->wMaxMultiplier		= cpu_to_le16(16*1024);
--	pd->bControlSize		= 2;
-+	pd->bControlSize		= 3;
- 	pd->bmControls[0]		= 1;
- 	pd->bmControls[1]		= 0;
-+	pd->bmControls[2]		= 0;
- 	pd->iProcessing			= 0;
- 	pd->bmVideoStandards		= 0;
- 
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 77d64031aa9c..f4cee41b66f0 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -231,7 +231,7 @@ static struct config_item *uvcg_control_header_make(struct config_group *group,
- 	h->desc.bLength			= UVC_DT_HEADER_SIZE(1);
- 	h->desc.bDescriptorType		= USB_DT_CS_INTERFACE;
- 	h->desc.bDescriptorSubType	= UVC_VC_HEADER;
--	h->desc.bcdUVC			= cpu_to_le16(0x0110);
-+	h->desc.bcdUVC			= cpu_to_le16(UVC_VERSION_DEFAULT);
- 	h->desc.dwClockFrequency	= cpu_to_le32(48000000);
- 
- 	config_item_init_type_name(&h->item, name, &uvcg_control_header_type);
-diff --git a/drivers/usb/gadget/legacy/webcam.c b/drivers/usb/gadget/legacy/webcam.c
-index 94e22867da1d..f5f13d39e770 100644
---- a/drivers/usb/gadget/legacy/webcam.c
-+++ b/drivers/usb/gadget/legacy/webcam.c
-@@ -90,7 +90,7 @@ static const struct UVC_HEADER_DESCRIPTOR(1) uvc_control_header = {
- 	.bLength		= UVC_DT_HEADER_SIZE(1),
- 	.bDescriptorType	= USB_DT_CS_INTERFACE,
- 	.bDescriptorSubType	= UVC_VC_HEADER,
--	.bcdUVC			= cpu_to_le16(0x0110),
-+	.bcdUVC			= cpu_to_le16(UVC_VERSION_DEFAULT),
- 	.wTotalLength		= 0, /* dynamic */
- 	.dwClockFrequency	= cpu_to_le32(48000000),
- 	.bInCollection		= 0, /* dynamic */
-@@ -115,15 +115,16 @@ static const struct uvc_camera_terminal_descriptor uvc_camera_terminal = {
- };
- 
- static const struct uvc_processing_unit_descriptor uvc_processing = {
--	.bLength		= UVC_DT_PROCESSING_UNIT_SIZE(2),
-+	.bLength		= UVC_DT_PROCESSING_UNIT_SIZE(UVC_VERSION_DEFAULT, 3),
- 	.bDescriptorType	= USB_DT_CS_INTERFACE,
- 	.bDescriptorSubType	= UVC_VC_PROCESSING_UNIT,
- 	.bUnitID		= 2,
- 	.bSourceID		= 1,
- 	.wMaxMultiplier		= cpu_to_le16(16*1024),
--	.bControlSize		= 2,
-+	.bControlSize		= 3,
- 	.bmControls[0]		= 1,
- 	.bmControls[1]		= 0,
-+	.bmControls[2]		= 0,
- 	.iProcessing		= 0,
- 	.bmVideoStandards	= 0,
- };
-diff --git a/include/uapi/linux/usb/video.h b/include/uapi/linux/usb/video.h
-index bfdae12cdacf..edd1bbde2290 100644
---- a/include/uapi/linux/usb/video.h
-+++ b/include/uapi/linux/usb/video.h
-@@ -21,6 +21,12 @@
-  * UVC constants
-  */
- 
-+/* UVC Protocol Version */
-+#define UVC_VERSION_1_0					0x0100
-+#define UVC_VERSION_1_1					0x0110
-+#define UVC_VERSION_1_5					0x0150
-+#define UVC_VERSION_DEFAULT				UVC_VERSION_1_1
-+
- /* A.2. Video Interface Subclass Codes */
- #define UVC_SC_UNDEFINED				0x00
- #define UVC_SC_VIDEOCONTROL				0x01
-@@ -104,6 +110,9 @@
- #define UVC_CT_ROLL_ABSOLUTE_CONTROL			0x0f
- #define UVC_CT_ROLL_RELATIVE_CONTROL			0x10
- #define UVC_CT_PRIVACY_CONTROL				0x11
-+#define UVC_CT_FOCUS_SIMPLE_CONTROL			0x12
-+#define UVC_CT_WINDOW_CONTROL				0x13
-+#define UVC_CT_REGION_OF_INTEREST_CONTROL		0x14
- 
- /* A.9.5. Processing Unit Control Selectors */
- #define UVC_PU_CONTROL_UNDEFINED			0x00
-@@ -125,6 +134,7 @@
- #define UVC_PU_HUE_AUTO_CONTROL				0x10
- #define UVC_PU_ANALOG_VIDEO_STANDARD_CONTROL		0x11
- #define UVC_PU_ANALOG_LOCK_STATUS_CONTROL		0x12
-+#define UVC_PU_CONTRAST_AUTO_CONTROL			0x13
- 
- /* A.9.7. VideoStreaming Interface Control Selectors */
- #define UVC_VS_CONTROL_UNDEFINED			0x00
-@@ -300,12 +310,14 @@ struct uvc_processing_unit_descriptor {
- 	__u8   bSourceID;
- 	__le16 wMaxMultiplier;
- 	__u8   bControlSize;
--	__u8   bmControls[2];
-+	__u8   bmControls[3];
- 	__u8   iProcessing;
-+	/* UVC 1.1 adds the following member */
- 	__u8   bmVideoStandards;
- } __attribute__((__packed__));
- 
--#define UVC_DT_PROCESSING_UNIT_SIZE(n)			(10+(n))
-+#define UVC_DT_PROCESSING_UNIT_SIZE(v, n)		((__u8) \
-+	(((v) == UVC_VERSION_1_0) ? (9+(n)) : ((10+(n)))))
- 
- /* 3.7.2.6. Extension Unit Descriptor */
- struct uvc_extension_unit_descriptor {
-@@ -447,13 +459,24 @@ struct uvc_streaming_control {
- 	__u16 wDelay;
- 	__u32 dwMaxVideoFrameSize;
- 	__u32 dwMaxPayloadTransferSize;
-+	/* UVC 1.1 adds the following members */
- 	__u32 dwClockFrequency;
- 	__u8  bmFramingInfo;
- 	__u8  bPreferedVersion;
- 	__u8  bMinVersion;
- 	__u8  bMaxVersion;
-+	/* UVC 1.5 adds the following members */
-+	__u8  bUsage;
-+	__u8  bBitDepthLuma;
-+	__u8  bmSettings;
-+	__u8  bMaxNumberOfRefFramesPlus1;
-+	__u16 bmRateControlModes;
-+	__u16 bmLayoutPerStream[4];
- } __attribute__((__packed__));
- 
-+#define UVC_STREAMING_CONTROL_SIZE(v)			\
-+	(((v) == UVC_VERSION_1_0) ? 26 : (((v) == UVC_VERSION_1_1) ? 34 : 48))
-+
- /* Uncompressed Payload - 3.1.1. Uncompressed Video Format Descriptor */
- struct uvc_format_uncompressed {
- 	__u8  bLength;
--- 
-2.17.1
-
+Thanks,
+Pavan
