@@ -2,47 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 214E14C08EC
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Feb 2022 03:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68FB44C0990
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Feb 2022 03:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237129AbiBWCdf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Feb 2022 21:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
+        id S233106AbiBWCob (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Feb 2022 21:44:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237589AbiBWCdQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Feb 2022 21:33:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1475E744;
-        Tue, 22 Feb 2022 18:31:20 -0800 (PST)
+        with ESMTP id S237786AbiBWCmo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Feb 2022 21:42:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE44C13E08;
+        Tue, 22 Feb 2022 18:36:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B5716158A;
-        Wed, 23 Feb 2022 02:31:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 286A0C340F1;
-        Wed, 23 Feb 2022 02:31:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C912B81DD2;
+        Wed, 23 Feb 2022 02:31:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0415C340E8;
+        Wed, 23 Feb 2022 02:31:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645583477;
-        bh=n5T1+I/pmeyijBxU7FOIfuJEcV3dxvkqCaFuwww8pfg=;
+        s=k20201202; t=1645583496;
+        bh=OSlMQc/xL1e7EgNgKDZtIfU3RCKD6yqrk/tH2HsHpqM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GaaMVG+c0WqCz/jd4d/wfiYzh12XHTi57HeW18L1GEGlbopQAr74JcQuo0HUQ6m1h
-         vF+8PYgTQCxgEOxE+PABZpUSObkW3nBnDB4osp8vL1/R6g0rfK4BAQNznugdYZR7OS
-         d20mYVF+xH50xikzwQfprwfcg6n+jouKNvHIrxwsKrcDv2fXKlz4s6rfCM1+fFkxq2
-         jgRipkdayNw2IsRj/WXhj7MyU0gZi4YTs1J6dfcQqsHsvH7Vzg6c/ywUQTawzj6+3b
-         JzQp7cWf4oPu19jCqP4mjRaDH0CTS9VZPRgVvZLdKrlt0NT9AgpXM/PhwaQkBAKbEw
-         TiqNdlhNrdzoQ==
+        b=NnMqPuIG80I7dzYy/kxwXzA9iqOiy2QH2/DnVqfbvMzKykpfbklM6+PhwJ6ueIhS6
+         RL/yzLwhMu5Qvu7GfrefsvfdflK31sXMkE8cMmSDKQOaEEqKzAu5E95aXmkb6N95fZ
+         aPU7/UPBM5NL4wcxIbqTpfAH+Za0gwqKxV871l1LnFoefhDN5YOnYKuUVVqsJPhZCW
+         arDrQFxwP+ZG+DGdb+QaWo8FVuMy5szr6Rqz7Tt6P2FAK8/Sc+ASrRjjI8AfaegO8Q
+         N4ZXNAAuhHaAVSGf+gThSKV8Ti+qFz4pqr52T2FAFp6kPUnHzFEcrrDc/qgEQlt7nS
+         SJIGyAiOF1CWQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Daniele Palmas <dnlplm@gmail.com>,
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Ross Maynard <bids.7405@bigpond.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, oliver@neukum.org,
         kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 18/18] net: usb: cdc_mbim: avoid altsetting toggling for Telit FN990
-Date:   Tue, 22 Feb 2022 21:30:35 -0500
-Message-Id: <20220223023035.241551-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 08/13] USB: zaurus: support another broken Zaurus
+Date:   Tue, 22 Feb 2022 21:31:12 -0500
+Message-Id: <20220223023118.241815-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220223023035.241551-1-sashal@kernel.org>
-References: <20220223023035.241551-1-sashal@kernel.org>
+In-Reply-To: <20220223023118.241815-1-sashal@kernel.org>
+References: <20220223023118.241815-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -57,36 +58,84 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Daniele Palmas <dnlplm@gmail.com>
+From: Oliver Neukum <oneukum@suse.com>
 
-[ Upstream commit 21e8a96377e6b6debae42164605bf9dcbe5720c5 ]
+[ Upstream commit 6605cc67ca18b9d583eb96e18a20f5f4e726103c ]
 
-Add quirk CDC_MBIM_FLAG_AVOID_ALTSETTING_TOGGLE for Telit FN990
-0x1071 composition in order to avoid bind error.
+This SL-6000 says Direct Line, not Ethernet
 
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+v2: added Reporter and Link
+
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Reported-by: Ross Maynard <bids.7405@bigpond.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215361
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/cdc_mbim.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/usb/cdc_ether.c | 12 ++++++++++++
+ drivers/net/usb/zaurus.c    | 12 ++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/drivers/net/usb/cdc_mbim.c b/drivers/net/usb/cdc_mbim.c
-index 77ac5a721e7b6..414341c9cf5ae 100644
---- a/drivers/net/usb/cdc_mbim.c
-+++ b/drivers/net/usb/cdc_mbim.c
-@@ -658,6 +658,11 @@ static const struct usb_device_id mbim_devs[] = {
- 	  .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
- 	},
+diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+index 8325f6d65dccc..eee402a59f6da 100644
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -571,6 +571,11 @@ static const struct usb_device_id	products[] = {
+ 	.bInterfaceSubClass	= USB_CDC_SUBCLASS_ETHERNET, \
+ 	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
  
-+	/* Telit FN990 */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x1bc7, 0x1071, USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
-+	  .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
-+	},
++#define ZAURUS_FAKE_INTERFACE \
++	.bInterfaceClass	= USB_CLASS_COMM, \
++	.bInterfaceSubClass	= USB_CDC_SUBCLASS_MDLM, \
++	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
 +
- 	/* default entry */
- 	{ USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
- 	  .driver_info = (unsigned long)&cdc_mbim_info_zlp,
+ /* SA-1100 based Sharp Zaurus ("collie"), or compatible;
+  * wire-incompatible with true CDC Ethernet implementations.
+  * (And, it seems, needlessly so...)
+@@ -624,6 +629,13 @@ static const struct usb_device_id	products[] = {
+ 	.idProduct              = 0x9032,	/* SL-6000 */
+ 	ZAURUS_MASTER_INTERFACE,
+ 	.driver_info		= 0,
++}, {
++	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++		 | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor               = 0x04DD,
++	.idProduct              = 0x9032,	/* SL-6000 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info		= 0,
+ }, {
+ 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
+ 		 | USB_DEVICE_ID_MATCH_DEVICE,
+diff --git a/drivers/net/usb/zaurus.c b/drivers/net/usb/zaurus.c
+index 8e717a0b559b3..7984f2157d222 100644
+--- a/drivers/net/usb/zaurus.c
++++ b/drivers/net/usb/zaurus.c
+@@ -256,6 +256,11 @@ static const struct usb_device_id	products [] = {
+ 	.bInterfaceSubClass	= USB_CDC_SUBCLASS_ETHERNET, \
+ 	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
+ 
++#define ZAURUS_FAKE_INTERFACE \
++	.bInterfaceClass	= USB_CLASS_COMM, \
++	.bInterfaceSubClass	= USB_CDC_SUBCLASS_MDLM, \
++	.bInterfaceProtocol	= USB_CDC_PROTO_NONE
++
+ /* SA-1100 based Sharp Zaurus ("collie"), or compatible. */
+ {
+ 	.match_flags	=   USB_DEVICE_ID_MATCH_INT_INFO
+@@ -313,6 +318,13 @@ static const struct usb_device_id	products [] = {
+ 	.idProduct              = 0x9032,	/* SL-6000 */
+ 	ZAURUS_MASTER_INTERFACE,
+ 	.driver_info = ZAURUS_PXA_INFO,
++}, {
++	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			    | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor		= 0x04DD,
++	.idProduct		= 0x9032,	/* SL-6000 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info = (unsigned long)&bogus_mdlm_info,
+ }, {
+ 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
+ 		 | USB_DEVICE_ID_MATCH_DEVICE,
 -- 
 2.34.1
 
