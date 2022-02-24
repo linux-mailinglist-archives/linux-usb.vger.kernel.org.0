@@ -2,98 +2,256 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBD94C267F
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Feb 2022 09:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D24AF4C289F
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Feb 2022 10:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbiBXIoq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Feb 2022 03:44:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
+        id S233082AbiBXJ4c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Feb 2022 04:56:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbiBXIop (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Feb 2022 03:44:45 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D8591363
-        for <linux-usb@vger.kernel.org>; Thu, 24 Feb 2022 00:44:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645692256; x=1677228256;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pCxpqs26PMJV1XHfwQRaOIzDXjr+IHhYlkWLI2bMfHE=;
-  b=Z/rvBWmN0C2fzlOfJWXkgQacXaMeGA5UF7UlVMOW+9z/EBZuLkvGvP0x
-   Kxmtbg3OliSLQHwcULb3VLaQKU9GTGofUYNW/bVg5DjNLRkkrfwblxfyg
-   xzN/qy6J7GBU8Hhx0VBdSmS4+1Vn/O8Nmra4yhqUjPCwKyGQfttor2Slb
-   k=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 24 Feb 2022 00:44:16 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 00:44:15 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 24 Feb 2022 00:44:09 -0800
-Received: from [10.216.4.12] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Thu, 24 Feb
- 2022 00:44:07 -0800
-Message-ID: <0edc0822-d75b-238a-16d4-d828710c1b60@quicinc.com>
-Date:   Thu, 24 Feb 2022 14:14:04 +0530
+        with ESMTP id S232209AbiBXJ4a (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Feb 2022 04:56:30 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6921C285AA2;
+        Thu, 24 Feb 2022 01:56:01 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 26FEF1F44A;
+        Thu, 24 Feb 2022 09:56:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645696560; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=757ZRRjpJoiVS489R5WI0W5vTxny+PNszy3i98nF14M=;
+        b=Hx43IEhL5S0JH1QQPNvVsNkeyUHpp+Bxwc5FSojlyPhtozRZZnw+ZEiZuLoOyODUS38dlr
+        Gf+cfNQTAl3PlE4PBEFU9lB9En0Moj3lQPSwq6qlnBxCLrfIHKFIuuomYafe9YugQ8PkZe
+        VU1ZF4SSL2h8/lJ1I1APn/LjULzkZFk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645696560;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=757ZRRjpJoiVS489R5WI0W5vTxny+PNszy3i98nF14M=;
+        b=AlX7aBWo4+ZvAqOobLGxC0gwEW2VZ/fgkvq9hNQHPa1JBtCMVyb9A3YdIKlO83J7On+TII
+        nHXgrTk6ZvDopIAA==
+Received: from localhost.localdomain (unknown [10.100.208.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D7B81A3B98;
+        Thu, 24 Feb 2022 09:55:59 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>, Johan Hovold <johan@kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 3/5] USB: serial: make use of UART_LCR_WLEN() + tty_get_char_size()
+Date:   Thu, 24 Feb 2022 10:55:56 +0100
+Message-Id: <20220224095558.30929-3-jslaby@suse.cz>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220224095558.30929-1-jslaby@suse.cz>
+References: <20220224095517.30872-1-jslaby@suse.cz>
+ <20220224095558.30929-1-jslaby@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [RFT PATCH] xhci: make xhci_handshake timeout for xhci_reset()
- adjustable
-Content-Language: en-US
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-CC:     <s.shtylyov@omp.ru>, <linux-usb@vger.kernel.org>
-References: <20220217135643.1321889-1-mathias.nyman@linux.intel.com>
- <20220218094133.GA28120@hu-pkondeti-hyd.qualcomm.com>
-From:   Udipto Goswami <quic_ugoswami@quicinc.com>
-In-Reply-To: <20220218094133.GA28120@hu-pkondeti-hyd.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Pavan, Mathias,
+Having a generic UART_LCR_WLEN() macro and the tty_get_char_size()
+helper, we can remove all those repeated switch-cases in drivers.
 
-we have tested the patch in the testing environment where initially we 
-were hitting the issue. We don't see any issue after including this.
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Cc: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+---
+ drivers/usb/serial/ark3116.c  | 17 ++---------------
+ drivers/usb/serial/f81232.c   | 16 +---------------
+ drivers/usb/serial/f81534.c   | 16 +---------------
+ drivers/usb/serial/mos7720.c  | 20 +-------------------
+ drivers/usb/serial/quatech2.c | 16 +---------------
+ drivers/usb/serial/ssu100.c   | 16 +---------------
+ 6 files changed, 7 insertions(+), 94 deletions(-)
 
-On 18-02-2022 03:11 pm, Pavan Kondeti wrote:
-> On Thu, Feb 17, 2022 at 03:56:43PM +0200, Mathias Nyman wrote:
->> xhci_reset() timeout was increased from 250ms to 10 seconds in order to
->> give Renesas 720201 xHC enough time to get ready in probe.
->>
->> xhci_reset() is called with interrupts disabled in other places, and
->> waiting for 10 seconds there is not acceptable.
->>
->> Add a timeout parameter to xhci_reset(), and adjust it back to 250ms
->> when called from xhci_stop() or xhci_shutdown() where interrupts are
->> disabled, and successful reset isn't that critical.
->>
->> Additionally change the signed integer timeout parameter in
->> xhci_handshake() to a u64 to match the timeout value we pass to
->> readl_poll_timeout_atomic()
->>
->> Reported-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->> Reported-by: Pavan Kondeti <quic_pkondeti@quicinc.com>
->> Fixes: 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
->> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> We have tested the patch and found no issues. Since the issue happens
-> very rarely, we have included in our builds for the wider testing.
->
-> Thanks,
-> Pavan
+diff --git a/drivers/usb/serial/ark3116.c b/drivers/usb/serial/ark3116.c
+index 5dd710e9fe7d..c0e4df87ff22 100644
+--- a/drivers/usb/serial/ark3116.c
++++ b/drivers/usb/serial/ark3116.c
+@@ -200,21 +200,8 @@ static void ark3116_set_termios(struct tty_struct *tty,
+ 	__u8 lcr, hcr, eval;
+ 
+ 	/* set data bit count */
+-	switch (cflag & CSIZE) {
+-	case CS5:
+-		lcr = UART_LCR_WLEN5;
+-		break;
+-	case CS6:
+-		lcr = UART_LCR_WLEN6;
+-		break;
+-	case CS7:
+-		lcr = UART_LCR_WLEN7;
+-		break;
+-	default:
+-	case CS8:
+-		lcr = UART_LCR_WLEN8;
+-		break;
+-	}
++	lcr = UART_LCR_WLEN(tty_get_char_size(cflag));
++
+ 	if (cflag & CSTOPB)
+ 		lcr |= UART_LCR_STOP;
+ 	if (cflag & PARENB)
+diff --git a/drivers/usb/serial/f81232.c b/drivers/usb/serial/f81232.c
+index 3ad1f515fb68..d9f20256a6a8 100644
+--- a/drivers/usb/serial/f81232.c
++++ b/drivers/usb/serial/f81232.c
+@@ -643,21 +643,7 @@ static void f81232_set_termios(struct tty_struct *tty,
+ 	if (C_CSTOPB(tty))
+ 		new_lcr |= UART_LCR_STOP;
+ 
+-	switch (C_CSIZE(tty)) {
+-	case CS5:
+-		new_lcr |= UART_LCR_WLEN5;
+-		break;
+-	case CS6:
+-		new_lcr |= UART_LCR_WLEN6;
+-		break;
+-	case CS7:
+-		new_lcr |= UART_LCR_WLEN7;
+-		break;
+-	default:
+-	case CS8:
+-		new_lcr |= UART_LCR_WLEN8;
+-		break;
+-	}
++	new_lcr |= UART_LCR_WLEN(tty_get_char_size(tty->termios.c_cflag));
+ 
+ 	mutex_lock(&priv->lock);
+ 
+diff --git a/drivers/usb/serial/f81534.c b/drivers/usb/serial/f81534.c
+index c0bca52ef92a..d789c1ec87b3 100644
+--- a/drivers/usb/serial/f81534.c
++++ b/drivers/usb/serial/f81534.c
+@@ -970,21 +970,7 @@ static void f81534_set_termios(struct tty_struct *tty,
+ 	if (C_CSTOPB(tty))
+ 		new_lcr |= UART_LCR_STOP;
+ 
+-	switch (C_CSIZE(tty)) {
+-	case CS5:
+-		new_lcr |= UART_LCR_WLEN5;
+-		break;
+-	case CS6:
+-		new_lcr |= UART_LCR_WLEN6;
+-		break;
+-	case CS7:
+-		new_lcr |= UART_LCR_WLEN7;
+-		break;
+-	default:
+-	case CS8:
+-		new_lcr |= UART_LCR_WLEN8;
+-		break;
+-	}
++	new_lcr |= UART_LCR_WLEN(tty_get_char_size(tty->termios.c_cflag));
+ 
+ 	baud = tty_get_baud_rate(tty);
+ 	if (!baud)
+diff --git a/drivers/usb/serial/mos7720.c b/drivers/usb/serial/mos7720.c
+index 227f43d2bd56..1e12b5f30dcc 100644
+--- a/drivers/usb/serial/mos7720.c
++++ b/drivers/usb/serial/mos7720.c
+@@ -1380,30 +1380,12 @@ static void change_port_settings(struct tty_struct *tty,
+ 		return;
+ 	}
+ 
+-	lData = UART_LCR_WLEN8;
+ 	lStop = 0x00;	/* 1 stop bit */
+ 	lParity = 0x00;	/* No parity */
+ 
+ 	cflag = tty->termios.c_cflag;
+ 
+-	/* Change the number of bits */
+-	switch (cflag & CSIZE) {
+-	case CS5:
+-		lData = UART_LCR_WLEN5;
+-		break;
+-
+-	case CS6:
+-		lData = UART_LCR_WLEN6;
+-		break;
+-
+-	case CS7:
+-		lData = UART_LCR_WLEN7;
+-		break;
+-	default:
+-	case CS8:
+-		lData = UART_LCR_WLEN8;
+-		break;
+-	}
++	lData = UART_LCR_WLEN(tty_get_char_size(cflag));
+ 
+ 	/* Change the Parity bit */
+ 	if (cflag & PARENB) {
+diff --git a/drivers/usb/serial/quatech2.c b/drivers/usb/serial/quatech2.c
+index 971907f083a3..36b1e064e51f 100644
+--- a/drivers/usb/serial/quatech2.c
++++ b/drivers/usb/serial/quatech2.c
+@@ -281,21 +281,7 @@ static void qt2_set_termios(struct tty_struct *tty,
+ 			new_lcr |= SERIAL_EVEN_PARITY;
+ 	}
+ 
+-	switch (cflag & CSIZE) {
+-	case CS5:
+-		new_lcr |= UART_LCR_WLEN5;
+-		break;
+-	case CS6:
+-		new_lcr |= UART_LCR_WLEN6;
+-		break;
+-	case CS7:
+-		new_lcr |= UART_LCR_WLEN7;
+-		break;
+-	default:
+-	case CS8:
+-		new_lcr |= UART_LCR_WLEN8;
+-		break;
+-	}
++	new_lcr |= UART_LCR_WLEN(tty_get_char_size(cflag));
+ 
+ 	baud = tty_get_baud_rate(tty);
+ 	if (!baud)
+diff --git a/drivers/usb/serial/ssu100.c b/drivers/usb/serial/ssu100.c
+index 3baf7c0f5a98..181e302136a5 100644
+--- a/drivers/usb/serial/ssu100.c
++++ b/drivers/usb/serial/ssu100.c
+@@ -231,21 +231,7 @@ static void ssu100_set_termios(struct tty_struct *tty,
+ 			urb_value |= SERIAL_EVEN_PARITY;
+ 	}
+ 
+-	switch (cflag & CSIZE) {
+-	case CS5:
+-		urb_value |= UART_LCR_WLEN5;
+-		break;
+-	case CS6:
+-		urb_value |= UART_LCR_WLEN6;
+-		break;
+-	case CS7:
+-		urb_value |= UART_LCR_WLEN7;
+-		break;
+-	default:
+-	case CS8:
+-		urb_value |= UART_LCR_WLEN8;
+-		break;
+-	}
++	urb_value |= UART_LCR_WLEN(tty_get_char_size(cflag));
+ 
+ 	baud = tty_get_baud_rate(tty);
+ 	if (!baud)
+-- 
+2.35.1
+
