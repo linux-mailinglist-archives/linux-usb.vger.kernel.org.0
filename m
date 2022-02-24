@@ -2,74 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBE74C336C
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Feb 2022 18:19:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539D14C34A7
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Feb 2022 19:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbiBXRUO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Feb 2022 12:20:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52046 "EHLO
+        id S232753AbiBXSYb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Feb 2022 13:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiBXRUN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Feb 2022 12:20:13 -0500
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EA529EBA2;
-        Thu, 24 Feb 2022 09:19:43 -0800 (PST)
-Received: by mail-oi1-f182.google.com with SMTP id y7so3604411oih.5;
-        Thu, 24 Feb 2022 09:19:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GIkfwABiL9u4jgKQ7QzwnEVlsUine0tssVICa4obUes=;
-        b=g/jJSG3508N6n1hQTkFvSgVPRlKQ5eKn0US59DGY9qROOFQJq8gHLKCQq/GtYHDS6V
-         WnGZGGpon7QoavlAVgZuxfLyQXXx0+nP2fRyBHKaeQ9xUTwUrF5rKGx6G7oTmEo9Rse0
-         WY3AHXSP/W4y19FFeB1gI7flw9JPi9FkguuRNuOExj2wCv0FAZH0cKeqUIhej5lg7Z8D
-         HZZJEV4OC0LLI4+SMTCEhItqUyAXuP0J0iYyRsqkyrIz4bEKiN+sfsL/fOZaaUtK5qsl
-         K2GCcNg8eWSAhk05Z4PtFI1egMrGQgJgqYuISqHF7iSo3jOd/zUsKGxkFY2x1QwyReCj
-         XK3A==
-X-Gm-Message-State: AOAM531rXyQBAJlr+GBID4HzXUNfiTONuanAC809YMz5wEzlvcapt7X3
-        q7d75aOvsxjL/KlLSO1Pig==
-X-Google-Smtp-Source: ABdhPJwW9NXc4ZUuWoldsXFpMnU1Bree9YmCN9tbO3wUbV9Cdsfwk+AcO5gUPlMiqfAMwr1jytWDLw==
-X-Received: by 2002:a05:6870:a40b:b0:d3:4785:c580 with SMTP id m11-20020a056870a40b00b000d34785c580mr6993835oal.221.1645723181847;
-        Thu, 24 Feb 2022 09:19:41 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t5sm1396432otp.67.2022.02.24.09.19.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 09:19:41 -0800 (PST)
-Received: (nullmailer pid 3265197 invoked by uid 1000);
-        Thu, 24 Feb 2022 17:19:39 -0000
-Date:   Thu, 24 Feb 2022 11:19:39 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Ray Jui <rjui@broadcom.com>, linux-kernel@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-rpi-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        Scott Branden <sbranden@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
-        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
-        Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 3/9] dt-bindings: usb: ci-hdrc-usb2: fix node node for
- ethernet controller
-Message-ID: <Yhe+K4rmcBtkyM6C@robh.at.kernel.org>
-References: <20220216074927.3619425-1-o.rempel@pengutronix.de>
- <20220216074927.3619425-4-o.rempel@pengutronix.de>
+        with ESMTP id S229853AbiBXSY3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Feb 2022 13:24:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD5225317F;
+        Thu, 24 Feb 2022 10:23:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13783B826E6;
+        Thu, 24 Feb 2022 18:23:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43850C340E9;
+        Thu, 24 Feb 2022 18:23:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645727036;
+        bh=8TGSW6w/JOL2VaPQZ77oAX4jTKb1mTWfqAmxorApL7U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MVYBUkrpL6VrhgG6uRO7XyzXpZwPREqZiyTCNCgHB3xw1Ns4VvAu68ctN4i6GlPp4
+         Yh1mQMjYtHLEeU8j3mzhPfG/f9QmoaHmsfM/cC+LuIrH7M5j6wg8r3o5/Ch10cMaxu
+         InKnh5dZFJparcw9g5jSEh6MHO8Nr1T6D83qqZ+o=
+Date:   Thu, 24 Feb 2022 19:23:53 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Felix Becker <linux.felixbecker2@gmx.de>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: simple: add Nokia phone driver
+Message-ID: <YhfNOZnZdRigFAr7@kroah.com>
+References: <20220224133109.10523-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220216074927.3619425-4-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220224133109.10523-1-johan@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,16 +51,14 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 16 Feb 2022 08:49:21 +0100, Oleksij Rempel wrote:
-> This documentation provides wrong node name for the Ethernet controller.
-> It should be "ethernet" instead of "smsc" as required by Ethernet
-> controller devicetree schema:
->  Documentation/devicetree/bindings/net/ethernet-controller.yaml
+On Thu, Feb 24, 2022 at 02:31:09PM +0100, Johan Hovold wrote:
+> Add a new "simple" driver for certain Nokia phones, including Nokia 130
+> (RM-1035) which exposes two serial ports in "charging only" mode.
 > 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+> Reported-by: Felix Becker <linux.felixbecker2@gmx.de>
+> Link: https://lore.kernel.org/r/20220208201506.6c65834d@gmx.de
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Johan Hovold <johan@kernel.org>
 
-Acked-by: Rob Herring <robh@kernel.org>
+
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
