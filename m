@@ -2,50 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589504C2D06
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Feb 2022 14:32:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDD94C2D3F
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Feb 2022 14:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235023AbiBXNcg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Feb 2022 08:32:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        id S234784AbiBXNgT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Feb 2022 08:36:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235015AbiBXNca (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Feb 2022 08:32:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9EB3BBC4;
-        Thu, 24 Feb 2022 05:31:51 -0800 (PST)
+        with ESMTP id S231639AbiBXNgS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Feb 2022 08:36:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25641178694
+        for <linux-usb@vger.kernel.org>; Thu, 24 Feb 2022 05:35:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51907B825CD;
-        Thu, 24 Feb 2022 13:31:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08064C340EC;
-        Thu, 24 Feb 2022 13:31:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF12B61AEA
+        for <linux-usb@vger.kernel.org>; Thu, 24 Feb 2022 13:35:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23E16C340E9;
+        Thu, 24 Feb 2022 13:35:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645709509;
-        bh=aDgHwHLlaNIdtT43THiW9lzUoMz27o+RJiZVrVu89lA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Omn8gcOAjIRuISt5tat3NXRjzlGmWi7T2wUJ14F8/pN7QWw+zUUOYj1skVjaw7sGg
-         F5CdZJinP5eRORKVojyF01K9Xsb+pNhv1M9lXETcLn/Qg0RGtnAlba8GyLeinovXpW
-         kxlThjKdBDmOEG8ldZCOabHP0jfQnKBN3VP5bFxPclMovzoltwpPqgQEFnayjr6VWn
-         N8wPH6mnLWjfNf5Zeg4FCSgzXYld6G45soYxWCJzxcWjPE9Wv3W0p5RGFM0SffTFHc
-         fby1miGrzcV8vipUL4ujRbiW5+7YBykSFFQEGX0NzzNRfUm3B7a3vc2D3hBzZdF99x
-         s6nNQXxO/5kuQ==
+        s=k20201202; t=1645709748;
+        bh=cR7KWfCohF5Ohuuf2LCU+PaP4blOX5nl4Nrdojvqp9c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lvF30bocJ51Xnyfcd93utGQTMIZ9UnPcsnuAtDexWBDrYDenE3bEejLw6T3lYMGqr
+         4CZRJp8aiDwLSxBo3CwxZH1ECEeWx8GaP5M1c6A/6CDROVYNnAlvs6L/pcfQtd7cwX
+         C59nZCZSatux4Jh/O4/Fpp7/QNCQCf49vtNc5HCFANs4fE4G3AObQoHFgqsF+u9qK+
+         W6oRBHM4Fp7t/WCGycLsrM9Q8E31Vku3dJThcFt9o+KzltJKQQKEb2k35Cc4wcjbuJ
+         J9qyWJJBnPDt19fNy3tztBvfRuIRvu7ekngYKu40pprdXuKBkpIX65h2hohFNLnQw1
+         znMp0HBhyvWBw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1nNEDk-0003j0-Iy; Thu, 24 Feb 2022 14:31:49 +0100
+        id 1nNEHc-0003mv-D9; Thu, 24 Feb 2022 14:35:48 +0100
+Date:   Thu, 24 Feb 2022 14:35:48 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Felix Becker <linux.felixbecker2@gmx.de>,
-        stable@vger.kernel.org
-Subject: [PATCH] USB: serial: simple: add Nokia phone driver
-Date:   Thu, 24 Feb 2022 14:31:09 +0100
-Message-Id: <20220224133109.10523-1-johan@kernel.org>
-X-Mailer: git-send-email 2.34.1
+To:     Felix Becker <linux.felixbecker2@gmx.de>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [usbserial] device 0421:069a is supported, in fact.
+Message-ID: <YheJtJ/p5QIsphYd@hovoldconsulting.com>
+References: <20220208125958.295e8a0b@gmx.de>
+ <YgKKQSOuwBy1cQ6H@kroah.com>
+ <20220208201506.6c65834d@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="TwgG+bR4WevH1e11"
+Content-Disposition: inline
+In-Reply-To: <20220208201506.6c65834d@gmx.de>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,62 +59,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a new "simple" driver for certain Nokia phones, including Nokia 130
-(RM-1035) which exposes two serial ports in "charging only" mode.
 
-Reported-by: Felix Becker <linux.felixbecker2@gmx.de>
-Link: https://lore.kernel.org/r/20220208201506.6c65834d@gmx.de
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/Kconfig             | 1 +
- drivers/usb/serial/usb-serial-simple.c | 7 +++++++
- 2 files changed, 8 insertions(+)
+--TwgG+bR4WevH1e11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/usb/serial/Kconfig b/drivers/usb/serial/Kconfig
-index de5c01257060..ef8d1c73c754 100644
---- a/drivers/usb/serial/Kconfig
-+++ b/drivers/usb/serial/Kconfig
-@@ -66,6 +66,7 @@ config USB_SERIAL_SIMPLE
- 		- Libtransistor USB console
- 		- a number of Motorola phones
- 		- Motorola Tetra devices
-+		- Nokia mobile phones
- 		- Novatel Wireless GPS receivers
- 		- Siemens USB/MPI adapter.
- 		- ViVOtech ViVOpay USB device.
-diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
-index bd23a7cb1be2..c95dfe4a6f0f 100644
---- a/drivers/usb/serial/usb-serial-simple.c
-+++ b/drivers/usb/serial/usb-serial-simple.c
-@@ -91,6 +91,11 @@ DEVICE(moto_modem, MOTO_IDS);
- 	{ USB_DEVICE(0x0cad, 0x9016) }	/* TPG2200 */
- DEVICE(motorola_tetra, MOTOROLA_TETRA_IDS);
- 
-+/* Nokia mobile phone driver */
-+#define NOKIA_IDS()			\
-+	{ USB_DEVICE(0x0421, 0x069a) }	/* Nokia 130 (RM-1035) */
-+DEVICE_N(nokia, NOKIA_IDS, 2);
-+
- /* Novatel Wireless GPS driver */
- #define NOVATEL_IDS()			\
- 	{ USB_DEVICE(0x09d7, 0x0100) }	/* NovAtel FlexPack GPS */
-@@ -123,6 +128,7 @@ static struct usb_serial_driver * const serial_drivers[] = {
- 	&vivopay_device,
- 	&moto_modem_device,
- 	&motorola_tetra_device,
-+	&nokia_device,
- 	&novatel_gps_device,
- 	&hp4x_device,
- 	&suunto_device,
-@@ -140,6 +146,7 @@ static const struct usb_device_id id_table[] = {
- 	VIVOPAY_IDS(),
- 	MOTO_IDS(),
- 	MOTOROLA_TETRA_IDS(),
-+	NOKIA_IDS(),
- 	NOVATEL_IDS(),
- 	HP4X_IDS(),
- 	SUUNTO_IDS(),
--- 
-2.34.1
+On Tue, Feb 08, 2022 at 08:15:36PM +0100, Felix Becker wrote:
+> On Tue, 8 Feb 2022 16:20:33 +0100, Greg KH <gregkh@linuxfoundation.org>
+> wrote about "Re: [usbserial] device 0421:069a is supported, in fact.":
+>=20
+> > Can you provide the output of `lsusb -v -d 0421:069a` for us?
+>=20
+> Attached (without `usbserial` loaded to specifically drive this phone):
+> `lsusb_0421:069a.nodriver.log`
 
+Thanks for reporting this. I've just sent you a patch adding a new
+"simple" driver for Nokia phones that should allow you to use this
+device without adding the device id manually.
+
+You just need to remember to enable the USB_SERIAL_SIMPLE Kconfig
+option in your kernel build.
+
+Will you be able to test the patch and let us know if it works as
+intended?
+
+Johan
+
+--TwgG+bR4WevH1e11
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQQHbPq+cpGvN/peuzMLxc3C7H1lCAUCYheJrAAKCRALxc3C7H1l
+CMlwAPsEpVQ+AnV2BCIficaE/letRsGoXZCIPfzIDVvTOYizAgD+N87gz02WK4xI
+f3kYw8Ww29gbDuIHhPeJMFswrOD20w4=
+=dFyY
+-----END PGP SIGNATURE-----
+
+--TwgG+bR4WevH1e11--
