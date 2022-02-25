@@ -2,97 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B93A04C4127
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Feb 2022 10:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 788074C419D
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Feb 2022 10:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238970AbiBYJSz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Feb 2022 04:18:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
+        id S239178AbiBYJju (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Feb 2022 04:39:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiBYJSx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Feb 2022 04:18:53 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDD824FBA2;
-        Fri, 25 Feb 2022 01:18:22 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id E1F5A5804B6;
-        Fri, 25 Feb 2022 04:18:21 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 25 Feb 2022 04:18:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=FX2A5mROcHA+clXESla3Vvycg0OLSU6abMHavk
-        eJOIg=; b=oiw/3bwgh8kqVwbPPYyY9kdisE2C/vLxKHgP5Pwr3+W2obOG6+Wmg9
-        meL5i4jw7aGSEFv7fjzvXyQmfUYlCuTg7kAieEHtknl6mV6G/yqVRrzIpUSenk+4
-        gnynEyA/OLEFQ97ojVxvjs/QZU/M0yVc5kqXqWVFdbNLxU5gcbutrUr48uFwoPLS
-        dMPFF6zdpLPF/VpLlGji2B/FMJWWbkAGdcNzKuUtjqI9YyuVdYyjnueklzgJtbLK
-        fDOiRdCr+pLgDoNSY/Ljc4dW6CnZ9t5SoHW99scFYbERWWDWljW0+AsDj3S/LWQP
-        eGs8OGGu/NN5X5XMD/DzeCFyItZSyRww==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=FX2A5mROcHA+clXES
-        la3Vvycg0OLSU6abMHavkeJOIg=; b=fV40NxMvQ7r4Tp7PHb4kMGq634spoWuTj
-        vaQgj5Kty78QA4f06NnSRO8zy4xLQYu7QhgZWzwsX9yhCJ0fHVWT/VKGHKKqeZWR
-        Hux+jzUJ9fmxPnWCZvo+c++9vk71UYixUW+YHGLn/JLU7dSZPhom7Bi22Xu+55wi
-        OcfmIkX8oW68+0M029sQ6o1WtGAPn8ooOOkWL1vEsWTP6n1qpuBe8jB/jjkCPpyM
-        F79hMTAtrMMFxz7cKy4Rj8+pwQRnYgptxIzbR+sqPK2IFBrNY05ipM7QSP+awNNt
-        oqtwkxxO5dPA8byeFkEUsic45azzj5fMQeRNE0/ITEguOYp9BQdTA==
-X-ME-Sender: <xms:3Z4YYi4PrI1z-g42JXvi9__WUnhUkIx2Ney5cFkA0k4cnKTBeUeFxg>
-    <xme:3Z4YYr7mQxK-h3OnRFGY1v4QKP7SGP23tR13Cc8DeKhQ2-IoRFgEZmbGUOZukTxxM
-    1Vo4RqeXPnh3g>
-X-ME-Received: <xmr:3Z4YYhdLwDrNTmSFOe3QCTZ1ruKPamN3kNpxCRYB1LQWEuI9Zt02Cj3bxZeP96ICoZUse9in3Wyx89LbeE5hmiLpfolz8L6C>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrleeggddtvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvffukfhfgggtuggjsehttdertd
-    dttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeen
-    ucggtffrrghtthgvrhhnpeevueehjefgfffgiedvudekvdektdelleelgefhleejieeuge
-    egveeuuddukedvteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
-    fhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:3Z4YYvIObjdH1IUIhyC_6vuFaix4MvXOwxgpRUeT66OzyF-heDDGeg>
-    <xmx:3Z4YYmKNpVp-6jSYpVM4xH9q1q-4nnmXsFdNiYLEwA4aNj6QDp1zrQ>
-    <xmx:3Z4YYgzbwShnnnrNduMEUU2vuOP609O2bPekxy9h8ifb8yU7IOSgtg>
-    <xmx:3Z4YYrCDUAUATHLuPVqjpdjswDMk1oW84b8lgybdSb2qfK-icA-5Yw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 25 Feb 2022 04:18:21 -0500 (EST)
-Date:   Fri, 25 Feb 2022 10:18:19 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
-        bjorn.andersson@linaro.org, robh@kernel.org,
-        linux-kernel@vger.kernel.org, quic_rjendra@quicinc.com,
-        quic_saipraka@quicinc.com
-Subject: Re: [Resend PATCH V1 2/2] Revert "arm64: dts: qcom: sc7280: Add EUD
- dt node and dwc3 connector"
-Message-ID: <Yhie2/fNhHQ7QMHZ@kroah.com>
-References: <cover.1645177190.git.quic_schowdhu@quicinc.com>
- <2bf8d74c1871b0e06de53f800fb77484677e610a.1645177190.git.quic_schowdhu@quicinc.com>
+        with ESMTP id S233715AbiBYJju (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Feb 2022 04:39:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9638F239304
+        for <linux-usb@vger.kernel.org>; Fri, 25 Feb 2022 01:39:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5AC44B82D49
+        for <linux-usb@vger.kernel.org>; Fri, 25 Feb 2022 09:39:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EAD67C340E7
+        for <linux-usb@vger.kernel.org>; Fri, 25 Feb 2022 09:39:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645781956;
+        bh=wdF4HymfXoxJSiXP70U0DC70i0kxfDn1X5mjRYLmx04=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=rLAVMjcXHg9NQyWyuiYVXnXl/+/XiSHex3HkivUl1oIxvJ5GiymR+XX3xYo2nKZxn
+         AmlN8/NXNdAiY8milswj9H0fb8yxvDpg/Gp7CAtdfin7un+jQD+IPvpXQRb5JoXyEl
+         FO+EWfB3v+ejn9gFtRNFCFk9VS33zq4YlzK5x4QmVFloFFX42JLMYWE+b5eIBvBWam
+         cvwT8CGxXKCrK4JicMc0OxzNkIpxkSRTg2oLGtaWsB16hkCPDNDwC1WIYiL02ThcY1
+         wHxHExtZ4JCW0yL+zHeeWbf/fMoWzN013ugirCmW5OAQPnPldumE6ZtTRaoiFshGI/
+         KdyhFToqvIDUg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id CCDDDC05FD2; Fri, 25 Feb 2022 09:39:15 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215475] RMNET data connection speed would be reduced to about
+ 80-100Mb/s from 150Mb/s  if try to re-connect it
+Date:   Fri, 25 Feb 2022 09:39:15 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: slark_xiao@163.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215475-208809-XcRDL3MdDQ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215475-208809@https.bugzilla.kernel.org/>
+References: <bug-215475-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2bf8d74c1871b0e06de53f800fb77484677e610a.1645177190.git.quic_schowdhu@quicinc.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 04:13:46PM +0530, Souradeep Chowdhury wrote:
-> This reverts commit a0c68e493007a8c72b6b00f6ac95590a86edc937.
-> 
-> Revert all the changes to add the Embedded USB Debugger(EUD) Node
-> in the device tree, the connector node and also changes to usb2 Node
-> associated with this.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215475
 
-Again, why?
+--- Comment #4 from slark_xiao@163.com ---
+Hi all,
+  According to Qualcomm analysis, there is no issue on IPA side. They suspe=
+ct
+that  USB is slow to drain is the Root Cause.
+  We tried to enable QMAP to speed up from host side. Ping test is okay, but
+failed in iperf test under simulator network.=20
+  Do you have any good idea for further debugging?
 
-thanks,
+Thanks.
 
-greg k-h
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
