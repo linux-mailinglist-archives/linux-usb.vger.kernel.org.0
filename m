@@ -2,61 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553744C4D01
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Feb 2022 18:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9114C4D3A
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Feb 2022 19:05:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiBYR41 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Feb 2022 12:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
+        id S232532AbiBYSFP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Feb 2022 13:05:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiBYR4Z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Feb 2022 12:56:25 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F642399EF;
-        Fri, 25 Feb 2022 09:55:53 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2d646fffcc2so42093377b3.4;
-        Fri, 25 Feb 2022 09:55:53 -0800 (PST)
+        with ESMTP id S232720AbiBYSFN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Feb 2022 13:05:13 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9526B1E6E91;
+        Fri, 25 Feb 2022 10:04:22 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id y189so7429840ybe.4;
+        Fri, 25 Feb 2022 10:04:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ARW/8wYeL9NnYtTyW8vKBNuProdpU0uaVTh1REnUsFc=;
-        b=TH8gobN/Ow5yp88DQxDjRnsCJHmspygnFoJ7ZIuN9mXyLXdDm0/SmrjDJgsp6dN6cT
-         z/AcU9klYwdX1O2WF5a8muV28NrFLUnB9oNepAv61ZoMEdy+i9cHGMufQ4NNkWAWpzoG
-         SRVWmfSe3vVhtOlm3z2+O5BUkcu/+nlXXU9Mqp4n6df4b2xw0TURloaFDZa8FawY+m5u
-         Cdds1HoH+OCPvDGIg6zXzyedh20/b3Wcmtr4LP8yRYx+A59WTZ6omENs+VlL5Iciv1Jr
-         BWZ55d9iaBF5YsUz6ofxNSAUWcHa4zz9CzoEwXX08cPeYhpsMoSeAlG+GYFVoLLOBIDK
-         XI5A==
+        bh=KojlstE2lgoa7NRwY6/3wf4IDjFuyhSCMnLIbiB/VXw=;
+        b=YsJOaByGxkVsWmlo3S060z6DNQE5Lpo0T52+WHe1QFVq1Np/PzH3I0i2xuV7aTMy/u
+         Q1kmPlvlBiL69lnqJu3XUV9IHW/Y6GcTXKhgAM1qqT6wqsIj5rTBMmRmp21nuQFG5MpD
+         iNDjQwEKh+b1yixh5b2jucpDw07D4LnYEuF4EtPK1iwjS7YEAgim+pnTWQT4rzvu5NL8
+         bCGymTsqjS6dXsUCatOsKzhYDnZN9c/0eSSoQEMulK5c5H8EhwhsC1SKteesQcz9uWMN
+         vazLu5uvqbP7OcmwtOu9xS+UARj3g9EIIvGU+mCXuoaLWkhMFQXOoBhGr1GnHmDWLZHl
+         qXwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ARW/8wYeL9NnYtTyW8vKBNuProdpU0uaVTh1REnUsFc=;
-        b=0eI8V83zabx6YAJ4mf5o+66aajMDutsJZ89dxgIqilXxVGCsvNhtV+S3D8E74e+xRz
-         gsJ0DvuDQS7eLDEJfAnAPmTSvFyQMTTTWam2Hsqvof6Dg+4MqHjv4XQyJV3uhcO2bwl1
-         r7s8eMZR6dRLutwtgJXtgKiZCqXdOHK5PjnUSManPJgLzniV7KxkBb6pUniqT4Wj2G/v
-         WkdDKx+c013lAEG6O5+o/SbehWBH8GkNHX+N4ueevRbcY5ueafNzw6tfm71MNdbMRO2L
-         VL7Hb7YI059EhLhKtE1N1oDiipgU/HlfHpcVuNiEXWozwVH43kIn2QitXl2W/kjJUbFe
-         3Tsw==
-X-Gm-Message-State: AOAM532BC0Daok5N48vJ/o973Dq76H1CtVprz8M4rtN2594LFtV46AQR
-        k+UhMX/IzJzojroD3o/xzp+suw83yFonqtxh0oQ=
-X-Google-Smtp-Source: ABdhPJzbhRYtduGB0jyQirTuOrvJTlsVp6G8VDz4JZYxg4CjXJpZ/0WaVTeKVHC68DqMnfsZs5+heai0OwdIkKYMM6I=
-X-Received: by 2002:a81:1613:0:b0:2d7:c68f:bf21 with SMTP id
- 19-20020a811613000000b002d7c68fbf21mr8804810yww.414.1645811752158; Fri, 25
- Feb 2022 09:55:52 -0800 (PST)
+        bh=KojlstE2lgoa7NRwY6/3wf4IDjFuyhSCMnLIbiB/VXw=;
+        b=kQLUpWTLKrkj92oFTMuFEFdeISYTIlNu1Vl+XDDEPMoKHj6iJoRxeVig54iq9qM9Um
+         5TxXq6CiFtL8mtPYs4B271rDpQj48wDVBIKxx5MsevNrmIiigVAwbKQfB77LfF7pPehK
+         cdUDcPvCO83EG4SDyifZ8cBV9k/aI/LfVpLdXrPU7TYz7n9vjo12yfAZ7daclHSAh9d9
+         DnpjD5pGqy/t5WTf10sIcsr68NbnDO1mRl2NSCo/Wb2JDSTQZCwQrDbIL1oPNhb1bGi9
+         nfwD9j8yTs21gyemfRM/qZ6TfKOD9x1+sArdQJwjNTjjN8T2gpHfjtw5nOxD1Cu1XU5C
+         qKMg==
+X-Gm-Message-State: AOAM532kpGQmDYS8sGmBN4PX7m4FGBygpNbfHwLWI5f2k0wS4ynz9IHd
+        MWj/HL4C3MofEHKwBdw0+9ApRfH7LzTqkF14Pck=
+X-Google-Smtp-Source: ABdhPJyqs/M2Em3/HU+NEY5CE3n65PJxyF06pbxASaTFZx+ohua2HRsbXo6S+rdEcQ6h3e4hUCuCMghFj0B5Kj/71MA=
+X-Received: by 2002:a25:5d0:0:b0:61d:932b:6fc0 with SMTP id
+ 199-20020a2505d0000000b0061d932b6fc0mr8506142ybf.585.1645812261673; Fri, 25
+ Feb 2022 10:04:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20220225145432.422130-1-pgwipeout@gmail.com> <20220225145432.422130-7-pgwipeout@gmail.com>
- <76abe7a9-4e75-b91d-8428-a4df1f6d97b1@wolfvision.net>
-In-Reply-To: <76abe7a9-4e75-b91d-8428-a4df1f6d97b1@wolfvision.net>
+References: <20220225145432.422130-1-pgwipeout@gmail.com> <20220225145432.422130-3-pgwipeout@gmail.com>
+ <5cca79dc-619c-a162-e850-b3efd4dc746d@gmail.com>
+In-Reply-To: <5cca79dc-619c-a162-e850-b3efd4dc746d@gmail.com>
 From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Fri, 25 Feb 2022 12:55:41 -0500
-Message-ID: <CAMdYzYpdd3-rOeG15dsDt7W1+AkSLJSQe18StjLtG8jzuKeajA@mail.gmail.com>
-Subject: Re: [PATCH v1 6/8] usb: dwc3: add rk3568 dwc3 support
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Date:   Fri, 25 Feb 2022 13:04:10 -0500
+Message-ID: <CAMdYzYo81L5YnLr=whBbqde--e_DSuSwSPaXuDwtzeXN7pLMwQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/8] dt-bindings: usb: dwc3: add description for rk3568
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Heiko Stuebner <heiko@sntech.de>, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -68,51 +73,95 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 12:08 PM Michael Riesch
-<michael.riesch@wolfvision.net> wrote:
+On Fri, Feb 25, 2022 at 11:07 AM Johan Jonker <jbx6244@gmail.com> wrote:
 >
 > Hi Peter,
 >
+> Lots of USB series all of a sudden.
+> Combine possible?
+>
 > On 2/25/22 15:54, Peter Geis wrote:
-> > The rk3568 dwc3 controller is backwards compatible with the rk3399 dwc3
-> > controller.
-> > Add support for it to the dwc3-of-simple driver.
+> > The rk3568 dwc3 controllers are backwards compatible with the rk3399.
+> > Add the device tree description for it.
 > >
 > > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 > > ---
-> >  drivers/usb/dwc3/dwc3-of-simple.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >  Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
 > >
-> > diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
-> > index 9dc6295df6b1..1d52a261af55 100644
-> > --- a/drivers/usb/dwc3/dwc3-of-simple.c
-> > +++ b/drivers/usb/dwc3/dwc3-of-simple.c
-> > @@ -49,7 +49,8 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
-> >        * Some controllers need to toggle the usb3-otg reset before trying to
-> >        * initialize the PHY, otherwise the PHY times out.
-> >        */
-> > -     if (of_device_is_compatible(np, "rockchip,rk3399-dwc3"))
-> > +     if (of_device_is_compatible(np, "rockchip,rk3399-dwc3") |
-> > +         of_device_is_compatible(np, "rockchip,rk3568-dwc3"))
-> >               simple->need_reset = true;
+> > diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+> > index 04077f2d7faf..e3044e81cc72 100644
+> > --- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+> > @@ -30,6 +30,7 @@ select:
+> >          enum:
+> >            - rockchip,rk3328-dwc3
+> >            - rockchip,rk3399-dwc3
+> > +          - rockchip,rk3568-dwc3
+> >    required:
+> >      - compatible
+> >
+> > @@ -39,6 +40,7 @@ properties:
+> >        - enum:
+> >            - rockchip,rk3328-dwc3
+> >            - rockchip,rk3399-dwc3
+> > +          - rockchip,rk3568-dwc3
+> >        - const: snps,dwc3
+> >
+> >    reg:
+> > @@ -75,7 +77,10 @@ properties:
+> >      maxItems: 1
+> >
+> he
+> >    reset-names:
+> > -    const: usb3-otg
+> > +    items:
+> > +      - enum:
+> > +          - usb3-otg
+> > +          - usb3-host
 >
-> Maybe read this value out the match data...
+> The use of reset-names is "sort of" only related to the rk3399 legacy
+> node. Still using this sub node DT to not to break older existing boot
+> loaders.
+>
+> https://github.com/torvalds/linux/search?q=usb3-otg
+>
+> It's only mentioned as comment in dwc3-of-simple.c but not used:
+>
+>         simple->resets = of_reset_control_array_get(np, false, true,
+>                                                     true);
+> core.c uses something similar.
+>
+>         dwc->reset = devm_reset_control_array_get_optional_shared(dev);
+>         if (IS_ERR(dwc->reset))
+>                 return PTR_ERR(dwc->reset);
+>
+>
+> Up to the maintainers, but I wouldn't add another variant/name for the
+> same thing as it also optional(= not required) and no longer needed.
 
-This is a good idea, thanks!
+I left these named separately since they are different reset signals,
+but if it isn't an issue I don't mind having them both be usb3-otg.
 
 >
-> >       simple->resets = of_reset_control_array_get(np, false, true,
-> > @@ -176,6 +177,7 @@ static const struct of_device_id of_dwc3_simple_match[] = {
-> >       { .compatible = "hisilicon,hi3670-dwc3" },
-> >       { .compatible = "intel,keembay-dwc3" },
-> >       { .compatible = "rockchip,rk3399-dwc3" },
-> > +     { .compatible = "rockchip,rk3568-dwc3" },
+> Johan
 >
-> ... so all future variants that are compatible to the rk3399 can share it?
+> ===
 >
-> Best regards,
-> Michael
+> Maybe drop PCLK_PIPE as well to reduce notifications.
+
+I'll be conducting testing to determine if we need PCLK_PIPE here, and
+as long as it isn't working simply because it's enabled by someone
+else I'll drop it.
+Ideally, it would be nice to have a proper clock map for these chips,
+but currently that's not in the TRM.
+
 >
-> >       { .compatible = "sprd,sc9860-dwc3" },
-> >       { /* Sentinel */ }
-> >  };
+> See example:
+> https://lore.kernel.org/linux-rockchip/20220225131602.2283499-4-michael.riesch@wolfvision.net/T/#u
+>
+> >
+> >  unevaluatedProperties: false
+> >
+
+Thanks for the review!
