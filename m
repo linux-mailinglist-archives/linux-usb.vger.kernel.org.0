@@ -2,70 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8CD4C4047
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Feb 2022 09:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5AAF4C40CF
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Feb 2022 09:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238577AbiBYIlM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Feb 2022 03:41:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
+        id S238671AbiBYI7Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Feb 2022 03:59:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238564AbiBYIlJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Feb 2022 03:41:09 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D120252905
-        for <linux-usb@vger.kernel.org>; Fri, 25 Feb 2022 00:40:38 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nNW9B-0000ZC-UI; Fri, 25 Feb 2022 09:40:17 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nNW97-000720-Sx; Fri, 25 Feb 2022 09:40:13 +0100
-Date:   Fri, 25 Feb 2022 09:40:13 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Scott Branden <sbranden@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, kernel@pengutronix.de,
-        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v5 2/9] dt-bindings: net: add schema for Microchip/SMSC
- LAN95xx USB Ethernet controllers
-Message-ID: <20220225084013.GA26647@pengutronix.de>
-References: <20220216074927.3619425-1-o.rempel@pengutronix.de>
- <20220216074927.3619425-3-o.rempel@pengutronix.de>
- <Yhe95rXZc7RzgO5o@robh.at.kernel.org>
+        with ESMTP id S233961AbiBYI7Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Feb 2022 03:59:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E517320E781
+        for <linux-usb@vger.kernel.org>; Fri, 25 Feb 2022 00:58:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 868F5B82BAF
+        for <linux-usb@vger.kernel.org>; Fri, 25 Feb 2022 08:58:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACEF3C340E7;
+        Fri, 25 Feb 2022 08:58:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645779530;
+        bh=sw5tDBlxWJXbCoGAwOiCDSj1VB62c4bkXCqy7O/uzrk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W5Xd3Jcv9mixpFloV3zOL+wMrtLhcud6/HWv+OuZvMPpC7kVMSJ3Zd2CS+8VXGVGa
+         9iF/N/vml8izrn1Xy0o9wHY7Y32bIeXlNN714sbgeCcnvAiO+/GPn/wYuzciKM4k9F
+         wWdLpSC5Zy+xxouNBln0CFJixk7sYSkepJ5ym4szMFd/4j1zOIZow96Fzu2baz7Iol
+         rlN7yNrZ94n0sb6YWnN9u70nXryKMSqysXvg8KJXsKd87P/WQCKztixIkHDN3gSjn4
+         sfhtsiusWUY5H0unsyeDZPF1/H7CL/wsJMBJX7GlZJqGqYeobvoh+pASAnvL5I/xfK
+         XQxzBBla8WBmg==
+Date:   Fri, 25 Feb 2022 14:28:45 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
+Subject: Re: [PATCH v2 0/9] usb/dwc3 / phy/tusb1210: Add TUSB1211 charger
+ detection
+Message-ID: <YhiaRUvW1AutIrCy@matsya>
+References: <20220213130524.18748-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yhe95rXZc7RzgO5o@robh.at.kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 09:37:59 up 76 days, 17:23, 84 users,  load average: 0.25, 0.18,
- 0.18
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220213130524.18748-1-hdegoede@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,29 +57,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 11:18:30AM -0600, Rob Herring wrote:
-> On Wed, Feb 16, 2022 at 08:49:20AM +0100, Oleksij Rempel wrote:
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    usb {
-> > +        #address-cells = <1>;
-> > +        #size-cells = <0>;
-> > +
-> > +        ethernet@1 {
-> > +            compatible = "usb424,ec00";
+On 13-02-22, 14:05, Hans de Goede wrote:
+> Hi All,
 > 
-> If this is a hub/ethernet combo device, how is it valid to be standalone 
-> without the hub?
+> Here is v2 of the patchs-series to add support for USB charger-type
+> (SDP/DCP) detection using a tusb1210 phy connected to a dwc3 controller.
+> 
+> Changes in v2:
+> [PATCH v2 9/9] phy: ti: tusb1210: Add charger detection:
+> - Add an online attribute to the registered power_supply class device,
+>   otherwise upower thinks it is an extra system battery
+> - Add tusb1210_remove_charger_detect() function to properly unregister
+>   the tusb->psy_nb notifier and to cancel tusb->chg_det_work
+> 
+> v1 cover-letter:
+> 
+> Some Android x86 tablets with a Bay Trail (BYT) SoC (with DWC3 UDC)
+> and a Crystal Cove PMIC, which does not support charger-detection,
+> rely on a TUSB1211 phy for charger-detection.
+> 
+> This series adds support for this, it starts with some dwc3 bug-fixes
+> for issues hit while developing this, as well as adding support to
+> the dwc3 code to set a special property checked by the tusb1210 driver
+> to signal that it needs to enable charger-detection.
+> 
+> The 2nd half of the series does some refactoring / fixes to the
+> tusb1210 driver and adds the charger-detection support.
 
-What is the best way to describe two type of devices: with and without
-hub in package? Have two different schema to keep things simple?
+Applied phy patches to phy-next, thanks
 
-Regards,
-Oleksij
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+~Vinod
