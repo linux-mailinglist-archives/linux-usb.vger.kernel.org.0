@@ -2,134 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE614C4BD8
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Feb 2022 18:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B99A4C4CC4
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Feb 2022 18:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238901AbiBYRQh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Feb 2022 12:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
+        id S243952AbiBYRnC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Feb 2022 12:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbiBYRQg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Feb 2022 12:16:36 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245EE1BB707;
-        Fri, 25 Feb 2022 09:16:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645809364; x=1677345364;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=d82XZA2/evL6z4Q1q/SvLwPu9W9fK10IO/w6ZJFsHio=;
-  b=q5QqyfiCcUGxSqgdQhp9juiHNWZBZpYn3t4pV6P5NgewX3iH5Pw9c8GU
-   Fup2YTjU40hfJGS7PzIDx03SA0M0SuMivXf5Pc82YjuK7KDMJ1ttDie2U
-   qDMXJILjrQSo0SZUQpM//xWWwxDYfL4iySjVwVPqq1pKVoDOM76DHsHc3
-   o=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 25 Feb 2022 09:16:03 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 09:16:03 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 25 Feb 2022 09:16:03 -0800
-Received: from jackp-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 25 Feb 2022 09:16:02 -0800
-Date:   Fri, 25 Feb 2022 09:16:01 -0800
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     Peter Geis <pgwipeout@gmail.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bin Yang <yangbin@rock-chips.com>,
-        "Heiko Stuebner" <heiko@sntech.de>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH v1 4/8] usb: dwc3: core: do not use 3.0 clock when
- operating in 2.0 mode
-Message-ID: <20220225171601.GF13801@jackp-linux.qualcomm.com>
-References: <20220225145432.422130-1-pgwipeout@gmail.com>
- <20220225145432.422130-5-pgwipeout@gmail.com>
+        with ESMTP id S239434AbiBYRnC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Feb 2022 12:43:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E103747041;
+        Fri, 25 Feb 2022 09:42:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9994AB832D3;
+        Fri, 25 Feb 2022 17:42:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E00C340F0;
+        Fri, 25 Feb 2022 17:42:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645810946;
+        bh=jfHP8ngKi4vi3hByTlvRBRmGbm9iwkShUz8a4jmfoDA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=n2kvSfc3paE5uL2pMwk1S162tbwbF/72CqdijVqlJrce7vDG9FBy+jqWdaH3istvR
+         2VesiPVL/8aE4R3giOSVzAO3EKj1IW4CBrkRgRVWZUgaPbu2sjnyywLMoyrEhhh/TT
+         zw93DjlZXGL6IS86ZJmESPcGTiOrZ1UKeC/qikGAW6KDolKQLXnQk3VZRi9Nm7YwsN
+         77Y4nmToTJnrlcd410RW94elR9bPMNuiu9cAxoeXUzKhtmgwO0hIEnaa9VldTHz8oU
+         5dO9RyjQ6SfjzB9pw3qppG5X0senYPvCFW87hoxmezrQuSXbHr6+RiZZim0B2saAMx
+         KriJ61n3uN8fw==
+Date:   Fri, 25 Feb 2022 11:42:24 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+        "open list:RADEON and AMDGPU DRM DRIVERS" 
+        <amd-gfx@lists.freedesktop.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
+        <nouveau@lists.freedesktop.org>,
+        "open list:X86 PLATFORM DRIVERS" 
+        <platform-driver-x86@vger.kernel.org>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Alexander.Deucher@amd.com, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH v5 3/7] PCI: Drop the `is_thunderbolt` attribute from PCI
+ core
+Message-ID: <20220225174224.GA366735@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220225145432.422130-5-pgwipeout@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220224215116.7138-4-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-+Thinh
-
-Hi Peter,
-
-On Fri, Feb 25, 2022 at 09:54:27AM -0500, Peter Geis wrote:
-> From: Bin Yang <yangbin@rock-chips.com>
+On Thu, Feb 24, 2022 at 03:51:12PM -0600, Mario Limonciello wrote:
+> The `is_thunderbolt` attribute originally had a well defined list of
+> quirks that it existed for, but it has been overloaded with more
+> meaning.
 > 
-> In the 3.0 device core, if the core is programmed to operate in
-> 2.0 only, then setting the GUCTL1.DEV_FORCE_20_CLK_FOR_30_CLK makes
-> the internal 2.0(utmi/ulpi) clock to be routed as the 3.0 (pipe)
-> clock. Enabling this feature allows the pipe3 clock to be not-running
-> when forcibly operating in 2.0 device mode.
+> Instead use the driver core removable attribute to indicate the
+> detail a device is attached to a thunderbolt or USB4 chain.
 > 
-> Signed-off-by: Bin Yang <yangbin@rock-chips.com>
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->  drivers/usb/dwc3/core.c | 4 ++++
->  drivers/usb/dwc3/core.h | 1 +
->  2 files changed, 5 insertions(+)
+>  drivers/pci/probe.c               | 2 +-
+>  drivers/platform/x86/apple-gmux.c | 2 +-
+>  include/linux/pci.h               | 5 ++---
+>  3 files changed, 4 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 18adddfba3da..032d40794fae 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1167,6 +1167,10 @@ static int dwc3_core_init(struct dwc3 *dwc)
->  		if (dwc->parkmode_disable_ss_quirk)
->  			reg |= DWC3_GUCTL1_PARKMODE_DISABLE_SS;
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index 17a969942d37..1b752d425c47 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -1584,7 +1584,7 @@ static void set_pcie_thunderbolt(struct pci_dev *dev)
+>  	/* Is the device part of a Thunderbolt controller? */
+>  	vsec = pci_find_vsec_capability(dev, PCI_VENDOR_ID_INTEL, PCI_VSEC_ID_INTEL_TBT);
+>  	if (vsec)
+> -		dev->is_thunderbolt = 1;
+> +		dev->external_facing = true;
+>  }
 >  
-> +		if (dwc->maximum_speed == USB_SPEED_HIGH ||
-> +		    dwc->maximum_speed == USB_SPEED_FULL)
-> +			reg |= DWC3_GUCTL1_DEV_FORCE_20_CLK_FOR_30_CLK;
-> +
-
-I doubt this is applicable to all revisions of the DWC_usb3x IP cores?
-For instance in the programming guide for DWC_usb31 1.90a bit 26 of
-GUCTL1 is 'Reserved'.  While I do see it in the DWC_usb3 databook,
-table 4-8 entry "Remove pipe_clk mux for 2.0 mode?" mentions this
-feature was only added in v2.90a.
-
-So this setting at least needs a revision check to make sure we're not
-causing unexpected behavior.  Something like
-
-	DWC3_VER_IS_WITHIN(DWC3, 290A, ANY)
-
-Jack
-
->  		dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
->  	}
+>  static void set_pcie_untrusted(struct pci_dev *dev)
+> diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
+> index 57553f9b4d1d..4444da0c39b0 100644
+> --- a/drivers/platform/x86/apple-gmux.c
+> +++ b/drivers/platform/x86/apple-gmux.c
+> @@ -596,7 +596,7 @@ static int gmux_resume(struct device *dev)
 >  
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index eb9c1efced05..ea3ca04406bb 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -259,6 +259,7 @@
->  /* Global User Control 1 Register */
->  #define DWC3_GUCTL1_DEV_DECOUPLE_L1L2_EVT	BIT(31)
->  #define DWC3_GUCTL1_TX_IPGAP_LINECHECK_DIS	BIT(28)
-> +#define DWC3_GUCTL1_DEV_FORCE_20_CLK_FOR_30_CLK	BIT(26)
->  #define DWC3_GUCTL1_DEV_L1_EXIT_BY_HW		BIT(24)
->  #define DWC3_GUCTL1_PARKMODE_DISABLE_SS		BIT(17)
+>  static int is_thunderbolt(struct device *dev, void *data)
+>  {
+> -	return to_pci_dev(dev)->is_thunderbolt;
+> +	return to_pci_dev(dev)->external_facing;
+>  }
 >  
-> -- 
-> 2.25.1
-> 
+>  static int gmux_probe(struct pnp_dev *pnp, const struct pnp_device_id *id)
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 1e5b769e42fc..d9719eb14654 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -442,7 +442,6 @@ struct pci_dev {
+>  	unsigned int	is_virtfn:1;
+>  	unsigned int	is_hotplug_bridge:1;
+>  	unsigned int	shpc_managed:1;		/* SHPC owned by shpchp */
+> -	unsigned int	is_thunderbolt:1;	/* Thunderbolt controller */
+>  	unsigned int	no_cmd_complete:1;	/* Lies about command completed events */
+>  
+>  	/*
+> @@ -2447,11 +2446,11 @@ static inline bool pci_is_thunderbolt_attached(struct pci_dev *pdev)
+>  {
+>  	struct pci_dev *parent = pdev;
+>  
+> -	if (pdev->is_thunderbolt)
+> +	if (dev_is_removable(&pdev->dev))
+>  		return true;
+>  
+>  	while ((parent = pci_upstream_bridge(parent)))
+> -		if (parent->is_thunderbolt)
+> +		if (dev_is_removable(&parent->dev))
+>  			return true;
+>  
+>  	return false;
+
+Since you remove this function entirely later, it seems like you might
+as well push this to the end of the series, so you won't have to
+change it before removing it.
+
+That would just leave the "PCI_VSEC_ID_INTEL_TBT implies external-facing"
+assumption above.  Not having a Thunderbolt spec, I have no idea how
+you deal with that.
+
+But it is definitely not the case that "dev_is_removable() implies
+device is Thunderbolt", so I don't think this last hunk can work.
+
+Bjorn
