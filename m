@@ -2,45 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30AAB4C4241
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Feb 2022 11:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C85DC4C452F
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Feb 2022 14:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239484AbiBYK1R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Feb 2022 05:27:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
+        id S240788AbiBYNE0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Feb 2022 08:04:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiBYK1O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Feb 2022 05:27:14 -0500
-Received: from mail.bitwise.fi (mail.bitwise.fi [109.204.228.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC32384;
-        Fri, 25 Feb 2022 02:26:37 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.bitwise.fi (Postfix) with ESMTP id 8358946002C;
-        Fri, 25 Feb 2022 12:26:33 +0200 (EET)
-X-Virus-Scanned: Debian amavisd-new at 
-Received: from mail.bitwise.fi ([127.0.0.1])
-        by localhost (mustetatti.dmz.bitwise.fi [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id aPS1rS0NMg1h; Fri, 25 Feb 2022 12:26:31 +0200 (EET)
-Received: from localhost.net (fw1.dmz.bitwise.fi [192.168.69.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: anssiha)
-        by mail.bitwise.fi (Postfix) with ESMTPSA id 6D87C46001C;
-        Fri, 25 Feb 2022 12:26:31 +0200 (EET)
-From:   Anssi Hannula <anssi.hannula@bitwise.fi>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2 v2] xhci: fix garbage USBSTS being logged in some cases
-Date:   Fri, 25 Feb 2022 12:26:02 +0200
-Message-Id: <20220225102602.3829106-1-anssi.hannula@bitwise.fi>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <fe7381b1-19bc-3b1e-50f3-0ed5c7c39e5e@linux.intel.com>
-References: <fe7381b1-19bc-3b1e-50f3-0ed5c7c39e5e@linux.intel.com>
+        with ESMTP id S234439AbiBYNEY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Feb 2022 08:04:24 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8C11DA032;
+        Fri, 25 Feb 2022 05:03:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645794232; x=1677330232;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=tLTi208t9PkSrFC828ZdMyJbU0Jlyi2aKs/bqY+wFKI=;
+  b=mwumVu94efXK5F6BUwUY7mkkqHgECU5YrJmd+RWCmRkBS3zieEThmsNj
+   ZfGC2iHfPqtzBHGP72q4dhJa7Q2u/9jUC1cQYM4f1Q/76c7En1xYX7krN
+   5kpOY0vrCXoFwdJRJT/NgQCJXFo3oJBRuHanjZc0DX5ewu01gPZAjRu4e
+   g=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 Feb 2022 05:03:52 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 05:03:51 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 25 Feb 2022 05:03:50 -0800
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 25 Feb 2022 05:03:47 -0800
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
+        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <quic_rjendra@quicinc.com>,
+        <quic_saipraka@quicinc.com>, <quic_schowdhu@quicinc.com>
+Subject: [PATCH V2 0/2] Revert device tree changes for EUD
+Date:   Fri, 25 Feb 2022 18:32:59 +0530
+Message-ID: <cover.1645793187.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,62 +61,22 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-xhci_decode_usbsts() is expected to return a zero-terminated string by
-its only caller, xhci_stop_endpoint_command_watchdog(), which directly
-logs the return value:
+Revert the device tree changes for Embedded USB Debugger(EUD)
+from the usb tree to avoid conflicts as device tree changes
+for EUD are supposed to go from qcom Tree.
 
-  xhci_warn(xhci, "USBSTS:%s\n", xhci_decode_usbsts(str, usbsts));
+Changes in V2
 
-However, if no recognized bits are set in usbsts, the function will
-return without having called any sprintf() and therefore return an
-untouched non-zero-terminated caller-provided buffer, causing garbage
-to be output to log.
+*Added the reason in revert statement.
 
-Fix that by always including the raw value in the output.
+Souradeep Chowdhury (2):
+  Revert "arm64: dts: qcom: sc7280: Set the default dr_mode for usb2"
+  Revert "arm64: dts: qcom: sc7280: Add EUD dt node and dwc3 connector"
 
-Note that before 4843b4b5ec64 ("xhci: fix even more unsafe memory usage
-in xhci tracing") the result effect in the failure case was different as
-a static buffer was used here, but the code still worked incorrectly.
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts |  4 ----
+ arch/arm64/boot/dts/qcom/sc7280.dtsi    | 36 ---------------------------------
+ 2 files changed, 40 deletions(-)
 
-Fixes: 9c1aa36efdae ("xhci: Show host status when watchdog triggers and host is assumed dead.")
-Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
----
-
-Mathias Nyman wrote:
-> Maybe this could be the first thing printed out, something like (untested):
-[...]
-
-Heh, that's actually pretty close to what I had at one point, not sure
-why I didn't go with it. I agree it looks better.
-
-Changed and tested on real HW:
-
-[   11.998832] xhci-hcd xhci-hcd.1.auto: xHCI host not responding to stop endpoint command.
-[   12.006925] xhci-hcd xhci-hcd.1.auto: USBSTS: 0x00000000
-
-
-v2: Improve print format on Mathias Nyman's suggestion.
-
- drivers/usb/host/xhci.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 8a0026ee9524..dd24c09927bd 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -2622,8 +2622,11 @@ static inline const char *xhci_decode_usbsts(char *str, u32 usbsts)
- {
- 	int ret = 0;
- 
-+	ret = sprintf(str, " 0x%08x", usbsts);
-+
- 	if (usbsts == ~(u32)0)
--		return " 0xffffffff";
-+		return str;
-+
- 	if (usbsts & STS_HALT)
- 		ret += sprintf(str + ret, " HCHalted");
- 	if (usbsts & STS_FATAL)
--- 
-2.34.1
+--
+2.7.4
 
