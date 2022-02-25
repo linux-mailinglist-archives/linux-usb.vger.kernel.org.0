@@ -2,130 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C4C4C4620
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Feb 2022 14:23:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3764C47C8
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Feb 2022 15:39:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241221AbiBYNXA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Feb 2022 08:23:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
+        id S231182AbiBYOjE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Feb 2022 09:39:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241213AbiBYNW7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Feb 2022 08:22:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A63E194162;
-        Fri, 25 Feb 2022 05:22:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B12361CD4;
-        Fri, 25 Feb 2022 13:22:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA894C340E7;
-        Fri, 25 Feb 2022 13:22:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645795344;
-        bh=D7408mBI5G/gY3GzXDcCdga0z2k4yNjN62AjEuHKo54=;
-        h=Date:From:To:Cc:Subject:From;
-        b=1s8b17gtQYlZyrUT5HbFi8sQ8CRxNX1VpYk2O6lL2eaAyYLaX9E6LmnjTUOf8o0KH
-         QhIVlL7S7cNbEchx9bV4LaA5WcsQTFgTAFCOvQyYSEaIqD1srp5TNMqGlVx4p52jJ9
-         tJexPx2aQ1fsQ59i/xLlzu1Gk/7VdP+JJcn9zqb0=
-Date:   Fri, 25 Feb 2022 14:22:21 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 5.17-rc6
-Message-ID: <YhjYDWv9q/44eWZu@kroah.com>
+        with ESMTP id S229687AbiBYOjC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Feb 2022 09:39:02 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 52FDF1AE66D
+        for <linux-usb@vger.kernel.org>; Fri, 25 Feb 2022 06:38:26 -0800 (PST)
+Received: (qmail 1080378 invoked by uid 1000); 25 Feb 2022 09:38:25 -0500
+Date:   Fri, 25 Feb 2022 09:38:25 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg KH <greg@kroah.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Salah Triki <salah.triki@gmail.com>, noralf@tronnes.org,
+        tzimmermann@suse.de, USB mailing list <linux-usb@vger.kernel.org>
+Subject: [PATCH] USB: core: Update kerneldoc for usb_get_dev() and
+ usb_get_intf()
+Message-ID: <Yhjp4Rp9Alipmwtq@rowland.harvard.edu>
+References: <YgbT4uqSIVY9ku10@rowland.harvard.edu>
+ <000000000000d31cac05d7c4da7e@google.com>
+ <YgcSbUwiALbmoTvL@rowland.harvard.edu>
+ <CAD-N9QX6kTf-Fagz8W00KOM1REhoqQvfTckqZZttMcdSCHmSag@mail.gmail.com>
+ <YgpqHEb1CuhIElIP@rowland.harvard.edu>
+ <20220217080459.GB2407@kadam>
+ <Yg5ozvWf0T+NTWPz@rowland.harvard.edu>
+ <YhieIzbS0OLSZTdj@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YhieIzbS0OLSZTdj@kroah.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 754e0b0e35608ed5206d6a67a791563c631cec07:
+The kerneldoc for usb_get_dev() and usb_get_intf() says that drivers
+should always refcount the references they hold for the usb_device or
+usb_interface structure, respectively.  But this is an overstatement:
+In many cases drivers do not access these references after they have
+been unbound, and in such cases refcounting is unnecessary.
 
-  Linux 5.17-rc4 (2022-02-13 12:13:30 -0800)
+This patch updates the kerneldoc for the two routines, explaining when
+a driver does not need to increment and decrement the refcount.  This
+should help dispel misconceptions which might otherwise afflict
+programmers new to the USB subsystem.
 
-are available in the Git repository at:
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.17-rc6
+---
 
-for you to fetch changes up to 19eae24b76c27dedfb166dc06a8c48e052cbc814:
 
-  Merge tag 'usb-serial-5.17-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2022-02-24 14:51:45 +0100)
+[as1972]
 
-----------------------------------------------------------------
-USB fixes for 5.17-rc6
 
-Here are a number of small USB driver fixes for 5.17-rc6 to resolve
-reported problems and add new device ids.  They include:
-	- dwc3 device mapping fix
-	- dwc3 new device ids
-	- xhci driver fixes
-	- dwc3 driver fixes
-	- gadget driver fixes
-	- usb-serial driver device id updates
+ drivers/usb/core/usb.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-All of these have been in linux-next with no reported problems.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Daehwan Jung (1):
-      usb: gadget: rndis: add spinlock for rndis response list
-
-Daniele Palmas (1):
-      USB: serial: option: add Telit LE910R1 compositions
-
-Dmytro Bagrii (1):
-      Revert "USB: serial: ch341: add new Product ID for CH341A"
-
-Fabrice Gasnier (1):
-      usb: dwc2: drd: fix soft connect when gadget is unconfigured
-
-Greg Kroah-Hartman (1):
-      Merge tag 'usb-serial-5.17-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
-
-Hans de Goede (2):
-      usb: dwc3: pci: Add "snps,dis_u2_susphy_quirk" for Intel Bay Trail
-      usb: dwc3: pci: Fix Bay Trail phy GPIO mappings
-
-Heikki Krogerus (1):
-      usb: dwc3: pci: add support for the Intel Raptor Lake-S
-
-Hongyu Xie (1):
-      xhci: Prevent futile URB re-submissions due to incorrect return value.
-
-Jens Axboe (1):
-      tps6598x: clear int mask on probe failure
-
-Puma Hsu (1):
-      xhci: re-initialize the HC during resume if HCE was set
-
-Sebastian Andrzej Siewior (1):
-      usb: dwc3: gadget: Let the interrupt handler disable bottom halves.
-
-Slark Xiao (1):
-      USB: serial: option: add support for DW5829e
-
-Szymon Heidrich (1):
-      USB: gadget: validate endpoint index for xilinx udc
-
- drivers/usb/dwc2/core.h             |  2 ++
- drivers/usb/dwc2/drd.c              |  6 ++++--
- drivers/usb/dwc3/dwc3-pci.c         | 21 ++++++++++++++++++---
- drivers/usb/dwc3/gadget.c           |  2 ++
- drivers/usb/gadget/function/rndis.c |  8 ++++++++
- drivers/usb/gadget/function/rndis.h |  1 +
- drivers/usb/gadget/udc/udc-xilinx.c |  6 ++++++
- drivers/usb/host/xhci.c             | 28 +++++++++++++++++++---------
- drivers/usb/serial/ch341.c          |  1 -
- drivers/usb/serial/option.c         | 12 ++++++++++++
- drivers/usb/typec/tipd/core.c       |  7 ++++---
- 11 files changed, 76 insertions(+), 18 deletions(-)
+Index: usb-devel/drivers/usb/core/usb.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/usb.c
++++ usb-devel/drivers/usb/core/usb.c
+@@ -688,6 +688,10 @@ EXPORT_SYMBOL_GPL(usb_alloc_dev);
+  * Drivers for USB interfaces should normally record such references in
+  * their probe() methods, when they bind to an interface, and release
+  * them by calling usb_put_dev(), in their disconnect() methods.
++ * However, if a driver does not access the usb_device structure after
++ * its disconnect() method returns then refcounting is not necessary,
++ * because the USB core guarantees that a usb_device will not be
++ * deallocated until after all of its interface drivers have been unbound.
+  *
+  * Return: A pointer to the device with the incremented reference counter.
+  */
+@@ -722,6 +726,10 @@ EXPORT_SYMBOL_GPL(usb_put_dev);
+  * Drivers for USB interfaces should normally record such references in
+  * their probe() methods, when they bind to an interface, and release
+  * them by calling usb_put_intf(), in their disconnect() methods.
++ * However, if a driver does not access the usb_interface structure after
++ * its disconnect() method returns then refcounting is not necessary,
++ * because the USB core guarantees that a usb_interface will not be
++ * deallocated until after its driver has been unbound.
+  *
+  * Return: A pointer to the interface with the incremented reference counter.
+  */
