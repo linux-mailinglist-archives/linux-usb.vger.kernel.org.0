@@ -2,125 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 865824C45F1
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Feb 2022 14:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C4C4C4620
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Feb 2022 14:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241137AbiBYNVA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Feb 2022 08:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
+        id S241221AbiBYNXA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Feb 2022 08:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241130AbiBYNU6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Feb 2022 08:20:58 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983A51FED89;
-        Fri, 25 Feb 2022 05:20:25 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id s13so4490360wrb.6;
-        Fri, 25 Feb 2022 05:20:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=s1IYJZfN0mhNOaQ7xs2EzjYsvsrp1awM4MJ+j+7u52c=;
-        b=D1PT3X4A3/4qAB2dteG2aRhfQPR+e22vU0e4PzgdD4Pecm79lz7X9hXBX8dGtd2KRj
-         686i4FTxtgNtswJoVjLRaGYneZFulFIxP/FQlxh89iUHTdZsxdsMfqRoRbX6DDwCbBcP
-         RisE1M4OfrDZXooYhJlQnhOezWRfeSi94qzIaRhKhhgzP1h0YAq352ofs/nODkN+AF1/
-         QWumRmW9DJScWEfEjXx/uBuiVyjRIco+pdqOeJlWNaU5nfeBxPXauooL0cZWunuclspL
-         zmiHpfeo7yUB35ig9E3o9onbLdGqUNWwVVJA3oqyAXLt6HPXhk1oLksIQ4ZDzX8oP8kb
-         z3dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=s1IYJZfN0mhNOaQ7xs2EzjYsvsrp1awM4MJ+j+7u52c=;
-        b=LoF66T61wsZhG44trVehja3ABSxdEmlw/bBrhni8kfbrumzXooFX8+y8rWveL8ZvMy
-         z9TuPl0K4JVJZGGz+qJjXU34tEonm5mgX0Po++X3Ur6gH4gvRQs+6IjIafCfXQhv6Kp7
-         j2PLmWZ//ZnG1fimTcR9clu9avRhtwhNeT5esOHv/3KRJ92Y58K4kfrwhMJxI3xxGPzp
-         3DX5Pe8c8+e/T/645lEkkhdf8gNzVT85kHbtAHMypi3tuSATzVEgwBWfH7BCsQrRaAm6
-         XborkbBiGKpRypGA26Rq7rUEkqqTLmLy0geJKHW9Hv2ndDPbeRIKFD7oM0HLECfHRMMZ
-         RkHw==
-X-Gm-Message-State: AOAM53055D0+H9CVoD+YFuprwU6R+TyO8jsXaNpZJt4PRIM18dAuSlm0
-        myUFOdPpf6Ta4IBlaoRjwjE=
-X-Google-Smtp-Source: ABdhPJxYMDQjuuuIGYLTbkg31qQ1dYrHeN8eVGWGz1u9aIrgkh/o3msDoM0EpvZtTVzhreSGAIZ/zQ==
-X-Received: by 2002:a5d:648b:0:b0:1e2:181:96cb with SMTP id o11-20020a5d648b000000b001e2018196cbmr6117994wri.508.1645795224064;
-        Fri, 25 Feb 2022 05:20:24 -0800 (PST)
-Received: from orome ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id j7-20020a05600c1c0700b0037c2c6d2a91sm2348993wms.2.2022.02.25.05.20.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 05:20:23 -0800 (PST)
-Date:   Fri, 25 Feb 2022 14:20:21 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Wayne Chang <waynec@nvidia.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
-        zhangqilong3@huawei.com, yangyingliang@huawei.com,
-        rikard.falkeborn@gmail.com, chunfeng.yun@mediatek.com,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: gadget: tegra-xudc: Fix control endpoint's
- definitions
-Message-ID: <YhjXlQJoKzI/9q89@orome>
-References: <20220107091349.149798-1-waynec@nvidia.com>
+        with ESMTP id S241213AbiBYNW7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Feb 2022 08:22:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A63E194162;
+        Fri, 25 Feb 2022 05:22:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B12361CD4;
+        Fri, 25 Feb 2022 13:22:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA894C340E7;
+        Fri, 25 Feb 2022 13:22:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645795344;
+        bh=D7408mBI5G/gY3GzXDcCdga0z2k4yNjN62AjEuHKo54=;
+        h=Date:From:To:Cc:Subject:From;
+        b=1s8b17gtQYlZyrUT5HbFi8sQ8CRxNX1VpYk2O6lL2eaAyYLaX9E6LmnjTUOf8o0KH
+         QhIVlL7S7cNbEchx9bV4LaA5WcsQTFgTAFCOvQyYSEaIqD1srp5TNMqGlVx4p52jJ9
+         tJexPx2aQ1fsQ59i/xLlzu1Gk/7VdP+JJcn9zqb0=
+Date:   Fri, 25 Feb 2022 14:22:21 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 5.17-rc6
+Message-ID: <YhjYDWv9q/44eWZu@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="nNcLsEMhhKxQEfJG"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220107091349.149798-1-waynec@nvidia.com>
-User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The following changes since commit 754e0b0e35608ed5206d6a67a791563c631cec07:
 
---nNcLsEMhhKxQEfJG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Linux 5.17-rc4 (2022-02-13 12:13:30 -0800)
 
-On Fri, Jan 07, 2022 at 05:13:49PM +0800, Wayne Chang wrote:
-> According to the Tegra Technical Reference Manual, the seq_num
-> field of control endpoint is not [31:24] but [31:27]. Bit 24
-> is reserved and bit 26 is splitxstate.
->=20
-> The change fixes the wrong control endpoint's definitions.
->=20
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> ---
->  drivers/usb/gadget/udc/tegra-xudc.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+are available in the Git repository at:
 
-Again, what's the impact of this? Is this a critical bug fix that needs
-to go into stable? Or is it cleanup? Perhaps add something along those
-lines to the commit message to make it clearer to maintainers how they
-need to deal with them.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.17-rc6
 
-Also, if this is a bugfix, make sure to Cc: stable@vger.kernel.org and
-add a corresponding Fixes: line. Same for that earlier patch.
+for you to fetch changes up to 19eae24b76c27dedfb166dc06a8c48e052cbc814:
 
-Thierry
+  Merge tag 'usb-serial-5.17-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2022-02-24 14:51:45 +0100)
 
---nNcLsEMhhKxQEfJG
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+USB fixes for 5.17-rc6
 
------BEGIN PGP SIGNATURE-----
+Here are a number of small USB driver fixes for 5.17-rc6 to resolve
+reported problems and add new device ids.  They include:
+	- dwc3 device mapping fix
+	- dwc3 new device ids
+	- xhci driver fixes
+	- dwc3 driver fixes
+	- gadget driver fixes
+	- usb-serial driver device id updates
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmIY15UACgkQ3SOs138+
-s6ELuA//frfkH8KumnsE3c8cVrLkPeCVSZOWkuK/7ye9Eg1ddJcQw/G1e3XdxijZ
-IdluDEI4Vvt0F2Fg/saOVlQ2H5pVozQUL4zWWqNs9ZORCW9HZuFVAuWfzAEqT3pT
-WY6i2SYq9+AAcZNFGL3HaLGfA5EjMvCjnpDMFEruzaKcOqaab8yFy77E4xxUa9WE
-WiBiU3HykF0S7sAOkXIv5g7WmllFZbFetipPwm9WDsv3lyZjg42i0qXKzqzeD/wv
-MRPEU/IRxSVXBtUfwWPrQBU71zct8xmTb9WAuhbgddTigWWNEt2Ovu2Yk5Sl5I9n
-dXWfmWUkujyKuWs+a+ULy85T/GuJ8XOgLHf1Ew6dL7k6yrPIHyTU3qFwbcdjqEsM
-VHuIT8j1OMWI18sVb+0QY6NjsDjwaAgErxUNE3c/oCTf+3JtrfOVBy40zlwr6BN+
-PkDhKLESUTjlu3YYRukVmaU47jcMjCLr1SSr+XMfa/byGtXyfe+EGAQ7tIZTwXSa
-+u7dhWmKBuW12cZbrGAw1raMdDrUhEkkgSv6c0KqAOeFjOY3XY+ndSQl8+x3I2vV
-m/VAQZ4u7RBSYhKQK3vPu6i18o/0yQq920B6gkdg2eQDfbPlLa/Tk6gGLujrV8mQ
-xkzo9jSVey6+WQcZ/CZdNy7qYASKI5RfQCDDjtDJwGIzGdUA5js=
-=Jn0V
------END PGP SIGNATURE-----
+All of these have been in linux-next with no reported problems.
 
---nNcLsEMhhKxQEfJG--
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Daehwan Jung (1):
+      usb: gadget: rndis: add spinlock for rndis response list
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit LE910R1 compositions
+
+Dmytro Bagrii (1):
+      Revert "USB: serial: ch341: add new Product ID for CH341A"
+
+Fabrice Gasnier (1):
+      usb: dwc2: drd: fix soft connect when gadget is unconfigured
+
+Greg Kroah-Hartman (1):
+      Merge tag 'usb-serial-5.17-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+
+Hans de Goede (2):
+      usb: dwc3: pci: Add "snps,dis_u2_susphy_quirk" for Intel Bay Trail
+      usb: dwc3: pci: Fix Bay Trail phy GPIO mappings
+
+Heikki Krogerus (1):
+      usb: dwc3: pci: add support for the Intel Raptor Lake-S
+
+Hongyu Xie (1):
+      xhci: Prevent futile URB re-submissions due to incorrect return value.
+
+Jens Axboe (1):
+      tps6598x: clear int mask on probe failure
+
+Puma Hsu (1):
+      xhci: re-initialize the HC during resume if HCE was set
+
+Sebastian Andrzej Siewior (1):
+      usb: dwc3: gadget: Let the interrupt handler disable bottom halves.
+
+Slark Xiao (1):
+      USB: serial: option: add support for DW5829e
+
+Szymon Heidrich (1):
+      USB: gadget: validate endpoint index for xilinx udc
+
+ drivers/usb/dwc2/core.h             |  2 ++
+ drivers/usb/dwc2/drd.c              |  6 ++++--
+ drivers/usb/dwc3/dwc3-pci.c         | 21 ++++++++++++++++++---
+ drivers/usb/dwc3/gadget.c           |  2 ++
+ drivers/usb/gadget/function/rndis.c |  8 ++++++++
+ drivers/usb/gadget/function/rndis.h |  1 +
+ drivers/usb/gadget/udc/udc-xilinx.c |  6 ++++++
+ drivers/usb/host/xhci.c             | 28 +++++++++++++++++++---------
+ drivers/usb/serial/ch341.c          |  1 -
+ drivers/usb/serial/option.c         | 12 ++++++++++++
+ drivers/usb/typec/tipd/core.c       |  7 ++++---
+ 11 files changed, 76 insertions(+), 18 deletions(-)
