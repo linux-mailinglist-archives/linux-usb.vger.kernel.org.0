@@ -2,63 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D8E4C57AA
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Feb 2022 19:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE05E4C57A3
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Feb 2022 19:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbiBZSmf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Feb 2022 13:42:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35434 "EHLO
+        id S232810AbiBZSmn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Feb 2022 13:42:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232752AbiBZSmd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Feb 2022 13:42:33 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8146827EC37;
-        Sat, 26 Feb 2022 10:41:58 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id v5so7291275qkj.4;
-        Sat, 26 Feb 2022 10:41:58 -0800 (PST)
+        with ESMTP id S232761AbiBZSmg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Feb 2022 13:42:36 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DFE1E64FC;
+        Sat, 26 Feb 2022 10:42:00 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id g23so9331368qvb.4;
+        Sat, 26 Feb 2022 10:42:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=gOsPhZEWEQuuT2NShwv+/GSU4LHuvEm9yYvo2QoT/EQ=;
-        b=R/KSu7/gavFinTUC20uEgLVG35ZIykqp3uptjNeINv1ka6InCTj1HVRehTJ8MWuNHY
-         cBqTZOU3zOnyrjzc+rsL50Q0aCvVS5LG0+B1bjwzXpXL08iSpSvxBbDer6F0WTniHtSo
-         MiXoxQawrpOodNXq9i85BHHG/FMTh7D0bHEXF/THfg6/LyAhnNG3PXzLm0dYDn8ldFKw
-         +GvBK2hTSIric62sja6XothC9bBtmBWERqVaTTO45wSpSthE1OBUk5PAD5zGnxsyCxyz
-         vUgtwKZSxqmxZC2cf8V1GRpxEmQ0NqOJ+3abZhxGiuFUO2SqzWQiLuWHaliaQAAeiGi3
-         PzbA==
+        bh=JPaFw68OuUtIuwUUWQ/YAMH/m6245D2UW9piC4irepM=;
+        b=ohRGljgT9n6KnhWzIuhLOYMf4bAC0dxu6b56hKPwmyQR2gsWwMTrz14Z51YO4pyzTp
+         iLnS19UfDKhkgkv/iN6+wX8hVbk9GrLjjR1XSU/zfMnLNb4TRio7YbcyLP4Qxt1KQQQL
+         UQKbxD+rgoKozrjZwohwOnOROk5jpDk0ma0XXbOqCoKJFcYwzVwtuIJptoOUvcpFz9Hp
+         xpwShpVieevWiy289bGM3OikL75ksOKsxT4g8p0dNGP5ygFWTo3XhzBzME0n2Tz4U7V8
+         bUnv7P/jvEhCjy7m1d3ythOsojy6Dt3RpC9udGp2AecZfpx6YRnFdxXiam/qzTVqKdH4
+         Tr/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gOsPhZEWEQuuT2NShwv+/GSU4LHuvEm9yYvo2QoT/EQ=;
-        b=pF4Io6PQNo+F/FbGmpZDDHKCt/dlrshcLRWwp7yVVbev0GhBHpUnEv0k6HtMIc3wlJ
-         cOtlD3A208dxtrFwZ3AoV/nNquekeH5c/bGNdSYxbUEjVcSl3jlGoCNSUrz0T5eOvN2V
-         FcwBKbqNIwQMlZ+3yRzIj5darWBvgtQNuq/EMSx0nVeVUUAsjxFY+6ftGuYYKi2QkSxH
-         yq/wnYo1cvdfNFjBjEcprvfy+sZ61bGHTIBkQ6+1rtgR7Itk2/NNRbevuefkhawkME3I
-         pcWQWACUKPGvSzAPI0Om7TS9YZhjZSLvpVOG3kIRMAvM2MkCdUdGzxugI9zRpNPvLi8V
-         05Bg==
-X-Gm-Message-State: AOAM533dZ7ZGpTRqb6J7J6w9P7ZSxoqB2SfMLgqtLbu/6qGvbo3BsF/v
-        n6bdesqgqVyO89G3Uk27zTw=
-X-Google-Smtp-Source: ABdhPJxCMJ/DgDWAppj+Kl9sdGzkRlm8iCGGKIndo6Lf3q5EL5QDB1gCMVii5QhrxfaQdKYl/m2dww==
-X-Received: by 2002:a05:620a:1219:b0:60d:da3e:86d6 with SMTP id u25-20020a05620a121900b0060dda3e86d6mr7557051qkj.473.1645900917626;
-        Sat, 26 Feb 2022 10:41:57 -0800 (PST)
+        bh=JPaFw68OuUtIuwUUWQ/YAMH/m6245D2UW9piC4irepM=;
+        b=gx9nRJbixMfHowclL+MJQF87zSaho9TkxgYFpILRdX/Qu0m0Ywnahh+ZO1hJG1zrZr
+         P1ZX5wyyfFIft4GmjOKcrTpVqm7fYnuXMRPbK31R0yiyL1FP7+yfNDTmaXIbcc1l0Q3L
+         6op7sRXmrRbDZwXII/0sWg57OWKoFUg5ooylJsLGkLgt7HX2ElxxONlqOYdoYRd3o7jS
+         o1yh24K1goadc/qaZ/x2rqCOJu5K8I4jTz9oCKjHRHT67iqg7YFrZE9kIPsAZvEISTd3
+         1tHi2sBdisY8b9GYyzf05Cl5H5TO8aDynCqlvt7UXJcPOLu2A2pR0OXjE4D68vvc9qNZ
+         57AQ==
+X-Gm-Message-State: AOAM531rrHZrCxuOYiLOUUp54eMkgr8GK/4C1yNn/D5ruEiCbOLlywN7
+        RmyaUP9YlW4He4Nzx9CLOYU=
+X-Google-Smtp-Source: ABdhPJwJUDRCCIp2NWBMNr9lFrQqnh7qaiYPDRkqrxmJD+kt1LzNR99zq5nU9nI+38qgTE3HZz9VZg==
+X-Received: by 2002:a05:6214:1c8e:b0:432:4f21:aedb with SMTP id ib14-20020a0562141c8e00b004324f21aedbmr9584724qvb.74.1645900919471;
+        Sat, 26 Feb 2022 10:41:59 -0800 (PST)
 Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id p68-20020a378d47000000b006491d2d1450sm2891983qkd.10.2022.02.26.10.41.57
+        by smtp.gmail.com with ESMTPSA id p68-20020a378d47000000b006491d2d1450sm2891983qkd.10.2022.02.26.10.41.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 10:41:57 -0800 (PST)
+        Sat, 26 Feb 2022 10:41:59 -0800 (PST)
 From:   Peter Geis <pgwipeout@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-rockchip@lists.infradead.org, michael.riesch@wolfvision.net,
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-rockchip@lists.infradead.org, heiko@sntech.de,
+        michael.riesch@wolfvision.net, Bin Yang <yangbin@rock-chips.com>,
         Peter Geis <pgwipeout@gmail.com>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 03/11] dt-bindings: usb: dwc3: add description for rk3568
-Date:   Sat, 26 Feb 2022 13:41:39 -0500
-Message-Id: <20220226184147.769964-4-pgwipeout@gmail.com>
+Subject: [PATCH v2 05/11] usb: dwc3: core: do not use 3.0 clock when operating in 2.0 mode
+Date:   Sat, 26 Feb 2022 13:41:41 -0500
+Message-Id: <20220226184147.769964-6-pgwipeout@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220226184147.769964-1-pgwipeout@gmail.com>
 References: <20220226184147.769964-1-pgwipeout@gmail.com>
@@ -74,34 +72,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The rk3568 dwc3 controllers are backwards compatible with the rk3399.
-Add the device tree description for it.
+From: Bin Yang <yangbin@rock-chips.com>
 
+In the 3.0 device core, if the core is programmed to operate in
+2.0 only, then setting the GUCTL1.DEV_FORCE_20_CLK_FOR_30_CLK makes
+the internal 2.0(utmi/ulpi) clock to be routed as the 3.0 (pipe)
+clock. Enabling this feature allows the pipe3 clock to be not-running
+when forcibly operating in 2.0 device mode.
+
+Signed-off-by: Bin Yang <yangbin@rock-chips.com>
 Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 ---
- Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/dwc3/core.c | 5 +++++
+ drivers/usb/dwc3/core.h | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-index 04077f2d7faf..b3798d94d2fd 100644
---- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-@@ -30,6 +30,7 @@ select:
-         enum:
-           - rockchip,rk3328-dwc3
-           - rockchip,rk3399-dwc3
-+          - rockchip,rk3568-dwc3
-   required:
-     - compatible
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 18adddfba3da..416d83a055fe 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1167,6 +1167,11 @@ static int dwc3_core_init(struct dwc3 *dwc)
+ 		if (dwc->parkmode_disable_ss_quirk)
+ 			reg |= DWC3_GUCTL1_PARKMODE_DISABLE_SS;
  
-@@ -39,6 +40,7 @@ properties:
-       - enum:
-           - rockchip,rk3328-dwc3
-           - rockchip,rk3399-dwc3
-+          - rockchip,rk3568-dwc3
-       - const: snps,dwc3
++		if (DWC3_VER_IS_WITHIN(DWC3, 290A, ANY) &&
++		    (dwc->maximum_speed == USB_SPEED_HIGH ||
++		     dwc->maximum_speed == USB_SPEED_FULL))
++			reg |= DWC3_GUCTL1_DEV_FORCE_20_CLK_FOR_30_CLK;
++
+ 		dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
+ 	}
  
-   reg:
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index eb9c1efced05..ea3ca04406bb 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -259,6 +259,7 @@
+ /* Global User Control 1 Register */
+ #define DWC3_GUCTL1_DEV_DECOUPLE_L1L2_EVT	BIT(31)
+ #define DWC3_GUCTL1_TX_IPGAP_LINECHECK_DIS	BIT(28)
++#define DWC3_GUCTL1_DEV_FORCE_20_CLK_FOR_30_CLK	BIT(26)
+ #define DWC3_GUCTL1_DEV_L1_EXIT_BY_HW		BIT(24)
+ #define DWC3_GUCTL1_PARKMODE_DISABLE_SS		BIT(17)
+ 
 -- 
 2.25.1
 
