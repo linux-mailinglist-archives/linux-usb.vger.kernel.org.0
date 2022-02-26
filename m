@@ -2,99 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5214C57AB
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Feb 2022 19:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A184C5858
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Feb 2022 22:55:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232746AbiBZSm6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Feb 2022 13:42:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
+        id S229789AbiBZVoc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Feb 2022 16:44:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232802AbiBZSmn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Feb 2022 13:42:43 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DA727EDF3;
-        Sat, 26 Feb 2022 10:42:03 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id w1so5529616qtj.2;
-        Sat, 26 Feb 2022 10:42:02 -0800 (PST)
+        with ESMTP id S229782AbiBZVob (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Feb 2022 16:44:31 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6670E3B282;
+        Sat, 26 Feb 2022 13:43:56 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id s14so12224365edw.0;
+        Sat, 26 Feb 2022 13:43:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4ghDZEj/NkkDjCwPou92KJHqMKUcvVac9Orj9JeFveY=;
-        b=CoJLuQ9QXYuue/UED91igxeadvZxn8t8dCGl24Y8qKc1xDB7DdJb8fzg3tHjeKN3tY
-         1j45CS3BKCMyP5CV6I/i6NIWDwE80hMD1TBrR8McazxO2scH1C/mDJJCeykBQJFe3nEn
-         YN2DvqbrT96NCR5sVWJiIxFSIU8K51lna4LokjrgziOATuHdtLpt9d3fUoFhjIw7JjMc
-         YYwWJRnGiyHSS5pG8KLCk0Z6+/ozjutzRvEpYel3rSmJL16jipVF1oD/8OCtZlxWvJEE
-         6QLbqS0GwLIHqY3sxGVzoAXJuHR/oxwL0CtfiLq4MlLRjW+oZR9vhSFv7D9Edmveb1yZ
-         j76Q==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gwvZa2dcVddk9XhPqnnw7BdDWgMrIWi0l2xYTw7uVq4=;
+        b=ieuNHUrgJeWwVhmGIAi92YZErZliThzoNqRKo14Vh+sq3q1K9eTV+DiAdkpOoRTYaG
+         WXNuRbXkazy+XO0BJK7MKSAt6Em7dNuT2QdgJpNTqlHnHm/v95O0pfprvooUCt/NvsNP
+         GsGeRZcVt6bsmPb/OVepmmCzhLbFdfigKKPGdNKglInJGsvP4kYjYGakxo0TYHKiLOeR
+         Hb0B/WodBnzk5LwENVkEwgLMfptAZ2nIh3ed/smowJh+s/V5xsy5YA0d78SnAaHhEZ1c
+         +0eV1wxXGGCaV8f22P5RzZZMaDyTH5meSyMsfyoAqbg0Qhf1U2asE7lyjTKtcPwZkp0R
+         ISqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4ghDZEj/NkkDjCwPou92KJHqMKUcvVac9Orj9JeFveY=;
-        b=GMaSoMm6YzDxIJGoTvarFPuzI+aMNgKaKRynfIVqTvXOHBVp+sPOpg8XLb5wBU+NiG
-         zRPiGN+MO1w83oAm0UJ6r8MEmfKyKZ+HWBszXB9wyhe13+xxfPfFzODeaOpSJIEnchVw
-         Ln4eeolI1/hVPaVUMNFaFkxhayZWWy/20OqggPRsh0LjZYGiN+QIQDjI3feqFIEPInxn
-         VMJ6Om2VL6xAl1G4IbClpZrFCAeE+sQDH5qkXDXJkv8L1E0qIcAjtbRYcDVOKSmuLYj8
-         KdLD69XkJUU0oUIsYKV7kLPSo1I1FYFh/lopjIYMt17ES1VtsfA3/lnGEO/Yzvtu5py/
-         GPdw==
-X-Gm-Message-State: AOAM53160ZQK6b18HAHcuQJiGQEBZXEpCW0NCz8PBcaCy/Srtt4qwmnV
-        izxgqWU/KIHfLywGmm61/Ys=
-X-Google-Smtp-Source: ABdhPJzEwVSZFWS6p9V5PNcImVSS6RAQMFHr+8F7FqII+D+lzaGNJjf4jqQ550d71lqAgdgdn161ow==
-X-Received: by 2002:ac8:5f46:0:b0:2de:783:5bea with SMTP id y6-20020ac85f46000000b002de07835beamr11367722qta.486.1645900922144;
-        Sat, 26 Feb 2022 10:42:02 -0800 (PST)
-Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id p68-20020a378d47000000b006491d2d1450sm2891983qkd.10.2022.02.26.10.42.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 10:42:01 -0800 (PST)
-From:   Peter Geis <pgwipeout@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gwvZa2dcVddk9XhPqnnw7BdDWgMrIWi0l2xYTw7uVq4=;
+        b=5u+WHDBhgs7pud2Faglwv7PBJOhbjzyUmhDB68eEL1EMdqhMjEJWkMZoDDLANgj9fr
+         udSHZuMBT0Fe7TBxroAiyXshj3+Ry6f3i+0aFQiAauifXLtG23NSgrnu4DPu2VklVIGS
+         O1rDDdQGAFRBiewUABzuvIChhIsdcew0fO2cXS7dww6jlTpbA1XW+IHIQrlj7FYrE717
+         ITeRpfZ6f1MPo9VDRq6PeU4P/1mrffmosPQt4p5AkwaMfmYNoJiKFq+6ZTsC7qUe9Ahs
+         wx4dzOlyjvgngUls1t97aomwRvDv9edu2qjozIoGM1BnOS09Ia+x2tFxrP0skh2pThpO
+         F05g==
+X-Gm-Message-State: AOAM533yDRTElakJnta0ubryWWI6jlm9pioR7mdKpZ1bZe9kNgzGlcIe
+        +RN7mbeWZx8L+4eIqBUdK59nebLrMdkKxw==
+X-Google-Smtp-Source: ABdhPJyNzE3rhYea/K5v861WD31Sr8quT5QSWT3FQqUAGpv/O3PpnjVEp3OTedF/I9qaslLnxSh6uQ==
+X-Received: by 2002:a05:6402:518b:b0:412:80a3:fb6e with SMTP id q11-20020a056402518b00b0041280a3fb6emr13399264edd.84.1645911834812;
+        Sat, 26 Feb 2022 13:43:54 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id t19-20020a1709060c5300b006d582121f99sm2658615ejf.36.2022.02.26.13.43.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Feb 2022 13:43:54 -0800 (PST)
+Message-ID: <cdbf28ae-b54f-dfaf-887b-c5705319ac06@gmail.com>
+Date:   Sat, 26 Feb 2022 22:43:53 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 08/11] usb: dwc3: add rk3568 dwc3 support
+Content-Language: en-US
+To:     Peter Geis <pgwipeout@gmail.com>, Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-rockchip@lists.infradead.org, heiko@sntech.de,
-        michael.riesch@wolfvision.net, Peter Geis <pgwipeout@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 08/11] usb: dwc3: add rk3568 dwc3 support
-Date:   Sat, 26 Feb 2022 13:41:44 -0500
-Message-Id: <20220226184147.769964-9-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220226184147.769964-1-pgwipeout@gmail.com>
+        michael.riesch@wolfvision.net, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 References: <20220226184147.769964-1-pgwipeout@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <20220226184147.769964-9-pgwipeout@gmail.com>
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <20220226184147.769964-9-pgwipeout@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The rk3568 dwc3 controller is backwards compatible with the rk3399 dwc3
-controller.
-Add support for it to the dwc3-of-simple driver.
+Hi Peter,
 
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
----
- drivers/usb/dwc3/dwc3-of-simple.c | 4 ++++
- 1 file changed, 4 insertions(+)
+See comments by rob+dt:
 
-diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
-index 57ba9427ad74..d9d1c5bfac3f 100644
---- a/drivers/usb/dwc3/dwc3-of-simple.c
-+++ b/drivers/usb/dwc3/dwc3-of-simple.c
-@@ -195,6 +195,10 @@ static const struct of_device_id of_dwc3_simple_match[] = {
- 		.compatible = "rockchip,rk3399-dwc3",
- 		.data = &dwc3_of_simple_data_rk3399,
- 	},
-+	{
-+		.compatible = "rockchip,rk3568-dwc3",
-+		.data = &dwc3_of_simple_data_rk3399,
-+	},
- 	{
- 		.compatible = "sprd,sc9860-dwc3",
- 	},
--- 
-2.25.1
+https://lore.kernel.org/linux-rockchip/CAL_JsqJwNdUfoYM8SZmOgMG9iAyZkJ4-kzjjiDDm_mdmghTEOA@mail.gmail.com/
 
+> Presumably you are getting lucky here (with link order). The kernel
+> has no logic to decide which driver to bind to if there are 2 matching
+> drivers.
+
+Due to the fall back string you make a mess with two drivers.
+Don't use dwc3-of-simple.c
+(only for rk3399 and legacy support. Not for new SoCs),
+because core.c has now reset support.
+You are creating a race which driver get probed first.
+Handle your quirks in core.
+
+Johan
+
+On 2/26/22 19:41, Peter Geis wrote:
+> The rk3568 dwc3 controller is backwards compatible with the rk3399 dwc3
+> controller.
+> Add support for it to the dwc3-of-simple driver.
+> 
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> ---
+>  drivers/usb/dwc3/dwc3-of-simple.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
+> index 57ba9427ad74..d9d1c5bfac3f 100644
+> --- a/drivers/usb/dwc3/dwc3-of-simple.c
+> +++ b/drivers/usb/dwc3/dwc3-of-simple.c
+> @@ -195,6 +195,10 @@ static const struct of_device_id of_dwc3_simple_match[] = {
+>  		.compatible = "rockchip,rk3399-dwc3",
+>  		.data = &dwc3_of_simple_data_rk3399,
+>  	},
+> +	{
+> +		.compatible = "rockchip,rk3568-dwc3",
+> +		.data = &dwc3_of_simple_data_rk3399,
+> +	},
+>  	{
+>  		.compatible = "sprd,sc9860-dwc3",
+>  	},
