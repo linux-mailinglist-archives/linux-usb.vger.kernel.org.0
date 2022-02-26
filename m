@@ -2,59 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044C24C5447
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Feb 2022 08:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E724C5607
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Feb 2022 14:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiBZHDV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Feb 2022 02:03:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
+        id S231760AbiBZNGb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Feb 2022 08:06:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiBZHDT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Feb 2022 02:03:19 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FD915A1E
-        for <linux-usb@vger.kernel.org>; Fri, 25 Feb 2022 23:02:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645858965; x=1677394965;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hEH38EK14XZipupfgbl/tmQEXY8PXs2mn9PGAPGP/sA=;
-  b=R4BRNcxjMYZ2hIP0+VRwZiDEyVbe1woqOgUo59L9cH1CXsEiyBfYLkQM
-   +GmSPu8h1AoWUK/t820zmX7m0gmYMvLEOr+qkeKHbM2Tfe72wl2yZpfyu
-   5ABm2UaaeIMgnXnwd1siQdCW3qat/AXVi/eTkPogRBKUgsI9JoVWMW9eX
-   4VV04sdgeExb7z0fxFH/LVwlzA+zWBec/B2AIdXOP6/ELxwykC7or74qG
-   CmDAiP2nRY5GJcUb2SWzjccnpyYz1XCORbNffCAGRABLjbmgw3+G6hIjc
-   D8rTCc1Lpuy+gBSrLalVs0sPtrpIpyBPvRpikuAIlTKK80OWaimrp+cJY
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10269"; a="277278641"
-X-IronPort-AV: E=Sophos;i="5.90,138,1643702400"; 
-   d="scan'208";a="277278641"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 23:02:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,138,1643702400"; 
-   d="scan'208";a="640350797"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 25 Feb 2022 23:02:42 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nNr6H-0005Bo-N7; Sat, 26 Feb 2022 07:02:41 +0000
-Date:   Sat, 26 Feb 2022 15:02:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- f6a9a2d64dd168b7d71076c0e6b2be7db7cb7399
-Message-ID: <6219d070.1f9GZ/UEmzWmMCES%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S231310AbiBZNG2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Feb 2022 08:06:28 -0500
+X-Greylist: delayed 387 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Feb 2022 05:05:54 PST
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CFF28C9F2;
+        Sat, 26 Feb 2022 05:05:54 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id F33B03200B23;
+        Sat, 26 Feb 2022 07:59:24 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Sat, 26 Feb 2022 07:59:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=24fXDkeGUQyzyrMr8LDRzf6/k+e8KqfMNtNUHH
+        53hTk=; b=UskEd8CKuqShsWO2xuk3i+VOFsjg7pIm1JRD8U3uPlg393NqrNUF3I
+        GfhK5TxYJnKkZifBNbDvxwRn6VJRQVGNFABJfzASJOoJgNkrjyz38Rgn+RO0KlW3
+        Q1dh/bot3oBCc6uQY9fNeoYRMnnGya2QuV66R6SXonCrv27FcNjaWFWuqLsQ1jua
+        4bvvKotYSJ9HjnFqcjLvucHCbM5vbxHVjJlRHVrMJ9z6xdZh/IuQgputmPPS8+2o
+        DYlyBiXHRMs5sicOzPlwvm6815aF3tR5ntA1VEQDVEEW2l29VcJEdV6OH3Vw1wef
+        0/J07rSHBPUdOXTtLiT2nvEFKhuPABTg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=24fXDkeGUQyzyrMr8LDRzf6/k+e8K
+        qfMNtNUHH53hTk=; b=W9FpTaMphsavn3/8ndGiuutvKDc54GGOLzjxHGEhcVmc3
+        8fUu9iPa2ZVrSA2CzeyXEU0bj78A4cQf2H8bWs3e6dPybEU6Un7CMXXsMwqcQZ/b
+        ZjmEM6CnVTOwPHKxqeeDPbpyFK4NDT+kGnKPoicmxDgvkQcRzfNpv0AsujVZovud
+        msiyC/1ZVMCaSqVyLwEpps4q0YdBSr3AnyK+Fllx88AZBNkJ4ETyQo1ZkFEAie2e
+        +6ZuxDfh8MwYmH79mNeqx/Ftn1mOof4OXoWduMv8wkOtEjzvGxBwnt7Ix98SrR4y
+        UH0rfPL0wMZFtKvLf1yzghQLvpj9dZn2iInFvRMCw==
+X-ME-Sender: <xms:KyQaYkI1P--HgEw406hQ3zgQE6wjGkufVMk-35C_G1TxO3yIzRSkLw>
+    <xme:KyQaYkIVkUTDxwS1bE50XHw4n3eZ8_qjX5xq97bOH3r4hqN8UQHzHppsvf8jtClBW
+    ufyVDi0StzRqR-fkfY>
+X-ME-Received: <xmr:KyQaYkuxF1ftGNn8VQbGO0kVWstdsfVJVEN_1ig62BW-jLEs_qwJuo6fUb-GzKVewG7UzHQwNGTkaepFPFV5VI8-svU1E_HfeTd_id2qky5eQGuoNg3ZwB1enh_ZZMU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrleeigdeghecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufhvvghnucfrvght
+    vghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtthgvrhhnpe
+    eugfelkedvtdejffefjeehveelfeevkefgudduhfeghfefgedtheevjeefffffgfenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhessh
+    hvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:KyQaYhZLZx5AwBB2Yl64I65F4Vgb5Ca8dkaLIPyexB9BQ3ojjnsLbw>
+    <xmx:KyQaYraA_EfLzhIh4I9lEe7OjLOyYVvALk1_H3vzy-yq-m_kVR5ezg>
+    <xmx:KyQaYtDt1H6iZNI1TrxLIfoAvY8FvVhKgN1NRU7hsyHTea5GuILJZQ>
+    <xmx:LCQaYgNvzMqkVN7aoy5Q5ActaAdRL48avKL_ho2dY9EW1ILCGfPp3g>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 26 Feb 2022 07:59:21 -0500 (EST)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
+        Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: typec: tipd: Forward plug orientation to typec subsystem
+Date:   Sat, 26 Feb 2022 13:59:12 +0100
+Message-Id: <20220226125912.59828-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,158 +83,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: f6a9a2d64dd168b7d71076c0e6b2be7db7cb7399  USB: core: Update kerneldoc for usb_get_dev() and usb_get_intf()
+In order to bring up the USB3 PHY on the Apple M1 we need to know the
+orientation of the Type-C cable. Extract it from the status register and
+forward it to the typec subsystem.
 
-elapsed time: 721m
-
-configs tested: 133
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                              allyesconfig
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allmodconfig
-mips                 randconfig-c004-20220225
-i386                          randconfig-c001
-powerpc              randconfig-c003-20220225
-s390                          debug_defconfig
-arm                        shmobile_defconfig
-sh                         microdev_defconfig
-arc                                 defconfig
-sh                   sh7770_generic_defconfig
-arm                            hisi_defconfig
-sh                           se7619_defconfig
-arm                        oxnas_v6_defconfig
-xtensa                  nommu_kc705_defconfig
-sh                          sdk7780_defconfig
-powerpc                     asp8347_defconfig
-arm                          exynos_defconfig
-s390                       zfcpdump_defconfig
-m68k                         apollo_defconfig
-powerpc                 linkstation_defconfig
-parisc                           allyesconfig
-arm                          lpd270_defconfig
-arm                       imx_v6_v7_defconfig
-sh                               allmodconfig
-arm                         assabet_defconfig
-mips                  decstation_64_defconfig
-sh                        dreamcast_defconfig
-xtensa                         virt_defconfig
-s390                             allyesconfig
-arm                           tegra_defconfig
-sh                   sh7724_generic_defconfig
-powerpc                     pq2fads_defconfig
-sh                          kfr2r09_defconfig
-arc                      axs103_smp_defconfig
-csky                                defconfig
-mips                         db1xxx_defconfig
-powerpc                    klondike_defconfig
-mips                             allyesconfig
-m68k                        m5272c3_defconfig
-powerpc                     tqm8548_defconfig
-i386                             alldefconfig
-powerpc                         wii_defconfig
-arm                          pxa910_defconfig
-arm                           sunxi_defconfig
-xtensa                           allyesconfig
-powerpc                       maple_defconfig
-powerpc                     ep8248e_defconfig
-sh                          lboxre2_defconfig
-mips                         rt305x_defconfig
-powerpc                   motionpro_defconfig
-arm                           viper_defconfig
-sh                        sh7757lcr_defconfig
-m68k                          multi_defconfig
-h8300                       h8s-sim_defconfig
-sh                           se7750_defconfig
-mips                          rb532_defconfig
-arm                  randconfig-c002-20220225
-arm                  randconfig-c002-20220226
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc64                            defconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-s390                 randconfig-r044-20220226
-arc                  randconfig-r043-20220226
-riscv                randconfig-r042-20220226
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-powerpc              randconfig-c003-20220225
-x86_64                        randconfig-c007
-arm                  randconfig-c002-20220225
-mips                 randconfig-c004-20220225
-i386                          randconfig-c001
-riscv                randconfig-c006-20220225
-powerpc                    ge_imp3a_defconfig
-mips                      bmips_stb_defconfig
-powerpc                   microwatt_defconfig
-powerpc                     ppa8548_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220226
-hexagon              randconfig-r045-20220225
-hexagon              randconfig-r041-20220226
-hexagon              randconfig-r041-20220225
-riscv                randconfig-r042-20220225
-
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/usb/typec/tipd/core.c     | 5 +++++
+ drivers/usb/typec/tipd/tps6598x.h | 1 +
+ 2 files changed, 6 insertions(+)
+
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index 7ffcda94d323..16b4560216ba 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -256,6 +256,10 @@ static int tps6598x_connect(struct tps6598x *tps, u32 status)
+ 	typec_set_pwr_opmode(tps->port, mode);
+ 	typec_set_pwr_role(tps->port, TPS_STATUS_TO_TYPEC_PORTROLE(status));
+ 	typec_set_vconn_role(tps->port, TPS_STATUS_TO_TYPEC_VCONN(status));
++	if (TPS_STATUS_TO_UPSIDE_DOWN(status))
++		typec_set_orientation(tps->port, TYPEC_ORIENTATION_REVERSE);
++	else
++		typec_set_orientation(tps->port, TYPEC_ORIENTATION_NORMAL);
+ 	tps6598x_set_data_role(tps, TPS_STATUS_TO_TYPEC_DATAROLE(status), true);
+ 
+ 	tps->partner = typec_register_partner(tps->port, &desc);
+@@ -278,6 +282,7 @@ static void tps6598x_disconnect(struct tps6598x *tps, u32 status)
+ 	typec_set_pwr_opmode(tps->port, TYPEC_PWR_MODE_USB);
+ 	typec_set_pwr_role(tps->port, TPS_STATUS_TO_TYPEC_PORTROLE(status));
+ 	typec_set_vconn_role(tps->port, TPS_STATUS_TO_TYPEC_VCONN(status));
++	typec_set_orientation(tps->port, TYPEC_ORIENTATION_NONE);
+ 	tps6598x_set_data_role(tps, TPS_STATUS_TO_TYPEC_DATAROLE(status), false);
+ 
+ 	power_supply_changed(tps->psy);
+diff --git a/drivers/usb/typec/tipd/tps6598x.h b/drivers/usb/typec/tipd/tps6598x.h
+index 3dae84c524fb..527857549d69 100644
+--- a/drivers/usb/typec/tipd/tps6598x.h
++++ b/drivers/usb/typec/tipd/tps6598x.h
+@@ -17,6 +17,7 @@
+ /* TPS_REG_STATUS bits */
+ #define TPS_STATUS_PLUG_PRESENT		BIT(0)
+ #define TPS_STATUS_PLUG_UPSIDE_DOWN	BIT(4)
++#define TPS_STATUS_TO_UPSIDE_DOWN(s)	(!!((s) & TPS_STATUS_PLUG_UPSIDE_DOWN))
+ #define TPS_STATUS_PORTROLE		BIT(5)
+ #define TPS_STATUS_TO_TYPEC_PORTROLE(s) (!!((s) & TPS_STATUS_PORTROLE))
+ #define TPS_STATUS_DATAROLE		BIT(6)
+-- 
+2.25.1
+
