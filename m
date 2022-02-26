@@ -2,132 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E724C5607
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Feb 2022 14:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A0E4C56C4
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Feb 2022 17:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbiBZNGb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Feb 2022 08:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S232271AbiBZQH2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Feb 2022 11:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbiBZNG2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Feb 2022 08:06:28 -0500
-X-Greylist: delayed 387 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Feb 2022 05:05:54 PST
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CFF28C9F2;
-        Sat, 26 Feb 2022 05:05:54 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id F33B03200B23;
-        Sat, 26 Feb 2022 07:59:24 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sat, 26 Feb 2022 07:59:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=24fXDkeGUQyzyrMr8LDRzf6/k+e8KqfMNtNUHH
-        53hTk=; b=UskEd8CKuqShsWO2xuk3i+VOFsjg7pIm1JRD8U3uPlg393NqrNUF3I
-        GfhK5TxYJnKkZifBNbDvxwRn6VJRQVGNFABJfzASJOoJgNkrjyz38Rgn+RO0KlW3
-        Q1dh/bot3oBCc6uQY9fNeoYRMnnGya2QuV66R6SXonCrv27FcNjaWFWuqLsQ1jua
-        4bvvKotYSJ9HjnFqcjLvucHCbM5vbxHVjJlRHVrMJ9z6xdZh/IuQgputmPPS8+2o
-        DYlyBiXHRMs5sicOzPlwvm6815aF3tR5ntA1VEQDVEEW2l29VcJEdV6OH3Vw1wef
-        0/J07rSHBPUdOXTtLiT2nvEFKhuPABTg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm2; bh=24fXDkeGUQyzyrMr8LDRzf6/k+e8K
-        qfMNtNUHH53hTk=; b=W9FpTaMphsavn3/8ndGiuutvKDc54GGOLzjxHGEhcVmc3
-        8fUu9iPa2ZVrSA2CzeyXEU0bj78A4cQf2H8bWs3e6dPybEU6Un7CMXXsMwqcQZ/b
-        ZjmEM6CnVTOwPHKxqeeDPbpyFK4NDT+kGnKPoicmxDgvkQcRzfNpv0AsujVZovud
-        msiyC/1ZVMCaSqVyLwEpps4q0YdBSr3AnyK+Fllx88AZBNkJ4ETyQo1ZkFEAie2e
-        +6ZuxDfh8MwYmH79mNeqx/Ftn1mOof4OXoWduMv8wkOtEjzvGxBwnt7Ix98SrR4y
-        UH0rfPL0wMZFtKvLf1yzghQLvpj9dZn2iInFvRMCw==
-X-ME-Sender: <xms:KyQaYkI1P--HgEw406hQ3zgQE6wjGkufVMk-35C_G1TxO3yIzRSkLw>
-    <xme:KyQaYkIVkUTDxwS1bE50XHw4n3eZ8_qjX5xq97bOH3r4hqN8UQHzHppsvf8jtClBW
-    ufyVDi0StzRqR-fkfY>
-X-ME-Received: <xmr:KyQaYkuxF1ftGNn8VQbGO0kVWstdsfVJVEN_1ig62BW-jLEs_qwJuo6fUb-GzKVewG7UzHQwNGTkaepFPFV5VI8-svU1E_HfeTd_id2qky5eQGuoNg3ZwB1enh_ZZMU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrleeigdeghecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufhvvghnucfrvght
-    vghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtthgvrhhnpe
-    eugfelkedvtdejffefjeehveelfeevkefgudduhfeghfefgedtheevjeefffffgfenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhessh
-    hvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:KyQaYhZLZx5AwBB2Yl64I65F4Vgb5Ca8dkaLIPyexB9BQ3ojjnsLbw>
-    <xmx:KyQaYraA_EfLzhIh4I9lEe7OjLOyYVvALk1_H3vzy-yq-m_kVR5ezg>
-    <xmx:KyQaYtDt1H6iZNI1TrxLIfoAvY8FvVhKgN1NRU7hsyHTea5GuILJZQ>
-    <xmx:LCQaYgNvzMqkVN7aoy5Q5ActaAdRL48avKL_ho2dY9EW1ILCGfPp3g>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 26 Feb 2022 07:59:21 -0500 (EST)
-From:   Sven Peter <sven@svenpeter.dev>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: typec: tipd: Forward plug orientation to typec subsystem
-Date:   Sat, 26 Feb 2022 13:59:12 +0100
-Message-Id: <20220226125912.59828-1-sven@svenpeter.dev>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        with ESMTP id S231523AbiBZQH1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Feb 2022 11:07:27 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2070.outbound.protection.outlook.com [40.107.94.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396C61D6CAA;
+        Sat, 26 Feb 2022 08:06:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L4LAXO5uFc/gy9sAvH5MXFGKAN0WGiwCDCg8ruxQyceXz/QE4+daojEW4NDoz3rL8zbq0Ctdm0l03r3p1V7dgM7GxDS8BVzyvchTk5so4o9GGTEDl/i+GWKLUZdKGokg0dMZI6EXxpYcOia0ujFHKaPib5HzGC1RdDT9kIPjPEH2Hdmo/hoAz9w//0lGtYRnlcFCoSKDwJ7hV/AfilgA8jWmJprBp6XMowIdVFDdUa/ycQScCNFHu/xVkR/6jf9zl7Ku7LTy/muk7J6g8AZbpbVPLhgLVIrzMaufv9EEUp9zqc3vyehZ3m2bCB4LhmbFwD8EhZoe2h3GhW4vJSdKGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HsOstLKHrzBv68OlTjjypwtpFGQLGLrqKRv0cR8g8cY=;
+ b=hPV3OprfLV/9Wl08x8WHyUTpTuWRA1Nc79QjtIqf8q1SYbuVm7tyNlg2969ZPnnQXUFpVjKcx7SQO9LUfFX/riZmF6VjJ03gvhryGzKWOCpwY3kC0b4a2KQRbFxLL68X7eoEbVqnEiWkjYX8BTGJggAyznzMRXnBut0S3PJBdfMNsPPIx0cjZF6D7LprrqKXRpXcEXEM8AYTDdDtxzsbXYHd/IrjchK2g/U4iaZ3sOFx12fYm666q/UkWFF0rirM/sTz3l3C2lJfbLUX6dFd54h0qtWeI6WC4J+cas33ozITdesSumtetS99+ONAKSU2IhvQ8q66k4wmYOTUXHYfmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HsOstLKHrzBv68OlTjjypwtpFGQLGLrqKRv0cR8g8cY=;
+ b=FHmeyxLNvO0N6QFKisNuoBwW4nVaf9uSwht4bFW4NTPbsrCuucgCDmK2mBFriiaV0kynGZw9Tb7ea9efXRfSOwZRaaKxxdQQ0sgUyq2Y9TZgctMMVhg2kdfKjfPfbObH2XH+irE/XyB9fNEJg3jIyOvV7yF1bjPK1btqLi/Yk4wzh1U+9E+bJs3rRhn6AmmSMxYmoO2ef6yoIc9vGWAIHPfgwuuGjh0Ux4p15se3cuEFrwbej+6w1y9PsOcIM+lzuDd5WR7jbLy9Wag3OuQhJm5CfnK0FXGMusXhmEB3Hu9kj5C+12BfvSTHO/iQM63OB7H+d3Tk7V+Q2ruV83wlrw==
+Received: from CH0PR12MB5089.namprd12.prod.outlook.com (2603:10b6:610:bc::8)
+ by DM6PR12MB5021.namprd12.prod.outlook.com (2603:10b6:5:208::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Sat, 26 Feb
+ 2022 16:06:51 +0000
+Received: from CH0PR12MB5089.namprd12.prod.outlook.com
+ ([fe80::2158:bc32:112a:2860]) by CH0PR12MB5089.namprd12.prod.outlook.com
+ ([fe80::2158:bc32:112a:2860%2]) with mapi id 15.20.5017.026; Sat, 26 Feb 2022
+ 16:06:51 +0000
+From:   Henry Lin <henryl@nvidia.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] xhci: fix runtime PM imbalance in USB2 resume
+Thread-Topic: [PATCH v2] xhci: fix runtime PM imbalance in USB2 resume
+Thread-Index: AQHYKhd7AopZ8pn1EUiip/DzNcJli6yj/JuAgAH/8D8=
+Date:   Sat, 26 Feb 2022 16:06:51 +0000
+Message-ID: <CH0PR12MB50897BE5D8841C27DD769580AC3F9@CH0PR12MB5089.namprd12.prod.outlook.com>
+References: <20220225055311.92447-1-henryl@nvidia.com>
+ <20220225071506.22012-1-henryl@nvidia.com> <Yhied+G/K8MndRfk@kroah.com>
+In-Reply-To: <Yhied+G/K8MndRfk@kroah.com>
+Accept-Language: en-US, zh-TW
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+suggested_attachment_session_id: e899dda9-4043-98c0-6a10-05d4910b937d
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c7e78e18-5736-4032-1c4f-08d9f942003b
+x-ms-traffictypediagnostic: DM6PR12MB5021:EE_
+x-microsoft-antispam-prvs: <DM6PR12MB5021EE247E8708812721863AAC3F9@DM6PR12MB5021.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: JhhTi9SZl4IMY26itPWxcU2oDNAj5fZjdf2wha7QbAIsmsRoDZPSpsrnwo23DEVKW7NW9MXd6xk0Hddwkp9u4FV05yT6O1IKh3xVm2jL+DScBESEIBxUTyynN63fVYdCi9PUNXVRBhFwUaob8vyTlan8xBZDCdNIACUkrdWjb5EZuW9CLs3kQ6X9kTLTc39VBm0JeeMwIRpKc53aXWW6V2TUgRkmOyU/+NvdfKdxwrub3k3uiuFVjrBuGQ15Pfore8LTV3aEsviieGRgthlinBzPmVe7Y+AR+hJrtm+1c9XwPNuBnEn86y/xSyFM7+kKvHO76/gz/N96s43Kg9mlcRGEw9ZjADdRayLHFeklO/YY0mbI5PNXVcHq+tlpdt5foJT1/DrCmYq7KJHDHeG8BSMz6g4r9dCDHU6fKVWO9CdWSn/akXmUVNE0U6QK2bnQLb3cZO1Z8kk6Jvn1HBNuUPyiNz/yvaSC3rcvgHravCzueXziTKXtUtQrRqhYq5HT5OE6uQ9wzZ7IZ/iVnMyY7Yq2wAJgPaNyPI/uO7d5HCsI+oiow9GC2bAxec5t6TjAzBcKY25hmtpBkAhx0hMB3vt+xDfOlFeWng9ebW33XUMFWDD1B334Z1LaT94Q+giu1KrpNG9xEUxL5zSQk6XGvJC/ot5p7VBcq1UgLAqninAvwepymTnxm6Oev+9XLbnMoEYPpXG22vdzkZYarM+8Ig==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5089.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(8936002)(2906002)(52536014)(5660300002)(4744005)(54906003)(33656002)(6916009)(4326008)(38070700005)(66446008)(7696005)(38100700002)(86362001)(316002)(76116006)(66946007)(91956017)(8676002)(71200400001)(66556008)(64756008)(66476007)(55016003)(83380400001)(26005)(186003)(6506007)(9686003)(122000001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?CV68f34k6WW4hZv20sNbd/MjALXK2wR5CHP2gEhvXfAtI9/N2qKqyw56zN?=
+ =?iso-8859-1?Q?+4Wj50bgCYBeB47NQ+Wd9/RtgJ6hceLz2/NXCjjUTKNU16MbwI2EPBmfuc?=
+ =?iso-8859-1?Q?bGojPWgxE/5p5PHsttGneldX3+a3ClNiQDv/OEuN4R1JnZ/5alfgIdyrrt?=
+ =?iso-8859-1?Q?lyZvujYbkOenoKsvZMPupfGg0Zfy588lvAgBTlTrO+uWwVcngCGx9TpUc3?=
+ =?iso-8859-1?Q?70bSrCwLRzuoV6NrFg+6UvGAse8geL8Sp+gp4jsH6myqT7KJclnD0A1pIo?=
+ =?iso-8859-1?Q?XuR6I0sCZe5uYKGOjWUyxNlgpjo4UYL6qcsxwMWMdhgmQu9ShYTU/cHTuS?=
+ =?iso-8859-1?Q?eK08neM7a5yvj1q3PKtHiSioBv2hYi7MHVnx2RbaF53nVANiCVUUDXvARb?=
+ =?iso-8859-1?Q?48f+FwdZpyw8iPNma5hmmpH1Bh5yvanfxUcTTIx8nh1iqA8bBWKZXy6o00?=
+ =?iso-8859-1?Q?Ia/zZdBbDodpvlOZta2nKKrK3d6BUCU7pvxRgkASGlcndKLvEC+zcZMqeW?=
+ =?iso-8859-1?Q?UxnoGOsbqDP57OpO9G2Q6pTYJPCiSYGtbEzPslkK4zCvuvYJKjOnWud5/p?=
+ =?iso-8859-1?Q?TjqnmdEBfUaYa6qXJNAAl4ggHkskYfctCoYAT8h97J3Ete/mpH6ps1Xnpp?=
+ =?iso-8859-1?Q?UJw18kDtlGMemV533ah5WOTk/1EwDcvMEmoDCYkPKAgy69h1+2m0FLorSK?=
+ =?iso-8859-1?Q?Z+1YtL8UkscOAK6Qf3rtTYdzF8aiqh+0AC62o+uTq5dHWDmr0WIv9XA5b7?=
+ =?iso-8859-1?Q?MoeGAN2Owyha+rXwXgbtJgxbXH0oLQ+PcmnP61AEkbnqkLX5NwojUlvnze?=
+ =?iso-8859-1?Q?wGHwulQEcM/2Xskv1YMOOdXdFKOSIPzrveSzSCqBMEfzdnkCq5RmgIJe9P?=
+ =?iso-8859-1?Q?iQ8qLdFFsGWyFycE+dvzS32K9THgkyMzYPc9erzt7RD0SULo8BWNIcDQnF?=
+ =?iso-8859-1?Q?exHYZQ0X9gUWBcZ9uvoDI84SGpQcCj1yOzUgnUqDYvD1TNwt0TDNR39GWr?=
+ =?iso-8859-1?Q?UdBG0tF5ljsNb/xN+/rg4B6xk2Uog0GGsqFn604pnBSqduLGmuHZq5YBAi?=
+ =?iso-8859-1?Q?3HnmqGGgE6Y/0rpdkiWoEXAhuR2t5KmFAr6XoGnbnpqMsWhSWuqJpZn+fW?=
+ =?iso-8859-1?Q?Wji8a1lpHnH4V0BhKrTWrLHDTiUkRregrzEh+SRMt+YA3aAUlE9RgwDjqQ?=
+ =?iso-8859-1?Q?2qcUmPYTb0oB7w5CXm2fAqzvqLLPRPLAiNkosZrS9BS+XK1NHEkkp43VSp?=
+ =?iso-8859-1?Q?qVExrbp8Q8YRDq9x4wPob+yFizdauHkjO889z28C6KUekhjdu5RAnabGLG?=
+ =?iso-8859-1?Q?2bRVITNuwY4v+bkDGZ5r8J8viCQYQOEYpU/n0HJEPullXkZBYHHCgwUBIp?=
+ =?iso-8859-1?Q?m2RP79aCj3XbG/Mc2r7WcXU0U8GX8Y6MMbe2KMBRj0Kc5VnN3wCooZLQtM?=
+ =?iso-8859-1?Q?YNkzkyeVO5tD1smULC8eb/fYTdoHUgTU8NqNJjyOBARxXdC5fpHAg90nUb?=
+ =?iso-8859-1?Q?GLB4RrnsdHmWRY9KNxG8VVR6oNfiHFx4qttjvVePLsa22UNhrQhRAl39hk?=
+ =?iso-8859-1?Q?0au8oV4kWVpBknRkjjqjaI7fCQteprMqpaDcBZCtj1nN3ww4MWUj/tmTcd?=
+ =?iso-8859-1?Q?GE6QptXbJkBjg2Io/ITgjHNQyUB32jtI9R48oa2dvf4kZYBca1cArH8A?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5089.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7e78e18-5736-4032-1c4f-08d9f942003b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Feb 2022 16:06:51.6354
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ODyuc55UI3YLjUyKzfMkIBQpnwcxAhL/H4mTzoSQrlA8dgkWiyU+budPh0Tp6iQmt2rdy2bP3qfLQqbqojBMwg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB5021
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In order to bring up the USB3 PHY on the Apple M1 we need to know the
-orientation of the Type-C cable. Extract it from the status register and
-forward it to the typec subsystem.
-
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
----
- drivers/usb/typec/tipd/core.c     | 5 +++++
- drivers/usb/typec/tipd/tps6598x.h | 1 +
- 2 files changed, 6 insertions(+)
-
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 7ffcda94d323..16b4560216ba 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -256,6 +256,10 @@ static int tps6598x_connect(struct tps6598x *tps, u32 status)
- 	typec_set_pwr_opmode(tps->port, mode);
- 	typec_set_pwr_role(tps->port, TPS_STATUS_TO_TYPEC_PORTROLE(status));
- 	typec_set_vconn_role(tps->port, TPS_STATUS_TO_TYPEC_VCONN(status));
-+	if (TPS_STATUS_TO_UPSIDE_DOWN(status))
-+		typec_set_orientation(tps->port, TYPEC_ORIENTATION_REVERSE);
-+	else
-+		typec_set_orientation(tps->port, TYPEC_ORIENTATION_NORMAL);
- 	tps6598x_set_data_role(tps, TPS_STATUS_TO_TYPEC_DATAROLE(status), true);
- 
- 	tps->partner = typec_register_partner(tps->port, &desc);
-@@ -278,6 +282,7 @@ static void tps6598x_disconnect(struct tps6598x *tps, u32 status)
- 	typec_set_pwr_opmode(tps->port, TYPEC_PWR_MODE_USB);
- 	typec_set_pwr_role(tps->port, TPS_STATUS_TO_TYPEC_PORTROLE(status));
- 	typec_set_vconn_role(tps->port, TPS_STATUS_TO_TYPEC_VCONN(status));
-+	typec_set_orientation(tps->port, TYPEC_ORIENTATION_NONE);
- 	tps6598x_set_data_role(tps, TPS_STATUS_TO_TYPEC_DATAROLE(status), false);
- 
- 	power_supply_changed(tps->psy);
-diff --git a/drivers/usb/typec/tipd/tps6598x.h b/drivers/usb/typec/tipd/tps6598x.h
-index 3dae84c524fb..527857549d69 100644
---- a/drivers/usb/typec/tipd/tps6598x.h
-+++ b/drivers/usb/typec/tipd/tps6598x.h
-@@ -17,6 +17,7 @@
- /* TPS_REG_STATUS bits */
- #define TPS_STATUS_PLUG_PRESENT		BIT(0)
- #define TPS_STATUS_PLUG_UPSIDE_DOWN	BIT(4)
-+#define TPS_STATUS_TO_UPSIDE_DOWN(s)	(!!((s) & TPS_STATUS_PLUG_UPSIDE_DOWN))
- #define TPS_STATUS_PORTROLE		BIT(5)
- #define TPS_STATUS_TO_TYPEC_PORTROLE(s) (!!((s) & TPS_STATUS_PORTROLE))
- #define TPS_STATUS_DATAROLE		BIT(6)
--- 
-2.25.1
-
+USB2 resume starts with usb_hcd_start_port_resume() in port status=0A=
+change handling for RESUME link state. usb_hcd_end_port_resume() call is=0A=
+needed to keep runtime PM balance.=0A=
+=0A=
+Fixes: a231ec41e6f6 ("xhci: refactor U0 link state handling in get_port_sta=
+tus")=0A=
+Signed-off-by: Henry Lin <henryl@nvidia.com>=0A=
+---=0A=
+V1 -> V2: Added Fixes tag in changelog=0A=
+=0A=
+ drivers/usb/host/xhci-hub.c | 2 ++=0A=
+ 1 file changed, 2 insertions(+)=0A=
+=0A=
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c=0A=
+index df3522dab31b..4a8b07b8ee01 100644=0A=
+--- a/drivers/usb/host/xhci-hub.c=0A=
++++ b/drivers/usb/host/xhci-hub.c=0A=
+@@ -1090,6 +1090,8 @@ static void xhci_get_usb2_port_status(struct xhci_por=
+t *port, u32 *status,=0A=
+                 if (link_state =3D=3D XDEV_U0) {=0A=
+                         bus_state->resume_done[portnum] =3D 0;=0A=
+                         clear_bit(portnum, &bus_state->resuming_ports);=0A=
++                       usb_hcd_end_port_resume(&port->rhub->hcd->self,=0A=
++                                               portnum);=0A=
+                         if (bus_state->suspended_ports & (1 << portnum)) {=
+=0A=
+                                 bus_state->suspended_ports &=3D ~(1 << por=
+tnum);=0A=
+                                 bus_state->port_c_suspend |=3D 1 << portnu=
+m;=0A=
+--=0A=
+2.17.1=
