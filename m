@@ -2,185 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4804C5729
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Feb 2022 18:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 491E84C57B4
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Feb 2022 19:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbiBZRxi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Feb 2022 12:53:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
+        id S232201AbiBZSma (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Feb 2022 13:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiBZRxi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Feb 2022 12:53:38 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7822C237D3
-        for <linux-usb@vger.kernel.org>; Sat, 26 Feb 2022 09:53:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1645897980;
-        bh=J1fEgeDAjc62/uXfha6qfhoUQg1KJjKKiqdX25k/SvI=;
-        h=X-UI-Sender-Class:Date:From:To:Subject:In-Reply-To:References;
-        b=gRFUA7WBl1sR5xsQpqJFnnMQ4ivxrQ5H7T6/9qK1VBBqucndG4+CkdlpPkRcTu5xU
-         f8SYGIHeQ9cQDXOvLW55q28IFRhkLVrFwocZ6vFgOsMlxoB7miv1StsKzz6m8Bzp27
-         zxXg5zeA9MT2utzg6spsvWCQ4nduiMrXmriV63ac=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from felics-pocket.localdomain ([2.247.251.17]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MCsQ4-1nWmg02mtU-008qNm for <linux-usb@vger.kernel.org>; Sat, 26 Feb 2022
- 18:53:00 +0100
-Received: from localhost.localdomain (localhost.localdomain [IPv6:::1])
-        by felics-pocket.localdomain (Elektropostamt) with ESMTP id A5F585C4A83C
-        for <linux-usb@vger.kernel.org>; Sat, 26 Feb 2022 18:52:44 +0100 (CET)
-Date:   Sat, 26 Feb 2022 18:52:44 +0100
-From:   Felix Becker <linux.felixbecker2@gmx.de>
-To:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: simple: add Nokia phone driver
-Message-ID: <20220226185244.1080e666@gmx.de>
-In-Reply-To: <20220224133109.10523-1-johan@kernel.org>
-References: <20220224133109.10523-1-johan@kernel.org>
-X-Mailer: Claws Mail 3.18.0git303 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S230320AbiBZSma (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Feb 2022 13:42:30 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762A91E694F;
+        Sat, 26 Feb 2022 10:41:55 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id b23so5532520qtt.6;
+        Sat, 26 Feb 2022 10:41:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u0citrcoCzIs3IvogW91FdAVSRvwdAd+hgl6yrJCnog=;
+        b=bYjmei/DsFjSIPX2KcChKNdSIy4gwCC5i9cOEdIuvqY5agdeAsPI3g3/v9jpOnrY2X
+         EZkJY61m+zDEw6Si1gnjWj3tmJxelhGBAdTN8DDb838E/HRw1ETLWM1TeNmashu3sO03
+         VtV+UbwQffo7at91YrbttQYxix9i0lCV1B94MVAqH1CQyrGV4+paKxp7yZMDB6APEJEj
+         YmNf1GQSWxDQy+gvVMJaCsHwxAq/JSBDyciw4hzHoml6sVUAlpPohp1MY9cWXX2eE3H9
+         oIDpUvt17Iqs4vlxSrgMxZWxgdE5bTOEiE0kdId0yS9zQroIiUxuhRfyFdQzvGfo/WTG
+         tqkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u0citrcoCzIs3IvogW91FdAVSRvwdAd+hgl6yrJCnog=;
+        b=PlYFq7d6CTAmhXdxUku8BYby+wIu7Vsr6YVgjTFLym6IKUjvTX2IS6ZaSJkX3NFJqQ
+         G8tQl00BWQaeum+7x9v723d89YfEMWjwYrGh2FXobV+xJ4Uwu2qS1A+lmqdCr8ugglGk
+         E6alcDTw7umrdutkB9pr5wUwNMjpJ9n+u+RdHAWqS3s6UKVv+gO4eJpiguxhzxHnYoiN
+         AYnStzNii5pV0KpHMS/dSbZhcwIFza6LW0oToECROFo0rpSs+zNBCLt8uOeEbw09x9RD
+         1RFlszraak7buxSrwk5IXp7kZ1nI2bxWYMCoLxmGTqrq+T8yxBQ2obEqpd2XUxbqmDSt
+         YdqQ==
+X-Gm-Message-State: AOAM530Q+EhXz6ZTQw19zH61ZrHH9KyGUhPaCRQMvHtEbNokEx67uPNG
+        CLz9UMenVUdy9KNJVcuTvzI=
+X-Google-Smtp-Source: ABdhPJyrCcHvaOeTvdpiFgXQoRiQBFvqkzvzacG7mNvNeZVD/h9fI04PIt92bSpBy+kbOyPOJ4jYHw==
+X-Received: by 2002:a05:622a:14d4:b0:2de:735:68 with SMTP id u20-20020a05622a14d400b002de07350068mr11381215qtx.45.1645900914593;
+        Sat, 26 Feb 2022 10:41:54 -0800 (PST)
+Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
+        by smtp.gmail.com with ESMTPSA id p68-20020a378d47000000b006491d2d1450sm2891983qkd.10.2022.02.26.10.41.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Feb 2022 10:41:54 -0800 (PST)
+From:   Peter Geis <pgwipeout@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org, heiko@sntech.de,
+        michael.riesch@wolfvision.net, Peter Geis <pgwipeout@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2 00/11] enable usb support on rk356x
+Date:   Sat, 26 Feb 2022 13:41:36 -0500
+Message-Id: <20220226184147.769964-1-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/++AQrVP1f2yTVCsWXBeU1H6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Provags-ID: V03:K1:a8BNh/C5lpyiq4uZU4PNGyVKJ1xO186fx0HXRSjCojuKvGiR14Y
- 8wKC3tycdEDUtZFX8RiEWvdmip4q2NrskrElj31yxoKrI2Yq3SKp/RPQVpTkYtZDEtcRqXJ
- F/nHCH5PedUPqKe3djPtjtVwl4YCZndr/GLVCq7cgsFeDGRmpqGBUj/vaX8nQknrgb/tFDd
- p4NniH6KBKoZOaQIca7XA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2fQXwnu/BuE=:sXD9N8ZCipvt0JXhp3Q/HK
- tijZlLKpMtQLx5TGFdz6tddCjX67aNWYg/4GQ2FqF5nKevP+eBt/l4eZeRHipUiINaUaUyeqx
- GniWmYZIJEP4O2RsgxiOS0Sf759MXWEAuB8/0O97LKsmByI3SDKtd7zmmzjDJiArdilxydUqF
- UG/YSpEyI3PpX3/mb0ycXlb+ovGNE++is+WgsK5wRtH+6abXxgFyDh5/jYlhp8z6TToOkQhhP
- R5TwfoRiOUdBCxX10G6NoigwFZ/k/p3KD+bFEKuxnXC1NpfV/T3jKmvH100CU6q27Qz7/lGyY
- IIg7HhSiAUKix1X5O8AHafpFUXqjFX7P4adGGX9bpl3tJPQ+wbHQOXEzVLptsHLK02YySt+FM
- R2HFmFbwBkAHB6WlBG+P8vpudpy3Qep69VkVYcmRWzZWLRDMx7ONFtfpBAmp0Q4M94yACnbU7
- kkT4X2pStiBeyK059pfNjazTRi/bu8pe8z3j5Lk2UJclvt3h4Q7Mjs06s9k2QxCF/gLKB5vOq
- g5pGmuiBoMzNakV2pkKLuJJLHRLsPd64EapJ9TVKgGjb4MTXuNY4c1wVRwst0buIqjTSXydTQ
- k0ENO0D/PGV/zZcWCChjJfLvyRl5U93AffdK6uVUKW7/mxwa9Ms7Pu9v3ysR9VQQKkD/gCpS4
- SGWi3H/DJEmfkfD51d70Saflg1Agk3OTeOE+fuOo7GhHYxnmgsE/hhfAY9pXBPhRwtX+WdDHp
- CC2iE36yRfSULfMpqtW3pFFA43Xm+kWeFxdJt8p0zzSX9b2q4JuWua3FRGWmrhPi+bTrKJBeJ
- nKm3tGdK4Ue+dyNjJme9oL162eA1xwkWyX0WIIC9BxJb0RRTRRl0pWW+7DDMGAM3Pi30OBRp5
- FETiljN0srDldXGSLySSToxrqaINiN58CzVoHB1ra/ULait33GloVHqiD9IA/HqVzD48qy5wF
- pp0yBqQ18OagoiRdjdADPWZ+fLhgjEW5b8T51fROKWgm7+jltmNH+r71TdbjYovbD7hiX/W4f
- YF+HqGbSbdGAy2UPUMSndGMSQ+d1iW5mNvw9we4FQdTvqh0VhcpKPPRBpMv3++IYGeNh+zd1u
- 4iNeUPGpxADjJw=
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---Sig_/++AQrVP1f2yTVCsWXBeU1H6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Good Morning,
 
-Dear Johan,
-dear people.
+This is my patch series that I have maintained out of tree until the
+combophy driver landed.
 
-I see that this includes my email address publicly in a non-obfuscated
-form, and this is also available freely on the web at
-https://lore.kernel.org/r/20220208201506.6c65834d@gmx.de.
+Patch 1 fixes the grf dt binding from the combophy merge.
+Patches 2 and 3 add the dt bindings for the grf changes necessary for
+this series.
+Patch 4 adds support to the grf driver to set the rk3566 otg clock
+source.
+Patch 5 is a downstream patch ported forward to shut down the usb3 clock
+when the controller is operating in usb2 mode.
+Patches 6, 7, and 8 clean up the dwc3-of-simple driver, allow the use of
+of-match-data, and add the compatible for the rk3568.
+Patch 9 adds the dwc3 nodes to the rk356x device tree includes.
+Patch 10 enables the dwc3 nodes on the Quartz64 Model A.
+Patch 11 enables the dwc3 nodes on the rk3568-evb.
 
-I do not want to have my Email address publicly available (e.g. against
-automated email address harvesting).
+Please review and apply.
 
-According to the GPDR, I want that you remove my email address from the
-patch before it is published somewhere on the web or/and in
-downloadable source code (if already done, I wish that it get's removed
-from everything published), and that you remove it from publicly
-accessible email list archives.
+Very Respectfully,
+Peter Geis
 
-Please confirm back to me when you have done that, or please refer to
-me whom I should contact to get my email address removed.
+Changelog:
+v2:
+- Add a dt-bindings fix for grf.yaml
+- Unify the reset names.
+- Constrain the force usb2 clock dwc3 patch to only supported variants of
+the ip.
+- Change dwc3-of-simple to support of-match-data.
+- Drop the PCLK-PIPE clk.
+- Rename the usb nodes to be more friendly.
+- Add the rk3568-evb enable patch.
 
-Regards!
+Bin Yang (1):
+  usb: dwc3: core: do not use 3.0 clock when operating in 2.0 mode
 
+Michael Riesch (1):
+  arm64: dts: rockchip: add usb3 support to rk3568-evb1-v10
 
-On Thu, 24 Feb 2022 14:31:09 +0100, Johan Hovold <johan@kernel.org>
-wrote about "[PATCH] USB: serial: simple: add Nokia phone driver":
+Peter Geis (9):
+  dt-bindings: soc: grf: fix rk3568 usb definitions
+  dt-bindings: soc: grf: add rk3566-pipe-grf compatible
+  dt-bindings: usb: dwc3: add description for rk3568
+  soc: rockchip: set dwc3 clock for rk3566
+  usb: dwc3: reorder dwc-of-simple compatibles
+  usb: dwc3: convert dwc3-of-simple to use match-data
+  usb: dwc3: add rk3568 dwc3 support
+  arm64: dts: rockchip: add rk356x dwc3 usb3 nodes
+  arm64: dts: rockchip: enable dwc3 on quartz64-a
 
-> Add a new "simple" driver for certain Nokia phones, including Nokia
-> 130 (RM-1035) which exposes two serial ports in "charging only" mode.
->=20
-> Reported-by: Felix Becker <linux.felixbecker2@gmx.de>
-> Link: https://lore.kernel.org/r/20220208201506.6c65834d@gmx.de
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->  drivers/usb/serial/Kconfig             | 1 +
->  drivers/usb/serial/usb-serial-simple.c | 7 +++++++
->  2 files changed, 8 insertions(+)
->=20
-> diff --git a/drivers/usb/serial/Kconfig b/drivers/usb/serial/Kconfig
-> index de5c01257060..ef8d1c73c754 100644
-> --- a/drivers/usb/serial/Kconfig
-> +++ b/drivers/usb/serial/Kconfig
-> @@ -66,6 +66,7 @@ config USB_SERIAL_SIMPLE
->  		- Libtransistor USB console
->  		- a number of Motorola phones
->  		- Motorola Tetra devices
-> +		- Nokia mobile phones
->  		- Novatel Wireless GPS receivers
->  		- Siemens USB/MPI adapter.
->  		- ViVOtech ViVOpay USB device.
-> diff --git a/drivers/usb/serial/usb-serial-simple.c
-> b/drivers/usb/serial/usb-serial-simple.c index
-> bd23a7cb1be2..c95dfe4a6f0f 100644 ---
-> a/drivers/usb/serial/usb-serial-simple.c +++
-> b/drivers/usb/serial/usb-serial-simple.c @@ -91,6 +91,11 @@
-> DEVICE(moto_modem, MOTO_IDS); { USB_DEVICE(0x0cad, 0x9016) }
-> /* TPG2200 */ DEVICE(motorola_tetra, MOTOROLA_TETRA_IDS);
-> =20
-> +/* Nokia mobile phone driver */
-> +#define NOKIA_IDS()			\
-> +	{ USB_DEVICE(0x0421, 0x069a) }	/* Nokia 130 (RM-1035)
-> */ +DEVICE_N(nokia, NOKIA_IDS, 2);
-> +
->  /* Novatel Wireless GPS driver */
->  #define NOVATEL_IDS()			\
->  	{ USB_DEVICE(0x09d7, 0x0100) }	/* NovAtel FlexPack
-> GPS */ @@ -123,6 +128,7 @@ static struct usb_serial_driver * const
-> serial_drivers[] =3D { &vivopay_device,
->  	&moto_modem_device,
->  	&motorola_tetra_device,
-> +	&nokia_device,
->  	&novatel_gps_device,
->  	&hp4x_device,
->  	&suunto_device,
-> @@ -140,6 +146,7 @@ static const struct usb_device_id id_table[] =3D {
->  	VIVOPAY_IDS(),
->  	MOTO_IDS(),
->  	MOTOROLA_TETRA_IDS(),
-> +	NOKIA_IDS(),
->  	NOVATEL_IDS(),
->  	HP4X_IDS(),
->  	SUUNTO_IDS(),
+ .../devicetree/bindings/soc/rockchip/grf.yaml |  5 +-
+ .../bindings/usb/rockchip,dwc3.yaml           |  2 +
+ .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 37 +++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3566.dtsi      | 12 +++++
+ .../boot/dts/rockchip/rk3568-evb1-v10.dts     | 46 +++++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi      |  9 ++++
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      | 45 +++++++++++++++++-
+ drivers/soc/rockchip/grf.c                    | 17 +++++++
+ drivers/usb/dwc3/core.c                       |  5 ++
+ drivers/usb/dwc3/core.h                       |  1 +
+ drivers/usb/dwc3/dwc3-of-simple.c             | 43 +++++++++++++----
+ 11 files changed, 210 insertions(+), 12 deletions(-)
 
+-- 
+2.25.1
 
-
---=20
-Machen ist wie wollen, nur krasser.
-
---Sig_/++AQrVP1f2yTVCsWXBeU1H6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoQC1DtG8M9RevkfXW6j9HlIpTekFAmIaaOwACgkQW6j9HlIp
-TemgThAAh1hif5Aew736zCQyl9TaGkeY4MMy8HbRNqnb+9wiEAeB+iUL0dADRRLZ
-OmDJ9SEFvKz51gGMoSP7rIX9Hxt8J0OZkzrltq5MkZRcnLkpgBlV0oBJViiUa3v/
-l+p29WEl4kgX1gB0/u4+y2l0Y0k3FRlUOAYpLNfalDLkJYUrlIjJpoxIsMLmS85j
-kaR9pKpGEVOoeOf5V7KVavRd64x3ge0/e+Vinu8Wz7eoMEpWLkAdWjMXVuGoHvUH
-HCYPW6X64W0ILhW5Y3+kLwqmyo/NmkZUDH2+3JtcFMiwm/oST24Kq5by8D7ywYLD
-bCFZAvEMSVYCPnrk97nbdCtN0xsQWhmhgey5WxPng1juexIj7HAGbSuGVKQOnRA0
-/r/LZX6RB2ZvJ8RHZCYKFLCG5aFk8T38MxcAznG4NxTu24+mq793JQ9iMFOL7uVY
-omW9tWIH79ts/3Us6nYcW5PHIlyepT957eKdvYeF2PF1b5UTP1MZ0OG6qstgbxjz
-rjtyhTJ9qSA1EHN/rS4eLPcdBdEftA1ddGiT5kb63XS/WDNmDJov74isDJOZPS8E
-/Nbqk3mJzYPvzTVmiatAMDbWBlJr9jWyyplTsqz2XnGy6ZLp+3+eCEPTXl/BmEVr
-6uAqt8ImA43JY4/rhyRYEc14ZLTghrNFKeBw8KNe/S3q/16oz6Q=
-=TXlU
------END PGP SIGNATURE-----
-
---Sig_/++AQrVP1f2yTVCsWXBeU1H6--
