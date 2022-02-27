@@ -2,77 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A59154C59D8
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Feb 2022 08:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3E64C5A4C
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Feb 2022 10:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiB0HBO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Feb 2022 02:01:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        id S229734AbiB0JvD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Feb 2022 04:51:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiB0HBN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Feb 2022 02:01:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A402BB35
-        for <linux-usb@vger.kernel.org>; Sat, 26 Feb 2022 23:00:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A39860915
-        for <linux-usb@vger.kernel.org>; Sun, 27 Feb 2022 07:00:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82032C340E9;
-        Sun, 27 Feb 2022 07:00:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645945235;
-        bh=SoYOmjuGEalZMbfn7wNUqFtPyQ3V4wXLiuoxYV1Y8WE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g4ssHRISf7Xqazh/w0VAuZBtQ3+VfCJwi6aPeUw+rnPP/54pAfc0JiIwXHsTGV6dE
-         1UM2nzdhLAGqhM03e28nIyCNum/kLE4ehHxR6BTUnExndUVAJhkQPDc9W2l8m5h2jI
-         s542F89wNAmociUxYLdFcR+FmUibNZQawjMOtMd4=
-Date:   Sun, 27 Feb 2022 08:00:31 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Felix Becker <linux.felixbecker2@gmx.de>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: simple: add Nokia phone driver
-Message-ID: <Yhshj29HdtsABnsU@kroah.com>
-References: <20220224133109.10523-1-johan@kernel.org>
- <20220226185244.1080e666@gmx.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220226185244.1080e666@gmx.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229609AbiB0JvC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Feb 2022 04:51:02 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C7556404;
+        Sun, 27 Feb 2022 01:50:26 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id l9so7894214pls.6;
+        Sun, 27 Feb 2022 01:50:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=0DCsJEgYCR8I8HZ/v5w4ZJgzjo6a8wTktOr0T/UncpY=;
+        b=lGGvmjBy2LqPrcywkKkje1CAH0aMeOVUbimwU+mltvcZxS1454kSy7WozIGPbWz45j
+         IL9Y5IjzYdkrI8DFVRcWpJM+XH1+yKfo/C2VkQtj4FMeprdXWlTV/zxhBVEf1SzSPo03
+         1ly9rw8hcM4Ao/bUgHb8rxZBViB1uVAPOW/ulb7161GpboNoAIGhKE2tAhQQW4OnJtnr
+         JfEtgN+4xY+4abM7+kYjHp0/YguBuFevFpJN5d2K72HieTQcpJgBALPRQ30/f68s2P3V
+         I9FivMaczC+tIf2TIhUdsoZG5n0w2WBCqydzHW1bjsfKU2XYqhXKBWzo9lTRCJqtBwJ4
+         cP2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=0DCsJEgYCR8I8HZ/v5w4ZJgzjo6a8wTktOr0T/UncpY=;
+        b=Y0TR18y46qbhkvobZcusijSMrIZkJqVjoLturoLbyJzAro1R6QekCLmDlSFqsbE+Bi
+         3zrC4e7kmW6amVWu9ZqZ98u8qyydJbYsqBBNpk6GIbJpAblAQT2xiFWBdSNuC3I3lF9P
+         6XAwZcQdN/e4wqhhrqRPhMFqjniZsSG7sRQ3PbKO9X6TM8m0MUjeYpoTb5otv78rlk5Q
+         qo9d1ybZIWdGK/QHvMa4mytiU3d+YCIjJspyBP+YjXXNygULFkcDNeEEUOHLappr9XOM
+         IoSZcRakmbqjrHXChtikXJAz7oLNA4JIcwUVmCwBTVgYlQFq5f8x+N87gbF1y1wDtThw
+         TsoA==
+X-Gm-Message-State: AOAM531McQeGR7+wUgf4YHBRJVqtYkPmGTMDBSTuHgyjU5NNoKKYDinb
+        7lZ/gKJwwDVcPWHw3PkszbU=
+X-Google-Smtp-Source: ABdhPJziWeUJbfSpBuaz+yLKcwXzLcoMNGdL/RDfMWUB+MFDYBLZ6nXXiJUFMtBzqaVkD2YtYOYJiQ==
+X-Received: by 2002:a17:902:ab09:b0:14f:c4aa:16e2 with SMTP id ik9-20020a170902ab0900b0014fc4aa16e2mr15524879plb.85.1645955426048;
+        Sun, 27 Feb 2022 01:50:26 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id o185-20020a6341c2000000b0036fb987b25fsm7473334pga.38.2022.02.27.01.50.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 27 Feb 2022 01:50:25 -0800 (PST)
+From:   Vincent Shih <vincent.sunplus@gmail.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, wells.lu@sunplus.com
+Cc:     Vincent Shih <vincent.sunplus@gmail.com>
+Subject: [PATCH v2 0/2] Add driver for ehci in Sunplus SP7021
+Date:   Sun, 27 Feb 2022 17:50:39 +0800
+Message-Id: <1645955441-6496-1-git-send-email-vincent.sunplus@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_FMBLA_NEWDOM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Feb 26, 2022 at 06:52:44PM +0100, Felix Becker wrote:
-> Dear Johan,
-> dear people.
-> 
-> I see that this includes my email address publicly in a non-obfuscated
-> form, and this is also available freely on the web at
-> https://lore.kernel.org/r/20220208201506.6c65834d@gmx.de.
-> 
-> I do not want to have my Email address publicly available (e.g. against
-> automated email address harvesting).
-> 
-> According to the GPDR, I want that you remove my email address from the
-> patch before it is published somewhere on the web or/and in
-> downloadable source code (if already done, I wish that it get's removed
-> from everything published), and that you remove it from publicly
-> accessible email list archives.
-> 
-> Please confirm back to me when you have done that, or please refer to
-> me whom I should contact to get my email address removed.
+This is a patch series for ehci driver for Sunplus SP7021 SoC.
 
-When sending a message to a public mailing list, the GPDR does not come
-into play, sorry.  There's nothing we can do here.
+Sunplus SP7021 is an ARM Coretex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD Card and
+etc.) into a single chip. It is designed for industrial control.
 
-thanks,
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-greg k-h
+Vincent Shih (2):
+  usb: host: ehci-sunplus: Add driver for ehci in Sunplus SP7021
+  dt-bindings: usb: Add bindings doc for Sunplus EHCI driver
+
+ .../bindings/usb/sunplus,sp7021-usb-ehci.yaml      |  97 ++++
+ MAINTAINERS                                        |   7 +
+ drivers/usb/host/Kconfig                           |  11 +
+ drivers/usb/host/Makefile                          |   1 +
+ drivers/usb/host/ehci-sunplus.c                    | 495 +++++++++++++++++++++
+ 5 files changed, 611 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml
+ create mode 100644 drivers/usb/host/ehci-sunplus.c
+
+-- 
+2.7.4
+
