@@ -2,137 +2,237 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15F84C7D00
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Feb 2022 23:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D354C7B55
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Feb 2022 22:06:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbiB1WHs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Feb 2022 17:07:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
+        id S229838AbiB1VG5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Feb 2022 16:06:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiB1WHq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Feb 2022 17:07:46 -0500
-X-Greylist: delayed 3241 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Feb 2022 14:07:01 PST
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E7D3C4E3A;
-        Mon, 28 Feb 2022 14:07:01 -0800 (PST)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 21SKr95E005627;
-        Mon, 28 Feb 2022 14:53:09 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 21SKr7Xe005624;
-        Mon, 28 Feb 2022 14:53:07 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Mon, 28 Feb 2022 14:53:07 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        alsa-devel@alsa-project.org, KVM list <kvm@vger.kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, linux1394-devel@lists.sourceforge.net,
-        drbd-dev@lists.linbit.com, linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>, linux-aspeed@lists.ozlabs.org,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-staging@lists.linux.dev,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sgx@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        samba-technical@lists.samba.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body as a ptr
-Message-ID: <20220228205307.GD614@gate.crashing.org>
-References: <20220228110822.491923-1-jakobkoschel@gmail.com> <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com> <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com> <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com> <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com> <CAHk-=wj27SZQ3kPTesBzkiGhe-mA3gOQqr_adt_bMFzmg1VNaA@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        with ESMTP id S229582AbiB1VG5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Feb 2022 16:06:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBD8642A;
+        Mon, 28 Feb 2022 13:06:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0FD8B81651;
+        Mon, 28 Feb 2022 21:06:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A58C340F1;
+        Mon, 28 Feb 2022 21:06:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646082374;
+        bh=h+Vr0xa4sw719cfJKXXdkWPHmnkmCz7iKEofpmYZuls=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ryUW/hps6zMY2vq+o6aVRQ7JS3au1jKNlMCz3lmBRnlpzyglulPdiNzhNLbp/b7uk
+         63eOc+hu8s+YtgOZUEWtlzJOTx/Wh8tFGtWhzQgATAUOKjkvvleDmkx4KJvCWKvyKz
+         b+FW1S2jAaEdxRoD6xwqhO0I62pHvacfENCPpHaM=
+Date:   Mon, 28 Feb 2022 22:06:10 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Won Chung <wonchung@google.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb:typec: Add sysfs support for Type C connector's
+ physical location
+Message-ID: <Yh05QgVw5htyGj+X@kroah.com>
+References: <20220228190649.362070-1-wonchung@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wj27SZQ3kPTesBzkiGhe-mA3gOQqr_adt_bMFzmg1VNaA@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220228190649.362070-1-wonchung@google.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 12:14:44PM -0800, Linus Torvalds wrote:
-> On Mon, Feb 28, 2022 at 12:10 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > We can do
-> >
-> >         typeof(pos) pos
-> >
-> > in the 'for ()' loop, and never use __iter at all.
-> >
-> > That means that inside the for-loop, we use a _different_ 'pos' than outside.
+On Mon, Feb 28, 2022 at 07:06:49PM +0000, Won Chung wrote:
+> When ACPI table includes _PLD field for a Type C connector, share _PLD
+> values in its sysfs. _PLD stands for physical location of device.
 > 
-> The thing that makes me throw up in my mouth a bit is that in that
+> Currently without connector's location information, when there are
+> multiple Type C ports, it is hard to distinguish which connector
+> corresponds to which physical port at which location. For example, when
+> there are two Type C connectors, it is hard to find out which connector
+> corresponds to the Type C port on the left panel versus the Type C port
+> on the right panel. With location information provided, we can determine
+> which specific device at which location is doing what.
 > 
->         typeof(pos) pos
+> _PLD output includes much more fields, but only generic fields are added
+> and exposed to sysfs, so that non-ACPI devices can also support it in
+> the future. The minimal generic fields needed for locating a port are
+> the following.
+> - panel
+> - horizontal_position
+> - vertical_position
+> - dock
+> - lid
 > 
-> the first 'pos' (that we use for just the typeof) is that outer-level
-> 'pos', IOW it's a *different* 'pos' than the second 'pos' in that same
-> declaration that declares the inner level shadowing new 'pos'
-> variable.
+> Signed-off-by: Won Chung <wonchung@google.com>
+> ---
+>  Documentation/ABI/testing/sysfs-class-typec | 43 +++++++++++++++++
+>  drivers/usb/typec/class.c                   | 52 +++++++++++++++++++++
+>  drivers/usb/typec/class.h                   |  3 ++
+>  3 files changed, 98 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+> index 75088ecad202..2879bc6e6ad2 100644
+> --- a/Documentation/ABI/testing/sysfs-class-typec
+> +++ b/Documentation/ABI/testing/sysfs-class-typec
+> @@ -141,6 +141,49 @@ Description:
+>  		- "reverse": CC2 orientation
+>  		- "unknown": Orientation cannot be determined.
+>  
+> +What:		/sys/class/typec/<port>/location/panel
+> +Date:		February 2022
+> +Contact:	Won Chung <wonchung@google.com>
+> +Description:
+> +		Describes which panel surface of the system’s housing the
+> +		Type C port resides on:
+> +		0 - Top
+> +		1 - Bottom
+> +		2 - Left
+> +		3 - Right
+> +		4 - Front
+> +		5 - Back
+> +		6 - Unknown (Vertical Position and Horizontal Position will be
+> +		ignored)
 
-The new "pos" has not yet been declared, so this has to refer to the
-outer "pos", it cannot be the inner one.  Because it hasn't been
-declared yet :-)
-
-Compare this to
-  typeof (pos) pos = pos;
-where that last "pos" *does* refer to the newly declared one: that
-declaration has already been done!  (So this code is UB btw, 6.3.2.1/2).
-
-> If I was a compiler person, I would say "Linus, that thing is too ugly
-> to live", and I would hate it. I'm just hoping that even compiler
-> people say "that's *so* ugly it's almost beautiful".
-
-It is perfectly well-defined.  Well, it would be good if we (GCC) would
-document it does work, and if someone tested it on LLVM as well.  But it
-is really hard to implement it to *not* work :-)
-
-> Because it does seem to work. It's not pretty, but hey, it's not like
-> our headers are really ever be winning any beauty contests...
-
-It is very pretty!  Needs a comment though :-)
+This is text files, why not say "top", "bottom", and so on?  Why use a
+number that means nothing?
 
 
-Segher
+> +
+> +What:		/sys/class/typec/<port>/location/vertical_position
+> +Date:		February 2022
+> +Contact:	Won Chung <wonchung@google.com>
+> +Description:
+> +		0 - Upper
+> +		1 - Center
+> +		2 - Lower
+
+Same here.
+
+
+> +
+> +What:		/sys/class/typec/<port>/location/horizontal_position
+> +Date:		Feb, 2022
+> +Contact:	Won Chung <wonchung@google.com>
+> +Description:
+> +		0 - Left
+> +		1 - Center
+> +		2 - Right
+
+And here.
+
+> +
+> +What:		/sys/class/typec/<port>/location/dock
+> +Date:		Feb, 2022
+
+Note that date ends in a few hours :(
+
+> +Contact:	Won Chung <wonchung@google.com>
+> +Description:
+> +		Set if the port resides in a docking station or a port replicator.
+> +
+> +What:		/sys/class/typec/<port>/location/lid
+> +Date:		Feb, 2022
+> +Contact:	Won Chung <wonchung@google.com>
+> +Description:
+> +		Set if the port resides on the lid of laptop system.
+
+"set"?  What does that mean?
+
+
+
+> +
+>  USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
+>  
+>  What:		/sys/class/typec/<port>-partner/accessory_mode
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 45a6f0c807cb..43b23c221f95 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -1579,8 +1579,40 @@ static const struct attribute_group typec_group = {
+>  	.attrs = typec_attrs,
+>  };
+>  
+> +#define DEV_ATTR_LOCATION_PROP(prop) \
+> +	static ssize_t prop##_show(struct device *dev, struct device_attribute *attr, \
+> +		char *buf) \
+> +	{ \
+> +		struct typec_port *port = to_typec_port(dev); \
+> +		if (port->pld) \
+> +			return sprintf(buf, "%u\n", port->pld->prop); \
+> +		return 0; \
+> +	}; \
+> +static DEVICE_ATTR_RO(prop)
+> +
+> +DEV_ATTR_LOCATION_PROP(panel);
+> +DEV_ATTR_LOCATION_PROP(vertical_position);
+> +DEV_ATTR_LOCATION_PROP(horizontal_position);
+> +DEV_ATTR_LOCATION_PROP(dock);
+> +DEV_ATTR_LOCATION_PROP(lid);
+> +
+> +static struct attribute *typec_location_attrs[] = {
+> +	&dev_attr_panel.attr,
+> +	&dev_attr_vertical_position.attr,
+> +	&dev_attr_horizontal_position.attr,
+> +	&dev_attr_dock.attr,
+> +	&dev_attr_lid.attr,
+> +	NULL,
+> +};
+> +
+> +static const struct attribute_group typec_location_group = {
+> +	.name = "location",
+> +	.attrs = typec_location_attrs,
+> +};
+> +
+>  static const struct attribute_group *typec_groups[] = {
+>  	&typec_group,
+> +	&typec_location_group,
+>  	NULL
+>  };
+>  
+> @@ -1614,6 +1646,24 @@ const struct device_type typec_port_dev_type = {
+>  	.release = typec_release,
+>  };
+>  
+> +void *get_pld(struct device *dev)
+
+That is a horrible global function name :(
+
+And why a void pointer?  We have real types in the kernel, please use
+them.
+
+> +{
+> +#ifdef CONFIG_ACPI
+
+No #ifdefs in .c files please.
+
+> +	struct acpi_pld_info *pld;
+> +	acpi_status status;
+> +
+> +	if (!has_acpi_companion(dev))
+> +		return NULL;
+> +
+> +	status = acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld);
+> +	if (ACPI_FAILURE(status))
+> +		return NULL;
+> +	return pld;
+
+See, you return a real type, don't throw that information away.  This
+isn't Windows :)
+
+thanks,
+
+gre gk-h
