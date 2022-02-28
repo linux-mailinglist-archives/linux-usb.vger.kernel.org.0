@@ -2,62 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B24A4C7B30
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Feb 2022 22:00:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E15F84C7D00
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Feb 2022 23:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbiB1VAg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Feb 2022 16:00:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
+        id S231368AbiB1WHs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Feb 2022 17:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiB1VAf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Feb 2022 16:00:35 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98624F464
-        for <linux-usb@vger.kernel.org>; Mon, 28 Feb 2022 12:59:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646081994; x=1677617994;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9xl2b40hzO4JRtT5sjr752FQcYhwowPk6zQQxSWYUDk=;
-  b=Q1+A7N/QWdKM2bw2DQpDuth4r7XR68k6XDMDgKD+gGsehGqUr/Vnx6N4
-   +Pg/56DM/29DcdSJZyp90SqsGQQgziwMNEocGRDYCObEkTTj/0agYE+ba
-   MGYAEBkeby7u3th2aMFywLdrpZz+bm2FbpGmV9wTjDYvhmtvbdZ+YWlSk
-   H9UIctsgGVwcsgZ9rjJDUFIIz4quOgHW24lXZlSF3jsl+E+OCAq/35SKZ
-   uV9h6THPoLkY9HGPlga4r658F+wt/jIuY6Rr8knigUMAgsKL8N2jcO2t2
-   i1YGoL9F28UmpqElyBQ3vvJf+hIyXJoBYi3KK8LatNqxdKtvO39p7+OuQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="253178587"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="253178587"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 12:59:54 -0800
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="593358352"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 12:59:52 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nOn6m-009b5a-T9;
-        Mon, 28 Feb 2022 22:59:04 +0200
-Date:   Mon, 28 Feb 2022 22:59:04 +0200
-From:   "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-To:     micklorain <micklorain@protonmail.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
-Subject: Re: [PATCH v1] usb: hcd: Try MSI interrupts on PCI devices
-Message-ID: <Yh03mFSESvwT8Wt0@smile.fi.intel.com>
-References: <PxIByDyBRcsbpcmVhGSNDFAoUcMmb78ctXCkw6fbpx25TGlCHvA6SJjjFkNr1FfQZMntYPTNyvEnblxzAZ8a6jP9ddLpKeCN6Chi_2FuexU=@protonmail.com>
-MIME-Version: 1.0
+        with ESMTP id S230402AbiB1WHq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Feb 2022 17:07:46 -0500
+X-Greylist: delayed 3241 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Feb 2022 14:07:01 PST
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E7D3C4E3A;
+        Mon, 28 Feb 2022 14:07:01 -0800 (PST)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 21SKr95E005627;
+        Mon, 28 Feb 2022 14:53:09 -0600
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 21SKr7Xe005624;
+        Mon, 28 Feb 2022 14:53:07 -0600
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Mon, 28 Feb 2022 14:53:07 -0600
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        alsa-devel@alsa-project.org, KVM list <kvm@vger.kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, linux1394-devel@lists.sourceforge.net,
+        drbd-dev@lists.linbit.com, linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>, linux-aspeed@lists.ozlabs.org,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        linux-staging@lists.linux.dev,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        intel-wired-lan@lists.osuosl.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        bcm-kernel-feedback-list@broadcom.com,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-sgx@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        samba-technical@lists.samba.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        tipc-discussion@lists.sourceforge.net,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body as a ptr
+Message-ID: <20220228205307.GD614@gate.crashing.org>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com> <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com> <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com> <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com> <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com> <CAHk-=wj27SZQ3kPTesBzkiGhe-mA3gOQqr_adt_bMFzmg1VNaA@mail.gmail.com>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PxIByDyBRcsbpcmVhGSNDFAoUcMmb78ctXCkw6fbpx25TGlCHvA6SJjjFkNr1FfQZMntYPTNyvEnblxzAZ8a6jP9ddLpKeCN6Chi_2FuexU=@protonmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <CAHk-=wj27SZQ3kPTesBzkiGhe-mA3gOQqr_adt_bMFzmg1VNaA@mail.gmail.com>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,43 +91,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 08:12:47PM +0000, micklorain wrote:
-> Hi,
+On Mon, Feb 28, 2022 at 12:14:44PM -0800, Linus Torvalds wrote:
+> On Mon, Feb 28, 2022 at 12:10 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > We can do
+> >
+> >         typeof(pos) pos
+> >
+> > in the 'for ()' loop, and never use __iter at all.
+> >
+> > That means that inside the for-loop, we use a _different_ 'pos' than outside.
 > 
-> This patch breaks USB for me. I noticed when I upgraded from debian's 4.19.0-18 (working) to 5.10.0-10 (broken). I git bisect'ed until I found that this patch is the culprit. Upstream 5.17.0-rc2 is still broken, but 5.17.0-rc2 with this patch reverted works.
+> The thing that makes me throw up in my mouth a bit is that in that
 > 
-> lsusb when things work :
-> https://paste.debian.net/hidden/2a964425/
+>         typeof(pos) pos
 > 
-> lsusb when things are broken :
-> https://paste.debian.net/hidden/0376920c/
-> 
-> dmesg when things are broken :
-> https://paste.debian.net/hidden/780ca112/
-> 
-> dmesg when things work :
-> https://paste.debian.net/hidden/4d1bfc0f/
-> 
-> Let me know if you need anything else from me.
+> the first 'pos' (that we use for just the typeof) is that outer-level
+> 'pos', IOW it's a *different* 'pos' than the second 'pos' in that same
+> declaration that declares the inner level shadowing new 'pos'
+> variable.
 
-Thanks for your report!
+The new "pos" has not yet been declared, so this has to refer to the
+outer "pos", it cannot be the inner one.  Because it hasn't been
+declared yet :-)
 
-Last time I have got something similar it becomes that PCI bridge which is used
-to connect USB controller to the PCI Root Bridge was not capable of MSI, while
-advertising that capability. I.o.w. HW bug.
+Compare this to
+  typeof (pos) pos = pos;
+where that last "pos" *does* refer to the newly declared one: that
+declaration has already been done!  (So this code is UB btw, 6.3.2.1/2).
 
-To understand if it's something similar, please run (under the root) each of
-the following commands:
+> If I was a compiler person, I would say "Linus, that thing is too ugly
+> to live", and I would hate it. I'm just hoping that even compiler
+> people say "that's *so* ugly it's almost beautiful".
 
-	lspci -nk -vvv
-	cat /proc/interrupts
+It is perfectly well-defined.  Well, it would be good if we (GCC) would
+document it does work, and if someone tested it on LLVM as well.  But it
+is really hard to implement it to *not* work :-)
 
-in both cases, i.e. working and non-working.
+> Because it does seem to work. It's not pretty, but hey, it's not like
+> our headers are really ever be winning any beauty contests...
 
-And then share the output (all 4 files).
-
--- 
-With Best Regards,
-Andy Shevchenko
+It is very pretty!  Needs a comment though :-)
 
 
+Segher
