@@ -2,101 +2,236 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDA14C6AB9
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Feb 2022 12:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E34FD4C6BA3
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Feb 2022 13:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235882AbiB1LiZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Feb 2022 06:38:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
+        id S236119AbiB1ME0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Feb 2022 07:04:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235485AbiB1LiX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Feb 2022 06:38:23 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D5F1A808
-        for <linux-usb@vger.kernel.org>; Mon, 28 Feb 2022 03:37:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646048264; x=1677584264;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=XClrDydasJs3bfEf61lLT5SWAC+IuVng5M/uMKS4c7w=;
-  b=cpFHmiS+4z3hgfBiFmWmspAE7aSdeKWGG8NIbrGjLf4y1zJqxPQLUmtd
-   DbyTKnYY0CpwFKzaN9d5whotoY+vzJfns8ffVBZLHU2um7sH65Rw5bXLK
-   mZyLkYhJl/sgRh386e/h8myeEF8N6BdZdTKtwPw9YvN2a+uRicHmajz3m
-   QKQBo/aJOhmEBldo5FfMMouFz8N0zxZ0E7pDXYIsXlW4nqz2HooZVIJAU
-   cPLkiP3vqywHpJ/X7Wn+LempPy3kwT4HSIdXuRwhKs19rUlrdtRlrukMe
-   G9GjQ1z4ZEZmSuoFK01c+D1722D86s+xDABNtW6yaKQcBGho7FWQNdpkN
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="251696003"
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="251696003"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 03:37:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="575287674"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 28 Feb 2022 03:37:29 -0800
-Subject: Re: [RFT PATCH] xhci: make xhci_handshake timeout for xhci_reset()
- adjustable
-To:     Udipto Goswami <quic_ugoswami@quicinc.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     s.shtylyov@omp.ru, linux-usb@vger.kernel.org
-References: <20220217135643.1321889-1-mathias.nyman@linux.intel.com>
- <20220218094133.GA28120@hu-pkondeti-hyd.qualcomm.com>
- <0edc0822-d75b-238a-16d4-d828710c1b60@quicinc.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <27f7aec3-cd86-3f55-dfa6-8f2b76437c90@linux.intel.com>
-Date:   Mon, 28 Feb 2022 13:39:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <0edc0822-d75b-238a-16d4-d828710c1b60@quicinc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S236121AbiB1MEX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Feb 2022 07:04:23 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D10A2C13A;
+        Mon, 28 Feb 2022 04:03:41 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id p15so24284100ejc.7;
+        Mon, 28 Feb 2022 04:03:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=m/mYa1XqvvHLfnL3BOoOqYDa1ViNV7MB47waZKIycw0=;
+        b=puET9FaE+iPLWSLHaH0Jc15P7LML3ILv/CtQc1xDRlDOvchBnePGr3CpZ8iNTFg26S
+         MvdmzyKLao5C/5rXrSzR7jzTPZ0Yuj+7M+cqDE4eOMJCgAt9uraXgTEJwynFkzni1Fvy
+         Vjo1HNa/jUOUFI/CmrkLVTegwpA5o7Cf0wR8qBn5y2xARegC4rz7JN5F70qSFE936vyK
+         a6/WQ787WIaZ7lFx0I/tSaiXwe3z6FIrVBWdIQkzq0oVXXDZs7cCv56cl8qPmZ4RxzRI
+         sP+DHiZk3rxPTft7o6PkfUdJMVZiSNaECaj+ljhYu978P5TkgTkfoRd54h/EuhklkuKS
+         esTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=m/mYa1XqvvHLfnL3BOoOqYDa1ViNV7MB47waZKIycw0=;
+        b=b5ErhjzOgn9U4hMBWo62yCMMDr61Wbhoawc/0WIGvgv7uxDqgPBoMig5dkM4VcHO7D
+         XKGWXQAibWijkLhBlKxLdxo61wnOSvx2UA6hpeOSM9Kcuf7/XZfe5J0/n1I5On+XdXXK
+         PFQcVcX3hWp/zNSc2A+ockxR4gcqCtFm6svFqpVzEXI/0Xk81KyM/fDpKtm0e8ViUMcX
+         o/CdwN5J0ITvoc2Erb4pWTpaOetb2pONRYytJagcudWss0yCyhqPe1OVwvoSobXHk6O4
+         swJRhuM3X8J92q2Tx5p5S+FryA/Dtr1braIlwDEjBlzC0ufkOGMpNIGrGLDVVdoY+DiY
+         6qYQ==
+X-Gm-Message-State: AOAM532P7Eovede7RZdlai8eb3Qd6/DRPl1sWJVIfHcd4AoqihYZ5BTx
+        KlHFJt41/QKvCU8lHPeyZ80=
+X-Google-Smtp-Source: ABdhPJyPihjoYwx+e9NKg98XvxKCbWi7t13guT1EBLKeJ6QGdK72cKHCeJpX8hRszpc83uJxZ+jQ9w==
+X-Received: by 2002:a17:906:d14e:b0:6cd:8d7e:eec9 with SMTP id br14-20020a170906d14e00b006cd8d7eeec9mr14944415ejb.28.1646049820086;
+        Mon, 28 Feb 2022 04:03:40 -0800 (PST)
+Received: from smtpclient.apple ([2a02:8109:9d80:3f6c:957a:1d13:c949:d1f3])
+        by smtp.gmail.com with ESMTPSA id l9-20020a1709060cc900b006ce04bb8668sm4257528ejh.184.2022.02.28.04.03.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 28 Feb 2022 04:03:39 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
+Subject: Re: [PATCH 1/6] drivers: usb: remove usage of list iterator past the
+ loop body
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+In-Reply-To: <20220228112413.GA2812@kadam>
+Date:   Mon, 28 Feb 2022 13:03:36 +0100
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergman <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-sgx@vger.kernel.org,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        bcm-kernel-feedback-list@broadcom.com, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, kvm@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        v9fs-developer@lists.sourceforge.net,
+        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E31E215E-C409-40B8-8452-57E70C91484C@gmail.com>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com>
+ <20220228110822.491923-2-jakobkoschel@gmail.com>
+ <20220228112413.GA2812@kadam>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+X-Mailer: Apple Mail (2.3693.60.0.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24.2.2022 10.44, Udipto Goswami wrote:
-> Hi Pavan, Mathias,
-> 
-> we have tested the patch in the testing environment where initially we were hitting the issue. We don't see any issue after including this.
-> 
-> On 18-02-2022 03:11 pm, Pavan Kondeti wrote:
->> On Thu, Feb 17, 2022 at 03:56:43PM +0200, Mathias Nyman wrote:
->>> xhci_reset() timeout was increased from 250ms to 10 seconds in order to
->>> give Renesas 720201 xHC enough time to get ready in probe.
->>>
->>> xhci_reset() is called with interrupts disabled in other places, and
->>> waiting for 10 seconds there is not acceptable.
->>>
->>> Add a timeout parameter to xhci_reset(), and adjust it back to 250ms
->>> when called from xhci_stop() or xhci_shutdown() where interrupts are
->>> disabled, and successful reset isn't that critical.
->>>
->>> Additionally change the signed integer timeout parameter in
->>> xhci_handshake() to a u64 to match the timeout value we pass to
->>> readl_poll_timeout_atomic()
->>>
->>> Reported-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->>> Reported-by: Pavan Kondeti <quic_pkondeti@quicinc.com>
->>> Fixes: 22ceac191211 ("xhci: Increase reset timeout for Renesas 720201 host.")
->>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->> We have tested the patch and found no issues. Since the issue happens
->> very rarely, we have included in our builds for the wider testing.
->>
->> Thanks,
->> Pavan
 
-Thanks 
-Can I add a "Tested-by: Pavan Kondeti <quic_pkondeti@quicinc.com>" tag?
 
--Mathias
+> On 28. Feb 2022, at 12:24, Dan Carpenter <dan.carpenter@oracle.com> =
+wrote:
+>=20
+> On Mon, Feb 28, 2022 at 12:08:17PM +0100, Jakob Koschel wrote:
+>> diff --git a/drivers/usb/gadget/udc/at91_udc.c =
+b/drivers/usb/gadget/udc/at91_udc.c
+>> index 9040a0561466..0fd0307bc07b 100644
+>> --- a/drivers/usb/gadget/udc/at91_udc.c
+>> +++ b/drivers/usb/gadget/udc/at91_udc.c
+>> @@ -150,13 +150,14 @@ static void proc_ep_show(struct seq_file *s, =
+struct at91_ep *ep)
+>> 	if (list_empty (&ep->queue))
+>> 		seq_printf(s, "\t(queue empty)\n");
+>>=20
+>> -	else list_for_each_entry (req, &ep->queue, queue) {
+>> -		unsigned	length =3D req->req.actual;
+>> +	else
+>> +		list_for_each_entry(req, &ep->queue, queue) {
+>> +			unsigned int	length =3D req->req.actual;
+>>=20
+>> -		seq_printf(s, "\treq %p len %d/%d buf %p\n",
+>> -				&req->req, length,
+>> -				req->req.length, req->req.buf);
+>> -	}
+>> +			seq_printf(s, "\treq %p len %d/%d buf %p\n",
+>> +					&req->req, length,
+>> +					req->req.length, req->req.buf);
+>> +		}
+>=20
+> Don't make unrelated white space changes.  It just makes the patch
+> harder to review.  As you're writing the patch make note of any
+> additional changes and do them later in a separate patch.
+>=20
+> Also a multi-line indent gets curly braces for readability even though
+> it's not required by C.  And then both sides would get curly braces.
+>=20
+>> 	spin_unlock_irqrestore(&udc->lock, flags);
+>> }
+>>=20
+>> @@ -226,7 +227,7 @@ static int proc_udc_show(struct seq_file *s, void =
+*unused)
+>>=20
+>> 	if (udc->enabled && udc->vbus) {
+>> 		proc_ep_show(s, &udc->ep[0]);
+>> -		list_for_each_entry (ep, &udc->gadget.ep_list, =
+ep.ep_list) {
+>> +		list_for_each_entry(ep, &udc->gadget.ep_list, =
+ep.ep_list) {
+>=20
+> Another unrelated change.
+>=20
+>> 			if (ep->ep.desc)
+>> 				proc_ep_show(s, ep);
+>> 		}
+>=20
+>=20
+> [ snip ]
+
+Thanks for pointing out, I'll remove the changes here and note them down
+to send them separately.
+
+>=20
+>> diff --git a/drivers/usb/gadget/udc/net2272.c =
+b/drivers/usb/gadget/udc/net2272.c
+>> index 7c38057dcb4a..bb59200f1596 100644
+>> --- a/drivers/usb/gadget/udc/net2272.c
+>> +++ b/drivers/usb/gadget/udc/net2272.c
+>> @@ -926,7 +926,8 @@ static int
+>> net2272_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+>> {
+>> 	struct net2272_ep *ep;
+>> -	struct net2272_request *req;
+>> +	struct net2272_request *req =3D NULL;
+>> +	struct net2272_request *tmp;
+>> 	unsigned long flags;
+>> 	int stopped;
+>>=20
+>> @@ -939,11 +940,13 @@ net2272_dequeue(struct usb_ep *_ep, struct =
+usb_request *_req)
+>> 	ep->stopped =3D 1;
+>>=20
+>> 	/* make sure it's still queued on this endpoint */
+>> -	list_for_each_entry(req, &ep->queue, queue) {
+>> -		if (&req->req =3D=3D _req)
+>> +	list_for_each_entry(tmp, &ep->queue, queue) {
+>> +		if (&tmp->req =3D=3D _req) {
+>> +			req =3D tmp;
+>> 			break;
+>> +		}
+>> 	}
+>> -	if (&req->req !=3D _req) {
+>> +	if (!req) {
+>> 		ep->stopped =3D stopped;
+>> 		spin_unlock_irqrestore(&ep->dev->lock, flags);
+>> 		return -EINVAL;
+>> @@ -954,7 +957,6 @@ net2272_dequeue(struct usb_ep *_ep, struct =
+usb_request *_req)
+>> 		dev_dbg(ep->dev->dev, "unlink (%s) pio\n", _ep->name);
+>> 		net2272_done(ep, req, -ECONNRESET);
+>> 	}
+>> -	req =3D NULL;
+>=20
+> Another unrelated change.  These are all good changes but send them as
+> separate patches.
+
+You are referring to the req =3D NULL, right?
+
+I've changed the use of 'req' in the same function and assumed that I =
+can
+just remove the unnecessary statement. But if it's better to do =
+separately
+I'll do that.
+
+>=20
+>> 	ep->stopped =3D stopped;
+>>=20
+>> 	spin_unlock_irqrestore(&ep->dev->lock, flags);
+>=20
+> regards,
+> dan carpenter
+
+thanks,
+Jakob Koschel
+
