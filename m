@@ -2,147 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CF54C70AB
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Feb 2022 16:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 165B14C7246
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Feb 2022 18:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237235AbiB1Pd4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Feb 2022 10:33:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
+        id S231675AbiB1ROR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Feb 2022 12:14:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235023AbiB1Pdz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Feb 2022 10:33:55 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2056.outbound.protection.outlook.com [40.107.95.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7FE13F02;
-        Mon, 28 Feb 2022 07:33:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=USD9wi/WFcUYSEUp0KblDzaCTPr03JnqPvki+Wk2b7m4SrTD9sMu+CGikuUFuqUd5HPgwXLHH8dzTWXi45+DfjfNSSqzuL8v/RRP/bfgrI7PJkraWbRH69jH9cYpNNkGxDVYUXzGw2WYrohH05x1/730ZcAK1cnXpRX87HEgwd93KMedtT9w9GM8VMDznoUj91UzRcRZdZiya5YMah1vwvKVk1WvCqzA+iZDnzXxZODzVfVWPSJF5p4n+IpOfG1MXz8s6hxuFOM7m2Vbf7k9mKes28CnIl1Mw+d6as6GCAInCZqXNaPjEAKr/7GnwS7cy2xf5DUc3DeeCH7FjIyvmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uyesUUymhIcpujg1rL+xaiySC7O/7wNFkfY1eyQrUf0=;
- b=JvTGtp4CKE5lstfRoeBCUXdGruJj3wTtp5MbmdCK1L/R5bMTK6uRDXAtZ+vjfd1J8gNY91YoMusvpyaB1/gj5RsUpxvXssMej0YWJN6T6eoRoOutZ+zeJ5SweqxPLWennTYYqVjUWm8HdxVPEGpnvQm+BT5vq/rVz0UyT4lkf/bmofo1Hcspy/xLUVECIr2kudNke/ZmjWqc/t8YG4DaO0iaBG/jFXtKv1Si0/ABB9YCrLrrQlnhyrErLNXRZ+FNOSghUGj7FoRPS0ZyEEzyhq6HAf3JlAtYbXpQchulIzeqq00eoMpP2BGxus6y8QS2sS2bCNFIozBhTiB0Dlgkrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uyesUUymhIcpujg1rL+xaiySC7O/7wNFkfY1eyQrUf0=;
- b=A9bmLQz5j+Q54ED1SPkOe5oVa7E7OdQTtHljgR4hrl3FsG3IF3Cq7mar0rw4LOwzpwk8T2EFehE8/2QMrjvn28HMOjdiYoaZEbau5c/kz/iFfDFPOmGa4esHIJEbla9E5LsyxvVxe2XZpEXfoBIZOdvhqbCq7suJ8SHaW15vo9k=
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
- by BN6PR12MB1394.namprd12.prod.outlook.com (2603:10b6:404:1e::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Mon, 28 Feb
- 2022 15:33:13 +0000
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::692d:9532:906b:2b08]) by BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::692d:9532:906b:2b08%5]) with mapi id 15.20.5017.027; Mon, 28 Feb 2022
- 15:33:13 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-CC:     Bjorn Helgaas <bhelgaas@google.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        "open list:RADEON and AMDGPU DRM DRIVERS" 
-        <amd-gfx@lists.freedesktop.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
-        <nouveau@lists.freedesktop.org>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        Lukas Wunner <lukas@wunner.de>
-Subject: RE: [PATCH v5 3/7] PCI: Drop the `is_thunderbolt` attribute from PCI
- core
-Thread-Topic: [PATCH v5 3/7] PCI: Drop the `is_thunderbolt` attribute from PCI
- core
-Thread-Index: AQHYKcitrtJAPT2QQUmCWjKl2gz6MKykioYAgAQ6SwCAAFbcoA==
-Date:   Mon, 28 Feb 2022 15:33:13 +0000
-Message-ID: <BL1PR12MB5157004F38E3FEFF046D9BE4E2019@BL1PR12MB5157.namprd12.prod.outlook.com>
-References: <20220224215116.7138-4-mario.limonciello@amd.com>
- <20220225174224.GA366735@bhelgaas> <Yhyg5OVL2hCkB+om@lahna>
-In-Reply-To: <Yhyg5OVL2hCkB+om@lahna>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Enabled=true;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_SetDate=2022-02-28T15:33:11Z;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Method=Standard;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Name=AMD Official Use
- Only-AIP 2.0;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_ActionId=98cb09c8-f615-4dd2-a3dd-5283e2c666b6;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_ContentBits=1
-msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_enabled: true
-msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_setdate: 2022-02-28T15:33:11Z
-msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_method: Standard
-msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_name: AMD Official Use
- Only-AIP 2.0
-msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_actionid: c6e06339-9e83-41c7-ad39-17583e63bb2c
-msip_label_88914ebd-7e6c-4e12-a031-a9906be2db14_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 301f27d5-b8d0-4da8-6c61-08d9facfa225
-x-ms-traffictypediagnostic: BN6PR12MB1394:EE_
-x-microsoft-antispam-prvs: <BN6PR12MB1394C3D6302DE7B5149FBCD4E2019@BN6PR12MB1394.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MtSf/7w63tOTzIJ0CDap3wgqqaVLhpTNwsxNW+MFuUUubb5W8zij4/IpaHnVOFNDRu/kigpO0FbSCXvViqFZ18H5YRJZJSNPeJ0Lq4we4vmOGmyuvOqBw+9FOb6GJQQEamEQTrbVaVCCS/afMPCLpcz4sCVQqcu2FoeU+AjQHKnIpF58JvfXIy6KyM9aLiZ6lQ9Sr0nC8LdfsbKOBYUv8jyXYeEnMbGhKSCo0Yr3BwWL6R9F3D6Ps3sQOdIYYwH7xO32sDIVvLtWoJ65QVWCHKq0AM09uvSw1JRYTQM4SHUoTHs5XdyM5mneyAQr6isV3Hj2mEu3r0v527xgP37ym7qamQlghorUdZx8X+b+WmGWVxR/q7tGQhsU1eKisbr8jmDsw0i9iUQjwlRU9rnnEJ9Q5NqdwiAteGJESnAxqHzJB7To/mscTqli6SdNiszqGT9kiJNdKcjlc8Eg72E8i8lsuhwcQS6JTb8yF6jcWnwPDka5Sun/JFhBtdL1j3ZWqgX/JTmPBsc0fBAl+XRNtJt1lw61FpDd4Vmkl8oPBK41Fmd6hCnjkf1mvdIA7ka0ypJIgIP+LeOR7hJmN4RwMSnnIt+9wuinYffS5O+P3mLUaS+okza7VcUtjYLsodLHo7vn17Jlb1nM768EUax8JWiFE/ni4pft5bgI7P83J83A238rTK+D5wLVEcdOlzQXXjbOascc8nQKd9g7Vj1GGEwHDJyenbbdII0zwPsTuEk83xl9Ml3w9qGP2N7ttDcJg9NX2+2F6ZiEFfaHSjosjirDJKpa3vPzEGvhFCMCO+718aEJ/1I+cxLRys7OUKqz
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7416002)(52536014)(33656002)(508600001)(55016003)(186003)(4744005)(5660300002)(8936002)(4326008)(66946007)(66476007)(76116006)(66556008)(8676002)(66446008)(122000001)(38070700005)(2906002)(86362001)(38100700002)(316002)(64756008)(66574015)(54906003)(110136005)(45080400002)(966005)(6506007)(83380400001)(71200400001)(9686003)(7696005)(81973001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?P90WYdMfvc4wqNhSnMoUZ8lb2ZToKIPRox0e5ENEPRzQtrnLsxeQIwn0Mx07?=
- =?us-ascii?Q?G/eYMA8i0dQ4sDAqBmaKBT+ulsNzegKBxo8V/Qs88oEyIAWYjEeIL8raw2I1?=
- =?us-ascii?Q?BzOeEcZSJsnY+kDpi5LRR+DVIOhKT3oV7zOWPNeJHBIL9YDJYAjlvNRCtFZ7?=
- =?us-ascii?Q?RVCr5hhYso5zKIC4UJJQsNZ0u/jqCMoQTwi/LlG2k1JVJDO1lASBwJiUmj/S?=
- =?us-ascii?Q?ZA9JqrQFcjheE873KdGLSzQw5yknqARoSTNT5kWd7KBhanXy5cQg3Ke6ZnFH?=
- =?us-ascii?Q?meKGs5uoyJJ7Hl/KOpcwmXeNgh40HGfZdKx8Bz8j99Vu5eFsCVrsiYdJaUo8?=
- =?us-ascii?Q?LGCZ3mONiUeqxBHo3kEInvhXKgCItpP5Ftlt4Y4/qKeq+sf37yqWjvSX2Plg?=
- =?us-ascii?Q?2g7Oak/l++wpUGRvW2RMukdFN4CjQsQmiz9RoBPKGxcxj5WmzE6MtsMHiW2W?=
- =?us-ascii?Q?OCfCZskW8DwLUr4v9IBpsBH5eoEef38Rw3VBvkmwA1l/sp1dpNFp2+4R+wYL?=
- =?us-ascii?Q?qAeKl3X/hFmSJHkxBthwTVV7hGYgaB73AwYoNoEXQuEIS6vzHztlVHPUqVvj?=
- =?us-ascii?Q?Irswrk65ATSEP4GeOrwSg8TLZofLX46ZZnb4ynNy3/ruMey9oewNGPeSPSvv?=
- =?us-ascii?Q?uMCqP/tG15uGroUIuNZ6D/gu44TGPnN7W2VAJTKTGw5h6NYJyBfuh4VFcZY3?=
- =?us-ascii?Q?UE4op6vvEji563RDfI/zBQwXGlDIztKLR2xPOLIRylDLV4/u1z5QKpbPt/Uu?=
- =?us-ascii?Q?Ta+qeN/wjr6HaJKpmbpXmQOjJ1cI89/so4ecBk7p+zvIqcUK6i8XhOACxCle?=
- =?us-ascii?Q?caPwgvjXqolJ+Hvj00mSUZGlVFmFZmtXG8QzGf/mQiUt6QOtAx12/41TcQq2?=
- =?us-ascii?Q?iMGhX4JapeiZMgc0TXhcKkTexoC8dBCLn8GBN4Oa8k2R4WSFA1yim5FT9fL+?=
- =?us-ascii?Q?lFMI+zLmVrBKEAgAoMxTWA/oP6Xvwpy6wcFtO2v4/3thHL70rV1KqLx7S39q?=
- =?us-ascii?Q?pjfiDmilpgd589cguyJ6FIZqSy396gSxvnVslmMu1GRSmFAkWjYFk8cBH5sY?=
- =?us-ascii?Q?577VFEZChnKx8T2DYMu+r+tnCzfz83y/sBF1O54v9prRNbY+YfFt1qZcSiFP?=
- =?us-ascii?Q?dPWly6X16SIV5TCMhHbkSRjyALoWsHeTWsN/EwQcpHP7pnlVKbrBdoSuV5J+?=
- =?us-ascii?Q?R96jAThsWOhCDFBkZKZddvafDACbUshw+p2A/unkSb7qUJeqK6jMaUNtKtIx?=
- =?us-ascii?Q?TXnN0s8e48W6MxzIohZ+ezZGuKRmLRlAz+2IYt0Qf35v44mHK1nDHFLsjEZN?=
- =?us-ascii?Q?QSkmQKlnAXHqg2MMmCgVseFrOKvSMs9eR7DFfBABAicIMQC+MChof7OnmvzJ?=
- =?us-ascii?Q?8l8cpkVUZAXhKo243FeoYsa2XANJodUrr0/8NTEYGpIG7WuizLN+IqMf49+9?=
- =?us-ascii?Q?4z8AcPaD6TPnSepq/bAs6gsaSOiF+4U0iGaTOxzPi5EMBNkbeAv0mCc176x5?=
- =?us-ascii?Q?y2/yA89uevg/7vnADcETO67kOEt2/0LAFTkkVAM6WTmJ4h1cYXwCqi5QTRxs?=
- =?us-ascii?Q?E5jx9zmG79u1BbtlV9WA/x6sm+p0YvGrZjE/fIRzpA/z/n3pEJuyRMs3PcYf?=
- =?us-ascii?Q?1M99U7uP7gSBJVFhnwzpYu5eX7BdLZG6BB4Br9jMYVG5pOQF/Fb2PChhlxAD?=
- =?us-ascii?Q?p/YMnCE0oH+TDLeQoT8Y84TPDeE=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S231156AbiB1ROQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Feb 2022 12:14:16 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F873E0E9;
+        Mon, 28 Feb 2022 09:13:37 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id d17so11599985pfl.0;
+        Mon, 28 Feb 2022 09:13:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1sgGhaMY3gOwRn1PpFA4st6ByY5uOpdF7tQam/Re/Vo=;
+        b=QoPKTXdaWxuI97HO/tb60FmRflBJDLnM9D0BpxTh1kzsFDhsxXqVhLwHH7nD+U6pFr
+         Tu9awJDeu+8JZpw8huEWlR69mOXkxgGzAfIgFcnb2Y/wsju7VHItpRcggGe/83PwJYd+
+         y61pQiO58zlejrm3T2UOP9u8L6MPf2RlBo1yp5YMRHkhhdO9HGRoBEQrd5Fl2F5d/0fz
+         GI3wtcKSb40zyaLWj5vwdvRL37k0Re+6UqrZqDdO5kvpHoYECgivP3whKGguWMIIVxAQ
+         5Km3HbYl8+f8fPg9/i/3X5TA1OmtDsnHWLnpFp7F+8HACLY9SFlH5I2+EO9kbHIHYLIr
+         4puA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1sgGhaMY3gOwRn1PpFA4st6ByY5uOpdF7tQam/Re/Vo=;
+        b=zaXgu4UKtHzlUQI2s83OSqEb598FXhgXeFOSS55MlxEyJ8gr7+fCQ48Ag5DovLl4aD
+         RCj9XPBjeFAD1s9ADZQ4zCbF+eA94FPYVAzXUM0fbBUn/x623LxwPHm0lPk2nhkTkybQ
+         ldL+jRVnfjt0DyJxWQE7zHGXggtvP2AETiPKGZv6eJh/YZAIeo3JN0VJhZTO11BTLxfr
+         Jc3fzNz8Qmm43KdS91k8MEq3gff/r06OHjcu0qN/6yZTh1AgQJ3RT7A/d5f4MwaT96te
+         /v74HWjDay1FaLm3jm8fkj8ZC9XE+H6QqkJ4ljdxkBhFSdQxecs2G75EtRwwWz5JCqpB
+         72fA==
+X-Gm-Message-State: AOAM532GJPEsQRjnm+aWxJxkOTSuGkF1ip8bk0b91KTuM1QpvBxo4kBp
+        8JXzoG+IBlgbidfIj5JnLeI+ID1r+pg=
+X-Google-Smtp-Source: ABdhPJy9d6FK0t99nrIJoPHep4GbDBhhAD2UxAzkKxjDaMN5psK18I7hwcADqnDD5TwQqr2ci8vgNg==
+X-Received: by 2002:a63:a501:0:b0:372:f7dc:6ced with SMTP id n1-20020a63a501000000b00372f7dc6cedmr18226266pgf.26.1646068416482;
+        Mon, 28 Feb 2022 09:13:36 -0800 (PST)
+Received: from charizard.lan (c-67-165-113-11.hsd1.wa.comcast.net. [67.165.113.11])
+        by smtp.gmail.com with ESMTPSA id y23-20020a17090aca9700b001bc943a20b2sm17429917pjt.35.2022.02.28.09.13.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 09:13:35 -0800 (PST)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH v3] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
+Date:   Mon, 28 Feb 2022 09:12:52 -0800
+Message-Id: <20220228171252.1827788-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 301f27d5-b8d0-4da8-6c61-08d9facfa225
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2022 15:33:13.4390
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /SyL04C6DQakKA86OiUghGFRB2riEkpzJypF8k+FXpJVZJ2VAatn3obSymzRCGlcRXaqTZx01pJtetiKbtqNyw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1394
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -150,29 +69,203 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[AMD Official Use Only]
+If the extcon device exists, get the mode from the extcon device. If
+the controller is DRD and the driver is unable to determine the mode,
+only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
 
->=20
-> On Fri, Feb 25, 2022 at 11:42:24AM -0600, Bjorn Helgaas wrote:
-> > That would just leave the "PCI_VSEC_ID_INTEL_TBT implies external-
-> facing"
-> > assumption above.  Not having a Thunderbolt spec, I have no idea how
-> > you deal with that.
->=20
-> You can download the spec here:
->=20
-> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fww
-> w.usb.org%2Fsites%2Fdefault%2Ffiles%2FUSB4%2520Specification%2520202
-> 11116.zip&amp;data=3D04%7C01%7Cmario.limonciello%40amd.com%7Ca26e64
-> 7a4acf4e7681d308d9faa358fd%7C3dd8961fe4884e608e11a82d994e183d%7C0
-> %7C0%7C637816402472428689%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC
-> 4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&
-> amp;sdata=3DHSDqx%2BHzSnczTZxaBij8sgqvJSS8ajtjCzZd2CPSbR4%3D&amp;re
-> served=3D0
->=20
-> Inside the archive there is also the DVSEC spec with name "USB4 DVSEC
-> Version 1.0.pdf".
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Thinh Nguyen <thinhn@synopsys.com>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+---
 
-The spec has Host_Router_indication (bits 18-19) as meaning external facing=
-.
-I'll respin the patch 3 for using that.
+Changes since [v2] of the patch:
+
+   - Fixed "Minor formatting change", to reflect what was meant by
+     review comment
+
+Changes since [v1] of the patch:
+
+   - Reworded commit message
+   - Minor formatting change
+
+
+[v2] https://lore.kernel.org/linux-usb/20220221192020.346622-1-andrew.smirnov@gmail.com/
+[v1] https://lore.kernel.org/linux-usb/20220206014532.372109-1-andrew.smirnov@gmail.com/T/#u
+
+previons discussion:
+
+https://lore.kernel.org/linux-usb/20220131192102.4115473-1-andrew.smirnov@gmail.com/
+
+
+
+ drivers/usb/dwc3/core.c | 55 ++++++++++++++++++++++++++++++++++++++++-
+ drivers/usb/dwc3/drd.c  | 50 -------------------------------------
+ 2 files changed, 54 insertions(+), 51 deletions(-)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index f2448d0a9d39..5e7a19959a9d 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -23,6 +23,7 @@
+ #include <linux/delay.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/of.h>
++#include <linux/of_graph.h>
+ #include <linux/acpi.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/reset.h>
+@@ -84,7 +85,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
+ 		 * mode. If the controller supports DRD but the dr_mode is not
+ 		 * specified or set to OTG, then set the mode to peripheral.
+ 		 */
+-		if (mode == USB_DR_MODE_OTG &&
++		if (mode == USB_DR_MODE_OTG && !dwc->edev &&
+ 		    (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+ 		     !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
+ 		    !DWC3_VER_IS_PRIOR(DWC3, 330A))
+@@ -1462,6 +1463,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
+ 	}
+ }
+
++static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
++{
++	struct device *dev = dwc->dev;
++	struct device_node *np_phy;
++	struct extcon_dev *edev = NULL;
++	const char *name;
++
++	if (device_property_read_bool(dev, "extcon"))
++		return extcon_get_edev_by_phandle(dev, 0);
++
++	/*
++	 * Device tree platforms should get extcon via phandle.
++	 * On ACPI platforms, we get the name from a device property.
++	 * This device property is for kernel internal use only and
++	 * is expected to be set by the glue code.
++	 */
++	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
++		edev = extcon_get_extcon_dev(name);
++		if (!edev)
++			return ERR_PTR(-EPROBE_DEFER);
++
++		return edev;
++	}
++
++	/*
++	 * Try to get an extcon device from the USB PHY controller's "port"
++	 * node. Check if it has the "port" node first, to avoid printing the
++	 * error message from underlying code, as it's a valid case: extcon
++	 * device (and "port" node) may be missing in case of "usb-role-switch"
++	 * or OTG mode.
++	 */
++	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
++	if (of_graph_is_present(np_phy)) {
++		struct device_node *np_conn;
++
++		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
++		if (np_conn)
++			edev = extcon_find_edev_by_node(np_conn);
++		of_node_put(np_conn);
++	}
++	of_node_put(np_phy);
++
++	return edev;
++}
++
+ static int dwc3_probe(struct platform_device *pdev)
+ {
+ 	struct device		*dev = &pdev->dev;
+@@ -1561,6 +1607,13 @@ static int dwc3_probe(struct platform_device *pdev)
+ 		goto err2;
+ 	}
+
++	dwc->edev = dwc3_get_extcon(dwc);
++	if (IS_ERR(dwc->edev)) {
++		ret = PTR_ERR(dwc->edev);
++		dev_err_probe(dwc->dev, ret, "failed to get extcon\n");
++		goto err3;
++	}
++
+ 	ret = dwc3_get_dr_mode(dwc);
+ 	if (ret)
+ 		goto err3;
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index e2b68bb770d1..9a414edc439a 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -8,7 +8,6 @@
+  */
+
+ #include <linux/extcon.h>
+-#include <linux/of_graph.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+
+@@ -438,51 +437,6 @@ static int dwc3_drd_notifier(struct notifier_block *nb,
+ 	return NOTIFY_DONE;
+ }
+
+-static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+-{
+-	struct device *dev = dwc->dev;
+-	struct device_node *np_phy;
+-	struct extcon_dev *edev = NULL;
+-	const char *name;
+-
+-	if (device_property_read_bool(dev, "extcon"))
+-		return extcon_get_edev_by_phandle(dev, 0);
+-
+-	/*
+-	 * Device tree platforms should get extcon via phandle.
+-	 * On ACPI platforms, we get the name from a device property.
+-	 * This device property is for kernel internal use only and
+-	 * is expected to be set by the glue code.
+-	 */
+-	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+-		edev = extcon_get_extcon_dev(name);
+-		if (!edev)
+-			return ERR_PTR(-EPROBE_DEFER);
+-
+-		return edev;
+-	}
+-
+-	/*
+-	 * Try to get an extcon device from the USB PHY controller's "port"
+-	 * node. Check if it has the "port" node first, to avoid printing the
+-	 * error message from underlying code, as it's a valid case: extcon
+-	 * device (and "port" node) may be missing in case of "usb-role-switch"
+-	 * or OTG mode.
+-	 */
+-	np_phy = of_parse_phandle(dev->of_node, "phys", 0);
+-	if (of_graph_is_present(np_phy)) {
+-		struct device_node *np_conn;
+-
+-		np_conn = of_graph_get_remote_node(np_phy, -1, -1);
+-		if (np_conn)
+-			edev = extcon_find_edev_by_node(np_conn);
+-		of_node_put(np_conn);
+-	}
+-	of_node_put(np_phy);
+-
+-	return edev;
+-}
+-
+ #if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
+ #define ROLE_SWITCH 1
+ static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
+@@ -575,10 +529,6 @@ int dwc3_drd_init(struct dwc3 *dwc)
+ {
+ 	int ret, irq;
+
+-	dwc->edev = dwc3_get_extcon(dwc);
+-	if (IS_ERR(dwc->edev))
+-		return PTR_ERR(dwc->edev);
+-
+ 	if (ROLE_SWITCH &&
+ 	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
+ 		ret = dwc3_setup_role_switch(dwc);
+--
+2.25.1
