@@ -2,123 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BB54C6F22
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Feb 2022 15:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D828F4C6FAD
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Feb 2022 15:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235110AbiB1ORr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Feb 2022 09:17:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
+        id S237185AbiB1OkN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Feb 2022 09:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232373AbiB1ORq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Feb 2022 09:17:46 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCF87E09E
-        for <linux-usb@vger.kernel.org>; Mon, 28 Feb 2022 06:17:07 -0800 (PST)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nOgpm-00033N-2r; Mon, 28 Feb 2022 15:17:06 +0100
-Received: from mgr by dude.hi.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nOgpk-003FiG-Sd; Mon, 28 Feb 2022 15:17:04 +0100
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     balbi@kernel.org, laurent.pinchart@ideasonboard.com,
-        paul.elder@ideasonboard.com, kernel@pengutronix.de,
-        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com
-Subject: [PATCH 2/2] usb: gadget: uvc: giveback vb2 buffer on req complete
-Date:   Mon, 28 Feb 2022 15:16:59 +0100
-Message-Id: <20220228141659.775302-2-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220228141659.775302-1-m.grzeschik@pengutronix.de>
-References: <20220228141659.775302-1-m.grzeschik@pengutronix.de>
+        with ESMTP id S236629AbiB1OkN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Feb 2022 09:40:13 -0500
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE547EB30;
+        Mon, 28 Feb 2022 06:39:31 -0800 (PST)
+Received: by mail-vs1-f47.google.com with SMTP id w4so13203433vsq.1;
+        Mon, 28 Feb 2022 06:39:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NgPIIS3M2iTi6HGFIRcC5El8608r4c/KqNVPec9SSG4=;
+        b=ffmocanYAypu5L+ic6J4Ofg+rMeCmubsQkdIU4eiZPn6NIVFxkZMts/h5/a8JJltFU
+         QOmGFQf+6STnU1ndj11APO1Vx1qA/RYd4rZ554Cdx7dhnzv8AUIjrN2s6padSHy/Dm3g
+         RQ1K9/cA6PPU0XLrOlF1cyyPMb18IGsreaQ1OyUFiGzkbb+oYYmnxd9bWdFrAXJsXueJ
+         Jn9+61dtJbblTv2XxbjmeR8Wqludz0GBoMOqJIHZvhcx6x7WhUrPg+ascfMjUyrqCs88
+         MiWKdaNey7GbiqLJNaxkxfOhOSNonXm0gwQRXfD+fUeST7Eh4sXBE++sAMVlssWYlm6h
+         rddA==
+X-Gm-Message-State: AOAM530MsidFvP3VUJhw4V+hSyJdm2JLidEqV0uOIbdMgr/OYAsONsBG
+        5NQRrZeJwVkh4Ksfq3SdlxnQLccOgGJAvA==
+X-Google-Smtp-Source: ABdhPJxy2QXChRRRWCURNZDdchQO0wgb0eFxxABpB3l0RqxmsL2eGT98L6xaShVkxMBpC0ndRXro0w==
+X-Received: by 2002:a67:cc19:0:b0:31b:b3be:a32a with SMTP id q25-20020a67cc19000000b0031bb3bea32amr7907335vsl.80.1646059170808;
+        Mon, 28 Feb 2022 06:39:30 -0800 (PST)
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com. [209.85.221.169])
+        by smtp.gmail.com with ESMTPSA id g21-20020a056102245500b0031b6426f679sm1332980vss.26.2022.02.28.06.39.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 06:39:30 -0800 (PST)
+Received: by mail-vk1-f169.google.com with SMTP id l10so5259609vki.9;
+        Mon, 28 Feb 2022 06:39:30 -0800 (PST)
+X-Received: by 2002:a05:6122:ca1:b0:330:b95b:e048 with SMTP id
+ ba33-20020a0561220ca100b00330b95be048mr8242679vkb.39.1646059170224; Mon, 28
+ Feb 2022 06:39:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220227231531.32279-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220227231531.32279-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 28 Feb 2022 15:39:19 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVzMFwHnfmybZAoqqa0sW1QiHYSYvKoS68m_y0+BjB=rA@mail.gmail.com>
+Message-ID: <CAMuHMdVzMFwHnfmybZAoqqa0sW1QiHYSYvKoS68m_y0+BjB=rA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: usb: renesas,usbhs: Document RZ/V2L bindings
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On uvc_video_encode_isoc_sg the mapped vb2 buffer is returned
-to early. Only after the last usb_request referencing the buffer
-it is allowed to give it back to vb2. This patch fixes that.
+On Mon, Feb 28, 2022 at 12:15 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Document RZ/V2L (R9A07G054) SoC bindings. USBHS block is identical to one
+> found on RZ/A2 SoC. No driver changes are required as generic compatible
+> string "renesas,rza2-usbhs" will be used as a fallback.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
----
- drivers/usb/gadget/function/uvc.h       | 1 +
- drivers/usb/gadget/function/uvc_queue.c | 2 --
- drivers/usb/gadget/function/uvc_video.c | 9 ++++++++-
- 3 files changed, 9 insertions(+), 3 deletions(-)
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index c3607a32b98624..9eec104b3666ad 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -79,6 +79,7 @@ struct uvc_request {
- 	struct uvc_video *video;
- 	struct sg_table sgt;
- 	u8 header[UVCG_REQUEST_HEADER_LEN];
-+	struct uvc_buffer *last_buf;
- };
- 
- struct uvc_video {
-diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-index 73ff56043d2e6a..d9a0a2809b74c7 100644
---- a/drivers/usb/gadget/function/uvc_queue.c
-+++ b/drivers/usb/gadget/function/uvc_queue.c
-@@ -329,8 +329,6 @@ int uvcg_queue_enable(struct uvc_video_queue *queue, int enable)
- void uvcg_complete_buffer(struct uvc_video_queue *queue,
- 					  struct uvc_buffer *buf)
- {
--	list_del(&buf->queue);
--
- 	buf->buf.field = V4L2_FIELD_NONE;
- 	buf->buf.sequence = queue->sequence++;
- 	buf->buf.vb2_buf.timestamp = ktime_get_ns();
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index 0c8d146b840321..7cbe6e81f171a4 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -183,8 +183,9 @@ uvc_video_encode_isoc_sg(struct usb_request *req, struct uvc_video *video,
- 		video->queue.buf_used = 0;
- 		buf->state = UVC_BUF_STATE_DONE;
- 		buf->offset = 0;
--		uvcg_complete_buffer(&video->queue, buf);
-+		list_del(&buf->queue);
- 		video->fid ^= UVC_STREAM_FID;
-+		ureq->last_buf = buf;
- 	}
- }
- 
-@@ -264,6 +265,11 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 		uvcg_queue_cancel(queue, 0);
- 	}
- 
-+	if (ureq->last_buf) {
-+		uvcg_complete_buffer(&video->queue, ureq->last_buf);
-+		ureq->last_buf = NULL;
-+	}
-+
- 	spin_lock_irqsave(&video->req_lock, flags);
- 	list_add_tail(&req->list, &video->req_free);
- 	spin_unlock_irqrestore(&video->req_lock, flags);
-@@ -332,6 +338,7 @@ uvc_video_alloc_requests(struct uvc_video *video)
- 		video->ureq[i].req->complete = uvc_video_complete;
- 		video->ureq[i].req->context = &video->ureq[i];
- 		video->ureq[i].video = video;
-+		video->ureq[i].last_buf = NULL;
- 
- 		list_add_tail(&video->ureq[i].req->list, &video->req_free);
- 		/* req_size/PAGE_SIZE + 1 for overruns and + 1 for header */
--- 
-2.30.2
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
