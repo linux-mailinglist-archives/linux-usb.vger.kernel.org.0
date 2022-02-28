@@ -2,196 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B596D4C7A23
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Feb 2022 21:21:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 345444C7A08
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Feb 2022 21:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiB1ULg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Feb 2022 15:11:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53502 "EHLO
+        id S229775AbiB1UUG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Feb 2022 15:20:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbiB1ULf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Feb 2022 15:11:35 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221858AE54
-        for <linux-usb@vger.kernel.org>; Mon, 28 Feb 2022 12:10:55 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id qk11so27200374ejb.2
-        for <linux-usb@vger.kernel.org>; Mon, 28 Feb 2022 12:10:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LeZ8UzRXrDw4d1M4BG6ctt9COK0EF5j9qtOsLWtMfJg=;
-        b=Jhdls+DdmLi+4DWS7o2GehQ/Yg8vWPth9HxY0ymuDsFhiEF5hlRLzgd1PV4wJ4dLVJ
-         JdRWd6PhVxu3cPtesSY0XREEgjw/sVhI1zgx2ECNJUHRlykk7MmbqhfMtkifVM/LmgYS
-         6chNfwYqW0eu75y5MSRY9nnHOEZnFkvhMXNYc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LeZ8UzRXrDw4d1M4BG6ctt9COK0EF5j9qtOsLWtMfJg=;
-        b=q56NetoqOV5HGBpuN2BR1JuODlAOegBJ9wjM0zb1k0k1UjnUpDAou1Sdhea7ooatLF
-         y/s3Im7X1QTaEb1niyeKOgN39STgyrjfaPkocOP2jQzLmwEjbQ3IZNERAnc4PKXd/Wrm
-         LjWSN5pOciPb20QkwxUxE6h+/uIZhGaYGNj0WciSh2jCuxvZkEJP9WAGCQUU4bFPLqPc
-         lGfD80ventPNmWMa2CXie89AdlEnwTi2brYMclvBVolW+LXcfutmf/59TYV3Scs1Tawc
-         N0seF6bk6mhqAKPGZ7snUUSEbyvVie670q4WnqgbtRaeBwl0330aSe37fUiUchpODWH8
-         xZeQ==
-X-Gm-Message-State: AOAM5332sYM6CM8EnMrP8hOxwgWRdjs6pxHzgCDV1bU8Hpj2EY7ytwhs
-        SFyWAxS0yaiuSBNk6LSjdHhuwrheuaWxDnk1ewU=
-X-Google-Smtp-Source: ABdhPJx9FTTKtxS/iFUE1DzQKoqT6Cs3xL4f71aMSdePLqHqTEHmlmo3mAy5umf9XtlNlbZ49WenXg==
-X-Received: by 2002:a17:906:53c3:b0:6cf:742d:84de with SMTP id p3-20020a17090653c300b006cf742d84demr15923068ejo.576.1646079053419;
-        Mon, 28 Feb 2022 12:10:53 -0800 (PST)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com. [209.85.218.49])
-        by smtp.gmail.com with ESMTPSA id fu31-20020a170907b01f00b006ce70b64b85sm4595983ejc.126.2022.02.28.12.10.51
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 12:10:51 -0800 (PST)
-Received: by mail-ej1-f49.google.com with SMTP id qk11so27200185ejb.2
-        for <linux-usb@vger.kernel.org>; Mon, 28 Feb 2022 12:10:51 -0800 (PST)
-X-Received: by 2002:ac2:4d91:0:b0:443:127b:558a with SMTP id
- g17-20020ac24d91000000b00443127b558amr14027806lfe.542.1646079041191; Mon, 28
- Feb 2022 12:10:41 -0800 (PST)
+        with ESMTP id S229782AbiB1UUE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Feb 2022 15:20:04 -0500
+Received: from mail-4327.protonmail.ch (mail-4327.protonmail.ch [185.70.43.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70198532F8
+        for <linux-usb@vger.kernel.org>; Mon, 28 Feb 2022 12:19:24 -0800 (PST)
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        by mail-4321.protonmail.ch (Postfix) with ESMTPS id 4K6s4m3GfMz4wyN5
+        for <linux-usb@vger.kernel.org>; Mon, 28 Feb 2022 20:12:56 +0000 (UTC)
+Authentication-Results: mail-4321.protonmail.ch;
+        dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="DwQkGTOR"
+Date:   Mon, 28 Feb 2022 20:12:47 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1646079171;
+        bh=SDxGAO65YfVls01gqwJXElo9FyZCXBZw0GS7u2G0v9E=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=DwQkGTOREVMEdoKdxNnTBSHNdDTIcTRz6SG87zLHUlo1efaDGJZjwZXERluwBZ0tC
+         S0oan07rDhBF3TTVKKyz5AQ0i5UgwvegC7gjqhL1fgVfBiffu0QP7WFQIROkCJpoH2
+         VuoHNw3FXVv+KmXfBODTeJDqfXj+w8sOJ2n7RYeO2NDsoBgq1pTMp4RREbsN5KBQY2
+         rAfFw/KC9Uhm4M7zx8aDp6JUAoLFbkoZujrj3uCO06/PpkjtGe49y8F7fXGsmPemwV
+         OphD1rZOmfreFtwQSSW2sVy143YSi5zEjCiT7nhhANHBtFR0JVlyMIYw/AwUhV09Sd
+         w/mmKMB5uGEjQ==
+To:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>
+From:   micklorain <micklorain@protonmail.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
+Reply-To: micklorain <micklorain@protonmail.com>
+Subject: Re: [PATCH v1] usb: hcd: Try MSI interrupts on PCI devices
+Message-ID: <PxIByDyBRcsbpcmVhGSNDFAoUcMmb78ctXCkw6fbpx25TGlCHvA6SJjjFkNr1FfQZMntYPTNyvEnblxzAZ8a6jP9ddLpKeCN6Chi_2FuexU=@protonmail.com>
 MIME-Version: 1.0
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
- <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com> <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
-In-Reply-To: <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 28 Feb 2022 12:10:24 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
-Message-ID: <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
-        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sgx@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>
-Content-Type: multipart/mixed; boundary="0000000000008601b205d919a4ad"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---0000000000008601b205d919a4ad
-Content-Type: text/plain; charset="UTF-8"
+Hi,
 
-On Mon, Feb 28, 2022 at 12:03 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+This patch breaks USB for me. I noticed when I upgraded from debian's 4.19.=
+0-18 (working) to 5.10.0-10 (broken). I git bisect'ed until I found that th=
+is patch is the culprit. Upstream 5.17.0-rc2 is still broken, but 5.17.0-rc=
+2 with this patch reverted works.
+
+lsusb when things work :
+https://paste.debian.net/hidden/2a964425/
+
+lsusb when things are broken :
+https://paste.debian.net/hidden/0376920c/
+
+dmesg when things are broken :
+https://paste.debian.net/hidden/780ca112/
+
+dmesg when things work :
+https://paste.debian.net/hidden/4d1bfc0f/
+
+Let me know if you need anything else from me.
+
+Thanks !
+Mick Lorain
+
+-------- Original Message --------
+
+On 02/07/2020 16:30, Andy Shevchenko wrote:
+
+> It appears that some platforms share same IRQ line between several device=
+s,
+> some of which are EHCI and OHCI controllers. This is neither practical no=
+r
+> performance-wise, especially in the case when they are supporting MSI.
 >
-> Side note: we do need *some* way to do it.
+> In order to improve the situation try to allocate MSI and fallback to leg=
+acy
+> IRQ if no MSI available.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/usb/core/hcd-pci.c | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+> index 1547aa6e5314..4dc443aaef5c 100644
+> --- a/drivers/usb/core/hcd-pci.c
+> +++ b/drivers/usb/core/hcd-pci.c
+> @@ -194,20 +194,21 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const st=
+ruct pci_device_id *id,
+>  =09 * make sure irq setup is not touched for xhci in generic hcd code
+>  =09 */
+>  =09if ((driver->flags & HCD_MASK) < HCD_USB3) {
+> -=09=09if (!dev->irq) {
+> +=09=09retval =3D pci_alloc_irq_vectors(dev, 1, 1, PCI_IRQ_LEGACY | PCI_I=
+RQ_MSI);
+> +=09=09if (retval < 0) {
+>  =09=09=09dev_err(&dev->dev,
+>  =09=09=09"Found HC with no IRQ. Check BIOS/PCI %s setup!\n",
+>  =09=09=09=09pci_name(dev));
+>  =09=09=09retval =3D -ENODEV;
+>  =09=09=09goto disable_pci;
+>  =09=09}
+> -=09=09hcd_irq =3D dev->irq;
+> +=09=09hcd_irq =3D pci_irq_vector(dev, 0);
+>  =09}
+>
+>  =09hcd =3D usb_create_hcd(driver, &dev->dev, pci_name(dev));
+>  =09if (!hcd) {
+>  =09=09retval =3D -ENOMEM;
+> -=09=09goto disable_pci;
+> +=09=09goto free_irq_vectors;
+>  =09}
+>
+>  =09hcd->amd_resume_bug =3D (usb_hcd_amd_remote_wakeup_quirk(dev) &&
+> @@ -286,6 +287,9 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const stru=
+ct pci_device_id *id,
+>
+>  put_hcd:
+>  =09usb_put_hcd(hcd);
+> +free_irq_vectors:
+> +=09if ((driver->flags & HCD_MASK) < HCD_USB3)
+> +=09=09pci_free_irq_vectors(dev);
+>  disable_pci:
+>  =09pci_disable_device(dev);
+>  =09dev_err(&dev->dev, "init %s fail, %d\n", pci_name(dev), retval);
+> @@ -343,6 +347,8 @@ void usb_hcd_pci_remove(struct pci_dev *dev)
+>  =09=09up_read(&companions_rwsem);
+>  =09}
+>  =09usb_put_hcd(hcd);
+> +=09if ((hcd->driver->flags & HCD_MASK) < HCD_USB3)
+> +=09=09pci_free_irq_vectors(dev);
+>  =09pci_disable_device(dev);
+>  }
+>  EXPORT_SYMBOL_GPL(usb_hcd_pci_remove);
+> @@ -454,7 +460,7 @@ static int suspend_common(struct device *dev, bool do=
+_wakeup)
+>  =09 * synchronized here.
+>  =09 */
+>  =09if (!hcd->msix_enabled)
+> -=09=09synchronize_irq(pci_dev->irq);
+> +=09=09synchronize_irq(pci_irq_vector(pci_dev, 0));
+>
+>  =09/* Downstream ports from this root hub should already be quiesced, so
+>  =09 * there will be no DMA activity.  Now we can shut down the upstream
+> --
+> 2.27.0
 
-Ooh.
 
-This patch is a work of art.
-
-And I mean that in the worst possible way.
-
-We can do
-
-        typeof(pos) pos
-
-in the 'for ()' loop, and never use __iter at all.
-
-That means that inside the for-loop, we use a _different_ 'pos' than outside.
-
-And then the compiler will not see some "might be uninitialized", but
-the outer 'pos' *will* be uninitialized.
-
-Unless, of course, the outer 'pos' had that pointless explicit initializer.
-
-Here - can somebody poke holes in this "work of art" patch?
-
-                     Linus
-
---0000000000008601b205d919a4ad
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l074y7ca0>
-X-Attachment-Id: f_l074y7ca0
-
-IE1ha2VmaWxlICAgICAgICAgICAgICAgICAgICAgICB8IDIgKy0KIGFyY2gveDg2L2tlcm5lbC9j
-cHUvc2d4L2VuY2wuYyB8IDIgKy0KIGluY2x1ZGUvbGludXgvbGlzdC5oICAgICAgICAgICB8IDYg
-KysrLS0tCiAzIGZpbGVzIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkK
-CmRpZmYgLS1naXQgYS9NYWtlZmlsZSBiL01ha2VmaWxlCmluZGV4IGRhZWI1Yzg4YjUwYi4uY2M0
-YjBhMjY2YWYwIDEwMDY0NAotLS0gYS9NYWtlZmlsZQorKysgYi9NYWtlZmlsZQpAQCAtNTE1LDcg
-KzUxNSw3IEBAIEtCVUlMRF9DRkxBR1MgICA6PSAtV2FsbCAtV3VuZGVmIC1XZXJyb3I9c3RyaWN0
-LXByb3RvdHlwZXMgLVduby10cmlncmFwaHMgXAogCQkgICAtZm5vLXN0cmljdC1hbGlhc2luZyAt
-Zm5vLWNvbW1vbiAtZnNob3J0LXdjaGFyIC1mbm8tUElFIFwKIAkJICAgLVdlcnJvcj1pbXBsaWNp
-dC1mdW5jdGlvbi1kZWNsYXJhdGlvbiAtV2Vycm9yPWltcGxpY2l0LWludCBcCiAJCSAgIC1XZXJy
-b3I9cmV0dXJuLXR5cGUgLVduby1mb3JtYXQtc2VjdXJpdHkgXAotCQkgICAtc3RkPWdudTg5CisJ
-CSAgIC1zdGQ9Z251MTEKIEtCVUlMRF9DUFBGTEFHUyA6PSAtRF9fS0VSTkVMX18KIEtCVUlMRF9B
-RkxBR1NfS0VSTkVMIDo9CiBLQlVJTERfQ0ZMQUdTX0tFUk5FTCA6PQpkaWZmIC0tZ2l0IGEvYXJj
-aC94ODYva2VybmVsL2NwdS9zZ3gvZW5jbC5jIGIvYXJjaC94ODYva2VybmVsL2NwdS9zZ3gvZW5j
-bC5jCmluZGV4IDQ4YWZlOTZhZTBmMC4uODdkYjJmMzkzNmIwIDEwMDY0NAotLS0gYS9hcmNoL3g4
-Ni9rZXJuZWwvY3B1L3NneC9lbmNsLmMKKysrIGIvYXJjaC94ODYva2VybmVsL2NwdS9zZ3gvZW5j
-bC5jCkBAIC00NTAsNyArNDUwLDcgQEAgc3RhdGljIHZvaWQgc2d4X21tdV9ub3RpZmllcl9yZWxl
-YXNlKHN0cnVjdCBtbXVfbm90aWZpZXIgKm1uLAogCQkJCSAgICAgc3RydWN0IG1tX3N0cnVjdCAq
-bW0pCiB7CiAJc3RydWN0IHNneF9lbmNsX21tICplbmNsX21tID0gY29udGFpbmVyX29mKG1uLCBz
-dHJ1Y3Qgc2d4X2VuY2xfbW0sIG1tdV9ub3RpZmllcik7Ci0Jc3RydWN0IHNneF9lbmNsX21tICp0
-bXAgPSBOVUxMOworCXN0cnVjdCBzZ3hfZW5jbF9tbSAqdG1wOwogCiAJLyoKIAkgKiBUaGUgZW5j
-bGF2ZSBpdHNlbGYgY2FuIHJlbW92ZSBlbmNsX21tLiAgTm90ZSwgb2JqZWN0cyBjYW4ndCBiZSBt
-b3ZlZApkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9saXN0LmggYi9pbmNsdWRlL2xpbnV4L2xp
-c3QuaAppbmRleCBkZDZjMjA0MWQwOWMuLjcwODA3OGIyZjI0ZCAxMDA2NDQKLS0tIGEvaW5jbHVk
-ZS9saW51eC9saXN0LmgKKysrIGIvaW5jbHVkZS9saW51eC9saXN0LmgKQEAgLTYzNCw5ICs2MzQs
-OSBAQCBzdGF0aWMgaW5saW5lIHZvaWQgbGlzdF9zcGxpY2VfdGFpbF9pbml0KHN0cnVjdCBsaXN0
-X2hlYWQgKmxpc3QsCiAgKiBAaGVhZDoJdGhlIGhlYWQgZm9yIHlvdXIgbGlzdC4KICAqIEBtZW1i
-ZXI6CXRoZSBuYW1lIG9mIHRoZSBsaXN0X2hlYWQgd2l0aGluIHRoZSBzdHJ1Y3QuCiAgKi8KLSNk
-ZWZpbmUgbGlzdF9mb3JfZWFjaF9lbnRyeShwb3MsIGhlYWQsIG1lbWJlcikJCQkJXAotCWZvciAo
-cG9zID0gbGlzdF9maXJzdF9lbnRyeShoZWFkLCB0eXBlb2YoKnBvcyksIG1lbWJlcik7CVwKLQkg
-ICAgICFsaXN0X2VudHJ5X2lzX2hlYWQocG9zLCBoZWFkLCBtZW1iZXIpOwkJCVwKKyNkZWZpbmUg
-bGlzdF9mb3JfZWFjaF9lbnRyeShwb3MsIGhlYWQsIG1lbWJlcikJCQkJCVwKKwlmb3IgKHR5cGVv
-Zihwb3MpIHBvcyA9IGxpc3RfZmlyc3RfZW50cnkoaGVhZCwgdHlwZW9mKCpwb3MpLCBtZW1iZXIp
-OwlcCisJICAgICAhbGlzdF9lbnRyeV9pc19oZWFkKHBvcywgaGVhZCwgbWVtYmVyKTsJXAogCSAg
-ICAgcG9zID0gbGlzdF9uZXh0X2VudHJ5KHBvcywgbWVtYmVyKSkKIAogLyoqCg==
---0000000000008601b205d919a4ad--
