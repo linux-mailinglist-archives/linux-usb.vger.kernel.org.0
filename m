@@ -2,177 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6F64C9401
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 20:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 348624C93FF
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 20:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiCATNk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Mar 2022 14:13:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
+        id S231363AbiCATMA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 1 Mar 2022 14:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiCATNj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 14:13:39 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DB448E62
-        for <linux-usb@vger.kernel.org>; Tue,  1 Mar 2022 11:12:57 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id kt27so4380735ejb.0
-        for <linux-usb@vger.kernel.org>; Tue, 01 Mar 2022 11:12:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+FYbGAw6yxU17iUDUp61Ry7f+ZSO9wN0ehJ+hGfk2DQ=;
-        b=NEmpYuhxkY3jphhiKwB9rL7CFHETV0OarciDwH/Y25b8gogpFDGLbcsm2Hp5JlhbRM
-         fgLdNaX0z1k1bpDTdAa2T+xhPoQGBlkWInAyVtxomjmoWydKKz6S1Vw5P8QyPxUNcXPG
-         O8s4ZVUjpR1ZVkG2oqZOMI9ApgRXI/RsyC5iE=
+        with ESMTP id S231338AbiCATL7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 14:11:59 -0500
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27656582F;
+        Tue,  1 Mar 2022 11:11:17 -0800 (PST)
+Received: by mail-yb1-f176.google.com with SMTP id bt13so29203229ybb.2;
+        Tue, 01 Mar 2022 11:11:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+FYbGAw6yxU17iUDUp61Ry7f+ZSO9wN0ehJ+hGfk2DQ=;
-        b=SKTZmo60V5t6jkRq/OjAnH6W3xEw8iGLfX6MBClHOiOKkjFCJCstDB9EnBDm3NwrLp
-         /dYo9bsPotM6rJMh9UuYn4EZLldElLFUz1+Pqk+rib48nQGo4HK0ZHTbJ8xIzMWPWYts
-         tP3xGPR8bS31RIg+vf9w2DxO+q9C1WsMXF2N2CIobChHn0THhWa/x+t8TCSv+TBgkeWB
-         KaL1eI6ASjm+zrtW7cJvasfW0PfFDBAN+IOa2ldbT+Og9QFXBBXUTIPc6cmlB0jvWrP0
-         vILmG/Ju/v4Eu1ZA243QwSb3CLreFf8Iz8nHzolAmb/4ltUcg8d6xW/Ik2NzucyrC2y7
-         7bLw==
-X-Gm-Message-State: AOAM530LYEzYiNWvm/yPW6dTD9qqLUjdLmoBgFwY0Twzyrgq2WbuX+6P
-        NftEZKUjoclZRyjYFsa/qDSDY6WwcPLXT1Q8cr8=
-X-Google-Smtp-Source: ABdhPJwT6/t6jwhulQPZyKkOYtbefVZdeg/12FUVTngu8jn979UucpQLi9UinJDcvLNmwHpixD6nNg==
-X-Received: by 2002:a17:907:76ac:b0:6ce:72b5:7b7c with SMTP id jw12-20020a17090776ac00b006ce72b57b7cmr19196923ejc.735.1646161976010;
-        Tue, 01 Mar 2022 11:12:56 -0800 (PST)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
-        by smtp.gmail.com with ESMTPSA id b2-20020a17090630c200b006d58f94acecsm5531714ejb.210.2022.03.01.11.12.55
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 11:12:55 -0800 (PST)
-Received: by mail-wr1-f49.google.com with SMTP id i8so4978144wrr.8
-        for <linux-usb@vger.kernel.org>; Tue, 01 Mar 2022 11:12:55 -0800 (PST)
-X-Received: by 2002:a2e:3013:0:b0:246:2ca9:365e with SMTP id
- w19-20020a2e3013000000b002462ca9365emr17902580ljw.291.1646161622598; Tue, 01
- Mar 2022 11:07:02 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nmWK2BW2x6xyV74EFPtWDeE7bgfe1HOlsD2rX10CEvs=;
+        b=DvvsKonyb7fR2c7QzbCJ+8FjvBu/8nZUAADqg3dgj1/R+x5wEhlEn178U0JhkVzG1u
+         Rn3YxJoeallf3Q/C91iIzhnqMQN47cp4tCun0pTWGwCkXbleJyxQ/oHbb+1YMh+kFfnD
+         7N/rz/D7NGgqH7EBIkHJiy1RE+VeXz5z9zxYs44nXix+s8hLikcGhexfUvuGe0y6i4oM
+         s+VVkV5NA9DFrf5dRx9z5B79QWkT1GC+ewvMLS8KipIEfaiAm85prTsu6gvZWUvc9cvi
+         LHRNgFAaOVdZlOEHW9gXzyOXckFlNb5Xvq0K+xtzETqI9CEHd4cb2kxClDIjWXEgZ/eF
+         Tq8g==
+X-Gm-Message-State: AOAM530QZdzPVEGqVc54atBz32ANZX2GAU2h0sKfhQ7dOWVcpg3rhPsf
+        QK8q9jf8TTtKrCIbzj/hn5rX7nivHCqf0sR/5Pw=
+X-Google-Smtp-Source: ABdhPJzdznA9JoxWBukbJH/P/CqzYOu5SA6WPHkv5lA2ZdqzTyBxETRORZtwqbCo1uWpT/gTyW0yXaWw+GTJrcOTYTs=
+X-Received: by 2002:a25:bbc1:0:b0:610:b4ce:31db with SMTP id
+ c1-20020a25bbc1000000b00610b4ce31dbmr25343371ybk.482.1646161877152; Tue, 01
+ Mar 2022 11:11:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
- <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
- <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com> <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
- <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org> <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
-In-Reply-To: <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 1 Mar 2022 11:06:45 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiT5HX6Kp0Qv4ZYK_rkq9t5fZ5zZ7vzvi6pub9kgp=72g@mail.gmail.com>
-Message-ID: <CAHk-=wiT5HX6Kp0Qv4ZYK_rkq9t5fZ5zZ7vzvi6pub9kgp=72g@mail.gmail.com>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sgx@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+References: <20220301022625.469446-1-wonchung@google.com> <Yh3ofnlEx0bT/R6E@kuha.fi.intel.com>
+ <CAOvb9yi4oi=KegV1d8MvxWPhStf5jL01CbdM_pAdLqKNAocJ1Q@mail.gmail.com>
+In-Reply-To: <CAOvb9yi4oi=KegV1d8MvxWPhStf5jL01CbdM_pAdLqKNAocJ1Q@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 1 Mar 2022 20:11:06 +0100
+Message-ID: <CAJZ5v0ipcdUqTEFn075NeioyHRDKy2j_pYZOBKgqnx_c1=q5Pw@mail.gmail.com>
+Subject: Re: [PATCH v2] usb:typec: Add sysfs support for Type C connector's
+ physical location
+To:     Won Chung <wonchung@google.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 2:29 PM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
+On Tue, Mar 1, 2022 at 7:57 PM Won Chung <wonchung@google.com> wrote:
 >
-> However, if the desire is really to poison the loop variable then we
-> can do
+> On Tue, Mar 1, 2022 at 1:33 AM Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> >
+> > Hi Won,
+> >
+> > On Tue, Mar 01, 2022 at 02:26:25AM +0000, Won Chung wrote:
+> > > When ACPI table includes _PLD field for a Type C connector, share _PLD
+> > > values in its sysfs. _PLD stands for physical location of device.
+> > >
+> > > Currently without connector's location information, when there are
+> > > multiple Type C ports, it is hard to distinguish which connector
+> > > corresponds to which physical port at which location. For example, when
+> > > there are two Type C connectors, it is hard to find out which connector
+> > > corresponds to the Type C port on the left panel versus the Type C port
+> > > on the right panel. With location information provided, we can determine
+> > > which specific device at which location is doing what.
+> > >
+> > > _PLD output includes much more fields, but only generic fields are added
+> > > and exposed to sysfs, so that non-ACPI devices can also support it in
+> > > the future. The minimal generic fields needed for locating a port are
+> > > the following.
+> > > - panel
+> > > - vertical_position
+> > > - horizontal_position
+> > > - dock
+> > > - lid
+> > >
+> > > Signed-off-by: Won Chung <wonchung@google.com>
+> > > ---
+> > >
+> > > Changes in v2:
+> > > - Use string for location.
+> > > - Clarify get_pld() with naming and return type.
+> > >
+> > >  Documentation/ABI/testing/sysfs-class-typec |  35 ++++++
+> > >  drivers/usb/typec/class.c                   | 113 ++++++++++++++++++++
+> > >  drivers/usb/typec/class.h                   |   3 +
+> > >  3 files changed, 151 insertions(+)
+> > >
+> > > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+> > > index 75088ecad202..4497a5aeb063 100644
+> > > --- a/Documentation/ABI/testing/sysfs-class-typec
+> > > +++ b/Documentation/ABI/testing/sysfs-class-typec
+> > > @@ -141,6 +141,41 @@ Description:
+> > >               - "reverse": CC2 orientation
+> > >               - "unknown": Orientation cannot be determined.
+> > >
+> > > +What:                /sys/class/typec/<port>/location/panel
+> > > +Date:                March 2022
+> > > +Contact:     Won Chung <wonchung@google.com>
+> > > +Description:
+> > > +             Describes which panel surface of the system’s housing the
+> > > +             port resides on.
+> > > +
+> > > +What:                /sys/class/typec/<port>/location/vertical_position
+> > > +Date:                March 2022
+> > > +Contact:     Won Chung <wonchung@google.com>
+> > > +Description:
+> > > +             Describes vertical position of the port on the panel surface.
+> > > +             Valid values: upper, center, lower
+> > > +
+> > > +What:                /sys/class/typec/<port>/location/horizontal_position
+> > > +Date:                March 2022
+> > > +Contact:     Won Chung <wonchung@google.com>
+> > > +Description:
+> > > +             Describes horizontal position of the port on the panel surface.
+> > > +             Valid values: left, center, right
+> > > +
+> > > +What:                /sys/class/typec/<port>/location/dock
+> > > +Date:                March 2022
+> > > +Contact:     Won Chung <wonchung@google.com>
+> > > +Description:
+> > > +             Set as "yes" if the port resides in a docking station or a port
+> > > +             replicator, otherwise set as "no".
+> > > +
+> > > +What:                /sys/class/typec/<port>/location/lid
+> > > +Date:                March 2022
+> > > +Contact:     Won Chung <wonchung@google.com>
+> > > +Description:
+> > > +             Set as "yes" if the port resides on the lid of laptop system,
+> > > +             otherwise set as "no".
+> > > +
+> >
+> > I've probable lost track of the topic during my winter break, I'm
+> > sorry about that, but why are you proposing now that this should be
+> > made Type-C specific?
+> > This information is not Type-C specific, so it definitely does not
+> > belong here.
+> >
+> > Br,
+> >
+> > --
+> > heikki
 >
-> #define list_for_each_entry(pos, head, member)                          \
->         for (pos = list_first_entry(head, typeof(*pos), member);        \
->              !list_entry_is_head(pos, head, member) && ((pos = NULL) == NULL;                   \
->              pos = list_next_entry(pos, member))
+> Hi Heikki,
 >
-> Which would at least set pos to NULL when the loop completes.
+> Thank you for the comment. Sorry that my description was not clear.
+> This is follow up from "[PATCH v6] ACPI: device_sysfs: Add sysfs
+> support for _PLD" in which Rafael suggested to have generic location
+> in Type C connector than adding PLD specifically to ACPI device.
 
-That would actually have been excellent if we had done that
-originally. It would not only avoid the stale and incorrectly typed
-head entry left-over turd, it would also have made it very easy to
-test for "did I find an entry in the loop".
+Well, this doesn't have to be /sys/class/typec/<port>/location/ though.
 
-But I don't much like it in the situation we are now.
-
-Why? Mainly because it basically changes the semantics of the loop
-_without_ any warnings about it.  And we don't actually get the
-advantage of the nicer semantics, because we can't actually make code
-do
-
-        list_for_each_entry(entry, ....) {
-                ..
-        }
-        if (!entry)
-                return -ESRCH;
-        .. use the entry we found ..
-
-because that would be a disaster for back-porting, plus it would be a
-flag-day issue (ie we'd have to change the semantics of the loop at
-the same time we change every single user).
-
-So instead of that simple "if (!entry)", we'd effectively have to
-continue to use something that still works with the old world order
-(ie that "if (list_entry_is_head())" model).
-
-So we couldn't really take _advantage_ of the nicer semantics, and
-we'd not even get a warning if somebody does it wrong - the code would
-just silently do the wrong thing.
-
-IOW: I don't think you are wrong about that patch: it would solve the
-problem that Jakob wants to solve, and it would have absolutely been
-much better if we had done this from the beginning. But I think that
-in our current situation, it's actually a really fragile solution to
-the "don't do that then" problem we have.
-
-              Linus
+For example, the device location information can be exposed in a more
+generic way is /sys/devices/.../location/ for all devices for which it
+is available, somewhat in analogy to /sys/devices/.../power/.
