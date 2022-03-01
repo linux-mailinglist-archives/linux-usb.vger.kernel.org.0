@@ -2,194 +2,366 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5914C93AA
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 19:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C324C93CE
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 20:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237135AbiCAS6m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Mar 2022 13:58:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
+        id S237232AbiCATCW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Mar 2022 14:02:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237127AbiCAS6j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 13:58:39 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C8F13E0A
-        for <linux-usb@vger.kernel.org>; Tue,  1 Mar 2022 10:57:56 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id cm8so23294427edb.3
-        for <linux-usb@vger.kernel.org>; Tue, 01 Mar 2022 10:57:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Zud0bHbg7or0vGw73+41/J87CFQxONqEus9t2ll45Rs=;
-        b=DsgKcn6Wm/yJlxIPNaf7eO5rB6HLZkcIk+WPwZvNmmUc/GKiS7zpasVMBWMd0yjyki
-         2PymiLOSNKkhLrj7c1c7v7IVJJL9ebx3T2/GG+m+54Ao3Nij3T+Kv/U69gcvZMfwy/x9
-         YdiE+IPzI+yQ9l05jpGxD2qYJnkMgYlvQchIH2huu8tur7SOHmB53bQgGEd797WQW2/y
-         6hAgypa6ocRO3PMCTOPkXaktqRTJFUN1KF9zzERSOlfrT7DWKOnG3dFsCmjQ3VgLp5aS
-         3jqI+PAkElL4g99Iwaj2xFNwFuKZR5feZ0CuvnsvBqDkimO5HJbyu8mXB/vrqIRSdrUF
-         0ZBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Zud0bHbg7or0vGw73+41/J87CFQxONqEus9t2ll45Rs=;
-        b=o5ILcYQtW17hOBGAgrSlZZHFRFA1RB1QXLA9qFfEiETdFw3Lh6IiAGhR5edxmaESpt
-         4KqeTKuPjuf/foep84JxGpxyYITqTq+kZuatZYsuLwHMdlNh5yMjwmxGFgLfdrRtSraL
-         /hE7Wm4FTQB//HO3P5I6IgLlC9NJznO3HYEuMzh0GTzxKdgbAATKrtqgWoYLAlMAZMWb
-         WpIrdRQwWdbgbBn4gXg/ySKr9C3K9AprTO/RXHyQxRgIq0wwI4ZhIkB9Tl1CBy38vF65
-         FXY+ez49jtrsEWtfu5KDBGti0zRiLsSolFa4bNZxzYU36jnsM3uBEGhGPwB1z8PwS3fi
-         +ZBg==
-X-Gm-Message-State: AOAM532bcQgTTdqiQzWeqxxV8zR+bMm4JvNlrAbhIRSNj8h3YN5+q44G
-        DwxHEu39NWVYwbGA/v0dUog3VIYhQ0aHGzim5lULXFkokhF21kmm
-X-Google-Smtp-Source: ABdhPJyL6+SxghMQh2cJjoZTXo+JonmVRVSfrrJfTCrKlK4gFnKNqpBlNq8QOSm7nMu/fvyHPWkk+GmV57kInGebUOM=
-X-Received: by 2002:a50:da47:0:b0:410:a39a:c43b with SMTP id
- a7-20020a50da47000000b00410a39ac43bmr26283276edk.33.1646161074969; Tue, 01
- Mar 2022 10:57:54 -0800 (PST)
+        with ESMTP id S233437AbiCATCS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 14:02:18 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45B54D9C6;
+        Tue,  1 Mar 2022 11:01:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/tBazeosVX7n1CPUUwf6PzIu6vjJVnHyHOkfjsv2zKo=; b=G2U9nPc+cKcx95Z9ga5OZXchNz
+        blxZ0iNm1M+uKQvG5JCjwfBWD2Vqk/JNrOrkTtzRMLvR552E7A4wIdnYTrEx28aAxcIhZIBDk2OhJ
+        2mC2hcK77WGdKfwnLWC9xIRW2naQmlD6pg6blozExF50oYyrluLyuDKCR05dvj4lJCUJucJUHaufH
+        36UHt4On3fRFJ0YJCkBdWklX7NM/KDi/YeSecU8YxtgD7/WN7ClqH8GnFhU3JjJVUQnhYo8rNzSqS
+        E0UBK85SGI9bRQfxw/IXmOle17eRFr0eUMCl1eNz3aBOX0q+MyaB3hvtdfAdZV9rP6eZ0vdNCYptA
+        LfRWRgDg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nP7kD-009r7Z-Q4; Tue, 01 Mar 2022 19:01:09 +0000
+Date:   Tue, 1 Mar 2022 19:01:09 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        samba-technical@lists.samba.org,
+        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        intel-wired-lan@lists.osuosl.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        bcm-kernel-feedback-list@broadcom.com,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-sgx@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        tipc-discussion@lists.sourceforge.net,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Message-ID: <Yh5tdcNNHw/z7VRZ@casper.infradead.org>
+References: <20220228110822.491923-3-jakobkoschel@gmail.com>
+ <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
+ <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
+ <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
+ <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
+ <Yh0tl3Lni4weIMkl@casper.infradead.org>
+ <CAHk-=wgBfJ1-cPA2LTvFyyy8owpfmtCuyiZi4+um8DhFNe+CyA@mail.gmail.com>
+ <Yh1aMm3hFe/j9ZbI@casper.infradead.org>
+ <CAHk-=wi0gSUMBr2SVF01Gy1xC1w1iGtJT5ztju9BPWYKjdh+NA@mail.gmail.com>
+ <202203011008.AA0B5A2D@keescook>
 MIME-Version: 1.0
-References: <20220301022625.469446-1-wonchung@google.com> <Yh3ofnlEx0bT/R6E@kuha.fi.intel.com>
-In-Reply-To: <Yh3ofnlEx0bT/R6E@kuha.fi.intel.com>
-From:   Won Chung <wonchung@google.com>
-Date:   Tue, 1 Mar 2022 10:57:41 -0800
-Message-ID: <CAOvb9yi4oi=KegV1d8MvxWPhStf5jL01CbdM_pAdLqKNAocJ1Q@mail.gmail.com>
-Subject: Re: [PATCH v2] usb:typec: Add sysfs support for Type C connector's
- physical location
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202203011008.AA0B5A2D@keescook>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 1:33 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi Won,
->
-> On Tue, Mar 01, 2022 at 02:26:25AM +0000, Won Chung wrote:
-> > When ACPI table includes _PLD field for a Type C connector, share _PLD
-> > values in its sysfs. _PLD stands for physical location of device.
-> >
-> > Currently without connector's location information, when there are
-> > multiple Type C ports, it is hard to distinguish which connector
-> > corresponds to which physical port at which location. For example, when
-> > there are two Type C connectors, it is hard to find out which connector
-> > corresponds to the Type C port on the left panel versus the Type C port
-> > on the right panel. With location information provided, we can determin=
-e
-> > which specific device at which location is doing what.
-> >
-> > _PLD output includes much more fields, but only generic fields are adde=
-d
-> > and exposed to sysfs, so that non-ACPI devices can also support it in
-> > the future. The minimal generic fields needed for locating a port are
-> > the following.
-> > - panel
-> > - vertical_position
-> > - horizontal_position
-> > - dock
-> > - lid
-> >
-> > Signed-off-by: Won Chung <wonchung@google.com>
-> > ---
-> >
-> > Changes in v2:
-> > - Use string for location.
-> > - Clarify get_pld() with naming and return type.
-> >
-> >  Documentation/ABI/testing/sysfs-class-typec |  35 ++++++
-> >  drivers/usb/typec/class.c                   | 113 ++++++++++++++++++++
-> >  drivers/usb/typec/class.h                   |   3 +
-> >  3 files changed, 151 insertions(+)
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentatio=
-n/ABI/testing/sysfs-class-typec
-> > index 75088ecad202..4497a5aeb063 100644
-> > --- a/Documentation/ABI/testing/sysfs-class-typec
-> > +++ b/Documentation/ABI/testing/sysfs-class-typec
-> > @@ -141,6 +141,41 @@ Description:
-> >               - "reverse": CC2 orientation
-> >               - "unknown": Orientation cannot be determined.
-> >
-> > +What:                /sys/class/typec/<port>/location/panel
-> > +Date:                March 2022
-> > +Contact:     Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Describes which panel surface of the system=E2=80=99s hou=
-sing the
-> > +             port resides on.
-> > +
-> > +What:                /sys/class/typec/<port>/location/vertical_positio=
-n
-> > +Date:                March 2022
-> > +Contact:     Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Describes vertical position of the port on the panel surf=
-ace.
-> > +             Valid values: upper, center, lower
-> > +
-> > +What:                /sys/class/typec/<port>/location/horizontal_posit=
-ion
-> > +Date:                March 2022
-> > +Contact:     Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Describes horizontal position of the port on the panel su=
-rface.
-> > +             Valid values: left, center, right
-> > +
-> > +What:                /sys/class/typec/<port>/location/dock
-> > +Date:                March 2022
-> > +Contact:     Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Set as "yes" if the port resides in a docking station or =
-a port
-> > +             replicator, otherwise set as "no".
-> > +
-> > +What:                /sys/class/typec/<port>/location/lid
-> > +Date:                March 2022
-> > +Contact:     Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Set as "yes" if the port resides on the lid of laptop sys=
-tem,
-> > +             otherwise set as "no".
-> > +
->
-> I've probable lost track of the topic during my winter break, I'm
-> sorry about that, but why are you proposing now that this should be
-> made Type-C specific?
-> This information is not Type-C specific, so it definitely does not
-> belong here.
->
-> Br,
->
-> --
-> heikki
+On Tue, Mar 01, 2022 at 10:14:07AM -0800, Kees Cook wrote:
+> On Mon, Feb 28, 2022 at 04:45:11PM -0800, Linus Torvalds wrote:
+> > Really. The "-Wshadow doesn't work on the kernel" is not some new
+> > issue, because you have to do completely insane things to the source
+> > code to enable it.
+> 
+> The first big glitch with -Wshadow was with shadowed global variables.
+> GCC 4.8 fixed that, but it still yells about shadowed functions. What
+> _almost_ works is -Wshadow=local. At first glace, all the warnings
+> look solvable, but then one will eventually discover __wait_event()
+> and associated macros that mix when and how deeply it intentionally
+> shadows variables. :)
 
-Hi Heikki,
+Well, that's just disgusting.  Macros fundamentally shouldn't be
+referring to things that aren't in their arguments.  The first step to
+cleaning this up is ...
 
-Thank you for the comment. Sorry that my description was not clear.
-This is follow up from "[PATCH v6] ACPI: device_sysfs: Add sysfs
-support for _PLD" in which Rafael suggested to have generic location
-in Type C connector than adding PLD specifically to ACPI device. I was
-also convinced by Rafael since userspace code would also be quite
-ACPI-specific to access PLD in ACPI device sysfs. The discussion can
-be found in https://lore.kernel.org/all/CAOvb9yh7uNg9ZU3RsieGChsjLCfKQhHhip=
-Bi4RMuQYKEA4fu9A@mail.gmail.com/.
-For your reference, in a diverged email thread, Greg also gave a
-feedback: https://lore.kernel.org/all/Yg01TjB6DGYeMxjI@kroah.com/.
+I'll take a look at the rest of cleaning this up soon.
 
-Do you think it is still better to have this location information in
-ACPI device? I would appreciate it if you can share your thoughts in
-the original thread where the discussion is. Thank you very much!
+From 28ffe35d56223d4242b915832299e5acc926737e Mon Sep 17 00:00:00 2001
+From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Date: Tue, 1 Mar 2022 13:47:07 -0500
+Subject: [PATCH] wait: Parameterize the return variable to ___wait_event()
 
-Won
+Macros should not refer to variables which aren't in their arguments.
+Pass the name from its callers.
+
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+---
+ include/linux/swait.h    | 12 ++++++------
+ include/linux/wait.h     | 32 ++++++++++++++++----------------
+ include/linux/wait_bit.h |  4 ++--
+ 3 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/include/linux/swait.h b/include/linux/swait.h
+index 6a8c22b8c2a5..5e8e9b13be2d 100644
+--- a/include/linux/swait.h
++++ b/include/linux/swait.h
+@@ -191,14 +191,14 @@ do {									\
+ } while (0)
+ 
+ #define __swait_event_timeout(wq, condition, timeout)			\
+-	___swait_event(wq, ___wait_cond_timeout(condition),		\
++	___swait_event(wq, ___wait_cond_timeout(condition, __ret),	\
+ 		      TASK_UNINTERRUPTIBLE, timeout,			\
+ 		      __ret = schedule_timeout(__ret))
+ 
+ #define swait_event_timeout_exclusive(wq, condition, timeout)		\
+ ({									\
+ 	long __ret = timeout;						\
+-	if (!___wait_cond_timeout(condition))				\
++	if (!___wait_cond_timeout(condition, __ret))			\
+ 		__ret = __swait_event_timeout(wq, condition, timeout);	\
+ 	__ret;								\
+ })
+@@ -216,14 +216,14 @@ do {									\
+ })
+ 
+ #define __swait_event_interruptible_timeout(wq, condition, timeout)	\
+-	___swait_event(wq, ___wait_cond_timeout(condition),		\
++	___swait_event(wq, ___wait_cond_timeout(condition, __ret),	\
+ 		      TASK_INTERRUPTIBLE, timeout,			\
+ 		      __ret = schedule_timeout(__ret))
+ 
+ #define swait_event_interruptible_timeout_exclusive(wq, condition, timeout)\
+ ({									\
+ 	long __ret = timeout;						\
+-	if (!___wait_cond_timeout(condition))				\
++	if (!___wait_cond_timeout(condition, __ret))			\
+ 		__ret = __swait_event_interruptible_timeout(wq,		\
+ 						condition, timeout);	\
+ 	__ret;								\
+@@ -252,7 +252,7 @@ do {									\
+ } while (0)
+ 
+ #define __swait_event_idle_timeout(wq, condition, timeout)		\
+-	___swait_event(wq, ___wait_cond_timeout(condition),		\
++	___swait_event(wq, ___wait_cond_timeout(condition, __ret),	\
+ 		       TASK_IDLE, timeout,				\
+ 		       __ret = schedule_timeout(__ret))
+ 
+@@ -278,7 +278,7 @@ do {									\
+ #define swait_event_idle_timeout_exclusive(wq, condition, timeout)	\
+ ({									\
+ 	long __ret = timeout;						\
+-	if (!___wait_cond_timeout(condition))				\
++	if (!___wait_cond_timeout(condition, __ret))			\
+ 		__ret = __swait_event_idle_timeout(wq,			\
+ 						   condition, timeout);	\
+ 	__ret;								\
+diff --git a/include/linux/wait.h b/include/linux/wait.h
+index 851e07da2583..890cce3c0f2e 100644
+--- a/include/linux/wait.h
++++ b/include/linux/wait.h
+@@ -271,7 +271,7 @@ static inline void wake_up_pollfree(struct wait_queue_head *wq_head)
+ 		__wake_up_pollfree(wq_head);
+ }
+ 
+-#define ___wait_cond_timeout(condition)						\
++#define ___wait_cond_timeout(condition, __ret)					\
+ ({										\
+ 	bool __cond = (condition);						\
+ 	if (__cond && !__ret)							\
+@@ -386,7 +386,7 @@ do {										\
+ })
+ 
+ #define __wait_event_timeout(wq_head, condition, timeout)			\
+-	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),		\
+ 		      TASK_UNINTERRUPTIBLE, 0, timeout,				\
+ 		      __ret = schedule_timeout(__ret))
+ 
+@@ -413,13 +413,13 @@ do {										\
+ ({										\
+ 	long __ret = timeout;							\
+ 	might_sleep();								\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_timeout(wq_head, condition, timeout);	\
+ 	__ret;									\
+ })
+ 
+ #define __wait_event_freezable_timeout(wq_head, condition, timeout)		\
+-	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),		\
+ 		      TASK_INTERRUPTIBLE, 0, timeout,				\
+ 		      __ret = freezable_schedule_timeout(__ret))
+ 
+@@ -431,7 +431,7 @@ do {										\
+ ({										\
+ 	long __ret = timeout;							\
+ 	might_sleep();								\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_freezable_timeout(wq_head, condition, timeout); \
+ 	__ret;									\
+ })
+@@ -503,7 +503,7 @@ do {										\
+ })
+ 
+ #define __wait_event_interruptible_timeout(wq_head, condition, timeout)		\
+-	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),		\
+ 		      TASK_INTERRUPTIBLE, 0, timeout,				\
+ 		      __ret = schedule_timeout(__ret))
+ 
+@@ -531,7 +531,7 @@ do {										\
+ ({										\
+ 	long __ret = timeout;							\
+ 	might_sleep();								\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_interruptible_timeout(wq_head,		\
+ 						condition, timeout);		\
+ 	__ret;									\
+@@ -698,7 +698,7 @@ do {										\
+ } while (0)
+ 
+ #define __wait_event_idle_timeout(wq_head, condition, timeout)			\
+-	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),		\
+ 		      TASK_IDLE, 0, timeout,					\
+ 		      __ret = schedule_timeout(__ret))
+ 
+@@ -725,13 +725,13 @@ do {										\
+ ({										\
+ 	long __ret = timeout;							\
+ 	might_sleep();								\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_idle_timeout(wq_head, condition, timeout);	\
+ 	__ret;									\
+ })
+ 
+ #define __wait_event_idle_exclusive_timeout(wq_head, condition, timeout)	\
+-	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),		\
+ 		      TASK_IDLE, 1, timeout,					\
+ 		      __ret = schedule_timeout(__ret))
+ 
+@@ -762,7 +762,7 @@ do {										\
+ ({										\
+ 	long __ret = timeout;							\
+ 	might_sleep();								\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_idle_exclusive_timeout(wq_head, condition, timeout);\
+ 	__ret;									\
+ })
+@@ -932,7 +932,7 @@ extern int do_wait_intr_irq(wait_queue_head_t *, wait_queue_entry_t *);
+ })
+ 
+ #define __wait_event_killable_timeout(wq_head, condition, timeout)		\
+-	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),		\
+ 		      TASK_KILLABLE, 0, timeout,				\
+ 		      __ret = schedule_timeout(__ret))
+ 
+@@ -962,7 +962,7 @@ extern int do_wait_intr_irq(wait_queue_head_t *, wait_queue_entry_t *);
+ ({										\
+ 	long __ret = timeout;							\
+ 	might_sleep();								\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_killable_timeout(wq_head,			\
+ 						condition, timeout);		\
+ 	__ret;									\
+@@ -1107,7 +1107,7 @@ do {										\
+ })
+ 
+ #define __wait_event_lock_irq_timeout(wq_head, condition, lock, timeout, state)	\
+-	___wait_event(wq_head, ___wait_cond_timeout(condition),			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),		\
+ 		      state, 0, timeout,					\
+ 		      spin_unlock_irq(&lock);					\
+ 		      __ret = schedule_timeout(__ret);				\
+@@ -1141,7 +1141,7 @@ do {										\
+ 						  timeout)			\
+ ({										\
+ 	long __ret = timeout;							\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_lock_irq_timeout(				\
+ 					wq_head, condition, lock, timeout,	\
+ 					TASK_INTERRUPTIBLE);			\
+@@ -1151,7 +1151,7 @@ do {										\
+ #define wait_event_lock_irq_timeout(wq_head, condition, lock, timeout)		\
+ ({										\
+ 	long __ret = timeout;							\
+-	if (!___wait_cond_timeout(condition))					\
++	if (!___wait_cond_timeout(condition, __ret))				\
+ 		__ret = __wait_event_lock_irq_timeout(				\
+ 					wq_head, condition, lock, timeout,	\
+ 					TASK_UNINTERRUPTIBLE);			\
+diff --git a/include/linux/wait_bit.h b/include/linux/wait_bit.h
+index 7dec36aecbd9..227e6a20a978 100644
+--- a/include/linux/wait_bit.h
++++ b/include/linux/wait_bit.h
+@@ -292,7 +292,7 @@ do {									\
+ })
+ 
+ #define __wait_var_event_timeout(var, condition, timeout)		\
+-	___wait_var_event(var, ___wait_cond_timeout(condition),		\
++	___wait_var_event(var, ___wait_cond_timeout(condition, __ret),	\
+ 			  TASK_UNINTERRUPTIBLE, 0, timeout,		\
+ 			  __ret = schedule_timeout(__ret))
+ 
+@@ -300,7 +300,7 @@ do {									\
+ ({									\
+ 	long __ret = timeout;						\
+ 	might_sleep();							\
+-	if (!___wait_cond_timeout(condition))				\
++	if (!___wait_cond_timeout(condition, __ret))			\
+ 		__ret = __wait_var_event_timeout(var, condition, timeout); \
+ 	__ret;								\
+ })
+-- 
+2.34.1
+
