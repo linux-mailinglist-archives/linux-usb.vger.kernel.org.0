@@ -2,190 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF304C93A1
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 19:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5914C93AA
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 19:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237103AbiCAS4l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Mar 2022 13:56:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60558 "EHLO
+        id S237135AbiCAS6m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Mar 2022 13:58:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234835AbiCAS4k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 13:56:40 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EFB60CDB
-        for <linux-usb@vger.kernel.org>; Tue,  1 Mar 2022 10:55:59 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id h15so23275435edv.7
-        for <linux-usb@vger.kernel.org>; Tue, 01 Mar 2022 10:55:59 -0800 (PST)
+        with ESMTP id S237127AbiCAS6j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 13:58:39 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C8F13E0A
+        for <linux-usb@vger.kernel.org>; Tue,  1 Mar 2022 10:57:56 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id cm8so23294427edb.3
+        for <linux-usb@vger.kernel.org>; Tue, 01 Mar 2022 10:57:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JZw99KMpsKBs3Ab/LBNeIPMebXALTITXobBfJpN/EsI=;
-        b=ZEWbFFu3eWrZxUgaaScwD4ZJ//Z7mV4SGMyACB20WwCKEMFGKIBMMEXVkM4kZXdOyd
-         EokMKBVyAcoYChV/SvtOh5q5h0Yafm3wlsC3jCGOeoM0h4pn550KTbE+/sUn3z3m8p0V
-         ZL0gG9ZTrYCOlyUURTCDAGrluijISoqXbB1wA=
+         :cc:content-transfer-encoding;
+        bh=Zud0bHbg7or0vGw73+41/J87CFQxONqEus9t2ll45Rs=;
+        b=DsgKcn6Wm/yJlxIPNaf7eO5rB6HLZkcIk+WPwZvNmmUc/GKiS7zpasVMBWMd0yjyki
+         2PymiLOSNKkhLrj7c1c7v7IVJJL9ebx3T2/GG+m+54Ao3Nij3T+Kv/U69gcvZMfwy/x9
+         YdiE+IPzI+yQ9l05jpGxD2qYJnkMgYlvQchIH2huu8tur7SOHmB53bQgGEd797WQW2/y
+         6hAgypa6ocRO3PMCTOPkXaktqRTJFUN1KF9zzERSOlfrT7DWKOnG3dFsCmjQ3VgLp5aS
+         3jqI+PAkElL4g99Iwaj2xFNwFuKZR5feZ0CuvnsvBqDkimO5HJbyu8mXB/vrqIRSdrUF
+         0ZBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JZw99KMpsKBs3Ab/LBNeIPMebXALTITXobBfJpN/EsI=;
-        b=bbgAWcfA8pP4h/pI4cm+k9CJMqgN6hUsLIpJVEY2XH18CD5PzaVEcWxXp+sYHsxD9V
-         2Je8Sjy20YbqsvZecuDPMFpuNouIaS2a4jhIc64pNwv+6JiXqoVjKPgZUCnrc0w26/Gh
-         wrkSliYdCIzYvRM7nxEL9EiBVxxFS+Ogc8nmrnFB+It0g4H9i2spwPbv2cFziCUpZ7N7
-         ZjHySijKW81jwTW/HJsAvT/6zKA2HhPNgpbrGKEqAzIuPBswV045P9daGb2wRmfwlMUY
-         TDKjD+Nb7ha8qdFgCLKuLsQHMnEX1gAlM7rvvCauPBkW1gNJO8OgX60bbkQ8+XMZq50h
-         LdYA==
-X-Gm-Message-State: AOAM533zdjGwFVFd3DcRsC/ytWj1WyCrsFKuIEqItGjnXHjt18p4ylGJ
-        7VPZ0cRwfkAMq12zmTF5kc0xxwnTqDi/+7kZRFI=
-X-Google-Smtp-Source: ABdhPJwyQ7yAyzTddvm5LZZO9xL4BV9bvfPm51+jfWW7PnJRjCmDMJUK/9Uo5ONOTwwHyqPIVNUu8w==
-X-Received: by 2002:aa7:da48:0:b0:413:4200:1377 with SMTP id w8-20020aa7da48000000b0041342001377mr25780405eds.407.1646160957454;
-        Tue, 01 Mar 2022 10:55:57 -0800 (PST)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id a25-20020a50ff19000000b0040f84cd806csm7471296edu.59.2022.03.01.10.55.57
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 10:55:57 -0800 (PST)
-Received: by mail-wr1-f43.google.com with SMTP id ay10so4152266wrb.6
-        for <linux-usb@vger.kernel.org>; Tue, 01 Mar 2022 10:55:57 -0800 (PST)
-X-Received: by 2002:a05:6512:2033:b0:443:3d49:dac with SMTP id
- s19-20020a056512203300b004433d490dacmr16440784lfs.52.1646160451271; Tue, 01
- Mar 2022 10:47:31 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Zud0bHbg7or0vGw73+41/J87CFQxONqEus9t2ll45Rs=;
+        b=o5ILcYQtW17hOBGAgrSlZZHFRFA1RB1QXLA9qFfEiETdFw3Lh6IiAGhR5edxmaESpt
+         4KqeTKuPjuf/foep84JxGpxyYITqTq+kZuatZYsuLwHMdlNh5yMjwmxGFgLfdrRtSraL
+         /hE7Wm4FTQB//HO3P5I6IgLlC9NJznO3HYEuMzh0GTzxKdgbAATKrtqgWoYLAlMAZMWb
+         WpIrdRQwWdbgbBn4gXg/ySKr9C3K9AprTO/RXHyQxRgIq0wwI4ZhIkB9Tl1CBy38vF65
+         FXY+ez49jtrsEWtfu5KDBGti0zRiLsSolFa4bNZxzYU36jnsM3uBEGhGPwB1z8PwS3fi
+         +ZBg==
+X-Gm-Message-State: AOAM532bcQgTTdqiQzWeqxxV8zR+bMm4JvNlrAbhIRSNj8h3YN5+q44G
+        DwxHEu39NWVYwbGA/v0dUog3VIYhQ0aHGzim5lULXFkokhF21kmm
+X-Google-Smtp-Source: ABdhPJyL6+SxghMQh2cJjoZTXo+JonmVRVSfrrJfTCrKlK4gFnKNqpBlNq8QOSm7nMu/fvyHPWkk+GmV57kInGebUOM=
+X-Received: by 2002:a50:da47:0:b0:410:a39a:c43b with SMTP id
+ a7-20020a50da47000000b00410a39ac43bmr26283276edk.33.1646161074969; Tue, 01
+ Mar 2022 10:57:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
- <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
- <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
- <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
- <Yh0tl3Lni4weIMkl@casper.infradead.org> <CAHk-=wgBfJ1-cPA2LTvFyyy8owpfmtCuyiZi4+um8DhFNe+CyA@mail.gmail.com>
- <Yh1aMm3hFe/j9ZbI@casper.infradead.org> <CAHk-=wi0gSUMBr2SVF01Gy1xC1w1iGtJT5ztju9BPWYKjdh+NA@mail.gmail.com>
- <202203011008.AA0B5A2D@keescook>
-In-Reply-To: <202203011008.AA0B5A2D@keescook>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 1 Mar 2022 10:47:14 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whccSm8HKANQbomYrF8cqBa1wUi1dvUEUc3Nf=WoX3WHQ@mail.gmail.com>
-Message-ID: <CAHk-=whccSm8HKANQbomYrF8cqBa1wUi1dvUEUc3Nf=WoX3WHQ@mail.gmail.com>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sgx@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>
+References: <20220301022625.469446-1-wonchung@google.com> <Yh3ofnlEx0bT/R6E@kuha.fi.intel.com>
+In-Reply-To: <Yh3ofnlEx0bT/R6E@kuha.fi.intel.com>
+From:   Won Chung <wonchung@google.com>
+Date:   Tue, 1 Mar 2022 10:57:41 -0800
+Message-ID: <CAOvb9yi4oi=KegV1d8MvxWPhStf5jL01CbdM_pAdLqKNAocJ1Q@mail.gmail.com>
+Subject: Re: [PATCH v2] usb:typec: Add sysfs support for Type C connector's
+ physical location
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 10:14 AM Kees Cook <keescook@chromium.org> wrote:
+On Tue, Mar 1, 2022 at 1:33 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
 >
-> The first big glitch with -Wshadow was with shadowed global variables.
-> GCC 4.8 fixed that, but it still yells about shadowed functions. What
-> _almost_ works is -Wshadow=local.
+> Hi Won,
+>
+> On Tue, Mar 01, 2022 at 02:26:25AM +0000, Won Chung wrote:
+> > When ACPI table includes _PLD field for a Type C connector, share _PLD
+> > values in its sysfs. _PLD stands for physical location of device.
+> >
+> > Currently without connector's location information, when there are
+> > multiple Type C ports, it is hard to distinguish which connector
+> > corresponds to which physical port at which location. For example, when
+> > there are two Type C connectors, it is hard to find out which connector
+> > corresponds to the Type C port on the left panel versus the Type C port
+> > on the right panel. With location information provided, we can determin=
+e
+> > which specific device at which location is doing what.
+> >
+> > _PLD output includes much more fields, but only generic fields are adde=
+d
+> > and exposed to sysfs, so that non-ACPI devices can also support it in
+> > the future. The minimal generic fields needed for locating a port are
+> > the following.
+> > - panel
+> > - vertical_position
+> > - horizontal_position
+> > - dock
+> > - lid
+> >
+> > Signed-off-by: Won Chung <wonchung@google.com>
+> > ---
+> >
+> > Changes in v2:
+> > - Use string for location.
+> > - Clarify get_pld() with naming and return type.
+> >
+> >  Documentation/ABI/testing/sysfs-class-typec |  35 ++++++
+> >  drivers/usb/typec/class.c                   | 113 ++++++++++++++++++++
+> >  drivers/usb/typec/class.h                   |   3 +
+> >  3 files changed, 151 insertions(+)
+> >
+> > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentatio=
+n/ABI/testing/sysfs-class-typec
+> > index 75088ecad202..4497a5aeb063 100644
+> > --- a/Documentation/ABI/testing/sysfs-class-typec
+> > +++ b/Documentation/ABI/testing/sysfs-class-typec
+> > @@ -141,6 +141,41 @@ Description:
+> >               - "reverse": CC2 orientation
+> >               - "unknown": Orientation cannot be determined.
+> >
+> > +What:                /sys/class/typec/<port>/location/panel
+> > +Date:                March 2022
+> > +Contact:     Won Chung <wonchung@google.com>
+> > +Description:
+> > +             Describes which panel surface of the system=E2=80=99s hou=
+sing the
+> > +             port resides on.
+> > +
+> > +What:                /sys/class/typec/<port>/location/vertical_positio=
+n
+> > +Date:                March 2022
+> > +Contact:     Won Chung <wonchung@google.com>
+> > +Description:
+> > +             Describes vertical position of the port on the panel surf=
+ace.
+> > +             Valid values: upper, center, lower
+> > +
+> > +What:                /sys/class/typec/<port>/location/horizontal_posit=
+ion
+> > +Date:                March 2022
+> > +Contact:     Won Chung <wonchung@google.com>
+> > +Description:
+> > +             Describes horizontal position of the port on the panel su=
+rface.
+> > +             Valid values: left, center, right
+> > +
+> > +What:                /sys/class/typec/<port>/location/dock
+> > +Date:                March 2022
+> > +Contact:     Won Chung <wonchung@google.com>
+> > +Description:
+> > +             Set as "yes" if the port resides in a docking station or =
+a port
+> > +             replicator, otherwise set as "no".
+> > +
+> > +What:                /sys/class/typec/<port>/location/lid
+> > +Date:                March 2022
+> > +Contact:     Won Chung <wonchung@google.com>
+> > +Description:
+> > +             Set as "yes" if the port resides on the lid of laptop sys=
+tem,
+> > +             otherwise set as "no".
+> > +
+>
+> I've probable lost track of the topic during my winter break, I'm
+> sorry about that, but why are you proposing now that this should be
+> made Type-C specific?
+> This information is not Type-C specific, so it definitely does not
+> belong here.
+>
+> Br,
+>
+> --
+> heikki
 
-Heh. Yeah, I just have long memories of "-Wshadow was a disaster". You
-looked into the details.
+Hi Heikki,
 
-> Another way to try to catch misused shadow variables is
-> -Wunused-but-set-varible, but it, too, has tons of false positives.
+Thank you for the comment. Sorry that my description was not clear.
+This is follow up from "[PATCH v6] ACPI: device_sysfs: Add sysfs
+support for _PLD" in which Rafael suggested to have generic location
+in Type C connector than adding PLD specifically to ACPI device. I was
+also convinced by Rafael since userspace code would also be quite
+ACPI-specific to access PLD in ACPI device sysfs. The discussion can
+be found in https://lore.kernel.org/all/CAOvb9yh7uNg9ZU3RsieGChsjLCfKQhHhip=
+Bi4RMuQYKEA4fu9A@mail.gmail.com/.
+For your reference, in a diverged email thread, Greg also gave a
+feedback: https://lore.kernel.org/all/Yg01TjB6DGYeMxjI@kroah.com/.
 
-That on the face of it should be an easy warning to get technically
-right for a compiler.
+Do you think it is still better to have this location information in
+ACPI device? I would appreciate it if you can share your thoughts in
+the original thread where the discussion is. Thank you very much!
 
-So I assume the "false positives" are simply because we end up having
-various variables that really don't end up being used - and
-"intentionally" so).
-
-Or rather, they might only be used under some config option - perhaps
-the use is even syntactically there and parsed, but the compiler
-notices that it's turned off under some
-
-        if (IS_ENABLED(..))
-
-option? Because yeah, we have a lot of those.
-
-I think that's a common theme with a lot of compiler warnings: on the
-face of it they sound "obviously sane" and nobody should ever write
-code like that.
-
-A conditional that is always true? Sounds idiotic, and sounds like a
-reasonable thing for a compiler to warn about, since why would you
-have a conditional in the first place for that?
-
-But then you realize that maybe the conditional is a build config
-option, and "always true" suddenly makes sense. Or it's a test for
-something that is always true on _that_architecture_ but not in some
-general sense (ie testing "sizeof()"). Or it's a purely syntactic
-conditional, like "do { } while (0)".
-
-It's why I'm often so down on a lot of the odd warnings that are
-hiding under W=1 and friends. They all may make sense in the trivial
-case ("That is insane") but then in the end they happen for sane code.
-
-And yeah, -Wshadow has had tons of history with macro nesting, and
-just being badly done in the first place (eg "strlen" can be a
-perfectly fine local variable).
-
-That said, maybe people could ask the gcc and clan people for a way to
-_mark_ the places where we expect to validly see shadowing. For
-example, that "local variable in a macro expression statement" thing
-is absolutely horrendous to fix with preprocessor tricks to try to
-make for unique identifiers.
-
-But I think it would be much more syntactically reasonable to add (for
-example) a "shadow" attribute to such a variable exactly to tell the
-compiler "yeah, yeah, I know this identifier could shadow an outer
-one" and turn it off that way.
-
-               Linus
+Won
