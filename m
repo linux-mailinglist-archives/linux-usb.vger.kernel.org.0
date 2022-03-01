@@ -2,175 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84B94C915B
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 18:20:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B514C91B6
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 18:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236449AbiCARVh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Mar 2022 12:21:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
+        id S236549AbiCARhW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Mar 2022 12:37:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236416AbiCARVg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 12:21:36 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60102.outbound.protection.outlook.com [40.107.6.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BD2636B;
-        Tue,  1 Mar 2022 09:20:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TRJMkLXP4uOHwjIdHGuuUhi681FsKFuIHLqk/O0R6ab5QdaNz94AB8dK+TBhXYCwg1CW8nEZeRhXuSwBTyVhJPsH53TODB7SHYOgk1rEeP5IoJDHf1ok7JDC3F3yoBl3n+qJuBFLls/WDll4zWf8EREX+WyTEGLryE+1NEKrjliAVPbVWFaVLYpA1Dgz0okj0yKjw4GW2QpAgwcfVPuZXh8Uk58OAIsbU3/qs+UWfKL6uMaMgDt9hJIULl8G3nd7gB0ufN+COKw9AWKQeSvHvwoqK7MVogSdF5PhO9ez9sPVdL+CbRNmprub69w0ydBElOrQ/qHoy3figXCag9/CEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/xMbdURBhqtdqJOmGrEZEnGdxmtkWd1rfdBb0baoRhU=;
- b=f/OI+Q3P1lf85GrZqe8kKyUp4hZrq+IsqvWTjCzkVbpumHeQtMZyXIR5aDxfXipw2IzmvV94feQ1ZOphjHrpRKkiGia6KCdl6+fovs+YEocsNySHGFDOSuv61D1yeQG/5Yt7fJi2TA1aBwY88quRL+/MHjPBfMAPOTfQSyDyz5sxy+f1Bi6GBUolSverz/1OIcP2tnD7ETB4EiMghRuEeCR/v1q0dLVohcZrDusM6PYvsinFpcCr3DrKEyXLlcI45Zzc5LIXNLdKme4LsA89g0LeB5/s+DGef2DEgjUFvXQpihzs19HRclglK7kVNFqaSHW4U+I7hcW/uDpIVtnODg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bang-olufsen.dk; dmarc=pass action=none
- header.from=bang-olufsen.dk; dkim=pass header.d=bang-olufsen.dk; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bang-olufsen.dk;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/xMbdURBhqtdqJOmGrEZEnGdxmtkWd1rfdBb0baoRhU=;
- b=FqsWNvnQ7rJyGr/KsM3Ns14eqVfflwmWqoTfLVXE2+zmQ65t2n+bpg+VUBKVTFI4JMsNv7Z4X0tW0NxFAyRakj/3wFraKX4/H2zaLekNaVkT9VzsM7BMQzVfN3mah4OJtbFY5lT8gAkWL7ADeW1r2xMT5X8+LYRFrqPKMTcL+AA=
-Received: from AM6PR03MB3943.eurprd03.prod.outlook.com (2603:10a6:20b:26::24)
- by VI1PR03MB4607.eurprd03.prod.outlook.com (2603:10a6:803:58::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Tue, 1 Mar
- 2022 17:20:51 +0000
-Received: from AM6PR03MB3943.eurprd03.prod.outlook.com
- ([fe80::6123:22f6:a2a7:5c1e]) by AM6PR03MB3943.eurprd03.prod.outlook.com
- ([fe80::6123:22f6:a2a7:5c1e%5]) with mapi id 15.20.5017.027; Tue, 1 Mar 2022
- 17:20:51 +0000
-From:   =?Windows-1252?Q?Alvin_=8Aipraga?= <ALSI@bang-olufsen.dk>
-To:     kernel test robot <lkp@intel.com>
-CC:     =?Windows-1252?Q?Alvin_=8Aipraga?= <alvin@pqrs.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/4] usb: typec: add TUSB320xA driver
-Thread-Topic: [PATCH 3/4] usb: typec: add TUSB320xA driver
-Thread-Index: AQHYLW8v7KcQSACO90u5wFrwbstD/Q==
-Date:   Tue, 1 Mar 2022 17:20:51 +0000
-Message-ID: <87h78h8u8d.fsf@bang-olufsen.dk>
-References: <20220301132010.115258-4-alvin@pqrs.dk>
-        <202203020056.igXsHYzi-lkp@intel.com>
-In-Reply-To: <202203020056.igXsHYzi-lkp@intel.com> (kernel test robot's
-        message of "Wed, 2 Mar 2022 00:58:06 +0800")
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bang-olufsen.dk;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 49e6188a-33d9-4f02-089a-08d9fba7d603
-x-ms-traffictypediagnostic: VI1PR03MB4607:EE_
-x-microsoft-antispam-prvs: <VI1PR03MB4607052F17E4E26E34FE93D483029@VI1PR03MB4607.eurprd03.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8X+5jA4utspCNQMpKTsIvoRRd6lsFID0IIMGAnGhp6Z3FGV29jQ5TyvYWqqIGWX1UDxXQrrFfbWC4JIJgk4M+jUY8Pg0e9jld/qC2fAYMHygUDP4HX9TZS10qs02XLv3cx9LYuvZn2Zz4JRvFLteyU/KZAHBQal4Z3soADsnJ5+fZYD4i/sE+b+otHGWG/b80vrrEtaRwZ6e0lXJWfGbjopPZiUPotHG8a0W5BquaFCLsT9eHIyZarFVQq6U0kYQCD11FAyvqdlGMOst85Q369DtJFQfyidv8kmr9r5mn1Et/ZAYZxqJoO5/PgCegkg+Wi+nHEPlyogCps1kq6tHW4y+nMryu7kmrgMtw+PzgZxp6Frf73xQ6a8kBDWqMD1bUM4bYh7QwLzFQzJHk93SBIn0a0Z11vT87jFqKF7RvSyHDPMJXlgu3+ECoiPf2Wk2qQW5UmLCGFEL95R1Mqts9XW36r0U/iWtLvhb+vaOMRsPfu1ddp9CEayC/4sJdZI6Ia5QLLRWFQ5TW7qYKO3+WG0dFR+LwxlEwOS9QxvF5TmjdF9KObNfBKCYvO9mW4InfVz8L+K7N7R3CIWJyCsxwjYGUz5HUx8DXfAm2dzPw2f06XIiJ8/9gc0JgrEJzJF5hONfSOuBzR8laDC1UzJ2h43dUYtok10GFHz83McU0/zoz+Ek+WCAAcvaMcc/IjItxWVtqxHXpK9Ov4MEU02IQTvBYegF4L9Xo1+hukgDLZHq2x3Z8F31ENE9UGm5rTa/Y1Av2KTHNpfJ0fUtr9IaarMvwhWKj0vb7y08tnY8Drw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR03MB3943.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(966005)(6506007)(8936002)(8976002)(6486002)(38100700002)(508600001)(5660300002)(36756003)(2616005)(186003)(38070700005)(6512007)(91956017)(76116006)(26005)(316002)(86362001)(6916009)(83380400001)(71200400001)(4326008)(66946007)(122000001)(64756008)(66556008)(66476007)(66446008)(54906003)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?xKkmnlzrHNQOdeu5666gLLg9fFspbVHdVsBSaydxOVFZhA5hjSETKBSx?=
- =?Windows-1252?Q?EdzXKtJAIUnA6tstYSSV7SDpmRERkJhpoffXthuR8ZHuDIdPGuEkhhUj?=
- =?Windows-1252?Q?xqJjbK6hbE3fv2DnScU2lajm3xRF3XjsQyYmV29Oxv6aa+tYc7b71+bL?=
- =?Windows-1252?Q?M5gi4fz3zlcfgLSKsyJlnjznmjUFN0i4s1WVtdkOBspXD8Bik9hgsNm6?=
- =?Windows-1252?Q?KyrA/8o5zYR8i3f/ydGGgRHKZ8DOLcsLmxxAtpios0M25u7wuiS7Q7M4?=
- =?Windows-1252?Q?76o4M3FBoYhQBLqZoYjaLfEgurq7pG0Ya25l0l1PDdCOgVSondHFGDOx?=
- =?Windows-1252?Q?s7MCRsH3j0IQvFYuNm/4G97qXg1KzBb3Wk3ApaGuhJciZ6PTn/CFRjAJ?=
- =?Windows-1252?Q?D7hzigChius/TXPD924YarRuAGRsmEwY7SPH4XVGl9QccC1kb2ak5hYC?=
- =?Windows-1252?Q?CLOxpyk4C7afQaPt5j2yHXEegdsIgxhK5Pi6iyjj1ceetxLb5p+O0/or?=
- =?Windows-1252?Q?8Xhbu2xiQZZ1VHgVsYA97aTbPVyU6h5Fl21/d7EJM2PN4va66FocOP6X?=
- =?Windows-1252?Q?FXLjplCoayAB/iM5wt6pwH2txJYJcSrglVSTmSFFkUpzc2i65/qfNhxO?=
- =?Windows-1252?Q?5rZ31ft2x2cx7WuPk6tmrl2FfBf/G/Ui5QxOkCVgypc2SnG3ytml2rk7?=
- =?Windows-1252?Q?ByTgPSur35HX8TbH2WQXBNcEnutXdTlfHC+jGSFxSPpKnwenIW4kwEXH?=
- =?Windows-1252?Q?rE3VDHrCIfLB3GZ2NCxXgIWFP4Y0ViFtf5m755EujdqryRF0YSMHTufF?=
- =?Windows-1252?Q?LZIsEm9Nx4Uuf9JDJs8MCL07FPfEuJ8AF7CglBdHEFBagwE05HgTsBV3?=
- =?Windows-1252?Q?AAmDAUCDSL5p+dTfzlL3FPYssyFq4ppx2iZpBPcWnnTsS4qwhxmQAzci?=
- =?Windows-1252?Q?pBUwXwDkw0iBB44P85R4q0KBvJ8OmOwHrtN8HJkk+sFW5EL7IHOm/dRd?=
- =?Windows-1252?Q?4Kii30smxLichFcHn2+qWuzgWnzJ9L6Nfi7wtcInQyIN5LAsM//rN8Ez?=
- =?Windows-1252?Q?2AKCMvHaOwb0+kFjtqK5oESwOSoCFiNFpJiyOa1uKZu3KAYP/Sdn+LhS?=
- =?Windows-1252?Q?nLQq6SJqkCt/UDNDkG8mr+ATx5rZJUQoODEJ3jI7vA9hWGLuoovNu5Os?=
- =?Windows-1252?Q?07Vvbha+tPU0qENePOpKEXPGobgLaV4TI7MOplOlz4VFhG3gpkxr/zJL?=
- =?Windows-1252?Q?ql2OS/XoKpqM+8KQXGMoU8XzIzMOVkgdPm3MW/sfpNVV7dJ1BBaklel/?=
- =?Windows-1252?Q?zuayavcbGnGQhXlvCWl8WEgPlA1fTYL2Z3LKXBRA0uG3e6iXFO3FCLxI?=
- =?Windows-1252?Q?gztwIjTII0Xwi2KSM5I5Z4nmz+kcZL1hMuFlWDXh0poGGB/wAatec4M7?=
- =?Windows-1252?Q?oDtKozD5WxZa/gUXfwyw6UbgHFrmTpPnSKXzHRXpUwdbqJX5CsHjl/OF?=
- =?Windows-1252?Q?5Dzw/L1M0tgw8qdxeAAf/WGQGZFroN5BhbKT0X+ssEupd6C9XA1wqO00?=
- =?Windows-1252?Q?0ljXPVtOyn6rcSZ62g/7rqnEcW7pi8ftjS1Z7QPe6eCAG/mYsT0nZ57r?=
- =?Windows-1252?Q?Up5pPXuXXmoN0lhJMMjSEWoE1D8o7aPQ1EudIHXb1tTTxg614Fp/F1mJ?=
- =?Windows-1252?Q?g8Z2CjIcMvNuntX5XGzt9vVfIptCUSGrgqmgcXxNn1Sc1jr9xyUs05xH?=
- =?Windows-1252?Q?ae4D5WJE80548hnEW2U=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S230313AbiCARhT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 12:37:19 -0500
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A879F2F03E;
+        Tue,  1 Mar 2022 09:36:37 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 668835801CF;
+        Tue,  1 Mar 2022 12:36:34 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 01 Mar 2022 12:36:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=5OE8xr6GO9X7MbNpDAcWFGeEO3b3B/8LX5WMVM
+        23luQ=; b=PuP2NuoqB9WepsjY0Uqokte1F02OSePW/KnqWPOHGfC62jDMQy8d6J
+        jihmHY7jaxPeYmV/brYSLMo2rdd0E65RFIbVZNaw+d6hF5TlV5h/HTFiyyQeuhEh
+        tTvMohVc8vJzz2F3uGXDhJ11n60AMBcwryX0OIQ4h4vBoJz9sXnQjtTWmMBfJvV8
+        ASNImP/JJmHc6aQngUkaR/9ejN6V67gkY3Ss3hOhMxZ05fa2rytR+8neryd7GnHR
+        NnoILjHkJCXbghnuIwO3WAIr0wjFgm+H99CgrlgjXtrJoB87p0eZTz8QaQ9jXLS7
+        eUmDU4ThQ2iD/GAcK9q8FPfYZ3dj5Siw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=5OE8xr6GO9X7MbNpD
+        AcWFGeEO3b3B/8LX5WMVM23luQ=; b=EDVGv6yEMy7PTbky8OfXVA9jYKh0oiM5+
+        sk6xt1CX3smAZYI0P9oaKzOCIkwMemVmh9foKoLwOV/IyVUBTTJc+ljLrovpUDdP
+        pIA4BCkMgcGpU96mM/8o9zjz4bY87GlxWmxlUETAhWUvR7QqjYOuAQqLjAz9vvM2
+        9w41DE+muRcTBgXgq7R5mX2xPAK9bu7QEmldC6d/UhIWw84PgZEMMUkVZDfimvGr
+        9rb1WTZ4HmbXffSgmjvpYAD0fz3a3kb/jxO9vzcKzkIUx9MDQUxolnVJ5gWPPm0P
+        3SACLLdt3Ji3p4//lVUF9os4MIANF8EQiUgikZ8An4R/ZWSxaE7Og==
+X-ME-Sender: <xms:oFkeYrv0LJt2Pjt0ZOYMYd1jCK6G-Z0GZXtRlOiCbijoVlbqDToesg>
+    <xme:oFkeYsdRXoRXAxTjhPFWtM5JX8rU2-dsIwxZfpFocA89gDBFD4vx9xsWmcbxEuUyQ
+    lpRakwPpYLi7A>
+X-ME-Received: <xmr:oFkeYuzzdQb5kL72Vvj74Xn0xRRyhzff8uvNHTyUqFsrLF_56anw9-ykyIbZGqAzSj0KTqXLBgC1Qf0KKdPZ7IM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtvddguddttdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
+    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:oFkeYqNP0oPgoNRpau1EsmnsGvsi8MuHt5Oau7Uh5DcasQw65k9YTg>
+    <xmx:oFkeYr8eoBRonSMDQgE0d2CdwAX12XsrowbLGxOxF_rvtS3YwiTEgg>
+    <xmx:oFkeYqVNxx7WBcYUGhcHc73BR9KI7xEAuh9FjZrqFDwJGYsF_7MqUw>
+    <xmx:olkeYkWtK93reuC1fg-f2X2RrUvR780eGtvCg6vOtajRgdiJ73bSmQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 1 Mar 2022 12:36:31 -0500 (EST)
+Date:   Tue, 1 Mar 2022 18:36:27 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        samba-technical@lists.samba.org,
+        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        intel-wired-lan@lists.osuosl.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        bcm-kernel-feedback-list@broadcom.com,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-sgx@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        tipc-discussion@lists.sourceforge.net,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Message-ID: <Yh5ZmwiH5AxtQ69K@kroah.com>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com>
+ <20220228110822.491923-3-jakobkoschel@gmail.com>
+ <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
+ <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
+ <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
+ <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
+ <FC710A1A-524E-481B-A668-FC258F529A2E@gmail.com>
+ <CAHk-=whLK11HyvpUtEftOjc3Gup2V77KpAQ2fycj3uai=qceHw@mail.gmail.com>
+ <CEDAD0D9-56EE-4105-9107-72C2EAD940B0@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: bang-olufsen.dk
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB3943.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 49e6188a-33d9-4f02-089a-08d9fba7d603
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Mar 2022 17:20:51.7331
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 210d08b8-83f7-470a-bc96-381193ca14a1
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9QrQHKZrdpYOTDeV6pFqIUBuEapBGSW7Wqq2q1fb5u0b5/3+y3/LU1iznobvh/YQOrnAwuUAZKhjDfbIBRf/hg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR03MB4607
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CEDAD0D9-56EE-4105-9107-72C2EAD940B0@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-kernel test robot <lkp@intel.com> writes:
+On Tue, Mar 01, 2022 at 12:28:15PM +0100, Jakob Koschel wrote:
+> 
+> 
+> > On 1. Mar 2022, at 01:41, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> > 
+> > On Mon, Feb 28, 2022 at 1:47 PM Jakob Koschel <jakobkoschel@gmail.com> wrote:
+> >> 
+> >> The goal of this is to get compiler warnings right? This would indeed be great.
+> > 
+> > Yes, so I don't mind having a one-time patch that has been gathered
+> > using some automated checker tool, but I don't think that works from a
+> > long-term maintenance perspective.
+> > 
+> > So if we have the basic rule being "don't use the loop iterator after
+> > the loop has finished, because it can cause all kinds of subtle
+> > issues", then in _addition_ to fixing the existing code paths that
+> > have this issue, I really would want to (a) get a compiler warning for
+> > future cases and (b) make it not actually _work_ for future cases.
+> > 
+> > Because otherwise it will just happen again.
+> > 
+> >> Changing the list_for_each_entry() macro first will break all of those cases
+> >> (e.g. the ones using 'list_entry_is_head()).
+> > 
+> > So I have no problems with breaking cases that we basically already
+> > have a patch for due to  your automated tool. There were certainly
+> > more than a handful, but it didn't look _too_ bad to just make the
+> > rule be "don't use the iterator after the loop".
+> > 
+> > Of course, that's just based on that patch of yours. Maybe there are a
+> > ton of other cases that your patch didn't change, because they didn't
+> > match your trigger case, so I may just be overly optimistic here.
+> 
+> Based on the coccinelle script there are ~480 cases that need fixing
+> in total. I'll now finish all of them and then split them by
+> submodules as Greg suggested and repost a patch set per submodule.
+> Sounds good?
 
-> Hi "Alvin,
->
-> I love your patch! Perhaps something to improve:
->
+Sounds good to me!
 
-<snip>
+If you need help carving these up and maintaining them over time as
+different subsystem maintainers accept/ignore them, just let me know.
+Doing large patchsets like this can be tough without a lot of
+experience.
 
->
-> All warnings (new ones prefixed by >>):
->
->>> drivers/usb/typec/tusb320xa.c:407:6: warning: no previous prototype for=
- 'tusb320xa_action_role_sw_put' [-Wmissing-prototypes]
->      407 | void tusb320xa_action_role_sw_put(void *data)
->          |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>> drivers/usb/typec/tusb320xa.c:414:6: warning: no previous prototype for=
- 'tusb320xa_action_unregister_port' [-Wmissing-prototypes]
->      414 | void tusb320xa_action_unregister_port(void *data)
->          |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+thanks,
 
-Ah yes, these should be static, will fix in v2. Thank you, test robot.
-
->
->
-> vim +/tusb320xa_action_role_sw_put +407 drivers/usb/typec/tusb320xa.c
->
->    406=09
->  > 407	void tusb320xa_action_role_sw_put(void *data)
->    408	{
->    409		struct usb_role_switch *role_sw =3D data;
->    410=09
->    411		usb_role_switch_put(role_sw);
->    412	}
->    413=09
->  > 414	void tusb320xa_action_unregister_port(void *data)
->    415	{
->    416		struct typec_port *port =3D data;
->    417=09
->    418		typec_unregister_port(port);
->    419	}
->    420=09
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org=
+greg k-h
