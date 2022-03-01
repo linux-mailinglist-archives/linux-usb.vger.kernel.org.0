@@ -2,112 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD09A4C86D4
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 09:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9220E4C878F
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 10:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbiCAIqi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Mar 2022 03:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
+        id S232312AbiCAJOy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Mar 2022 04:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiCAIqh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 03:46:37 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AC6887B0
-        for <linux-usb@vger.kernel.org>; Tue,  1 Mar 2022 00:45:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646124357; x=1677660357;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=kZlnL7Cjf3OQonGGAlDqlXfRnXMN3fkRvXe0n8J+s50=;
-  b=FZZ+nVW1dFM8Stp3hSHROW7jH3kQ8cM1P6mvCRE3De5n3tL5BDDGiEO7
-   mtIZlmWSwNVUVzs8qKfcYJdC7yldD8Ka9mmgFvgK/Iai6vIf9Ce6jkSN/
-   YvcU7LUV5bkyMsKgQumevsUTn2T8JwV2rcZRirNJKALfI6C1CdmgmD374
-   Pht0uzAwz/pGULRVBmjXt/2PBcShs1H3FmJgL6rH7Cml8EpBtWXT0tJq1
-   1W4cfaw6K1x6EbPjXwImEeuaicK4Z8RN5IMy89g6XD2fzH70kC6GMgMd8
-   Q9PS/0uazoXWa2CwH689S0uIpniMzNMX81XznXr09wkXHdH7urYazaCrM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="277754605"
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="277754605"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 00:45:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="575626988"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 01 Mar 2022 00:45:55 -0800
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>
-Cc:     s.shtylyov@omp.ru, linux-usb@vger.kernel.org
-References: <20220217135643.1321889-1-mathias.nyman@linux.intel.com>
- <20220301014949.GG13801@jackp-linux.qualcomm.com>
- <20220301040339.GA11371@hu-pkondeti-hyd.qualcomm.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFT PATCH] xhci: make xhci_handshake timeout for xhci_reset()
- adjustable
-Message-ID: <ffc9abb1-908b-1c09-cd9d-cbd83ea4e478@linux.intel.com>
-Date:   Tue, 1 Mar 2022 10:47:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        with ESMTP id S232960AbiCAJOw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 04:14:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E532657169;
+        Tue,  1 Mar 2022 01:14:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24420B816A6;
+        Tue,  1 Mar 2022 09:14:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51870C340EE;
+        Tue,  1 Mar 2022 09:14:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646126048;
+        bh=3u5ZRH134IsbvgB65HHGgx0NUtj7j3ilfzvoR9+6XSY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LVGI6hTsonrfGWNRI8s4fNHsvabvgQDzYG9sbH6HwDRk5ka6vwqL1OAMbHjaGdj1A
+         xk2u6mhlMWs9hk0fJz1sLIezRIIl9iUWfI58LjDkIC/XlkJ+mfVnktbAdD14ePqvUp
+         yjEUMDGKIsjHEDPiXjGWy0WJ501Djkpm2FsQ2gNM=
+Date:   Tue, 1 Mar 2022 10:14:04 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
+ containing a '$ref'
+Message-ID: <Yh3j3D22TopTEV9E@kroah.com>
+References: <20220228213802.1639658-1-robh@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20220301040339.GA11371@hu-pkondeti-hyd.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1.3.2022 6.03, Pavan Kondeti wrote:
-> On Mon, Feb 28, 2022 at 05:49:49PM -0800, Jack Pham wrote:
->> Hi Mathias,
->>
->> On Thu, Feb 17, 2022 at 03:56:43PM +0200, Mathias Nyman wrote:
->>> xhci_reset() timeout was increased from 250ms to 10 seconds in order to
->>> give Renesas 720201 xHC enough time to get ready in probe.
->>
->> This suggests that the only place we really need the long timeout is
->> in xhci_gen_setup().
->>
->>> @@ -1163,7 +1161,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
->>>  		xhci_dbg(xhci, "Stop HCD\n");
->>>  		xhci_halt(xhci);
->>>  		xhci_zero_64b_regs(xhci);
->>> -		retval = xhci_reset(xhci);
->>> +		retval = xhci_reset(xhci, XHCI_RESET_LONG_USEC);
->>
->> Since preemption is disabled here (spin_lock_irq() is called near the
->> start of this function), shouldn't we also limit this to 250ms here in
->> xhci_resume() as well?
->>> The rationale of decreasing the timeout to 250 in certain places is based
-> on the criticality of the operation but not on the preemption/irq state.
-> Since xHC reset is critical in startup and resume, the 10 seconds timeout
-> is enforced so that we don't break Renesas 720201 xHC.
+On Mon, Feb 28, 2022 at 03:38:02PM -0600, Rob Herring wrote:
+> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
 > 
-> Since all of our internl test reports indicate that the timeout is happening
-> from stop hcd, this patch is helping.
+> json-schema versions draft7 and earlier have a weird behavior in that
+> any keywords combined with a '$ref' are ignored (silently). The correct
+> form was to put a '$ref' under an 'allOf'. This behavior is now changed
+> in the 2019-09 json-schema spec and '$ref' can be mixed with other
+> keywords.
 > 
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-mtd@lists.infradead.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-phy@lists.infradead.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-This was pretty much my reasoning as well.
-I could add a comment about this to the commit message
-
-In addition we want a targeted fix for a real world issue that we can send to
-stable without changing too much, risking regressions.
-
-I also think we should focus more on fixing the locking (preemption/irq state)
-around xhci_reset() in xhci_resume() than tuning the timeout, but this needs more
-thought and should be a separate patch for later.
-
-Additionally I guess xhci_reset() is more likely to fail in xhci_stop() and
-xhci_shutdown() as power or clocks for xHC may be disabled, or entire xHC removed from the
-bus by then.   
-
-Thanks
--Mathias
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
