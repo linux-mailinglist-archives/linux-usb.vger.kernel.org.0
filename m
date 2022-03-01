@@ -2,89 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2F54C9069
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 17:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C35DD4C9105
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 18:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236221AbiCAQeH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Mar 2022 11:34:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
+        id S236273AbiCARBH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Mar 2022 12:01:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235735AbiCAQeG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 11:34:06 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470BC5FF2F
-        for <linux-usb@vger.kernel.org>; Tue,  1 Mar 2022 08:33:25 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id t5so5658774pfg.4
-        for <linux-usb@vger.kernel.org>; Tue, 01 Mar 2022 08:33:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=peE7sO9c9bIwrLDEH+P5tPx9gsKQOC+ku7JdeqViooo=;
-        b=KoTASANrVf5duaFDYBHbeH/9TtHaMvz7i+kkj9juAMUtoR1T5pwMEm3RCMva1Azq0V
-         Csx3NzdZZZ/vw0LO/tP1TSd8FA8E1Ss55qaXRBI2my9o1cGn10jS9dADrlWZ0ES9Vjp3
-         1wOZJhSniaiD7fRGtnW9d/jgK9KKMD5YIiq0M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=peE7sO9c9bIwrLDEH+P5tPx9gsKQOC+ku7JdeqViooo=;
-        b=vntQHeSp036nUmLHmoY86dwscV4Vxc3zfEOkxCk5bt11Br1HTjnHQU4Dc1BfbEduzH
-         +vhiibqk/OBYp1BrAOIVG4RFW6UiZsLnE75SQkpBMIRl1UOo8fWES4Kxq9B1h8rFsevt
-         nwjDWoiHJVBPEyiKt2wXhUvr0o0ad7yXYqSGzWiSCM4nq8ZzLbobiMINZsV8ZfYg6xlc
-         +Tq4mewWgw8k6aXr3RVKI4swt6aITEPhAujT/Pilzs7kgHQ+27knD+zX7D/SJzd17blV
-         Iu8SGdKbBsU3BjEft/OO9FGtKj9gHun1V7n5P/Uxe+6Sxx1rrZv08Pahi37l6bS4PB4t
-         Xk2Q==
-X-Gm-Message-State: AOAM531Db24Y69yaESUNV9Q6u6dWHW0+EC0z4s0OgMy3UpJ2OAh73SCk
-        w0wIifjpQbhe6vBPhGEDYuJWtw==
-X-Google-Smtp-Source: ABdhPJzOsZaPH+JussBROy3HgQg618t7zVhdAt+Gn2HqVPRz1lT34TD61D6g5HEnQnaGXPoKXcyJdw==
-X-Received: by 2002:a63:d47:0:b0:373:598c:e0aa with SMTP id 7-20020a630d47000000b00373598ce0aamr22407736pgn.243.1646152404787;
-        Tue, 01 Mar 2022 08:33:24 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:77d:b927:44d6:c9f5])
-        by smtp.gmail.com with UTF8SMTPSA id y12-20020a056a00190c00b004f39e28fb87sm18721077pfi.98.2022.03.01.08.33.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 08:33:24 -0800 (PST)
-Date:   Tue, 1 Mar 2022 08:33:22 -0800
-From:   "mka@chromium.org" <mka@chromium.org>
-To:     "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "Tao Wang (Consultant) (QUIC)" <quic_wat@quicinc.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dianders@chromium.org" <dianders@chromium.org>,
-        "frowand.list@gmail.com" <frowand.list@gmail.com>,
-        "hadess@hadess.net" <hadess@hadess.net>,
-        "krzk@kernel.org" <krzk@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "peter.chen@kernel.org" <peter.chen@kernel.org>,
-        "ravisadineni@chromium.org" <ravisadineni@chromium.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "rogerq@kernel.org" <rogerq@kernel.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "swboyd@chromium.org" <swboyd@chromium.org>
-Subject: Re: =?utf-8?B?5Zue5aSNOiDlm57lpI0=?= =?utf-8?Q?=3A?= Re: [PATCH v20
- 3/5] usb: misc: Add onboard_usb_hub driver
-Message-ID: <Yh5K0u3jp4jTXCPi@google.com>
-References: <SA1PR02MB86067ACF0C96F18B7306D208903A9@SA1PR02MB8606.namprd02.prod.outlook.com>
- <SA1PR02MB860660B6F33011E5A97F7930903A9@SA1PR02MB8606.namprd02.prod.outlook.com>
- <YhURQAksLKVuzU36@google.com>
- <SA1PR02MB860602E0AC4D9BD0BC4245B5903C9@SA1PR02MB8606.namprd02.prod.outlook.com>
- <YhXolQDwIMbTi/O2@kroah.com>
- <DM8PR02MB81988555CA6B66BB3FD5E488E3019@DM8PR02MB8198.namprd02.prod.outlook.com>
- <Yh0UZUU9/9Hd6Pc1@google.com>
- <DM8PR02MB8198F2BFE9E933CC8F2C148BE3029@DM8PR02MB8198.namprd02.prod.outlook.com>
+        with ESMTP id S235988AbiCARBE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 12:01:04 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155C811A2E;
+        Tue,  1 Mar 2022 09:00:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646154023; x=1677690023;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9VhC8QHxpiYe2QNMS+J1jnkfhl2jLLg1QePMyLDV5kI=;
+  b=GrKCJ3DLy+1bQN6QeQupAUj004X+H8QYin4dGF2f29kwQOEmSU12ViQC
+   vKKz7idbhD8jif5NZUdxXe9sug8QQgnWLYIG9IQxaSIRbds+iw/w4WMoB
+   tx07AG+jpqpOZDxqxNXZgTPwRuiY9BUwL5C2m9SzXSTW6ZtaGLTPB8dwX
+   8rcCmoB4BNI4Q5v27TOi7iC/6zC8FxTeXCD5lPBhRLZosoMefGrUVcoS2
+   WdCHpZZGtKRzabZBvzauhmLhQwnFdLAQ8fun1q468abh0d3/3oHU7N/KD
+   gb+OEq62Nh4t0Ty4Yz10EBVj4nkmwIBQXhpSDA3gn6Du+Pp6+sTL6tYdj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="313901076"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="313901076"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 08:58:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="593661381"
+Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 01 Mar 2022 08:58:45 -0800
+Received: from kbuild by 2146afe809fb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nP5pk-0000lx-Pu; Tue, 01 Mar 2022 16:58:44 +0000
+Date:   Wed, 2 Mar 2022 00:58:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        =?utf-8?B?77+9aXByYWdh?= <alsi@bang-olufsen.dk>
+Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] usb: typec: add TUSB320xA driver
+Message-ID: <202203020056.igXsHYzi-lkp@intel.com>
+References: <20220301132010.115258-4-alvin@pqrs.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DM8PR02MB8198F2BFE9E933CC8F2C148BE3029@DM8PR02MB8198.namprd02.prod.outlook.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220301132010.115258-4-alvin@pqrs.dk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,58 +67,62 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 02:30:00AM +0000, Linyu Yuan (QUIC) wrote:
-> > From: mka@chromium.org <mka@chromium.org>
-> > Sent: Tuesday, March 1, 2022 2:29 AM
-> > To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
-> > Cc: gregkh@linuxfoundation.org; Tao Wang (Consultant) (QUIC)
-> > <quic_wat@quicinc.com>; balbi@kernel.org; devicetree@vger.kernel.org;
-> > dianders@chromium.org; frowand.list@gmail.com; hadess@hadess.net;
-> > krzk@kernel.org; linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
-> > mathias.nyman@intel.com; michal.simek@xilinx.com;
-> > peter.chen@kernel.org; ravisadineni@chromium.org; robh+dt@kernel.org;
-> > rogerq@kernel.org; stern@rowland.harvard.edu; swboyd@chromium.org
-> > Subject: Re: 回复: 回复: Re: [PATCH v20 3/5] usb: misc: Add
-> > onboard_usb_hub driver
-> > 
-> > >
-> > > Hi Greg and mka,
-> > >
-> > > Let's make it clear that we are talking about once this driver is approved
-> > into usb tree,
-> > > If we use different USB HUB which have VID/PID not defined in this driver,
-> > > We need to update this driver.
-> > >
-> > > But if we defined VID/PID in device tree(for a specific board, manufacture
-> > should know VID/PID from HUB it used),
-> > > dynamic parsed by the driver,  then we don't need to change this driver
-> > (increase VID/PID table).
-> > 
-> > As per my earlier reply, the kernel/USB core uses the VID:PID reported
-> > by the USB device, the compatible string in the device tree is purely
-> > informational. That's not something that could be changed by this
-> > driver.
-> I can't fully understand this comment,  could you please share step if we want to add a new HUB support, what should we do ? nothing ?
+Hi "Alvin,
 
-Add the VID:PID and compatible strings to onboard_usb_hub.c, analogous
-to those for the RTS5411 and RTS5414. More work will be needed if the
-hub needs a special power up or power down sequence (multiple regulators,
-GPIOs, ...)
+I love your patch! Perhaps something to improve:
 
-> If do nothing, can we remove id_table from  onboard_hub_usbdev_driver  ?
-> > 
-> > And even if the VID:PID from the device tree was used: how is the
-> > kernel supposed to know that the onboard_hub driver should be
-> > probed for a given VID:PID from the device tree, without listing
-> > the VID:PID (or compatible string) in the driver (which is what
-> > you seem to seek to avoid)?
-> In my opinion, if it need update VID/PID table in this driver to support a new HUB,
-> we can parse VID/PID from device tree and create dynamic VID/PID entry to id_table of onboard_hub_usbdev_driver.
-> 
-> Hope you can understand what I said.
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on robh/for-next v5.17-rc6 next-20220301]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Not really.
+url:    https://github.com/0day-ci/linux/commits/Alvin-ipraga/usb-typec-add-drivers-for-TUSB320xA-and-TS5USBA224/20220301-212251
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220302/202203020056.igXsHYzi-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/c60eb902fdeaef99cf2c10e84e0369ee6787753a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Alvin-ipraga/usb-typec-add-drivers-for-TUSB320xA-and-TS5USBA224/20220301-212251
+        git checkout c60eb902fdeaef99cf2c10e84e0369ee6787753a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/usb/typec/
 
-I doubt that what you are suggesting would work. The easiest thing
-to convince people would probably be to send a patch (based on this
-one) with a working implementation of your idea.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/typec/tusb320xa.c:407:6: warning: no previous prototype for 'tusb320xa_action_role_sw_put' [-Wmissing-prototypes]
+     407 | void tusb320xa_action_role_sw_put(void *data)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/usb/typec/tusb320xa.c:414:6: warning: no previous prototype for 'tusb320xa_action_unregister_port' [-Wmissing-prototypes]
+     414 | void tusb320xa_action_unregister_port(void *data)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/tusb320xa_action_role_sw_put +407 drivers/usb/typec/tusb320xa.c
+
+   406	
+ > 407	void tusb320xa_action_role_sw_put(void *data)
+   408	{
+   409		struct usb_role_switch *role_sw = data;
+   410	
+   411		usb_role_switch_put(role_sw);
+   412	}
+   413	
+ > 414	void tusb320xa_action_unregister_port(void *data)
+   415	{
+   416		struct typec_port *port = data;
+   417	
+   418		typec_unregister_port(port);
+   419	}
+   420	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
