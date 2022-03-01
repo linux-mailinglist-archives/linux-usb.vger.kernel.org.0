@@ -2,142 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7594C84A5
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 08:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941C64C8584
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 08:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbiCAHFi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Mar 2022 02:05:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57860 "EHLO
+        id S233122AbiCAHvz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Mar 2022 02:51:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230438AbiCAHFg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 02:05:36 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F9252E11;
-        Mon, 28 Feb 2022 23:04:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646118296; x=1677654296;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cNy2VhZ7uIfEAZ6OMEmFA5tBH3wtQ7ZLN6kAGMbwVEs=;
-  b=mYSJjN0gKehKuYKq5WJVAiuEgY2oQG56vZZzrpej9N28jyhrB6oVIZTq
-   LIkc7wWwoc/GRUZ1USteBGa3lBWxP1JUcXKoAdFat6uuu4ucmhUoe/d74
-   TlE+SjT+gLOIc7vUeKdYQqSikytCoTs8EMTDUwEiZLJksMNCYuVqX5ST5
-   XmfDQY5e1E/Ckp46ggpQzE4Wl9hedumSNEyEIZYAKMnM2FC9E7HUFwCUw
-   bcBRAo4o4Xl3hKq2JuL8FSQeFa/Dgxkzc4YP/rf676N3NPnh5o+ztQqyN
-   YMzr21NBtUGTDAhW2Q1F6ghgTLZZ3xUYDGlEM6iuCqhUWoUlw98qagowT
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="316287788"
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="316287788"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 23:04:54 -0800
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="510405909"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 23:04:49 -0800
-Received: by lahna (sSMTP sendmail emulation); Tue, 01 Mar 2022 09:04:47 +0200
-Date:   Tue, 1 Mar 2022 09:04:47 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     Lukas Wunner <lukas@wunner.de>, Bjorn Helgaas <helgaas@kernel.org>,
-        Michael Jamet <michael.jamet@intel.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        "open list:RADEON and AMDGPU DRM DRIVERS" 
-        <amd-gfx@lists.freedesktop.org>,
-        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
-        <nouveau@lists.freedesktop.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Subject: Re: [PATCH v5 3/7] PCI: Drop the `is_thunderbolt` attribute from PCI
- core
-Message-ID: <Yh3Fj8kA5mkbp8Hp@lahna>
-References: <BL1PR12MB5157004F38E3FEFF046D9BE4E2019@BL1PR12MB5157.namprd12.prod.outlook.com>
- <20220228221344.GA529289@bhelgaas>
- <20220228223246.GA11428@wunner.de>
- <BL1PR12MB5157D5E18AB8206E2085C952E2019@BL1PR12MB5157.namprd12.prod.outlook.com>
+        with ESMTP id S232923AbiCAHvy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 02:51:54 -0500
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF7970F71;
+        Mon, 28 Feb 2022 23:51:11 -0800 (PST)
+Received: from relay11.mail.gandi.net (unknown [217.70.178.231])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id C52A4C3D50;
+        Tue,  1 Mar 2022 07:40:13 +0000 (UTC)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2B2C310000D;
+        Tue,  1 Mar 2022 07:40:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646120409;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1EOlbUxAApC61mQjvw+lG70+JM2jHWLUjBcqvnLcepA=;
+        b=EWUY1TKvGS6Yg129zF29NgHJHMwcv48rJCLCe7SF45JHcNNriVOQo+vcGiYixEAaHnyulB
+        nJQBl068EP/pSVzbkdxbgXCJZTn/Woy6xox0qwrhuWnLDJmO7Aw8fafuMklMsuzENOIIXz
+        c+TC7F7dcVRu1QNFnUnAFY2l+9/i9oBUcQ4iFhctYdJL7TClStx6/rANhA1Sbvyn0M96zz
+        DN43uNBfzPSoxhjSP8ns2qwAGgi1xkMICNqykUP4WLVTs0I1l9IOPWWY8T3PooNnoadHUN
+        InLV/E29BXUcvgd0jZP/wxq0rm/fa2yidd9Or23IERKtnX+02I184mza7r59qQ==
+Date:   Tue, 1 Mar 2022 08:40:01 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
+ containing a '$ref'
+Message-ID: <20220301084001.3771855e@xps13>
+In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
+References: <20220228213802.1639658-1-robh@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BL1PR12MB5157D5E18AB8206E2085C952E2019@BL1PR12MB5157.namprd12.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Rob,
 
-On Mon, Feb 28, 2022 at 10:36:59PM +0000, Limonciello, Mario wrote:
-> [AMD Official Use Only]
-> 
-> > -----Original Message-----
-> > From: Lukas Wunner <lukas@wunner.de>
-> > Sent: Monday, February 28, 2022 16:33
-> > To: Bjorn Helgaas <helgaas@kernel.org>
-> > Cc: Limonciello, Mario <Mario.Limonciello@amd.com>; Mika Westerberg
-> > <mika.westerberg@linux.intel.com>; Michael Jamet
-> > <michael.jamet@intel.com>; open list:PCI SUBSYSTEM <linux-
-> > pci@vger.kernel.org>; open list:THUNDERBOLT DRIVER <linux-
-> > usb@vger.kernel.org>; Yehezkel Bernat <YehezkelShB@gmail.com>; open
-> > list:DRM DRIVERS <dri-devel@lists.freedesktop.org>; open list:X86
-> > PLATFORM DRIVERS <platform-driver-x86@vger.kernel.org>; Andreas
-> > Noever <andreas.noever@gmail.com>; open list:RADEON and AMDGPU
-> > DRM DRIVERS <amd-gfx@lists.freedesktop.org>; open list:DRM DRIVER FOR
-> > NVIDIA GEFORCE/QUADRO GPUS <nouveau@lists.freedesktop.org>; Bjorn
-> > Helgaas <bhelgaas@google.com>; Deucher, Alexander
-> > <Alexander.Deucher@amd.com>
-> > Subject: Re: [PATCH v5 3/7] PCI: Drop the `is_thunderbolt` attribute from PCI
-> > core
-> > 
-> > On Mon, Feb 28, 2022 at 04:13:44PM -0600, Bjorn Helgaas wrote:
-> > > On Mon, Feb 28, 2022 at 03:33:13PM +0000, Limonciello, Mario wrote:
-> > > > > On Fri, Feb 25, 2022 at 11:42:24AM -0600, Bjorn Helgaas wrote:
-> > > > > > That would just leave the "PCI_VSEC_ID_INTEL_TBT implies external-
-> > > > > facing"
-> > > > > > assumption above.  Not having a Thunderbolt spec, I have no idea
-> > how
-> > > > > > you deal with that.
-> > > > >
-> > > > > You can download the spec here:
-> > [...]
-> > > > > Inside the archive there is also the DVSEC spec with name "USB4 DVSEC
-> > > > > Version 1.0.pdf".
-> > > >
-> > > > The spec has Host_Router_indication (bits 18-19) as meaning external
-> > facing.
-> > > > I'll respin the patch 3 for using that.
-> > >
-> > > Thanks, please include the spec citation when you do.  And probably
-> > > the URL, because it's not at all obvious how the casual reader would
-> > > get from "is_thunderbolt" to a recent add-on to the USB4 spec.
-> > 
-> > PCI_VSEC_ID_INTEL_TBT is not mentioned at all in the USB4 spec,
-> > hence there's no connection between "is_thunderbolt" and the USB4 spec.
-> > 
-> > It's a proprietary VSEC used by Intel and the only way to recognize
-> > pre-USB4 Thunderbolt devices that I know of.  Its ID is also
-> > different from the DVSEC IDs given in the above-mentioned spec.
-> > 
-> > Thanks,
-> 
-> The USB4 DVSEC spec makes comments about DVSEC_ID of 0x8086 and also
-> DVSEC VENDOR_ID of 0x8086.  Is that not also present on the Intel TBT3 controllers?
-> 
-> My interpretation of this (and Mika's comment) was that rather than
-> looking at the Intel VSEC we should look at the USB4 DVSEC to detect
-> the Intel TBT3 controllers.
+robh@kernel.org wrote on Mon, 28 Feb 2022 15:38:02 -0600:
 
-For pre-USB4 controllers (TBT 1-3) we need to use the existing method
-(or a quirk based on device ID) as they don't have the USB4 DVSEC.
+> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
+>=20
+> json-schema versions draft7 and earlier have a weird behavior in that
+> any keywords combined with a '$ref' are ignored (silently). The correct
+> form was to put a '$ref' under an 'allOf'. This behavior is now changed
+> in the 2019-09 json-schema spec and '$ref' can be mixed with other
+> keywords.
+>=20
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-mtd@lists.infradead.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-phy@lists.infradead.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/connector/usb-connector.yaml         |  3 +--
+>  .../bindings/display/brcm,bcm2711-hdmi.yaml       |  3 +--
+>  .../bindings/display/bridge/adi,adv7511.yaml      |  5 ++---
+>  .../bindings/display/bridge/synopsys,dw-hdmi.yaml |  5 ++---
+>  .../bindings/display/panel/display-timings.yaml   |  3 +--
+>  .../devicetree/bindings/display/ste,mcde.yaml     |  4 ++--
+>  .../devicetree/bindings/input/adc-joystick.yaml   |  9 ++++-----
+>  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  3 +--
+>  .../devicetree/bindings/leds/leds-lp50xx.yaml     |  3 +--
+>  .../devicetree/bindings/mfd/google,cros-ec.yaml   | 12 ++++--------
+>  .../devicetree/bindings/mtd/nand-controller.yaml  |  8 +++-----
+>  .../bindings/mtd/rockchip,nand-controller.yaml    |  3 +--
+
+For MTD bindings:
+
+Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+
+Thanks,
+Miqu=C3=A8l
