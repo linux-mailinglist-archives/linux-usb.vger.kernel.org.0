@@ -2,44 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B334C958E
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 21:14:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD704C95BC
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 21:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237675AbiCAUOw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Mar 2022 15:14:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S237790AbiCAUQ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Mar 2022 15:16:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237666AbiCAUOt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 15:14:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A0B7306F;
-        Tue,  1 Mar 2022 12:14:06 -0800 (PST)
+        with ESMTP id S237850AbiCAUQB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 15:16:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5D87DE19;
+        Tue,  1 Mar 2022 12:15:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A942B81D0F;
-        Tue,  1 Mar 2022 20:14:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DFB1C340EF;
-        Tue,  1 Mar 2022 20:14:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1620461638;
+        Tue,  1 Mar 2022 20:15:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8DCDC340EF;
+        Tue,  1 Mar 2022 20:15:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646165644;
-        bh=92awyDG6T52IsdsbSeDSnL7mpT5M1S2TkLHv3GFwsBU=;
+        s=k20201202; t=1646165711;
+        bh=4N2J2oR8S/J4fVumM5U4WBjdvr38F3mQKilEvTjAQq8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rat0fUZXdBLIp6PX0KT5Nh8OV6us0eHSzJ+VkyP0j1mMNT3+G71UHH+3d3/wNOnHv
-         ZpVsoJW+mueHZJdsiC1mDqOPWxdvJpDfHZyEu6tkIIyXjv894iJxWTx0ZUh9rMtHS9
-         0ryspHD6kafpHUgYoIsnlB+LWqhU+rV7IjuR/ZAJbCqfCCd2lnx3IZ78dkGGxNTl9d
-         WCZ5FDrn2shGypEvi95acYptDzV8jLadwCOeE9gjaqnLrs2kc2P4r4bw5nAI/Pf57l
-         SkkzVaVe586AE1lV6Z2LMEcnZKASvQy/QDNxqqDYQmv+/BDhKgU4UgnU+Mjdf8IKZl
-         iV5MyK4NHmuxQ==
+        b=gUNaar6GUcdLc/7DRJk4kt9kVbXl7qSD0x3FEct/r4QjXgmoEYzPw4csF8lVp4fpT
+         qwdUuDjn4Iy+FVAVtMk5aWe5LxNzQt8Pbtjj/MQd4WY6o9KFi4ZwVvsfpFmvq7Ek50
+         xog6Z/uwpOCvd0Xx3NZqnueRq1DUSSbvEtDPPz1z1FDdOa4LHncfyKnx/P+Q3gvDGS
+         +7fccYf1ILqZPdISk2qC2iHU4zzwFcrFHKB+UJbBAmm1Km6hnPStfyuOeCtRidpnXG
+         BaNjzSh6vB8vgh+yVKBB8Srt+nwtRwZ5kBbFKwp3Fml33YRPP0QX9fe7mOn8NnBY3h
+         JE2qN+bexWDUA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, balbi@kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 03/28] usb: dwc3: pci: add support for the Intel Raptor Lake-S
-Date:   Tue,  1 Mar 2022 15:13:08 -0500
-Message-Id: <20220301201344.18191-3-sashal@kernel.org>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Grant Grundler <grundler@chromium.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, kuba@kernel.org, jgg@ziepe.ca,
+        arnd@arndb.de, linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.16 15/28] sr9700: sanity check for packet length
+Date:   Tue,  1 Mar 2022 15:13:20 -0500
+Message-Id: <20220301201344.18191-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220301201344.18191-1-sashal@kernel.org>
 References: <20220301201344.18191-1-sashal@kernel.org>
@@ -57,43 +58,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+From: Oliver Neukum <oneukum@suse.com>
 
-[ Upstream commit 038438a25c45d5ac996e95a22fa9e76ff3d1f8c7 ]
+[ Upstream commit e9da0b56fe27206b49f39805f7dcda8a89379062 ]
 
-This patch adds the necessary PCI ID for Intel Raptor Lake-S
-devices.
+A malicious device can leak heap data to user space
+providing bogus frame lengths. Introduce a sanity check.
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Link: https://lore.kernel.org/r/20220214141948.18637-1-heikki.krogerus@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Reviewed-by: Grant Grundler <grundler@chromium.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-pci.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/usb/sr9700.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 7ff8fc8f79a9b..4e69a9d829f23 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -43,6 +43,7 @@
- #define PCI_DEVICE_ID_INTEL_ADLP		0x51ee
- #define PCI_DEVICE_ID_INTEL_ADLM		0x54ee
- #define PCI_DEVICE_ID_INTEL_ADLS		0x7ae1
-+#define PCI_DEVICE_ID_INTEL_RPLS		0x7a61
- #define PCI_DEVICE_ID_INTEL_TGL			0x9a15
- #define PCI_DEVICE_ID_AMD_MR			0x163a
+diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
+index b658510cc9a42..5a53e63d33a60 100644
+--- a/drivers/net/usb/sr9700.c
++++ b/drivers/net/usb/sr9700.c
+@@ -413,7 +413,7 @@ static int sr9700_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 		/* ignore the CRC length */
+ 		len = (skb->data[1] | (skb->data[2] << 8)) - 4;
  
-@@ -409,6 +410,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADLS),
- 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
+-		if (len > ETH_FRAME_LEN)
++		if (len > ETH_FRAME_LEN || len > skb->len)
+ 			return 0;
  
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_RPLS),
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
-+
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGL),
- 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
+ 		/* the last packet of current skb */
 -- 
 2.34.1
 
