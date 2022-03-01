@@ -2,57 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634E64C9787
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 22:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA134C9878
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 23:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238504AbiCAVHB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Mar 2022 16:07:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
+        id S238512AbiCAWpl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Mar 2022 17:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236791AbiCAVHA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 16:07:00 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C36F7EA04
-        for <linux-usb@vger.kernel.org>; Tue,  1 Mar 2022 13:06:18 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nP9hH-00025z-OI; Tue, 01 Mar 2022 22:06:15 +0100
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nP9hG-0007sl-H0; Tue, 01 Mar 2022 22:06:14 +0100
-Date:   Tue, 1 Mar 2022 22:06:14 +0100
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: Re: [PATCH 3/3] usb: dwc3: gadget: EP_DELAY_START is only handled
- for non isoc eps
-Message-ID: <20220301210614.GH11577@pengutronix.de>
-References: <20220228150843.870809-1-m.grzeschik@pengutronix.de>
- <20220228150843.870809-4-m.grzeschik@pengutronix.de>
- <3f2ae881-363f-c4de-5269-75b42f5320c7@synopsys.com>
+        with ESMTP id S233513AbiCAWpk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 17:45:40 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB047804D;
+        Tue,  1 Mar 2022 14:44:58 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 221LcOgN005050;
+        Tue, 1 Mar 2022 22:44:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=ykvyyLl7q6ghJb9019sxdtjUtMUQwiVAHjJjIiX4Ags=;
+ b=Gal5gJe9fq4uQoYJ7Rmezl/Re69zOHkSyBxGjb/BG87AY540K7vDIXihyuVTY8NGvOZA
+ kP11WyBunqq89cWTBlvjZM9CrSjWBn26GR6i76vnidV/08DO4UwUSLJx5zgWKLeOaTzE
+ 1+XEhfvNeT50oXeVhrRyfgCNREdj2VY23q1Nj84pVCELpR+r6/kK8byScSNX5c++ud7C
+ X74vILqTYXHA7Y4cuF90W39IqtCgVfvef47q0ewFS/yPWeeVgJCEoisXWmWdgkeHYRj9
+ o258SsBy0wr+/uQv3fJ4hohl6o6SZGNMirozHopF+Zp65pQO7V2TsD3YyKA05alAmG8K Bw== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ehu7tsb28-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 22:44:54 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 221McckK016596;
+        Tue, 1 Mar 2022 22:44:53 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma02dal.us.ibm.com with ESMTP id 3efbuafsn7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Mar 2022 22:44:53 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 221MiqeQ48496908
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 1 Mar 2022 22:44:52 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BC9322805C;
+        Tue,  1 Mar 2022 22:44:52 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0709728059;
+        Tue,  1 Mar 2022 22:44:52 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.40.70])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue,  1 Mar 2022 22:44:51 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, johan@kernel.org,
+        gregkh@linuxfoundation.org, Eddie James <eajames@linux.ibm.com>,
+        Joel Stanley <joel@jms.id.au>
+Subject: [PATCH v2] USB: serial: pl2303: Add IBM device IDs
+Date:   Tue,  1 Mar 2022 16:44:46 -0600
+Message-Id: <20220301224446.21236-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LiQwW4YX+w4axhAx"
-Content-Disposition: inline
-In-Reply-To: <3f2ae881-363f-c4de-5269-75b42f5320c7@synopsys.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 22:02:48 up 81 days,  5:48, 75 users,  load average: 0.79, 0.41,
- 0.24
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: bZay3zXL_pWT7UbdJeSBIfP4rGxVXCJ9
+X-Proofpoint-GUID: bZay3zXL_pWT7UbdJeSBIfP4rGxVXCJ9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-01_07,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ clxscore=1015 impostorscore=0 mlxscore=0 bulkscore=0 priorityscore=1501
+ phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2203010111
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,115 +81,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+IBM manufactures a PL2303 device for UPS communications. Add the vendor
+and product IDs so that the PL2303 driver binds to the device.
 
---LiQwW4YX+w4axhAx
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+Changes since v1:
+ - Fix commit message Signed-off-by ordering.
 
-On Tue, Mar 01, 2022 at 01:12:37AM +0000, Thinh Nguyen wrote:
->Hi,
->
->Michael Grzeschik wrote:
->> Refactor the codepath for handling DWC3_EP_DELAY_START condition
->> only being checked on non isoc endpoints.
->
->The DWC3_EP_DELAY_START should still be applicable to isoc and End
->Transfer pending. While the End Transfer command is active, don't issue
->Start Transfer command.
->
->Previously I think we have a check for the isoc endpoint and
->DWC3_EP_DELAY_START because it was intended to check against the halt
->condition, but it was done incorrectly. (Note that isoc endpoint doesn't
->halt and there's no STALL handshake).
->
->This change should not be applied. If we're to apply the fix for isoc
->and delay start check, it should be done separately.
+ drivers/usb/serial/pl2303.c | 1 +
+ drivers/usb/serial/pl2303.h | 3 +++
+ 2 files changed, 4 insertions(+)
 
-Right! I just realized that we indeed at least also have to check for
-DWC3_EP_END_TRANSFER_PENDING flag on isoc transfers. Without that,
-we would open up a race where we kick(update) transfers, that are
-potentially to late for that current transfer.
+diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+index a70fd86f735c..e2ef761ed39c 100644
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -116,6 +116,7 @@ static const struct usb_device_id id_table[] = {
+ 	{ USB_DEVICE(ADLINK_VENDOR_ID, ADLINK_ND6530GC_PRODUCT_ID) },
+ 	{ USB_DEVICE(SMART_VENDOR_ID, SMART_PRODUCT_ID) },
+ 	{ USB_DEVICE(AT_VENDOR_ID, AT_VTKIT3_PRODUCT_ID) },
++	{ USB_DEVICE(IBM_VENDOR_ID, IBM_PRODUCT_ID) },
+ 	{ }					/* Terminating entry */
+ };
+ 
+diff --git a/drivers/usb/serial/pl2303.h b/drivers/usb/serial/pl2303.h
+index 6097ee8fccb2..c5406452b774 100644
+--- a/drivers/usb/serial/pl2303.h
++++ b/drivers/usb/serial/pl2303.h
+@@ -35,6 +35,9 @@
+ #define ATEN_PRODUCT_UC232B	0x2022
+ #define ATEN_PRODUCT_ID2	0x2118
+ 
++#define IBM_VENDOR_ID		0x04b3
++#define IBM_PRODUCT_ID		0x4016
++
+ #define IODATA_VENDOR_ID	0x04bb
+ #define IODATA_PRODUCT_ID	0x0a03
+ #define IODATA_PRODUCT_ID_RSAQ5	0x0a0e
+-- 
+2.27.0
 
-So yes, please drop that patch. The other patches on the other hand are
-fine I think.
-
-Regards,
-Michael
-
->> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->> ---
->>  drivers/usb/dwc3/gadget.c | 22 +++++++++++-----------
->>  1 file changed, 11 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index b89dadaef4db9d..d09bd66f498a69 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -1901,17 +1901,6 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep =
-*dep, struct dwc3_request *req)
->>  	if (dep->flags & DWC3_EP_WAIT_TRANSFER_COMPLETE)
->>  		return 0;
->>
->> -	/*
->> -	 * Start the transfer only after the END_TRANSFER is completed
->> -	 * and endpoint STALL is cleared.
->> -	 */
->> -	if ((dep->flags & DWC3_EP_END_TRANSFER_PENDING) ||
->> -	    (dep->flags & DWC3_EP_WEDGE) ||
->> -	    (dep->flags & DWC3_EP_STALL)) {
->> -		dep->flags |=3D DWC3_EP_DELAY_START;
->> -		return 0;
->> -	}
->> -
->>  	/*
->>  	 * NOTICE: Isochronous endpoints should NEVER be prestarted. We must
->>  	 * wait for a XferNotReady event so we will know what's the current
->> @@ -1927,6 +1916,17 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep =
-*dep, struct dwc3_request *req)
->>
->>  			return 0;
->>  		}
->> +	} else {
->> +		/*
->> +		 * Start the transfer only after the END_TRANSFER is completed
->> +		 * and endpoint STALL is cleared.
->> +		 */
->> +		if ((dep->flags & DWC3_EP_END_TRANSFER_PENDING) ||
->> +		    (dep->flags & DWC3_EP_WEDGE) ||
->> +		    (dep->flags & DWC3_EP_STALL)) {
->> +			dep->flags |=3D DWC3_EP_DELAY_START;
->> +			return 0;
->> +		}
->>  	}
->>
->>  	__dwc3_gadget_kick_transfer(dep);
->
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---LiQwW4YX+w4axhAx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmIeisMACgkQC+njFXoe
-LGSY+xAA0Y0fgG21qQMCoWZj3N2J4xAurn6B3P5VTc4lUxu9kdONLzobWCf3gRPE
-TMsqARcvbjUo9nPIN5L33tVhRxX9SKonvTE3wRuJkUuGrJyI2+qcwLLdQVDZ8VNY
-y3kJ6D3lnDJ6kYlY7BzqttHOm0zOPFNleQG6/9/ihUXaYQkXOR2kh+GfGXqMklzD
-vVTszU5uFoYy1Di34wnP0zhy8p9+chj13fHGkKEV9T7lHyVJu/YWhjPsVa1YxkCi
-27EnUYTIrqbkY/0zuhhVO5dgPsE0X5kEDIa+yzdjZTxNcoAuH5eiMqRNqW3HoY3N
-Oe7XIHPtffqe1fTornK/PRidY2QXtJVsXizNE1Osx0HWhFfmyH6TYBauyXdXqno0
-2M0nItc+oOqbf+VDMwJ2cJZi/7EyA7VB9m65KJZO1i15PbqgKCQI4ScYPfGUYDsD
-78QJVUat7u8xKMSW3KtNSVe8rpreGWRfFgrkBXGUZoVvgu1KbhzM7bdVi3AzrH4y
-386Tc4dx5QqMpd/EtXlTjojrI/RViizqXhDx/2wcvkCxXoK93gOlWiZppHmpYfsi
-/YQ05r0TgIzC3MlXuTQm/0qOh9Jid9qxcWwfiiNzW7dfYUHu7KSSD91C1zaG+pCF
-PN8iF/ztGEuEHZF+u4XC1lvSoXZcCeRbrsjxL3pGQ7eSe8AOA78=
-=YQAz
------END PGP SIGNATURE-----
-
---LiQwW4YX+w4axhAx--
