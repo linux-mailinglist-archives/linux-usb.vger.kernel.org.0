@@ -2,156 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87084C880E
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 10:34:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D64344C889E
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 10:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233811AbiCAJey (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Mar 2022 04:34:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
+        id S234046AbiCAJ7V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Mar 2022 04:59:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233087AbiCAJev (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 04:34:51 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4719ADEC;
-        Tue,  1 Mar 2022 01:33:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646127234; x=1677663234;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=048tbWG3NAZMNu9WZUi/GCpvqCa2ZO3Gyg1+Y/iqdfs=;
-  b=AkjUEnRR3/dpseIbwAu0+GnatluPc2cSWR9Hste7EpQvkq3JNlR/dxRp
-   FOfWDU1oen0qgU0tyrNewJzQN3XGFJwyzF36cFqHvX8m+d9wbaZ3pYM1H
-   n7c99x2fEc9KdZQ9IHAC+yiV7ySdpAewHsjteIHhkI13Us+lWiPma8D4U
-   ITwDUmP/bEiLvWFfF5DEyuD4drZ8XYm0V/uRPX0uYtSJBTIgITlNSB8ex
-   JjP+aww5usYRwqOvEP8oZQB59diX8s+zWBN2LZ3UuUvFtaxCxXnDn/b17
-   Q0rZk1hW7C2ERohDQ0AzHJ2iGfpcGNN91E0zkgFGpew3ThvEFQsVqfxOV
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="250679807"
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="250679807"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 01:33:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="685662305"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 01 Mar 2022 01:33:51 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 01 Mar 2022 11:33:50 +0200
-Date:   Tue, 1 Mar 2022 11:33:50 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Won Chung <wonchung@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb:typec: Add sysfs support for Type C connector's
- physical location
-Message-ID: <Yh3ofnlEx0bT/R6E@kuha.fi.intel.com>
-References: <20220301022625.469446-1-wonchung@google.com>
+        with ESMTP id S233176AbiCAJ7U (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 04:59:20 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7136FA36
+        for <linux-usb@vger.kernel.org>; Tue,  1 Mar 2022 01:58:39 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id y5so7208260wmi.0
+        for <linux-usb@vger.kernel.org>; Tue, 01 Mar 2022 01:58:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ezdeTFdrJTsDEenywDPHfcLnhNipBCHF9MXHMNmg8uE=;
+        b=V2OTBoFu/3u2MYQvlXN4XFA5Mpc0sw3VVP6kB35gAmpBt4CBakEr+BEajFVumt4As4
+         0YJzO8ZkJSWBwhRj8Uy59RUU3v/hwzbgxduT2I1y1xX6HI1gg41aETpQIUdjxh7ZnBz4
+         HhdMQcg8+L7O8eux9r9AapKed4y6D46u2n+k9nwiZpMaa2tu8mfi2s4ZCxAcFvaUN+tp
+         HrzR1JisJxyRdZ3wNr04C/4Vuj0omTcfD+rfi5DwD/mU4leNbAbXNJMtNPKsu3bNCRus
+         eGsPP4EAXhwGxUe8HQ9DLeSwcxn2uyLPYqzmE2imgxG0kXR+Hov/16dL3PxdUfxU3h53
+         VE0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ezdeTFdrJTsDEenywDPHfcLnhNipBCHF9MXHMNmg8uE=;
+        b=vZF7ko+5ZQKbqxiaAYphu0i7/UBTU3lyhk6Z6Y+Efxcl5XTvtHjnQzVbFZmVGuZYV1
+         faf5EVtrzxfTAkaydnpJldYwonRhivjqt04ojJXrtPJAXY0igo70oLsL8YOPzBmw2gTX
+         AOE9QTBhXCUWLKuL+S8lvauzX6m0vaHaZNvWqSbRXxf7sF4/hC8sV0dmAkBqh5VbNd0B
+         eG5TWN5grJhltjFmfb4clrA3VkYRv5n8A3l8eiVRME0o7Koc5M0RNSqKyl6qUyf+S4r5
+         j3q1FKa34czaRXPUYr1kTbihiGMou1Cwz5yyvWe1kGlzqPBPQM76qITncYopX3IcBMK+
+         +XEg==
+X-Gm-Message-State: AOAM530cutxWDyY0ZQCuZJJgjDT7nr0rn3cA1u7TYi0YQT9HPc4I6kCV
+        SU4/gzx9gNFRwKjMiX8qMwA+Jg==
+X-Google-Smtp-Source: ABdhPJyd3JL277KFZFJnNY8vNt+J/UADyqWySP9nrfMl9nw+JMafV9kv9enuyMZSjvJi9JFM8u0lYg==
+X-Received: by 2002:a1c:29c6:0:b0:381:51d6:9afe with SMTP id p189-20020a1c29c6000000b0038151d69afemr9268826wmp.0.1646128718201;
+        Tue, 01 Mar 2022 01:58:38 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id r186-20020a1c2bc3000000b0037bdd94a4e5sm1955820wmr.39.2022.03.01.01.58.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 01:58:37 -0800 (PST)
+Date:   Tue, 1 Mar 2022 09:58:34 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
+ containing a '$ref'
+Message-ID: <Yh3uSifwByjQWpyO@google.com>
+References: <20220228213802.1639658-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220301022625.469446-1-wonchung@google.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Won,
+On Mon, 28 Feb 2022, Rob Herring wrote:
 
-On Tue, Mar 01, 2022 at 02:26:25AM +0000, Won Chung wrote:
-> When ACPI table includes _PLD field for a Type C connector, share _PLD
-> values in its sysfs. _PLD stands for physical location of device.
+> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
 > 
-> Currently without connector's location information, when there are
-> multiple Type C ports, it is hard to distinguish which connector
-> corresponds to which physical port at which location. For example, when
-> there are two Type C connectors, it is hard to find out which connector
-> corresponds to the Type C port on the left panel versus the Type C port
-> on the right panel. With location information provided, we can determine
-> which specific device at which location is doing what.
+> json-schema versions draft7 and earlier have a weird behavior in that
+> any keywords combined with a '$ref' are ignored (silently). The correct
+> form was to put a '$ref' under an 'allOf'. This behavior is now changed
+> in the 2019-09 json-schema spec and '$ref' can be mixed with other
+> keywords.
 > 
-> _PLD output includes much more fields, but only generic fields are added
-> and exposed to sysfs, so that non-ACPI devices can also support it in
-> the future. The minimal generic fields needed for locating a port are
-> the following.
-> - panel
-> - vertical_position
-> - horizontal_position
-> - dock
-> - lid
-> 
-> Signed-off-by: Won Chung <wonchung@google.com>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-mtd@lists.infradead.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-phy@lists.infradead.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
-> 
-> Changes in v2:
-> - Use string for location.
-> - Clarify get_pld() with naming and return type.
-> 
->  Documentation/ABI/testing/sysfs-class-typec |  35 ++++++
->  drivers/usb/typec/class.c                   | 113 ++++++++++++++++++++
->  drivers/usb/typec/class.h                   |   3 +
->  3 files changed, 151 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> index 75088ecad202..4497a5aeb063 100644
-> --- a/Documentation/ABI/testing/sysfs-class-typec
-> +++ b/Documentation/ABI/testing/sysfs-class-typec
-> @@ -141,6 +141,41 @@ Description:
->  		- "reverse": CC2 orientation
->  		- "unknown": Orientation cannot be determined.
->  
-> +What:		/sys/class/typec/<port>/location/panel
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		Describes which panel surface of the system’s housing the
-> +		port resides on.
-> +
-> +What:		/sys/class/typec/<port>/location/vertical_position
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		Describes vertical position of the port on the panel surface.
-> +		Valid values: upper, center, lower
-> +
-> +What:		/sys/class/typec/<port>/location/horizontal_position
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		Describes horizontal position of the port on the panel surface.
-> +		Valid values: left, center, right
-> +
-> +What:		/sys/class/typec/<port>/location/dock
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		Set as "yes" if the port resides in a docking station or a port
-> +		replicator, otherwise set as "no".
-> +
-> +What:		/sys/class/typec/<port>/location/lid
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		Set as "yes" if the port resides on the lid of laptop system,
-> +		otherwise set as "no".
-> +
+>  .../bindings/connector/usb-connector.yaml         |  3 +--
+>  .../bindings/display/brcm,bcm2711-hdmi.yaml       |  3 +--
+>  .../bindings/display/bridge/adi,adv7511.yaml      |  5 ++---
+>  .../bindings/display/bridge/synopsys,dw-hdmi.yaml |  5 ++---
+>  .../bindings/display/panel/display-timings.yaml   |  3 +--
+>  .../devicetree/bindings/display/ste,mcde.yaml     |  4 ++--
+>  .../devicetree/bindings/input/adc-joystick.yaml   |  9 ++++-----
+>  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  3 +--
+>  .../devicetree/bindings/leds/leds-lp50xx.yaml     |  3 +--
 
-I've probable lost track of the topic during my winter break, I'm
-sorry about that, but why are you proposing now that this should be
-made Type-C specific?
-This information is not Type-C specific, so it definitely does not
-belong here.
+>  .../devicetree/bindings/mfd/google,cros-ec.yaml   | 12 ++++--------
 
-Br,
+Go for it.
+
+Acked-by: Lee Jones <lee.jones@linaro.org>
+
+>  .../devicetree/bindings/mtd/nand-controller.yaml  |  8 +++-----
+>  .../bindings/mtd/rockchip,nand-controller.yaml    |  3 +--
+>  .../devicetree/bindings/net/ti,cpsw-switch.yaml   |  3 +--
+>  .../bindings/phy/phy-stm32-usbphyc.yaml           |  3 +--
+>  .../bindings/power/supply/sbs,sbs-manager.yaml    |  4 +---
+>  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml      |  3 +--
+>  .../devicetree/bindings/soc/ti/ti,pruss.yaml      | 15 +++------------
+>  .../devicetree/bindings/sound/st,stm32-sai.yaml   |  3 +--
+>  .../devicetree/bindings/sound/tlv320adcx140.yaml  | 13 ++++++-------
+>  .../devicetree/bindings/spi/spi-controller.yaml   |  4 +---
+>  .../devicetree/bindings/usb/st,stusb160x.yaml     |  4 +---
+>  21 files changed, 39 insertions(+), 74 deletions(-)
 
 -- 
-heikki
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
