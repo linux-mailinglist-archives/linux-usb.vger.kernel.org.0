@@ -2,84 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882444C8EC5
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 16:18:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 101CC4C8F3B
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Mar 2022 16:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233290AbiCAPTR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Mar 2022 10:19:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
+        id S235814AbiCAPjF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Mar 2022 10:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231482AbiCAPTP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 10:19:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1561E4BBA7
-        for <linux-usb@vger.kernel.org>; Tue,  1 Mar 2022 07:18:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6F3AB8185C
-        for <linux-usb@vger.kernel.org>; Tue,  1 Mar 2022 15:18:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4FE37C340F2
-        for <linux-usb@vger.kernel.org>; Tue,  1 Mar 2022 15:18:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646147911;
-        bh=C1zsWe9MBXn69Wz7saFn8q1gKuG9VzYRlIGYnwQGjSE=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=pm6AWGBrVi3KazSWmrdp8oDzuzpmRcsbhfI1snB0MGpXoH7XwwpQWDFVLLYC/6u7s
-         FCxWywj2V4GfrKr93Lf6k2vJJdLrldWF3CaI6f7XQa8sadFjelrCGOs/RYep6SAfi4
-         wa4qDRGoZBdDNaC0qsQy4Bjbp6OeHpnepuj7oYjIg4RaQRt6DatcXKeiFSuFHEr6mq
-         35fMyJnfiIdR/R6ctVqF7URmQljIkMsN8FN4q2HFqovU8mQuzmMm4KUODh6g0U/CwU
-         77p9ZObViy7k7B+cqd8N206i5YvelTAtOp6Tda8/SqSTqy3qOe8MKEVM5Mwfx74Dkb
-         5Ee8Ld1QDKe1g==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 22466C05FCE; Tue,  1 Mar 2022 15:18:31 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215649] all usb devices stop working and forced to reboot the
- system
-Date:   Tue, 01 Mar 2022 15:18:30 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: ricciare@libero.it
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-215649-208809-zZ2VWtIvCQ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215649-208809@https.bugzilla.kernel.org/>
-References: <bug-215649-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S231776AbiCAPjF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 10:39:05 -0500
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330DC3F889;
+        Tue,  1 Mar 2022 07:38:24 -0800 (PST)
+Received: by mail-oo1-f51.google.com with SMTP id u47-20020a4a9732000000b00316d0257de0so22965838ooi.7;
+        Tue, 01 Mar 2022 07:38:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IgFdAQ+7rpP01kxtGmU2BZRc0yJm0gPUU3cLLc8Jk3I=;
+        b=J7PeG/lQ3o2cNCZf6zJh2Nj3BiJRvcUFaJOcqfEZnyloqc/pCfPv3u19Uk+JmO6vND
+         BIuViC2kaz8pNSL6blPPjp4T6P9CRfgxxbMPqZTwNX+kiUg4R+clDN+8LgFxc1EsDMdz
+         oCDhD1OKxLukW8AuhEJ1INpDh1P/xBb/YJ7XlpBhsZy5l7vYP6HAsMPwYN60fbqcdobw
+         g0rLAv++iLEwdRVcppfcY8HfYJOCYKuDcSp79jXc+/JuUmpMZpd3PuMsAVj4MSUsRZEI
+         X5xWxp/PH6xBjuG6KKwfdKFN3lHFG7rJTYkVk/g891qPGGICoT/O/xa9fRVdFMTRkwTF
+         asTQ==
+X-Gm-Message-State: AOAM531uXBpNfdA20TLMz3ZSCgyRmMlxZuxlULYCxQCmu+PKnDZdxwzM
+        v4qC4PHUR1YDmudxfPSBjQ==
+X-Google-Smtp-Source: ABdhPJxnILQc7GonthpI4taLLpmtwW7NoXOejQ9ut/CquT/SyVavj3WgIPY3n6l9AQJxHWqwjh4Qzg==
+X-Received: by 2002:a05:6870:4392:b0:d7:844:3d99 with SMTP id r18-20020a056870439200b000d708443d99mr8431062oah.56.1646149103443;
+        Tue, 01 Mar 2022 07:38:23 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id x10-20020a4a2a4a000000b0031bf0818df1sm6273831oox.4.2022.03.01.07.38.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 07:38:22 -0800 (PST)
+Received: (nullmailer pid 1294204 invoked by uid 1000);
+        Tue, 01 Mar 2022 15:38:21 -0000
+Date:   Tue, 1 Mar 2022 09:38:21 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: renesas,usbhs: Document RZ/V2L bindings
+Message-ID: <Yh497cZIqQFrc/Mi@robh.at.kernel.org>
+References: <20220227231531.32279-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220227231531.32279-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215649
+On Sun, 27 Feb 2022 23:15:31 +0000, Lad Prabhakar wrote:
+> Document RZ/V2L (R9A07G054) SoC bindings. USBHS block is identical to one
+> found on RZ/A2 SoC. No driver changes are required as generic compatible
+> string "renesas,rza2-usbhs" will be used as a fallback.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> DTSi changes have been posted as part of series [0].
+> 
+> [0] https://patchwork.kernel.org/project/linux-renesas-soc/
+> cover/20220227203744.18355-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> ---
+>  Documentation/devicetree/bindings/usb/renesas,usbhs.yaml | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
 
---- Comment #1 from Nicola Ricciarelli (ricciare@libero.it) ---
-Created attachment 300514
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D300514&action=3Dedit
-this is the complete dmesg output
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Applied, thanks!
