@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12E24CAD53
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Mar 2022 19:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 612184CAD66
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Mar 2022 19:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240143AbiCBSRT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Mar 2022 13:17:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
+        id S241810AbiCBSWY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Mar 2022 13:22:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237841AbiCBSRS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Mar 2022 13:17:18 -0500
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F905D76CD;
-        Wed,  2 Mar 2022 10:16:35 -0800 (PST)
-Received: by mail-ot1-f52.google.com with SMTP id l21-20020a056830239500b005afd2a7eaa2so2373796ots.9;
-        Wed, 02 Mar 2022 10:16:35 -0800 (PST)
+        with ESMTP id S229907AbiCBSWX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Mar 2022 13:22:23 -0500
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B46A35244;
+        Wed,  2 Mar 2022 10:21:40 -0800 (PST)
+Received: by mail-ot1-f45.google.com with SMTP id j9-20020a9d7d89000000b005ad5525ba09so2382938otn.10;
+        Wed, 02 Mar 2022 10:21:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=P3MRIK5gW2O7mrW4QZKZYfeNk1HyToDuaqXYaRPQ9IY=;
-        b=6hhpudyoPcac3eexHiU/T+qO0veMgkw59VkqUX6SFont7g8+bdueN7gkqmoUmP9YpY
-         CrtGX3FIoTE7InUWHd862A4SzH9/fJZvJ4OJ97IPpKv21pzdEazIA4r8EXGY5mbgqNsV
-         NFFG0rdhbH9DG4GR8mxoLa2BuBzayLN4oGLqjnIgJw2XE7OAwVGpSDpAqh0Vnytx4/5K
-         bmXT2c1SuFWhw8fj67TYb7sqOubTk35OWt+Gp8AdzFeXUViU6uLchWfXd6EvE74j1Zfa
-         cvc6I7/AbjAX/jo/KCd7hR0VkeUVINkInOfVzWQ6eYoU7Cs/ARjX/vcUgQjCC7yLLPQD
-         wJ7A==
-X-Gm-Message-State: AOAM531OTw8qtkQeWQ+kz5/o7ZMu3KKIfmpT09hT9xH66mATKp5D6eXV
-        ZQMxUJlqcAd0ZCIrqOVJog==
-X-Google-Smtp-Source: ABdhPJw8B8/gKP1lgIHA99pQq3ABpDWurRMZW0Mj/KfZWTaN7JRlomYR8ZI7Za1D4HwaIBFKjKiLKg==
-X-Received: by 2002:a05:6830:418f:b0:5a6:e75:cb7 with SMTP id r15-20020a056830418f00b005a60e750cb7mr15971120otu.66.1646244994603;
-        Wed, 02 Mar 2022 10:16:34 -0800 (PST)
+        bh=kEmc4vSJMmgmR2K1Zq+xyigIUozonuP2ZIoWp9eF2IM=;
+        b=abgaX0GtsoyfnoTkw8iK5fdNXAUuVyztU/aBrSO8R1p/gDeH3lkPMaDUYwH93ldayS
+         JmXv/SdoE5ou+ySsePXpCmgUanAsOYoWnCV6n9tdJkfLdYI9jJH1OD/ARI+Tl+uXtzdF
+         Vb6yIFJbdxeLXyFnj2peP5nBy8K0EmXaFDIxSp8iMca66oGgfj90ivHPN2hv7B/sX1eW
+         pGOeRVJcmljOj0W5G8eiAU+vcDOtxy8AF3vmnVLcwyfTCHjfCfBQfe9DLMtH8k4zQgbv
+         OnnHtvoqaYReToU7bK7dOLPmE/JlcbzL8xrySO1eVMsXgK/O54GdU5/kj1AemrXTVxS7
+         /V3g==
+X-Gm-Message-State: AOAM533limPfKbB1FFAberBwg29LoJxYkmHjJl4KL/TMiQLXF7B2Mf/u
+        4JlyFBcL1B6EmxM8wE7Fnw==
+X-Google-Smtp-Source: ABdhPJx5vlUqvuCRqY+jOdWjalJ3e3Gt0iZVCh1kT9hUjpkpHnoZG9lKYEoJTzSMm49d/wgRawPdIg==
+X-Received: by 2002:a05:6830:43a0:b0:5af:e328:6bc7 with SMTP id s32-20020a05683043a000b005afe3286bc7mr13446805otv.62.1646245299583;
+        Wed, 02 Mar 2022 10:21:39 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id l6-20020a056870d3c600b000d75713938csm2110023oag.7.2022.03.02.10.16.33
+        by smtp.gmail.com with ESMTPSA id m7-20020a9d6447000000b005acf7e4c507sm8054981otl.20.2022.03.02.10.21.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 10:16:33 -0800 (PST)
-Received: (nullmailer pid 3992016 invoked by uid 1000);
-        Wed, 02 Mar 2022 18:16:33 -0000
-Date:   Wed, 2 Mar 2022 12:16:33 -0600
+        Wed, 02 Mar 2022 10:21:38 -0800 (PST)
+Received: (nullmailer pid 3999619 invoked by uid 1000);
+        Wed, 02 Mar 2022 18:21:37 -0000
+Date:   Wed, 2 Mar 2022 12:21:37 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -47,16 +47,15 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         =?utf-8?B?77+9aXByYWdh?= <alsi@bang-olufsen.dk>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: usb: add TUSB320xA Type-C port
- controller
-Message-ID: <Yh+0gWTmjrAJGAiG@robh.at.kernel.org>
+Subject: Re: [PATCH 2/4] dt-bindings: usb: add TS5USBA224 USB/Audio switch mux
+Message-ID: <Yh+1sQ8rVh9HZZzm@robh.at.kernel.org>
 References: <20220301132010.115258-1-alvin@pqrs.dk>
- <20220301132010.115258-2-alvin@pqrs.dk>
+ <20220301132010.115258-3-alvin@pqrs.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220301132010.115258-2-alvin@pqrs.dk>
+In-Reply-To: <20220301132010.115258-3-alvin@pqrs.dk>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -68,35 +67,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 02:20:05PM +0100, Alvin Šipraga wrote:
+On Tue, Mar 01, 2022 at 02:20:06PM +0100, Alvin Šipraga wrote:
 > From: Alvin Šipraga <alsi@bang-olufsen.dk>
 > 
-> The TUSB320xA is a non-PD Type-C port controller managed over I2C.
+> The TS5USBA224 is a USB High Speed/Audio switch mux IC controlled via
+> GPIO. It is typically composed with a Type-C port controller with Audio
+> Accessory mode detection.
 > 
 > Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
 > ---
->  .../devicetree/bindings/usb/ti,tusb320xa.yaml | 78 +++++++++++++++++++
->  1 file changed, 78 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/ti,tusb320xa.yaml
+>  .../bindings/usb/ti,ts5usba224.yaml           | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/ti,ts5usba224.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/ti,tusb320xa.yaml b/Documentation/devicetree/bindings/usb/ti,tusb320xa.yaml
+> diff --git a/Documentation/devicetree/bindings/usb/ti,ts5usba224.yaml b/Documentation/devicetree/bindings/usb/ti,ts5usba224.yaml
 > new file mode 100644
-> index 000000000000..a93d53ddd01c
+> index 000000000000..0a488b961906
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/ti,tusb320xa.yaml
-> @@ -0,0 +1,78 @@
+> +++ b/Documentation/devicetree/bindings/usb/ti,ts5usba224.yaml
+> @@ -0,0 +1,56 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/usb/ti,tusb320xa.yaml#
+> +$id: http://devicetree.org/schemas/usb/ti,ts5usba224.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: TUSB320xA Type-C port controller DT bindings
+> +title: TS5USBA224 USB 2.0 High Speed and Audio mux DT bindings
 > +
 > +description:
-> +  The Texas Instruments TUSB320xA is a USB Type-C port controller which
-> +  supports role and plug orientation detection using the CC pins. It is
-> +  compatible with the USB Type-C Cable and Connector Specification v1.1.
+> +  The Texas Instruments TS5USBA224 is a double-pole, double throw
+> +  (DPDT) multiplexer that includes a low-distortion audio switch and a
+> +  USB 2.0 High Speed switch in the same package.
 > +
 > +maintainers:
 > +  - Alvin Šipraga <alsi@bang-olufsen.dk>
@@ -104,66 +105,47 @@ On Tue, Mar 01, 2022 at 02:20:05PM +0100, Alvin Šipraga wrote:
 > +properties:
 > +  compatible:
 > +    enum:
-> +      - ti,tusb320la
-> +      - ti,tusb320ha
+> +      - ti,ts5usba224
 > +
-> +  reg:
+> +  asel-gpio:
+> +    description: Output GPIO for A_SEL signal
 > +    maxItems: 1
 > +
-> +  interrupts:
-> +    maxItems: 1
+> +  accessory:
+> +    type: boolean
+> +    description:
+> +      Indicates that this is an Accessory Mode mux.
 > +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    patternProperties:
-> +      '^port@':
+> +  port:
+> +    $ref: /schemas/graph.yaml#/properties/port
+> +    description:
+> +      OF graph bindings modelling a Type-C port controller.
 
-Exact port numbers need to be defined. What does port@0 represent? 
-port@1?
+What does that mean?
 
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description:
-> +          OF graph bindings modelling any "usb-role-switch" or "accessory" mux.
+There's a couple of Type-C bindings on the list ATM. Without block 
+diagrams of all the relevant components and the corresponding graph, I 
+can't say whether any of this graph usage makes sense.
+
 > +
 > +required:
 > +  - compatible
-> +  - reg
-> +  - interrupts
+> +  - asel-gpio
+> +  - accessory
+> +  - port
 > +
 > +additionalProperties: false
 > +
 > +examples:
 > +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    usbaudiomux@0 {
+> +      compatible = "ti,ts5usba224";
+> +      asel-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
+> +      accessory;
 > +
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      tcpc@47 {
-> +        compatible = "ti,tusb320la";
-> +        reg = <0x47>;
-> +        interrupt-parent = <&gpio5>;
-> +        interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
-> +
-> +        ports {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +
-> +          port@0 {
-> +            reg = <0>;
-> +            typec1_mux: endpoint {
-> +              remote-endpoint = <&usb_audio_mux1>;
-> +            };
-> +          };
-> +
-> +          port@1 {
-> +            reg = <1>;
-> +            typec1_dr_sw: endpoint {
-> +              remote-endpoint = <&usbotg1_drd_sw>;
-> +            };
-> +          };
+> +      port {
+> +        usb_audio_mux1: endpoint {
+> +          remote-endpoint = <&typec1_mux>;
 > +        };
 > +      };
 > +    };
