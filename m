@@ -2,137 +2,285 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963BA4CA105
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Mar 2022 10:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD0C4CA192
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Mar 2022 10:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238595AbiCBJni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Mar 2022 04:43:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
+        id S231334AbiCBJ6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Mar 2022 04:58:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbiCBJnh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Mar 2022 04:43:37 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9F13E0DB
-        for <linux-usb@vger.kernel.org>; Wed,  2 Mar 2022 01:42:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1646214173; x=1677750173;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=65Ie3MJD5XZ2TfeYPPzg97lgs7XwJKgLkZgbIlbFNeQ=;
-  b=SMIQ/iz9bTt+5oIUkOVMKifMf0eJX1/mQc+y4V6TOGu91//zx79FsusL
-   jQyth9h+yMId24nFXiuJ2Dx1fvedsEwnmq43EKiDP+2cWcWl+eSy/Hhdm
-   9ZqY24gmxhY4ZIHai6obpksJ6zo7oHWk22/1tTvS8aekO9CNNwDS1f4m/
-   0hdvIkCyL0i1thHuBT+MTLsAojVmk6hB6bWqzW4tXGXSAHtKJERA6Kyak
-   Dys+RfT8s40DPSPOiJTeY/5hQQbVyac2LZ2TeO6edicyEC3Ny+mA0gEcO
-   WBTGOh394YhwqX24DenvN9cbaOyNzLvndcHM5fxs4glDZua8cmrN5Cjh5
+        with ESMTP id S240798AbiCBJ6L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Mar 2022 04:58:11 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64D0BDE41;
+        Wed,  2 Mar 2022 01:57:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646215039; x=1677751039;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=VVGdFbQA5dpTmH1Oi8imwujW6M34G1DuUPJxrfXUWac=;
+  b=dUJKeVCEss+KIYUuBxj/U2E91CJk4EQBdgVwdxdCiUH7IxQfuWD7ciBE
+   7CTSyFgpqzbdVXtLW0mcWNq7J8kRPZ18sBOU0ZUXVEmY2ky0rSw9aMlH6
+   S+dPvdcG7dZgST+UeOaYlEf1g296G0Vox4JkeCC4li8fuF3CgPIOBtxRO
+   tcjGWlRvmtCknvVFzT5EmYFYRxjoKHyKE6Z6TPvG/mUAx5FK1VGd47s2w
+   CAO8N0OKnJMehp6YSj03+QefFnWqLPSLcHb84M/Kz2WIHu6zeZlrts2Tr
+   +bOCE5qMaBYaM5ifYiinoASp/vYfJoEIOQ6pKOsJRY6pMTMTC0FWz2kNF
    A==;
-X-IronPort-AV: E=Sophos;i="5.90,148,1643670000"; 
-   d="scan'208";a="22401814"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 02 Mar 2022 10:42:51 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 02 Mar 2022 10:42:51 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 02 Mar 2022 10:42:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1646214171; x=1677750171;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=65Ie3MJD5XZ2TfeYPPzg97lgs7XwJKgLkZgbIlbFNeQ=;
-  b=Qv6NEsk9CspOSCE7zeJx13x6/fkawT6tad6L/lKz9hdUvraykuqA0q1O
-   2QENynztrpYAQLfBjL53h2cx5IGYyhAFiDGUHWVxBSqD7MVrinMrbVTI6
-   nHrlaZW5/1ZxZqg2sxltjIqWO8vobOICHMbWrITl0EQZUH+KqmnOubi0b
-   PhxB3alMjkZ2bDj394ly3zLROEvXn5R+01HUYtuIZy8187+gDXP1j63AT
-   oIh4bSO9B6K7I3hPIgE1H3zy1Ug8qB0yd+/eh+l/xXB+GQFnr3DHboIxB
-   dYIRookJEUDe4ZGmDG1v7h4JtWb/xG+HWJDOQYGnttdfDRGX5ExElZ4SH
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,148,1643670000"; 
-   d="scan'208";a="22401812"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 02 Mar 2022 10:42:51 +0100
-Received: from steina-w.tq-net.de (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id BC4DB280074;
-        Wed,  2 Mar 2022 10:42:50 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [RFC 1/1] usb: chipidea: ci_hdrc_imx: disable runtime pm for HSIC interface
-Date:   Wed,  2 Mar 2022 10:42:39 +0100
-Message-Id: <20220302094239.3075014-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.25.1
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="240777082"
+X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
+   d="scan'208";a="240777082"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 01:57:19 -0800
+X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
+   d="scan'208";a="551182160"
+Received: from abotoi-mobl2.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.218.48])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 01:57:12 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+        Johan Hovold <johan@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-api@vger.kernel.org, Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [RFC PATCH 5/7] serial: termbits: ADDRB to indicate 9th bit addressing mode
+Date:   Wed,  2 Mar 2022 11:56:04 +0200
+Message-Id: <20220302095606.14818-6-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com>
+References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-With the add of power-domain support in commit 02f8eb40ef7b ("ARM: dts:
-imx7s: Add power domain for imx7d HSIC") runtime suspend will disable
-the power-domain. This prevents IRQs to occur when a new device is attached
-on a downstream hub.
+Add ADDRB to termbits to indicate 9th bit addressing mode.
+This change is necessary for supporting devices with RS485
+multipoint addressing [*]. A later patch in the patch series
+adds support for Synopsys Designware UART capable for 9th bit
+addressing mode. In this mode, 9th bit is used to indicate an
+address (byte) within the communication line. The 9th bit
+addressing mode is selected using ADDRB introduced by an earlier
+patch.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+[*] Technically, RS485 is just an electronic spec and does not
+itself specify the 9th bit addressing mode but 9th bit seems
+at least "semi-standard" way to do addressing with RS485.
+
+Cc: linux-api@vger.kernel.org
+Cc: Richard Henderson <rth@twiddle.net>
+Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: linux-alpha@vger.kernel.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: linux-parisc@vger.kernel.org
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: sparclinux@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
-Our board TQMa7x + MBa7x (i.MX7 based) uses a HSIC link to mounted USB HUB on
-usbh device. Cold plugging an USB mass storage device is working fine. But
-once the last non-HUB device is disconnected the ci_hdrc device goes into
-runtime suspend. This will eventually also disable the 'pgc_hsic_phy' power
-domain. Results is that no more updates from USB hub is handled, neither HUB
-on HSIC link or HUB on that's downstream link. USB tree looks like this:
+ arch/alpha/include/uapi/asm/termbits.h   | 1 +
+ arch/mips/include/uapi/asm/termbits.h    | 1 +
+ arch/parisc/include/uapi/asm/termbits.h  | 1 +
+ arch/powerpc/include/uapi/asm/termbits.h | 1 +
+ arch/sparc/include/uapi/asm/termbits.h   | 1 +
+ drivers/tty/amiserial.c                  | 6 +++++-
+ drivers/tty/moxa.c                       | 1 +
+ drivers/tty/mxser.c                      | 1 +
+ drivers/tty/serial/serial_core.c         | 2 ++
+ drivers/tty/tty_ioctl.c                  | 2 ++
+ drivers/usb/serial/usb-serial.c          | 5 +++--
+ include/uapi/asm-generic/termbits.h      | 1 +
+ 12 files changed, 20 insertions(+), 3 deletions(-)
 
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ci_hdrc/1p, 480M
-    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
-        |__ Port 1: Dev 3, If 0, Class=Hub, Driver=hub/4p, 480M
-            |__ Port 1: Dev 4, If 0, Class=Mass Storage, Driver=usb-storage, 480M
-        |__ Port 2: Dev 5, If 0, Class=Mass Storage, Driver=usb-storage, 480M
-
-I noticed once the power domain is disabled, no IRQs appear if I attach a new
-mass storage, essentially preventing any runtime resume.
-I do not know if this is specific to i.MX7 only or if this is a general USB
-HSIC problem, so this diff might be too much.
-
-BTW: An udev rule with the same effect is:
-ACTION=="add", SUBSYSTEMS=="platform", DRIVER=="ci_hdrc",
-KERNELS=="30b30000.usb", TEST=="power/control", ATTR{power/control}="on"
-
-But I would like to get this fixed on driver level.
-
-Regards
-Alexander
-
- drivers/usb/chipidea/ci_hdrc_imx.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
-index 097142ffb184..e5c22b70431c 100644
---- a/drivers/usb/chipidea/ci_hdrc_imx.c
-+++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-@@ -344,6 +344,8 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
- 	if ((of_usb_get_phy_mode(dev->of_node) == USBPHY_INTERFACE_MODE_HSIC)
- 		&& data->usbmisc_data) {
- 		pdata.flags |= CI_HDRC_IMX_IS_HSIC;
-+		/* Runtime suspend is not supported for HSIC interface */
-+		pdata.flags &= ~CI_HDRC_SUPPORTS_RUNTIME_PM;
- 		data->usbmisc_data->hsic = 1;
- 		data->pinctrl = devm_pinctrl_get(dev);
- 		if (PTR_ERR(data->pinctrl) == -ENODEV)
+diff --git a/arch/alpha/include/uapi/asm/termbits.h b/arch/alpha/include/uapi/asm/termbits.h
+index 4575ba34a0ea..285169c794ec 100644
+--- a/arch/alpha/include/uapi/asm/termbits.h
++++ b/arch/alpha/include/uapi/asm/termbits.h
+@@ -180,6 +180,7 @@ struct ktermios {
+ #define HUPCL	00040000
+ 
+ #define CLOCAL	00100000
++#define ADDRB	010000000		/* address bit */
+ #define CMSPAR	  010000000000		/* mark or space (stick) parity */
+ #define CRTSCTS	  020000000000		/* flow control */
+ 
+diff --git a/arch/mips/include/uapi/asm/termbits.h b/arch/mips/include/uapi/asm/termbits.h
+index dfeffba729b7..e7ea31cfec78 100644
+--- a/arch/mips/include/uapi/asm/termbits.h
++++ b/arch/mips/include/uapi/asm/termbits.h
+@@ -181,6 +181,7 @@ struct ktermios {
+ #define	 B3000000 0010015
+ #define	 B3500000 0010016
+ #define	 B4000000 0010017
++#define ADDRB	  0020000	/* address bit */
+ #define CIBAUD	  002003600000	/* input baud rate */
+ #define CMSPAR	  010000000000	/* mark or space (stick) parity */
+ #define CRTSCTS	  020000000000	/* flow control */
+diff --git a/arch/parisc/include/uapi/asm/termbits.h b/arch/parisc/include/uapi/asm/termbits.h
+index 40e920f8d683..629be061f5d5 100644
+--- a/arch/parisc/include/uapi/asm/termbits.h
++++ b/arch/parisc/include/uapi/asm/termbits.h
+@@ -158,6 +158,7 @@ struct ktermios {
+ #define  B3000000 0010015
+ #define  B3500000 0010016
+ #define  B4000000 0010017
++#define ADDRB	  0020000		/* address bit */
+ #define CIBAUD    002003600000		/* input baud rate */
+ #define CMSPAR    010000000000          /* mark or space (stick) parity */
+ #define CRTSCTS   020000000000          /* flow control */
+diff --git a/arch/powerpc/include/uapi/asm/termbits.h b/arch/powerpc/include/uapi/asm/termbits.h
+index ed18bc61f63d..1b778ac562a4 100644
+--- a/arch/powerpc/include/uapi/asm/termbits.h
++++ b/arch/powerpc/include/uapi/asm/termbits.h
+@@ -171,6 +171,7 @@ struct ktermios {
+ #define HUPCL	00040000
+ 
+ #define CLOCAL	00100000
++#define ADDRB	00200000		/* address bit */
+ #define CMSPAR	  010000000000		/* mark or space (stick) parity */
+ #define CRTSCTS	  020000000000		/* flow control */
+ 
+diff --git a/arch/sparc/include/uapi/asm/termbits.h b/arch/sparc/include/uapi/asm/termbits.h
+index ce5ad5d0f105..4ad60c4acf65 100644
+--- a/arch/sparc/include/uapi/asm/termbits.h
++++ b/arch/sparc/include/uapi/asm/termbits.h
+@@ -200,6 +200,7 @@ struct ktermios {
+ #define B3000000  0x00001011
+ #define B3500000  0x00001012
+ #define B4000000  0x00001013  */
++#define ADDRB	  0x00002000  /* address bit */
+ #define CIBAUD	  0x100f0000  /* input baud rate (not used) */
+ #define CMSPAR	  0x40000000  /* mark or space (stick) parity */
+ #define CRTSCTS	  0x80000000  /* flow control */
+diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
+index 533d02b38e02..3ca97007bd6e 100644
+--- a/drivers/tty/amiserial.c
++++ b/drivers/tty/amiserial.c
+@@ -1175,7 +1175,11 @@ static void rs_set_termios(struct tty_struct *tty, struct ktermios *old_termios)
+ {
+ 	struct serial_state *info = tty->driver_data;
+ 	unsigned long flags;
+-	unsigned int cflag = tty->termios.c_cflag;
++	unsigned int cflag;
++
++	tty->termios.c_cflag &= ~ADDRB;
++
++	cflag = tty->termios.c_cflag;
+ 
+ 	change_speed(tty, info, old_termios);
+ 
+diff --git a/drivers/tty/moxa.c b/drivers/tty/moxa.c
+index f3c72ab1476c..07cd88152d58 100644
+--- a/drivers/tty/moxa.c
++++ b/drivers/tty/moxa.c
+@@ -2050,6 +2050,7 @@ static int MoxaPortSetTermio(struct moxa_port *port, struct ktermios *termio,
+ 
+ 	ofsAddr = port->tableAddr;
+ 
++	termio->c_cflag &= ~ADDRB;
+ 	mode = termio->c_cflag & CSIZE;
+ 	if (mode == CS5)
+ 		mode = MX_CS5;
+diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+index 836c9eca2946..220676363a07 100644
+--- a/drivers/tty/mxser.c
++++ b/drivers/tty/mxser.c
+@@ -577,6 +577,7 @@ static void mxser_change_speed(struct tty_struct *tty, struct ktermios *old_term
+ 	struct mxser_port *info = tty->driver_data;
+ 	unsigned cflag, cval;
+ 
++	tty->termios.c_cflag &= ~ADDRB;
+ 	cflag = tty->termios.c_cflag;
+ 
+ 	if (mxser_set_baud(tty, tty_get_baud_rate(tty))) {
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 846192a7b4bf..8ab88293c917 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -1489,6 +1489,8 @@ static void uart_set_termios(struct tty_struct *tty,
+ 		goto out;
+ 	}
+ 
++	tty->termios.c_cflag &= ~ADDRB;
++
+ 	uart_change_speed(tty, state, old_termios);
+ 	/* reload cflag from termios; port driver may have overridden flags */
+ 	cflag = tty->termios.c_cflag;
+diff --git a/drivers/tty/tty_ioctl.c b/drivers/tty/tty_ioctl.c
+index 63181925ec1a..934037d78868 100644
+--- a/drivers/tty/tty_ioctl.c
++++ b/drivers/tty/tty_ioctl.c
+@@ -319,6 +319,8 @@ unsigned char tty_get_frame_size(unsigned int cflag)
+ 		bits++;
+ 	if (cflag & PARENB)
+ 		bits++;
++	if (cflag & ADDRB)
++		bits++;
+ 
+ 	return bits;
+ }
+diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
+index 24101bd7fcad..44b73aea80bb 100644
+--- a/drivers/usb/serial/usb-serial.c
++++ b/drivers/usb/serial/usb-serial.c
+@@ -525,9 +525,10 @@ static void serial_set_termios(struct tty_struct *tty, struct ktermios *old)
+ 
+ 	dev_dbg(&port->dev, "%s\n", __func__);
+ 
+-	if (port->serial->type->set_termios)
++	if (port->serial->type->set_termios) {
++		tty->termios.c_cflag &= ~ADDRB;
+ 		port->serial->type->set_termios(tty, port, old);
+-	else
++	} else
+ 		tty_termios_copy_hw(&tty->termios, old);
+ }
+ 
+diff --git a/include/uapi/asm-generic/termbits.h b/include/uapi/asm-generic/termbits.h
+index 2fbaf9ae89dd..5f5228329d45 100644
+--- a/include/uapi/asm-generic/termbits.h
++++ b/include/uapi/asm-generic/termbits.h
+@@ -157,6 +157,7 @@ struct ktermios {
+ #define  B3000000 0010015
+ #define  B3500000 0010016
+ #define  B4000000 0010017
++#define ADDRB     0020000	/* address bit */
+ #define CIBAUD	  002003600000	/* input baud rate */
+ #define CMSPAR	  010000000000	/* mark or space (stick) parity */
+ #define CRTSCTS	  020000000000	/* flow control */
 -- 
-2.25.1
+2.30.2
 
