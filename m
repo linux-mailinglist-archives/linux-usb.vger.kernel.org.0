@@ -2,128 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151FA4CA0A6
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Mar 2022 10:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF4C4CA0C4
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Mar 2022 10:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240488AbiCBJZr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Mar 2022 04:25:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        id S240498AbiCBJaZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Mar 2022 04:30:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240469AbiCBJZp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Mar 2022 04:25:45 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86606A2510;
-        Wed,  2 Mar 2022 01:24:57 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id kt27so2445237ejb.0;
-        Wed, 02 Mar 2022 01:24:57 -0800 (PST)
+        with ESMTP id S240485AbiCBJaW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Mar 2022 04:30:22 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA28AB8232
+        for <linux-usb@vger.kernel.org>; Wed,  2 Mar 2022 01:29:36 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id bn33so1385757ljb.6
+        for <linux-usb@vger.kernel.org>; Wed, 02 Mar 2022 01:29:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=sIH+XDr0bcmAnSp6r3s95jesa/YkHfKfM8EvZG2x2jo=;
-        b=hsEF+EI2f/RYm/JUPs5oa2IZ2CZKuZpD4CJzPSyORMsbaDMnWp3DfRlMKqPj8JtZVi
-         anq67h7VOcM4sIpbWPxDDScpzx/H60AyP2jz/xk1p1AWJ2b76Qle5lpRibmjhahNK8Qd
-         Q7brsKclZaRyQPIYUF9v+Me/p5Aknf2rDEL+cC9etK5k8xNnJ1vks4LH3Of18ieYNGOR
-         IaLxKYHcUxJQI8k0iC6gQO+0CxLha9AeOJ2e7wS3AyH6r05EwI1v2UMd3DS67bndzW50
-         BKZXMwjw8JNnRxzYAJ8UfCJFwSrXpSH5KThqTGibnHCM4xpeGZHlOeIVlU0lJ/SCBMRM
-         CMIw==
+        d=rasmusvillemoes.dk; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XH8CYV/Z50iBLZ27uSo3DlVY0KhJ8ZO+RiecWTcYel0=;
+        b=IQg4uBejV+wOE9gbvRPz3nvi4LkiiVw4YSIjC8NPteocLXX0uLpiZyGXJ60leACu72
+         E2mMgbaj2BDeYnhoOw0DKPRcT2bjIlB4yRTWQZ65OcYRTHhlWzgeq8LyFprIEpiij6N8
+         YNaymndxJaFKphqyYHlKdyPolm4uaJOX+WJuI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=sIH+XDr0bcmAnSp6r3s95jesa/YkHfKfM8EvZG2x2jo=;
-        b=Iyya5hAMAT+36dKnMYu5Y/2cDEXA/7PYS1XYLzFVbcu5nwdRxU8LSyFA6P4LSgHT2p
-         IRmxewsi8FgjiJUh14oxoOKShmj0RPTbRnPrIyqDk8ueuZ9kVv/kBYbw57TsHZQhQEbm
-         gSZfS3o8RkdwBHVm8mSOKFTl3PPLBnHZ0zCXkQ/R9DlRbtvnGEDyPnDhrS8ShSYOdevJ
-         CDn/un2qGzFQIYa9VdYpSscwmZUQXiRHZM6/1ntbaY0PokqAOf9KEa+/mQY1SSllIHFi
-         8Kvtu9FLzuI2gIPYcQd2YE0sNaQ3eJF9dpzcd4rJ+ktPNm5cbu8oAMexAQ2pH84jptCj
-         v7Jg==
-X-Gm-Message-State: AOAM532Oa9GEgwsNAaEBPBCYtW9WapIgBFvi3RKYM4HZ/V3s7LZOEh0m
-        B45kKM47jwa4hsK+vfNnzPU=
-X-Google-Smtp-Source: ABdhPJyeQXm9LWD3RXtqVhCpGaC2+7E5F6tWlrf4CiE3RYx+9cku+hvfEypndrYXp0tlrBL6eAOGqA==
-X-Received: by 2002:a17:906:d7aa:b0:6cf:1fb3:2986 with SMTP id pk10-20020a170906d7aa00b006cf1fb32986mr22427009ejb.594.1646213096003;
-        Wed, 02 Mar 2022 01:24:56 -0800 (PST)
-Received: from tom-desktop (net-188-217-57-126.cust.vodafonedsl.it. [188.217.57.126])
-        by smtp.gmail.com with ESMTPSA id b6-20020a50e386000000b00410d64cb3e4sm8545376edm.75.2022.03.02.01.24.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 01:24:55 -0800 (PST)
-Date:   Wed, 2 Mar 2022 10:24:53 +0100
-From:   Tommaso Merciai <tomm.merciai@gmail.com>
-To:     Richard Leitner <richard.leitner@linux.dev>
-Cc:     Pavel Machek <pavel@denx.de>, Sasha Levin <sashal@kernel.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        richard.leitner@skidata.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.10 04/23] usb: usb251xb: add boost-up property
- support
-Message-ID: <20220302092453.GA4465@tom-desktop>
-References: <20220215152957.581303-1-sashal@kernel.org>
- <20220215152957.581303-4-sashal@kernel.org>
- <20220220101256.GC7321@amd>
- <Yhy+pvprwSx4zdCG@ltleri2>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XH8CYV/Z50iBLZ27uSo3DlVY0KhJ8ZO+RiecWTcYel0=;
+        b=Bxgxbw7CRbbx4vtUAIumR8zb/y2yBTHj6abFTIsVETUl9DkTTgToYdLSrDAd4nIUMK
+         U0DMVDZLqgL+kGJ/bsmoOgfjVvpzzLqPcNvgVsdTT9lIu9fmbp/xU+NJQiTAI+d78WnK
+         UYLN1oDgWxpCvsyVET3MH1MgCUwaIYA+Ri23KFxJclHumSAxtW+bWARqV3dU5WuJLQKn
+         iPmXIejhvqOfSKi29jhJbqPKtGNRJU//LssDu6VlllT/VE8EBewWhRWYAtAcKv6/E/dE
+         cuZAmpZuZ2J5e5pw3O5RLbJWjBzADIBk62b9B/7cYyOeHluLD1NYWaoQtTMLaugwEeC5
+         oBAA==
+X-Gm-Message-State: AOAM531AQW2w7kA95HsVw3QlZddp8dkK9yBfrcA1PwlXOBSLv1FaaWZQ
+        Aq0LYcmNtqg/uFbXrRsbJdbxpA==
+X-Google-Smtp-Source: ABdhPJxPRWTwhfDKGEWi/HTZUmtnN6xoKL1T2KNwEAF9KgB2sMMXSt6lke7BfBVtPRIEaNMyntkyzw==
+X-Received: by 2002:a2e:3c0d:0:b0:246:3c52:7ada with SMTP id j13-20020a2e3c0d000000b002463c527adamr19885072lja.459.1646213374808;
+        Wed, 02 Mar 2022 01:29:34 -0800 (PST)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id f36-20020a0565123b2400b0043795432e87sm1960430lfv.150.2022.03.02.01.29.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 01:29:33 -0800 (PST)
+Message-ID: <78ccb184-405e-da93-1e02-078f90d2b9bc@rasmusvillemoes.dk>
+Date:   Wed, 2 Mar 2022 10:29:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yhy+pvprwSx4zdCG@ltleri2>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        David Laight <David.Laight@aculab.com>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        KVM list <kvm@vger.kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        "linux1394-devel@lists.sourceforge.net" 
+        <linux1394-devel@lists.sourceforge.net>,
+        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        "v9fs-developer@lists.sourceforge.net" 
+        <v9fs-developer@lists.sourceforge.net>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "tipc-discussion@lists.sourceforge.net" 
+        <tipc-discussion@lists.sourceforge.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Mike Rapoport <rppt@kernel.org>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com>
+ <20220228110822.491923-3-jakobkoschel@gmail.com>
+ <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
+ <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
+ <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com>
+ <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
+ <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org>
+ <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
+ <CAHk-=wiT5HX6Kp0Qv4ZYK_rkq9t5fZ5zZ7vzvi6pub9kgp=72g@mail.gmail.com>
+ <7dc860874d434d2288f36730d8ea3312@AcuMS.aculab.com>
+ <CAHk-=whKqg89zu4T95+ctY-hocR6kDArpo2qO14-kV40Ga7ufw@mail.gmail.com>
+ <0ced2b155b984882b39e895f0211037c@AcuMS.aculab.com>
+ <CAHk-=wix0HLCBs5sxAeW3uckg0YncXbTjMsE-Tv8WzmkOgLAXQ@mail.gmail.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <CAHk-=wix0HLCBs5sxAeW3uckg0YncXbTjMsE-Tv8WzmkOgLAXQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 01:23:02PM +0100, Richard Leitner wrote:
-> Hi,
-> 
-> On Sun, Feb 20, 2022 at 11:12:57AM +0100, Pavel Machek wrote:
-> > Hi!
-> > 
-> > > From: Tommaso Merciai <tomm.merciai@gmail.com>
-> > > 
-> > > [ Upstream commit 5c2b9c61ae5d8ad0a196d33b66ce44543be22281 ]
-> > > 
-> > > Add support for boost-up register of usb251xb hub.
-> > > boost-up property control USB electrical drive strength
-> > > This register can be set:
-> > > 
-> > >  - Normal mode -> 0x00
-> > >  - Low         -> 0x01
-> > >  - Medium      -> 0x10
-> > >  - High        -> 0x11
-> > > 
-> > > (Normal Default)
-> > > 
-> > > References:
-> > >  - http://www.mouser.com/catalog/specsheets/2514.pdf p29
-> > 
-> > Should the boost-up property be documented somewhere in the kernel
-> > tree? We normally do that for device tree properties. And we normally
-> > have properties used somewhere in the device tree. What is going on here?
-> 
-> AFAIK this patch was dropped for all stable releases, so this specific
-> AUTOSEL message/thread is obsolete.
-> 
-> Nonetheless the DT documentation is also missing on master. Therefore
-> I guess it should be provided asap 😉
-> 
-> Tommaso, can you provide a patch?
+On 02/03/2022 00.55, Linus Torvalds wrote:
+> On Tue, Mar 1, 2022 at 3:19 PM David Laight <David.Laight@aculab.com> wrote:
+>>
 
-Hi All,
-Sorry for delay, but I'm quite busy in these days.
-Yes I can provide a patch about documentation in the
-next days.
-
-Regards,
-Tommaso
-
+> With the "don't use iterator outside the loop" approach, the exact
+> same code works in both the old world order and the new world order,
+> and you don't have the semantic confusion. And *if* you try to use the
+> iterator outside the loop, you'll _mostly_ (*) get a compiler warning
+> about it not being initialized.
 > 
-> regards;rl
+>              Linus
 > 
-> > 
-> > Best regards,
-> > 							Pavel
+> (*) Unless somebody initializes the iterator pointer pointlessly.
+> Which clearly does happen. Thus the "mostly". It's not perfect, and
+> that's most definitely not nice - but it should at least hopefully
+> make it that much harder to mess up.
+
+This won't help the current issue (because it doesn't exist and might
+never), but just in case some compiler people are listening, I'd like to
+have some sort of way to tell the compiler "treat this variable as
+uninitialized from here on". So one could do
+
+#define kfree(p) do { __kfree(p); __magic_uninit(p); } while (0)
+
+with __magic_uninit being a magic no-op that doesn't affect the
+semantics of the code, but could be used by the compiler's "[is/may be]
+used uninitialized" machinery to flag e.g. double frees on some odd
+error path etc. It would probably only work for local automatic
+variables, but it should be possible to just ignore the hint if p is
+some expression like foo->bar or has side effects. If we had that, the
+end-of-loop test could include that to "uninitialize" the iterator.
+
+Maybe sparse/smatch or some other static analyzer could implement such a
+magic thing? Maybe it's better as a function attribute
+[__attribute__((uninitializes(1)))] to avoid having to macrofy all
+functions that release resources.
+
+Rasmus
