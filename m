@@ -2,162 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA374C9B58
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Mar 2022 03:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BBE4C9C18
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Mar 2022 04:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239151AbiCBCqv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Mar 2022 21:46:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
+        id S234858AbiCBDX5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Mar 2022 22:23:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbiCBCqt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 21:46:49 -0500
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAFDA9E0E
-        for <linux-usb@vger.kernel.org>; Tue,  1 Mar 2022 18:46:06 -0800 (PST)
-Received: by mail-oo1-xc2c.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso459752ooi.3
-        for <linux-usb@vger.kernel.org>; Tue, 01 Mar 2022 18:46:06 -0800 (PST)
+        with ESMTP id S232602AbiCBDXz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Mar 2022 22:23:55 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7E44B1CF
+        for <linux-usb@vger.kernel.org>; Tue,  1 Mar 2022 19:23:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wjdqSaPpltqhLridozcEUTEQoIYV6/3L4YmJnQ5z0lY=;
-        b=LN9nnhqICRhttXAVr1od9T1t/Ymtpxhtz4tHsjH3dYjcd3Rkq9C9wMhSXlkrlSYC1A
-         DlJ/JptFxg1yVABD2c1AkWjsPC7Du3KLmBhl0PmcAe7J/mlUk1cp6g/yIWvbZRRK/ixo
-         +bm5IDVzJdC4fxWuoEI4G5CHndK46TO9kW9KbAaQI641rdN+rU1dvb6VBLEpmuuVwgUt
-         80QLDod/jgV5iicQ0WoUYh+G5NUspA9Y6GZrYqrOz6zP3KBF8+B00J/JX/kKtJbsLcZw
-         Nn9Y0EtKII81vB9nbqmK7v/AXIDRsz2QxYS4EGE2oGDGOXpVkmABqBHnLwBv01oaAEdI
-         u6og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wjdqSaPpltqhLridozcEUTEQoIYV6/3L4YmJnQ5z0lY=;
-        b=thjzyxo3rD+LbosPAWUY8Y50sw7prz1YPINDdR3EIBpscQ8iMUoj2H1ewlbfs50pWk
-         JEh7g/0ISabPkBtVDWovxfFnF6qcIMZ2U8nFYs0u3QBHHdrZZbxjbfhiJFJQIyubuw6m
-         StJbbxghbwYgV7le3RFx2d4UUa9S2cL8/uryJFqq/r9I0noZK/cZumG3dtfJn0e/LmhN
-         Rupx/ue+miJJB41ZupMpOo4PKd35M9AjpbZxDXOOQbywJfAeaAPHL9WeojQaq5p1NcO6
-         FgK2ijAUynH8sfDiw2bu3iXDAcdSNYuOeFUP6F83pcwXrpbCkzUHmOn2m9iOU6tY36NO
-         AG8g==
-X-Gm-Message-State: AOAM533D+HRS2tFLdm7c8YvTagp+XmTtuDuS22LphdTSfuDg1C6WUH/J
-        6rlMl5LILepQYcXjb1C1XprDtw==
-X-Google-Smtp-Source: ABdhPJyABJwssvqzs0MiuFje5MNOUuD4BXQpc8Bd2B6R1kdb3joprE0iJZUcrLXMN5kygRaNyqLzdA==
-X-Received: by 2002:a05:6820:1396:b0:31c:59f4:2fe4 with SMTP id i22-20020a056820139600b0031c59f42fe4mr13722344oow.10.1646189166017;
-        Tue, 01 Mar 2022 18:46:06 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id 23-20020a9d0b97000000b005ad33994e93sm7196700oth.31.2022.03.01.18.46.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 18:46:05 -0800 (PST)
-Date:   Tue, 1 Mar 2022 18:47:56 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
- containing a '$ref'
-Message-ID: <Yh7a3Gl6PPamTjY5@ripper>
-References: <20220228213802.1639658-1-robh@kernel.org>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646191394; x=1677727394;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=huEDIUJEkW/cXWB8R04EZxsdyJ7NSCmxsoS/MrjOgOE=;
+  b=yjDYllrzb4X7DJjU8rMUaKFLCQte+H4liv6/NDMB84U/Vj7dbFK979Hb
+   I/CZ0f3QkaQ+Kqd/8oI4EzwgJ2xYFBq+HMa75wz/cET1kt7dQUZeeS9iw
+   KUTGyotqcr56qAfTe2snXozXkEoB47MX0ggste1UIRl4eVl+Zn2E3Zwev
+   I=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 01 Mar 2022 19:23:14 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 19:23:13 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 1 Mar 2022 19:23:13 -0800
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 1 Mar 2022 19:23:10 -0800
+Date:   Wed, 2 Mar 2022 08:53:06 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>, <s.shtylyov@omp.ru>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: [RFT PATCH] xhci: make xhci_handshake timeout for xhci_reset()
+ adjustable
+Message-ID: <20220302032306.GB11371@hu-pkondeti-hyd.qualcomm.com>
+References: <20220217135643.1321889-1-mathias.nyman@linux.intel.com>
+ <20220301014949.GG13801@jackp-linux.qualcomm.com>
+ <20220301040339.GA11371@hu-pkondeti-hyd.qualcomm.com>
+ <ffc9abb1-908b-1c09-cd9d-cbd83ea4e478@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ffc9abb1-908b-1c09-cd9d-cbd83ea4e478@linux.intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 28 Feb 13:38 PST 2022, Rob Herring wrote:
-
-> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
+On Tue, Mar 01, 2022 at 10:47:36AM +0200, Mathias Nyman wrote:
+> On 1.3.2022 6.03, Pavan Kondeti wrote:
+> > On Mon, Feb 28, 2022 at 05:49:49PM -0800, Jack Pham wrote:
+> >> Hi Mathias,
+> >>
+> >> On Thu, Feb 17, 2022 at 03:56:43PM +0200, Mathias Nyman wrote:
+> >>> xhci_reset() timeout was increased from 250ms to 10 seconds in order to
+> >>> give Renesas 720201 xHC enough time to get ready in probe.
+> >>
+> >> This suggests that the only place we really need the long timeout is
+> >> in xhci_gen_setup().
+> >>
+> >>> @@ -1163,7 +1161,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+> >>>  		xhci_dbg(xhci, "Stop HCD\n");
+> >>>  		xhci_halt(xhci);
+> >>>  		xhci_zero_64b_regs(xhci);
+> >>> -		retval = xhci_reset(xhci);
+> >>> +		retval = xhci_reset(xhci, XHCI_RESET_LONG_USEC);
+> >>
+> >> Since preemption is disabled here (spin_lock_irq() is called near the
+> >> start of this function), shouldn't we also limit this to 250ms here in
+> >> xhci_resume() as well?
+> >>> The rationale of decreasing the timeout to 250 in certain places is based
+> > on the criticality of the operation but not on the preemption/irq state.
+> > Since xHC reset is critical in startup and resume, the 10 seconds timeout
+> > is enforced so that we don't break Renesas 720201 xHC.
+> > 
+> > Since all of our internl test reports indicate that the timeout is happening
+> > from stop hcd, this patch is helping.
+> > 
 > 
-> json-schema versions draft7 and earlier have a weird behavior in that
-> any keywords combined with a '$ref' are ignored (silently). The correct
-> form was to put a '$ref' under an 'allOf'. This behavior is now changed
-> in the 2019-09 json-schema spec and '$ref' can be mixed with other
-> keywords.
+> This was pretty much my reasoning as well.
+> I could add a comment about this to the commit message
 > 
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/connector/usb-connector.yaml         |  3 +--
->  .../bindings/display/brcm,bcm2711-hdmi.yaml       |  3 +--
->  .../bindings/display/bridge/adi,adv7511.yaml      |  5 ++---
->  .../bindings/display/bridge/synopsys,dw-hdmi.yaml |  5 ++---
->  .../bindings/display/panel/display-timings.yaml   |  3 +--
->  .../devicetree/bindings/display/ste,mcde.yaml     |  4 ++--
->  .../devicetree/bindings/input/adc-joystick.yaml   |  9 ++++-----
->  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  3 +--
->  .../devicetree/bindings/leds/leds-lp50xx.yaml     |  3 +--
->  .../devicetree/bindings/mfd/google,cros-ec.yaml   | 12 ++++--------
->  .../devicetree/bindings/mtd/nand-controller.yaml  |  8 +++-----
->  .../bindings/mtd/rockchip,nand-controller.yaml    |  3 +--
->  .../devicetree/bindings/net/ti,cpsw-switch.yaml   |  3 +--
->  .../bindings/phy/phy-stm32-usbphyc.yaml           |  3 +--
->  .../bindings/power/supply/sbs,sbs-manager.yaml    |  4 +---
->  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml      |  3 +--
+> In addition we want a targeted fix for a real world issue that we can send to
+> stable without changing too much, risking regressions.
+> 
+Makes complete sense. 
 
-For the remoteproc binding:
+Greg,
 
-Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Do you plan to include this patch?
 
 Thanks,
-Bjorn
+Pavan
