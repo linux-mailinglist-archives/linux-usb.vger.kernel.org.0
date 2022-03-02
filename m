@@ -2,120 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2509E4CA46D
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Mar 2022 13:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 567C14CA70E
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Mar 2022 15:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241654AbiCBMHE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Mar 2022 07:07:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
+        id S242666AbiCBOFG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 2 Mar 2022 09:05:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233223AbiCBMHB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Mar 2022 07:07:01 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B58C0859;
-        Wed,  2 Mar 2022 04:06:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646222778; x=1677758778;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AnjlKf1LQKzOgzxBT/jxnMz1bZYSfLAR8Dv3xXjRDio=;
-  b=ZQsY8Ow8nwoLaosyScGJFXUnkNAat/0ujx/vtvV7Uxt5xfOCJ6ZgoaZz
-   IF/OzVls2jwyTuBRxghvzNtaj04WxRsBxGpBLqnUSe2LyMTDDT8oey4he
-   XqQN4FFH0cQbaVl+O/bGJNCexsPYdKnmDdRUBwVXXf6PRmu/ChfARUxtv
-   YH2Pr0lAv7uXFUbTD9lTW1sOWkn8cvQxHjvCMhZp2bSkxMJ1ysE591tvS
-   hsemIhhMoeCWiY7mZSgBbMa1aP4hMXV/LKuE7xO7FXVkFMHXp3cyu18Oc
-   GSbt1pH/SCdifmRYfHnYIbbbnZkv38aMp8TPj3iHq0zFo3tnozIAq5N2/
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="236894996"
-X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
-   d="scan'208";a="236894996"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 04:06:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
-   d="scan'208";a="686116074"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 02 Mar 2022 04:06:00 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 02 Mar 2022 14:06:00 +0200
-Date:   Wed, 2 Mar 2022 14:06:00 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tipd: Forward plug orientation to typec
- subsystem
-Message-ID: <Yh9dqPh69wcI3har@kuha.fi.intel.com>
-References: <20220226125912.59828-1-sven@svenpeter.dev>
+        with ESMTP id S242590AbiCBOFC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Mar 2022 09:05:02 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58C228567E
+        for <linux-usb@vger.kernel.org>; Wed,  2 Mar 2022 06:04:13 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-196-4Li6Fux3PdyQ14Lo-DMf3A-1; Wed, 02 Mar 2022 14:04:10 +0000
+X-MC-Unique: 4Li6Fux3PdyQ14Lo-DMf3A-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Wed, 2 Mar 2022 14:04:06 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Wed, 2 Mar 2022 14:04:06 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Xiaomeng Tong' <xiam0nd.tong@gmail.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "bjohannesmeyer@gmail.com" <bjohannesmeyer@gmail.com>,
+        "c.giuffrida@vu.nl" <c.giuffrida@vu.nl>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "h.j.bos@vu.nl" <h.j.bos@vu.nl>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "jakobkoschel@gmail.com" <jakobkoschel@gmail.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "linux1394-devel@lists.sourceforge.net" 
+        <linux1394-devel@lists.sourceforge.net>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tipc-discussion@lists.sourceforge.net" 
+        <tipc-discussion@lists.sourceforge.net>,
+        "v9fs-developer@lists.sourceforge.net" 
+        <v9fs-developer@lists.sourceforge.net>
+Subject: RE: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Thread-Topic: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Thread-Index: AQHYLhg9+DU/OogLf0+tiSFmjztyUKysHu+Q
+Date:   Wed, 2 Mar 2022 14:04:06 +0000
+Message-ID: <1077f17e50d34dc2bbfdf4e52a1cb2fd@AcuMS.aculab.com>
+References: <CAHk-=whLK11HyvpUtEftOjc3Gup2V77KpAQ2fycj3uai=qceHw@mail.gmail.com>
+ <20220302093106.8402-1-xiam0nd.tong@gmail.com>
+In-Reply-To: <20220302093106.8402-1-xiam0nd.tong@gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220226125912.59828-1-sven@svenpeter.dev>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Feb 26, 2022 at 01:59:12PM +0100, Sven Peter wrote:
-> In order to bring up the USB3 PHY on the Apple M1 we need to know the
-> orientation of the Type-C cable. Extract it from the status register and
-> forward it to the typec subsystem.
+From: Xiaomeng Tong
+> Sent: 02 March 2022 09:31
 > 
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/usb/typec/tipd/core.c     | 5 +++++
->  drivers/usb/typec/tipd/tps6598x.h | 1 +
->  2 files changed, 6 insertions(+)
+> On Mon, 28 Feb 2022 16:41:04 -0800, Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > But basically to _me_, the important part is that the end result is
+> > maintainable longer-term.
 > 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index 7ffcda94d323..16b4560216ba 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -256,6 +256,10 @@ static int tps6598x_connect(struct tps6598x *tps, u32 status)
->  	typec_set_pwr_opmode(tps->port, mode);
->  	typec_set_pwr_role(tps->port, TPS_STATUS_TO_TYPEC_PORTROLE(status));
->  	typec_set_vconn_role(tps->port, TPS_STATUS_TO_TYPEC_VCONN(status));
-> +	if (TPS_STATUS_TO_UPSIDE_DOWN(status))
-> +		typec_set_orientation(tps->port, TYPEC_ORIENTATION_REVERSE);
-> +	else
-> +		typec_set_orientation(tps->port, TYPEC_ORIENTATION_NORMAL);
->  	tps6598x_set_data_role(tps, TPS_STATUS_TO_TYPEC_DATAROLE(status), true);
->  
->  	tps->partner = typec_register_partner(tps->port, &desc);
-> @@ -278,6 +282,7 @@ static void tps6598x_disconnect(struct tps6598x *tps, u32 status)
->  	typec_set_pwr_opmode(tps->port, TYPEC_PWR_MODE_USB);
->  	typec_set_pwr_role(tps->port, TPS_STATUS_TO_TYPEC_PORTROLE(status));
->  	typec_set_vconn_role(tps->port, TPS_STATUS_TO_TYPEC_VCONN(status));
-> +	typec_set_orientation(tps->port, TYPEC_ORIENTATION_NONE);
->  	tps6598x_set_data_role(tps, TPS_STATUS_TO_TYPEC_DATAROLE(status), false);
->  
->  	power_supply_changed(tps->psy);
-> diff --git a/drivers/usb/typec/tipd/tps6598x.h b/drivers/usb/typec/tipd/tps6598x.h
-> index 3dae84c524fb..527857549d69 100644
-> --- a/drivers/usb/typec/tipd/tps6598x.h
-> +++ b/drivers/usb/typec/tipd/tps6598x.h
-> @@ -17,6 +17,7 @@
->  /* TPS_REG_STATUS bits */
->  #define TPS_STATUS_PLUG_PRESENT		BIT(0)
->  #define TPS_STATUS_PLUG_UPSIDE_DOWN	BIT(4)
-> +#define TPS_STATUS_TO_UPSIDE_DOWN(s)	(!!((s) & TPS_STATUS_PLUG_UPSIDE_DOWN))
->  #define TPS_STATUS_PORTROLE		BIT(5)
->  #define TPS_STATUS_TO_TYPEC_PORTROLE(s) (!!((s) & TPS_STATUS_PORTROLE))
->  #define TPS_STATUS_DATAROLE		BIT(6)
-> -- 
-> 2.25.1
+> I couldn't agree more. And because of that, I stick with the following
+> approach because it's maintainable longer-term than "type(pos) pos" one:
+>  Implements a new macro for each list_for_each_entry* with _inside suffix.
+>   #define list_for_each_entry_inside(pos, type, head, member)
 
-thanks,
+I think that it would be better to make any alternate loop macro
+just set the variable to NULL on the loop exit.
+That is easier to code for and the compiler might be persuaded to
+not redo the test.
 
--- 
-heikki
+It also doesn't need an extra variable defined in the for() statement
+so can be back-ported to older kernels without required declaration
+in the middle of blocks.
+
+OTOH there may be alternative definitions that can be used to get
+the compiler (or other compiler-like tools) to detect broken code.
+Even if the definition can't possibly generate a working kerrnel.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
