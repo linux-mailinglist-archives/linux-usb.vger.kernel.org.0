@@ -2,74 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD0C4CA192
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Mar 2022 10:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B63064CA2A0
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Mar 2022 12:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiCBJ6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Mar 2022 04:58:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
+        id S239015AbiCBLBK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Mar 2022 06:01:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240798AbiCBJ6L (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Mar 2022 04:58:11 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64D0BDE41;
-        Wed,  2 Mar 2022 01:57:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646215039; x=1677751039;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=VVGdFbQA5dpTmH1Oi8imwujW6M34G1DuUPJxrfXUWac=;
-  b=dUJKeVCEss+KIYUuBxj/U2E91CJk4EQBdgVwdxdCiUH7IxQfuWD7ciBE
-   7CTSyFgpqzbdVXtLW0mcWNq7J8kRPZ18sBOU0ZUXVEmY2ky0rSw9aMlH6
-   S+dPvdcG7dZgST+UeOaYlEf1g296G0Vox4JkeCC4li8fuF3CgPIOBtxRO
-   tcjGWlRvmtCknvVFzT5EmYFYRxjoKHyKE6Z6TPvG/mUAx5FK1VGd47s2w
-   CAO8N0OKnJMehp6YSj03+QefFnWqLPSLcHb84M/Kz2WIHu6zeZlrts2Tr
-   +bOCE5qMaBYaM5ifYiinoASp/vYfJoEIOQ6pKOsJRY6pMTMTC0FWz2kNF
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="240777082"
-X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
-   d="scan'208";a="240777082"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 01:57:19 -0800
-X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
-   d="scan'208";a="551182160"
-Received: from abotoi-mobl2.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.218.48])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 01:57:12 -0800
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
-        Johan Hovold <johan@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-api@vger.kernel.org, Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [RFC PATCH 5/7] serial: termbits: ADDRB to indicate 9th bit addressing mode
-Date:   Wed,  2 Mar 2022 11:56:04 +0200
-Message-Id: <20220302095606.14818-6-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com>
-References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com>
+        with ESMTP id S238647AbiCBLBI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Mar 2022 06:01:08 -0500
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57CD6E7A4
+        for <linux-usb@vger.kernel.org>; Wed,  2 Mar 2022 03:00:21 -0800 (PST)
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220302110016epoutp0369ea241fc4e4ac5bc64a395062cd0aca~Yi0qmgT_93076730767epoutp03C
+        for <linux-usb@vger.kernel.org>; Wed,  2 Mar 2022 11:00:16 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220302110016epoutp0369ea241fc4e4ac5bc64a395062cd0aca~Yi0qmgT_93076730767epoutp03C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1646218816;
+        bh=kq8MQbVRkc+bOUL5EisgTWGyifp1Wf2QScEObld1uDc=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=VBiAPt2ZvaQ40xwTA8+UZ8RzRuOIDVE9uv49XxDqKoVuisSMBghbFybAjH7/9Iwru
+         TMNjOQnksf8x/hQ2B2Yy/KLdmU4zQ/C+QSDhP1DvjRKI7NYAEDACoW9CB2yCOo0wyN
+         x7oUTRy6L+AcVZll59VcXkiPT92+vyLyc4V8fRWc=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220302110015epcas1p11e00fb34377d4913a5204264f2a86106~Yi0qGCeoa0938509385epcas1p1j;
+        Wed,  2 Mar 2022 11:00:15 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.38.241]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4K7rk64VW2z4x9Ps; Wed,  2 Mar
+        2022 11:00:14 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7F.25.09592.E3E4F126; Wed,  2 Mar 2022 20:00:14 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220302110014epcas1p48988c9d9e7f43f5ca002f718baa7ae53~Yi0odL9Xt1455414554epcas1p4C;
+        Wed,  2 Mar 2022 11:00:14 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220302110014epsmtrp120570eea30bcef7d260dbef848ee1bda~Yi0ocaG5d0587005870epsmtrp1Q;
+        Wed,  2 Mar 2022 11:00:14 +0000 (GMT)
+X-AuditID: b6c32a37-28fff70000002578-9c-621f4e3e3792
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E7.59.29871.E3E4F126; Wed,  2 Mar 2022 20:00:14 +0900 (KST)
+Received: from yj84jang02 (unknown [10.88.97.211]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220302110013epsmtip2d98d3399c45cf71f6484d5611b47ffdc~Yi0oO1qT42184721847epsmtip2H;
+        Wed,  2 Mar 2022 11:00:13 +0000 (GMT)
+From:   =?ks_c_5601-1987?B?wOW/tcH4L1RWIFMvVyBMYWIoVkQpL1N0YWZmIEVuZ2luZWVyL7vv?=
+         =?ks_c_5601-1987?B?vLrA/MDa?= <yj84.jang@samsung.com>
+To:     "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>
+Cc:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        "'Pavel Machek'" <pavel@ucw.cz>,
+        "'Len Brown'" <len.brown@intel.com>,
+        "'Bjorn Helgaas'" <bhelgaas@google.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <js07.lee@samsung.com>
+In-Reply-To: <Yh8jb/X5ZNFvVQlf@kroah.com>
+Subject: RE: [PATCH] PM: Add device name to suspend_report_result()
+Date:   Wed, 2 Mar 2022 20:00:14 +0900
+Message-ID: <03e001d82e24$b1b0e450$1512acf0$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset="ks_c_5601-1987"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQGYo0TT2vM3t6OMkLszEBoeXVnaDgIOdYpqAcZRUMetDFa0cA==
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOJsWRmVeSWpSXmKPExsWy7bCmrq6dn3ySwbk/ihZLmjIsmhevZ7N4
+        dPM3q8WsKXuZLJbv62e0uLxrDpvF2XnH2Sw+9x5htFi0rJXZ4u6po2wWc79MZXbg9liwqdRj
+        8Z6XTB6bVnWyeeyfu4bdo2/LKkaPFau/s3t83iQXwB6VbZORmpiSWqSQmpecn5KZl26r5B0c
+        7xxvamZgqGtoaWGupJCXmJtqq+TiE6DrlpkDdKKSQlliTilQKCCxuFhJ386mKL+0JFUhI7+4
+        xFYptSAlp8CsQK84Mbe4NC9dLy+1xMrQwMDIFKgwITtj5aeFLAUz5Cre/V/I0sB4W6KLkYND
+        QsBEYsaetC5GLg4hgR2MEnPmH2SCcD4xSrzavIwFwvnGKHGrZSGQwwnWce7zD3aIxF5Gia3H
+        Z0G1PGeU2HPqJFiGTaCdUWLnqtXsIC0iAuYScx8eB0swC1xikrh+aQsjSIJTQFNi5cc7rCC2
+        sICzxN59R8B2sAioSGw8e4sNxOYVsJT4v+IPE4QtKHFy5hOwGmYBI4klq+czQdjyEtvfzmGG
+        uE9B4ufTZawQi50kXl09wQpRIyIxu7ONGeQICYEDHBJbd05ghWhwkejr+cUOYQtLvDq+BcqW
+        knjZ3wZlp0tMfPwWyi6Q+Pt4CdQyY4l3b9dC2YoSO3/PZYRYxifx7msPKySIeSU62oQgSpQl
+        Hp9fzQZhS0qs/72faQKj0iwkr81C8tosJK/NQvLCAkaWVYxiqQXFuempxYYFxvAIT87P3cQI
+        TsFa5jsYp739oHeIkYmD8RCjBAezkgivuLV8khBvSmJlVWpRfnxRaU5q8SFGU2BoT2SWEk3O
+        B2aBvJJ4QxNLAxMzIxMLY0tjMyVx3lXTTicKCaQnlqRmp6YWpBbB9DFxcEo1MFkt29pZp93S
+        l9jl1F4RbTPj9c3Jel/Z620CNjyz67F33fvw3vWPU7beCUlWuqEgf8Yn6dWiu79nmjJsW7WC
+        f/VL8bwNyzaytV8W2av3o3vrmg/rMgJLVjX7uZi7TemzizA5pWtnU143+8058bfKsqdOLLCu
+        3VF/t3fxkqWtj1Z/Oc/VxPAy9lU6w+2FB5NSzrRJnk57I/n2wKviWOmauW9iGc6//NnPl9bE
+        mW5wqoJhsljcu+BPkkmCm5uZuLfde2+cyqEXM0mhq6LuwSk/iR2vJz61eRQ5zah48WXP8qn2
+        fceb368T+tUsclsteVlM+PX3tyS+ODzclRSQp3oqmjd3n9ilM5kikm7ZpZM3/1ZiKc5INNRi
+        LipOBABfkH8OSgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAIsWRmVeSWpSXmKPExsWy7bCSvK6dn3ySwZrr7BZLmjIsmhevZ7N4
+        dPM3q8WsKXuZLJbv62e0uLxrDpvF2XnH2Sw+9x5htFi0rJXZ4u6po2wWc79MZXbg9liwqdRj
+        8Z6XTB6bVnWyeeyfu4bdo2/LKkaPFau/s3t83iQXwB7FZZOSmpNZllqkb5fAlbHy00KWghly
+        Fe/+L2RpYLwt0cXIySEhYCJx7vMP9i5GLg4hgd2MEg+X/mSCSEhKfP30ma2LkQPIFpY4fLgY
+        ouYpo0Tv100sIA6bQDujxM5Vq9lBGkQEzCXmPjwOZjML3GKS+HvIGaJjJaPEteOtYAlOAU2J
+        lR/vsILYwgLOEnv3HWEBsVkEVCQ2nr3FBmLzClhK/F/xhwnCFpQ4OfMJC8RQE4nGw91QtrzE
+        9rdzmCEuVZD4+XQZK8QRThKvrp5ghagRkZjd2cY8gVF4FpJRs5CMmoVk1CwkLQsYWVYxSqYW
+        FOem5xYbFhjmpZbrFSfmFpfmpesl5+duYgRHopbmDsbtqz7oHWJk4mA8xCjBwawkwituLZ8k
+        xJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dUA9Nkq2vyFpMF
+        7k2ZyLl56a/r5x/XHqyaWXFWROdL6qxQQUOVtkqLuefu6N/xE1jZ+Pp8fmed/sp4lvnGQi4n
+        Z28vZ+/5U8rZb2av4Kt0Ma/48UbWGy/a448VKMtszNvM/in7S7TTioMxK/crq1QJfjrLfr3F
+        Ymt29Y54V//zMfofTRd4pK+N2rmLUeW628H+zqYin3v/rYqMJKdE2xtw7WG4cPq0kPujMF11
+        Xe2OPc2BFl6b2AMaJ6zX//H3Pk/8H5F38ml+muv8Fx01NJLbb7m74f1f7q4r2QWOzusZj2ax
+        R+442jFJKjjwy/bKB0wup10b/eQCZZQXK/HwvW/tPX51ZUXS8leJxZ9U9VeEKrEUZyQaajEX
+        FScCAG+lEs8zAwAA
+X-CMS-MailID: 20220302110014epcas1p48988c9d9e7f43f5ca002f718baa7ae53
+X-Msg-Generator: CA
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220302064921epcas1p19fbe8c017d776657caa696a3cef10093
+References: <CGME20220302064921epcas1p19fbe8c017d776657caa696a3cef10093@epcas1p1.samsung.com>
+        <20220302064917.64073-1-yj84.jang@samsung.com> <Yh8jb/X5ZNFvVQlf@kroah.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,210 +124,105 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add ADDRB to termbits to indicate 9th bit addressing mode.
-This change is necessary for supporting devices with RS485
-multipoint addressing [*]. A later patch in the patch series
-adds support for Synopsys Designware UART capable for 9th bit
-addressing mode. In this mode, 9th bit is used to indicate an
-address (byte) within the communication line. The 9th bit
-addressing mode is selected using ADDRB introduced by an earlier
-patch.
+> -----Original Message-----
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: Wednesday, March 2, 2022 4:58 PM
+> To: Youngjin Jang <yj84.jang@samsung.com>
+> Cc: Rafael J. Wysocki <rafael@kernel.org>; Pavel Machek <pavel@ucw.cz>;
+> Len Brown <len.brown@intel.com>; Bjorn Helgaas <bhelgaas@google.com>;
+> linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+> pci@vger.kernel.org; linux-acpi@vger.kernel.org; linux-
+usb@vger.kernel.org;
+> js07.lee@samsung.com
+> Subject: Re: [PATCH] PM: Add device name to suspend_report_result()
+> 
+> On Wed, Mar 02, 2022 at 03:49:17PM +0900, Youngjin Jang wrote:
+> > From: "yj84.jang" <yj84.jang@samsung.com>
+> >
+> > currently, suspend_report_result() prints only function information.
+> > If any driver uses common pm function, nobody knows who called failed
+> > function exactly.
+> >
+> > So, device information is needed to recognize specific wrong driver.
+> >
+> > e.g.)
+> > PM: dpm_run_callback(): pm_generic_suspend+0x0/0x48 returns 0
+> > PM: dpm_run_callback(): platform_pm_suspend+0x0/0x68 returns 0 after
+> > patch,
+> > PM: dpm_run_callback(): pm_generic_suspend+0x0/0x48 (amba) returns 0
+> > PM: dpm_run_callback(): platform_pm_suspend+0x0/0x68 (armv7-pmu)
+> > returns 0
+> >
+> > Signed-off-by: yj84.jang <yj84.jang@samsung.com>
+> > ---
+> >  drivers/base/power/main.c  | 10 +++++-----
+> >  drivers/pci/pci-driver.c   | 14 +++++++-------
+> >  drivers/pnp/driver.c       |  2 +-
+> >  drivers/usb/core/hcd-pci.c |  4 ++--
+> >  include/linux/pm.h         |  8 ++++----
+> >  5 files changed, 19 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> > index 04ea92c..a762fe8 100644
+> > --- a/drivers/base/power/main.c
+> > +++ b/drivers/base/power/main.c
+> > @@ -485,7 +485,7 @@ static int dpm_run_callback(pm_callback_t cb, struct
+> device *dev,
+> >  	trace_device_pm_callback_start(dev, info, state.event);
+> >  	error = cb(dev);
+> >  	trace_device_pm_callback_end(dev, error);
+> > -	suspend_report_result(cb, error);
+> > +	suspend_report_result(dev, cb, error);
+> >
+> >  	initcall_debug_report(dev, calltime, cb, error);
+> >
+> > @@ -1568,7 +1568,7 @@ static int legacy_suspend(struct device *dev,
+> pm_message_t state,
+> >  	trace_device_pm_callback_start(dev, info, state.event);
+> >  	error = cb(dev, state);
+> >  	trace_device_pm_callback_end(dev, error);
+> > -	suspend_report_result(cb, error);
+> > +	suspend_report_result(dev, cb, error);
+> >
+> >  	initcall_debug_report(dev, calltime, cb, error);
+> >
+> > @@ -1855,7 +1855,7 @@ static int device_prepare(struct device *dev,
+> pm_message_t state)
+> >  	device_unlock(dev);
+> >
+> >  	if (ret < 0) {
+> > -		suspend_report_result(callback, ret);
+> > +		suspend_report_result(dev, callback, ret);
+> >  		pm_runtime_put(dev);
+> >  		return ret;
+> >  	}
+> > @@ -1960,10 +1960,10 @@ int dpm_suspend_start(pm_message_t state)  }
+> > EXPORT_SYMBOL_GPL(dpm_suspend_start);
+> >
+> > -void __suspend_report_result(const char *function, void *fn, int ret)
+> > +void __suspend_report_result(const char *function, struct device
+> > +*dev, void *fn, int ret)
+> >  {
+> >  	if (ret)
+> > -		pr_err("%s(): %pS returns %d\n", function, fn, ret);
+> > +		pr_err("%s(): %pS (%s) returns %d\n", function, fn,
+> > +dev_driver_string(dev), ret);
+> 
+> If you have a struct device, please use dev_err().
+> 
+> thanks,
+> 
+> greg k-h
 
-[*] Technically, RS485 is just an electronic spec and does not
-itself specify the 9th bit addressing mode but 9th bit seems
-at least "semi-standard" way to do addressing with RS485.
+Hello,
+Thanks for your review.
 
-Cc: linux-api@vger.kernel.org
-Cc: Richard Henderson <rth@twiddle.net>
-Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: linux-alpha@vger.kernel.org
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: linux-parisc@vger.kernel.org
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: sparclinux@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- arch/alpha/include/uapi/asm/termbits.h   | 1 +
- arch/mips/include/uapi/asm/termbits.h    | 1 +
- arch/parisc/include/uapi/asm/termbits.h  | 1 +
- arch/powerpc/include/uapi/asm/termbits.h | 1 +
- arch/sparc/include/uapi/asm/termbits.h   | 1 +
- drivers/tty/amiserial.c                  | 6 +++++-
- drivers/tty/moxa.c                       | 1 +
- drivers/tty/mxser.c                      | 1 +
- drivers/tty/serial/serial_core.c         | 2 ++
- drivers/tty/tty_ioctl.c                  | 2 ++
- drivers/usb/serial/usb-serial.c          | 5 +++--
- include/uapi/asm-generic/termbits.h      | 1 +
- 12 files changed, 20 insertions(+), 3 deletions(-)
+I think dev_err() is nice option, but we can see a minor issue.
+Prefix log "PM: " would be lost, If I use dev_err() in this context.
+As you know, all logs in power management include "PM :" prefix.
 
-diff --git a/arch/alpha/include/uapi/asm/termbits.h b/arch/alpha/include/uapi/asm/termbits.h
-index 4575ba34a0ea..285169c794ec 100644
---- a/arch/alpha/include/uapi/asm/termbits.h
-+++ b/arch/alpha/include/uapi/asm/termbits.h
-@@ -180,6 +180,7 @@ struct ktermios {
- #define HUPCL	00040000
- 
- #define CLOCAL	00100000
-+#define ADDRB	010000000		/* address bit */
- #define CMSPAR	  010000000000		/* mark or space (stick) parity */
- #define CRTSCTS	  020000000000		/* flow control */
- 
-diff --git a/arch/mips/include/uapi/asm/termbits.h b/arch/mips/include/uapi/asm/termbits.h
-index dfeffba729b7..e7ea31cfec78 100644
---- a/arch/mips/include/uapi/asm/termbits.h
-+++ b/arch/mips/include/uapi/asm/termbits.h
-@@ -181,6 +181,7 @@ struct ktermios {
- #define	 B3000000 0010015
- #define	 B3500000 0010016
- #define	 B4000000 0010017
-+#define ADDRB	  0020000	/* address bit */
- #define CIBAUD	  002003600000	/* input baud rate */
- #define CMSPAR	  010000000000	/* mark or space (stick) parity */
- #define CRTSCTS	  020000000000	/* flow control */
-diff --git a/arch/parisc/include/uapi/asm/termbits.h b/arch/parisc/include/uapi/asm/termbits.h
-index 40e920f8d683..629be061f5d5 100644
---- a/arch/parisc/include/uapi/asm/termbits.h
-+++ b/arch/parisc/include/uapi/asm/termbits.h
-@@ -158,6 +158,7 @@ struct ktermios {
- #define  B3000000 0010015
- #define  B3500000 0010016
- #define  B4000000 0010017
-+#define ADDRB	  0020000		/* address bit */
- #define CIBAUD    002003600000		/* input baud rate */
- #define CMSPAR    010000000000          /* mark or space (stick) parity */
- #define CRTSCTS   020000000000          /* flow control */
-diff --git a/arch/powerpc/include/uapi/asm/termbits.h b/arch/powerpc/include/uapi/asm/termbits.h
-index ed18bc61f63d..1b778ac562a4 100644
---- a/arch/powerpc/include/uapi/asm/termbits.h
-+++ b/arch/powerpc/include/uapi/asm/termbits.h
-@@ -171,6 +171,7 @@ struct ktermios {
- #define HUPCL	00040000
- 
- #define CLOCAL	00100000
-+#define ADDRB	00200000		/* address bit */
- #define CMSPAR	  010000000000		/* mark or space (stick) parity */
- #define CRTSCTS	  020000000000		/* flow control */
- 
-diff --git a/arch/sparc/include/uapi/asm/termbits.h b/arch/sparc/include/uapi/asm/termbits.h
-index ce5ad5d0f105..4ad60c4acf65 100644
---- a/arch/sparc/include/uapi/asm/termbits.h
-+++ b/arch/sparc/include/uapi/asm/termbits.h
-@@ -200,6 +200,7 @@ struct ktermios {
- #define B3000000  0x00001011
- #define B3500000  0x00001012
- #define B4000000  0x00001013  */
-+#define ADDRB	  0x00002000  /* address bit */
- #define CIBAUD	  0x100f0000  /* input baud rate (not used) */
- #define CMSPAR	  0x40000000  /* mark or space (stick) parity */
- #define CRTSCTS	  0x80000000  /* flow control */
-diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
-index 533d02b38e02..3ca97007bd6e 100644
---- a/drivers/tty/amiserial.c
-+++ b/drivers/tty/amiserial.c
-@@ -1175,7 +1175,11 @@ static void rs_set_termios(struct tty_struct *tty, struct ktermios *old_termios)
- {
- 	struct serial_state *info = tty->driver_data;
- 	unsigned long flags;
--	unsigned int cflag = tty->termios.c_cflag;
-+	unsigned int cflag;
-+
-+	tty->termios.c_cflag &= ~ADDRB;
-+
-+	cflag = tty->termios.c_cflag;
- 
- 	change_speed(tty, info, old_termios);
- 
-diff --git a/drivers/tty/moxa.c b/drivers/tty/moxa.c
-index f3c72ab1476c..07cd88152d58 100644
---- a/drivers/tty/moxa.c
-+++ b/drivers/tty/moxa.c
-@@ -2050,6 +2050,7 @@ static int MoxaPortSetTermio(struct moxa_port *port, struct ktermios *termio,
- 
- 	ofsAddr = port->tableAddr;
- 
-+	termio->c_cflag &= ~ADDRB;
- 	mode = termio->c_cflag & CSIZE;
- 	if (mode == CS5)
- 		mode = MX_CS5;
-diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
-index 836c9eca2946..220676363a07 100644
---- a/drivers/tty/mxser.c
-+++ b/drivers/tty/mxser.c
-@@ -577,6 +577,7 @@ static void mxser_change_speed(struct tty_struct *tty, struct ktermios *old_term
- 	struct mxser_port *info = tty->driver_data;
- 	unsigned cflag, cval;
- 
-+	tty->termios.c_cflag &= ~ADDRB;
- 	cflag = tty->termios.c_cflag;
- 
- 	if (mxser_set_baud(tty, tty_get_baud_rate(tty))) {
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 846192a7b4bf..8ab88293c917 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -1489,6 +1489,8 @@ static void uart_set_termios(struct tty_struct *tty,
- 		goto out;
- 	}
- 
-+	tty->termios.c_cflag &= ~ADDRB;
-+
- 	uart_change_speed(tty, state, old_termios);
- 	/* reload cflag from termios; port driver may have overridden flags */
- 	cflag = tty->termios.c_cflag;
-diff --git a/drivers/tty/tty_ioctl.c b/drivers/tty/tty_ioctl.c
-index 63181925ec1a..934037d78868 100644
---- a/drivers/tty/tty_ioctl.c
-+++ b/drivers/tty/tty_ioctl.c
-@@ -319,6 +319,8 @@ unsigned char tty_get_frame_size(unsigned int cflag)
- 		bits++;
- 	if (cflag & PARENB)
- 		bits++;
-+	if (cflag & ADDRB)
-+		bits++;
- 
- 	return bits;
- }
-diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
-index 24101bd7fcad..44b73aea80bb 100644
---- a/drivers/usb/serial/usb-serial.c
-+++ b/drivers/usb/serial/usb-serial.c
-@@ -525,9 +525,10 @@ static void serial_set_termios(struct tty_struct *tty, struct ktermios *old)
- 
- 	dev_dbg(&port->dev, "%s\n", __func__);
- 
--	if (port->serial->type->set_termios)
-+	if (port->serial->type->set_termios) {
-+		tty->termios.c_cflag &= ~ADDRB;
- 		port->serial->type->set_termios(tty, port, old);
--	else
-+	} else
- 		tty_termios_copy_hw(&tty->termios, old);
- }
- 
-diff --git a/include/uapi/asm-generic/termbits.h b/include/uapi/asm-generic/termbits.h
-index 2fbaf9ae89dd..5f5228329d45 100644
---- a/include/uapi/asm-generic/termbits.h
-+++ b/include/uapi/asm-generic/termbits.h
-@@ -157,6 +157,7 @@ struct ktermios {
- #define  B3000000 0010015
- #define  B3500000 0010016
- #define  B4000000 0010017
-+#define ADDRB     0020000	/* address bit */
- #define CIBAUD	  002003600000	/* input baud rate */
- #define CMSPAR	  010000000000	/* mark or space (stick) parity */
- #define CRTSCTS	  020000000000	/* flow control */
--- 
-2.30.2
+So, I think pr_err() with detail information would be better than dev_err().
+- PM: amba 1740000.etm: dpm_run_callback(): pm_generic_resume+0x0/0x48
+returns 0
+
 
