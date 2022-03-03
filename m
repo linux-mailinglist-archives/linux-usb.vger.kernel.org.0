@@ -2,232 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2639B4CBEA3
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 14:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D814CBE9A
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 14:13:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233632AbiCCNQf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Mar 2022 08:16:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
+        id S233424AbiCCNO2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Mar 2022 08:14:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233626AbiCCNQb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 08:16:31 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2080.outbound.protection.outlook.com [40.107.243.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48DF170D79;
-        Thu,  3 Mar 2022 05:15:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oaTEVTJjqNJczV8KoARWHTwZ/9RxHMv9zQEOra8ZtnBpyN4ODTfdjhpfHUHoJeg2fFKFffEq+u+CUXy3uxNddTMaAJhaAUl4PN6QbPCt5UdSTMNyvC3KtjIlaiGFjp29KVaGSb1r4u91T+Qqev3IQbds/YBuyDMB1HAFUKwc4P46wHqiBbcUwzZUGYDJ1uGMU3wC2Xv1zzY5NrvxM+iZBHdQ6p1M+G1jxsj+pMiFzIa/kmhJJ+yItMAtZIg/z5AD3Cfq8Zvj6t+KDXsSlOVzOkdpaWWe+u/2zwdMSAsyOxa81ZnLbrC2T6zQg+WXBqp1KtJbZbPEWejcKhfvD3szmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E2NRF3zG5GTlITHNDIEFEyDjbn3EZCXYSkaV3O9354A=;
- b=JRyxOK9A84qnfZ5gE/r8/YNzX/zE0sps3bnCnvLrRMUfEHZ+vM/vIXCde7kAQ1VSaHoAy8f9Na31yNjrvqSRcri3NwAURMg6+CI/r82UcTWTwj5FFhHAv/KiL9giYDVTz7kONFq9CPpRIsnZ776Kfiy435ah2LomAhqZVCru4+2DUfDpCYviI7YjRMP+0ckzc7hNlyzhu8MFEhUsa7NnejSQYVVWZ5mSdEwNMM2ZciKBBjMiGNmCDmyeWLg6mui7Zw2hKJeoi9C3w3sWAkafueWGtFbiQm3VlIJ3CoxpPuMWUlvJTMeShULBlmDEpPo1tMzt4TqzUltKbnnkicJmzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E2NRF3zG5GTlITHNDIEFEyDjbn3EZCXYSkaV3O9354A=;
- b=veoQ1JT9iQLvAzYQff48q3DQugpGcaoyfVTRF3RYI/MHjyCDLNwCp2uvOIcBNQxXDnu7+/OO0jtdsvEX6uMTHLJoecWLInuOFqCEZegRkuIBeAfeLyOQJPb9PchNdpk71FN9AvZCX/4D1zQEKLRCZ0WtOQorJrDU/CeVoGVnSjE=
-Received: from DM5PR20CA0032.namprd20.prod.outlook.com (2603:10b6:3:13d::18)
- by DM6PR12MB2810.namprd12.prod.outlook.com (2603:10b6:5:41::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Thu, 3 Mar
- 2022 13:15:43 +0000
-Received: from DM6NAM11FT028.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:13d:cafe::d2) by DM5PR20CA0032.outlook.office365.com
- (2603:10b6:3:13d::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14 via Frontend
- Transport; Thu, 3 Mar 2022 13:15:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT028.mail.protection.outlook.com (10.13.173.140) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5038.14 via Frontend Transport; Thu, 3 Mar 2022 13:15:42 +0000
-Received: from localhost.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 3 Mar
- 2022 07:15:39 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-CC:     "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <Sanju.Mehta@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v2 5/5] thunderbolt: Rename EEPROM handling bits to match USB4 spec
-Date:   Thu, 3 Mar 2022 07:13:28 -0600
-Message-ID: <20220303131328.4150454-5-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220303131328.4150454-1-mario.limonciello@amd.com>
-References: <20220303131328.4150454-1-mario.limonciello@amd.com>
+        with ESMTP id S233602AbiCCNOW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 08:14:22 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E626C1704CD;
+        Thu,  3 Mar 2022 05:13:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646313216; x=1677849216;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ma2qRpZmEUOKw4dAaXn2anSNBJxLgIsqf7L4gdroyXc=;
+  b=IT/ALg5Of+VrwgELoruyecOXbnwlFf/A3uA1oNh5PRKAbG9KBPFbdT5t
+   ZYhoq+aBzV3jjF5uyifWO2gTIV0VNBt++MHBNwSCWSpZI3f5hW2RPv4zN
+   q1KVI6UskcK3Zcm02kQNLuhyE9DP2Ms9v1H1MJhyGOC9+SY8CCw7utPl4
+   YKeC6tWbnzX2ZAcllKWL1YDZvdJqPPGxnZchX8Lba4Yqcsgt079AWH75w
+   wDOUhoLxDt78sBP22T3lO2lHBEUmamsMLZYUeEXrtFbtQ+RclOXGxVlLZ
+   kDLaAbbP1zll7oALUdbwQRIB/x6cV7fstrFtSagNy9XtU7M+uBoIMXozG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="340102488"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="340102488"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 05:13:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="686498504"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 03 Mar 2022 05:13:33 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 03 Mar 2022 15:13:33 +0200
+Date:   Thu, 3 Mar 2022 15:13:33 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Xin Ji <xji@analogixsemi.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] usb: typec: anx7411: Add Analogix PD ANX7411
+ support
+Message-ID: <YiC+/ccRvR/+mAkT@kuha.fi.intel.com>
+References: <20220223102353.3833578-1-xji@analogixsemi.com>
+ <20220223102353.3833578-2-xji@analogixsemi.com>
+ <Yh9dBlrWm3OicQWa@kuha.fi.intel.com>
+ <20220303024757.GA4159259@anxtwsw-Precision-3640-Tower>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3bfff270-3284-441d-796c-08d9fd17eb4f
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2810:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB28109BB204388D847909C219E2049@DM6PR12MB2810.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TZZXV5bRR4MBMUposappupUu1nt3kSr+0nALr/WYBFM0NIliZTamDwhJZvPihi9eUMqPXliRSEbsPBMUbGTyii8iHKTlatJvu4DqtBcDlId00HiyfM3eokIRqLtIEyK/xmRN73/ZGXW9P4ebltYwXE1c4KI8O/n4GXxcPkdAGoWgY4ri90q/UmDKI0FIX62KVTCmV7FWIYteNf3qk1UcbeyTO0D7UjMimUfFq/j5Gtb54ywxFJ/rnzlWKb80D3hWrK5/6nvJ72tsqTdUZFKNeNJRz3m3m9nH0d0rvoHGbgoLTWN7wmLOO9wcRjeaR7Yw96hH7KGFj3lmFpQEnK7imlj6iCOmuLnr0FyxMC6PNiVNKs7153VqhOjBlpM7wrSzUfGsgghZuJXVKDl5smq03tt6aqlVaSFkLyPUni3YaofmxjehGc3jBbmQ39njloAlCkMePJCJv4jiRqDSmMjoeXvJJJ50nk2xH1AVFVTAX3g93+720LhlEznOb5opyL2sz4npUn3474ZRwTtEIajBKXPY6SdyMB+YDBEkrYjQln3j/+xho2NLtoDQDuZP0ooQ1S0SthTxVSEIMMp1zQeofQFLaDKLD1vFJgysLApsQaF3GlJ/bnjB0OCmqO7eNCT4KHb3t0lqxHTPGywtZUSps2n8wUeXJOoXzs/GYI8F53x5pcPFJzb1HoVQRLfpcE2L8tj+jfPicJxsdXREVqvjZA7vrsg1PK2/3vvQulXnV2s94bObKyNvTnVh9W5eCQOs
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(356005)(81166007)(6666004)(82310400004)(186003)(16526019)(2616005)(1076003)(26005)(36860700001)(336012)(83380400001)(54906003)(66574015)(426003)(44832011)(36756003)(86362001)(47076005)(70206006)(70586007)(8936002)(8676002)(4326008)(5660300002)(316002)(40460700003)(6916009)(2906002)(508600001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 13:15:42.2471
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3bfff270-3284-441d-796c-08d9fd17eb4f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT028.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2810
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220303024757.GA4159259@anxtwsw-Precision-3640-Tower>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The structure `tb_eeprom_ctl` is used to show the bits accessed when
-reading/writing EEPROM.
+On Thu, Mar 03, 2022 at 10:47:57AM +0800, Xin Ji wrote:
+> On Wed, Mar 02, 2022 at 02:03:18PM +0200, Heikki Krogerus wrote:
+> > Hi,
+> > 
+> > This does not apply on top of Greg's latest usb-next branch. You need
+> > to rebase this. There are also a few more nitpicks below.
+> 
+> Hi, I didn't found tcpci.h in include/linux/usb/
 
-As this structure is specified in the USB4 spec as `VSC_CS_4` update
-the names and use of members to match the specification. This should not
-change anything functionally.
+I'm asking you to create the file.
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v1->v2:
- * Update commit message
- drivers/thunderbolt/eeprom.c  | 24 ++++++++++++------------
- drivers/thunderbolt/tb_regs.h | 10 +++++-----
- 2 files changed, 17 insertions(+), 17 deletions(-)
+So create a separate patch where you move the register definitions and
+command definitions from drivers/usb/typec/tcpm/tcpci.h to
+include/linux/usb/tcpci.h
 
-diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
-index 10cdbcb55df9..c90d22f56d4e 100644
---- a/drivers/thunderbolt/eeprom.c
-+++ b/drivers/thunderbolt/eeprom.c
-@@ -17,7 +17,7 @@
-  */
- static int tb_eeprom_ctl_write(struct tb_switch *sw, struct tb_eeprom_ctl *ctl)
- {
--	return tb_sw_write(sw, ctl, TB_CFG_SWITCH, sw->cap_plug_events + 4, 1);
-+	return tb_sw_write(sw, ctl, TB_CFG_SWITCH, sw->cap_plug_events + ROUTER_CS_4, 1);
- }
- 
- /*
-@@ -25,7 +25,7 @@ static int tb_eeprom_ctl_write(struct tb_switch *sw, struct tb_eeprom_ctl *ctl)
-  */
- static int tb_eeprom_ctl_read(struct tb_switch *sw, struct tb_eeprom_ctl *ctl)
- {
--	return tb_sw_read(sw, ctl, TB_CFG_SWITCH, sw->cap_plug_events + 4, 1);
-+	return tb_sw_read(sw, ctl, TB_CFG_SWITCH, sw->cap_plug_events + ROUTER_CS_4, 1);
- }
- 
- enum tb_eeprom_transfer {
-@@ -46,18 +46,18 @@ static int tb_eeprom_active(struct tb_switch *sw, bool enable)
- 	if (res)
- 		return res;
- 	if (enable) {
--		ctl.access_high = 1;
-+		ctl.bit_banging_enable = 1;
- 		res = tb_eeprom_ctl_write(sw, &ctl);
- 		if (res)
- 			return res;
--		ctl.access_low = 0;
-+		ctl.fl_cs = 0;
- 		return tb_eeprom_ctl_write(sw, &ctl);
- 	} else {
--		ctl.access_low = 1;
-+		ctl.fl_cs = 1;
- 		res = tb_eeprom_ctl_write(sw, &ctl);
- 		if (res)
- 			return res;
--		ctl.access_high = 0;
-+		ctl.bit_banging_enable = 0;
- 		return tb_eeprom_ctl_write(sw, &ctl);
- 	}
- }
-@@ -65,8 +65,8 @@ static int tb_eeprom_active(struct tb_switch *sw, bool enable)
- /*
-  * tb_eeprom_transfer - transfer one bit
-  *
-- * If TB_EEPROM_IN is passed, then the bit can be retrieved from ctl->data_in.
-- * If TB_EEPROM_OUT is passed, then ctl->data_out will be written.
-+ * If TB_EEPROM_IN is passed, then the bit can be retrieved from ctl->fl_do.
-+ * If TB_EEPROM_OUT is passed, then ctl->fl_di will be written.
-  */
- static int tb_eeprom_transfer(struct tb_switch *sw, struct tb_eeprom_ctl *ctl,
- 			      enum tb_eeprom_transfer direction)
-@@ -77,7 +77,7 @@ static int tb_eeprom_transfer(struct tb_switch *sw, struct tb_eeprom_ctl *ctl,
- 		if (res)
- 			return res;
- 	}
--	ctl->clock = 1;
-+	ctl->fl_sk = 1;
- 	res = tb_eeprom_ctl_write(sw, ctl);
- 	if (res)
- 		return res;
-@@ -86,7 +86,7 @@ static int tb_eeprom_transfer(struct tb_switch *sw, struct tb_eeprom_ctl *ctl,
- 		if (res)
- 			return res;
- 	}
--	ctl->clock = 0;
-+	ctl->fl_sk = 0;
- 	return tb_eeprom_ctl_write(sw, ctl);
- }
- 
-@@ -101,7 +101,7 @@ static int tb_eeprom_out(struct tb_switch *sw, u8 val)
- 	if (res)
- 		return res;
- 	for (i = 0; i < 8; i++) {
--		ctl.data_out = val & 0x80;
-+		ctl.fl_di = val & 0x80;
- 		res = tb_eeprom_transfer(sw, &ctl, TB_EEPROM_OUT);
- 		if (res)
- 			return res;
-@@ -126,7 +126,7 @@ static int tb_eeprom_in(struct tb_switch *sw, u8 *val)
- 		res = tb_eeprom_transfer(sw, &ctl, TB_EEPROM_IN);
- 		if (res)
- 			return res;
--		*val |= ctl.data_in;
-+		*val |= ctl.fl_do;
- 	}
- 	return 0;
- }
-diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-index db3005cba203..b301eeb0c89b 100644
---- a/drivers/thunderbolt/tb_regs.h
-+++ b/drivers/thunderbolt/tb_regs.h
-@@ -133,11 +133,11 @@ struct tb_cap_phy {
- } __packed;
- 
- struct tb_eeprom_ctl {
--	bool clock:1; /* send pulse to transfer one bit */
--	bool access_low:1; /* set to 0 before access */
--	bool data_out:1; /* to eeprom */
--	bool data_in:1; /* from eeprom */
--	bool access_high:1; /* set to 1 before access */
-+	bool fl_sk:1; /* send pulse to transfer one bit */
-+	bool fl_cs:1; /* set to 0 before access */
-+	bool fl_di:1; /* to eeprom */
-+	bool fl_do:1; /* from eeprom */
-+	bool bit_banging_enable:1; /* set to 1 before access */
- 	bool not_present:1; /* should be 0 */
- 	bool unknown1:1;
- 	bool present:1; /* should be 1 */
+thanks,
+
 -- 
-2.34.1
-
+heikki
