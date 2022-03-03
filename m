@@ -2,57 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BF34CC475
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 18:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E39424CC607
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 20:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235063AbiCCR63 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Mar 2022 12:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        id S235098AbiCCTaO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Mar 2022 14:30:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiCCR63 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 12:58:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB686710D7;
-        Thu,  3 Mar 2022 09:57:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6D9FB81DB8;
-        Thu,  3 Mar 2022 17:57:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26E72C340F0;
-        Thu,  3 Mar 2022 17:57:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646330260;
-        bh=hY8rAyb1zsetbVzg5OgbfUyuPVMG9GYiD0/OIrED5wE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=MYtflfLlh9TiDIXibSAM3pECoM8IbJp/05QsspbsKvZKkl5j4EUgMmodgp2cjdhMF
-         JTZmmwKMzxtj93Qne9s/wvdqDNlzdXG3hCnWhvtR6nVLTrQPaNra7nV1f90JR7QWSu
-         7T1Zy72GRHqDvy5VKoVwueQpSXaAWRhn4Ua/a6QC0Xc6n1npHP9CFEe8JCH2CCH+2K
-         5KLkN1opATv48ZWhgJx4cK5ypHTH6OP8R8nuErFkIY8gi+mEPrre+XgjPXlFqBzCXx
-         CMelsAhubwzk4WOjMRd+12xrL1f5UMJWpla+zs15nXAbU5nLoizleMGTIYg+AqpWIs
-         4/20pPLfFu4yg==
-Date:   Thu, 3 Mar 2022 11:57:38 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     =?utf-8?B?7J6l7JiB7KeEL1RWIFMvVyBMYWIoVkQpL1N0YWZmIEVuZ2luZWVyL+yCvA==?=
-         =?utf-8?B?7ISx7KCE7J6Q?= <yj84.jang@samsung.com>
-Cc:     'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
-        "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        'Pavel Machek' <pavel@ucw.cz>,
-        'Len Brown' <len.brown@intel.com>,
-        'Bjorn Helgaas' <bhelgaas@google.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-usb@vger.kernel.org, js07.lee@samsung.com
-Subject: Re: [PATCH] PM: Add device name to suspend_report_result()
-Message-ID: <20220303175738.GA818511@bhelgaas>
+        with ESMTP id S232432AbiCCTaN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 14:30:13 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2D418E436
+        for <linux-usb@vger.kernel.org>; Thu,  3 Mar 2022 11:29:27 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id z9-20020a6be009000000b00640d453b0fdso4085806iog.8
+        for <linux-usb@vger.kernel.org>; Thu, 03 Mar 2022 11:29:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=RvfzRuIjzXeV56b1mRFLXFY+p/ycge3TMt6j8QIdRXg=;
+        b=0BdCA5ch899Vna1eEvK0YVK0aQLud4n8PghHPCajKJiyQOEgP9IDD5D92P9eDDv3hv
+         4Ko7PyD4Ib3wx7pjSxzd2Dg28IcL0zYQeRbT7IZA+pP+iOrfp4ue5w8ugZ0YWxO02kz/
+         SLUnF/CxBe9KeqhtHI3cZicov1/z/pqJ+yTCs6nTDqF53rPlPowk1YL3X2TreEXOpe49
+         XMtdJ0fMVgRb3XXShSqPL3tb9CBMzVQtDW7SZBrgrumc0WISt5Q8emohr04BdKMrRX+r
+         mL7YPG48FoPfqmBaIFScoBnzezb8P/+TzFBEigVirYGXFzxeHh+qdEJkdAz0ZKneIpLd
+         4vsg==
+X-Gm-Message-State: AOAM531TAjt3JkpDAKwCwR+VMRmy3cwO6vHlpdR/hqPbIs5l/5EzKv2V
+        rlJsyCS3jIKGIas3PS5FRQlbC68TAhrMAueofgbt4RQypMbT
+X-Google-Smtp-Source: ABdhPJzUTAaA/byxOffRax7TszOB4dPGuWt1MdkQS0ngFiiHxVQpxAFrKZZu9OzlQwtoxwNuGlvNJDnknDD5HUyikzlUMeUyBzoc
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <044701d82e88$c5edb6f0$51c924d0$@samsung.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a02:69cc:0:b0:314:3518:780b with SMTP id
+ e195-20020a0269cc000000b003143518780bmr29956636jac.133.1646335766948; Thu, 03
+ Mar 2022 11:29:26 -0800 (PST)
+Date:   Thu, 03 Mar 2022 11:29:26 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000091f0b805d9556a82@google.com>
+Subject: [syzbot] WARNING in usbtmc_ioctl/usb_submit_urb
+From:   syzbot <syzbot+a48e3d1a875240cab5de@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,62 +53,77 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 07:56:37AM +0900, 장영진/TV S/W Lab(VD)/Staff Engineer/삼성전자 wrote:
-> > -----Original Message-----
-> > From: Bjorn Helgaas <helgaas@kernel.org>
-> > Sent: Thursday, March 3, 2022 5:16 AM
-> > To: 'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>
-> > Cc: �念��/TV S/W Lab(VD)/Staff Engineer/�Ｚ���� <yj84.jang@samsung.com>;
-> > 'Rafael J. Wysocki' <rafael@kernel.org>; 'Pavel Machek' <pavel@ucw.cz>;
-> > 'Len Brown' <len.brown@intel.com>; 'Bjorn Helgaas' <bhelgaas@google.com>;
-> > linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
-> > pci@vger.kernel.org; linux-acpi@vger.kernel.org; linux-usb@vger.kernel.org;
-> > js07.lee@samsung.com
-> > Subject: Re: [PATCH] PM: Add device name to suspend_report_result()
-> > 
-> > On Wed, Mar 02, 2022 at 03:52:51PM +0100, 'Greg Kroah-Hartman' wrote:
-> > > On Wed, Mar 02, 2022 at 08:00:14PM +0900,  念  /TV S/W Lab(VD)/Staff
-> > Engineer/ Ｚ     wrote:
-> > > > > -----Original Message-----
-> > > > > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > > Sent: Wednesday, March 2, 2022 4:58 PM
-> > > > > To: Youngjin Jang <yj84.jang@samsung.com>
-> > > > > Cc: Rafael J. Wysocki <rafael@kernel.org>; Pavel Machek
-> > > > > <pavel@ucw.cz>; Len Brown <len.brown@intel.com>; Bjorn Helgaas
-> > > > > <bhelgaas@google.com>; linux-pm@vger.kernel.org;
-> > > > > linux-kernel@vger.kernel.org; linux- pci@vger.kernel.org;
-> > > > > linux-acpi@vger.kernel.org; linux-
-> > > > usb@vger.kernel.org;
-> > > > > js07.lee@samsung.com
-> > > > > Subject: Re: [PATCH] PM: Add device name to
-> > > > > suspend_report_result()
-> > > > >
-> > > > > On Wed, Mar 02, 2022 at 03:49:17PM +0900, Youngjin Jang wrote:
-> > > > > > From: "yj84.jang" <yj84.jang@samsung.com>
+Hello,
 
-> > > > > > -		pr_err("%s(): %pS returns %d\n", function, fn, ret);
-> > > > > > +		pr_err("%s(): %pS (%s) returns %d\n", function, fn,
-> > > > > > +dev_driver_string(dev), ret);
-> > > > >
-> > > > > If you have a struct device, please use dev_err().
-> > > >
-> > > > I think dev_err() is nice option, but we can see a minor issue.
-> > > > Prefix log "PM: " would be lost, If I use dev_err() in this context.
-> > > > As you know, all logs in power management include "PM :" prefix.
-> > >
-> > > Why does that matter?  Fix them all to use the struct device pointer
-> > > and then they will be properly unified with the rest of the kernel log
-> > > infrastructure.
-> > 
-> > You can #define dev_fmt if you need a prefix.
-> 
-> I tested dev_fmt before, but I feel that not a good solution.
-> Because the readability is not so great than I expected.
-> I didn't want to break the PM logging rules.
+syzbot found the following issue on:
 
-I didn't catch your meaning here.  Some examples would probably help.
+HEAD commit:    2293be58d6a1 Merge tag 'trace-v5.17-rc4' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=166215b6700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4b9a7fa580ff2b33
+dashboard link: https://syzkaller.appspot.com/bug?extid=a48e3d1a875240cab5de
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=172cdd12700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=170790e6700000
 
-The patch above is from __suspend_report_result() in
-drivers/base/power/main.c.  That file already defines both pr_fmt and
-dev_fmt to be "PM: ", so I would expect dev_err() output to already
-include "PM: ".
+Bisection is inconclusive: the issue happens on the oldest tested release.
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15f51482700000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=17f51482700000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13f51482700000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a48e3d1a875240cab5de@syzkaller.appspotmail.com
+
+usb 5-1: BOGUS control dir, pipe 80001e80 doesn't match bRequestType 0
+WARNING: CPU: 0 PID: 3813 at drivers/usb/core/urb.c:412 usb_submit_urb+0x13a5/0x1970 drivers/usb/core/urb.c:410
+Modules linked in:
+CPU: 0 PID: 3813 Comm: syz-executor122 Not tainted 5.17.0-rc5-syzkaller-00306-g2293be58d6a1 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:usb_submit_urb+0x13a5/0x1970 drivers/usb/core/urb.c:410
+Code: 4c 24 38 8a 04 01 84 c0 0f 85 ad 05 00 00 45 0f b6 06 48 c7 c7 c0 f0 26 8b 48 8b 74 24 20 4c 89 e2 89 d9 31 c0 e8 3b 4b 58 fb <0f> 0b e9 0b f0 ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c a8 ed ff
+RSP: 0018:ffffc90002c3fa40 EFLAGS: 00010246
+RAX: 1323d10499d7ec00 RBX: 0000000080001e80 RCX: ffff88801c2c5700
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff816aea02 R09: fffffbfff1ffbbde
+R10: fffffbfff1ffbbde R11: 0000000000000000 R12: ffff88801d757618
+R13: ffff88801d79d000 R14: ffff88801da98b18 R15: ffff88807a91f0a8
+FS:  00005555574a2300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa78ffa04d0 CR3: 00000000195f0000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ usb_start_wait_urb+0x113/0x530 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x2a5/0x4b0 drivers/usb/core/message.c:153
+ usbtmc_ioctl_request drivers/usb/class/usbtmc.c:1947 [inline]
+ usbtmc_ioctl+0x164e/0x20e0 drivers/usb/class/usbtmc.c:2090
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fe3805832a9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffec2198ee8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007fe3805832a9
+RDX: 0000000020000140 RSI: 00000000c0105b08 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
+R10: 000000000000000f R11: 0000000000000246 R12: 00000000000530bd
+R13: 00007ffec2198efc R14: 00007ffec2198f10 R15: 00007ffec2198f00
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
