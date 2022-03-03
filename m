@@ -2,220 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A264CC46C
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 18:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BF34CC475
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 18:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234039AbiCCRz0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Mar 2022 12:55:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
+        id S235063AbiCCR63 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Mar 2022 12:58:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234593AbiCCRzY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 12:55:24 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F95163D71
-        for <linux-usb@vger.kernel.org>; Thu,  3 Mar 2022 09:54:36 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id f8so7618670edf.10
-        for <linux-usb@vger.kernel.org>; Thu, 03 Mar 2022 09:54:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RQc1EduZOxTVRuovpIxxC4lLLOT2x5sF2/FtMnYZD/E=;
-        b=Cwet6+xm3v/FuUk7aMMFOzwkCxFlqIg+IXN/Es6pmj/8bjEUctLSG6QX85Nk7SNSHX
-         OAjh3lSun2PuLc+dQhVoaTX5dtgrMAbxuXJPHvIgU1PjmKeRdu8CsDIaOwECO63sf4v4
-         wN30/iPlbXr7RcfAtg8Igk2qVW4s+WQRc+/fgRBitdCmR1XGg1KxrH6USS1O0cc/Qmp6
-         4P3g0jz2aODU6+sgof2+vtDbZyXdVFEQQH6nj0Z3NlS68QKcLE0ukAgOr4Is3Xj1JYCR
-         lXJ113FpUGjltfa31Q1FKRIory/1DMJA0bcKB6+hOSGLZX7/IVs+cp9A7I75EF7tfH1s
-         icGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RQc1EduZOxTVRuovpIxxC4lLLOT2x5sF2/FtMnYZD/E=;
-        b=O57DJhKcqkyrMVt0MHAqi9MYSy4IyZj9JjEAhbXvWCknrIMtmWl52aCOzA096pmCmI
-         qDRFNJJxLpfcA0tYmNLy+Cvx91jw+gARYiVot/X7ff2KYj9ghbXXHsizPuBIZmzwfGhc
-         W96IBGTEimJ/K/FMmLsHOr3DOclxH+ABz5p5fTMP4c7fKNNN/tgcO3kh0EwauEPzxEqG
-         O8yYZYrtF0R3AOS1OEM+4vMpYWlNryNnSWLZMiL7H99ddIX3iHOvgPNytisSbBi7x7AF
-         aXfUyE+xVyW9TOqid1AtDKyzJn/EyvAVymAyq60rUB4tN8AUn80/OZm4kZqYxVT687jU
-         k4Aw==
-X-Gm-Message-State: AOAM5320e+6Rcvgdj1tP/gZMTHyOUBfXk8r1ST7BAuv0yYMoTzpPzx6L
-        SPWJq8cV54OLbaINreefEVluzYeTA3myDcQziaipnipV3gfC3A==
-X-Google-Smtp-Source: ABdhPJx96NoKM7kiOq+mdIK5kt8YNcj4xxoTnWjFMDM//0/0jJNiszMwTp5lpcPnEmv1NbCtRQQwsQB91On+I/Qv5qY=
-X-Received: by 2002:aa7:c687:0:b0:415:eb43:8ff5 with SMTP id
- n7-20020aa7c687000000b00415eb438ff5mr2509400edq.74.1646330074426; Thu, 03 Mar
- 2022 09:54:34 -0800 (PST)
+        with ESMTP id S229662AbiCCR63 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 12:58:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB686710D7;
+        Thu,  3 Mar 2022 09:57:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6D9FB81DB8;
+        Thu,  3 Mar 2022 17:57:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26E72C340F0;
+        Thu,  3 Mar 2022 17:57:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646330260;
+        bh=hY8rAyb1zsetbVzg5OgbfUyuPVMG9GYiD0/OIrED5wE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=MYtflfLlh9TiDIXibSAM3pECoM8IbJp/05QsspbsKvZKkl5j4EUgMmodgp2cjdhMF
+         JTZmmwKMzxtj93Qne9s/wvdqDNlzdXG3hCnWhvtR6nVLTrQPaNra7nV1f90JR7QWSu
+         7T1Zy72GRHqDvy5VKoVwueQpSXaAWRhn4Ua/a6QC0Xc6n1npHP9CFEe8JCH2CCH+2K
+         5KLkN1opATv48ZWhgJx4cK5ypHTH6OP8R8nuErFkIY8gi+mEPrre+XgjPXlFqBzCXx
+         CMelsAhubwzk4WOjMRd+12xrL1f5UMJWpla+zs15nXAbU5nLoizleMGTIYg+AqpWIs
+         4/20pPLfFu4yg==
+Date:   Thu, 3 Mar 2022 11:57:38 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     =?utf-8?B?7J6l7JiB7KeEL1RWIFMvVyBMYWIoVkQpL1N0YWZmIEVuZ2luZWVyL+yCvA==?=
+         =?utf-8?B?7ISx7KCE7J6Q?= <yj84.jang@samsung.com>
+Cc:     'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        'Pavel Machek' <pavel@ucw.cz>,
+        'Len Brown' <len.brown@intel.com>,
+        'Bjorn Helgaas' <bhelgaas@google.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-usb@vger.kernel.org, js07.lee@samsung.com
+Subject: Re: [PATCH] PM: Add device name to suspend_report_result()
+Message-ID: <20220303175738.GA818511@bhelgaas>
 MIME-Version: 1.0
-References: <20220301022625.469446-1-wonchung@google.com> <Yh3ofnlEx0bT/R6E@kuha.fi.intel.com>
- <CAOvb9yi4oi=KegV1d8MvxWPhStf5jL01CbdM_pAdLqKNAocJ1Q@mail.gmail.com>
- <CAJZ5v0ipcdUqTEFn075NeioyHRDKy2j_pYZOBKgqnx_c1=q5Pw@mail.gmail.com> <Yh9TIeCIchBrZOdH@kuha.fi.intel.com>
-In-Reply-To: <Yh9TIeCIchBrZOdH@kuha.fi.intel.com>
-From:   Won Chung <wonchung@google.com>
-Date:   Thu, 3 Mar 2022 09:54:11 -0800
-Message-ID: <CAOvb9yhaV2Kx5R+BR9M_rcqw5XOo7AiLmNP1r7XX_qf5xOBCfQ@mail.gmail.com>
-Subject: Re: [PATCH v2] usb:typec: Add sysfs support for Type C connector's
- physical location
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <044701d82e88$c5edb6f0$51c924d0$@samsung.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 3:21 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> On Tue, Mar 01, 2022 at 08:11:06PM +0100, Rafael J. Wysocki wrote:
-> > On Tue, Mar 1, 2022 at 7:57 PM Won Chung <wonchung@google.com> wrote:
+On Thu, Mar 03, 2022 at 07:56:37AM +0900, 장영진/TV S/W Lab(VD)/Staff Engineer/삼성전자 wrote:
+> > -----Original Message-----
+> > From: Bjorn Helgaas <helgaas@kernel.org>
+> > Sent: Thursday, March 3, 2022 5:16 AM
+> > To: 'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>
+> > Cc: �念��/TV S/W Lab(VD)/Staff Engineer/�Ｚ���� <yj84.jang@samsung.com>;
+> > 'Rafael J. Wysocki' <rafael@kernel.org>; 'Pavel Machek' <pavel@ucw.cz>;
+> > 'Len Brown' <len.brown@intel.com>; 'Bjorn Helgaas' <bhelgaas@google.com>;
+> > linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+> > pci@vger.kernel.org; linux-acpi@vger.kernel.org; linux-usb@vger.kernel.org;
+> > js07.lee@samsung.com
+> > Subject: Re: [PATCH] PM: Add device name to suspend_report_result()
+> > 
+> > On Wed, Mar 02, 2022 at 03:52:51PM +0100, 'Greg Kroah-Hartman' wrote:
+> > > On Wed, Mar 02, 2022 at 08:00:14PM +0900,  念  /TV S/W Lab(VD)/Staff
+> > Engineer/ Ｚ     wrote:
+> > > > > -----Original Message-----
+> > > > > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > > Sent: Wednesday, March 2, 2022 4:58 PM
+> > > > > To: Youngjin Jang <yj84.jang@samsung.com>
+> > > > > Cc: Rafael J. Wysocki <rafael@kernel.org>; Pavel Machek
+> > > > > <pavel@ucw.cz>; Len Brown <len.brown@intel.com>; Bjorn Helgaas
+> > > > > <bhelgaas@google.com>; linux-pm@vger.kernel.org;
+> > > > > linux-kernel@vger.kernel.org; linux- pci@vger.kernel.org;
+> > > > > linux-acpi@vger.kernel.org; linux-
+> > > > usb@vger.kernel.org;
+> > > > > js07.lee@samsung.com
+> > > > > Subject: Re: [PATCH] PM: Add device name to
+> > > > > suspend_report_result()
+> > > > >
+> > > > > On Wed, Mar 02, 2022 at 03:49:17PM +0900, Youngjin Jang wrote:
+> > > > > > From: "yj84.jang" <yj84.jang@samsung.com>
+
+> > > > > > -		pr_err("%s(): %pS returns %d\n", function, fn, ret);
+> > > > > > +		pr_err("%s(): %pS (%s) returns %d\n", function, fn,
+> > > > > > +dev_driver_string(dev), ret);
+> > > > >
+> > > > > If you have a struct device, please use dev_err().
+> > > >
+> > > > I think dev_err() is nice option, but we can see a minor issue.
+> > > > Prefix log "PM: " would be lost, If I use dev_err() in this context.
+> > > > As you know, all logs in power management include "PM :" prefix.
 > > >
-> > > On Tue, Mar 1, 2022 at 1:33 AM Heikki Krogerus
-> > > <heikki.krogerus@linux.intel.com> wrote:
-> > > >
-> > > > Hi Won,
-> > > >
-> > > > On Tue, Mar 01, 2022 at 02:26:25AM +0000, Won Chung wrote:
-> > > > > When ACPI table includes _PLD field for a Type C connector, share=
- _PLD
-> > > > > values in its sysfs. _PLD stands for physical location of device.
-> > > > >
-> > > > > Currently without connector's location information, when there ar=
-e
-> > > > > multiple Type C ports, it is hard to distinguish which connector
-> > > > > corresponds to which physical port at which location. For example=
-, when
-> > > > > there are two Type C connectors, it is hard to find out which con=
-nector
-> > > > > corresponds to the Type C port on the left panel versus the Type =
-C port
-> > > > > on the right panel. With location information provided, we can de=
-termine
-> > > > > which specific device at which location is doing what.
-> > > > >
-> > > > > _PLD output includes much more fields, but only generic fields ar=
-e added
-> > > > > and exposed to sysfs, so that non-ACPI devices can also support i=
-t in
-> > > > > the future. The minimal generic fields needed for locating a port=
- are
-> > > > > the following.
-> > > > > - panel
-> > > > > - vertical_position
-> > > > > - horizontal_position
-> > > > > - dock
-> > > > > - lid
-> > > > >
-> > > > > Signed-off-by: Won Chung <wonchung@google.com>
-> > > > > ---
-> > > > >
-> > > > > Changes in v2:
-> > > > > - Use string for location.
-> > > > > - Clarify get_pld() with naming and return type.
-> > > > >
-> > > > >  Documentation/ABI/testing/sysfs-class-typec |  35 ++++++
-> > > > >  drivers/usb/typec/class.c                   | 113 ++++++++++++++=
-++++++
-> > > > >  drivers/usb/typec/class.h                   |   3 +
-> > > > >  3 files changed, 151 insertions(+)
-> > > > >
-> > > > > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Docume=
-ntation/ABI/testing/sysfs-class-typec
-> > > > > index 75088ecad202..4497a5aeb063 100644
-> > > > > --- a/Documentation/ABI/testing/sysfs-class-typec
-> > > > > +++ b/Documentation/ABI/testing/sysfs-class-typec
-> > > > > @@ -141,6 +141,41 @@ Description:
-> > > > >               - "reverse": CC2 orientation
-> > > > >               - "unknown": Orientation cannot be determined.
-> > > > >
-> > > > > +What:                /sys/class/typec/<port>/location/panel
-> > > > > +Date:                March 2022
-> > > > > +Contact:     Won Chung <wonchung@google.com>
-> > > > > +Description:
-> > > > > +             Describes which panel surface of the system=E2=80=
-=99s housing the
-> > > > > +             port resides on.
-> > > > > +
-> > > > > +What:                /sys/class/typec/<port>/location/vertical_p=
-osition
-> > > > > +Date:                March 2022
-> > > > > +Contact:     Won Chung <wonchung@google.com>
-> > > > > +Description:
-> > > > > +             Describes vertical position of the port on the pane=
-l surface.
-> > > > > +             Valid values: upper, center, lower
-> > > > > +
-> > > > > +What:                /sys/class/typec/<port>/location/horizontal=
-_position
-> > > > > +Date:                March 2022
-> > > > > +Contact:     Won Chung <wonchung@google.com>
-> > > > > +Description:
-> > > > > +             Describes horizontal position of the port on the pa=
-nel surface.
-> > > > > +             Valid values: left, center, right
-> > > > > +
-> > > > > +What:                /sys/class/typec/<port>/location/dock
-> > > > > +Date:                March 2022
-> > > > > +Contact:     Won Chung <wonchung@google.com>
-> > > > > +Description:
-> > > > > +             Set as "yes" if the port resides in a docking stati=
-on or a port
-> > > > > +             replicator, otherwise set as "no".
-> > > > > +
-> > > > > +What:                /sys/class/typec/<port>/location/lid
-> > > > > +Date:                March 2022
-> > > > > +Contact:     Won Chung <wonchung@google.com>
-> > > > > +Description:
-> > > > > +             Set as "yes" if the port resides on the lid of lapt=
-op system,
-> > > > > +             otherwise set as "no".
-> > > > > +
-> > > >
-> > > > I've probable lost track of the topic during my winter break, I'm
-> > > > sorry about that, but why are you proposing now that this should be
-> > > > made Type-C specific?
-> > > > This information is not Type-C specific, so it definitely does not
-> > > > belong here.
-> > > >
-> > > > Br,
-> > > >
-> > > > --
-> > > > heikki
-> > >
-> > > Hi Heikki,
-> > >
-> > > Thank you for the comment. Sorry that my description was not clear.
-> > > This is follow up from "[PATCH v6] ACPI: device_sysfs: Add sysfs
-> > > support for _PLD" in which Rafael suggested to have generic location
-> > > in Type C connector than adding PLD specifically to ACPI device.
-> >
-> > Well, this doesn't have to be /sys/class/typec/<port>/location/ though.
-> >
-> > For example, the device location information can be exposed in a more
-> > generic way is /sys/devices/.../location/ for all devices for which it
-> > is available, somewhat in analogy to /sys/devices/.../power/.
->
-> Right, that's what I meant. These can be made generic.
+> > > Why does that matter?  Fix them all to use the struct device pointer
+> > > and then they will be properly unified with the rest of the kernel log
+> > > infrastructure.
+> > 
+> > You can #define dev_fmt if you need a prefix.
+> 
+> I tested dev_fmt before, but I feel that not a good solution.
+> Because the readability is not so great than I expected.
+> I didn't want to break the PM logging rules.
 
-> thanks,
->
-> --
-> heikki
+I didn't catch your meaning here.  Some examples would probably help.
 
-Hi Heikki and Rafael,
-
-Thank you for clarification and guidance. I created and sent a new
-patch on driver core for /sys/devices/.../location/.
-
-Won
+The patch above is from __suspend_report_result() in
+drivers/base/power/main.c.  That file already defines both pr_fmt and
+dev_fmt to be "PM: ", so I would expect dev_err() output to already
+include "PM: ".
