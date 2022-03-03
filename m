@@ -2,93 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A204CC211
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 16:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A264CC46C
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 18:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234355AbiCCQAP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Mar 2022 11:00:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59592 "EHLO
+        id S234039AbiCCRz0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Mar 2022 12:55:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233373AbiCCQAN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 11:00:13 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5040818E42C
-        for <linux-usb@vger.kernel.org>; Thu,  3 Mar 2022 07:59:27 -0800 (PST)
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6BD0B3F4C0
-        for <linux-usb@vger.kernel.org>; Thu,  3 Mar 2022 15:59:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646323164;
-        bh=MdwjWjZqm0RnOglfFnSZ5WY/pIE+2hElYzOWtQJQrYc=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=iBgc9seJnQU63p3sE7YBgOI3sDErrUBtAFmNiojds/FR9W6gEmiFcNQWXNmT3nJkx
-         YWuL541U4k2HBH+Tlfh2cPWyKDI3DoGiqtF7sX1CH0sobDHOIfVSwkDWXf7R1ceNij
-         G8ic1ZsJmx1vY+A4P2KBJDL43dowH0ed19fY6V5biblXD5kx4IC3tPq+ovUhZnRTxT
-         qhTSeLRjlF9uG5yFwOE19pSaSXVm9VNYN2IpLTkD70vg2Fw7qfRZ45VIggDJ6tMnpv
-         05WmxCWwoLk23N3IiSaPEWmyIgYZbZmHfpUX1iVqPg9sQvM+WKhxnqdp1ma4MU978T
-         Ps5TUAgj7epow==
-Received: by mail-wm1-f70.google.com with SMTP id f13-20020a05600c154d00b003818123caf9so1776628wmg.0
-        for <linux-usb@vger.kernel.org>; Thu, 03 Mar 2022 07:59:24 -0800 (PST)
+        with ESMTP id S234593AbiCCRzY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 12:55:24 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F95163D71
+        for <linux-usb@vger.kernel.org>; Thu,  3 Mar 2022 09:54:36 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id f8so7618670edf.10
+        for <linux-usb@vger.kernel.org>; Thu, 03 Mar 2022 09:54:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RQc1EduZOxTVRuovpIxxC4lLLOT2x5sF2/FtMnYZD/E=;
+        b=Cwet6+xm3v/FuUk7aMMFOzwkCxFlqIg+IXN/Es6pmj/8bjEUctLSG6QX85Nk7SNSHX
+         OAjh3lSun2PuLc+dQhVoaTX5dtgrMAbxuXJPHvIgU1PjmKeRdu8CsDIaOwECO63sf4v4
+         wN30/iPlbXr7RcfAtg8Igk2qVW4s+WQRc+/fgRBitdCmR1XGg1KxrH6USS1O0cc/Qmp6
+         4P3g0jz2aODU6+sgof2+vtDbZyXdVFEQQH6nj0Z3NlS68QKcLE0ukAgOr4Is3Xj1JYCR
+         lXJ113FpUGjltfa31Q1FKRIory/1DMJA0bcKB6+hOSGLZX7/IVs+cp9A7I75EF7tfH1s
+         icGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MdwjWjZqm0RnOglfFnSZ5WY/pIE+2hElYzOWtQJQrYc=;
-        b=3I9m9uAd/zCrHgU/wkgDGn1/x2KGdYBGl8OQJHouNb6fn3M1ESMkKu21rX1CbEEcyi
-         lroO4cW4QxubA/igAxV5sfLoaohhbBwtyTCW5QVwZk1sNhurWY0CpK48RZNcDO7awFbO
-         4DeOvyX+nJuwcS0Fia5EZnaKtP1gKUFarMZIjiCMI1VGmZcEara0oySAKLowlF4mZBK2
-         wb4kJDYeyUTn69ZBq7ysohulgUC4nq+OuYsBlQFh8dbaisF45/hs4T3o95OU2BT7KtAX
-         8LdVEc2Zi7+KpAQdEDYHs831GWazNHHGhXfZ4WSE1iyeyJ+avkNPdVDyFxyjUjIsO48j
-         2FaA==
-X-Gm-Message-State: AOAM532PMPqWAE/yFxXZWvepdGiEML/kf7fQnGH+RIsSZ5E6pkuYvTvE
-        zg//UQ6ghnGE4xaVQK1shejT81yFEWiPr0l4d76iQrwcVIDwDQA/hX9XwF08HgZt+6S+Zo4tgZu
-        XzX5G2jVwpYRQphZa+bPhAQbMmnezwMn9QExOdA==
-X-Received: by 2002:a5d:50d2:0:b0:1f0:2348:4331 with SMTP id f18-20020a5d50d2000000b001f023484331mr8154296wrt.19.1646323164083;
-        Thu, 03 Mar 2022 07:59:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxHlIPEDuVmE/S59LvjLHrwrYJRSachY/7BYD0C1MLQqqJNXoqHm4h7MEj9W5zhmieIqEBtnw==
-X-Received: by 2002:a5d:50d2:0:b0:1f0:2348:4331 with SMTP id f18-20020a5d50d2000000b001f023484331mr8154279wrt.19.1646323163879;
-        Thu, 03 Mar 2022 07:59:23 -0800 (PST)
-Received: from [192.168.0.137] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id o13-20020a5d648d000000b001efd62a840dsm2610469wri.111.2022.03.03.07.59.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 07:59:23 -0800 (PST)
-Message-ID: <b793195b-1d3d-63b2-19d2-72ae2aec8c0f@canonical.com>
-Date:   Thu, 3 Mar 2022 16:59:22 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RQc1EduZOxTVRuovpIxxC4lLLOT2x5sF2/FtMnYZD/E=;
+        b=O57DJhKcqkyrMVt0MHAqi9MYSy4IyZj9JjEAhbXvWCknrIMtmWl52aCOzA096pmCmI
+         qDRFNJJxLpfcA0tYmNLy+Cvx91jw+gARYiVot/X7ff2KYj9ghbXXHsizPuBIZmzwfGhc
+         W96IBGTEimJ/K/FMmLsHOr3DOclxH+ABz5p5fTMP4c7fKNNN/tgcO3kh0EwauEPzxEqG
+         O8yYZYrtF0R3AOS1OEM+4vMpYWlNryNnSWLZMiL7H99ddIX3iHOvgPNytisSbBi7x7AF
+         aXfUyE+xVyW9TOqid1AtDKyzJn/EyvAVymAyq60rUB4tN8AUn80/OZm4kZqYxVT687jU
+         k4Aw==
+X-Gm-Message-State: AOAM5320e+6Rcvgdj1tP/gZMTHyOUBfXk8r1ST7BAuv0yYMoTzpPzx6L
+        SPWJq8cV54OLbaINreefEVluzYeTA3myDcQziaipnipV3gfC3A==
+X-Google-Smtp-Source: ABdhPJx96NoKM7kiOq+mdIK5kt8YNcj4xxoTnWjFMDM//0/0jJNiszMwTp5lpcPnEmv1NbCtRQQwsQB91On+I/Qv5qY=
+X-Received: by 2002:aa7:c687:0:b0:415:eb43:8ff5 with SMTP id
+ n7-20020aa7c687000000b00415eb438ff5mr2509400edq.74.1646330074426; Thu, 03 Mar
+ 2022 09:54:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
- override params bindings
-Content-Language: en-US
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
+References: <20220301022625.469446-1-wonchung@google.com> <Yh3ofnlEx0bT/R6E@kuha.fi.intel.com>
+ <CAOvb9yi4oi=KegV1d8MvxWPhStf5jL01CbdM_pAdLqKNAocJ1Q@mail.gmail.com>
+ <CAJZ5v0ipcdUqTEFn075NeioyHRDKy2j_pYZOBKgqnx_c1=q5Pw@mail.gmail.com> <Yh9TIeCIchBrZOdH@kuha.fi.intel.com>
+In-Reply-To: <Yh9TIeCIchBrZOdH@kuha.fi.intel.com>
+From:   Won Chung <wonchung@google.com>
+Date:   Thu, 3 Mar 2022 09:54:11 -0800
+Message-ID: <CAOvb9yhaV2Kx5R+BR9M_rcqw5XOo7AiLmNP1r7XX_qf5xOBCfQ@mail.gmail.com>
+Subject: Re: [PATCH v2] usb:typec: Add sysfs support for Type C connector's
+ physical location
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-References: <1646288011-32242-1-git-send-email-quic_c_sanm@quicinc.com>
- <1646288011-32242-2-git-send-email-quic_c_sanm@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <1646288011-32242-2-git-send-email-quic_c_sanm@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,102 +75,147 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 03/03/2022 07:13, Sandeep Maheswaram wrote:
-> Add device tree bindings for SNPS phy tuning parameters.
-> 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> ---
->  .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 125 +++++++++++++++++++++
->  1 file changed, 125 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-> index 0dfe691..227c097 100644
-> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-> @@ -50,6 +50,131 @@ properties:
->    vdda33-supply:
->      description: phandle to the regulator 3.3V supply node.
->  
-> +  qcom,hs-disconnect:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      This adjusts the voltage level for the threshold used to
-> +      detect a disconnect event at the host. Possible values are.
+On Wed, Mar 2, 2022 at 3:21 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> On Tue, Mar 01, 2022 at 08:11:06PM +0100, Rafael J. Wysocki wrote:
+> > On Tue, Mar 1, 2022 at 7:57 PM Won Chung <wonchung@google.com> wrote:
+> > >
+> > > On Tue, Mar 1, 2022 at 1:33 AM Heikki Krogerus
+> > > <heikki.krogerus@linux.intel.com> wrote:
+> > > >
+> > > > Hi Won,
+> > > >
+> > > > On Tue, Mar 01, 2022 at 02:26:25AM +0000, Won Chung wrote:
+> > > > > When ACPI table includes _PLD field for a Type C connector, share=
+ _PLD
+> > > > > values in its sysfs. _PLD stands for physical location of device.
+> > > > >
+> > > > > Currently without connector's location information, when there ar=
+e
+> > > > > multiple Type C ports, it is hard to distinguish which connector
+> > > > > corresponds to which physical port at which location. For example=
+, when
+> > > > > there are two Type C connectors, it is hard to find out which con=
+nector
+> > > > > corresponds to the Type C port on the left panel versus the Type =
+C port
+> > > > > on the right panel. With location information provided, we can de=
+termine
+> > > > > which specific device at which location is doing what.
+> > > > >
+> > > > > _PLD output includes much more fields, but only generic fields ar=
+e added
+> > > > > and exposed to sysfs, so that non-ACPI devices can also support i=
+t in
+> > > > > the future. The minimal generic fields needed for locating a port=
+ are
+> > > > > the following.
+> > > > > - panel
+> > > > > - vertical_position
+> > > > > - horizontal_position
+> > > > > - dock
+> > > > > - lid
+> > > > >
+> > > > > Signed-off-by: Won Chung <wonchung@google.com>
+> > > > > ---
+> > > > >
+> > > > > Changes in v2:
+> > > > > - Use string for location.
+> > > > > - Clarify get_pld() with naming and return type.
+> > > > >
+> > > > >  Documentation/ABI/testing/sysfs-class-typec |  35 ++++++
+> > > > >  drivers/usb/typec/class.c                   | 113 ++++++++++++++=
+++++++
+> > > > >  drivers/usb/typec/class.h                   |   3 +
+> > > > >  3 files changed, 151 insertions(+)
+> > > > >
+> > > > > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Docume=
+ntation/ABI/testing/sysfs-class-typec
+> > > > > index 75088ecad202..4497a5aeb063 100644
+> > > > > --- a/Documentation/ABI/testing/sysfs-class-typec
+> > > > > +++ b/Documentation/ABI/testing/sysfs-class-typec
+> > > > > @@ -141,6 +141,41 @@ Description:
+> > > > >               - "reverse": CC2 orientation
+> > > > >               - "unknown": Orientation cannot be determined.
+> > > > >
+> > > > > +What:                /sys/class/typec/<port>/location/panel
+> > > > > +Date:                March 2022
+> > > > > +Contact:     Won Chung <wonchung@google.com>
+> > > > > +Description:
+> > > > > +             Describes which panel surface of the system=E2=80=
+=99s housing the
+> > > > > +             port resides on.
+> > > > > +
+> > > > > +What:                /sys/class/typec/<port>/location/vertical_p=
+osition
+> > > > > +Date:                March 2022
+> > > > > +Contact:     Won Chung <wonchung@google.com>
+> > > > > +Description:
+> > > > > +             Describes vertical position of the port on the pane=
+l surface.
+> > > > > +             Valid values: upper, center, lower
+> > > > > +
+> > > > > +What:                /sys/class/typec/<port>/location/horizontal=
+_position
+> > > > > +Date:                March 2022
+> > > > > +Contact:     Won Chung <wonchung@google.com>
+> > > > > +Description:
+> > > > > +             Describes horizontal position of the port on the pa=
+nel surface.
+> > > > > +             Valid values: left, center, right
+> > > > > +
+> > > > > +What:                /sys/class/typec/<port>/location/dock
+> > > > > +Date:                March 2022
+> > > > > +Contact:     Won Chung <wonchung@google.com>
+> > > > > +Description:
+> > > > > +             Set as "yes" if the port resides in a docking stati=
+on or a port
+> > > > > +             replicator, otherwise set as "no".
+> > > > > +
+> > > > > +What:                /sys/class/typec/<port>/location/lid
+> > > > > +Date:                March 2022
+> > > > > +Contact:     Won Chung <wonchung@google.com>
+> > > > > +Description:
+> > > > > +             Set as "yes" if the port resides on the lid of lapt=
+op system,
+> > > > > +             otherwise set as "no".
+> > > > > +
+> > > >
+> > > > I've probable lost track of the topic during my winter break, I'm
+> > > > sorry about that, but why are you proposing now that this should be
+> > > > made Type-C specific?
+> > > > This information is not Type-C specific, so it definitely does not
+> > > > belong here.
+> > > >
+> > > > Br,
+> > > >
+> > > > --
+> > > > heikki
+> > >
+> > > Hi Heikki,
+> > >
+> > > Thank you for the comment. Sorry that my description was not clear.
+> > > This is follow up from "[PATCH v6] ACPI: device_sysfs: Add sysfs
+> > > support for _PLD" in which Rafael suggested to have generic location
+> > > in Type C connector than adding PLD specifically to ACPI device.
+> >
+> > Well, this doesn't have to be /sys/class/typec/<port>/location/ though.
+> >
+> > For example, the device location information can be exposed in a more
+> > generic way is /sys/devices/.../location/ for all devices for which it
+> > is available, somewhat in analogy to /sys/devices/.../power/.
+>
+> Right, that's what I meant. These can be made generic.
 
-':', instead of full stop.
+> thanks,
+>
+> --
+> heikki
 
-> +      7 -> +21.56%
-> +      6 -> +17.43%
-> +      5 -> +13.32%
-> +      4 -> +9.73%
-> +      3 -> +6.3
-> +      2 -> +3.17%
-> +      1 -> 0, Design default%
+Hi Heikki and Rafael,
 
-Use "default:" instead. Here and in other places.
+Thank you for clarification and guidance. I created and sent a new
+patch on driver core for /sys/devices/.../location/.
 
-> +      0 -> -2.72%
-
-In current form this should be an enum... but actually current form is
-wrong. You should not store register values in DT. What if next version
-of hardware has a different meaning of these values?
-
-Instead, you should store here meaningful values, not register values.
-
-This applies to all cases below.
-
-> +
-> +  qcom,squelch-detector:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      This adjusts the voltage level for the threshold used to
-> +      detect valid high-speed data. Possible values are
-> +      7-> -20.90%
-> +      6-> -15.60%
-> +      5-> -10.30%
-> +      4-> -5.30%
-> +      3-> 0, Design default%
-> +      2-> +5.30%
-> +      1-> +10.60%
-> +      0-> +15.90%
-> +
-> +  qcom,hs-amplitude:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      This adjusts the high-speed DC level voltage.
-> +      Possible values are
-> +      15-> +26.70%
-> +      14-> +24.30%
-> +      13-> +22.20%
-> +      12-> +20.00%
-> +      11-> +17.80%
-> +      10-> +15.60%
-> +      9-> +13.30%
-> +      8-> +11.10%
-> +      7-> +8.90%
-> +      6-> +6.50%
-> +      5-> +4.40%
-> +      4-> +2.30%
-> +      3-> 0, Design default%
-> +      2-> -2.20%
-> +      1-> -4.40%
-> +      0-> -6.60%
-> +
-> +  qcom,pre-emphasis-duration:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      This signal controls the duration for which the
-> +      HS pre-emphasis current is sourced onto DP<#> or DM<#>.
-> +      The HS Transmitter pre-emphasis duration is defined in terms of
-> +      unit amounts. One unit of pre-emphasis duration is approximately
-> +      650 ps and is defined as 1X pre-emphasis duration.
-> +      Possible values are
-> +      1-> 1x, short pre-emphasis current duration
-> +      0-> 2x, long pre-emphasis current duration
-
-I could understand encoding of percentages in way of register value, but
-a boolean flag is too much.
-
-
-Best regards,
-Krzysztof
+Won
