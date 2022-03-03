@@ -2,160 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E314CC85D
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 22:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 710244CC8C8
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 23:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233972AbiCCVtc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Mar 2022 16:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
+        id S236846AbiCCWYe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Mar 2022 17:24:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbiCCVtc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 16:49:32 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C8AAE5B;
-        Thu,  3 Mar 2022 13:48:45 -0800 (PST)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 223LmgLV023479;
-        Thu, 3 Mar 2022 21:48:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=1pbqyUEw1bzH9TofM6xgfYFQ/n9JBpL9GVCRuT7xppI=;
- b=FtAQJ60BYY+PMN+N3G67foUKkyYTWhnM98Jm58W4h9Q+XHQkt4ge3AgF0BHdOm4YmRCi
- vawNOnSjR+i0VbD7WEa6UI2tnqWfNxEQkka8YOA8yysEBZz02g0JYu/1ZwTR8K+zoGN4
- Lu3ricPGLR7Gfqknu8zbC37/0zXGC6JwJlJC2LXSuX8fHnUMTMViorRWVU77zpJi9X2r
- HZaBZvQzTCh7Q+O3t1AuejLEBhjemddUGWri3JjnMYEaAUZTMT6pPunIYvSt29+CLzXZ
- MF1Qure8/DhNZX6SWFM0WbLsi8l39fMPkVtZi7YKnMKwmQ0JDQvir4xXDvUSrl6CrzgF Fg== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ek5ww8014-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 21:48:42 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 223Lbbiu028147;
-        Thu, 3 Mar 2022 21:48:41 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma02wdc.us.ibm.com with ESMTP id 3ek4kd0g5x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 21:48:40 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 223LmdtW14025356
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Mar 2022 21:48:39 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 93FEB12405A;
-        Thu,  3 Mar 2022 21:48:39 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 93A6B124055;
-        Thu,  3 Mar 2022 21:48:38 +0000 (GMT)
-Received: from [9.211.103.39] (unknown [9.211.103.39])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu,  3 Mar 2022 21:48:38 +0000 (GMT)
-Message-ID: <b1ec9ab3-d621-fa66-0fae-f966242f3f7f@linux.ibm.com>
-Date:   Thu, 3 Mar 2022 15:48:37 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2] USB: serial: pl2303: Add IBM device IDs
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>, Joel Stanley <joel@jms.id.au>
-Cc:     linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <20220301224446.21236-1-eajames@linux.ibm.com>
- <YiB7gz0GJ1Uz0mE2@hovoldconsulting.com>
- <CACPK8XfoCXisL=udkuO-x4LZ3r-9iKA2d7oLb7KmXs3+LkQgnQ@mail.gmail.com>
- <YiCHPuNkMuO4uARu@hovoldconsulting.com>
- <CACPK8XfUCyVgwVYLt_99CgQWuoFTw7O9d2NiuzMzGPa1VFVUyg@mail.gmail.com>
- <YiCN+x2XPiawaweY@hovoldconsulting.com>
- <CACPK8Xc9MnM9_jr7NrNLtqBrN_t8D7G-scQvk51vbpOU6LWeuw@mail.gmail.com>
- <YiCU3KI9Dh2psRnK@hovoldconsulting.com>
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <YiCU3KI9Dh2psRnK@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Shm5Iy2_Dk68VoVDh6BUihLcMU3Q8uLU
-X-Proofpoint-ORIG-GUID: Shm5Iy2_Dk68VoVDh6BUihLcMU3Q8uLU
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S236842AbiCCWYa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 17:24:30 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C676210BBF4
+        for <linux-usb@vger.kernel.org>; Thu,  3 Mar 2022 14:23:43 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id l21-20020a056830239500b005afd2a7eaa2so5867415ots.9
+        for <linux-usb@vger.kernel.org>; Thu, 03 Mar 2022 14:23:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=84N9C6KvyMy2P8CDxkMygU4c2ZXeXw9ZduzWrJT2etE=;
+        b=cFzFuK9Te+gPYjsQw43HWd+lX0dK75cQbikvF+GotiKMkoC7n3D5HmUVNLnEV8gBpH
+         oBKM8lXnCJMovyZOcmMwSfRGp7xNWHY4XVb/EDVU5NpxUfncr25dJ5uqjKdGZG8y9hif
+         ATRmIFWvL8nT6Fxu9sp/brC8rt8gRB/WUcYRk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=84N9C6KvyMy2P8CDxkMygU4c2ZXeXw9ZduzWrJT2etE=;
+        b=0ejJZrGAP42AbHSn9Wh049x9PPrbPCWhkuxFh88sQQ5qr8t1YhLEl4rmmVcjZhPT6N
+         mLchbOAhFS2SWpl2JVq4hAHrVvB2JepUuIJLMjgEWDozgX6C3h9j/3lNLuISsYtegy8B
+         heU3B6s2DLVEG6lxwphbaRfkPEmug5Q61CzaobkqqILDxHz6cgqbdxLvOOxZXJiRZckI
+         k4S8zqH3+4yI9oHiCaeLazBBhig/+Ai0au8wqtvnViG2s+GdoBV4JX+Xj4yvVjmvhsYg
+         nkG9SW34qXivNlqJPv9/gZVQ38AIqWbCTxllqth9L+s67q3R7OrKo22cH0zfQgYFnpyT
+         GOGg==
+X-Gm-Message-State: AOAM530PK1LOIrDpu7reISjS6ozfP1/RpmDPHLP0aLnzs8icwsEDCAkW
+        3xwD4zizpJAXD3SUngUr+eoN/wUYEm9626MKWgSk4w==
+X-Google-Smtp-Source: ABdhPJx96sN+CrROFdnLq4TVFnKH2FvrwIjYkI+NMasfcx0/cQZZuTxmSn4ziMWwpGM1lI9t0aITlvtBXJxVU5Cw/Xc=
+X-Received: by 2002:a9d:22e9:0:b0:5ac:1754:342c with SMTP id
+ y96-20020a9d22e9000000b005ac1754342cmr20034277ota.159.1646346223173; Thu, 03
+ Mar 2022 14:23:43 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 3 Mar 2022 14:23:42 -0800
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-03_09,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 spamscore=0 mlxlogscore=999 impostorscore=0 bulkscore=0
- lowpriorityscore=0 malwarescore=0 phishscore=0 mlxscore=0 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203030097
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b793195b-1d3d-63b2-19d2-72ae2aec8c0f@canonical.com>
+References: <1646288011-32242-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1646288011-32242-2-git-send-email-quic_c_sanm@quicinc.com> <b793195b-1d3d-63b2-19d2-72ae2aec8c0f@canonical.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 3 Mar 2022 14:23:42 -0800
+Message-ID: <CAE-0n53xT1OaDLg+o1g_DXO5CHOZ=YC1C=2weeET-6cvbSKXPQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
+ override params bindings
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Wesley Cheng <wcheng@codeaurora.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-On 3/3/22 04:13, Johan Hovold wrote:
-> On Thu, Mar 03, 2022 at 09:46:05AM +0000, Joel Stanley wrote:
->> On Thu, 3 Mar 2022 at 09:44, Johan Hovold <johan@kernel.org> wrote:
->>> On Thu, Mar 03, 2022 at 09:24:51AM +0000, Joel Stanley wrote:
->>>> On Thu, 3 Mar 2022 at 09:15, Johan Hovold <johan@kernel.org> wrote:
->>>>> On Thu, Mar 03, 2022 at 08:52:29AM +0000, Joel Stanley wrote:
->>>>>> On Thu, 3 Mar 2022 at 08:25, Johan Hovold <johan@kernel.org> wrote:
->>>>>>> On Tue, Mar 01, 2022 at 04:44:46PM -0600, Eddie James wrote:
->>>>>>>> IBM manufactures a PL2303 device for UPS communications. Add the vendor
->>>>>>>> and product IDs so that the PL2303 driver binds to the device.
->>>>>>>>
->>>>>>>> Signed-off-by: Joel Stanley <joel@jms.id.au>
->>>>>>>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->>>>>>>> ---
->>>>>>>> Changes since v1:
->>>>>>>>   - Fix commit message Signed-off-by ordering.
->>>>>>> Almost there. You're still missing a Co-developed-by tag, a From line,
->>>>>>> or both.
->>>>>> It's neither. This patch was applied to a tree by myself, and I asked
->>>>>> Eddie to send it to mainline for merging.
->>>>> Then you are missing a From line. As the patch looks like know, Eddie is
->>>>> considered the author and not you.
->>>> You are incorrect. Eddie is the author.
->>> Then what is your SoB doing there in the first place? If Eddie is the
->>> sole author as well as the submitter, and you didn't touch the patch in
->>> between, then your SoB does not belong in the chain.
->>>
->>> If you applied Eddie's patch to your shared tree and Eddie generated a
->>> patch from there, then the chain should be:
->>>
->>>          SoB: E
->>>          SoB: J
->>>          SoB: E
->>>
->>> but this is starting to look a bit ridiculous.
->> I agree. I would appreciate it if you applied the patch, with or
->> without my sob in whatever order you deem fit.
-> Ok, I'll assume what you intended was E-J-E but that perhaps
-> git-format-patch swallowed the last SoB. Thanks for clarifying.
+Quoting Krzysztof Kozlowski (2022-03-03 07:59:22)
+> On 03/03/2022 07:13, Sandeep Maheswaram wrote:
+> > Add device tree bindings for SNPS phy tuning parameters.
+> >
+> > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > ---
+> >  .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 125 +++++++++++++++++++++
+> >  1 file changed, 125 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> > index 0dfe691..227c097 100644
+> > --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> > +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> > @@ -50,6 +50,131 @@ properties:
+> >    vdda33-supply:
+> >      description: phandle to the regulator 3.3V supply node.
+> >
+> > +  qcom,hs-disconnect:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description:
+> > +      This adjusts the voltage level for the threshold used to
+> > +      detect a disconnect event at the host. Possible values are.
 >
-> I was going to apply to the patch, but I see now that you didn't provide
-> any details about the product apart from it being a UPS and that's not
-> reflected in the define name.
+> ':', instead of full stop.
 >
-> Do you have a pointer to device (family) in question?
-
-
-Hi,
-
-
-It's a pretty generic pl2303 device and doesn't have to be used for UPS, 
-but that is our use-case. Here is a page with some detail about the 
-device: 
-https://www.ibm.com/docs/en/power9/9009-22A?topic=power-uninterruptible-supply
-
-
-Thanks,
-
-Eddie
-
-
+> > +      7 -> +21.56%
+> > +      6 -> +17.43%
+> > +      5 -> +13.32%
+> > +      4 -> +9.73%
+> > +      3 -> +6.3
+> > +      2 -> +3.17%
+> > +      1 -> 0, Design default%
 >
-> Johan
+> Use "default:" instead. Here and in other places.
+>
+> > +      0 -> -2.72%
+>
+> In current form this should be an enum... but actually current form is
+> wrong. You should not store register values in DT. What if next version
+> of hardware has a different meaning of these values?
+>
+> Instead, you should store here meaningful values, not register values.
+
++1
+
+To emphasize one point, meaningful values typically have a unit of
+measure, like Hz, ms, mV, etc. What are the percentages adjusting from?
+Is it a percentage decrease from the input voltage?
