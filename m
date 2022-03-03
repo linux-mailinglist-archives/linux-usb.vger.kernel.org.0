@@ -2,72 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0E14CC736
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 21:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC7F4CC77B
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 22:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236353AbiCCUnz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Mar 2022 15:43:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
+        id S234920AbiCCVBF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Mar 2022 16:01:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235500AbiCCUnx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 15:43:53 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1EDDEA3F
-        for <linux-usb@vger.kernel.org>; Thu,  3 Mar 2022 12:43:07 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id e23-20020a6b6917000000b006406b9433d6so4135386ioc.14
-        for <linux-usb@vger.kernel.org>; Thu, 03 Mar 2022 12:43:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=lCbnp0c+ARU7aCR1dzzMJYL5adEdTpl2eSYsjAMtki8=;
-        b=uXxz/+caAhW1vKAc0SIipkNh0Ac5ppIsI6Smpm0Fpr9Yc/iO2L5Aew72U1rcv6NHkA
-         ncAXXraKAMtmdYMLMpRPvYe0EbYwlaKRu38GIHz4+wOTmU8O3NEQ81NUqxBgxD2LAGFs
-         6a0s2GBfxDA7rthPIMieBiRn0PZrOdIgSXD29IR1Tk3YzrNUjPHu3A08bK3NbiSDxFn0
-         L1EwCBBH4JKTiku2N0TK6uxx2Yo0QUL7z8YIjseySp7iKEyYc4hOj08p9VX+yGlLbnjq
-         LCRycJi0tDc5YWpP9LpxKWa+UjmeV68cWH2Fu0dScGnrq2w6ZpDAURghM+zB7lAAnSEh
-         U5nw==
-X-Gm-Message-State: AOAM532gaoEYex6J97TzjZnlZtIZJUcLHZ1uotQ8/PnR6o1ruOp09lFp
-        CgVLUk0A6Xv4EkESnjisiA/oEv7FVctSDueVftTuwX5XdUx4
-X-Google-Smtp-Source: ABdhPJy0TdlkldIFbiSBr/Tp2J55fnwCTVN6aaQG/cQB9mSzw3hRWui/L5X6P7Xev64bFa/YddO8iqEITqPegxNLMKuO4T7RI0yX
+        with ESMTP id S231439AbiCCVBE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 16:01:04 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 251C21CFD1
+        for <linux-usb@vger.kernel.org>; Thu,  3 Mar 2022 13:00:18 -0800 (PST)
+Received: (qmail 1290092 invoked by uid 1000); 3 Mar 2022 16:00:17 -0500
+Date:   Thu, 3 Mar 2022 16:00:17 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg KH <greg@kroah.com>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs@googlegroups.com
+Subject: [PATCH] usb: usbtmc: Fix bug in pipe direction for control transfers
+Message-ID: <YiEsYTPEE6lOCOA5@rowland.harvard.edu>
+References: <YiElaWLdXT+m/RJM@rowland.harvard.edu>
+ <000000000000054cc905d95672fa@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:154d:b0:2bc:84c0:b255 with SMTP id
- j13-20020a056e02154d00b002bc84c0b255mr33769254ilu.87.1646340186916; Thu, 03
- Mar 2022 12:43:06 -0800 (PST)
-Date:   Thu, 03 Mar 2022 12:43:06 -0800
-In-Reply-To: <YiElaWLdXT+m/RJM@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000054cc905d95672fa@google.com>
-Subject: Re: [syzbot] WARNING in usbtmc_ioctl/usb_submit_urb
-From:   syzbot <syzbot+a48e3d1a875240cab5de@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000054cc905d95672fa@google.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+The syzbot fuzzer reported a minor bug in the usbtmc driver:
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+usb 5-1: BOGUS control dir, pipe 80001e80 doesn't match bRequestType 0
+WARNING: CPU: 0 PID: 3813 at drivers/usb/core/urb.c:412
+usb_submit_urb+0x13a5/0x1970 drivers/usb/core/urb.c:410
+Modules linked in:
+CPU: 0 PID: 3813 Comm: syz-executor122 Not tainted
+5.17.0-rc5-syzkaller-00306-g2293be58d6a1 #0
+...
+Call Trace:
+ <TASK>
+ usb_start_wait_urb+0x113/0x530 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x2a5/0x4b0 drivers/usb/core/message.c:153
+ usbtmc_ioctl_request drivers/usb/class/usbtmc.c:1947 [inline]
+
+The problem is that usbtmc_ioctl_request() uses usb_rcvctrlpipe() for
+all of its transfers, whether they are in or out.  It's easy to fix.
 
 Reported-and-tested-by: syzbot+a48e3d1a875240cab5de@syzkaller.appspotmail.com
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+CC: <stable@vger.kernel.org>
 
-Tested on:
+---
 
-commit:         754e0b0e Linux 5.17-rc4
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v5.17-rc4
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f4cd52967afc7901
-dashboard link: https://syzkaller.appspot.com/bug?extid=a48e3d1a875240cab5de
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=140dcc16700000
 
-Note: testing is done by a robot and is best-effort only.
+[as1973]
+
+
+ drivers/usb/class/usbtmc.c |   13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+Index: usb-devel/drivers/usb/class/usbtmc.c
+===================================================================
+--- usb-devel.orig/drivers/usb/class/usbtmc.c
++++ usb-devel/drivers/usb/class/usbtmc.c
+@@ -1919,6 +1919,7 @@ static int usbtmc_ioctl_request(struct u
+ 	struct usbtmc_ctrlrequest request;
+ 	u8 *buffer = NULL;
+ 	int rv;
++	unsigned int is_in, pipe;
+ 	unsigned long res;
+ 
+ 	res = copy_from_user(&request, arg, sizeof(struct usbtmc_ctrlrequest));
+@@ -1928,12 +1929,14 @@ static int usbtmc_ioctl_request(struct u
+ 	if (request.req.wLength > USBTMC_BUFSIZE)
+ 		return -EMSGSIZE;
+ 
++	is_in = request.req.bRequestType & USB_DIR_IN;
++
+ 	if (request.req.wLength) {
+ 		buffer = kmalloc(request.req.wLength, GFP_KERNEL);
+ 		if (!buffer)
+ 			return -ENOMEM;
+ 
+-		if ((request.req.bRequestType & USB_DIR_IN) == 0) {
++		if (!is_in) {
+ 			/* Send control data to device */
+ 			res = copy_from_user(buffer, request.data,
+ 					     request.req.wLength);
+@@ -1944,8 +1947,12 @@ static int usbtmc_ioctl_request(struct u
+ 		}
+ 	}
+ 
++	if (is_in)
++		pipe = usb_rcvctrlpipe(data->usb_dev, 0);
++	else
++		pipe = usb_sndctrlpipe(data->usb_dev, 0);
+ 	rv = usb_control_msg(data->usb_dev,
+-			usb_rcvctrlpipe(data->usb_dev, 0),
++			pipe,
+ 			request.req.bRequest,
+ 			request.req.bRequestType,
+ 			request.req.wValue,
+@@ -1957,7 +1964,7 @@ static int usbtmc_ioctl_request(struct u
+ 		goto exit;
+ 	}
+ 
+-	if (rv && (request.req.bRequestType & USB_DIR_IN)) {
++	if (rv && is_in) {
+ 		/* Read control data from device */
+ 		res = copy_to_user(request.data, buffer, rv);
+ 		if (res)
