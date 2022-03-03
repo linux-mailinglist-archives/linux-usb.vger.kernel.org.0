@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91014CB808
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 08:43:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91AB34CB80F
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 08:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbiCCHo2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Mar 2022 02:44:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S230326AbiCCHsP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Mar 2022 02:48:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiCCHo2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 02:44:28 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936B015C9ED;
-        Wed,  2 Mar 2022 23:43:43 -0800 (PST)
+        with ESMTP id S229588AbiCCHsM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 02:48:12 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD1231902;
+        Wed,  2 Mar 2022 23:47:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646293423; x=1677829423;
+  t=1646293647; x=1677829647;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uFbDZllnjgFcPHD9kmqzGdMepkMXyq0m/mHoU/oLtz0=;
-  b=M+p7vCVkJ+MJx45rqoNhHJJK8DV5Xh11er0XPuG/L4Z54rawI/IMDBfM
-   3ZTGGeI+8CHcRwthPig3q1bimjR8YO9R113Lc1AZMFhlQbF7mm3yKga0F
-   mK8XpOMGoC09GtX9CQ6ir/+rc5Qm/APjSMVCgnu6TSipnN6VAXizAbEWm
-   Ay9ot2+DTaCVVc7oHRmMUw+APi4O8RdqoOEBfasXLKtkqhs6WeWmGksdc
-   PEpGyt2hpeZBf49zFCITIcEJBLnVPA+f5J97WXNtkVT3x/dIyZPU4oPXF
-   g42z9HzIQAChaAveAbgDmdnULOl8sk9ZGBzb9tqORmT0BIYdBzCC/9Nlp
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="340035954"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=zuBLV0n7JURTuSzn8qbNt8uwizHW3bq1hZyOCBYUPq0=;
+  b=a/Ximz412s18uFnYkH9qxXxQeBMM+Lnx1EbBrBlw5PfT5VKjRubCBSRz
+   q0995Cws1bLA3DtPj3ncQlOnsY6XkU18pf2tlFbtdloPZIK53clMonFUN
+   G3Se8AN5jT0FRccFXsPk9/VwidMhzuAOtkQbipSMXWj3igeL8sY8XXV3d
+   PTJuW0kXeI1wCmhcVO/z9QJw73Arg2hW5InfTWPu5r3hVXUcUZ10Hhobn
+   oWK6qJKrU76XsQdZt+uTayx0WxGgcwFSpGc4yhNptde/IhCNAR7t6ZE34
+   T5ZIT9CuUJCezFtso4TN5507O6KXniw3WmIPobR1yPEOLisB+aOawe+bc
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="237114412"
 X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="340035954"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 23:43:43 -0800
+   d="scan'208";a="237114412"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 23:47:27 -0800
 X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="779158794"
+   d="scan'208";a="551637872"
 Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 23:43:41 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 03 Mar 2022 09:43:38 +0200
-Date:   Thu, 3 Mar 2022 09:43:38 +0200
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 23:47:24 -0800
+Received: by lahna (sSMTP sendmail emulation); Thu, 03 Mar 2022 09:47:22 +0200
+Date:   Thu, 3 Mar 2022 09:47:22 +0200
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     Mario Limonciello <mario.limonciello@amd.com>
 Cc:     "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
         linux-kernel@vger.kernel.org, Sanju.Mehta@amd.com
-Subject: Re: [PATCH 2/5] drivers/thunderbolt: don't resume switches without
- uid set
-Message-ID: <YiBxqkG9iB9x8SMW@lahna>
+Subject: Re: [PATCH 3/5] drivers/thunderbolt: Don't make DROM read success
+ compulsory
+Message-ID: <YiByip/y6p68j6lP@lahna>
 References: <20220302220709.3138846-1-mario.limonciello@amd.com>
- <20220302220709.3138846-2-mario.limonciello@amd.com>
+ <20220302220709.3138846-3-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220302220709.3138846-2-mario.limonciello@amd.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220302220709.3138846-3-mario.limonciello@amd.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,49 +64,58 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi Mario,
 
-On Wed, Mar 02, 2022 at 04:07:06PM -0600, Mario Limonciello wrote:
-> Switches might not have a uid set if the DROM read failed during
-
-That's "Routers" and "UID" :)
-
-Also $subject should have prefix "thunderbolt: " not
-"drivers/thunderbolt". Please capitalize the summary too:
-
-  thunderbolt: Do not resume routers if UID is not set
-
-The patch itself looks good to me.
-
-> initialization previously.
+On Wed, Mar 02, 2022 at 04:07:07PM -0600, Mario Limonciello wrote:
+> The USB4 specification doesn't make any requirements that reading
+> a device router's DROM is needed for the operation of the device.
 > 
-> Normally upon resume the uid is re-read to confirm it's the same
-> device connected.
-> * If the DROM read failed during init but then succeeded during
->   resume it could either be a new device or faulty device
-> * If the DROM read failed during init and also failed during resume
->   it might be a different device plugged in all together.
+> On page 207 of the USB4 1.0 spec it does mention that a CM may use
+> the DROM to make decision though:
+> ```
+> After enumerating a Router, the Connection Manager may read the
+> contents of the Router’s DROM. If, after reading the contents of
+> DROM, the Connection Manager decides that it does not want the
+> Router in its Domain...
+> ```
+
+You don't need to quote the spec for Thunderbolt patches. I can read,
+and it's not like it is going to change anyway ;-)
+
+> Other connection manager solutions don't necessarily read it or gate
+> the usability of the device on whether it was read.
+
+Indeed.
+
+> So make failures when reading the DROM show warnings but not
+> fail the initialization of the switch.
 > 
-> Detect this situation and prevent re-using the same configuration in
-> these cirucmstances.
-> 
+> Link: https://www.usb.org/sites/default/files/USB4%20Specification%2020211116.zip
+
+Also no need to "link" the spec. I know where the spec can be
+downloaded.
+
+Ditto for all patches.
+
 > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->  drivers/thunderbolt/switch.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  drivers/thunderbolt/switch.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
 > diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> index b5fb3e76ed09..294518af4ee4 100644
+> index 294518af4ee4..ac87e8b50e52 100644
 > --- a/drivers/thunderbolt/switch.c
 > +++ b/drivers/thunderbolt/switch.c
-> @@ -2980,6 +2980,10 @@ int tb_switch_resume(struct tb_switch *sw)
->  			return err;
->  		}
+> @@ -2784,10 +2784,8 @@ int tb_switch_add(struct tb_switch *sw)
 >  
-> +		/* We don't have any way to confirm this was the same device */
-> +		if (!sw->uid)
-> +			return -ENODEV;
-> +
->  		if (tb_switch_is_usb4(sw))
->  			err = usb4_switch_read_uid(sw, &uid);
->  		else
+>  		/* read drom */
+>  		ret = tb_drom_read(sw);
+> -		if (ret) {
+> -			dev_err(&sw->dev, "reading DROM failed\n");
+> -			return ret;
+> -		}
+> +		if (ret)
+> +			dev_warn(&sw->dev, "reading DROM failed: %d\n", ret);
+>  		tb_sw_dbg(sw, "uid: %#llx\n", sw->uid);
+>  
+>  		tb_check_quirks(sw);
 > -- 
 > 2.34.1
