@@ -2,196 +2,325 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6F44CBA36
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 10:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B1F4CBA8A
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 10:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231965AbiCCJbH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Mar 2022 04:31:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
+        id S232082AbiCCJo0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Mar 2022 04:44:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbiCCJbF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 04:31:05 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64F9A16DAC8
-        for <linux-usb@vger.kernel.org>; Thu,  3 Mar 2022 01:30:19 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-318-HvTdrMxlM1W3jsGT6It_3A-1; Thu, 03 Mar 2022 09:30:16 +0000
-X-MC-Unique: HvTdrMxlM1W3jsGT6It_3A-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 3 Mar 2022 09:30:14 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 3 Mar 2022 09:30:14 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Xiaomeng Tong' <xiam0nd.tong@gmail.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "bjohannesmeyer@gmail.com" <bjohannesmeyer@gmail.com>,
-        "c.giuffrida@vu.nl" <c.giuffrida@vu.nl>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
-        "h.j.bos@vu.nl" <h.j.bos@vu.nl>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "jakobkoschel@gmail.com" <jakobkoschel@gmail.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linux1394-devel@lists.sourceforge.net" 
-        <linux1394-devel@lists.sourceforge.net>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tipc-discussion@lists.sourceforge.net" 
-        <tipc-discussion@lists.sourceforge.net>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "v9fs-developer@lists.sourceforge.net" 
-        <v9fs-developer@lists.sourceforge.net>
-Subject: RE: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-Thread-Topic: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-Thread-Index: AQHYLhg9+DU/OogLf0+tiSFmjztyUKysHu+QgADRVYCAACVtoIAALj+AgAAE1XA=
-Date:   Thu, 3 Mar 2022 09:30:14 +0000
-Message-ID: <2d208771c50b4c6db4f43039e9d62851@AcuMS.aculab.com>
-References: <39404befad5b44b385698ff65465abe5@AcuMS.aculab.com>
- <20220303072657.11124-1-xiam0nd.tong@gmail.com>
-In-Reply-To: <20220303072657.11124-1-xiam0nd.tong@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S231977AbiCCJoZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 04:44:25 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF977172894
+        for <linux-usb@vger.kernel.org>; Thu,  3 Mar 2022 01:43:38 -0800 (PST)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220303094336epoutp01a075c490906a19e0ee9290c232371c67~Y1bAjFFMZ2874628746epoutp01G
+        for <linux-usb@vger.kernel.org>; Thu,  3 Mar 2022 09:43:36 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220303094336epoutp01a075c490906a19e0ee9290c232371c67~Y1bAjFFMZ2874628746epoutp01G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1646300616;
+        bh=JGt2SUFXN47lwLD6/OHx/URaET0Jb/5ljVf5ZET/LrU=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=awxpXq59SJiHvSLQdwKJ1TPT1BuLWGyVp+GRhxCkctHzWUKZpyezBX8hHN22q8rTv
+         OpZteJesIaym3T5WOdADApJX4b7iuHP7FjLhOhuAYOBq22FMQEgunAclp7pB815Ouv
+         J/RoD7a3i3ZcrOAzLfE44MViBph4f9blFyIc15l0=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220303094335epcas1p2305ca1dc3507e47c1035e838144dc1b1~Y1bAFFo3q2074320743epcas1p2B;
+        Thu,  3 Mar 2022 09:43:35 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.36.224]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4K8QzB3GqZz4x9Q5; Thu,  3 Mar
+        2022 09:43:34 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        61.3A.64085.6CD80226; Thu,  3 Mar 2022 18:43:34 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220303094334epcas1p256f56793abe1984803caf11ef76bfc0f~Y1a_cf1e81681416814epcas1p2J;
+        Thu,  3 Mar 2022 09:43:34 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220303094334epsmtrp23ace0099c009a1b00d372eee173dce0f~Y1a_bhwdQ1563115631epsmtrp2_;
+        Thu,  3 Mar 2022 09:43:34 +0000 (GMT)
+X-AuditID: b6c32a35-9c3ff7000000fa55-e3-62208dc63715
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        29.C3.29871.5CD80226; Thu,  3 Mar 2022 18:43:33 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.88.97.211]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220303094333epsmtip253dde6a648aadc01426a5f5bdf5d9f17~Y1a_QUQHN0753207532epsmtip2Y;
+        Thu,  3 Mar 2022 09:43:33 +0000 (GMT)
+From:   Youngjin Jang <yj84.jang@samsung.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     "Youngjin Jang" <yj84.jang@samsung.com>, js07.lee@samsung.com
+Subject: [PATCH v2] PM: Add device name to suspend_report_result()
+Date:   Thu,  3 Mar 2022 18:39:07 +0900
+Message-Id: <20220303093907.515129-1-yj84.jang@samsung.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAJsWRmVeSWpSXmKPExsWy7bCmge6xXoUkg90LRCyWNGVYNC9ez2bx
+        6OZvVotZU/YyWSzf189ocXnXHDaLs/OOs1l87j3CaLFoWSuzxd1TR9ks5n6ZymzRdWgxqwOP
+        x4JNpR6L97xk8ti0qpPNY//cNewefVtWMXqsWP2d3ePzJrkA9qhsm4zUxJTUIoXUvOT8lMy8
+        dFsl7+B453hTMwNDXUNLC3MlhbzE3FRbJRefAF23zBygO5UUyhJzSoFCAYnFxUr6djZF+aUl
+        qQoZ+cUltkqpBSk5BWYFesWJucWleel6eaklVoYGBkamQIUJ2Rk39l9hKnhjUdG4TbWBcbF+
+        FyMnh4SAicTXI4eYQGwhgR2MEldvS3UxcgHZnxglNp/Zww7hfGOU+L6qnx2m49vHp1CJvYwS
+        azbfYYFr2bf1MNgsNgFtiVVb5oFViQhcZpJ4+30CM0iCWcBR4sPBPawgtrCAk8T0vdvBxrII
+        qEr0vDoCFucVsJY4sf8bE8Q6eYmZl76zQ8QFJU7OfMICMUdeonnrbGaQBRICrRwSl7duhbrP
+        RWL57kWsELawxKvjW6DiUhKf3+1lg7DTJSY+fgsVL5D4+3gJM4RtLPHu7VogmwNogabE+l3Q
+        QFKU2Pl7LiPEXj6Jd197WEFKJAR4JTrahCBKlCUen18NNV1SYv3v/VDne0hsW7KLGRK+sRIX
+        fjUxTmCUn4Xkm1lIvpmFsHgBI/MqRrHUguLc9NRiwwJDeKQm5+duYgQnVS3THYwT337QO8TI
+        xMF4iFGCg1lJhNdSUyFJiDclsbIqtSg/vqg0J7X4EKMpMHwnMkuJJucD03peSbyhiaWBiZmR
+        iYWxpbGZkjjvqmmnE4UE0hNLUrNTUwtSi2D6mDg4pRqYDlzL3OO89Lri/Kt8gjzbpZp8p/Oc
+        LT/6f3K1x+/+5N5LqnXPNdwdv+69uiUsWKdbequrak7qox1FJq0TZhsYzLj374JMzt3w6ZX8
+        Nnv7QxauWd5856CTIbfvL5X4iY+T+yvPzg0+yv3jXM22n0o/I2w+efd03Eif+fCwQ1G3l7JO
+        79dkl50X9wv9nVdk56cqpW++Sk3ykt6ML0ny/N2t0y79iRTJ/t58wJHzZHLg50VmTlP/rJfd
+        U8ZX5Hs+3WLxq5W8ytEHl3O/DpzS9oZ11pS4yw0Nz67c4mv7dPaGdtwc3VT+0wevFq69VcSw
+        rig9sOjRZ7tdm7xfl8yqU/3x3Kvz+I/nGSlfVKWmFvruVmIpzkg01GIuKk4EAA4AizQzBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPLMWRmVeSWpSXmKPExsWy7bCSvO7RXoUkg8PbLC2WNGVYNC9ez2bx
+        6OZvVotZU/YyWSzf189ocXnXHDaLs/OOs1l87j3CaLFoWSuzxd1TR9ks5n6ZymzRdWgxqwOP
+        x4JNpR6L97xk8ti0qpPNY//cNewefVtWMXqsWP2d3ePzJrkA9igum5TUnMyy1CJ9uwSujBv7
+        rzAVvLGoaNym2sC4WL+LkZNDQsBE4tvHp+xdjFwcQgK7GSWmzvrBCJGQlPj66TNbFyMHkC0s
+        cfhwMUTNB0aJh9s+sIDUsAloS6zaMg+sWUTgNpNEz4NvTCAJZgFniXU7FoEVCQs4SUzfu50d
+        xGYRUJXoeXWEFcTmFbCWOLEfol5CQF5i5qXv7BBxQYmTM5+wQMyRl2jeOpt5AiPfLCSpWUhS
+        CxiZVjFKphYU56bnFhsWGOallusVJ+YWl+al6yXn525iBIe5luYOxu2rPugdYmTiYDzEKMHB
+        rCTCa6mpkCTEm5JYWZValB9fVJqTWnyIUZqDRUmc90LXyXghgfTEktTs1NSC1CKYLBMHp1QD
+        09WDYWrHVoZuNd2/43vN66++PHsea+wX+MyUEnRd6uPK4uOsl38+fqXV1z1/vuy7ksh7lVWd
+        y2ZWpoR9mmnhFBc/OenAoxkyJqxaF64HPe1aYZdkyct6qfJg6bTIPf9rfz42WffxqKpK/Foe
+        BTFNs/syWy+d2Xzu2AvDa9m/tlwO+8pxaf7x5m7W3km7DsfrvCjrXnVtYemlE02iXO9LJIOv
+        fJ23SCv55Ibaex7SikmRRp4Xo1J1quUPRMr3MDxbPK9xS4HHfOYVM1aH5fgZbNh2X0NW/d1n
+        Lyelv5M7My4efvl+Rl2V946pV+btfjA3bxu7u1ZE997qzVydDw2TZV7E6t/hSazJ8baf+9dy
+        Wr4SS3FGoqEWc1FxIgBM58VS4gIAAA==
+X-CMS-MailID: 20220303094334epcas1p256f56793abe1984803caf11ef76bfc0f
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220303094334epcas1p256f56793abe1984803caf11ef76bfc0f
+References: <CGME20220303094334epcas1p256f56793abe1984803caf11ef76bfc0f@epcas1p2.samsung.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-RnJvbTogWGlhb21lbmcgVG9uZw0KPiBTZW50OiAwMyBNYXJjaCAyMDIyIDA3OjI3DQo+IA0KPiBP
-biBUaHUsIDMgTWFyIDIwMjIgMDQ6NTg6MjMgKzAwMDAsIERhdmlkIExhaWdodCB3cm90ZToNCj4g
-PiBvbiAzIE1hciAyMDIyIDEwOjI3OjI5ICswODAwLCBYaWFvbWVuZyBUb25nIHdyb3RlOg0KPiA+
-ID4gVGhlIHByb2JsZW0gaXMgdGhlIG1pcy11c2Ugb2YgaXRlcmF0b3Igb3V0c2lkZSB0aGUgbG9v
-cCBvbiBleGl0LCBhbmQNCj4gPiA+IHRoZSBpdGVyYXRvciB3aWxsIGJlIHRoZSBIRUFEJ3MgY29u
-dGFpbmVyX29mIHBvaW50ZXIgd2hpY2ggcG9pbnRlcnMNCj4gPiA+IHRvIGEgdHlwZS1jb25mdXNl
-ZCBzdHJ1Y3QuIFNpZGVub3RlOiBUaGUgKm1pcy11c2UqIGhlcmUgcmVmZXJzIHRvDQo+ID4gPiBt
-aXN0YWtlbHkgYWNjZXNzIHRvIG90aGVyIG1lbWJlcnMgb2YgdGhlIHN0cnVjdCwgaW5zdGVhZCBv
-ZiB0aGUNCj4gPiA+IGxpc3RfaGVhZCBtZW1iZXIgd2hpY2ggYWN1dGFsbHkgaXMgdGhlIHZhbGlk
-IEhFQUQuDQo+ID4NCj4gPiBUaGUgcHJvYmxlbSBpcyB0aGF0IHRoZSBIRUFEJ3MgY29udGFpbmVy
-X29mIHBvaW50ZXIgc2hvdWxkIG5ldmVyDQo+ID4gYmUgY2FsY3VsYXRlZCBhdCBhbGwuDQo+ID4g
-VGhpcyBpcyB3aGF0IGlzIGZ1bmRhbWVudGFsbHkgYnJva2VuIGFib3V0IHRoZSBjdXJyZW50IGRl
-ZmluaXRpb24uDQo+IA0KPiBZZXMsIHRoZSBydWxlIGlzICJ0aGUgSEVBRCdzIGNvbnRhaW5lcl9v
-ZiBwb2ludGVyIHNob3VsZCBuZXZlciBiZQ0KPiBjYWxjdWxhdGVkIGF0IGFsbCBvdXRzaWRlIHRo
-ZSBsb29wIiwgYnV0IGhvdyBkbyB5b3UgbWFrZSBzdXJlIGV2ZXJ5b25lDQo+IGZvbGxvd3MgdGhp
-cyBydWxlPw0KPiBFdmVyeW9uZSBtYWtlcyBtaXN0YWtlcywgYnV0IHdlIGNhbiBlbGltaW5hdGUg
-dGhlbSBhbGwgZnJvbSB0aGUgYmVnaW5uaW5nDQo+IHdpdGggdGhlIGhlbHAgb2YgY29tcGlsZXIg
-d2hpY2ggY2FuIGNhdGNoIHN1Y2ggdXNlLWFmdGVyLWxvb3AgdGhpbmdzLg0KPiANCj4gPiA+IElP
-VywgeW91IHdvdWxkIGRlcmVmZXJlbmNlIGEgKE5VTEwgKyBvZmZzZXRfb2ZfbWVtYmVyKSBhZGRy
-ZXNzIGhlcmUuDQo+ID4NCj4gPldoZXJlPw0KPiANCj4gSW4gdGhlIGNhc2Ugd2hlcmUgYSBkZXZl
-bG9wZXIgZG8gbm90IGZvbGxvd3MgdGhlIGFib3ZlIHJ1bGUsIGFuZCBtaXN0YWtlbHkNCj4gYWNj
-ZXNzIGEgbm9uLWxpc3QtaGVhZCBtZW1iZXIgb2YgdGhlIEhFQUQncyBjb250YWluZXJfb2YgcG9p
-bnRlciBvdXRzaWRlDQo+IHRoZSBsb29wLiBGb3IgZXhhbXBsZToNCj4gICAgIHN0cnVjdCByZXF7
-DQo+ICAgICAgIGludCBhOw0KPiAgICAgICBzdHJ1Y3QgbGlzdF9oZWFkIGg7DQo+ICAgICB9DQo+
-ICAgICBzdHJ1Y3QgcmVxICpyOw0KPiAgICAgbGlzdF9mb3JfZWFjaF9lbnRyeShyLCBIRUFELCBo
-KSB7DQo+ICAgICAgIGlmIChyLT5hID09IDB4MTApDQo+ICAgICAgICAgYnJlYWs7DQo+ICAgICB9
-DQo+ICAgICAvLyB0aGUgZGV2ZWxvcGVyIG1hZGUgYSBtaXN0YWtlOiBoZSBkaWRuJ3QgdGFrZSB0
-aGlzIHNpdHVhdGlvbiBpbnRvDQo+ICAgICAvLyBhY2NvdW50IHdoZXJlIGFsbCBlbnRyaWVzIGlu
-IHRoZSBsaXN0IGFyZSAqci0+YSAhPSAweDEwKiwgYW5kIG5vdw0KPiAgICAgLy8gdGhlIHIgaXMg
-dGhlIEhFQUQncyBjb250YWluZXJfb2YgcG9pbnRlci4NCj4gICAgIHItPmEgPSAweDIwOw0KPiBU
-aHVzIHRoZSAici0+YSA9IDB4MjAiIHdvdWxkIGRlcmVmZXJlbmNlIGEgKE5VTEwgKyBvZmZzZXRf
-b2ZfbWVtYmVyKQ0KPiBhZGRyZXNzIGhlcmUuDQoNClRoYXQgaXMganVzdCBhIGJ1Zy4NCk5vIGRp
-ZmZlcmVudCB0byBmYWlsaW5nIHRvIGNoZWNrIGFueXRoaW5nIGVsc2UgbWlnaHQgJ3JldHVybicN
-CmEgTlVMTCBwb2ludGVyLg0KQmVjYXVzZSBpdCBpcyBhIE5VTEwgZGVyZWZlcmVuY2UgeW91IGZp
-bmQgb3V0IHByZXR0eSBxdWlja2x5Lg0KVGhlIGV4aXN0aW5nIGxvb3AgbGVhdmVzIHlvdSB3aXRo
-IGEgdmFsaWQgcG9pbnRlciB0byBzb21ldGhpbmcNCnRoYXQgaXNuJ3QgYSBsaXN0IGl0ZW0uDQoN
-Cj4gPiA+IFBsZWFzZSByZW1pbmQgbWUgaWYgaSBtaXNzZWQgc29tZXRoaW5nLCB0aGFua3MuDQo+
-ID4gPg0KPiA+ID4gQ2FuIHlvdSBzaGFyZSB5b3VyICJhbHRlcm5hdGl2ZSBkZWZpbml0aW9ucyIg
-ZGV0YWlscz8gdGhhbmtzIQ0KPiA+DQo+ID4gVGhlIGxvb3Agc2hvdWxkIHByb2JhYmx5IHVzZSBh
-cyBleHRyYSB2YXJpYWJsZSB0aGF0IHBvaW50cw0KPiA+IHRvIHRoZSAnbGlzdCBub2RlJyBpbiB0
-aGUgbmV4dCBzdHJ1Y3R1cmUuDQo+ID4gU29tZXRoaW5nIGxpa2U6DQo+ID4gCWZvciAoeHh4ICpp
-dGVyID0gaGVhZC0+bmV4dDsNCj4gPiAJCWl0ZXIgPT0gJmhlYWQgPyAoKGl0ZW0gPSBOVUxMKSww
-KSA6ICgoaXRlbSA9IGxpc3RfaXRlbShpdGVyKSwxKSk7DQo+ID4gCQlpdGVyID0gaXRlbS0+bWVt
-YmVyLT5uZXh0KSB7DQo+ID4gCSAgIC4uLg0KPiA+IFdpdGggYSBiaXQgb2YgY2FzdGluZyB5b3Ug
-Y2FuIHVzZSAnaXRlbScgdG8gaG9sZCAnaXRlcicuDQo+IA0KPiB5b3Ugc3RpbGwgY2FuIG5vdCBt
-YWtlIHN1cmUgZXZlcnlvbmUgZm9sbG93cyB0aGlzIHJ1bGU6DQo+ICJkbyBub3QgdXNlIGl0ZXJh
-dG9yIG91dHNpZGUgdGhlIGxvb3AiIHdpdGhvdXQgdGhlIGhlbHAgb2YgY29tcGlsZXIsDQo+IGJl
-Y2F1c2UgaXRlbSBpcyBkZWNsYXJlZCBvdXRzaWRlIHRoZSBsb29wLg0KDQpUaGF0IG9uZSBoYXMg
-J2l0ZXInIGRlZmluZWQgaW4gdGhlIGxvb3AuDQoNCj4gQlRXLCB0byBhdm9pZCBhbWJpZ3VpdHnv
-vIx0aGUgImFsdGVybmF0aXZlIGRlZmluaXRpb25zIiBoZXJlIGkgYXNrZWQgaXMNCj4gc29tZXRo
-aW5nIGZyb20geW91IGluIHRoaXMgY29udGV4dDoNCj4gIk9UT0ggdGhlcmUgbWF5IGJlIGFsdGVy
-bmF0aXZlIGRlZmluaXRpb25zIHRoYXQgY2FuIGJlIHVzZWQgdG8gZ2V0DQo+IHRoZSBjb21waWxl
-ciAob3Igb3RoZXIgY29tcGlsZXItbGlrZSB0b29scykgdG8gZGV0ZWN0IGJyb2tlbiBjb2RlLg0K
-PiBFdmVuIGlmIHRoZSBkZWZpbml0aW9uIGNhbid0IHBvc3NpYmx5IGdlbmVyYXRlIGEgd29ya2lu
-ZyBrZXJybmVsLiINCg0KSSB3YXMgdGhpbmtpbmcgb2Ygc29tZXRoaW5nIGxpa2U6DQoJaWYgKChw
-b3MgPSBsaXN0X2ZpcnN0KSksIDEpIHBvcyA9IE5VTEwgZWxzZQ0Kc28gdGhhdCB1bmNoZWNrZWQg
-ZGVyZWZlcmVuY2VzIGFmdGVyIHRoZSBsb29wIHdpbGwgYmUgZGV0ZWN0YWJsZQ0KYXMgTlVMTCBw
-b2ludGVyIG9mZnNldHMgLSBidXQgdGhhdCBpbiBpdHNlbGYgaXNuJ3QgZW5vdWdoIHRvIGF2b2lk
-DQpvdGhlciB3YXJuaW5ncy4NCg0KPiA+ID4gVGhlICJsaXN0X2Zvcl9lYWNoX2VudHJ5X2luc2lk
-ZShwb3MsIHR5cGUsIGhlYWQsIG1lbWJlcikiIHdheSBtYWtlcw0KPiA+ID4gdGhlIGl0ZXJhdG9y
-IGludmlzaWFibGUgb3V0c2lkZSB0aGUgbG9vcCwgYW5kIHdvdWxkIGJlIGNhdGNoZWQgYnkNCj4g
-PiA+IGNvbXBpbGVyIGlmIHVzZS1hZnRlci1sb29wIHRoaW5ncyBoYXBwZW5lZC4NCj4gDQo+ID4g
-SXQgaXMgYWxzbyBhIGNvbXBldGUgUElUQSBmb3IgYW55dGhpbmcgZG9pbmcgYSBzZWFyY2guDQo+
-IA0KPiBZb3UgbWVhbiBpdCB3b3VsZCBiZSBhIGJ1cmRlbiBvbiBzZWFyY2g/IGNhbiB5b3Ugc2hv
-dyBtZSBzb21lIGV4YW1wbGVzPw0KDQpUaGUgd2hvbGUgYnVzaW5lc3Mgb2YgaGF2aW5nIHRvIHNh
-dmUgdGhlIHBvaW50ZXIgdG8gdGhlIGxvY2F0ZWQgaXRlbQ0KYmVmb3JlIGJyZWFraW5nIHRoZSBs
-b29wLCByZW1lbWJlcmluZyB0byBoYXZlIHNldCBpdCB0byBOVUxMIGVhcmxpZXIgZXRjLg0KDQpJ
-dCBpcyBzbyBtdWNoIGJldHRlciBpZiB5b3UgY2FuIGp1c3QgZG86DQoJCWlmIChmb3VuZCkNCgkJ
-CWJyZWFrOw0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFt
-bGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3Ry
-YXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+From: "Youngjin Jang" <yj84.jang@samsung.com>
+
+currently, suspend_report_result() prints only function information.
+If any driver uses common pm function, nobody knows who called
+failed function exactly.
+
+So, device is needed to recognize specific wrong driver.
+
+e.g.)
+PM: dpm_run_callback(): pm_generic_suspend+0x0/0x48 returns 0
+PM: dpm_run_callback(): platform_pm_suspend+0x0/0x68 returns 0
+after patch,
+amba 1740000.etm: dpm_run_callback(): pm_generic_suspend+0x0/0x48
+returns 0
+armv7-pmu soc:pmu: dpm_run_callback(): platform_pm_suspend+0x0/0x68
+returns 0
+
+Signed-off-by: Youngjin Jang <yj84.jang@samsung.com>
+---
+Changes since v1:
+ - Use dev_err() to print out device name
+ - Use real name on email sender
+ 
+ drivers/base/power/main.c  | 10 +++++-----
+ drivers/pci/pci-driver.c   | 14 +++++++-------
+ drivers/pnp/driver.c       |  2 +-
+ drivers/usb/core/hcd-pci.c |  4 ++--
+ include/linux/pm.h         |  8 ++++----
+ 5 files changed, 19 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index 04ea92cbd9cf..41e17b8c2c20 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -485,7 +485,7 @@ static int dpm_run_callback(pm_callback_t cb, struct device *dev,
+ 	trace_device_pm_callback_start(dev, info, state.event);
+ 	error = cb(dev);
+ 	trace_device_pm_callback_end(dev, error);
+-	suspend_report_result(cb, error);
++	suspend_report_result(dev, cb, error);
+ 
+ 	initcall_debug_report(dev, calltime, cb, error);
+ 
+@@ -1568,7 +1568,7 @@ static int legacy_suspend(struct device *dev, pm_message_t state,
+ 	trace_device_pm_callback_start(dev, info, state.event);
+ 	error = cb(dev, state);
+ 	trace_device_pm_callback_end(dev, error);
+-	suspend_report_result(cb, error);
++	suspend_report_result(dev, cb, error);
+ 
+ 	initcall_debug_report(dev, calltime, cb, error);
+ 
+@@ -1855,7 +1855,7 @@ static int device_prepare(struct device *dev, pm_message_t state)
+ 	device_unlock(dev);
+ 
+ 	if (ret < 0) {
+-		suspend_report_result(callback, ret);
++		suspend_report_result(dev, callback, ret);
+ 		pm_runtime_put(dev);
+ 		return ret;
+ 	}
+@@ -1960,10 +1960,10 @@ int dpm_suspend_start(pm_message_t state)
+ }
+ EXPORT_SYMBOL_GPL(dpm_suspend_start);
+ 
+-void __suspend_report_result(const char *function, void *fn, int ret)
++void __suspend_report_result(const char *function, struct device *dev, void *fn, int ret)
+ {
+ 	if (ret)
+-		pr_err("%s(): %pS returns %d\n", function, fn, ret);
++		dev_err(dev, "%s(): %pS returns %d\n", function, fn, ret);
+ }
+ EXPORT_SYMBOL_GPL(__suspend_report_result);
+ 
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index 588588cfda48..415f7664b010 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -596,7 +596,7 @@ static int pci_legacy_suspend(struct device *dev, pm_message_t state)
+ 		int error;
+ 
+ 		error = drv->suspend(pci_dev, state);
+-		suspend_report_result(drv->suspend, error);
++		suspend_report_result(dev, drv->suspend, error);
+ 		if (error)
+ 			return error;
+ 
+@@ -775,7 +775,7 @@ static int pci_pm_suspend(struct device *dev)
+ 		int error;
+ 
+ 		error = pm->suspend(dev);
+-		suspend_report_result(pm->suspend, error);
++		suspend_report_result(dev, pm->suspend, error);
+ 		if (error)
+ 			return error;
+ 
+@@ -821,7 +821,7 @@ static int pci_pm_suspend_noirq(struct device *dev)
+ 		int error;
+ 
+ 		error = pm->suspend_noirq(dev);
+-		suspend_report_result(pm->suspend_noirq, error);
++		suspend_report_result(dev, pm->suspend_noirq, error);
+ 		if (error)
+ 			return error;
+ 
+@@ -1010,7 +1010,7 @@ static int pci_pm_freeze(struct device *dev)
+ 		int error;
+ 
+ 		error = pm->freeze(dev);
+-		suspend_report_result(pm->freeze, error);
++		suspend_report_result(dev, pm->freeze, error);
+ 		if (error)
+ 			return error;
+ 	}
+@@ -1030,7 +1030,7 @@ static int pci_pm_freeze_noirq(struct device *dev)
+ 		int error;
+ 
+ 		error = pm->freeze_noirq(dev);
+-		suspend_report_result(pm->freeze_noirq, error);
++		suspend_report_result(dev, pm->freeze_noirq, error);
+ 		if (error)
+ 			return error;
+ 	}
+@@ -1116,7 +1116,7 @@ static int pci_pm_poweroff(struct device *dev)
+ 		int error;
+ 
+ 		error = pm->poweroff(dev);
+-		suspend_report_result(pm->poweroff, error);
++		suspend_report_result(dev, pm->poweroff, error);
+ 		if (error)
+ 			return error;
+ 	}
+@@ -1154,7 +1154,7 @@ static int pci_pm_poweroff_noirq(struct device *dev)
+ 		int error;
+ 
+ 		error = pm->poweroff_noirq(dev);
+-		suspend_report_result(pm->poweroff_noirq, error);
++		suspend_report_result(dev, pm->poweroff_noirq, error);
+ 		if (error)
+ 			return error;
+ 	}
+diff --git a/drivers/pnp/driver.c b/drivers/pnp/driver.c
+index cc6757dfa3f1..c02e7bf643a6 100644
+--- a/drivers/pnp/driver.c
++++ b/drivers/pnp/driver.c
+@@ -171,7 +171,7 @@ static int __pnp_bus_suspend(struct device *dev, pm_message_t state)
+ 
+ 	if (pnp_drv->driver.pm && pnp_drv->driver.pm->suspend) {
+ 		error = pnp_drv->driver.pm->suspend(dev);
+-		suspend_report_result(pnp_drv->driver.pm->suspend, error);
++		suspend_report_result(dev, pnp_drv->driver.pm->suspend, error);
+ 		if (error)
+ 			return error;
+ 	}
+diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+index d630cccd2e6e..dd44e37a454a 100644
+--- a/drivers/usb/core/hcd-pci.c
++++ b/drivers/usb/core/hcd-pci.c
+@@ -446,7 +446,7 @@ static int suspend_common(struct device *dev, bool do_wakeup)
+ 				HCD_WAKEUP_PENDING(hcd->shared_hcd))
+ 			return -EBUSY;
+ 		retval = hcd->driver->pci_suspend(hcd, do_wakeup);
+-		suspend_report_result(hcd->driver->pci_suspend, retval);
++		suspend_report_result(dev, hcd->driver->pci_suspend, retval);
+ 
+ 		/* Check again in case wakeup raced with pci_suspend */
+ 		if ((retval == 0 && do_wakeup && HCD_WAKEUP_PENDING(hcd)) ||
+@@ -556,7 +556,7 @@ static int hcd_pci_suspend_noirq(struct device *dev)
+ 		dev_dbg(dev, "--> PCI %s\n",
+ 				pci_power_name(pci_dev->current_state));
+ 	} else {
+-		suspend_report_result(pci_prepare_to_sleep, retval);
++		suspend_report_result(dev, pci_prepare_to_sleep, retval);
+ 		return retval;
+ 	}
+ 
+diff --git a/include/linux/pm.h b/include/linux/pm.h
+index e1e9402180b9..cdccbb9cef2c 100644
+--- a/include/linux/pm.h
++++ b/include/linux/pm.h
+@@ -745,11 +745,11 @@ extern int dpm_suspend_late(pm_message_t state);
+ extern int dpm_suspend(pm_message_t state);
+ extern int dpm_prepare(pm_message_t state);
+ 
+-extern void __suspend_report_result(const char *function, void *fn, int ret);
++extern void __suspend_report_result(const char *function, struct device *dev, void *fn, int ret);
+ 
+-#define suspend_report_result(fn, ret)					\
++#define suspend_report_result(dev, fn, ret)				\
+ 	do {								\
+-		__suspend_report_result(__func__, fn, ret);		\
++		__suspend_report_result(__func__, dev, fn, ret);	\
+ 	} while (0)
+ 
+ extern int device_pm_wait_for_dev(struct device *sub, struct device *dev);
+@@ -789,7 +789,7 @@ static inline int dpm_suspend_start(pm_message_t state)
+ 	return 0;
+ }
+ 
+-#define suspend_report_result(fn, ret)		do {} while (0)
++#define suspend_report_result(dev, fn, ret)	do {} while (0)
+ 
+ static inline int device_pm_wait_for_dev(struct device *a, struct device *b)
+ {
+-- 
+2.25.1
 
