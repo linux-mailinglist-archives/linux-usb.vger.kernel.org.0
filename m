@@ -2,123 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531C64CB82A
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 08:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E33AD4CB8A6
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Mar 2022 09:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbiCCHy7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Mar 2022 02:54:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
+        id S231293AbiCCIWb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Mar 2022 03:22:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiCCHy6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 02:54:58 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AC416F960;
-        Wed,  2 Mar 2022 23:54:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646294053; x=1677830053;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b/d2xM5QHwo48QlJhIIi1Xm1eu2owKNVfYPj+uvB7DE=;
-  b=E5XWVMiFXWfa50RdckcLz4v0p17w4Kw015LpUCgZ0VH7fFFCuDoHQkDw
-   OnMzMeBEy1CsdXdSwsjwLua1dU+FlzCu4FWvr8Iu/hIkQapkhZuuYtQQ3
-   O5GKdW6IilfR/hKdRKyIBKuW2JDYjfLsDTObpHhnfagbXjgs2KCL4Sk0J
-   sLR5G3s2M7SaupOSKCzYHwmq2DPG0tg3ZaVb/0jsAv1e5ZrUjcJ2jcWn3
-   9KA2nnctT/MCESSdHkRvktnf5LjtYnbDLvlMK/3s4cPHS178s5HbSBA+y
-   YCQ9RTM2vk/pERE0TbRZfw3+VCH6KpkBHsW754Ydydr0WaUs3uc4HLiuY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="241023334"
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="241023334"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 23:54:12 -0800
-X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
-   d="scan'208";a="508496453"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 23:54:10 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 03 Mar 2022 09:54:08 +0200
-Date:   Thu, 3 Mar 2022 09:54:08 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Sanju.Mehta@amd.com
-Subject: Re: [PATCH 4/5] drivers/thunderbolt: Clarify/correct register
- offsets for tb_cap_plug_events
-Message-ID: <YiB0IFe96XIORdUz@lahna>
-References: <20220302220709.3138846-1-mario.limonciello@amd.com>
- <20220302220709.3138846-4-mario.limonciello@amd.com>
+        with ESMTP id S230344AbiCCIWa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Mar 2022 03:22:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF2D171874;
+        Thu,  3 Mar 2022 00:21:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55DD761AAD;
+        Thu,  3 Mar 2022 08:21:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B59D2C004E1;
+        Thu,  3 Mar 2022 08:21:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646295704;
+        bh=Gp6JglkhjTdAVrzVd96E3S7hvE4cbhVXiV0LaXlu1+8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gVeWsBsFmJjqd/M0UDKsCa9PwCDab68I/C7hyff7wFeDn8dIZaEAnRxtUiZAvIoiN
+         YXIGndqRXGDEud7HAOK68XYWvp3PwD0HOUurBSuXtMuIA9rxTenQI1QCh+87+jbH3G
+         ZKwK7NZ8bAYGta5DZFlB2ghO/l4/9usaqLfZ/UoeZED4pq+Pr4epTUFUonpSk9/w3q
+         BV60J+cRbF7I1AK91S7zF7Cwg2yvPrVnWEJvgEbCJOvfq+pnXmKq1YfrmQvfqXMdOW
+         TnxBCDRfqKv4bM2+jk9W9Pt3uB/JeZtjp+fXzwVkTacxrwf/4WLhvdjk+24uaj9MDD
+         JMhGeX+W53zzA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nPgiU-0001j1-2Q; Thu, 03 Mar 2022 09:21:42 +0100
+Date:   Thu, 3 Mar 2022 09:21:42 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Dawid Buchwald <buchwald.dawid@gmail.com>
+Cc:     linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] Support for new variant of PL2303GS adapter
+Message-ID: <YiB6llY1e+QGekyL@hovoldconsulting.com>
+References: <CAHxGD_vXqJS-6W6AS2hc7H-2ht8Ofy16faSpgaqoDArk3CY0Qw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220302220709.3138846-4-mario.limonciello@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHxGD_vXqJS-6W6AS2hc7H-2ht8Ofy16faSpgaqoDArk3CY0Qw@mail.gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 04:07:08PM -0600, Mario Limonciello wrote:
-> The USB4 1.0 specification outlines the `cap_plug_events` structure in
-> table 13-14 located on page 507.  This shows that there was a mistake
-> in VSC_CS_1 where plug events disable should be 4 bits and
-> "TBT3-Compatible" should be 3 bits.
+[ +CC: linux-usb ]
+
+On Wed, Mar 02, 2022 at 07:47:17PM +0100, Dawid Buchwald wrote:
+> This is the issue I have with recently acquired PL2303 adapter:
 > 
-> While correcting the mistake, update the names and comments to more
-> closely match the specification.  This should not change anything
-> functionally.
+> [   70.502848] usb 1-2: new full-speed USB device number 5 using xhci_hcd
+> [   70.652523] usb 1-2: New USB device found, idVendor=067b,
+> idProduct=23f3, bcdDevice= 6.05
+> [   70.652533] usb 1-2: New USB device strings: Mfr=1, Product=2,
+> SerialNumber=3
+> [   70.652538] usb 1-2: Product: USB-Serial Controller
+> [   70.652540] usb 1-2: Manufacturer: Prolific Technology Inc.
+> [   70.652543] usb 1-2: SerialNumber: CJAKj19B616
+> [   70.674558] usbcore: registered new interface driver usbserial_generic
+> [   70.674578] usbserial: USB Serial support registered for generic
+> [   70.677490] usbcore: registered new interface driver pl2303
+> [   70.677498] usbserial: USB Serial support registered for pl2303
+> [   70.677510] pl2303 1-2:1.0: pl2303 converter detected
+> [   70.677513] pl2303 1-2:1.0: unknown device type, please report to
+> linux-usb@vger.kernel.org
 > 
-> Link: https://www.usb.org/sites/default/files/USB4%20Specification%2020211116.zip
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Dawid Buchwald <buchwald.dawid@gmail.com>
+
+Thanks for the patch. Looks good, but unfortunately it has been
+whitespace damaged (tabs replaced by space, e.g. by your mailer) and
+doesn't apply.
+
+I could fix it up for you if you prefer, but it's probably better if
+you get this fixed on your end so you're all set for your future
+contributions.
+
+Try sending the patch to yourself first and make sure you can apply it
+with git-am. Take a look at git-send-email too for sending.
+
+Please also add a "USB: serial: pl2303: " prefix to the Subject line and
+shorten the current subject somewhat (e.g. "add support for PL2303GS").
+
+For completeness, please also include the output of "lsusb -v" for this
+device. It can replace the log snipped above.
+
 > ---
->  drivers/thunderbolt/tb_regs.h | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-> index 70795a2aa9bb..8c42f8bc679e 100644
-> --- a/drivers/thunderbolt/tb_regs.h
-> +++ b/drivers/thunderbolt/tb_regs.h
-> @@ -146,14 +146,14 @@ struct tb_eeprom_ctl {
->  
->  struct tb_cap_plug_events {
->  	struct tb_cap_extended_short cap_header;
-> -	u32 __unknown1:2;
-> -	u32 plug_events:5;
-> -	u32 __unknown2:25;
-> -	u32 __unknown3;
-> -	u32 __unknown4;
-> +	u32 __unknown1:3; /* VSC_CS_1 */
-> +	u32 plug_events:4; /* VSC_CS_1 */
-> +	u32 __unknown2:25; /* VSC_CS_1 */
-> +	u32 vsc_cs_2;
-> +	u32 vsc_cs_3;
->  	struct tb_eeprom_ctl eeprom_ctl;
-> -	u32 __unknown5[7];
-> -	u32 drom_offset; /* 32 bit register, but eeprom addresses are 16 bit */
-> +	u32 __unknown5[7]; /* VSC_CS_5 -> VSC_CS_11 */
-> +	u32 drom_offset; /* VSC_CS_12: 32 bit register, but eeprom addresses are 16 bit */
->  } __packed;
->  
->  /* device headers */
-> @@ -464,6 +464,10 @@ struct tb_regs_hop {
->  
->  /* Plug Events registers */
->  #define TB_PLUG_EVENTS_USB_DISABLE		BIT(2)
-> +#define USB4_PLUG_EVENTS_LANE_DISABLE		BIT(3)
-> +#define USB4_PLUG_EVENTS_DPOUT_DISABLE		BIT(4)
-> +#define USB4_PLUG_EVENTS_LOW_DPIN_DISABLE	BIT(5)
-> +#define USB4_PLUG_EVENTS_HIGH_DPIN_DISABLE	BIT(6)
+> diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+> index a70fd86f735c..1072f8eb6ab9 100644
+> --- a/drivers/usb/serial/pl2303.c
+> +++ b/drivers/usb/serial/pl2303.c
+> @@ -435,6 +435,7 @@ static int pl2303_detect_type(struct usb_serial *serial)
+>                 case 0x105:
+>                 case 0x305:
+>                 case 0x405:
+> +               case 0x605:
+>                         /*
+>                          * Assume it's an HXN-type if the device doesn't
+>                          * support the old read request value.
 
-Since this is TBT3 "compatible" we should use TB_ prefix. What about:
-
-TB_PLUG_EVENTS_CS_1_ ?
-
-or 
-
-TB_VSEC_3_CS_1_ ?
-
-something that is easy to match with the register name in the USB4 spec.
+Johan
