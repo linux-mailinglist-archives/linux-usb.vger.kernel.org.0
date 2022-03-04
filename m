@@ -2,96 +2,236 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 933934CD866
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Mar 2022 16:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C0D4CD96C
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Mar 2022 17:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237124AbiCDP7B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Mar 2022 10:59:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
+        id S239571AbiCDQsh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Mar 2022 11:48:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234317AbiCDP7A (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Mar 2022 10:59:00 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCCF6F48D
-        for <linux-usb@vger.kernel.org>; Fri,  4 Mar 2022 07:58:11 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id kt27so18501613ejb.0
-        for <linux-usb@vger.kernel.org>; Fri, 04 Mar 2022 07:58:11 -0800 (PST)
+        with ESMTP id S240819AbiCDQs1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Mar 2022 11:48:27 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E2760FA
+        for <linux-usb@vger.kernel.org>; Fri,  4 Mar 2022 08:47:38 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id j13so251127plx.4
+        for <linux-usb@vger.kernel.org>; Fri, 04 Mar 2022 08:47:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ikOaY4WgNW4ap5y0cDzLfLJZo+z0nd9LAiZZqby3v7I=;
-        b=WslIidjFM8mdyg+UgPm5PsKVm3kFWUGXR0xXHc4pMcMEBEclhWFInmROkqrCcWfrmE
-         yXZ+cQ8RcZEgxNmbrmU23fuqHzyaDobA+jE1wILU7jhV3k7F+IwPrnl1FKRbaE3dhrbA
-         chIUWvZ7SPjdCLnfYMCSYVSVotkYmRxaK9ef0Bja5Ku+WpVjehl5Bz4r2uDnibQCx3km
-         BF6/Z3OPEYAYU8VEXRbCBtx5JXcFdhriR93d55G7WwIi+b1Oq4iaNLoAOBEAmC/ogpu9
-         Qm1c2T/0KlYyWE3fkiV+CatJg9L9t6b8ssGD3ny2EDvLjFBNeDaS/MN5u6MbWR4slKBy
-         /Svg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=UWkk0uBu0jNx1jlmlEAHZrCFH0Ow2QY0VnclMogaKZA=;
+        b=KwXz8HiKBcGhZmtQJUtz/f6kjUWc334PSXkjKi8gcJTaOQo0/sEQE3McfTBWtYFR5k
+         Qpe2leEGKxHy/f4ieXWmHCQgkDADja6/P9RNcDVKjFujZHP7JJD4hKd+ZUJYMrE3OVWl
+         9uoPUTZ9qdmMBmpKdlHEnOt3WNKQeT4p+j6M4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ikOaY4WgNW4ap5y0cDzLfLJZo+z0nd9LAiZZqby3v7I=;
-        b=ifM/WPzkWwhvhrg8XqLQW/9PFyGfRsY6lXepM4husis9fyVh9fZRPZEeJ0yfIHrtk5
-         UUZrjDt9tL4YiIini8NuLVgQDhkE8haLMDP2PQcTQ7bVOrKaoNfNgvPBuivxEX7We92y
-         PLVcMHMRMjfhkyGV92owjc6sp1pwkW5fzgFuMjHAxYBW4j4FKKx9ZTLdu4THo8mEXEKG
-         +DoAVuIuukGiIXC7PWQfAh+qegqLo9iaPpfwNv6/u93CixLqj6ZS3Wqb2wxvO4nD2TSG
-         TZBsoBDBbFVi1jEEyY3KMfEfUodxBc6fpGSd0z2slzvcbe4YStOjw935c57LncYfsmMg
-         aMVA==
-X-Gm-Message-State: AOAM5327tTmZ9GbI3UOCh0BoGdwd88zGUljxlEpCdTm9y2vx+jTAfZdV
-        Z6dR/UxGDgEtmY3mAC+RWTVZUStsVx0IcG+MnT8=
-X-Google-Smtp-Source: ABdhPJwMOr/4FiZmIV8Xmk69pxcWDoGZkMkn+sNuJYI72rielxIxZf01G6EpjVQbJe4WY002H5Mw4ndxUATUjaazQnM=
-X-Received: by 2002:a17:907:7f06:b0:6d6:f8f7:2655 with SMTP id
- qf6-20020a1709077f0600b006d6f8f72655mr14249497ejc.658.1646409490028; Fri, 04
- Mar 2022 07:58:10 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=UWkk0uBu0jNx1jlmlEAHZrCFH0Ow2QY0VnclMogaKZA=;
+        b=bQCHhNhBj+HZFOJcfmayof0ohvpY0nwyfiHoFs4f8uavms+cekwZneSLtcWW4rjg3q
+         tjQldOqQ8tHC9xWakNtW8zDoiAHdJXQZxED99Wi8mzM69dBv7eyJvDwz469ArhHP/Kr2
+         R6Oe0zwfMBxKsatHHhAee7vhcXWt3nalkZIAMp72FlPruo8sa+ryx1SCmuZ6GL9/1zjB
+         jbPUOSwQ1oFgeKzaKugg+eSrnwVtCGm7nkvBN4kIT2VuTT0Ez6atBQaju+fMP8bneYTT
+         Rcz/FKPwh/Y2tjYn9LHNA2xIok5MjbY/0T/rj8E5XKxv/Jn9VpRtLckohK30dix/z8qG
+         TMWg==
+X-Gm-Message-State: AOAM531WV6ljUaJgRF5RSLFweYELN80zYcUtdLNCzEBOGwDV0K0F9Vkk
+        gfOWysnQdrn3nztFJiFa1XE8DLkKlgl9Gw==
+X-Google-Smtp-Source: ABdhPJygDLM6vn1CP8G+JFD6hR5yUQJTkAg+Zd8FsLvVEDVetnN/4JV4PNsbL8vscZhnR7uaJNWENg==
+X-Received: by 2002:a17:90a:67c9:b0:1b9:51d5:6c13 with SMTP id g9-20020a17090a67c900b001b951d56c13mr11551613pjm.216.1646412457902;
+        Fri, 04 Mar 2022 08:47:37 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:f35b:8ac4:5a84:dca])
+        by smtp.gmail.com with UTF8SMTPSA id u14-20020a17090adb4e00b001bee5dd39basm10050651pjx.1.2022.03.04.08.47.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Mar 2022 08:47:37 -0800 (PST)
+Date:   Fri, 4 Mar 2022 08:47:34 -0800
+From:   "mka@chromium.org" <mka@chromium.org>
+To:     "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "Tao Wang (Consultant) (QUIC)" <quic_wat@quicinc.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dianders@chromium.org" <dianders@chromium.org>,
+        "frowand.list@gmail.com" <frowand.list@gmail.com>,
+        "hadess@hadess.net" <hadess@hadess.net>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "peter.chen@kernel.org" <peter.chen@kernel.org>,
+        "ravisadineni@chromium.org" <ravisadineni@chromium.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "rogerq@kernel.org" <rogerq@kernel.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "swboyd@chromium.org" <swboyd@chromium.org>
+Subject: Re: =?utf-8?B?5Zue5aSNOiDlm57lpI0=?= =?utf-8?Q?=3A?= Re: [PATCH v20
+ 3/5] usb: misc: Add onboard_usb_hub driver
+Message-ID: <YiJCpt46S1ngV+y7@google.com>
+References: <SA1PR02MB86067ACF0C96F18B7306D208903A9@SA1PR02MB8606.namprd02.prod.outlook.com>
+ <SA1PR02MB860660B6F33011E5A97F7930903A9@SA1PR02MB8606.namprd02.prod.outlook.com>
+ <YhURQAksLKVuzU36@google.com>
+ <SA1PR02MB860602E0AC4D9BD0BC4245B5903C9@SA1PR02MB8606.namprd02.prod.outlook.com>
+ <YhXolQDwIMbTi/O2@kroah.com>
+ <DM8PR02MB81988555CA6B66BB3FD5E488E3019@DM8PR02MB8198.namprd02.prod.outlook.com>
+ <Yh0UZUU9/9Hd6Pc1@google.com>
+ <DM8PR02MB8198F2BFE9E933CC8F2C148BE3029@DM8PR02MB8198.namprd02.prod.outlook.com>
+ <Yh5K0u3jp4jTXCPi@google.com>
+ <DM8PR02MB819876BA541F3C62D971EF09E3039@DM8PR02MB8198.namprd02.prod.outlook.com>
 MIME-Version: 1.0
-References: <CAOMZO5AJ3j0-LUHX9MNdHQotrG+chPhQgB15xiHTm9r9wuvdLw@mail.gmail.com>
- <CAOMZO5A4zQM1dLhL7+Qa2GEW52eb2PbGjBXRKZfvA279k6Pemg@mail.gmail.com>
- <YiIeEHMc+tWE0coi@lunn.ch> <CAOMZO5CioYoddT0kqtf+wOTvvxArm9ipW2bAj84qKM_eQgMcjg@mail.gmail.com>
- <YiIndfh0B87LRYnI@lunn.ch>
-In-Reply-To: <YiIndfh0B87LRYnI@lunn.ch>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Fri, 4 Mar 2022 12:57:58 -0300
-Message-ID: <CAOMZO5BOREQcH9e5oL=QQsH2VsijQTPPA=pEX0KCjjnveaVppg@mail.gmail.com>
-Subject: Re: smsc9511: Register access happens after unregistration
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Schrempf Frieder <frieder.schrempf@kontron.de>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Marek Vasut <marex@denx.de>,
-        USB list <linux-usb@vger.kernel.org>, oneukum@suse.com,
-        Adam Ford <aford173@gmail.com>, peter.chen@kernel.org,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        fntoth@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DM8PR02MB819876BA541F3C62D971EF09E3039@DM8PR02MB8198.namprd02.prod.outlook.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 11:51 AM Andrew Lunn <andrew@lunn.ch> wrote:
+On Wed, Mar 02, 2022 at 05:14:30AM +0000, Linyu Yuan (QUIC) wrote:
+> > From: mka@chromium.org <mka@chromium.org>
+> > Sent: Wednesday, March 2, 2022 12:33 AM
+> > To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
+> > Cc: gregkh@linuxfoundation.org; Tao Wang (Consultant) (QUIC)
+> > <quic_wat@quicinc.com>; balbi@kernel.org; devicetree@vger.kernel.org;
+> > dianders@chromium.org; frowand.list@gmail.com; hadess@hadess.net;
+> > krzk@kernel.org; linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
+> > mathias.nyman@intel.com; michal.simek@xilinx.com;
+> > peter.chen@kernel.org; ravisadineni@chromium.org; robh+dt@kernel.org;
+> > rogerq@kernel.org; stern@rowland.harvard.edu; swboyd@chromium.org
+> > Subject: Re: 回复: 回复: Re: [PATCH v20 3/5] usb: misc: Add
+> > onboard_usb_hub driver
+> > 
+> > > In my opinion, if it need update VID/PID table in this driver to support a
+> > new HUB,
+> > > we can parse VID/PID from device tree and create dynamic VID/PID entry
+> > to id_table of onboard_hub_usbdev_driver.
+> > >
+> > > Hope you can understand what I said.
+> > 
+> > Not really.
+> > 
+> > I doubt that what you are suggesting would work. The easiest thing
+> > to convince people would probably be to send a patch (based on this
+> > one) with a working implementation of your idea.
+> 
+> I show my idea, but not test,
+> 
+> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> index e280409..1811317 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.c
+> +++ b/drivers/usb/misc/onboard_usb_hub.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/init.h>
+>  #include <linux/kernel.h>
+>  #include <linux/list.h>
+> +#include <linux/slab.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+>  #include <linux/of.h>
+> @@ -173,6 +174,58 @@ static void onboard_hub_remove_usbdev(struct onboard_hub *hub, const struct usb_
+>  	mutex_unlock(&hub->lock);
+>  }
+>  
+> +#define MAX_HUB_NUM		4
+> +#define MAX_TABLE_SIZE		(MAX_HUB_NUM * 2)
+> +static struct usb_device_id onboard_hub_id_table[MAX_TABLE_SIZE + 1];
+> +MODULE_DEVICE_TABLE(usb, onboard_hub_id_table);
+> +
+> +static void onboard_hub_add_idtable(__u16 vid, __u16 pid)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < MAX_TABLE_SIZE; i++) {
+> +		if (!onboard_hub_id_table[i].idVendor)
+> +			break;
+> +
+> +		if (onboard_hub_id_table[i].idVendor == vid &&
+> +		    onboard_hub_id_table[i].idProduct == pid)
+> +			return;
+> +	}
+> +	if (i == MAX_TABLE_SIZE)
+> +		return;
+> +
+> +	onboard_hub_id_table[i].idVendor = vid;
+> +	onboard_hub_id_table[i].idProduct = pid;
+> +	onboard_hub_id_table[i].match_flags = USB_DEVICE_ID_MATCH_DEVICE;
+> +}
+> +
+> +static int onboard_hub_parse_idtable(struct device_node *np)
+> +{
+> +	int size = of_property_count_elems_of_size(np, "vidpid", sizeof(int));
+> +	int ret, i;
+> +	u16 *ids;
+> +
+> +	if (!size || size % 2)
+> +		return -EINVAL;
+> +
+> +	ids = kzalloc(sizeof(u16) * size, GFP_KERNEL);
+> +	if (!ids)
+> +		return -ENOMEM;
+> +
+> +	ret = of_property_read_u16_array(np, "vidpid", ids, size);
+> +	if (ret) {
+> +		kfree(ids);
+> +		return -EINVAL;
+> +	}
+> +
+> +	for (i = 0; i < size; i+=2)
+> +		onboard_hub_add_idtable(ids[i], ids[i+1]);
+> +
+> +	kfree(ids);
+> +
+> +	return 0;
+> +}
+> +
+>  static ssize_t always_powered_in_suspend_show(struct device *dev, struct device_attribute *attr,
+>  			   char *buf)
+>  {
+> @@ -210,6 +263,10 @@ static int onboard_hub_probe(struct platform_device *pdev)
+>  	struct onboard_hub *hub;
+>  	int err;
+>  
+> +	err = onboard_hub_parse_idtable(dev->of_node);
+> +	if (err)
+> +		return err;
+> +
+>  	hub = devm_kzalloc(dev, sizeof(*hub), GFP_KERNEL);
+>  	if (!hub)
+>  		return -ENOMEM;
+> @@ -378,15 +435,6 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
+>  	onboard_hub_remove_usbdev(hub, udev);
+>  }
+>  
+> -static const struct usb_device_id onboard_hub_id_table[] = {
+> -	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS5411 USB 3.1 */
+> -	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
+> -	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0414) }, /* RTS5414 USB 3.2 */
+> -	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5414) }, /* RTS5414 USB 2.1 */
+> -	{}
+> -};
+> -MODULE_DEVICE_TABLE(usb, onboard_hub_id_table);
+> -
+>  static struct usb_device_driver onboard_hub_usbdev_driver = {
+>  	.name = "onboard-usb-hub",
+>  	.probe = onboard_hub_usbdev_probe,
 
-> But why does it return ENODEV? It seems to me, ignoring it is papering
-> over the cracks. Why cannot we access to the PHY?
+I see multiple issues with this approach:
 
-The -ENODEV is returned by usb_control_msg():
+1. The new device tree property 'vidpid'. It is (or should be) redundant
+   with the compatible string, I very much doubt you could convince DT
+   maintainers to add it.
+2. You don't want to modify the driver to enabled support for new USB hubs.
+   That means you would have to use a compatible string that is already in
+   the driver, but which doesn't match the VID:PID of the hub. While this
+   might work it's a hack.
+3. If the USB hub is probed before the platform device it won't use this
+   driver because the VID:PID isn't in the device id table.
+4. Possible race conditions when changing the device id table on the fly
 
-__smsc95xx_read_reg: -19
-         usbnet_read_cmd: -19
-              usb_control_msg: -19
-
- # echo -n "2-1" > /sys/bus/usb/drivers/usb/unbind
-usb 2-1.1: USB disconnect, device number 3
-smsc95xx 2-1.1:1.0 eth1: unregister 'smsc95xx' usb-ci_hdrc.1-1.1,
-smsc95xx USB 2.0 Ethernet
-libphy: *********** phy_disconnect: 1
-libphy: *********** phy_disconnect: 2
-********** returning -ENODEV from usb_control_msg
-*********** returning -ENODEV from __usbnet_read_cmd
-smsc95xx 2-1.1:1.0 eth1: Failed to read reg index 0x00000114: -19
-smsc95xx 2-1.1:1.0 eth1: Error reading MII_ACCESS
-smsc95xx 2-1.1:1.0 eth1: __smsc95xx_mdio_read: MII is busy
