@@ -2,119 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882A14CD7BB
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Mar 2022 16:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 933934CD866
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Mar 2022 16:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234426AbiCDP3B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Mar 2022 10:29:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        id S237124AbiCDP7B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Mar 2022 10:59:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiCDP3B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Mar 2022 10:29:01 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CAD4C414;
-        Fri,  4 Mar 2022 07:28:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=cgN9vxorelzw3VwEgeGHzYx+hnysDRumjVLx3wSP6i8=; b=rZxOdMBSL1Xys44bhf5Ycuem0S
-        etxCLDoJNG1TlZ/tbAQqDxnoOdhsDxVjykInoy6gENQJ8YoV7Du6FiXcZwVmDbrZ7OF7M6Uc66Msk
-        5nNDIHSeY7ApwIkoIA4jFPMRy0p4SQGFKJ6e40iw5i9h6NEdoXWUXGDnlnb1R7pW/RcTO8IcKnmFA
-        //csRV+FgPnq/seEPai/yiLKqRA55QmwVlkQnjx0TOQc8WITUEjn0XsAwT172s6+YuebUtWC4Wb1p
-        inhbruf+nTeZZQIPx6CA5C/VggbbfvlDhhg7TGm0ImQ5neyxOcvG3gQVW9aerrHrkDX1kEuoqft8T
-        AZIQ8q0A==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nQ9qd-00Ck1M-0Z; Fri, 04 Mar 2022 15:28:03 +0000
-Message-ID: <851f1804-4156-0b37-0bbd-598bdbb2abfa@infradead.org>
-Date:   Fri, 4 Mar 2022 07:27:54 -0800
+        with ESMTP id S234317AbiCDP7A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Mar 2022 10:59:00 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCCF6F48D
+        for <linux-usb@vger.kernel.org>; Fri,  4 Mar 2022 07:58:11 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id kt27so18501613ejb.0
+        for <linux-usb@vger.kernel.org>; Fri, 04 Mar 2022 07:58:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ikOaY4WgNW4ap5y0cDzLfLJZo+z0nd9LAiZZqby3v7I=;
+        b=WslIidjFM8mdyg+UgPm5PsKVm3kFWUGXR0xXHc4pMcMEBEclhWFInmROkqrCcWfrmE
+         yXZ+cQ8RcZEgxNmbrmU23fuqHzyaDobA+jE1wILU7jhV3k7F+IwPrnl1FKRbaE3dhrbA
+         chIUWvZ7SPjdCLnfYMCSYVSVotkYmRxaK9ef0Bja5Ku+WpVjehl5Bz4r2uDnibQCx3km
+         BF6/Z3OPEYAYU8VEXRbCBtx5JXcFdhriR93d55G7WwIi+b1Oq4iaNLoAOBEAmC/ogpu9
+         Qm1c2T/0KlYyWE3fkiV+CatJg9L9t6b8ssGD3ny2EDvLjFBNeDaS/MN5u6MbWR4slKBy
+         /Svg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ikOaY4WgNW4ap5y0cDzLfLJZo+z0nd9LAiZZqby3v7I=;
+        b=ifM/WPzkWwhvhrg8XqLQW/9PFyGfRsY6lXepM4husis9fyVh9fZRPZEeJ0yfIHrtk5
+         UUZrjDt9tL4YiIini8NuLVgQDhkE8haLMDP2PQcTQ7bVOrKaoNfNgvPBuivxEX7We92y
+         PLVcMHMRMjfhkyGV92owjc6sp1pwkW5fzgFuMjHAxYBW4j4FKKx9ZTLdu4THo8mEXEKG
+         +DoAVuIuukGiIXC7PWQfAh+qegqLo9iaPpfwNv6/u93CixLqj6ZS3Wqb2wxvO4nD2TSG
+         TZBsoBDBbFVi1jEEyY3KMfEfUodxBc6fpGSd0z2slzvcbe4YStOjw935c57LncYfsmMg
+         aMVA==
+X-Gm-Message-State: AOAM5327tTmZ9GbI3UOCh0BoGdwd88zGUljxlEpCdTm9y2vx+jTAfZdV
+        Z6dR/UxGDgEtmY3mAC+RWTVZUStsVx0IcG+MnT8=
+X-Google-Smtp-Source: ABdhPJwMOr/4FiZmIV8Xmk69pxcWDoGZkMkn+sNuJYI72rielxIxZf01G6EpjVQbJe4WY002H5Mw4ndxUATUjaazQnM=
+X-Received: by 2002:a17:907:7f06:b0:6d6:f8f7:2655 with SMTP id
+ qf6-20020a1709077f0600b006d6f8f72655mr14249497ejc.658.1646409490028; Fri, 04
+ Mar 2022 07:58:10 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v1 0/4] support USB offload feature
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>,
-        "chihhao . chen" <chihhao.chen@mediatek.com>, sc.suh@samsung.com,
-        cpgs@samsung.com, cpgsproxy5@samsung.com
-References: <CGME20220304062609epcas2p1b9e2720d2d7d66438e1eab92546f46cc@epcas2p1.samsung.com>
- <1027007693.21646375403236.JavaMail.epsvc@epcpadp3>
- <YiHCTgg5Ibv9YQvi@kroah.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <YiHCTgg5Ibv9YQvi@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAOMZO5AJ3j0-LUHX9MNdHQotrG+chPhQgB15xiHTm9r9wuvdLw@mail.gmail.com>
+ <CAOMZO5A4zQM1dLhL7+Qa2GEW52eb2PbGjBXRKZfvA279k6Pemg@mail.gmail.com>
+ <YiIeEHMc+tWE0coi@lunn.ch> <CAOMZO5CioYoddT0kqtf+wOTvvxArm9ipW2bAj84qKM_eQgMcjg@mail.gmail.com>
+ <YiIndfh0B87LRYnI@lunn.ch>
+In-Reply-To: <YiIndfh0B87LRYnI@lunn.ch>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Fri, 4 Mar 2022 12:57:58 -0300
+Message-ID: <CAOMZO5BOREQcH9e5oL=QQsH2VsijQTPPA=pEX0KCjjnveaVppg@mail.gmail.com>
+Subject: Re: smsc9511: Register access happens after unregistration
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Schrempf Frieder <frieder.schrempf@kontron.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Marek Vasut <marex@denx.de>,
+        USB list <linux-usb@vger.kernel.org>, oneukum@suse.com,
+        Adam Ford <aford173@gmail.com>, peter.chen@kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        fntoth@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, Mar 4, 2022 at 11:51 AM Andrew Lunn <andrew@lunn.ch> wrote:
 
+> But why does it return ENODEV? It seems to me, ignoring it is papering
+> over the cracks. Why cannot we access to the PHY?
 
-On 3/3/22 23:39, Greg Kroah-Hartman wrote:
-> On Fri, Mar 04, 2022 at 03:23:54PM +0900, Daehwan Jung wrote:
->> This patchset is for USB offload feature, which makes Co-processor to use
->> some memories of xhci. Especially it's useful for USB Audio scenario.
->> Audio stream would get shortcut because Co-processor directly write/read
->> data in xhci memories. It could get speed-up using faster memory like SRAM.
->> That's why this also gives vendors flexibilty of memory management.
->> Below pathches have been merged in AOSP kernel(android12-5.10) and I put
->> together and split into 3 patches. Plus let me add user(xhci-exynos) module 
->> to see how user could use it. 
->>
->> To sum up, it's for providing xhci memories to Co-Processor.
->> It would cover DCBAA, Device Context, Tranfer Ring, Event Ring, ERST.
->> It needs xhci hooks and to export some xhci symbols.
->>
->> ANDROID: usb: host: fix slab-out-of-bounds in xhci_vendor_get_ops
->> ANDROID: usb: export built-in tracepoint functions
->> ANDROID: usb: host: Use old init scheme when hook unavailable
->> ANDROID: usb: host: free the offload TR by vendor hook
->> ANDROID: usb: host: xhci: provide function prototype for xhci_address_device
->> ANDROID: usb: host: add bus_suspend/bus_resume to xhci overrides
->> ANDROID: usb: host: add address_device to xhci overrides
->> ANDROID: usb: host: add max packet parameter on alloc_transfer_ring hook
->> ANDROID: usb: host: add xhci hooks for vendor specific container context
->> ANDROID: usb: host: export xhci symbols for ring management
->> ANDROID: usb: host: export additional xhci symbols for ring management
->> FROMLIST: usb: xhci-plat: add xhci_plat_priv_overwrite
->> FROMLIST: usb: host: export symbols for xhci hooks usage
->> FROMLIST: usb: host: add xhci hooks for USB offload
-> 
-> What does that list of text mean?  You are only submitting 4 patches
-> here, not that many.
-> 
->>
->> Below are owners of patches.
->>
->> Howard Yen <howardyen@google.com>
->> Jack Pham <jackp@codeaurora.org>
->> Puma Hsu <pumahsu@google.com>
->> J. Avila <elavila@google.com>
->> chihhao.chen <chihhao.chen@mediatek.com>
-> 
-> What do you mean by this?  Did you loose authorship of the code you just
-> submitted?  That's not ok.  You always have to properly credit the
-> creators of the changes you submit to us for obvious legal reasons.
-> 
-> Please fix up and resend this series properly.
+The -ENODEV is returned by usb_control_msg():
 
-Also: Greg might have received the full patch series, but I didn't, so I
-checked lore.kernel.org/linux-usb/, and it did not either, so it appears
-that there is a problem with sending the full series.
+__smsc95xx_read_reg: -19
+         usbnet_read_cmd: -19
+              usb_control_msg: -19
 
--- 
-~Randy
+ # echo -n "2-1" > /sys/bus/usb/drivers/usb/unbind
+usb 2-1.1: USB disconnect, device number 3
+smsc95xx 2-1.1:1.0 eth1: unregister 'smsc95xx' usb-ci_hdrc.1-1.1,
+smsc95xx USB 2.0 Ethernet
+libphy: *********** phy_disconnect: 1
+libphy: *********** phy_disconnect: 2
+********** returning -ENODEV from usb_control_msg
+*********** returning -ENODEV from __usbnet_read_cmd
+smsc95xx 2-1.1:1.0 eth1: Failed to read reg index 0x00000114: -19
+smsc95xx 2-1.1:1.0 eth1: Error reading MII_ACCESS
+smsc95xx 2-1.1:1.0 eth1: __smsc95xx_mdio_read: MII is busy
