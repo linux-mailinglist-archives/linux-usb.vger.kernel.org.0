@@ -2,75 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0BC4CD630
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Mar 2022 15:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE384CD633
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Mar 2022 15:18:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235432AbiCDOSj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Mar 2022 09:18:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
+        id S237187AbiCDOTD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Mar 2022 09:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiCDOSi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Mar 2022 09:18:38 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1842559B;
-        Fri,  4 Mar 2022 06:17:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646403470; x=1677939470;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=or3pXL7frdL+sQOxlxnzqbp2iB/FyXVFN2iAqqfq00c=;
-  b=gFMQ9jfeg38vNguS5itQreotU4r2bH/Brn7m+7HSPGJ63/+LFihsNQp+
-   2azxkFZPQ28jKmGDY8s5zjVYH3ufj3L8/pPEoD4X0+ND1Jhm+qMvCOuKS
-   rtRzGHOsotROQfa4BmiGsrL2cbWV/ps0p5LfJUGQlL3l9ZXRSKvN1GDt/
-   ZWcTyPCwWF6kqadDRhou9FTLtyl3yS8Nj7eN5OwihB/8Cq4XQV3LFIsAv
-   VJutUV+urkdsRLvzg/CCxyBaPrF+wHmNvx+tg47awQCqGOwCK5OmWl4iU
-   H/XtkoJhlGFopRg1P8aT3gJzN+orsJiUXEeQ7QxS9ulvthT7ymDj/wTOd
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="253711653"
-X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="253711653"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 06:17:50 -0800
-X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="710345703"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 06:17:48 -0800
-Received: by lahna (sSMTP sendmail emulation); Fri, 04 Mar 2022 16:17:45 +0200
-Date:   Fri, 4 Mar 2022 16:17:45 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Sanju.Mehta@amd.com
-Subject: Re: [PATCH v2 1/5] thunderbolt: Retry DROM reads for more failure
- scenarios
-Message-ID: <YiIfiYyJrdmavuAD@lahna>
-References: <20220303131328.4150454-1-mario.limonciello@amd.com>
+        with ESMTP id S239792AbiCDOTB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Mar 2022 09:19:01 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5B36F3ED08
+        for <linux-usb@vger.kernel.org>; Fri,  4 Mar 2022 06:18:10 -0800 (PST)
+Received: (qmail 1315410 invoked by uid 1000); 4 Mar 2022 09:18:09 -0500
+Date:   Fri, 4 Mar 2022 09:18:09 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adam Cozzette <acozzette@cs.hmc.edu>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] USB: storage: ums-realtek: fix error code in
+ rts51x_read_mem()
+Message-ID: <YiIfoU7vVIf6Bbrz@rowland.harvard.edu>
+References: <20220304073504.GA26464@kili>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220303131328.4150454-1-mario.limonciello@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220304073504.GA26464@kili>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mario,
-
-On Thu, Mar 03, 2022 at 07:13:24AM -0600, Mario Limonciello wrote:
-> Currently DROM reads are only retried in the case that parsing failed.
-> However if the size or CRC fails, then there should also be a retry.
+On Fri, Mar 04, 2022 at 10:35:04AM +0300, Dan Carpenter wrote:
+> The rts51x_read_mem() function should return negative error codes.
+> Currently if the kmalloc() fails it returns USB_STOR_TRANSPORT_ERROR (3)
+> which is treated as success by the callers.
 > 
-> This helps with reading the DROM on TBT3 devices connected to AMD
-> Yellow Carp which will sometimes fail on the first attempt.
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Fixes: 065e60964e29 ("ums_realtek: do not use stack memory for DMA")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
 
-This and the rest of the patches applied to thunderbolt.git/next,
-thanks!
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+>  drivers/usb/storage/realtek_cr.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
+> index 3789698d9d3c..0c423916d7bf 100644
+> --- a/drivers/usb/storage/realtek_cr.c
+> +++ b/drivers/usb/storage/realtek_cr.c
+> @@ -365,7 +365,7 @@ static int rts51x_read_mem(struct us_data *us, u16 addr, u8 *data, u16 len)
+>  
+>  	buf = kmalloc(len, GFP_NOIO);
+>  	if (buf == NULL)
+> -		return USB_STOR_TRANSPORT_ERROR;
+> +		return -ENOMEM;
+>  
+>  	usb_stor_dbg(us, "addr = 0x%x, len = %d\n", addr, len);
+>  
+> -- 
+> 2.20.1
+> 
