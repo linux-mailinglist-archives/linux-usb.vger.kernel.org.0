@@ -2,154 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF2A4CD598
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Mar 2022 14:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 395494CD5BD
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Mar 2022 14:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237774AbiCDN43 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Mar 2022 08:56:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50236 "EHLO
+        id S239611AbiCDN7t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Mar 2022 08:59:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiCDN42 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Mar 2022 08:56:28 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3606619D634;
-        Fri,  4 Mar 2022 05:55:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646402141; x=1677938141;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c4N+V43B3i0c7JWoTDHNDNh4DYCcViChbXoi/oxgYJ4=;
-  b=nOzgqITRsYTt3w3jH6R4vrDtROCF2kN2Q9RZ329aWoWgCxUGPkyE9FpJ
-   0bKMjYn5S7aBex4XDPD8gm24Tm4uJCFYISHl/XYMwPY/TtRp+WQ8OgQoG
-   O5b+8Ex3mDwyKX4QJECQeZioe8utkAHvxS7bbjPJ2/FaKr/rzGBbaqU5Z
-   d78vi5BtDMNxNxJbdZWGkSzfNsM5fqJ5BARrDdhoxVHIAOgg1PSnEV0qn
-   mS9EmC3sZ8Y/x+XFOlomzjmmbAmQjSEMgU4s0Ex8EdbOMDIM42NKGbcXj
-   QpIHWBjW0HADYY/407JMXkOxFCUm/SkNXVVRQ1sMsi8pzn3nWuWdMwXL8
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="314693087"
-X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="314693087"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 05:55:40 -0800
-X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="511854676"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 05:55:37 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nQ8OR-00BF8a-QX;
-        Fri, 04 Mar 2022 15:54:51 +0200
-Date:   Fri, 4 Mar 2022 15:54:51 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v3 4/6] typec: mux: Allow multiple mux_devs per mux
-Message-ID: <YiIaK8kSYGtivvhk@smile.fi.intel.com>
-References: <20220303223351.141238-1-bjorn.andersson@linaro.org>
- <20220303223351.141238-4-bjorn.andersson@linaro.org>
+        with ESMTP id S239590AbiCDN7s (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Mar 2022 08:59:48 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6079F4BBA9
+        for <linux-usb@vger.kernel.org>; Fri,  4 Mar 2022 05:59:00 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id qa43so17607129ejc.12
+        for <linux-usb@vger.kernel.org>; Fri, 04 Mar 2022 05:59:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v7Z048Fg1MLEEnzImA0ckswqu74FEZc8woDEqzOfgBY=;
+        b=Cvhijw5GDwNz8ZEqb6SR/kh1cc+uMvz2EAvODVNJam1ywavnxnq/ZZElCYQdEVCFaN
+         Nfepzgx8HkBb8Y6HgDcI5Xx6c7HglltKMkTUztCk8+ZxyNOIvhXlItSYKX85MFasjE/r
+         0CPvpIKTAFwsLGUjpqdmuJDLvt2qgm5XtWMsfbi4EJ5DsYdXdxYqo9NuBBAxfg04ri5A
+         wlit2ZYomhCizDpxQHtSQ2swEjCGaYl6vdzRQaq/GjWEtwwVwRrZIuuDvLgQhRWWUDCl
+         wfjCfoV9hmdTpsGrCI7dFqiRyYOzliWRIMaE3XaXUVrPP/0elVLxovZibGgEMunn94Ql
+         ugZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v7Z048Fg1MLEEnzImA0ckswqu74FEZc8woDEqzOfgBY=;
+        b=hZ7cvepguGJPGR9SNyTUeqSosAkZa8WzmrEK+JXYbyYNe+KWFOo4kbdvi1gM+DVOB/
+         PW63nTh9v3Duk5QLLjlUmAQCosNvm4pCZXxk+mH4FUHT9B2E4uiZBIQMvOrYVnngaeon
+         yDsrZqSJTQp22Uqkw7FN1KMKIoUZUjAEQeQMmZ/L4vUWxV9ol4U5VP2q3w418Nqr0SEC
+         dZxxEH22cKMnXkQembCZLHddH65El3hzy5TcAqj5KqnXK6DXIBGPMBavwlf4IYWOaWsS
+         1Vqp8PD0SXMRhraQAf4tr07YMOzAHy/B7/XepJLxGyBewjf+MYvPzDss+KP9dgwMCaGm
+         6RYg==
+X-Gm-Message-State: AOAM533G9BkyYX9SKGWHay/D3bSYKGJbskyHGvdHTCd/a9EEXWiLPFLi
+        X66EahVZ/P3B8sxxoaE/gMbsMbZ7yT+xg11/nC0=
+X-Google-Smtp-Source: ABdhPJxlCUSQ4fnO3yACp9sOcPs2VN7k6+zN7uBCLAQR8zCgEhg20Rt6Oj8twcGTsIDizTnGMSbT7DI2mQdFDUXI5fc=
+X-Received: by 2002:a17:907:72c3:b0:6da:c277:8c62 with SMTP id
+ du3-20020a17090772c300b006dac2778c62mr1548151ejc.492.1646402338800; Fri, 04
+ Mar 2022 05:58:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303223351.141238-4-bjorn.andersson@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAOMZO5AJ3j0-LUHX9MNdHQotrG+chPhQgB15xiHTm9r9wuvdLw@mail.gmail.com>
+In-Reply-To: <CAOMZO5AJ3j0-LUHX9MNdHQotrG+chPhQgB15xiHTm9r9wuvdLw@mail.gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Fri, 4 Mar 2022 10:58:47 -0300
+Message-ID: <CAOMZO5A4zQM1dLhL7+Qa2GEW52eb2PbGjBXRKZfvA279k6Pemg@mail.gmail.com>
+Subject: Re: smsc9511: Register access happens after unregistration
+To:     Schrempf Frieder <frieder.schrempf@kontron.de>,
+        Martyn Welch <martyn.welch@collabora.com>
+Cc:     Marek Vasut <marex@denx.de>, USB list <linux-usb@vger.kernel.org>,
+        oneukum@suse.com, Adam Ford <aford173@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, peter.chen@kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        fntoth@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 02:33:49PM -0800, Bjorn Andersson wrote:
-> In the Qualcomm platforms the USB/DP PHY handles muxing and orientation
-> switching of the SuperSpeed lines, but the SBU lines needs to be
-> connected and switched by external (to the SoC) hardware.
-> 
-> It's therefor necessary to be able to have the TypeC controller operate
-> multiple TypeC muxes and switches. Use the newly introduced indirection
-> object to handle this, to avoid having to taint the TypeC controllers
-> with knowledge about the downstream hardware configuration.
-> 
-> The max number of devs per indirection is set to 3, which account for
-> being able to mux/switch the USB HS, SS and SBU lines, as per defined
-> defined in the usb-c-connector binding. This number could be grown if
-> need arrises at a later point in time.
+Hi Martyn,
 
-...
+On Thu, Mar 3, 2022 at 10:14 AM Fabio Estevam <festevam@gmail.com> wrote:
+>
+> Hi,
+>
+> On a imx8mm-iotgateway board running kernel 5.17-rc6 I am getting the following
+> smsc95xx errors after a 'reboot' command:
+>
+> ci_hdrc ci_hdrc.1: remove, state 1
+> usb usb2: USB disconnect, device number 1
+> usb 2-1: USB disconnect, device number 2
+> usb 2-1.1: USB disconnect, device number 3
+> smsc95xx 2-1.1:1.0 eth1: unregister 'smsc95xx' usb-ci_hdrc.1-1.1,
+> smsc95xx USB 2.0 Ethernet
+> smsc95xx 2-1.1:1.0 eth1: Failed to read reg index 0x00000114: -19
+> smsc95xx 2-1.1:1.0 eth1: Error reading MII_ACCESS
+> smsc95xx 2-1.1:1.0 eth1: __smsc95xx_mdio_read: MII is busy
+> smsc95xx 2-1.1:1.0 eth1: Failed to read reg index 0x00000114: -19
+> smsc95xx 2-1.1:1.0 eth1: Error reading MII_ACCESS
+> smsc95xx 2-1.1:1.0 eth1: __smsc95xx_mdio_read: MII is busy
+> smsc95xx 2-1.1:1.0 eth1: hardware isn't capable of remote wakeup
 
-> +	for (i = 0; i < count; i++) {
-> +		if (IS_ERR(sw_devs[i])) {
-> +			err = PTR_ERR(sw_devs[i]);
-> +			goto put_sw_devs;
-> +		}
-> +	}
->  
-> -	sw->sw_dev = sw_dev;
-> +	for (i = 0; i < count; i++) {
-> +		WARN_ON(!try_module_get(sw_devs[i]->dev.parent->driver->owner));
-> +		sw->sw_devs[i] = sw_devs[i];
-> +	}
-> +
-> +	sw->num_sw_devs = count;
->  
->  	return sw;
-> +
-> +put_sw_devs:
-> +	for (i = 0; i < count; i++) {
+The same error has been previously reported by Ferry Toth on Intel
+Edison-Arduino:
+https://lore.kernel.org/netdev/5cd6fc87-0f8d-0b9b-42be-8180540a94e7@gmail.com/
 
-Shouldn't it be
+It happens after commit a049a30fc27c ("net: usb: Correct PHY handling
+of smsc95xx")
 
-	while (i--)
+A simple way to reproduce it:
 
-?
+echo -n "2-1" > /sys/bus/usb/drivers/usb/unbind
 
-> +		if (!IS_ERR(sw_devs[i]))
+It is not clear to me why register 0x114 (MII_ADDR) is accessed after
+smsc95xx unregistration.
 
-We may get rid of this check if we guarantee that the device is NULL.
+Any ideas?
 
-> +			put_device(&sw_devs[i]->dev);
-> +	}
-> +
-> +	kfree(sw);
-> +
-> +	return ERR_PTR(err);
->  }
-
-...
-
-> +	for (i = 0; i < count; i++) {
-> +		if (IS_ERR(mux_devs[i])) {
-> +			err = PTR_ERR(mux_devs[i]);
-> +			goto put_mux_devs;
-> +		}
-
-Ditto.
-
-> +	}
-
-...
-
-> +put_mux_devs:
-> +	for (i = 0; i < count; i++) {
-> +		if (!IS_ERR(mux_devs[i]))
-> +			put_device(&mux_devs[i]->dev);
-> +	}
-
-Ditto.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks
