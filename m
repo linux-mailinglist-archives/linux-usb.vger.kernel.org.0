@@ -2,149 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9FE4CD638
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Mar 2022 15:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF89C4CD693
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Mar 2022 15:41:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235076AbiCDOVC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Mar 2022 09:21:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
+        id S239854AbiCDOlx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Mar 2022 09:41:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiCDOVB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Mar 2022 09:21:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D851BA92A
-        for <linux-usb@vger.kernel.org>; Fri,  4 Mar 2022 06:20:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1812617E4
-        for <linux-usb@vger.kernel.org>; Fri,  4 Mar 2022 14:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B45C340E9;
-        Fri,  4 Mar 2022 14:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646403613;
-        bh=82RHPbKYaBxahcxTnnqX7gZSoXp6vzfHXkknNkVXsIM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Otzd1uMpSaT8Fhgw7h78oksXKn9VhihG5rD1+6kjPE0uuA7EksPwgd/5G0OmSPh1S
-         0JR5d/CyxBf9C4ueQCw5XmowFwO7pdtyHjzROdPfebB1f/HyqdaqEA5ZSbphtudjNe
-         ipnGUcJRZ+DtwzQY6oiyZqvtZDkfBi+NTpBi5Z2A=
-Date:   Fri, 4 Mar 2022 15:20:08 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-usb@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Ville Syrjala <syrjala@sci.fi>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Henk Vergonet <Henk.Vergonet@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benjamin Valentin <benpicco@googlemail.com>,
-        Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Helmut Schaa <helmut.schaa@googlemail.com>,
-        Duncan Sands <duncan.sands@free.fr>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Olav Kongas <ok@artecdesign.ee>,
-        Rui Miguel Silva <rui.silva@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Clemens Ladisch <clemens@ladisch.de>,
-        UNGLinuxDriver@microchip.com,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kees Cook <keescook@chromium.org>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Thomas Toye <thomas@toye.io>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        Rajat Jain <rajatja@google.com>,
-        Kelly Devilliv <kelly.devilliv@gmail.com>,
-        Shubhankar Kuranagatti <shubhankarvk@gmail.com>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Will Deacon <will@kernel.org>,
-        Davidlohr Bueso <dbueso@suse.de>,
-        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Arnd Bergmann <arnd@arndb.de>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Len Baker <len.baker@gmx.com>,
-        gushengxian <gushengxian@yulong.com>
-Subject: Re: [PATCH] usb: rework usb_maxpacket() and remove its third argument
-Message-ID: <YiIgGOkNntEiu78O@kroah.com>
-References: <20220304105420.1059585-1-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S237280AbiCDOlv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Mar 2022 09:41:51 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420431BD043
+        for <linux-usb@vger.kernel.org>; Fri,  4 Mar 2022 06:41:03 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id w4so8500940edc.7
+        for <linux-usb@vger.kernel.org>; Fri, 04 Mar 2022 06:41:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FtDWxUue9aeboZ6Jc8TQjbFp8OHOB5sIsWa7uu6j7r0=;
+        b=FsydzRpUw0KGMxT4BBiuq0YJYf8A8Qr6AaNNky5DkcTDCpZP8TYU7EIjYj/v1lSGuJ
+         laq90JDSV+8MY0+ynS4V/z9APvM4gOmbHtd2rW6o9DmQChgdg31TbCrOHBil66nzqoW3
+         0N/zoIjOTY5VUgWJr3rfeNq7VC0nRm+AH8nYZtsNkJgKIvwG2zMtAiHF2ScUTYDQjqxb
+         CXoG03kejOg4jf7bbLqOonZUcfpzUy9YTTu4OTE6RAKHdx6KXhgpuIlAmgPGdmUDjtUE
+         0xVb8Rhr+/wCczoozv0T56wvs9PnMDWUEdXrEc2p6eP7syiYTpxqIngiWAqlRSf+koMo
+         pPAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FtDWxUue9aeboZ6Jc8TQjbFp8OHOB5sIsWa7uu6j7r0=;
+        b=QD7CjAIcELNZS4+WhEO016GBecnv77YMO26mzXsR8oRS2bmak/Ux8uTkwpCPqwYhhi
+         ENskK91pNGuYkGIS+Er/HM3RSoE78pKET+dS3OSbnhr0gAyMNy2c4eEXLD408ZhLB8gc
+         GeqyhXPthktA5m/b8rLVtm0bwNEAAGw/nPq5PVevU9LW4RgqEL3hvNS0VTk+Q4Ah8sZK
+         /FWwGSSpRfhj+jYNUV2jJpOFDSF2ZARwR0D5KNSZ+bOxTD1RSX15ZnpeRTIipBxXVk+k
+         8cKtb6YDRVYfrwkfIyh4QV53lWIj6rsUB16FZz+3S+dVXpDHmWCrH8TR1wXyJZHNRpHF
+         /e/w==
+X-Gm-Message-State: AOAM532ocTO56Tq9HIQVjQk+YLKbSGzhFudHFdNuPMwOnfc9lGtd4eus
+        suvaAfTWWPN3ZBhcfZQfN4IO6CsIGjc07090UYo=
+X-Google-Smtp-Source: ABdhPJxTTRFCuDwFtG+znMu2vFd84ajQoGW9WPA3wYLTSnr71x5f1dZPQmrMwEvIBkX17jv/Qm3Pog5y/f5zVChWrL8=
+X-Received: by 2002:a05:6402:26c1:b0:415:eeb0:ffa5 with SMTP id
+ x1-20020a05640226c100b00415eeb0ffa5mr5595980edd.356.1646404861691; Fri, 04
+ Mar 2022 06:41:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304105420.1059585-1-mailhol.vincent@wanadoo.fr>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAOMZO5AJ3j0-LUHX9MNdHQotrG+chPhQgB15xiHTm9r9wuvdLw@mail.gmail.com>
+ <CAOMZO5A4zQM1dLhL7+Qa2GEW52eb2PbGjBXRKZfvA279k6Pemg@mail.gmail.com> <YiIeEHMc+tWE0coi@lunn.ch>
+In-Reply-To: <YiIeEHMc+tWE0coi@lunn.ch>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Fri, 4 Mar 2022 11:40:49 -0300
+Message-ID: <CAOMZO5CioYoddT0kqtf+wOTvvxArm9ipW2bAj84qKM_eQgMcjg@mail.gmail.com>
+Subject: Re: smsc9511: Register access happens after unregistration
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Schrempf Frieder <frieder.schrempf@kontron.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Marek Vasut <marex@denx.de>,
+        USB list <linux-usb@vger.kernel.org>, oneukum@suse.com,
+        Adam Ford <aford173@gmail.com>, peter.chen@kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        fntoth@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 07:53:50PM +0900, Vincent Mailhol wrote:
-> Change the prototype of usb_maxpacket() from:
-> | static inline __u16
-> | usb_maxpacket(struct usb_device *udev, int pipe, int is_out)
-> 
-> into:
-> | static inline u16 usb_maxpacket(struct usb_device *dev, int pipe)
-> 
-> and rewrite the function.
-> 
-> Rationale:
-> 
->   * The third argument of usb_maxpacket(): is_out can be derived from
->     its second one: pipe using usb_pipeout(pipe). Furthermore,
->     usb_pipoout(pipe) is being called within usb_maxpacket()
->     regardless to confirm the input.
-> 
->   * This function is not exposed to the UAPI so return type should be
->     u16, not __u16.
-> 
->   * Let's not reinvent the wheel and rely on usb_endpoint_maxp() to
->     make this a one liner function.
-> 
-> All the users of usb_endpoint_maxp() are then updated.
-> 
-> Two of the users: oxu210hp-hcd.c and isp1760-hcd.c rely on a local
-> macro: max_packet() to mask the maximum size. Because this masking is
-> already performed by usb_maxpacket(), this patch also removes these
-> redundant sanitization and remove the local macro if not needed any
-> more (keep it in oxu210hp-hcd.c which uses it elsewhere but remove it
-> in isp1760-hcd.c).
+Hi Andrew,
 
-This type of "change all callers of this function" is brutal to do like
-this, as is evident by the number of people you had to cc: here.
+On Fri, Mar 4, 2022 at 11:11 AM Andrew Lunn <andrew@lunn.ch> wrote:
 
-How about doing it the normal way.  Create a new function, with the
-proper options you wish to see be used, and then move everyone over to
-it, and when that is done, remove the old function.  Bonus points for
-doing this with some crazy macros to keep the old name in the end (it
-can be done, but I don't recommend it for the faint-of-heart, so it's
-not required.)
+> I suggest you look at the call sequences. When does phy_stop() and
+> phy_disconnect() get called? phylib has a work queue which runs once
+> per second to poll the PHY and get its status. That polling is stopped
+> by calling phy_stop(). It is also assumed you can still talk to the
+> PHY while performing phy_stop().
 
-thanks,
+With this debug patch:
 
-greg k-h
+--- a/drivers/net/phy/phy.c
++++ b/drivers/net/phy/phy.c
+@@ -1034,6 +1034,8 @@ void phy_stop(struct phy_device *phydev)
+ {
+        struct net_device *dev = phydev->attached_dev;
+
++       pr_err("*************** %s\n", __func__);
++
+        if (!phy_is_started(phydev) && phydev->state != PHY_DOWN) {
+                WARN(1, "called from state %s\n",
+                     phy_state_to_str(phydev->state));
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index ce0bb5951b81..e26d9edf32f3 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -1108,8 +1108,11 @@ EXPORT_SYMBOL(phy_connect);
+  */
+ void phy_disconnect(struct phy_device *phydev)
+ {
+-       if (phy_is_started(phydev))
++       pr_err("*********** %s: 1\n", __func__);
++       if (phy_is_started(phydev)) {
++               pr_err("*********** %s: 2\n", __func__);
+                phy_stop(phydev);
++       }
+
+        if (phy_interrupt_is_valid(phydev))
+                phy_free_interrupt(phydev);
+diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+index bc1e3dd67c04..6ed674636961 100644
+--- a/drivers/net/usb/smsc95xx.c
++++ b/drivers/net/usb/smsc95xx.c
+@@ -1190,6 +1190,7 @@ static void smsc95xx_unbind(struct usbnet *dev,
+struct usb_interface *intf)
+ {
+        struct smsc95xx_priv *pdata = dev->driver_priv;
+
++       pr_err("*********** %s: calling phy_disconnect\n", __func__);
+        phy_disconnect(dev->net->phydev);
+        mdiobus_unregister(pdata->mdiobus);
+        mdiobus_free(pdata->mdiobus);
+@@ -1206,6 +1207,7 @@ static int smsc95xx_start_phy(struct usbnet *dev)
+
+ static int smsc95xx_stop(struct usbnet *dev)
+ {
++       pr_err("*********** %s\n", __func__);
+        if (dev->net->phydev)
+                phy_stop(dev->net->phydev);
+
+The result is:
+
+ # echo -n "2-1" > /sys/bus/usb/drivers/usb/unbind
+usb 2-1.1: USB disconnect, device number 3
+smsc95xx 2-1.1:1.0 eth1: unregister 'smsc95xx' usb-ci_hdrc.1-1.1,
+smsc95xx USB 2.0 Ethernet
+smsc95xx 2-1.1:1.0 eth1: Failed to read reg index 0x00000114: -19
+smsc95xx 2-1.1:1.0 eth1: Error reading MII_ACCESS
+*********** smsc95xx_unbind: calling phy_disconnect
+smsc95xx 2-1.1:1.0 eth1: __smsc95xx_mdio_read: MII is busy
+libphy: *********** phy_disconnect: 1
+libphy: *********** phy_disconnect: 2
+*************** phy_stop
+smsc95xx 2-1.1:1.0 eth1: Failed to read reg index 0x00000114: -19
+smsc95xx 2-1.1:1.0 eth1: Error reading MII_ACCESS
+smsc95xx 2-1.1:1.0 eth1: __smsc95xx_mdio_read: MII is busy
+smsc95xx 2-1.1:1.0 eth1: Failed to read reg index 0x00000114: -19
+smsc95xx 2-1.1:1.0 eth1: Error reading MII_ACCESS
+smsc95xx 2-1.1:1.0 eth1: __smsc95xx_mdio_read: MII is busy
+*********** smsc95xx_stop
+smsc95xx 2-1.1:1.0 eth1: hardware isn't capable of remote wakeup
+usb 2-1.4: USB disconnect, device number 4
+
+Maybe the -19 errors should be ignored?
