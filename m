@@ -2,123 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA41C4CE853
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 03:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30914CE971
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 07:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbiCFCsP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Mar 2022 21:48:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37040 "EHLO
+        id S232807AbiCFGLK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Mar 2022 01:11:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiCFCsP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Mar 2022 21:48:15 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0303D5AA7E
-        for <linux-usb@vger.kernel.org>; Sat,  5 Mar 2022 18:47:23 -0800 (PST)
-Received: (qmail 1370238 invoked by uid 1000); 5 Mar 2022 21:47:22 -0500
-Date:   Sat, 5 Mar 2022 21:47:22 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Subject: [PATCH] usb: gadget: Fix use-after-free bug by not setting
- udc->dev.driver
-Message-ID: <YiQgukfFFbBnwJ/9@rowland.harvard.edu>
-References: <YiOy73F0J31b8uPj@rowland.harvard.edu>
- <000000000000050b5705d97d731e@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000050b5705d97d731e@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S229480AbiCFGLK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 01:11:10 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BCC47568;
+        Sat,  5 Mar 2022 22:10:19 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id p17so11172655plo.9;
+        Sat, 05 Mar 2022 22:10:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=bTdhh/5VMjchowHJrtU9IWxfTRNg2byjdSu19Bb5sQI=;
+        b=Q8ZJxtPz1iuCKhkBpauBxAg34PB8IiG3TlPdQb5sVTGC0Z03U/GY74mYQQyDV4yMVM
+         lK3YjL0CXuL0MKxL1rVGEZWWjZlGpWnHOI5INEm6MDepsRlHqyMQWMXU0X1lkZuXCcOs
+         JpSTBSYzT45Z7g3d5YQD0Byj5tMf1zr/a1WsP8AZ2cA2I2Aj0mQEX69SPUP/M5u/GLPU
+         slKP5A4vyHZt1GsiSQPKvc6IPyXQdWz05YJpxWcd+bUwuzeq+MGmhf4hYeKK6mPAzm/8
+         WVHPTvO+VbyuMoe6nnXyx+GLWt1P5/QC0eTQ9F5RMUgibgtHjnUWsoKHGaInEYrJYgtB
+         RHJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=bTdhh/5VMjchowHJrtU9IWxfTRNg2byjdSu19Bb5sQI=;
+        b=KvO0F1GBT4xBeyUGOsT/vxeJkT4TDimM843o+zTE6uBkQYrkBrP3hOlJ/tTipNKOyI
+         FfSWkch4hbJinA1T3lQ55gRWaUd3pN7gGT+sCQuZ3v2rl5g8RZGqtQboxkdOJNx3B7nc
+         J8kfNA3rfxRgSumcidlmYVY2oN117kyNntROOAwK2uQEtBAMTC4GaJ9/Vkl3F5528LC6
+         Ood8dCcnD6HJfYXLToGj1LhWQ0kK8S1w2facByNcf5qdOpUOQRBTZxribAs3q+YahEdh
+         +Lm9hIdQ7A8svLmRNETmpdarFntzwiK2H/ZGrvneN0kWhdu7aizI//i4lesePL1/o+Ya
+         nMeQ==
+X-Gm-Message-State: AOAM532JEc5Y/lZRLbSJX881RaWAPFNj1kCGLnNnCIvVDO1LpG5+260t
+        AYcewJXjQR8KBeOWedhWQLw=
+X-Google-Smtp-Source: ABdhPJw2z78XNkuUT+CrMuqMagiZ55nNkVTmvHIhnndayAsPH+/VyihABGYebe0LlQcr4NMEk8U/RQ==
+X-Received: by 2002:a17:903:1c8:b0:150:12cd:a02d with SMTP id e8-20020a17090301c800b0015012cda02dmr6412993plh.174.1646547018666;
+        Sat, 05 Mar 2022 22:10:18 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id q13-20020aa7982d000000b004cb98a2ca35sm11994907pfl.211.2022.03.05.22.10.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 05 Mar 2022 22:10:18 -0800 (PST)
+From:   Vincent Shih <vincent.sunplus@gmail.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, wells.lu@sunplus.com
+Cc:     Vincent Shih <vincent.sunplus@gmail.com>
+Subject: [PATCH v3 0/2] Add driver for ehci in Sunplus SP7021
+Date:   Sun,  6 Mar 2022 14:10:34 +0800
+Message-Id: <1646547036-14885-1-git-send-email-vincent.sunplus@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The syzbot fuzzer found a use-after-free bug:
+This is a patch series for ehci driver for Sunplus SP7021 SoC.
 
-BUG: KASAN: use-after-free in dev_uevent+0x712/0x780 drivers/base/core.c:2320
-Read of size 8 at addr ffff88802b934098 by task udevd/3689
+Sunplus SP7021 is an ARM Coretex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD Card and
+etc.) into a single chip. It is designed for industrial control.
 
-CPU: 2 PID: 3689 Comm: udevd Not tainted 5.17.0-rc4-syzkaller-00229-g4f12b742eb2b #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255
- __kasan_report mm/kasan/report.c:442 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
- dev_uevent+0x712/0x780 drivers/base/core.c:2320
- uevent_show+0x1b8/0x380 drivers/base/core.c:2391
- dev_attr_show+0x4b/0x90 drivers/base/core.c:2094
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-Although the bug manifested in the driver core, the real cause was a
-race with the gadget core.  dev_uevent() does:
+Vincent Shih (2):
+  usb: host: ehci-sunplus: Add driver for ehci in Sunplus SP7021
+  dt-bindings: usb: Add bindings doc for Sunplus EHCI driver
 
-	if (dev->driver)
-		add_uevent_var(env, "DRIVER=%s", dev->driver->name);
+ .../bindings/usb/sunplus,sp7021-usb-ehci.yaml      |  63 ++++++
+ MAINTAINERS                                        |   7 +
+ drivers/usb/host/Kconfig                           |  12 +
+ drivers/usb/host/Makefile                          |   1 +
+ drivers/usb/host/ehci-sunplus.c                    | 241 +++++++++++++++++++++
+ 5 files changed, 324 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml
+ create mode 100644 drivers/usb/host/ehci-sunplus.c
 
-and between the test and the dereference of dev->driver, the gadget
-core sets dev->driver to NULL.
+-- 
+2.7.4
 
-The race wouldn't occur if the gadget core registered its devices on
-a real bus, using the standard synchronization techniques of the
-driver core.  However, it's not necessary to make such a large change
-in order to fix this bug; all we need to do is make sure that
-udc->dev.driver is always NULL.
-
-In fact, there is no reason for udc->dev.driver ever to be set to
-anything, let alone to the value it currently gets: the address of the
-gadget's driver.  After all, a gadget driver only knows how to manage
-a gadget, not how to manage a UDC.
-
-This patch simply removes the statements in the gadget core that touch
-udc->dev.driver.
-
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Reported-and-tested-by: syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com
-Fixes: 2ccea03a8f7e ("usb: gadget: introduce UDC Class")
-CC: <stable@vger.kernel.org>
-
----
-
-
-[as1974]
-
-
- drivers/usb/gadget/udc/core.c |    3 ---
- 1 file changed, 3 deletions(-)
-
-Index: usb-devel/drivers/usb/gadget/udc/core.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/udc/core.c
-+++ usb-devel/drivers/usb/gadget/udc/core.c
-@@ -1436,7 +1436,6 @@ static void usb_gadget_remove_driver(str
- 	usb_gadget_udc_stop(udc);
- 
- 	udc->driver = NULL;
--	udc->dev.driver = NULL;
- 	udc->gadget->dev.driver = NULL;
- }
- 
-@@ -1498,7 +1497,6 @@ static int udc_bind_to_driver(struct usb
- 			driver->function);
- 
- 	udc->driver = driver;
--	udc->dev.driver = &driver->driver;
- 	udc->gadget->dev.driver = &driver->driver;
- 
- 	usb_gadget_udc_set_speed(udc, driver->max_speed);
-@@ -1521,7 +1519,6 @@ err1:
- 		dev_err(&udc->dev, "failed to start %s: %d\n",
- 			udc->driver->function, ret);
- 	udc->driver = NULL;
--	udc->dev.driver = NULL;
- 	udc->gadget->dev.driver = NULL;
- 	return ret;
- }
