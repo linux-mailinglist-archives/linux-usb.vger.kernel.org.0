@@ -2,37 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5704CECF8
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 19:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5BD4CED3A
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 19:40:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbiCFSBB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Mar 2022 13:01:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S233040AbiCFSky (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Mar 2022 13:40:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbiCFSBA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 13:01:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126763EF37;
-        Sun,  6 Mar 2022 10:00:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2AA9B80EBE;
-        Sun,  6 Mar 2022 18:00:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6463AC340EC;
-        Sun,  6 Mar 2022 18:00:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646589605;
-        bh=HZP74ZA4RW2ibfRByAf5KWvT/L7pk7G/fjmfHeBhJD0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rPFmLs3H6+2+NS3g3jxd6sVwEX3G8BorFRhHe5/+q54jru0FUXLK9xUYb+4B6eB+2
-         iWPwoBI4Fh3j6h9WJQNO+ojbIM2SoUsM+v6y0hEQHFyVVio3gKIDsqnVFbJfoaWaXQ
-         4hD4RDZMKn7uDHG3kb9yPMFQGisOh3cdrINAtU7w=
-Date:   Sun, 6 Mar 2022 19:00:01 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
+        with ESMTP id S230078AbiCFSkv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 13:40:51 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F8029822
+        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 10:39:58 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id h13so4932845ede.5
+        for <linux-usb@vger.kernel.org>; Sun, 06 Mar 2022 10:39:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PJdT0uYnIkrEHo7bQMb01yqEAfgHuebjZMfybZUKXYE=;
+        b=B/5f58vo38KUye6rmtbHQBaKoggxbOmSU0CQJSWqOAHyy9t315nFmnDuBmDN1ozPVT
+         JuhWsDbopsXEFZIL+xUPJBnH2WPNrq38E6lEDXRBn7DEce6AOKlLN/VYyRVTFYlSh6Rv
+         nzjiRiQM0rz62DZOG2Ynfyu+9z8r/oClL3gXo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PJdT0uYnIkrEHo7bQMb01yqEAfgHuebjZMfybZUKXYE=;
+        b=pkaExKYrk93Ml8hZsX2mfWctVk7Fi+lXud3HW17HwODQe0rElQImPyuaUpORSvet3M
+         tsvExle65ulvsPMRUPhk6X23EDAg67Hu+WBAeLZgNxjL4Gg3pxF5cmW0wXYcqXglUFeY
+         629wxm78SF/fHcSVz/6yYuq6jcGsqXZdQ1/Jah40EMqtf7mOPid6cv2WnDX9cTimaB52
+         LE0IUmaOCf2vF5Kbg+ov0WHe3qgX8XY3yXAQfxMf1hCwb6DIuYGpezYmQPzECFsJks0y
+         4pjrcYFsTd4UTkkorsZv3G2R2HDX2VwU3xNZ+SDpee8A9pl/HL97t/e2Z8jy347bmsVC
+         RyeQ==
+X-Gm-Message-State: AOAM533r+kSf3IVobz9pFJZ95xqXetXWPZ/jtVkcMEMEMU6z8TU4GSQV
+        lgjUjUH3pB5f2HWwWc571vMBh/bM+iq/oKUcvTU=
+X-Google-Smtp-Source: ABdhPJwEG5X8nyeZCkCC5UBDSlCl57OEbjfg77uPBHsIgKj3O+sN5f0A9MibT9gwHTdGza8wI19igA==
+X-Received: by 2002:a05:6402:6da:b0:3fd:cacb:f4b2 with SMTP id n26-20020a05640206da00b003fdcacbf4b2mr7814192edy.332.1646591997156;
+        Sun, 06 Mar 2022 10:39:57 -0800 (PST)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com. [209.85.218.43])
+        by smtp.gmail.com with ESMTPSA id fx13-20020a170906b74d00b006da9e406786sm3584410ejb.189.2022.03.06.10.39.55
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Mar 2022 10:39:56 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id qx21so27553907ejb.13
+        for <linux-usb@vger.kernel.org>; Sun, 06 Mar 2022 10:39:55 -0800 (PST)
+X-Received: by 2002:a05:6512:6c6:b0:447:ca34:b157 with SMTP id
+ u6-20020a05651206c600b00447ca34b157mr5678695lff.435.1646591984685; Sun, 06
+ Mar 2022 10:39:44 -0800 (PST)
+MIME-Version: 1.0
+References: <20220306175034.3084609-1-jakobkoschel@gmail.com> <20220306175034.3084609-2-jakobkoschel@gmail.com>
+In-Reply-To: <20220306175034.3084609-2-jakobkoschel@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 6 Mar 2022 10:39:28 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wheru6rEfzC2wuO9k03PRF6s3nhxryCAnwR5bzKwPV2ww@mail.gmail.com>
+Message-ID: <CAHk-=wheru6rEfzC2wuO9k03PRF6s3nhxryCAnwR5bzKwPV2ww@mail.gmail.com>
+Subject: Re: [PATCH 01/26] usb: gadget: fsl: remove usage of list iterator
+ past the loop body
 To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+Cc:     Greg Kroah-Hartman <greg@kroah.com>, linux-kernel@vger.kernel.org,
         Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
         Andrew Jeffery <andrew@aj.id.au>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
@@ -54,82 +82,42 @@ Cc:     linux-kernel@vger.kernel.org,
         Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH 25/26] usb: gadget: dummy_hcd: replace usage of rc to
- check if a list element was found
-Message-ID: <YiT2odfvXhp4nsK4@kroah.com>
-References: <20220306175034.3084609-1-jakobkoschel@gmail.com>
- <20220306175034.3084609-26-jakobkoschel@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220306175034.3084609-26-jakobkoschel@gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 06:50:33PM +0100, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
-> 
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable [1].
-> 
-> This removes the need to check the rc value to determine if the
-> break/goto was hit and can be made more obvious
-> by checking if the variable was set within the list traversal loop.
-> 
-> Link: https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-> ---
->  drivers/usb/gadget/udc/dummy_hcd.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
-> index a2d956af42a2..f21944707707 100644
-> --- a/drivers/usb/gadget/udc/dummy_hcd.c
-> +++ b/drivers/usb/gadget/udc/dummy_hcd.c
-> @@ -751,7 +751,7 @@ static int dummy_dequeue(struct usb_ep *_ep, struct usb_request *_req)
->  	struct dummy		*dum;
->  	int			retval = -EINVAL;
->  	unsigned long		flags;
-> -	struct dummy_request	*req = NULL;
-> +	struct dummy_request	*req = NULL, *tmp;
->  
->  	if (!_ep || !_req)
->  		return retval;
-> @@ -763,17 +763,18 @@ static int dummy_dequeue(struct usb_ep *_ep, struct usb_request *_req)
->  
->  	local_irq_save(flags);
->  	spin_lock(&dum->lock);
-> -	list_for_each_entry(req, &ep->queue, queue) {
-> -		if (&req->req == _req) {
-> -			list_del_init(&req->queue);
-> +	list_for_each_entry(tmp, &ep->queue, queue) {
-> +		if (&tmp->req == _req) {
-> +			list_del_init(&tmp->queue);
->  			_req->status = -ECONNRESET;
-> +			req = tmp;
->  			retval = 0;
->  			break;
->  		}
->  	}
->  	spin_unlock(&dum->lock);
->  
-> -	if (retval == 0) {
-> +	if (req) {
+On Sun, Mar 6, 2022 at 9:51 AM Jakob Koschel <jakobkoschel@gmail.com> wrote:
+>
+>         /* make sure it's actually queued on this endpoint */
+> -       list_for_each_entry(req, &ep->queue, queue) {
+> -               if (&req->req == _req)
+> +       list_for_each_entry(tmp, &ep->queue, queue) {
+> +               if (&tmp->req == _req) {
+> +                       req = tmp;
+>                         break;
+> +               }
+>         }
 
-There's no need for this change as we are testing retval, not req here,
-unlike the other udc drivers.
+Honestly, I think many (most?) of these would be a lot cleaner as
 
-So this one I think is correct as-is, or am I mistaken somehow?
+        list_for_each_entry(tmp, &ep->queue, queue) {
+                if (&tmp->req != _req)
+                        continue;
+                req = tmp;
+                break;
+        }
 
-thanks,
+and in fact maybe that 'tmp' would be better named 'iter' or similar
+(maybe 'pos', which is what the list.h macros themselves use for the
+iterator naming), just from a naming standpoint.
 
-greg k-h
+Because it's not really some temporary variable, it has a real use.
+
+           Linus
