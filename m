@@ -2,47 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22274CEB75
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 13:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 515B44CEBCE
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 14:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233573AbiCFMMz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Mar 2022 07:12:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
+        id S232372AbiCFN6R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Mar 2022 08:58:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiCFMMy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 07:12:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBA11A833;
-        Sun,  6 Mar 2022 04:12:02 -0800 (PST)
+        with ESMTP id S231158AbiCFN6Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 08:58:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B2123BE9
+        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 05:57:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0873A60E09;
-        Sun,  6 Mar 2022 12:12:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDCB2C340EC;
-        Sun,  6 Mar 2022 12:12:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D446AB80E88
+        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 13:57:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0413BC340EC;
+        Sun,  6 Mar 2022 13:57:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646568721;
-        bh=RdsMn1NV+ee2cT77H5I6utiQ+VayosQE+GCEI/twxPo=;
+        s=korg; t=1646575040;
+        bh=/jaMnA9gEr2PHz5SHjyGjFkhdrgpJn4FkADnGh8FrVs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=USMK8bgQ4mCYGXENDtJjq8OiU1m843+JH8xGKlAI4ebgctv2drHgEq9JZKGcUypGm
-         Ee7k+sZGvkJte1T7vY9omjdxfGBoCmLiW+tXm0EGX21v/Qw7EKASYbIgBCIwQpeu/u
-         Wyom0/8V4z0eXZH1uQIzHlixzdkh8rUNAXzx6Tv0=
-Date:   Sun, 6 Mar 2022 13:11:58 +0100
+        b=bH4JcaXsB590LkDKsDp1p3BaA2s1+GFgMFayg2vULvydjbRCk+gYVG0r8PSxpOD4e
+         YNmfRMbhiwY0EowhZsqXooo19ZYdHyQtxl2rx8exoXSzhDJCsBvk4PsyOb6uMiiV16
+         dbhneNAiAzcCAhuSPG1KUPNy+Pkp2jj2C3GDFVxs=
+Date:   Sun, 6 Mar 2022 14:57:17 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yunhao Tian <t123yh.xyz@gmail.com>
-Cc:     linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: PREEMPT_RT causes scheduling errors with f_rndis USB gadget
-Message-ID: <YiSlDqqk0gnUouWd@kroah.com>
-References: <CAFQXTv2B10=i6DMV1iJpOT-Mj9F93hOi_415cn49N6X_yDFw2g@mail.gmail.com>
- <YiSOjGLzMCvKOm0G@kroah.com>
- <CAFQXTv1CACLRB-Tx07pR4xFNQncdq=i7Q7=vQzgD3hpdehr7cQ@mail.gmail.com>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, balbi@kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH v3] usb: dwc3: gadget: move cmd_endtransfer to extra
+ function
+Message-ID: <YiS9vZWoONJKTbpL@kroah.com>
+References: <d2cba6f5-6de8-f5f6-f639-9f4a384d1f77@synopsys.com>
+ <20220305005356.1400365-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFQXTv1CACLRB-Tx07pR4xFNQncdq=i7Q7=vQzgD3hpdehr7cQ@mail.gmail.com>
+In-Reply-To: <20220305005356.1400365-1-m.grzeschik@pengutronix.de>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,28 +51,24 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 06:57:08PM +0800, Yunhao Tian wrote:
-> Greg KH <gregkh@linuxfoundation.org> 于2022年3月6日周日 18:36写道：
-> >
-> > On Sun, Mar 06, 2022 at 06:17:54PM +0800, Yunhao Tian wrote:
-> > > Hi everyone,
-> > >
-> > > I'm using Linux 5.15.24-rt31 kernel with PREEMPT_RT enabled, on my
-> > > RK3308 board. I set up f_rndis gadget with the following script, and
-> > > plugged my board to a x86 Linux computer running 5.15.25 kernel:
-> >
-> > Does the same thing happen with the non-rt kernel?
-> >
-> > thanks,
-> >
-> > greg k-h
+On Sat, Mar 05, 2022 at 01:53:56AM +0100, Michael Grzeschik wrote:
+> This patch adds the extra function __dwc3_stop_active_transfer to
+> consolidate the same codepath.
 > 
-> Hi Greg,
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 > 
-> Thanks for your reply!
-> 
-> This doesn't happen to non-rt kernel. It will only happen when
-> PREEMPT_RT is turned on, with rt kernel.
+> ---
+> v1 -> v2: - renamed the function to __dwc3_stop_active_transfer
+>           - added function description
+> v2 -> v3: - fixed spelling and removed extra line
+> 	  - make __dwc3_stop_active_transfer return ret
+> 	  - use ret in __dwc3_gadget_start_isoc
 
-Great, thanks for letting us know.  I'll let you work this out with the
--rt developers :)
+So is this v3 of a single patch in this series, or the whole series?
+
+I'm totally confused, please resend the whole, updated series, as v4
+please.
+
+thanks,
+
+greg k-h
