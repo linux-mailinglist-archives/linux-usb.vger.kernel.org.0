@@ -2,62 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58B34CEC49
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 17:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1494CECB0
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 18:51:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233840AbiCFQxz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Mar 2022 11:53:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
+        id S232684AbiCFRwE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Mar 2022 12:52:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbiCFQxy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 11:53:54 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F4732EE7
-        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 08:53:01 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id bi12so14174264ejb.3
-        for <linux-usb@vger.kernel.org>; Sun, 06 Mar 2022 08:53:01 -0800 (PST)
+        with ESMTP id S230335AbiCFRwD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 12:52:03 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A1F3E5DB;
+        Sun,  6 Mar 2022 09:51:11 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id w4so14454240edc.7;
+        Sun, 06 Mar 2022 09:51:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:to:content-language:from
-         :subject:content-transfer-encoding;
-        bh=/OF2g++NVapWas9TlzlJN282C0D0WDKqRHH9LNz4J3U=;
-        b=NMoAB3/rlHHmuK92SOEyfUE4DANVvyg4LJJSlCK/PeZtCDaosbXI4lapfG3RDPzNl9
-         OCQ/vp/Nco7ch/RyzQpKwLJLd1os1a6dS3UkLwMmHURVW910No/sOlt8LbIsdo9guxAX
-         qqGtORhkTSq/E66AlWHkOzg53Il9ZxVyU4LDX7BmdxA6UmdPCMMzfDZt/b6xluSNvzFI
-         4D1xovXWAfzAE2vK9oNTkMEUeQthZqoVRAJvO7B/WenS3L6HaLf/e3sTPcxpi/qQTSdG
-         4MqgjGXkuDvRXCIvzcLwXUcJPDjPGN1ZZaLix1ZNRxFPfqETWBTC/0RgKgACsKY+sfg/
-         SPAw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1sHC6Xk8ZJo08DuzVROXh4Esd+CuhfmZFv4uGHlwk+M=;
+        b=EEvkjMNywY4oF2c5mrnpcqCp5FoCPw334cGIv0cmdOBtW81bzJ9LqxFKiV+98acAKV
+         0ju3vfoIc2jnStgxoewNjOKNG8wT4f9dMzryh+NCq8xMb3SB6vwq5W6SDVcR5sfHUD2F
+         OJiNtcLxwDi9LGrqxvthxHmCsnLIUmixF1tr7eVqIRPYaHNztb9aLhF6dfsd0mpGG8WL
+         X0/2TIy2TVaQNxlzNyh6cG1qxJpdBtLWeZzlZMZ2/NUeH3SKKXC2TklGFPsJ+TDZw6Z1
+         MPGWgMY32ZzocJ2q8zMuLpZedccQD+UayRt0agOip4/nDYAoFOi9mQU2DPeJCXntAnPK
+         8BVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:to
-         :content-language:from:subject:content-transfer-encoding;
-        bh=/OF2g++NVapWas9TlzlJN282C0D0WDKqRHH9LNz4J3U=;
-        b=KEI/JWkbsrf188JE/l2s/Nys3+gp3dsWKpI6x0hdctsuGjZ3gLVFwfj01BByLm+kja
-         ar1UQE/Rzu54mwXfm3dwj5kcbAYQe9cdRDI0RKBEgdUaWqQfaWPIBFN6i4ZJUQaCmUKr
-         bfI0W8CjL7BLiFYjTY3hFRzVe7jW1qKin1OMw+NMgsK+wWwgIsDsRURchiq6d85cFLsL
-         k92x2nWNqsCn35pxo5P8wfuUXDJJKFXWB/IOpBWnCIwTlo4XkAQ/LRMEV3sy1y3wRHne
-         YJm0sY6r/7lb+Y4rXmFEtCh9E7lH622iB9TDXHuOmby8ZBByXyScD3bwwDkAi1Tcwdiw
-         zleg==
-X-Gm-Message-State: AOAM530x6wbNNIgB5WkiCl61W+Qn4mOBWxuFRssZi8vN+YZaw/kX8fd1
-        Diwdq+2ppBNmkxYTb9/1PX425IR4Fgo=
-X-Google-Smtp-Source: ABdhPJxDxA6I2hcIwm3xrV9VeY/hjJ9OoFiDYxbzdWfZvjDBLmzJrUUGs3x0yaBgjf2SqUyHjST0MA==
-X-Received: by 2002:a17:907:3f91:b0:6d7:16c0:ae1b with SMTP id hr17-20020a1709073f9100b006d716c0ae1bmr6324117ejc.74.1646585580171;
-        Sun, 06 Mar 2022 08:53:00 -0800 (PST)
-Received: from ?IPV6:2a01:5e0:502:80::827? ([2a01:5e0:502:80::827])
-        by smtp.gmail.com with ESMTPSA id k3-20020a05640212c300b0041605b2d9c1sm3344916edx.58.2022.03.06.08.52.59
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Mar 2022 08:52:59 -0800 (PST)
-Message-ID: <165de6a0-43e9-092c-2916-66b115c7fbf4@gmail.com>
-Date:   Sun, 6 Mar 2022 17:52:58 +0100
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1sHC6Xk8ZJo08DuzVROXh4Esd+CuhfmZFv4uGHlwk+M=;
+        b=ueVF8xJgBQqjNm4/zz3BtMRa6jaX+yvk5SPRgRWfWbaWX+F49l65tDKWJeIKv8CPFD
+         QvmkB0D/0n015JXstEIx3KoZuf438ru/b/+S9cvN4Fphta1apNX63e/2AAy7KIC00cju
+         B2fiP6rzXg9Wn1CdpqeUH8+DP+zmb/xenKclfol8J1cpaaKV05OmLUleZstvA47CLSTY
+         MsFBok8Fog2dGzB+EC6M4JNlWEf1pr6qIwK3zxwCTGE9T3HIb3Oyn/z3RBT6KMAqtwzQ
+         T0JcBhVteI8ugFv5VVFWlGVgkjtUkSDR7/j/S+GQY6R57KuMBxLH1ku+uTFeOxMjChMF
+         I4+w==
+X-Gm-Message-State: AOAM532gghsDpNEmvqAJHFZ/iAQ4WqEkyoNQ4pXirdaw8U80yvVIaB7K
+        jj62Fb4hh1QHLJ94MBZ9YofI5OBIfhZ9z2l7
+X-Google-Smtp-Source: ABdhPJyc22m5/ALErbRpRTh2XeUC5yNaZMHuKbVd8vo5meeNd5UuqpZDLskh9+j+VbijF/OjTkI1jg==
+X-Received: by 2002:a50:fd0f:0:b0:416:e62:ccec with SMTP id i15-20020a50fd0f000000b004160e62ccecmr7651074eds.300.1646589069555;
+        Sun, 06 Mar 2022 09:51:09 -0800 (PST)
+Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id 20-20020a17090601d400b006caff964e30sm4052606ejj.19.2022.03.06.09.51.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Mar 2022 09:51:09 -0800 (PST)
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+To:     Greg Kroah-Hartman <greg@kroah.com>
+Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-usb@vger.kernel.org (open list:USB GADGET/PERIPHERAL SUBSYSTEM),
+        Mike Rapoport <rppt@kernel.org>,
+        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: [PATCH 00/26] usb: gadget: remove usage of list iterator past the loop
+Date:   Sun,  6 Mar 2022 18:50:08 +0100
+Message-Id: <20220306175034.3084609-1-jakobkoschel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-To:     linux-usb@vger.kernel.org
-Content-Language: en-US
-From:   =?UTF-8?B?TWF0ecOhxaEgS3JvdXBh?= <kroupa.matyas@gmail.com>
-Subject: Another PL2303
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -69,102 +89,112 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+ok, let's start here.
 
-I recently bought a serial console adapter with PL2303. After a quick 
-search I discovered that there have been problems with different 
-versions of this chip so I include some info about mine.
+This patch set removes any use of the list iterator variable past
+the list body. This will allow defining the list iterator variable
+within the list_for_each_entry_*() macros to avoid any (invalid)
+use after the loop. If no break/goto was hit during list traversal
+the list iterator variable would otherwise be a bogus pointer
+since it is computed on something that is not actually an element
+of the list.
 
-Thanks in advance
+I've basically followed what we discussed in:
+https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
 
-Matyáš
+There are some cases where it might be possible to 'ditch' the tmp
+variable and refactor the code past the loop into the loop body.
+For the sake of keeping the *_dequeue() functions more similar, I've
+decided against doing it for some and leaving it in others.
 
-dmesg:
+In general there are four use cases after the loop body here:
 
-[172076.820388] usb 3-2.2: new full-speed USB device number 11 using 
-xhci_hcd
-[172076.960358] usb 3-2.2: New USB device found, idVendor=067b, 
-idProduct=23f3, bcdDevice= 6.05
-[172076.960372] usb 3-2.2: New USB device strings: Mfr=1, Product=2, 
-SerialNumber=3
-[172076.960377] usb 3-2.2: Product: USB-Serial Controller
-[172076.960381] usb 3-2.2: Manufacturer: Prolific Technology Inc.
-[172076.960384] usb 3-2.2: SerialNumber: CCBLj19B616
-[172077.038242] usbcore: registered new interface driver pl2303
-[172077.038251] usbserial: USB Serial support registered for pl2303
-[172077.038269] pl2303 3-2.2:1.0: pl2303 converter detected
-[172077.038273] pl2303 3-2.2:1.0: unknown device type, please report to 
-linux-usb@vger.kernel.org
+1) using &req->req in a comparision after the loop
+2) using the iterator as a pointer in a comparision after the loop
+3) use the &iterator->list to compare with the head to see if the
+	loop exits early
+4) using the iterator past the loop but using the rc variable to see if the
+	loop exits early
 
-lsusb:
+Jakob Koschel (26):
+  usb: gadget: fsl: remove usage of list iterator past the loop body
+  usb: gadget: bdc: remove usage of list iterator past the loop body
+  usb: gadget: udc: atmel: remove usage of list iterator past the loop
+    body
+  usb: gadget: udc: pxa25x: remove usage of list iterator past the loop
+    body
+  usb: gadget: udc: at91: remove usage of list iterator past the loop
+    body
+  usb: gadget: goku_udc: remove usage of list iterator past the loop
+    body
+  usb: gadget: udc: gr_udc: remove usage of list iterator past the loop
+    body
+  usb: gadget: lpc32xx_udc: remove usage of list iterator past the loop
+    body
+  usb: gadget: mv_u3d: remove usage of list iterator past the loop body
+  usb: gadget: udc: mv_udc_core: remove usage of list iterator past the
+    loop body
+  usb: gadget: net2272: remove usage of list iterator past the loop body
+  usb: gadget: udc: net2280: remove usage of list iterator past the loop
+    body
+  usb: gadget: omap_udc: remove usage of list iterator past the loop
+    body
+  usb: gadget: s3c-hsudc: remove usage of list iterator past the loop
+    body
+  usb: gadget: udc-xilinx: remove usage of list iterator past the loop
+    body
+  usb: gadget: aspeed: remove usage of list iterator past the loop body
+  usb: gadget: configfs: remove using list iterator after loop body as a
+    ptr
+  usb: gadget: legacy: remove using list iterator after loop body as a
+    ptr
+  usb: gadget: udc: max3420_udc: remove using list iterator after loop
+    body as a ptr
+  usb: gadget: tegra-xudc: remove using list iterator after loop body as
+    a ptr
+  usb: gadget: composite: remove check of list iterator against head
+    past the loop body
+  usb: gadget: pxa27x_udc: replace usage of rc to check if a list
+    element was found
+  usb: gadget: udc: s3c2410: replace usage of rc to check if a list
+    element was found
+  usb: gadget: udc: core: replace usage of rc to check if a list element
+    was found
+  usb: gadget: dummy_hcd: replace usage of rc to check if a list element
+    was found
+  usb: gadget: udc: s3c2410: replace usage of rc to check if a list
+    element was found
 
-Bus 003 Device 011: ID 067b:23f3 Prolific Technology, Inc. USB-Serial 
-Controller
-Couldn't open device, some information will be missing
-Device Descriptor:
-   bLength                18
-   bDescriptorType         1
-   bcdUSB               2.00
-   bDeviceClass            0
-   bDeviceSubClass         0
-   bDeviceProtocol         0
-   bMaxPacketSize0        64
-   idVendor           0x067b Prolific Technology, Inc.
-   idProduct          0x23f3
-   bcdDevice            6.05
-   iManufacturer           1 Prolific Technology Inc.
-   iProduct                2 USB-Serial Controller
-   iSerial                 3 CCBLj19B616
-   bNumConfigurations      1
-   Configuration Descriptor:
-     bLength                 9
-     bDescriptorType         2
-     wTotalLength       0x0027
-     bNumInterfaces          1
-     bConfigurationValue     1
-     iConfiguration          0
-     bmAttributes         0xa0
-       (Bus Powered)
-       Remote Wakeup
-     MaxPower              100mA
-     Interface Descriptor:
-       bLength                 9
-       bDescriptorType         4
-       bInterfaceNumber        0
-       bAlternateSetting       0
-       bNumEndpoints           3
-       bInterfaceClass       255 Vendor Specific Class
-       bInterfaceSubClass      0
-       bInterfaceProtocol      0
-       iInterface              0
-       Endpoint Descriptor:
-         bLength                 7
-         bDescriptorType         5
-         bEndpointAddress     0x81  EP 1 IN
-         bmAttributes            3
-           Transfer Type            Interrupt
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x000a  1x 10 bytes
-         bInterval               1
-       Endpoint Descriptor:
-         bLength                 7
-         bDescriptorType         5
-         bEndpointAddress     0x02  EP 2 OUT
-         bmAttributes            2
-           Transfer Type            Bulk
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x0040  1x 64 bytes
-         bInterval               0
-       Endpoint Descriptor:
-         bLength                 7
-         bDescriptorType         5
-         bEndpointAddress     0x83  EP 3 IN
-         bmAttributes            2
-           Transfer Type            Bulk
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x0040  1x 64 bytes
-         bInterval               0
+ drivers/usb/gadget/composite.c           | 18 ++++++++++--------
+ drivers/usb/gadget/configfs.c            | 20 ++++++++++++--------
+ drivers/usb/gadget/legacy/hid.c          | 23 ++++++++++++-----------
+ drivers/usb/gadget/udc/aspeed-vhub/epn.c | 10 ++++++----
+ drivers/usb/gadget/udc/at91_udc.c        | 10 ++++++----
+ drivers/usb/gadget/udc/atmel_usba_udc.c  | 11 +++++++----
+ drivers/usb/gadget/udc/bdc/bdc_ep.c      | 11 ++++++++---
+ drivers/usb/gadget/udc/core.c            | 16 ++++++++++------
+ drivers/usb/gadget/udc/dummy_hcd.c       | 11 ++++++-----
+ drivers/usb/gadget/udc/fsl_qe_udc.c      | 11 +++++++----
+ drivers/usb/gadget/udc/fsl_udc_core.c    | 11 +++++++----
+ drivers/usb/gadget/udc/goku_udc.c        | 10 ++++++----
+ drivers/usb/gadget/udc/gr_udc.c          | 10 ++++++----
+ drivers/usb/gadget/udc/lpc32xx_udc.c     | 10 ++++++----
+ drivers/usb/gadget/udc/max3420_udc.c     | 11 +++++++----
+ drivers/usb/gadget/udc/mv_u3d_core.c     | 10 ++++++----
+ drivers/usb/gadget/udc/mv_udc_core.c     | 10 ++++++----
+ drivers/usb/gadget/udc/net2272.c         | 11 ++++++-----
+ drivers/usb/gadget/udc/net2280.c         | 11 +++++++----
+ drivers/usb/gadget/udc/omap_udc.c        | 10 ++++++----
+ drivers/usb/gadget/udc/pxa25x_udc.c      | 11 +++++++----
+ drivers/usb/gadget/udc/pxa27x_udc.c      |  9 +++++----
+ drivers/usb/gadget/udc/s3c-hsudc.c       | 10 ++++++----
+ drivers/usb/gadget/udc/s3c2410_udc.c     | 11 ++++++-----
+ drivers/usb/gadget/udc/tegra-xudc.c      | 10 ++++++----
+ drivers/usb/gadget/udc/udc-xilinx.c      | 11 +++++++----
+ 26 files changed, 184 insertions(+), 123 deletions(-)
+
+
+base-commit: 719fce7539cd3e186598e2aed36325fe892150cf
+--
+2.25.1
 
