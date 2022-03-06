@@ -2,33 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F374CEDE6
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4F74CEDE5
 	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 22:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234082AbiCFVN5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Mar 2022 16:13:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S234206AbiCFVNz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Mar 2022 16:13:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234210AbiCFVN4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 16:13:56 -0500
+        with ESMTP id S232246AbiCFVNx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 16:13:53 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0381009
-        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 13:13:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7B710A2
+        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 13:12:55 -0800 (PST)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mgr@pengutronix.de>)
-        id 1nQyBW-0000Ns-Ea; Sun, 06 Mar 2022 22:12:58 +0100
+        id 1nQyBR-0000Nt-IY; Sun, 06 Mar 2022 22:12:53 +0100
 Received: from mgr by dude.hi.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <mgr@pengutronix.de>)
-        id 1nQyBQ-009ZVG-Pv; Sun, 06 Mar 2022 22:12:52 +0100
+        id 1nQyBQ-009ZVJ-QN; Sun, 06 Mar 2022 22:12:52 +0100
 From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
 To:     linux-usb@vger.kernel.org
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        kernel@pengutronix.de, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [RESEND v3 1/2] usb: dwc3: gadget: ep_queue simplify isoc start condition
-Date:   Sun,  6 Mar 2022 22:12:50 +0100
-Message-Id: <20220306211251.2281335-2-m.grzeschik@pengutronix.de>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, kernel@pengutronix.de
+Subject: [RESEND v3 2/2] usb: dwc3: gadget: move cmd_endtransfer to extra function
+Date:   Sun,  6 Mar 2022 22:12:51 +0100
+Message-Id: <20220306211251.2281335-3-m.grzeschik@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220306211251.2281335-1-m.grzeschik@pengutronix.de>
 References: <20220306211251.2281335-1-m.grzeschik@pengutronix.de>
@@ -47,40 +46,122 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-To improve reading the code this patch moves the cases to start_isoc or
-return the function under one common condition check.
+This patch adds the extra function __dwc3_stop_active_transfer to
+consolidate the same codepath.
 
-Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
 ---
-v1 -> v3: added reviewed by, no further changes
+v1 -> v2: - renamed the function to __dwc3_stop_active_transfer
+          - added function description
+v2 -> v3: - fixed spelling and removed extra line
+	  - make __dwc3_stop_active_transfer return ret
+	  - use ret in __dwc3_gadget_start_isoc
 
- drivers/usb/dwc3/gadget.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/usb/dwc3/gadget.c | 69 +++++++++++++++++++++------------------
+ 1 file changed, 37 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index a0c883f19a417c..37dbf6132731b7 100644
+index 37dbf6132731b7..bd9d8494c90b73 100644
 --- a/drivers/usb/dwc3/gadget.c
 +++ b/drivers/usb/dwc3/gadget.c
-@@ -1913,13 +1913,11 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
- 	 * errors which will force us issue EndTransfer command.
- 	 */
- 	if (usb_endpoint_xfer_isoc(dep->endpoint.desc)) {
--		if (!(dep->flags & DWC3_EP_PENDING_REQUEST) &&
--				!(dep->flags & DWC3_EP_TRANSFER_STARTED))
--			return 0;
--
--		if ((dep->flags & DWC3_EP_PENDING_REQUEST)) {
--			if (!(dep->flags & DWC3_EP_TRANSFER_STARTED))
-+		if (!(dep->flags & DWC3_EP_TRANSFER_STARTED)) {
-+			if ((dep->flags & DWC3_EP_PENDING_REQUEST))
- 				return __dwc3_gadget_start_isoc(dep);
-+
-+			return 0;
- 		}
- 	}
+@@ -1673,6 +1673,40 @@ static int __dwc3_gadget_get_frame(struct dwc3 *dwc)
+ 	return DWC3_DSTS_SOFFN(reg);
+ }
  
++/**
++ * __dwc3_stop_active_transfer - stop the current active transfer
++ * @dep: isoc endpoint
++ * @force: set forcerm bit in the command
++ * @interrupt: command complete interrupt after End Transfer command
++ *
++ * When setting force, the ForceRM bit will be set. In that case
++ * the controller won't update the TRB progress on command
++ * completion. It also won't clear the HWO bit in the TRB.
++ * The command will also not complete immediately in that case.
++ */
++static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool interrupt)
++{
++	struct dwc3_gadget_ep_cmd_params params;
++	u32 cmd;
++	int ret;
++
++	cmd = DWC3_DEPCMD_ENDTRANSFER;
++	cmd |= force ? DWC3_DEPCMD_HIPRI_FORCERM : 0;
++	cmd |= interrupt ? DWC3_DEPCMD_CMDIOC : 0;
++	cmd |= DWC3_DEPCMD_PARAM(dep->resource_index);
++	memset(&params, 0, sizeof(params));
++	ret = dwc3_send_gadget_ep_cmd(dep, cmd, &params);
++	WARN_ON_ONCE(ret);
++	dep->resource_index = 0;
++
++	if (!interrupt)
++		dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
++	else if (!ret)
++		dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
++
++	return ret;
++}
++
+ /**
+  * dwc3_gadget_start_isoc_quirk - workaround invalid frame number
+  * @dep: isoc endpoint
+@@ -1842,21 +1876,8 @@ static int __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
+ 	 * status, issue END_TRANSFER command and retry on the next XferNotReady
+ 	 * event.
+ 	 */
+-	if (ret == -EAGAIN) {
+-		struct dwc3_gadget_ep_cmd_params params;
+-		u32 cmd;
+-
+-		cmd = DWC3_DEPCMD_ENDTRANSFER |
+-			DWC3_DEPCMD_CMDIOC |
+-			DWC3_DEPCMD_PARAM(dep->resource_index);
+-
+-		dep->resource_index = 0;
+-		memset(&params, 0, sizeof(params));
+-
+-		ret = dwc3_send_gadget_ep_cmd(dep, cmd, &params);
+-		if (!ret)
+-			dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
+-	}
++	if (ret == -EAGAIN)
++		ret = __dwc3_stop_active_transfer(dep, false, true);
+ 
+ 	return ret;
+ }
+@@ -3597,10 +3618,6 @@ static void dwc3_reset_gadget(struct dwc3 *dwc)
+ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+ 	bool interrupt)
+ {
+-	struct dwc3_gadget_ep_cmd_params params;
+-	u32 cmd;
+-	int ret;
+-
+ 	if (!(dep->flags & DWC3_EP_TRANSFER_STARTED) ||
+ 	    (dep->flags & DWC3_EP_END_TRANSFER_PENDING))
+ 		return;
+@@ -3632,19 +3649,7 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+ 	 * This mode is NOT available on the DWC_usb31 IP.
+ 	 */
+ 
+-	cmd = DWC3_DEPCMD_ENDTRANSFER;
+-	cmd |= force ? DWC3_DEPCMD_HIPRI_FORCERM : 0;
+-	cmd |= interrupt ? DWC3_DEPCMD_CMDIOC : 0;
+-	cmd |= DWC3_DEPCMD_PARAM(dep->resource_index);
+-	memset(&params, 0, sizeof(params));
+-	ret = dwc3_send_gadget_ep_cmd(dep, cmd, &params);
+-	WARN_ON_ONCE(ret);
+-	dep->resource_index = 0;
+-
+-	if (!interrupt)
+-		dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
+-	else
+-		dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
++	__dwc3_stop_active_transfer(dep, force, interrupt);
+ }
+ 
+ static void dwc3_clear_stall_all_ep(struct dwc3 *dwc)
 -- 
 2.30.2
 
