@@ -2,145 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 778684CEC32
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 17:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A58B34CEC49
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 17:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbiCFQKv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Mar 2022 11:10:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
+        id S233840AbiCFQxz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Mar 2022 11:53:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbiCFQKu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 11:10:50 -0500
-Received: from mail-4327.protonmail.ch (mail-4327.protonmail.ch [185.70.43.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25BAFD23
-        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 08:09:56 -0800 (PST)
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        by mail-4321.protonmail.ch (Postfix) with ESMTPS id 4KBRPb1LFNz4xQ95
-        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 16:09:55 +0000 (UTC)
-Authentication-Results: mail-4321.protonmail.ch;
-        dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="l66YgoUw"
-Date:   Sun, 06 Mar 2022 16:09:49 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1646582990;
-        bh=QUOJwC+A9V07d3DFaD6t61oC9Dik2Q4ioYUQDnLR7s0=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=l66YgoUw8phyMwLd26lwPX+DLo02S2DcXcoavS8sbhv4vEBUSKGiPr+3TEUUeRKs7
-         SZsj4fFqv7WabNopS02DbyHVqEfveOILvFn2tI1qazSbb86t6IxrEiWIHzPEmmbkOC
-         N3oFf9RMjdTsHQ1y3G2/x+2uwOwk3DQLpkGeUM9Mbn1yQ4JbSpH4aGDb8Ll7C+lAbt
-         vyPeEQUowlkgfRJsQ/hyfeE6fQreBl3yYo6WgUhgM6I7ds6QR2Ds01IFWv6EWer4cK
-         08Io5ki3aofe49+vGU7nShqj6RLuIwwNEZEhyokgSD0N/yNHg+9vnyEPJqmXZ4oqmX
-         bolos8z3LNQ9g==
-To:     "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-From:   micklorain <micklorain@protonmail.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
-Reply-To: micklorain <micklorain@protonmail.com>
-Subject: Re: [PATCH v1] usb: hcd: Try MSI interrupts on PCI devices
-Message-ID: <GCkSeDmZAyagb-3ogwNAwxsKYpxXSQRM6HeO_O9WxSYO1-8WL8ook5WQ9JchpyBqo4SIJ2XuW2DWFJeJrCzqzcedaBjNvfjNLZo1j3hU5tc=@protonmail.com>
-In-Reply-To: <Yh03mFSESvwT8Wt0@smile.fi.intel.com>
-References: <PxIByDyBRcsbpcmVhGSNDFAoUcMmb78ctXCkw6fbpx25TGlCHvA6SJjjFkNr1FfQZMntYPTNyvEnblxzAZ8a6jP9ddLpKeCN6Chi_2FuexU=@protonmail.com> <Yh03mFSESvwT8Wt0@smile.fi.intel.com>
+        with ESMTP id S231229AbiCFQxy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 11:53:54 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F4732EE7
+        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 08:53:01 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id bi12so14174264ejb.3
+        for <linux-usb@vger.kernel.org>; Sun, 06 Mar 2022 08:53:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:to:content-language:from
+         :subject:content-transfer-encoding;
+        bh=/OF2g++NVapWas9TlzlJN282C0D0WDKqRHH9LNz4J3U=;
+        b=NMoAB3/rlHHmuK92SOEyfUE4DANVvyg4LJJSlCK/PeZtCDaosbXI4lapfG3RDPzNl9
+         OCQ/vp/Nco7ch/RyzQpKwLJLd1os1a6dS3UkLwMmHURVW910No/sOlt8LbIsdo9guxAX
+         qqGtORhkTSq/E66AlWHkOzg53Il9ZxVyU4LDX7BmdxA6UmdPCMMzfDZt/b6xluSNvzFI
+         4D1xovXWAfzAE2vK9oNTkMEUeQthZqoVRAJvO7B/WenS3L6HaLf/e3sTPcxpi/qQTSdG
+         4MqgjGXkuDvRXCIvzcLwXUcJPDjPGN1ZZaLix1ZNRxFPfqETWBTC/0RgKgACsKY+sfg/
+         SPAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to
+         :content-language:from:subject:content-transfer-encoding;
+        bh=/OF2g++NVapWas9TlzlJN282C0D0WDKqRHH9LNz4J3U=;
+        b=KEI/JWkbsrf188JE/l2s/Nys3+gp3dsWKpI6x0hdctsuGjZ3gLVFwfj01BByLm+kja
+         ar1UQE/Rzu54mwXfm3dwj5kcbAYQe9cdRDI0RKBEgdUaWqQfaWPIBFN6i4ZJUQaCmUKr
+         bfI0W8CjL7BLiFYjTY3hFRzVe7jW1qKin1OMw+NMgsK+wWwgIsDsRURchiq6d85cFLsL
+         k92x2nWNqsCn35pxo5P8wfuUXDJJKFXWB/IOpBWnCIwTlo4XkAQ/LRMEV3sy1y3wRHne
+         YJm0sY6r/7lb+Y4rXmFEtCh9E7lH622iB9TDXHuOmby8ZBByXyScD3bwwDkAi1Tcwdiw
+         zleg==
+X-Gm-Message-State: AOAM530x6wbNNIgB5WkiCl61W+Qn4mOBWxuFRssZi8vN+YZaw/kX8fd1
+        Diwdq+2ppBNmkxYTb9/1PX425IR4Fgo=
+X-Google-Smtp-Source: ABdhPJxDxA6I2hcIwm3xrV9VeY/hjJ9OoFiDYxbzdWfZvjDBLmzJrUUGs3x0yaBgjf2SqUyHjST0MA==
+X-Received: by 2002:a17:907:3f91:b0:6d7:16c0:ae1b with SMTP id hr17-20020a1709073f9100b006d716c0ae1bmr6324117ejc.74.1646585580171;
+        Sun, 06 Mar 2022 08:53:00 -0800 (PST)
+Received: from ?IPV6:2a01:5e0:502:80::827? ([2a01:5e0:502:80::827])
+        by smtp.gmail.com with ESMTPSA id k3-20020a05640212c300b0041605b2d9c1sm3344916edx.58.2022.03.06.08.52.59
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Mar 2022 08:52:59 -0800 (PST)
+Message-ID: <165de6a0-43e9-092c-2916-66b115c7fbf4@gmail.com>
+Date:   Sun, 6 Mar 2022 17:52:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+To:     linux-usb@vger.kernel.org
+Content-Language: en-US
+From:   =?UTF-8?B?TWF0ecOhxaEgS3JvdXBh?= <kroupa.matyas@gmail.com>
+Subject: Another PL2303
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-------- Original Message -------
-
-On Monday, February 28th, 2022 at 21:59, andriy.shevchenko@linux.intel.com =
-<andriy.shevchenko@linux.intel.com> wrote:
-
-> On Mon, Feb 28, 2022 at 08:12:47PM +0000, micklorain wrote:
->
-> > Hi,
-> >
-> > This patch breaks USB for me. I noticed when I upgraded from debian's 4=
-.19.0-18 (working) to 5.10.0-10 (broken). I git bisect'ed until I found tha=
-t this patch is the culprit. Upstream 5.17.0-rc2 is still broken, but 5.17.=
-0-rc2 with this patch reverted works.
-> >
-> > lsusb when things work :
-> >
-> > https://paste.debian.net/hidden/2a964425/
-> >
-> > lsusb when things are broken :
-> >
-> > https://paste.debian.net/hidden/0376920c/
-> >
-> > dmesg when things are broken :
-> >
-> > https://paste.debian.net/hidden/780ca112/
-> >
-> > dmesg when things work :
-> >
-> > https://paste.debian.net/hidden/4d1bfc0f/
-> >
-> > Let me know if you need anything else from me.
->
-> Thanks for your report!
->
-> Last time I have got something similar it becomes that PCI bridge which i=
-s used
->
-> to connect USB controller to the PCI Root Bridge was not capable of MSI, =
-while
->
-> advertising that capability. I.o.w. HW bug.
->
-> To understand if it's something similar, please run (under the root) each=
- of
->
-> the following commands:
->
-> lspci -nk -vvv
->
-> cat /proc/interrupts
->
-> in both cases, i.e. working and non-working.
->
-> And then share the output (all 4 files).
->
-> --
->
-> With Best Regards,
->
-> Andy Shevchenko
-
 Hi,
 
-Thanks for your reply.
-This is the results of the commands you requested :
+I recently bought a serial console adapter with PL2303. After a quick 
+search I discovered that there have been problems with different 
+versions of this chip so I include some info about mine.
 
-* When things work (commit dcb85f85fa6f142aae1fe86f399d4503d49f2b60 with co=
-mmit 306c54d0edb6ba94d39877524dddebaad7770cf2 reverted)
-- lspci -nk -vvv :
-https://paste.debian.net/hidden/77d92dc9/
+Thanks in advance
 
-- cat /proc/interrupts
-https://paste.debian.net/hidden/67208c8e/
+Matyáš
 
-* When things are broken (commit dcb85f85fa6f142aae1fe86f399d4503d49f2b60)
-- lspci -nk -vvv :
-https://paste.debian.net/hidden/121362b3/
+dmesg:
 
-- cat /proc/interrupts :
-https://paste.debian.net/hidden/dbe8d1bb/
+[172076.820388] usb 3-2.2: new full-speed USB device number 11 using 
+xhci_hcd
+[172076.960358] usb 3-2.2: New USB device found, idVendor=067b, 
+idProduct=23f3, bcdDevice= 6.05
+[172076.960372] usb 3-2.2: New USB device strings: Mfr=1, Product=2, 
+SerialNumber=3
+[172076.960377] usb 3-2.2: Product: USB-Serial Controller
+[172076.960381] usb 3-2.2: Manufacturer: Prolific Technology Inc.
+[172076.960384] usb 3-2.2: SerialNumber: CCBLj19B616
+[172077.038242] usbcore: registered new interface driver pl2303
+[172077.038251] usbserial: USB Serial support registered for pl2303
+[172077.038269] pl2303 3-2.2:1.0: pl2303 converter detected
+[172077.038273] pl2303 3-2.2:1.0: unknown device type, please report to 
+linux-usb@vger.kernel.org
 
-Hope this can help.
+lsusb:
 
-Thanks.
-Mick Lorain
+Bus 003 Device 011: ID 067b:23f3 Prolific Technology, Inc. USB-Serial 
+Controller
+Couldn't open device, some information will be missing
+Device Descriptor:
+   bLength                18
+   bDescriptorType         1
+   bcdUSB               2.00
+   bDeviceClass            0
+   bDeviceSubClass         0
+   bDeviceProtocol         0
+   bMaxPacketSize0        64
+   idVendor           0x067b Prolific Technology, Inc.
+   idProduct          0x23f3
+   bcdDevice            6.05
+   iManufacturer           1 Prolific Technology Inc.
+   iProduct                2 USB-Serial Controller
+   iSerial                 3 CCBLj19B616
+   bNumConfigurations      1
+   Configuration Descriptor:
+     bLength                 9
+     bDescriptorType         2
+     wTotalLength       0x0027
+     bNumInterfaces          1
+     bConfigurationValue     1
+     iConfiguration          0
+     bmAttributes         0xa0
+       (Bus Powered)
+       Remote Wakeup
+     MaxPower              100mA
+     Interface Descriptor:
+       bLength                 9
+       bDescriptorType         4
+       bInterfaceNumber        0
+       bAlternateSetting       0
+       bNumEndpoints           3
+       bInterfaceClass       255 Vendor Specific Class
+       bInterfaceSubClass      0
+       bInterfaceProtocol      0
+       iInterface              0
+       Endpoint Descriptor:
+         bLength                 7
+         bDescriptorType         5
+         bEndpointAddress     0x81  EP 1 IN
+         bmAttributes            3
+           Transfer Type            Interrupt
+           Synch Type               None
+           Usage Type               Data
+         wMaxPacketSize     0x000a  1x 10 bytes
+         bInterval               1
+       Endpoint Descriptor:
+         bLength                 7
+         bDescriptorType         5
+         bEndpointAddress     0x02  EP 2 OUT
+         bmAttributes            2
+           Transfer Type            Bulk
+           Synch Type               None
+           Usage Type               Data
+         wMaxPacketSize     0x0040  1x 64 bytes
+         bInterval               0
+       Endpoint Descriptor:
+         bLength                 7
+         bDescriptorType         5
+         bEndpointAddress     0x83  EP 3 IN
+         bmAttributes            2
+           Transfer Type            Bulk
+           Synch Type               None
+           Usage Type               Data
+         wMaxPacketSize     0x0040  1x 64 bytes
+         bInterval               0
+
