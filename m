@@ -2,73 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515B44CEBCE
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 14:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 778684CEC32
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 17:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232372AbiCFN6R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Mar 2022 08:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
+        id S231722AbiCFQKv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Mar 2022 11:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbiCFN6Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 08:58:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B2123BE9
-        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 05:57:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S231625AbiCFQKu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 11:10:50 -0500
+Received: from mail-4327.protonmail.ch (mail-4327.protonmail.ch [185.70.43.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25BAFD23
+        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 08:09:56 -0800 (PST)
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D446AB80E88
-        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 13:57:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0413BC340EC;
-        Sun,  6 Mar 2022 13:57:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646575040;
-        bh=/jaMnA9gEr2PHz5SHjyGjFkhdrgpJn4FkADnGh8FrVs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bH4JcaXsB590LkDKsDp1p3BaA2s1+GFgMFayg2vULvydjbRCk+gYVG0r8PSxpOD4e
-         YNmfRMbhiwY0EowhZsqXooo19ZYdHyQtxl2rx8exoXSzhDJCsBvk4PsyOb6uMiiV16
-         dbhneNAiAzcCAhuSPG1KUPNy+Pkp2jj2C3GDFVxs=
-Date:   Sun, 6 Mar 2022 14:57:17 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v3] usb: dwc3: gadget: move cmd_endtransfer to extra
- function
-Message-ID: <YiS9vZWoONJKTbpL@kroah.com>
-References: <d2cba6f5-6de8-f5f6-f639-9f4a384d1f77@synopsys.com>
- <20220305005356.1400365-1-m.grzeschik@pengutronix.de>
+        by mail-4321.protonmail.ch (Postfix) with ESMTPS id 4KBRPb1LFNz4xQ95
+        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 16:09:55 +0000 (UTC)
+Authentication-Results: mail-4321.protonmail.ch;
+        dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="l66YgoUw"
+Date:   Sun, 06 Mar 2022 16:09:49 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1646582990;
+        bh=QUOJwC+A9V07d3DFaD6t61oC9Dik2Q4ioYUQDnLR7s0=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=l66YgoUw8phyMwLd26lwPX+DLo02S2DcXcoavS8sbhv4vEBUSKGiPr+3TEUUeRKs7
+         SZsj4fFqv7WabNopS02DbyHVqEfveOILvFn2tI1qazSbb86t6IxrEiWIHzPEmmbkOC
+         N3oFf9RMjdTsHQ1y3G2/x+2uwOwk3DQLpkGeUM9Mbn1yQ4JbSpH4aGDb8Ll7C+lAbt
+         vyPeEQUowlkgfRJsQ/hyfeE6fQreBl3yYo6WgUhgM6I7ds6QR2Ds01IFWv6EWer4cK
+         08Io5ki3aofe49+vGU7nShqj6RLuIwwNEZEhyokgSD0N/yNHg+9vnyEPJqmXZ4oqmX
+         bolos8z3LNQ9g==
+To:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>
+From:   micklorain <micklorain@protonmail.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
+Reply-To: micklorain <micklorain@protonmail.com>
+Subject: Re: [PATCH v1] usb: hcd: Try MSI interrupts on PCI devices
+Message-ID: <GCkSeDmZAyagb-3ogwNAwxsKYpxXSQRM6HeO_O9WxSYO1-8WL8ook5WQ9JchpyBqo4SIJ2XuW2DWFJeJrCzqzcedaBjNvfjNLZo1j3hU5tc=@protonmail.com>
+In-Reply-To: <Yh03mFSESvwT8Wt0@smile.fi.intel.com>
+References: <PxIByDyBRcsbpcmVhGSNDFAoUcMmb78ctXCkw6fbpx25TGlCHvA6SJjjFkNr1FfQZMntYPTNyvEnblxzAZ8a6jP9ddLpKeCN6Chi_2FuexU=@protonmail.com> <Yh03mFSESvwT8Wt0@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220305005356.1400365-1-m.grzeschik@pengutronix.de>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Mar 05, 2022 at 01:53:56AM +0100, Michael Grzeschik wrote:
-> This patch adds the extra function __dwc3_stop_active_transfer to
-> consolidate the same codepath.
-> 
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> 
-> ---
-> v1 -> v2: - renamed the function to __dwc3_stop_active_transfer
->           - added function description
-> v2 -> v3: - fixed spelling and removed extra line
-> 	  - make __dwc3_stop_active_transfer return ret
-> 	  - use ret in __dwc3_gadget_start_isoc
+------- Original Message -------
 
-So is this v3 of a single patch in this series, or the whole series?
+On Monday, February 28th, 2022 at 21:59, andriy.shevchenko@linux.intel.com =
+<andriy.shevchenko@linux.intel.com> wrote:
 
-I'm totally confused, please resend the whole, updated series, as v4
-please.
+> On Mon, Feb 28, 2022 at 08:12:47PM +0000, micklorain wrote:
+>
+> > Hi,
+> >
+> > This patch breaks USB for me. I noticed when I upgraded from debian's 4=
+.19.0-18 (working) to 5.10.0-10 (broken). I git bisect'ed until I found tha=
+t this patch is the culprit. Upstream 5.17.0-rc2 is still broken, but 5.17.=
+0-rc2 with this patch reverted works.
+> >
+> > lsusb when things work :
+> >
+> > https://paste.debian.net/hidden/2a964425/
+> >
+> > lsusb when things are broken :
+> >
+> > https://paste.debian.net/hidden/0376920c/
+> >
+> > dmesg when things are broken :
+> >
+> > https://paste.debian.net/hidden/780ca112/
+> >
+> > dmesg when things work :
+> >
+> > https://paste.debian.net/hidden/4d1bfc0f/
+> >
+> > Let me know if you need anything else from me.
+>
+> Thanks for your report!
+>
+> Last time I have got something similar it becomes that PCI bridge which i=
+s used
+>
+> to connect USB controller to the PCI Root Bridge was not capable of MSI, =
+while
+>
+> advertising that capability. I.o.w. HW bug.
+>
+> To understand if it's something similar, please run (under the root) each=
+ of
+>
+> the following commands:
+>
+> lspci -nk -vvv
+>
+> cat /proc/interrupts
+>
+> in both cases, i.e. working and non-working.
+>
+> And then share the output (all 4 files).
+>
+> --
+>
+> With Best Regards,
+>
+> Andy Shevchenko
 
-thanks,
+Hi,
 
-greg k-h
+Thanks for your reply.
+This is the results of the commands you requested :
+
+* When things work (commit dcb85f85fa6f142aae1fe86f399d4503d49f2b60 with co=
+mmit 306c54d0edb6ba94d39877524dddebaad7770cf2 reverted)
+- lspci -nk -vvv :
+https://paste.debian.net/hidden/77d92dc9/
+
+- cat /proc/interrupts
+https://paste.debian.net/hidden/67208c8e/
+
+* When things are broken (commit dcb85f85fa6f142aae1fe86f399d4503d49f2b60)
+- lspci -nk -vvv :
+https://paste.debian.net/hidden/121362b3/
+
+- cat /proc/interrupts :
+https://paste.debian.net/hidden/dbe8d1bb/
+
+Hope this can help.
+
+Thanks.
+Mick Lorain
