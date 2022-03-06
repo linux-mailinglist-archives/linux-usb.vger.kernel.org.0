@@ -2,141 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058224CED53
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 20:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAA34CED8B
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 20:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233860AbiCFTUn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Mar 2022 14:20:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
+        id S234123AbiCFTup (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Mar 2022 14:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiCFTUm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 14:20:42 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD93F5577B;
-        Sun,  6 Mar 2022 11:19:49 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id bg10so27735994ejb.4;
-        Sun, 06 Mar 2022 11:19:49 -0800 (PST)
+        with ESMTP id S233066AbiCFTuo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 14:50:44 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9ABF286FB
+        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 11:49:51 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id c19so7440079ede.8
+        for <linux-usb@vger.kernel.org>; Sun, 06 Mar 2022 11:49:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=RWG5yH3AWrpWTwAcnLFzgM65C6lndUaF3A9rlT3VpsU=;
-        b=NWF68WLsIBqfcDq3zpJAB03gsXDKDLdGJYPHNJJUZiaCBp4yQj26EI8nIFMR+f+xN5
-         lRp6OrUhkZ5BXDdSsVCFdil7bbP2J1RE1C5UTnAMlJ9Rx81vDLcIUYqItfp9CFXGZvEi
-         NfwYwFVfYT7+W4wHgcH35E/ZzlK2t4ra6D/83deLgihL9YKGOfqgapVe7OG/rKOBTxCH
-         X9dzD2kiCw8idguG7pk7jtk+qT0DjHdwCPRfnzpJazk6B3rr4wdwzyptZQvkh6WP/A94
-         Mj12Jv25BmA0lA+COshLoV495i5HYaiBW/mCCYdsMLUFdmL9RiHyyRhCUeneqak7U/d/
-         lS/A==
+        d=linaro.org; s=google;
+        h=mime-version:content-transfer-encoding:date:message-id:to:cc
+         :subject:from:references:in-reply-to;
+        bh=XLhPWEmMpHQvyW1W5mtCnNiQBwxzgUcUP7pc39MQlDo=;
+        b=J9mSFnx8pNw6ymDvb+L/r4Rx6sDtfA4dvzCBZoOujxf6y3QDqhIR74wtH7rdplirnO
+         P7+5TsoDt9VED7FkhLiL+Fh+SBqxrDd6lE+oq1L+znsuoKX0UxlmhS4TkgEi8JTnjKmH
+         8b2cx4eTdPltmTiu+w26fLK1IRHKV4wEyZubiW1VKN1hJVd5i4NMgSrysl5ZbF9S13mt
+         SI6fXIBdN3WavZDzakmhqASPSLXKAzndBxgpXjrr5iKb65sJXV9hHBbmFGwUvPOt663m
+         VjSu3IPRbM6w60UgpPClw1JpU3RZY/cqjLyi1LI6fdsgRl9j1SRlNddchURsy+mgJ72B
+         1mPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=RWG5yH3AWrpWTwAcnLFzgM65C6lndUaF3A9rlT3VpsU=;
-        b=MBXFQKo7jYaXh4S3KadcoSDVJENbwkEj2hcvez9YqByrlRvyo9nyZ0BI7ik+2tIAfa
-         jEVN9DcYIrA8UELr/nVfsXzuodyAkBl+ETgq1vQkn1C2uktUNQk4o0/lc3qzaEAV09Gs
-         almArjUSnCMADlUnwDn8sb+TPsnQAYNKTc+JOE6HDY94wdZGDQQ4JYA7CT5xkFng+HiL
-         sI+K0+I1G9onh/9Kf5XZ33KVrPBvCp645vpvc19AszqAlQFQLMghabhJMmNIcgZUeAM/
-         Ih/yjdTn7eHAIdM4OzukvYxEgT8cKsWcUkB6HdhB7OiSH0n/DobxA9d/dPI+EiGxlU5f
-         cQzw==
-X-Gm-Message-State: AOAM530OlHXX8PCifl/jjdz+h3yZ/y94jUQWDurMziuekSR6p2GKQ6Ow
-        wuUXpesFjq1bovMlE3LYyFQ=
-X-Google-Smtp-Source: ABdhPJyx89Yb5QqwohfRvWf3kRU0UIsIgclDae3DFDBWsrGCb3peJ3WzpPDljJTd890gG0rUxLq55Q==
-X-Received: by 2002:a17:907:78d6:b0:6da:825b:96d with SMTP id kv22-20020a17090778d600b006da825b096dmr6872056ejc.460.1646594388262;
-        Sun, 06 Mar 2022 11:19:48 -0800 (PST)
-Received: from smtpclient.apple ([2a02:8109:9d80:3f6c:dceb:fbab:14be:fc99])
-        by smtp.gmail.com with ESMTPSA id kv9-20020a17090778c900b006da693d5e91sm3960268ejc.122.2022.03.06.11.19.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 06 Mar 2022 11:19:47 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
-Subject: Re: [PATCH 01/26] usb: gadget: fsl: remove usage of list iterator
- past the loop body
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-In-Reply-To: <CAHk-=wheru6rEfzC2wuO9k03PRF6s3nhxryCAnwR5bzKwPV2ww@mail.gmail.com>
-Date:   Sun, 6 Mar 2022 20:19:46 +0100
-Cc:     Greg Kroah-Hartman <greg@kroah.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        "open list:USB GADGET/PERIPHERAL SUBSYSTEM" 
-        <linux-usb@vger.kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:to:cc:subject:from:references:in-reply-to;
+        bh=XLhPWEmMpHQvyW1W5mtCnNiQBwxzgUcUP7pc39MQlDo=;
+        b=spqG/9glhsySKzo+1K8NeLMQ5c0tX6axCxCj72JnJKoaom5LHfmgLz0lGoPec0snQn
+         whessT8uHMJPVp/Vm0brE+RlmpVbQLQnUNbMMgAOF0pRfsDApW+RTaID3F4tdSc+QcAJ
+         uFLDvd+sVZ8gdjqq70Ozn4aaE+abj7ey8rQNip7UZG/DC85kbxaAnjHYADYbJYb1fvKM
+         vz+g3KXfO/T87yMZS+JXWXj5tjynliH9oc32HTHapF2TQqnEK3meeoHvnmcBC2ltO72t
+         7f1DCL/2kHovGSpaDuGW4ejYelGNuz49HQBXA5p3ooLlrnxgJWidoA12fh7zwpjPQ1/K
+         JUfQ==
+X-Gm-Message-State: AOAM531G6cQPcKf8g3q8vLXkUuYZ7fWE/H/sjvqo3HpjW4usVhSltXaI
+        P/JrWTyTddiW2b7gS7uyQvPTeHfqH2VeoQ==
+X-Google-Smtp-Source: ABdhPJw2RG2oy2Oy2fSY0QO/eH+PHUJGuGyLgmhbD8FqMGhAGU/wkJYmX/6WleyQcaZoWC0j+B4Xgg==
+X-Received: by 2002:a05:6402:f2a:b0:415:a3b3:2019 with SMTP id i42-20020a0564020f2a00b00415a3b32019mr7991921eda.177.1646596190483;
+        Sun, 06 Mar 2022 11:49:50 -0800 (PST)
+Received: from localhost (a109-49-33-111.cpe.netcabo.pt. [109.49.33.111])
+        by smtp.gmail.com with ESMTPSA id s8-20020a170906354800b006da9dec91f2sm3709979eja.163.2022.03.06.11.49.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Mar 2022 11:49:50 -0800 (PST)
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <34D2D040-8BF4-4F70-830D-0715A8BE7873@gmail.com>
-References: <20220306175034.3084609-1-jakobkoschel@gmail.com>
- <20220306175034.3084609-2-jakobkoschel@gmail.com>
- <CAHk-=wheru6rEfzC2wuO9k03PRF6s3nhxryCAnwR5bzKwPV2ww@mail.gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-X-Mailer: Apple Mail (2.3693.60.0.1.1)
+Content-Type: text/plain; charset=UTF-8
+Date:   Sun, 06 Mar 2022 19:49:48 +0000
+Message-Id: <CID1MUEO000C.WD5GN0N24HV3@arch-thunder>
+To:     "Vincent Mailhol" <mailhol.vincent@wanadoo.fr>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2 02/10] usb: isp1760: remove redundant max_packet()
+ macro
+From:   "Rui Miguel Silva" <rui.silva@linaro.org>
+References: <20220304105420.1059585-1-mailhol.vincent@wanadoo.fr>
+ <20220306075524.706660-1-mailhol.vincent@wanadoo.fr>
+ <20220306075524.706660-3-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20220306075524.706660-3-mailhol.vincent@wanadoo.fr>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Vincent,
+Thanks for the patch.
+
+On Sun Mar 6, 2022 at 7:55 AM WET, Vincent Mailhol wrote:
+
+> The function usb_endpoint_maxp() (called by usb_maxpacket()) already
+> does the sanitazation of the USB endpoint max packet size. The call to
+> max_packet() does the same thing and is thus removed.
+>
+> The macro max_packet() not being used anymore also gets removed.
+>
+> CC: Rui Miguel Silva <rui.silva@linaro.org>
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+
+Thanks for the cleanup, looks good to me.
+
+Reviewed-by: Rui Miguel Silva <rui.silva@linaro.org>
+
+Cheers,
+     Rui
+> ---
+>  drivers/usb/isp1760/isp1760-hcd.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/usb/isp1760/isp1760-hcd.c b/drivers/usb/isp1760/isp1=
+760-hcd.c
+> index 79d571f1429b..893becb077d3 100644
+> --- a/drivers/usb/isp1760/isp1760-hcd.c
+> +++ b/drivers/usb/isp1760/isp1760-hcd.c
+> @@ -1768,7 +1768,6 @@ static void qtd_list_free(struct list_head *qtd_lis=
+t)
+>   * Packetize urb->transfer_buffer into list of packets of size wMaxPacke=
+tSize.
+>   * Also calculate the PID type (SETUP/IN/OUT) for each packet.
+>   */
+> -#define max_packet(wMaxPacketSize) ((wMaxPacketSize) & 0x07ff)
+>  static void packetize_urb(struct usb_hcd *hcd,
+>  		struct urb *urb, struct list_head *head, gfp_t flags)
+>  {
+> @@ -1809,8 +1808,8 @@ static void packetize_urb(struct usb_hcd *hcd,
+>  			packet_type =3D IN_PID;
+>  	}
+> =20
+> -	maxpacketsize =3D max_packet(usb_maxpacket(urb->dev, urb->pipe,
+> -						usb_pipeout(urb->pipe)));
+> +	maxpacketsize =3D usb_maxpacket(urb->dev, urb->pipe,
+> +				      usb_pipeout(urb->pipe));
+> =20
+>  	/*
+>  	 * buffer gets wrapped in one or more qtds;
+> --=20
+> 2.34.1
 
 
-> On 6. Mar 2022, at 19:39, Linus Torvalds =
-<torvalds@linux-foundation.org> wrote:
->=20
-> On Sun, Mar 6, 2022 at 9:51 AM Jakob Koschel <jakobkoschel@gmail.com> =
-wrote:
->>=20
->>        /* make sure it's actually queued on this endpoint */
->> -       list_for_each_entry(req, &ep->queue, queue) {
->> -               if (&req->req =3D=3D _req)
->> +       list_for_each_entry(tmp, &ep->queue, queue) {
->> +               if (&tmp->req =3D=3D _req) {
->> +                       req =3D tmp;
->>                        break;
->> +               }
->>        }
->=20
-> Honestly, I think many (most?) of these would be a lot cleaner as
->=20
->        list_for_each_entry(tmp, &ep->queue, queue) {
->                if (&tmp->req !=3D _req)
->                        continue;
->                req =3D tmp;
->                break;
->        }
-
-Alright, then I'll go ahead and adjust them. I tried keeping the code
-as similar as possible because in other cases it might be less cleaner
-inverting the condition.
-
->=20
-> and in fact maybe that 'tmp' would be better named 'iter' or similar
-> (maybe 'pos', which is what the list.h macros themselves use for the
-> iterator naming), just from a naming standpoint.
-
-I agree, also here I simply kept it to what we concluded in the other
-thread. I also think using 'iter' would make more sense.
->=20
-> Because it's not really some temporary variable, it has a real use.
->=20
->           Linus
-
-Jakob
 
