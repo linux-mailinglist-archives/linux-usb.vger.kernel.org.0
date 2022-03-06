@@ -2,66 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7E64CE9F8
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 08:58:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 678114CEA7B
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Mar 2022 11:18:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbiCFH73 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Mar 2022 02:59:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
+        id S232544AbiCFKTA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Mar 2022 05:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232304AbiCFH72 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 02:59:28 -0500
-Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D24275FA
-        for <linux-usb@vger.kernel.org>; Sat,  5 Mar 2022 23:58:35 -0800 (PST)
-Received: from localhost.localdomain ([106.133.32.90])
-        by smtp.orange.fr with ESMTPA
-        id Qljkni9jQu3WEQlmMnB81J; Sun, 06 Mar 2022 08:58:34 +0100
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
-X-ME-Date: Sun, 06 Mar 2022 08:58:34 +0100
-X-ME-IP: 106.133.32.90
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Ville Syrjala <syrjala@sci.fi>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Henk Vergonet <Henk.Vergonet@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benjamin Valentin <benpicco@googlemail.com>,
-        Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Helmut Schaa <helmut.schaa@googlemail.com>,
-        Duncan Sands <duncan.sands@free.fr>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Olav Kongas <ok@artecdesign.ee>,
-        Rui Miguel Silva <rui.silva@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Clemens Ladisch <clemens@ladisch.de>
-Subject: [PATCH v2 10/10] usb: remove third argument of usb_maxpacket()
-Date:   Sun,  6 Mar 2022 16:55:24 +0900
-Message-Id: <20220306075524.706660-11-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220306075524.706660-1-mailhol.vincent@wanadoo.fr>
-References: <20220304105420.1059585-1-mailhol.vincent@wanadoo.fr>
- <20220306075524.706660-1-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S230004AbiCFKS6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 05:18:58 -0500
+Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA5027CFE;
+        Sun,  6 Mar 2022 02:18:06 -0800 (PST)
+Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-2dbd8777564so134833787b3.0;
+        Sun, 06 Mar 2022 02:18:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=FMOobh8nHhcrPpWV4O/wajuKnYqT9MqpD2rk4aIOeew=;
+        b=Goedn+VBvsRSba5EGffAp1+WLrLJfspwNpMpUqoW/ooYaehP3heX/hRuDnsyJxzS3/
+         gHugUemS2aSDn80bCTFowNaF5KWVcmLRIyAZdNTWKrJe4asm9hSNsnEuDoi9kP1/yv5N
+         oZCdqn7jvhMNgpRZzSkbU2vvBivUeCoBrmqwtLtZfaOlTqjikwvLrMpmCnVuufu+OF2c
+         7i/IXSJlywGHxK6yeHTOgVUAh+a+E4OVl+0ecIWxxNsz4soz8nGHlkx3c+18UEGiAYZe
+         YMM/BxKDzlPbbM1nvjGeaWLpKXHEIew25bWlQsGNmScLjTn8HMDVLGqG+2KSA7Pmr/Zx
+         PaLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=FMOobh8nHhcrPpWV4O/wajuKnYqT9MqpD2rk4aIOeew=;
+        b=UZ4jVLLlJiNEU7pJGJ8/nGg4hdFtHBCw8jrTh8Mn4q6pFzm9MX/yV3DpWigXGUVwgv
+         FbF17hXHkCQ3jva/O0/ip6aGbmbkhQ3zlaGOL6rgo9EFyGarGCdRyMAMyaJzTy56ZdIz
+         ZmzX+LJ28CxsiuUreH21HcMTzjzEqTN3Qyd6FIb0Z47v6V94ldSVIRFFsHnsMaYqTZwy
+         WWgbNcQe9rttodR8CHgC8qapntGA57ESKugzioyPIQyqx7W0I8sOMsid4fnJpHh1xqUi
+         JfEyiS/NKlpIGAqeIuPbYdpI7n8qsGDcxaWq8Wsqns+hWn6ov1/Y/QmHPKGf2G9Bx4x7
+         AkqQ==
+X-Gm-Message-State: AOAM5327g9SGRzC9MXXhP5NAm98/lXAdSJvPgsnvvT8t1MaioM3/evia
+        6UGC+FRLqsIiWhrQY2y/hAmYIgcP9bZIg9kT7u5XaNXAQeGgM9VR
+X-Google-Smtp-Source: ABdhPJxiOhUnhtEwbnu50sJjXz6gV1Z3Rk2jM1FVLyO/ASgHE9+5+Jubw//NwDs2sQTh3QYGJPjxSUbMq6kEGP/RrMg=
+X-Received: by 2002:a81:8781:0:b0:2db:da7f:c068 with SMTP id
+ x123-20020a818781000000b002dbda7fc068mr4772814ywf.75.1646561885254; Sun, 06
+ Mar 2022 02:18:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+From:   Yunhao Tian <t123yh.xyz@gmail.com>
+Date:   Sun, 6 Mar 2022 18:17:54 +0800
+Message-ID: <CAFQXTv2B10=i6DMV1iJpOT-Mj9F93hOi_415cn49N6X_yDFw2g@mail.gmail.com>
+Subject: PREEMPT_RT causes scheduling errors with f_rndis USB gadget
+To:     linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,29 +60,55 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Now that all users of usb_maxpacket() have been migrated to only use
-two arguments, remove the third variadic argument which was introduced
-for the transition.
+Hi everyone,
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- include/linux/usb.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+I'm using Linux 5.15.24-rt31 kernel with PREEMPT_RT enabled, on my
+RK3308 board. I set up f_rndis gadget with the following script, and
+plugged my board to a x86 Linux computer running 5.15.25 kernel:
 
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 588aa7dc3d10..2ebab87bf867 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -1969,8 +1969,7 @@ usb_pipe_endpoint(struct usb_device *dev, unsigned int pipe)
- 	return eps[usb_pipeendpoint(pipe)];
- }
- 
--static inline u16 usb_maxpacket(struct usb_device *dev, int pipe,
--				/* int is_out deprecated */ ...)
-+static inline u16 usb_maxpacket(struct usb_device *dev, int pipe)
- {
- 	return usb_endpoint_maxp(&usb_pipe_endpoint(dev, pipe)->desc);
- }
--- 
-2.34.1
+#!/bin/sh
+cd /sys/kernel/config/usb_gadget
+mkdir g_smartcross; cd g_smartcross
+echo 0xF055 > idVendor
+echo 0xCAFE > idProduct
+mkdir strings/0x409
+echo "SmartCross" > strings/0x409/manufacturer
+echo "SC-1 USB Device" > strings/0x409/product
+mkdir configs/c.1
+mkdir functions/rndis.usb0
+echo EF > functions/rndis.usb0/class
+echo 4 > functions/rndis.usb0/subclass
+echo 1 > functions/rndis.usb0/protocol
+ln -s functions/rndis.usb0 configs/c.1
+echo ff400000.usb > UDC
 
+ I started a HTTP server using python3 -m http.server on the x86
+computer, and executed curl on my board to download a 100MB file from
+the computer. I got the following kernel logs from serial console of
+the board:
+
+% Total % Received % Xferd Average Speed Time Time Time Current
+Dload Upload Total Spent Left Speed
+7 100M 7 7500k 0 0 7217k 0 0:00:14 0:00:01 0:00:13 7218k[ 23.002846]
+sched: RT throttling activated
+23 100M 23 23.4M 0 0 5948k 0 0:00:17 0:00:04 0:00:13 5948k[ 25.992869]
+NOHZ tick-stop error: Non-RCU local softi!
+[ 25.993834] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #80!!!
+[ 25.994833] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #80!!!
+[ 25.995832] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #80!!!
+[ 25.995885] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #180!!!
+[ 25.996831] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #180!!!
+[ 25.997830] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #180!!!
+
+If I turn off PREEMPT_RT, there won't be any errors while downloading.
+
+I believe this problem is not tied to any specific board, and anyone
+can reproduce this problem using a Raspberry Pi (Although I didn't try
+because I don't have one). I would like to ask for assistance
+regarding this problem.
