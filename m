@@ -2,169 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196C14D0217
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 15:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6B54D0281
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 16:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243593AbiCGOyN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Mar 2022 09:54:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49290 "EHLO
+        id S243686AbiCGPLC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Mar 2022 10:11:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243551AbiCGOxs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 09:53:48 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DED35DED;
-        Mon,  7 Mar 2022 06:52:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646664773; x=1678200773;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=d/3k4mHvlZwTsHccmScqQ+aEtnwgFzJWdq9diAD46iw=;
-  b=EW+xC8wu/RN1SOmZiDloMXefskH/qZxfu2Fk1duvFJQIA2UOupxz29aW
-   faXtvtArfoWkdspdYTIbRU58P/mlJQunIdPsm4/gqKoNhth8vM8jJp0WG
-   MjdBSEQ/K/KQ6jwT2skTgk7cPPiQNN+Gs+ywuHCDV07bHWzCuwW8o47Mq
-   U6GmI0fiSk/M4SAG9s0WXgo61/J1lXtATwZKBYDkZ48HJrnVN/aYgTJW5
-   vHZrPjl+240/A45NGd5h2iJiFW60iTXNbm83zpZ5acloPbvaLAx2z/K+4
-   RkEM17MhfKaWIcUYF82+Mrhf7QvoAKsTk7gRNDVDdhTHHiG2NjKi3Bg28
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="254136272"
-X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
-   d="scan'208";a="254136272"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 06:52:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
-   d="scan'208";a="687559044"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 07 Mar 2022 06:52:46 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 07 Mar 2022 16:52:45 +0200
-Date:   Mon, 7 Mar 2022 16:52:45 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4 3/7] usb: typec: mux: Check dev_set_name() return value
-Message-ID: <YiYcPa2XE2MlKVQU@kuha.fi.intel.com>
-References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
- <20220307034040.1111107-3-bjorn.andersson@linaro.org>
- <YiXZkqPQxqQ9I0VH@smile.fi.intel.com>
- <YiYXywEEz7WZQhfd@ripper>
+        with ESMTP id S242883AbiCGPK6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 10:10:58 -0500
+X-Greylist: delayed 1256 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Mar 2022 07:10:03 PST
+Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.143.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCBE59A41
+        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 07:10:03 -0800 (PST)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway31.websitewelcome.com (Postfix) with ESMTP id E5CA76730
+        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 08:49:06 -0600 (CST)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id REfanp59WHnotREfanGgt1; Mon, 07 Mar 2022 08:49:06 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Ffdy6z+jLWtdsYT/cAqK0cKmbp/7CaFfPazFLQ9MlP4=; b=mwhYzltTsMKEaWhoQ519z8wv1I
+        zbpB0D48oE9bMgRLfOFycU/Dc2898RIRKoK1cdDpCzGtK3QxZygcj2gr/OUsmF1cHoTBkb8ckwGRy
+        JtMlijix34aDR6Rw1NrOzdd2Zm+6CQdMGt9UzLuYn5Hon7yylQaIMtLxsWJzufkN3x1dyZkjA8jF0
+        P+2B+bCIqh+5gaixxah86BojuqcHAEUPAdf0p/WXRzzwQeUGCrs5qQOyYPu1AQmt2hbPJqre5vsAt
+        6z1IMAOb45XtS1wBFZr2ZyFfvgGj/5DP+W1ABA3G7HAiDWaA06oH4iTz7rz0Yp/UTRgzpZapvY+Ts
+        +OwNnEUQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:38094)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nREfa-002KX7-2w; Mon, 07 Mar 2022 14:49:06 +0000
+Message-ID: <4252cd9d-a761-e064-58cf-eebc3b9d0bb7@roeck-us.net>
+Date:   Mon, 7 Mar 2022 06:49:03 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiYXywEEz7WZQhfd@ripper>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Xin Ji <xji@analogixsemi.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220307090929.701137-1-xji@analogixsemi.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v7 1/3] usb: typec: tcpci: move tcpci.h to
+ include/linux/usb/ directory
+In-Reply-To: <20220307090929.701137-1-xji@analogixsemi.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nREfa-002KX7-2w
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:38094
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 32
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 06:33:47AM -0800, Bjorn Andersson wrote:
-> On Mon 07 Mar 02:08 PST 2022, Andy Shevchenko wrote:
+On 3/7/22 01:09, Xin Ji wrote:
+> Move tcpci.h as a global file, better for other USB Type-C driver
+> access.
 > 
-> > On Sun, Mar 06, 2022 at 07:40:36PM -0800, Bjorn Andersson wrote:
-> > > It's possible that dev_set_name() returns -ENOMEM, catch and handle this.
-> > 
-> > Thanks!
-> > Shouldn't we have a Fixes tag and be sent separately for this cycle?
-> > 
-> 
-> It seems appropriate to add:
-> 
-> Fixes: 3370db35193b ("usb: typec: Registering real device entries for the muxes")
-> 
-> 
-> If the maintainer would prefer to get this into v5.18, it could either
-> be picked ahead of the rest of the series, or I can resubmit it on its
-> own. I don't think it's a critical fix though.
 
-Me neither.
+The idea was to have tcpci compliant drivers in the tcpm/ subdirectory.
+If I recall correctly, the reason for having this driver elsewhere is
+that it doesn't support tcpm. That should be explained here.
+"better for other USB Type-C driver" is not a reason for moving
+a header file.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Fix compiling error after moving tcpci.h to include/linux/usb/.
+> 
+I don't think this should be part of the commit description.
 
-> > > Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > ---
-> > > 
-> > > Changes since v3:
-> > > - New patch
-> > > 
-> > >  drivers/usb/typec/mux.c | 14 ++++++++++----
-> > >  1 file changed, 10 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-> > > index c8340de0ed49..d2aaf294b649 100644
-> > > --- a/drivers/usb/typec/mux.c
-> > > +++ b/drivers/usb/typec/mux.c
-> > > @@ -131,8 +131,11 @@ typec_switch_register(struct device *parent,
-> > >  	sw->dev.class = &typec_mux_class;
-> > >  	sw->dev.type = &typec_switch_dev_type;
-> > >  	sw->dev.driver_data = desc->drvdata;
-> > > -	dev_set_name(&sw->dev, "%s-switch",
-> > > -		     desc->name ? desc->name : dev_name(parent));
-> > > +	ret = dev_set_name(&sw->dev, "%s-switch", desc->name ? desc->name : dev_name(parent));
-> > 
-> > We may use shorten form of the ternary
-> > 
-> > 	ret = dev_set_name(&sw->dev, "%s-switch", desc->name ?: dev_name(parent));
-> > 
-> > at the same time, but it's up to you.
-> > 
-> 
-> I looked at it, but felt it was an unrelated change and decided to leave
-> it as is.
-> 
-> > Either way code looks good to me,
-> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > 
-> 
-> Thanks,
-> Bjorn
-> 
-> > > +	if (ret) {
-> > > +		put_device(&sw->dev);
-> > > +		return ERR_PTR(ret);
-> > > +	}
-> > >  
-> > >  	ret = device_add(&sw->dev);
-> > >  	if (ret) {
-> > > @@ -338,8 +341,11 @@ typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
-> > >  	mux->dev.class = &typec_mux_class;
-> > >  	mux->dev.type = &typec_mux_dev_type;
-> > >  	mux->dev.driver_data = desc->drvdata;
-> > > -	dev_set_name(&mux->dev, "%s-mux",
-> > > -		     desc->name ? desc->name : dev_name(parent));
-> > > +	ret = dev_set_name(&mux->dev, "%s-mux", desc->name ? desc->name : dev_name(parent));
-> > 
-> > Ditto.
-> > 
-> > > +	if (ret) {
-> > > +		put_device(&mux->dev);
-> > > +		return ERR_PTR(ret);
-> > > +	}
-> > >  
-> > >  	ret = device_add(&mux->dev);
-> > >  	if (ret) {
-> > > -- 
-> > > 2.33.1
-> > > 
-> > 
-> > -- 
-> > With Best Regards,
-> > Andy Shevchenko
-> > 
-> > 
+Guenter
 
--- 
-heikki
+> Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> ---
+>   drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
+>   drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
+>   drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
+>   drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
+>   {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
+>   5 files changed, 5 insertions(+), 7 deletions(-)
+>   rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index e07d26a3cd8e..9c907296596f 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -13,11 +13,10 @@
+>   #include <linux/property.h>
+>   #include <linux/regmap.h>
+>   #include <linux/usb/pd.h>
+> +#include <linux/usb/tcpci.h>
+>   #include <linux/usb/tcpm.h>
+>   #include <linux/usb/typec.h>
+>   
+> -#include "tcpci.h"
+> -
+>   #define	PD_RETRY_COUNT_DEFAULT			3
+>   #define	PD_RETRY_COUNT_3_0_OR_HIGHER		2
+>   #define	AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV	3500
+> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> index df2505570f07..4b6705f3d7b7 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> @@ -11,11 +11,10 @@
+>   #include <linux/module.h>
+>   #include <linux/regmap.h>
+>   #include <linux/usb/pd.h>
+> +#include <linux/usb/tcpci.h>
+>   #include <linux/usb/tcpm.h>
+>   #include <linux/usb/typec.h>
+>   
+> -#include "tcpci.h"
+> -
+>   #define PD_ACTIVITY_TIMEOUT_MS				10000
+>   
+>   #define TCPC_VENDOR_ALERT				0x80
+> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> index f1bd9e09bc87..9e0338bce7ef 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> @@ -11,10 +11,9 @@
+>   #include <linux/of.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/regmap.h>
+> +#include <linux/usb/tcpci.h>
+>   #include <linux/usb/tcpm.h>
+>   
+> -#include "tcpci.h"
+> -
+>   #define MT6360_REG_VCONNCTRL1	0x8C
+>   #define MT6360_REG_MODECTRL2	0x8F
+>   #define MT6360_REG_SWRESET	0xA0
+> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> index b56a0880a044..3291ca4948da 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> @@ -10,9 +10,9 @@
+>   #include <linux/i2c.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/gpio/consumer.h>
+> +#include <linux/usb/tcpci.h>
+>   #include <linux/usb/tcpm.h>
+>   #include <linux/regmap.h>
+> -#include "tcpci.h"
+>   
+>   #define RT1711H_VID		0x29CF
+>   #define RT1711H_PID		0x1711
+> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/include/linux/usb/tcpci.h
+> similarity index 99%
+> rename from drivers/usb/typec/tcpm/tcpci.h
+> rename to include/linux/usb/tcpci.h
+> index b2edd45f13c6..20c0bedb8ec8 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.h
+> +++ b/include/linux/usb/tcpci.h
+> @@ -9,6 +9,7 @@
+>   #define __LINUX_USB_TCPCI_H
+>   
+>   #include <linux/usb/typec.h>
+> +#include <linux/usb/tcpm.h>
+>   
+>   #define TCPC_VENDOR_ID			0x0
+>   #define TCPC_PRODUCT_ID			0x2
+
