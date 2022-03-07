@@ -2,367 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3044CF071
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 04:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0334CF11F
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 06:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235113AbiCGDkC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Mar 2022 22:40:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
+        id S234237AbiCGF1K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Mar 2022 00:27:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235055AbiCGDjz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Mar 2022 22:39:55 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C60C4EA00
-        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 19:39:01 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id i5so13919517oih.1
-        for <linux-usb@vger.kernel.org>; Sun, 06 Mar 2022 19:39:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=49L7WLNCDMugCqX6fsdECZs0GVJID2sbYVWyG32rCpw=;
-        b=Tx6KfbiJuFYkqkl/CBjrqJFb7VDjM4fGn5H8eUrcLSVrmbTKPX5aQ/BbdiItNh4Tcg
-         VT3gFp3QPX9XEIesM1Le8LEflQITkEkS1ok7D805kIWtS5FW7EEFqhTv+ITH1XGWgvk9
-         8yuy64GDDIhUaqwpxz7DkdEGOAppZ7w6rBVvTrIzvsiacOZrYuV5qdX887U0Wd0/4omZ
-         nCBlw1sUhs6W3qU+8ZroPS+cDLCQ82V+azMrIeirUZvIqIE64Cn0LdbjSrP1lactiY0C
-         qcOCeMozci+AGvRIqr73XxGoVdETpWz/3336A4evyzAdr8MnU8EsBwLbP8TXSztwxVYs
-         0LdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=49L7WLNCDMugCqX6fsdECZs0GVJID2sbYVWyG32rCpw=;
-        b=6gZ614XRGSKSLpgaUG92aCVxqWBeoPV1lTwsM0GgZ8s9JVOjzeuHkyurdYfKR0rmYr
-         rYplskqMrBEn0XDoUwGM/o9o0SCdal7UAjWf3haoUPXdmTjbLeuzQMkKMTFipePaKDj1
-         gUebP+022d2Ua+ydUGpNu83dz8ik2CW+nnNCgRw+1Mm+kYDBlTm35oNivnqHWblxzOUN
-         lTua/imwySlx35L1k4XpVQoEuw0HiKdd8sosJncYbKe9aoy/Bnn714DmdZBgodSRyCn1
-         hT41GmaP7vsrR4oKNZUnlgnE0UR1Or0VJBS2sF0FiN53FWXhYdk9VEdr3/DTf6tO7+ye
-         yo+w==
-X-Gm-Message-State: AOAM531fCF1XUwWYT8uVRwhLoAZ0UqD4JKxK0lokzbQjp4kk/Se5Kk7i
-        LEUq1xHh4lUKrMnh4ldxpDJleA==
-X-Google-Smtp-Source: ABdhPJyX2BXF3WJ65qS0nhgl/lTvKjLYe+ljR3L17V/GVwnZXMDGrtI5cuhIRDfC5MxwA0yIA+9Cmg==
-X-Received: by 2002:a05:6808:2022:b0:2d4:752b:dfb5 with SMTP id q34-20020a056808202200b002d4752bdfb5mr5841086oiw.174.1646624340640;
-        Sun, 06 Mar 2022 19:39:00 -0800 (PST)
-Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id o2-20020a05687072c200b000d9ae3e1fabsm5005172oak.12.2022.03.06.19.38.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Mar 2022 19:39:00 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH v4 7/7] usb: typec: mux: Add On Semi fsa4480 driver
-Date:   Sun,  6 Mar 2022 19:40:40 -0800
-Message-Id: <20220307034040.1111107-7-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
-References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229827AbiCGF1J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 00:27:09 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60F31AD94
+        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 21:26:15 -0800 (PST)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220307052610epoutp04754123124ba9d899200783334c0837d6~aAfYLl9P30984009840epoutp04Z
+        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 05:26:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220307052610epoutp04754123124ba9d899200783334c0837d6~aAfYLl9P30984009840epoutp04Z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1646630770;
+        bh=9tjq2zNlTSzLqr3qckKG9tmOLZlxb8W7Esn7UKQRyV0=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=lWlax/Hau5sbfWnYBPT1sgA9Hu/pcFW47J5vmrN7hoJPuGR4Phwk2GYNGztu5E2zB
+         TGGj9ShVnOD6kXdWuA9jkibZwuSBCDM+B0YuH9yJbl1ndCb7eznb3INl5Ku499Gjv0
+         c9BpuldZY+lZdQakrso7a7/58x31ThpcFINfAYxk=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220307052609epcas2p25bc106c55f44992c76ba6489993e4e2e~aAfXiihYj1775517755epcas2p2R;
+        Mon,  7 Mar 2022 05:26:09 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.88]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4KBn4H2vwrz4x9QP; Mon,  7 Mar
+        2022 05:26:07 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        50.4C.51767.D6795226; Mon,  7 Mar 2022 14:26:05 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220307052605epcas2p2b84f6db2642863ed61373070f508e200~aAfTw8EZd2036320363epcas2p2K;
+        Mon,  7 Mar 2022 05:26:05 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220307052605epsmtrp175691b06cd1275ed69afb439f3a7f8c2~aAfTwJ1Ui1024710247epsmtrp1d;
+        Mon,  7 Mar 2022 05:26:05 +0000 (GMT)
+X-AuditID: b6c32a45-447ff7000000ca37-d5-6225976d1f84
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        87.5C.29871.D6795226; Mon,  7 Mar 2022 14:26:05 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220307052605epsmtip11291b6c3684732bf2275c54f6d7f48e0~aAfTlCOcX0030500305epsmtip1_;
+        Mon,  7 Mar 2022 05:26:05 +0000 (GMT)
+From:   JaeHun Jung <jh0801.jung@samsung.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
+        linux-kernel@vger.kernel.org (open list),
+        Seungchull Suh <sc.suh@samsung.com>,
+        Daehwan Jung <dh10.jung@samsung.com>,
+        JaeHun Jung <jh0801.jung@samsung.com>
+Subject: [PATCH] usb: dwc3: Add dwc3 lock for blocking interrupt storming
+Date:   Mon,  7 Mar 2022 14:24:39 +0900
+Message-Id: <1646630679-121585-1-git-send-email-jh0801.jung@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJKsWRmVeSWpSXmKPExsWy7bCmuW7udNUkg5m3dCyOtT1ht7izYBqT
+        RfPi9WwWdx/+YLG4vGsOm8WiZa3MFl13bzA6sHtsWtXJ5rF/7hp2j74tqxg9Pm+SC2CJyrbJ
+        SE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMAbpASaEsMacU
+        KBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgXqBXnJhbXJqXrpeXWmJlaGBgZApUmJCdsfXF
+        W7aC78IV+7dPYG1gvCLQxcjBISFgIvH7LGsXIxeHkMAORom+r4/ZIZxPjBKrtt5hgXC+MUrc
+        vNzM3MXICdbRvHYzE0RiL6PEw8WroKp+MEpsWHWPCaSKTUBbYt+cRewgtohAmMTEZfvAipgF
+        bjNKrJh3gREkISzgKbG2YSoriM0ioCrx9tkksGZeAQ+JXwteskCsk5O4ea4TavUqdom3V5Ig
+        bBeJV9/vsELYwhKvjm9hh7ClJF72t0HZxRKdmw4xgiyWEGhglPh2oIMJImEsMetZOyMoBJgF
+        NCXW79KHBIayxJFbYGuZBfgkOg7/ZYcI80p0tAlBNKpKHGy8CXWZtMS33neMECUeEtuOcYOE
+        hQRiJW5tbmOewCg7C2H8AkbGVYxiqQXFuempxUYFhvA4Ss7P3cQITlNarjsYJ7/9oHeIkYmD
+        8RCjBAezkgjv/fMqSUK8KYmVValF+fFFpTmpxYcYTYGhNZFZSjQ5H5go80riDU0sDUzMzAzN
+        jUwNzJXEeb1SNiQKCaQnlqRmp6YWpBbB9DFxcEo1MB23tRXefbSoQlol3H6qeAuTlHnJYst4
+        RtXJi2sLlnh7ZpV5Bfz7JqpYP6X6hlDDEabWg1K86llCb+8fj7l3bpre88Mz5YRk5yq/ufBC
+        W2dV0BufHw7P+Op1LpkKqWvvD5OYbVL30+DmdcudL3xnntHxWrwzc5XJWla3hTtid0i/VH+9
+        yZMzZrt2eWL6vqCPTNnKIf8sQlU+ato0nvResVj0u+vPd+LmypssNprn6S492dJ++tna47ef
+        69jMX72Gsaskz4D7ZmcMr9Dcpfu2+80M/tR1/fSxzPWPSjvfB/js823+LXA36+GquzMmr8zg
+        jP//7MNSY3Fbqc6LYs+8Hb4Grf8h/LprzSJ+L8UTj5RYijMSDbWYi4oTAdTDuQbcAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNJMWRmVeSWpSXmKPExsWy7bCSnG7udNUkg9O/uCyOtT1ht7izYBqT
+        RfPi9WwWdx/+YLG4vGsOm8WiZa3MFl13bzA6sHtsWtXJ5rF/7hp2j74tqxg9Pm+SC2CJ4rJJ
+        Sc3JLEst0rdL4MrY+uItW8F34Yr92yewNjBeEehi5OSQEDCRaF67mamLkYtDSGA3o8SKvlnM
+        EAlpiZ2dU5kgbGGJ+y1HWCGKvjFK3H85nR0kwSagLbFvziIwW0QgTOLfo4ssIEXMAncZJZpO
+        TGQDSQgLeEqsbZjKCmKzCKhKvH02CWwqr4CHxK8FL1kgNshJ3DzXyTyBkWcBI8MqRsnUguLc
+        9NxiwwLDvNRyveLE3OLSvHS95PzcTYzg8NHS3MG4fdUHvUOMTByMhxglOJiVRHjvn1dJEuJN
+        SaysSi3Kjy8qzUktPsQozcGiJM57oetkvJBAemJJanZqakFqEUyWiYNTqoEpVHNV1YZqX7bz
+        Lk7Lru3Sd8us2Dil4Pk+rYmpzqIrD2Z4Ns3hO7howYTnlRNOOiRYKP4W13zFJ6JcKrQ2MUU9
+        osHkfMz8Wws6r26QYn8j2Npy11+oVrlm3WWf3WVp6W7bDUyM9TZLNixfFLkiaNHa06o+B1Ry
+        zvQJ1t17snXPu7m5qWEV99X1ZfNu2sv9PPIg65tBehiDJsOmiruXl2VnLTNa/Dw8eUG3wr3N
+        t456zVHw3n9G931t8tFD+jGmBnfkOJSv1D/pSDjXFWV5hWPN9ZeN117NSFK5c3ySQrsFS9yp
+        5L4zu9fypElkpn9RemEnIfTUVdBsrUnprs+GxdIX5e7Jziq99e7oUV6tbaVKLMUZiYZazEXF
+        iQDjvkCnjgIAAA==
+X-CMS-MailID: 20220307052605epcas2p2b84f6db2642863ed61373070f508e200
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220307052605epcas2p2b84f6db2642863ed61373070f508e200
+References: <CGME20220307052605epcas2p2b84f6db2642863ed61373070f508e200@epcas2p2.samsung.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The ON Semiconductor FSA4480 is a USB Type-C port multimedia switch with
-support for analog audio headsets. It allows sharing a common USB Type-C
-port to pass USB2.0 signal, analog audio, sideband use wires and analog
-microphone signal.
+Interrupt Storming occurred with a very low probability of occurrence.
+The occurrence of the problem is estimated to be caused by a race condition
+between the top half and bottom half of the interrupt service routine.
+It was confirmed that variables have values that cannot be held
+when ISR occurs through normal H / W irq.
+=====================================================================
+(struct dwc3_event_buffer *) ev_buf = 0xFFFFFF88DE6A0380 (
+	(void *) buf = 0xFFFFFFC01594E000,
+	(void *) cache = 0xFFFFFF88DDC14080,
+	(unsigned int) length = 4096,
+	(unsigned int) lpos = 0,
+	(unsigned int) count = 0, <<
+	(unsigned int) flags = 1, <<
+=====================================================================
+"evt->count=0" and "evt->flags=DWC3_EVENT_PENDING" cannot be set
+at the same time.
 
-Due to lacking upstream audio support for testing, the audio muxing is
-left untouched, but implementation of muxing the SBU lines is provided
-as a pair of Type-C mux and switch devices. This provides the necessary
-support for enabling the DisplayPort altmode on devices with this
-circuit.
+We estimate that a race condition occurred
+between dwc3_interrupt() and dwc3_process_event_buf()
+called by dwc3_gadget_process_pending_events().
+So I try to block the race condition through spin_lock.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: JaeHun Jung <jh0801.jung@samsung.com>
 ---
+ drivers/usb/dwc3/gadget.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-Changes since v3:
-- None
-
-Changes since v2:
-- Expanded Kconfig help text.
-- Fixed copyright year
-- Fixed spelling mistakes in comments
-- Introduce FSA4480_MAX_REGISTER
-- Use dev_err_probe()
-- Removed some useless blank lines.
-
-Changes since v1:
-- None
-
- drivers/usb/typec/mux/Kconfig   |  10 ++
- drivers/usb/typec/mux/Makefile  |   1 +
- drivers/usb/typec/mux/fsa4480.c | 216 ++++++++++++++++++++++++++++++++
- 3 files changed, 227 insertions(+)
- create mode 100644 drivers/usb/typec/mux/fsa4480.c
-
-diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-index edead555835e..5eb2c17d72c1 100644
---- a/drivers/usb/typec/mux/Kconfig
-+++ b/drivers/usb/typec/mux/Kconfig
-@@ -2,6 +2,16 @@
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index a0c883f19a41..88f9ecf8cbfe 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -4172,6 +4172,7 @@ static irqreturn_t dwc3_thread_interrupt(int irq, void *_evt)
+ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
+ {
+ 	struct dwc3 *dwc = evt->dwc;
++	unsigned long flags;
+ 	u32 amount;
+ 	u32 count;
  
- menu "USB Type-C Multiplexer/DeMultiplexer Switch support"
+@@ -4188,13 +4189,18 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
+ 	 * irq event handler completes before caching new event to prevent
+ 	 * losing events.
+ 	 */
+-	if (evt->flags & DWC3_EVENT_PENDING)
++	spin_lock_irqsave(&dwc->lock, flags);
++	if (evt->flags & DWC3_EVENT_PENDING) {
++		spin_unlock_irqrestore(&dwc->lock, flags);
+ 		return IRQ_HANDLED;
++	}
  
-+config TYPEC_MUX_FSA4480
-+	tristate "ON Semi FSA4480 Analog Audio Switch driver"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  Driver for the ON Semiconductor FSA4480 Analog Audio Switch, which
-+	  provides support for muxing analog audio and sideband signals on a
-+	  common USB Type-C connector.
-+	  If compiled as a module, the module will be named fsa4480.
-+
- config TYPEC_MUX_PI3USB30532
- 	tristate "Pericom PI3USB30532 Type-C cross switch driver"
- 	depends on I2C
-diff --git a/drivers/usb/typec/mux/Makefile b/drivers/usb/typec/mux/Makefile
-index 280a6f553115..e52a56c16bfb 100644
---- a/drivers/usb/typec/mux/Makefile
-+++ b/drivers/usb/typec/mux/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
+ 	count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
+ 	count &= DWC3_GEVNTCOUNT_MASK;
+-	if (!count)
++	if (!count) {
++		spin_unlock_irqrestore(&dwc->lock, flags);
+ 		return IRQ_NONE;
++	}
  
-+obj-$(CONFIG_TYPEC_MUX_FSA4480)		+= fsa4480.o
- obj-$(CONFIG_TYPEC_MUX_PI3USB30532)	+= pi3usb30532.o
- obj-$(CONFIG_TYPEC_MUX_INTEL_PMC)	+= intel_pmc_mux.o
-diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
-new file mode 100644
-index 000000000000..ab8d014a6b79
---- /dev/null
-+++ b/drivers/usb/typec/mux/fsa4480.c
-@@ -0,0 +1,216 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2021-2022 Linaro Ltd.
-+ * Copyright (C) 2018-2020 The Linux Foundation
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/regmap.h>
-+#include <linux/usb/typec_dp.h>
-+#include <linux/usb/typec_mux.h>
-+
-+#define FSA4480_SWITCH_ENABLE	0x04
-+#define FSA4480_SWITCH_SELECT	0x05
-+#define FSA4480_SWITCH_STATUS1	0x07
-+#define FSA4480_SLOW_L		0x08
-+#define FSA4480_SLOW_R		0x09
-+#define FSA4480_SLOW_MIC	0x0a
-+#define FSA4480_SLOW_SENSE	0x0b
-+#define FSA4480_SLOW_GND	0x0c
-+#define FSA4480_DELAY_L_R	0x0d
-+#define FSA4480_DELAY_L_MIC	0x0e
-+#define FSA4480_DELAY_L_SENSE	0x0f
-+#define FSA4480_DELAY_L_AGND	0x10
-+#define FSA4480_RESET		0x1e
-+#define FSA4480_MAX_REGISTER	0x1f
-+
-+#define FSA4480_ENABLE_DEVICE	BIT(7)
-+#define FSA4480_ENABLE_SBU	GENMASK(6, 5)
-+#define FSA4480_ENABLE_USB	GENMASK(4, 3)
-+
-+#define FSA4480_SEL_SBU_REVERSE	GENMASK(6, 5)
-+#define FSA4480_SEL_USB		GENMASK(4, 3)
-+
-+struct fsa4480 {
-+	struct i2c_client *client;
-+
-+	/* used to serialize concurrent change requests */
-+	struct mutex lock;
-+
-+	struct typec_switch_dev *sw;
-+	struct typec_mux_dev *mux;
-+
-+	struct regmap *regmap;
-+
-+	u8 cur_enable;
-+	u8 cur_select;
-+};
-+
-+static const struct regmap_config fsa4480_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = FSA4480_MAX_REGISTER,
-+};
-+
-+static int fsa4480_switch_set(struct typec_switch_dev *sw,
-+			      enum typec_orientation orientation)
-+{
-+	struct fsa4480 *fsa = typec_switch_get_drvdata(sw);
-+	u8 new_sel;
-+
-+	mutex_lock(&fsa->lock);
-+	new_sel = FSA4480_SEL_USB;
-+	if (orientation == TYPEC_ORIENTATION_REVERSE)
-+		new_sel |= FSA4480_SEL_SBU_REVERSE;
-+
-+	if (new_sel == fsa->cur_select)
-+		goto out_unlock;
-+
-+	if (fsa->cur_enable & FSA4480_ENABLE_SBU) {
-+		/* Disable SBU output while re-configuring the switch */
-+		regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE,
-+			     fsa->cur_enable & ~FSA4480_ENABLE_SBU);
-+
-+		/* 35us to allow the SBU switch to turn off */
-+		usleep_range(35, 1000);
-+	}
-+
-+	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, new_sel);
-+	fsa->cur_select = new_sel;
-+
-+	if (fsa->cur_enable & FSA4480_ENABLE_SBU) {
-+		regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, fsa->cur_enable);
-+
-+		/* 15us to allow the SBU switch to turn on again */
-+		usleep_range(15, 1000);
-+	}
-+
-+out_unlock:
-+	mutex_unlock(&fsa->lock);
-+
-+	return 0;
-+}
-+
-+static int fsa4480_mux_set(struct typec_mux_dev *mux, struct typec_mux_state *state)
-+{
-+	struct fsa4480 *fsa = typec_mux_get_drvdata(mux);
-+	u8 new_enable;
-+
-+	mutex_lock(&fsa->lock);
-+
-+	new_enable = FSA4480_ENABLE_DEVICE | FSA4480_ENABLE_USB;
-+	if (state->mode >= TYPEC_DP_STATE_A)
-+		new_enable |= FSA4480_ENABLE_SBU;
-+
-+	if (new_enable == fsa->cur_enable)
-+		goto out_unlock;
-+
-+	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, new_enable);
-+	fsa->cur_enable = new_enable;
-+
-+	if (new_enable & FSA4480_ENABLE_SBU) {
-+		/* 15us to allow the SBU switch to turn off */
-+		usleep_range(15, 1000);
-+	}
-+
-+out_unlock:
-+	mutex_unlock(&fsa->lock);
-+
-+	return 0;
-+}
-+
-+static int fsa4480_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	struct typec_switch_desc sw_desc = { };
-+	struct typec_mux_desc mux_desc = { };
-+	struct fsa4480 *fsa;
-+
-+	fsa = devm_kzalloc(dev, sizeof(*fsa), GFP_KERNEL);
-+	if (!fsa)
-+		return -ENOMEM;
-+
-+	fsa->client = client;
-+	mutex_init(&fsa->lock);
-+
-+	fsa->regmap = devm_regmap_init_i2c(client, &fsa4480_regmap_config);
-+	if (IS_ERR(fsa->regmap))
-+		return dev_err_probe(dev, PTR_ERR(fsa->regmap), "failed to initialize regmap\n");
-+
-+	fsa->cur_enable = FSA4480_ENABLE_DEVICE | FSA4480_ENABLE_USB;
-+	fsa->cur_select = FSA4480_SEL_USB;
-+
-+	/* set default settings */
-+	regmap_write(fsa->regmap, FSA4480_SLOW_L, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_SLOW_R, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_SLOW_MIC, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_SLOW_SENSE, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_SLOW_GND, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_DELAY_L_R, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_DELAY_L_MIC, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_DELAY_L_SENSE, 0x00);
-+	regmap_write(fsa->regmap, FSA4480_DELAY_L_AGND, 0x09);
-+	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, fsa->cur_select);
-+	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, fsa->cur_enable);
-+
-+	sw_desc.drvdata = fsa;
-+	sw_desc.fwnode = dev->fwnode;
-+	sw_desc.set = fsa4480_switch_set;
-+
-+	fsa->sw = typec_switch_register(dev, &sw_desc);
-+	if (IS_ERR(fsa->sw))
-+		return dev_err_probe(dev, PTR_ERR(fsa->sw), "failed to register typec switch\n");
-+
-+	mux_desc.drvdata = fsa;
-+	mux_desc.fwnode = dev->fwnode;
-+	mux_desc.set = fsa4480_mux_set;
-+
-+	fsa->mux = typec_mux_register(dev, &mux_desc);
-+	if (IS_ERR(fsa->mux)) {
-+		typec_switch_unregister(fsa->sw);
-+		return dev_err_probe(dev, PTR_ERR(fsa->mux), "failed to register typec mux\n");
-+	}
-+
-+	i2c_set_clientdata(client, fsa);
-+	return 0;
-+}
-+
-+static int fsa4480_remove(struct i2c_client *client)
-+{
-+	struct fsa4480 *fsa = i2c_get_clientdata(client);
-+
-+	typec_mux_unregister(fsa->mux);
-+	typec_switch_unregister(fsa->sw);
-+
-+	return 0;
-+}
-+
-+static const struct i2c_device_id fsa4480_table[] = {
-+	{ "fsa4480" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, fsa4480_table);
-+
-+static const struct of_device_id fsa4480_of_table[] = {
-+	{ .compatible = "fcs,fsa4480" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, fsa4480_of_table);
-+
-+static struct i2c_driver fsa4480_driver = {
-+	.driver = {
-+		.name = "fsa4480",
-+		.of_match_table = fsa4480_of_table,
-+	},
-+	.probe_new	= fsa4480_probe,
-+	.remove		= fsa4480_remove,
-+	.id_table	= fsa4480_table,
-+};
-+module_i2c_driver(fsa4480_driver);
-+
-+MODULE_DESCRIPTION("ON Semiconductor FSA4480 driver");
-+MODULE_LICENSE("GPL v2");
+ 	evt->count = count;
+ 	evt->flags |= DWC3_EVENT_PENDING;
+@@ -4210,6 +4216,7 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
+ 		memcpy(evt->cache, evt->buf, count - amount);
+ 
+ 	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), count);
++	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
+ 	return IRQ_WAKE_THREAD;
+ }
 -- 
-2.33.1
+2.31.1
 
