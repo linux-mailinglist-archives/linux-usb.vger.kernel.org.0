@@ -2,67 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A3F4D0458
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 17:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD5E4D063E
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 19:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233934AbiCGQnm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Mar 2022 11:43:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
+        id S238964AbiCGSUC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Mar 2022 13:20:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242183AbiCGQni (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 11:43:38 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A4F35861;
-        Mon,  7 Mar 2022 08:42:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=dZ5ezsuEtPttQFdHzk6smo3zWVoSu7+ceMuIlWOmZYs=; b=HxxanOKYrIkyKERJAGiE7BSo/F
-        nw/zRMZwV6QO1ZCrfnsTpq52v9qrqMrbte7yL/NVifHFxBOQIjHe5kvab95AbpESaiG0ECtl5nJeg
-        D/bfMiY+iZ2KA803m+moPurXBies0z8cDlU4/l3nCPW0y2kRS2yqCcpkJgabbxE2H8FBcaCxqqNHA
-        yIJHE9wgYY2DGZpJ32vEZOOgVEDtXO15QBEtwBnvO7Gf9+FHZi5hqWb5FNxuxcJd4b2MfgWvHdBAy
-        h+8582DZslTnxKpjHyR57RPI/lX+5Xhc3mh3qzGlIcr27X5rVppJ37R7s4bIRVvDaO1yVlSih5tiY
-        9zIJABww==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRGRS-000sgV-A6; Mon, 07 Mar 2022 16:42:38 +0000
-Date:   Mon, 7 Mar 2022 08:42:38 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
-        cpgs@samsung.com, cpgsproxy5@samsung.com
-Subject: Re: [PATCH v2 4/4] usb: host: add xhci-exynos module
-Message-ID: <YiY1/tojTSqAbYmZ@infradead.org>
-References: <1646648256-105214-1-git-send-email-dh10.jung@samsung.com>
- <CGME20220307101852epcas2p2639761a90e794f0b4a4a842a17ba534e@epcas2p2.samsung.com>
- <1646648256-105214-5-git-send-email-dh10.jung@samsung.com>
+        with ESMTP id S233567AbiCGSUC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 13:20:02 -0500
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F70970072
+        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 10:19:07 -0800 (PST)
+Received: by mail-oo1-xc2b.google.com with SMTP id 6-20020a4a0906000000b0031d7eb98d31so18816630ooa.10
+        for <linux-usb@vger.kernel.org>; Mon, 07 Mar 2022 10:19:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Ik6PnwIc/hNQRSEOmSUP2XjqA00iDrxZuoAM6QekVVk=;
+        b=biE2r++EpPXcWVQO9N6Snb7BoUQfzERHR08SnT6Ora6gR5gLYsE8VU31DzUqUejJLk
+         tJHsy+xNLXxmeQMYFsL8ChNAhY1UOVEPXRjX9oFcsgBHb06JJ2RJk0PEVL1BNnxK4e7D
+         B2OV3q9Eo+HRZQ/FiSneWs5GhQTdCU4/+A21IQdn90iA+F2wgcbfKymJloe24bNgg7Gs
+         l5DFx+D9hQL121zZY+H5c8K8KHenAEJX9FEwi+iwq4XVSWQTD/UAivrQHEMXLiRkhK2Q
+         wFem78oXqwNVPL6qoTduvW2Cju7FtetIjscMJsh8/g/H+y4Kvw/lq5ty53nbDyIxxE5M
+         9Ifw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Ik6PnwIc/hNQRSEOmSUP2XjqA00iDrxZuoAM6QekVVk=;
+        b=3ogai7CvPWtkYDK8wt2vwAZdXx7lCyJdfUHJdK37Hx3go7qi4qeozOc4jYeSP/zvH7
+         +QU1tNkVj6a0WPskNY7rEDnlch20KhVXi77K+5/QkFZ1uZjvmIOEyxGEnBLag7cpnubI
+         RT9s/TPAnChqOwuN9/5brOEj+DPRs6eY1cIkaONeuR8xs4AtpnJDokGT82eTwYZ7EDOE
+         x/BUdUuY+HDgYp6NhBTNnuI54uhrMEEqW/2MBeHMqiqQPvgUaP21mX8wF3pUHxeFCep3
+         WNAsf96NiA3yYx34uDEfgl+K7JrQtA7KxEL1/2S1SmXAcGX2xyV0Tjk/8ZRPDeGaY0dE
+         koOw==
+X-Gm-Message-State: AOAM531xmYYEikSEKz56REX2bHGK1AY5hoGl9q1Er6zJFRIfGYI+dOL7
+        9G2O0srvIqrtmw9BHKDrozinzGtSC1nfJgB1cBc=
+X-Google-Smtp-Source: ABdhPJzHM3512rYsGDQpuCeMGMAwRvpF/x6d0nU7+dSao69cSG3loHjY3Kki+C2GN0JB9EpmZpUTCKFIuFaNUO3/Fc4=
+X-Received: by 2002:a05:6871:690:b0:da:648c:3b1e with SMTP id
+ l16-20020a056871069000b000da648c3b1emr138468oao.62.1646677147004; Mon, 07 Mar
+ 2022 10:19:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646648256-105214-5-git-send-email-dh10.jung@samsung.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6820:1058:0:0:0:0 with HTTP; Mon, 7 Mar 2022 10:19:06
+ -0800 (PST)
+Reply-To: fionahill.usa@outlook.com
+From:   Fiona Hill <ivanroberti700@gmail.com>
+Date:   Mon, 7 Mar 2022 10:19:06 -0800
+Message-ID: <CAKiAiLBS1KV5YXD0zwhvjFxrfEuHsL7oV=p_GUSAZYrAL_B+BQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 07:17:36PM +0900, Daehwan Jung wrote:
-> This is for reference to introduce usb offload as seeing how a user does.
-> We only care DCBAA, Device Context, Transfer Ring, Event Ring, and ERST.
-> They are allocated on specific address(SRAM) for Co-Processor.
-> Co-processor could use them directly without xhci driver after then.
+-- 
 
-No one cares about your "reference".  Without a real, actual users
-crappy hooks like this are completely uninteresting.
+Hello, Please with honesty did you receive our message we send to you?
