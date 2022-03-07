@@ -2,69 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF214D03C5
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 17:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A3F4D0458
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 17:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244032AbiCGQPW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Mar 2022 11:15:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S233934AbiCGQnm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Mar 2022 11:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244028AbiCGQPU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 11:15:20 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364193BF9C;
-        Mon,  7 Mar 2022 08:14:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646669666; x=1678205666;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9lxkY6esalBBvJEOAscFPgv2UXaiF/EqM4Jnw+GpDxE=;
-  b=d0ZK+Pr78qIyWV/NwaqPufVWLgofrGExRWNszCkAiDMIAWJUyfdxEIP8
-   nos+onjXTN0/lz6k2tgI0DXOktpyD9Nd2lGMLKI/BnxqanysLpkGsMn6+
-   wXPqVW9JhWUn6XQDM6Zj+pTrJUoKgRFjJEEWqHvVV/BmrNTmV+3yJ2XgT
-   e10p1FZPyzKcUcFKmVYwJXRkJZnvpT6AJWu44xf0ua5PJUVK1pf4maFMc
-   IdMLl1dvzY1ETzPuZztcJ/8oRXhkgT5j02RNV8cl+guA+D7mzKGkIkqLj
-   U6SkQuim9XSbMt3VxE5QDEYW5WCzB5kvw/uaZ8Q21rOI6dcfS7p1DHu+m
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="340861379"
-X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
-   d="scan'208";a="340861379"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 08:14:25 -0800
-X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
-   d="scan'208";a="643298544"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 08:14:22 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nRFzN-00CrBy-PE;
-        Mon, 07 Mar 2022 18:13:37 +0200
-Date:   Mon, 7 Mar 2022 18:13:37 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4 7/7] usb: typec: mux: Add On Semi fsa4480 driver
-Message-ID: <YiYvMf5X+S0WZ9lO@smile.fi.intel.com>
-References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
- <20220307034040.1111107-7-bjorn.andersson@linaro.org>
- <YiXbg4QwgIgLh3LW@smile.fi.intel.com>
- <YiYbOQpX4+fP8S1W@ripper>
+        with ESMTP id S242183AbiCGQni (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 11:43:38 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A4F35861;
+        Mon,  7 Mar 2022 08:42:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dZ5ezsuEtPttQFdHzk6smo3zWVoSu7+ceMuIlWOmZYs=; b=HxxanOKYrIkyKERJAGiE7BSo/F
+        nw/zRMZwV6QO1ZCrfnsTpq52v9qrqMrbte7yL/NVifHFxBOQIjHe5kvab95AbpESaiG0ECtl5nJeg
+        D/bfMiY+iZ2KA803m+moPurXBies0z8cDlU4/l3nCPW0y2kRS2yqCcpkJgabbxE2H8FBcaCxqqNHA
+        yIJHE9wgYY2DGZpJ32vEZOOgVEDtXO15QBEtwBnvO7Gf9+FHZi5hqWb5FNxuxcJd4b2MfgWvHdBAy
+        h+8582DZslTnxKpjHyR57RPI/lX+5Xhc3mh3qzGlIcr27X5rVppJ37R7s4bIRVvDaO1yVlSih5tiY
+        9zIJABww==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nRGRS-000sgV-A6; Mon, 07 Mar 2022 16:42:38 +0000
+Date:   Mon, 7 Mar 2022 08:42:38 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Daehwan Jung <dh10.jung@samsung.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
+        cpgs@samsung.com, cpgsproxy5@samsung.com
+Subject: Re: [PATCH v2 4/4] usb: host: add xhci-exynos module
+Message-ID: <YiY1/tojTSqAbYmZ@infradead.org>
+References: <1646648256-105214-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220307101852epcas2p2639761a90e794f0b4a4a842a17ba534e@epcas2p2.samsung.com>
+ <1646648256-105214-5-git-send-email-dh10.jung@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YiYbOQpX4+fP8S1W@ripper>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <1646648256-105214-5-git-send-email-dh10.jung@samsung.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,47 +58,11 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 06:48:25AM -0800, Bjorn Andersson wrote:
-> On Mon 07 Mar 02:16 PST 2022, Andy Shevchenko wrote:
-> > On Sun, Mar 06, 2022 at 07:40:40PM -0800, Bjorn Andersson wrote:
+On Mon, Mar 07, 2022 at 07:17:36PM +0900, Daehwan Jung wrote:
+> This is for reference to introduce usb offload as seeing how a user does.
+> We only care DCBAA, Device Context, Transfer Ring, Event Ring, and ERST.
+> They are allocated on specific address(SRAM) for Co-Processor.
+> Co-processor could use them directly without xhci driver after then.
 
-...
-
-> > > +		/* 15us to allow the SBU switch to turn off */
-> > > +		usleep_range(15, 1000);
-> > 
-> > This is quite unusual range.
-> > 
-> > If you are fine with the long delay, why to stress the system on it?
-> > Otherwise the use of 1000 is unclear.
-> > 
-> > That said, I would expect one of the below:
-> > 
-> > 		usleep_range(15, 30);
-> > 		usleep_range(500, 1000);
-> 
-> Glad you asked about that, as you say the typical form is to keep the
-> range within 2x of the lower value, or perhaps lower + 5.
-> 
-> But if the purpose is to specify a minimum time and then give a max to
-> give the system some flexibility in it's decision of when to wake up.
-> And in situations such as this, we're talking about someone connecting a
-> cable, so we're in "no rush" and I picked the completely arbitrary 1ms
-> as the max.
-> 
-> Do you see any drawback of this much higher number? (Other than it
-> looking "wrong")
-
-I see the drawback of low number. The 1000 makes not much sense to me with
-the minimum 66x times less. If there is no rush, use some reasonable values,
-what about
-
-		usleep_range(100, 1000);
-
-? 10x is way better than 66x.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+No one cares about your "reference".  Without a real, actual users
+crappy hooks like this are completely uninteresting.
