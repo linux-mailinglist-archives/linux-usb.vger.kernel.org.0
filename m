@@ -2,219 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 547374D0754
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 20:11:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA144D07FF
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 20:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244967AbiCGTMn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Mar 2022 14:12:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33756 "EHLO
+        id S245180AbiCGTyV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Mar 2022 14:54:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235488AbiCGTMl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 14:12:41 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC3D56426
-        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 11:11:46 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id o106-20020a9d2273000000b005b21f46878cso4694402ota.3
-        for <linux-usb@vger.kernel.org>; Mon, 07 Mar 2022 11:11:46 -0800 (PST)
+        with ESMTP id S238451AbiCGTyU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 14:54:20 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E0E54FA9
+        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 11:53:25 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id s10so271070edd.0
+        for <linux-usb@vger.kernel.org>; Mon, 07 Mar 2022 11:53:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Jb3LOlMf5pk1D9PjLVHGSfg0goBFbrUHnygCupUhgZI=;
-        b=iNQpsc5C47zsL+rwea5Gp9oqE5D8fpUxVHM/oEeqnouFvmu3EH516OlUb2UAnzE9j7
-         0fKrEb4VlNgNhBDOxV3WTDoN9IjJv7auS6de717hqUuXbO8rfTXzlEGqnVyfSBYs4TRo
-         JbHNYrXbasfzo6mbe5OoZ43yxlqsM24sjqZeKJddKqh+lHn/8ULKrgyJODzAudqWEF2M
-         dZQJtvb/W71PecwPK8ychQ5EwhbpQfCJL6Yz3j/4KX4p5jnGKQKdzSlKW5WRYZOJA82r
-         SQi+26rzzx5f0ztSOvpa211LBscQiorvpyq+3U7Wca8GeWz9ACEhPQLS8pKIgqhbMLjM
-         9itg==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=zI3YMoABJRyR+odt0AbJrQOCfTLDDuwNt2ksIU5nkFY=;
+        b=dpEw9x78APOEbjTC5L38uYIr4Syz7DSkFqs2aZMogOCDNdtzFom+mp1r+x36Gamx6+
+         IwlNgFx5NT6nN/IjMqaCGdF54zmzQFZLaM5X7/wnMiZHdCTZ7bGt+gZ7cEu4GKATgTxX
+         WCt1y2/X5Lkutescz3KLif8usHEBUMfN5ZJRQT4QcWoaTJHsoI4ksXE9fe6Gh0X2iffY
+         pKKrunt/cDmJ2ns7GjUpIg+VdIfUHfBpSKeCGSWNpl1rKxFtprh/LjTh0jC9rKy78OuC
+         qJAIhVVXrlxTdklXI3hgpidTbXunS1LaOIDkggN+P0KtRnuRAPEH5zo/1or35chB63Qx
+         P8qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Jb3LOlMf5pk1D9PjLVHGSfg0goBFbrUHnygCupUhgZI=;
-        b=uGxp0rVG5H1owedslJd071WkwSmaFUitecDsNxNti850UePkaOrTMhpvVLOzbRp5bd
-         S3TuUEup4PNy9M8Jju3yJz5NataZiGL1T+NZlfJDRD0f7i8m5tI0fyyEGynNP6zkh2L7
-         oPhrYDCxmwfMDk3Xphn2DOUzMBA0Yv6XxmBfnnQSS0FWk1ES7glZaHLHSEVqS69KF+9l
-         rZWn6pHxxrVOrD0C3G/dbMKWPlHb+22zYPpQ+W1/2dIBpwPCPuRz4+AH0ljX6MBRYeE6
-         MO4rJ5ZW3jg9b+CuS7BDJ+PO0RBFep8qwXAlAjOsWjvNpadA1ZVdJcqLOYC5XqM4P/aG
-         CAIw==
-X-Gm-Message-State: AOAM5328xO9ymiBVefxOrlbV/iUm53Moc2KBGvg3sNA0CXjCiKwFkP/7
-        rYY8cCf7fwRNCtb3VALbeTlnEYmcA/E6DA==
-X-Google-Smtp-Source: ABdhPJyrQkhnOMlIjCfuY6r6deiMNn2tGrB6tFf9VgrnJ7SyMmVsaBZWntgAitDk2cHkCVeXVdDvAQ==
-X-Received: by 2002:a9d:2045:0:b0:5b2:1052:93fd with SMTP id n63-20020a9d2045000000b005b2105293fdmr6358924ota.259.1646680305167;
-        Mon, 07 Mar 2022 11:11:45 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id k15-20020a056808068f00b002d91362e56esm6764310oig.1.2022.03.07.11.11.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 11:11:44 -0800 (PST)
-Date:   Mon, 7 Mar 2022 11:13:28 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4 1/7] device property: Helper to match multiple
- connections
-Message-ID: <YiZZWN1FgnWxBCuN@ripper>
-References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
- <YiXZBMG7cK6Cm7wP@smile.fi.intel.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=zI3YMoABJRyR+odt0AbJrQOCfTLDDuwNt2ksIU5nkFY=;
+        b=xAL/BffZcuaZ+Z/r9QYyK7ozqOPxZIV5ltobLUhYI/14888K87QSJ+16ldc3pFy7ky
+         8JnaFBtvl2nDE0Uu3podyObl1WXcF1prIqOGQKh00uiIBvZt0cLeNfH6suMPJnTOPlTy
+         ghV2PPru6HQg8rRmQYHcyxuR/OnfgRijHQPk4dauWiSs5itcn3YWe10fKPpZs3S2pIhU
+         85dC48N0FhR3VZyN0lbxwzqI6gImUGM6+3KSfWqrbZSSkgDKhO+JAEaJE5nbp9xmMSPN
+         YQ5VLSVSx0/fJpepYC3iPxj5HRcUy2V+oHi/qlF9rnXO9XqRtV+ofQGhd4j1Gq4ByMmQ
+         vImQ==
+X-Gm-Message-State: AOAM530dOjvKpvJZp8Zfs2deDsaTJfKCZgnv+bbpJrWhJqNPsCZ2Wn/L
+        u2l40qisf0+zLwmj2Osmw1bz3Fa3bE/nQ4r/C5M=
+X-Google-Smtp-Source: ABdhPJwekVLiO7U16bI9jGL1/WRIlboI2TWJlng/U48GG2D90b9DyKcLGVBMWKOCEe/pcXxerEcC/RK8x+Rv74UEG1Y=
+X-Received: by 2002:a05:6402:354c:b0:416:476a:e642 with SMTP id
+ f12-20020a056402354c00b00416476ae642mr6242014edd.237.1646682803862; Mon, 07
+ Mar 2022 11:53:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiXZBMG7cK6Cm7wP@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Received: by 2002:a17:906:7313:0:0:0:0 with HTTP; Mon, 7 Mar 2022 11:53:21
+ -0800 (PST)
+Reply-To: fionahill.usa@outlook.com
+From:   Fiona Hill <drivanrobert81@gmail.com>
+Date:   Mon, 7 Mar 2022 11:53:21 -0800
+Message-ID: <CAJp5pikHZCn_RNZpE0r9Zvwm03PU2fWL=SH=W+FGcQ0wtVDX+A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 07 Mar 02:05 PST 2022, Andy Shevchenko wrote:
-
-> On Sun, Mar 06, 2022 at 07:40:34PM -0800, Bjorn Andersson wrote:
-> > In some cases multiple connections with the same connection id
-> > needs to be resolved from a fwnode graph.
-> > 
-> > One such example is when separate hardware is used for performing muxing
-> > and/or orientation switching of the SuperSpeed and SBU lines in a USB
-> > Type-C connector. In this case the connector needs to belong to a graph
-> > with multiple matching remote endpoints, and the Type-C controller needs
-> > to be able to resolve them both.
-> > 
-> > Add a new API that allows this kind of lookup.
-> 
-> Thanks for the update!
-> 
-> First of all, I have noticed that subject misses the verb, something like Add
-> or Introduce.
-> 
-
-Will update accordingly.
-
-> ...
-> 
-> > +/**
-> > + * fwnode_connection_find_matches - Find connections from a device node
-> > + * @fwnode: Device node with the connection
-> > + * @con_id: Identifier for the connection
-> > + * @data: Data for the match function
-> > + * @match: Function to check and convert the connection description
-> > + * @matches: Array of pointers to fill with matches
-> 
-> (Optional) array...
-> 
-
-Ditto.
-
-> > + * @matches_len: Length of @matches
-> > + *
-> > + * Find up to @matches_len connections with unique identifier @con_id between
-> > + * @fwnode and other device nodes. @match will be used to convert the
-> > + * connection description to data the caller is expecting to be returned
-> > + * through the @matches array.
-> 
-> > + * If @matches is NULL @matches_len is ignored and the total number of resolved
-> > + * matches is returned.
-> 
-> I would require matches_len to be 0, see below.
-> 
-> > + * Return: Number of matches resolved, or negative errno.
-> > + */
-> > +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
-> > +				   const char *con_id, void *data,
-> > +				   devcon_match_fn_t match,
-> > +				   void **matches, unsigned int matches_len)
-> > +{
-> > +	unsigned int count_graph;
-> > +	unsigned int count_ref;
-> > +
-> > +	if (!fwnode || !match)
-> > +		return -EINVAL;
-> > +
-> > +	count_graph = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
-> > +						  matches, matches_len);
-> 
-> > +	if (matches) {
-> > +		matches += count_graph;
-> > +		matches_len -= count_graph;
-> > +	}
-> 
-> So, the valid case is matches != NULL and matches_len == 0. For example, when
-> we have run something previously on the buffer and it becomes full.
-> 
-> In this case we have carefully handle this case.
-> 
-> 	if (matches) {
-> 		matches += count_graph;
-> 		if (matches_len)
-> 			matches_len -= count_graph;
-
-When matches is non-NULL, both the sub-functions are limited by
-matches_len and as such count_graph <= matches_len.
-
-As such matches_len >= 0.
-
-In the event that the originally passed matches_len was 0, then
-count_graph will be 0 and matches_len will remain 0.
-
-I therefor don't see that this additional check changes things.
-
-> 	}
-> 
-> Seems it can be also
-> 
-> 	if (matches)
-> 		matches += count_graph;
-> 
-> 	if (matches_len)
-> 		matches_len -= count_graph;
-
-We covered the case of matches && (matches_len || !matches_len) above.
-
-For the case of !matches && matches_len, this added conditional would
-cause matches_len to be extra ignored by keeping it at 0, but per
-kernel-doc and implementation we ignore all other values already.
-
-
-Note that this is in contrast from vsnprintf() where the code will
-continue to produce results, only store the first "matches_len"
-entires and return the final count.
-
-Unfortunately we can't follow such semantics here, instead it is clearly
-documented in the kernel-doc that @matches_len is ignored when @matches
-is NULL.
-
-
-So unless I'm missing something I don't see what you gain over keeping
-the check on only matches.
-
-> 
-> That said, do we have a test cases for this?
-> 
-
-I looked briefly at adding some kunit tests for this, but was discourage
-by the prospect of building up the graphs to run the tests against.
-
-Regards,
-Bjorn
-
-> > +	count_ref = fwnode_devcon_matches(fwnode, con_id, data, match,
-> > +					  matches, matches_len);
-> > +
-> > +	return count_graph + count_ref;
-> > +}
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+-- 
+Please with honesty did you receive my message i sent to you?
