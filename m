@@ -2,144 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319BE4CF38A
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 09:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7CAC4CF3EE
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 09:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236155AbiCGIcH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Mar 2022 03:32:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
+        id S233490AbiCGIsp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Mar 2022 03:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236148AbiCGIcF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 03:32:05 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D8F55494
-        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 00:31:12 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id n15so7804046wra.6
-        for <linux-usb@vger.kernel.org>; Mon, 07 Mar 2022 00:31:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=M/a9sSwIlTaA0uOLJ9Rhq9zNudgRJnKE3XEQH6XwFTk=;
-        b=rObXpXR3EaNrhwjqznYI5UI/8FW8+HkUOrYJHj0N9jvZN7ux/1LqsMbdB0xtvY8r+8
-         MJ9B0tASl1hXnNc0pV/OfoduCWvT439CKst/kIy9PV/klegMlInhxK9AoT83oZAMxWsK
-         1XGuP2VKlhDirgv2lIItCN64UFVG15ahzoo86J1EdkkKtSeYEOHpn2yt9kJRUB1m5Hh2
-         6TH1SJUbNAmMiSJntJ2N9SHkqINNZE3deeA4HRSbwxzHeCCXYgnPetPmm0nAEKGQec0E
-         epM3gjETw6giPTSM+m2Ovo7tPANwqmUyP0aR/B9zMlbAI38eBsyA+cJQlwt27fsSUb3C
-         /+ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=M/a9sSwIlTaA0uOLJ9Rhq9zNudgRJnKE3XEQH6XwFTk=;
-        b=PTvheyopBQkNgTEwbA2vFm2UpZ6qaaJyYA77ptFWyX2DMQb5jYdksKZOW/wGk+i2NR
-         6DR2cQnma6QqbZDjSFXg0EO3DgK1zKGheuSJII0Oajw0dd51FyfidtDFw0seuK1YBA2J
-         TtTv44JW8mTlKJQUR2R1h2C61x8VxIiynOAY6X2IWDQjxhnVOsSqmH7pXYPjEZO3fSwe
-         /0hIo21kmLnT4dcQsYosqPlVvMj1n1wvvhnhaJl0KSD2KzdUDUa6sa/8+XG6NotZ2Y+t
-         oH9faH8dosw+EjzQ0BceEg5VvaZpyUxZ8po4ujHri9EznI/vKhdAsilTR5iUaNOHlZ6x
-         vB+Q==
-X-Gm-Message-State: AOAM531LQ0v8lDClnndNAR0xwo1gfMMKlXGFbJsx291FnSlZhVwh3BS4
-        KAQbqedDyX6Kp/x/CzrlwfEowA==
-X-Google-Smtp-Source: ABdhPJyEq7eU3DL5hMKyDwdqWuJL5kvEefFehXEj8huNMwMlxYC7JfjL1Sd0vMOPNsNkU9dppusmZw==
-X-Received: by 2002:adf:f94a:0:b0:1ef:9485:e43d with SMTP id q10-20020adff94a000000b001ef9485e43dmr7164123wrr.552.1646641870512;
-        Mon, 07 Mar 2022 00:31:10 -0800 (PST)
-Received: from ?IPV6:2001:861:44c0:66c0:1451:71b4:fefe:6096? ([2001:861:44c0:66c0:1451:71b4:fefe:6096])
-        by smtp.gmail.com with ESMTPSA id v188-20020a1cacc5000000b00384b71a50d5sm12607329wme.24.2022.03.07.00.31.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 00:31:10 -0800 (PST)
-Message-ID: <ae246f3f-debd-f183-7d77-ab72c9332cd5@baylibre.com>
-Date:   Mon, 7 Mar 2022 09:31:12 +0100
+        with ESMTP id S233385AbiCGIso (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 03:48:44 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24BEE0A;
+        Mon,  7 Mar 2022 00:47:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646642869; x=1678178869;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=xt/3R0lQEI5gTKOyK1+eaIjn7pr4giAio4UXAW6KfRk=;
+  b=Iot3qmYni8Y0TZbUMQSi7hJoNUxGueUGdgF8FO94rpK1oDDEDAvzcYkJ
+   5T2DiZGm/hEvBvnofcRyjKz0FYPc6gpT/DVPO00GHkJYNBoLMDJNzd+xH
+   0eDVZyazqH5/xsxu19BgEUxiPXEDrBAPx3xHs5iWWxJSsMJs69DU9nebU
+   YghUzAv1QzxSo3Y7/x93CnNxCLGWrCYi9f02Dh0hJZWI1lGTbRL2eo1n8
+   rZQyJ33hXByaWNMh7N1S3bLQjMXje1yGUINIo5lcdIe5PUw9ICyQlEezL
+   YCAuuGq8xX263zFJ8qZVbniz+/zDio6taQWQnJ+8BStB2KlYcrt3uBJwM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="317571629"
+X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
+   d="scan'208";a="317571629"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 00:47:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
+   d="scan'208";a="577527667"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 07 Mar 2022 00:47:41 -0800
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     mathias.nyman@intel.com, kernel@puri.sm, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220304113057.1477958-1-martin.kepplinger@puri.sm>
+ <YiIfZFPl9ZqPBKvj@kroah.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] usb: xhci: make XHCI_STOP_EP_CMD_TIMEOUT a module
+ parameter
+Message-ID: <835b3990-43a6-a985-81b4-b86bddfe951f@linux.intel.com>
+Date:   Mon, 7 Mar 2022 10:49:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] usb: dwc3-meson-g12a: constify drvdata structs
+In-Reply-To: <YiIfZFPl9ZqPBKvj@kroah.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>
-References: <a3c178c9-7c33-d7b8-9f6e-734dc28728ab@gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <a3c178c9-7c33-d7b8-9f6e-734dc28728ab@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 06/03/2022 21:59, Heiner Kallweit wrote:
-> Constify the drvdata structs. This also matches the definition of
-> member drvdata in dwc3_meson_g12a.
+On 4.3.2022 16.17, Greg KH wrote:
+> On Fri, Mar 04, 2022 at 12:30:57PM +0100, Martin Kepplinger wrote:
+>> On the Librem 5 imx8mq system we've seen the stop endpoint command
+>> time out regularly which results in the hub dying.
+>>
+>> While on the one hand we see "Port resume timed out, port 1-1: 0xfe3"
+>> before this and on the other hand driver-comments suggest that the driver
+>> might be able to recover instead of dying here, Sarah seemed to have a
+>> workaround for this particulator problem in mind already:
+>>
+>> Make it a module parameter. So while it might not be the root cause for
+>> the problem, do this to give users a workaround.
 > 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->   drivers/usb/dwc3/dwc3-meson-g12a.c | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
+> This is not the 1990's, sorry, please do not add new module parameters.
+> They modify code, when you want to modify an individual device.
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> index bd814df3b..b282ad0e6 100644
-> --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-> +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> @@ -188,7 +188,7 @@ static int dwc3_meson_gxl_usb_post_init(struct dwc3_meson_g12a *priv);
->    * reset to recover usage of the port.
->    */
->   
-> -static struct dwc3_meson_g12a_drvdata gxl_drvdata = {
-> +static const struct dwc3_meson_g12a_drvdata gxl_drvdata = {
->   	.otg_switch_supported = true,
->   	.otg_phy_host_port_disable = true,
->   	.clks = meson_gxl_clocks,
-> @@ -202,7 +202,7 @@ static struct dwc3_meson_g12a_drvdata gxl_drvdata = {
->   	.usb_post_init = dwc3_meson_gxl_usb_post_init,
->   };
->   
-> -static struct dwc3_meson_g12a_drvdata gxm_drvdata = {
-> +static const struct dwc3_meson_g12a_drvdata gxm_drvdata = {
->   	.otg_switch_supported = true,
->   	.otg_phy_host_port_disable = true,
->   	.clks = meson_gxl_clocks,
-> @@ -216,7 +216,7 @@ static struct dwc3_meson_g12a_drvdata gxm_drvdata = {
->   	.usb_post_init = dwc3_meson_gxl_usb_post_init,
->   };
->   
-> -static struct dwc3_meson_g12a_drvdata axg_drvdata = {
-> +static const struct dwc3_meson_g12a_drvdata axg_drvdata = {
->   	.otg_switch_supported = true,
->   	.clks = meson_gxl_clocks,
->   	.num_clks = ARRAY_SIZE(meson_gxl_clocks),
-> @@ -229,7 +229,7 @@ static struct dwc3_meson_g12a_drvdata axg_drvdata = {
->   	.usb_post_init = dwc3_meson_gxl_usb_post_init,
->   };
->   
-> -static struct dwc3_meson_g12a_drvdata g12a_drvdata = {
-> +static const struct dwc3_meson_g12a_drvdata g12a_drvdata = {
->   	.otg_switch_supported = true,
->   	.clks = meson_g12a_clocks,
->   	.num_clks = ARRAY_SIZE(meson_g12a_clocks),
-> @@ -241,7 +241,7 @@ static struct dwc3_meson_g12a_drvdata g12a_drvdata = {
->   	.usb_init = dwc3_meson_g12a_usb_init,
->   };
->   
-> -static struct dwc3_meson_g12a_drvdata a1_drvdata = {
-> +static const struct dwc3_meson_g12a_drvdata a1_drvdata = {
->   	.otg_switch_supported = false,
->   	.clks = meson_a1_clocks,
->   	.num_clks = ARRAY_SIZE(meson_a1_clocks),
 
-Looks good:
+Agree, I think we really need to find the rootcause here.
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+There's a known problem with this stop endpoint timeout timer.
+
+For all other commands we start the timer when the controller starts processing the
+command, but the stop endpoint timer is started immediately when command is queued.
+So it might timeout if some other commend before it failed.
+
+I have a patchseries for this. It's still work in progress but should be testable.
+Pushed to a branch named stop_endpoint_fixes
+
+git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git stop_endpoint_fixes
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=stop_endpoint_fixes
+
+Can you try it out and see if it helps?
+
+Thanks
+-Mathias
