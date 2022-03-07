@@ -2,151 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897C14CFBD8
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 11:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EABA4CFBCE
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 11:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240451AbiCGKuM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Mar 2022 05:50:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
+        id S230226AbiCGKuI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Mar 2022 05:50:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241665AbiCGKr6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 05:47:58 -0500
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D1926AFA;
-        Mon,  7 Mar 2022 02:07:44 -0800 (PST)
-Received: by mail-ej1-f41.google.com with SMTP id kt27so30814400ejb.0;
-        Mon, 07 Mar 2022 02:07:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=G+EB4AFFggnOrILvZ54WrATwjsSqh5U/oFtHwdFDjNI=;
-        b=K9gAwwYl408q54rxkD1td/0UhPqIUuKqcnkmti32Rr8Zkzr9gJcXhh6w0S/Kdx34AD
-         Jn62Y3lq+i/zPAeP4/6hEYfhMQf3Y6vvRcewF31grKVvsUbbQhYurVxAGg9eZqgAZ4jD
-         Gv32MmlMsWN7pG/ktSjsXEFiis3m/Qs7foAKWxl3r5L4hg0q1sGrHdRxX1B9WX9oZ06O
-         ChL8PRujG2+5Lzfiefi2Wo/nHwh5F9vPjjwh0RGBM5RgYdko0tln6tJlu/9b+Lurm5bk
-         bCrgTFyOSjb3ojVrzcpCWVMzyNnvBA9EnP2cmvcXnVjNrTxi5d0pf/ewtDYkAUGE0vRF
-         7EbQ==
-X-Gm-Message-State: AOAM531be3so1qG4lzYrukpUBw/6Mk0MirEoEoTuLDXRwQFNOT+MKyYg
-        WgdJ5fM7UBIxSdeTHpXg5lKA2qE+/w4=
-X-Google-Smtp-Source: ABdhPJxHr9JJBLHk0ehHjtgsScZD3zqslWKk6tyAugnkbdNvtf7SfIi6l8BrB33uqcUBr3UUUQh4Cw==
-X-Received: by 2002:a17:906:314b:b0:6d6:da31:e545 with SMTP id e11-20020a170906314b00b006d6da31e545mr8769492eje.125.1646647626072;
-        Mon, 07 Mar 2022 02:07:06 -0800 (PST)
-Received: from [192.168.0.141] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.googlemail.com with ESMTPSA id lw3-20020a170906bcc300b006db3e2aa7c9sm254733ejb.171.2022.03.07.02.07.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 02:07:05 -0800 (PST)
-Message-ID: <32e72657-a43d-0ae1-1bf2-d15b7426765f@kernel.org>
-Date:   Mon, 7 Mar 2022 11:07:04 +0100
+        with ESMTP id S242465AbiCGKtS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 05:49:18 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51227A0BF5;
+        Mon,  7 Mar 2022 02:09:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646647747; x=1678183747;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8PFTkIqce0rP+0KbEpJbiB9sWz9SBA69Y1zamNvg0f4=;
+  b=cw8u9u7f7159WZzX2d1h+tzfnd0vhsDVxpnRlElCpEucD8u10VhfcM9g
+   3XLWQvqtQKnKXUl/UnKv0AOSbEoC9TMtueLdASsZvJFewv+pTVdS58erB
+   CCzreqxiI3UkBL/2PPI2NMgip79NqzFRPzLffBM2EutS0extYib4ijbjv
+   06387ymMKMMMx4SvATc69V15wgtpv9nA5Ln0B113dgG7tnHhSgJ9laV73
+   GFKjV/Ab4F4jMpG+aTaSxy1S0WogXw8gPX4LzWeaDLalagmqg3/N0Ek8l
+   Ex7Y90MVgvzbdod4rNdKcMdP+1w34qdfLQL9sTcB+IXl4yyU93rGnehsv
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="234961906"
+X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
+   d="scan'208";a="234961906"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 02:09:06 -0800
+X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
+   d="scan'208";a="780273706"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 02:09:04 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nRAHr-00ChaN-5o;
+        Mon, 07 Mar 2022 12:08:19 +0200
+Date:   Mon, 7 Mar 2022 12:08:18 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v4 3/7] usb: typec: mux: Check dev_set_name() return value
+Message-ID: <YiXZkqPQxqQ9I0VH@smile.fi.intel.com>
+References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
+ <20220307034040.1111107-3-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 4/4] usb: host: add xhci-exynos module
-Content-Language: en-US
-To:     Daehwan Jung <dh10.jung@samsung.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>,
-        "chihhao . chen" <chihhao.chen@mediatek.com>, sc.suh@samsung.com,
-        cpgs@samsung.com, cpgsproxy5@samsung.com
-References: <1646375038-72082-1-git-send-email-dh10.jung@samsung.com>
- <CGME20220304062618epcas2p2e3c73b5c4ed0c9bc0ca0c02aa658d3fb@epcas2p2.samsung.com>
- <1027007693.21646375582736.JavaMail.epsvc@epcpadp4>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <1027007693.21646375582736.JavaMail.epsvc@epcpadp4>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220307034040.1111107-3-bjorn.andersson@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 04/03/2022 07:23, Daehwan Jung wrote:
-> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+On Sun, Mar 06, 2022 at 07:40:36PM -0800, Bjorn Andersson wrote:
+> It's possible that dev_set_name() returns -ENOMEM, catch and handle this.
 
-+Cc Randy,
-I guess here is the rest of the patches.
+Thanks!
+Shouldn't we have a Fixes tag and be sent separately for this cycle?
 
+> Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 > ---
->  drivers/usb/host/xhci-exynos.c | 2025 ++++++++++++++++++++++++++++++++
->  drivers/usb/host/xhci-exynos.h |  150 +++
->  2 files changed, 2175 insertions(+)
->  create mode 100644 drivers/usb/host/xhci-exynos.c
->  create mode 100644 drivers/usb/host/xhci-exynos.h
 > 
-> diff --git a/drivers/usb/host/xhci-exynos.c b/drivers/usb/host/xhci-exynos.c
-> new file mode 100644
-> index 000000000000..3913c48d4b20
-> --- /dev/null
-> +++ b/drivers/usb/host/xhci-exynos.c
-> @@ -0,0 +1,2025 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * xhci-exynos.c - xHCI host controller driver platform Bus Glue for Exynos.
-> + *
-> + * Copyright (C) 2022 Samsung Electronics Incorporated - http://www.samsung.com
-> + * Author: Daehwan Jung <dh10.jung@samsung.com>
-> + *
-> + * A lot of code borrowed from the Linux xHCI driver.
+> Changes since v3:
+> - New patch
+> 
+>  drivers/usb/typec/mux.c | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
+> index c8340de0ed49..d2aaf294b649 100644
+> --- a/drivers/usb/typec/mux.c
+> +++ b/drivers/usb/typec/mux.c
+> @@ -131,8 +131,11 @@ typec_switch_register(struct device *parent,
+>  	sw->dev.class = &typec_mux_class;
+>  	sw->dev.type = &typec_switch_dev_type;
+>  	sw->dev.driver_data = desc->drvdata;
+> -	dev_set_name(&sw->dev, "%s-switch",
+> -		     desc->name ? desc->name : dev_name(parent));
+> +	ret = dev_set_name(&sw->dev, "%s-switch", desc->name ? desc->name : dev_name(parent));
 
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/module.h>
-> +#include <linux/pci.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/usb/phy.h>
-> +#include <linux/slab.h>
-> +#include <linux/phy/phy.h>
-> +#include <linux/acpi.h>
-> +#include <linux/usb/of.h>
-> +#ifdef CONFIG_SND_EXYNOS_USB_AUDIO
+We may use shorten form of the ternary
 
-This does not exist.
+	ret = dev_set_name(&sw->dev, "%s-switch", desc->name ?: dev_name(parent));
 
-Please do not add dead code to Linux kernel.
+at the same time, but it's up to you.
 
-> +#include "../../../sound/usb/exynos_usb_audio.h"
-> +#include <linux/types.h>
-> +#include "xhci-trace.h"
-> +#endif
-> +
-> +#include "../core/hub.h"
-> +#include "../core/phy.h"
-> +#include "xhci.h"
-> +#include "xhci-plat.h"
-> +#include "xhci-mvebu.h"
-> +#include "xhci-rcar.h"
-> +#include "../dwc3/dwc3-exynos.h"
-> +#include "../dwc3/exynos-otg.h"
+Either way code looks good to me,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-No, how XHCI is related to dwc3? What if different block provides XHCI,
-not DWC3?
+> +	if (ret) {
+> +		put_device(&sw->dev);
+> +		return ERR_PTR(ret);
+> +	}
+>  
+>  	ret = device_add(&sw->dev);
+>  	if (ret) {
+> @@ -338,8 +341,11 @@ typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
+>  	mux->dev.class = &typec_mux_class;
+>  	mux->dev.type = &typec_mux_dev_type;
+>  	mux->dev.driver_data = desc->drvdata;
+> -	dev_set_name(&mux->dev, "%s-mux",
+> -		     desc->name ? desc->name : dev_name(parent));
+> +	ret = dev_set_name(&mux->dev, "%s-mux", desc->name ? desc->name : dev_name(parent));
 
-> +#include "xhci-exynos.h"
-> +#include <soc/samsung/exynos-cpupm.h>
+Ditto.
 
-This does not exist and does not even compile.
+> +	if (ret) {
+> +		put_device(&mux->dev);
+> +		return ERR_PTR(ret);
+> +	}
+>  
+>  	ret = device_add(&mux->dev);
+>  	if (ret) {
+> -- 
+> 2.33.1
+> 
 
-Please do not send code which does not compile... Also, just in case -
-do not send code which compiles but does not work. :)
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-Best regards,
-Krzysztof
