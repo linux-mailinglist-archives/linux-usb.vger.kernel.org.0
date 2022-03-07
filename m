@@ -2,169 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C24F4D0147
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 15:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 646EC4D0182
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 15:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237420AbiCGOdI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Mar 2022 09:33:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
+        id S243294AbiCGOhZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Mar 2022 09:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243217AbiCGOdB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 09:33:01 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2168779393
-        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 06:32:04 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id a6so15304625oid.9
-        for <linux-usb@vger.kernel.org>; Mon, 07 Mar 2022 06:32:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jAOEfcrHxWTEhg7BxTnoFSoh64ur+frJb+7Etlx9rtQ=;
-        b=GJ/zew/2c/T7gmBh99VfzZLRMIr1lWxgtwiRGpln7n6kXctT05678TBF1YPo8K/nyU
-         xOL/GNqnsexBZCu2VL/N3mTeUDMxf6kTPDvrzocCn/XswBlLdtp+GJzmpSxz7sqo4KXt
-         4wr7xC63ca5frxTj5uJRTgnPWTe6M+mGV6zRZ5vAST0uEDv9m+LWK0h2mFrEPzjBt1Yt
-         /X9IYwbSusvVKxyEyVqgZsa1ageF3DyBQDHldMq/hndd38A4zi/b6Iqeqx6a4+T4eW9U
-         S8DmT71hgMF8+wgDwfhNOqN3TjxkzV0ImuTqjRWVDS5YjPGK9jGaPbiZxzs0TVQ8sY7R
-         7MFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jAOEfcrHxWTEhg7BxTnoFSoh64ur+frJb+7Etlx9rtQ=;
-        b=WeTaMXeyGvsf8kb5LX++s+TbqqNSPKb+NIdWXoEc6WZYZDXpxZRrQlSbmSSmZp7P7N
-         hHbspUO3R/DahhRQdt9wicRoyhTwqp47ee2AAAAUc59fcKN+HnyvxHa+uU302xZGLsXv
-         jg4/9uMCFDJKpmyh5AYDuStC4xgx46rIDT2l6LmJDgpRr0DXUJZwy+YZGKjSc8+Sy/ZB
-         ok9fYqZ2TFjaDOXRf6ZxdlY8pSIlQ9OxtjzermaWr+2zk9zjIcck+xPi0ioI162mfuee
-         RJzNtnwU1dQKsoEQDS1+StItQz0W4EzxJH0zRKhNvLWWSv7YXB/xh016A8olx8ARe4Wd
-         QHhA==
-X-Gm-Message-State: AOAM531WgPJM4r84lMAmh1r7G0QwcJvIjioOxLW3oi4CGAeR4h4rO/n+
-        0ou5i6GoGMIAn8blQjanoie8jA==
-X-Google-Smtp-Source: ABdhPJzqOXx5kooaXG2dVnX2vpjZX9hB4LZw1mzfujLDchjIhcK0otseZB2nycRu3BZ28DFHpurG6A==
-X-Received: by 2002:a05:6808:23ca:b0:2d9:bb42:81e with SMTP id bq10-20020a05680823ca00b002d9bb42081emr5269110oib.141.1646663523111;
-        Mon, 07 Mar 2022 06:32:03 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id o10-20020a0568080f8a00b002d726c76b77sm6442939oiw.15.2022.03.07.06.32.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 06:32:02 -0800 (PST)
-Date:   Mon, 7 Mar 2022 06:33:47 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
+        with ESMTP id S243285AbiCGOhZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 09:37:25 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B7F7E590;
+        Mon,  7 Mar 2022 06:36:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646663790; x=1678199790;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=RhzWHO29ZNU2Nsn9nHyfYfEHvrdiuDbT4BJYyRMuu0I=;
+  b=Aayj+mL0YZ+JlNuMti7p6qo1lj2/g9CDkPg4kqbuRAEcglkNv6TFKeT9
+   0+bfa2RmMM7Z5KwiBtjmoZzLvCtD6/GuKgXSlvIOVso0sdaR9NEq/LeRt
+   7p56BpZnAp+PAmN3cjrt66PGtfufIA9AE7Y+gLx6ACgnUdyYF3sJZk+mK
+   CptZBx8yUMTErTDVvGGLQ4tQn15w6BcOEu78XQ2GPV8RFJKWs/DZm2aP6
+   Nl+AsdtveUb/cN5Y/d0B5HoXPfb2zKy3mDUXTHZfAoe8IhzvH7dhxQsXl
+   xCo3KG2k3kKa3v9oZ/Z7D7oRgpRtUjpM0S00t8HvN16r370GmP3PeOnWe
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="235012360"
+X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
+   d="scan'208";a="235012360"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 06:36:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
+   d="scan'208";a="687555371"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 07 Mar 2022 06:36:27 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 07 Mar 2022 16:36:27 +0200
+Date:   Mon, 7 Mar 2022 16:36:27 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?utf-8?B?77+9aXByYWdh?= <alsi@bang-olufsen.dk>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4 3/7] usb: typec: mux: Check dev_set_name() return value
-Message-ID: <YiYXywEEz7WZQhfd@ripper>
-References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
- <20220307034040.1111107-3-bjorn.andersson@linaro.org>
- <YiXZkqPQxqQ9I0VH@smile.fi.intel.com>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] usb: typec: add TUSB320xA driver
+Message-ID: <YiYYa7GkknJ+CAuL@kuha.fi.intel.com>
+References: <20220301132010.115258-1-alvin@pqrs.dk>
+ <20220301132010.115258-4-alvin@pqrs.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YiXZkqPQxqQ9I0VH@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220301132010.115258-4-alvin@pqrs.dk>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 07 Mar 02:08 PST 2022, Andy Shevchenko wrote:
+Hi,
 
-> On Sun, Mar 06, 2022 at 07:40:36PM -0800, Bjorn Andersson wrote:
-> > It's possible that dev_set_name() returns -ENOMEM, catch and handle this.
+On Tue, Mar 01, 2022 at 02:20:07PM +0100, Alvin Šipraga wrote:
+> From: Alvin Šipraga <alsi@bang-olufsen.dk>
 > 
-> Thanks!
-> Shouldn't we have a Fixes tag and be sent separately for this cycle?
+> The TUSB320LA and TUSB320HA (or LAI, HAI) chips are I2C controlled
+> non-PD Type-C port controllers. They support detection of cable
+> orientation, port attachment state, and role, including Audio Accessory
+> and Debug Accessory modes. Add a typec class driver for this family.
 > 
+> Note that there already exists an extcon driver for the TUSB320 (a
+> slightly older revision that does not support setting role preference or
+> disabling the CC state machine). This driver is loosely based on that
+> one.
 
-It seems appropriate to add:
+This looked mostly OK to me. There is one question below.
 
-Fixes: 3370db35193b ("usb: typec: Registering real device entries for the muxes")
+<snip>
 
+> +static int tusb320xa_check_signature(struct tusb320xa *tusb)
+> +{
+> +	static const char sig[] = { '\0', 'T', 'U', 'S', 'B', '3', '2', '0' };
+> +	unsigned int val;
+> +	int i, ret;
+> +
+> +	mutex_lock(&tusb->lock);
+> +
+> +	for (i = 0; i < sizeof(sig); i++) {
+> +		ret = regmap_read(tusb->regmap, sizeof(sig) - 1 - i, &val);
+> +		if (ret)
+> +			goto done;
+> +
+> +		if (val != sig[i]) {
+> +			dev_err(tusb->dev, "signature mismatch!\n");
+> +			ret = -ENODEV;
+> +			goto done;
+> +		}
+> +	}
+> +
+> +done:
+> +	mutex_unlock(&tusb->lock);
+> +
+> +	return ret;
+> +}
 
-If the maintainer would prefer to get this into v5.18, it could either
-be picked ahead of the rest of the series, or I can resubmit it on its
-own. I don't think it's a critical fix though.
+Couldn't that be done with a single read?
 
-> > Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> > 
-> > Changes since v3:
-> > - New patch
-> > 
-> >  drivers/usb/typec/mux.c | 14 ++++++++++----
-> >  1 file changed, 10 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-> > index c8340de0ed49..d2aaf294b649 100644
-> > --- a/drivers/usb/typec/mux.c
-> > +++ b/drivers/usb/typec/mux.c
-> > @@ -131,8 +131,11 @@ typec_switch_register(struct device *parent,
-> >  	sw->dev.class = &typec_mux_class;
-> >  	sw->dev.type = &typec_switch_dev_type;
-> >  	sw->dev.driver_data = desc->drvdata;
-> > -	dev_set_name(&sw->dev, "%s-switch",
-> > -		     desc->name ? desc->name : dev_name(parent));
-> > +	ret = dev_set_name(&sw->dev, "%s-switch", desc->name ? desc->name : dev_name(parent));
-> 
-> We may use shorten form of the ternary
-> 
-> 	ret = dev_set_name(&sw->dev, "%s-switch", desc->name ?: dev_name(parent));
-> 
-> at the same time, but it's up to you.
-> 
+        char sig[8];
+        u64 val;
 
-I looked at it, but felt it was an unrelated change and decided to leave
-it as is.
+        strcpy(sig, "TUSB320")
 
-> Either way code looks good to me,
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
+        mutex_lock(&tusb->lock);
 
-Thanks,
-Bjorn
+        ret = regmap_raw_read(tusb->regmap, 0, &val, sizeof(val));
+        ...
+        if (val != cpu_to_le64(*(u64 *)sig)) {
+        ...
 
-> > +	if (ret) {
-> > +		put_device(&sw->dev);
-> > +		return ERR_PTR(ret);
-> > +	}
-> >  
-> >  	ret = device_add(&sw->dev);
-> >  	if (ret) {
-> > @@ -338,8 +341,11 @@ typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
-> >  	mux->dev.class = &typec_mux_class;
-> >  	mux->dev.type = &typec_mux_dev_type;
-> >  	mux->dev.driver_data = desc->drvdata;
-> > -	dev_set_name(&mux->dev, "%s-mux",
-> > -		     desc->name ? desc->name : dev_name(parent));
-> > +	ret = dev_set_name(&mux->dev, "%s-mux", desc->name ? desc->name : dev_name(parent));
-> 
-> Ditto.
-> 
-> > +	if (ret) {
-> > +		put_device(&mux->dev);
-> > +		return ERR_PTR(ret);
-> > +	}
-> >  
-> >  	ret = device_add(&mux->dev);
-> >  	if (ret) {
-> > -- 
-> > 2.33.1
-> > 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+Something like that?
+
+thanks,
+
+-- 
+heikki
