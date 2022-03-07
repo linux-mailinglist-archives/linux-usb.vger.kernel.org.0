@@ -2,115 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5447F4D02C4
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 16:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF214D03C5
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 17:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243758AbiCGP1x convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 7 Mar 2022 10:27:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
+        id S244032AbiCGQPW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Mar 2022 11:15:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243757AbiCGP1u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 10:27:50 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4546B92D07
-        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 07:26:55 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-85-dcBRBPURPaqNT771jbYVzw-1; Mon, 07 Mar 2022 15:26:52 +0000
-X-MC-Unique: dcBRBPURPaqNT771jbYVzw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Mon, 7 Mar 2022 15:26:48 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Mon, 7 Mar 2022 15:26:48 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dan Carpenter' <dan.carpenter@oracle.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>
-CC:     "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
-        "linux1394-devel@lists.sourceforge.net" 
-        <linux1394-devel@lists.sourceforge.net>,
-        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jason Gunthorpe <jgg@ziepe.ca>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Arnd Bergman" <arnd@arndb.de>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "v9fs-developer@lists.sourceforge.net" 
-        <v9fs-developer@lists.sourceforge.net>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "tipc-discussion@lists.sourceforge.net" 
-        <tipc-discussion@lists.sourceforge.net>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: RE: [PATCH 0/6] Remove usage of list iterator past the loop body
-Thread-Topic: [PATCH 0/6] Remove usage of list iterator past the loop body
-Thread-Index: AQHYMjRtYqIeET2JD0yO+p9PX3jHEKy0Bmqg
-Date:   Mon, 7 Mar 2022 15:26:48 +0000
-Message-ID: <f7ffd78aa68340e1ade6af15fa2f06d8@AcuMS.aculab.com>
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220307150037.GD3293@kadam>
-In-Reply-To: <20220307150037.GD3293@kadam>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S244028AbiCGQPU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 11:15:20 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364193BF9C;
+        Mon,  7 Mar 2022 08:14:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646669666; x=1678205666;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9lxkY6esalBBvJEOAscFPgv2UXaiF/EqM4Jnw+GpDxE=;
+  b=d0ZK+Pr78qIyWV/NwaqPufVWLgofrGExRWNszCkAiDMIAWJUyfdxEIP8
+   nos+onjXTN0/lz6k2tgI0DXOktpyD9Nd2lGMLKI/BnxqanysLpkGsMn6+
+   wXPqVW9JhWUn6XQDM6Zj+pTrJUoKgRFjJEEWqHvVV/BmrNTmV+3yJ2XgT
+   e10p1FZPyzKcUcFKmVYwJXRkJZnvpT6AJWu44xf0ua5PJUVK1pf4maFMc
+   IdMLl1dvzY1ETzPuZztcJ/8oRXhkgT5j02RNV8cl+guA+D7mzKGkIkqLj
+   U6SkQuim9XSbMt3VxE5QDEYW5WCzB5kvw/uaZ8Q21rOI6dcfS7p1DHu+m
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="340861379"
+X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
+   d="scan'208";a="340861379"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 08:14:25 -0800
+X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
+   d="scan'208";a="643298544"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 08:14:22 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nRFzN-00CrBy-PE;
+        Mon, 07 Mar 2022 18:13:37 +0200
+Date:   Mon, 7 Mar 2022 18:13:37 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v4 7/7] usb: typec: mux: Add On Semi fsa4480 driver
+Message-ID: <YiYvMf5X+S0WZ9lO@smile.fi.intel.com>
+References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
+ <20220307034040.1111107-7-bjorn.andersson@linaro.org>
+ <YiXbg4QwgIgLh3LW@smile.fi.intel.com>
+ <YiYbOQpX4+fP8S1W@ripper>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiYbOQpX4+fP8S1W@ripper>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,53 +73,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Dan Carpenter
-> Sent: 07 March 2022 15:01
+On Mon, Mar 07, 2022 at 06:48:25AM -0800, Bjorn Andersson wrote:
+> On Mon 07 Mar 02:16 PST 2022, Andy Shevchenko wrote:
+> > On Sun, Mar 06, 2022 at 07:40:40PM -0800, Bjorn Andersson wrote:
+
+...
+
+> > > +		/* 15us to allow the SBU switch to turn off */
+> > > +		usleep_range(15, 1000);
+> > 
+> > This is quite unusual range.
+> > 
+> > If you are fine with the long delay, why to stress the system on it?
+> > Otherwise the use of 1000 is unclear.
+> > 
+> > That said, I would expect one of the below:
+> > 
+> > 		usleep_range(15, 30);
+> > 		usleep_range(500, 1000);
 > 
-> Updating this API is risky because some places rely on the old behavior
-> and not all of them have been updated.  Here are some additional places
-> you might want to change.
+> Glad you asked about that, as you say the typical form is to keep the
+> range within 2x of the lower value, or perhaps lower + 5.
+> 
+> But if the purpose is to specify a minimum time and then give a max to
+> give the system some flexibility in it's decision of when to wake up.
+> And in situations such as this, we're talking about someone connecting a
+> cable, so we're in "no rush" and I picked the completely arbitrary 1ms
+> as the max.
+> 
+> Do you see any drawback of this much higher number? (Other than it
+> looking "wrong")
 
-I really can't help thinking that trying to merge this patch is
-actually impossible.
-It affects far too many different parts of the tree.
+I see the drawback of low number. The 1000 makes not much sense to me with
+the minimum 66x times less. If there is no rush, use some reasonable values,
+what about
 
-Since (I believe) this is a doubly linked list with forwards and
-backwards pointers that point to a 'node' (not that there is a
-nice comment to that effect in the header - and there are lots of
-ways to do linked lists) the 'head' pretty much has to be a 'node'.
+		usleep_range(100, 1000);
 
-I'd write the following new defines (but I might be using
-the old names here):
+? 10x is way better than 66x.
 
-list_first(head, field) First item, NULL if empty.
-list_last(head, field) Last item NULL if empty.
-list_next(head, item, field) Item after 'item', NULL if last.
-list_prev(head, item. field) Item before 'item', NULL if first.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-You get (something like):
-#define list_first(head, field) \
-	head->next == &head ? NULL : list_item(head->next, field)
-(probably needs typeof(item) from somewhere).
-
-The iterator loop is then just:
-#define loop_iterate(item, head, field) \
-	for (item = list_first(head, field); item; \
-		item = list_next(head, item, field)
-
-I'm not sure, but making the 'head' be a structure that contains
-a single member that is a 'node' might help type checking.
-
-Then all the code that uses the current defines can slowly be
-moved over (probably a couple of releases) before the existing
-defines are deleted.
-
-That should simplify all the open-coded search loops that are
-just as likely to be buggy (possibly more so).
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
 
