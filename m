@@ -2,166 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C894CFBBB
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 11:45:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 897C14CFBD8
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 11:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241201AbiCGKqi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Mar 2022 05:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54776 "EHLO
+        id S240451AbiCGKuM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Mar 2022 05:50:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241203AbiCGKqX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 05:46:23 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5879E546;
-        Mon,  7 Mar 2022 02:07:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646647622; x=1678183622;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=L1jx+V8E552T2PPRm+4WoanMaIRUFpfYGagJ4ohp3Bc=;
-  b=Nc3PUtEQ93fOPMakSsCp/OrYJ76yC9nZKtGYcsvVFEv0qLtur5C4A7BH
-   jFXNvkSfHG3X5QhSCZPX7ndFSu/SeGShmVrVaWcjv/Wiov0g0pW0bYVaV
-   B3p32xa+gJ7G58yWlgPenDeDfoH4Sgs4x5AM0hZd5xKAOtZFvfXfZSLta
-   8fx050RVvwqX8RWKEkVW5JDkbn/zMzHVJ5H+UzQ1PsEqg5N8J/AUpg71U
-   cBx8U+qy/zVhUU6ay+ciyB25O5YoUQHqcKUyz8FANtrDLyANwlr0m0IcQ
-   sb6nXiN9EZ3qoOk28gqLgAfZaFg775nrJgn1QlK9dp+ZoYTNKW6QgSUB2
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="254083323"
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="254083323"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 02:06:44 -0800
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="643188785"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 02:06:41 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nRAFY-00ChWh-J3;
-        Mon, 07 Mar 2022 12:05:56 +0200
-Date:   Mon, 7 Mar 2022 12:05:56 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4 1/7] device property: Helper to match multiple
- connections
-Message-ID: <YiXZBMG7cK6Cm7wP@smile.fi.intel.com>
-References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
+        with ESMTP id S241665AbiCGKr6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 05:47:58 -0500
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D1926AFA;
+        Mon,  7 Mar 2022 02:07:44 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id kt27so30814400ejb.0;
+        Mon, 07 Mar 2022 02:07:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=G+EB4AFFggnOrILvZ54WrATwjsSqh5U/oFtHwdFDjNI=;
+        b=K9gAwwYl408q54rxkD1td/0UhPqIUuKqcnkmti32Rr8Zkzr9gJcXhh6w0S/Kdx34AD
+         Jn62Y3lq+i/zPAeP4/6hEYfhMQf3Y6vvRcewF31grKVvsUbbQhYurVxAGg9eZqgAZ4jD
+         Gv32MmlMsWN7pG/ktSjsXEFiis3m/Qs7foAKWxl3r5L4hg0q1sGrHdRxX1B9WX9oZ06O
+         ChL8PRujG2+5Lzfiefi2Wo/nHwh5F9vPjjwh0RGBM5RgYdko0tln6tJlu/9b+Lurm5bk
+         bCrgTFyOSjb3ojVrzcpCWVMzyNnvBA9EnP2cmvcXnVjNrTxi5d0pf/ewtDYkAUGE0vRF
+         7EbQ==
+X-Gm-Message-State: AOAM531be3so1qG4lzYrukpUBw/6Mk0MirEoEoTuLDXRwQFNOT+MKyYg
+        WgdJ5fM7UBIxSdeTHpXg5lKA2qE+/w4=
+X-Google-Smtp-Source: ABdhPJxHr9JJBLHk0ehHjtgsScZD3zqslWKk6tyAugnkbdNvtf7SfIi6l8BrB33uqcUBr3UUUQh4Cw==
+X-Received: by 2002:a17:906:314b:b0:6d6:da31:e545 with SMTP id e11-20020a170906314b00b006d6da31e545mr8769492eje.125.1646647626072;
+        Mon, 07 Mar 2022 02:07:06 -0800 (PST)
+Received: from [192.168.0.141] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.googlemail.com with ESMTPSA id lw3-20020a170906bcc300b006db3e2aa7c9sm254733ejb.171.2022.03.07.02.07.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 02:07:05 -0800 (PST)
+Message-ID: <32e72657-a43d-0ae1-1bf2-d15b7426765f@kernel.org>
+Date:   Mon, 7 Mar 2022 11:07:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 4/4] usb: host: add xhci-exynos module
+Content-Language: en-US
+To:     Daehwan Jung <dh10.jung@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>,
+        "chihhao . chen" <chihhao.chen@mediatek.com>, sc.suh@samsung.com,
+        cpgs@samsung.com, cpgsproxy5@samsung.com
+References: <1646375038-72082-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220304062618epcas2p2e3c73b5c4ed0c9bc0ca0c02aa658d3fb@epcas2p2.samsung.com>
+ <1027007693.21646375582736.JavaMail.epsvc@epcpadp4>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1027007693.21646375582736.JavaMail.epsvc@epcpadp4>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 07:40:34PM -0800, Bjorn Andersson wrote:
-> In some cases multiple connections with the same connection id
-> needs to be resolved from a fwnode graph.
+On 04/03/2022 07:23, Daehwan Jung wrote:
+> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+
++Cc Randy,
+I guess here is the rest of the patches.
+
+> ---
+>  drivers/usb/host/xhci-exynos.c | 2025 ++++++++++++++++++++++++++++++++
+>  drivers/usb/host/xhci-exynos.h |  150 +++
+>  2 files changed, 2175 insertions(+)
+>  create mode 100644 drivers/usb/host/xhci-exynos.c
+>  create mode 100644 drivers/usb/host/xhci-exynos.h
 > 
-> One such example is when separate hardware is used for performing muxing
-> and/or orientation switching of the SuperSpeed and SBU lines in a USB
-> Type-C connector. In this case the connector needs to belong to a graph
-> with multiple matching remote endpoints, and the Type-C controller needs
-> to be able to resolve them both.
-> 
-> Add a new API that allows this kind of lookup.
-
-Thanks for the update!
-
-First of all, I have noticed that subject misses the verb, something like Add
-or Introduce.
-
-...
-
-> +/**
-> + * fwnode_connection_find_matches - Find connections from a device node
-> + * @fwnode: Device node with the connection
-> + * @con_id: Identifier for the connection
-> + * @data: Data for the match function
-> + * @match: Function to check and convert the connection description
-> + * @matches: Array of pointers to fill with matches
-
-(Optional) array...
-
-> + * @matches_len: Length of @matches
+> diff --git a/drivers/usb/host/xhci-exynos.c b/drivers/usb/host/xhci-exynos.c
+> new file mode 100644
+> index 000000000000..3913c48d4b20
+> --- /dev/null
+> +++ b/drivers/usb/host/xhci-exynos.c
+> @@ -0,0 +1,2025 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * xhci-exynos.c - xHCI host controller driver platform Bus Glue for Exynos.
 > + *
-> + * Find up to @matches_len connections with unique identifier @con_id between
-> + * @fwnode and other device nodes. @match will be used to convert the
-> + * connection description to data the caller is expecting to be returned
-> + * through the @matches array.
+> + * Copyright (C) 2022 Samsung Electronics Incorporated - http://www.samsung.com
+> + * Author: Daehwan Jung <dh10.jung@samsung.com>
+> + *
+> + * A lot of code borrowed from the Linux xHCI driver.
 
-> + * If @matches is NULL @matches_len is ignored and the total number of resolved
-> + * matches is returned.
-
-I would require matches_len to be 0, see below.
-
-> + * Return: Number of matches resolved, or negative errno.
 > + */
-> +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
-> +				   const char *con_id, void *data,
-> +				   devcon_match_fn_t match,
-> +				   void **matches, unsigned int matches_len)
-> +{
-> +	unsigned int count_graph;
-> +	unsigned int count_ref;
 > +
-> +	if (!fwnode || !match)
-> +		return -EINVAL;
+> +#include <linux/clk.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/module.h>
+> +#include <linux/pci.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/usb/phy.h>
+> +#include <linux/slab.h>
+> +#include <linux/phy/phy.h>
+> +#include <linux/acpi.h>
+> +#include <linux/usb/of.h>
+> +#ifdef CONFIG_SND_EXYNOS_USB_AUDIO
+
+This does not exist.
+
+Please do not add dead code to Linux kernel.
+
+> +#include "../../../sound/usb/exynos_usb_audio.h"
+> +#include <linux/types.h>
+> +#include "xhci-trace.h"
+> +#endif
 > +
-> +	count_graph = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
-> +						  matches, matches_len);
+> +#include "../core/hub.h"
+> +#include "../core/phy.h"
+> +#include "xhci.h"
+> +#include "xhci-plat.h"
+> +#include "xhci-mvebu.h"
+> +#include "xhci-rcar.h"
+> +#include "../dwc3/dwc3-exynos.h"
+> +#include "../dwc3/exynos-otg.h"
 
-> +	if (matches) {
-> +		matches += count_graph;
-> +		matches_len -= count_graph;
-> +	}
+No, how XHCI is related to dwc3? What if different block provides XHCI,
+not DWC3?
 
-So, the valid case is matches != NULL and matches_len == 0. For example, when
-we have run something previously on the buffer and it becomes full.
+> +#include "xhci-exynos.h"
+> +#include <soc/samsung/exynos-cpupm.h>
 
-In this case we have carefully handle this case.
+This does not exist and does not even compile.
 
-	if (matches) {
-		matches += count_graph;
-		if (matches_len)
-			matches_len -= count_graph;
-	}
-
-Seems it can be also
-
-	if (matches)
-		matches += count_graph;
-
-	if (matches_len)
-		matches_len -= count_graph;
-
-That said, do we have a test cases for this?
-
-> +	count_ref = fwnode_devcon_matches(fwnode, con_id, data, match,
-> +					  matches, matches_len);
-> +
-> +	return count_graph + count_ref;
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
+Please do not send code which does not compile... Also, just in case -
+do not send code which compiles but does not work. :)
 
 
+Best regards,
+Krzysztof
