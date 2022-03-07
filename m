@@ -2,177 +2,228 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 717BE4D0ACF
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 23:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F084D0B8E
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 23:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236250AbiCGWS3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Mar 2022 17:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
+        id S245378AbiCGW6v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Mar 2022 17:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343730AbiCGWSF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 17:18:05 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70117.outbound.protection.outlook.com [40.107.7.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DAB7DAA3;
-        Mon,  7 Mar 2022 14:17:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ip6r7+Tj8jJ7GU/JVzfV0GVmQsxQVaLA9P0SezwUY+lv/hoN67NOMrqTkFWC0YOANK7rC6fFdL2bS4r7HAMS022RsNY1HuvX6+yjV9V0smvlDLEGYA7ZqYd80xzehe0E59BluaqaBa996r1e3OifqRV+UqXBcK18Q6Ymf3P5kTcihK+vIg8VfNEfMtUXK96RmL2OvqSXibN20kk38C8KabUrIK2AXvYIVUcu3PFOEX4GsoPrSUpk7l7ENu/JS0UWobWCrZvqB4vPaDRU9ZPBx9CnUCQZCPxPtIzCQqE44Wvl0Kg43gnXB34gZw9bmsNApVFmupmulIpHPQaAGEQJVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pThASW7EkSheM3hCgws9OtDCJMlusjf5ZI0ar8AoNiI=;
- b=dCnpECmxpA+ubCV/iAUw4nYvIzyMlWMfYHe7KWex3q/7emZmHygkOHdKohrI4Sp+zDYAUEjMgpIpu9zt0iXRgSeMLqA/Lp3N4lGy3lomE7Or2PLeLYdP/lMp4zcM0V1x6LhMPGHRp5HJo2oBvXQmoT7kinlNo3sXb7eSJH5SSgxLY7tGQfBmyJF4MLDj5vvTkUtzilF4rdwlFMdfman/vcvRMMt3Y4DfFk99gph0pbDhp5O0XxyFpG7CyrGMQMzmyA3DRBumkrltyJyVzoi4nmjZ3h1yXzMcFIwmz3Kk0VOr72alt50L7XuYFkGceFzNihsGDFq5wW8ulyxMUEALJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bang-olufsen.dk; dmarc=pass action=none
- header.from=bang-olufsen.dk; dkim=pass header.d=bang-olufsen.dk; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bang-olufsen.dk;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pThASW7EkSheM3hCgws9OtDCJMlusjf5ZI0ar8AoNiI=;
- b=dvqpgofNdriOsUvAa8cS2FailNyfimLuB9qHoiEeqpRuL147K9yxB6OqvfqM4yMV+rC8PQq2UNTsgiVzeHr0m/DMWM0NGLQou0b/C3bU1YaVu551gubE3P1znuGwUdMHP638PHD5PJkx10t+BahcfYDJs52QA9i5ouQ84r7Zf+k=
-Received: from AM6PR03MB3943.eurprd03.prod.outlook.com (2603:10a6:20b:26::24)
- by AM9PR03MB6964.eurprd03.prod.outlook.com (2603:10a6:20b:2de::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Mon, 7 Mar
- 2022 22:17:05 +0000
-Received: from AM6PR03MB3943.eurprd03.prod.outlook.com
- ([fe80::6123:22f6:a2a7:5c1e]) by AM6PR03MB3943.eurprd03.prod.outlook.com
- ([fe80::6123:22f6:a2a7:5c1e%5]) with mapi id 15.20.5038.026; Mon, 7 Mar 2022
- 22:17:04 +0000
-From:   =?utf-8?B?QWx2aW4gxaBpcHJhZ2E=?= <ALSI@bang-olufsen.dk>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     =?utf-8?B?QWx2aW4gxaBpcHJhZ2E=?= <alvin@pqrs.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/4] usb: typec: add TUSB320xA driver
-Thread-Topic: [PATCH 3/4] usb: typec: add TUSB320xA driver
-Thread-Index: AQHYLW8v7KcQSACO90u5wFrwbstD/Q==
-Date:   Mon, 7 Mar 2022 22:17:04 +0000
-Message-ID: <87lexlcsrj.fsf@bang-olufsen.dk>
-References: <20220301132010.115258-1-alvin@pqrs.dk>
-        <20220301132010.115258-4-alvin@pqrs.dk> <YiYYa7GkknJ+CAuL@kuha.fi.intel.com>
-In-Reply-To: <YiYYa7GkknJ+CAuL@kuha.fi.intel.com> (Heikki Krogerus's message
-        of "Mon, 7 Mar 2022 16:36:27 +0200")
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bang-olufsen.dk;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 74162d58-6b7b-4298-f149-08da00883616
-x-ms-traffictypediagnostic: AM9PR03MB6964:EE_
-x-microsoft-antispam-prvs: <AM9PR03MB6964F7E0D7CEF53E2D01A1AC83089@AM9PR03MB6964.eurprd03.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ZEHBssoY71PD2g6Ddh41JwZa/LfqHD32zvLovOvX5Rc/pP4YdaRpa4o0govxsdXPlBwihMGADajC1Ji1E9OUSwTzsYZ9OTMBnQWR+V2P6YtJCJN5fEdYmSXt0enfSDnal9amTThATBYtIh6E7x8dy5nTt3p1/Ia3nBY94G/mkUv1xxZt2leCRyfu6fsU3ccCv/OViWsuPHPTXVc+ajrEwgr+lO7TxnmGNJeJbS9Mmh2+rfBs0jf4+/qupO/LqaTPS76Ge8S0EVoTSCyGnxzA0LQM6++9scXM110LRTNvAe5Hio3NdvT9JWpBVzN1ssRxL0dKPTNQkW9djjNk7WLuBUXJSJSV9fn4R9U01MMgkpZakpV9JdTfPtPz1mIEmag9Unc0shnJp6SrTowPjJqxI9IK+HZ86hLWCEcSuBIjerXY/WezqX0zn0wP4BcNCicrIvPvumj5/Zd20WB6UJbnpnka5rdFxdaMpHQMvFwdlUXMQdgUQmg+MBQLjw9fsyi5DdwrbHjdZBN3T+R+65nJKsKNp2zEG+4rkDp0vpd+BMqdgQXgsFIdeHPEQzo1dKj40Qh+1hO8cNKsNbvXF+JfLlf/ncCXwk5ilsJLAqEfz09cacBRb/3Px1vej96nDAqHh1M7lBCffMjwjqZs19mRFisnuHCKLf7sSUH08/IpVSt6qpS8hteQpVi2nugFHekRGUTC4usAFWuX5E4zBKKZSA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR03MB3943.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(64756008)(66446008)(66476007)(66556008)(8676002)(316002)(76116006)(66946007)(4326008)(6916009)(91956017)(54906003)(36756003)(85182001)(85202003)(86362001)(2906002)(38070700005)(38100700002)(5660300002)(8976002)(8936002)(122000001)(6512007)(71200400001)(6486002)(6506007)(508600001)(186003)(26005)(2616005)(66574015)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b2Z1VkxYaG9qWm1Sdm92UkMyNUhKcWhOUndDK3NsallLN3hMUzE0YzNtdlFt?=
- =?utf-8?B?UDZFVC9rbUtWaXRxTmRMSGJYWmlWakphcEZKQk1GcHFaWUxFdDRhTUFLbTFY?=
- =?utf-8?B?N1VnK0lKbWlWeW9pSHJwOXdUS1IzOWhNaGpZVDBlRXNjKy9WQStqa2l4Snhq?=
- =?utf-8?B?U2ZBK0RBOVdsUWVZKzMwWFk3b1dia21QblBCZUJkR2hiNXhXNnJYN0xYMk1P?=
- =?utf-8?B?WWUxdVlvVFNwbXNTZU96bG1IZWZBTkJRODU0UTdaOFNpdkJwdkJ5V0h5NWMx?=
- =?utf-8?B?L3p1bmdheng4SWdFM1gvSkl4MFZ2ZDlTUUo4a2VnbnI3QzVTT3NnSFJYWXpY?=
- =?utf-8?B?MU95Wm1qWWRjQ241MGVvZnFjY1RUUGJtbHY5ODhRaHFVYkllQjRrUnRaZ1J3?=
- =?utf-8?B?Zk9uTklacTduZkRQRlgzQzBtSGovVC9ibk11ZklaenNSK1hlYitPWHVVTzJT?=
- =?utf-8?B?dXBzcXovaW5nL3QxZVRQdFpoSzgyajE3a3dwSVBjVXR3aDdrUS9NK1RpdTlN?=
- =?utf-8?B?am83TU56ZHpjdUVaTzFlUU5xc0NZUTRvZzBZeUpadlcxUVVScEtTaWpMN1FH?=
- =?utf-8?B?SmtkWm5qdUtHOWZYU3J4Y09MbU04VHlFNkJVRjdkM29zQ2VpalJxT2R2Q1Qy?=
- =?utf-8?B?RUowcURsbVJEMGQ3ekVoVFBxNEZiUi8veVg5TGs0TXpFYmJhUVFWYnVieUtr?=
- =?utf-8?B?VDh2NkR4S2hmNEo3cTNYZDFlT3VobXBxSlRtY2p2VzlFNkNlVUtsUmdDLzdV?=
- =?utf-8?B?d2ZMc1plcFlEczQzVWd4ZDZZQjMyOW1zSmZWODh3NCs3NS94R2FmejJvV3Vo?=
- =?utf-8?B?cFRyYzNqb01LYXF1alRHYjhYcTlxTGhsYXk3OTlFY2FlUUY1TE1lRkJ3Ykwv?=
- =?utf-8?B?bWd1dmEzZC9qTEVBT0ZReWlKQzRnQjhQWElVaVI1bmhaaktpZmtJdWdRc242?=
- =?utf-8?B?a2pIN1ZuRHVmVjBlc1lyaW0wOTFWeGl3ck5PNitQWTNsYzM0enZMK1BseWE2?=
- =?utf-8?B?MnhRdXNxRzhsYnFkcGoxTjMzTWVxRUgyQk5yRXd3bGpYS0RkS2lxR2ZSOTJJ?=
- =?utf-8?B?eXNNMWhRSGRTRlN6N0ZtSFF3SjBPc3N6MlJXMEttUllkL1EzSlN4RHppM2hn?=
- =?utf-8?B?WjhBeDlnMjYrNVlTNUd4UkdOdmVPSW1semhkNCtEbU5TQWtVd3dUSnd5aXV1?=
- =?utf-8?B?dk55L1N2NFdmaklCUjVydjBicFNFN0hSUnZtOE1VZ2JVQm41Q2FRTDE3KzNB?=
- =?utf-8?B?bzc0WXpmWlgrbUtxSFVha2xFRlE3TXlzZURxQm5NVGZpVGZXRDRWdGdrVk9i?=
- =?utf-8?B?VjFBdHE2d2tkZlNmb3kwZDhGUHJnZHdIN1VESmdyOSt4LzBub29vZDJxeDlj?=
- =?utf-8?B?TzNiMDEwYUlvaDdBcS9qWjc5ZnJZOWErWmdtbUZhY3MydlVoLzhkT0xmRFZJ?=
- =?utf-8?B?NWh1NmlWNTJtOXlONDNuM1VHak5jUHdHNkdrRmJwMW5acjRmcXhaUG9EcE1k?=
- =?utf-8?B?T1Uyc0RtR3JNREJvYTE3eEp4ZDdrVlp5S3hsQ1dqMjczcHJaV3IwUFdScTRM?=
- =?utf-8?B?USt4eVJ6dEhYTEg5NUozbk0zM1J3SkNmQXdTQzEzYkVIK1RSWUFFTGdHTWtE?=
- =?utf-8?B?NHlPZ0NLTW9pL3NkOGFYV0VDVWZDbTF3b3JUanN0T0tYRHh1VlI1UHVjN0pi?=
- =?utf-8?B?T1gxUkFMd3Qyc2NSdjZBR1dsOUI2QUV6clE5YkI5Z0dwL3NyVkxqcWp1OWlx?=
- =?utf-8?B?eHJRWlhJV1BOZzlQVGZUbFNhVC8xK0hhTHlwc0hxaHpKbEdNc1RxRVU4SFBO?=
- =?utf-8?B?ME5ZcGxmc1hOOVJFQlNOdFZaMmdsV0tEam9vakN5TUxsUW5qOEgrUDBvYmFh?=
- =?utf-8?B?UEpVYnI3amxWN1dvTWlZdS9IcG5QMGhraTIzRDZIQlpyRUpZdzROMFZESXV6?=
- =?utf-8?B?ODZxRTFIcTlGcGc0OWpPNkQvUi9KMk1xdjZkNkFCa2ZIWWlQbWpNUDBEZGlC?=
- =?utf-8?B?YUVHZEFFa1NDcHBZWERCYTVvRDV3KzA1ZjNFK3Q3V2lOU2NscFZhcVV4b2lX?=
- =?utf-8?B?c0R1Z0VqcnhzN201ZWgycVB3MldKMThiZjVXdjNaSEpqRFhLbmJRL3l5T3ZV?=
- =?utf-8?B?MnRKdnJNakRsaDNhWkVDdlJSbXFGTVU4ZU5veGwwYWdMT25VVXI2U3p5VWZB?=
- =?utf-8?Q?sHREgxitbJUOS/4OynAlAWY=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <892BC636A7A22B48A473D815F5A47D97@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: bang-olufsen.dk
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB3943.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74162d58-6b7b-4298-f149-08da00883616
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Mar 2022 22:17:04.8434
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 210d08b8-83f7-470a-bc96-381193ca14a1
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LaIDiKQnOOlSG5l9+LXh1l/Wbr6wJmQzoOV88DYDKbaIbyNM23wQVEmaHCYMJPi8PXhrZKzo2vukvun5qhMl0Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR03MB6964
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S234381AbiCGW6u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 17:58:50 -0500
+Received: from so254-9.mailgun.net (so254-9.mailgun.net [198.61.254.9])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 36725DF3C
+        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 14:57:55 -0800 (PST)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1646693875; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: From: From: References: Cc: To: To: Subject: Subject:
+ MIME-Version: Date: Message-ID: Sender: Sender;
+ bh=Yo86Jhl6KDhxzAXuV9uElORzmnO5FH0PRgzuixGE8hI=; b=Yp9q+Dm/Iw0iCQ6tTt9LKvAZP8n46uFiQf2CPPA7Pni8s9f9b7CTSFN19aa3ccZ1Pq25b/5j
+ ZKoMdNddnCvkaTNdGsJE76pfbq/rJBN5WNtx8RvBKawi/Ux7hzzBylZgU7Y7zuBi8lPQ6BVl
+ DaKh+KgRDoSHjxOdNVaQBpS3kPQ=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 62268df22f1b1e8f79025b82 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 07 Mar 2022 22:57:53
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 3CD4AC4360D; Mon,  7 Mar 2022 22:57:53 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+Received: from [192.168.1.17] (cpe-75-80-185-151.san.res.rr.com [75.80.185.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 47331C4338F;
+        Mon,  7 Mar 2022 22:57:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 47331C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Message-ID: <1238af3f-3110-a1f2-808c-3c07282b4f14@codeaurora.org>
+Date:   Mon, 7 Mar 2022 14:57:50 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2 1/2] usb: dwc3: Not set DWC3_EP_END_TRANSFER_PENDING in
+ ep cmd fails
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Jung Daehwan <dh10.jung@samsung.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <1644836933-141376-1-git-send-email-dh10.jung@samsung.com>
+ <ff604504-00df-0c1b-673e-892e42737f7a@synopsys.com>
+ <20220215063925.GC144890@ubuntu>
+ <63c8c9d1-9b07-a9f2-3639-a38641e19a7a@synopsys.com>
+ <6a1322c4-9589-f4de-d42c-d38af2e12e82@quicinc.com>
+ <e3332511-82d3-2892-ad72-a0c167273174@synopsys.com>
+ <01c4d42e-93cd-d293-f4e3-8c136049d87c@codeaurora.org>
+ <894d54ad-b6f9-b942-be99-fe3ad102051b@synopsys.com>
+ <dbd00cb1-b5d0-24e7-ef72-dff3765c26cf@codeaurora.org>
+ <810de66c-7d73-fae0-9356-b06b48134ad6@synopsys.com>
+ <1714910d-f923-d0c7-72a9-0c1d098f783f@codeaurora.org>
+ <4371e407-7791-b0b5-dc8c-ad0be09acba4@synopsys.com>
+ <e165c644-4ad0-b103-4f8b-2d3bc1b211f1@codeaurora.org>
+ <b2eca3ba-5c36-c788-629c-016bd36be8a7@synopsys.com>
+ <b0196760-0495-bd8d-7f41-e46f971b0beb@codeaurora.org>
+ <d043eea8-b72e-f1ab-7f0d-93b3b0503de0@synopsys.com>
+ <15aac89a-bf1d-9f30-6a9a-6d8fe97268ac@codeaurora.org>
+ <594fbaf7-d9f0-a3a0-e660-880e12418282@synopsys.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+In-Reply-To: <594fbaf7-d9f0-a3a0-e660-880e12418282@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgSGVpa2tpLA0KDQpIZWlra2kgS3JvZ2VydXMgPGhlaWtraS5rcm9nZXJ1c0BsaW51eC5pbnRl
-bC5jb20+IHdyaXRlczoNCg0KPiBIaSwNCj4NCj4gT24gVHVlLCBNYXIgMDEsIDIwMjIgYXQgMDI6
-MjA6MDdQTSArMDEwMCwgQWx2aW4gxaBpcHJhZ2Egd3JvdGU6DQo+PiBGcm9tOiBBbHZpbiDFoGlw
-cmFnYSA8YWxzaUBiYW5nLW9sdWZzZW4uZGs+DQo+PiANCj4+IFRoZSBUVVNCMzIwTEEgYW5kIFRV
-U0IzMjBIQSAob3IgTEFJLCBIQUkpIGNoaXBzIGFyZSBJMkMgY29udHJvbGxlZA0KPj4gbm9uLVBE
-IFR5cGUtQyBwb3J0IGNvbnRyb2xsZXJzLiBUaGV5IHN1cHBvcnQgZGV0ZWN0aW9uIG9mIGNhYmxl
-DQo+PiBvcmllbnRhdGlvbiwgcG9ydCBhdHRhY2htZW50IHN0YXRlLCBhbmQgcm9sZSwgaW5jbHVk
-aW5nIEF1ZGlvIEFjY2Vzc29yeQ0KPj4gYW5kIERlYnVnIEFjY2Vzc29yeSBtb2Rlcy4gQWRkIGEg
-dHlwZWMgY2xhc3MgZHJpdmVyIGZvciB0aGlzIGZhbWlseS4NCj4+IA0KPj4gTm90ZSB0aGF0IHRo
-ZXJlIGFscmVhZHkgZXhpc3RzIGFuIGV4dGNvbiBkcml2ZXIgZm9yIHRoZSBUVVNCMzIwIChhDQo+
-PiBzbGlnaHRseSBvbGRlciByZXZpc2lvbiB0aGF0IGRvZXMgbm90IHN1cHBvcnQgc2V0dGluZyBy
-b2xlIHByZWZlcmVuY2Ugb3INCj4+IGRpc2FibGluZyB0aGUgQ0Mgc3RhdGUgbWFjaGluZSkuIFRo
-aXMgZHJpdmVyIGlzIGxvb3NlbHkgYmFzZWQgb24gdGhhdA0KPj4gb25lLg0KPg0KPiBUaGlzIGxv
-b2tlZCBtb3N0bHkgT0sgdG8gbWUuIFRoZXJlIGlzIG9uZSBxdWVzdGlvbiBiZWxvdy4NCj4NCj4g
-PHNuaXA+DQo+DQo+PiArc3RhdGljIGludCB0dXNiMzIweGFfY2hlY2tfc2lnbmF0dXJlKHN0cnVj
-dCB0dXNiMzIweGEgKnR1c2IpDQo+PiArew0KPj4gKwlzdGF0aWMgY29uc3QgY2hhciBzaWdbXSA9
-IHsgJ1wwJywgJ1QnLCAnVScsICdTJywgJ0InLCAnMycsICcyJywgJzAnIH07DQo+PiArCXVuc2ln
-bmVkIGludCB2YWw7DQo+PiArCWludCBpLCByZXQ7DQo+PiArDQo+PiArCW11dGV4X2xvY2soJnR1
-c2ItPmxvY2spOw0KPj4gKw0KPj4gKwlmb3IgKGkgPSAwOyBpIDwgc2l6ZW9mKHNpZyk7IGkrKykg
-ew0KPj4gKwkJcmV0ID0gcmVnbWFwX3JlYWQodHVzYi0+cmVnbWFwLCBzaXplb2Yoc2lnKSAtIDEg
-LSBpLCAmdmFsKTsNCj4+ICsJCWlmIChyZXQpDQo+PiArCQkJZ290byBkb25lOw0KPj4gKw0KPj4g
-KwkJaWYgKHZhbCAhPSBzaWdbaV0pIHsNCj4+ICsJCQlkZXZfZXJyKHR1c2ItPmRldiwgInNpZ25h
-dHVyZSBtaXNtYXRjaCFcbiIpOw0KPj4gKwkJCXJldCA9IC1FTk9ERVY7DQo+PiArCQkJZ290byBk
-b25lOw0KPj4gKwkJfQ0KPj4gKwl9DQo+PiArDQo+PiArZG9uZToNCj4+ICsJbXV0ZXhfdW5sb2Nr
-KCZ0dXNiLT5sb2NrKTsNCj4+ICsNCj4+ICsJcmV0dXJuIHJldDsNCj4+ICt9DQo+DQo+IENvdWxk
-bid0IHRoYXQgYmUgZG9uZSB3aXRoIGEgc2luZ2xlIHJlYWQ/DQo+DQo+ICAgICAgICAgY2hhciBz
-aWdbOF07DQo+ICAgICAgICAgdTY0IHZhbDsNCj4NCj4gICAgICAgICBzdHJjcHkoc2lnLCAiVFVT
-QjMyMCIpDQo+DQo+ICAgICAgICAgbXV0ZXhfbG9jaygmdHVzYi0+bG9jayk7DQo+DQo+ICAgICAg
-ICAgcmV0ID0gcmVnbWFwX3Jhd19yZWFkKHR1c2ItPnJlZ21hcCwgMCwgJnZhbCwgc2l6ZW9mKHZh
-bCkpOw0KPiAgICAgICAgIC4uLg0KPiAgICAgICAgIGlmICh2YWwgIT0gY3B1X3RvX2xlNjQoKih1
-NjQgKilzaWcpKSB7DQo+ICAgICAgICAgLi4uDQo+DQo+IFNvbWV0aGluZyBsaWtlIHRoYXQ/DQoN
-CkkgdGhpbmsgaXQncyBhIGJpdCBjcnlwdGljIC0gYXJlIHlvdSBzdXJlIGl0J3Mgd29ydGggaXQg
-anVzdCB0byBzYXZlIDgNCm9uZS1vZmYgcmVnbWFwX3JlYWQoKXM/IEkgY291bGQgYWxzbyBqdXN0
-IHJlbW92ZSB0aGlzIGNoZWNrLi4uIEkgc2VlIGl0DQptb3N0bHkgYXMgYSBjb3VydGVzeSB0byB0
-aGUgdXNlciBpbiBjYXNlIHRoZSBJMkMgYWRkcmVzcyBpbiBoaXMgZGV2aWNlDQp0cmVlIG1pc3Rh
-a2VubHkgcG9pbnRzIHRvIHNvbWUgb3RoZXIgdW5zdXNwZWN0aW5nIGNoaXAuDQoNCkJUVywgZG8g
-eW91IGhhdmUgYW55IGZlZWRiYWNrIG9uIHRoZSBkZXZpY2UgdHJlZSBiaW5kaW5ncyBvZiB0aGlz
-DQpzZXJpZXM/IFJvYiBoYWQgc29tZSBxdWVzdGlvbnMgYW5kIEkgYW0gbm90IHN1cmUgdGhhdCBt
-eSBwcm9wb3NlZA0KYmluZGluZ3MgYXJlIGZ1bGx5IGFsaWduZWQgd2l0aCB0aGUgdHlwZWMgc3Vi
-c3lzdGVtIGV4cGVjdGF0aW9ucy4gQW55DQpmZWVkYmFjayB3b3VsZCBiZSB3ZWxjb21lLg0KDQpJ
-IHdpbGwgd2FpdCBmb3IgbW9yZSBjb21tZW50cyBhbmQgc2VuZCBhIHYyIGluIH5hIHdlZWsuDQoN
-CktpbmQgcmVnYXJkcywNCkFsdmluDQoNCj4NCj4gdGhhbmtzLA==
+Hi Thinh,
+
+On 3/4/2022 4:53 PM, Thinh Nguyen wrote:
+> Wesley Cheng wrote:
+>> Hi Thinh,
+>>
+>> On 2/28/2022 7:02 PM, Thinh Nguyen wrote:
+>>> Wesley Cheng wrote:
+>>>> Hi Thinh,
+>>>>
+>>>> On 2/28/2022 5:09 PM, Thinh Nguyen wrote:
+>>>>> Hi Wesley,
+>>>>>
+>>>
+>>> <snip>
+>>>
+>>>>>
+>>>>> [ 2181.481956865       0x9dc63f265]   dbg_complete: ep6in: trb ffffffc01e7f52a0 (E43:D43) buf 00000000ebaf0000 size 1x 0 ctrl 00000810 (hlcs:sC:normal)
+>>>>> [ 2181.482044730       0x9dc63f8fc]   dbg_gadget_giveback: ep6in: req ffffff8860657500 length 8/8 zsI ==> 0
+>>>>> [ 2181.482222490       0x9dc640651]   event (0000c040): ep0out: Transfer Complete (sIL) [Setup Phase]
+>>>>> [ 2181.482273271       0x9dc640a20]   dbg_trace_log_ctrl: Get Interface Status(Intf = 4, Length = 20)
+>>>>> [ 2181.482334782       0x9dc640ebc]   dbg_ep_queue: ep6in: req ffffff8860657500 length 0/8 zsI ==> -115
+>>>>> [ 2181.482357386       0x9dc64106e]   dbg_prepare: ep6in: trb ffffffc01e7f52b0 (E44:D43) buf 00000000ea578000 size 1x 8 ctrl 00000811 (Hlcs:sC:normal)
+>>>>> [ 2181.482391865       0x9dc641304]   dbg_send_ep_cmd: ep6in: cmd 'Update Transfer' [d0007] params 00000000 00000000 00000000 --> status: Successful
+>>>>> [ 2181.482485615       0x9dc641a0d]   dbg_send_ep_cmd: ep0out: cmd 'Start Transfer' [406] params 00000000 efffa000 00000000 --> status: Successful
+>>>>> [ 2181.482565303       0x9dc642006]   event (000010c0): ep0out: Transfer Not Ready [0] (Not Active) [Data Phase]
+>>>>> [ 2181.482719417       0x9dc642b96]   event (00002040): ep0out: Transfer Complete (Sil) [Data Phase]
+>>>>> [ 2181.482814938       0x9dc6432c0]   dbg_gadget_giveback: ep0out: req ffffff87df84d900 length 20/20 zsI ==> 0
+>>>>> [ 2181.482926084       0x9dc643b16]   event (000020c2): ep0in: Transfer Not Ready [0] (Not Active) [Status Phase]
+>>>>> [ 2181.483024261       0x9dc644272]   dbg_send_ep_cmd: ep0in: cmd 'Start Transfer' [406] params 00000000 efffa000 00000000 --> status: Successful
+>>>>>
+>>>>> The control status isn't completed here.
+>>>>>
+>>>>> [ 2181.483069521       0x9dc6445d7]   dbg_ep_dequeue: ep2in: req ffffff879f5a8b00 length 0/63680 zsI ==> -115
+>>>>> [ 2181.496068792       0x9dc6814c9]   dbg_send_ep_cmd: ep2in: cmd 'End Transfer' [50d08] params 00000000 00000000 00000000 --> status: Timed Out
+>>>>>
+>>>>> But the dequeue may come when host already sent a new Setup packet.
+>>>>> The ep0out hasn't started yet at the point.
+>>>>>
+>>>>> Due to various system latency, I can see that this can happen when
+>>>>> the dwc3 driver hasn't received the interrupt notified the status stage
+>>>>> event yet.
+>>>>>
+>>>>> If that's the case, the host may have already sent the Setup packet
+>>>>> at this point. So the End Transfer may get stuck if the Setup packet
+>>>>> isn't DMA out yet.
+>>>>>
+>>>>> Can you try the change below to see if it resolves the issue?
+>>>> Thanks, Thinh.  Sure I'll give it a try with this change.  This is very
+>>>> similar to the change proposed here as well:
+>>>>
+>>>> https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/20220216000835.25400-3-quic_wcheng@quicinc.com/__;!!A4F2R9G_pg!KlgSpNELOXQydIQuarA3A4NJXIcvHslXqzOdBwYqUIR97Mqdp8zdyezhOC9EJ6UqxLxM$ 
+>>>>
+>>>
+>>> Not sure if this completely resolves the issue here. The change seems to
+>>> issue the End Transfer command before Start Transfer for the next Setup
+>>> stage completes. Also it's missing some checks for async calls to the
+>>> endpoint that's pending dequeue. Also, we may not need to wait for End
+>>> Transfer command to time out if we know the condition to avoid.
+>>>
+>>>> One thing to mention is that, I'm not sure how dependable checking soley
+>>>> the ep0state would be.  I've seen some scenarios where we'd run into the
+>>>> end transfer timeout during the time between inspecting the SETUP packet
+>>>> (dwc3_ep0_inspect_setup()) and when the data phase is queued.  The
+>>>> timing of the data phase can potentially differ if it is a vendor
+>>>> specific control request.
+>>>
+>>> This timeout should only apply to Setup packet and Setup stage. Even if
+>>> it's vendor specific control request, it should be fine. Host should not
+>>> issue a Setup packet until it receives a status stage (unless there's a
+>>> disconnect in the middle of a control transfer, but that's a different
+>>> issue).
+>>>
+>>> If you do see a problem. We can take a look further.
+>>>
+>> So far so good w/ the testing.  Had to make a small change in your patch
+>> to fix a typo:
+>>                 if (!(dwc3_ep->flags & DWC3_EP_DELAY_STOP))
+>>                         continue;
+>>
+>>                 dwc3_ep->flags &= ~DWC3_EP_DELAY_STOP;
+>>                 ret = dwc3_stop_active_transfer(dwc3_ep, true, true);
+>>
+>> Was using dep instead of dwc3_ep.  Will let this run over the weekend
+>> and get back to you.
+>>
+> 
+> Ok. This seems to confirm my suspicion. Can you update the patch with
+> the following adjustment:
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 3e75eaa13abc..c3f7529f64fc 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -2309,6 +2309,10 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+>                 if (r == req) {
+>                         struct dwc3_request *t;
+> 
+> +                       if (dwc->ep0state != EP0_SETUP_PHASE &&
+> +                           !dwc->delayed_status)
+> +                               dep->flags |= DWC3_EP_DELAY_STOP;
+> +
+>                         /* wait until it is processed */
+>                         dwc3_stop_active_transfer(dep, true, true);
+> 
+> This is to avoid a case if the function driver has some dependency for
+> requests to return before sending the control status using delayed
+> status, which can cause a hang.
+> 
+> We only need to make sure not to issue End Transfer after the status
+> transfer started and before its completion interrupt, which may prevent
+> the driver from starting the Setup stage.
+> 
+
+Added the above change, and tested it over the weekend and it was
+working well for me.  However, I wasn't able to really test the
+delayed_status flag too much, since we don't have a function driver that
+utilizes the USB_GADGET_DELAYED_STATUS too much. (we only have a FFS
+interface, which will do it during enum, which is part of the test case
+I ran)
+
+Would it also make sense to check for the dwc->setup_packet_pending flag
+as well in the same IF condition?  That would mean that there was a
+SETUP packet cached in the controller, which would need to be handled.
+I heard from our CC w/ Synopsys that we need to ensure any pending SETUP
+packets stored in internal memory needed to be cleared as well before
+issuing the endxfer.
+
+This sounds similar to your statement previously about if the SETUP
+packet wasn't DMA'ed out yet.
+
+Thanks
+Wesley Cheng
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
