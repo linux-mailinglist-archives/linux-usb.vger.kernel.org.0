@@ -2,95 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D814CF212
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 07:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 319BE4CF38A
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Mar 2022 09:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiCGGl2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Mar 2022 01:41:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
+        id S236155AbiCGIcH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Mar 2022 03:32:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiCGGl1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 01:41:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD3522B3F
-        for <linux-usb@vger.kernel.org>; Sun,  6 Mar 2022 22:40:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 277B761299
-        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 06:40:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 83578C340E9
-        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 06:40:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646635232;
-        bh=vkBedR4NUqjKxbm3yHJ+oZ+ArtvaytUIA7ASuad9F4I=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=liBDWHMnya2QYtXMAZXonSgNgHp9OhFxnxC2JB8x8DglXzRrHxOG6n6hzeAP3z9CL
-         zLWWWEQJn79AWvUb1BmGwkY0dYsn1ybgN0yedJxPV1Pt5BTgd6eqZM3q+q2bNvBQrk
-         s+Cvsy5VDsOYKx/eiWPI66X6/k8BLUUBllfxo6MbfjDj2q1RTuLV4OtQpIKCz/nEFO
-         9/tS4IkzUUNQhrcXAxdYNHKDdhoeWKXM84KFjoqeNvRQ7plwADHuitYb1bhXxARxWp
-         I7DtNSxNABdeMho+0plCm14e7ocZf8nEmEA0rAaupPGXNENu408bxaXn8FKZr7hJzQ
-         dUzo8RZZB8KYQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 2EA83C05FD0; Mon,  7 Mar 2022 06:40:32 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215475] RMNET data connection speed would be reduced to about
- 80-100Mb/s from 150Mb/s  if try to re-connect it
-Date:   Mon, 07 Mar 2022 06:40:31 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: slark_xiao@163.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215475-208809-x9DdEZx98p@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215475-208809@https.bugzilla.kernel.org/>
-References: <bug-215475-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S236148AbiCGIcF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 03:32:05 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D8F55494
+        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 00:31:12 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id n15so7804046wra.6
+        for <linux-usb@vger.kernel.org>; Mon, 07 Mar 2022 00:31:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=M/a9sSwIlTaA0uOLJ9Rhq9zNudgRJnKE3XEQH6XwFTk=;
+        b=rObXpXR3EaNrhwjqznYI5UI/8FW8+HkUOrYJHj0N9jvZN7ux/1LqsMbdB0xtvY8r+8
+         MJ9B0tASl1hXnNc0pV/OfoduCWvT439CKst/kIy9PV/klegMlInhxK9AoT83oZAMxWsK
+         1XGuP2VKlhDirgv2lIItCN64UFVG15ahzoo86J1EdkkKtSeYEOHpn2yt9kJRUB1m5Hh2
+         6TH1SJUbNAmMiSJntJ2N9SHkqINNZE3deeA4HRSbwxzHeCCXYgnPetPmm0nAEKGQec0E
+         epM3gjETw6giPTSM+m2Ovo7tPANwqmUyP0aR/B9zMlbAI38eBsyA+cJQlwt27fsSUb3C
+         /+ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=M/a9sSwIlTaA0uOLJ9Rhq9zNudgRJnKE3XEQH6XwFTk=;
+        b=PTvheyopBQkNgTEwbA2vFm2UpZ6qaaJyYA77ptFWyX2DMQb5jYdksKZOW/wGk+i2NR
+         6DR2cQnma6QqbZDjSFXg0EO3DgK1zKGheuSJII0Oajw0dd51FyfidtDFw0seuK1YBA2J
+         TtTv44JW8mTlKJQUR2R1h2C61x8VxIiynOAY6X2IWDQjxhnVOsSqmH7pXYPjEZO3fSwe
+         /0hIo21kmLnT4dcQsYosqPlVvMj1n1wvvhnhaJl0KSD2KzdUDUa6sa/8+XG6NotZ2Y+t
+         oH9faH8dosw+EjzQ0BceEg5VvaZpyUxZ8po4ujHri9EznI/vKhdAsilTR5iUaNOHlZ6x
+         vB+Q==
+X-Gm-Message-State: AOAM531LQ0v8lDClnndNAR0xwo1gfMMKlXGFbJsx291FnSlZhVwh3BS4
+        KAQbqedDyX6Kp/x/CzrlwfEowA==
+X-Google-Smtp-Source: ABdhPJyEq7eU3DL5hMKyDwdqWuJL5kvEefFehXEj8huNMwMlxYC7JfjL1Sd0vMOPNsNkU9dppusmZw==
+X-Received: by 2002:adf:f94a:0:b0:1ef:9485:e43d with SMTP id q10-20020adff94a000000b001ef9485e43dmr7164123wrr.552.1646641870512;
+        Mon, 07 Mar 2022 00:31:10 -0800 (PST)
+Received: from ?IPV6:2001:861:44c0:66c0:1451:71b4:fefe:6096? ([2001:861:44c0:66c0:1451:71b4:fefe:6096])
+        by smtp.gmail.com with ESMTPSA id v188-20020a1cacc5000000b00384b71a50d5sm12607329wme.24.2022.03.07.00.31.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 00:31:10 -0800 (PST)
+Message-ID: <ae246f3f-debd-f183-7d77-ab72c9332cd5@baylibre.com>
+Date:   Mon, 7 Mar 2022 09:31:12 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] usb: dwc3-meson-g12a: constify drvdata structs
+Content-Language: en-US
+To:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>
+References: <a3c178c9-7c33-d7b8-9f6e-734dc28728ab@gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <a3c178c9-7c33-d7b8-9f6e-734dc28728ab@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215475
+On 06/03/2022 21:59, Heiner Kallweit wrote:
+> Constify the drvdata structs. This also matches the definition of
+> member drvdata in dwc3_meson_g12a.
+> 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+>   drivers/usb/dwc3/dwc3-meson-g12a.c | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> index bd814df3b..b282ad0e6 100644
+> --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
+> +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> @@ -188,7 +188,7 @@ static int dwc3_meson_gxl_usb_post_init(struct dwc3_meson_g12a *priv);
+>    * reset to recover usage of the port.
+>    */
+>   
+> -static struct dwc3_meson_g12a_drvdata gxl_drvdata = {
+> +static const struct dwc3_meson_g12a_drvdata gxl_drvdata = {
+>   	.otg_switch_supported = true,
+>   	.otg_phy_host_port_disable = true,
+>   	.clks = meson_gxl_clocks,
+> @@ -202,7 +202,7 @@ static struct dwc3_meson_g12a_drvdata gxl_drvdata = {
+>   	.usb_post_init = dwc3_meson_gxl_usb_post_init,
+>   };
+>   
+> -static struct dwc3_meson_g12a_drvdata gxm_drvdata = {
+> +static const struct dwc3_meson_g12a_drvdata gxm_drvdata = {
+>   	.otg_switch_supported = true,
+>   	.otg_phy_host_port_disable = true,
+>   	.clks = meson_gxl_clocks,
+> @@ -216,7 +216,7 @@ static struct dwc3_meson_g12a_drvdata gxm_drvdata = {
+>   	.usb_post_init = dwc3_meson_gxl_usb_post_init,
+>   };
+>   
+> -static struct dwc3_meson_g12a_drvdata axg_drvdata = {
+> +static const struct dwc3_meson_g12a_drvdata axg_drvdata = {
+>   	.otg_switch_supported = true,
+>   	.clks = meson_gxl_clocks,
+>   	.num_clks = ARRAY_SIZE(meson_gxl_clocks),
+> @@ -229,7 +229,7 @@ static struct dwc3_meson_g12a_drvdata axg_drvdata = {
+>   	.usb_post_init = dwc3_meson_gxl_usb_post_init,
+>   };
+>   
+> -static struct dwc3_meson_g12a_drvdata g12a_drvdata = {
+> +static const struct dwc3_meson_g12a_drvdata g12a_drvdata = {
+>   	.otg_switch_supported = true,
+>   	.clks = meson_g12a_clocks,
+>   	.num_clks = ARRAY_SIZE(meson_g12a_clocks),
+> @@ -241,7 +241,7 @@ static struct dwc3_meson_g12a_drvdata g12a_drvdata = {
+>   	.usb_init = dwc3_meson_g12a_usb_init,
+>   };
+>   
+> -static struct dwc3_meson_g12a_drvdata a1_drvdata = {
+> +static const struct dwc3_meson_g12a_drvdata a1_drvdata = {
+>   	.otg_switch_supported = false,
+>   	.clks = meson_a1_clocks,
+>   	.num_clks = ARRAY_SIZE(meson_a1_clocks),
 
---- Comment #6 from slark_xiao@163.com ---
-Make a update about this issue.
-  When we change rx_urb_size in the host side and keep it same as the QMAP
-related QMI, this issue is "fixed".
-  I also checked some old commit which related with rx_urb_size, let's say=
-=20
-https://patchwork.kernel.org/project/linux-usb/patch/20200803065105.8997-1-=
-yzc666@netease.com/
-and
-https://patchwork.ozlabs.org/project/netdev/patch/20200909091302.20992-1-dn=
-lplm@gmail.com/#2524381.
-They tried to update the rx_urb_size to make QMAP works better. But these
-commits seems have been rejected.
-  So do we have any new solutions or workarounds about changing the
-rx_urb_size?
+Looks good:
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
