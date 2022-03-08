@@ -2,154 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE4A4D169E
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Mar 2022 12:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8363B4D1745
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Mar 2022 13:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346544AbiCHLud (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Mar 2022 06:50:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
+        id S1346709AbiCHMaY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Mar 2022 07:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235291AbiCHLub (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Mar 2022 06:50:31 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12B22E084;
-        Tue,  8 Mar 2022 03:49:31 -0800 (PST)
+        with ESMTP id S235466AbiCHMaX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Mar 2022 07:30:23 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC31369CF
+        for <linux-usb@vger.kernel.org>; Tue,  8 Mar 2022 04:29:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646740171; x=1678276171;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=hptAeT1aRWP2UIvZ3fkUSKXBKuDV4uGYtvodri9TAc4=;
-  b=fSA7nw4dIwFXAJWNA5QOX5x/1P/ZWKvBzR6j5ASQF8eHw7m1Qz+4OaoQ
-   aXuEbCVXIgGsQT6Sa3yT0c/OzkREOSkRr5FK22Ws4GFCQuK4ryLP+8m0h
-   82td6G00Btk2LcrHSZzxS5SE9Yf73Li/myZt0KUM/2nZfgU+A4b+MR90P
-   9mcnbsguh3CFmTVUHP5F30DW/ncK61CVpwkfzOi8tJoT2PYJH0a1se6JZ
-   2ANDGGaw3oOON/pddAau6HWs8rbYifOyvcUIxSpc91OD51s0roy8WdGNg
-   BVVWWlItEd+OlaKQnLfbzuiBG2dUQHHM9tco4yKWqfggSsdKFpAt+nz9j
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="252236217"
+  t=1646742567; x=1678278567;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9o58/RGSpN4bxsc76gOpwpTEa7NExYFvWNFAsSNmCtQ=;
+  b=CUNlLmurwv5VPwGm3LQTngmdV0z4q2IwM3NLnshr4AsblhG+oLBJazwz
+   NK7vUpg0SJCyHrN/znJiRGtaO3Zg9jn6fA/De/DwAnlh4LfQRsgm3rMv9
+   NlEbLZMziaVmw7chkHsok1+mT5C2kIQg1hfPKIbCL82t1kcaKSfHWWoSR
+   bu6WDoY1qq6HRAQ8c77r8MuLRRwW+R3izcXK77SzSbzfjANpXZ1Gm1od4
+   4/MyjJDKe1dpUGQpTfYuOG/HT+teRkCiMFqFd2/A5HeGs8Zp4qhq3GNng
+   YgOBSfmUlunI0myT8+rZhjt1Ukw6lHKhJKLdGYfsDl+OXhbCRrj3qtSl7
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="234625559"
 X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="252236217"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 03:49:31 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="234625559"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 04:29:26 -0800
 X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="687896769"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 08 Mar 2022 03:49:28 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 08 Mar 2022 13:49:27 +0200
-Date:   Tue, 8 Mar 2022 13:49:27 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
-Cc:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/4] usb: typec: add TUSB320xA driver
-Message-ID: <YidCx7Vi3ob8vquD@kuha.fi.intel.com>
-References: <20220301132010.115258-1-alvin@pqrs.dk>
- <20220301132010.115258-4-alvin@pqrs.dk>
- <YiYYa7GkknJ+CAuL@kuha.fi.intel.com>
- <87lexlcsrj.fsf@bang-olufsen.dk>
+   d="scan'208";a="577979323"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 04:29:23 -0800
+Received: by lahna (sSMTP sendmail emulation); Tue, 08 Mar 2022 14:20:33 +0200
+Date:   Tue, 8 Mar 2022 14:20:33 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [GIT PULL] Thunderbolt/USB4 changes for v5.18 merge window
+Message-ID: <YidKEUcphTB4SE0E@lahna>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87lexlcsrj.fsf@bang-olufsen.dk>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 10:17:04PM +0000, Alvin Šipraga wrote:
-> Hi Heikki,
-> 
-> Heikki Krogerus <heikki.krogerus@linux.intel.com> writes:
-> 
-> > Hi,
-> >
-> > On Tue, Mar 01, 2022 at 02:20:07PM +0100, Alvin Šipraga wrote:
-> >> From: Alvin Šipraga <alsi@bang-olufsen.dk>
-> >> 
-> >> The TUSB320LA and TUSB320HA (or LAI, HAI) chips are I2C controlled
-> >> non-PD Type-C port controllers. They support detection of cable
-> >> orientation, port attachment state, and role, including Audio Accessory
-> >> and Debug Accessory modes. Add a typec class driver for this family.
-> >> 
-> >> Note that there already exists an extcon driver for the TUSB320 (a
-> >> slightly older revision that does not support setting role preference or
-> >> disabling the CC state machine). This driver is loosely based on that
-> >> one.
-> >
-> > This looked mostly OK to me. There is one question below.
-> >
-> > <snip>
-> >
-> >> +static int tusb320xa_check_signature(struct tusb320xa *tusb)
-> >> +{
-> >> +	static const char sig[] = { '\0', 'T', 'U', 'S', 'B', '3', '2', '0' };
-> >> +	unsigned int val;
-> >> +	int i, ret;
-> >> +
-> >> +	mutex_lock(&tusb->lock);
-> >> +
-> >> +	for (i = 0; i < sizeof(sig); i++) {
-> >> +		ret = regmap_read(tusb->regmap, sizeof(sig) - 1 - i, &val);
-> >> +		if (ret)
-> >> +			goto done;
-> >> +
-> >> +		if (val != sig[i]) {
-> >> +			dev_err(tusb->dev, "signature mismatch!\n");
-> >> +			ret = -ENODEV;
-> >> +			goto done;
-> >> +		}
-> >> +	}
-> >> +
-> >> +done:
-> >> +	mutex_unlock(&tusb->lock);
-> >> +
-> >> +	return ret;
-> >> +}
-> >
-> > Couldn't that be done with a single read?
-> >
-> >         char sig[8];
-> >         u64 val;
-> >
-> >         strcpy(sig, "TUSB320")
-> >
-> >         mutex_lock(&tusb->lock);
-> >
-> >         ret = regmap_raw_read(tusb->regmap, 0, &val, sizeof(val));
-> >         ...
-> >         if (val != cpu_to_le64(*(u64 *)sig)) {
-> >         ...
-> >
-> > Something like that?
-> 
-> I think it's a bit cryptic - are you sure it's worth it just to save 8
-> one-off regmap_read()s? I could also just remove this check... I see it
-> mostly as a courtesy to the user in case the I2C address in his device
-> tree mistakenly points to some other unsuspecting chip.
-> 
-> BTW, do you have any feedback on the device tree bindings of this
-> series? Rob had some questions and I am not sure that my proposed
-> bindings are fully aligned with the typec subsystem expectations. Any
-> feedback would be welcome.
+Hi Greg,
 
-I don't think I understand DT well enough to comment. I'm not
-completely sure what he's asking..
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-> I will wait for more comments and send a v2 in ~a week.
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-thanks,
+are available in the Git repository at:
 
--- 
-heikki
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.18-rc1
+
+for you to fetch changes up to 144c4a77a3e1e520daba85eafd28999af22e1aa5:
+
+  thunderbolt: Rename EEPROM handling bits to match USB4 spec (2022-03-04 17:10:36 +0300)
+
+----------------------------------------------------------------
+thunderbolt: Changes for v5.18 merge window
+
+This includes following Thunderbolt/USB4 changes for the v5.18 merge
+window:
+
+  * Improvements for Intel Alpine and Titan Ridge support
+  * Replace acpi_bus_get_device() with acpi_fetch_acpi_dev()
+  * Improvements around DROM handling on AMD hardware
+  * A couple of cleanups.
+
+All these have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      thunderbolt: Remove useless DMA-32 fallback configuration
+
+Mario Limonciello (5):
+      thunderbolt: Retry DROM reads for more failure scenarios
+      thunderbolt: Do not resume routers if UID is not set
+      thunderbolt: Do not make DROM read success compulsory
+      thunderbolt: Clarify register definitions for `tb_cap_plug_events`
+      thunderbolt: Rename EEPROM handling bits to match USB4 spec
+
+Mika Westerberg (3):
+      thunderbolt: Disable LTTPR on Intel Titan Ridge
+      thunderbolt: Add missing device ID to tb_switch_is_alpine_ridge()
+      thunderbolt: Add internal xHCI connect flows for Thunderbolt 3 devices
+
+Rafael J. Wysocki (1):
+      thunderbolt: Replace acpi_bus_get_device()
+
+ drivers/thunderbolt/acpi.c    |   4 +-
+ drivers/thunderbolt/eeprom.c  |  41 ++++++++--------
+ drivers/thunderbolt/lc.c      | 110 ++++++++++++++++++++++++++++++++++++++++++
+ drivers/thunderbolt/nhi.c     |   3 +-
+ drivers/thunderbolt/switch.c  |  81 +++++++++++++++++++++++++++++--
+ drivers/thunderbolt/tb.c      |  11 +++++
+ drivers/thunderbolt/tb.h      |   8 +++
+ drivers/thunderbolt/tb_regs.h |  37 +++++++++-----
+ drivers/thunderbolt/tunnel.c  |  10 ++++
+ 9 files changed, 265 insertions(+), 40 deletions(-)
