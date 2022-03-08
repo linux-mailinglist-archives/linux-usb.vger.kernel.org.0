@@ -2,206 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE914D1B47
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Mar 2022 16:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0BA4D1B8A
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Mar 2022 16:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347758AbiCHPDR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Mar 2022 10:03:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
+        id S1347769AbiCHPVI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Mar 2022 10:21:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347764AbiCHPC7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Mar 2022 10:02:59 -0500
-X-Greylist: delayed 1231 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Mar 2022 07:02:01 PST
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.51.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406A94D9F4
-        for <linux-usb@vger.kernel.org>; Tue,  8 Mar 2022 07:02:01 -0800 (PST)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id B90C45EDA
-        for <linux-usb@vger.kernel.org>; Tue,  8 Mar 2022 08:41:29 -0600 (CST)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id Rb1lnMWN4HnotRb1lnmK8A; Tue, 08 Mar 2022 08:41:29 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=5NeK/sZmH86+pHk+fuSZ0PXD45byb2lWCHalWlIUKMU=; b=h8d7B9DJGKL+044uhBTcmxMkxS
-        ePJXbReChucm7c4uKGaNTYknILfc9fI1YRAzPmF26aWYWP3db9oKKSvFj8ZR2N6esK0WAd6BUiRd/
-        vUW6sfGFmLapCNWQ88EsCWXMUjgv8/eGmaxmqxLAQAjV6QnSRO1TBRCJ9LjYcwZBgJvORtQdeDMCN
-        3WqZOVOpGePOCsCgbLeOBP5V16VuRr5pfOMGdH/qiVqdaMiZkgTqkHWIbXKbrbT1hsRgR2NcrVInz
-        k6T0F5BrvBSJVQWfcXiPgORYC2JL2RiAWS6o88OHEu5LMQOaLbWT634P6b5n3gGxt7gfl1F8oN8TK
-        SFZoY+AA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:38102)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nRb1l-002QgF-0j; Tue, 08 Mar 2022 14:41:29 +0000
-Message-ID: <0fa1e65c-949f-f492-f769-b1f5ed3b181d@roeck-us.net>
-Date:   Tue, 8 Mar 2022 06:41:27 -0800
+        with ESMTP id S244311AbiCHPVG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Mar 2022 10:21:06 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CF84DF43
+        for <linux-usb@vger.kernel.org>; Tue,  8 Mar 2022 07:20:10 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id d19-20020a0566022bf300b00645eba5c992so2557647ioy.4
+        for <linux-usb@vger.kernel.org>; Tue, 08 Mar 2022 07:20:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=t0VNOU7RRwjb3H7s1WRSl1+Azc/DP7e41yedGLIzhXo=;
+        b=Wkhcx67z8+2eDl7vG37jxJm38cH83DqGmKMcnm/yzbwx3J3tjk6OTChnhycq3txB6S
+         Trf+vjMGpaCj65NTg9vmRCRm5JnxV2qk0fOHKb7/BzsQVfNsS62qwLsNHRFEJJv4kWkT
+         1oq7pvYk/eqQcVgcEK2knZjUQZHpAx1mu/Q/SVUnroiOb++SdUgpUVvbfkOhCbypA8RY
+         emhv22EkYL9mA4rYnOGFPLWk05/2YVse9qhdTWQuUesWzbM3+srcJBHyh4gFfe61h8fe
+         HYuTupTO2mz9R78Yk0cOj1OxuGFsrtEM0NcdQ71ZBd+ajbwxPz0Wc8iqf4ZMGSoXG+s1
+         IdMA==
+X-Gm-Message-State: AOAM532J6t7gQ5Bj7vwLRfSwxCvDg8ehaDrD53Skyz7C8ziUxYOmmbAJ
+        x26pHfhCIyOHzEOjVl7rnLG4YC+OwuaczR4yth0TgTFibe6b
+X-Google-Smtp-Source: ABdhPJxIN1KmDqfCPfbxTpbcL1P976T5kld5TWrV6qwp59ZVvVUSFZWeL+pWItJl4jnlnqyijl4xmXUrp4AFu7GyO3ZtQUl40q2Q
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v8 1/3] usb: typec: tcpci: move tcpci.h to
- include/linux/usb/ directory
-Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Xin Ji <xji@analogixsemi.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220308073431.1217890-1-xji@analogixsemi.com>
- <YicrpWig4kwdh2lg@kuha.fi.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <YicrpWig4kwdh2lg@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nRb1l-002QgF-0j
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:38102
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 4
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1c04:b0:2be:4c61:20f4 with SMTP id
+ l4-20020a056e021c0400b002be4c6120f4mr15914234ilh.245.1646752809820; Tue, 08
+ Mar 2022 07:20:09 -0800 (PST)
+Date:   Tue, 08 Mar 2022 07:20:09 -0800
+In-Reply-To: <20220308150836.3680-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000043292605d9b684bf@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in cdc_ncm_tx_fixup
+From:   syzbot <syzbot+5ec3d1378e31c88d87f4@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/8/22 02:10, Heikki Krogerus wrote:
-> On Tue, Mar 08, 2022 at 03:34:28PM +0800, Xin Ji wrote:
->> As for convenience use TCPCI register definition, move tcpci.h to
->> include/linux/usb/ directory.
-> 
-> To be honest, I was still hoping for a better explanation here.
-> 
-> The reason why this header is made global is because some USB PD
-> controllers - PD controllers consisting of a microcontroller
-> (acting as the TCPM) and a port controller (TCPC) - may require that
-> the driver for the PD controller accesses directly also the on-chip
-> port controller in some cases.
-> 
-> I was hoping that that was explained in the commit message somehow.
-> 
+Hello,
 
-Same here.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Guenter
+Reported-and-tested-by: syzbot+5ec3d1378e31c88d87f4@syzkaller.appspotmail.com
 
->> Signed-off-by: Xin Ji <xji@analogixsemi.com>
->>
->> ---
->> V7 -> V8: Fix Guanter's comment, remove unnecessary explain.
->> ---
->>   drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
->>   drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
->>   drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
->>   drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
->>   {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
->>   5 files changed, 5 insertions(+), 7 deletions(-)
->>   rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
->>
->> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
->> index e07d26a3cd8e..9c907296596f 100644
->> --- a/drivers/usb/typec/tcpm/tcpci.c
->> +++ b/drivers/usb/typec/tcpm/tcpci.c
->> @@ -13,11 +13,10 @@
->>   #include <linux/property.h>
->>   #include <linux/regmap.h>
->>   #include <linux/usb/pd.h>
->> +#include <linux/usb/tcpci.h>
->>   #include <linux/usb/tcpm.h>
->>   #include <linux/usb/typec.h>
->>   
->> -#include "tcpci.h"
->> -
->>   #define	PD_RETRY_COUNT_DEFAULT			3
->>   #define	PD_RETRY_COUNT_3_0_OR_HIGHER		2
->>   #define	AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV	3500
->> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
->> index df2505570f07..4b6705f3d7b7 100644
->> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
->> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
->> @@ -11,11 +11,10 @@
->>   #include <linux/module.h>
->>   #include <linux/regmap.h>
->>   #include <linux/usb/pd.h>
->> +#include <linux/usb/tcpci.h>
->>   #include <linux/usb/tcpm.h>
->>   #include <linux/usb/typec.h>
->>   
->> -#include "tcpci.h"
->> -
->>   #define PD_ACTIVITY_TIMEOUT_MS				10000
->>   
->>   #define TCPC_VENDOR_ALERT				0x80
->> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
->> index f1bd9e09bc87..9e0338bce7ef 100644
->> --- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
->> +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
->> @@ -11,10 +11,9 @@
->>   #include <linux/of.h>
->>   #include <linux/platform_device.h>
->>   #include <linux/regmap.h>
->> +#include <linux/usb/tcpci.h>
->>   #include <linux/usb/tcpm.h>
->>   
->> -#include "tcpci.h"
->> -
->>   #define MT6360_REG_VCONNCTRL1	0x8C
->>   #define MT6360_REG_MODECTRL2	0x8F
->>   #define MT6360_REG_SWRESET	0xA0
->> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
->> index b56a0880a044..3291ca4948da 100644
->> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
->> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
->> @@ -10,9 +10,9 @@
->>   #include <linux/i2c.h>
->>   #include <linux/interrupt.h>
->>   #include <linux/gpio/consumer.h>
->> +#include <linux/usb/tcpci.h>
->>   #include <linux/usb/tcpm.h>
->>   #include <linux/regmap.h>
->> -#include "tcpci.h"
->>   
->>   #define RT1711H_VID		0x29CF
->>   #define RT1711H_PID		0x1711
->> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/include/linux/usb/tcpci.h
->> similarity index 99%
->> rename from drivers/usb/typec/tcpm/tcpci.h
->> rename to include/linux/usb/tcpci.h
->> index b2edd45f13c6..20c0bedb8ec8 100644
->> --- a/drivers/usb/typec/tcpm/tcpci.h
->> +++ b/include/linux/usb/tcpci.h
->> @@ -9,6 +9,7 @@
->>   #define __LINUX_USB_TCPCI_H
->>   
->>   #include <linux/usb/typec.h>
->> +#include <linux/usb/tcpm.h>
->>   
->>   #define TCPC_VENDOR_ID			0x0
->>   #define TCPC_PRODUCT_ID			0x2
->> -- 
->> 2.25.1
-> 
+Tested on:
 
+commit:         ea4424be Merge tag 'mtd/fixes-for-5.17-rc8' of git://g..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+kernel config:  https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
+dashboard link: https://syzkaller.appspot.com/bug?extid=5ec3d1378e31c88d87f4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=129f209a700000
+
+Note: testing is done by a robot and is best-effort only.
