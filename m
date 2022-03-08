@@ -2,72 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0BA4D1B8A
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Mar 2022 16:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEAD4D1BDC
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Mar 2022 16:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347769AbiCHPVI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Mar 2022 10:21:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
+        id S1347871AbiCHPic (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Mar 2022 10:38:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244311AbiCHPVG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Mar 2022 10:21:06 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CF84DF43
-        for <linux-usb@vger.kernel.org>; Tue,  8 Mar 2022 07:20:10 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id d19-20020a0566022bf300b00645eba5c992so2557647ioy.4
-        for <linux-usb@vger.kernel.org>; Tue, 08 Mar 2022 07:20:10 -0800 (PST)
+        with ESMTP id S1347946AbiCHPiS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Mar 2022 10:38:18 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048B04EA16
+        for <linux-usb@vger.kernel.org>; Tue,  8 Mar 2022 07:37:22 -0800 (PST)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9D2883F1C6
+        for <linux-usb@vger.kernel.org>; Tue,  8 Mar 2022 15:37:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646753840;
+        bh=+SoAPYrI9AVK4oPXSILcL3dQXENtG2+Idjow9ASKefY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=fCxYOSR1o6oSC/WNadgyZ6FmwitvL4kYwwjfPx/kbepgUA4XSv5p7/wNRAxVoTkjH
+         Wopj8wZCDTTl9qVKyreaiEDaOCjx11cUSO4hViSoNdELZwdpYjrVG9NtZAyXnK7wwS
+         96EQVxvBiQC+wUqFwi80Q/7YNFKgWfYf3eKPoZ7ajRU9jq2yCp6I/oBOsytUN5HU+5
+         +ceLNkO3jd+xt36Y2Rtg1AMriy3/GzJG5qZsZjJKgOmzAtlRkSOcN9YEzXItCdNimF
+         PsHTzR1wV1GeR5+DrQU4NsXaOzfIE6PLub2oIurqJFKE9EyEEPzLVBiGe2Cnfe5hG/
+         kXVhdtuIe/jAg==
+Received: by mail-ej1-f70.google.com with SMTP id ga31-20020a1709070c1f00b006cec400422fso8866126ejc.22
+        for <linux-usb@vger.kernel.org>; Tue, 08 Mar 2022 07:37:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=t0VNOU7RRwjb3H7s1WRSl1+Azc/DP7e41yedGLIzhXo=;
-        b=Wkhcx67z8+2eDl7vG37jxJm38cH83DqGmKMcnm/yzbwx3J3tjk6OTChnhycq3txB6S
-         Trf+vjMGpaCj65NTg9vmRCRm5JnxV2qk0fOHKb7/BzsQVfNsS62qwLsNHRFEJJv4kWkT
-         1oq7pvYk/eqQcVgcEK2knZjUQZHpAx1mu/Q/SVUnroiOb++SdUgpUVvbfkOhCbypA8RY
-         emhv22EkYL9mA4rYnOGFPLWk05/2YVse9qhdTWQuUesWzbM3+srcJBHyh4gFfe61h8fe
-         HYuTupTO2mz9R78Yk0cOj1OxuGFsrtEM0NcdQ71ZBd+ajbwxPz0Wc8iqf4ZMGSoXG+s1
-         IdMA==
-X-Gm-Message-State: AOAM532J6t7gQ5Bj7vwLRfSwxCvDg8ehaDrD53Skyz7C8ziUxYOmmbAJ
-        x26pHfhCIyOHzEOjVl7rnLG4YC+OwuaczR4yth0TgTFibe6b
-X-Google-Smtp-Source: ABdhPJxIN1KmDqfCPfbxTpbcL1P976T5kld5TWrV6qwp59ZVvVUSFZWeL+pWItJl4jnlnqyijl4xmXUrp4AFu7GyO3ZtQUl40q2Q
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+SoAPYrI9AVK4oPXSILcL3dQXENtG2+Idjow9ASKefY=;
+        b=At11/aCGx/TxoQFuOVsdgVOZuPv96LVQjeQGFG60yyLW3Rio8uPkCv7YyNZiaLAI1u
+         i4WR9fgB09yPvAhgBFlGBdxnJA5dA5vjAqRxt7MnJHXtyUIZSN2MuKhUS2cUfty2Iby9
+         b1dye5zFfaXwGUkLnAZ8zPrMKx45Cvl1xVjjzPXBmtn1/NoQ8BxLApskBOfMpTyHSTjN
+         udiEozWblWGHPo92kpFfQgb/5dRD2rX4uTYiIsCZo+UqnvNO0c/AwLBlH/PDgwkUhfEg
+         jdh8OosS4M3wLcaRcVt8rXwF2/gM07EEXLq10gvOKpJI5RaholhrS4gYhRAKNy/FoB2e
+         M5+w==
+X-Gm-Message-State: AOAM533fo+f0W4Qm8byx0wjfbD+DYaIz1NaAzJYbXBMD2Nsf9nsmveE4
+        yLWnGh05fwXovKm0VqR78YdL4RWddnivB9xQ8jkWgNzC0HMqiCMlmWy6kHQm/2mLu35yyaK6/cF
+        /PXC9IiRGQnkEusQqVghso9q8wEhPJeMM11WxOQ==
+X-Received: by 2002:a05:6402:278f:b0:410:d242:465e with SMTP id b15-20020a056402278f00b00410d242465emr16782990ede.292.1646753840337;
+        Tue, 08 Mar 2022 07:37:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz92daKVL0yFb5mnkxZ7pVOsbSSBLZKj9sYcVlzo06U6i1kLzX6KcggaRKM9ZFJo3msmBRHBA==
+X-Received: by 2002:a05:6402:278f:b0:410:d242:465e with SMTP id b15-20020a056402278f00b00410d242465emr16782971ede.292.1646753840170;
+        Tue, 08 Mar 2022 07:37:20 -0800 (PST)
+Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id cf17-20020a170906b2d100b006daa59af421sm5521472ejb.149.2022.03.08.07.37.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 07:37:19 -0800 (PST)
+Message-ID: <b6a5a2c9-84af-5cd3-b411-6e04895f8f67@canonical.com>
+Date:   Tue, 8 Mar 2022 16:37:18 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c04:b0:2be:4c61:20f4 with SMTP id
- l4-20020a056e021c0400b002be4c6120f4mr15914234ilh.245.1646752809820; Tue, 08
- Mar 2022 07:20:09 -0800 (PST)
-Date:   Tue, 08 Mar 2022 07:20:09 -0800
-In-Reply-To: <20220308150836.3680-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000043292605d9b684bf@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in cdc_ncm_tx_fixup
-From:   syzbot <syzbot+5ec3d1378e31c88d87f4@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 4/4] usb: host: add xhci-exynos module
+Content-Language: en-US
+To:     Daehwan Jung <dh10.jung@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
+        cpgs@samsung.com, cpgsproxy5@samsung.com
+References: <1646648256-105214-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220307101852epcas2p2639761a90e794f0b4a4a842a17ba534e@epcas2p2.samsung.com>
+ <1646648256-105214-5-git-send-email-dh10.jung@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <1646648256-105214-5-git-send-email-dh10.jung@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 07/03/2022 11:17, Daehwan Jung wrote:
+> This is for reference to introduce usb offload as seeing how a user does.
+> We only care DCBAA, Device Context, Transfer Ring, Event Ring, and ERST.
+> They are allocated on specific address(SRAM) for Co-Processor.
+> Co-processor could use them directly without xhci driver after then.
+> 
+> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> ---
+>  drivers/usb/host/xhci-exynos.c | 2025 ++++++++++++++++++++++++++++++++
+>  drivers/usb/host/xhci-exynos.h |  150 +++
+>  2 files changed, 2175 insertions(+)
+>  create mode 100644 drivers/usb/host/xhci-exynos.c
+>  create mode 100644 drivers/usb/host/xhci-exynos.h
+> 
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+NAK. I wrote in reply to your v1 - you need an in-tree user. Not
+out-of-tree.
 
-Reported-and-tested-by: syzbot+5ec3d1378e31c88d87f4@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         ea4424be Merge tag 'mtd/fixes-for-5.17-rc8' of git://g..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
-dashboard link: https://syzkaller.appspot.com/bug?extid=5ec3d1378e31c88d87f4
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=129f209a700000
-
-Note: testing is done by a robot and is best-effort only.
+Best regards,
+Krzysztof
