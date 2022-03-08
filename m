@@ -2,69 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC794D15FE
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Mar 2022 12:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF2F4D164A
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Mar 2022 12:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346413AbiCHLQq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Mar 2022 06:16:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
+        id S242623AbiCHLcJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Mar 2022 06:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346377AbiCHLQn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Mar 2022 06:16:43 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530C146175
-        for <linux-usb@vger.kernel.org>; Tue,  8 Mar 2022 03:15:47 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nRXoO-0001bV-04; Tue, 08 Mar 2022 12:15:28 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nRXoM-0000Ry-4J; Tue, 08 Mar 2022 12:15:26 +0100
-Date:   Tue, 8 Mar 2022 12:15:26 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Scott Branden <sbranden@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, kernel@pengutronix.de,
-        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v5 5/9] ARM: dts: exynos: fix ethernet node name for
- different odroid boards
-Message-ID: <20220308111526.GA1086@pengutronix.de>
-References: <20220216074927.3619425-1-o.rempel@pengutronix.de>
- <20220216074927.3619425-6-o.rempel@pengutronix.de>
- <bbb7e8fa-757a-64c6-640e-c24bf3e56b82@canonical.com>
+        with ESMTP id S230461AbiCHLcI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Mar 2022 06:32:08 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E232842A34;
+        Tue,  8 Mar 2022 03:31:12 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id p3-20020a17090a680300b001bbfb9d760eso1946350pjj.2;
+        Tue, 08 Mar 2022 03:31:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HwYw6UCyoABQdRBRd1yhW2c7K50Bveoo4+Wjmoa50zo=;
+        b=dM6KzRJGdqy0RZKW65Mmi00X1hYAe56e/tarN+bZUJiIEmmQYK3TnQGUmZdgZuzZ7X
+         ncQGosXHgJslwJJTthS1skxibiQF0/m5woIiTSXnmPLiBM556leLnwotm6S44wGNstER
+         r2oc2IrgQ0g7SA57xnNRIXuME8F8FymVEox+vMIRvFPouUbKQ1HbBBezZ2EvRwhvtGiX
+         6cl+IbVVaC3cveWq97fV9bnn2PvgWGe8kTg2nPAMQTSomhzHjkzS2O1m9q7t5m+mZqa/
+         2EL1CBsozUzKyntfzFEllD8zYlUNU899SihgT1O3ZSQWWtZMmDvgkfVVrQyt7boeN/zl
+         9aOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HwYw6UCyoABQdRBRd1yhW2c7K50Bveoo4+Wjmoa50zo=;
+        b=xvv7XJdp1kdRHnExcdt6RKgyPScRCry/MrD3qBpVNsAtA+I+i9ATUfhMavCHl0d+v9
+         U+xhHsifZ6BBBC0nt/khhiHglG06EXdh2g02hRZBicqOzPIqQRWPmLOAC4PSf/45FVRJ
+         vB5AADrRaULIyEzld/dHArh4zhmSoz/Zlv8WyDhTcaVt69jzz9NUB8pPwntOi3WrfNQO
+         oyrJ2/RRifFYI04zc3pBdtpUpCkpCVOAZpjXn4aPMTRxdAOLXL4WqfanJ6SbAKLV39lj
+         9Qr6U28mH9aD7r22AzZ/SNKoB91VcgOAM1ifjyI9lmzA7StEuUWjAMBurRJeeNqJYdpf
+         Euxg==
+X-Gm-Message-State: AOAM533w1So9tACyQdy7zM9YM7/pbpVq6pELqReE1LFN9FaWorkYssEA
+        W+ecnOpSZKirJkXMLY4j4x4squot/wjqfQ==
+X-Google-Smtp-Source: ABdhPJzi3HS2uJRqE1jJb7DSwpJAxEqdJJejAJYKA+rLIfRPZeMYyrmR806+7//fUQz3sqZsY6F0gw==
+X-Received: by 2002:a17:902:d505:b0:151:9e65:b844 with SMTP id b5-20020a170902d50500b001519e65b844mr17452429plg.49.1646739071793;
+        Tue, 08 Mar 2022 03:31:11 -0800 (PST)
+Received: from localhost.localdomain (114-24-142-127.dynamic-ip.hinet.net. [114.24.142.127])
+        by smtp.gmail.com with ESMTPSA id v66-20020a622f45000000b004f129e7767fsm18470726pfv.130.2022.03.08.03.31.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 03:31:11 -0800 (PST)
+From:   Wei Ming Chen <jj251510319013@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     andreyknvl@gmail.com, balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, Wei Ming Chen <jj251510319013@gmail.com>
+Subject: [PATCH] usb: gadget: return -EINVAL if no proper ep address available
+Date:   Tue,  8 Mar 2022 19:28:32 +0800
+Message-Id: <20220308112832.6170-1-jj251510319013@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <bbb7e8fa-757a-64c6-640e-c24bf3e56b82@canonical.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 12:14:51 up 87 days, 20:00, 87 users,  load average: 0.94, 0.50,
- 0.31
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,37 +68,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 12:02:29PM +0100, Krzysztof Kozlowski wrote:
-> On 16/02/2022 08:49, Oleksij Rempel wrote:
-> > The node name of Ethernet controller should be "ethernet" instead of
-> > "usbether" as required by Ethernet controller devicetree schema:
-> >  Documentation/devicetree/bindings/net/ethernet-controller.yaml
-> > 
-> > This patch can potentially affect boot loaders patching against full
-> > node path instead of using device aliases.
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> >  arch/arm/boot/dts/exynos4412-odroidu3.dts       | 2 +-
-> >  arch/arm/boot/dts/exynos4412-odroidx.dts        | 2 +-
-> >  arch/arm/boot/dts/exynos5410-odroidxu.dts       | 2 +-
-> >  arch/arm/boot/dts/exynos5422-odroidxu3-lite.dts | 2 +-
-> >  arch/arm/boot/dts/exynos5422-odroidxu3.dts      | 2 +-
-> >  5 files changed, 5 insertions(+), 5 deletions(-)
-> > 
-> 
-> Hi Oleksij,
-> 
-> Both Exynos patches look good, unfortunately I forgot about them a week
-> ago when I was preparing late pull request and now it is too late for
-> this cycle. I will pick them up after the merge window. Sorry, for this.
+If we try to use raw_ioctl_ep_enable() for ep5in on a hardware that
+only support from ep1-ep4 for both in and out direction, it will return
+-EBUSY originally.
 
-No problem. Thank you for the feedback :)
+I think it will be more intuitive if we return -EINVAL, Cuz -EBUSY sounds
+like ep5in is not available now, but might be available in the future.
 
-Regards,
-Oleksij
+Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+---
+ drivers/usb/gadget/legacy/raw_gadget.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index d86c3a36441e..b4cc083a7ca6 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -758,6 +758,7 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+ 	unsigned long flags;
+ 	struct usb_endpoint_descriptor *desc;
+ 	struct raw_ep *ep;
++	bool ep_num_matched = false;
+ 
+ 	desc = memdup_user((void __user *)value, sizeof(*desc));
+ 	if (IS_ERR(desc))
+@@ -792,6 +793,7 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+ 		if (ep->addr != usb_endpoint_num(desc) &&
+ 				ep->addr != USB_RAW_EP_ADDR_ANY)
+ 			continue;
++		ep_num_matched = true;
+ 		if (!usb_gadget_ep_match_desc(dev->gadget, ep->ep, desc, NULL))
+ 			continue;
+ 		ep->ep->desc = desc;
+@@ -815,6 +817,12 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+ 		goto out_unlock;
+ 	}
+ 
++	if (!ep_num_matched) {
++		dev_dbg(&dev->gadget->dev, "fail, no proper ep address available\n");
++		ret = -EINVAL;
++		goto out_free;
++	}
++
+ 	dev_dbg(&dev->gadget->dev, "fail, no gadget endpoints available\n");
+ 	ret = -EBUSY;
+ 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.25.1
+
