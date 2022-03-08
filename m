@@ -2,92 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 547054D0E30
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Mar 2022 04:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DBC4D0EDB
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Mar 2022 05:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242497AbiCHDAz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Mar 2022 22:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
+        id S235935AbiCHEwH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Mar 2022 23:52:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244999AbiCHDAz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 22:00:55 -0500
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3788B3B56E
-        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 19:00:00 -0800 (PST)
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 36AEFC0A2F;
-        Tue,  8 Mar 2022 02:59:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1646708399; bh=m6/GfkDH/MpQhKcai7eH+dsCJWpLLHhfTeu2C3Ndmqg=;
-        h=Date:From:Subject:To:Cc:From;
-        b=kJlKnO8B93eDddFYGpW+csjlpzVibmIFftbu+bpZT+E9WGAECrk5iPuwq9c3BG7GM
-         mIGHKexl+73VoSnWDoCOXjNEdlRuY6z1F84v3FMTbymngD70V2x6iwgv9Xhax2IKzp
-         oEmpRDmr0N80QrycP4bLyrCjGAMfaFnyUukHPn8kRLxmgKAw4vVZ3+u4dHgo/CXyKT
-         3/lTNHlr0dYmccJGz4KDijQlseGG3DwVTqcEGBUIfj2sdgHG++8J1okYM9NZy9X8HR
-         XEnjmO6vdWedGQcIzCIbujv0+ghXCWRj70tFNf6HTjEHXO8d6bgxLvcSJGUf4AuAyk
-         dTFr5dvMUlGxQ==
-Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id B64D1A0099;
-        Tue,  8 Mar 2022 02:59:56 +0000 (UTC)
-Received: by te-lab16-v2 (sSMTP sendmail emulation); Mon, 07 Mar 2022 18:59:56 -0800
-Date:   Mon, 07 Mar 2022 18:59:56 -0800
-Message-Id: <deb8146b8e1f7f8495ef2d5647017270934cb2d8.1646708142.git.Thinh.Nguyen@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH] usb: dwc3: gadget: Give some time to schedule isoc
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Michael Grzeschik <mgr@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231371AbiCHEwG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Mar 2022 23:52:06 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FD9366AD
+        for <linux-usb@vger.kernel.org>; Mon,  7 Mar 2022 20:51:10 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id w4-20020a056e021c8400b002c29cb00633so11680917ill.16
+        for <linux-usb@vger.kernel.org>; Mon, 07 Mar 2022 20:51:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=uiEnvrCJO9ahx3KjvytyRBPbLTaFX8Hx3K+SLJ16Csc=;
+        b=V5X9xwNUoaKSuZDx3wbcM0mwMHleGQIvJNA6mUOA1vTrpnc81RmjNIM9rXyIU00PG2
+         rH9z8ybM1w86BPxBomPEfeV4i6glzxWpXd4rFgxEviMYmkwR2v+bOjnSfx76aiTSNgki
+         WUHI2mcSM/9/Ux6aTpYZxbLrQ9iJ6o1+fcacOnSqpFdHD0kYuJvUgQk+VXPWdVOQW7ng
+         2waBsRpEpzn7YPA3Y6gAQb0GRcKpyPKltz5wDv+IaTL31UpB+wB9X4opXdKGfnWDc449
+         1xm4SsyTAP0IpFX/UqYa6oMVKIcW/xymPPOckNoyWXCrDeHPPOlTAkTNvLEvGCaEwbY/
+         K9Cw==
+X-Gm-Message-State: AOAM533B7h68D2WsFHeau+j6WWcFzc00crAavau62gwig/AiLmnV8lNe
+        HyDq+MG7AvvNBJWg1LgygHu6x217+R4+jScgT3Vmgc5r5Hjc
+X-Google-Smtp-Source: ABdhPJy4yEr09F5ipqfpdWFc+mUL+o4PBJhUCKpWE7/ZHU18qkT14hHwwkq0R1JMdFrqzLXvp6R1hRAOvq2bLJxPuL/iYs2opext
+MIME-Version: 1.0
+X-Received: by 2002:a92:6d02:0:b0:2c6:e1:79b with SMTP id i2-20020a926d02000000b002c600e1079bmr14430503ilc.67.1646715069632;
+ Mon, 07 Mar 2022 20:51:09 -0800 (PST)
+Date:   Mon, 07 Mar 2022 20:51:09 -0800
+In-Reply-To: <20220308043407.3440-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c5961605d9adba2c@google.com>
+Subject: Re: [syzbot] WARNING in mcba_usb_probe/usb_submit_urb
+From:   syzbot <syzbot+3bc1dce0cc0052d60fde@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently the driver will schedule isoc transfers immediately on the
-next interval, which is quite aggressive when the interval is 125us.
-There's report that some platforms may need more time to process the
-transfer, otherwise the controller may miss the first interval. Let's
-keep it simple and give the controller at least 500us to schedule the
-isoc transfer.
+Hello,
 
-Link: https://lore.kernel.org/linux-usb/20220302143539.GI11577@pengutronix.de/
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
- drivers/usb/dwc3/gadget.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index a0c883f19a41..eb88ef5dd16f 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1830,7 +1830,13 @@ static int __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
- 	}
- 
- 	for (i = 0; i < DWC3_ISOC_MAX_RETRIES; i++) {
--		dep->frame_number = DWC3_ALIGN_FRAME(dep, i + 1);
-+		int future_interval = i + 1;
-+
-+		/* Give the controller at least 500us to schedule transfers */
-+		if (desc->bInterval < 3)
-+			future_interval += 3 - desc->bInterval;
-+
-+		dep->frame_number = DWC3_ALIGN_FRAME(dep, future_interval);
- 
- 		ret = __dwc3_gadget_kick_transfer(dep);
- 		if (ret != -EAGAIN)
+Reported-and-tested-by: syzbot+3bc1dce0cc0052d60fde@syzkaller.appspotmail.com
 
-base-commit: 98d107b84614a1c6b0b8009feae49c5fb0ef4758
--- 
-2.28.0
+Tested on:
 
+commit:         ea4424be Merge tag 'mtd/fixes-for-5.17-rc8' of git://g..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=aba0ab2928a512c2
+dashboard link: https://syzkaller.appspot.com/bug?extid=3bc1dce0cc0052d60fde
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1527dff6700000
+
+Note: testing is done by a robot and is best-effort only.
