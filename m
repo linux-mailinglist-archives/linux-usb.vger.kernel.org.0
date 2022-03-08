@@ -2,118 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C4C4D1D01
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Mar 2022 17:18:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 425214D1E26
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Mar 2022 18:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234985AbiCHQS4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Mar 2022 11:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
+        id S241529AbiCHRJt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Mar 2022 12:09:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348143AbiCHQSz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Mar 2022 11:18:55 -0500
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607D2DFC4;
-        Tue,  8 Mar 2022 08:17:58 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id D30ABE0076;
-        Tue,  8 Mar 2022 08:17:27 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id I5-U4puZBtsc; Tue,  8 Mar 2022 08:17:27 -0800 (PST)
-Message-ID: <2d439eec0548361669bcc7b4de5b2c0e966d4d62.camel@puri.sm>
-Subject: Re: [PATCH] usb: xhci: make XHCI_STOP_EP_CMD_TIMEOUT a module
- parameter
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     mathias.nyman@intel.com, kernel@puri.sm, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 08 Mar 2022 17:17:23 +0100
-In-Reply-To: <835b3990-43a6-a985-81b4-b86bddfe951f@linux.intel.com>
-References: <20220304113057.1477958-1-martin.kepplinger@puri.sm>
-         <YiIfZFPl9ZqPBKvj@kroah.com>
-         <835b3990-43a6-a985-81b4-b86bddfe951f@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S230093AbiCHRJs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Mar 2022 12:09:48 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C2636305;
+        Tue,  8 Mar 2022 09:08:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646759332; x=1678295332;
+  h=from:to:cc:subject:date:message-id;
+  bh=R0CDGnvApoSO1gfn9j+YZMCQMFxsSEmVfmtBoWiu+Qw=;
+  b=S5ceqGltaeFtsuLCkCWcq1CU6lm58G8qp3DcNfKNZe2xngHbgFXK+Vzb
+   YOxt3IJwein2lAKXqMsOe1a/yCqcf87Ud6CWKxlgLSL51XXxNnYXeItDk
+   Im4kbNNa25FkUyu0QgHTblfapkjQY8M6p2MMthC84g7QR1UIX1uFXUGvD
+   Rq8BMLaUfuGh80VcRWyyD6lTr46hhVONpGmiO3yZ8zEZmigZsllJX9+M2
+   egta+QvEcoje0c6k2fjnvkYZhd26zvq6ZAWTWAmSVeoaZ6/YwRR5sqXuJ
+   lY0M2QOrhudGFu7JGGKmMljaWm0qKw+HiWJ5TJm/UuIc7U/ft4EPnGyFU
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="235352219"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="235352219"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 09:08:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="641822768"
+Received: from gio-01395267462.iind.intel.com ([10.49.4.124])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Mar 2022 09:08:49 -0800
+From:   shruthi.sanil@intel.com
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     heikki.krogerus@intel.com, srikanth.thokala@intel.com,
+        mallikarjunappa.sangannavar@intel.com, shruthi.sanil@intel.com
+Subject: [PATCH] usb: dwc3: pci: Add support for Intel Alder Lake
+Date:   Tue,  8 Mar 2022 22:38:48 +0530
+Message-Id: <20220308170848.30722-1-shruthi.sanil@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, dem 07.03.2022 um 10:49 +0200 schrieb Mathias Nyman:
-> On 4.3.2022 16.17, Greg KH wrote:
-> > On Fri, Mar 04, 2022 at 12:30:57PM +0100, Martin Kepplinger wrote:
-> > > On the Librem 5 imx8mq system we've seen the stop endpoint
-> > > command
-> > > time out regularly which results in the hub dying.
-> > > 
-> > > While on the one hand we see "Port resume timed out, port 1-1:
-> > > 0xfe3"
-> > > before this and on the other hand driver-comments suggest that
-> > > the driver
-> > > might be able to recover instead of dying here, Sarah seemed to
-> > > have a
-> > > workaround for this particulator problem in mind already:
-> > > 
-> > > Make it a module parameter. So while it might not be the root
-> > > cause for
-> > > the problem, do this to give users a workaround.
-> > 
-> > This is not the 1990's, sorry, please do not add new module
-> > parameters.
-> > They modify code, when you want to modify an individual device.
-> > 
-> 
-> Agree, I think we really need to find the rootcause here.
-> 
-> There's a known problem with this stop endpoint timeout timer.
-> 
-> For all other commands we start the timer when the controller starts
-> processing the
-> command, but the stop endpoint timer is started immediately when
-> command is queued.
-> So it might timeout if some other commend before it failed.
-> 
-> I have a patchseries for this. It's still work in progress but should
-> be testable.
-> Pushed to a branch named stop_endpoint_fixes
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git
-> stop_endpoint_fixes
-> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=stop_endpoint_fixes
-> 
-> Can you try it out and see if it helps?
-> 
+From: Shruthi Sanil <shruthi.sanil@intel.com>
 
-thanks a lot Mathias, I'm running these now. The timeout has not been
-easy to reproduce (or I'm just lazy) but in a few days I should be able
-to tell whether that helps.
+Add the PCI device ID and update the dwc3_pci_id_table
+for Intel Alder Lake SoC.
 
-So this thread has been about
+The DWC3 controllor in the CPU block handles the USB3 traffic
+and the device ID is common across the Alder Lake platforms.
 
-[14145.960512] xhci-hcd xhci-hcd.4.auto: Port resume timed out, port 1-
-1: 0xfe3
-[14156.308511] xhci-hcd xhci-hcd.4.auto: xHCI host not responding to
-stop endpoint command.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Shruthi Sanil <shruthi.sanil@intel.com>
+---
+ drivers/usb/dwc3/dwc3-pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-that I previously tried to work around by increasing
-XHCI_MAX_REXIT_TIMEOUT_MS and XHCI_STOP_EP_CMD_TIMEOUT.
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 06d0e88ec8af..d8b9798fc7d4 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -40,6 +40,7 @@
+ #define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
+ #define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
+ #define PCI_DEVICE_ID_INTEL_JSP			0x4dee
++#define PCI_DEVICE_ID_INTEL_ADL			0x465e
+ #define PCI_DEVICE_ID_INTEL_ADLP		0x51ee
+ #define PCI_DEVICE_ID_INTEL_ADLM		0x54ee
+ #define PCI_DEVICE_ID_INTEL_ADLS		0x7ae1
+@@ -412,6 +413,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_JSP),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
+ 
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADL),
++	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
++
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADLP),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
+ 
 
-
-These patches can't help with the following, right?
-readl_poll_timeout_atomic() with a fixed timeout is called in this
-case:
-
-xhci-hcd xhci-hcd.4.auto: Abort failed to stop command ring: -110
-
-I see that too from time to time. It results in the HC dying as well.
-
-thanks,
-                              martin
+base-commit: ea4424be16887a37735d6550cfd0611528dbe5d9
+-- 
+2.17.1
 
