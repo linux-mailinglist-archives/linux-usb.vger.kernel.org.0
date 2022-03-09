@@ -2,29 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B1D4D3133
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Mar 2022 15:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7EC4D324E
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Mar 2022 16:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233505AbiCIOqf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Mar 2022 09:46:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44346 "EHLO
+        id S234072AbiCIP6R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Mar 2022 10:58:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiCIOqb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 09:46:31 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1F413C9F8
-        for <linux-usb@vger.kernel.org>; Wed,  9 Mar 2022 06:45:33 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nRxZ6-00016d-RG; Wed, 09 Mar 2022 15:45:24 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nRxZ5-0001o8-Uy; Wed, 09 Mar 2022 15:45:23 +0100
-Date:   Wed, 9 Mar 2022 15:45:23 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
+        with ESMTP id S234060AbiCIP6Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 10:58:16 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C0113C26F;
+        Wed,  9 Mar 2022 07:57:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=qW2VCBDnPQYpT6M3ugNgUmJT+AvAVhZfE5koYfv1Ils=; b=qtWwj8LPMb2Nt+HIeRqBcFJtoE
+        cBebLsfftvs8n04bEm+nJPNmPp6Cp0GXb4OM+z4qiF3Mdq6CE/Ev5Gk9p7YAw9EZ74KDgA5zhj5GE
+        CJYwJ74HxVGGsQsXDReDRe2SUa0mkTJnxXKPBuWsKjLEgqXXMiKuwt05h095e9dZRUs4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nRygQ-009z8C-Nn; Wed, 09 Mar 2022 16:57:02 +0100
+Date:   Wed, 9 Mar 2022 16:57:02 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
 Cc:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Heiner Kallweit <hkallweit1@gmail.com>,
@@ -32,99 +35,34 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org, paskripkin@gmail.com
 Subject: Re: net: asix: best way to handle orphan PHYs
-Message-ID: <20220309144523.GE15680@pengutronix.de>
+Message-ID: <YijOTgDA95c3uaTl@lunn.ch>
 References: <20220309121835.GA15680@pengutronix.de>
  <YiisJogt/WO5gLId@lunn.ch>
+ <20220309144523.GE15680@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YiisJogt/WO5gLId@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 14:34:30 up 88 days, 22:20, 90 users,  load average: 2.55, 1.39,
- 0.69
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220309144523.GE15680@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Andrew,
+> EEPROM provides information, which PHY address should be used. If
+> address is 0x10, it is internal PHY. Different parts of ASIX driver use
+> this logic.
 
-On Wed, Mar 09, 2022 at 02:31:18PM +0100, Andrew Lunn wrote:
-> On Wed, Mar 09, 2022 at 01:18:35PM +0100, Oleksij Rempel wrote:
-> > Hello all,
-> > 
-> > I have ASIX based USB Ethernet adapter with two PHYs: internal and
-> > external. The internal PHY is enabled by default and there seems to be
-> > no way to disable internal PHY on the MAC level without affecting the
-> > external PHY.
-> > 
-> > What is the preferred method to suspend internal PHY?
-> > Currently I have following options:
-> > - suspend PHY in the probe function of the PHY driver
-> > - get the phydev in the MAC driver and call phy_suspend()
-> > - whisper magic numbers from the MAC driver directly this the MDIO bus.
-> > 
-> > Are there other options?
-> 
-> Hi Oleksij
-> 
-> Can you unique identity this device? Does it have a custom VID:PID?
+O.K, so the solution should be generic, unless there are devices with
+bad EEPROM content.
 
-No, currently it has generic VID:PID.
+> Ok, so if phy_suspend() is the preffered way, I need to get phydev
+> without attaching it. Correct? Do we already have some helpers to do it?
 
-> It seems like suspending it in the PHY driver would be messy. How do
-> you identify the PHY is part of your devices and should be suspended?
+mdiobus_get_phy() will get you the phydev is you know the bus and the
+address.
 
-EEPROM provides information, which PHY address should be used. If
-address is 0x10, it is internal PHY. Different parts of ASIX driver use
-this logic.
-
-> Doing it from the MAC driver seems better, your identification
-> information is close to hand.
-> 
-> I would avoid the magic numbers, since phy_suspend() makes it clear
-> what you are doing.
-> 
-> Is there one MDIO bus with two devices, or two MDIO busses?  If there
-> are two busses, you could maybe add an extra flag to the bus structure
-> you pass to mdiobus_register() which indicates it should suspend all
-> PHY it finds on the bus during enumeration of the bus. Generally we
-> don't want this, if the PHY has link already we want to keep it, to
-> avoid the 1.5s delay causes by autoneg. But if we know the PHYs on the
-> bus are not going to be used, it would be a good point to suspend
-> them.
-
-It is one MDIO bus with multiple PHYs one of them is the internal PHY.
-ax88772 seems to provide way to put the PHY to reset from one of MAC
-register. See drivers/net/usb/asix_devices.c
-ax88772_hw_reset()
-  if (priv->embd_phy)
-    ...
-  else
-    asix_sw_reset(dev, AX_SWRESET_IPPD | AX_SWRESET_PRL,
-
-But this way is not working for the ax88772b variant.
-
-Ok, so if phy_suspend() is the preffered way, I need to get phydev
-without attaching it. Correct? Do we already have some helpers to do it?
-
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+	Andrew
