@@ -2,49 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 470224D253F
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Mar 2022 02:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E944D2530
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Mar 2022 02:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiCIBE3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Mar 2022 20:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
+        id S229728AbiCIBEr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Mar 2022 20:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiCIBEB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Mar 2022 20:04:01 -0500
+        with ESMTP id S229687AbiCIBEj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Mar 2022 20:04:39 -0500
 Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EDA12F415;
-        Tue,  8 Mar 2022 16:41:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730B42BB0D;
+        Tue,  8 Mar 2022 16:42:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646786479; x=1678322479;
+  t=1646786524; x=1678322524;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
   bh=uVYTo3zmAFmOrPCTNEi6PNR2yQWPKzEW4c6l7/SRtPU=;
-  b=kOx5mKT8mYYBaFJIM2C4Aq4ibcxbBdc4xkkTllICthsuTIWM/t167wWc
-   RR6m/XQuvvcZqcBgyCsCz5jSGe1jixhHaQOgar4d2J25Eh9NCTMREDjS4
-   /CIuJPCGKH05j3GxFuFWB7qB3gUdm9Nk8tXg9ZXrRTkQl9WFuSk77f0nd
-   E=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Mar 2022 16:37:18 -0800
+  b=C6R0hZnW0JUw4WHzQLhrEeG207YWcNnEixm1LXeiPW/9N2B3/W6Gq63d
+   uCR7bpW5nWY4p7c4Ffe2AVgk80zP1Dy6vOnmMu9m2+JkggC1XSgCVOiaM
+   ANpE06qq0P2ggqWYJrlgBN8zkEViiOVVBPPaalQHSAFXYJko9Frjcjv0v
+   U=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Mar 2022 16:42:04 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 16:37:18 -0800
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 16:42:03 -0800
 Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 8 Mar 2022 16:37:18 -0800
+ 15.2.986.15; Tue, 8 Mar 2022 16:42:02 -0800
 Received: from wcheng-linux.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 8 Mar 2022 16:37:17 -0800
+ 15.2.986.15; Tue, 8 Mar 2022 16:42:02 -0800
 From:   Wesley Cheng <quic_wcheng@quicinc.com>
 To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <quic_jackp@quicinc.com>, <Thinh.Nguyen@synopsys.com>,
         Wesley Cheng <quic_wcheng@quicinc.com>
 Subject: [PATCH] usb: dwc3: gadget: Wait for ep0 xfers to complete during dequeue
-Date:   Tue, 8 Mar 2022 16:37:05 -0800
-Message-ID: <20220309003705.10474-1-quic_wcheng@quicinc.com>
+Date:   Tue, 8 Mar 2022 16:41:48 -0800
+Message-ID: <20220309004148.12061-1-quic_wcheng@quicinc.com>
 X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
