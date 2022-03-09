@@ -2,124 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1B14D3DC5
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Mar 2022 00:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE1F4D3DCD
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Mar 2022 00:59:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiCIXz1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Mar 2022 18:55:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
+        id S235596AbiCJAAm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Mar 2022 19:00:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiCIXz0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 18:55:26 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E1812223A
-        for <linux-usb@vger.kernel.org>; Wed,  9 Mar 2022 15:54:25 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id g16-20020a05660203d000b005f7b3b0642eso2723464iov.16
-        for <linux-usb@vger.kernel.org>; Wed, 09 Mar 2022 15:54:25 -0800 (PST)
+        with ESMTP id S229520AbiCJAAl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 19:00:41 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C13FCE939;
+        Wed,  9 Mar 2022 15:59:42 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id j12so2696583ils.0;
+        Wed, 09 Mar 2022 15:59:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3P8g9u3vJUtm4A9yAvYJk4LsJmcVg6YYa9BoxTi+5uE=;
+        b=UYB0QDw15gPlPJVL+6PbqKCH9nJX4RkIyvB2ggYwFNGBCw3OdqQuuUIeWu8mihMlq9
+         hrDBH475fvEbUuFqBhvmTe1AmV1CbVuJpJjZhw5aSKvS5vxPyRwFUvHbSC64r6rWVYut
+         n0jbh1OIVxEl2raescQuWJKbp3QpnWdZZ1sQbShnuCiR3g2E4d5qPY+g9o9+sfYRcfal
+         lQZ8GUXQKLYkO2Jtj0atnzDg6KHB0JvC4wdR8ZNEImaf7ip7CkkiQmigsbJTcBB9xIqH
+         F8t9QYpo/3VjSyDBXvL1InsQq510U9Up/J5xTXEb0M+urukRRgqfEV5yUCOfLSTAJYui
+         IxTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=FZKkfb+B9Ye8SW4sgOk+aViFCG1Zd9t6idiFkhiqLKA=;
-        b=szZCnoiRlIVgvNb1QzHdS5cyJ9cuwDMcU6Q1VkMxlPvQERNKiQEYGMKWRdEfICdwLk
-         s5hKcjoQBUbGTK5EWuRzDW1qDhnhkvR5SY8k8ZroJzyEsNUwetjgkHNz20Gtx5Yo9vfW
-         geE6NTUKAzKNquUMa8TdKEuLWssyK839gFXTKGa66WqwWLva4ZJva0Qy2pqo1C0lFPTL
-         fNhtePDgsKjLGXucAvNRyNBg6KpKOhkC5msE09TXwafQ8A9orvrjtMcqSiG3s70lM9w2
-         p5n2R7iYMhZKH5RiGHZmYX3tTjUWNIX6o/ZvoC3i3iWXvKeZqw4rDcau9FKd3s/UKRzN
-         KJyw==
-X-Gm-Message-State: AOAM531erihUwtgGCl0WR7P5fY+YGU4ONiN4WlfyhgJHkFMYwi8lgfIx
-        A4jf26ZzNcAJ/U96AtoNjs2gfX30QAq1jDWc2kOxnVvPdEwy
-X-Google-Smtp-Source: ABdhPJyVHy/khyyLSyf05JTis72no6NvtkZogjvY6QKKugmN/bv16pOOktXDBrhtnfxHZvR7dvaajtm3yJlsPwJXk3Ttq0pln574
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3P8g9u3vJUtm4A9yAvYJk4LsJmcVg6YYa9BoxTi+5uE=;
+        b=tT3cfiilim6hy0RfdYy0ZTXmfF3rOPMti+Vnntn8m9lBARf50TnIipwAI3qDGBOBur
+         v5jal/+q/0NceUrQX3zk44H21Os7mXXGVCxS5cQhOuCnlcPUhaXUrvG2pMHKEvAAxbk0
+         ykET5fPIEOtVOyhxr+osNBCKkH11ZBqkZnLSh4jdYcs4KFuzWno4iV6pMYWJ3BjZGhMh
+         iMCO5SxB5dOBuhxckwVqovzO/7QHpTbIrgnvX+VXpcR//5EaNYiZY2a9ENipXApQexOE
+         MrHL+iQMEWCf5IKYfgicx3xsuSo6L/ll1ogexmFjiIf2jirLh7V/q3vwk2+aChcJ/x4Q
+         3NLw==
+X-Gm-Message-State: AOAM533qvzpC08oLksF8PuK7W+QRnsVE6n0vcuhI2yk1ILYpvow2Zirq
+        M8NEmZmvEh2dtoA9YzPaOflN0yKFtXzAN/Z/R1JQM3E/b7E=
+X-Google-Smtp-Source: ABdhPJwCn3UqWr0phlnPZ9sqqHZ276kAgETWITUftbU7qwrFqaSR3FSFMTK2H+dam0JN4lghiGM/8i9sPhK1OQCPaRo=
+X-Received: by 2002:a92:cf42:0:b0:2c6:2e92:800a with SMTP id
+ c2-20020a92cf42000000b002c62e92800amr1530365ilr.28.1646870381500; Wed, 09 Mar
+ 2022 15:59:41 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:7513:0:b0:2b9:5b61:e376 with SMTP id
- q19-20020a927513000000b002b95b61e376mr1558659ilc.193.1646870064861; Wed, 09
- Mar 2022 15:54:24 -0800 (PST)
-Date:   Wed, 09 Mar 2022 15:54:24 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000351b8605d9d1d1bf@google.com>
-Subject: [syzbot] memory leak in usb_get_configuration
-From:   syzbot <syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, pavel.hofman@ivitera.com,
-        rob@robgreener.com, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220308112832.6170-1-jj251510319013@gmail.com>
+In-Reply-To: <20220308112832.6170-1-jj251510319013@gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Thu, 10 Mar 2022 00:59:29 +0100
+Message-ID: <CA+fCnZd2GoU6LVvT4eBT3w7TigRrp_9XcAGyL55K5nbi3yt4sA@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: return -EINVAL if no proper ep address available
+To:     Wei Ming Chen <jj251510319013@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="00000000000014bb2505d9d1e4ac"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+--00000000000014bb2505d9d1e4ac
+Content-Type: text/plain; charset="UTF-8"
 
-syzbot found the following issue on:
+On Tue, Mar 8, 2022 at 12:31 PM Wei Ming Chen <jj251510319013@gmail.com> wrote:
+>
 
-HEAD commit:    0014404f9c18 Merge branch 'akpm' (patches from Andrew)
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15864216700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3f0a704147ec8e32
-dashboard link: https://syzkaller.appspot.com/bug?extid=f0fae482604e6d9a87c9
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a63dbe700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e150a1700000
+Hi,
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com
+The commit name should be prefixed with "usb: raw-gadget:".
 
-BUG: memory leak
-unreferenced object 0xffff88810c0289e0 (size 32):
-  comm "kworker/1:2", pid 139, jiffies 4294947862 (age 15.910s)
-  hex dump (first 32 bytes):
-    09 02 12 00 01 00 00 00 00 09 04 00 00 00 d0 bb  ................
-    3a 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  :...............
-  backtrace:
-    [<ffffffff82c98127>] kmalloc include/linux/slab.h:586 [inline]
-    [<ffffffff82c98127>] usb_get_configuration+0x1c7/0x1cd0 drivers/usb/core/config.c:919
-    [<ffffffff82c863f9>] usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
-    [<ffffffff82c863f9>] usb_new_device+0x1a9/0x2e0 drivers/usb/core/hub.c:2536
-    [<ffffffff82c88ea4>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
-    [<ffffffff82c88ea4>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
-    [<ffffffff82c88ea4>] port_event drivers/usb/core/hub.c:5660 [inline]
-    [<ffffffff82c88ea4>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
-    [<ffffffff8126a41f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126ad49>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81274705>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+> If we try to use raw_ioctl_ep_enable() for ep5in on a hardware that
+> only support from ep1-ep4 for both in and out direction, it will return
+> -EBUSY originally.
+>
+> I think it will be more intuitive if we return -EINVAL, Cuz -EBUSY sounds
+> like ep5in is not available now, but might be available in the future.
 
-BUG: memory leak
-unreferenced object 0xffff88810a600f40 (size 64):
-  comm "kworker/1:2", pid 139, jiffies 4294947866 (age 15.870s)
-  hex dump (first 32 bytes):
-    01 00 00 00 01 00 00 00 09 04 00 00 00 d0 bb 3a  ...............:
-    00 00 00 00 00 00 00 00 f2 89 02 0c 81 88 ff ff  ................
-  backtrace:
-    [<ffffffff82c9871d>] kmalloc include/linux/slab.h:586 [inline]
-    [<ffffffff82c9871d>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff82c9871d>] usb_parse_configuration drivers/usb/core/config.c:772 [inline]
-    [<ffffffff82c9871d>] usb_get_configuration+0x7bd/0x1cd0 drivers/usb/core/config.c:944
-    [<ffffffff82c863f9>] usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
-    [<ffffffff82c863f9>] usb_new_device+0x1a9/0x2e0 drivers/usb/core/hub.c:2536
-    [<ffffffff82c88ea4>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
-    [<ffffffff82c88ea4>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
-    [<ffffffff82c88ea4>] port_event drivers/usb/core/hub.c:5660 [inline]
-    [<ffffffff82c88ea4>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
-    [<ffffffff8126a41f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126ad49>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81274705>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+Cuz -> because
 
+>
+> Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+> ---
+>  drivers/usb/gadget/legacy/raw_gadget.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+> index d86c3a36441e..b4cc083a7ca6 100644
+> --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> @@ -758,6 +758,7 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+>         unsigned long flags;
+>         struct usb_endpoint_descriptor *desc;
+>         struct raw_ep *ep;
+> +       bool ep_num_matched = false;
+>
+>         desc = memdup_user((void __user *)value, sizeof(*desc));
+>         if (IS_ERR(desc))
+> @@ -792,6 +793,7 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+>                 if (ep->addr != usb_endpoint_num(desc) &&
+>                                 ep->addr != USB_RAW_EP_ADDR_ANY)
+>                         continue;
+> +               ep_num_matched = true;
+>                 if (!usb_gadget_ep_match_desc(dev->gadget, ep->ep, desc, NULL))
+>                         continue;
+>                 ep->ep->desc = desc;
+> @@ -815,6 +817,12 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+>                 goto out_unlock;
+>         }
+>
+> +       if (!ep_num_matched) {
+> +               dev_dbg(&dev->gadget->dev, "fail, no proper ep address available\n");
+> +               ret = -EINVAL;
+> +               goto out_free;
+> +       }
 
+Thinking more about this, we should cover the following cases:
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+1. If there are no endpoints that match the provided descriptor, return EINVAL.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+2. If there are matching endpoints, but they are all already enabled,
+return EBUSY.
+
+A draft change is attached.
+
+What do you think?
+
+If the suggested change looks good, feel free to incorporate it into
+the version 2 of your patch.
+
+> +
+>         dev_dbg(&dev->gadget->dev, "fail, no gadget endpoints available\n");
+>         ret = -EBUSY;
+>
+> --
+> 2.25.1
+>
+
+Thanks!
+
+--00000000000014bb2505d9d1e4ac
+Content-Type: text/x-patch; charset="US-ASCII"; name="raw-gadget-retval.patch"
+Content-Disposition: attachment; filename="raw-gadget-retval.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l0k813tg0>
+X-Attachment-Id: f_l0k813tg0
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9sZWdhY3kvcmF3X2dhZGdldC5jIGIvZHJp
+dmVycy91c2IvZ2FkZ2V0L2xlZ2FjeS9yYXdfZ2FkZ2V0LmMKaW5kZXggZDg2YzNhMzY0NDFlLi5h
+MGQ1ZWRmMWIyYzUgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2dhZGdldC9sZWdhY3kvcmF3X2dh
+ZGdldC5jCisrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC9sZWdhY3kvcmF3X2dhZGdldC5jCkBAIC03
+ODcsMTMgKzc4NywxNCBAQCBzdGF0aWMgaW50IHJhd19pb2N0bF9lcF9lbmFibGUoc3RydWN0IHJh
+d19kZXYgKmRldiwgdW5zaWduZWQgbG9uZyB2YWx1ZSkKIAogCWZvciAoaSA9IDA7IGkgPCBkZXYt
+PmVwc19udW07IGkrKykgewogCQllcCA9ICZkZXYtPmVwc1tpXTsKLQkJaWYgKGVwLT5zdGF0ZSAh
+PSBTVEFURV9FUF9ESVNBQkxFRCkKLQkJCWNvbnRpbnVlOwogCQlpZiAoZXAtPmFkZHIgIT0gdXNi
+X2VuZHBvaW50X251bShkZXNjKSAmJgogCQkJCWVwLT5hZGRyICE9IFVTQl9SQVdfRVBfQUREUl9B
+TlkpCiAJCQljb250aW51ZTsKIAkJaWYgKCF1c2JfZ2FkZ2V0X2VwX21hdGNoX2Rlc2MoZGV2LT5n
+YWRnZXQsIGVwLT5lcCwgZGVzYywgTlVMTCkpCiAJCQljb250aW51ZTsKKwkJZXBfcHJvcHNfbWF0
+Y2hlZCA9IHRydWU7CisJCWlmIChlcC0+c3RhdGUgIT0gU1RBVEVfRVBfRElTQUJMRUQpCisJCQlj
+b250aW51ZTsKIAkJZXAtPmVwLT5kZXNjID0gZGVzYzsKIAkJcmV0ID0gdXNiX2VwX2VuYWJsZShl
+cC0+ZXApOwogCQlpZiAocmV0IDwgMCkgewpAQCAtODE1LDggKzgxNiwxMyBAQCBzdGF0aWMgaW50
+IHJhd19pb2N0bF9lcF9lbmFibGUoc3RydWN0IHJhd19kZXYgKmRldiwgdW5zaWduZWQgbG9uZyB2
+YWx1ZSkKIAkJZ290byBvdXRfdW5sb2NrOwogCX0KIAotCWRldl9kYmcoJmRldi0+Z2FkZ2V0LT5k
+ZXYsICJmYWlsLCBubyBnYWRnZXQgZW5kcG9pbnRzIGF2YWlsYWJsZVxuIik7Ci0JcmV0ID0gLUVC
+VVNZOworCWlmICghZXBfcHJvcHNfbWF0Y2hlZCkKKwkJZGV2X2RiZygmZGV2LT5nYWRnZXQtPmRl
+diwgImZhaWwsIGJhZCBlbmRwb2ludCBkZXNjcmlwdG9yXG4iKTsKKwkJcmV0ID0gLUVJTlZBTDsK
+Kwl9IGVsc2UgeworCQlkZXZfZGJnKCZkZXYtPmdhZGdldC0+ZGV2LCAiZmFpbCwgbm8gZW5kcG9p
+bnRzIGF2YWlsYWJsZVxuIik7CisJCXJldCA9IC1FQlVTWTsKKwl9CiAKIG91dF9mcmVlOgogCWtm
+cmVlKGRlc2MpOwo=
+--00000000000014bb2505d9d1e4ac--
