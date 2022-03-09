@@ -2,187 +2,228 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C924D383C
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Mar 2022 19:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF484D395F
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Mar 2022 20:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235893AbiCIR5h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Mar 2022 12:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S235845AbiCITCU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Mar 2022 14:02:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235405AbiCIR5f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 12:57:35 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2C45FB6
-        for <linux-usb@vger.kernel.org>; Wed,  9 Mar 2022 09:56:35 -0800 (PST)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id AACE83F1D0
-        for <linux-usb@vger.kernel.org>; Wed,  9 Mar 2022 17:56:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646848593;
-        bh=ywWEngNkae6mKxGv+1cfuhQRhz77SMjtBbNBkeG8nw8=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=e5q+qBAXGYAdQHNHhA/QFJAzD5z2psKGXIm50Ao3aoTsjwV3RQNM9Qwptz3epQKFg
-         79werHXY/0RPl7V6XpWIm/NCZoPRS+xdcbkO+RK2sFohhBnmG26KpbZ4Nea6xuDc3k
-         HYRUWT4khxsQewKqgEpmp8PLbfd+oyTxK+x6ZxpP3WF/4Vgx7p5O0/nVN7pQLPgo7O
-         Pi/VSetqSCFTx7TeqnMAU1bvzYlaP8tIeKsH3NunJiq1tQpZttOw6yA43671kIvj6b
-         JszfAqlcXJlBl6IRXLghlHCfPRWozrxPji2EJBZFmr2cp7aYM3tlhhuP8eXyAEuqU2
-         mKRmz3Ur7DjJA==
-Received: by mail-ej1-f72.google.com with SMTP id k16-20020a17090632d000b006ae1cdb0f07so1696981ejk.16
-        for <linux-usb@vger.kernel.org>; Wed, 09 Mar 2022 09:56:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ywWEngNkae6mKxGv+1cfuhQRhz77SMjtBbNBkeG8nw8=;
-        b=ab6JVEoZJ2UCuRJaTtDzu2QPlqdzUnUdk98rxMRnZ2SK3wmDW5B/kZVA8D+qFH3bs4
-         rxRxl69P2QRQQCholNcrJ1l7k38OtqF5Q/EP51iAOFfdH4aWs3s0VyZ2/0YBbW6vTq3B
-         Rzym9O4KuSqpmxBMvBAiaNZruZz+wTHhVjdJIsyjhng+Su5PWaL6+g+wSyB9IPVHPGzJ
-         oj07CYlDPxvmkjyAnfZNc64xJpARHPq6wLP6ItUwdO+5P0t9iO0ECzrYFGHcP2O6Hxyt
-         eDbOPPkxtsx4Oxyy4MNDIIV3Jr/kwWBugWsEq2WkyE3RovoLGkEa3Lqt+338XB4lGqDi
-         igJw==
-X-Gm-Message-State: AOAM532YeIjqmTgSwaMbmgyE/hll/hOorze7fl9bcd1vVFDCcN/yUWkA
-        nqAfS1Bl8nhICg61yzPl585rU6ofolQyrDAF/1FN6S8TQ8OUnBzRMsyET8qefYPa7IU9+hAIjIN
-        WyPwVPPhUB4lYYK1RuZaNLop/y9zU1keACrWkaQ==
-X-Received: by 2002:a17:906:69d1:b0:6ce:7201:ec26 with SMTP id g17-20020a17090669d100b006ce7201ec26mr866304ejs.105.1646848593316;
-        Wed, 09 Mar 2022 09:56:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwN6yRIxH1ByXIFcKPd19wdA/C3x9ZhriHZnykAidYhzyn7sr4M8QeESi5VszJkWH2JSACfjQ==
-X-Received: by 2002:a17:906:69d1:b0:6ce:7201:ec26 with SMTP id g17-20020a17090669d100b006ce7201ec26mr866289ejs.105.1646848593018;
-        Wed, 09 Mar 2022 09:56:33 -0800 (PST)
-Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id h8-20020a50ed88000000b004160630c980sm1095553edr.62.2022.03.09.09.56.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 09:56:32 -0800 (PST)
-Message-ID: <6867439a-b995-86e7-6136-bcb8709eeb90@canonical.com>
-Date:   Wed, 9 Mar 2022 18:56:31 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 14/26] usb: gadget: s3c-hsudc: remove usage of list
- iterator past the loop body
-Content-Language: en-US
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Greg Kroah-Hartman <greg@kroah.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        "open list:USB GADGET/PERIPHERAL SUBSYSTEM" 
-        <linux-usb@vger.kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-References: <20220308171818.384491-1-jakobkoschel@gmail.com>
- <20220308171818.384491-15-jakobkoschel@gmail.com>
- <a3fb72da-a9e3-04af-fa19-62765bf81c2b@canonical.com>
- <B269AAED-135D-4EAB-AA7C-26219581FB40@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <B269AAED-135D-4EAB-AA7C-26219581FB40@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230261AbiCITCS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 14:02:18 -0500
+Received: from so254-9.mailgun.net (so254-9.mailgun.net [198.61.254.9])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 8963AE2343
+        for <linux-usb@vger.kernel.org>; Wed,  9 Mar 2022 11:01:19 -0800 (PST)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1646852479; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: From: From: References: Cc: To: To: Subject: Subject:
+ MIME-Version: Date: Message-ID: Sender: Sender;
+ bh=8C+xvbuy9RSAyuvBy0Tm2WB0XWQS+wESHMb9s4mczek=; b=jwJgT9q/FjszCZkynYwKJZQ43AVCy8WCi2Sk2dcEVVihyrRSisSJlTrzibbr25oO1cA4g+22
+ 86rsdu6AtiBICiiNOFDUuD+TqZkNXa8D8xx9bq8Nxl/rsC67WLl5lmlyFuxMQQu6BcMSRO+w
+ fTLn4olMNG91ZlVL9HXGPwFLpK8=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
+ 6228f97ea1f319ec73aeae5d (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 09 Mar 2022 19:01:18
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 605B1C4360D; Wed,  9 Mar 2022 19:01:17 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+Received: from [192.168.1.17] (cpe-75-80-185-151.san.res.rr.com [75.80.185.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B0D4FC4338F;
+        Wed,  9 Mar 2022 19:01:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org B0D4FC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Message-ID: <d8eb4c9d-3c68-b7f0-2dd6-600a542a64d1@codeaurora.org>
+Date:   Wed, 9 Mar 2022 11:01:14 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] usb: dwc3: gadget: Wait for ep0 xfers to complete during
+ dequeue
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
+        Thinh.Nguyen@synopsys.com
+References: <20220309004148.12061-1-quic_wcheng@quicinc.com>
+ <Yih/tapu/JMRgBqT@kroah.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+In-Reply-To: <Yih/tapu/JMRgBqT@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 09/03/2022 18:36, Jakob Koschel wrote:
-> 
->> On 9. Mar 2022, at 18:25, Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+Hi Greg,
+
+On 3/9/2022 2:21 AM, Greg KH wrote:
+> On Tue, Mar 08, 2022 at 04:41:48PM -0800, Wesley Cheng wrote:
+>> From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 >>
->> On 08/03/2022 18:18, Jakob Koschel wrote:
->>> If the list representing the request queue does not contain the expected
->>> request, the value of the list_for_each_entry() iterator will not point
->>> to a valid structure. To avoid type confusion in such case, the list
->>> iterator scope will be limited to the list_for_each_entry() loop.
->>>
->>> In preparation to limiting scope of the list iterator to the list traversal
->>> loop, use a dedicated pointer to point to the found request object [1].
->>>
->>> Link: https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
->>> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
->>> ---
->>> drivers/usb/gadget/udc/s3c-hsudc.c | 12 +++++++-----
->>> 1 file changed, 7 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/drivers/usb/gadget/udc/s3c-hsudc.c b/drivers/usb/gadget/udc/s3c-hsudc.c
->>> index 89f1f8c9f02e..bf803e013458 100644
->>> --- a/drivers/usb/gadget/udc/s3c-hsudc.c
->>> +++ b/drivers/usb/gadget/udc/s3c-hsudc.c
->>> @@ -877,7 +877,7 @@ static int s3c_hsudc_dequeue(struct usb_ep *_ep, struct usb_request *_req)
->>> {
->>> 	struct s3c_hsudc_ep *hsep = our_ep(_ep);
->>> 	struct s3c_hsudc *hsudc = hsep->dev;
->>> -	struct s3c_hsudc_req *hsreq;
->>> +	struct s3c_hsudc_req *hsreq = NULL, *iter;
->>> 	unsigned long flags;
->>>
->>> 	hsep = our_ep(_ep);
->>> @@ -886,11 +886,13 @@ static int s3c_hsudc_dequeue(struct usb_ep *_ep, struct usb_request *_req)
->>>
->>> 	spin_lock_irqsave(&hsudc->lock, flags);
->>>
->>> -	list_for_each_entry(hsreq, &hsep->queue, queue) {
->>> -		if (&hsreq->req == _req)
->>> -			break;
->>> +	list_for_each_entry(iter, &hsep->queue, queue) {
->>> +		if (&iter->req != _req)
->>> +			continue;
->>> +		hsreq = iter;
->>> +		break;
+>> If the request being dequeued is currently active, then the current
+>> logic is to issue a stop transfer command, and allow the command
+>> completion to cleanup the cancelled list.  The DWC3 controller will
+>> run into an end transfer command timeout if there is an ongoing EP0
+>> transaction.  If this is the case, wait for the EP0 completion event
+>> before proceeding to retry the endxfer command again.
 >>
->> You have in the loop both continue and break, looks a bit complicated.
->> Why not simpler:
+>> Co-developed-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> 
+> 
+> You sent this twice?  What is the differences between the patches?
+> 
+Sorry for sending it twice.  It was a mistake on my end, where I thought
+the patch wasn't getting sent out by our email server, so I sent it out
+several times to check.  Ended up just showing up after 30 mins or so :/.
+> And as you sent it, your signed-off-by needs to be at the end, as per
+> the kernel documentation.
+> 
+I'll fix this.
+>> ---
+>>  Patch discussion below:
+>>    https://lore.kernel.org/linux-usb/1644836933-141376-1-git-send-email-dh10.jung@samsung.com/T/#t
+> 
+> So this is a v2?
+> 
+> 
+This is an entirely different change, but the change was discussed in
+the above thread.
 >>
->> if (&iter->req == _req) {
->> 	hsreq = iter;
->> 	break;
->> }
-> 
-> Ultimately I changed this based on the feedback from Linus
-> (Link: https://lore.kernel.org/linux-kernel/CAHk-=wheru6rEfzC2wuO9k03PRF6s3nhxryCAnwR5bzKwPV2ww@mail.gmail.com/).
-
-Not cleaner to me at all, but it's all personal opinion. :)
-
+>>  drivers/usb/dwc3/core.h   |  2 +-
+>>  drivers/usb/dwc3/ep0.c    | 14 ++++++++++++++
+>>  drivers/usb/dwc3/gadget.c | 13 ++++++++-----
+>>  drivers/usb/dwc3/gadget.h |  1 +
+>>  4 files changed, 24 insertions(+), 6 deletions(-)
 >>
->> ?
->> Less code, typical (expected) code flow when looking for something in
->> the list. Is your approach related to some speculative execution?
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index eb9c1efced05..f557f5f36a7f 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -736,7 +736,7 @@ struct dwc3_ep {
+>>  #define DWC3_EP_FIRST_STREAM_PRIMED	BIT(10)
+>>  #define DWC3_EP_PENDING_CLEAR_STALL	BIT(11)
+>>  #define DWC3_EP_TXFIFO_RESIZED		BIT(12)
+>> -
+>> +#define DWC3_EP_DELAY_STOP             BIT(13)
 > 
-> no relation to speculative execution.
+> Why did you loose the blank line?
 > 
-> I have no preference for one over the other, so I'll just change it to
-> however it is desired.
+I can add that back in.
+
+Thanks
+Wesley Cheng
+
+>>  	/* This last one is specific to EP0 */
+>>  #define DWC3_EP0_DIR_IN			BIT(31)
+>>  
+>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+>> index 658739410992..1064be5518f6 100644
+>> --- a/drivers/usb/dwc3/ep0.c
+>> +++ b/drivers/usb/dwc3/ep0.c
+>> @@ -271,6 +271,7 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
+>>  {
+>>  	struct dwc3_ep			*dep;
+>>  	int				ret;
+>> +	int                             i;
+>>  
+>>  	complete(&dwc->ep0_in_setup);
+>>  
+>> @@ -279,6 +280,19 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
+>>  			DWC3_TRBCTL_CONTROL_SETUP, false);
+>>  	ret = dwc3_ep0_start_trans(dep);
+>>  	WARN_ON(ret < 0);
+>> +	for (i = 2; i < DWC3_ENDPOINTS_NUM; i++) {
+>> +		struct dwc3_ep *dwc3_ep;
+>> +
+>> +		dwc3_ep = dwc->eps[i];
+>> +		if (!dwc3_ep)
+>> +			continue;
+>> +
+>> +		if (!(dwc3_ep->flags & DWC3_EP_DELAY_STOP))
+>> +			continue;
+>> +
+>> +		dwc3_ep->flags &= ~DWC3_EP_DELAY_STOP;
+>> +		dwc3_stop_active_transfer(dwc3_ep, true, true);
+>> +	}
+>>  }
+>>  
+>>  static struct dwc3_ep *dwc3_wIndex_to_dep(struct dwc3 *dwc, __le16 wIndex_le)
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index a0c883f19a41..ccef508b1296 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -654,9 +654,6 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
+>>  	return dwc3_send_gadget_ep_cmd(dep, DWC3_DEPCMD_SETEPCONFIG, &params);
+>>  }
+>>  
+>> -static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+>> -		bool interrupt);
+>> -
+>>  /**
+>>   * dwc3_gadget_calc_tx_fifo_size - calculates the txfifo size value
+>>   * @dwc: pointer to the DWC3 context
+>> @@ -1899,6 +1896,7 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
+>>  	 */
+>>  	if ((dep->flags & DWC3_EP_END_TRANSFER_PENDING) ||
+>>  	    (dep->flags & DWC3_EP_WEDGE) ||
+>> +	    (dep->flags & DWC3_EP_DELAY_STOP) ||
+>>  	    (dep->flags & DWC3_EP_STALL)) {
+>>  		dep->flags |= DWC3_EP_DELAY_START;
+>>  		return 0;
+>> @@ -2033,6 +2031,9 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+>>  		if (r == req) {
+>>  			struct dwc3_request *t;
+>>  
+>> +			if (dwc->ep0state != EP0_SETUP_PHASE && !dwc->delayed_status)
+>> +				dep->flags |= DWC3_EP_DELAY_STOP;
+>> +
+>>  			/* wait until it is processed */
+>>  			dwc3_stop_active_transfer(dep, true, true);
+>>  
+>> @@ -2116,7 +2117,8 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
+>>  		list_for_each_entry_safe(req, tmp, &dep->started_list, list)
+>>  			dwc3_gadget_move_cancelled_request(req, DWC3_REQUEST_STATUS_STALLED);
+>>  
+>> -		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING) {
+>> +		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING ||
+>> +		    (dep->flags & DWC3_EP_DELAY_STOP)) {
+>>  			dep->flags |= DWC3_EP_PENDING_CLEAR_STALL;
+>>  			return 0;
+>>  		}
+>> @@ -3596,7 +3598,7 @@ static void dwc3_reset_gadget(struct dwc3 *dwc)
+>>  	}
+>>  }
+>>  
+>> -static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+>> +void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+>>  	bool interrupt)
 > 
-> It would just be great to have a (somewhat) consistent way so I can prepare
-> the rest of the patch sets accordingly.
+> This is a horrid api (2 booleans?)  But you aren't adding it so I guess
+> we can live with it :(
 > 
+> thanks,
+> 
+> greg k-h
 
-Yeah, I understand. The code itself looks good, so:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-
-Best regards,
-Krzysztof
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
