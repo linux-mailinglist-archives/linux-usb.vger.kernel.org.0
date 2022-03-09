@@ -2,138 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C55F4D2C47
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Mar 2022 10:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C304D2D07
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Mar 2022 11:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiCIJjx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Mar 2022 04:39:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
+        id S230171AbiCIKWy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Mar 2022 05:22:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiCIJjw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 04:39:52 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F8CCEA1D
-        for <linux-usb@vger.kernel.org>; Wed,  9 Mar 2022 01:38:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1646818733; x=1678354733;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=QinkyWkurnA9GYOKnlibFGMhJylaOQgc0rY+P87JEas=;
-  b=a80FnJ0OBa7NnVpR+89TWOJcP91oaQ0bIbCresx0JS6fB249P+/tBjZR
-   +DGFF/RU1ZIPmwQDuKLJUNEBreDylgR71yedo0TsrBjZFjAqAyckJZcGX
-   fz1qEJ174lxdi5XSlCO20pfF5nXII9K/B7Mnf2kAug329Kt7y1fslsHwX
-   JzMxdAtM2WG4RXFjPvGdcGJab0uk8cGKqOfuPGg0Srq6npwV53BZGxDQW
-   nIkJgVZ6YAa5Z2EH5WlcACrbgUGSbWur8vqLebU82If1p2m9/oHgjXF0L
-   qP7vQJLRgCa/XqAwyvxO7eBvjIF5VyIkyj3lzrZuRlr2ZpNgS6fN+OVxF
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,167,1643670000"; 
-   d="scan'208";a="22549039"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 09 Mar 2022 10:38:50 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 09 Mar 2022 10:38:50 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 09 Mar 2022 10:38:50 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1646818730; x=1678354730;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=QinkyWkurnA9GYOKnlibFGMhJylaOQgc0rY+P87JEas=;
-  b=KBtMHdSFCjpm3QSWJJKV8tBNeXt/k4mYcd5Kw+ml9rBNMkzKvw7mBCoe
-   iKEvdBfLaNo9aSSHOrZVNM1Afw5lBKShcVB8TtseXvap2jG1d3fxrEclo
-   lIsyNBGcFCfvCf/cvEFpSLaD9ombugShTl9tct7qRqxQPADiGXQyVMqEx
-   W89IzvYMf4yFWXL3+9OspeFMxyXvQRsJ5YJWfKsbVvxLPXw3ymN/jfqRj
-   ezn+DcA8byuPrgp2XEGxchVyEfYkDxEZxJGzLOjFD9ardx4+3A2qDuPqV
-   AE5vhZ0KDNP/ny+XlV4kZUdNQgFEqTv0bDO5dxBHYPsZUb3fTsuoPaghq
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,167,1643670000"; 
-   d="scan'208";a="22549038"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 09 Mar 2022 10:38:50 +0100
-Received: from steina-w.tq-net.de (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        with ESMTP id S230031AbiCIKWr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 05:22:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4F116FDE8;
+        Wed,  9 Mar 2022 02:21:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 42512280065;
-        Wed,  9 Mar 2022 10:38:50 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 1/1] usb: common: usb-conn-gpio: Make VBUS supply completely optional
-Date:   Wed,  9 Mar 2022 10:38:42 +0100
-Message-Id: <20220309093842.113260-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.25.1
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F43FB81FF7;
+        Wed,  9 Mar 2022 10:21:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C42C340E8;
+        Wed,  9 Mar 2022 10:21:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646821306;
+        bh=Wm6tZYodnJhLaX2LYxO6sDtIEcS/tDhVWe8DN5ggHFE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Nlz1py1GRsjS+umP2V+rm1oqiosy9OL4/vbrcwaaIQoq/8G9FeyK54V8yKPjafEaM
+         2S2+p0gTTETq4b61VteUcVjgkb/VZQWeRG/jRn7AFdv4wdLEsu8zX/mAQeDt7caAN1
+         iUaaHxqIl6xjtMMBhP91Yp3lMEctbv+0aYP0vk5k=
+Date:   Wed, 9 Mar 2022 11:21:41 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
+        Thinh.Nguyen@synopsys.com
+Subject: Re: [PATCH] usb: dwc3: gadget: Wait for ep0 xfers to complete during
+ dequeue
+Message-ID: <Yih/tapu/JMRgBqT@kroah.com>
+References: <20220309004148.12061-1-quic_wcheng@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309004148.12061-1-quic_wcheng@quicinc.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It makes sense that if the USB connector is a child of an USB port
-providing VBUS supply, there is no need to do it again.
-But this does not handle the case where VBUS is controlled by PWR from
-USB host controller, without any regulator at all.
-Support this by making VBUS pure optional.
+On Tue, Mar 08, 2022 at 04:41:48PM -0800, Wesley Cheng wrote:
+> From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> 
+> If the request being dequeued is currently active, then the current
+> logic is to issue a stop transfer command, and allow the command
+> completion to cleanup the cancelled list.  The DWC3 controller will
+> run into an end transfer command timeout if there is an ongoing EP0
+> transaction.  If this is the case, wait for the EP0 completion event
+> before proceeding to retry the endxfer command again.
+> 
+> Co-developed-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
-This is essentially for getting rid of the warnings:
-usb-conn-gpio 38100000.usb:connector: supply vbus not found, using dummy regulator
-on our imx8mp based board. Only an ID pin GPIO is provided, VBUS is controlled
-by USB PWR signal within USB core hardware.
 
- drivers/usb/common/usb-conn-gpio.c | 20 +++-----------------
- 1 file changed, 3 insertions(+), 17 deletions(-)
+You sent this twice?  What is the differences between the patches?
 
-diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-index 0158148cb054..395f9bbe3056 100644
---- a/drivers/usb/common/usb-conn-gpio.c
-+++ b/drivers/usb/common/usb-conn-gpio.c
-@@ -175,7 +175,6 @@ static int usb_conn_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct usb_conn_info *info;
--	bool need_vbus = true;
- 	int ret = 0;
- 
- 	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
-@@ -205,22 +204,9 @@ static int usb_conn_probe(struct platform_device *pdev)
- 
- 	INIT_DELAYED_WORK(&info->dw_det, usb_conn_detect_cable);
- 
--	/*
--	 * If the USB connector is a child of a USB port and that port already provides the VBUS
--	 * supply, there's no need for the USB connector to provide it again.
--	 */
--	if (dev->parent && dev->parent->of_node) {
--		if (of_find_property(dev->parent->of_node, "vbus-supply", NULL))
--			need_vbus = false;
--	}
--
--	if (!need_vbus) {
--		info->vbus = devm_regulator_get_optional(dev, "vbus");
--		if (PTR_ERR(info->vbus) == -ENODEV)
--			info->vbus = NULL;
--	} else {
--		info->vbus = devm_regulator_get(dev, "vbus");
--	}
-+	info->vbus = devm_regulator_get_optional(dev, "vbus");
-+	if (PTR_ERR(info->vbus) == -ENODEV)
-+		info->vbus = NULL;
- 
- 	if (IS_ERR(info->vbus)) {
- 		ret = PTR_ERR(info->vbus);
--- 
-2.25.1
+And as you sent it, your signed-off-by needs to be at the end, as per
+the kernel documentation.
 
+> ---
+>  Patch discussion below:
+>    https://lore.kernel.org/linux-usb/1644836933-141376-1-git-send-email-dh10.jung@samsung.com/T/#t
+
+So this is a v2?
+
+
+> 
+>  drivers/usb/dwc3/core.h   |  2 +-
+>  drivers/usb/dwc3/ep0.c    | 14 ++++++++++++++
+>  drivers/usb/dwc3/gadget.c | 13 ++++++++-----
+>  drivers/usb/dwc3/gadget.h |  1 +
+>  4 files changed, 24 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index eb9c1efced05..f557f5f36a7f 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -736,7 +736,7 @@ struct dwc3_ep {
+>  #define DWC3_EP_FIRST_STREAM_PRIMED	BIT(10)
+>  #define DWC3_EP_PENDING_CLEAR_STALL	BIT(11)
+>  #define DWC3_EP_TXFIFO_RESIZED		BIT(12)
+> -
+> +#define DWC3_EP_DELAY_STOP             BIT(13)
+
+Why did you loose the blank line?
+
+>  	/* This last one is specific to EP0 */
+>  #define DWC3_EP0_DIR_IN			BIT(31)
+>  
+> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+> index 658739410992..1064be5518f6 100644
+> --- a/drivers/usb/dwc3/ep0.c
+> +++ b/drivers/usb/dwc3/ep0.c
+> @@ -271,6 +271,7 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
+>  {
+>  	struct dwc3_ep			*dep;
+>  	int				ret;
+> +	int                             i;
+>  
+>  	complete(&dwc->ep0_in_setup);
+>  
+> @@ -279,6 +280,19 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
+>  			DWC3_TRBCTL_CONTROL_SETUP, false);
+>  	ret = dwc3_ep0_start_trans(dep);
+>  	WARN_ON(ret < 0);
+> +	for (i = 2; i < DWC3_ENDPOINTS_NUM; i++) {
+> +		struct dwc3_ep *dwc3_ep;
+> +
+> +		dwc3_ep = dwc->eps[i];
+> +		if (!dwc3_ep)
+> +			continue;
+> +
+> +		if (!(dwc3_ep->flags & DWC3_EP_DELAY_STOP))
+> +			continue;
+> +
+> +		dwc3_ep->flags &= ~DWC3_EP_DELAY_STOP;
+> +		dwc3_stop_active_transfer(dwc3_ep, true, true);
+> +	}
+>  }
+>  
+>  static struct dwc3_ep *dwc3_wIndex_to_dep(struct dwc3 *dwc, __le16 wIndex_le)
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index a0c883f19a41..ccef508b1296 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -654,9 +654,6 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
+>  	return dwc3_send_gadget_ep_cmd(dep, DWC3_DEPCMD_SETEPCONFIG, &params);
+>  }
+>  
+> -static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+> -		bool interrupt);
+> -
+>  /**
+>   * dwc3_gadget_calc_tx_fifo_size - calculates the txfifo size value
+>   * @dwc: pointer to the DWC3 context
+> @@ -1899,6 +1896,7 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
+>  	 */
+>  	if ((dep->flags & DWC3_EP_END_TRANSFER_PENDING) ||
+>  	    (dep->flags & DWC3_EP_WEDGE) ||
+> +	    (dep->flags & DWC3_EP_DELAY_STOP) ||
+>  	    (dep->flags & DWC3_EP_STALL)) {
+>  		dep->flags |= DWC3_EP_DELAY_START;
+>  		return 0;
+> @@ -2033,6 +2031,9 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+>  		if (r == req) {
+>  			struct dwc3_request *t;
+>  
+> +			if (dwc->ep0state != EP0_SETUP_PHASE && !dwc->delayed_status)
+> +				dep->flags |= DWC3_EP_DELAY_STOP;
+> +
+>  			/* wait until it is processed */
+>  			dwc3_stop_active_transfer(dep, true, true);
+>  
+> @@ -2116,7 +2117,8 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
+>  		list_for_each_entry_safe(req, tmp, &dep->started_list, list)
+>  			dwc3_gadget_move_cancelled_request(req, DWC3_REQUEST_STATUS_STALLED);
+>  
+> -		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING) {
+> +		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING ||
+> +		    (dep->flags & DWC3_EP_DELAY_STOP)) {
+>  			dep->flags |= DWC3_EP_PENDING_CLEAR_STALL;
+>  			return 0;
+>  		}
+> @@ -3596,7 +3598,7 @@ static void dwc3_reset_gadget(struct dwc3 *dwc)
+>  	}
+>  }
+>  
+> -static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+> +void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+>  	bool interrupt)
+
+This is a horrid api (2 booleans?)  But you aren't adding it so I guess
+we can live with it :(
+
+thanks,
+
+greg k-h
