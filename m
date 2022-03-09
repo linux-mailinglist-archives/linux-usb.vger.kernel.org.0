@@ -2,168 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFDC4D2BDB
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Mar 2022 10:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C55F4D2C47
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Mar 2022 10:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbiCIJ2q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Mar 2022 04:28:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47426 "EHLO
+        id S230075AbiCIJjx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Mar 2022 04:39:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiCIJ2q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 04:28:46 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A977B7F8;
-        Wed,  9 Mar 2022 01:27:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646818067; x=1678354067;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=40lu8G3vNf9s+cmlvZJzsGvJxZvLDzsgHboDdo7NC/c=;
-  b=SuBp23e5I3jqIcxV6DksKN4WVZJ7cpUcIYFBVIJfSvG+G+ycNf/mpA5O
-   UHY3IsYok0AsTF7mYsMra/8PxvBDKIxLy71PW89y7yfvkAsUc3w7na/Ud
-   5fypjU1VLxMIiD4HmNgdZfTxzq8jZ4PKrvmuMUG/HmnaP2yUh0gqLPSQZ
-   2oPlK4eCDXJxTn6lbW5TAZ69i1zrpqB1IB9qJxFdQ0YGmTfza/YxhMeBd
-   a5wmSZVHJwhw4C9357KrF0K78fqfaKzlRBaE2nWgt9JcPmdAOXhRKY6t0
-   WQilPja02F2ZD4ih5jM2QWnK+WSov3vDqQ0zBMhgYdnKKpV3FixHdwPUD
+        with ESMTP id S229947AbiCIJjw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 04:39:52 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F8CCEA1D
+        for <linux-usb@vger.kernel.org>; Wed,  9 Mar 2022 01:38:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1646818733; x=1678354733;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QinkyWkurnA9GYOKnlibFGMhJylaOQgc0rY+P87JEas=;
+  b=a80FnJ0OBa7NnVpR+89TWOJcP91oaQ0bIbCresx0JS6fB249P+/tBjZR
+   +DGFF/RU1ZIPmwQDuKLJUNEBreDylgR71yedo0TsrBjZFjAqAyckJZcGX
+   fz1qEJ174lxdi5XSlCO20pfF5nXII9K/B7Mnf2kAug329Kt7y1fslsHwX
+   JzMxdAtM2WG4RXFjPvGdcGJab0uk8cGKqOfuPGg0Srq6npwV53BZGxDQW
+   nIkJgVZ6YAa5Z2EH5WlcACrbgUGSbWur8vqLebU82If1p2m9/oHgjXF0L
+   qP7vQJLRgCa/XqAwyvxO7eBvjIF5VyIkyj3lzrZuRlr2ZpNgS6fN+OVxF
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="255121270"
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="255121270"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 01:27:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="578322963"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 09 Mar 2022 01:27:44 -0800
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     mathias.nyman@intel.com, kernel@puri.sm, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220304113057.1477958-1-martin.kepplinger@puri.sm>
- <YiIfZFPl9ZqPBKvj@kroah.com>
- <835b3990-43a6-a985-81b4-b86bddfe951f@linux.intel.com>
- <2d439eec0548361669bcc7b4de5b2c0e966d4d62.camel@puri.sm>
- <efd900656e15eac9169ee597ab7c19986c15277c.camel@puri.sm>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] usb: xhci: make XHCI_STOP_EP_CMD_TIMEOUT a module
- parameter
-Message-ID: <60227688-4435-516d-2525-b31fabbef273@linux.intel.com>
-Date:   Wed, 9 Mar 2022 11:29:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+X-IronPort-AV: E=Sophos;i="5.90,167,1643670000"; 
+   d="scan'208";a="22549039"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 09 Mar 2022 10:38:50 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 09 Mar 2022 10:38:50 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 09 Mar 2022 10:38:50 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1646818730; x=1678354730;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QinkyWkurnA9GYOKnlibFGMhJylaOQgc0rY+P87JEas=;
+  b=KBtMHdSFCjpm3QSWJJKV8tBNeXt/k4mYcd5Kw+ml9rBNMkzKvw7mBCoe
+   iKEvdBfLaNo9aSSHOrZVNM1Afw5lBKShcVB8TtseXvap2jG1d3fxrEclo
+   lIsyNBGcFCfvCf/cvEFpSLaD9ombugShTl9tct7qRqxQPADiGXQyVMqEx
+   W89IzvYMf4yFWXL3+9OspeFMxyXvQRsJ5YJWfKsbVvxLPXw3ymN/jfqRj
+   ezn+DcA8byuPrgp2XEGxchVyEfYkDxEZxJGzLOjFD9ardx4+3A2qDuPqV
+   AE5vhZ0KDNP/ny+XlV4kZUdNQgFEqTv0bDO5dxBHYPsZUb3fTsuoPaghq
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,167,1643670000"; 
+   d="scan'208";a="22549038"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 09 Mar 2022 10:38:50 +0100
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 42512280065;
+        Wed,  9 Mar 2022 10:38:50 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 1/1] usb: common: usb-conn-gpio: Make VBUS supply completely optional
+Date:   Wed,  9 Mar 2022 10:38:42 +0100
+Message-Id: <20220309093842.113260-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <efd900656e15eac9169ee597ab7c19986c15277c.camel@puri.sm>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9.3.2022 9.56, Martin Kepplinger wrote:
-> Am Dienstag, dem 08.03.2022 um 17:17 +0100 schrieb Martin Kepplinger:
->> Am Montag, dem 07.03.2022 um 10:49 +0200 schrieb Mathias Nyman:
->>> On 4.3.2022 16.17, Greg KH wrote:
->>>> On Fri, Mar 04, 2022 at 12:30:57PM +0100, Martin Kepplinger
->>>> wrote:
->>>>> On the Librem 5 imx8mq system we've seen the stop endpoint
->>>>> command
->>>>> time out regularly which results in the hub dying.
->>>>>
->>>>> While on the one hand we see "Port resume timed out, port 1-1:
->>>>> 0xfe3"
->>>>> before this and on the other hand driver-comments suggest that
->>>>> the driver
->>>>> might be able to recover instead of dying here, Sarah seemed to
->>>>> have a
->>>>> workaround for this particulator problem in mind already:
->>>>>
->>>>> Make it a module parameter. So while it might not be the root
->>>>> cause for
->>>>> the problem, do this to give users a workaround.
->>>>
->>>> This is not the 1990's, sorry, please do not add new module
->>>> parameters.
->>>> They modify code, when you want to modify an individual device.
->>>>
->>>
->>> Agree, I think we really need to find the rootcause here.
->>>
->>> There's a known problem with this stop endpoint timeout timer.
->>>
->>> For all other commands we start the timer when the controller
->>> starts
->>> processing the
->>> command, but the stop endpoint timer is started immediately when
->>> command is queued.
->>> So it might timeout if some other commend before it failed.
->>>
->>> I have a patchseries for this. It's still work in progress but
->>> should
->>> be testable.
->>> Pushed to a branch named stop_endpoint_fixes
->>>
->>> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git
->>> stop_endpoint_fixes
->>> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=stop_endpoint_fixes
->>>
->>> Can you try it out and see if it helps?
->>>
->>
->> thanks a lot Mathias, I'm running these now. The timeout has not been
->> easy to reproduce (or I'm just lazy) but in a few days I should be
->> able
->> to tell whether that helps.
->>
->> So this thread has been about
->>
->> [14145.960512] xhci-hcd xhci-hcd.4.auto: Port resume timed out, port
->> 1-
->> 1: 0xfe3
->> [14156.308511] xhci-hcd xhci-hcd.4.auto: xHCI host not responding to
->> stop endpoint command.
->>
->> that I previously tried to work around by increasing
->> XHCI_MAX_REXIT_TIMEOUT_MS and XHCI_STOP_EP_CMD_TIMEOUT.
->>
->>
->> These patches can't help with the following, right?
->> readl_poll_timeout_atomic() with a fixed timeout is called in this
->> case:
->>
->> xhci-hcd xhci-hcd.4.auto: Abort failed to stop command ring: -110
->>
->> I see that too from time to time. It results in the HC dying as well.
->>
->> thanks,
->>                               martin
->>
-> 
-> hi Mathias,
-> 
-> I already saw "Port resume timed out" and the HC dying running your
-> patches. I append the logs.
-> 
-> So for now I saw more success with increasing
-> XHCI_MAX_REXIT_TIMEOUT_MS.
-> 
+It makes sense that if the USB connector is a child of an USB port
+providing VBUS supply, there is no need to do it again.
+But this does not handle the case where VBUS is controlled by PWR from
+USB host controller, without any regulator at all.
+Support this by making VBUS pure optional.
 
-XHCI_MAX_REXIT_TIMEOUT_MS is only 20ms, that we can probably change.
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+This is essentially for getting rid of the warnings:
+usb-conn-gpio 38100000.usb:connector: supply vbus not found, using dummy regulator
+on our imx8mp based board. Only an ID pin GPIO is provided, VBUS is controlled
+by USB PWR signal within USB core hardware.
 
-Is 40ms enough?
+ drivers/usb/common/usb-conn-gpio.c | 20 +++-----------------
+ 1 file changed, 3 insertions(+), 17 deletions(-)
 
-"Port resume timed out, port 1-1: 0xfe3" means port link state is still in
-resume even if we asked link to go to U0 20ms ago.
+diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
+index 0158148cb054..395f9bbe3056 100644
+--- a/drivers/usb/common/usb-conn-gpio.c
++++ b/drivers/usb/common/usb-conn-gpio.c
+@@ -175,7 +175,6 @@ static int usb_conn_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct usb_conn_info *info;
+-	bool need_vbus = true;
+ 	int ret = 0;
+ 
+ 	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
+@@ -205,22 +204,9 @@ static int usb_conn_probe(struct platform_device *pdev)
+ 
+ 	INIT_DELAYED_WORK(&info->dw_det, usb_conn_detect_cable);
+ 
+-	/*
+-	 * If the USB connector is a child of a USB port and that port already provides the VBUS
+-	 * supply, there's no need for the USB connector to provide it again.
+-	 */
+-	if (dev->parent && dev->parent->of_node) {
+-		if (of_find_property(dev->parent->of_node, "vbus-supply", NULL))
+-			need_vbus = false;
+-	}
+-
+-	if (!need_vbus) {
+-		info->vbus = devm_regulator_get_optional(dev, "vbus");
+-		if (PTR_ERR(info->vbus) == -ENODEV)
+-			info->vbus = NULL;
+-	} else {
+-		info->vbus = devm_regulator_get(dev, "vbus");
+-	}
++	info->vbus = devm_regulator_get_optional(dev, "vbus");
++	if (PTR_ERR(info->vbus) == -ENODEV)
++		info->vbus = NULL;
+ 
+ 	if (IS_ERR(info->vbus)) {
+ 		ret = PTR_ERR(info->vbus);
+-- 
+2.25.1
 
-Maybe this hw combination just resumes slowly.
-
-Thanks
-Mathias
