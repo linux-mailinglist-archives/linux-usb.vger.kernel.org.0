@@ -2,54 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 030054D3DA7
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Mar 2022 00:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1B14D3DC5
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Mar 2022 00:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236041AbiCIXlr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Mar 2022 18:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
+        id S230035AbiCIXz1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Mar 2022 18:55:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiCIXlp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 18:41:45 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9C6A2504
-        for <linux-usb@vger.kernel.org>; Wed,  9 Mar 2022 15:40:45 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nS5v8-00064Q-RA; Thu, 10 Mar 2022 00:40:42 +0100
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nS5v5-0000c3-13; Thu, 10 Mar 2022 00:40:39 +0100
-Date:   Thu, 10 Mar 2022 00:40:38 +0100
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH] usb: dwc3: gadget: Give some time to schedule isoc
-Message-ID: <20220309234038.GA28594@pengutronix.de>
-References: <deb8146b8e1f7f8495ef2d5647017270934cb2d8.1646708142.git.Thinh.Nguyen@synopsys.com>
+        with ESMTP id S229970AbiCIXz0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 18:55:26 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E1812223A
+        for <linux-usb@vger.kernel.org>; Wed,  9 Mar 2022 15:54:25 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id g16-20020a05660203d000b005f7b3b0642eso2723464iov.16
+        for <linux-usb@vger.kernel.org>; Wed, 09 Mar 2022 15:54:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=FZKkfb+B9Ye8SW4sgOk+aViFCG1Zd9t6idiFkhiqLKA=;
+        b=szZCnoiRlIVgvNb1QzHdS5cyJ9cuwDMcU6Q1VkMxlPvQERNKiQEYGMKWRdEfICdwLk
+         s5hKcjoQBUbGTK5EWuRzDW1qDhnhkvR5SY8k8ZroJzyEsNUwetjgkHNz20Gtx5Yo9vfW
+         geE6NTUKAzKNquUMa8TdKEuLWssyK839gFXTKGa66WqwWLva4ZJva0Qy2pqo1C0lFPTL
+         fNhtePDgsKjLGXucAvNRyNBg6KpKOhkC5msE09TXwafQ8A9orvrjtMcqSiG3s70lM9w2
+         p5n2R7iYMhZKH5RiGHZmYX3tTjUWNIX6o/ZvoC3i3iWXvKeZqw4rDcau9FKd3s/UKRzN
+         KJyw==
+X-Gm-Message-State: AOAM531erihUwtgGCl0WR7P5fY+YGU4ONiN4WlfyhgJHkFMYwi8lgfIx
+        A4jf26ZzNcAJ/U96AtoNjs2gfX30QAq1jDWc2kOxnVvPdEwy
+X-Google-Smtp-Source: ABdhPJyVHy/khyyLSyf05JTis72no6NvtkZogjvY6QKKugmN/bv16pOOktXDBrhtnfxHZvR7dvaajtm3yJlsPwJXk3Ttq0pln574
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="OgqxwSJOaUobr8KG"
-Content-Disposition: inline
-In-Reply-To: <deb8146b8e1f7f8495ef2d5647017270934cb2d8.1646708142.git.Thinh.Nguyen@synopsys.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 00:38:45 up 89 days,  8:24, 76 users,  load average: 0.08, 0.08,
- 0.06
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:7513:0:b0:2b9:5b61:e376 with SMTP id
+ q19-20020a927513000000b002b95b61e376mr1558659ilc.193.1646870064861; Wed, 09
+ Mar 2022 15:54:24 -0800 (PST)
+Date:   Wed, 09 Mar 2022 15:54:24 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000351b8605d9d1d1bf@google.com>
+Subject: [syzbot] memory leak in usb_get_configuration
+From:   syzbot <syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, pavel.hofman@ivitera.com,
+        rob@robgreener.com, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,81 +54,72 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello,
 
---OgqxwSJOaUobr8KG
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-On Mon, Mar 07, 2022 at 06:59:56PM -0800, Thinh Nguyen wrote:
->Currently the driver will schedule isoc transfers immediately on the
->next interval, which is quite aggressive when the interval is 125us.
->There's report that some platforms may need more time to process the
->transfer, otherwise the controller may miss the first interval. Let's
->keep it simple and give the controller at least 500us to schedule the
->isoc transfer.
->
->Link: https://lore.kernel.org/linux-usb/20220302143539.GI11577@pengutronix=
-=2Ede/
->Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+HEAD commit:    0014404f9c18 Merge branch 'akpm' (patches from Andrew)
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15864216700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3f0a704147ec8e32
+dashboard link: https://syzkaller.appspot.com/bug?extid=f0fae482604e6d9a87c9
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a63dbe700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e150a1700000
 
-Tested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com
 
->---
-> drivers/usb/dwc3/gadget.c | 8 +++++++-
-> 1 file changed, 7 insertions(+), 1 deletion(-)
->
->diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->index a0c883f19a41..eb88ef5dd16f 100644
->--- a/drivers/usb/dwc3/gadget.c
->+++ b/drivers/usb/dwc3/gadget.c
->@@ -1830,7 +1830,13 @@ static int __dwc3_gadget_start_isoc(struct dwc3_ep =
-*dep)
-> 	}
->
-> 	for (i =3D 0; i < DWC3_ISOC_MAX_RETRIES; i++) {
->-		dep->frame_number =3D DWC3_ALIGN_FRAME(dep, i + 1);
->+		int future_interval =3D i + 1;
->+
->+		/* Give the controller at least 500us to schedule transfers */
->+		if (desc->bInterval < 3)
->+			future_interval +=3D 3 - desc->bInterval;
->+
->+		dep->frame_number =3D DWC3_ALIGN_FRAME(dep, future_interval);
->
-> 		ret =3D __dwc3_gadget_kick_transfer(dep);
-> 		if (ret !=3D -EAGAIN)
->
->base-commit: 98d107b84614a1c6b0b8009feae49c5fb0ef4758
->--=20
->2.28.0
->
->
+BUG: memory leak
+unreferenced object 0xffff88810c0289e0 (size 32):
+  comm "kworker/1:2", pid 139, jiffies 4294947862 (age 15.910s)
+  hex dump (first 32 bytes):
+    09 02 12 00 01 00 00 00 00 09 04 00 00 00 d0 bb  ................
+    3a 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  :...............
+  backtrace:
+    [<ffffffff82c98127>] kmalloc include/linux/slab.h:586 [inline]
+    [<ffffffff82c98127>] usb_get_configuration+0x1c7/0x1cd0 drivers/usb/core/config.c:919
+    [<ffffffff82c863f9>] usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
+    [<ffffffff82c863f9>] usb_new_device+0x1a9/0x2e0 drivers/usb/core/hub.c:2536
+    [<ffffffff82c88ea4>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
+    [<ffffffff82c88ea4>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+    [<ffffffff82c88ea4>] port_event drivers/usb/core/hub.c:5660 [inline]
+    [<ffffffff82c88ea4>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
+    [<ffffffff8126a41f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
+    [<ffffffff8126ad49>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
+    [<ffffffff81274705>] kthread+0x125/0x160 kernel/kthread.c:377
+    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+BUG: memory leak
+unreferenced object 0xffff88810a600f40 (size 64):
+  comm "kworker/1:2", pid 139, jiffies 4294947866 (age 15.870s)
+  hex dump (first 32 bytes):
+    01 00 00 00 01 00 00 00 09 04 00 00 00 d0 bb 3a  ...............:
+    00 00 00 00 00 00 00 00 f2 89 02 0c 81 88 ff ff  ................
+  backtrace:
+    [<ffffffff82c9871d>] kmalloc include/linux/slab.h:586 [inline]
+    [<ffffffff82c9871d>] kzalloc include/linux/slab.h:714 [inline]
+    [<ffffffff82c9871d>] usb_parse_configuration drivers/usb/core/config.c:772 [inline]
+    [<ffffffff82c9871d>] usb_get_configuration+0x7bd/0x1cd0 drivers/usb/core/config.c:944
+    [<ffffffff82c863f9>] usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
+    [<ffffffff82c863f9>] usb_new_device+0x1a9/0x2e0 drivers/usb/core/hub.c:2536
+    [<ffffffff82c88ea4>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
+    [<ffffffff82c88ea4>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+    [<ffffffff82c88ea4>] port_event drivers/usb/core/hub.c:5660 [inline]
+    [<ffffffff82c88ea4>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
+    [<ffffffff8126a41f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
+    [<ffffffff8126ad49>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
+    [<ffffffff81274705>] kthread+0x125/0x160 kernel/kthread.c:377
+    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
 
---OgqxwSJOaUobr8KG
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmIpOvMACgkQC+njFXoe
-LGTqMg/+LhlwJuFwERQ3iClbw2GAwICiWqymUm+8KmFymT5GqPLHOzXDbNeGMPVf
-feuOqqDJwwZoQIwdMrA74buaeBzz6GEzd0Ikdpbyqij2pkYeSmwbICNbSO+oB+w3
-P65OOKLFxP7EITNwSmRALy1KD/Pw+YlZhXyU0O2Pit6exC8zGUr6+H2EK3yZ19dF
-koEq7EYcpRRIKoQV3ei3ERQak1Gcb89LyuU3Fwi9B6e/ZqObU4o90jkBg5sgAdiE
-VS0Wuur1+deM52gIM+jE2xhnXml9glTiNkO9eVK8DJ72ps+zWfJOQaMtq8B3CheW
-FsxNAEfBSG81URRmzFUWNaLw/MwQ0dEkX5Fj54rHNG67Kn9B6aMbhz6eGnhniYFS
-qd8IsMP8aG4U8dGhDH0xgJFKVfIJiQJsG9HwKrH6+P3qz1DxbungMhucumKUg/zw
-IxqKPStLMrzzx5M67ElHQVFBM3SNL4SCBzAbSJ7ZDNZsJSEPM7BH5HY1uGMVXQti
-k3bS9JrwjcXJDhKNP216yXRN/i/8uDEb68NXxTTs1blifw2b0jh/oTBf8iKHIpdc
-xN9NqYpvwnRIf8K7KHRupcdEw/UbNA3idKhVYr52eNO9LW3cenRbPd5CVKk+8NTJ
-Q8KbHiIRtd7VJMROTQi/MBBFNHM+HgzSaJbZllKo5aGmp0I3m4U=
-=aDQN
------END PGP SIGNATURE-----
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---OgqxwSJOaUobr8KG--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
