@@ -2,229 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B444D3B6D
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Mar 2022 21:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 030054D3DA7
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Mar 2022 00:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236111AbiCIUzQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Mar 2022 15:55:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
+        id S236041AbiCIXlr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Mar 2022 18:41:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235059AbiCIUzP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 15:55:15 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFD3EA743;
-        Wed,  9 Mar 2022 12:54:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646859255; x=1678395255;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/1Uy0HusF/qCAMDQY4I/Zn9aPVqrSxW/m9P8fu4Texo=;
-  b=jKNT9NGNaGZhivHNdx6vZnm1shU/Z3zrgGtfuDj+rzUiw9PBPoyq28qQ
-   LsxzGOgU21qw9CdoSjsLC70/3EZVNjwk5Fv3/6ByYZKh45gecE0+zDBzy
-   Vh90hSFaBVk+NAwEwoBuc2AX8/jO9s68zD+O05AeWxUTKldhUY6kp9wrJ
-   8=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Mar 2022 12:54:14 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 12:54:14 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 9 Mar 2022 12:54:14 -0800
-Received: from wcheng-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 9 Mar 2022 12:54:13 -0800
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_jackp@quicinc.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "Wesley Cheng" <quic_wcheng@quicinc.com>
-Subject: [PATCH v2] usb: dwc3: gadget: Wait for ep0 xfers to complete during dequeue
-Date:   Wed, 9 Mar 2022 12:54:02 -0800
-Message-ID: <20220309205402.4467-1-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.33.1
+        with ESMTP id S229680AbiCIXlp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 18:41:45 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9C6A2504
+        for <linux-usb@vger.kernel.org>; Wed,  9 Mar 2022 15:40:45 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1nS5v8-00064Q-RA; Thu, 10 Mar 2022 00:40:42 +0100
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1nS5v5-0000c3-13; Thu, 10 Mar 2022 00:40:39 +0100
+Date:   Thu, 10 Mar 2022 00:40:38 +0100
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH] usb: dwc3: gadget: Give some time to schedule isoc
+Message-ID: <20220309234038.GA28594@pengutronix.de>
+References: <deb8146b8e1f7f8495ef2d5647017270934cb2d8.1646708142.git.Thinh.Nguyen@synopsys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="OgqxwSJOaUobr8KG"
+Content-Disposition: inline
+In-Reply-To: <deb8146b8e1f7f8495ef2d5647017270934cb2d8.1646708142.git.Thinh.Nguyen@synopsys.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 00:38:45 up 89 days,  8:24, 76 users,  load average: 0.08, 0.08,
+ 0.06
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
-If a Setup packet is received but yet to DMA out, the controller will
-not process the End Transfer command of any endpoint. Polling of its
-DEPCMD.CmdAct may block setting up TRB for Setup packet, causing a
-command timeout.
+--OgqxwSJOaUobr8KG
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This may occur if the driver doesn’t service the completion interrupt of
-the control status stage yet due to system latency, then it won’t
-prepare TRB and start the transfer for the next Setup Stage. To the host
-side, the control transfer had completed, and the host can send a new
-Setup packet at this point.
+On Mon, Mar 07, 2022 at 06:59:56PM -0800, Thinh Nguyen wrote:
+>Currently the driver will schedule isoc transfers immediately on the
+>next interval, which is quite aggressive when the interval is 125us.
+>There's report that some platforms may need more time to process the
+>transfer, otherwise the controller may miss the first interval. Let's
+>keep it simple and give the controller at least 500us to schedule the
+>isoc transfer.
+>
+>Link: https://lore.kernel.org/linux-usb/20220302143539.GI11577@pengutronix=
+=2Ede/
+>Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
-In the meanwhile, if the driver receives an async call to dequeue a
-request (triggering End Transfer) to any endpoint, then the driver will
-service that End transfer first, blocking the control status stage
-completion handler. Since no TRB is available for the Setup stage, the
-Setup packet can’t be DMA’ed out and the End Transfer gets hung.
+Tested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-The driver must not block setting up of the Setup stage. So track and
-only issue the End Transfer command only when there’s Setup TRB prepared
-so that the controller can DMA out the Setup packet. Delay the End
-transfer command if there's no Setup TRB available. This is applicable to
-all DWC_usb3x IPs.
+>---
+> drivers/usb/dwc3/gadget.c | 8 +++++++-
+> 1 file changed, 7 insertions(+), 1 deletion(-)
+>
+>diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>index a0c883f19a41..eb88ef5dd16f 100644
+>--- a/drivers/usb/dwc3/gadget.c
+>+++ b/drivers/usb/dwc3/gadget.c
+>@@ -1830,7 +1830,13 @@ static int __dwc3_gadget_start_isoc(struct dwc3_ep =
+*dep)
+> 	}
+>
+> 	for (i =3D 0; i < DWC3_ISOC_MAX_RETRIES; i++) {
+>-		dep->frame_number =3D DWC3_ALIGN_FRAME(dep, i + 1);
+>+		int future_interval =3D i + 1;
+>+
+>+		/* Give the controller at least 500us to schedule transfers */
+>+		if (desc->bInterval < 3)
+>+			future_interval +=3D 3 - desc->bInterval;
+>+
+>+		dep->frame_number =3D DWC3_ALIGN_FRAME(dep, future_interval);
+>
+> 		ret =3D __dwc3_gadget_kick_transfer(dep);
+> 		if (ret !=3D -EAGAIN)
+>
+>base-commit: 98d107b84614a1c6b0b8009feae49c5fb0ef4758
+>--=20
+>2.28.0
+>
+>
 
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Co-developed-by: Wesley Cheng <quic_wcheng@quicinc.com>
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- Changes in v2:
-   - Updated commit message with further details about the symptom
-     observed and how the patch addresses it.
-   - Fixed placement of commit sign-off tags.
-   - Added some comments to the changes to explain the issue details.
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
- Patch discussion below:
-   https://lore.kernel.org/linux-usb/1644836933-141376-1-git-send-email-dh10.jung@samsung.com/T/#t
+--OgqxwSJOaUobr8KG
+Content-Type: application/pgp-signature; name="signature.asc"
 
- drivers/usb/dwc3/core.h   |  1 +
- drivers/usb/dwc3/ep0.c    | 14 ++++++++++++++
- drivers/usb/dwc3/gadget.c | 20 +++++++++++++++-----
- drivers/usb/dwc3/gadget.h |  1 +
- 4 files changed, 31 insertions(+), 5 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index eb9c1efced05..52050e7fb46b 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -736,6 +736,7 @@ struct dwc3_ep {
- #define DWC3_EP_FIRST_STREAM_PRIMED	BIT(10)
- #define DWC3_EP_PENDING_CLEAR_STALL	BIT(11)
- #define DWC3_EP_TXFIFO_RESIZED		BIT(12)
-+#define DWC3_EP_DELAY_STOP             BIT(13)
- 
- 	/* This last one is specific to EP0 */
- #define DWC3_EP0_DIR_IN			BIT(31)
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index 658739410992..1064be5518f6 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -271,6 +271,7 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
- {
- 	struct dwc3_ep			*dep;
- 	int				ret;
-+	int                             i;
- 
- 	complete(&dwc->ep0_in_setup);
- 
-@@ -279,6 +280,19 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
- 			DWC3_TRBCTL_CONTROL_SETUP, false);
- 	ret = dwc3_ep0_start_trans(dep);
- 	WARN_ON(ret < 0);
-+	for (i = 2; i < DWC3_ENDPOINTS_NUM; i++) {
-+		struct dwc3_ep *dwc3_ep;
-+
-+		dwc3_ep = dwc->eps[i];
-+		if (!dwc3_ep)
-+			continue;
-+
-+		if (!(dwc3_ep->flags & DWC3_EP_DELAY_STOP))
-+			continue;
-+
-+		dwc3_ep->flags &= ~DWC3_EP_DELAY_STOP;
-+		dwc3_stop_active_transfer(dwc3_ep, true, true);
-+	}
- }
- 
- static struct dwc3_ep *dwc3_wIndex_to_dep(struct dwc3 *dwc, __le16 wIndex_le)
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index a0c883f19a41..9840f0bb7795 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -654,9 +654,6 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
- 	return dwc3_send_gadget_ep_cmd(dep, DWC3_DEPCMD_SETEPCONFIG, &params);
- }
- 
--static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
--		bool interrupt);
--
- /**
-  * dwc3_gadget_calc_tx_fifo_size - calculates the txfifo size value
-  * @dwc: pointer to the DWC3 context
-@@ -1899,6 +1896,7 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
- 	 */
- 	if ((dep->flags & DWC3_EP_END_TRANSFER_PENDING) ||
- 	    (dep->flags & DWC3_EP_WEDGE) ||
-+	    (dep->flags & DWC3_EP_DELAY_STOP) ||
- 	    (dep->flags & DWC3_EP_STALL)) {
- 		dep->flags |= DWC3_EP_DELAY_START;
- 		return 0;
-@@ -2033,6 +2031,16 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
- 		if (r == req) {
- 			struct dwc3_request *t;
- 
-+			/*
-+			 * If a Setup packet is received but yet to DMA out, the controller will
-+			 * not process the End Transfer command of any endpoint. Polling of its
-+			 * DEPCMD.CmdAct may block setting up TRB for Setup packet, causing a
-+			 * timeout. Delay issuing the End Transfer command until the Setup TRB is
-+			 * prepared.
-+			 */
-+			if (dwc->ep0state != EP0_SETUP_PHASE && !dwc->delayed_status)
-+				dep->flags |= DWC3_EP_DELAY_STOP;
-+
- 			/* wait until it is processed */
- 			dwc3_stop_active_transfer(dep, true, true);
- 
-@@ -2116,7 +2124,8 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
- 		list_for_each_entry_safe(req, tmp, &dep->started_list, list)
- 			dwc3_gadget_move_cancelled_request(req, DWC3_REQUEST_STATUS_STALLED);
- 
--		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING) {
-+		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING ||
-+		    (dep->flags & DWC3_EP_DELAY_STOP)) {
- 			dep->flags |= DWC3_EP_PENDING_CLEAR_STALL;
- 			return 0;
- 		}
-@@ -3596,7 +3605,7 @@ static void dwc3_reset_gadget(struct dwc3 *dwc)
- 	}
- }
- 
--static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
-+void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
- 	bool interrupt)
- {
- 	struct dwc3_gadget_ep_cmd_params params;
-@@ -3604,6 +3613,7 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
- 	int ret;
- 
- 	if (!(dep->flags & DWC3_EP_TRANSFER_STARTED) ||
-+	    (dep->flags & DWC3_EP_DELAY_STOP) ||
- 	    (dep->flags & DWC3_EP_END_TRANSFER_PENDING))
- 		return;
- 
-diff --git a/drivers/usb/dwc3/gadget.h b/drivers/usb/dwc3/gadget.h
-index 77df4b6d6c13..f763380e672e 100644
---- a/drivers/usb/dwc3/gadget.h
-+++ b/drivers/usb/dwc3/gadget.h
-@@ -116,6 +116,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
- 		gfp_t gfp_flags);
- int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol);
- void dwc3_ep0_send_delayed_status(struct dwc3 *dwc);
-+void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool interrupt);
- 
- /**
-  * dwc3_gadget_ep_get_transfer_index - Gets transfer index from HW
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmIpOvMACgkQC+njFXoe
+LGTqMg/+LhlwJuFwERQ3iClbw2GAwICiWqymUm+8KmFymT5GqPLHOzXDbNeGMPVf
+feuOqqDJwwZoQIwdMrA74buaeBzz6GEzd0Ikdpbyqij2pkYeSmwbICNbSO+oB+w3
+P65OOKLFxP7EITNwSmRALy1KD/Pw+YlZhXyU0O2Pit6exC8zGUr6+H2EK3yZ19dF
+koEq7EYcpRRIKoQV3ei3ERQak1Gcb89LyuU3Fwi9B6e/ZqObU4o90jkBg5sgAdiE
+VS0Wuur1+deM52gIM+jE2xhnXml9glTiNkO9eVK8DJ72ps+zWfJOQaMtq8B3CheW
+FsxNAEfBSG81URRmzFUWNaLw/MwQ0dEkX5Fj54rHNG67Kn9B6aMbhz6eGnhniYFS
+qd8IsMP8aG4U8dGhDH0xgJFKVfIJiQJsG9HwKrH6+P3qz1DxbungMhucumKUg/zw
+IxqKPStLMrzzx5M67ElHQVFBM3SNL4SCBzAbSJ7ZDNZsJSEPM7BH5HY1uGMVXQti
+k3bS9JrwjcXJDhKNP216yXRN/i/8uDEb68NXxTTs1blifw2b0jh/oTBf8iKHIpdc
+xN9NqYpvwnRIf8K7KHRupcdEw/UbNA3idKhVYr52eNO9LW3cenRbPd5CVKk+8NTJ
+Q8KbHiIRtd7VJMROTQi/MBBFNHM+HgzSaJbZllKo5aGmp0I3m4U=
+=aDQN
+-----END PGP SIGNATURE-----
+
+--OgqxwSJOaUobr8KG--
