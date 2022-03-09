@@ -2,93 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027D34D357F
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Mar 2022 18:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DEB34D3808
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Mar 2022 18:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235932AbiCIRCf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Mar 2022 12:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
+        id S236965AbiCIRVb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Mar 2022 12:21:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236997AbiCIRBz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 12:01:55 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCB01662D7;
-        Wed,  9 Mar 2022 08:50:34 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id x5so3623019edd.11;
-        Wed, 09 Mar 2022 08:50:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=idcrIwJK7fv1u+7sZxPAu9s/3XQBSoZ4lKPrU7eypvY=;
-        b=KAbNH7RFZU0IFVTEIfD5beiz4M/f7a5r4KvxR4aOJUOz0/EhqD4d+uQv1ua0Mp5j+Z
-         H6AwMswXpXDWAQwJkfPPiEHURc+zvge67kQd3uDEwckdBMvi8izjzX3wNgA+cW/EbCXJ
-         CdDZCZ8SAnWkyYy6Dan7R7VQDR8xmcTY7bCmJx6FT0CCYzn47t+SYnolS/4aX3iDn8o7
-         YaLiofiaT1KXp+uvBuwDEyBvNJziZ50zkOv5GDbJWrwRDGQzOd5i24qkWGx/kOxx+knM
-         ZBrUltdk/YbV/nLH4O+HHTGTC2aBTTfhLTj0ELaNhBgWRUSfbxxUYnu1Drg3Qui0ttb7
-         KFKA==
+        with ESMTP id S236892AbiCIRV2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Mar 2022 12:21:28 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB4CB0EAF
+        for <linux-usb@vger.kernel.org>; Wed,  9 Mar 2022 09:20:29 -0800 (PST)
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 555BA3F19E
+        for <linux-usb@vger.kernel.org>; Wed,  9 Mar 2022 17:20:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646846428;
+        bh=WpQvggAM0yElbhRsM3tZFtF/ELRn9cc4tgbsCUzDav4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Tx7hXn6T++ZsQrEvTfJdnQfUYNgUbSxuysYSk2FmtKoiiDqVm/fie99G5/7l/8RXv
+         VaQwyKjBqJxTYt8spH24Gybt/5cC/fbjUx/S063qb3Ct+gIdx5Ti0mIuZYRAoVDe+5
+         Rsp03GFIRphhiUHX3kPf9V3KC6e7I0/Mq7QfFQw+dxtEe75rCmSgmRzXGauyRod2Is
+         ImlyH4tGAzys3lrwWbQ80LfE+zloKbZHFiBBQjQCrh03mvSDW4Q+VwoBF23lIyV9X4
+         xjHkRQHgXIs+0WkuQOfBv3rErLeZhPlSVXJejUaKjhBliXX901ruB8C4vLrhyUiAcY
+         HjqdQNC3P2cGQ==
+Received: by mail-wr1-f69.google.com with SMTP id m18-20020a5d4a12000000b00203731460e6so978001wrq.3
+        for <linux-usb@vger.kernel.org>; Wed, 09 Mar 2022 09:20:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=idcrIwJK7fv1u+7sZxPAu9s/3XQBSoZ4lKPrU7eypvY=;
-        b=SY13b6tk00JOFrTSPuwAvhjQL7kWdekz5v5p4rj4hvjW+T+2sU1h+4AAB6mHJbbRY+
-         j8DCvaBpAJTFBFUhjraZVhv2GXtQ2AXXNRowY9WyXkNvVZ4BcsI5SoX16xAv5djEVKiu
-         8gv1BCxeA6bgPxc2z2RnO3isjVDreOb2TZxxoszwr6BB2aUpE8Y1d+gkycsYGxJvjuYg
-         wW9yuF4sSOGq0u5kXHS7RX97gZ2Tm1J0h6hn1w6y0BSifz9seILS5Y9xtyYXKnf9xuyX
-         viV84ESjKQj7+Fji1WVABQIoU4Fsu2N4TvUXdHd96c/ccph0tZzWWuMLxV/wVjFXUZLO
-         Ateg==
-X-Gm-Message-State: AOAM530B+iUaSBL6vTgMPsKLKIrwHzVTqkiBYqRg7rIWMl/zm5V7lFkA
-        4W/GZcf9vKTWzzJqB8ezjnCnTeSJ7Pmqf34gTsY=
-X-Google-Smtp-Source: ABdhPJwU0XjsVoaNhPHrZb9HZjY0WszBLpO5VvlqeYE6B/5Nog0HNksBCUflkAQcMwh+XdrGYDQcMMeczRSfaK4QOa4=
-X-Received: by 2002:a50:9d0f:0:b0:416:95a3:1611 with SMTP id
- v15-20020a509d0f000000b0041695a31611mr337493ede.77.1646844632418; Wed, 09 Mar
- 2022 08:50:32 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WpQvggAM0yElbhRsM3tZFtF/ELRn9cc4tgbsCUzDav4=;
+        b=ZXkIbkIsBVuF/9SgXReLKBnMUgS4lCjtzeb540kSZXS0GKMLnco2P0XM4CHFrqvcQy
+         dKz1NzGJChxhi2Z2FChEnLFLJ0e+U+XkP1rgyNALwrZHuLPlk2nVHgEBJdCOZQ35sL1k
+         v/XGoxKiETr6EZBEIcyFnVEvHlEWwpwGgK6VaVHe9OHK3z9Xahb4P+G6jrFK+Dd5dkUi
+         e/upEm6l5FpYKXpDNcfqCIhLDjSuI/1j5HXJgPG3u9MwTBCeEO8Optu4+BKVCPuX5HJh
+         gjEzIGuYMin8XsUTZCRbOCiXONtXyK9ZlsUC9/vpMkjkCalfeooNMMMSG2ewWT6dlEOc
+         C9Iw==
+X-Gm-Message-State: AOAM531JEQ3adzw6Sb0YHrWlqdkf+SxPzGNb11FUK08bGzc5KERm1hqR
+        9CJ3xtpFyE95g+Fq5eOneSd+ntqPmuVZDDiqGs6kdoCRrXBJMefNDhMjnn8nxk0GQSeaivAUhQ/
+        tpNq8WvLX6fyak8yx+PnN1agaEti+pK2cT7JQEw==
+X-Received: by 2002:a17:906:3a4f:b0:6cf:86e0:586c with SMTP id a15-20020a1709063a4f00b006cf86e0586cmr741943ejf.626.1646846417777;
+        Wed, 09 Mar 2022 09:20:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwp8qV5iSHK0r0pv+Ud4p0lkvk1vU2K4nXYAjwrQ7dcKZD7+H0nUl5OJBkP+xuDINxqEXHVsQ==
+X-Received: by 2002:a17:906:3a4f:b0:6cf:86e0:586c with SMTP id a15-20020a1709063a4f00b006cf86e0586cmr741909ejf.626.1646846417574;
+        Wed, 09 Mar 2022 09:20:17 -0800 (PST)
+Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id q22-20020a170906771600b006cf8a37ebf5sm952362ejm.103.2022.03.09.09.20.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 09:20:17 -0800 (PST)
+Message-ID: <5136e20f-4a09-35f0-72d8-11e06d52a063@canonical.com>
+Date:   Wed, 9 Mar 2022 18:20:16 +0100
 MIME-Version: 1.0
-References: <20220305204720.2978554-1-festevam@gmail.com> <12992128.uLZWGnKmhe@steina-w>
-In-Reply-To: <12992128.uLZWGnKmhe@steina-w>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 9 Mar 2022 13:50:20 -0300
-Message-ID: <CAOMZO5B=btQKAT5HKBTfJRFc880ygzOLWN=65DdAHdce18QxTw@mail.gmail.com>
-Subject: Re: (EXT) [PATCH v2 net] smsc95xx: Ignore -ENODEV errors when device
- is unplugged
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com, fntoth@gmail.com,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Andrew Lunn <andrew@lunn.ch>, netdev <netdev@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Marek Vasut <marex@denx.de>, Fabio Estevam <festevam@denx.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 26/26] usb: gadget: udc: s3c2410: remove usage of list
+ iterator past the loop body
+Content-Language: en-US
+To:     Jakob Koschel <jakobkoschel@gmail.com>,
+        Greg Kroah-Hartman <greg@kroah.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        "open list:USB GADGET/PERIPHERAL SUBSYSTEM" 
+        <linux-usb@vger.kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+References: <20220308171818.384491-1-jakobkoschel@gmail.com>
+ <20220308171818.384491-27-jakobkoschel@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220308171818.384491-27-jakobkoschel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alexander,
+On 08/03/2022 18:18, Jakob Koschel wrote:
+> To move the list iterator variable into the list_for_each_entry_*()
+> macro in the future it should be avoided to use the list iterator
+> variable after the loop body.
+> 
+> To *never* use the list iterator variable after the loop it was
+> concluded to use a separate iterator variable [1].
+> 
+> Link: https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+> ---
+>  drivers/usb/gadget/udc/s3c2410_udc.c | 17 +++++++++--------
+>  1 file changed, 9 insertions(+), 8 deletions(-)
+> 
 
-On Wed, Mar 9, 2022 at 11:02 AM Alexander Stein
-<alexander.stein@ew.tq-group.com> wrote:
 
-> Oh BTW, is this queued for stable? Which versions? If 'Fixes: a049a30fc27c
-> ("net: usb: Correct PHY handling of smsc95xx")' is the indicator, it's not
-> enough. This errors also shows up on v5.15.27 and is fixed with this patch.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-("net: usb: Correct PHY handling of smsc95xx")' is also present in 5.15:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/log/drivers/net/usb/smsc95xx.c?h=v5.15.27
 
-so the fix should land in 5.15 too.
-
-For 5.10, when the fix reaches Linus' tree, then I will ping
-Dave/Jakub/Greg to apply the 3 latest smsc95xx commits
-to 5.10 stable tree:
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/log/drivers/net/usb/smsc95xx.c?id=c70c453abcbf
-
-I have been running 5.10 + the 3 commits above and no more smsc95xx
-errors are seen.
+Best regards,
+Krzysztof
