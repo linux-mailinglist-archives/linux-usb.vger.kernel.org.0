@@ -2,55 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C254D4555
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Mar 2022 12:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD794D4627
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Mar 2022 12:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240860AbiCJLIo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 10 Mar 2022 06:08:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
+        id S241790AbiCJLpy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Mar 2022 06:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbiCJLIn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Mar 2022 06:08:43 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B31822BFB
-        for <linux-usb@vger.kernel.org>; Thu, 10 Mar 2022 03:07:41 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id z10-20020a056602080a00b00645b9fdc630so3603262iow.5
-        for <linux-usb@vger.kernel.org>; Thu, 10 Mar 2022 03:07:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to:cc:content-transfer-encoding;
-        bh=ley6AiQa9kytHCGEuHlxzUEN+VCZUDMbILTNBl2UYjA=;
-        b=Q+4ymZNkse6w9CtE/K8tToBWHjSf6BfrL6qWcKyI2A8OvWMtGLK32hpli9HsCZH4MP
-         sHwXRkP15ZWJLddCJapSt/CRRsFIBunhNNKrpPYXLMIQv3MZoWjMJvkMuNW3/MrWoLpd
-         KMP01x+ZuklcSfCGo51Sf5MB85cAj4evdC7X9ZXbt5o+a6HM8Utzco0bi6ZiXwZ4oHB1
-         dx089Unh4XBXjB67QJdQOKfp58fyhK08acXfyc+GxSHYPHkN5vnoMUPrgYZW8dmgWtks
-         30Ft1WVCWNlhjPAicqWOpn8Jj0mic4vW3McmKukzLTPzdZdfISYJP1GrorVcozsPbakz
-         MDlw==
-X-Gm-Message-State: AOAM531B8lU4uSJSbnOYsiivsIOhzgSHuO0bfynINaqGjBgA2Du7sLGf
-        m7WhPirsYuehGI4LcsAY6tomOqLGM+n55Xzl17GF1L5bahX+
-X-Google-Smtp-Source: ABdhPJz5Q0JnQINs+ynbn7+RQ1iAfUnfgwPcmZ5Yr6MhThm7O+7lT440FWhDffjLyz2TzWOHxYWmMjDIRBBHrkS0LRiJ1okR764a
+        with ESMTP id S241764AbiCJLpr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Mar 2022 06:45:47 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71257140749
+        for <linux-usb@vger.kernel.org>; Thu, 10 Mar 2022 03:44:46 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nSHDh-0001NO-34; Thu, 10 Mar 2022 12:44:37 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nSHDf-00EXXl-C5; Thu, 10 Mar 2022 12:44:35 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, paskripkin@gmail.com
+Subject: [PATCH net-next v1 1/4] net: usb: asix: unify ax88772_resume code
+Date:   Thu, 10 Mar 2022 12:44:31 +0100
+Message-Id: <20220310114434.3465481-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Received: by 2002:a02:c6c9:0:b0:308:3586:f407 with SMTP id
- r9-20020a02c6c9000000b003083586f407mr3596147jan.173.1646910460611; Thu, 10
- Mar 2022 03:07:40 -0800 (PST)
-Date:   Thu, 10 Mar 2022 03:07:40 -0800
-In-Reply-To: <602855d8-9c9c-ad0e-3aab-06befb0c343c@suse.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fb524d05d9db389a@google.com>
-Subject: Re: [syzbot] memory leak in usb_get_configuration
-From:   syzbot <syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, oneukum@suse.com,
-        pavel.hofman@ivitera.com, rob@robgreener.com,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,28 +49,90 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->
-> On 10.03.22 00:54, syzbot wrote:
->
->> Hello,
->>
->> syzbot found the following issue on:
->>
->> HEAD commit:    0014404f9c18 Merge branch 'akpm' (patches from Andrew)
->> git tree:       upstream
->> console output: https://syzkaller.appspot.com/x/log.txt?x=15864216700000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=3f0a704147ec8e32
->> dashboard link: https://syzkaller.appspot.com/bug?extid=f0fae482604e6d9a87c9
->> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a63dbe700000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e150a1700000
->>
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com
->>
-> #syz test: upstream 0014404f9c18
+The only difference is the reset code, so remove not needed duplicates.
 
-"upstream" does not look like a valid git repo address.
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ drivers/net/usb/asix.h         |  1 +
+ drivers/net/usb/asix_devices.c | 32 ++++++++------------------------
+ 2 files changed, 9 insertions(+), 24 deletions(-)
 
->
->  
+diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
+index 4334aafab59a..b5ac693cebf2 100644
+--- a/drivers/net/usb/asix.h
++++ b/drivers/net/usb/asix.h
+@@ -177,6 +177,7 @@ struct asix_rx_fixup_info {
+ struct asix_common_private {
+ 	void (*resume)(struct usbnet *dev);
+ 	void (*suspend)(struct usbnet *dev);
++	int (*reset)(struct usbnet *dev, int in_pm);
+ 	u16 presvd_phy_advertise;
+ 	u16 presvd_phy_bmcr;
+ 	struct asix_rx_fixup_info rx_fixup_info;
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index 6ea44e53713a..bb09181596c5 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -625,27 +625,13 @@ static void ax88772_resume(struct usbnet *dev)
+ 	int i;
+ 
+ 	for (i = 0; i < 3; i++)
+-		if (!ax88772_hw_reset(dev, 1))
++		if (!priv->reset(dev, 1))
+ 			break;
+ 
+ 	if (netif_running(dev->net))
+ 		phy_start(priv->phydev);
+ }
+ 
+-static void ax88772a_resume(struct usbnet *dev)
+-{
+-	struct asix_common_private *priv = dev->driver_priv;
+-	int i;
+-
+-	for (i = 0; i < 3; i++) {
+-		if (!ax88772a_hw_reset(dev, 1))
+-			break;
+-	}
+-
+-	if (netif_running(dev->net))
+-		phy_start(priv->phydev);
+-}
+-
+ static int asix_resume(struct usb_interface *intf)
+ {
+ 	struct usbnet *dev = usb_get_intfdata(intf);
+@@ -763,9 +749,14 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+ 
+ 	chipcode &= AX_CHIPCODE_MASK;
+ 
+-	ret = (chipcode == AX_AX88772_CHIPCODE) ? ax88772_hw_reset(dev, 0) :
+-						  ax88772a_hw_reset(dev, 0);
++	priv->resume = ax88772_resume;
++	priv->suspend = ax88772_suspend;
++	if (chipcode == AX_AX88772_CHIPCODE)
++		priv->reset = ax88772_hw_reset;
++	else
++		priv->reset = ax88772a_hw_reset;
+ 
++	ret = priv->reset(dev, 0);
+ 	if (ret < 0) {
+ 		netdev_dbg(dev->net, "Failed to reset AX88772: %d\n", ret);
+ 		return ret;
+@@ -780,13 +771,6 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+ 
+ 	priv->presvd_phy_bmcr = 0;
+ 	priv->presvd_phy_advertise = 0;
+-	if (chipcode == AX_AX88772_CHIPCODE) {
+-		priv->resume = ax88772_resume;
+-		priv->suspend = ax88772_suspend;
+-	} else {
+-		priv->resume = ax88772a_resume;
+-		priv->suspend = ax88772_suspend;
+-	}
+ 
+ 	ret = ax88772_init_mdio(dev);
+ 	if (ret)
+-- 
+2.30.2
+
