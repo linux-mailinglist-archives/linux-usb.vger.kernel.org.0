@@ -2,47 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EAB74D5E3D
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Mar 2022 10:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF794D5E92
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Mar 2022 10:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347139AbiCKJUi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Mar 2022 04:20:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
+        id S1347592AbiCKJin (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Mar 2022 04:38:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243086AbiCKJUh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Mar 2022 04:20:37 -0500
+        with ESMTP id S1347502AbiCKJim (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Mar 2022 04:38:42 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6251BD048;
-        Fri, 11 Mar 2022 01:19:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D9649C85;
+        Fri, 11 Mar 2022 01:37:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BA0A61F27;
-        Fri, 11 Mar 2022 09:19:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0641C340E9;
-        Fri, 11 Mar 2022 09:19:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 804F6612C8;
+        Fri, 11 Mar 2022 09:37:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2CD4C340EC;
+        Fri, 11 Mar 2022 09:37:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646990373;
-        bh=wuHe8NaXh4zJwIPauMCZkRknqC9dqhWaU0wygMAjDVg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=HRmAO2ddpQxXLp72B4m1QgBy0/HxUOae4lHjp5lXlaQWTnAOLP6uNVS85mBVbZWa0
-         7Bp9HAMuvsh7VIDW39YLgJvz6fx89UoE4FvNkeIBF19+qfo6OQnWR06Ww9HmSy84FR
-         jrbdH17rca80IjsBTmc1BnvA6DV8pGiNrnWeN2aljMQ6tG4xZ9C0tzJp2enaz2oz//
-         OL6OIA5nngrLdfQICFxsWZwz04s/7/UiwmCgS5QdwiKZnwFbUE7IUbnAMpDtL7TmLq
-         6u9AVGuzJcjB/3RecSRBybKv44/7owEsEkH8a2kDTH7VVyr5vFiUeyNfhdiAf3iMh6
-         p377W5O0Eo1xA==
+        s=k20201202; t=1646991457;
+        bh=h9t5ker/pif0mihscztts2EzVeCJ38jCD40jobk+fb0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i0eVLg+GLapWdKbgtyDupNGQaR92Wiyq2wU1c4CUFf7g4xxv7DHJrkw39tAYGaOXj
+         fMXSxlkzhDDNlvYnrvkK3285+1Oq2u2JmQzKYViUgCoZktAxGUBu8Msyuwk0PRWrd2
+         LfQfRT0HsFZg3kS1E4GJ2a9UMZdmeIWKUUVDMPyLRFQIaNS1GpBE1OnlO9Oi4dq1Oy
+         hTGP5J5kuUVf6eA8+yhnJl4HHa66KcXwcMhM6n259C4HlwscebPLGs8wiUpkAMfboU
+         K8wtc9hvRH75joMfzOwVdmbS0HtGRxGCfO8nhOfo3dOnlk2y4TZ+StklVqm1GnpsRr
+         XTLB9nLovO4zw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1nSbQm-0001N9-B8; Fri, 11 Mar 2022 10:19:28 +0100
-Date:   Fri, 11 Mar 2022 10:19:28 +0100
+        id 1nSbiG-0001wS-LU; Fri, 11 Mar 2022 10:37:32 +0100
+Date:   Fri, 11 Mar 2022 10:37:32 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial updates for 5.18-rc1
-Message-ID: <YisUIF1uXOs5g/tw@hovoldconsulting.com>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     Joel Stanley <joel@jms.id.au>, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] USB: serial: pl2303: Add IBM device IDs
+Message-ID: <YisYXEnzOfC7Qsx6@hovoldconsulting.com>
+References: <20220301224446.21236-1-eajames@linux.ibm.com>
+ <YiB7gz0GJ1Uz0mE2@hovoldconsulting.com>
+ <CACPK8XfoCXisL=udkuO-x4LZ3r-9iKA2d7oLb7KmXs3+LkQgnQ@mail.gmail.com>
+ <YiCHPuNkMuO4uARu@hovoldconsulting.com>
+ <CACPK8XfUCyVgwVYLt_99CgQWuoFTw7O9d2NiuzMzGPa1VFVUyg@mail.gmail.com>
+ <YiCN+x2XPiawaweY@hovoldconsulting.com>
+ <CACPK8Xc9MnM9_jr7NrNLtqBrN_t8D7G-scQvk51vbpOU6LWeuw@mail.gmail.com>
+ <YiCU3KI9Dh2psRnK@hovoldconsulting.com>
+ <b1ec9ab3-d621-fa66-0fae-f966242f3f7f@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <b1ec9ab3-d621-fa66-0fae-f966242f3f7f@linux.ibm.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,45 +65,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3:
+On Thu, Mar 03, 2022 at 03:48:37PM -0600, Eddie James wrote:
 
-  Linux 5.17-rc6 (2022-02-27 14:36:33 -0800)
+> It's a pretty generic pl2303 device and doesn't have to be used for UPS, 
+> but that is our use-case. Here is a page with some detail about the 
+> device: 
+> https://www.ibm.com/docs/en/power9/9009-22A?topic=power-uninterruptible-supply
 
-are available in the Git repository at:
+Could you please also post the output of "lsusb -v" for this device to
+this thread for completeness? This may be needed to improve the current
+type detection for newer pl2303 devices.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.18-rc1
+Do you know which type of PL2303 you use?
 
-for you to fetch changes up to 4ac56b1f1ef8139dbfc5dab918aa235e8344ec4e:
+Thanks!
 
-  USB: serial: usb_wwan: remove redundant assignment to variable i (2022-03-08 18:51:02 +0100)
-
-----------------------------------------------------------------
-USB-serial updates for 5.18-rc1
-
-Here are the USB-serial updates for 5.18-rc1, including:
-
- - a new "simple driver" for some Nokia phones
- - a fix for pl2303 GS type detection
- - another pl2303 device id
-
-Included is also a clean up.
-
-All have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Colin Ian King (1):
-      USB: serial: usb_wwan: remove redundant assignment to variable i
-
-Eddie James (1):
-      USB: serial: pl2303: add IBM device IDs
-
-Johan Hovold (2):
-      USB: serial: simple: add Nokia phone driver
-      USB: serial: pl2303: fix GS type detection
-
- drivers/usb/serial/Kconfig             | 1 +
- drivers/usb/serial/pl2303.c            | 2 ++
- drivers/usb/serial/pl2303.h            | 3 +++
- drivers/usb/serial/usb-serial-simple.c | 7 +++++++
- drivers/usb/serial/usb_wwan.c          | 1 -
- 5 files changed, 13 insertions(+), 1 deletion(-)
+Johan
