@@ -2,201 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5224D584A
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Mar 2022 03:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 476E74D58DB
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Mar 2022 04:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345699AbiCKCoU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Mar 2022 21:44:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S1345993AbiCKD2W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Mar 2022 22:28:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345698AbiCKCoQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Mar 2022 21:44:16 -0500
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C872DEF7B5
-        for <linux-usb@vger.kernel.org>; Thu, 10 Mar 2022 18:43:13 -0800 (PST)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220311024311epoutp0248935e80930322b6073ce56d7b38139f~bM2OHk8p51677916779epoutp02F
-        for <linux-usb@vger.kernel.org>; Fri, 11 Mar 2022 02:43:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220311024311epoutp0248935e80930322b6073ce56d7b38139f~bM2OHk8p51677916779epoutp02F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1646966591;
-        bh=NUDTE57F0DdzRh7R26Cnm6vu/JSZJxqGGYbS9+198pM=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=Lf8V44Ao7oJXRQ3nD6Ot5eLIbpmpluXETSJrhHCqNQEpRacHfw3dDQO6+ylQYtcv9
-         64BGjRaYlGh8rWb3ihZl4OCWeHYzDJtz+/mJu/VXcjjl/CwOablT1XsO1SyrCMIKoA
-         Jtj9CWACuDtrkjTd1CPZbZ24a0uz6QDDXWA22xxk=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20220311024310epcas2p16a64a2c2320a57c11db648bc2f62edea~bM2Nc-AgL0101401014epcas2p1P;
-        Fri, 11 Mar 2022 02:43:10 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.90]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4KF9GN6CGDz4x9QR; Fri, 11 Mar
-        2022 02:43:08 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        44.8A.33036.A37BA226; Fri, 11 Mar 2022 11:43:06 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220311024305epcas2p2f9482558b88a8a5ebb9030440195dfdc~bM2JF4CXH0992709927epcas2p2B;
-        Fri, 11 Mar 2022 02:43:05 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220311024305epsmtrp113ac46e10b1ba0d9fee6a520fc76af10~bM2JE-L8y1486714867epsmtrp1j;
-        Fri, 11 Mar 2022 02:43:05 +0000 (GMT)
-X-AuditID: b6c32a48-4fbff7000000810c-f3-622ab73ac96f
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        61.46.03370.937BA226; Fri, 11 Mar 2022 11:43:05 +0900 (KST)
-Received: from KORDO034583 (unknown [10.229.18.132]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220311024305epsmtip2844dcfefe601145efda0e37d64fe8339~bM2I5p6Yp0645406454epsmtip2E;
-        Fri, 11 Mar 2022 02:43:05 +0000 (GMT)
-From:   =?UTF-8?B?7KCV7J6s7ZuI?= <jh0801.jung@samsung.com>
-To:     "'Thinh Nguyen'" <Thinh.Nguyen@synopsys.com>,
-        "'Felipe Balbi'" <balbi@kernel.org>,
-        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>
-Cc:     "'open list:USB XHCI DRIVER'" <linux-usb@vger.kernel.org>,
-        "'open list'" <linux-kernel@vger.kernel.org>,
-        "'Seungchull Suh'" <sc.suh@samsung.com>,
-        "'Daehwan Jung'" <dh10.jung@samsung.com>, <cpgs@samsung.com>,
-        <cpgsproxy5@samsung.com>
-In-Reply-To: <559b00b6-8b3d-9422-6a25-674f719ad237@synopsys.com>
-Subject: RE: [PATCH] usb: dwc3: Add dwc3 lock for blocking interrupt
- storming
-Date:   Fri, 11 Mar 2022 11:43:05 +0900
-Message-ID: <017f01d834f1$bc3a9c30$34afd490$@samsung.com>
+        with ESMTP id S239978AbiCKD2V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Mar 2022 22:28:21 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36B71A2735;
+        Thu, 10 Mar 2022 19:27:19 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id h5so5269279plf.7;
+        Thu, 10 Mar 2022 19:27:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=c5IT3PbDgaeY8qmsercAMGNkkxjzO2Aj3HUs/2+UID8=;
+        b=I8gC/ZR5OTbu1QF7F/SSzj98hGkRp/bJfRkJTANyUlPrycfofYDfEF2fvzXH092+ki
+         +7t3oiMEjkt54UlIHrGLn4ZVbIAmOTLcFBb7ahVfHdNgLxWeA7vAbUR8BQSnooiXwQmy
+         xB6n606rXuBGu/GMhzRLGTjID8INq8IM/9Ds3CDjSlluyANsf6hs7eEyos+PIFd62b37
+         5PTPS8DY733+m4n61+1rLqwp49OP65JVyi4JFaa3YejC+nW6Q3o/j1k+zm4VAyzqcbRe
+         5WAlijr6xqwBZfBiI5uSH47YKANt+dPTm9itnVe4JUTEzt/1ukzM5sLsiuaslbWcZ5ow
+         c5Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=c5IT3PbDgaeY8qmsercAMGNkkxjzO2Aj3HUs/2+UID8=;
+        b=Cdpyx/HTpGAGtaNyEL9Nx1boTmvw97Vd2cb554Nq6EKXvAqNoBj6J0ebD/g5ocq3ZX
+         mojkj9EoHlL6qPHIms3+WajsYxY7dCRdqq0z/U+RNbcfvvkStga+FCDwXNlD+ZNFrWtR
+         POhL0OizJFgjk8l0SJqb8lnpBPpOecge2KjeP5h+2O/J4M903QhTPzgThwNOSQI2KX3X
+         p72GRxBRo++0f64YS/tJqyaD5tHI+ERc8W1ZjRGnNAFP4nzsfoDFkj+9xoQi3AKbYF1r
+         C02yaO/8HDQ0dta88CwOlffmSfIf7xXQ8t9+M1TzgHI92ubiKdG68nWMJD6bgRcfdsqu
+         HdRQ==
+X-Gm-Message-State: AOAM532uXX9s6tsTt3CM8Xc7XXh2pGLXUejKYLxruBTN1fkmmQ9cT6aa
+        3dBtvV5JXVNRJ3phT6yBZfyfdCnLk49tcRvt
+X-Google-Smtp-Source: ABdhPJwpvxCPs2SW8c9kqutTJ7xqv6gUDFeCA7BBGdhC1jO22UCHLln3YDQPc/LJ6hMCC41F7Q2w0w==
+X-Received: by 2002:a17:902:ea0d:b0:151:df90:779f with SMTP id s13-20020a170902ea0d00b00151df90779fmr8608184plg.1.1646969238816;
+        Thu, 10 Mar 2022 19:27:18 -0800 (PST)
+Received: from localhost.localdomain (114-24-95-63.dynamic-ip.hinet.net. [114.24.95.63])
+        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm9204254pfl.135.2022.03.10.19.27.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 19:27:18 -0800 (PST)
+From:   Wei Ming Chen <jj251510319013@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     andreyknvl@gmail.com, balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, Wei Ming Chen <jj251510319013@gmail.com>
+Subject: [PATCH v2] usb: raw-gadget: return -EINVAL if no proper ep address available
+Date:   Fri, 11 Mar 2022 11:22:38 +0800
+Message-Id: <20220311032238.3978-1-jj251510319013@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CA+fCnZd2GoU6LVvT4eBT3w7TigRrp_9XcAGyL55K5nbi3yt4sA@mail.gmail.com>
+References: <CA+fCnZd2GoU6LVvT4eBT3w7TigRrp_9XcAGyL55K5nbi3yt4sA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 15.0
-Content-Language: ko
-Thread-Index: AQKjdV3S7gSSYh+T3/lJgRyIlCpbTQJQQbEmAWDN/4EB6fufUwOJLlPlqtnLqfA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPJsWRmVeSWpSXmKPExsWy7bCmma7Vdq0kg9OP+C2OtT1ht3h5SNNi
-        88MrbBZ3FkxjsmhevJ7N4vKuOWwWi5a1Mlt03b3BaLFqwQF2B06PTas62Tz2z13D7tG3ZRWj
-        x5b9nxk9Pm+SC2CNyrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy
-        8QnQdcvMAbpHSaEsMacUKBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgXqBXnJhbXJqXrpeX
-        WmJlaGBgZApUmJCdMePXbtaCX9oVE+9xNzBe1+pi5OSQEDCRWLLuPQuILSSwg1Fi0QPZLkYu
-        IPsTo8SEdUdYIZzPjBKrFnSxwHS0/X7KApHYxSixcsc+dgjnJaPEwYMPmbsYOTjYBCwkzjbo
-        g8RFBHoYJY603GYEcZhB5s582g42ilPAQeLGhKWMIA3CAv4Sjx/VgYRZBFQlpjb+YASxeQUs
-        Jb4fW8AOYQtKnJz5BKyVWUBbYtnC18wQFylI7P50lBUiLiIxu7MNLC4i4Cdx7NoDsL0SAks5
-        JO5/6WGFaHCRWPz1IJQtLPHq+BZ2CFtK4mV/G5RdLNG56RBUcwOjxLcDHUwQCWOJWc/awY5m
-        FtCUWL9LH8SUEFCWOHILGkK8Eg0bf7ND3MMn0XH4LztECa9ER5sQRImqxMHGmywTGJVnIfls
-        FpLPZiH5ZhbCrgWMLKsYxVILinPTU4uNCkzgcZ2cn7uJEZxStTx2MM5++0HvECMTB+MhRgkO
-        ZiUR3qZQjSQh3pTEyqrUovz4otKc1OJDjKbAsJ7ILCWanA9M6nkl8YYmlgYmZmaG5kamBuZK
-        4rxeKRsShQTSE0tSs1NTC1KLYPqYODilGpjOrao7/MwgtiMg9K68bphW2U/zPuOqb43Whtls
-        Fc7a9+T/3/mtGHs59s6RJxcmuIWLLvmkNdlG5Dmz499H7ikvnOfp98wJisj9tbNcxDhPf/r6
-        t5b/4uZ8CbBNj9ZfwfnVc1fBW7/p6+zslEIy5p9bcC9KccuvhUvzWJ/94Ot98pdV4cHivWGS
-        r86E9vt3f9ITTrRNYGO8HpJetaaf9+KPo6/XKoacX3yXddJVzxtLnhkxRfkb1O54PKd8tmng
-        m6kLz+59f2PH5ievDrbM3s1+ly3uk931DY6qFosvMWtF1T8/nhpx9rrqzaNJmxgvM/XKNXFr
-        5N17OX95ndd7seqrs5/nOEsHBZj3GAuuaRNVYinOSDTUYi4qTgQAyOzBQTIEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupjkeLIzCtJLcpLzFFi42LZdlhJXtdyu1aSwbVbRhbH2p6wW7w8pGmx
-        +eEVNos7C6YxWTQvXs9mcXnXHDaLRctamS267t5gtFi14AC7A6fHplWdbB77565h9+jbsorR
-        Y8v+z4wenzfJBbBGcdmkpOZklqUW6dslcGVcWHCXuaBdvmL9+SVMDYzfJboYOTkkBEwk2n4/
-        Zeli5OIQEtjBKHHu6hlmiIS0xM7OqUwQtrDE/ZYjrBBFzxkl/s/4xNjFyMHBJmAhcbZBHyQu
-        ItAH1PxnLTOIwyzwjVFiweKDTBAdG5gkPu/8wAYyilPAQeLGhKWMILawgK/Erj0tYCtYBFQl
-        pjb+AIvzClhKfD+2gB3CFpQ4OfMJC4jNLKAt0fuwlRHGXrbwNdSpChK7Px1lhYiLSMzubAOL
-        iwj4SRy79oBxAqPwLCSjZiEZNQvJqFlI2hcwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dL
-        zs/dxAiOMi2tHYx7Vn3QO8TIxMF4iFGCg1lJhLcpVCNJiDclsbIqtSg/vqg0J7X4EKM0B4uS
-        OO+FrpPxQgLpiSWp2ampBalFMFkmDk6pBibL76ZpBQ/mVNqnP/w/Y4LgxVem9aLvdubIaObv
-        fF+W3F1Sfv3qj71RrGfYlgR31ahfWZ3PcaswQPha58MLp7aYdE0/f+izZ9KnxyHSx5pY9yU5
-        iepqbPk9ObizxN8068HMlbvl4o1nndb8lP65PvUAl8KXU0/EeNrWPH/l96/t5KSafYtmGxuo
-        /PXPfr1UV2uLzqnHMXYNqWuvX09sOO/0J/PfejMfxo2yGs5WWyfIuLf1T3oaznzElpuF957S
-        nQV6h5wnu33NO+ntIrFwben5/U0Kmy/MWLLouFwNq7i8qv2/+3LcbI6JnFps+YqX1jW5r+cI
-        n10xX8C+XpT9mruw0o/d6Sf27VBn6VMqi1ViKc5INNRiLipOBADy6SOHIQMAAA==
-X-CMS-MailID: 20220311024305epcas2p2f9482558b88a8a5ebb9030440195dfdc
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220307052605epcas2p2b84f6db2642863ed61373070f508e200
-References: <CGME20220307052605epcas2p2b84f6db2642863ed61373070f508e200@epcas2p2.samsung.com>
-        <1646630679-121585-1-git-send-email-jh0801.jung@samsung.com>
-        <99eabe6c-8782-1bc6-e1d7-09b019cee65b@synopsys.com>
-        <016a01d834e7$72b11fd0$58135f70$@samsung.com>
-        <559b00b6-8b3d-9422-6a25-674f719ad237@synopsys.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> -----Original Message-----
-> From: Thinh Nguyen =5Bmailto:Thinh.Nguyen=40synopsys.com=5D
-> Sent: Friday, March 11, 2022 10:57 AM
-> To: =EC=A0=95=EC=9E=AC=ED=9B=88;=20Thinh=20Nguyen;=20'Felipe=20Balbi';=20=
-'Greg=20Kroah-Hartman'=0D=0A>=20Cc:=20'open=20list:USB=20XHCI=20DRIVER';=20=
-'open=20list';=20'Seungchull=20Suh';=20'Daehwan=0D=0A>=20Jung';=20cpgs=40sa=
-msung.com;=20cpgsproxy5=40samsung.com=0D=0A>=20Subject:=20Re:=20=5BPATCH=5D=
-=20usb:=20dwc3:=20Add=20dwc3=20lock=20for=20blocking=20interrupt=0D=0A>=20s=
-torming=0D=0A>=20=0D=0A>=20=EC=A0=95=EC=9E=AC=ED=9B=88=20wrote:=0D=0A>=20>=
-=20Hi.=0D=0A>=20>=0D=0A>=20>>=20-----Original=20Message-----=0D=0A>=20>>=20=
-From:=20Thinh=20Nguyen=20=5Bmailto:Thinh.Nguyen=40synopsys.com=5D=0D=0A>=20=
->>=20Sent:=20Thursday,=20March=2010,=202022=2011:14=20AM=0D=0A>=20>>=20To:=
-=20JaeHun=20Jung;=20Felipe=20Balbi;=20Greg=20Kroah-Hartman=0D=0A>=20>>=20Cc=
-:=20open=20list:USB=20XHCI=20DRIVER;=20open=20list;=20Seungchull=20Suh;=20D=
-aehwan=0D=0A>=20>>=20Jung=0D=0A>=20>>=20Subject:=20Re:=20=5BPATCH=5D=20usb:=
-=20dwc3:=20Add=20dwc3=20lock=20for=20blocking=20interrupt=0D=0A>=20>>=20sto=
-rming=0D=0A>=20>>=0D=0A>=20>>=20Hi,=0D=0A>=20>>=0D=0A>=20>>=20JaeHun=20Jung=
-=20wrote:=0D=0A>=20>>>=20Interrupt=20Storming=20occurred=20with=20a=20very=
-=20low=20probability=20of=20occurrence.=0D=0A>=20>>>=20The=20occurrence=20o=
-f=20the=20problem=20is=20estimated=20to=20be=20caused=20by=20a=20race=0D=0A=
->=20>>>=20condition=20between=20the=20top=20half=20and=20bottom=20half=20of=
-=20the=20interrupt=0D=0A>=20>>>=20service=0D=0A>=20>>=20routine.=0D=0A>=20>=
->>=20It=20was=20confirmed=20that=20variables=20have=20values=20that=20canno=
-t=20be=20held=20when=0D=0A>=20>>>=20ISR=20occurs=20through=20normal=20H=20/=
-=20W=20irq.=0D=0A>=20>>>=20=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=0D=0A>=20>>>=20=3D=20(struct=20dwc3_event_buffer=20*)=20ev_buf=20=3D=
-=200xFFFFFF88DE6A0380=20(=0D=0A>=20>>>=20=09(void=20*)=20buf=20=3D=200xFFFF=
-FFC01594E000,=0D=0A>=20>>>=20=09(void=20*)=20cache=20=3D=200xFFFFFF88DDC140=
-80,=0D=0A>=20>>>=20=09(unsigned=20int)=20length=20=3D=204096,=0D=0A>=20>>>=
-=20=09(unsigned=20int)=20lpos=20=3D=200,=0D=0A>=20>>>=20=09(unsigned=20int)=
-=20count=20=3D=200,=20<<=0D=0A>=20>>>=20=09(unsigned=20int)=20flags=20=3D=
-=201,=20<<=0D=0A>=20>>>=20=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=0D=0A>=20>>>=20=3D=20=22evt->count=3D0=22=20and=20=22evt->flags=3DDW=
-C3_EVENT_PENDING=22=20cannot=20be=20set=0D=0A>=20>>>=20at=20the=20same=20ti=
-me.=0D=0A>=20>>>=0D=0A>=20>>>=20We=20estimate=20that=20a=20race=20condition=
-=20occurred=20between=20dwc3_interrupt()=0D=0A>=20>>>=20and=20dwc3_process_=
-event_buf()=20called=20by=0D=0A>=20>>>=20dwc3_gadget_process_pending_events=
-().=0D=0A>=20>>>=20So=20I=20try=20to=20block=20the=20race=20condition=20thr=
-ough=20spin_lock.=0D=0A>=20>>=0D=0A>=20>>=20This=20looks=20like=20it=20need=
-s=20a=20memory=20barrier.=20Would=20this=20work=20for=20you?=0D=0A>=20>=20M=
-aybe=20it=20could=20be.=20But=20=22evt->count=20=3D=200;=22=20is=20updated=
-=20on=0D=0A>=20dwc3_process_event_buf().=0D=0A>=20>=20So,=20I=20think=20spi=
-n_lock=20is=20more=20clear=20routine=20for=20this=20issue.=0D=0A>=20>=0D=0A=
->=20=0D=0A>=20Not=20really.=20If=20problem=20is=20due=20to=20the=20evt->fla=
-gs=20not=20updated=20in=20time,=20then=0D=0A>=20the=20solution=20should=20b=
-e=20using=20the=20memory=20barrier.=20The=20spin_lock=20would=0D=0A>=20obfu=
-scate=20the=20issue.=20And=20we=20should=20avoid=20using=20spin_lock=20in=
-=20the=20top-half.=0D=0A=0D=0AThis=20issue=20was=20occurred=20by=20watchdog=
-.=20The=20interrupt=20occurred=20in=20units=20of=204=20to=205us=20and=20can=
-not=20be=20released=20until=20the=20bottom=20is=20executed.=0D=0AIf=20it=20=
-is=20a=20problem=20with=20the=20memory=20barrier,=20the=20value=20should=20=
-be=20updated=20after=20a=20few=20clocks=20and=20the=20TOP=20should=20run=20=
-normally.=20Isn't=20it?=0D=0AAnd=20Could=20you=20explain=20me=20why=20we=20=
-should=20avoid=20using=20spin_lock=20in=20the=20top-half.=0D=0A=0D=0A>=20=
-=0D=0A>=20BR,=0D=0A>=20Thinh=0D=0A>=20=0D=0A>=20>>=0D=0A>=20>>=20diff=20--g=
-it=20a/drivers/usb/dwc3/gadget.c=20b/drivers/usb/dwc3/gadget.c=0D=0A>=20>>=
-=20index=0D=0A>=20>>=20c02e239978e0..a96c344b9f17=20100644=0D=0A>=20>>=20--=
--=20a/drivers/usb/dwc3/gadget.c=0D=0A>=20>>=20+++=20b/drivers/usb/dwc3/gadg=
-et.c=0D=0A>=20>>=20=40=40=20-5340,6=20+5340,9=20=40=40=20static=20irqreturn=
-_t=20dwc3_check_event_buf(struct=0D=0A>=20>>=20dwc3_event_buffer=20*evt)=0D=
-=0A>=20>>=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20return=20IRQ_HA=
-NDLED;=0D=0A>=20>>=20=20=20=20=20=20=20=20=20=7D=0D=0A>=20>>=0D=0A>=20>>=20=
-+=20=20=20=20=20=20=20/*=20Make=20sure=20the=20event=20flags=20is=20updated=
-=20*/=0D=0A>=20>>=20+=20=20=20=20=20=20=20wmb();=0D=0A>=20>>=20+=0D=0A>=20>=
->=20=20=20=20=20=20=20=20=20/*=0D=0A>=20>>=20=20=20=20=20=20=20=20=20=20*=
-=20With=20PCIe=20legacy=20interrupt,=20test=20shows=20that=20top-half=20irq=
-=0D=0A>=20>>=20handler=20can=0D=0A>=20>>=20=20=20=20=20=20=20=20=20=20*=20b=
-e=20called=20again=20after=20HW=20interrupt=20deassertion.=20Check=20if=0D=
-=0A>=20>>=20bottom-=20half=0D=0A>=20>>=0D=0A>=20>>=0D=0A>=20>>=20Thanks,=0D=
-=0A>=20>>=20Thinh=0D=0A>=20>=0D=0A=0D=0A=0D=0A
+If we try to use raw_ioctl_ep_enable() for ep5in on a hardware that
+only support from ep1-ep4 for both in and out direction, it will return
+-EBUSY originally.
+
+I think it will be more intuitive if we return -EINVAL, because -EBUSY
+sounds like ep5in is not available now, but might be available in the
+future.
+
+Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+---
+ drivers/usb/gadget/legacy/raw_gadget.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index d86c3a36441e..e5707626c4d4 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -758,6 +758,7 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+ 	unsigned long flags;
+ 	struct usb_endpoint_descriptor *desc;
+ 	struct raw_ep *ep;
++	bool ep_props_matched = false;
+ 
+ 	desc = memdup_user((void __user *)value, sizeof(*desc));
+ 	if (IS_ERR(desc))
+@@ -787,13 +788,14 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+ 
+ 	for (i = 0; i < dev->eps_num; i++) {
+ 		ep = &dev->eps[i];
+-		if (ep->state != STATE_EP_DISABLED)
+-			continue;
+ 		if (ep->addr != usb_endpoint_num(desc) &&
+ 				ep->addr != USB_RAW_EP_ADDR_ANY)
+ 			continue;
+ 		if (!usb_gadget_ep_match_desc(dev->gadget, ep->ep, desc, NULL))
+ 			continue;
++		ep_props_matched = true;
++		if (ep->state != STATE_EP_DISABLED)
++			continue;
+ 		ep->ep->desc = desc;
+ 		ret = usb_ep_enable(ep->ep);
+ 		if (ret < 0) {
+@@ -815,8 +817,13 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+ 		goto out_unlock;
+ 	}
+ 
+-	dev_dbg(&dev->gadget->dev, "fail, no gadget endpoints available\n");
+-	ret = -EBUSY;
++	if (!ep_props_matched) {
++		dev_dbg(&dev->gadget->dev, "fail, bad endpoint descriptor\n");
++		ret = -EINVAL;
++	} else {
++		dev_dbg(&dev->gadget->dev, "fail, no endpoints available\n");
++		ret = -EBUSY;
++	}
+ 
+ out_free:
+ 	kfree(desc);
+-- 
+2.25.1
+
