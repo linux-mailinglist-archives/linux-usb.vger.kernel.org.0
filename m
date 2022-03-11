@@ -2,67 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6994D5D57
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Mar 2022 09:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F5B4D5DDA
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Mar 2022 09:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237246AbiCKIbr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Mar 2022 03:31:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
+        id S241925AbiCKIvb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Mar 2022 03:51:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240221AbiCKIbp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Mar 2022 03:31:45 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A5F1B98BF;
-        Fri, 11 Mar 2022 00:30:42 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id q29so5928343pgn.7;
-        Fri, 11 Mar 2022 00:30:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EVR/EXEx8VwYMh+Mq3TbIRbAjTsCwpmkb5RBazMVbfs=;
-        b=GNLK00oLX064vIX+r2kYl2hpm4t94e+rXiqn1qZ9hWMFVkY6aHlbSH8BEbBAsY0Ldy
-         KB7UpyqDEx+aEAnMxJl6Nl3E9H4wxWU1Knh/dmR4kXxg9JgjkKp2s5gTO7PazmLZm4F5
-         ug9oi8DNyH2TidnPshxULWDwMziBs1Mm74UGEhni4KCZZ1F/pvAGs2QLTee/o+NXCoPx
-         e1Q8+zNhSL0HH2j5cNAHuMhmyya2h5bpdxFqEFGQOT0lbo0Qt4U+F3IZQRIZLr+ufMzv
-         YFN8l03fX2C2ydQiW4D5SBwzqbWJs2F18393kuDS6aObl/l9t9Qp8YIQQ+TU6u5Jq1RJ
-         PRtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EVR/EXEx8VwYMh+Mq3TbIRbAjTsCwpmkb5RBazMVbfs=;
-        b=ROxHzxYKwUG7U1MvD9CVgnLhrtel81QgBS4TdwZ8MvfHR8oK1V46peJmfqlt/DZ94j
-         3HPNHd1+SaQRXfS6J9FgrJ2ul6TWrViFnyFnMUxbx/36wAPeyI0JIQ2f0L7OpTP9fUeM
-         E0bJXtxmqHKPrGIaj655/timaGnNio/jKn9JmQEtGLmy2ceDCHARMmizcXFCsZnLL+YX
-         03PWXX6+iGr6Doo9aMnbviTRb/d9GzPbcOLc0fLRkhBSWqEsat+COFKYjKFtE9VPb7i9
-         blgztyJjk2LSsmOq2V7ABMZ/7+/3jSaimSYne/aBuBEvt+8JHIYhLQLUiTVRTWAhhEz6
-         IN4g==
-X-Gm-Message-State: AOAM531aPtMVaw6VcDmEeRCku4sUZdthJHoR7vVGBVhntFTcCX24Rc9u
-        tJqRIJxWv7AdP0RdVquCVcXolPjoMvGpCaG4
-X-Google-Smtp-Source: ABdhPJwvPShUx/fd22EZnsmFZ7/fjy+OpgeoE43Ls+h/GXbhsRJW42jHfLYkBse6whh+7z/UG3sqSQ==
-X-Received: by 2002:a63:5451:0:b0:378:6b6c:ed83 with SMTP id e17-20020a635451000000b003786b6ced83mr7469585pgm.446.1646987441896;
-        Fri, 11 Mar 2022 00:30:41 -0800 (PST)
-Received: from localhost.localdomain (114-24-95-63.dynamic-ip.hinet.net. [114.24.95.63])
-        by smtp.gmail.com with ESMTPSA id q8-20020a056a00150800b004f7948d14e7sm785465pfu.191.2022.03.11.00.30.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 00:30:41 -0800 (PST)
-From:   Wei Ming Chen <jj251510319013@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     andreyknvl@gmail.com, balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, Wei Ming Chen <jj251510319013@gmail.com>
-Subject: [PATCH v2] usb: raw-gadget: return -EINVAL if no proper ep address available
-Date:   Fri, 11 Mar 2022 16:29:45 +0800
-Message-Id: <20220311082944.4881-1-jj251510319013@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CA+fCnZd2GoU6LVvT4eBT3w7TigRrp_9XcAGyL55K5nbi3yt4sA@mail.gmail.com>
-References: <CA+fCnZd2GoU6LVvT4eBT3w7TigRrp_9XcAGyL55K5nbi3yt4sA@mail.gmail.com>
+        with ESMTP id S241410AbiCKIv3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Mar 2022 03:51:29 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C559F1BAF05
+        for <linux-usb@vger.kernel.org>; Fri, 11 Mar 2022 00:50:26 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nSayY-0004dp-AT; Fri, 11 Mar 2022 09:50:18 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nSayV-00552d-M1; Fri, 11 Mar 2022 09:50:15 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, paskripkin@gmail.com
+Subject: [PATCH net-next v2 1/4] net: usb: asix: unify ax88772_resume code
+Date:   Fri, 11 Mar 2022 09:50:11 +0100
+Message-Id: <20220311085014.1210963-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,74 +49,90 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If we try to use raw_ioctl_ep_enable() for ep5in on a hardware that
-only support from ep1-ep4 for both in and out direction, it will return
--EBUSY originally.
+The only difference is the reset code, so remove not needed duplicates.
 
-I think it will be more intuitive if we return -EINVAL, because -EBUSY
-sounds like ep5in is not available now, but might be available in the
-future.
-
-Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
+ drivers/net/usb/asix.h         |  1 +
+ drivers/net/usb/asix_devices.c | 32 ++++++++------------------------
+ 2 files changed, 9 insertions(+), 24 deletions(-)
 
-Changes in v2:
-- Rename variable from ep_num_matched to ep_props_matched
-- Incorporate the patch from Andrey Konovalov that cover
-  the foloowing cases:
-    1. If there are no endpoints that match the provided descriptor, return
-       EINVAL.
-    2. If there are matching endpoints, but they are all already enabled,
-       return EBUSY.
-
- drivers/usb/gadget/legacy/raw_gadget.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-index d86c3a36441e..e5707626c4d4 100644
---- a/drivers/usb/gadget/legacy/raw_gadget.c
-+++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -758,6 +758,7 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
- 	unsigned long flags;
- 	struct usb_endpoint_descriptor *desc;
- 	struct raw_ep *ep;
-+	bool ep_props_matched = false;
+diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
+index 4334aafab59a..b5ac693cebf2 100644
+--- a/drivers/net/usb/asix.h
++++ b/drivers/net/usb/asix.h
+@@ -177,6 +177,7 @@ struct asix_rx_fixup_info {
+ struct asix_common_private {
+ 	void (*resume)(struct usbnet *dev);
+ 	void (*suspend)(struct usbnet *dev);
++	int (*reset)(struct usbnet *dev, int in_pm);
+ 	u16 presvd_phy_advertise;
+ 	u16 presvd_phy_bmcr;
+ 	struct asix_rx_fixup_info rx_fixup_info;
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index e6cfa9a39a87..28bb98cdfa33 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -625,27 +625,13 @@ static void ax88772_resume(struct usbnet *dev)
+ 	int i;
  
- 	desc = memdup_user((void __user *)value, sizeof(*desc));
- 	if (IS_ERR(desc))
-@@ -787,13 +788,14 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+ 	for (i = 0; i < 3; i++)
+-		if (!ax88772_hw_reset(dev, 1))
++		if (!priv->reset(dev, 1))
+ 			break;
  
- 	for (i = 0; i < dev->eps_num; i++) {
- 		ep = &dev->eps[i];
--		if (ep->state != STATE_EP_DISABLED)
--			continue;
- 		if (ep->addr != usb_endpoint_num(desc) &&
- 				ep->addr != USB_RAW_EP_ADDR_ANY)
- 			continue;
- 		if (!usb_gadget_ep_match_desc(dev->gadget, ep->ep, desc, NULL))
- 			continue;
-+		ep_props_matched = true;
-+		if (ep->state != STATE_EP_DISABLED)
-+			continue;
- 		ep->ep->desc = desc;
- 		ret = usb_ep_enable(ep->ep);
- 		if (ret < 0) {
-@@ -815,8 +817,13 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
- 		goto out_unlock;
- 	}
+ 	if (netif_running(dev->net))
+ 		phy_start(priv->phydev);
+ }
  
--	dev_dbg(&dev->gadget->dev, "fail, no gadget endpoints available\n");
--	ret = -EBUSY;
-+	if (!ep_props_matched) {
-+		dev_dbg(&dev->gadget->dev, "fail, bad endpoint descriptor\n");
-+		ret = -EINVAL;
-+	} else {
-+		dev_dbg(&dev->gadget->dev, "fail, no endpoints available\n");
-+		ret = -EBUSY;
-+	}
+-static void ax88772a_resume(struct usbnet *dev)
+-{
+-	struct asix_common_private *priv = dev->driver_priv;
+-	int i;
+-
+-	for (i = 0; i < 3; i++) {
+-		if (!ax88772a_hw_reset(dev, 1))
+-			break;
+-	}
+-
+-	if (netif_running(dev->net))
+-		phy_start(priv->phydev);
+-}
+-
+ static int asix_resume(struct usb_interface *intf)
+ {
+ 	struct usbnet *dev = usb_get_intfdata(intf);
+@@ -763,9 +749,14 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
  
- out_free:
- 	kfree(desc);
+ 	chipcode &= AX_CHIPCODE_MASK;
+ 
+-	ret = (chipcode == AX_AX88772_CHIPCODE) ? ax88772_hw_reset(dev, 0) :
+-						  ax88772a_hw_reset(dev, 0);
++	priv->resume = ax88772_resume;
++	priv->suspend = ax88772_suspend;
++	if (chipcode == AX_AX88772_CHIPCODE)
++		priv->reset = ax88772_hw_reset;
++	else
++		priv->reset = ax88772a_hw_reset;
+ 
++	ret = priv->reset(dev, 0);
+ 	if (ret < 0) {
+ 		netdev_dbg(dev->net, "Failed to reset AX88772: %d\n", ret);
+ 		return ret;
+@@ -780,13 +771,6 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+ 
+ 	priv->presvd_phy_bmcr = 0;
+ 	priv->presvd_phy_advertise = 0;
+-	if (chipcode == AX_AX88772_CHIPCODE) {
+-		priv->resume = ax88772_resume;
+-		priv->suspend = ax88772_suspend;
+-	} else {
+-		priv->resume = ax88772a_resume;
+-		priv->suspend = ax88772_suspend;
+-	}
+ 
+ 	ret = ax88772_init_mdio(dev);
+ 	if (ret)
 -- 
-2.25.1
+2.30.2
 
