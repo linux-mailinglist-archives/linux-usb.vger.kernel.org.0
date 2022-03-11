@@ -2,217 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725F64D5FB8
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Mar 2022 11:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF54E4D5FD8
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Mar 2022 11:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347996AbiCKKge (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Mar 2022 05:36:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
+        id S1348054AbiCKKjD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Mar 2022 05:39:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348015AbiCKKg2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Mar 2022 05:36:28 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA5F1BD988;
-        Fri, 11 Mar 2022 02:35:12 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        with ESMTP id S1346581AbiCKKjB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Mar 2022 05:39:01 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F682F3
+        for <linux-usb@vger.kernel.org>; Fri, 11 Mar 2022 02:37:44 -0800 (PST)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 39DE021900;
-        Fri, 11 Mar 2022 10:35:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646994911; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=3mp/NTfr1ZRQi2cvIw2K8ve4TPHKPxpsioOPY6Gm7jc=;
-        b=jEF0gJQKcwhTeagwgBdvSlHK36VYwwKZUbqR5ce0nf5w8NliamXW+5XJYokUtbuWWuhBgB
-        8rKEt/xFMtHs84cFx6WEQp8PD/IfplRPiesklbTvPESwhZqVNC6NFBDRQiZfIVwtX1gnKU
-        r4JvdzxW9L6tOjbi2UUDEDb/R5Qt3hA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0D8A613A85;
-        Fri, 11 Mar 2022 10:35:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hhYYAt8lK2JRdgAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 11 Mar 2022 10:35:11 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] xen/usb: harden xen_hcd against malicious backends
-Date:   Fri, 11 Mar 2022 11:35:09 +0100
-Message-Id: <20220311103509.12908-1-jgross@suse.com>
-X-Mailer: git-send-email 2.34.1
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9E5443F203
+        for <linux-usb@vger.kernel.org>; Fri, 11 Mar 2022 10:37:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646995063;
+        bh=h9mhN1l0jEg81Bw1okmoM1euKZTWPDCOflq/7RGt514=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=riMPFMPTXKr6Znx9Oo+arl3YVQhSBrZo2EqNDdKShKzsBwvR0EASh9ts/nD7sroBP
+         WGxLO6cFWaJR+NP/chXsDDarhtHO6ZOc9l85skiSroxxLnmpT/H5fIwXCABGGuCJjq
+         JoM0nI/Tp5bAVSfZDSeMOhwKnyTezJU6Gmndsaw+YY00l4Jo+gYfnKgj6N0u9nhboO
+         CoXKDpJ9XwpwPsfhQVAhO0AkhpQh+xjELENgEmeHKqjn46BJetKd2RkdpvkJVjNX9J
+         3QAS8wfkZiWFEd80+AJsMaUKzK8Mjkufrh1FrAFybwsz+HwtbmjcX6NzAy95tcilon
+         qMyCgCs+Ggj3g==
+Received: by mail-ej1-f70.google.com with SMTP id ga31-20020a1709070c1f00b006cec400422fso4694333ejc.22
+        for <linux-usb@vger.kernel.org>; Fri, 11 Mar 2022 02:37:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=h9mhN1l0jEg81Bw1okmoM1euKZTWPDCOflq/7RGt514=;
+        b=E/ryHoKGgv+6fTKm0inUsz+rtY0tT7nr/3TwdAdL0ng0EOe/+rv1jhEOioYEG7Hm/d
+         DEFZnjDB9u701f9jX/llpEETDq9B4nHzfu4Fp1l0JzvGb5xrXZY9bRg8CyMiLBjISoXY
+         8vhyvHkP0CoqSqr2cd7htxkSAJh5c48dM2pChZA5PQiYLoOpIuRbjIoYhKiu9peQhDj+
+         PFgvRnF2jlb5n3pLyh95dKI+3ZLlInVp3N/KORZwcg1SH01ktUHy0wVv1sNICT/f7Qv4
+         MsnReEk6/yUX8Da2cX0LdRlV1DFVIjKpBRTSwr6hopQ9TSEhjGZa9JLXjr95iORgS8om
+         zo8A==
+X-Gm-Message-State: AOAM5307wqgxxan6qHxalMTXGpm1Se9OUjZ+dxyKXpVW3IFDRQ2R3PMX
+        zwjLzQWSTvmE3EKyprM8X+50/5i4DIWh6DR/mii9B2cqMfaHJVHBHe/hT+mQqYsbOgThW+vsTx+
+        tHthnkRC10XceaUX1irb44DoQxQDshTrWYMb8wA==
+X-Received: by 2002:a17:907:3e98:b0:6d7:7c21:529f with SMTP id hs24-20020a1709073e9800b006d77c21529fmr8241312ejc.104.1646995062773;
+        Fri, 11 Mar 2022 02:37:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJySUrEllRvzUKMm8nuZ24/WPj5ahUOL3vYX386ifl7LfzzG3qWE67RngRL+w4jFgklVI7KbKQ==
+X-Received: by 2002:a17:907:3e98:b0:6d7:7c21:529f with SMTP id hs24-20020a1709073e9800b006d77c21529fmr8241294ejc.104.1646995062569;
+        Fri, 11 Mar 2022 02:37:42 -0800 (PST)
+Received: from [192.168.0.148] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id p3-20020a1709060e8300b006d0e8ada804sm2742975ejf.127.2022.03.11.02.37.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Mar 2022 02:37:42 -0800 (PST)
+Message-ID: <3a9258c3-0555-0de5-f8fb-06f542f55855@canonical.com>
+Date:   Fri, 11 Mar 2022 11:37:40 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] usb: usb251xb: Set boost value for up- and downstream
+ ports
+Content-Language: en-US
+To:     "Neumann, Bastian" <Bastian.Neumann@dentsplysirona.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <PH0PR17MB48487D4BC9BB0D3C38D8EED38E0C9@PH0PR17MB4848.namprd17.prod.outlook.com>
+ <PH0PR17MB4848F60C6E91ECB7CDF308138E0C9@PH0PR17MB4848.namprd17.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <PH0PR17MB4848F60C6E91ECB7CDF308138E0C9@PH0PR17MB4848.namprd17.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Make sure a malicious backend can't cause any harm other than wrong
-I/O data.
+On 11/03/2022 11:04, Neumann, Bastian wrote:
+> This patch adds devicetree properties to enable signal boosting on USB ports.
+> 
+> Signed-off-by: Bastian Neumann <bastian.neumann@dentsplysirona.com>
+> ---
+>  .../devicetree/bindings/usb/usb251xb.txt      | 22 +++++++++++++
 
-Missing are verification of the request id in a response, sanitizing
-the reported actual I/O length, and protection against interrupt storms
-from the backend.
+Please split the bindings change. scripts/checkpatch did not complain?
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
- drivers/usb/host/xen-hcd.c | 57 ++++++++++++++++++++++++++++----------
- 1 file changed, 43 insertions(+), 14 deletions(-)
+You also need to Cc maintainers. Use scripts/get_maintainer.pl for this.
 
-diff --git a/drivers/usb/host/xen-hcd.c b/drivers/usb/host/xen-hcd.c
-index 01db5c767251..3e487baf8422 100644
---- a/drivers/usb/host/xen-hcd.c
-+++ b/drivers/usb/host/xen-hcd.c
-@@ -51,6 +51,7 @@ struct vdevice_status {
- struct usb_shadow {
- 	struct xenusb_urb_request req;
- 	struct urb *urb;
-+	bool in_flight;
- };
- 
- struct xenhcd_info {
-@@ -720,6 +721,12 @@ static void xenhcd_gnttab_done(struct xenhcd_info *info, unsigned int id)
- 	int nr_segs = 0;
- 	int i;
- 
-+	if (!shadow->in_flight) {
-+		xenhcd_set_error(info, "Illegal request id");
-+		return;
-+	}
-+	shadow->in_flight = false;
-+
- 	nr_segs = shadow->req.nr_buffer_segs;
- 
- 	if (xenusb_pipeisoc(shadow->req.pipe))
-@@ -803,6 +810,7 @@ static int xenhcd_do_request(struct xenhcd_info *info, struct urb_priv *urbp)
- 
- 	info->urb_ring.req_prod_pvt++;
- 	info->shadow[id].urb = urb;
-+	info->shadow[id].in_flight = true;
- 
- 	RING_PUSH_REQUESTS_AND_CHECK_NOTIFY(&info->urb_ring, notify);
- 	if (notify)
-@@ -931,10 +939,27 @@ static int xenhcd_unlink_urb(struct xenhcd_info *info, struct urb_priv *urbp)
- 	return ret;
- }
- 
--static int xenhcd_urb_request_done(struct xenhcd_info *info)
-+static void xenhcd_res_to_urb(struct xenhcd_info *info,
-+			      struct xenusb_urb_response *res, struct urb *urb)
-+{
-+	if (unlikely(!urb))
-+		return;
-+
-+	if (res->actual_length > urb->transfer_buffer_length)
-+		urb->actual_length = urb->transfer_buffer_length;
-+	else if (res->actual_length < 0)
-+		urb->actual_length = 0;
-+	else
-+		urb->actual_length = res->actual_length;
-+	urb->error_count = res->error_count;
-+	urb->start_frame = res->start_frame;
-+	xenhcd_giveback_urb(info, urb, res->status);
-+}
-+
-+static int xenhcd_urb_request_done(struct xenhcd_info *info,
-+				   unsigned int *eoiflag)
- {
- 	struct xenusb_urb_response res;
--	struct urb *urb;
- 	RING_IDX i, rp;
- 	__u16 id;
- 	int more_to_do = 0;
-@@ -961,16 +986,12 @@ static int xenhcd_urb_request_done(struct xenhcd_info *info)
- 			xenhcd_gnttab_done(info, id);
- 			if (info->error)
- 				goto err;
--			urb = info->shadow[id].urb;
--			if (likely(urb)) {
--				urb->actual_length = res.actual_length;
--				urb->error_count = res.error_count;
--				urb->start_frame = res.start_frame;
--				xenhcd_giveback_urb(info, urb, res.status);
--			}
-+			xenhcd_res_to_urb(info, &res, info->shadow[id].urb);
- 		}
- 
- 		xenhcd_add_id_to_freelist(info, id);
-+
-+		*eoiflag = 0;
- 	}
- 	info->urb_ring.rsp_cons = i;
- 
-@@ -988,7 +1009,7 @@ static int xenhcd_urb_request_done(struct xenhcd_info *info)
- 	return 0;
- }
- 
--static int xenhcd_conn_notify(struct xenhcd_info *info)
-+static int xenhcd_conn_notify(struct xenhcd_info *info, unsigned int *eoiflag)
- {
- 	struct xenusb_conn_response res;
- 	struct xenusb_conn_request *req;
-@@ -1033,6 +1054,8 @@ static int xenhcd_conn_notify(struct xenhcd_info *info)
- 				       info->conn_ring.req_prod_pvt);
- 		req->id = id;
- 		info->conn_ring.req_prod_pvt++;
-+
-+		*eoiflag = 0;
- 	}
- 
- 	if (rc != info->conn_ring.req_prod_pvt)
-@@ -1055,14 +1078,19 @@ static int xenhcd_conn_notify(struct xenhcd_info *info)
- static irqreturn_t xenhcd_int(int irq, void *dev_id)
- {
- 	struct xenhcd_info *info = (struct xenhcd_info *)dev_id;
-+	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
- 
--	if (unlikely(info->error))
-+	if (unlikely(info->error)) {
-+		xen_irq_lateeoi(irq, XEN_EOI_FLAG_SPURIOUS);
- 		return IRQ_HANDLED;
-+	}
- 
--	while (xenhcd_urb_request_done(info) | xenhcd_conn_notify(info))
-+	while (xenhcd_urb_request_done(info, &eoiflag) |
-+	       xenhcd_conn_notify(info, &eoiflag))
- 		/* Yield point for this unbounded loop. */
- 		cond_resched();
- 
-+	xen_irq_lateeoi(irq, eoiflag);
- 	return IRQ_HANDLED;
- }
- 
-@@ -1139,9 +1167,9 @@ static int xenhcd_setup_rings(struct xenbus_device *dev,
- 		goto fail;
- 	}
- 
--	err = bind_evtchn_to_irq(info->evtchn);
-+	err = bind_evtchn_to_irq_lateeoi(info->evtchn);
- 	if (err <= 0) {
--		xenbus_dev_fatal(dev, err, "bind_evtchn_to_irq");
-+		xenbus_dev_fatal(dev, err, "bind_evtchn_to_irq_lateeoi");
- 		goto fail;
- 	}
- 
-@@ -1494,6 +1522,7 @@ static struct usb_hcd *xenhcd_create_hcd(struct xenbus_device *dev)
- 	for (i = 0; i < XENUSB_URB_RING_SIZE; i++) {
- 		info->shadow[i].req.id = i + 1;
- 		info->shadow[i].urb = NULL;
-+		info->shadow[i].in_flight = false;
- 	}
- 	info->shadow[XENUSB_URB_RING_SIZE - 1].req.id = 0x0fff;
- 
--- 
-2.34.1
+Read:
+https://elixir.bootlin.com/linux/v5.13/source/Documentation/process/submitting-patches.rst
 
+Best regards,
+Krzysztof
