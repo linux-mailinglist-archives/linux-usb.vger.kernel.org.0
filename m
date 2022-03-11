@@ -2,159 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CE04D5BF9
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Mar 2022 08:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6994D5D57
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Mar 2022 09:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238326AbiCKHF7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Mar 2022 02:05:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
+        id S237246AbiCKIbr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Mar 2022 03:31:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346623AbiCKHF5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Mar 2022 02:05:57 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FC5FABDA
-        for <linux-usb@vger.kernel.org>; Thu, 10 Mar 2022 23:04:54 -0800 (PST)
-Received: from pyrite.rasen.tech (h175-177-042-148.catv02.itscom.jp [175.177.42.148])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9FFDD488;
-        Fri, 11 Mar 2022 08:04:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646982292;
-        bh=K+hwxi2WlF+xfa+GZijuHbBewmeJDw8Pk9b+TAOY6ic=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KXSFQgbCNRjntokF3/YrWgubp5nn82wOFieo5m0Kb2QzDdnLYuWgoCYKRTyLDetOr
-         3PG6XoEIKdHku8Ipn9SxrabHFocAYQxrP+0DPTD9AunaqKziwCZAAd/aMPl6yLAZl6
-         /W0g0N2OhA5Cfg60qADNNPmlcrVoQm8FWuJeZFKA=
-Date:   Fri, 11 Mar 2022 16:04:44 +0900
-From:   paul.elder@ideasonboard.com
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de,
-        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH 1/2] usb: gadget: uvc: clean and rename
- uvcg_queue_next_buffer to uvcg_complete_buffer
-Message-ID: <20220311070444.GC1046627@pyrite.rasen.tech>
-References: <20220228141659.775302-1-m.grzeschik@pengutronix.de>
+        with ESMTP id S240221AbiCKIbp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Mar 2022 03:31:45 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A5F1B98BF;
+        Fri, 11 Mar 2022 00:30:42 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id q29so5928343pgn.7;
+        Fri, 11 Mar 2022 00:30:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=EVR/EXEx8VwYMh+Mq3TbIRbAjTsCwpmkb5RBazMVbfs=;
+        b=GNLK00oLX064vIX+r2kYl2hpm4t94e+rXiqn1qZ9hWMFVkY6aHlbSH8BEbBAsY0Ldy
+         KB7UpyqDEx+aEAnMxJl6Nl3E9H4wxWU1Knh/dmR4kXxg9JgjkKp2s5gTO7PazmLZm4F5
+         ug9oi8DNyH2TidnPshxULWDwMziBs1Mm74UGEhni4KCZZ1F/pvAGs2QLTee/o+NXCoPx
+         e1Q8+zNhSL0HH2j5cNAHuMhmyya2h5bpdxFqEFGQOT0lbo0Qt4U+F3IZQRIZLr+ufMzv
+         YFN8l03fX2C2ydQiW4D5SBwzqbWJs2F18393kuDS6aObl/l9t9Qp8YIQQ+TU6u5Jq1RJ
+         PRtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=EVR/EXEx8VwYMh+Mq3TbIRbAjTsCwpmkb5RBazMVbfs=;
+        b=ROxHzxYKwUG7U1MvD9CVgnLhrtel81QgBS4TdwZ8MvfHR8oK1V46peJmfqlt/DZ94j
+         3HPNHd1+SaQRXfS6J9FgrJ2ul6TWrViFnyFnMUxbx/36wAPeyI0JIQ2f0L7OpTP9fUeM
+         E0bJXtxmqHKPrGIaj655/timaGnNio/jKn9JmQEtGLmy2ceDCHARMmizcXFCsZnLL+YX
+         03PWXX6+iGr6Doo9aMnbviTRb/d9GzPbcOLc0fLRkhBSWqEsat+COFKYjKFtE9VPb7i9
+         blgztyJjk2LSsmOq2V7ABMZ/7+/3jSaimSYne/aBuBEvt+8JHIYhLQLUiTVRTWAhhEz6
+         IN4g==
+X-Gm-Message-State: AOAM531aPtMVaw6VcDmEeRCku4sUZdthJHoR7vVGBVhntFTcCX24Rc9u
+        tJqRIJxWv7AdP0RdVquCVcXolPjoMvGpCaG4
+X-Google-Smtp-Source: ABdhPJwvPShUx/fd22EZnsmFZ7/fjy+OpgeoE43Ls+h/GXbhsRJW42jHfLYkBse6whh+7z/UG3sqSQ==
+X-Received: by 2002:a63:5451:0:b0:378:6b6c:ed83 with SMTP id e17-20020a635451000000b003786b6ced83mr7469585pgm.446.1646987441896;
+        Fri, 11 Mar 2022 00:30:41 -0800 (PST)
+Received: from localhost.localdomain (114-24-95-63.dynamic-ip.hinet.net. [114.24.95.63])
+        by smtp.gmail.com with ESMTPSA id q8-20020a056a00150800b004f7948d14e7sm785465pfu.191.2022.03.11.00.30.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 00:30:41 -0800 (PST)
+From:   Wei Ming Chen <jj251510319013@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     andreyknvl@gmail.com, balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, Wei Ming Chen <jj251510319013@gmail.com>
+Subject: [PATCH v2] usb: raw-gadget: return -EINVAL if no proper ep address available
+Date:   Fri, 11 Mar 2022 16:29:45 +0800
+Message-Id: <20220311082944.4881-1-jj251510319013@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CA+fCnZd2GoU6LVvT4eBT3w7TigRrp_9XcAGyL55K5nbi3yt4sA@mail.gmail.com>
+References: <CA+fCnZd2GoU6LVvT4eBT3w7TigRrp_9XcAGyL55K5nbi3yt4sA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228141659.775302-1-m.grzeschik@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael,
+If we try to use raw_ioctl_ep_enable() for ep5in on a hardware that
+only support from ep1-ep4 for both in and out direction, it will return
+-EBUSY originally.
 
-Thanks for the patch.
+I think it will be more intuitive if we return -EINVAL, because -EBUSY
+sounds like ep5in is not available now, but might be available in the
+future.
 
-On Mon, Feb 28, 2022 at 03:16:58PM +0100, Michael Grzeschik wrote:
-> The functions purpose is different to its name. We change the function
-> name and remove all unused code.
-> 
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> ---
->  drivers/usb/gadget/function/uvc_queue.c | 18 +-----------------
->  drivers/usb/gadget/function/uvc_queue.h |  2 +-
->  drivers/usb/gadget/function/uvc_video.c |  6 +++---
->  3 files changed, 5 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-> index d852ac9e47e72c..73ff56043d2e6a 100644
-> --- a/drivers/usb/gadget/function/uvc_queue.c
-> +++ b/drivers/usb/gadget/function/uvc_queue.c
-> @@ -326,24 +326,10 @@ int uvcg_queue_enable(struct uvc_video_queue *queue, int enable)
->  }
->  
->  /* called with &queue_irqlock held.. */
-> -struct uvc_buffer *uvcg_queue_next_buffer(struct uvc_video_queue *queue,
-> +void uvcg_complete_buffer(struct uvc_video_queue *queue,
->  					  struct uvc_buffer *buf)
->  {
-> -	struct uvc_buffer *nextbuf;
-> -
-> -	if ((queue->flags & UVC_QUEUE_DROP_INCOMPLETE) &&
-> -	     buf->length != buf->bytesused) {
-> -		buf->state = UVC_BUF_STATE_QUEUED;
-> -		vb2_set_plane_payload(&buf->buf.vb2_buf, 0, 0);
-> -		return buf;
-> -	}
-> -
->  	list_del(&buf->queue);
-> -	if (!list_empty(&queue->irqqueue))
-> -		nextbuf = list_first_entry(&queue->irqqueue, struct uvc_buffer,
-> -					   queue);
-> -	else
-> -		nextbuf = NULL;
+Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+---
 
-Is it fine to drop these? They look important to me. If they're not,
-then the reason should be explained in the commit message.
+Changes in v2:
+- Rename variable from ep_num_matched to ep_props_matched
+- Incorporate the patch from Andrey Konovalov that cover
+  the foloowing cases:
+    1. If there are no endpoints that match the provided descriptor, return
+       EINVAL.
+    2. If there are matching endpoints, but they are all already enabled,
+       return EBUSY.
 
->  
->  	buf->buf.field = V4L2_FIELD_NONE;
->  	buf->buf.sequence = queue->sequence++;
-> @@ -351,8 +337,6 @@ struct uvc_buffer *uvcg_queue_next_buffer(struct uvc_video_queue *queue,
->  
->  	vb2_set_plane_payload(&buf->buf.vb2_buf, 0, buf->bytesused);
->  	vb2_buffer_done(&buf->buf.vb2_buf, VB2_BUF_STATE_DONE);
-> -
-> -	return nextbuf;
+ drivers/usb/gadget/legacy/raw_gadget.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-This looks fine since all callers ignore it anyway.
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index d86c3a36441e..e5707626c4d4 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -758,6 +758,7 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+ 	unsigned long flags;
+ 	struct usb_endpoint_descriptor *desc;
+ 	struct raw_ep *ep;
++	bool ep_props_matched = false;
+ 
+ 	desc = memdup_user((void __user *)value, sizeof(*desc));
+ 	if (IS_ERR(desc))
+@@ -787,13 +788,14 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+ 
+ 	for (i = 0; i < dev->eps_num; i++) {
+ 		ep = &dev->eps[i];
+-		if (ep->state != STATE_EP_DISABLED)
+-			continue;
+ 		if (ep->addr != usb_endpoint_num(desc) &&
+ 				ep->addr != USB_RAW_EP_ADDR_ANY)
+ 			continue;
+ 		if (!usb_gadget_ep_match_desc(dev->gadget, ep->ep, desc, NULL))
+ 			continue;
++		ep_props_matched = true;
++		if (ep->state != STATE_EP_DISABLED)
++			continue;
+ 		ep->ep->desc = desc;
+ 		ret = usb_ep_enable(ep->ep);
+ 		if (ret < 0) {
+@@ -815,8 +817,13 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+ 		goto out_unlock;
+ 	}
+ 
+-	dev_dbg(&dev->gadget->dev, "fail, no gadget endpoints available\n");
+-	ret = -EBUSY;
++	if (!ep_props_matched) {
++		dev_dbg(&dev->gadget->dev, "fail, bad endpoint descriptor\n");
++		ret = -EINVAL;
++	} else {
++		dev_dbg(&dev->gadget->dev, "fail, no endpoints available\n");
++		ret = -EBUSY;
++	}
+ 
+ out_free:
+ 	kfree(desc);
+-- 
+2.25.1
 
-
-Paul
-
->  }
->  
->  struct uvc_buffer *uvcg_queue_head(struct uvc_video_queue *queue)
-> diff --git a/drivers/usb/gadget/function/uvc_queue.h b/drivers/usb/gadget/function/uvc_queue.h
-> index 05360a0767f61f..b668927b5d2c4e 100644
-> --- a/drivers/usb/gadget/function/uvc_queue.h
-> +++ b/drivers/usb/gadget/function/uvc_queue.h
-> @@ -93,7 +93,7 @@ void uvcg_queue_cancel(struct uvc_video_queue *queue, int disconnect);
->  
->  int uvcg_queue_enable(struct uvc_video_queue *queue, int enable);
->  
-> -struct uvc_buffer *uvcg_queue_next_buffer(struct uvc_video_queue *queue,
-> +void uvcg_complete_buffer(struct uvc_video_queue *queue,
->  					  struct uvc_buffer *buf);
->  
->  struct uvc_buffer *uvcg_queue_head(struct uvc_video_queue *queue);
-> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-> index 7f59a0c4740209..0c8d146b840321 100644
-> --- a/drivers/usb/gadget/function/uvc_video.c
-> +++ b/drivers/usb/gadget/function/uvc_video.c
-> @@ -112,7 +112,7 @@ uvc_video_encode_bulk(struct usb_request *req, struct uvc_video *video,
->  	if (buf->bytesused == video->queue.buf_used) {
->  		video->queue.buf_used = 0;
->  		buf->state = UVC_BUF_STATE_DONE;
-> -		uvcg_queue_next_buffer(&video->queue, buf);
-> +		uvcg_complete_buffer(&video->queue, buf);
->  		video->fid ^= UVC_STREAM_FID;
->  
->  		video->payload_size = 0;
-> @@ -183,7 +183,7 @@ uvc_video_encode_isoc_sg(struct usb_request *req, struct uvc_video *video,
->  		video->queue.buf_used = 0;
->  		buf->state = UVC_BUF_STATE_DONE;
->  		buf->offset = 0;
-> -		uvcg_queue_next_buffer(&video->queue, buf);
-> +		uvcg_complete_buffer(&video->queue, buf);
->  		video->fid ^= UVC_STREAM_FID;
->  	}
->  }
-> @@ -210,7 +210,7 @@ uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
->  	if (buf->bytesused == video->queue.buf_used) {
->  		video->queue.buf_used = 0;
->  		buf->state = UVC_BUF_STATE_DONE;
-> -		uvcg_queue_next_buffer(&video->queue, buf);
-> +		uvcg_complete_buffer(&video->queue, buf);
->  		video->fid ^= UVC_STREAM_FID;
->  	}
->  }
-> -- 
-> 2.30.2
-> 
