@@ -2,221 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFCFA4D5E0D
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Mar 2022 10:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EAB74D5E3D
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Mar 2022 10:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244941AbiCKJG0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Mar 2022 04:06:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
+        id S1347139AbiCKJUi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Mar 2022 04:20:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233602AbiCKJGZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Mar 2022 04:06:25 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2090.outbound.protection.outlook.com [40.107.92.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED1D1BB700
-        for <linux-usb@vger.kernel.org>; Fri, 11 Mar 2022 01:05:22 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U8UZGzDZWXGNmvA8w0YGiA38n5iPfz2f7xoQPikZLt8yIhjw6TNwFuMyoS8ZtkahDw41htI3jPHMm1DuaXwR/LQbRTbhqzdK6yjkUugTJ0ivdbgGHtO1EKYJBVTJzWbCRS6Z9iwoDlFMsCPQsSiRdPvQhP+LOKiFyRIoVj9HTLJKnza3Mfkytz/+ziYrYqlJm2KK01KRVUuMJdg1u8qYf5ic2mXqJ+2FXqiNM2w4GKK2T3aZQF+XyYyoeocUlRwRPL/E8hArpPPRSnzq9IBy0C9ibS7zHPp1BfPbdFnb70M+hywn4l190F2IoNeuD0MmISsiX2+nI4ytMcNplxCASQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=12KrVgoquyN0PiobvA3+73mAGiI949mbzpz8BCgDdwM=;
- b=lkY5QY/TcDLZ/fV1yubBsrjLxtDOpWxzI0JJiAABlf76NeRi3tlPE92SGYEBL1pznGvtIVPtZ0USaz8kH9oOIkfD3LhAyf07M1G5Pyr8EBnfZ7Mxfx5Q+lRNwBsMyVzQx5ehrm4KT6PnLXtXgqWSODeUn2w5pGZFyKOA1QR/YXqzqDh3nedwM5ibISyOeCwHNTQkQoezVugaZxhZ/SgyqQecRgYid9eYV9rNkxOR57dv1sLomPP+iukZdf6HkKe8tvDLnUPRv5EGHPkBFAvkd3IT79c0IV0Xk/KmkUMMeZneNEKnSJNvevRaTXrlbB/iEXoMbCtt8qx5jEzju10d9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=dentsplysirona.com; dmarc=pass action=none
- header.from=dentsplysirona.com; dkim=pass header.d=dentsplysirona.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dentsplysirona.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=12KrVgoquyN0PiobvA3+73mAGiI949mbzpz8BCgDdwM=;
- b=p9wQyrhPOqHqrN+mnpS1AUbXLjg+H+hW0wEHSZLeyD5afnITO42c7DmiZssSHs5Z4mQax4SR46nuowMBF6HDoV3mNxPRoVh1YN4BvLHqNX+I1CrkDVxBb1Pes/nq//iKiKuYukxQYpza8vdyPiji66KV8ziQAPQ7Sleycq0qSWM=
-Received: from PH0PR17MB4848.namprd17.prod.outlook.com (2603:10b6:510:8d::12)
- by PH0PR17MB4438.namprd17.prod.outlook.com (2603:10b6:510:1e::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22; Fri, 11 Mar
- 2022 09:05:20 +0000
-Received: from PH0PR17MB4848.namprd17.prod.outlook.com
- ([fe80::6860:7a7f:9314:1f3c]) by PH0PR17MB4848.namprd17.prod.outlook.com
- ([fe80::6860:7a7f:9314:1f3c%5]) with mapi id 15.20.5038.027; Fri, 11 Mar 2022
- 09:05:20 +0000
-From:   "Neumann, Bastian" <Bastian.Neumann@dentsplysirona.com>
-To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: [PATCH] usb: usb251xb: Set boost value for up- and downstream ports
-Thread-Topic: [PATCH] usb: usb251xb: Set boost value for up- and downstream
- ports
-Thread-Index: Adg1JbGHe/2UNl8pRq+1WxBhm4k0NQ==
-Date:   Fri, 11 Mar 2022 09:05:19 +0000
-Message-ID: <PH0PR17MB48487D4BC9BB0D3C38D8EED38E0C9@PH0PR17MB4848.namprd17.prod.outlook.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=dentsplysirona.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 48a9e666-7520-476f-0d8c-08da033e44b7
-x-ms-traffictypediagnostic: PH0PR17MB4438:EE_
-x-microsoft-antispam-prvs: <PH0PR17MB443857ABDBD741E87B6F7D788E0C9@PH0PR17MB4438.namprd17.prod.outlook.com>
-x-disclaimer: Applied
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7V6WQJeKgsV553uirnaEejUnL+d4+ru9lWHQKKJOFUiLOn/pOxRdFG1KwwbSKT7qC6u+v+6DiduTQn/rp1kPDNM5iBWdRkBKfGgOLgvKlE9ehRMMOmO1XL3IbQwO7FQjgymyz0X+uyw9MAiDZSbtD30CdTuwL9kJBMy2rGF1D9P5oKym5eug17NHbgDn+gRgktegnMT6XFUoAdwiECUf4QHb8i0AHeN+DaStNyAEduESgNL+LhWRRLqXkUZZ5fRPPvUEYOUNeiBTg735spcQRpRGReY0743NI4OQirC1TOSa3V4uoI7wRj4dMOAcHK6hnZR+AfjRWCvaePSyfO8l9D7Wb7QwFQIYJWn7ST6suF/q3RcT0HovUU4y/EsoyLe4pYtpK3yRpaaTpq9I4HzMIqBDR3A6tVw9uaTmmSDIPSl8Bnro4mn6RHkEyDchZazcxEAncnJV+rKnNL0ee623TObBA1uQhjTVBLmIABEq+SV1kzSavUHcxR8RjYVNfExtsY+IdTkKmnYJpEgKPw4HLAUQd5vrEyxGvBviPRtVe914oRMjRIahF7tJPf8HdgHws0Y8yYrt0fUir4sho+yuTEbvxFsOX444ynyC1pEwUfnqiD6JSdbhShsTFjQy3CfPC+YV4ogXApTsOi3Sj2XWMI4hyu6rGNEi/MfJD/1Vw2skoUoSrDoYnC+k8pjpnriQZqStf77i/Pf6LUkOogTcbA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR17MB4848.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(66476007)(76116006)(66946007)(55016003)(33656002)(64756008)(8676002)(9686003)(66446008)(86362001)(7696005)(122000001)(6506007)(38100700002)(508600001)(71200400001)(6916009)(316002)(38070700005)(2906002)(26005)(8936002)(83380400001)(186003)(52536014)(66574015)(5660300002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Q0loRHFtYUJyZWQ2SjFWcVY4Mkx4SktCVUVtdzFMUzZ4NGpFWldxUW5iWFlS?=
- =?utf-8?B?N0lLOVFyVUl0RkFLMW5tY0d3bmNzdmhtNXphdU1uYTVzdU1xaUZxa2N1RVlQ?=
- =?utf-8?B?THB3NDl0OXUxRkVCQmNYVjNtVFJ3TWlvU1BvaWhOUzI3a05QaVdqVU5HSHJk?=
- =?utf-8?B?YzY1eHdLYXB2UHhXUlFLZGFHUDhZR0JOdi9MZ3ZWZWtIQ3EySUx1clFmbFMx?=
- =?utf-8?B?V2JNUkJ4eW8yYXg3RVRrTUloT2ltZUJZWU1UaWpNNjQ3Unc5eHBEeGxPQWt5?=
- =?utf-8?B?b1k5RllYUVBJNTJjdFlBc0hWZnZGMmR2aE1WWWlvWFRaUEFDN3ZINldoL3pS?=
- =?utf-8?B?QUdhYTgwck1kb2ZiblJvR09QbDhpMVFHMi92VjVjUEpqQmRMMWoyYnY2YmR5?=
- =?utf-8?B?b01qWnkxQ3ZmSnRJTGJFazNHdEF1ZHk0ZndpcTI3dVZuWElVcWJ5NERCeVBV?=
- =?utf-8?B?YTE5YnFGTGFvWWpsZVZVME9sL2IzMktiYk5Nb01tOS9vNytiNUFudzByR3ZZ?=
- =?utf-8?B?NVRSY0I4NlhvZlpRYnQrQTVOSTdDRVY5akFHSVJYeTMyYjJPZzE5aVg3NmNB?=
- =?utf-8?B?TEVRQlZubUZCMzBOc0ptOFNmUnU2dlN3NHRhUDlTNWc5UUhXcldFTnE5ME9F?=
- =?utf-8?B?ZWV0d1lrN0VmOUlWdEhudGZXWDVtQmtSRS9Hbm9ZUk5aMG1nRGJwb1l2R2hV?=
- =?utf-8?B?dkVkbzFLNVNwQ05hSnBMQTR3UVduTWhvbmtXaS9vRjR2ZldvN0hsdkc5cG82?=
- =?utf-8?B?aGM3N1AzVUpsekZvdmJpSmJlWEZTeGd2SEJDczhhdHdueFIyL2I1dWdoUjVw?=
- =?utf-8?B?M3FsbXNSNmljSmNIMFM4TmZldWI3ZENyOU1oUS9ZVDlSRjFWNFZuOHB1Ylpa?=
- =?utf-8?B?Qlo1cEVYc3owSzdaVXh5NmVzcXgvWlJrMFIzNDUwc2JxQ0V2S29VNDkxRXRl?=
- =?utf-8?B?MC9FblhldU54Y0p3TXp4NElyQkkrdHFGQm1ZU1NoWmR4TGlOcFRFK09QU0Zz?=
- =?utf-8?B?S3phWHJQUTJqOHBwTndqbHBzeXNKYTAzZFJKT0lCYmVITUlveTZuWjNuOXRR?=
- =?utf-8?B?cjdCY0JPZVhhRmpBdERkU1BveUxoSE11UXZjTGU4RFNwK0Myay9rZExVNUJD?=
- =?utf-8?B?akEyUGhER2oxaVZYME5QWTV5cXZkK2RKRERGZkJ3NWRXY1RPZTE0Tk0vSSsy?=
- =?utf-8?B?S0JmVXNPZTJxZWpPdFM5akcrSlBMc1VpcFk0cUM0Tm9EdDYvNGQ1RTl3QXlt?=
- =?utf-8?B?bTFvM3AvNG1CVDMxeFRFb1AvMmlTamJ1clNUVnhzTi8ydHBCWUI1MTc4YTYr?=
- =?utf-8?B?NFJ6S1FqbUhvZHpFQmFJSUJoQWhvYVFsdndaNkZyTmpuRTFWcStXTlJONHZS?=
- =?utf-8?B?eXNPM3A3WE5jSnJPRkxQcXRwelExbkdGbERkc2FHSnFJM2JrdE9WTjNXZ0FM?=
- =?utf-8?B?dGNtN2dqckhWbGhpL3FTRkRTNlFNRTNYOGI2cFlUQnlDMkF4Y3RFZGxEWEcw?=
- =?utf-8?B?WDg0T25IOTRkd0FJMnBlN3poOHFyNEhiSm1PdHNwWnVmRG9SZW1kSUhEM2xk?=
- =?utf-8?B?ME9CNkp5QmlkNTAzV3NnMGlHWm1JZ25DRStkWXIyWDJjODN4WFdJNVI5Q0dl?=
- =?utf-8?B?RW9GY0d3bi9ZdDBwUlFUYXBETWZNcVViMHVBditZaXd6NDFSUHlac1IxUG0r?=
- =?utf-8?B?YkN6eDRoM3llSUJ4T0x3TktTOVh5U2djTlhwUFpLUTFXQTRVS2RzcTh2SWox?=
- =?utf-8?B?UnQyR24xQWtWWjZ1VmRRN0JPc01hUlhRbVE5b0NQbnZGL29rTG1VcUh5TU9L?=
- =?utf-8?B?MFNoYWpnUU40RjBMUGdDWDM2S2NWbzVFZ2lNdW11OGhpVVRUckNaQU5yNklY?=
- =?utf-8?B?NlZzT3M3dVVKZ0wweHpFREdKenF4OTBzTk9ZR2VhMmNROXIxYzBGeHdGRlN6?=
- =?utf-8?B?QmlxcDgwSmNIeGcwbmdnc3NWendHMnplUU1pWXp4aWtWb1Bna1Vqc0UvcVlm?=
- =?utf-8?Q?HPyDGm6sLtv9Wiye7MUeeF8ZZ4ykoI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S243086AbiCKJUh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Mar 2022 04:20:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6251BD048;
+        Fri, 11 Mar 2022 01:19:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BA0A61F27;
+        Fri, 11 Mar 2022 09:19:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0641C340E9;
+        Fri, 11 Mar 2022 09:19:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646990373;
+        bh=wuHe8NaXh4zJwIPauMCZkRknqC9dqhWaU0wygMAjDVg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=HRmAO2ddpQxXLp72B4m1QgBy0/HxUOae4lHjp5lXlaQWTnAOLP6uNVS85mBVbZWa0
+         7Bp9HAMuvsh7VIDW39YLgJvz6fx89UoE4FvNkeIBF19+qfo6OQnWR06Ww9HmSy84FR
+         jrbdH17rca80IjsBTmc1BnvA6DV8pGiNrnWeN2aljMQ6tG4xZ9C0tzJp2enaz2oz//
+         OL6OIA5nngrLdfQICFxsWZwz04s/7/UiwmCgS5QdwiKZnwFbUE7IUbnAMpDtL7TmLq
+         6u9AVGuzJcjB/3RecSRBybKv44/7owEsEkH8a2kDTH7VVyr5vFiUeyNfhdiAf3iMh6
+         p377W5O0Eo1xA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nSbQm-0001N9-B8; Fri, 11 Mar 2022 10:19:28 +0100
+Date:   Fri, 11 Mar 2022 10:19:28 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial updates for 5.18-rc1
+Message-ID: <YisUIF1uXOs5g/tw@hovoldconsulting.com>
 MIME-Version: 1.0
-X-OriginatorOrg: dentsplysirona.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR17MB4848.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 48a9e666-7520-476f-0d8c-08da033e44b7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2022 09:05:20.0331
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: bc74e59c-5fa3-4157-9c37-6e5063d11a62
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4khI9v4VHxzRSuUoAVxqT8n0p/+jYQT23F5oN2JchiAU3gVz3v/KxiEspbyMxIjD896T2ruz2Djds26Ljp53KwYH1+kYYTWt4kNekGOeC9xZBZCK5wcd3GCpn5VDGujz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR17MB4438
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VGhpcyBwYXRjaCBhZGRzIGRldmljZXRyZWUgcHJvcGVydGllcyB0byBlbmFibGUgc2lnbmFsIGJv
-b3N0aW5nIG9uIFVTQiBwb3J0cy4NCg0KU2lnbmVkLW9mZi1ieTogQmFzdGlhbiBOZXVtYW5uIDxi
-YXN0aWFuLm5ldW1hbm5AZGVudHNwbHlzaXJvbmEuY29tPg0KLS0tDQogLi4uL2RldmljZXRyZWUv
-YmluZGluZ3MvdXNiL3VzYjI1MXhiLnR4dCAgICAgIHwgMjIgKysrKysrKysrKysrKw0KIGRyaXZl
-cnMvdXNiL21pc2MvdXNiMjUxeGIuYyAgICAgICAgICAgICAgICAgICB8IDMyICsrKysrKysrKysr
-KysrKysrLS0NCiAyIGZpbGVzIGNoYW5nZWQsIDUyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25z
-KC0pDQoNCmRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNi
-L3VzYjI1MXhiLnR4dCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNi
-MjUxeGIudHh0DQppbmRleCAxYTkzNGVhYjE3NWUuLjUzOGFlNDlmYzMxZCAxMDA2NDQNCi0tLSBh
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvdXNiMjUxeGIudHh0DQorKysg
-Yi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL3VzYjI1MXhiLnR4dA0KQEAg
-LTY4LDYgKzY4LDI2IEBAIE9wdGlvbmFsIHByb3BlcnRpZXMgOg0KICAtIHN3YXAtZHgtbGFuZXMg
-OiBTcGVjaWZpZXMgdGhlIHBvcnRzIHdoaWNoIHdpbGwgc3dhcCB0aGUgZGlmZmVyZW50aWFsLXBh
-aXINCiAgICAgICAgKEQrL0QtKSwgZGVmYXVsdCBpcyBub3Qtc3dhcHBlZC4NCg0KK0VsZWN0cmlj
-YWwgc2lnbmFsIGJvb3N0aW5nDQorVGhlIGNvbnRyb2xsZXIgc3VwcGxpZXMgYSAiYm9vc3Rpbmci
-IGZ1bmN0aW9uYWxpdHkgdG8gZHJpdmUgdXAgdGhlIFVTQg0KK2VsZWN0cmljYWwgc2lnbmFscy4g
-VGhpcyBjb3VsZCByZXN1bHQgaW4gbm9uLVVTQiBjb21wbGlhbnQgcGFyYW1ldGVycw0KKyhvbmUg
-ZXhhbXBsZSB3b3VsZCBiZSBKL0sgbGV2ZWwgdGVzdCkuIFRoaXMgc2hvdWxkIGJlIDwweDAwPiB1
-bmxlc3Mgc3BlY2lmaWMNCitpbXBsZW1lbnRhdGlvbiBpc3N1ZXMgcmVxdWlldyBhZGRpdGlvbmFs
-IHNpZ25hbCBib29zdGluZyB0byBjb3JyZWN0IGZvciBkZXJhZGVkDQorVVNCIHNpZ25hbGluZyBs
-ZXZlbHM6DQorIC0gPDB4MDA+IDogTm9ybWFsIGVsZWN0cmljYWwgZHJpdmUgc3RyZW5ndGggKG5v
-IGJvb3N0KQ0KKyAtIDwweDAxPiA6IEVsZXZhdGVkIGRyaXZlIHN0cmVuZ3RoIGxvdyAofjQlIGJv
-b3N0KQ0KKyAtIDwweDAyPiA6IEVsZXZhdGVkIGRyaXZlIHN0cmVuZ3RoIG1lZGl1bSAofjglIGJv
-b3N0KQ0KKyAtIDwweDAzPiA6IEVsZXZhdGVkIGRyaXZlIHN0cmVuZ3RoIGhpZ2ggKH4xMiUgYm9v
-c3QpDQorDQorIC0gYm9vc3QtdXAgOiBVU0IgZWxlY3RyaWNhbCBzaWduYWxpbmcgZHJpdmUgc3Ry
-ZW5ndGggYm9vc3QgZm9yIHVwc3RyZWFtIHBvcnQuDQorIC0gYm9vc3QtMSA6ICBVU0IgZWxlY3Ry
-aWNhbCBzaWduYWxpbmcgZHJpdmUgc3RyZW5ndGggYm9vc3QgZm9yIHBvcnQgMS4NCisgLSBib29z
-dC0yIDogIFVTQiBlbGVjdHJpY2FsIHNpZ25hbGluZyBkcml2ZSBzdHJlbmd0aCBib29zdCBmb3Ig
-cG9ydCAyLg0KKyAtIGJvb3N0LTMgOiAgVVNCIGVsZWN0cmljYWwgc2lnbmFsaW5nIGRyaXZlIHN0
-cmVuZ3RoIGJvb3N0IGZvciBwb3J0IDMuDQorIC0gYm9vc3QtNCA6ICBVU0IgZWxlY3RyaWNhbCBz
-aWduYWxpbmcgZHJpdmUgc3RyZW5ndGggYm9vc3QgZm9yIHBvcnQgNC4NCisgLSBib29zdC01IDog
-IFVTQiBlbGVjdHJpY2FsIHNpZ25hbGluZyBkcml2ZSBzdHJlbmd0aCBib29zdCBmb3IgcG9ydCA1
-Lg0KKyAtIGJvb3N0LTYgOiAgVVNCIGVsZWN0cmljYWwgc2lnbmFsaW5nIGRyaXZlIHN0cmVuZ3Ro
-IGJvb3N0IGZvciBwb3J0IDYuDQorIC0gYm9vc3QtNyA6ICBVU0IgZWxlY3RyaWNhbCBzaWduYWxp
-bmcgZHJpdmUgc3RyZW5ndGggYm9vc3QgZm9yIHBvcnQgNy4NCisNCiBFeGFtcGxlczoNCiAgICAg
-ICAgdXNiMjUxMmJAMmMgew0KICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAibWljcm9jaGlw
-LHVzYjI1MTJiIjsNCkBAIC04Niw0ICsxMDYsNiBAQCBFeGFtcGxlczoNCiAgICAgICAgICAgICAg
-ICBzZXJpYWwgPSAiMTIzNDU2Nzg5MEEiOw0KICAgICAgICAgICAgICAgIC8qIGNvcnJlY3QgbWlz
-cGxhY2VkIHVzYiBjb25uZWN0b3JzIG9uIHBvcnQgMSwyICovDQogICAgICAgICAgICAgICAgc3dh
-cC1keC1sYW5lcyA9IDwxIDI+Ow0KKyAgICAgICAgICAgICAgIGJvb3N0LXVwID0gPDB4MDA+OyAv
-KiBubyBib29zdCBmb3IgdXBzdHJlYW0gcG9ydCAqLw0KKyAgICAgICAgICAgICAgIGJvb3N0LTEg
-PSA8MHgwMj47IC8qIG1lZGl1bSBib29zdCBvbiBwb3J0IDEgKi8NCiAgICAgICAgfTsNCmRpZmYg
-LS1naXQgYS9kcml2ZXJzL3VzYi9taXNjL3VzYjI1MXhiLmMgYi9kcml2ZXJzL3VzYi9taXNjL3Vz
-YjI1MXhiLmMNCmluZGV4IDA0YzRlM2ZlZDA5NC4uNjI1MTA2MzQzZDEyIDEwMDY0NA0KLS0tIGEv
-ZHJpdmVycy91c2IvbWlzYy91c2IyNTF4Yi5jDQorKysgYi9kcml2ZXJzL3VzYi9taXNjL3VzYjI1
-MXhiLmMNCkBAIC01NzUsNiArNTc1LDM2IEBAIHN0YXRpYyBpbnQgdXNiMjUxeGJfZ2V0X29mZGF0
-YShzdHJ1Y3QgdXNiMjUxeGIgKmh1YiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICh3
-Y2hhcl90ICopaHViLT5zZXJpYWwsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICBVU0Iy
-NTFYQl9TVFJJTkdfQlVGU0laRSk7DQoNCisgICAgICAgaHViLT5ib29zdF91cCA9IFVTQjI1MVhC
-X0RFRl9CT09TVF9VUDsNCisgICAgICAgaWYgKCFvZl9wcm9wZXJ0eV9yZWFkX3UzMihucCwgImJv
-b3N0LXVwIiwNCisgICAgICAgICAgICZwcm9wZXJ0eV91MzIpKQ0KKyAgICAgICAgICAgICAgIGh1
-Yi0+Ym9vc3RfdXAgfD0gKHByb3BlcnR5X3UzMiA8PCAwKTsNCisNCisgICAgICAgaHViLT5ib29z
-dF8xNCA9IFVTQjI1MVhCX0RFRl9CT09TVF8xNDsNCisgICAgICAgaWYgKCFvZl9wcm9wZXJ0eV9y
-ZWFkX3UzMihucCwgImJvb3N0LTEiLA0KKyAgICAgICAgICAgJnByb3BlcnR5X3UzMikpDQorICAg
-ICAgICAgICAgICAgaHViLT5ib29zdF8xNCB8PSAocHJvcGVydHlfdTMyIDw8IDApOw0KKyAgICAg
-ICBpZiAoIW9mX3Byb3BlcnR5X3JlYWRfdTMyKG5wLCAiYm9vc3QtMiIsDQorICAgICAgICAgICAm
-cHJvcGVydHlfdTMyKSkNCisgICAgICAgICAgICAgICBodWItPmJvb3N0XzE0IHw9IChwcm9wZXJ0
-eV91MzIgPDwgMik7DQorICAgICAgIGlmICghb2ZfcHJvcGVydHlfcmVhZF91MzIobnAsICJib29z
-dC0zIiwNCisgICAgICAgICAgICZwcm9wZXJ0eV91MzIpKQ0KKyAgICAgICAgICAgICAgIGh1Yi0+
-Ym9vc3RfMTQgfD0gKHByb3BlcnR5X3UzMiA8PCA0KTsNCisgICAgICAgaWYgKCFvZl9wcm9wZXJ0
-eV9yZWFkX3UzMihucCwgImJvb3N0LTQiLA0KKyAgICAgICAgICAgJnByb3BlcnR5X3UzMikpDQor
-ICAgICAgICAgICAgICAgaHViLT5ib29zdF8xNCB8PSAocHJvcGVydHlfdTMyIDw8IDYpOw0KKyAg
-ICAgICBodWItPmJvb3N0XzU3ID0gVVNCMjUxWEJfREVGX0JPT1NUXzU3Ow0KKyAgICAgICBpZiAo
-IW9mX3Byb3BlcnR5X3JlYWRfdTMyKG5wLCAiYm9vc3QtNSIsDQorICAgICAgICAgICAmcHJvcGVy
-dHlfdTMyKSkNCisgICAgICAgICAgICAgICBodWItPmJvb3N0XzU3IHw9IChwcm9wZXJ0eV91MzIg
-PDwgMCk7DQorICAgICAgIGlmICghb2ZfcHJvcGVydHlfcmVhZF91MzIobnAsICJib29zdC02IiwN
-CisgICAgICAgICAgICZwcm9wZXJ0eV91MzIpKQ0KKyAgICAgICAgICAgICAgIGh1Yi0+Ym9vc3Rf
-NTcgfD0gKHByb3BlcnR5X3UzMiA8PCAyKTsNCisgICAgICAgaWYgKCFvZl9wcm9wZXJ0eV9yZWFk
-X3UzMihucCwgImJvb3N0LTciLA0KKyAgICAgICAgICAgJnByb3BlcnR5X3UzMikpDQorICAgICAg
-ICAgICAgICAgaHViLT5ib29zdF81NyB8PSAocHJvcGVydHlfdTMyIDw8IDQpOw0KKw0KKw0KICAg
-ICAgICAvKg0KICAgICAgICAgKiBUaGUgZGF0YXNoZWV0IGRvY3VtZW50cyB0aGUgcmVnaXN0ZXIg
-YXMgJ1BvcnQgU3dhcCcgYnV0IGluIHJlYWwgdGhlDQogICAgICAgICAqIHJlZ2lzdGVyIGNvbnRy
-b2xzIHRoZSBVU0IgRFAvRE0gc2lnbmFsIHN3YXBwaW5nIGZvciBlYWNoIHBvcnQuDQpAQCAtNTg3
-LDggKzYxNyw2IEBAIHN0YXRpYyBpbnQgdXNiMjUxeGJfZ2V0X29mZGF0YShzdHJ1Y3QgdXNiMjUx
-eGIgKmh1YiwNCiAgICAgICAgICogbWF5IGJlIGFzIHNvb24gYXMgbmVlZGVkLg0KICAgICAgICAg
-Ki8NCiAgICAgICAgaHViLT5iYXRfY2hhcmdlX2VuID0gVVNCMjUxWEJfREVGX0JBVFRFUllfQ0hB
-UkdJTkdfRU5BQkxFOw0KLSAgICAgICBodWItPmJvb3N0XzU3ID0gVVNCMjUxWEJfREVGX0JPT1NU
-XzU3Ow0KLSAgICAgICBodWItPmJvb3N0XzE0ID0gVVNCMjUxWEJfREVGX0JPT1NUXzE0Ow0KICAg
-ICAgICBodWItPnBvcnRfbWFwMTIgPSBVU0IyNTFYQl9ERUZfUE9SVF9NQVBfMTI7DQogICAgICAg
-IGh1Yi0+cG9ydF9tYXAzNCA9IFVTQjI1MVhCX0RFRl9QT1JUX01BUF8zNDsNCiAgICAgICAgaHVi
-LT5wb3J0X21hcDU2ID0gVVNCMjUxWEJfREVGX1BPUlRfTUFQXzU2Ow0KLS0NCjIuMzAuMg0KDQoN
-Cg0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NClNp
-cm9uYSBEZW50YWwgU3lzdGVtcyBHbWJIDQpTaXR6IGRlciBHZXNlbGxzY2hhZnQgLyByZWdpc3Rl
-cmVkIGFkZHJlc3M6IEZhYnJpa3N0cmHDn2UgMzEsIDY0NjI1IEJlbnNoZWltDQpSZWdpc3Rlcmdl
-cmljaHQgLyBjb3VydCBvZiByZWdpc3RyeTogQW10c2dlcmljaHQgRGFybXN0YWR0LCBIUkIgMjQ5
-NDgNCkdlc2Now6RmdHNmw7xocmVyIC8gTWFuYWdpbmcgRGlyZWN0b3I6IERyLiBDb3JkIFN0w6Ro
-bGVyLCBKYW4gU2llZmVydCwgUmFpbmVyIFJhc2Noa2UNCkF1ZnNpY2h0c3JhdHN2b3JzaXR6ZW5k
-ZXIgLyBDaGFpcm1hbiBvZiB0aGUgU3VwZXJ2aXNvcnkgQm9hcmQ6IERyLiBBbGV4YW5kZXIgVm9l
-bGNrZXINCg0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0NCg0KDQpEaWVzZSBFLU1haWwgaXN0IGF1c3NjaGxpZXNzbGljaCBmdWVyIGRlbiBhbmdlc3By
-b2NoZW5lbiBBZHJlc3NhdGVuDQpiZXN0aW1tdCB1bmQga2FubiB2ZXJ0cmF1bGljaGUgSW5mb3Jt
-YXRpb25lbiBiZWluaGFsdGVuLg0KLS0NClRoaXMgZS1tYWlsIGlzIGludGVuZGVkIG9ubHkgZm9y
-IHRoZSBkZXNpZ25hdGVkIHJlY2lwaWVudChzKS4gSXQgbWF5DQpjb250YWluIGNvbmZpZGVudGlh
-bCBvciBwcm9wcmlldGFyeSBpbmZvcm1hdGlvbi4NCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0K
+The following changes since commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3:
+
+  Linux 5.17-rc6 (2022-02-27 14:36:33 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.18-rc1
+
+for you to fetch changes up to 4ac56b1f1ef8139dbfc5dab918aa235e8344ec4e:
+
+  USB: serial: usb_wwan: remove redundant assignment to variable i (2022-03-08 18:51:02 +0100)
+
+----------------------------------------------------------------
+USB-serial updates for 5.18-rc1
+
+Here are the USB-serial updates for 5.18-rc1, including:
+
+ - a new "simple driver" for some Nokia phones
+ - a fix for pl2303 GS type detection
+ - another pl2303 device id
+
+Included is also a clean up.
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      USB: serial: usb_wwan: remove redundant assignment to variable i
+
+Eddie James (1):
+      USB: serial: pl2303: add IBM device IDs
+
+Johan Hovold (2):
+      USB: serial: simple: add Nokia phone driver
+      USB: serial: pl2303: fix GS type detection
+
+ drivers/usb/serial/Kconfig             | 1 +
+ drivers/usb/serial/pl2303.c            | 2 ++
+ drivers/usb/serial/pl2303.h            | 3 +++
+ drivers/usb/serial/usb-serial-simple.c | 7 +++++++
+ drivers/usb/serial/usb_wwan.c          | 1 -
+ 5 files changed, 13 insertions(+), 1 deletion(-)
