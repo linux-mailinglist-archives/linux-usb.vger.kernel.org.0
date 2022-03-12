@@ -2,81 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6164D6F5E
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Mar 2022 14:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C85C94D6F9D
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Mar 2022 15:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbiCLN7z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 12 Mar 2022 08:59:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
+        id S231320AbiCLPAa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Mar 2022 10:00:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiCLN7z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Mar 2022 08:59:55 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD2EF5430
-        for <linux-usb@vger.kernel.org>; Sat, 12 Mar 2022 05:58:48 -0800 (PST)
-Date:   Sun, 13 Mar 2022 00:58:28 +1100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jookia.org; s=key1;
-        t=1647093525;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=zSdN7nwNYrzBSqWKTF9/We5rMMO7YBfBWLjU2MpLZc4=;
-        b=xWRmpX9gqWKBSdDQ9o5OCpYMLCMfZfpm7egj0IPcFa8YzrAS+2jWX0T1VBlqlbGqepsg8x
-        XaFiNgZ5ZOb5zYsODicpE7LozbhPPpIvIpC+6F/tNgtKOuurhh6BQShmd81W9LYKRjrx1i
-        ehVZuJ/AzmTuuu+cAQahAth61yasp9Sf8QNvkbO+nga8xZyMB5uxaZvdqrwoBCz1vasZN1
-        6ANpdEQtdAU1puxHWqm27mO/ZoLBwzcxlzOmwa0Yvo4FTAL5g0bltGpP9N38/492Sd0msx
-        qUbtXTtfh7u8nZb8pVYEEVY64MhNvpR60uN24FqUATL3epyfQ2HqrIlYdVEc4g==
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Jookia <contact@jookia.org>
-To:     linux-usb@vger.kernel.org
-Subject: acm_port_shutdown hangs for 30 seconds
-Message-ID: <YiynBKeGJCMEkgyO@novena-choice-citizen>
+        with ESMTP id S229935AbiCLPA3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Mar 2022 10:00:29 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5FBF03CFE1
+        for <linux-usb@vger.kernel.org>; Sat, 12 Mar 2022 06:59:22 -0800 (PST)
+Received: (qmail 1617672 invoked by uid 1000); 12 Mar 2022 09:59:21 -0500
+Date:   Sat, 12 Mar 2022 09:59:21 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     Jiri Kosina <jkosina@suse.cz>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Salah Triki <salah.triki@gmail.com>,
+        benjamin.tissoires@redhat.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
+        noralf@tronnes.org,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        tzimmermann@suse.de
+Subject: Re: [PATCH] HID: elo: Fix refcount leak in elo_probe()
+Message-ID: <Yiy1SSH0robIK06h@rowland.harvard.edu>
+References: <YgbT4uqSIVY9ku10@rowland.harvard.edu>
+ <000000000000d31cac05d7c4da7e@google.com>
+ <YgcSbUwiALbmoTvL@rowland.harvard.edu>
+ <CAD-N9QX6kTf-Fagz8W00KOM1REhoqQvfTckqZZttMcdSCHmSag@mail.gmail.com>
+ <YgpqHEb1CuhIElIP@rowland.harvard.edu>
+ <20220217080459.GB2407@kadam>
+ <Yg5ozvWf0T+NTWPz@rowland.harvard.edu>
+ <YhieIzbS0OLSZTdj@kroah.com>
+ <CAD-N9QXx7aq_4ZH_AOkOeE+RgQUgehRXm1diuzsrVgJDDohC+Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: jookia.org
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAD-N9QXx7aq_4ZH_AOkOeE+RgQUgehRXm1diuzsrVgJDDohC+Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello there,
+On Sat, Mar 12, 2022 at 05:39:05PM +0800, Dongliang Mu wrote:
+> On Fri, Feb 25, 2022 at 5:15 PM Greg KH <greg@kroah.com> wrote:
+> >
+> > On Thu, Feb 17, 2022 at 10:25:02AM -0500, Alan Stern wrote:
+> > > On Thu, Feb 17, 2022 at 11:04:59AM +0300, Dan Carpenter wrote:
+> > > > Salah sent a bunch of these.  The reasoning was explained in this email.
+> > > >
+> > > > https://www.spinics.net/lists/kernel/msg4026672.html
+> > > >
+> > > > When he resent the patch, Greg said that taking the reference wasn't
+> > > > needed so the patch wasn't applied.  (Also it had the same reference
+> > > > leak so that's a second reason it wasn't applied).
+> > >
+> > > Indeed, the kerneldoc for usb_get_intf() does say that each reference
+> > > held by a driver must be refcounted.  And there's nothing wrong with
+> > > doing that, _provided_ you do it correctly.
+> > >
+> > > But if you know the extra refcount will never be needed (because the
+> > > reference will be dropped before the usb_interface in question is
+> > > removed), fiddling with the reference count is unnecessary.  I guess
+> > > whether or not to do it could be considered a matter of taste.
+> > >
+> > > On the other hand, it wouldn't hurt to update the kerneldoc for
+> > > usb_get_intf() (and usb_get_dev() also).  We could point out that if a
+> > > driver does not access the usb_interface structure after its disconnect
+> > > routine returns, incrementing the refcount isn't mandatory.
+> >
+> > That would be good to add to prevent this type of confusion in the
+> > future.
+> 
+> Hi Jiri Kosina,
+> 
+> from my understanding, my previous patch and patch from Alan Stern can
+> all fix the underlying issue. But as Dan said, the patch from Alan is
+> more elegant.
+> 
+> However, the revert commit from you said, my commit introduces memory
+> leak, which confuses me.
+> 
+> HID: elo: Revert USB reference counting
+> 
+> Commit 817b8b9 ("HID: elo: fix memory leak in elo_probe") introduced
+> memory leak on error path, but more importantly the whole USB reference
+> counting is not needed at all in the first place ......
+> 
+> If it is really my patch that introduces the memory leak, please let me know.
 
-I've been banging my head against this issue over the years but sat down
-and started to debug it today.
+Jiri named the wrong commit in his Changelog.  The memory leak was 
+introduced by commit fbf42729d0e9 ("HID: elo: update the reference count 
+of the usb device structure"). not by your commit 817b8b9c5396 ("HID: 
+elo: fix memory leak in elo_probe").
 
-When I try to quit GNU screen, minicom or another serial program it
-sometimes hangs for around 30 seconds.
-
-To reproduce I do this:
-
-1. Connect an Arduino Micro with stock LED blink firmware
-2. Run 'screen /dev/ttyACM1 9600'
-3. Type some letters (no response from the board is given)
-4. Quit in some way
-
-If I skip step 3 (typing letters), the hang does not happen.
-
-In userspace the hang happens at a call to close() on the TTY, and using
-perf and ftrace it looks to be spending a lot of time poisoning urbs in
-acm_port_shutdown.
-This kind of makes sense to me as there is some in flight data to be
-sent and there's no acknowledgement coming from the chip.
-
-I've had this issue with embedded Linux boards too that for some reason
-or another have stopped functioning.
-The current solution I have is to forcefully unplug the board, but
-that's not ideal.
-
-My questions are:
-
-- Is this a bug?
-- Can I reduce the timeout somehow?
-
-Thanks for your time,
-Jookia.
+Alan Stern
