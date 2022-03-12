@@ -2,89 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BCE4D6E99
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Mar 2022 13:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6164D6F5E
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Mar 2022 14:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbiCLMLT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 12 Mar 2022 07:11:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35332 "EHLO
+        id S231787AbiCLN7z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Mar 2022 08:59:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiCLMLS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Mar 2022 07:11:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EC610C1;
-        Sat, 12 Mar 2022 04:10:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23BD360ED9;
-        Sat, 12 Mar 2022 12:10:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 73C65C340EE;
-        Sat, 12 Mar 2022 12:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647087012;
-        bh=od+O6iBCXPg7m95XTkKOVRXfTF7XVSzEbp2nKdwRS9w=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=mHJOQhvUYWiPC1jLkgUrw6xzK1CPDFVFui3OmzlZRj07Zss4SVW6IMrhh5DrN2Ujx
-         lCFCSThhrulGpbFnXc+P4DMwr8ExpB6obkCwN/bOMI9HWgsTd/JLjBBTW2uXylLudl
-         XFgTjNlaTPJh10qTiZD2eqOlFuaqxI8KHi3y5RjZ1ogB6A9uZfbqHYe7P0wRWaqjI2
-         SPvf0hEKsnm2dfglrfeeKep9l98n421/yjJJd1q3JhmesEbyedni914khw8qJB1l+7
-         wCPX6y84J3COK4DuDkzZRL+wXYQ/XMgsgXePBEzP0q4CDeCCDL9T3Px6a9q9gbS2J3
-         pYdxXNzqzHEDA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4FE03F0383F;
-        Sat, 12 Mar 2022 12:10:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229762AbiCLN7z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Mar 2022 08:59:55 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD2EF5430
+        for <linux-usb@vger.kernel.org>; Sat, 12 Mar 2022 05:58:48 -0800 (PST)
+Date:   Sun, 13 Mar 2022 00:58:28 +1100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jookia.org; s=key1;
+        t=1647093525;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=zSdN7nwNYrzBSqWKTF9/We5rMMO7YBfBWLjU2MpLZc4=;
+        b=xWRmpX9gqWKBSdDQ9o5OCpYMLCMfZfpm7egj0IPcFa8YzrAS+2jWX0T1VBlqlbGqepsg8x
+        XaFiNgZ5ZOb5zYsODicpE7LozbhPPpIvIpC+6F/tNgtKOuurhh6BQShmd81W9LYKRjrx1i
+        ehVZuJ/AzmTuuu+cAQahAth61yasp9Sf8QNvkbO+nga8xZyMB5uxaZvdqrwoBCz1vasZN1
+        6ANpdEQtdAU1puxHWqm27mO/ZoLBwzcxlzOmwa0Yvo4FTAL5g0bltGpP9N38/492Sd0msx
+        qUbtXTtfh7u8nZb8pVYEEVY64MhNvpR60uN24FqUATL3epyfQ2HqrIlYdVEc4g==
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jookia <contact@jookia.org>
+To:     linux-usb@vger.kernel.org
+Subject: acm_port_shutdown hangs for 30 seconds
+Message-ID: <YiynBKeGJCMEkgyO@novena-choice-citizen>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 1/4] net: usb: asix: unify ax88772_resume code
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164708701232.11169.2704062360712589828.git-patchwork-notify@kernel.org>
-Date:   Sat, 12 Mar 2022 12:10:12 +0000
-References: <20220311085014.1210963-1-o.rempel@pengutronix.de>
-In-Reply-To: <20220311085014.1210963-1-o.rempel@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     davem@davemloft.net, kuba@kernel.org, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, paskripkin@gmail.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: jookia.org
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
+Hello there,
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+I've been banging my head against this issue over the years but sat down
+and started to debug it today.
 
-On Fri, 11 Mar 2022 09:50:11 +0100 you wrote:
-> The only difference is the reset code, so remove not needed duplicates.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  drivers/net/usb/asix.h         |  1 +
->  drivers/net/usb/asix_devices.c | 32 ++++++++------------------------
->  2 files changed, 9 insertions(+), 24 deletions(-)
+When I try to quit GNU screen, minicom or another serial program it
+sometimes hangs for around 30 seconds.
 
-Here is the summary with links:
-  - [net-next,v2,1/4] net: usb: asix: unify ax88772_resume code
-    https://git.kernel.org/netdev/net-next/c/d57da85dc4e3
-  - [net-next,v2,2/4] net: usb: asix: store chipid to avoid reading it on reset
-    https://git.kernel.org/netdev/net-next/c/5436fb3fd4c1
-  - [net-next,v2,3/4] net: usb: asix: make use of mdiobus_get_phy and phy_connect_direct
-    https://git.kernel.org/netdev/net-next/c/d5f3c81c569f
-  - [net-next,v2,4/4] net: usb: asix: suspend embedded PHY if external is used
-    https://git.kernel.org/netdev/net-next/c/4d17d43de9d1
+To reproduce I do this:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+1. Connect an Arduino Micro with stock LED blink firmware
+2. Run 'screen /dev/ttyACM1 9600'
+3. Type some letters (no response from the board is given)
+4. Quit in some way
 
+If I skip step 3 (typing letters), the hang does not happen.
 
+In userspace the hang happens at a call to close() on the TTY, and using
+perf and ftrace it looks to be spending a lot of time poisoning urbs in
+acm_port_shutdown.
+This kind of makes sense to me as there is some in flight data to be
+sent and there's no acknowledgement coming from the chip.
+
+I've had this issue with embedded Linux boards too that for some reason
+or another have stopped functioning.
+The current solution I have is to forcefully unplug the board, but
+that's not ideal.
+
+My questions are:
+
+- Is this a bug?
+- Can I reduce the timeout somehow?
+
+Thanks for your time,
+Jookia.
