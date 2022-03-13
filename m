@@ -2,101 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F377D4D776A
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Mar 2022 18:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A4E4D77E0
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Mar 2022 20:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235243AbiCMR7Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Mar 2022 13:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41756 "EHLO
+        id S235532AbiCMTIv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Mar 2022 15:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235245AbiCMR7P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Mar 2022 13:59:15 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA42A25EA0;
-        Sun, 13 Mar 2022 10:58:05 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id b28so11670359lfc.4;
-        Sun, 13 Mar 2022 10:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=rS9E+l0t1qeR/q2Nej9jwr575vUVg/ygf4pM8R2kiL8=;
-        b=b3LIAWv8MZtR31aLx2W8cpmAyGNVI1VP6ckHdlGTXUpQ1fKdi0uSs7VHElRTy0VKl0
-         cOFQQVMiWf4U3FMcUrL50hrsqKqUoCz1MEkZBrvhrHgHHk+zx1VaLXsQ/Uhy6zerLeKN
-         7JggvH+N+bB8T+a1H1lMvez+VctNRwmHVGkVNyj/nWon56psS0pAykz4JZxP1Mo8/qAU
-         GtUNqUVLAUEI3UFGuBxkyDrCATjVp6Puy8ciO6uMqNGLE+gI89L/NaCgabz8IH0tM7PX
-         tFrFxjTPNymX0tWu4KfEWpGFr8K+Cug6tMYVOESPp+OAYT7bJE9QHoyMEEKWGhQy8iA3
-         Eheg==
+        with ESMTP id S235430AbiCMTIr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Mar 2022 15:08:47 -0400
+Received: from mail-io1-xd45.google.com (mail-io1-xd45.google.com [IPv6:2607:f8b0:4864:20::d45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4200A5882F
+        for <linux-usb@vger.kernel.org>; Sun, 13 Mar 2022 12:07:23 -0700 (PDT)
+Received: by mail-io1-xd45.google.com with SMTP id k10-20020a5d91ca000000b006414a00b160so10767332ior.18
+        for <linux-usb@vger.kernel.org>; Sun, 13 Mar 2022 12:07:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rS9E+l0t1qeR/q2Nej9jwr575vUVg/ygf4pM8R2kiL8=;
-        b=7Fh/cwemaLfQ4ANNF7p7J/6J6I+i33PB/o2FdKtxNrwY2KeNEwDOwSpw8BiD0l4mnS
-         ejiF9cx3fs5hWMMfXtlaABuzdWpKEa+jiFPrp0qbC5fljWBn3+JeiRlPj0ElY0vhV/18
-         S7ceJCphrMK4msSNquTsXxtIFdE7cYwlMUAWJPuvInY1U8Eo9F3Ey40wch2Aepr+GbyR
-         /7rj+bphf+U6g2QoQGegRbvYY/pjPlD6tFPPTTlBbfiwcloXll2US/Os7JonuuQL+gKL
-         3qpnAwrAxiwuT7Ou7HoSATuzLkwh+wtpg4GxUa0fO42ctfDEw0oHM63vNjdn7Ox+i1LO
-         iEMg==
-X-Gm-Message-State: AOAM530WhJBxP4v9KohJxHoylfV303YBQEijyrJzmfSnb6EMG070ZqaX
-        ED8sAG+No/66re87HVqjwYk=
-X-Google-Smtp-Source: ABdhPJxb0HLjVZOVRwe2MlV2I025fTveSXJ+KOnQNM83lrVa7y4d5E5nRZQkUEozn1cUVElkGLQEMg==
-X-Received: by 2002:a05:6512:3e19:b0:448:23de:5b18 with SMTP id i25-20020a0565123e1900b0044823de5b18mr12012632lfv.554.1647194284133;
-        Sun, 13 Mar 2022 10:58:04 -0700 (PDT)
-Received: from [192.168.1.11] ([94.103.229.107])
-        by smtp.gmail.com with ESMTPSA id k11-20020ac2456b000000b004482043aac1sm2815737lfm.263.2022.03.13.10.58.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Mar 2022 10:58:03 -0700 (PDT)
-Message-ID: <d979796e-d991-4ffd-7668-d1f7baee3f51@gmail.com>
-Date:   Sun, 13 Mar 2022 20:58:02 +0300
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=hrG6Ki3aA8GUhdvCzu83x+7g5sqskeEOsHfTy29t4bQ=;
+        b=aNMYlzaKMyqhRs6IrrVKE7uXRvJmO4ZbvWzbtlMy6NB8HTf8M+8zSI2tMVFbOL3MJO
+         sx+h/VaJ3BledsSRkAcAg91g0qkt4GxmIombbJ7XT2IDfXyS+DzfzV/qQPUWqirmeG/9
+         7Z4lAubekfBg9BP0wica5gkef2eNV5lapJS+UP+kb+1ZGs1IRwQlkJ0u8q0hDP4O2b/X
+         zO8kSwnyAZ1rOABTAreg3n9+aK+YGuGNTV/PM/AvaNNyrdUi5zpIB6wWgDCpE84YRK5V
+         1x1Rl+vgMuAA8500e9kPuxHr+zSo5wycx1s51Lf6csTf/lFREB3BVlKVKXeoSvXmAMUQ
+         cJDQ==
+X-Gm-Message-State: AOAM531xw1QyyKmRwbyjRsT2v+wzXJjerMaHrgUrQxS1gpoHaY/577AA
+        3W23Kn/WPbnZjziLCHSQjFsnQdRstJ2No1ULZ33o8rS/Bf5J
+X-Google-Smtp-Source: ABdhPJy52cW2X75vVZN/Qp8fQW0mjgpEorMgwvmJGJ9IXYb2e9asY0cQIyZbCDcnDxdOubkkNtceCMO4uFw8Z/qci8JwOkZPxMF/
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [syzbot] KMSAN: uninit-value in asix_mdio_read (3)
-Content-Language: en-US
-To:     syzbot <syzbot+9ed16c369e0f40e366b2@syzkaller.appspotmail.com>,
-        andrew@lunn.ch, davem@davemloft.net, glider@google.com,
+X-Received: by 2002:a05:6638:3816:b0:31a:60:22c9 with SMTP id
+ i22-20020a056638381600b0031a006022c9mr2318973jav.146.1647198380638; Sun, 13
+ Mar 2022 12:06:20 -0700 (PDT)
+Date:   Sun, 13 Mar 2022 12:06:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005a48c405da1e42a7@google.com>
+Subject: [syzbot] WARNING in dev_shutdown (2)
+From:   syzbot <syzbot+b7f7bc8316a81a317025@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, jhs@mojatatu.com, jiri@resnulli.us,
         kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux@rempel-privat.de,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000176d6705da1d4bd3@google.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <000000000000176d6705da1d4bd3@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/13/22 20:57, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-> 
-> Reported-and-tested-by: syzbot+9ed16c369e0f40e366b2@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         72494641 x86: kmsan: enable KMSAN builds for x86
-> git tree:       https://github.com/google/kmsan.git master
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=28718f555f258365
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9ed16c369e0f40e366b2
-> compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=11ccaa41700000
-> 
-> Note: testing is done by a robot and is best-effort only.
+Hello,
 
-#syz fix: net: asix: add proper error handling of usb read errors
+syzbot found the following issue on:
+
+HEAD commit:    98d107b84614 usb: host: xhci: Remove some unnecessary retu..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=14e2cd45700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3c586df4d4c0a65
+dashboard link: https://syzkaller.appspot.com/bug?extid=b7f7bc8316a81a317025
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b7f7bc8316a81a317025@syzkaller.appspotmail.com
+
+ax88179_178a 1-1:8.224 eth1: Failed to write reg index 0x0001: -19
+ax88179_178a 1-1:8.224 eth1: Failed to write reg index 0x0002: -19
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 5 at net/sched/sch_generic.c:1484 dev_shutdown+0x44f/0x520 net/sched/sch_generic.c:1484
+Modules linked in:
+CPU: 0 PID: 5 Comm: kworker/0:0 Not tainted 5.17.0-rc6-syzkaller-00100-g98d107b84614 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:dev_shutdown+0x44f/0x520 net/sched/sch_generic.c:1484
+Code: fc 48 c7 c2 20 40 d6 86 be 55 00 00 00 48 c7 c7 00 44 d6 86 c6 05 d6 6d ca 03 01 e8 98 96 c4 00 e9 76 fd ff ff e8 41 62 61 fc <0f> 0b e9 b8 fe ff ff 48 8b 7c 24 10 e8 30 83 90 fc e9 de fb ff ff
+RSP: 0018:ffffc9000005f598 EFLAGS: 00010246
+RAX: 0000000000040000 RBX: 0000000000000001 RCX: ffffc90007c12000
+RDX: 0000000000040000 RSI: ffffffff84e29def RDI: ffff888116c4c510
+RBP: ffff888116c4c000 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff84e23f1a R11: 0000000000000000 R12: ffff888116c4c410
+R13: ffff888110ce4c18 R14: ffffed1022d89880 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2bf24000 CR3: 000000010e37a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ unregister_netdevice_many+0x816/0x1870 net/core/dev.c:10408
+ unregister_netdevice_queue net/core/dev.c:10349 [inline]
+ unregister_netdevice_queue+0x2dd/0x3c0 net/core/dev.c:10339
+ unregister_netdevice include/linux/netdevice.h:2902 [inline]
+ unregister_netdev+0x18/0x20 net/core/dev.c:10474
+ usbnet_disconnect+0x139/0x270 drivers/net/usb/usbnet.c:1623
+ usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
+ __device_release_driver+0x627/0x760 drivers/base/dd.c:1209
+ device_release_driver_internal drivers/base/dd.c:1242 [inline]
+ device_release_driver+0x26/0x40 drivers/base/dd.c:1265
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:529
+ device_del+0x4f3/0xc80 drivers/base/core.c:3592
+ usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1419
+ usb_disconnect.cold+0x27a/0x78e drivers/usb/core/hub.c:2228
+ hub_port_connect drivers/usb/core/hub.c:5207 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5507 [inline]
+ port_event drivers/usb/core/hub.c:5665 [inline]
+ hub_event+0x1e39/0x44d0 drivers/usb/core/hub.c:5747
+ process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+ process_scheduled_works kernel/workqueue.c:2370 [inline]
+ worker_thread+0x833/0x1110 kernel/workqueue.c:2456
+ kthread+0x2ef/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-
-With regards,
-Pavel Skripkin
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
