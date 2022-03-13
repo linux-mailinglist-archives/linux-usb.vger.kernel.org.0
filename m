@@ -2,268 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D20324D7514
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Mar 2022 12:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A35A14D75F5
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Mar 2022 15:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233289AbiCMMAc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Mar 2022 08:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
+        id S234658AbiCMOxz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Mar 2022 10:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiCMMAb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Mar 2022 08:00:31 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1651D25E88;
-        Sun, 13 Mar 2022 04:59:22 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C062C492;
-        Sun, 13 Mar 2022 12:59:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1647172761;
-        bh=2KHd2mtefEmvKWJtyswFnBPxpf8PGYWwKivi8REA7VM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C5+2f3qYyNhsh21BGuAPQGSxoecJTUCJk94W9DXtfWsOw00Kc1GM0oL3isbgklIKQ
-         CDWWQ8knRJepBSoDBwdpKkxe8IqfPKwaET5JbC/22rGpc37fpIXX/NrpYXVDCs6wwE
-         q1G08QnFez/16rZ4PwJ+Fv7hdFXmQBa/6L8+pZd4=
-Date:   Sun, 13 Mar 2022 13:59:04 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] media: Kconfig: cleanup VIDEO_DEV dependencies
-Message-ID: <Yi3ciCTbHrxYUatX@pendragon.ideasonboard.com>
-References: <42ae3d28d4d822f3e14db76b99f2f4c41688ae3e.1647155467.git.mchehab@kernel.org>
+        with ESMTP id S234636AbiCMOxy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Mar 2022 10:53:54 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCDD888E9;
+        Sun, 13 Mar 2022 07:52:46 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id b16so15484650ioz.3;
+        Sun, 13 Mar 2022 07:52:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i/XezRwvh2gzL6Ttf5VHhgwtutiLUu4G+QBeYqkcdxc=;
+        b=JlswR+2w6s45M6iLlDIZMJkpJdKO1GUMNUv2bF5jmu+WIK6sGHxzY8408fzrsdZMCr
+         gNyxbdC4rA/9nhGriZeyQFWJT4gL8H2tLm8EHhLuXbfCVMT9YbCDzp+cU/MbGXSd3HkX
+         lO3iX4hAVSmpCejNwl8qkyoLTGvkItlx0bUkyToXQcclkqebDr0MpMjgH8jBXaNgc3vM
+         NgmbaoaGrJnqcHsvvlBNp/lNPK0HeOM32TyFFIQgMMU7yjo1p7gxbwep7M7RgLfvxd7v
+         cqC4HgyK5VNf9MzPWXtrMx7x1dOE/PAoyNfKndC4e5HxBUlxtRQ0kx+3+I2AkFQJRus6
+         dtBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i/XezRwvh2gzL6Ttf5VHhgwtutiLUu4G+QBeYqkcdxc=;
+        b=8Qgkuk0v71tf0imNlIvsfOvcF8EFdR1IZgoNLrO7huxCSi96nSJLjYBh9fzCsRUyFR
+         wAF5X7t7rEgHTHG3COE0pQfByHu4keU2yuX7RQ+HXdfLi6XK0wT6Yy2eDA+a6Nz7po6I
+         MQ9HWELVUwim3BNUJFjYav/EbB/hBdD8vIsyWVnUH23ib6YxCFLvizeLJbmXz2G7axTf
+         8/1tV3ZlqzjsIXgrKcHetIhYcQMNFVwnpkbdUy3zN05LY1lDzdansMRjmYmUrY/1oKtj
+         G9I941eLglMMI7fFkrsyH284D2mmR5mzhj6jarJbf8048Q0K2e31IWQw3wl5RpArZxPW
+         isNA==
+X-Gm-Message-State: AOAM533oRskQPTRDehB8pbu83/KDXeHdMKopYz64XFdVRDQbE0hAR4EU
+        oc2ZKK/N/4nP1f+6ExTXgsZ180gHbNFwjdyITvFcolpn
+X-Google-Smtp-Source: ABdhPJw7YFcidFnVOL/eCTnU0sWP31A2Zyx0IitwSpYV1dPANnItK2s6TayRSMvVa4aPhLMb8ER31D2QQ7Oc8kGww8Q=
+X-Received: by 2002:a05:6638:a2f:b0:314:b8b9:1c21 with SMTP id
+ 15-20020a0566380a2f00b00314b8b91c21mr16766450jao.22.1647183165672; Sun, 13
+ Mar 2022 07:52:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <42ae3d28d4d822f3e14db76b99f2f4c41688ae3e.1647155467.git.mchehab@kernel.org>
+References: <CA+fCnZd2GoU6LVvT4eBT3w7TigRrp_9XcAGyL55K5nbi3yt4sA@mail.gmail.com>
+ <20220311082944.4881-1-jj251510319013@gmail.com>
+In-Reply-To: <20220311082944.4881-1-jj251510319013@gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Sun, 13 Mar 2022 15:52:35 +0100
+Message-ID: <CA+fCnZeXMKXBzJm=akMNm4OVN53T_1aQw4n+yYZ6Vkqmj8+KAQ@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: raw-gadget: return -EINVAL if no proper ep
+ address available
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wei Ming Chen <jj251510319013@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mauro,
-
-Thank you for the patch.
-
-Trimming the CC list to keep a few mailing lists only.
-
-On Sun, Mar 13, 2022 at 08:12:05AM +0100, Mauro Carvalho Chehab wrote:
-> media Kconfig has two entries associated to V4L API:
-> VIDEO_DEV and VIDEO_V4L2.
-> 
-> On Kernel 2.6.x, there were two V4L APIs, each one with its own flag.
-> VIDEO_DEV were meant to:
-> 	1) enable Video4Linux and make its Kconfig options to appear;
-> 	2) it makes the Kernel build the V4L core.
-> 
-> while VIDEO_V4L2 where used to distinguish between drivers that
-> implement the newer API and drivers that implemented the former one.
-> 
-> With time, such meaning changed, specially after the removal of
-> all V4L version 1 drivers.
-> 
-> At the current implementation, VIDEO_DEV only does (1): it enables
-> the media options related to V4L, that now has:
-> 
-> 	menu "Video4Linux options"
-> 		visible if VIDEO_DEV
-> 
-> 	source "drivers/media/v4l2-core/Kconfig"
-> 	endmenu
-> 
-> but it doesn't affect anymore the V4L core drivers.
-> 
-> The rationale is that the V4L2 core has a "soft" dependency
-> at the I2C bus, and now requires to select a number of other
-> Kconfig options:
-> 
-> 	config VIDEO_V4L2
-> 		tristate
-> 		depends on (I2C || I2C=n) && VIDEO_DEV
-> 		select RATIONAL
-> 		select VIDEOBUF2_V4L2 if VIDEOBUF2_CORE
-> 		default (I2C || I2C=n) && VIDEO_DEV
-> 
-> In the past, merging them would be tricky, but it seems that it is now
-> possible to merge those symbols, in order to simplify V4L dependencies.
-> 
-> Let's keep VIDEO_DEV, as this one is used on some make *defconfig
-> configurations.
-
-I would have gone for VIDEO_V4L2, but if it makes configuration changes
-easier to handle, VIDEO_DEV is fine with me too.
-
-> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+On Fri, Mar 11, 2022 at 9:30 AM Wei Ming Chen <jj251510319013@gmail.com> wrote:
+>
+> If we try to use raw_ioctl_ep_enable() for ep5in on a hardware that
+> only support from ep1-ep4 for both in and out direction, it will return
+> -EBUSY originally.
+>
+> I think it will be more intuitive if we return -EINVAL, because -EBUSY
+> sounds like ep5in is not available now, but might be available in the
+> future.
+>
+> Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
 > ---
->  drivers/input/rmi4/Kconfig                    |   2 +-
->  drivers/input/touchscreen/Kconfig             |   4 +-
->  drivers/media/Kconfig                         |   3 +
->  drivers/media/common/saa7146/Kconfig          |   2 +-
->  drivers/media/dvb-core/Kconfig                |   2 +-
->  drivers/media/dvb-frontends/Kconfig           |   4 +-
->  drivers/media/i2c/Kconfig                     | 250 +++++++++---------
->  drivers/media/i2c/ccs/Kconfig                 |   2 +-
->  drivers/media/i2c/cx25840/Kconfig             |   2 +-
->  drivers/media/i2c/et8ek8/Kconfig              |   2 +-
->  drivers/media/i2c/m5mols/Kconfig              |   2 +-
->  drivers/media/pci/Kconfig                     |   2 +-
->  drivers/media/pci/bt8xx/Kconfig               |   2 +-
->  drivers/media/pci/cobalt/Kconfig              |   2 +-
->  drivers/media/pci/cx18/Kconfig                |   2 +-
->  drivers/media/pci/dt3155/Kconfig              |   2 +-
->  drivers/media/pci/intel/ipu3/Kconfig          |   2 +-
->  drivers/media/pci/ivtv/Kconfig                |   2 +-
->  drivers/media/pci/meye/Kconfig                |   2 +-
->  drivers/media/pci/saa7146/Kconfig             |   6 +-
->  drivers/media/pci/sta2x11/Kconfig             |   2 +-
->  drivers/media/pci/tw5864/Kconfig              |   2 +-
->  drivers/media/pci/tw68/Kconfig                |   2 +-
->  drivers/media/pci/tw686x/Kconfig              |   2 +-
->  drivers/media/platform/Kconfig                |   6 +-
->  drivers/media/platform/allegro-dvt/Kconfig    |   2 +-
->  drivers/media/platform/am437x/Kconfig         |   2 +-
->  drivers/media/platform/amphion/Kconfig        |   2 +-
->  drivers/media/platform/aspeed/Kconfig         |   2 +-
->  drivers/media/platform/atmel/Kconfig          |   8 +-
->  drivers/media/platform/cadence/Kconfig        |   4 +-
->  drivers/media/platform/coda/Kconfig           |   2 +-
->  drivers/media/platform/davinci/Kconfig        |  12 +-
->  drivers/media/platform/exynos-gsc/Kconfig     |   2 +-
->  drivers/media/platform/exynos4-is/Kconfig     |   2 +-
->  drivers/media/platform/intel/Kconfig          |   2 +-
->  drivers/media/platform/marvell-ccic/Kconfig   |   4 +-
->  drivers/media/platform/meson/ge2d/Kconfig     |   2 +-
->  drivers/media/platform/mtk-jpeg/Kconfig       |   2 +-
->  drivers/media/platform/mtk-mdp/Kconfig        |   2 +-
->  drivers/media/platform/mtk-vcodec/Kconfig     |   2 +-
->  drivers/media/platform/mtk-vpu/Kconfig        |   2 +-
->  drivers/media/platform/nxp/Kconfig            |   8 +-
->  drivers/media/platform/nxp/imx-jpeg/Kconfig   |   2 +-
->  drivers/media/platform/omap/Kconfig           |   2 +-
->  drivers/media/platform/omap3isp/Kconfig       |   2 +-
->  drivers/media/platform/qcom/camss/Kconfig     |   2 +-
->  drivers/media/platform/qcom/venus/Kconfig     |   2 +-
->  drivers/media/platform/renesas/Kconfig        |  12 +-
->  .../media/platform/renesas/rcar-vin/Kconfig   |   4 +-
->  drivers/media/platform/rockchip/rga/Kconfig   |   2 +-
->  .../media/platform/rockchip/rkisp1/Kconfig    |   2 +-
->  drivers/media/platform/s3c-camif/Kconfig      |   2 +-
->  drivers/media/platform/s5p-g2d/Kconfig        |   2 +-
->  drivers/media/platform/s5p-jpeg/Kconfig       |   2 +-
->  drivers/media/platform/s5p-mfc/Kconfig        |   2 +-
->  drivers/media/platform/sti/bdisp/Kconfig      |   2 +-
->  drivers/media/platform/sti/delta/Kconfig      |   2 +-
->  drivers/media/platform/sti/hva/Kconfig        |   2 +-
->  drivers/media/platform/stm32/Kconfig          |   4 +-
->  .../media/platform/sunxi/sun4i-csi/Kconfig    |   2 +-
->  .../media/platform/sunxi/sun6i-csi/Kconfig    |   2 +-
->  drivers/media/platform/sunxi/sun8i-di/Kconfig |   2 +-
->  .../media/platform/sunxi/sun8i-rotate/Kconfig |   2 +-
->  drivers/media/platform/tegra/vde/Kconfig      |   2 +-
->  drivers/media/platform/ti-vpe/Kconfig         |   4 +-
->  drivers/media/platform/via/Kconfig            |   2 +-
->  drivers/media/platform/xilinx/Kconfig         |   2 +-
->  drivers/media/radio/Kconfig                   |  54 ++--
->  drivers/media/radio/si470x/Kconfig            |   2 +-
->  drivers/media/radio/wl128x/Kconfig            |   2 +-
->  drivers/media/spi/Kconfig                     |   4 +-
->  drivers/media/test-drivers/Kconfig            |   2 +-
->  drivers/media/test-drivers/vicodec/Kconfig    |   2 +-
->  drivers/media/test-drivers/vimc/Kconfig       |   2 +-
->  drivers/media/test-drivers/vivid/Kconfig      |   2 +-
->  drivers/media/tuners/Kconfig                  |   6 +-
->  drivers/media/tuners/e4000.c                  |   6 +-
->  drivers/media/tuners/fc2580.c                 |   6 +-
->  drivers/media/usb/airspy/Kconfig              |   2 +-
->  drivers/media/usb/au0828/Kconfig              |   6 +-
->  drivers/media/usb/cpia2/Kconfig               |   2 +-
->  drivers/media/usb/dvb-usb-v2/Kconfig          |   8 +-
->  drivers/media/usb/dvb-usb/Kconfig             |   4 +-
->  drivers/media/usb/gspca/Kconfig               |  96 +++----
->  drivers/media/usb/gspca/gl860/Kconfig         |   2 +-
->  drivers/media/usb/gspca/m5602/Kconfig         |   2 +-
->  drivers/media/usb/hackrf/Kconfig              |   2 +-
->  drivers/media/usb/hdpvr/Kconfig               |   2 +-
->  drivers/media/usb/msi2500/Kconfig             |   2 +-
->  drivers/media/usb/pvrusb2/Kconfig             |   2 +-
->  drivers/media/usb/pwc/Kconfig                 |   2 +-
->  drivers/media/usb/s2255/Kconfig               |   2 +-
->  drivers/media/usb/stkwebcam/Kconfig           |   2 +-
->  drivers/media/usb/usbtv/Kconfig               |   2 +-
->  drivers/media/usb/uvc/Kconfig                 |   2 +-
->  drivers/media/usb/zr364xx/Kconfig             |   2 +-
->  drivers/media/v4l2-core/Kconfig               |  12 +-
->  drivers/media/v4l2-core/Makefile              |   2 +-
->  drivers/staging/media/atomisp/Kconfig         |   2 +-
->  drivers/staging/media/atomisp/i2c/Kconfig     |  14 +-
->  drivers/staging/media/hantro/Kconfig          |   2 +-
->  drivers/staging/media/imx/Kconfig             |   2 +-
->  drivers/staging/media/ipu3/Kconfig            |   2 +-
->  drivers/staging/media/max96712/Kconfig        |   2 +-
->  drivers/staging/media/meson/vdec/Kconfig      |   2 +-
->  drivers/staging/media/omap4iss/Kconfig        |   2 +-
->  drivers/staging/media/rkvdec/Kconfig          |   2 +-
->  drivers/staging/media/sunxi/cedrus/Kconfig    |   2 +-
->  drivers/staging/media/tegra-video/Kconfig     |   2 +-
->  drivers/staging/media/zoran/Kconfig           |   2 +-
->  drivers/staging/most/video/Kconfig            |   2 +-
->  .../vc04_services/bcm2835-camera/Kconfig      |   2 +-
->  drivers/usb/gadget/Kconfig                    |   2 +-
->  drivers/usb/gadget/legacy/Kconfig             |   2 +-
->  sound/pci/Kconfig                             |   4 +-
->  116 files changed, 363 insertions(+), 368 deletions(-)
+>
+> Changes in v2:
+> - Rename variable from ep_num_matched to ep_props_matched
+> - Incorporate the patch from Andrey Konovalov that cover
+>   the foloowing cases:
+>     1. If there are no endpoints that match the provided descriptor, return
+>        EINVAL.
+>     2. If there are matching endpoints, but they are all already enabled,
+>        return EBUSY.
+>
+>  drivers/usb/gadget/legacy/raw_gadget.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+> index d86c3a36441e..e5707626c4d4 100644
+> --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> @@ -758,6 +758,7 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+>         unsigned long flags;
+>         struct usb_endpoint_descriptor *desc;
+>         struct raw_ep *ep;
+> +       bool ep_props_matched = false;
+>
+>         desc = memdup_user((void __user *)value, sizeof(*desc));
+>         if (IS_ERR(desc))
+> @@ -787,13 +788,14 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+>
+>         for (i = 0; i < dev->eps_num; i++) {
+>                 ep = &dev->eps[i];
+> -               if (ep->state != STATE_EP_DISABLED)
+> -                       continue;
+>                 if (ep->addr != usb_endpoint_num(desc) &&
+>                                 ep->addr != USB_RAW_EP_ADDR_ANY)
+>                         continue;
+>                 if (!usb_gadget_ep_match_desc(dev->gadget, ep->ep, desc, NULL))
+>                         continue;
+> +               ep_props_matched = true;
+> +               if (ep->state != STATE_EP_DISABLED)
+> +                       continue;
+>                 ep->ep->desc = desc;
+>                 ret = usb_ep_enable(ep->ep);
+>                 if (ret < 0) {
+> @@ -815,8 +817,13 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+>                 goto out_unlock;
+>         }
+>
+> -       dev_dbg(&dev->gadget->dev, "fail, no gadget endpoints available\n");
+> -       ret = -EBUSY;
+> +       if (!ep_props_matched) {
+> +               dev_dbg(&dev->gadget->dev, "fail, bad endpoint descriptor\n");
+> +               ret = -EINVAL;
+> +       } else {
+> +               dev_dbg(&dev->gadget->dev, "fail, no endpoints available\n");
+> +               ret = -EBUSY;
+> +       }
+>
+>  out_free:
+>         kfree(desc);
+> --
+> 2.25.1
+>
 
-[snip]
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
 
-> diff --git a/drivers/media/pci/tw5864/Kconfig b/drivers/media/pci/tw5864/Kconfig
-> index d376d4ed65b9..0a0f3191f238 100644
-> --- a/drivers/media/pci/tw5864/Kconfig
-> +++ b/drivers/media/pci/tw5864/Kconfig
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  config VIDEO_TW5864
->  	tristate "Techwell TW5864 video/audio grabber and encoder"
-> -	depends on VIDEO_DEV && PCI && VIDEO_V4L2
-> +	depends on VIDEO_DEV && PCI && VIDEO_DEV
+Greg, could you consider picking this up?
 
-You can drop the second VIDEO_DEV.
-
->  	select VIDEOBUF2_DMA_CONTIG
->  	help
->  	  Support for boards based on Techwell TW5864 chip which provides
-> diff --git a/drivers/media/pci/tw68/Kconfig b/drivers/media/pci/tw68/Kconfig
-> index af0cb60337bb..ef29be7db493 100644
-> --- a/drivers/media/pci/tw68/Kconfig
-> +++ b/drivers/media/pci/tw68/Kconfig
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  config VIDEO_TW68
->  	tristate "Techwell tw68x Video For Linux"
-> -	depends on VIDEO_DEV && PCI && VIDEO_V4L2
-> +	depends on VIDEO_DEV && PCI && VIDEO_DEV
-
-Here too.
-
-Apart from that, the patch looks good to me.
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-I have however not evaluated the impact it will have on make oldconfig.
-
->  	select VIDEOBUF2_DMA_SG
->  	help
->  	  Support for Techwell tw68xx based frame grabber boards.
-
-[snip]
-
--- 
-Regards,
-
-Laurent Pinchart
+Thanks!
