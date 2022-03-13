@@ -2,141 +2,268 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E596F4D73A3
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Mar 2022 08:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20324D7514
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Mar 2022 12:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbiCMHgZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Mar 2022 03:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37502 "EHLO
+        id S233289AbiCMMAc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Mar 2022 08:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbiCMHgY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Mar 2022 03:36:24 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4374F82D33
-        for <linux-usb@vger.kernel.org>; Sat, 12 Mar 2022 23:35:16 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id j18-20020a056e02125200b002c5fd4f94a7so7374513ilq.4
-        for <linux-usb@vger.kernel.org>; Sat, 12 Mar 2022 23:35:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=4Dqq0/WpjlQyZBrDSLqAVmKyOSqEUWgYv7yZtITMZJk=;
-        b=UwsAx03RgHF2bw8s5gQIqD8Qpi1WTuyPnQmzcR+U7AVfUXOOIfcdbQK0dBpEfbilZ6
-         Q/YW9iuua2PVj+WzwB1eYJjbWsd0O1/8CGbQC+/jYzpAD3o1uaml7CrGOhD1n+PSYzZW
-         8T1RBtM7J3330ywz85KtSuMdyYpXGlK7SNISqyRdQXJHYu+2LwJIHXRb7QPUiOrRqMWa
-         JlwdwzoyJnxmmF2NqT2a4BcpY1Wp1txt1ClurKju1YVhpf1TRAo6dKrlZPgNkA1CvChe
-         h4Ux9IxVv5iJsiZqAtw/8/sJPHyCmGVP7808UxQupITsc5Jb+Wi8/kkGW1rum3P3uAeV
-         Sfqg==
-X-Gm-Message-State: AOAM532RsnTML95VGdLUmvPmg2Ks9C9BrVpESZvuRc3LJIPkRcq7e6/3
-        9EJXxG9CXeipVr7R4e1VS4FKzA+z9XGW8rI7uciiVC4Sa8rs
-X-Google-Smtp-Source: ABdhPJxcjIzZ8oheB+VnXeJwhlI7M+OrxqC2lMUii6fgoNO7yrJLUKm+s4UBGV+1g2U7U1gTXp/w1l15k1hu9YwLjaBjyou+NCxS
+        with ESMTP id S230181AbiCMMAb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Mar 2022 08:00:31 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1651D25E88;
+        Sun, 13 Mar 2022 04:59:22 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C062C492;
+        Sun, 13 Mar 2022 12:59:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1647172761;
+        bh=2KHd2mtefEmvKWJtyswFnBPxpf8PGYWwKivi8REA7VM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C5+2f3qYyNhsh21BGuAPQGSxoecJTUCJk94W9DXtfWsOw00Kc1GM0oL3isbgklIKQ
+         CDWWQ8knRJepBSoDBwdpKkxe8IqfPKwaET5JbC/22rGpc37fpIXX/NrpYXVDCs6wwE
+         q1G08QnFez/16rZ4PwJ+Fv7hdFXmQBa/6L8+pZd4=
+Date:   Sun, 13 Mar 2022 13:59:04 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] media: Kconfig: cleanup VIDEO_DEV dependencies
+Message-ID: <Yi3ciCTbHrxYUatX@pendragon.ideasonboard.com>
+References: <42ae3d28d4d822f3e14db76b99f2f4c41688ae3e.1647155467.git.mchehab@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:164f:b0:2c6:1b85:b985 with SMTP id
- v15-20020a056e02164f00b002c61b85b985mr15358280ilu.4.1647156915691; Sat, 12
- Mar 2022 23:35:15 -0800 (PST)
-Date:   Sat, 12 Mar 2022 23:35:15 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d9660d05da149ac1@google.com>
-Subject: [syzbot] KMSAN: uninit-value in asix_mdio_read (3)
-From:   syzbot <syzbot+9ed16c369e0f40e366b2@syzkaller.appspotmail.com>
-To:     andrew@lunn.ch, davem@davemloft.net, glider@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux@rempel-privat.de,
-        netdev@vger.kernel.org, paskripkin@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <42ae3d28d4d822f3e14db76b99f2f4c41688ae3e.1647155467.git.mchehab@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Mauro,
 
-syzbot found the following issue on:
+Thank you for the patch.
 
-HEAD commit:    724946410067 x86: kmsan: enable KMSAN builds for x86
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=158dd1f6700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=28718f555f258365
-dashboard link: https://syzkaller.appspot.com/bug?extid=9ed16c369e0f40e366b2
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11b31281700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15e8c4ee700000
+Trimming the CC list to keep a few mailing lists only.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9ed16c369e0f40e366b2@syzkaller.appspotmail.com
+On Sun, Mar 13, 2022 at 08:12:05AM +0100, Mauro Carvalho Chehab wrote:
+> media Kconfig has two entries associated to V4L API:
+> VIDEO_DEV and VIDEO_V4L2.
+> 
+> On Kernel 2.6.x, there were two V4L APIs, each one with its own flag.
+> VIDEO_DEV were meant to:
+> 	1) enable Video4Linux and make its Kconfig options to appear;
+> 	2) it makes the Kernel build the V4L core.
+> 
+> while VIDEO_V4L2 where used to distinguish between drivers that
+> implement the newer API and drivers that implemented the former one.
+> 
+> With time, such meaning changed, specially after the removal of
+> all V4L version 1 drivers.
+> 
+> At the current implementation, VIDEO_DEV only does (1): it enables
+> the media options related to V4L, that now has:
+> 
+> 	menu "Video4Linux options"
+> 		visible if VIDEO_DEV
+> 
+> 	source "drivers/media/v4l2-core/Kconfig"
+> 	endmenu
+> 
+> but it doesn't affect anymore the V4L core drivers.
+> 
+> The rationale is that the V4L2 core has a "soft" dependency
+> at the I2C bus, and now requires to select a number of other
+> Kconfig options:
+> 
+> 	config VIDEO_V4L2
+> 		tristate
+> 		depends on (I2C || I2C=n) && VIDEO_DEV
+> 		select RATIONAL
+> 		select VIDEOBUF2_V4L2 if VIDEOBUF2_CORE
+> 		default (I2C || I2C=n) && VIDEO_DEV
+> 
+> In the past, merging them would be tricky, but it seems that it is now
+> possible to merge those symbols, in order to simplify V4L dependencies.
+> 
+> Let's keep VIDEO_DEV, as this one is used on some make *defconfig
+> configurations.
 
-asix 1-1:0.0 (unnamed net_device) (uninitialized): Failed to enable software MII access
-asix 1-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
-=====================================================
-BUG: KMSAN: uninit-value in asix_check_host_enable drivers/net/usb/asix_common.c:84 [inline]
-BUG: KMSAN: uninit-value in asix_mdio_read+0x537/0xa40 drivers/net/usb/asix_common.c:499
- asix_check_host_enable drivers/net/usb/asix_common.c:84 [inline]
- asix_mdio_read+0x537/0xa40 drivers/net/usb/asix_common.c:499
- asix_mdio_bus_read+0xba/0xe0 drivers/net/usb/asix_common.c:558
- __mdiobus_read+0xbf/0x4f0 drivers/net/phy/mdio_bus.c:762
- mdiobus_read+0xaa/0xf0 drivers/net/phy/mdio_bus.c:869
- get_phy_c22_id drivers/net/phy/phy_device.c:813 [inline]
- get_phy_device+0x218/0x8b0 drivers/net/phy/phy_device.c:890
- mdiobus_scan+0x1c7/0x940
- __mdiobus_register+0xe6c/0x11a0 drivers/net/phy/mdio_bus.c:589
- __devm_mdiobus_register+0x18f/0x2f0 drivers/net/phy/mdio_devres.c:87
- ax88772_init_mdio drivers/net/usb/asix_devices.c:676 [inline]
- ax88772_bind+0x10b1/0x1770 drivers/net/usb/asix_devices.c:786
- usbnet_probe+0x1251/0x4160 drivers/net/usb/usbnet.c:1747
- usb_probe_interface+0xf19/0x1600 drivers/usb/core/driver.c:396
- really_probe+0x653/0x14b0 drivers/base/dd.c:596
- __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
- driver_probe_device drivers/base/dd.c:782 [inline]
- __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
- bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
- __device_attach+0x593/0x8e0 drivers/base/dd.c:970
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
- bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
- device_add+0x1fff/0x26e0 drivers/base/core.c:3405
- usb_set_configuration+0x37e9/0x3ed0 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0x13c/0x300 drivers/usb/core/generic.c:238
- usb_probe_device+0x309/0x570 drivers/usb/core/driver.c:293
- really_probe+0x653/0x14b0 drivers/base/dd.c:596
- __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
- driver_probe_device drivers/base/dd.c:782 [inline]
- __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
- bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
- __device_attach+0x593/0x8e0 drivers/base/dd.c:970
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
- bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
- device_add+0x1fff/0x26e0 drivers/base/core.c:3405
- usb_new_device+0x1b8e/0x2950 drivers/usb/core/hub.c:2566
- hub_port_connect drivers/usb/core/hub.c:5358 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
- port_event drivers/usb/core/hub.c:5660 [inline]
- hub_event+0x58e3/0x89e0 drivers/usb/core/hub.c:5742
- process_one_work+0xdb6/0x1820 kernel/workqueue.c:2307
- worker_thread+0x10b3/0x21e0 kernel/workqueue.c:2454
- kthread+0x3c7/0x500 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30
+I would have gone for VIDEO_V4L2, but if it makes configuration changes
+easier to handle, VIDEO_DEV is fine with me too.
 
-Local variable smsr.i created at:
- asix_mdio_read+0xaf/0xa40 drivers/net/usb/asix_common.c:499
- asix_mdio_bus_read+0xba/0xe0 drivers/net/usb/asix_common.c:558
+> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+>  drivers/input/rmi4/Kconfig                    |   2 +-
+>  drivers/input/touchscreen/Kconfig             |   4 +-
+>  drivers/media/Kconfig                         |   3 +
+>  drivers/media/common/saa7146/Kconfig          |   2 +-
+>  drivers/media/dvb-core/Kconfig                |   2 +-
+>  drivers/media/dvb-frontends/Kconfig           |   4 +-
+>  drivers/media/i2c/Kconfig                     | 250 +++++++++---------
+>  drivers/media/i2c/ccs/Kconfig                 |   2 +-
+>  drivers/media/i2c/cx25840/Kconfig             |   2 +-
+>  drivers/media/i2c/et8ek8/Kconfig              |   2 +-
+>  drivers/media/i2c/m5mols/Kconfig              |   2 +-
+>  drivers/media/pci/Kconfig                     |   2 +-
+>  drivers/media/pci/bt8xx/Kconfig               |   2 +-
+>  drivers/media/pci/cobalt/Kconfig              |   2 +-
+>  drivers/media/pci/cx18/Kconfig                |   2 +-
+>  drivers/media/pci/dt3155/Kconfig              |   2 +-
+>  drivers/media/pci/intel/ipu3/Kconfig          |   2 +-
+>  drivers/media/pci/ivtv/Kconfig                |   2 +-
+>  drivers/media/pci/meye/Kconfig                |   2 +-
+>  drivers/media/pci/saa7146/Kconfig             |   6 +-
+>  drivers/media/pci/sta2x11/Kconfig             |   2 +-
+>  drivers/media/pci/tw5864/Kconfig              |   2 +-
+>  drivers/media/pci/tw68/Kconfig                |   2 +-
+>  drivers/media/pci/tw686x/Kconfig              |   2 +-
+>  drivers/media/platform/Kconfig                |   6 +-
+>  drivers/media/platform/allegro-dvt/Kconfig    |   2 +-
+>  drivers/media/platform/am437x/Kconfig         |   2 +-
+>  drivers/media/platform/amphion/Kconfig        |   2 +-
+>  drivers/media/platform/aspeed/Kconfig         |   2 +-
+>  drivers/media/platform/atmel/Kconfig          |   8 +-
+>  drivers/media/platform/cadence/Kconfig        |   4 +-
+>  drivers/media/platform/coda/Kconfig           |   2 +-
+>  drivers/media/platform/davinci/Kconfig        |  12 +-
+>  drivers/media/platform/exynos-gsc/Kconfig     |   2 +-
+>  drivers/media/platform/exynos4-is/Kconfig     |   2 +-
+>  drivers/media/platform/intel/Kconfig          |   2 +-
+>  drivers/media/platform/marvell-ccic/Kconfig   |   4 +-
+>  drivers/media/platform/meson/ge2d/Kconfig     |   2 +-
+>  drivers/media/platform/mtk-jpeg/Kconfig       |   2 +-
+>  drivers/media/platform/mtk-mdp/Kconfig        |   2 +-
+>  drivers/media/platform/mtk-vcodec/Kconfig     |   2 +-
+>  drivers/media/platform/mtk-vpu/Kconfig        |   2 +-
+>  drivers/media/platform/nxp/Kconfig            |   8 +-
+>  drivers/media/platform/nxp/imx-jpeg/Kconfig   |   2 +-
+>  drivers/media/platform/omap/Kconfig           |   2 +-
+>  drivers/media/platform/omap3isp/Kconfig       |   2 +-
+>  drivers/media/platform/qcom/camss/Kconfig     |   2 +-
+>  drivers/media/platform/qcom/venus/Kconfig     |   2 +-
+>  drivers/media/platform/renesas/Kconfig        |  12 +-
+>  .../media/platform/renesas/rcar-vin/Kconfig   |   4 +-
+>  drivers/media/platform/rockchip/rga/Kconfig   |   2 +-
+>  .../media/platform/rockchip/rkisp1/Kconfig    |   2 +-
+>  drivers/media/platform/s3c-camif/Kconfig      |   2 +-
+>  drivers/media/platform/s5p-g2d/Kconfig        |   2 +-
+>  drivers/media/platform/s5p-jpeg/Kconfig       |   2 +-
+>  drivers/media/platform/s5p-mfc/Kconfig        |   2 +-
+>  drivers/media/platform/sti/bdisp/Kconfig      |   2 +-
+>  drivers/media/platform/sti/delta/Kconfig      |   2 +-
+>  drivers/media/platform/sti/hva/Kconfig        |   2 +-
+>  drivers/media/platform/stm32/Kconfig          |   4 +-
+>  .../media/platform/sunxi/sun4i-csi/Kconfig    |   2 +-
+>  .../media/platform/sunxi/sun6i-csi/Kconfig    |   2 +-
+>  drivers/media/platform/sunxi/sun8i-di/Kconfig |   2 +-
+>  .../media/platform/sunxi/sun8i-rotate/Kconfig |   2 +-
+>  drivers/media/platform/tegra/vde/Kconfig      |   2 +-
+>  drivers/media/platform/ti-vpe/Kconfig         |   4 +-
+>  drivers/media/platform/via/Kconfig            |   2 +-
+>  drivers/media/platform/xilinx/Kconfig         |   2 +-
+>  drivers/media/radio/Kconfig                   |  54 ++--
+>  drivers/media/radio/si470x/Kconfig            |   2 +-
+>  drivers/media/radio/wl128x/Kconfig            |   2 +-
+>  drivers/media/spi/Kconfig                     |   4 +-
+>  drivers/media/test-drivers/Kconfig            |   2 +-
+>  drivers/media/test-drivers/vicodec/Kconfig    |   2 +-
+>  drivers/media/test-drivers/vimc/Kconfig       |   2 +-
+>  drivers/media/test-drivers/vivid/Kconfig      |   2 +-
+>  drivers/media/tuners/Kconfig                  |   6 +-
+>  drivers/media/tuners/e4000.c                  |   6 +-
+>  drivers/media/tuners/fc2580.c                 |   6 +-
+>  drivers/media/usb/airspy/Kconfig              |   2 +-
+>  drivers/media/usb/au0828/Kconfig              |   6 +-
+>  drivers/media/usb/cpia2/Kconfig               |   2 +-
+>  drivers/media/usb/dvb-usb-v2/Kconfig          |   8 +-
+>  drivers/media/usb/dvb-usb/Kconfig             |   4 +-
+>  drivers/media/usb/gspca/Kconfig               |  96 +++----
+>  drivers/media/usb/gspca/gl860/Kconfig         |   2 +-
+>  drivers/media/usb/gspca/m5602/Kconfig         |   2 +-
+>  drivers/media/usb/hackrf/Kconfig              |   2 +-
+>  drivers/media/usb/hdpvr/Kconfig               |   2 +-
+>  drivers/media/usb/msi2500/Kconfig             |   2 +-
+>  drivers/media/usb/pvrusb2/Kconfig             |   2 +-
+>  drivers/media/usb/pwc/Kconfig                 |   2 +-
+>  drivers/media/usb/s2255/Kconfig               |   2 +-
+>  drivers/media/usb/stkwebcam/Kconfig           |   2 +-
+>  drivers/media/usb/usbtv/Kconfig               |   2 +-
+>  drivers/media/usb/uvc/Kconfig                 |   2 +-
+>  drivers/media/usb/zr364xx/Kconfig             |   2 +-
+>  drivers/media/v4l2-core/Kconfig               |  12 +-
+>  drivers/media/v4l2-core/Makefile              |   2 +-
+>  drivers/staging/media/atomisp/Kconfig         |   2 +-
+>  drivers/staging/media/atomisp/i2c/Kconfig     |  14 +-
+>  drivers/staging/media/hantro/Kconfig          |   2 +-
+>  drivers/staging/media/imx/Kconfig             |   2 +-
+>  drivers/staging/media/ipu3/Kconfig            |   2 +-
+>  drivers/staging/media/max96712/Kconfig        |   2 +-
+>  drivers/staging/media/meson/vdec/Kconfig      |   2 +-
+>  drivers/staging/media/omap4iss/Kconfig        |   2 +-
+>  drivers/staging/media/rkvdec/Kconfig          |   2 +-
+>  drivers/staging/media/sunxi/cedrus/Kconfig    |   2 +-
+>  drivers/staging/media/tegra-video/Kconfig     |   2 +-
+>  drivers/staging/media/zoran/Kconfig           |   2 +-
+>  drivers/staging/most/video/Kconfig            |   2 +-
+>  .../vc04_services/bcm2835-camera/Kconfig      |   2 +-
+>  drivers/usb/gadget/Kconfig                    |   2 +-
+>  drivers/usb/gadget/legacy/Kconfig             |   2 +-
+>  sound/pci/Kconfig                             |   4 +-
+>  116 files changed, 363 insertions(+), 368 deletions(-)
 
-CPU: 0 PID: 7 Comm: kworker/0:1 Not tainted 5.17.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-=====================================================
+[snip]
 
+> diff --git a/drivers/media/pci/tw5864/Kconfig b/drivers/media/pci/tw5864/Kconfig
+> index d376d4ed65b9..0a0f3191f238 100644
+> --- a/drivers/media/pci/tw5864/Kconfig
+> +++ b/drivers/media/pci/tw5864/Kconfig
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  config VIDEO_TW5864
+>  	tristate "Techwell TW5864 video/audio grabber and encoder"
+> -	depends on VIDEO_DEV && PCI && VIDEO_V4L2
+> +	depends on VIDEO_DEV && PCI && VIDEO_DEV
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+You can drop the second VIDEO_DEV.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+>  	select VIDEOBUF2_DMA_CONTIG
+>  	help
+>  	  Support for boards based on Techwell TW5864 chip which provides
+> diff --git a/drivers/media/pci/tw68/Kconfig b/drivers/media/pci/tw68/Kconfig
+> index af0cb60337bb..ef29be7db493 100644
+> --- a/drivers/media/pci/tw68/Kconfig
+> +++ b/drivers/media/pci/tw68/Kconfig
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  config VIDEO_TW68
+>  	tristate "Techwell tw68x Video For Linux"
+> -	depends on VIDEO_DEV && PCI && VIDEO_V4L2
+> +	depends on VIDEO_DEV && PCI && VIDEO_DEV
+
+Here too.
+
+Apart from that, the patch looks good to me.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+I have however not evaluated the impact it will have on make oldconfig.
+
+>  	select VIDEOBUF2_DMA_SG
+>  	help
+>  	  Support for Techwell tw68xx based frame grabber boards.
+
+[snip]
+
+-- 
+Regards,
+
+Laurent Pinchart
