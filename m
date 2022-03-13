@@ -2,121 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A1B4D7884
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Mar 2022 22:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C824D78B0
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Mar 2022 00:13:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235525AbiCMVzJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Mar 2022 17:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
+        id S235637AbiCMXOn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Mar 2022 19:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiCMVzI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Mar 2022 17:55:08 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6753915A16
-        for <linux-usb@vger.kernel.org>; Sun, 13 Mar 2022 14:54:00 -0700 (PDT)
-Date:   Sun, 13 Mar 2022 21:53:54 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1647208436;
-        bh=CWiy5Iy4sY8ijezS7geyEPEVE0V9xlZRML2FVU4VTCw=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=tMcSb7oP88fHQsbGXv9Oxl67cHvLELFcTRHraZfQiISaMRURr21h6t3ndSX1NOY75
-         pcimQ+qk3kl0rgD0q2jy60f3XazPIOiweEcYcnOaoJoGTp7sJhXOG13pRqLGkU/65C
-         h4Uxibpactwf/uGHdxDgxS4zGXSjj1ek/yoZ1CQZJ7EDIiuwUcDdlex1w9FWZZcjfM
-         7D0Nup1PXy4qnxsMzQSKvo+AHzIviAQqVDXdcAQgMwqkxrh+cY/L76nVW6lIuHH6Bc
-         wOfzDaIANOum8EyS3Lv95GQ8zlnZM6CAfj17M54zgaFBf37/37i5oQ+UmpOu2hhyzR
-         /gmzgpiEDicsw==
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-From:   micklorain <micklorain@protonmail.com>
-Cc:     "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
-Reply-To: micklorain <micklorain@protonmail.com>
-Subject: Re: [PATCH v1] usb: hcd: Try MSI interrupts on PCI devices
-Message-ID: <B-JSIrXmPNRjtsNvWoMqiYRmsf0xlANSpMWrBUjjSCZwzi-ImpPNSeqsfOXZf4rkMiUR8JiQvEffx59Eu4NZKVJ7Z3mGtuPXomhd9AyV7sI=@protonmail.com>
-In-Reply-To: <Yh0wIGmoCjzKPTej@kroah.com>
-References: <PxIByDyBRcsbpcmVhGSNDFAoUcMmb78ctXCkw6fbpx25TGlCHvA6SJjjFkNr1FfQZMntYPTNyvEnblxzAZ8a6jP9ddLpKeCN6Chi_2FuexU=@protonmail.com> <Yh0wIGmoCjzKPTej@kroah.com>
+        with ESMTP id S233316AbiCMXOm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Mar 2022 19:14:42 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA97E2B188
+        for <linux-usb@vger.kernel.org>; Sun, 13 Mar 2022 16:13:33 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id q5so19499217ljb.11
+        for <linux-usb@vger.kernel.org>; Sun, 13 Mar 2022 16:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=efxDK1uU7DkE4cVJ9myazVuQ4eaJnIyftNcM+xFzvi0=;
+        b=l7lEhbuCFMuPP9xZOCDbemNTrx0aG0mlLDwZvuHI5Wb3AqfXuWxZ3gD6FsZwc1XOnb
+         C3m2UqxBQnwIY7HOtJmRzmLYepLZsFjl+D6qhoajbaz29klgVRKceniv5qZs57wbLjV0
+         yJlJcq9F7QuSuM1GH6O7ja4BdxvnQhaxPXVR95+bhFFisQGgP7h2CR9OYbB8VAf9lTdB
+         1BxkJlmN1xrp1sMZEmSkCpKyZWqTb6bLiR4AoORn8Y1bwj1C0o4hWI+1yZ5ORsFl+9OD
+         a7X5vvQaL5NtViDtn0tb0zfsCfxgMacJ3qptau+q2x6w1tHrzCc5SsNM4VHqgDiP9Nno
+         5xvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=efxDK1uU7DkE4cVJ9myazVuQ4eaJnIyftNcM+xFzvi0=;
+        b=riO4aHxlXgP8lrF9RCIRArSNYnE97tKShiBe7Jh8yCKn27rBAAH1TRxx4eD2ga+Ym9
+         nh/V5aQkPK1xuBNFk+YcmLkPnJ8son9zGg309ws7qy2vYUBJKnuaIg9RbFPOwcGnCgVz
+         bzGHN7rfl2rEexsuNJ7jnj+ib1Rbdm/4bgpt9rhq1UDU+dQISk+PZReu61Zae6GdMvC0
+         /HgUwrICXG9saSl00qpMsr2DZB7YMcN3l5rynxyVN0dhfFXma0zCg4qqzNmn+MdzZsWc
+         ELcB7mCOjMyhiqxw+3T1kMnzmeYRqcSZOuBIDquKF8zzW/giFZx/rU6wonrkBCVPiagC
+         PnDg==
+X-Gm-Message-State: AOAM533qqTzQhvSJKHf/hJpANSvLnsDRYnFZMEMXP1rXIt9qXovJEuYw
+        JDxquLeumdRbDan2Ysk+mj7O0K/xD8LWvmKKRg==
+X-Google-Smtp-Source: ABdhPJzgElBlPcuDeQrjQA3FErE7xHbU0dtUeD6LpafVyM4kkic0xdAQ/u62qa/7d+q1Cab6CDosUo5eqohuGjOexSo=
+X-Received: by 2002:a2e:bf1d:0:b0:247:dea7:f657 with SMTP id
+ c29-20020a2ebf1d000000b00247dea7f657mr12678600ljr.454.1647213212141; Sun, 13
+ Mar 2022 16:13:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6512:68c:0:0:0:0 with HTTP; Sun, 13 Mar 2022 16:13:31
+ -0700 (PDT)
+Reply-To: fionahill.usa@outlook.com
+From:   Fiona Hill <xaviervives77@gmail.com>
+Date:   Sun, 13 Mar 2022 16:13:31 -0700
+Message-ID: <CAPB_yMTPnYdjXvy=GLLQ8z_JjsVeckUEt1YPP5fC1kc_bg06XQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-Thanks for taking the time to reply.
-
-------- Original Message -------
-
-On Monday, February 28th, 2022 at 21:27, gregkh@linuxfoundation.org <gregkh=
-@linuxfoundation.org> wrote:
-
-> On Mon, Feb 28, 2022 at 08:12:47PM +0000, micklorain wrote:
->
-> > Hi,
-> >
-> > This patch breaks USB for me. I noticed when I upgraded from debian's 4=
-.19.0-18 (working) to 5.10.0-10 (broken). I git bisect'ed until I found tha=
-t this patch is the culprit. Upstream 5.17.0-rc2 is still broken, but 5.17.=
-0-rc2 with this patch reverted works.
-> >
-> > lsusb when things work :
-> >
-> > https://paste.debian.net/hidden/2a964425/
-> >
-> > lsusb when things are broken :
-> >
-> > https://paste.debian.net/hidden/0376920c/
-> >
-> > dmesg when things are broken :
-> >
-> > https://paste.debian.net/hidden/780ca112/
->
-> This dmesg says:
->
-> [ 1.049161] PCI: Using host bridge windows from ACPI; if necessary, use "=
-pci=3Dnocrs" and report a bug
->
-> have you tried that?
-
-I tried to use "pci=3Dnocrs", but it didn't help.
-
->
-> > dmesg when things work :
-> >
-> > https://paste.debian.net/hidden/4d1bfc0f/
->
-> The messages here look different for PCI, can you diff them?
->
-> I see:
->
-> [ 0.342113] PCI: PCI BIOS area is rw and x. Use pci=3Dnobios if you want =
-it NX.
->
-> [ 0.342178] PCI: PCI BIOS revision 3.00 entry at 0xf0031, last bus=3D3
->
-> [ 0.342180] PCI: Using configuration type 1 for base access
->
-> That's not in the "failing" system, are you sure that's the only change
->
-> here?
-
-Sorry, my email wasn't very clear, I gave the dmesg for two very different =
-kernel versions.
-
-But anyway, it doesn't really matter since Andriy Shevchenko found the prob=
-lem.
-
-Again, thank you for your time.
-
-Mick Lorain
-
-
+-- 
+Diid you see my  message i send to you ? I'm waiting for your urgent respond,
