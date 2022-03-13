@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117F04D7877
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Mar 2022 22:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A1B4D7884
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Mar 2022 22:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234146AbiCMVpw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Mar 2022 17:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
+        id S235525AbiCMVzJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Mar 2022 17:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiCMVpv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Mar 2022 17:45:51 -0400
+        with ESMTP id S231156AbiCMVzI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Mar 2022 17:55:08 -0400
 Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8239D47559
-        for <linux-usb@vger.kernel.org>; Sun, 13 Mar 2022 14:44:41 -0700 (PDT)
-Date:   Sun, 13 Mar 2022 21:44:36 +0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6753915A16
+        for <linux-usb@vger.kernel.org>; Sun, 13 Mar 2022 14:54:00 -0700 (PDT)
+Date:   Sun, 13 Mar 2022 21:53:54 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1647207877;
-        bh=jE8I87acYvfUCVQGGBgOyDXoB9kr/X6s8MJ1AzlD6Cc=;
+        s=protonmail3; t=1647208436;
+        bh=CWiy5Iy4sY8ijezS7geyEPEVE0V9xlZRML2FVU4VTCw=;
         h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
          References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID;
-        b=OQWk5m3pEWgtauTrJ19hF7z1tozRztxD1pxmV2ZMOTZ9CLTyMsQ5QQxTxjZEln8RY
-         SkYD8yTkbH0Oe2oe9oVdIXRdFGRWLU4aq06yMsliZDiN7aS9/uVTwPTKPCIHoYZzE4
-         Uc8cgJNAvyE/r+vxSwrQgRzQ1eLGCj2YW8FKS22MuPNbSVYvFDI9GHvPqtKJi3zIU7
-         cZuA+eGAVVJpjHRCEB40Yz4o05exb/fsM1DE4G/LduFL6Sb0av48OlOK0Ivj+ESx5z
-         9IdqZEKsiPtXr+912we1vX/KPl9EgbOGflxY6hH6nAr6Cz+vPRAK+LF1bgs3+HU7Zz
-         5LwP6qYG3tDyg==
-To:     "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
+        b=tMcSb7oP88fHQsbGXv9Oxl67cHvLELFcTRHraZfQiISaMRURr21h6t3ndSX1NOY75
+         pcimQ+qk3kl0rgD0q2jy60f3XazPIOiweEcYcnOaoJoGTp7sJhXOG13pRqLGkU/65C
+         h4Uxibpactwf/uGHdxDgxS4zGXSjj1ek/yoZ1CQZJ7EDIiuwUcDdlex1w9FWZZcjfM
+         7D0Nup1PXy4qnxsMzQSKvo+AHzIviAQqVDXdcAQgMwqkxrh+cY/L76nVW6lIuHH6Bc
+         wOfzDaIANOum8EyS3Lv95GQ8zlnZM6CAfj17M54zgaFBf37/37i5oQ+UmpOu2hhyzR
+         /gmzgpiEDicsw==
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
 From:   micklorain <micklorain@protonmail.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+Cc:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "mathias.nyman@intel.com" <mathias.nyman@intel.com>
 Reply-To: micklorain <micklorain@protonmail.com>
 Subject: Re: [PATCH v1] usb: hcd: Try MSI interrupts on PCI devices
-Message-ID: <pVZSQtquqT8_tNfgSacEQWJO4agPMHUT5gF3FkkWuJ3LERhq0JswT2y22oDz7Jvn_Vz28uA8rS2SAfJbPwq3EEQi2Vb-zySZdBozgVdR308=@protonmail.com>
-In-Reply-To: <YijoMAZJ1elUfZnh@smile.fi.intel.com>
-References: <PxIByDyBRcsbpcmVhGSNDFAoUcMmb78ctXCkw6fbpx25TGlCHvA6SJjjFkNr1FfQZMntYPTNyvEnblxzAZ8a6jP9ddLpKeCN6Chi_2FuexU=@protonmail.com> <Yh03mFSESvwT8Wt0@smile.fi.intel.com> <GCkSeDmZAyagb-3ogwNAwxsKYpxXSQRM6HeO_O9WxSYO1-8WL8ook5WQ9JchpyBqo4SIJ2XuW2DWFJeJrCzqzcedaBjNvfjNLZo1j3hU5tc=@protonmail.com> <YijoMAZJ1elUfZnh@smile.fi.intel.com>
+Message-ID: <B-JSIrXmPNRjtsNvWoMqiYRmsf0xlANSpMWrBUjjSCZwzi-ImpPNSeqsfOXZf4rkMiUR8JiQvEffx59Eu4NZKVJ7Z3mGtuPXomhd9AyV7sI=@protonmail.com>
+In-Reply-To: <Yh0wIGmoCjzKPTej@kroah.com>
+References: <PxIByDyBRcsbpcmVhGSNDFAoUcMmb78ctXCkw6fbpx25TGlCHvA6SJjjFkNr1FfQZMntYPTNyvEnblxzAZ8a6jP9ddLpKeCN6Chi_2FuexU=@protonmail.com> <Yh0wIGmoCjzKPTej@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -51,124 +51,72 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi,
+Thanks for taking the time to reply.
 
-On Wednesday, March 9th, 2022 at 18:47, andriy.shevchenko@linux.intel.com <=
-andriy.shevchenko@linux.intel.com> wrote:
+------- Original Message -------
 
-> On Sun, Mar 06, 2022 at 04:09:49PM +0000, micklorain wrote:
->
-> > On Monday, February 28th, 2022 at 21:59, andriy.shevchenko@linux.intel.=
-com andriy.shevchenko@linux.intel.com wrote:
-> >
-> > > On Mon, Feb 28, 2022 at 08:12:47PM +0000, micklorain wrote:
->
-> ...
->
-> > > Last time I have got something similar it becomes that PCI bridge whi=
-ch is used
-> > >
-> > > to connect USB controller to the PCI Root Bridge was not capable of M=
-SI, while
-> > >
-> > > advertising that capability. I.o.w. HW bug.
-> > >
-> > > To understand if it's something similar, please run (under the root) =
-each of
-> > >
-> > > the following commands:
-> > >
-> > > lspci -nk -vvv
-> > >
-> > > cat /proc/interrupts
-> > >
-> > > in both cases, i.e. working and non-working.
-> > >
-> > > And then share the output (all 4 files).
->
-> > Thanks for your reply.
-> >
-> > This is the results of the commands you requested :
-> >
-> > * When things work (commit dcb85f85fa6f142aae1fe86f399d4503d49f2b60 wit=
-h commit 306c54d0edb6ba94d39877524dddebaad7770cf2 reverted)
-> >
-> > - lspci -nk -vvv :
-> >
-> > https://paste.debian.net/hidden/77d92dc9/
-> >
-> > - cat /proc/interrupts
-> >
-> > https://paste.debian.net/hidden/67208c8e/
-> >
-> > * When things are broken (commit dcb85f85fa6f142aae1fe86f399d4503d49f2b=
-60)
-> >
-> > - lspci -nk -vvv :
-> >
-> > https://paste.debian.net/hidden/121362b3/
-> >
-> > - cat /proc/interrupts :
-> >
-> > https://paste.debian.net/hidden/dbe8d1bb/
-> >
-> > Hope this can help.
->
-> Thank you for sharing. Are you able to compile a kernel and boot it? If s=
-o,
->
-> can you try the following patch?
+On Monday, February 28th, 2022 at 21:27, gregkh@linuxfoundation.org <gregkh=
+@linuxfoundation.org> wrote:
 
-I tried the patch, but it didn't help...
+> On Mon, Feb 28, 2022 at 08:12:47PM +0000, micklorain wrote:
+>
+> > Hi,
+> >
+> > This patch breaks USB for me. I noticed when I upgraded from debian's 4=
+.19.0-18 (working) to 5.10.0-10 (broken). I git bisect'ed until I found tha=
+t this patch is the culprit. Upstream 5.17.0-rc2 is still broken, but 5.17.=
+0-rc2 with this patch reverted works.
+> >
+> > lsusb when things work :
+> >
+> > https://paste.debian.net/hidden/2a964425/
+> >
+> > lsusb when things are broken :
+> >
+> > https://paste.debian.net/hidden/0376920c/
+> >
+> > dmesg when things are broken :
+> >
+> > https://paste.debian.net/hidden/780ca112/
+>
+> This dmesg says:
+>
+> [ 1.049161] PCI: Using host bridge windows from ACPI; if necessary, use "=
+pci=3Dnocrs" and report a bug
+>
+> have you tried that?
+
+I tried to use "pci=3Dnocrs", but it didn't help.
 
 >
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> > dmesg when things work :
+> >
+> > https://paste.debian.net/hidden/4d1bfc0f/
 >
-> index 65f7f6b0576c..149742aa5f4d 100644
+> The messages here look different for PCI, can you diff them?
 >
-> --- a/drivers/pci/quirks.c
+> I see:
 >
-> +++ b/drivers/pci/quirks.c
+> [ 0.342113] PCI: PCI BIOS area is rw and x. Use pci=3Dnobios if you want =
+it NX.
 >
-> @@ -3041,6 +3041,13 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_BROADCOM,
+> [ 0.342178] PCI: PCI BIOS revision 3.00 entry at 0xf0031, last bus=3D3
 >
-> PCI_DEVICE_ID_TIGON3_5715S,
+> [ 0.342180] PCI: Using configuration type 1 for base access
 >
-> quirk_msi_intx_disable_bug);
+> That's not in the "failing" system, are you sure that's the only change
 >
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4386, quirk_msi_intx_disabl=
-e_ati_bug);
->
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4387, quirk_msi_intx_disabl=
-e_ati_bug);
->
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4388, quirk_msi_intx_disabl=
-e_ati_bug);
->
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4389, quirk_msi_intx_disabl=
-e_ati_bug);
->
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x438a, quirk_msi_intx_disabl=
-e_ati_bug);
->
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x438b, quirk_msi_intx_disabl=
-e_ati_bug);
->
-> +
->
-> DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4390,
->
-> quirk_msi_intx_disable_ati_bug);
->
-> DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4391,
->
-> In case it doesn't help, remove 'ati_' part from the function name and tr=
-y again.
+> here?
 
-... but removing 'ati_' from the function name indeed fixed my issue.
+Sorry, my email wasn't very clear, I gave the dmesg for two very different =
+kernel versions.
 
-Will this fix be upstreamed now ?
+But anyway, it doesn't really matter since Andriy Shevchenko found the prob=
+lem.
 
-Thank you very much for your help.
+Again, thank you for your time.
 
 Mick Lorain
+
+
