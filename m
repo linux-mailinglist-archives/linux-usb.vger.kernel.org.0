@@ -2,85 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF964D7D2E
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Mar 2022 09:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01824D7D8B
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Mar 2022 09:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237210AbiCNIGV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Mar 2022 04:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
+        id S237679AbiCNIZY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Mar 2022 04:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238696AbiCNIEW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Mar 2022 04:04:22 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D2D3B3D1
-        for <linux-usb@vger.kernel.org>; Mon, 14 Mar 2022 01:02:04 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id p9so22424734wra.12
-        for <linux-usb@vger.kernel.org>; Mon, 14 Mar 2022 01:02:04 -0700 (PDT)
+        with ESMTP id S231159AbiCNIZW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Mar 2022 04:25:22 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8C9E036;
+        Mon, 14 Mar 2022 01:24:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=ZbQvHoyGIYzvUki2Rr3koBlbf8HphwGvoPoiGFCWjVI=;
-        b=Px/AIFSkS5xiQntL+czEDZNooaKyKwCT5+5oX3Dxiuaq0p2Muil6CAGE/yKjTcSPRk
-         zDe4uh38/LLZAeLwbHMGwjTg12kmpC6yeWSofKA0umP5cCfX9/OYY82Bw345RNYb0ncn
-         orCm5F+5ZfCmlxK+d1VXp7nIMCWzluoafQnmDOcfqWejvaYNcsBVEphbI2O0YMhV2/Sw
-         btjwvk4hgGfi1Ebtg7vyteqdSKhr8lp3tlnQhW8mViZOmcTxC9P84ODdx/3FeHEOfW8P
-         6h58+Jo9NlVZHRXuw0qPEJXdJKCF5VgLcohK/rtJkyKSW2QSe8R2Hvd+nhg3g9Uwmmee
-         CRRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=ZbQvHoyGIYzvUki2Rr3koBlbf8HphwGvoPoiGFCWjVI=;
-        b=U6S96Fk9i/n3WsFLXHB58x0sLokte5yDYVkZJR4t+qXn4oZKn5vw7sE2PnYqAxj9a9
-         A8cT4x+S5z1BzivlLboySA4AZxHOMcr5wN+R9wjPfdnO5a1SMY0MmPaTzMiJAfXxKgqF
-         UhypEpP3ICiDDQK19KHys2BkJPKJ0lOZ5ncrn5sq/PM1AasAnaSMFI1FdWV/QrfVXPLB
-         cyb6XMTDe/sQohvqz9/hboTR03SziRbpISPD0/B87agz9lfXOsv1SHqjEQPpDgBpLDSl
-         k/WBNtMDU4q1yboXPZuf35PC/dPqVQFdBijnegNIQ2cFuEaEoXrGiV7UEC9kgsIrKj2v
-         OPeg==
-X-Gm-Message-State: AOAM5307TlbxLfcTsrXMVBwfyAGfUYD3u9LzCKx9u6ojWNwDN3EtXa6w
-        G/ldY/EoHmkZO7VqYe7j6S+dfg==
-X-Google-Smtp-Source: ABdhPJztePfcEZyw3gKDCW6el7zVf+skc/7D+PKs0YU6FDvddmqBB//lsO2gITU97Xj5EZ5qC+/51g==
-X-Received: by 2002:adf:fb4e:0:b0:1e3:3e66:d5f6 with SMTP id c14-20020adffb4e000000b001e33e66d5f6mr16194756wrs.615.1647244875196;
-        Mon, 14 Mar 2022 01:01:15 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:67f0:57f7:2185:6d18? ([2001:861:44c0:66c0:67f0:57f7:2185:6d18])
-        by smtp.gmail.com with ESMTPSA id v188-20020a1cacc5000000b00384b71a50d5sm14188253wme.24.2022.03.14.01.01.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 01:01:14 -0700 (PDT)
-Message-ID: <18f984ff-36c8-dbe5-6dd0-404c4fe9deab@baylibre.com>
-Date:   Mon, 14 Mar 2022 09:01:19 +0100
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647246252; x=1678782252;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9M2dGLZHOzlDI1I7rEFcYQKVj/YSgpw5OURbl0Zah84=;
+  b=fWMaf1IYEMg89x9rtpKJT2danIbOs9bahaDYOpOJEzVTiMrsBZS3Of3i
+   CQ+6/VqJ31gSFIp1vyyuWFIPIu1REUF6q/LnLmsjyRqYQX4lFB3zfuYj7
+   uG7GpVfdfs4x4t+Y2eXeiiOkMXuz0woMAoZT+u7wQv62OHEDN6QhjpITa
+   w=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Mar 2022 01:24:11 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 01:24:10 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 14 Mar 2022 01:24:10 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 14 Mar 2022 01:16:17 -0700
+Date:   Mon, 14 Mar 2022 13:46:13 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Kishon Vijay Abraham I" <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_kriskura@quicinc.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
+ override params bindings
+Message-ID: <20220314081613.GA28402@hu-pkondeti-hyd.qualcomm.com>
+References: <1646288011-32242-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1646288011-32242-2-git-send-email-quic_c_sanm@quicinc.com>
+ <b793195b-1d3d-63b2-19d2-72ae2aec8c0f@canonical.com>
+ <20220314032952.GA27561@hu-pkondeti-hyd.qualcomm.com>
+ <f1621a67-a0ff-f111-c4da-9401924e7f4a@canonical.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 64/64] media: Kconfig: cleanup VIDEO_DEV dependencies
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     alsa-devel@alsa-project.org, bcm-kernel-feedback-list@broadcom.com,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, mjpeg-users@lists.sourceforge.net,
-        openbmc@lists.ozlabs.org
-References: <cover.1647242578.git.mchehab@kernel.org>
- <decd26e90adc5c16470e4f738810f22fe6478b27.1647242579.git.mchehab@kernel.org>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <decd26e90adc5c16470e4f738810f22fe6478b27.1647242579.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <f1621a67-a0ff-f111-c4da-9401924e7f4a@canonical.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,174 +82,103 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 14/03/2022 08:55, Mauro Carvalho Chehab wrote:
-> media Kconfig has two entries associated to V4L API:
-> VIDEO_DEV and VIDEO_V4L2.
-> 
-> On Kernel 2.6.x, there were two V4L APIs, each one with its own flag.
-> VIDEO_DEV were meant to:
-> 	1) enable Video4Linux and make its Kconfig options to appear;
-> 	2) it makes the Kernel build the V4L core.
-> 
-> while VIDEO_V4L2 where used to distinguish between drivers that
-> implement the newer API and drivers that implemented the former one.
-> 
-> With time, such meaning changed, specially after the removal of
-> all V4L version 1 drivers.
-> 
-> At the current implementation, VIDEO_DEV only does (1): it enables
-> the media options related to V4L, that now has:
-> 
-> 	menu "Video4Linux options"
-> 		visible if VIDEO_DEV
-> 
-> 	source "drivers/media/v4l2-core/Kconfig"
-> 	endmenu
-> 
-> but it doesn't affect anymore the V4L core drivers.
-> 
-> The rationale is that the V4L2 core has a "soft" dependency
-> at the I2C bus, and now requires to select a number of other
-> Kconfig options:
-> 
-> 	config VIDEO_V4L2
-> 		tristate
-> 		depends on (I2C || I2C=n) && VIDEO_DEV
-> 		select RATIONAL
-> 		select VIDEOBUF2_V4L2 if VIDEOBUF2_CORE
-> 		default (I2C || I2C=n) && VIDEO_DEV
-> 
-> In the past, merging them would be tricky, but it seems that it is now
-> possible to merge those symbols, in order to simplify V4L dependencies.
-> 
-> Let's keep VIDEO_DEV, as this one is used on some make *defconfig
-> configurations.
-> 
-> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
-> 
->   drivers/input/rmi4/Kconfig                    |   2 +-
->   drivers/input/touchscreen/Kconfig             |   4 +-
->   drivers/media/Kconfig                         |   3 +
->   drivers/media/common/saa7146/Kconfig          |   2 +-
->   drivers/media/dvb-core/Kconfig                |   2 +-
->   drivers/media/dvb-frontends/Kconfig           |   4 +-
->   drivers/media/i2c/Kconfig                     | 250 +++++++++---------
->   drivers/media/i2c/ccs/Kconfig                 |   2 +-
->   drivers/media/i2c/cx25840/Kconfig             |   2 +-
->   drivers/media/i2c/et8ek8/Kconfig              |   2 +-
->   drivers/media/i2c/m5mols/Kconfig              |   2 +-
->   drivers/media/pci/Kconfig                     |   2 +-
->   drivers/media/pci/bt8xx/Kconfig               |   2 +-
->   drivers/media/pci/cobalt/Kconfig              |   2 +-
->   drivers/media/pci/cx18/Kconfig                |   2 +-
->   drivers/media/pci/dt3155/Kconfig              |   2 +-
->   drivers/media/pci/intel/ipu3/Kconfig          |   2 +-
->   drivers/media/pci/ivtv/Kconfig                |   2 +-
->   drivers/media/pci/meye/Kconfig                |   2 +-
->   drivers/media/pci/saa7146/Kconfig             |   6 +-
->   drivers/media/pci/sta2x11/Kconfig             |   2 +-
->   drivers/media/pci/tw5864/Kconfig              |   2 +-
->   drivers/media/pci/tw68/Kconfig                |   2 +-
->   drivers/media/pci/tw686x/Kconfig              |   2 +-
->   drivers/media/platform/Kconfig                |   6 +-
->   drivers/media/platform/allegro-dvt/Kconfig    |   2 +-
->   .../platform/allwinner/sun4i-csi/Kconfig      |   2 +-
->   .../platform/allwinner/sun6i-csi/Kconfig      |   2 +-
->   .../media/platform/allwinner/sun8i-di/Kconfig |   2 +-
->   .../platform/allwinner/sun8i-rotate/Kconfig   |   2 +-
->   .../media/platform/amlogic/meson-ge2d/Kconfig |   2 +-
->   drivers/media/platform/aspeed/Kconfig         |   2 +-
->   drivers/media/platform/atmel/Kconfig          |   8 +-
->   drivers/media/platform/cadence/Kconfig        |   4 +-
->   drivers/media/platform/chips-media/Kconfig    |   2 +-
->   drivers/media/platform/intel/Kconfig          |   2 +-
->   drivers/media/platform/marvell/Kconfig        |   4 +-
->   .../media/platform/mediatek/mtk-jpeg/Kconfig  |   2 +-
->   .../media/platform/mediatek/mtk-mdp/Kconfig   |   2 +-
->   .../platform/mediatek/mtk-vcodec/Kconfig      |   2 +-
->   .../media/platform/mediatek/mtk-vpu/Kconfig   |   2 +-
->   .../media/platform/nvidia/tegra-vde/Kconfig   |   2 +-
->   drivers/media/platform/nxp/Kconfig            |   6 +-
->   drivers/media/platform/nxp/amphion/Kconfig    |   2 +-
->   drivers/media/platform/nxp/imx-jpeg/Kconfig   |   2 +-
->   drivers/media/platform/qcom/camss/Kconfig     |   2 +-
->   drivers/media/platform/qcom/venus/Kconfig     |   2 +-
->   drivers/media/platform/renesas/Kconfig        |  30 +--
->   .../media/platform/renesas/rcar-vin/Kconfig   |   4 +-
->   drivers/media/platform/rockchip/rga/Kconfig   |   2 +-
->   .../media/platform/rockchip/rkisp1/Kconfig    |   2 +-
->   .../media/platform/samsung/exynos-gsc/Kconfig |   2 +-
->   .../media/platform/samsung/exynos4-is/Kconfig |   2 +-
->   .../media/platform/samsung/s3c-camif/Kconfig  |   2 +-
->   .../media/platform/samsung/s5p-g2d/Kconfig    |   2 +-
->   .../media/platform/samsung/s5p-jpeg/Kconfig   |   2 +-
->   .../media/platform/samsung/s5p-mfc/Kconfig    |   2 +-
->   drivers/media/platform/sti/bdisp/Kconfig      |   2 +-
->   drivers/media/platform/sti/delta/Kconfig      |   2 +-
->   drivers/media/platform/sti/hva/Kconfig        |   2 +-
->   drivers/media/platform/sti/stm32/Kconfig      |   4 +-
->   drivers/media/platform/ti/am437x/Kconfig      |   2 +-
->   drivers/media/platform/ti/davinci/Kconfig     |  12 +-
->   drivers/media/platform/ti/omap/Kconfig        |   2 +-
->   drivers/media/platform/ti/omap3isp/Kconfig    |   2 +-
->   drivers/media/platform/ti/vpe/Kconfig         |   4 +-
->   drivers/media/platform/via/Kconfig            |   2 +-
->   drivers/media/platform/xilinx/Kconfig         |   2 +-
->   drivers/media/radio/Kconfig                   |  54 ++--
->   drivers/media/radio/si470x/Kconfig            |   2 +-
->   drivers/media/radio/wl128x/Kconfig            |   2 +-
->   drivers/media/spi/Kconfig                     |   4 +-
->   drivers/media/test-drivers/Kconfig            |   2 +-
->   drivers/media/test-drivers/vicodec/Kconfig    |   2 +-
->   drivers/media/test-drivers/vimc/Kconfig       |   2 +-
->   drivers/media/test-drivers/vivid/Kconfig      |   2 +-
->   drivers/media/tuners/Kconfig                  |   6 +-
->   drivers/media/tuners/e4000.c                  |   6 +-
->   drivers/media/tuners/fc2580.c                 |   6 +-
->   drivers/media/usb/airspy/Kconfig              |   2 +-
->   drivers/media/usb/au0828/Kconfig              |   6 +-
->   drivers/media/usb/cpia2/Kconfig               |   2 +-
->   drivers/media/usb/dvb-usb-v2/Kconfig          |   8 +-
->   drivers/media/usb/dvb-usb/Kconfig             |   4 +-
->   drivers/media/usb/gspca/Kconfig               |  96 +++----
->   drivers/media/usb/gspca/gl860/Kconfig         |   2 +-
->   drivers/media/usb/gspca/m5602/Kconfig         |   2 +-
->   drivers/media/usb/hackrf/Kconfig              |   2 +-
->   drivers/media/usb/hdpvr/Kconfig               |   2 +-
->   drivers/media/usb/msi2500/Kconfig             |   2 +-
->   drivers/media/usb/pvrusb2/Kconfig             |   2 +-
->   drivers/media/usb/pwc/Kconfig                 |   2 +-
->   drivers/media/usb/s2255/Kconfig               |   2 +-
->   drivers/media/usb/stkwebcam/Kconfig           |   2 +-
->   drivers/media/usb/usbtv/Kconfig               |   2 +-
->   drivers/media/usb/uvc/Kconfig                 |   2 +-
->   drivers/media/usb/zr364xx/Kconfig             |   2 +-
->   drivers/media/v4l2-core/Kconfig               |  12 +-
->   drivers/media/v4l2-core/Makefile              |   2 +-
->   drivers/staging/media/atomisp/Kconfig         |   2 +-
->   drivers/staging/media/atomisp/i2c/Kconfig     |  14 +-
->   drivers/staging/media/hantro/Kconfig          |   2 +-
->   drivers/staging/media/imx/Kconfig             |   2 +-
->   drivers/staging/media/ipu3/Kconfig            |   2 +-
->   drivers/staging/media/max96712/Kconfig        |   2 +-
->   drivers/staging/media/meson/vdec/Kconfig      |   2 +-
->   drivers/staging/media/omap4iss/Kconfig        |   2 +-
->   drivers/staging/media/rkvdec/Kconfig          |   2 +-
->   drivers/staging/media/sunxi/cedrus/Kconfig    |   2 +-
->   drivers/staging/media/tegra-video/Kconfig     |   2 +-
->   drivers/staging/media/zoran/Kconfig           |   2 +-
->   drivers/staging/most/video/Kconfig            |   2 +-
->   .../vc04_services/bcm2835-camera/Kconfig      |   2 +-
->   drivers/usb/gadget/Kconfig                    |   2 +-
->   drivers/usb/gadget/legacy/Kconfig             |   2 +-
->   sound/pci/Kconfig                             |   4 +-
->   116 files changed, 371 insertions(+), 376 deletions(-)
+Hi Krzysztof,
 
+On Mon, Mar 14, 2022 at 08:39:57AM +0100, Krzysztof Kozlowski wrote:
+> On 14/03/2022 04:29, Pavan Kondeti wrote:
+> > Hi Krzysztof,
+> > 
+> > On Thu, Mar 03, 2022 at 04:59:22PM +0100, Krzysztof Kozlowski wrote:
+> >> On 03/03/2022 07:13, Sandeep Maheswaram wrote:
+> >>> Add device tree bindings for SNPS phy tuning parameters.
+> >>>
+> >>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> >>> ---
+> >>>  .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 125 +++++++++++++++++++++
+> >>>  1 file changed, 125 insertions(+)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> >>> index 0dfe691..227c097 100644
+> >>> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> >>> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> >>> @@ -50,6 +50,131 @@ properties:
+> >>>    vdda33-supply:
+> >>>      description: phandle to the regulator 3.3V supply node.
+> >>>  
+> >>> +  qcom,hs-disconnect:
+> >>> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >>> +    description:
+> >>> +      This adjusts the voltage level for the threshold used to
+> >>> +      detect a disconnect event at the host. Possible values are.
+> >>
+> >> ':', instead of full stop.
+> >>
+> >>> +      7 -> +21.56%
+> >>> +      6 -> +17.43%
+> >>> +      5 -> +13.32%
+> >>> +      4 -> +9.73%
+> >>> +      3 -> +6.3
+> >>> +      2 -> +3.17%
+> >>> +      1 -> 0, Design default%
+> >>
+> >> Use "default:" instead. Here and in other places.
+> >>
+> >>> +      0 -> -2.72%
+> >>
+> >> In current form this should be an enum... but actually current form is
+> >> wrong. You should not store register values in DT. What if next version
+> >> of hardware has a different meaning of these values?
+> >>
+> >> Instead, you should store here meaningful values, not register values.
+> >>
+> > 
+> > Thanks for the feedback.
+> > 
+> > The values in % really makes the tuning easy. People look at the eye diagram
+> > and decided whether to increase/decrease the margin. The absolute values
+> > may not be that useful. All we need is an "adjustment" here. The databook
+> > it self does not give any absolute values.
+> > 
+> > I agree to the "enum" suggestion which we have been following for the
+> > qusb2 driver already. 
+> > 
+> > The values have not changed in the last 5 years for this hardware block, so
+> > defining enums for the % values would be really helpful. 
+> 
+> I did not say you cannot store here percentages. Quite opposite - store
+> here the percentages. Just do not store register value. No. Please read
+> my comment again - meaningful values are needed.
+> 
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com> # for meson-vdec & meson-ge2d
+IIUC, you are asking us to come up with a meaningful values to encode the
+percentage values. However, all the % increments are not linear, so we can't
+come up with {min, max} scheme. Lets take an example of hostdisconnect
+threshold.
+
+As per the data book,
+
++      7 -> +21.56%
++      6 -> +17.43%
++      5 -> +13.32%
++      4 -> +9.73%
++      3 -> +6.3
++      2 -> +3.17%
++      1 -> 0, Design default%
++      0 -> -2.72%
+
+so how do we give meaningful values here? Does the below scheme make sense
+to you?
+
+#define QCOM_SNPS_FEMTO_HS_DISCONNECT_NEG_2P72	(-272)
+#define QCOM_SNPS_FEMTO_HS_DISCONNECT_DEFAULT	0
+#define QCOM_SNPS_FEMTO_HS_DISCONNECT_3P17	317
+#define QCOM_SNPS_FEMTO_HS_DISCONNECT_6P3	63
+..
+..
+
+In the driver, we have a mapping (which can be per SoC if required in future)
+that takes these values and convert to the correct values for a given
+register.
+
+Thanks,
+Pavan
