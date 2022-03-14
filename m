@@ -2,149 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7F24D8095
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Mar 2022 12:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0884D854D
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Mar 2022 13:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237703AbiCNLXC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Mar 2022 07:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S235888AbiCNMtB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Mar 2022 08:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236077AbiCNLXB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Mar 2022 07:23:01 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCD23A5CE
-        for <linux-usb@vger.kernel.org>; Mon, 14 Mar 2022 04:21:50 -0700 (PDT)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 10DBF3FCA0
-        for <linux-usb@vger.kernel.org>; Mon, 14 Mar 2022 11:21:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647256906;
-        bh=W9VMt9fitOMhu9PbN4y31ZgV44fBSNG49uwM8HTR7CI=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=C6eXvayj7U/WIeKlnazwo1Ju8ONqN2yw0jBJPDHDP+MSB8ggJad/EXesuuSTrRJNy
-         6VYiQlzHNCxZlqFgGv0SxI11hIWb+Ts4H5JoE07GomrOYWQ0XhBMMbObFdDI/3M9/s
-         WUi9cUcQKfQbkR7FeVkCioLc5CJvZlJWUnlH156VTtaSj4kZwatUczXXkVIfBNX+iz
-         T6IUof1STRJGMiJKevZKiM+XJ1nVdJ9at97oioLPYFM56nsnVft/2aKlPXH0Xbk0re
-         hwVYq/BRHrQcHimlAFZPoiJ58e+OO5T3Amezbx10nYXL2sxkcsKyFAc7dxBO/S1sOW
-         l2IuhoToRj3yQ==
-Received: by mail-ej1-f71.google.com with SMTP id ga31-20020a1709070c1f00b006cec400422fso7765767ejc.22
-        for <linux-usb@vger.kernel.org>; Mon, 14 Mar 2022 04:21:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=W9VMt9fitOMhu9PbN4y31ZgV44fBSNG49uwM8HTR7CI=;
-        b=zS08AaDz2ykdTvjWbVKpUEyGQt8rFMEJc8oIhCm+iwmVgyFlv4Egy9y3n71b509Hd7
-         9I4pNZjQPOKvXY6Wnk/aQTgELnQ2+JszfzbnbBxxI4L+5tRmG8QjNHk1LB03UmMP8Nct
-         QbMSABwXRoXwUzeBupNb4OuQCKNmdJFaZJxwwcWXuD5fAEAGp+Kcrp4OLuuuBlXf8NjS
-         J/h6Ote3/9d/3Div/EKmj5iCVjFE0B25qeXc0SQESGbkfza9PTrCKAdRdjcJ2+Ae2dNr
-         XWINfiVjuqPCOhv2Dvf/FyIcJgCW4Uujn9l4rUrw75SQAJLgOqdhtr58ecaYZx8orlJi
-         CZ4A==
-X-Gm-Message-State: AOAM532TKsdqXlSkWASwFG1ERwYyFhJ7jAqxseBlOGNnhjHKm2ZGi+LE
-        fWwdtl79PEiCvul1xMXyuFHp/TL3wf6FNbm+aosxfVh5q20H6XGAPoPUeWcBfQWfnt5cpvCwmGU
-        5UAY3FNx6J9fZsBhut6I9eo/Kpr6+BR+cYhzKqg==
-X-Received: by 2002:a17:907:6da2:b0:6da:94a9:b7f3 with SMTP id sb34-20020a1709076da200b006da94a9b7f3mr18346494ejc.692.1647256904341;
-        Mon, 14 Mar 2022 04:21:44 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJznZeSz7ppOk/V81jFboc957xuTXOB6UgvnwgrPV/5NzFrdaVAXBT1SidK5IOuXKNsAyX8TzA==
-X-Received: by 2002:a17:907:6da2:b0:6da:94a9:b7f3 with SMTP id sb34-20020a1709076da200b006da94a9b7f3mr18346474ejc.692.1647256904099;
-        Mon, 14 Mar 2022 04:21:44 -0700 (PDT)
-Received: from [192.168.0.152] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.googlemail.com with ESMTPSA id y18-20020aa7ca12000000b0041677910461sm7859672eds.53.2022.03.14.04.21.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 04:21:43 -0700 (PDT)
-Message-ID: <1a43277a-94b9-4f95-314a-876291227982@canonical.com>
-Date:   Mon, 14 Mar 2022 12:21:42 +0100
+        with ESMTP id S238520AbiCNMr5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Mar 2022 08:47:57 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCBD387A8;
+        Mon, 14 Mar 2022 05:41:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=41PUcU9tzULCiIgb8Uibh/5DuRgn44vcqHlit9be1ys=;
+  b=da5ZDADTYjfUb4CkZvv1ifI5i+2sUHWvJw+dkr6l96rFI9+3qCoi3gnv
+   q0ycGdD5ccrm59796HzJuglqTi/Zn7sM07eq2eqJ7FQY8P7GtUxL24J6z
+   5W/zcd3/E6fo/TuVnTzoYm6lik0f+KcMTza69NkDCls6kpW1/h8PdxP5f
+   k=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
+   d="scan'208";a="25997332"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:53:59 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     linux-can@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-spi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, platform-driver-x86@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-leds@vger.kernel.org, Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-clk@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-rdma@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        linux-power@fi.rohmeurope.com, Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 00/30] fix typos in comments
+Date:   Mon, 14 Mar 2022 12:53:24 +0100
+Message-Id: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
- override params bindings
-Content-Language: en-US
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_kriskura@quicinc.com
-References: <1646288011-32242-2-git-send-email-quic_c_sanm@quicinc.com>
- <b793195b-1d3d-63b2-19d2-72ae2aec8c0f@canonical.com>
- <20220314032952.GA27561@hu-pkondeti-hyd.qualcomm.com>
- <f1621a67-a0ff-f111-c4da-9401924e7f4a@canonical.com>
- <20220314081613.GA28402@hu-pkondeti-hyd.qualcomm.com>
- <c88396f4-4cfe-d375-1dcd-b34a6496cb06@canonical.com>
- <20220314094054.GB28402@hu-pkondeti-hyd.qualcomm.com>
- <b45b3b7e-e1c0-79b6-81c0-53c70427dd10@canonical.com>
- <20220314103045.GA31533@hu-pkondeti-hyd.qualcomm.com>
- <fadbc93f-8741-58c6-d0e5-dc740e0f0724@canonical.com>
- <20220314111313.GA6889@hu-pkondeti-hyd.qualcomm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220314111313.GA6889@hu-pkondeti-hyd.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 14/03/2022 12:13, Pavan Kondeti wrote:
-> Hi Krzysztof,
-> 
-> On Mon, Mar 14, 2022 at 11:41:27AM +0100, Krzysztof Kozlowski wrote:
->> On 14/03/2022 11:30, Pavan Kondeti wrote:
->>> Hi Krzysztof,
->>>
->>>>
->>>> Ah, I did not get it. That's not the solution for this case. defines in
->>>> dt-bindings are for constants which already can be in DT, e.g. IDs. Your
->>>> register values should not be stored in DT.
->>>>
->>> These are again not register definitions. These are encodings that dT and
->>> driver can use. These would be constants only, no?
->>
->> What do you mean it is not a register value? I don't have access to
->> datasheet/manual but I can clearly see code:
->>
->> +	if (or->hs_disconnect.override)
->> +		qcom_snps_hsphy_write_mask(hsphy->base,
->> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X0,
->> +			HS_DISCONNECT_MASK,
->> +			or->hs_disconnect.value << HS_DISCONNECT_SHIFT);
->>
->> You read the value from DT (e.g. "3" which means 6.3% for hs-disconnect)
->> and you write it to a register. Directly. 3 is a value for the hardware,
->> meaningless outside of it. It has meaning only in this one hardware
->> programming model. For humans it means nothing. For humans 6.3% means
->> something.
->>
-> 
-> Right, This is what I have been saying will change. we don't pass the direct
-> register values anymore. Instead I am saying, we pass the percentage
-> multiplied by 100. For 6.3%, user will be passing 630 in device tree. for
-> -2.75% user will pass (-275).
-> 
-> Are we on the same page now?
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-Yes, it sounds good. Thanks!
+---
 
-Best regards,
-Krzysztof
+ drivers/base/devres.c                               |    4 ++--
+ drivers/clk/qcom/gcc-sm6125.c                       |    2 +-
+ drivers/clk/ti/clkctrl.c                            |    2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c              |    4 ++--
+ drivers/gpu/drm/amd/display/dc/bios/command_table.c |    6 +++---
+ drivers/gpu/drm/amd/pm/amdgpu_pm.c                  |    2 +-
+ drivers/gpu/drm/bridge/analogix/analogix_dp_core.c  |    4 ++--
+ drivers/gpu/drm/sti/sti_gdp.c                       |    2 +-
+ drivers/infiniband/hw/qib/qib_iba7220.c             |    4 ++--
+ drivers/leds/leds-pca963x.c                         |    2 +-
+ drivers/media/i2c/ov5695.c                          |    2 +-
+ drivers/mfd/rohm-bd9576.c                           |    2 +-
+ drivers/mtd/ubi/block.c                             |    2 +-
+ drivers/net/can/usb/ucan.c                          |    4 ++--
+ drivers/net/ethernet/packetengines/yellowfin.c      |    2 +-
+ drivers/net/wireless/ath/ath6kl/htc_mbox.c          |    2 +-
+ drivers/net/wireless/cisco/airo.c                   |    2 +-
+ drivers/net/wireless/mediatek/mt76/mt7915/init.c    |    2 +-
+ drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c |    6 +++---
+ drivers/platform/x86/uv_sysfs.c                     |    2 +-
+ drivers/s390/crypto/pkey_api.c                      |    2 +-
+ drivers/scsi/aic7xxx/aicasm/aicasm.c                |    2 +-
+ drivers/scsi/elx/libefc_sli/sli4.c                  |    2 +-
+ drivers/scsi/lpfc/lpfc_mbox.c                       |    2 +-
+ drivers/scsi/qla2xxx/qla_gs.c                       |    2 +-
+ drivers/spi/spi-sun4i.c                             |    2 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme.c           |    2 +-
+ drivers/usb/gadget/udc/snps_udc_core.c              |    2 +-
+ fs/kernfs/file.c                                    |    2 +-
+ kernel/events/core.c                                |    2 +-
+ 30 files changed, 39 insertions(+), 39 deletions(-)
