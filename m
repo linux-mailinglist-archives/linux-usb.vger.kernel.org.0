@@ -2,228 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61EE34D7ED8
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Mar 2022 10:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969B14D7F48
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Mar 2022 10:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237513AbiCNJmS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Mar 2022 05:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
+        id S236072AbiCNJ7Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Mar 2022 05:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiCNJmR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Mar 2022 05:42:17 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80F94477F;
-        Mon, 14 Mar 2022 02:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647250868; x=1678786868;
+        with ESMTP id S231392AbiCNJ7Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Mar 2022 05:59:24 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C3413EBB
+        for <linux-usb@vger.kernel.org>; Mon, 14 Mar 2022 02:58:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647251893; x=1678787893;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=jN1qeKcaaJ6l/XvFuxLr2WD3gAYL2iISnD+T41RAglc=;
-  b=cPE1jDVUqeK6E4yKui/XPv0ypNF+b1322/Y5MbthNqKFhg+V6Ij7a/6W
-   cJbAJww40EVi/hjGqbt0qEXQMl7GTlaX1i/F/0iwTOR9A0mmqD7tIpXqb
-   24661R0b4xIksmvTe+35xnfiJvrupG5F544rGqi2V90GGAVJtqS9X/dlH
-   g=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 14 Mar 2022 02:41:06 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 02:41:05 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 14 Mar 2022 02:41:05 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 14 Mar 2022 02:40:58 -0700
-Date:   Mon, 14 Mar 2022 15:10:54 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_kriskura@quicinc.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
- override params bindings
-Message-ID: <20220314094054.GB28402@hu-pkondeti-hyd.qualcomm.com>
-References: <1646288011-32242-1-git-send-email-quic_c_sanm@quicinc.com>
- <1646288011-32242-2-git-send-email-quic_c_sanm@quicinc.com>
- <b793195b-1d3d-63b2-19d2-72ae2aec8c0f@canonical.com>
- <20220314032952.GA27561@hu-pkondeti-hyd.qualcomm.com>
- <f1621a67-a0ff-f111-c4da-9401924e7f4a@canonical.com>
- <20220314081613.GA28402@hu-pkondeti-hyd.qualcomm.com>
- <c88396f4-4cfe-d375-1dcd-b34a6496cb06@canonical.com>
+  bh=ewO8ZT0KnYgPFiDA6NjrROPM+pMOJuWqQIubpOvBq5o=;
+  b=lbwUM6lObpD45TcO3TV9t7PFbdXbch6nuqXNUiLl4/45K84VWFqJalVU
+   pbzg/GX/BmJPfMRGVcqax0XG62DA8CHsSlABXCnUIRLUKKp07moqODvUK
+   QY1yskCYbB6Tccw7R6EWlI9gFmE85d/ogtiIYR0dSbHVT1zHxCVSeMV0b
+   8pvzyC+52JCjKNvMKKIOXFejytuXQS1NMnCPnGjXg0eImlEvgd0fF+I1Q
+   7evxl4Klwk5T1SEiFLz0mY9arW7OhvD1b6cXQ0OkDayYoEzHiDuOccSbX
+   Mx/NTWJMhPy7WqfcIKS22eZRQ4WQW++LWkwo/HcXfD37tSJC9VrZRSyZ/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="255711692"
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="255711692"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 02:58:13 -0700
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="539899583"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 02:58:11 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nThSE-00H8np-VY;
+        Mon, 14 Mar 2022 11:57:30 +0200
+Date:   Mon, 14 Mar 2022 11:57:30 +0200
+From:   "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>
+To:     micklorain <micklorain@protonmail.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
+Subject: Re: [PATCH v1] usb: hcd: Try MSI interrupts on PCI devices
+Message-ID: <Yi8Rih9KZ7BrtbvP@smile.fi.intel.com>
+References: <PxIByDyBRcsbpcmVhGSNDFAoUcMmb78ctXCkw6fbpx25TGlCHvA6SJjjFkNr1FfQZMntYPTNyvEnblxzAZ8a6jP9ddLpKeCN6Chi_2FuexU=@protonmail.com>
+ <Yh03mFSESvwT8Wt0@smile.fi.intel.com>
+ <GCkSeDmZAyagb-3ogwNAwxsKYpxXSQRM6HeO_O9WxSYO1-8WL8ook5WQ9JchpyBqo4SIJ2XuW2DWFJeJrCzqzcedaBjNvfjNLZo1j3hU5tc=@protonmail.com>
+ <YijoMAZJ1elUfZnh@smile.fi.intel.com>
+ <pVZSQtquqT8_tNfgSacEQWJO4agPMHUT5gF3FkkWuJ3LERhq0JswT2y22oDz7Jvn_Vz28uA8rS2SAfJbPwq3EEQi2Vb-zySZdBozgVdR308=@protonmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c88396f4-4cfe-d375-1dcd-b34a6496cb06@canonical.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <pVZSQtquqT8_tNfgSacEQWJO4agPMHUT5gF3FkkWuJ3LERhq0JswT2y22oDz7Jvn_Vz28uA8rS2SAfJbPwq3EEQi2Vb-zySZdBozgVdR308=@protonmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krzysztof,
+On Sun, Mar 13, 2022 at 09:44:36PM +0000, micklorain wrote:
+> On Wednesday, March 9th, 2022 at 18:47, andriy.shevchenko@linux.intel.com <andriy.shevchenko@linux.intel.com> wrote:
+> > On Sun, Mar 06, 2022 at 04:09:49PM +0000, micklorain wrote:
+> > > On Monday, February 28th, 2022 at 21:59, andriy.shevchenko@linux.intel.com andriy.shevchenko@linux.intel.com wrote:
+> > > > On Mon, Feb 28, 2022 at 08:12:47PM +0000, micklorain wrote:
 
-Thanks for your suggestions and guidance on this.
-
-On Mon, Mar 14, 2022 at 09:36:02AM +0100, Krzysztof Kozlowski wrote:
-> On 14/03/2022 09:16, Pavan Kondeti wrote:
-> > Hi Krzysztof,
-> > 
-> > On Mon, Mar 14, 2022 at 08:39:57AM +0100, Krzysztof Kozlowski wrote:
-> >> On 14/03/2022 04:29, Pavan Kondeti wrote:
-> >>> Hi Krzysztof,
-> >>>
-> >>> On Thu, Mar 03, 2022 at 04:59:22PM +0100, Krzysztof Kozlowski wrote:
-> >>>> On 03/03/2022 07:13, Sandeep Maheswaram wrote:
-> >>>>> Add device tree bindings for SNPS phy tuning parameters.
-> >>>>>
-> >>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> >>>>> ---
-> >>>>>  .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 125 +++++++++++++++++++++
-> >>>>>  1 file changed, 125 insertions(+)
-> >>>>>
-> >>>>> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-> >>>>> index 0dfe691..227c097 100644
-> >>>>> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-> >>>>> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-> >>>>> @@ -50,6 +50,131 @@ properties:
-> >>>>>    vdda33-supply:
-> >>>>>      description: phandle to the regulator 3.3V supply node.
-> >>>>>  
-> >>>>> +  qcom,hs-disconnect:
-> >>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >>>>> +    description:
-> >>>>> +      This adjusts the voltage level for the threshold used to
-> >>>>> +      detect a disconnect event at the host. Possible values are.
-> >>>>
-> >>>> ':', instead of full stop.
-> >>>>
-> >>>>> +      7 -> +21.56%
-> >>>>> +      6 -> +17.43%
-> >>>>> +      5 -> +13.32%
-> >>>>> +      4 -> +9.73%
-> >>>>> +      3 -> +6.3
-> >>>>> +      2 -> +3.17%
-> >>>>> +      1 -> 0, Design default%
-> >>>>
-> >>>> Use "default:" instead. Here and in other places.
-> >>>>
-> >>>>> +      0 -> -2.72%
-> >>>>
-> >>>> In current form this should be an enum... but actually current form is
-> >>>> wrong. You should not store register values in DT. What if next version
-> >>>> of hardware has a different meaning of these values?
-> >>>>
-> >>>> Instead, you should store here meaningful values, not register values.
-> >>>>
-> >>>
-> >>> Thanks for the feedback.
-> >>>
-> >>> The values in % really makes the tuning easy. People look at the eye diagram
-> >>> and decided whether to increase/decrease the margin. The absolute values
-> >>> may not be that useful. All we need is an "adjustment" here. The databook
-> >>> it self does not give any absolute values.
-> >>>
-> >>> I agree to the "enum" suggestion which we have been following for the
-> >>> qusb2 driver already. 
-> >>>
-> >>> The values have not changed in the last 5 years for this hardware block, so
-> >>> defining enums for the % values would be really helpful. 
-> >>
-> >> I did not say you cannot store here percentages. Quite opposite - store
-> >> here the percentages. Just do not store register value. No. Please read
-> >> my comment again - meaningful values are needed.
-> >>
-> > 
-> > IIUC, you are asking us to come up with a meaningful values to encode the
-> > percentage values. However, all the % increments are not linear, so we can't
-> > come up with {min, max} scheme. Lets take an example of hostdisconnect
-> > threshold.
-> > 
-> > As per the data book,
-> > 
-> > +      7 -> +21.56%
-> > +      6 -> +17.43%
-> > +      5 -> +13.32%
-> > +      4 -> +9.73%
-> > +      3 -> +6.3
-> > +      2 -> +3.17%
-> > +      1 -> 0, Design default%
-> > +      0 -> -2.72%
-> > 
-> > so how do we give meaningful values here? Does the below scheme make sense
-> > to you?
+> > ...
+> >
+> > > > Last time I have got something similar it becomes that PCI bridge which is used
+> > > >
+> > > > to connect USB controller to the PCI Root Bridge was not capable of MSI, while
+> > > >
+> > > > advertising that capability. I.o.w. HW bug.
+> > > >
+> > > > To understand if it's something similar, please run (under the root) each of
+> > > >
+> > > > the following commands:
+> > > >
+> > > > lspci -nk -vvv
+> > > >
+> > > > cat /proc/interrupts
+> > > >
+> > > > in both cases, i.e. working and non-working.
+> > > >
+> > > > And then share the output (all 4 files).
+> >
+> > > Thanks for your reply.
+> > >
+> > > This is the results of the commands you requested :
+> > >
+> > > * When things work (commit dcb85f85fa6f142aae1fe86f399d4503d49f2b60 with commit 306c54d0edb6ba94d39877524dddebaad7770cf2 reverted)
+> > >
+> > > - lspci -nk -vvv :
+> > >
+> > > https://paste.debian.net/hidden/77d92dc9/
+> > >
+> > > - cat /proc/interrupts
+> > >
+> > > https://paste.debian.net/hidden/67208c8e/
+> > >
+> > > * When things are broken (commit dcb85f85fa6f142aae1fe86f399d4503d49f2b60)
+> > >
+> > > - lspci -nk -vvv :
+> > >
+> > > https://paste.debian.net/hidden/121362b3/
+> > >
+> > > - cat /proc/interrupts :
+> > >
+> > > https://paste.debian.net/hidden/dbe8d1bb/
+> > >
+> > > Hope this can help.
+> >
+> > Thank you for sharing. Are you able to compile a kernel and boot it? If so,
+> >
+> > can you try the following patch?
 > 
-> By "meaningful value" I mean something which has a understandable
-> meaning to reader of this code or to hardware designer. For example
-> percentage values or some units (ms, ns, Hz, mA, mV). The value used in
-> register is not meaningful in that way to us because it has a meaning
-> only to the hardware block. Storing register values is more difficult to
-> read later, non-portable and non-scalable.
+> I tried the patch, but it didn't help...
 > 
-> > 
-> > #define QCOM_SNPS_FEMTO_HS_DISCONNECT_NEG_2P72	(-272)
-> > #define QCOM_SNPS_FEMTO_HS_DISCONNECT_DEFAULT	0
-> > #define QCOM_SNPS_FEMTO_HS_DISCONNECT_3P17	317
-> > #define QCOM_SNPS_FEMTO_HS_DISCONNECT_6P3	63
+> >
+> > diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> >
+> > index 65f7f6b0576c..149742aa5f4d 100644
+> >
+> > --- a/drivers/pci/quirks.c
+> >
+> > +++ b/drivers/pci/quirks.c
+> >
+> > @@ -3041,6 +3041,13 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_BROADCOM,
+> >
+> > PCI_DEVICE_ID_TIGON3_5715S,
+> >
+> > quirk_msi_intx_disable_bug);
+> >
+> > +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4386, quirk_msi_intx_disable_ati_bug);
+> >
+> > +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4387, quirk_msi_intx_disable_ati_bug);
+> >
+> > +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4388, quirk_msi_intx_disable_ati_bug);
+> >
+> > +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4389, quirk_msi_intx_disable_ati_bug);
+> >
+> > +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x438a, quirk_msi_intx_disable_ati_bug);
+> >
+> > +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x438b, quirk_msi_intx_disable_ati_bug);
+> >
+> > +
+> >
+> > DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4390,
+> >
+> > quirk_msi_intx_disable_ati_bug);
+> >
+> > DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4391,
+> >
+> > In case it doesn't help, remove 'ati_' part from the function name and try again.
 > 
-> This is some define in driver, does not look related to bindings.
+> ... but removing 'ati_' from the function name indeed fixed my issue.
 > 
-> > In the driver, we have a mapping (which can be per SoC if required in future)
-> > that takes these values and convert to the correct values for a given
-> > register.
-> 
-> You focus on driver but I am talking here only about bindings.
+> Will this fix be upstreamed now ?
 
-I was saying we define those defines in include/dt-bindings/phy/... header and
-use it in the device tree and as well in the driver.
+I will do it ASAP. Thanks for report and testing!
 
-> 
-> What could be the meaningful value? Percentage could work. You have
-> there a negative value, so I wonder what type of percentage is it? What
-> is the formula?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-I just multiplied by 100 since device tree has no support for floating (as per
-my knowledge). The negative value represents it lowers the disconnect
-threshold by 2.72% of the default value. if it makes sense, we could also
-start from 0 like below.
 
-#define QCOM_SNPS_FEMTO_HS_DISCONNECT_NEG_2P72_PCT 0
-#define QCOM_SNPS_FEMTO_HS_DISCONNECT_DEFAULT	1
-#define QCOM_SNPS_FEMTO_HS_DISCONNECT_3P17_PCT	2
-#define QCOM_SNPS_FEMTO_HS_DISCONNECT_6P3_PCT	3
-
-The driver can have a table to map these bindings. This looks much better
-than those x100 formula values.
-
-> Your defines above look absolute, so maybe encode there absolute uV value?
-
-Like I said, the data book it self does not give any absolute values. Since
-pct values are more useful in electrical compliance tuning, better to stick
-to pct values with proper encodings.
-
-Thanks,
-Pavan
