@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B754D8BA6
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Mar 2022 19:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2337A4D8BAB
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Mar 2022 19:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243761AbiCNSV1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Mar 2022 14:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
+        id S243778AbiCNSVa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Mar 2022 14:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243727AbiCNSV0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Mar 2022 14:21:26 -0400
+        with ESMTP id S243760AbiCNSV1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Mar 2022 14:21:27 -0400
 Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF49735865
-        for <linux-usb@vger.kernel.org>; Mon, 14 Mar 2022 11:20:15 -0700 (PDT)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1901366AB
+        for <linux-usb@vger.kernel.org>; Mon, 14 Mar 2022 11:20:16 -0700 (PDT)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id ADE9740028
-        for <linux-usb@vger.kernel.org>; Mon, 14 Mar 2022 18:20:14 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 817BC4003F
+        for <linux-usb@vger.kernel.org>; Mon, 14 Mar 2022 18:20:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647282014;
-        bh=fp8gzCHSAGGAhHxY8/ZkxcekCduFjxC+Ysw+LEh4qoM=;
+        s=20210705; t=1647282015;
+        bh=3F2+CAuLP5QZLFRCTc5YKJtMfEWVhLlhzdIM3Py96Yo=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=BExsAhYZgcKHoao29q5wOLXprN/vGcigf/rb5Ft3Hn06gfilxYl2Sk+AgQ5h0/fKf
-         8oDLav2rWdoS6lqaz++d7PLAIiE+yDB7PHq0mSkpUnlhmCxONfQal5SMHa2ZO79Hf5
-         uLUbp50wr8kMuuFu24h4Om+1X9LcsaSIeqKIaiwBuoONTbcOcmjhv84Q25P4bcJH5E
-         zfCodh5cAww/By5E75BT3u7ML3Fn7TQ4QnwI1Evc/rvXNHtXHtLwMP7j/FV55adNSY
-         3Pfaip+4+zuecXOTTUTnPeyzWtBQfwA9CwxeKiQnGAJnxnZmR/Y10Z5PfU9J4tg2JQ
-         B2x6G7PgH2Dyg==
-Received: by mail-ed1-f71.google.com with SMTP id i5-20020a056402054500b00415ce7443f4so9274642edx.12
-        for <linux-usb@vger.kernel.org>; Mon, 14 Mar 2022 11:20:14 -0700 (PDT)
+         MIME-Version;
+        b=o/g0x/LPDRZnBOVMej65YdHFbrr4rtuf1ugwj/EbdyLqBzkhbcq8h69LHRbrBULZl
+         56n49IYWfOLKHNQgN/EfXI5nbegDJyYwtfio16RH6d4hTvKIgzpmz1eNFhtikz9Ek/
+         lMXjFKEDGXaPGmOLAsHYKTipYo0dBkAk2gKHRu3oAcXdMscbru1NOwiQRL5LlSX4nR
+         Qhil2K4n+4hnGZUwMX0KMJMcARC4hL5qVPlmzOJR0gjCK9vd/nhCXNhkod0pS670R8
+         LnDOCSX4fu8i2oREe0473rrUymAP3RD+HUg4o/ZargeT/Eb45ES3AF+KqaTd10bd40
+         xipn+Cc57cLXA==
+Received: by mail-ej1-f71.google.com with SMTP id q22-20020a1709064cd600b006db14922f93so8372736ejt.7
+        for <linux-usb@vger.kernel.org>; Mon, 14 Mar 2022 11:20:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fp8gzCHSAGGAhHxY8/ZkxcekCduFjxC+Ysw+LEh4qoM=;
-        b=awRaKgCmx6xuzkZFh0e8ezxJTOQXLiBhwaA7Os1x9fvpkXYm6eCh2Qc4TfC0J40kck
-         U6kimy/avBdHCChR7o8Z/VJbmn34KktJV1mJU2Gvb/N+qBMDHGfylikfK2JIuxn5TB5o
-         I7+YtU8dfZdrZ8eBJV7Tc7bTFhHGk7T5z4fcaPpFOTBSBVFhTNNIPBRupxeJ9y0NDhmi
-         XPcXRWbMHEMMeivMkJm5G1TjJ3W7va9jB23gjW5QnYsUF8qF/GuaswJ4TSnkYZ7WwQLH
-         z7YYetTCEb+qN0M1hMsCvFneUn6RoVGda5kd3ucqtcs4LCXFIylzYTkT25arO3CvQS1l
-         2KEw==
-X-Gm-Message-State: AOAM532daC9vI3flmhqHKFMzMj/YdsgKJYOWhEM7KJcnASUhha/RxYhW
-        hJdy9/nkP/SgKVi1YQhS1QROvmZ3MNcZCLgfOW4jQ8D8e4vSxs0jbl1szJ8+QeZ+vbu7muwCXnh
-        yZ2STF3+uDiKyCVEaKCEFn2RniknLmZKDxII6cQ==
-X-Received: by 2002:a05:6402:5cb:b0:415:e04a:5230 with SMTP id n11-20020a05640205cb00b00415e04a5230mr22004452edx.352.1647282013441;
-        Mon, 14 Mar 2022 11:20:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwfJEfoRq9Vs7yHaKY2O3oU3VWB2UJaMc03+F75wKvACaBfz72jl5h/d9vBhLJ488DLA/DFXg==
-X-Received: by 2002:a05:6402:5cb:b0:415:e04a:5230 with SMTP id n11-20020a05640205cb00b00415e04a5230mr22004429edx.352.1647282013219;
-        Mon, 14 Mar 2022 11:20:13 -0700 (PDT)
+        bh=3F2+CAuLP5QZLFRCTc5YKJtMfEWVhLlhzdIM3Py96Yo=;
+        b=5L4+Itjc01SQILUYIgVd5DPiaZtR75ked0thHUJnm6lnQQWOX63LLG01zhrzZBLv8g
+         GjBDlFsLaZBBAkuAErLoupzeVD4+4NftFiVgM0eUsc9rjMJiQg5kDLzjKfHQpsNNIV0F
+         JkykSf5jVL1MZx5NKe/uX5qrj7s/O4ksbN1DWryF+V2f37RcJ9eXkjHw1DBF1uAIz7di
+         /VsE+vsWXwd99uDQO0QLkUo/6caj20AthgMpHRHzn/5xe4FE+jursI449OQwidA0e9n/
+         TReoEzgk6SkVPdsc+NwsCYl/qLWwjUpTb9/i1llsUguTycx/OID+9h+PLR4W3NwDUTQ3
+         rOAw==
+X-Gm-Message-State: AOAM531nwO9MPRrl/rwnf4SlNxxC0KsSqxbIF1k0+kHPdTIjTzshbdjE
+        MuIR6Wa/me/X/Uk4pZ0uhZwM4qTaY3cvGRStLxWDHX8qHFJIoZUlajcgq14sdHjs8p8n4clBtMC
+        lDGzwoNUO5rVdGem8hXGhBuE12mSzFMFeMwdiPw==
+X-Received: by 2002:a17:906:7953:b0:6da:951c:1173 with SMTP id l19-20020a170906795300b006da951c1173mr19830436ejo.465.1647282014952;
+        Mon, 14 Mar 2022 11:20:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwkcwlyOc0SXQwJvd/c10csYRaaMAinbSZyI/FaYE0QvgKDO1i/aLi/j5YzU3k9ZXqrCumxNw==
+X-Received: by 2002:a17:906:7953:b0:6da:951c:1173 with SMTP id l19-20020a170906795300b006da951c1173mr19830421ejo.465.1647282014773;
+        Mon, 14 Mar 2022 11:20:14 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id i25-20020a50fd19000000b0041614eca4d1sm8566449eds.12.2022.03.14.11.20.11
+        by smtp.gmail.com with ESMTPSA id i25-20020a50fd19000000b0041614eca4d1sm8566449eds.12.2022.03.14.11.20.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 11:20:12 -0700 (PDT)
+        Mon, 14 Mar 2022 11:20:14 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -64,21 +64,18 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        =?UTF-8?q?M=C3=A5ns=20Rullg=C3=A5rd?= <mans@mansr.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: [PATCH 3/5] ARM: dts: s5pv210: Use standard arrays of generic PHYs for EHCI/OHCI device
-Date:   Mon, 14 Mar 2022 19:19:46 +0100
-Message-Id: <20220314181948.246434-3-krzysztof.kozlowski@canonical.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 4/5] dt-bindings: usb: samsung,exynos-usb2: add missing required reg
+Date:   Mon, 14 Mar 2022 19:19:47 +0100
+Message-Id: <20220314181948.246434-4-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220314181948.246434-1-krzysztof.kozlowski@canonical.com>
 References: <20220314181948.246434-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,55 +83,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Move USB PHYs to a standard arrays for S5PV210 EHCI/OHCI devices. This
-resolves the conflict between S5PV210 EHCI/OHCI sub-nodes and generic USB
-device bindings.
+"reg" property is required on Samsung S5PV210/Exynos EHCI/OHCI
+controllers.
 
-Suggested-by: Måns Rullgård <mans@mansr.com>
-Suggested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Fixes: 4bf2283cb208 ("dt-bindings: usb: samsung,exynos-usb2: convert to dtschema")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- arch/arm/boot/dts/s5pv210.dtsi | 18 ++++--------------
- 1 file changed, 4 insertions(+), 14 deletions(-)
 
-diff --git a/arch/arm/boot/dts/s5pv210.dtsi b/arch/arm/boot/dts/s5pv210.dtsi
-index a7aca54832d9..4ea1e638432a 100644
---- a/arch/arm/boot/dts/s5pv210.dtsi
-+++ b/arch/arm/boot/dts/s5pv210.dtsi
-@@ -434,14 +434,9 @@ ehci: usb@ec200000 {
- 			interrupt-parent = <&vic1>;
- 			clocks = <&clocks CLK_USB_HOST>;
- 			clock-names = "usbhost";
--			#address-cells = <1>;
--			#size-cells = <0>;
-+			phys = <&usbphy 1>;
-+			phy-names = "host";
- 			status = "disabled";
--
--			port@0 {
--				reg = <0>;
--				phys = <&usbphy 1>;
--			};
- 		};
+---
+
+Fixed commit in current next. If this should go as fix, I can split it
+from the second commit.
+---
+ Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
+index fbf07d6e707a..ef42c6fce73c 100644
+--- a/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
++++ b/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
+@@ -62,6 +62,7 @@ required:
+   - interrupts
+   - phys
+   - phy-names
++  - reg
  
- 		ohci: usb@ec300000 {
-@@ -451,14 +446,9 @@ ohci: usb@ec300000 {
- 			interrupt-parent = <&vic1>;
- 			clocks = <&clocks CLK_USB_HOST>;
- 			clock-names = "usbhost";
--			#address-cells = <1>;
--			#size-cells = <0>;
-+			phys = <&usbphy 1>;
-+			phy-names = "host";
- 			status = "disabled";
--
--			port@0 {
--				reg = <0>;
--				phys = <&usbphy 1>;
--			};
- 		};
- 
- 		mfc: codec@f1700000 {
+ allOf:
+   - if:
 -- 
 2.32.0
 
