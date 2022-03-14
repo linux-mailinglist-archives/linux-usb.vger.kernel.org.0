@@ -2,168 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376B44D7A61
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Mar 2022 06:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E004D7C27
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Mar 2022 08:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236175AbiCNFdD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Mar 2022 01:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        id S236764AbiCNHlp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Mar 2022 03:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236202AbiCNFdA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Mar 2022 01:33:00 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F90C3D48B;
-        Sun, 13 Mar 2022 22:31:50 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id o23so12760642pgk.13;
-        Sun, 13 Mar 2022 22:31:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=1DPJ7SGMvyfoUwo9X/vu4UVhU1Tx4WkS35X+VF/0EP4=;
-        b=cxtaKnregLaKLEDwWc84/IFvfdvNCRhQOdQ8cvcoQ0tXPxGr/jUXgrg2IgCcNZc4FX
-         uIli+ny1cThyTt0ySnrFHlkQYXsmvFWKeDHNyp6vW/XqFvmDATYyB4jB2yQD0ybHT9SF
-         RVWiAzwSIT/egVxAsfXWDaZ1Lz5XKQj5xSL2daoE+7r8CcvzFqWyaWffeupnz3hiVOCv
-         ownT4/Zxdz8yUXeN4uA3HJW2e0SIksfFWkb1RYc9dZTWPNsvX0GwGrjicf6ikBK+Ohc4
-         x7LEA3piKgrRpxHblffWw0F9Coe6z/vHgNd6r/FxFimyPcCfkmM3U7DijzOyF4qfuu58
-         rEXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=1DPJ7SGMvyfoUwo9X/vu4UVhU1Tx4WkS35X+VF/0EP4=;
-        b=3H6YllHj13TBmYQLULretUBT7mj0zPfvLB5pa9mOtGMzNiZVFJJmPTmrnt3fYX2qoa
-         +fc1Ww9Mp976fashEKfZETc30fBRKZCjFPf8b8W2MGaWFnOy9E5AXQ3E5nrnoBVhwyas
-         yKTO2X7hJ0FrqxuWZRRTC+C10AQwf35OhEGeHzY798SbkMdlaQbSNuhA9qww4ppH31ru
-         SVqvtcBISKCCJ1bZn7+kIjlN7XlmLeA/dosWqYRQMQa8CCf2FjUoLL0vMZ7xcOlQrxGR
-         u2HaEGdd+8Aq/IKoW6nzacXnJCCmSXCeqp/6/8a3LB62i0XCl6g05LUyUxnTB6Rw7lfP
-         pb6Q==
-X-Gm-Message-State: AOAM531Ie7h86Fu5A8i+lI1248/qbbGR8H2Wo9FAY6rEG5I8Bvs83XGx
-        R1dotXJohEwDT2oK9t+iPRs=
-X-Google-Smtp-Source: ABdhPJx3Q6EI395hKYFkDb0FwvhVKPS9olsiL4DX1R3h+KmPrDlCz6ZwH3PJj7ki9UbGPZr9Ln3Cbw==
-X-Received: by 2002:a63:485e:0:b0:380:2ff5:d0c0 with SMTP id x30-20020a63485e000000b003802ff5d0c0mr18929734pgk.493.1647235909751;
-        Sun, 13 Mar 2022 22:31:49 -0700 (PDT)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id c7-20020aa78e07000000b004f6e4d8ccc8sm18116376pfr.163.2022.03.13.22.31.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 13 Mar 2022 22:31:49 -0700 (PDT)
-From:   Vincent Shih <vincent.sunplus@gmail.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, wells.lu@sunplus.com
-Cc:     Vincent Shih <vincent.sunplus@gmail.com>
-Subject: [PATCH v1 2/2] dt-bindings: usb: Add bindings doc for Sunplus USB HOST OHCI driver
-Date:   Mon, 14 Mar 2022 13:32:04 +0800
-Message-Id: <1647235924-15572-3-git-send-email-vincent.sunplus@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1647235924-15572-1-git-send-email-vincent.sunplus@gmail.com>
-References: <1647235924-15572-1-git-send-email-vincent.sunplus@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232409AbiCNHlp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Mar 2022 03:41:45 -0400
+Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [203.148.12.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF1E40E65;
+        Mon, 14 Mar 2022 00:40:35 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
+ (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 14 Mar
+ 2022 15:25:27 +0800
+Received: from [192.168.43.174] (124.64.16.6) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 14 Mar
+ 2022 15:25:24 +0800
+To:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <stern@rowland.harvard.edu>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
+        <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
+From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+Subject: [PATCH] USB: Fix xhci ERDP update issue
+Message-ID: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
+Date:   Mon, 14 Mar 2022 15:25:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [124.64.16.6]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add bindings doc for Sunplus USB HOST OHCI driver
+On some situations, software handles TRB events slower than adding TRBs,
+xhci_irq will not exit until all events are handled. If xhci_irq just
+handles 256 TRBs and exit, the temp variable(event_ring_deq) driver 
+records in xhci irq is equal to driver current dequeue pointer. It will 
+cause driver not update ERDP and software dequeue pointer lost sync with 
+ERDP. On the next xhci_irq, the event ring is full but driver will not 
+update ERDP as software dequeue pointer is equal to ERDP.
 
-Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
+[  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
+[  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7 
+inflight: CMD OUT
+[  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78 
+00 00 08 00
+[  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host 
+not responding to stop endpoint command.
+[  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
+[  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not 
+responding, assume dead
+[  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6 
+inflight: CMD
+[  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8 
+00 00 08 00
+[  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5 
+inflight: CMD
+
+Fixed this issue by update software record temp variable when handles 
+128 TRB events.
+
+Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
 ---
- .../bindings/usb/sunplus,sp7021-usb-ohci.yaml      | 69 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 70 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.yaml
+  drivers/usb/host/xhci-ring.c | 1 +
+  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.yaml b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.yaml
-new file mode 100644
-index 0000000..7583b68
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.yaml
-@@ -0,0 +1,69 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd. 2021
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/sunplus,sp7021-usb-ohci.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sunplus SP7021 OHCI Controller Device Tree Bindings
-+
-+allOf:
-+  - $ref: usb-hcd.yaml#
-+
-+maintainers:
-+  - Vincent Shih <vincent.sunplus@gmail.com>
-+
-+description:
-+  Sunplus SP7021 USB HOST IP is a USB2.0 Host Controller. It supports both
-+  Enhanced Host Controller Interface (EHCI) and Open Host Controller Interface
-+  (OHCI).
-+
-+  It supports 32-bits address bus and 64bit data bus interface, compliant
-+  to AMBA AXI interface for data transfer.
-+
-+  It supports 32-bits address and data bus interface, compliant to AMBA
-+  AHB interface for register configurations.
-+
-+  It supports 32-bits address and data bus interface, compliant to AMBA
-+  AXI interface for register alternative configurations.
-+
-+  The UTM Interface block generates PHY control signals, compliant to
-+  USB2.0 Transceiver Macrocell Interface Specification Revision 1.0.
-+
-+properties:
-+  compatible:
-+    const: sunplus,sp7021-usb-ohci
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - resets
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    sp_ohci0: usb@9c102080 {
-+      compatible = "sunplus,sp7021-usb-ohci";
-+      reg = <0x9c102080 0x68>;
-+      clocks = <&clkc 0x3a>;
-+      resets = <&rstc 0x2a>;
-+      interrupt-parent = <&intc>;
-+      interrupts = <15 IRQ_TYPE_LEVEL_HIGH>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f7a9ed7..4c80c39 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17949,6 +17949,7 @@ SUNPLUS USB OHCI DRIVER
- M:	Vincent Shih <vincent.sunplus@gmail.com>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.yaml
- F:	drivers/usb/host/ohci-sunplus.c
- 
- SUPERH
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index d0b6806..f970799 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -3141,6 +3141,7 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+                 if (event_loop++ < TRBS_PER_SEGMENT / 2)
+                         continue;
+                 xhci_update_erst_dequeue(xhci, event_ring_deq);
++               event_ring_deq = xhci->event_ring->dequeue;
+
+                 /* ring is half-full, force isoc trbs to interrupt more 
+often */
+                 if (xhci->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
 -- 
 2.7.4
-
