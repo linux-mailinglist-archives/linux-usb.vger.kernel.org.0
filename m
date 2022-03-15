@@ -2,112 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F904DA0E3
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Mar 2022 18:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9504DA118
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Mar 2022 18:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350480AbiCORKN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Mar 2022 13:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
+        id S1350546AbiCOR1T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Mar 2022 13:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348819AbiCORKM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Mar 2022 13:10:12 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AB948E4A
-        for <linux-usb@vger.kernel.org>; Tue, 15 Mar 2022 10:08:59 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id y17so10285327ljd.12
-        for <linux-usb@vger.kernel.org>; Tue, 15 Mar 2022 10:08:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=89AapUKE/1pFpkNlzVSvl0gcg/r2kqLZ2/9LmCBzmGw=;
-        b=eIytPWVlHZG2c+3ssVjE3ER93sxCwkcHLBBjPEF/CN2OkYiJ1qyEanUT5e2Fng/dvQ
-         cTz2EqvgfhPaL6KT/YJ1aKcd5EWDAWbwCu0qrNrZPRj+zxQ4mZzMCdTXGsGsPQfjic5y
-         /a8HTCfZuBmRijJeDeSHHPfXo3cwN72mlQj5Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=89AapUKE/1pFpkNlzVSvl0gcg/r2kqLZ2/9LmCBzmGw=;
-        b=uU8EWtm4yDc3h/2S5W0WiKKd1XNjzMNWKQGg3X/MpyD2DJqVABS+xtoienwldHkHpL
-         G5FGaNNxy8fwGoFMHmXJq+G586mh0QQgzeEknX7PLZ6b8ZiggspY6BoFflyF6lja10Sp
-         E8wMOWvzaMC+ecWOHu0Hz4/OHmIHfnPo6XWtjqxGK9NkS0dWSx2YuwIYBY+7V60edQ9T
-         h9zhi1zszTueptxtQavKQ8FTKqvuFDbDvRn3sMsLmeSpxbe5kMzDOKKfgJjOBQ81owrx
-         ItoE99VS8KIFcow8Ryymtth7Rd/GemlTxeBlwh7mRMJj9tP924fKMqihAkM6I7tVC+qO
-         /qGQ==
-X-Gm-Message-State: AOAM532hkaQACsyD0eWC1mGa+N+fcY/dZEhhgCRcird7OHm81Zcqm1jG
-        hWNSUG8TMmeuiCL2SnpH+6e2jtCcwwwaNkb2
-X-Google-Smtp-Source: ABdhPJzykc0OXn/61yuX9k9zeUMcy6JeZ8RTlvpqUM9y5luJfLoNtm3/Z/1OD/C+0az9dsOohAinyg==
-X-Received: by 2002:a2e:b0cf:0:b0:248:b17:7fb2 with SMTP id g15-20020a2eb0cf000000b002480b177fb2mr16526556ljl.26.1647364136970;
-        Tue, 15 Mar 2022 10:08:56 -0700 (PDT)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
-        by smtp.gmail.com with ESMTPSA id e4-20020a05651c038400b00247ebace677sm4401147ljp.21.2022.03.15.10.08.53
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 10:08:54 -0700 (PDT)
-Received: by mail-lf1-f51.google.com with SMTP id l20so34096553lfg.12
-        for <linux-usb@vger.kernel.org>; Tue, 15 Mar 2022 10:08:53 -0700 (PDT)
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
- y3-20020ac24203000000b004488053d402mr10011514lfh.687.1647364132924; Tue, 15
- Mar 2022 10:08:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <0000000000009e7a1905b8295829@google.com> <00000000000003887a05da3e872c@google.com>
-In-Reply-To: <00000000000003887a05da3e872c@google.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 15 Mar 2022 10:08:36 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj4HBk7o8_dbpk=YiTOFxvE9LTiH8Gk=1kgVxOq1jaH7g@mail.gmail.com>
-Message-ID: <CAHk-=wj4HBk7o8_dbpk=YiTOFxvE9LTiH8Gk=1kgVxOq1jaH7g@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: out-of-bounds Read in ath9k_hif_usb_rx_cb (3)
-To:     syzbot <syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        ath9k-devel@qca.qualcomm.com, chouhan.shreyansh630@gmail.com,
-        David Miller <davem@davemloft.net>,
+        with ESMTP id S1350543AbiCOR1Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Mar 2022 13:27:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187A248E79
+        for <linux-usb@vger.kernel.org>; Tue, 15 Mar 2022 10:26:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAADA615A2
+        for <linux-usb@vger.kernel.org>; Tue, 15 Mar 2022 17:26:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C896C340EE;
+        Tue, 15 Mar 2022 17:26:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647365162;
+        bh=Ij4oiFcgoMgMx5C5TPSOMZBFORHOmbZ8CQV6BwrUosE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V7JsfvLYHr9M1VDy4puiSX//sOIjTRX5Xh3KFWxNzDgBO7fk5oytj5RZD49FNgAra
+         IdJyri8WTDOEgIrz8XzVooPh+y1I6YbXk00NPhXaLD+rUud8U1GUH6MWJzHkVdUKHI
+         KcUYAhGa3fLGQJXo2jkchP0lvVTnwY7tqJ/avvPc=
+Date:   Tue, 15 Mar 2022 18:25:58 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     linux-usb@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Ville Syrjala <syrjala@sci.fi>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Henk Vergonet <Henk.Vergonet@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Benjamin Valentin <benpicco@googlemail.com>,
+        Oliver Neukum <oliver@neukum.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:USB GADGET/PERIPHERAL SUBSYSTEM" 
-        <linux-usb@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Netdev <netdev@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Woojung Huh <woojung.huh@microchip.com>,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Helmut Schaa <helmut.schaa@googlemail.com>,
+        Duncan Sands <duncan.sands@free.fr>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Olav Kongas <ok@artecdesign.ee>,
+        Rui Miguel Silva <rui.silva@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Clemens Ladisch <clemens@ladisch.de>
+Subject: Re: [PATCH v2 03/10] usb: rework usb_maxpacket() and deprecate its
+ third argument
+Message-ID: <YjDMJs/LU/lVAaku@kroah.com>
+References: <20220304105420.1059585-1-mailhol.vincent@wanadoo.fr>
+ <20220306075524.706660-1-mailhol.vincent@wanadoo.fr>
+ <20220306075524.706660-4-mailhol.vincent@wanadoo.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220306075524.706660-4-mailhol.vincent@wanadoo.fr>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 2:36 AM syzbot
-<syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit
-> 09688c0166e7 ("Linux 5.17-rc8")
+On Sun, Mar 06, 2022 at 04:55:17PM +0900, Vincent Mailhol wrote:
+> This is a transitional patch with the goal of changing the prototype
+> of usb_maxpacket() from:
+> | static inline __u16
+> | usb_maxpacket(struct usb_device *udev, int pipe, int is_out)
+> 
+> into:
+> | static inline u16 usb_maxpacket(struct usb_device *dev, int pipe)
+> 
+> The third argument of usb_maxpacket(): is_out gets removed because it
+> can be derived from its second argument: pipe using
+> usb_pipeout(pipe). Furthermore, in the current version,
+> ubs_pipeout(pipe) is called regardless in order to sanitize the is_out
+> parameter.
+> 
+> In order to make a smooth change, we first deprecate the is_out
+> parameter by simply ignoring it (using a variadic function) and will
+> remove it latter, once all the callers get updated.
+> 
+> Finally, the body of the function is reworked in order not to reinvent
+> the wheel and just relies on the usb_pipe_endpoint() helper function
+> instead.
+> 
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+>  include/linux/usb.h | 24 +++---------------------
+>  1 file changed, 3 insertions(+), 21 deletions(-)
+> 
+> diff --git a/include/linux/usb.h b/include/linux/usb.h
+> index 200b7b79acb5..588aa7dc3d10 100644
+> --- a/include/linux/usb.h
+> +++ b/include/linux/usb.h
+> @@ -1969,30 +1969,12 @@ usb_pipe_endpoint(struct usb_device *dev, unsigned int pipe)
+>  	return eps[usb_pipeendpoint(pipe)];
+>  }
+>  
+> -/*-------------------------------------------------------------------------*/
+> -
+> -static inline __u16
+> -usb_maxpacket(struct usb_device *udev, int pipe, int is_out)
+> +static inline u16 usb_maxpacket(struct usb_device *dev, int pipe,
+> +				/* int is_out deprecated */ ...)
 
-No, I'm afraid that means that the bisection is broken:
+No need to change from udev->dev, right?
 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=140283ad700000
+>  {
+> -	struct usb_host_endpoint	*ep;
+> -	unsigned			epnum = usb_pipeendpoint(pipe);
+> -
+> -	if (is_out) {
+> -		WARN_ON(usb_pipein(pipe));
+> -		ep = udev->ep_out[epnum];
+> -	} else {
+> -		WARN_ON(usb_pipeout(pipe));
+> -		ep = udev->ep_in[epnum];
+> -	}
+> -	if (!ep)
+> -		return 0;
+> -
+> -	/* NOTE:  only 0x07ff bits are for packet size... */
+> -	return usb_endpoint_maxp(&ep->desc);
+> +	return usb_endpoint_maxp(&usb_pipe_endpoint(dev, pipe)->desc);
 
-and yeah, looking at that log it looks like every single run has
+The change to use usb_pipe_endpoint() can be done separately.
 
-  testing commit [...]
-  run #0: crashed: KASAN: use-after-free Read in ath9k_hif_usb_rx_cb
-  ...
-  # git bisect good [...]
+Let's make these in tiny steps so that we can easily roll things back if
+things are not working.
 
-and you never saw a "bad" commit that didn't have the issue, so the
-top-of-tree gets marked "good" (and I suspect you intentionally mark
-the broken case "good" in order to find where it got fixed, so you're
-using "git bisect" in a reverse way).
+thanks,
 
-I didn't look closer, but it does seem to not reproduce very reliably,
-maybe that is what confused the bot originally.
-
-                   Linus
+greg k-h
