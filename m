@@ -2,133 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAF34D9E7E
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Mar 2022 16:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 651E84D9E9E
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Mar 2022 16:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349557AbiCOPTe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Mar 2022 11:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
+        id S1349580AbiCOP1h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Mar 2022 11:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235955AbiCOPTc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Mar 2022 11:19:32 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 112ED12AE8
-        for <linux-usb@vger.kernel.org>; Tue, 15 Mar 2022 08:18:18 -0700 (PDT)
-Received: (qmail 1724875 invoked by uid 1000); 15 Mar 2022 11:18:17 -0400
-Date:   Tue, 15 Mar 2022 11:18:17 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, CobeChen@zhaoxin.com,
-        TimGuo@zhaoxin.com, tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
-Subject: Re: [PATCH] USB:Fix ehci infinite suspend-resume loop issue in
- zhaoxin
-Message-ID: <YjCuOXRFZ8CjK9SD@rowland.harvard.edu>
-References: <3d0ae3ca-9dad-bb8f-5c41-45bdcb07b9cd@zhaoxin.com>
- <Yi9QIk+6VIWW6V/W@rowland.harvard.edu>
- <320584eb-ef89-3759-509c-e7e9cb10f983@zhaoxin.com>
+        with ESMTP id S1346240AbiCOP1g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Mar 2022 11:27:36 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB23506D3
+        for <linux-usb@vger.kernel.org>; Tue, 15 Mar 2022 08:26:24 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id e11-20020a5d8e0b000000b006412cf3f627so14713825iod.17
+        for <linux-usb@vger.kernel.org>; Tue, 15 Mar 2022 08:26:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=vdTQDBC3Jklh96eo2Y2NGd8ppWKF8RaZ4ErDmGq8gGk=;
+        b=u59ijjtaPt1jioV2iWhoWhLMov0DNRrS1SfAh15VTKra0No2hG6vn+iMWE8pagcWFl
+         KtgSZJ5zgDlpTGIwOdxTb4pLYTG1L1HAlD22M7Xo1pC/eVWniqwCdIZG5DaCMFkKRt0T
+         ETpz2K1G9dIZ5paXhu7VyB/krMvmAGdr/a4jeruqgSwYJlBaEnnKmYYzNAkITKjd+gjt
+         Dc5FOLzhegUhIMjS0ix44PiS2//gSdEHToA3EDHnYkmPHus8zpXflDV55RWyHCvs175K
+         B3KWtOzwXo8njOUZGFbTN41VChcWkZnp1gCo25Ds/GnowcCXi2d5LNIxCosLGxDf/mwr
+         Llgw==
+X-Gm-Message-State: AOAM533aWtpqb1t7eYgeIJjwfTjyyTFc1nTbd0RGK5/RAh1p8kTzIfLd
+        8Su1gR6motgvhYkf7daeTbe5n9XhvOKUg9Q0/xqZU2aRCaLz
+X-Google-Smtp-Source: ABdhPJxRlEiUerv7gDBygAznUFLNS8dEjNh8w4wUD1854dHWrJtxtiWpX1Ofn8b9ntKMGI5XtebtNVYiHhzz9+6TcpL8z7tKBfdj
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <320584eb-ef89-3759-509c-e7e9cb10f983@zhaoxin.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:6c09:0:b0:2c7:a105:d426 with SMTP id
+ h9-20020a926c09000000b002c7a105d426mr7213685ilc.111.1647357983549; Tue, 15
+ Mar 2022 08:26:23 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 08:26:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006d718005da436bcc@google.com>
+Subject: [syzbot] KMSAN: uninit-value in asix_mdio_write_nopm
+From:   syzbot <syzbot+737f7d251877e50f3dce@syzkaller.appspotmail.com>
+To:     andrew@lunn.ch, davem@davemloft.net, glider@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux@rempel-privat.de,
+        netdev@vger.kernel.org, paskripkin@gmail.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 08:39:09PM +0800, WeitaoWang-oc@zhaoxin.com wrote:
-> On 2022/3/14 10:24, Alan Stern wrote:
-> > > +       t1 = ehci_readl(ehci, &ehci->regs->status);
-> > > +       ehci_writel(ehci, t1 & STS_PCD, &ehci->regs->status);
-> > > +       ehci_readl(ehci, &ehci->regs->status);
-> > 
-> > You should not clear the STS_PCD bit.  What if some other port had a
-> > status change at the same time?  Then because you cleared the
-> > port-change-detect bit, the system would not realize that the other port
-> > needed to be handled.
-> 
-> I really didn't think about this case.
-> 
-> > Leaving the STS_PCD bit turned on will cause the driver to do a little
-> > extra work, but it shouldn't cause any harm.
-> > 
-> I have encountered the following situation if EHCI runtime suspend is
-> enabled by default.
-> 
-> 
-> 
-> 1.Wake from system to disk and boot OS.
+Hello,
 
-You're talking about resuming after hibernation, right?
+syzbot found the following issue on:
 
-> 2.EHCI will entry runtime suspend after enumerated by driver during boot
-> phase of suspend to disk
+HEAD commit:    724946410067 x86: kmsan: enable KMSAN builds for x86
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=151d8ea9700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=28718f555f258365
+dashboard link: https://syzkaller.appspot.com/bug?extid=737f7d251877e50f3dce
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
 
-I'm not sure what you mean by "boot phase of suspend to disk".  This is 
-while the restore kernel is starting up at the beginning of resume from 
-hibernation, right?
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> 3.EHCI will be placed to freeze state and ehci_resume is called after image
-> is loaded.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+737f7d251877e50f3dce@syzkaller.appspotmail.com
 
-ehci_resume is called to leave runtime suspend.  Going into the freeze 
-state doesn't require any changes.
+usb 6-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 6-1: Product: syz
+usb 6-1: Manufacturer: syz
+usb 6-1: SerialNumber: syz
+usb 6-1: config 0 descriptor??
+asix 6-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
+=====================================================
+BUG: KMSAN: uninit-value in asix_check_host_enable drivers/net/usb/asix_common.c:84 [inline]
+BUG: KMSAN: uninit-value in asix_mdio_write_nopm+0x556/0x9d0 drivers/net/usb/asix_common.c:605
+ asix_check_host_enable drivers/net/usb/asix_common.c:84 [inline]
+ asix_mdio_write_nopm+0x556/0x9d0 drivers/net/usb/asix_common.c:605
+ ax88772a_hw_reset+0xa67/0x12e0 drivers/net/usb/asix_devices.c:524
+ ax88772_bind+0x750/0x1770 drivers/net/usb/asix_devices.c:762
+ usbnet_probe+0x1251/0x4160 drivers/net/usb/usbnet.c:1747
+ usb_probe_interface+0xf19/0x1600 drivers/usb/core/driver.c:396
+ really_probe+0x653/0x14b0 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
+ driver_probe_device drivers/base/dd.c:782 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach+0x593/0x8e0 drivers/base/dd.c:970
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
+ bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
+ device_add+0x1fff/0x26e0 drivers/base/core.c:3405
+ usb_set_configuration+0x37e9/0x3ed0 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0x13c/0x300 drivers/usb/core/generic.c:238
+ usb_probe_device+0x309/0x570 drivers/usb/core/driver.c:293
+ really_probe+0x653/0x14b0 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
+ driver_probe_device drivers/base/dd.c:782 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach+0x593/0x8e0 drivers/base/dd.c:970
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
+ bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
+ device_add+0x1fff/0x26e0 drivers/base/core.c:3405
+ usb_new_device+0x1b8e/0x2950 drivers/usb/core/hub.c:2566
+ hub_port_connect drivers/usb/core/hub.c:5358 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+ port_event drivers/usb/core/hub.c:5660 [inline]
+ hub_event+0x58e3/0x89e0 drivers/usb/core/hub.c:5742
+ process_one_work+0xdb6/0x1820 kernel/workqueue.c:2307
+ worker_thread+0x10b3/0x21e0 kernel/workqueue.c:2454
+ kthread+0x3c7/0x500 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30
 
-> 4.If PCD flag is set(caused by patch), then HCD_FLAG_RH_RUNNING will be set.
-> 
-> 5.Pci_pm_freeze_noirq is called to check ehci root hub state and return
-> value is -EBUSY. which will cause
->  quiesce phase of suspend to disk fail.
+Local variable smsr.i created at:
+ asix_mdio_write_nopm+0xe7/0x9d0 drivers/net/usb/asix_common.c:605
+ ax88772a_hw_reset+0xa67/0x12e0 drivers/net/usb/asix_devices.c:524
 
-You're talking about check_root_hub_suspended() in hcd-pci.c, right?
-
-You know, I'm not at all certain that the callbacks for freeze and 
-freeze_noirq should ever return anything other than 0.  It's okay for 
-them to call check_root_hub_suspended(), but they should ignore its 
-return value.
-
-Can you check if the patch below helps?
-
-Alan Stern
+CPU: 1 PID: 3515 Comm: kworker/1:3 Not tainted 5.17.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+=====================================================
 
 
-Index: usb-devel/drivers/usb/core/hcd-pci.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hcd-pci.c
-+++ usb-devel/drivers/usb/core/hcd-pci.c
-@@ -575,6 +575,12 @@ static int hcd_pci_resume(struct device
- 	return resume_common(dev, PM_EVENT_RESUME);
- }
- 
-+static int hcd_pci_freeze_check(struct device *dev)
-+{
-+	(void) check_root_hub_suspended(dev);
-+	return 0;
-+}
-+
- static int hcd_pci_restore(struct device *dev)
- {
- 	return resume_common(dev, PM_EVENT_RESTORE);
-@@ -586,6 +592,7 @@ static int hcd_pci_restore(struct device
- #define hcd_pci_suspend_noirq	NULL
- #define hcd_pci_resume_noirq	NULL
- #define hcd_pci_resume		NULL
-+#define hcd_pci_freeze_check	NULL
- #define hcd_pci_restore		NULL
- 
- #endif	/* CONFIG_PM_SLEEP */
-@@ -616,8 +623,8 @@ const struct dev_pm_ops usb_hcd_pci_pm_o
- 	.suspend_noirq	= hcd_pci_suspend_noirq,
- 	.resume_noirq	= hcd_pci_resume_noirq,
- 	.resume		= hcd_pci_resume,
--	.freeze		= check_root_hub_suspended,
--	.freeze_noirq	= check_root_hub_suspended,
-+	.freeze		= hcd_pci_freeze_check,
-+	.freeze_noirq	= hcd_pci_freeze_check,
- 	.thaw_noirq	= NULL,
- 	.thaw		= NULL,
- 	.poweroff	= hcd_pci_suspend,
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
