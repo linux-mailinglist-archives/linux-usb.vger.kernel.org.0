@@ -2,125 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E11D4D9E42
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Mar 2022 15:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAF34D9E7E
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Mar 2022 16:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349519AbiCOPAM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Mar 2022 11:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
+        id S1349557AbiCOPTe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Mar 2022 11:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349513AbiCOPAI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Mar 2022 11:00:08 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916E2237C1
-        for <linux-usb@vger.kernel.org>; Tue, 15 Mar 2022 07:58:55 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id r7so867878wmq.2
-        for <linux-usb@vger.kernel.org>; Tue, 15 Mar 2022 07:58:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=POhFPKDu05rnolEnCMUfGWyfG7SKY0U5Ki6iIBt2QSc=;
-        b=IBHTPOQcn29kklQGIliTcHYKIlLy1dPyQq5MpQtQ8Rur3tD04R7Y+eUXGEt1fzLVQx
-         YIZL2dYJxijss5RL7iOr9hlNcGqQT33rAntIGNNjyH/O5yI5OdL9zZYFi+FpumuGVt17
-         tmg9yV0NlLZEpcDrhh60IiQQcnlIkltBGP9tfOgyQRPExk+dLmcFoSnEiU775LZOU7+S
-         Hg/lKJ7Ge0hO9wW31M6fXsQRogJIf38lBdD2kS47wH0P1vj9PhRYJ+ZItuDjO3P7hfqq
-         zpzziIwKe+EYrLat07rpOVazT0RRsZ4ybUb81s3QBbqI9Qln6+f9XEPRutI7nD6brxY8
-         I9YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=POhFPKDu05rnolEnCMUfGWyfG7SKY0U5Ki6iIBt2QSc=;
-        b=OovQ9xTvySF2askLmJKC+j9/onyRZDbEfv1S89lYKlFhe+jsJXrBXDxqDFCsOiMxmt
-         w7GOQJyRmntAvtXzsJEiET4pRQcMZqHwly4aIUJuZ6X0vrUMEDX+93rvqdNSR6pEz008
-         hQNhMI7jhYkvOmnVs7aOJGtohCBcyv4df8R8F6zHpwIuxZwP8+X/Ihl8Dazhq2Vy04ax
-         HI4hKN/JHkc2jgJmaqOavzA8LXbZ9ZmCCtlKYM8dK/KoUvh7ck+4kkpuxtDX9MuMEWN9
-         0QyEHbb6cAKEhZ21JYUHDwjtRRlPgrNJKOS4GbtWUt4EXzRWmAev91sA+0EGzrZ8mICB
-         vqEg==
-X-Gm-Message-State: AOAM532+49PUWWzLfC2al/fzs08j9lIF4FKXIQsgI7kDFsrkKTgdWKFt
-        mVVuLQ9F3NWgBwZEydOEUuCkzw==
-X-Google-Smtp-Source: ABdhPJxmiznixQ5WYnAHb2k3VoyxMtuqDjeDIZk/Mm1XFptDScHBiIL7knyiv2Vf5YursjLargeEbw==
-X-Received: by 2002:a05:600c:4608:b0:38c:6ba3:1c9f with SMTP id m8-20020a05600c460800b0038c6ba31c9fmr93477wmo.39.1647356333964;
-        Tue, 15 Mar 2022 07:58:53 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id y12-20020adff14c000000b001f04d1959easm15759411wro.13.2022.03.15.07.58.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 07:58:53 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 14:58:51 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     frank zago <frank@zago.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Jan-Niklas Burfeind <kernel@aiyionpri.me>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-usb@vger.kernel.org, gunar@schorcht.net
-Subject: Re: [PATCH v3] mfd: ch341: add driver for the WCH CH341 in I2C/GPIO
- mode
-Message-ID: <YjCpq8YVwmZzOzwE@google.com>
-References: <20220314030937.22762-1-frank@zago.net>
+        with ESMTP id S235955AbiCOPTc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Mar 2022 11:19:32 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 112ED12AE8
+        for <linux-usb@vger.kernel.org>; Tue, 15 Mar 2022 08:18:18 -0700 (PDT)
+Received: (qmail 1724875 invoked by uid 1000); 15 Mar 2022 11:18:17 -0400
+Date:   Tue, 15 Mar 2022 11:18:17 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, CobeChen@zhaoxin.com,
+        TimGuo@zhaoxin.com, tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
+Subject: Re: [PATCH] USB:Fix ehci infinite suspend-resume loop issue in
+ zhaoxin
+Message-ID: <YjCuOXRFZ8CjK9SD@rowland.harvard.edu>
+References: <3d0ae3ca-9dad-bb8f-5c41-45bdcb07b9cd@zhaoxin.com>
+ <Yi9QIk+6VIWW6V/W@rowland.harvard.edu>
+ <320584eb-ef89-3759-509c-e7e9cb10f983@zhaoxin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220314030937.22762-1-frank@zago.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <320584eb-ef89-3759-509c-e7e9cb10f983@zhaoxin.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 13 Mar 2022, frank zago wrote:
-
-> The CH341 is a multifunction chip, presenting 3 different USB PID. One
-> of these functions is for I2C/SPI/GPIO. This new driver manages I2C
-> and GPIO.
+On Tue, Mar 15, 2022 at 08:39:09PM +0800, WeitaoWang-oc@zhaoxin.com wrote:
+> On 2022/3/14 10:24, Alan Stern wrote:
+> > > +       t1 = ehci_readl(ehci, &ehci->regs->status);
+> > > +       ehci_writel(ehci, t1 & STS_PCD, &ehci->regs->status);
+> > > +       ehci_readl(ehci, &ehci->regs->status);
+> > 
+> > You should not clear the STS_PCD bit.  What if some other port had a
+> > status change at the same time?  Then because you cleared the
+> > port-change-detect bit, the system would not realize that the other port
+> > needed to be handled.
 > 
-> The I2C interface can run at 4 different speeds. This driver currently
-> only offer 100MHz. Tested with a variety of I2C sensors, and the IIO
-> subsystem.
+> I really didn't think about this case.
 > 
-> The GPIO interface offers 16 GPIOs. 6 are read/write, and 10 are
-> read-only.
+> > Leaving the STS_PCD bit turned on will cause the driver to do a little
+> > extra work, but it shouldn't cause any harm.
+> > 
+> I have encountered the following situation if EHCI runtime suspend is
+> enabled by default.
 > 
-> Signed-off-by: frank zago <frank@zago.net>
-> ---
 > 
-> Changes from v2:
->   - bug fixes
->   - more robust USB enumeration
->   - Changed to an MFD driver as suggested
+> 
+> 1.Wake from system to disk and boot OS.
 
-Perhaps you should have engaged with me before potentially wasting
-your valuable time.
+You're talking about resuming after hibernation, right?
 
-MFD is designed to take a parent platform driver and split it out into
-various sub-systems.  If you don't use the MFD Core API (which is the
-case here) it is not an MFD.  MFD is not a dumping ground for
-collections of random device drivers.
+> 2.EHCI will entry runtime suspend after enumerated by driver during boot
+> phase of suspend to disk
 
-I have no problem with you placing registration and core code inside
-MFD (that *is* what it was designed for), but the leaf 'functionality'
-should be placed in more appropriate locations.
+I'm not sure what you mean by "boot phase of suspend to disk".  This is 
+while the restore kernel is starting up at the beginning of resume from 
+hibernation, right?
 
-I2C  => drivers/i2c
-SPI  => drivers/spi
-GPIO => drivers/gpio (or perhaps drivers/pinctrl)
-USB  => drivers/usb
-UART => drivers/tty/serial
+> 3.EHCI will be placed to freeze state and ehci_resume is called after image
+> is loaded.
 
-Etc ... Find places for everything.
+ehci_resume is called to leave runtime suspend.  Going into the freeze 
+state doesn't require any changes.
 
-Anything left over, give to Greg (drivers/misc). :)
+> 4.If PCD flag is set(caused by patch), then HCD_FLAG_RH_RUNNING will be set.
+> 
+> 5.Pci_pm_freeze_noirq is called to check ehci root hub state and return
+> value is -EBUSY. which will cause
+>  quiesce phase of suspend to disk fail.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+You're talking about check_root_hub_suspended() in hcd-pci.c, right?
+
+You know, I'm not at all certain that the callbacks for freeze and 
+freeze_noirq should ever return anything other than 0.  It's okay for 
+them to call check_root_hub_suspended(), but they should ignore its 
+return value.
+
+Can you check if the patch below helps?
+
+Alan Stern
+
+
+Index: usb-devel/drivers/usb/core/hcd-pci.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hcd-pci.c
++++ usb-devel/drivers/usb/core/hcd-pci.c
+@@ -575,6 +575,12 @@ static int hcd_pci_resume(struct device
+ 	return resume_common(dev, PM_EVENT_RESUME);
+ }
+ 
++static int hcd_pci_freeze_check(struct device *dev)
++{
++	(void) check_root_hub_suspended(dev);
++	return 0;
++}
++
+ static int hcd_pci_restore(struct device *dev)
+ {
+ 	return resume_common(dev, PM_EVENT_RESTORE);
+@@ -586,6 +592,7 @@ static int hcd_pci_restore(struct device
+ #define hcd_pci_suspend_noirq	NULL
+ #define hcd_pci_resume_noirq	NULL
+ #define hcd_pci_resume		NULL
++#define hcd_pci_freeze_check	NULL
+ #define hcd_pci_restore		NULL
+ 
+ #endif	/* CONFIG_PM_SLEEP */
+@@ -616,8 +623,8 @@ const struct dev_pm_ops usb_hcd_pci_pm_o
+ 	.suspend_noirq	= hcd_pci_suspend_noirq,
+ 	.resume_noirq	= hcd_pci_resume_noirq,
+ 	.resume		= hcd_pci_resume,
+-	.freeze		= check_root_hub_suspended,
+-	.freeze_noirq	= check_root_hub_suspended,
++	.freeze		= hcd_pci_freeze_check,
++	.freeze_noirq	= hcd_pci_freeze_check,
+ 	.thaw_noirq	= NULL,
+ 	.thaw		= NULL,
+ 	.poweroff	= hcd_pci_suspend,
