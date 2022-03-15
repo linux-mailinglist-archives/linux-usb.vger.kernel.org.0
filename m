@@ -2,99 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8E94D9B72
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Mar 2022 13:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE5E4D9C74
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Mar 2022 14:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348406AbiCOMph (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Mar 2022 08:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
+        id S1348789AbiCONmU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Mar 2022 09:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235627AbiCOMpg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Mar 2022 08:45:36 -0400
-Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [203.148.12.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCEC37BC2;
-        Tue, 15 Mar 2022 05:44:21 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
- (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 15 Mar
- 2022 20:44:16 +0800
-Received: from [10.29.8.53] (10.29.8.53) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 15 Mar
- 2022 20:44:15 +0800
-Subject: Re: [PATCH] USB: Fix xhci ERDP update issue
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
-        <stern@rowland.harvard.edu>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
-        <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
-References: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
- <261420fb-28b4-0def-a9e1-9c011bab7912@linux.intel.com>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-Message-ID: <1882dfc1-0f46-a594-d75b-b73d30f6d6db@zhaoxin.com>
-Date:   Tue, 15 Mar 2022 20:44:14 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        with ESMTP id S1348757AbiCONmS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Mar 2022 09:42:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DA152E66;
+        Tue, 15 Mar 2022 06:41:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD8FFB81677;
+        Tue, 15 Mar 2022 13:41:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07A13C340E8;
+        Tue, 15 Mar 2022 13:40:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647351662;
+        bh=gvl9SFrDd+2JfY4XpOU21w5Fgp3RnrxgO3xzRNMW3ig=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=FpIzPAInqwcWVe7lVXyZMo10uysAvQH5/+0FSS06nOQud/sjKtVu2eXUrgVVwDtnS
+         K9saXWWZ1hCdhU07mL3gP1lbyLMM5ncodj0hAGG1sCe8guzPWwUCxCvCMd4UnYk0ij
+         MiKnX5ElR8cklFLsknUpJxfH63KChYC/OCTeoHADKe2d7sJJxnj+KlqJSXMWCfA0RW
+         7IMl8VYJBtsy0LvBdpwYawlVvfm1y/uovTsdBOXZktA8NvrkBJg6F9XHpbVdi97yvv
+         ktn0TMEJDT+qVku5scquwwLC4arp4ujY52Gxd5XtzcUD53EHdZUC9sEswg4SOYFru/
+         p422dM8tR7ngQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Julia Lawall <Julia.Lawall@inria.fr>, linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        linux-media@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-perf-users@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Sean Wang <sean.wang@mediatek.com>,
+        linux-arm-msm@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        platform-driver-x86@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        target-devel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-s390@vger.kernel.org,
+        Jonas Karlman <jonas@kwiboo.se>, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
+        linux-omap@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-leds@vger.kernel.org, linux-spi@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, linux-clk@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-wireless@vger.kernel.org
+In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+Subject: Re: (subset) [PATCH 00/30] fix typos in comments
+Message-Id: <164735165474.3687547.1964402001196947729.b4-ty@kernel.org>
+Date:   Tue, 15 Mar 2022 13:40:54 +0000
 MIME-Version: 1.0
-In-Reply-To: <261420fb-28b4-0def-a9e1-9c011bab7912@linux.intel.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.29.8.53]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2022/3/15 下午4:08, Mathias Nyman wrote:
-> On 14.3.2022 9.25, WeitaoWang-oc@zhaoxin.com wrote:
->> On some situations, software handles TRB events slower than adding TRBs,
->> xhci_irq will not exit until all events are handled. If xhci_irq just
->> handles 256 TRBs and exit, the temp variable(event_ring_deq) driver records in xhci irq is equal to driver current dequeue pointer. It will cause driver not update ERDP and software dequeue pointer lost sync with ERDP. On the next xhci_irq, the event ring is full but driver will not update ERDP as software dequeue pointer is equal to ERDP.
->>
->> [  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
->> [  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7 inflight: CMD OUT
->> [  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78 00 00 08 00
->> [  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host not responding to stop endpoint command.
->> [  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
->> [  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not responding, assume dead
->> [  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6 inflight: CMD
->> [  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8 00 00 08 00
->> [  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5 inflight: CMD
->>
->> Fixed this issue by update software record temp variable when handles 128 TRB events.>
->> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+On Mon, 14 Mar 2022 12:53:24 +0100, Julia Lawall wrote:
+> Various spelling mistakes in comments.
+> Detected with the help of Coccinelle.
 > 
-> Thanks
-> 
-> Solution itself looks good but patch has some minor format issue:
-> 
-> 
-> It would also be interesting to know if the full event ring was triggered in a real
-> life usecase?
-> If that is the case I might need to look more into it.
-> 
-> Bigger event ring, more rings, faster handler, avoid irqoff time...
-> 
-> Thanks
-> Mathias
-> .
-Some performance test tools such as fio or iometer can be used to reproduce
-  this case, If tested with 4KB read or write. xHCI will generate a lost TRB
-  events fast than software consume on a certain period of time. Once 
-the interrupt is entered, software may handle more than 128 TRBs at a time.
-While the software is processing, xHCI is still generating events. This may
-has problems caused by the ERDP update mechanism. If update software
-  record temp variable when handles 128 TRB events, event ring full will not
-  happen any more even though fio test with 4KB read or write.
 
-Thanks
-Weitao Wang
-> 
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[21/30] spi: sun4i: fix typos in comments
+        commit: 2002c13243d595e211c0dad6b8e2e87f906f474b
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
