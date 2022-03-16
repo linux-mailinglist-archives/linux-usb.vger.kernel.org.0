@@ -2,121 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD31B4DB139
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 14:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A2D4DB1B9
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 14:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356309AbiCPNVh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Mar 2022 09:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
+        id S244882AbiCPNnh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Mar 2022 09:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356332AbiCPNVb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 09:21:31 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7855692B8;
-        Wed, 16 Mar 2022 06:19:07 -0700 (PDT)
+        with ESMTP id S243280AbiCPNnd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 09:43:33 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C161D41337;
+        Wed, 16 Mar 2022 06:42:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647436747; x=1678972747;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=3gydTSfJJ0kj7X+pEx3OA6sK9bKnh0Gb6dYO4OHWtjw=;
-  b=NPYLy9lK9jY8hOqyrqfYiffIpKlW9C57obYh/zuTqUXUJwiPllHUDbXQ
-   TOKzIDMdqNlag2JaN6SBEdUxBtke4iLeJ1mBhte4PrW+BwaVvatiMekzb
-   v0WTBum0j4QvDdjio25oiizpbmxk1BJIhQB2eut5h2m2Ff2uFKrtXy5DL
-   FBjqPxZvmps3cPmF3nB9HzHT0ssU4hQGvyOVBwGtWRmdZei5p8gM2GsfV
-   WXfMcn5n5orKEKAYWrzxg6ofSATCoyKBoDuDk1bQbKPSjCILAPjjk1LRT
-   pJ2z0j9g3YBs/avUaiw5jBq+JMqIMq3zgSo1AvowAkky5GfHkbf3K7S/c
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="343013016"
+  t=1647438139; x=1678974139;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=momPsxoKPNJVtZlhvwNbwSbe8YRFEMNcFz37imYur0M=;
+  b=gLh2OQ09MecChtK/W/klfHL6ueoxvF+vTD8htvpwDSfbw2AhmqXQLf1J
+   Ab+bzyUG3aNMujf9XdaqNma1skYIug8ckjOeg4EeXuVFNeClayh0PP4Kt
+   A5QbL1YKIa81UxaYVeLAkMy575Qgfltj0r5KOT5kje4pKlOc7CHdishEN
+   Rd+jQlbMZXlz1sBzNbWWG5uwQFjpVjpEiXjfR1MGlk9/JGbOYsMSipym6
+   elP9GYOlQLdrCkUo41Td3dAuEPaKhT+zAb7Nv2NU66H3yb2mMAaltL1l/
+   9ymIf89X/k6IpOO6FDrB/Ri+ohxXJWcoZr0BlQnqdH7+mySqXn5kt5ie/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="236535317"
 X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="343013016"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 06:19:04 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="236535317"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 06:42:19 -0700
 X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="646642824"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 16 Mar 2022 06:18:58 -0700
-To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>,
-        mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, tonywwang@zhaoxin.com,
-        weitaowang@zhaoxin.com
-References: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
- <261420fb-28b4-0def-a9e1-9c011bab7912@linux.intel.com>
- <1882dfc1-0f46-a594-d75b-b73d30f6d6db@zhaoxin.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] USB: Fix xhci ERDP update issue
-Message-ID: <6c11dc4f-4984-e7aa-9fc5-7026100b38e1@linux.intel.com>
-Date:   Wed, 16 Mar 2022 15:20:44 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+   d="scan'208";a="644674084"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 06:42:16 -0700
+Received: by lahna (sSMTP sendmail emulation); Wed, 16 Mar 2022 15:42:14 +0200
+Date:   Wed, 16 Mar 2022 15:42:14 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC] thunderbolt: Automatically authorize PCIe tunnels when
+ IOMMU is active
+Message-ID: <YjHpNloXEvPpv1In@lahna>
+References: <20220315213008.5357-1-mario.limonciello@amd.com>
+ <YjGD7N++F+ioISHb@lahna>
+ <BL1PR12MB5157349C626E3818B813D9A0E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <1882dfc1-0f46-a594-d75b-b73d30f6d6db@zhaoxin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BL1PR12MB5157349C626E3818B813D9A0E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 15.3.2022 14.44, WeitaoWang-oc@zhaoxin.com wrote:
-> On 2022/3/15 下午4:08, Mathias Nyman wrote:
->> On 14.3.2022 9.25, WeitaoWang-oc@zhaoxin.com wrote:
->>> On some situations, software handles TRB events slower than adding TRBs,
->>> xhci_irq will not exit until all events are handled. If xhci_irq just
->>> handles 256 TRBs and exit, the temp variable(event_ring_deq) driver records in xhci irq is equal to driver current dequeue pointer. It will cause driver not update ERDP and software dequeue pointer lost sync with ERDP. On the next xhci_irq, the event ring is full but driver will not update ERDP as software dequeue pointer is equal to ERDP.
->>>
->>> [  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
->>> [  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7 inflight: CMD OUT
->>> [  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78 00 00 08 00
->>> [  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host not responding to stop endpoint command.
->>> [  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
->>> [  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not responding, assume dead
->>> [  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6 inflight: CMD
->>> [  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8 00 00 08 00
->>> [  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5 inflight: CMD
->>>
->>> Fixed this issue by update software record temp variable when handles 128 TRB events.>
->>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
->>
->> Thanks
->>
->> Solution itself looks good but patch has some minor format issue:
->>
->>
->> It would also be interesting to know if the full event ring was triggered in a real
->> life usecase?
->> If that is the case I might need to look more into it.
->>
->> Bigger event ring, more rings, faster handler, avoid irqoff time...
->>
->> Thanks
->> Mathias
->> .
-> Some performance test tools such as fio or iometer can be used to reproduce
->  this case, If tested with 4KB read or write. xHCI will generate a lost TRB
->  events fast than software consume on a certain period of time. Once the interrupt is entered, software may handle more than 128 TRBs at a time.
-> While the software is processing, xHCI is still generating events. This may
-> has problems caused by the ERDP update mechanism. If update software
->  record temp variable when handles 128 TRB events, event ring full will not
->  happen any more even though fio test with 4KB read or write.
+On Wed, Mar 16, 2022 at 01:06:24PM +0000, Limonciello, Mario wrote:
+> [AMD Official Use Only]
 > 
-> Thanks
-> Weitao Wang
->>
+> 
+> 
+> > -----Original Message-----
+> > From: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Sent: Wednesday, March 16, 2022 01:30
+> > To: Limonciello, Mario <Mario.Limonciello@amd.com>
+> > Cc: Andreas Noever <andreas.noever@gmail.com>; Michael Jamet
+> > <michael.jamet@intel.com>; Yehezkel Bernat <YehezkelShB@gmail.com>;
+> > open list:THUNDERBOLT DRIVER <linux-usb@vger.kernel.org>; open list
+> > <linux-kernel@vger.kernel.org>
+> > Subject: Re: [RFC] thunderbolt: Automatically authorize PCIe tunnels when
+> > IOMMU is active
+> > 
+> > Hi Mario,
+> > 
+> > On Tue, Mar 15, 2022 at 04:30:08PM -0500, Mario Limonciello wrote:
+> > > Historically TBT3 in Linux used "Thunderbolt security levels" as a primary
+> > > means of "security" against DMA attacks. This mean that users would need
+> > to
+> > > ack any device plugged in via userspace.  In ~2018 machines started to use
+> > > the IOMMU for protection, but instead of dropping security levels a
+> > > convoluted flow was introduced:
+> > > * User hotplugs device
+> > > * Driver discovers supported tunnels
+> > > * Driver emits a uevent to userspace that a PCIe tunnel is present
+> > > * Userspace reads 'iommu_dma_protection' attribute (which currently
+> > >   indicates an Intel IOMMU is present and was enabled pre-boot not that
+> > >   it's active "now")
+> > > * Based on that value userspace then authorizes automatically or prompts
+> > >   the user like how security level based support worked.
+> > 
+> > There are legitimate reasons to disable PCIe tunneling even if the IOMMU
+> > bits are in place. The ACPI _OSC allows the boot firmware to do so and
+> > our "security levels" allows the userspace policy to do the same. I
+> > would not like to change that unless absolutely necessary.
+> 
+> Actually I intentionally left that in the RFC patch, to only do this based off
+> of tb_acpi_may_tunnel_pcie, so I think that should still work as you described
+> if boot firmware turned off PCIe tunneling.
 
-Thanks for the clarification.
-
-Could you resubmit this after fixing the minor patch format issue?
-Also make sure patch passes checkpatch test
-
-Thanks
--Mathias
+Right but if the user still wants to disable it, like say you are
+travelling and you want to be sure that no PCIe devices get attached
+while your laptop is charging from a public "charging station" (whatever
+is the right term).
