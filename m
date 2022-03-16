@@ -2,121 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE07D4DA762
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 02:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8CF94DA76C
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 02:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345036AbiCPBes (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Mar 2022 21:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S1352975AbiCPBnC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Mar 2022 21:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235181AbiCPBer (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Mar 2022 21:34:47 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F9C32ECC;
-        Tue, 15 Mar 2022 18:33:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647394414; x=1678930414;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xAHtXDDav9BrhYDuigVnMmC1A+VvTM+jKpTIjJx+T54=;
-  b=FuC3LziPKETAcu0IK6Hp96O3mtF6HD+mzhK1VVunudy9ZM6+jJ0RNkyg
-   sxCeYsgXGGsLqPoXS5+pmKM4e4gQ40a95esK/ys0k7zB3sPBs02u6jLKL
-   j4V6hs+url69lnx7oG0DWyqHIsELOl9RWofhDqjfGdFPSaw5mkREcknay
-   la0dIYQZxvPCg2bp7tWYjCgVf2b4st+1Pp7wMcsT8oQA6uetJPyySGa7R
-   RIk4RtSAScck2w6+Jc5cVmVsKbwkg1xk9NOtiLSQXLCMiwmjFZ5zeCwGi
-   AQ3upHxh5sze3C6/f+mDT0yCYYA2Oz49WIxlfQc5X7ZYabh6M048BpRiH
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256414460"
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="256414460"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 18:33:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="646451611"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 15 Mar 2022 18:33:31 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUIXa-000BlM-8n; Wed, 16 Mar 2022 01:33:30 +0000
-Date:   Wed, 16 Mar 2022 09:32:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Will Deacon <will@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "open list:AMD IOMMU (AMD-VI)" <iommu@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH 2/2] thunderbolt: Use pre-boot DMA protection on AMD
- systems
-Message-ID: <202203160904.VB4alCdg-lkp@intel.com>
-References: <20220315162455.5190-2-mario.limonciello@amd.com>
+        with ESMTP id S1352992AbiCPBnB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Mar 2022 21:43:01 -0400
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A2453E0F
+        for <linux-usb@vger.kernel.org>; Tue, 15 Mar 2022 18:41:48 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id l2so1854961ybe.8
+        for <linux-usb@vger.kernel.org>; Tue, 15 Mar 2022 18:41:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=46rIVjsH1I8ddsXUapuHI/bM1nu3UlZ0AvQXrsOVXb4=;
+        b=cYcpJNTw9G9tegY7Eh58PPSuiqsR4BPVOqaQNu5py5q8LS4OYW/j/AE0zadGir6I1/
+         GI5UVJBGOJkHBifHK9SEGf4bo+AcTAdowBeJ6MTPzCr2ZzMA75REXYUcA7CMz+nlkxTk
+         BGZvkofjLOLZ+9Jjbd0hAt+tgQKCnzuzLMsWWEIG630/d1WlPeNaKegURTjMjtwDFt3h
+         BLRoun154kB+0liNwJWJUfuMIBzU7HEczOANtf+0oWChvsLMhBQNMcWW+/nhBZ4GSMVo
+         mrI0KZK2ljpC2YkPZRg6gYJBS97G+ULJdlVG45rrRl7NX5jioaAAgFLCDCB/BfcTjlf9
+         ++0w==
+X-Gm-Message-State: AOAM532A1de+XysMqagDPdpf1tAxYAb+9VuqDRlV+2AOvjJGBHDQfIIJ
+        6ucqYJQrR/jfMB6aVxoT0ti5Z9GcDRz1eq+u+d0=
+X-Google-Smtp-Source: ABdhPJxPS/6WHKVDuNsdE9erAHvl+tUi3V9+2ynZ/lT8MXDYzGa5xmpTdOz0b5U/C/2QyI4LIIqoYiut+6yIAKAJCnM=
+X-Received: by 2002:a25:26c8:0:b0:633:61d7:ef84 with SMTP id
+ m191-20020a2526c8000000b0063361d7ef84mr8865096ybm.630.1647394907540; Tue, 15
+ Mar 2022 18:41:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315162455.5190-2-mario.limonciello@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220304105420.1059585-1-mailhol.vincent@wanadoo.fr>
+ <20220306075524.706660-1-mailhol.vincent@wanadoo.fr> <20220306075524.706660-4-mailhol.vincent@wanadoo.fr>
+ <YjDMJs/LU/lVAaku@kroah.com>
+In-Reply-To: <YjDMJs/LU/lVAaku@kroah.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 16 Mar 2022 10:41:36 +0900
+Message-ID: <CAMZ6RqL_mJ6Rdn2tQL=Q3fzN_JO+-nwq5uONLFmHd2UB7-Hr8g@mail.gmail.com>
+Subject: Re: [PATCH v2 03/10] usb: rework usb_maxpacket() and deprecate its
+ third argument
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Ville Syrjala <syrjala@sci.fi>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Henk Vergonet <Henk.Vergonet@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Benjamin Valentin <benpicco@googlemail.com>,
+        Oliver Neukum <oliver@neukum.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Helmut Schaa <helmut.schaa@googlemail.com>,
+        Duncan Sands <duncan.sands@free.fr>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Olav Kongas <ok@artecdesign.ee>,
+        Rui Miguel Silva <rui.silva@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Clemens Ladisch <clemens@ladisch.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mario,
+On Wed. 16 mars 2022 at 02:25, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Sun, Mar 06, 2022 at 04:55:17PM +0900, Vincent Mailhol wrote:
+> > This is a transitional patch with the goal of changing the prototype
+> > of usb_maxpacket() from:
+> > | static inline __u16
+> > | usb_maxpacket(struct usb_device *udev, int pipe, int is_out)
+> >
+> > into:
+> > | static inline u16 usb_maxpacket(struct usb_device *dev, int pipe)
+> >
+> > The third argument of usb_maxpacket(): is_out gets removed because it
+> > can be derived from its second argument: pipe using
+> > usb_pipeout(pipe). Furthermore, in the current version,
+> > ubs_pipeout(pipe) is called regardless in order to sanitize the is_out
+> > parameter.
+> >
+> > In order to make a smooth change, we first deprecate the is_out
+> > parameter by simply ignoring it (using a variadic function) and will
+> > remove it latter, once all the callers get updated.
+> >
+> > Finally, the body of the function is reworked in order not to reinvent
+> > the wheel and just relies on the usb_pipe_endpoint() helper function
+> > instead.
+> >
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > ---
+> >  include/linux/usb.h | 24 +++---------------------
+> >  1 file changed, 3 insertions(+), 21 deletions(-)
+> >
+> > diff --git a/include/linux/usb.h b/include/linux/usb.h
+> > index 200b7b79acb5..588aa7dc3d10 100644
+> > --- a/include/linux/usb.h
+> > +++ b/include/linux/usb.h
+> > @@ -1969,30 +1969,12 @@ usb_pipe_endpoint(struct usb_device *dev, unsigned int pipe)
+> >       return eps[usb_pipeendpoint(pipe)];
+> >  }
+> >
+> > -/*-------------------------------------------------------------------------*/
+> > -
+> > -static inline __u16
+> > -usb_maxpacket(struct usb_device *udev, int pipe, int is_out)
+> > +static inline u16 usb_maxpacket(struct usb_device *dev, int pipe,
+> > +                             /* int is_out deprecated */ ...)
+>
+> No need to change from udev->dev, right?
 
-Thank you for the patch! Yet something to improve:
+Right. The motivation of this change was to align with other functions
+(the majority of the functions in linux/usb.h name it dev, not udev).
+Comment taken, I will keep the udev name in v3.
 
-[auto build test ERROR on joro-iommu/next]
-[also build test ERROR on arm-perf/for-next/perf linus/master v5.17-rc8 next-20220315]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> >  {
+> > -     struct usb_host_endpoint        *ep;
+> > -     unsigned                        epnum = usb_pipeendpoint(pipe);
+> > -
+> > -     if (is_out) {
+> > -             WARN_ON(usb_pipein(pipe));
+> > -             ep = udev->ep_out[epnum];
+> > -     } else {
+> > -             WARN_ON(usb_pipeout(pipe));
+> > -             ep = udev->ep_in[epnum];
+> > -     }
+> > -     if (!ep)
+> > -             return 0;
+> > -
+> > -     /* NOTE:  only 0x07ff bits are for packet size... */
+> > -     return usb_endpoint_maxp(&ep->desc);
+> > +     return usb_endpoint_maxp(&usb_pipe_endpoint(dev, pipe)->desc);
+>
+> The change to use usb_pipe_endpoint() can be done separately.
+>
+> Let's make these in tiny steps so that we can easily roll things back if
+> things are not working.
 
-url:    https://github.com/0day-ci/linux/commits/Mario-Limonciello/iommu-amd-Add-support-to-indicate-whether-DMA-remap-support-is-enabled/20220316-002821
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git next
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220316/202203160904.VB4alCdg-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/9b0b7079d348c607cba7af4c87eaae1a79e52d91
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Mario-Limonciello/iommu-amd-Add-support-to-indicate-whether-DMA-remap-support-is-enabled/20220316-002821
-        git checkout 9b0b7079d348c607cba7af4c87eaae1a79e52d91
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/thunderbolt/domain.c:9:
->> include/linux/amd-iommu.h:159:52: error: use of undeclared identifier 'ENODEV'
-   static inline int amd_iommu_detect(void) { return -ENODEV; }
-                                                      ^
-   1 error generated.
+ACK. I will respin the patch series as below:
+  * Make usb_maxpacket variadic
+  * Migrate the callers of usb_maxpacket()
+  * Suppress the third argument of usb_maxpacket()
+  * Change the body of usb_maxpacket() using usb_pipe_endpoint().
 
 
-vim +/ENODEV +159 include/linux/amd-iommu.h
-
-6a9401a7ac13e6 arch/x86/include/asm/amd_iommu.h Joerg Roedel          2009-11-20  158  
-480125ba49ba62 arch/x86/include/asm/amd_iommu.h Konrad Rzeszutek Wilk 2010-08-26 @159  static inline int amd_iommu_detect(void) { return -ENODEV; }
-6a9401a7ac13e6 arch/x86/include/asm/amd_iommu.h Joerg Roedel          2009-11-20  160  
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> thanks,
+>
+> greg k-h
