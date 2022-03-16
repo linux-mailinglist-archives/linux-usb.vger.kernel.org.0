@@ -2,121 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D94E4DABFC
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 08:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 054244DAC10
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 08:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354306AbiCPHqz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Mar 2022 03:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
+        id S1347258AbiCPHxT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Mar 2022 03:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354295AbiCPHqy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 03:46:54 -0400
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3AC60CC3
-        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 00:45:40 -0700 (PDT)
-Received: by mail-oo1-xc2f.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso1784073ooi.1
-        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 00:45:40 -0700 (PDT)
+        with ESMTP id S1354347AbiCPHxS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 03:53:18 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D619B60CEF;
+        Wed, 16 Mar 2022 00:52:04 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id t2so2882187pfj.10;
+        Wed, 16 Mar 2022 00:52:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T87zTH0DkphGLesbWlrfLY37BYRGj5Dcsh6fZ7Tb2Io=;
-        b=r1XEXiASBQDYZ5V4TV73TqXbRPkoxgosJdV49eyGOPLU/Y8tV87HdLL086XkKTPyfH
-         MQFEjm1sPu217Jk6SkldXFKawlY+jNY7UCsWGUqkyeWmlP/qecm+wo74TK5aFSoha033
-         nICfZT38j16WTKmtm7Bn7uryf7ZzPLxV0ECLZyJOs3fP6oB6mH6Zf5AdGdrTGttuoMUP
-         2AY6haAAiY4SQTKEonDAlVrpH4NlpowXYIv/6DJYg9h13ril1KbWhfL+0NqaQD0xAlTE
-         Tl65DdltW7v38+WjqbO+OnC0giEL1gO7f1YFUmLZCD8Pjp68bGn6s7naqY0Fmwmg9zrx
-         NtCg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=r86Uhz+1lX3u0Xky+aQ3JdrpwMrTIezbGKn+VRBOt3U=;
+        b=lABWo/4nXGSnQfOOU4NY6qC3Gcdo2T5t3oNS1Mn2DH8YA4YvELSeML9nsHh51WbdJr
+         P5jnvQUJQmGmKv1VbQKY7XkEpRLPQoX6u95HAIAIai8QLnUdBQmQlIO1jeAI8BgVFg4O
+         mOt54SOb0ZBP9g0ZJdu7LVqrm9cpFmzboyJw0tFX01cGyEAL0KuCHw08EZVWcGfdD8/u
+         VXqJgHRdfralSos5DiP9b0CtWs3EEtB6GBpXUpzZ6Fz5Ov3uEZlhT81bHPcfhU4MK+C7
+         35lcHj3yYKqstRYswCEJU+SqQ7z+65hbKUpyqBYz7q3f3uuqHe1YSboJuYQ60aHC1+Z7
+         7Kow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T87zTH0DkphGLesbWlrfLY37BYRGj5Dcsh6fZ7Tb2Io=;
-        b=DJ+pEVkFoq0v9rV+a5jOOhF0Vf4nSCdHLvrOU6oTfbnWPhJBeamlqfDOSlLal+q5aN
-         bfsxmQZHizGGZ0Wa7+ig0sySX97jBSttqr5NNoIi//pTyaRAossdkZgZr2wq8oaOkZmZ
-         GQ86WPZ13oL6Co+/zAjtw2NV81TkMaBpt+y82c/MF+H1mEoFyy4zs6v4Fl/m3FeUmAim
-         lL0lKBIEwcdx8AVk8/v4+iw3MRry6t4BOTtxhqbcfrZAQhohHG9brh9v+aemPG3C+Cs5
-         9byvrB4rC+/KvygkCgkivpcchEDgz1f30w/bRYv9N4Rsq4CFQHVYNRcNwjEPFp5+iYvF
-         IqbA==
-X-Gm-Message-State: AOAM5337Vi9Z3GXI1Tf3vLHI2IOciFo3K3pSg+YSBpQ9VAAOlz6VElBr
-        21EQ/3huYx62Qs43BoVDdJedt/eZ04uwS+x8WKpbiA==
-X-Google-Smtp-Source: ABdhPJwzCR0t8OhcbK4m9h7T96CulLhfg0yY9yNAWIVbNLOCUnRCPgn7zHvpS8UjmFaaH1ztlBIszs4pNFw+zeng5vg=
-X-Received: by 2002:a05:6870:9619:b0:d9:a25e:ed55 with SMTP id
- d25-20020a056870961900b000d9a25eed55mr2840688oaq.163.1647416739279; Wed, 16
- Mar 2022 00:45:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <0000000000009e7a1905b8295829@google.com> <00000000000003887a05da3e872c@google.com>
- <CAHk-=wj4HBk7o8_dbpk=YiTOFxvE9LTiH8Gk=1kgVxOq1jaH7g@mail.gmail.com>
-In-Reply-To: <CAHk-=wj4HBk7o8_dbpk=YiTOFxvE9LTiH8Gk=1kgVxOq1jaH7g@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 16 Mar 2022 08:45:28 +0100
-Message-ID: <CACT4Y+atgbwmYmiYqhFQT9_oHw5cD5oyp5bNyCJNz34wSaMgmg@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: out-of-bounds Read in ath9k_hif_usb_rx_cb (3)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     syzbot <syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        ath9k-devel@qca.qualcomm.com, chouhan.shreyansh630@gmail.com,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:USB GADGET/PERIPHERAL SUBSYSTEM" 
-        <linux-usb@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Netdev <netdev@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Zekun Shen <bruceshenzk@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=r86Uhz+1lX3u0Xky+aQ3JdrpwMrTIezbGKn+VRBOt3U=;
+        b=YAanNCZwhHY4+z8qXSXaRewQN0EaDPS9NDlUcPJrSzOd1UHPyUzoX8uTC4Qe7WVuaQ
+         09bq4dErNgpXLvca43Sv2/yWbW9W2zzPQpNRcIC5ZDc97WLkM57LkBVsqypyHzbPiuxC
+         ctghsAYkyuy+3V0bGv/BnZg/JO5agid9KKEGsg7gSbQpfw5iKBJRA5zOy2ojqk6dSK5k
+         4exsAOrXoNjgqNqp+2uND7bNY1Z2YW7q3X/2O3n2YSRgXdUHUnqtzrB0LVoY7Wohg3NG
+         D9HaIjfHKWKi1a1KLkzWbHkotXbqxkupEPTYT7CPid0/hV9QLSDkR045u31ppIv8ptw1
+         Jbag==
+X-Gm-Message-State: AOAM533g2gDqjMjpRiYNrgJQfm69Mp5LojYhuxvvF4pQuGUkIHZMGlId
+        868DOltRQzb/2ZnVeJlV75Y=
+X-Google-Smtp-Source: ABdhPJy89FBz6Ml9CJ9C6wLdr+N7QV6mngezYZ/2QDD9auytklePsPZkgn0R3v9o6vi4qxmo+QG2Yw==
+X-Received: by 2002:a63:f1d:0:b0:381:8478:e9e4 with SMTP id e29-20020a630f1d000000b003818478e9e4mr2157737pgl.240.1647417124299;
+        Wed, 16 Mar 2022 00:52:04 -0700 (PDT)
+Received: from ubuntu.huawei.com ([119.3.119.19])
+        by smtp.googlemail.com with ESMTPSA id d6-20020a17090a6f0600b001c64b1bcd50sm1560852pjk.39.2022.03.16.00.52.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 00:52:03 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, michal.simek@xilinx.com,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Subject: [PATCH] usb: gadget: udc-xilinx: remove unnecessary initialization of list iterator
+Date:   Wed, 16 Mar 2022 15:51:53 +0800
+Message-Id: <20220316075153.3708-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 15 Mar 2022 at 18:08, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, Mar 15, 2022 at 2:36 AM syzbot
-> <syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com> wrote:
-> >
-> > syzbot suspects this issue was fixed by commit
-> > 09688c0166e7 ("Linux 5.17-rc8")
->
-> No, I'm afraid that means that the bisection is broken:
->
-> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=140283ad700000
->
-> and yeah, looking at that log it looks like every single run has
->
->   testing commit [...]
->   run #0: crashed: KASAN: use-after-free Read in ath9k_hif_usb_rx_cb
->   ...
->   # git bisect good [...]
->
-> and you never saw a "bad" commit that didn't have the issue, so the
-> top-of-tree gets marked "good" (and I suspect you intentionally mark
-> the broken case "good" in order to find where it got fixed, so you're
-> using "git bisect" in a reverse way).
->
-> I didn't look closer, but it does seem to not reproduce very reliably,
-> maybe that is what confused the bot originally.
+'req' will always be set by the subsequent list_for_each_entry()
+before any uses. Thus, to avoid ambiguity it is better to remove
+the unnecessary initialization of list iterator 'req'.
 
-Hi Linus,
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+---
+ drivers/usb/gadget/udc/udc-xilinx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for taking a look. Yes, it's a "reverse" bisection that tries
-to find the fix.
-And your conclusion re flakiness looks right, there were few runs with
-only 1/20 crashes.
-But the bug looks to be fixed by something anyway. git log on the file
-pretty clearly points to:
+diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
+index 6ce886fb7..fa6cbfc63 100644
+--- a/drivers/usb/gadget/udc/udc-xilinx.c
++++ b/drivers/usb/gadget/udc/udc-xilinx.c
+@@ -1136,7 +1136,7 @@ static int xudc_ep_queue(struct usb_ep *_ep, struct usb_request *_req,
+ static int xudc_ep_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+ {
+ 	struct xusb_ep *ep	= to_xusb_ep(_ep);
+-	struct xusb_req *req	= to_xusb_req(_req);
++	struct xusb_req *req;
+ 	struct xusb_udc *udc	= ep->udc;
+ 	unsigned long flags;
+ 
+-- 
+2.17.1
 
-#syz fix: ath9k: Fix out-of-bound memcpy in ath9k_hif_usb_rx_stream
