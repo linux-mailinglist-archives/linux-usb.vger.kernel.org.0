@@ -2,153 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0697B4DB00D
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 13:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D474DB01C
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 13:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355900AbiCPMsi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Mar 2022 08:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
+        id S1355922AbiCPMxO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Mar 2022 08:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232270AbiCPMsh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 08:48:37 -0400
-Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [203.148.12.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D143B65D31;
-        Wed, 16 Mar 2022 05:47:20 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
- (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 16 Mar
- 2022 20:47:17 +0800
-Received: from [10.29.8.49] (10.29.8.49) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 16 Mar
- 2022 20:47:16 +0800
-Message-ID: <e9c0fd5f-5573-40d9-bfdb-e18e034a05aa@zhaoxin.com>
-Date:   Wed, 16 Mar 2022 20:47:14 +0800
+        with ESMTP id S1356020AbiCPMxK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 08:53:10 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AE34F46C
+        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 05:51:56 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id z26so2964433lji.8
+        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 05:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=H5UB8g+uOk5+rlXN9szYQCp81wiCHfqYY7NM4RxveBc=;
+        b=mKKNk+1PpA0qzD3xt6P2T9bdpq37VN3bvYJE43iCuZ1j+5knXpxEHpB/mJDTrpdszi
+         AiAjmGMvJwM5C+D8jsuqQ8vvRZnvA74zxh7Kkboj3wJze0NoWJ9FK60mR7CLFNftBJ5D
+         mkcFvawVVDl4bvZosame15I9uHuzVAeDjdQNIMYfhqIqm0MGbjOyWb/JnCXmFEjYwO8y
+         +SYWs+I9BlJ6yYs4gsP50zVsykpmY8MbYgkje6QYxxecZZcaVJwRCLbtuVxp03O2+2x1
+         FftF3ulHV2WjAMG/sGSXOph85Cm+7qvovPaK2nTuvw+MmxJ+MwK370/Ky+xWtWMA9vaU
+         T46A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=H5UB8g+uOk5+rlXN9szYQCp81wiCHfqYY7NM4RxveBc=;
+        b=UhD702SCFzJ1a9Kj64aVyBGR5oOsy7UeYDA3ub6zBzmmKFlX5jyKB4tWRvXMgHoHzS
+         8jHhlY0Ikya+QCgHJxiaoC2bsX46YyHw5hchjyQCCwiI4IMEe3kSbVEDML8W01kEUJ//
+         Rr9b8yMDexds77e66Avm/g4ChrNm/3Z9v4m4WrdS3X87T2kQo2mZDdwwXObHKXKMY79E
+         oiRDe21IF4mw3Es4t6HIAUz5rIJEUv/ieV7mZyjeYCpGecPUxYePpVSIigrUQ7UM6a15
+         UtNOlu0M5IbScUhaoJieuKDyPjxmXvEsmRx3I9ZQ7gtT5fjBaOR8J9YfZ9DNSQU8UwqR
+         Jyyw==
+X-Gm-Message-State: AOAM530p8kO07N616OG/QfkOoEr18lnMwazTRMZsRswtVpS+yDfR4idk
+        bIbGwVaGqUtLF92c0iuaQRn5QMgcObk9mFr4Udc=
+X-Google-Smtp-Source: ABdhPJzib/xWigZeqYTsyCUZeycBbvqSsfKrvbBv6JQ0qLfVRz4BvijPDq2DvfpOss308BH2Gv/5tV/tDHhOGTXcvL4=
+X-Received: by 2002:a05:651c:1691:b0:247:da0e:7c56 with SMTP id
+ bd17-20020a05651c169100b00247da0e7c56mr19005427ljb.296.1647435114574; Wed, 16
+ Mar 2022 05:51:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] USB: Fix xhci ERDP update issue
-Content-Language: en-US
-To:     Peter Chen <hzpeterchen@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-CC:     <mathias.nyman@intel.com>, Alan Stern <stern@rowland.harvard.edu>,
-        "USB list" <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, <CobeChen@zhaoxin.com>,
-        <TimGuo@zhaoxin.com>, <tonywwang@zhaoxin.com>,
-        <weitaowang@zhaoxin.com>
-References: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
- <Yi7xJy70XZCA8RyN@kroah.com>
- <CAL411-o_2PSndEVXfa+ciLukSr5u5w8G9T63d2MpSm2Fpn5QTQ@mail.gmail.com>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-In-Reply-To: <CAL411-o_2PSndEVXfa+ciLukSr5u5w8G9T63d2MpSm2Fpn5QTQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.29.8.49]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a19:4918:0:0:0:0:0 with HTTP; Wed, 16 Mar 2022 05:51:53
+ -0700 (PDT)
+Reply-To: fbenson033@gmail.com
+From:   Fred Benson <bfred8326@gmail.com>
+Date:   Wed, 16 Mar 2022 13:51:53 +0100
+Message-ID: <CAGMpz9G7gxmYaRQSyus2Xszk9TnE0gZJnhp3nEb5UGyfxSsnOg@mail.gmail.com>
+Subject: i am sick
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOTS_OF_MONEY,MILLION_USD,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:22d listed in]
+        [list.dnswl.org]
+        * -0.0 BAYES_40 BODY: Bayes spam probability is 20 to 40%
+        *      [score: 0.2381]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [bfred8326[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [bfred8326[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [fbenson033[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 MILLION_USD BODY: Talks about millions of dollars
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  2.4 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2022/3/16 19:57, Peter Chen wrote:
-> On Mon, Mar 14, 2022 at 10:34 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->>
->> On Mon, Mar 14, 2022 at 03:25:23PM +0800, WeitaoWang-oc@zhaoxin.com wrote:
->>> On some situations, software handles TRB events slower than adding TRBs,
->>> xhci_irq will not exit until all events are handled. If xhci_irq just
->>> handles 256 TRBs and exit, the temp variable(event_ring_deq) driver records
->>> in xhci irq is equal to driver current dequeue pointer. It will cause driver
->>> not update ERDP and software dequeue pointer lost sync with ERDP. On the
->>> next xhci_irq, the event ring is full but driver will not update ERDP as
->>> software dequeue pointer is equal to ERDP.
-> 
-> At the current driver, the ERDP is updated at most 128 TRBs, how is
-> the above condition
-> triggered?
-> 
-> Peter
+Hello
+  i am Fred Benson from the united staes of america.i need your help
+and support in the transfer of 4.5 million united states dollars into
+your bank account abroad..
+please get back to me for more details to proced.
 
-If the number of TRB events to be processed in a given interrupt is 256.
-ERDP is updated after only the first 128 TRB evnets are processed.
-It will not be updated when another 128 TRB evnets are processed as 
-event_ring_deq= "xhci->event_ring->dequeue", which will cause the 
-software-recorded dequeue pointer is out of sync with ERDP on interrupt 
-exit.
-
-Weitao Wang
-> 
-> 
->>>
->>> [  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
->>> [  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7
->>> inflight: CMD OUT
->>> [  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78 00
->>> 00 08 00
->>> [  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host not
->>> responding to stop endpoint command.
->>> [  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
->>> [  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not responding,
->>> assume dead
->>> [  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6
->>> inflight: CMD
->>> [  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8 00
->>> 00 08 00
->>> [  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5
->>> inflight: CMD
->>>
->>> Fixed this issue by update software record temp variable when handles 128
->>> TRB events.
->>>
->>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
->>> ---
->>>   drivers/usb/host/xhci-ring.c | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
->>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
->>> index d0b6806..f970799 100644
->>> --- a/drivers/usb/host/xhci-ring.c
->>> +++ b/drivers/usb/host/xhci-ring.c
->>> @@ -3141,6 +3141,7 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
->>>                  if (event_loop++ < TRBS_PER_SEGMENT / 2)
->>>                          continue;
->>>                  xhci_update_erst_dequeue(xhci, event_ring_deq);
->>> +               event_ring_deq = xhci->event_ring->dequeue;
->>>
->>>                  /* ring is half-full, force isoc trbs to interrupt more
->>> often */
->>>                  if (xhci->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
->>> --
->>> 2.7.4
->>
->> Hi,
->>
->> This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
->> a patch that has triggered this response.  He used to manually respond
->> to these common problems, but in order to save his sanity (he kept
->> writing the same thing over and over, yet to different people), I was
->> created.  Hopefully you will not take offence and will fix the problem
->> in your patch and resubmit it so that it can be accepted into the Linux
->> kernel tree.
->>
->> You are receiving this message because of the following common error(s)
->> as indicated below:
->>
->> - Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
->>    and can not be applied.  Please read the file,
->>    Documentation/email-clients.txt in order to fix this.
->>
->>
->> If you wish to discuss this problem further, or you have questions about
->> how to resolve this issue, please feel free to respond to this email and
->> Greg will reply once he has dug out from the pending patches received
->> from other developers.
->>
->> thanks,
->>
->> greg k-h's patch email bot
-> .
+Regards
