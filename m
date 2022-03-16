@@ -2,49 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727F74DB23E
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 15:13:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 470154DB2FA
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 15:21:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348896AbiCPOOO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Mar 2022 10:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
+        id S1356864AbiCPOW0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Mar 2022 10:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238912AbiCPOOM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 10:14:12 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Mar 2022 07:12:57 PDT
-Received: from esa4.mentor.iphmx.com (esa4.mentor.iphmx.com [68.232.137.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2E2559C
-        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 07:12:56 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="73196304"
-Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
-  by esa4.mentor.iphmx.com with ESMTP; 16 Mar 2022 06:11:53 -0800
-IronPort-SDR: yinlGcG1rWKxYvNKX7I0/mJ38rv/keO0jJpNdFvGvS8IUqLtnz3Zve7yLE9M2aQexr62iWAfqX
- Pcj/SCo2CIsAd9wDlfuaFgsaUQP8WxZcCdCV0gOalcShL8FSAR8wKP1Q8KNfNSYsU2Z0O9tk6Q
- xOMSblYVU7rGFVZXohvKonMtU+HlxE8sPmpqWCNuXMyIY4WDv1gOxuCPZW+YJgChBy4an/WHoB
- L/LoJGyUWw1Zx+vyyCIpbGA7bAxUljTYsJB4tF17YETxFTVQNqAUJfDOGxuMZx0mv3RcBJlrXG
- dXI=
-From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: Trouble with Intenso FlashLine 32GB USB stick on Kernel 4.14
-Thread-Topic: Trouble with Intenso FlashLine 32GB USB stick on Kernel 4.14
-Thread-Index: AQHYOTtOe51NnlFSaUuY2Jn7sXnpnKzCCQ0AgAACFjA=
-Date:   Wed, 16 Mar 2022 14:11:47 +0000
-Message-ID: <1148788f4bd848c78e28b116537979e6@SVR-IES-MBX-03.mgc.mentorg.com>
-References: <1647437997247.23069@mentor.com> <YjHswpjToSM5Pr7n@kroah.com>
-In-Reply-To: <YjHswpjToSM5Pr7n@kroah.com>
-Accept-Language: de-DE, en-IE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S1356789AbiCPOVy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 10:21:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADBB52E6C
+        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 07:19:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B26CE61277
+        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 14:19:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFFCFC340F0;
+        Wed, 16 Mar 2022 14:19:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647440354;
+        bh=Ag1JnlJt50voX4mDBVF0jDygZ1WgvRuqQwp99e7e4Uc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YrClgv9sq1i8gZ6oCLAFD2OnmJaIpatP71ISJ3onpY+eYfn8Z+aLq7qSDCd5URX1y
+         eZxc2u8JRUkDGoHJd6dQIocqs8ocjkxZ0Hd86ZMAYSdxdRJyRjrkncLaF5nGiC7Ywd
+         q7Wwedb7/iNaFZ3M2Ub/27wQOJXICbdAkKO0Zihs=
+Date:   Wed, 16 Mar 2022 15:19:11 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: Trouble with Intenso FlashLine 32GB USB stick on Kernel 4.14
+Message-ID: <YjHx34Xjy9eAyn+l@kroah.com>
+References: <1647437997247.23069@mentor.com>
+ <YjHswpjToSM5Pr7n@kroah.com>
+ <1148788f4bd848c78e28b116537979e6@SVR-IES-MBX-03.mgc.mentorg.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1148788f4bd848c78e28b116537979e6@SVR-IES-MBX-03.mgc.mentorg.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,28 +51,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Pj4gWzE1OTkwOS42MTQ1MzVdIHVzYiAxLTE6IHVzYmZzOiBVU0JERVZGU19DT05UUk9MIGZhaWxl
-ZCBjbWQgTm1lRGVmYXVsdFByaW8gcnF0IDE5MiBycSA1MSBsZW4gMiByZXQgLTExMA0KPj4gWzE1
-OTkwOS42NjU1MTNdIHVzYiAxLTE6IHVzYmZzOiBVU0JERVZGU19DT05UUk9MIGZhaWxlZCBjbWQg
-Tm1lRGVmYXVsdFByaW8gcnF0IDE5MiBycSA1MSBsZW4gMiByZXQgLTExMA0KPj4gWzE1OTkwOS43
-Mjk1MTBdIHVzYiAxLTE6IHVzYmZzOiBVU0JERVZGU19DT05UUk9MIGZhaWxlZCBjbWQgTm1lRGVm
-YXVsdFByaW8gcnF0IDE5MiBycSA1MSBsZW4gMiByZXQgLTExMA0KPj4gWzE1OTkwOS43ODA2MTBd
-IHVzYiAxLTE6IHVzYmZzOiBVU0JERVZGU19DT05UUk9MIGZhaWxlZCBjbWQgTm1lRGVmYXVsdFBy
-aW8gcnF0IDE5MiBycSA1MSBsZW4gMiByZXQgLTExMA0KPg0KPiBXaHkgaXMgdXNiZnMgYmVpbmcg
-dXNlZCBmb3IgYSBzdG9yYWdlIGRldmljZT8gIFdoYXQgdXNlcnNwYWNlIHByb2dyYW0gZG8NCj4g
-eW91IGhhdmUgdGhhdCBpcyBwb2tpbmcgYXQgdGhlIGRldmljZT8NCg0KTmVlZCB0byBhc2sgdGhl
-IHVzZXJzcGFjZSBtYWludGFpbmVycyBpbiB0aGF0IHByb2plY3QsIHRoYW5rcyBmb3IgdGhlIGhp
-bnQuDQoNCj4+IFsxNTk5MjguOTA4NjMzXSBJTkZPOiB0YXNrIHVzYi1zdG9yYWdlOjMxODY4IGJs
-b2NrZWQgZm9yIG1vcmUgdGhhbiAxMCBzZWNvbmRzLg0KPj4gWzE1OTkyOC45MDg3MzVdICByZXRf
-ZnJvbV9mb3JrKzB4MzUvMHg0MA0KPj4gWzE1OTkzMS41OTQ0ODNdIHVzYiAxLTE6IHJlc2V0IGhp
-Z2gtc3BlZWQgVVNCIGRldmljZSBudW1iZXIgMTMgdXNpbmcgeGhjaV9oY2QNCj4+DQo+PiBBbnlv
-bmUgZnJvbSBVU0Igd2hvIGNhbiBoZWxwIHdpdGggdGhhdD8NCj4NCj4gNC4xNCBpcyByZWFsbHkg
-b2xkLiAgRG9lcyA1LjE2IHJlc29sdmUgdGhpcz8NCj4NClJlY2VudCBEZXNrdG9wIFVidW50dSAy
-MTA0IGRvZXNuJ3Qgc2hvdyB0aGlzIChrZXJuZWwgNS40KS4NCkluIHRoaXMgcHJvamVjdCwgd2Ug
-Y2FuJ3QgbW92ZSBmcm9tIDQuMTQsIHVuZm9ydHVuYXRlbHkgKGknbSBhdCA0LjE0LjI0NCBoZXJl
-KS4NCg0KVGhhbmtzDQoNCkNhcnN0ZW4NCg0KDQotLS0tLS0tLS0tLS0tLS0tLQ0KU2llbWVucyBF
-bGVjdHJvbmljIERlc2lnbiBBdXRvbWF0aW9uIEdtYkg7IEFuc2NocmlmdDogQXJudWxmc3RyYcOf
-ZSAyMDEsIDgwNjM0IE3DvG5jaGVuOyBHZXNlbGxzY2hhZnQgbWl0IGJlc2NocsOkbmt0ZXIgSGFm
-dHVuZzsgR2VzY2jDpGZ0c2bDvGhyZXI6IFRob21hcyBIZXVydW5nLCBGcmFuayBUaMO8cmF1Zjsg
-U2l0eiBkZXIgR2VzZWxsc2NoYWZ0OiBNw7xuY2hlbjsgUmVnaXN0ZXJnZXJpY2h0IE3DvG5jaGVu
-LCBIUkIgMTA2OTU1DQo=
+On Wed, Mar 16, 2022 at 02:11:47PM +0000, Schmid, Carsten wrote:
+> >> [159909.614535] usb 1-1: usbfs: USBDEVFS_CONTROL failed cmd NmeDefaultPrio rqt 192 rq 51 len 2 ret -110
+> >> [159909.665513] usb 1-1: usbfs: USBDEVFS_CONTROL failed cmd NmeDefaultPrio rqt 192 rq 51 len 2 ret -110
+> >> [159909.729510] usb 1-1: usbfs: USBDEVFS_CONTROL failed cmd NmeDefaultPrio rqt 192 rq 51 len 2 ret -110
+> >> [159909.780610] usb 1-1: usbfs: USBDEVFS_CONTROL failed cmd NmeDefaultPrio rqt 192 rq 51 len 2 ret -110
+> >
+> > Why is usbfs being used for a storage device?  What userspace program do
+> > you have that is poking at the device?
+> 
+> Need to ask the userspace maintainers in that project, thanks for the hint.
+> 
+> >> [159928.908633] INFO: task usb-storage:31868 blocked for more than 10 seconds.
+> >> [159928.908735]  ret_from_fork+0x35/0x40
+> >> [159931.594483] usb 1-1: reset high-speed USB device number 13 using xhci_hcd
+> >>
+> >> Anyone from USB who can help with that?
+> >
+> > 4.14 is really old.  Does 5.16 resolve this?
+> >
+> Recent Desktop Ubuntu 2104 doesn't show this (kernel 5.4).
+> In this project, we can't move from 4.14, unfortunately (i'm at 4.14.244 here).
+
+Then try using 'git bisect' to track down where the issue gets fixed?
+
+thanks,
+
+greg k-h
