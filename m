@@ -2,104 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 630864DBA8C
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 23:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A50854DBB02
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 00:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239288AbiCPWN7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Mar 2022 18:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
+        id S240917AbiCPX1l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Mar 2022 19:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239294AbiCPWN4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 18:13:56 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB47B63AE
-        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 15:12:39 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id qx21so6985870ejb.13
-        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 15:12:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=t5YisPtzsM0C7fd6A1oY9SJVrPbbN9Fr5lieyUuqkfc=;
-        b=fmwiNl0r6a9JRcS3K6o1ySAskAiVMhvrq5sSCwGp48vGBkIgjJD6xTFBQYnvXpXA2m
-         1/xpsLio6KIPNZCdMBc5KwTo6RsiXcsr5HzJe4ENqMzvxhz9EDbQ/hU2ZJFAen97UZ2e
-         FWt3ez8jRkkikqWznF+OSUKDyM4D7bplgNxJoFmde1pCmwNie37Y8YPoelj6GcKaLC0s
-         plswckazIaqMYeUuVu1Q7phBIrMTB/apcw8VCCIdCKiAZu+DogUoTgPSB83DvnI7m38K
-         jic7aTyWzC4uNDQ9HSXMYw8maMB+FjngeebxVqUYRQV+1fzqe72kUYxPOUbzJBadx9FI
-         JnLg==
+        with ESMTP id S238816AbiCPX1k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 19:27:40 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3166B64C9
+        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 16:26:25 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2e59939b862so40587267b3.10
+        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 16:26:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=t5YisPtzsM0C7fd6A1oY9SJVrPbbN9Fr5lieyUuqkfc=;
-        b=C/lq5BkQ3n4Zl0I0FtD0IhzI868kc+psZcVAQAnivuK531lw4tJELh611ldJCwbKBQ
-         z+s6RwlWBTn1BNieZ5iTe5p4A8ibsjezWmEBEFu+jY3ejIOWKrnoVzEUHblmPQa7BfEj
-         IG1SFG8YAIOXEUtJNo9T5yqPogIm06FsNcGXlC3Hs2qSvEZVc/Sa2948pBYSiMvS+cSB
-         BxYJxNcpcjBWafjEys67kYRyb+6OG+GwGhpwau8RbGEEcaeME3HZRmJWKnqbC6YLAwKH
-         kLQUaWAKX06VjG0W6ub3kvs9CAgHDikl8kKlrQ3LRWx6+7MMTrjxsQYWQ7sgi7h0fZbW
-         C24A==
-X-Gm-Message-State: AOAM530xzwyaFTM455TWLYgjTNGt4yXJU/pq989RSjLpM+9CDKUjAOQt
-        cw2VTKXTyAvZ5xFURNoHlmQ=
-X-Google-Smtp-Source: ABdhPJxrjkgQZHXfQI57DVw/cpw3kGWhJM8+A2NW/BrvO9HS075CCoUCmKco4qeyPPLf3EiNGtJfFQ==
-X-Received: by 2002:a17:906:c053:b0:6b5:fde8:af2 with SMTP id bm19-20020a170906c05300b006b5fde80af2mr1739626ejb.642.1647468758296;
-        Wed, 16 Mar 2022 15:12:38 -0700 (PDT)
-Received: from ?IPV6:2a01:c23:b866:cc00:e490:2de6:a89f:9b66? (dynamic-2a01-0c23-b866-cc00-e490-2de6-a89f-9b66.c23.pool.telefonica.de. [2a01:c23:b866:cc00:e490:2de6:a89f:9b66])
-        by smtp.googlemail.com with ESMTPSA id v5-20020a50c405000000b004161123bf7asm1609613edf.67.2022.03.16.15.12.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Mar 2022 15:12:37 -0700 (PDT)
-Message-ID: <4667c495-56d0-c53d-2c2d-3280e8a6ae13@gmail.com>
-Date:   Wed, 16 Mar 2022 23:12:19 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fSiAnwTUF0swgLbeTQB2X23s9tJhZ8t3IkH4f+pKXm0=;
+        b=6oN52JKcJT3uAnd7TvwOF71bIpEiI/JKuWE8INaaD/xDI54Tt/eLm01fk59a54xE9A
+         VFWxRC4biS4M1QFvIWetVLqWNnWxSsgh5jDIhXAJYZwyD6DK4OW7In8FoF+peZWimfYG
+         n8aEcPZPnlxOvpqeqLmQ1oxWA9KTvAzBrDtPUA7oVHqxw/17TS836kWRQISMdI+FumEn
+         WNcV54joUz6n6FekaFGRL3Lrx/60qwh04diEsSGVlRHHmxinnKfPYMut8xSED3NysqBr
+         L/roEM4zObx4AnitBgn75TCHavpwJM0R9bXSNYrQeLRGQDjGHz10iH45obKSAtaeDbLj
+         uR8g==
+X-Gm-Message-State: AOAM530EHf2WHXhK7vEOISgyfLWO62YIHH5nlXttGLzzMYBke/vfNMn6
+        DlU5MWqCk3WZj5yZeOsgsItatT3b8la+EucrqaQKA7cp
+X-Google-Smtp-Source: ABdhPJzn2p2ovUNnU+X2UhqtLiXBuXGJLIy5Jm9riEfAJHOuZg6Xp19qUAJvgIczcFSx1JIHjJ0Oo/O9K4uW1n1BzQk=
+X-Received: by 2002:a81:c443:0:b0:2d0:dfa3:9ed9 with SMTP id
+ s3-20020a81c443000000b002d0dfa39ed9mr3086639ywj.220.1647473184323; Wed, 16
+ Mar 2022 16:26:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: [PATCH v2 5/5] usb: host: xhci-plat: omit shared hcd if either root
- hub has no ports
-Content-Language: en-US
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Tung Nguyen <tunguyen@apm.com>
-References: <0684616b-5cc0-e9f6-7015-ce709c6d4386@gmail.com>
-In-Reply-To: <0684616b-5cc0-e9f6-7015-ce709c6d4386@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220304105420.1059585-1-mailhol.vincent@wanadoo.fr>
+ <20220316161935.2049-1-mailhol.vincent@wanadoo.fr> <20220316161935.2049-10-mailhol.vincent@wanadoo.fr>
+ <YjIbkR7njaFX7NKi@rowland.harvard.edu>
+In-Reply-To: <YjIbkR7njaFX7NKi@rowland.harvard.edu>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Thu, 17 Mar 2022 08:26:13 +0900
+Message-ID: <CAMZ6RqLtC9HOnxK=E18o4FqJT9ixJQj7vJOctKExhNACAHoZGg@mail.gmail.com>
+Subject: Re: [PATCH v3 9/9] usb: rework usb_maxpacket() using usb_pipe_endpoint()
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Activate the just added extension for xhci-plat and omit the shared
-hcd if either of the root hubs has no ports.
+On Thu. 17 Mar 2022 at 02:17, Alan Stern <stern@rowland.harvard.edu> wrote:
+> On Thu, Mar 17, 2022 at 01:19:35AM +0900, Vincent Mailhol wrote:
+> > Rework the body of usb_maxpacket() in order not to reinvent the wheel
+> > and just rely on the usb_pipe_endpoint() helper function instead.
+> >
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > ---
+> >  include/linux/usb.h | 14 +-------------
+> >  1 file changed, 1 insertion(+), 13 deletions(-)
+> >
+> > diff --git a/include/linux/usb.h b/include/linux/usb.h
+> > index 8127782aa7a1..653d34ff0999 100644
+> > --- a/include/linux/usb.h
+> > +++ b/include/linux/usb.h
+> > @@ -1971,19 +1971,7 @@ usb_pipe_endpoint(struct usb_device *dev, unsigned int pipe)
+> >
+> >  static inline u16 usb_maxpacket(struct usb_device *udev, int pipe)
+> >  {
+> > -     struct usb_host_endpoint        *ep;
+> > -     unsigned                        epnum = usb_pipeendpoint(pipe);
+> > -
+> > -     if (usb_pipeout(pipe))
+> > -             ep = udev->ep_out[epnum];
+> > -     else
+> > -             ep = udev->ep_in[epnum];
+> > -
+> > -     if (!ep)
+> > -             return 0;
+> > -
+> > -     /* NOTE:  only 0x07ff bits are for packet size... */
+> > -     return usb_endpoint_maxp(&ep->desc);
+> > +     return usb_endpoint_maxp(&usb_pipe_endpoint(udev, pipe)->desc);
+>
+> The original code was careful to handle the case where ep was a NULL
+> pointer.  What will your routine do if usb_pipe_endpoint(udev, pipe)
+> returns NULL?
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- drivers/usb/host/xhci-plat.c | 2 ++
- 1 file changed, 2 insertions(+)
+Sorry, you are absolutely right. Will send a v4.
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index c512ec214..044855818 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -245,6 +245,8 @@ static int xhci_plat_probe(struct platform_device *pdev)
- 
- 	xhci = hcd_to_xhci(hcd);
- 
-+	xhci->allow_single_roothub = 1;
-+
- 	/*
- 	 * Not all platforms have clks so it is not an error if the
- 	 * clock do not exist.
--- 
-2.35.1
+Thank you!
 
 
+Yours sincerely,
+Vincent Maihol
