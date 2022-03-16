@@ -2,133 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2544DA71A
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 01:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 560B04DA73E
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 02:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352854AbiCPAwp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Mar 2022 20:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
+        id S1352900AbiCPBMV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Mar 2022 21:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241438AbiCPAwo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Mar 2022 20:52:44 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8603E5C868;
-        Tue, 15 Mar 2022 17:51:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647391891; x=1678927891;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YXFKpERtBJQFxnnvLc21al+Vghk+4iLs8WPaY6XgGEQ=;
-  b=BX6RLkzGGEOoBdprexYXFclhxv9HjUEa7JHHy+XVdUHQyyhA5Y1m9Zew
-   1EsFROjUvCfk0mU/hWCYbp1FrqQu41XRPdfpP21ov/Mlp9BZlO4EkZtWn
-   37vSrGE+wka1tXuNkaEtjqYtELq4oWgMrJIjBWxO8tRA+Oaj+kbVo2n6p
-   Iuzj9bIVxsabuLLarwGjl7dEFkQI8ge0F0brA7T6WMrT58zhvr/hXej45
-   t9qajl2C31A1TC8yZocs4JthvTnf4QMjxBFTJFGgX4rROxO9gleBNtxR8
-   vgSzw0if3ArvFZ4s9b46/EiBpWMzRqWcV1ZR1zPlfY5q1zYcx51ODxNqn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256181133"
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="256181133"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 17:51:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="714391253"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 15 Mar 2022 17:51:28 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUHst-000Bj2-F4; Wed, 16 Mar 2022 00:51:27 +0000
-Date:   Wed, 16 Mar 2022 08:51:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, Will Deacon <will@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "open list:AMD IOMMU (AMD-VI)" <iommu@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH 1/2] iommu/amd: Add support to indicate whether DMA remap
- support is enabled
-Message-ID: <202203160844.lKviWR1Q-lkp@intel.com>
-References: <20220315162455.5190-1-mario.limonciello@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315162455.5190-1-mario.limonciello@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S1346648AbiCPBMU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Mar 2022 21:12:20 -0400
+Received: from m43-7.mailgun.net (m43-7.mailgun.net [69.72.43.7])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 4B4D653B54
+        for <linux-usb@vger.kernel.org>; Tue, 15 Mar 2022 18:11:03 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1647393063; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: From: From: References: Cc: To: To: Subject: Subject:
+ MIME-Version: Date: Message-ID: Sender: Sender;
+ bh=rJzMOl9nxtt7GhGevUnuI0rIWjcbPz3Dla8Nb02HdiQ=; b=MOILiI//6EIFjNzX94+ysYV55A8YEiGdJ3Ki3aSjGbqbgO4LfK+bWwn3yV9MV7U77mDTkP20
+ K5MM7jYN0PZW3wnEe6OjkF8d54ODl7LOFnJHjULWTUY6ybRbU3TY0Hu24ZTPxMSmf9qSTCuH
+ hOQFeC8g0joN5oARFVlnqhxFlu8=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 623139262f1b1e8f798c9831 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 16 Mar 2022 01:11:02
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 989BFC4360C; Wed, 16 Mar 2022 01:11:01 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: from [192.168.1.17] (cpe-75-80-185-151.san.res.rr.com [75.80.185.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id BEA1BC4338F;
+        Wed, 16 Mar 2022 01:10:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org BEA1BC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Message-ID: <7bbbe944-a28d-e45b-a189-0aa1dfdb3ebe@codeaurora.org>
+Date:   Tue, 15 Mar 2022 18:10:58 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v3] usb: dwc3: Issue core soft reset before enabling
+ run/stop
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <20220315014317.14265-1-quic_wcheng@quicinc.com>
+ <1e2ae095-4933-b268-ffa6-2899d49bffa2@synopsys.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+In-Reply-To: <1e2ae095-4933-b268-ffa6-2899d49bffa2@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mario,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on joro-iommu/next]
-[also build test ERROR on arm-perf/for-next/perf linus/master v5.17-rc8 next-20220315]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Mario-Limonciello/iommu-amd-Add-support-to-indicate-whether-DMA-remap-support-is-enabled/20220316-002821
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git next
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220316/202203160844.lKviWR1Q-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/fa63035401902e438c5ef3213112901a1054c621
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Mario-Limonciello/iommu-amd-Add-support-to-indicate-whether-DMA-remap-support-is-enabled/20220316-002821
-        git checkout fa63035401902e438c5ef3213112901a1054c621
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/iommu/amd/init.c:3294:6: error: redefinition of 'amd_ivrs_remap_support'
-    3294 | bool amd_ivrs_remap_support(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/iommu/amd/init.c:20:
-   include/linux/amd-iommu.h:198:20: note: previous definition of 'amd_ivrs_remap_support' was here
-     198 | static inline bool amd_ivrs_remap_support(void)
-         |                    ^~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +/amd_ivrs_remap_support +3294 drivers/iommu/amd/init.c
+On 3/15/2022 5:28 PM, Thinh Nguyen wrote:
+> Wesley Cheng wrote:
+>> It is recommended by the Synopsis databook to issue a DCTL.CSftReset
+>> when reconnecting from a device-initiated disconnect routine.  This
+>> resolves issues with enumeration during fast composition switching
+>> cases, which result in an unknown device on the host.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>  Changes in v3:
+>>    - Removed change from RFC series and placed into its own patch.
+>>
+>>  Previous patches:
+>>   https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/20220203080017.27339-1-quic_wcheng@quicinc.com/__;!!A4F2R9G_pg!OjNviLgYSUvXpUWpeTDiI6OVuwjW2kjQpACAYYo5MdI09GClnUHLGFjuoMrtquF8Qe9X$ 
+>>
+>>  drivers/usb/dwc3/core.c   |  4 +---
+>>  drivers/usb/dwc3/core.h   |  2 ++
+>>  drivers/usb/dwc3/gadget.c | 11 +++++++++++
+>>  3 files changed, 14 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 18adddfba3da..02d10e1cb774 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -115,8 +115,6 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
+>>  	dwc->current_dr_role = mode;
+>>  }
+>>  
+>> -static int dwc3_core_soft_reset(struct dwc3 *dwc);
+>> -
+>>  static void __dwc3_set_mode(struct work_struct *work)
+>>  {
+>>  	struct dwc3 *dwc = work_to_dwc(work);
+>> @@ -261,7 +259,7 @@ u32 dwc3_core_fifo_space(struct dwc3_ep *dep, u8 type)
+>>   * dwc3_core_soft_reset - Issues core soft reset and PHY reset
+>>   * @dwc: pointer to our context structure
+>>   */
+>> -static int dwc3_core_soft_reset(struct dwc3 *dwc)
+>> +int dwc3_core_soft_reset(struct dwc3 *dwc)
+>>  {
+>>  	u32		reg;
+>>  	int		retries = 1000;
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index eb9c1efced05..86e27afef6c5 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -1530,6 +1530,8 @@ bool dwc3_has_imod(struct dwc3 *dwc);
+>>  int dwc3_event_buffers_setup(struct dwc3 *dwc);
+>>  void dwc3_event_buffers_cleanup(struct dwc3 *dwc);
+>>  
+>> +int dwc3_core_soft_reset(struct dwc3 *dwc);
+>> +
+>>  #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+>>  int dwc3_host_init(struct dwc3 *dwc);
+>>  void dwc3_host_exit(struct dwc3 *dwc);
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index a0c883f19a41..448ff6cb9c22 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -2544,6 +2544,17 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>  						dwc->ev_buf->length;
+>>  		}
+>>  	} else {
+>> +		/*
+>> +		 * In the Synopsis DesignWare Cores USB3 Databook Rev. 1.90a
+Hi Thinh,
 
-  3284	
-  3285	/*
-  3286	 * ivrs_remap_support - Is %IOMMU_IVINFO_DMA_REMAP set in IVRS table
-  3287	 *
-  3288	 * Returns true if the platform has %IOMMU_IVINFO_DMA_REMAP% set in the IOMMU
-  3289	 * IVRS IVInfo field.
-  3290	 * Presence of this flag indicates to the OS/HV that the IOMMU is used for
-  3291	 * Preboot DMA protection and device accessed memory should be remapped after
-  3292	 * the OS has loaded.
-  3293	 */
-> 3294	bool amd_ivrs_remap_support(void)
-  3295	{
-  3296		return amdr_ivrs_remap_support;
-  3297	}
-  3298	EXPORT_SYMBOL_GPL(amd_ivrs_remap_support);
-  3299	
+Thanks for the review.
+> 
+> It's "Synopsys". Version 1.90a is for DWC_usb31 controller.
+> 
+Ah, I need to get the incorrect spelling out of my head! :)
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>> +		 * Section 4.1.9, it specifies that for a reconnect after a
+>> +		 * device-initiated disconnect requires a core soft reset
+>> +		 * (DCTL.CSftRst) before enabling the run/stop bit.
+> 
+> Just want to note that we're skipping some controller initialization on
+> soft-reset here. But it's probably fine because the global registers
+> don't get reset on soft reset. Just need to make sure that the registers
+> that do get reset get reinitialized on __dwc3_gadget_start().
+> 
+>> +		 */
+>> +		spin_unlock_irqrestore(&dwc->lock, flags);
+>> +		dwc3_core_soft_reset(dwc);
+>> +		spin_lock_irqsave(&dwc->lock, flags);
+>> +
+>> +		dwc3_event_buffers_setup(dwc);
+>>  		__dwc3_gadget_start(dwc);
+>>  	}
+>>  
+> 
+> It's a little awkward because dwc3 also issues soft-reset during driver
+> probe. Pullup() is called during driver bindings. So soft-reset is
+> called multiple times. I don't have a better solution at the moment, but
+> I don't see a problem with it either.
+> Correct...this would mainly help w/ the soft connect/disconnect
+situations.  Will fixup the typos and resend.
+
+> After fixing the typos,
+> 
+> Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> 
+> Thanks,
+> Thinh
+
+Thanks
+Wesley Cheng
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
