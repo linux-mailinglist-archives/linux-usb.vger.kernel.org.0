@@ -2,132 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A454DABD4
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 08:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D94E4DABFC
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 08:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354208AbiCPHaz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Mar 2022 03:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
+        id S1354306AbiCPHqz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Mar 2022 03:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349045AbiCPHax (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 03:30:53 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF240BC08
-        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 00:29:38 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id v130-20020a1cac88000000b00389d0a5c511so2678274wme.5
-        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 00:29:38 -0700 (PDT)
+        with ESMTP id S1354295AbiCPHqy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 03:46:54 -0400
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3AC60CC3
+        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 00:45:40 -0700 (PDT)
+Received: by mail-oo1-xc2f.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso1784073ooi.1
+        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 00:45:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=kgNwF822XLCpGGuXU87MYUal/QeHjmk53OqzbsvP3bY=;
-        b=xD/WCj/AZbGlstB61QBDFLGXR/Q1SP1OwvMRpNEHYlufjUEV/fKRX43+FBYIWRB0mf
-         WVCcyBCJ4q+y+xkzlWFsmRK3x3aWWobiSZZ2vdJs3IOQMVrU94MJdN6vz5Ovn7wfa5o4
-         ET7lGASgldMyWo+jbMPLLaIgBLsK2xFBgLY7aggnDiAy7bMK/0vvkVURJG5iWdm0WWcL
-         UZtGMCGvt/mbF8H/jU+std2FfmIxQvj6Ht9Yqa18vsT7KyTG3L35XnIpwyaK01wpyVPk
-         d+b6Kc8t3fZetoIQTo0BoVhBFpafF//kYTtojPOh71qD3DF1npK5grUvsKtw06O+T5YW
-         IRSw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T87zTH0DkphGLesbWlrfLY37BYRGj5Dcsh6fZ7Tb2Io=;
+        b=r1XEXiASBQDYZ5V4TV73TqXbRPkoxgosJdV49eyGOPLU/Y8tV87HdLL086XkKTPyfH
+         MQFEjm1sPu217Jk6SkldXFKawlY+jNY7UCsWGUqkyeWmlP/qecm+wo74TK5aFSoha033
+         nICfZT38j16WTKmtm7Bn7uryf7ZzPLxV0ECLZyJOs3fP6oB6mH6Zf5AdGdrTGttuoMUP
+         2AY6haAAiY4SQTKEonDAlVrpH4NlpowXYIv/6DJYg9h13ril1KbWhfL+0NqaQD0xAlTE
+         Tl65DdltW7v38+WjqbO+OnC0giEL1gO7f1YFUmLZCD8Pjp68bGn6s7naqY0Fmwmg9zrx
+         NtCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=kgNwF822XLCpGGuXU87MYUal/QeHjmk53OqzbsvP3bY=;
-        b=pJi5swNuv8kBnIzMVXmNbIb5kYMEcDtbWkhUv1Hj12oHFDgwnOmgKFD1OlnLGWxgLB
-         IMPHVMDE3FWN+CaeUycxsMGsYJ9MY0mUVvwHORz9FKIlvp5J4R27++WOMcnhTDmtLg/K
-         b+B8QRKzd9ND9l3EervNCC+eFDjdMVRS3okcWloFZjdf0iWX6GF6SqPdk2cml5yGnYgr
-         K67D5cj1xLNA2CtUjZqPIxm4Ay678UTNfBzdvbIogxodFKw6lzQAcXs75soVK2MzZmDf
-         mAxdgqA/6dhFRB29XvyvrnhyZoaiqLkbBoroWteUv1TSYvXirdmHLvsfG9HJQOWEI1RU
-         LKjg==
-X-Gm-Message-State: AOAM532+4tPi6rfVTIS7VcVXGMkPHxCl97tGc222SShWKKQRE0ISiSR5
-        3aEfGZLsz7LBQLRpnaYcIYlNXg==
-X-Google-Smtp-Source: ABdhPJzX8MMJ0NL8uSl/FdpeIZgB04fJEiEQQC/NKc206ehgFfgEO4RvrogJnLOwzfteKqBEo+fK3Q==
-X-Received: by 2002:a05:600c:3d07:b0:38b:94f2:5d17 with SMTP id bh7-20020a05600c3d0700b0038b94f25d17mr5139780wmb.67.1647415776688;
-        Wed, 16 Mar 2022 00:29:36 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id p18-20020adfba92000000b001e4ae791663sm932414wrg.62.2022.03.16.00.29.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 00:29:36 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 07:29:34 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Frank Zago <frank@zago.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-usb@vger.kernel.org, gunar@schorcht.net
-Subject: Re: [PATCH v3] mfd: ch341: add driver for the WCH CH341 in I2C/GPIO
- mode
-Message-ID: <YjGR3i5W4HAZfsc0@google.com>
-References: <20220314030937.22762-1-frank@zago.net>
- <YjCpq8YVwmZzOzwE@google.com>
- <fee91f27-17c4-25c0-c149-3b20161429ba@zago.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T87zTH0DkphGLesbWlrfLY37BYRGj5Dcsh6fZ7Tb2Io=;
+        b=DJ+pEVkFoq0v9rV+a5jOOhF0Vf4nSCdHLvrOU6oTfbnWPhJBeamlqfDOSlLal+q5aN
+         bfsxmQZHizGGZ0Wa7+ig0sySX97jBSttqr5NNoIi//pTyaRAossdkZgZr2wq8oaOkZmZ
+         GQ86WPZ13oL6Co+/zAjtw2NV81TkMaBpt+y82c/MF+H1mEoFyy4zs6v4Fl/m3FeUmAim
+         lL0lKBIEwcdx8AVk8/v4+iw3MRry6t4BOTtxhqbcfrZAQhohHG9brh9v+aemPG3C+Cs5
+         9byvrB4rC+/KvygkCgkivpcchEDgz1f30w/bRYv9N4Rsq4CFQHVYNRcNwjEPFp5+iYvF
+         IqbA==
+X-Gm-Message-State: AOAM5337Vi9Z3GXI1Tf3vLHI2IOciFo3K3pSg+YSBpQ9VAAOlz6VElBr
+        21EQ/3huYx62Qs43BoVDdJedt/eZ04uwS+x8WKpbiA==
+X-Google-Smtp-Source: ABdhPJwzCR0t8OhcbK4m9h7T96CulLhfg0yY9yNAWIVbNLOCUnRCPgn7zHvpS8UjmFaaH1ztlBIszs4pNFw+zeng5vg=
+X-Received: by 2002:a05:6870:9619:b0:d9:a25e:ed55 with SMTP id
+ d25-20020a056870961900b000d9a25eed55mr2840688oaq.163.1647416739279; Wed, 16
+ Mar 2022 00:45:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fee91f27-17c4-25c0-c149-3b20161429ba@zago.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <0000000000009e7a1905b8295829@google.com> <00000000000003887a05da3e872c@google.com>
+ <CAHk-=wj4HBk7o8_dbpk=YiTOFxvE9LTiH8Gk=1kgVxOq1jaH7g@mail.gmail.com>
+In-Reply-To: <CAHk-=wj4HBk7o8_dbpk=YiTOFxvE9LTiH8Gk=1kgVxOq1jaH7g@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 16 Mar 2022 08:45:28 +0100
+Message-ID: <CACT4Y+atgbwmYmiYqhFQT9_oHw5cD5oyp5bNyCJNz34wSaMgmg@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: out-of-bounds Read in ath9k_hif_usb_rx_cb (3)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     syzbot <syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        ath9k-devel@qca.qualcomm.com, chouhan.shreyansh630@gmail.com,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:USB GADGET/PERIPHERAL SUBSYSTEM" 
+        <linux-usb@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Netdev <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Zekun Shen <bruceshenzk@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 15 Mar 2022, Frank Zago wrote:
+On Tue, 15 Mar 2022 at 18:08, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Mar 15, 2022 at 2:36 AM syzbot
+> <syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com> wrote:
+> >
+> > syzbot suspects this issue was fixed by commit
+> > 09688c0166e7 ("Linux 5.17-rc8")
+>
+> No, I'm afraid that means that the bisection is broken:
+>
+> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=140283ad700000
+>
+> and yeah, looking at that log it looks like every single run has
+>
+>   testing commit [...]
+>   run #0: crashed: KASAN: use-after-free Read in ath9k_hif_usb_rx_cb
+>   ...
+>   # git bisect good [...]
+>
+> and you never saw a "bad" commit that didn't have the issue, so the
+> top-of-tree gets marked "good" (and I suspect you intentionally mark
+> the broken case "good" in order to find where it got fixed, so you're
+> using "git bisect" in a reverse way).
+>
+> I didn't look closer, but it does seem to not reproduce very reliably,
+> maybe that is what confused the bot originally.
 
-> Hello Lee,
-> 
-> >> Changes from v2:
-> >>   - bug fixes
-> >>   - more robust USB enumeration
-> >>   - Changed to an MFD driver as suggested
-> > 
-> > Perhaps you should have engaged with me before potentially wasting
-> > your valuable time.
-> > 
-> > MFD is designed to take a parent platform driver and split it out into
-> > various sub-systems.  If you don't use the MFD Core API (which is the
-> > case here) it is not an MFD.  MFD is not a dumping ground for
-> > collections of random device drivers.
-> > 
-> > I have no problem with you placing registration and core code inside
-> > MFD (that *is* what it was designed for), but the leaf 'functionality'
-> > should be placed in more appropriate locations.
-> > 
-> > I2C  => drivers/i2c
-> > SPI  => drivers/spi
-> > GPIO => drivers/gpio (or perhaps drivers/pinctrl)
-> > USB  => drivers/usb
-> > UART => drivers/tty/serial
-> > 
-> > Etc ... Find places for everything.
-> > 
-> > Anything left over, give to Greg (drivers/misc). :)
-> > 
-> 
-> AFAICS that works if the driver is built-in, but not as a module. 
+Hi Linus,
 
-How did you reach that conclusion?
+Thanks for taking a look. Yes, it's a "reverse" bisection that tries
+to find the fix.
+And your conclusion re flakiness looks right, there were few runs with
+only 1/20 crashes.
+But the bug looks to be fixed by something anyway. git log on the file
+pretty clearly points to:
 
-I expect most of the drivers in MFD and their children to be modules.
-
-  `git grep module_.*_driver -- drivers/mfd/`
-
-> I'd prefer that driver to be a module if desired, and have all its files in the same
-> place instead of scattered in various directories.
-
-The design and organisation of the kernel does not work like that.
-
-> I can try drivers/misc if it's a better place.
-
-I suspect you'll receive the same advice from Greg and Arnd.
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+#syz fix: ath9k: Fix out-of-bound memcpy in ath9k_hif_usb_rx_stream
