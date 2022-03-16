@@ -2,252 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DA54DB9E0
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 22:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DCD4DBA48
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 22:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355320AbiCPVFH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Mar 2022 17:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44926 "EHLO
+        id S1358182AbiCPVqC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Mar 2022 17:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355049AbiCPVFE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 17:05:04 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C8DDED0
-        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 14:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647464629; x=1679000629;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ODrHCDEyVdHVF668cSzErXiaUPijkJ9vy+FDwiVf+UA=;
-  b=awTcdXbmuMGq43H5YuzSbwU1lV4mO36KaMfUJO7KfsVVTzVuAbKwyszg
-   6ebE9UCDpQavcbV3fMa+CRC+o00EhAEjMRV55QkKjT37qwF/2XPZhBL2d
-   QSvZSR8+fIZFqkq9TUMrrqXzrzHa5xH2gUmkm/95OUZedg189WhkBb8UE
-   QMe31FQzgJF3tVimwFtbWiQfwWo/ITOvwn57hSNSzCjrdHh4gE58EY72e
-   I5mVMgu7xfEQHbXm4X0Iy4CSpT+bGxswjT3o86u+UUNGncf4oaXo945n5
-   clwGvBrDaHZwqTeVDdnSl66MPUm4fBK/2a0gtqFCjxib7GU6I7HFavhcy
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="244164210"
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="244164210"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 14:03:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="714765464"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 16 Mar 2022 14:03:48 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUao7-000Cvn-OK; Wed, 16 Mar 2022 21:03:47 +0000
-Date:   Thu, 17 Mar 2022 05:03:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- e4cf6580ac740f766dae26203bd6311d353dcd42
-Message-ID: <623250b0.HZjNbjBBexjUWvLy%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S1358163AbiCPVp6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 17:45:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07D213CCE
+        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 14:44:43 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUbRh-00011n-DG; Wed, 16 Mar 2022 22:44:41 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUbRg-00185T-ET; Wed, 16 Mar 2022 22:44:39 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUbRe-009dKa-1A; Wed, 16 Mar 2022 22:44:38 +0100
+Date:   Wed, 16 Mar 2022 22:44:37 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: refcount underflow on stm32mp1
+Message-ID: <20220316214437.iawmafmard7sed5w@pengutronix.de>
+References: <20220316164724.uic3azim4mhp6jvl@pengutronix.de>
+ <YjIZuY2qXGD/Toqf@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="a27awqdjjjh3u3n6"
+Content-Disposition: inline
+In-Reply-To: <YjIZuY2qXGD/Toqf@kroah.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: e4cf6580ac740f766dae26203bd6311d353dcd42  usb: dwc3: gadget: Wait for ep0 xfers to complete during dequeue
 
-elapsed time: 1322m
+--a27awqdjjjh3u3n6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-configs tested: 169
-configs skipped: 4
+Hello Greg,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+On Wed, Mar 16, 2022 at 06:09:13PM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Mar 16, 2022 at 05:47:24PM +0100, Uwe Kleine-K=F6nig wrote:
+> > on an stm32mp157a based machine I encounter the following problem during
+> > boot:
+> >=20
+> > [    2.031752] using random self ethernet address
+> > [    2.034869] using random host ethernet address
+> > [    2.039329] using random self ethernet address
+> > [    2.043986] using random host ethernet address
+> > [    2.049186] usb0: HOST MAC 6a:74:a8:25:a5:f9
+> > [    2.052482] usb0: MAC f6:83:b5:19:02:4f
+> > [    2.056631] Mass Storage Function, version: 2009/09/11
+> > [    2.061408] LUN: removable file: (no medium)
+> > [    2.065652] no file given for LUN0
+> > [    2.111423] g_multi 49000000.usb-otg: failed to start g_multi: -22
+> > [    2.116359] ------------[ cut here ]------------
+> > [    2.120762] WARNING: CPU: 0 PID: 7 at lib/refcount.c:28 dwc2_hsotg_r=
+emove+0x1c/0x2c
+> > [    2.128541] refcount_t: underflow; use-after-free.
+> > [    2.133214] Modules linked in:
+> > [    2.136229] CPU: 0 PID: 7 Comm: kworker/u4:0 Not tainted 5.17.0-rc8-=
+dirty #10
+> > [    2.143351] Hardware name: STM32 (Device Tree Support)
+> > [    2.148482] Workqueue: events_unbound deferred_probe_work_func
+> > [    2.154314]  unwind_backtrace from show_stack+0x18/0x1c
+> > [    2.159515]  show_stack from dump_stack_lvl+0x40/0x4c
+> > [    2.164555]  dump_stack_lvl from __warn+0xd8/0x17c
+> > [    2.169334]  __warn from warn_slowpath_fmt+0x98/0xc8
+> > [    2.174287]  warn_slowpath_fmt from dwc2_hsotg_remove+0x1c/0x2c
+> > [    2.180196]  dwc2_hsotg_remove from dwc2_driver_probe+0x59c/0x790
+> > [    2.186278]  dwc2_driver_probe from platform_probe+0x64/0xc0
+> > [    2.191926]  platform_probe from really_probe+0x1ac/0x470
+> > [    2.197312]  really_probe from __driver_probe_device+0xa8/0x20c
+> > [    2.203220]  __driver_probe_device from driver_probe_device+0x3c/0xcc
+> > [    2.209650]  driver_probe_device from __device_attach_driver+0xac/0x=
+124
+> > [    2.216254]  __device_attach_driver from bus_for_each_drv+0x84/0xc8
+> > [    2.222511]  bus_for_each_drv from __device_attach+0xcc/0x1d4
+> > [    2.228245]  __device_attach from bus_probe_device+0x8c/0x94
+> > [    2.233894]  bus_probe_device from deferred_probe_work_func+0x9c/0xdc
+> > [    2.240324]  deferred_probe_work_func from process_one_work+0x210/0x=
+584
+> > [    2.246929]  process_one_work from worker_thread+0x214/0x544
+> > [    2.252576]  worker_thread from kthread+0xf0/0x120
+> > [    2.257356]  kthread from ret_from_fork+0x14/0x2c
+> > [    2.262047] Exception stack(0xc190ffb0 to 0xc190fff8)
+> > [    2.267089] ffa0:                                     00000000 00000=
+000 00000000 00000000
+> > [    2.275260] ffc0: 00000000 00000000 00000000 00000000 00000000 00000=
+000 00000000 00000000
+> > [    2.283426] ffe0: 00000000 00000000 00000000 00000000 00000013 00000=
+000
+> > [    2.290196] ---[ end trace 0000000000000000 ]---
+> >=20
+> > This happens on v5.15 and on v5.17-rc8.
+> >=20
+> > I didn't try to debug this further, just wanted to let you know ...
+>=20
+> So it's always been an issue?
+>=20
+> git bisect?
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220314
-mips                 randconfig-c004-20220314
-i386                          randconfig-c001
-powerpc                 mpc834x_itx_defconfig
-arm                     eseries_pxa_defconfig
-arm                      footbridge_defconfig
-mips                        vocore2_defconfig
-arm                            lart_defconfig
-sh                         microdev_defconfig
-arm                         vf610m4_defconfig
-powerpc64                           defconfig
-mips                  decstation_64_defconfig
-powerpc                  storcenter_defconfig
-sh                           sh2007_defconfig
-alpha                            alldefconfig
-ia64                            zx1_defconfig
-arc                     nsimosci_hs_defconfig
-powerpc                       ppc64_defconfig
-powerpc                 mpc85xx_cds_defconfig
-ia64                      gensparse_defconfig
-sh                        sh7785lcr_defconfig
-arm                        oxnas_v6_defconfig
-h8300                            allyesconfig
-um                           x86_64_defconfig
-sh                          r7780mp_defconfig
-powerpc                      pasemi_defconfig
-s390                       zfcpdump_defconfig
-um                               alldefconfig
-arm                         axm55xx_defconfig
-powerpc                      pcm030_defconfig
-arm                        shmobile_defconfig
-arm                          pxa910_defconfig
-powerpc                     ep8248e_defconfig
-parisc                generic-64bit_defconfig
-xtensa                           alldefconfig
-sh                              ul2_defconfig
-sparc                            alldefconfig
-openrisc                 simple_smp_defconfig
-sh                   secureedge5410_defconfig
-arm                         lubbock_defconfig
-sh                             shx3_defconfig
-nios2                         3c120_defconfig
-sh                          polaris_defconfig
-arm                        realview_defconfig
-sh                        edosk7760_defconfig
-arm                         assabet_defconfig
-xtensa                          iss_defconfig
-arm                          badge4_defconfig
-powerpc                     tqm8548_defconfig
-powerpc                     pq2fads_defconfig
-sh                        sh7763rdp_defconfig
-sh                     sh7710voipgw_defconfig
-mips                           ci20_defconfig
-arm                  randconfig-c002-20220313
-arm                  randconfig-c002-20220314
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64               randconfig-a004-20220314
-x86_64               randconfig-a005-20220314
-x86_64               randconfig-a003-20220314
-x86_64               randconfig-a002-20220314
-x86_64               randconfig-a006-20220314
-x86_64               randconfig-a001-20220314
-i386                 randconfig-a003-20220314
-i386                 randconfig-a004-20220314
-i386                 randconfig-a001-20220314
-i386                 randconfig-a006-20220314
-i386                 randconfig-a002-20220314
-i386                 randconfig-a005-20220314
-arc                  randconfig-r043-20220313
-arc                  randconfig-r043-20220314
-riscv                randconfig-r042-20220313
-s390                 randconfig-r044-20220313
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                                  kexec
+I don't believe this is the easiest approach to tackle that problem.
+Support for stm32mp157a was added around v5.5, but I failed to get this
+version up on my machine. v5.15 is the oldest kernel I had running on
+that machine.
 
-clang tested configs:
-arm                  randconfig-c002-20220313
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220313
-riscv                randconfig-c006-20220313
-mips                 randconfig-c004-20220313
-i386                          randconfig-c001
-powerpc                     pseries_defconfig
-powerpc                      katmai_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                 mpc836x_mds_defconfig
-mips                      maltaaprp_defconfig
-powerpc                          g5_defconfig
-powerpc                     skiroot_defconfig
-powerpc                      pmac32_defconfig
-powerpc                     kilauea_defconfig
-mips                           mtx1_defconfig
-mips                        maltaup_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64               randconfig-a014-20220314
-x86_64               randconfig-a015-20220314
-x86_64               randconfig-a016-20220314
-x86_64               randconfig-a012-20220314
-x86_64               randconfig-a013-20220314
-x86_64               randconfig-a011-20220314
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                 randconfig-a013-20220314
-i386                 randconfig-a015-20220314
-i386                 randconfig-a014-20220314
-i386                 randconfig-a011-20220314
-i386                 randconfig-a016-20220314
-i386                 randconfig-a012-20220314
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220313
-hexagon              randconfig-r045-20220313
-hexagon              randconfig-r045-20220314
-riscv                randconfig-r042-20220314
-hexagon              randconfig-r041-20220314
+The problem is that after usb_add_gadget_udc() failed in
+dwc2_driver_probe(), dwc2_hsotg_remove() -> usb_del_gadget_udc() ->
+usb_put_gadget() -> put_device() results in that underflow.
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+With that information I'd expect that someone understanding how
+reference counting works with usb gadgets should be able to come up with
+a fix.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--a27awqdjjjh3u3n6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIyWkIACgkQwfwUeK3K
+7Al8+ggAoGL3tr23C5gcAwrR0yLkW6Idneeik+858kJqimnT03drNBarwGWOkzwE
+w6CZP6y0GFEX+1b1H2NV9SEY1Ui0gKTLIiaqCH07aCq7/rjHiifPRgQlunhX9bYc
+pe8lx4Kqdcb4ltLVQAl7JdytJ18O5GAKsCDWjH5rb7XpryVZI/QjGWBXvFSK4Jzf
+3jtf7g2YAeRBBQ/KHUsrYH8tdG6OvwNYKUxpORHdAaYf62dIW2YRksL9d0X0Rr/9
+Fro92sZ9PqdExv7PMC/ZOg5E5WSpKRVL/Rqp9u7Zixsqxeg7babC/w1Ma3EdhniV
+UQaPQDYgR5lneL/b0edqy2EUm683rw==
+=3wGC
+-----END PGP SIGNATURE-----
+
+--a27awqdjjjh3u3n6--
