@@ -2,109 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFB14DB602
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 17:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB114DB697
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Mar 2022 17:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357490AbiCPQVZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Mar 2022 12:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
+        id S1357558AbiCPQsw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Mar 2022 12:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353824AbiCPQVV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 12:21:21 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C35A6D3B5
-        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 09:20:05 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 6so583155pgg.0
-        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 09:20:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DyBR7xQAXaZuPCsKjwy8hOfizYgRD0r3iSUyQaw9ZjA=;
-        b=jhn9uT3vNcEu9losxG+d7dM3QdRDWlepsH67bgjyM8Ky6XAuv322MT2LlDBg3dHaqr
-         aSPH6DDD3h75azSsFDacdD68wIBg2NscXWIoF4k12sj+UZbxQpBTCD6p1w3bOte733u9
-         aYeNPTaGbSn1bAVKCivrrkHEuHSDVrvBtnXz6Jb+lBZnpZ/VUca9mfaxSSbxww3PIZoB
-         Cxxq3XCn5o+RkoxDrlfJ8gHR7m1AbOIvrj/xmydWjw28E8EG8DhtBTsV5gLDRWSSSuJp
-         ss+7I/xXZkVeGg6jkhkZo8+DdJQf31OUBGSG8Xjtl1H3oC14Y5uyZLlDggWg1T53OUf0
-         xZ+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=DyBR7xQAXaZuPCsKjwy8hOfizYgRD0r3iSUyQaw9ZjA=;
-        b=ZBSe+jouy7NbzS8aF44fMv/jvyNI3DaSDHV1Sp56EcRtCgO5908iJVfJmNazwF9u/S
-         nXkGj44OW1GG3oPPVkApj12myxSmCFwF2aAAnqNEtZPENL7OVIU35MgS1GMOpg0gdjRv
-         Lt8ZCL0ipNg42qbx6s5/PfuBLMU7IjZyOblOg7q9rwrW27aSXArdhS90hzBpt0WppAKE
-         lSL+ZnK6lM9h3+26kau1rdS3ecNMEPDgCm4wahNIrXD1WHS+Cyjt8MZddpEuMb+YDE5T
-         7Mp13+KtM0mCcJG1eQN3zEHEqKLyG42qrPQXHEBeVEBhZ1q6yXSMh7xrJ/irpQVvnoAw
-         boSQ==
-X-Gm-Message-State: AOAM53189Gkhb8XoMyn6PTpHiuR/npC9yQnt9i9jzrr9c1w9A9e64tRD
-        GFGddNJTPkF9yLK3yoPcP3E=
-X-Google-Smtp-Source: ABdhPJyUNNE7RMdioIJ4wiJqv9RPC6cigkIriDE5GYZr3e0Vm8uXP0vz5B4uTLd40mg/fnQ7P3MhGQ==
-X-Received: by 2002:a05:6a00:8cc:b0:4bc:3def:b616 with SMTP id s12-20020a056a0008cc00b004bc3defb616mr666031pfu.18.1647447604740;
-        Wed, 16 Mar 2022 09:20:04 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id mt15-20020a17090b230f00b001bf191e6f08sm2988374pjb.9.2022.03.16.09.20.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 09:20:04 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v3 9/9] usb: rework usb_maxpacket() using usb_pipe_endpoint()
-Date:   Thu, 17 Mar 2022 01:19:35 +0900
-Message-Id: <20220316161935.2049-10-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220316161935.2049-1-mailhol.vincent@wanadoo.fr>
-References: <20220304105420.1059585-1-mailhol.vincent@wanadoo.fr>
- <20220316161935.2049-1-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S1357556AbiCPQst (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 12:48:49 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB5230F78
+        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 09:47:29 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUWo2-0004eD-M9; Wed, 16 Mar 2022 17:47:26 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUWo3-0015Mg-46; Wed, 16 Mar 2022 17:47:25 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUWo1-009aUU-5k; Wed, 16 Mar 2022 17:47:25 +0100
+Date:   Wed, 16 Mar 2022 17:47:24 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, kernel@pengutronix.de
+Subject: refcount underflow on stm32mp1
+Message-ID: <20220316164724.uic3azim4mhp6jvl@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="btd5pldgkulmfcnt"
+Content-Disposition: inline
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Rework the body of usb_maxpacket() in order not to reinvent the wheel
-and just rely on the usb_pipe_endpoint() helper function instead.
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- include/linux/usb.h | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+--btd5pldgkulmfcnt
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 8127782aa7a1..653d34ff0999 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -1971,19 +1971,7 @@ usb_pipe_endpoint(struct usb_device *dev, unsigned int pipe)
- 
- static inline u16 usb_maxpacket(struct usb_device *udev, int pipe)
- {
--	struct usb_host_endpoint	*ep;
--	unsigned			epnum = usb_pipeendpoint(pipe);
--
--	if (usb_pipeout(pipe))
--		ep = udev->ep_out[epnum];
--	else
--		ep = udev->ep_in[epnum];
--
--	if (!ep)
--		return 0;
--
--	/* NOTE:  only 0x07ff bits are for packet size... */
--	return usb_endpoint_maxp(&ep->desc);
-+	return usb_endpoint_maxp(&usb_pipe_endpoint(udev, pipe)->desc);
- }
- 
- /* translate USB error codes to codes user space understands */
--- 
-2.34.1
+Hello,
 
+on an stm32mp157a based machine I encounter the following problem during
+boot:
+
+[    2.031752] using random self ethernet address
+[    2.034869] using random host ethernet address
+[    2.039329] using random self ethernet address
+[    2.043986] using random host ethernet address
+[    2.049186] usb0: HOST MAC 6a:74:a8:25:a5:f9
+[    2.052482] usb0: MAC f6:83:b5:19:02:4f
+[    2.056631] Mass Storage Function, version: 2009/09/11
+[    2.061408] LUN: removable file: (no medium)
+[    2.065652] no file given for LUN0
+[    2.111423] g_multi 49000000.usb-otg: failed to start g_multi: -22
+[    2.116359] ------------[ cut here ]------------
+[    2.120762] WARNING: CPU: 0 PID: 7 at lib/refcount.c:28 dwc2_hsotg_remov=
+e+0x1c/0x2c
+[    2.128541] refcount_t: underflow; use-after-free.
+[    2.133214] Modules linked in:
+[    2.136229] CPU: 0 PID: 7 Comm: kworker/u4:0 Not tainted 5.17.0-rc8-dirt=
+y #10
+[    2.143351] Hardware name: STM32 (Device Tree Support)
+[    2.148482] Workqueue: events_unbound deferred_probe_work_func
+[    2.154314]  unwind_backtrace from show_stack+0x18/0x1c
+[    2.159515]  show_stack from dump_stack_lvl+0x40/0x4c
+[    2.164555]  dump_stack_lvl from __warn+0xd8/0x17c
+[    2.169334]  __warn from warn_slowpath_fmt+0x98/0xc8
+[    2.174287]  warn_slowpath_fmt from dwc2_hsotg_remove+0x1c/0x2c
+[    2.180196]  dwc2_hsotg_remove from dwc2_driver_probe+0x59c/0x790
+[    2.186278]  dwc2_driver_probe from platform_probe+0x64/0xc0
+[    2.191926]  platform_probe from really_probe+0x1ac/0x470
+[    2.197312]  really_probe from __driver_probe_device+0xa8/0x20c
+[    2.203220]  __driver_probe_device from driver_probe_device+0x3c/0xcc
+[    2.209650]  driver_probe_device from __device_attach_driver+0xac/0x124
+[    2.216254]  __device_attach_driver from bus_for_each_drv+0x84/0xc8
+[    2.222511]  bus_for_each_drv from __device_attach+0xcc/0x1d4
+[    2.228245]  __device_attach from bus_probe_device+0x8c/0x94
+[    2.233894]  bus_probe_device from deferred_probe_work_func+0x9c/0xdc
+[    2.240324]  deferred_probe_work_func from process_one_work+0x210/0x584
+[    2.246929]  process_one_work from worker_thread+0x214/0x544
+[    2.252576]  worker_thread from kthread+0xf0/0x120
+[    2.257356]  kthread from ret_from_fork+0x14/0x2c
+[    2.262047] Exception stack(0xc190ffb0 to 0xc190fff8)
+[    2.267089] ffa0:                                     00000000 00000000 =
+00000000 00000000
+[    2.275260] ffc0: 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000 00000000
+[    2.283426] ffe0: 00000000 00000000 00000000 00000000 00000013 00000000
+[    2.290196] ---[ end trace 0000000000000000 ]---
+
+This happens on v5.15 and on v5.17-rc8.
+
+I didn't try to debug this further, just wanted to let you know ...
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--btd5pldgkulmfcnt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIyFJkACgkQwfwUeK3K
+7Amy0gf9GUAO3m6t5edKZmaaK4Cc+h3WRkewSX5jRGUwoIsJ78ObPHkql8r51buT
+EPuwG8RccN0+KA7wG6x7RT0ZtUEVuMjdLrttzR5/RfA2cmTLW/wzf/ruRbM87r6P
+lfV/+k6nkV95yDlrC8HuW4IChgtsP3NMySRcSJBJb0R37JpifGjaQ2gFfjsEmJzQ
+4A4ah+cIthwLHQr662GJZe8fq7yzipbP4Zk7Gd2IlxjEvUPElRzfpl853ODfp+iT
+G8Lg8YXngEsBeGw1EKdcHrsBWACa/HirzPN0qpX2SFjV2feYk9cWNlTnDWxFoTqA
+/7nFxYz9IEuvGdDO0iyZGS90i8Jc6A==
+=M+BV
+-----END PGP SIGNATURE-----
+
+--btd5pldgkulmfcnt--
