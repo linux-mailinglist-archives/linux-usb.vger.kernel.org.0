@@ -2,160 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC7C4DBD18
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 03:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB24C4DBD31
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 03:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358461AbiCQCkX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Mar 2022 22:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
+        id S243033AbiCQCo2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Mar 2022 22:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358444AbiCQCkV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 22:40:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F14A1FCF0;
-        Wed, 16 Mar 2022 19:39:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F001BB81DD5;
-        Thu, 17 Mar 2022 02:39:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71A07C340F0;
-        Thu, 17 Mar 2022 02:38:57 +0000 (UTC)
-Date:   Wed, 16 Mar 2022 22:38:55 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eli Cohen <eli@mellanox.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Krzysztof Opasiak <k.opasiak@samsung.com>,
-        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
-        Joachim Fritschi <jfritschi@freenet.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Karol Herbst <karolherbst@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, netdev@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org, x86@kernel.org
-Subject: Re: [PATCH 9/9] testmmiotrace: eliminate anonymous module_init &
- module_exit
-Message-ID: <20220316223855.5c31ae25@gandalf.local.home>
-In-Reply-To: <20220316192010.19001-10-rdunlap@infradead.org>
-References: <20220316192010.19001-1-rdunlap@infradead.org>
-        <20220316192010.19001-10-rdunlap@infradead.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S236570AbiCQCo1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 22:44:27 -0400
+Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [203.148.12.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2D3DF96;
+        Wed, 16 Mar 2022 19:43:10 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
+ (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 17 Mar
+ 2022 10:43:07 +0800
+Received: from [10.29.8.49] (10.29.8.49) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 17 Mar
+ 2022 10:43:05 +0800
+Message-ID: <edfa2f91-80e9-fa05-3a91-9c22ce223f29@zhaoxin.com>
+Date:   Thu, 17 Mar 2022 10:43:04 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] USB: Fix xhci ERDP update issue
+Content-Language: en-US
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <stern@rowland.harvard.edu>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
+        <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
+References: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
+ <261420fb-28b4-0def-a9e1-9c011bab7912@linux.intel.com>
+ <1882dfc1-0f46-a594-d75b-b73d30f6d6db@zhaoxin.com>
+ <6c11dc4f-4984-e7aa-9fc5-7026100b38e1@linux.intel.com>
+From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <6c11dc4f-4984-e7aa-9fc5-7026100b38e1@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.29.8.49]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 16 Mar 2022 12:20:10 -0700
-Randy Dunlap <rdunlap@infradead.org> wrote:
-
-> Eliminate anonymous module_init() and module_exit(), which can lead to
-> confusion or ambiguity when reading System.map, crashes/oops/bugs,
-> or an initcall_debug log.
+On 2022/3/16 21:20, Mathias Nyman wrote:
+> On 15.3.2022 14.44, WeitaoWang-oc@zhaoxin.com wrote:
+>> On 2022/3/15 下午4:08, Mathias Nyman wrote:
+>>> On 14.3.2022 9.25, WeitaoWang-oc@zhaoxin.com wrote:
+>>>> On some situations, software handles TRB events slower than adding TRBs,
+>>>> xhci_irq will not exit until all events are handled. If xhci_irq just
+>>>> handles 256 TRBs and exit, the temp variable(event_ring_deq) driver records in xhci irq is equal to driver current dequeue pointer. It will cause driver not update ERDP and software dequeue pointer lost sync with ERDP. On the next xhci_irq, the event ring is full but driver will not update ERDP as software dequeue pointer is equal to ERDP.
+>>>>
+>>>> [  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
+>>>> [  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7 inflight: CMD OUT
+>>>> [  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78 00 00 08 00
+>>>> [  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host not responding to stop endpoint command.
+>>>> [  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
+>>>> [  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not responding, assume dead
+>>>> [  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6 inflight: CMD
+>>>> [  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8 00 00 08 00
+>>>> [  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5 inflight: CMD
+>>>>
+>>>> Fixed this issue by update software record temp variable when handles 128 TRB events.>
+>>>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+>>>
+>>> Thanks
+>>>
+>>> Solution itself looks good but patch has some minor format issue:
+>>>
+>>>
+>>> It would also be interesting to know if the full event ring was triggered in a real
+>>> life usecase?
+>>> If that is the case I might need to look more into it.
+>>>
+>>> Bigger event ring, more rings, faster handler, avoid irqoff time...
+>>>
+>>> Thanks
+>>> Mathias
+>>> .
+>> Some performance test tools such as fio or iometer can be used to reproduce
+>>   this case, If tested with 4KB read or write. xHCI will generate a lost TRB
+>>   events fast than software consume on a certain period of time. Once the interrupt is entered, software may handle more than 128 TRBs at a time.
+>> While the software is processing, xHCI is still generating events. This may
+>> has problems caused by the ERDP update mechanism. If update software
+>>   record temp variable when handles 128 TRB events, event ring full will not
+>>   happen any more even though fio test with 4KB read or write.
+>>
+>> Thanks
+>> Weitao Wang
+>>>
 > 
-> Give each of these init and exit functions unique driver-specific
-> names to eliminate the anonymous names.
+> Thanks for the clarification.
 > 
-> Example 1: (System.map)
->  ffffffff832fc78c t init
->  ffffffff832fc79e t init
->  ffffffff832fc8f8 t init
+> Could you resubmit this after fixing the minor patch format issue?
+> Also make sure patch passes checkpatch test
 > 
-> Example 2: (initcall_debug log)
->  calling  init+0x0/0x12 @ 1
->  initcall init+0x0/0x12 returned 0 after 15 usecs
->  calling  init+0x0/0x60 @ 1
->  initcall init+0x0/0x60 returned 0 after 2 usecs
->  calling  init+0x0/0x9a @ 1
->  initcall init+0x0/0x9a returned 0 after 74 usecs
-> 
-> Fixes: 8b7d89d02ef3 ("x86: mmiotrace - trace memory mapped IO")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Thanks
+> -Mathias
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+All right, I'll resubmit this patch.Thanks for your help.
 
--- Steve
-
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Cc: Karol Herbst <karolherbst@gmail.com>
-> Cc: Pekka Paalanen <ppaalanen@gmail.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: nouveau@lists.freedesktop.org
-> Cc: x86@kernel.org
-> ---
->  arch/x86/mm/testmmiotrace.c |    8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> --- lnx-517-rc8.orig/arch/x86/mm/testmmiotrace.c
-> +++ lnx-517-rc8/arch/x86/mm/testmmiotrace.c
-> @@ -113,7 +113,7 @@ static void do_test_bulk_ioremapping(voi
->  	synchronize_rcu();
->  }
->  
-> -static int __init init(void)
-> +static int __init testmmiotrace_init(void)
->  {
->  	unsigned long size = (read_far) ? (8 << 20) : (16 << 10);
->  	int ret = security_locked_down(LOCKDOWN_MMIOTRACE);
-> @@ -136,11 +136,11 @@ static int __init init(void)
->  	return 0;
->  }
->  
-> -static void __exit cleanup(void)
-> +static void __exit testmmiotrace_cleanup(void)
->  {
->  	pr_debug("unloaded.\n");
->  }
->  
-> -module_init(init);
-> -module_exit(cleanup);
-> +module_init(testmmiotrace_init);
-> +module_exit(testmmiotrace_cleanup);
->  MODULE_LICENSE("GPL");
-
+Weitao Wang
+> .
