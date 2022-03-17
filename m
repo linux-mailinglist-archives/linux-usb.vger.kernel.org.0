@@ -2,61 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD354DBCB0
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 02:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 104064DBCB3
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 02:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353326AbiCQBwe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Mar 2022 21:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
+        id S1350601AbiCQB63 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Mar 2022 21:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236468AbiCQBwd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 21:52:33 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DA5140FB;
-        Wed, 16 Mar 2022 18:51:18 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id bu29so6763542lfb.0;
-        Wed, 16 Mar 2022 18:51:17 -0700 (PDT)
+        with ESMTP id S232966AbiCQB62 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 21:58:28 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891B11CB1B;
+        Wed, 16 Mar 2022 18:57:13 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id q5so5420913ljb.11;
+        Wed, 16 Mar 2022 18:57:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=r4E837av3GEkT1qW1jpjXNfbYr30LcsFLqr+mfuO7kI=;
-        b=M1OooYYfw9BSCfTSNFcgMHAiPRL5YFnto2cRrIOhbc8TGNNIIZAKbBHM4+llfK7yY+
-         MT+uUc48HAOACA5KBiPh3jWIGjBPjG1J8NHiitP4ggDa9djiKHh3H3acEjHfR4MUiWo1
-         xIE+pek0wami4eGEnA4ePE6mEm/OTlxvhTW+hjsWLO7UQhMDti8ypnErVd+kkKDJnR7q
-         pVcloMESpSO05TXdVfZ2pTbqMvNvtBE7xhWZAsvdW9esn0avaPdpP4El8NI6THST4DcW
-         vMQys0xqrCs7llv+JB+hZlOdflIKu+afzCYQUAjWhiKvk6BTNJXr5IpohVjgOYTBbFa4
-         zG+w==
+        bh=D2eRtDhUiRlh6LC4tNmroWlfl0w9KefZzF7QC113Ymw=;
+        b=HWHhI+tJQb7NceqGVdfZf3qv6HHsoD0DK8KH+CJhB6W4ZWMx0h+SDyEEwnL25LMVQg
+         zKpt0ilsFTJWMEn+YotbBv+CHmhm5wz9RJm+gBH3YhHI/sHYQXOCtql1zNHK16BwRv2P
+         sGc0l127JfS/+cMODtL4iRAzr56VdQX3AYGKDR/BmEsAQPDNuYKFh+B1i0a2Px4TICyD
+         OWROAcrc5KqNBGAXvwAhOqXYkRgxfVHMf+b+Z1cYZBFcpkRErF0rm1jhR9xPhKPFUnbW
+         0XJsyPajRCCHhkCPbcMA0M0GcAvaVRxYsfyiDLT9zqaKO3jUS9WTDeci37Hs2h244u1Z
+         /FdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=r4E837av3GEkT1qW1jpjXNfbYr30LcsFLqr+mfuO7kI=;
-        b=vb7zxnnqKwZw040qR9jJeCtELM26HgTtahRozLvhbXlAuLGZc8m+Zk2LwvQhdpCXqI
-         KNQd2OpJRSH5JZDkWxp0ipd7Bq5K9+Dqj9qb6ixi5fKAhm8xSpoyE86Wh3nkDQqBV+6D
-         k5I8xw8YZbW1SyDTuxcL2dA/SN+71WOJt77vJ7TIkbmtJ5sQs9k8y/WY3dgdbd4IKlrt
-         yGSuRKClIcPbACcrIHYxwTh61bzw1NczqvE/6SyLhs44Rt0lpA8zO2/zhcAG5tqfk5W9
-         phXHeGuIz3pGaZLSocyaFqAy4hcENa61pAr+GO/eeK41r9R6tOfd+Png6sI058Tjt/rY
-         ppPg==
-X-Gm-Message-State: AOAM533eJsWOVAgsu08QJnyFrjtvyc3nAeQLW8mlJUJGg7fm66L0jrFK
-        jmjdFBvZNOVOWIEkpxiaqaRAMBCjmF9VI7I4HUMHjuZt
-X-Google-Smtp-Source: ABdhPJwbTzCTkxZMnP3PAx3eirbIfZXngNsD5OU6F25AFOCc0j6FKXLeozR5ecJos4ZtXVU0p84hRZAd0pz32cQezmo=
-X-Received: by 2002:a05:6512:3f09:b0:43a:4463:56f9 with SMTP id
- y9-20020a0565123f0900b0043a446356f9mr1360376lfa.533.1647481876197; Wed, 16
- Mar 2022 18:51:16 -0700 (PDT)
+        bh=D2eRtDhUiRlh6LC4tNmroWlfl0w9KefZzF7QC113Ymw=;
+        b=PWlxqGLaegudeSlUyEronYsKHl3U0xDk79vXeZFovlK8kiB4MWeABDOT0C8DrB5za5
+         fQk9eODxH6cQyPeiOS2plK3kvWAe9c8m99O1wolgLRG/TLq8pzDuR1pMvh5O4ZPQ+vtl
+         z4H3xTlMcudd3nhfJY9jTPvrKvfozLoNf7E53/D+V76sAT9/DkwZgRzVD1WxN2snq+mB
+         fzszcb9RLugd0QFzmh0B1D5ZhPRbWCjg1BA/4JKZ4XjEU7x7sjRDhbPB9Ed1t2ip6rQo
+         GNqtebi79d8AeLeizIOEdNf0gcT0RHU5zvVziQ88qoHUaybyhYWI3xbICUlhqbnx4B9r
+         Fiog==
+X-Gm-Message-State: AOAM532f7KKR8TnCb7txfbfIDKaFwBuNZzwhEWHT+PUo+ftlOKarolbS
+        qYwWNpaMYb1YEf3cDvb77BBkVSU5TLCopR+84L0=
+X-Google-Smtp-Source: ABdhPJyFlkiIFXp5hQL4DLC4LGWzR86G2RzWAwiNyNiA38WnKp4DUP+0KDCKDRtO1/T4VA2hZDiQIlMOygIkkzfVeKY=
+X-Received: by 2002:a2e:9d86:0:b0:247:da0e:7c59 with SMTP id
+ c6-20020a2e9d86000000b00247da0e7c59mr1443340ljj.127.1647482231736; Wed, 16
+ Mar 2022 18:57:11 -0700 (PDT)
 MIME-Version: 1.0
 References: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
- <Yi7xJy70XZCA8RyN@kroah.com> <CAL411-o_2PSndEVXfa+ciLukSr5u5w8G9T63d2MpSm2Fpn5QTQ@mail.gmail.com>
- <d95ca5f6-221b-1a22-abbe-10621e2fb219@linux.intel.com>
-In-Reply-To: <d95ca5f6-221b-1a22-abbe-10621e2fb219@linux.intel.com>
+In-Reply-To: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
 From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Thu, 17 Mar 2022 09:51:01 +0800
-Message-ID: <CAL411-pJt2mZFeE_mkGrA68VhkG237FYwCEUY9FTr6ptUQNd_Q@mail.gmail.com>
+Date:   Thu, 17 Mar 2022 09:56:57 +0800
+Message-ID: <CAL411-pthKbSuUEjFPDJtRK=nWApRnJkPVH0C+qaqNRyf0u5yg@mail.gmail.com>
 Subject: Re: [PATCH] USB: Fix xhci ERDP update issue
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>,
-        mathias.nyman@intel.com, Alan Stern <stern@rowland.harvard.edu>,
+To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+Cc:     mathias.nyman@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
         USB list <linux-usb@vger.kernel.org>,
         lkml <linux-kernel@vger.kernel.org>, CobeChen@zhaoxin.com,
         TimGuo@zhaoxin.com, tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
@@ -71,54 +69,57 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 8:43 PM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
+On Thu, Mar 17, 2022 at 1:30 AM WeitaoWang-oc@zhaoxin.com
+<WeitaoWang-oc@zhaoxin.com> wrote:
 >
-> On 16.3.2022 13.57, Peter Chen wrote:
-> > On Mon, Mar 14, 2022 at 10:34 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >>
-> >> On Mon, Mar 14, 2022 at 03:25:23PM +0800, WeitaoWang-oc@zhaoxin.com wrote:
-> >>> On some situations, software handles TRB events slower than adding TRBs,
-> >>> xhci_irq will not exit until all events are handled. If xhci_irq just
-> >>> handles 256 TRBs and exit, the temp variable(event_ring_deq) driver records
-> >>> in xhci irq is equal to driver current dequeue pointer. It will cause driver
-> >>> not update ERDP and software dequeue pointer lost sync with ERDP. On the
-> >>> next xhci_irq, the event ring is full but driver will not update ERDP as
-> >>> software dequeue pointer is equal to ERDP.
-> >
-> > At the current driver, the ERDP is updated at most 128 TRBs, how is
-> > the above condition
-> > triggered?
-> >
-> > Peter
-> >
+> On some situations, software handles TRB events slower than adding TRBs,
+> xhci_irq will not exit until all events are handled. If xhci_irq just
+> handles 256 TRBs and exit, the temp variable(event_ring_deq) driver
+> records in xhci irq is equal to driver current dequeue pointer. It will
+> cause driver not update ERDP and software dequeue pointer lost sync with
+> ERDP. On the next xhci_irq, the event ring is full but driver will not
+> update ERDP as software dequeue pointer is equal to ERDP.
 >
-> Before, and during _one_ interrupt handling xHC hardware writes exactly 256 events
-> to event ring. ring buffer size is 256 so buffer position 0 and 256 point
-> to the same place.
+> [  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
+> [  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7
+> inflight: CMD OUT
+> [  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78
+> 00 00 08 00
+> [  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host
+> not responding to stop endpoint command.
+> [  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
+> [  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not
+> responding, assume dead
+> [  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6
+> inflight: CMD
+> [  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8
+> 00 00 08 00
+> [  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5
+> inflight: CMD
 >
-> Interrupt handler stores software dequeue in a local variable "event_ring_deq".
-> Handler start handling events, it updates software dequeue, but not local variable.
-> After 128 events handler updates hardware ERDP.
+> Fixed this issue by update software record temp variable when handles
+> 128 TRB events.
 >
-> So at event 128 we got:
-> Hardware ERDP = 128
-> software dequeue = 128
-> event_ring_deq = 0
->
-> Handler continue handling events, at event 256 try to update HW ERDP again, but fail due
-> to this condition in update_erst_dequeue():
->       if (event_ring_deq != xhci->event_ring->dequeue)
->
-> This fails because event_ring_deq is still 0, and software deq is 256,
-> pointing to the same place in the event ring.
->
-> So at the end of the interrupt handler we have:
-> HW ERDP = 128
-> software dequeue = 256 (same as 0)
->
-> So in this specific case we fail to update ERDP correctly
+> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
 
-Cleared, thanks.
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
 
-Peter
+> ---
+>   drivers/usb/host/xhci-ring.c | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index d0b6806..f970799 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -3141,6 +3141,7 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+>                  if (event_loop++ < TRBS_PER_SEGMENT / 2)
+>                          continue;
+>                  xhci_update_erst_dequeue(xhci, event_ring_deq);
+> +               event_ring_deq = xhci->event_ring->dequeue;
+>
+>                  /* ring is half-full, force isoc trbs to interrupt more
+> often */
+>                  if (xhci->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
+> --
+> 2.7.4
