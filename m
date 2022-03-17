@@ -2,130 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7F34DCAE0
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 17:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD144DCB10
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 17:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236377AbiCQQM6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Mar 2022 12:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
+        id S232439AbiCQQSe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Mar 2022 12:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235642AbiCQQM6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Mar 2022 12:12:58 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCEB214F85
-        for <linux-usb@vger.kernel.org>; Thu, 17 Mar 2022 09:11:40 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id z12-20020a17090ad78c00b001bf022b69d6so5918334pju.2
-        for <linux-usb@vger.kernel.org>; Thu, 17 Mar 2022 09:11:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=wywg4x91ht1wDsZE8LDgwKs/937jDdBiI3aoJq8Icig=;
-        b=EcRFu47wdTKbqMSAq17bN6l3fW68je9I7sz6dNGS5tKD2WRbtx22XzizUZtR0qkyAQ
-         QWP1OHwCDN5A0Nw0t3Q7qmd76Q7jNga+edrTyslT2xibkPds1nD37wWbuAnO8SwFuhrO
-         gsVcYZtwJfnoFR7QpeZ53g8ha9BP7vQeAQagIeRfmuB8NZSh871Oy/O22T8GKZQsso7+
-         GAqKZ5LuYXbJaI8VOrspWlTrq9NYT2zp8TS48/UvpIibmW0S8anvsp+TLqAO1q5KW6Bh
-         lxRLQvTEz/3EMFmPsbBbDBLIo1E7GTCaZssTwBenfG227MP1XIuXr1IbCZbQ1ApUnFqh
-         aueg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=wywg4x91ht1wDsZE8LDgwKs/937jDdBiI3aoJq8Icig=;
-        b=nXhzHHRVwI/9mFrhghTWAaA2iLUJI7lI84O29n7mPjtCbGaNeHDD1MfiWIl1/wrigV
-         F9TUEKXCNlMlxwmaJ1jSXUxzpj3afRTKyAZpwZbN9Zuqxat8AL64oDG1rYMrLeTjE3N4
-         1isGonacqfuqYhq9rSJUVp1wORwjdCPsdjOdASmegSMOuN032AvayMpRQXKJaGMIZ9cf
-         1StqEqyaER5hc0rmEfDnj+1A0NmxzYq4Kp+E1/fHYzdC0I441GMpe9yZ4JeZ+mXHX85g
-         +CUDVmNS2YfjzxUTO7UBSOGaIttfe6u+lO0dfZlloOlzzy3EgR0AL4vmCeFhBYKCvlj/
-         A68w==
-X-Gm-Message-State: AOAM533B5Y5gIh3gEJXfnnR6Zjh9kBMbjX03kwvek+ZLgI9IuYsDY1aY
-        v5wLNjmbuqBfEAkKGj4LTiDpZA==
-X-Google-Smtp-Source: ABdhPJzujChC6izQDJEHNAPYk2A2y6Fs/ty0Hxcz37xAtsWb7B2FaolAnh/R0gH50blU6B7YVSPE4w==
-X-Received: by 2002:a17:902:7613:b0:151:6e1c:c49c with SMTP id k19-20020a170902761300b001516e1cc49cmr5906213pll.109.1647533499805;
-        Thu, 17 Mar 2022 09:11:39 -0700 (PDT)
-Received: from [127.0.1.1] ([2620:10d:c090:400::5:d2fd])
-        by smtp.gmail.com with ESMTPSA id q10-20020a056a00088a00b004f7ceff389esm7702590pfj.152.2022.03.17.09.11.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 09:11:39 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-scsi@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Florian Westphal <fw@strlen.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Karol Herbst <karolherbst@gmail.com>,
-        Eli Cohen <eli@mellanox.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>, x86@kernel.org,
-        netfilter-devel@vger.kernel.org,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Amit Shah <amit@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-block@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-        linux-usb@vger.kernel.org, coreteam@netfilter.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Krzysztof Opasiak <k.opasiak@samsung.com>,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        nouveau@lists.freedesktop.org, Jason Wang <jasowang@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        virtualization@lists.linux-foundation.org,
-        Leon Romanovsky <leon@kernel.org>,
-        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
-        linux-rdma@vger.kernel.org,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joachim Fritschi <jfritschi@freenet.de>
-In-Reply-To: <20220316192010.19001-1-rdunlap@infradead.org>
-References: <20220316192010.19001-1-rdunlap@infradead.org>
-Subject: Re: (subset) [PATCH 0/9] treewide: eliminate anonymous module_init & module_exit
-Message-Id: <164753349550.89091.10994175450707575992.b4-ty@kernel.dk>
-Date:   Thu, 17 Mar 2022 10:11:35 -0600
+        with ESMTP id S229812AbiCQQSe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Mar 2022 12:18:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91E122156CE;
+        Thu, 17 Mar 2022 09:17:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 571631424;
+        Thu, 17 Mar 2022 09:17:17 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 24DC83F7B4;
+        Thu, 17 Mar 2022 09:17:16 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        mario.limonciello@amd.com
+Subject: [PATCH] thunderbolt: Make iommu_dma_protection more accurate
+Date:   Thu, 17 Mar 2022 16:17:07 +0000
+Message-Id: <2d01fa50c2650c730b0244929097737918e302e7.1647533152.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.28.0.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 16 Mar 2022 12:20:01 -0700, Randy Dunlap wrote:
-> There are a number of drivers that use "module_init(init)" and
-> "module_exit(exit)", which are anonymous names and can lead to
-> confusion or ambiguity when reading System.map, crashes/oops/bugs,
-> or an initcall_debug log.
-> 
-> Give each of these init and exit functions unique driver-specific
-> names to eliminate the anonymous names.
-> 
-> [...]
+Between me trying to get rid of iommu_present() and Mario wanting to
+support the AMD equivalent of DMAR_PLATFORM_OPT_IN, scrutiny has shown
+that the iommu_dma_protection attribute is being far too optimistic.
+Even if an IOMMU might be present for some PCI segment in the system,
+that doesn't necessarily mean it provides translation for the device(s)
+we care about. Furthermore, all that DMAR_PLATFORM_OPT_IN really does
+is tell us that memory was protected before the kernel was loaded, and
+prevent the user from disabling the intel-iommu driver entirely. What
+actually matters is whether we trust individual devices, based on the
+"external facing" property that we expect firmware to describe for
+Thunderbolt ports.
 
-Applied, thanks!
+Avoid false positives by looking as close as possible to the same PCI
+topology that the IOMMU layer will consider once a Thunderbolt endpoint
+appears. Crucially, we can't assume that IOMMU translation being enabled
+for any reason is sufficient on its own; full (expensive) DMA protection
+will still only be imposed on untrusted devices.
 
-[1/9] virtio_blk: eliminate anonymous module_init & module_exit
-      commit: bcfe9b6cbb4438b8c1cc4bd475221652c8f9301b
+CC: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
 
-Best regards,
+This supersedes my previous attempt just trying to replace
+iommu_present() at [1], further to the original discussion at [2].
+
+[1] https://lore.kernel.org/linux-iommu/BL1PR12MB515799C0BE396377DBBEF055E2119@BL1PR12MB5157.namprd12.prod.outlook.com/T/
+[2] https://lore.kernel.org/linux-iommu/202203160844.lKviWR1Q-lkp@intel.com/T/
+
+ drivers/thunderbolt/domain.c | 12 +++---------
+ drivers/thunderbolt/nhi.c    | 35 +++++++++++++++++++++++++++++++++++
+ include/linux/thunderbolt.h  |  2 ++
+ 3 files changed, 40 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
+index 7018d959f775..d5c825e84ac8 100644
+--- a/drivers/thunderbolt/domain.c
++++ b/drivers/thunderbolt/domain.c
+@@ -7,9 +7,7 @@
+  */
+ 
+ #include <linux/device.h>
+-#include <linux/dmar.h>
+ #include <linux/idr.h>
+-#include <linux/iommu.h>
+ #include <linux/module.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/slab.h>
+@@ -257,13 +255,9 @@ static ssize_t iommu_dma_protection_show(struct device *dev,
+ 					 struct device_attribute *attr,
+ 					 char *buf)
+ {
+-	/*
+-	 * Kernel DMA protection is a feature where Thunderbolt security is
+-	 * handled natively using IOMMU. It is enabled when IOMMU is
+-	 * enabled and ACPI DMAR table has DMAR_PLATFORM_OPT_IN set.
+-	 */
+-	return sprintf(buf, "%d\n",
+-		       iommu_present(&pci_bus_type) && dmar_platform_optin());
++	struct tb *tb = container_of(dev, struct tb, dev);
++
++	return sprintf(buf, "%d\n", tb->nhi->iommu_dma_protection);
+ }
+ static DEVICE_ATTR_RO(iommu_dma_protection);
+ 
+diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+index c73da0532be4..e12c2e266741 100644
+--- a/drivers/thunderbolt/nhi.c
++++ b/drivers/thunderbolt/nhi.c
+@@ -14,6 +14,7 @@
+ #include <linux/errno.h>
+ #include <linux/pci.h>
+ #include <linux/interrupt.h>
++#include <linux/iommu.h>
+ #include <linux/module.h>
+ #include <linux/delay.h>
+ #include <linux/property.h>
+@@ -1102,6 +1103,39 @@ static void nhi_check_quirks(struct tb_nhi *nhi)
+ 		nhi->quirks |= QUIRK_AUTO_CLEAR_INT;
+ }
+ 
++static void nhi_check_iommu(struct tb_nhi *nhi)
++{
++	struct pci_dev *pdev;
++	bool port_ok = false;
++
++	/*
++	 * Check for sibling devices that look like they should be our
++	 * tunnelled ports. We can reasonably assume that if an IOMMU is
++	 * managing the bridge it will manage any future devices beyond it
++	 * too. If firmware has described a port as external-facing as
++	 * expected then we can trust the IOMMU layer to enforce isolation;
++	 * otherwise even if translation is enabled for existing devices it
++	 * may potentially be overridden for a future tunnelled endpoint.
++	 */
++	for_each_pci_bridge(pdev, nhi->pdev->bus) {
++		if (!pci_is_pcie(pdev) ||
++		    !(pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT ||
++		      pci_pcie_type(pdev) == PCI_EXP_TYPE_DOWNSTREAM))
++			continue;
++
++		if (!device_iommu_mapped(&pdev->dev))
++			return;
++
++		if (!pdev->untrusted) {
++			dev_info(&nhi->pdev->dev,
++				 "Assuming unreliable Kernel DMA protection\n");
++			return;
++		}
++		port_ok = true;
++	}
++	nhi->iommu_dma_protection = port_ok;
++}
++
+ static int nhi_init_msi(struct tb_nhi *nhi)
+ {
+ 	struct pci_dev *pdev = nhi->pdev;
+@@ -1219,6 +1253,7 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		return -ENOMEM;
+ 
+ 	nhi_check_quirks(nhi);
++	nhi_check_iommu(nhi);
+ 
+ 	res = nhi_init_msi(nhi);
+ 	if (res) {
+diff --git a/include/linux/thunderbolt.h b/include/linux/thunderbolt.h
+index 124e13cb1469..7a8ad984e651 100644
+--- a/include/linux/thunderbolt.h
++++ b/include/linux/thunderbolt.h
+@@ -465,6 +465,7 @@ static inline struct tb_xdomain *tb_service_parent(struct tb_service *svc)
+  * @msix_ida: Used to allocate MSI-X vectors for rings
+  * @going_away: The host controller device is about to disappear so when
+  *		this flag is set, avoid touching the hardware anymore.
++ * @iommu_dma_protection: An IOMMU will isolate external-facing ports.
+  * @interrupt_work: Work scheduled to handle ring interrupt when no
+  *		    MSI-X is used.
+  * @hop_count: Number of rings (end point hops) supported by NHI.
+@@ -479,6 +480,7 @@ struct tb_nhi {
+ 	struct tb_ring **rx_rings;
+ 	struct ida msix_ida;
+ 	bool going_away;
++	bool iommu_dma_protection;
+ 	struct work_struct interrupt_work;
+ 	u32 hop_count;
+ 	unsigned long quirks;
 -- 
-Jens Axboe
-
+2.28.0.dirty
 
