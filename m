@@ -2,104 +2,248 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6014DBEE6
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 07:04:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 551224DBF41
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 07:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiCQGGG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Mar 2022 02:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
+        id S229784AbiCQGUS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Mar 2022 02:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiCQGF4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Mar 2022 02:05:56 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7859CDCA8F
-        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 22:37:40 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id b188so4600189oia.13
-        for <linux-usb@vger.kernel.org>; Wed, 16 Mar 2022 22:37:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ceem6RmP/yEqjGNLoTEsmJ4aPRMMWZNmndo0Vukg9II=;
-        b=Uh0pYOZ0PGTaA5tApNxJCok5Q0c5eO0syIRU2q354Kx2FYqXqS3HLNn3A2YY9ZeTLU
-         5vwuslGlonqzGPngcr+DCrbVbvbHb3+URilfVGiXCKBFysFhCQzeGG/JKd/X1Uv1QPHC
-         +Qpwfi8rB4pvGMNhTDWLXtROEOMlaYwyzNrSYmDTmqAXfavwiytTsS7YNpl6wf4+CLCY
-         WdRlAcrnFlIyv5VVLLbMxPS0uhXQuts5qTHWg4re2BtsKOGFkZRq2vRyfewm3Q7zM//g
-         aj5K2a6DWylFJvDs/GKpyUaTHKYhwQ+5TPubLWUEbsGTIgHfVcls6OOEyYS/AtdqKnU0
-         gRZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=ceem6RmP/yEqjGNLoTEsmJ4aPRMMWZNmndo0Vukg9II=;
-        b=ZPvW/SRDSyDIGbO88DCvLm4ceWSogIYpQWWoZMunvglaDYG6jNhOgNZKnecF0buEUs
-         z6spErKNQicQ1xxy15Fiy+KCeqKOfNCGagpLANrBd7fmh8JXSIx8/kfINHf/QnZ7bHCz
-         CLKukr/dTYK0rrR/Lr6pndhyamX1vlHGMgf80gWWWW5qMdr6XHZIb8mffk6V0N3iFJxq
-         XeLGOYCWoDQARU5QyxjjQPzUec3urNYSges+qNVdtMRE2nXg2jCnn964hxJZk5boepMt
-         S0g2URct3KfZJlfAlIVMQhjEArti1DNN1UEIqUTMSnm2RXQBbnEV60hrJvBGyf1UJCTd
-         gAtw==
-X-Gm-Message-State: AOAM532UKC0K+h2pk2phIoqeRaLLdKJAIuDh+g9JZY43KGnIyMtjSIVi
-        MOpw39gIeOteIF4PNtgV8QYSFOXUalU2qg==
-X-Google-Smtp-Source: ABdhPJzFBH8+ijIomMbZc5BqEdet4RmW3hQyc7e4TumYZZ90DTAH8P5feGg76Fpkamg1aSrh9AVqnA==
-X-Received: by 2002:a17:90a:5797:b0:1bc:56a9:f6c8 with SMTP id g23-20020a17090a579700b001bc56a9f6c8mr13853390pji.12.1647489350433;
-        Wed, 16 Mar 2022 20:55:50 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id e6-20020a056a001a8600b004f78e446ff5sm5096734pfv.15.2022.03.16.20.55.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 20:55:49 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v4 9/9] usb: rework usb_maxpacket() using usb_pipe_endpoint()
-Date:   Thu, 17 Mar 2022 12:55:14 +0900
-Message-Id: <20220317035514.6378-10-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220317035514.6378-1-mailhol.vincent@wanadoo.fr>
-References: <20220304105420.1059585-1-mailhol.vincent@wanadoo.fr>
- <20220317035514.6378-1-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S229600AbiCQGUH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Mar 2022 02:20:07 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F164AFA233;
+        Wed, 16 Mar 2022 23:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=bTtyCTv8jHiRySjv+joBkY5T4kiLsInhhDpfMbwTL1s=; b=os+6uLP+YQvzPOsl13Jv5guvuH
+        c88qjXZH5IySVlxqAYUihC2hbNJHZhERaN/9M1O+TRZA8WFEmSQGTv+E/uOHf9IEu5y58HmvUView
+        tJqv1oexE/7GCbLX/RqjjjPHc0Nz4QT1PCSUsF7D8Jb/EYTGiFjELEvWYE7Gu9MYUTFHov/uRCRY7
+        /x9sJUmFziSe300ACpWlnZupzoQCtmqCqtEMV0UdvwGyry98Nfw5QdyjOvLJ0JePVDhb/0YX8qdJT
+        w7vRAVMjNtBdhuXSlAfQdRkRsVo81YE8w/5mlAJkMGGTpqeQHzUxEbTrcOVom5D0PCqAQ3d5CQPbP
+        DH34JIfA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nUiEF-001mlP-TU; Thu, 17 Mar 2022 04:59:16 +0000
+Message-ID: <5db1feea-f630-79e6-15cc-77babf58a429@infradead.org>
+Date:   Wed, 16 Mar 2022 21:59:01 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 6/9] usb: gadget: eliminate anonymous module_init &
+ module_exit
+Content-Language: en-US
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eli Cohen <eli@mellanox.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
+        Joachim Fritschi <jfritschi@freenet.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org,
+        Felipe Balbi <balbi@kernel.org>
+References: <20220316192010.19001-1-rdunlap@infradead.org>
+ <20220316192010.19001-7-rdunlap@infradead.org>
+ <YjKrMyRvHh7nzHwW@iweiny-desk3>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <YjKrMyRvHh7nzHwW@iweiny-desk3>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Rework the body of usb_maxpacket() and just rely on the
-usb_pipe_endpoint() helper function to retrieve the host endpoint
-instead of doing it by hand.
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- include/linux/usb.h | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 8127782aa7a1..60bee864d897 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -1971,13 +1971,7 @@ usb_pipe_endpoint(struct usb_device *dev, unsigned int pipe)
- 
- static inline u16 usb_maxpacket(struct usb_device *udev, int pipe)
- {
--	struct usb_host_endpoint	*ep;
--	unsigned			epnum = usb_pipeendpoint(pipe);
--
--	if (usb_pipeout(pipe))
--		ep = udev->ep_out[epnum];
--	else
--		ep = udev->ep_in[epnum];
-+	struct usb_host_endpoint *ep = usb_pipe_endpoint(udev, pipe);
- 
- 	if (!ep)
- 		return 0;
+On 3/16/22 20:29, Ira Weiny wrote:
+> On Wed, Mar 16, 2022 at 12:20:07PM -0700, Randy Dunlap wrote:
+>> Eliminate anonymous module_init() and module_exit(), which can lead to
+>> confusion or ambiguity when reading System.map, crashes/oops/bugs,
+>> or an initcall_debug log.
+>>
+>> Give each of these init and exit functions unique driver-specific
+>> names to eliminate the anonymous names.
+>>
+>> Example 1: (System.map)
+>>  ffffffff832fc78c t init
+>>  ffffffff832fc79e t init
+>>  ffffffff832fc8f8 t init
+>>
+>> Example 2: (initcall_debug log)
+>>  calling  init+0x0/0x12 @ 1
+>>  initcall init+0x0/0x12 returned 0 after 15 usecs
+>>  calling  init+0x0/0x60 @ 1
+>>  initcall init+0x0/0x60 returned 0 after 2 usecs
+>>  calling  init+0x0/0x9a @ 1
+>>  initcall init+0x0/0x9a returned 0 after 74 usecs
+>>
+>> Fixes: bd25a14edb75 ("usb: gadget: legacy/serial: allow dynamic removal")
+>> Fixes: 7bb5ea54be47 ("usb gadget serial: use composite gadget framework")
+>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> 
+> I continue to be confused about the latest rules for the Fixes tag but this one
+> in particular seems completely useless.  This is the 'beginning of time' commit
+> by Linus AFAICT.  So do any of these Fixes tags need to be in this series?
+
+I guess it mostly depends on whether they get applied to stable trees, but
+it's entirely fine with me if they don't.
+
+{I also corrected Felipe's email address here.}
+
+> Regardless:
+> 
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+
+Thanks.
+
+> 
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
+>> Cc: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+>> Cc: linux-usb@vger.kernel.org
+>> ---
+>>  drivers/usb/gadget/legacy/inode.c  |    8 ++++----
+>>  drivers/usb/gadget/legacy/serial.c |   10 +++++-----
+>>  drivers/usb/gadget/udc/dummy_hcd.c |    8 ++++----
+>>  3 files changed, 13 insertions(+), 13 deletions(-)
+>>
+>> --- lnx-517-rc8.orig/drivers/usb/gadget/legacy/serial.c
+>> +++ lnx-517-rc8/drivers/usb/gadget/legacy/serial.c
+>> @@ -273,7 +273,7 @@ static struct usb_composite_driver gseri
+>>  static int switch_gserial_enable(bool do_enable)
+>>  {
+>>  	if (!serial_config_driver.label)
+>> -		/* init() was not called, yet */
+>> +		/* gserial_init() was not called, yet */
+>>  		return 0;
+>>  
+>>  	if (do_enable)
+>> @@ -283,7 +283,7 @@ static int switch_gserial_enable(bool do
+>>  	return 0;
+>>  }
+>>  
+>> -static int __init init(void)
+>> +static int __init gserial_init(void)
+>>  {
+>>  	/* We *could* export two configs; that'd be much cleaner...
+>>  	 * but neither of these product IDs was defined that way.
+>> @@ -314,11 +314,11 @@ static int __init init(void)
+>>  
+>>  	return usb_composite_probe(&gserial_driver);
+>>  }
+>> -module_init(init);
+>> +module_init(gserial_init);
+>>  
+>> -static void __exit cleanup(void)
+>> +static void __exit gserial_cleanup(void)
+>>  {
+>>  	if (enable)
+>>  		usb_composite_unregister(&gserial_driver);
+>>  }
+>> -module_exit(cleanup);
+>> +module_exit(gserial_cleanup);
+>> --- lnx-517-rc8.orig/drivers/usb/gadget/udc/dummy_hcd.c
+>> +++ lnx-517-rc8/drivers/usb/gadget/udc/dummy_hcd.c
+>> @@ -2765,7 +2765,7 @@ static struct platform_driver dummy_hcd_
+>>  static struct platform_device *the_udc_pdev[MAX_NUM_UDC];
+>>  static struct platform_device *the_hcd_pdev[MAX_NUM_UDC];
+>>  
+>> -static int __init init(void)
+>> +static int __init dummy_hcd_init(void)
+>>  {
+>>  	int	retval = -ENOMEM;
+>>  	int	i;
+>> @@ -2887,9 +2887,9 @@ err_alloc_udc:
+>>  		platform_device_put(the_hcd_pdev[i]);
+>>  	return retval;
+>>  }
+>> -module_init(init);
+>> +module_init(dummy_hcd_init);
+>>  
+>> -static void __exit cleanup(void)
+>> +static void __exit dummy_hcd_cleanup(void)
+>>  {
+>>  	int i;
+>>  
+>> @@ -2905,4 +2905,4 @@ static void __exit cleanup(void)
+>>  	platform_driver_unregister(&dummy_udc_driver);
+>>  	platform_driver_unregister(&dummy_hcd_driver);
+>>  }
+>> -module_exit(cleanup);
+>> +module_exit(dummy_hcd_cleanup);
+>> --- lnx-517-rc8.orig/drivers/usb/gadget/legacy/inode.c
+>> +++ lnx-517-rc8/drivers/usb/gadget/legacy/inode.c
+>> @@ -2101,7 +2101,7 @@ MODULE_ALIAS_FS("gadgetfs");
+>>  
+>>  /*----------------------------------------------------------------------*/
+>>  
+>> -static int __init init (void)
+>> +static int __init gadgetfs_init (void)
+>>  {
+>>  	int status;
+>>  
+>> @@ -2111,12 +2111,12 @@ static int __init init (void)
+>>  			shortname, driver_desc);
+>>  	return status;
+>>  }
+>> -module_init (init);
+>> +module_init (gadgetfs_init);
+>>  
+>> -static void __exit cleanup (void)
+>> +static void __exit gadgetfs_cleanup (void)
+>>  {
+>>  	pr_debug ("unregister %s\n", shortname);
+>>  	unregister_filesystem (&gadgetfs_type);
+>>  }
+>> -module_exit (cleanup);
+>> +module_exit (gadgetfs_cleanup);
+>>  
+
 -- 
-2.34.1
-
+~Randy
