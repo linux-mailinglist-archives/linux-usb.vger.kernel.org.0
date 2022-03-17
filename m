@@ -2,172 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20844DC440
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 11:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 140D64DC7C4
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 14:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbiCQKvK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Mar 2022 06:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
+        id S234155AbiCQNoZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Mar 2022 09:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232739AbiCQKvJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Mar 2022 06:51:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22398171EEC
-        for <linux-usb@vger.kernel.org>; Thu, 17 Mar 2022 03:49:53 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nUnhW-0007sC-RB; Thu, 17 Mar 2022 11:49:50 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nUnhX-001EW6-8l; Thu, 17 Mar 2022 11:49:49 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nUnhV-009kLa-4d; Thu, 17 Mar 2022 11:49:49 +0100
-Date:   Thu, 17 Mar 2022 11:49:49 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: refcount underflow on stm32mp1
-Message-ID: <20220317104949.ln75wh2a22vekwj2@pengutronix.de>
-References: <20220316164724.uic3azim4mhp6jvl@pengutronix.de>
- <YjIZuY2qXGD/Toqf@kroah.com>
- <20220316214437.iawmafmard7sed5w@pengutronix.de>
+        with ESMTP id S234339AbiCQNoX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Mar 2022 09:44:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85F5C1263C;
+        Thu, 17 Mar 2022 06:43:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 44A181576;
+        Thu, 17 Mar 2022 06:43:06 -0700 (PDT)
+Received: from [10.57.42.204] (unknown [10.57.42.204])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B6DA83F766;
+        Thu, 17 Mar 2022 06:43:04 -0700 (PDT)
+Message-ID: <23f232a1-f511-d2fe-b1f8-5fd32b3a1a8f@arm.com>
+Date:   Thu, 17 Mar 2022 13:42:56 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="b57payncrjjc627a"
-Content-Disposition: inline
-In-Reply-To: <20220316214437.iawmafmard7sed5w@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] thunderbolt: Stop using iommu_present()
+Content-Language: en-GB
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "michael.jamet@intel.com" <michael.jamet@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
+        "hch@lst.de" <hch@lst.de>
+References: <YjHb1xCx4UAmUjrR@lahna>
+ <16852eb2-98bb-6337-741f-8c2f06418b08@arm.com> <YjIb+XOGZbWKpQDa@lahna>
+ <BL1PR12MB515762E68F3A48A97EB2DC89E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <YjIgQfmcw6fydkXd@lahna> <3bb6a2f8-005b-587a-7d7a-7a9a5391ec05@arm.com>
+ <BL1PR12MB5157DA58C3BDAFB5736676F6E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <5ef1c30a-1740-00cc-ad16-4b1c1b02fca4@arm.com>
+ <BL1PR12MB5157380CD6FD9EB83E76CBB0E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <0709e994-1c8b-56fe-7743-8fdbf3ba748b@arm.com> <YjLsfhUmhjOiy6G8@lahna>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <YjLsfhUmhjOiy6G8@lahna>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 2022-03-17 08:08, Mika Westerberg wrote:
+> Hi Robin,
+> 
+> On Wed, Mar 16, 2022 at 07:17:57PM +0000, Robin Murphy wrote:
+>> The feeling I'm getting from all this is that if we've got as far as
+>> iommu_dma_protection_show() then it's really too late to meaningfully
+>> mitigate bad firmware.
+> 
+> Note, these are requirements from Microsoft in order for the system to
+> use the "Kernel DMA protection". Because of this, likelyhood of "bad
+> firmware" should be quite low since these systems ship with Windows
+> installed so they should get at least some soft of validation that this
+> actually works.
+> 
+>> We should be able to detect missing
+>> untrusted/external-facing properties as early as nhi_probe(), and if we
+>> could go into "continue at your own risk" mode right then *before* anything
+>> else happens, it all becomes a lot easier to reason about.
+> 
+> I think what we want is that the DMAR opt-in bit is set in the ACPI
+> tables and that we know the full IOMMU translation is happening for the
+> devices behind "external facing ports". If that's not the case the
+> iommu_dma_protection_show() should return 0 meaning the userspace can
+> ask the user whether the connected device is allowed to use DMA (e.g
+> PCIe is tunneled or not).
 
---b57payncrjjc627a
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ah, if it's safe to just say "no protection" in the case that we don't 
+know for sure, that's even better. Clearly I hadn't quite grasped that 
+aspect of the usage model, thanks for the nudge!
 
-On Wed, Mar 16, 2022 at 10:44:37PM +0100, Uwe Kleine-K=F6nig wrote:
-> Hello Greg,
->=20
-> On Wed, Mar 16, 2022 at 06:09:13PM +0100, Greg Kroah-Hartman wrote:
-> > On Wed, Mar 16, 2022 at 05:47:24PM +0100, Uwe Kleine-K=F6nig wrote:
-> > > on an stm32mp157a based machine I encounter the following problem dur=
-ing
-> > > boot:
-> > >=20
-> > > [    2.031752] using random self ethernet address
-> > > [    2.034869] using random host ethernet address
-> > > [    2.039329] using random self ethernet address
-> > > [    2.043986] using random host ethernet address
-> > > [    2.049186] usb0: HOST MAC 6a:74:a8:25:a5:f9
-> > > [    2.052482] usb0: MAC f6:83:b5:19:02:4f
-> > > [    2.056631] Mass Storage Function, version: 2009/09/11
-> > > [    2.061408] LUN: removable file: (no medium)
-> > > [    2.065652] no file given for LUN0
-> > > [    2.111423] g_multi 49000000.usb-otg: failed to start g_multi: -22
-> > > [    2.116359] ------------[ cut here ]------------
-> > > [    2.120762] WARNING: CPU: 0 PID: 7 at lib/refcount.c:28 dwc2_hsotg=
-_remove+0x1c/0x2c
-> > > [    2.128541] refcount_t: underflow; use-after-free.
-> > > [    2.133214] Modules linked in:
-> > > [    2.136229] CPU: 0 PID: 7 Comm: kworker/u4:0 Not tainted 5.17.0-rc=
-8-dirty #10
-> > > [    2.143351] Hardware name: STM32 (Device Tree Support)
-> > > [    2.148482] Workqueue: events_unbound deferred_probe_work_func
-> > > [    2.154314]  unwind_backtrace from show_stack+0x18/0x1c
-> > > [    2.159515]  show_stack from dump_stack_lvl+0x40/0x4c
-> > > [    2.164555]  dump_stack_lvl from __warn+0xd8/0x17c
-> > > [    2.169334]  __warn from warn_slowpath_fmt+0x98/0xc8
-> > > [    2.174287]  warn_slowpath_fmt from dwc2_hsotg_remove+0x1c/0x2c
-> > > [    2.180196]  dwc2_hsotg_remove from dwc2_driver_probe+0x59c/0x790
-> > > [    2.186278]  dwc2_driver_probe from platform_probe+0x64/0xc0
-> > > [    2.191926]  platform_probe from really_probe+0x1ac/0x470
-> > > [    2.197312]  really_probe from __driver_probe_device+0xa8/0x20c
-> > > [    2.203220]  __driver_probe_device from driver_probe_device+0x3c/0=
-xcc
-> > > [    2.209650]  driver_probe_device from __device_attach_driver+0xac/=
-0x124
-> > > [    2.216254]  __device_attach_driver from bus_for_each_drv+0x84/0xc8
-> > > [    2.222511]  bus_for_each_drv from __device_attach+0xcc/0x1d4
-> > > [    2.228245]  __device_attach from bus_probe_device+0x8c/0x94
-> > > [    2.233894]  bus_probe_device from deferred_probe_work_func+0x9c/0=
-xdc
-> > > [    2.240324]  deferred_probe_work_func from process_one_work+0x210/=
-0x584
-> > > [    2.246929]  process_one_work from worker_thread+0x214/0x544
-> > > [    2.252576]  worker_thread from kthread+0xf0/0x120
-> > > [    2.257356]  kthread from ret_from_fork+0x14/0x2c
-> > > [    2.262047] Exception stack(0xc190ffb0 to 0xc190fff8)
-> > > [    2.267089] ffa0:                                     00000000 000=
-00000 00000000 00000000
-> > > [    2.275260] ffc0: 00000000 00000000 00000000 00000000 00000000 000=
-00000 00000000 00000000
-> > > [    2.283426] ffe0: 00000000 00000000 00000000 00000000 00000013 000=
-00000
-> > > [    2.290196] ---[ end trace 0000000000000000 ]---
-> > >=20
-> > > This happens on v5.15 and on v5.17-rc8.
-> > >=20
-> > > I didn't try to debug this further, just wanted to let you know ...
-> >=20
-> > So it's always been an issue?
-> >=20
-> > git bisect?
->=20
-> I don't believe this is the easiest approach to tackle that problem.
-> Support for stm32mp157a was added around v5.5, but I failed to get this
-> version up on my machine. v5.15 is the oldest kernel I had running on
-> that machine.
->=20
-> The problem is that after usb_add_gadget_udc() failed in
-> dwc2_driver_probe(), dwc2_hsotg_remove() -> usb_del_gadget_udc() ->
-> usb_put_gadget() -> put_device() results in that underflow.
->=20
-> With that information I'd expect that someone understanding how
-> reference counting works with usb gadgets should be able to come up with
-> a fix.
+> We do check for the DMAR bit in the Intel IOMMU code and we also do
+> check that there actually are PCIe ports marked external facing but we
+> could issue warning there if that's not the case. Similarly if the user
+> explicitly disabled the IOMMU translation. This can be done inside a new
+> IOMMU API that does something like the below pseudo-code:
+> 
+> #if IOMMU_ENABLED
+> bool iommu_dma_protected(struct device *dev)
+> {
+> 	if (dmar_platform_optin() /* or the AMD equivalent */) {
+> 		if (!iommu_present(...)) /* whatever is needed to check that the full translation is enabled */
+> 			dev_warn(dev, "IOMMU protection disabled!");
+> 		/*
+> 		 * Look for the external facing ports. Should be at
+> 		 * least 1 or issue warning.
+> 		 */
+> 		 ...
+> 
+> 		return true;
+> 	}
+> 
+> 	return false;
+> }
+> #else
+> static inline bool iommu_dma_protected(struct device *dev)
+> {
+> 	return false;
+> }
+> #endif
+> 
+> Then we can make iommu_dma_protection_show() to call this function.
 
-The problem is that usb_add_gadget_udc() failing already calls
-usb_put_gadget() and so dwc2_hsotg_remove() must not call it again when
-called from dwc2_driver_probe.
+The problem that I've been trying to nail down here is that 
+dmar_platform_optin() really doesn't mean much for us - I don't know how 
+  Windows' IOMMU drivers work, but there's every chance it's not the 
+same way as ours. The only material effect that dmar_platform_optin() 
+has for us is to prevent the user from disabling the IOMMU driver 
+altogether, and thus ensure that iommu_present() is true. Whether or not 
+we can actually trust the IOMMU driver to provide reliable protection 
+depends entirely on whether it knows the PCIe ports are external-facing. 
+If not, we can only *definitely* know what the IOMMU driver will do for 
+a given endpoint once that endpoint has appeared behind the port and 
+iommu_probe_device() has decided what its default domain should be, and 
+as far as I now understand, that's not an option for Thunderbolt since 
+it can only happen *after* the tunnel has been authorised and created.
 
-I don't understand that udc stuff enough to be confident that a patch I
-create for that will do the right thing.
+Much as I'm tempted to de-scope back to my IOMMU API cleanup and run 
+away from the rest of the issue, I think I can crib enough from the 
+existing code to attempt a reasonable complete fix, so let me give that 
+a go...
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---b57payncrjjc627a
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIzEkoACgkQwfwUeK3K
-7AltWAf/d2oybMnJAtV1sm4LLGd/poOW+zZjDu0cZlpHLTuybI50ZV/KZtaXifYz
-XFrstUBSVH4+KE72lmasjLLAGKQZPAoKUoRmNJSgRknVoO94TZsrN11im7vhxJBc
-KXndH5Nomi8JwAC8DUEvma59N0r+H5LvKBeFuOaLyZRxCyo8tcQwErepUG7umfjJ
-mVGRJNVAZKaX/Dc6aDM7xjsHVHT8Bl9U2NfNYUFwQDj0oDf4HJ6LIOne1CzZzgJ3
-S9KYOHoGuuHGjbFs9oQA084ixZGiv3vPpAjgVDR8KoSLvK7VIxauo4BYIAkD3RDL
-RRnVJXwinBPQJvRY6Eptxwb0OSpovQ==
-=8tkL
------END PGP SIGNATURE-----
-
---b57payncrjjc627a--
+Thanks,
+Robin.
