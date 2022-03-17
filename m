@@ -2,197 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6654DC1C0
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 09:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1E54DC3E5
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 11:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbiCQIrp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Mar 2022 04:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
+        id S232550AbiCQKYn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Mar 2022 06:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbiCQIrk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Mar 2022 04:47:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F5C81C9B7B
-        for <linux-usb@vger.kernel.org>; Thu, 17 Mar 2022 01:46:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647506783;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sVx9DgD8AwAJ8+xHbwqIFqUi1dP3yjGM90jTXU92h6o=;
-        b=Stt1w64ygRrI4MRvGG0Q82JnK6LQQ0gv2D3EC0zPArgmA9eA6WZvpYLqrW3Zwzu74TJGzs
-        pewqhnq8+QEMegzh9IPNNYB3RaQUUANUVzJkGCuCOiZz5x96BWpNbAnBPmNTDWwXxBXOHT
-        xEpJwnmJdsTTUWfERK1Nl/y9EHGl57E=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-635-7I8ftN2EOIe68vrg6AndoA-1; Thu, 17 Mar 2022 04:46:20 -0400
-X-MC-Unique: 7I8ftN2EOIe68vrg6AndoA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5987B1C03385;
-        Thu, 17 Mar 2022 08:46:18 +0000 (UTC)
-Received: from localhost (unknown [10.39.194.252])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9FB7153CF;
-        Thu, 17 Mar 2022 08:46:13 +0000 (UTC)
-Date:   Thu, 17 Mar 2022 08:46:12 +0000
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eli Cohen <eli@mellanox.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Krzysztof Opasiak <k.opasiak@samsung.com>,
-        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
-        Joachim Fritschi <jfritschi@freenet.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Karol Herbst <karolherbst@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, netdev@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org, x86@kernel.org
-Subject: Re: [PATCH 5/9] virtio-scsi: eliminate anonymous module_init &
- module_exit
-Message-ID: <YjL1VK4F53hKntam@stefanha-x1.localdomain>
-References: <20220316192010.19001-1-rdunlap@infradead.org>
- <20220316192010.19001-6-rdunlap@infradead.org>
+        with ESMTP id S231407AbiCQKYl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Mar 2022 06:24:41 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D013E0CB;
+        Thu, 17 Mar 2022 03:23:24 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id s29so8148807lfb.13;
+        Thu, 17 Mar 2022 03:23:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=q997/aim32qAN844XtyF1EgVZGYQu0iTF+26V6EakWA=;
+        b=dCYZRbOJJduJbzFTmXHHEDdLPUTx6ttR6pFI89o//ywj4hPEtjACrI+j95gZRrm/UQ
+         nyZ07FdMf0uNwL05rvb/qgTcwvRK71SEP+LCmH1J1NH7n6n4yw1CkF6JDptYFqg2oXIU
+         gQqfoYUIpeMhm2jO2eWRHnV3PIBUq4cYAyqJuZz6HEok/dPZttjRj62Vuuo4W4XkcKZh
+         bf4s5hNRBwWB5/tPBBozYMxxfhE/zx8Uh8ousphxZ9sTaYsMI2BLZy2Q0RTSjFG3uaxQ
+         7WwwLbJvygjQqaej6K7B/v4QAxvJMWiSNKWi5gl7sTt0dy264mY0QaxOfm2FlPQsEl/r
+         9KfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=q997/aim32qAN844XtyF1EgVZGYQu0iTF+26V6EakWA=;
+        b=VlmuMT6tYhvKOTUxJLaEp3ZUstC4+/yxrjmx5gIa/VAAEYTveTN+nRN1Ji3gGIswnF
+         G6g9dSU5F+re5jFBY38JZXoMqAEeEazb3gVZlwkxW8n5+0dGM0vtQRT2riRhhKgkwFWN
+         Rp1QOl3VXcL1qYXc8umbECirgJXvuGiSsVVDcgKATdsg4lwEJsD7vjauxKKkYNBpHRhw
+         rDBd6o5XsOWU5/je28k0+GKJxMXgIqJ6ppQIsuJtx0J/B4DRi+nCcTF8cZavcZiUD9UP
+         n9TVHRgsx+STdGMVqcWOWeiMWuryepJmHad4IdC0+i02/l+LhvbwKgCMkgBbRQLQt7Oj
+         9DYw==
+X-Gm-Message-State: AOAM530azvhtsbkbsa8i1NPBrJV6ZxpIg64dCXMWTe+07HivNLr4ctZS
+        owVnSoB6uEibyX8obU/5/qQe6w7g8eOA2JNpo40=
+X-Google-Smtp-Source: ABdhPJx6Yw5sqc3oHgOC+M1OOphrf/GwfLoaeL01BvrlD7R30s1AwRtOdfgYh4FrjRTymS/KC7T98VTRHMz7/o96Mo4=
+X-Received: by 2002:a05:6512:2256:b0:449:f79a:e762 with SMTP id
+ i22-20020a056512225600b00449f79ae762mr1357073lfu.261.1647512602353; Thu, 17
+ Mar 2022 03:23:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3AeFxmP0HGbN94e3"
-Content-Disposition: inline
-In-Reply-To: <20220316192010.19001-6-rdunlap@infradead.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <1647235924-15572-1-git-send-email-vincent.sunplus@gmail.com>
+ <1647235924-15572-3-git-send-email-vincent.sunplus@gmail.com> <7d560277-95e2-070c-e603-30f00dea7f51@canonical.com>
+In-Reply-To: <7d560277-95e2-070c-e603-30f00dea7f51@canonical.com>
+From:   =?UTF-8?B?5pa96YyV6bS7?= <vincent.sunplus@gmail.com>
+Date:   Thu, 17 Mar 2022 18:24:33 +0800
+Message-ID: <CAPvp3RhOs5y2XBYEdY31f5rc9yP5o-x_2KB2=umhL7VdvGXYTw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] dt-bindings: usb: Add bindings doc for Sunplus USB
+ HOST OHCI driver
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, stern@rowland.harvard.edu,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, wells.lu@sunplus.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi, Krzysztof
 
---3AeFxmP0HGbN94e3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> =E6=96=BC 2022=E5=
+=B9=B43=E6=9C=8815=E6=97=A5
+=E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=8812:42=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On 14/03/2022 06:32, Vincent Shih wrote:
+> > Add bindings doc for Sunplus USB HOST OHCI driver
+> >
+> > Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
+> > ---
+> >  .../bindings/usb/sunplus,sp7021-usb-ohci.yaml      | 69 ++++++++++++++=
+++++++++
+> >  MAINTAINERS                                        |  1 +
+> >  2 files changed, 70 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/sunplus,sp702=
+1-usb-ohci.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-o=
+hci.yaml b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.ya=
+ml
+> > new file mode 100644
+> > index 0000000..7583b68
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.yam=
+l
+> > @@ -0,0 +1,69 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +# Copyright (C) Sunplus Co., Ltd. 2021
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/sunplus,sp7021-usb-ohci.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+>
+> Looks good. Few minor nitpicks:
+>
+> > +title: Sunplus SP7021 OHCI Controller Device Tree Bindings
+>
+> Remove "Device Tree Bindings" words here. Title is about hardware.
+>
 
-On Wed, Mar 16, 2022 at 12:20:06PM -0700, Randy Dunlap wrote:
-> Eliminate anonymous module_init() and module_exit(), which can lead to
-> confusion or ambiguity when reading System.map, crashes/oops/bugs,
-> or an initcall_debug log.
->=20
-> Give each of these init and exit functions unique driver-specific
-> names to eliminate the anonymous names.
->=20
-> Example 1: (System.map)
->  ffffffff832fc78c t init
->  ffffffff832fc79e t init
->  ffffffff832fc8f8 t init
->=20
-> Example 2: (initcall_debug log)
->  calling  init+0x0/0x12 @ 1
->  initcall init+0x0/0x12 returned 0 after 15 usecs
->  calling  init+0x0/0x60 @ 1
->  initcall init+0x0/0x60 returned 0 after 2 usecs
->  calling  init+0x0/0x9a @ 1
->  initcall init+0x0/0x9a returned 0 after 74 usecs
->=20
-> Fixes: 4fe74b1cb051 ("[SCSI] virtio-scsi: SCSI driver for QEMU based virt=
-ual machines")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: "Michael S. Tsirkin" <mst@redhat.com>
-> Cc: Jason Wang <jasowang@redhat.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Stefan Hajnoczi <stefanha@redhat.com>
-> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-> Cc: linux-scsi@vger.kernel.org
-> Cc: virtualization@lists.linux-foundation.org
-> ---
->  drivers/scsi/virtio_scsi.c |    8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> --- lnx-517-rc8.orig/drivers/scsi/virtio_scsi.c
-> +++ lnx-517-rc8/drivers/scsi/virtio_scsi.c
-> @@ -988,7 +988,7 @@ static struct virtio_driver virtio_scsi_
->  	.remove =3D virtscsi_remove,
->  };
-> =20
-> -static int __init init(void)
-> +static int __init virtio_scsi_init(void)
->  {
->  	int ret =3D -ENOMEM;
-> =20
-> @@ -1020,14 +1020,14 @@ error:
->  	return ret;
->  }
-> =20
-> -static void __exit fini(void)
-> +static void __exit virtio_scsi_fini(void)
->  {
->  	unregister_virtio_driver(&virtio_scsi_driver);
->  	mempool_destroy(virtscsi_cmd_pool);
->  	kmem_cache_destroy(virtscsi_cmd_cache);
->  }
-> -module_init(init);
-> -module_exit(fini);
-> +module_init(virtio_scsi_init);
-> +module_exit(virtio_scsi_fini);
-> =20
->  MODULE_DEVICE_TABLE(virtio, id_table);
->  MODULE_DESCRIPTION("Virtio SCSI HBA driver");
->=20
+Yes, I will remove it.
 
-Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
+> > +
+> > +allOf:
+> > +  - $ref: usb-hcd.yaml#
+>
+> Put entire "allOf:" just before "properties:".
 
---3AeFxmP0HGbN94e3
-Content-Type: application/pgp-signature; name="signature.asc"
+Yes, I will modify it.
 
------BEGIN PGP SIGNATURE-----
+>
+> > +
+> > +maintainers:
+> > +  - Vincent Shih <vincent.sunplus@gmail.com>
+> > +
+> > +description:
+> > +  Sunplus SP7021 USB HOST IP is a USB2.0 Host Controller. It supports =
+both
+> > +  Enhanced Host Controller Interface (EHCI) and Open Host Controller I=
+nterface
+> > +  (OHCI).
+> > +
+> > +  It supports 32-bits address bus and 64bit data bus interface, compli=
+ant
+> > +  to AMBA AXI interface for data transfer.
+> > +
+> > +  It supports 32-bits address and data bus interface, compliant to AMB=
+A
+> > +  AHB interface for register configurations.
+> > +
+> > +  It supports 32-bits address and data bus interface, compliant to AMB=
+A
+> > +  AXI interface for register alternative configurations.
+> > +
+> > +  The UTM Interface block generates PHY control signals, compliant to
+> > +  USB2.0 Transceiver Macrocell Interface Specification Revision 1.0.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: sunplus,sp7021-usb-ohci
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+>
+> You might need here phys. Are you sure you do not need to configure the
+> phy for OHCI? You should not assume it would be configured by other drive=
+r.
+>
 
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmIy9VQACgkQnKSrs4Gr
-c8geUQgAw2TOHcSEnWK4BJz/IELyWnu6TzVbAIIgDLtl/bUwEsgSwAljdB7zw8K/
-6MBcR6ner6oRCLk6Vx0ltNqrAeaxRZOAPqnj1uBP+FZ13in/KYZNz4XkdVZpRbDj
-Kqgko1egvrgmbZlvwbRA15UnNntchizS8VfXd45jyGUFLD/zl1JvIKGDVU31vt7i
-ZLPUWxMdPG2LwGpgBmTEQnX9LQbK0/d2+f8AEnMAzn1SmIKp8ZgCTYwQrpuD/1xU
-eqYoCjQVhNAk7kwkL3XeL/1m0d3b+UVvNRIGaEQBo2Ia8ZJcub7kua6KFb3wfYyK
-AQM+SWYvzoTl9ws3BUL4BqsEgEItBA==
-=iao2
------END PGP SIGNATURE-----
+Yes, OHCI driver does not need to configure phy according to the
+suggestion of our RD.
+The default status of phy after power-on is good enough for OHCI.
 
---3AeFxmP0HGbN94e3--
+> Best regards,
+> Krzysztof
 
+Thanks for your review.
