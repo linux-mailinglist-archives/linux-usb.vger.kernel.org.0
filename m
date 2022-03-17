@@ -2,124 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104064DBCB3
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 02:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC7C4DBD18
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 03:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350601AbiCQB63 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Mar 2022 21:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
+        id S1358461AbiCQCkX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Mar 2022 22:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232966AbiCQB62 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 21:58:28 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891B11CB1B;
-        Wed, 16 Mar 2022 18:57:13 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id q5so5420913ljb.11;
-        Wed, 16 Mar 2022 18:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=D2eRtDhUiRlh6LC4tNmroWlfl0w9KefZzF7QC113Ymw=;
-        b=HWHhI+tJQb7NceqGVdfZf3qv6HHsoD0DK8KH+CJhB6W4ZWMx0h+SDyEEwnL25LMVQg
-         zKpt0ilsFTJWMEn+YotbBv+CHmhm5wz9RJm+gBH3YhHI/sHYQXOCtql1zNHK16BwRv2P
-         sGc0l127JfS/+cMODtL4iRAzr56VdQX3AYGKDR/BmEsAQPDNuYKFh+B1i0a2Px4TICyD
-         OWROAcrc5KqNBGAXvwAhOqXYkRgxfVHMf+b+Z1cYZBFcpkRErF0rm1jhR9xPhKPFUnbW
-         0XJsyPajRCCHhkCPbcMA0M0GcAvaVRxYsfyiDLT9zqaKO3jUS9WTDeci37Hs2h244u1Z
-         /FdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D2eRtDhUiRlh6LC4tNmroWlfl0w9KefZzF7QC113Ymw=;
-        b=PWlxqGLaegudeSlUyEronYsKHl3U0xDk79vXeZFovlK8kiB4MWeABDOT0C8DrB5za5
-         fQk9eODxH6cQyPeiOS2plK3kvWAe9c8m99O1wolgLRG/TLq8pzDuR1pMvh5O4ZPQ+vtl
-         z4H3xTlMcudd3nhfJY9jTPvrKvfozLoNf7E53/D+V76sAT9/DkwZgRzVD1WxN2snq+mB
-         fzszcb9RLugd0QFzmh0B1D5ZhPRbWCjg1BA/4JKZ4XjEU7x7sjRDhbPB9Ed1t2ip6rQo
-         GNqtebi79d8AeLeizIOEdNf0gcT0RHU5zvVziQ88qoHUaybyhYWI3xbICUlhqbnx4B9r
-         Fiog==
-X-Gm-Message-State: AOAM532f7KKR8TnCb7txfbfIDKaFwBuNZzwhEWHT+PUo+ftlOKarolbS
-        qYwWNpaMYb1YEf3cDvb77BBkVSU5TLCopR+84L0=
-X-Google-Smtp-Source: ABdhPJyFlkiIFXp5hQL4DLC4LGWzR86G2RzWAwiNyNiA38WnKp4DUP+0KDCKDRtO1/T4VA2hZDiQIlMOygIkkzfVeKY=
-X-Received: by 2002:a2e:9d86:0:b0:247:da0e:7c59 with SMTP id
- c6-20020a2e9d86000000b00247da0e7c59mr1443340ljj.127.1647482231736; Wed, 16
- Mar 2022 18:57:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
-In-Reply-To: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Thu, 17 Mar 2022 09:56:57 +0800
-Message-ID: <CAL411-pthKbSuUEjFPDJtRK=nWApRnJkPVH0C+qaqNRyf0u5yg@mail.gmail.com>
-Subject: Re: [PATCH] USB: Fix xhci ERDP update issue
-To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-Cc:     mathias.nyman@intel.com,
+        with ESMTP id S1358444AbiCQCkV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Mar 2022 22:40:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F14A1FCF0;
+        Wed, 16 Mar 2022 19:39:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F001BB81DD5;
+        Thu, 17 Mar 2022 02:39:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71A07C340F0;
+        Thu, 17 Mar 2022 02:38:57 +0000 (UTC)
+Date:   Wed, 16 Mar 2022 22:38:55 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        USB list <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, CobeChen@zhaoxin.com,
-        TimGuo@zhaoxin.com, tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Eli Cohen <eli@mellanox.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
+        Joachim Fritschi <jfritschi@freenet.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org
+Subject: Re: [PATCH 9/9] testmmiotrace: eliminate anonymous module_init &
+ module_exit
+Message-ID: <20220316223855.5c31ae25@gandalf.local.home>
+In-Reply-To: <20220316192010.19001-10-rdunlap@infradead.org>
+References: <20220316192010.19001-1-rdunlap@infradead.org>
+        <20220316192010.19001-10-rdunlap@infradead.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 1:30 AM WeitaoWang-oc@zhaoxin.com
-<WeitaoWang-oc@zhaoxin.com> wrote:
->
-> On some situations, software handles TRB events slower than adding TRBs,
-> xhci_irq will not exit until all events are handled. If xhci_irq just
-> handles 256 TRBs and exit, the temp variable(event_ring_deq) driver
-> records in xhci irq is equal to driver current dequeue pointer. It will
-> cause driver not update ERDP and software dequeue pointer lost sync with
-> ERDP. On the next xhci_irq, the event ring is full but driver will not
-> update ERDP as software dequeue pointer is equal to ERDP.
->
-> [  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
-> [  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7
-> inflight: CMD OUT
-> [  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78
-> 00 00 08 00
-> [  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host
-> not responding to stop endpoint command.
-> [  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
-> [  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not
-> responding, assume dead
-> [  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6
-> inflight: CMD
-> [  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8
-> 00 00 08 00
-> [  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5
-> inflight: CMD
->
-> Fixed this issue by update software record temp variable when handles
-> 128 TRB events.
->
-> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+On Wed, 16 Mar 2022 12:20:10 -0700
+Randy Dunlap <rdunlap@infradead.org> wrote:
 
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
+> Eliminate anonymous module_init() and module_exit(), which can lead to
+> confusion or ambiguity when reading System.map, crashes/oops/bugs,
+> or an initcall_debug log.
+> 
+> Give each of these init and exit functions unique driver-specific
+> names to eliminate the anonymous names.
+> 
+> Example 1: (System.map)
+>  ffffffff832fc78c t init
+>  ffffffff832fc79e t init
+>  ffffffff832fc8f8 t init
+> 
+> Example 2: (initcall_debug log)
+>  calling  init+0x0/0x12 @ 1
+>  initcall init+0x0/0x12 returned 0 after 15 usecs
+>  calling  init+0x0/0x60 @ 1
+>  initcall init+0x0/0x60 returned 0 after 2 usecs
+>  calling  init+0x0/0x9a @ 1
+>  initcall init+0x0/0x9a returned 0 after 74 usecs
+> 
+> Fixes: 8b7d89d02ef3 ("x86: mmiotrace - trace memory mapped IO")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
 
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- Steve
+
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: Karol Herbst <karolherbst@gmail.com>
+> Cc: Pekka Paalanen <ppaalanen@gmail.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: nouveau@lists.freedesktop.org
+> Cc: x86@kernel.org
 > ---
->   drivers/usb/host/xhci-ring.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index d0b6806..f970799 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -3141,6 +3141,7 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
->                  if (event_loop++ < TRBS_PER_SEGMENT / 2)
->                          continue;
->                  xhci_update_erst_dequeue(xhci, event_ring_deq);
-> +               event_ring_deq = xhci->event_ring->dequeue;
->
->                  /* ring is half-full, force isoc trbs to interrupt more
-> often */
->                  if (xhci->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
-> --
-> 2.7.4
+>  arch/x86/mm/testmmiotrace.c |    8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> --- lnx-517-rc8.orig/arch/x86/mm/testmmiotrace.c
+> +++ lnx-517-rc8/arch/x86/mm/testmmiotrace.c
+> @@ -113,7 +113,7 @@ static void do_test_bulk_ioremapping(voi
+>  	synchronize_rcu();
+>  }
+>  
+> -static int __init init(void)
+> +static int __init testmmiotrace_init(void)
+>  {
+>  	unsigned long size = (read_far) ? (8 << 20) : (16 << 10);
+>  	int ret = security_locked_down(LOCKDOWN_MMIOTRACE);
+> @@ -136,11 +136,11 @@ static int __init init(void)
+>  	return 0;
+>  }
+>  
+> -static void __exit cleanup(void)
+> +static void __exit testmmiotrace_cleanup(void)
+>  {
+>  	pr_debug("unloaded.\n");
+>  }
+>  
+> -module_init(init);
+> -module_exit(cleanup);
+> +module_init(testmmiotrace_init);
+> +module_exit(testmmiotrace_cleanup);
+>  MODULE_LICENSE("GPL");
+
