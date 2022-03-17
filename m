@@ -2,179 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1E54DC3E5
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 11:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B20844DC440
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 11:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232550AbiCQKYn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Mar 2022 06:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
+        id S232738AbiCQKvK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Mar 2022 06:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbiCQKYl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Mar 2022 06:24:41 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D013E0CB;
-        Thu, 17 Mar 2022 03:23:24 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id s29so8148807lfb.13;
-        Thu, 17 Mar 2022 03:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=q997/aim32qAN844XtyF1EgVZGYQu0iTF+26V6EakWA=;
-        b=dCYZRbOJJduJbzFTmXHHEDdLPUTx6ttR6pFI89o//ywj4hPEtjACrI+j95gZRrm/UQ
-         nyZ07FdMf0uNwL05rvb/qgTcwvRK71SEP+LCmH1J1NH7n6n4yw1CkF6JDptYFqg2oXIU
-         gQqfoYUIpeMhm2jO2eWRHnV3PIBUq4cYAyqJuZz6HEok/dPZttjRj62Vuuo4W4XkcKZh
-         bf4s5hNRBwWB5/tPBBozYMxxfhE/zx8Uh8ousphxZ9sTaYsMI2BLZy2Q0RTSjFG3uaxQ
-         7WwwLbJvygjQqaej6K7B/v4QAxvJMWiSNKWi5gl7sTt0dy264mY0QaxOfm2FlPQsEl/r
-         9KfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=q997/aim32qAN844XtyF1EgVZGYQu0iTF+26V6EakWA=;
-        b=VlmuMT6tYhvKOTUxJLaEp3ZUstC4+/yxrjmx5gIa/VAAEYTveTN+nRN1Ji3gGIswnF
-         G6g9dSU5F+re5jFBY38JZXoMqAEeEazb3gVZlwkxW8n5+0dGM0vtQRT2riRhhKgkwFWN
-         Rp1QOl3VXcL1qYXc8umbECirgJXvuGiSsVVDcgKATdsg4lwEJsD7vjauxKKkYNBpHRhw
-         rDBd6o5XsOWU5/je28k0+GKJxMXgIqJ6ppQIsuJtx0J/B4DRi+nCcTF8cZavcZiUD9UP
-         n9TVHRgsx+STdGMVqcWOWeiMWuryepJmHad4IdC0+i02/l+LhvbwKgCMkgBbRQLQt7Oj
-         9DYw==
-X-Gm-Message-State: AOAM530azvhtsbkbsa8i1NPBrJV6ZxpIg64dCXMWTe+07HivNLr4ctZS
-        owVnSoB6uEibyX8obU/5/qQe6w7g8eOA2JNpo40=
-X-Google-Smtp-Source: ABdhPJx6Yw5sqc3oHgOC+M1OOphrf/GwfLoaeL01BvrlD7R30s1AwRtOdfgYh4FrjRTymS/KC7T98VTRHMz7/o96Mo4=
-X-Received: by 2002:a05:6512:2256:b0:449:f79a:e762 with SMTP id
- i22-20020a056512225600b00449f79ae762mr1357073lfu.261.1647512602353; Thu, 17
- Mar 2022 03:23:22 -0700 (PDT)
+        with ESMTP id S232739AbiCQKvJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Mar 2022 06:51:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22398171EEC
+        for <linux-usb@vger.kernel.org>; Thu, 17 Mar 2022 03:49:53 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUnhW-0007sC-RB; Thu, 17 Mar 2022 11:49:50 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUnhX-001EW6-8l; Thu, 17 Mar 2022 11:49:49 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUnhV-009kLa-4d; Thu, 17 Mar 2022 11:49:49 +0100
+Date:   Thu, 17 Mar 2022 11:49:49 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: refcount underflow on stm32mp1
+Message-ID: <20220317104949.ln75wh2a22vekwj2@pengutronix.de>
+References: <20220316164724.uic3azim4mhp6jvl@pengutronix.de>
+ <YjIZuY2qXGD/Toqf@kroah.com>
+ <20220316214437.iawmafmard7sed5w@pengutronix.de>
 MIME-Version: 1.0
-References: <1647235924-15572-1-git-send-email-vincent.sunplus@gmail.com>
- <1647235924-15572-3-git-send-email-vincent.sunplus@gmail.com> <7d560277-95e2-070c-e603-30f00dea7f51@canonical.com>
-In-Reply-To: <7d560277-95e2-070c-e603-30f00dea7f51@canonical.com>
-From:   =?UTF-8?B?5pa96YyV6bS7?= <vincent.sunplus@gmail.com>
-Date:   Thu, 17 Mar 2022 18:24:33 +0800
-Message-ID: <CAPvp3RhOs5y2XBYEdY31f5rc9yP5o-x_2KB2=umhL7VdvGXYTw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] dt-bindings: usb: Add bindings doc for Sunplus USB
- HOST OHCI driver
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, stern@rowland.harvard.edu,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, wells.lu@sunplus.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="b57payncrjjc627a"
+Content-Disposition: inline
+In-Reply-To: <20220316214437.iawmafmard7sed5w@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, Krzysztof
 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> =E6=96=BC 2022=E5=
-=B9=B43=E6=9C=8815=E6=97=A5
-=E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=8812:42=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On 14/03/2022 06:32, Vincent Shih wrote:
-> > Add bindings doc for Sunplus USB HOST OHCI driver
-> >
-> > Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
-> > ---
-> >  .../bindings/usb/sunplus,sp7021-usb-ohci.yaml      | 69 ++++++++++++++=
-++++++++
-> >  MAINTAINERS                                        |  1 +
-> >  2 files changed, 70 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/sunplus,sp702=
-1-usb-ohci.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-o=
-hci.yaml b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.ya=
-ml
-> > new file mode 100644
-> > index 0000000..7583b68
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.yam=
-l
-> > @@ -0,0 +1,69 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +# Copyright (C) Sunplus Co., Ltd. 2021
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/usb/sunplus,sp7021-usb-ohci.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
->
-> Looks good. Few minor nitpicks:
->
-> > +title: Sunplus SP7021 OHCI Controller Device Tree Bindings
->
-> Remove "Device Tree Bindings" words here. Title is about hardware.
->
+--b57payncrjjc627a
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes, I will remove it.
+On Wed, Mar 16, 2022 at 10:44:37PM +0100, Uwe Kleine-K=F6nig wrote:
+> Hello Greg,
+>=20
+> On Wed, Mar 16, 2022 at 06:09:13PM +0100, Greg Kroah-Hartman wrote:
+> > On Wed, Mar 16, 2022 at 05:47:24PM +0100, Uwe Kleine-K=F6nig wrote:
+> > > on an stm32mp157a based machine I encounter the following problem dur=
+ing
+> > > boot:
+> > >=20
+> > > [    2.031752] using random self ethernet address
+> > > [    2.034869] using random host ethernet address
+> > > [    2.039329] using random self ethernet address
+> > > [    2.043986] using random host ethernet address
+> > > [    2.049186] usb0: HOST MAC 6a:74:a8:25:a5:f9
+> > > [    2.052482] usb0: MAC f6:83:b5:19:02:4f
+> > > [    2.056631] Mass Storage Function, version: 2009/09/11
+> > > [    2.061408] LUN: removable file: (no medium)
+> > > [    2.065652] no file given for LUN0
+> > > [    2.111423] g_multi 49000000.usb-otg: failed to start g_multi: -22
+> > > [    2.116359] ------------[ cut here ]------------
+> > > [    2.120762] WARNING: CPU: 0 PID: 7 at lib/refcount.c:28 dwc2_hsotg=
+_remove+0x1c/0x2c
+> > > [    2.128541] refcount_t: underflow; use-after-free.
+> > > [    2.133214] Modules linked in:
+> > > [    2.136229] CPU: 0 PID: 7 Comm: kworker/u4:0 Not tainted 5.17.0-rc=
+8-dirty #10
+> > > [    2.143351] Hardware name: STM32 (Device Tree Support)
+> > > [    2.148482] Workqueue: events_unbound deferred_probe_work_func
+> > > [    2.154314]  unwind_backtrace from show_stack+0x18/0x1c
+> > > [    2.159515]  show_stack from dump_stack_lvl+0x40/0x4c
+> > > [    2.164555]  dump_stack_lvl from __warn+0xd8/0x17c
+> > > [    2.169334]  __warn from warn_slowpath_fmt+0x98/0xc8
+> > > [    2.174287]  warn_slowpath_fmt from dwc2_hsotg_remove+0x1c/0x2c
+> > > [    2.180196]  dwc2_hsotg_remove from dwc2_driver_probe+0x59c/0x790
+> > > [    2.186278]  dwc2_driver_probe from platform_probe+0x64/0xc0
+> > > [    2.191926]  platform_probe from really_probe+0x1ac/0x470
+> > > [    2.197312]  really_probe from __driver_probe_device+0xa8/0x20c
+> > > [    2.203220]  __driver_probe_device from driver_probe_device+0x3c/0=
+xcc
+> > > [    2.209650]  driver_probe_device from __device_attach_driver+0xac/=
+0x124
+> > > [    2.216254]  __device_attach_driver from bus_for_each_drv+0x84/0xc8
+> > > [    2.222511]  bus_for_each_drv from __device_attach+0xcc/0x1d4
+> > > [    2.228245]  __device_attach from bus_probe_device+0x8c/0x94
+> > > [    2.233894]  bus_probe_device from deferred_probe_work_func+0x9c/0=
+xdc
+> > > [    2.240324]  deferred_probe_work_func from process_one_work+0x210/=
+0x584
+> > > [    2.246929]  process_one_work from worker_thread+0x214/0x544
+> > > [    2.252576]  worker_thread from kthread+0xf0/0x120
+> > > [    2.257356]  kthread from ret_from_fork+0x14/0x2c
+> > > [    2.262047] Exception stack(0xc190ffb0 to 0xc190fff8)
+> > > [    2.267089] ffa0:                                     00000000 000=
+00000 00000000 00000000
+> > > [    2.275260] ffc0: 00000000 00000000 00000000 00000000 00000000 000=
+00000 00000000 00000000
+> > > [    2.283426] ffe0: 00000000 00000000 00000000 00000000 00000013 000=
+00000
+> > > [    2.290196] ---[ end trace 0000000000000000 ]---
+> > >=20
+> > > This happens on v5.15 and on v5.17-rc8.
+> > >=20
+> > > I didn't try to debug this further, just wanted to let you know ...
+> >=20
+> > So it's always been an issue?
+> >=20
+> > git bisect?
+>=20
+> I don't believe this is the easiest approach to tackle that problem.
+> Support for stm32mp157a was added around v5.5, but I failed to get this
+> version up on my machine. v5.15 is the oldest kernel I had running on
+> that machine.
+>=20
+> The problem is that after usb_add_gadget_udc() failed in
+> dwc2_driver_probe(), dwc2_hsotg_remove() -> usb_del_gadget_udc() ->
+> usb_put_gadget() -> put_device() results in that underflow.
+>=20
+> With that information I'd expect that someone understanding how
+> reference counting works with usb gadgets should be able to come up with
+> a fix.
 
-> > +
-> > +allOf:
-> > +  - $ref: usb-hcd.yaml#
->
-> Put entire "allOf:" just before "properties:".
+The problem is that usb_add_gadget_udc() failing already calls
+usb_put_gadget() and so dwc2_hsotg_remove() must not call it again when
+called from dwc2_driver_probe.
 
-Yes, I will modify it.
+I don't understand that udc stuff enough to be confident that a patch I
+create for that will do the right thing.
 
->
-> > +
-> > +maintainers:
-> > +  - Vincent Shih <vincent.sunplus@gmail.com>
-> > +
-> > +description:
-> > +  Sunplus SP7021 USB HOST IP is a USB2.0 Host Controller. It supports =
-both
-> > +  Enhanced Host Controller Interface (EHCI) and Open Host Controller I=
-nterface
-> > +  (OHCI).
-> > +
-> > +  It supports 32-bits address bus and 64bit data bus interface, compli=
-ant
-> > +  to AMBA AXI interface for data transfer.
-> > +
-> > +  It supports 32-bits address and data bus interface, compliant to AMB=
-A
-> > +  AHB interface for register configurations.
-> > +
-> > +  It supports 32-bits address and data bus interface, compliant to AMB=
-A
-> > +  AXI interface for register alternative configurations.
-> > +
-> > +  The UTM Interface block generates PHY control signals, compliant to
-> > +  USB2.0 Transceiver Macrocell Interface Specification Revision 1.0.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: sunplus,sp7021-usb-ohci
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +
-> > +  resets:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
->
-> You might need here phys. Are you sure you do not need to configure the
-> phy for OHCI? You should not assume it would be configured by other drive=
-r.
->
+Best regards
+Uwe
 
-Yes, OHCI driver does not need to configure phy according to the
-suggestion of our RD.
-The default status of phy after power-on is good enough for OHCI.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-> Best regards,
-> Krzysztof
+--b57payncrjjc627a
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks for your review.
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIzEkoACgkQwfwUeK3K
+7AltWAf/d2oybMnJAtV1sm4LLGd/poOW+zZjDu0cZlpHLTuybI50ZV/KZtaXifYz
+XFrstUBSVH4+KE72lmasjLLAGKQZPAoKUoRmNJSgRknVoO94TZsrN11im7vhxJBc
+KXndH5Nomi8JwAC8DUEvma59N0r+H5LvKBeFuOaLyZRxCyo8tcQwErepUG7umfjJ
+mVGRJNVAZKaX/Dc6aDM7xjsHVHT8Bl9U2NfNYUFwQDj0oDf4HJ6LIOne1CzZzgJ3
+S9KYOHoGuuHGjbFs9oQA084ixZGiv3vPpAjgVDR8KoSLvK7VIxauo4BYIAkD3RDL
+RRnVJXwinBPQJvRY6Eptxwb0OSpovQ==
+=8tkL
+-----END PGP SIGNATURE-----
+
+--b57payncrjjc627a--
