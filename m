@@ -2,132 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657C84DC0A8
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 09:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 847344DC1AA
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Mar 2022 09:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbiCQILE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Mar 2022 04:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
+        id S231437AbiCQIpw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Mar 2022 04:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiCQILD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Mar 2022 04:11:03 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1992DD2;
-        Thu, 17 Mar 2022 01:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647504587; x=1679040587;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i5uAxe0PmqtwfYW1OGC8/aQYpXunMY6vhmtGfo43Uek=;
-  b=T2cnt2cxhMJB1+71/KOmiSZvc9YdCHVP1VLQrz6FgTLvtaP+uWsUVzIx
-   O0il4Xl1hL5FKeASOMDLFaCfPMqZ3Zs3+bOVCgQbvyUO4N1QLCt2jJWux
-   A7rzguSfj4zrMrRapJWibiey37BhExSVgA2xCfB5EmG2ECXs92evpwl3c
-   D3DoWHQJDMIRpS94VFbQ2n4ag32ayvW43bC9QmOb0jsR/ykhUx2L5vy6J
-   5YOwfiz7xD5hJhjMEtdZ1v5bxpGeWO4aEq4r3j5DOk529Pmj4DbuzH3fx
-   ZI+7Ec47+Pylz3XI1Pb4vi6LD8/1QR2gFznYxrIsfCYECI5xP1mHtC7Y4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="244265647"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="244265647"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 01:09:47 -0700
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="516675048"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 01:09:42 -0700
-Received: by lahna (sSMTP sendmail emulation); Thu, 17 Mar 2022 10:08:30 +0200
-Date:   Thu, 17 Mar 2022 10:08:30 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "michael.jamet@intel.com" <michael.jamet@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
-        "hch@lst.de" <hch@lst.de>
-Subject: Re: [PATCH] thunderbolt: Stop using iommu_present()
-Message-ID: <YjLsfhUmhjOiy6G8@lahna>
-References: <YjHb1xCx4UAmUjrR@lahna>
- <16852eb2-98bb-6337-741f-8c2f06418b08@arm.com>
- <YjIb+XOGZbWKpQDa@lahna>
- <BL1PR12MB515762E68F3A48A97EB2DC89E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
- <YjIgQfmcw6fydkXd@lahna>
- <3bb6a2f8-005b-587a-7d7a-7a9a5391ec05@arm.com>
- <BL1PR12MB5157DA58C3BDAFB5736676F6E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
- <5ef1c30a-1740-00cc-ad16-4b1c1b02fca4@arm.com>
- <BL1PR12MB5157380CD6FD9EB83E76CBB0E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
- <0709e994-1c8b-56fe-7743-8fdbf3ba748b@arm.com>
+        with ESMTP id S231444AbiCQIpt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Mar 2022 04:45:49 -0400
+Received: from mail.olerise.pl (mail.olerise.pl [46.183.184.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589231C947D
+        for <linux-usb@vger.kernel.org>; Thu, 17 Mar 2022 01:44:31 -0700 (PDT)
+Received: by mail.olerise.pl (Postfix, from userid 1001)
+        id BF99146054; Thu, 17 Mar 2022 09:41:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=olerise.pl; s=mail;
+        t=1647506604; bh=ZNYiuZLXlxCdAPtstEG/gwJieB5RBwA/cHj1SZ3Mpl0=;
+        h=Date:From:To:Subject:From;
+        b=Sq1GNeoXbS3KJNCiLAefsD+P1Sv4M2VkH+MV0pPnIBiH6mWiAGEdzKNHa7NmV+clJ
+         GX2ha/8yQkLiqVR3s37X0NgDpOv6EG+RNUXMGVo7mRX2dG9fM3kBqcPXGsCHLiUjNj
+         JjuHlpfAGU2AdUWkttplG8ANt7LDbVsrb3m4wrTNqKIBsoAIRRtZvUQsQKIlTsqdkc
+         su8g6Br7tEtMGCU7ir6t0rNJmELNHgKFAcZgJxmZH2WiYYLFA6GHlR+wWbF4y1B+Ee
+         3/KyQg9kv3KW17IfxpPKEMjnuozqrJT6NI90nCke+B3VckvgH9Hai86iqne1pno7nC
+         qh9OL5j1BJPnA==
+Received: by mail.olerise.pl for <linux-usb@vger.kernel.org>; Thu, 17 Mar 2022 08:40:21 GMT
+Message-ID: <20220317084500-0.1.2d.rugq.0.4p1wbenn9m@olerise.pl>
+Date:   Thu, 17 Mar 2022 08:40:21 GMT
+From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= <mikolaj.rudzik@olerise.pl>
+To:     <linux-usb@vger.kernel.org>
+Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
+X-Mailer: mail.olerise.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0709e994-1c8b-56fe-7743-8fdbf3ba748b@arm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_BL,
+        RCVD_IN_MSPIKE_L3,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Robin,
+Dzie=C5=84 dobry,
 
-On Wed, Mar 16, 2022 at 07:17:57PM +0000, Robin Murphy wrote:
-> The feeling I'm getting from all this is that if we've got as far as
-> iommu_dma_protection_show() then it's really too late to meaningfully
-> mitigate bad firmware.
+chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
+skania nowych zlece=C5=84 ze strony www.
 
-Note, these are requirements from Microsoft in order for the system to
-use the "Kernel DMA protection". Because of this, likelyhood of "bad
-firmware" should be quite low since these systems ship with Windows
-installed so they should get at least some soft of validation that this
-actually works.
+Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
+, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
+=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
+jonowania strony w Google.
 
-> We should be able to detect missing
-> untrusted/external-facing properties as early as nhi_probe(), and if we
-> could go into "continue at your own risk" mode right then *before* anything
-> else happens, it all becomes a lot easier to reason about.
+Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
 
-I think what we want is that the DMAR opt-in bit is set in the ACPI
-tables and that we know the full IOMMU translation is happening for the
-devices behind "external facing ports". If that's not the case the
-iommu_dma_protection_show() should return 0 meaning the userspace can
-ask the user whether the connected device is allowed to use DMA (e.g
-PCIe is tunneled or not).
 
-We do check for the DMAR bit in the Intel IOMMU code and we also do
-check that there actually are PCIe ports marked external facing but we
-could issue warning there if that's not the case. Similarly if the user
-explicitly disabled the IOMMU translation. This can be done inside a new
-IOMMU API that does something like the below pseudo-code:
-
-#if IOMMU_ENABLED
-bool iommu_dma_protected(struct device *dev)
-{
-	if (dmar_platform_optin() /* or the AMD equivalent */) {
-		if (!iommu_present(...)) /* whatever is needed to check that the full translation is enabled */
-			dev_warn(dev, "IOMMU protection disabled!");
-		/*
-		 * Look for the external facing ports. Should be at
-		 * least 1 or issue warning.
-		 */
-		 ...
-
-		return true;
-	}
-
-	return false;
-}
-#else
-static inline bool iommu_dma_protected(struct device *dev)
-{
-	return false;
-}
-#endif
-
-Then we can make iommu_dma_protection_show() to call this function.
+Pozdrawiam
+Miko=C5=82aj Rudzik
