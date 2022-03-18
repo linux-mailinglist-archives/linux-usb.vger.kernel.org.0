@@ -2,90 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F55E4DDC31
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Mar 2022 15:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F5F4DDCA0
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Mar 2022 16:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233643AbiCROwn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Mar 2022 10:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
+        id S237895AbiCRPSv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Mar 2022 11:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiCROwm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Mar 2022 10:52:42 -0400
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D4F261B;
-        Fri, 18 Mar 2022 07:51:22 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 385E128042B86;
-        Fri, 18 Mar 2022 15:51:21 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 2CB204ADE5; Fri, 18 Mar 2022 15:51:21 +0100 (CET)
-Date:   Fri, 18 Mar 2022 15:51:21 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
-        "michael.jamet@intel.com" <michael.jamet@intel.com>,
-        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH] thunderbolt: Make iommu_dma_protection more accurate
-Message-ID: <20220318145121.GA11127@wunner.de>
-References: <2d01fa50c2650c730b0244929097737918e302e7.1647533152.git.robin.murphy@arm.com>
- <BL1PR12MB515783C0F998169D49D92A55E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
- <BL1PR12MB51573F55B3C2B3922BAAA7F1E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
- <YjRvMk1kcbMwJvx+@lahna>
- <65207fdf-c4ab-5165-dbda-8ab55b51adb7@arm.com>
- <YjSCWaq7Ej/2iJPp@lahna>
- <78fc0426-c22a-ec62-f92b-0019bea5947e@arm.com>
+        with ESMTP id S237893AbiCRPSu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Mar 2022 11:18:50 -0400
+X-Greylist: delayed 1450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Mar 2022 08:17:31 PDT
+Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D141019F200
+        for <linux-usb@vger.kernel.org>; Fri, 18 Mar 2022 08:17:31 -0700 (PDT)
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id A6E39162E3B
+        for <linux-usb@vger.kernel.org>; Fri, 18 Mar 2022 09:53:05 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id VDyTnSrLcRnrrVDyTnuZsZ; Fri, 18 Mar 2022 09:53:05 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=RWX714/jDCCOsaw7lp0A5+LmDt+hl3N9VB86DpnpeYs=; b=WQ7Fnc39x44QGuivKi5K7oCRae
+        2aY4PQj66g3pVUe41yXRgcJES+Duj1AUzbUTV5msWJ/R2HubkBMNKI0CZZtgIqMU4kBmNUT+aLU3L
+        yJVSFsxFIsHJSdYIOo5YBURPMIn1qUuVHOnYmoAb1LOPhR7blVugER+rbuL36Ui38cXSCXFUThXXi
+        ZccEkcDSMUK/1213b+XhZ/1kuKvorwTyGY/c9uxzui9ryWDn+4mSafEkU6ku4EUOTn8xH+4r5Mm0j
+        EDWFQMoq+A56KRkJuFKmr3uaCgbIugLmCazf+7c+nk6tFH2SMdOqHoFIpCFlc6zoQwPV2KMFIJljy
+        h1XQQBtw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54326)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nVDyT-003h93-60; Fri, 18 Mar 2022 14:53:05 +0000
+Message-ID: <1649b585-3030-a8a2-f4e7-91e0bf0eb1a1@roeck-us.net>
+Date:   Fri, 18 Mar 2022 07:53:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <78fc0426-c22a-ec62-f92b-0019bea5947e@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     qianfan <qianfanguijin@163.com>, Bin Liu <b-liu@ti.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <8cea8d54-bd3c-5892-96d3-4d16e07ba457@163.com>
+ <fabca0f0-c901-9cb0-a8ca-974604491d1b@163.com>
+ <309dee6d-8c04-7f4f-c2d5-a7e23445e532@163.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: dev_WARN_ONCE cause gpio-watchdog reset
+In-Reply-To: <309dee6d-8c04-7f4f-c2d5-a7e23445e532@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nVDyT-003h93-60
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54326
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 8
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 02:08:16PM +0000, Robin Murphy wrote:
-> OK, so do we have any realistic options for identifying the correct PCI
-> devices, if USB4 PCIe adapters might be anywhere relative to their
-> associated NHI? Short of maintaining a list of known IDs, the only thought I
-> have left is that if we walk the whole PCI segment looking specifically for
-> hotplug-capable Gen1 ports, any system modern enough to have Thunderbolt is
-> *probably* not going to have any real PCIe Gen1 hotplug slots, so maybe
-> false negatives might be tolerable, but it still feels like a bit of a
-> sketchy heuristic.
+On 3/17/22 23:05, qianfan wrote:
+[ ... ]
 
-The Thunderbolt Device ROM contains the PCI slot number, so you can
-correlate the Thunderbolt switch ports with PCIe downstream ports
-and know exactly where PCIe tunnels are terminated.
+> 
+> So I think it's a bug of MUSB, not caused by dev_WARN_ONCE. But I can't check which stop hrtimer.
+> 
 
-Code is here:
-* thunderbolt: Obtain PCI slot number from DROM
-  https://github.com/l1k/linux/commit/756f7148bc10
-* thunderbolt: Move upstream_port to struct tb
-  https://github.com/l1k/linux/commit/58f16e7dd431
-* thunderbolt: Correlate PCI devices with Thunderbolt ports
-  https://github.com/l1k/linux/commit/f53ea40a7487
+Correct. Look at the code:
 
-I implemented that in 2018, so it won't apply cleanly to current
-mainline.  But I kept forward-porting it on my private branch and
-could push that to GitHub if anyone is interested.
+static void musb_h_tx_flush_fifo(struct musb_hw_ep *ep)
+{
+...
+	int             retries = 1000;
+...
+	while (csr & MUSB_TXCSR_FIFONOTEMPTY) {
+		...
+		if (dev_WARN_ONCE(musb->controller, retries-- < 1,
+                                 "Could not flush host TX%d fifo: csr: %04x\n",
+                                 ep->epnum, csr))
+                         return;
+                 mdelay(1);
+	}
 
-I don't know if this will work out-of-the-box for SoC-integrated
-Thunderbolt controllers.  It was developed with the discrete
-controllers in mind, which was the only thing available back then.
+This is where the one second comes from. The function is called from
+musb_urb_dequeue() which disables interrupts. This forces a hard stall
+of the kernel for a full second.
 
-Thanks,
+There is nothing we can do about that in the watchdog driver.
 
-Lukas
+Guenter
