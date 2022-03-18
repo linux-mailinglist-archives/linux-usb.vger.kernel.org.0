@@ -2,256 +2,225 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC764DD30E
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Mar 2022 03:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE374DD4E1
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Mar 2022 07:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbiCRCZy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Mar 2022 22:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
+        id S232797AbiCRGuj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Mar 2022 02:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbiCRCZw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Mar 2022 22:25:52 -0400
-Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE15D2689BE;
-        Thu, 17 Mar 2022 19:24:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Message-ID:Date:MIME-Version:Subject:From; bh=3Wqr0
-        LmAc+Tu06Mfqf8Q6sxkTtWGgGka/IG01puW8UQ=; b=lQndHPvuGti6urMNgzhK+
-        exaGyZmMrk7uyjIWCsxTTd7wv29W0u0ts8KyaqYFVKoIIBijPeeFY+T1mY9+m7cj
-        afoSUI7xSLvnQYB/C0+i9+gpS1ILzvdZegcEFgWgugIVbtMRwt327RjVWykZ60q6
-        FI4BYvOqzJVbRSbOOFuCL4=
-Received: from [192.168.3.109] (unknown [218.201.129.19])
-        by smtp9 (Coremail) with SMTP id DcCowADnWlec6TNihxSlBg--.1698S2;
-        Fri, 18 Mar 2022 10:08:29 +0800 (CST)
-Message-ID: <fabca0f0-c901-9cb0-a8ca-974604491d1b@163.com>
-Date:   Fri, 18 Mar 2022 10:08:27 +0800
+        with ESMTP id S230046AbiCRGuh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Mar 2022 02:50:37 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66D917586B;
+        Thu, 17 Mar 2022 23:49:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647586158; x=1679122158;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vYf7H+zfZsWDggOzPC1KjFaiFOBNQv1b5Be/sCd1Hl8=;
+  b=emNnLO4Ox0tOJOCCeBN7arfEL/1RgKXC3fxI/ARsW9tfVgqdPz7oeoHY
+   uCIRy3gxgv1KrrMsk/onIl+Ig0e+1MNpg77GI3NOJtbJ/+9SV5PCB9I+/
+   t2uXPMLZHxuzxWVVixkBqxFhJvwMcNwMnC4M3jvEZ3arlT/rLUnyxOSN3
+   AKvoxBUXIYXTJ2DoIxORrCKv20zJbIjaik7BarAVI3uEzehizDHU8TLAB
+   vhFrwjyJaa21Y2TdnAtytP00KcR5l2GyGqGibMeYTt7pfpDRCxDG5dLc2
+   pZr2EFzlaV7zLc975rWzOdmdfakUNCjnNW04fmPUkyWHYIK+4FdtKFhwD
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="239233969"
+X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
+   d="scan'208";a="239233969"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 23:49:18 -0700
+X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
+   d="scan'208";a="499128327"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 23:49:14 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 18 Mar 2022 08:44:51 +0200
+Date:   Fri, 18 Mar 2022 08:44:51 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-pci@vger.kernel.org, mario.limonciello@amd.com
+Subject: Re: [PATCH] thunderbolt: Make iommu_dma_protection more accurate
+Message-ID: <YjQqY/Nq0pgpcAaI@lahna>
+References: <2d01fa50c2650c730b0244929097737918e302e7.1647533152.git.robin.murphy@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: dev_WARN_ONCE cause gpio-watchdog reset
-From:   qianfan <qianfanguijin@163.com>
-To:     Bin Liu <b-liu@ti.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <8cea8d54-bd3c-5892-96d3-4d16e07ba457@163.com>
-In-Reply-To: <8cea8d54-bd3c-5892-96d3-4d16e07ba457@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcCowADnWlec6TNihxSlBg--.1698S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3AF48JryrXr1DtF1DAr47urg_yoWfXFW5pr
-        4Syrn8Crs5Z34Yvw4fK3WUKry8J3y09FnrGryxKr1Du3W3C34UXrZFqryF9ryj9348A347
-        Kr1DKw4qyFWvgw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UBVb9UUUUU=
-X-Originating-IP: [218.201.129.19]
-X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiyh3H7VQHOVkregAAsf
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2d01fa50c2650c730b0244929097737918e302e7.1647533152.git.robin.murphy@arm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Robin,
 
-在 2022/3/18 8:44, qianfan 写道:
-> Hi:
->
-> I have a custom AM3352 board with linux v5.15 support. I had enabled 
-> gpio-watchdog driver and the timeout of gpio-watchdog is 1.6s .
->
-> The system will reboot when AM3352's MUSB driver print warn message: 
-> (next is the log)
->
-> [ 1555.665496] ------------[ cut here ]------------
-> [ 1555.670343] WARNING: CPU: 0 PID: 345 at 
-> drivers/usb/musb/musb_host.c:115 musb_h_tx_flush_fifo+0x11c/0x13c
-> [ 1555.680395] musb-hdrc musb-hdrc.0: Could not flush host TX10 fifo: 
-> csr: 2403
-> [ 1555.687779] Modules linked in:
-> [ 1555.690989] CPU: 0 PID: 345 Comm: kworker/0:1 Not tainted 
-> 5.15.0-00013-g0ccd7df8f5ad #122
-> [ 1555.699560] Hardware name: Generic AM33XX (Flattened Device Tree)
-> [ 1555.705946] Workqueue: usb_hub_wq hub_event
-> [ 1555.710359] [<c0111438>] (unwind_backtrace) from [<c010b9f4>] 
-> (show_stack+0x10/0x14)
-> [ 1555.718497] [<c010b9f4>] (show_stack) from [<c0adc24c>] 
-> (dump_stack_lvl+0x40/0x4c)
-> [ 1555.726453] [<c0adc24c>] (dump_stack_lvl) from [<c0136264>] 
-> (__warn+0xf0/0x104)
-> [ 1555.734126] [<c0136264>] (__warn) from [<c01362ec>] 
-> (warn_slowpath_fmt+0x74/0xbc)
-> [ 1555.741973] [<c01362ec>] (warn_slowpath_fmt) from [<c07e8b40>] 
-> (musb_h_tx_flush_fifo+0x11c/0x13c)
-> [ 1555.751280] [<c07e8b40>] (musb_h_tx_flush_fifo) from [<c07ea024>] 
-> (musb_cleanup_urb+0x128/0x204)
-> [ 1555.760495] [<c07ea024>] (musb_cleanup_urb) from [<c07ea1e4>] 
-> (musb_urb_dequeue+0xe4/0x17c)
-> [ 1555.769253] [<c07ea1e4>] (musb_urb_dequeue) from [<c07c33f4>] 
-> (usb_hcd_flush_endpoint+0x118/0x130)
-> [ 1555.778654] [<c07c33f4>] (usb_hcd_flush_endpoint) from [<c07c66ec>] 
-> (usb_disable_endpoint+0x58/0xa4)
-> [ 1555.788232] [<c07c66ec>] (usb_disable_endpoint) from [<c07c6828>] 
-> (usb_disable_interface+0x3c/0x54)
-> [ 1555.797716] [<c07c6828>] (usb_disable_interface) from [<c07c8f3c>] 
-> (usb_unbind_interface+0x160/0x224)
-> [ 1555.807385] [<c07c8f3c>] (usb_unbind_interface) from [<c06a731c>] 
-> (device_release_driver_internal+0x1d0/0x1d8)
-> [ 1555.817882] [<c06a731c>] (device_release_driver_internal) from 
-> [<c07b062c>] (usbnet_cdc_unbind+0x70/0x78)
-> [ 1555.827926] [<c07b062c>] (usbnet_cdc_unbind) from [<c07b2098>] 
-> (usbnet_disconnect+0x48/0xd8)
-> [ 1555.836780] [<c07b2098>] (usbnet_disconnect) from [<c07c8e40>] 
-> (usb_unbind_interface+0x64/0x224)
-> [ 1555.845993] [<c07c8e40>] (usb_unbind_interface) from [<c06a731c>] 
-> (device_release_driver_internal+0x1d0/0x1d8)
-> [ 1555.856480] [<c06a731c>] (device_release_driver_internal) from 
-> [<c06a5bf4>] (bus_remove_device+0xc8/0xf8)
-> [ 1555.866515] [<c06a5bf4>] (bus_remove_device) from [<c06a0e5c>] 
-> (device_del+0x180/0x404)
-> [ 1555.874909] [<c06a0e5c>] (device_del) from [<c07c68c8>] 
-> (usb_disable_device+0x88/0x130)
-> [ 1555.883300] [<c07c68c8>] (usb_disable_device) from [<c07bd410>] 
-> (usb_disconnect+0xb0/0x234)
-> [ 1555.892057] [<c07bd410>] (usb_disconnect) from [<c07bf968>] 
-> (hub_event+0xf3c/0x1288)
-> [ 1555.900179] [<c07bf968>] (hub_event) from [<c015306c>] 
-> (process_one_work+0x22c/0x55c)
-> [ 1555.908401] [<c015306c>] (process_one_work) from [<c01533c8>] 
-> (worker_thread+0x2c/0x5cc)
-> [ 1555.916889] [<c01533c8>] (worker_thread) from [<c015b028>] 
-> (kthread+0x140/0x168)
-> [ 1555.924652] [<c015b028>] (kthread) from [<c0100150>] 
-> (ret_from_fork+0x14/0x24)
-> [ 1555.932226] Exception stack(0▒
-> U-Boot SPL 2022.01-rc1-00183-gfa5b4e2d19 (Feb 24 2022 - 15:48:38 +0800)
-> Trying to boot from NAND
->
-> Could you please give me some advice?
->
-> Thanks
->
-Adding a printk message on gpio_wdt_ping and redroduce this question:
+Thanks for working on this!
 
-diff --git a/drivers/watchdog/gpio_wdt.c b/drivers/watchdog/gpio_wdt.c
-index 4102328a522f..fcfd07e0445a 100644
---- a/drivers/watchdog/gpio_wdt.c
-+++ b/drivers/watchdog/gpio_wdt.c
-@@ -57,6 +57,7 @@ static int gpio_wdt_ping(struct watchdog_device *wdd)
-         case HW_ALGO_TOGGLE:
-                 /* Toggle output pin */
-                 priv->state = !priv->state;
-+               printk("gwp\n");
-                 gpiod_set_value_cansleep(priv->gpiod, priv->state);
-                 break;
-         case HW_ALGO_LEVEL:
+On Thu, Mar 17, 2022 at 04:17:07PM +0000, Robin Murphy wrote:
+> Between me trying to get rid of iommu_present() and Mario wanting to
+> support the AMD equivalent of DMAR_PLATFORM_OPT_IN, scrutiny has shown
+> that the iommu_dma_protection attribute is being far too optimistic.
+> Even if an IOMMU might be present for some PCI segment in the system,
+> that doesn't necessarily mean it provides translation for the device(s)
+> we care about. Furthermore, all that DMAR_PLATFORM_OPT_IN really does
+> is tell us that memory was protected before the kernel was loaded, and
+> prevent the user from disabling the intel-iommu driver entirely. What
+> actually matters is whether we trust individual devices, based on the
+> "external facing" property that we expect firmware to describe for
+> Thunderbolt ports.
 
-Next is the log:
+We still want to know that DMAR_PLATFORM_OPT_IN is set by the firmware
+because that tells us that none of the devices connected before OS got
+control had the ability to perform DMA outside of the RMRR regions. If
+they did then all this is pointless because they could have modified the
+system memory as they wished.
 
-[   90.222821] gwp
-[   91.024956] gwp
-[   91.826936] gwp
-[   92.628898] gwp
-[   93.430888] gwp
-[   94.232859] gwp
-[   94.264325] musb-hdrc musb-hdrc.0: ep11 RX three-strikes error
-[   95.034845] gwp
-[   95.836791] gwp
-[   96.164582] gwp
-[   96.269984] usb 1-1: USB disconnect, device number 3
-[   96.275556] rndis_host 1-1:1.0 usb0: unregister 'rndis_host' 
-usb-musb-hdrc.0-1, RNDIS device
-[   97.279609] ------------[ cut here ]------------
-[   97.284455] WARNING: CPU: 0 PID: 67 at 
-drivers/usb/musb/musb_host.c:115 musb_h_tx_flush_fifo+0x11c/0x13c
-[   97.294417] musb-hdrc musb-hdrc.0: Could not flush host TX10 fifo: 
-csr: 2403
-[   97.301801] Modules linked in:
-[   97.305012] CPU: 0 PID: 67 Comm: kworker/0:12 Not tainted 
-5.15.0-00013-g0ccd7df8f5ad-dirty #123
-[   97.314130] Hardware name: Generic AM33XX (Flattened Device Tree)
-[   97.320515] Workqueue: usb_hub_wq hub_event
-[   97.324928] [<c0111438>] (unwind_backtrace) from [<c010b9f4>] 
-(show_stack+0x10/0x14)
-[   97.333066] [<c010b9f4>] (show_stack) from [<c0adc25c>] 
-(dump_stack_lvl+0x40/0x4c)
-[   97.341023] [<c0adc25c>] (dump_stack_lvl) from [<c0136264>] 
-(__warn+0xf0/0x104)
-[   97.348697] [<c0136264>] (__warn) from [<c01362ec>] 
-(warn_slowpath_fmt+0x74/0xbc)
-[   97.356545] [<c01362ec>] (warn_slowpath_fmt) from [<c07e8b40>] 
-(musb_h_tx_flush_fifo+0x11c/0x13c)
-[   97.365854] [<c07e8b40>] (musb_h_tx_flush_fifo) from [<c07ea024>] 
-(musb_cleanup_urb+0x128/0x204)
-[   97.375069] [<c07ea024>] (musb_cleanup_urb) from [<c07ea1e4>] 
-(musb_urb_dequeue+0xe4/0x17c)
-[   97.383829] [<c07ea1e4>] (musb_urb_dequeue) from [<c07c33f4>] 
-(usb_hcd_flush_endpoint+0x118/0x130)
-[   97.393230] [<c07c33f4>] (usb_hcd_flush_endpoint) from [<c07c66ec>] 
-(usb_disable_endpoint+0x58/0xa4)
-[   97.402810] [<c07c66ec>] (usb_disable_endpoint) from [<c07c6828>] 
-(usb_disable_interface+0x3c/0x54)
-[   97.412294] [<c07c6828>] (usb_disable_interface) from [<c07c8f3c>] 
-(usb_unbind_interface+0x160/0x224)
-[   97.421963] [<c07c8f3c>] (usb_unbind_interface) from [<c06a731c>] 
-(device_release_driver_internal+0x1d0/0x1d8)
-[   97.432461] [<c06a731c>] (device_release_driver_internal) from 
-[<c07b062c>] (usbnet_cdc_unbind+0x70/0x78)
-[   97.442505] [<c07b062c>] (usbnet_cdc_unbind) from [<c07b2098>] 
-(usbnet_disconnect+0x48/0xd8)
-[   97.451359] [<c07b2098>] (usbnet_disconnect) from [<c07c8e40>] 
-(usb_unbind_interface+0x64/0x224)
-[   97.460573] [<c07c8e40>] (usb_unbind_interface) from [<c06a731c>] 
-(device_release_driver_internal+0x1d0/0x1d8)
-[   97.471061] [<c06a731c>] (device_release_driver_internal) from 
-[<c06a5bf4>] (bus_remove_device+0xc8/0xf8)
-[   97.481097] [<c06a5bf4>] (bus_remove_device) from [<c06a0e5c>] 
-(device_del+0x180/0x404)
-[   97.489491] [<c06a0e5c>] (device_del) from [<c07c68c8>] 
-(usb_disable_device+0x88/0x130)
-[   97.497882] [<c07c68c8>] (usb_disable_device) from [<c07bd410>] 
-(usb_disconnect+0xb0/0x234)
-[   97.506640] [<c07bd410>] (usb_disconnect) from [<c07bf968>] 
-(hub_event+0xf3c/0x1288)
-[   97.514762] [<c07bf968>] (hub_event) from [<c015306c>] 
-(process_one_work+0x22c/0x55c)
-[   97.522986] [<c015306c>] (process_one_work) from [<c01533c8>] 
-(worker_thread+0x2c/0x5cc)
-[   97.531473] [<c01533c8>] (worker_thread) from [<c015b028>] 
-(kthread+0x140/0x168)
-[   97.539237] [<c015b028>] (kthread) from [<c0100150>] 
-(ret_from_fork+0x14/0x24)
-[   97.546812] Exception stack(0xc3157fb0 to 0xc3157ff8)
-[   97.552106] 7fa0:                                     00000000 
-00000000 00000000 00000000
-[   97.560674] 7fc0: 00000000 00000000 00000000 00000000 00000000 
-00000000 00000000 00000000
-[   97.569241] 7fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[   97.576170] ---[ end trace 96798796855f16a3 ]---
-[   97.582427] gwp
-[   98.384391] gwp
-[   99.186369] gwp
-[   99.988316] gwp
-
-The last time before dev_WARN_ONCE is [   96.164582] and the next time 
-is [   97.582427]. It took about 1.4 seconds.
-
-But It should be 0.8s. Here is my dts configurations about gpio-watchdog:
-
-     watchdog: watchdog {
-         compatible = "linux,wdt-gpio";
-         pinctrl-names = "default";
-         pinctrl-0 = <&gpiowdt_pins>;
-
-         gpios = <&gpio3 8 GPIO_ACTIVE_HIGH>;
-         enable-gpios = <&gpio3 7 GPIO_ACTIVE_LOW>;
-         always-running;
-         hw_algo = "toggle";
-         hw_margin_ms = <1600>;
-     };
-
-The watchdog ping work is trigger by kthread_queue_work, is it means 
-dev_WARN_ONCE delayed kthread_queue_work?
+> Avoid false positives by looking as close as possible to the same PCI
+> topology that the IOMMU layer will consider once a Thunderbolt endpoint
+> appears. Crucially, we can't assume that IOMMU translation being enabled
+> for any reason is sufficient on its own; full (expensive) DMA protection
+> will still only be imposed on untrusted devices.
+> 
+> CC: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+> 
+> This supersedes my previous attempt just trying to replace
+> iommu_present() at [1], further to the original discussion at [2].
+> 
+> [1] https://lore.kernel.org/linux-iommu/BL1PR12MB515799C0BE396377DBBEF055E2119@BL1PR12MB5157.namprd12.prod.outlook.com/T/
+> [2] https://lore.kernel.org/linux-iommu/202203160844.lKviWR1Q-lkp@intel.com/T/
+> 
+>  drivers/thunderbolt/domain.c | 12 +++---------
+>  drivers/thunderbolt/nhi.c    | 35 +++++++++++++++++++++++++++++++++++
+>  include/linux/thunderbolt.h  |  2 ++
+>  3 files changed, 40 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
+> index 7018d959f775..d5c825e84ac8 100644
+> --- a/drivers/thunderbolt/domain.c
+> +++ b/drivers/thunderbolt/domain.c
+> @@ -7,9 +7,7 @@
+>   */
+>  
+>  #include <linux/device.h>
+> -#include <linux/dmar.h>
+>  #include <linux/idr.h>
+> -#include <linux/iommu.h>
+>  #include <linux/module.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/slab.h>
+> @@ -257,13 +255,9 @@ static ssize_t iommu_dma_protection_show(struct device *dev,
+>  					 struct device_attribute *attr,
+>  					 char *buf)
+>  {
+> -	/*
+> -	 * Kernel DMA protection is a feature where Thunderbolt security is
+> -	 * handled natively using IOMMU. It is enabled when IOMMU is
+> -	 * enabled and ACPI DMAR table has DMAR_PLATFORM_OPT_IN set.
+> -	 */
+> -	return sprintf(buf, "%d\n",
+> -		       iommu_present(&pci_bus_type) && dmar_platform_optin());
+> +	struct tb *tb = container_of(dev, struct tb, dev);
+> +
+> +	return sprintf(buf, "%d\n", tb->nhi->iommu_dma_protection);
+>  }
+>  static DEVICE_ATTR_RO(iommu_dma_protection);
+>  
+> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+> index c73da0532be4..e12c2e266741 100644
+> --- a/drivers/thunderbolt/nhi.c
+> +++ b/drivers/thunderbolt/nhi.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/errno.h>
+>  #include <linux/pci.h>
+>  #include <linux/interrupt.h>
+> +#include <linux/iommu.h>
+>  #include <linux/module.h>
+>  #include <linux/delay.h>
+>  #include <linux/property.h>
+> @@ -1102,6 +1103,39 @@ static void nhi_check_quirks(struct tb_nhi *nhi)
+>  		nhi->quirks |= QUIRK_AUTO_CLEAR_INT;
+>  }
+>  
+> +static void nhi_check_iommu(struct tb_nhi *nhi)
+> +{
+> +	struct pci_dev *pdev;
+> +	bool port_ok = false;
 
 
+So for here somewhere we should call dmar_platform_optin() first. I
+think this is something we want to move inside the IOMMU API (alongside
+with the below checks).
+
+> +
+> +	/*
+> +	 * Check for sibling devices that look like they should be our
+> +	 * tunnelled ports. We can reasonably assume that if an IOMMU is
+> +	 * managing the bridge it will manage any future devices beyond it
+> +	 * too. If firmware has described a port as external-facing as
+> +	 * expected then we can trust the IOMMU layer to enforce isolation;
+> +	 * otherwise even if translation is enabled for existing devices it
+> +	 * may potentially be overridden for a future tunnelled endpoint.
+> +	 */
+> +	for_each_pci_bridge(pdev, nhi->pdev->bus) {
+> +		if (!pci_is_pcie(pdev) ||
+> +		    !(pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT ||
+> +		      pci_pcie_type(pdev) == PCI_EXP_TYPE_DOWNSTREAM))
+> +			continue;
+> +
+> +		if (!device_iommu_mapped(&pdev->dev))
+> +			return;
+> +
+> +		if (!pdev->untrusted) {
+> +			dev_info(&nhi->pdev->dev,
+> +				 "Assuming unreliable Kernel DMA protection\n");
+> +			return;
+> +		}
+> +		port_ok = true;
+> +	}
+> +	nhi->iommu_dma_protection = port_ok;
+> +}
+> +
+>  static int nhi_init_msi(struct tb_nhi *nhi)
+>  {
+>  	struct pci_dev *pdev = nhi->pdev;
+> @@ -1219,6 +1253,7 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  		return -ENOMEM;
+>  
+>  	nhi_check_quirks(nhi);
+> +	nhi_check_iommu(nhi);
+>  
+>  	res = nhi_init_msi(nhi);
+>  	if (res) {
+> diff --git a/include/linux/thunderbolt.h b/include/linux/thunderbolt.h
+> index 124e13cb1469..7a8ad984e651 100644
+> --- a/include/linux/thunderbolt.h
+> +++ b/include/linux/thunderbolt.h
+> @@ -465,6 +465,7 @@ static inline struct tb_xdomain *tb_service_parent(struct tb_service *svc)
+>   * @msix_ida: Used to allocate MSI-X vectors for rings
+>   * @going_away: The host controller device is about to disappear so when
+>   *		this flag is set, avoid touching the hardware anymore.
+> + * @iommu_dma_protection: An IOMMU will isolate external-facing ports.
+>   * @interrupt_work: Work scheduled to handle ring interrupt when no
+>   *		    MSI-X is used.
+>   * @hop_count: Number of rings (end point hops) supported by NHI.
+> @@ -479,6 +480,7 @@ struct tb_nhi {
+>  	struct tb_ring **rx_rings;
+>  	struct ida msix_ida;
+>  	bool going_away;
+> +	bool iommu_dma_protection;
+>  	struct work_struct interrupt_work;
+>  	u32 hop_count;
+>  	unsigned long quirks;
+> -- 
+> 2.28.0.dirty
