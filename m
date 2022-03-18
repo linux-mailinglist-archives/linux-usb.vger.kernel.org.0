@@ -2,198 +2,218 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 049784DE025
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Mar 2022 18:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA264DE31B
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Mar 2022 21:59:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239714AbiCRRod (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Mar 2022 13:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
+        id S240974AbiCRVAe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Mar 2022 17:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239736AbiCRRob (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Mar 2022 13:44:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8376A76FF;
-        Fri, 18 Mar 2022 10:43:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE1811515;
-        Fri, 18 Mar 2022 10:43:11 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 45A903F7B4;
-        Fri, 18 Mar 2022 10:43:10 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     joro@8bytes.org, baolu.lu@linux.intel.com,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     iommu@lists.linux-foundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mario.limonciello@amd.com, hch@lst.de
-Subject: [PATCH v2 2/2] thunderbolt: Make iommu_dma_protection more accurate
-Date:   Fri, 18 Mar 2022 17:42:58 +0000
-Message-Id: <0dd14883930c9f55ace22162e23765a37d91a057.1647624084.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.28.0.dirty
-In-Reply-To: <cover.1647624084.git.robin.murphy@arm.com>
-References: <cover.1647624084.git.robin.murphy@arm.com>
+        with ESMTP id S238390AbiCRVAb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Mar 2022 17:00:31 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB361B3F67
+        for <linux-usb@vger.kernel.org>; Fri, 18 Mar 2022 13:59:09 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id z6so1117454iot.0
+        for <linux-usb@vger.kernel.org>; Fri, 18 Mar 2022 13:59:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oNAPpR+5qx5bHO8wJ1SIgWig3LUKuwuqLo641jvFAak=;
+        b=R3B03hXdzmRL4FMHavxss76+tb9Q0Hy78NbdGoHIgmWRsuIfciGr2JWywHMf/Kpkhf
+         QniqntLtfhiE8E3Wo0oxTFcS1KWerJtG5tNgnrk3j2xUiX43wMMg+/mjp1wKd5A4aRIu
+         ErIGjgvdava6sQlmLmDCO8Qr2P9RfzXvczFjE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oNAPpR+5qx5bHO8wJ1SIgWig3LUKuwuqLo641jvFAak=;
+        b=hhMk7trAQ1IxLgII/m1pLRDQ2S5yoxmZOrBc31UZYkZXTsACCCG1//Se0yuUiT6JF2
+         igbcXOaPrCvJj5oz0UrYc8cBjTLlSENObrRX4jW1dJ1aomZeszu2WhyTVDcKAcwc6uEn
+         JsodBdowMZt4Qo7AlDqJQrqfN2WDiI1THIOJuwOGxAJFWEsR4aZUhwYCtGOzCkvw02nu
+         oU5fhWd+bWPEVtgvt97swEHCttxz+K2wucglN3PX/EfpeI2DZdnsSv7O2PMZ5iqkwHdJ
+         r3zHALmKF5AyYQrXbJhS4qQ4lsdHWSijTInGfY2d5e7moJDmGpnt7CRNmNujEVpc0sV6
+         b6Fw==
+X-Gm-Message-State: AOAM5326a4w4vMaYjiXyNTYejFMs5sucHVH69qnQzHurkDKO9pai/sD0
+        mOuV5kakC/7PF8vew4W6lWI4Xg==
+X-Google-Smtp-Source: ABdhPJw+g6qtXnLujFKVRv55AGvVhZcbGPndogV4eznqetPdpLwXYueCN6beIFsP8OoV/l235xaSaw==
+X-Received: by 2002:a5d:9542:0:b0:648:f92b:7bc6 with SMTP id a2-20020a5d9542000000b00648f92b7bc6mr5223132ios.73.1647637149068;
+        Fri, 18 Mar 2022 13:59:09 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id d14-20020a056602328e00b006494aa126c2sm3528385ioz.11.2022.03.18.13.59.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 13:59:08 -0700 (PDT)
+Subject: Re: [PATCH 64/64] media: Kconfig: cleanup VIDEO_DEV dependencies
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Heungjun Kim <riverful.kim@samsung.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Jacob Chen <jacob-chen@iotwrt.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>,
+        Jeff LaBundy <jeff@labundy.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Joe Hung <joe_hung@ilitek.com>, Joel Stanley <joel@jms.id.au>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Marek Vasut <marex@denx.de>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Martina Krasteva <martinax.krasteva@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Mike Isely <isely@pobox.com>, Ming Qian <ming.qian@nxp.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Olivier Lorin <o.lorin@laposte.net>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Rick Chang <rick.chang@mediatek.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Scott Branden <sbranden@broadcom.com>,
+        Sean Young <sean@mess.org>, Shawn Guo <shawnguo@kernel.org>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Shijie Qin <shijie.qin@nxp.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Todor Tomov <todor.too@gmail.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Yong Deng <yong.deng@magewell.com>,
+        Yong Zhi <yong.zhi@intel.com>, Zhou Peng <eagle.zhou@nxp.com>,
+        alsa-devel@alsa-project.org, bcm-kernel-feedback-list@broadcom.com,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        linux-usb@vger.kernel.org, mjpeg-users@lists.sourceforge.net,
+        openbmc@lists.ozlabs.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1647242578.git.mchehab@kernel.org>
+ <decd26e90adc5c16470e4f738810f22fe6478b27.1647242579.git.mchehab@kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <9e02d88a-3344-8d91-c652-72cb989506de@linuxfoundation.org>
+Date:   Fri, 18 Mar 2022 14:59:05 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <decd26e90adc5c16470e4f738810f22fe6478b27.1647242579.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Between me trying to get rid of iommu_present() and Mario wanting to
-support the AMD equivalent of DMAR_PLATFORM_OPT_IN, scrutiny has shown
-that the iommu_dma_protection attribute is being far too optimistic.
-Even if an IOMMU might be present for some PCI segment in the system,
-that doesn't necessarily mean it provides translation for the device(s)
-we care about. Furthermore, all that DMAR_PLATFORM_OPT_IN really does
-is tell us that memory was protected before the kernel was loaded, and
-prevent the user from disabling the intel-iommu driver entirely. While
-that lets us assume kernel integrity, what matters for actual runtime
-DMA protection is whether we trust individual devices, based on the
-"external facing" property that we expect firmware to describe for
-Thunderbolt ports.
+On 3/14/22 1:55 AM, Mauro Carvalho Chehab wrote:
+> media Kconfig has two entries associated to V4L API:
+> VIDEO_DEV and VIDEO_V4L2.
+> 
+> On Kernel 2.6.x, there were two V4L APIs, each one with its own flag.
+> VIDEO_DEV were meant to:
+> 	1) enable Video4Linux and make its Kconfig options to appear;
+> 	2) it makes the Kernel build the V4L core.
+> 
+> while VIDEO_V4L2 where used to distinguish between drivers that
+> implement the newer API and drivers that implemented the former one.
+> 
+> With time, such meaning changed, specially after the removal of
+> all V4L version 1 drivers.
+> 
+> At the current implementation, VIDEO_DEV only does (1): it enables
+> the media options related to V4L, that now has:
+> 
+> 	menu "Video4Linux options"
+> 		visible if VIDEO_DEV
+> 
+> 	source "drivers/media/v4l2-core/Kconfig"
+> 	endmenu
+> 
+> but it doesn't affect anymore the V4L core drivers.
+> 
+> The rationale is that the V4L2 core has a "soft" dependency
+> at the I2C bus, and now requires to select a number of other
+> Kconfig options:
+> 
+> 	config VIDEO_V4L2
+> 		tristate
+> 		depends on (I2C || I2C=n) && VIDEO_DEV
+> 		select RATIONAL
+> 		select VIDEOBUF2_V4L2 if VIDEOBUF2_CORE
+> 		default (I2C || I2C=n) && VIDEO_DEV
+> 
+> In the past, merging them would be tricky, but it seems that it is now
+> possible to merge those symbols, in order to simplify V4L dependencies.
+> 
+> Let's keep VIDEO_DEV, as this one is used on some make *defconfig
+> configurations.
+> 
+> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+> 
 
-It's proven challenging to determine the appropriate ports accurately
-given the variety of possible topologies, so while still not getting a
-perfect answer, by putting enough faith in firmware we can at least get
-a good bit closer. If we can see that any device near a Thunderbolt NHI
-has all the requisites for Kernel DMA Protection, chances are that it
-*is* a relevant port, but moreover that implies that firmware is playing
-the game overall, so we'll use that to assume that all Thunderbolt ports
-should be correctly marked and thus will end up fully protected.
+>   drivers/media/test-drivers/vicodec/Kconfig    |   2 +-
+>   drivers/media/test-drivers/vimc/Kconfig       |   2 +-
+>   drivers/media/test-drivers/vivid/Kconfig      |   2 +-
+>
 
-CC: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
+For vimc change: (trimmed the recipient list to send response)
 
-v2: Give up trying to look for specific devices, just look for evidence
-    that firmware cares at all.
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
- drivers/thunderbolt/domain.c | 12 +++--------
- drivers/thunderbolt/nhi.c    | 41 ++++++++++++++++++++++++++++++++++++
- include/linux/thunderbolt.h  |  2 ++
- 3 files changed, 46 insertions(+), 9 deletions(-)
+thanks,
+-- Shuah
 
-diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
-index 7018d959f775..2889a214dadc 100644
---- a/drivers/thunderbolt/domain.c
-+++ b/drivers/thunderbolt/domain.c
-@@ -7,9 +7,7 @@
-  */
- 
- #include <linux/device.h>
--#include <linux/dmar.h>
- #include <linux/idr.h>
--#include <linux/iommu.h>
- #include <linux/module.h>
- #include <linux/pm_runtime.h>
- #include <linux/slab.h>
-@@ -257,13 +255,9 @@ static ssize_t iommu_dma_protection_show(struct device *dev,
- 					 struct device_attribute *attr,
- 					 char *buf)
- {
--	/*
--	 * Kernel DMA protection is a feature where Thunderbolt security is
--	 * handled natively using IOMMU. It is enabled when IOMMU is
--	 * enabled and ACPI DMAR table has DMAR_PLATFORM_OPT_IN set.
--	 */
--	return sprintf(buf, "%d\n",
--		       iommu_present(&pci_bus_type) && dmar_platform_optin());
-+	struct tb *tb = container_of(dev, struct tb, dev);
-+
-+	return sysfs_emit(buf, "%d\n", tb->nhi->iommu_dma_protection);
- }
- static DEVICE_ATTR_RO(iommu_dma_protection);
- 
-diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-index c73da0532be4..9e396e283792 100644
---- a/drivers/thunderbolt/nhi.c
-+++ b/drivers/thunderbolt/nhi.c
-@@ -14,6 +14,7 @@
- #include <linux/errno.h>
- #include <linux/pci.h>
- #include <linux/interrupt.h>
-+#include <linux/iommu.h>
- #include <linux/module.h>
- #include <linux/delay.h>
- #include <linux/property.h>
-@@ -1102,6 +1103,45 @@ static void nhi_check_quirks(struct tb_nhi *nhi)
- 		nhi->quirks |= QUIRK_AUTO_CLEAR_INT;
- }
- 
-+static int nhi_check_iommu_pdev(struct pci_dev *pdev, void *data)
-+{
-+	if (!pdev->untrusted ||
-+	    !dev_iommu_capable(&pdev->dev, IOMMU_CAP_PRE_BOOT_PROTECTION))
-+		return 0;
-+	*(bool *)data = true;
-+	return 1; /* Stop walking */
-+}
-+
-+static void nhi_check_iommu(struct tb_nhi *nhi)
-+{
-+	struct pci_bus *bus = nhi->pdev->bus;
-+	bool port_ok = false;
-+
-+	/*
-+	 * Ideally what we'd do here is grab every PCI device that
-+	 * represents a tunnelling adapter for this NHI and check their
-+	 * status directly, but unfortunately USB4 seems to make it
-+	 * obnoxiously difficult to reliably make any correlation.
-+	 *
-+	 * So for now we'll have to bodge it... Hoping that the system
-+	 * is at least sane enough that an adapter is in the same PCI
-+	 * segment as its NHI, if we can find *something* on that segment
-+	 * which meets the requirements for Kernel DMA Protection, we'll
-+	 * take that to imply that firmware is aware and has (hopefully)
-+	 * done the right thing in general. We need to know that the PCI
-+	 * layer has seen the ExternalFacingPort property and propagated
-+	 * it to the "untrusted" flag that the IOMMU layer will then
-+	 * enforce, but also that the IOMMU driver itself can be trusted
-+	 * not to have been subverted by a pre-boot DMA attack.
-+	 */
-+	while (bus->parent)
-+		bus = bus->parent;
-+
-+	pci_walk_bus(bus, nhi_check_iommu_pdev, &port_ok);
-+
-+	nhi->iommu_dma_protection = port_ok;
-+}
-+
- static int nhi_init_msi(struct tb_nhi *nhi)
- {
- 	struct pci_dev *pdev = nhi->pdev;
-@@ -1219,6 +1259,7 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		return -ENOMEM;
- 
- 	nhi_check_quirks(nhi);
-+	nhi_check_iommu(nhi);
- 
- 	res = nhi_init_msi(nhi);
- 	if (res) {
-diff --git a/include/linux/thunderbolt.h b/include/linux/thunderbolt.h
-index 124e13cb1469..7a8ad984e651 100644
---- a/include/linux/thunderbolt.h
-+++ b/include/linux/thunderbolt.h
-@@ -465,6 +465,7 @@ static inline struct tb_xdomain *tb_service_parent(struct tb_service *svc)
-  * @msix_ida: Used to allocate MSI-X vectors for rings
-  * @going_away: The host controller device is about to disappear so when
-  *		this flag is set, avoid touching the hardware anymore.
-+ * @iommu_dma_protection: An IOMMU will isolate external-facing ports.
-  * @interrupt_work: Work scheduled to handle ring interrupt when no
-  *		    MSI-X is used.
-  * @hop_count: Number of rings (end point hops) supported by NHI.
-@@ -479,6 +480,7 @@ struct tb_nhi {
- 	struct tb_ring **rx_rings;
- 	struct ida msix_ida;
- 	bool going_away;
-+	bool iommu_dma_protection;
- 	struct work_struct interrupt_work;
- 	u32 hop_count;
- 	unsigned long quirks;
--- 
-2.28.0.dirty
+
 
