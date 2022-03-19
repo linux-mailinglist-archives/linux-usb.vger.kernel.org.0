@@ -2,79 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC284DEA33
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Mar 2022 19:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E464DEA67
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Mar 2022 20:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243944AbiCSSvZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 19 Mar 2022 14:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
+        id S244020AbiCSTaZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 19 Mar 2022 15:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239382AbiCSSvX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 19 Mar 2022 14:51:23 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FA421FC5C;
-        Sat, 19 Mar 2022 11:50:01 -0700 (PDT)
-Received: from darkstar.musicnaut.iki.fi (85-76-3-17-nat.elisa-mobile.fi [85.76.3.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S244010AbiCSTaW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 19 Mar 2022 15:30:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D9A1959C3;
+        Sat, 19 Mar 2022 12:29:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: aaro.koskinen)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 90D401B005E7;
-        Sat, 19 Mar 2022 20:49:54 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1647715795;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UZiM45VyUb2qyeM2RPKLOiRoIP0g6aqsRFs2FjvcgMs=;
-        b=nxWUY/hMxJdb2PwmYVBvX+fR1NveAJnAKYoJFBJAG/GUG8xvSw2fz52G6Xo7wKHVSr0qwn
-        y39uFTLQKpAJ2LOb1jdTkPjk/Zt5T5jreEhYN8yP4TF9UQhAyQu/oY1k0KrkW8wEcc62wx
-        hgWZdU0Ir9TEgYVwQvuA77rpIIpnzBAWdTNFDE/OOASjwzPcwCHVKHWp8J5ObeXTUrPPQF
-        Duxt2vtLvOlF83OUlNBDJVr7FW8Gx/lf19F0Wjk2lqqS05+WB9Tp3Q8fhmjAXMDEKbV9Rm
-        JQ36TlD+HL+7kDAn5ARVDvKbi+A8x4ygbfpY6IVeLZ7fg8GsHqUwI2oyqpeYEg==
-Date:   Sat, 19 Mar 2022 20:49:52 +0200
-From:   Aaro Koskinen <aaro.koskinen@iki.fi>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Paul Walmsley <paul@pwsan.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [RFC RFT PATCH 0/4] ARM: OMAP1: clock: Convert to CCF
-Message-ID: <20220319184952.GF1986@darkstar.musicnaut.iki.fi>
-References: <20220310233307.99220-1-jmkrzyszt@gmail.com>
- <YixWZ+IiN2l9jmzg@atomide.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YixWZ+IiN2l9jmzg@atomide.com>
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1647715795; a=rsa-sha256;
-        cv=none;
-        b=XXxZOctinU4m+znhMMf9d6S+wOdBCmt0XyYtVcfB49SQV+My3T/COD9lnwqsHqGmemMSKt
-        xUDRk3eFN4xj4Yux0YCVP/m/6Y9WwNbzDvxSa1ydkD1n+xmpirjWvZTydgl3mC/bAkZTz3
-        OE7QN4T3EazF7J9VmhmkHSy5jEaPkcAo5kGTQifvI4qRdFJWRHIBIl+HJVkszX/osqg7Qw
-        EyUck589BQEubVQwgJ+9kfzPJyeYPOjAdXbHI7OIffaGDKYhJcDXbxlMjrW24x/4lc3OS+
-        mVsbOA3le7oxnC0zYMp1VvmDIiN16CEbqDKm8LeYxUaM6XGdyWlucQc1J9dgsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1647715795;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UZiM45VyUb2qyeM2RPKLOiRoIP0g6aqsRFs2FjvcgMs=;
-        b=UYpNc8T8xI9LyrGirHytNxANqphjTTOj7resU82lQ3iQE5zo6nFg23tVN4gleAXzWN9YZS
-        PXjwkOj10cw49XsQDTm6mMsTiVWCPbuoCjgZfUFG6Nb3s0lIL1CYM1ybfAMJNZFbUiOAGU
-        c7mS7Cnx23qRqn+qyW+ncAgS++2xTayKtNvic4hOA1bSXrE1U+AgNBIBVPQjkMI5xazmH7
-        v9SsbokuHStuXPoaK/wmYE4/4LxZxJu13UnbAZpVzYXKEjyNxEfDwD2Ad5mQxuoaKh4bTe
-        tl9s6P83zykboVBrXzizFQ8eGHwvU4W1LvSQqe+B9Fj24rL9q6ko5D7/FfLBRg==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED91260C2B;
+        Sat, 19 Mar 2022 19:29:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 58645C340EF;
+        Sat, 19 Mar 2022 19:29:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647718140;
+        bh=Rfzy1Lut8EkX7L3KZjJ5kzMvOCltkpLJ0C61l0aZACE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=em/gImJWbl3SltNus2/K+8HqONC7MrhjP5/o76jACjn31QJ6zyelmVrjMRK7hhL19
+         bRhDcnBZGg6xWtf+NaLFi0h1lEICQl2vr3t+AiLQ08gFO27NmBKnBxg60V4fjGOQ9A
+         PMO/C87D1+X8X31zO/cHhPl2T2D8suyI9a8BE7uwJZ+W+6AIjUgqT2uhbs+XjZ8KRe
+         D90pdJx5+ruHkgGpNQR37Zu4/t+GroBRGrMFnydj2DoqBczyCj2qccRdJk+jCeAS3q
+         0Fj823cN5hea9mlDDl945Y98jeS+2JiHhgtKF73toVfurEEPMtwkc+e/xB9NTFBC6Y
+         kcxG6szzy7cgw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42B42F03846;
+        Sat, 19 Mar 2022 19:29:00 +0000 (UTC)
+Subject: Re: [GIT PULL] USB fixes for 5.17-final
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YjWS3CaN65nJNHEj@kroah.com>
+References: <YjWS3CaN65nJNHEj@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YjWS3CaN65nJNHEj@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.17-final
+X-PR-Tracked-Commit-Id: 16b1941eac2bd499f065a6739a40ce0011a3d740
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 6aa61c12a43bb365296e72251e7346b661030b52
+Message-Id: <164771814026.23927.6644446405642889764.pr-tracker-bot@kernel.org>
+Date:   Sat, 19 Mar 2022 19:29:00 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,19 +61,15 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+The pull request you sent on Sat, 19 Mar 2022 09:22:52 +0100:
 
-On Sat, Mar 12, 2022 at 10:14:31AM +0200, Tony Lindgren wrote:
-> * Janusz Krzysztofik <jmkrzyszt@gmail.com> [220310 23:32]:
-> > The main motivation behind this series is planned resurection of OMAP1
-> > camera driver.  Since OMAP1 clock internals have never been visible to
-> > drivers, that driver used to use v4l2-clk to expose a pixel clock for a
-> > sensor.  The v4l2-clk code has been recently depreciated and removed from
-> > the media subtree, hence the need for an alternative solution.
-> 
-> Nice :) This will also help Arnd with building multi-v5 kernels.
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.17-final
 
-This will need more testing still... The patch 4 is breaking at least 770
-(the display/fb doesn't work anymore).
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/6aa61c12a43bb365296e72251e7346b661030b52
 
-A.
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
