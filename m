@@ -2,188 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A71D54DE42D
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Mar 2022 23:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68AF34DE52B
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Mar 2022 03:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241360AbiCRWrT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Mar 2022 18:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
+        id S241819AbiCSCbU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Mar 2022 22:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232698AbiCRWrS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Mar 2022 18:47:18 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759D8227C51
-        for <linux-usb@vger.kernel.org>; Fri, 18 Mar 2022 15:45:58 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id j7-20020a4ad6c7000000b0031c690e4123so11874402oot.11
-        for <linux-usb@vger.kernel.org>; Fri, 18 Mar 2022 15:45:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ekiD2sX45IwGk6wtsqdwxLttTAGZcGccRjZl1i6g1JA=;
-        b=dMDapo5gWo0mYQwoT0A/aOZqMdPyZSCOVsL5zPGffJvLJZp0AfN2E9xdlck/nSLv/N
-         hEsSe5KNbjsmefIhgIIv1yDVHMP+6YIgd44fW9U2d/c1Akfns382n70WbM/10yIkuHjZ
-         SUNIZp82WOT2MEcG49QwDBCrffF4++Gcu4CkY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ekiD2sX45IwGk6wtsqdwxLttTAGZcGccRjZl1i6g1JA=;
-        b=1Z+gVwLarAmZFvMehdklIALnGmPVv8YjsJQYT+Ga5IAdMuZVhxltuGLUESfkxKE4sy
-         bND7rnaVhxl4dmhwgZFJfQg91bg1hTApbXJzi0gguyubW/RxIQHs2DdzOgCbCoBIdes5
-         zzGkgdQzbn+HQbKno3OlGHUsYz+edVGo7l/aeDp+KnHOAYnSnBP+aYO1yG5q8bGerFQh
-         oEOu2VaCBUfD2Lz4EA9y/19dbMEv32MYO+gdCTPakpl+K8lbNSU2pGRkWxmY/IjxrPdC
-         8KHpDb6UvKXZfuKIE92k/uwWdg1y/pS5HRZozn42U4KR9jKzqOIcjJUVRxwgcB+SCfkg
-         AO2g==
-X-Gm-Message-State: AOAM531o2gam9KTP2sOJsQEuvkWYkB4nD6XO4taW1eM8v7pMi6Kk+XNa
-        6YJTsJUGHOCtW3JitSIbx7WVOQ==
-X-Google-Smtp-Source: ABdhPJziihDBziDyTkE7iKcLTBW6BUUFUpCgkLWdsk/9MySxxcozoxXb4xoR4U6FbxLxPWes+cEMkA==
-X-Received: by 2002:a05:6820:814:b0:322:b1b2:2456 with SMTP id bg20-20020a056820081400b00322b1b22456mr3591951oob.0.1647643557718;
-        Fri, 18 Mar 2022 15:45:57 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id x12-20020a056830244c00b005ad233e0ba3sm4330223otr.48.2022.03.18.15.45.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 15:45:57 -0700 (PDT)
-Subject: Re: [PATCH 7/9] usb: usbip: eliminate anonymous module_init &
- module_exit
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eli Cohen <eli@mellanox.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Krzysztof Opasiak <k.opasiak@samsung.com>,
-        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
-        Joachim Fritschi <jfritschi@freenet.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Karol Herbst <karolherbst@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, netdev@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org, x86@kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220316192010.19001-1-rdunlap@infradead.org>
- <20220316192010.19001-8-rdunlap@infradead.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <282f4857-7b4f-810e-af0e-e9ca8129c7fc@linuxfoundation.org>
-Date:   Fri, 18 Mar 2022 16:45:54 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        with ESMTP id S232816AbiCSCbU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Mar 2022 22:31:20 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C772BB7CB;
+        Fri, 18 Mar 2022 19:29:58 -0700 (PDT)
+Received: from kwepemi100012.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KL4Yk6cxnzfYmv;
+        Sat, 19 Mar 2022 10:28:26 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ kwepemi100012.china.huawei.com (7.221.188.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sat, 19 Mar 2022 10:29:56 +0800
+Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
+ kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sat, 19 Mar 2022 10:29:56 +0800
+Received: from kwepemm600014.china.huawei.com ([7.193.23.54]) by
+ kwepemm600014.china.huawei.com ([7.193.23.54]) with mapi id 15.01.2308.021;
+ Sat, 19 Mar 2022 10:29:56 +0800
+From:   zhangqilong <zhangqilong3@huawei.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Subject: =?gb2312?B?tPC4tDogW1BBVENIIC1uZXh0XSB1c2I6IHhoY2k6IHRlZ3JhOkZpeCBQTSB1?=
+ =?gb2312?B?c2FnZSByZWZlcmVuY2UgbGVhayBvZiB0ZWdyYV94dXNiX3VucG93ZXJnYXRl?=
+ =?gb2312?Q?=5Fpartitions?=
+Thread-Topic: [PATCH -next] usb: xhci: tegra:Fix PM usage reference leak of
+ tegra_xusb_unpowergate_partitions
+Thread-Index: AQHYOsJR0FkcLz93T06vOMu+/fLlsKzF/BVg
+Date:   Sat, 19 Mar 2022 02:29:56 +0000
+Message-ID: <f596821a2025456a872c3d0d29ed6f68@huawei.com>
+References: <20220315025614.2599576-1-zhangqilong3@huawei.com>
+ <YjRzitp5BJmBpV18@kroah.com>
+In-Reply-To: <YjRzitp5BJmBpV18@kroah.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.177.246]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <20220316192010.19001-8-rdunlap@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/16/22 1:20 PM, Randy Dunlap wrote:
-> Eliminate anonymous module_init() and module_exit(), which can lead to
-> confusion or ambiguity when reading System.map, crashes/oops/bugs,
-> or an initcall_debug log.
-> 
-> Give each of these init and exit functions unique driver-specific
-> names to eliminate the anonymous names.
-> 
-> Example 1: (System.map)
->   ffffffff832fc78c t init
->   ffffffff832fc79e t init
->   ffffffff832fc8f8 t init
-> 
-> Example 2: (initcall_debug log)
->   calling  init+0x0/0x12 @ 1
->   initcall init+0x0/0x12 returned 0 after 15 usecs
->   calling  init+0x0/0x60 @ 1
->   initcall init+0x0/0x60 returned 0 after 2 usecs
->   calling  init+0x0/0x9a @ 1
->   initcall init+0x0/0x9a returned 0 after 74 usecs
-> 
-> Fixes: 80fd9cd52de6 ("usbip: vudc: Add VUDC main file")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Krzysztof Opasiak <k.opasiak@samsung.com>
-> Cc: Igor Kotrasinski <i.kotrasinsk@samsung.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Valentina Manea <valentina.manea.m@gmail.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Shuah Khan <skhan@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
-> ---
->   drivers/usb/usbip/vudc_main.c |    8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> --- lnx-517-rc8.orig/drivers/usb/usbip/vudc_main.c
-> +++ lnx-517-rc8/drivers/usb/usbip/vudc_main.c
-> @@ -28,7 +28,7 @@ static struct platform_driver vudc_drive
->   
->   static struct list_head vudc_devices = LIST_HEAD_INIT(vudc_devices);
->   
-> -static int __init init(void)
-> +static int __init vudc_init(void)
->   {
->   	int retval = -ENOMEM;
->   	int i;
-> @@ -86,9 +86,9 @@ cleanup:
->   out:
->   	return retval;
->   }
-> -module_init(init);
-> +module_init(vudc_init);
->   
-> -static void __exit cleanup(void)
-> +static void __exit vudc_cleanup(void)
->   {
->   	struct vudc_device *udc_dev = NULL, *udc_dev2 = NULL;
->   
-> @@ -103,7 +103,7 @@ static void __exit cleanup(void)
->   	}
->   	platform_driver_unregister(&vudc_driver);
->   }
-> -module_exit(cleanup);
-> +module_exit(vudc_cleanup);
->   
->   MODULE_DESCRIPTION("USB over IP Device Controller");
->   MODULE_AUTHOR("Krzysztof Opasiak, Karol Kosik, Igor Kotrasinski");
-> 
-
-Thanks for fixing this.
-
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+DQoNCj4gLS0tLS3Tyrz+1K28/i0tLS0tDQo+ILeivP7IyzogR3JlZyBLSCBbbWFpbHRvOmdyZWdr
+aEBsaW51eGZvdW5kYXRpb24ub3JnXQ0KPiC3osvNyrG85DogMjAyMsTqM9TCMTjI1SAxOTo1Nw0K
+PiDK1bz+yMs6IHpoYW5ncWlsb25nIDx6aGFuZ3FpbG9uZzNAaHVhd2VpLmNvbT4NCj4gs63LzTog
+bWF0aGlhcy5ueW1hbkBpbnRlbC5jb207IHRoaWVycnkucmVkaW5nQGdtYWlsLmNvbTsNCj4gam9u
+YXRoYW5oQG52aWRpYS5jb207IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4LXRl
+Z3JhQHZnZXIua2VybmVsLm9yZw0KPiDW98ziOiBSZTogW1BBVENIIC1uZXh0XSB1c2I6IHhoY2k6
+IHRlZ3JhOkZpeCBQTSB1c2FnZSByZWZlcmVuY2UgbGVhayBvZg0KPiB0ZWdyYV94dXNiX3VucG93
+ZXJnYXRlX3BhcnRpdGlvbnMNCj4gDQo+IE9uIFR1ZSwgTWFyIDE1LCAyMDIyIGF0IDEwOjU2OjE0
+QU0gKzA4MDAsIHpoYW5ncWlsb25nIHdyb3RlOg0KPiA+IHBtX3J1bnRpbWVfZ2V0X3N5bmMgd2ls
+bCBpbmNyZW1lbnQgcG0gdXNhZ2UgY291bnRlciBldmVuIGl0IGZhaWxlZC4NCj4gPiBGb3JnZXR0
+aW5nIHRvIHB1dHRpbmcgb3BlcmF0aW9uIHdpbGwgcmVzdWx0IGluIHJlZmVyZW5jZSBsZWFrIGhl
+cmUuIFdlDQo+ID4gZml4IGl0IGJ5IHJlcGxhY2luZyBpdCB3aXRoIHBtX3J1bnRpbWVfcmVzdW1l
+X2FuZF9nZXQgdG8ga2VlcCB1c2FnZQ0KPiA+IGNvdW50ZXIgYmFsYW5jZWQuDQo+ID4NCj4gPiBG
+aXhlczoxYTc0MjZkMjVmYTMgKCJ1c2I6IHhoY2k6IHRlZ3JhOiBVbmxpbmsgcG93ZXIgZG9tYWlu
+IGRldmljZXMiKQ0KPiANCj4gSSBkbyBub3Qgc2VlIHRoaXMgY29tbWl0IGlkIGluIGFueSB0cmVl
+IEkga25vdyBvZi4gIEFyZSB5b3Ugc3VyZSBpdCBpcyBjb3JyZWN0Pw0KSSBwYXN0ZSB0aGUgd3Jv
+bmcgY29tbWl0IGlkLCBJdCBpcyA0MWE3NDI2ZDI1ZmEzDQoNClRoYW5rcw0KDQpaaGFuZw0KPiAN
+Cj4gdGhhbmtzLA0KPiANCj4gZ3JlZyBrLWgNCg==
