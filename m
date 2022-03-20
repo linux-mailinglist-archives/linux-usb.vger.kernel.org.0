@@ -2,28 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515DE4E19AB
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Mar 2022 05:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D15094E19AD
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Mar 2022 05:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244712AbiCTEpe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Mar 2022 00:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        id S244716AbiCTEpi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Mar 2022 00:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234810AbiCTEpc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Mar 2022 00:45:32 -0400
+        with ESMTP id S244713AbiCTEpe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Mar 2022 00:45:34 -0400
 Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132AB1A3B4
-        for <linux-usb@vger.kernel.org>; Sat, 19 Mar 2022 21:44:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822043152F
+        for <linux-usb@vger.kernel.org>; Sat, 19 Mar 2022 21:44:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647751449; x=1679287449;
+  t=1647751451; x=1679287451;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0mZ2UkB6qvAlzF0OklvW5PAyLLYs4wwLuCyXXF0DzZg=;
-  b=XJLnCBjHEIqFCNWlVKfXEfY6DkqiGhT7qMNtbaNyGaMwZ7Kock5NbwMi
-   Rf/WnJCLr3Am+UvVQQ+mUz79IE5PcjBlwXejmFX5wX5VwVDMJSF8w+N+7
-   UqA46FPtF7BzXdKZBUUMaGGZXx6kQXumfD9pMowo40sIbD//OSAH541RS
-   E=;
+  bh=aDOY22hKH8xHx4e6PbNvOR2LcgO4dCQJgjTWzseu688=;
+  b=zgwPE6bepGqEHHcpFKnfdxFHcl0crv31X2TyIDDOeCXr7ZCPnPuEqLE5
+   28RSHkO3+5l1pdlleOREWytso6BdRkxC9FdxBf4kEMFHr9uNDNNAG2E9G
+   n+KJS9mL0lUSxl6rnMYOdoVgmQou8sdGxDDxZXA1cTUp7iDG8fUtpLZ97
+   g=;
 Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
   by alexa-out-sd-01.qualcomm.com with ESMTP; 19 Mar 2022 21:44:08 -0700
 X-QCInternal: smtphost
@@ -32,19 +32,19 @@ Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
 Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sat, 19 Mar 2022 21:43:33 -0700
+ 15.2.986.22; Sat, 19 Mar 2022 21:43:35 -0700
 Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sat, 19 Mar 2022 21:43:31 -0700
+ 15.2.986.22; Sat, 19 Mar 2022 21:43:33 -0700
 From:   Linyu Yuan <quic_linyyuan@quicinc.com>
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
         "Linyu Yuan" <quic_linyyuan@quicinc.com>
-Subject: [PATCH v2 2/4] usb: gadget: add trace event of configfs group operation
-Date:   Sun, 20 Mar 2022 12:43:22 +0800
-Message-ID: <1647751404-6841-3-git-send-email-quic_linyyuan@quicinc.com>
+Subject: [PATCH v2 3/4] usb: gadget: add trace event of configfs link/unlink operation
+Date:   Sun, 20 Mar 2022 12:43:23 +0800
+Message-ID: <1647751404-6841-4-git-send-email-quic_linyyuan@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1647751404-6841-1-git-send-email-quic_linyyuan@quicinc.com>
 References: <1647751404-6841-1-git-send-email-quic_linyyuan@quicinc.com>
@@ -64,151 +64,85 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add API trace_usb_configfs_make_group() and trace_usb_configfs_drop_group()
-to trace user create gadget/function/configuration... groups,
-it also trace group create in a specific function.
+Add API trace_usb_configfs_link_group() and trace_usb_configfs_unlink_group()
+to trace user link/unlink a function to gadget configuration,
+if a specific function need link/unlink, it also can be used.
 
 Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 ---
 v2: no change
 
- drivers/usb/gadget/configfs.c                | 88 ++++++++++++++++++++++++++++
- drivers/usb/gadget/function/f_mass_storage.c |  4 ++
- drivers/usb/gadget/function/uvc_configfs.c   | 12 ++++
- include/linux/usb/composite.h                |  9 +++
- include/linux/usb/gadget_configfs.h          |  2 +
- 5 files changed, 115 insertions(+)
+ drivers/usb/gadget/configfs.c              | 50 ++++++++++++++++++++++++++++++
+ drivers/usb/gadget/function/uvc_configfs.c | 12 +++++++
+ include/linux/usb/composite.h              |  6 ++++
+ 3 files changed, 68 insertions(+)
 
 diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index f35a226..be9e70a 100644
+index be9e70a..0f85290 100644
 --- a/drivers/usb/gadget/configfs.c
 +++ b/drivers/usb/gadget/configfs.c
-@@ -624,6 +624,8 @@ static struct config_group *function_make(
+@@ -425,6 +425,8 @@ static int config_usb_cfg_link(
+ 	struct usb_function *f;
+ 	int ret;
  
- 	gi = container_of(group, struct gadget_info, functions_group);
- 
-+	trace_usb_configfs_make_group(&group->cg_item, &fi->group.cg_item);
++	trace_usb_configfs_link_group(usb_cfg_ci, usb_func_ci);
 +
  	mutex_lock(&gi->lock);
- 	list_add_tail(&fi->cfs_list, &gi->available_func);
- 	mutex_unlock(&gi->lock);
-@@ -637,6 +639,8 @@ static void function_drop(
- 	struct usb_function_instance *fi = to_usb_function_instance(item);
- 	struct gadget_info *gi;
+ 	/*
+ 	 * Make sure this function is from within our _this_ gadget and not
+@@ -474,6 +476,8 @@ static void config_usb_cfg_unlink(
+ 			to_usb_function_instance(usb_func_ci);
+ 	struct usb_function *f;
  
-+	trace_usb_configfs_drop_group(&group->cg_item, item);
++	trace_usb_configfs_unlink_group(usb_cfg_ci, usb_func_ci);
 +
- 	gi = container_of(group, struct gadget_info, functions_group);
+ 	/*
+ 	 * ideally I would like to forbid to unlink functions while a gadget is
+ 	 * bound to an UDC. Since this isn't possible at the moment, we simply
+@@ -896,6 +900,8 @@ static int os_desc_link(struct config_item *os_desc_ci,
+ 	struct usb_configuration *c = NULL, *iter;
+ 	int ret;
  
++	trace_usb_configfs_link_group(os_desc_ci, usb_cfg_ci);
++
  	mutex_lock(&gi->lock);
-@@ -732,6 +736,7 @@ static struct config_group *config_desc_make(
- 	if (ret)
- 		goto err;
+ 	list_for_each_entry(iter, &cdev->configs, list) {
+ 		if (iter != &c_target->c)
+@@ -927,6 +933,8 @@ static void os_desc_unlink(struct config_item *os_desc_ci,
+ 	struct gadget_info *gi = os_desc_item_to_gadget_info(os_desc_ci);
+ 	struct usb_composite_dev *cdev = &gi->cdev;
  
-+	trace_usb_configfs_make_group(&group->cg_item, &cfg->group.cg_item);
- 	return &cfg->group;
- err:
- 	kfree(cfg->c.label);
-@@ -743,6 +748,7 @@ static void config_desc_drop(
- 		struct config_group *group,
- 		struct config_item *item)
- {
-+	trace_usb_configfs_drop_group(&group->cg_item, item);
- 	config_item_put(item);
- }
- 
-@@ -1086,6 +1092,7 @@ static struct config_item *ext_prop_make(
- 	ext_prop_type->ct_owner = desc->owner;
- 
- 	config_item_init_type_name(&ext_prop->item, name, ext_prop_type);
-+	trace_usb_configfs_make_group(&group->cg_item, &ext_prop->item);
- 
- 	ext_prop->name = kstrdup(name, GFP_KERNEL);
- 	if (!ext_prop->name) {
-@@ -1110,6 +1117,8 @@ static void ext_prop_drop(struct config_group *group, struct config_item *item)
- 	struct usb_os_desc_ext_prop *ext_prop = to_usb_os_desc_ext_prop(item);
- 	struct usb_os_desc *desc = to_usb_os_desc(&group->cg_item);
- 
-+	trace_usb_configfs_drop_group(&group->cg_item, item);
++	trace_usb_configfs_unlink_group(os_desc_ci, usb_cfg_ci);
 +
- 	if (desc->opts_mutex)
- 		mutex_lock(desc->opts_mutex);
- 	list_del(&ext_prop->entry);
-@@ -1629,6 +1638,7 @@ static struct config_group *gadgets_make(
- 	if (!gi->composite.gadget_driver.function)
- 		goto err;
- 
-+	trace_usb_configfs_make_group(&group->cg_item, &gi->group.cg_item);
- 	return &gi->group;
- err:
- 	kfree(gi);
-@@ -1637,6 +1647,7 @@ static struct config_group *gadgets_make(
- 
- static void gadgets_drop(struct config_group *group, struct config_item *item)
- {
-+	trace_usb_configfs_drop_group(&group->cg_item, item);
- 	config_item_put(item);
+ 	mutex_lock(&gi->lock);
+ 	if (gi->composite.gadget_driver.udc_name)
+ 		unregister_gadget(gi);
+@@ -1756,6 +1764,48 @@ void trace_usb_configfs_drop_group(struct config_item *pitem,
+ 	trace_usb_configfs_make_drop_group(pitem, item, "rmdir");
  }
- 
-@@ -1670,6 +1681,83 @@ void unregister_gadget_item(struct config_item *item)
- }
- EXPORT_SYMBOL_GPL(unregister_gadget_item);
- 
-+#ifdef CONFIG_TRACEPOINTS
-+#define GROUP_LEN	128
-+static int gadget_configfs_group(char *group, struct config_item *item)
+ EXPORT_SYMBOL(trace_usb_configfs_drop_group);
++
++static void trace_usb_configfs_link_unlink_group(struct config_item *dest,
++		struct config_item *src, char *link_unlink)
 +{
-+	char *tmpgroup = kzalloc(GROUP_LEN, GFP_KERNEL);
-+
-+	if (!tmpgroup)
-+		return -1;
-+
-+	for (;;) {
-+		if (item->ci_type == &gadgets_type) {
-+			kfree(tmpgroup);
-+			return 0;
-+		}
-+
-+		if (tmpgroup[0] == '\0')
-+			snprintf(group, GROUP_LEN, "%s",
-+					config_item_name(item));
-+		else
-+			snprintf(group, GROUP_LEN, "%s/%s",
-+					config_item_name(item), tmpgroup);
-+
-+		item = item->ci_parent;
-+		if (item->ci_type == &gadgets_type) {
-+			kfree(tmpgroup);
-+			return 0;
-+		}
-+
-+		strcpy(tmpgroup, group);
-+	}
-+
-+	return 0;
-+}
-+
-+static void trace_usb_configfs_make_drop_group(struct config_item *pitem,
-+		struct config_item *item, char *make_drop)
-+{
-+	char *group = kzalloc(2 * GROUP_LEN, GFP_KERNEL);
-+	char *tmpgroup;
++	char *group = kzalloc(4 * GROUP_LEN, GFP_KERNEL);
++	char *group1, *group2;
 +	int ret;
 +
 +	if (!group)
 +		goto out;
 +
-+	tmpgroup = group + GROUP_LEN;
-+	ret = gadget_configfs_group(tmpgroup, pitem);
++	group1 = group + 2 * GROUP_LEN;
++	ret = gadget_configfs_group(group1, dest);
 +	if (ret)
 +		goto out;
 +
-+	if (tmpgroup[0] == '\0')
-+		snprintf(group, GROUP_LEN, "%s %s", make_drop,
-+				config_item_name(item));
-+	else
-+		snprintf(group, GROUP_LEN, "%s %s/%s", make_drop, tmpgroup,
-+				config_item_name(item));
++	group2 = group + 3 * GROUP_LEN;
++	ret = gadget_configfs_group(group2, src);
++	if (ret)
++		goto out;
++
++	snprintf(group, 2 * GROUP_LEN, "%s %s %s", link_unlink, group1, group2);
 +
 +	trace_gadget_configfs(group);
 +
@@ -216,144 +150,100 @@ index f35a226..be9e70a 100644
 +	kfree(group);
 +}
 +
-+void trace_usb_configfs_make_group(struct config_item *pitem,
-+		struct config_item *item)
++void trace_usb_configfs_link_group(struct config_item *dest,
++		struct config_item *src)
 +{
-+	trace_usb_configfs_make_drop_group(pitem, item, "mkdir");
++	trace_usb_configfs_link_unlink_group(dest, src, "link");
 +}
-+EXPORT_SYMBOL(trace_usb_configfs_make_group);
++EXPORT_SYMBOL(trace_usb_configfs_link_group);
 +
-+void trace_usb_configfs_drop_group(struct config_item *pitem,
-+		struct config_item *item)
++void trace_usb_configfs_unlink_group(struct config_item *dest,
++		struct config_item *src)
 +{
-+	trace_usb_configfs_make_drop_group(pitem, item, "rmdir");
++	trace_usb_configfs_link_unlink_group(dest, src, "unlink");
 +}
-+EXPORT_SYMBOL(trace_usb_configfs_drop_group);
-+#endif
-+
++EXPORT_SYMBOL(trace_usb_configfs_unlink_group);
+ #endif
+ 
  static int __init gadget_cfs_init(void)
- {
- 	int ret;
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index ba899ca..8bf1f37 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -3288,6 +3288,8 @@ static struct config_group *fsg_lun_make(struct config_group *group,
- 
- 	config_group_init_type_name(&opts->group, name, &fsg_lun_type);
- 
-+	trace_usb_configfs_make_group(&group->cg_item, &opts->group.cg_item);
-+
- 	return &opts->group;
- out:
- 	mutex_unlock(&fsg_opts->lock);
-@@ -3299,6 +3301,8 @@ static void fsg_lun_drop(struct config_group *group, struct config_item *item)
- 	struct fsg_lun_opts *lun_opts;
- 	struct fsg_opts *fsg_opts;
- 
-+	trace_usb_configfs_drop_group(&group->cg_item, item);
-+
- 	lun_opts = to_fsg_lun_opts(item);
- 	fsg_opts = to_fsg_opts(&group->cg_item);
- 
 diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 77d6403..cc0f2eb 100644
+index cc0f2eb..fc139f3 100644
 --- a/drivers/usb/gadget/function/uvc_configfs.c
 +++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -236,6 +236,8 @@ static struct config_item *uvcg_control_header_make(struct config_group *group,
+@@ -598,6 +598,8 @@ static int uvcg_control_class_allow_link(struct config_item *src,
+ 	struct uvcg_control_header *target_hdr;
+ 	int ret = -EINVAL;
  
- 	config_item_init_type_name(&h->item, name, &uvcg_control_header_type);
- 
-+	trace_usb_configfs_make_group(&group->cg_item, &h->item);
++	trace_usb_configfs_link_group(src, target);
 +
- 	return &h->item;
- }
+ 	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
  
-@@ -1039,6 +1041,8 @@ static struct config_item
+ 	control = src->ci_parent->ci_parent;
+@@ -639,6 +641,8 @@ static void uvcg_control_class_drop_link(struct config_item *src,
+ 	struct uvc_descriptor_header **class_array;
+ 	struct uvcg_control_header *target_hdr;
  
- 	config_item_init_type_name(&h->item, name, &uvcg_streaming_header_type);
- 
-+	trace_usb_configfs_make_group(&group->cg_item, &h->item);
++	trace_usb_configfs_unlink_group(src, target);
 +
- 	return &h->item;
- }
+ 	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
  
-@@ -1380,6 +1384,8 @@ static struct config_item *uvcg_frame_make(struct config_group *group,
+ 	control = src->ci_parent->ci_parent;
+@@ -883,6 +887,8 @@ static int uvcg_streaming_header_allow_link(struct config_item *src,
+ 	struct uvcg_format_ptr *format_ptr;
+ 	int i, ret = -EINVAL;
  
- 	config_item_init_type_name(&h->item, name, &uvcg_frame_type);
- 
-+	trace_usb_configfs_make_group(&group->cg_item, &h->item);
++	trace_usb_configfs_link_group(src, target);
 +
- 	return &h->item;
- }
+ 	src_hdr = to_uvcg_streaming_header(src);
+ 	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
  
-@@ -1389,6 +1395,8 @@ static void uvcg_frame_drop(struct config_group *group, struct config_item *item
- 	struct f_uvc_opts *opts;
- 	struct config_item *opts_item;
+@@ -946,6 +952,8 @@ static void uvcg_streaming_header_drop_link(struct config_item *src,
+ 	struct uvcg_format *target_fmt = NULL;
+ 	struct uvcg_format_ptr *format_ptr, *tmp;
  
-+	trace_usb_configfs_drop_group(&group->cg_item, item);
++	trace_usb_configfs_unlink_group(src, target);
 +
- 	opts_item = group->cg_item.ci_parent->ci_parent->ci_parent;
- 	opts = to_f_uvc_opts(opts_item);
+ 	src_hdr = to_uvcg_streaming_header(src);
+ 	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
  
-@@ -1649,6 +1657,8 @@ static struct config_group *uvcg_uncompressed_make(struct config_group *group,
- 	config_group_init_type_name(&h->fmt.group, name,
- 				    &uvcg_uncompressed_type);
+@@ -2171,6 +2179,8 @@ static int uvcg_streaming_class_allow_link(struct config_item *src,
+ 	size_t size = 0, count = 0;
+ 	int ret = -EINVAL;
  
-+	trace_usb_configfs_make_group(&group->cg_item, &h->fmt.group.cg_item);
++	trace_usb_configfs_link_group(src, target);
 +
- 	return &h->fmt.group;
- }
+ 	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
  
-@@ -1835,6 +1845,8 @@ static struct config_group *uvcg_mjpeg_make(struct config_group *group,
- 	config_group_init_type_name(&h->fmt.group, name,
- 				    &uvcg_mjpeg_type);
+ 	streaming = src->ci_parent->ci_parent;
+@@ -2242,6 +2252,8 @@ static void uvcg_streaming_class_drop_link(struct config_item *src,
+ 	struct uvc_descriptor_header ***class_array;
+ 	struct uvcg_streaming_header *target_hdr;
  
-+	trace_usb_configfs_make_group(&group->cg_item, &h->fmt.group.cg_item);
++	trace_usb_configfs_unlink_group(src, target);
 +
- 	return &h->fmt.group;
- }
+ 	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
  
+ 	streaming = src->ci_parent->ci_parent;
 diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-index 9d27622..611029d 100644
+index 611029d..a90e626 100644
 --- a/include/linux/usb/composite.h
 +++ b/include/linux/usb/composite.h
-@@ -603,6 +603,15 @@ void usb_put_function_instance(struct usb_function_instance *fi);
- void usb_put_function(struct usb_function *f);
- struct usb_function_instance *usb_get_function_instance(const char *name);
- struct usb_function *usb_get_function(struct usb_function_instance *fi);
-+#ifdef CONFIG_TRACEPOINTS
-+void trace_usb_configfs_make_group(struct config_item *pitem,
+@@ -608,9 +608,15 @@ void trace_usb_configfs_make_group(struct config_item *pitem,
+ 		struct config_item *item);
+ void trace_usb_configfs_drop_group(struct config_item *pitem,
+ 		struct config_item *item);
++void trace_usb_configfs_link_group(struct config_item *pitem,
 +		struct config_item *item);
-+void trace_usb_configfs_drop_group(struct config_item *pitem,
++void trace_usb_configfs_unlink_group(struct config_item *pitem,
 +		struct config_item *item);
-+#else
-+#define trace_usb_configfs_make_group(pitem, item) do {} while(0)
-+#define trace_usb_configfs_drop_group(pitem, item) do {} while(0)
-+#endif
+ #else
+ #define trace_usb_configfs_make_group(pitem, item) do {} while(0)
+ #define trace_usb_configfs_drop_group(pitem, item) do {} while(0)
++#define trace_usb_configfs_link_group(pitem, item) do {} while(0)
++#define trace_usb_configfs_unlink_group(pitem, item) do {} while(0)
+ #endif
  
  struct usb_configuration *usb_get_config(struct usb_composite_dev *cdev,
- 		int val);
-diff --git a/include/linux/usb/gadget_configfs.h b/include/linux/usb/gadget_configfs.h
-index d61aebd..a89f177 100644
---- a/include/linux/usb/gadget_configfs.h
-+++ b/include/linux/usb/gadget_configfs.h
-@@ -63,6 +63,7 @@ static struct config_item_type struct_in##_langid_type = {		\
- 		goto err;						\
- 	config_group_init_type_name(&new->group, name,			\
- 			&struct_in##_langid_type);			\
-+	trace_usb_configfs_make_group(&group->cg_item, &new->group.cg_item); \
- 									\
- 	gi = container_of(group, struct struct_member, strings_group);	\
- 	ret = -EEXIST;							\
-@@ -86,6 +87,7 @@ static void struct_in##_strings_drop(					\
- 		struct config_group *group,				\
- 		struct config_item *item)				\
- {									\
-+	trace_usb_configfs_drop_group(&group->cg_item, item);		\
- 	config_item_put(item);						\
- }									\
- 									\
 -- 
 2.7.4
 
