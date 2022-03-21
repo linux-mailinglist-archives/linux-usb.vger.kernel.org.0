@@ -2,518 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7DF4E1DA3
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Mar 2022 20:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3654E1EB8
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Mar 2022 02:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343605AbiCTTwa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Mar 2022 15:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
+        id S1343984AbiCUB0g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Mar 2022 21:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbiCTTw3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Mar 2022 15:52:29 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 41CB711A9B9
-        for <linux-usb@vger.kernel.org>; Sun, 20 Mar 2022 12:51:05 -0700 (PDT)
-Received: (qmail 78281 invoked by uid 1000); 20 Mar 2022 15:51:04 -0400
-Date:   Sun, 20 Mar 2022 15:51:04 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>
-Subject: [RFC PATCH 4/4] USB: gadget: Add a new bus for gadgets
-Message-ID: <YjeFqK+ZrcHx9HZh@rowland.harvard.edu>
-References: <YjeEbHL8ITkW692W@rowland.harvard.edu>
- <YjeEwspj0V3JaV1L@rowland.harvard.edu>
- <YjeFImy6hY+2MHe2@rowland.harvard.edu>
- <YjeFaCijdcfw5fdc@rowland.harvard.edu>
+        with ESMTP id S232538AbiCUB0f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Mar 2022 21:26:35 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2048B275DE;
+        Sun, 20 Mar 2022 18:25:11 -0700 (PDT)
+Received: from fsav314.sakura.ne.jp (fsav314.sakura.ne.jp [153.120.85.145])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 22L1OQ9W020821;
+        Mon, 21 Mar 2022 10:24:26 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav314.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp);
+ Mon, 21 Mar 2022 10:24:26 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 22L1OOpR020816
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 21 Mar 2022 10:24:25 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <49925af7-78a8-a3dd-bce6-cfc02e1a9236@I-love.SAKURA.ne.jp>
+Date:   Mon, 21 Mar 2022 10:24:23 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjeFaCijdcfw5fdc@rowland.harvard.edu>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: An announcement for kernel-global workqueue users.
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,RCVD_IN_SBL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds a "gadget" bus and uses it for registering gadgets and
-their drivers.  From now on, bindings will be managed by the driver
-core rather than through ad-hoc manipulations in the UDC core.
+Hello.
 
-As part of this change, the driver_pending_list is removed.  The UDC
-core won't need to keep track of unbound drivers for later binding,
-because the driver core handles all of that for us.
+The Linux kernel provides kernel-global WQs (namely, system_wq, system_highpri_wq,
+system_long_wq, system_unbound_wq, system_freezable_wq, system_power_efficient_wq
+and system_freezable_power_efficient_wq). But since attempt to flush kernel-global
+WQs has possibility of deadlock, Tejun Heo thinks that we should stop calling
+flush_scheduled_work() and flush_workqueue(system_*). Such callers as of Linux 5.17
+are listed below.
 
-However, we do need one new feature: a way to prevent gadget drivers
-from being bound to more than one gadget at a time.  The existing code
-does this automatically, but the driver core doesn't -- it's perfectly
-happy to bind a single driver to all the matching devices on the bus.
-The patch adds a new bitflag to the usb_gadget_driver structure for
-this purpose.
+----------
+$ git grep -nF 'flush_scheduled_work()'
+drivers/acpi/osl.c:1182:         * invoke flush_scheduled_work()/acpi_os_wait_events_complete() to flush
+drivers/acpi/osl.c:1575:        flush_scheduled_work();
+drivers/block/aoe/aoedev.c:324: flush_scheduled_work();
+drivers/block/aoe/aoedev.c:523: flush_scheduled_work();
+drivers/crypto/atmel-ecc.c:401: flush_scheduled_work();
+drivers/crypto/atmel-sha204a.c:162:     flush_scheduled_work();
+drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c:2606:       flush_scheduled_work();
+drivers/gpu/drm/bridge/lontium-lt9611uxc.c:985: flush_scheduled_work();
+drivers/gpu/drm/i915/display/intel_display.c:10790:     flush_scheduled_work();
+drivers/gpu/drm/i915/gt/selftest_execlists.c:87:        flush_scheduled_work();
+drivers/iio/light/tsl2563.c:811:        flush_scheduled_work();
+drivers/infiniband/hw/mlx4/cm.c:511:            flush_scheduled_work();
+drivers/infiniband/hw/mlx4/cm.c:543:            flush_scheduled_work(); /* make sure all timers were flushed */
+drivers/infiniband/ulp/isert/ib_isert.c:2639:   flush_scheduled_work();
+drivers/input/mouse/psmouse-smbus.c:320:        flush_scheduled_work();
+drivers/md/dm.c:229:    flush_scheduled_work();
+drivers/message/fusion/mptscsih.c:1234: flush_scheduled_work();
+drivers/net/phy/phy.c:1060:     /* Cannot call flush_scheduled_work() here as desired because
+drivers/net/usb/lan78xx.c:3240:  * can't flush_scheduled_work() until we drop rtnl (later),
+drivers/net/usb/usbnet.c:853:    * can't flush_scheduled_work() until we drop rtnl (later),
+drivers/net/wireless/ath/ath6kl/usb.c:481:      flush_scheduled_work();
+drivers/net/wwan/wwan_hwsim.c:537:      flush_scheduled_work();         /* Wait deletion works completion */
+drivers/nvme/target/configfs.c:1557:    flush_scheduled_work();
+drivers/nvme/target/rdma.c:1587:                flush_scheduled_work();
+drivers/nvme/target/rdma.c:2056:        flush_scheduled_work();
+drivers/nvme/target/tcp.c:1818:         flush_scheduled_work();
+drivers/nvme/target/tcp.c:1879: flush_scheduled_work();
+drivers/nvme/target/tcp.c:1884: flush_scheduled_work();
+drivers/platform/surface/surface_acpi_notify.c:863:     flush_scheduled_work();
+drivers/power/supply/ab8500_btemp.c:975:        flush_scheduled_work();
+drivers/power/supply/ab8500_chargalg.c:1993:    flush_scheduled_work();
+drivers/power/supply/ab8500_charger.c:3400:     flush_scheduled_work();
+drivers/power/supply/ab8500_fg.c:3021:  flush_scheduled_work();
+drivers/rapidio/devices/tsi721.c:2944:  flush_scheduled_work();
+drivers/rtc/dev.c:99:                   flush_scheduled_work();
+drivers/scsi/mpt3sas/mpt3sas_scsih.c:12409:     flush_scheduled_work();
+drivers/scsi/qla2xxx/qla_target.c:1568:         flush_scheduled_work();
+drivers/staging/olpc_dcon/olpc_dcon.c:386:      flush_scheduled_work();
+sound/soc/intel/atom/sst/sst.c:363:     flush_scheduled_work();
+$ git grep -nF 'flush_workqueue(system_'
+drivers/block/rnbd/rnbd-clt.c:1776:     flush_workqueue(system_long_wq);
+drivers/infiniband/core/device.c:2857:  flush_workqueue(system_unbound_wq);
+include/linux/workqueue.h:592:  flush_workqueue(system_wq);
+----------
 
-A nice side effect of this change is a reduction in the total lines of
-code, since now the driver core will do part of the work that the UDC
-used to do.
+I tried to send a patch that emits a warning when flushing kernel-global WQs is attempted
+( https://lkml.kernel.org/r/2efd5461-fccd-f1d9-7138-0a6767cbf5fe@I-love.SAKURA.ne.jp ).
+But Linus does not want such patch
+( https://lkml.kernel.org/r/CAHk-=whWreGjEQ6yasspzBrNnS7EQiL+SknToWt=SzUh4XomyQ@mail.gmail.com ).
 
-A possible future patch could add udc devices to the gadget bus, say
-as a separate device type.
+Steps for converting kernel-global WQs into module's local WQs are shown below.
+But since an oversight in Step 4 results in breakage, I think that this conversion
+should be carefully handled by maintainers/developers of each module who are
+familiar with that module. (This is why I'm sending this mail than sending patches,
+in order to ask for your cooperation.)
 
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+----------
+Step 0: Consider if flushing kernel-global WQs is unavoidable.
 
----
+    For example, commit 081bdc9fe05bb232 ("RDMA/ib_srp: Fix a deadlock")
+    simply removed flush_workqueue(system_long_wq) call.
 
- drivers/usb/gadget/udc/core.c |  248 +++++++++++++++++++-----------------------
- include/linux/usb/gadget.h    |   26 ++--
- 2 files changed, 135 insertions(+), 139 deletions(-)
+    For another example, schedule_on_each_cpu() does not need to call
+    flush_scheduled_work() because schedule_on_each_cpu() knows the list
+    of all "struct work_struct" instances which need to be flushed using
+    flush_work() call.
 
-Index: usb-devel/drivers/usb/gadget/udc/core.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/udc/core.c
-+++ usb-devel/drivers/usb/gadget/udc/core.c
-@@ -23,6 +23,8 @@
- 
- #include "trace.h"
- 
-+static struct bus_type gadget_bus_type;
-+
- /**
-  * struct usb_udc - describes one usb device controller
-  * @driver: the gadget driver pointer. For use by the class code
-@@ -47,11 +49,9 @@ struct usb_udc {
- 
- static struct class *udc_class;
- static LIST_HEAD(udc_list);
--static LIST_HEAD(gadget_driver_pending_list);
--static DEFINE_MUTEX(udc_lock);
- 
--static int udc_bind_to_driver(struct usb_udc *udc,
--		struct usb_gadget_driver *driver);
-+/* Protects udc_list, udc->driver, driver->is_bound, and related calls */
-+static DEFINE_MUTEX(udc_lock);
- 
- /* ------------------------------------------------------------------------- */
- 
-@@ -1238,24 +1238,6 @@ static void usb_udc_nop_release(struct d
- 	dev_vdbg(dev, "%s\n", __func__);
- }
- 
--/* should be called with udc_lock held */
--static int check_pending_gadget_drivers(struct usb_udc *udc)
--{
--	struct usb_gadget_driver *driver;
--	int ret = 0;
--
--	list_for_each_entry(driver, &gadget_driver_pending_list, pending)
--		if (!driver->udc_name || strcmp(driver->udc_name,
--						dev_name(&udc->dev)) == 0) {
--			ret = udc_bind_to_driver(udc, driver);
--			if (ret != -EPROBE_DEFER)
--				list_del_init(&driver->pending);
--			break;
--		}
--
--	return ret;
--}
--
- /**
-  * usb_initialize_gadget - initialize a gadget and its embedded struct device
-  * @parent: the parent device to this udc. Usually the controller driver's
-@@ -1276,6 +1258,7 @@ void usb_initialize_gadget(struct device
- 		gadget->dev.release = usb_udc_nop_release;
- 
- 	device_initialize(&gadget->dev);
-+	gadget->dev.bus = &gadget_bus_type;
- }
- EXPORT_SYMBOL_GPL(usb_initialize_gadget);
- 
-@@ -1312,6 +1295,7 @@ int usb_add_gadget(struct usb_gadget *ga
- 
- 	mutex_lock(&udc_lock);
- 	list_add_tail(&udc->list, &udc_list);
-+	mutex_unlock(&udc_lock);
- 
- 	ret = device_add(&udc->dev);
- 	if (ret)
-@@ -1324,23 +1308,14 @@ int usb_add_gadget(struct usb_gadget *ga
- 	if (ret)
- 		goto err_del_udc;
- 
--	/* pick up one of pending gadget drivers */
--	ret = check_pending_gadget_drivers(udc);
--	if (ret)
--		goto err_del_gadget;
--
--	mutex_unlock(&udc_lock);
--
- 	return 0;
- 
-- err_del_gadget:
--	device_del(&gadget->dev);
--
-  err_del_udc:
- 	flush_work(&gadget->work);
- 	device_del(&udc->dev);
- 
-  err_unlist_udc:
-+	mutex_lock(&udc_lock);
- 	list_del(&udc->list);
- 	mutex_unlock(&udc_lock);
- 
-@@ -1419,24 +1394,6 @@ int usb_add_gadget_udc(struct device *pa
- }
- EXPORT_SYMBOL_GPL(usb_add_gadget_udc);
- 
--static void usb_gadget_remove_driver(struct usb_udc *udc)
--{
--	dev_dbg(&udc->dev, "unregistering UDC driver [%s]\n",
--			udc->driver->function);
--
--	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
--
--	usb_gadget_disconnect(udc->gadget);
--	usb_gadget_disable_async_callbacks(udc);
--	if (udc->gadget->irq)
--		synchronize_irq(udc->gadget->irq);
--	udc->driver->unbind(udc->gadget);
--	usb_gadget_udc_stop(udc);
--
--	udc->driver = NULL;
--	udc->gadget->dev.driver = NULL;
--}
--
- /**
-  * usb_del_gadget - deletes a gadget and unregisters its udc
-  * @gadget: the gadget to be deleted.
-@@ -1455,13 +1412,6 @@ void usb_del_gadget(struct usb_gadget *g
- 
- 	mutex_lock(&udc_lock);
- 	list_del(&udc->list);
--
--	if (udc->driver) {
--		struct usb_gadget_driver *driver = udc->driver;
--
--		usb_gadget_remove_driver(udc);
--		list_add(&driver->pending, &gadget_driver_pending_list);
--	}
- 	mutex_unlock(&udc_lock);
- 
- 	kobject_uevent(&udc->dev.kobj, KOBJ_REMOVE);
-@@ -1486,119 +1436,143 @@ EXPORT_SYMBOL_GPL(usb_del_gadget_udc);
- 
- /* ------------------------------------------------------------------------- */
- 
--static int udc_bind_to_driver(struct usb_udc *udc, struct usb_gadget_driver *driver)
-+static int gadget_match_driver(struct device *dev, struct device_driver *drv)
- {
--	int ret;
-+	struct usb_gadget *gadget = dev_to_usb_gadget(dev);
-+	struct usb_udc *udc = gadget->udc;
-+	struct usb_gadget_driver *driver = container_of(drv,
-+			struct usb_gadget_driver, driver);
- 
--	dev_dbg(&udc->dev, "registering UDC driver [%s]\n",
--			driver->function);
-+	/* If the driver specifies a udc_name, it must match the UDC's name */
-+	if (driver->udc_name &&
-+			strcmp(driver->udc_name, dev_name(&udc->dev)) != 0)
-+		return 0;
- 
-+	/* Otherwise any gadget driver matches any UDC */
-+	return 1;
-+}
-+
-+static int gadget_bind_driver(struct device *dev)
-+{
-+	struct usb_gadget *gadget = dev_to_usb_gadget(dev);
-+	struct usb_udc *udc = gadget->udc;
-+	struct usb_gadget_driver *driver = container_of(dev->driver,
-+			struct usb_gadget_driver, driver);
-+	int ret = 0;
-+
-+	mutex_lock(&udc_lock);
-+	if (driver->is_bound) {
-+		mutex_unlock(&udc_lock);
-+		return -ENXIO;		/* Driver binds to only one gadget */
-+	}
-+	driver->is_bound = true;
- 	udc->driver = driver;
--	udc->gadget->dev.driver = &driver->driver;
-+	mutex_unlock(&udc_lock);
-+
-+	dev_dbg(&udc->dev, "binding gadget driver [%s]\n", driver->function);
- 
- 	usb_gadget_udc_set_speed(udc, driver->max_speed);
- 
-+	mutex_lock(&udc_lock);
- 	ret = driver->bind(udc->gadget, driver);
- 	if (ret)
--		goto err1;
-+		goto err_bind;
-+
- 	ret = usb_gadget_udc_start(udc);
--	if (ret) {
--		driver->unbind(udc->gadget);
--		goto err1;
--	}
-+	if (ret)
-+		goto err_start;
- 	usb_gadget_enable_async_callbacks(udc);
- 	usb_udc_connect_control(udc);
-+	mutex_unlock(&udc_lock);
- 
- 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
- 	return 0;
--err1:
-+
-+ err_start:
-+	driver->unbind(udc->gadget);
-+
-+ err_bind:
- 	if (ret != -EISNAM)
- 		dev_err(&udc->dev, "failed to start %s: %d\n",
--			udc->driver->function, ret);
-+			driver->function, ret);
-+
- 	udc->driver = NULL;
--	udc->gadget->dev.driver = NULL;
-+	driver->is_bound = false;
-+	mutex_unlock(&udc_lock);
-+
- 	return ret;
- }
- 
--int usb_gadget_register_driver(struct usb_gadget_driver *driver)
-+static void gadget_unbind_driver(struct device *dev)
- {
--	struct usb_udc		*udc = NULL;
--	int			ret = -ENODEV;
-+	struct usb_gadget *gadget = dev_to_usb_gadget(dev);
-+	struct usb_udc *udc = gadget->udc;
-+	struct usb_gadget_driver *driver = udc->driver;
-+
-+	dev_dbg(&udc->dev, "unbinding gadget driver [%s]\n", driver->function);
-+
-+	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
-+
-+	mutex_lock(&udc_lock);
-+	usb_gadget_disconnect(gadget);
-+	usb_gadget_disable_async_callbacks(udc);
-+	if (gadget->irq)
-+		synchronize_irq(gadget->irq);
-+	udc->driver->unbind(gadget);
-+	usb_gadget_udc_stop(udc);
-+
-+	driver->is_bound = false;
-+	udc->driver = NULL;
-+	mutex_unlock(&udc_lock);
-+}
-+
-+/* ------------------------------------------------------------------------- */
-+
-+int usb_gadget_register_driver_owner(struct usb_gadget_driver *driver,
-+		struct module *owner, const char *mod_name)
-+{
-+	int ret;
- 
- 	if (!driver || !driver->bind || !driver->setup)
- 		return -EINVAL;
- 
-+	driver->driver.bus = &gadget_bus_type;
-+	driver->driver.owner = owner;
-+	driver->driver.mod_name = mod_name;
-+	ret = driver_register(&driver->driver);
-+	if (ret) {
-+		pr_warn("%s: driver registration failed: %d\n",
-+				driver->function, ret);
-+		return ret;
-+	}
-+
- 	mutex_lock(&udc_lock);
--	if (driver->udc_name) {
--		list_for_each_entry(udc, &udc_list, list) {
--			ret = strcmp(driver->udc_name, dev_name(&udc->dev));
--			if (!ret)
--				break;
--		}
--		if (ret)
--			ret = -ENODEV;
--		else if (udc->driver)
-+	if (!driver->is_bound) {
-+		if (driver->match_existing_only) {
-+			pr_warn("%s: couldn't find an available UDC or it's busy\n",
-+					driver->function);
- 			ret = -EBUSY;
--		else
--			goto found;
--	} else {
--		list_for_each_entry(udc, &udc_list, list) {
--			/* For now we take the first one */
--			if (!udc->driver)
--				goto found;
-+		} else {
-+			pr_info("%s: couldn't find an available UDC\n",
-+					driver->function);
- 		}
--	}
--
--	if (!driver->match_existing_only) {
--		list_add_tail(&driver->pending, &gadget_driver_pending_list);
--		pr_info("couldn't find an available UDC - added [%s] to list of pending drivers\n",
--			driver->function);
- 		ret = 0;
- 	}
--
- 	mutex_unlock(&udc_lock);
-+
- 	if (ret)
--		pr_warn("couldn't find an available UDC or it's busy: %d\n", ret);
--	return ret;
--found:
--	ret = udc_bind_to_driver(udc, driver);
--	mutex_unlock(&udc_lock);
-+		driver_unregister(&driver->driver);
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(usb_gadget_register_driver);
-+EXPORT_SYMBOL_GPL(usb_gadget_register_driver_owner);
- 
- int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
- {
--	struct usb_udc		*udc = NULL;
--	int			ret = -ENODEV;
--
- 	if (!driver || !driver->unbind)
- 		return -EINVAL;
- 
--	mutex_lock(&udc_lock);
--	list_for_each_entry(udc, &udc_list, list) {
--		if (udc->driver == driver) {
--			usb_gadget_remove_driver(udc);
--			usb_gadget_set_state(udc->gadget,
--					     USB_STATE_NOTATTACHED);
--
--			/* Maybe there is someone waiting for this UDC? */
--			check_pending_gadget_drivers(udc);
--			/*
--			 * For now we ignore bind errors as probably it's
--			 * not a valid reason to fail other's gadget unbind
--			 */
--			ret = 0;
--			break;
--		}
--	}
--
--	if (ret) {
--		list_del(&driver->pending);
--		ret = 0;
--	}
--	mutex_unlock(&udc_lock);
--	return ret;
-+	driver_unregister(&driver->driver);
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(usb_gadget_unregister_driver);
- 
-@@ -1750,8 +1724,17 @@ static int usb_udc_uevent(struct device
- 	return 0;
- }
- 
-+static struct bus_type gadget_bus_type = {
-+	.name = "gadget",
-+	.probe = gadget_bind_driver,
-+	.remove = gadget_unbind_driver,
-+	.match = gadget_match_driver,
-+};
-+
- static int __init usb_udc_init(void)
- {
-+	int rc;
-+
- 	udc_class = class_create(THIS_MODULE, "udc");
- 	if (IS_ERR(udc_class)) {
- 		pr_err("failed to create udc class --> %ld\n",
-@@ -1760,12 +1743,17 @@ static int __init usb_udc_init(void)
- 	}
- 
- 	udc_class->dev_uevent = usb_udc_uevent;
--	return 0;
-+
-+	rc = bus_register(&gadget_bus_type);
-+	if (rc)
-+		class_destroy(udc_class);
-+	return rc;
- }
- subsys_initcall(usb_udc_init);
- 
- static void __exit usb_udc_exit(void)
- {
-+	bus_unregister(&gadget_bus_type);
- 	class_destroy(udc_class);
- }
- module_exit(usb_udc_exit);
-Index: usb-devel/include/linux/usb/gadget.h
-===================================================================
---- usb-devel.orig/include/linux/usb/gadget.h
-+++ usb-devel/include/linux/usb/gadget.h
-@@ -664,9 +664,9 @@ static inline int usb_gadget_check_confi
-  * @driver: Driver model state for this driver.
-  * @udc_name: A name of UDC this driver should be bound to. If udc_name is NULL,
-  *	this driver will be bound to any available UDC.
-- * @pending: UDC core private data used for deferred probe of this driver.
-- * @match_existing_only: If udc is not found, return an error and don't add this
-- *      gadget driver to list of pending driver
-+ * @match_existing_only: If udc is not found, return an error and fail
-+ *	the driver registration
-+ * @is_bound: Allow a driver to be bound to only one gadget
-  *
-  * Devices are disabled till a gadget driver successfully bind()s, which
-  * means the driver will handle setup() requests needed to enumerate (and
-@@ -729,8 +729,8 @@ struct usb_gadget_driver {
- 	struct device_driver	driver;
- 
- 	char			*udc_name;
--	struct list_head	pending;
- 	unsigned                match_existing_only:1;
-+	bool			is_bound:1;
- };
- 
- 
-@@ -740,22 +740,30 @@ struct usb_gadget_driver {
- /* driver modules register and unregister, as usual.
-  * these calls must be made in a context that can sleep.
-  *
-- * these will usually be implemented directly by the hardware-dependent
-- * usb bus interface driver, which will only support a single driver.
-+ * A gadget driver can be bound to only one gadget at a time.
-  */
- 
- /**
-- * usb_gadget_register_driver - register a gadget driver
-+ * usb_gadget_register_driver_owner - register a gadget driver
-  * @driver: the driver being registered
-+ * @owner: the driver module
-+ * @mod_name: the driver module's build name
-  * Context: can sleep
-  *
-  * Call this in your gadget driver's module initialization function,
-- * to tell the underlying usb controller driver about your driver.
-+ * to tell the underlying UDC controller driver about your driver.
-  * The @bind() function will be called to bind it to a gadget before this
-  * registration call returns.  It's expected that the @bind() function will
-  * be in init sections.
-+ *
-+ * Use the macro defined below instead of calling this directly.
-  */
--int usb_gadget_register_driver(struct usb_gadget_driver *driver);
-+int usb_gadget_register_driver_owner(struct usb_gadget_driver *driver,
-+		struct module *owner, const char *mod_name);
-+
-+/* use a define to avoid include chaining to get THIS_MODULE & friends */
-+#define usb_gadget_register_driver(driver) \
-+	usb_gadget_register_driver_owner(driver, THIS_MODULE, KBUILD_MODNAME)
- 
- /**
-  * usb_gadget_unregister_driver - unregister a gadget driver
+    If flushing kernel-global WQs is still unavoidable, please proceed to
+    the following steps.
+
+Step 1: Declare a variable for your module.
+
+    struct workqueue_struct *my_wq;
+
+Step 2: Create a WQ for your module from __init function. The same flags
+        used by corresponding kernel-global WQ can be used when creating
+        the WQ for your module.
+
+    my_wq = alloc_workqueue("my_wq_name", 0, 0);
+
+Step 3: Destroy the WQ created in Step 2 from __exit function (and the error
+        handling path of __init function if __init function may fail after
+        creating the WQ).
+
+    destroy_workqueue(my_wq);
+
+Step 4: Replace e.g. schedule_work() call with corresponding queue_work() call
+        throughout your module which should be handled by the WQ for your module.
+
+Step 5: Replace flush_scheduled_work() and flush_workqueue(system_*) calls
+        with flush_workqueue() of the WQ for your module.
+
+    flush_workqueue(my_wq);
+----------
+
+Regards.
