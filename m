@@ -2,221 +2,262 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3FF4E2E3A
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Mar 2022 17:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCAD04E2EA2
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Mar 2022 18:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351314AbiCUQlj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Mar 2022 12:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
+        id S1351532AbiCURAo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Mar 2022 13:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237331AbiCUQlj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Mar 2022 12:41:39 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8136A5F259;
-        Mon, 21 Mar 2022 09:40:12 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id d10so30974435eje.10;
-        Mon, 21 Mar 2022 09:40:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EJtLOy1z9qbTwrw3Odhnv9M+mtBkKVnNxZm6T651y2Q=;
-        b=JVDIFxZhuOHeEVexVd7T/hSG4JJGfSXpKlQR/ylBx3yWAjVJYEfPItWO8ljpF3SXyK
-         kxElOTx1KaFQuoERVOWLkF4AIAGfY2CqpmWMz82BdUET9PVmL2RlKqkCv+zRIe2EryPA
-         tjnTmY9UUibI1pF/rlunvzkCvkgRbAVnnRb13kguTQnkdlT4i7F9G0ND9/kYYbyeqz/L
-         vXctdMmUYxXFocGHomYINVhoQEUcNt7WvGjR1lhEnXabSL2ct4ttKaBXiSbP/1KhqEmd
-         F0lJTOmz1BZeJuRd/MHvUxJfkkxt8nKXEtPXNLJxrcd34Yyj/tCqf0qgPcxYzgqz0Vqo
-         kS7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EJtLOy1z9qbTwrw3Odhnv9M+mtBkKVnNxZm6T651y2Q=;
-        b=LjldzHyIthHOCwxyMHwb83wD/uCCkifxkUYd5Fxv8QneLLP12HtOs2V97NPA7kBBmZ
-         kkukIoMwgPAntXf3TfUHrlQo3Pw2AVsShSQXMnzBvTP/kQy5ZaHnPbI28H/IXvpRGbay
-         EAeVM/3JXK6HOKsNdTz2G/UMmyMTgg/tUkPAmJTKI8hxZZ+/3SfH/CdxvoKqoJVnKP3p
-         4mF8bgFkSuHag/JWGBWK7StTJ5WGZ5ODf9w3r3Cz7bFB1x6mr6a2vAfIUuaaJNS6hDi6
-         H/0SWF5AZjhOf0bRlueGXG4z+aCMcGmOmTOdxXiXSaU1/W5xFti3XYn36aA/3t0nBZIv
-         cdPg==
-X-Gm-Message-State: AOAM533i4638Lp1opecOyKXqYOfjHVYNOMn11EWfNxtA1bGR6IM436LA
-        Op7etaNevAwKfH2WURgWkL2WMKpXjXZZVN6bSD8=
-X-Google-Smtp-Source: ABdhPJx0/vREgiXqKTqUQ4+7St5r1LVPAwbRsGJP8mIxaSQcjKrEYSltuiOJGLsg2j99Lus5dg+jzHabi5US69p6aVg=
-X-Received: by 2002:a17:906:4cc7:b0:6d0:7efb:49f with SMTP id
- q7-20020a1709064cc700b006d07efb049fmr21578550ejt.639.1647880811015; Mon, 21
- Mar 2022 09:40:11 -0700 (PDT)
+        with ESMTP id S241969AbiCURAn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Mar 2022 13:00:43 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175675D5D2;
+        Mon, 21 Mar 2022 09:59:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647881958; x=1679417958;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=e5qKp3TccmtB9JB7hc3Gj03ZjUm1y7odox68rTsjaJ8=;
+  b=DTYFPJmcpn66SAJ9rp9IZFMuXtKtAz7BKtIsbUyq5mrnQLShJ3YZE6NR
+   tW/J4bolfZ9x4RM7F7e6gY60dsvFHELTYpeXw65aF7ufC1PRy5E+QhP28
+   jjJf1BZEc3HgpLhrScoGY2YWK8Tj3TIwjauCrJAKYolWeSk2rp8FFwKb5
+   uQBh9NQjJznpX+5xQgmutuAavghENe+YWu7CI8eyNdbjf0bWqJ8YaSTHZ
+   muTWM9hoRWeaWwwT5wQKLdPGiDi2v/fxm2b0Oriz/SIzUjqYNHNWLCtFd
+   jfUcdnyRQbuEwUxFQmhpqufT3vQHIC0QoG2S1Pa5oLB0Qr3AFdi23QK3A
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="318311192"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="318311192"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 09:59:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="648633203"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga004.jf.intel.com with ESMTP; 21 Mar 2022 09:59:08 -0700
+To:     Daehwan Jung <dh10.jung@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
+References: <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220321090204epcas2p3b2be5c6b131240e408d12d40c517395c@epcas2p3.samsung.com>
+ <1647853194-62147-3-git-send-email-dh10.jung@samsung.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v3 2/4] usb: host: add xhci hooks for USB offload
+Message-ID: <8f34e9ee-4f50-9028-34ba-444090acf48c@linux.intel.com>
+Date:   Mon, 21 Mar 2022 19:00:55 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220321042142.69239-1-frank@zago.net> <20220321042142.69239-2-frank@zago.net>
-In-Reply-To: <20220321042142.69239-2-frank@zago.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 21 Mar 2022 18:39:00 +0200
-Message-ID: <CAHp75VcyNDNfYyUvSk4kToLiLCVDWo5-Rz_1_fRtR7i8ZjGr7g@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] mfd: ch341: add core driver for the WCH CH341 in
- I2C/GPIO mode
-To:     frank zago <frank@zago.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1647853194-62147-3-git-send-email-dh10.jung@samsung.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 11:17 AM frank zago <frank@zago.net> wrote:
->
-> The CH341 is a multifunction chip, presenting 3 different USB PID. One
-> of these functions is for I2C/SPI/GPIO. This new set of drivers will
-> manage I2C and GPIO.
+On 21.3.2022 10.59, Daehwan Jung wrote:
+> To enable supporting for USB offload, define "offload" in usb controller
+> node of device tree. "offload" value can be used to determine which type
+> of offload was been enabled in the SoC.
+> 
+> For example:
+> 
+> &usbdrd_dwc3 {
+> 	...
+> 	/* support usb offloading, 0: disabled, 1: audio */
+> 	offload = <1>;
+> 	...
+> };
+> 
+> There are several vendor_ops introduced by this patch:
+> 
+> struct xhci_vendor_ops - function callbacks for vendor specific operations
+> {
+> 	@vendor_init:
+> 		- called for vendor init process during xhci-plat-hcd
+> 		  probe.
+> 	@vendor_cleanup:
+> 		- called for vendor cleanup process during xhci-plat-hcd
+> 		  remove.
 
-...
+The vendor_init() and vendor_cleanup() aren't really useful.
+you are calling them from platform_probe() and platform_remove(),
+just modify the probe and remove functions of the xhci-exynos driver directly.
 
-> +The driver doesn't support detection of I2C device present on the
 
-devices
+> 	@is_usb_offload_enabled:
+> 		- called to check if usb offload enabled.
 
-> +bus. Apparently when a device is not present at a given address, the
-> +CH341 will return an extra byte of data, but the driver doesn't
-> +support that. This may be addressed in the future.
+Looks like this is being used more like a quirk bit.
+I think we can get rid of this as well
 
-...
+> 	@alloc_dcbaa:
+> 		- called when allocating vendor specific dcbaa during
+> 		  memory initializtion.
+> 	@free_dcbaa:
+> 		- called to free vendor specific dcbaa when cleanup the
+> 		  memory.
+> 	@alloc_transfer_ring:
+> 		- called when vendor specific transfer ring allocation is required
+> 	@free_transfer_ring:
+> 		- called to free vendor specific transfer ring
+> 	@sync_dev_ctx:
+> 		- called when synchronization for device context is required
+> }
+> 
+> The xhci hooks with prefix "xhci_vendor_" on the ops in xhci_vendor_ops.
+> For example, vendor_init ops will be invoked by xhci_vendor_init() hook,
+> is_usb_offload_enabled ops will be invoked by
+> xhci_vendor_is_usb_offload_enabled(), and so on.
+> 
+> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> Signed-off-by: J. Avila <elavila@google.com>
+> Signed-off-by: Puma Hsu <pumahsu@google.com>
+> Signed-off-by: Howard Yen <howardyen@google.com>
+> ---
+>  drivers/usb/host/xhci-hub.c  |   5 ++
+>  drivers/usb/host/xhci-mem.c  | 131 +++++++++++++++++++++++++++++++----
+>  drivers/usb/host/xhci-plat.c |  43 +++++++++++-
+>  drivers/usb/host/xhci-plat.h |   7 ++
+>  drivers/usb/host/xhci.c      |  80 ++++++++++++++++++++-
+>  drivers/usb/host/xhci.h      |  46 ++++++++++++
+>  6 files changed, 295 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+> index 56546aaa93c7..aea72ffce820 100644
+> --- a/drivers/usb/host/xhci-hub.c
+> +++ b/drivers/usb/host/xhci-hub.c
+> @@ -535,8 +535,13 @@ static int xhci_stop_device(struct xhci_hcd *xhci, int slot_id, int suspend)
+>  	    cmd->status == COMP_COMMAND_RING_STOPPED) {
+>  		xhci_warn(xhci, "Timeout while waiting for stop endpoint command\n");
+>  		ret = -ETIME;
+> +		goto cmd_cleanup;
+>  	}
+>  
+> +	ret = xhci_vendor_sync_dev_ctx(xhci, slot_id);
+> +	if (ret)
+> +		xhci_warn(xhci, "Sync device context failed, ret=%d\n", ret);
+> +
+>  cmd_cleanup:
+>  	xhci_free_command(xhci, cmd);
+>  	return ret;
+> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+> index 82b9f90c0f27..5ee0ffb676d3 100644
+> --- a/drivers/usb/host/xhci-mem.c
+> +++ b/drivers/usb/host/xhci-mem.c
+> @@ -365,6 +365,54 @@ static int xhci_alloc_segments_for_ring(struct xhci_hcd *xhci,
+>  	return 0;
+>  }
+>  
+> +static void xhci_vendor_free_container_ctx(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx)
+> +{
+> +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
+> +
+> +	if (ops && ops->free_container_ctx)
+> +		ops->free_container_ctx(xhci, ctx);
+> +}
 
->     spear-pcie-gadget
->     uacce
->     xilinx_sdfec
-> +   ch341
 
-Seems you broke the order.
+Looks suspicious, we always need to free container contexts, why this much checking?
 
-...
-
-> +config MFD_CH341
-
-> +       tristate "WinChipHead CH341 in I2C/SPI/GPIO mode"
-
-(1)
-
-> +       depends on USB
-> +       help
-> +         If you say yes to this option, support for the CH341 series
-> +         of chips, running in I2C/SPI/GPIO mode will be included.
-
-"chips running" (no comma needed)
-
-> +         The chip's SPI mode is not supported.
-
-Maybe no need to include SPI in the (1) along with dropping this line?
-
-> +         This driver can also be built as a module.  If so, the
-> +         module will be called ch341-core.
-
-...
-
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-
-(2)
-
-> +#include <linux/mfd/core.h>
 
 > +
-> +#include <linux/mfd/ch341.h>
+> +static void xhci_vendor_alloc_container_ctx(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx,
+> +					    int type, gfp_t flags)
+> +{
+> +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
+> +
+> +	if (ops && ops->alloc_container_ctx)
+> +		ops->alloc_container_ctx(xhci, ctx, type, flags);
+> +}
 
-Moving these two to (2) ?
-
-...
-
-> +       dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-
-devm_kzalloc() ?
-
-> +       if (!dev)
-> +               return -ENOMEM;
-
-...
-
-> +       rc = mfd_add_hotplug_devices(&iface->dev, ch341_devs,
-> +                                    ARRAY_SIZE(ch341_devs));
-
-> +       if (rc) {
-
-> +               dev_err(&iface->dev, "Failed to add mfd devices to core.");
-> +               goto free_dev;
-
-return dev_err_probe(...); ?
-
-> +       }
-
-...
-
-> +       usb_set_intfdata(dev->iface, NULL);
-
-This has been done by device driver core  for the past 10+ years.
-
-...
-
-> +static const struct usb_device_id ch341_usb_table[] = {
-> +       { USB_DEVICE(0x1a86, 0x5512) },
-> +       { }
-> +};
+same, there should always be a function to allocate container context..
 
 > +
-
-Redundant blank line.
-
-> +MODULE_DEVICE_TABLE(usb, ch341_usb_table);
+> +static struct xhci_ring *xhci_vendor_alloc_transfer_ring(struct xhci_hcd *xhci,
+> +		u32 endpoint_type, enum xhci_ring_type ring_type,
+> +		unsigned int max_packet, gfp_t mem_flags)
+> +{
+> +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
 > +
-> +static struct usb_driver ch341_usb_driver = {
-> +       .name       = "ch341-mfd",
-> +       .id_table   = ch341_usb_table,
-> +       .probe      = ch341_usb_probe,
+> +	if (ops && ops->alloc_transfer_ring)
+> +		return ops->alloc_transfer_ring(xhci, endpoint_type, ring_type,
+> +				max_packet, mem_flags);
+> +	return 0;
 
-> +       .disconnect = ch341_usb_disconnect
+same, looks like a lot of extra code.
 
-Keep a comma to avoid unneeded churn in the future.
-
-> +};
-
+> +}
+> +
+> +void xhci_vendor_free_transfer_ring(struct xhci_hcd *xhci,
+> +		struct xhci_ring *ring, unsigned int ep_index)
+> +{
+> +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
+> +
+> +	if (ops && ops->free_transfer_ring)
+> +		ops->free_transfer_ring(xhci, ring, ep_index);
+> +}
 > +
 
-Redundant blank line.
+same.
 
-> +module_usb_driver(ch341_usb_driver);
+> +bool xhci_vendor_is_usb_offload_enabled(struct xhci_hcd *xhci,
+> +		struct xhci_virt_device *virt_dev, unsigned int ep_index)
+> +{
+> +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
+> +
+> +	if (ops && ops->is_usb_offload_enabled)
+> +		return ops->is_usb_offload_enabled(xhci, virt_dev, ep_index);
+> +	return false;
+> +}
+> +
+>  /*
+>   * Create a new ring with zero or more segments.
+>   *
+> @@ -417,7 +465,11 @@ void xhci_free_endpoint_ring(struct xhci_hcd *xhci,
+>  		struct xhci_virt_device *virt_dev,
+>  		unsigned int ep_index)
+>  {
+> -	xhci_ring_free(xhci, virt_dev->eps[ep_index].ring);
+> +	if (xhci_vendor_is_usb_offload_enabled(xhci, virt_dev, ep_index))
+> +		xhci_vendor_free_transfer_ring(xhci, virt_dev->eps[ep_index].ring, ep_index);
+> +	else
+> +		xhci_ring_free(xhci, virt_dev->eps[ep_index].ring);
+> +
+>  	virt_dev->eps[ep_index].ring = NULL;
+>  }
 
+Ok, I see.
+So idea is to override some functions that allocate and free DMA memory.
+Your vendor_ops structure filled with function callbacks could be a 
+mem_ops structure that allows your driver to directly override those
+functions.
 
-> +/*
-> + * Definitions for CH341 MFD driver
-> + */
+For example here we would only call
 
-One line?
+xhci->mem_ops->ring_free(...);
+This would set to xhci_ring_free() by default, but your xhci-exonys driver could
+set it to xhci_exonys_free_ring(), which would do any needed is_offload_enabled()
+checks and custom freeing.
 
-...
+Same goes for most most of the other functions in this patch
 
-> +#include <linux/usb.h>
+If possible see if it's enough to override the existing callbacks in
+struct hc_driver instead of creating new function pointers.
 
-No users of this header. Use forward declarations.
-
-> +#include <linux/mutex.h>
-
-Missed types.h.
-
-...
-
-> +#define DEFAULT_TIMEOUT 1000   /* 1s USB requests timeout */
-
-Use proper suffix, i.e. _MS.
-
--- 
-With Best Regards,
-Andy Shevchenko
+-Mathias
