@@ -2,123 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8BD94E2095
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Mar 2022 07:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5483F4E21B6
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Mar 2022 09:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243740AbiCUGXX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Mar 2022 02:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42490 "EHLO
+        id S1345094AbiCUIIH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Mar 2022 04:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238029AbiCUGXV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Mar 2022 02:23:21 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3397B6E5F;
-        Sun, 20 Mar 2022 23:21:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647843716; x=1679379716;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=+rkB4KEmfi5Lh7xQbC1EST+XQiej4N3zvxLPT5tm5cQ=;
-  b=w+TogDmd2V/9F3+onYGuyyHd7lSbbv+r5rTnsWX6RtbNRrws1A0e0uKo
-   MQM4uHV6X+13wmrQ5jTUdIQzaZIra6tdXEaCw1xA1kqFp1riMIcfzH0EL
-   ijOLJgEFKgOPSv3TKUdm1r5xQoTVEWY/nq1kquLBRHCrJXEvdEsuNK7pP
-   M=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Mar 2022 23:21:56 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 23:21:55 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 20 Mar 2022 23:21:55 -0700
-Received: from [10.216.8.69] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 20 Mar
- 2022 23:21:50 -0700
-Subject: Re: [PATCH v2 0/3] Refactor xhci quirks and plat private data
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Doug Anderson" <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>
-References: <1646130507-26796-1-git-send-email-quic_c_sanm@quicinc.com>
- <ddc86a4f-8d1c-c02c-5600-4fa851568557@quicinc.com>
- <YjR0Ne3BDxxMfrxt@kroah.com>
-From:   "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>
-Message-ID: <b38ddfcc-68c3-d99f-816b-8b9f788aa88a@quicinc.com>
-Date:   Mon, 21 Mar 2022 11:51:41 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.2.1
+        with ESMTP id S1345091AbiCUIHy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Mar 2022 04:07:54 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92291F2138;
+        Mon, 21 Mar 2022 01:06:28 -0700 (PDT)
+Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N0X0U-1oJtik1HZU-00wVqJ; Mon, 21 Mar 2022 09:01:18 +0100
+Received: by mail-wr1-f54.google.com with SMTP id q8so8128981wrc.0;
+        Mon, 21 Mar 2022 01:01:18 -0700 (PDT)
+X-Gm-Message-State: AOAM530QyJNXpQwGNlPMqeItywJxqMsl/zbjvWWzDpdlrZkXCr8RJaxz
+        quxuO6/2myPpZKT/w0nv6SS5TdiP5FOIXzaaers=
+X-Google-Smtp-Source: ABdhPJyn1rYxVcE3vSEk7fX9M0V9XhL9fPzronNopTs/qFftIqrfqDJrF+1Q25gMK0KMvVps+51S6HSesNjON/ttkuc=
+X-Received: by 2002:a5d:6d0f:0:b0:203:9157:1c48 with SMTP id
+ e15-20020a5d6d0f000000b0020391571c48mr17006225wrq.192.1647849677912; Mon, 21
+ Mar 2022 01:01:17 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YjR0Ne3BDxxMfrxt@kroah.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220310233307.99220-1-jmkrzyszt@gmail.com> <YixWZ+IiN2l9jmzg@atomide.com>
+In-Reply-To: <YixWZ+IiN2l9jmzg@atomide.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 21 Mar 2022 09:01:02 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3nLV2FXRQVocELNTiLqJY-CZXy9Ko6CSunFnhou_493Q@mail.gmail.com>
+Message-ID: <CAK8P3a3nLV2FXRQVocELNTiLqJY-CZXy9Ko6CSunFnhou_493Q@mail.gmail.com>
+Subject: Re: [RFC RFT PATCH 0/4] ARM: OMAP1: clock: Convert to CCF
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Paul Walmsley <paul@pwsan.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:vgAUigR5OPNj49ogn46JzH0xL1qFerLhCnQe2Rw4G41COIuYwD2
+ gDQhNMFMotYD1t0mm2MBqsdJWdav5iLbb5T0IpEp2gVK2WGlmTxXsfJ7ELVnTmM7NPGp78h
+ ejDsVzbVo7ItJ26utXeSWw6cgLBwubNJdmpeMif5wlsKHWpInaHGs7TdHV5BGlq174FP8v/
+ E1fG47z+WffR58W8Wpasw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BPOaNPv7Tw0=:8k4QFT0FY7a7GBg9NpCVN4
+ gCtHYVOrczoclRfMhTn+HeOmoTv95UKmbhp7rRDzXAECtbN5CRw71LFCl9merFGku/DXwKCWJ
+ EL1kN8pfG25zBsgXFFvPHnrfV9jVMcr6ykgbZ6/IB9cPm0NVpqiaHFRsjo7izLrSNZX6tE951
+ Xt80xYb75m0I3g/at+NiPs1FwPiRjSRpDf85zmKbdECUBKqUR65Z8e9ucf9wrH/oQjZDKt4uC
+ ZjxDOz0cSWbN0C5DdxRrAIUjH4F4cUjn00SR54mt8Gp0m4hA9uaOrkSt2Rxse1va1MaLyxy8+
+ /GqIk1KAvWSqhIyeKVdc9PON6xI+qRIoimZ4QAMIuOLn6DYz6ozKOi0K0BSDDGDzW9BzpZ+qL
+ G7aEbOFwChDX2CxCXMJCNirvzR+/slUgAjpJnjmPf8VJ2dM+UpjbcxsLw3fT2SyKeqoqD0/ww
+ mMlyvLGEzKtMEKIafqbL5f0MhTol50eAB7HcIhfOFqpefBp+vayLqUD2nwtDntXOBWA5cfcLx
+ RCN4/M25Qua849SAcQv70bdHAtmESJ4FDfgVGKp9Hc9hW21JbsSTX7w6BMVgjLZ7LbM4L8rjk
+ iTY9WH7M4HWMYHIFUnwSG0pEpAWsxMBvtZtf3PO7Am/l7snxlHDFN3Ckan9XbRiFdBba/N/lx
+ Hczg0DwL89oiMjbqBl2v7LpmXGIubg5HsCj24O9nodhG0Df6rba9vfmD2/ZH5qycEv/cfyBWI
+ HcZ0mPM6pYgzGsE4U67PU9yaB9o3xLjODH0/i5f1QJW+Wg0X+g69hTYF/XTG45nxTW9bCmos+
+ jEueFjvZ8eyWVKzzDrPFHIpLFozxoP6Xx5t0pooa0cp9G+TGgc=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
-
-On 3/18/2022 5:29 PM, Greg Kroah-Hartman wrote:
-> On Thu, Mar 17, 2022 at 11:17:17AM +0530, Sandeep Maheswaram (Temp) wrote:
->> Hi Greg,
->>
->> On 3/1/2022 3:58 PM, Sandeep Maheswaram wrote:
->>> changes in v2:
->>> Added a PATCH 2/3 to remove unwanted header inclusion.
->>> Fixed minor nitpicks in PATCH 3/3.
->>>
->>> Pavankumar Kondeti (1):
->>>     usb: xhci: refactor quirks and plat private data
->>>
->>> Sandeep Maheswaram (2):
->>>     usb: xhci: Remove unwanted header inclusion
->>>     usb: dwc: host: add xhci_plat_priv quirk XHCI_SKIP_PHY_INIT
->>>
->>>    drivers/usb/cdns3/host.c        |  2 +-
->>>    drivers/usb/dwc3/host.c         | 13 ++++++++
->>>    drivers/usb/host/xhci-plat.c    |  3 +-
->>>    drivers/usb/host/xhci-plat.h    | 24 ---------------
->>>    drivers/usb/host/xhci-rcar.c    |  3 +-
->>>    drivers/usb/host/xhci.h         | 60 ++++--------------------------------
->>>    include/linux/usb/xhci-plat.h   | 24 +++++++++++++++
->>>    include/linux/usb/xhci-quirks.h | 67 +++++++++++++++++++++++++++++++++++++++++
->>>    8 files changed, 115 insertions(+), 81 deletions(-)
->>>    delete mode 100644 drivers/usb/host/xhci-plat.h
->>>    create mode 100644 include/linux/usb/xhci-plat.h
->>>    create mode 100644 include/linux/usb/xhci-quirks.h
->> Please let me know your opinion about this patch series.
-> I need the xhci maintainer to review it...
+On Sat, Mar 12, 2022 at 9:14 AM Tony Lindgren <tony@atomide.com> wrote:
 >
-> thanks,
+> * Janusz Krzysztofik <jmkrzyszt@gmail.com> [220310 23:32]:
+> > The main motivation behind this series is planned resurection of OMAP1
+> > camera driver.  Since OMAP1 clock internals have never been visible to
+> > drivers, that driver used to use v4l2-clk to expose a pixel clock for a
+> > sensor.  The v4l2-clk code has been recently depreciated and removed from
+> > the media subtree, hence the need for an alternative solution.
 >
-> greg k-h
+> Nice :) This will also help Arnd with building multi-v5 kernels.
 
+Thanks for looping me in, I missed the thread originally but now
+got the replies.
 
-Can you please review this patch series.
+As OMAP1 is the last user of HAVE_LEGACY_CLK on Arm, converting
+it would be particularly nice, and it allows me to dig out my omap1
+multiplatform patches, which does get us closer to endgame.
 
-Regards
+The only other ARM9 platforms that are not multiplatform yet are
+ep93xx (which can probably be done now as well after its
+clk conversion) and s3c24xx (which is scheduled for removal next
+year).
 
-Sandeep
+When those are out of the way, we only have StrongARM (rpc,
+sa1100, footbridge) and XScale (pxa, ixp, iop) remaining.
 
+      Arnd
