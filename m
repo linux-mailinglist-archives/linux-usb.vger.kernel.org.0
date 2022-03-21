@@ -2,199 +2,200 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03FA94E2CFB
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Mar 2022 16:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B586F4E2DDF
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Mar 2022 17:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349205AbiCUP6G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Mar 2022 11:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
+        id S1351071AbiCUQ2k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Mar 2022 12:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236298AbiCUP6F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Mar 2022 11:58:05 -0400
-X-Greylist: delayed 672 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Mar 2022 08:56:39 PDT
-Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3D75D1B6;
-        Mon, 21 Mar 2022 08:56:39 -0700 (PDT)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9f:8600:0:0:0:1])
-        (authenticated bits=0)
-        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 22LFj3Jb506661
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Mon, 21 Mar 2022 15:45:05 GMT
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8602:8cd5:a7b0:d07:d516])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 22LFj2lX1245399
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Mon, 21 Mar 2022 16:45:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1647877503; bh=eQHJWF+2Qkckbxc6boV6Ua513xsiPv7/H/5mXqIvaF8=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=CEHzqXz9IPk4GobVdbrQC0kKK23X+r4qs3QFYPDpbUhNNP45Zvb4YzY03Ox6D5jSz
-         PE+j54KI4Z2+vNUt8cOHFFuILpB+ApDllVRHBBfLUBYVwxpFj1dnwKSrMMr7d45MEE
-         gZ6/3Ws75fxF+YPCKskNO6fFk1g2iBnP/l40Cj04=
-Received: (nullmailer pid 902608 invoked by uid 1000);
-        Mon, 21 Mar 2022 15:45:01 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Howard Yen <howardyen@google.com>,
+        with ESMTP id S234825AbiCUQ2j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Mar 2022 12:28:39 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A48ECDAD;
+        Mon, 21 Mar 2022 09:27:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647880033; x=1679416033;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fRBotUMjnutJva7VRlBZ1np6GJrR8gIwmYzFjbpJQMU=;
+  b=D69c4JiOSfdLqbxV2yHb0FXHQlb8C1a7a5tFoc20h/ZrkFX9RbGzyj7/
+   A60pp5plQNnB9ED3YOl4OMXn+UCsdjd9eViNXxahur3R1S8pBiXE/Butg
+   lfzU0SmPw99FW4TV+npx7/QjIh9jf//7b9pxF54bk2rVdIi0XO9xtu0MV
+   POIV4TwNY9plSjqRHhnrQqrXzlHcNMXz1hI9ekFVQIiRemFlGR7wexE2U
+   qUxP+BizNGLhgqX7CXjOlyIvg8CnC0vUO1HD4/4bpA5xYQUZPmczzbFIQ
+   YgGN+w4kILA+kMPAHQWR4Y1mIwAcWnx5cUUAPCw7D2h2NSyCiAXgiRNu7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="257540300"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="257540300"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 09:27:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="716557906"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 21 Mar 2022 09:27:10 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWKs9-000Hyz-Ao; Mon, 21 Mar 2022 16:27:09 +0000
+Date:   Tue, 22 Mar 2022 00:26:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daehwan Jung <dh10.jung@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Howard Yen <howardyen@google.com>,
         Jack Pham <jackp@codeaurora.org>,
         Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
+        "J . Avila" <elavila@google.com>,
+        Daehwan Jung <dh10.jung@samsung.com>, sc.suh@samsung.com
 Subject: Re: [PATCH v3 4/4] usb: host: add xhci-exynos driver
-In-Reply-To: <1647853194-62147-5-git-send-email-dh10.jung@samsung.com>
-        (Daehwan Jung's message of "Mon, 21 Mar 2022 17:59:54 +0900")
-Organization: m
-References: <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
-        <CGME20220321090205epcas2p15ac16f281554b663062e0e31666defab@epcas2p1.samsung.com>
-        <1647853194-62147-5-git-send-email-dh10.jung@samsung.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Mon, 21 Mar 2022 16:45:01 +0100
-Message-ID: <87r16v9uo2.fsf@miraculix.mork.no>
+Message-ID: <202203220053.4OkItVxU-lkp@intel.com>
+References: <1647853194-62147-5-git-send-email-dh10.jung@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.3 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1647853194-62147-5-git-send-email-dh10.jung@samsung.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Daehwan Jung <dh10.jung@samsung.com> writes:
+Hi Daehwan,
 
-> +++ b/drivers/usb/host/xhci-exynos.c
-> @@ -0,0 +1,982 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * xhci-exynos.c - xHCI host controller driver platform Bus Glue for Exy=
-nos.
-> + *
-> + * Copyright (C) 2022 Samsung Electronics Incorporated - http://www.sams=
-ung.com
-> + * Author: Daehwan Jung <dh10.jung@samsung.com>
-> + *
-> + * A lot of code borrowed from the Linux xHCI driver.
-> + */
-> +#include <linux/clk.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/module.h>
-> +#include <linux/pci.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/usb/phy.h>
-> +#include <linux/slab.h>
-> +#include <linux/acpi.h>
-> +#include <linux/usb/of.h>
-> +
-> +#include "xhci.h"
-> +#include "xhci-plat.h"
-> +#include "xhci-mvebu.h"
-> +#include "xhci-rcar.h"
+Thank you for the patch! Yet something to improve:
 
-The xhci-plat.c file is Copyright (C) 2012 Texas Instruments Incorporated
-You can't just steal it.
+[auto build test ERROR on next-20220318]
+[also build test ERROR on v5.17]
+[cannot apply to usb/usb-testing krzk/for-next char-misc/char-misc-testing v5.17 v5.17-rc8 v5.17-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Besides, even if you could, this isn't about copying as much code as
-posible from A to B.  The point is to add as *little* code as possible
-to support your hardware.
+url:    https://github.com/0day-ci/linux/commits/Daehwan-Jung/usb-host-export-symbols-for-xhci-hooks-usage/20220321-180046
+base:    6d72dda014a4753974eb08950089ddf71fec4f60
+config: nios2-allyesconfig (https://download.01.org/0day-ci/archive/20220322/202203220053.4OkItVxU-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/517a7258fc6a2861b66ae9893b39d8bd4d6739e7
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Daehwan-Jung/usb-host-export-symbols-for-xhci-hooks-usage/20220321-180046
+        git checkout 517a7258fc6a2861b66ae9893b39d8bd4d6739e7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-> +static int xhci_exynos_vendor_init(struct xhci_hcd *xhci)
-> +{
-> +	/* TODO */
-> +	return 0;
-> +}
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-And you didn't even add that?
+All errors (new ones prefixed by >>):
 
-> +static int xhci_exynos_wake_lock(struct xhci_hcd_exynos *xhci_exynos,
-> +				   int is_main_hcd, int is_lock)
-> +{
-> +	struct usb_hcd	*hcd =3D xhci_exynos->hcd;
-> +	struct xhci_hcd *xhci =3D hcd_to_xhci(hcd);
-> +	struct wakeup_source *main_wakelock, *shared_wakelock;
-> +
-> +	main_wakelock =3D xhci_exynos->main_wakelock;
-> +	shared_wakelock =3D xhci_exynos->shared_wakelock;
-
-Are these fields initialized anywhere?
-
-
-> +
-> +	if (xhci->xhc_state & XHCI_STATE_REMOVING)
-> +		return -ESHUTDOWN;
-> +
-> +	if (is_lock) {
-
-bool?
-
-> +		if (is_main_hcd)
-
-another bool?
-
-> +			__pm_stay_awake(main_wakelock);
-> +		else
-> +			__pm_stay_awake(shared_wakelock);
-> +	} else {
-> +		if (is_main_hcd)
-> +			__pm_relax(main_wakelock);
-> +		else
-> +			__pm_relax(shared_wakelock);
-> +	}
-
-Looks interesting.   Are you signalling relax/wakeups events to the PM
-core on device suspend/resume?  Why?
-
-> +static int xhci_exynos_address_device(struct usb_hcd *hcd, struct usb_de=
-vice *udev)
-> +{
-> +	struct xhci_hcd *xhci;
-> +	int ret;
-> +
-> +	ret =3D xhci_address_device(hcd, udev);
-> +	xhci =3D hcd_to_xhci(hcd);
-> +
-> +	return ret;
-> +}
-
-What's left here if we drop the unused parts?
-
-> +#ifdef CONFIG_OF
-> +static const struct xhci_plat_priv xhci_plat_marvell_armada =3D {
-> +	.init_quirk =3D xhci_mvebu_mbus_init_quirk,
-> +};
-> +
-> +static const struct xhci_plat_priv xhci_plat_marvell_armada3700 =3D {
-> +	.plat_setup =3D xhci_mvebu_a3700_plat_setup,
-> +	.init_quirk =3D xhci_mvebu_a3700_init_quirk,
-> +};
-
-
-Right...
-
-> +#ifdef CONFIG_ACPI
-> +static const struct acpi_device_id usb_xhci_acpi_match[] =3D {
-> +	/* XHCI-compliant USB Controller */
-> +	{ "PNP0D10", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(acpi, usb_xhci_acpi_match);
-> +#endif
-
-Nice one
-
-There's no need to copy me if you plan to resend any of this.  I'm just
-a drive-by reader here anyway, and I've seen enough.
-
-Good luck!
+   drivers/usb/host/xhci-exynos.c: In function 'xhci_priv_exynos_setup':
+   drivers/usb/host/xhci-exynos.c:55:18: error: 'struct xhci_plat_priv' has no member named 'plat_setup'
+      55 |         if (!priv->plat_setup)
+         |                  ^~
+   drivers/usb/host/xhci-exynos.c:58:20: error: 'struct xhci_plat_priv' has no member named 'plat_setup'
+      58 |         return priv->plat_setup(hcd);
+         |                    ^~
+   drivers/usb/host/xhci-exynos.c: In function 'xhci_exynos_free_container_ctx':
+>> drivers/usb/host/xhci-exynos.c:146:17: error: implicit declaration of function 'dma_pool_free'; did you mean 'mempool_free'? [-Werror=implicit-function-declaration]
+     146 |                 dma_pool_free(xhci->device_pool, ctx->bytes, ctx->dma);
+         |                 ^~~~~~~~~~~~~
+         |                 mempool_free
+   In file included from include/uapi/linux/posix_types.h:5,
+                    from include/uapi/linux/types.h:14,
+                    from include/linux/types.h:6,
+                    from include/linux/kasan-checks.h:5,
+                    from include/asm-generic/rwonce.h:26,
+                    from ./arch/nios2/include/generated/asm/rwonce.h:1,
+                    from include/linux/compiler.h:248,
+                    from include/linux/err.h:5,
+                    from include/linux/clk.h:12,
+                    from drivers/usb/host/xhci-exynos.c:10:
+   drivers/usb/host/xhci-exynos.c: In function 'xhci_exynos_bus_suspend':
+   include/linux/stddef.h:8:14: error: called object is not a function or function pointer
+       8 | #define NULL ((void *)0)
+         |              ^
+   drivers/usb/host/xhci.h:2190:33: note: in expansion of macro 'NULL'
+    2190 | #define xhci_bus_suspend        NULL
+         |                                 ^~~~
+   drivers/usb/host/xhci-exynos.c:234:15: note: in expansion of macro 'xhci_bus_suspend'
+     234 |         ret = xhci_bus_suspend(hcd);
+         |               ^~~~~~~~~~~~~~~~
+   drivers/usb/host/xhci-exynos.c: In function 'xhci_exynos_bus_resume':
+   include/linux/stddef.h:8:14: error: called object is not a function or function pointer
+       8 | #define NULL ((void *)0)
+         |              ^
+   drivers/usb/host/xhci.h:2191:33: note: in expansion of macro 'NULL'
+    2191 | #define xhci_bus_resume         NULL
+         |                                 ^~~~
+   drivers/usb/host/xhci-exynos.c:252:15: note: in expansion of macro 'xhci_bus_resume'
+     252 |         ret = xhci_bus_resume(hcd);
+         |               ^~~~~~~~~~~~~~~
+   drivers/usb/host/xhci-exynos.c: In function 'xhci_exynos_address_device':
+   drivers/usb/host/xhci-exynos.c:260:26: warning: variable 'xhci' set but not used [-Wunused-but-set-variable]
+     260 |         struct xhci_hcd *xhci;
+         |                          ^~~~
+   drivers/usb/host/xhci-exynos.c: In function 'xhci_exynos_parse_endpoint':
+   drivers/usb/host/xhci-exynos.c:276:29: warning: variable 'ep_ctx' set but not used [-Wunused-but-set-variable]
+     276 |         struct xhci_ep_ctx *ep_ctx;
+         |                             ^~~~~~
+   drivers/usb/host/xhci-exynos.c: In function 'xhci_exynos_set_hc_event_deq_audio':
+   drivers/usb/host/xhci-exynos.c:370:20: warning: variable 'deq' set but not used [-Wunused-but-set-variable]
+     370 |         dma_addr_t deq;
+         |                    ^~~
+   drivers/usb/host/xhci-exynos.c: At top level:
+   drivers/usb/host/xhci-exynos.c:576:10: error: 'const struct xhci_plat_priv' has no member named 'plat_setup'
+     576 |         .plat_setup = xhci_mvebu_a3700_plat_setup,
+         |          ^~~~~~~~~~
+   drivers/usb/host/xhci-exynos.c:576:23: error: 'xhci_mvebu_a3700_plat_setup' undeclared here (not in a function); did you mean 'xhci_mvebu_a3700_init_quirk'?
+     576 |         .plat_setup = xhci_mvebu_a3700_plat_setup,
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                       xhci_mvebu_a3700_init_quirk
+   drivers/usb/host/xhci-exynos.c: In function 'xhci_priv_exynos_setup':
+   drivers/usb/host/xhci-exynos.c:59:1: error: control reaches end of non-void function [-Werror=return-type]
+      59 | }
+         | ^
+   At top level:
+   drivers/usb/host/xhci-exynos.c:588:36: warning: 'xhci_plat_brcm' defined but not used [-Wunused-const-variable=]
+     588 | static const struct xhci_plat_priv xhci_plat_brcm = {
+         |                                    ^~~~~~~~~~~~~~
+   drivers/usb/host/xhci-exynos.c:584:36: warning: 'xhci_plat_renesas_rcar_gen3' defined but not used [-Wunused-const-variable=]
+     584 | static const struct xhci_plat_priv xhci_plat_renesas_rcar_gen3 = {
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/host/xhci-exynos.c:580:36: warning: 'xhci_plat_renesas_rcar_gen2' defined but not used [-Wunused-const-variable=]
+     580 | static const struct xhci_plat_priv xhci_plat_renesas_rcar_gen2 = {
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/host/xhci-exynos.c:575:36: warning: 'xhci_plat_marvell_armada3700' defined but not used [-Wunused-const-variable=]
+     575 | static const struct xhci_plat_priv xhci_plat_marvell_armada3700 = {
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/host/xhci-exynos.c:571:36: warning: 'xhci_plat_marvell_armada' defined but not used [-Wunused-const-variable=]
+     571 | static const struct xhci_plat_priv xhci_plat_marvell_armada = {
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
+vim +146 drivers/usb/host/xhci-exynos.c
 
+   141	
+   142	static void xhci_exynos_free_container_ctx(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx)
+   143	{
+   144		/* Ignore dma_pool_free if it is allocated from URAM */
+   145		if (ctx->dma != EXYNOS_URAM_DEVICE_CTX_ADDR)
+ > 146			dma_pool_free(xhci->device_pool, ctx->bytes, ctx->dma);
+   147	}
+   148	
 
-Bj=C3=B8rn
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
