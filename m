@@ -2,240 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CD64E2807
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Mar 2022 14:46:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4F74E2C6A
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Mar 2022 16:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234812AbiCUNsU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Mar 2022 09:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
+        id S1350357AbiCUPhd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Mar 2022 11:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348096AbiCUNry (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Mar 2022 09:47:54 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE9698593;
-        Mon, 21 Mar 2022 06:46:29 -0700 (PDT)
+        with ESMTP id S1350350AbiCUPhb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Mar 2022 11:37:31 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FBF66CBA;
+        Mon, 21 Mar 2022 08:36:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647870389; x=1679406389;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=W9j/dfJIho7NP3A9luFZbQPGZdwDuDPwrJFZfTErn8U=;
-  b=JiXz+UPaZ+SxvquYLuUwDKr5jYjDy+/fTK+soqCwXzPr+ErSdkBEJvrv
-   YKYtoYQqIernYOPqnvGSL4hy6j+CuAW0auZ1EKIG9XJgUmiAeBYmtLGf+
-   4OcxM75KHIboiKplRAw2qYoQEyw/ua4jbTBN5ycJu6bpoUPkXLADGHa83
-   dzv8zJkjSDFIVv9+ZdcX/exoIuhsjLJ7higGhHorijk+BaXG4SrMdigCB
-   m06bAC7hRZb4n9X1dqPSmEh48T2TgmhEEQKhx01VtGO25ZLzKTDBly8HW
-   fosAVjGJ6ZRRyOApsY7Cw2J8iHcPG1xEPXUXeOVLyRwYGbMDvd6+e5zkM
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="318265388"
+  t=1647876966; x=1679412966;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lSDashDNH9eIHMNCJgAgiFFxMUd2Ab7RBOmLmw1UzaA=;
+  b=PgaayNVlRWACd+OP8l+19f7kJfBGUY9sv7uci66Jxdpd9JpvfzlCHox2
+   xtCrPhx9hRUTBf2X65gojHQH/5Lkv1QSZQhN2etx5l/JnPJ7V5CpRGMy5
+   miP9YX8gpOjO6n0RK2MmbNxFuWqtYNZjH9vJgnmhs+hbc9AxkE9dnsJo/
+   D3jXo7uctkYGrAJTv97ovvKWvLp0F3PSEIZKTTRfOzKnnArmUvyubfAu2
+   fb9xclsIxTA5iwFcRJlbtcw8hspsbDW81dlpSkVcEVge+oLQpbWbsHK0d
+   MEN9FIEZ6D8DvEDGr5Ry0D1+2CJMfpdoeGozHu6rIFGfrFpSrN57LWfT/
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="282407403"
 X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="318265388"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 06:46:03 -0700
+   d="scan'208";a="282407403"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 08:36:06 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="648569360"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 21 Mar 2022 06:46:02 -0700
-Subject: Re: [PATCH] usb: xhci: make XHCI_STOP_EP_CMD_TIMEOUT a module
- parameter
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     mathias.nyman@intel.com, kernel@puri.sm, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220304113057.1477958-1-martin.kepplinger@puri.sm>
- <YiIfZFPl9ZqPBKvj@kroah.com>
- <835b3990-43a6-a985-81b4-b86bddfe951f@linux.intel.com>
- <2d439eec0548361669bcc7b4de5b2c0e966d4d62.camel@puri.sm>
- <efd900656e15eac9169ee597ab7c19986c15277c.camel@puri.sm>
- <60227688-4435-516d-2525-b31fabbef273@linux.intel.com>
- <a66bd7ff8356cc0d97073ae41d128eabb74cc94d.camel@puri.sm>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <b7dc410e-09f4-0a36-7022-747489a5632e@linux.intel.com>
-Date:   Mon, 21 Mar 2022 15:47:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+   d="scan'208";a="636684757"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Mar 2022 08:36:03 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWK4g-000HwT-L1; Mon, 21 Mar 2022 15:36:02 +0000
+Date:   Mon, 21 Mar 2022 23:35:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daehwan Jung <dh10.jung@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>,
+        Daehwan Jung <dh10.jung@samsung.com>, sc.suh@samsung.com
+Subject: Re: [PATCH v3 1/4] usb: host: export symbols for xhci hooks usage
+Message-ID: <202203212326.t8A838in-lkp@intel.com>
+References: <1647853194-62147-2-git-send-email-dh10.jung@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <a66bd7ff8356cc0d97073ae41d128eabb74cc94d.camel@puri.sm>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1647853194-62147-2-git-send-email-dh10.jung@samsung.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 15.3.2022 10.43, Martin Kepplinger wrote:
-> Am Mittwoch, dem 09.03.2022 um 11:29 +0200 schrieb Mathias Nyman:
->> On 9.3.2022 9.56, Martin Kepplinger wrote:
->>> Am Dienstag, dem 08.03.2022 um 17:17 +0100 schrieb Martin
->>> Kepplinger:
->>>> Am Montag, dem 07.03.2022 um 10:49 +0200 schrieb Mathias Nyman:
->>>>> On 4.3.2022 16.17, Greg KH wrote:
->>>>>> On Fri, Mar 04, 2022 at 12:30:57PM +0100, Martin Kepplinger
->>>>>> wrote:
->>>>>>> On the Librem 5 imx8mq system we've seen the stop endpoint
->>>>>>> command
->>>>>>> time out regularly which results in the hub dying.
->>>>>>>
->>>>>>> While on the one hand we see "Port resume timed out, port
->>>>>>> 1-1:
->>>>>>> 0xfe3"
->>>>>>> before this and on the other hand driver-comments suggest
->>>>>>> that
->>>>>>> the driver
->>>>>>> might be able to recover instead of dying here, Sarah
->>>>>>> seemed to
->>>>>>> have a
->>>>>>> workaround for this particulator problem in mind already:
->>>>>>>
->>>>>>> Make it a module parameter. So while it might not be the
->>>>>>> root
->>>>>>> cause for
->>>>>>> the problem, do this to give users a workaround.
->>>>>>
->>>>>> This is not the 1990's, sorry, please do not add new module
->>>>>> parameters.
->>>>>> They modify code, when you want to modify an individual
->>>>>> device.
->>>>>>
->>>>>
->>>>> Agree, I think we really need to find the rootcause here.
->>>>>
->>>>> There's a known problem with this stop endpoint timeout timer.
->>>>>
->>>>> For all other commands we start the timer when the controller
->>>>> starts
->>>>> processing the
->>>>> command, but the stop endpoint timer is started immediately
->>>>> when
->>>>> command is queued.
->>>>> So it might timeout if some other commend before it failed.
->>>>>
->>>>> I have a patchseries for this. It's still work in progress but
->>>>> should
->>>>> be testable.
->>>>> Pushed to a branch named stop_endpoint_fixes
->>>>>
->>>>> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git
->>>>> stop_endpoint_fixes
->>>>> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=stop_endpoint_fixes
->>>>>
->>>>> Can you try it out and see if it helps?
->>>>>
->>>>
->>>> thanks a lot Mathias, I'm running these now. The timeout has not
->>>> been
->>>> easy to reproduce (or I'm just lazy) but in a few days I should
->>>> be
->>>> able
->>>> to tell whether that helps.
->>>>
->>>> So this thread has been about
->>>>
->>>> [14145.960512] xhci-hcd xhci-hcd.4.auto: Port resume timed out,
->>>> port
->>>> 1-
->>>> 1: 0xfe3
->>>> [14156.308511] xhci-hcd xhci-hcd.4.auto: xHCI host not responding
->>>> to
->>>> stop endpoint command.
->>>>
->>>> that I previously tried to work around by increasing
->>>> XHCI_MAX_REXIT_TIMEOUT_MS and XHCI_STOP_EP_CMD_TIMEOUT.
->>>>
->>>>
->>>> These patches can't help with the following, right?
->>>> readl_poll_timeout_atomic() with a fixed timeout is called in
->>>> this
->>>> case:
->>>>
->>>> xhci-hcd xhci-hcd.4.auto: Abort failed to stop command ring: -110
->>>>
->>>> I see that too from time to time. It results in the HC dying as
->>>> well.
->>>>
->>>> thanks,
->>>>                               martin
->>>>
->>>
->>> hi Mathias,
->>>
->>> I already saw "Port resume timed out" and the HC dying running your
->>> patches. I append the logs.
->>>
->>> So for now I saw more success with increasing
->>> XHCI_MAX_REXIT_TIMEOUT_MS.
->>>
->>
->> XHCI_MAX_REXIT_TIMEOUT_MS is only 20ms, that we can probably change.
->>
->> Is 40ms enough?
->>
->> "Port resume timed out, port 1-1: 0xfe3" means port link state is
->> still in
->> resume even if we asked link to go to U0 20ms ago.
->>
->> Maybe this hw combination just resumes slowly.
->>
->> Thanks
->> Mathias
-> 
-> 
-> hi Mathias, sorry for not responding until now. I'm currently testing
-> whether QUIRK_HUB_SLOW_RESET will work too to avoid the HC dying due to
-> the command timeouts:
-> 
-> { USB_DEVICE(0x0424, 0x2640), .driver_info = USB_QUIRK_HUB_SLOW_RESET
-> },
-> 
-> But these timeouts usually happen after a port is reset (not just
-> runtime-resumed without resetting, which happens very often).
-> 
-> And exactly *that* is what I now want to try to avoid now. I *never*
-> want ports on the Hub in question to be reset. (it causes enough other
-> hick-ups even *if* the reset would be successful and not result in the
-> HC die, so all resets need to go away).
-> 
-> Normally, on successful runtime resume (without any reset), the hub
-> port status is:
-> 
-> Mär 15 08:24:44.748852 pureos kernel: usb 1-1-port2: status 0503 change
-> 0004
-> Mär 15 08:24:44.747863 pureos kernel: usb 1-1-port1: status 0507 change
-> 0000
-> 
-> But when the following happens:
-> 
-> Mär 15 08:24:52.660348 pureos kernel: usb 1-1-port2: status 0101 change
-> 0005
-> Mär 15 08:24:52.656107 pureos kernel: usb 1-1-port1: status 0507 change
-> 0000
-> 
-> then hub_activate() sets "reset_resume" (persist is enabled) and it's
-> too late :)
-> 
-> Do you have an idea about what could be the cause for "status 0101"
-> here? (it basically means ENABLE and HIGH_SPEED is not set, but why?)
-> 
-> I know this is a bit of a different area now, but it's all about
-> avoiding problems on that hub at runtime.
-> 
-> thanks,
-> 
->                                  martin
+Hi Daehwan,
 
-Not sure about this.
-The failing case has change 0005, meaning the connect status change bit is
-set. Also HIGH_SPEED bit in status is only relevant when ENABLE bit is set.
+Thank you for the patch! Perhaps something to improve:
 
-If there was a connect change detected then I guess port reset is needed to
-get the USB 2 port back to enable state.
+[auto build test WARNING on next-20220318]
+[also build test WARNING on v5.17]
+[cannot apply to usb/usb-testing krzk/for-next char-misc/char-misc-testing v5.17 v5.17-rc8 v5.17-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
--Mathias
+url:    https://github.com/0day-ci/linux/commits/Daehwan-Jung/usb-host-export-symbols-for-xhci-hooks-usage/20220321-180046
+base:    6d72dda014a4753974eb08950089ddf71fec4f60
+config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20220321/202203212326.t8A838in-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/0577f386af5e7bc6400e76dc23c22fbcf45d715f
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Daehwan-Jung/usb-host-export-symbols-for-xhci-hooks-usage/20220321-180046
+        git checkout 0577f386af5e7bc6400e76dc23c22fbcf45d715f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/usb/host/
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/usb/host/xhci-mem.c:68:6: warning: no previous prototype for 'xhci_segment_free' [-Wmissing-prototypes]
+      68 | void xhci_segment_free(struct xhci_hcd *xhci, struct xhci_segment *seg)
+         |      ^~~~~~~~~~~~~~~~~
+   drivers/usb/host/xhci-mem.c:100:6: warning: no previous prototype for 'xhci_link_segments' [-Wmissing-prototypes]
+     100 | void xhci_link_segments(struct xhci_segment *prev,
+         |      ^~~~~~~~~~~~~~~~~~
+>> drivers/usb/host/xhci-mem.c:261:6: warning: no previous prototype for 'xhci_remove_stream_mapping' [-Wmissing-prototypes]
+     261 | void xhci_remove_stream_mapping(struct xhci_ring *ring)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/host/xhci-mem.c:1974:5: warning: no previous prototype for 'xhci_check_trb_in_td_math' [-Wmissing-prototypes]
+    1974 | int xhci_check_trb_in_td_math(struct xhci_hcd *xhci)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/xhci_remove_stream_mapping +261 drivers/usb/host/xhci-mem.c
+
+   260	
+ > 261	void xhci_remove_stream_mapping(struct xhci_ring *ring)
+   262	{
+   263		struct xhci_segment *seg;
+   264	
+   265		if (WARN_ON_ONCE(ring->trb_address_map == NULL))
+   266			return;
+   267	
+   268		seg = ring->first_seg;
+   269		do {
+   270			xhci_remove_segment_mapping(ring->trb_address_map, seg);
+   271			seg = seg->next;
+   272		} while (seg != ring->first_seg);
+   273	}
+   274	EXPORT_SYMBOL_GPL(xhci_remove_stream_mapping);
+   275	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
