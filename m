@@ -2,262 +2,400 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCAD04E2EA2
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Mar 2022 18:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7944D4E2ECB
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Mar 2022 18:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351532AbiCURAo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Mar 2022 13:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
+        id S1351634AbiCURIu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Mar 2022 13:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241969AbiCURAn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Mar 2022 13:00:43 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175675D5D2;
-        Mon, 21 Mar 2022 09:59:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647881958; x=1679417958;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=e5qKp3TccmtB9JB7hc3Gj03ZjUm1y7odox68rTsjaJ8=;
-  b=DTYFPJmcpn66SAJ9rp9IZFMuXtKtAz7BKtIsbUyq5mrnQLShJ3YZE6NR
-   tW/J4bolfZ9x4RM7F7e6gY60dsvFHELTYpeXw65aF7ufC1PRy5E+QhP28
-   jjJf1BZEc3HgpLhrScoGY2YWK8Tj3TIwjauCrJAKYolWeSk2rp8FFwKb5
-   uQBh9NQjJznpX+5xQgmutuAavghENe+YWu7CI8eyNdbjf0bWqJ8YaSTHZ
-   muTWM9hoRWeaWwwT5wQKLdPGiDi2v/fxm2b0Oriz/SIzUjqYNHNWLCtFd
-   jfUcdnyRQbuEwUxFQmhpqufT3vQHIC0QoG2S1Pa5oLB0Qr3AFdi23QK3A
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="318311192"
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="318311192"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 09:59:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="648633203"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 21 Mar 2022 09:59:08 -0700
-To:     Daehwan Jung <dh10.jung@samsung.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
-References: <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
- <CGME20220321090204epcas2p3b2be5c6b131240e408d12d40c517395c@epcas2p3.samsung.com>
- <1647853194-62147-3-git-send-email-dh10.jung@samsung.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v3 2/4] usb: host: add xhci hooks for USB offload
-Message-ID: <8f34e9ee-4f50-9028-34ba-444090acf48c@linux.intel.com>
-Date:   Mon, 21 Mar 2022 19:00:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        with ESMTP id S1349584AbiCURIt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Mar 2022 13:08:49 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29ABAF1F1;
+        Mon, 21 Mar 2022 10:07:23 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a8so31169621ejc.8;
+        Mon, 21 Mar 2022 10:07:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=nNbNlGuXV6X4fWF2qLDMdJsQMzIxqfeeRH+sUuCiCXQ=;
+        b=db9Mw7BqATvzLY1U2pGCP7VeG2dUUK3OxrlF/KdZGWer11Uc7abtZMQ2dHoWY0qtEV
+         BENMVa4hEQxaHRJYvYuhFrogLje5nOt7i1KZhMRbW7HIIuJHIb2YqCT6uGtTWd7qDq9d
+         NhymuRw43M7tzX4C39venxpI3bHQEkM9nKhYKYRzBBsDXYVOTPXQmcUTXG6HHzHwz0ku
+         MH80Pk/ulwEpF7kCClk/Iqkji3iRjNV0Ld3jfuGtM1uIWuu5vKtxsv0V3704ujRD74ru
+         SAypy3Ae861RvOsQn/QEjkOxaF7q9HcXx0juWk0M33LJMpap7VyxBn1C4oKmBmnQekuS
+         444Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nNbNlGuXV6X4fWF2qLDMdJsQMzIxqfeeRH+sUuCiCXQ=;
+        b=cMlIgll78cQB8MGQ4Yz6uAAXYVC2dWxd2dteEFQGA2SYv7Bns6j5wyAW8FAtlaXeMq
+         LmCK6aJarxbbdozCxta4mwOi0RAa4gMIJvFNvxFsUL/UjrpCaRJ0o/BTczJI9NqeDW3J
+         DF/YjcoXDYuomAPbDtRx+tWAIdwBdcfOCiM0ygdZ8FV50a6D98Pae9NDpo25tz2J3ikz
+         uey13EjGpNgzBpq7B1RDd3MP6fkRu5YlsBBGkzxaKJELrm3abeY9lN3ngeAJf/MghYo6
+         JAA1E0Zi9ZtI5TcNbDnlSF8PCzyZjnA99fp4OQJNPL6MU+Jc6LdOaoQOVN5mFbJtsS6r
+         RWrg==
+X-Gm-Message-State: AOAM530eTwVeNytBXGzQXk2Myuovz7iEZnOJuA+Ph2LCVmuib76IRk2b
+        lmwnG8iNARQN/mzwdkkgNMj1g4h9jQIkyum/F3Q=
+X-Google-Smtp-Source: ABdhPJz3+5NZZMx6LfOczVDWh8iPK8wiFLRlrTjLaXEGAzbTMpJ0HoYaMDtbC7h4sMTpGeMQo3gxiUfgSLQ9LdtTCqk=
+X-Received: by 2002:a17:907:7289:b0:6df:9746:e7c4 with SMTP id
+ dt9-20020a170907728900b006df9746e7c4mr20246985ejc.497.1647882442198; Mon, 21
+ Mar 2022 10:07:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1647853194-62147-3-git-send-email-dh10.jung@samsung.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220321042142.69239-1-frank@zago.net> <20220321042142.69239-3-frank@zago.net>
+In-Reply-To: <20220321042142.69239-3-frank@zago.net>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 21 Mar 2022 19:06:10 +0200
+Message-ID: <CAHp75VdfEheEPWBDb+3FUwmwGx_4NR8o+SMwTwjgPr7oGGM5-A@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] gpio: ch341: add MFD cell driver for the CH341
+To:     frank zago <frank@zago.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21.3.2022 10.59, Daehwan Jung wrote:
-> To enable supporting for USB offload, define "offload" in usb controller
-> node of device tree. "offload" value can be used to determine which type
-> of offload was been enabled in the SoC.
-> 
-> For example:
-> 
-> &usbdrd_dwc3 {
-> 	...
-> 	/* support usb offloading, 0: disabled, 1: audio */
-> 	offload = <1>;
-> 	...
-> };
-> 
-> There are several vendor_ops introduced by this patch:
-> 
-> struct xhci_vendor_ops - function callbacks for vendor specific operations
-> {
-> 	@vendor_init:
-> 		- called for vendor init process during xhci-plat-hcd
-> 		  probe.
-> 	@vendor_cleanup:
-> 		- called for vendor cleanup process during xhci-plat-hcd
-> 		  remove.
+On Mon, Mar 21, 2022 at 4:13 PM frank zago <frank@zago.net> wrote:
+>
+> The GPIO interface offers 16 GPIOs. 6 are read/write, and 10 are
+> read-only.
 
-The vendor_init() and vendor_cleanup() aren't really useful.
-you are calling them from platform_probe() and platform_remove(),
-just modify the probe and remove functions of the xhci-exynos driver directly.
+We use terminology of output-only and input-only. Is it what you are
+telling us? If it's something else, you have to elaborate much better
+on what's going on with these GPIO lines.
 
+...
 
-> 	@is_usb_offload_enabled:
-> 		- called to check if usb offload enabled.
+> +config GPIO_CH341
+> +       tristate "CH341 USB adapter in GPIO/I2C/SPI mode"
 
-Looks like this is being used more like a quirk bit.
-I think we can get rid of this as well
+How is this driver related to either SPI or I=C2=B2C modes?
 
-> 	@alloc_dcbaa:
-> 		- called when allocating vendor specific dcbaa during
-> 		  memory initializtion.
-> 	@free_dcbaa:
-> 		- called to free vendor specific dcbaa when cleanup the
-> 		  memory.
-> 	@alloc_transfer_ring:
-> 		- called when vendor specific transfer ring allocation is required
-> 	@free_transfer_ring:
-> 		- called to free vendor specific transfer ring
-> 	@sync_dev_ctx:
-> 		- called when synchronization for device context is required
-> }
-> 
-> The xhci hooks with prefix "xhci_vendor_" on the ops in xhci_vendor_ops.
-> For example, vendor_init ops will be invoked by xhci_vendor_init() hook,
-> is_usb_offload_enabled ops will be invoked by
-> xhci_vendor_is_usb_offload_enabled(), and so on.
-> 
-> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> Signed-off-by: J. Avila <elavila@google.com>
-> Signed-off-by: Puma Hsu <pumahsu@google.com>
-> Signed-off-by: Howard Yen <howardyen@google.com>
-> ---
->  drivers/usb/host/xhci-hub.c  |   5 ++
->  drivers/usb/host/xhci-mem.c  | 131 +++++++++++++++++++++++++++++++----
->  drivers/usb/host/xhci-plat.c |  43 +++++++++++-
->  drivers/usb/host/xhci-plat.h |   7 ++
->  drivers/usb/host/xhci.c      |  80 ++++++++++++++++++++-
->  drivers/usb/host/xhci.h      |  46 ++++++++++++
->  6 files changed, 295 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-> index 56546aaa93c7..aea72ffce820 100644
-> --- a/drivers/usb/host/xhci-hub.c
-> +++ b/drivers/usb/host/xhci-hub.c
-> @@ -535,8 +535,13 @@ static int xhci_stop_device(struct xhci_hcd *xhci, int slot_id, int suspend)
->  	    cmd->status == COMP_COMMAND_RING_STOPPED) {
->  		xhci_warn(xhci, "Timeout while waiting for stop endpoint command\n");
->  		ret = -ETIME;
-> +		goto cmd_cleanup;
->  	}
->  
-> +	ret = xhci_vendor_sync_dev_ctx(xhci, slot_id);
-> +	if (ret)
-> +		xhci_warn(xhci, "Sync device context failed, ret=%d\n", ret);
+> +       depends on MFD_CH341
+
+Can't be compile tested?
+
+> +       help
+> +         If you say yes to this option, GPIO support will be included fo=
+r the
+> +         WCH CH341, a USB to I2C/SPI/GPIO interface.
 > +
->  cmd_cleanup:
->  	xhci_free_command(xhci, cmd);
->  	return ret;
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index 82b9f90c0f27..5ee0ffb676d3 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -365,6 +365,54 @@ static int xhci_alloc_segments_for_ring(struct xhci_hcd *xhci,
->  	return 0;
->  }
->  
-> +static void xhci_vendor_free_container_ctx(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx)
+> +         This driver can also be built as a module.  If so, the module
+> +         will be called gpio-ch341.
+
+...
+
+> +/* Notes.
+
+Keep the proper (not network) style for multi-line comments.
+
+
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/gpio.h>
+
+> +#include <linux/mfd/ch341.h>
+
+If I got your intention with groups of headers, I would see rather
+
+...ordered headers...
+blank line
+#include <linux/gpio.h>
+
+But more importantly that gpio.h is the wrong header and must be
+replaced with the appropriate one from the include/gpio/ folder.
+
+Also you have missed headers, like types.h.
+
+...
+
+> +#define CH341_PARA_CMD_STS          0xA0  /* Get pins status */
+> +#define CH341_CMD_UIO_STREAM        0xAB  /* UIO stream command */
+> +
+> +#define CH341_CMD_UIO_STM_OUT       0x80  /* UIO interface OUT command (=
+D0~D5) */
+> +#define CH341_CMD_UIO_STM_DIR       0x40  /* UIO interface DIR command (=
+D0~D5) */
+> +#define CH341_CMD_UIO_STM_END       0x20  /* UIO interface END command *=
+/
+
+What does UIO mean here? If it is Userspace I/O in terms of Linux
+kernel, it's no-go we want this. Otherwise needs to be explained
+somewhere.
+
+...
+
+> +struct ch341_gpio {
+> +       struct gpio_chip gpio;
+> +       struct mutex gpio_lock;
+> +       u16 gpio_dir;           /* 1 bit per pin, 0=3DIN, 1=3DOUT. */
+> +       u16 gpio_last_read;     /* last GPIO values read */
+> +       u16 gpio_last_written;  /* last GPIO values written */
+> +       u8 gpio_buf[SEG_SIZE];
+> +
+> +       struct {
+> +               char name[32];
+> +               bool enabled;
+> +               struct irq_chip irq;
+> +               int num;
+> +               struct urb *urb;
+> +               struct usb_anchor urb_out;
+> +               u8 buf[CH341_USB_MAX_INTR_SIZE];
+> +       } gpio_irq;
+
+We have a specific GPIO IRQ chip structure, what is the purpose of
+semi-duplication of it?
+
+> +
+> +       struct ch341_device *ch341;
+> +};
+
+...
+
+> +static void ch341_gpio_dbg_show(struct seq_file *s, struct gpio_chip *ch=
+ip)
 > +{
-> +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
+> +       struct ch341_gpio *dev =3D gpiochip_get_data(chip);
 > +
-> +	if (ops && ops->free_container_ctx)
-> +		ops->free_container_ctx(xhci, ctx);
+> +       seq_printf(s, "pin config  : %04x  (0=3DIN, 1=3DOUT)\n", dev->gpi=
+o_dir);
+> +       seq_printf(s, "last read   : %04x\n", dev->gpio_last_read);
+> +       seq_printf(s, "last written: %04x\n", dev->gpio_last_written);
+
+Multi-line debug output is quite non-standard among GPIO drivers.
+
 > +}
 
-
-Looks suspicious, we always need to free container contexts, why this much checking?
-
-
-> +
-> +static void xhci_vendor_alloc_container_ctx(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx,
-> +					    int type, gfp_t flags)
 > +{
-> +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
+> +       struct ch341_device *ch341 =3D dev->ch341;
+> +       int actual;
+> +       int rc;
 > +
-> +	if (ops && ops->alloc_container_ctx)
-> +		ops->alloc_container_ctx(xhci, ctx, type, flags);
+> +       mutex_lock(&ch341->usb_lock);
+> +
+> +       rc =3D usb_bulk_msg(ch341->usb_dev,
+> +                         usb_sndbulkpipe(ch341->usb_dev, ch341->ep_out),
+> +                         dev->gpio_buf, out_len,
+> +                         &actual, DEFAULT_TIMEOUT);
+
+> +       if (rc < 0)
+> +               goto done;
+> +
+> +       if (in_len =3D=3D 0) {
+> +               rc =3D actual;
+> +               goto done;
+> +       }
+
+You may do it better. See below.
+
+> +       rc =3D usb_bulk_msg(ch341->usb_dev,
+> +                         usb_rcvbulkpipe(ch341->usb_dev, ch341->ep_in),
+> +                         dev->gpio_buf, SEG_SIZE, &actual, DEFAULT_TIMEO=
+UT);
+> +
+> +       if (rc =3D=3D 0)
+> +               rc =3D actual;
+
+> +done:
+
+out_unlock: sounds better.
+
+> +       mutex_unlock(&ch341->usb_lock);
+
+> +       return rc;
+
+if (rc < 0)
+  return rc;
+
+return actual;
+
 > +}
 
-same, there should always be a function to allocate container context..
+...
 
-> +
-> +static struct xhci_ring *xhci_vendor_alloc_transfer_ring(struct xhci_hcd *xhci,
-> +		u32 endpoint_type, enum xhci_ring_type ring_type,
-> +		unsigned int max_packet, gfp_t mem_flags)
+> +       int result;
+
+rc / result / etc... Please, become consistent in naming the return
+code variable.
+
+...
+
+> +       if (result =3D=3D 6)
+> +               dev->gpio_last_read =3D le16_to_cpu(*(__le16 *)dev->gpio_=
+buf);
+
+So, it means you have the wrong type of gpio_but. Also you missed the
+pointer versions of leXX_to_cpu() helpers.
+
+...
+
+> +       return (result !=3D 6) ? result : 0;
+
+Besides redundant parentheses, this can be optimized. I will leave it
+for your homework (the hint is given at the top part of the review).
+
+...
+
+> +       return (dev->gpio_last_read & BIT(offset)) ? 1 : 0;
+
+!! can be used. But it's up to you and maintainers, the compiler will
+do its job anyway.
+
+...
+
+> +       dev->gpio_last_written &=3D ~*mask;
+> +       dev->gpio_last_written |=3D (*bits & *mask);
+
+Can be done in one line as it's a well established pattern in Linux
+kernel for drivers.
+
+...
+
+> +       return (dev->gpio_dir & BIT(offset)) ? 0 : 1;
+
+! will do the job.
+
+...
+
+> +       if (!(pin_can_output & mask))
+> +               return -EINVAL;
+
+I don't remember if we have a valid mask for this case.
+
+...
+
+> +       if (!urb->status) {
+
+Will be much better to simply do:
+
+if (urb_status) {
+ ...
+ return;
+}
+
+> +       } else {
+> +               usb_unanchor_urb(dev->gpio_irq.urb);
+> +       }
+
+...
+
+> +       if (data->irq !=3D dev->gpio_irq.num || type !=3D IRQ_TYPE_EDGE_R=
+ISING)
+> +               return -EINVAL;
+
+Usually we lock the handler type here while in ->probe() we assign a
+bad handler by default in order to filter out spurious interrupts.
+
+...
+
+> +       dev->gpio_irq.enabled =3D true;
+
+What is the purpose of this flag? Note there is a patch to add a
+specific flag to the descriptor to do exactly this.
+
+...
+
+> +/* Convert the GPIO index to the IRQ number */
+> +static int ch341_gpio_to_irq(struct gpio_chip *chip, unsigned int offset=
+)
 > +{
-> +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
+> +       struct ch341_gpio *dev =3D gpiochip_get_data(chip);
 > +
-> +	if (ops && ops->alloc_transfer_ring)
-> +		return ops->alloc_transfer_ring(xhci, endpoint_type, ring_type,
-> +				max_packet, mem_flags);
-> +	return 0;
+> +       if (offset !=3D CH341_GPIO_INT_LINE)
+> +               return -ENXIO;
+> +
+> +       return dev->gpio_irq.num;
 
-same, looks like a lot of extra code.
+In the new code we will have the special field that limits the GPIO
+IRQ lines (can be different to the ngpio).
 
 > +}
+
+...
+
+> +       snprintf(dev->gpio_irq.name, sizeof(dev->gpio_irq.name),
+> +                "ch341-%s-gpio", dev_name(&ch341->usb_dev->dev));
+
+> +       dev->gpio_irq.name[sizeof(dev->gpio_irq.name) - 1] =3D 0;
+
+This is redundant. Have you read the manual page on snprintf()?
+
+...
+
+> +       rc =3D devm_irq_alloc_desc(&pdev->dev, 0);
+> +       if (rc < 0) {
+
+> +               dev_err(&pdev->dev, "Cannot allocate an IRQ desc");
+> +               return rc;
+
+return dev_err_probe();
+
+> +       }
 > +
-> +void xhci_vendor_free_transfer_ring(struct xhci_hcd *xhci,
-> +		struct xhci_ring *ring, unsigned int ep_index)
-> +{
-> +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
+> +       dev->gpio_irq.num =3D rc;
+> +       dev->gpio_irq.enabled =3D false;
 > +
-> +	if (ops && ops->free_transfer_ring)
-> +		ops->free_transfer_ring(xhci, ring, ep_index);
-> +}
+> +       irq_set_chip_data(dev->gpio_irq.num, dev);
+> +       irq_set_chip_and_handler(dev->gpio_irq.num, &dev->gpio_irq.irq,
+> +                                handle_simple_irq);
+
+Oh l=C3=A0 l=C3=A0. Can you use the latest and greatest approach of
+instantiating the GPIO IRQ chip?
+
+...
+
+> +               dev_err(&pdev->dev, "Cannot allocate the int URB");
+> +               return -ENOMEM;
+
+return dev_err_probe();
+
+...
+
+> +       rc =3D gpiochip_add_data(gpio, dev);
+
+Why not devm?
+
+> +       if (rc) {
+> +               dev_err(&pdev->dev, "Could not add GPIO\n");
+> +               goto release_urb;
+
+return dev_err_probe();
+
+> +       }
+
+...
+
+> +static struct platform_driver ch341_gpio_driver =3D {
+> +       .driver.name    =3D "ch341-gpio",
+> +       .probe          =3D ch341_gpio_probe,
+> +       .remove         =3D ch341_gpio_remove,
+> +};
 > +
 
-same.
+Redundant blank line.
 
-> +bool xhci_vendor_is_usb_offload_enabled(struct xhci_hcd *xhci,
-> +		struct xhci_virt_device *virt_dev, unsigned int ep_index)
-> +{
-> +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
-> +
-> +	if (ops && ops->is_usb_offload_enabled)
-> +		return ops->is_usb_offload_enabled(xhci, virt_dev, ep_index);
-> +	return false;
-> +}
-> +
->  /*
->   * Create a new ring with zero or more segments.
->   *
-> @@ -417,7 +465,11 @@ void xhci_free_endpoint_ring(struct xhci_hcd *xhci,
->  		struct xhci_virt_device *virt_dev,
->  		unsigned int ep_index)
->  {
-> -	xhci_ring_free(xhci, virt_dev->eps[ep_index].ring);
-> +	if (xhci_vendor_is_usb_offload_enabled(xhci, virt_dev, ep_index))
-> +		xhci_vendor_free_transfer_ring(xhci, virt_dev->eps[ep_index].ring, ep_index);
-> +	else
-> +		xhci_ring_free(xhci, virt_dev->eps[ep_index].ring);
-> +
->  	virt_dev->eps[ep_index].ring = NULL;
->  }
+> +module_platform_driver(ch341_gpio_driver);
 
-Ok, I see.
-So idea is to override some functions that allocate and free DMA memory.
-Your vendor_ops structure filled with function callbacks could be a 
-mem_ops structure that allows your driver to directly override those
-functions.
-
-For example here we would only call
-
-xhci->mem_ops->ring_free(...);
-This would set to xhci_ring_free() by default, but your xhci-exonys driver could
-set it to xhci_exonys_free_ring(), which would do any needed is_offload_enabled()
-checks and custom freeing.
-
-Same goes for most most of the other functions in this patch
-
-If possible see if it's enough to override the existing callbacks in
-struct hc_driver instead of creating new function pointers.
-
--Mathias
+--=20
+With Best Regards,
+Andy Shevchenko
