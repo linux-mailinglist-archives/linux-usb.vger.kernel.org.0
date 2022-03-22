@@ -2,201 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BF14E418A
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Mar 2022 15:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8300D4E4359
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Mar 2022 16:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237789AbiCVOlk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Mar 2022 10:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36930 "EHLO
+        id S236068AbiCVPx1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Mar 2022 11:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236750AbiCVOlj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Mar 2022 10:41:39 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 206CB25E;
-        Tue, 22 Mar 2022 07:40:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4B1821042;
-        Tue, 22 Mar 2022 07:40:10 -0700 (PDT)
-Received: from [10.57.43.230] (unknown [10.57.43.230])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 10C753F73B;
-        Tue, 22 Mar 2022 07:40:06 -0700 (PDT)
-Message-ID: <8b47440b-91df-ba2f-b004-33e4c6dc1f20@arm.com>
-Date:   Tue, 22 Mar 2022 14:40:02 +0000
+        with ESMTP id S235730AbiCVPx1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Mar 2022 11:53:27 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BF489CFD;
+        Tue, 22 Mar 2022 08:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647964319; x=1679500319;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=9ttX9cZdVk3gMLlMA8zvmvOJ+iMJUZrKKbcKF7FJWwM=;
+  b=WUe56AswEZUfydv1gfwAfD8UxOvIz1XjZA+VYyKdiVeVCotp/HJXJPH6
+   SPu3E8nwBZVHCSqkKgctd7J6nemigN+1Q9FyMGoyhgytzYuZ1Yk9y8Imj
+   RzNDFKRIpK7knTB8xxK9VfFOXYZeshzOKA+4DcQ9lwAePJ5Mpg1jKzUOW
+   P8rkVYm6Flv7uRs5ngdpr27q7dL0iAgMdaWBHld6yhW661zwZE9003/8G
+   wxJT1TR9PIxOw23muVSE52yOY49Gp4Yv1sgPPey2Gn3c24ANXRx2YDP+m
+   5Pms4p7gLHxPURix8bXn9FESM700XFyFvhabrbuOpdu0Tu+HU8FSzsjW1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="255418969"
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="255418969"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 08:51:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
+   d="scan'208";a="649039098"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga004.jf.intel.com with ESMTP; 22 Mar 2022 08:51:54 -0700
+To:     "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com
+References: <1646130507-26796-1-git-send-email-quic_c_sanm@quicinc.com>
+ <ddc86a4f-8d1c-c02c-5600-4fa851568557@quicinc.com>
+ <YjR0Ne3BDxxMfrxt@kroah.com>
+ <b38ddfcc-68c3-d99f-816b-8b9f788aa88a@quicinc.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v2 0/3] Refactor xhci quirks and plat private data
+Message-ID: <29ba84fb-1db2-1d84-cf9e-191e9bcbf739@linux.intel.com>
+Date:   Tue, 22 Mar 2022 17:53:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/2] thunderbolt: Make iommu_dma_protection more
- accurate
-Content-Language: en-GB
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     joro@8bytes.org, baolu.lu@linux.intel.com,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, iommu@lists.linux-foundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mario.limonciello@amd.com, hch@lst.de
-References: <cover.1647624084.git.robin.murphy@arm.com>
- <0dd14883930c9f55ace22162e23765a37d91a057.1647624084.git.robin.murphy@arm.com>
- <Yjm150r3KPKp/2O4@lahna>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <Yjm150r3KPKp/2O4@lahna>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b38ddfcc-68c3-d99f-816b-8b9f788aa88a@quicinc.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2022-03-22 11:41, Mika Westerberg wrote:
-> Hi Robin,
+On 21.3.2022 8.21, Sandeep Maheswaram (Temp) wrote:
+> Hi Mathias,
 > 
-> I tried this now on two Intel systems. One with integrated Thunderbolt
-> and one with discrete. There was a small issue, see below but once fixed
-> it worked as expected :)
+> On 3/18/2022 5:29 PM, Greg Kroah-Hartman wrote:
+>> On Thu, Mar 17, 2022 at 11:17:17AM +0530, Sandeep Maheswaram (Temp) wrote:
+>>> Hi Greg,
+>>>
+>>> On 3/1/2022 3:58 PM, Sandeep Maheswaram wrote:
+>>>> changes in v2:
+>>>> Added a PATCH 2/3 to remove unwanted header inclusion.
+>>>> Fixed minor nitpicks in PATCH 3/3.
+>>>>
+>>>> Pavankumar Kondeti (1):
+>>>>     usb: xhci: refactor quirks and plat private data
+>>>>
+>>>> Sandeep Maheswaram (2):
+>>>>     usb: xhci: Remove unwanted header inclusion
+>>>>     usb: dwc: host: add xhci_plat_priv quirk XHCI_SKIP_PHY_INIT
+>>>>
+>>>>    drivers/usb/cdns3/host.c        |  2 +-
+>>>>    drivers/usb/dwc3/host.c         | 13 ++++++++
+>>>>    drivers/usb/host/xhci-plat.c    |  3 +-
+>>>>    drivers/usb/host/xhci-plat.h    | 24 ---------------
+>>>>    drivers/usb/host/xhci-rcar.c    |  3 +-
+>>>>    drivers/usb/host/xhci.h         | 60 ++++--------------------------------
+>>>>    include/linux/usb/xhci-plat.h   | 24 +++++++++++++++
+>>>>    include/linux/usb/xhci-quirks.h | 67 +++++++++++++++++++++++++++++++++++++++++
+>>>>    8 files changed, 115 insertions(+), 81 deletions(-)
+>>>>    delete mode 100644 drivers/usb/host/xhci-plat.h
+>>>>    create mode 100644 include/linux/usb/xhci-plat.h
+>>>>    create mode 100644 include/linux/usb/xhci-quirks.h
+>>> Please let me know your opinion about this patch series.
+>> I need the xhci maintainer to review it...
+>>
+>> thanks,
+>>
+>> greg k-h
 > 
-> On Fri, Mar 18, 2022 at 05:42:58PM +0000, Robin Murphy wrote:
->> Between me trying to get rid of iommu_present() and Mario wanting to
->> support the AMD equivalent of DMAR_PLATFORM_OPT_IN, scrutiny has shown
->> that the iommu_dma_protection attribute is being far too optimistic.
->> Even if an IOMMU might be present for some PCI segment in the system,
->> that doesn't necessarily mean it provides translation for the device(s)
->> we care about. Furthermore, all that DMAR_PLATFORM_OPT_IN really does
->> is tell us that memory was protected before the kernel was loaded, and
->> prevent the user from disabling the intel-iommu driver entirely. While
->> that lets us assume kernel integrity, what matters for actual runtime
->> DMA protection is whether we trust individual devices, based on the
->> "external facing" property that we expect firmware to describe for
->> Thunderbolt ports.
->>
->> It's proven challenging to determine the appropriate ports accurately
->> given the variety of possible topologies, so while still not getting a
->> perfect answer, by putting enough faith in firmware we can at least get
->> a good bit closer. If we can see that any device near a Thunderbolt NHI
->> has all the requisites for Kernel DMA Protection, chances are that it
->> *is* a relevant port, but moreover that implies that firmware is playing
->> the game overall, so we'll use that to assume that all Thunderbolt ports
->> should be correctly marked and thus will end up fully protected.
->>
->> CC: Mario Limonciello <mario.limonciello@amd.com>
->> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
->> ---
->>
->> v2: Give up trying to look for specific devices, just look for evidence
->>      that firmware cares at all.
->>
->>   drivers/thunderbolt/domain.c | 12 +++--------
->>   drivers/thunderbolt/nhi.c    | 41 ++++++++++++++++++++++++++++++++++++
->>   include/linux/thunderbolt.h  |  2 ++
->>   3 files changed, 46 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
->> index 7018d959f775..2889a214dadc 100644
->> --- a/drivers/thunderbolt/domain.c
->> +++ b/drivers/thunderbolt/domain.c
->> @@ -7,9 +7,7 @@
->>    */
->>   
->>   #include <linux/device.h>
->> -#include <linux/dmar.h>
->>   #include <linux/idr.h>
->> -#include <linux/iommu.h>
->>   #include <linux/module.h>
->>   #include <linux/pm_runtime.h>
->>   #include <linux/slab.h>
->> @@ -257,13 +255,9 @@ static ssize_t iommu_dma_protection_show(struct device *dev,
->>   					 struct device_attribute *attr,
->>   					 char *buf)
->>   {
->> -	/*
->> -	 * Kernel DMA protection is a feature where Thunderbolt security is
->> -	 * handled natively using IOMMU. It is enabled when IOMMU is
->> -	 * enabled and ACPI DMAR table has DMAR_PLATFORM_OPT_IN set.
->> -	 */
->> -	return sprintf(buf, "%d\n",
->> -		       iommu_present(&pci_bus_type) && dmar_platform_optin());
->> +	struct tb *tb = container_of(dev, struct tb, dev);
->> +
->> +	return sysfs_emit(buf, "%d\n", tb->nhi->iommu_dma_protection);
->>   }
->>   static DEVICE_ATTR_RO(iommu_dma_protection);
->>   
->> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
->> index c73da0532be4..9e396e283792 100644
->> --- a/drivers/thunderbolt/nhi.c
->> +++ b/drivers/thunderbolt/nhi.c
->> @@ -14,6 +14,7 @@
->>   #include <linux/errno.h>
->>   #include <linux/pci.h>
->>   #include <linux/interrupt.h>
->> +#include <linux/iommu.h>
->>   #include <linux/module.h>
->>   #include <linux/delay.h>
->>   #include <linux/property.h>
->> @@ -1102,6 +1103,45 @@ static void nhi_check_quirks(struct tb_nhi *nhi)
->>   		nhi->quirks |= QUIRK_AUTO_CLEAR_INT;
->>   }
->>   
->> +static int nhi_check_iommu_pdev(struct pci_dev *pdev, void *data)
->> +{
->> +	if (!pdev->untrusted ||
->> +	    !dev_iommu_capable(&pdev->dev, IOMMU_CAP_PRE_BOOT_PROTECTION))
 > 
-> This one needs to take the pdev->external_facing into account too
-> because most of the time there are no existing tunnels when the driver
-> is loaded so we only see the PCIe root/downstream port. I think this is
-> enough actually:
+> Can you please review this patch series.
 > 
-> 	if (!pdev->external_facing ||
-> 	    !dev_iommu_capable(&pdev->dev, IOMMU_CAP_PRE_BOOT_PROTECTION))
 
-Ah yes, my bad, for some reason I got the misapprehension into my head 
-that untrusted was propagated to the port as well, not just the devices 
-behind it. I'll fix this and tweak the comment below to match.
+I don't have a better solution than this.
 
->> +		return 0;
->> +	*(bool *)data = true;
->> +	return 1; /* Stop walking */
->> +}
->> +
->> +static void nhi_check_iommu(struct tb_nhi *nhi)
->> +{
->> +	struct pci_bus *bus = nhi->pdev->bus;
->> +	bool port_ok = false;
->> +
->> +	/*
->> +	 * Ideally what we'd do here is grab every PCI device that
->> +	 * represents a tunnelling adapter for this NHI and check their
->> +	 * status directly, but unfortunately USB4 seems to make it
->> +	 * obnoxiously difficult to reliably make any correlation.
->> +	 *
->> +	 * So for now we'll have to bodge it... Hoping that the system
->> +	 * is at least sane enough that an adapter is in the same PCI
->> +	 * segment as its NHI, if we can find *something* on that segment
->> +	 * which meets the requirements for Kernel DMA Protection, we'll
->> +	 * take that to imply that firmware is aware and has (hopefully)
->> +	 * done the right thing in general. We need to know that the PCI
->> +	 * layer has seen the ExternalFacingPort property and propagated
->> +	 * it to the "untrusted" flag that the IOMMU layer will then
->> +	 * enforce, but also that the IOMMU driver itself can be trusted
->> +	 * not to have been subverted by a pre-boot DMA attack.
->> +	 */
->> +	while (bus->parent)
->> +		bus = bus->parent;
->> +
->> +	pci_walk_bus(bus, nhi_check_iommu_pdev, &port_ok);
->> +
->> +	nhi->iommu_dma_protection = port_ok;
-> 
-> I would put here a log debug, something like this:
-> 
-> dev_dbg(&nhi->pdev->dev, "IOMMU DMA protection is %sabled\n",
-> 	port_ok ? "en" : "dis");
+So neither devicetree or ACPI entries exists for the xHC part of this dwc3 controller?
 
-Ack. I'll wait and send a v3 once the merge window's over, and can roll 
-Mario's AMD IOMMU patch into that too.
+A pure platform device is created, and it matches and binds to xhci-plat driver by "xhci-hcd" name.
+I guess we have no way to identify this dwc3 xhci controller in xhci-plat.c, and set quirks there,
+like all those devicetree xhci devices that we set quirks based on .compatibility. 
 
-Thanks,
-Robin.
+Thanks
+Mathias
+
