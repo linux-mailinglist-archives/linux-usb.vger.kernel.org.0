@@ -2,98 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85ED34E44AA
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Mar 2022 18:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBCD4E44C1
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Mar 2022 18:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238086AbiCVRHd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Mar 2022 13:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S239411AbiCVRLd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Mar 2022 13:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiCVRHc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Mar 2022 13:07:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A8762C2;
-        Tue, 22 Mar 2022 10:06:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A85F5B81CED;
-        Tue, 22 Mar 2022 17:06:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66269C340F5;
-        Tue, 22 Mar 2022 17:06:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647968761;
-        bh=I90Q1yL3ZsVCkc/hXJ77PW/IOeESv0+uLIFtxRhG+QY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YlaG1a4Lcc3Io4HDmK/3kzGApE6DcetS4vE2nVLUCgETwMvmhKIXPBkcnJjgt7mR0
-         IW8J3qN50G/8aFySTRxsQ2uWrrf48HrJIlWJCJLS26Wv8VDJNhhYj6mQfOkC1ji2KG
-         vw01y/iSI5Gpo6zYlZi7wtBiR2g0P0b7jLOawTdG7TGEocJ9pmkRJNR1M4hf6u/i4x
-         vRoOLK38oPwQMjckVOqqnvS+M3cJ2Ns26jh94Dk/MkouZs+jhD/Bg6c3EBy/2G4fQo
-         +Vt26MsjuZuq4ALOMB6W3DaDzfK9c0c9g+IB+GBy8iB7sPZfzidxiNLyOU0JDWenD2
-         tLiYcVOlhnkIQ==
-Received: by mail-pj1-f48.google.com with SMTP id mz9-20020a17090b378900b001c657559290so3560000pjb.2;
-        Tue, 22 Mar 2022 10:06:01 -0700 (PDT)
-X-Gm-Message-State: AOAM532AqKhYHACNRU1DCkeqgAMxQm9EzR6LeCwNKAzTIpmQN+Ob4VdI
-        U7cSMLo6FCJa0f4rkj05ukKLSL6sB0aLjLkPplE=
-X-Google-Smtp-Source: ABdhPJycCT1LkvZga/e0W6zDH8tC9vsexe7bu7jZnKVb+DPob7Sqf3iYqLKdXUYGmNT216Iji86Xg+la6oaCr9tqOGY=
-X-Received: by 2002:a17:90a:3181:b0:1c7:6d18:391a with SMTP id
- j1-20020a17090a318100b001c76d18391amr2895779pjb.30.1647968760887; Tue, 22 Mar
- 2022 10:06:00 -0700 (PDT)
+        with ESMTP id S230246AbiCVRLc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Mar 2022 13:11:32 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE7478059;
+        Tue, 22 Mar 2022 10:10:04 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id c62so2977166edf.5;
+        Tue, 22 Mar 2022 10:10:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xgLpXYKrGRM0LPMxrUU/nWjLzhk/XDVmKUWyNC9e+2s=;
+        b=QGNmG+YDXM8tS3npRaoXcBab0tK96+y7yJIWSUGcgacsmx4+IdshoxorgxR5E4k9rK
+         WzKM+OTxUURACO2iy2YC+Cg7IZbapp/G5cCh/zeyqzV4iqtf8nHxwLwXqLKAto8xkyX5
+         TR9OCsEMaGVS0THoKuHUuFosxzsXvifvH7gMocWrvUN4Qujs0NEs/A38eDTJJHFnUXQm
+         7gIiITvOvEhDLNHAXNH9uBFaXfG2R+nppdfxB4wEbsy4VIW+40EMfxAjiz43Y+0IqiBt
+         YYQkeafo+xDdoCvEs872QDrVxg3dfhpMS72JwMQ91SqO+bguX+HIY6tpFRSC1KTfkniL
+         6X/A==
+X-Gm-Message-State: AOAM5324+SQvMJMO4rGV09s5ec4aWRi/ZxAjRTGFKNI8Jauwxm8bPv/z
+        Vg4y0WsR3PKUxgDLFi5wWBs=
+X-Google-Smtp-Source: ABdhPJxVSiGCUR2u9o3p68s+gMYV2ZChhCYnEeRkVV3BdjnI7U4sMC2OGOYza3FR+oduALIcCEu7VA==
+X-Received: by 2002:a50:cc89:0:b0:400:8f82:99e8 with SMTP id q9-20020a50cc89000000b004008f8299e8mr29768149edi.7.1647969003077;
+        Tue, 22 Mar 2022 10:10:03 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id o2-20020a50d802000000b00410d7f0c52csm10124565edj.8.2022.03.22.10.10.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Mar 2022 10:10:02 -0700 (PDT)
+Message-ID: <ad877924-68bb-f029-258a-0cf9094265eb@kernel.org>
+Date:   Tue, 22 Mar 2022 18:10:00 +0100
 MIME-Version: 1.0
-References: <CGME20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c@epcas2p1.samsung.com>
- <1647853194-62147-1-git-send-email-dh10.jung@samsung.com> <YjhB7+AaEXvuUmdi@kroah.com>
- <20220321092409.GA62265@ubuntu> <YjhGKVKuPsKG80wZ@kroah.com>
- <20220321100631.GB62265@ubuntu> <YjhQg4I7eYWXIfgr@kroah.com>
-In-Reply-To: <YjhQg4I7eYWXIfgr@kroah.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Tue, 22 Mar 2022 18:05:49 +0100
-X-Gmail-Original-Message-ID: <CAJKOXPdmSUqs+d3CuJ9px=vWPPdgP0scAZvKJkKDrs5O+sw6yA@mail.gmail.com>
-Message-ID: <CAJKOXPdmSUqs+d3CuJ9px=vWPPdgP0scAZvKJkKDrs5O+sw6yA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] support USB offload feature
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jung Daehwan <dh10.jung@samsung.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 4/4] usb: host: add xhci-exynos driver
+Content-Language: en-US
+To:     Daehwan Jung <dh10.jung@samsung.com>,
         Mathias Nyman <mathias.nyman@intel.com>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         Howard Yen <howardyen@google.com>,
         Jack Pham <jackp@codeaurora.org>,
         Puma Hsu <pumahsu@google.com>,
         "J . Avila" <elavila@google.com>, sc.suh@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220321090205epcas2p15ac16f281554b663062e0e31666defab@epcas2p1.samsung.com>
+ <1647853194-62147-5-git-send-email-dh10.jung@samsung.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1647853194-62147-5-git-send-email-dh10.jung@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 21 Mar 2022 at 11:16, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> >
-> > [v3, 0/4] add xhci-exynos driver
-> >
-> > This patchset is for support xhci-exynos driver....
-> > ....
-> >
-> >   usb: host: export symbols for xhci-exynos to use xhci hooks
-> >   usb: host: add xhci hooks for xhci-exynos
-> >   usb: host: add some to xhci overrides for xhci-exynos
-> >   usb: host: add xhci-exynos driver
->
-> Yes, that makes much more sense.  What would you want to see if you had
-> to review such a series?
+On 21/03/2022 09:59, Daehwan Jung wrote:
+> This driver supports USB Audio offload with Co-processor.
 
-Unfortunately it might not make more sense, because last time
-xhci-exynos driver was a fake driver, not for submission. It did not
-compile, it did not work in mainline.
+One do you need one more XHCI driver? How does it differ from existing
+and why existing cannot be extended?
 
-That driver was not even sent to proper mailing lists, as pointed out
-by get_maintainers.pl, maybe because it was not developed on the
-mainline kernel, so there is no MAINTAINERS file?
+> It only cares DCBAA, Device Context, Transfer Ring, Event Ring, and ERST.
+> They are allocated on specific address with xhci hooks.
+> Co-processor could use them directly without xhci driver after then.
+> 
+> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> ---
+>  drivers/usb/host/Kconfig       |   9 +
+>  drivers/usb/host/Makefile      |   1 +
+>  drivers/usb/host/xhci-exynos.c | 982 +++++++++++++++++++++++++++++++++
+>  drivers/usb/host/xhci-exynos.h |  63 +++
+>  4 files changed, 1055 insertions(+)
+>  create mode 100644 drivers/usb/host/xhci-exynos.c
+>  create mode 100644 drivers/usb/host/xhci-exynos.h
+> 
 
+Please address all the questions I raised in your v1, do not ignore them.
+
+Please use get_maintainers.pl to CC all necessary people and lists. It
+makes me very sad that you do not follow the kernel development process
+(as mentioned in submitting-patches.rst and other documents).
 
 Best regards,
 Krzysztof
