@@ -2,120 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9556D4E3693
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Mar 2022 03:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 625344E3697
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Mar 2022 03:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235441AbiCVCS1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Mar 2022 22:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
+        id S235333AbiCVC1R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Mar 2022 22:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235439AbiCVCS0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Mar 2022 22:18:26 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB0627B10
-        for <linux-usb@vger.kernel.org>; Mon, 21 Mar 2022 19:16:14 -0700 (PDT)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220322021608epoutp0346c49753fd78d701ae2c73716772143f~ekkwLHYnX1140411404epoutp03Y
-        for <linux-usb@vger.kernel.org>; Tue, 22 Mar 2022 02:16:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220322021608epoutp0346c49753fd78d701ae2c73716772143f~ekkwLHYnX1140411404epoutp03Y
+        with ESMTP id S235298AbiCVC1R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Mar 2022 22:27:17 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E043F0534
+        for <linux-usb@vger.kernel.org>; Mon, 21 Mar 2022 19:25:37 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220322021907epoutp0494c8a446dc163985daa9b8cfb310646a~eknWs8j8-3204232042epoutp04p
+        for <linux-usb@vger.kernel.org>; Tue, 22 Mar 2022 02:19:07 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220322021907epoutp0494c8a446dc163985daa9b8cfb310646a~eknWs8j8-3204232042epoutp04p
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1647915369;
-        bh=YkyXc49blA5j2YgNtVL9LfMTogUrkHGCfnzHkF2IvSs=;
+        s=mail20170921; t=1647915547;
+        bh=nGSRQy06lskincvbpgfI2D9wc05q1WJ8V6ti+BDrsEA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=I1SadVQfZapTeK7wxoAAQUr88yEeUrqwKdhPvC2WIZ1507BKz9GkJ1IXmnM4YJWDp
-         fpdmvkq27FLnUV9uQB7Kpe2csIu54A6G2/biu9vJlNSz/UePp63wy64nBymJq6dslu
-         UeWyv5RJ4On1IAtKg8JWlUjhP3afdEvF7jt/S5Cw=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20220322021608epcas2p3485b283f589044bd6ea1cd37e6ee32ba~ekkvf2lwq1317813178epcas2p3A;
-        Tue, 22 Mar 2022 02:16:08 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.68]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4KMw851l6Vz4x9QV; Tue, 22 Mar
-        2022 02:16:05 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        b=UpM6VyTyCvKG8pRkXFLisWKDRY/kHTwMyYYsiXSqtlgSKQpavgMzyQgUk6J3xvEEP
+         3WaywVrG3BeMVEzh98HNp2tG2VEGslpcybVUfLaJHkEwROCjTT0GC6gPNeViCmJAlJ
+         Dexo2Wh2oWFI20/qfj8b72HVpwVBe1VO8rOxnCtQ=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220322021907epcas2p1e5887624c46dfe87ee32be90235291d7~eknWTbY6N0429904299epcas2p1G;
+        Tue, 22 Mar 2022 02:19:07 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.100]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4KMwCW1Bdtz4x9QL; Tue, 22 Mar
+        2022 02:19:03 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
         epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        80.37.16040.36139326; Tue, 22 Mar 2022 11:16:03 +0900 (KST)
+        B1.99.16040.41239326; Tue, 22 Mar 2022 11:19:00 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220322021603epcas2p2fb2d8ac144fc59ff2b75b416f9e2b650~ekkq8Mvex2873328733epcas2p2v;
-        Tue, 22 Mar 2022 02:16:03 +0000 (GMT)
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220322021900epcas2p3c371eaa923e240f45ed627e067fd9899~eknPe6pas1315813158epcas2p3O;
+        Tue, 22 Mar 2022 02:19:00 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220322021603epsmtrp161310519870a8e08a7a8fd9faa151af6~ekkq7T8jN2314223142epsmtrp1I;
-        Tue, 22 Mar 2022 02:16:03 +0000 (GMT)
-X-AuditID: b6c32a46-bffff70000023ea8-e5-623931638fae
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        20220322021900epsmtrp1acfde2da721f6b61bfb80bf0f7afb9b2~eknPeJtBV2487424874epsmtrp1D;
+        Tue, 22 Mar 2022 02:19:00 +0000 (GMT)
+X-AuditID: b6c32a46-bffff70000023ea8-1c-623932147a4d
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F5.A9.29871.36139326; Tue, 22 Mar 2022 11:16:03 +0900 (KST)
-Received: from ubuntu (unknown [12.36.155.120]) by epsmtip1.samsung.com
+        94.F9.29871.31239326; Tue, 22 Mar 2022 11:18:59 +0900 (KST)
+Received: from ubuntu (unknown [12.36.155.120]) by epsmtip2.samsung.com
         (KnoxPortal) with ESMTPA id
-        20220322021603epsmtip1e44bf2b3722a9e8d09a985503f5b1425~ekkqy2_080819308193epsmtip1S;
-        Tue, 22 Mar 2022 02:16:03 +0000 (GMT)
-Date:   Tue, 22 Mar 2022 11:14:42 +0900
+        20220322021859epsmtip2bed7626382597c0b49ab1f7624725434~eknPUGjpi2692926929epsmtip2a;
+        Tue, 22 Mar 2022 02:18:59 +0000 (GMT)
+Date:   Tue, 22 Mar 2022 11:17:42 +0900
 From:   Jung Daehwan <dh10.jung@samsung.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         Howard Yen <howardyen@google.com>,
         Jack Pham <jackp@codeaurora.org>,
         Puma Hsu <pumahsu@google.com>,
         "J . Avila" <elavila@google.com>, sc.suh@samsung.com
-Subject: Re: [PATCH v3 2/4] usb: host: add xhci hooks for USB offload
-Message-ID: <20220322021442.GA67215@ubuntu>
+Subject: Re: [PATCH v3 0/4] support USB offload feature
+Message-ID: <20220322021742.GB67215@ubuntu>
 MIME-Version: 1.0
-In-Reply-To: <8f34e9ee-4f50-9028-34ba-444090acf48c@linux.intel.com>
+In-Reply-To: <YjhQg4I7eYWXIfgr@kroah.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJJsWRmVeSWpSXmKPExsWy7bCmmW6yoWWSweRb5hZPjixit2hevJ7N
-        4vqf94wW7c8vsFlc3jWHzWLRslZmi+ZNU1gtXn9oYrGYuVbZouvuDUYHLo/Lfb1MHgs2lXos
-        3vOSyWPeyUCP/XPXsHv0bVnF6PF5k1wAe1S2TUZqYkpqkUJqXnJ+SmZeuq2Sd3C8c7ypmYGh
-        rqGlhbmSQl5ibqqtkotPgK5bZg7QcUoKZYk5pUChgMTiYiV9O5ui/NKSVIWM/OISW6XUgpSc
-        AvMCveLE3OLSvHS9vNQSK0MDAyNToMKE7IynbX/ZCvrsKo7u421gvG3YxcjJISFgIvHk4EG2
-        LkYuDiGBHYwSP44tZwZJCAl8YpTYd9ccIvGNUeLjpC6gBAdYx6P7iRDxvYwS+4/1sUM4Txgl
-        rm5/zdTFyM7BIqAq8SEGZA6bgJbEvR8nwGaKCBhKfLu0nRGknFngMZNEy7vp7CAJYQFXicWb
-        DrGCzOcV0Jb40pQOEuYVEJQ4OfMJC4jNKeAs8e3RBEaQElEBFYlXB+tBxkgILOWQmDdvMhvE
-        My4S+//0MkLYwhKvjm9hh7ClJF72t0HZxRK7PrUyQTQ3MEo0PoA4TkLAWGLWs3awZmaBTIn3
-        S28zQfyrLHHkFgtEmE+i4/Bfdogwr0RHmxBEp7LE9MsTWCFsSYmDr89BTfSQaL26Fxq2fUwS
-        nxruskxglJ+F5LVZSLZB2DoSC3Z/YpsFtIJZQFpi+T8OCFNTYv0u/QWMrKsYxVILinPTU4uN
-        CozgEZ2cn7uJEZxmtdx2ME55+0HvECMTB+MhRgkOZiUR3sUfzJOEeFMSK6tSi/Lji0pzUosP
-        MZoCY2kis5Rocj4w0eeVxBuaWBqYmJkZmhuZGpgrifN6pWxIFBJITyxJzU5NLUgtgulj4uCU
-        amBa3tQVfuZy34zELDPPEI/AIrtdeuf/8usbVD5auPjezKlVxmt95l1fmLY4ofJ/198AG4tJ
-        mb/mvqmcKdS+YpPQrXttDQzdc9z3RdulXElMsOS+rV1sGdR5Zk6E/uu5b1QbvbnbpPky3vLb
-        mNqylH4SZbiuvNowr4Zxy1KBnj9LmDM5r55qPdp16HeBkFf2hKVx26R/rg1S2SyyRTfn6/Wd
-        N+QaL4ldXZ51ICF0C+v2S9Y975b2KKVb8Pru2exy0/TX2f3X9jZIOEQazG8/IKJa1SQxVcPI
-        0NUvNXqq3Ors03nfrqQuK2NkSeTktgx7lcnd3SnI/y60gvH+ORv37mw27ilnK7IPfwnol72z
-        UomlOCPRUIu5qDgRAJfngNs8BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPLMWRmVeSWpSXmKPExsWy7bCSnG6yoWWSwbQHghZPjixit2hevJ7N
-        4vqf94wW7c8vsFlc3jWHzWLRslZmi+ZNU1gtXn9oYrGYuVbZouvuDUYHLo/Lfb1MHgs2lXos
-        3vOSyWPeyUCP/XPXsHv0bVnF6PF5k1wAexSXTUpqTmZZapG+XQJXxv1Fh1gKTltXrGzuYW1g
-        3KjfxcjBISFgIvHofmIXIyeHkMBuRon1jwVAbAkBSYmlc2+wQ9jCEvdbjrB2MXIB1TxilDi3
-        fTOQw87BIqAq8SEGpIRNQEvi3o8TzCC2iIChxLdL2xlBypkFnjJJLN7YxgSSEBZwlVi86RAr
-        yFpeAW2JL03pECP7mCS2nLvJBlLDKyAocXLmExYQmxlo6I1/L5lA6pkFpCWW/+MACXMKOEt8
-        ezSBESQsKqAi8epg/QRGwVlImmchaZ6F0LyAkXkVo2RqQXFuem6xYYFhXmq5XnFibnFpXrpe
-        cn7uJkZwnGhp7mDcvuqD3iFGJg7GQ4wSHMxKIryLP5gnCfGmJFZWpRblxxeV5qQWH2KU5mBR
-        Eue90HUyXkggPbEkNTs1tSC1CCbLxMEp1cDEqCju4mEVUX74xPOAWYZ17T239u7yZnRkvSsh
-        Jn2IJSZ4Xs76/1PTF8smSt7m/GyZVn74XhCPcR77zY8zXD/kKRySimQ8+SNr0v9T8vJGcg01
-        xy7ynshsXLf5F/tiz2+Cs3NfqV/1ChZasXTO6rWn3y3wmnZ0ar1WtGIo4wJXN4PPl0ImKl+T
-        dH7Lqqqlo3gz4PHTKdaBuhnHnuod2+Rx5s+a+663/fmzzr707dHf67VuIlPNyRvi1TrbTb/2
-        L+B48Tsqc94FyVXXfvj/rAm67WRUF+Pnx3a3dAu78+6A85/nZ+7/pGvOFnNrRe41F5Hzkcrn
-        mRhaNU6eE0z8O33TRPH7S4z/1nOGXAyYLf5CiaU4I9FQi7moOBEAz0e+JQIDAAA=
-X-CMS-MailID: 20220322021603epcas2p2fb2d8ac144fc59ff2b75b416f9e2b650
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMJsWRmVeSWpSXmKPExsWy7bCmha6IkWWSwbmn4hZPjixit2hevJ7N
+        4vqf94wW7c8vsFlc3jWHzWLRslZmi+ZNU1gtZq5Vtui6e4PRgdPjcl8vk8eCTaUei/e8ZPLY
+        P3cNu0ffllWMHp83yQWwRWXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXm
+        ptoqufgE6Lpl5gDdpKRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMC/QK07MLS7N
+        S9fLSy2xMjQwMDIFKkzIzrg9/QVTwRbZisa/D5kaGDeIdTFyckgImEgs3TWPvYuRi0NIYAej
+        xO62W4wQzidGiS/TlrNBON8YJZY/nMwE0/J33zEWiMReRol/fYdZQBJCAk8YJTZfZwexWQRU
+        JWbumMUIYrMJaEnc+3GCGcQWETCW6D87C2wfs8AGJokTd56DJYQFzCVmT+kDa+YV0JZY+GsZ
+        G4QtKHFy5hOwBZwCmhITJs8AuoKDQ1RAReLVwXqQORICEzkkZt9tYYO4zkVixpdNUJcKS7w6
+        voUdwpaSeNnfBmUXS+z61MoE0dzAKNH4AOI6CaDrZj1rZwRZwCyQKXH9kgKIKSGgLHHkFtgJ
+        zAJ8Eh2H/7JDhHklOtqEIBqVJaZfnsAKYUtKHHx9Dmqgh8S05vnQ4N0G9O6LjcwTGOVnIfls
+        FsKyWWAbdCQW7P7EBhGWllj+jwPC1JRYv0t/ASPrKkax1ILi3PTUYqMCI3hcJ+fnbmIEp1Yt
+        tx2MU95+0DvEyMTBeIhRgoNZSYR38QfzJCHelMTKqtSi/Pii0pzU4kOMpsBomsgsJZqcD0zu
+        eSXxhiaWBiZmZobmRqYG5krivF4pGxKFBNITS1KzU1MLUotg+pg4OKUamKS3G4p+lJr0drcu
+        o/ubnBnqFe48aXO258U9P/Cr/7BkcXfkJc9Lpz63rbSbuN3d+7TLmwXc4Sph22WuOvc1V609
+        IJ6jPqnuVsRWO8FLveWnlpZaSbwLT3nS5t02uWPlzKl/Iyq2vmRPzFYK2pokGmawdCfjEvOS
+        Vp8NHzSWtW/R4beOKlI7tWLmw4ei7bxXDT56Zr18cWresi2dOyR7o+c3vUjyP3ia+1/oA8vU
+        DycUe26IJ3/lmXTExDJLauu/jd3fm9Ti7yzzO/ppz/uvTRMMxdXOpyz13rF3K+vm7RN39hUf
+        d8u8esZ5wfzQ0xM/q1+5Kvs1dpbtxTr1+su/Fq6zK/XbybaJ2fX3M45964KVWIozEg21mIuK
+        EwFm0tGJNgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNLMWRmVeSWpSXmKPExsWy7bCSvK6wkWWSwaHzlhZPjixit2hevJ7N
+        4vqf94wW7c8vsFlc3jWHzWLRslZmi+ZNU1gtZq5Vtui6e4PRgdPjcl8vk8eCTaUei/e8ZPLY
+        P3cNu0ffllWMHp83yQWwRXHZpKTmZJalFunbJXBl9CzpZyr4KFWx69AqlgbGNpEuRk4OCQET
+        ib/7jrF0MXJxCAnsZpTo6J7ICpGQlFg69wY7hC0scb/lCCtE0SNGidefbzCDJFgEVCVm7pjF
+        CGKzCWhJ3PtxAiwuImAs0X92FjtIA7PAJiaJ2b/XgiWEBcwlZk/pA5vKK6AtsfDXMjaIqbuY
+        JI72tLBAJAQlTs58AmYzA0298e8lUxcjB5AtLbH8HwdImFNAU2LC5BlgYVEBFYlXB+snMArO
+        QtI8C0nzLITmBYzMqxglUwuKc9Nziw0LDPNSy/WKE3OLS/PS9ZLzczcxguNDS3MH4/ZVH/QO
+        MTJxMB5ilOBgVhLhXfzBPEmINyWxsiq1KD++qDQntfgQozQHi5I474Wuk/FCAumJJanZqakF
+        qUUwWSYOTqkGJgaTOQ+TnVjjvnIHTGo+/uFF94eMosf7lPvNvkWZR/ncncdezzRz8r4Op7Mr
+        V5aveivBdHlauJLG3ulnj23e/eJ3WbyZ+TbJ7yrWP7OKrpeu6NXTbarg3e/X+7rujaVtrd7s
+        qaoZv+8HLDA7seqGcZvjmQMTp39K3Ggx0W1Gfc0Ur0mKB/6sWXGxv9wo+Gbz82cZTZu+Pmtl
+        n5YoHCNpMWHK0d7/T6OvWul8VFn98Uak8MR26cCWnTMWsO1p89rbs+yq65OXR27JMT/gqVcJ
+        EFn0N3WZVrvv/+9z5pzIUlj0ZHnEjVRG7Yl1EXFH3T5etL0d++72cdtL0W07b5/6IhkhaHOk
+        Itxnx2fuWsbGRHUlluKMREMt5qLiRAABHf8k/gIAAA==
+X-CMS-MailID: 20220322021900epcas2p3c371eaa923e240f45ed627e067fd9899
 X-Msg-Generator: CA
 Content-Type: multipart/mixed;
-        boundary="----GSQR3kPPEyoeEG69Vah8YifR26QqWy9Bp_qtiefWPF7qlfBd=_22cc65_"
+        boundary="----_7s4r-glDYfHz5mV2FGmC11V_HCNsCeqJGxaGPxgMNZjUkbW=_22cd97_"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220321090204epcas2p3b2be5c6b131240e408d12d40c517395c
-References: <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
-        <CGME20220321090204epcas2p3b2be5c6b131240e408d12d40c517395c@epcas2p3.samsung.com>
-        <1647853194-62147-3-git-send-email-dh10.jung@samsung.com>
-        <8f34e9ee-4f50-9028-34ba-444090acf48c@linux.intel.com>
+X-CMS-RootMailID: 20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c
+References: <CGME20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c@epcas2p1.samsung.com>
+        <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
+        <YjhB7+AaEXvuUmdi@kroah.com> <20220321092409.GA62265@ubuntu>
+        <YjhGKVKuPsKG80wZ@kroah.com> <20220321100631.GB62265@ubuntu>
+        <YjhQg4I7eYWXIfgr@kroah.com>
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -123,227 +123,93 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-------GSQR3kPPEyoeEG69Vah8YifR26QqWy9Bp_qtiefWPF7qlfBd=_22cc65_
+------_7s4r-glDYfHz5mV2FGmC11V_HCNsCeqJGxaGPxgMNZjUkbW=_22cd97_
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
 
-On Mon, Mar 21, 2022 at 07:00:55PM +0200, Mathias Nyman wrote:
-> On 21.3.2022 10.59, Daehwan Jung wrote:
-> > To enable supporting for USB offload, define "offload" in usb controller
-> > node of device tree. "offload" value can be used to determine which type
-> > of offload was been enabled in the SoC.
+On Mon, Mar 21, 2022 at 11:16:35AM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Mar 21, 2022 at 07:06:31PM +0900, Jung Daehwan wrote:
+> > On Mon, Mar 21, 2022 at 10:32:25AM +0100, Greg Kroah-Hartman wrote:
+> > > On Mon, Mar 21, 2022 at 06:24:09PM +0900, Jung Daehwan wrote:
+> > > > On Mon, Mar 21, 2022 at 10:14:23AM +0100, Greg Kroah-Hartman wrote:
+> > > > > On Mon, Mar 21, 2022 at 05:59:50PM +0900, Daehwan Jung wrote:
+> > > > > > This patchset is for USB offload feature, which makes Co-processor to use
+> > > > > > some memories of xhci. Especially it's useful for USB Audio scenario.
+> > > > > > Audio stream would get shortcut because Co-processor directly write/read
+> > > > > > data in xhci memories. It could get speed-up using faster memory like SRAM.
+> > > > > > That's why this gives vendors flexibilty of memory management.
+> > > > > > Several pathches have been merged in AOSP kernel(android12-5.10) and I put
+> > > > > > together and split into 3 patches. Plus let me add user(xhci-exynos)
+> > > > > > module to see how user could use it.
+> > > > > > 
+> > > > > > To sum up, it's for providing xhci memories to Co-Processor.
+> > > > > > It would cover DCBAA, Device Context, Transfer Ring, Event Ring, ERST.
+> > > > > > It needs xhci hooks and to export some xhci symbols.
+> > > > > > 
+> > > > > > Changes in v2 :
+> > > > > > - Fix commit message by adding Signed-off-by in each patch.
+> > > > > > - Fix conflict on latest.
+> > > > > > 
+> > > > > > Changes in v3 :
+> > > > > > - Remove export symbols and xhci hooks which xhci-exynos don't need.
+> > > > > > - Modify commit message to clarify why it needs to export symbols.
+> > > > > > - Check compiling of xhci-exynos.
+> > > > > 
+> > > > > As I asked for in the previous submission, you MUST have a user for
+> > > > > these hooks, otherwise we can not accept them (nor would you WANT us to
+> > > > > accept them).  Please fix that up and add them to the next submission as
+> > > > > we can not do anything with this one.
+> > > > > 
+> > > > > thanks,
+> > > > > 
+> > > > > greg k-h
+> > > > > 
+> > > > 
+> > > > Hi greg,
+> > > > 
+> > > > I've submitted the user(xhci-exynos) together on the last patch of the patchset.
+> > > > You can see xhci-exynos uses these hooks and symbols.
+> > > > 
+> > > > [PATCH v3 4/4] usb: host: add xhci-exynos driver
+> > > 
+> > > Then this is not "offload" hooks at all.  They are merely "support
+> > > another xhci platform driver, right?
 > > 
-> > For example:
+> > Yes, right.
 > > 
-> > &usbdrd_dwc3 {
-> > 	...
-> > 	/* support usb offloading, 0: disabled, 1: audio */
-> > 	offload = <1>;
-> > 	...
-> > };
+> > > 
+> > > I see a lot of exports and function hooks added, are they _ALL_ used by
+> > > the xhci driver?  If so, please reword this series as it is not very
+> > > obvious at all what you are doing.
 > > 
-> > There are several vendor_ops introduced by this patch:
+> > Yes, they are all used by the xhci driver. Is it OK for me to use "xhci-exynos"
+> > instead of "USB offload" on series like below?
 > > 
-> > struct xhci_vendor_ops - function callbacks for vendor specific operations
-> > {
-> > 	@vendor_init:
-> > 		- called for vendor init process during xhci-plat-hcd
-> > 		  probe.
-> > 	@vendor_cleanup:
-> > 		- called for vendor cleanup process during xhci-plat-hcd
-> > 		  remove.
-> 
-> The vendor_init() and vendor_cleanup() aren't really useful.
-> you are calling them from platform_probe() and platform_remove(),
-> just modify the probe and remove functions of the xhci-exynos driver directly.
-> 
->
-
-OK. I agree with you and I'm going to modify it on next submission.
-
-> > 	@is_usb_offload_enabled:
-> > 		- called to check if usb offload enabled.
-> 
-> Looks like this is being used more like a quirk bit.
-> I think we can get rid of this as well
-> 
-
-Yes. I don't need it if I could get a quirk bit.
-
-> > 	@alloc_dcbaa:
-> > 		- called when allocating vendor specific dcbaa during
-> > 		  memory initializtion.
-> > 	@free_dcbaa:
-> > 		- called to free vendor specific dcbaa when cleanup the
-> > 		  memory.
-> > 	@alloc_transfer_ring:
-> > 		- called when vendor specific transfer ring allocation is required
-> > 	@free_transfer_ring:
-> > 		- called to free vendor specific transfer ring
-> > 	@sync_dev_ctx:
-> > 		- called when synchronization for device context is required
-> > }
+> > [v3, 0/4] add xhci-exynos driver
 > > 
-> > The xhci hooks with prefix "xhci_vendor_" on the ops in xhci_vendor_ops.
-> > For example, vendor_init ops will be invoked by xhci_vendor_init() hook,
-> > is_usb_offload_enabled ops will be invoked by
-> > xhci_vendor_is_usb_offload_enabled(), and so on.
+> > This patchset is for support xhci-exynos driver....
+> > ....
 > > 
-> > Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> > Signed-off-by: J. Avila <elavila@google.com>
-> > Signed-off-by: Puma Hsu <pumahsu@google.com>
-> > Signed-off-by: Howard Yen <howardyen@google.com>
-> > ---
-> >  drivers/usb/host/xhci-hub.c  |   5 ++
-> >  drivers/usb/host/xhci-mem.c  | 131 +++++++++++++++++++++++++++++++----
-> >  drivers/usb/host/xhci-plat.c |  43 +++++++++++-
-> >  drivers/usb/host/xhci-plat.h |   7 ++
-> >  drivers/usb/host/xhci.c      |  80 ++++++++++++++++++++-
-> >  drivers/usb/host/xhci.h      |  46 ++++++++++++
-> >  6 files changed, 295 insertions(+), 17 deletions(-)
-> > 
-> > diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-> > index 56546aaa93c7..aea72ffce820 100644
-> > --- a/drivers/usb/host/xhci-hub.c
-> > +++ b/drivers/usb/host/xhci-hub.c
-> > @@ -535,8 +535,13 @@ static int xhci_stop_device(struct xhci_hcd *xhci, int slot_id, int suspend)
-> >  	    cmd->status == COMP_COMMAND_RING_STOPPED) {
-> >  		xhci_warn(xhci, "Timeout while waiting for stop endpoint command\n");
-> >  		ret = -ETIME;
-> > +		goto cmd_cleanup;
-> >  	}
-> >  
-> > +	ret = xhci_vendor_sync_dev_ctx(xhci, slot_id);
-> > +	if (ret)
-> > +		xhci_warn(xhci, "Sync device context failed, ret=%d\n", ret);
-> > +
-> >  cmd_cleanup:
-> >  	xhci_free_command(xhci, cmd);
-> >  	return ret;
-> > diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> > index 82b9f90c0f27..5ee0ffb676d3 100644
-> > --- a/drivers/usb/host/xhci-mem.c
-> > +++ b/drivers/usb/host/xhci-mem.c
-> > @@ -365,6 +365,54 @@ static int xhci_alloc_segments_for_ring(struct xhci_hcd *xhci,
-> >  	return 0;
-> >  }
-> >  
-> > +static void xhci_vendor_free_container_ctx(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx)
-> > +{
-> > +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
-> > +
-> > +	if (ops && ops->free_container_ctx)
-> > +		ops->free_container_ctx(xhci, ctx);
-> > +}
+> >   usb: host: export symbols for xhci-exynos to use xhci hooks
+> >   usb: host: add xhci hooks for xhci-exynos
+> >   usb: host: add some to xhci overrides for xhci-exynos
+> >   usb: host: add xhci-exynos driver
 > 
+> Yes, that makes much more sense.  What would you want to see if you had
+> to review such a series?
 > 
-> Looks suspicious, we always need to free container contexts, why this much checking?
+> thanks,
 > 
+> greg k-h
 > 
 
-Calling funcion could cause a problem if some functions haven't been mapped
-on ops yet. Others below are same.
-
-> > +
-> > +static void xhci_vendor_alloc_container_ctx(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx,
-> > +					    int type, gfp_t flags)
-> > +{
-> > +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
-> > +
-> > +	if (ops && ops->alloc_container_ctx)
-> > +		ops->alloc_container_ctx(xhci, ctx, type, flags);
-> > +}
-> 
-> same, there should always be a function to allocate container context..
-> 
-> > +
-> > +static struct xhci_ring *xhci_vendor_alloc_transfer_ring(struct xhci_hcd *xhci,
-> > +		u32 endpoint_type, enum xhci_ring_type ring_type,
-> > +		unsigned int max_packet, gfp_t mem_flags)
-> > +{
-> > +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
-> > +
-> > +	if (ops && ops->alloc_transfer_ring)
-> > +		return ops->alloc_transfer_ring(xhci, endpoint_type, ring_type,
-> > +				max_packet, mem_flags);
-> > +	return 0;
-> 
-> same, looks like a lot of extra code.
-> 
-> > +}
-> > +
-> > +void xhci_vendor_free_transfer_ring(struct xhci_hcd *xhci,
-> > +		struct xhci_ring *ring, unsigned int ep_index)
-> > +{
-> > +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
-> > +
-> > +	if (ops && ops->free_transfer_ring)
-> > +		ops->free_transfer_ring(xhci, ring, ep_index);
-> > +}
-> > +
-> 
-> same.
-> 
-> > +bool xhci_vendor_is_usb_offload_enabled(struct xhci_hcd *xhci,
-> > +		struct xhci_virt_device *virt_dev, unsigned int ep_index)
-> > +{
-> > +	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
-> > +
-> > +	if (ops && ops->is_usb_offload_enabled)
-> > +		return ops->is_usb_offload_enabled(xhci, virt_dev, ep_index);
-> > +	return false;
-> > +}
-> > +
-> >  /*
-> >   * Create a new ring with zero or more segments.
-> >   *
-> > @@ -417,7 +465,11 @@ void xhci_free_endpoint_ring(struct xhci_hcd *xhci,
-> >  		struct xhci_virt_device *virt_dev,
-> >  		unsigned int ep_index)
-> >  {
-> > -	xhci_ring_free(xhci, virt_dev->eps[ep_index].ring);
-> > +	if (xhci_vendor_is_usb_offload_enabled(xhci, virt_dev, ep_index))
-> > +		xhci_vendor_free_transfer_ring(xhci, virt_dev->eps[ep_index].ring, ep_index);
-> > +	else
-> > +		xhci_ring_free(xhci, virt_dev->eps[ep_index].ring);
-> > +
-> >  	virt_dev->eps[ep_index].ring = NULL;
-> >  }
-> 
-> Ok, I see.
-> So idea is to override some functions that allocate and free DMA memory.
-> Your vendor_ops structure filled with function callbacks could be a 
-> mem_ops structure that allows your driver to directly override those
-> functions.
-> 
-> For example here we would only call
-> 
-> xhci->mem_ops->ring_free(...);
-> This would set to xhci_ring_free() by default, but your xhci-exonys driver could
-> set it to xhci_exonys_free_ring(), which would do any needed is_offload_enabled()
-> checks and custom freeing.
-> 
-> Same goes for most most of the other functions in this patch
-> 
-
-Exactly. I'm appreciate for your understanding my patch.
-
-> If possible see if it's enough to override the existing callbacks in
-> struct hc_driver instead of creating new function pointers.
-> 
-> -Mathias
->
-
-I've used override for reset, start, add_endpoint, address_device, bus_suspend,
-and bus_resume in hc_driver. I could use reset_bandwidth more but I don't
-think override is better in this case because allocation / free of ep ring are
-always done with xhci hooks on others.
+Thanks for your comment. I'm going to modify it on next submission.
 
 Best Regards,
 Jung Daehwan
 
-------GSQR3kPPEyoeEG69Vah8YifR26QqWy9Bp_qtiefWPF7qlfBd=_22cc65_
+------_7s4r-glDYfHz5mV2FGmC11V_HCNsCeqJGxaGPxgMNZjUkbW=_22cd97_
 Content-Type: text/plain; charset="utf-8"
 
 
-------GSQR3kPPEyoeEG69Vah8YifR26QqWy9Bp_qtiefWPF7qlfBd=_22cc65_--
+------_7s4r-glDYfHz5mV2FGmC11V_HCNsCeqJGxaGPxgMNZjUkbW=_22cd97_--
