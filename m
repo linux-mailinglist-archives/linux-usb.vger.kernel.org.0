@@ -2,205 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF8E4E3DC1
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Mar 2022 12:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A04024E3E06
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Mar 2022 13:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234331AbiCVLnL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Mar 2022 07:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
+        id S233191AbiCVMEG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Mar 2022 08:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234369AbiCVLnB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Mar 2022 07:43:01 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6FB7E0BD;
-        Tue, 22 Mar 2022 04:41:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647949293; x=1679485293;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HvgOL6YZgSy7nSW+sywrpP3lBboqncbKKW+arHb8epo=;
-  b=ig4Pr8BAr22IrjNcBs3FmjOJ1lVUFFJAkffsRfLHkiTPO8v6Qf7J5esW
-   SPSATg94Lrh4hAfDQv/LizwZBUHoC/Wyg5srr8yJPSvRAp4TiWmYxnnYA
-   V+swmUHKuNBbH+Ad01d9912VH7YIOC29z6A5QCSKor2J9k1oVZCBsZ0Fe
-   YMK4GSnIxNX8p8HUcpObz/0YbHop2lk2PVhW23pd1L/fTNgzusDoW3Xmh
-   tNq5QpHHFWairlviS+vFem1gS5p8iyB956S5c/thWWjtsTao6p9N+tGAb
-   s2h2uvkTnWLBgVoxm03qHKeGyMq+oZvhsv8MFy+IwZ8PFb/P94umh88hb
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="282631478"
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="282631478"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 04:41:33 -0700
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="646992054"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 04:41:30 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 22 Mar 2022 13:41:27 +0200
-Date:   Tue, 22 Mar 2022 13:41:27 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     joro@8bytes.org, baolu.lu@linux.intel.com,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, iommu@lists.linux-foundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mario.limonciello@amd.com, hch@lst.de
-Subject: Re: [PATCH v2 2/2] thunderbolt: Make iommu_dma_protection more
- accurate
-Message-ID: <Yjm150r3KPKp/2O4@lahna>
-References: <cover.1647624084.git.robin.murphy@arm.com>
- <0dd14883930c9f55ace22162e23765a37d91a057.1647624084.git.robin.murphy@arm.com>
+        with ESMTP id S231799AbiCVMEE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Mar 2022 08:04:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3A38301B;
+        Tue, 22 Mar 2022 05:02:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE5ED61382;
+        Tue, 22 Mar 2022 12:02:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 545B5C340EC;
+        Tue, 22 Mar 2022 12:02:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647950556;
+        bh=oXomf+OroFKXPI727l4Y0841A5BkhUXzo5xCfhdMsC0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TKE/1FWW/oIajs0VV3zmrI5NUmCEutISIFYySMXYpw+kvv0dJFWgyqzsVMXykcuoX
+         PyW7CTXlKifLMnywE5dTPyddnXvi+eurEpvnVBN1blVkHfFTNnAhPA7OE976g/tlqX
+         qbH1SznaPVG4E7H6Fq+qBcpe1PMXBezhJxT6ktcaIQRGDLiQWddT0rcKHLQi6S76bn
+         nuH0sA2NVhSCD0GcNMHL/GhCRYNfhBtAtnl4B1E4WmVWpqwLjXfwYlNfiQ+eIw1biZ
+         yxcoyoqSE0Vw3q7w4p3fNwK+Njl8UbLlQfh8LnObtcK56M/8fqDoxNl9qtaEAcMHc9
+         fzBoxgyDpyTYQ==
+Date:   Tue, 22 Mar 2022 12:02:28 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Cc:     Tony Lindgren <tony@atomide.com>, Paul Walmsley <paul@pwsan.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Felipe Balbi <balbi@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-mmc@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2] ARM: OMAP1: Prepare for conversion of OMAP1 clocks to
+ CCF
+Message-ID: <Yjm61MFGuo0Yug/B@sirena.org.uk>
+References: <20220310233307.99220-3-jmkrzyszt@gmail.com>
+ <20220321215416.236250-1-jmkrzyszt@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="j44egohE1ZoQznmQ"
 Content-Disposition: inline
-In-Reply-To: <0dd14883930c9f55ace22162e23765a37d91a057.1647624084.git.robin.murphy@arm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220321215416.236250-1-jmkrzyszt@gmail.com>
+X-Cookie: Drop that pickle!
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Robin,
 
-I tried this now on two Intel systems. One with integrated Thunderbolt
-and one with discrete. There was a small issue, see below but once fixed
-it worked as expected :)
+--j44egohE1ZoQznmQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Mar 18, 2022 at 05:42:58PM +0000, Robin Murphy wrote:
-> Between me trying to get rid of iommu_present() and Mario wanting to
-> support the AMD equivalent of DMAR_PLATFORM_OPT_IN, scrutiny has shown
-> that the iommu_dma_protection attribute is being far too optimistic.
-> Even if an IOMMU might be present for some PCI segment in the system,
-> that doesn't necessarily mean it provides translation for the device(s)
-> we care about. Furthermore, all that DMAR_PLATFORM_OPT_IN really does
-> is tell us that memory was protected before the kernel was loaded, and
-> prevent the user from disabling the intel-iommu driver entirely. While
-> that lets us assume kernel integrity, what matters for actual runtime
-> DMA protection is whether we trust individual devices, based on the
-> "external facing" property that we expect firmware to describe for
-> Thunderbolt ports.
-> 
-> It's proven challenging to determine the appropriate ports accurately
-> given the variety of possible topologies, so while still not getting a
-> perfect answer, by putting enough faith in firmware we can at least get
-> a good bit closer. If we can see that any device near a Thunderbolt NHI
-> has all the requisites for Kernel DMA Protection, chances are that it
-> *is* a relevant port, but moreover that implies that firmware is playing
-> the game overall, so we'll use that to assume that all Thunderbolt ports
-> should be correctly marked and thus will end up fully protected.
-> 
-> CC: Mario Limonciello <mario.limonciello@amd.com>
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> ---
-> 
-> v2: Give up trying to look for specific devices, just look for evidence
->     that firmware cares at all.
-> 
->  drivers/thunderbolt/domain.c | 12 +++--------
->  drivers/thunderbolt/nhi.c    | 41 ++++++++++++++++++++++++++++++++++++
->  include/linux/thunderbolt.h  |  2 ++
->  3 files changed, 46 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
-> index 7018d959f775..2889a214dadc 100644
-> --- a/drivers/thunderbolt/domain.c
-> +++ b/drivers/thunderbolt/domain.c
-> @@ -7,9 +7,7 @@
->   */
->  
->  #include <linux/device.h>
-> -#include <linux/dmar.h>
->  #include <linux/idr.h>
-> -#include <linux/iommu.h>
->  #include <linux/module.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/slab.h>
-> @@ -257,13 +255,9 @@ static ssize_t iommu_dma_protection_show(struct device *dev,
->  					 struct device_attribute *attr,
->  					 char *buf)
->  {
-> -	/*
-> -	 * Kernel DMA protection is a feature where Thunderbolt security is
-> -	 * handled natively using IOMMU. It is enabled when IOMMU is
-> -	 * enabled and ACPI DMAR table has DMAR_PLATFORM_OPT_IN set.
-> -	 */
-> -	return sprintf(buf, "%d\n",
-> -		       iommu_present(&pci_bus_type) && dmar_platform_optin());
-> +	struct tb *tb = container_of(dev, struct tb, dev);
-> +
-> +	return sysfs_emit(buf, "%d\n", tb->nhi->iommu_dma_protection);
->  }
->  static DEVICE_ATTR_RO(iommu_dma_protection);
->  
-> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-> index c73da0532be4..9e396e283792 100644
-> --- a/drivers/thunderbolt/nhi.c
-> +++ b/drivers/thunderbolt/nhi.c
-> @@ -14,6 +14,7 @@
->  #include <linux/errno.h>
->  #include <linux/pci.h>
->  #include <linux/interrupt.h>
-> +#include <linux/iommu.h>
->  #include <linux/module.h>
->  #include <linux/delay.h>
->  #include <linux/property.h>
-> @@ -1102,6 +1103,45 @@ static void nhi_check_quirks(struct tb_nhi *nhi)
->  		nhi->quirks |= QUIRK_AUTO_CLEAR_INT;
->  }
->  
-> +static int nhi_check_iommu_pdev(struct pci_dev *pdev, void *data)
-> +{
-> +	if (!pdev->untrusted ||
-> +	    !dev_iommu_capable(&pdev->dev, IOMMU_CAP_PRE_BOOT_PROTECTION))
+On Mon, Mar 21, 2022 at 10:54:16PM +0100, Janusz Krzysztofik wrote:
+> In preparation for conversion of OMAP1 clocks to common clock framework,
+> identify users of those clocks which don't call clk_prepare/unprepare()
+> and update them to call clk_prepare_enable/clk_disable_unprepare() instead
+> of just clk_enable/disable(), as required by CCF implementation of clock
+> API.
 
-This one needs to take the pdev->external_facing into account too
-because most of the time there are no existing tunnels when the driver
-is loaded so we only see the PCIe root/downstream port. I think this is
-enough actually:
+Acked-by: Mark Brown <broonie@kernel.org>
 
-	if (!pdev->external_facing ||
-	    !dev_iommu_capable(&pdev->dev, IOMMU_CAP_PRE_BOOT_PROTECTION))
+--j44egohE1ZoQznmQ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +		return 0;
-> +	*(bool *)data = true;
-> +	return 1; /* Stop walking */
-> +}
-> +
-> +static void nhi_check_iommu(struct tb_nhi *nhi)
-> +{
-> +	struct pci_bus *bus = nhi->pdev->bus;
-> +	bool port_ok = false;
-> +
-> +	/*
-> +	 * Ideally what we'd do here is grab every PCI device that
-> +	 * represents a tunnelling adapter for this NHI and check their
-> +	 * status directly, but unfortunately USB4 seems to make it
-> +	 * obnoxiously difficult to reliably make any correlation.
-> +	 *
-> +	 * So for now we'll have to bodge it... Hoping that the system
-> +	 * is at least sane enough that an adapter is in the same PCI
-> +	 * segment as its NHI, if we can find *something* on that segment
-> +	 * which meets the requirements for Kernel DMA Protection, we'll
-> +	 * take that to imply that firmware is aware and has (hopefully)
-> +	 * done the right thing in general. We need to know that the PCI
-> +	 * layer has seen the ExternalFacingPort property and propagated
-> +	 * it to the "untrusted" flag that the IOMMU layer will then
-> +	 * enforce, but also that the IOMMU driver itself can be trusted
-> +	 * not to have been subverted by a pre-boot DMA attack.
-> +	 */
-> +	while (bus->parent)
-> +		bus = bus->parent;
-> +
-> +	pci_walk_bus(bus, nhi_check_iommu_pdev, &port_ok);
-> +
-> +	nhi->iommu_dma_protection = port_ok;
+-----BEGIN PGP SIGNATURE-----
 
-I would put here a log debug, something like this:
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmI5utQACgkQJNaLcl1U
+h9COEQf9ELwbgSwwn1JVU6FAUZODISuwoWMyUuvHTGdNQEvrMH3GFIUbXQVQONw5
+wO62KwasXhYThVzc3rrC74tKTRzwY9/CvA4GNJfZqmHSuXg02O1XqYe6zUmlRbdt
+qxVjr4o/EKcY48qmrI9SV9k4GBDuOeU2fSZJP7EIvFqLC/tfDbQYYuRB+TY9Ig+j
+oTmg/0JXVooTcMULwexILHzRg4S4+mxOAjfsMojVzku0MepzEPzGo0xZDGYmD0RC
+QggKUpiyDnHPKgNk+pEG+1HmSf9sEd2Vb4k2eMfkacZ7Tz81/FON54F8K/213wKl
+hCsEajyZs2COxhX4Xfe+zoGXkLD3bg==
+=HhWj
+-----END PGP SIGNATURE-----
 
-dev_dbg(&nhi->pdev->dev, "IOMMU DMA protection is %sabled\n",
-	port_ok ? "en" : "dis");
+--j44egohE1ZoQznmQ--
