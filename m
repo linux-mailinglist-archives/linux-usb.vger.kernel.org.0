@@ -2,119 +2,224 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CBFB4E3ED2
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Mar 2022 13:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EABE4E3EED
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Mar 2022 13:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233871AbiCVMyu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Mar 2022 08:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
+        id S235103AbiCVM6v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Mar 2022 08:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233537AbiCVMyt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Mar 2022 08:54:49 -0400
-X-Greylist: delayed 1325 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Mar 2022 05:53:19 PDT
-Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.47.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E67A25EB9
-        for <linux-usb@vger.kernel.org>; Tue, 22 Mar 2022 05:53:17 -0700 (PDT)
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id 561631787A
-        for <linux-usb@vger.kernel.org>; Tue, 22 Mar 2022 07:31:08 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id WdfHnwJk3dx86WdfInhxc4; Tue, 22 Mar 2022 07:31:08 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=E5Aows6fzjBhdYfTnbSqfUWzSiW9YfHAmPUHEbpwWJo=; b=PnuDbzlG5Hb7/SDAr+eaO1WhIQ
-        Q6BIijqhYFQBjt7yjZ3FMOOwS28Ak8FhVwKW+z+dlTMHhzyAxFztOQOV8HnkluXKGaB4ym0KmwanN
-        gMOuoqxxcro2voHlUaKIOW1mYxnOVBRytcSk8hA8l+enCVIuzL9ZGzpGuKGzGvUnGyQmxdKWfOygz
-        spqWBZBvXLypBX6OMagJdROR+Opg2Cn7nJutE7maFdp7trq4vFzRYrgJQFD2bEIjkloWw4/aX+9q9
-        z44ceBNeRezKB6jc9TWTR6HJ+2ayNh6ylxP1eojwLQIRQ7FRE5oH8SwKN1gqKJOeHcvZYQxg9D40u
-        Yht5/cKg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54390)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nWdfH-002AJg-HW; Tue, 22 Mar 2022 12:31:07 +0000
-Message-ID: <15b83842-60d9-78b8-54e9-3a27211caded@roeck-us.net>
-Date:   Tue, 22 Mar 2022 05:31:06 -0700
+        with ESMTP id S235050AbiCVM6n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Mar 2022 08:58:43 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4F67E59E
+        for <linux-usb@vger.kernel.org>; Tue, 22 Mar 2022 05:57:16 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id o67so1440643vsc.0
+        for <linux-usb@vger.kernel.org>; Tue, 22 Mar 2022 05:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Ppk4E5hYstLtlP6lp8ICcikx4DHgZFKDbW5AAggvyp4=;
+        b=h+aYh8qwAh0UWC0P1YNSPbmFo/bym0qi4GWojagLChRGKGnqh150DFUZpK71ETFZvR
+         9NWBQtpH+nwNsEwJj5rUdeXvddoVz/Kc/vCezqdTVneUS5m4KkGrBnwXn4iXqBwcqfD/
+         y3VoBEoVdEDLlK0/J84XV97KaRSm++2H+spgQUsPoKnQZ+ITBi7kdDYjtQ821f/sr1aX
+         b+3F2j0nE92cD601xxuON4t9RmE/5RKFIx3OH7kUZ4X93WE5RDYTL9QoumW3hVTq4GLQ
+         pYqhSunDrjnZEWKwwYUh7xHtS+ny9mXUK93ZUqzmAiPaSXL5HJ0ICL65CJYjPgusnVSA
+         AfnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Ppk4E5hYstLtlP6lp8ICcikx4DHgZFKDbW5AAggvyp4=;
+        b=4THFtsHFZHF07qIiz/hKezeHr52lhupM0TKGHx5MvtGW0jd8Tt0K2bUtorC7x3Sa98
+         Bz9mKEphYKCZHNs8Xsr9BWEnV1CiE6lM1l3kgPm1eIzqvhAG0HHPvxsFg3FRz187sYRm
+         4Oj+0TQ0r5PnJV8oKXfJTInbJrRIZN0bFA3VctLAns6ywIKm8ritUiXprMfJ5QQOhf6j
+         iUQoT4up+1cHT4Y9rokLTViSFzHJYstH0uulVadlFdWonZoeC3wLDr8Jgr68tQKMplWi
+         AqjT8MKZdZKzfTr7vPwjfRl3wc6hb2msq6KqQ0MEUEUGmpsnWIVXUb4nnXnTIUCTdxbl
+         GJ3Q==
+X-Gm-Message-State: AOAM530EsexgQ2auR0hyeK5Vh42MWDth4nkTAm0CrMp+TWY0XB3l7X0+
+        oQ80QBw+Cjoz6++TMLhfP0osr0DzL1K3ajBokM8=
+X-Google-Smtp-Source: ABdhPJygHHoa2/UTtXQcBrBslzhE3K1ccSz/R2LAv9mwYqbUcQcwOh6A+pZ+ydhNU8zY1xB5uzdZnr+ovv2UckDm3Lk=
+X-Received: by 2002:a67:c787:0:b0:31e:874e:b9a3 with SMTP id
+ t7-20020a67c787000000b0031e874eb9a3mr9177725vsk.54.1647953835452; Tue, 22 Mar
+ 2022 05:57:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: linux resetting when the usb storage was removed while copying
-Content-Language: en-US
-To:     qianfan <qianfanguijin@163.com>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
-Cc:     linux-watchdog@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <1cc135e3-741f-e7d6-5d0a-fef319832a4c@163.com>
- <87pmmee9kr.fsf@mail.parknet.co.jp>
- <06ebc7fb-e7eb-b994-78fd-df07155ef4b5@163.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <06ebc7fb-e7eb-b994-78fd-df07155ef4b5@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nWdfH-002AJg-HW
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54390
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 1
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <YjeEbHL8ITkW692W@rowland.harvard.edu> <YjeEwspj0V3JaV1L@rowland.harvard.edu>
+In-Reply-To: <YjeEwspj0V3JaV1L@rowland.harvard.edu>
+From:   Jun Li <lijun.kernel@gmail.com>
+Date:   Tue, 22 Mar 2022 20:57:04 +0800
+Message-ID: <CAKgpwJUMXiPoLNNXzk2d=532fhfdWK0awopd0PPPg87kBi3=jg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/4] USB: gadget: Rename usb_gadget_probe_driver()
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/22/22 01:42, qianfan wrote:
-> 
-> 在 2022/3/22 15:21, OGAWA Hirofumi 写道:
->> qianfan <qianfanguijin@163.com> writes:
->>
->>> Hi:
->>>
->>> I am tesing usb storage on linux v5.15, found that the system is resetting when the
->>> usb storage(fat32 format) was removed while copying. Besides my custom board
->>> has a gpio-watchdog with 1.6s timeout.
->> Looks like I/O error by unplugging usb while reading data pages for
->> readahead, then your watchdog detected some state to reset system.
->>
->> If you disabled watchdog, it works as normal soon or later? If so, FAT
->> would not be able to do much (maybe ratelimit I/O error to mitigate
->> serial console overhead), request is from userspace or upper layer in
->> kernel.
-> 
-> I had changed console to ttynull and the system doesn't reset again.  kernel driver generate lots of error messages when usb storage is disconnected:
-> 
-> $ dmesg | grep 'FAT read failed' | wc -l
-> 
-> 608
-> 
-> usb storage can work again when reconnected.
-> 
-> The gpio watchdog depends on hrtimer, maybe printk in ISR delayed hrtimer that cause watchdog reset.
-> 
+Alan Stern <stern@rowland.harvard.edu> =E4=BA=8E2022=E5=B9=B43=E6=9C=8822=
+=E6=97=A5=E5=91=A8=E4=BA=8C 06:57=E5=86=99=E9=81=93=EF=BC=9A
+>
+> In preparation for adding a "gadget" bus, this patch renames
+> usb_gadget_probe_driver() to usb_gadget_register_driver().  The new
+> name will be more accurate, since gadget drivers will be registered on
+> the gadget bus and the probing will be done by the driver core, not
+> the UDC core.
+>
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
 
-Exactly. We had a similar problem recently, also related to the gpio watchdog.
-I think the system ends up in a loop, retrying block 1162. Key for fixing
-the problem will be to find the function causing the loop.
-
-Guenter
+Missed one rename change:
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 1fb837d9271e..4141206bb0ed 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -284,7 +284,7 @@ static ssize_t gadget_dev_desc_UDC_store(struct
+config_item *item,
+                        goto err;
+                }
+                gi->composite.gadget_driver.udc_name =3D name;
+-               ret =3D usb_gadget_probe_driver(&gi->composite.gadget_drive=
+r);
++               ret =3D usb_gadget_register_driver(&gi->composite.gadget_dr=
+iver);
+                if (ret) {
+                        gi->composite.gadget_driver.udc_name =3D NULL;
+                        goto err;
+Li Jun
+>
+>
+>  drivers/usb/gadget/composite.c         |    2 +-
+>  drivers/usb/gadget/legacy/dbgp.c       |    2 +-
+>  drivers/usb/gadget/legacy/inode.c      |    2 +-
+>  drivers/usb/gadget/legacy/raw_gadget.c |    4 ++--
+>  drivers/usb/gadget/udc/core.c          |    4 ++--
+>  include/linux/usb/gadget.h             |    4 ++--
+>  6 files changed, 9 insertions(+), 9 deletions(-)
+>
+> Index: usb-devel/drivers/usb/gadget/composite.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- usb-devel.orig/drivers/usb/gadget/composite.c
+> +++ usb-devel/drivers/usb/gadget/composite.c
+> @@ -2500,7 +2500,7 @@ int usb_composite_probe(struct usb_compo
+>         gadget_driver->driver.name =3D driver->name;
+>         gadget_driver->max_speed =3D driver->max_speed;
+>
+> -       return usb_gadget_probe_driver(gadget_driver);
+> +       return usb_gadget_register_driver(gadget_driver);
+>  }
+>  EXPORT_SYMBOL_GPL(usb_composite_probe);
+>
+> Index: usb-devel/drivers/usb/gadget/legacy/dbgp.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- usb-devel.orig/drivers/usb/gadget/legacy/dbgp.c
+> +++ usb-devel/drivers/usb/gadget/legacy/dbgp.c
+> @@ -422,7 +422,7 @@ static struct usb_gadget_driver dbgp_dri
+>
+>  static int __init dbgp_init(void)
+>  {
+> -       return usb_gadget_probe_driver(&dbgp_driver);
+> +       return usb_gadget_register_driver(&dbgp_driver);
+>  }
+>
+>  static void __exit dbgp_exit(void)
+> Index: usb-devel/drivers/usb/gadget/legacy/inode.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- usb-devel.orig/drivers/usb/gadget/legacy/inode.c
+> +++ usb-devel/drivers/usb/gadget/legacy/inode.c
+> @@ -1873,7 +1873,7 @@ dev_config (struct file *fd, const char
+>         else
+>                 gadgetfs_driver.max_speed =3D USB_SPEED_FULL;
+>
+> -       value =3D usb_gadget_probe_driver(&gadgetfs_driver);
+> +       value =3D usb_gadget_register_driver(&gadgetfs_driver);
+>         if (value !=3D 0) {
+>                 spin_lock_irq(&dev->lock);
+>                 goto fail;
+> Index: usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- usb-devel.orig/drivers/usb/gadget/legacy/raw_gadget.c
+> +++ usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
+> @@ -510,12 +510,12 @@ static int raw_ioctl_run(struct raw_dev
+>         }
+>         spin_unlock_irqrestore(&dev->lock, flags);
+>
+> -       ret =3D usb_gadget_probe_driver(&dev->driver);
+> +       ret =3D usb_gadget_register_driver(&dev->driver);
+>
+>         spin_lock_irqsave(&dev->lock, flags);
+>         if (ret) {
+>                 dev_err(dev->dev,
+> -                       "fail, usb_gadget_probe_driver returned %d\n", re=
+t);
+> +                       "fail, usb_gadget_register_driver returned %d\n",=
+ ret);
+>                 dev->state =3D STATE_DEV_FAILED;
+>                 goto out_unlock;
+>         }
+> Index: usb-devel/drivers/usb/gadget/udc/core.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- usb-devel.orig/drivers/usb/gadget/udc/core.c
+> +++ usb-devel/drivers/usb/gadget/udc/core.c
+> @@ -1523,7 +1523,7 @@ err1:
+>         return ret;
+>  }
+>
+> -int usb_gadget_probe_driver(struct usb_gadget_driver *driver)
+> +int usb_gadget_register_driver(struct usb_gadget_driver *driver)
+>  {
+>         struct usb_udc          *udc =3D NULL;
+>         int                     ret =3D -ENODEV;
+> @@ -1568,7 +1568,7 @@ found:
+>         mutex_unlock(&udc_lock);
+>         return ret;
+>  }
+> -EXPORT_SYMBOL_GPL(usb_gadget_probe_driver);
+> +EXPORT_SYMBOL_GPL(usb_gadget_register_driver);
+>
+>  int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
+>  {
+> Index: usb-devel/include/linux/usb/gadget.h
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- usb-devel.orig/include/linux/usb/gadget.h
+> +++ usb-devel/include/linux/usb/gadget.h
+> @@ -745,7 +745,7 @@ struct usb_gadget_driver {
+>   */
+>
+>  /**
+> - * usb_gadget_probe_driver - probe a gadget driver
+> + * usb_gadget_register_driver - register a gadget driver
+>   * @driver: the driver being registered
+>   * Context: can sleep
+>   *
+> @@ -755,7 +755,7 @@ struct usb_gadget_driver {
+>   * registration call returns.  It's expected that the @bind() function w=
+ill
+>   * be in init sections.
+>   */
+> -int usb_gadget_probe_driver(struct usb_gadget_driver *driver);
+> +int usb_gadget_register_driver(struct usb_gadget_driver *driver);
+>
+>  /**
+>   * usb_gadget_unregister_driver - unregister a gadget driver
