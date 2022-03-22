@@ -2,130 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8300D4E4359
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Mar 2022 16:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C434E444C
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Mar 2022 17:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236068AbiCVPx1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Mar 2022 11:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
+        id S239137AbiCVQiX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Mar 2022 12:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235730AbiCVPx1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Mar 2022 11:53:27 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BF489CFD;
-        Tue, 22 Mar 2022 08:51:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647964319; x=1679500319;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=9ttX9cZdVk3gMLlMA8zvmvOJ+iMJUZrKKbcKF7FJWwM=;
-  b=WUe56AswEZUfydv1gfwAfD8UxOvIz1XjZA+VYyKdiVeVCotp/HJXJPH6
-   SPu3E8nwBZVHCSqkKgctd7J6nemigN+1Q9FyMGoyhgytzYuZ1Yk9y8Imj
-   RzNDFKRIpK7knTB8xxK9VfFOXYZeshzOKA+4DcQ9lwAePJ5Mpg1jKzUOW
-   P8rkVYm6Flv7uRs5ngdpr27q7dL0iAgMdaWBHld6yhW661zwZE9003/8G
-   wxJT1TR9PIxOw23muVSE52yOY49Gp4Yv1sgPPey2Gn3c24ANXRx2YDP+m
-   5Pms4p7gLHxPURix8bXn9FESM700XFyFvhabrbuOpdu0Tu+HU8FSzsjW1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="255418969"
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="255418969"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 08:51:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,201,1643702400"; 
-   d="scan'208";a="649039098"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 22 Mar 2022 08:51:54 -0700
-To:     "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>,
+        with ESMTP id S239125AbiCVQiU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Mar 2022 12:38:20 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8AD5C369;
+        Tue, 22 Mar 2022 09:36:51 -0700 (PDT)
+Received: from darkstar.musicnaut.iki.fi (85-76-100-34-nat.elisa-mobile.fi [85.76.100.34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: aaro.koskinen)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 789CC1B002D3;
+        Tue, 22 Mar 2022 18:36:47 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1647967008;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RNrNBemsZsaG7NZqTZ3MCUPdFOPCvyRw2+V4JUFQ0Nk=;
+        b=AwQeGd4204Vkw2568/3IwnUQBQ0Fh1dXtTS6xgcE5LdH4O44DDujrzanA3Ztya+Ibx1nNf
+        JyapZaT+3E4mNaK8XtkSDXDB4EOWkTPjxDydWRqxlICq5KxJc4eqJlxzrXJLF/cRCqUZrf
+        x4V7AZ7+tzZWU7IpoqcaUskfjCf21Cvwh6CbaQYH+dl1lDUZXPkGNKy/1HmHSFgmnTEtOb
+        4fWa4oUd/Q4vKk4vsxACXhQWFTAyBKri4h7BCo+I5SwR22alCGwKCC9yJ0V8bjJVMa2Lpk
+        fdc0v0hlSPhAK45pi8KQOJBm4PA8QpjZqXf8MUxhJR91vUyxj8Sjq5tyvPaPdg==
+Date:   Tue, 22 Mar 2022 18:36:46 +0200
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Cc:     Tony Lindgren <tony@atomide.com>, Paul Walmsley <paul@pwsan.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-References: <1646130507-26796-1-git-send-email-quic_c_sanm@quicinc.com>
- <ddc86a4f-8d1c-c02c-5600-4fa851568557@quicinc.com>
- <YjR0Ne3BDxxMfrxt@kroah.com>
- <b38ddfcc-68c3-d99f-816b-8b9f788aa88a@quicinc.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v2 0/3] Refactor xhci quirks and plat private data
-Message-ID: <29ba84fb-1db2-1d84-cf9e-191e9bcbf739@linux.intel.com>
-Date:   Tue, 22 Mar 2022 17:53:42 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Felipe Balbi <balbi@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-mmc@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2] ARM: OMAP1: Prepare for conversion of OMAP1 clocks to
+ CCF
+Message-ID: <20220322163646.GD297526@darkstar.musicnaut.iki.fi>
+References: <20220310233307.99220-3-jmkrzyszt@gmail.com>
+ <20220321215416.236250-1-jmkrzyszt@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <b38ddfcc-68c3-d99f-816b-8b9f788aa88a@quicinc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321215416.236250-1-jmkrzyszt@gmail.com>
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1647967008; a=rsa-sha256;
+        cv=none;
+        b=l2ZnGsGINPS9lZ5lJlSl6lZOgGL7Q607SYPV0J7WR6YGktBvdwhgSHlOmX5wRAHk7ZfcLc
+        zWtjZl9vuQ8iZacCUsrqZ+A1kGWNR+XopLUfhq6z4OojVlDNVy+DO6pAEkD2VsFi4gdBwY
+        gW1AKxorc7PrNyH1dQJmHyt53UaFPwYDrpa/8uLCUJ2vjL9PcWxdevZZwdnAwYmepKjI5R
+        ZnmhP+hd3sLudvP2V9GtzwtgGlUhnU+ZbFcY+J9r/BScbaJCeFfyYojSKrAbgB7XAN0pWq
+        tZWDfB/LL1en0FbHwSw/DMl44aemO9uXJeoIXxxlUkebpSB6zKugvTu7ZJELXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1647967008;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RNrNBemsZsaG7NZqTZ3MCUPdFOPCvyRw2+V4JUFQ0Nk=;
+        b=oL/5cvCYEppmlz4BJVPwqBpl81I2Z6QgKsr1OROeI8lunAjaoDigGvxhxH32vZ/zvJS32+
+        BDZ6ooMIZE1UsrSiwxmWSUbT6Tcu93Suy4+zbuXo+nXdRIg5GRwRx6SMS/LmjsCoLo6HyT
+        9u0ITw35hSb4Mznr2j+ojp6dBv1OoviG8VOl390BQiNhGlXtYN9C3FU1pZU2iWPeFSdReh
+        X7PkfpGOPTbfe12YpZz7gagw/3UkqPdBSW+ZvgjsMxxfpG/ZH+1H4Ig2hPZqt2oD/iZml7
+        V6yDtD0vk6EH9/pO08Zsx2Bjsa+ZOpz2OGYNEdzkbYnttQmBh8szxuKjg2mMEw==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21.3.2022 8.21, Sandeep Maheswaram (Temp) wrote:
-> Hi Mathias,
+Hi,
+
+On Mon, Mar 21, 2022 at 10:54:16PM +0100, Janusz Krzysztofik wrote:
+> In preparation for conversion of OMAP1 clocks to common clock framework,
+> identify users of those clocks which don't call clk_prepare/unprepare()
+> and update them to call clk_prepare_enable/clk_disable_unprepare() instead
+> of just clk_enable/disable(), as required by CCF implementation of clock
+> API.
 > 
-> On 3/18/2022 5:29 PM, Greg Kroah-Hartman wrote:
->> On Thu, Mar 17, 2022 at 11:17:17AM +0530, Sandeep Maheswaram (Temp) wrote:
->>> Hi Greg,
->>>
->>> On 3/1/2022 3:58 PM, Sandeep Maheswaram wrote:
->>>> changes in v2:
->>>> Added a PATCH 2/3 to remove unwanted header inclusion.
->>>> Fixed minor nitpicks in PATCH 3/3.
->>>>
->>>> Pavankumar Kondeti (1):
->>>>     usb: xhci: refactor quirks and plat private data
->>>>
->>>> Sandeep Maheswaram (2):
->>>>     usb: xhci: Remove unwanted header inclusion
->>>>     usb: dwc: host: add xhci_plat_priv quirk XHCI_SKIP_PHY_INIT
->>>>
->>>>    drivers/usb/cdns3/host.c        |  2 +-
->>>>    drivers/usb/dwc3/host.c         | 13 ++++++++
->>>>    drivers/usb/host/xhci-plat.c    |  3 +-
->>>>    drivers/usb/host/xhci-plat.h    | 24 ---------------
->>>>    drivers/usb/host/xhci-rcar.c    |  3 +-
->>>>    drivers/usb/host/xhci.h         | 60 ++++--------------------------------
->>>>    include/linux/usb/xhci-plat.h   | 24 +++++++++++++++
->>>>    include/linux/usb/xhci-quirks.h | 67 +++++++++++++++++++++++++++++++++++++++++
->>>>    8 files changed, 115 insertions(+), 81 deletions(-)
->>>>    delete mode 100644 drivers/usb/host/xhci-plat.h
->>>>    create mode 100644 include/linux/usb/xhci-plat.h
->>>>    create mode 100644 include/linux/usb/xhci-quirks.h
->>> Please let me know your opinion about this patch series.
->> I need the xhci maintainer to review it...
->>
->> thanks,
->>
->> greg k-h
-> 
-> 
-> Can you please review this patch series.
-> 
+> v2: update still a few more OMAP specific drivers missed in v1,
+>   - call clk_prepare/unprepare() just after/before clk_get/put() where it
+>     can make more sense than merging prepare/unprepare with enable/disable.
 
-I don't have a better solution than this.
+Something is still broken. When doing kexec (using CCF kernel), the
+kexec'ed kernel now hangs early (on 770):
 
-So neither devicetree or ACPI entries exists for the xHC part of this dwc3 controller?
+[    0.853912] MUX: initialized W4_USB_PUEN
+[    0.858001] MUX: initialized V6_USB0_TXD
+[    0.862060] MUX: initialized W5_USB0_SE0
+[    0.866210] MUX: initialized Y5_USB0_RCV
+[    0.870269] MUX: initialized AA9_USB0_VP
+[    0.874389] MUX: initialized R9_USB0_VM
+[    0.878356] USB: hmc 16, usb0 6 wires (dev), Mini-AB on usb0
+[    0.886230] initcall customize_machine+0x0/0x30 returned 0 after 29296 usecs
+[    0.893707] calling  init_atags_procfs+0x0/0xe8 @ 1
+[    0.898864] initcall init_atags_procfs+0x0/0xe8 returned 0 after 0 usecs
+[    0.905883] calling  exceptions_init+0x0/0x8c @ 1
+[    0.910797] initcall exceptions_init+0x0/0x8c returned 0 after 0 usecs
+[    0.917602] calling  omap_init+0x0/0xc @ 1
+[    0.922393] initcall omap_init+0x0/0xc returned 0 after 9765 usecs
+[    0.928863] calling  omap1_init_devices+0x0/0x2c @ 1
+[    2.568664] random: fast init done
 
-A pure platform device is created, and it matches and binds to xhci-plat driver by "xhci-hcd" name.
-I guess we have no way to identify this dwc3 xhci controller in xhci-plat.c, and set quirks there,
-like all those devicetree xhci devices that we set quirks based on .compatibility. 
+Probably something is now disabled that has been previously always
+enabled by default/bootloader. I'll try adding some printk()s to see
+the exact place where it hangs...
 
-Thanks
-Mathias
-
+A.
