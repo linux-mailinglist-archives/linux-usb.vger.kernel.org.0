@@ -2,21 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F02FB4E3B88
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Mar 2022 10:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 506864E3B94
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Mar 2022 10:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232319AbiCVJQG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Mar 2022 05:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
+        id S232134AbiCVJSD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Mar 2022 05:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbiCVJQF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Mar 2022 05:16:05 -0400
+        with ESMTP id S232502AbiCVJR4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Mar 2022 05:17:56 -0400
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3951B45522;
-        Tue, 22 Mar 2022 02:14:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAE427FD7;
+        Tue, 22 Mar 2022 02:16:30 -0700 (PDT)
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 530BF68AFE; Tue, 22 Mar 2022 10:14:33 +0100 (CET)
-Date:   Tue, 22 Mar 2022 10:14:32 +0100
+        id 6556268AFE; Tue, 22 Mar 2022 10:16:26 +0100 (CET)
+Date:   Tue, 22 Mar 2022 10:16:26 +0100
 From:   Christoph Hellwig <hch@lst.de>
 To:     Robin Murphy <robin.murphy@arm.com>
 Cc:     joro@8bytes.org, baolu.lu@linux.intel.com,
@@ -24,14 +24,14 @@ Cc:     joro@8bytes.org, baolu.lu@linux.intel.com,
         mika.westerberg@linux.intel.com, YehezkelShB@gmail.com,
         iommu@lists.linux-foundation.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, mario.limonciello@amd.com, hch@lst.de
-Subject: Re: [PATCH v2 1/2] iommu: Add capability for pre-boot DMA
- protection
-Message-ID: <20220322091432.GA27069@lst.de>
-References: <cover.1647624084.git.robin.murphy@arm.com> <797c70d255f946c4d631f2ffc67f277cfe0cb97c.1647624084.git.robin.murphy@arm.com>
+Subject: Re: [PATCH v2 2/2] thunderbolt: Make iommu_dma_protection more
+ accurate
+Message-ID: <20220322091626.GB27069@lst.de>
+References: <cover.1647624084.git.robin.murphy@arm.com> <0dd14883930c9f55ace22162e23765a37d91a057.1647624084.git.robin.murphy@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <797c70d255f946c4d631f2ffc67f277cfe0cb97c.1647624084.git.robin.murphy@arm.com>
+In-Reply-To: <0dd14883930c9f55ace22162e23765a37d91a057.1647624084.git.robin.murphy@arm.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -42,26 +42,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 05:42:57PM +0000, Robin Murphy wrote:
-> VT-d's dmar_platform_optin() actually represents a combination of
-> properties fairly well standardised by Microsoft as "Pre-boot DMA
-> Protection" and "Kernel DMA Protection"[1]. As such, we can provide
-> interested consumers with an abstracted capability rather than
-> driver-specific interfaces that won't scale. We name it for the former
-> aspect since that's what external callers are most likely to be
-> interested in; the latter is for the IOMMU layer to handle itself.
+On Fri, Mar 18, 2022 at 05:42:58PM +0000, Robin Murphy wrote:
+> Between me trying to get rid of iommu_present() and Mario wanting to
+> support the AMD equivalent of DMAR_PLATFORM_OPT_IN, scrutiny has shown
+> that the iommu_dma_protection attribute is being far too optimistic.
+> Even if an IOMMU might be present for some PCI segment in the system,
+> that doesn't necessarily mean it provides translation for the device(s)
+> we care about. Furthermore, all that DMAR_PLATFORM_OPT_IN really does
+> is tell us that memory was protected before the kernel was loaded, and
+> prevent the user from disabling the intel-iommu driver entirely. While
+> that lets us assume kernel integrity, what matters for actual runtime
+> DMA protection is whether we trust individual devices, based on the
+> "external facing" property that we expect firmware to describe for
+> Thunderbolt ports.
 > 
-> Also use this as an opportunity to draw a line in the sand and add a
-> new interface so as not to introduce any more callers of iommu_capable()
-> which I also want to get rid of. For now it's a quick'n'dirty wrapper
-> function, but will evolve to subsume the internal interface in future.
+> It's proven challenging to determine the appropriate ports accurately
+> given the variety of possible topologies, so while still not getting a
+> perfect answer, by putting enough faith in firmware we can at least get
+> a good bit closer. If we can see that any device near a Thunderbolt NHI
+> has all the requisites for Kernel DMA Protection, chances are that it
+> *is* a relevant port, but moreover that implies that firmware is playing
+> the game overall, so we'll use that to assume that all Thunderbolt ports
+> should be correctly marked and thus will end up fully protected.
 > 
-> [1] https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-kernel-dma-protection
-> 
-> Suggested-by: Christoph Hellwig <hch@lst.de>
+> CC: Mario Limonciello <mario.limonciello@amd.com>
 > Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 
-I can't really think of a way in which I suggested this, but it does
-looks like a good interface:
+Looks sensible to me:
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Acked-by: Christoph Hellwig <hch@lst.de>
