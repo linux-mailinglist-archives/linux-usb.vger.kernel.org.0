@@ -2,64 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7634E5055
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Mar 2022 11:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 481854E5103
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Mar 2022 12:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243540AbiCWKcX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Mar 2022 06:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        id S235607AbiCWLJM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Mar 2022 07:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiCWKcW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Mar 2022 06:32:22 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E83E6EB0A;
-        Wed, 23 Mar 2022 03:30:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648031451; x=1679567451;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SV0+1VOXq+yxYQQCFdKG0nZadXPiB8XCijjjUS7LwI4=;
-  b=MvHPNDY+0MNQM4fPyPTgPVAxo+zI3eqAeFin9sfkcNlh2BvYHvzrE+/o
-   8HJ22J20aLHSNkzUz2/DRlKPjdJkijHYIQVUT8dXTE2dDc+5QWfUUQ0KV
-   ham8QzQ0iJlx6By9IWOSrkahnQWeLgK6ow98qh/KEe4gYQhU0KTVfutJ7
-   tUCtAG99kEKcp0C9xob6EWyCNyAYr/cwKXbYu8+jlBhzeblTeM5V3cSc0
-   KsO8d5kUqiSA2NVl8GUoy0NyFRKW3FHy45aUFxHJR3QQbZicEyOuoDd0S
-   1nYqActMOtfh2cO9CZ1L5irMod2llowrZ4vDJE2yT+MLx7tSg9vjM+VHr
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="240238208"
-X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
-   d="scan'208";a="240238208"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 03:30:51 -0700
-X-IronPort-AV: E=Sophos;i="5.90,203,1643702400"; 
-   d="scan'208";a="515731387"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 03:30:47 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 23 Mar 2022 12:30:45 +0200
-Date:   Wed, 23 Mar 2022 12:30:45 +0200
-From:   "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>
-To:     "Khandelwal, Rajat" <rajat.khandelwal@intel.com>
-Cc:     "bleung@google.com" <bleung@google.com>,
-        "Malani, Prashant" <pmalani@google.com>,
-        "jthies@google.com" <jthies@google.com>,
-        "Rao, Abhijeet" <abhijeet.rao@intel.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] USB4/TBT device routers should wake up during S0ix when
- something gets connected/disconnected or a DP monitor gets plugged in
-Message-ID: <Yjr21UzWmj4NjItA@lahna>
-References: <20220323101818.3503-1-rajat.khandelwal@intel.com>
- <CO1PR11MB48357FE72D34818360D2105E96189@CO1PR11MB4835.namprd11.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CO1PR11MB48357FE72D34818360D2105E96189@CO1PR11MB4835.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230331AbiCWLJL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Mar 2022 07:09:11 -0400
+Received: from fx308.security-mail.net (smtpout30.security-mail.net [85.31.212.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C203278057
+        for <linux-usb@vger.kernel.org>; Wed, 23 Mar 2022 04:07:42 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by fx308.security-mail.net (Postfix) with ESMTP id BD11581C481
+        for <linux-usb@vger.kernel.org>; Wed, 23 Mar 2022 12:07:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1648033660;
+        bh=v9g7DsSlFogJyv3ZLABnERl4LylzS13BZ7QkOZDwmL8=;
+        h=From:To:Cc:Subject:Date;
+        b=US4JTqihEgeufVQs0aDOwjRhcRDOloqrOJZFpWTvLfJvWUkU2m/ufisErb+/yBK5y
+         RjowHUDpHS3tmZyDOFicZARf/K4gpm1Yz8ilw997mwQjRyTZOKaLwUbrd4pRaHZwKW
+         //wrm6SIEspB4lS1peE54/0+gYk3UlKA/ZXqqne0=
+Received: from fx308 (localhost [127.0.0.1])
+        by fx308.security-mail.net (Postfix) with ESMTP id 54C2B81C406;
+        Wed, 23 Mar 2022 12:07:39 +0100 (CET)
+X-Virus-Scanned: E-securemail
+Secumail-id: <9bf1.623aff68.52346.0>
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
+        by fx308.security-mail.net (Postfix) with ESMTPS id 52DE381C3C6;
+        Wed, 23 Mar 2022 12:07:20 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id 35E4F27E0425;
+        Wed, 23 Mar 2022 12:07:20 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 1AF2827E0443;
+        Wed, 23 Mar 2022 12:07:20 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 1AF2827E0443
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1648033640;
+        bh=O83eUvONSacsYz8f+A0wiZQO9msOmZgqo3/7OCab0aA=;
+        h=From:To:Date:Message-Id;
+        b=emEtCNXJjYmRbbSVSa1jzKO/xPOcQWCNcNu6j5sE0Lc83MhcjRzVIaD7D1MlPs7uM
+         5RdlHkAEaQ+YJJGSKvzV8QoIH9d1oDkkXYdc6L1CnCYFzd1ePSGuDe2iDOwinKkmXp
+         pO4JJCPxTsKye79GbpNad2MNJcR4MkXnsJcaUjXA=
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id mxBrwjpK59jW; Wed, 23 Mar 2022 12:07:20 +0100 (CET)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 00DC627E0425;
+        Wed, 23 Mar 2022 12:07:19 +0100 (CET)
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     linux-usb@vger.kernel.org
+Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Amelie DELAUNAY <amelie.delaunay@foss.st.com>,
+        Yann Sionneau <ysionneau@kalray.eu>,
+        Michael Grzeschik <mgr@pengutronix.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jules Maselbas <jmaselbas@kalray.eu>
+Subject: [PATCH v2 0/3] Cleanup the call ordering of phy_init and phy_power_on
+Date:   Wed, 23 Mar 2022 12:07:05 +0100
+Message-Id: <20220323110708.8254-1-jmaselbas@kalray.eu>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: by Secumail
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,49 +80,34 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
 
-If you want it to be woken up when something is plugged to the USB4 port
-then I suggest to add this to the "wakeup" capability of the usb4_port
-itself (see drivers/thunderbolt/usb4_port.c). And make it disabled by
-default too.
+Last year Ahmad asked what is the correct order when calling phy_init
+and phy_power_on. Since then, I didn't see the situation improve much
+and I am once again toying around with usb phy driver.
 
-On Wed, Mar 23, 2022 at 10:26:37AM +0000, Khandelwal, Rajat wrote:
-> +Mika
-> @Malani, Prashant @bleung@google.com This is the patch which fixes the partner issue. Kindly escalate your thoughts. 
-> 
-> Thanks
-> Rajat
-> 
-> -----Original Message-----
-> From: Khandelwal, Rajat <rajat.khandelwal@intel.com> 
-> Sent: Wednesday, March 23, 2022 3:48 PM
-> To: mika.westerberg@linux.intel.com
-> Cc: Khandelwal, Rajat <rajat.khandelwal@intel.com>; bleung@google.com; jthies@google.com; Malani, Prashant <pmalani@google.com>; Rao, Abhijeet <abhijeet.rao@intel.com>; Regupathy, Rajaram <rajaram.regupathy@intel.com>; linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: [PATCH] USB4/TBT device routers should wake up during S0ix when something gets connected/disconnected or a DP monitor gets plugged in
-> 
-> Device routers don't wake up during S0ix when something is plugged in/out or if a DP monitor gets connected. This causes the linux device to not wake up during S0ix cycling as the host router didn't wake up because the device router didn't. This patch adds a new functionality to linux.
-> 
-> Signed-off-by: Rajat-Khandelwal <rajat.khandelwal@intel.com>
-> ---
->  drivers/thunderbolt/switch.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c index d026e305fe5d..4f8056724aa4 100644
-> --- a/drivers/thunderbolt/switch.c
-> +++ b/drivers/thunderbolt/switch.c
-> @@ -3067,13 +3067,11 @@ void tb_switch_suspend(struct tb_switch *sw, bool runtime)
->  			tb_switch_suspend(port->remote->sw, runtime);
->  	}
->  
-> -	if (runtime) {
-> +	if (runtime || device_may_wakeup(&sw->dev)) {
->  		/* Trigger wake when something is plugged in/out */
->  		flags |= TB_WAKE_ON_CONNECT | TB_WAKE_ON_DISCONNECT;
->  		flags |= TB_WAKE_ON_USB4;
->  		flags |= TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE | TB_WAKE_ON_DP;
-> -	} else if (device_may_wakeup(&sw->dev)) {
-> -		flags |= TB_WAKE_ON_USB4 | TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE;
->  	}
->  
->  	tb_switch_set_wake(sw, flags);
-> --
-> 2.17.1
+The following two patches were in my tree for a year... Last year i
+previously tried to change the call order in the dwc2 driver but this
+requires the relevent phy to be also compatible with the "new" ordering.
+The stm32-usbphyc driver wasn't compatible, I am not sure if that is
+still is the case.
+
+For now simply add documentation, hopefully correct, but I am not an
+expert on actual phy sementics or usage in the kernel. And add warning
+when the order is not what's expected.
+
+Best,
+
+---
+changes in v2:
+  - Update the documentation syntax for returned value
+
+Jules Maselbas (3):
+  phy: core: Add documentation of phy operation order
+  phy: core: Update documentation syntax
+  phy: core: Warn when phy_power_on is called before phy_init
+
+ drivers/phy/phy-core.c | 44 +++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 41 insertions(+), 3 deletions(-)
+
+-- 
+2.17.1
+
