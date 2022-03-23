@@ -2,132 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9621A4E5203
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Mar 2022 13:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 360224E52DE
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Mar 2022 14:15:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236041AbiCWMTC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Mar 2022 08:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
+        id S244194AbiCWNQa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Mar 2022 09:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235516AbiCWMTB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Mar 2022 08:19:01 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC2376E2E;
-        Wed, 23 Mar 2022 05:17:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648037852; x=1679573852;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PSHcI897D2zwxp8xEylKJ3SYcDP8lVWYEjAmdTs22kM=;
-  b=JvztOgiYfjHuuPoDvTvt1ftKhcgovQ3A40U1kdwutYHiritjVaRd1Pbi
-   KWIpRtj4T1LTN1mkwv3f3QO/mgSEHnZoNpMMLidJ7FaDqcqqKD1MrrAiE
-   18bd5wxwrb098Q92EZSXzosKGpZup91qc5obMHJE4M7sEbHDI1BnbAa/D
-   OwRBTHCyT+97BzkmpKyjCqRB+19AkBdpYV4x06MrSVLCLiCOLInCQ7R7o
-   SzvmDv1YBCilu8qU2midHQoZsW7SVENGwxctLzzUW7ZTmvj0eshodiO1d
-   FAS0TNgA7KIsckM5dcIhuKzbCLwvZamMEa6fQtwrJFG4eH7OwibYBFwJo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10294"; a="282942188"
-X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
-   d="scan'208";a="282942188"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 05:17:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
-   d="scan'208";a="583669177"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 23 Mar 2022 05:17:28 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nWzvb-000K2T-L6; Wed, 23 Mar 2022 12:17:27 +0000
-Date:   Wed, 23 Mar 2022 20:17:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Aswath Govindraju <a-govindraju@ti.com>
-Subject: Re: [PATCH 2/2] drivers: usb: dwc3: Add AM62 USB wrapper driver
-Message-ID: <202203232002.K45zQUfY-lkp@intel.com>
-References: <20220323053524.7009-3-a-govindraju@ti.com>
+        with ESMTP id S238027AbiCWNQ3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Mar 2022 09:16:29 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2D36A5FF14
+        for <linux-usb@vger.kernel.org>; Wed, 23 Mar 2022 06:14:58 -0700 (PDT)
+Received: (qmail 156469 invoked by uid 1000); 23 Mar 2022 09:14:57 -0400
+Date:   Wed, 23 Mar 2022 09:14:57 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [RFC PATCH 4/4] USB: gadget: Add a new bus for gadgets
+Message-ID: <YjsdUTQsuWwYT0AX@rowland.harvard.edu>
+References: <YjeEbHL8ITkW692W@rowland.harvard.edu>
+ <YjeEwspj0V3JaV1L@rowland.harvard.edu>
+ <YjeFImy6hY+2MHe2@rowland.harvard.edu>
+ <YjeFaCijdcfw5fdc@rowland.harvard.edu>
+ <YjeFqK+ZrcHx9HZh@rowland.harvard.edu>
+ <20220323065528.GA32029@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220323053524.7009-3-a-govindraju@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220323065528.GA32029@hu-pkondeti-hyd.qualcomm.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Aswath,
+On Wed, Mar 23, 2022 at 12:25:28PM +0530, Pavan Kondeti wrote:
+> Hi Alan,
+> 
+> On Sun, Mar 20, 2022 at 03:51:04PM -0400, Alan Stern wrote:
+> > This patch adds a "gadget" bus and uses it for registering gadgets and
+> > their drivers.  From now on, bindings will be managed by the driver
+> > core rather than through ad-hoc manipulations in the UDC core.
+> > 
+> > As part of this change, the driver_pending_list is removed.  The UDC
+> > core won't need to keep track of unbound drivers for later binding,
+> > because the driver core handles all of that for us.
+> > 
+> > However, we do need one new feature: a way to prevent gadget drivers
+> > from being bound to more than one gadget at a time.  The existing code
+> > does this automatically, but the driver core doesn't -- it's perfectly
+> > happy to bind a single driver to all the matching devices on the bus.
+> > The patch adds a new bitflag to the usb_gadget_driver structure for
+> > this purpose.
+> > 
+> > A nice side effect of this change is a reduction in the total lines of
+> > code, since now the driver core will do part of the work that the UDC
+> > used to do.
+> > 
+> > A possible future patch could add udc devices to the gadget bus, say
+> > as a separate device type.
+> 
+> Can you please elaborate on this? This UDC device will be added to gadget bus
+> but not bound to any driver, correct?
 
-I love your patch! Yet something to improve:
+The UDC/gadget subsystem is designed a little strangely.  For each UDC 
+hardware device, the UDC core creates _two_ software representations: a 
+struct usb_udc and a struct usb_gadget.  Both of these contain an 
+embedded struct device, so the physical UDC hardware corresponds to two 
+software "devices".
 
-[auto build test ERROR on linux/master]
-[also build test ERROR on usb/usb-testing linus/master v5.17 next-20220323]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Currently neither of these devices gets registered on any bus.  There is 
+a driver associated with the usb_gadget device, but not in the usual way 
+(that is, it doesn't use the normal driver-core binding mechanism).
 
-url:    https://github.com/0day-ci/linux/commits/Aswath-Govindraju/AM62-Add-support-for-AM62-USB-wrapper-driver/20220323-133708
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
-config: hexagon-buildonly-randconfig-r002-20220323 (https://download.01.org/0day-ci/archive/20220323/202203232002.K45zQUfY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 902f4708fe1d03b0de7e5315ef875006a6adc319)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/4ca423573f638454724a40416042d84552db81af
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Aswath-Govindraju/AM62-Add-support-for-AM62-USB-wrapper-driver/20220323-133708
-        git checkout 4ca423573f638454724a40416042d84552db81af
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/
+My patch keeps both of these device structures, but it registers the 
+usb_gadget device on the new gadget bus and uses the driver core to do 
+normal binding.  The usb_udc device still is not registered on any bus 
+and does not have a driver.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> > 
+> > ---
+> > 
+> >  drivers/usb/gadget/udc/core.c |  248 +++++++++++++++++++-----------------------
+> >  include/linux/usb/gadget.h    |   26 ++--
+> >  2 files changed, 135 insertions(+), 139 deletions(-)
+> > 
+> 
+> <snip>
+> 
+> >  
+> >  /* ------------------------------------------------------------------------- */
+> >  
+> > -static int udc_bind_to_driver(struct usb_udc *udc, struct usb_gadget_driver *driver)
+> > +static int gadget_match_driver(struct device *dev, struct device_driver *drv)
+> >  {
+> > -	int ret;
+> > +	struct usb_gadget *gadget = dev_to_usb_gadget(dev);
+> > +	struct usb_udc *udc = gadget->udc;
+> > +	struct usb_gadget_driver *driver = container_of(drv,
+> > +			struct usb_gadget_driver, driver);
+> >  
+> > -	dev_dbg(&udc->dev, "registering UDC driver [%s]\n",
+> > -			driver->function);
+> > +	/* If the driver specifies a udc_name, it must match the UDC's name */
+> > +	if (driver->udc_name &&
+> > +			strcmp(driver->udc_name, dev_name(&udc->dev)) != 0)
+> > +		return 0;
+> >  
+> > +	/* Otherwise any gadget driver matches any UDC */
+> > +	return 1;
+> > +}
+> > +
+> 
+> Would it be better if we add the driver->is_bound check here so that probe is
+> not invoked? your patch checks it later at the probe.
 
-All errors (new ones prefixed by >>):
+Yes, you're right; the check could be moved here.  But this is only 
+because the driver core holds the device lock the whole time while it 
+does matching and probing.  If the lock were held during probing but not 
+matching, it would then be possible for two processes to concurrently 
+bind the same driver to two gadgets.
 
->> drivers/usb/dwc3/dwc3-am62.c:567:10: error: use of undeclared identifier 'dwc3_ti_pm_ops'; did you mean 'dwc3_ti_probe'?
-                   .pm     = &dwc3_ti_pm_ops,
-                              ^~~~~~~~~~~~~~
-                              dwc3_ti_probe
-   drivers/usb/dwc3/dwc3-am62.c:379:12: note: 'dwc3_ti_probe' declared here
-   static int dwc3_ti_probe(struct platform_device *pdev)
-              ^
->> drivers/usb/dwc3/dwc3-am62.c:567:9: error: incompatible pointer types initializing 'const struct dev_pm_ops *' with an expression of type 'int (*)(struct platform_device *)' [-Werror,-Wincompatible-pointer-types]
-                   .pm     = &dwc3_ti_pm_ops,
-                             ^~~~~~~~~~~~~~~
-   2 errors generated.
+As far as I know, the driver core does not promise to hold the device 
+lock during both matching and probing, so it may not be safe to depend 
+on this behavior.  Maybe I'm wrong about this...
 
+On the other hand, it wouldn't hurt to do the is_bound check in both 
+places; it's a very cheap operation.  Thanks for the suggestion.
 
-vim +567 drivers/usb/dwc3/dwc3-am62.c
-
-   561	
-   562	static struct platform_driver dwc3_ti_driver = {
-   563		.probe		= dwc3_ti_probe,
-   564		.remove		= dwc3_ti_remove,
-   565		.driver		= {
-   566			.name	= "dwc3-am62",
- > 567			.pm	= &dwc3_ti_pm_ops,
-   568			.of_match_table = dwc3_ti_of_match,
-   569		},
-   570	};
-   571	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Alan Stern
