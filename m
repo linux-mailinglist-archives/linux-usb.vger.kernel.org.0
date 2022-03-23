@@ -2,147 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6864E5AFF
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Mar 2022 23:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5044E5B3B
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Mar 2022 23:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345087AbiCWWB7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Mar 2022 18:01:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S1344480AbiCWW0S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Mar 2022 18:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345080AbiCWWB5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Mar 2022 18:01:57 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C845B5AEE5;
-        Wed, 23 Mar 2022 15:00:26 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-d6ca46da48so3121044fac.12;
-        Wed, 23 Mar 2022 15:00:26 -0700 (PDT)
+        with ESMTP id S1345234AbiCWW0R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Mar 2022 18:26:17 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C37A8FE54
+        for <linux-usb@vger.kernel.org>; Wed, 23 Mar 2022 15:24:46 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id u3so3869107ljd.0
+        for <linux-usb@vger.kernel.org>; Wed, 23 Mar 2022 15:24:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=cCUJOW25CLr0CeLCnE62n9am59728Z8IpIAoIkTyH8w=;
-        b=BrN0/8+UKuT/c/CxI6vxUQoH8bAOu5CLLGm0B1gaXmAlXGpD5RAIYpoQiv/g/PHo0n
-         zgrW2NzOL21eJiKJMrksxsLY5cEzU8GdSIiMvX+jEo7JBJPVAJaX+cA6ixDdJ6xq1zKM
-         TK6NO1/dGDclpceuyLpigdW8hUJim1AVc1Cykc564tB6rp3wjlFprtbbYbBsdyhomcch
-         uJ+DH7iQUKJiujYBygCXWhVZozbUTzMXzFa96/0JIlqGvJZ6WisDrpGk2jy7OOcpGZXE
-         U3cm/P9/4RmHUpiA+5v0jFwbTf4Pr8RHeaVsvtZduhILkPrc4CRMBMB9eKc61WSRwoDP
-         sfJw==
+        h=date:from:to:cc:subject:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9rkG7WcnwMrwtSbSTNjbzfaDimXYJol6aLhdNQP/ujo=;
+        b=PO6sZyheQspi6iHP8hrYDsjC2Py9SoGU4VzmUt04VpS09ePjF8TfJXAnPmkpVLYYhi
+         8YDcFqTI4fTh/uDJB9wSEJIqwy0nHxzOzalVcwKSFmwJnsYwvbDFYAhnMoimqF8WMvr7
+         gU1oTX6qGI/Hc7Ys3Y8FnGqcpqYrG5ejcJXyuJv1mkdBJhKa6jPTY9poV4Q5xkRCr1N8
+         37tEhPRs2/c32susMBh6GT2Q3s2VAXhuel6mXIVexYdMQUSImKoxfYPhX/DejDIyVWHZ
+         56vsTUW3pGwPUqg4e+YegZcdyWGoRTs8yFKp/zxnC+CV0fsGfrzEDr5uTWOXO8obnKaS
+         CAfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=cCUJOW25CLr0CeLCnE62n9am59728Z8IpIAoIkTyH8w=;
-        b=wingd7PxZXTPptVSgziEAP5limmTh/KSJ8KmBaZZwskzbNPwtIuKrXuH47Q7A/nQS0
-         6Zr29LA64CoZOpytCDkMfNLo9po1a9aBd1QrlJA7zM1ufgUTbquBu/EoD5Pz/QyenGyE
-         qDYNYcJ39gG/3SBdo4HXCPSLxYpku28/ekBRzx72AkSJtE14knxVCHUHqTlgZO0cBlmK
-         SB0i2Xk//gaj9m3lgpkmeRUTECz1IBhuDV8mf1jaPYK2FKD/rbGsNrhAXx0zBGvnHOPs
-         fzVYc2vq2y+cT9VMq7TpT02wPvc2umk0g+tIPU5aFMcnYtUD1+J3NVMmYRPD6jp+w9Nk
-         L/6Q==
-X-Gm-Message-State: AOAM531ByyHBsXhMy6BidHpuBl9fIaUA6wyLPPJeAm+I2kPQ8/QErUzP
-        VPMAkeVPf0OqCNOWLZ5YCvKe5GLjfGldcvOj
-X-Google-Smtp-Source: ABdhPJxKYcohZLXbzIiEAcg3BmdYtw/mH4Ru7srghs3Ss4x/V6+R8kTndUbj/ELK42v6ZBNc50K2+w==
-X-Received: by 2002:a05:6870:42d0:b0:dd:acbd:14dc with SMTP id z16-20020a05687042d000b000ddacbd14dcmr1041713oah.87.1648072825998;
-        Wed, 23 Mar 2022 15:00:25 -0700 (PDT)
-Received: from test-HP-EliteDesk-800-G1-SFF ([70.102.108.170])
-        by smtp.gmail.com with ESMTPSA id w8-20020aca3008000000b002ef7e3ad3b8sm490262oiw.29.2022.03.23.15.00.25
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9rkG7WcnwMrwtSbSTNjbzfaDimXYJol6aLhdNQP/ujo=;
+        b=Zd+9sNVySzRmrg3HAZndT/v6vYufyLtIVP/hmheErQhNg+rTQGpkG83HtUAG7+NfjI
+         TOPKt67WwprXFAcuESdfydnqxFMCT6dPP8PPZaJZqGFRw4IMNSnwoAwEgY5/+7Yyjw10
+         g4S4HW3TH7+sBPR7K39TN3iOyC9caQMJRKIsf+SGqd12i2oVXrV1ypDJrN+OYFJqIy2P
+         IW61EFNwVlj0GgtR2Anwkv3bfcnaIRxyfFb2IP4ziuVCydJhTQlMTQcTh/vWyLxOdCiI
+         W0NAqzagnXb6sxRouSWZD8rdWRwzigkhwGWcWoZZJhm9AmPtFmlrFPgbwbx509feE1K/
+         M5Ug==
+X-Gm-Message-State: AOAM533TCN5JeiUOcOTRd63kw0cXcw6czRsuCcq+zv2SlIT2oLmYB1QP
+        k8T4r7N1//igmWRYSECliT0I71Phqk2xs8kc
+X-Google-Smtp-Source: ABdhPJxvOKqNHrrpia+4z8lz8540IIVX2zKhJ5Gpu6cZPEOECFvXXD9yuW67TnTcDte4hkqSHBVxfg==
+X-Received: by 2002:a2e:ba15:0:b0:247:d9d3:a937 with SMTP id p21-20020a2eba15000000b00247d9d3a937mr1761362lja.233.1648074284126;
+        Wed, 23 Mar 2022 15:24:44 -0700 (PDT)
+Received: from reki (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
+        by smtp.gmail.com with ESMTPSA id y17-20020a2e95d1000000b002463d2595f0sm123602ljh.135.2022.03.23.15.24.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 15:00:25 -0700 (PDT)
-Date:   Wed, 23 Mar 2022 15:00:24 -0700
-From:   Greg Jesionowski <jesionowskigreg@gmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: usb: ax88179_178a: add Allied Telesis AT-UMCs
-Message-ID: <20220323220024.GA36800@test-HP-EliteDesk-800-G1-SFF>
+        Wed, 23 Mar 2022 15:24:43 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 01:24:39 +0300
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, hminas@synopsys.com
+Subject: usb: dwc2: Problem with remote wakeup implementation
+Message-ID: <20220324012439.65ef4823@reki>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Adds the driver_info and IDs for the AX88179 based Allied Telesis AT-UMC
-family of devices.
+Hello. I'm trying to implement remote wakeup signalling for dwc2.
+The dwc3 driver in gadget mode has the ability to send a remote
+wakeup signal to the host by writing 1 to the srp file:
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Greg Jesionowski <jesionowskigreg@gmail.com>
----
- drivers/net/usb/ax88179_178a.c | 51 ++++++++++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+echo 1 > /sys/class/udc/XXX/srp
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index a31098981a65..e2fa56b92685 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1872,6 +1872,45 @@ static const struct driver_info mct_info = {
- 	.tx_fixup = ax88179_tx_fixup,
+My naive implementation was able to wake up the host on 5.10 kernel,
+but it's not working anymore on 5.15, it's just does nothing now.
+I tried to roll back all the changes in drivers/usb/dwc2 to the 5.10,
+but it didn't help.
+
+I don't have any DesignWare documentation, so I hope someone
+can help me to make it work in the right way.
+
+I will be very grateful.
+
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 3146df6e6510..c64e573af7ca 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -4683,6 +4683,52 @@ static int dwc2_hsotg_vbus_draw(struct usb_gadget *gadget, unsigned int mA)
+ 	return usb_phy_set_power(hsotg->uphy, mA);
+ }
+ 
++/**
++ * dwc2_hsotg_wakeup - send wakeup signal to the host
++ * @gadget: The usb gadget state
++ *
++ * If the gadget is in device mode and in the L1 or L2 state,
++ * it sends a wakeup signal to the host.
++ */
++static int dwc2_hsotg_wakeup(struct usb_gadget *gadget)
++{
++	struct dwc2_hsotg *hsotg = to_hsotg(gadget);
++	int ret = -1;
++	unsigned long flags;
++
++	spin_lock_irqsave(&hsotg->lock, flags);
++
++	if (!hsotg->remote_wakeup_allowed) {
++		dev_dbg(hsotg->dev,
++			"wakeup signalling skipped: is not allowed by host\n");
++		goto skip;
++	}
++	if (hsotg->lx_state != DWC2_L1 && hsotg->lx_state != DWC2_L2) {
++		dev_dbg(hsotg->dev,
++			"wakeup signalling skipped: gadget not in L1/L2 state\n");
++		goto skip;
++	}
++	if (!dwc2_is_device_mode(hsotg)) {
++		dev_dbg(hsotg->dev,
++			"wakeup signalling skipped: gadget not in device mode\n");
++		goto skip;
++	}
++
++	dev_dbg(hsotg->dev, "sending wakeup signal to the host");
++
++	dwc2_set_bit(hsotg, DCTL, DCTL_RMTWKUPSIG);
++	mdelay(10);
++	dwc2_clear_bit(hsotg, DCTL, DCTL_RMTWKUPSIG);
++
++	/* After the signalling, the USB core wakes up to L0 */
++	hsotg->lx_state = DWC2_L0;
++
++	ret = 0;
++skip:
++	spin_unlock_irqrestore(&hsotg->lock, flags);
++	return ret;
++}
++
+ static const struct usb_gadget_ops dwc2_hsotg_gadget_ops = {
+ 	.get_frame	= dwc2_hsotg_gadget_getframe,
+ 	.set_selfpowered	= dwc2_hsotg_set_selfpowered,
+@@ -4691,6 +4737,7 @@ static const struct usb_gadget_ops dwc2_hsotg_gadget_ops = {
+ 	.pullup                 = dwc2_hsotg_pullup,
+ 	.vbus_session		= dwc2_hsotg_vbus_session,
+ 	.vbus_draw		= dwc2_hsotg_vbus_draw,
++	.wakeup			= dwc2_hsotg_wakeup,
  };
  
-+static const struct driver_info at_umc2000_info = {
-+	.description = "AT-UMC2000 USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter",
-+	.bind   = ax88179_bind,
-+	.unbind = ax88179_unbind,
-+	.status = ax88179_status,
-+	.link_reset = ax88179_link_reset,
-+	.reset  = ax88179_reset,
-+	.stop   = ax88179_stop,
-+	.flags  = FLAG_ETHER | FLAG_FRAMING_AX,
-+	.rx_fixup = ax88179_rx_fixup,
-+	.tx_fixup = ax88179_tx_fixup,
-+};
-+
-+static const struct driver_info at_umc200_info = {
-+	.description = "AT-UMC200 USB 3.0/USB 3.1 Gen 1 to Fast Ethernet Adapter",
-+	.bind   = ax88179_bind,
-+	.unbind = ax88179_unbind,
-+	.status = ax88179_status,
-+	.link_reset = ax88179_link_reset,
-+	.reset  = ax88179_reset,
-+	.stop   = ax88179_stop,
-+	.flags  = FLAG_ETHER | FLAG_FRAMING_AX,
-+	.rx_fixup = ax88179_rx_fixup,
-+	.tx_fixup = ax88179_tx_fixup,
-+};
-+
-+static const struct driver_info at_umc2000sp_info = {
-+	.description = "AT-UMC2000/SP USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter",
-+	.bind   = ax88179_bind,
-+	.unbind = ax88179_unbind,
-+	.status = ax88179_status,
-+	.link_reset = ax88179_link_reset,
-+	.reset  = ax88179_reset,
-+	.stop   = ax88179_stop,
-+	.flags  = FLAG_ETHER | FLAG_FRAMING_AX,
-+	.rx_fixup = ax88179_rx_fixup,
-+	.tx_fixup = ax88179_tx_fixup,
-+};
-+
- static const struct usb_device_id products[] = {
- {
- 	/* ASIX AX88179 10/100/1000 */
-@@ -1913,6 +1952,18 @@ static const struct usb_device_id products[] = {
- 	/* Magic Control Technology U3-A9003 USB 3.0 Gigabit Ethernet Adapter */
- 	USB_DEVICE(0x0711, 0x0179),
- 	.driver_info = (unsigned long)&mct_info,
-+}, {
-+	/* Allied Telesis AT-UMC2000 USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
-+	USB_DEVICE(0x07c9, 0x000e),
-+	.driver_info = (unsigned long)&at_umc2000_info,
-+}, {
-+	/* Allied Telesis AT-UMC200 USB 3.0/USB 3.1 Gen 1 to Fast Ethernet Adapter */
-+	USB_DEVICE(0x07c9, 0x000f),
-+	.driver_info = (unsigned long)&at_umc200_info,
-+}, {
-+	/* Allied Telesis AT-UMC2000/SP USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
-+	USB_DEVICE(0x07c9, 0x0010),
-+	.driver_info = (unsigned long)&at_umc2000sp_info,
- },
- 	{ },
- };
--- 
-2.25.1
+ /**
+
 
