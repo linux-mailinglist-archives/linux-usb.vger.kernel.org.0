@@ -2,139 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360224E52DE
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Mar 2022 14:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7215A4E5444
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Mar 2022 15:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244194AbiCWNQa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Mar 2022 09:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
+        id S244287AbiCWOcm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Mar 2022 10:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238027AbiCWNQ3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Mar 2022 09:16:29 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2D36A5FF14
-        for <linux-usb@vger.kernel.org>; Wed, 23 Mar 2022 06:14:58 -0700 (PDT)
-Received: (qmail 156469 invoked by uid 1000); 23 Mar 2022 09:14:57 -0400
-Date:   Wed, 23 Mar 2022 09:14:57 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [RFC PATCH 4/4] USB: gadget: Add a new bus for gadgets
-Message-ID: <YjsdUTQsuWwYT0AX@rowland.harvard.edu>
-References: <YjeEbHL8ITkW692W@rowland.harvard.edu>
- <YjeEwspj0V3JaV1L@rowland.harvard.edu>
- <YjeFImy6hY+2MHe2@rowland.harvard.edu>
- <YjeFaCijdcfw5fdc@rowland.harvard.edu>
- <YjeFqK+ZrcHx9HZh@rowland.harvard.edu>
- <20220323065528.GA32029@hu-pkondeti-hyd.qualcomm.com>
+        with ESMTP id S237222AbiCWOcl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Mar 2022 10:32:41 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5CC7A9AE
+        for <linux-usb@vger.kernel.org>; Wed, 23 Mar 2022 07:31:07 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id qx21so3168371ejb.13
+        for <linux-usb@vger.kernel.org>; Wed, 23 Mar 2022 07:31:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=FiqNhl/cI6wxGkLb9mBZPXXy7xwymO3zqp/WgxUHXUI=;
+        b=a5D/FC4KmyFXSpkmdd1sTXSjEHekxQNVKadxhzOXj+hHwRSrg2h+vowP4B0S7FumiU
+         uWrWRF7pylwGxodIO85iyi6P+gshxkOlR1qNhxl26IIsvcCYfiO/7YDF48fcaKX6v2ic
+         qcLgfoogdgP78uaC9hTrNsOSPMDW4bL7Us4UyftSoYC1gvkH7xuC7ESaMHWypZrS9wYP
+         nUHfCZb/NSHBbx1UCIzsjITS8UOBXgtYOLsSLWnwpoCz5ICRy8Js6qwwzmcJ9NJjzHIS
+         GzTwJATBfnl2VxKEra7WUB+2TbCAuTFO1zGdJUhkYrtHFfNOIbZVqhYXZ8Z+z5nXliK0
+         SP2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=FiqNhl/cI6wxGkLb9mBZPXXy7xwymO3zqp/WgxUHXUI=;
+        b=qlVHMEa2F26D7AcAautt6449evzPqhBBPjdyIk4oJFJIt7NNDp9H/WwXF3yiic4eMh
+         jNxMSMR1O/PUZf1Ie9rFmyiwYpH9vg2x3oNMg8MVhMaxtqY4A/nnXlsiJOcGlIPr9tId
+         qa635whVGMyFM1JtKpxTJjNF8OOxScuX4avc0HTZ6jnUMG2RVBV2e3DRMuRf9Cr+hxqc
+         ZO8i4Bab2y6C62vaRYQ7QuXz/K1e6EuXSnobHqf5kF9kqjjRG4+0zZSEo9xajdvImPhW
+         n+IXQoiGvyHkMesQd4kStOYOrUhrX/9uPRzHvRVMOu5hK7CrXm/6WtJ9FQ5EGSq3Ubm9
+         V8Nw==
+X-Gm-Message-State: AOAM5308aL3Wm+ZiysrLG44MnWHDYQHUuYgvRyA5AMhNP+CcepsJmQem
+        I0xvt/2OTKZwueq3SkO4vNXSRc1pYTj9svVjBwgP1g==
+X-Google-Smtp-Source: ABdhPJy1TIxmXzRn8TzJosm68MZqp3sSSwaNsLtM+mQ429elw5eHsHlHcEP7KzVHxyENGWkFIPzISdjoV99gVJsqu/o=
+X-Received: by 2002:a17:906:3014:b0:6da:f381:4dfe with SMTP id
+ 20-20020a170906301400b006daf3814dfemr230517ejz.670.1648045865895; Wed, 23 Mar
+ 2022 07:31:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220323065528.GA32029@hu-pkondeti-hyd.qualcomm.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220323101818.3503-1-rajat.khandelwal@intel.com> <CO1PR11MB48357FE72D34818360D2105E96189@CO1PR11MB4835.namprd11.prod.outlook.com>
+In-Reply-To: <CO1PR11MB48357FE72D34818360D2105E96189@CO1PR11MB4835.namprd11.prod.outlook.com>
+From:   Benson Leung <bleung@google.com>
+Date:   Wed, 23 Mar 2022 07:30:54 -0700
+Message-ID: <CANLzEkvGHCwsOu_KfFgDkkYypvW-QQ-_egcVycrSo2WfaToamQ@mail.gmail.com>
+Subject: Re: [PATCH] USB4/TBT device routers should wake up during S0ix when
+ something gets connected/disconnected or a DP monitor gets plugged in
+To:     "Khandelwal, Rajat" <rajat.khandelwal@intel.com>
+Cc:     "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "Malani, Prashant" <pmalani@google.com>,
+        "jthies@google.com" <jthies@google.com>,
+        "Rao, Abhijeet" <abhijeet.rao@intel.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Westerberg, Mika" <mika.westerberg@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 12:25:28PM +0530, Pavan Kondeti wrote:
-> Hi Alan,
-> 
-> On Sun, Mar 20, 2022 at 03:51:04PM -0400, Alan Stern wrote:
-> > This patch adds a "gadget" bus and uses it for registering gadgets and
-> > their drivers.  From now on, bindings will be managed by the driver
-> > core rather than through ad-hoc manipulations in the UDC core.
-> > 
-> > As part of this change, the driver_pending_list is removed.  The UDC
-> > core won't need to keep track of unbound drivers for later binding,
-> > because the driver core handles all of that for us.
-> > 
-> > However, we do need one new feature: a way to prevent gadget drivers
-> > from being bound to more than one gadget at a time.  The existing code
-> > does this automatically, but the driver core doesn't -- it's perfectly
-> > happy to bind a single driver to all the matching devices on the bus.
-> > The patch adds a new bitflag to the usb_gadget_driver structure for
-> > this purpose.
-> > 
-> > A nice side effect of this change is a reduction in the total lines of
-> > code, since now the driver core will do part of the work that the UDC
-> > used to do.
-> > 
-> > A possible future patch could add udc devices to the gadget bus, say
-> > as a separate device type.
-> 
-> Can you please elaborate on this? This UDC device will be added to gadget bus
-> but not bound to any driver, correct?
+Hi Rajat,
 
-The UDC/gadget subsystem is designed a little strangely.  For each UDC 
-hardware device, the UDC core creates _two_ software representations: a 
-struct usb_udc and a struct usb_gadget.  Both of these contain an 
-embedded struct device, so the physical UDC hardware corresponds to two 
-software "devices".
+On Wed, Mar 23, 2022 at 3:26 AM Khandelwal, Rajat
+<rajat.khandelwal@intel.com> wrote:
+>
+> +Mika
+> @Malani, Prashant @bleung@google.com This is the patch which fixes the pa=
+rtner issue. Kindly escalate your thoughts.
+>
+> Thanks
+> Rajat
+>
+> -----Original Message-----
+> From: Khandelwal, Rajat <rajat.khandelwal@intel.com>
+> Sent: Wednesday, March 23, 2022 3:48 PM
+> To: mika.westerberg@linux.intel.com
+> Cc: Khandelwal, Rajat <rajat.khandelwal@intel.com>; bleung@google.com; jt=
+hies@google.com; Malani, Prashant <pmalani@google.com>; Rao, Abhijeet <abhi=
+jeet.rao@intel.com>; Regupathy, Rajaram <rajaram.regupathy@intel.com>; linu=
+x-usb@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: [PATCH] USB4/TBT device routers should wake up during S0ix when =
+something gets connected/disconnected or a DP monitor gets plugged in
+>
+> Device routers don't wake up during S0ix when something is plugged in/out=
+ or if a DP monitor gets connected. This causes the linux device to not wak=
+e up during S0ix cycling as the host router didn't wake up because the devi=
+ce router didn't. This patch adds a new functionality to linux.
+>
+> Signed-off-by: Rajat-Khandelwal <rajat.khandelwal@intel.com>
+> ---
+>  drivers/thunderbolt/switch.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c =
+index d026e305fe5d..4f8056724aa4 100644
+> --- a/drivers/thunderbolt/switch.c
+> +++ b/drivers/thunderbolt/switch.c
+> @@ -3067,13 +3067,11 @@ void tb_switch_suspend(struct tb_switch *sw, bool=
+ runtime)
+>                         tb_switch_suspend(port->remote->sw, runtime);
+>         }
+>
+> -       if (runtime) {
+> +       if (runtime || device_may_wakeup(&sw->dev)) {
+>                 /* Trigger wake when something is plugged in/out */
+>                 flags |=3D TB_WAKE_ON_CONNECT | TB_WAKE_ON_DISCONNECT;
+>                 flags |=3D TB_WAKE_ON_USB4;
+>                 flags |=3D TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE | TB_WAKE_ON=
+_DP;
+> -       } else if (device_may_wakeup(&sw->dev)) {
+> -               flags |=3D TB_WAKE_ON_USB4 | TB_WAKE_ON_USB3 | TB_WAKE_ON=
+_PCIE;
+>         }
+>
+>         tb_switch_set_wake(sw, flags);
+> --
+> 2.17.1
+>
 
-Currently neither of these devices gets registered on any bus.  There is 
-a driver associated with the usb_gadget device, but not in the usual way 
-(that is, it doesn't use the normal driver-core binding mechanism).
 
-My patch keeps both of these device structures, but it registers the 
-usb_gadget device on the new gadget bus and uses the driver core to do 
-normal binding.  The usb_udc device still is not registered on any bus 
-and does not have a driver.
+Can you please help double check your email configuration for sending
+patches and responses to the mailing list?
+I've checked the linux-usb mailing list archives and they don't
+capture your original patch email or your forward.
+https://marc.info/?l=3Dlinux-usb&r=3D1&b=3D202203&w=3D2
 
-> > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> > 
-> > ---
-> > 
-> >  drivers/usb/gadget/udc/core.c |  248 +++++++++++++++++++-----------------------
-> >  include/linux/usb/gadget.h    |   26 ++--
-> >  2 files changed, 135 insertions(+), 139 deletions(-)
-> > 
-> 
-> <snip>
-> 
-> >  
-> >  /* ------------------------------------------------------------------------- */
-> >  
-> > -static int udc_bind_to_driver(struct usb_udc *udc, struct usb_gadget_driver *driver)
-> > +static int gadget_match_driver(struct device *dev, struct device_driver *drv)
-> >  {
-> > -	int ret;
-> > +	struct usb_gadget *gadget = dev_to_usb_gadget(dev);
-> > +	struct usb_udc *udc = gadget->udc;
-> > +	struct usb_gadget_driver *driver = container_of(drv,
-> > +			struct usb_gadget_driver, driver);
-> >  
-> > -	dev_dbg(&udc->dev, "registering UDC driver [%s]\n",
-> > -			driver->function);
-> > +	/* If the driver specifies a udc_name, it must match the UDC's name */
-> > +	if (driver->udc_name &&
-> > +			strcmp(driver->udc_name, dev_name(&udc->dev)) != 0)
-> > +		return 0;
-> >  
-> > +	/* Otherwise any gadget driver matches any UDC */
-> > +	return 1;
-> > +}
-> > +
-> 
-> Would it be better if we add the driver->is_bound check here so that probe is
-> not invoked? your patch checks it later at the probe.
+I did find Mika's response to your forward, though.
 
-Yes, you're right; the check could be moved here.  But this is only 
-because the driver core holds the device lock the whole time while it 
-does matching and probing.  If the lock were held during probing but not 
-matching, it would then be possible for two processes to concurrently 
-bind the same driver to two gadgets.
+Let's get this figured out so that folks can have an easier time
+applying your patches for evaluation with b4 or
+similar tools.
 
-As far as I know, the driver core does not promise to hold the device 
-lock during both matching and probing, so it may not be safe to depend 
-on this behavior.  Maybe I'm wrong about this...
+Thanks,
 
-On the other hand, it wouldn't hurt to do the is_bound check in both 
-places; it's a very cheap operation.  Thanks for the suggestion.
+Benson
 
-Alan Stern
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
