@@ -2,236 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F5B4E65E9
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 16:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1384E65EF
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 16:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241927AbiCXPTr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Mar 2022 11:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45224 "EHLO
+        id S243410AbiCXPX3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Mar 2022 11:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236651AbiCXPTq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 11:19:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55ED5E74D
-        for <linux-usb@vger.kernel.org>; Thu, 24 Mar 2022 08:18:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89264617B4
-        for <linux-usb@vger.kernel.org>; Thu, 24 Mar 2022 15:18:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E6807C340F3
-        for <linux-usb@vger.kernel.org>; Thu, 24 Mar 2022 15:18:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648135092;
-        bh=wFdDi2YbweqP31Kix5fwzIo252s01+Mxo1JuuSPQ4fs=;
-        h=From:To:Subject:Date:From;
-        b=AoFg1l5t+pLUAWWT9B5HnQddo9NI38C43WxtBKsnEjm9h5VSkMkK4JONtM/Nw5Av4
-         SGnzkNjlOar7qDeImoHdsee2HsmtlUjfdC4rl8fsD/LOWMU4LaYj1b3eyjYr1zHlCp
-         LZKWTVAuN/5DufXoDp9QgiwTrEZ1Lt+v2vq3hrYi+KZZoZBKKk8d9L4/m9s4khjnQm
-         Ew6wuTIIEgUGEEEkbvsX7/HNk/WX+FMgxbd+D2P/afFjFfq7XKCgc/u9CcdpJlVFkP
-         0RVdDgb5WBfgHddEJpGLCyv7LQCTWM+qk70OTfNT2vwddyB/79TGOgDcAiLDdd4tWS
-         6XwqB4y1TE75g==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id D3F3FC05FD6; Thu, 24 Mar 2022 15:18:12 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215740] New: kernel warning: DMA-API: xhci_hcd: cacheline
- tracking EEXIST, overlapping mappings aren't supported
-Date:   Thu, 24 Mar 2022 15:18:12 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: travneff@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression attachments.created
-Message-ID: <bug-215740-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S243075AbiCXPX2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 11:23:28 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 20DBBAA01A
+        for <linux-usb@vger.kernel.org>; Thu, 24 Mar 2022 08:21:55 -0700 (PDT)
+Received: (qmail 210380 invoked by uid 1000); 24 Mar 2022 11:21:54 -0400
+Date:   Thu, 24 Mar 2022 11:21:54 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Petr Janecek <janecek@ucw.cz>
+Cc:     alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
+Subject: Re: Apogee ONEv2 keeps resetting
+Message-ID: <YjyMkqk4zZWPJ6T0@rowland.harvard.edu>
+References: <3f4d1bce-7459-9ea4-be73-9b51f569e526@ucw.cz>
+ <YjoPVAxeKtY6aV1s@rowland.harvard.edu>
+ <63b772ff-ef03-5f0a-c42c-ad9ec9770f16@ucw.cz>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63b772ff-ef03-5f0a-c42c-ad9ec9770f16@ucw.cz>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215740
+On Thu, Mar 24, 2022 at 03:44:41AM +0100, Petr Janecek wrote:
+> Hi Alan,
+> 
+> On 3/22/22 19:03, Alan Stern wrote:
+> > On Sun, Mar 20, 2022 at 02:15:40AM +0100, Petr Janecek wrote:
+> > > Hi,
+> > >     I'm trying to use Apogee ONEv2.  From usb dumps under
+> > > macos or windows it seems like a usb Class Audio 2.0
+> > > device, but in linux, it keeps resetting every two seconds
+> > > or so.  It keeps resetting even when the snd-usb-audio
+> > > driver is disabled, so the problem is probably at a lower
+> > > level.
+> > 
+> > Can you post the log output on a system where snd-usb-audio is disabled?
+> 
+> [ 3412.279063] usb 3-8: new high-speed USB device number 6 using xhci_hcd
+> [ 3412.470003] usb 3-8: New USB device found, idVendor=0c60, idProduct=0017,
+> bcdDevice= 1.05
+> [ 3412.470017] usb 3-8: New USB device strings: Mfr=1, Product=2,
+> SerialNumber=3
+> [ 3412.470023] usb 3-8: Product: ONEv2
+> [ 3412.470028] usb 3-8: Manufacturer: Apogee
+> [ 3412.470033] usb 3-8: SerialNumber: 0C12FF2020204652334D513A7A2A9B
+> [ 3413.217053] usb 3-8: USB disconnect, device number 6
+> [ 3413.629046] usb 3-8: new high-speed USB device number 7 using xhci_hcd
+> [ 3413.829760] usb 3-8: New USB device found, idVendor=0c60, idProduct=0017,
+> bcdDevice= 1.05
+> [ 3413.829766] usb 3-8: New USB device strings: Mfr=1, Product=2,
+> SerialNumber=3
+> [ 3413.829768] usb 3-8: Product: ONEv2
+> [ 3413.829770] usb 3-8: Manufacturer: Apogee
+> [ 3413.829772] usb 3-8: SerialNumber: 0C12FF2020204652334D513A7A2A9B
+> [ 3414.421964] usb 3-8: USB disconnect, device number 7
+> [ 3414.838981] usb 3-8: new high-speed USB device number 8 using xhci_hcd
+> [ 3415.029947] usb 3-8: New USB device found, idVendor=0c60, idProduct=0017,
+> bcdDevice= 1.05
+> [ 3415.029961] usb 3-8: New USB device strings: Mfr=1, Product=2,
+> SerialNumber=3
+> [ 3415.029968] usb 3-8: Product: ONEv2
+> [ 3415.029973] usb 3-8: Manufacturer: Apogee
+> [ 3415.029978] usb 3-8: SerialNumber: 0C12FF2020204652334D513A7A2A9B
+> [ 3415.627052] usb 3-8: USB disconnect, device number 8
 
-            Bug ID: 215740
-           Summary: kernel warning: DMA-API: xhci_hcd: cacheline tracking
-                    EEXIST, overlapping mappings aren't supported
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.17
-          Hardware: All
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: travneff@gmail.com
-        Regression: No
+Nothing particularly suspicious there.
 
-Created attachment 300612
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D300612&action=3Dedit
-full dmesg log with the warning
+> 
+> > >    The messages below are from v5.16.16, but it behaves
+> > > the same no matter what I plug it into.
+> > > 
+> > > [  253.708616] usb 3-8: new high-speed USB device number 6 using xhci_hcd
+> > > [  253.899363] usb 3-8: New USB device found, idVendor=0c60, idProduct=0017,
+> > > bcdDevice= 1.05
+> > > [  253.899370] usb 3-8: New USB device strings: Mfr=1, Product=2,
+> > > SerialNumber=3
+> > > [  253.899373] usb 3-8: Product: ONEv2
+> > > [  253.899375] usb 3-8: Manufacturer: Apogee
+> > > [  253.899377] usb 3-8: SerialNumber: 0C12FF2020204652334D513A7A2A9B
+> > > [  253.960901] mc: Linux media interface: v0.10
+> > 
+> > Any idea where that line came from?
+> 
+>   That's from CONFIG_MEDIA_CONTROLLER, which is selected for usb
+> webcam.  It also selects CONFIG_SND_USB_AUDIO_USE_MEDIA_CONTROLLER.
+> Compiled it out, rebooted.  Now the line is missing, but no other
+> change.
+> 
+> > You should try capturing a usbmon trace showing what happens when the
+> > device is plugged in and then resets.  Preferably on a system where
+> > snd-usb-audio is disabled.
+> 
+>   Trace from wireshark is attached.
 
-I have this kernel trace often while PC booting:
+The trace doesn't help much, unfortunately.  It shows normal device 
+initialization, plus a couple of extra string descriptor reads.  About 
+1/2 second afterward, the device disconnects itself electronically from 
+the USB bus and reconnects 20 ms later.
 
-    DMA-API: xhci_hcd 0000:09:00.3: cacheline tracking EEXIST, overlapping
-mappings aren't supported
-    WARNING: CPU: 4 PID: 69 at kernel/dma/debug.c:570 add_dma_entry+0x1c7/0=
-x250
-    Modules linked in: bpf_preload
-    CPU: 4 PID: 69 Comm: kworker/4:1 Not tainted 5.17.0 #1
-    Hardware name: ASUS System Product Name/TUF GAMING B550M-PLUS, BIOS 2423
-08/10/2021
-    Workqueue: usb_hub_wq hub_event
-    RIP: 0010:add_dma_entry+0x1c7/0x250
-    Code: ff 0f 84 97 00 00 00 48 8b 5f 50 48 85 db 75 03 48 8b 1f e8 4b 53=
- 80
-00 48 89 c6 48 89 da 48 c7 c7 58 b3 84 94 e8 27 21 ca 00 <0f> 0b 48 85 ed 0=
-f 85
-69 d2 ca 00 8b 05 88 a0 30 02 85 c0 0f 85 f4
-    RSP: 0018:ffff9cadc0c9ba88 EFLAGS: 00010292
-    RAX: 0000000000000060 RBX: ffff9173d2c49ea0 RCX: 0000000000000000
-    RDX: 0000000000000001 RSI: 00000000ffffdfff RDI: 00000000ffffffff
-    RBP: ffff9173d11a5e80 R08: 0000000000000000 R09: ffff9cadc0c9b8c0
-    R10: ffff9cadc0c9b8b8 R11: ffffffff95165128 R12: 0000000000000000
-    R13: 0000000000000001 R14: 0000000000000206 R15: 00000000046882ee
-    FS:  0000000000000000(0000) GS:ffff9182a8200000(0000)
-knlGS:0000000000000000
-    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-    CR2: 00007fce5d52a130 CR3: 0000000119b28000 CR4: 0000000000350ee0
-    Call Trace:
-    <TASK>
-    dma_map_page_attrs+0x82/0x250
-    ? _raw_spin_unlock_irqrestore+0x30/0x60
-    usb_hcd_map_urb_for_dma+0x3eb/0x4f0
-    usb_hcd_submit_urb+0x9b/0xb90
-    ? lockdep_init_map_type+0x62/0x260
-    usb_start_wait_urb+0x55/0x130
-    usb_control_msg+0xc9/0x110
-    hub_ext_port_status+0x89/0x110
-    hub_event+0x1e4/0x1920
-    ? lock_acquire+0xe0/0x2d0
-    ? lock_is_held_type+0xea/0x140
-    process_one_work+0x29b/0x5f0
-    worker_thread+0x4f/0x390
-    ? process_one_work+0x5f0/0x5f0
-    kthread+0xf5/0x120
-    ? kthread_complete_and_exit+0x20/0x20
-    ret_from_fork+0x22/0x30
-    </TASK>
+I get the feeling that the device expects to receive some specific 
+messages from the host within that one-half second, and disconnects if 
+it doesn't see them.  And presumably it doesn't get what it's looking 
+for even when the USB sound drivers are enabled.
 
-My usb devices:
+Although I doubt it will show anything helpful, you might try collecting 
+a usbmon trace with the sound drivers enabled.  Perhaps it will suggest 
+something to the USB audio developers.
 
-$ lsusb -t
-    /:  Bus 04.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/4p, 10000M
-        |__ Port 4: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p, 5000M
-            |__ Port 4: Dev 3, If 0, Class=3DHub, Driver=3Dhub/4p, 5000M
-                |__ Port 2: Dev 4, If 0, Class=3DMass Storage, Driver=3Duas=
-, 5000M
-                |__ Port 4: Dev 5, If 0, Class=3DHub, Driver=3Dhub/4p, 5000M
-                    |__ Port 4: Dev 6, If 0, Class=3DHub, Driver=3Dhub/4p, =
-5000M
-    /:  Bus 03.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/4p, 480M
-        |__ Port 2: Dev 2, If 3, Class=3DApplication Specific Interface, Dr=
-iver=3D,
-12M
-        |__ Port 2: Dev 2, If 1, Class=3DVendor Specific Class, Driver=3Dbt=
-usb, 12M
-        |__ Port 2: Dev 2, If 2, Class=3DVendor Specific Class, Driver=3Dbt=
-usb, 12M
-        |__ Port 2: Dev 2, If 0, Class=3DVendor Specific Class, Driver=3Dbt=
-usb, 12M
-        |__ Port 4: Dev 3, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
-            |__ Port 1: Dev 12, If 0, Class=3DCommunications, Driver=3Dcdc_=
-ether,
-480M
-            |__ Port 1: Dev 12, If 1, Class=3DCDC Data, Driver=3Dcdc_ether,=
- 480M
-            |__ Port 4: Dev 4, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
-                |__ Port 4: Dev 5, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
-                    |__ Port 3: Dev 6, If 1, Class=3DHuman Interface Device,
-Driver=3Dusbhid, 1.5M
-                    |__ Port 3: Dev 6, If 0, Class=3DHuman Interface Device,
-Driver=3Dusbhid, 1.5M
-                    |__ Port 4: Dev 7, If 0, Class=3DHub, Driver=3Dhub/4p, =
-480M
-                        |__ Port 2: Dev 8, If 0, Class=3DHuman Interface De=
-vice,
-Driver=3Dusbfs, 1.5M
-                        |__ Port 3: Dev 9, If 0, Class=3DVendor Specific Cl=
-ass,
-Driver=3D, 480M
-                        |__ Port 4: Dev 10, If 0, Class=3DImaging, Driver=
-=3D, 480M
-    /:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/4p, 10000M
-    /:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/10p, 480M
-        |__ Port 6: Dev 2, If 2, Class=3DHuman Interface Device, Driver=3Du=
-sbhid,
-12M
-        |__ Port 6: Dev 2, If 0, Class=3DVendor Specific Class, Driver=3D, =
-12M
-        |__ Port 7: Dev 3, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
+> > One other thing you might try: Disable runtime PM for USB ("echo -1
+> > > /sys/module/usbcore/parameters/autosuspend" before plugging in the
+> > device).
+> 
+>   Makes no difference -- almost: after few resets it once took much
+> longer (>10x) to reconnect.
 
-$ lsusb
-    Bus 004 Device 006: ID 2109:0812 VIA Labs, Inc. VL812 Hub
-    Bus 004 Device 005: ID 2109:0812 VIA Labs, Inc. VL812 Hub
-    Bus 004 Device 004: ID 0578:0578 Intrinsix Corp. KingSpec
-    Bus 004 Device 003: ID 2109:0812 VIA Labs, Inc. VL812 Hub
-    Bus 004 Device 002: ID 2109:0812 VIA Labs, Inc. VL812 Hub
-    Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-    Bus 003 Device 010: ID 1004:633e LG Electronics, Inc. LM-X420xxx/G2/G3
-Android Phone (MTP/download mode)
-    Bus 003 Device 009: ID 0bda:8812 Realtek Semiconductor Corp. RTL8812AU
-802.11a/b/g/n/ac 2T2R DB WLAN Adapter
-    Bus 003 Device 008: ID 0463:ffff MGE UPS Systems UPS
-    Bus 003 Device 007: ID 2109:2812 VIA Labs, Inc. VL812 Hub
-    Bus 003 Device 006: ID 046d:c30e Logitech, Inc. UltraX Keyboard (Y-BL49)
-    Bus 003 Device 005: ID 2109:2812 VIA Labs, Inc. VL812 Hub
-    Bus 003 Device 004: ID 2109:2812 VIA Labs, Inc. VL812 Hub
-    Bus 003 Device 012: ID 0525:a4a2 Netchip Technology, Inc. Linux-USB
-Ethernet/RNDIS Gadget
-    Bus 003 Device 003: ID 2109:2812 VIA Labs, Inc. VL812 Hub
-    Bus 003 Device 002: ID 0b05:17cb ASUSTek Computer, Inc. Broadcom BCM207=
-02A0
-Bluetooth
-    Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-    Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-    Bus 001 Device 003: ID 05e3:0610 Genesys Logic, Inc. Hub
-    Bus 001 Device 002: ID 0b05:1939 ASUSTek Computer, Inc. AURA LED Contro=
-ller
-    Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Oh well, it was worth a try.  Some devices don't like runtime suspend.  
+But obviously that isn't the problem here.
 
-Kernel is built from
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-at v5.17 tag (f443e374ae131c168a065ea1748feac6b2e76613)
-
-Also reproduces for my distro kernel:
-https://bugzilla.redhat.com/show_bug.cgi?id=3D2021242
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Alan Stern
