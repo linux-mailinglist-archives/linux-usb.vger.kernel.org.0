@@ -2,48 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770994E6757
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 17:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A904E6854
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 19:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352065AbiCXQ41 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Mar 2022 12:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
+        id S1352479AbiCXSFS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Mar 2022 14:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352106AbiCXQ4F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 12:56:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670B998F5A;
-        Thu, 24 Mar 2022 09:53:32 -0700 (PDT)
+        with ESMTP id S236126AbiCXSFR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 14:05:17 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39247B6D1C;
+        Thu, 24 Mar 2022 11:03:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57384B824A6;
-        Thu, 24 Mar 2022 16:53:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D9C1C340EC;
-        Thu, 24 Mar 2022 16:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648140810;
-        bh=RScfqBuaHBvINh3Oshl5Oe9QzFycEgDhFH1156Kqxtw=;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8CE82CE25B1;
+        Thu, 24 Mar 2022 18:03:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA14C340F0;
+        Thu, 24 Mar 2022 18:03:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648145021;
+        bh=t4qj3yzjpmPxrk9bbLyU8usx0IFZLTWW+/9wIEcE8T0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zCJjsK4CfPhNrswjvgITtlBe/SyLu6cstafWsWugsHVr4b2j+Jz96U4V3lyp/8/2r
-         dpzIEKUwgXX3sRDX/3Z/IrJUiDD/gfeBfP+T1GAyvijHINXuf2emShERIiYDDSq4mg
-         W55rAAJ/0iGEqrXGwsgm+jF4Qtavlk2hPns4yuAg=
-Date:   Thu, 24 Mar 2022 17:53:27 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dan Vacura <w36195@motorola.com>
-Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@st.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: uvc: Fix crash when encoding data for
- usb request
-Message-ID: <YjyiB6IlfbMSGKZ2@kroah.com>
-References: <20220318164706.22365-1-w36195@motorola.com>
+        b=RyuBJrVfvGAO3I+jdGpD3wWjzHZ5BPFyIqWkxNU+ZGEMVRx7okKrAVg0PHdIgXy4E
+         j4cvG8KokWZHeHXK0v8HaHHhcoisqdch4CPoA+WYVrKKai6xags4j49GUPqZZ6xnEB
+         vX/rIS8hBuibENDX1LmjivHy2I6Qh8ZIvogvzXRALHN4kltJcr6V23dr2ZqJgOU6mP
+         TD93ffV9fwme715cdPhGHRTErYTO3HZf9IkAexYWpInnigQvrxwRqgDcZRUpt8BBf8
+         0zasG5ShtBezkzkb66iOesP0vxz0bNxkuOcwbWqujbYehvDg4uxsOffNUk+FMD/dgV
+         IsMlJ1z61ezEw==
+Date:   Thu, 24 Mar 2022 20:03:37 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eli Cohen <eli@mellanox.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
+        Joachim Fritschi <jfritschi@freenet.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org
+Subject: Re: [PATCH 3/9] net: mlx5: eliminate anonymous module_init &
+ module_exit
+Message-ID: <YjyyeUEAo+1Kob5v@unreal>
+References: <20220316192010.19001-1-rdunlap@infradead.org>
+ <20220316192010.19001-4-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220318164706.22365-1-w36195@motorola.com>
+In-Reply-To: <20220316192010.19001-4-rdunlap@infradead.org>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,48 +96,38 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 11:47:06AM -0500, Dan Vacura wrote:
-> During the uvcg_video_pump() process, if an error occurs and
-> uvcg_queue_cancel() is called, the buffer queue will be cleared out, but
-> the current marker (queue->buf_used) of the active buffer (no longer
-> active) is not reset. On the next iteration of uvcg_video_pump() the
-> stale buf_used count will be used and the logic of min((unsigned
-> int)len, buf->bytesused - queue->buf_used) may incorrectly calculate a
-> nbytes size, causing an invalid memory access.
+On Wed, Mar 16, 2022 at 12:20:04PM -0700, Randy Dunlap wrote:
+> Eliminate anonymous module_init() and module_exit(), which can lead to
+> confusion or ambiguity when reading System.map, crashes/oops/bugs,
+> or an initcall_debug log.
 > 
-> [80802.185460][  T315] configfs-gadget gadget: uvc: VS request completed
-> with status -18.
-> [80802.185519][  T315] configfs-gadget gadget: uvc: VS request completed
-> with status -18.
-> ...
-> uvcg_queue_cancel() is called and the queue is cleared out, but the
-> marker queue->buf_used is not reset.
-> ...
-> [80802.262328][ T8682] Unable to handle kernel paging request at virtual
-> address ffffffc03af9f000
-> ...
-> ...
-> [80802.263138][ T8682] Call trace:
-> [80802.263146][ T8682]  __memcpy+0x12c/0x180
-> [80802.263155][ T8682]  uvcg_video_pump+0xcc/0x1e0
-> [80802.263165][ T8682]  process_one_work+0x2cc/0x568
-> [80802.263173][ T8682]  worker_thread+0x28c/0x518
-> [80802.263181][ T8682]  kthread+0x160/0x170
-> [80802.263188][ T8682]  ret_from_fork+0x10/0x18
-> [80802.263198][ T8682] Code: a8c12829 a88130cb a8c130
+> Give each of these init and exit functions unique driver-specific
+> names to eliminate the anonymous names.
 > 
-> Fixes: d692522577c0 ("usb: gadget/uvc: Port UVC webcam gadget to use videobuf2 framework")
-> Signed-off-by: Dan Vacura <w36195@motorola.com>
+> Example 1: (System.map)
+>  ffffffff832fc78c t init
+>  ffffffff832fc79e t init
+>  ffffffff832fc8f8 t init
 > 
+> Example 2: (initcall_debug log)
+>  calling  init+0x0/0x12 @ 1
+>  initcall init+0x0/0x12 returned 0 after 15 usecs
+>  calling  init+0x0/0x60 @ 1
+>  initcall init+0x0/0x60 returned 0 after 2 usecs
+>  calling  init+0x0/0x9a @ 1
+>  initcall init+0x0/0x9a returned 0 after 74 usecs
+> 
+> Fixes: e126ba97dba9 ("mlx5: Add driver for Mellanox Connect-IB adapters")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Eli Cohen <eli@mellanox.com>
+> Cc: Saeed Mahameed <saeedm@nvidia.com>
+> Cc: netdev@vger.kernel.org
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: linux-rdma@vger.kernel.org
 > ---
-> Changes in v2:
-> - Add Fixes tag
+>  drivers/net/ethernet/mellanox/mlx5/core/main.c |    8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
 
-<formletter>
-
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
-
-</formletter>
+Thanks,
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
