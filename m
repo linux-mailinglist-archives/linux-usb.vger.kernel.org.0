@@ -2,32 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1384E65EF
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 16:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A75C4E65F2
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 16:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243410AbiCXPX3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Mar 2022 11:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S1350724AbiCXP1v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Mar 2022 11:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243075AbiCXPX2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 11:23:28 -0400
+        with ESMTP id S233148AbiCXP1u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 11:27:50 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 20DBBAA01A
-        for <linux-usb@vger.kernel.org>; Thu, 24 Mar 2022 08:21:55 -0700 (PDT)
-Received: (qmail 210380 invoked by uid 1000); 24 Mar 2022 11:21:54 -0400
-Date:   Thu, 24 Mar 2022 11:21:54 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6FC39A9974
+        for <linux-usb@vger.kernel.org>; Thu, 24 Mar 2022 08:26:18 -0700 (PDT)
+Received: (qmail 210494 invoked by uid 1000); 24 Mar 2022 11:26:17 -0400
+Date:   Thu, 24 Mar 2022 11:26:17 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Petr Janecek <janecek@ucw.cz>
-Cc:     alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
-Subject: Re: Apogee ONEv2 keeps resetting
-Message-ID: <YjyMkqk4zZWPJ6T0@rowland.harvard.edu>
-References: <3f4d1bce-7459-9ea4-be73-9b51f569e526@ucw.cz>
- <YjoPVAxeKtY6aV1s@rowland.harvard.edu>
- <63b772ff-ef03-5f0a-c42c-ad9ec9770f16@ucw.cz>
+To:     WeitaoWangoc <WeitaoWang-oc@zhaoxin.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tonywwang@zhaoxin.com,
+        weitaowang@zhaoxin.com, CobeChen@zhaoxin.com
+Subject: Re: [PATCH v2] USB:Fix ehci infinite suspend-resume loop issue in
+ zhaoxin
+Message-ID: <YjyNmSEks8oVOyao@rowland.harvard.edu>
+References: <20220324121735.3803-1-WeitaoWang-oc@zhaoxin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <63b772ff-ef03-5f0a-c42c-ad9ec9770f16@ucw.cz>
+In-Reply-To: <20220324121735.3803-1-WeitaoWang-oc@zhaoxin.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
@@ -37,100 +38,105 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 03:44:41AM +0100, Petr Janecek wrote:
-> Hi Alan,
+On Thu, Mar 24, 2022 at 08:17:35PM +0800, WeitaoWangoc wrote:
+> In zhaoxin platform, some ehci projects will latch a wakeup signal
+> internal when plug in a device on port during system S0. This wakeup
+> signal will turn on when ehci runtime suspend, which will trigger a
+> system control interrupt that will resume ehci back to D0. As no
+> device connect, ehci will be set to runtime suspend and turn on the
+> internal latched wakeup signal again. It will cause a suspend-resume
+> loop and generate system control interrupt continuously.
 > 
-> On 3/22/22 19:03, Alan Stern wrote:
-> > On Sun, Mar 20, 2022 at 02:15:40AM +0100, Petr Janecek wrote:
-> > > Hi,
-> > >     I'm trying to use Apogee ONEv2.  From usb dumps under
-> > > macos or windows it seems like a usb Class Audio 2.0
-> > > device, but in linux, it keeps resetting every two seconds
-> > > or so.  It keeps resetting even when the snd-usb-audio
-> > > driver is disabled, so the problem is probably at a lower
-> > > level.
-> > 
-> > Can you post the log output on a system where snd-usb-audio is disabled?
+> Fixed this issue by clear wakeup signal latched in ehci internal when
+> ehci resume callback is called.
 > 
-> [ 3412.279063] usb 3-8: new high-speed USB device number 6 using xhci_hcd
-> [ 3412.470003] usb 3-8: New USB device found, idVendor=0c60, idProduct=0017,
-> bcdDevice= 1.05
-> [ 3412.470017] usb 3-8: New USB device strings: Mfr=1, Product=2,
-> SerialNumber=3
-> [ 3412.470023] usb 3-8: Product: ONEv2
-> [ 3412.470028] usb 3-8: Manufacturer: Apogee
-> [ 3412.470033] usb 3-8: SerialNumber: 0C12FF2020204652334D513A7A2A9B
-> [ 3413.217053] usb 3-8: USB disconnect, device number 6
-> [ 3413.629046] usb 3-8: new high-speed USB device number 7 using xhci_hcd
-> [ 3413.829760] usb 3-8: New USB device found, idVendor=0c60, idProduct=0017,
-> bcdDevice= 1.05
-> [ 3413.829766] usb 3-8: New USB device strings: Mfr=1, Product=2,
-> SerialNumber=3
-> [ 3413.829768] usb 3-8: Product: ONEv2
-> [ 3413.829770] usb 3-8: Manufacturer: Apogee
-> [ 3413.829772] usb 3-8: SerialNumber: 0C12FF2020204652334D513A7A2A9B
-> [ 3414.421964] usb 3-8: USB disconnect, device number 7
-> [ 3414.838981] usb 3-8: new high-speed USB device number 8 using xhci_hcd
-> [ 3415.029947] usb 3-8: New USB device found, idVendor=0c60, idProduct=0017,
-> bcdDevice= 1.05
-> [ 3415.029961] usb 3-8: New USB device strings: Mfr=1, Product=2,
-> SerialNumber=3
-> [ 3415.029968] usb 3-8: Product: ONEv2
-> [ 3415.029973] usb 3-8: Manufacturer: Apogee
-> [ 3415.029978] usb 3-8: SerialNumber: 0C12FF2020204652334D513A7A2A9B
-> [ 3415.627052] usb 3-8: USB disconnect, device number 8
+> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
 
-Nothing particularly suspicious there.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-> 
-> > >    The messages below are from v5.16.16, but it behaves
-> > > the same no matter what I plug it into.
-> > > 
-> > > [  253.708616] usb 3-8: new high-speed USB device number 6 using xhci_hcd
-> > > [  253.899363] usb 3-8: New USB device found, idVendor=0c60, idProduct=0017,
-> > > bcdDevice= 1.05
-> > > [  253.899370] usb 3-8: New USB device strings: Mfr=1, Product=2,
-> > > SerialNumber=3
-> > > [  253.899373] usb 3-8: Product: ONEv2
-> > > [  253.899375] usb 3-8: Manufacturer: Apogee
-> > > [  253.899377] usb 3-8: SerialNumber: 0C12FF2020204652334D513A7A2A9B
-> > > [  253.960901] mc: Linux media interface: v0.10
-> > 
-> > Any idea where that line came from?
-> 
->   That's from CONFIG_MEDIA_CONTROLLER, which is selected for usb
-> webcam.  It also selects CONFIG_SND_USB_AUDIO_USE_MEDIA_CONTROLLER.
-> Compiled it out, rebooted.  Now the line is missing, but no other
-> change.
-> 
-> > You should try capturing a usbmon trace showing what happens when the
-> > device is plugged in and then resets.  Preferably on a system where
-> > snd-usb-audio is disabled.
-> 
->   Trace from wireshark is attached.
-
-The trace doesn't help much, unfortunately.  It shows normal device 
-initialization, plus a couple of extra string descriptor reads.  About 
-1/2 second afterward, the device disconnects itself electronically from 
-the USB bus and reconnects 20 ms later.
-
-I get the feeling that the device expects to receive some specific 
-messages from the host within that one-half second, and disconnects if 
-it doesn't see them.  And presumably it doesn't get what it's looking 
-for even when the USB sound drivers are enabled.
-
-Although I doubt it will show anything helpful, you might try collecting 
-a usbmon trace with the sound drivers enabled.  Perhaps it will suggest 
-something to the USB audio developers.
-
-> > One other thing you might try: Disable runtime PM for USB ("echo -1
-> > > /sys/module/usbcore/parameters/autosuspend" before plugging in the
-> > device).
-> 
->   Makes no difference -- almost: after few resets it once took much
-> longer (>10x) to reconnect.
-
-Oh well, it was worth a try.  Some devices don't like runtime suspend.  
-But obviously that isn't the problem here.
+I'll submit the change to hcd-pci.c after the current merge window 
+closes.
 
 Alan Stern
+
+> ---
+> v1->v2
+>  - Improve this patch with not to clear STS_PCD bit.
+>  - Change a boolean flag name to make its meaning more obvious.
+>  - Fix "tabs converted to spaces" issue.
+> 
+>  drivers/usb/host/ehci-hcd.c | 23 +++++++++++++++++++++++
+>  drivers/usb/host/ehci-pci.c |  4 ++++
+>  drivers/usb/host/ehci.h     |  1 +
+>  3 files changed, 28 insertions(+)
+> 
+> diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+> index 3d82e0b853be..684164fa9716 100644
+> --- a/drivers/usb/host/ehci-hcd.c
+> +++ b/drivers/usb/host/ehci-hcd.c
+> @@ -1103,6 +1103,26 @@ static void ehci_remove_device(struct usb_hcd *hcd, struct usb_device *udev)
+>  
+>  #ifdef	CONFIG_PM
+>  
+> +/* Clear wakeup signal locked in zhaoxin platform when device plug in. */
+> +static void ehci_zx_wakeup_clear(struct ehci_hcd *ehci)
+> +{
+> +	u32 __iomem	*reg = &ehci->regs->port_status[4];
+> +	u32 		t1 = ehci_readl(ehci, reg);
+> +
+> +	t1 &= (u32)~0xf0000;
+> +	t1 |= PORT_TEST_FORCE;
+> +	ehci_writel(ehci, t1, reg);
+> +	t1 = ehci_readl(ehci, reg);
+> +	msleep(1);
+> +	t1 &= (u32)~0xf0000;
+> +	ehci_writel(ehci, t1, reg);
+> +	ehci_readl(ehci, reg);
+> +	msleep(1);
+> +	t1 = ehci_readl(ehci, reg);
+> +	ehci_writel(ehci, t1 | PORT_CSC, reg);
+> +	ehci_readl(ehci, reg);
+> +}
+> +
+>  /* suspend/resume, section 4.3 */
+>  
+>  /* These routines handle the generic parts of controller suspend/resume */
+> @@ -1154,6 +1174,9 @@ int ehci_resume(struct usb_hcd *hcd, bool force_reset)
+>  	if (ehci->shutdown)
+>  		return 0;		/* Controller is dead */
+>  
+> +	if (ehci->zx_wakeup_clear_needed)
+> +		ehci_zx_wakeup_clear(ehci);
+> +
+>  	/*
+>  	 * If CF is still set and reset isn't forced
+>  	 * then we maintained suspend power.
+> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+> index e87cf3a00fa4..b11a6f82aee2 100644
+> --- a/drivers/usb/host/ehci-pci.c
+> +++ b/drivers/usb/host/ehci-pci.c
+> @@ -222,6 +222,10 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+>  			ehci->has_synopsys_hc_bug = 1;
+>  		}
+>  		break;
+> +	case PCI_VENDOR_ID_ZHAOXIN:
+> +		if (pdev->device == 0x3104 && (pdev->revision & 0xf0) == 0x90)
+> +			ehci->zx_wakeup_clear_needed = 1;
+> +		break;
+>  	}
+>  
+>  	/* optional debug port, normally in the first BAR */
+> diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
+> index fdd073cc053b..ad3f13a3eaf1 100644
+> --- a/drivers/usb/host/ehci.h
+> +++ b/drivers/usb/host/ehci.h
+> @@ -220,6 +220,7 @@ struct ehci_hcd {			/* one per controller */
+>  	unsigned		imx28_write_fix:1; /* For Freescale i.MX28 */
+>  	unsigned		spurious_oc:1;
+>  	unsigned		is_aspeed:1;
+> +	unsigned		zx_wakeup_clear_needed:1;
+>  
+>  	/* required for usb32 quirk */
+>  	#define OHCI_CTRL_HCFS          (3 << 6)
+> -- 
+> 2.32.0
