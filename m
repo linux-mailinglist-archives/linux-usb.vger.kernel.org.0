@@ -2,129 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 655044E5F5B
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 08:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BEB54E5F8D
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 08:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbiCXH3B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Mar 2022 03:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
+        id S1345982AbiCXHgG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Mar 2022 03:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348545AbiCXH26 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 03:28:58 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535BD98F72;
-        Thu, 24 Mar 2022 00:27:26 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id r13so7333474ejd.5;
-        Thu, 24 Mar 2022 00:27:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DAtToKdRS0zfVnS9HsS764HRko9yvlBX55xZExohPhI=;
-        b=C6lJsHb8Ua0B3vszq3ZlSFp9A0YBsRu9mnPk11EG7gZ5v2ngkVTwYI0taNDgJ6TmSa
-         P0kDVWF8XQXNiCf0UyYcyjxP6TBoiIhyAd7oqVX9x1SljitbUDhQj5EtqhMYTZoELhXw
-         xqVGut7ZTcGZsXS+i766X1z/fvbknrRYjEB3M+I0A2r8roRNYNM9Hxz3W8vnOtcKa0Ix
-         rsHea1vzuwan96vBib/nt9fQnGGAX7nbxYinnmRMOFfXLNXJUktv5hImOdi5IDyDSEE0
-         zFDHnsLtsG5xnJlcSA841GkOzmy7xKm/+xj4QEdIsKQWgKYIzh5aCRagdPc/60OLni1/
-         c5Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DAtToKdRS0zfVnS9HsS764HRko9yvlBX55xZExohPhI=;
-        b=Y6KWRLv3rY9MNW22ffM2NKwq5onszNOgp1uGuR+6dgGxlfys7f158+jFGgyovBMq1v
-         GZtWx76SWQZuqw98fs6UI/lBdzwvDGik55K4iziGlpGzOHiHce7INCsRMkWYS2jxT+f6
-         RfHvohZntLob0KwYWALSy67M117lgzLTQwZmkm9dY1psJA7NmslXgOh8gZQh/6DOuK3b
-         VHoFuF6dG8hMHfdO/ae89YxeOCrBgyJFNcXVA8YZE3RxjYzEDCe2YXYFY85msODUR/06
-         neUKOt7S5UyTHzArZ7A3H22d1TRbmKkGBknMh+1F5hbY1yDOJrcjTTnx+071nVV1pYrE
-         dAvw==
-X-Gm-Message-State: AOAM531LqIOGauFICWIE9ytkZ7fHcECLR8bu+r+mWFjpep4b8oqAN5TL
-        C0vwyBQXFq29euVX56mZJK0=
-X-Google-Smtp-Source: ABdhPJxuy5OwcuHiwxx2kTj53MTVWm9l1g6mMZIh4t6sVXn4V2Xfgcu+l/18CgkvNOWvM0cQGtuioQ==
-X-Received: by 2002:a17:906:c091:b0:6db:62b6:f4cc with SMTP id f17-20020a170906c09100b006db62b6f4ccmr4249141ejz.607.1648106844690;
-        Thu, 24 Mar 2022 00:27:24 -0700 (PDT)
-Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id d7-20020a50cd47000000b004187eacb4d6sm1031270edj.37.2022.03.24.00.27.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 00:27:24 -0700 (PDT)
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Andreas Noever <andreas.noever@gmail.com>
-Cc:     Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] thunderbolt: replace usage of found with dedicated list iterator variable
-Date:   Thu, 24 Mar 2022 08:27:00 +0100
-Message-Id: <20220324072700.63787-1-jakobkoschel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S240530AbiCXHgF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 03:36:05 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4131B6;
+        Thu, 24 Mar 2022 00:34:32 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22O7YUkJ011981;
+        Thu, 24 Mar 2022 02:34:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1648107270;
+        bh=D9AZ6nq4ixB+gR0sohNQN6r+bXD5UsdbEltEqB76hjs=;
+        h=From:To:CC:Subject:Date;
+        b=lefvM9+tjZctBRsvlz2wWhL76JrLidK640ygfx0twnEPTesBmAZDyQybTvkKvYoPq
+         vbjShS8XFzLYRAiEhvKBLEdQKYcam8GVs18eqYLBAbn/g6jGxMonnQ2Y9pEt5H129p
+         cTUUInVwotNJ+14YmcC2vzghlpap1gYEfFE5DKkc=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22O7YUu5120823
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 24 Mar 2022 02:34:30 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 24
+ Mar 2022 02:34:30 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 24 Mar 2022 02:34:29 -0500
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22O7YQLl024942;
+        Thu, 24 Mar 2022 02:34:26 -0500
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>
+Subject: [PATCH v2 0/2] AM62: Add support for AM62 USB wrapper driver
+Date:   Thu, 24 Mar 2022 13:04:23 +0530
+Message-ID: <20220324073425.18607-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+The following series of patches add support for AM62 USB wrapper driver
+and its corresponding bindings.
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable instead of a
-found boolean [1].
+changes since v1:
+- Fixed the error with dev_pm_ops uninitialization, in patch 2.
+  This was reported by kernel test bot
+- In patch 1, made correction in grammer of clocks property description
+  and added maxItems in the interrupts property based on comments
+  received from Roger
+- In patch 1, corrected the title, fixed the description of
+  ti,syscon-phy-pll-refclk, added pattern properties and child node
+  in the example based on the comments from Krzysztof.
 
-This removes the need to use a found variable and simply checking if
-the variable was set, can determine if the break/goto was hit.
+Aswath Govindraju (2):
+  dt-bindings: usb: Add documentation for AM62 USB Wrapper module
+  drivers: usb: dwc3: Add AM62 USB wrapper driver
 
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
----
- drivers/thunderbolt/ctl.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ .../devicetree/bindings/usb/ti,am62-usb.yaml  | 117 ++++
+ drivers/usb/dwc3/Kconfig                      |   9 +
+ drivers/usb/dwc3/Makefile                     |   1 +
+ drivers/usb/dwc3/dwc3-am62.c                  | 581 ++++++++++++++++++
+ 4 files changed, 708 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+ create mode 100644 drivers/usb/dwc3/dwc3-am62.c
 
-diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
-index 4986edfbdf67..e92c658dba1c 100644
---- a/drivers/thunderbolt/ctl.c
-+++ b/drivers/thunderbolt/ctl.c
-@@ -158,21 +158,20 @@ static bool tb_cfg_request_is_active(struct tb_cfg_request *req)
- static struct tb_cfg_request *
- tb_cfg_request_find(struct tb_ctl *ctl, struct ctl_pkg *pkg)
- {
--	struct tb_cfg_request *req;
--	bool found = false;
-+	struct tb_cfg_request *req = NULL, *iter;
- 
- 	mutex_lock(&pkg->ctl->request_queue_lock);
--	list_for_each_entry(req, &pkg->ctl->request_queue, list) {
--		tb_cfg_request_get(req);
--		if (req->match(req, pkg)) {
--			found = true;
-+	list_for_each_entry(iter, &pkg->ctl->request_queue, list) {
-+		tb_cfg_request_get(iter);
-+		if (iter->match(iter, pkg)) {
-+			req = iter;
- 			break;
- 		}
--		tb_cfg_request_put(req);
-+		tb_cfg_request_put(iter);
- 	}
- 	mutex_unlock(&pkg->ctl->request_queue_lock);
- 
--	return found ? req : NULL;
-+	return req;
- }
- 
- /* utility functions */
-
-base-commit: f443e374ae131c168a065ea1748feac6b2e76613
 -- 
-2.25.1
+2.17.1
 
