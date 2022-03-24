@@ -2,43 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611934E631A
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 13:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFE34E6330
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 13:21:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349980AbiCXMTO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Mar 2022 08:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
+        id S243643AbiCXMVf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Mar 2022 08:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237496AbiCXMTN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 08:19:13 -0400
-Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [203.148.12.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B2599EDF;
-        Thu, 24 Mar 2022 05:17:40 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
- (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 24 Mar
- 2022 20:17:36 +0800
-Received: from L440.zhaoxin.com (10.29.8.49) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 24 Mar
- 2022 20:17:35 +0800
-From:   WeitaoWangoc <WeitaoWang-oc@zhaoxin.com>
-To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>,
-        <CobeChen@zhaoxin.com>, Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-Subject: [PATCH v2] USB:Fix ehci infinite suspend-resume loop issue in zhaoxin
-Date:   Thu, 24 Mar 2022 20:17:35 +0800
-Message-ID: <20220324121735.3803-1-WeitaoWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.32.0
+        with ESMTP id S1344524AbiCXMVb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 08:21:31 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9560C35262;
+        Thu, 24 Mar 2022 05:19:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648124399; x=1679660399;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6ZFdlgkUlrg1RA91ERKHsxNCJjmhkRGWCp0W1Zaki/Y=;
+  b=nnlwdpRcLsjLo2Du/2k2x2MC3WjPhThQ3zV9lvjOU9HgsNjzcE0QILDq
+   w9wndo0vRYJXP0F1/c2Vf1t3gNHIPXNpjYaTlKdKikPHRTU8fJdZHOu8d
+   f7S+OROnQhRVU/lgEFUKaTrFmQMBJlQsSn4FxmuU1X5+V0Sk8GVcRN3h1
+   gP1JOLnfH0PNt8qB6URAIpN8tr9Ha8n0HXVVdaUyncyw/gtuePSuHZDIs
+   tWZYFOOWv+gahtQvtuk4DIgOvOSItZ5cN6b/2/Nvh1iGPoziUBH1DpB6n
+   xzLm1CekQgzgGYfxgt+AfRkOo8SjY4Hn7Q0DZKVe05Ny14FD+hr4vu0Rr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="321561461"
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="321561461"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 05:19:58 -0700
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="649834499"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 05:19:55 -0700
+Received: by lahna (sSMTP sendmail emulation); Thu, 24 Mar 2022 14:19:52 +0200
+Date:   Thu, 24 Mar 2022 14:19:52 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [PATCH] thunderbolt: replace usage of found with dedicated list
+ iterator variable
+Message-ID: <Yjxh6Md0F955FC4A@lahna>
+References: <20220324072700.63787-1-jakobkoschel@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.29.8.49]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324072700.63787-1-jakobkoschel@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,96 +67,22 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In zhaoxin platform, some ehci projects will latch a wakeup signal
-internal when plug in a device on port during system S0. This wakeup
-signal will turn on when ehci runtime suspend, which will trigger a
-system control interrupt that will resume ehci back to D0. As no
-device connect, ehci will be set to runtime suspend and turn on the
-internal latched wakeup signal again. It will cause a suspend-resume
-loop and generate system control interrupt continuously.
+Hi Jakob,
 
-Fixed this issue by clear wakeup signal latched in ehci internal when
-ehci resume callback is called.
+On Thu, Mar 24, 2022 at 08:27:00AM +0100, Jakob Koschel wrote:
+> To move the list iterator variable into the list_for_each_entry_*()
+> macro in the future it should be avoided to use the list iterator
+> variable after the loop body.
+> 
+> To *never* use the list iterator variable after the loop it was
+> concluded to use a separate iterator variable instead of a
+> found boolean [1].
+> 
+> This removes the need to use a found variable and simply checking if
+> the variable was set, can determine if the break/goto was hit.
+> 
+> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
----
-v1->v2
- - Improve this patch with not to clear STS_PCD bit.
- - Change a boolean flag name to make its meaning more obvious.
- - Fix "tabs converted to spaces" issue.
-
- drivers/usb/host/ehci-hcd.c | 23 +++++++++++++++++++++++
- drivers/usb/host/ehci-pci.c |  4 ++++
- drivers/usb/host/ehci.h     |  1 +
- 3 files changed, 28 insertions(+)
-
-diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
-index 3d82e0b853be..684164fa9716 100644
---- a/drivers/usb/host/ehci-hcd.c
-+++ b/drivers/usb/host/ehci-hcd.c
-@@ -1103,6 +1103,26 @@ static void ehci_remove_device(struct usb_hcd *hcd, struct usb_device *udev)
- 
- #ifdef	CONFIG_PM
- 
-+/* Clear wakeup signal locked in zhaoxin platform when device plug in. */
-+static void ehci_zx_wakeup_clear(struct ehci_hcd *ehci)
-+{
-+	u32 __iomem	*reg = &ehci->regs->port_status[4];
-+	u32 		t1 = ehci_readl(ehci, reg);
-+
-+	t1 &= (u32)~0xf0000;
-+	t1 |= PORT_TEST_FORCE;
-+	ehci_writel(ehci, t1, reg);
-+	t1 = ehci_readl(ehci, reg);
-+	msleep(1);
-+	t1 &= (u32)~0xf0000;
-+	ehci_writel(ehci, t1, reg);
-+	ehci_readl(ehci, reg);
-+	msleep(1);
-+	t1 = ehci_readl(ehci, reg);
-+	ehci_writel(ehci, t1 | PORT_CSC, reg);
-+	ehci_readl(ehci, reg);
-+}
-+
- /* suspend/resume, section 4.3 */
- 
- /* These routines handle the generic parts of controller suspend/resume */
-@@ -1154,6 +1174,9 @@ int ehci_resume(struct usb_hcd *hcd, bool force_reset)
- 	if (ehci->shutdown)
- 		return 0;		/* Controller is dead */
- 
-+	if (ehci->zx_wakeup_clear_needed)
-+		ehci_zx_wakeup_clear(ehci);
-+
- 	/*
- 	 * If CF is still set and reset isn't forced
- 	 * then we maintained suspend power.
-diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-index e87cf3a00fa4..b11a6f82aee2 100644
---- a/drivers/usb/host/ehci-pci.c
-+++ b/drivers/usb/host/ehci-pci.c
-@@ -222,6 +222,10 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
- 			ehci->has_synopsys_hc_bug = 1;
- 		}
- 		break;
-+	case PCI_VENDOR_ID_ZHAOXIN:
-+		if (pdev->device == 0x3104 && (pdev->revision & 0xf0) == 0x90)
-+			ehci->zx_wakeup_clear_needed = 1;
-+		break;
- 	}
- 
- 	/* optional debug port, normally in the first BAR */
-diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
-index fdd073cc053b..ad3f13a3eaf1 100644
---- a/drivers/usb/host/ehci.h
-+++ b/drivers/usb/host/ehci.h
-@@ -220,6 +220,7 @@ struct ehci_hcd {			/* one per controller */
- 	unsigned		imx28_write_fix:1; /* For Freescale i.MX28 */
- 	unsigned		spurious_oc:1;
- 	unsigned		is_aspeed:1;
-+	unsigned		zx_wakeup_clear_needed:1;
- 
- 	/* required for usb32 quirk */
- 	#define OHCI_CTRL_HCFS          (3 << 6)
--- 
-2.32.0
+Looks good to me. I will pick this up to Thunderbolt tree after the
+merge window closes.
