@@ -2,70 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C904E62BD
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 12:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 611934E631A
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 13:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349882AbiCXLyp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Mar 2022 07:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
+        id S1349980AbiCXMTO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Mar 2022 08:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235216AbiCXLyo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 07:54:44 -0400
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5B81ADAD;
-        Thu, 24 Mar 2022 04:53:11 -0700 (PDT)
-Received: by mail-ed1-f51.google.com with SMTP id u26so5289952eda.12;
-        Thu, 24 Mar 2022 04:53:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5ltKLzd5hL5HQokDkXemnqLoOTjdJvhrUSmUGjXhOKY=;
-        b=v9UpqE5UxNDfqOhxObQvIBnuVCLY9yhQXbdUzcSOiOMW5TCoKJjlAr9whreuq1ySyf
-         OIhYXneLHk+b/o+GIiatNref+srnHspVNxSdGRlQpX9xf8ZXkCAJWJBV2/2riSSNikWA
-         +s7KZcy8of4oJanviNqJypSORH0XkjiDbfdHwzDsfZeEuapU+ziQ8gmQR1dhct1iuUhU
-         wM6dIaa9tAeTk//mcKX/lYZz/uQ7tj3X+GGc9LWnR5SRyEHVsP8AuwjLfqJF9aQXLrIR
-         yYhEhEXZpQ3V79fUARP3wQHZLXjlrxQn4UcMPyFaUA85AWLGySTRXoutwjLAsPcGzoQ0
-         P+cQ==
-X-Gm-Message-State: AOAM532vn62ZWuGlWLx33WDntRb1nZWaIa74lZSri8tbLFXfRA37VHlz
-        2SQCUPAlUPwhOtKSwqQZWp7yuvvSw17oRQ==
-X-Google-Smtp-Source: ABdhPJz6j4PqEWrxanuEP+vlNZkdiYyWicoY+CmwYGxtZYFcvjcm4oFtqKwL7YtAAZbwP55R+jzUxg==
-X-Received: by 2002:aa7:cd7a:0:b0:419:48ce:3a10 with SMTP id ca26-20020aa7cd7a000000b0041948ce3a10mr6228425edb.312.1648122790189;
-        Thu, 24 Mar 2022 04:53:10 -0700 (PDT)
-Received: from [192.168.0.156] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id da23-20020a056402177700b0041394d8173csm1281621edb.31.2022.03.24.04.53.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 04:53:09 -0700 (PDT)
-Message-ID: <2b33798e-23c2-d4a5-171a-55c28bc40c40@kernel.org>
-Date:   Thu, 24 Mar 2022 12:53:08 +0100
+        with ESMTP id S237496AbiCXMTN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 08:19:13 -0400
+Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [203.148.12.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B2599EDF;
+        Thu, 24 Mar 2022 05:17:40 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
+ (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 24 Mar
+ 2022 20:17:36 +0800
+Received: from L440.zhaoxin.com (10.29.8.49) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 24 Mar
+ 2022 20:17:35 +0800
+From:   WeitaoWangoc <WeitaoWang-oc@zhaoxin.com>
+To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>,
+        <CobeChen@zhaoxin.com>, Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+Subject: [PATCH v2] USB:Fix ehci infinite suspend-resume loop issue in zhaoxin
+Date:   Thu, 24 Mar 2022 20:17:35 +0800
+Message-ID: <20220324121735.3803-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add documentation for AM62 USB
- Wrapper module
-Content-Language: en-US
-To:     Aswath Govindraju <a-govindraju@ti.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-References: <20220324073425.18607-1-a-govindraju@ti.com>
- <20220324073425.18607-2-a-govindraju@ti.com>
- <93fe6a41-3b59-2fbc-6f95-833f337815ee@kernel.org>
- <41f79aa5-1e04-53f8-ab21-85fe6039e24e@ti.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <41f79aa5-1e04-53f8-ab21-85fe6039e24e@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.29.8.49]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,103 +46,96 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24/03/2022 12:40, Aswath Govindraju wrote:
-> Hi Krzysztof,
-> 
-> On 24/03/22 16:37, Krzysztof Kozlowski wrote:
->> On 24/03/2022 08:34, Aswath Govindraju wrote:
->>> Add bindings for the TI's AM62 wrapper module for the Synopsys USBSS-DRD
->>> controller.
->>>
->>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
->>> ---
->>>
->>> Changes since v1:
->>> - made correction in grammer of clocks property description
->>>   and added maxItems in the interrupts property based on comments
->>>   received from Roger
->>> - corrected the title, fixed the description of
->>>   ti,syscon-phy-pll-refclk, added pattern properties and child node
->>>   in the example based on the comments from Krzysztof.
->>>
->>>  .../devicetree/bindings/usb/ti,am62-usb.yaml  | 117 ++++++++++++++++++
->>>  1 file changed, 117 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml b/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
->>> new file mode 100644
->>> index 000000000000..452bfdc6fb09
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
->>> @@ -0,0 +1,117 @@
->>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/usb/ti,am62-usb.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: TI's AM62 wrapper module for the Synopsys USBSS-DRD controller
->>> +
->>> +maintainers:
->>> +  - Aswath Govindraju <a-govindraju@ti.com>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: ti,am62-usb
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  ranges: true
->>> +
->>> +  power-domains:
->>> +    description:
->>> +      PM domain provider node and an args specifier containing
->>> +      the USB ISO device id value. See,
->>> +      Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml
->>> +    maxItems: 1
->>> +
->>> +  clocks:
->>> +    description: Clock phandle to usb2_refclk
->>> +    maxItems: 1
->>> +
->>> +  clock-names:
->>> +    items:
->>> +      - const: ref
->>> +
->>> +  id-gpio:
->>> +    description:
->>> +      GPIO to be used as ID pin
->>> +    maxItems: 1
->>
->> I have doubts about this. If you USB controller handles the ID pin, then
->> probably this should be moved to usb-connector.yaml. I did not see
->> id-gpio in any other USB controller blocks.
->>
-> 
-> Yes, the USB wrapper handles the ID pin operation only. It also reads
-> the status of VBUS by reading a register from its MMR and not using a
-> gpio. After evaluating the role the based on the states if id pin and
-> VBUS, this role is communicated to the dwc3 core driver using extcon.
-> There is no way for the dwc3 driver to detect the role on its own.
-> 
-> 
-> The usb-connector(drivers/usb/common/usb-conn-gpio.c) driver, seems to
-> be implemented for driving the VBUS, based on ID and VBUS pin status.
-> However, in case of the above implementation we need to communicate the
-> detected role to the dwc3 core driver. Also, the wrapper does not
-> control VBUS but it is the dwc3 core driver that drives the VBUS.
-> Therefore, I think the usb-connector implementation cannot be used here.
+In zhaoxin platform, some ehci projects will latch a wakeup signal
+internal when plug in a device on port during system S0. This wakeup
+signal will turn on when ehci runtime suspend, which will trigger a
+system control interrupt that will resume ehci back to D0. As no
+device connect, ehci will be set to runtime suspend and turn on the
+internal latched wakeup signal again. It will cause a suspend-resume
+loop and generate system control interrupt continuously.
 
-I don't think about usb-conn-gpio.c but using the binding generic
-binding for usb-X-connector and define a connector with ID.
+Fixed this issue by clear wakeup signal latched in ehci internal when
+ehci resume callback is called.
 
-Actually Rob could help here.
+Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+---
+v1->v2
+ - Improve this patch with not to clear STS_PCD bit.
+ - Change a boolean flag name to make its meaning more obvious.
+ - Fix "tabs converted to spaces" issue.
 
-Rob,
-Should the id-gpio be modeled as a property in this glue/wrapper driver
-or rather as part of usb-connector child node?
+ drivers/usb/host/ehci-hcd.c | 23 +++++++++++++++++++++++
+ drivers/usb/host/ehci-pci.c |  4 ++++
+ drivers/usb/host/ehci.h     |  1 +
+ 3 files changed, 28 insertions(+)
 
-
-Best regards,
-Krzysztof
+diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+index 3d82e0b853be..684164fa9716 100644
+--- a/drivers/usb/host/ehci-hcd.c
++++ b/drivers/usb/host/ehci-hcd.c
+@@ -1103,6 +1103,26 @@ static void ehci_remove_device(struct usb_hcd *hcd, struct usb_device *udev)
+ 
+ #ifdef	CONFIG_PM
+ 
++/* Clear wakeup signal locked in zhaoxin platform when device plug in. */
++static void ehci_zx_wakeup_clear(struct ehci_hcd *ehci)
++{
++	u32 __iomem	*reg = &ehci->regs->port_status[4];
++	u32 		t1 = ehci_readl(ehci, reg);
++
++	t1 &= (u32)~0xf0000;
++	t1 |= PORT_TEST_FORCE;
++	ehci_writel(ehci, t1, reg);
++	t1 = ehci_readl(ehci, reg);
++	msleep(1);
++	t1 &= (u32)~0xf0000;
++	ehci_writel(ehci, t1, reg);
++	ehci_readl(ehci, reg);
++	msleep(1);
++	t1 = ehci_readl(ehci, reg);
++	ehci_writel(ehci, t1 | PORT_CSC, reg);
++	ehci_readl(ehci, reg);
++}
++
+ /* suspend/resume, section 4.3 */
+ 
+ /* These routines handle the generic parts of controller suspend/resume */
+@@ -1154,6 +1174,9 @@ int ehci_resume(struct usb_hcd *hcd, bool force_reset)
+ 	if (ehci->shutdown)
+ 		return 0;		/* Controller is dead */
+ 
++	if (ehci->zx_wakeup_clear_needed)
++		ehci_zx_wakeup_clear(ehci);
++
+ 	/*
+ 	 * If CF is still set and reset isn't forced
+ 	 * then we maintained suspend power.
+diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+index e87cf3a00fa4..b11a6f82aee2 100644
+--- a/drivers/usb/host/ehci-pci.c
++++ b/drivers/usb/host/ehci-pci.c
+@@ -222,6 +222,10 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+ 			ehci->has_synopsys_hc_bug = 1;
+ 		}
+ 		break;
++	case PCI_VENDOR_ID_ZHAOXIN:
++		if (pdev->device == 0x3104 && (pdev->revision & 0xf0) == 0x90)
++			ehci->zx_wakeup_clear_needed = 1;
++		break;
+ 	}
+ 
+ 	/* optional debug port, normally in the first BAR */
+diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
+index fdd073cc053b..ad3f13a3eaf1 100644
+--- a/drivers/usb/host/ehci.h
++++ b/drivers/usb/host/ehci.h
+@@ -220,6 +220,7 @@ struct ehci_hcd {			/* one per controller */
+ 	unsigned		imx28_write_fix:1; /* For Freescale i.MX28 */
+ 	unsigned		spurious_oc:1;
+ 	unsigned		is_aspeed:1;
++	unsigned		zx_wakeup_clear_needed:1;
+ 
+ 	/* required for usb32 quirk */
+ 	#define OHCI_CTRL_HCFS          (3 << 6)
+-- 
+2.32.0
