@@ -2,141 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A75C4E65F2
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 16:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 770994E6757
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 17:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350724AbiCXP1v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Mar 2022 11:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
+        id S1352065AbiCXQ41 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Mar 2022 12:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233148AbiCXP1u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 11:27:50 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6FC39A9974
-        for <linux-usb@vger.kernel.org>; Thu, 24 Mar 2022 08:26:18 -0700 (PDT)
-Received: (qmail 210494 invoked by uid 1000); 24 Mar 2022 11:26:17 -0400
-Date:   Thu, 24 Mar 2022 11:26:17 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     WeitaoWangoc <WeitaoWang-oc@zhaoxin.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tonywwang@zhaoxin.com,
-        weitaowang@zhaoxin.com, CobeChen@zhaoxin.com
-Subject: Re: [PATCH v2] USB:Fix ehci infinite suspend-resume loop issue in
- zhaoxin
-Message-ID: <YjyNmSEks8oVOyao@rowland.harvard.edu>
-References: <20220324121735.3803-1-WeitaoWang-oc@zhaoxin.com>
+        with ESMTP id S1352106AbiCXQ4F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 12:56:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670B998F5A;
+        Thu, 24 Mar 2022 09:53:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57384B824A6;
+        Thu, 24 Mar 2022 16:53:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D9C1C340EC;
+        Thu, 24 Mar 2022 16:53:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648140810;
+        bh=RScfqBuaHBvINh3Oshl5Oe9QzFycEgDhFH1156Kqxtw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zCJjsK4CfPhNrswjvgITtlBe/SyLu6cstafWsWugsHVr4b2j+Jz96U4V3lyp/8/2r
+         dpzIEKUwgXX3sRDX/3Z/IrJUiDD/gfeBfP+T1GAyvijHINXuf2emShERIiYDDSq4mg
+         W55rAAJ/0iGEqrXGwsgm+jF4Qtavlk2hPns4yuAg=
+Date:   Thu, 24 Mar 2022 17:53:27 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dan Vacura <w36195@motorola.com>
+Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@st.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: gadget: uvc: Fix crash when encoding data for
+ usb request
+Message-ID: <YjyiB6IlfbMSGKZ2@kroah.com>
+References: <20220318164706.22365-1-w36195@motorola.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220324121735.3803-1-WeitaoWang-oc@zhaoxin.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220318164706.22365-1-w36195@motorola.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 08:17:35PM +0800, WeitaoWangoc wrote:
-> In zhaoxin platform, some ehci projects will latch a wakeup signal
-> internal when plug in a device on port during system S0. This wakeup
-> signal will turn on when ehci runtime suspend, which will trigger a
-> system control interrupt that will resume ehci back to D0. As no
-> device connect, ehci will be set to runtime suspend and turn on the
-> internal latched wakeup signal again. It will cause a suspend-resume
-> loop and generate system control interrupt continuously.
+On Fri, Mar 18, 2022 at 11:47:06AM -0500, Dan Vacura wrote:
+> During the uvcg_video_pump() process, if an error occurs and
+> uvcg_queue_cancel() is called, the buffer queue will be cleared out, but
+> the current marker (queue->buf_used) of the active buffer (no longer
+> active) is not reset. On the next iteration of uvcg_video_pump() the
+> stale buf_used count will be used and the logic of min((unsigned
+> int)len, buf->bytesused - queue->buf_used) may incorrectly calculate a
+> nbytes size, causing an invalid memory access.
 > 
-> Fixed this issue by clear wakeup signal latched in ehci internal when
-> ehci resume callback is called.
+> [80802.185460][  T315] configfs-gadget gadget: uvc: VS request completed
+> with status -18.
+> [80802.185519][  T315] configfs-gadget gadget: uvc: VS request completed
+> with status -18.
+> ...
+> uvcg_queue_cancel() is called and the queue is cleared out, but the
+> marker queue->buf_used is not reset.
+> ...
+> [80802.262328][ T8682] Unable to handle kernel paging request at virtual
+> address ffffffc03af9f000
+> ...
+> ...
+> [80802.263138][ T8682] Call trace:
+> [80802.263146][ T8682]  __memcpy+0x12c/0x180
+> [80802.263155][ T8682]  uvcg_video_pump+0xcc/0x1e0
+> [80802.263165][ T8682]  process_one_work+0x2cc/0x568
+> [80802.263173][ T8682]  worker_thread+0x28c/0x518
+> [80802.263181][ T8682]  kthread+0x160/0x170
+> [80802.263188][ T8682]  ret_from_fork+0x10/0x18
+> [80802.263198][ T8682] Code: a8c12829 a88130cb a8c130
 > 
-> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
-I'll submit the change to hcd-pci.c after the current merge window 
-closes.
-
-Alan Stern
-
+> Fixes: d692522577c0 ("usb: gadget/uvc: Port UVC webcam gadget to use videobuf2 framework")
+> Signed-off-by: Dan Vacura <w36195@motorola.com>
+> 
 > ---
-> v1->v2
->  - Improve this patch with not to clear STS_PCD bit.
->  - Change a boolean flag name to make its meaning more obvious.
->  - Fix "tabs converted to spaces" issue.
-> 
->  drivers/usb/host/ehci-hcd.c | 23 +++++++++++++++++++++++
->  drivers/usb/host/ehci-pci.c |  4 ++++
->  drivers/usb/host/ehci.h     |  1 +
->  3 files changed, 28 insertions(+)
-> 
-> diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
-> index 3d82e0b853be..684164fa9716 100644
-> --- a/drivers/usb/host/ehci-hcd.c
-> +++ b/drivers/usb/host/ehci-hcd.c
-> @@ -1103,6 +1103,26 @@ static void ehci_remove_device(struct usb_hcd *hcd, struct usb_device *udev)
->  
->  #ifdef	CONFIG_PM
->  
-> +/* Clear wakeup signal locked in zhaoxin platform when device plug in. */
-> +static void ehci_zx_wakeup_clear(struct ehci_hcd *ehci)
-> +{
-> +	u32 __iomem	*reg = &ehci->regs->port_status[4];
-> +	u32 		t1 = ehci_readl(ehci, reg);
-> +
-> +	t1 &= (u32)~0xf0000;
-> +	t1 |= PORT_TEST_FORCE;
-> +	ehci_writel(ehci, t1, reg);
-> +	t1 = ehci_readl(ehci, reg);
-> +	msleep(1);
-> +	t1 &= (u32)~0xf0000;
-> +	ehci_writel(ehci, t1, reg);
-> +	ehci_readl(ehci, reg);
-> +	msleep(1);
-> +	t1 = ehci_readl(ehci, reg);
-> +	ehci_writel(ehci, t1 | PORT_CSC, reg);
-> +	ehci_readl(ehci, reg);
-> +}
-> +
->  /* suspend/resume, section 4.3 */
->  
->  /* These routines handle the generic parts of controller suspend/resume */
-> @@ -1154,6 +1174,9 @@ int ehci_resume(struct usb_hcd *hcd, bool force_reset)
->  	if (ehci->shutdown)
->  		return 0;		/* Controller is dead */
->  
-> +	if (ehci->zx_wakeup_clear_needed)
-> +		ehci_zx_wakeup_clear(ehci);
-> +
->  	/*
->  	 * If CF is still set and reset isn't forced
->  	 * then we maintained suspend power.
-> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-> index e87cf3a00fa4..b11a6f82aee2 100644
-> --- a/drivers/usb/host/ehci-pci.c
-> +++ b/drivers/usb/host/ehci-pci.c
-> @@ -222,6 +222,10 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
->  			ehci->has_synopsys_hc_bug = 1;
->  		}
->  		break;
-> +	case PCI_VENDOR_ID_ZHAOXIN:
-> +		if (pdev->device == 0x3104 && (pdev->revision & 0xf0) == 0x90)
-> +			ehci->zx_wakeup_clear_needed = 1;
-> +		break;
->  	}
->  
->  	/* optional debug port, normally in the first BAR */
-> diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
-> index fdd073cc053b..ad3f13a3eaf1 100644
-> --- a/drivers/usb/host/ehci.h
-> +++ b/drivers/usb/host/ehci.h
-> @@ -220,6 +220,7 @@ struct ehci_hcd {			/* one per controller */
->  	unsigned		imx28_write_fix:1; /* For Freescale i.MX28 */
->  	unsigned		spurious_oc:1;
->  	unsigned		is_aspeed:1;
-> +	unsigned		zx_wakeup_clear_needed:1;
->  
->  	/* required for usb32 quirk */
->  	#define OHCI_CTRL_HCFS          (3 << 6)
-> -- 
-> 2.32.0
+> Changes in v2:
+> - Add Fixes tag
+
+<formletter>
+
+This is not the correct way to submit patches for inclusion in the
+stable kernel tree.  Please read:
+    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+for how to do this properly.
+
+</formletter>
