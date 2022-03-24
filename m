@@ -2,128 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54CD4E6141
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 10:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BB64E61F2
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 11:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245285AbiCXJqi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Mar 2022 05:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
+        id S1346239AbiCXKt0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Mar 2022 06:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240369AbiCXJqh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 05:46:37 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48D19BB84
-        for <linux-usb@vger.kernel.org>; Thu, 24 Mar 2022 02:45:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648115106; x=1679651106;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=3io4DtMeMK6OzsQLZExB12RAEiyKAHD3H4e/3sNzxXM=;
-  b=XsXiVg/ZwoscQYm90BWDTb4iM440Ye3nf3L7X+yA4ohrOKmlyTs9Afxa
-   pIFoRV0u4XE3BayCKaQo/4z/Y3We7+W+wWyS85D1FgjZDgRlMm2xNElhE
-   H5bN678DYxw0PeyxetMYIldI+4MCxLeePZsSBcsFAREw5HzvVONXssuf/
-   J7E/rbMAsJFVXGLQSc5ycdKZxysCDfDm0phDvgHsawm9p4ysOSVRU7u3u
-   GFArwEvN+O171ksL9QyG2+/kNZAqHf6kMIlP/gNPpZZrVwwryVvrZZM0r
-   mPkn56Ccfr84yDYghk3Ekx4sf20xHPL7MG8TYSX+NtDxlWi4Bibv+vfwo
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="255897729"
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="255897729"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 02:45:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
-   d="scan'208";a="693262631"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 24 Mar 2022 02:45:04 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 24 Mar 2022 11:45:03 +0200
-Date:   Thu, 24 Mar 2022 11:45:03 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: How to proceed: usci_acpi: PPM init failed (-110)
-Message-ID: <Yjw9n5FXHMp8TpsM@kuha.fi.intel.com>
-References: <20210823180626.tb6m7h5tp6adhvt2@fastboi.localdomain>
- <YSTI51ilGLJLYlQz@kuha.fi.intel.com>
- <20210824164942.6pakfzf2crnxes7w@fastboi.localdomain>
- <YSX5Gewqat7zbEXY@kuha.fi.intel.com>
- <20210825092138.jmhbjx2innikurw2@fastboi.localdomain>
- <YSdIb+f+/cbRyBs1@kuha.fi.intel.com>
- <20210826114105.amyjjhslqhiqdw6e@fastboi.localdomain>
- <178d8c7ca72400c2aa12679d4532611d@cavoj.net>
- <Ye5wFVwQTWawdPPK@kuha.fi.intel.com>
- <23e8104421efcf0937168e0ac5489367@cavoj.net>
+        with ESMTP id S242718AbiCXKtZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 06:49:25 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC40AA1476;
+        Thu, 24 Mar 2022 03:47:53 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id g24so5566865lja.7;
+        Thu, 24 Mar 2022 03:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0J0phj6AMm9UiRKwAINuoHI0saZ8K5+RIjVP4BiGyXI=;
+        b=W00tgU32BzYT8QLgeVcXl8t4GzABMp804DZT8qVYJWfBc/h/MwqASWjK/H7E55dO9S
+         vGbTCT41p6wwmNueLXPdk+fSUc8udFZn/GnSGl9K9eHZn1Ms4i+g6FKFk9++rUP+PPI1
+         /yS65327j6U+Q91NDdtof6r4Af5w8VvN3uXkRl7payULhsm3xi/wLV6TD/z/J5hn+uPB
+         wfuHz+C42EwmTphgB0DHXZGKdxYhj0i4M4JuAvLCaUZsPc4SpLNLekyrXVDJLlSQ30ln
+         10SneDCDPmi8igzRWPJcI2H9lr/7RAHeziu6Lc+N1M2ol8Zv/FmvZok5DcfYIBMeuAUx
+         dGXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0J0phj6AMm9UiRKwAINuoHI0saZ8K5+RIjVP4BiGyXI=;
+        b=1vN34ONauab3igrWeEDRVG2GpY1aPLu7CPIcKEWYKG6AF3yYYatxD+hlStUDdg4Yeg
+         2DHyTFvfI9fA2IhfYWk+uMGGlSCXJmJNZkCniRdBigdmH0Chon7J2mwj7+W06rmcL1+V
+         4erBgU0UNRr/ujyt6rYXDsMF9QRronYGsxRC5Vop2sxvqLkFaIt/ax7uSDdwGaKRbkg2
+         ZaK00xeSE9d8sjqfRKKqPk4sMCCK6xoAkuHzOJsCa/OLH45KAvMopEuJX6stKz5EkUCw
+         3InP6sU15XuMYw07EHxg/m45F/GNe4pU5olyUWm7thNfp4DWOzrwHyBIivJziNOn6+ZM
+         glag==
+X-Gm-Message-State: AOAM533iZ1RF/KrYaqzzfLnlcZthYiJ5WkYRNCH5MGUO4mtGr1sZE6PY
+        7y+GQla39IHTTg711K9L4jmA279R4Lwj8FOB6JU=
+X-Google-Smtp-Source: ABdhPJxvmZtFy+J+bFzyel0LLaX1+RiiFwWo/r3cr+oq0EQA4ui/aadInIzdparY+LLIAu38KrEIPRgcoBCKyW02w/0=
+X-Received: by 2002:a05:651c:b1e:b0:249:95d3:7832 with SMTP id
+ b30-20020a05651c0b1e00b0024995d37832mr3671439ljr.426.1648118872009; Thu, 24
+ Mar 2022 03:47:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <23e8104421efcf0937168e0ac5489367@cavoj.net>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1647235924-15572-1-git-send-email-vincent.sunplus@gmail.com> <Yjth1mAtn/hX2Xvx@robh.at.kernel.org>
+In-Reply-To: <Yjth1mAtn/hX2Xvx@robh.at.kernel.org>
+From:   =?UTF-8?B?5pa96YyV6bS7?= <vincent.sunplus@gmail.com>
+Date:   Thu, 24 Mar 2022 18:48:41 +0800
+Message-ID: <CAPvp3RjPW1x-k4oA7QHHXm+QCNySMJLiR5TcqtCK-0geRtrd8A@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] Add USB HOST OHCI driver for Sunplus SP7021 SoC
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, stern@rowland.harvard.edu,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi again,
+Rob Herring <robh@kernel.org> =E6=96=BC 2022=E5=B9=B43=E6=9C=8824=E6=97=A5 =
+=E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=882:07=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Mon, Mar 14, 2022 at 01:32:02PM +0800, Vincent Shih wrote:
+> > This is a patch series for USB HOST OHCI driver for Sunplus SP7021 SoC.
+> >
+> > Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+> > many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD Card and
+> > etc.) into a single chip. It is designed for industrial control.
+>
+> Looks to me like the generic-ohci binding and driver should work for
+> this?
+>
+The generic-ohci binding and driver did work for Sunplus SP7021.
+And do I need to submit the patch for the ohci driver and binding doc
+for Sunplus
+SP7021 SoC ?
 
-I'm sorry for the super slow progress with this. Just a quick update.
-
-On Sat, Feb 19, 2022 at 01:39:33AM +0100, Samuel Čavoj wrote:
-> Hi
-> 
-> sorry about the delay.
-> 
-> On 2022-01-24 10:23, Heikki Krogerus wrote:
-> > On Sat, Jan 22, 2022 at 12:21:29AM +0000, Samuel Čavoj wrote:
-> > > Hi Heikki,
-> > > 
-> > > do you think we could get this back on track somehow? I'm not sure
-> > > what to
-> > > try next, do you have any ideas? Are there any tools to try and
-> > > trace what
-> > > the Windows driver does? Either from within Windows itself or
-> > > intercept it
-> > > somehow externally -- a hypervisor approach? Are there any tools
-> > > developed
-> > > for this purpose? I wasn't really able to find much.
-> > 
-> > I don't have any ideas right now, but I'll try to think of something
-> > that we could try. I'll also see if I can get my hands on one of those
-> > Asus Zenbook laptops. It was a Zenbook 13, right?
-> 
-> Yup, it's a Zenbook 13 OLED (UM325).
-
-So, I'm not able to get one of those unfortunately.
-
-> > Did you try to see what happens if you don't reset the "PPM"?
-> 
-> No difference, as far as I can tell. I used the patch below to
-> get more output. This is right after boot, in the initramfs:
-> 
-> [    0.787887] ucsi_acpi USBC000:00: hi ucsi here
-> [    0.787893] ucsi_acpi USBC000:00: skipping reset
-> [    0.787894] ucsi_acpi USBC000:00: enable basic notifications
-> [    0.813169] ucsi_acpi USBC000:00: got notification:
-> [    0.814386] ucsi_acpi USBC000:00:     checking ua->flags: 2, cci: 0
-> [    1.859334] ucsi_acpi USBC000:00: PPM init failed (-110)
-> 
-> Same output after cold boot, reboot from linux and reboot from windows.
-
-Based on that output, there is a notification, and I'm assuming that
-notification is for the command completion. But CCI is 0?
-
-That could be because the mailbox in memory is not getting
-synchronised for some reason, but it could also mean that the EC
-firmware is really not writing anything to the CCI. Both cases
-probable mean we are missing some extra step that Windows is doing,
-but what... I have no idea.
-
-thanks,
-
--- 
-heikki
+> Rob
