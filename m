@@ -2,90 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D22454E6D3E
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Mar 2022 05:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDBC4E6D6E
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Mar 2022 05:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356765AbiCYEfy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Mar 2022 00:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
+        id S244709AbiCYEre (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Mar 2022 00:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbiCYEfx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Mar 2022 00:35:53 -0400
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFD7C680B;
-        Thu, 24 Mar 2022 21:34:18 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 25 Mar
- 2022 12:34:11 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 25 Mar
- 2022 12:34:10 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>
-Subject: [PATCH] usb: typec: tcpm: testing array offset 'port->logbuffer_head' before use
-Date:   Fri, 25 Mar 2022 12:34:09 +0800
-Message-ID: <1648182849-9209-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S237520AbiCYErd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Mar 2022 00:47:33 -0400
+Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D0CC6EC7
+        for <linux-usb@vger.kernel.org>; Thu, 24 Mar 2022 21:45:56 -0700 (PDT)
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 7B0F0660C548
+        for <linux-usb@vger.kernel.org>; Thu, 24 Mar 2022 23:45:56 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id XbpknOPFIRnrrXbpkngRDZ; Thu, 24 Mar 2022 23:45:56 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ychwoWq+jKWXscmOpK+qKFx885JOQlK6rLw3cnAAJtU=; b=n8PNSaX442ga68s56glkIFM2tw
+        BPwaHBRnYvPChM9shQYkg2+QJ9xzPTsL4IlQ76Bjm9vxQ2xxLjScMndy8q+Lj8M5+e9d2LQHHqhAs
+        2SI7HUXWc7TGIFhR93GM5SbRe1Cr1/PRXzVNhugMDgfkCsPMmL93oCMaNXavXvTvDpz+OHi7LXgu1
+        5GdhsmTkiZsKEoRnovXblriXzXV+z9ybmI7gvamptfT+zayNTVPK5YxZPCbmvf+nsQ7xn9QElM8Sn
+        LDLgTNuD5PiqALk6AVGPrOT04M7YS3Pi5H1bFvwIYFL82tKbRSz/JPWpYG6lGmpBwGKA4WppaL5za
+        Ct9UvLrg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54468)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nXbpk-000lJ4-1e; Fri, 25 Mar 2022 04:45:56 +0000
+Message-ID: <86b338ea-2c6c-a06f-c935-30e2ebdd37ea@roeck-us.net>
+Date:   Thu, 24 Mar 2022 21:45:54 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-125.meizu.com (172.16.1.125) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] usb: typec: tcpm: testing array offset
+ 'port->logbuffer_head' before use
+Content-Language: en-US
+To:     Haowen Bai <baihaowen@meizu.com>, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1648182849-9209-1-git-send-email-baihaowen@meizu.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <1648182849-9209-1-git-send-email-baihaowen@meizu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nXbpk-000lJ4-1e
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54468
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 2
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix possible indexing array of bound for 
-port->logbuffer[port->logbuffer_head], where port->logbuffer_head boundary
- check happens later. so we do it before.
+On 3/24/22 21:34, Haowen Bai wrote:
+> Fix possible indexing array of bound for
+> port->logbuffer[port->logbuffer_head], where port->logbuffer_head boundary
+>   check happens later. so we do it before.
+> 
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+>   drivers/usb/typec/tcpm/tcpm.c | 15 ++++++++-------
+>   1 file changed, 8 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 5fce795..541e9e4 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -591,6 +591,14 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
+>   	unsigned long rem_nsec;
+>   
+>   	mutex_lock(&port->logbuffer_lock);
+> +
+> +	if (port->logbuffer_head < 0 ||
+> +	    port->logbuffer_head >= LOG_BUFFER_ENTRIES) {
+> +		dev_warn(port->dev,
+> +			 "Bad log buffer index %d\n", port->logbuffer_head);
+> +		goto abort;
+> +	}
+> +
+>   	if (!port->logbuffer[port->logbuffer_head]) {
+>   		port->logbuffer[port->logbuffer_head] =
+>   				kzalloc(LOG_BUFFER_ENTRY_SIZE, GFP_KERNEL);
+> @@ -607,13 +615,6 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
+>   		strcpy(tmpbuffer, "overflow");
+>   	}
+>   
+> -	if (port->logbuffer_head < 0 ||
+> -	    port->logbuffer_head >= LOG_BUFFER_ENTRIES) {
+> -		dev_warn(port->dev,
+> -			 "Bad log buffer index %d\n", port->logbuffer_head);
+> -		goto abort;
+> -	}
+> -
+>   	if (!port->logbuffer[port->logbuffer_head]) {
+>   		dev_warn(port->dev,
+>   			 "Log buffer index %d is NULL\n", port->logbuffer_head);
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+One could argue that the check is unnecessary and can be removed as it can be proven
+that it logbuffer_head always in the range of [0, LOG_BUFFER_ENTRIES - 1]. Moving
+the check, however, does not add any value unless you can _prove_ that it needs to
+be moved, ie that logbuffer_head can be observed to be < 0 or >= LOG_BUFFER_ENTRIES.
+I think that is quite unlikely.
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 5fce795..541e9e4 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -591,6 +591,14 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
- 	unsigned long rem_nsec;
- 
- 	mutex_lock(&port->logbuffer_lock);
-+
-+	if (port->logbuffer_head < 0 ||
-+	    port->logbuffer_head >= LOG_BUFFER_ENTRIES) {
-+		dev_warn(port->dev,
-+			 "Bad log buffer index %d\n", port->logbuffer_head);
-+		goto abort;
-+	}
-+
- 	if (!port->logbuffer[port->logbuffer_head]) {
- 		port->logbuffer[port->logbuffer_head] =
- 				kzalloc(LOG_BUFFER_ENTRY_SIZE, GFP_KERNEL);
-@@ -607,13 +615,6 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
- 		strcpy(tmpbuffer, "overflow");
- 	}
- 
--	if (port->logbuffer_head < 0 ||
--	    port->logbuffer_head >= LOG_BUFFER_ENTRIES) {
--		dev_warn(port->dev,
--			 "Bad log buffer index %d\n", port->logbuffer_head);
--		goto abort;
--	}
--
- 	if (!port->logbuffer[port->logbuffer_head]) {
- 		dev_warn(port->dev,
- 			 "Log buffer index %d is NULL\n", port->logbuffer_head);
--- 
-2.7.4
-
+Guenter
