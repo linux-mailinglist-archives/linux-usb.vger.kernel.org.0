@@ -2,184 +2,226 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8844E7BFA
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Mar 2022 01:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4224E7DE4
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Mar 2022 01:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbiCYUlq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Mar 2022 16:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
+        id S233633AbiCYV6c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Mar 2022 17:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiCYUlp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Mar 2022 16:41:45 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43014171EF9;
-        Fri, 25 Mar 2022 13:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648240810; x=1679776810;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=/khNg5Ei108i3fhOUlj+7F6wA9Py3hXoiSYOmw59AqM=;
-  b=FNec5TaO6SLl4eVHNIIwfTx+JfcfkR1TIn/dHohym0NYHZvnHLtBl3R6
-   zoNfQgaRgnBPQkZhuE/KMR+aMEC/zvPGZKSZTjAvEMqwF+sHSvDD4YbWm
-   a84V9tFmJaqJNE5+XwUUiiBavD986gufGGWpYH7ysObQ8Ax8MsLE1sDdN
-   Y=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 Mar 2022 13:40:09 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 13:40:09 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 25 Mar 2022 13:40:09 -0700
-Received: from jackp-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 25 Mar 2022 13:40:08 -0700
-Date:   Fri, 25 Mar 2022 13:39:59 -0700
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>, <kyletso@google.com>,
-        <andy.shevchenko@gmail.com>, <unixbhaskar@gmail.com>,
-        <subbaram@codeaurora.org>, <mrana@codeaurora.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] usb: typec: ucsi: possible deadlock in ucsi_pr_swap() and
- ucsi_handle_connector_change()
-Message-ID: <20220325203959.GA19752@jackp-linux.qualcomm.com>
-References: <037de7ac-e210-bdf5-ec7a-8c0c88a0be20@gmail.com>
- <YgPQB9BYJcDzbd02@kuha.fi.intel.com>
+        with ESMTP id S233577AbiCYV6b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Mar 2022 17:58:31 -0400
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E66E237F6;
+        Fri, 25 Mar 2022 14:56:55 -0700 (PDT)
+Received: by mail-oo1-f47.google.com with SMTP id i8-20020a4a6f48000000b00324ada4b9d9so1536740oof.11;
+        Fri, 25 Mar 2022 14:56:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=07QZdweVT8s+Pmvjh4pehebYkWYellXCpkQyazdEVlM=;
+        b=sJw/ngKR1FWs4daVNO1mrysf3hbCoNILglv/IBhYayn0UTMGxIs99DuYFvp+mfXVvs
+         XWRicdvFduurnRGuxxcJG4CT9qdc/OgceQtA7V6xsn56RowfQkkyp+/LJyf0l/OSf6zm
+         yTB3m/eiARJW4ZVUmYC3zMm6J7zsshZHnFWrkrM8E7e1zlWBdZtgOnPRqYlCS6oF/C9o
+         9vIaieV9zlCJw4ntA5VkKiybQGYyecDP9XZDpORiP24g+O2/u/gqjf8pFazxVhE1n7FL
+         IhNRMvbYu3rga295TgzgeVMJbj/0jCRi8qatj9h80bbWs5cWZ0q1t3fv2oypkw9sfAHP
+         kK8g==
+X-Gm-Message-State: AOAM5324AJuewbE7PNR/RSNL7lHoEqVYUZkVCl47u66o/yWW7mmfPD18
+        wqrGJG2V7LVDqwuBAOHEnbFIhykyZg==
+X-Google-Smtp-Source: ABdhPJzBZvXkR78XCZZ9Avn8UFj380HuRR3U/MKpgPGtSQdKJX3E0Ybiwo6MLU11DIhd07X+mmSXbQ==
+X-Received: by 2002:a4a:ac01:0:b0:324:910a:5d04 with SMTP id p1-20020a4aac01000000b00324910a5d04mr4861546oon.87.1648245414547;
+        Fri, 25 Mar 2022 14:56:54 -0700 (PDT)
+Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.googlemail.com with ESMTPSA id r81-20020acaf354000000b002ecf46e8016sm3380537oih.51.2022.03.25.14.56.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 14:56:53 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mukesh Savaliya <msavaliy@codeaurora.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        Bayi Cheng <bayi.cheng@mediatek.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Min Guo <min.guo@mediatek.com>, netdev@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH] dt-bindings: Fix missing '/schemas' in $ref paths
+Date:   Fri, 25 Mar 2022 16:56:52 -0500
+Message-Id: <20220325215652.525383-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YgPQB9BYJcDzbd02@kuha.fi.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+Absolute paths in $ref should always begin with '/schemas'. The tools
+mostly work with it omitted, but for correctness the path should be
+everything except the hostname as that is taken from the schema's $id
+value. This scheme is defined in the json-schema spec.
 
-On Wed, Feb 09, 2022 at 04:30:31PM +0200, Heikki Krogerus wrote:
-> On Wed, Feb 09, 2022 at 11:50:57AM +0800, Jia-Ju Bai wrote:
-> > Hello,
-> > 
-> > My static analysis tool reports a possible deadlock in the ucsi driver in
-> > Linux 5.16:
-> > 
-> > ucsi_pr_swap()
-> >   mutex_lock(&con->lock); --> Line 962 (Lock A)
-> >   wait_for_completion_timeout(&con->complete, ...) --> Line 981 (Wait X)
-> > 
-> > ucsi_handle_connector_change()
-> >   mutex_lock(&con->lock); --> Line 763 (Lock A)
-> >   complete(&con->complete); --> Line 782 (Wake X)
-> >   complete(&con->complete); --> Line 807 (Wake X)
-> > 
-> > When ucsi_pr_swap() is executed, "Wait X" is performed by holding "Lock A".
-> > If ucsi_handle_connector_change() is executed at this time, "Wake X" cannot
-> > be performed to wake up "Wait X" in ucsi_handle_connector_change(), because
-> > "Lock A" has been already held by ucsi_handle_connector_change(), causing a
-> > possible deadlock.
-> > I find that "Wait X" is performed with a timeout, to relieve the possible
-> > deadlock; but I think this timeout can cause inefficient execution.
-> > 
-> > I am not quite sure whether this possible problem is real.
-> > Any feedback would be appreciated, thanks :)
-> 
-> This is probable a regression from commit ad74b8649bea ("usb: typec:
-> ucsi: Preliminary support for alternate modes"). Can you test does
-> this patch fix the issue (attached)?
+Cc: Hector Martin <marcan@marcan.st>
+Cc: Sven Peter <sven@svenpeter.dev>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Vivien Didelot <vivien.didelot@gmail.com>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Vladimir Oltean <olteanv@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mukesh Savaliya <msavaliy@codeaurora.org>
+Cc: Akash Asthana <akashast@codeaurora.org>
+Cc: Bayi Cheng <bayi.cheng@mediatek.com>
+Cc: Chuanhong Guo <gch981213@gmail.com>
+Cc: Min Guo <min.guo@mediatek.com>
+Cc: netdev@vger.kernel.org
+Cc: linux-spi@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml   | 2 +-
+ Documentation/devicetree/bindings/net/dsa/dsa-port.yaml       | 2 +-
+ Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml  | 2 +-
+ .../devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml         | 2 +-
+ Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml | 2 +-
+ Documentation/devicetree/bindings/spi/sprd,spi-adi.yaml       | 2 +-
+ Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml      | 4 ++--
+ Documentation/devicetree/bindings/usb/mediatek,musb.yaml      | 2 +-
+ 8 files changed, 9 insertions(+), 9 deletions(-)
 
-We encountered a slightly different twist to this bug.  Instead of
-deadlocking, we see that the dr_swap() / pr_swap() operations actually
-jump out of the wait_for_completion_timeout() immediately, even before
-any partner change occurs.  This is because the con->complete may
-already have its done flag set to true from the first time
-ucsi_handle_connector_change() runs, and is never reset after that.
-
-In addition to the unlocking below, I think we need to also add
-reinit_completion() calls at the start of ucsi_{pr,dr}_swap().
-
-Thanks,
-Jack
-
-> From 2ad06425a3df7be656f8a5b3c202aab45554fd17 Mon Sep 17 00:00:00 2001
-> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Date: Wed, 9 Feb 2022 17:27:19 +0300
-> Subject: [PATCH] usb: typec: ucsi: Test fix
-> 
-> Interim.
-> 
-> Not-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index f0c2fa19f3e0f..225104beda8be 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -956,14 +956,18 @@ static int ucsi_dr_swap(struct typec_port *port, enum typec_data_role role)
->  	if (ret < 0)
->  		goto out_unlock;
->  
-> +	mutex_unlock(&con->lock);
-> +
->  	if (!wait_for_completion_timeout(&con->complete,
->  					msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
-> -		ret = -ETIMEDOUT;
-> +		return -ETIMEDOUT;
-> +
-> +	return 0;
->  
->  out_unlock:
->  	mutex_unlock(&con->lock);
->  
-> -	return ret < 0 ? ret : 0;
-> +	return ret;
->  }
->  
->  static int ucsi_pr_swap(struct typec_port *port, enum typec_role role)
-> @@ -992,11 +996,13 @@ static int ucsi_pr_swap(struct typec_port *port, enum typec_role role)
->  	if (ret < 0)
->  		goto out_unlock;
->  
-> +	mutex_unlock(&con->lock);
-> +
->  	if (!wait_for_completion_timeout(&con->complete,
-> -				msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS))) {
-> -		ret = -ETIMEDOUT;
-> -		goto out_unlock;
-> -	}
-> +				msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
-> +		return -ETIMEDOUT;
-> +
-> +	mutex_lock(&con->lock);
->  
->  	/* Something has gone wrong while swapping the role */
->  	if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) !=
-> @@ -1372,6 +1378,7 @@ void ucsi_unregister(struct ucsi *ucsi)
->  	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
->  
->  	for (i = 0; i < ucsi->cap.num_connectors; i++) {
-> +		complete(&ucsi->connector[i].complete);
->  		cancel_work_sync(&ucsi->connector[i].work);
->  		ucsi_unregister_partner(&ucsi->connector[i]);
->  		ucsi_unregister_altmodes(&ucsi->connector[i],
-> -- 
-> 2.34.1
-> 
+diff --git a/Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml b/Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
+index b6b5d3a912b3..0dc957a56d35 100644
+--- a/Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
++++ b/Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
+@@ -42,7 +42,7 @@ patternProperties:
+     description:
+       The individual power management domains within this controller
+     type: object
+-    $ref: /power/apple,pmgr-pwrstate.yaml#
++    $ref: /schemas/power/apple,pmgr-pwrstate.yaml#
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
+index e60867c7c571..07a85f7b17e0 100644
+--- a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
+@@ -15,7 +15,7 @@ description:
+   Ethernet switch port Description
+ 
+ allOf:
+-  - $ref: "http://devicetree.org/schemas/net/ethernet-controller.yaml#"
++  - $ref: /schemas/net/ethernet-controller.yaml#
+ 
+ properties:
+   reg:
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+index a776cd37c297..95fcb43675d6 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+@@ -103,7 +103,7 @@ patternProperties:
+                  supports up to 50MHz, up to four chip selects, programmable
+                  data path from 4 bits to 32 bits and numerous protocol
+                  variants.
+-    $ref: /spi/spi-controller.yaml#
++    $ref: /schemas/spi/spi-controller.yaml#
+ 
+     properties:
+       compatible:
+diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
+index be3cc7faed53..41e60fe4b09f 100644
+--- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
++++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
+@@ -18,7 +18,7 @@ description: |
+   capability of this controller.
+ 
+ allOf:
+-  - $ref: /spi/spi-controller.yaml#
++  - $ref: /schemas/spi/spi-controller.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
+index 055524fe8327..5a60fba14bba 100644
+--- a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
++++ b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
+@@ -16,7 +16,7 @@ description: The QSPI controller allows SPI protocol communication in single,
+   as NOR flash.
+ 
+ allOf:
+-  - $ref: /spi/spi-controller.yaml#
++  - $ref: /schemas/spi/spi-controller.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/spi/sprd,spi-adi.yaml b/Documentation/devicetree/bindings/spi/sprd,spi-adi.yaml
+index fe014020da69..a3ab1a1f1eb4 100644
+--- a/Documentation/devicetree/bindings/spi/sprd,spi-adi.yaml
++++ b/Documentation/devicetree/bindings/spi/sprd,spi-adi.yaml
+@@ -44,7 +44,7 @@ description: |
+   compatibility.
+ 
+ allOf:
+-  - $ref: /spi/spi-controller.yaml#
++  - $ref: /schemas/spi/spi-controller.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+index 77db1233516e..df766f8de872 100644
+--- a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+@@ -132,7 +132,7 @@ properties:
+     default: host
+ 
+   connector:
+-    $ref: /connector/usb-connector.yaml#
++    $ref: /schemas/connector/usb-connector.yaml#
+     description:
+       Connector for dual role switch, especially for "gpio-usb-b-connector"
+     type: object
+@@ -191,7 +191,7 @@ properties:
+ patternProperties:
+   "^usb@[0-9a-f]+$":
+     type: object
+-    $ref: /usb/mediatek,mtk-xhci.yaml#
++    $ref: /schemas/usb/mediatek,mtk-xhci.yaml#
+     description:
+       The xhci should be added as subnode to mtu3 as shown in the following
+       example if the host mode is enabled.
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,musb.yaml b/Documentation/devicetree/bindings/usb/mediatek,musb.yaml
+index 03d62d60ce5f..11a33f9b1f17 100644
+--- a/Documentation/devicetree/bindings/usb/mediatek,musb.yaml
++++ b/Documentation/devicetree/bindings/usb/mediatek,musb.yaml
+@@ -63,7 +63,7 @@ properties:
+     maxItems: 1
+ 
+   connector:
+-    $ref: /connector/usb-connector.yaml#
++    $ref: /schemas/connector/usb-connector.yaml#
+     description: Connector for dual role switch
+     type: object
+ 
+-- 
+2.32.0
 
