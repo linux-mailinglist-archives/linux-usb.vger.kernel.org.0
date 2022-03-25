@@ -2,78 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDBC4E6D6E
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Mar 2022 05:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8795A4E6F72
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Mar 2022 09:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244709AbiCYEre (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Mar 2022 00:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
+        id S1345556AbiCYIbz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Mar 2022 04:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237520AbiCYErd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Mar 2022 00:47:33 -0400
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D0CC6EC7
-        for <linux-usb@vger.kernel.org>; Thu, 24 Mar 2022 21:45:56 -0700 (PDT)
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 7B0F0660C548
-        for <linux-usb@vger.kernel.org>; Thu, 24 Mar 2022 23:45:56 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id XbpknOPFIRnrrXbpkngRDZ; Thu, 24 Mar 2022 23:45:56 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ychwoWq+jKWXscmOpK+qKFx885JOQlK6rLw3cnAAJtU=; b=n8PNSaX442ga68s56glkIFM2tw
-        BPwaHBRnYvPChM9shQYkg2+QJ9xzPTsL4IlQ76Bjm9vxQ2xxLjScMndy8q+Lj8M5+e9d2LQHHqhAs
-        2SI7HUXWc7TGIFhR93GM5SbRe1Cr1/PRXzVNhugMDgfkCsPMmL93oCMaNXavXvTvDpz+OHi7LXgu1
-        5GdhsmTkiZsKEoRnovXblriXzXV+z9ybmI7gvamptfT+zayNTVPK5YxZPCbmvf+nsQ7xn9QElM8Sn
-        LDLgTNuD5PiqALk6AVGPrOT04M7YS3Pi5H1bFvwIYFL82tKbRSz/JPWpYG6lGmpBwGKA4WppaL5za
-        Ct9UvLrg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54468)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nXbpk-000lJ4-1e; Fri, 25 Mar 2022 04:45:56 +0000
-Message-ID: <86b338ea-2c6c-a06f-c935-30e2ebdd37ea@roeck-us.net>
-Date:   Thu, 24 Mar 2022 21:45:54 -0700
+        with ESMTP id S244130AbiCYIby (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Mar 2022 04:31:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675933CA4C
+        for <linux-usb@vger.kernel.org>; Fri, 25 Mar 2022 01:30:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEF9661AF9
+        for <linux-usb@vger.kernel.org>; Fri, 25 Mar 2022 08:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5022EC340F5
+        for <linux-usb@vger.kernel.org>; Fri, 25 Mar 2022 08:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648197019;
+        bh=qpR3YZspHru5ZYFibQJM3beH+9JrHRRWSht910y4/bs=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=LEbjlZMOEuZ+Bhm7fFea3juw7XVyNOLIULjnghmBgePbMdSENXewtY5trYzlb+QvA
+         OJmJBGfZr4USpowBo2YBb6mA0IoEm99Sp0czxcqnJn2Xj9lu40OY/tMANa1YpKYEiH
+         EcsOQZNRNnNPzAYWM1oGjmFdV8iAeXxVWZbVCv89sMilKQw7FG8EhrIKLZlDEkWizk
+         Aq5HX81RkZhwg0YklQhZTyNVQDH0evT8pcqkcEQ7ZoxfHAat/y6vXRC+xIpvLIKqne
+         cX5An8UCKi/VOAzXk6ivqvD9l8++TXWfys1UxLdB378CaGpowU1YGowvkTO3SuCSnj
+         rUUhjaz6/op2Q==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 356ACCC13B0; Fri, 25 Mar 2022 08:30:19 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214021] The USB devices fail to be detected during boot
+Date:   Fri, 25 Mar 2022 08:30:18 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: tilman@imap.cc
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-214021-208809-ZcR5kwNzlD@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214021-208809@https.bugzilla.kernel.org/>
+References: <bug-214021-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] usb: typec: tcpm: testing array offset
- 'port->logbuffer_head' before use
-Content-Language: en-US
-To:     Haowen Bai <baihaowen@meizu.com>, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1648182849-9209-1-git-send-email-baihaowen@meizu.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <1648182849-9209-1-git-send-email-baihaowen@meizu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nXbpk-000lJ4-1e
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54468
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,54 +70,22 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/24/22 21:34, Haowen Bai wrote:
-> Fix possible indexing array of bound for
-> port->logbuffer[port->logbuffer_head], where port->logbuffer_head boundary
->   check happens later. so we do it before.
-> 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
->   drivers/usb/typec/tcpm/tcpm.c | 15 ++++++++-------
->   1 file changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 5fce795..541e9e4 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -591,6 +591,14 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
->   	unsigned long rem_nsec;
->   
->   	mutex_lock(&port->logbuffer_lock);
-> +
-> +	if (port->logbuffer_head < 0 ||
-> +	    port->logbuffer_head >= LOG_BUFFER_ENTRIES) {
-> +		dev_warn(port->dev,
-> +			 "Bad log buffer index %d\n", port->logbuffer_head);
-> +		goto abort;
-> +	}
-> +
->   	if (!port->logbuffer[port->logbuffer_head]) {
->   		port->logbuffer[port->logbuffer_head] =
->   				kzalloc(LOG_BUFFER_ENTRY_SIZE, GFP_KERNEL);
-> @@ -607,13 +615,6 @@ static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
->   		strcpy(tmpbuffer, "overflow");
->   	}
->   
-> -	if (port->logbuffer_head < 0 ||
-> -	    port->logbuffer_head >= LOG_BUFFER_ENTRIES) {
-> -		dev_warn(port->dev,
-> -			 "Bad log buffer index %d\n", port->logbuffer_head);
-> -		goto abort;
-> -	}
-> -
->   	if (!port->logbuffer[port->logbuffer_head]) {
->   		dev_warn(port->dev,
->   			 "Log buffer index %d is NULL\n", port->logbuffer_head);
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214021
 
-One could argue that the check is unnecessary and can be removed as it can be proven
-that it logbuffer_head always in the range of [0, LOG_BUFFER_ENTRIES - 1]. Moving
-the check, however, does not add any value unless you can _prove_ that it needs to
-be moved, ie that logbuffer_head can be observed to be < 0 or >= LOG_BUFFER_ENTRIES.
-I think that is quite unlikely.
+Tilman Schmidt (tilman@imap.cc) changed:
 
-Guenter
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |tilman@imap.cc
+
+--- Comment #16 from Tilman Schmidt (tilman@imap.cc) ---
+Any progress on this? This is getting fixed/circumvented and rebroken
+repeatedly in downstream releases like Ubuntu. A definitive fix would be hi=
+ghly
+appreciated.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
