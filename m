@@ -2,73 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B814E722B
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Mar 2022 12:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F6F4E725A
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Mar 2022 12:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356093AbiCYL3p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Mar 2022 07:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
+        id S1347921AbiCYLiM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Mar 2022 07:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355971AbiCYL3o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Mar 2022 07:29:44 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E514813FA7;
-        Fri, 25 Mar 2022 04:28:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648207689; x=1679743689;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dMgYIsDhZfpaODwuMAjjtTf/jqUDjedYJhO0eLc8fsM=;
-  b=OIlQpdikF/FDLepEpsHKHI0e8B5f6UzLRZYoard5YsMRLvN1eIOcqTyr
-   UBIA6Z0FE5H4o2SznNovocZ/ajHdJd3pVO2k3mjIj6ospGp8ezTt8Ec2O
-   ty5SCmOotnuDqWVUK8DsZB99CBKxaW7Womf/DoAb1tZ/tvFdLibFNrwVk
-   dnHdKSiob485U2qmL4kett/pqEzJxeQYNpXtWQ/uPifstQaUhc28SnR6v
-   SwaqKL0UZQYrXhXW8+3myoZr2MsYSjLZx4TM/r0lnRFTMFFamjxP86AaJ
-   qTIRrW8HdLHUKGdn7+O2903SpO3Z4Ur6FkRZ3GO8n2oXh3S5Olr0Tv79+
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="238555581"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="238555581"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 04:28:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="693652087"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 25 Mar 2022 04:27:58 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 25 Mar 2022 13:27:57 +0200
-Date:   Fri, 25 Mar 2022 13:27:57 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
- XHCI_SKIP_PHY_INIT
-Message-ID: <Yj2nPa6/Y01P5aCY@kuha.fi.intel.com>
-References: <1648103831-12347-1-git-send-email-quic_c_sanm@quicinc.com>
- <1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com>
- <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
- <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
+        with ESMTP id S1356931AbiCYLh6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Mar 2022 07:37:58 -0400
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E96BD7DA;
+        Fri, 25 Mar 2022 04:36:23 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id w21so5923656wra.2;
+        Fri, 25 Mar 2022 04:36:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5/xCx5Y2e0Klyd/HbXihrZqcDQDT2V+46V0GBs4k8mk=;
+        b=rDQf89hUvx34pCOLWGZCNqei98dKC/P/8jK/LzBHGAaTQCvQxDa5DYlBDA8c9UwBor
+         K2HRPVMKPcbQZuY8tkPp8l/tCrRoAwD63D6eFW/cp60wr7Z8NcuEzLQMAE6mNxKNgxyx
+         7FhncPHm6rxzVVrIViIX60t6Yc/v0OQAxe43ZzMyuTASK8ym+kSXQnCBRBGviQfkhKzw
+         WWtU2MaeHnS/jATfhtdrVtX8noVCfCpRArgUVoKPgyphgpUAeTR1p0gB/SaCksL5nZWS
+         oraJdsp9jU8my/VCQUoaylZWzSfpOyfExoGnVKGibEeuDUWmaY8MjM+C/TEWH5BrU0ih
+         jyig==
+X-Gm-Message-State: AOAM530VIQxPY2F6xiWrghMPfFp6B2vC8rR+f0EkC5GXEMNvcooT5eJi
+        bIekemMyGbDbJmpnsJqwFcc=
+X-Google-Smtp-Source: ABdhPJxJjF28B2+aRUQOSmKVj4QHce1eDHa+AlOHnwTrZyL7xExfzeVoAfSxs7+n8uRRi+3rbh3eiw==
+X-Received: by 2002:adf:d1c2:0:b0:205:7f2f:5043 with SMTP id b2-20020adfd1c2000000b002057f2f5043mr8882517wrd.238.1648208181638;
+        Fri, 25 Mar 2022 04:36:21 -0700 (PDT)
+Received: from [192.168.0.159] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id g1-20020a1c4e01000000b003899c8053e1sm5565941wmh.41.2022.03.25.04.36.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 04:36:21 -0700 (PDT)
+Message-ID: <382c4fae-95c5-af26-5d54-fa7ae7422b37@kernel.org>
+Date:   Fri, 25 Mar 2022 12:36:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 1/4] usb: host: export symbols for xhci hooks usage
+Content-Language: en-US
+To:     Jung Daehwan <dh10.jung@samsung.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>,
+        "chihhao . chen" <chihhao.chen@mediatek.com>, sc.suh@samsung.com,
+        cpgs@samsung.com, cpgsproxy5@samsung.com
+References: <1646375038-72082-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220304062617epcas2p2084161966aaa66d07f4c25720ec18088@epcas2p2.samsung.com>
+ <252651381.41646375583002.JavaMail.epsvc@epcpadp4>
+ <b33d8497-d6d5-18e2-93a9-e0564a84c1c5@kernel.org>
+ <1983025922.01648006681661.JavaMail.epsvc@epcpadp4>
+ <105eaeec-d77e-b0eb-86ad-a88c7446ca98@kernel.org>
+ <1295226194.41648172284403.JavaMail.epsvc@epcpadp4>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1295226194.41648172284403.JavaMail.epsvc@epcpadp4>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,101 +77,62 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 12:36:22AM +0200, Mathias Nyman wrote:
-> On 24.3.2022 14.27, Heikki Krogerus wrote:
-> > On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
-> >> Currently the phy init is done from dwc3 and also xhci which makes the
-> >> runtime_usage value 2 for the phy which causes issue during runtime
-> >> suspend. When we run the below command the runtime_status still shows
-> >> active.
-> >> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
-> >>
-> >> dwc3 manages PHY by own DRD driver, so skip the management by
-> >> HCD core by setting this quirk.
-> >>
-> >> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> >> ---
-> >>  drivers/usb/dwc3/host.c | 13 +++++++++++++
-> >>  1 file changed, 13 insertions(+)
-> >>
-> >> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> >> index eda8719..d4fcf06 100644
-> >> --- a/drivers/usb/dwc3/host.c
-> >> +++ b/drivers/usb/dwc3/host.c
-> >> @@ -13,6 +13,12 @@
-> >>  #include <linux/platform_device.h>
-> >>  
-> >>  #include "core.h"
-> >> +#include <linux/usb/xhci-plat.h>
-> >> +#include <linux/usb/xhci-quirks.h>
-> >> +
-> >> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
-> >> +	.quirks = XHCI_SKIP_PHY_INIT,
-> >> +};
-> >>  
-> >>  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
-> >>  					int irq, char *name)
-> >> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
-> >>  		}
-> >>  	}
-> >>  
-> >> +	ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
-> >> +			sizeof(xhci_plat_dwc3_xhci));
-> >> +	if (ret) {
-> >> +		dev_err(dwc->dev, "failed to add data to xHCI\n");
-> >> +		goto err;
-> >> +	}
-> >> +
-> >>  	ret = platform_device_add(xhci);
-> >>  	if (ret) {
-> >>  		dev_err(dwc->dev, "failed to register xHCI device\n");
-> > 
-> > I think you should just use device property:
-> > 
+On 25/03/2022 02:28, Jung Daehwan wrote:
+> On Wed, Mar 23, 2022 at 10:41:23AM +0100, Krzysztof Kozlowski wrote:
+>> On 23/03/2022 03:58, Jung Daehwan wrote:
+>>> On Mon, Mar 07, 2022 at 10:59:06AM +0100, Krzysztof Kozlowski wrote:
+>>>> On 04/03/2022 07:23, Daehwan Jung wrote:
+>>>>> Export symbols for xhci hooks usage:
+>>>>> 	xhci_ring_free
+>>>>> 	- Allow xhci hook to free xhci_ring.
+>>>>
+>>>> Instead of copying-pasting the name of function, please explain why do
+>>>> you need these symbols exported.
+>>>>
+>>>> The "Why" is actually one of most important questions, because "what is
+>>>> this patch doing" we can easily see...
+>>>>
+>>>>>
+>>>>> 	xhci_get_slot_ctx
+>>>>> 	- Allow xhci hook to get slot_ctx from the xhci_container_ctx
+>>>>> 	  for getting the slot_ctx information to know which slot is
+>>>>> 	  offloading and compare the context in remote subsystem memory
+>>>>> 	  if needed.
+>>>>>
+>>>>
+>>>>
+>>>> Best regards,
+>>>> Krzysztof
+>>>>
+>>>
+>>> Hi Krzysztof
+>>>
+>>> xhci_ring_free has been removed from v3..
+>>> The reason why I want to export is for managing vendor specific ring.
+>>> I want to alloc and free vendor specific ring on specific address.
+>>> It's done with xhci hooks.
+>>
+>> It's better, but still does not explain why these have to be exported.
+>> Please mention where are these hooks going to be. Where are they
+>> implemented. I actually expect all of these exports to be used in your
+>> patchset.
+>>
+>> Best regards,
+>> Krzysztof
+>>
 > 
-> This was suggested in an earlier series, but was rejected as it also added
-> the property as a device tree parameter.
+> OK. How about adding call stack like below?
 > 
-> I think adding more device properties can be messy in the long run, especially if we
-> need to add them for many of the existing xhci quirks.
-> We also end up with a mix where some device properties are listed as device tree
-> parameters, and some not.
-> 
-> Defining xhci quirks and platform data structure in headers shared with dwc3 and cdns3
-> allow those drivers to easily set any existing xhci quirk, or other possible optional
-> callbacks.
-> 
-> cdns3 driver is already doing this, but it includes the full xhci.h header.
-> This series cleans up that a bit so cdns3 will only include xhci quirk bits and
-> platform data structure.
-> 
-> On the downside we add a couple xhci related header files to include/linux/usb/
-> Let me know if you see any other issues I missed with this approach.
+> xhci_free_endpoint_ring -> xhci_vendor_free_transfer_ring(xhck hooks
+> ops) -> xhci_ring_free
 
-The problem here is that these drivers are now coupled together, and
-that should not be taken lightly. We have a dependency hell in our
-hands with a lot of drivers, and the culprit is always platform data.
+What I would like to see is high level explanation, why do you need
+these functions exported. Such call trace does not answer this, because
+you do not need to export functions just to call the. You need to export
+them for modules, so this means that some modules (which - need names)
+will be using these functions. Three or four sentences are usually
+enough to explain it.
 
-Build-in device properties may be messy, but I would still say they
-are less messy than those quirk flags - you got to admit, they are a
-mess. The benefit from build-in properties is in any case the fact
-that they remove the need to couple these drivers together.
 
-You can also use something like naming convention if you are worried
-about confusion between devicetree properties and build-in only
-properties ("build-in:skip-phy-init" or whatever), and of course
-require that each of the build-in only property is documented clearly
-in drivers/usb/host/xhci-plat.c. But this in any case really can not
-be justification for a platform data blob just so you can avoid using
-the properties - honestly, it really should to be the other way
-around.
-
-Platform data is in practice always problematic. On top of the driver
-coupling, it creates maintenance burden, code duplication, etc. Please
-don't just accept it lightly. I'm telling you, for hacks like this, the
-build-in device properties is a much much safer bet.
-
-thanks,
-
--- 
-heikki
+Best regards,
+Krzysztof
