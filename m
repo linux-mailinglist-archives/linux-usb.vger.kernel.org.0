@@ -2,150 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 177114E6AC1
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Mar 2022 23:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB404E6C28
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Mar 2022 02:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355431AbiCXWgM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Mar 2022 18:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
+        id S1351724AbiCYBm1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Mar 2022 21:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355411AbiCXWgK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 18:36:10 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442B9BA321;
-        Thu, 24 Mar 2022 15:34:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648161278; x=1679697278;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=QPHtBgpmj+pdnRd5iLwaN4PLxXJdwqwY6VkCkPvMiUI=;
-  b=IiNHCWVmW4GELU0s63iDHlhQS2IN4K5h3EHW0CCi1QHq0R4sqO37a+M2
-   9HXWJ1EymCL9mmo6l1elmYR3dVxw+MrtvAP6JSPoq/10oBQXKHUI/4J61
-   FBODsIamFE9tQWS6dIXGOWtbnwjNZfJJ0nifoF1tx6HuDwY7n8dCRECBf
-   1aNdmr8jqXbQ1PsbAdE7XLuWvGeB9ARF3MpC0QgMB5zcYkGUV48fJ5DA/
-   Et2VIITNnqkZp0cEQqu1CJ+3xLRJjEn+jRn3q/Ot2Hbhkex44Wft4UjyJ
-   +rWfVCbqz5o/yUj8GMYCOHaild9ojpCKf2Ul+0N6DwZnW4yjE4flxRJGI
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="238447070"
-X-IronPort-AV: E=Sophos;i="5.90,208,1643702400"; 
-   d="scan'208";a="238447070"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 15:34:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,208,1643702400"; 
-   d="scan'208";a="650029183"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 24 Mar 2022 15:34:33 -0700
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-References: <1648103831-12347-1-git-send-email-quic_c_sanm@quicinc.com>
- <1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com>
- <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
- XHCI_SKIP_PHY_INIT
-Message-ID: <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
-Date:   Fri, 25 Mar 2022 00:36:22 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        with ESMTP id S1357624AbiCYBkr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Mar 2022 21:40:47 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B69C193CB
+        for <linux-usb@vger.kernel.org>; Thu, 24 Mar 2022 18:38:09 -0700 (PDT)
+Received: from epcas3p4.samsung.com (unknown [182.195.41.22])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220325013805epoutp015f9c848f31f2f0196f7a775e4b1d5fbd~fe-X9Is-32171021710epoutp01Q
+        for <linux-usb@vger.kernel.org>; Fri, 25 Mar 2022 01:38:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220325013805epoutp015f9c848f31f2f0196f7a775e4b1d5fbd~fe-X9Is-32171021710epoutp01Q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1648172285;
+        bh=910WxcN8pBjdeRXjmpQWK3JOe9qPQxcY642mK+q7DDg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=I9y88AxHcgOhguIXPk/sjuuE8ESJryzRvLJ2doMA0xuSZJsIhNLGSOPhH5F0z1dI7
+         I85+C3vbjsotP6OdcQK+lvanqiFNNnOPY8JVvEJM42m28GJu6s4kS4zWLWOXTGtWHM
+         JpRgZyz1njIWZekTCc80b+TyPhkQAtTIFmwGnToU=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas3p3.samsung.com (KnoxPortal) with ESMTP id
+        20220325013804epcas3p3a71753f89954a903d90d78546b6f1b3e~fe-XX2n8p2534725347epcas3p3J;
+        Fri, 25 Mar 2022 01:38:04 +0000 (GMT)
+Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp2.localdomain
+        (Postfix) with ESMTP id 4KPl8r2zRwz4x9QK; Fri, 25 Mar 2022 01:38:04 +0000
+        (GMT)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220325012959epcas2p45d91d20dff6adc0f17dc4305d9e14130~fe4UH5A4L0307203072epcas2p4s;
+        Fri, 25 Mar 2022 01:29:59 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220325012959epsmtrp28f6457e9afc0f6d15fc66bf7f2aa3684~fe4UG4etZ0434104341epsmtrp23;
+        Fri, 25 Mar 2022 01:29:59 +0000 (GMT)
+X-AuditID: b6c32a29-41fff700000074af-d7-623d1b1709f0
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A4.BA.29871.71B1D326; Fri, 25 Mar 2022 10:29:59 +0900 (KST)
+Received: from ubuntu (unknown [12.36.155.120]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220325012959epsmtip144d1117d67e9abd83c5da9cceb5cf0b5~fe4T41NUs0578005780epsmtip1o;
+        Fri, 25 Mar 2022 01:29:59 +0000 (GMT)
+Date:   Fri, 25 Mar 2022 10:28:36 +0900
+From:   Jung Daehwan <dh10.jung@samsung.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>,
+        "chihhao . chen" <chihhao.chen@mediatek.com>, sc.suh@samsung.com,
+        cpgs@samsung.com, cpgsproxy5@samsung.com
+Subject: Re: [PATCH v1 1/4] usb: host: export symbols for xhci hooks usage
+Message-ID: <1295226194.41648172284403.JavaMail.epsvc@epcpadp4>
 MIME-Version: 1.0
-In-Reply-To: <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <105eaeec-d77e-b0eb-86ad-a88c7446ca98@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgkeLIzCtJLcpLzFFi42LZdlhJTldc2jbJ4MVzA4sVh+cxWrw8pGmx
+        +eEVNosnRxaxWzQvXs9mcf3Pe0aL9ucX2CzOn9/AbnF51xw2i0XLWpktmjdNYbWYuVbZouvu
+        DUYHXo/Lfb1MHgs2lXos3vOSyWPTqk42j/1z17B7tJzcz+LRt2UVo8fnTXIBHFFcNimpOZll
+        qUX6dglcGae2PWMsuM9TseneKbYGxu+cXYycHBICJhJXey+wdDFycQgJ7GaUaHtwjgUiISmx
+        dO4NdghbWOJ+yxFWiKJHjBLXNk5iAkmwCKhK9Cz7xwxiswloSdz7cQLMFhHQlLj+9ztYA7PA
+        fmaJ7/vPgiWEBbwkfj77xgpi8wI1nF92iBFi6hsmid8tx1kgEoISJ2c+AbOZgYpu/HsJtI0D
+        yJaWWP6PAyTMKWAnsbljE1hYVEBF4tXB+gmMgrOQNM9C0jwLoXkBI/MqRsnUguLc9NxiwwLD
+        vNRyveLE3OLSvHS95PzcTYzgyNLS3MG4fdUHvUOMTByMhxglOJiVRHjvX7ZOEuJNSaysSi3K
+        jy8qzUktPsQozcGiJM57oetkvJBAemJJanZqakFqEUyWiYNTqoFp2sacAL1lJQ2BZownvp4M
+        vxcYVdb1tHIDv/LGuO17+gqtbmVpGTGYSKr6qDvNEL/VVbU6bepe/WulL9TWeS/6qsjSFdYY
+        kphxvV9D1C/Jv2XG2QtZFhuPy2lssms5IfV327SD3TeVDubon7mgLnaG5eBRx/PHdl1z6Pl3
+        Rjbm/euqCdEZNRdc136Ti/Fi124ODfNbZnFCrUH4BafJGsH19fN1TvzoW2thEeE1+Yrqx0Mf
+        Mj1vMUz9Ebvz4Z3M5Ap7qVy3WVEfJz2a/WW2mI1E/1qjT5fji/MWpP5d3pdxbmXw09UL3k/i
+        t6/7YdXHpW24yN1faEd5ihqf1cvf2TVmz7f8aM2oD0vRNF73JlKJpTgj0VCLuag4EQBxtVcf
+        GwMAAA==
+X-CMS-MailID: 20220325012959epcas2p45d91d20dff6adc0f17dc4305d9e14130
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----FxW1adctUC2Ba58hBscSmKlxeMgdXQkzmfCwtO.kn3Xz82SJ=_5685_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20220304062617epcas2p2084161966aaa66d07f4c25720ec18088
+References: <1646375038-72082-1-git-send-email-dh10.jung@samsung.com>
+        <CGME20220304062617epcas2p2084161966aaa66d07f4c25720ec18088@epcas2p2.samsung.com>
+        <252651381.41646375583002.JavaMail.epsvc@epcpadp4>
+        <b33d8497-d6d5-18e2-93a9-e0564a84c1c5@kernel.org>
+        <1983025922.01648006681661.JavaMail.epsvc@epcpadp4>
+        <105eaeec-d77e-b0eb-86ad-a88c7446ca98@kernel.org>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24.3.2022 14.27, Heikki Krogerus wrote:
-> On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
->> Currently the phy init is done from dwc3 and also xhci which makes the
->> runtime_usage value 2 for the phy which causes issue during runtime
->> suspend. When we run the below command the runtime_status still shows
->> active.
->> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
->>
->> dwc3 manages PHY by own DRD driver, so skip the management by
->> HCD core by setting this quirk.
->>
->> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->> ---
->>  drivers/usb/dwc3/host.c | 13 +++++++++++++
->>  1 file changed, 13 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
->> index eda8719..d4fcf06 100644
->> --- a/drivers/usb/dwc3/host.c
->> +++ b/drivers/usb/dwc3/host.c
->> @@ -13,6 +13,12 @@
->>  #include <linux/platform_device.h>
->>  
->>  #include "core.h"
->> +#include <linux/usb/xhci-plat.h>
->> +#include <linux/usb/xhci-quirks.h>
->> +
->> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
->> +	.quirks = XHCI_SKIP_PHY_INIT,
->> +};
->>  
->>  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
->>  					int irq, char *name)
->> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
->>  		}
->>  	}
->>  
->> +	ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
->> +			sizeof(xhci_plat_dwc3_xhci));
->> +	if (ret) {
->> +		dev_err(dwc->dev, "failed to add data to xHCI\n");
->> +		goto err;
->> +	}
->> +
->>  	ret = platform_device_add(xhci);
->>  	if (ret) {
->>  		dev_err(dwc->dev, "failed to register xHCI device\n");
+------FxW1adctUC2Ba58hBscSmKlxeMgdXQkzmfCwtO.kn3Xz82SJ=_5685_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+
+On Wed, Mar 23, 2022 at 10:41:23AM +0100, Krzysztof Kozlowski wrote:
+> On 23/03/2022 03:58, Jung Daehwan wrote:
+> > On Mon, Mar 07, 2022 at 10:59:06AM +0100, Krzysztof Kozlowski wrote:
+> >> On 04/03/2022 07:23, Daehwan Jung wrote:
+> >>> Export symbols for xhci hooks usage:
+> >>> 	xhci_ring_free
+> >>> 	- Allow xhci hook to free xhci_ring.
+> >>
+> >> Instead of copying-pasting the name of function, please explain why do
+> >> you need these symbols exported.
+> >>
+> >> The "Why" is actually one of most important questions, because "what is
+> >> this patch doing" we can easily see...
+> >>
+> >>>
+> >>> 	xhci_get_slot_ctx
+> >>> 	- Allow xhci hook to get slot_ctx from the xhci_container_ctx
+> >>> 	  for getting the slot_ctx information to know which slot is
+> >>> 	  offloading and compare the context in remote subsystem memory
+> >>> 	  if needed.
+> >>>
+> >>
+> >>
+> >> Best regards,
+> >> Krzysztof
+> >>
+> > 
+> > Hi Krzysztof
+> > 
+> > xhci_ring_free has been removed from v3..
+> > The reason why I want to export is for managing vendor specific ring.
+> > I want to alloc and free vendor specific ring on specific address.
+> > It's done with xhci hooks.
 > 
-> I think you should just use device property:
+> It's better, but still does not explain why these have to be exported.
+> Please mention where are these hooks going to be. Where are they
+> implemented. I actually expect all of these exports to be used in your
+> patchset.
+> 
+> Best regards,
+> Krzysztof
 > 
 
-This was suggested in an earlier series, but was rejected as it also added
-the property as a device tree parameter.
+OK. How about adding call stack like below?
 
-I think adding more device properties can be messy in the long run, especially if we
-need to add them for many of the existing xhci quirks.
-We also end up with a mix where some device properties are listed as device tree
-parameters, and some not.
+xhci_free_endpoint_ring -> xhci_vendor_free_transfer_ring(xhck hooks
+ops) -> xhci_ring_free
 
-Defining xhci quirks and platform data structure in headers shared with dwc3 and cdns3
-allow those drivers to easily set any existing xhci quirk, or other possible optional
-callbacks.
+Best Regards,
+Jung Daehwan
 
-cdns3 driver is already doing this, but it includes the full xhci.h header.
-This series cleans up that a bit so cdns3 will only include xhci quirk bits and
-platform data structure.
+------FxW1adctUC2Ba58hBscSmKlxeMgdXQkzmfCwtO.kn3Xz82SJ=_5685_
+Content-Type: text/plain; charset="utf-8"
 
-On the downside we add a couple xhci related header files to include/linux/usb/
-Let me know if you see any other issues I missed with this approach.
 
-Thanks
-Mathias
+------FxW1adctUC2Ba58hBscSmKlxeMgdXQkzmfCwtO.kn3Xz82SJ=_5685_--
+
