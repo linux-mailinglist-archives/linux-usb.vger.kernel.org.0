@@ -2,54 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE21B4E80BA
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Mar 2022 13:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7CB44E80E2
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Mar 2022 13:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbiCZMMg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Mar 2022 08:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
+        id S232969AbiCZMp3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Mar 2022 08:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbiCZMMf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Mar 2022 08:12:35 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2ED62A00;
-        Sat, 26 Mar 2022 05:10:58 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id bq24so1495272lfb.5;
-        Sat, 26 Mar 2022 05:10:58 -0700 (PDT)
+        with ESMTP id S230241AbiCZMp2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Mar 2022 08:45:28 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E571A22BC2;
+        Sat, 26 Mar 2022 05:43:50 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id bu29so17614745lfb.0;
+        Sat, 26 Mar 2022 05:43:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :references:from:in-reply-to:content-transfer-encoding;
-        bh=Ll5knS5YA52Kc4SbaRYixAUy03BOBNgYGFoMKYNZTIg=;
-        b=bIWm3xtJfUJmweXArCFB/6GKKm4CDtfED0ixkIKU9Vg0UNlwQmdC2lwTKeV0EYKCAg
-         41ypveRNCpWi+SOlXU9zgvN1g1R7Wu8U0S1jTgZDiaQOAUDhcPmg3dxmG88sxZhHKlB1
-         7Ze/HNL5FG7OHuNgI0oE02V1LC7oGI0eYwP17iMj/9JJ4p2Hm1smAsAp9oPqFcvEaWNl
-         rKor25c60uk8vDm4uOkIyuRCpjV/Bpt8dye4motVtG595QXprTU+4zQ+lxzhp6cNMobP
-         3kfZoS4wkoWTcaB6QFJequjpuT+24FpOK6cJ2mlKvOilndmvtC6a0aJN59S1IotvgDN0
-         YT4Q==
+        bh=dkHNlJuCLFrOKAwBePvcq9liX1UlXv47eIJWGN8QrZc=;
+        b=JAcNQ3jmIk15fBuGkSxTQ0Z1MRKZsbwTr1J9MLhZx0gAm0nmzG52Vb/oOTZ2phtbWN
+         fXF4z1p7B005X+pE4FD317P2aItWlrE/EdqUc6UTT1qmWDNt6grzCS2SEZdBokXzd+uH
+         kZTS3tkq/scQY4sqRSkg32KmTFe6fKEGFD/X1vVneUY9/3V4WIp/ZO2BTzGfEbE5S72g
+         kdhbk7+5PMsgfhCRo6Ag+02M1ZuEazPYO25frIvr3nu3TNTzwRvy/n27Pan93JA7UV8e
+         8jL12CBUbxNvdeTVBGM8iBIOjdeiIv9ePtm6oae/hzau5mLZ6cEXV6VL81uus+5/uFeM
+         X01w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Ll5knS5YA52Kc4SbaRYixAUy03BOBNgYGFoMKYNZTIg=;
-        b=WVvf9bMlVtITLqmJvaVGN3TQv1t6+Hmq8m2QTaDraFSiSaMjhCAu0RBjzbbDGv1eUH
-         lPRN36AxQNjTAtuRka3yz4V4uj5p2584Pbu4SJqjik4LCBUa+WYOAkVKGwP/ifk3Z3on
-         7wCBqezaF+EKyAI06ZAY0VT1q8WlxWgutEdjCIaZibSAvzGgenN5sX5KWigz2vRNor9Y
-         0YfI0a3hD5ErdnKRvPIWqa1F8/VUKm1rmwF46ogIXRHZ7vCKqd0GhO7bk4MBMnQImq23
-         GYRXN8/S1H8T5ZmVSPaUsS+eW/5hDc5Lo7xT16GcO2wOmo6YZkyozQd1MighZ+t7PlWQ
-         8Cgw==
-X-Gm-Message-State: AOAM533V7HvbfM5MXghJNdK12/8ZYC3oIAYGvQzJU/K/zX0x8d8pGEvt
-        9gQoW88BnOErLzM3yjsw8C4=
-X-Google-Smtp-Source: ABdhPJwj+mzvxH9OfMNHs/OW5zJhrbfF6E3JAuD0uNtIYYFvw/Dpa9LIUM+AedD1YYxDgVs9BW0YQg==
-X-Received: by 2002:a05:6512:22cd:b0:44a:6d2c:8b9f with SMTP id g13-20020a05651222cd00b0044a6d2c8b9fmr7855962lfu.142.1648296656622;
-        Sat, 26 Mar 2022 05:10:56 -0700 (PDT)
+        bh=dkHNlJuCLFrOKAwBePvcq9liX1UlXv47eIJWGN8QrZc=;
+        b=NNiy2rq9UjWtlTnDkag3QatONqw5ae73N/2feANi7VXt5VwWGsUAb3l8+PJNgogE5l
+         rnrc6mX3dKc96CilCMmpogZdXfZm3GUkA9Soe7kfgPPaxMD3CwjRaNezvJCT5TFyFOkJ
+         MSF+ALhsxF96w58RVZsAqJ3xPkvavgrDAV9M6Fo8IdIkOu5IWPdNCugpJr9Tw7wB3X0z
+         rgJm4xbxSBNXXukkO10fYXZQgVrYtmARo3hNLBmRp3pRYhxxZ2A9y/niTndylTjCZPsM
+         l0WsI7v2UiDP3e3pqDrGri6HVD5qep1pVA9s/oaN0O0tzRmZF/Is309tVwQh2afFtM+n
+         YJAw==
+X-Gm-Message-State: AOAM531/Qg2X9QcJydh27IvXf8iYOO7jn5RHX0/ifPNaswSYYNdPTsZS
+        qVIEmYTysVx/+jooeb0kpnc=
+X-Google-Smtp-Source: ABdhPJx7SmErxDmbkwRJcvtXrz+ac8KvRmFbNYoXprLR7ObTuaF1G6c6R+CUiLzgfpHZ8kzdzLj8FA==
+X-Received: by 2002:a05:6512:16a9:b0:44a:2f67:3b29 with SMTP id bu41-20020a05651216a900b0044a2f673b29mr12238459lfb.153.1648298629015;
+        Sat, 26 Mar 2022 05:43:49 -0700 (PDT)
 Received: from [192.168.1.11] ([94.103.225.225])
-        by smtp.gmail.com with ESMTPSA id b36-20020a0565120ba400b0044a245f918esm1041607lfv.232.2022.03.26.05.10.55
+        by smtp.gmail.com with ESMTPSA id m13-20020ac2424d000000b0044859fdd0b7sm1048951lfl.301.2022.03.26.05.43.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Mar 2022 05:10:55 -0700 (PDT)
-Message-ID: <f468c651-4bc7-75f2-e5e3-2b88aaf37cb2@gmail.com>
-Date:   Sat, 26 Mar 2022 15:10:54 +0300
+        Sat, 26 Mar 2022 05:43:48 -0700 (PDT)
+Message-ID: <59034997-46f4-697d-3620-7897db7fb97d@gmail.com>
+Date:   Sat, 26 Mar 2022 15:43:47 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
@@ -80,29 +80,38 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Hi David,
 
 On 3/26/22 14:47, David Kahurani wrote:
-> Same here. My apologies.
-> 
-> On Sat, Mar 26, 2022 at 2:28 PM David Kahurani <k.kahurani@gmail.com> wrote:
 >>
->> Hello,
+>> Signed-off-by: David Kahurani <k.kahurani@gmail.com>
+>> Reported-by: syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com
+>> ---
+>>  drivers/net/usb/ax88179_178a.c | 181 +++++++++++++++++++++++++++------
+>>  1 file changed, 152 insertions(+), 29 deletions(-)
 >>
->> syzbot found the following issue on:
+>> diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+>> index a31098981..932e21a65 100644
+>> --- a/drivers/net/usb/ax88179_178a.c
+>> +++ b/drivers/net/usb/ax88179_178a.c
+>> @@ -224,9 +224,12 @@ static int __ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+>>   ret = fn(dev, cmd, USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+>>   value, index, data, size);
 >>
->> HEAD commit: 85cfd6e539bd kmsan: core: delete kmsan_gup_pgd_range()
->> git tree: https://github.com/google/kmsan.git master
->> console output: https://syzkaller.appspot.com/x/log.txt?x=12d6c53c700000
->> kernel config: https://syzkaller.appspot.com/x/.config?x=b9807dd5b044fd7a
->> dashboard link: https://syzkaller.appspot.com/bug?extid=d3dbdf31fbe9d8f5f311
->> compiler: clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
->>
->> Based off a previous patch to fix a similar issue.
->> -------------------------
 
-Looks sane.
+You've changed __ax88179_write_cmd(), but not __ax88179_read_cmd(). I've 
+missed it. Changing  __ax88179_write_cmd() does not help with uninit 
+value bugs
 
-Can you, please, send it as proper patch with explanation in commit 
-message and with a bit cutted log, since full ->probe() calltrace is not 
-interesting :)
+Also I believe, __ax88179_read_cmd() should have __must_check annotation 
+too, since problem came from it in the first place (I mean after added 
+sane error handling inside it)
+
+Next thing is ax88179_read_cmd_nopm() still prone to uninit value bugs, 
+since it touches uninitialized `buf` in case of __ax88179_read_cmd() 
+error...
+
+
+
+I remembered why I gave up on fixing this driver... I hope, you have 
+more free time and motivation :)
 
 
 
