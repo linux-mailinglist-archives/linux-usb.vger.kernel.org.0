@@ -2,74 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F4E4E8424
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Mar 2022 21:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C78B34E8458
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Mar 2022 22:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235110AbiCZUTi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Mar 2022 16:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S235364AbiCZVTd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Mar 2022 17:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235108AbiCZUTh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Mar 2022 16:19:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAB9201AD;
-        Sat, 26 Mar 2022 13:18:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27AFF60DE7;
-        Sat, 26 Mar 2022 20:18:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 89277C34110;
-        Sat, 26 Mar 2022 20:17:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648325879;
-        bh=t9TqTzHBMH9CC+VthsB8t8Y6SaXZs2Sfvo6XYeWkERI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=AI+8tw4ZgSQ8fo43Msvj7UkRwwDYGJuHsskUN6lYe2UDnXt4iFTe8Yn9leaGvJCQ6
-         plXoEOkfwDaTBLM0FbIVucQCb+ozsF5snWaGOP+0I4EH7kVWQd0y0uGYuCWKLBBGAg
-         Uy4Fq/FqDoNBOThg78fB5o/091WCalweF/y+TUkZeWUio4x4QWaVEWhYdOam4u1Dp+
-         4xplMWEKL5bHTZe71jjPwno1Vk6IMhEb2CEf4LnynwtYudRYreDw3I6TRBVHNo9maE
-         2NQuatoVJfHsMECDOZk4oCX6BY9WlcT6cDMby4BHwGOxNVEGpKYNQVD+8jgYnTWZ+I
-         6pPgsD4JmqbPA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 77A36E6D402;
-        Sat, 26 Mar 2022 20:17:59 +0000 (UTC)
-Subject: Re: [GIT PULL] USB/Thunderbolt driver changes for 5.18-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yj7vGtn8fILavjyL@kroah.com>
-References: <Yj7vGtn8fILavjyL@kroah.com>
-X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Yj7vGtn8fILavjyL@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.18-rc1
-X-PR-Tracked-Commit-Id: 46d2c20b0b10cf07a2a24b047a09195ba96c84f7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 710f5d627a98e86f821aceb840b8f2f1fcc6cf75
-Message-Id: <164832587948.7233.13743974093479078315.pr-tracker-bot@kernel.org>
-Date:   Sat, 26 Mar 2022 20:17:59 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229921AbiCZVTc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Mar 2022 17:19:32 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AC662FF;
+        Sat, 26 Mar 2022 14:17:55 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id m3so18776847lfj.11;
+        Sat, 26 Mar 2022 14:17:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=dorKyWKnXy7IlU5rrn/oj/4eomYs0ghYVJYTP+RQhwU=;
+        b=YRqFWEWAZ28v076CK4im5SsXJvYcIfTGKam4+0bSK2o/aS6vIDYE9Y18URClNg/GqB
+         RCIrT5/7wf+CDsHlQvI4o8cs9ZDgVgyG09UsPOCxV7FV/be8bWIFNAdFHLt232AT/u/R
+         9tApWuES+tn6MKrH+Rd0XeuBjp3pfNrH9xiShEbuRChEEcxs22tXOEpjgP9sHh12IhF7
+         pyRZ7G5XJCDBc28A619jRNMmcBnapRF4g8eyBhjm8NHdarSvsB1s9EOVtGA7U+e2x7Z+
+         SqPOCtfjyDxdl+qszxJZ2uetnejw9VLLWyenYM/+BHW6jmXH/0j8qsRyJ0oRFmob/5Oz
+         E37g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dorKyWKnXy7IlU5rrn/oj/4eomYs0ghYVJYTP+RQhwU=;
+        b=OWtiosIj/h7OB969mbqPDwL32NnFGh+IdR5T+kFRrgdcDsCPaYcBF2jaw1TVndYTI1
+         gI6Zz/2j8a9NWwLkqi/riLMGSqwqbWH1VPnM5/KDzf+J0GUTkpKImYqNDB+gS2Erz2uS
+         Nc9ZP8ahIcEheGpLr8oIUivl2nw5pQEDU1b/S+WtwoKMy1krKIKr/GCDPhR2mcvUDa3N
+         KV1+N0UpLYZG6SL8LeMgfGtTPHDAlbG5+0b4djxAvVigIm4JaU+rwkWJhYD+p/xXL6IH
+         3FzxUyMmlChbgLE+uYPNG2K+5SfTbgkVue/bDu/XBwGC/+hg7VWXs8uOr1tnBK50RDBw
+         Dphg==
+X-Gm-Message-State: AOAM533wnbmlWFwTFFPbwpbCK8kPmcrR3BMNlkNZDboD+y/BlxtKDJoQ
+        FwqVkJWRKPgiYxAqTzoOlPS2rTYWiyvaEg==
+X-Google-Smtp-Source: ABdhPJwR/+ymjQZpTMAtiHGRcZti14dQruOjPpTxdcJTz7Y/Kj/+bGyN0Cae9N+tEUxHtv4Zv8OG9Q==
+X-Received: by 2002:ac2:434a:0:b0:443:e48d:50b7 with SMTP id o10-20020ac2434a000000b00443e48d50b7mr13484093lfl.45.1648329472824;
+        Sat, 26 Mar 2022 14:17:52 -0700 (PDT)
+Received: from dell.intranet (178235254230.gdansk.vectranet.pl. [178.235.254.230])
+        by smtp.gmail.com with ESMTPSA id h8-20020ac25d68000000b00447b5cad2a7sm1174015lft.228.2022.03.26.14.17.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 14:17:52 -0700 (PDT)
+From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
+To:     Aaro Koskinen <aaro.koskinen@iki.fi>
+Cc:     Tony Lindgren <tony@atomide.com>, Paul Walmsley <paul@pwsan.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Felipe Balbi <balbi@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-mmc@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2] ARM: OMAP1: Prepare for conversion of OMAP1 clocks to CCF
+Date:   Sat, 26 Mar 2022 22:17:49 +0100
+Message-ID: <1810824.tdWV9SEqCh@dell>
+In-Reply-To: <20220322190753.GF297526@darkstar.musicnaut.iki.fi>
+References: <20220310233307.99220-3-jmkrzyszt@gmail.com> <20220322163646.GD297526@darkstar.musicnaut.iki.fi> <20220322190753.GF297526@darkstar.musicnaut.iki.fi>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Sat, 26 Mar 2022 11:46:50 +0100:
+Hi Aaro,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.18-rc1
+Dnia wtorek, 22 marca 2022 20:07:53 CET Aaro Koskinen pisze:
+> Hi,
+> 
+> On Tue, Mar 22, 2022 at 06:36:48PM +0200, Aaro Koskinen wrote:
+> > On Mon, Mar 21, 2022 at 10:54:16PM +0100, Janusz Krzysztofik wrote:
+> > > In preparation for conversion of OMAP1 clocks to common clock framework,
+> > > identify users of those clocks which don't call clk_prepare/unprepare()
+> > > and update them to call clk_prepare_enable/clk_disable_unprepare() instead
+> > > of just clk_enable/disable(), as required by CCF implementation of clock
+> > > API.
+> > > 
+> > > v2: update still a few more OMAP specific drivers missed in v1,
+> > >   - call clk_prepare/unprepare() just after/before clk_get/put() where it
+> > >     can make more sense than merging prepare/unprepare with enable/disable.
+> > 
+> > Something is still broken. When doing kexec (using CCF kernel), the
+> > kexec'ed kernel now hangs early (on 770):
+> [...]
+> > [    0.928863] calling  omap1_init_devices+0x0/0x2c @ 1
+> 
+> It hangs in omap_sram_reprogram_clock() (<- omap1_select_table_rate()
+> <- omap1_clk_late_init()).
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/710f5d627a98e86f821aceb840b8f2f1fcc6cf75
+I've reviewed my changes but haven't found anything suspicious.  Could you 
+please provide:
+- dmesg from both cold start and kexec, both non-CCF and CCF version, 
+- contents of /sys/kernel/debug/clock/summary (non-CCF) after boot/kexec,
+- contents of /sys/kernel/debug/clk/clk_summary (CCF) after boot?
 
-Thank you!
+Thanks,
+Janusz
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> 
+> A.
+> 
+
+
+
+
