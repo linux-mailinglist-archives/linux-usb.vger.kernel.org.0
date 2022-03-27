@@ -2,105 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CED4E8486
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Mar 2022 23:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7864E84BD
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Mar 2022 01:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiCZWUO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Mar 2022 18:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
+        id S230237AbiC0AGf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Mar 2022 20:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233852AbiCZWUN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Mar 2022 18:20:13 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4339AE0F4
-        for <linux-usb@vger.kernel.org>; Sat, 26 Mar 2022 15:18:36 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id c23so11683407plo.0
-        for <linux-usb@vger.kernel.org>; Sat, 26 Mar 2022 15:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Zn9hUS9+TJuj5BOExyChQI9blhGPAAw70oe9ehMu1C8=;
-        b=YdLqSJCaxeDoszeI1HsCA6L9lCAFsdqkKTgMJhgEohIbCVwmPRCmFy4CNsYR071iWO
-         S5NbX5OQ4JNIGQUxkjyxwcTeXJB7b8/hHIeBtNpTHbfKISnEWCCF/pliS466HeBsOeuX
-         Jzf7AjanB8WJSpHcCDgWiHpDtLdlKtt2GdJldmey1Mzb/CeYDyFfoqskq2x5iC1TGAME
-         VivtU3/YpdNVYPa/FiiJk4t7ldmdvX3o+5I44iHn3QQWHIfBen2+Eetkvs7IgMROi85M
-         106KObN8lcOt8QJPSmTCEwwbFMjJ9WZE5gQMxqpucmBGajpi95VMRzmM7tmsaESRcNVU
-         jL+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Zn9hUS9+TJuj5BOExyChQI9blhGPAAw70oe9ehMu1C8=;
-        b=kgcLqOarbYLKVk1ruP600DLHzoBU3JzinLJ1YcdO/7IHPtTFqiYs+GkPnvYad4yqLF
-         c0kxD+L8aNoZMXzZu+/RsbJ9IDVwt6RZqTrfHwePrn8QtD2Asu9Z0xeZnSsyqwDXIPbx
-         WE7BXV7RYmyW6Fu5bdAnf0PfpQYWK6oMJVk66+mtOTlL1/1/JvyBRHQ+kLuFS/JiInBa
-         j3DPuAcPLlzLEDhznONVP5wDvW2xwb9otJi5509thOMmyz7jjaf9LuCJYrXEs/ZtsR0t
-         0Nn8rQO+YyZvaH4JhK/LsS6XbU1PjjioYPfouuy7N9SyqWOKTqX3zcUqcaB+Qdbh6VZq
-         bJLg==
-X-Gm-Message-State: AOAM530stlHJmVJBoiH6K7gqpoNUoETnZxPdSsVvXCnakXMplzhhzyOp
-        od3m7MrNze4s3AoHNDGzVgDMZ7G1DLlXbpx3mv4=
-X-Google-Smtp-Source: ABdhPJy5WeI+eOzRwchW/gzPu0QVuZs9oQteWJWwpPeyLzCReiwjhNT0OFan94TG1wpW9VHmMmJNPT+Tfjbv1lavtyE=
-X-Received: by 2002:a17:90b:1b10:b0:1c7:3413:87e0 with SMTP id
- nu16-20020a17090b1b1000b001c7341387e0mr20846365pjb.132.1648333115787; Sat, 26
- Mar 2022 15:18:35 -0700 (PDT)
+        with ESMTP id S230047AbiC0AGf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Mar 2022 20:06:35 -0400
+X-Greylist: delayed 133 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Mar 2022 17:04:57 PDT
+Received: from devnull.tasossah.com (devnull.tasossah.com [IPv6:2001:41d0:1:e60e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23024369DB
+        for <linux-usb@vger.kernel.org>; Sat, 26 Mar 2022 17:04:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=devnull.tasossah.com; s=vps; h=Content-Transfer-Encoding:Content-Type:
+        Subject:Cc:To:From:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=8xkGnK29QDhVgR2y9snCPokmvRU3AUxcvu3RzTWgOqg=; b=KeuvurEIkXfBqxxPxvRXu6KltU
+        +owibL/umly2h7OplmGnFKqF6c0sOA9GyTrwi+BJxwFpHChBuKfSo4WHaKl8Zi8LsIkUHyvAs70OF
+        URS58xPtxCUh9jGEORWrBbXDY/h0MTIkLNnF9FjJKpQIDEXBt/U/WvYWC8KD7x+ZxAWM=;
+Received: from [2a02:587:6a16:2a00::298]
+        by devnull.tasossah.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <tasos@tasossah.com>)
+        id 1nYGMY-009RbV-OM; Sun, 27 Mar 2022 02:02:30 +0200
+Message-ID: <b8ed7a8e-f4da-696f-cbbf-6f675a13aea4@tasossah.com>
+Date:   Sun, 27 Mar 2022 02:02:19 +0200
 MIME-Version: 1.0
-Received: by 2002:ac4:db43:0:b0:48b:3c2a:99ef with HTTP; Sat, 26 Mar 2022
- 15:18:35 -0700 (PDT)
-Reply-To: chrisbonnivier@gmail.com
-From:   CLARK POWER <alaminabubakar525@gmail.com>
-Date:   Sat, 26 Mar 2022 23:18:35 +0100
-Message-ID: <CAM-AdgUAeTcDEbqApQSWrk+ctAxUBY88ji9eAnw1TaUrApw_5A@mail.gmail.com>
-Subject: =?UTF-8?Q?ANTWORTEN_SIE_ZUR=C3=9CCK=2C_WENN_SIE_EINEN_SCHNELLEN_DARL?=
-        =?UTF-8?Q?EHEN_BEN=C3=96TIGEN?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   Tasos Sahanidis <tasos@tasossah.com>
+To:     linux-usb@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        tasos@tasossah.com
+Content-Language: en-US
+Subject: [PATCH] usb: core: Don't block while sleeping in do_proc_control()
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:629 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [alaminabubakar525[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [alaminabubakar525[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=20
-Hallo
-Ben=C3=B6tigen Sie finanzielle Hilfe? Wenn ja, kontaktieren Sie uns f=C3=BC=
-r
-weitere Details.
-Vollst=C3=A4ndiger Name:
-Land:
-Menge:
-Dauer:
-Handynummer:
+Since commit ae8709b296d8 ("USB: core: Make do_proc_control() and
+do_proc_bulk() killable") if a device has the USB_QUIRK_DELAY_CTRL_MSG
+quirk set, it will temporarily block all other URBs (e.g. interrupts)
+while sleeping due to a control.
+
+This results in noticeable delays when, for example, a userspace usbfs
+application is sending URB interrupts at a high rate to a keyboard and
+simultaneously updates the lock indicators using controls. Interrupts
+with direction set to IN are also affected by this, meaning that
+delivery of HID reports (containing scancodes) to the usbfs application
+is delayed as well.
+
+This patch fixes the regression by calling msleep() while the device
+mutex is unlocked, as was the case originally with usb_control_msg().
+
+Fixes: ae8709b296d8 ("USB: core: Make do_proc_control() and do_proc_bulk() killable")
+Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
+---
+ drivers/usb/core/devio.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index 6abb7294e919..b5b85bf80329 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -1209,12 +1209,16 @@ static int do_proc_control(struct usb_dev_state *ps,
+  		usb_unlock_device(dev);
+ 		i = usbfs_start_wait_urb(urb, tmo, &actlen);
++
++		/* Linger a bit, prior to the next control message. */
++		if (dev->quirks & USB_QUIRK_DELAY_CTRL_MSG)
++			msleep(200);
+ 		usb_lock_device(dev);
+ 		snoop_urb(dev, NULL, pipe, actlen, i, COMPLETE, tbuf, actlen);
+ 		if (!i && actlen) {
+ 			if (copy_to_user(ctrl->data, tbuf, actlen)) {
+ 				ret = -EFAULT;
+-				goto recv_fault;
++				goto done;
+ 			}
+ 		}
+ 	} else {
+@@ -1231,6 +1235,10 @@ static int do_proc_control(struct usb_dev_state *ps,
+  		usb_unlock_device(dev);
+ 		i = usbfs_start_wait_urb(urb, tmo, &actlen);
++
++		/* Linger a bit, prior to the next control message. */
++		if (dev->quirks & USB_QUIRK_DELAY_CTRL_MSG)
++			msleep(200);
+ 		usb_lock_device(dev);
+ 		snoop_urb(dev, NULL, pipe, actlen, i, COMPLETE, NULL, 0);
+ 	}
+@@ -1242,10 +1250,6 @@ static int do_proc_control(struct usb_dev_state *ps,
+ 	}
+ 	ret = (i < 0 ? i : actlen);
+ - recv_fault:
+-	/* Linger a bit, prior to the next control message. */
+-	if (dev->quirks & USB_QUIRK_DELAY_CTRL_MSG)
+-		msleep(200);
+  done:
+ 	kfree(dr);
+ 	usb_free_urb(urb);
+-- 
+2.25.1
+
+
+
