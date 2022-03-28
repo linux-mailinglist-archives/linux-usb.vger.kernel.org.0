@@ -2,119 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9954E9027
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Mar 2022 10:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2324E92B2
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Mar 2022 12:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236040AbiC1Iam (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Mar 2022 04:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
+        id S240332AbiC1KsV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Mar 2022 06:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239371AbiC1Iaj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Mar 2022 04:30:39 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F93114090;
-        Mon, 28 Mar 2022 01:28:57 -0700 (PDT)
+        with ESMTP id S240329AbiC1KsU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Mar 2022 06:48:20 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9864ECEA;
+        Mon, 28 Mar 2022 03:46:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648456137; x=1679992137;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=bX7y6PYsoKmkrmqLzNupZvbiwlzgwmoedmetGhJMRzs=;
-  b=hPL/X0jFULZlU73qPGP2e6OsawjNVFfCoXYEibm3BmS5rGPiuczOAySU
-   /Rcn4JsTdlGH6yG+XXA/Pu9V60EGa1baRb+5rZEXb5ZD8uOEWx5kqz3gX
-   vIWPGor57quoXZkCM+n+HAWPvWFqowv32dO3zQVyrcR6WSJvprCNm8ShN
-   IUPfahaY/NUQktIJGfG40LPrEnAVOs3toXAqI8qkwCzo31kvAZkq8yKnd
-   8YZEIRRUhPjWQ6k1CRzabImukS/J9afjeY9psTkyKkjK26YPgVw/06/AZ
-   rtcBV6wZMvbpU/BrRN9dwuNMcuf7ZsQAx8ZNNAJeSaE//C4Zq4JJOZZfk
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="239542233"
-X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
-   d="scan'208";a="239542233"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 01:28:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
-   d="scan'208";a="694288700"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 28 Mar 2022 01:28:53 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 28 Mar 2022 11:28:52 +0300
-Date:   Mon, 28 Mar 2022 11:28:52 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jack Pham <quic_jackp@quicinc.com>
-Cc:     Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>, kyletso@google.com,
-        andy.shevchenko@gmail.com, unixbhaskar@gmail.com,
-        subbaram@codeaurora.org, mrana@codeaurora.org,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] usb: typec: ucsi: possible deadlock in ucsi_pr_swap() and
- ucsi_handle_connector_change()
-Message-ID: <YkFxxAfvpennEZYg@kuha.fi.intel.com>
-References: <037de7ac-e210-bdf5-ec7a-8c0c88a0be20@gmail.com>
- <YgPQB9BYJcDzbd02@kuha.fi.intel.com>
- <20220325203959.GA19752@jackp-linux.qualcomm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220325203959.GA19752@jackp-linux.qualcomm.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+  t=1648464400; x=1680000400;
+  h=from:to:cc:subject:date:message-id;
+  bh=y5Ta5faJZepUriOYafytGSAos/omF5AAyV8E9eFTQcg=;
+  b=HLZIX6NVMzaZuTgby5J/L0fG1ahKa89r6wB7rH8qj+v7hvfV9waBn0A9
+   7Sz00m7G/ejw+1kx2wtYgLrM7A49Qu3rs3xXaWO925xOnsndRv1YlXo72
+   4rsMctEo+zVwW1eLdy7GKi++9kCR+yCFVe0sbVlBmWPlL2ALSfSNP3DPI
+   mroTQSaxbJXvFPM42ROIOPAbikYYR3i5VUpDl0RDX005Up9Pe9QdhJDyj
+   X4xQIPEtXkn7Ze4A0l54mB0uoEbvSZF5kO0Q/XD6HOwLBxj+/XSkuONvp
+   +0PjpYOG/kRz0emu13w9ZsdJrWTZSp7BoHpP4jd+qjvXbr5tb/gN8n6Ju
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="258937800"
+X-IronPort-AV: E=Sophos;i="5.90,217,1643702400"; 
+   d="scan'208";a="258937800"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 03:46:39 -0700
+X-IronPort-AV: E=Sophos;i="5.90,217,1643702400"; 
+   d="scan'208";a="545910074"
+Received: from unknown (HELO localhost.localdomain) ([10.223.165.89])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 03:46:37 -0700
+From:   tanveer1.alam@intel.com
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     abhijeet.rao@intel.com, Tanveer Alam <tanveer1.alam@intel.com>
+Subject: [PATCH] usb: typec: mux: intel_pmc_mux: Add retry logic to a PMC command
+Date:   Mon, 28 Mar 2022 16:14:37 +0530
+Message-Id: <20220328104437.5626-1-tanveer1.alam@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 01:39:59PM -0700, Jack Pham wrote:
-> Hi Heikki,
-> 
-> On Wed, Feb 09, 2022 at 04:30:31PM +0200, Heikki Krogerus wrote:
-> > On Wed, Feb 09, 2022 at 11:50:57AM +0800, Jia-Ju Bai wrote:
-> > > Hello,
-> > > 
-> > > My static analysis tool reports a possible deadlock in the ucsi driver in
-> > > Linux 5.16:
-> > > 
-> > > ucsi_pr_swap()
-> > >   mutex_lock(&con->lock); --> Line 962 (Lock A)
-> > >   wait_for_completion_timeout(&con->complete, ...) --> Line 981 (Wait X)
-> > > 
-> > > ucsi_handle_connector_change()
-> > >   mutex_lock(&con->lock); --> Line 763 (Lock A)
-> > >   complete(&con->complete); --> Line 782 (Wake X)
-> > >   complete(&con->complete); --> Line 807 (Wake X)
-> > > 
-> > > When ucsi_pr_swap() is executed, "Wait X" is performed by holding "Lock A".
-> > > If ucsi_handle_connector_change() is executed at this time, "Wake X" cannot
-> > > be performed to wake up "Wait X" in ucsi_handle_connector_change(), because
-> > > "Lock A" has been already held by ucsi_handle_connector_change(), causing a
-> > > possible deadlock.
-> > > I find that "Wait X" is performed with a timeout, to relieve the possible
-> > > deadlock; but I think this timeout can cause inefficient execution.
-> > > 
-> > > I am not quite sure whether this possible problem is real.
-> > > Any feedback would be appreciated, thanks :)
-> > 
-> > This is probable a regression from commit ad74b8649bea ("usb: typec:
-> > ucsi: Preliminary support for alternate modes"). Can you test does
-> > this patch fix the issue (attached)?
-> 
-> We encountered a slightly different twist to this bug.  Instead of
-> deadlocking, we see that the dr_swap() / pr_swap() operations actually
-> jump out of the wait_for_completion_timeout() immediately, even before
-> any partner change occurs.  This is because the con->complete may
-> already have its done flag set to true from the first time
-> ucsi_handle_connector_change() runs, and is never reset after that.
-> 
-> In addition to the unlocking below, I think we need to also add
-> reinit_completion() calls at the start of ucsi_{pr,dr}_swap().
+From: Tanveer Alam <tanveer1.alam@intel.com>
 
-OK. I'll add that to the patch.
+There are few scenerio when PMC reports 'busy condition' and command
+fail.
 
-thanks,
+If PMC receives a high priority command while servicing a low priority
+command then it discards the low priority command and start servicing
+the high priority command. The lower priority command fail and driver
+returns error. If the same command resend to the PMC then PMC latches
+the command and service it accordingly.
 
+Thus adds the retry logic for the PMC command.
+
+Signed-off-by: Tanveer Alam <tanveer1.alam@intel.com>
+---
+ drivers/usb/typec/mux/intel_pmc_mux.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+index 2cdd22130834..da6b381ddf00 100644
+--- a/drivers/usb/typec/mux/intel_pmc_mux.c
++++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+@@ -173,7 +173,7 @@ static int hsl_orientation(struct pmc_usb_port *port)
+ 	return port->orientation - 1;
+ }
+ 
+-static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
++static int pmc_usb_send_command(struct intel_scu_ipc_dev *ipc, u8 *msg, u32 len)
+ {
+ 	u8 response[4];
+ 	u8 status_res;
+@@ -184,7 +184,7 @@ static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
+ 	 * Status can be checked from the response message if the
+ 	 * function intel_scu_ipc_dev_command succeeds.
+ 	 */
+-	ret = intel_scu_ipc_dev_command(port->pmc->ipc, PMC_USBC_CMD, 0, msg,
++	ret = intel_scu_ipc_dev_command(ipc, PMC_USBC_CMD, 0, msg,
+ 					len, response, sizeof(response));
+ 
+ 	if (ret)
+@@ -203,6 +203,23 @@ static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
+ 	return 0;
+ }
+ 
++static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
++{
++	int retry_count = 3;
++	int ret;
++
++	/*
++	 * If PMC is busy then retry the command once again
++	 */
++	while (retry_count--) {
++		ret = pmc_usb_send_command(port->pmc->ipc, msg, len);
++		if (ret != -EBUSY)
++			break;
++	}
++
++	return ret;
++}
++
+ static int
+ pmc_usb_mux_dp_hpd(struct pmc_usb_port *port, struct typec_displayport_data *dp)
+ {
 -- 
-heikki
+2.17.1
+
