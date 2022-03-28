@@ -2,101 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302084E9685
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Mar 2022 14:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6C84E9A58
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Mar 2022 17:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242449AbiC1M2A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Mar 2022 08:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
+        id S244184AbiC1PIB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Mar 2022 11:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242471AbiC1M1x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Mar 2022 08:27:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 557FA4D269
-        for <linux-usb@vger.kernel.org>; Mon, 28 Mar 2022 05:26:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648470372;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iTjwmJF+3k+khwx6D8oLjFZKu5VissWtc8nbGOTpT9Q=;
-        b=Ps8dXJ4OEk2qcp2EoVm5At8ZOqouMo2vH6ZYIIUn6AbLqcjMrIFl9PthavIjAPTj2PnwYT
-        OaVvhY2IG6PbR+3w0QznnNnb/i1N18SZl5l4JRVYGcgay/xwkQDEaUjLp+UAx3zY2i/RRx
-        3sJ1a4145zv8P0yoNKwJa90KxF7Ymqk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-645--5RnXKeuOIybH1S_rZd2zA-1; Mon, 28 Mar 2022 08:26:09 -0400
-X-MC-Unique: -5RnXKeuOIybH1S_rZd2zA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 303B3299E743;
-        Mon, 28 Mar 2022 12:26:01 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A28697AC3;
-        Mon, 28 Mar 2022 12:25:40 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <TYZPR01MB3935D1963BFD458E85412E4DF81B9@TYZPR01MB3935.apcprd01.prod.exchangelabs.com>
-References: <TYZPR01MB3935D1963BFD458E85412E4DF81B9@TYZPR01MB3935.apcprd01.prod.exchangelabs.com>
-To:     kushagra765@outlook.com
-Cc:     dhowells@redhat.com, linux-doc@vger.kernel.org, corbet@lwn.net,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
-        balbi@kernel.org, gregkh@linuxfoundation.org, arnd@arndb.de,
-        mcgrof@kernel.org, akpm@linux-foundation.org,
-        viro@zeniv.linux.org.uk, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-cachefs@redhat.com
-Subject: Re: [ PATCH ] Documentation: fixed doc-build warnings
+        with ESMTP id S244215AbiC1PHv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Mar 2022 11:07:51 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575944E3A1
+        for <linux-usb@vger.kernel.org>; Mon, 28 Mar 2022 08:06:09 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id v35so26508799ybi.10
+        for <linux-usb@vger.kernel.org>; Mon, 28 Mar 2022 08:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M/wRiyThS5X8/D2KX8GPji/87UrigbGUnnN2Y5aIQZk=;
+        b=yV5Sdnq4Kjd2UWp/LZ5lwEEIERJNIr6KcM46CNCVWFvx5wlzaJKddNK3VRi9pv7R2o
+         hWLbRfqsYLG0O6BNwadNXFRL0YPv+6GRHkR0IzKLPhfmrUR2KryNXljHadxnyCDBIKfG
+         KF3hEMCHNIbTbUadbfHl44Bxavmpj4Yv1hA3CuM83B2CxsfvMWvxfFESE+lhkcc2sl81
+         sVn2fmUkIK1jSq6CSafEfGsW+woSpsvXDMkS8B+IG38HEM9XFKMRr8RrXUF/P0GXJxbn
+         0RCKTCb0nMdQINyuCCC1bFgIRbmReMA7sVoFZOdeeWwD8F4hNP9k17WhtrZi3ge5CPd4
+         ikkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M/wRiyThS5X8/D2KX8GPji/87UrigbGUnnN2Y5aIQZk=;
+        b=dPWRZ94Dm1pMMCHT2L5cY2XRTKQIJZl2WuNK7qGI3n8A0wTybcdbMyig/LB9N8dIyV
+         RnuylqEhqvIwl/6QtfAM8s51yyyRAOWWjlRbG5h4zyGmo8yuOqDPjyWfuhg9sZ+EtA3T
+         qJI77Io8V8dLYbWSiKLP90UQrSmuHq5YkjH9QBlRna+pKNJ9+i+vSbUrvqDQ2T2WCy1z
+         ZaE1RzzN+XsGp9eSnwAh9eXzrvLO1n0AO/b/ACg7s0rIaI4njvq/BUWD8VbO4jab97zz
+         KZtEoGxPM0jbUnXMWqRZxzklb6RoCxCbsNDY3G/9aOgnNHhB4EqKm42jzEhjhB1NUGe3
+         h9Og==
+X-Gm-Message-State: AOAM533K9LH2o8Y3z8XZPwUhQlE/7/GTDTiRBTyVUT9SpMy87zNGWlf8
+        ngUIYrqaUtDse/C7aRFa+wB+bTl/QmPtI2yNR0vAyg==
+X-Google-Smtp-Source: ABdhPJyBvWP4T/nWYSh2/FjJMHmzkTwu66lNSkHUz/fBNP/OZSAqAsPGed14FjOgCZ7TguMcw0Nj5dmdm+VJ9v0F0CI=
+X-Received: by 2002:a25:ab64:0:b0:633:6d02:ebc8 with SMTP id
+ u91-20020a25ab64000000b006336d02ebc8mr23196123ybi.492.1648479968482; Mon, 28
+ Mar 2022 08:06:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2581030.1648470339.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 28 Mar 2022 13:25:39 +0100
-Message-ID: <2581031.1648470339@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220321042142.69239-1-frank@zago.net> <20220321042142.69239-3-frank@zago.net>
+In-Reply-To: <20220321042142.69239-3-frank@zago.net>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 28 Mar 2022 17:05:57 +0200
+Message-ID: <CACRpkdaOHHkJnvB=RQ8dLXGxT_h5mGgy5Np87QVMcPzegNi2oQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] gpio: ch341: add MFD cell driver for the CH341
+To:     frank zago <frank@zago.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
+        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-kushagra765@outlook.com wrote:
+Hi Frank,
 
-> @@ -256,7 +256,6 @@ struct fscache_cookie *fscache_acquire_cookie(struct=
- fscache_volume *volume,
->  =
+thanks for your patch!
 
->  /**
->   * fscache_use_cookie - Request usage of cookie attached to an object
-> - * @object: Object description
->   * @will_modify: If cache is expected to be modified locally
->   *
->   * Request usage of the cookie attached to an object.  The caller shoul=
-d tell
-> @@ -272,7 +271,6 @@ static inline void fscache_use_cookie(struct fscache=
-_cookie *cookie,
->  =
+I see you already got a bunch of homework from Andy, I will do a more
+thorough review on the next iteration, just a few things:
 
->  /**
->   * fscache_unuse_cookie - Cease usage of cookie attached to an object
-> - * @object: Object description
->   * @aux_data: Updated auxiliary data (or NULL)
->   * @object_size: Revised size of the object (or NULL)
->   *
+On Mon, Mar 21, 2022 at 5:21 AM frank zago <frank@zago.net> wrote:
 
-Just deleting these lines is the wrong thing to do.  They should instead
-mention the cookie parameter.
+> The GPIO interface offers 16 GPIOs. 6 are read/write, and 10 are
+> read-only.
+>
+> Signed-off-by: frank zago <frank@zago.net>
+(...)
+> +config GPIO_CH341
+> +       tristate "CH341 USB adapter in GPIO/I2C/SPI mode"
+> +       depends on MFD_CH341
 
-David
+I would add
+default MFD_CD341
 
+This way it gets selected automatically if the MFD module gets
+selected. (I suspect you should do the same with the I2C module).
+
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/gpio.h>
+
+Use <linux/gpio/driver.h>
+
+Yours,
+Linus Walleij
