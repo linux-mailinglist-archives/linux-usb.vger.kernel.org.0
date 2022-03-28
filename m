@@ -2,112 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093B74E8D95
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Mar 2022 07:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B194E8F87
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Mar 2022 09:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238189AbiC1Fu2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Mar 2022 01:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
+        id S239015AbiC1H7Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Mar 2022 03:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232370AbiC1FuW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Mar 2022 01:50:22 -0400
-Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6ED0451592;
-        Sun, 27 Mar 2022 22:48:42 -0700 (PDT)
-Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
-        by mail.parknet.co.jp (Postfix) with ESMTPSA id 9EAEB15F93A;
-        Mon, 28 Mar 2022 14:48:40 +0900 (JST)
-Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
-        by ibmpc.myhome.or.jp (8.16.1/8.16.1/Debian-2) with ESMTPS id 22S5mdSq110033
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Mon, 28 Mar 2022 14:48:40 +0900
-Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
-        by devron.myhome.or.jp (8.16.1/8.16.1/Debian-2) with ESMTPS id 22S5mdTv426820
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Mon, 28 Mar 2022 14:48:39 +0900
-Received: (from hirofumi@localhost)
-        by devron.myhome.or.jp (8.16.1/8.16.1/Submit) id 22S5mcVN426819;
-        Mon, 28 Mar 2022 14:48:38 +0900
-From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
-To:     qianfan <qianfanguijin@163.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: linux resetting when the usb storage was removed while copying
-References: <1cc135e3-741f-e7d6-5d0a-fef319832a4c@163.com>
-        <87pmmee9kr.fsf@mail.parknet.co.jp>
-        <06ebc7fb-e7eb-b994-78fd-df07155ef4b5@163.com>
-        <15b83842-60d9-78b8-54e9-3a27211caded@roeck-us.net>
-Date:   Mon, 28 Mar 2022 14:48:38 +0900
-In-Reply-To: <15b83842-60d9-78b8-54e9-3a27211caded@roeck-us.net> (Guenter
-        Roeck's message of "Tue, 22 Mar 2022 05:31:06 -0700")
-Message-ID: <87pmm6hbk9.fsf@mail.parknet.co.jp>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
+        with ESMTP id S239014AbiC1H7X (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Mar 2022 03:59:23 -0400
+X-Greylist: delayed 365 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Mar 2022 00:57:42 PDT
+Received: from mail.ourpartnership.pl (mail.ourpartnership.pl [80.211.82.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9726352E6E
+        for <linux-usb@vger.kernel.org>; Mon, 28 Mar 2022 00:57:42 -0700 (PDT)
+Received: by mail.ourpartnership.pl (Postfix, from userid 1001)
+        id 3F024637EB; Mon, 28 Mar 2022 08:46:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ourpartnership.pl;
+        s=mail; t=1648453727;
+        bh=M1ZVeu3q6Upppe+FUx/3rgI7MKJXh389NZDbgCK1SX4=;
+        h=Date:From:To:Subject:From;
+        b=eWxb6fLp0aB3TCAWP4CP7tgNeT2YXfxu8SySGiS7NG9uw68CUd8TR9C90n6jLCimS
+         mKi3JipJgahuP44MKCZbWMdERJLeu1f6nz6CskOxVvdbe/Lb4iRHcsO4NXvBT+RpZn
+         JbhVaUy1vLLV0qChEUTIhJczdlrvSS0xqTRRnC/GEjnEQE7imi0obIUhsAD4rN5vii
+         hC2vj3D3vl3zvvuy1txZ2YUJyn3+IAHzPLUzcHKL0iISZZfa1pUxcBb4B1iXKRt6u5
+         Zb5j1WPIkh9JQ4FteKkF/TdAI3+U8/pqMYnm1kKc03/KN4lovWkdVDqCAQxaKCGUnF
+         Vw0NjoMh1QEhg==
+Received: by mail.ourpartnership.pl for <linux-usb@vger.kernel.org>; Mon, 28 Mar 2022 07:46:04 GMT
+Message-ID: <20220328074501-0.1.9.2b4m.0.rk2g5sn5io@ourpartnership.pl>
+Date:   Mon, 28 Mar 2022 07:46:04 GMT
+From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
+        <arkadiusz.sokolowski@ourpartnership.pl>
+To:     <linux-usb@vger.kernel.org>
+Subject: Koszty instalacji fotowoltaicznej
+X-Mailer: mail.ourpartnership.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
->> I had changed console to ttynull and the system doesn't reset again.  kernel driver generate lots of error messages when usb storage is disconnected:
->> 
->> $ dmesg | grep 'FAT read failed' | wc -l
->> 
->> 608
->> 
->> usb storage can work again when reconnected.
->> 
->> The gpio watchdog depends on hrtimer, maybe printk in ISR delayed hrtimer that cause watchdog reset.
+stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
+ obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
 
-This limits the rate of messages. Can you try if a this patch fixes behavior?
+Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
+acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
+ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
 
-Thanks.
--- 
-OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
+=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
+=2E
+
+Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
+temacie?
 
 
-[PATCH] fat: Add ratelimit to fat*_ent_bread()
-
-fat*_ent_bread() can be the cause of too many report on I/O error
-path. So use fat_msg_ratelimit() instead.
-
-Signed-off-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
----
- fs/fat/fatent.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/fs/fat/fatent.c b/fs/fat/fatent.c
-index 978ac67..1db348f 100644
---- a/fs/fat/fatent.c	2022-03-28 14:34:04.582208819 +0900
-+++ b/fs/fat/fatent.c	2022-03-28 14:39:26.884325073 +0900
-@@ -94,7 +94,8 @@ static int fat12_ent_bread(struct super_
- err_brelse:
- 	brelse(bhs[0]);
- err:
--	fat_msg(sb, KERN_ERR, "FAT read failed (blocknr %llu)", (llu)blocknr);
-+	fat_msg_ratelimit(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
-+			  (llu)blocknr);
- 	return -EIO;
- }
- 
-@@ -107,8 +108,8 @@ static int fat_ent_bread(struct super_bl
- 	fatent->fat_inode = MSDOS_SB(sb)->fat_inode;
- 	fatent->bhs[0] = sb_bread(sb, blocknr);
- 	if (!fatent->bhs[0]) {
--		fat_msg(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
--		       (llu)blocknr);
-+		fat_msg_ratelimit(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
-+				  (llu)blocknr);
- 		return -EIO;
- 	}
- 	fatent->nr_bhs = 1;
-_
-
--- 
-OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+Pozdrawiam
+Arkadiusz Soko=C5=82owski
