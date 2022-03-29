@@ -2,85 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E54A4EB3B0
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Mar 2022 20:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78E84EB5F7
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Mar 2022 00:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240698AbiC2St2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Mar 2022 14:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
+        id S237419AbiC2Wbh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Mar 2022 18:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiC2St1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Mar 2022 14:49:27 -0400
-Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6521BA470
-        for <linux-usb@vger.kernel.org>; Tue, 29 Mar 2022 11:47:43 -0700 (PDT)
-Received: from [192.168.1.18] ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id ZGsVnTTcWuCn2ZGsVnMSTo; Tue, 29 Mar 2022 20:47:41 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Tue, 29 Mar 2022 20:47:41 +0200
-X-ME-IP: 90.126.236.122
-Message-ID: <63e05f0a-6fb0-c7dc-0c3a-467a5c4e11da@wanadoo.fr>
-Date:   Tue, 29 Mar 2022 20:47:38 +0200
+        with ESMTP id S237333AbiC2Wbf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Mar 2022 18:31:35 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1176A055;
+        Tue, 29 Mar 2022 15:29:52 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 123-20020a1c1981000000b0038b3616a71aso2363427wmz.4;
+        Tue, 29 Mar 2022 15:29:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:mime-version:content-transfer-encoding
+         :content-description:subject:to:from:date:reply-to;
+        bh=+v//v9bV1cKxYYqp6E5HrJfuFydY/JXcjMGnmfr7lM0=;
+        b=Ebae8FwkrlJlE1BFNq+ANJECj4FooJVHM6vLRMyMFjUkHh5JrrmFRQ//T9pqlqC+Wk
+         h12chq/RmrWlMaM6LM4ntSpHfxLYhQhRv5ftWfmRebLNFl9TbbZiBMRY0PTujHnMvPVp
+         qQSw6FYnkWNaCp0eA1iLQqT9dDmEbB2bP9S/lMloj6dyyB4cauhtq08rfIENSUrJpxtU
+         gTYhvl+ZPYHhBaflHY73L+Lr5YZRDqjfB64g+H1YsxUvhzUoQ5GvU1/9z3whIhBehrmp
+         f1MNd1hceXcsVB32sDA6ufMB0/6wtzLD+K+K3vB4ikKy+CXvxKInB/yG1xqNaihI7nvi
+         5Jrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:content-description:subject:to:from:date
+         :reply-to;
+        bh=+v//v9bV1cKxYYqp6E5HrJfuFydY/JXcjMGnmfr7lM0=;
+        b=EwUeHRiRAK9mmqTsV+9tMuvgUsw3emZPoCnCicWsQhPvi/ssHetBv3xBrwa2H3xPH/
+         0FL076sRBHUOTE7NQTO6KfrcHVMdVVSk9N+KZyk0f9wiD0OTpcCmuPql7WWlgjYrmcbY
+         zJoXLgjNyrrMoiKdmIgXWRzSHTRzch2VcIB/fUiZTw/hgkS5DQWrP370S4GPnyv40S7G
+         /Q+vk4mBCRXocDBec1RKitX3YhCGSAbYQTkq1ICX7G6bdpMvm+hK74MOs6mHg5rfCh9C
+         BR4OGBWmrvLxKQMsZDzXY+gFswyEPxLmRTkEhUzu5RcNZarTudJn5GPz6C+TEUlZjX+u
+         mBKg==
+X-Gm-Message-State: AOAM530WLe3iThbXyqCp7sH/nUwGafaiSFRV8pcTbBiDQgd/ALuUTY8z
+        hPLBWZNplrCBP28dRDSevHu36VLMxf63rf1p1hE=
+X-Google-Smtp-Source: ABdhPJy4aC73DHPUdZJDBFbPOL7n6cEDJ4B2MzETLotYLSuFf4cVS1J5JW5BCrjgowSndl+4WwGNJQ==
+X-Received: by 2002:a05:600c:5021:b0:38c:70c0:80e9 with SMTP id n33-20020a05600c502100b0038c70c080e9mr1567338wmr.91.1648592990855;
+        Tue, 29 Mar 2022 15:29:50 -0700 (PDT)
+Received: from [172.20.10.4] ([102.91.4.27])
+        by smtp.gmail.com with ESMTPSA id n18-20020a5d6612000000b00203fbd39059sm16004923wru.42.2022.03.29.15.29.46
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Tue, 29 Mar 2022 15:29:49 -0700 (PDT)
+Message-ID: <6243885d.1c69fb81.4d4fe.f2d7@mx.google.com>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] usb: gadget: udc: add NULL pointer check
-Content-Language: fr
-To:     cgel.zte@gmail.com, balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, peter.chen@kernel.org,
-        skhan@linuxfoundation.org, lv.ruyi@zte.com.cn, johan@kernel.org,
-        jakobkoschel@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-References: <20220329055407.2375626-1-lv.ruyi@zte.com.cn>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220329055407.2375626-1-lv.ruyi@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Gefeliciteerd, er is geld aan je gedoneerd
+To:     Recipients <adeboyejofolashade55@gmail.com>
+From:   adeboyejofolashade55@gmail.com
+Date:   Tue, 29 Mar 2022 23:29:40 +0100
+Reply-To: mike.weirsky.foundation003@gmail.com
+X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_US_DOLLARS_3 autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Beste begunstigde,
 
-Le 29/03/2022 à 07:54, cgel.zte@gmail.com a écrit :
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
->
-> kzalloc() is a memory allocation function which can return NULL when some
-> internal memory errors happen. It is safer to check NULL pointer.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-> ---
->   drivers/usb/gadget/udc/mv_udc_core.c | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/udc/mv_udc_core.c
-> index fdb17d86cd65..f52eb3f2420a 100644
-> --- a/drivers/usb/gadget/udc/mv_udc_core.c
-> +++ b/drivers/usb/gadget/udc/mv_udc_core.c
-> @@ -2231,6 +2231,10 @@ static int mv_udc_probe(struct platform_device *pdev)
->   
->   	/* allocate a small amount of memory to get valid address */
->   	udc->status_req->req.buf = kzalloc(8, GFP_KERNEL);
-> +	if (!udc->status_req->req.buf) {
-> +		retval = -ENOMEM;
-> +		goto err_destroy_dma;
-> +	}
+ Je hebt een liefdadigheidsdonatie van ($ 10.000.000,00) van Mr. Mike Weirs=
+ky, een winnaar van een powerball-jackpotloterij van $ 273 miljoen.  Ik don=
+eer aan 5 willekeurige personen als je deze e-mail ontvangt, dan is je e-ma=
+il geselecteerd na een spin-ball. Ik heb vrijwillig besloten om het bedrag =
+van $ 10 miljoen USD aan jou te doneren als een van de geselecteerde 5, om =
+mijn winst te verifi=EBren
+ =
 
-Hi,
-
-not directly related to this patch, but I wonder if this kzalloc should 
-be freed in the error handling path, and maybe also in the .remove 
-function. It seems to be leaking.
-
-CJ
-
->   	udc->status_req->req.dma = DMA_ADDR_INVALID;
->   
->   	udc->resume_state = USB_STATE_NOTATTACHED;
+  Vriendelijk antwoord op: mike.weirsky.foundation003@gmail.com
+ Voor uw claim.
