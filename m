@@ -2,197 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766214ECAF3
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Mar 2022 19:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA56D4ECC1C
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Mar 2022 20:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237034AbiC3Rrh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Mar 2022 13:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
+        id S1350503AbiC3S1O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Mar 2022 14:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiC3Rrg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Mar 2022 13:47:36 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2DB11987E;
-        Wed, 30 Mar 2022 10:45:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648662349; x=1680198349;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=bhBu1QbtdGHCC2qA88WxU1+lM89JHNS2xL8ubX9vaIE=;
-  b=KA/fjs/cHLcdsW63A2zlYO8k4nWzdUApAGBaQoD9ySGOi3xwccZ8MVhR
-   uRIP/I7qgyEz8lkcdhPRBhdQqsw2gw/f+E4dVQp+M9tl5RPJY6PgZte/c
-   7Nb5Qt8deI0QMBzo7evesl0K4XEtWjIYkUUeK1+Rx2lfnVq6+CHKybpSz
-   0Qi0CPa4t786l9EHhtSrsDraS82jaUn1aY7WYQgpG5MaAw+PLAOfhoNzR
-   RsXvo2/6VleUDx+C9lDZyo8VNcJUl32lPiFhZ+RJvOFYRBXeN2kuhyvJ7
-   JkFkWkgDm4Wbp+LE+0Zvnc3MA8XWNbXRowT+aSPEQL2I9GOeUL6y/Wu24
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="239534457"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="239534457"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 10:45:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="653974778"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 30 Mar 2022 10:45:44 -0700
-To:     "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-References: <1648103831-12347-1-git-send-email-quic_c_sanm@quicinc.com>
- <1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com>
- <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
- <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
- <Yj2nPa6/Y01P5aCY@kuha.fi.intel.com>
- <4619c75c-cd34-82f2-56e1-a8bcb6d97177@linux.intel.com>
- <Yj3h4p/kmZTvMz0O@kuha.fi.intel.com>
- <fae54b27-9ae2-ecfc-69ae-40e5f5e1afbe@quicinc.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
- XHCI_SKIP_PHY_INIT
-Message-ID: <bd694ef9-be57-79f1-e95e-5501c396be25@linux.intel.com>
-Date:   Wed, 30 Mar 2022 20:47:34 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        with ESMTP id S1350529AbiC3S0n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Mar 2022 14:26:43 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBB94B1FD
+        for <linux-usb@vger.kernel.org>; Wed, 30 Mar 2022 11:23:50 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-df26ea5bfbso5306069fac.1
+        for <linux-usb@vger.kernel.org>; Wed, 30 Mar 2022 11:23:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
+        b=U1oUia1Thamt6Z7oWm6PGNKOk9RXK6Jv76DGrI1cLcYRcY5/d1Tt5qepQRdZm6lsyq
+         RBa/xpJM28ShOu5ibphzafHjPKptRC4OMeOVco0xYKihrCNFhnaGQOBDSvUdgHWgE3gf
+         cWTbx+dPO2nv/wujOZrrbxfJpePUzp7QZ1RCloUPxJhGXTvBKUziPieC1LSkK8oSaB+t
+         E85QJNBGnQK8HE8wei7Zq5jQSpeI5JY8kzofCGcJSUHLIHQXWsBy6ta+brl9WPLZzyWA
+         2jPBZlOFyxLxFI8awBJCcZtcLmSyu35IRMr8cJ72zb2pokIUUqe6EUB9pKUwVKwbq4my
+         ou5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
+        b=3IY2PRfbWWbSeW9db8qfmdx2tdGfi5pOgiAz+tXJJmTFOLFHo1lcCaqYwjVxq9NNP7
+         4r3vPpDbsAZyLxHN2YwQAGXcHhSA/Bqn2K9U5ti8iPxZ4Jk41bReVZak1CsavJjjGbcO
+         YLmPLwzlavvoraH8CfUHyGLHRJH+gu1y/cckwK8HYgYttYAHvRG+Ep/ejEenX45jYZb+
+         CjfOqKiVnctkX+cRukewEgdbyIdBZsMT/WTcxU5SXFSuxDrCuvyvcmp+e190VLY8SgjS
+         T07jUgj5eybZHx8u5bXwfBZVCCZ+JP7Pp8F2cwWHHKAe4TQxCBVjqXEZ51QC5ok5u1Aq
+         b3Wg==
+X-Gm-Message-State: AOAM533idWXlxox7TZ1K93TY6PxkSlXNhqv5V4KkSoXA8Bh4iWe4ljTz
+        ifDmEWw7QEQc+7DizJms4DBAJRp+kcD9OIuSOQUKwyE4Xwzv
+X-Google-Smtp-Source: ABdhPJzkTl+tJbylc9dRvis6ZhULbTl7j4ynIkLgm4b/Lu4YSrf6PCWjehKBvofPJCmWKHUKJGD0xbE01MjL0VC50Jo=
+X-Received: by 2002:a17:90b:3143:b0:1c7:5cee:3948 with SMTP id
+ ip3-20020a17090b314300b001c75cee3948mr852445pjb.140.1648664618224; Wed, 30
+ Mar 2022 11:23:38 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <fae54b27-9ae2-ecfc-69ae-40e5f5e1afbe@quicinc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Reply-To: isabellasayouba0@gmail.com
+Sender: 040stherchurch@gmail.com
+Received: by 2002:a05:6a20:691d:b0:76:6cf5:d552 with HTTP; Wed, 30 Mar 2022
+ 11:23:37 -0700 (PDT)
+From:   Mrs Isabella Sayouba <isabellasayouba0@gmail.com>
+Date:   Wed, 30 Mar 2022 18:23:37 +0000
+X-Google-Sender-Auth: _Xe1kByDkvq-Dn04BagO7gok_qM
+Message-ID: <CAAzQq761QVaWKiKernxpKjqNCK+6V9mRKHBnOcqF8rXJO9Y+aA@mail.gmail.com>
+Subject: =?UTF-8?B?44GC44GE44GV44Gk44CC?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 29.3.2022 12.18, Sandeep Maheswaram (Temp) wrote:
-> Hi Mathias,Heikki
-> 
-> On 3/25/2022 9:08 PM, Heikki Krogerus wrote:
->> On Fri, Mar 25, 2022 at 04:33:27PM +0200, Mathias Nyman wrote:
->>> On 25.3.2022 13.27, Heikki Krogerus wrote:
->>>> On Fri, Mar 25, 2022 at 12:36:22AM +0200, Mathias Nyman wrote:
->>>>> On 24.3.2022 14.27, Heikki Krogerus wrote:
->>>>>> On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
->>>>>>> Currently the phy init is done from dwc3 and also xhci which makes the
->>>>>>> runtime_usage value 2 for the phy which causes issue during runtime
->>>>>>> suspend. When we run the below command the runtime_status still shows
->>>>>>> active.
->>>>>>> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
->>>>>>>
->>>>>>> dwc3 manages PHY by own DRD driver, so skip the management by
->>>>>>> HCD core by setting this quirk.
->>>>>>>
->>>>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>>>>>> ---
->>>>>>>   drivers/usb/dwc3/host.c | 13 +++++++++++++
->>>>>>>   1 file changed, 13 insertions(+)
->>>>>>>
->>>>>>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
->>>>>>> index eda8719..d4fcf06 100644
->>>>>>> --- a/drivers/usb/dwc3/host.c
->>>>>>> +++ b/drivers/usb/dwc3/host.c
->>>>>>> @@ -13,6 +13,12 @@
->>>>>>>   #include <linux/platform_device.h>
->>>>>>>     #include "core.h"
->>>>>>> +#include <linux/usb/xhci-plat.h>
->>>>>>> +#include <linux/usb/xhci-quirks.h>
->>>>>>> +
->>>>>>> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
->>>>>>> +    .quirks = XHCI_SKIP_PHY_INIT,
->>>>>>> +};
->>>>>>>     static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
->>>>>>>                       int irq, char *name)
->>>>>>> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
->>>>>>>           }
->>>>>>>       }
->>>>>>>   +    ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
->>>>>>> +            sizeof(xhci_plat_dwc3_xhci));
->>>>>>> +    if (ret) {
->>>>>>> +        dev_err(dwc->dev, "failed to add data to xHCI\n");
->>>>>>> +        goto err;
->>>>>>> +    }
->>>>>>> +
->>>>>>>       ret = platform_device_add(xhci);
->>>>>>>       if (ret) {
->>>>>>>           dev_err(dwc->dev, "failed to register xHCI device\n");
->>>>>> I think you should just use device property:
->>>>>>
->>>>> This was suggested in an earlier series, but was rejected as it also added
->>>>> the property as a device tree parameter.
->>>>>
->>>>> I think adding more device properties can be messy in the long run, especially if we
->>>>> need to add them for many of the existing xhci quirks.
->>>>> We also end up with a mix where some device properties are listed as device tree
->>>>> parameters, and some not.
->>>>>
->>>>> Defining xhci quirks and platform data structure in headers shared with dwc3 and cdns3
->>>>> allow those drivers to easily set any existing xhci quirk, or other possible optional
->>>>> callbacks.
->>>>>
->>>>> cdns3 driver is already doing this, but it includes the full xhci.h header.
->>>>> This series cleans up that a bit so cdns3 will only include xhci quirk bits and
->>>>> platform data structure.
->>>>>
->>>>> On the downside we add a couple xhci related header files to include/linux/usb/
->>>>> Let me know if you see any other issues I missed with this approach.
->>>> The problem here is that these drivers are now coupled together, and
->>>> that should not be taken lightly. We have a dependency hell in our
->>>> hands with a lot of drivers, and the culprit is always platform data.
->>>>
->>>> Build-in device properties may be messy, but I would still say they
->>>> are less messy than those quirk flags - you got to admit, they are a
->>>> mess. The benefit from build-in properties is in any case the fact
->>>> that they remove the need to couple these drivers together.
->>> Agree, quirk bits are messy. Any suggestion that would work with
->>> PCI xHCI devices, devicetree, and "pure" platform devices?
->> I think xHCI driver should always be able to rely on being able to
->> read this kind of information from the fwnode. If there is no actual
->> firmware node (DT or ACPI), or if it's missing some information, the
->> glue driver needs to populate software node for the xHCI.
->>
->> Right now I just want to avoid having to pass the quirks using
->> platform data from drivers such as drivers/usb/cdns3/host.c and
->> drivers/usb/dwc3/host.c to xHCI.
->>
->> One way we could do that is by defining compatibility ID for both of
->> them that we provide using a single device property (like I guess DT
->> does). Then based on that compatibility ID, xhci-plat.c can set the
->> actual "static" quirk flags. That we could already do easily. How
->> would that sound to you?
-
-Sounds good. 
-
-> 
-> This was my previous patch where I was using device tree property. Should we go ahead with this approach?
-> 
-> https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/
-> 
-> Any further changes to this ?
-
-By dropping the DT part of that series we get a similar built-in device property
-solution as Heikki initially suggested.
-
-How about adding the compatibility ID device property that was just suggested?
-Then matching the Id in xhci-plat.c against a static table containing Ids and
-xhci_plat_priv structures, with the needed quirks for dwc3.
-
-Thanks
--Mathias
+44GC44GE44GV44Gk44CCDQoNCua2meOCkua1geOBl+OBquOBjOOCieOBk+OBruODoeODvOODq+OC
+kuabuOOBhOOBpuOBhOOBvuOBmeOAguengeOBruebruOBq+OBr+Wkp+OBjeOBquaCsuOBl+OBv+OB
+jOOBguOCiuOBvuOBmeOAguengeOBruWQjeWJjeOBr+OCpOOCtuODmeODqeODu+OCteODqOOCpuOD
+kOOBleOCk+OBp+OBmeOAguODgeODpeODi+OCuOOCouWHuui6q+OBp+OAgeODluODq+OCreODiuOD
+leOCoeOCveOBrueXhemZouOBi+OCiemAo+e1oeOCkuWPluOCiuOBvuOBmeOAguengeOBr+OBguOB
+quOBn+OBq+W/g+OCkumWi+OBhOOBpuaEn+WLleOBl+OBn+OBruOBp+OAgeOBguOBquOBn+OBq+ip
+seOBmeS7peWkluOBq+mBuOaKnuiCouOBr+OBguOCiuOBvuOBm+OCk+OAguengeOBr+OAgTIwMTHl
+ubTjgavkuqHjgY/jgarjgovliY3jgavjg5bjg6vjgq3jg4rjg5XjgqHjgr3jga7jg4Hjg6Xjg4vj
+grjjgqLlpKfkvb/jgag55bm06ZaT5YON44GE44Gm44GE44GfU2F5b3ViYQ0KQnJvd27msI/jgajn
+tZDlqZrjgZfjgb7jgZfjgZ/jgILlrZDkvpvjgarjgZfjgacxMeW5tOmWk+e1kOWpmuOBl+OBn+OA
+gg0KDQrlvbzjga/jgZ/jgaPjgZ815pel6ZaT57aa44GE44Gf55+t44GE55eF5rCX44Gu5b6M44Gn
+5q2744Gr44G+44GX44Gf44CC5b2844Gu5q275b6M44CB56eB44Gv5YaN5ama44GX44Gq44GE44GT
+44Go44Gr5rG644KB44G+44GX44Gf44CC5Lqh44GP44Gq44Gj44Gf5aSr44GM55Sf44GN44Gm44GE
+44Gf44Go44GN44CB5b2844Gv57eP6aGNODUw5LiH44OJ44Or44KS6aCQ44GR44G+44GX44Gf44CC
+DQrvvIg4MDDkuIc1MDAw44OJ44Or77yJ6KW/44Ki44OV44Oq44Kr44Gu44OW44Or44Kt44OK44OV
+44Kh44K944Gu6aaW6YO944Ov44Ks44OJ44Kl44Kw44O844Gu6YqA6KGM44Gn44CC54++5Zyo44CB
+44GT44Gu44GK6YeR44Gv44G+44Gg6YqA6KGM44Gr44GC44KK44G+44GZ44CC5b2844Gv44GT44Gu
+44GK6YeR44KS44OW44Or44Kt44OK44OV44Kh44K944Gu6Ymx5qWt44GL44KJ44Gu6YeR44Gu6Ly4
+5Ye644Gr5Yip55So44Gn44GN44KL44KI44GG44Gr44GX44G+44GX44Gf44CCDQoNCuacgOi/keOA
+geengeOBruWMu+iAheOBr+engeOBjOeZjOOBqOiEs+WNkuS4reOBruWVj+mhjOOBruOBn+OCgeOB
+qzfjg7bmnIjplpPjga/ntprjgYvjgarjgYTjgaDjgo3jgYbjgajnp4HjgavoqIDjgYTjgb7jgZfj
+gZ/jgILnp4HjgpLmnIDjgoLmgqnjgb7jgZvjgabjgYTjgovjga7jga/ohLPljZLkuK3jga7nl4Xm
+sJfjgafjgZnjgILnp4Hjga7nirbmhYvjgpLnn6XjgaPjgZ/jga7jgafjgIHnp4Hjga/jgZPjga7j
+gYrph5HjgpLjgYLjgarjgZ/jgavmuKHjgZfjgabjgIHmgbXjgb7jgozjgarjgYTkurrjgIXjga7k
+uJboqbHjgpLjgZnjgovjgZPjgajjgavjgZfjgb7jgZfjgZ/jgILjgYLjgarjgZ/jga/jgZPjga7j
+gYrph5HjgpLnp4HjgYzjgZPjgZPjgafmjIfnpLrjgZnjgovmlrnms5XjgafliKnnlKjjgZnjgovj
+gafjgZfjgofjgYbjgILnp4Hjga/jgYLjgarjgZ/jgavjgYLjgarjgZ/jga7lgIvkurrnmoTjgark
+vb/nlKjjga7jgZ/jgoHjgavnt4/jgYrph5Hjga4zMOODkeODvOOCu+ODs+ODiOOCkuWPluOBo+OB
+puassuOBl+OBhOOBp+OBmeOAguOBiumHkeOBrjcw77yF44Gv56eB44Gu5ZCN5YmN44Gn5a2k5YWQ
+6Zmi44KS5bu644Gm44CB6YCa44KK44Gu6LKn44GX44GE5Lq644CF44KS5Yqp44GR44KL44Gf44KB
+44Gr5L2/44GG44Gn44GX44KH44GG44CC56eB44Gv5a2k5YWQ44Go44GX44Gm6IKy44Gh44G+44GX
+44Gf44GM44CB56We44Gu5a6244KS57at5oyB44GZ44KL44Gf44KB44Gg44GR44Gr44CB5a625peP
+44Gr44Gv6Kqw44KC44GE44G+44Gb44KT44CC44GT44Gu55eF5rCX44GM56eB44KS44Go44Gm44KC
+6Ium44GX44KB44Gf44Gu44Gn44CB56We44GM56eB44Gu572q44KS6LWm44GX44CB5qW95ZyS44Gn
+56eB44Gu6a2C44KS5Y+X44GR5YWl44KM44KL44KI44GG44Gr44GT44KM44KS44GX44Gm44GE44KL
+44Gu44Gn44GZ44CCDQoNCui/lOS/oeOCkuWPl+OBkeWPluOCiuasoeesrOOAgeODluODq+OCreOD
+iuODleOCoeOCveOBrumKgOihjOOBrumAo+e1oeWFiOOCkuOBiuefpeOCieOBm+OBl+OBvuOBmeOA
+guOBvuOBn+OAgemKgOihjOOBruePvuWcqOOBruWPl+WPluS6uuOBp+OBguOCi+OBk+OBqOOCkuio
+vOaYjuOBmeOCi+aoqemZkOabuOOCkueZuuihjOOBmeOCi+OCiOOBhumKgOihjOmVt+OBq+aMh+ek
+uuOBl+OBvuOBmeOAguengeOBjOOBk+OBk+OBp+i/sOOBueOBn+OCiOOBhuOBq+OBguOBquOBn+OB
+jOOBneOCjOOBq+W/nOOBmOOBpuihjOWLleOBmeOCi+OBk+OBqOOCkuengeOBq+S/neiovOOBl+OB
+puOBj+OBoOOBleOBhOOAgg0KDQrjgqTjgrbjg5njg6njg7vjgrXjg6jjgqbjg5DlpKvkurrjgYvj
+gonjgIINCg==
