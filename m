@@ -2,50 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4FA4EB9B4
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Mar 2022 06:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E594EB9B8
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Mar 2022 06:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242605AbiC3EiU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Mar 2022 00:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
+        id S242625AbiC3EiX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Mar 2022 00:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242658AbiC3EiQ (ORCPT
+        with ESMTP id S242661AbiC3EiQ (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Mar 2022 00:38:16 -0400
 Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359532253B
-        for <linux-usb@vger.kernel.org>; Tue, 29 Mar 2022 21:36:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144FD22B00
+        for <linux-usb@vger.kernel.org>; Tue, 29 Mar 2022 21:36:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648614989; x=1680150989;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pxbJoZ3BpvuAzHyWwdRp7ex5qa5f8m7AM508o+M6jNE=;
-  b=b3UuKfQ1iaXxKLofuXwHklSjfKm4teVj4lIIYjS7IhInh1qlwhgJljlp
-   4bPQc9G8zwGEsbaA9eKtWgEYALktcFMhBkRKj+umJZmZs55KJmQsRTxQv
-   xnrCkuBFhvnbAcZM6enJCD6vYMmGoQDBWL0R4IdqhFzXCiU3cJqeCc5tT
-   I=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 29 Mar 2022 21:36:28 -0700
+  t=1648614990; x=1680150990;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=fBx4UZiCzCK1j+2CfVkFTu4yhrZbHawb5Ljq+4d0Rxc=;
+  b=ls1RLkI0Xvw8y6CgD23eWGz57d1VjUaXCPok7CeN+3M6tIe9idWi5WFP
+   NtknjGnSV5wBfRvcf/CDF5ilSL7dkQtM2jfraAbMUSkFfwIbpZ95hLmBK
+   9q8lUaE8t6E4ZLMT4QzOjYTgT/O01z6DW4MIEM4kfDidY+LxbFzfw41Lc
+   k=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 29 Mar 2022 21:36:29 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 21:36:28 -0700
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 21:36:29 -0700
 Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 29 Mar 2022 21:36:27 -0700
+ 15.2.986.22; Tue, 29 Mar 2022 21:36:29 -0700
 Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 29 Mar 2022 21:36:26 -0700
+ 15.2.986.22; Tue, 29 Mar 2022 21:36:27 -0700
 From:   Linyu Yuan <quic_linyyuan@quicinc.com>
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
         "Linyu Yuan" <quic_linyyuan@quicinc.com>
-Subject: [PATCH v3 0/5] usb: gadget: configfs: new trace events
-Date:   Wed, 30 Mar 2022 12:36:15 +0800
-Message-ID: <1648614980-25024-1-git-send-email-quic_linyyuan@quicinc.com>
+Subject: [PATCH v3 1/5] usb: gadget: remove gadgets_type storage type 'static'
+Date:   Wed, 30 Mar 2022 12:36:16 +0800
+Message-ID: <1648614980-25024-2-git-send-email-quic_linyyuan@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1648614980-25024-1-git-send-email-quic_linyyuan@quicinc.com>
+References: <1648614980-25024-1-git-send-email-quic_linyyuan@quicinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain
@@ -62,76 +64,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Last year I try to add trace event support for usb gadget configfs [1],
-this time the idea is change a lot, the purpose is trace all user space
-operation to gadget configuration, include gadget and it's function.
+Prepare for new trace event function which will use gadgets_type variable.
 
-In usb gadget configfs, mainly user can do mkdir/rmdir a group,
-link/unlink a function, change gadget/function attributes,
-each operation will touch a struct config_item.
+Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+---
+v3: first add this change
 
-It only have one trace event entry which store string,
-provide several API which represent user operation and generate string
-from  struct config_item.
+ drivers/usb/gadget/configfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-example output,
-   mkdir-80      [000] .....    44.555106: gadget_configfs: mkdir dummy
-      sh-76      [000] .....    44.562609: gadget_configfs: echo dummy/idVendor 0x05C6
-
-   mkdir-81      [000] .....    44.569795: gadget_configfs: mkdir dummy/functions/eem.0
-      sh-76      [000] .....    44.600221: gadget_configfs: echo dummy/functions/eem.0/dev_addr 1e:77:46:4b:1e:96
-
-   mkdir-82      [000] .....    44.615542: gadget_configfs: mkdir dummy/configs/dummy.1
-      ln-83      [000] .....    44.628997: gadget_configfs: link dummy/configs/dummy.1 dummy/functions/eem.0
-      sh-76      [000] .....    44.634506: gadget_configfs: echo dummy/configs/dummy.1/MaxPower 500
-
-   mkdir-84      [000] .....    44.642265: gadget_configfs: mkdir dummy/configs/dummy.1/strings/0x409
-      sh-76      [000] .....    44.663886: gadget_configfs: echo dummy/configs/dummy.1/strings/0x409/configuration dummy
-
-   rmdir-85      [000] .....    64.255507: gadget_configfs: rmdir dummy/configs/dummy.1/strings/0x409
-      rm-86      [000] .....    64.263926: gadget_configfs: unlink dummy/configs/dummy.1 dummy/functions/eem.0
-   rmdir-87      [000] .....    64.279768: gadget_configfs: rmdir dummy/configs/dummy.1
-   rmdir-88      [000] .....    64.328124: gadget_configfs: rmdir dummy/functions/eem.0
-   rmdir-89      [000] .....    64.992085: gadget_configfs: rmdir dummy
-
-
-As it is different from last year change, start a new thread.
-
-[1] https://lore.kernel.org/linux-usb/1635229309-2821-1-git-send-email-quic_linyyuan@quicinc.com/
-
-V2: add example output
-V3: add trace.c and move all APIs to it
-
-Linyu Yuan (5):
-  usb: gadget: remove gadgets_type storage type 'static'
-  usb: gadget: add trace event of configfs operation
-  usb: gadget: add trace event of configfs group operation
-  usb: gadget: add trace event of configfs link/unlink operation
-  usb: gadget: add trace event of configfs write attributes operation
-
- drivers/usb/gadget/Makefile                    |   2 +
- drivers/usb/gadget/configfs.c                  |  45 ++++++-
- drivers/usb/gadget/function/f_acm.c            |   1 +
- drivers/usb/gadget/function/f_hid.c            |   4 +
- drivers/usb/gadget/function/f_loopback.c       |   4 +
- drivers/usb/gadget/function/f_mass_storage.c   |  20 ++++
- drivers/usb/gadget/function/f_midi.c           |   6 +
- drivers/usb/gadget/function/f_printer.c        |   4 +
- drivers/usb/gadget/function/f_serial.c         |   1 +
- drivers/usb/gadget/function/f_sourcesink.c     |  16 +++
- drivers/usb/gadget/function/f_uac1.c           |   6 +
- drivers/usb/gadget/function/f_uac1_legacy.c    |   4 +
- drivers/usb/gadget/function/f_uac2.c           |   8 ++
- drivers/usb/gadget/function/u_ether_configfs.h |  10 ++
- drivers/usb/gadget/function/uvc_configfs.c     |  42 +++++++
- drivers/usb/gadget/trace.c                     | 156 +++++++++++++++++++++++++
- drivers/usb/gadget/trace.h                     |  39 +++++++
- include/linux/usb/composite.h                  |  18 +++
- include/linux/usb/gadget_configfs.h            |   4 +
- 19 files changed, 389 insertions(+), 1 deletion(-)
- create mode 100644 drivers/usb/gadget/trace.c
- create mode 100644 drivers/usb/gadget/trace.h
-
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 1fb837d..b2beeda 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -1642,7 +1642,7 @@ static struct configfs_group_operations gadgets_ops = {
+ 	.drop_item      = &gadgets_drop,
+ };
+ 
+-static const struct config_item_type gadgets_type = {
++const struct config_item_type gadgets_type = {
+ 	.ct_group_ops   = &gadgets_ops,
+ 	.ct_owner       = THIS_MODULE,
+ };
 -- 
 2.7.4
 
