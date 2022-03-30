@@ -2,67 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA6A4EB8B8
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Mar 2022 05:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D63A4EB91C
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Mar 2022 05:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240176AbiC3DUM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Mar 2022 23:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46884 "EHLO
+        id S242445AbiC3D42 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Mar 2022 23:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241298AbiC3DUL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Mar 2022 23:20:11 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB041905BC
-        for <linux-usb@vger.kernel.org>; Tue, 29 Mar 2022 20:18:22 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id o13so16438958pgc.12
-        for <linux-usb@vger.kernel.org>; Tue, 29 Mar 2022 20:18:22 -0700 (PDT)
+        with ESMTP id S234735AbiC3D4Z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Mar 2022 23:56:25 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050425AEF5;
+        Tue, 29 Mar 2022 20:54:37 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22U3Avcj011972;
+        Wed, 30 Mar 2022 03:51:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=MTAz/AZSivMduMxR16LfoZmOoRCY6iaWZcf+qgW2veU=;
+ b=yTpwjuV5XJJenXGLOtJ5APN89BpjH44AssGabqf/HygQwOebr2m4RHYT4Q1MzyH16BnY
+ GnyZKvQVaCZLd98vNGy2WsjvcqrDpa8Ec4fM1/LY1E4hztStu38u4Jkvje7b5HyJ7+bh
+ cw6FohmU/fasg4XAwefa32vxq1blUcaaJ+uxiTVBrWktt7HYaRFOFL6wJFuGhMFWq1f3
+ 2z6WYFDDa7n8Exepk7rmE1Q8Oo/SQv2q+lW99AKK5kFxSwZlO3vM8wxRYBTv++kR7TAM
+ Ao/vx89J+88h+Wsz9cjJ2uhXywCEL6NAB2I3Rwq/ijIr0nDmQIysnjkRxSYO2y9uA4Cl vw== 
+Received: from aserp3030.oracle.com ([141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f1sm2gb1e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Mar 2022 03:51:33 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22U3ohVf156677;
+        Wed, 30 Mar 2022 03:51:32 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2175.outbound.protection.outlook.com [104.47.59.175])
+        by aserp3030.oracle.com with ESMTP id 3f1rv8e93f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Mar 2022 03:51:32 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WsJDH6e55m6fMwohhPNYcmQRIrEvhDM2k2HjvuVF+z/9iVJ3ZsDioCAihqcehce8Hy3R63fU0BbWUe5/LGBLKDYDY5QcSU+qd9I1RAN2wNhE0N59EkmZusC/UzwWGS3/H1ys/MUGsPpbaLi+nVf65rJPtK22Egcrq/imGIuBN+ymSeSiuT4EB4b+p295d5zsHC5Jo8ZwQK/LV/ZSpsI1KmiFdZNrspCPQTKQG1/RG984MCGzi7BVy/jJHavdZZ5neoiZvydJf6LQrejcZlZuue+KPfXMf4uQSoeQ2CT7ABcM3HcbVkDRhQH9LYmPePhKdIVHer/shqIXvFU5+vDDZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MTAz/AZSivMduMxR16LfoZmOoRCY6iaWZcf+qgW2veU=;
+ b=PbQA+hAIyGQ4PeDMPggqKePXD++iXwaSd1MWuNo5T+x+RgvCEoYywO8iTtbSTaH3bZf/drQwHaDF2ri2ISaVAJbIHmGmdfXhwA89jUVjajXvUEZWfPJCYE3ZBIv810xGIimWsLrHFlkyYqJNjyiFxCUlJXCv8xlbBRmh+08ZDViXltrrJJsQrJG2dtz50KEp5PLLo5ySWnNnQPG5KlAI8Zj9iQ0E6AyftWIBBsHaOionU3Md4KSxroCjPpFQijRdZKQk39J8pZ2ycv+ny9Uofep7rstzpXbLO3V45v4gCcU+xvHqS0SttRYrTUPo+aByOdEzbcYMtOAzApC1GefUcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:user-agent:from:to:subject:date:in-reply-to:message-id
-         :mime-version;
-        bh=d5PrXmjlVV+n4kFaqkChC2P0jRxIvJLjnA0nD3aygdk=;
-        b=NkNr9zBpJWVJzqCnY0V8iQizwCUWsuiiPUzaZvyU3mk8KJD1qAVoyQTWptlOIONpBy
-         UWy6lSc6dAYHYBNId9Ovh6iKMPyGr75PPlcFn5YktFu6FrKzFVCVUFVtUsg3T5SaijWH
-         M0grb9Kfo52c/9D/fdB9xAz00FSABZ0S4OoLAaxcl6/CiKPZppZ9J0PtwpuFHoPFSUzI
-         e28JjA/cxLqE+WnJv3VhJC8kn5vqVCFdur+NvznhQDu7uuz0zpx3wGBkZvroS51RPqjH
-         Bh2Oxw52xsuOhzJcFT4QBGFEuAFMFw0MpQsK9TM/DOQ9TEUcqKnGBoMCNAyBByxfdhg0
-         DXNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=d5PrXmjlVV+n4kFaqkChC2P0jRxIvJLjnA0nD3aygdk=;
-        b=2ofwokespgjEEEZxv6cvl2W5t/+Rdr0IXDvk6HQ9mqFeRcTXA6KGjlNb9VF3h17fj5
-         DOaEw7DI/uy3RsZ3tcChAVQ5s54cwjBnvQYMG6OJeX8OBwwzBrm5cXuzAIfmq46FUfmE
-         iVCa8kZ6sLp6rjr6t0eujW2RrFhyAkrUiUsAn1riMDQ4bGV2NE/vvidcFUUnWls32Fha
-         QF2GHidSwloUNjWb82ihHxCZq4Z4LNFcF/ZfVXzctMw8TcWAYIFgKIt13JpuicWfSEgL
-         PwoLGeb80GtBzAb45oJU+i9rwxAbchF2iNIaDbeETiElleGDl4c1gChdtg+pvROC4wMe
-         y2sw==
-X-Gm-Message-State: AOAM533n3qiOcWV2x7ZkFWb3KZb3ylFP4gqCYP9m5dyM9qmsysYCnLH1
-        IP+hOl2CUcJdLi/P/2NsHVfE+xy23NTWWohm
-X-Google-Smtp-Source: ABdhPJxYrfJ81XUmKwhs8CVOGuQsFDGRr7p7JPn0mKY+YiVpCt+fUHE0PefV83EEsHSLr8NfY3YJWw==
-X-Received: by 2002:a05:6a00:cc5:b0:4fb:4969:3eb with SMTP id b5-20020a056a000cc500b004fb496903ebmr14915431pfv.59.1648610301836;
-        Tue, 29 Mar 2022 20:18:21 -0700 (PDT)
-Received: from laptop.lockywolf.net ([2001:470:24:315::102])
-        by smtp.gmail.com with ESMTPSA id v22-20020a056a00149600b004fb34a7b500sm13329690pfu.203.2022.03.29.20.18.19
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 20:18:21 -0700 (PDT)
-References: <87sfr0okqm.fsf@laptop.lockywolf.net>
-User-agent: mu4e 1.6.3; emacs 29.0.50
-From:   Vladimir Nikishkin <lockywolf@gmail.com>
-To:     linux-usb@vger.kernel.org
-Subject: Re: [xhci] usb 4-1: reset SuperSpeed Gen 1 USB device number 2
- using xhci_hcd
-Date:   Wed, 30 Mar 2022 11:02:34 +0800
-In-reply-to: <87sfr0okqm.fsf@laptop.lockywolf.net>
-Message-ID: <87r16knnw4.fsf@laptop.lockywolf.net>
-MIME-Version: 1.0
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MTAz/AZSivMduMxR16LfoZmOoRCY6iaWZcf+qgW2veU=;
+ b=x9YEY0C9uo937d1SOBCJcYlAQFFtKI5NgsnWuF7P51+RtvrhrPdgw6sidLrs0+gDe57kVAyZVSeDFChVzDziyki6SoIJRjPg/AiFPRVpNyvq4OLiiES6uSAp7kQE3JVV0TbGhUSxZKn7gOQFUFp8tXAIfL1UBT9IEc6o2QrI+TQ=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by MN2PR10MB4173.namprd10.prod.outlook.com (2603:10b6:208:1d1::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.18; Wed, 30 Mar
+ 2022 03:51:30 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::48e3:d153:6df4:fbed]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::48e3:d153:6df4:fbed%4]) with mapi id 15.20.5102.023; Wed, 30 Mar 2022
+ 03:51:30 +0000
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eli Cohen <eli@mellanox.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        =?utf-8?Q?Micha=C5=82_Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
+        Joachim Fritschi <jfritschi@freenet.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org
+Subject: Re: [PATCH 5/9] virtio-scsi: eliminate anonymous module_init &
+ module_exit
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1y20st7ww.fsf@ca-mkp.ca.oracle.com>
+References: <20220316192010.19001-1-rdunlap@infradead.org>
+        <20220316192010.19001-6-rdunlap@infradead.org>
+Date:   Tue, 29 Mar 2022 23:51:27 -0400
+In-Reply-To: <20220316192010.19001-6-rdunlap@infradead.org> (Randy Dunlap's
+        message of "Wed, 16 Mar 2022 12:20:06 -0700")
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: DM6PR02CA0042.namprd02.prod.outlook.com
+ (2603:10b6:5:177::19) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 609889fb-058c-4bdb-5695-08da12009300
+X-MS-TrafficTypeDiagnostic: MN2PR10MB4173:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR10MB4173D0036F739BDDC7753C888E1F9@MN2PR10MB4173.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: un6f//6iu39uhfJNawpCiF2FMLLldzDMSXxNSS8zBCMV13ExzfYEjDtFTwTgjWWM558X85eREvri4Y+lciAQodprT9CfTyHFh3pKxn2SYZcw2ii8GZL1b2MREo3ctfCgozkX7uXt4H0SFaKzRMW3GzaspFYrxNLVVCfvlEKqn4JY0C6GpUhCa7oyVPKTYe1o78Z0AN+jyHTjVFQXAk7JtfcMaS6RkDIN5Fkh2fT3wQD4Bymr86V7LaBWpKl4K9UfPXw8tbh86SEe9RgtNOT9oY+o587CX+k/V5XFB3bgdGMkFDZeV1MWMHWlu8Cysq7U7ELege/BfmtFvS50QlounZYAEO1wf9OoNw4nC2U7F7Aik8XddeYBpY3IR8diGgVdsieiybiVNpu2fBDZbL4G3P5h4iPMPGGfLfsHsWOTY/JO02HCce0KVbC548eyJFBWbGqIN1auEIRrQdk1ynesnOxzMloZSi9yvcFCLxY7N3RpJAuxUgCjaN7nXQbARTZB3c1zrdElYWF0wMS6dyeia/n3XlD1zh1bbZOsymlwcTKK1yvWxyyF/35Nx0tf5q9i1Ge/uwcsKMmQshIGxS2ckItIV2M3DPFmUAmfSfF20Yigyx3qfTm5ozR1ohCJw7ikhZ86uf4y/v98K2ndxSDo/T7Gwffu+niK/+wv1MImEbUl0VoxCFBEWjHxydMd+EJqchuOX51IKj3ZMbzzDGpa0A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(6486002)(4326008)(7366002)(8676002)(54906003)(7416002)(36916002)(2906002)(66556008)(6512007)(6666004)(6916009)(66476007)(7406005)(5660300002)(86362001)(52116002)(66946007)(558084003)(38100700002)(38350700002)(26005)(6506007)(508600001)(8936002)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Vxpgna/MvdxlJqlYd+4dFReKfRiyjM9rdLnc/OFC6HX/OQgo7Y7DcKA6CDD7?=
+ =?us-ascii?Q?EgT+vkeh3ThSpqf18xVol9ikVRAx8S4e3R29pEohzXqwgq9TPf25ZPHxOq2X?=
+ =?us-ascii?Q?Y303ft/jsd1h3FXPN7Uyp5qRadYwZS7bA6gZkgBgypdVv0bQ8g7ecmXBalvB?=
+ =?us-ascii?Q?jvqUpgObUcLyZLc/pyvMqrAYPkrTt4uOAwa18AlV/S1uupXtK5PWMUk0OCk2?=
+ =?us-ascii?Q?YwOmTXIvVURrvwcQX/cdk/CYGJWZQa/UZDnBZI5Ea4A8wBcWclMeWZpfOV0r?=
+ =?us-ascii?Q?IdbRffXM5s1zhNocpjUtqRO6ODJBh0F3J9oZZ7XDLvw5BNKHxKdOqXmvrGsy?=
+ =?us-ascii?Q?M+sdn9GkNL47FiVDfhkADMt15Il9iGYPGL0vCsLxv3952mcGK5mv/J7jJypq?=
+ =?us-ascii?Q?uHBG7piUL/R6u502DY5gu8XFcy/Fh9Zrxp7x8dmtZ7eS+RmKLQAxC6tZ6Tvg?=
+ =?us-ascii?Q?FzEQAMiKdoiGz0F5IdYLPl3uMmC5f43ODBSTMxoUoZomRRMd5SWR6uRxBdOz?=
+ =?us-ascii?Q?OXhJF3CitpEtt+l0kpzqMu+iFqN6OviCuB9m+uSVOX6wmqbkGzwuvkTnk8h8?=
+ =?us-ascii?Q?3y+nuukANnCwK3A/yDgEFE9Gn9wd1z9I+ksULstacbvePDjDmPpGNkeHMp4N?=
+ =?us-ascii?Q?42/5/Ejyf6CdKsNnPSASiV6ws7pg2hTrtDidCe0UuLgoEyn4DuccIaluetWk?=
+ =?us-ascii?Q?HAveApqmuCFndhUEcnJOUkOynuLooW6XwJTM8bExDJd+if/j91btSSE7mj28?=
+ =?us-ascii?Q?UW60RIvNXL2KrB/YrjniWak53zsdyezUivhX+1A9fn2ffQx16UN4eWnB5aPS?=
+ =?us-ascii?Q?JD0lROY9/YSR519lUcMI8WonHlnz02sCSPCPhF/Pklhh8vOfOICFgIbmFoLQ?=
+ =?us-ascii?Q?9idSTBft+PIrVGwFB7BTrlXO8MtY3sZq5rqxosTo24H+LCXOhtr4YX+Ky/TY?=
+ =?us-ascii?Q?5ZfksXfzXAX5s4KxhuDZBJHGyrpXCAxLTksbJ3cut7k2GgQOuF7adi4pDdwT?=
+ =?us-ascii?Q?T0R7695z5RDiEgEV1/b7MQOf8UN7MqBgJ0UIE/AzIsK1eWf+xTKibXK2vkFE?=
+ =?us-ascii?Q?KuV0EwU9P7Ilfun5FOPoLmhfsntWB5pnEJKsmEqKEzo6CGVECD2Sw0cGmfAg?=
+ =?us-ascii?Q?IPAQ551LEyXAW8T70zAls9ReqBDv0d+G/f2Dx5DG/1CbNwXbWPv+OIbNXT0o?=
+ =?us-ascii?Q?mLaa1Bn9HBJ2JhVYBrmxElo+U7r408sI/a4xh3fgY2KtDop6P4CxywxsaxqV?=
+ =?us-ascii?Q?VTvw9X87kZk9pXw1xODOSBIMb6R1MQoJJVxpW8bdldwqAVwap8wMZE1ApIGN?=
+ =?us-ascii?Q?UP37WhAxED5nJKcYTDGD4hfQKswtr4gCwayjeA+ZCHIwfw8lwdB8hKoUGD+u?=
+ =?us-ascii?Q?K6EMzAtgcuAr7xh7pGYKMHWegegOa9Dvg6Qj2swuZ2Ml4bqOnijK5i0CYvCm?=
+ =?us-ascii?Q?gLa1WgGSNY0vLshRhZFP+Rg2RaH1FN6z9z42vfYLwRHOM4HZKl3AVIaT1z94?=
+ =?us-ascii?Q?d5WUv5Yt/cm8iNWQP3UyKOGrRcmzyt26yHt7IIXvGhwYHPwuqz+TVK9DPA+1?=
+ =?us-ascii?Q?LABK2/ATjBM1oBN4rejj+UnIn5SqilLKYPnTd6FvUr7Ydy7pRi9wxwEdqXze?=
+ =?us-ascii?Q?VvQMLe5Vq2jO92qBr1nDZkIgCmGe98P09ytI3JGzX+drHCkIofZzV2rRUZKu?=
+ =?us-ascii?Q?kyCMel8BZIMLOZzdf5w5wGVZcSmdvGM8WDrncLMPILlMxDVQ2PStAW/awZoQ?=
+ =?us-ascii?Q?cQL+1NUbGiKknlAarVNKOe92qf9gV/s=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 609889fb-058c-4bdb-5695-08da12009300
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 03:51:30.4418
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: x71bOGbVgGxrMdmSRIqZvsq7l5SWhdaI4jtwFsMcqPQDBb3QZ+Uxw2lm2IWWC5fX2yOaCAuYCcMvAEMGz6Z+tsGhfk+VxDvKjr1vBsq0PKo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4173
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10301 signatures=695566
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=806 spamscore=0
+ adultscore=0 mlxscore=0 phishscore=0 bulkscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203300017
+X-Proofpoint-ORIG-GUID: NlyRnsT44OwC8SWLKEdZBVwQEiUY1Qxq
+X-Proofpoint-GUID: NlyRnsT44OwC8SWLKEdZBVwQEiUY1Qxq
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,65 +190,13 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-Vladimir Nikishkin <lockywolf@gmail.com> writes:
+Randy,
 
-I seem to be having a problem similar to the one Sedat Dilek had.
-My usb 3.0 'ASMedia Technology Inc. ASM1051E SATA 6Gb/s bridge, ASM1053E
-SATA 6Gb/s bridge, ASM1153 SATA 3Gb/s bridge, ASM1153E SATA 6Gb/s
-bridge' is getting reset under load.
-I tried adding the 't' flag, but the drives is still getting reset with
-the following message in dmesg:
-```
-[  +0.004767] scsi host6: uas_eh_device_reset_handler start
-[  +0.066198] usb 2-2.4.2: reset SuperSpeed USB device number 91 using xhci_hcd
-[  +0.014680] scsi host6: uas_eh_device_reset_handler success
-[Mar29 23:01] sd 6:0:0:0: [sde] tag#18 uas_eh_abort_handler 0 uas-tag 11 inflight: CMD OUT 
-[  +0.000007] sd 6:0:0:0: [sde] tag#18 CDB: opcode=0x8a 8a 00 00 00 00 01 97 1d e4 08 00 00 04 00 00 00
-[  +0.000042] sd 6:0:0:0: [sde] tag#17 uas_eh_abort_handler 0 uas-tag 10 inflight: CMD OUT 
-[  +0.000004] sd 6:0:0:0: [sde] tag#17 CDB: opcode=0x8a 8a 00 00 00 00 01 97 1d e0 08 00 00 04 00 00 00
-[  +0.000071] sd 6:0:0:0: [sde] tag#16 uas_eh_abort_handler 0 uas-tag 9 inflight: CMD OUT 
-[  +0.000004] sd 6:0:0:0: [sde] tag#16 CDB: opcode=0x8a 8a 00 00 00 00 01 97 1d e0 00 00 00 00 08 00 00
-[  +0.000027] sd 6:0:0:0: [sde] tag#15 uas_eh_abort_handler 0 uas-tag 8 inflight: CMD OUT 
-[  +0.000004] sd 6:0:0:0: [sde] tag#15 CDB: opcode=0x8a 8a 00 00 00 00 01 97 1d dc 00 00 00 04 00 00 00
-[  +0.005166] scsi host6: uas_eh_device_reset_handler start
-[  +0.065988] usb 2-2.4.2: reset SuperSpeed USB device number 91 using xhci_hcd
-[  +0.014673] scsi host6: uas_eh_device_reset_handler success
-```
+> Eliminate anonymous module_init() and module_exit(), which can lead to
+> confusion or ambiguity when reading System.map, crashes/oops/bugs, or
+> an initcall_debug log.
 
-I have also captured the usbmon log. The file is too big for an email
-attachment, so I uploaded it to my server.
-http://public.lockywolf.net/pub/usbmon-dump.bus2-without-smart-udisks.txt.gz
-
-
-I have seen reports that firmware needs to be updated in those chips in
-order to support large drives
-(https://www.computerbase.de/forum/threads/asmedia-aktuelle-externe-gehaeuse-chip-firmware-fuer-8tb.1473501/page-2
-and also
-https://jamesachambers.com/fixing-storage-adapters-for-raspberry-pi-via-firmware-updates/
-)
-Googling for ASM1153+Raspberryp Pi returns quite a lot of difficulties
-with using those chips. (Although I am not using it with Raspberry Pi)
-(https://github.com/raspberrypi/linux/issues/3070
-https://bugzilla.redhat.com/show_bug.cgi?id=1230336
-https://community.home-assistant.io/t/usb-boot-on-raspberry-pi-4/172223/61
-https://blog.franco.net.eu.org/notes/a-solution-to-io-errors-on-usb3-external-hdd-enclosures.html)
-
-
-Maybe it is not on only the ATA command that is leading to a reset?
-In my case the device is getting reset after ~30 Gb transferred via
-rsync.
-
-Disabling uas makes the issue a little less likely to get hit, in the
-sense that even though resets happen, they do not interrupt a transfer,
-but in fact the issue still remains: after ~50 "minor resets", the
-device get reset in some other fundamental way, so that /dev/sdX
-numbering changes.
-
-Any debugging suggestions welcome. (I will try to rebuild the kernel
-with the sysctl debug patch.)
-
+Applied to 5.18/scsi-staging, thanks!
 
 -- 
-Your sincerely,
-Vladimir Nikishkin (MiEr, lockywolf)
-(Laptop)
+Martin K. Petersen	Oracle Linux Engineering
