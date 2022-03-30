@@ -2,768 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224564EBAB2
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Mar 2022 08:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC1C4EBBD5
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Mar 2022 09:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240822AbiC3GUb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Mar 2022 02:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
+        id S243857AbiC3HgL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Mar 2022 03:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243230AbiC3GU2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Mar 2022 02:20:28 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16054E14
-        for <linux-usb@vger.kernel.org>; Tue, 29 Mar 2022 23:18:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648621120; x=1680157120;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rtwQQrvp3GnWwyFfGQolmWpamTAFcpYUHajB2zOChoQ=;
-  b=oXOFiTwf3ENRjIlDGiPyAVdbkGdLRGdXcareTO+YqRY7mGafBAFF3Co3
-   wOHOWAhj8CZKC/4NThAeomBcAz4mmW7POxnL2/1rVqYl95HE1XyLx/KWv
-   sdtd5MHg8hHkPiJ5uabBxQrzcJJHxvktFI+A7tu8q2FN0GzOB23bP0PJG
-   s=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 29 Mar 2022 23:18:39 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 23:18:39 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 29 Mar 2022 23:18:38 -0700
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 29 Mar 2022 23:18:36 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
-        "Linyu Yuan" <quic_linyyuan@quicinc.com>
-Subject: [PATCH v4 5/5] usb: gadget: add trace event of configfs write attributes operation
-Date:   Wed, 30 Mar 2022 14:18:07 +0800
-Message-ID: <1648621087-14948-6-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1648621087-14948-1-git-send-email-quic_linyyuan@quicinc.com>
-References: <1648621087-14948-1-git-send-email-quic_linyyuan@quicinc.com>
+        with ESMTP id S243852AbiC3HgG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Mar 2022 03:36:06 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3647721BC63
+        for <linux-usb@vger.kernel.org>; Wed, 30 Mar 2022 00:34:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648625660; x=1680161660;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=gebrUP0PABkvuZtEnUDK1eQ6ZuQoR/5R69twsZKupCM=;
+  b=DkmvhNj0T8IlqHHfzx7Ub0FvrS/46o7FZQ+IG/HYfwakPdo6ur297H3m
+   by3jqC6xflsDICPYRxY9cyOKJdhmdwBx/HzPFqQgooGyNYuMdZEoRBy3K
+   QOSjFmDIqYkIBPCkp6FOTy3LYObDgS/2hrbad0wogOwquFtWTvt6FncNa
+   k9xLV9LhhPyl6/LHoUhQZN5mpQOJM6Ys1ZvLK9xYeIoMstCvWcdSl7aMu
+   S5R002Pm5fL5g8BGxoCGQt7avkuY6irj8u8qLJC0N90oCtIhvgBzdEgXp
+   aWBgy2HUCm076fZwar711aoiP+neYj1gkIsSZJyoiqQi5PS5Iy2Lj01N4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="259446093"
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="259446093"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 00:34:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="653676873"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga004.jf.intel.com with ESMTP; 30 Mar 2022 00:34:16 -0700
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Josue David Hernandez Gutierrez 
+        <josue.d.hernandez.gutierrez@intel.com>
+Cc:     linux-usb@vger.kernel.org
+References: <20220329154406.5485-1-josue.d.hernandez.gutierrez@intel.com>
+ <20220329154406.5485-2-josue.d.hernandez.gutierrez@intel.com>
+ <YkMv9wB1zXtMQgWN@kroah.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH 2/2] usb: host: xhci: Move msi/msi-x functions to xhci-pci
+Message-ID: <3028aa38-bd85-1e04-e2e0-6229d6320b89@linux.intel.com>
+Date:   Wed, 30 Mar 2022 10:36:06 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YkMv9wB1zXtMQgWN@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add API trace_usb_configfs_write_attr() to trace user change gadget or
-function attributes.
+On 29.3.2022 19.12, Greg KH wrote:
+> On Tue, Mar 29, 2022 at 09:44:06AM -0600, Josue David Hernandez Gutierrez wrote:
+>> There were sync and cleanup msi/msix functions in xhci inside a #ifdef
+>> macro to check if PCI module is being compiling. These functions has
+> 
+> "have"?
+> 
+>> been moved to xhci-pci where they belong.
+> 
+> Again, move first, modify second.
+> 
 
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
-v2: no change
-v3: add API in trace.c
-v4: fix memory leak
+In this case a small modification first makes moving the code a lot easier.
+But yes, patches could be split into clearer functional and "moving" changes.
 
- drivers/usb/gadget/configfs.c                  | 24 ++++++++++++++++++++++++
- drivers/usb/gadget/function/f_acm.c            |  1 +
- drivers/usb/gadget/function/f_hid.c            |  4 ++++
- drivers/usb/gadget/function/f_loopback.c       |  4 ++++
- drivers/usb/gadget/function/f_mass_storage.c   | 16 ++++++++++++++++
- drivers/usb/gadget/function/f_midi.c           |  6 ++++++
- drivers/usb/gadget/function/f_printer.c        |  4 ++++
- drivers/usb/gadget/function/f_serial.c         |  1 +
- drivers/usb/gadget/function/f_sourcesink.c     | 16 ++++++++++++++++
- drivers/usb/gadget/function/f_uac1.c           |  6 ++++++
- drivers/usb/gadget/function/f_uac1_legacy.c    |  4 ++++
- drivers/usb/gadget/function/f_uac2.c           |  8 ++++++++
- drivers/usb/gadget/function/u_ether_configfs.h | 10 ++++++++++
- drivers/usb/gadget/function/uvc_configfs.c     | 18 ++++++++++++++++++
- drivers/usb/gadget/trace.c                     | 26 ++++++++++++++++++++++++++
- include/linux/usb/composite.h                  |  3 +++
- include/linux/usb/gadget_configfs.h            |  2 ++
- 17 files changed, 153 insertions(+)
-
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index a304d29..a9ea331 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -146,6 +146,8 @@ static ssize_t gadget_dev_desc_##_name##_store(struct config_item *item, \
- {							\
- 	u8 val;						\
- 	int ret;					\
-+							\
-+	trace_usb_configfs_write_attr(item, #_name, page);	\
- 	ret = kstrtou8(page, 0, &val);			\
- 	if (ret)					\
- 		return ret;				\
-@@ -159,6 +161,8 @@ static ssize_t gadget_dev_desc_##_name##_store(struct config_item *item, \
- {							\
- 	u16 val;					\
- 	int ret;					\
-+							\
-+	trace_usb_configfs_write_attr(item, #_name, page);	\
- 	ret = kstrtou16(page, 0, &val);			\
- 	if (ret)					\
- 		return ret;				\
-@@ -198,6 +202,8 @@ static ssize_t gadget_dev_desc_bcdDevice_store(struct config_item *item,
- 	u16 bcdDevice;
- 	int ret;
- 
-+	trace_usb_configfs_write_attr(item, "bcdDevice", page);
-+
- 	ret = kstrtou16(page, 0, &bcdDevice);
- 	if (ret)
- 		return ret;
-@@ -215,6 +221,8 @@ static ssize_t gadget_dev_desc_bcdUSB_store(struct config_item *item,
- 	u16 bcdUSB;
- 	int ret;
- 
-+	trace_usb_configfs_write_attr(item, "bcdUSB", page);
-+
- 	ret = kstrtou16(page, 0, &bcdUSB);
- 	if (ret)
- 		return ret;
-@@ -262,6 +270,8 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
- 	char *name;
- 	int ret;
- 
-+	trace_usb_configfs_write_attr(item, "UDC", page);
-+
- 	if (strlen(page) < len)
- 		return -EOVERFLOW;
- 
-@@ -311,6 +321,8 @@ static ssize_t gadget_dev_desc_max_speed_store(struct config_item *item,
- {
- 	struct gadget_info *gi = to_gadget_info(item);
- 
-+	trace_usb_configfs_write_attr(item, "max_speed", page);
-+
- 	mutex_lock(&gi->lock);
- 
- 	/* Prevent changing of max_speed after the driver is binded */
-@@ -519,6 +531,9 @@ static ssize_t gadget_config_desc_MaxPower_store(struct config_item *item,
- 	struct config_usb_cfg *cfg = to_config_usb_cfg(item);
- 	u16 val;
- 	int ret;
-+
-+	trace_usb_configfs_write_attr(item, "MaxPower", page);
-+
- 	ret = kstrtou16(page, 0, &val);
- 	if (ret)
- 		return ret;
-@@ -542,6 +557,9 @@ static ssize_t gadget_config_desc_bmAttributes_store(struct config_item *item,
- 	struct config_usb_cfg *cfg = to_config_usb_cfg(item);
- 	u8 val;
- 	int ret;
-+
-+	trace_usb_configfs_write_attr(item, "bmAttributes", page);
-+
- 	ret = kstrtou8(page, 0, &val);
- 	if (ret)
- 		return ret;
-@@ -809,6 +827,8 @@ static ssize_t os_desc_use_store(struct config_item *item, const char *page,
- 	int ret;
- 	bool use;
- 
-+	trace_usb_configfs_write_attr(item, "use", page);
-+
- 	mutex_lock(&gi->lock);
- 	ret = strtobool(page, &use);
- 	if (!ret) {
-@@ -833,6 +853,8 @@ static ssize_t os_desc_b_vendor_code_store(struct config_item *item,
- 	int ret;
- 	u8 b_vendor_code;
- 
-+	trace_usb_configfs_write_attr(item, "b_vendor_code", page);
-+
- 	mutex_lock(&gi->lock);
- 	ret = kstrtou8(page, 0, &b_vendor_code);
- 	if (!ret) {
-@@ -862,6 +884,8 @@ static ssize_t os_desc_qw_sign_store(struct config_item *item, const char *page,
- 	struct gadget_info *gi = os_desc_item_to_gadget_info(item);
- 	int res, l;
- 
-+	trace_usb_configfs_write_attr(item, "qw_sign", page);
-+
- 	l = min((int)len, OS_STRING_QW_SIGN_LEN >> 1);
- 	if (page[l - 1] == '\n')
- 		--l;
-diff --git a/drivers/usb/gadget/function/f_acm.c b/drivers/usb/gadget/function/f_acm.c
-index 349945e..d48f666 100644
---- a/drivers/usb/gadget/function/f_acm.c
-+++ b/drivers/usb/gadget/function/f_acm.c
-@@ -794,6 +794,7 @@ static struct configfs_item_operations acm_item_ops = {
- static ssize_t f_acm_console_store(struct config_item *item,
- 		const char *page, size_t count)
- {
-+	trace_usb_configfs_write_attr(item, "console", page);
- 	return gserial_set_console(to_f_serial_opts(item)->port_num,
- 				   page, count);
- }
-diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-index ca0a7d9..c54af8d 100644
---- a/drivers/usb/gadget/function/f_hid.c
-+++ b/drivers/usb/gadget/function/f_hid.c
-@@ -1074,6 +1074,8 @@ static ssize_t f_hid_opts_##name##_store(struct config_item *item,	\
- 	int ret;							\
- 	u##prec num;							\
- 									\
-+	trace_usb_configfs_write_attr(item, #name, page);		\
-+									\
- 	mutex_lock(&opts->lock);					\
- 	if (opts->refcnt) {						\
- 		ret = -EBUSY;						\
-@@ -1123,6 +1125,8 @@ static ssize_t f_hid_opts_report_desc_store(struct config_item *item,
- 	int ret = -EBUSY;
- 	char *d;
- 
-+	trace_usb_configfs_write_attr(item, "report_desc", page);
-+
- 	mutex_lock(&opts->lock);
- 
- 	if (opts->refcnt)
-diff --git a/drivers/usb/gadget/function/f_loopback.c b/drivers/usb/gadget/function/f_loopback.c
-index ae41f55..42f6061 100644
---- a/drivers/usb/gadget/function/f_loopback.c
-+++ b/drivers/usb/gadget/function/f_loopback.c
-@@ -489,6 +489,8 @@ static ssize_t f_lb_opts_qlen_store(struct config_item *item,
- 	int ret;
- 	u32 num;
- 
-+	trace_usb_configfs_write_attr(item, "qlen", page);
-+
- 	mutex_lock(&opts->lock);
- 	if (opts->refcnt) {
- 		ret = -EBUSY;
-@@ -527,6 +529,8 @@ static ssize_t f_lb_opts_bulk_buflen_store(struct config_item *item,
- 	int ret;
- 	u32 num;
- 
-+	trace_usb_configfs_write_attr(item, "bulk_buflen", page);
-+
- 	mutex_lock(&opts->lock);
- 	if (opts->refcnt) {
- 		ret = -EBUSY;
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index a96eca9..295966b 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -3141,6 +3141,8 @@ static ssize_t fsg_lun_opts_file_store(struct config_item *item,
- 	struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
- 	struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
- 
-+	trace_usb_configfs_write_attr(item, "file", page);
-+
- 	return fsg_store_file(opts->lun, &fsg_opts->common->filesem, page, len);
- }
- 
-@@ -3157,6 +3159,8 @@ static ssize_t fsg_lun_opts_ro_store(struct config_item *item,
- 	struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
- 	struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
- 
-+	trace_usb_configfs_write_attr(item, "ro", page);
-+
- 	return fsg_store_ro(opts->lun, &fsg_opts->common->filesem, page, len);
- }
- 
-@@ -3171,6 +3175,8 @@ static ssize_t fsg_lun_opts_removable_show(struct config_item *item,
- static ssize_t fsg_lun_opts_removable_store(struct config_item *item,
- 				       const char *page, size_t len)
- {
-+	trace_usb_configfs_write_attr(item, "removable", page);
-+
- 	return fsg_store_removable(to_fsg_lun_opts(item)->lun, page, len);
- }
- 
-@@ -3187,6 +3193,8 @@ static ssize_t fsg_lun_opts_cdrom_store(struct config_item *item,
- 	struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
- 	struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
- 
-+	trace_usb_configfs_write_attr(item, "cdrom", page);
-+
- 	return fsg_store_cdrom(opts->lun, &fsg_opts->common->filesem, page,
- 			       len);
- }
-@@ -3201,6 +3209,8 @@ static ssize_t fsg_lun_opts_nofua_show(struct config_item *item, char *page)
- static ssize_t fsg_lun_opts_nofua_store(struct config_item *item,
- 				       const char *page, size_t len)
- {
-+	trace_usb_configfs_write_attr(item, "nofua", page);
-+
- 	return fsg_store_nofua(to_fsg_lun_opts(item)->lun, page, len);
- }
- 
-@@ -3215,6 +3225,8 @@ static ssize_t fsg_lun_opts_inquiry_string_show(struct config_item *item,
- static ssize_t fsg_lun_opts_inquiry_string_store(struct config_item *item,
- 						 const char *page, size_t len)
- {
-+	trace_usb_configfs_write_attr(item, "inquiry_string", page);
-+
- 	return fsg_store_inquiry_string(to_fsg_lun_opts(item)->lun, page, len);
- }
- 
-@@ -3353,6 +3365,8 @@ static ssize_t fsg_opts_stall_store(struct config_item *item, const char *page,
- 	int ret;
- 	bool stall;
- 
-+	trace_usb_configfs_write_attr(item, "stall", page);
-+
- 	mutex_lock(&opts->lock);
- 
- 	if (opts->refcnt) {
-@@ -3393,6 +3407,8 @@ static ssize_t fsg_opts_num_buffers_store(struct config_item *item,
- 	int ret;
- 	u8 num;
- 
-+	trace_usb_configfs_write_attr(item, "num_buffers", page);
-+
- 	mutex_lock(&opts->lock);
- 	if (opts->refcnt) {
- 		ret = -EBUSY;
-diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
-index fddf539..ebb2d7b 100644
---- a/drivers/usb/gadget/function/f_midi.c
-+++ b/drivers/usb/gadget/function/f_midi.c
-@@ -1110,6 +1110,8 @@ static ssize_t f_midi_opts_##name##_store(struct config_item *item,	\
- 	int ret;							\
- 	u32 num;							\
- 									\
-+	trace_usb_configfs_write_attr(item, #name, page);		\
-+									\
- 	mutex_lock(&opts->lock);					\
- 	if (opts->refcnt > 1) {						\
- 		ret = -EBUSY;						\
-@@ -1154,6 +1156,8 @@ static ssize_t f_midi_opts_##name##_store(struct config_item *item,	\
- 	int ret;							\
- 	s32 num;							\
- 									\
-+	trace_usb_configfs_write_attr(item, #name, page);		\
-+									\
- 	mutex_lock(&opts->lock);					\
- 	if (opts->refcnt > 1) {						\
- 		ret = -EBUSY;						\
-@@ -1209,6 +1213,8 @@ static ssize_t f_midi_opts_id_store(struct config_item *item,
- 	int ret;
- 	char *c;
- 
-+	trace_usb_configfs_write_attr(item, "id", page);
-+
- 	mutex_lock(&opts->lock);
- 	if (opts->refcnt > 1) {
- 		ret = -EBUSY;
-diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-index abec5c5..c071574 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -1239,6 +1239,8 @@ static ssize_t f_printer_opts_pnp_string_store(struct config_item *item,
- 	char *new_pnp;
- 	int result;
- 
-+	trace_usb_configfs_write_attr(item, "pnp_string", page);
-+
- 	mutex_lock(&opts->lock);
- 
- 	new_pnp = kstrndup(page, len, GFP_KERNEL);
-@@ -1281,6 +1283,8 @@ static ssize_t f_printer_opts_q_len_store(struct config_item *item,
- 	int ret;
- 	u16 num;
- 
-+	trace_usb_configfs_write_attr(item, "q_len", page);
-+
- 	mutex_lock(&opts->lock);
- 	if (opts->refcnt) {
- 		ret = -EBUSY;
-diff --git a/drivers/usb/gadget/function/f_serial.c b/drivers/usb/gadget/function/f_serial.c
-index a9480b9..58f69a7 100644
---- a/drivers/usb/gadget/function/f_serial.c
-+++ b/drivers/usb/gadget/function/f_serial.c
-@@ -271,6 +271,7 @@ static struct configfs_item_operations serial_item_ops = {
- static ssize_t f_serial_console_store(struct config_item *item,
- 		const char *page, size_t count)
- {
-+	trace_usb_configfs_write_attr(item, "console", page);
- 	return gserial_set_console(to_f_serial_opts(item)->port_num,
- 				   page, count);
- }
-diff --git a/drivers/usb/gadget/function/f_sourcesink.c b/drivers/usb/gadget/function/f_sourcesink.c
-index 6803cd6..4e6acd7 100644
---- a/drivers/usb/gadget/function/f_sourcesink.c
-+++ b/drivers/usb/gadget/function/f_sourcesink.c
-@@ -907,6 +907,8 @@ static ssize_t f_ss_opts_pattern_store(struct config_item *item,
- 	int ret;
- 	u8 num;
- 
-+	trace_usb_configfs_write_attr(item, "pattern", page);
-+
- 	mutex_lock(&opts->lock);
- 	if (opts->refcnt) {
- 		ret = -EBUSY;
-@@ -950,6 +952,8 @@ static ssize_t f_ss_opts_isoc_interval_store(struct config_item *item,
- 	int ret;
- 	u8 num;
- 
-+	trace_usb_configfs_write_attr(item, "isoc_interval", page);
-+
- 	mutex_lock(&opts->lock);
- 	if (opts->refcnt) {
- 		ret = -EBUSY;
-@@ -993,6 +997,8 @@ static ssize_t f_ss_opts_isoc_maxpacket_store(struct config_item *item,
- 	int ret;
- 	u16 num;
- 
-+	trace_usb_configfs_write_attr(item, "isoc_maxpacket", page);
-+
- 	mutex_lock(&opts->lock);
- 	if (opts->refcnt) {
- 		ret = -EBUSY;
-@@ -1036,6 +1042,8 @@ static ssize_t f_ss_opts_isoc_mult_store(struct config_item *item,
- 	int ret;
- 	u8 num;
- 
-+	trace_usb_configfs_write_attr(item, "isoc_mult", page);
-+
- 	mutex_lock(&opts->lock);
- 	if (opts->refcnt) {
- 		ret = -EBUSY;
-@@ -1079,6 +1087,8 @@ static ssize_t f_ss_opts_isoc_maxburst_store(struct config_item *item,
- 	int ret;
- 	u8 num;
- 
-+	trace_usb_configfs_write_attr(item, "isoc_maxburst", page);
-+
- 	mutex_lock(&opts->lock);
- 	if (opts->refcnt) {
- 		ret = -EBUSY;
-@@ -1122,6 +1132,8 @@ static ssize_t f_ss_opts_bulk_buflen_store(struct config_item *item,
- 	int ret;
- 	u32 num;
- 
-+	trace_usb_configfs_write_attr(item, "bulk_buflen", page);
-+
- 	mutex_lock(&opts->lock);
- 	if (opts->refcnt) {
- 		ret = -EBUSY;
-@@ -1160,6 +1172,8 @@ static ssize_t f_ss_opts_bulk_qlen_store(struct config_item *item,
- 	int ret;
- 	u32 num;
- 
-+	trace_usb_configfs_write_attr(item, "bulk_qlen", page);
-+
- 	mutex_lock(&opts->lock);
- 	if (opts->refcnt) {
- 		ret = -EBUSY;
-@@ -1198,6 +1212,8 @@ static ssize_t f_ss_opts_iso_qlen_store(struct config_item *item,
- 	int ret;
- 	u32 num;
- 
-+	trace_usb_configfs_write_attr(item, "iso_qlen", page);
-+
- 	mutex_lock(&opts->lock);
- 	if (opts->refcnt) {
- 		ret = -EBUSY;
-diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-index 6f0e1d8..efbf45f 100644
---- a/drivers/usb/gadget/function/f_uac1.c
-+++ b/drivers/usb/gadget/function/f_uac1.c
-@@ -1474,6 +1474,8 @@ static ssize_t f_uac1_opts_##name##_store(				\
- 	int ret;							\
- 	type num;							\
- 									\
-+	trace_usb_configfs_write_attr(item, #name, page);		\
-+									\
- 	mutex_lock(&opts->lock);					\
- 	if (opts->refcnt) {						\
- 		ret = -EBUSY;						\
-@@ -1527,6 +1529,8 @@ static ssize_t f_uac1_opts_##name##_store(struct config_item *item,	\
- 	u32 num;							\
- 	int i;								\
- 									\
-+	trace_usb_configfs_write_attr(item, #name, page);		\
-+									\
- 	mutex_lock(&opts->lock);					\
- 	if (opts->refcnt) {						\
- 		ret = -EBUSY;						\
-@@ -1573,6 +1577,8 @@ static ssize_t f_uac1_opts_##name##_store(struct config_item *item,	\
- 	struct f_uac1_opts *opts = to_f_uac1_opts(item);		\
- 	int ret = 0;							\
- 									\
-+	trace_usb_configfs_write_attr(item, #name, page);		\
-+									\
- 	mutex_lock(&opts->lock);					\
- 	if (opts->refcnt) {						\
- 		ret = -EBUSY;						\
-diff --git a/drivers/usb/gadget/function/f_uac1_legacy.c b/drivers/usb/gadget/function/f_uac1_legacy.c
-index e2d7f69..a65917b 100644
---- a/drivers/usb/gadget/function/f_uac1_legacy.c
-+++ b/drivers/usb/gadget/function/f_uac1_legacy.c
-@@ -837,6 +837,8 @@ static ssize_t f_uac1_opts_##name##_store(struct config_item *item,		\
- 	int ret;							\
- 	u32 num;							\
- 									\
-+	trace_usb_configfs_write_attr(item, #name, page);		\
-+									\
- 	mutex_lock(&opts->lock);					\
- 	if (opts->refcnt) {						\
- 		ret = -EBUSY;						\
-@@ -882,6 +884,8 @@ static ssize_t f_uac1_opts_##name##_store(struct config_item *item,	\
- 	int ret = -EBUSY;						\
- 	char *tmp;							\
- 									\
-+	trace_usb_configfs_write_attr(item, #name, page);		\
-+									\
- 	mutex_lock(&opts->lock);					\
- 	if (opts->refcnt)						\
- 		goto end;						\
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index 1905a8d..1849f3b 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -1886,6 +1886,8 @@ static ssize_t f_uac2_opts_##name##_store(struct config_item *item,	\
- 	int ret;							\
- 	type num;							\
- 									\
-+	trace_usb_configfs_write_attr(item, #name, page);		\
-+									\
- 	mutex_lock(&opts->lock);					\
- 	if (opts->refcnt) {						\
- 		ret = -EBUSY;						\
-@@ -1938,6 +1940,8 @@ static ssize_t f_uac2_opts_##name##_store(struct config_item *item,	\
- 	struct f_uac2_opts *opts = to_f_uac2_opts(item);		\
- 	int ret = 0;							\
- 									\
-+	trace_usb_configfs_write_attr(item, #name, page);		\
-+									\
- 	mutex_lock(&opts->lock);					\
- 	if (opts->refcnt) {						\
- 		ret = -EBUSY;						\
-@@ -1995,6 +1999,8 @@ static ssize_t f_uac2_opts_##name##_store(struct config_item *item,	\
- 	u32 num;							\
- 	int i;								\
- 									\
-+	trace_usb_configfs_write_attr(item, #name, page);		\
-+									\
- 	mutex_lock(&opts->lock);					\
- 	if (opts->refcnt) {						\
- 		ret = -EBUSY;						\
-@@ -2041,6 +2047,8 @@ static ssize_t f_uac2_opts_##name##_store(struct config_item *item,	\
- 	struct f_uac2_opts *opts = to_f_uac2_opts(item);		\
- 	int ret = 0;							\
- 									\
-+	trace_usb_configfs_write_attr(item, #name, page);		\
-+									\
- 	mutex_lock(&opts->lock);					\
- 	if (opts->refcnt) {						\
- 		ret = -EBUSY;						\
-diff --git a/drivers/usb/gadget/function/u_ether_configfs.h b/drivers/usb/gadget/function/u_ether_configfs.h
-index f558c31..05578be 100644
---- a/drivers/usb/gadget/function/u_ether_configfs.h
-+++ b/drivers/usb/gadget/function/u_ether_configfs.h
-@@ -45,6 +45,8 @@
- 		struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);	\
- 		int ret;						\
- 									\
-+		trace_usb_configfs_write_attr(item, "dev_addr", page);	\
-+									\
- 		mutex_lock(&opts->lock);				\
- 		if (opts->refcnt) {					\
- 			mutex_unlock(&opts->lock);			\
-@@ -80,6 +82,8 @@
- 		struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);	\
- 		int ret;						\
- 									\
-+		trace_usb_configfs_write_attr(item, "host_addr", page);	\
-+									\
- 		mutex_lock(&opts->lock);				\
- 		if (opts->refcnt) {					\
- 			mutex_unlock(&opts->lock);			\
-@@ -115,6 +119,8 @@
- 		u8 val;							\
- 		int ret;						\
- 									\
-+		trace_usb_configfs_write_attr(item, "qmult", page);	\
-+									\
- 		mutex_lock(&opts->lock);				\
- 		if (opts->refcnt) {					\
- 			ret = -EBUSY;					\
-@@ -154,6 +160,8 @@ out:									\
- 		struct f_##_f_##_opts *opts = to_f_##_f_##_opts(item);	\
- 		int ret = -EBUSY;					\
- 									\
-+		trace_usb_configfs_write_attr(item, "ifname", page);	\
-+									\
- 		mutex_lock(&opts->lock);				\
- 		if (!opts->refcnt)					\
- 			ret = gether_set_ifname(opts->net, page, len);	\
-@@ -185,6 +193,8 @@ out:									\
- 		int ret = -EINVAL;					\
- 		u8 val;							\
- 									\
-+		trace_usb_configfs_write_attr(item, #_n_, page);		\
-+									\
- 		mutex_lock(&opts->lock);				\
- 		if (sscanf(page, "%02hhx", &val) > 0) {			\
- 			opts->_n_ = val;				\
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index fc139f3..6556e42 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -172,6 +172,8 @@ uvcg_control_header_##cname##_store(struct config_item *item,		\
- 	int ret;							\
- 	u##bits num;							\
- 									\
-+	trace_usb_configfs_write_attr(item, #cname, page);		\
-+									\
- 	mutex_lock(su_mutex); /* for navigating configfs hierarchy */	\
- 									\
- 	opts_item = ch->item.ci_parent->ci_parent->ci_parent;		\
-@@ -1129,6 +1131,8 @@ static ssize_t  uvcg_frame_##cname##_store(struct config_item *item,	\
- 	typeof(f->frame.cname) num;					\
- 	int ret;							\
- 									\
-+	trace_usb_configfs_write_attr(item, #aname, page);		\
-+									\
- 	ret = kstrtou##bits(page, 0, &num);				\
- 	if (ret)							\
- 		return ret;						\
-@@ -1288,6 +1292,8 @@ static ssize_t uvcg_frame_dw_frame_interval_store(struct config_item *item,
- 	int ret = 0, n = 0;
- 	u32 *frm_intrv, *tmp;
- 
-+	trace_usb_configfs_write_attr(item, "dwFrameInterval", page);
-+
- 	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
- 
- 	opts_item = ch->item.ci_parent->ci_parent->ci_parent->ci_parent;
-@@ -1484,6 +1490,8 @@ static ssize_t uvcg_uncompressed_guid_format_store(struct config_item *item,
- 	struct mutex *su_mutex = &ch->fmt.group.cg_subsys->su_mutex;
- 	int ret;
- 
-+	trace_usb_configfs_write_attr(item, "guidFormat", page);
-+
- 	mutex_lock(su_mutex); /* for navigating configfs hierarchy */
- 
- 	opts_item = ch->fmt.group.cg_item.ci_parent->ci_parent->ci_parent;
-@@ -1566,6 +1574,8 @@ uvcg_uncompressed_##cname##_store(struct config_item *item,		\
- 	int ret;							\
- 	u8 num;								\
- 									\
-+	trace_usb_configfs_write_attr(item, #aname, page);		\
-+									\
- 	mutex_lock(su_mutex); /* for navigating configfs hierarchy */	\
- 									\
- 	opts_item = u->fmt.group.cg_item.ci_parent->ci_parent->ci_parent;\
-@@ -1613,6 +1623,8 @@ uvcg_uncompressed_bma_controls_store(struct config_item *item,
- 				     const char *page, size_t len)
- {
- 	struct uvcg_uncompressed *unc = to_uvcg_uncompressed(item);
-+
-+	trace_usb_configfs_write_attr(item, "bmaControls", page);
- 	return uvcg_format_bma_controls_store(&unc->fmt, page, len);
- }
- 
-@@ -1761,6 +1773,8 @@ uvcg_mjpeg_##cname##_store(struct config_item *item,			\
- 	int ret;							\
- 	u8 num;								\
- 									\
-+	trace_usb_configfs_write_attr(item, #aname, page);		\
-+									\
- 	mutex_lock(su_mutex); /* for navigating configfs hierarchy */	\
- 									\
- 	opts_item = u->fmt.group.cg_item.ci_parent->ci_parent->ci_parent;\
-@@ -1808,6 +1822,8 @@ uvcg_mjpeg_bma_controls_store(struct config_item *item,
- 				     const char *page, size_t len)
- {
- 	struct uvcg_mjpeg *u = to_uvcg_mjpeg(item);
-+
-+	trace_usb_configfs_write_attr(item, "bmaControls", page);
- 	return uvcg_format_bma_controls_store(&u->fmt, page, len);
- }
- 
-@@ -2420,6 +2436,8 @@ f_uvc_opts_##cname##_store(struct config_item *item,			\
- 	unsigned int num;						\
- 	int ret;							\
- 									\
-+	trace_usb_configfs_write_attr(item, #aname, page);		\
-+									\
- 	mutex_lock(&opts->lock);					\
- 	if (opts->refcnt) {						\
- 		ret = -EBUSY;						\
-diff --git a/drivers/usb/gadget/trace.c b/drivers/usb/gadget/trace.c
-index 68e747b..7276e8b 100644
---- a/drivers/usb/gadget/trace.c
-+++ b/drivers/usb/gadget/trace.c
-@@ -134,4 +134,30 @@ void trace_usb_configfs_unlink_group(struct config_item *dest,
- 	trace_usb_configfs_link_unlink_group(dest, src, "unlink");
- }
- EXPORT_SYMBOL(trace_usb_configfs_unlink_group);
-+
-+void trace_usb_configfs_write_attr(struct config_item *item,
-+		const char *attr, const char *page)
-+{
-+	char *info, *group;
-+	int ret;
-+
-+	info = kzalloc(2 * PAGE_SIZE, GFP_KERNEL);
-+	if (!info)
-+		return;
-+
-+	group = info + 2 * PAGE_SIZE - GROUP_LEN;
-+	ret = gadget_configfs_group(group, item);
-+	if (ret) {
-+		kfree(info);
-+		return;
-+	}
-+
-+	snprintf(info, 2 * PAGE_SIZE - GROUP_LEN,
-+			"echo %s/%s %s", group, attr, page);
-+
-+	trace_gadget_configfs(info);
-+
-+	kfree(info);
-+}
-+EXPORT_SYMBOL(trace_usb_configfs_write_attr);
- #endif
-diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-index df74bd5..5326871 100644
---- a/include/linux/usb/composite.h
-+++ b/include/linux/usb/composite.h
-@@ -612,11 +612,14 @@ void trace_usb_configfs_link_group(struct config_item *dest,
- 		struct config_item *src);
- void trace_usb_configfs_unlink_group(struct config_item *dest,
- 		struct config_item *src);
-+void trace_usb_configfs_write_attr(struct config_item *item,
-+		const char *attr, const char *page);
- #else
- #define trace_usb_configfs_make_group(parent, item) do {} while(0)
- #define trace_usb_configfs_drop_group(parent, item) do {} while(0)
- #define trace_usb_configfs_link_group(dest, src) do {} while(0)
- #define trace_usb_configfs_unlink_group(dest, src) do {} while(0)
-+#define trace_usb_configfs_write_attr(item, attr, page) do {} while(0)
- #endif
- 
- struct usb_configuration *usb_get_config(struct usb_composite_dev *cdev,
-diff --git a/include/linux/usb/gadget_configfs.h b/include/linux/usb/gadget_configfs.h
-index a89f177..2c0663e 100644
---- a/include/linux/usb/gadget_configfs.h
-+++ b/include/linux/usb/gadget_configfs.h
-@@ -14,6 +14,8 @@ static ssize_t __struct##_##__name##_store(struct config_item *item, \
- 	struct __struct *gs = to_##__struct(item);	\
- 	int ret;					\
- 							\
-+	trace_usb_configfs_write_attr(item, #__name, page);	\
-+							\
- 	ret = usb_string_copy(page, &gs->__name);	\
- 	if (ret)					\
- 		return ret;				\
--- 
-2.7.4
+Thanks
+Mathias 
 
