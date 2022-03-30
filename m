@@ -2,71 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCA14EB928
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Mar 2022 06:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4FA4EB9B4
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Mar 2022 06:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240352AbiC3EFe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Mar 2022 00:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
+        id S242605AbiC3EiU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Mar 2022 00:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiC3EFb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Mar 2022 00:05:31 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB32EA765;
-        Tue, 29 Mar 2022 21:03:43 -0700 (PDT)
+        with ESMTP id S242658AbiC3EiQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Mar 2022 00:38:16 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359532253B
+        for <linux-usb@vger.kernel.org>; Tue, 29 Mar 2022 21:36:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648613024; x=1680149024;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vadEC+trwPTFlk33Do/EYDLu46dxriKX977pa9Dtt+k=;
-  b=AUiQmUjEdCFf2WiIdDVCB44FO/9AkaDi3iWfELtPBD0sBxTIXWLwHoK/
-   diKbmwXFMN7TwbAjr3EUKCA/lz1NJ2uxwZmcaA5zI69TEx2wmJobl+c8A
-   /Aam+5J6VrZ6xFlM9u3MpjGY7afrz1hK96JNCRrfMe6CG0wv9ArBKf6P5
-   U=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 29 Mar 2022 21:03:43 -0700
+  t=1648614989; x=1680150989;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pxbJoZ3BpvuAzHyWwdRp7ex5qa5f8m7AM508o+M6jNE=;
+  b=b3UuKfQ1iaXxKLofuXwHklSjfKm4teVj4lIIYjS7IhInh1qlwhgJljlp
+   4bPQc9G8zwGEsbaA9eKtWgEYALktcFMhBkRKj+umJZmZs55KJmQsRTxQv
+   xnrCkuBFhvnbAcZM6enJCD6vYMmGoQDBWL0R4IdqhFzXCiU3cJqeCc5tT
+   I=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 29 Mar 2022 21:36:28 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 21:03:27 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 21:36:28 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 29 Mar 2022 21:03:27 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ 15.2.986.22; Tue, 29 Mar 2022 21:36:27 -0700
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 29 Mar 2022 21:03:22 -0700
-Date:   Wed, 30 Mar 2022 09:33:18 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>
-CC:     Matthias Kaehlcke <mka@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>
-Subject: Re: [PATCH v11 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <20220330040318.GB29680@hu-pkondeti-hyd.qualcomm.com>
-References: <1647932876-23249-1-git-send-email-quic_c_sanm@quicinc.com>
- <1647932876-23249-3-git-send-email-quic_c_sanm@quicinc.com>
- <YjthzwUldu2+31Pm@google.com>
- <b044f873-c20a-c666-0bd3-8d67c3337b03@quicinc.com>
+ 15.2.986.22; Tue, 29 Mar 2022 21:36:26 -0700
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
+        "Linyu Yuan" <quic_linyyuan@quicinc.com>
+Subject: [PATCH v3 0/5] usb: gadget: configfs: new trace events
+Date:   Wed, 30 Mar 2022 12:36:15 +0800
+Message-ID: <1648614980-25024-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <b044f873-c20a-c666-0bd3-8d67c3337b03@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,123 +62,76 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Sandeep/Matthias,
+Last year I try to add trace event support for usb gadget configfs [1],
+this time the idea is change a lot, the purpose is trace all user space
+operation to gadget configuration, include gadget and it's function.
 
-On Thu, Mar 24, 2022 at 10:24:55AM +0530, Sandeep Maheswaram (Temp) wrote:
-> 
-> On 3/23/2022 11:37 PM, Matthias Kaehlcke wrote:
-> >On Tue, Mar 22, 2022 at 12:37:53PM +0530, Sandeep Maheswaram wrote:
-> >>During suspend read the status of all port and make sure the PHYs
-> >>are in the correct mode based on current speed.
-> >>Phy interrupt masks are set based on this mode. Keep track of the mode
-> >>of the HS PHY to be able to configure wakeup properly.
-> >>
-> >>Also check during suspend if any wakeup capable devices are
-> >>connected to the controller (directly or through hubs), if there
-> >>are none set a flag to indicate that the PHY is powered
-> >>down during suspend.
-> >>
-> >>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> >>---
-> >>  drivers/usb/dwc3/core.c | 54 ++++++++++++++++++++++++++++++++++++++++---------
-> >>  1 file changed, 45 insertions(+), 9 deletions(-)
-> >>
-> >>diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> >>index 1170b80..232a734 100644
-> >>--- a/drivers/usb/dwc3/core.c
-> >>+++ b/drivers/usb/dwc3/core.c
-> >>@@ -32,12 +32,14 @@
-> >>  #include <linux/usb/gadget.h>
-> >>  #include <linux/usb/of.h>
-> >>  #include <linux/usb/otg.h>
-> >>+#include <linux/usb/hcd.h>
-> >>  #include "core.h"
-> >>  #include "gadget.h"
-> >>  #include "io.h"
-> >>  #include "debug.h"
-> >>+#include "../host/xhci.h"
-> >>  #define DWC3_DEFAULT_AUTOSUSPEND_DELAY	5000 /* ms */
-> >>@@ -1861,10 +1863,36 @@ static int dwc3_core_init_for_resume(struct dwc3 *dwc)
-> >>  	return ret;
-> >>  }
-> >>+static void dwc3_set_phy_speed_mode(struct dwc3 *dwc)
-> >>+{
-> >>+
-> >>+	int i, num_ports;
-> >>+	u32 reg;
-> >>+	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
-> >>+	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
-> >>+
-> >>+	dwc->hs_phy_mode = 0;
-> >>+
-> >>+	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
-> >>+
-> >>+	num_ports = HCS_MAX_PORTS(reg);
-> >>+	for (i = 0; i < num_ports; i++) {
-> >>+		reg = readl(&xhci_hcd->op_regs->port_status_base + i * 0x04);
-> >s/0x04/NUM_PORT_REGS/
-> Okay. Will update in next version.
-> >
-> >>+		if (reg & PORT_PE) {
-> >>+			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
-> >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_HS;
-> >>+			else if (DEV_LOWSPEED(reg))
-> >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_LS;
-> >>+		}
-> >>+	}
-> >>+	phy_set_mode(dwc->usb2_generic_phy, dwc->hs_phy_mode);
-> >>+}
-> >>+
-> >>  static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >>  {
-> >>  	unsigned long	flags;
-> >>  	u32 reg;
-> >>+	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
-> >>  	switch (dwc->current_dr_role) {
-> >>  	case DWC3_GCTL_PRTCAP_DEVICE:
-> >>@@ -1877,10 +1905,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >>  		dwc3_core_exit(dwc);
-> >>  		break;
-> >>  	case DWC3_GCTL_PRTCAP_HOST:
-> >>-		if (!PMSG_IS_AUTO(msg)) {
-> >>-			dwc3_core_exit(dwc);
-> >>-			break;
-> >>-		}
-> >>+		dwc3_set_phy_speed_mode(dwc);
-> >>  		/* Let controller to suspend HSPHY before PHY driver suspends */
-> >>  		if (dwc->dis_u2_susphy_quirk ||
-> >>@@ -1896,6 +1921,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
-> >>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> >>+
-> >>+		if (!PMSG_IS_AUTO(msg)) {
-> >>+			if (device_may_wakeup(&dwc->xhci->dev) &&
-> >Does the xHCI actually provide the correct information? I think Brian brought
-> >up earlier that xhci-plat always marks the xHCI as wakeup capable, regardless
-> >of whether the specific implementation actually supports wakeup. So a dwc3
-> >without wakeup support would keep the PHY and the dwc3 active during suspend
-> >if wakeup capable devices are connected (unless the admin disabled wakeup),
-> >even though wakeup it doesn't support wakeup.
-> >
-> >Using the wakeup capability/policy of the xHCI to make decisions in the dwc3
-> >driver might still be the best we can do with the weird driver split over 3
-> >drivers for dwc3. Maybe the dwc3 could pass the actual capability to wake up
-> >to the xHCI through a property_entry? Then again, it's actually the 'glue'
-> >driver (dwc3-qcom) who knows about the actual wakeup capability, and not the
-> >dwc3 core/host ...
-> Will check if we can do something regarding this.
+In usb gadget configfs, mainly user can do mkdir/rmdir a group,
+link/unlink a function, change gadget/function attributes,
+each operation will touch a struct config_item.
 
-Can we introduce a device tree param to xhci-plat to specify if the underlying
-device is wakeup capable or not. Based on this xhci-plat can call
-device_set_wakeup_capable() with correct argument.
+It only have one trace event entry which store string,
+provide several API which represent user operation and generate string
+from  struct config_item.
 
-One immediate problem is that current code unconditionally calls
-device_set_wakeup_capable(&pdev->dev, true). So we may break existing use
-cases also.
+example output,
+   mkdir-80      [000] .....    44.555106: gadget_configfs: mkdir dummy
+      sh-76      [000] .....    44.562609: gadget_configfs: echo dummy/idVendor 0x05C6
 
-Given that xHC assumes that the undelying device is wakeup capable but dwc3
-tearing the stack during PM suspend does not make any sense. can we atleast
-create a device tree param for dwc3 not to do this? 
+   mkdir-81      [000] .....    44.569795: gadget_configfs: mkdir dummy/functions/eem.0
+      sh-76      [000] .....    44.600221: gadget_configfs: echo dummy/functions/eem.0/dev_addr 1e:77:46:4b:1e:96
 
-Thanks,
-Pavan
+   mkdir-82      [000] .....    44.615542: gadget_configfs: mkdir dummy/configs/dummy.1
+      ln-83      [000] .....    44.628997: gadget_configfs: link dummy/configs/dummy.1 dummy/functions/eem.0
+      sh-76      [000] .....    44.634506: gadget_configfs: echo dummy/configs/dummy.1/MaxPower 500
+
+   mkdir-84      [000] .....    44.642265: gadget_configfs: mkdir dummy/configs/dummy.1/strings/0x409
+      sh-76      [000] .....    44.663886: gadget_configfs: echo dummy/configs/dummy.1/strings/0x409/configuration dummy
+
+   rmdir-85      [000] .....    64.255507: gadget_configfs: rmdir dummy/configs/dummy.1/strings/0x409
+      rm-86      [000] .....    64.263926: gadget_configfs: unlink dummy/configs/dummy.1 dummy/functions/eem.0
+   rmdir-87      [000] .....    64.279768: gadget_configfs: rmdir dummy/configs/dummy.1
+   rmdir-88      [000] .....    64.328124: gadget_configfs: rmdir dummy/functions/eem.0
+   rmdir-89      [000] .....    64.992085: gadget_configfs: rmdir dummy
+
+
+As it is different from last year change, start a new thread.
+
+[1] https://lore.kernel.org/linux-usb/1635229309-2821-1-git-send-email-quic_linyyuan@quicinc.com/
+
+V2: add example output
+V3: add trace.c and move all APIs to it
+
+Linyu Yuan (5):
+  usb: gadget: remove gadgets_type storage type 'static'
+  usb: gadget: add trace event of configfs operation
+  usb: gadget: add trace event of configfs group operation
+  usb: gadget: add trace event of configfs link/unlink operation
+  usb: gadget: add trace event of configfs write attributes operation
+
+ drivers/usb/gadget/Makefile                    |   2 +
+ drivers/usb/gadget/configfs.c                  |  45 ++++++-
+ drivers/usb/gadget/function/f_acm.c            |   1 +
+ drivers/usb/gadget/function/f_hid.c            |   4 +
+ drivers/usb/gadget/function/f_loopback.c       |   4 +
+ drivers/usb/gadget/function/f_mass_storage.c   |  20 ++++
+ drivers/usb/gadget/function/f_midi.c           |   6 +
+ drivers/usb/gadget/function/f_printer.c        |   4 +
+ drivers/usb/gadget/function/f_serial.c         |   1 +
+ drivers/usb/gadget/function/f_sourcesink.c     |  16 +++
+ drivers/usb/gadget/function/f_uac1.c           |   6 +
+ drivers/usb/gadget/function/f_uac1_legacy.c    |   4 +
+ drivers/usb/gadget/function/f_uac2.c           |   8 ++
+ drivers/usb/gadget/function/u_ether_configfs.h |  10 ++
+ drivers/usb/gadget/function/uvc_configfs.c     |  42 +++++++
+ drivers/usb/gadget/trace.c                     | 156 +++++++++++++++++++++++++
+ drivers/usb/gadget/trace.h                     |  39 +++++++
+ include/linux/usb/composite.h                  |  18 +++
+ include/linux/usb/gadget_configfs.h            |   4 +
+ 19 files changed, 389 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/usb/gadget/trace.c
+ create mode 100644 drivers/usb/gadget/trace.h
+
+-- 
+2.7.4
+
