@@ -2,76 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08004EE0D1
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Mar 2022 20:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106784EE31F
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Mar 2022 23:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236328AbiCaSod (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 31 Mar 2022 14:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
+        id S241446AbiCaVPH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 31 Mar 2022 17:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236024AbiCaSo0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Mar 2022 14:44:26 -0400
-Received: from mail1.bemta31.messagelabs.com (mail1.bemta31.messagelabs.com [67.219.246.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51404235771;
-        Thu, 31 Mar 2022 11:42:38 -0700 (PDT)
+        with ESMTP id S235305AbiCaVPG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Mar 2022 17:15:06 -0400
+Received: from mail1.bemta35.messagelabs.com (mail1.bemta35.messagelabs.com [67.219.250.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647885FD6;
+        Thu, 31 Mar 2022 14:13:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1648752157; i=@motorola.com;
-        bh=I0ILUk5Y0W7A0emDc9iHMdTkNtmNc0vpgg9nFCU/qeE=;
+        s=Selector; t=1648761196; i=@motorola.com;
+        bh=Oscoe//5oQimSy5iSL2jY5wOLa/t9XXDwFLpzHlYKyA=;
         h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
          Content-Transfer-Encoding;
-        b=rjHnYntgkh0QMw8W/7WG/tuxNt2MgjW/hiXKdpFVPlo5STwmwikah1n3SQ8TaySb6
-         siJddTotE2VHpNEoWcIm/1LSSckbWhhX5lNTKgVhq1I58lAuIle0ZW6kSsgFJ/OePp
-         +PqCrCDQOsqdStkTk/XV1uZTqr6Lp5VIgg+Eh17KdDolkBzgcFKBgue66k4V56xzuF
-         8nhWcRx8jDBdiSFOWkTKoZZp1J3wVglbM1YRxFtkpy6YjeUVG84q9MKGwYHPRav+Gh
-         5EkD3ivBgwpl69EDt3wj/Vq3MlO7KXG81eSz/LelrXTL3YN1cxeciotSKiAcNRhIFR
-         /ftjy06ksuMNg==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDIsWRWlGSWpSXmKPExsWS8eKJhK7MN9c
-  kg6ttkhbH2p6wW6xefJXJonnxejaLzolL2C0u75rDZrFoWSuzxYKNjxgd2D1md8xk9di0qpPN
-  Y//cNeweT3/sZfb4vEkugDWKNTMvKb8igTVj9+3dzAWrBCteX/nG1MDYyd/FyMkhJDCVSeL6V
-  JYuRi4gewmTxKLvLewgCTYBNYkFr1cxg9giArISh6/8BrOZBSYwSXzckwJiCwsESRxY+w+snk
-  VAVeJs5zwmEJtXwELizpIlYPUSAvISp5YdhIoLSpyc+YQFYo68RPPW2cwTGLlnIUnNQpJawMi
-  0itEiqSgzPaMkNzEzR9fQwEDX0NBE10TXXC+xSjdRr7RYNzWxuETXUC+xvFgvtbhYr7gyNzkn
-  RS8vtWQTIzAgU4pY2Hcwru35qXeIUZKDSUmU1+GQa5IQX1J+SmVGYnFGfFFpTmrxIUYZDg4lC
-  V7ez0A5waLU9NSKtMwcYHTApCU4eJREeK+9BkrzFhck5hZnpkOkTjHqcjy9emUvsxBLXn5eqp
-  Q4r/VXoCIBkKKM0jy4EbBIvcQoKyXMy8jAwCDEU5BalJtZgir/ilGcg1FJmNcbZApPZl4J3KZ
-  XQEcwAR2hfwPsiJJEhJRUA5Nqqby9MHtgvv+hOy5l4bYNdYd+swj8WbKSZ/oC4wDH5Hnq3I1H
-  Np60vnLn5LOn5ofEDgo0vHueECW+roahJ3OjUEysStrTe7oXDjbdM0t2VPqVpsF2o/DUeo/1b
-  cknfRVY23QOy1+wuXlcknnnTJOzu70YPot88llwc/lOEZu7MVeet7lMXxW911t/03eH6Xf6OL
-  66a1tcn3D98e3Ag5+uzHM6I7ev7uXNAwzO6044ZCcYcX5t5Pv2SNsl5avWy1hH1jCJmP1xOxy
-  SLvNVPr0QXP4i4q2zKGOVQvXxisq7T79e5BP/uDJw+lOhx8xslV5cobM33WKVXWip9WrX5YTC
-  x2/mJegXt+2uFz0f3qTEUpyRaKjFXFScCABxs+hITwMAAA==
+        b=Nxqwf7klgQcmTZbCrwzM70Nw+3R9FucqaRz5KOEIs2YTRRLfCxzPxIUzpPrX6X8Hx
+         YLyb1PSek+a7J88lNyFfmORbgcFKXzk1VdNjk34zn4dDqi4CDM7yZ/YvJEfj4Dhyu/
+         ECg3vNA17WTXfXk+zqYV9TM37FaO6PFjRBKiYdAuTNpI+8elRJ5VUZmxN8iY4JsQ5b
+         iXcdQuqvOJEWdBsIV0eFYDhwiTbQppT5gnx8YCWir1k0JI8aX8QR0hmr7xEjN2/efq
+         sANN6pKqgi3rIKykciVNsBz9C6a+ieLiOOPPaBPvL+XVIZfSVS9vHhwVEIyeftRYfT
+         XcdxTycQDCb6w==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHIsWRWlGSWpSXmKPExsWS8eKJqG62pFu
+  SwfNZghbH2p6wW8zZHG3x5EA7o0Xz4vVsFp0Tl7BbLGxbwmJxedccNotFy1qZLR7Ovspo8fbO
+  dBaLBRsfMTpwe8zumMnqsXmFlsemVZ1sHvvnrmH3WNw3mdXj8yY5j0Pb37AFsEexZuYl5Vcks
+  GZcW3qEpeCtRsXn3l6mBsb5Sl2MXBxCAtOZJE6c+80I4Sxlkjiy9gKQw8nBJqAmseD1KmYQW0
+  RAVuLwld/MIEXMAguZJd7+fsYKkhAW8JV4++w2C4jNIqAqMWfeRXYQm1fAUmLxhvNgcQkBeYl
+  Tyw4yQcQFJU7OfAIWZwaKN2+dzTyBkXsWktQsJKkFjEyrGG2SijLTM0pyEzNzdA0NDHQNDU2A
+  tBGQttBLrNJN1Cst1i1PLS7RNdJLLC/WSy0u1iuuzE3OSdHLSy3ZxAgM6pSitLIdjG39P/UOM
+  UpyMCmJ8jocck0S4kvKT6nMSCzOiC8qzUktPsQow8GhJMF7QsQtSUiwKDU9tSItMwcYYTBpCQ
+  4eJRHeCDGgNG9xQWJucWY6ROoUoy7HpUNX9jILseTl56VKifNySwAVCYAUZZTmwY2ARfslRlk
+  pYV5GBgYGIZ6C1KLczBJU+VeM4hyMSsK8ISBTeDLzSuA2vQI6ggnoCP0briBHlCQipKQamK6U
+  ZjWbtH7lFTRlsgthXpna7+3Gen2zekPavE/yV+bNqnx6evqdGPmdimd6PR/LGa3MufdoQ9XbM
+  yGpR2evSVj11vuw9deJIrrvX3Ae285sXD35JfPHCU76HAt/W9XO+tPqzvp1gkL/zAMXqjZ/Cd
+  v8quVz6Nq4O0XHCzqKNrL1/HRsZZzKMM93ubrYqegCjuc+nt0P5BtP6xjOcPf1b9i0I1nsVnC
+  EK/+ed7sl5Xe7tFQ6Vc3u23Fmfk3UUddM5TP5GRlmggrxC5tuzC0q0K6eyB0w6YT+rIcWSW9d
+  4y5ce6gunODluUPjDrNTu/WN9y3vfy9bHNeXLL9hWiDrJ5Zf/1Z1TiyZ7KQU3sCzTomlOCPRU
+  Iu5qDgRAIXdMEBxAwAA
 X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-15.tower-706.messagelabs.com!1648752156!5014!1
-X-Originating-IP: [104.232.228.24]
+X-Msg-Ref: server-6.tower-636.messagelabs.com!1648761194!43693!1
+X-Originating-IP: [104.232.228.21]
 X-SYMC-ESS-Client-Auth: outbound-route-from=pass
 X-StarScan-Received: 
 X-StarScan-Version: 9.85.5; banners=-,-,-
 X-VirusChecked: Checked
-Received: (qmail 2705 invoked from network); 31 Mar 2022 18:42:36 -0000
-Received: from unknown (HELO va32lpfpp04.lenovo.com) (104.232.228.24)
-  by server-15.tower-706.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 31 Mar 2022 18:42:36 -0000
-Received: from ilclmmrp01.lenovo.com (ilclmmrp01.mot.com [100.65.83.165])
+Received: (qmail 10518 invoked from network); 31 Mar 2022 21:13:15 -0000
+Received: from unknown (HELO va32lpfpp01.lenovo.com) (104.232.228.21)
+  by server-6.tower-636.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 31 Mar 2022 21:13:15 -0000
+Received: from va32lmmrp02.lenovo.com (va32lmmrp02.mot.com [10.62.176.191])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by va32lpfpp04.lenovo.com (Postfix) with ESMTPS id 4KTscD0zcyzbbbK;
-        Thu, 31 Mar 2022 18:42:36 +0000 (UTC)
+        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4KTwy21XdRzldQp;
+        Thu, 31 Mar 2022 21:13:14 +0000 (UTC)
 Received: from p1g3.. (unknown [10.45.4.253])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: w36195)
-        by ilclmmrp01.lenovo.com (Postfix) with ESMTPSA id 4KTscC65fkzbvDd;
-        Thu, 31 Mar 2022 18:42:35 +0000 (UTC)
+        by va32lmmrp02.lenovo.com (Postfix) with ESMTPSA id 4KTwy159SZzf6Wh;
+        Thu, 31 Mar 2022 21:13:13 +0000 (UTC)
 From:   Dan Vacura <w36195@motorola.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Dan Vacura <w36195@motorola.com>, stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bhupesh Sharma <bhupesh.sharma@st.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] usb: gadget: uvc: Fix crash when encoding data for usb request
-Date:   Thu, 31 Mar 2022 13:40:23 -0500
-Message-Id: <20220331184024.23918-1-w36195@motorola.com>
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Carlos Bilbao <bilbao@vt.edu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH] usb: gadget: uvc: allow changing interface name via configfs
+Date:   Thu, 31 Mar 2022 16:11:50 -0500
+Message-Id: <20220331211155.412906-1-w36195@motorola.com>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -85,61 +89,142 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-During the uvcg_video_pump() process, if an error occurs and
-uvcg_queue_cancel() is called, the buffer queue will be cleared out, but
-the current marker (queue->buf_used) of the active buffer (no longer
-active) is not reset. On the next iteration of uvcg_video_pump() the
-stale buf_used count will be used and the logic of min((unsigned
-int)len, buf->bytesused - queue->buf_used) may incorrectly calculate a
-nbytes size, causing an invalid memory access.
+Add a configfs entry, "function_name", to change the iInterface field
+for VideoControl. This name is used on host devices for user selection,
+useful when multiple cameras are present. The default will remain "UVC
+Camera".
 
-[80802.185460][  T315] configfs-gadget gadget: uvc: VS request completed
-with status -18.
-[80802.185519][  T315] configfs-gadget gadget: uvc: VS request completed
-with status -18.
-...
-uvcg_queue_cancel() is called and the queue is cleared out, but the
-marker queue->buf_used is not reset.
-...
-[80802.262328][ T8682] Unable to handle kernel paging request at virtual
-address ffffffc03af9f000
-...
-...
-[80802.263138][ T8682] Call trace:
-[80802.263146][ T8682]  __memcpy+0x12c/0x180
-[80802.263155][ T8682]  uvcg_video_pump+0xcc/0x1e0
-[80802.263165][ T8682]  process_one_work+0x2cc/0x568
-[80802.263173][ T8682]  worker_thread+0x28c/0x518
-[80802.263181][ T8682]  kthread+0x160/0x170
-[80802.263188][ T8682]  ret_from_fork+0x10/0x18
-[80802.263198][ T8682] Code: a8c12829 a88130cb a8c130
-
-Fixes: d692522577c0 ("usb: gadget/uvc: Port UVC webcam gadget to use videobuf2 framework")
-Cc: <stable@vger.kernel.org>
+Cc: <stable@vger.kernel.org> # 5.10+
 Signed-off-by: Dan Vacura <w36195@motorola.com>
-
 ---
-Changes in v3:
-- Cc stable
-Changes in v2:
-- Add Fixes tag
+ .../ABI/testing/configfs-usb-gadget-uvc       |  1 +
+ Documentation/usb/gadget-testing.rst          |  1 +
+ drivers/usb/gadget/function/f_uvc.c           |  4 +-
+ drivers/usb/gadget/function/u_uvc.h           |  1 +
+ drivers/usb/gadget/function/uvc_configfs.c    | 41 +++++++++++++++++++
+ 5 files changed, 47 insertions(+), 1 deletion(-)
 
- drivers/usb/gadget/function/uvc_queue.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-index d852ac9e47e7..2cda982f3765 100644
---- a/drivers/usb/gadget/function/uvc_queue.c
-+++ b/drivers/usb/gadget/function/uvc_queue.c
-@@ -264,6 +264,8 @@ void uvcg_queue_cancel(struct uvc_video_queue *queue, int disconnect)
- 		buf->state = UVC_BUF_STATE_ERROR;
- 		vb2_buffer_done(&buf->buf.vb2_buf, VB2_BUF_STATE_ERROR);
- 	}
-+	queue->buf_used = 0;
+diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+index 889ed45be4ca..611b23e6488d 100644
+--- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
++++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+@@ -7,6 +7,7 @@ Description:	UVC function directory
+ 		streaming_maxburst	0..15 (ss only)
+ 		streaming_maxpacket	1..1023 (fs), 1..3072 (hs/ss)
+ 		streaming_interval	1..16
++		function_name		string [32]
+ 		===================	=============================
+ 
+ What:		/config/usb-gadget/gadget/functions/uvc.name/control
+diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+index c6d034abce3a..1c37159fa171 100644
+--- a/Documentation/usb/gadget-testing.rst
++++ b/Documentation/usb/gadget-testing.rst
+@@ -787,6 +787,7 @@ The uvc function provides these attributes in its function directory:
+ 	streaming_maxpacket maximum packet size this endpoint is capable of
+ 			    sending or receiving when this configuration is
+ 			    selected
++	function_name       name of the interface
+ 	=================== ================================================
+ 
+ There are also "control" and "streaming" subdirectories, each of which contain
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 71bb5e477dba..50e6e7a58b41 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -44,7 +44,7 @@ MODULE_PARM_DESC(trace, "Trace level bitmask");
+ #define UVC_STRING_STREAMING_IDX		1
+ 
+ static struct usb_string uvc_en_us_strings[] = {
+-	[UVC_STRING_CONTROL_IDX].s = "UVC Camera",
++	/* [UVC_STRING_CONTROL_IDX].s = DYNAMIC, */
+ 	[UVC_STRING_STREAMING_IDX].s = "Video Streaming",
+ 	{  }
+ };
+@@ -676,6 +676,7 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+ 	uvc_hs_streaming_ep.bEndpointAddress = uvc->video.ep->address;
+ 	uvc_ss_streaming_ep.bEndpointAddress = uvc->video.ep->address;
+ 
++	uvc_en_us_strings[UVC_STRING_CONTROL_IDX].s = opts->function_name;
+ 	us = usb_gstrings_attach(cdev, uvc_function_strings,
+ 				 ARRAY_SIZE(uvc_en_us_strings));
+ 	if (IS_ERR(us)) {
+@@ -866,6 +867,7 @@ static struct usb_function_instance *uvc_alloc_inst(void)
+ 
+ 	opts->streaming_interval = 1;
+ 	opts->streaming_maxpacket = 1024;
++	snprintf(opts->function_name, sizeof(opts->function_name), "UVC Camera");
+ 
+ 	ret = uvcg_attach_configfs(opts);
+ 	if (ret < 0) {
+diff --git a/drivers/usb/gadget/function/u_uvc.h b/drivers/usb/gadget/function/u_uvc.h
+index 9a01a7d4f17f..24b8681b0d6f 100644
+--- a/drivers/usb/gadget/function/u_uvc.h
++++ b/drivers/usb/gadget/function/u_uvc.h
+@@ -27,6 +27,7 @@ struct f_uvc_opts {
+ 
+ 	unsigned int					control_interface;
+ 	unsigned int					streaming_interface;
++	char						function_name[32];
+ 
+ 	/*
+ 	 * Control descriptors array pointers for full-/high-speed and
+diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+index 77d64031aa9c..63b8d3758b38 100644
+--- a/drivers/usb/gadget/function/uvc_configfs.c
++++ b/drivers/usb/gadget/function/uvc_configfs.c
+@@ -2425,10 +2425,51 @@ UVCG_OPTS_ATTR(streaming_maxburst, streaming_maxburst, 15);
+ 
+ #undef UVCG_OPTS_ATTR
+ 
++#define UVCG_OPTS_STRING_ATTR(cname, aname)				\
++static ssize_t f_uvc_opts_string_##cname##_show(struct config_item *item,\
++					 char *page)			\
++{									\
++	struct f_uvc_opts *opts = to_f_uvc_opts(item);			\
++	int result;							\
++									\
++	mutex_lock(&opts->lock);					\
++	result = snprintf(page, sizeof(opts->aname), "%s", opts->aname);\
++	mutex_unlock(&opts->lock);					\
++									\
++	return result;							\
++}									\
++									\
++static ssize_t f_uvc_opts_string_##cname##_store(struct config_item *item,\
++					  const char *page, size_t len)	\
++{									\
++	struct f_uvc_opts *opts = to_f_uvc_opts(item);			\
++	int ret = 0;							\
++									\
++	mutex_lock(&opts->lock);					\
++	if (opts->refcnt) {						\
++		ret = -EBUSY;						\
++		goto end;						\
++	}								\
++									\
++	ret = snprintf(opts->aname, min(sizeof(opts->aname), len),	\
++			"%s", page);					\
++									\
++end:									\
++	mutex_unlock(&opts->lock);					\
++	return ret;							\
++}									\
++									\
++UVC_ATTR(f_uvc_opts_string_, cname, aname)
 +
- 	/* This must be protected by the irqlock spinlock to avoid race
- 	 * conditions between uvc_queue_buffer and the disconnection event that
- 	 * could result in an interruptible wait in uvc_dequeue_buffer. Do not
++UVCG_OPTS_STRING_ATTR(function_name, function_name);
++
++#undef UVCG_OPTS_STRING_ATTR
++
+ static struct configfs_attribute *uvc_attrs[] = {
+ 	&f_uvc_opts_attr_streaming_interval,
+ 	&f_uvc_opts_attr_streaming_maxpacket,
+ 	&f_uvc_opts_attr_streaming_maxburst,
++	&f_uvc_opts_string_attr_function_name,
+ 	NULL,
+ };
+ 
 -- 
 2.32.0
 
