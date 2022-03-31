@@ -2,73 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6164EDDC3
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Mar 2022 17:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C1C4EDE6D
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Mar 2022 18:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238392AbiCaPsx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 31 Mar 2022 11:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
+        id S239554AbiCaQKk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 31 Mar 2022 12:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239982AbiCaPst (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Mar 2022 11:48:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63D93A9;
-        Thu, 31 Mar 2022 08:47:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F8CD609E9;
-        Thu, 31 Mar 2022 15:47:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79637C340ED;
-        Thu, 31 Mar 2022 15:47:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648741620;
-        bh=cEGVTkftOWacxOkSFXlwf1myFdjc75yANlPjREI+RQw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KhFEUO23zJ0ThCl0EXFROOmhXFFcWupvOGRTwmOvqyFps15MWSb0+yMNhXQorftm6
-         /abVRnNgc3XjiaOwrfU3a3WGmbYzU95Jcrua8x5HOaVFHGIbDyxwIpTV4Ib7PVlcH1
-         +PK9cGvTuLWlXep176fdQoRMQjvttKogqYYgSXSykzU6lZuwvc4jRtzLWZmu4xRjJP
-         RmbHSLv/13myKqPCN03Xc9Do90Aus1c5NUdmYtSx5amV0yyWQUWbFYReNcfy3yx3nO
-         z/PDPi5/i4Bji7ZUAKqbBP+sjWYb5ibYNLvxCesa3UXEKF0ESZhL0DeIrVeBj/mFAl
-         8JOsAqoQyUdLA==
-Date:   Thu, 31 Mar 2022 08:46:59 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: remove duplicate assignment
-Message-ID: <20220331084659.58ba1843@kernel.org>
-In-Reply-To: <1648728494-37344-1-git-send-email-wangqing@vivo.com>
-References: <1648728494-37344-1-git-send-email-wangqing@vivo.com>
+        with ESMTP id S239322AbiCaQKj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Mar 2022 12:10:39 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9835A6414
+        for <linux-usb@vger.kernel.org>; Thu, 31 Mar 2022 09:08:50 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id a1so421379wrh.10
+        for <linux-usb@vger.kernel.org>; Thu, 31 Mar 2022 09:08:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:from:to:subject
+         :content-transfer-encoding;
+        bh=o2Yn/h3KAaawz9BBLTR9h83EJKTs0GPzz+wLbE97qA8=;
+        b=mgecW7VPRXyFFVWedQodlSHuF0bUIPwgbP6kn4nBUTQ9idFqLZvP6X1937NHYmR9wr
+         pl52P+bLvmtton5Z5NSxQFndc1euRI5t4iPYe7CM7Gp2FOlOfpan7oXzCKvWzUq42w8r
+         WcC7nE26jNEzO6HcyIgl1AL6OUYsYCkhmXJyTrV1YfD4tzQI+awbAK2LA+l7F4UOXN0Q
+         pHrPStATV11jubSQ+/wtUqTIOiPAY/BnyS2OyYKNZrfaehyqu/oDXlijQ/UGBYUcXfU3
+         DmBD0DrKJ3RilUYsOxzbHuANVHH4vPdK2Fg5jmqBYyGxRdixCL2PISzE/8+HIbFrHan7
+         kHtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:from:to:subject
+         :content-transfer-encoding;
+        bh=o2Yn/h3KAaawz9BBLTR9h83EJKTs0GPzz+wLbE97qA8=;
+        b=3VJacqnlEB8JfQY7BBRDDUl60Rt5Ut3PUrTXPgAmWBBvL109fpJNqpBU5eLy5lWe5c
+         9lI3snha2FWowGn+vf+5ML4pQxGUnbozQbj1grGPXY0ilEcV5iLnaojxqammaVVnKG0P
+         xS5au7LYQfgo6UH7/RJOpIVloR/Y9i/DriY52EcZuc2dQDmg5OqeE7l6+vJ5UcnYJswd
+         Nj3JvXCONG/foErxgVzPfaKYYzEsqNQOWcyMDfrCUOiB8alrfZuLQZ7DXiHmNVfMNeZz
+         JYXP554iRbefcaDwoxlvDg1PUIUhEldC/qvoZCYRfVcgK9ZBcobsvT1NAqvCaBjLMDmN
+         dS3w==
+X-Gm-Message-State: AOAM531HoiCUmzsgRCICckMk2OabJ8HN0h4840R6v/OdLgFGuYG1vCx7
+        YNl7drGDTgALNAFL0tDn3urusJISfnA=
+X-Google-Smtp-Source: ABdhPJweFISNVyBuAhwYRALUSjixMPVQMZO8kSUipxHqwJN+X9EwQt95EZhC33AYLxLDBSvDNTYNGA==
+X-Received: by 2002:adf:a497:0:b0:203:d9cd:4c94 with SMTP id g23-20020adfa497000000b00203d9cd4c94mr4781024wrb.368.1648742929386;
+        Thu, 31 Mar 2022 09:08:49 -0700 (PDT)
+Received: from DESKTOP-R5VBAL5 ([39.53.224.185])
+        by smtp.gmail.com with ESMTPSA id b10-20020a05600018aa00b002042a98168csm23746766wri.15.2022.03.31.09.08.48
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Thu, 31 Mar 2022 09:08:49 -0700 (PDT)
+Message-ID: <6245d211.1c69fb81.3dc3a.eedc@mx.google.com>
+Date:   Thu, 31 Mar 2022 09:08:49 -0700 (PDT)
+X-Google-Original-Date: 31 Mar 2022 12:08:48 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   royceldreamlandestimation@gmail.com
+To:     linux-usb@vger.kernel.org
+Subject: Estimating Services
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 31 Mar 2022 05:08:14 -0700 Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
-> 
-> netdev_alloc_skb() has assigned ssi->netdev to skb->dev if successed,
-> no need to repeat assignment.
-> 
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
+Hi,=0D=0A=0D=0AWe provide estimation & quantities takeoff service=
+s. We are providing 98-100 accuracy in our estimates and take-off=
+s. Please tell us if you need any estimating services regarding y=
+our projects.=0D=0A=0D=0ASend over the plans and mention the exac=
+t scope of work and shortly we will get back with a proposal on w=
+hich our charges and turnaround time will be mentioned=0D=0A=0D=0A=
+You may ask for sample estimates and take-offs. Thanks.=0D=0A=0D=0A=
+Kind Regards=0D=0ARoycel Wahl=0D=0ADreamland Estimation, LLC
 
-# Form letter - net-next is closed
-
-We have already sent the networking pull request for 5.18
-and therefore net-next is closed for new drivers, features,
-code refactoring and optimizations. We are currently accepting
-bug fixes only.
-
-Please repost when net-next reopens after 5.18-rc1 is cut.
-
-RFC patches sent for review only are obviously welcome at any time.
