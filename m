@@ -2,233 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9FCC4ED84E
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Mar 2022 13:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A2C4ED957
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Mar 2022 14:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235009AbiCaLSs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 31 Mar 2022 07:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
+        id S235676AbiCaMKS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 31 Mar 2022 08:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbiCaLSr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Mar 2022 07:18:47 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A093205BD4;
-        Thu, 31 Mar 2022 04:17:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648725420; x=1680261420;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=pjCtimjt0fYKXCjngBoxtDwovUxjoMR1xDl1UMLmYmA=;
-  b=Hoj7jVyww/ALBn6MHGJ2fda05M4ruRXDUs5zyZOc9IWdeGGTxMbQ9hBj
-   r+4CiODAx93kFvE/fQ/QHImq5ROjAgMdZSDILHQyf9LetSiMGo/grdp4N
-   egyKXgnG+aQzOy5onej66DB0gqZ/9Zr3kqDA6nXK2STlpDRi4sBnw1ep0
-   VYE7GP8qiVZPaxYUJQR0X5nZQgcQLbMNhqQbZL7y9Z4BVBjhROHxPB52D
-   hKGjAN13xx/V3ExM0GRWZG8um1CpUpLiBGTA96inQGIF5MDyBGjPWV5ai
-   fl2FVMoIXyOCqwjEK434S/a0MfEO+8WFWlLe11bpEp8bq1rCp42ozMpdQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259778552"
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="259778552"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2022 04:16:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,225,1643702400"; 
-   d="scan'208";a="695451250"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 31 Mar 2022 04:16:54 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 31 Mar 2022 14:16:53 +0300
-Date:   Thu, 31 Mar 2022 14:16:53 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
- XHCI_SKIP_PHY_INIT
-Message-ID: <YkWNpTLjh2weX9Mk@kuha.fi.intel.com>
-References: <1648103831-12347-1-git-send-email-quic_c_sanm@quicinc.com>
- <1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com>
- <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
- <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
- <Yj2nPa6/Y01P5aCY@kuha.fi.intel.com>
- <4619c75c-cd34-82f2-56e1-a8bcb6d97177@linux.intel.com>
- <Yj3h4p/kmZTvMz0O@kuha.fi.intel.com>
- <fae54b27-9ae2-ecfc-69ae-40e5f5e1afbe@quicinc.com>
- <bd694ef9-be57-79f1-e95e-5501c396be25@linux.intel.com>
+        with ESMTP id S234164AbiCaMKQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Mar 2022 08:10:16 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2125.outbound.protection.outlook.com [40.107.255.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2A4457A1;
+        Thu, 31 Mar 2022 05:08:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ILWegTR6TPmRUBhvTaTqOYc9lCCWZhyWGQJ5/ItWle3IDaFrpj8gX+wm5v2hfNIXWI0CzjRwnC4x4clpK0foHZqjUcDiy8zG2k8g0CRxqKxaXU/el4ie8vCVpHkmsjmIlIBORIcbxUCDuA0iQ8H4SUjqMglQjRLcKl1z+AZ9yWvG9H+iQFydEIAxS9RpsTtqqg0jmD5Ooci4QAim7RNY8bg8Nr8GzdzjKnZI5AfpP8A3Wp+5tsnpHDL81VnZ9V4Dt5xmQqhFAd5aXgOAzAInafiGhz35Wj3oitGU3ZbbRyxJ9UYnNl7oHeIeSS8+VReoyVT0Pwki47ysFnrAmYCLfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TX+KffmLSdKcObPxPYq4w7P09k+IE3x2sUc4hdGshqQ=;
+ b=GuZoEpBzBc0FBPnfiEAQLq/s+Gyq01AV1MdBIxiRewdcvzF1+m5T8CL18fE8ypPJ/L59x4f9j87W7iN74wfWpnif99lXlkWSkvTfSQxL0cet2X2qRWYPGgqfaT2dbM/9L/HYPOFrlNn/ajNnxzy3DZjFkKmfbwFTcaa2vc2DAEjcVcRIy//ThTSglSDaNd129Y7T4FoAKMdEsvIQ7wa7HkjUiGgbwVdj33bSCryqA1jy+R203AnW2s0Yi8rYcH8BFtsITdFoJVcbAjyWtO2Z+ZFbprCidY7NLUXWyqd27KRLbDNLC5/t6NoHX/48aUe322omrgXbhyDRwoCtps+D9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TX+KffmLSdKcObPxPYq4w7P09k+IE3x2sUc4hdGshqQ=;
+ b=ZFQwa3QbV60lXrZIpaNPuE5TF7JcE/GALocUTMVdTzuNqJO9scTQJnTpNLFYzmVSkDDuBY+9qwwdOuuoxX4w10nLalem4KReI+BGRDopMZskKySmRGzu6PIyijrMHnScDCmsldmjmk3PHBDuYltWYt8QloHiTUeC8+IRGRzsjrg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
+ by SI2PR06MB3882.apcprd06.prod.outlook.com (2603:1096:4:ea::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.23; Thu, 31 Mar
+ 2022 12:08:26 +0000
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::6c6e:d8af:2d3c:3507]) by SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::6c6e:d8af:2d3c:3507%7]) with mapi id 15.20.5123.021; Thu, 31 Mar 2022
+ 12:08:26 +0000
+From:   Qing Wang <wangqing@vivo.com>
+To:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wang Qing <wangqing@vivo.com>
+Subject: [PATCH] net: usb: remove duplicate assignment
+Date:   Thu, 31 Mar 2022 05:08:14 -0700
+Message-Id: <1648728494-37344-1-git-send-email-wangqing@vivo.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR0302CA0015.apcprd03.prod.outlook.com
+ (2603:1096:202::25) To SL2PR06MB3082.apcprd06.prod.outlook.com
+ (2603:1096:100:37::17)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bd694ef9-be57-79f1-e95e-5501c396be25@linux.intel.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3ca93b6d-9dd5-4733-be2c-08da130f2969
+X-MS-TrafficTypeDiagnostic: SI2PR06MB3882:EE_
+X-Microsoft-Antispam-PRVS: <SI2PR06MB388241FB7B9BD044C135A77DBDE19@SI2PR06MB3882.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: S78W7rLJySBjEE8Hm4GTL3ceZXHrvem2s5ADiOuB3Dec0eiBQ/KraJcAyx2l4ZctF8TW9RujuIex/or8UbLrmnyX5+Rk6UXanxOIgxeEDPR0KTUBnHHbWpUuwScMJeH2NZGMh99+KKdcHkI3pH4VeSedV1S018T8AUinxc2t9DT7NVFGxofbYLox8+T+tJXNVtjkYHKjgCCdlBnv73i6wpUz5TohcoIS0klCJy7m3fRVD4iK658TrLzHPugbCc5e0V/R+XDdIellXzV2dW68psPD74u8aUAqFxIbG3+nrQiFhIxVqUEJl0KW2pnjeMQ20GNJXxzhfT8dK4YIrqUyW0DPQzD9fVW0YoAdyMlpaGjRcy1ZAv/E/GmKVpF6R2Xy9JMMO+E2gTottluyFlfwJrYYbxHkmWkJuJMd6T/C3PID61xrLGeVhDWzc3gTxooUjiRz7LnxDPvyzSHbpLDqQX84y2D0aB0dQVFlR+37t9J56g7AzkzyEXWRmRk7r5AKX0Sr64VjzJx03p6ldsi6s5AoRiCnADJW5xwTZkWlrvCKVCYfDl91B5gmjoXkZLrqmY2rMNhuOwXvDEyGBNMiOI9xp6ZR4hmTtiy9DNDCCXYkt06jNVdYO2dwjs6RUjXgifHMAAzg6yS7ULZkxgXeUVQguAubujca6s/RBUDZI2coVI10JUXZAu32qkCxVE9i10uyyaDu1a45RFKz3PaGPw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(110136005)(38350700002)(38100700002)(86362001)(316002)(8936002)(4326008)(66946007)(66556008)(66476007)(8676002)(107886003)(2616005)(26005)(186003)(83380400001)(6666004)(508600001)(6486002)(6512007)(52116002)(6506007)(36756003)(4744005)(2906002)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YdrdCsSs4XVb7vacb9JYdxbiMlLPd4cXEBAYMbhkayzdvKbcbVQNDY+HgEC6?=
+ =?us-ascii?Q?EDk+ScVMWXdclXxAcvpM+NYQcs2z12bIvZ14xPx6mKIOomfUhOKz5yegx+XY?=
+ =?us-ascii?Q?nhigxSLNbVUVSwS0BwtXeYCnWbI53VRXnm9QuCNNHZX4E6lfKcprJG6zXfsD?=
+ =?us-ascii?Q?M8rwSSMQ39cDfQf8x9diKNLHmE/X7KYJqYmlIFXYzNmKKVgrNdgihARD3Ojt?=
+ =?us-ascii?Q?t7H/0kLor3YmuT/VbiPKNaZuifvGQHM35Ykn61RaoACn44fTeqmNv6VJZuTg?=
+ =?us-ascii?Q?Oc3zKe+IDFdQVGflWEFGtdktmNQE9nxU2moBRTD34To31hXS5xgYea5Qe+9R?=
+ =?us-ascii?Q?9kLTSuQg5o+jKzYeaGBQYtX3uJevVpIaCJN/Dqi0LDrKo/WXv6Q48WGA5jbr?=
+ =?us-ascii?Q?7p43ek7gGWREMUF9vgLKJP9rij3ZoRBGevai5sD8Hpb24E7Dv4Ea8VV/ZeP5?=
+ =?us-ascii?Q?s0Ld6Z1nnpkeOP4VSBlIMjTKaIrZNGrFXwQfpCn2Rynitil0PoAmgHuv+w6x?=
+ =?us-ascii?Q?jBNZydJIGjbyZvXeLWjfwA3nTE6Dr3ToDRIEW0IsNmgQQ9Bxq8cftR1wyCD2?=
+ =?us-ascii?Q?S1IbBJVlG2OubOy8s6cblsEhQe6H4vdf9W0yAi2pkR6O1pvFZCCQWlZgmv29?=
+ =?us-ascii?Q?N84z9GIlpiUFdOJ1jpbnCzYtdp1XAJh6ZwaFk1o7E+izOHqg9T6LYkJeFGDf?=
+ =?us-ascii?Q?5bEYwsj9ARwrl4RIxCmHqGqzrhW5HxPRnO3R2MbJPfgqdmsBm4R5tJrnPOeN?=
+ =?us-ascii?Q?8+frMxv1spntesFMsRnGaiSJyAeotsVac3iQdy2GV7iJzftW2CRSlPgn+4Es?=
+ =?us-ascii?Q?YYBzHMz3WPW4RwtD7PPnn8EbBaghkwVDrQ8WV+199iS6+nQJq8A+wN22atkU?=
+ =?us-ascii?Q?lkxXXZ9/WqTMFCIBIJnTdqoKPQVfH4F9/O4bf+jmR53gOazp99ZRHzBrSvCR?=
+ =?us-ascii?Q?TbG9Gahysd5c4ThRwD1JVYvLzE0/B0oiBTR1RqWj7FbgHtX+ZZ4SGa8+c5mu?=
+ =?us-ascii?Q?ieLM29qvWoh6Ki8CTI9IKjUTrqB1MPzuK/qLoODk02kwoOW/r6+o1TVBwqw+?=
+ =?us-ascii?Q?w8DhClgoClHYG712JFh+b64bJPyPW5whjN7TxO9sk3L5fp6rpnmF/gIpHWjM?=
+ =?us-ascii?Q?Z5jP98MIDT1IwNTGIwwMiexANpciPgziMGT8WSA5XFyGpoc4FEtalDpaLPUU?=
+ =?us-ascii?Q?UHwFLRo6X2jgy2lD5l6dPpGUt0QAYY4Hk0KWanZG7KisI9d5ity8QnRHA2wK?=
+ =?us-ascii?Q?K8oXwGd9bGO3/gGpndF3fE54mAlrcW+Cq4pNK3HcPtumO/oBJiA41tESYcCK?=
+ =?us-ascii?Q?JP3G+zJsKtf6rxsZzR+Tg0KhPeaMj1sxdDzyWQfXGbwMZZ5j0qq1f2nv+2q+?=
+ =?us-ascii?Q?o36H2uQqD2XFkK0B5is5X/N5Ztn7vSXOc4T7vNo9oGpw+V6EYDIn3b6jyYnY?=
+ =?us-ascii?Q?V/8l5uptE9gvL6YRxubwcRQgjsbV1tkUfA9BQx8pNadC9I1fN2PwYqbrHmGW?=
+ =?us-ascii?Q?XClllfhfW9gklNbBRtwJMLIal+1GSYXk9padhnh3HdsSUspIfEWjIUjaMSX2?=
+ =?us-ascii?Q?n0lxKohLla36GroE7nvno/fyO1MFNjytJBOlsiTX4iEmSiUjyFjLLeO+fnYt?=
+ =?us-ascii?Q?x+5mucChBHWKTUaU5AszhZQ8RCTBWtrnNjYs6nv5B5LWp4R4WxijO3ZIS6Kp?=
+ =?us-ascii?Q?yPO55ETNX8lVTQkzODYybXnvsuQPVbzD6H+UbCkC7yt1MDs2WJ1ONjcPaeF0?=
+ =?us-ascii?Q?FbK/8j01XA=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ca93b6d-9dd5-4733-be2c-08da130f2969
+X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 12:08:26.7985
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: w3jelA6Xs0GYiWKeByODVUDoB1g5sRFbxs0ffbswnER2nwm7nJcxt+HsjxM9toO0PrxzJrY+q4PnR0yt5c3qQA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB3882
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 08:47:34PM +0300, Mathias Nyman wrote:
-> On 29.3.2022 12.18, Sandeep Maheswaram (Temp) wrote:
-> > Hi Mathias,Heikki
-> > 
-> > On 3/25/2022 9:08 PM, Heikki Krogerus wrote:
-> >> On Fri, Mar 25, 2022 at 04:33:27PM +0200, Mathias Nyman wrote:
-> >>> On 25.3.2022 13.27, Heikki Krogerus wrote:
-> >>>> On Fri, Mar 25, 2022 at 12:36:22AM +0200, Mathias Nyman wrote:
-> >>>>> On 24.3.2022 14.27, Heikki Krogerus wrote:
-> >>>>>> On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
-> >>>>>>> Currently the phy init is done from dwc3 and also xhci which makes the
-> >>>>>>> runtime_usage value 2 for the phy which causes issue during runtime
-> >>>>>>> suspend. When we run the below command the runtime_status still shows
-> >>>>>>> active.
-> >>>>>>> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
-> >>>>>>>
-> >>>>>>> dwc3 manages PHY by own DRD driver, so skip the management by
-> >>>>>>> HCD core by setting this quirk.
-> >>>>>>>
-> >>>>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> >>>>>>> ---
-> >>>>>>>   drivers/usb/dwc3/host.c | 13 +++++++++++++
-> >>>>>>>   1 file changed, 13 insertions(+)
-> >>>>>>>
-> >>>>>>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> >>>>>>> index eda8719..d4fcf06 100644
-> >>>>>>> --- a/drivers/usb/dwc3/host.c
-> >>>>>>> +++ b/drivers/usb/dwc3/host.c
-> >>>>>>> @@ -13,6 +13,12 @@
-> >>>>>>>   #include <linux/platform_device.h>
-> >>>>>>>     #include "core.h"
-> >>>>>>> +#include <linux/usb/xhci-plat.h>
-> >>>>>>> +#include <linux/usb/xhci-quirks.h>
-> >>>>>>> +
-> >>>>>>> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
-> >>>>>>> +    .quirks = XHCI_SKIP_PHY_INIT,
-> >>>>>>> +};
-> >>>>>>>     static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
-> >>>>>>>                       int irq, char *name)
-> >>>>>>> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
-> >>>>>>>           }
-> >>>>>>>       }
-> >>>>>>>   +    ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
-> >>>>>>> +            sizeof(xhci_plat_dwc3_xhci));
-> >>>>>>> +    if (ret) {
-> >>>>>>> +        dev_err(dwc->dev, "failed to add data to xHCI\n");
-> >>>>>>> +        goto err;
-> >>>>>>> +    }
-> >>>>>>> +
-> >>>>>>>       ret = platform_device_add(xhci);
-> >>>>>>>       if (ret) {
-> >>>>>>>           dev_err(dwc->dev, "failed to register xHCI device\n");
-> >>>>>> I think you should just use device property:
-> >>>>>>
-> >>>>> This was suggested in an earlier series, but was rejected as it also added
-> >>>>> the property as a device tree parameter.
-> >>>>>
-> >>>>> I think adding more device properties can be messy in the long run, especially if we
-> >>>>> need to add them for many of the existing xhci quirks.
-> >>>>> We also end up with a mix where some device properties are listed as device tree
-> >>>>> parameters, and some not.
-> >>>>>
-> >>>>> Defining xhci quirks and platform data structure in headers shared with dwc3 and cdns3
-> >>>>> allow those drivers to easily set any existing xhci quirk, or other possible optional
-> >>>>> callbacks.
-> >>>>>
-> >>>>> cdns3 driver is already doing this, but it includes the full xhci.h header.
-> >>>>> This series cleans up that a bit so cdns3 will only include xhci quirk bits and
-> >>>>> platform data structure.
-> >>>>>
-> >>>>> On the downside we add a couple xhci related header files to include/linux/usb/
-> >>>>> Let me know if you see any other issues I missed with this approach.
-> >>>> The problem here is that these drivers are now coupled together, and
-> >>>> that should not be taken lightly. We have a dependency hell in our
-> >>>> hands with a lot of drivers, and the culprit is always platform data.
-> >>>>
-> >>>> Build-in device properties may be messy, but I would still say they
-> >>>> are less messy than those quirk flags - you got to admit, they are a
-> >>>> mess. The benefit from build-in properties is in any case the fact
-> >>>> that they remove the need to couple these drivers together.
-> >>> Agree, quirk bits are messy. Any suggestion that would work with
-> >>> PCI xHCI devices, devicetree, and "pure" platform devices?
-> >> I think xHCI driver should always be able to rely on being able to
-> >> read this kind of information from the fwnode. If there is no actual
-> >> firmware node (DT or ACPI), or if it's missing some information, the
-> >> glue driver needs to populate software node for the xHCI.
-> >>
-> >> Right now I just want to avoid having to pass the quirks using
-> >> platform data from drivers such as drivers/usb/cdns3/host.c and
-> >> drivers/usb/dwc3/host.c to xHCI.
-> >>
-> >> One way we could do that is by defining compatibility ID for both of
-> >> them that we provide using a single device property (like I guess DT
-> >> does). Then based on that compatibility ID, xhci-plat.c can set the
-> >> actual "static" quirk flags. That we could already do easily. How
-> >> would that sound to you?
-> 
-> Sounds good. 
-> 
-> > 
-> > This was my previous patch where I was using device tree property. Should we go ahead with this approach?
-> > 
-> > https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/
-> > 
-> > Any further changes to this ?
-> 
-> By dropping the DT part of that series we get a similar built-in device property
-> solution as Heikki initially suggested.
-> 
-> How about adding the compatibility ID device property that was just suggested?
-> Then matching the Id in xhci-plat.c against a static table containing Ids and
-> xhci_plat_priv structures, with the needed quirks for dwc3.
+From: Wang Qing <wangqing@vivo.com>
 
-There was a comment from Pavan. Is it still possible to get this
-detail from DT?
-I guess that would still be ideal, right?
+netdev_alloc_skb() has assigned ssi->netdev to skb->dev if successed,
+no need to repeat assignment.
 
-I have another question. Can't we now just assume that if the sysdev
-is the parent (or grandparent), then the phy initialization should
-always be skipped? In that case we could just do something like this:
+Signed-off-by: Wang Qing <wangqing@vivo.com>
+---
+ drivers/net/usb/qmi_wwan.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 649ffd861b44e..1018b33488046 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -212,8 +212,12 @@ static int xhci_plat_probe(struct platform_device *pdev)
- #endif
-        }
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 3353e76..17cf0d1
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -190,7 +190,6 @@ static int qmimux_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 		skbn = netdev_alloc_skb(net, pkt_len + LL_MAX_HEADER);
+ 		if (!skbn)
+ 			return 0;
+-		skbn->dev = net;
  
--       if (!sysdev)
-+       if (sysdev) {
-+               if (sysdev != &pdev->dev)
-+                       hcd->skip_phy_initialization = 1;
-+       } else {
-                sysdev = &pdev->dev;
-+       }
- 
-        if (WARN_ON(!sysdev->dma_mask))
-                /* Platform did not initialize dma_mask */
-
-
-I did not go through all the drivers that carefully, so I may have
-missed something, but it looks like the only drivers that can have the
-sysdev as the parent or grandparent are cdns3 and dwc3.
-
-thanks,
-
+ 		switch (skb->data[offset + qmimux_hdr_sz] & 0xf0) {
+ 		case 0x40:
 -- 
-heikki
+2.7.4
+
