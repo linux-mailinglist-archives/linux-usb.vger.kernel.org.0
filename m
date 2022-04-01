@@ -2,204 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7023D4EE944
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Apr 2022 09:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB5D4EE96E
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Apr 2022 09:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343976AbiDAHva (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Apr 2022 03:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
+        id S1344105AbiDAH7q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Apr 2022 03:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232806AbiDAHv2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Apr 2022 03:51:28 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D45DB18BC
-        for <linux-usb@vger.kernel.org>; Fri,  1 Apr 2022 00:49:39 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id p15so4082525ejc.7
-        for <linux-usb@vger.kernel.org>; Fri, 01 Apr 2022 00:49:39 -0700 (PDT)
+        with ESMTP id S235271AbiDAH7p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Apr 2022 03:59:45 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F6726364D;
+        Fri,  1 Apr 2022 00:57:54 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id h196so1470350qke.12;
+        Fri, 01 Apr 2022 00:57:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yUuXc/3RjtWm/4ApHN92lrKX7Ow6h3wcH9Gg1mgZ/sU=;
-        b=yv0eYYULooqaOzk9E5QMDT1KImV9iXTaJ0S6E5D0/VwCCWlQcnD/8Vo57GAY9CLsBr
-         1nUvrXJgH8hskmfzs8B1WyI67oxhUkfpyAhvFPHS38X3ezba7h21EN/sU6KQ4MX2yX/T
-         AQV2ANLKaqQX/LJdhgxvVTaF4AGfXB4tk0lp1deT67HaoHUuzC/i1QFCgnNjWs1p+Q5e
-         LnUIXO3ZLWFb6zGCORhnvTD+0tmneBjctYAZ0xINkiurjUp6B3EGf70XotcFxdfmTRUE
-         jU++QBNXVMZCtJbs5WP+/Hyk4CQCFndE/5+ETcvV+82ChGRSHK2w8gvBM0QyUp0hjsEw
-         o0rw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P5srtj7khY+hVrjIWR3S7lQuVnq9rPhASABAlLq0xns=;
+        b=VABeflTvTO1dTlQOVWd+GIzMXTHo6kxXqrnHQX8FkgG8JtABEoYQlgzr13JoPi361i
+         p4d8tZM/JsrvsWOTSUkQ+fm3gTam4NJIO1vyegH550R/3+Y2r9LuBC7ADZfKEOZJp+pH
+         m1heyw262ccEeUFpV21LQGM54eT4GF7RwL7flyGDHKKWzOI3XNYjyHaHSDHSW6xUmzUz
+         0mXl1mUXCgT/N/tOYigbmnFYqjDHBW4dU7xZ5FQrtdnCp6LF74+h7LRuun0ZRrK9I/NP
+         WbjKkGVtyLlXgZX1ZKFNCZ2MTwyICIzkjdHd0lJ6uYbgd7k7MUL6mNSZYcXwjLrZ9ihJ
+         keKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=yUuXc/3RjtWm/4ApHN92lrKX7Ow6h3wcH9Gg1mgZ/sU=;
-        b=rWE/8r4nQiShoyAOncr68IdkFJR0eRvCzBpyxw5C95YdNZ3B5Cbe9DrYJ0+p6DDMwb
-         g3zuuQE4uGh3bFYDSX12dNS+RDGBl+MS0CMH7VqUOTJMq7sC0xHQpIYCF+vWKeuRX0Yv
-         QF8JIOM5xMUXQtPWINln0hc4l3WMvGROELx1uHOvMl8CqwwMbK5k5DigcVYGa673t0lP
-         P6ySHyQbLt8sbDy05Y8TH5nN80l7PW4IGKu1rNJK+LX3UXYqidgJK0cv02Z94PrJqWWP
-         Wm0lRK619OdHl7oGuf3D+jWhtDePXeobKLQnfaaJh+2GX7E/CfdBG87YqxKEkqUAfIbv
-         vSRQ==
-X-Gm-Message-State: AOAM532+9QppYkLjaaLjzGbkvi+yHqh829NZ1dTq90B55b3K4rEX+EM7
-        jFAR/vBIGpZUE0Bp1EyP6MFH+PR7yPe7hc9R
-X-Google-Smtp-Source: ABdhPJyUD8xHV+dYdxVDPmeyfD7e9/7Ow8NmRo8ewNb1JPfZUTssEF49fghDYUNPD1QxZoGs7J5WXw==
-X-Received: by 2002:a17:907:6282:b0:6e0:c64a:60a7 with SMTP id nd2-20020a170907628200b006e0c64a60a7mr8187192ejc.349.1648799378077;
-        Fri, 01 Apr 2022 00:49:38 -0700 (PDT)
-Received: from [192.168.0.169] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id g23-20020a17090670d700b006ccfd4163f7sm703883ejk.206.2022.04.01.00.49.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 00:49:37 -0700 (PDT)
-Message-ID: <5139bdb8-11ee-6efe-6c42-acf2f96d9153@linaro.org>
-Date:   Fri, 1 Apr 2022 09:49:36 +0200
+        bh=P5srtj7khY+hVrjIWR3S7lQuVnq9rPhASABAlLq0xns=;
+        b=nObj2nA4rDhbdraQPaj1HEunCoPZOJIlNZ+rAGWmbWLeb2mA3mnkctL1EfIRxsTBXn
+         XrR7LpH+iwgejFcV9aqpQqKwCVvEUy3wDwSv382XFxDW+X/GDEKX60Q1fAtR9zTIpJhM
+         8djWO89f1hWVM0TeG6r/4deNFmdCnqk8bq/HrHioBrNaeQs2RUCECU+Pd2SA/C7+sanl
+         +mTcMyq+zdUZWaQCS5+Y0pAXlpiGJpHohavue1y2+oCouW2ZF6ERLqFoVc+m3MmRHwX9
+         q0AgJ+kv2lpxitSc0V94DH/MV/KgxXHpivt2gaFqvazuOwldSyaVuQfs7cF1AZrkIIPG
+         lj2Q==
+X-Gm-Message-State: AOAM532/keOnAV9UGL6w/QcpQa8InNXU9AIvVbkcyOjf8DcZEr3KmiLi
+        yriyjyAjkiX4z4nAKf91NgQY2MZZpyg=
+X-Google-Smtp-Source: ABdhPJwE6No9Bivwck4+4hL9Zno2MWfpmoTPPyFo7ZA1whlIs0Ib1Og+raGgcZ8OcPSqH9vKhFS51A==
+X-Received: by 2002:a05:620a:424b:b0:67d:36cc:5afb with SMTP id w11-20020a05620a424b00b0067d36cc5afbmr5876252qko.598.1648799873270;
+        Fri, 01 Apr 2022 00:57:53 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id w17-20020ac857d1000000b002e19feda592sm1231557qta.85.2022.04.01.00.57.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 00:57:52 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     gregkh@linuxfoundation.org
+Cc:     weiyongjun1@huawei.com, colin.king@intel.com, lv.ruyi@zte.com.cn,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] usb: ftdi-elan: Fix undefined behaviour
+Date:   Fri,  1 Apr 2022 07:57:47 +0000
+Message-Id: <20220401075747.2407536-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add documentation for AM62 USB
- Wrapper module
-Content-Language: en-US
-To:     Aswath Govindraju <a-govindraju@ti.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-References: <20220324073425.18607-1-a-govindraju@ti.com>
- <20220324073425.18607-2-a-govindraju@ti.com>
- <93fe6a41-3b59-2fbc-6f95-833f337815ee@kernel.org>
- <41f79aa5-1e04-53f8-ab21-85fe6039e24e@ti.com>
- <2b33798e-23c2-d4a5-171a-55c28bc40c40@kernel.org>
- <YkZFV4h/vvmKg6iw@robh.at.kernel.org>
- <1fcac9c3-4b84-6572-ebc6-4d6a50f0132a@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1fcac9c3-4b84-6572-ebc6-4d6a50f0132a@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 01/04/2022 07:04, Aswath Govindraju wrote:
-> Hi Rob,
-> 
-> On 01/04/22 05:50, Rob Herring wrote:
->> On Thu, Mar 24, 2022 at 12:53:08PM +0100, Krzysztof Kozlowski wrote:
->>> On 24/03/2022 12:40, Aswath Govindraju wrote:
->>>> Hi Krzysztof,
->>>>
->>>> On 24/03/22 16:37, Krzysztof Kozlowski wrote:
->>>>> On 24/03/2022 08:34, Aswath Govindraju wrote:
->>>>>> Add bindings for the TI's AM62 wrapper module for the Synopsys USBSS-DRD
->>>>>> controller.
->>>>>>
->>>>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
->>>>>> ---
->>>>>>
->>>>>> Changes since v1:
->>>>>> - made correction in grammer of clocks property description
->>>>>>   and added maxItems in the interrupts property based on comments
->>>>>>   received from Roger
->>>>>> - corrected the title, fixed the description of
->>>>>>   ti,syscon-phy-pll-refclk, added pattern properties and child node
->>>>>>   in the example based on the comments from Krzysztof.
->>>>>>
->>>>>>  .../devicetree/bindings/usb/ti,am62-usb.yaml  | 117 ++++++++++++++++++
->>>>>>  1 file changed, 117 insertions(+)
->>>>>>  create mode 100644 Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml b/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
->>>>>> new file mode 100644
->>>>>> index 000000000000..452bfdc6fb09
->>>>>> --- /dev/null
->>>>>> +++ b/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
->>>>>> @@ -0,0 +1,117 @@
->>>>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>>>>> +%YAML 1.2
->>>>>> +---
->>>>>> +$id: http://devicetree.org/schemas/usb/ti,am62-usb.yaml#
->>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>> +
->>>>>> +title: TI's AM62 wrapper module for the Synopsys USBSS-DRD controller
->>>>>> +
->>>>>> +maintainers:
->>>>>> +  - Aswath Govindraju <a-govindraju@ti.com>
->>>>>> +
->>>>>> +properties:
->>>>>> +  compatible:
->>>>>> +    const: ti,am62-usb
->>>>>> +
->>>>>> +  reg:
->>>>>> +    maxItems: 1
->>>>>> +
->>>>>> +  ranges: true
->>>>>> +
->>>>>> +  power-domains:
->>>>>> +    description:
->>>>>> +      PM domain provider node and an args specifier containing
->>>>>> +      the USB ISO device id value. See,
->>>>>> +      Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml
->>>>>> +    maxItems: 1
->>>>>> +
->>>>>> +  clocks:
->>>>>> +    description: Clock phandle to usb2_refclk
->>>>>> +    maxItems: 1
->>>>>> +
->>>>>> +  clock-names:
->>>>>> +    items:
->>>>>> +      - const: ref
->>>>>> +
->>>>>> +  id-gpio:
->>>>>> +    description:
->>>>>> +      GPIO to be used as ID pin
->>>>>> +    maxItems: 1
->>>>>
->>>>> I have doubts about this. If you USB controller handles the ID pin, then
->>>>> probably this should be moved to usb-connector.yaml. I did not see
->>>>> id-gpio in any other USB controller blocks.
->>>>>
->>>>
->>>> Yes, the USB wrapper handles the ID pin operation only. It also reads
->>>> the status of VBUS by reading a register from its MMR and not using a
->>>> gpio. After evaluating the role the based on the states if id pin and
->>>> VBUS, this role is communicated to the dwc3 core driver using extcon.
->>>> There is no way for the dwc3 driver to detect the role on its own.
->>>>
->>>>
->>>> The usb-connector(drivers/usb/common/usb-conn-gpio.c) driver, seems to
->>>> be implemented for driving the VBUS, based on ID and VBUS pin status.
->>>> However, in case of the above implementation we need to communicate the
->>>> detected role to the dwc3 core driver. Also, the wrapper does not
->>>> control VBUS but it is the dwc3 core driver that drives the VBUS.
->>>> Therefore, I think the usb-connector implementation cannot be used here.
->>>
->>> I don't think about usb-conn-gpio.c but using the binding generic
->>> binding for usb-X-connector and define a connector with ID.
->>>
->>> Actually Rob could help here.
->>>
->>> Rob,
->>> Should the id-gpio be modeled as a property in this glue/wrapper driver
->>> or rather as part of usb-connector child node?
->>
->> That's a simple question. Where does the ID GPIO signal go to? The 
->> connector, so it goes in the connector node.
->>
-> 
-> Thank you for the clarification. Here ID-gpio is directly read by the
-> wrapper and hence, I have modeled it as a property in the wrapper dt
-> node. May I know if this wrong and should the modelling be looked at
-> differently?
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-What do you mean here by "read"? If you refer to the driver reading the
-pin value, it is less related to the hardware, right?
+The use of zero-sized array causes undefined behaviour when it is not
+the last member in a structure. As it happens to be in this case.
 
+Also, the current code makes use of a language extension to the C90
+standard, but the preferred mechanism to declare variable-length
+types such as this one is a flexible array member, introduced in
+C99:
 
-Best regards,
-Krzysztof
+struct foo {
+        int stuff;
+        struct boo array[];
+};
+
+By making use of the mechanism above, we will get a compiler warning
+in case the flexible array does not occur last. Which is beneficial
+to cultivate a high-quality code.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ drivers/usb/misc/ftdi-elan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/misc/ftdi-elan.c b/drivers/usb/misc/ftdi-elan.c
+index 6c38c62d29b2..e818d2ed6831 100644
+--- a/drivers/usb/misc/ftdi-elan.c
++++ b/drivers/usb/misc/ftdi-elan.c
+@@ -171,7 +171,6 @@ struct usb_ftdi {
+ 	struct delayed_work command_work;
+ 	struct delayed_work respond_work;
+ 	struct u132_platform_data platform_data;
+-	struct resource resources[0];
+ 	struct platform_device platform_dev;
+ 	unsigned char *bulk_in_buffer;
+ 	size_t bulk_in_size;
+@@ -185,6 +184,7 @@ struct usb_ftdi {
+ 	int expected;
+ 	int received;
+ 	int ed_found;
++	struct resource resources[];
+ };
+ #define kref_to_usb_ftdi(d) container_of(d, struct usb_ftdi, kref)
+ #define platform_device_to_usb_ftdi(d) container_of(d, struct usb_ftdi, \
+-- 
+2.25.1
+
