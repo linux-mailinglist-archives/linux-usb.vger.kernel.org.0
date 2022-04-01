@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D30754EF489
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Apr 2022 17:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8143D4EF4FC
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Apr 2022 17:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348393AbiDAO53 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Apr 2022 10:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
+        id S1349551AbiDAO4y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Apr 2022 10:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351442AbiDAOsz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Apr 2022 10:48:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A73E6004D;
-        Fri,  1 Apr 2022 07:39:44 -0700 (PDT)
+        with ESMTP id S1352087AbiDAOty (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Apr 2022 10:49:54 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D258F292BAE;
+        Fri,  1 Apr 2022 07:40:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 201DC60C8B;
-        Fri,  1 Apr 2022 14:39:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA653C34112;
-        Fri,  1 Apr 2022 14:39:26 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A5BDECE258D;
+        Fri,  1 Apr 2022 14:39:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51776C36AE3;
+        Fri,  1 Apr 2022 14:39:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648823967;
-        bh=DhyRSmYkqVp0mD9tp8xB/iWyiPaIGIOPXQyeKGIgjq8=;
+        s=k20201202; t=1648823989;
+        bh=BajCV1XP1yu2fNsxTPAu527PA7vDUg5dFLjTlsjP+bE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GabFQgBNjXvoMaMWtr/GnokIhKsCOquKZ93zN0sH87joGZwMLlM+YqFm5ubCs/pZK
-         QS9LcB/KZMgH55iC9cRtr8XMfzWWoJtuP7hIllt3KzRcUwrJx3NfouFeLoc6lRaEkZ
-         vXDN8ZAnVOQ/UaooZLdJjkxOCjCgHKeL1vVi2Ee2xOoGK25I78oltrf02ZwpBDwgRG
-         3m8Vff0IRIb6QRVZhXqscVr9Blc0ZYwVhkx32H/PI9Xw0TuTY4to81wrAbDeXp9ibk
-         ilrHDw3Y0A/vuZ5xjby84nNnYAITq3Jpsmrbmd2hqUYEnZA0tOPI6LrZG3+eDWHtPN
-         kjKLvUKTH/e0w==
+        b=RQV/REYtoQ9tOiwHv0K0OmBIc+KLDjReggAmONsZxkN3B3SYjkzy+xztERErwxZTJ
+         ZhVMjmHZ+Fhjc0EmtBuQP6Q9S7Mu1VVVOrjOmt8KWj4I8CiOldfoK010YKM000lUEK
+         a9L9l/jug5lVKu3jaW6irSxHhbIqvjFYn5ydk8ZwM26s0a6vEx6nrv+Ai6JgLYelFH
+         xNYc/6lXauJS1ajTv2hKocAuBi+tCCMIet47/Cebz0Cwq/+DGUonx1IVLw1oVBuF85
+         Oye3ydTl3Bz5fuRfmJMy6LzfEmA+BT1dm2q1FjaCubdZvEP8M3L8bmiN2xt6p/JlOg
+         3Vohhul1/SchQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Neal Liu <neal_liu@aspeedtech.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
+Cc:     Hans de Goede <hdegoede@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 34/98] usb: ehci: add pci device support for Aspeed platforms
-Date:   Fri,  1 Apr 2022 10:36:38 -0400
-Message-Id: <20220401143742.1952163-34-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, balbi@kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 43/98] usb: dwc3: pci: Set the swnode from inside dwc3_pci_quirks()
+Date:   Fri,  1 Apr 2022 10:36:47 -0400
+Message-Id: <20220401143742.1952163-43-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220401143742.1952163-1-sashal@kernel.org>
 References: <20220401143742.1952163-1-sashal@kernel.org>
@@ -57,50 +57,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Neal Liu <neal_liu@aspeedtech.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit c3c9cee592828528fd228b01d312c7526c584a42 ]
+[ Upstream commit e285cb403994419e997749c9a52b9370884ae0c8 ]
 
-Enable Aspeed quirks in commit 7f2d73788d90 ("usb: ehci:
-handshake CMD_RUN instead of STS_HALT") to support Aspeed
-ehci-pci device.
+The quirk handling may need to set some different properties
+which means using a different swnode, move the setting of the swnode
+to inside dwc3_pci_quirks() so that the quirk handling can choose
+a different swnode.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-Link: https://lore.kernel.org/r/20220208101657.76459-1-neal_liu@aspeedtech.com
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20220213130524.18748-4-hdegoede@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/ehci-pci.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/usb/dwc3/dwc3-pci.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-index e87cf3a00fa4..638f03b89739 100644
---- a/drivers/usb/host/ehci-pci.c
-+++ b/drivers/usb/host/ehci-pci.c
-@@ -21,6 +21,9 @@ static const char hcd_name[] = "ehci-pci";
- /* defined here to avoid adding to pci_ids.h for single instance use */
- #define PCI_DEVICE_ID_INTEL_CE4100_USB	0x2e70
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 06d0e88ec8af..4d9608cc55f7 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -185,7 +185,8 @@ static const struct software_node dwc3_pci_amd_mr_swnode = {
+ 	.properties = dwc3_pci_mr_properties,
+ };
  
-+#define PCI_VENDOR_ID_ASPEED		0x1a03
-+#define PCI_DEVICE_ID_ASPEED_EHCI	0x2603
-+
- /*-------------------------------------------------------------------------*/
- #define PCI_DEVICE_ID_INTEL_QUARK_X1000_SOC		0x0939
- static inline bool is_intel_quark_x1000(struct pci_dev *pdev)
-@@ -222,6 +225,12 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
- 			ehci->has_synopsys_hc_bug = 1;
+-static int dwc3_pci_quirks(struct dwc3_pci *dwc)
++static int dwc3_pci_quirks(struct dwc3_pci *dwc,
++			   const struct software_node *swnode)
+ {
+ 	struct pci_dev			*pdev = dwc->pci;
+ 
+@@ -242,7 +243,7 @@ static int dwc3_pci_quirks(struct dwc3_pci *dwc)
  		}
- 		break;
-+	case PCI_VENDOR_ID_ASPEED:
-+		if (pdev->device == PCI_DEVICE_ID_ASPEED_EHCI) {
-+			ehci_info(ehci, "applying Aspeed HC workaround\n");
-+			ehci->is_aspeed = 1;
-+		}
-+		break;
  	}
  
- 	/* optional debug port, normally in the first BAR */
+-	return 0;
++	return device_add_software_node(&dwc->dwc3->dev, swnode);
+ }
+ 
+ #ifdef CONFIG_PM
+@@ -307,11 +308,7 @@ static int dwc3_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ 	dwc->dwc3->dev.parent = dev;
+ 	ACPI_COMPANION_SET(&dwc->dwc3->dev, ACPI_COMPANION(dev));
+ 
+-	ret = device_add_software_node(&dwc->dwc3->dev, (void *)id->driver_data);
+-	if (ret < 0)
+-		goto err;
+-
+-	ret = dwc3_pci_quirks(dwc);
++	ret = dwc3_pci_quirks(dwc, (void *)id->driver_data);
+ 	if (ret)
+ 		goto err;
+ 
 -- 
 2.34.1
 
