@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65BB4EEF90
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Apr 2022 16:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D41E4EF167
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Apr 2022 16:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347073AbiDAO2r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Apr 2022 10:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
+        id S1347730AbiDAOfp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Apr 2022 10:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346989AbiDAO21 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Apr 2022 10:28:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70F126B381;
-        Fri,  1 Apr 2022 07:26:36 -0700 (PDT)
+        with ESMTP id S1347403AbiDAOcb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Apr 2022 10:32:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BE01EA5F0;
+        Fri,  1 Apr 2022 07:28:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 384CDB824AF;
-        Fri,  1 Apr 2022 14:26:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21F01C36AE2;
-        Fri,  1 Apr 2022 14:26:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6445A61CB1;
+        Fri,  1 Apr 2022 14:28:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D554FC36AE2;
+        Fri,  1 Apr 2022 14:28:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648823194;
-        bh=qAnlLL+6EJDVpUHAdBK0VU/02Zl+0/lVVmEYu85XYWY=;
+        s=k20201202; t=1648823325;
+        bh=DhyRSmYkqVp0mD9tp8xB/iWyiPaIGIOPXQyeKGIgjq8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cnTV94INE3moiLfDbfIvkLH+tELlbfoqgE0+zDdugd1uqNoicVupqgcg6HlidkkEH
-         /xgNnuyqD7CQrZTYFjPIkn9urFUke8wi7fvGa8huI/VLhiv6mThP+PaRF2c9C+/GWK
-         +Ty9zIDCCNvNMvmyD8kkCIabO5kNwivfR+XBGUAL7VLKiWyQfhoJVpW1pkkF4aX4Nc
-         eDUNufUFR807rYAsCnaPg5JT0RmcMVxnOJMzoshssYSZfl4DXg86wu1RThC02GKmRD
-         IvfqskmjtbNaP8PmizO+ehZBHdnFhgq9js9vxYMXHb/PuooosVv779jyl7dyJo0yW/
-         NCmOFUh7Sk+lg==
+        b=bnM4mdMXnlUpBnPiv4K5nZ8GfR9kYUrVVRWlTod9ecjVSJAUDV/fOy+EV8a4Ulds2
+         kJ2qIE4uTKQvu+F88zZ4EEXysnoGeJ5pU/m49ccOZ6VKLn4ZsPwyfXvExg7TXEt+kI
+         51/9MoxT9q4HFOErgZ1mdmf67274NlpE2Dpxq5nNVpVG8Vo4xH99T3O4SQ3zEqLm2n
+         FCprEbR9+ybzEcKP0B+nCmqdVeEqWCze1Fcv6vrTTD2WyPGe08+LGpMQyyL0tQc4ll
+         gviXdWrLxNhrUra7Jiu3sPVRmSW1qIgHR8L8JbtVppU2iaYl4BAkVZoO3cLgrtrpek
+         28n28m21CnRKg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pawel Laszczak <pawell@cadence.com>,
-        kernel test robot <lkp@intel.com>,
+Cc:     Neal Liu <neal_liu@aspeedtech.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 016/149] usb: cdnsp: fix cdnsp_decode_trb function to properly handle ret value
-Date:   Fri,  1 Apr 2022 10:23:23 -0400
-Message-Id: <20220401142536.1948161-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.17 058/149] usb: ehci: add pci device support for Aspeed platforms
+Date:   Fri,  1 Apr 2022 10:24:05 -0400
+Message-Id: <20220401142536.1948161-58-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220401142536.1948161-1-sashal@kernel.org>
 References: <20220401142536.1948161-1-sashal@kernel.org>
@@ -57,390 +57,50 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Pawel Laszczak <pawell@cadence.com>
+From: Neal Liu <neal_liu@aspeedtech.com>
 
-[ Upstream commit 03db9289b5ab59437e42a111a34545a7cedb5190 ]
+[ Upstream commit c3c9cee592828528fd228b01d312c7526c584a42 ]
 
-Variable ret in function cdnsp_decode_trb is initialized but not
-used. To fix this compiler warning patch adds checking whether the
-data buffer has not been overflowed.
+Enable Aspeed quirks in commit 7f2d73788d90 ("usb: ehci:
+handshake CMD_RUN instead of STS_HALT") to support Aspeed
+ehci-pci device.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-Link: https://lore.kernel.org/r/20220112053237.14309-1-pawell@gli-login.cadence.com
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+Link: https://lore.kernel.org/r/20220208101657.76459-1-neal_liu@aspeedtech.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/cdns3/cdnsp-debug.h | 305 ++++++++++++++++----------------
- 1 file changed, 154 insertions(+), 151 deletions(-)
+ drivers/usb/host/ehci-pci.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/usb/cdns3/cdnsp-debug.h b/drivers/usb/cdns3/cdnsp-debug.h
-index a8776df2d4e0..f0ca865cce2a 100644
---- a/drivers/usb/cdns3/cdnsp-debug.h
-+++ b/drivers/usb/cdns3/cdnsp-debug.h
-@@ -182,208 +182,211 @@ static inline const char *cdnsp_decode_trb(char *str, size_t size, u32 field0,
- 	int ep_id = TRB_TO_EP_INDEX(field3) - 1;
- 	int type = TRB_FIELD_TO_TYPE(field3);
- 	unsigned int ep_num;
--	int ret = 0;
-+	int ret;
- 	u32 temp;
+diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+index e87cf3a00fa4..638f03b89739 100644
+--- a/drivers/usb/host/ehci-pci.c
++++ b/drivers/usb/host/ehci-pci.c
+@@ -21,6 +21,9 @@ static const char hcd_name[] = "ehci-pci";
+ /* defined here to avoid adding to pci_ids.h for single instance use */
+ #define PCI_DEVICE_ID_INTEL_CE4100_USB	0x2e70
  
- 	ep_num = DIV_ROUND_UP(ep_id, 2);
- 
- 	switch (type) {
- 	case TRB_LINK:
--		ret += snprintf(str, size,
--				"LINK %08x%08x intr %ld type '%s' flags %c:%c:%c:%c",
--				field1, field0, GET_INTR_TARGET(field2),
--				cdnsp_trb_type_string(type),
--				field3 & TRB_IOC ? 'I' : 'i',
--				field3 & TRB_CHAIN ? 'C' : 'c',
--				field3 & TRB_TC ? 'T' : 't',
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size,
-+			       "LINK %08x%08x intr %ld type '%s' flags %c:%c:%c:%c",
-+			       field1, field0, GET_INTR_TARGET(field2),
-+			       cdnsp_trb_type_string(type),
-+			       field3 & TRB_IOC ? 'I' : 'i',
-+			       field3 & TRB_CHAIN ? 'C' : 'c',
-+			       field3 & TRB_TC ? 'T' : 't',
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_TRANSFER:
- 	case TRB_COMPLETION:
- 	case TRB_PORT_STATUS:
- 	case TRB_HC_EVENT:
--		ret += snprintf(str, size,
--				"ep%d%s(%d) type '%s' TRB %08x%08x status '%s'"
--				" len %ld slot %ld flags %c:%c",
--				ep_num, ep_id % 2 ? "out" : "in",
--				TRB_TO_EP_INDEX(field3),
--				cdnsp_trb_type_string(type), field1, field0,
--				cdnsp_trb_comp_code_string(GET_COMP_CODE(field2)),
--				EVENT_TRB_LEN(field2), TRB_TO_SLOT_ID(field3),
--				field3 & EVENT_DATA ? 'E' : 'e',
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size,
-+			       "ep%d%s(%d) type '%s' TRB %08x%08x status '%s'"
-+			       " len %ld slot %ld flags %c:%c",
-+			       ep_num, ep_id % 2 ? "out" : "in",
-+			       TRB_TO_EP_INDEX(field3),
-+			       cdnsp_trb_type_string(type), field1, field0,
-+			       cdnsp_trb_comp_code_string(GET_COMP_CODE(field2)),
-+			       EVENT_TRB_LEN(field2), TRB_TO_SLOT_ID(field3),
-+			       field3 & EVENT_DATA ? 'E' : 'e',
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_MFINDEX_WRAP:
--		ret += snprintf(str, size, "%s: flags %c",
--				cdnsp_trb_type_string(type),
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size, "%s: flags %c",
-+			       cdnsp_trb_type_string(type),
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_SETUP:
--		ret += snprintf(str, size,
--				"type '%s' bRequestType %02x bRequest %02x "
--				"wValue %02x%02x wIndex %02x%02x wLength %d "
--				"length %ld TD size %ld intr %ld Setup ID %ld "
--				"flags %c:%c:%c",
--				cdnsp_trb_type_string(type),
--				field0 & 0xff,
--				(field0 & 0xff00) >> 8,
--				(field0 & 0xff000000) >> 24,
--				(field0 & 0xff0000) >> 16,
--				(field1 & 0xff00) >> 8,
--				field1 & 0xff,
--				(field1 & 0xff000000) >> 16 |
--				(field1 & 0xff0000) >> 16,
--				TRB_LEN(field2), GET_TD_SIZE(field2),
--				GET_INTR_TARGET(field2),
--				TRB_SETUPID_TO_TYPE(field3),
--				field3 & TRB_IDT ? 'D' : 'd',
--				field3 & TRB_IOC ? 'I' : 'i',
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size,
-+			       "type '%s' bRequestType %02x bRequest %02x "
-+			       "wValue %02x%02x wIndex %02x%02x wLength %d "
-+			       "length %ld TD size %ld intr %ld Setup ID %ld "
-+			       "flags %c:%c:%c",
-+			       cdnsp_trb_type_string(type),
-+			       field0 & 0xff,
-+			       (field0 & 0xff00) >> 8,
-+			       (field0 & 0xff000000) >> 24,
-+			       (field0 & 0xff0000) >> 16,
-+			       (field1 & 0xff00) >> 8,
-+			       field1 & 0xff,
-+			       (field1 & 0xff000000) >> 16 |
-+			       (field1 & 0xff0000) >> 16,
-+			       TRB_LEN(field2), GET_TD_SIZE(field2),
-+			       GET_INTR_TARGET(field2),
-+			       TRB_SETUPID_TO_TYPE(field3),
-+			       field3 & TRB_IDT ? 'D' : 'd',
-+			       field3 & TRB_IOC ? 'I' : 'i',
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_DATA:
--		ret += snprintf(str, size,
--				"type '%s' Buffer %08x%08x length %ld TD size %ld "
--				"intr %ld flags %c:%c:%c:%c:%c:%c:%c",
--				cdnsp_trb_type_string(type),
--				field1, field0, TRB_LEN(field2),
--				GET_TD_SIZE(field2),
--				GET_INTR_TARGET(field2),
--				field3 & TRB_IDT ? 'D' : 'i',
--				field3 & TRB_IOC ? 'I' : 'i',
--				field3 & TRB_CHAIN ? 'C' : 'c',
--				field3 & TRB_NO_SNOOP ? 'S' : 's',
--				field3 & TRB_ISP ? 'I' : 'i',
--				field3 & TRB_ENT ? 'E' : 'e',
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size,
-+			       "type '%s' Buffer %08x%08x length %ld TD size %ld "
-+			       "intr %ld flags %c:%c:%c:%c:%c:%c:%c",
-+			       cdnsp_trb_type_string(type),
-+			       field1, field0, TRB_LEN(field2),
-+			       GET_TD_SIZE(field2),
-+			       GET_INTR_TARGET(field2),
-+			       field3 & TRB_IDT ? 'D' : 'i',
-+			       field3 & TRB_IOC ? 'I' : 'i',
-+			       field3 & TRB_CHAIN ? 'C' : 'c',
-+			       field3 & TRB_NO_SNOOP ? 'S' : 's',
-+			       field3 & TRB_ISP ? 'I' : 'i',
-+			       field3 & TRB_ENT ? 'E' : 'e',
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_STATUS:
--		ret += snprintf(str, size,
--				"Buffer %08x%08x length %ld TD size %ld intr"
--				"%ld type '%s' flags %c:%c:%c:%c",
--				field1, field0, TRB_LEN(field2),
--				GET_TD_SIZE(field2),
--				GET_INTR_TARGET(field2),
--				cdnsp_trb_type_string(type),
--				field3 & TRB_IOC ? 'I' : 'i',
--				field3 & TRB_CHAIN ? 'C' : 'c',
--				field3 & TRB_ENT ? 'E' : 'e',
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size,
-+			       "Buffer %08x%08x length %ld TD size %ld intr"
-+			       "%ld type '%s' flags %c:%c:%c:%c",
-+			       field1, field0, TRB_LEN(field2),
-+			       GET_TD_SIZE(field2),
-+			       GET_INTR_TARGET(field2),
-+			       cdnsp_trb_type_string(type),
-+			       field3 & TRB_IOC ? 'I' : 'i',
-+			       field3 & TRB_CHAIN ? 'C' : 'c',
-+			       field3 & TRB_ENT ? 'E' : 'e',
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_NORMAL:
- 	case TRB_ISOC:
- 	case TRB_EVENT_DATA:
- 	case TRB_TR_NOOP:
--		ret += snprintf(str, size,
--				"type '%s' Buffer %08x%08x length %ld "
--				"TD size %ld intr %ld "
--				"flags %c:%c:%c:%c:%c:%c:%c:%c:%c",
--				cdnsp_trb_type_string(type),
--				field1, field0, TRB_LEN(field2),
--				GET_TD_SIZE(field2),
--				GET_INTR_TARGET(field2),
--				field3 & TRB_BEI ? 'B' : 'b',
--				field3 & TRB_IDT ? 'T' : 't',
--				field3 & TRB_IOC ? 'I' : 'i',
--				field3 & TRB_CHAIN ? 'C' : 'c',
--				field3 & TRB_NO_SNOOP ? 'S' : 's',
--				field3 & TRB_ISP ? 'I' : 'i',
--				field3 & TRB_ENT ? 'E' : 'e',
--				field3 & TRB_CYCLE ? 'C' : 'c',
--				!(field3 & TRB_EVENT_INVALIDATE) ? 'V' : 'v');
-+		ret = snprintf(str, size,
-+			       "type '%s' Buffer %08x%08x length %ld "
-+			       "TD size %ld intr %ld "
-+			       "flags %c:%c:%c:%c:%c:%c:%c:%c:%c",
-+			       cdnsp_trb_type_string(type),
-+			       field1, field0, TRB_LEN(field2),
-+			       GET_TD_SIZE(field2),
-+			       GET_INTR_TARGET(field2),
-+			       field3 & TRB_BEI ? 'B' : 'b',
-+			       field3 & TRB_IDT ? 'T' : 't',
-+			       field3 & TRB_IOC ? 'I' : 'i',
-+			       field3 & TRB_CHAIN ? 'C' : 'c',
-+			       field3 & TRB_NO_SNOOP ? 'S' : 's',
-+			       field3 & TRB_ISP ? 'I' : 'i',
-+			       field3 & TRB_ENT ? 'E' : 'e',
-+			       field3 & TRB_CYCLE ? 'C' : 'c',
-+			       !(field3 & TRB_EVENT_INVALIDATE) ? 'V' : 'v');
- 		break;
- 	case TRB_CMD_NOOP:
- 	case TRB_ENABLE_SLOT:
--		ret += snprintf(str, size, "%s: flags %c",
--				cdnsp_trb_type_string(type),
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size, "%s: flags %c",
-+			       cdnsp_trb_type_string(type),
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_DISABLE_SLOT:
--		ret += snprintf(str, size, "%s: slot %ld flags %c",
--				cdnsp_trb_type_string(type),
--				TRB_TO_SLOT_ID(field3),
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size, "%s: slot %ld flags %c",
-+			       cdnsp_trb_type_string(type),
-+			       TRB_TO_SLOT_ID(field3),
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_ADDR_DEV:
--		ret += snprintf(str, size,
--				"%s: ctx %08x%08x slot %ld flags %c:%c",
--				cdnsp_trb_type_string(type), field1, field0,
--				TRB_TO_SLOT_ID(field3),
--				field3 & TRB_BSR ? 'B' : 'b',
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size,
-+			       "%s: ctx %08x%08x slot %ld flags %c:%c",
-+			       cdnsp_trb_type_string(type), field1, field0,
-+			       TRB_TO_SLOT_ID(field3),
-+			       field3 & TRB_BSR ? 'B' : 'b',
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_CONFIG_EP:
--		ret += snprintf(str, size,
--				"%s: ctx %08x%08x slot %ld flags %c:%c",
--				cdnsp_trb_type_string(type), field1, field0,
--				TRB_TO_SLOT_ID(field3),
--				field3 & TRB_DC ? 'D' : 'd',
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size,
-+			       "%s: ctx %08x%08x slot %ld flags %c:%c",
-+			       cdnsp_trb_type_string(type), field1, field0,
-+			       TRB_TO_SLOT_ID(field3),
-+			       field3 & TRB_DC ? 'D' : 'd',
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_EVAL_CONTEXT:
--		ret += snprintf(str, size,
--				"%s: ctx %08x%08x slot %ld flags %c",
--				cdnsp_trb_type_string(type), field1, field0,
--				TRB_TO_SLOT_ID(field3),
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size,
-+			       "%s: ctx %08x%08x slot %ld flags %c",
-+			       cdnsp_trb_type_string(type), field1, field0,
-+			       TRB_TO_SLOT_ID(field3),
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_RESET_EP:
- 	case TRB_HALT_ENDPOINT:
- 	case TRB_FLUSH_ENDPOINT:
--		ret += snprintf(str, size,
--				"%s: ep%d%s(%d) ctx %08x%08x slot %ld flags %c",
--				cdnsp_trb_type_string(type),
--				ep_num, ep_id % 2 ? "out" : "in",
--				TRB_TO_EP_INDEX(field3), field1, field0,
--				TRB_TO_SLOT_ID(field3),
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size,
-+			       "%s: ep%d%s(%d) ctx %08x%08x slot %ld flags %c",
-+			       cdnsp_trb_type_string(type),
-+			       ep_num, ep_id % 2 ? "out" : "in",
-+			       TRB_TO_EP_INDEX(field3), field1, field0,
-+			       TRB_TO_SLOT_ID(field3),
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_STOP_RING:
--		ret += snprintf(str, size,
--				"%s: ep%d%s(%d) slot %ld sp %d flags %c",
--				cdnsp_trb_type_string(type),
--				ep_num, ep_id % 2 ? "out" : "in",
--				TRB_TO_EP_INDEX(field3),
--				TRB_TO_SLOT_ID(field3),
--				TRB_TO_SUSPEND_PORT(field3),
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size,
-+			       "%s: ep%d%s(%d) slot %ld sp %d flags %c",
-+			       cdnsp_trb_type_string(type),
-+			       ep_num, ep_id % 2 ? "out" : "in",
-+			       TRB_TO_EP_INDEX(field3),
-+			       TRB_TO_SLOT_ID(field3),
-+			       TRB_TO_SUSPEND_PORT(field3),
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_SET_DEQ:
--		ret += snprintf(str, size,
--				"%s: ep%d%s(%d) deq %08x%08x stream %ld slot %ld  flags %c",
--				cdnsp_trb_type_string(type),
--				ep_num, ep_id % 2 ? "out" : "in",
--				TRB_TO_EP_INDEX(field3), field1, field0,
--				TRB_TO_STREAM_ID(field2),
--				TRB_TO_SLOT_ID(field3),
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size,
-+			       "%s: ep%d%s(%d) deq %08x%08x stream %ld slot %ld  flags %c",
-+			       cdnsp_trb_type_string(type),
-+			       ep_num, ep_id % 2 ? "out" : "in",
-+			       TRB_TO_EP_INDEX(field3), field1, field0,
-+			       TRB_TO_STREAM_ID(field2),
-+			       TRB_TO_SLOT_ID(field3),
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_RESET_DEV:
--		ret += snprintf(str, size, "%s: slot %ld flags %c",
--				cdnsp_trb_type_string(type),
--				TRB_TO_SLOT_ID(field3),
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		ret = snprintf(str, size, "%s: slot %ld flags %c",
-+			       cdnsp_trb_type_string(type),
-+			       TRB_TO_SLOT_ID(field3),
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
- 		break;
- 	case TRB_ENDPOINT_NRDY:
--		temp  = TRB_TO_HOST_STREAM(field2);
--
--		ret += snprintf(str, size,
--				"%s: ep%d%s(%d) H_SID %x%s%s D_SID %lx flags %c:%c",
--				cdnsp_trb_type_string(type),
--				ep_num, ep_id % 2 ? "out" : "in",
--				TRB_TO_EP_INDEX(field3), temp,
--				temp == STREAM_PRIME_ACK ? "(PRIME)" : "",
--				temp == STREAM_REJECTED ? "(REJECTED)" : "",
--				TRB_TO_DEV_STREAM(field0),
--				field3 & TRB_STAT ? 'S' : 's',
--				field3 & TRB_CYCLE ? 'C' : 'c');
-+		temp = TRB_TO_HOST_STREAM(field2);
++#define PCI_VENDOR_ID_ASPEED		0x1a03
++#define PCI_DEVICE_ID_ASPEED_EHCI	0x2603
 +
-+		ret = snprintf(str, size,
-+			       "%s: ep%d%s(%d) H_SID %x%s%s D_SID %lx flags %c:%c",
-+			       cdnsp_trb_type_string(type),
-+			       ep_num, ep_id % 2 ? "out" : "in",
-+			       TRB_TO_EP_INDEX(field3), temp,
-+			       temp == STREAM_PRIME_ACK ? "(PRIME)" : "",
-+			       temp == STREAM_REJECTED ? "(REJECTED)" : "",
-+			       TRB_TO_DEV_STREAM(field0),
-+			       field3 & TRB_STAT ? 'S' : 's',
-+			       field3 & TRB_CYCLE ? 'C' : 'c');
+ /*-------------------------------------------------------------------------*/
+ #define PCI_DEVICE_ID_INTEL_QUARK_X1000_SOC		0x0939
+ static inline bool is_intel_quark_x1000(struct pci_dev *pdev)
+@@ -222,6 +225,12 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+ 			ehci->has_synopsys_hc_bug = 1;
+ 		}
  		break;
- 	default:
--		ret += snprintf(str, size,
--				"type '%s' -> raw %08x %08x %08x %08x",
--				cdnsp_trb_type_string(type),
--				field0, field1, field2, field3);
-+		ret = snprintf(str, size,
-+			       "type '%s' -> raw %08x %08x %08x %08x",
-+			       cdnsp_trb_type_string(type),
-+			       field0, field1, field2, field3);
++	case PCI_VENDOR_ID_ASPEED:
++		if (pdev->device == PCI_DEVICE_ID_ASPEED_EHCI) {
++			ehci_info(ehci, "applying Aspeed HC workaround\n");
++			ehci->is_aspeed = 1;
++		}
++		break;
  	}
  
-+	if (ret >= size)
-+		pr_info("CDNSP: buffer overflowed.\n");
-+
- 	return str;
- }
- 
+ 	/* optional debug port, normally in the first BAR */
 -- 
 2.34.1
 
