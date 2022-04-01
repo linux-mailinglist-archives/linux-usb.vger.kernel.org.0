@@ -2,63 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B964EEE76
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Apr 2022 15:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97CE4EEE90
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Apr 2022 15:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346479AbiDANvY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Apr 2022 09:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S1346533AbiDANz0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Apr 2022 09:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346471AbiDANvU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Apr 2022 09:51:20 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7027CA0E8;
-        Fri,  1 Apr 2022 06:49:29 -0700 (PDT)
+        with ESMTP id S1345150AbiDANzZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Apr 2022 09:55:25 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3624D3153D;
+        Fri,  1 Apr 2022 06:53:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648820969; x=1680356969;
+  t=1648821215; x=1680357215;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=6sFUED6jomDpVrS/0BCwozH6u0xdut4xuWB/lq33NWs=;
-  b=UuWT5bZoSV1IX33c1ceZHd8ws9Y13j2Xl2M18HGKM5whavdyTetaqTKL
-   wR2QHpnr04hcyEIgCI1N4vpAR2XF5llZb3Tg4ye2oa6ZGA1WmsvbCkJgZ
-   rgLoKMBoY16RR39L2WDFeN/5ZGX3xvWXIIVgQ2mznSsgBrv23Ew6cq542
-   9OzOhqyZ6xSiN8pzQm6TPgUvoTOtLVDFcApeuTTWcaFRYE60L7JI0kceg
-   4wSH8GteG0HsoAMK64LShvGcnrRKl1F/Nshp+ExQWZpZOkXxH6uAY9H7N
-   6JfGit9xM4Zd15pYiTenptmy6tfgoLCsjtDf1z1bqQqVv2ziVZFNoG89i
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="240077425"
+   mime-version:in-reply-to;
+  bh=9JVIFR1RY3e4c1DpSi0zz4R7HTop2QK2Mx5IigfiEgA=;
+  b=BgVXgZca8UcIkIqGCH9ubUE6Ty0rdYiMjBpJWb7Eg/7GuzCahVuBdIId
+   /NpljIlBNYOCZrkTKRebmU9vSJTVEGzXJyPpIGG/PxxLZJN4Kq1gkManL
+   WsaDgvkvtzVjsGcT3ca3POO7s6SyUUS5/9728kEWjhF1s323w7EJoPrxn
+   H1dgxiRWnBgfEUk286+5JptMfcjGCje12LFV6pqACxEpUKs6WEuZBpk8W
+   ZPZRZuMWaevQ8iUajE+dUNW8x7AXzNOs5Od+NDurZLOYJzv6qB47LOOmm
+   3BpsfKhLgXq+LxpQfsWsW1Bzc5lASnwqX/5PYIWXAy++HlkzsRekcqYi3
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="323311000"
 X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
-   d="scan'208";a="240077425"
+   d="scan'208";a="323311000"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 06:49:29 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 06:53:34 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
-   d="scan'208";a="695896434"
+   d="scan'208";a="695898668"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 01 Apr 2022 06:49:26 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 01 Apr 2022 16:49:25 +0300
-Date:   Fri, 1 Apr 2022 16:49:25 +0300
+  by fmsmga001.fm.intel.com with SMTP; 01 Apr 2022 06:53:32 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 01 Apr 2022 16:53:31 +0300
+Date:   Fri, 1 Apr 2022 16:53:31 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
-        Angus Ainslie <angus@akkea.ca>,
-        Hector Martin <marcan@marcan.st>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-kernel@vger.kernel.org, kernel@puri.sm
-Subject: Re: [PATCH 0/7] TPS6598x PD tracing and other improvements
-Message-ID: <YkcC5XKZzIQBID8w@kuha.fi.intel.com>
-References: <20220317154518.4082046-1-sebastian.krzyszkowiak@puri.sm>
+To:     tanveer1.alam@intel.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, abhijeet.rao@intel.com
+Subject: Re: [PATCH] usb: typec: mux: intel_pmc_mux: Add retry logic to a PMC
+ command
+Message-ID: <YkcD25gTJ07h7XDK@kuha.fi.intel.com>
+References: <20220328105137.6223-1-tanveer1.alam@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220317154518.4082046-1-sebastian.krzyszkowiak@puri.sm>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+In-Reply-To: <20220328105137.6223-1-tanveer1.alam@intel.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,45 +61,76 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On Thu, Mar 17, 2022 at 04:45:11PM +0100, Sebastian Krzyszkowiak wrote:
-> This is a series developed for the Librem 5 phone, which uses TPS65982
-> as its USB-C controller. Implemented are Power Delivery sink contract
-> tracing and exporting negotiated power values as power supply properties,
-> fixes for data role swapping, status register caching and a debugfs entry
-> for querying customer use word of the firmware running on the controller.
+On Mon, Mar 28, 2022 at 04:21:37PM +0530, tanveer1.alam@intel.com wrote:
+> From: Tanveer Alam <tanveer1.alam@intel.com>
 > 
-> Angus Ainslie (3):
->   usb: typec: tipd: set the data role on tps IRQ
->   usb: typec: tipd: Add trace event for SINK PD contract
->   usb: typec: tipd: Provide POWER_SUPPLY_PROP_{CURRENT,VOLTAGE}_MAX
+> There are few scenerio when PMC reports 'busy condition' and command
+> fail.
 > 
-> Guido Günther (2):
->   usb: typec: tipd: Only update power status on IRQ
->   usb: typec: tipd: Add debugfs entries for customer use word
+> If PMC receives a high priority command while servicing a low priority
+> command then it discards the low priority command and start servicing
+> the high priority command. The lower priority command fail and driver
+> returns error. If the same command resend to the PMC then PMC latches
+> the command and service it accordingly.
 > 
-> Sebastian Krzyszkowiak (2):
->   usb: typec: tipd: Provide POWER_SUPPLY_PROP_PRESENT
->   usb: typec: tipd: Fail probe when the controller is in BOOT mode
+> Thus adds the retry logic for the PMC command.
 > 
->  drivers/usb/typec/tipd/core.c     | 263 ++++++++++++++++++++++++++----
->  drivers/usb/typec/tipd/tps6598x.h |  30 ++++
->  drivers/usb/typec/tipd/trace.h    |  38 +++++
->  3 files changed, 302 insertions(+), 29 deletions(-)
+> Signed-off-by: Tanveer Alam <tanveer1.alam@intel.com>
 
-These look pretty good to me. I'll see if I can test these on Monday -
-I finally have access to a machine again that actually has TI PD
-controller. But I will give my comments then in any case, if there is
-anything to comment.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-But related to patch 3/7, there is a series in works that would expose
-the PDOs in sysfs [1]. I was wondering have you guys noticed it, and
-would that actually work also in your case?
+> ---
+>  drivers/usb/typec/mux/intel_pmc_mux.c | 21 +++++++++++++++++++--
+>  1 file changed, 19 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+> index 2cdd22130834..da6b381ddf00 100644
+> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
+> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+> @@ -173,7 +173,7 @@ static int hsl_orientation(struct pmc_usb_port *port)
+>  	return port->orientation - 1;
+>  }
+>  
+> -static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
+> +static int pmc_usb_send_command(struct intel_scu_ipc_dev *ipc, u8 *msg, u32 len)
+>  {
+>  	u8 response[4];
+>  	u8 status_res;
+> @@ -184,7 +184,7 @@ static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
+>  	 * Status can be checked from the response message if the
+>  	 * function intel_scu_ipc_dev_command succeeds.
+>  	 */
+> -	ret = intel_scu_ipc_dev_command(port->pmc->ipc, PMC_USBC_CMD, 0, msg,
+> +	ret = intel_scu_ipc_dev_command(ipc, PMC_USBC_CMD, 0, msg,
+>  					len, response, sizeof(response));
+>  
+>  	if (ret)
+> @@ -203,6 +203,23 @@ static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
+>  	return 0;
+>  }
+>  
+> +static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
+> +{
+> +	int retry_count = 3;
+> +	int ret;
+> +
+> +	/*
+> +	 * If PMC is busy then retry the command once again
+> +	 */
+> +	while (retry_count--) {
+> +		ret = pmc_usb_send_command(port->pmc->ipc, msg, len);
+> +		if (ret != -EBUSY)
+> +			break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  static int
+>  pmc_usb_mux_dp_hpd(struct pmc_usb_port *port, struct typec_displayport_data *dp)
+>  {
 
-[1] https://lore.kernel.org/linux-usb/20220203144657.16527-1-heikki.krogerus@linux.intel.com/
-
-Br,
+thanks,
 
 -- 
 heikki
