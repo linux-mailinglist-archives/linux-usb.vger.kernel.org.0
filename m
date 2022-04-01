@@ -2,135 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97CE4EEE90
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Apr 2022 15:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E2E4EEEE9
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Apr 2022 16:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346533AbiDANz0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Apr 2022 09:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
+        id S1346722AbiDAOMs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Apr 2022 10:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345150AbiDANzZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Apr 2022 09:55:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3624D3153D;
-        Fri,  1 Apr 2022 06:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648821215; x=1680357215;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9JVIFR1RY3e4c1DpSi0zz4R7HTop2QK2Mx5IigfiEgA=;
-  b=BgVXgZca8UcIkIqGCH9ubUE6Ty0rdYiMjBpJWb7Eg/7GuzCahVuBdIId
-   /NpljIlBNYOCZrkTKRebmU9vSJTVEGzXJyPpIGG/PxxLZJN4Kq1gkManL
-   WsaDgvkvtzVjsGcT3ca3POO7s6SyUUS5/9728kEWjhF1s323w7EJoPrxn
-   H1dgxiRWnBgfEUk286+5JptMfcjGCje12LFV6pqACxEpUKs6WEuZBpk8W
-   ZPZRZuMWaevQ8iUajE+dUNW8x7AXzNOs5Od+NDurZLOYJzv6qB47LOOmm
-   3BpsfKhLgXq+LxpQfsWsW1Bzc5lASnwqX/5PYIWXAy++HlkzsRekcqYi3
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="323311000"
-X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
-   d="scan'208";a="323311000"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 06:53:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
-   d="scan'208";a="695898668"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 01 Apr 2022 06:53:32 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 01 Apr 2022 16:53:31 +0300
-Date:   Fri, 1 Apr 2022 16:53:31 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     tanveer1.alam@intel.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, abhijeet.rao@intel.com
-Subject: Re: [PATCH] usb: typec: mux: intel_pmc_mux: Add retry logic to a PMC
- command
-Message-ID: <YkcD25gTJ07h7XDK@kuha.fi.intel.com>
-References: <20220328105137.6223-1-tanveer1.alam@intel.com>
+        with ESMTP id S1346710AbiDAOMp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Apr 2022 10:12:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BAD12AEB
+        for <linux-usb@vger.kernel.org>; Fri,  1 Apr 2022 07:10:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88DBBB824B7
+        for <linux-usb@vger.kernel.org>; Fri,  1 Apr 2022 14:10:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4AF80C36AE2
+        for <linux-usb@vger.kernel.org>; Fri,  1 Apr 2022 14:10:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648822253;
+        bh=F3PPjXONEfqSMNAfs+2YykVq2UZYQ8sMPqFaU2xEAIM=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=YLxtd4HgNmhtjrtg2ZaciIaXXXxDnXWgb+2XSx+5VyaPjJDigfVxyNu8wNuP6sF2+
+         UJ2q1RvRb0xTSKeoyaCl1abByHapGgwE+8VWRaGblrvU7mEKYlouSpZOJSe0ShzI7T
+         lBhJMLQiTjfsjNCLHhFZbdgnPTqjJsRz0M5w8yEO0muSYfLMXLnPzMGkgTsC8bJMZx
+         hLVcVFlacQUGRWZI3Njf7LgiSXaWfzVYdh0j3drwQA0DVof3m7N6Mal2vj4aOc/XAB
+         TYNngXpOLJceNC0mUTBrLlQ6HHgKTNmVZyPW4S+TQRDDiFKOnHsPvmSJ0CpR5hfXwR
+         TzSYYEclnLbNg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 3B98BC05FCE; Fri,  1 Apr 2022 14:10:53 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210425] Plugging in or unplugging power cord while system is
+ suspended does not trigger updates
+Date:   Fri, 01 Apr 2022 14:10:52 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: andrew.co@free.fr
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-210425-208809-INl12XnS1f@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
+References: <bug-210425-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328105137.6223-1-tanveer1.alam@intel.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 04:21:37PM +0530, tanveer1.alam@intel.com wrote:
-> From: Tanveer Alam <tanveer1.alam@intel.com>
-> 
-> There are few scenerio when PMC reports 'busy condition' and command
-> fail.
-> 
-> If PMC receives a high priority command while servicing a low priority
-> command then it discards the low priority command and start servicing
-> the high priority command. The lower priority command fail and driver
-> returns error. If the same command resend to the PMC then PMC latches
-> the command and service it accordingly.
-> 
-> Thus adds the retry logic for the PMC command.
-> 
-> Signed-off-by: Tanveer Alam <tanveer1.alam@intel.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Adrien (andrew.co@free.fr) changed:
 
-> ---
->  drivers/usb/typec/mux/intel_pmc_mux.c | 21 +++++++++++++++++++--
->  1 file changed, 19 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-> index 2cdd22130834..da6b381ddf00 100644
-> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-> @@ -173,7 +173,7 @@ static int hsl_orientation(struct pmc_usb_port *port)
->  	return port->orientation - 1;
->  }
->  
-> -static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
-> +static int pmc_usb_send_command(struct intel_scu_ipc_dev *ipc, u8 *msg, u32 len)
->  {
->  	u8 response[4];
->  	u8 status_res;
-> @@ -184,7 +184,7 @@ static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
->  	 * Status can be checked from the response message if the
->  	 * function intel_scu_ipc_dev_command succeeds.
->  	 */
-> -	ret = intel_scu_ipc_dev_command(port->pmc->ipc, PMC_USBC_CMD, 0, msg,
-> +	ret = intel_scu_ipc_dev_command(ipc, PMC_USBC_CMD, 0, msg,
->  					len, response, sizeof(response));
->  
->  	if (ret)
-> @@ -203,6 +203,23 @@ static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
->  	return 0;
->  }
->  
-> +static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
-> +{
-> +	int retry_count = 3;
-> +	int ret;
-> +
-> +	/*
-> +	 * If PMC is busy then retry the command once again
-> +	 */
-> +	while (retry_count--) {
-> +		ret = pmc_usb_send_command(port->pmc->ipc, msg, len);
-> +		if (ret != -EBUSY)
-> +			break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  static int
->  pmc_usb_mux_dp_hpd(struct pmc_usb_port *port, struct typec_displayport_data *dp)
->  {
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |andrew.co@free.fr
 
-thanks,
+--- Comment #11 from Adrien (andrew.co@free.fr) ---
+I have this problem aswell on Thinkpad X1 nano
 
--- 
-heikki
+Linux XXX 5.15.27 #1 SMP PREEMPT Tue Mar 8 18:18:11 CST 2022 x86_64 11th Gen
+Intel(R) Core(TM) i5-1140G7 @ 1.10GHz GenuineIntel GNU/Linux
+
+I can't find any workaround that work on my system. Is there any command th=
+at
+can be ran to force check if a power supply is present ? For now, I have to
+reboot the laptop, or plug/unplug the charger once after resuming from slee=
+p.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
