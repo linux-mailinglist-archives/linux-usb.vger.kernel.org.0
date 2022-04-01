@@ -2,62 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB5D4EE96E
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Apr 2022 09:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8104EE97A
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Apr 2022 10:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344105AbiDAH7q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Apr 2022 03:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
+        id S1344126AbiDAIFg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Apr 2022 04:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235271AbiDAH7p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Apr 2022 03:59:45 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F6726364D;
-        Fri,  1 Apr 2022 00:57:54 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id h196so1470350qke.12;
-        Fri, 01 Apr 2022 00:57:54 -0700 (PDT)
+        with ESMTP id S244236AbiDAIFe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Apr 2022 04:05:34 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C346862106;
+        Fri,  1 Apr 2022 01:03:44 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id kd21so1463086qvb.6;
+        Fri, 01 Apr 2022 01:03:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=P5srtj7khY+hVrjIWR3S7lQuVnq9rPhASABAlLq0xns=;
-        b=VABeflTvTO1dTlQOVWd+GIzMXTHo6kxXqrnHQX8FkgG8JtABEoYQlgzr13JoPi361i
-         p4d8tZM/JsrvsWOTSUkQ+fm3gTam4NJIO1vyegH550R/3+Y2r9LuBC7ADZfKEOZJp+pH
-         m1heyw262ccEeUFpV21LQGM54eT4GF7RwL7flyGDHKKWzOI3XNYjyHaHSDHSW6xUmzUz
-         0mXl1mUXCgT/N/tOYigbmnFYqjDHBW4dU7xZ5FQrtdnCp6LF74+h7LRuun0ZRrK9I/NP
-         WbjKkGVtyLlXgZX1ZKFNCZ2MTwyICIzkjdHd0lJ6uYbgd7k7MUL6mNSZYcXwjLrZ9ihJ
-         keKQ==
+        bh=iigF8mZf5i0ikBPqRgdRRkmmEgwTtaij4Ng6hfEOlCQ=;
+        b=ftdTOSnXccEyo1dXXR9tTbQVppJSoN5RXjbIIr/EbrENnzHLuN9lJwfUKrxOrHm3O/
+         QnEXfsZjW+AQ8LPoBsdsiMNqN7FNsNsuyX6s7Ru38zJSlnRqR/L4b9TJ7wjzZdQTYkkC
+         RU5DCf7qm9TPiWkLvjhh1LDCTDQ785zYPc+B1gzilKeBoig2fLqMF61w2qrGyL959ad9
+         iMX7kz3SF3PEviq5DUSfwpo1+DW8AL4Ps72+YeHaXrcAIVDGTLdvg+tJd587rucjqw/q
+         AAkuPAyIclnPyJIAQpXsi8h3N5KNkm/xybiyxRN51HnZ/FPmaboCZCEFImtW3J1AvDqZ
+         G4lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=P5srtj7khY+hVrjIWR3S7lQuVnq9rPhASABAlLq0xns=;
-        b=nObj2nA4rDhbdraQPaj1HEunCoPZOJIlNZ+rAGWmbWLeb2mA3mnkctL1EfIRxsTBXn
-         XrR7LpH+iwgejFcV9aqpQqKwCVvEUy3wDwSv382XFxDW+X/GDEKX60Q1fAtR9zTIpJhM
-         8djWO89f1hWVM0TeG6r/4deNFmdCnqk8bq/HrHioBrNaeQs2RUCECU+Pd2SA/C7+sanl
-         +mTcMyq+zdUZWaQCS5+Y0pAXlpiGJpHohavue1y2+oCouW2ZF6ERLqFoVc+m3MmRHwX9
-         q0AgJ+kv2lpxitSc0V94DH/MV/KgxXHpivt2gaFqvazuOwldSyaVuQfs7cF1AZrkIIPG
-         lj2Q==
-X-Gm-Message-State: AOAM532/keOnAV9UGL6w/QcpQa8InNXU9AIvVbkcyOjf8DcZEr3KmiLi
-        yriyjyAjkiX4z4nAKf91NgQY2MZZpyg=
-X-Google-Smtp-Source: ABdhPJwE6No9Bivwck4+4hL9Zno2MWfpmoTPPyFo7ZA1whlIs0Ib1Og+raGgcZ8OcPSqH9vKhFS51A==
-X-Received: by 2002:a05:620a:424b:b0:67d:36cc:5afb with SMTP id w11-20020a05620a424b00b0067d36cc5afbmr5876252qko.598.1648799873270;
-        Fri, 01 Apr 2022 00:57:53 -0700 (PDT)
+        bh=iigF8mZf5i0ikBPqRgdRRkmmEgwTtaij4Ng6hfEOlCQ=;
+        b=DJP+gPmjnDzBWLRX2xxwKwabJG7hwjK3FiAehIw5mNeFxQmpycqrfv0XpoxHuNinoA
+         6FaCHp4hfpt7Q5IXulGS0O9qoGFMxkaTI2zo0p7baV1ElVkR7Ean7DD17TdWfsa63FBI
+         n9279B02KptnKLfTuWQ6vlgFutPBdqa+hJqUwIAUfwNt8McaC1aoOd0vKy6RsZL5whkb
+         F7z0ZUmOVTfH8OWgJiyKusuwwsgg2fLb7woylrj03FpYwFxfHOnF86M5Kk9fDTNNg7mU
+         R7wXiSN+Q6gvDJJexeTmmc/5DNAwNT3/jGvkwWF6qsgQI173B70KgRFAMWJ4Hi3lFZQ5
+         WIog==
+X-Gm-Message-State: AOAM532rdJ4geFybaMJFXoK8B9JbfMX8B6ZLlf6c5+J0+CV6VXWW/KN9
+        rjWpnh39NFobVwmivbhXQC0rYdAuCxk=
+X-Google-Smtp-Source: ABdhPJxngn1dIdK7Y2CsTXi9S2CvDhQnSZg9UI6fOapkkkuAr/xkbmo7jHaEEvp22b7sQqFhZN6RHg==
+X-Received: by 2002:a05:6214:c6a:b0:443:6a15:5888 with SMTP id t10-20020a0562140c6a00b004436a155888mr7313538qvj.20.1648800223945;
+        Fri, 01 Apr 2022 01:03:43 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id w17-20020ac857d1000000b002e19feda592sm1231557qta.85.2022.04.01.00.57.50
+        by smtp.gmail.com with ESMTPSA id w3-20020a05622a190300b002e1f084d84bsm1426120qtc.50.2022.04.01.01.03.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 00:57:52 -0700 (PDT)
+        Fri, 01 Apr 2022 01:03:43 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     gregkh@linuxfoundation.org
-Cc:     weiyongjun1@huawei.com, colin.king@intel.com, lv.ruyi@zte.com.cn,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] usb: ftdi-elan: Fix undefined behaviour
-Date:   Fri,  1 Apr 2022 07:57:47 +0000
-Message-Id: <20220401075747.2407536-1-lv.ruyi@zte.com.cn>
+To:     mailhol.vincent@wanadoo.fr
+Cc:     gregkh@linuxfoundation.org, lv.ruyi@zte.com.cn,
+        cai.huoqing@linux.dev, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] usb: host: replace zero-length array with flexible-array member
+Date:   Fri,  1 Apr 2022 08:03:37 +0000
+Message-Id: <20220401080337.2407622-1-lv.ruyi@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -71,49 +72,34 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-The use of zero-sized array causes undefined behaviour when it is not
-the last member in a structure. As it happens to be in this case.
+There is a regular need in the kernel to provide a way to declare
+having a dynamically sized set of trailing elements in a structure.
+Kernel code should always use “flexible array members”[1] for these
+cases. The older style of one-element or zero-length arrays should
+no longer be used[2].
 
-Also, the current code makes use of a language extension to the C90
-standard, but the preferred mechanism to declare variable-length
-types such as this one is a flexible array member, introduced in
-C99:
-
-struct foo {
-        int stuff;
-        struct boo array[];
-};
-
-By making use of the mechanism above, we will get a compiler warning
-in case the flexible array does not occur last. Which is beneficial
-to cultivate a high-quality code.
+[1] https://en.wikipedia.org/wiki/Flexible_array_member
+[2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
 ---
- drivers/usb/misc/ftdi-elan.c | 2 +-
+ drivers/usb/host/oxu210hp-hcd.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/misc/ftdi-elan.c b/drivers/usb/misc/ftdi-elan.c
-index 6c38c62d29b2..e818d2ed6831 100644
---- a/drivers/usb/misc/ftdi-elan.c
-+++ b/drivers/usb/misc/ftdi-elan.c
-@@ -171,7 +171,6 @@ struct usb_ftdi {
- 	struct delayed_work command_work;
- 	struct delayed_work respond_work;
- 	struct u132_platform_data platform_data;
--	struct resource resources[0];
- 	struct platform_device platform_dev;
- 	unsigned char *bulk_in_buffer;
- 	size_t bulk_in_size;
-@@ -185,6 +184,7 @@ struct usb_ftdi {
- 	int expected;
- 	int received;
- 	int ed_found;
-+	struct resource resources[];
- };
- #define kref_to_usb_ftdi(d) container_of(d, struct usb_ftdi, kref)
- #define platform_device_to_usb_ftdi(d) container_of(d, struct usb_ftdi, \
+diff --git a/drivers/usb/host/oxu210hp-hcd.c b/drivers/usb/host/oxu210hp-hcd.c
+index b741670525e3..86f92aadeb0e 100644
+--- a/drivers/usb/host/oxu210hp-hcd.c
++++ b/drivers/usb/host/oxu210hp-hcd.c
+@@ -169,7 +169,7 @@ struct ehci_regs {
+ #define FLAG_CF		(1<<0)		/* true: we'll support "high speed" */
+ 
+ 	/* PORTSC: offset 0x44 */
+-	u32		port_status[0];	/* up to N_PORTS */
++	u32		port_status[];	/* up to N_PORTS */
+ /* 31:23 reserved */
+ #define PORT_WKOC_E	(1<<22)		/* wake on overcurrent (enable) */
+ #define PORT_WKDISC_E	(1<<21)		/* wake on disconnect (enable) */
 -- 
 2.25.1
 
