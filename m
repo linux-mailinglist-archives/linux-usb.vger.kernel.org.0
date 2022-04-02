@@ -2,95 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D1F4F0496
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Apr 2022 17:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B2A4F065F
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Apr 2022 23:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357420AbiDBPtc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Apr 2022 11:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
+        id S230195AbiDBVOp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Apr 2022 17:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238316AbiDBPtb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Apr 2022 11:49:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D91177D35
-        for <linux-usb@vger.kernel.org>; Sat,  2 Apr 2022 08:47:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59016B80315
-        for <linux-usb@vger.kernel.org>; Sat,  2 Apr 2022 15:47:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 24009C340EE
-        for <linux-usb@vger.kernel.org>; Sat,  2 Apr 2022 15:47:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648914457;
-        bh=DcIP0udA6EkXhMiTE3qxcLXiahdOC856QCGt0Kq6eIk=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=u5ar6Hfgyr6qsQRG7j8ATPjhZnmhX6U+BU5k0LFzaHSaIneiio+SE5h9/0T3BxNDh
-         //V8qOr0Sj/sgbKxx5KEDKeY1Bx/tuIXZogr7xCJirtlxkTOGDxfq0lzFpICbwE4Pa
-         P4hEGTBsdUXyUOGsqI251C418eHuZ4KtxLXUBtODYoPGyz+KIacKmPfInoJBzy+O1l
-         +5Hgiznsfr7brreQh2ggDICWCBkFUbKIFL25bxgNY8oVk1vSoAnqYqfD2Qt1/s+IMn
-         fxPdZATICkO8ZOgSZfkoM9lXisUNEgvNc7rsa5SlCB9xmrW/X5EZ08CrUj1CXkJ4M3
-         p44B4ABGgjpEg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 0EA65C05FD5; Sat,  2 Apr 2022 15:47:37 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214875] USB 3.1 device cannot be detected
-Date:   Sat, 02 Apr 2022 15:47:36 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: tucci.michele@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: PATCH_ALREADY_AVAILABLE
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-214875-208809-JNPG5NmZzT@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214875-208809@https.bugzilla.kernel.org/>
-References: <bug-214875-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S230163AbiDBVOo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Apr 2022 17:14:44 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85A4BF2
+        for <linux-usb@vger.kernel.org>; Sat,  2 Apr 2022 14:12:51 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id c15so8235251ljr.9
+        for <linux-usb@vger.kernel.org>; Sat, 02 Apr 2022 14:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=/CsZAmpO0XrU711+MySx4TZ4692BiQKBX5G9tt8o2yQ=;
+        b=KSpCN5ImfnG9LJ1RmzLizAlndzuVcJwMUf1HHMH+waJuCQ74DYunKp+Idq3f1Ds6kz
+         jTAVy/E5VSQHWH4i5wk8SNh+koANAOjePjxbCF2BnNGF+xj7AM3bLQrUKzZTXSEAFak8
+         dszP5gUcJOBxRP196jyt9j8DwPu5/OIL9J4Vspiz81oBPMJvGttqFpLOZhWDbGqPcr+P
+         agXqkfVsJK0QnXdWI+vQpYyRtDkV7prC0exIroNy9yTnekr5ulkof6VvaiVdW+wJ5YcX
+         xj1ZwNCILwnLWa8eQCLVE1RsPc6LgozQmkcAReUGB/oxQfR7H6MAeEbkOjTYpTP4WIKd
+         LrWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=/CsZAmpO0XrU711+MySx4TZ4692BiQKBX5G9tt8o2yQ=;
+        b=5Cv8ADAEvNxJH3OgMRcRs+epm6tLR3wWOsYOGGnSkxtxZR0eBzCXRVv5q8k1vooCVL
+         OhdOChKAAQYj2Pk8iHHgD8X2K8rZuPAhUsiYv6hjwy95ooSIiS7zD9T6ojiIeqUv0vMb
+         uoQJ5BzVGPrepuM/zAgaAzuupuJGeaJIt2ecUwE6uT4OgDW5+LKcqEvSqMzSwO+T5uAz
+         FPivz1Ml0YLkhxS/EQ2YliHG4KRF0yb/vuQqOs5Jmcq0RIYHJczJItct3LO6osqG88pt
+         bPjzdR+9Ex4FrgZ3xxS0FeULtK6wmocpD4w8hY0OeQ8GB9Q1xLQlhch41Lmu6G/7kuMk
+         vpeQ==
+X-Gm-Message-State: AOAM533oanxC3jsKaZKAcCwtPb/3dygSd88tjvy1WE7e2aDnLteRIUVM
+        NJw931cDqBieBxpk2lTt0YzEd81H0c4=
+X-Google-Smtp-Source: ABdhPJyxroFiNdB2xFV2OJYNHyVAUFOqpflLPGbLz+sIbRs3wsW9MkT3ozOYZ06knQaruP8Z649BcA==
+X-Received: by 2002:a2e:a905:0:b0:24a:fed2:d12e with SMTP id j5-20020a2ea905000000b0024afed2d12emr7289683ljq.255.1648933969760;
+        Sat, 02 Apr 2022 14:12:49 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.79.7])
+        by smtp.gmail.com with ESMTPSA id v10-20020a2ea44a000000b002493831631csm598839ljn.14.2022.04.02.14.12.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 14:12:49 -0700 (PDT)
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Subject: Buffer overflow in drivers/usb/host/ehci-sched.c?
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Message-ID: <2f9e5b99-c527-9c54-7fd3-0f052be982dc@gmail.com>
+Date:   Sun, 3 Apr 2022 00:12:48 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214875
+Hello!
 
-Michele Tucci (tucci.michele@gmail.com) changed:
+   The following function in the EHCI scheduling code causes the SVACE static analyzer to
+report possible buffer overflow (see the last assignment below), e.g.:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |tucci.michele@gmail.com
+Buffer 'ehci->bandwidth' of size 64 accessed at ehci-sched.c:240 can overflow, since its
+index 'i + j' can have value 66 that is out of range, as indicated by preceding conditional
+expression at ehci-sched.c:240.
 
---- Comment #5 from Michele Tucci (tucci.michele@gmail.com) ---
-My USB 3 external hard drive cannot be detected after this fix.
+   I tried hard to analyze this code but couldn't quite figure out whether an overflow could
+actually happen... Maybe Alan (or Greg?) could please help me out?
 
-To get it working again, I restored to 10 (20ms) the value of
-desc->bPwrOn2PwrGood in drivers/usb/host/xhci-hub.c:347.
+static void reserve_release_intr_bandwidth(struct ehci_hcd *ehci,
+		struct ehci_qh *qh, int sign)
+{
+	unsigned		start_uf;
+	unsigned		i, j, m;
+	int			usecs = qh->ps.usecs;
+	int			c_usecs = qh->ps.c_usecs;
+	int			tt_usecs = qh->ps.tt_usecs;
+	struct ehci_tt		*tt;
 
-This is how the device looks like from lsusb:
-```
-Bus 004 Device 002: ID 174c:55aa ASMedia Technology Inc. ASM1051E ...
-```
+	if (qh->ps.phase == NO_FRAME)	/* Bandwidth wasn't reserved */
+		return;
+	start_uf = qh->ps.bw_phase << 3;
 
---=20
-You may reply to this email to add a comment.
+	bandwidth_dbg(ehci, sign, "intr", &qh->ps);
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+	if (sign < 0) {		/* Release bandwidth */
+		usecs = -usecs;
+		c_usecs = -c_usecs;
+		tt_usecs = -tt_usecs;
+	}
+
+	/* Entire transaction (high speed) or start-split (full/low speed) */
+	for (i = start_uf + qh->ps.phase_uf; i < EHCI_BANDWIDTH_SIZE;
+			i += qh->ps.bw_uperiod)
+		ehci->bandwidth[i] += usecs;
+
+	/* Complete-split (full/low speed) */
+	if (qh->ps.c_usecs) {
+		/* NOTE: adjustments needed for FSTN */
+		for (i = start_uf; i < EHCI_BANDWIDTH_SIZE;
+				i += qh->ps.bw_uperiod) {
+			for ((j = 2, m = 1 << (j+8)); j < 8; (++j, m <<= 1)) {
+				if (qh->ps.cs_mask & m)
+					ehci->bandwidth[i+j] += c_usecs;
+			}
+		}
+	}
+[...]
+
+   There shouldn't be a buffer overflow iff qh->ps.bw_uperiod is a multiple of 8, right?
+
+MBR, Sergey
