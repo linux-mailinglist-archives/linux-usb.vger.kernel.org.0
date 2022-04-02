@@ -2,114 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5952B4F030B
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Apr 2022 15:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D1F4F0496
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Apr 2022 17:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243460AbiDBNym (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Apr 2022 09:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
+        id S1357420AbiDBPtc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Apr 2022 11:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243383AbiDBNyl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Apr 2022 09:54:41 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id F3E4421240
-        for <linux-usb@vger.kernel.org>; Sat,  2 Apr 2022 06:52:49 -0700 (PDT)
-Received: (qmail 60900 invoked by uid 1000); 2 Apr 2022 09:52:49 -0400
-Date:   Sat, 2 Apr 2022 09:52:49 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: Re: [PATCH] usb: host: ohci-omap: Make it CCF clk API compatible
-Message-ID: <YkhVMQXdbAYr9A6E@rowland.harvard.edu>
-References: <20220402114353.130775-1-jmkrzyszt@gmail.com>
+        with ESMTP id S238316AbiDBPtb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Apr 2022 11:49:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D91177D35
+        for <linux-usb@vger.kernel.org>; Sat,  2 Apr 2022 08:47:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59016B80315
+        for <linux-usb@vger.kernel.org>; Sat,  2 Apr 2022 15:47:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 24009C340EE
+        for <linux-usb@vger.kernel.org>; Sat,  2 Apr 2022 15:47:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648914457;
+        bh=DcIP0udA6EkXhMiTE3qxcLXiahdOC856QCGt0Kq6eIk=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=u5ar6Hfgyr6qsQRG7j8ATPjhZnmhX6U+BU5k0LFzaHSaIneiio+SE5h9/0T3BxNDh
+         //V8qOr0Sj/sgbKxx5KEDKeY1Bx/tuIXZogr7xCJirtlxkTOGDxfq0lzFpICbwE4Pa
+         P4hEGTBsdUXyUOGsqI251C418eHuZ4KtxLXUBtODYoPGyz+KIacKmPfInoJBzy+O1l
+         +5Hgiznsfr7brreQh2ggDICWCBkFUbKIFL25bxgNY8oVk1vSoAnqYqfD2Qt1/s+IMn
+         fxPdZATICkO8ZOgSZfkoM9lXisUNEgvNc7rsa5SlCB9xmrW/X5EZ08CrUj1CXkJ4M3
+         p44B4ABGgjpEg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 0EA65C05FD5; Sat,  2 Apr 2022 15:47:37 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214875] USB 3.1 device cannot be detected
+Date:   Sat, 02 Apr 2022 15:47:36 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: blocking
+X-Bugzilla-Who: tucci.michele@gmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: PATCH_ALREADY_AVAILABLE
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-214875-208809-JNPG5NmZzT@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214875-208809@https.bugzilla.kernel.org/>
+References: <bug-214875-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220402114353.130775-1-jmkrzyszt@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Apr 02, 2022 at 01:43:53PM +0200, Janusz Krzysztofik wrote:
-> The driver, OMAP1 specific, now omits clk_prepare/unprepare() steps, not
-> supported by OMAP1 custom implementation of clock API.  However, non-CCF
-> stubs of those functions exist for use on such platforms until converted
-> to CCF.
-> 
-> Update the driver to be compatible with CCF implementation of clock API.
-> 
-> Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-> ---
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214875
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Michele Tucci (tucci.michele@gmail.com) changed:
 
->  drivers/usb/host/ohci-omap.c | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ohci-omap.c b/drivers/usb/host/ohci-omap.c
-> index 45dcf8292072..2ab2e089a2b7 100644
-> --- a/drivers/usb/host/ohci-omap.c
-> +++ b/drivers/usb/host/ohci-omap.c
-> @@ -281,6 +281,10 @@ static int ohci_hcd_omap_probe(struct platform_device *pdev)
->  		goto err_put_hcd;
->  	}
->  
-> +	retval = clk_prepare(priv->usb_host_ck);
-> +	if (retval)
-> +		goto err_put_host_ck;
-> +
->  	if (!cpu_is_omap15xx())
->  		priv->usb_dc_ck = clk_get(&pdev->dev, "usb_dc_ck");
->  	else
-> @@ -288,13 +292,17 @@ static int ohci_hcd_omap_probe(struct platform_device *pdev)
->  
->  	if (IS_ERR(priv->usb_dc_ck)) {
->  		retval = PTR_ERR(priv->usb_dc_ck);
-> -		goto err_put_host_ck;
-> +		goto err_unprepare_host_ck;
->  	}
->  
-> +	retval = clk_prepare(priv->usb_dc_ck);
-> +	if (retval)
-> +		goto err_put_dc_ck;
-> +
->  	if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len, hcd_name)) {
->  		dev_dbg(&pdev->dev, "request_mem_region failed\n");
->  		retval = -EBUSY;
-> -		goto err_put_dc_ck;
-> +		goto err_unprepare_dc_ck;
->  	}
->  
->  	hcd->regs = ioremap(hcd->rsrc_start, hcd->rsrc_len);
-> @@ -319,8 +327,12 @@ static int ohci_hcd_omap_probe(struct platform_device *pdev)
->  	iounmap(hcd->regs);
->  err2:
->  	release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
-> +err_unprepare_dc_ck:
-> +	clk_unprepare(priv->usb_dc_ck);
->  err_put_dc_ck:
->  	clk_put(priv->usb_dc_ck);
-> +err_unprepare_host_ck:
-> +	clk_unprepare(priv->usb_host_ck);
->  err_put_host_ck:
->  	clk_put(priv->usb_host_ck);
->  err_put_hcd:
-> @@ -355,7 +367,9 @@ static int ohci_hcd_omap_remove(struct platform_device *pdev)
->  	}
->  	iounmap(hcd->regs);
->  	release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
-> +	clk_unprepare(priv->usb_dc_ck);
->  	clk_put(priv->usb_dc_ck);
-> +	clk_unprepare(priv->usb_host_ck);
->  	clk_put(priv->usb_host_ck);
->  	usb_put_hcd(hcd);
->  	return 0;
-> -- 
-> 2.35.1
-> 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |tucci.michele@gmail.com
+
+--- Comment #5 from Michele Tucci (tucci.michele@gmail.com) ---
+My USB 3 external hard drive cannot be detected after this fix.
+
+To get it working again, I restored to 10 (20ms) the value of
+desc->bPwrOn2PwrGood in drivers/usb/host/xhci-hub.c:347.
+
+This is how the device looks like from lsusb:
+```
+Bus 004 Device 002: ID 174c:55aa ASMedia Technology Inc. ASM1051E ...
+```
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
