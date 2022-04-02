@@ -2,34 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416B34F02FF
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Apr 2022 15:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5952B4F030B
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Apr 2022 15:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237851AbiDBNw3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Apr 2022 09:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S243460AbiDBNym (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Apr 2022 09:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiDBNw3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Apr 2022 09:52:29 -0400
+        with ESMTP id S243383AbiDBNyl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Apr 2022 09:54:41 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1AE10315
-        for <linux-usb@vger.kernel.org>; Sat,  2 Apr 2022 06:50:37 -0700 (PDT)
-Received: (qmail 60854 invoked by uid 1000); 2 Apr 2022 09:50:36 -0400
-Date:   Sat, 2 Apr 2022 09:50:36 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id F3E4421240
+        for <linux-usb@vger.kernel.org>; Sat,  2 Apr 2022 06:52:49 -0700 (PDT)
+Received: (qmail 60900 invoked by uid 1000); 2 Apr 2022 09:52:49 -0400
+Date:   Sat, 2 Apr 2022 09:52:49 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Petr Janecek <janecek@ucw.cz>
-Cc:     alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
-Subject: Re: Apogee ONEv2 keeps resetting
-Message-ID: <YkhUrG6aa7MtSXiw@rowland.harvard.edu>
-References: <3f4d1bce-7459-9ea4-be73-9b51f569e526@ucw.cz>
- <YjoPVAxeKtY6aV1s@rowland.harvard.edu>
- <63b772ff-ef03-5f0a-c42c-ad9ec9770f16@ucw.cz>
- <YjyMkqk4zZWPJ6T0@rowland.harvard.edu>
- <20220402041824.GA26837@jkm>
+To:     Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: Re: [PATCH] usb: host: ohci-omap: Make it CCF clk API compatible
+Message-ID: <YkhVMQXdbAYr9A6E@rowland.harvard.edu>
+References: <20220402114353.130775-1-jmkrzyszt@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220402041824.GA26837@jkm>
+In-Reply-To: <20220402114353.130775-1-jmkrzyszt@gmail.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
@@ -39,35 +36,80 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Apr 02, 2022 at 06:18:26AM +0200, Petr Janecek wrote:
->   I've compared traces in linux to macos and windows, and
-> the only thing linux does that the others don't is something
-> like
+On Sat, Apr 02, 2022 at 01:43:53PM +0200, Janusz Krzysztofik wrote:
+> The driver, OMAP1 specific, now omits clk_prepare/unprepare() steps, not
+> supported by OMAP1 custom implementation of clock API.  However, non-CCF
+> stubs of those functions exist for use on such platforms until converted
+> to CCF.
 > 
-> usb_get_string(dev, 0, 0xee, &buf, 1024)
+> Update the driver to be compatible with CCF implementation of clock API.
 > 
-> like it's getting the microsoft os descriptor.
+> Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+> ---
 
-Exactly so.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
->   And the apogee does not like it: it's the only get
-> descriptor string request with empty string response.  When
-> the request is made the second time, it's the last request
-> before reset.
-
-That doesn't necessarily mean anything, of course.
-
->   This oddball request happens even with snd-usb-audio
-> disabled.  And I'm totally unable to find where it comes
-> from, I have not enabled anything like USB_GADGET.
-> How to get rid of it?
-
-It might not come from a kernel driver at all; it might come from a user 
-program via usbfs.  Try turning on usbfs snooping before you plug in the 
-device:
-
-	echo 1 >/sys/module/usbcore/parameters/usbfs_snoop
-
-and see what shows up in the kernel log.
-
-Alan Stern
+>  drivers/usb/host/ohci-omap.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ohci-omap.c b/drivers/usb/host/ohci-omap.c
+> index 45dcf8292072..2ab2e089a2b7 100644
+> --- a/drivers/usb/host/ohci-omap.c
+> +++ b/drivers/usb/host/ohci-omap.c
+> @@ -281,6 +281,10 @@ static int ohci_hcd_omap_probe(struct platform_device *pdev)
+>  		goto err_put_hcd;
+>  	}
+>  
+> +	retval = clk_prepare(priv->usb_host_ck);
+> +	if (retval)
+> +		goto err_put_host_ck;
+> +
+>  	if (!cpu_is_omap15xx())
+>  		priv->usb_dc_ck = clk_get(&pdev->dev, "usb_dc_ck");
+>  	else
+> @@ -288,13 +292,17 @@ static int ohci_hcd_omap_probe(struct platform_device *pdev)
+>  
+>  	if (IS_ERR(priv->usb_dc_ck)) {
+>  		retval = PTR_ERR(priv->usb_dc_ck);
+> -		goto err_put_host_ck;
+> +		goto err_unprepare_host_ck;
+>  	}
+>  
+> +	retval = clk_prepare(priv->usb_dc_ck);
+> +	if (retval)
+> +		goto err_put_dc_ck;
+> +
+>  	if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len, hcd_name)) {
+>  		dev_dbg(&pdev->dev, "request_mem_region failed\n");
+>  		retval = -EBUSY;
+> -		goto err_put_dc_ck;
+> +		goto err_unprepare_dc_ck;
+>  	}
+>  
+>  	hcd->regs = ioremap(hcd->rsrc_start, hcd->rsrc_len);
+> @@ -319,8 +327,12 @@ static int ohci_hcd_omap_probe(struct platform_device *pdev)
+>  	iounmap(hcd->regs);
+>  err2:
+>  	release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
+> +err_unprepare_dc_ck:
+> +	clk_unprepare(priv->usb_dc_ck);
+>  err_put_dc_ck:
+>  	clk_put(priv->usb_dc_ck);
+> +err_unprepare_host_ck:
+> +	clk_unprepare(priv->usb_host_ck);
+>  err_put_host_ck:
+>  	clk_put(priv->usb_host_ck);
+>  err_put_hcd:
+> @@ -355,7 +367,9 @@ static int ohci_hcd_omap_remove(struct platform_device *pdev)
+>  	}
+>  	iounmap(hcd->regs);
+>  	release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
+> +	clk_unprepare(priv->usb_dc_ck);
+>  	clk_put(priv->usb_dc_ck);
+> +	clk_unprepare(priv->usb_host_ck);
+>  	clk_put(priv->usb_host_ck);
+>  	usb_put_hcd(hcd);
+>  	return 0;
+> -- 
+> 2.35.1
+> 
