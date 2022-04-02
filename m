@@ -2,61 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CFE4F0073
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Apr 2022 12:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C09104F0105
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Apr 2022 13:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354274AbiDBKXd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Apr 2022 06:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
+        id S240572AbiDBL0Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Apr 2022 07:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240177AbiDBKXc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Apr 2022 06:23:32 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E5054F8B;
-        Sat,  2 Apr 2022 03:21:40 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KVtPG6CSfz9sSK;
-        Sat,  2 Apr 2022 12:21:38 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1wir2VXs-afR; Sat,  2 Apr 2022 12:21:38 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KVtPG5V6Yz9sQx;
-        Sat,  2 Apr 2022 12:21:38 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id AB4628B76D;
-        Sat,  2 Apr 2022 12:21:38 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id DFqm6iNAGvko; Sat,  2 Apr 2022 12:21:38 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.136])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 77F2A8B768;
-        Sat,  2 Apr 2022 12:21:38 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 232ALRkc685271
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sat, 2 Apr 2022 12:21:27 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 232ALQKN685270;
-        Sat, 2 Apr 2022 12:21:26 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH] usb: Prepare cleanup of powerpc's asm/prom.h
-Date:   Sat,  2 Apr 2022 12:21:25 +0200
-Message-Id: <d9193539d7d079d70fc3480afb1b413f4694ddd1.1648833420.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S237246AbiDBL0Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Apr 2022 07:26:24 -0400
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006001A488C;
+        Sat,  2 Apr 2022 04:24:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=piEcQKp69tsqp6f1AmqC7AayDxYUhW60pSCM0aWFEeo=; b=eIzu7
+        jixZN9WJBpZDw+WDPLuM9EnqlUhsdn2C2Jn/oMsVAfB5TpDbocqkJK2ctQ6QJCJA37lfB2Emg8UhD
+        r/n8OHlrEaqyKHkCVTVz0lAVZ+gLmVhikrF0oA+g2jJl4e1KUO7dRqhlRVSNqYRtYDAwU1GRjOxQg
+        pkoXvvf4McrSfcfenv4FfR/cbPQXhXsuRxpT5zF0mqqbfVo0MExPcZE65nFhW/mI/JUE3trHP/KSR
+        rue09fXK4Vgr1RxZKXo5HbwUYEID3sxJhhQVhbKQqei5uGjdr31m5gc8PCj/hksyAedXJAIA9vHh3
+        RSSu3l/Ezw++UBYulMEiZNCXapZfQ==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1nabrn-0007hO-Qf; Sat, 02 Apr 2022 12:24:27 +0100
+Date:   Sat, 2 Apr 2022 12:24:23 +0100
+From:   John Keeping <john@metanate.com>
+To:     Dan Vacura <w36195@motorola.com>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Carlos Bilbao <bilbao@vt.edu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2] usb: gadget: uvc: allow changing interface name via
+ configfs
+Message-ID: <YkgyZ6BrSX/7pDry@donbot>
+References: <20220401160447.5919-1-w36195@motorola.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648894884; l=1052; s=20211009; h=from:subject:message-id; bh=31qBNvYg+9teJ24W5JCdaymt7P+Q2V+l2RzRNV6PiWs=; b=8ERo7UwJqfGiph7yI/Wq51Gg9MGofLdd4F33xrx+24/3lb3yJRl4WSwKVY6nDwmMjy3LynPR5fEy Hqv+OjsYBvJ/TDR0+yIKsK5n8QGjYkX+JFQmuAuwUmxuSjw8QAH9
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220401160447.5919-1-w36195@motorola.com>
+X-Authenticated: YES
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,44 +59,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-powerpc's asm/prom.h brings some headers that it doesn't
-need itself.
+On Fri, Apr 01, 2022 at 11:04:45AM -0500, Dan Vacura wrote:
+> Add a configfs entry, "function_name", to change the iInterface field
+> for VideoControl. This name is used on host devices for user selection,
+> useful when multiple cameras are present. The default will remain "UVC
+> Camera".
 
-In order to clean it up, first add missing headers in
-users of asm/prom.h
+> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> index 71bb5e477dba..50e6e7a58b41 100644
+> --- a/drivers/usb/gadget/function/f_uvc.c
+> +++ b/drivers/usb/gadget/function/f_uvc.c
+> @@ -44,7 +44,7 @@ MODULE_PARM_DESC(trace, "Trace level bitmask");
+>  #define UVC_STRING_STREAMING_IDX		1
+>  
+>  static struct usb_string uvc_en_us_strings[] = {
+> -	[UVC_STRING_CONTROL_IDX].s = "UVC Camera",
+> +	/* [UVC_STRING_CONTROL_IDX].s = DYNAMIC, */
+>  	[UVC_STRING_STREAMING_IDX].s = "Video Streaming",
+>  	{  }
+>  };
+> @@ -676,6 +676,7 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+>  	uvc_hs_streaming_ep.bEndpointAddress = uvc->video.ep->address;
+>  	uvc_ss_streaming_ep.bEndpointAddress = uvc->video.ep->address;
+>  
+> +	uvc_en_us_strings[UVC_STRING_CONTROL_IDX].s = opts->function_name;
+>  	us = usb_gstrings_attach(cdev, uvc_function_strings,
+>  				 ARRAY_SIZE(uvc_en_us_strings));
+>  	if (IS_ERR(us)) {
+> @@ -866,6 +867,7 @@ static struct usb_function_instance *uvc_alloc_inst(void)
+>  
+>  	opts->streaming_interval = 1;
+>  	opts->streaming_maxpacket = 1024;
+> +	snprintf(opts->function_name, sizeof(opts->function_name), "UVC Camera");
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- drivers/usb/core/hcd-pci.c     | 1 -
- drivers/usb/host/ohci-ppc-of.c | 3 ---
- 2 files changed, 4 deletions(-)
+This only allows a single language to be specified.  I know that's what
+the existing string uses, but for other strings which can be set by
+userspace multiple languages are supported.
 
-diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-index 8176bc81a635..f192925f74f7 100644
---- a/drivers/usb/core/hcd-pci.c
-+++ b/drivers/usb/core/hcd-pci.c
-@@ -15,7 +15,6 @@
- #ifdef CONFIG_PPC_PMAC
- #include <asm/machdep.h>
- #include <asm/pmac_feature.h>
--#include <asm/prom.h>
- #endif
- 
- #include "usb.h"
-diff --git a/drivers/usb/host/ohci-ppc-of.c b/drivers/usb/host/ohci-ppc-of.c
-index 45f7cceb6df3..1960b8dfdba5 100644
---- a/drivers/usb/host/ohci-ppc-of.c
-+++ b/drivers/usb/host/ohci-ppc-of.c
-@@ -19,9 +19,6 @@
- #include <linux/of_irq.h>
- #include <linux/of_platform.h>
- 
--#include <asm/prom.h>
--
--
- static int
- ohci_ppc_of_start(struct usb_hcd *hcd)
- {
--- 
-2.35.1
-
+Should we be making USB_CONFIG_STRINGS_LANG more generic so that it can
+be used by functions as well as the core configfs code?
