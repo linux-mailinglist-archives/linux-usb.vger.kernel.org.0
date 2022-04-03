@@ -2,45 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8EC4F087B
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Apr 2022 10:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B5E4F089F
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Apr 2022 12:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344807AbiDCIwo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 3 Apr 2022 04:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
+        id S236393AbiDCKBP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 3 Apr 2022 06:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbiDCIwn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Apr 2022 04:52:43 -0400
-Received: from mxout03.lancloud.ru (mxout03.lancloud.ru [45.84.86.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CDDB7C2;
-        Sun,  3 Apr 2022 01:50:47 -0700 (PDT)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru B6B542093D12
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH] usb: Prepare cleanup of powerpc's asm/prom.h
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <d9193539d7d079d70fc3480afb1b413f4694ddd1.1648833420.git.christophe.leroy@csgroup.eu>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <86bf7aa0-cfcd-33f3-30c5-a944883325b3@omp.ru>
-Date:   Sun, 3 Apr 2022 11:50:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S235300AbiDCKBO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Apr 2022 06:01:14 -0400
+Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E556AA1BF
+        for <linux-usb@vger.kernel.org>; Sun,  3 Apr 2022 02:59:19 -0700 (PDT)
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id ax0vnFTWQRGzQax0vnw6b6; Sun, 03 Apr 2022 11:59:18 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 03 Apr 2022 11:59:18 +0200
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH] usb: misc: eud: Fix an error handling path in eud_probe()
+Date:   Sun,  3 Apr 2022 11:59:15 +0200
+Message-Id: <362908699275ecec078381b42d87c817c6965fc6.1648979948.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <d9193539d7d079d70fc3480afb1b413f4694ddd1.1648833420.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,49 +44,46 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+It is odd to call devm_add_action_or_reset() before calling the function
+that should be undone.
 
-On 4/2/22 1:21 PM, Christophe Leroy wrote:
+Either, the "_or_reset" part should be omitted, or the action should be
+recorded after the resources have been allocated.
 
-> powerpc's asm/prom.h brings some headers that it doesn't
-> need itself.
-> 
-> In order to clean it up, first add missing headers in
-> users of asm/prom.h
+Switch the order of devm_add_action_or_reset() and usb_role_switch_get().
 
-   I'm not seeing any headers added in this patch?
+Fixes: 9a1bf58ccd44 ("usb: misc: eud: Add driver support for Embedded USB Debugger(EUD)")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/usb/misc/qcom_eud.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  drivers/usb/core/hcd-pci.c     | 1 -
->  drivers/usb/host/ohci-ppc-of.c | 3 ---
->  2 files changed, 4 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-> index 8176bc81a635..f192925f74f7 100644
-> --- a/drivers/usb/core/hcd-pci.c
-> +++ b/drivers/usb/core/hcd-pci.c
-> @@ -15,7 +15,6 @@
->  #ifdef CONFIG_PPC_PMAC
->  #include <asm/machdep.h>
->  #include <asm/pmac_feature.h>
-> -#include <asm/prom.h>
->  #endif
->  
->  #include "usb.h"
-> diff --git a/drivers/usb/host/ohci-ppc-of.c b/drivers/usb/host/ohci-ppc-of.c
-> index 45f7cceb6df3..1960b8dfdba5 100644
-> --- a/drivers/usb/host/ohci-ppc-of.c
-> +++ b/drivers/usb/host/ohci-ppc-of.c
-> @@ -19,9 +19,6 @@
->  #include <linux/of_irq.h>
->  #include <linux/of_platform.h>
->  
-> -#include <asm/prom.h>
-> -
-> -
->  static int
->  ohci_ppc_of_start(struct usb_hcd *hcd)
->  {
+diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+index f929bffdc5d1..b7f13df00764 100644
+--- a/drivers/usb/misc/qcom_eud.c
++++ b/drivers/usb/misc/qcom_eud.c
+@@ -186,16 +186,16 @@ static int eud_probe(struct platform_device *pdev)
+ 
+ 	chip->dev = &pdev->dev;
+ 
+-	ret = devm_add_action_or_reset(chip->dev, eud_role_switch_release, chip);
+-	if (ret)
+-		return dev_err_probe(chip->dev, ret,
+-				"failed to add role switch release action\n");
+-
+ 	chip->role_sw = usb_role_switch_get(&pdev->dev);
+ 	if (IS_ERR(chip->role_sw))
+ 		return dev_err_probe(chip->dev, PTR_ERR(chip->role_sw),
+ 					"failed to get role switch\n");
+ 
++	ret = devm_add_action_or_reset(chip->dev, eud_role_switch_release, chip);
++	if (ret)
++		return dev_err_probe(chip->dev, ret,
++				"failed to add role switch release action\n");
++
+ 	chip->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(chip->base))
+ 		return PTR_ERR(chip->base);
+-- 
+2.32.0
 
-MBR, Sergey
