@@ -2,209 +2,295 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1694F10A2
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Apr 2022 10:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E55524F10D9
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Apr 2022 10:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239533AbiDDISU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Apr 2022 04:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42608 "EHLO
+        id S1347686AbiDDI1n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Apr 2022 04:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237518AbiDDISR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Apr 2022 04:18:17 -0400
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EA13B3ED
-        for <linux-usb@vger.kernel.org>; Mon,  4 Apr 2022 01:16:19 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:6d4d:d9ec:3c70:7c2c])
-        by baptiste.telenet-ops.be with bizsmtp
-        id EYG82700R40M8zK01YG8cT; Mon, 04 Apr 2022 10:16:17 +0200
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nbHse-0089Aj-Eu; Mon, 04 Apr 2022 10:16:08 +0200
-Date:   Mon, 4 Apr 2022 10:16:08 +0200 (CEST)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     linux-kernel@vger.kernel.org
-cc:     linux-m68k@lists.linux-m68k.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        linux-rdma@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-xfs@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-s390@vger.kernel.org
-Subject: Re: Build regressions/improvements in v5.18-rc1
-In-Reply-To: <20220404074734.1092959-1-geert@linux-m68k.org>
-Message-ID: <alpine.DEB.2.22.394.2204041006230.1941618@ramsan.of.borg>
-References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com> <20220404074734.1092959-1-geert@linux-m68k.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        with ESMTP id S235878AbiDDI1l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Apr 2022 04:27:41 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D740A31201;
+        Mon,  4 Apr 2022 01:25:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649060745; x=1680596745;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=aSR5l3IacGuxHAxGjVGKEnKGeES5l9D7h/qyvZtNVOA=;
+  b=Wpm/t81a6JD8tJePopto5fLP1H646lcCmNjZQrOum5fMFd9U4lpZLCH1
+   fS2Cs+jhjOBBMxgZ3JQrRRMnLmpr5joydXfC9cZkJczHUY+eUR2qh0n/N
+   6EZJlqo406Tcm0AC7UMY9IanxMK3rtwwej6nTNQO9Mi5T9+xJQWTJ09bA
+   w=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 04 Apr 2022 01:25:43 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 01:25:27 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 4 Apr 2022 01:25:26 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 4 Apr 2022 01:25:20 -0700
+Date:   Mon, 4 Apr 2022 13:55:16 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Doug Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_kriskura@quicinc.com>
+Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
+ XHCI_SKIP_PHY_INIT
+Message-ID: <20220404082516.GE29680@hu-pkondeti-hyd.qualcomm.com>
+References: <1648103831-12347-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com>
+ <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
+ <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
+ <Yj2nPa6/Y01P5aCY@kuha.fi.intel.com>
+ <4619c75c-cd34-82f2-56e1-a8bcb6d97177@linux.intel.com>
+ <Yj3h4p/kmZTvMz0O@kuha.fi.intel.com>
+ <fae54b27-9ae2-ecfc-69ae-40e5f5e1afbe@quicinc.com>
+ <bd694ef9-be57-79f1-e95e-5501c396be25@linux.intel.com>
+ <YkWNpTLjh2weX9Mk@kuha.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YkWNpTLjh2weX9Mk@kuha.fi.intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 4 Apr 2022, Geert Uytterhoeven wrote:
-> Below is the list of build error/warning regressions/improvements in
-> v5.18-rc1[1] compared to v5.17[2].
->
-> Summarized:
->  - build errors: +36/-15
->  - build warnings: +5/-38
->
-> Happy fixing! ;-)
->
-> Thanks to the linux-next team for providing the build service.
->
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/3123109284176b1532874591f7c81f3837bbdc17/ (all 96 configs)
-> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/f443e374ae131c168a065ea1748feac6b2e76613/ (all 96 configs)
->
->
-> *** ERRORS ***
->
-> 36 error regressions:
->  + /kisskb/src/arch/m68k/include/asm/bitops.h: error: array subscript 2 is above array bounds of 'long unsigned int[1]' [-Werror=array-bounds]:  => 329:20
+Hi Heikki,
 
-m68k-gcc8/m68k-allmodconfig (assumed gcc8 bug)
+On Thu, Mar 31, 2022 at 02:16:53PM +0300, Heikki Krogerus wrote:
+> On Wed, Mar 30, 2022 at 08:47:34PM +0300, Mathias Nyman wrote:
+> > On 29.3.2022 12.18, Sandeep Maheswaram (Temp) wrote:
+> > > Hi Mathias,Heikki
+> > > 
+> > > On 3/25/2022 9:08 PM, Heikki Krogerus wrote:
+> > >> On Fri, Mar 25, 2022 at 04:33:27PM +0200, Mathias Nyman wrote:
+> > >>> On 25.3.2022 13.27, Heikki Krogerus wrote:
+> > >>>> On Fri, Mar 25, 2022 at 12:36:22AM +0200, Mathias Nyman wrote:
+> > >>>>> On 24.3.2022 14.27, Heikki Krogerus wrote:
+> > >>>>>> On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
+> > >>>>>>> Currently the phy init is done from dwc3 and also xhci which makes the
+> > >>>>>>> runtime_usage value 2 for the phy which causes issue during runtime
+> > >>>>>>> suspend. When we run the below command the runtime_status still shows
+> > >>>>>>> active.
+> > >>>>>>> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
+> > >>>>>>>
+> > >>>>>>> dwc3 manages PHY by own DRD driver, so skip the management by
+> > >>>>>>> HCD core by setting this quirk.
+> > >>>>>>>
+> > >>>>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > >>>>>>> ---
+> > >>>>>>>   drivers/usb/dwc3/host.c | 13 +++++++++++++
+> > >>>>>>>   1 file changed, 13 insertions(+)
+> > >>>>>>>
+> > >>>>>>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> > >>>>>>> index eda8719..d4fcf06 100644
+> > >>>>>>> --- a/drivers/usb/dwc3/host.c
+> > >>>>>>> +++ b/drivers/usb/dwc3/host.c
+> > >>>>>>> @@ -13,6 +13,12 @@
+> > >>>>>>>   #include <linux/platform_device.h>
+> > >>>>>>>     #include "core.h"
+> > >>>>>>> +#include <linux/usb/xhci-plat.h>
+> > >>>>>>> +#include <linux/usb/xhci-quirks.h>
+> > >>>>>>> +
+> > >>>>>>> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
+> > >>>>>>> +    .quirks = XHCI_SKIP_PHY_INIT,
+> > >>>>>>> +};
+> > >>>>>>>     static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+> > >>>>>>>                       int irq, char *name)
+> > >>>>>>> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
+> > >>>>>>>           }
+> > >>>>>>>       }
+> > >>>>>>>   +    ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
+> > >>>>>>> +            sizeof(xhci_plat_dwc3_xhci));
+> > >>>>>>> +    if (ret) {
+> > >>>>>>> +        dev_err(dwc->dev, "failed to add data to xHCI\n");
+> > >>>>>>> +        goto err;
+> > >>>>>>> +    }
+> > >>>>>>> +
+> > >>>>>>>       ret = platform_device_add(xhci);
+> > >>>>>>>       if (ret) {
+> > >>>>>>>           dev_err(dwc->dev, "failed to register xHCI device\n");
+> > >>>>>> I think you should just use device property:
+> > >>>>>>
+> > >>>>> This was suggested in an earlier series, but was rejected as it also added
+> > >>>>> the property as a device tree parameter.
+> > >>>>>
+> > >>>>> I think adding more device properties can be messy in the long run, especially if we
+> > >>>>> need to add them for many of the existing xhci quirks.
+> > >>>>> We also end up with a mix where some device properties are listed as device tree
+> > >>>>> parameters, and some not.
+> > >>>>>
+> > >>>>> Defining xhci quirks and platform data structure in headers shared with dwc3 and cdns3
+> > >>>>> allow those drivers to easily set any existing xhci quirk, or other possible optional
+> > >>>>> callbacks.
+> > >>>>>
+> > >>>>> cdns3 driver is already doing this, but it includes the full xhci.h header.
+> > >>>>> This series cleans up that a bit so cdns3 will only include xhci quirk bits and
+> > >>>>> platform data structure.
+> > >>>>>
+> > >>>>> On the downside we add a couple xhci related header files to include/linux/usb/
+> > >>>>> Let me know if you see any other issues I missed with this approach.
+> > >>>> The problem here is that these drivers are now coupled together, and
+> > >>>> that should not be taken lightly. We have a dependency hell in our
+> > >>>> hands with a lot of drivers, and the culprit is always platform data.
+> > >>>>
+> > >>>> Build-in device properties may be messy, but I would still say they
+> > >>>> are less messy than those quirk flags - you got to admit, they are a
+> > >>>> mess. The benefit from build-in properties is in any case the fact
+> > >>>> that they remove the need to couple these drivers together.
+> > >>> Agree, quirk bits are messy. Any suggestion that would work with
+> > >>> PCI xHCI devices, devicetree, and "pure" platform devices?
+> > >> I think xHCI driver should always be able to rely on being able to
+> > >> read this kind of information from the fwnode. If there is no actual
+> > >> firmware node (DT or ACPI), or if it's missing some information, the
+> > >> glue driver needs to populate software node for the xHCI.
+> > >>
+> > >> Right now I just want to avoid having to pass the quirks using
+> > >> platform data from drivers such as drivers/usb/cdns3/host.c and
+> > >> drivers/usb/dwc3/host.c to xHCI.
+> > >>
+> > >> One way we could do that is by defining compatibility ID for both of
+> > >> them that we provide using a single device property (like I guess DT
+> > >> does). Then based on that compatibility ID, xhci-plat.c can set the
+> > >> actual "static" quirk flags. That we could already do easily. How
+> > >> would that sound to you?
+> > 
+> > Sounds good. 
+> > 
+> > > 
+> > > This was my previous patch where I was using device tree property. Should we go ahead with this approach?
+> > > 
+> > > https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/
+> > > 
+> > > Any further changes to this ?
+> > 
+> > By dropping the DT part of that series we get a similar built-in device property
+> > solution as Heikki initially suggested.
+> > 
+> > How about adding the compatibility ID device property that was just suggested?
+> > Then matching the Id in xhci-plat.c against a static table containing Ids and
+> > xhci_plat_priv structures, with the needed quirks for dwc3.
+> 
+> There was a comment from Pavan. Is it still possible to get this
+> detail from DT?
+> I guess that would still be ideal, right?
+> 
+I was suggesting if we can have device tree param like the patch sandeep
+pointed out.
 
->  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: .cfi_endproc without corresponding .cfi_startproc:  => 32
->  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: bad or irreducible absolute expression:  => 16
->  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: junk at end of line, first unrecognized character is `:':  => 16
->  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `be 0x100(%sr2,%r0)':  => 29
->  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `ldi 0,%r20':  => 30
->  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `ldw 0(%sp),%r31':  => 26
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ble 0x100(%sr2,%r0)':  => 51, 46
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 0,%r25':  => 44
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 1,%r25':  => 49
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 173,%r20':  => 45, 50
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.callinfo':  => 40
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.entry':  => 41
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.exit':  => 54
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.proc':  => 39
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.procend':  => 55
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.stringz':  => 76
+How would adding a compatible index to usb_xhci_of_match[] would work
+actually? I ask this because, dwc3/host.c creates platform device and
+it is not associated with any of_node, so of_driver_match_device() called
+from platform bus match method does not work. one way to achieve this would
+be by matching against sysdev. Something like below. Is it acceptible?
 
-parisc64-gcc8/generic-64bit_defconfig
-parisc-gcc8/generic-32bit_defconfig
-parisc-gcc8/parisc-allmodconfig
-parisc-gcc8/parisc-allnoconfig
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 649ffd8..bd5d055 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -126,6 +126,10 @@ static const struct xhci_plat_priv xhci_plat_brcm = {
+ 	.quirks = XHCI_RESET_ON_RESUME,
+ };
+ 
++static const struct xhci_plat_priv xhci_plat_dwc3 = {
++	.quirks = XHCI_SKIP_PHY_INIT,
++};
++
+ static const struct of_device_id usb_xhci_of_match[] = {
+ 	{
+ 		.compatible = "generic-xhci",
+@@ -167,6 +171,9 @@ static const struct of_device_id usb_xhci_of_match[] = {
+ 	}, {
+ 		.compatible = "brcm,bcm7445-xhci",
+ 		.data = &xhci_plat_brcm,
++	}, {
++		.compatible = "snps,dwc3",
++		.data = &xhci_plat_dwc3,
+ 	},
+ 	{},
+ };
+@@ -274,6 +281,15 @@ static int xhci_plat_probe(struct platform_device *pdev)
+ 	else
+ 		priv_match = dev_get_platdata(&pdev->dev);
+ 
++	/* allow private data mapping with the sysdev compatible */
++	if (!priv_match) {
++		struct of_device_id *match;
++
++		match = of_match_device(usb_xhci_of_match, sysdev);
++		if (match)
++			priv_match = match->data;
++	}
++
+ 	if (priv_match) {
+ 		priv = hcd_to_xhci_priv(hcd);
+ 		/* Just copy data for now */
 
->  + /kisskb/src/arch/sparc/kernel/irq_32.c: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]:  => 262:14, 261:46, 259:14, 258:14, 263:14
+> I have another question. Can't we now just assume that if the sysdev
+> is the parent (or grandparent), then the phy initialization should
+> always be skipped? In that case we could just do something like this:
+> 
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index 649ffd861b44e..1018b33488046 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -212,8 +212,12 @@ static int xhci_plat_probe(struct platform_device *pdev)
+>  #endif
+>         }
+>  
+> -       if (!sysdev)
+> +       if (sysdev) {
+> +               if (sysdev != &pdev->dev)
+> +                       hcd->skip_phy_initialization = 1;
+> +       } else {
+>                 sysdev = &pdev->dev;
+> +       }
+>  
+>         if (WARN_ON(!sysdev->dma_mask))
+>                 /* Platform did not initialize dma_mask */
+> 
+> 
+> I did not go through all the drivers that carefully, so I may have
+> missed something, but it looks like the only drivers that can have the
+> sysdev as the parent or grandparent are cdns3 and dwc3.
+> 
+I cross checked and these are two drivers that are creating xhci-plat device.
+So this patch would definitely work. However I am not sure in future if any
+device created via device tree would want to use this feature. For now,
+it looks good. It Mathias, Do you see any problem with this approach?
 
-sparc64-gcc11/sparc-allmodconfig
-
->  + /kisskb/src/drivers/gpu/drm/r128/r128_cce.c: error: case label does not reduce to an integer constant:  => 417:2, 418:2
-
-arm64-gcc5.4/arm64-allmodconfig
-mipsel/mips-allmodconfig
-powerpc-gcc5/powerpc-allmodconfig
-powerpc-gcc5/powerpc-allyesconfig
-powerpc-gcc5/ppc32_allmodconfig
-powerpc-gcc5/ppc64_book3e_allmodconfig
-powerpc-gcc5/ppc64le_allmodconfig
-
->  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function):  => 149:37
->  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor':  => 149:22
->  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]:  => 150:1
->  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size':  => 88:22
->  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]:  => 89:1
->  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]:  => 100:2
-
-um-x86_64/um-allmodconfig
-um-x86_64/um-allyesconfig
-
->  + /kisskb/src/drivers/media/platform/nxp/imx-pxp.h: error: initializer element is not constant:  => 582:38
-
-arm64-gcc5.4/arm64-allmodconfig
-powerpc-gcc5/powerpc-allmodconfig
-
->  + /kisskb/src/drivers/misc/habanalabs/common/memory.c: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]:  => 153:49, 153:7
-
-mipsel/mips-allmodconfig
-mips-gcc8/mips-allmodconfig
-sparc64/sparc-allmodconfig
-xtensa-gcc11/xtensa-allmodconfig
-
->  + /kisskb/src/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c: error: case label does not reduce to an integer constant:  => 4917:4
->  + /kisskb/src/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c: error: case label does not reduce to an integer constant:  => 3798:2, 3809:2
-
-arm64-gcc5.4/arm64-allmodconfig
-powerpc-gcc5/powerpc-allmodconfig
-powerpc-gcc5/ppc64_book3e_allmodconfig
-
->  + /kisskb/src/drivers/scsi/aacraid/commsup.c: error: case label does not reduce to an integer constant:  => 1983:2
-
-arm64-gcc5.4/arm64-allmodconfig
-powerpc-gcc5/powerpc-allmodconfig
-powerpc-gcc5/ppc64_book3e_allmodconfig
-powerpc-gcc5/ppc64le_allmodconfig
-
->  + /kisskb/src/drivers/tty/serial/mpc52xx_uart.c: error: initialization from incompatible pointer type [-Werror=incompatible-pointer-types]:  => 1004:12, 1005:12, 1006:14, 970:12, 968:16, 971:14, 969:12, 1002:16, 1003:16, 967:16
-
-powerpc-gcc5/ppc32_allmodconfig
-
->  + /kisskb/src/drivers/usb/typec/tcpm/tcpm.c: error: case label does not reduce to an integer constant:  => 4724:3
-
-arm64-gcc5.4/arm64-allmodconfig
-powerpc-gcc5/powerpc-allmodconfig
-powerpc-gcc5/ppc64_book3e_allmodconfig
-
->  + /kisskb/src/fs/xfs/xfs_buf.h: error: initializer element is not constant:  => 46:23
->  + /kisskb/src/sound/usb/midi.c: error: case label does not reduce to an integer constant:  => 1389:2
-
-arm64-gcc5.4/arm64-allmodconfig
-mipsel/mips-allmodconfig
-powerpc-gcc5/powerpc-allmodconfig
-powerpc-gcc5/powerpc-allyesconfig
-powerpc-gcc5/ppc32_allmodconfig
-powerpc-gcc5/ppc64_book3e_allmodconfig
-powerpc-gcc5/ppc64le_allmodconfig
-
->  + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_402' declared with attribute error: FIELD_PREP: mask is not constant:  => 352:38
->  + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_404' declared with attribute error: FIELD_PREP: mask is not constant:  => 352:38
-
-powerpc-gcc5/powerpc-allmodconfig
-
-
-> *** WARNINGS ***
->
-> 5 warning regressions:
->  + /kisskb/src/arch/m68k/include/asm/string.h: warning: '__builtin_memset' offset [0, 11] is out of the bounds [0, 0] [-Warray-bounds]:  => 68:25
-
-m68k-gcc11/sun3_defconfig
-
->  + /kisskb/src/arch/s390/kernel/machine_kexec.c: warning: 'memcpy' offset [0, 511] is out of the bounds [0, 0] [-Warray-bounds]:  => 57:9
-
-s390x-gcc11/s390-defconfig
-
->  + /kisskb/src/drivers/net/ethernet/i825xx/sun3_82586.c: warning: array subscript 1 is above array bounds of 'volatile struct transmit_cmd_struct *[1]' [-Warray-bounds]:  => 989:108, 989:122
-
-m68k-gcc11/sun3_defconfig
-m68k-gcc8/sun3_defconfig
-
->  + /kisskb/src/drivers/scsi/mpt3sas/mpt3sas_base.c: warning: array subscript 'Mpi2SasIOUnitPage1_t {aka struct _MPI2_CONFIG_PAGE_SASIOUNIT_1}[0]' is partly outside array bounds of 'unsigned char[20]' [-Warray-bounds]:  => 5400:40, 5403:43, 5396:40
-
-powerpc-gcc11/skiroot_defconfig
-
->  + modpost: WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation failed, symbol will not be versioned.:  => N/A
-
-sparc64-gcc11/sparc64-defconfig
-sparc64/sparc64-defconfig
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+Thanks,
+Pavan
