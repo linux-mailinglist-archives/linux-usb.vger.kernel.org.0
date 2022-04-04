@@ -2,136 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EDD4F1E10
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Apr 2022 00:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E504F1F2E
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Apr 2022 00:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233411AbiDDWXp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Apr 2022 18:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S229883AbiDDWg6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Apr 2022 18:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350452AbiDDWUp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Apr 2022 18:20:45 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2082.outbound.protection.outlook.com [40.107.102.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7471960FC;
-        Mon,  4 Apr 2022 14:47:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NiA73asseRJd+OAe+SvVOHkQM/yz2mwi1HJwbQqnRrXM/CaMI/ktj4mZVRWGTfPFMKKmZNgxx9189DaQyfHM3GQdogumrIqSCvF+lH18ZhT7Oynk86V0koI+IO0s/CxJizw0RsuMGpGkC1dbf6QFwTk7AO0IZVB3TqN8tGDbQRByHKqCBqC08b2Ye1l5dxfEgiSSfi7/COdmFhZUwvx8W3u3zQQvv9q8Ps77zkGu5QVaNbkoVYzXPPklPZgpnM6GpZ+PqBmJJX8CWlA/Z7wGzp+V0L77k8pD6brAXxzvxHymhISQM1JD380r/bjSXdYJQT1gO6LCWXtRxal7MZtvGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XMR4xWlYy//KFYEx4oDnOTHb6xFhYDBioq8yF6mfED0=;
- b=Ahrjh89PjoBHPQGSIQ3ua9KtH9QpsKX/YzVnEOxMxWv60N7kNZAm9XEOdX2swBwmJzkbt4TEoGgHtnLkvqT9s2eo472jYPta8FnfxfUUbwbRaWu+lJ5zMtbXRRg2Od0dRD77Ng4L9+c8MytjrxrvdKnhKsqa8yE/VlxmIa4pAJVu/cSI9gq5TDfn4VTyBq2Hp99KYTGOFhqbCUVWlxZofBt/tlNYcyVw2dmKhZxcuogt77XvGBBm3hxrxM060VsBvSRPk9933/JwedtvlBvjhkqIJ2piTKt7F8fxj6MBalThRqjmkuuSplGunW/HbfcOzFFfoZmOYRhiz5ZK0FtqKQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XMR4xWlYy//KFYEx4oDnOTHb6xFhYDBioq8yF6mfED0=;
- b=Hzu/kXoKRz30mqfJIbBDFRLnQbQRhAh4/SeqlBMHvTR1DZBzqGpJDnHdWyFJNPsaG5IZCrONLxZbp2esXye1/10RAH3xMwSw0o6KkDKl0ubTAB5bZZaNH1zIPu2hpMCFOZ4aV3ls9Cl6U/JLULyVa3xmAJZGMf88zDl9Hr89dpg=
-Received: from BN6PR16CA0008.namprd16.prod.outlook.com (2603:10b6:404:f5::18)
- by CH0PR12MB5074.namprd12.prod.outlook.com (2603:10b6:610:e1::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Mon, 4 Apr
- 2022 21:47:11 +0000
-Received: from BN8NAM11FT057.eop-nam11.prod.protection.outlook.com
- (2603:10b6:404:f5:cafe::1d) by BN6PR16CA0008.outlook.office365.com
- (2603:10b6:404:f5::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31 via Frontend
- Transport; Mon, 4 Apr 2022 21:47:11 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT057.mail.protection.outlook.com (10.13.177.49) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5123.19 via Frontend Transport; Mon, 4 Apr 2022 21:47:11 +0000
-Received: from doryam3r2rack03-34.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 4 Apr 2022 16:47:10 -0500
-From:   Richard Gong <richard.gong@amd.com>
-To:     <jikos@kernel.org>, <benjamin.tissoires@redhat.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mario.limonciello@amd.com>,
-        <amit.bhutani@amd.com>, <richard.gong@amd.com>
-Subject: [PATCH] HID: usbhid: set mouse as a wakeup resource
-Date:   Mon, 4 Apr 2022 16:45:57 -0500
-Message-ID: <20220404214557.3329796-1-richard.gong@amd.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S235927AbiDDWen (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Apr 2022 18:34:43 -0400
+Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE65541B9;
+        Mon,  4 Apr 2022 14:52:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
+        s=Selector; t=1649109158; i=@motorola.com;
+        bh=FC1k8RXkwsdD29iqlfP9VRrjSDl1IA59BmUkMvuR3So=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=DmiZ9Z/qOz36dBP3mupQj/+M+0S4TTv5JA2vt7F4+cpsl+xyG0/LPSKueiUZeuEs3
+         7tmgbqlN6XOSuQbX7geToECPjK4rYINOa0oPGpeMvEZCfHEXp3rY6z6iPhQBGicXV8
+         0GV9XUUWwJK2Q1gQ4LhWWEWmg7UNW15A7Inaztd/Cg/yrRWnB+Yl680gv965YGOexk
+         8WUpjY6bypKkQ3yvSc68gox9MJK2vJYzkyKBgFpfKlPueCdxDCiOON6oOqZwBKuO0+
+         GW11kIZNg3kWmOxmwifx5Yqv0EyD7ZC9fJ0xXm9WeKx0Y3WdsmBew/gN13HPayeTSE
+         hhm6e4JR4CiZA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpmleJIrShJLcpLzFFi42LJePFEQndphne
+  SweFuLYtjbU/YLeZsjrZ4cqCd0aJ58Xo2i/ebprBadE5cwm6xsG0Ji8XlXXPYLBYta2W2eDj7
+  KqPF2zvTWRy4PWZ3zGT12LxCy2PTqk42j/1z17B7LO6bzOqxacotVo/Pm+Q8Dm1/wxbAEcWam
+  ZeUX5HAmrGr/QZrwSWhiiN397A3MN7n72Lk4hASmMIkcfZ5JxOEs5BJ4vStNcxdjJwcLAIqEu
+  sfLGEEsdkE1CQWvF4FFhcBiv+708IGYjML/GeS6P7oAmILC4RKzJw8CayeV0BZYs+Rw+wgtpB
+  AkMTbs72sEHFBiZMzn7BA9GpJ3Pj3EmgxB5AtLbH8HwdImBNo1dMdN9knMPLOQtIxC0nHLISO
+  BYzMqxitk4oy0zNKchMzc3QNDQx0DQ1NdM1MdQ0tDfUSq3QT9UqLdVMTi0t0jfQSy4v1UouL9
+  Yorc5NzUvTyUks2MQLjI6XIcf8Oxp2rfuodYpTkYFIS5T3j6p0kxJeUn1KZkVicEV9UmpNafI
+  hRhoNDSYI3JBUoJ1iUmp5akZaZA4xVmLQEB4+SCK+4I1Cat7ggMbc4Mx0idYpRl+PSoSt7mYV
+  Y8vLzUqXEebvSgYoEQIoySvPgRsDSxiVGWSlhXkYGBgYhnoLUotzMElT5V4ziHIxKwrxbQKbw
+  ZOaVwG16BXQEE9AR7854ghxRkoiQkmpgUivyznzVsljaIyt+U6aTwi27D4dWf818fqClf8nFZ
+  7smr7nsHlClG+H2Y+H+3Ec7rCZ9mCfO/P1anryxw564+tmHUy9f4rq57rkcw+Vb3LsnZB36b/
+  6EpWTKUntWyXL38MkLmmf+aWedG6g5Td/FxFSt8Pa3ZEeO13+W8QldfvSB8fzjGzmvXT5533B
+  evcdYIbrUVlOVu+HVl4/bGgQn/z2i+qM9UFmUbUMnS3K8Svl/MQ77YBPjy8tOfdJPWNz29Jnp
+  envl88Kffj1y+Wf+9fne3B9hdvOPVSjbq8ufE5P8tkFiAgtT8TmF82rmyT9MDVIPl5StacxZ2
+  L3shIkyd2+7UfVMvngfg8/dXziPKLEUZyQaajEXFScCAGWVNMWWAwAA
+X-Env-Sender: w36195@motorola.com
+X-Msg-Ref: server-5.tower-715.messagelabs.com!1649109157!2020!1
+X-Originating-IP: [104.232.228.24]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.85.5; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 30282 invoked from network); 4 Apr 2022 21:52:37 -0000
+Received: from unknown (HELO va32lpfpp04.lenovo.com) (104.232.228.24)
+  by server-5.tower-715.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 4 Apr 2022 21:52:37 -0000
+Received: from ilclmmrp02.lenovo.com (ilclmmrp02.mot.com [100.65.83.26])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by va32lpfpp04.lenovo.com (Postfix) with ESMTPS id 4KXPdd24JKzgMXh;
+        Mon,  4 Apr 2022 21:52:37 +0000 (UTC)
+Received: from p1g3 (unknown [10.45.5.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: w36195)
+        by ilclmmrp02.lenovo.com (Postfix) with ESMTPSA id 4KXPdc6bglzbrlP;
+        Mon,  4 Apr 2022 21:52:36 +0000 (UTC)
+Date:   Mon, 4 Apr 2022 16:52:35 -0500
+From:   Dan Vacura <w36195@motorola.com>
+To:     John Keeping <john@metanate.com>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Carlos Bilbao <bilbao@vt.edu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2] usb: gadget: uvc: allow changing interface name via
+ configfs
+Message-ID: <YktoowtOyRcCBLOb@p1g3>
+References: <20220401160447.5919-1-w36195@motorola.com>
+ <YkgyZ6BrSX/7pDry@donbot>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f4529ae9-744e-482d-312c-08da1684acc7
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5074:EE_
-X-Microsoft-Antispam-PRVS: <CH0PR12MB507456B04F3DC5822E62A38D95E59@CH0PR12MB5074.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2ButYMtxmQUStKbsSp307bimMuC6En89VqNaWVsmPygaihYtT8hmpWZK3kgH86zCCDV/DjWnD2bNCejRENqvxOITPBYJlpE1epJ454VujLAUkVkAH1JN930xGVLy4G41W9BlFJ+dXO3glFO+nUtD/QxvfhutEqcloEgDtQutzG5r+h8vKKhCDyNA3NCumymUxKnYRkUvMG+LoJ1ToOl0w1KfXJGRxwbNHHzZZ6HnGCHVU8ly654LxaA/SiDCYy7iqmB4jdJBNKbpY8LeiBNahTHK4MQ0uwtI7ZWq97GVbfoiJ7Me7SQbtb5BinIcjp1xsbreUyw3Yh+kEjGn3h8MLEhK3BZvwrG4nEZeewAQFblZzZUjoElj5oao08umUmNp2QTPRpSwTWDDX7f/lDbUilr4DT0Z6qLaKbs28NxY3zlskJce3ZQ++4T2p6D4bM1iy6WnAK0zg7J18Z2HAbC+lN0koqwY6wwGwMP3OcI9/8n+aYjoOIObE7D+KUU0iYMjr7Ht+WzgtZ7YfKllIvsJmmVXNpgbVJT9s63eZagI9NxVJGhLcHzJvMam6TR6e5cWbCTU8EArYRAJF0TMwOS2g3LNevKh08PWeAR+htGdbJMtLIzNL7GceqrMpeCkVfqiCVRu+60V5jBZPxwrYOxq/+s2D6p34iXF4G1CBjNN70h41n1yFPNRQJ9s61E6r32Ql9MOzy3+B4RS03iesLEC0Q==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(36860700001)(40460700003)(86362001)(47076005)(82310400004)(356005)(81166007)(44832011)(5660300002)(7696005)(6666004)(16526019)(186003)(26005)(8936002)(110136005)(4326008)(8676002)(316002)(70206006)(1076003)(54906003)(508600001)(70586007)(2616005)(36756003)(83380400001)(426003)(336012)(2906002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2022 21:47:11.5794
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4529ae9-744e-482d-312c-08da1684acc7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT057.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5074
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkgyZ6BrSX/7pDry@donbot>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB HID transport layer doesn't set mouse as a wakeup resource by default
-so user can't wake system from s0i3 using wired USB mouse. However, users
-can wake the same system from s0i3 with the same wired USB mouse
-on Windows.
+On Sat, Apr 02, 2022 at 12:24:23PM +0100, John Keeping wrote:
+> On Fri, Apr 01, 2022 at 11:04:45AM -0500, Dan Vacura wrote:
+> > Add a configfs entry, "function_name", to change the iInterface field
+> > for VideoControl. This name is used on host devices for user selection,
+> > useful when multiple cameras are present. The default will remain "UVC
+> > Camera".
+> 
+> > diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> > index 71bb5e477dba..50e6e7a58b41 100644
+> > --- a/drivers/usb/gadget/function/f_uvc.c
+> > +++ b/drivers/usb/gadget/function/f_uvc.c
+> > @@ -44,7 +44,7 @@ MODULE_PARM_DESC(trace, "Trace level bitmask");
+> >  #define UVC_STRING_STREAMING_IDX		1
+> >  
+> >  static struct usb_string uvc_en_us_strings[] = {
+> > -	[UVC_STRING_CONTROL_IDX].s = "UVC Camera",
+> > +	/* [UVC_STRING_CONTROL_IDX].s = DYNAMIC, */
+> >  	[UVC_STRING_STREAMING_IDX].s = "Video Streaming",
+> >  	{  }
+> >  };
+> > @@ -676,6 +676,7 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+> >  	uvc_hs_streaming_ep.bEndpointAddress = uvc->video.ep->address;
+> >  	uvc_ss_streaming_ep.bEndpointAddress = uvc->video.ep->address;
+> >  
+> > +	uvc_en_us_strings[UVC_STRING_CONTROL_IDX].s = opts->function_name;
+> >  	us = usb_gstrings_attach(cdev, uvc_function_strings,
+> >  				 ARRAY_SIZE(uvc_en_us_strings));
+> >  	if (IS_ERR(us)) {
+> > @@ -866,6 +867,7 @@ static struct usb_function_instance *uvc_alloc_inst(void)
+> >  
+> >  	opts->streaming_interval = 1;
+> >  	opts->streaming_maxpacket = 1024;
+> > +	snprintf(opts->function_name, sizeof(opts->function_name), "UVC Camera");
+> 
+> This only allows a single language to be specified.  I know that's what
+> the existing string uses, but for other strings which can be set by
+> userspace multiple languages are supported.
+> 
+> Should we be making USB_CONFIG_STRINGS_LANG more generic so that it can
+> be used by functions as well as the core configfs code?
 
-To work around this wakeup issue on Linux, the user must manually enable
-wakeup via the following command:
-	echo enabled > /sys/bus/usb/device/*/power/wakeup
-
-The mouse is set to wake resource by default to ensure the same behavior
-across operating systems.
-
-Signed-off-by: Richard Gong <richard.gong@amd.com>
----
- drivers/hid/usbhid/hid-core.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index 54752c85604b..571dded02b3d 100644
---- a/drivers/hid/usbhid/hid-core.c
-+++ b/drivers/hid/usbhid/hid-core.c
-@@ -1183,8 +1183,10 @@ static int usbhid_start(struct hid_device *hid)
- 	 * devices supporting the boot protocol.
- 	 */
- 	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT &&
--			interface->desc.bInterfaceProtocol ==
--				USB_INTERFACE_PROTOCOL_KEYBOARD) {
-+			((interface->desc.bInterfaceProtocol ==
-+				USB_INTERFACE_PROTOCOL_KEYBOARD)
-+			|| (interface->desc.bInterfaceProtocol ==
-+				USB_INTERFACE_PROTOCOL_MOUSE))) {
- 		usbhid_set_leds(hid);
- 		device_set_wakeup_enable(&dev->dev, 1);
- 	}
--- 
-2.25.1
+Agree that adding support for more than one language would be ideal.
+Looking through the gadget functions, most seem to be hardcoded to en-us
+locale and don't provide a way to change the exposed names. Recently
+this was just accepted, which I modeled my change after:
+https://lore.kernel.org/all/20220122112446.1415547-2-t123yh.xyz@gmail.com/
+so at least making USB_CONFIG_STRINGS_LANG more generic would benefit
+the uac and uvc gadgets.
 
