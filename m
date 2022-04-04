@@ -2,132 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5912C4F1587
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Apr 2022 15:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA574F15C9
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Apr 2022 15:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348539AbiDDNKC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Apr 2022 09:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
+        id S1350573AbiDDNYa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Apr 2022 09:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbiDDNKA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Apr 2022 09:10:00 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B82233A1C
-        for <linux-usb@vger.kernel.org>; Mon,  4 Apr 2022 06:08:01 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nbMR5-00046a-JX; Mon, 04 Apr 2022 15:07:59 +0200
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nbMR4-0001kk-U2; Mon, 04 Apr 2022 15:07:58 +0200
-Date:   Mon, 4 Apr 2022 15:07:58 +0200
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     balbi@kernel.org, paul.elder@ideasonboard.com,
-        kieran.bingham@ideasonboard.com, nicolas@ndufresne.ca,
-        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de
-Subject: Re: [PATCH 5/5] usb: gadget: uvc: stop the pump on more conditions
-Message-ID: <20220404130758.GB6952@pengutronix.de>
-References: <20220402233914.3625405-1-m.grzeschik@pengutronix.de>
- <20220402233914.3625405-6-m.grzeschik@pengutronix.de>
+        with ESMTP id S241154AbiDDNY3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Apr 2022 09:24:29 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B433DA68;
+        Mon,  4 Apr 2022 06:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649078553; x=1680614553;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Brz0s4RVmiMzt+dQ6G1J1x2m39pVMxu2cjfDv6ZP0GY=;
+  b=V8uuSgVueNzgtiss+RJHWC9yRUETh8f3X8B1BGXy3dDQn0cARQUDqKf0
+   OiaMBVK3CD1j5bi06k9BQCBYwyb5A+iNK5vsMUzk2YrOrLaa6+yox0j5h
+   89esj7ZRGL5HXlKE8/phfGKg5SiFKN6LqOiyP1QYbbSZH0Hu0vzNP42Pt
+   4wOCb22pVzjHY6GcAaNGfhBmdUdB0aKuMDqrEbn5PGYLnPgfgMPPmN3TT
+   dXKJNoJldE4tPxzBmsTPXu6qKjE0ydzAVYa8dyR8UBn+LiV+Pf7dI4Isl
+   nirmhReLgDEMpLKzK6W/LOmzoPtOmhbAJFUDcVThBb6eHpCkW6x6RnqYi
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="285461893"
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="285461893"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 06:22:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="696568285"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 04 Apr 2022 06:22:25 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 04 Apr 2022 16:22:25 +0300
+Date:   Mon, 4 Apr 2022 16:22:25 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
+        Angus Ainslie <angus@akkea.ca>,
+        Hector Martin <marcan@marcan.st>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-kernel@vger.kernel.org, kernel@puri.sm
+Subject: Re: [PATCH 1/7] usb: typec: tipd: Only update power status on IRQ
+Message-ID: <YkrxEU8nZxkY8txk@kuha.fi.intel.com>
+References: <20220317154518.4082046-1-sebastian.krzyszkowiak@puri.sm>
+ <20220317154518.4082046-2-sebastian.krzyszkowiak@puri.sm>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eAbsdosE1cNLO4uF"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220402233914.3625405-6-m.grzeschik@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 15:04:43 up 5 days,  1:34, 69 users,  load average: 0.14, 0.23, 0.18
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220317154518.4082046-2-sebastian.krzyszkowiak@puri.sm>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, Mar 17, 2022 at 04:45:12PM +0100, Sebastian Krzyszkowiak wrote:
+> From: Guido Günther <agx@sigxcpu.org>
+> 
+> Instead of refetching power status cache it and only update it when a
+> change is signalled via irq. This simplifies tracing and adding more
+> supply properties in follow up patches.
+> 
+> Signed-off-by: Guido Günther <agx@sigxcpu.org>
+> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
 
---eAbsdosE1cNLO4uF
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-I think we can skip this patch for now, since it is depending on this serie=
-s:
+> ---
+>  drivers/usb/typec/tipd/core.c | 32 ++++++++++++--------------------
+>  1 file changed, 12 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 16b4560216ba..dfbba5ae9487 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -93,6 +93,8 @@ struct tps6598x {
+>  	struct power_supply *psy;
+>  	struct power_supply_desc psy_desc;
+>  	enum power_supply_usb_type usb_type;
+> +
+> +	u16 pwr_status;
+>  };
+>  
+>  static enum power_supply_property tps6598x_psy_props[] = {
+> @@ -230,17 +232,12 @@ static int tps6598x_connect(struct tps6598x *tps, u32 status)
+>  {
+>  	struct typec_partner_desc desc;
+>  	enum typec_pwr_opmode mode;
+> -	u16 pwr_status;
+>  	int ret;
+>  
+>  	if (tps->partner)
+>  		return 0;
+>  
+> -	ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &pwr_status);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	mode = TPS_POWER_STATUS_PWROPMODE(pwr_status);
+> +	mode = TPS_POWER_STATUS_PWROPMODE(tps->pwr_status);
+>  
+>  	desc.usb_pd = mode == TYPEC_PWR_MODE_PD;
+>  	desc.accessory = TYPEC_ACCESSORY_NONE; /* XXX: handle accessories */
+> @@ -455,6 +452,7 @@ static bool tps6598x_read_power_status(struct tps6598x *tps)
+>  		dev_err(tps->dev, "failed to read power status: %d\n", ret);
+>  		return false;
+>  	}
+> +	tps->pwr_status = pwr_status;
+>  	trace_tps6598x_power_status(pwr_status);
+>  
+>  	return true;
+> @@ -601,15 +599,8 @@ static const struct regmap_config tps6598x_regmap_config = {
+>  static int tps6598x_psy_get_online(struct tps6598x *tps,
+>  				   union power_supply_propval *val)
+>  {
+> -	int ret;
+> -	u16 pwr_status;
+> -
+> -	ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &pwr_status);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	if (TPS_POWER_STATUS_CONNECTION(pwr_status) &&
+> -	    TPS_POWER_STATUS_SOURCESINK(pwr_status)) {
+> +	if (TPS_POWER_STATUS_CONNECTION(tps->pwr_status) &&
+> +	    TPS_POWER_STATUS_SOURCESINK(tps->pwr_status)) {
+>  		val->intval = 1;
+>  	} else {
+>  		val->intval = 0;
+> @@ -622,15 +613,11 @@ static int tps6598x_psy_get_prop(struct power_supply *psy,
+>  				 union power_supply_propval *val)
+>  {
+>  	struct tps6598x *tps = power_supply_get_drvdata(psy);
+> -	u16 pwr_status;
+>  	int ret = 0;
+>  
+>  	switch (psp) {
+>  	case POWER_SUPPLY_PROP_USB_TYPE:
+> -		ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &pwr_status);
+> -		if (ret < 0)
+> -			return ret;
+> -		if (TPS_POWER_STATUS_PWROPMODE(pwr_status) == TYPEC_PWR_MODE_PD)
+> +		if (TPS_POWER_STATUS_PWROPMODE(tps->pwr_status) == TYPEC_PWR_MODE_PD)
+>  			val->intval = POWER_SUPPLY_USB_TYPE_PD;
+>  		else
+>  			val->intval = POWER_SUPPLY_USB_TYPE_C;
+> @@ -837,6 +824,11 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	fwnode_handle_put(fwnode);
+>  
+>  	if (status & TPS_STATUS_PLUG_PRESENT) {
+> +		ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &tps->pwr_status);
+> +		if (ret < 0) {
+> +			dev_err(tps->dev, "failed to read power status: %d\n", ret);
+> +			goto err_role_put;
+> +		}
+>  		ret = tps6598x_connect(tps, status);
+>  		if (ret)
+>  			dev_err(&client->dev, "failed to register partner\n");
+> -- 
+> 2.35.1
 
-https://lore.kernel.org/linux-usb/20220315143356.3919911-1-m.grzeschik@peng=
-utronix.de/
-
-The other Patches of this series have no dependencies.
-
-Michael
-
-On Sun, Apr 03, 2022 at 01:39:14AM +0200, Michael Grzeschik wrote:
->While looping in the pump, there are more conditions to stop handling
->requests. The streamoff event that will disable the endpoint and
->the vb2_queue is called early. We add the variables into account.
->
->Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->---
-> drivers/usb/gadget/function/uvc_video.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/=
-function/uvc_video.c
->index 8b3116d48d2bd8..b1d7083d07846e 100644
->--- a/drivers/usb/gadget/function/uvc_video.c
->+++ b/drivers/usb/gadget/function/uvc_video.c
->@@ -368,7 +368,7 @@ static void uvcg_video_pump(struct work_struct *work)
-> 	unsigned long flags;
-> 	int ret;
->
->-	while (video->ep->enabled) {
->+	while (video->ep->enabled || queue->queue.streaming || video->uvc->strea=
-mon) {
-> 		/* Retrieve the first available USB request, protected by the
-> 		 * request lock.
-> 		 */
->--=20
->2.30.2
->
->
->
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---eAbsdosE1cNLO4uF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmJK7asACgkQC+njFXoe
-LGRQ5Q/8Cm4PUW2EHt9RPC/v7IDDAqbyo65A8aruaTdUiddk/29BnD3lpbjHswWe
-ANgrr5TBHCIR5RsdOwo9BHc5Tr9CWa251tdoUCu9IhlyMLknYnzGtuKUovWFK8TC
-G/bFDdBH/xfsLTaNRzJDggvTXtdyM3ZLDAcamreQqL2qdtb1EiSoaWUVCbZQhC7g
-GYO2W8ZP/hCPxZ3hpPVCiKg0004UduKGYfoD3n0zFIVTe7KRh0XlpcLSZIbzGk5V
-z9uSstrIrnXw23ZqpFsZRejRlOZo1n7DY5imfey4AT0NXwYWsyhjdHeWaxYBcf+2
-QOa12SLZ+IQ1SytxiGzZqxkPIsDK4o2RGsop3tWCMDHTtY8RLGO2QHfVXU7/HCnx
-cIpJdcpqTX4H0xw6e67eZwub8dpQIBR6KmGu0OaZXafg1fLO9OZBei+9TMidyr1/
-pnfanJZXzYD7LyYUuDIXt1ZLZtoS38Fuwpx+i3qKkJGszJZkB3f6M+7/MD4/HIbf
-zvwYDI5X2+BqeJs+1fuDzHpkmmUAmOylzXUF25xqLg08QMw63ggjMo7yTBrP3oOj
-vAHtwyLYTx/0oerhPiNW8JK/h739GytdiozDIADdyd0xskFNxy0bV3/4+GAUmgUu
-4Znq0wG1BYDgYbiRRW9xF4cnLr/sDt6ieCacDK/h5jjYiVV6t8Q=
-=5P8J
------END PGP SIGNATURE-----
-
---eAbsdosE1cNLO4uF--
+-- 
+heikki
