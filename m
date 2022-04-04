@@ -2,108 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D50194F16BF
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Apr 2022 16:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DA74F17AD
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Apr 2022 16:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376856AbiDDOGv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Apr 2022 10:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55960 "EHLO
+        id S1378270AbiDDO6B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Apr 2022 10:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354650AbiDDOGt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Apr 2022 10:06:49 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB24227CDF;
-        Mon,  4 Apr 2022 07:04:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649081092; x=1680617092;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LsWFLHLl25IGPmvMSnceiEs7ypxsKRsANc2aGAvqfWI=;
-  b=mWd7UYMZKcjKDqVT94qku7szgAZnXRzU1B7JeQryFjbYFzyCzYbOSx6+
-   ikV5C5GWrfP1hfaECeu12QbASwZQh0cb7vUND+gRo1wQX5g5edDgT2ubG
-   rtvL+T81mpIeE+S8sQXWw3PMJXnD0rQtFA9PX+rxEKG0yR0RfQH/5zmW+
-   6lZigTt8kapO4H7G8c49nQBfVRXx4OHA6QePnM3gB9hpcEkoUeLiMFk5A
-   iJSWEaVWOpGlynF1R1wGM9jKSGUA0ezrGf+LFYZrE4xqJe3xLON/DaBxY
-   vD/lev/dDThJorEQFnEukl4cBwjjkLDOK7XR8Qqj/y5OhBaPQkCJyEJ67
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="240457523"
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="240457523"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 07:04:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="696578362"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 04 Apr 2022 07:04:49 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 04 Apr 2022 17:04:48 +0300
-Date:   Mon, 4 Apr 2022 17:04:48 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
-        Angus Ainslie <angus@akkea.ca>,
-        Hector Martin <marcan@marcan.st>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-kernel@vger.kernel.org, kernel@puri.sm
-Subject: Re: [PATCH 7/7] usb: typec: tipd: Fail probe when the controller is
- in BOOT mode
-Message-ID: <Ykr7ABCxR9ocVozc@kuha.fi.intel.com>
-References: <20220317154518.4082046-1-sebastian.krzyszkowiak@puri.sm>
- <20220317154518.4082046-8-sebastian.krzyszkowiak@puri.sm>
+        with ESMTP id S1378115AbiDDO6A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Apr 2022 10:58:00 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C694217044;
+        Mon,  4 Apr 2022 07:56:04 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 169781F44CDC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649084163;
+        bh=L53ghdeLUWVQzV2A3ZJW1vrW7GualNW/UOaTx+cxwGc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=G64xZBO+iYwNgp1QUxsfrqodzBDNqX27J415NbYquxbYvI0GghMuCpBRIke5XlCSt
+         57m7fD99GFJAan7qJ09f6Ih4AZvUIzITKpNd/uOCTtJWmEnkGlp2m653BIEwucjjIf
+         g8IoGHT6tlQmlBJAheW21CbhtWVS95Qs84aTxLeomYG5WO/9jM/O7SQ6YWC/FHDMdB
+         9F5GKaWFfoeWuFzUe0EQex+viItxcKfMSte0igad3e1QCY552D8JI0KmAXIN/mWE30
+         zbh6OAJQilOtmDzbhRIWDj55hyFGlh67cdZXLGz8Lrjxkowr1IMW4S6Ah4ymp2iQH0
+         Dv/WjoMPSMcXg==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     b-liu@ti.com
+Cc:     gregkh@linuxfoundation.org, matthias.bgg@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH] usb: musb: mediatek: Use clk_bulk API to simplify clock operations
+Date:   Mon,  4 Apr 2022 16:55:58 +0200
+Message-Id: <20220404145558.93340-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220317154518.4082046-8-sebastian.krzyszkowiak@puri.sm>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 04:45:18PM +0100, Sebastian Krzyszkowiak wrote:
-> BOOT mode means that the device isn't operational because of missing
-> firmware, so there's no reason to try to continue in this condition
-> (probe will fail in a different place anyway).
-> 
-> Aside of that, the warning that used to be emited about "dead-battery
-> condition" was misleading, as dead-battery condition is a different
-> thing that's unrelated to operation mode.
-> 
-> Therefore, assume that BOOT mode is not a supported mode of operation.
-> 
-> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+This driver uses three clocks and there's no special handling, they're
+either enabled or disabled sequentially: migrate to the clk_bulk API
+to simplify clock handling.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+This patch brings no functional changes.
 
-> ---
->  drivers/usb/typec/tipd/core.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index d3c70aaf1a0c..c818cc40139d 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -729,8 +729,6 @@ static int tps6598x_check_mode(struct tps6598x *tps)
->  	case TPS_MODE_APP:
->  		return 0;
->  	case TPS_MODE_BOOT:
-> -		dev_warn(tps->dev, "dead-battery condition\n");
-> -		return 0;
->  	case TPS_MODE_BIST:
->  	case TPS_MODE_DISC:
->  	default:
-> -- 
-> 2.35.1
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/usb/musb/mediatek.c | 73 +++++--------------------------------
+ 1 file changed, 10 insertions(+), 63 deletions(-)
 
-thanks,
-
+diff --git a/drivers/usb/musb/mediatek.c b/drivers/usb/musb/mediatek.c
+index 1aeb34dbe24f..cad991380b0c 100644
+--- a/drivers/usb/musb/mediatek.c
++++ b/drivers/usb/musb/mediatek.c
+@@ -36,6 +36,8 @@
+ #define DMA_INTR_STATUS_MSK	GENMASK(7, 0)
+ #define DMA_INTR_UNMASK_SET_MSK	GENMASK(31, 24)
+ 
++#define MTK_MUSB_CLKS_NUM	3
++
+ struct mtk_glue {
+ 	struct device *dev;
+ 	struct musb *musb;
+@@ -44,9 +46,7 @@ struct mtk_glue {
+ 	struct phy *phy;
+ 	struct usb_phy *xceiv;
+ 	enum phy_mode phy_mode;
+-	struct clk *main;
+-	struct clk *mcu;
+-	struct clk *univpll;
++	struct clk_bulk_data clks[MTK_MUSB_CLKS_NUM];
+ 	enum usb_role role;
+ 	struct usb_role_switch *role_sw;
+ };
+@@ -55,64 +55,11 @@ static int mtk_musb_clks_get(struct mtk_glue *glue)
+ {
+ 	struct device *dev = glue->dev;
+ 
+-	glue->main = devm_clk_get(dev, "main");
+-	if (IS_ERR(glue->main)) {
+-		dev_err(dev, "fail to get main clock\n");
+-		return PTR_ERR(glue->main);
+-	}
+-
+-	glue->mcu = devm_clk_get(dev, "mcu");
+-	if (IS_ERR(glue->mcu)) {
+-		dev_err(dev, "fail to get mcu clock\n");
+-		return PTR_ERR(glue->mcu);
+-	}
+-
+-	glue->univpll = devm_clk_get(dev, "univpll");
+-	if (IS_ERR(glue->univpll)) {
+-		dev_err(dev, "fail to get univpll clock\n");
+-		return PTR_ERR(glue->univpll);
+-	}
+-
+-	return 0;
+-}
++	glue->clks[0].id = "main";
++	glue->clks[1].id = "mcu";
++	glue->clks[2].id = "univpll";
+ 
+-static int mtk_musb_clks_enable(struct mtk_glue *glue)
+-{
+-	int ret;
+-
+-	ret = clk_prepare_enable(glue->main);
+-	if (ret) {
+-		dev_err(glue->dev, "failed to enable main clock\n");
+-		goto err_main_clk;
+-	}
+-
+-	ret = clk_prepare_enable(glue->mcu);
+-	if (ret) {
+-		dev_err(glue->dev, "failed to enable mcu clock\n");
+-		goto err_mcu_clk;
+-	}
+-
+-	ret = clk_prepare_enable(glue->univpll);
+-	if (ret) {
+-		dev_err(glue->dev, "failed to enable univpll clock\n");
+-		goto err_univpll_clk;
+-	}
+-
+-	return 0;
+-
+-err_univpll_clk:
+-	clk_disable_unprepare(glue->mcu);
+-err_mcu_clk:
+-	clk_disable_unprepare(glue->main);
+-err_main_clk:
+-	return ret;
+-}
+-
+-static void mtk_musb_clks_disable(struct mtk_glue *glue)
+-{
+-	clk_disable_unprepare(glue->univpll);
+-	clk_disable_unprepare(glue->mcu);
+-	clk_disable_unprepare(glue->main);
++	return devm_clk_bulk_get(dev, MTK_MUSB_CLKS_NUM, glue->clks);
+ }
+ 
+ static int mtk_otg_switch_set(struct mtk_glue *glue, enum usb_role role)
+@@ -390,7 +337,7 @@ static int mtk_musb_exit(struct musb *musb)
+ 	mtk_otg_switch_exit(glue);
+ 	phy_power_off(glue->phy);
+ 	phy_exit(glue->phy);
+-	mtk_musb_clks_disable(glue);
++	clk_bulk_disable_unprepare(MTK_MUSB_CLKS_NUM, glue->clks);
+ 
+ 	pm_runtime_put_sync(dev);
+ 	pm_runtime_disable(dev);
+@@ -528,7 +475,7 @@ static int mtk_musb_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(dev);
+ 	pm_runtime_get_sync(dev);
+ 
+-	ret = mtk_musb_clks_enable(glue);
++	ret = clk_bulk_prepare_enable(MTK_MUSB_CLKS_NUM, glue->clks);
+ 	if (ret)
+ 		goto err_enable_clk;
+ 
+@@ -551,7 +498,7 @@ static int mtk_musb_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ err_device_register:
+-	mtk_musb_clks_disable(glue);
++	clk_bulk_disable_unprepare(MTK_MUSB_CLKS_NUM, glue->clks);
+ err_enable_clk:
+ 	pm_runtime_put_sync(dev);
+ 	pm_runtime_disable(dev);
 -- 
-heikki
+2.35.1
+
