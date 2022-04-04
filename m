@@ -2,85 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55524F10D9
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Apr 2022 10:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5174F10F4
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Apr 2022 10:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347686AbiDDI1n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Apr 2022 04:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
+        id S238341AbiDDIcS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Apr 2022 04:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235878AbiDDI1l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Apr 2022 04:27:41 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D740A31201;
-        Mon,  4 Apr 2022 01:25:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649060745; x=1680596745;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=aSR5l3IacGuxHAxGjVGKEnKGeES5l9D7h/qyvZtNVOA=;
-  b=Wpm/t81a6JD8tJePopto5fLP1H646lcCmNjZQrOum5fMFd9U4lpZLCH1
-   fS2Cs+jhjOBBMxgZ3JQrRRMnLmpr5joydXfC9cZkJczHUY+eUR2qh0n/N
-   6EZJlqo406Tcm0AC7UMY9IanxMK3rtwwej6nTNQO9Mi5T9+xJQWTJ09bA
-   w=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 04 Apr 2022 01:25:43 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 01:25:27 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 4 Apr 2022 01:25:26 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 4 Apr 2022 01:25:20 -0700
-Date:   Mon, 4 Apr 2022 13:55:16 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Doug Anderson" <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_kriskura@quicinc.com>
-Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
- XHCI_SKIP_PHY_INIT
-Message-ID: <20220404082516.GE29680@hu-pkondeti-hyd.qualcomm.com>
-References: <1648103831-12347-1-git-send-email-quic_c_sanm@quicinc.com>
- <1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com>
- <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
- <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
- <Yj2nPa6/Y01P5aCY@kuha.fi.intel.com>
- <4619c75c-cd34-82f2-56e1-a8bcb6d97177@linux.intel.com>
- <Yj3h4p/kmZTvMz0O@kuha.fi.intel.com>
- <fae54b27-9ae2-ecfc-69ae-40e5f5e1afbe@quicinc.com>
- <bd694ef9-be57-79f1-e95e-5501c396be25@linux.intel.com>
- <YkWNpTLjh2weX9Mk@kuha.fi.intel.com>
+        with ESMTP id S237592AbiDDIcQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Apr 2022 04:32:16 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3047325590;
+        Mon,  4 Apr 2022 01:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649061020; x=1680597020;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ABizxv2oeYO2wwl4Dd5x36/ryIakHx/dr6Yh5+l52KI=;
+  b=J91TomdTbrFgF+3NZ+k6Rqf9lTNSN9eW0jIXrPQlh9ytH5lXzaHai3mj
+   7v8u/DMKnrm9kJn/r3H6qhTyCcI7gX6CfOHN1VQY0ZIbgqL4UVUtzJSv+
+   EEDRQUwAl5Brg/8et5SHRuALN4fICWUlU0+g0Pn96mbRmm/VtDMYKN2Xn
+   21T7KYwR5cIDA7+VxKjuQV7RHqcVD36rJVVm84N9/QsrJkeVbaAXKGAjA
+   /UUqJYA/l3mN6SeQ3BaVMWa1VSDJhzcq8vq2f4SxRR4d19kS9j7FfXI26
+   NJS508qoMnesTz5LjYhirai0/iokO1kESF//ZUCFbpgh9YbBegWQT9cgc
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="323639795"
+X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
+   d="scan'208";a="323639795"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 01:30:19 -0700
+X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
+   d="scan'208";a="569293542"
+Received: from rhamza-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.211.126])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 01:30:10 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Johan Hovold <johan@kernel.org>, heiko@sntech.de,
+        giulio.benetti@micronovasrl.com,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-api@vger.kernel.org,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v2 07/12] serial: termbits: ADDRB to indicate 9th bit addressing mode
+Date:   Mon,  4 Apr 2022 11:29:07 +0300
+Message-Id: <20220404082912.6885-8-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220404082912.6885-1-ilpo.jarvinen@linux.intel.com>
+References: <20220404082912.6885-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YkWNpTLjh2weX9Mk@kuha.fi.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,209 +80,339 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+Add ADDRB to termbits to indicate 9th bit addressing mode.
+This change is necessary for supporting devices with RS485
+multipoint addressing [*]. A later patch in the patch series
+adds support for Synopsys Designware UART capable for 9th bit
+addressing mode. In this mode, 9th bit is used to indicate an
+address (byte) within the communication line. The 9th bit
+addressing mode is selected using ADDRB introduced by an earlier
+patch.
 
-On Thu, Mar 31, 2022 at 02:16:53PM +0300, Heikki Krogerus wrote:
-> On Wed, Mar 30, 2022 at 08:47:34PM +0300, Mathias Nyman wrote:
-> > On 29.3.2022 12.18, Sandeep Maheswaram (Temp) wrote:
-> > > Hi Mathias,Heikki
-> > > 
-> > > On 3/25/2022 9:08 PM, Heikki Krogerus wrote:
-> > >> On Fri, Mar 25, 2022 at 04:33:27PM +0200, Mathias Nyman wrote:
-> > >>> On 25.3.2022 13.27, Heikki Krogerus wrote:
-> > >>>> On Fri, Mar 25, 2022 at 12:36:22AM +0200, Mathias Nyman wrote:
-> > >>>>> On 24.3.2022 14.27, Heikki Krogerus wrote:
-> > >>>>>> On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
-> > >>>>>>> Currently the phy init is done from dwc3 and also xhci which makes the
-> > >>>>>>> runtime_usage value 2 for the phy which causes issue during runtime
-> > >>>>>>> suspend. When we run the below command the runtime_status still shows
-> > >>>>>>> active.
-> > >>>>>>> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
-> > >>>>>>>
-> > >>>>>>> dwc3 manages PHY by own DRD driver, so skip the management by
-> > >>>>>>> HCD core by setting this quirk.
-> > >>>>>>>
-> > >>>>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > >>>>>>> ---
-> > >>>>>>>   drivers/usb/dwc3/host.c | 13 +++++++++++++
-> > >>>>>>>   1 file changed, 13 insertions(+)
-> > >>>>>>>
-> > >>>>>>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> > >>>>>>> index eda8719..d4fcf06 100644
-> > >>>>>>> --- a/drivers/usb/dwc3/host.c
-> > >>>>>>> +++ b/drivers/usb/dwc3/host.c
-> > >>>>>>> @@ -13,6 +13,12 @@
-> > >>>>>>>   #include <linux/platform_device.h>
-> > >>>>>>>     #include "core.h"
-> > >>>>>>> +#include <linux/usb/xhci-plat.h>
-> > >>>>>>> +#include <linux/usb/xhci-quirks.h>
-> > >>>>>>> +
-> > >>>>>>> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
-> > >>>>>>> +    .quirks = XHCI_SKIP_PHY_INIT,
-> > >>>>>>> +};
-> > >>>>>>>     static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
-> > >>>>>>>                       int irq, char *name)
-> > >>>>>>> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
-> > >>>>>>>           }
-> > >>>>>>>       }
-> > >>>>>>>   +    ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
-> > >>>>>>> +            sizeof(xhci_plat_dwc3_xhci));
-> > >>>>>>> +    if (ret) {
-> > >>>>>>> +        dev_err(dwc->dev, "failed to add data to xHCI\n");
-> > >>>>>>> +        goto err;
-> > >>>>>>> +    }
-> > >>>>>>> +
-> > >>>>>>>       ret = platform_device_add(xhci);
-> > >>>>>>>       if (ret) {
-> > >>>>>>>           dev_err(dwc->dev, "failed to register xHCI device\n");
-> > >>>>>> I think you should just use device property:
-> > >>>>>>
-> > >>>>> This was suggested in an earlier series, but was rejected as it also added
-> > >>>>> the property as a device tree parameter.
-> > >>>>>
-> > >>>>> I think adding more device properties can be messy in the long run, especially if we
-> > >>>>> need to add them for many of the existing xhci quirks.
-> > >>>>> We also end up with a mix where some device properties are listed as device tree
-> > >>>>> parameters, and some not.
-> > >>>>>
-> > >>>>> Defining xhci quirks and platform data structure in headers shared with dwc3 and cdns3
-> > >>>>> allow those drivers to easily set any existing xhci quirk, or other possible optional
-> > >>>>> callbacks.
-> > >>>>>
-> > >>>>> cdns3 driver is already doing this, but it includes the full xhci.h header.
-> > >>>>> This series cleans up that a bit so cdns3 will only include xhci quirk bits and
-> > >>>>> platform data structure.
-> > >>>>>
-> > >>>>> On the downside we add a couple xhci related header files to include/linux/usb/
-> > >>>>> Let me know if you see any other issues I missed with this approach.
-> > >>>> The problem here is that these drivers are now coupled together, and
-> > >>>> that should not be taken lightly. We have a dependency hell in our
-> > >>>> hands with a lot of drivers, and the culprit is always platform data.
-> > >>>>
-> > >>>> Build-in device properties may be messy, but I would still say they
-> > >>>> are less messy than those quirk flags - you got to admit, they are a
-> > >>>> mess. The benefit from build-in properties is in any case the fact
-> > >>>> that they remove the need to couple these drivers together.
-> > >>> Agree, quirk bits are messy. Any suggestion that would work with
-> > >>> PCI xHCI devices, devicetree, and "pure" platform devices?
-> > >> I think xHCI driver should always be able to rely on being able to
-> > >> read this kind of information from the fwnode. If there is no actual
-> > >> firmware node (DT or ACPI), or if it's missing some information, the
-> > >> glue driver needs to populate software node for the xHCI.
-> > >>
-> > >> Right now I just want to avoid having to pass the quirks using
-> > >> platform data from drivers such as drivers/usb/cdns3/host.c and
-> > >> drivers/usb/dwc3/host.c to xHCI.
-> > >>
-> > >> One way we could do that is by defining compatibility ID for both of
-> > >> them that we provide using a single device property (like I guess DT
-> > >> does). Then based on that compatibility ID, xhci-plat.c can set the
-> > >> actual "static" quirk flags. That we could already do easily. How
-> > >> would that sound to you?
-> > 
-> > Sounds good. 
-> > 
-> > > 
-> > > This was my previous patch where I was using device tree property. Should we go ahead with this approach?
-> > > 
-> > > https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/
-> > > 
-> > > Any further changes to this ?
-> > 
-> > By dropping the DT part of that series we get a similar built-in device property
-> > solution as Heikki initially suggested.
-> > 
-> > How about adding the compatibility ID device property that was just suggested?
-> > Then matching the Id in xhci-plat.c against a static table containing Ids and
-> > xhci_plat_priv structures, with the needed quirks for dwc3.
-> 
-> There was a comment from Pavan. Is it still possible to get this
-> detail from DT?
-> I guess that would still be ideal, right?
-> 
-I was suggesting if we can have device tree param like the patch sandeep
-pointed out.
+[*] Technically, RS485 is just an electronic spec and does not
+itself specify the 9th bit addressing mode but 9th bit seems
+at least "semi-standard" way to do addressing with RS485.
 
-How would adding a compatible index to usb_xhci_of_match[] would work
-actually? I ask this because, dwc3/host.c creates platform device and
-it is not associated with any of_node, so of_driver_match_device() called
-from platform bus match method does not work. one way to achieve this would
-be by matching against sysdev. Something like below. Is it acceptible?
+Cc: linux-api@vger.kernel.org
+Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: linux-alpha@vger.kernel.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: linux-parisc@vger.kernel.org
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: sparclinux@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Ilpo JÃ¤rvinen <ilpo.jarvinen@linux.intel.com>
+---
+ arch/alpha/include/uapi/asm/termbits.h   | 1 +
+ arch/mips/include/uapi/asm/termbits.h    | 1 +
+ arch/parisc/include/uapi/asm/termbits.h  | 1 +
+ arch/powerpc/include/uapi/asm/termbits.h | 1 +
+ arch/sparc/include/uapi/asm/termbits.h   | 1 +
+ drivers/char/pcmcia/synclink_cs.c        | 2 ++
+ drivers/ipack/devices/ipoctal.c          | 2 ++
+ drivers/mmc/core/sdio_uart.c             | 2 ++
+ drivers/net/usb/hso.c                    | 3 ++-
+ drivers/s390/char/tty3270.c              | 3 +++
+ drivers/staging/greybus/uart.c           | 2 ++
+ drivers/tty/amiserial.c                  | 6 +++++-
+ drivers/tty/moxa.c                       | 1 +
+ drivers/tty/mxser.c                      | 1 +
+ drivers/tty/serial/serial_core.c         | 2 ++
+ drivers/tty/synclink_gt.c                | 2 ++
+ drivers/tty/tty_ioctl.c                  | 2 ++
+ drivers/usb/class/cdc-acm.c              | 2 ++
+ drivers/usb/serial/usb-serial.c          | 6 ++++--
+ include/uapi/asm-generic/termbits.h      | 1 +
+ net/bluetooth/rfcomm/tty.c               | 2 ++
+ 21 files changed, 40 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 649ffd8..bd5d055 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -126,6 +126,10 @@ static const struct xhci_plat_priv xhci_plat_brcm = {
- 	.quirks = XHCI_RESET_ON_RESUME,
- };
+diff --git a/arch/alpha/include/uapi/asm/termbits.h b/arch/alpha/include/uapi/asm/termbits.h
+index 4575ba34a0ea..285169c794ec 100644
+--- a/arch/alpha/include/uapi/asm/termbits.h
++++ b/arch/alpha/include/uapi/asm/termbits.h
+@@ -180,6 +180,7 @@ struct ktermios {
+ #define HUPCL	00040000
  
-+static const struct xhci_plat_priv xhci_plat_dwc3 = {
-+	.quirks = XHCI_SKIP_PHY_INIT,
-+};
-+
- static const struct of_device_id usb_xhci_of_match[] = {
- 	{
- 		.compatible = "generic-xhci",
-@@ -167,6 +171,9 @@ static const struct of_device_id usb_xhci_of_match[] = {
- 	}, {
- 		.compatible = "brcm,bcm7445-xhci",
- 		.data = &xhci_plat_brcm,
-+	}, {
-+		.compatible = "snps,dwc3",
-+		.data = &xhci_plat_dwc3,
- 	},
- 	{},
- };
-@@ -274,6 +281,15 @@ static int xhci_plat_probe(struct platform_device *pdev)
- 	else
- 		priv_match = dev_get_platdata(&pdev->dev);
+ #define CLOCAL	00100000
++#define ADDRB	010000000		/* address bit */
+ #define CMSPAR	  010000000000		/* mark or space (stick) parity */
+ #define CRTSCTS	  020000000000		/* flow control */
  
-+	/* allow private data mapping with the sysdev compatible */
-+	if (!priv_match) {
-+		struct of_device_id *match;
+diff --git a/arch/mips/include/uapi/asm/termbits.h b/arch/mips/include/uapi/asm/termbits.h
+index dfeffba729b7..e7ea31cfec78 100644
+--- a/arch/mips/include/uapi/asm/termbits.h
++++ b/arch/mips/include/uapi/asm/termbits.h
+@@ -181,6 +181,7 @@ struct ktermios {
+ #define	 B3000000 0010015
+ #define	 B3500000 0010016
+ #define	 B4000000 0010017
++#define ADDRB	  0020000	/* address bit */
+ #define CIBAUD	  002003600000	/* input baud rate */
+ #define CMSPAR	  010000000000	/* mark or space (stick) parity */
+ #define CRTSCTS	  020000000000	/* flow control */
+diff --git a/arch/parisc/include/uapi/asm/termbits.h b/arch/parisc/include/uapi/asm/termbits.h
+index 40e920f8d683..629be061f5d5 100644
+--- a/arch/parisc/include/uapi/asm/termbits.h
++++ b/arch/parisc/include/uapi/asm/termbits.h
+@@ -158,6 +158,7 @@ struct ktermios {
+ #define  B3000000 0010015
+ #define  B3500000 0010016
+ #define  B4000000 0010017
++#define ADDRB	  0020000		/* address bit */
+ #define CIBAUD    002003600000		/* input baud rate */
+ #define CMSPAR    010000000000          /* mark or space (stick) parity */
+ #define CRTSCTS   020000000000          /* flow control */
+diff --git a/arch/powerpc/include/uapi/asm/termbits.h b/arch/powerpc/include/uapi/asm/termbits.h
+index ed18bc61f63d..1b778ac562a4 100644
+--- a/arch/powerpc/include/uapi/asm/termbits.h
++++ b/arch/powerpc/include/uapi/asm/termbits.h
+@@ -171,6 +171,7 @@ struct ktermios {
+ #define HUPCL	00040000
+ 
+ #define CLOCAL	00100000
++#define ADDRB	00200000		/* address bit */
+ #define CMSPAR	  010000000000		/* mark or space (stick) parity */
+ #define CRTSCTS	  020000000000		/* flow control */
+ 
+diff --git a/arch/sparc/include/uapi/asm/termbits.h b/arch/sparc/include/uapi/asm/termbits.h
+index ce5ad5d0f105..4ad60c4acf65 100644
+--- a/arch/sparc/include/uapi/asm/termbits.h
++++ b/arch/sparc/include/uapi/asm/termbits.h
+@@ -200,6 +200,7 @@ struct ktermios {
+ #define B3000000  0x00001011
+ #define B3500000  0x00001012
+ #define B4000000  0x00001013  */
++#define ADDRB	  0x00002000  /* address bit */
+ #define CIBAUD	  0x100f0000  /* input baud rate (not used) */
+ #define CMSPAR	  0x40000000  /* mark or space (stick) parity */
+ #define CRTSCTS	  0x80000000  /* flow control */
+diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
+index 78baba55a8b5..d179b9b57a25 100644
+--- a/drivers/char/pcmcia/synclink_cs.c
++++ b/drivers/char/pcmcia/synclink_cs.c
+@@ -2287,6 +2287,8 @@ static void mgslpc_set_termios(struct tty_struct *tty, struct ktermios *old_term
+ 		== RELEVANT_IFLAG(old_termios->c_iflag)))
+ 	  return;
+ 
++	tty->termios.c_cflag &= ~ADDRB;
 +
-+		match = of_match_device(usb_xhci_of_match, sysdev);
-+		if (match)
-+			priv_match = match->data;
+ 	mgslpc_change_params(info, tty);
+ 
+ 	/* Handle transition to B0 status */
+diff --git a/drivers/ipack/devices/ipoctal.c b/drivers/ipack/devices/ipoctal.c
+index 20d2b9ec1227..d66cc9683ebc 100644
+--- a/drivers/ipack/devices/ipoctal.c
++++ b/drivers/ipack/devices/ipoctal.c
+@@ -506,6 +506,8 @@ static void ipoctal_set_termios(struct tty_struct *tty,
+ 	struct ipoctal_channel *channel = tty->driver_data;
+ 	speed_t baud;
+ 
++	tty->termios.c_cflag &= ~ADDRB;
++
+ 	cflag = tty->termios.c_cflag;
+ 
+ 	/* Disable and reset everything before change the setup */
+diff --git a/drivers/mmc/core/sdio_uart.c b/drivers/mmc/core/sdio_uart.c
+index 04c0823e0359..7432b01379ef 100644
+--- a/drivers/mmc/core/sdio_uart.c
++++ b/drivers/mmc/core/sdio_uart.c
+@@ -880,6 +880,8 @@ static void sdio_uart_set_termios(struct tty_struct *tty,
+ 	if (sdio_uart_claim_func(port) != 0)
+ 		return;
+ 
++	tty->termios.c_cflag &= ~ADDRB;
++
+ 	sdio_uart_change_speed(port, &tty->termios, old_termios);
+ 
+ 	/* Handle transition to B0 status */
+diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
+index f97813a4e8d1..b687327bc7b1 100644
+--- a/drivers/net/usb/hso.c
++++ b/drivers/net/usb/hso.c
+@@ -1099,7 +1099,8 @@ static void _hso_serial_set_termios(struct tty_struct *tty)
+ 		~(CSIZE		/* no size */
+ 		| PARENB	/* disable parity bit */
+ 		| CBAUD		/* clear current baud rate */
+-		| CBAUDEX);	/* clear current buad rate */
++		| CBAUDEX	/* clear current baud rate */
++		| ADDRB);	/* disable 9th (addr) bit */
+ 
+ 	tty->termios.c_cflag |= CS8;	/* character size 8 bits */
+ 
+diff --git a/drivers/s390/char/tty3270.c b/drivers/s390/char/tty3270.c
+index 5c83f71c1d0e..253d2997a1d3 100644
+--- a/drivers/s390/char/tty3270.c
++++ b/drivers/s390/char/tty3270.c
+@@ -1768,6 +1768,9 @@ tty3270_set_termios(struct tty_struct *tty, struct ktermios *old)
+ 	tp = tty->driver_data;
+ 	if (!tp)
+ 		return;
++
++	tty->termios.c_cflag &= ~ADDRB;
++
+ 	spin_lock_bh(&tp->view.lock);
+ 	if (L_ICANON(tty)) {
+ 		new = L_ECHO(tty) ? TF_INPUT: TF_INPUTN;
+diff --git a/drivers/staging/greybus/uart.c b/drivers/staging/greybus/uart.c
+index dc4ed0ff1ae2..83e73aefde0f 100644
+--- a/drivers/staging/greybus/uart.c
++++ b/drivers/staging/greybus/uart.c
+@@ -487,6 +487,8 @@ static void gb_tty_set_termios(struct tty_struct *tty,
+ 	struct ktermios *termios = &tty->termios;
+ 	u8 newctrl = gb_tty->ctrlout;
+ 
++	termios->c_cflag &= ~ADDRB;
++
+ 	newline.rate = cpu_to_le32(tty_get_baud_rate(tty));
+ 	newline.format = termios->c_cflag & CSTOPB ?
+ 				GB_SERIAL_2_STOP_BITS : GB_SERIAL_1_STOP_BITS;
+diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
+index 533d02b38e02..3ca97007bd6e 100644
+--- a/drivers/tty/amiserial.c
++++ b/drivers/tty/amiserial.c
+@@ -1175,7 +1175,11 @@ static void rs_set_termios(struct tty_struct *tty, struct ktermios *old_termios)
+ {
+ 	struct serial_state *info = tty->driver_data;
+ 	unsigned long flags;
+-	unsigned int cflag = tty->termios.c_cflag;
++	unsigned int cflag;
++
++	tty->termios.c_cflag &= ~ADDRB;
++
++	cflag = tty->termios.c_cflag;
+ 
+ 	change_speed(tty, info, old_termios);
+ 
+diff --git a/drivers/tty/moxa.c b/drivers/tty/moxa.c
+index f3c72ab1476c..07cd88152d58 100644
+--- a/drivers/tty/moxa.c
++++ b/drivers/tty/moxa.c
+@@ -2050,6 +2050,7 @@ static int MoxaPortSetTermio(struct moxa_port *port, struct ktermios *termio,
+ 
+ 	ofsAddr = port->tableAddr;
+ 
++	termio->c_cflag &= ~ADDRB;
+ 	mode = termio->c_cflag & CSIZE;
+ 	if (mode == CS5)
+ 		mode = MX_CS5;
+diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+index 836c9eca2946..220676363a07 100644
+--- a/drivers/tty/mxser.c
++++ b/drivers/tty/mxser.c
+@@ -577,6 +577,7 @@ static void mxser_change_speed(struct tty_struct *tty, struct ktermios *old_term
+ 	struct mxser_port *info = tty->driver_data;
+ 	unsigned cflag, cval;
+ 
++	tty->termios.c_cflag &= ~ADDRB;
+ 	cflag = tty->termios.c_cflag;
+ 
+ 	if (mxser_set_baud(tty, tty_get_baud_rate(tty))) {
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index c6ac91033e38..de198c2acefe 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -1493,6 +1493,8 @@ static void uart_set_termios(struct tty_struct *tty,
+ 		goto out;
+ 	}
+ 
++	tty->termios.c_cflag &= ~ADDRB;
++
+ 	uart_change_speed(tty, state, old_termios);
+ 	/* reload cflag from termios; port driver may have overridden flags */
+ 	cflag = tty->termios.c_cflag;
+diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
+index 25c558e65ece..ee767cea18ed 100644
+--- a/drivers/tty/synclink_gt.c
++++ b/drivers/tty/synclink_gt.c
+@@ -714,6 +714,8 @@ static void set_termios(struct tty_struct *tty, struct ktermios *old_termios)
+ 
+ 	DBGINFO(("%s set_termios\n", tty->driver->name));
+ 
++	tty->termios.c_cflag &= ~ADDRB;
++
+ 	change_params(info);
+ 
+ 	/* Handle transition to B0 status */
+diff --git a/drivers/tty/tty_ioctl.c b/drivers/tty/tty_ioctl.c
+index 63181925ec1a..934037d78868 100644
+--- a/drivers/tty/tty_ioctl.c
++++ b/drivers/tty/tty_ioctl.c
+@@ -319,6 +319,8 @@ unsigned char tty_get_frame_size(unsigned int cflag)
+ 		bits++;
+ 	if (cflag & PARENB)
+ 		bits++;
++	if (cflag & ADDRB)
++		bits++;
+ 
+ 	return bits;
+ }
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 9b9aea24d58c..fd246ec70da8 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1056,6 +1056,8 @@ static void acm_tty_set_termios(struct tty_struct *tty,
+ 	struct usb_cdc_line_coding newline;
+ 	int newctrl = acm->ctrlout;
+ 
++	termios->c_cflag &= ~ADDRB;
++
+ 	newline.dwDTERate = cpu_to_le32(tty_get_baud_rate(tty));
+ 	newline.bCharFormat = termios->c_cflag & CSTOPB ? 2 : 0;
+ 	newline.bParityType = termios->c_cflag & PARENB ?
+diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
+index 24101bd7fcad..8d1d170eb7e6 100644
+--- a/drivers/usb/serial/usb-serial.c
++++ b/drivers/usb/serial/usb-serial.c
+@@ -525,10 +525,12 @@ static void serial_set_termios(struct tty_struct *tty, struct ktermios *old)
+ 
+ 	dev_dbg(&port->dev, "%s\n", __func__);
+ 
+-	if (port->serial->type->set_termios)
++	if (port->serial->type->set_termios) {
++		tty->termios.c_cflag &= ~ADDRB;
+ 		port->serial->type->set_termios(tty, port, old);
+-	else
++	} else {
+ 		tty_termios_copy_hw(&tty->termios, old);
 +	}
+ }
+ 
+ static int serial_break(struct tty_struct *tty, int break_state)
+diff --git a/include/uapi/asm-generic/termbits.h b/include/uapi/asm-generic/termbits.h
+index 2fbaf9ae89dd..5f5228329d45 100644
+--- a/include/uapi/asm-generic/termbits.h
++++ b/include/uapi/asm-generic/termbits.h
+@@ -157,6 +157,7 @@ struct ktermios {
+ #define  B3000000 0010015
+ #define  B3500000 0010016
+ #define  B4000000 0010017
++#define ADDRB     0020000	/* address bit */
+ #define CIBAUD	  002003600000	/* input baud rate */
+ #define CMSPAR	  010000000000	/* mark or space (stick) parity */
+ #define CRTSCTS	  020000000000	/* flow control */
+diff --git a/net/bluetooth/rfcomm/tty.c b/net/bluetooth/rfcomm/tty.c
+index ebd78fdbd6e8..832e725f23ab 100644
+--- a/net/bluetooth/rfcomm/tty.c
++++ b/net/bluetooth/rfcomm/tty.c
+@@ -871,6 +871,8 @@ static void rfcomm_tty_set_termios(struct tty_struct *tty, struct ktermios *old)
+ 	if (!dev || !dev->dlc || !dev->dlc->session)
+ 		return;
+ 
++	new->c_cflag &= ~ADDRB;
 +
- 	if (priv_match) {
- 		priv = hcd_to_xhci_priv(hcd);
- 		/* Just copy data for now */
+ 	/* Handle turning off CRTSCTS */
+ 	if ((old->c_cflag & CRTSCTS) && !(new->c_cflag & CRTSCTS))
+ 		BT_DBG("Turning off CRTSCTS unsupported");
+-- 
+2.30.2
 
-> I have another question. Can't we now just assume that if the sysdev
-> is the parent (or grandparent), then the phy initialization should
-> always be skipped? In that case we could just do something like this:
-> 
-> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> index 649ffd861b44e..1018b33488046 100644
-> --- a/drivers/usb/host/xhci-plat.c
-> +++ b/drivers/usb/host/xhci-plat.c
-> @@ -212,8 +212,12 @@ static int xhci_plat_probe(struct platform_device *pdev)
->  #endif
->         }
->  
-> -       if (!sysdev)
-> +       if (sysdev) {
-> +               if (sysdev != &pdev->dev)
-> +                       hcd->skip_phy_initialization = 1;
-> +       } else {
->                 sysdev = &pdev->dev;
-> +       }
->  
->         if (WARN_ON(!sysdev->dma_mask))
->                 /* Platform did not initialize dma_mask */
-> 
-> 
-> I did not go through all the drivers that carefully, so I may have
-> missed something, but it looks like the only drivers that can have the
-> sysdev as the parent or grandparent are cdns3 and dwc3.
-> 
-I cross checked and these are two drivers that are creating xhci-plat device.
-So this patch would definitely work. However I am not sure in future if any
-device created via device tree would want to use this feature. For now,
-it looks good. It Mathias, Do you see any problem with this approach?
-
-Thanks,
-Pavan
