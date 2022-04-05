@@ -2,122 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D5C4F4BC3
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 03:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFAA4F4BA6
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 03:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347586AbiDEXFG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Apr 2022 19:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
+        id S231466AbiDEXD6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Apr 2022 19:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453691AbiDEP5M (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Apr 2022 11:57:12 -0400
-Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010CFD1125
-        for <linux-usb@vger.kernel.org>; Tue,  5 Apr 2022 08:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1649170904; i=@motorola.com;
-        bh=XuimDw4+iVhi9gEj1se5IBFh/YWO1jnu2M7n1+SW2uE=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=YR89p1j1ZF1Rzk3uPdUgiL4ncC3Xd+8s5A6rvRL3aOXHamL2P1Gll/SA6SczawBIh
-         S3Mds2cZo/UPnAq6d6ZebYD1CHOYZ528ioMFgWtWEuM1XIZc11tQanOIJFkyeSeLth
-         UAItQj3wr2QqEKB5wVKh94P/y7QiejKBs9YB6YhPFLAe9yEqCKZDJUWReXpIvS5Lfn
-         Se4VGwoo+Pli4biGoM+zEf8iDiQj8lBqj6CvGJ7b7+y5Y7ofofHReW7Qd6ShBNFn39
-         l6mwG4W5jnX/Tl+dYy7/j5UjkuXPBExHfwplqkDog5oacVySmcgQOVPLHEnDZ3z/qG
-         rqVeW36fwT9LA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCIsWRWlGSWpSXmKPExsWS8eKJmO71SJ8
-  kg017VC2OtT1ht1g1dSeLxbbTv1ktOicuYbdYtKyV2WJL2xUmi0+ndjJb/PjTB+S2/GVy4PSY
-  3TGT1WPTqk42j80vupk9dty28ej/a+DxeZNcAFsUa2ZeUn5FAmvG/H0PmQp2s1e8XdDL2MDYy
-  9bFyMUhJDCDSeLalCksEM4iJom3N6+wdjFycrAIqEg82DyHCcRmE1CTWPB6FTOILSIQIXH91g
-  cwm1ngAKPE7BZpEFtYwEviwIE5jCA2r4CyxNUzF9khhi5nlPiz8BwrREJQ4uTMJywQzVoSN/6
-  9BFrAAWRLSyz/xwES5hSwkjh/ZSr7BEbeWUg6ZiHpmIXQsYCReRWjdVJRZnpGSW5iZo6uoYGB
-  rqGhia6ZCZBpoZdYpZuoV1qsm5pYXKJrpJdYXqyXWlysV1yZm5yTopeXWrKJERj4KUUOOTsYv
-  6z8qXeIUZKDSUmUt83DJ0mILyk/pTIjsTgjvqg0J7X4EKMMB4eSBG9jCFBOsCg1PbUiLTMHGI
-  UwaQkOHiUR3g1hQGne4oLE3OLMdIjUKUZFKXHel+FACQGQREZpHlwbLPIvMcpKCfMyMjAwCPE
-  UpBblZpagyr9iFOdgVBLmTYgAmsKTmVcCN/0V0GImoMXvzniCLC5JREhJNTA1zpTXdF768Y/H
-  xSKJYMWwZ4Yee3btnHd7zXumY/06a48qCAf3/ttjnnxE+9gSH8WnG2RWOjVeeLMvLmK/0tygH
-  d3J1XaOdz5685xZspibwdqtkklRtWF/VEeG6AMlJ95p0qcLZsR8ntfZELrmlvOeM/OOm9lbuU
-  /dcGFP/H6l3EKp67vnLP+qt/jF1dM6rSpXQ65cctwpVhrxgYn/WePPXcwlj0+655Z/qFlz/bv
-  ujWk7NXuiEhVm7n1zoju5ZE+irlIy44vHPQcCVk0z+flu6XfVq+tiZ04KERW7Y3UrtzinsjBj
-  59pGf4/JPy5Ki8aJ3Qv59tFm/aKTpuccXrlPmMgsM7vx2WKx/BvKzmeeKLEUZyQaajEXFScCA
-  DKltZ13AwAA
-X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-8.tower-635.messagelabs.com!1649170903!12437!1
-X-Originating-IP: [104.232.228.22]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.85.5; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 22166 invoked from network); 5 Apr 2022 15:01:43 -0000
-Received: from unknown (HELO va32lpfpp02.lenovo.com) (104.232.228.22)
-  by server-8.tower-635.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 5 Apr 2022 15:01:43 -0000
-Received: from va32lmmrp01.lenovo.com (va32lmmrp01.mot.com [10.62.177.113])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by va32lpfpp02.lenovo.com (Postfix) with ESMTPS id 4KXrT31b9Nz50GGy;
-        Tue,  5 Apr 2022 15:01:43 +0000 (UTC)
-Received: from p1g3 (unknown [10.45.5.92])
+        with ESMTP id S1454028AbiDEP5t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Apr 2022 11:57:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D545167F87;
+        Tue,  5 Apr 2022 08:03:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: w36195)
-        by va32lmmrp01.lenovo.com (Postfix) with ESMTPSA id 4KXrT25w5Czf6f0;
-        Tue,  5 Apr 2022 15:01:42 +0000 (UTC)
-Date:   Tue, 5 Apr 2022 10:01:34 -0500
-From:   Dan Vacura <w36195@motorola.com>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
-        kernel@pengutronix.de, nicolas@ndufresne.ca,
-        kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH 1/5] usb: gadget: uvc: reset bytesused on queue cancel
-Message-ID: <YkxZzvbazHEX2EAg@p1g3>
-References: <20220402233914.3625405-1-m.grzeschik@pengutronix.de>
- <20220402233914.3625405-2-m.grzeschik@pengutronix.de>
- <3a6bb767-a114-1d60-3600-52cef493ed58@omp.ru>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEB3C6179F;
+        Tue,  5 Apr 2022 15:02:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB57BC385A4;
+        Tue,  5 Apr 2022 15:02:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649170979;
+        bh=qNv9WCGw+H4LJDj4fT2rA98UYD02WLOHpYP7c+6zAxU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Jxc7Wj5dW0eM8sgkO1wX3113Q5/56VIuZs3gNSexvnbVAgzV2iDk7oiXCV9x/jAOr
+         Hbs1KRTXzrpGvuCd9gnbxAURMYmfjIW6T7bkvOG2sZqHPkX8ZFEGRekFM1VFcOc9Sy
+         x8qkS/8jN/R2vWMCk8/RlnYuB3Xs1y2A1cZKBJcI=
+Date:   Tue, 5 Apr 2022 17:02:56 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     linux-usb@vger.kernel.org, Robert Jarzmik <robert.jarzmik@free.fr>,
+        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/4] usb: phy: generic: Support enabling/disabling VBUS
+Message-ID: <YkxaIK/y+7H8HgwZ@kroah.com>
+References: <20220114170941.800068-1-sean.anderson@seco.com>
+ <ffee044a-d34f-6be5-1fa9-c14cf3bb30de@seco.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3a6bb767-a114-1d60-3600-52cef493ed58@omp.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ffee044a-d34f-6be5-1fa9-c14cf3bb30de@seco.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael,
-
-Looks like we found the same issue, I submitted the same change the
-other week here:
-https://lore.kernel.org/all/20220331184024.23918-1-w36195@motorola.com/
-
-One difference is you had the reset outside of the queue lock. I figured
-to keep it within the lock since we can get a cancel while the pump
-worker is running and this can negate the reset. Do you agree?
-
-Thanks,
-
-Dan
-
-On Tue, Apr 05, 2022 at 11:43:16AM +0300, Sergey Shtylyov wrote:
-> Hello!
+On Tue, Apr 05, 2022 at 10:51:34AM -0400, Sean Anderson wrote:
 > 
-> On 4/3/22 2:39 AM, Michael Grzeschik wrote:
 > 
-> > On uvcg_queue_cancel the buf_used counter has to be reset. Since the
-> > encode function uses the variable to decide if the encoded data has
-> > reached the end of frame. Intermediate calls of uvcg_queue_cancel can
-> > therefor lead to miscalculations in the encode functions, if buf_used
-> 
->    Therefore?
-> 
-> > was not properly reset.
+> On 1/14/22 12:09 PM, Sean Anderson wrote:
+> > The generic USB phy has had VBUS-related code for a long time, but it
+> > has always been broken, since the regulator was never gotten from the
+> > device tree. However, the support itself seems not very useful, since
+> > e.g.  usb_phy_vbus_on/off has no users and usb_phy_set_power is only
+> > used by gadgets to make sure they don't draw too much current. Instead,
+> > use the VBUS regulator to implement otg_set_vbus, which is called from
+> > several drivers. This results in a change in semantics of VBUS, but
+> > since support was always broken I don't think this will have any affect.
 > > 
-> > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> [...]
+> > 
+> > Sean Anderson (4):
+> >   dt-bindings: usb: usb-nop-xceiv: Repurpose vbus-regulator
+> >   usb: phy: generic: Get the vbus supply
+> >   usb: phy: generic: Implement otg->set_vbus
+> >   usb: phy: generic: Disable vbus on removal
+> > 
+> >  .../bindings/usb/usb-nop-xceiv.yaml           |  8 +--
+> >  drivers/usb/phy/phy-generic.c                 | 55 +++++++++----------
+> >  2 files changed, 31 insertions(+), 32 deletions(-)
+> > 
 > 
-> MBR, Sergey
+> ping?
+> 
+> When this was submitted I got an email saying that the merge window was
+> closed... but I think it has opened and closed again during the
+> intervening time.
+
+It opened yesterday.  Please give us a chance to catch up.
+
+While that happens, please take the time to review other changes on the
+mailing lists, we can always use the help.
+
+thanks,
+
+greg k-h
