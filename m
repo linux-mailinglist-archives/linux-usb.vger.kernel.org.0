@@ -2,88 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC32E4F6BEC
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 22:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D254F6C10
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 23:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234492AbiDFVBT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Apr 2022 17:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
+        id S235128AbiDFVFG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Apr 2022 17:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235120AbiDFVBI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 17:01:08 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3DAE1277
-        for <linux-usb@vger.kernel.org>; Wed,  6 Apr 2022 12:29:20 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1ncBLC-00022D-1f; Wed, 06 Apr 2022 21:29:18 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1ncBLC-001TPU-IR; Wed, 06 Apr 2022 21:29:17 +0200
-Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1ncBL9-00DrTf-OK; Wed, 06 Apr 2022 21:29:15 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org
-Subject: [PATCH] usb: gadget: f_acm: add support for USB_CDC_REQ_SEND_BREAK
-Date:   Wed,  6 Apr 2022 21:29:14 +0200
-Message-Id: <20220406192914.3302636-1-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S236636AbiDFVDq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 17:03:46 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38254101D0
+        for <linux-usb@vger.kernel.org>; Wed,  6 Apr 2022 12:35:34 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id s13so4641625ljd.5
+        for <linux-usb@vger.kernel.org>; Wed, 06 Apr 2022 12:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=lAU1fEYcKmDZuj2KcYo6lIuNo57KwPZ3JsWtPZCFJOg=;
+        b=BZbkkMBGGodlgIxxcQ0eDJ+TfnSE15njQ2t96aKK2m1TT3lG8UFkiPCfpcQzRUSzFZ
+         yrRf82q1+NQ85s5kJRgjIjEawfvcNPpsWX6P+nbPhDFIFxUBCvOEcPBBGmX1p0b+Ne5z
+         7KfcKtX2nSTDRpkR0E1CfYRa1qqJNT0qlfnRRkY9p/hDX6opHw5nieK+IdoL7nrlezUZ
+         xZCxUaB3B3E/LyH6CzpYNGlfulCSlJyD4FrIacKWIE4wLFqAWuEC+zsK3/X2FPwoq8hn
+         pYG+8tnoq+jGFWmMe56Zu6/+39df4y/TckRk5yk6Ak+QiEo8ExTlgAmfc+Nln9nrwnc8
+         Ya6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=lAU1fEYcKmDZuj2KcYo6lIuNo57KwPZ3JsWtPZCFJOg=;
+        b=Lqm7OUQJgPN71H8kQqW0QC9TdTnSPszPdRdIIE43ra1DmBtjZe3Vpndx4GLtB7LeyT
+         tBBp/i5cnpDWq7xUEzU6fF/BFntp0PjzUgC4dAIyz6MIab7IE6OYy0o+PQye4wrBgKqr
+         jU9IY/nHMszg8sDiqveFtdFzzMr07sM47o7WnjGUd6XVXefP+jsqUFbql4/qw5ItaP92
+         xaCtIuBMbtmkqZEm6dBnI0UwNUdrpkgvyiJqGyDufA2wlVeBBMrZvJ4ra/fEKxg/NAgd
+         JaFTdG1twXXvULTKzTH+w+huKhuRBjlQty9h60jCTmEon4v6QaxMYvwWl+Y0+Y94/fBS
+         MZKQ==
+X-Gm-Message-State: AOAM530lz/jZFGJJAdJKBZs3bUOZrdNUMNDwUCYfPUc9YAWYbOiO06DS
+        uVMQl2+Vv79cnduf3QxSzjVS6jK8TCCbadYEdPo=
+X-Google-Smtp-Source: ABdhPJyxS/y//lijcsOmg2IATzjbtmupncD644WD5goVdOoUY3DOfLO/kHTOTO4JAxY4qoXLgqxV+4g5QxBVhXGgnno=
+X-Received: by 2002:a2e:7f13:0:b0:247:ef72:9e8b with SMTP id
+ a19-20020a2e7f13000000b00247ef729e8bmr6297682ljd.205.1649273732545; Wed, 06
+ Apr 2022 12:35:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a9a:1183:0:b0:1aa:e80e:9e85 with HTTP; Wed, 6 Apr 2022
+ 12:35:32 -0700 (PDT)
+From:   Amadeo Giannini <joygreenldtm@gmail.com>
+Date:   Wed, 6 Apr 2022 12:35:32 -0700
+Message-ID: <CAEnpgaVvFp1xK_oLBNmsYUXXwBe3CxpTHc53XfyEaHxV_h7tWA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently the usb side setting of the USB_CDC_REQ_SEND_BREAK control
-is not supported. This patch adds the support.
-
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
----
- drivers/usb/gadget/function/f_acm.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/drivers/usb/gadget/function/f_acm.c b/drivers/usb/gadget/function/f_acm.c
-index 349945e064bba3..411eb489e0ff11 100644
---- a/drivers/usb/gadget/function/f_acm.c
-+++ b/drivers/usb/gadget/function/f_acm.c
-@@ -333,6 +333,8 @@ static void acm_complete_set_line_coding(struct usb_ep *ep,
- 	}
- }
- 
-+static int acm_send_break(struct gserial *port, int duration);
-+
- static int acm_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
- {
- 	struct f_acm		*acm = func_to_acm(f);
-@@ -391,6 +393,14 @@ static int acm_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
- 		acm->port_handshake_bits = w_value;
- 		break;
- 
-+	case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8)
-+			| USB_CDC_REQ_SEND_BREAK:
-+		if (w_index != acm->ctrl_id)
-+			goto invalid;
-+
-+		acm_send_break(&acm->port, w_value);
-+		break;
-+
- 	default:
- invalid:
- 		dev_vdbg(&cdev->gadget->dev,
 -- 
-2.30.2
-
+Are you in need of a loan (Money)? How much do you need & the time you
+can pay back? Apply now at 2% interest rate.
