@@ -2,164 +2,349 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4704F62BD
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 17:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22B44F62BB
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 17:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235381AbiDFPK3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Apr 2022 11:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
+        id S235775AbiDFPQj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Apr 2022 11:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235706AbiDFPIq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 11:08:46 -0400
-Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.109.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26BE45B172
-        for <linux-usb@vger.kernel.org>; Wed,  6 Apr 2022 05:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1649246469;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2uxPVrLHHZ9WOfVeGUImhWvzOynG/YeguSdsEVVGHVA=;
-        b=EMaDfbTjgZp2agtG/jrgO0APU/aj+axSsuyfO+Y7DnSVuPQty6wzLzQ3eK9nHxqt1uylny
-        N2iQK281fKsAjYyN4rAh7r3TLhlAexnsuTI9GbYJEKXyYglDryZsogqXimf1ayK6RI6zSx
-        t2I/85vEVAz60TQiaTpU9QkinSwnD4Y=
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com
- (mail-he1eur04lp2056.outbound.protection.outlook.com [104.47.13.56]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-20-OyxXb08sPdeFnHDjXRtlVA-1; Wed, 06 Apr 2022 13:47:41 +0200
-X-MC-Unique: OyxXb08sPdeFnHDjXRtlVA-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pi3EJybS8nE/4dAyZCFtbM4GXspkfN2lUcmKTCmVIXdKT9kvLMbibMky5AlXn5rVfdPfqVRmfXE0M4gcRqGAI3e5mmQ4RVLWY1t5H1GlvYbnj9rBDYOa8Kr7fll4q45vyG+X15A4piVR7WNI25kuZQE2k64Gnv7V8ffh1FCJV7rsrtxYQJKdr5yZZEgieMpz9FAYi1tq2xhw/1sUn7jWAylx069P18bDcwPeOYRUa2uoL8AqUJ1xErNvBxVryMZNfmbn4bUzCLWpvEypD/Y6hUDsQgxDRbKmWBtlDsqXgXyMV+Wt3tIrZQCQIMjIlM0tXmkvkoUuOQzG5REj00D7hA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D7Bn3I1F3bpIELEBVtKsSF3gh+6M48Pa+GIMYvFnaVQ=;
- b=b/YwBkgL/X00c296dGzzwmGgNLmQ0eFI4Mh5DWgxdMuy5w97HzEvlrWMrs8Ripbj1gyLh3YHDiNRsHyLSVKDN4zQbvvUTrt31tKi5eEbqnwF9lSay5N9gp+zas5QqsGaHFcUsmH8v0fv8EnWQFIBjKUdsvZNxg0wyN24B15mjkyiaQqO4/FUnU4jCpIKdw/ft2wugxrknHmFah0l0H1qXlonzy97U4Ub/UBVHW0Ju22Lm0RY98trAF3Yjjql6XFMLtZTEMayaBSpfQ/MQQgaxhpJE/G6+0zhjSr4zamUTnO8x1gKTUXUQkGKgvU3O4I5V9WySOPWmZnIo9ZKUQ6DUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16) by AS8PR04MB8867.eurprd04.prod.outlook.com
- (2603:10a6:20b:42e::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
- 2022 11:47:39 +0000
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::8c82:19c5:ce96:491b]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::8c82:19c5:ce96:491b%4]) with mapi id 15.20.5123.031; Wed, 6 Apr 2022
- 11:47:39 +0000
-Message-ID: <f90522c4-f7d6-3068-9789-8c6d893f2768@suse.com>
-Date:   Wed, 6 Apr 2022 13:47:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] usb: misc: fix improper handling of refcount in
- uss720_probe()
-Content-Language: en-US
-To:     Hangyu Hua <hbh25y@gmail.com>, gregkh@linuxfoundation.org,
-        mudongliangabcd@gmail.com
-CC:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220406073349.22203-1-hbh25y@gmail.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20220406073349.22203-1-hbh25y@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: AS8PR07CA0037.eurprd07.prod.outlook.com
- (2603:10a6:20b:459::9) To VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16)
+        with ESMTP id S235757AbiDFPQb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 11:16:31 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D8A63FF5E;
+        Wed,  6 Apr 2022 05:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649247410; x=1680783410;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=rpKYLZdYBLhVE5YeaVAJgHvi/eQxc/sAqc3k28IE/NI=;
+  b=CDKg/bhl+u9U8i1vhxt63LMkRsvzz+dkYGafeBX2GnqwA56vDti9nNOZ
+   PlSjgiChFQ3QJQnDld5AdL4wf9RYCmvddByJnbMS8qTCprBC5CwP3V0c/
+   aj9Y0lyOz44otWSQEmkfLn/LX7evx46t4cXjpm+SlgF/G6AbyFu0DrHS1
+   zkEAQR5YfZkzXI6bliDq9SjenZykKUQ7X6Yv+7tFNXFsNRLfqGbyCMlvQ
+   dLy4BJ8hCt2HwDaj7X8NLyWqORFlrQsdInCc9UNIFQHE+8jDr1gyIVvMb
+   8MZTIlnGp79J5F14ZLLfrqxNCxL4CNL1FR8zUFUPE1vLAArIX0fR4QzZL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="321724888"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="321724888"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 05:16:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="658504053"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga004.jf.intel.com with ESMTP; 06 Apr 2022 05:16:25 -0700
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_kriskura@quicinc.com
+References: <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
+ <Yj2nPa6/Y01P5aCY@kuha.fi.intel.com>
+ <4619c75c-cd34-82f2-56e1-a8bcb6d97177@linux.intel.com>
+ <Yj3h4p/kmZTvMz0O@kuha.fi.intel.com>
+ <fae54b27-9ae2-ecfc-69ae-40e5f5e1afbe@quicinc.com>
+ <bd694ef9-be57-79f1-e95e-5501c396be25@linux.intel.com>
+ <YkWNpTLjh2weX9Mk@kuha.fi.intel.com>
+ <20220404082516.GE29680@hu-pkondeti-hyd.qualcomm.com>
+ <20220406062543.GA10801@hu-pkondeti-hyd.qualcomm.com>
+ <1234f637-9420-77e2-dc61-7e702ac8abe0@linux.intel.com>
+ <20220406110153.GE10801@hu-pkondeti-hyd.qualcomm.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
+ XHCI_SKIP_PHY_INIT
+Message-ID: <f578947c-fb10-11b7-abe8-28b6b3f6bb0c@linux.intel.com>
+Date:   Wed, 6 Apr 2022 15:18:17 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 39af00dc-6885-4e64-43cf-08da17c3402a
-X-MS-TrafficTypeDiagnostic: AS8PR04MB8867:EE_
-X-Microsoft-Antispam-PRVS: <AS8PR04MB886738984F9247C34428A9F3C7E79@AS8PR04MB8867.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yVtAZaqAoiaN14zScqPfm7StZKxB26Q+CwmKxzGNGv5x35ye/bMLf7N94zC4/XSD+NZWJ+0rwsD+XpBr9ZiHYSioNEyrCBlh0BYd1ZDbG7PcgHOjG/M4wKG3Df/IXpBiLBnA72QKpUnzBexwh978EIZwIpdMi2BEsgaFp4i+4dQ+fiQezW96s2bB9YtzyfGoF8YFqNNNRvjEmJBgWJPWIO85x3aiaQkZE+rTWywjVGoH3aaHOxbXKxH7WK9ANvz1LlcGKMnVu62tqw7eqRpUopVh9LfCSLNzLUWUBKfpKY9ZA+o6VaA1ZA/6MpqMs9GNUEmn8VZP0gGR8WNJX6P0fjhxaYKJ6WTVf2hWgqgdhDnPxCtf35gQ8n12+XJqUteG8CwENyzXCmW+u2HrM9Ll/q+//c1CuOjXd+/PdgS9vAhTtXfZd0/4bReHsEZoIMlD5yBmnbmrrNM81JERpdl7ITydMA1PRFOEl9GS1bh2o4+6o58Azig3ao7lA0FyuRMpS0rBfMPaSfmEVK4zlRR9OsBN1S8SdHW1j84Ou/Hzh42KW68TlX0c0U1Kf+tWm6iJgUj8oaJ3X/iA4gr5nddRkE8IvVXPN8VZSX7fzZoLpmWYVLWT8qLOGDfdl9EXx4qwg7mG0hA3RIh4qg6+c/AJny/bHiZIe/Cm+iIctW0U5m3Ty63wcQyQgS9d2UDaIgrgP3d7FiEqi2sZmkclb1jTNdmLtoBZUcaOK2Q5JgUZA/U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(66946007)(2906002)(31686004)(86362001)(4744005)(31696002)(5660300002)(53546011)(316002)(186003)(8676002)(2616005)(6506007)(508600001)(6666004)(6486002)(6512007)(36756003)(38100700002)(66476007)(4326008)(66556008)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1JHn47woJJajBNhUXSVDHWUquLJKixMep3xHTUB1GCkZ7IHCVOWpvhxDqW5Z?=
- =?us-ascii?Q?frXztqFy3bTU3Bs13U05J3vuEZQge9orddgjc8AmF8Cus8oZBSMgBcCNKnHN?=
- =?us-ascii?Q?ZUw91ALush7VNxkoCQPN5GHXbKmT6CyexhuNHzHqr0iy4ec2Gq3V68cyxD/E?=
- =?us-ascii?Q?yFbAbz+Jr9RVO//czQVyFpKBYAD1HhfWllQhPh+dm+6zwQbk9s70+kiCDqUl?=
- =?us-ascii?Q?LFADVXoHizwAf1Pvj2asoYGtU/Y2y781eFGjZ8FE3UYGIf3sUN0FaYl/5v6k?=
- =?us-ascii?Q?v53OPgafeFO+6F1gcrsLIphQseLUs8xtzxC0ycg4mbt9JEGbUGWAD/vqrH8M?=
- =?us-ascii?Q?vIu3jOlBOsl7uAb2uZPcixanrI1LIY94H8gnDsga7C/fM+8DhD4EmHfpErLM?=
- =?us-ascii?Q?sBHyhAkfM62oA3miuiA6VXjxhfF7j2nhGiod9IF0Emw0Mqrs9VfZsMBrB9f5?=
- =?us-ascii?Q?GlvtULx8i4yjIUhFcO1UsHohdeX/wfO66dC21gMEnTROlz/qGnfGGyJTB7qY?=
- =?us-ascii?Q?c+8A9a84Xp2a/hrKhESymsuTAVeefWnGnT4622jzeeNEzer50tdcoB2E9OXE?=
- =?us-ascii?Q?V0I49P/9DyrfevW/uyS4krO9y399ruOM2jDj17KMVcIdiZULeuO2qLnzKcns?=
- =?us-ascii?Q?s3dtZXPG0n7BpijK3SJl+Blpc/4VFHzvTebmNHHYwtw2Vbk6k1VWgvl79rgT?=
- =?us-ascii?Q?8yW9jJEMakP3CrZHoZV4asTIKwIxosTLZ6bi1DKA3C/YpNMxsK/S9LFtKgMq?=
- =?us-ascii?Q?R5zaw+So+xP48ED93UmLgLg6sVm2Tp0yiAN/Y6FfABrUmdoXh1V10HCs8aE+?=
- =?us-ascii?Q?OKHoFc0yGYq4p+rViW4me66XbhilAG6kkqN1CfutrRoU2rbn/Em5JtdKz1Ae?=
- =?us-ascii?Q?Zba6JQlFKRb3+VwKu2s6gGAND9IGKaM307S7x0uqltjA2TqPPz5vRv3GEONv?=
- =?us-ascii?Q?wV61V8HCTMxXfGSRUlk6jcNm9C80njiFC07i4tLEFQskZoX/UKub18y3LrtO?=
- =?us-ascii?Q?9t/m/F755DcjlCfvoLbwR39pNwY//n6J05QfqMF0Zkay1iwqCXMNaKLg3Xpg?=
- =?us-ascii?Q?rXWNrbQnI1sUn60GHV5OW+cDlGj0v2m4cgefmtE4W9JpoVf4Ui1fJoj6fVU7?=
- =?us-ascii?Q?L9Gaoa9+VWO5Zrat6Y3Bce8P/f8AOYyNLrqNUqE7GbvKF46f7Z6Da00qLOub?=
- =?us-ascii?Q?2cCdwJsI7i/cuEFWkm6F0S/GcIOPKBH7mHgsp2DfcOoWISGOND5oK1CE/YcQ?=
- =?us-ascii?Q?BHWKxIM+dJQOHMKuOnH+FMuZHzodFPKq+fpw0tYCfqjw9RRTZYwoSMnftuUx?=
- =?us-ascii?Q?k9HR3/ISZq1GYgWjh8HSJcNmuYimIZBzA5ex2XOXZqvbyX6uRE2PZRbbHZEg?=
- =?us-ascii?Q?Lg5j0dK/jPV5lGNH6x/7dQGg48A4Bb725BDNJm4Wy6qcvt7PskRqIfrlAtl9?=
- =?us-ascii?Q?oGJwVIZG0B8xlU1NB/pJG/5f9BafyUbNRBa2+4GgmPz44FyVeLlMpou3e1b2?=
- =?us-ascii?Q?1+S+TJLPJD36bkqPqR7TmffEWAWKJ77di8cFCm0r2U143v4upeTHamX6otzz?=
- =?us-ascii?Q?d6CX2wn73OpjO65fxfxhfK4LEp2wizUiZ2c5P4HjxKVs66X4V9LId9eVp9Cb?=
- =?us-ascii?Q?lXAh6SScKFms+0z6uQhcRLI91w78N0DQ91eyybPeWw3b2fALTzw+Gei1893P?=
- =?us-ascii?Q?qGXP5QcyLXeYPSC/CkjJs3hOoYNLrR3iNsvEjyyh+K8vh8xE+E78uc3Y8km8?=
- =?us-ascii?Q?KCYAJQT4/tgNjwleqh+F/GlnzU6/7cqkqRxbUABgpQ+1tyvYZ4A7vf5+0phw?=
-X-MS-Exchange-AntiSpam-MessageData-1: dFUrfJg5D7tr3w==
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39af00dc-6885-4e64-43cf-08da17c3402a
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 11:47:39.0638
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FPEGpi51lkG2T8NGjuRGaH2aF3NqgeawanbdyLCBtGWJfmUNJQP5IvVZx6G2uhigiYS4r6S0mn/4dUtCt1n7Jw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8867
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220406110153.GE10801@hu-pkondeti-hyd.qualcomm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 6.4.2022 14.01, Pavan Kondeti wrote:
+> Hi Mathias,
+> 
+> On Wed, Apr 06, 2022 at 01:52:56PM +0300, Mathias Nyman wrote:
+>> Hi
+>>
+>> Sorry about the delayed response.
+>>
+>>
+>> On 6.4.2022 9.25, Pavan Kondeti wrote:
+>>> Hi Heikki/Mathias,
+>>>
+>>> On Mon, Apr 04, 2022 at 01:55:16PM +0530, Pavan Kondeti wrote:
+>>>> Hi Heikki,
+>>>>
+>>>> On Thu, Mar 31, 2022 at 02:16:53PM +0300, Heikki Krogerus wrote:
+>>>>> On Wed, Mar 30, 2022 at 08:47:34PM +0300, Mathias Nyman wrote:
+>>>>>> On 29.3.2022 12.18, Sandeep Maheswaram (Temp) wrote:
+>>>>>>> Hi Mathias,Heikki
+>>>>>>>
+>>>>>>> On 3/25/2022 9:08 PM, Heikki Krogerus wrote:
+>>>>>>>> On Fri, Mar 25, 2022 at 04:33:27PM +0200, Mathias Nyman wrote:
+>>>>>>>>> On 25.3.2022 13.27, Heikki Krogerus wrote:
+>>>>>>>>>> On Fri, Mar 25, 2022 at 12:36:22AM +0200, Mathias Nyman wrote:
+>>>>>>>>>>> On 24.3.2022 14.27, Heikki Krogerus wrote:
+>>>>>>>>>>>> On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
+>>>>>>>>>>>>> Currently the phy init is done from dwc3 and also xhci which makes the
+>>>>>>>>>>>>> runtime_usage value 2 for the phy which causes issue during runtime
+>>>>>>>>>>>>> suspend. When we run the below command the runtime_status still shows
+>>>>>>>>>>>>> active.
+>>>>>>>>>>>>> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> dwc3 manages PHY by own DRD driver, so skip the management by
+>>>>>>>>>>>>> HCD core by setting this quirk.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>>>>>>>>>>>> ---
+>>>>>>>>>>>>>   drivers/usb/dwc3/host.c | 13 +++++++++++++
+>>>>>>>>>>>>>   1 file changed, 13 insertions(+)
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+>>>>>>>>>>>>> index eda8719..d4fcf06 100644
+>>>>>>>>>>>>> --- a/drivers/usb/dwc3/host.c
+>>>>>>>>>>>>> +++ b/drivers/usb/dwc3/host.c
+>>>>>>>>>>>>> @@ -13,6 +13,12 @@
+>>>>>>>>>>>>>   #include <linux/platform_device.h>
+>>>>>>>>>>>>>     #include "core.h"
+>>>>>>>>>>>>> +#include <linux/usb/xhci-plat.h>
+>>>>>>>>>>>>> +#include <linux/usb/xhci-quirks.h>
+>>>>>>>>>>>>> +
+>>>>>>>>>>>>> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
+>>>>>>>>>>>>> +    .quirks = XHCI_SKIP_PHY_INIT,
+>>>>>>>>>>>>> +};
+>>>>>>>>>>>>>     static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+>>>>>>>>>>>>>                       int irq, char *name)
+>>>>>>>>>>>>> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
+>>>>>>>>>>>>>           }
+>>>>>>>>>>>>>       }
+>>>>>>>>>>>>>   +    ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
+>>>>>>>>>>>>> +            sizeof(xhci_plat_dwc3_xhci));
+>>>>>>>>>>>>> +    if (ret) {
+>>>>>>>>>>>>> +        dev_err(dwc->dev, "failed to add data to xHCI\n");
+>>>>>>>>>>>>> +        goto err;
+>>>>>>>>>>>>> +    }
+>>>>>>>>>>>>> +
+>>>>>>>>>>>>>       ret = platform_device_add(xhci);
+>>>>>>>>>>>>>       if (ret) {
+>>>>>>>>>>>>>           dev_err(dwc->dev, "failed to register xHCI device\n");
+>>>>>>>>>>>> I think you should just use device property:
+>>>>>>>>>>>>
+>>>>>>>>>>> This was suggested in an earlier series, but was rejected as it also added
+>>>>>>>>>>> the property as a device tree parameter.
+>>>>>>>>>>>
+>>>>>>>>>>> I think adding more device properties can be messy in the long run, especially if we
+>>>>>>>>>>> need to add them for many of the existing xhci quirks.
+>>>>>>>>>>> We also end up with a mix where some device properties are listed as device tree
+>>>>>>>>>>> parameters, and some not.
+>>>>>>>>>>>
+>>>>>>>>>>> Defining xhci quirks and platform data structure in headers shared with dwc3 and cdns3
+>>>>>>>>>>> allow those drivers to easily set any existing xhci quirk, or other possible optional
+>>>>>>>>>>> callbacks.
+>>>>>>>>>>>
+>>>>>>>>>>> cdns3 driver is already doing this, but it includes the full xhci.h header.
+>>>>>>>>>>> This series cleans up that a bit so cdns3 will only include xhci quirk bits and
+>>>>>>>>>>> platform data structure.
+>>>>>>>>>>>
+>>>>>>>>>>> On the downside we add a couple xhci related header files to include/linux/usb/
+>>>>>>>>>>> Let me know if you see any other issues I missed with this approach.
+>>>>>>>>>> The problem here is that these drivers are now coupled together, and
+>>>>>>>>>> that should not be taken lightly. We have a dependency hell in our
+>>>>>>>>>> hands with a lot of drivers, and the culprit is always platform data.
+>>>>>>>>>>
+>>>>>>>>>> Build-in device properties may be messy, but I would still say they
+>>>>>>>>>> are less messy than those quirk flags - you got to admit, they are a
+>>>>>>>>>> mess. The benefit from build-in properties is in any case the fact
+>>>>>>>>>> that they remove the need to couple these drivers together.
+>>>>>>>>> Agree, quirk bits are messy. Any suggestion that would work with
+>>>>>>>>> PCI xHCI devices, devicetree, and "pure" platform devices?
+>>>>>>>> I think xHCI driver should always be able to rely on being able to
+>>>>>>>> read this kind of information from the fwnode. If there is no actual
+>>>>>>>> firmware node (DT or ACPI), or if it's missing some information, the
+>>>>>>>> glue driver needs to populate software node for the xHCI.
+>>>>>>>>
+>>>>>>>> Right now I just want to avoid having to pass the quirks using
+>>>>>>>> platform data from drivers such as drivers/usb/cdns3/host.c and
+>>>>>>>> drivers/usb/dwc3/host.c to xHCI.
+>>>>>>>>
+>>>>>>>> One way we could do that is by defining compatibility ID for both of
+>>>>>>>> them that we provide using a single device property (like I guess DT
+>>>>>>>> does). Then based on that compatibility ID, xhci-plat.c can set the
+>>>>>>>> actual "static" quirk flags. That we could already do easily. How
+>>>>>>>> would that sound to you?
+>>>>>>
+>>>>>> Sounds good. 
+>>>>>>
+>>>>>>>
+>>>>>>> This was my previous patch where I was using device tree property. Should we go ahead with this approach?
+>>>>>>>
+>>>>>>> https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/
+>>>>>>>
+>>>>>>> Any further changes to this ?
+>>>>>>
+>>>>>> By dropping the DT part of that series we get a similar built-in device property
+>>>>>> solution as Heikki initially suggested.
+>>>>>>
+>>>>>> How about adding the compatibility ID device property that was just suggested?
+>>>>>> Then matching the Id in xhci-plat.c against a static table containing Ids and
+>>>>>> xhci_plat_priv structures, with the needed quirks for dwc3.
+>>>>>
+>>>>> There was a comment from Pavan. Is it still possible to get this
+>>>>> detail from DT?
+>>>>> I guess that would still be ideal, right?
+>>>>>
+>>>> I was suggesting if we can have device tree param like the patch sandeep
+>>>> pointed out.
+>>>>
+>>>> How would adding a compatible index to usb_xhci_of_match[] would work
+>>>> actually? I ask this because, dwc3/host.c creates platform device and
+>>>> it is not associated with any of_node, so of_driver_match_device() called
+>>>> from platform bus match method does not work. one way to achieve this would
+>>>> be by matching against sysdev. Something like below. Is it acceptible?
+>>>>
+>>>> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+>>>> index 649ffd8..bd5d055 100644
+>>>> --- a/drivers/usb/host/xhci-plat.c
+>>>> +++ b/drivers/usb/host/xhci-plat.c
+>>>> @@ -126,6 +126,10 @@ static const struct xhci_plat_priv xhci_plat_brcm = {
+>>>>  	.quirks = XHCI_RESET_ON_RESUME,
+>>>>  };
+>>>>  
+>>>> +static const struct xhci_plat_priv xhci_plat_dwc3 = {
+>>>> +	.quirks = XHCI_SKIP_PHY_INIT,
+>>>> +};
+>>>> +
+>>>>  static const struct of_device_id usb_xhci_of_match[] = {
+>>>>  	{
+>>>>  		.compatible = "generic-xhci",
+>>>> @@ -167,6 +171,9 @@ static const struct of_device_id usb_xhci_of_match[] = {
+>>>>  	}, {
+>>>>  		.compatible = "brcm,bcm7445-xhci",
+>>>>  		.data = &xhci_plat_brcm,
+>>>> +	}, {
+>>>> +		.compatible = "snps,dwc3",
+>>>> +		.data = &xhci_plat_dwc3,
+>>>>  	},
+>>
+>> Isn't there a risk that xhci-plat now binds to the parent dwc3 device?
+>> competing with the similar of_match_table entry created in drivers/usb/dwc3/core.c
+> 
+> Sill of me. Yes, it does not work. Thanks for pointing it out.
+> 
+>>
+>>>>  	{},
+>>>>  };
+>>>> @@ -274,6 +281,15 @@ static int xhci_plat_probe(struct platform_device *pdev)
+>>>>  	else
+>>>>  		priv_match = dev_get_platdata(&pdev->dev);
+>>>>  
+>>>> +	/* allow private data mapping with the sysdev compatible */
+>>>> +	if (!priv_match) {
+>>>> +		struct of_device_id *match;
+>>>> +
+>>>> +		match = of_match_device(usb_xhci_of_match, sysdev);
+>>>> +		if (match)
+>>>> +			priv_match = match->data;
+>>>> +	}
+>>>> +
+>>>>  	if (priv_match) {
+>>>>  		priv = hcd_to_xhci_priv(hcd);
+>>>>  		/* Just copy data for now */
+>>>>
+>>>>> I have another question. Can't we now just assume that if the sysdev
+>>>>> is the parent (or grandparent), then the phy initialization should
+>>>>> always be skipped? In that case we could just do something like this:
+>>>>>
+>>>>> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+>>>>> index 649ffd861b44e..1018b33488046 100644
+>>>>> --- a/drivers/usb/host/xhci-plat.c
+>>>>> +++ b/drivers/usb/host/xhci-plat.c
+>>>>> @@ -212,8 +212,12 @@ static int xhci_plat_probe(struct platform_device *pdev)
+>>>>>  #endif
+>>>>>         }
+>>>>>  
+>>>>> -       if (!sysdev)
+>>>>> +       if (sysdev) {
+>>>>> +               if (sysdev != &pdev->dev)
+>>>>> +                       hcd->skip_phy_initialization = 1;
+>>>>> +       } else {
+>>>>>                 sysdev = &pdev->dev;
+>>>>> +       }
+>>>>>  
+>>>>>         if (WARN_ON(!sysdev->dma_mask))
+>>>>>                 /* Platform did not initialize dma_mask */
+>>>>>
+>>>>>
+>>>>> I did not go through all the drivers that carefully, so I may have
+>>>>> missed something, but it looks like the only drivers that can have the
+>>>>> sysdev as the parent or grandparent are cdns3 and dwc3.
+>>>>>
+>>>> I cross checked and these are two drivers that are creating xhci-plat device.
+>>>> So this patch would definitely work. However I am not sure in future if any
+>>>> device created via device tree would want to use this feature. For now,
+>>>> it looks good. It Mathias, Do you see any problem with this approach?
+>>>>
+>>
+>> Would work for now but seems like a risk to assume this would hold for all future
+>> xhci platform devices. 
+>>
+> Agree that it may break in future for other drivers.
+> 
+>>>
+>>> Can you please provide your suggestions on this? We have discussed about
+>>> 3 approaches here other than the whole platform data refactoring done.
+>>>
+>>> (1) Introduce a new dT property and expect dwc3/host.c to set this property
+>>> to skip the phy initialization.
+>>
+>> Adding one more device property to swnode in dwc3/host.c starts
+>> to look like the best option for now even if it didn't appeal initially.
+>>
+>> The place creating the xhci platform device should have best info on what properties
+>> are needed for the platform device.
+>>
+>> So this would be just like Heikki's first suggestion, or Sandeep's patches 2/3 and 3/3 in:
+>> https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/
+>> but without the devicetree binding documentation part.
+>>
+> Why do you say devicetree binding doc is not needed in this case? Possible
+> that xhci-plat's device can be coming from dT and this param is passed to
+> skip initialization of PHY.
 
+Adding it is fine by me. It was rejected earlier by Rob Herring
 
-On 06.04.22 09:33, Hangyu Hua wrote:
-> usb_put_dev shouldn't be called when uss720_probe succeeds because of
-> priv->usbdev. At the same time, priv->usbdev shouldn't be set to NULL
-> before destroy_priv in uss720_disconnect because usb_put_dev is in
-> destroy_priv.
+But we can live without it.
+In dwc3 and cdns3 "pure" platform case we add the device property when
+creating the device.
 
-Hi,
+In dT case we should have a compatible entry, and we can add a matching
+entry in usb_xhci_of_match[] which sets the needed quirk.
 
-I am sorry, but that's a clear NACK.
-> @@ -754,13 +753,13 @@ static void uss720_disconnect(struct usb_interface =
-*intf)
->  	usb_set_intfdata(intf, NULL);
->  	if (pp) {
->  		priv =3D pp->private_data;
-> -		priv->usbdev =3D NULL;
->  		priv->pp =3D NULL;
->  		dev_dbg(&intf->dev, "parport_remove_port\n");
->  		parport_remove_port(pp);
->  		parport_put_port(pp);
->  		kill_all_async_requests_priv(priv);
->  		kref_put(&priv->ref_count, destroy_priv);
-> +		priv->usbdev =3D NULL;
-
-That is a clear use after free The patch is no good in this state..
-
-=C2=A0=C2=A0=C2=A0 HTH
-=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
-
+Thanks
+-Mathias
