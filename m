@@ -2,136 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4754F5D4D
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 14:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B6F4F5EA4
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 15:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiDFMJY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Apr 2022 08:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
+        id S231270AbiDFNDU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Apr 2022 09:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232469AbiDFMI3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 08:08:29 -0400
-Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [203.148.12.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0A11A3949;
-        Tue,  5 Apr 2022 19:38:34 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
- (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Wed, 6 Apr
- 2022 10:38:30 +0800
-Received: from [10.29.8.49] (10.29.8.49) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Wed, 6 Apr
- 2022 10:38:29 +0800
-Message-ID: <bbd9148d-5970-2233-6ee9-625e961cd2f5@zhaoxin.com>
-Date:   Wed, 6 Apr 2022 10:38:28 +0800
+        with ESMTP id S231830AbiDFNCe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 09:02:34 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DABC141456;
+        Wed,  6 Apr 2022 02:27:48 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id y32so3038278lfa.6;
+        Wed, 06 Apr 2022 02:27:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m3IQ7CoZ6vlav2yUsjjiGW1nzTDdZ4wf2eol2IE81cQ=;
+        b=VBZ7KQ/NZDgWKsyvuVHZCw6NEKu2hgdV+Xk4R1wwE2jCwieAxP/SKuN3X0c8YofH8f
+         tJmrZO7ssCkesBW6AnVxtRRLKBg8f3aKHvtZNpjSSPLrn27GceasbmCIBYY/dUNZ6ReL
+         6dhOM1SWbJ3TxxDwIn15J8WJjI+MtFCdFRyL/czvfgtKV+/kEcG+X/q5m4DNSijPdFlu
+         lnUdYWj4gDJy3N1370tOYnR0FlFGDlt4XdC1Kiox1yheVMTnK1VoZgQXYUXaoTRavptG
+         WWuVwGiBHB4NvX8IZdzXsVHWQxpbAPPSk93IdG9BjpbmuVm80m6lr3Gwm8uuDVtPVOny
+         k8HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m3IQ7CoZ6vlav2yUsjjiGW1nzTDdZ4wf2eol2IE81cQ=;
+        b=vKMeuJB78EjbtIqbZ2mZNWfX3x5NjhtUUB2xZSTxHthn7PHpw9naFgXxI04+M0aVjn
+         twkdNxtF+YTBnzvIpvoKb0NiYGnhp66iAejdoveyx8RfxPassA7Sac0pxu/OrO92N7o2
+         QNgrMcYSPc3bJSKMN15M/LMit74z1NXlg3dvJ7142gmxcsSsPVo7N+IKAcZ286VfDxds
+         OaVvf2hHUXsWlqqsa7MdpB21EutnK+t0E01AyuQ58M2XlUUeGcCsaXaTxLR5J4LszCn3
+         g4+0I9+WsCFlfIfBfV44HSAJ7uwYJ0GM4yQ0M7QLbLZH9x2VKD2W/xQoOH0M5B0SzhrE
+         GpGw==
+X-Gm-Message-State: AOAM532gGLhNo1o5H2XW6SB1drGb8ceUIDImgrx2PN0blosd4IVh8UZc
+        CrJ4li9wx974YSHVko2MRjSggv0k33fb5oqy
+X-Google-Smtp-Source: ABdhPJxz0CiarLexgsE9kHwbeL5jl5eAo9sOJTTGGKFBmvBW9mOs2pCfQBQ35/Sz6sZFoPlUKfpRPQ==
+X-Received: by 2002:a05:6512:3b06:b0:44a:5bbc:4d2 with SMTP id f6-20020a0565123b0600b0044a5bbc04d2mr5463156lfv.571.1649237266379;
+        Wed, 06 Apr 2022 02:27:46 -0700 (PDT)
+Received: from localhost.localdomain (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
+        by smtp.gmail.com with ESMTPSA id r23-20020a2e94d7000000b0024b1565bba8sm988627ljh.118.2022.04.06.02.27.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 02:27:45 -0700 (PDT)
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     mdevaev@gmail.com, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: f_mass_storage: break IO operations via configfs
+Date:   Wed,  6 Apr 2022 12:24:45 +0300
+Message-Id: <20220406092445.215288-1-mdevaev@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] USB:Fix ehci infinite suspend-resume loop issue in
- zhaoxin
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <CobeChen@zhaoxin.com>,
-        <TimGuo@zhaoxin.com>, <tonywwang@zhaoxin.com>,
-        <weitaowang@zhaoxin.com>
-References: <3d0ae3ca-9dad-bb8f-5c41-45bdcb07b9cd@zhaoxin.com>
- <Yi9QIk+6VIWW6V/W@rowland.harvard.edu>
- <320584eb-ef89-3759-509c-e7e9cb10f983@zhaoxin.com>
- <YjCuOXRFZ8CjK9SD@rowland.harvard.edu>
- <ac40c227-ea26-bccd-d254-5a2034103184@zhaoxin.com>
- <YkxoHY2SVomGwGdh@rowland.harvard.edu>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-In-Reply-To: <YkxoHY2SVomGwGdh@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.29.8.49]
-X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2022/4/6 00:02, Alan Stern wrote:
-> On Wed, Mar 16, 2022 at 10:18:39AM +0800, WeitaoWang-oc@zhaoxin.com wrote:
->> On 2022/3/15 11:18, Alan Stern wrote:
->>> On Tue, Mar 15, 2022 at 08:39:09PM +0800, WeitaoWang-oc@zhaoxin.com wrote:
->>>> I have encountered the following situation if EHCI runtime suspend is
->>>> enabled by default.
-> 
-> Some things about this still confuse me...
-> 
->>>> 1.Wake from system to disk and boot OS.
->>>
->>> You're talking about resuming after hibernation, right?
->>
->> You're right.
->>>> 2.EHCI will entry runtime suspend after enumerated by driver during boot
->>>> phase of suspend to disk
->>>
->>> I'm not sure what you mean by "boot phase of suspend to disk".  This is
->>> while the restore kernel is starting up at the beginning of resume from
->>> hibernation, right?
->>>
->> You understood exactly what I was saying.
-> 
-> Okay, so we're waking up from hibernation.
-> 
->>>> 3.EHCI will be placed to freeze state and ehci_resume is called after image
->>>> is loaded.
->>>
->>> ehci_resume is called to leave runtime suspend.  Going into the freeze
->>> state doesn't require any changes.
-> 
-> In fact, the resume kernel doesn't call ehci_resume at all.  Here's what
-> it does:
-> 
-> 	The resume kernel boots;
-> 
-> 	If your patch causes STS_PCD to be set at this point, the flag
-> 	should get cleared shortly afterward by ehci_irq;
-> 
-> 	ehci-hcd goes into runtime suspend;
-> 
-> 	The kernel reads the system image that was stored earlier when
-> 	hibernation began;
-> 
-> 	After the image is loaded, the system goes into the freeze
-> 	state (this does not call any routines in ehci-hcd);
-On this phase, pci_pm_freeze will be called for pci device. In this
-function, pm_runtime_resume will be called to resume already
-runtime-suspend devices. which will cause ehci_resume to be called.
-Thus STS_PCD flag will be set in ehci_resume function.
+Using the SIGUSR1 signal sent to the "file-storage" thread
+from the userspace, it is possible to break IO operations
+that block the gadget. Thus, it is possible to implement
+"force eject" without stopping the gadget and umounting
+it from the host side.
 
-Thanks
-Weitao Wang
-> 
-> 	The resume kernel transfers control to the image kernel;
-> 
-> Now the image kernel is running.  It goes into the restore state, which
-> involves calling ehci_resume.  Presumably your patch cases the STS_PCD
-> flag to get set at this point.
-> o
-> But that's all!  The system is now back up, out of hibernation, and
-> running normally.  There are no more calls to check_root_hub_suspended
-> 
->>>> 4.If PCD flag is set(caused by patch), then HCD_FLAG_RH_RUNNING will be set.
->>>>
->>>> 5.Pci_pm_freeze_noirq is called to check ehci root hub state and return
->>>> value is -EBUSY. which will cause
->>>>    quiesce phase of suspend to disk fail.
->>>
->>> You're talking about check_root_hub_suspended() in hcd-pci.c, right?
->>>
->> It's right.
-> 
-> So how can this happen, given that the image kernel doesn't call
-> pci_pm_freeze_noirq?
-> 
-> Alan Stern
-> .
+There are two problems here:
+
+  - In order to send a signal, we need to find the thread
+    in procfs, but if several mass storage gadgets are created
+    in the system, each process has the same name and it is
+    impossible to distinguish one gadget from another.
+
+  - Root privileges are required to send the signal.
+
+The proposed "break_io" interface solves both problems.
+It allows us to get rid of the procfs search and delegate
+sending the signal to a regular user.
+
+Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+---
+ drivers/usb/gadget/function/f_mass_storage.c | 22 ++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 6ad669dde41c..e9b7c59e1dc4 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -3239,6 +3239,27 @@ static ssize_t fsg_opts_stall_store(struct config_item *item, const char *page,
+ 
+ CONFIGFS_ATTR(fsg_opts_, stall);
+ 
++static ssize_t fsg_opts_break_io_store(struct config_item *item,
++				       const char *page, size_t len)
++{
++	struct fsg_opts *opts = to_fsg_opts(item);
++	unsigned long flags;
++
++	mutex_lock(&opts->lock);
++	spin_lock_irqsave(&opts->common->lock, flags);
++
++	if (opts->common->thread_task)
++		send_sig_info(SIGUSR1, SEND_SIG_PRIV,
++			      opts->common->thread_task);
++
++	spin_unlock_irqrestore(&opts->common->lock, flags);
++	mutex_unlock(&opts->lock);
++
++	return len;
++}
++
++CONFIGFS_ATTR_WO(fsg_opts_, break_io);
++
+ #ifdef CONFIG_USB_GADGET_DEBUG_FILES
+ static ssize_t fsg_opts_num_buffers_show(struct config_item *item, char *page)
+ {
+@@ -3283,6 +3304,7 @@ CONFIGFS_ATTR(fsg_opts_, num_buffers);
+ 
+ static struct configfs_attribute *fsg_attrs[] = {
+ 	&fsg_opts_attr_stall,
++	&fsg_opts_attr_break_io,
+ #ifdef CONFIG_USB_GADGET_DEBUG_FILES
+ 	&fsg_opts_attr_num_buffers,
+ #endif
+-- 
+2.35.1
+
