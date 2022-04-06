@@ -2,172 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BF64F696A
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 20:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95124F6ACA
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 22:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiDFSzF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Apr 2022 14:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
+        id S233816AbiDFUFy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Apr 2022 16:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiDFSwj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 14:52:39 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346041B8FCB;
-        Wed,  6 Apr 2022 11:36:39 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id m12so4423393ljp.8;
-        Wed, 06 Apr 2022 11:36:39 -0700 (PDT)
+        with ESMTP id S233570AbiDFUEZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 16:04:25 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A531FEE4CE
+        for <linux-usb@vger.kernel.org>; Wed,  6 Apr 2022 11:14:00 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id 9so3958858iou.5
+        for <linux-usb@vger.kernel.org>; Wed, 06 Apr 2022 11:14:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MTXXhBg+FTagJspmijIFe2Eoza61RgpH2nZKIaqAxBo=;
-        b=m5KfhJDcvYaZq+SMyHRlozyi4aK9XzE9sGY198GkLb5v0PHpiaIk1+SFOo3D3yLQCT
-         LGKZZjXZiWBSa+8vgBE3XjAeDeOVkwkIKVL6qT63eW1fsmC7nSik2rfsiG+m5j5bWIFV
-         X5r6kO4k7AqSmfPO04I0epjb+8K1pdtxEir3HlPjfXNboaA3aUMpiPSn+FD4e8/2vzWn
-         0Qg9oK/GyV5mvCAWVB2UEd261/NYvDuic1Aw258anORoZ34JXgQN6AD2BnXPozV71egt
-         hsP3KxmrY98y+Eot9qn+ImfP+yIuXeq80iwWFCbCHEKc6CsQtwYOqihgP2hFCpPPcwGE
-         pqug==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0OCy6LDYOIaS0T1WcEa+rwDReqz2SxY3oGp8Y6a/ndc=;
+        b=fUL21+aV9GSqoqJkETQjlSLoHe+M9P2mRn+vKYS1qWwmVQrbKUlsMi1coUdwgaFQkZ
+         WnX4p9HYOr5jPZ2YJRw/G4PrtQQqR7OCaHeROXcO0Di2ozo/ZoxCl4KtEn1UInHPGIAd
+         Eu4o4NFOCIRaTAgpNSW1rCVz/FZL4C4/20pYw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MTXXhBg+FTagJspmijIFe2Eoza61RgpH2nZKIaqAxBo=;
-        b=XSvIQ3lNS4cbaEhDLvRYzATRXqaIDNO3CKyDN2iHehJEu2BzQzYWgAKfHcAbpwQR1S
-         7YEOF7e+L4QO1xKGVXsymZRAbE8A0A80WnM+plhWldJNN5mWpHIGOYX3SMdGinJDDB5U
-         M+YlJI0QI6/YCX8MdToP5yqk4ZeusVxUnNu9DzOmj9vnW0yNibqdWceVFkT7s0nSOWp1
-         KybZMxXm3j88ojS7SmkubVtLGUkzCxJOuStgD2Dswsy7H3DquX1gxL57T0JYTH028Nwa
-         6/Ur93WBawWpKPnO5fDPGClcYPeh+MhjJtGFNwynYHY/ygt3ZxTR8G8sAkudXkq95AjD
-         Ntuw==
-X-Gm-Message-State: AOAM533kM1HnxGBnuz76gJuiNXV8odvNhhWrmLnXRfkr+XY1baH2GsY6
-        0dmdl36IaDNA2DuOrzoyUyI=
-X-Google-Smtp-Source: ABdhPJw7qDfUNjQQxm/7WkFnUA2kpGQV5Yz1O7JPZNHsIhiQxnUF4d7sPtt0/vvICgEyb+rAdyWSJg==
-X-Received: by 2002:a2e:9e19:0:b0:247:deb7:cd9f with SMTP id e25-20020a2e9e19000000b00247deb7cd9fmr5998897ljk.261.1649270197298;
-        Wed, 06 Apr 2022 11:36:37 -0700 (PDT)
-Received: from reki (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
-        by smtp.gmail.com with ESMTPSA id t17-20020a192d51000000b0044a5a9960f9sm1907346lft.236.2022.04.06.11.36.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 11:36:35 -0700 (PDT)
-Date:   Wed, 6 Apr 2022 21:36:34 +0300
-From:   Maxim Devaev <mdevaev@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_mass_storage: break IO operations via
- configfs
-Message-ID: <20220406213634.104cae45@reki>
-In-Reply-To: <Yk3TLPKyaQDsnuD4@rowland.harvard.edu>
-References: <20220406092445.215288-1-mdevaev@gmail.com>
-        <Yk2wvhSTMKTLFK6c@rowland.harvard.edu>
-        <20220406195234.4f63cb4a@reki>
-        <Yk3TLPKyaQDsnuD4@rowland.harvard.edu>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0OCy6LDYOIaS0T1WcEa+rwDReqz2SxY3oGp8Y6a/ndc=;
+        b=rVarw2RJJTV1R3dTMpoXDv+Mx59R8gcuWoSBNrYNyPyvXd7BKu4s1+rvrQ8kfnrnlB
+         BsC3zv0DdHMc8M+QvwSSMYjpzAEVAJXbOJywVMy6Jf0NGDzFK1bZJqWazNPCUJsoHo1C
+         qHMNCKL8dMm91LW4Va6xfShZpnOPulrdrefwz997ZJ6K7vNhUkmr1Bbud8Lbs6zgYnZm
+         YCYlazoZs2cApmqQzPfmckd/Q8unR/uVhpzREnsqDRnCn9O8Jr1dYYM+F8SWaL6cZr7K
+         WHtEU8J2Jo/fo6Y/s80wPuAM2UGsdbezBY3aZdAxwcHLn+P8NuxbD4Hdvl7E4k5wBbvf
+         feKw==
+X-Gm-Message-State: AOAM530Zf18C9ksXwU5XNiXA5nO41g3q/8QW+HVFzcJS2JWOpWKMo8JY
+        hgAyjtEKpdnnjTf2KCIhIjQK1rjZ3Tlr9w==
+X-Google-Smtp-Source: ABdhPJy+pe5o48OnBlUAWmG9tMdvl9j+ZgBFPO9RgRnitcES25uJqa3ZAi7AwksabLAclXno5xxLqg==
+X-Received: by 2002:a05:6602:2aca:b0:646:a866:9fd4 with SMTP id m10-20020a0566022aca00b00646a8669fd4mr4829331iov.92.1649268838737;
+        Wed, 06 Apr 2022 11:13:58 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id f20-20020a6be814000000b00649d9a4db2asm11145251ioh.27.2022.04.06.11.13.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 11:13:58 -0700 (PDT)
+Subject: Re: [PATCH] usb: usbip: fix a refcount leak in stub_probe()
+To:     Hangyu Hua <hbh25y@gmail.com>, valentina.manea.m@gmail.com,
+        shuah@kernel.org, gregkh@linuxfoundation.org, khoroshilov@ispras.ru
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220406061713.18938-1-hbh25y@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <4341150b-195c-a896-1f6a-8715bbb539e2@linuxfoundation.org>
+Date:   Wed, 6 Apr 2022 12:13:57 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <20220406061713.18938-1-hbh25y@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=D0=92 Wed, 6 Apr 2022 13:51:40 -0400
-Alan Stern <stern@rowland.harvard.edu> wrote:
+On 4/6/22 12:17 AM, Hangyu Hua wrote:
+> usb_get_dev is called in stub_device_alloc. When stub_probe fails after
+> that, usb_put_dev needs to be used.
+> 
 
-> On Wed, Apr 06, 2022 at 07:52:34PM +0300, Maxim Devaev wrote:
-> > > It's not clear to me how breaking I/O operations allows you to do a=20
-> > > "force eject".  It seems that what you would need is something like=20
-> > > fsg_store_file() that omits the curlun->prevent_medium_removal check.
-> > > Interrupting a lengthy I/O operation doesn't really have anything to =
-do=20
-> > > with this. =20
-> >=20
-> > Perhaps I chose the wrong path, it's just how my userspace code works n=
-ow.
-> > If the drive is connected to a Linux host, then in order to clear
-> > the "file" and extract the image, I sent a SIGUSR1 signal to the "file-=
-storage"
-> > thread. This interrupted long IO operations, reset curlun->prevent_medi=
-um_removal
-> > and I got the ability to extract. =20
->=20
-> Oh, I see.  That's kind of an unintended side effect of not calling=20
-> raise_exception().
->=20
-> And while it does interrupt long I/O operations, it does so in=20
-> non-sanctioned way.  To the host it will appear as though the gadget's=20
-> firmware has crashed, since the gadget will stop sending or receiving=20
-> data.  Eventually the host will time out and reset the gadget.
->=20
-> Maybe that's the sort of thing you want, but I rather doubt it.
+Thank you for the patch. Please include details on how you found
+this problem.
 
-It's hard to say how it actually should work in case of force removing.
-At least the currect approach with SIGUSR1 is really working on thousands
-systems and with Linux, Mac and Windows. I believe that the criterion
-of the experiment is quite important here. I know of several other utilities
-that use SIGUSR1 for similar purposes.
+Nit: Change this to:
 
-> > Will masking the curlun->prevent_medium_removal flag be enough? =20
->=20
-> I think so.  But it will be blocked to some extent by long-running I/O=20
-> operations, because those operations acquire the filesem rw-semaphore=20
-> for reading.
->=20
-> More precisely, each individual command holds the rw-semaphore.  But the=
-=20
-> semaphore is dropped between commands, and a long-running I/O operation=20
-> typically consists of many separate commands.  So the blocking may be=20
-> acceptable.
+usb_get_dev() is called in stub_device_alloc(). When stub_probe() fails
+after that, usb_put_dev() needs to be called to release the reference.
 
-It is very important for KVM-over-IP to be able to command "turn it off imm=
-ediately".
-In this context, I would prefer "break_io" rather than "allow_force_remove".
+> Fix this by moving usb_put_dev() to sdev_free
+> 
 
-> > > You should not call send_sig_info() directly; instead call=20
-> > > raise_exception().  It already does the work you need (including some=
-=20
-> > > things you left out). =20
-> >=20
-> > raise_exception() assumes the setting of a new state, and I did not wan=
-t to do this,
-> > since the same does not happen when throwing a signal from userspace. =
-=20
->=20
-> Userspace isn't supposed to send the USR1 signal, only the INT, TERM, or=
-=20
-> KILL signals.  USR1 is supposed to be reserved for the driver's internal=
-=20
-> use.  Unfortunately, AFAIK there's no way to allow the driver to send a=20
-> signal to itself without also allowing the signal to be sent by=20
-> userspace.  :-(
+Nit: Change this to:
 
-It's funny that you actually helped me solve my problem thanks to this undo=
-cumented
-behavior. If it were not for the ability to send a signal, I would not be a=
-ble to make
-the necessary code, and my software would always be waiting for the complet=
-ion of IO.
+Fix this by moving usb_put_dev() to sdev_free error path handling.
 
-So here I am grateful to you - I didn't have to patch the kernel a few year=
-s ago,
-and now I just want to turn it into a clear feature :)
+> Fixes: 3ff67445750a ("usbip: fix error handling in stub_probe()")
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> ---
+>   drivers/usb/usbip/stub_dev.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
+> index d8d3892e5a69..3c6d452e3bf4 100644
+> --- a/drivers/usb/usbip/stub_dev.c
+> +++ b/drivers/usb/usbip/stub_dev.c
+> @@ -393,7 +393,6 @@ static int stub_probe(struct usb_device *udev)
+>   
+>   err_port:
+>   	dev_set_drvdata(&udev->dev, NULL);
+> -	usb_put_dev(udev);
+>   
+>   	/* we already have busid_priv, just lock busid_lock */
+>   	spin_lock(&busid_priv->busid_lock);
+> @@ -408,6 +407,7 @@ static int stub_probe(struct usb_device *udev)
+>   	put_busid_priv(busid_priv);
+>   
+>   sdev_free:
+> +	usb_put_dev(udev);
+>   	stub_device_free(sdev);
+>   
+>   	return rc;
+> 
 
-Given the needs of the userspace code, maybe the suggested "break_io"
-would be the best choice?
+With the above addressed:
 
-> And sending the signal _does_ set a new state, whether you intended to=20
-> or not.  Although in this case, the new state is always the same as the=20
-> old state, i.e., FSG_STATE_NORMAL.
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-So I could call raise_exception(fsg->common, FSG_STATE_NORMAL) instead of s=
-ending
-the signal from break_io handler. There will be a slight difference
-in exception_req_tag and exception_arg, but it does not seem to cause any s=
-ide effects.
-Please correct me if I'm wrong.
-
+thanks,
+-- Shuah
