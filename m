@@ -2,63 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BBD4F5F9B
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 15:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629E44F604C
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 15:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233298AbiDFN0V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Apr 2022 09:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
+        id S234093AbiDFNxs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Apr 2022 09:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233291AbiDFNZw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 09:25:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF84386A89;
-        Tue,  5 Apr 2022 18:13:19 -0700 (PDT)
+        with ESMTP id S233977AbiDFNxk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 09:53:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF54844CCF3
+        for <linux-usb@vger.kernel.org>; Tue,  5 Apr 2022 18:56:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67F2F61923;
-        Wed,  6 Apr 2022 01:13:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D82AC385A1;
-        Wed,  6 Apr 2022 01:13:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 554F4B8203A
+        for <linux-usb@vger.kernel.org>; Wed,  6 Apr 2022 01:56:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E813AC385A4
+        for <linux-usb@vger.kernel.org>; Wed,  6 Apr 2022 01:56:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649207598;
-        bh=XhrRwaJr766BJcr+zRvpxYXxBy6jna9TGrTSweXCY1Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g8Oqp0wSAhnciHM0lfhuzwuROBlAV0QXRuF062IwHGhpgOFIKfLzrVHCccbzRkOin
-         7R0C0T2xEWGUUREEo79Ws2luDtk97Bcv5Ix1hjIqwDgbv7+de+7BD6E+WqzDBDPNRe
-         WLEMFqAz1mSdFu+lYXB/7w2enU5on5KfevctBaZCzti1J+5FSBMla8KL9U+coMTrDc
-         PT9TDJs3mvxU1JWtZW7ZFa0n0gCUnxc2cb75v7MSxLS7xP52BBXPpbMrZorpTWBtNy
-         bV7obvFWjwnCmzqkA00ARtjNoz8YawBqMbRpjx+OerzeqhQ4pFZPyamnWaUQCXhzGN
-         Efl3Qn+Ia+nGA==
-Date:   Wed, 6 Apr 2022 09:13:10 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>
-Cc:     =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Scott Branden <sbranden@broadcom.com>,
-        Tony Lindgren <tony@atomide.com>, kernel@pengutronix.de,
-        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v5 9/9] arm64: dts: imx8mm-kontron: fix ethernet node name
-Message-ID: <20220406011310.GC129381@dragon>
-References: <20220216074927.3619425-1-o.rempel@pengutronix.de>
- <20220216074927.3619425-10-o.rempel@pengutronix.de>
+        s=k20201202; t=1649210193;
+        bh=fr5V/IwM4IQkz3SCioIdpXn3p9LrtGqH7NY/CotLeNs=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=HXzrRGaWWZIFr1jp/pFS/RLCqwdZ4Q80p0GOUB4Ah1I4azr2RnAQMLgu0zh1HEErz
+         ykrv/WmAQF81RclcVWEr6qzbzgCYuQ81e8ztWwQO0kOzvZCoCSrdaOu7GH1QNMhE7D
+         nKz8r4OoF/9HpO4wivh7GR33UbjLzrs2DNcUv/D4Q7DdzBzmGOYMrCYLXBSdW0POx9
+         tzAWCUXnPWYChSn0NzA6fqoIPfq7C+6QO1uuK4k7PceZLjRNGdd8Q+Cg0Vy312SSS3
+         dWN4obMS8LoZXaWK751uadvv+BEki1A5P1lofzbIPLOuTQVmN0Zl45QSTgGUlweR3y
+         JmYULYzjgWwvA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id C58BBC05FCE; Wed,  6 Apr 2022 01:56:33 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215799] apple-mfi-fastcharge causes automatic pm hibernation
+ entry, when iPhone gets attached
+Date:   Wed, 06 Apr 2022 01:56:33 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: labre@posteo.de
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-215799-208809-A133p9a2QE@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215799-208809@https.bugzilla.kernel.org/>
+References: <bug-215799-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216074927.3619425-10-o.rempel@pengutronix.de>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,41 +71,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-+ Frieder Schrempf who is the board owner.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215799
 
-On Wed, Feb 16, 2022 at 08:49:27AM +0100, Oleksij Rempel wrote:
-> The node name of Ethernet controller should be "ethernet" instead of
-> "usbether" as required by Ethernet controller devicetree schema:
->  Documentation/devicetree/bindings/net/ethernet-controller.yaml
-> 
-> This patch can potentially affect boot loaders patching against full
-> node path instead of using device aliases.
+Manuel Ullmann (labre@posteo.de) changed:
 
-Frieder,
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |CODE_FIX
 
-Are you okay with that?
+--- Comment #4 from Manuel Ullmann (labre@posteo.de) ---
+(In reply to Oliver Neukum from comment #2)
+> Working theory:
+>=20
+> You are misinterpreting the system's reaction. The hibernation is not done
+> automatically by the kernel. Instead the kernel reports a charger as a
+> battery. That battery, being a charger, reports a charge of zero. User sp=
+ace
+> monitors this and does as it should if its only known power source is a
+> battery at zero charge: it hibernates the system.
 
-Shawn
+Your theory is correct. The laptop-mode-tools auto-hibernation facility cau=
+ses
+the hibernation. This happens even with the patch, because laptop-mode-tools
+fails to check, whether a battery has battery-like nodes or whether there a=
+re
+just chargers in /sys/class/power_supply. [1]
 
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
-> index d40caf14ac4a..23be1ec538ba 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
-> @@ -182,7 +182,7 @@ usb1@1 {
->  		#address-cells = <1>;
->  		#size-cells = <0>;
->  
-> -		usbnet: usbether@1 {
-> +		usbnet: ethernet@1 {
->  			compatible = "usb424,ec00";
->  			reg = <1>;
->  			local-mac-address = [ 00 00 00 00 00 00 ];
-> -- 
-> 2.30.2
-> 
+> Please test this patch
+
+Thank you for looking into this and for the patch. laptop-mode-tools is in
+Bash, so I can send the PR myself. It would be nice, if it could be backpor=
+ted,
+since it fixes a bug, but laptop-mode-tools could also use a better check f=
+or
+battery nodes.
+
+[1]:
+https://github.com/rickysarraf/laptop-mode-tools/blob/25496b668d597f947a7d6=
+5e7c2d4712e8f77692e/usr/sbin/laptop_mode#L486
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
