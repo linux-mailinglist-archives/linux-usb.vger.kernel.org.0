@@ -2,87 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CCC4F6831
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 19:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0C94F68BA
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 20:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239741AbiDFR4Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Apr 2022 13:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
+        id S240329AbiDFSPN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Apr 2022 14:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239770AbiDFR4I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 13:56:08 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 293963C30F8
-        for <linux-usb@vger.kernel.org>; Wed,  6 Apr 2022 09:20:06 -0700 (PDT)
-Received: (qmail 192537 invoked by uid 1000); 6 Apr 2022 12:20:05 -0400
-Date:   Wed, 6 Apr 2022 12:20:05 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, CobeChen@zhaoxin.com,
-        TimGuo@zhaoxin.com, tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
-Subject: Re: [PATCH] USB:Fix ehci infinite suspend-resume loop issue in
- zhaoxin
-Message-ID: <Yk29tZpy9pLDlPj2@rowland.harvard.edu>
-References: <3d0ae3ca-9dad-bb8f-5c41-45bdcb07b9cd@zhaoxin.com>
- <Yi9QIk+6VIWW6V/W@rowland.harvard.edu>
- <320584eb-ef89-3759-509c-e7e9cb10f983@zhaoxin.com>
- <YjCuOXRFZ8CjK9SD@rowland.harvard.edu>
- <ac40c227-ea26-bccd-d254-5a2034103184@zhaoxin.com>
- <YkxoHY2SVomGwGdh@rowland.harvard.edu>
- <bbd9148d-5970-2233-6ee9-625e961cd2f5@zhaoxin.com>
+        with ESMTP id S240487AbiDFSO4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 14:14:56 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33D4239313;
+        Wed,  6 Apr 2022 09:52:38 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id h11so4069758ljb.2;
+        Wed, 06 Apr 2022 09:52:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=hivMJCrPDEZ4f+6hmVn6hj8p1TUlQCQz9AqY1gEV4jw=;
+        b=hACzY332OhkbK68D5QIPTEzAVPoRFXE8oksSkVa9KtQBEdACNqGv72zJEHLEI9QZXM
+         5QbmA8jMYkJAMi6wxongOZTVHNuxKsQzpl93lNvMqD+v361Bl2v1ughzSO3jjiy0zxFq
+         MizUaFtb9P8OElMN3GdLUk5Ip4XauCy6D5JePUfqKonY0w4LDDCF1tzvLJQqsda70lv5
+         gYK7y3Lzv0sl81d1wGpL9v/a3kt9bO4nRouZRxAXPmLxgtv8gG8QRUPgFcq2CQDaITSr
+         9SkrFbz8AfeNW7avb566/PPsHGBqO6BnSJsg3b7Fc0w2MZv0GGPgmP3NDX8pl6V0nY7H
+         W3lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=hivMJCrPDEZ4f+6hmVn6hj8p1TUlQCQz9AqY1gEV4jw=;
+        b=WKPGK/pVvjQMJrYSDF1bF0LgeJHMaGlW6JoRwTJJeJSvMnksi4HiJM+9+lkZxvgZSC
+         /EdNoZAmdih/l5i/Utq6GyuKPm7++W/fZ1E8v98SEdc8byrk0YR1qLLkp54PHCWCsGqC
+         l0Yi3Y9N5ErG7Uvgii7uZde9TlN2714vfFpkgfwMFc8gLQ9M3ZT+Q3NOV+mguF9G2Wd8
+         HiWKUaVtGVZ+RVMxQtv4KtmjZkIuKu+3aE/mSkaDuEBpqOUXcKyXuisF+2TQCQ1yuGId
+         Zz3WHAcrcnhirqoDvMZvu3x3APBLbl1GcT6rT3IeNC7JHfoq70p+ZVfGuoiZd9Dw3Npm
+         B8Rw==
+X-Gm-Message-State: AOAM532c2fC/HMrOkM4oRoRRLUH0DkoT35bhQFpxro21EvBWx/NVPpO2
+        5ed6ij9f4IFEt4g+HfpY+EA=
+X-Google-Smtp-Source: ABdhPJzVbE2XPzujOfnuB8RNCRrD7x9ttQeAciO1x5BAFgV/ApAg7IheulSAKOAU4qCPuEQLGzyqog==
+X-Received: by 2002:a2e:9e43:0:b0:24b:3c6:3832 with SMTP id g3-20020a2e9e43000000b0024b03c63832mr5707412ljk.63.1649263956916;
+        Wed, 06 Apr 2022 09:52:36 -0700 (PDT)
+Received: from reki (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
+        by smtp.gmail.com with ESMTPSA id k19-20020a056512331300b0044a8470fe29sm1883995lfe.19.2022.04.06.09.52.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 09:52:35 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 19:52:34 +0300
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_mass_storage: break IO operations via
+ configfs
+Message-ID: <20220406195234.4f63cb4a@reki>
+In-Reply-To: <Yk2wvhSTMKTLFK6c@rowland.harvard.edu>
+References: <20220406092445.215288-1-mdevaev@gmail.com>
+ <Yk2wvhSTMKTLFK6c@rowland.harvard.edu>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bbd9148d-5970-2233-6ee9-625e961cd2f5@zhaoxin.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 10:38:28AM +0800, WeitaoWang-oc@zhaoxin.com wrote:
-> On 2022/4/6 00:02, Alan Stern wrote:
-> > In fact, the resume kernel doesn't call ehci_resume at all.  Here's what
-> > it does:
-> > 
-> > 	The resume kernel boots;
-> > 
-> > 	If your patch causes STS_PCD to be set at this point, the flag
-> > 	should get cleared shortly afterward by ehci_irq;
-> > 
-> > 	ehci-hcd goes into runtime suspend;
-> > 
-> > 	The kernel reads the system image that was stored earlier when
-> > 	hibernation began;
-> > 
-> > 	After the image is loaded, the system goes into the freeze
-> > 	state (this does not call any routines in ehci-hcd);
-> On this phase, pci_pm_freeze will be called for pci device. In this
-> function, pm_runtime_resume will be called to resume already
-> runtime-suspend devices. which will cause ehci_resume to be called.
-> Thus STS_PCD flag will be set in ehci_resume function.
+> It's not clear to me how breaking I/O operations allows you to do a 
+> "force eject".  It seems that what you would need is something like 
+> fsg_store_file() that omits the curlun->prevent_medium_removal check.
+> Interrupting a lengthy I/O operation doesn't really have anything to do 
+> with this.
 
-Aha!  I was missing that piece of information, thanks.
+Perhaps I chose the wrong path, it's just how my userspace code works now.
+If the drive is connected to a Linux host, then in order to clear
+the "file" and extract the image, I sent a SIGUSR1 signal to the "file-storage"
+thread. This interrupted long IO operations, reset curlun->prevent_medium_removal
+and I got the ability to extract.
 
-But this still doesn't explain why check_root_hub_suspended is failing.  
-That routine checks the HCD_RH_RUNNING bit, which gets set in 
-hcd_bus_resume.  hcd_bus_resume gets called as part of resuming the root 
-hub, and in ehci-hcd this happens when ehci_irq sees that STS_PCD is set 
-and calls usb_hcd_resume_root_hub.  That routine queues a wakeup request 
-on the pm_wq work queue, which is then supposed to run hcd_resume_work 
-to actually restart the root hub.
+It was done in our KVM-over-IP project and worked for several years,
+just now I want to do it without searching for procfs and the need
+to use sudo helpers like this:
+https://github.com/pikvm/kvmd/blob/1b3a2cc/kvmd/helpers/otgmsd/unlock/__init__.py
 
-But pm_wq is a freezable work queue!  While the system is in the freeze 
-state, the work queue isn't running.  This means that the root hub 
-should remain suspended until the end of the freeze phase, and so the 
-call to check_root_hub_suspended should succeed.
+Maybe it's worth introducing some option that will allow us to ignore
+curlun->prevent_medium_removal and perform a forced extraction?
+Something like "allow_force_eject" on the same lavel with "stall".
+Will masking the curlun->prevent_medium_removal flag be enough?
 
-Can you check to see what's really happening on your system?  Something 
-must be wrong with my analysis, but I can't tell what it is.  I'm still 
-puzzled.
+> Or to keep this ability restricted to the superuser, if that is desired.
 
-Alan Stern
+Indeed.
+
+> You should not call send_sig_info() directly; instead call 
+> raise_exception().  It already does the work you need (including some 
+> things you left out).
+
+raise_exception() assumes the setting of a new state, and I did not want to do this,
+since the same does not happen when throwing a signal from userspace.
