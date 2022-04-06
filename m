@@ -2,65 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FF84F5CDF
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 13:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BBD4F5F9B
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 15:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiDFLtq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Apr 2022 07:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
+        id S233298AbiDFN0V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Apr 2022 09:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbiDFLtd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 07:49:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2485A6284
-        for <linux-usb@vger.kernel.org>; Wed,  6 Apr 2022 01:47:40 -0700 (PDT)
+        with ESMTP id S233291AbiDFNZw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 09:25:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF84386A89;
+        Tue,  5 Apr 2022 18:13:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA788B8218E
-        for <linux-usb@vger.kernel.org>; Wed,  6 Apr 2022 08:47:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5F724C385A1
-        for <linux-usb@vger.kernel.org>; Wed,  6 Apr 2022 08:47:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67F2F61923;
+        Wed,  6 Apr 2022 01:13:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D82AC385A1;
+        Wed,  6 Apr 2022 01:13:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649234857;
-        bh=GtAodZEEbnaBXpx28tmVn+XHQvCIdnZTtLnY+kvT7jQ=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Ias5MCYsnWzo9408z1jssGH6LHlPESOZ7NdJZz4vOdUre6/ekELEq+2HoYNiXpd/u
-         TX6dJW1getPl2ulj5IpneDJB6cikRbDeN4ThC6ASaQW2wiVxLpmAJdGG7PvLzihVX+
-         1Rf1HtYCAMi71+U8gI/XHKGS9we5hbWlWkZkBVndIgzjiCeg9CujsVaWdW76m4AwpJ
-         ZAD8XS+it7Ka3KLr/fxwNzydi2YEDxkJnA5Dwfq4r90TajkWd6UVQdsw15sngRxKuN
-         Ph9ZbF1i+cTGHboA3hehNgGbZJ9AvdyvpPZQwHcJ+vzHZGaVFVS392/59vE3F805+I
-         OVfBqYEpHVLXg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 4D130C05FE2; Wed,  6 Apr 2022 08:47:37 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215799] apple-mfi-fastcharge causes automatic pm hibernation
- entry, when iPhone gets attached
-Date:   Wed, 06 Apr 2022 08:47:37 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: oliver@neukum.org
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: CODE_FIX
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215799-208809-SEX9Mt2x0B@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215799-208809@https.bugzilla.kernel.org/>
-References: <bug-215799-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        s=k20201202; t=1649207598;
+        bh=XhrRwaJr766BJcr+zRvpxYXxBy6jna9TGrTSweXCY1Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g8Oqp0wSAhnciHM0lfhuzwuROBlAV0QXRuF062IwHGhpgOFIKfLzrVHCccbzRkOin
+         7R0C0T2xEWGUUREEo79Ws2luDtk97Bcv5Ix1hjIqwDgbv7+de+7BD6E+WqzDBDPNRe
+         WLEMFqAz1mSdFu+lYXB/7w2enU5on5KfevctBaZCzti1J+5FSBMla8KL9U+coMTrDc
+         PT9TDJs3mvxU1JWtZW7ZFa0n0gCUnxc2cb75v7MSxLS7xP52BBXPpbMrZorpTWBtNy
+         bV7obvFWjwnCmzqkA00ARtjNoz8YawBqMbRpjx+OerzeqhQ4pFZPyamnWaUQCXhzGN
+         Efl3Qn+Ia+nGA==
+Date:   Wed, 6 Apr 2022 09:13:10 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc:     =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Scott Branden <sbranden@broadcom.com>,
+        Tony Lindgren <tony@atomide.com>, kernel@pengutronix.de,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v5 9/9] arm64: dts: imx8mm-kontron: fix ethernet node name
+Message-ID: <20220406011310.GC129381@dragon>
+References: <20220216074927.3619425-1-o.rempel@pengutronix.de>
+ <20220216074927.3619425-10-o.rempel@pengutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216074927.3619425-10-o.rempel@pengutronix.de>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,25 +69,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215799
++ Frieder Schrempf who is the board owner.
 
---- Comment #5 from Oliver Neukum (oliver@neukum.org) ---
-(In reply to Manuel Ullmann from comment #4)
+On Wed, Feb 16, 2022 at 08:49:27AM +0100, Oleksij Rempel wrote:
+> The node name of Ethernet controller should be "ethernet" instead of
+> "usbether" as required by Ethernet controller devicetree schema:
+>  Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> 
+> This patch can potentially affect boot loaders patching against full
+> node path instead of using device aliases.
 
->=20
-> Thank you for looking into this and for the patch. laptop-mode-tools is in
-> Bash, so I can send the PR myself. It would be nice, if it could be
-> backported, since it fixes a bug, but laptop-mode-tools could also use a
-> better check for battery nodes.
+Frieder,
 
-Hi,
+Are you okay with that?
 
-just to make this clear. We seem to have two bugs. Do both need to be fixed=
- to
-remedy this issue, or do we have two independent bugs?
+Shawn
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
+> index d40caf14ac4a..23be1ec538ba 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
+> @@ -182,7 +182,7 @@ usb1@1 {
+>  		#address-cells = <1>;
+>  		#size-cells = <0>;
+>  
+> -		usbnet: usbether@1 {
+> +		usbnet: ethernet@1 {
+>  			compatible = "usb424,ec00";
+>  			reg = <1>;
+>  			local-mac-address = [ 00 00 00 00 00 00 ];
+> -- 
+> 2.30.2
+> 
