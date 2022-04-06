@@ -2,123 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4513B4F6484
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 18:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB514F6587
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 18:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236761AbiDFP5H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Apr 2022 11:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57322 "EHLO
+        id S237559AbiDFQdF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Apr 2022 12:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236759AbiDFP4z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 11:56:55 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CD156ED5D;
-        Wed,  6 Apr 2022 06:21:56 -0700 (PDT)
-Received: from darkstar.musicnaut.iki.fi (85-76-76-218-nat.elisa-mobile.fi [85.76.76.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: aaro.koskinen)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 67FC71B000E0;
-        Wed,  6 Apr 2022 16:21:51 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1649251312;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wwR7bU/LqezBbEgTJDf+iEsMymzvGIHgAIteyu5Psh0=;
-        b=eQ8xzLBJMgXjtwB7Yzjx/LojJlTidJ/nTLI5pX0s3cY3Zpsn8b7BqqyMs3XT0RDiE5x3gs
-        VxYcG9eYTL2ti5Y7V7hFYM+rqV7NikHD3H+p5eERqlQfhhkziGxt5EzkIqEux9pVT/63ct
-        9RZefQzE5i14yPjKv+zCKIJs/eTPZg90LntJxUwFkLpuxJfeJHGC27x/eapHvMw+3QBCfO
-        gmU++itRdwNwFQooc8+77js9RrGrUrR+mkDgelpwUoV/wq1kCEziaeZMKg/gpUDKVDqGmb
-        sdmlvWnhCTYcYS7NFr9PDY7i6KlEk5IH1VV/If5zeEdFsCEIB7hDvyObaWz3Xw==
-Date:   Wed, 6 Apr 2022 16:21:49 +0300
-From:   Aaro Koskinen <aaro.koskinen@iki.fi>
-To:     Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Cc:     Tony Lindgren <tony@atomide.com>, Paul Walmsley <paul@pwsan.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
+        with ESMTP id S238249AbiDFQcx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 12:32:53 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B603119481D;
+        Wed,  6 Apr 2022 06:52:25 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 236DqJL0112009;
+        Wed, 6 Apr 2022 08:52:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649253139;
+        bh=AQtmCU8nSw+pQUsM07priatShylKCYZ0upOcmmY/1FU=;
+        h=From:To:CC:Subject:Date;
+        b=BqUeqp/+TzacMy9jQdjsNvRJiB2MJW4gyzBCjAM5Zb2wiMY30Kzu1HQR750uVaXvv
+         cKRwXviWs8eXflbgweaBlWQ/krr+SgJNeLGKfP4c1QLyoHDR2THNJi+UTinNxA61Us
+         JPLeAc0sCR7JnmQ3CTXegxcOAGfIX1nsDXFhy9vQ=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 236DqJmB089706
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 6 Apr 2022 08:52:19 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 6
+ Apr 2022 08:52:19 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 6 Apr 2022 08:52:19 -0500
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 236DqFsn079424;
+        Wed, 6 Apr 2022 08:52:16 -0500
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Felipe Balbi <balbi@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-mmc@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH v2] ARM: OMAP1: Prepare for conversion of OMAP1 clocks to
- CCF
-Message-ID: <20220406132149.GC594699@darkstar.musicnaut.iki.fi>
-References: <20220310233307.99220-3-jmkrzyszt@gmail.com>
- <20220322163646.GD297526@darkstar.musicnaut.iki.fi>
- <20220322190753.GF297526@darkstar.musicnaut.iki.fi>
- <1810824.tdWV9SEqCh@dell>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/2] AM62: Add support for AM62 USB wrapper driver
+Date:   Wed, 6 Apr 2022 19:22:09 +0530
+Message-ID: <20220406135214.6989-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1810824.tdWV9SEqCh@dell>
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1649251312; a=rsa-sha256;
-        cv=none;
-        b=G3rkvREcvYSgPILWjB5NXkPEwDB12zuDb/aFmiEvpjUFHoIPAJkYCg4gSvydBuXsCOrASV
-        qwVzzbSSEMx9mt98MsnoQGVKzIanrO0nr1oceqozsnLldbYtfYofM5nMCz1ygfNCoiqH+K
-        IgUw/j2ZP7FR0vbtq7AE6gODdl7vMQ3Vfs+C4Xr8gfhiKcLrcewjnyFbLJ8VzM6wBTdU7t
-        gGydIzbI/MdPmrFnVpcq2dLpYJlLq8V5O5cFhpaQPPezxVpgC6QZLcN3upxt341r2aPWzQ
-        DGmnbA4hUe8LZaRUfUkOTNHA0z69SzxLRjRbScNwYpTyKIoK+T6Q5ps5tgqjKw==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1649251312;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wwR7bU/LqezBbEgTJDf+iEsMymzvGIHgAIteyu5Psh0=;
-        b=vWn818AHWtvsq5cDnlrJUnWE79qMNnj8xFj19jFSqwBPLeAtdZ43oHVi70bcMK+nMmLrSK
-        egs3u5wrj9LuerZbuMRnIpytvyvxIRPPV7q5I7a2AsQUHhbykzAHVVpq/9fp7ydLJC4BkE
-        /j7PyMCSQ8gsrfNhsiwPPt7loNA6QMRRlDk5Z6QZ2s9NdMXLpTvDXdFyETUiIH9yQ6N8ZV
-        UA7Ohf8mDgm8uV/Dx1bNcCT7oIamV8mar/PlKoL+fP1XJy/PNu3ZxCz87uc5NkMQwotWIp
-        I92ppcKhR83XiGqTSWPAjd1EkDpGjMI2CtDXW+kr0FIUmivOhk5Ny7zCGfDavA==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+The following series of patches add support for AM62 USB wrapper driver
+and its corresponding bindings.
 
-On Sat, Mar 26, 2022 at 10:17:49PM +0100, Janusz Krzysztofik wrote:
-> Dnia wtorek, 22 marca 2022 20:07:53 CET Aaro Koskinen pisze:
-> > On Tue, Mar 22, 2022 at 06:36:48PM +0200, Aaro Koskinen wrote:
-> > > Something is still broken. When doing kexec (using CCF kernel), the
-> > > kexec'ed kernel now hangs early (on 770):
-> > [...]
-> > > [    0.928863] calling  omap1_init_devices+0x0/0x2c @ 1
-> > 
-> > It hangs in omap_sram_reprogram_clock() (<- omap1_select_table_rate()
-> > <- omap1_clk_late_init()).
-> 
-> I've reviewed my changes but haven't found anything suspicious.
+changes since v2:
+- Removed the implementation of detecting the role from the wrapper
+  driver and moved the implementation to using linux,extcon-usb-gpio
+  driver for role detection.
+- Updated the binding documentation and example to reflect the same.
 
-The below change is fixing the kexec boot. Based on the comment in the
-code, it seems this clock is needed for the SRAM to work.
+changes since v1:
+- Fixed the error with dev_pm_ops uninitialization, in patch 2.
+  This was reported by kernel test bot
+- In patch 1, made correction in grammer of clocks property description
+  and added maxItems in the interrupts property based on comments
+  received from Roger
+- In patch 1, corrected the title, fixed the description of
+  ti,syscon-phy-pll-refclk, added pattern properties and child node
+  in the example based on the comments from Krzysztof. 
 
-diff --git a/arch/arm/mach-omap1/clock_data.c b/arch/arm/mach-omap1/clock_data.c
-index e33e11f826af..b8b4876ff935 100644
---- a/arch/arm/mach-omap1/clock_data.c
-+++ b/arch/arm/mach-omap1/clock_data.c
-@@ -285,7 +285,7 @@ static struct omap1_clk tc1_ck = {
-  */
- 
- static struct omap1_clk tc2_ck = {
--	.hw.init	= CLK_HW_INIT("tc2_ck", "tc_ck", &omap1_clk_gate_ops, 0),
-+	.hw.init	= CLK_HW_INIT("tc2_ck", "tc_ck", &omap1_clk_gate_ops, CLK_IS_CRITICAL),
- 	.ops		= &clkops_generic,
- 	.enable_reg	= OMAP1_IO_ADDRESS(ARM_IDLECT3),
- 	.enable_bit	= EN_TC2_CK,
+Aswath Govindraju (2):
+  dt-bindings: usb: Add documentation for AM62 USB Wrapper module
+  drivers: usb: dwc3: Add AM62 USB wrapper driver
 
-A.
+ .../devicetree/bindings/usb/ti,am62-usb.yaml  | 115 +++++
+ drivers/usb/dwc3/Kconfig                      |   9 +
+ drivers/usb/dwc3/Makefile                     |   1 +
+ drivers/usb/dwc3/dwc3-am62.c                  | 446 ++++++++++++++++++
+ 4 files changed, 571 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+ create mode 100644 drivers/usb/dwc3/dwc3-am62.c
+
+-- 
+2.17.1
