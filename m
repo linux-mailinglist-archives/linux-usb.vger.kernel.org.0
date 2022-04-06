@@ -2,117 +2,341 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B728D4F61DD
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 16:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C8B4F61F8
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Apr 2022 16:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234621AbiDFOXY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Apr 2022 10:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
+        id S234936AbiDFOjZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Apr 2022 10:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234675AbiDFOXR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 10:23:17 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701714C0080;
-        Wed,  6 Apr 2022 03:28:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649240901; x=1680776901;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ga3bmWpFRns3F8dX7fQDF54qJCQGZJAxmilcJLgTgi4=;
-  b=ISovC0x0CfXM3aY0CZ4mpCnr/wxXR/JoE1bAp8n+//p5i2J7w+LyhBtJ
-   awsNfUz1Z14lcSIMy9T/BE9+nrsjZtH+pnKtK8PDtZDURFHZDnmpwIYpc
-   be/JUg/FxVvJQ6iT0eKmUmMXz+oQxQZZz97cwB1x/tNkei1jRr8mmWLB1
-   LpP+ZGBQEMHY2iUFl89+YXXp6/HCu2kNVIJXARd91FKY91YgwLDXRdeYm
-   EwVpfze661J/AWur2yr4NZmlaZ3zklwt8dEEUuftRwB3Nc5QtqZx8lZHC
-   cMGCTwUT3Yy6DQ31yaGN5/0W2gVAHDwiqU43uqJMxCLk54mu0ma8vRd1e
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="240942576"
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="240942576"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 03:28:08 -0700
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="570453045"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.82]) ([10.254.215.82])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 03:28:04 -0700
-Message-ID: <b2bcd37a-08aa-0c49-8181-063beb43fc41@linux.intel.com>
-Date:   Wed, 6 Apr 2022 18:28:01 +0800
+        with ESMTP id S234991AbiDFOjF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 10:39:05 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2424557DB;
+        Wed,  6 Apr 2022 04:02:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649242928; x=1680778928;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=5Vd4p97X7lurv2t1pBHjljFm4GNcTipj0ct9dgPwR3A=;
+  b=SX3w5T7T1yecjjnjhUbk135dBvnwOrQT1OOl5iFLMJUJzEPFmKMvVCE4
+   wOVwGfZ/CKmBPbNlvJw1tV3Fx3JaDMQy6AmSarjfOJA5M/5GAhXY8d99a
+   DZh1Gbx0e7QaGEUA+EPNkT6/86LBgBjeJPWGYERO1e13jZKrxQbMVrMYB
+   Y=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Apr 2022 04:02:04 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 04:02:03 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 6 Apr 2022 04:02:03 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 6 Apr 2022 04:01:57 -0700
+Date:   Wed, 6 Apr 2022 16:31:53 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Doug Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_kriskura@quicinc.com>
+Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
+ XHCI_SKIP_PHY_INIT
+Message-ID: <20220406110153.GE10801@hu-pkondeti-hyd.qualcomm.com>
+References: <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
+ <Yj2nPa6/Y01P5aCY@kuha.fi.intel.com>
+ <4619c75c-cd34-82f2-56e1-a8bcb6d97177@linux.intel.com>
+ <Yj3h4p/kmZTvMz0O@kuha.fi.intel.com>
+ <fae54b27-9ae2-ecfc-69ae-40e5f5e1afbe@quicinc.com>
+ <bd694ef9-be57-79f1-e95e-5501c396be25@linux.intel.com>
+ <YkWNpTLjh2weX9Mk@kuha.fi.intel.com>
+ <20220404082516.GE29680@hu-pkondeti-hyd.qualcomm.com>
+ <20220406062543.GA10801@hu-pkondeti-hyd.qualcomm.com>
+ <1234f637-9420-77e2-dc61-7e702ac8abe0@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Cc:     baolu.lu@linux.intel.com, iommu@lists.linux-foundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mario.limonciello@amd.com, hch@lst.de
-Subject: Re: [PATCH v3 2/4] iommu: Add capability for pre-boot DMA protection
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-References: <cover.1649089693.git.robin.murphy@arm.com>
- <2b5dc62a6325075cb5bd1ceec31ebad1833acf83.1649089693.git.robin.murphy@arm.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <2b5dc62a6325075cb5bd1ceec31ebad1833acf83.1649089693.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1234f637-9420-77e2-dc61-7e702ac8abe0@linux.intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2022/4/5 18:41, Robin Murphy wrote:
-> VT-d's dmar_platform_optin() actually represents a combination of
-> properties fairly well standardised by Microsoft as "Pre-boot DMA
-> Protection" and "Kernel DMA Protection"[1]. As such, we can provide
-> interested consumers with an abstracted capability rather than
-> driver-specific interfaces that won't scale. We name it for the former
-> aspect since that's what external callers are most likely to be
-> interested in; the latter is for the IOMMU layer to handle itself.
-> 
-> [1] https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-kernel-dma-protection
-> 
-> Suggested-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Hi Mathias,
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-
-Best regards,
-baolu
-
-> ---
->   drivers/iommu/intel/iommu.c | 2 ++
->   include/linux/iommu.h       | 2 ++
->   2 files changed, 4 insertions(+)
+On Wed, Apr 06, 2022 at 01:52:56PM +0300, Mathias Nyman wrote:
+> Hi
 > 
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index 255304eb3b1f..49d552a96098 100644
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -4550,6 +4550,8 @@ static bool intel_iommu_capable(struct device *dev, enum iommu_cap cap)
->   		return domain_update_iommu_snooping(NULL);
->   	if (cap == IOMMU_CAP_INTR_REMAP)
->   		return irq_remapping_enabled == 1;
-> +	if (cap == IOMMU_CAP_PRE_BOOT_PROTECTION)
-> +		return dmar_platform_optin();
->   
->   	return false;
->   }
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index 1fa927e6f1c6..64c02f472f7b 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -107,6 +107,8 @@ enum iommu_cap {
->   					   transactions */
->   	IOMMU_CAP_INTR_REMAP,		/* IOMMU supports interrupt isolation */
->   	IOMMU_CAP_NOEXEC,		/* IOMMU_NOEXEC flag */
-> +	IOMMU_CAP_PRE_BOOT_PROTECTION,	/* Firmware says it used the IOMMU for
-> +					   DMA protection and we should too */
->   };
->   
->   /* These are the possible reserved region types */
+> Sorry about the delayed response.
+> 
+> 
+> On 6.4.2022 9.25, Pavan Kondeti wrote:
+> > Hi Heikki/Mathias,
+> > 
+> > On Mon, Apr 04, 2022 at 01:55:16PM +0530, Pavan Kondeti wrote:
+> >> Hi Heikki,
+> >>
+> >> On Thu, Mar 31, 2022 at 02:16:53PM +0300, Heikki Krogerus wrote:
+> >>> On Wed, Mar 30, 2022 at 08:47:34PM +0300, Mathias Nyman wrote:
+> >>>> On 29.3.2022 12.18, Sandeep Maheswaram (Temp) wrote:
+> >>>>> Hi Mathias,Heikki
+> >>>>>
+> >>>>> On 3/25/2022 9:08 PM, Heikki Krogerus wrote:
+> >>>>>> On Fri, Mar 25, 2022 at 04:33:27PM +0200, Mathias Nyman wrote:
+> >>>>>>> On 25.3.2022 13.27, Heikki Krogerus wrote:
+> >>>>>>>> On Fri, Mar 25, 2022 at 12:36:22AM +0200, Mathias Nyman wrote:
+> >>>>>>>>> On 24.3.2022 14.27, Heikki Krogerus wrote:
+> >>>>>>>>>> On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
+> >>>>>>>>>>> Currently the phy init is done from dwc3 and also xhci which makes the
+> >>>>>>>>>>> runtime_usage value 2 for the phy which causes issue during runtime
+> >>>>>>>>>>> suspend. When we run the below command the runtime_status still shows
+> >>>>>>>>>>> active.
+> >>>>>>>>>>> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
+> >>>>>>>>>>>
+> >>>>>>>>>>> dwc3 manages PHY by own DRD driver, so skip the management by
+> >>>>>>>>>>> HCD core by setting this quirk.
+> >>>>>>>>>>>
+> >>>>>>>>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> >>>>>>>>>>> ---
+> >>>>>>>>>>>   drivers/usb/dwc3/host.c | 13 +++++++++++++
+> >>>>>>>>>>>   1 file changed, 13 insertions(+)
+> >>>>>>>>>>>
+> >>>>>>>>>>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> >>>>>>>>>>> index eda8719..d4fcf06 100644
+> >>>>>>>>>>> --- a/drivers/usb/dwc3/host.c
+> >>>>>>>>>>> +++ b/drivers/usb/dwc3/host.c
+> >>>>>>>>>>> @@ -13,6 +13,12 @@
+> >>>>>>>>>>>   #include <linux/platform_device.h>
+> >>>>>>>>>>>     #include "core.h"
+> >>>>>>>>>>> +#include <linux/usb/xhci-plat.h>
+> >>>>>>>>>>> +#include <linux/usb/xhci-quirks.h>
+> >>>>>>>>>>> +
+> >>>>>>>>>>> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
+> >>>>>>>>>>> +    .quirks = XHCI_SKIP_PHY_INIT,
+> >>>>>>>>>>> +};
+> >>>>>>>>>>>     static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+> >>>>>>>>>>>                       int irq, char *name)
+> >>>>>>>>>>> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
+> >>>>>>>>>>>           }
+> >>>>>>>>>>>       }
+> >>>>>>>>>>>   +    ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
+> >>>>>>>>>>> +            sizeof(xhci_plat_dwc3_xhci));
+> >>>>>>>>>>> +    if (ret) {
+> >>>>>>>>>>> +        dev_err(dwc->dev, "failed to add data to xHCI\n");
+> >>>>>>>>>>> +        goto err;
+> >>>>>>>>>>> +    }
+> >>>>>>>>>>> +
+> >>>>>>>>>>>       ret = platform_device_add(xhci);
+> >>>>>>>>>>>       if (ret) {
+> >>>>>>>>>>>           dev_err(dwc->dev, "failed to register xHCI device\n");
+> >>>>>>>>>> I think you should just use device property:
+> >>>>>>>>>>
+> >>>>>>>>> This was suggested in an earlier series, but was rejected as it also added
+> >>>>>>>>> the property as a device tree parameter.
+> >>>>>>>>>
+> >>>>>>>>> I think adding more device properties can be messy in the long run, especially if we
+> >>>>>>>>> need to add them for many of the existing xhci quirks.
+> >>>>>>>>> We also end up with a mix where some device properties are listed as device tree
+> >>>>>>>>> parameters, and some not.
+> >>>>>>>>>
+> >>>>>>>>> Defining xhci quirks and platform data structure in headers shared with dwc3 and cdns3
+> >>>>>>>>> allow those drivers to easily set any existing xhci quirk, or other possible optional
+> >>>>>>>>> callbacks.
+> >>>>>>>>>
+> >>>>>>>>> cdns3 driver is already doing this, but it includes the full xhci.h header.
+> >>>>>>>>> This series cleans up that a bit so cdns3 will only include xhci quirk bits and
+> >>>>>>>>> platform data structure.
+> >>>>>>>>>
+> >>>>>>>>> On the downside we add a couple xhci related header files to include/linux/usb/
+> >>>>>>>>> Let me know if you see any other issues I missed with this approach.
+> >>>>>>>> The problem here is that these drivers are now coupled together, and
+> >>>>>>>> that should not be taken lightly. We have a dependency hell in our
+> >>>>>>>> hands with a lot of drivers, and the culprit is always platform data.
+> >>>>>>>>
+> >>>>>>>> Build-in device properties may be messy, but I would still say they
+> >>>>>>>> are less messy than those quirk flags - you got to admit, they are a
+> >>>>>>>> mess. The benefit from build-in properties is in any case the fact
+> >>>>>>>> that they remove the need to couple these drivers together.
+> >>>>>>> Agree, quirk bits are messy. Any suggestion that would work with
+> >>>>>>> PCI xHCI devices, devicetree, and "pure" platform devices?
+> >>>>>> I think xHCI driver should always be able to rely on being able to
+> >>>>>> read this kind of information from the fwnode. If there is no actual
+> >>>>>> firmware node (DT or ACPI), or if it's missing some information, the
+> >>>>>> glue driver needs to populate software node for the xHCI.
+> >>>>>>
+> >>>>>> Right now I just want to avoid having to pass the quirks using
+> >>>>>> platform data from drivers such as drivers/usb/cdns3/host.c and
+> >>>>>> drivers/usb/dwc3/host.c to xHCI.
+> >>>>>>
+> >>>>>> One way we could do that is by defining compatibility ID for both of
+> >>>>>> them that we provide using a single device property (like I guess DT
+> >>>>>> does). Then based on that compatibility ID, xhci-plat.c can set the
+> >>>>>> actual "static" quirk flags. That we could already do easily. How
+> >>>>>> would that sound to you?
+> >>>>
+> >>>> Sounds good. 
+> >>>>
+> >>>>>
+> >>>>> This was my previous patch where I was using device tree property. Should we go ahead with this approach?
+> >>>>>
+> >>>>> https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/
+> >>>>>
+> >>>>> Any further changes to this ?
+> >>>>
+> >>>> By dropping the DT part of that series we get a similar built-in device property
+> >>>> solution as Heikki initially suggested.
+> >>>>
+> >>>> How about adding the compatibility ID device property that was just suggested?
+> >>>> Then matching the Id in xhci-plat.c against a static table containing Ids and
+> >>>> xhci_plat_priv structures, with the needed quirks for dwc3.
+> >>>
+> >>> There was a comment from Pavan. Is it still possible to get this
+> >>> detail from DT?
+> >>> I guess that would still be ideal, right?
+> >>>
+> >> I was suggesting if we can have device tree param like the patch sandeep
+> >> pointed out.
+> >>
+> >> How would adding a compatible index to usb_xhci_of_match[] would work
+> >> actually? I ask this because, dwc3/host.c creates platform device and
+> >> it is not associated with any of_node, so of_driver_match_device() called
+> >> from platform bus match method does not work. one way to achieve this would
+> >> be by matching against sysdev. Something like below. Is it acceptible?
+> >>
+> >> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> >> index 649ffd8..bd5d055 100644
+> >> --- a/drivers/usb/host/xhci-plat.c
+> >> +++ b/drivers/usb/host/xhci-plat.c
+> >> @@ -126,6 +126,10 @@ static const struct xhci_plat_priv xhci_plat_brcm = {
+> >>  	.quirks = XHCI_RESET_ON_RESUME,
+> >>  };
+> >>  
+> >> +static const struct xhci_plat_priv xhci_plat_dwc3 = {
+> >> +	.quirks = XHCI_SKIP_PHY_INIT,
+> >> +};
+> >> +
+> >>  static const struct of_device_id usb_xhci_of_match[] = {
+> >>  	{
+> >>  		.compatible = "generic-xhci",
+> >> @@ -167,6 +171,9 @@ static const struct of_device_id usb_xhci_of_match[] = {
+> >>  	}, {
+> >>  		.compatible = "brcm,bcm7445-xhci",
+> >>  		.data = &xhci_plat_brcm,
+> >> +	}, {
+> >> +		.compatible = "snps,dwc3",
+> >> +		.data = &xhci_plat_dwc3,
+> >>  	},
+> 
+> Isn't there a risk that xhci-plat now binds to the parent dwc3 device?
+> competing with the similar of_match_table entry created in drivers/usb/dwc3/core.c
+
+Sill of me. Yes, it does not work. Thanks for pointing it out.
+
+> 
+> >>  	{},
+> >>  };
+> >> @@ -274,6 +281,15 @@ static int xhci_plat_probe(struct platform_device *pdev)
+> >>  	else
+> >>  		priv_match = dev_get_platdata(&pdev->dev);
+> >>  
+> >> +	/* allow private data mapping with the sysdev compatible */
+> >> +	if (!priv_match) {
+> >> +		struct of_device_id *match;
+> >> +
+> >> +		match = of_match_device(usb_xhci_of_match, sysdev);
+> >> +		if (match)
+> >> +			priv_match = match->data;
+> >> +	}
+> >> +
+> >>  	if (priv_match) {
+> >>  		priv = hcd_to_xhci_priv(hcd);
+> >>  		/* Just copy data for now */
+> >>
+> >>> I have another question. Can't we now just assume that if the sysdev
+> >>> is the parent (or grandparent), then the phy initialization should
+> >>> always be skipped? In that case we could just do something like this:
+> >>>
+> >>> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> >>> index 649ffd861b44e..1018b33488046 100644
+> >>> --- a/drivers/usb/host/xhci-plat.c
+> >>> +++ b/drivers/usb/host/xhci-plat.c
+> >>> @@ -212,8 +212,12 @@ static int xhci_plat_probe(struct platform_device *pdev)
+> >>>  #endif
+> >>>         }
+> >>>  
+> >>> -       if (!sysdev)
+> >>> +       if (sysdev) {
+> >>> +               if (sysdev != &pdev->dev)
+> >>> +                       hcd->skip_phy_initialization = 1;
+> >>> +       } else {
+> >>>                 sysdev = &pdev->dev;
+> >>> +       }
+> >>>  
+> >>>         if (WARN_ON(!sysdev->dma_mask))
+> >>>                 /* Platform did not initialize dma_mask */
+> >>>
+> >>>
+> >>> I did not go through all the drivers that carefully, so I may have
+> >>> missed something, but it looks like the only drivers that can have the
+> >>> sysdev as the parent or grandparent are cdns3 and dwc3.
+> >>>
+> >> I cross checked and these are two drivers that are creating xhci-plat device.
+> >> So this patch would definitely work. However I am not sure in future if any
+> >> device created via device tree would want to use this feature. For now,
+> >> it looks good. It Mathias, Do you see any problem with this approach?
+> >>
+> 
+> Would work for now but seems like a risk to assume this would hold for all future
+> xhci platform devices. 
+> 
+Agree that it may break in future for other drivers.
+
+> > 
+> > Can you please provide your suggestions on this? We have discussed about
+> > 3 approaches here other than the whole platform data refactoring done.
+> > 
+> > (1) Introduce a new dT property and expect dwc3/host.c to set this property
+> > to skip the phy initialization.
+> 
+> Adding one more device property to swnode in dwc3/host.c starts
+> to look like the best option for now even if it didn't appeal initially.
+> 
+> The place creating the xhci platform device should have best info on what properties
+> are needed for the platform device.
+> 
+> So this would be just like Heikki's first suggestion, or Sandeep's patches 2/3 and 3/3 in:
+> https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/
+> but without the devicetree binding documentation part.
+> 
+Why do you say devicetree binding doc is not needed in this case? Possible
+that xhci-plat's device can be coming from dT and this param is passed to
+skip initialization of PHY.
+
+Thanks,
+Pavan
