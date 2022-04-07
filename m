@@ -2,45 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF2B4F796E
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 10:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6974F4F7992
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 10:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235962AbiDGIXY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Apr 2022 04:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
+        id S242962AbiDGI0m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Apr 2022 04:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232075AbiDGIXV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 04:23:21 -0400
+        with ESMTP id S231472AbiDGI0l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 04:26:41 -0400
 Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DA032EFB;
-        Thu,  7 Apr 2022 01:21:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138D06D84F;
+        Thu,  7 Apr 2022 01:24:41 -0700 (PDT)
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2378LGcb079529;
-        Thu, 7 Apr 2022 03:21:16 -0500
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2378ObmA080494;
+        Thu, 7 Apr 2022 03:24:37 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649319676;
-        bh=EoHtWKcFkOghZU5hDLrvJQfjYWennn+KvVv+rh5Ug0Q=;
+        s=ti-com-17Q1; t=1649319877;
+        bh=2DBlPzwLUq3Lwb2+iEkSKNZY/glab/gN1ctc5jkCYEk=;
         h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=ApM/5TozLCJIXtxv06dzRTy9W2FiDKmz8dPiLYptlyS8hzq2+EfSPB8CcHONDyuAj
-         JBwltJrsebL7qbGdlIF/j/doDPoOrE/qnxIzIJh1NS1OYhdK/QM2CnUaQjAhJHB7ZC
-         D1nCskVvAab9AA7y2YI+dOt3rsLYaZVhtC9fyPvw=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2378LGuG022156
+        b=qzBJ2gGejNLk5CZ/YtLw6hn1ycVWS8Yk4suWf1s7EkeXh/LXtgsLr8AQTmq+2ZgA3
+         7bf3ofmPRLsSZAUCKcC8ttDlRSAwCIfPZ+CVs1rNLCHBBI3kKqQaLsR5ek1cSN2iFj
+         MzvRJFRdaZzUo2Upyr9MdiPIsp/WfDRdb27rHDkY=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2378ObhV023994
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 7 Apr 2022 03:21:16 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 7 Apr 2022 03:24:37 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 7
- Apr 2022 03:21:16 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2022 03:24:37 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 7 Apr 2022 03:21:16 -0500
+ Frontend Transport; Thu, 7 Apr 2022 03:24:37 -0500
 Received: from [10.24.69.236] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2378LCwu030044;
-        Thu, 7 Apr 2022 03:21:13 -0500
-Message-ID: <4ed5e7e8-84e8-3f57-f445-99735ae2d721@ti.com>
-Date:   Thu, 7 Apr 2022 13:51:12 +0530
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2378OXvL065555;
+        Thu, 7 Apr 2022 03:24:34 -0500
+Message-ID: <8bdf5f21-0783-a474-1630-46d87d66fb6f@ti.com>
+Date:   Thu, 7 Apr 2022 13:54:33 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
@@ -56,9 +56,9 @@ CC:     Vignesh Raghavendra <vigneshr@ti.com>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 References: <20220406135214.6989-1-a-govindraju@ti.com>
  <20220406135214.6989-3-a-govindraju@ti.com>
- <e2a7063b-535a-0fe3-44bd-bc921cce1c82@kernel.org>
+ <d41d51ff-1c61-6694-4598-d55034e8210d@kernel.org>
 From:   Aswath Govindraju <a-govindraju@ti.com>
-In-Reply-To: <e2a7063b-535a-0fe3-44bd-bc921cce1c82@kernel.org>
+In-Reply-To: <d41d51ff-1c61-6694-4598-d55034e8210d@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -74,7 +74,7 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi Roger,
 
-On 07/04/22 13:29, Roger Quadros wrote:
+On 07/04/22 13:50, Roger Quadros wrote:
 > Hi Aswath,
 > 
 > On 06/04/2022 16:52, Aswath Govindraju wrote:
@@ -88,6 +88,38 @@ On 07/04/22 13:29, Roger Quadros wrote:
 >> - Removed the implementation of detecting the role from the wrapper
 >>   driver and moved the implementation to using linux,extcon-usb-gpio
 >>   driver for role detection.
+> 
+> I'm a bit puzzled. So ID is managed by extcon-usb-gpio driver and
+> VBUS is managed by this driver.
+> 
+> So who decides the USB ports state based on the below truth table?
+> 
+> +	/*
+> +	 * ID | VBUS | STATE
+> +	 * -----------------
+> +	 * 0  | 0    | HOST
+> +	 * 0  | 1    | HOST
+> +	 * 1  | 0    | Disconnected (set mode valid to 0)
+> +	 * 1  | 1    | Device
+> +	 *
+> +	 */
+> 
+> If only ID signal is available to extcon-usb-gpio driver it cannot detect
+> the Disconnected state. We need to set mode valid to 0 for disconnected state.
+> 
+
+Yes that is correct, the mode valid signal needs to be set when there is
+no cable connected. I am slightly confused on why 0-0 state is not
+considered disconnected? So, whenever VBUS is not high it should be
+disconnected right?
+
+Thanks,
+Aswath
+
+> cheers,
+> -roger
+> 
+> 
 >> - Updated the binding documentation and example to reflect the same.
 >>
 >>
@@ -108,26 +140,10 @@ On 07/04/22 13:29, Roger Quadros wrote:
 >> +config USB_DWC3_AM62
 >> +	tristate "Texas Instruments AM62 Platforms"
 >> +	depends on ARCH_K3 || COMPILE_TEST
-> 
-> Does this need to depend on EXTCON as well if COMPILE_TEST is not set?
-> 
-
-The wrapper does not depend on the EXTCON but it is the controller that
-uses extcon for getting role updates.
-
 >> +	default USB_DWC3
 >> +	help
 >> +	  Support TI's AM62 platforms with DesignWare Core USB3 IP.
 >> +	  The Designware Core USB3 IP is progammed to operate in
-> 
-> typo 'programmed'
-
-Sorry, will fix this in the respin.
-
-Thanks,
-Aswath
-
-> 
 >> +	  in USB 2.0 mode only.
 >> +	  Say 'Y' or 'M' here if you have one such device
 >>  endif
