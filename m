@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5504F7C9C
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 12:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA464F7C9D
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 12:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237407AbiDGKXV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Apr 2022 06:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41742 "EHLO
+        id S243724AbiDGKXY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Apr 2022 06:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240485AbiDGKXS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 06:23:18 -0400
-Received: from fx302.security-mail.net (mxout.security-mail.net [85.31.212.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571D99682C
-        for <linux-usb@vger.kernel.org>; Thu,  7 Apr 2022 03:21:19 -0700 (PDT)
+        with ESMTP id S240485AbiDGKXW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 06:23:22 -0400
+Received: from fx305.security-mail.net (smtpout30.security-mail.net [85.31.212.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DA827FD9
+        for <linux-usb@vger.kernel.org>; Thu,  7 Apr 2022 03:21:21 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by fx302.security-mail.net (Postfix) with ESMTP id B33743D3B0EA
-        for <linux-usb@vger.kernel.org>; Thu,  7 Apr 2022 12:21:17 +0200 (CEST)
+        by fx305.security-mail.net (Postfix) with ESMTP id 8164030FDEA
+        for <linux-usb@vger.kernel.org>; Thu,  7 Apr 2022 12:21:20 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1649326877;
-        bh=qeM5UihRfAhfzoiHR44SgCP5YCYY5Yg5beDIiKFiYjw=;
+        s=sec-sig-email; t=1649326880;
+        bh=2leB9N9MVO1isCk23h+tI5TUBCZFTqNDEKraPyTS3tI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=LtyALYjAXI/mUdztS+25BH4MmjY5W/DP94PzFoImKkkIF59sbofl8HhhE2nwEJaDe
-         qP4UCO08rOjDuzNF3lTJ9wOY9+qOQUTfIQfievpFpXWTrlxZZ627SSSOfu56PqkFg0
-         MKtWEaRDj34L2eoaWcnjvH4uAS+hhQNO19RqqmXg=
-Received: from fx302 (localhost [127.0.0.1])
-        by fx302.security-mail.net (Postfix) with ESMTP id C93023D3B0DE;
-        Thu,  7 Apr 2022 12:21:16 +0200 (CEST)
+        b=WiRpawPxoFGAm+vM5jCu3MRtsmlDtvcjqyH52aRHONEi4EIUmvBOYJy3ruGD+AtdV
+         LsQVBS+ElIyEsXAs2lugHscP+vGFwv8PBVqPzfsZ5ExFioqicVuinxj4t35v7HcTn+
+         uenUPLLFzJxofdag4XAtBMjIlemC22VQekUnI6nc=
+Received: from fx305 (localhost [127.0.0.1])
+        by fx305.security-mail.net (Postfix) with ESMTP id 247D730FD36;
+        Thu,  7 Apr 2022 12:21:19 +0200 (CEST)
 X-Virus-Scanned: E-securemail
-Secumail-id: <180ad.624ebb1c.47d3a.0>
+Secumail-id: <13a18.624ebb1c.cdc68.0>
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
-        by fx302.security-mail.net (Postfix) with ESMTPS id 483AF3D3B0DC;
+        by fx305.security-mail.net (Postfix) with ESMTPS id 8314D30FD53;
         Thu,  7 Apr 2022 12:21:16 +0200 (CEST)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTPS id 2C76E27E044F;
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id 9DCF927E044F;
         Thu,  7 Apr 2022 12:21:16 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 166DD27E044D;
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 87EE727E044D;
         Thu,  7 Apr 2022 12:21:16 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 166DD27E044D
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 87EE727E044D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
         s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1649326876;
-        bh=pJLQoI+CUXSinQ8V+o6Uj41mhRgAL58tDZolAf6mrKg=;
+        bh=9IM9Pd49M0jFhF7iENBzRLSpXjLX1rGW2MgcQSst3IU=;
         h=From:To:Date:Message-Id;
-        b=dfbp2qAuqyS0GKJyBZfP1lSX0m7X0mTNlZ+QI6JQXPy8oCARSj40bGNPnFcSYPZbm
-         QZYQr5WHbJIoqdN8SVUBHsDG3nPrxBKZEPzQiDbkb/IiDJzSE8pHkW0ZsyV1YHzW+G
-         Y99eAYZNvbUyWzhke45/2kARChcW1R5SHq6IY8s0=
+        b=IdX8uYYwjaFAjT0p0mKvde9rm56N1wrTLce4TQ7+tgGjKbuT7lmWHuc1FjKk+2tiR
+         zwHrHN1iU5vKialopUMwQoR5K02MOSkH6OkHyQMLq+qaTU0XnoHGg23u7s+LAOXcJg
+         B0L8L4oECeLV78az/wtpUvIeRNI26g2iuRVVQ8nU=
 Received: from zimbra2.kalray.eu ([127.0.0.1])
         by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id SJnR7KfZKuqP; Thu,  7 Apr 2022 12:21:16 +0200 (CEST)
+        with ESMTP id Bg-8kJbaERwh; Thu,  7 Apr 2022 12:21:16 +0200 (CEST)
 Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id EF3B127E0443;
-        Thu,  7 Apr 2022 12:21:15 +0200 (CEST)
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 6AB8C27E0443;
+        Thu,  7 Apr 2022 12:21:16 +0200 (CEST)
 From:   Jules Maselbas <jmaselbas@kalray.eu>
 To:     linux-phy@lists.infradead.org
 Cc:     linux-usb@vger.kernel.org, Kishon Vijay Abraham I <kishon@ti.com>,
@@ -64,9 +64,9 @@ Cc:     linux-usb@vger.kernel.org, Kishon Vijay Abraham I <kishon@ti.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Jules Maselbas <jmaselbas@kalray.eu>
-Subject: [PATCH RESEND v3 2/3] phy: core: Update documentation syntax
-Date:   Thu,  7 Apr 2022 12:21:07 +0200
-Message-Id: <20220407102108.24211-3-jmaselbas@kalray.eu>
+Subject: [PATCH RESEND v3 3/3] phy: core: Warn when phy_power_on is called before phy_init
+Date:   Thu,  7 Apr 2022 12:21:08 +0200
+Message-Id: <20220407102108.24211-4-jmaselbas@kalray.eu>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220407102108.24211-1-jmaselbas@kalray.eu>
 References: <20220407102108.24211-1-jmaselbas@kalray.eu>
@@ -81,48 +81,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Update the syntax used by the documentation of phy operation functions.
-This is to unify the syntax with the newly added documentation.
+A warning when the order of phy operation is mixed up by drivers,
+this is an atempt to make the phy usage more uniform across (usb)
+drivers.
 
 Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+Cc: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc: Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Cc: Minas Harutyunyan <hminas@synopsys.com>
+Cc: Kishon Vijay Abraham I <kishon@ti.com>
 ---
-v2: new patch
-v3: no change
-
- drivers/phy/phy-core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/phy/phy-core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
-index d1817a0f2d09..d11b517e283a 100644
+index d11b517e283a..90f589563a60 100644
 --- a/drivers/phy/phy-core.c
 +++ b/drivers/phy/phy-core.c
-@@ -467,7 +467,7 @@ EXPORT_SYMBOL_GPL(phy_reset);
-  * runtime, which are otherwise lost after host controller reset and cannot
-  * be applied in phy_init() or phy_power_on().
-  *
-- * Returns: 0 if successful, an negative error code otherwise
-+ * Return: %0 if successful, a negative error code otherwise
-  */
- int phy_calibrate(struct phy *phy)
- {
-@@ -493,7 +493,7 @@ EXPORT_SYMBOL_GPL(phy_calibrate);
-  * on the phy. The configuration will be applied on the current phy
-  * mode, that can be changed using phy_set_mode().
-  *
-- * Returns: 0 if successful, an negative error code otherwise
-+ * Return: %0 if successful, a negative error code otherwise
-  */
- int phy_configure(struct phy *phy, union phy_configure_opts *opts)
- {
-@@ -527,7 +527,7 @@ EXPORT_SYMBOL_GPL(phy_configure);
-  * PHY, so calling it as many times as deemed fit will have no side
-  * effect.
-  *
-- * Returns: 0 if successful, an negative error code otherwise
-+ * Return: %0 if successful, a negative error code otherwise
-  */
- int phy_validate(struct phy *phy, enum phy_mode mode, int submode,
- 		 union phy_configure_opts *opts)
+@@ -253,6 +253,9 @@ int phy_init(struct phy *phy)
+ 	ret = 0; /* Override possible ret == -ENOTSUPP */
+ 
+ 	mutex_lock(&phy->mutex);
++	if (phy->power_count > phy->init_count)
++		dev_warn(&phy->dev, "phy_power_on was called before phy_init\n");
++
+ 	if (phy->init_count == 0 && phy->ops->init) {
+ 		ret = phy->ops->init(phy);
+ 		if (ret < 0) {
 -- 
 2.17.1
 
