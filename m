@@ -2,285 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28CF4F868F
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 19:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FA24F86D2
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 20:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346594AbiDGRuq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Apr 2022 13:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58424 "EHLO
+        id S1346727AbiDGSEC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Apr 2022 14:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346587AbiDGRup (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 13:50:45 -0400
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D16522E971;
-        Thu,  7 Apr 2022 10:48:38 -0700 (PDT)
-Received: by mail-lf1-f52.google.com with SMTP id x17so1824392lfa.10;
-        Thu, 07 Apr 2022 10:48:38 -0700 (PDT)
+        with ESMTP id S1346713AbiDGSEB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 14:04:01 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A2BBC863
+        for <linux-usb@vger.kernel.org>; Thu,  7 Apr 2022 11:02:00 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id s8so6123805pfk.12
+        for <linux-usb@vger.kernel.org>; Thu, 07 Apr 2022 11:02:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=agXpjK6hwkbSHuLW+3nuC38eZfuydg6+MYj5IHJD/dA=;
-        b=ZOjnsxH+JEgTYbpr31a1JoSYzqtTAU/6kTS7HVjLVAYj9b9k1O9DhWFIv3U2FKniuM
-         K4/ocnRp/+rIIRQepEd+hN7AX2pER6QVZOvVGDwAEFA8um7HK0BmLB1ctyLqx4cGqYoF
-         DOiJwtWEZJRdSh5BPmDrVd2ob/VwMX6ZSSvxDZGZWcpBL0Ny7dyTquYsywZ6g6f1wqRC
-         54gn4BfsP9394K4y/taLcjwgmauqVbgoSsMD2Thbgpf2i01/eebDAJdUZ7AckLXXwhQP
-         nFfbZ8oYY6xkJH5coYzXBD1aAUWliLIpXoOk1JFsnthP3CsdqqM3iwNtdSb7IsC7/gOE
-         XICg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=F4m+NmCt6OQn1SzMUe8Cohym4BG+NQ3hA7612DJmQk8=;
+        b=gxJe8yE0vDDooVk/tyWuz6yS5lmQYS/Wkon9uCa6FbL1Vp+1car52FqOuW/+gvGVtr
+         uRFXlYXosH7BLeaJQ/dxhonfjStPz7APnzrBFOHVy8ov9Dm1Qt5vTegZpuZo3JL4j/yS
+         Mt/CLtsQsj2t2PTylkSKsg9ChciEv8RgvBrkE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=agXpjK6hwkbSHuLW+3nuC38eZfuydg6+MYj5IHJD/dA=;
-        b=Ic4ft/imLXTXNRjYHrlkfLCqqVrO0ecqq2ApVIEvI+FataC92ei1OhsD/SYsR0M9Dp
-         L4lFp7T+xV5/pr7DKCfnxuBQElYCOPnxbD/p5GjOTvNa2YLg7LXGYtiuqkwrLmPQfKI6
-         7s4KAC1oIzL2bmWdOo9g2mtFVnFug1WMWVwnY5zAK7fR3/f1Z9hP5EyZmlOgf1ZUawoT
-         jwLbqfBYOuIXVc9ydU8rDhdzagIYXzoBwyRXxOhNYTJgAqHWKmF74BcWhRQ0b6jzmp7w
-         zhpqfYo7dUOw2qYY3X9P1RN7gsuLWvoGOxFCF3Q/szIi9GD+y2f3QmwjzeMBd46NEUEp
-         rvzA==
-X-Gm-Message-State: AOAM530fKbh7RRAfNH9zNMQg4NcARezu88zpZsRtD5twtOpms1vRoSrb
-        etOBAAmTa3j2ZjL8Q/J29rE=
-X-Google-Smtp-Source: ABdhPJzhrJ8o1BKfLE8sMalPqJQ+0csad/JLloRu3BOeKzazeUbAZCwFTQlZwdwZQw3DkPXhJC0Eow==
-X-Received: by 2002:a19:8c4b:0:b0:44a:b6a4:4873 with SMTP id i11-20020a198c4b000000b0044ab6a44873mr9896391lfj.549.1649353656669;
-        Thu, 07 Apr 2022 10:47:36 -0700 (PDT)
-Received: from reki (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
-        by smtp.gmail.com with ESMTPSA id bu20-20020a056512169400b0043eaf37af75sm2226966lfb.199.2022.04.07.10.47.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 10:47:25 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 20:47:13 +0300
-From:   Maxim Devaev <mdevaev@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F4m+NmCt6OQn1SzMUe8Cohym4BG+NQ3hA7612DJmQk8=;
+        b=oS/Hg9Mb7YURkfhZGYcSNQvp1cpz1gdDvsxAw0KsTTPhzfiEDYQLx7W4ah6OKMHk0t
+         dbLd/mgRLVYZgX7ZedJP4dYNxKQFh7kl3dHHtCYtYDRvx7lIcb2PI+FenMZdn2AlmBiD
+         5hf7vUJ1MgNmR4LdqNe74y0ZKymSCAzFZwYtnfXFN4bQzzCg8KkZCDhEuYt4LNaefOC4
+         80w3PGGrWXIx1aIE9WPHhZvZkX2CJ6ze1fp4aelf1YhzHsA9XRMeeJ4YAChCRLxscFEz
+         Sl0YnUcPd4/cl72Ei9101z7KFTeo/ZqDkXJAgHyUUrPuN4YveHLz44gnQfWL41zH92Ib
+         R2rg==
+X-Gm-Message-State: AOAM531l3m0F1tSNaddGG9qZJV+fx0dPpy5WkOJfOkEDcMAVuEv3R/Bs
+        CeLT5lsASWF+KNjBTAI3qnUahw==
+X-Google-Smtp-Source: ABdhPJzRd2qZYYwG5AfxTyIymC3MZj/ozFy0iyV+2G1omVsn91D0Sgr3xC08x23KE/K5bh1F6e4nmg==
+X-Received: by 2002:a05:6a00:190a:b0:4fa:e4e9:7126 with SMTP id y10-20020a056a00190a00b004fae4e97126mr15410147pfi.65.1649354519621;
+        Thu, 07 Apr 2022 11:01:59 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:693e:9ca0:42a0:6bf7])
+        by smtp.gmail.com with UTF8SMTPSA id x12-20020aa7956c000000b004fdf7a4d49dsm16020425pfq.158.2022.04.07.11.01.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 11:01:59 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 11:01:57 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_mass_storage: break IO operations via
- configfs
-Message-ID: <20220407204553.35cead72@reki>
-In-Reply-To: <Yk8L6b9wEWTjWOg4@rowland.harvard.edu>
-References: <20220406092445.215288-1-mdevaev@gmail.com>
-        <Yk2wvhSTMKTLFK6c@rowland.harvard.edu>
-        <20220406195234.4f63cb4a@reki>
-        <Yk3TLPKyaQDsnuD4@rowland.harvard.edu>
-        <20220406213634.104cae45@reki>
-        <Yk8L6b9wEWTjWOg4@rowland.harvard.edu>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_kriskura@quicinc.com, quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v12 4/6] usb: dwc3: qcom: Keep power domain on to retain
+ controller status
+Message-ID: <Yk8nFZhLgdTQsllD@google.com>
+References: <1649321104-31322-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1649321104-31322-5-git-send-email-quic_c_sanm@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1649321104-31322-5-git-send-email-quic_c_sanm@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=D0=92 Thu, 7 Apr 2022 12:06:01 -0400
-Alan Stern <stern@rowland.harvard.edu> wrote:
+On Thu, Apr 07, 2022 at 02:15:02PM +0530, Sandeep Maheswaram wrote:
+> Keep the power domain on in order to retain controller status and
+> to support wakeup from devices.
+> 
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 9804a19..35087cf 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/phy/phy.h>
+> +#include <linux/pm_domain.h>
+>  #include <linux/usb/of.h>
+>  #include <linux/reset.h>
+>  #include <linux/iopoll.h>
+> @@ -724,6 +725,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  	struct resource		*res, *parent_res = NULL;
+>  	int			ret, i;
+>  	bool			ignore_pipe_clk;
+> +	struct generic_pm_domain *genpd;
+>  
+>  	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
+>  	if (!qcom)
+> @@ -732,6 +734,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  	platform_set_drvdata(pdev, qcom);
+>  	qcom->dev = &pdev->dev;
+>  
+> +	genpd = pd_to_genpd(qcom->dev->pm_domain);
+> +
+>  	if (has_acpi_companion(dev)) {
+>  		qcom->acpi_pdata = acpi_device_get_match_data(dev);
+>  		if (!qcom->acpi_pdata) {
+> @@ -839,6 +843,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto interconnect_exit;
+>  
+> +	genpd->flags |= GENPD_FLAG_ALWAYS_ON;
 
-> On Wed, Apr 06, 2022 at 09:36:34PM +0300, Maxim Devaev wrote:
-> > =D0=92 Wed, 6 Apr 2022 13:51:40 -0400
-> > Alan Stern <stern@rowland.harvard.edu> wrote:
-> >  =20
-> > > On Wed, Apr 06, 2022 at 07:52:34PM +0300, Maxim Devaev wrote: =20
-> > > > > It's not clear to me how breaking I/O operations allows you to do=
- a=20
-> > > > > "force eject".  It seems that what you would need is something li=
-ke=20
-> > > > > fsg_store_file() that omits the curlun->prevent_medium_removal ch=
-eck.
-> > > > > Interrupting a lengthy I/O operation doesn't really have anything=
- to do=20
-> > > > > with this.   =20
-> > > >=20
-> > > > Perhaps I chose the wrong path, it's just how my userspace code wor=
-ks now.
-> > > > If the drive is connected to a Linux host, then in order to clear
-> > > > the "file" and extract the image, I sent a SIGUSR1 signal to the "f=
-ile-storage"
-> > > > thread. This interrupted long IO operations, reset curlun->prevent_=
-medium_removal
-> > > > and I got the ability to extract.   =20
-> > >=20
-> > > Oh, I see.  That's kind of an unintended side effect of not calling=20
-> > > raise_exception().
-> > >=20
-> > > And while it does interrupt long I/O operations, it does so in=20
-> > > non-sanctioned way.  To the host it will appear as though the gadget'=
-s=20
-> > > firmware has crashed, since the gadget will stop sending or receiving=
-=20
-> > > data.  Eventually the host will time out and reset the gadget.
-> > >=20
-> > > Maybe that's the sort of thing you want, but I rather doubt it. =20
-> >=20
-> > It's hard to say how it actually should work in case of force removing.
-> > At least the currect approach with SIGUSR1 is really working on thousan=
-ds
-> > systems and with Linux, Mac and Windows. I believe that the criterion
-> > of the experiment is quite important here. I know of several other util=
-ities
-> > that use SIGUSR1 for similar purposes. =20
->=20
-> This merely means that the current unintended behavior of userspace USR1=
-=20
-> signals must not be changed.  But it doesn't mean you have to continue=20
-> to rely on that behavior; you can implement something better.
+Not sure it really matters, but could this be done conditionally based
+on device_can_wakeup() of the dwc3 core device?
 
-So I suggest break_io :) I haven't come up with anything better.
+> +
+>  	device_init_wakeup(&pdev->dev, 1);
 
-> > > > Will masking the curlun->prevent_medium_removal flag be enough?   =
-=20
-> > >=20
-> > > I think so.  But it will be blocked to some extent by long-running I/=
-O=20
-> > > operations, because those operations acquire the filesem rw-semaphore=
-=20
-> > > for reading.
-> > >=20
-> > > More precisely, each individual command holds the rw-semaphore.  But =
-the=20
-> > > semaphore is dropped between commands, and a long-running I/O operati=
-on=20
-> > > typically consists of many separate commands.  So the blocking may be=
-=20
-> > > acceptable. =20
-> >=20
-> > It is very important for KVM-over-IP to be able to command "turn it off=
- immediately". =20
->=20
-> Why is this?  A lot of actual devices (DVD drives, for instance) don't=20
-> give you the ability to eject the media when the host has prevented it. =
-=20
-> Why should f-mass-storage be different?
+Now that the dwc3 core looks at the wakeup-source property it seems
+this driver should enable wakeup only when it is enabled for the
+core.
 
-The DVD drive has the ability to physically eject the disc. It's not too go=
-od
-for the drive itself, but it's just there. We can also urgently remove
-the USB flash drive.
-
-At least there is one situation where the behavior of f_mass_storage differs
-from the behavior of a real drive. What happens when you click on the physi=
-cal
-"eject" button? Yes, the OS can block this, but the problem is that we don'=
-t have
-an "eject" here. If I connect the gadget to the Linux host and don't even m=
-ount
-the image, Linux won't let me change the image in the "file", since the gad=
-get
-will be constantly busy with some IO.
-
-But I believe creating a virtual "eject" button is a separate task that
-does not depend on "break_io".
-
-> > In this context, I would prefer "break_io" rather than "allow_force_rem=
-ove". =20
->=20
-> Okay.  But what about the 30-second host timeout I mentioned above? =20
-> Does this actually happen with your approach?  It seems like the kind of=
-=20
-> thing you don't want in a "turn it off immediately" situation.  (I=20
-> haven't tried doing this myself -- maybe I should.)
-
-Neither I nor my users noticed any problems related to this. After extracti=
-ng
-the image using SIGUSR1/"file", I can just assign a new "file"image
-and everything will work.
-
-> > > > > You should not call send_sig_info() directly; instead call=20
-> > > > > raise_exception().  It already does the work you need (including =
-some=20
-> > > > > things you left out).   =20
-> > > >=20
-> > > > raise_exception() assumes the setting of a new state, and I did not=
- want to do this,
-> > > > since the same does not happen when throwing a signal from userspac=
-e.   =20
-> > >=20
-> > > Userspace isn't supposed to send the USR1 signal, only the INT, TERM,=
- or=20
-> > > KILL signals.  USR1 is supposed to be reserved for the driver's inter=
-nal=20
-> > > use.  Unfortunately, AFAIK there's no way to allow the driver to send=
- a=20
-> > > signal to itself without also allowing the signal to be sent by=20
-> > > userspace.  :-( =20
-> >=20
-> > It's funny that you actually helped me solve my problem thanks to this =
-undocumented
-> > behavior. If it were not for the ability to send a signal, I would not =
-be able to make
-> > the necessary code, and my software would always be waiting for the com=
-pletion of IO.
-> >=20
-> > So here I am grateful to you - I didn't have to patch the kernel a few =
-years ago,
-> > and now I just want to turn it into a clear feature :)
-> >=20
-> > Given the needs of the userspace code, maybe the suggested "break_io"
-> > would be the best choice? =20
->=20
-> It sounds like what you really want is a combination of both "interrupt=20
-> I/O" and "forced eject".
-
-Indeed. But I didn't want to introduce some complex entities into the "file=
-" attribute
-or make magic prefixes for the image name or something. So I suggested
-"echo > break_io && echo > file". This will not break the current behavior =
-of the drive.
-
-> > > And sending the signal _does_ set a new state, whether you intended t=
-o=20
-> > > or not.  Although in this case, the new state is always the same as t=
-he=20
-> > > old state, i.e., FSG_STATE_NORMAL. =20
-> >=20
-> > So I could call raise_exception(fsg->common, FSG_STATE_NORMAL) instead =
-of sending
-> > the signal from break_io handler. There will be a slight difference
-> > in exception_req_tag and exception_arg, but it does not seem to cause a=
-ny side effects.
-> > Please correct me if I'm wrong. =20
->=20
-> In fact, the best approach would be to introduce a new state (let's call=
-=20
-> it FSG_STATE_FORCED_EJECT) with priority just above
-> FSG_STATE_ABORT_BULK_OUT.  You would call raise_exception with=20
-> FSG_STATE_FORCED_EJECT, not FSG_STATE_NORMAL.  handle_exceptions() would=
-=20
-> treat this state partially like ABORT_BULK_OUT in that it would avoid=20
-> resetting all the LUN data values and would call send_status_common() if=
-=20
-> a command had been underway.  But in addition it would do the forced=20
-> eject.
-
-Do you mean something like this?
-
-    if (old_state !=3D FSG_STATE_ABORT_BULK_OUT) {
-        for (i =3D 0; i < ARRAY_SIZE(common->luns); ++i) {
-            curlun =3D common->luns[i];
-            if (!curlun)
-                continue;
-            curlun->prevent_medium_removal =3D 0;
-            if (old_state !=3D FSG_STATE_FORCED_EJECT) {
-                curlun->sense_data =3D SS_NO_SENSE;
-                curlun->unit_attention_data =3D SS_NO_SENSE;
-                curlun->sense_data_info =3D 0;
-                curlun->info_valid =3D 0;
-            }
-        }
-    }
-
-> Also, the sysfs routine should be careful to see whether the command=20
-> currently being executed is for the LUN being ejected.  I guess you=20
-> have never tried issuing your USR1 signal to a mass-storage gadget=20
-> running more than one LUN.  If you did, you would find that it clears=20
-> the prevent_medium_removal flag for all of them, not just the one that=20
-> you wanted.
-
-I haven't tried it, but I figured it out along the way when I discovered
-the SIGUSR1 feature. I perceive it as something that should work that way.
-Like, we hit the whole device.
+Actually I wonder if it would make sense to leave wakeup for dwc3-qcom
+'officially' disabled, and just make all wakeup related decisions
+based on the wakeup configuration of the dwc3 core (as
+dwc3_qcom_en/disable_interrupts() already do). The separate wakeup
+policies for dwc3 core and dwc3-qcom are confusing and don't seem to
+add any value.
