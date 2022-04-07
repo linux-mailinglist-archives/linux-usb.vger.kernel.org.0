@@ -2,110 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F304F7562
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 07:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CCF24F75CF
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 08:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240926AbiDGFep (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Apr 2022 01:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
+        id S240962AbiDGGRh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Apr 2022 02:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237177AbiDGFeo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 01:34:44 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10577DD5;
-        Wed,  6 Apr 2022 22:32:44 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2375WfAq111462;
-        Thu, 7 Apr 2022 00:32:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649309561;
-        bh=9X51TdJHUCLYh+di/XNgaYLQgZEYwINWiXfEVFy5c5w=;
-        h=Date:From:Subject:CC:References:In-Reply-To;
-        b=oXnFTsgtzn7avFPnFhDTxyFk6oRHJpQ2dr0zd6nuOJOG8Blv2+VOax4Z6ARMPEk5U
-         0u+7W/lsVJDXxsTQOysHuGDsl+WJOnEWWGJulU4oY26ORIfPQroBz4S/VsATdMs1SZ
-         r1eFDFuiGiaY5uYZMQOi2cCeRKhhp8l4++pP9GkM=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2375Wfjc115909
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 7 Apr 2022 00:32:41 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 7
- Apr 2022 00:32:41 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 7 Apr 2022 00:32:41 -0500
-Received: from [10.24.69.236] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2375Wb8S018307;
-        Thu, 7 Apr 2022 00:32:38 -0500
-Message-ID: <301bc860-bab7-9e18-9cef-7c8069d112dc@ti.com>
-Date:   Thu, 7 Apr 2022 11:02:37 +0530
+        with ESMTP id S233185AbiDGGRg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 02:17:36 -0400
+Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [203.148.12.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4D71F047C;
+        Wed,  6 Apr 2022 23:15:35 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
+ (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 7 Apr
+ 2022 14:15:31 +0800
+Received: from [10.29.8.49] (10.29.8.49) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 7 Apr
+ 2022 14:15:30 +0800
+Message-ID: <bd43807d-a2d7-5742-4253-c443cdf5c2f0@zhaoxin.com>
+Date:   Thu, 7 Apr 2022 14:15:29 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-From:   Aswath Govindraju <a-govindraju@ti.com>
-Subject: Re: [PATCH v2 0/2] AM62: Add support for AM62 USB wrapper driver
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-References: <20220324073425.18607-1-a-govindraju@ti.com>
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] USB:Fix ehci infinite suspend-resume loop issue in
+ zhaoxin
 Content-Language: en-US
-In-Reply-To: <20220324073425.18607-1-a-govindraju@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <CobeChen@zhaoxin.com>,
+        <TimGuo@zhaoxin.com>, <tonywwang@zhaoxin.com>,
+        <weitaowang@zhaoxin.com>
+References: <3d0ae3ca-9dad-bb8f-5c41-45bdcb07b9cd@zhaoxin.com>
+ <Yi9QIk+6VIWW6V/W@rowland.harvard.edu>
+ <320584eb-ef89-3759-509c-e7e9cb10f983@zhaoxin.com>
+ <YjCuOXRFZ8CjK9SD@rowland.harvard.edu>
+ <ac40c227-ea26-bccd-d254-5a2034103184@zhaoxin.com>
+ <YkxoHY2SVomGwGdh@rowland.harvard.edu>
+ <bbd9148d-5970-2233-6ee9-625e961cd2f5@zhaoxin.com>
+ <Yk29tZpy9pLDlPj2@rowland.harvard.edu>
+From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <Yk29tZpy9pLDlPj2@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.29.8.49]
+X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi All,
-
-On 24/03/22 13:04, Aswath Govindraju wrote:
-> The following series of patches add support for AM62 USB wrapper driver
-> and its corresponding bindings.
+On 2022/4/7 00:20, Alan Stern wrote:
+> On Wed, Apr 06, 2022 at 10:38:28AM +0800, WeitaoWang-oc@zhaoxin.com wrote:
+>> On 2022/4/6 00:02, Alan Stern wrote:
+>>> In fact, the resume kernel doesn't call ehci_resume at all.  Here's what
+>>> it does:
+>>>
+>>> 	The resume kernel boots;
+>>>
+>>> 	If your patch causes STS_PCD to be set at this point, the flag
+>>> 	should get cleared shortly afterward by ehci_irq;
+>>>
+>>> 	ehci-hcd goes into runtime suspend;
+>>>
+>>> 	The kernel reads the system image that was stored earlier when
+>>> 	hibernation began;
+>>>
+>>> 	After the image is loaded, the system goes into the freeze
+>>> 	state (this does not call any routines in ehci-hcd);
+>> On this phase, pci_pm_freeze will be called for pci device. In this
+>> function, pm_runtime_resume will be called to resume already
+>> runtime-suspend devices. which will cause ehci_resume to be called.
+>> Thus STS_PCD flag will be set in ehci_resume function.
 > 
-> changes since v1:
-> - Fixed the error with dev_pm_ops uninitialization, in patch 2.
->   This was reported by kernel test bot
-> - In patch 1, made correction in grammer of clocks property description
->   and added maxItems in the interrupts property based on comments
->   received from Roger
-> - In patch 1, corrected the title, fixed the description of
->   ti,syscon-phy-pll-refclk, added pattern properties and child node
->   in the example based on the comments from Krzysztof.
+> Aha!  I was missing that piece of information, thanks.
 > 
-
-Thank you for all the review and comments. I have posted respin(v3) for
-this patch series. Here is the link to the series
-
-https://patchwork.kernel.org/project/linux-usb/list/?series=629613
-
-Regards,
-Aswath
-
-> Aswath Govindraju (2):
->   dt-bindings: usb: Add documentation for AM62 USB Wrapper module
->   drivers: usb: dwc3: Add AM62 USB wrapper driver
+> But this still doesn't explain why check_root_hub_suspended is failing.
+> That routine checks the HCD_RH_RUNNING bit, which gets set in
+> hcd_bus_resume.  hcd_bus_resume gets called as part of resuming the root
+> hub, and in ehci-hcd this happens when ehci_irq sees that STS_PCD is set
+> and calls usb_hcd_resume_root_hub.  That routine queues a wakeup request
+> on the pm_wq work queue, which is then supposed to run hcd_resume_work
+> to actually restart the root hub.
 > 
->  .../devicetree/bindings/usb/ti,am62-usb.yaml  | 117 ++++
->  drivers/usb/dwc3/Kconfig                      |   9 +
->  drivers/usb/dwc3/Makefile                     |   1 +
->  drivers/usb/dwc3/dwc3-am62.c                  | 581 ++++++++++++++++++
->  4 files changed, 708 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
->  create mode 100644 drivers/usb/dwc3/dwc3-am62.c
+> But pm_wq is a freezable work queue!  While the system is in the freeze
+> state, the work queue isn't running.  This means that the root hub
+> should remain suspended until the end of the freeze phase, and so the
+> call to check_root_hub_suspended should succeed.
 > 
+> Can you check to see what's really happening on your system?  Something
+> must be wrong with my analysis, but I can't tell what it is.  I'm still
+> puzzled.
+> 
+> Alan Stern
+Your analysis is right, my test platform's kernel version is not the
+latest, this kernel not call freeze_kernel_threads on software_resume
+function.
+(https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/kernel/power/hibernate.c?h=v5.18-rc1&id=2351f8d295ed63393190e39c2f7c1fee1a80578f)
+So pm_wq is active and can handle root hub power events.
+Update my kernel to fix the issue in the url above, system hibernation
+test was successful with our patch(not clear STS_PCD bit).
+Thanks for your clarification.
+
+Weitao Wang
