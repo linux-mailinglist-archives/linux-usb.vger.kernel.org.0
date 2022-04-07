@@ -2,59 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AA54F75F5
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 08:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B91F4F7624
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 08:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241063AbiDGG2J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Apr 2022 02:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
+        id S241153AbiDGGg1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Apr 2022 02:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241045AbiDGG2H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 02:28:07 -0400
-Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7571F6879;
-        Wed,  6 Apr 2022 23:26:05 -0700 (PDT)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9f:8600:0:0:0:1])
-        (authenticated bits=0)
-        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 2376Pw0d489380
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Thu, 7 Apr 2022 07:26:00 +0100
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8602:8cd5:a7b0:d07:d516])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 2376PvJT1752668
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Thu, 7 Apr 2022 08:25:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1649312758; bh=D1PIi86VaPw1LfCheCQTJFYDQIskZ/Yd8Lb1YSyamFM=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=AaBqMpTIfFkUUrP5BxwEu9YEKOXpQMxBF95SF4keaWE0TxJdgL4jxGt0JkKdNUK8d
-         q9ZIFBNl2XLSs2/CN/JXU8sNG1tj5jFr2bTX5aVku6+54V39CDtuvTn7c36XZ0LWYY
-         MqMe+slWNRvtx7TCXSUEGO8FcPA8LUuLcXZLl4GM=
-Received: (nullmailer pid 687170 invoked by uid 1000);
-        Thu, 07 Apr 2022 06:25:57 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Lech Perczak <lech.perczak@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Kristian Evensen <kristian.evensen@gmail.com>,
-        Oliver Neukum <oliver@neukum.org>
-Subject: Re: [PATCH 2/3] rndis_host: enable the bogus MAC fixup for ZTE
- devices from cdc_ether
-Organization: m
-References: <20220407001926.11252-1-lech.perczak@gmail.com>
-        <20220407001926.11252-3-lech.perczak@gmail.com>
-Date:   Thu, 07 Apr 2022 08:25:57 +0200
-In-Reply-To: <20220407001926.11252-3-lech.perczak@gmail.com> (Lech Perczak's
-        message of "Thu, 7 Apr 2022 02:19:25 +0200")
-Message-ID: <87o81d1kay.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.5 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        with ESMTP id S232836AbiDGGgY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 02:36:24 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDA3A8B6DE;
+        Wed,  6 Apr 2022 23:34:22 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app4 (Coremail) with SMTP id cS_KCgBnKRC7hU5imJbiAA--.58581S2;
+        Thu, 07 Apr 2022 14:33:35 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     chris@zankel.net, jcmvbkbc@gmail.com, mustafa.ismail@intel.com,
+        shiraz.saleem@intel.com, jgg@ziepe.ca, wg@grandegger.com,
+        mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, jes@trained-monkey.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        alexander.deucher@amd.com, linux-xtensa@linux-xtensa.org,
+        linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-hippi@sunsite.dk,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH 00/11] Fix deadlocks caused by del_timer_sync()
+Date:   Thu,  7 Apr 2022 14:33:16 +0800
+Message-Id: <cover.1649310812.git.duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgBnKRC7hU5imJbiAA--.58581S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFWkWw1rJF47KF45KFyUJrb_yoW8GF4DpF
+        45u390kr1jvF4xu3W8tw1kZFy3Gw4xJrWrK39Fq3s5Xa4rZF43XF17GFy8WrZ5JryxGa4a
+        yF1qyw4rGF4avrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvm1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+        z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgYNAVZdtZEbDgAOs8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,42 +60,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Lech Perczak <lech.perczak@gmail.com> writes:
+If the timer handlers need a lock owned by the thread calling 
+del_timer_sync(), then, the caller thread will block forever.
 
-> +static int zte_rndis_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
-> +{
-> +	return rndis_rx_fixup(dev, skb) && usbnet_cdc_zte_rx_fixup(dev, skb);
-> +}
->=20=20
+Duoming Zhou (11):
+  drivers: tty: serial: Fix deadlock in sa1100_set_termios()
+  drivers: usb: host: Fix deadlock in oxu_bus_suspend()
+  drivers: staging: rtl8192u: Fix deadlock in ieee80211_beacons_stop()
+  drivers: staging: rtl8723bs: Fix deadlock in
+    rtw_surveydone_event_callback()
+  drivers: staging: rtl8192e: Fix deadlock in rtllib_beacons_stop()
+  drivers: staging: rtl8192e: Fix deadlock in
+    rtw_joinbss_event_prehandle()
+  drivers: net: hippi: Fix deadlock in rr_close()
+  drivers: net: can: Fix deadlock in grcan_close()
+  drivers: infiniband: hw: Fix deadlock in irdma_cleanup_cm_core()
+  arch: xtensa: platforms: Fix deadlock in iss_net_close()
+  arch: xtensa: platforms: Fix deadlock in rs_close()
 
-Does this work as expected? Only the last ethernet packet in the rndis
-frame will end up being handled by usbnet_cdc_zte_rx_fixup().  The
-others are cloned and submitted directly to usbnet_skb_return().
+ arch/xtensa/platforms/iss/console.c                    | 4 +++-
+ arch/xtensa/platforms/iss/network.c                    | 2 ++
+ drivers/infiniband/hw/irdma/cm.c                       | 5 ++++-
+ drivers/net/can/grcan.c                                | 2 ++
+ drivers/net/hippi/rrunner.c                            | 2 ++
+ drivers/staging/rtl8192e/rtllib_softmac.c              | 2 +-
+ drivers/staging/rtl8192u/ieee80211/ieee80211_softmac.c | 2 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme.c              | 4 ++++
+ drivers/tty/serial/sa1100.c                            | 2 ++
+ drivers/usb/host/oxu210hp-hcd.c                        | 2 ++
+ 10 files changed, 23 insertions(+), 4 deletions(-)
 
-I don't know how to best solve that, but maybe add another
-RNDIS_DRIVER_DATA_x flag and test that in rndis_rx_fixup?  I.e something
-like
+-- 
+2.17.1
 
-	bool fixup_dst =3D dev->driver_info->data & RNDIS_DRIVER_DATA_FIXUP_DST:
-        ..
-
-		/* try to return all the packets in the batch */
-		skb2 =3D skb_clone(skb, GFP_ATOMIC);
-		if (unlikely(!skb2))
-			break;
-		skb_pull(skb, msg_len - sizeof *hdr);
-		skb_trim(skb2, data_len);
-                if (fixup_dst)
-                	usbnet_cdc_zte_rx_fixup(dev, skb2);
-		usbnet_skb_return(dev, skb2);
-	}
-        if (fixup_dst)
-                usbnet_cdc_zte_rx_fixup(dev, skb);
-
-	/* caller will usbnet_skb_return the remaining packet */
-	return 1;
-}
-
-
-
-Bj=C3=B8rn
