@@ -2,93 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C354F7DA9
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 13:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C17134F7DAE
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 13:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237785AbiDGLOo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Apr 2022 07:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
+        id S241947AbiDGLPz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Apr 2022 07:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiDGLOn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 07:14:43 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85F5713F00;
-        Thu,  7 Apr 2022 04:12:40 -0700 (PDT)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 7 Apr 2022 19:12:17
- +0800 (GMT+08:00)
-X-Originating-IP: [10.181.226.201]
-Date:   Thu, 7 Apr 2022 19:12:17 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Sergey Shtylyov" <s.shtylyov@omp.ru>
-Cc:     linux-kernel@vger.kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
-        mustafa.ismail@intel.com, shiraz.saleem@intel.com, jgg@ziepe.ca,
-        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, jes@trained-monkey.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        alexander.deucher@amd.com, linux-xtensa@linux-xtensa.org,
-        linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-hippi@sunsite.dk,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linma@zju.edu.cn
-Subject: Re: Re: [PATCH 11/11] arch: xtensa: platforms: Fix deadlock in
- rs_close()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.8 build 20200806(7a9be5e8)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <1195e776-328d-12fe-d1f8-22085dc77b44@omp.ru>
-References: <cover.1649310812.git.duoming@zju.edu.cn>
- <9ca3ab0b40c875b6019f32f031c68a1ae80dd73a.1649310812.git.duoming@zju.edu.cn>
- <1195e776-328d-12fe-d1f8-22085dc77b44@omp.ru>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S233874AbiDGLPy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 07:15:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727E113C726
+        for <linux-usb@vger.kernel.org>; Thu,  7 Apr 2022 04:13:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07F7A61E38
+        for <linux-usb@vger.kernel.org>; Thu,  7 Apr 2022 11:13:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 436BDC385A4
+        for <linux-usb@vger.kernel.org>; Thu,  7 Apr 2022 11:13:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649330029;
+        bh=/5QGt9tfKLv6slzkxqN9epjtPoCEPDyGgFDCOCl8zoM=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=kfXSZRVIakbP2RXbvSwASOabxkc4I+3im1UOVyV10Oq6UfQv48C4OuTS2qfw9OoIh
+         6dxTaoX53TIkeGkuS4UIALVjLHtJX0L/o4IgXIRFiSltMbXnHvDAUKeebDpzFkhYEj
+         ofO8gu+cNuybghfB0+tPVekLpDUMDuZwjZKt5VXPTSIb3mdtZ97QgXaED8K4zDyuVX
+         InEpKc2E1WcbvakfYyirpYB3eGG0ukAtuDqnH75g82P0PM1PgpYT1Yj/wmZXbrO42k
+         nyirDE1K47cBs7oOCAc3hWJ9gmv7jXzmn/jXauf1hvM9R1FSMoP6f/4DgGWj8Y5MzK
+         QrHxc3iTQrXaw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 2B176CAC6E2; Thu,  7 Apr 2022 11:13:49 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215799] apple-mfi-fastcharge causes automatic pm hibernation
+ entry, when iPhone gets attached
+Date:   Thu, 07 Apr 2022 11:13:48 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bugzilla@hadess.net
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-215799-208809-n757MqQpPi@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215799-208809@https.bugzilla.kernel.org/>
+References: <bug-215799-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Message-ID: <6728929.3f2bf.18003b99de6.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgDnXmIRx05icIeRAQ--.17700W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgkNAVZdtZExngAIsP
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGVsbG8sCgpPbiBUaHUsIDcgQXByIDIwMjIgMTI6NDI6MzEgKzAzMDAgU2VyZ2V5IFNodHlseW92
-IHdyb3RlOgoKPiA+IFRoZXJlIGlzIGEgZGVhZGxvY2sgaW4gcnNfY2xvc2UoKSwgd2hpY2ggaXMg
-c2hvd24KPiA+IGJlbG93Ogo+ID4gCj4gPiAgICAoVGhyZWFkIDEpICAgICAgICAgICAgICB8ICAg
-ICAgKFRocmVhZCAyKQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgfCByc19vcGVuKCkK
-PiA+IHJzX2Nsb3NlKCkgICAgICAgICAgICAgICAgIHwgIG1vZF90aW1lcigpCj4gPiAgc3Bpbl9s
-b2NrX2JoKCkgLy8oMSkgICAgICB8ICAod2FpdCBhIHRpbWUpCj4gPiAgLi4uICAgICAgICAgICAg
-ICAgICAgICAgICB8IHJzX3BvbGwoKQo+ID4gIGRlbF90aW1lcl9zeW5jKCkgICAgICAgICAgfCAg
-c3Bpbl9sb2NrKCkgLy8oMikKPiA+ICAod2FpdCB0aW1lciB0byBzdG9wKSAgICAgIHwgIC4uLgo+
-ID4gCj4gPiBXZSBob2xkIHRpbWVyX2xvY2sgaW4gcG9zaXRpb24gKDEpIG9mIHRocmVhZCAxIGFu
-ZAo+ID4gdXNlIGRlbF90aW1lcl9zeW5jKCkgdG8gd2FpdCB0aW1lciB0byBzdG9wLCBidXQgdGlt
-ZXIgaGFuZGxlcgo+ID4gYWxzbyBuZWVkIHRpbWVyX2xvY2sgaW4gcG9zaXRpb24gKDIpIG9mIHRo
-cmVhZCAyLgo+ID4gQXMgYSByZXN1bHQsIHJzX2Nsb3NlKCkgd2lsbCBibG9jayBmb3JldmVyLgo+
-ID4gCj4gPiBUaGlzIHBhdGNoIGV4dHJhY3RzIGRlbF90aW1lcl9zeW5jKCkgZnJvbSB0aGUgcHJv
-dGVjdGlvbiBvZgo+ID4gc3Bpbl9sb2NrX2JoKCksIHdoaWNoIGNvdWxkIGxldCB0aW1lciBoYW5k
-bGVyIHRvIG9idGFpbgo+ID4gdGhlIG5lZWRlZCBsb2NrLgo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5
-OiBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1LmVkdS5jbj4KPiA+IC0tLQo+ID4gIGFyY2gveHRl
-bnNhL3BsYXRmb3Jtcy9pc3MvY29uc29sZS5jIHwgNCArKystCj4gPiAgMSBmaWxlIGNoYW5nZWQs
-IDMgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvYXJj
-aC94dGVuc2EvcGxhdGZvcm1zL2lzcy9jb25zb2xlLmMgYi9hcmNoL3h0ZW5zYS9wbGF0Zm9ybXMv
-aXNzL2NvbnNvbGUuYwo+ID4gaW5kZXggODFkN2M3ZThmN2UuLmQ0MzFiNjFhZTNjIDEwMDY0NAo+
-ID4gLS0tIGEvYXJjaC94dGVuc2EvcGxhdGZvcm1zL2lzcy9jb25zb2xlLmMKPiA+ICsrKyBiL2Fy
-Y2gveHRlbnNhL3BsYXRmb3Jtcy9pc3MvY29uc29sZS5jCj4gPiBAQCAtNTEsOCArNTEsMTAgQEAg
-c3RhdGljIGludCByc19vcGVuKHN0cnVjdCB0dHlfc3RydWN0ICp0dHksIHN0cnVjdCBmaWxlICog
-ZmlscCkKPiA+ICBzdGF0aWMgdm9pZCByc19jbG9zZShzdHJ1Y3QgdHR5X3N0cnVjdCAqdHR5LCBz
-dHJ1Y3QgZmlsZSAqIGZpbHApCj4gPiAgewo+ID4gIAlzcGluX2xvY2tfYmgoJnRpbWVyX2xvY2sp
-Owo+ID4gLQlpZiAodHR5LT5jb3VudCA9PSAxKQo+ID4gKwlpZiAodHR5LT5jb3VudCA9PSAxKSB7
-Cj4gPiArCQlzcGluX3VubG9ja19iaCgmdGltZXJfbG9jayk7Cj4gPiAgCQlkZWxfdGltZXJfc3lu
-Yygmc2VyaWFsX3RpbWVyKTsKPiA+ICsJfQo+ID4gIAlzcGluX3VubG9ja19iaCgmdGltZXJfbG9j
-ayk7Cj4gCj4gICAgRG91YmxlIHVubG9jayBpZmYgdHR5LT5jb3VudCA9PSAxPwoKWWVzLCBUaGFu
-a3MgYSBsb3QgZm9yIHlvdXIgdGltZXIgYW5kIGFkdmljZS4gSSBmb3VuZCB0aGVyZSBpcyBubyBy
-YWNlIGNvbmRpdGlvbgpiZXR3ZWVuIHJzX2Nsb3NlIGFuZCByc19wb2xsKHRpbWVyIGhhbmRsZXIp
-LCBJIHRoaW5rIHdlIGNvdWxkIHJlbW92ZSB0aGUgdGltZXJfbG9jawppbiByc19jbG9zZSgpLCBy
-c19vcGVuKCkgYW5kIHJzX3BvbGwoKS4KCkJlc3QgcmVnYXJkcywKRHVvbWluZyBaaG91
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215799
+
+Bastien Nocera (bugzilla@hadess.net) changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |bugzilla@hadess.net
+
+--- Comment #7 from Bastien Nocera (bugzilla@hadess.net) ---
+I replied about the problem on the linux-usb list and in
+https://github.com/rickysarraf/laptop-mode-tools/issues/183
+
+This is most certainly a bug in the script, not a problem with the driver.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
