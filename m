@@ -2,112 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E2C4F71AD
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 03:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590064F71C1
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 03:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238526AbiDGBpc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Apr 2022 21:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
+        id S235437AbiDGBzv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Apr 2022 21:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239316AbiDGBol (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 21:44:41 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19D241C2A31
-        for <linux-usb@vger.kernel.org>; Wed,  6 Apr 2022 18:42:11 -0700 (PDT)
-Received: from localhost.localdomain (unknown [222.205.11.114])
-        by mail-app4 (Coremail) with SMTP id cS_KCgBHvaRtQU5iYn_gAA--.26376S4;
-        Thu, 07 Apr 2022 09:42:05 +0800 (CST)
-From:   Lin Ma <linma@zju.edu.cn>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        mdharm-usb@one-eyed-alien.net
-Cc:     Lin Ma <linma@zju.edu.cn>
-Subject: [PATCH v1] USB: storage: karma: fix rio_karma_init return
-Date:   Thu,  7 Apr 2022 09:41:56 +0800
-Message-Id: <20220407014156.3038-1-linma@zju.edu.cn>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S231624AbiDGBzu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 21:55:50 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E5419B07C;
+        Wed,  6 Apr 2022 18:53:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649296431; x=1680832431;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GfoMu1rSQjLGCY+LsK9hopMjy06xNe7EDG2XcdKQJC8=;
+  b=Zcz6IYvCo8Xe7I+WwsAv90jpPUK7K2+AlbM/ZxnF8VM0Js2bhVmjm04Z
+   7mFKwqNwmEwYmk3HUlFL2TyGo7DFtMDrRvrokxPwHsC32XrycErK494aA
+   I44T3ZcK9NGZ4PL2/K6ivXtXagQ32I7z65teNu3UnKgrUeqi7vLVplt98
+   8=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Apr 2022 18:53:51 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 18:53:51 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 6 Apr 2022 18:53:50 -0700
+Received: from wcheng-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 6 Apr 2022 18:53:49 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH] usb: dwc3: EP clear halt leading to incorrect submission of delayed_status
+Date:   Wed, 6 Apr 2022 18:53:36 -0700
+Message-ID: <20220407015336.19455-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cS_KCgBHvaRtQU5iYn_gAA--.26376S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7CrWUtw48GFW5Xr48CFyrCrg_yoW8Xr4kpa
-        ykJry5CFyUJF4fKr9rX34DuFy5Can7tFyjga4fKwn09rsrJF48CF12va4093ZYqrySkr1I
-        qFsYkFyagFn8AFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv01xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
-        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l
-        42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWU
-        twCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
-        LiSPUUUUU==
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The function rio_karam_init() should return -ENOMEM instead of
-value 0 (USB_STOR_TRANSPORT_GOOD) when allocation fails.
+The usb_ep_clear_halt() API can be called from the function driver, and
+translates to dwc3_gadget_ep_set_halt().  This routine is shared with when
+the host issues a clear feature ENDPOINT_HALT, and is differentiated by the
+protocol argument.  If the following sequence occurs, there can be a
+situation where the delayed_status flag is improperly cleared for the wrong
+SETUP transaction:
 
-Simlarlly, it should return -EIO when rio_karma_send_command() fails.
+1. Vendor specific control transfer returns USB_GADGET_DELAYED_STATUS.
+2. DWC3 gadget sets dwc->delayed_status to '1'.
+3. Another function driver issues a usb_ep_clear_halt() call.
+4. DWC3 gadget issues dwc3_stop_active_transfer() and sets
+   DWC3_EP_PENDING_CLEAR_STALL.
+5. EP command complete interrupt triggers for the end transfer, and
+   dwc3_ep0_send_delayed_status() is allowed to run, as delayed_status
+   is '1' due to step#1.
+6. STATUS phase is sent, and delayed_status is cleared.
+7. Vendor specific control transfer is finished being handled, and issues
+   usb_composite_setup_continue().  This results in queuing of a data
+   phase.
 
-Fixes: dfe0d3ba20e8 ("USB Storage: add rio karma eject support")
+Cache the protocol flag so that DWC3 gadget is aware of when the clear halt
+is due to a SETUP request from the host versus when it is sourced from a
+function driver.  This allows for the EP command complete interrupt to know
+if it needs to issue a delayed status phase.
 
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 ---
-Changes in V1:
-  - use -ENOMEM rather than USB_STOR_TRANSPORT_ERROR
-  - take care of rio_karma_send_command() too
+ drivers/usb/dwc3/core.h   | 1 +
+ drivers/usb/dwc3/ep0.c    | 1 +
+ drivers/usb/dwc3/gadget.c | 3 ++-
+ 3 files changed, 4 insertions(+), 1 deletion(-)
 
- drivers/usb/storage/karma.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/storage/karma.c b/drivers/usb/storage/karma.c
-index 05cec81dcd3f..38ddfedef629 100644
---- a/drivers/usb/storage/karma.c
-+++ b/drivers/usb/storage/karma.c
-@@ -174,24 +174,25 @@ static void rio_karma_destructor(void *extra)
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 5c9d467195a6..55f98485c54c 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1272,6 +1272,7 @@ struct dwc3 {
+ 	unsigned		connected:1;
+ 	unsigned		softconnect:1;
+ 	unsigned		delayed_status:1;
++	unsigned		clear_stall_protocol:1;
+ 	unsigned		ep0_bounced:1;
+ 	unsigned		ep0_expect_in:1;
+ 	unsigned		has_hibernation:1;
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index 1064be5518f6..aa8476da222d 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -1080,6 +1080,7 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
+ 	unsigned int direction = !dwc->ep0_expect_in;
  
- static int rio_karma_init(struct us_data *us)
- {
--	int ret = 0;
- 	struct karma_data *data = kzalloc(sizeof(struct karma_data), GFP_NOIO);
+ 	dwc->delayed_status = false;
++	dwc->clear_stall_protocol = 0;
  
- 	if (!data)
--		goto out;
-+		return -ENOMEM;
+ 	if (dwc->ep0state != EP0_STATUS_PHASE)
+ 		return;
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index ab725d2262d6..c427ddae016f 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2152,6 +2152,7 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
+ 		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING ||
+ 		    (dep->flags & DWC3_EP_DELAY_STOP)) {
+ 			dep->flags |= DWC3_EP_PENDING_CLEAR_STALL;
++			dwc->clear_stall_protocol = protocol;
+ 			return 0;
+ 		}
  
- 	data->recv = kmalloc(RIO_RECV_LEN, GFP_NOIO);
- 	if (!data->recv) {
- 		kfree(data);
--		goto out;
-+		return -ENOMEM;
+@@ -3483,7 +3484,7 @@ static void dwc3_gadget_endpoint_command_complete(struct dwc3_ep *dep,
+ 		}
+ 
+ 		dep->flags &= ~(DWC3_EP_STALL | DWC3_EP_WEDGE);
+-		if (dwc->delayed_status)
++		if (dwc->clear_stall_protocol)
+ 			dwc3_ep0_send_delayed_status(dwc);
  	}
  
- 	us->extra = data;
- 	us->extra_destructor = rio_karma_destructor;
--	ret = rio_karma_send_command(RIO_ENTER_STORAGE, us);
--	data->in_storage = (ret == 0);
--out:
--	return ret;
-+	if (rio_karma_send_command(RIO_ENTER_STORAGE, us))
-+		return -EIO;
-+
-+	data->in_storage = 1;
-+
-+	return 0;
- }
- 
- static struct scsi_host_template karma_host_template;
--- 
-2.35.1
-
