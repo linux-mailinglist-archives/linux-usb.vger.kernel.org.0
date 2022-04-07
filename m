@@ -2,116 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF864F722C
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 04:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C544F7230
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 04:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239340AbiDGCmS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Apr 2022 22:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
+        id S239365AbiDGCn0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Apr 2022 22:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239303AbiDGCmP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 22:42:15 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A1B138346;
-        Wed,  6 Apr 2022 19:40:17 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id z128so3815800pgz.2;
-        Wed, 06 Apr 2022 19:40:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Q0BS+DlYIFXWqo3Zzeim6fvtNJHwGEjQKRmny/DdPeI=;
-        b=lj6OeQgsdULcEtsSutYDsI9wAYtipXM4Vo+YHFr4+Xt1+cgsZTF4/6bem3AhwhMJHs
-         bCGdWyDnPcy2lOtnzGBk26IvVhPSuCVcRpy2r8jjtLq1mBqLyGS+8DXeqsCpxkHxjuvn
-         UfNFVoIqOnm4n1smOkLhGKhUkkern6DLZh/ug0AZMNZfGc6oULdMGDATfwndNEHU2cP8
-         XJ5LhRvZiRq2KMy1OlLp8ZGKsMh6ryGYDgFqw/CurM3tmHkP2T+j1EjZprEjC0vq9lA8
-         RB/ORZZIziTJZYylcg+qNJKwSvIgo0i0/CczwjIf8U8ZzLmevfcRGg1sO0fXU7nOI4k3
-         5PDA==
+        with ESMTP id S239303AbiDGCnY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 22:43:24 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B59113196C
+        for <linux-usb@vger.kernel.org>; Wed,  6 Apr 2022 19:41:22 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id z10-20020a056602080a00b00645b9fdc630so2840519iow.5
+        for <linux-usb@vger.kernel.org>; Wed, 06 Apr 2022 19:41:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Q0BS+DlYIFXWqo3Zzeim6fvtNJHwGEjQKRmny/DdPeI=;
-        b=OBUSg4W8BDWDgS4E/BB1DNKsaQ7vwUZJG17WUbDg5ThEBufGOdTGvcpbkwxC1m74Pk
-         8hG1nz3/YW0f5hFeLotwwPncb2mXg1/SzxD1erF1i9g8cZS188ge9HZAcG58aNBfGmB/
-         J71cbshm0qlEcryqPRUrEH/sl4PNz1IP35O6Gehdh5RFpYXO6ynolQP/lROhYaTP4A5H
-         RXCOGUBnFBzl3NZl0IAYp2Ooc/eitjKBDl4+if5p6F+Geh70T1uYCnnTohvwvZNSDGgy
-         OQneSB0+VnTG8sAcrDnA5etZCFx7P32WQr+gAnT2Wc2bukTTYh7paEvATLRNQbPTFVXG
-         N3HQ==
-X-Gm-Message-State: AOAM530Enbxzfbr/7w9PPZ9a+L9rpBWpT5pwa1EBlAZAu8i4P+Q2NcWl
-        yK6ifHV1QNZ0HTQ7P8+9pib2mZciqHtdvg==
-X-Google-Smtp-Source: ABdhPJzif8Jcyr1Q316a7UtqQl2OAfR8jsfKZq+llBOYYuCIe+5pdhNZTMccBy0FnO9J14oA9b7n9Q==
-X-Received: by 2002:a05:6a00:2887:b0:4fa:e10c:7ca with SMTP id ch7-20020a056a00288700b004fae10c07camr12046138pfb.9.1649299216608;
-        Wed, 06 Apr 2022 19:40:16 -0700 (PDT)
-Received: from slim.das-security.cn ([103.84.139.52])
-        by smtp.gmail.com with ESMTPSA id q10-20020a056a00088a00b004f7ceff389esm21577827pfj.152.2022.04.06.19.40.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 19:40:16 -0700 (PDT)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     gregkh@linuxfoundation.org, mudongliangabcd@gmail.com,
-        oneukum@suse.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH v2] usb: misc: fix improper handling of refcount in uss720_probe()
-Date:   Thu,  7 Apr 2022 10:40:01 +0800
-Message-Id: <20220407024001.11761-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=FPnFLcQyYhCFXk0VrLepSFcekoTeVgMkT+ojeLkwXxg=;
+        b=BriYGeUNsQY6GswOyoWTv8CgqLJ2x1MZ8NWpWH0H/dKlDFsMr0jab/AE+e5xYC6UPb
+         VrPKmwbxieQ7w2lHdC+EfLl3Wjg3NPx/HMwN7sznIVeW7EYLhYEi77NwgKDAEsOtgr73
+         74fQuaVPEllobEUAQ4J5pwFMAGis3vi6S5oDjl65UMxrNf5rIbLEOGfRPxIF+kl2ZrM1
+         iCOAN2ArKFpEo0uor3thBCLFaTOkv/CW1de/3feORkQt8rZSLy9/H+/z8YPRu0/mVmEl
+         9Hl7rVKjaq9e+RgsLV502TEOHyHpZE/tle5NKGqzUOez2PFGQ6v/6/awWeAnQrdfXVHd
+         2QTA==
+X-Gm-Message-State: AOAM532pPAxKmHOFHYdqlaH3jf6p3vvSpJ6FjYQS8CeKuIK4KZ9M6bqc
+        oPq/dRQOB7kcwm+qmc1eyyjAlKjlrK1G/A03tRHbfCUg/nyA
+X-Google-Smtp-Source: ABdhPJzqtrd4sabLux6vR5+l+khyNsFOVbGzr/VFyM/MP5DGx96Qu/ip0omBcn6x9qDeFAImnQx/HZ9s8eAIVjTqfme6Ffi0RUFZ
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c691:0:b0:2be:8eab:9f7d with SMTP id
+ o17-20020a92c691000000b002be8eab9f7dmr5431907ilg.26.1649299281836; Wed, 06
+ Apr 2022 19:41:21 -0700 (PDT)
+Date:   Wed, 06 Apr 2022 19:41:21 -0700
+In-Reply-To: <000000000000d56a0305d80c2f2b@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d27e6705dc07698c@google.com>
+Subject: Re: [syzbot] KMSAN: uninit-value in ax88179_led_setting
+From:   syzbot <syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com>
+To:     arnd@arndb.de, dan.carpenter@oracle.com, davem@davemloft.net,
+        glider@google.com, jackychou@asix.com.tw, jannh@google.com,
+        jgg@ziepe.ca, k.kahurani@gmail.com, kbuild-all@lists.01.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, lkp@intel.com, netdev@vger.kernel.org,
+        pabeni@redhat.com, paskripkin@gmail.com, phil@philpotter.co.uk,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-usb_put_dev shouldn't be called when uss720_probe succeeds because of
-priv->usbdev. At the same time, priv->usbdev shouldn't be set to NULL
-before destroy_priv in uss720_disconnect because usb_put_dev is in
-destroy_priv.
+syzbot has found a reproducer for the following issue on:
 
-Fix this by moving priv->usbdev = NULL after usb_put_dev.
+HEAD commit:    33d9269ef6e0 Revert "kernel: kmsan: don't instrument stack..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=158ddbcf700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d830111cc3be873
+dashboard link: https://syzkaller.appspot.com/bug?extid=d3dbdf31fbe9d8f5f311
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=146e3dc3700000
 
-Fixes: dcb4b8ad6a44 ("misc/uss720: fix memory leak in uss720_probe")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com
 
-v2: fix a stupid UAF in the previous version.
+ax88179_178a 2-1:0.252 (unnamed net_device) (uninitialized): Failed to read reg index 0x0001: -71
+ax88179_178a 2-1:0.252 (unnamed net_device) (uninitialized): Failed to read reg index 0x0002: -71
+=====================================================
+BUG: KMSAN: uninit-value in ax88179_check_eeprom drivers/net/usb/ax88179_178a.c:1074 [inline]
+BUG: KMSAN: uninit-value in ax88179_led_setting+0x884/0x30b0 drivers/net/usb/ax88179_178a.c:1168
+ ax88179_check_eeprom drivers/net/usb/ax88179_178a.c:1074 [inline]
+ ax88179_led_setting+0x884/0x30b0 drivers/net/usb/ax88179_178a.c:1168
+ ax88179_bind+0xf00/0x1a50 drivers/net/usb/ax88179_178a.c:1412
+ usbnet_probe+0x1251/0x4160 drivers/net/usb/usbnet.c:1747
+ usb_probe_interface+0xf19/0x1600 drivers/usb/core/driver.c:396
+ really_probe+0x653/0x14b0 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:755
+ driver_probe_device drivers/base/dd.c:785 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:902
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach+0x593/0x8e0 drivers/base/dd.c:973
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:1020
+ bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
+ device_add+0x1fff/0x26e0 drivers/base/core.c:3405
+ usb_set_configuration+0x37e9/0x3ed0 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0x13c/0x300 drivers/usb/core/generic.c:238
+ usb_probe_device+0x309/0x570 drivers/usb/core/driver.c:293
+ really_probe+0x653/0x14b0 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:755
+ driver_probe_device drivers/base/dd.c:785 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:902
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach+0x593/0x8e0 drivers/base/dd.c:973
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:1020
+ bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
+ device_add+0x1fff/0x26e0 drivers/base/core.c:3405
+ usb_new_device+0x1b8e/0x2950 drivers/usb/core/hub.c:2566
+ hub_port_connect drivers/usb/core/hub.c:5358 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+ port_event drivers/usb/core/hub.c:5660 [inline]
+ hub_event+0x58e3/0x89e0 drivers/usb/core/hub.c:5742
+ process_one_work+0xdb6/0x1820 kernel/workqueue.c:2307
+ worker_thread+0x10b3/0x21e0 kernel/workqueue.c:2454
+ kthread+0x3c7/0x500 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30
 
- drivers/usb/misc/uss720.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Local variable eeprom.i created at:
+ ax88179_check_eeprom drivers/net/usb/ax88179_178a.c:1045 [inline]
+ ax88179_led_setting+0x2e2/0x30b0 drivers/net/usb/ax88179_178a.c:1168
+ ax88179_bind+0xf00/0x1a50 drivers/net/usb/ax88179_178a.c:1412
 
-diff --git a/drivers/usb/misc/uss720.c b/drivers/usb/misc/uss720.c
-index 748139d26263..0be8efcda15d 100644
---- a/drivers/usb/misc/uss720.c
-+++ b/drivers/usb/misc/uss720.c
-@@ -71,6 +71,7 @@ static void destroy_priv(struct kref *kref)
- 
- 	dev_dbg(&priv->usbdev->dev, "destroying priv datastructure\n");
- 	usb_put_dev(priv->usbdev);
-+	priv->usbdev = NULL;
- 	kfree(priv);
- }
- 
-@@ -736,7 +737,6 @@ static int uss720_probe(struct usb_interface *intf,
- 	parport_announce_port(pp);
- 
- 	usb_set_intfdata(intf, pp);
--	usb_put_dev(usbdev);
- 	return 0;
- 
- probe_abort:
-@@ -754,7 +754,6 @@ static void uss720_disconnect(struct usb_interface *intf)
- 	usb_set_intfdata(intf, NULL);
- 	if (pp) {
- 		priv = pp->private_data;
--		priv->usbdev = NULL;
- 		priv->pp = NULL;
- 		dev_dbg(&intf->dev, "parport_remove_port\n");
- 		parport_remove_port(pp);
--- 
-2.25.1
+CPU: 0 PID: 7 Comm: kworker/0:1 Not tainted 5.17.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+=====================================================
 
