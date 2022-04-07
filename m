@@ -2,113 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CCF24F75CF
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 08:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766374F75ED
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 08:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240962AbiDGGRh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Apr 2022 02:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
+        id S239510AbiDGG0X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Apr 2022 02:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233185AbiDGGRg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 02:17:36 -0400
-Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [203.148.12.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4D71F047C;
-        Wed,  6 Apr 2022 23:15:35 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
- (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 7 Apr
- 2022 14:15:31 +0800
-Received: from [10.29.8.49] (10.29.8.49) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 7 Apr
- 2022 14:15:30 +0800
-Message-ID: <bd43807d-a2d7-5742-4253-c443cdf5c2f0@zhaoxin.com>
-Date:   Thu, 7 Apr 2022 14:15:29 +0800
+        with ESMTP id S235849AbiDGG0W (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 02:26:22 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984BA1F6361;
+        Wed,  6 Apr 2022 23:24:22 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V9PYJ2X_1649312652;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V9PYJ2X_1649312652)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 07 Apr 2022 14:24:20 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] usb: gadget: u_audio: clean up some inconsistent indenting
+Date:   Thu,  7 Apr 2022 14:24:10 +0800
+Message-Id: <20220407062410.89214-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] USB:Fix ehci infinite suspend-resume loop issue in
- zhaoxin
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <CobeChen@zhaoxin.com>,
-        <TimGuo@zhaoxin.com>, <tonywwang@zhaoxin.com>,
-        <weitaowang@zhaoxin.com>
-References: <3d0ae3ca-9dad-bb8f-5c41-45bdcb07b9cd@zhaoxin.com>
- <Yi9QIk+6VIWW6V/W@rowland.harvard.edu>
- <320584eb-ef89-3759-509c-e7e9cb10f983@zhaoxin.com>
- <YjCuOXRFZ8CjK9SD@rowland.harvard.edu>
- <ac40c227-ea26-bccd-d254-5a2034103184@zhaoxin.com>
- <YkxoHY2SVomGwGdh@rowland.harvard.edu>
- <bbd9148d-5970-2233-6ee9-625e961cd2f5@zhaoxin.com>
- <Yk29tZpy9pLDlPj2@rowland.harvard.edu>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-In-Reply-To: <Yk29tZpy9pLDlPj2@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.29.8.49]
-X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2022/4/7 00:20, Alan Stern wrote:
-> On Wed, Apr 06, 2022 at 10:38:28AM +0800, WeitaoWang-oc@zhaoxin.com wrote:
->> On 2022/4/6 00:02, Alan Stern wrote:
->>> In fact, the resume kernel doesn't call ehci_resume at all.  Here's what
->>> it does:
->>>
->>> 	The resume kernel boots;
->>>
->>> 	If your patch causes STS_PCD to be set at this point, the flag
->>> 	should get cleared shortly afterward by ehci_irq;
->>>
->>> 	ehci-hcd goes into runtime suspend;
->>>
->>> 	The kernel reads the system image that was stored earlier when
->>> 	hibernation began;
->>>
->>> 	After the image is loaded, the system goes into the freeze
->>> 	state (this does not call any routines in ehci-hcd);
->> On this phase, pci_pm_freeze will be called for pci device. In this
->> function, pm_runtime_resume will be called to resume already
->> runtime-suspend devices. which will cause ehci_resume to be called.
->> Thus STS_PCD flag will be set in ehci_resume function.
-> 
-> Aha!  I was missing that piece of information, thanks.
-> 
-> But this still doesn't explain why check_root_hub_suspended is failing.
-> That routine checks the HCD_RH_RUNNING bit, which gets set in
-> hcd_bus_resume.  hcd_bus_resume gets called as part of resuming the root
-> hub, and in ehci-hcd this happens when ehci_irq sees that STS_PCD is set
-> and calls usb_hcd_resume_root_hub.  That routine queues a wakeup request
-> on the pm_wq work queue, which is then supposed to run hcd_resume_work
-> to actually restart the root hub.
-> 
-> But pm_wq is a freezable work queue!  While the system is in the freeze
-> state, the work queue isn't running.  This means that the root hub
-> should remain suspended until the end of the freeze phase, and so the
-> call to check_root_hub_suspended should succeed.
-> 
-> Can you check to see what's really happening on your system?  Something
-> must be wrong with my analysis, but I can't tell what it is.  I'm still
-> puzzled.
-> 
-> Alan Stern
-Your analysis is right, my test platform's kernel version is not the
-latest, this kernel not call freeze_kernel_threads on software_resume
-function.
-(https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/kernel/power/hibernate.c?h=v5.18-rc1&id=2351f8d295ed63393190e39c2f7c1fee1a80578f)
-So pm_wq is active and can handle root hub power events.
-Update my kernel to fix the issue in the url above, system hibernation
-test was successful with our patch(not clear STS_PCD bit).
-Thanks for your clarification.
+Eliminate the follow smatch warning:
 
-Weitao Wang
+drivers/usb/gadget/function/u_audio.c:1182 g_audio_setup() warn:
+inconsistent indenting.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/usb/gadget/function/u_audio.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index 2bb569895a90..c1f62e91b012 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -1179,8 +1179,8 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
+ 	if (c_chmask) {
+ 		struct uac_rtd_params *prm = &uac->c_prm;
+ 
+-    spin_lock_init(&prm->lock);
+-    uac->c_prm.uac = uac;
++		spin_lock_init(&prm->lock);
++		uac->c_prm.uac = uac;
+ 		prm->max_psize = g_audio->out_ep_maxpsize;
+ 		prm->srate = params->c_srates[0];
+ 
+-- 
+2.20.1.7.g153144c
+
