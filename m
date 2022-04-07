@@ -2,107 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DB14F7BB0
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 11:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208334F7BF0
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 11:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243815AbiDGJeN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Apr 2022 05:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
+        id S236278AbiDGJol (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Apr 2022 05:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243816AbiDGJeL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 05:34:11 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE1EB369E;
-        Thu,  7 Apr 2022 02:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649323931; x=1680859931;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=2UXXZYyV85lALXlrplrR+1ziqbNgpOEQ934veSRPz0M=;
-  b=likf5xQDPCuc/x5hlNJk0N969jZ5OVSxvdQxHNCn0gWjBaLE+m2LWlQF
-   QN1X1WuiU/VGxB7kFni3X4TKx6itUcVkvDlZhEn8OtmHswGtcji59pluD
-   Cl4dEXnJq72m/aaRiGsoa4PmWlwA3S5j95LUDUyQp4uKbhT05+HRYpYO6
-   Y=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 07 Apr 2022 02:32:10 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 02:31:54 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 7 Apr 2022 02:31:54 -0700
-Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 7 Apr 2022 02:31:49 -0700
-From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_kriskura@quicinc.com>,
-        <quic_vpulyala@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [PATCH v3 2/2] usb: dwc3: host: Set the property usb-skip-phy-init
-Date:   Thu, 7 Apr 2022 15:01:28 +0530
-Message-ID: <1649323888-12420-3-git-send-email-quic_c_sanm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1649323888-12420-1-git-send-email-quic_c_sanm@quicinc.com>
-References: <1649323888-12420-1-git-send-email-quic_c_sanm@quicinc.com>
+        with ESMTP id S237161AbiDGJok (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 05:44:40 -0400
+Received: from mxout04.lancloud.ru (mxout04.lancloud.ru [45.84.86.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F38718D9AD;
+        Thu,  7 Apr 2022 02:42:37 -0700 (PDT)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru C1ADB20CD431
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH 11/11] arch: xtensa: platforms: Fix deadlock in rs_close()
+To:     Duoming Zhou <duoming@zju.edu.cn>, <linux-kernel@vger.kernel.org>
+CC:     <chris@zankel.net>, <jcmvbkbc@gmail.com>,
+        <mustafa.ismail@intel.com>, <shiraz.saleem@intel.com>,
+        <jgg@ziepe.ca>, <wg@grandegger.com>, <mkl@pengutronix.de>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <jes@trained-monkey.org>, <gregkh@linuxfoundation.org>,
+        <jirislaby@kernel.org>, <alexander.deucher@amd.com>,
+        <linux-xtensa@linux-xtensa.org>, <linux-rdma@vger.kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-hippi@sunsite.dk>, <linux-staging@lists.linux.dev>,
+        <linux-serial@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <cover.1649310812.git.duoming@zju.edu.cn>
+ <9ca3ab0b40c875b6019f32f031c68a1ae80dd73a.1649310812.git.duoming@zju.edu.cn>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <1195e776-328d-12fe-d1f8-22085dc77b44@omp.ru>
+Date:   Thu, 7 Apr 2022 12:42:31 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <9ca3ab0b40c875b6019f32f031c68a1ae80dd73a.1649310812.git.duoming@zju.edu.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Runtime suspend of phy drivers was failing from DWC3 driver as
-runtime usage value is 2 because the phy is initialized from
-DWC3 core and HCD core.
-Some controllers like DWC3 and CDNS3 manage phy in their core drivers.
-This property can be set to avoid phy initialization in HCD core.
+Hello!
 
-Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
----
- drivers/usb/dwc3/host.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On 4/7/22 9:37 AM, Duoming Zhou wrote:
 
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index eda8719..fe810ff 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -67,7 +67,7 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
- 
- int dwc3_host_init(struct dwc3 *dwc)
- {
--	struct property_entry	props[4];
-+	struct property_entry	props[5];
- 	struct platform_device	*xhci;
- 	int			ret, irq;
- 	int			prop_idx = 0;
-@@ -114,6 +114,8 @@ int dwc3_host_init(struct dwc3 *dwc)
- 	if (DWC3_VER_IS_WITHIN(DWC3, ANY, 300A))
- 		props[prop_idx++] = PROPERTY_ENTRY_BOOL("quirk-broken-port-ped");
- 
-+	props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb-skip-phy-init");
-+
- 	if (prop_idx) {
- 		ret = device_create_managed_software_node(&xhci->dev, props, NULL);
- 		if (ret) {
--- 
-2.7.4
+> There is a deadlock in rs_close(), which is shown
+> below:
+> 
+>    (Thread 1)              |      (Thread 2)
+>                            | rs_open()
+> rs_close()                 |  mod_timer()
+>  spin_lock_bh() //(1)      |  (wait a time)
+>  ...                       | rs_poll()
+>  del_timer_sync()          |  spin_lock() //(2)
+>  (wait timer to stop)      |  ...
+> 
+> We hold timer_lock in position (1) of thread 1 and
+> use del_timer_sync() to wait timer to stop, but timer handler
+> also need timer_lock in position (2) of thread 2.
+> As a result, rs_close() will block forever.
+> 
+> This patch extracts del_timer_sync() from the protection of
+> spin_lock_bh(), which could let timer handler to obtain
+> the needed lock.
+> 
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> ---
+>  arch/xtensa/platforms/iss/console.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/xtensa/platforms/iss/console.c b/arch/xtensa/platforms/iss/console.c
+> index 81d7c7e8f7e..d431b61ae3c 100644
+> --- a/arch/xtensa/platforms/iss/console.c
+> +++ b/arch/xtensa/platforms/iss/console.c
+> @@ -51,8 +51,10 @@ static int rs_open(struct tty_struct *tty, struct file * filp)
+>  static void rs_close(struct tty_struct *tty, struct file * filp)
+>  {
+>  	spin_lock_bh(&timer_lock);
+> -	if (tty->count == 1)
+> +	if (tty->count == 1) {
+> +		spin_unlock_bh(&timer_lock);
+>  		del_timer_sync(&serial_timer);
+> +	}
+>  	spin_unlock_bh(&timer_lock);
 
+   Double unlock iff tty->count == 1?
+
+[...]
+
+MBR, Sergey
