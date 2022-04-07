@@ -2,125 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BE04F72B0
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 05:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F304F7562
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 07:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234218AbiDGDML (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Apr 2022 23:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
+        id S240926AbiDGFep (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Apr 2022 01:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233995AbiDGDMH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 23:12:07 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A4B227C58;
-        Wed,  6 Apr 2022 20:10:08 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id l7so2665674ejn.2;
-        Wed, 06 Apr 2022 20:10:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6G3zddOtH8eyIxvQmfflWw1/4QptoCpMZ2g0zuWQJE4=;
-        b=nsb1zr3FcdGj2BTMPaxGW4jXWziAfDjqWTGNOM/ere5rA+I7OedBX9FN9atCOecIGt
-         pcRc2c5DFkGY8a6Ik0Uh5YRSD4muI4yDahqMHXN5KbWzCAWmeGpNXHAapwijgrzbh/up
-         +0DkhUUKfgYpP2iDFI/+qEhD+4SYlRQ9Iff104cFNNsllrvGRgvhnYlQ9OJPxOkLf9zR
-         lYKVizquQRl/Ex5NNdnNtZPZBiSOdRXGpOpTFGT+1vYsPK1wDGbaha2BYIqt7p6Odlsj
-         onYQ4aCvJg47l+RjUblnRAhl0N9pEIqc2hcZYeb9ah2tbLPodebxcFdTGLUaTi9mqnfa
-         KsEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6G3zddOtH8eyIxvQmfflWw1/4QptoCpMZ2g0zuWQJE4=;
-        b=8O+Rsf1118BbJCg+TdNedraZdvCMfz9ORYGvuaRsPJk7Mt0SaPjAtvLqjYwF3BJz4y
-         pnweLzvxNpfagM2cIVn+H4zA2Jhqye6VOl+jPnGwfydqykXm1Lhb5TbJDTMGVz7f3gMU
-         asIDCOWg47tB13aQnQMKXpYSHOh42D5TuMAiDMLG5eaufpjiiUH7ag2Q0CT73048K1bM
-         yZnMZIC1LaLj38yp8Qlb6bwz/CL1FzghxXhhzd/BUWV7HmsW7sE0gN2IclpyldWQdhkr
-         1UhRojzYAyAKgk/sggmYnx+nggFDdKraT2TQ1D/tT0e6qEicg5bCUv28eGh6Pf4boYfa
-         dPHQ==
-X-Gm-Message-State: AOAM532vYDlsQd/q3pQrZEdeHGXU0V9PS595Ql7ye1PQEq68KglBC1BJ
-        HI0czn8wciAVA0chFizaA1MFAVcqg0HLPmdzMEk=
-X-Google-Smtp-Source: ABdhPJxI9ltkUnnn2XwyGKwQSgLHlnE+U25/ZiqM/ZnUB51X94ZZgD8fddLhu8IXGk5t/J2oDvKOAQMOqIcgdVtZyC0=
-X-Received: by 2002:a17:906:3a15:b0:6cf:ea4e:a1cc with SMTP id
- z21-20020a1709063a1500b006cfea4ea1ccmr11755209eje.753.1649301007335; Wed, 06
- Apr 2022 20:10:07 -0700 (PDT)
+        with ESMTP id S237177AbiDGFeo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 01:34:44 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10577DD5;
+        Wed,  6 Apr 2022 22:32:44 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2375WfAq111462;
+        Thu, 7 Apr 2022 00:32:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649309561;
+        bh=9X51TdJHUCLYh+di/XNgaYLQgZEYwINWiXfEVFy5c5w=;
+        h=Date:From:Subject:CC:References:In-Reply-To;
+        b=oXnFTsgtzn7avFPnFhDTxyFk6oRHJpQ2dr0zd6nuOJOG8Blv2+VOax4Z6ARMPEk5U
+         0u+7W/lsVJDXxsTQOysHuGDsl+WJOnEWWGJulU4oY26ORIfPQroBz4S/VsATdMs1SZ
+         r1eFDFuiGiaY5uYZMQOi2cCeRKhhp8l4++pP9GkM=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2375Wfjc115909
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 7 Apr 2022 00:32:41 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 7
+ Apr 2022 00:32:41 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 7 Apr 2022 00:32:41 -0500
+Received: from [10.24.69.236] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2375Wb8S018307;
+        Thu, 7 Apr 2022 00:32:38 -0500
+Message-ID: <301bc860-bab7-9e18-9cef-7c8069d112dc@ti.com>
+Date:   Thu, 7 Apr 2022 11:02:37 +0530
 MIME-Version: 1.0
-References: <20220407024001.11761-1-hbh25y@gmail.com>
-In-Reply-To: <20220407024001.11761-1-hbh25y@gmail.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Thu, 7 Apr 2022 11:09:41 +0800
-Message-ID: <CAD-N9QV27nJW=_goZKB0666Nq1pNphbgoHeYn_FmSkkJh9vyKg@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: misc: fix improper handling of refcount in uss720_probe()
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   Aswath Govindraju <a-govindraju@ti.com>
+Subject: Re: [PATCH v2 0/2] AM62: Add support for AM62 USB wrapper driver
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+References: <20220324073425.18607-1-a-govindraju@ti.com>
+Content-Language: en-US
+In-Reply-To: <20220324073425.18607-1-a-govindraju@ti.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 10:40 AM Hangyu Hua <hbh25y@gmail.com> wrote:
->
-> usb_put_dev shouldn't be called when uss720_probe succeeds because of
-> priv->usbdev. At the same time, priv->usbdev shouldn't be set to NULL
-> before destroy_priv in uss720_disconnect because usb_put_dev is in
-> destroy_priv.
->
-> Fix this by moving priv->usbdev = NULL after usb_put_dev.
+Hi All,
 
-Hi Hangyu,
+On 24/03/22 13:04, Aswath Govindraju wrote:
+> The following series of patches add support for AM62 USB wrapper driver
+> and its corresponding bindings.
+> 
+> changes since v1:
+> - Fixed the error with dev_pm_ops uninitialization, in patch 2.
+>   This was reported by kernel test bot
+> - In patch 1, made correction in grammer of clocks property description
+>   and added maxItems in the interrupts property based on comments
+>   received from Roger
+> - In patch 1, corrected the title, fixed the description of
+>   ti,syscon-phy-pll-refclk, added pattern properties and child node
+>   in the example based on the comments from Krzysztof.
+> 
 
-good catch as priv->usbdev is still used after the probe function.
+Thank you for all the review and comments. I have posted respin(v3) for
+this patch series. Here is the link to the series
 
-I agree with this patch.
+https://patchwork.kernel.org/project/linux-usb/list/?series=629613
 
-Reviewed-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Regards,
+Aswath
 
->
-> Fixes: dcb4b8ad6a44 ("misc/uss720: fix memory leak in uss720_probe")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> ---
->
-> v2: fix a stupid UAF in the previous version.
->
->  drivers/usb/misc/uss720.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/usb/misc/uss720.c b/drivers/usb/misc/uss720.c
-> index 748139d26263..0be8efcda15d 100644
-> --- a/drivers/usb/misc/uss720.c
-> +++ b/drivers/usb/misc/uss720.c
-> @@ -71,6 +71,7 @@ static void destroy_priv(struct kref *kref)
->
->         dev_dbg(&priv->usbdev->dev, "destroying priv datastructure\n");
->         usb_put_dev(priv->usbdev);
-> +       priv->usbdev = NULL;
->         kfree(priv);
->  }
->
-> @@ -736,7 +737,6 @@ static int uss720_probe(struct usb_interface *intf,
->         parport_announce_port(pp);
->
->         usb_set_intfdata(intf, pp);
-> -       usb_put_dev(usbdev);
->         return 0;
->
->  probe_abort:
-> @@ -754,7 +754,6 @@ static void uss720_disconnect(struct usb_interface *intf)
->         usb_set_intfdata(intf, NULL);
->         if (pp) {
->                 priv = pp->private_data;
-> -               priv->usbdev = NULL;
->                 priv->pp = NULL;
->                 dev_dbg(&intf->dev, "parport_remove_port\n");
->                 parport_remove_port(pp);
-> --
-> 2.25.1
->
+> Aswath Govindraju (2):
+>   dt-bindings: usb: Add documentation for AM62 USB Wrapper module
+>   drivers: usb: dwc3: Add AM62 USB wrapper driver
+> 
+>  .../devicetree/bindings/usb/ti,am62-usb.yaml  | 117 ++++
+>  drivers/usb/dwc3/Kconfig                      |   9 +
+>  drivers/usb/dwc3/Makefile                     |   1 +
+>  drivers/usb/dwc3/dwc3-am62.c                  | 581 ++++++++++++++++++
+>  4 files changed, 708 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+>  create mode 100644 drivers/usb/dwc3/dwc3-am62.c
+> 
