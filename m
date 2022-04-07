@@ -2,135 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE4E4F7759
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 09:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 443364F77AB
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 09:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241697AbiDGHYP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Apr 2022 03:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
+        id S241902AbiDGHhG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Apr 2022 03:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiDGHYK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 03:24:10 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033A4DBB;
-        Thu,  7 Apr 2022 00:22:11 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id l7so3531039ejn.2;
-        Thu, 07 Apr 2022 00:22:10 -0700 (PDT)
+        with ESMTP id S241943AbiDGHgu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 03:36:50 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704DC1A54E4
+        for <linux-usb@vger.kernel.org>; Thu,  7 Apr 2022 00:34:44 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id x20so5338890edi.12
+        for <linux-usb@vger.kernel.org>; Thu, 07 Apr 2022 00:34:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vwGQPeLGONcDmqJfPIeESPpipQ500aFLCZgIRy5zqZ0=;
-        b=cGpUq0EaSPKZUmC5xLx1Jzohz8q2BA0SCfgkM8wrethxxkDt/+g2N32fYAJT3XYV7c
-         gQbz6QMaUUd43OLUA3Qr9ybm972y3GG09XSDuFu30DSIEbHhMHSFAgUidWPsz8GrgGeW
-         s7tbaW4vOsf45FRd0naJvDCrCyKtKsWV4L7c0X8uFXIFfWJcIPONICfRuDmKWStRxSCw
-         O51niQQXIBWe/kqVxIekXIQ/hHMRE3f0A3lQ3oU7dB+SGmXs9PVY3nPhJ24PTFgfotQd
-         B8VGD/Fzr7+dIrGtF2FRhhrKgQ9sbMeozCRly8MMFIdcZp6QMqHRMmi7EmTJnuHLjSxB
-         q5fQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=D0eewgzwxQKM6rJm3nMWSPJRt+DNSKba6io2SPOxSUw=;
+        b=Z62JlS8D0nSV6/VKnpdKI7q7XoAQgwVimEZAlXcOruIWVu8e12ojkZCGKrX/0ZSlgv
+         Kp82XWDG7rdVVyPgnHK1mgBnr2JsyHR0yxXUwvhepp1VLr8zFelNlP07ytHOEOWjr2L+
+         m5BDXBZz4fonZV6mVCCRYXamTNR6K9FYSeXre37O3DFvXy/Ydw8Z77YKi1SCYhinGj9Y
+         Biu9Aq/7tb44Jnq+w6+KhJBwOf4p9JBYM7cYdTZIc4ev1Y2mESKgguEfWBAhah54uD2f
+         BJdMmn5ENX997m1grd82HbZzgfChTo6HXpsZ7PudpUvYYB4OuS4ct3rM1QKO9k+7r+35
+         0ZEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vwGQPeLGONcDmqJfPIeESPpipQ500aFLCZgIRy5zqZ0=;
-        b=eSHnZOiNGhZwGg8k5lAaG1nZZs4y1xnXp4A6nZNaNTohPEfwBw8onMMr/DLnQ0Ls1L
-         0wUXekcsyykhAqCxj/qwUMFSoKYTxpBWMlVWU/XCS83HM/cSKk7zT9F0KhAcV9K48mBN
-         7dxoBJUbIejmY4LL5k+f4Bzavi9vWA7GWO2Wex711nf6p1anzQrSxNIJyHtFxnzuugnJ
-         bEMXe1V46OWh3zJfWm8z6mauFG+4jKf7+fMZPNclNcUwUYeHEoVKuMe7y5+DQ6U8kmcN
-         vC3fllTzwm9daE9AVQOVuSW6uG3tFNj97Et1I6ir0csQh9YGjo+eFIFdHHhoCXsPogAU
-         dT1Q==
-X-Gm-Message-State: AOAM532PCUE5LW8a8rvdvhLWKz2RBemkwgSllZGY6IIxXzJ8v/6QK6iV
-        7/WW/qjbHKE0qN/jj80nJvNR9dfusThSxiRjhHE=
-X-Google-Smtp-Source: ABdhPJzQRq8/eIccgTS4Y7+Q3Go4ejR4ddyxfTtgPRrDE8QiY00n90m58Se3srjqqXXHUSIg52T71GhZZnCQSkeWe4o=
-X-Received: by 2002:a17:907:8a26:b0:6e1:2646:ef23 with SMTP id
- sc38-20020a1709078a2600b006e12646ef23mr12386094ejc.109.1649316129522; Thu, 07
- Apr 2022 00:22:09 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=D0eewgzwxQKM6rJm3nMWSPJRt+DNSKba6io2SPOxSUw=;
+        b=Da4Qm0lmGAQTSKlPU0I+dKcuqaP5wPUn3fDvs9W7Lv2VMkcs4a1OtF32DBrYBsqk6f
+         alZ2vaT6iMm2j2OtACTd6AuG5n3U5wjqjzOVkqrpDM+Om955gGsnpyFQnNGHfcwJFTwp
+         x+bK6CsJ4GXHQtljGSW6xSI8+PPEwcAcW0jp4p5E33Pjs5tfD4zy/eKi12SSsmCDQppm
+         VocXVvMtFAYf7Hi3Ktf6SupqeWwCLXAKeGz3tWywR/py4Zrcf/wA/8lheI6s/Gk3RvYX
+         cq9wM6pjelBeWXUFnfw3byoebcqInVWIUAYheFV1zH4H+UXmAmuaajDxaKwFeaFP6h23
+         mDsQ==
+X-Gm-Message-State: AOAM533mf6+qZ2TG9zi/HXjxmfreFdr2WJ44LgKVjpgYKU525DAlWpGt
+        xgwiTyj7Rh0F7hZQfZPj/Q7lLA==
+X-Google-Smtp-Source: ABdhPJxFuFxmy/rxMdEhYWXQIH/1JyMCkjI+Js9rkyfTp2rZ3T+uDfui+0IYKUP5knnDnKoHCzd/hg==
+X-Received: by 2002:aa7:cdd9:0:b0:41d:10cc:7904 with SMTP id h25-20020aa7cdd9000000b0041d10cc7904mr80897edw.202.1649316883063;
+        Thu, 07 Apr 2022 00:34:43 -0700 (PDT)
+Received: from [192.168.0.185] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id b5-20020a17090630c500b006e8044fa76bsm2998844ejb.143.2022.04.07.00.34.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 00:34:42 -0700 (PDT)
+Message-ID: <6b070220-a8f9-f2a2-72b7-7adc807ef754@linaro.org>
+Date:   Thu, 7 Apr 2022 09:34:41 +0200
 MIME-Version: 1.0
-References: <cover.1649310812.git.duoming@zju.edu.cn> <9ca3ab0b40c875b6019f32f031c68a1ae80dd73a.1649310812.git.duoming@zju.edu.cn>
-In-Reply-To: <9ca3ab0b40c875b6019f32f031c68a1ae80dd73a.1649310812.git.duoming@zju.edu.cn>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Thu, 7 Apr 2022 00:21:58 -0700
-Message-ID: <CAMo8BfLG_u2z2HwY9Qo6cFgNoSrrz2mS2iD+rtj-uyrKhZYmLw@mail.gmail.com>
-Subject: Re: [PATCH 11/11] arch: xtensa: platforms: Fix deadlock in rs_close()
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Chris Zankel <chris@zankel.net>, mustafa.ismail@intel.com,
-        shiraz.saleem@intel.com, jgg@ziepe.ca, wg@grandegger.com,
-        mkl@pengutronix.de, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        jes@trained-monkey.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: Add documentation for AM62 USB
+ Wrapper module
+Content-Language: en-US
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, alexander.deucher@amd.com,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, linux-rdma@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        linux-hippi@sunsite.dk, linux-staging@lists.linux.dev,
-        linux-serial@vger.kernel.org, USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220406135214.6989-1-a-govindraju@ti.com>
+ <20220406135214.6989-2-a-govindraju@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220406135214.6989-2-a-govindraju@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Duoming,
-
-On Wed, Apr 6, 2022 at 11:38 PM Duoming Zhou <duoming@zju.edu.cn> wrote:
->
-> There is a deadlock in rs_close(), which is shown
-> below:
->
->    (Thread 1)              |      (Thread 2)
->                            | rs_open()
-> rs_close()                 |  mod_timer()
->  spin_lock_bh() //(1)      |  (wait a time)
->  ...                       | rs_poll()
->  del_timer_sync()          |  spin_lock() //(2)
->  (wait timer to stop)      |  ...
->
-> We hold timer_lock in position (1) of thread 1 and
-> use del_timer_sync() to wait timer to stop, but timer handler
-> also need timer_lock in position (2) of thread 2.
-> As a result, rs_close() will block forever.
-
-I agree with this.
-
-> This patch extracts del_timer_sync() from the protection of
-> spin_lock_bh(), which could let timer handler to obtain
-> the needed lock.
-
-Looking at the timer_lock I don't really understand what it protects.
-It looks like it is not needed at all.
-
-Also, I see that rs_poll rewinds the timer regardless of whether del_timer_sync
-was called or not, which violates del_timer_sync requirements.
-
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+On 06/04/2022 15:52, Aswath Govindraju wrote:
+> Add bindings for the TI's AM62 wrapper module for the Synopsys USBSS-DRD
+> controller.
+> 
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
 > ---
->  arch/xtensa/platforms/iss/console.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/xtensa/platforms/iss/console.c b/arch/xtensa/platforms/iss/console.c
-> index 81d7c7e8f7e..d431b61ae3c 100644
-> --- a/arch/xtensa/platforms/iss/console.c
-> +++ b/arch/xtensa/platforms/iss/console.c
-> @@ -51,8 +51,10 @@ static int rs_open(struct tty_struct *tty, struct file * filp)
->  static void rs_close(struct tty_struct *tty, struct file * filp)
->  {
->         spin_lock_bh(&timer_lock);
-> -       if (tty->count == 1)
-> +       if (tty->count == 1) {
-> +               spin_unlock_bh(&timer_lock);
->                 del_timer_sync(&serial_timer);
-> +       }
->         spin_unlock_bh(&timer_lock);
+> 
+> changes since v2:
+> - Removed the implementation of detecting the role from the wrapper
+>   driver and moved the implementation to using linux,extcon-usb-gpio
+>   driver for role detection.
+> - Updated the binding documentation and example to reflect the same.
+> 
+>  .../devicetree/bindings/usb/ti,am62-usb.yaml  | 115 ++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+> 
 
-Now in case tty->count == 1 the timer_lock would be unlocked twice.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-Thanks.
--- Max
+
+Best regards,
+Krzysztof
