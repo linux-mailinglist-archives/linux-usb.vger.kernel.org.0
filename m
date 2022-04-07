@@ -2,124 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C544F7230
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 04:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7A14F723C
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 04:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239365AbiDGCn0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Apr 2022 22:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
+        id S234204AbiDGCrb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Apr 2022 22:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239303AbiDGCnY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 22:43:24 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B59113196C
-        for <linux-usb@vger.kernel.org>; Wed,  6 Apr 2022 19:41:22 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id z10-20020a056602080a00b00645b9fdc630so2840519iow.5
-        for <linux-usb@vger.kernel.org>; Wed, 06 Apr 2022 19:41:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=FPnFLcQyYhCFXk0VrLepSFcekoTeVgMkT+ojeLkwXxg=;
-        b=BriYGeUNsQY6GswOyoWTv8CgqLJ2x1MZ8NWpWH0H/dKlDFsMr0jab/AE+e5xYC6UPb
-         VrPKmwbxieQ7w2lHdC+EfLl3Wjg3NPx/HMwN7sznIVeW7EYLhYEi77NwgKDAEsOtgr73
-         74fQuaVPEllobEUAQ4J5pwFMAGis3vi6S5oDjl65UMxrNf5rIbLEOGfRPxIF+kl2ZrM1
-         iCOAN2ArKFpEo0uor3thBCLFaTOkv/CW1de/3feORkQt8rZSLy9/H+/z8YPRu0/mVmEl
-         9Hl7rVKjaq9e+RgsLV502TEOHyHpZE/tle5NKGqzUOez2PFGQ6v/6/awWeAnQrdfXVHd
-         2QTA==
-X-Gm-Message-State: AOAM532pPAxKmHOFHYdqlaH3jf6p3vvSpJ6FjYQS8CeKuIK4KZ9M6bqc
-        oPq/dRQOB7kcwm+qmc1eyyjAlKjlrK1G/A03tRHbfCUg/nyA
-X-Google-Smtp-Source: ABdhPJzqtrd4sabLux6vR5+l+khyNsFOVbGzr/VFyM/MP5DGx96Qu/ip0omBcn6x9qDeFAImnQx/HZ9s8eAIVjTqfme6Ffi0RUFZ
+        with ESMTP id S238895AbiDGCrY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Apr 2022 22:47:24 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DF020DB38;
+        Wed,  6 Apr 2022 19:45:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649299525; x=1680835525;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=ffCfV/u5aK2/Nt9IZ+hCLvnY6QW2nh2wJ6EbOYyE8mo=;
+  b=f3p+BQuWvPiWC30fKmMI9ul665hIdn0/HTKUzNcS/DomzHeyWCkivtLC
+   NqabtVolVGvqVECtkryudPATR/rGjj/11tUJl8aB5qj46ptUbOOLsQ3EQ
+   DV/0oaF1mqQ6B9S7W/MTirTfuMEaHvnayznelH4ti2yWfjZL+S4c2ITiI
+   s=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Apr 2022 19:45:24 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 19:45:25 -0700
+Received: from cbsp-sh-gv.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 6 Apr 2022 19:45:22 -0700
+From:   Tao Wang <quic_wat@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+CC:     <quic_wat@quicinc.com>, <quic_linyyuan@quicinc.com>
+Subject: [PATCH] usb: hcd: add a flag for whether using shared_hcd priv
+Date:   Thu, 7 Apr 2022 10:45:14 +0800
+Message-ID: <1649299514-64014-1-git-send-email-quic_wat@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-Received: by 2002:a92:c691:0:b0:2be:8eab:9f7d with SMTP id
- o17-20020a92c691000000b002be8eab9f7dmr5431907ilg.26.1649299281836; Wed, 06
- Apr 2022 19:41:21 -0700 (PDT)
-Date:   Wed, 06 Apr 2022 19:41:21 -0700
-In-Reply-To: <000000000000d56a0305d80c2f2b@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d27e6705dc07698c@google.com>
-Subject: Re: [syzbot] KMSAN: uninit-value in ax88179_led_setting
-From:   syzbot <syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com>
-To:     arnd@arndb.de, dan.carpenter@oracle.com, davem@davemloft.net,
-        glider@google.com, jackychou@asix.com.tw, jannh@google.com,
-        jgg@ziepe.ca, k.kahurani@gmail.com, kbuild-all@lists.01.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, lkp@intel.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, paskripkin@gmail.com, phil@philpotter.co.uk,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+The shared_hcd->hcd_priv is not used in xhci, so not
+need to malloc hcd priv memory for shared_hcd.
 
-HEAD commit:    33d9269ef6e0 Revert "kernel: kmsan: don't instrument stack..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=158ddbcf700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d830111cc3be873
-dashboard link: https://syzkaller.appspot.com/bug?extid=d3dbdf31fbe9d8f5f311
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=146e3dc3700000
+This change add a shared_hcd_no_priv flag to indicate
+if shared_hcd use priv, and set the flag of xhci to 1.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com
+Signed-off-by: Tao Wang <quic_wat@quicinc.com>
+---
+ drivers/usb/core/hcd.c       | 6 +++++-
+ drivers/usb/host/xhci-plat.c | 1 +
+ include/linux/usb/hcd.h      | 1 +
+ 3 files changed, 7 insertions(+), 1 deletion(-)
 
-ax88179_178a 2-1:0.252 (unnamed net_device) (uninitialized): Failed to read reg index 0x0001: -71
-ax88179_178a 2-1:0.252 (unnamed net_device) (uninitialized): Failed to read reg index 0x0002: -71
-=====================================================
-BUG: KMSAN: uninit-value in ax88179_check_eeprom drivers/net/usb/ax88179_178a.c:1074 [inline]
-BUG: KMSAN: uninit-value in ax88179_led_setting+0x884/0x30b0 drivers/net/usb/ax88179_178a.c:1168
- ax88179_check_eeprom drivers/net/usb/ax88179_178a.c:1074 [inline]
- ax88179_led_setting+0x884/0x30b0 drivers/net/usb/ax88179_178a.c:1168
- ax88179_bind+0xf00/0x1a50 drivers/net/usb/ax88179_178a.c:1412
- usbnet_probe+0x1251/0x4160 drivers/net/usb/usbnet.c:1747
- usb_probe_interface+0xf19/0x1600 drivers/usb/core/driver.c:396
- really_probe+0x653/0x14b0 drivers/base/dd.c:596
- __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:755
- driver_probe_device drivers/base/dd.c:785 [inline]
- __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:902
- bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
- __device_attach+0x593/0x8e0 drivers/base/dd.c:973
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:1020
- bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
- device_add+0x1fff/0x26e0 drivers/base/core.c:3405
- usb_set_configuration+0x37e9/0x3ed0 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0x13c/0x300 drivers/usb/core/generic.c:238
- usb_probe_device+0x309/0x570 drivers/usb/core/driver.c:293
- really_probe+0x653/0x14b0 drivers/base/dd.c:596
- __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:755
- driver_probe_device drivers/base/dd.c:785 [inline]
- __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:902
- bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
- __device_attach+0x593/0x8e0 drivers/base/dd.c:973
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:1020
- bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
- device_add+0x1fff/0x26e0 drivers/base/core.c:3405
- usb_new_device+0x1b8e/0x2950 drivers/usb/core/hub.c:2566
- hub_port_connect drivers/usb/core/hub.c:5358 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
- port_event drivers/usb/core/hub.c:5660 [inline]
- hub_event+0x58e3/0x89e0 drivers/usb/core/hub.c:5742
- process_one_work+0xdb6/0x1820 kernel/workqueue.c:2307
- worker_thread+0x10b3/0x21e0 kernel/workqueue.c:2454
- kthread+0x3c7/0x500 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30
-
-Local variable eeprom.i created at:
- ax88179_check_eeprom drivers/net/usb/ax88179_178a.c:1045 [inline]
- ax88179_led_setting+0x2e2/0x30b0 drivers/net/usb/ax88179_178a.c:1168
- ax88179_bind+0xf00/0x1a50 drivers/net/usb/ax88179_178a.c:1412
-
-CPU: 0 PID: 7 Comm: kworker/0:1 Not tainted 5.17.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-=====================================================
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 99908d8..f339c3e 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -2419,7 +2419,11 @@ struct usb_hcd *__usb_create_hcd(const struct hc_driver *driver,
+ {
+ 	struct usb_hcd *hcd;
+ 
+-	hcd = kzalloc(sizeof(*hcd) + driver->hcd_priv_size, GFP_KERNEL);
++	if (primary_hcd && driver->shared_hcd_no_priv)
++		hcd = kzalloc(sizeof(*hcd), GFP_KERNEL);
++	else
++		hcd = kzalloc(sizeof(*hcd) + driver->hcd_priv_size, GFP_KERNEL);
++
+ 	if (!hcd)
+ 		return NULL;
+ 	if (primary_hcd == NULL) {
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 21280a6..223e508 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -236,6 +236,7 @@ static int xhci_plat_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 
+ 	driver = &xhci_plat_hc_driver;
++	driver->shared_hcd_no_priv = 1;
+ 
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0)
+diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+index 2ffafbd..03ac312 100644
+--- a/include/linux/usb/hcd.h
++++ b/include/linux/usb/hcd.h
+@@ -256,6 +256,7 @@ struct hc_driver {
+ 	const char	*description;	/* "ehci-hcd" etc */
+ 	const char	*product_desc;	/* product/vendor string */
+ 	size_t		hcd_priv_size;	/* size of private data */
++	bool		shared_hcd_no_priv;	/* 0 use priv, 1 not use priv*/
+ 
+ 	/* irq handler */
+ 	irqreturn_t	(*irq) (struct usb_hcd *hcd);
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
