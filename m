@@ -2,113 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A92624F81E2
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 16:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7634F81F3
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Apr 2022 16:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344103AbiDGOi6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Apr 2022 10:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
+        id S1344147AbiDGOkt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Apr 2022 10:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344023AbiDGOi4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 10:38:56 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0091112A8E3
-        for <linux-usb@vger.kernel.org>; Thu,  7 Apr 2022 07:36:55 -0700 (PDT)
-Received: (qmail 223946 invoked by uid 1000); 7 Apr 2022 10:36:55 -0400
-Date:   Thu, 7 Apr 2022 10:36:55 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Lin Ma <linma@zju.edu.cn>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, mdharm-usb@one-eyed-alien.net
-Subject: Re: [PATCH v0] USB: storage: karma: fix rio_karma_init return
-Message-ID: <Yk73B5jKKMoYFCoj@rowland.harvard.edu>
-References: <20220406100259.6483-1-linma@zju.edu.cn>
- <Yk2tR4iEr5/T6o+h@rowland.harvard.edu>
- <18ed9d8e.3c7eb.1800193253f.Coremail.linma@zju.edu.cn>
+        with ESMTP id S231358AbiDGOks (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 10:40:48 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 358B11A7766;
+        Thu,  7 Apr 2022 07:38:42 -0700 (PDT)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 7 Apr 2022 22:38:13
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.181.226.201]
+Date:   Thu, 7 Apr 2022 22:38:13 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Jason Gunthorpe" <jgg@ziepe.ca>
+Cc:     "Dan Carpenter" <dan.carpenter@oracle.com>,
+        linux-kernel@vger.kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
+        mustafa.ismail@intel.com, shiraz.saleem@intel.com,
+        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, jes@trained-monkey.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        alexander.deucher@amd.com, linux-xtensa@linux-xtensa.org,
+        linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-hippi@sunsite.dk,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: Re: Re: [PATCH 09/11] drivers: infiniband: hw: Fix deadlock in
+ irdma_cleanup_cm_core()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.8 build 20200806(7a9be5e8)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <20220407142355.GV64706@ziepe.ca>
+References: <cover.1649310812.git.duoming@zju.edu.cn>
+ <4069b99042d28c8e51b941d9e698b99d1656ed33.1649310812.git.duoming@zju.edu.cn>
+ <20220407112455.GK3293@kadam>
+ <1be0c02d.3f701.1800416ef60.Coremail.duoming@zju.edu.cn>
+ <20220407142355.GV64706@ziepe.ca>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <18ed9d8e.3c7eb.1800193253f.Coremail.linma@zju.edu.cn>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <403bbe08.3fc24.18004762739.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgB3HwBV905iIZ2UAQ--.29189W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg4NAVZdtZE9jgAGsa
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 09:11:02AM +0800, Lin Ma wrote:
-> Hi Alan,
-> 
-> > Not exactly.  rio_karma_init() is a usb-storage initFunction (see 
-> > the usb_stor_acquire_resources() routine in usb.c), and these functions 
-> > are supposed to return either 0 or a negative error code.
-> > 
-> > So you should make the routine return -ENOMEM, not 
-> > USB_STOR_TRANSPORT_ERROR.  You can simplify the patch by changing the 
-> > line where ret is defined; initialize it to -ENOMEM rather than to 0
-> 
-> Thanks for pointing out that, and as I dig deeper, I found that the use of error code
-> is "totally a mess" in the usb storage.
-> 
-> Taking the initfunction for example, there are below 6 cases
-> 1 karam: rio_karma_init()
-> 2 realtek_cr: init_realtek_cr()
-> 3 aluda: init_alauda()
-> 4 isd200: isd200_init_info()
-> 5 shuttle_usbat: init_usbat()
-> 6 onetouch: onetouch_connect_input()
-> 
-> The (1) is erroneously return 0 even when the kzalloc if failed, must be fixed.
-> The (2) and (6) uses -ENOMEM when allocation fails. (2) will also return -EIO when
-> another kzalloc fails or rts51x_check_status() fails.
-> The (3) uses USB_STOR_TRANSPORT_ERROR when allocation fails (seems that I learned a
-> mistake from here).
-> The (4) uses custom ISD200_ERROR when allocation fails.
-> The (5) uses constant 1 when allocation fails.
-> 
-> It's worth pointed out that (except (1)), the others though not following the standard,
-> it won't cause bad thing because the callsite of these initFunction just check whether the
-> return is zero.
-
-That isn't true.  Look again at the code:
-
-> /*
->  * Just before we start our control thread, initialize
->  * the device if it needs initialization
->  */
->  if (us->unusual_dev->initFunction) {
->      p = us->unusual_dev->initFunction(us);
->      if (p)
->          return p;
-
-If p isn't zero then this function uses p as its return value.  Thus it 
-does more with p than just check whether it is zero.
-
->  }
-> 
-> I will then send patches to make sure all initFunction follow the standard.
-> 
-> > 
-> > And don't forget the error code for when the rio_karma_send_command() 
-> > call fails.  In that case the return value should be -EIO.
-> > 
-> 
-> Okay, will add this in next version of this patch.
-> 
-> > 
-> > Shouldn't this also be marked for the stable kernels?
-> > 
-> 
-> Sorry, I didn't get it, do you mean add another tag like "Cc: stable@vger.kernel.org"?
-> Or I just need to CC the mail to stable mail list?
-
-I mean add another tag.  See the description of Option 1 in 
-Documentation/process/stable-kernel-rules.rst.
-
-Alan Stern
-
-> 
-> Regards
-> Lin
+SGVsbG8sCgpPbiBUaHUsIDcgQXByIDIwMjIgMTE6MjM6NTUgLTAzMDAgSmFzb24gR3VudGhvcnBl
+IHdyb3RlOgoKPiA+ID4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9pbmZpbmliYW5kL2h3L2lyZG1h
+L2NtLmMgYi9kcml2ZXJzL2luZmluaWJhbmQvaHcvaXJkbWEvY20uYwo+ID4gPiA+IGluZGV4IGRl
+ZGIzYjdlZGQ4Li4wMTlkZDhiZmUwOCAxMDA2NDQKPiA+ID4gPiArKysgYi9kcml2ZXJzL2luZmlu
+aWJhbmQvaHcvaXJkbWEvY20uYwo+ID4gPiA+IEBAIC0zMjUyLDggKzMyNTIsMTEgQEAgdm9pZCBp
+cmRtYV9jbGVhbnVwX2NtX2NvcmUoc3RydWN0IGlyZG1hX2NtX2NvcmUgKmNtX2NvcmUpCj4gPiA+
+ID4gIAkJcmV0dXJuOwo+ID4gPiA+ICAKPiA+ID4gPiAgCXNwaW5fbG9ja19pcnFzYXZlKCZjbV9j
+b3JlLT5odF9sb2NrLCBmbGFncyk7Cj4gPiA+ID4gLQlpZiAodGltZXJfcGVuZGluZygmY21fY29y
+ZS0+dGNwX3RpbWVyKSkKPiA+ID4gPiArCWlmICh0aW1lcl9wZW5kaW5nKCZjbV9jb3JlLT50Y3Bf
+dGltZXIpKSB7Cj4gPiA+ID4gKwkJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmY21fY29yZS0+aHRf
+bG9jaywgZmxhZ3MpOwo+ID4gPiA+ICAJCWRlbF90aW1lcl9zeW5jKCZjbV9jb3JlLT50Y3BfdGlt
+ZXIpOwo+ID4gPiA+ICsJCXNwaW5fbG9ja19pcnFzYXZlKCZjbV9jb3JlLT5odF9sb2NrLCBmbGFn
+cyk7Cj4gPiA+ID4gKwl9Cj4gPiA+ID4gIAlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZjbV9jb3Jl
+LT5odF9sb2NrLCBmbGFncyk7Cj4gPiA+IAo+ID4gPiBUaGlzIGxvY2sgZG9lc24ndCBzZWVtIHRv
+IGJlIHByb3RlY3RpbmcgYW55dGhpbmcuICBBbHNvIGRvIHdlIG5lZWQgdG8KPiA+ID4gY2hlY2sg
+dGltZXJfcGVuZGluZygpPyAgSSB0aGluayB0aGUgZGVsX3RpbWVyX3N5bmMoKSBmdW5jdGlvbiB3
+aWxsIGp1c3QKPiA+ID4gcmV0dXJuIGRpcmVjdGx5IGlmIHRoZXJlIGlzbid0IGEgcGVuZGluZyBs
+b2NrPwo+ID4gCj4gPiBUaGFua3MgYSBsb3QgZm9yIHlvdXIgYWR2aWNlLCBJIHdpbGwgcmVtb3Zl
+IHRoZSB0aW1lcl9wZW5kaW5nKCkgYW5kIHRoZQo+ID4gcmVkdW5kYW50IGxvY2suCj4gCj4gRG9l
+cyBkZWxfdGltZXJfc3luYyB3b3JrIHdpdGggYSBzZWxmLXJlc2NoZWR1bGluZyB0aW1lciBsaWtl
+IHRoaXMgaGFzPwoKVGhlIGRlbF90aW1lcl9zeW5jKCkgd2lsbCBraWxsIHRoZSB0aW1lciBhbHRo
+b3VnaCBpdCBpcyBzZWxmLXJlc2NoZWR1bGluZy4KV2UgY291bGQgdXNlIG90aGVyIGZ1bmN0aW9u
+cyB0byBhcm91c2UgdGltZXIgYWdhaW4gYmVzaWRlcyB0aW1lciBoYW5kbGVyIGl0c2VsZi4KCkJl
+c3QgcmVnYXJkcywKRHVvbWluZyBaaG91Cg==
