@@ -2,139 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFF14F991B
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Apr 2022 17:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D08D4F996B
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Apr 2022 17:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237405AbiDHPOq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Apr 2022 11:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35146 "EHLO
+        id S237467AbiDHPaR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Apr 2022 11:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235257AbiDHPOq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Apr 2022 11:14:46 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D837FC8A5;
-        Fri,  8 Apr 2022 08:12:42 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id j6so5023886qkp.9;
-        Fri, 08 Apr 2022 08:12:42 -0700 (PDT)
+        with ESMTP id S235433AbiDHPaQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Apr 2022 11:30:16 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7B710F6D8
+        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 08:28:11 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id z128so8080800pgz.2
+        for <linux-usb@vger.kernel.org>; Fri, 08 Apr 2022 08:28:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ChSEY7h2sRW/2ExANChMlGLpgvQbTjAzXwSGw78syU4=;
-        b=VL1Y942y0CjJChV2tq2vsSLGf9pTuJOFpVmdTPyNruzKwny/pl92SPdwDE7JjJqrC7
-         sPQ3fqggNInkGYeBcIH1fiyaPuU4wvysUlDRIkRuRC3Wqb3Bbhvc3ym473gBDVOGKQk4
-         mv7YZUmqITDZ2Etk09PrfFLmxD3Ki6eRYtXWKKCloAtUE2FjDY8TfQQH7mBktUkR+LN1
-         2kBJZHf1ktDPuQxcejrWCIngAVNBKuFZJRRmXCKCn0VUQrha0K1exXCzIg6xq5v1Ag5A
-         EL6mehVqJWqU4dbcne64OMdSdvKp1KXxcr8Ti6xKJUdhKPiRGp5aMIIJd8mb/2XEC11r
-         fvQw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1wXlO1/OweZPaHt8M+nzEA7n6raTEZFPMqSrFHsFy68=;
+        b=MBHgOKWhgWG5n/O1LvUP1gmEucefc1d1UqihpPPHc/YMi20+QGU9jlYs+Ar+BKo2xv
+         eHZucs1INCirCqPZj+jXdPX9MPIRwIM+glwQqYAcMfsFXuGsSSy1Y47RsD2i8YaTYESx
+         GJtd11a1lGhywBBavZolL1ht9fgER0kt0gB1Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ChSEY7h2sRW/2ExANChMlGLpgvQbTjAzXwSGw78syU4=;
-        b=B4fMJrK+Xcy+q8dMb+jDKSeCLXu1/BXtzIF7wx6NjytrmRzR/+XnJpCZJLp4cMc9Z+
-         RHESNk6e99aJp01l974HGQvAeWv8s87Wa8zadxusQqw5PugGkcnJ6QhztcMtbqokvnCB
-         /S4xO7+99DA5A0AGh10QhIZOcJjP97NWg9h7yJ9HaVELqVNUpP8j8DPpDX887irkD/nk
-         zM0sc7UtSlGytW7l5yF+CQv9giOm7pv9JsblyHzdDLn9FwhXqMBmTKldJrZUqAc3Hnup
-         aClNfQxmK/GwHXjw/IOibsMkcrXTlLiqJ37cekQrzDM0KGvKPRPbp35MSacD813MbRUc
-         r9JA==
-X-Gm-Message-State: AOAM531qMrTaCUMyldbyZfV0iLv1vyazplBb4keYtdPRRVjVZcCo2sjx
-        3iEj7tErk10woXLQVu7S/Lw=
-X-Google-Smtp-Source: ABdhPJwyTFG9s1eZqDpr0it5uK6x7Wfc6bXkHoffjYadfbrQpn/oFApdowm3ocx0VSpB92zWbYg23A==
-X-Received: by 2002:a05:620a:460b:b0:67d:1cd4:527e with SMTP id br11-20020a05620a460b00b0067d1cd4527emr12838615qkb.277.1649430761326;
-        Fri, 08 Apr 2022 08:12:41 -0700 (PDT)
-Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id 191-20020a3707c8000000b0069a13545fcfsm2266052qkh.123.2022.04.08.08.12.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 08:12:41 -0700 (PDT)
-From:   Peter Geis <pgwipeout@gmail.com>
-Cc:     linux-rockchip@lists.infradead.org, heiko@sntech.de,
-        Peter Geis <pgwipeout@gmail.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1wXlO1/OweZPaHt8M+nzEA7n6raTEZFPMqSrFHsFy68=;
+        b=jnhw0hsRLpcC+QO81dxvjZ3q2HAhiR8NDyTOIDfFFUMmiwgUtDRUI7G/wS3dcYQd7/
+         pGVl3ckvAPL1R+Yf4JWvOYwWFnZuKOryhtE8yNYhdyVI1bjKwOAhUT9EpniLIPeSmFEs
+         bvFpbA/yHskqyfir59SNeJc/76v0arsOZHo0K7DrgVTEnRtKN5qDXxq0STd6YfL1Y4J6
+         sf1qbflC7Hyy9UQF7o+KtIvN+Uf84yJn5Ptycf12o8S6w12dm1/Wu5rzei09LKvqsIGb
+         2EM1mCYNhjOgZaXaGCCz2VWLkoekOROrckZbL3bC1H5umjSr1h8A56XmKqgb4RzQbXtk
+         gNJg==
+X-Gm-Message-State: AOAM532GlHzDHchOikUbY89W2nP1LVFhMP6mkCJ/QoWuAMCDkiZ/MTf7
+        w/ga1Th2Cddsn9IbJe5i8FFtVA==
+X-Google-Smtp-Source: ABdhPJw94w7jXnsvHlrKirC7rL9BHIBOthUmugLehPK83vyxfXwhKk6v5pdfs8vieWoC8xjP1vdL0g==
+X-Received: by 2002:a05:6a00:1a49:b0:505:7ab3:e5c7 with SMTP id h9-20020a056a001a4900b005057ab3e5c7mr4404001pfv.62.1649431690633;
+        Fri, 08 Apr 2022 08:28:10 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:5944:d1ca:a1fe:33cc])
+        by smtp.gmail.com with UTF8SMTPSA id g15-20020a056a0023cf00b004e17e11cb17sm28018059pfc.111.2022.04.08.08.28.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 08:28:10 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 08:28:08 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v5 0/5] enable usb support on rk356x
-Date:   Fri,  8 Apr 2022 11:12:32 -0400
-Message-Id: <20220408151237.3165046-1-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_ppratap@quicinc.com, quic_kriskura@quicinc.com,
+        quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v12 6/6] arm64: dts: qcom: sc7280: Add wakeup-source
+ property for USB node
+Message-ID: <YlBUiBZv6Hhsxn3C@google.com>
+References: <1649321104-31322-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1649321104-31322-7-git-send-email-quic_c_sanm@quicinc.com>
+ <Yk8oMI3zifzFpJmW@google.com>
+ <20220408020239.GB26536@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220408020239.GB26536@hu-pkondeti-hyd.qualcomm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Good Morning,
+On Fri, Apr 08, 2022 at 07:32:39AM +0530, Pavan Kondeti wrote:
+> On Thu, Apr 07, 2022 at 11:06:40AM -0700, Matthias Kaehlcke wrote:
+> > On Thu, Apr 07, 2022 at 02:15:04PM +0530, Sandeep Maheswaram wrote:
+> > > Adding wakeup-source property for USB controller in SC7280.
+> > > This property is added to inform that the USB controller is
+> > > wake up capable and to conditionally power down the phy during
+> > > system suspend.
+> > > 
+> > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > > ---
+> > >  arch/arm64/boot/dts/qcom/sc7280.dtsi | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > > index f0b64be..046262a 100644
+> > > --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > > +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > > @@ -2916,6 +2916,7 @@
+> > >  				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
+> > >  				phy-names = "usb2-phy", "usb3-phy";
+> > >  				maximum-speed = "super-speed";
+> > > +				wakeup-source;
+> > >  			};
+> > >  		};
+> > 
+> > Not all SC7280 boards may want to enable wakeup from USB, so this is
+> > probably best configured on a per-board basis.
+> 
+> This wakeup capability is provided by the SoC. If a particular
+> board does not want to support, ideally it needs to be disabled from
+> user space. The capability is always there but some platforms choose to
+> disable it.
 
-This is my patch series that I have maintained out of tree until the
-combophy driver landed.
+I guess 'wakeup-source' is a bit of an edge case between hardware capability
+(which is certainly required to make wakeup work) and policy.
 
-This has been rebased on v5.18-rc1, several patches in the previous
-series already landed and have been dropped.
+arch/arm64/boot/dts/mediatek/mt2712-evb.dts and
+arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi are two example where
+'wakeup-source' is set at the board level for a USB controller.
 
-Patch 1 adds the dt bindings for the grf changes necessary.
-Patch 2 adds support to the grf driver to set the rk3566 otg clock
-source.
-Patch 3 adds the dwc3 nodes to the rk356x device tree includes.
-Patch 4 enables the dwc3 nodes on the Quartz64 Model A.
-Patch 5 enables the dwc3 nodes on the rk3568-evb.
+It's also true that user space can disable wakeup as you said, and a board
+could also delete the property in its device tree if desired.
 
-Please review and apply.
+With that I agree that setting 'wakeup-source' at the SoC level provides
+more flexibility and is more in line with the DT as hardware description.
 
-Very Respectfully,
-Peter Geis
-
-Changelog:
-v5:
-- Rebase on v5.18-rc1
-- Drop patches already merged
-- Collect acks and tested-by
-
-v4:
-- Add SoC specific binding, fall back to core.
- 
-v3:
-- Drop the dwc-of-simple method in favor of using dwc core.
-- Drop all quirks except snps,dis_u2_susphy_quirk, which is necessary to
-  prevent device detection failures in some states.
-- Drop the reset-names.
-
-v2:
-- Add a dt-bindings fix for grf.yaml
-- Unify the reset names.
-- Constrain the force usb2 clock dwc3 patch to only supported variants of
-the ip.
-- Change dwc3-of-simple to support of-match-data.
-- Drop the PCLK-PIPE clk.
-- Rename the usb nodes to be more friendly.
-- Add the rk3568-evb enable patch.
-
-Michael Riesch (1):
-  arm64: dts: rockchip: add usb3 support to rk3568-evb1-v10
-
-Peter Geis (4):
-  dt-bindings: soc: grf: add rk3566-pipe-grf compatible
-  soc: rockchip: set dwc3 clock for rk3566
-  arm64: dts: rockchip: add rk356x dwc3 usb3 nodes
-  arm64: dts: rockchip: enable dwc3 on quartz64-a
-
- .../devicetree/bindings/soc/rockchip/grf.yaml |  1 +
- .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 37 +++++++++++++++
- arch/arm64/boot/dts/rockchip/rk3566.dtsi      | 11 +++++
- .../boot/dts/rockchip/rk3568-evb1-v10.dts     | 46 +++++++++++++++++++
- arch/arm64/boot/dts/rockchip/rk3568.dtsi      |  9 ++++
- arch/arm64/boot/dts/rockchip/rk356x.dtsi      | 35 +++++++++++++-
- drivers/soc/rockchip/grf.c                    | 17 +++++++
- 7 files changed, 155 insertions(+), 1 deletion(-)
-
--- 
-2.25.1
-
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
