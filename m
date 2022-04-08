@@ -2,83 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99374F96C7
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Apr 2022 15:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 233064F9736
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Apr 2022 15:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236297AbiDHNhi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Apr 2022 09:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
+        id S235974AbiDHNsl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Apr 2022 09:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236291AbiDHNhg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Apr 2022 09:37:36 -0400
-Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7055A2F429E;
-        Fri,  8 Apr 2022 06:35:30 -0700 (PDT)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9f:8600:0:0:0:1])
-        (authenticated bits=0)
-        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 238DZEaD542723
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Fri, 8 Apr 2022 14:35:15 +0100
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8602:8cd5:a7b0:d07:d516])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 238DZDlN2391998
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Fri, 8 Apr 2022 15:35:13 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1649424913; bh=dNK6QvzfkB+BZ2rLeGGl1RWUm0ala0WHo/wVB47NP18=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=ljt89BOxjAHcCO0CHlTHJLHmsDv7Fn7I2qmSTwJYpLga/lyrHn4Eay9jLyTwwmcVQ
-         Hpe9hn/xYSzin0htvQwljku53u2vOM9g8uz67dhz/++tMq8yBTPaJ2AdKRgAZQe1Wa
-         QTVTPWm1mYLw/H0QWmua3VphyvPvW2DUp4Ls9FQI=
-Received: (nullmailer pid 762927 invoked by uid 1000);
-        Fri, 08 Apr 2022 13:35:13 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Lars Melin <larsm17@gmail.com>
-Cc:     sven@svenschwermer.de, linux-usb@vger.kernel.org,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        linux-kernel@vger.kernel.org, oliver@neukum.org
-Subject: Re: [PATCH v1 2/2] net: usb: cdc_ether: Add Fibocom MA510 modem
-Organization: m
-References: <20220407074745.74195-1-sven@svenschwermer.de>
-        <20220407074745.74195-2-sven@svenschwermer.de>
-        <3b8a8497-df41-8bf4-6816-f4419cb7f950@gmail.com>
-Date:   Fri, 08 Apr 2022 15:35:13 +0200
-In-Reply-To: <3b8a8497-df41-8bf4-6816-f4419cb7f950@gmail.com> (Lars Melin's
-        message of "Fri, 8 Apr 2022 08:15:00 +0700")
-Message-ID: <87ee27y9ym.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S231500AbiDHNsk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Apr 2022 09:48:40 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE8C60CEF
+        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 06:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649425597; x=1680961597;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dM5xwuAZsFrANyH1Q7Drd0dOwX8c4fbMEe6WzERhu0s=;
+  b=kCAHl1o+dCd1W6TP7ox5fY6YC97RSH9/IML1AZUTNTQDIbB9cH2K9DBC
+   WZg0jUHVB8PdYVqhu+8zmgUnwIZeKPpd3SQtxa0118hVb9wPr+0owZtLe
+   8zmOY/fv941kbQUXYpYDE2aJGJjbZNCyPHq9ts89Z3L3NNcMzV+WURKvy
+   wIr7z5V5PNhK0Jl2NUXub6C+5rOHmGfydsWHMmfQtZdFyftLPML2RQUs1
+   gO9cFGpELFe5QvwBQ89qXshNuR3nDec81Tt+FE9LHr2PIXFejW/MPcG5n
+   OpqQUaVZuQbWv3u3GnyJ3sYXGmOtVUB0lkQvsrAZOlQSAncsAFc3h/N4l
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="260432079"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="260432079"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 06:46:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="653263275"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Apr 2022 06:46:35 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/3] xhci fixes for usb-linus
+Date:   Fri,  8 Apr 2022 16:48:20 +0300
+Message-Id: <20220408134823.2527272-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.5 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Lars Melin <larsm17@gmail.com> writes:
+Hi Greg
 
-> Why do you add this modem to the whitelist?
+A few small xhci fixes for usb-linus
 
-I believe the clue is the
+Fixes USB 3 link resume for tunneled USB 3 devices, timers left running
+after shutdown, and a bug in how we handle a full event ring.
 
-> +	.driver_info =3D (unsigned long)&wwan_info,
-
-to set FLAG_WWAN instead of the default FLAG_ETHER | FLAG_POINTTOPOINT
-
-> The net interface has the correct cdc_ether attributes so the
-> cdc_ether driver should bind automagically without any need for the
-> modem to be in the whitelist.
-
-Yes, this sort of works against the class driver philosophy.  But we've
-already started down that road, so...
+Thanks
+-Mathias
 
 
+Henry Lin (1):
+  xhci: stop polling roothubs after shutdown
 
-Bj=C3=B8rn
+Mathias Nyman (1):
+  xhci: increase usb U3 -> U0 link resume timeout from 100ms to 500ms
+
+Weitao Wang (1):
+  USB: Fix xhci event ring dequeue pointer ERDP update issue
+
+ drivers/usb/host/xhci-hub.c  |  2 +-
+ drivers/usb/host/xhci-ring.c |  1 +
+ drivers/usb/host/xhci.c      | 11 +++++++++++
+ 3 files changed, 13 insertions(+), 1 deletion(-)
+
+-- 
+2.25.1
+
