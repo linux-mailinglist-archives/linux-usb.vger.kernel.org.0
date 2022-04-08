@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5D54F949F
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Apr 2022 13:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3814F94D8
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Apr 2022 13:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235249AbiDHL5K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Apr 2022 07:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
+        id S235322AbiDHL6x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Apr 2022 07:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233147AbiDHL5I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Apr 2022 07:57:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8090F7DA90
-        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 04:55:03 -0700 (PDT)
+        with ESMTP id S235306AbiDHL6t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Apr 2022 07:58:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2CC7DE39
+        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 04:56:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 401D0B82A8E
-        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 11:55:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0377EC385AB
-        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 11:55:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5721CB82A8C
+        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 11:56:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E9878C385B4
+        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 11:56:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649418901;
-        bh=ztnBtepE0WUw6Rvu39eIbGdHoX7rTqSgARtUsNlMPrI=;
+        s=k20201202; t=1649419003;
+        bh=HczfQE3vWSFDP66cbbbQF6je5sSn5i8hkPYsi4xkO4I=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=A7c4yVhazTCCGquevMDTIOum9VAqucj4KsmWKgjZkimZHaF+sbRPEhKG8q0dlRDn+
-         Y5M/YYR5KX3pYkM96xM/G9llcO00UNLTovrndYYROooC4pOw6h1vH4QXbQTE09hA4O
-         NO9g6c71pWoF4pnsj2Oba8r1zn8eaBYcSOZjDgfVgJ4x/NKlZ+8IeRs/MstUjFX4pw
-         eyhJF+iw4C1HrLMHuuTOyQV/BwYOlh3WOWFX8jJIEhtRKZTPGbsmVqZWwdFMSTj7mf
-         KULANbC9ernAHxzb4W+dTQ2mhG9s2c4tchAgFc/pl4yWOvfEFMP6hpD4O3s5ZTBSTs
-         RJn8MgZvPQlvA==
+        b=oraKp0RC63hEEcqMpQH5Zukas1p1Mj+mDlhsiWf+7UiLPNKIUELLdSLtGDOKv0ot3
+         QljN3f7vflUBa1HX92VPYjDqYG70rTt3/2Gy+Wup8hSBOVpsV96g1jFK9T6UWnd6Vt
+         qcnRySjGORHOPHGPyuU8gxJ244TC+8M/BTygpfbC2NOpACeQAc64MOL2r5m/BoVPyW
+         FMItKivEv7EwfNtJR4p9IY5R7GdU6ynE5a6hy+Q7ePMvO4hYaIf1yFnZ/jFLO29uzx
+         JEiGG87KFAZai8FnSjW7QiSteuOqzXsinRUP/BK04kXjnTXLNQT5uspGtja5+a1zli
+         rx826//+X5bkQ==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id DE450CC13B0; Fri,  8 Apr 2022 11:55:00 +0000 (UTC)
+        id D356FCC13B0; Fri,  8 Apr 2022 11:56:43 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 214021] The USB devices fail to be detected during boot
-Date:   Fri, 08 Apr 2022 11:55:00 +0000
+Date:   Fri, 08 Apr 2022 11:56:43 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -51,8 +51,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214021-208809-vEb6pxnCFH@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-214021-208809-WwABQonNzh@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-214021-208809@https.bugzilla.kernel.org/>
 References: <bug-214021-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -72,25 +72,10 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D214021
 
---- Comment #19 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-The roothub deferring patches fixing this triggered a race, and were revert=
-ed.
-That race should now be fixed in 5.16-rc3 and in stable kernels with patche=
-s:
-
-6ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0 race")
-6cca13de26ee ("usb: hub: Fix locking issues with address0_mutex")
-
-I'm planning on reapplying the roothub deferring patches but would
-need some help testing them, making sure they work and not trigger any
-new issues.
-
-Patches attached (based on 5.18-rc1).
-
-0001-usb-core-hcd-Add-support-for-deferring-roothub-regis.patch
-0002-xhci-Set-HCD-flag-to-defer-primary-roothub-registrat.patch
-
-Thanks
+--- Comment #20 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+Created attachment 300723
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D300723&action=3Dedit
+Patch 0001 usb core hcd: Add support for deferring roothub
 
 --=20
 You may reply to this email to add a comment.
