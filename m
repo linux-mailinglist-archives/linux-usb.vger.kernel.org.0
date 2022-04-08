@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FABF4F92B6
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Apr 2022 12:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F71B4F92C9
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Apr 2022 12:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbiDHKTX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Apr 2022 06:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
+        id S234472AbiDHKUX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Apr 2022 06:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233149AbiDHKTW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Apr 2022 06:19:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9D530F7B
-        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 03:17:19 -0700 (PDT)
+        with ESMTP id S234380AbiDHKTu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Apr 2022 06:19:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA20D3997
+        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 03:17:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16AAEB829FB
-        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 10:17:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C819AC385A3
-        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 10:17:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 103C261E95
+        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 10:17:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 780E5C385A1
+        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 10:17:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649413036;
-        bh=JG4f4xvjt6xSCZrhgzjLK7AJI46a2xi990gywdjgfIE=;
+        s=k20201202; t=1649413065;
+        bh=DVCz3xBHnFw5uH6eGDqc2Xmh8Lik6Tst6oY94PUhadQ=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=i6+ip+LJY49tnYKZfU/W5QyhXRuG1mdT2vAStvVdo+qpx1cliSVup5NtspDTa8Avq
-         3S7gJbIun3siqNRqxfRBb073T9i/nD+d6PBMnW0OFwqmEyaMoqWKKIW3Q9Lx0X0wy8
-         sVvKCnXiWnyib8VqrvHOxuVMIJkSpeQIcg9uCImQO1+qf4tLxWsdvdXlZt9gwZaOCa
-         VhUe4Z38cgeN8KZOKZqMrAt/RbYAKb1SR5qHWFDNReqJKMlH7PWzogErY7w+WfPhEV
-         HkD/W1UesUuSVesq9w2rxTy0X9La8wGXnXE0TcFaBXQVny3slWqwiEvIaPPK7WbYjq
-         tlSxTEihvUvXw==
+        b=Nv0L8TTzAYl66VVnhwemRUvXTLjSpfiB4/8MgRtN9O60QpWhcYnj+yap7wksSaWgp
+         ygf+tIW70KDrWFsowKmjXQbg5S2MIF/297D48MmW2ynqRIYKNuOlFJ6OVtaypI1fQ0
+         PGnIzae2dixDiHex333KDv21nq9WpHQ+zyKQ6Ss8Bky4yxmRbT2QwjLEJCoK4Sxcnc
+         kjnQjB6EG8ejMa1zpjSceCy9hBnyFCIuljfuBhXxxAFB+KL+kMRgYFMY178TgqXnhD
+         7q31sAQMRw/TfwjhGRbn6Z6HTTNZIIRz0Q6dpWJ6UJqqICJrRARhVD6KJQKEcH6Gpu
+         y9ElrJI0ApaBQ==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id AA22ACAC6E2; Fri,  8 Apr 2022 10:17:16 +0000 (UTC)
+        id 668F4CAC6E2; Fri,  8 Apr 2022 10:17:45 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 215487] usb driver crash due to usbip events
-Date:   Fri, 08 Apr 2022 10:17:16 +0000
+Date:   Fri, 08 Apr 2022 10:17:45 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -51,8 +51,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215487-208809-oBRw3y92RH@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-215487-208809-6cCuDP6SiY@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-215487-208809@https.bugzilla.kernel.org/>
 References: <bug-215487-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -72,21 +72,10 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D215487
 
---- Comment #1 from Daniel Oltmanns (oltmanns@embedded.rwth-aachen.de) ---
-UPDATE: We have upgraded to the new Bullseye 64Bit OS on the raspberry pi. =
-We
-now received the following error with the following Call trace:
-
-Error: "Unable to handle kernel NULL pointer dereference at virtual address
-000000000000004c"
-
-Call Trace:
-- stub_rx_loop+0x42c/0xb20 [usbip_host]
-- kthread+0x140/0x158
-- ret_from_fork+0x10/0x20
-
-The full error message can be seen in the new attachment
-'kernel_oops_bullseye'.
+--- Comment #2 from Daniel Oltmanns (oltmanns@embedded.rwth-aachen.de) ---
+Created attachment 300722
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D300722&action=3Dedit
+kernel error bullseye
 
 --=20
 You may reply to this email to add a comment.
