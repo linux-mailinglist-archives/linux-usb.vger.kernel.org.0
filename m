@@ -2,92 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E6C4F9731
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Apr 2022 15:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D28B4F980D
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Apr 2022 16:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236488AbiDHNss (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Apr 2022 09:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
+        id S236908AbiDHObV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Apr 2022 10:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236481AbiDHNsq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Apr 2022 09:48:46 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD0E8BF4F;
-        Fri,  8 Apr 2022 06:46:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649425602; x=1680961602;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=l4VBFcXc3qAqGn+1Yb4l3Fd2gPYj10oSRfyXmwYf1JQ=;
-  b=HFswPf9erbKAZXdZA9yx0u/FTDIlTUOMIHOCTEcjhvlDQVGDkaFUk6N9
-   JsG+nhpRPxcVdFbDA86N64k/90OElu0rzYyN3Tpx0lLrxCTBOzftJQISM
-   aapgtqHAj1t/svw1+Pqea3I7wFfnO3YUpC/k7NuHKUnWsu+ih67KRoG8h
-   +SQXfBObNDW8KVKcTfhcz7DsBq23iDFJfCn0QUmkk7Sq9qB8XE+sHgN0y
-   4YtlNgGy+QW17+5csUvdHaae2S+uzavvtTmeBpgRd5zkzwDr6HmFAQCdP
-   5HFCmIOGSMLQjpiEGqM3jV3IL4cxXTvLTmDGND/aI5cV3Ta4femu6Ylcd
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="260432095"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="260432095"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 06:46:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="653263292"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Apr 2022 06:46:41 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 3/3] xhci: increase usb U3 -> U0 link resume timeout from 100ms to 500ms
-Date:   Fri,  8 Apr 2022 16:48:23 +0300
-Message-Id: <20220408134823.2527272-4-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220408134823.2527272-1-mathias.nyman@linux.intel.com>
-References: <20220408134823.2527272-1-mathias.nyman@linux.intel.com>
+        with ESMTP id S236894AbiDHObV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Apr 2022 10:31:21 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1B9D8362202
+        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 07:29:17 -0700 (PDT)
+Received: (qmail 257248 invoked by uid 1000); 8 Apr 2022 10:29:16 -0400
+Date:   Fri, 8 Apr 2022 10:29:16 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rajat Jain <rajatja@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Youngjin Jang <yj84.jang@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: hcd-pci: Fully suspend across freeze/thaw cycle
+Message-ID: <YlBGvFFSp/R2CBmh@rowland.harvard.edu>
+References: <20220407115918.1.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407115918.1.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The first U3 wake signal by the host may be lost if the USB 3 connection is
-tunneled over USB4, with a runtime suspended USB4 host, and firmware
-implemented connection manager.
+On Thu, Apr 07, 2022 at 11:59:55AM -0700, Evan Green wrote:
+> The documentation for the freeze() method says that it "should quiesce
+> the device so that it doesn't generate IRQs or DMA". The unspoken
+> consequence of not doing this is that MSIs aimed at non-boot CPUs may
+> get fully lost if they're sent during the period where the target CPU is
+> offline.
+> 
+> The current callbacks for USB HCD do not fully quiesce interrupts,
+> specifically on XHCI. Change to use the full suspend/resume flow for
+> freeze/thaw to ensure interrupts are fully quiesced. This fixes issues
+> where USB devices fail to thaw during hibernation because XHCI misses
+> its interrupt and fails to recover.
 
-Specs state the host must wait 100ms (tU3WakeupRetryDelay) before
-resending a U3 wake signal if device doesn't respond, leading to U3 -> U0
-link transition times around 270ms in the tunneled case.
+I don't think your interpretation is quite right.  The problem doesn't lie 
+in the HCD callbacks but rather in the root-hub callbacks.
 
-Cc: stable@vger.kernel.org
-Fixes: 0200b9f790b0 ("xhci: Wait until link state trainsits to U0 after setting USB_SS_PORT_LS_U0")
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-hub.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Correct me if I'm wrong about xHCI, but AFAIK the host controller doesn't 
+issue any interrupt requests on its own behalf; it issues IRQs only on 
+behalf of its root hubs.  Given that the root hubs should be suspended 
+(i.e., frozen) at this point, and hence not running, the only IRQs they 
+might make would be for wakeup requests.
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index 1e7dc130c39a..f65f1ba2b592 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -1434,7 +1434,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 				}
- 				spin_unlock_irqrestore(&xhci->lock, flags);
- 				if (!wait_for_completion_timeout(&bus_state->u3exit_done[wIndex],
--								 msecs_to_jiffies(100)))
-+								 msecs_to_jiffies(500)))
- 					xhci_dbg(xhci, "missing U0 port change event for port %d-%d\n",
- 						 hcd->self.busnum, wIndex + 1);
- 				spin_lock_irqsave(&xhci->lock, flags);
--- 
-2.25.1
+So during freeze, wakeups should be disabled on root hubs.  Currently I 
+believe we don't do this; if a root hub was already runtime suspended when 
+asked to go into freeze, its wakeup setting will remain unchanged.  _That_ 
+is the bug which needs to be fixed.  (Consider what would happen if a root 
+hub wakes up after it is frozen but before the host controller is frozen: 
+The attempt to freeze the host controller would fail, causing the entire 
+hibernation transition to fail.)
 
+The whole issue of how wakeup requests should be handled during hibernation 
+is a difficult one.  I don't think we have any good protection against cases 
+where a wakeup request races with the system entering hibernation.  For 
+instance, if a wakeup event occurs after we go into the thaw state, it won't 
+even be recognized as such because the system will be running normally and 
+will handle it as an ordinary event.  But then it will be consumed, so the 
+wakeup signal won't remain on to reactivate the system once it has shut 
+down, and when the stored kernel image is eventually restored it won't 
+remember that the event ever happened.
+
+Alan Stern
+
+> Signed-off-by: Evan Green <evgreen@chromium.org> ---
+> 
+> You may be able to reproduce this issue on your own machine via the
+> following:
+> 1. Disable runtime PM on your XHCI controller
+> 2. Aim your XHCI IRQ at a non-boot CPU (replace 174): echo 2 >
+>    /proc/irq/174/smp_affinity
+> 3. Attempt to hibernate (no need to actually go all the way down).
+> 
+> I run 2 and 3 in a loop, and can usually hit a hang or dead XHCI
+> controller within 1-2 iterations. I happened to notice this on an
+> Alderlake system where runtime PM is accidentally disabled for one of
+> the XHCI controllers. Some more discussion and debugging can be found at
+> [1].
+> 
+> [1] https://lore.kernel.org/linux-pci/CAE=gft4a-QL82iFJE_xRQ3JrMmz-KZKWREtz=MghhjFbJeK=8A@mail.gmail.com/T/#u
+> 
+> ---
+>  drivers/usb/core/hcd-pci.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+> index 8176bc81a635d6..e02506807ffc6c 100644
+> --- a/drivers/usb/core/hcd-pci.c
+> +++ b/drivers/usb/core/hcd-pci.c
+> @@ -616,10 +616,10 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
+>  	.suspend_noirq	= hcd_pci_suspend_noirq,
+>  	.resume_noirq	= hcd_pci_resume_noirq,
+>  	.resume		= hcd_pci_resume,
+> -	.freeze		= check_root_hub_suspended,
+> -	.freeze_noirq	= check_root_hub_suspended,
+> -	.thaw_noirq	= NULL,
+> -	.thaw		= NULL,
+> +	.freeze		= hcd_pci_suspend,
+> +	.freeze_noirq	= hcd_pci_suspend_noirq,
+> +	.thaw_noirq	= hcd_pci_resume_noirq,
+> +	.thaw		= hcd_pci_resume,
+>  	.poweroff	= hcd_pci_suspend,
+>  	.poweroff_noirq	= hcd_pci_suspend_noirq,
+>  	.restore_noirq	= hcd_pci_resume_noirq,
+> -- 
+> 2.31.0
+> 
