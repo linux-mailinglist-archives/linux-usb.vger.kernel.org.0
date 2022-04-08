@@ -2,137 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074C24F8B46
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Apr 2022 02:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5224F8C20
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Apr 2022 05:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232900AbiDHAik (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Apr 2022 20:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
+        id S233319AbiDHBRI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Apr 2022 21:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232174AbiDHAij (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 20:38:39 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49B83106136;
-        Thu,  7 Apr 2022 17:36:35 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Fri, 8 Apr 2022 08:35:49
- +0800 (GMT+08:00)
-X-Originating-IP: [10.192.67.219]
-Date:   Fri, 8 Apr 2022 08:35:49 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Saleem, Shiraz" <shiraz.saleem@intel.com>
-Cc:     "Dan Carpenter" <dan.carpenter@oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chris@zankel.net" <chris@zankel.net>,
-        "jcmvbkbc@gmail.com" <jcmvbkbc@gmail.com>,
-        "Ismail, Mustafa" <mustafa.ismail@intel.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "wg@grandegger.com" <wg@grandegger.com>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "jes@trained-monkey.org" <jes@trained-monkey.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "alexander.deucher@amd.com" <alexander.deucher@amd.com>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-hippi@sunsite.dk" <linux-hippi@sunsite.dk>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: RE: Re: [PATCH 09/11] drivers: infiniband: hw: Fix deadlock in
- irdma_cleanup_cm_core()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.8 build 20200806(7a9be5e8)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <MWHPR11MB00293D107510E728769874DFE9E69@MWHPR11MB0029.namprd11.prod.outlook.com>
-References: <cover.1649310812.git.duoming@zju.edu.cn>
- <4069b99042d28c8e51b941d9e698b99d1656ed33.1649310812.git.duoming@zju.edu.cn>
- <20220407112455.GK3293@kadam>
- <1be0c02d.3f701.1800416ef60.Coremail.duoming@zju.edu.cn>
- <20220407142908.GO12805@kadam>
- <MWHPR11MB00293D107510E728769874DFE9E69@MWHPR11MB0029.namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S230169AbiDHBRH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Apr 2022 21:17:07 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A3927147;
+        Thu,  7 Apr 2022 18:15:06 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so8162795pjk.4;
+        Thu, 07 Apr 2022 18:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Idjn34kuNBBfLlmwcM6XkwnNJSjd6HgvJJshg4x6j34=;
+        b=SiN06LPFjNlk0fqA/8xabk/HLDehtoLlkMWHLQZ4sGuFgvMH8Pr8eGl6cS0w3RVL1q
+         7LHZBJ5UcWX0gil6p3MzSW31TLOepSndhqSGv654TqM8YEsQeLX9nvjfJogAepQ9DSlc
+         +XtxjqzcZ6HeqYifVin5lBPuSXMa29v4OO1wsqIuBQjs8jFbdHUE69pAXK5w9gubegFL
+         2Q+Kjcm9UrvbGbn0tiffkVUH3sO3TqukQ17SKwjMMNWIpb6N79CXMoTzZm0E0375tF4d
+         FFHLKML5X+2xhyB0hS9KcthjKBzxMfc2FKSTKOTWRgagz6P+QzqPjD4AX++VqXQ/jwAZ
+         L58w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Idjn34kuNBBfLlmwcM6XkwnNJSjd6HgvJJshg4x6j34=;
+        b=2Gypk81W6lPN3zgsQOMzFpPkz3Mn9MrWPfsWrdDLMlrtlUud1CdeLMQjS7QWYOCrmr
+         OCmrccyeAFKDXd2WAehTS9i383rQxdkfzEHIn5eXkk8hha2W4vn+KrPmLsRLlb2/89fv
+         Ee8uUsqMregZ8XmVNL7/BcDDEiU5JZMpEYN6d9NKttDFYITz5gsgI9Fe27nT1QluCuH7
+         3iGFJpwDG02BU2RUJwbWBxEn40juza+H1zJ88lkcq5V1DVCcuhn11b7R9UAbvyDmp917
+         VxVO2hO8bSZ1JutO45kZLQURZzuCvSrIhrc+nqhG47kCL0RMiPBsndUZMLNt2tDyv6E/
+         TQGg==
+X-Gm-Message-State: AOAM532N4pagUYdI9zi4JsZDxKjPkAxZedc46fY0iFyXP6RH/jK1lN3D
+        yw3BCXeZGKsSI+ql3wbArx7SbQt7PleecZkX
+X-Google-Smtp-Source: ABdhPJyCX3ztY5bfjruQrRVJxAW56nV269fJn/l3lQt8OkK1msBDS+Hq505xUIIgXdyRwAR2RGdKIA==
+X-Received: by 2002:a17:90b:224f:b0:1c9:949e:2202 with SMTP id hk15-20020a17090b224f00b001c9949e2202mr18808604pjb.56.1649380505412;
+        Thu, 07 Apr 2022 18:15:05 -0700 (PDT)
+Received: from [192.168.1.5] ([110.78.142.75])
+        by smtp.googlemail.com with ESMTPSA id m21-20020a17090a7f9500b001c97c6bcaf4sm10270319pjl.39.2022.04.07.18.15.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 18:15:05 -0700 (PDT)
+Message-ID: <3b8a8497-df41-8bf4-6816-f4419cb7f950@gmail.com>
+Date:   Fri, 8 Apr 2022 08:15:00 +0700
 MIME-Version: 1.0
-Message-ID: <7775f2d3.3fd15.18006994530.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgCHj6dlg09ist7pAA--.33797W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg0OAVZdtZFLwwACsl
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1 2/2] net: usb: cdc_ether: Add Fibocom MA510 modem
+Content-Language: en-US
+To:     sven@svenschwermer.de, linux-usb@vger.kernel.org
+Cc:     Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        linux-kernel@vger.kernel.org, oliver@neukum.org
+References: <20220407074745.74195-1-sven@svenschwermer.de>
+ <20220407074745.74195-2-sven@svenschwermer.de>
+From:   Lars Melin <larsm17@gmail.com>
+In-Reply-To: <20220407074745.74195-2-sven@svenschwermer.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGVsbG8sCgpPbiBUaHUsIDcgQXByIDIwMjIgMTc6MzY6MTIgKzAwMDAgU2FsZWVtLCBTaGlyYXog
-d3JvdGU6CiAKPiA+IFN1YmplY3Q6IFJlOiBSZTogW1BBVENIIDA5LzExXSBkcml2ZXJzOiBpbmZp
-bmliYW5kOiBodzogRml4IGRlYWRsb2NrIGluCj4gPiBpcmRtYV9jbGVhbnVwX2NtX2NvcmUoKQo+
-ID4gCj4gPiBPbiBUaHUsIEFwciAwNywgMjAyMiBhdCAwODo1NDoxM1BNICswODAwLCBkdW9taW5n
-QHpqdS5lZHUuY24gd3JvdGU6Cj4gPiA+IEhlbGxvLAo+ID4gPgo+ID4gPiBPbiBUaHUsIDcgQXBy
-IDIwMjIgMTQ6MjQ6NTYgKzAzMDAgRGFuIENhcnBlbnRlciB3cm90ZToKPiA+ID4KPiA+ID4gPiA+
-IFRoZXJlIGlzIGEgZGVhZGxvY2sgaW4gaXJkbWFfY2xlYW51cF9jbV9jb3JlKCksIHdoaWNoIGlz
-IHNob3duCj4gPiA+ID4gPiBiZWxvdzoKPiA+ID4gPiA+Cj4gPiA+ID4gPiAgICAoVGhyZWFkIDEp
-ICAgICAgICAgICAgICB8ICAgICAgKFRocmVhZCAyKQo+ID4gPiA+ID4gICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgfCBpcmRtYV9zY2hlZHVsZV9jbV90aW1lcigpCj4gPiA+ID4gPiBpcmRtYV9j
-bGVhbnVwX2NtX2NvcmUoKSAgICB8ICBhZGRfdGltZXIoKQo+ID4gPiA+ID4gIHNwaW5fbG9ja19p
-cnFzYXZlKCkgLy8oMSkgfCAgKHdhaXQgYSB0aW1lKQo+ID4gPiA+ID4gIC4uLiAgICAgICAgICAg
-ICAgICAgICAgICAgfCBpcmRtYV9jbV90aW1lcl90aWNrKCkKPiA+ID4gPiA+ICBkZWxfdGltZXJf
-c3luYygpICAgICAgICAgIHwgIHNwaW5fbG9ja19pcnFzYXZlKCkgLy8oMikKPiA+ID4gPiA+ICAo
-d2FpdCB0aW1lciB0byBzdG9wKSAgICAgIHwgIC4uLgo+ID4gPiA+ID4KPiA+ID4gPiA+IFdlIGhv
-bGQgY21fY29yZS0+aHRfbG9jayBpbiBwb3NpdGlvbiAoMSkgb2YgdGhyZWFkIDEgYW5kIHVzZQo+
-ID4gPiA+ID4gZGVsX3RpbWVyX3N5bmMoKSB0byB3YWl0IHRpbWVyIHRvIHN0b3AsIGJ1dCB0aW1l
-ciBoYW5kbGVyIGFsc28KPiA+ID4gPiA+IG5lZWQgY21fY29yZS0+aHRfbG9jayBpbiBwb3NpdGlv
-biAoMikgb2YgdGhyZWFkIDIuCj4gPiA+ID4gPiBBcyBhIHJlc3VsdCwgaXJkbWFfY2xlYW51cF9j
-bV9jb3JlKCkgd2lsbCBibG9jayBmb3JldmVyLgo+ID4gPiA+ID4KPiA+ID4gPiA+IFRoaXMgcGF0
-Y2ggZXh0cmFjdHMgZGVsX3RpbWVyX3N5bmMoKSBmcm9tIHRoZSBwcm90ZWN0aW9uIG9mCj4gPiA+
-ID4gPiBzcGluX2xvY2tfaXJxc2F2ZSgpLCB3aGljaCBjb3VsZCBsZXQgdGltZXIgaGFuZGxlciB0
-byBvYnRhaW4gdGhlCj4gPiA+ID4gPiBuZWVkZWQgbG9jay4KPiA+ID4gPiA+Cj4gPiA+ID4gPiBT
-aWduZWQtb2ZmLWJ5OiBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1LmVkdS5jbj4KPiA+ID4gPiA+
-IC0tLQo+ID4gPiA+ID4gIGRyaXZlcnMvaW5maW5pYmFuZC9ody9pcmRtYS9jbS5jIHwgNSArKysr
-LQo+ID4gPiA+ID4gIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24o
-LSkKPiA+ID4gPiA+Cj4gPiA+ID4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9pbmZpbmliYW5kL2h3
-L2lyZG1hL2NtLmMKPiA+ID4gPiA+IGIvZHJpdmVycy9pbmZpbmliYW5kL2h3L2lyZG1hL2NtLmMK
-PiA+ID4gPiA+IGluZGV4IGRlZGIzYjdlZGQ4Li4wMTlkZDhiZmUwOCAxMDA2NDQKPiA+ID4gPiA+
-IC0tLSBhL2RyaXZlcnMvaW5maW5pYmFuZC9ody9pcmRtYS9jbS5jCj4gPiA+ID4gPiArKysgYi9k
-cml2ZXJzL2luZmluaWJhbmQvaHcvaXJkbWEvY20uYwo+ID4gPiA+ID4gQEAgLTMyNTIsOCArMzI1
-MiwxMSBAQCB2b2lkIGlyZG1hX2NsZWFudXBfY21fY29yZShzdHJ1Y3QKPiA+IGlyZG1hX2NtX2Nv
-cmUgKmNtX2NvcmUpCj4gPiA+ID4gPiAgCQlyZXR1cm47Cj4gPiA+ID4gPgo+ID4gPiA+ID4gIAlz
-cGluX2xvY2tfaXJxc2F2ZSgmY21fY29yZS0+aHRfbG9jaywgZmxhZ3MpOwo+ID4gPiA+ID4gLQlp
-ZiAodGltZXJfcGVuZGluZygmY21fY29yZS0+dGNwX3RpbWVyKSkKPiA+ID4gPiA+ICsJaWYgKHRp
-bWVyX3BlbmRpbmcoJmNtX2NvcmUtPnRjcF90aW1lcikpIHsKPiA+ID4gPiA+ICsJCXNwaW5fdW5s
-b2NrX2lycXJlc3RvcmUoJmNtX2NvcmUtPmh0X2xvY2ssIGZsYWdzKTsKPiA+ID4gPiA+ICAJCWRl
-bF90aW1lcl9zeW5jKCZjbV9jb3JlLT50Y3BfdGltZXIpOwo+ID4gPiA+ID4gKwkJc3Bpbl9sb2Nr
-X2lycXNhdmUoJmNtX2NvcmUtPmh0X2xvY2ssIGZsYWdzKTsKPiA+ID4gPiA+ICsJfQo+ID4gPiA+
-ID4gIAlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZjbV9jb3JlLT5odF9sb2NrLCBmbGFncyk7Cj4g
-PiA+ID4KPiA+ID4gPiBUaGlzIGxvY2sgZG9lc24ndCBzZWVtIHRvIGJlIHByb3RlY3RpbmcgYW55
-dGhpbmcuICBBbHNvIGRvIHdlIG5lZWQKPiA+ID4gPiB0byBjaGVjayB0aW1lcl9wZW5kaW5nKCk/
-ICBJIHRoaW5rIHRoZSBkZWxfdGltZXJfc3luYygpIGZ1bmN0aW9uCj4gPiA+ID4gd2lsbCBqdXN0
-IHJldHVybiBkaXJlY3RseSBpZiB0aGVyZSBpc24ndCBhIHBlbmRpbmcgbG9jaz8KPiA+ID4KPiA+
-ID4gVGhhbmtzIGEgbG90IGZvciB5b3VyIGFkdmljZSwgSSB3aWxsIHJlbW92ZSB0aGUgdGltZXJf
-cGVuZGluZygpIGFuZAo+ID4gPiB0aGUgcmVkdW5kYW50IGxvY2suCj4gPiAKPiA+IEkgZGlkbid0
-IGdpdmUgYW55IGFkdmljZS4gOlAgSSBvbmx5IGFzayBxdWVzdGlvbnMgd2hlbiBJIGRvbid0IGtu
-b3cgdGhlIGFuc3dlcnMuCj4gPiBTb21lb25lIHByb2JhYmx5IG5lZWRzIHRvIGxvb2sgYXQgJmNt
-X2NvcmUtPmh0X2xvY2sgYW5kIGZpZ3VyZSBvdXQgd2hhdCBpdCdzCj4gPiBwcm90ZWN0aW5nLgo+
-ID4gCj4gQWdyZWVkIG9uIHRoaXMgZml4Lgo+IAo+IFdlIHNob3VsZCBub3QgbG9jayBhcm91bmQg
-ZGVsX3RpbWVyX3N5bmMgb3IgbmVlZCB0byBjaGVjayBvbiB0aW1lcl9wZW5kaW5nLgo+IAo+IEhv
-d2V2ZXIsIHdlIGRvIG5lZWQgc2VyaWFsaXplIGFkZGl0aW9uIG9mIGEgdGltZXIgd2hpY2ggY2Fu
-IGJlIGNhbGxlZCBmcm9tIG11bHRpcGxlIHBhdGhzLCBpLmUuIHRoZSB0aW1lciBoYW5kbGVyIGFu
-ZCBpcmRtYV9zY2hlZHVsZV9jbV90aW1lci4KCkkgdGhpbmsgd2Ugc2hvdWxkIHJlcGxhY2UgdGhl
-IGNoZWNrICJpZiAoIXRpbWVyX3BlbmRpbmcoJmNtX2NvcmUtPnRjcF90aW1lcikpIiB0bwoiaWYg
-KHRpbWVyX3BlbmRpbmcoJmNtX2NvcmUtPnRjcF90aW1lcikpIiBpbiBpcmRtYV9jbV90aW1lcl90
-aWNrKCksIGFuZCByZXBsYWNlCiJpZiAoIXdhc190aW1lcl9zZXQpIiB0byAiaWYgKHdhc190aW1l
-cl9zZXQpIiBpbiBpcmRtYV9zY2hlZHVsZV9jbV90aW1lcigpIGluIG9yZGVyCnRvIGd1YXJhbnRl
-ZSB0aGUgdGltZXIgY291bGQgYmUgZXhlY3V0ZWQuIEkgd2lsbCBzZW5kIHRoZSBtb2RpZmllZCBw
-YXRjaCBhcyBzb29uIGFzIApwb3NzaWJsZS4KCkJlc3QgcmVnYXJkcywKRHVvbWluZyBaaG91Cgo=
+On 4/7/2022 14:47, sven@svenschwermer.de wrote:
+> From: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
+> 
+> +GTUSBMODE: 31
+> --------------
+> T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#= 99 Spd=480  MxCh= 0
+> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=2cb7 ProdID=0106 Rev= 0.00
+> S:  Manufacturer=Fibocom MA510 Modem
+> S:  Product=Fibocom MA510 Modem
+> S:  SerialNumber=55e2695b
+> C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+> A:  FirstIf#= 3 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=option
+> E:  Ad=84(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 3 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+> E:  Ad=86(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> I:  If#= 4 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+> I:* If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> 
+> +GTUSBMODE: 32
+> --------------
+> T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#=100 Spd=480  MxCh= 0
+> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=2cb7 ProdID=010a Rev= 0.00
+> S:  Manufacturer=Fibocom MA510 Modem
+> S:  Product=Fibocom MA510 Modem
+> S:  SerialNumber=55e2695b
+> C:* #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
+> A:  FirstIf#= 2 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
+> I:* If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=option
+> E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+> E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> I:  If#= 3 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+> I:* If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> 
+> Signed-off-by: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
+> ---
+>   drivers/net/usb/cdc_ether.c | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+> index b09b5567aea2..c9367587698e 100644
+> --- a/drivers/net/usb/cdc_ether.c
+> +++ b/drivers/net/usb/cdc_ether.c
+> @@ -1005,6 +1005,18 @@ static const struct usb_device_id	products[] = {
+>   				      USB_CDC_SUBCLASS_ETHERNET,
+>   				      USB_CDC_PROTO_NONE),
+>   	.driver_info = (unsigned long)&wwan_info,
+> +}, {
+> +	/* Fibocom MA510 (+GTUSBMODE=31) */
+> +	USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x0106, USB_CLASS_COMM,
+> +				      USB_CDC_SUBCLASS_ETHERNET,
+> +				      USB_CDC_PROTO_NONE),
+> +	.driver_info = (unsigned long)&wwan_info,
+> +}, {
+> +	/* Fibocom MA510 (+GTUSBMODE=32) */
+> +	USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010a, USB_CLASS_COMM,
+> +				      USB_CDC_SUBCLASS_ETHERNET,
+> +				      USB_CDC_PROTO_NONE),
+> +	.driver_info = (unsigned long)&wwan_info,
+>   }, {
+>   	USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_ETHERNET,
+>   			USB_CDC_PROTO_NONE),
 
+Why do you add this modem to the whitelist?
+The net interface has the correct cdc_ether attributes so the cdc_ether 
+driver should bind automagically without any need for the modem to be in 
+the whitelist.
+
+thanks
+Lars
