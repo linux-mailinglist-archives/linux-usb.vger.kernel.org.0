@@ -2,140 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11AB34FA175
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Apr 2022 03:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C084FA19E
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Apr 2022 04:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232874AbiDICAq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Apr 2022 22:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
+        id S240581AbiDICWI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Apr 2022 22:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240456AbiDICAk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Apr 2022 22:00:40 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2242F3FBD3
-        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 18:58:34 -0700 (PDT)
-Received: (qmail 273585 invoked by uid 1000); 8 Apr 2022 21:58:33 -0400
-Date:   Fri, 8 Apr 2022 21:58:33 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rajat Jain <rajatja@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Youngjin Jang <yj84.jang@samsung.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: hcd-pci: Fully suspend across freeze/thaw cycle
-Message-ID: <YlDoSY19HYNJGI50@rowland.harvard.edu>
-References: <20220407115918.1.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
- <YlBGvFFSp/R2CBmh@rowland.harvard.edu>
- <CAE=gft7Zi9tpJ74Tf2iqPRbwJkmSLiKJt-WhwD+h-DxQh75D6g@mail.gmail.com>
+        with ESMTP id S229939AbiDICWH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Apr 2022 22:22:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393432BFC0F
+        for <linux-usb@vger.kernel.org>; Fri,  8 Apr 2022 19:20:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AA0D62264
+        for <linux-usb@vger.kernel.org>; Sat,  9 Apr 2022 02:20:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B18C385A3;
+        Sat,  9 Apr 2022 02:19:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649470799;
+        bh=2fZxFj3xelePElUio1V95W1kW8lNcg1Bm7+fQn3Vx7k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Gicb2opCNxC0Oim7v4yr0OKRLia7DTo9+Wr39pemLhyrqZvbXWA13pBhnjopz/Rw4
+         qj8u65bq6uCbH/VLi5gx4fbkDdLYzn0i+SCTDG9WDkQkx0maylYVx5dzAyZ7hB6Ysx
+         zp5AqmyDeHaRg3UzfiPzUyeQYMKGiLY/MkQGTGd2Bz6TOWQ4AHNddZ2K3s0t8RbgPS
+         IA4N5hd8s6W0xG+D7odxDq8jdisC3qxslNaD2wRGWWDY78hEWArApt/V9HHXesAtor
+         +Pjf2tSzaxnAG/Qxne08KX0E5Th1ycersbQJKFw2D31QJOQh0zyLcmKbhcHG9nyk4k
+         zyW0TO6TnToWg==
+Date:   Sat, 9 Apr 2022 10:19:48 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Peter Chen <hzpeterchen@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: (EXT) Re: [RFC 1/1] usb: chipidea: ci_hdrc_imx: disable runtime
+ pm for HSIC interface
+Message-ID: <20220409021948.GA3618@Peter>
+References: <20220302094239.3075014-1-alexander.stein@ew.tq-group.com>
+ <CAL411-o8TPNv8vAfdPtzTaFkOGc7EmwNJv1Jxc-YUv1wc_vq0g@mail.gmail.com>
+ <1891703.PYKUYFuaPT@steina-w>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAE=gft7Zi9tpJ74Tf2iqPRbwJkmSLiKJt-WhwD+h-DxQh75D6g@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1891703.PYKUYFuaPT@steina-w>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 02:52:30PM -0700, Evan Green wrote:
-> Hi Alan,
-
-Hello.
-
-> On Fri, Apr 8, 2022 at 7:29 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Thu, Apr 07, 2022 at 11:59:55AM -0700, Evan Green wrote:
-> > > The documentation for the freeze() method says that it "should quiesce
-> > > the device so that it doesn't generate IRQs or DMA". The unspoken
-> > > consequence of not doing this is that MSIs aimed at non-boot CPUs may
-> > > get fully lost if they're sent during the period where the target CPU is
-> > > offline.
-> > >
-> > > The current callbacks for USB HCD do not fully quiesce interrupts,
-> > > specifically on XHCI. Change to use the full suspend/resume flow for
-> > > freeze/thaw to ensure interrupts are fully quiesced. This fixes issues
-> > > where USB devices fail to thaw during hibernation because XHCI misses
-> > > its interrupt and fails to recover.
-> >
-> > I don't think your interpretation is quite right.  The problem doesn't lie
-> > in the HCD callbacks but rather in the root-hub callbacks.
-> >
-> > Correct me if I'm wrong about xHCI, but AFAIK the host controller doesn't
-> > issue any interrupt requests on its own behalf; it issues IRQs only on
-> > behalf of its root hubs.  Given that the root hubs should be suspended
-> > (i.e., frozen) at this point, and hence not running, the only IRQs they
-> > might make would be for wakeup requests.
-> >
-> > So during freeze, wakeups should be disabled on root hubs.  Currently I
-> > believe we don't do this; if a root hub was already runtime suspended when
-> > asked to go into freeze, its wakeup setting will remain unchanged.  _That_
+On 22-03-29 10:14:36, Alexander Stein wrote:
+> Hello Peter,
 > 
-> For my issue at least, it's the opposite. Enabling runtime pm on the
-> controller significantly reduces the repro rate of the lost interrupt.
+> Am Dienstag, 15. März 2022, 02:23:23 CEST schrieb Peter Chen:
+> > On Wed, Mar 2, 2022 at 5:42 PM Alexander Stein
+> > 
+> > <alexander.stein@ew.tq-group.com> wrote:
+> > > With the add of power-domain support in commit 02f8eb40ef7b ("ARM: dts:
+> > > imx7s: Add power domain for imx7d HSIC") runtime suspend will disable
+> > > the power-domain. This prevents IRQs to occur when a new device is
+> > > attached
+> > > on a downstream hub.
+> > > 
+> > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > ---
+> > > Our board TQMa7x + MBa7x (i.MX7 based) uses a HSIC link to mounted USB HUB
+> > > on usbh device. Cold plugging an USB mass storage device is working fine.
+> > > But once the last non-HUB device is disconnected the ci_hdrc device goes
+> > > into runtime suspend.
+> > 
+> > Would you please show the difference between cold boot and runtime
+> > suspend after disconnecting
+> > the last USB device?
+> > 
+> > - Power domain on/off status for HUB device
+> > - Runtime suspend status at /sys entry for HUB device
+> > - "/sys/..power/wakeup" /sys entry  for HUB device
+> 
+> I hope I got all entries you requested.
+> 
+> For reference this is the bus topology:
+> lsusb -t
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ci_hdrc/1p, 480M
+> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ci_hdrc/1p, 480M
+>     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+>         |__ Port 2: Dev 3, If 0, Class=Mass Storage, Driver=usb-storage, 480M
+> 
+> Bus 2 is a different connector and doesn't matter here. I'm disconnecting 'Dev 
+> 3' in this scenario.
+> 
+> After boot up with the bus as shown above:
+> $ cat /sys/bus/usb/devices/1-1/power/wakeup
+> disabled
+> $ cat /sys/bus/usb/devices/1-1/power/runtime_status
+> active
+> $ cat /sys/kernel/debug/pm_genpd/usb-hsic-phy/current_state
+> on
+> 
+> After disconnecting Dev 3 from the bus ('usb 1-1.2: USB disconnect, device 
+> number 3' in dmesg) the status changes as follows (without the patch):
+> $ cat /sys/bus/usb/devices/1-1/power/wakeup
+> disabled
+> $ cat /sys/bus/usb/devices/1-1/power/runtime_status
+> suspended
+> $ cat /sys/kernel/debug/pm_genpd/usb-hsic-phy/current_state
+> off-0
+> 
+> For the record, when applying the posted patch this changes into:
+> $ cat /sys/bus/usb/devices/1-1/power/wakeup
+> disabled
+> $ cat /sys/bus/usb/devices/1-1/power/runtime_status
+> suspended
+> $ cat /sys/kernel/debug/pm_genpd/usb-hsic-phy/current_state
+> on
+> 
 
-That doesn't seem to make sense.  If the controller is in runtime suspend at 
-the start of hibernation, the pci_pm_freeze() routine will do a runtime 
-resume before calling the HCD freeze function.  So when the controller gets 
-put into the freeze state, it is guaranteed not to be runtime suspended 
-regardless of what you enable.
+Okay, I think the problem here is the power domain for USB controller is
+off at runtime, but USB controller/PHY needs to detect the USB wakeup
+signal at runtime, so the USB controller/PHY's power domain should be
+not off. The proper change may keep power domain on at runtime, and the
+power domain could be off at system suspend.
 
-> I think having the controller runtime suspended reduces the overall
-> number of interrupts that flow in, which is why my chances to hit an
-> interrupt in this window drop, but aren't fully eliminated.
+The controller/PHY clk could be off at runtime, it does not affect the
+wakeup detecting from controll/PHY side.
 
-When you ran your tests, was wakeup enabled for the host controller?
+-- 
 
-> I think xhci may still find reasons to generate interrupts even if all
-> of its root hub ports are suspended without wake events. For example,
-> won't Port Status Change Events still come in if a device is unplugged
-> or overcurrents in between freeze() and thaw()?
+Thanks,
+Peter Chen
 
-I'm not an expert on xHCI or xhci-hcd.  For that, we should ask the xhci-hcd 
-maintainer (CC'ed).  In fact, he should have been CC'ed on the original 
-patch since it was meant to fix a problem involving xHCI controllers.
-
-With EHCI, for example, if a port status change event occurs while the root 
-hub is suspended with wakeups disabled, no interrupt request will be 
-generated because the port-specific WKOC_E, WKDSCNNT_E, and WKCNNT_E (Wake 
-on Over-Current Enable, Wake on Disconnect Enable, and Wake on Connect 
-Enable) bits are turned off.  In effect, the port-status change events can 
-occur but they aren't treated as wakeup events.
-
->  The spec does mention
-> that generation of this event is gated by the HCHalted flag, but at
-> least in my digging around I couldn't find a place where we halt the
-> controller through this path.
-
-Bear in mind that suspending the controller and suspending the root hub are 
-two different things.
-
->  With how fragile xhci (and maybe
-> others?) are towards lost interrupts, even if it does happen to be
-> perfect now, it seems like it would be more resilient to just fully
-> suspend the controller across this transition.
-
-Suspending the controller won't fix the problem if the wakeup settings for 
-the root hubs are wrong (although it may reduce the window for a race, like 
-what you mentioned above).  Conversely, if the wakeup settings for the root 
-hubs are correct then suspending the controller shouldn't make any 
-difference.
-
-> I'd also put forward the hypothesis (feel free to shoot it down!) that
-> unless there's a human-scale time penalty with this change, the
-> downsides of being more heavy handed like this across freeze/thaw are
-> minimal. There's always a thaw() right on the heels of freeze(), and
-> hibernation is such a rare and jarring transition that being able to
-> recover after the transition is more important than accomplishing the
-> transition quickly.
-
-That's true, but it ignores the underlying problem described in the 
-preceding paragraphs.
-
-Alan Stern
