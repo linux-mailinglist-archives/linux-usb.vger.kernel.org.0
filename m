@@ -2,121 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE7E4FAE6A
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Apr 2022 17:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2567E4FAE71
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Apr 2022 17:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240141AbiDJPUz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 Apr 2022 11:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41284 "EHLO
+        id S243422AbiDJPX3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 10 Apr 2022 11:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiDJPUy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Apr 2022 11:20:54 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BAC2980A;
-        Sun, 10 Apr 2022 08:18:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 49F41CE0FE5;
-        Sun, 10 Apr 2022 15:18:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02F11C385A4;
-        Sun, 10 Apr 2022 15:18:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649603920;
-        bh=yIvrIYuGpHOrzjH4oQy1ZlnyuMsY1S8I+K/sED7d7QI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1NWFl0PPhSiUncXwtxj8dPOJgwu1vYWUWtVUxkTvmRa7rjlbbYdx/XuqYRy5+iIK+
-         cbVAFyqCFsnpj6pNRCl2WpSyypnqU+JeoLA7H7gUG79GmB6cKAvtra0BT1+Kl81p60
-         QvcivIqZAW7tk1uhNeROif13McOGavVafYQygFEg=
-Date:   Sun, 10 Apr 2022 17:18:37 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     balbi@kernel.org, joel@jms.id.au, andrew@aj.id.au,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, alcooperx@gmail.com,
-        christophe.jaillet@wanadoo.fr, cai.huoqing@linux.dev,
-        benh@kernel.crashing.org, neal_liu@aspeedtech.com,
-        miles.chen@mediatek.com, balamanikandan.gunasundar@microchip.com,
-        macpaul.lin@mediatek.com, s.shtylyov@omp.ru,
-        jakobkoschel@gmail.com, stern@rowland.harvard.edu,
-        andriy.shevchenko@linux.intel.com, quic_wcheng@quicinc.com,
-        yashsri421@gmail.com, rdunlap@infradead.org,
-        linux-geode@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org,
-        bcm-kernel-feedback-list@broadcom.com
-Subject: Re: [PATCH] usb: gadget: udc: clean up comments
-Message-ID: <YlL1Takwt2s05igD@kroah.com>
-References: <20220410150828.1891123-1-trix@redhat.com>
+        with ESMTP id S243413AbiDJPX2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Apr 2022 11:23:28 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0F2ECFD03
+        for <linux-usb@vger.kernel.org>; Sun, 10 Apr 2022 08:21:16 -0700 (PDT)
+Received: (qmail 314411 invoked by uid 1000); 10 Apr 2022 11:21:15 -0400
+Date:   Sun, 10 Apr 2022 11:21:15 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_mass_storage: break IO operations via
+ configfs
+Message-ID: <YlL164UHvCV0ti4U@rowland.harvard.edu>
+References: <Yk8L6b9wEWTjWOg4@rowland.harvard.edu>
+ <20220407204553.35cead72@reki>
+ <YlBN4Zcn9NYw0PLA@rowland.harvard.edu>
+ <20220409115756.4f9b015d@reki>
+ <YlGOOJ9SwkD7WVmX@rowland.harvard.edu>
+ <20220409170837.02f0853f@reki>
+ <YlHrBdYkBSR0L6FL@rowland.harvard.edu>
+ <20220410014228.117d9f66@reki>
+ <YlI5b1SNdsVnuo/v@rowland.harvard.edu>
+ <20220410051804.315fb0d9@reki>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220410150828.1891123-1-trix@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220410051804.315fb0d9@reki>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 11:08:28AM -0400, Tom Rix wrote:
-> SPDX
-> *.h use /* */ style comments
+On Sun, Apr 10, 2022 at 05:18:04AM +0300, Maxim Devaev wrote:
+> В Sat, 9 Apr 2022 21:57:03 -0400
+> Alan Stern <stern@rowland.harvard.edu> пишет:
 > 
-> For double words, remove
-> with, also
+> > On Sun, Apr 10, 2022 at 01:42:28AM +0300, Maxim Devaev wrote:
+> > > В Sat, 9 Apr 2022 16:22:29 -0400
+> > > Alan Stern <stern@rowland.harvard.edu> wrote:  
+> > > > > I'm using Raspberry Pi with DWC2. So:
+> > > > > - Connect RPi-based gadget to the Linux host.
+> > > > > - Set image in the "file" attribute.    
+> > > > 
+> > > > Exactly what is the full pathname you're using for the "file" attribute?  
+> > > 
+> > > /sys/kernel/config/usb_gadget/kvmd/functions/mass_storage.usb0/lun.0/file  
+> > 
+> > Yeah, that doesn't seem right at all.
+> > 
+> > You're doing this under KVM, right?  Is the gadget driver running in the 
+> > host OS or the guest OS?  And the sysfs file accesses -- are they in the 
+> > host's filesystem or in the guest's?
+> > 
+> > What happens if you don't use KVM and just load the gadget driver on the 
+> > physical machine?
 > 
-> Spelling replacements
-> wayt to way
-> wakup to wakeup
-> Contrl to Control
-> cheks to checks
-> initiaization to initialization
-> dyanmic to dynamic
+> We really have a miscommunication :) Speaking of KVM, I mean KVM-over-IP,
+> a physical device that emulates Keyboard-Video-Mouse. It is made on the
+> Raspberry Pi and is physically connected via USB to another host machine
+> to emulate mass storage, among other things. So, we have two physical devices:
+> with USB host and USB gadget.
+
+Okay, I see where I misunderstood.  Oops.  :-)
+
+> > > > I also tried sending a USR1 signal to the driver's kernel thread while 
+> > > > an image was mounted and being accessed.  It did clear the prevent_allow 
+> > > > flag, so I could eject the image.  But it also caused a 30-second delay 
+> > > > on the host, as predicted.  Now, maybe you don't care about such delays 
+> > > > when you're going to eject the media anyway, but it still seems like a 
+> > > > bad thing to do.  
+> > > 
+> > > It looks like the prevent_medium_removal flag switching really works better in this case.  
+> > 
+> > I don't understand that comment.  In what case?  Works better than what?
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/usb/gadget/udc/amd5536udc.h       | 2 +-
->  drivers/usb/gadget/udc/aspeed-vhub/core.c | 2 +-
->  drivers/usb/gadget/udc/aspeed-vhub/ep0.c  | 2 +-
->  drivers/usb/gadget/udc/aspeed-vhub/hub.c  | 2 +-
->  drivers/usb/gadget/udc/aspeed-vhub/vhub.h | 4 ++--
->  drivers/usb/gadget/udc/at91_udc.c         | 2 +-
->  drivers/usb/gadget/udc/bdc/bdc_core.c     | 4 ++--
->  drivers/usb/gadget/udc/core.c             | 4 ++--
->  drivers/usb/gadget/udc/trace.h            | 2 +-
->  9 files changed, 12 insertions(+), 12 deletions(-)
+> Sorry, better than SIGUSR1. The patch that only sets the prevent_medium_removal=0
+> and makes the "file" empty.
+
+Ah, yes, I agree.
+
+> > > > > > > I have reflected on the rest of your arguments and changed my mind.
+> > > > > > > I think that "forced_eject" for a specific lun without interrupting operations would
+> > > > > > > really be the best solution. I wrote a simple patch and tested it, everything seems
+> > > > > > > to work. What do you think about something like this?
+> > > > > > > 
+> > > > > > > 
+> > > > > > > static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *item,
+> > > > > > >                                                const char *page, size_t len)
+> > > > > > > {
+> > > > > > >         struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
+> > > > > > >         struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
+> > > > > > >         int ret;
+> > > > > > > 
+> > > > > > >         opts->lun->prevent_medium_removal = 0;
+> > > > > > >         ret = fsg_store_file(opts->lun, &fsg_opts->common->filesem, "", 0);
+> > > > > > >         return ret < 0 ? ret : len;
+> > > > > > > }
+> > > > > > > 
+> > > > > > > CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);      
+> > > > > > 
+> > > > > > The basic idea is right.  But this should not be a CONFIGFS option; it 
+> > > > > > should be an ordinary LUN attribute.  For an example, see the definition of 
+> > > > > > file_store() in f_mass_storage.c; your routine should look very similar.    
+> > > > > 
+> > > > > Okay, but where this attribute is located in sysfs? How can I use it?    
+> > > > 
+> > > > Well, it's going to be in different places depending on what UDC driver 
+> > > > your gadget uses.  On my system I'm using the dummy_udc driver, so the 
+> > > > sysfs "file" attribute is located at:
+> > > > 
+> > > > 	/sys/devices/platform/dummy_ucd.0/gadget/lun0/file
+> > > > 
+> > > > If instead you're looking at
+> > > > 
+> > > > 	/sys/module/g_mass_storage/parameters/file
+> > > > 
+> > > > or in some configfs directory, that's the wrong place.  You can eject 
+> > > > the media simply by doing (as root):
+> > > > 
+> > > > 	echo >/sys/devices/.../gadget/lun0/file
+> > > > 
+> > > > (fill in the "..." appropriately for your system).
+> > > >   
+> > > > > Sorry for the stupid question.    
+> > > > 
+> > > > Not at all.  
+> > > 
+> > > Thanks! Unfortunately I'm using dwc2 driver and it doesn't have any gadget parameters
+> > > outside of the configfs:
+> > > 
+> > > [root@pikvm ~]# find /sys -iname lun0
+> > > [root@pikvm ~]# find /sys -iname lun.0
+> > > /sys/kernel/config/usb_gadget/kvmd/functions/mass_storage.usb0/lun.0
+> > > [root@pikvm ~]#
+> > > 
+> > > So in my local case configfs is only way to place forced_eject :(  
+> > 
+> > That can't possibly be right.  Again, we may be miscommunicating because 
+> > of the way you're using KVM.
+> > 
+> > What happens if you set up the gadget using g-mass-storage instead of 
+> > configfs?  For example:
+> > 
+> > 	modprobe g-mass-storage cdrom=y removable=y ro=y file=...
+> >
+> > > Could we add both device attrs and configfs file?  
+> > 
+> > No.  Configfs files are for setting up the gadget in the first place, or 
+> > changing its configuration while it isn't attached to a host.  Device 
+> > attribute files are for modifying the gadget while it is running.
+> > 
+> I've tried and got this:
 > 
+> [root@pikvm ~]# modprobe g-mass-storage cdrom=y removable=y ro=y file=/var/lib/kvmd/msd/images/dsl-4.11.rc1.iso
+> [root@pikvm ~]# find /sys -iname lun.0
+> [root@pikvm ~]# find /sys -iname lun0
+> /sys/devices/platform/soc/fe980000.usb/gadget/lun0
+> [root@pikvm ~]# ls /sys/devices/platform/soc/fe980000.usb/gadget/lun0
+> power  file  nofua  ro  uevent
+> 
+> But with libcomposite and configfs I don't have "/sys/devices/platform/soc/fe980000.usb/gadget/lun0" at all:
+> 
+> [root@pikvm ~]# ls /sys/devices/platform/soc/fe980000.usb/gadget/
+> power  suspended  uevent
+> 
+> So all this timed I used configfs to change parameters.
+> I thought this was the way it was intended because the code for changing configfs
+> and device attributes is almost identical and everything worked.
+> If I don't have device attributes when using libcomposite, then how am I supposed
+> to change its settings in runtime, if not through configfs?
 
-Hi,
+All right.  I've never used configfs before, so my understanding of it 
+was out of date.  After reading through the documentation and the code, 
+it's clear now that you're right and there should be both a device 
+attribute and a configfs file.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Unlike the fsg_lun_opts_forced_eject_store() example you wrote above, 
+but like the existing fsg_lun_opts_file_store() and file_store() 
+routines, both of your new routines should call a single 
+fsg_store_forced_eject() function in storage_common.c to do the real 
+work.  Namely, something like:
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+	lun->prevent_medium_removal = 0;
+	return fsg_store_file(lun, filesem, "", 0);
 
-- Your patch did many different things all at once, making it difficult
-  to review.  All Linux kernel patches need to only do one thing at a
-  time.  If you need to do multiple things (such as clean up all coding
-  style issues in a file/driver), do it in a sequence of patches, each
-  one doing only one thing.  This will make it easier to review the
-  patches to ensure that they are correct, and to help alleviate any
-  merge issues that larger patches can cause.
+That should accomplish what you're looking for, in all possible 
+configurations.
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Alan Stern
