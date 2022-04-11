@@ -2,43 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4DB4FBCB3
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Apr 2022 15:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F444FBCB2
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Apr 2022 15:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346320AbiDKNDM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Apr 2022 09:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
+        id S1346316AbiDKNDN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Apr 2022 09:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346313AbiDKNDF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 09:03:05 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEC21C93F
-        for <linux-usb@vger.kernel.org>; Mon, 11 Apr 2022 06:00:51 -0700 (PDT)
+        with ESMTP id S1346329AbiDKNDM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 09:03:12 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F062C112
+        for <linux-usb@vger.kernel.org>; Mon, 11 Apr 2022 06:00:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649682051; x=1681218051;
+  t=1649682057; x=1681218057;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1WXNmwvWB7vKcXKCA0XNPVWy2V14lesQSx9PcD01+4A=;
-  b=XY1s4Q56CMpg9tMyDbqFtGwV+tk8/ddmMSkDK2s73wWuSYNPhBhFldNN
-   HvYxolkJsx6yvpAbiioS16ZlZjMdDOsLnB0HhAoyuDOR/rC03jYz1ih6H
-   pCvsrxAAKSh128SiMkzCKyHYRXH5m0nwdOnuk0+5eNmk+F4pLGdDDAFrc
-   yZjVr++KKLl2hNNFxvuzdLmyQO9gll3kWkuRISnr9mZsY6NWcb32XMJHe
-   nx8v0lGRGVJqBIQ+5fRswcOBbjHawxZiMCY6DvVqkVKTJwr4y5uc+0IqA
-   qccUvO39Udqen8nTj3szkqfwOIy5EHzY3oGGyeO3qxD4U4aWlkwV/uynr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="249390168"
+  bh=ioZBE8hHg87s6nHLr10yJiq5tbQQUlK0KDyDtiLfQM8=;
+  b=Oez3v0KcyQneVKsU6wHz3bd9r0v3KrPCT0hc9jhUJ+8JfryCfNKZ+VQ8
+   Ny0u66+mNnkxYro02okJH8kfjQ+oqj7oy5rLpKYDkhOsDTiaWnHw4xIuE
+   nAZvaPpJW72LmxCi6FGhLhQy5KHRI0n2xGEh3MpBH/08XmCfHFMgQ+Nq1
+   hKjmnvMtxmrCE6kXcptdMZultWw/sAvrh7h3mhXl3nrDNo2X0nhZ5cRvj
+   LKFRKEwoWd6PgfFffk0m6udE3IXK3crj5tGCKp9WGL69wEAnq7dX/j5ow
+   TpwRaHuM8osKpUKkIhQ2XQHZxG98pS34ttTYR0vEceKpVnEMSykmHiIyx
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="242044374"
 X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="249390168"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 06:00:51 -0700
+   d="scan'208";a="242044374"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 06:00:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="589869129"
+   d="scan'208";a="654611224"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 11 Apr 2022 06:00:49 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 11 Apr 2022 06:00:49 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 5C347144; Mon, 11 Apr 2022 16:00:49 +0300 (EEST)
+        id 6496A3D5; Mon, 11 Apr 2022 16:00:49 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -46,44 +46,59 @@ Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
         Andreas Noever <andreas.noever@gmail.com>,
         Lukas Wunner <lukas@wunner.de>,
         Brad Campbell <lists2009@fnarfbargle.com>
-Subject: [PATCH 2/4] thunderbolt: Use decimal number with port numbers
-Date:   Mon, 11 Apr 2022 16:00:47 +0300
-Message-Id: <20220411130049.53656-2-mika.westerberg@linux.intel.com>
+Subject: [PATCH 3/4] thunderbolt: Dump path config space entries during discovery
+Date:   Mon, 11 Apr 2022 16:00:48 +0300
+Message-Id: <20220411130049.53656-3-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220411130049.53656-1-mika.westerberg@linux.intel.com>
 References: <20220411130049.53656-1-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This makes it consistent with the other logging functions.
+This is useful when debugging possible issues during tunnel discovery.
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/tb.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thunderbolt/path.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index b6fcd8d45324..ad025ff142ba 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -674,7 +674,7 @@ static inline int tb_port_write(struct tb_port *port, const void *buffer,
- #define __TB_PORT_PRINT(level, _port, fmt, arg...)                      \
- 	do {                                                            \
- 		const struct tb_port *__port = (_port);                 \
--		level(__port->sw->tb, "%llx:%x: " fmt,                  \
-+		level(__port->sw->tb, "%llx:%u: " fmt,                  \
- 		      tb_route(__port->sw), __port->port, ## arg);      \
- 	} while (0)
- #define tb_port_WARN(port, fmt, arg...) \
+diff --git a/drivers/thunderbolt/path.c b/drivers/thunderbolt/path.c
+index 299712accfe9..ee03fd75a472 100644
+--- a/drivers/thunderbolt/path.c
++++ b/drivers/thunderbolt/path.c
+@@ -166,6 +166,9 @@ struct tb_path *tb_path_discover(struct tb_port *src, int src_hopid,
+ 		return NULL;
+ 	}
+ 
++	tb_dbg(path->tb, "discovering %s path starting from %llx:%u\n",
++	       path->name, tb_route(src->sw), src->port);
++
+ 	p = src;
+ 	h = src_hopid;
+ 
+@@ -198,10 +201,13 @@ struct tb_path *tb_path_discover(struct tb_port *src, int src_hopid,
+ 		path->hops[i].out_port = out_port;
+ 		path->hops[i].next_hop_index = next_hop;
+ 
++		tb_dump_hop(&path->hops[i], &hop);
++
+ 		h = next_hop;
+ 		p = out_port->remote;
+ 	}
+ 
++	tb_dbg(path->tb, "path discovery complete\n");
+ 	return path;
+ 
+ err:
 -- 
 2.35.1
 
