@@ -2,100 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DC54FC4EB
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Apr 2022 21:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 166344FC537
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Apr 2022 21:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349618AbiDKTUV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Apr 2022 15:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
+        id S1349671AbiDKTlL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Apr 2022 15:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349600AbiDKTUP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 15:20:15 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE91377E3;
-        Mon, 11 Apr 2022 12:17:51 -0700 (PDT)
+        with ESMTP id S242555AbiDKTlJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 15:41:09 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8131D302
+        for <linux-usb@vger.kernel.org>; Mon, 11 Apr 2022 12:38:54 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id b17so5159743ilq.5
+        for <linux-usb@vger.kernel.org>; Mon, 11 Apr 2022 12:38:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649704671; x=1681240671;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=xe75I8n3OTMoteAolKlOzcM4jUyKy8Ora1F0ulMVcVM=;
-  b=ePJ7HPzDuYOkRpdbnfhjhLbVzA+7luaPg3gGoT/qKv53OQcKMOxXLuH5
-   3RSBTM2eQ5ybgpFyPGNHqz/jY23aG5fE3IWzbT9zPwICgZ4mWi/Wt3ETh
-   NywgZd4MCR6HDMEBVS4oDh9A9luydGgCsJ9Lpanep0WEIYN3ckGUNJ2A6
-   E=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 Apr 2022 12:17:50 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 12:17:50 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Apr 2022 12:17:50 -0700
-Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Apr 2022 12:17:44 -0700
-From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        <quic_kriskura@quicinc.com>, <quic_vpulyala@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [PATCH v13 6/6] arm64: dts: qcom: sc7280: Add wakeup-source property for USB node
-Date:   Tue, 12 Apr 2022 00:46:54 +0530
-Message-ID: <1649704614-31518-7-git-send-email-quic_c_sanm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1649704614-31518-1-git-send-email-quic_c_sanm@quicinc.com>
-References: <1649704614-31518-1-git-send-email-quic_c_sanm@quicinc.com>
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1WfDLkMmrYqZ6Ij9lfpj1VDoW1LAn8E2xThCsyOWFGE=;
+        b=IKv1G1i0A6yENpCFhUhSheXLDeap3M1/5nt62rwktvIPbzYG8x4+VcYZhp2L5BYzTS
+         VC+fUvTTKInwNLDZDfjDiZTQQ4Ld6WCvs8mU2W4V3RpsVy8Nx0CN3xoPrNHhwJMqDVBb
+         zhrVJg09qedrBhavLeXJtmqhkG6kxUsjwVLtc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1WfDLkMmrYqZ6Ij9lfpj1VDoW1LAn8E2xThCsyOWFGE=;
+        b=ycYKndpAkgmoJpUrRsw5Aw/Smp2tYV/x8SAy8s6GScmIHVKe+0qZc2unCnCKNnrgqO
+         kh3uLP1tCh8WB6qvL76j/e2i3eUQ83/WbhGauUuMxfZTyiufQfGxaoxeiHeSwIZZjTyL
+         enGVVumz6eb8934lg3d0tNeL0/rUEsMzgkdZEa4Iss7zkij0A4W5jAdJfsculKRuoFvp
+         QPfgH8wWYSItXJ46bupH9wXlDxdSN1bPqKNAbWkqbzXFDdt0lvdSugo9hZpZVK9NLDoF
+         vi7Erz0iqbNBwc5mxerMR7SasiF8y47OZqS5AJE7FZuRLNJUlT41qHtQuW9v2bCfQceV
+         SEtw==
+X-Gm-Message-State: AOAM533YTAK3PUQKvhYTpOJTAf5w31hqzoY0nFUMPOVvLXqq3/55nyIJ
+        0fhpyKqItREStXsdyqQqb69LzA==
+X-Google-Smtp-Source: ABdhPJz0XsoDdd0nsaFO5HSBwS1X9AjPFVqn1VnZsUg1ItNo8xlkSLtdOnYZhfiQHHdGa7DE6PR8aw==
+X-Received: by 2002:a05:6e02:17ce:b0:2ca:7d71:6cb2 with SMTP id z14-20020a056e0217ce00b002ca7d716cb2mr8406267ilu.43.1649705934358;
+        Mon, 11 Apr 2022 12:38:54 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id q13-20020a056e020c2d00b002caa365b43bsm4314131ilg.76.2022.04.11.12.38.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 12:38:54 -0700 (PDT)
+Subject: Re: [PATCH v2] usb: usbip: fix a refcount leak in stub_probe()
+To:     Hangyu Hua <hbh25y@gmail.com>, valentina.manea.m@gmail.com,
+        shuah@kernel.org, gregkh@linuxfoundation.org, khoroshilov@ispras.ru
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220407022204.10730-1-hbh25y@gmail.com>
+ <7c584e2d-1c23-3df9-7e4e-c4d9a9014224@linuxfoundation.org>
+ <d40cb8cf-a92d-3f87-3af1-0422f8d8264f@gmail.com>
+ <91089407-cc21-ba05-5346-4f546cca7555@linuxfoundation.org>
+ <55d22e24-09ad-20b8-e1de-8d7c2f8ab1a8@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <16876455-ed60-65c6-1375-ac88e4209cb2@linuxfoundation.org>
+Date:   Mon, 11 Apr 2022 13:38:53 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <55d22e24-09ad-20b8-e1de-8d7c2f8ab1a8@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Adding wakeup-source property for USB controller in SC7280.
-This property is added to inform that the USB controller is
-wake up capable and to conditionally power down the phy during
-system suspend.
+On 4/10/22 11:29 PM, Hangyu Hua wrote:
+> On 2022/4/8 23:04, Shuah Khan wrote:
+>> On 4/7/22 7:59 PM, Hangyu Hua wrote:
+>>> Hi Shuah,
+>>>
+>>> I find this by code review. Do i really need to add this to commit log? This look like a little weird.
+>>>
+>>
+>> Great. Good find.
+>>
+>> It is important to understand how the problem is found. Please add it
+>> the change log. We usually expect dmesg or such info. that revealed
+>> refcount leak, since this one is found during code review, we would
+>> like to see that information the commit log.
+>>
+>> Also please remember to avoid top posting.
+> 
+> I get what you meant now. But i don't know how to get a clear dmesg or any other log. The kernel will not crash because of this. I just used gdb to find that udev->dev->kobj->kref gets bigger and bigger whenever I call stub_probe with busid_priv->status = STUB_BUSID_REMOV.
+> 
+> Thanks for telling me the rules.
+> 
 
-Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+There is no need to gather dmesg etc. Just add a note that you found
+the problem during code review. Having complete information about why
+a change is made will be helpful for future changes to this code and
+somebody new trying understand the changes made to this file/routine
+and why.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index f0b64be..046262a 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2916,6 +2916,7 @@
- 				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
- 				phy-names = "usb2-phy", "usb3-phy";
- 				maximum-speed = "super-speed";
-+				wakeup-source;
- 			};
- 		};
- 
--- 
-2.7.4
-
+thanks,
+-- Shuah
