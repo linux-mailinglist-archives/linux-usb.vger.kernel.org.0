@@ -2,64 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E434FBFAD
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Apr 2022 16:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42744FC016
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Apr 2022 17:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347547AbiDKO6D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Apr 2022 10:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
+        id S243127AbiDKPSE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Apr 2022 11:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347584AbiDKO5o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 10:57:44 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AF6165AF;
-        Mon, 11 Apr 2022 07:55:30 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id g18so6485785ejc.10;
-        Mon, 11 Apr 2022 07:55:30 -0700 (PDT)
+        with ESMTP id S1347749AbiDKPRn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 11:17:43 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440861B1;
+        Mon, 11 Apr 2022 08:15:29 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id r13so31605194ejd.5;
+        Mon, 11 Apr 2022 08:15:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=cPfG2H4mLBr47cKqUjnT59BLkTDD6UWYrmsvL4zHnIo=;
-        b=Uy/bxAAuqZ9K+qdIhOn4QdDjCdOvTzCsHVj/zq6n0YUDbneYUdT+7RlMaHSomvuQBW
-         jnPhQ5/JaFf4xtfN5tM4IyAoqhfaLouNXd7dXmpnztTU72lhDYzFr8hDDjv8Pb+DpZlb
-         FSu3lcBq+HgrMUa98apFMFNJ5PZO5z/GTYiBrofm/5UWcfRyPey30K1PAwzH988nLf/9
-         5JLsBUgJuuz2UH2fYpob+Sun8G6kQ+vLRfdUxMt5GsLmO0I0C2Rnvnz+QfSa6JPUkDOo
-         geSMpMAgN7mkvqTBVmKBo7WsyMsML6XOICzNloiJUGd6T3JtzpA2777VMAGBITmPiDr8
-         9yTA==
+        bh=ly8qeDVw7zF5NU0RjXFxoEFBwNsxc6leMxYfyV7Srm4=;
+        b=HhWEYM04cPm9rnN/yhveILDzOYkGL91YRYmt95vUt0Xgv++KwaofLEaM+QYcg1VQim
+         eI+8pQNXd05xIfuyLgsNNEIRoBfHBpm81KD1h9KGUNXdIidTIjE6gnQJF1fsgYdka6Ju
+         eDSXwT4zR9shC7vOcScpbX51j52JcYAxZVzsof3ujKii8CZ63XEujKBEgQA+cDmAoiEF
+         ZPqeex0+BC9vd3sSSnsu7Z+BphG/Rxxx2IK1tra+rv8ssyh3ViK3TvtaezpGues37FuD
+         djGUgqnavIroXqKNC5F7CcH0V0Fkv+6gZe2SaPp9o3MRi4T49ZUOZwP32XVOtHoHkG5f
+         U5Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cPfG2H4mLBr47cKqUjnT59BLkTDD6UWYrmsvL4zHnIo=;
-        b=RaMJFWDIa+6StXUjguJFvN8X+PQepFeZRjXgayrN9f4LCCoLejjY+9uZ4R1iB45MfB
-         8KcS8yovWlasTtWcYL/tZidksoGDn3UUJShAw3qEqt1l+G2IJyoQGwskinfBUk+ezHYh
-         ummOPnxW0xUM6rFFboufPYhb0bEJG7dvpU8EVIR52LvrYTqeZSMMUC7MH1aJs5uHCI9o
-         2Kkqzu3yW4NMJwIPELAo1pdUKYx6X4hNufoEj4O+uZObBchbuWvR6tcrZq3/sp9lgN49
-         i/Qn3GkEg+VjmIBnYSwYgnt+2dDmqutciKBOvDLsk7iWD4Phcm9f3+5Yofkvij5+gIu7
-         P/yg==
-X-Gm-Message-State: AOAM530Yn3vWBh7SjDph0z2XB73RSMWruSnR7eCJ/mlqvbZdAUlG+Y/G
-        7acPfd3QjoMg4VVCo91UMUFP3sKlMwsW85D6CMw=
-X-Google-Smtp-Source: ABdhPJzGTXwGzpSVprY55wJWpFpj9QAGpv0s5vrLkI3vsCX5pfLKwotr0Y91k+A4dhX3GnpI5z8u5+zDGqDzXjfVGC0=
-X-Received: by 2002:a17:907:628e:b0:6d9:c6fa:6168 with SMTP id
- nd14-20020a170907628e00b006d9c6fa6168mr30299560ejc.132.1649688928772; Mon, 11
- Apr 2022 07:55:28 -0700 (PDT)
+        bh=ly8qeDVw7zF5NU0RjXFxoEFBwNsxc6leMxYfyV7Srm4=;
+        b=xC7uQUS59FKcySJ5xwxG2m96rRCmozoJWHO81YK9k7SsXPXy6ifZLhV10XsqysI/2K
+         qp9wgjl5FhtFQ524msdGINg0rbPIoVvL+IyoYxH/le4Mut1ZKeHs/Pz1y6fGcNKqrvFj
+         8c34nv/DsKruSZFOZCWa2HSB0uKeNDelRejgnuBhoPpVm1INuC0AwoC4stV0hJM4bdUC
+         r+fNb0l88luKufha1h95eaBCzr0lRJOcC5r+Am+Qz2sWpcFPsTjmwJff1urjZRXWlzyI
+         XzrzgEGs8DJUhbB1LD18wPINMNqjfO4LoxggCIzVHnpcFMYEFmUh8t9xKOPiFfNBwHwl
+         P/Lg==
+X-Gm-Message-State: AOAM5321Azab5BTryhtLkcZpS8C3W1hNmvPpI5bh6rVLXP3KPJXvj7yO
+        ipnnKDPK2RyH1sdM87JGNsCSWUNFAyf2MFsRzU/c6Py8srs=
+X-Google-Smtp-Source: ABdhPJzEBVQ3sO6Q6oQG9NLtTLt17jGA872K66xLcQMJiFjD4HIZRf8vEChLi9Dy3MT+eDvoptY6zRn18WvVv8eAb78=
+X-Received: by 2002:a17:907:968e:b0:6db:aed5:43c8 with SMTP id
+ hd14-20020a170907968e00b006dbaed543c8mr30685289ejc.636.1649690127832; Mon, 11
+ Apr 2022 08:15:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220409120901.267526-1-dzm91@hust.edu.cn>
-In-Reply-To: <20220409120901.267526-1-dzm91@hust.edu.cn>
+References: <20220404151036.265901-1-k.kahurani@gmail.com> <6b6a8f5c-ceb9-ce97-bf79-d7634b433135@gmail.com>
+In-Reply-To: <6b6a8f5c-ceb9-ce97-bf79-d7634b433135@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 11 Apr 2022 17:51:15 +0300
-Message-ID: <CAHp75Vc4hGOJ8gr9R5WqgZ1QkC-uEeQ7WXAqO0YjynDx9jOvnw@mail.gmail.com>
-Subject: Re: [PATCH] driver: usb: nullify dangling pointer in cdc_ncm_free
-To:     Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     Oliver Neukum <oliver@neukum.org>,
+Date:   Mon, 11 Apr 2022 18:11:14 +0300
+Message-ID: <CAHp75VdkPJuHLFfQzPS==G_K1fqai53eT-=Gh-kL9mTED1x2fw@mail.gmail.com>
+Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read errors
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     David Kahurani <k.kahurani@gmail.com>,
+        netdev <netdev@vger.kernel.org>,
+        syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com,
         "David S. Miller" <davem@davemloft.net>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzbot+eabbf2aaa999cc507108@syzkaller.appspotmail.com,
-        USB <linux-usb@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -71,32 +74,27 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 5:14 AM Dongliang Mu <dzm91@hust.edu.cn> wrote:
+On Tue, Apr 5, 2022 at 3:05 AM Pavel Skripkin <paskripkin@gmail.com> wrote:
+> On 4/4/22 18:10, David Kahurani wrote:
+> > Reads that are lesser than the requested size lead to uninit-value bugs. Qualify
+> > such reads as errors and handle them correctly.
+
+> I'd personally cut this log a bit and would add this part of the initial
+> report
 >
-> From: Dongliang Mu <mudongliangabcd@gmail.com>
+> Local variable eeprom.i created at:
+>   ax88179_check_eeprom drivers/net/usb/ax88179_178a.c:1045 [inline]
+>   ax88179_led_setting+0x2e2/0x30b0 drivers/net/usb/ax88179_178a.c:1168
+>   ax88179_bind+0xe75/0x1990 drivers/net/usb/ax88179_178a.c:1411
 >
-> cdc_ncm_bind calls cdc_ncm_bind_common and sets dev->data[0]
-> with ctx. However, in the unbind function - cdc_ncm_unbind,
-> it calls cdc_ncm_free and frees ctx, leaving dev->data[0] as
-> a dangling pointer. The following ioctl operation will trigger
-> the UAF in the function cdc_ncm_set_dgram_size.
-
-First of all, please use the standard form of referring to the func()
-as in this sentence.
-
-> Fix this by setting dev->data[0] as zero.
+> Since it shows exactly where problem comes from.
 >
-> ==================================================================
-> BUG: KASAN: use-after-free in cdc_ncm_set_dgram_size+0xc91/0xde0
-> Read of size 8 at addr ffff8880755210b0 by task dhcpcd/3174
->
+> I do not insist, just IMO
 
-Please, avoid SO noisy commit messages. Find the core part of the
-traceback(s) which should be rarely more than 5-10 lines.
-
-...
-
-The code seems fine.
+I insist though. It will reduce the resource consumption (i.e. storage
+and network load on cloning / pulling) a lot (taking into account
+multiplier of how many Linux kernel source copies are around the
+globe) and hence become more environmentally friendly.
 
 -- 
 With Best Regards,
