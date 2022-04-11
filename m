@@ -2,57 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251DE4FC274
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Apr 2022 18:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D344FC335
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Apr 2022 19:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348469AbiDKQg0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Apr 2022 12:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
+        id S1348817AbiDKR3H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Apr 2022 13:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348553AbiDKQgW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 12:36:22 -0400
-Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E972E7E;
-        Mon, 11 Apr 2022 09:34:05 -0700 (PDT)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9f:8600:0:0:0:1])
-        (authenticated bits=0)
-        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 23BGXc7W674600
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Mon, 11 Apr 2022 17:33:40 +0100
-Received: from miraculix.mork.no (ip-60-18-248-87.eidsiva.net [87.248.18.60] (may be forged))
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 23BGXcDQ3493261
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Mon, 11 Apr 2022 18:33:38 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1649694818; bh=uqwVfZl85irAGcKmQTCFWVKvrirB5WC2P3nhY5ZmQwI=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=SfiUidB+b2fSEPq7suo8IpjEH99O6kn0jfWUgajv3jbmtwJmf4OrmrkxSt8C6zgqO
-         hyNwythEc//lwkPPghjgLrrSbpPCE3zPxMA1LeIoJosmXU4EoZrGHDaWG9tx25B4S7
-         hDkOtXYB1FgP4B7ECzilJ3aeMfdFvF7cXZOuuWnk=
-Received: (nullmailer pid 831328 invoked by uid 1000);
-        Mon, 11 Apr 2022 16:33:33 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Daniele Palmas <dnlplm@gmail.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net 1/1] net: usb: qmi_wwan: add Telit 0x1057 composition
-Organization: m
-References: <20220411135943.4067264-1-dnlplm@gmail.com>
-Date:   Mon, 11 Apr 2022 18:33:33 +0200
-In-Reply-To: <20220411135943.4067264-1-dnlplm@gmail.com> (Daniele Palmas's
-        message of "Mon, 11 Apr 2022 15:59:43 +0200")
-Message-ID: <877d7vwpeq.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S245656AbiDKR3G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 13:29:06 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462B225C6
+        for <linux-usb@vger.kernel.org>; Mon, 11 Apr 2022 10:26:51 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id lc2so11758038ejb.12
+        for <linux-usb@vger.kernel.org>; Mon, 11 Apr 2022 10:26:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=QdVBcinj38tWRTEOTYJBcwKqCMlbGmUYjUq6qlfOE7I=;
+        b=UTMeqqZRzEs+YztkK6jE7H1rm+Gnq/GhHWzAkcR1/1R9AxnvUqhA+WOAeyO55V1RAA
+         noKtPSsjE0NnPco5aKAWAO6ONIxmgFd1w8PzZgDhfgqDKwR7Y1QFMuaztgTGxTlbQA6C
+         PzgoCeeNxE7Bm4UGwbw5vLhvoCg2MPCeDzq3CJ59EXYJtgl3lKxPDW+1qFmivBgsAgS0
+         X0/6wkwVXiyP8rvsczAlKTTl5KHmqo3WgznTUgTUAFZQHV4owSmlIa/fZj57ci3LoDoS
+         eePDBoz87vyKt8dtINUDqCzIs4FxeUeuuKoAMBGfBo81AXQxZ0YJ52zIZ/iwiwutwB+I
+         6dPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=QdVBcinj38tWRTEOTYJBcwKqCMlbGmUYjUq6qlfOE7I=;
+        b=cPwSIRar5A2MXU6ntqybr13RqY1remTQo/MiwVg85I0ljbfMMfi6H1PK9GfQbuOLh7
+         dNyI/bofOLyQgOGWYZuzbUgKC0UisEqMiBCcgK1Cerwx7gML6zqIvh20AQLJGWrO1dyR
+         UEh8+RC18PAlWPWIN1B4ltkwO+xIU4MwKxox8aUp55yljdpvBQBFTmfYsEoNlocrNyJc
+         ZEF/anncWj07tBD/n3rFUBSgjRaW+1tD+VmCuA2VT42miNj6x4GF7xryZZHe5Fava0IW
+         T9qpY7Nqswk0nGQse+fVPJJUcuI2eTbKxjGE5pJAJQcXRzNfv8cKGRxomr+rLp5bwNva
+         NwCA==
+X-Gm-Message-State: AOAM532X572EG8FR73Z/2CpGdId6tpiV6wAVLYiXcP4xiERGqphESZ0w
+        H64QNVK/jr78VViA4mJNLTFj0M5LZwzkLXp/vIE18CQP
+X-Google-Smtp-Source: ABdhPJx7PGbrKr5RbXzcElSySQXqvo1C9wnYbLsogJwptmrIaqkGA7hL1Ppz4c7DMe+55CUCI+eOVAtRX5e9i+Y8Q+A=
+X-Received: by 2002:a17:907:7b8b:b0:6e8:9dd9:59ac with SMTP id
+ ne11-20020a1709077b8b00b006e89dd959acmr2927802ejc.588.1649698009610; Mon, 11
+ Apr 2022 10:26:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.5 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 11 Apr 2022 12:26:38 -0500
+Message-ID: <CAHCN7xK9sZGXruaLzbam+t2REqvKiTrWbZ-GdA3gXux=9B-2Lw@mail.gmail.com>
+Subject: Using PTN5110 w/ USB Hub
+To:     Guenter Roeck <linux@roeck-us.net>,
+        heikki.krogerus@linux.intel.com,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,12 +61,20 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Daniele Palmas <dnlplm@gmail.com> writes:
+I have a board with a dual role USB conttroller connected to a dual
+role hub connected to a PTN5110 for enabing power to the USB-C.
 
-> Add the following Telit FN980 composition:
->
-> 0x1057: tty, adb, rmnet, tty, tty, tty, tty, tty
->
-> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+SoC -> Hub -> PTN-> USB-C
 
-Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+The hope was the PTN5110 would enable/disable the src_en pin when I
+connect a device that needs power.  Unfortunately, most of the
+examples I can see for the device trees on a PTN5110 show some sort of
+connection to a USB controller, but  I am going through a hub, not a
+controller.
+
+Is it possible to configure the PTN5110 to either not require
+connection to a USB controller or plumb it to a USB hub?
+
+thanks
+
+adam
