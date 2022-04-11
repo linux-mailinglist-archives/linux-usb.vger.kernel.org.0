@@ -2,106 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166344FC537
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Apr 2022 21:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 398844FC62B
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Apr 2022 22:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349671AbiDKTlL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Apr 2022 15:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45698 "EHLO
+        id S231994AbiDKUxX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Apr 2022 16:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242555AbiDKTlJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 15:41:09 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8131D302
-        for <linux-usb@vger.kernel.org>; Mon, 11 Apr 2022 12:38:54 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id b17so5159743ilq.5
-        for <linux-usb@vger.kernel.org>; Mon, 11 Apr 2022 12:38:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1WfDLkMmrYqZ6Ij9lfpj1VDoW1LAn8E2xThCsyOWFGE=;
-        b=IKv1G1i0A6yENpCFhUhSheXLDeap3M1/5nt62rwktvIPbzYG8x4+VcYZhp2L5BYzTS
-         VC+fUvTTKInwNLDZDfjDiZTQQ4Ld6WCvs8mU2W4V3RpsVy8Nx0CN3xoPrNHhwJMqDVBb
-         zhrVJg09qedrBhavLeXJtmqhkG6kxUsjwVLtc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1WfDLkMmrYqZ6Ij9lfpj1VDoW1LAn8E2xThCsyOWFGE=;
-        b=ycYKndpAkgmoJpUrRsw5Aw/Smp2tYV/x8SAy8s6GScmIHVKe+0qZc2unCnCKNnrgqO
-         kh3uLP1tCh8WB6qvL76j/e2i3eUQ83/WbhGauUuMxfZTyiufQfGxaoxeiHeSwIZZjTyL
-         enGVVumz6eb8934lg3d0tNeL0/rUEsMzgkdZEa4Iss7zkij0A4W5jAdJfsculKRuoFvp
-         QPfgH8wWYSItXJ46bupH9wXlDxdSN1bPqKNAbWkqbzXFDdt0lvdSugo9hZpZVK9NLDoF
-         vi7Erz0iqbNBwc5mxerMR7SasiF8y47OZqS5AJE7FZuRLNJUlT41qHtQuW9v2bCfQceV
-         SEtw==
-X-Gm-Message-State: AOAM533YTAK3PUQKvhYTpOJTAf5w31hqzoY0nFUMPOVvLXqq3/55nyIJ
-        0fhpyKqItREStXsdyqQqb69LzA==
-X-Google-Smtp-Source: ABdhPJz0XsoDdd0nsaFO5HSBwS1X9AjPFVqn1VnZsUg1ItNo8xlkSLtdOnYZhfiQHHdGa7DE6PR8aw==
-X-Received: by 2002:a05:6e02:17ce:b0:2ca:7d71:6cb2 with SMTP id z14-20020a056e0217ce00b002ca7d716cb2mr8406267ilu.43.1649705934358;
-        Mon, 11 Apr 2022 12:38:54 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id q13-20020a056e020c2d00b002caa365b43bsm4314131ilg.76.2022.04.11.12.38.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 12:38:54 -0700 (PDT)
-Subject: Re: [PATCH v2] usb: usbip: fix a refcount leak in stub_probe()
-To:     Hangyu Hua <hbh25y@gmail.com>, valentina.manea.m@gmail.com,
-        shuah@kernel.org, gregkh@linuxfoundation.org, khoroshilov@ispras.ru
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220407022204.10730-1-hbh25y@gmail.com>
- <7c584e2d-1c23-3df9-7e4e-c4d9a9014224@linuxfoundation.org>
- <d40cb8cf-a92d-3f87-3af1-0422f8d8264f@gmail.com>
- <91089407-cc21-ba05-5346-4f546cca7555@linuxfoundation.org>
- <55d22e24-09ad-20b8-e1de-8d7c2f8ab1a8@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <16876455-ed60-65c6-1375-ac88e4209cb2@linuxfoundation.org>
-Date:   Mon, 11 Apr 2022 13:38:53 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        with ESMTP id S230226AbiDKUxW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 16:53:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FD41BE8D
+        for <linux-usb@vger.kernel.org>; Mon, 11 Apr 2022 13:51:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 575E861651
+        for <linux-usb@vger.kernel.org>; Mon, 11 Apr 2022 20:51:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B2923C385AF
+        for <linux-usb@vger.kernel.org>; Mon, 11 Apr 2022 20:51:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649710266;
+        bh=hRWUE3+0f06fs9OYlTTb1gsip/BakK7yVMZPCSt60e4=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Qzdryen8jIo7EA20ZMEyyYRmENtz86Bmq8fV8quj3wNC/B7/ieL4Nhcp3kZ8eUzJI
+         XjhMU+8gDsjFdbZ1+3ocBGZOt/BwPw49dxShtU6dxejIvah4ajzqHDypTeA9ghbRAa
+         mm2QPbMK4Zy71MxpxT+1WDyLt4C0ownndCqeYMhDgTQz5/wvqOmJiW94bTJrpSmk73
+         o/E4nE1E/oh58fmvw4s6286l/ACT6WG+bnCJVW7Mmk7eG17Yw6qrS3nlV/ZWpTVncA
+         adM82TZO2s1CXMpjy3biYu32rpSZmMz4nSXBdJCA538H5gKLQg8hXkjwYtUTE7WB+N
+         6yOLpGISZdbhg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 998CFCC13B0; Mon, 11 Apr 2022 20:51:06 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210425] Plugging in or unplugging power cord while system is
+ suspended does not trigger updates
+Date:   Mon, 11 Apr 2022 20:51:06 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: grzegorz.alibozek@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-210425-208809-li0tIl8jCp@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
+References: <bug-210425-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <55d22e24-09ad-20b8-e1de-8d7c2f8ab1a8@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/10/22 11:29 PM, Hangyu Hua wrote:
-> On 2022/4/8 23:04, Shuah Khan wrote:
->> On 4/7/22 7:59 PM, Hangyu Hua wrote:
->>> Hi Shuah,
->>>
->>> I find this by code review. Do i really need to add this to commit log? This look like a little weird.
->>>
->>
->> Great. Good find.
->>
->> It is important to understand how the problem is found. Please add it
->> the change log. We usually expect dmesg or such info. that revealed
->> refcount leak, since this one is found during code review, we would
->> like to see that information the commit log.
->>
->> Also please remember to avoid top posting.
-> 
-> I get what you meant now. But i don't know how to get a clear dmesg or any other log. The kernel will not crash because of this. I just used gdb to find that udev->dev->kobj->kref gets bigger and bigger whenever I call stub_probe with busid_priv->status = STUB_BUSID_REMOV.
-> 
-> Thanks for telling me the rules.
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
 
-There is no need to gather dmesg etc. Just add a note that you found
-the problem during code review. Having complete information about why
-a change is made will be helpful for future changes to this code and
-somebody new trying understand the changes made to this file/routine
-and why.
+--- Comment #12 from grzegorz.alibozek@gmail.com ---
+(In reply to M=C3=A9ven Car from comment #7)
+> I have this naive patch that fix the main issue:
+>=20
+> diff --git drivers/usb/typec/ucsi/ucsi.c drivers/usb/typec/ucsi/ucsi.c
+> index d0c63afaf345..a679359c98be 100644
+> --- drivers/usb/typec/ucsi/ucsi.c
+> +++ drivers/usb/typec/ucsi/ucsi.c
+> @@ -187,11 +187,22 @@ EXPORT_SYMBOL_GPL(ucsi_send_command);
+>  int ucsi_resume(struct ucsi *ucsi)
+>  {
+>         u64 command;
+> +       int ret;
+> +       int i;
+>=20=20
+>         /* Restore UCSI notification enable mask after system resume */
+>         command =3D UCSI_SET_NOTIFICATION_ENABLE | ucsi->ntfy;
+>=20=20
+> -       return ucsi_send_command(ucsi, command, NULL, 0);
+> +       ret =3D ucsi_send_command(ucsi, command, NULL, 0);
+> +       if (ret)
+> +               return ret;
+> +
+> +       /* update all connectors */
+> +       for (i =3D 0; i < ucsi->cap.num_connectors; i++) {
+> +               ucsi_connector_change(ucsi, i);
+> +       }
+> +
+> +       return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(ucsi_resume);
+>  /*
+> -------------------------------------------------------------------------=
+- */
+>=20
+>=20
+> Will probably post to LKML
 
-thanks,
--- Shuah
+any update about your fix?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
