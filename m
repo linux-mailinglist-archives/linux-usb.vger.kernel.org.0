@@ -2,158 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EDD24FC167
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Apr 2022 17:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1298E4FC199
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Apr 2022 17:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348227AbiDKPu0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Apr 2022 11:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
+        id S1348308AbiDKPzj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Apr 2022 11:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346426AbiDKPuY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 11:50:24 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8F01095;
-        Mon, 11 Apr 2022 08:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649692090; x=1681228090;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+TyBus24Umus7ZMTk+S6IRyj/G2u6EnizamRZLaTPng=;
-  b=REf4iXb9HbrDxddQTjuPKNLwch9T9sOtwiU/dD2XFk7MgK8szi8kMidK
-   4Htn/oPe9p3cTKmFmY9s359PRudNyCbKJFb2XLIQlmlfpw2cFctoHzeLC
-   j2MXRmFuDqZk2TCBCePjIp7gBe5UpjPbrxcG9qjwvZwPC6bNaoqKTUl+A
-   I=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Apr 2022 08:48:09 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 08:48:09 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Apr 2022 08:48:09 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Apr 2022 08:48:07 -0700
-Date:   Mon, 11 Apr 2022 21:18:03 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: dwc3: EP clear halt leading to incorrect submission
- of delayed_status
-Message-ID: <20220411154803.GA26372@hu-pkondeti-hyd.qualcomm.com>
-References: <20220407015336.19455-1-quic_wcheng@quicinc.com>
+        with ESMTP id S237270AbiDKPzi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 11:55:38 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620EF31502;
+        Mon, 11 Apr 2022 08:53:23 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 37A3C5C0244;
+        Mon, 11 Apr 2022 11:53:20 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 11 Apr 2022 11:53:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1649692400; x=1649778800; bh=C9DKg6V1tZ
+        iLrBe/wdMsxkBkoEmu0OP0fNztWC46E3U=; b=pN5TnRhWhpVC+3YE18aubxei0h
+        ZXLBGyCHpp/c7tAcQ0LK5tKxb1CMmFKwSYV01T714ifDQLpKwGoaLp6Nqke1FiwT
+        O+fTeJn46iJ3H6zNduAX391666vDH7WineN9ZeNjOyNoGcfboGR6n4VB7CTxBa9Z
+        NbTv/AFl6iMeBLVSNYLefCHSQpUMjcJgJw5EYE4vvffn/hMpNcgxGbsRJwZSY9IS
+        J47iTllWaFndvKltHwriuuLjyDuukARHRcA8IhYbZGWx0Zm/zeMwKVJBx0sdwHhM
+        saidp72V8e/cJ1kVUPIVVX2gdFuZ27aoJBMQ0ijJux+xNRiNEUIfNzJeFPhg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm3; t=1649692400; x=1649778800; bh=C
+        9DKg6V1tZiLrBe/wdMsxkBkoEmu0OP0fNztWC46E3U=; b=UZegvQ35q34lAwixN
+        4fwiq3Mei4KPkY+Fi5NpjuZLu3FWFX2DfyKyUZLMQOiYqPwEiS+b1Z7VnDupdp07
+        cRqwFGM9/7TAnFmJ8QkKJ+CWzAipqNz5VK5T250qXUCgJklLqreodrs0wh0UE9Dc
+        99aLPRlP9/igrdqzU2Pa+3qGb0wEviiJem36a/WL5x8D/NjKe/YHiuwOkoAmcQdT
+        e7vKzr/HU9IXpFyS8udvWizOrjNExMiZHCK1IeOhUPHLoK7QaTSb7RcuFQ5OY2LE
+        e3NhGnr2w9cugb98hMO5wiRWTg6zrn3sbN/MCzLdlXjdRUqfpcpBev1udAMYale7
+        FKzKA==
+X-ME-Sender: <xms:705UYg7C_P60qXCFX1TaDWc394EKY9B-hMBhLQJ3n2FDsZyNiDJn7A>
+    <xme:705UYh5Q1fgAwbK5euXLdhvrG1nZijiia2EoEJtFVieevx1wbMgRI74FdioFOH7ej
+    pqA4csdxENCiyoAK2k>
+X-ME-Received: <xmr:705UYvdo1m9LFjG1w_K0HL8HWhLN2I1RfA9-WfvpUOqtldf5TSYbT1kKXugnh5ZtGD6wINGGIzbsddcrmdIP8csmSpgjSBJysTMbwRp5168cguxC9vL4RW83xMmxcHE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekiedgleehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
+    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
+    epuefgleekvddtjefffeejheevleefveekgfduudfhgefhfeegtdehveejfefffffgnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnse
+    hsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:705UYlIHMHuQYtILwwZv23ivgiVWaG2ltmNyxfvsAgc9kanLwDSZPQ>
+    <xmx:705UYkKO4rEPB4SOHCuwcItJZfWfjPtxMBpxn2N3RcnFj85ZpldEXA>
+    <xmx:705UYmx6BCts7w2Ykh5hdyJlmmCMTcnahjSo9LNRvGSbdn-5LDR_nw>
+    <xmx:8E5UYs_GdpH4AzKesLfxh1_FM1uAvjhgpl0-y6mzYvnLQtJWchvHIg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 11 Apr 2022 11:53:18 -0400 (EDT)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sven Peter <sven@svenpeter.dev>, Yu Chen <chenyu56@huawei.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Hector Martin <marcan@marcan.st>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc3: Try usb-role-switch first in dwc3_drd_init
+Date:   Mon, 11 Apr 2022 17:53:00 +0200
+Message-Id: <20220411155300.9766-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220407015336.19455-1-quic_wcheng@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Wesley,
+If the PHY controller node has a "port" dwc3 tries to find an
+extcon device even when "usb-role-switch" is present. This happens
+because dwc3_get_extcon() sees that "port" node and then calls
+extcon_find_edev_by_node() which will always return EPROBE_DEFER
+in that case.
 
-On Wed, Apr 06, 2022 at 06:53:36PM -0700, Wesley Cheng wrote:
-> The usb_ep_clear_halt() API can be called from the function driver, and
-> translates to dwc3_gadget_ep_set_halt().  This routine is shared with when
-> the host issues a clear feature ENDPOINT_HALT, and is differentiated by the
-> protocol argument.  If the following sequence occurs, there can be a
-> situation where the delayed_status flag is improperly cleared for the wrong
-> SETUP transaction:
-> 
-> 1. Vendor specific control transfer returns USB_GADGET_DELAYED_STATUS.
-> 2. DWC3 gadget sets dwc->delayed_status to '1'.
-> 3. Another function driver issues a usb_ep_clear_halt() call.
-> 4. DWC3 gadget issues dwc3_stop_active_transfer() and sets
->    DWC3_EP_PENDING_CLEAR_STALL.
-> 5. EP command complete interrupt triggers for the end transfer, and
->    dwc3_ep0_send_delayed_status() is allowed to run, as delayed_status
->    is '1' due to step#1.
-> 6. STATUS phase is sent, and delayed_status is cleared.
-> 7. Vendor specific control transfer is finished being handled, and issues
->    usb_composite_setup_continue().  This results in queuing of a data
->    phase.
-> 
-> Cache the protocol flag so that DWC3 gadget is aware of when the clear halt
-> is due to a SETUP request from the host versus when it is sourced from a
-> function driver.  This allows for the EP command complete interrupt to know
-> if it needs to issue a delayed status phase.
-> 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
->  drivers/usb/dwc3/core.h   | 1 +
->  drivers/usb/dwc3/ep0.c    | 1 +
->  drivers/usb/dwc3/gadget.c | 3 ++-
->  3 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index 5c9d467195a6..55f98485c54c 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -1272,6 +1272,7 @@ struct dwc3 {
->  	unsigned		connected:1;
->  	unsigned		softconnect:1;
->  	unsigned		delayed_status:1;
-> +	unsigned		clear_stall_protocol:1;
->  	unsigned		ep0_bounced:1;
->  	unsigned		ep0_expect_in:1;
->  	unsigned		has_hibernation:1;
-> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-> index 1064be5518f6..aa8476da222d 100644
-> --- a/drivers/usb/dwc3/ep0.c
-> +++ b/drivers/usb/dwc3/ep0.c
-> @@ -1080,6 +1080,7 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
->  	unsigned int direction = !dwc->ep0_expect_in;
->  
->  	dwc->delayed_status = false;
-> +	dwc->clear_stall_protocol = 0;
->  
->  	if (dwc->ep0state != EP0_STATUS_PHASE)
->  		return;
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index ab725d2262d6..c427ddae016f 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -2152,6 +2152,7 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
->  		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING ||
->  		    (dep->flags & DWC3_EP_DELAY_STOP)) {
->  			dep->flags |= DWC3_EP_PENDING_CLEAR_STALL;
-> +			dwc->clear_stall_protocol = protocol;
->  			return 0;
->  		}
->  
-> @@ -3483,7 +3484,7 @@ static void dwc3_gadget_endpoint_command_complete(struct dwc3_ep *dep,
->  		}
->  
->  		dep->flags &= ~(DWC3_EP_STALL | DWC3_EP_WEDGE);
-> -		if (dwc->delayed_status)
-> +		if (dwc->clear_stall_protocol)
->  			dwc3_ep0_send_delayed_status(dwc);
->  	}
->  
+On the other hand, even if an extcon was present and dwc3_get_extcon()
+was successful it would still be ignored in favor of "usb-role-switch".
 
-Is it safe to maintain clear_stall_protocol per dwc3 instance? What if
-CLEAR_FEATURE(halt_endpoint) and usb_ep_clear_halt() are interleaved and
-We come here as part of usb_ep_clear_halt()'s endpoint command complete.
-We may simply send the delayed status corresponding to the protocol clear
-stall.
+Let's just first check if "usb-role-switch" is configured in the device
+tree and directly use it instead and only try to look for an extcon
+device otherwise.
 
-We can still maintain a global flag if we cache endpoint number in it so
-that we can cross check against the endpoint for which completion received.
+Fixes: 8a0a13799744 ("usb: dwc3: Registering a role switch in the DRD code.")
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+---
+ drivers/usb/dwc3/drd.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-Thanks,
-Pavan
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index 9a22ce601504..ff40ff26275c 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -586,16 +586,15 @@ int dwc3_drd_init(struct dwc3 *dwc)
+ {
+ 	int ret, irq;
+ 
++	if (ROLE_SWITCH &&
++	    device_property_read_bool(dwc->dev, "usb-role-switch"))
++		return dwc3_setup_role_switch(dwc);
++
+ 	dwc->edev = dwc3_get_extcon(dwc);
+ 	if (IS_ERR(dwc->edev))
+ 		return PTR_ERR(dwc->edev);
+ 
+-	if (ROLE_SWITCH &&
+-	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
+-		ret = dwc3_setup_role_switch(dwc);
+-		if (ret < 0)
+-			return ret;
+-	} else if (dwc->edev) {
++	if (dwc->edev) {
+ 		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
+ 		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
+ 					       &dwc->edev_nb);
+-- 
+2.25.1
 
