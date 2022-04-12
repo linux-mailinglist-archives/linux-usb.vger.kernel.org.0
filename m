@@ -2,69 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A7F4FE6D3
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 19:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CA64FE803
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 20:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357152AbiDLRaX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Apr 2022 13:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        id S1358715AbiDLSdF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Apr 2022 14:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235665AbiDLRaV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 13:30:21 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC8C53722;
-        Tue, 12 Apr 2022 10:28:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649784483; x=1681320483;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MTrQUb89ytH2QRNrlqQ8N1/cVixUkR7ofVo0qRQ1nuA=;
-  b=XUv67KDU9qqY7sgjYaaWHjegL4dDeARJ6kGurTi7mah4PMF84czutf9s
-   FFrEdOxztbmvTUU8bJMvFnssN+NGOAZf+TiBn7zZyBz3GP28Vkz40xEgF
-   0kPAkwBw7iInkoDSFh5teBPQxWWiaRRR13GNK7DmM37hlm//ljnPttbfA
-   vDIpODirlqEGwUxbcdDe11SUCawmLCI8/5jiCjNa9yx/x9Wy0x+YkGXd3
-   yk4KgbRfCsyB9l7EFv0wmYPbmJV69COTxaGZTqz0bRESXbv0kGLvKYCUF
-   ZTU/TnHdrvAbMj7ikLnMIzzYLoQMoXUJCXcNgMp4pzh4XY5LZ4RhsEJ9C
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="260045761"
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="260045761"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 10:26:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="611550097"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Apr 2022 10:26:21 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neKGD-00031g-0G;
-        Tue, 12 Apr 2022 17:25:01 +0000
-Date:   Wed, 13 Apr 2022 01:24:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Jameson Thies <jthies@google.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] usb: typec: USB Power Deliver helpers for ports
- and partners
-Message-ID: <202204130102.YjEnm3E0-lkp@intel.com>
-References: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
+        with ESMTP id S1358692AbiDLScb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 14:32:31 -0400
+Received: from out28-195.mail.aliyun.com (out28-195.mail.aliyun.com [115.124.28.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E74B4DF7B;
+        Tue, 12 Apr 2022 11:30:10 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.4200453|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00985243-0.00141626-0.988731;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047211;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.NPNg.gm_1649788202;
+Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NPNg.gm_1649788202)
+          by smtp.aliyun-inc.com(33.37.68.114);
+          Wed, 13 Apr 2022 02:30:08 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     gregkh@linuxfoundation.org, hminas@synopsys.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dragancecavac@yahoo.com, hns@goldelico.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, reimu@sudomaker.com
+Subject: [PATCH v2 0/2] Add OTG support for Ingenic SoCs.
+Date:   Wed, 13 Apr 2022 02:29:59 +0800
+Message-Id: <1649788201-87620-1-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,56 +45,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+1.Add OTG support for the JZ4775 SoC, the JZ4780 SoC, the X1000
+  SoC, the X1600 SoC, the X1700 SoC, the X1830 SoC, and the
+  X2000 SoC.
+2.Introduce support for disable Ingenic overcurrent detection,
+  once selected it enables GOTGCTL register bits VbvalidOvEn
+  and VbvalidOvVal to disable the VBUS overcurrent detection.
 
-I love your patch! Perhaps something to improve:
+v1->v2:
+1.Add Rob Herring's Acked-by.
+2.Add Minas Harutyunyan's Acked-by.
+3.Use "activate_ingenic_overcurrent_detection" instead
+  "deactivate_ingenic_overcurrent_detection" as Greg's suggestion.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on chrome-platform/for-next v5.18-rc2 next-20220412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+周琰杰 (Zhou Yanjie) (2):
+  dt-bindings: dwc2: Add bindings for new Ingenic SoCs.
+  USB: dwc2: Add OTG support for Ingenic SoCs.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: i386-randconfig-a004-20220411 (https://download.01.org/0day-ci/archive/20220413/202204130102.YjEnm3E0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/98fece77872792e49f1005617761a533089f319d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
-        git checkout 98fece77872792e49f1005617761a533089f319d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/typec/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/typec/class.c:30:27: warning: unused variable 'cap_name' [-Wunused-const-variable]
-   static const char * const cap_name[] = {
-                             ^
-   1 warning generated.
---
->> drivers/usb/typec/pd.c:669: warning: expecting prototype for pd_register(). Prototype was for pd_unregister() instead
->> drivers/usb/typec/pd.c:717: warning: expecting prototype for pd_link_device(). Prototype was for pd_unlink_device() instead
---
->> drivers/usb/typec/class.c:1222: warning: expecting prototype for typec_port_set_pd_capabilities(). Prototype was for typec_port_set_pd() instead
-
-
-vim +/cap_name +30 drivers/usb/typec/class.c
-
-    29	
-  > 30	static const char * const cap_name[] = {
-    31		[TYPEC_SINK]		= "sink-capabilities",
-    32		[TYPEC_SOURCE]		= "source-capabilities",
-    33	};
-    34	
+ Documentation/devicetree/bindings/usb/dwc2.yaml |  7 ++++
+ drivers/usb/dwc2/core.c                         |  9 +++++
+ drivers/usb/dwc2/core.h                         |  5 +++
+ drivers/usb/dwc2/params.c                       | 50 ++++++++++++++++++++++++-
+ 4 files changed, 70 insertions(+), 1 deletion(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.7.4
+
