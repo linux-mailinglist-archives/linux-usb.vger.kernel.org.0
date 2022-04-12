@@ -2,224 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A586C4FD263
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 09:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42F64FDC5D
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 13:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351409AbiDLHK5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Apr 2022 03:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
+        id S242078AbiDLKUy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Apr 2022 06:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245607AbiDLHJI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 03:09:08 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E70149F17;
-        Mon, 11 Apr 2022 23:49:31 -0700 (PDT)
+        with ESMTP id S1354278AbiDLKDW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 06:03:22 -0400
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5746E572
+        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 02:09:59 -0700 (PDT)
+Received: by mail-ua1-x92c.google.com with SMTP id 63so7987958uaw.10
+        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 02:09:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649746177; x=1681282177;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=+XDXOeZpM1JBBXTBf7y/zYMvg/OCqKw83jJ8o8A85GE=;
-  b=V/rpB9bSYwqGGS6MH4ADnwoYYHCao6e9qeKiE/W3TLHoU23G+lARompA
-   Y6tiSEL6tF/4Al3vazCeKe6zCD+ABWBIfweQmmsydeHJfNFu7tkGsSZTu
-   47hExx2nxIN8btnKI44Fd84UvPweyiYowxIvFXqcVDBhWvusJSF5SLm+9
-   0=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 11 Apr 2022 23:49:31 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 23:49:30 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Apr 2022 23:49:29 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Apr 2022 23:49:23 -0700
-Date:   Tue, 12 Apr 2022 12:19:20 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>
-CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_kriskura@quicinc.com>,
-        <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v13 2/6] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <20220412064920.GD2627@hu-pkondeti-hyd.qualcomm.com>
-References: <1649704614-31518-1-git-send-email-quic_c_sanm@quicinc.com>
- <1649704614-31518-3-git-send-email-quic_c_sanm@quicinc.com>
- <YlSVec5+SpdMZWCz@google.com>
- <36d22ad7-7f11-2f63-cd68-5d564476161e@quicinc.com>
- <20220412050018.GB2627@hu-pkondeti-hyd.qualcomm.com>
- <259c9e87-a52e-c063-7901-2c6decd42675@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=/mhawLYqSD4ihGrLIqf8HesRiShc0rzLBY5rz5Z4/wY=;
+        b=We5/BapYZVp8dkE48MZpLyA9uGAXLOxWh3SXIlJL0gRR7ogUK+y5b6AZbH2O8TjUas
+         OvYvvrsKIRGB8kVec6kvRlD8kxG7F4IDjhx29BpKnTuV+4FRVC28tpH8nGZAP5KT/Y/O
+         WCImvJ7RsCutjmypIjYdy39FWx20WT6LSeUvN5TgTW/p/oVbN9fYoP8n5XvtHA6kpEFA
+         5EOeaeEzbcTZ1grIaEy/TYRk28MqeLlgSPx3EGFLRat4+51dE+8FR+QvbAy/C0MnzbQD
+         77QY1adJoSspaFxgM+aL5xbvRMpJqnATCKlqvQVUroBvoicuySuYoQu0HG6yQ5xPfqMQ
+         dkCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=/mhawLYqSD4ihGrLIqf8HesRiShc0rzLBY5rz5Z4/wY=;
+        b=2ehIkMGdYR2sJu7kpwSH1vqYHKDIk3VDcmL1T1zv2PIFxOSUgB2lMna2CRvWK2Ga/o
+         vuqUq8n9UGXBpzKEy85WxrbBHrRrjWsYlxZhiI616j2Pq5iVStUXyFwkNxwwGYMGhRJs
+         DqrQkqVo6sMS/TnLPEkoAlUZi5juYFzMNaN1bix2PsqYMTBrtPvSNM98crRDfEBIhIOZ
+         1oqhyPxbsdvqZ+yKB4xTS3Q0NMPloQCfqJDAcJoboDTea1jILrw9dPJXiTEpMKKFaDtc
+         ucz96NR6SF26aHaai+3so7g8i1k+itjWD2wBxK4qnk6PC0Klvm/+uC9MDdtFCsbUL0yN
+         vmAQ==
+X-Gm-Message-State: AOAM533vuq8fnsP05gGafiXJ2eaQeswg7JqlLcYjKtPMpb7mj0e4xlOP
+        /KzVIXII4IEgg6++feh237HjmGQwjWOkZdW/cec=
+X-Google-Smtp-Source: ABdhPJyCfvlk2Vr9MKFBzxXN2MrWm1fNVWpRgcEJZ6UoSD6pWU6UrwmP8KFeqcyi8HOEhBwVkgFfRNiEitzWJ15ZK7I=
+X-Received: by 2002:ab0:5a26:0:b0:35d:dbe:637d with SMTP id
+ l35-20020ab05a26000000b0035d0dbe637dmr997712uad.38.1649754598230; Tue, 12 Apr
+ 2022 02:09:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <259c9e87-a52e-c063-7901-2c6decd42675@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Sender: barristerhassanmohamed@gmail.com
+Received: by 2002:a05:6102:126f:0:0:0:0 with HTTP; Tue, 12 Apr 2022 02:09:57
+ -0700 (PDT)
+From:   "Dr. Aisha al-gaddafi" <dr.aishaalgaddafi09@gmail.com>
+Date:   Tue, 12 Apr 2022 09:09:57 +0000
+X-Google-Sender-Auth: EZLUjUQ9-5HyJcyl4F0hPY-3vKI
+Message-ID: <CAKXgMZ5LYdRb0fnT7fw9Ww5TCH7rqiJSxtqp_eRfX0ZyxnZdBQ@mail.gmail.com>
+Subject: Please i need your help
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        MILLION_HUNDRED,MILLION_USD,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_US_DOLLARS_3,UNDISC_MONEY,URG_BIZ autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:92c listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.7037]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [dr.aishaalgaddafi09[at]gmail.com]
+        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
+        *  1.3 MILLION_USD BODY: Talks about millions of dollars
+        *  0.0 T_US_DOLLARS_3 BODY: Mentions millions of $ ($NN,NNN,NNN.NN)
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.6 URG_BIZ Contains urgent matter
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Sandeep,
+ Please i need your help
 
-On Tue, Apr 12, 2022 at 12:08:02PM +0530, Sandeep Maheswaram (Temp) wrote:
-> Hi Pavan,
-> 
-> On 4/12/2022 10:30 AM, Pavan Kondeti wrote:
-> >Hi Sandeep,
-> >
-> >On Tue, Apr 12, 2022 at 10:16:39AM +0530, Sandeep Maheswaram (Temp) wrote:
-> >>Hi Matthias,
-> >>
-> >>On 4/12/2022 2:24 AM, Matthias Kaehlcke wrote:
-> >>>On Tue, Apr 12, 2022 at 12:46:50AM +0530, Sandeep Maheswaram wrote:
-> >>>>During suspend read the status of all port and set hs phy mode
-> >>>>based on current speed. Use this hs phy mode to configure wakeup
-> >>>>interrupts in qcom glue driver.
-> >>>>
-> >>>>Check wakep-source property for dwc3 core node to set the
-> >>>s/wakep/wakeup/
-> >>Okay. Will update in next version.
-> >>>>wakeup capability. Drop the device_init_wakeup call from
-> >>>>runtime suspend and resume.
-> >>>>
-> >>>>Also check during suspend if any wakeup capable devices are
-> >>>>connected to the controller (directly or through hubs), if there
-> >>>>are none set a flag to indicate that the PHY is powered
-> >>>>down during suspend.
-> >>>>
-> >>>>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> >>>>---
-> >>>A per-patch change log would be really helpful for reviewers, even
-> >>>if it doesn't include older versions.
-> >>Okay. Will update in next version.
-> >>>>  drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
-> >>>>  drivers/usb/dwc3/core.h |  4 ++++
-> >>>>  drivers/usb/dwc3/host.c | 25 +++++++++++++++++++++++++
-> >>>>  3 files changed, 49 insertions(+), 13 deletions(-)
-> >>>>
-> >>>>diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> >>>>index 1170b80..effaa43 100644
-> >>>>--- a/drivers/usb/dwc3/core.c
-> >>>>+++ b/drivers/usb/dwc3/core.c
-> >>>>@@ -32,6 +32,7 @@
-> >>>>  #include <linux/usb/gadget.h>
-> >>>>  #include <linux/usb/of.h>
-> >>>>  #include <linux/usb/otg.h>
-> >>>>+#include <linux/usb/hcd.h>
-> >>>>  #include "core.h"
-> >>>>  #include "gadget.h"
-> >>>>@@ -1723,6 +1724,7 @@ static int dwc3_probe(struct platform_device *pdev)
-> >>>>  	platform_set_drvdata(pdev, dwc);
-> >>>>  	dwc3_cache_hwparams(dwc);
-> >>>>+	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
-> >>>>  	spin_lock_init(&dwc->lock);
-> >>>>  	mutex_init(&dwc->mutex);
-> >>>>@@ -1865,6 +1867,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >>>>  {
-> >>>>  	unsigned long	flags;
-> >>>>  	u32 reg;
-> >>>>+	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
-> >>>>  	switch (dwc->current_dr_role) {
-> >>>>  	case DWC3_GCTL_PRTCAP_DEVICE:
-> >>>>@@ -1877,10 +1880,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >>>>  		dwc3_core_exit(dwc);
-> >>>>  		break;
-> >>>>  	case DWC3_GCTL_PRTCAP_HOST:
-> >>>>-		if (!PMSG_IS_AUTO(msg)) {
-> >>>>-			dwc3_core_exit(dwc);
-> >>>>-			break;
-> >>>>-		}
-> >>>>+		dwc3_check_phy_speed_mode(dwc);
-> >>>>  		/* Let controller to suspend HSPHY before PHY driver suspends */
-> >>>>  		if (dwc->dis_u2_susphy_quirk ||
-> >>>>@@ -1896,6 +1896,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >>>>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
-> >>>>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> >>>>+
-> >>>>+		if (!PMSG_IS_AUTO(msg)) {
-> >>>>+			if (device_may_wakeup(dwc->dev) &&
-> >>>>+			    usb_wakeup_enabled_descendants(hcd->self.root_hub)) {
-> >>>You did not answer my question on v12, reposting it:
-> >>>
-> >>>   Did you ever try whether you could use device_children_wakeup_capable() from
-> >>>   [1] instead of usb_wakeup_enabled_descendants()?
-> >>>
-> >>>   [1] https://patchwork.kernel.org/project/linux-usb/patch/1635753224-23975-2-git-send-email-quic_c_sanm@quicinc.com/#24566065
-> >>Sorry ..I have replied in mail yesterday but it is not showing up in
-> >>patchwork link.
-> >>
-> >>Tried with  device_children_wakeup_capable(dwc->dev) instead of
-> >>usb_wakeup_enabled_descendants and it always returns true even
-> >>
-> >>when no devices are connected.
-> >>
-> >What do you mean by when no devices are connected? There is always
-> >root hub connected and we should not power down the DWC3 here even
-> >when remote wakeup for root hub is enabled. Essentially
-> >usb_wakeup_enabled_descendants() returns true even without any
-> >physical devices connected.
-> >
-> >What does device_children_wakeup_capable() do? Sorry, I could not
-> >find this function definition.
-> >
-> >Thanks,
-> >Pavan
-> 
-> usb_wakeup_enabled_descendants() doesn't consider hubs. It only returns true if any devices
-> are connected with wakeup capability apart from hubs. If we consider hubs also dwc3 core exit
-> and phy exit will never be called.
-> 
+I am sending my greetings to you from the Sultanate of Oman, In the
+capital city of Muscat.
 
-copy/pasting the code here. you are passing roothub as udev. As you can see
-this function clearly takes the remote wakeup of root hub into account. Lets
-take a simple case, we have a roothub with one port. nothing attached. so
-we enter runtime suspend. Don't you want to keep PHY ON? otherwise, how can
-you detect if a keyboard/mouse attached directly to root hub? 
+May i use this medium to open a mutual communication with you, and
+seeking your acceptance towards investing in your country under your
+management as my partner, My name is Aisha Gaddafi and presently
+living in Oman, i am a Widow and single Mother with three Children,
+the only biological Daughter of late Libyan President (Late Colonel
+Muammar Gaddafi) and presently i am under political asylum protection
+by the Omani Government.
 
-In your configuration, is remote wakeup enabled for the roothub or not?
+I have funds worth =E2=80=9CTwenty Seven Million Five Hundred Thousand Unit=
+ed
+State Dollars=E2=80=9D -$27.500.000.00 US Dollars which i want to entrust o=
+n
+you for investment project in your country.If you are willing to
+handle this project on my behalf, kindly reply urgent to enable me
+provide you more details to start the transfer process.
 
-/* Count of wakeup-enabled devices at or below udev */
-unsigned usb_wakeup_enabled_descendants(struct usb_device *udev)
-{
-	struct usb_hub *hub = usb_hub_to_struct_hub(udev);
+I shall appreciate your urgent response
 
-	return udev->do_remote_wakeup +
-			(hub ? hub->wakeup_enabled_descendants : 0);
-}
-> device_children_wakeup_capable() implementation was shared by Matthias in below thread
-> https://patchwork.kernel.org/project/linux-usb/patch/1635753224-23975-2-git-send-email-quic_c_sanm@quicinc.com/#24566065
-> 
-> Probably device_children_wakeup_capable() is returning true because it considers hubs also.
-> 
+Thanks
 
-if you see choose_wakeup(), it derives the USB remote wakeup capability from
-the device_may_wakeup(), so the patch suggested might work. Note that we have
-to take wakeup capability of roothub into account even when there is no
-USB device attached.
-
-Thanks,
-Pavan
+Yours Truly Aisha
