@@ -2,45 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBB94FE3F7
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 16:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6434FE3F9
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 16:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356695AbiDLOjO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Apr 2022 10:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
+        id S245315AbiDLOk4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Apr 2022 10:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352025AbiDLOjN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 10:39:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427475F268;
-        Tue, 12 Apr 2022 07:36:55 -0700 (PDT)
+        with ESMTP id S232530AbiDLOky (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 10:40:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5C25F266;
+        Tue, 12 Apr 2022 07:38:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9313B81E80;
-        Tue, 12 Apr 2022 14:36:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52E28C385A9;
-        Tue, 12 Apr 2022 14:36:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A28660EC1;
+        Tue, 12 Apr 2022 14:38:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83018C385A1;
+        Tue, 12 Apr 2022 14:38:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649774212;
-        bh=pX2rBIpn2exoLft39iyMB6kQtWkSYw6SG76OGvUgMVY=;
+        s=korg; t=1649774316;
+        bh=lcIKnqX7ND/P1RbiqjkdmPWf/TRA+1K8M7N7NXSFRw0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c+2CJJZpvxDBYXwQwvOEelNmnxnaKDMOkKAxHmNdHHfMmztLIAXHuDVqaW1FRQnfI
-         Ph5N4bczHjIZlwRAP5crc3eHxNqRaRgjZf8DitB8TZ+kOf/b2hU/K3XQRH6uhXenSR
-         KBRVKOAcR0mJQbjSPHrhwTzRkzux4NUJEhEFNPnk=
-Date:   Tue, 12 Apr 2022 16:36:49 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Lin Ma <linma@zju.edu.cn>
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        mdharm-usb@one-eyed-alien.net, stable@vger.kernel.org
-Subject: Re: [PATCH v3] USB: storage: karma: fix rio_karma_init return
-Message-ID: <YlWOgaOFGjVg2P5F@kroah.com>
-References: <20220412021246.18340-1-linma@zju.edu.cn>
+        b=RsBwi3/WtJtFYWnmy7meXcP0++2CjGti6kYk2bXS0e2jXcizaYzuZMdxn7HFJVnA5
+         R61xgErVwVl+UZkbuvdB2yOsDVIoVF/bqu1chYHRJXE+mcGTCQ8id1bBvSy5HaRmbE
+         7aL1gzWpl57xnz0CFtzDr7ii88W+RFuLOXgtj99g=
+Date:   Tue, 12 Apr 2022 16:38:33 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Jameson Thies <jthies@google.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] usb: typec: Separate sysfs directory for all USB
+ PD objects
+Message-ID: <YlWO6UbZ8zM4f6b6@kroah.com>
+References: <20220412130023.83927-1-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220412021246.18340-1-linma@zju.edu.cn>
+In-Reply-To: <20220412130023.83927-1-heikki.krogerus@linux.intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -51,85 +56,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 10:12:46AM +0800, Lin Ma wrote:
-> The function rio_karam_init() should return -ENOMEM instead of
-> value 0 (USB_STOR_TRANSPORT_GOOD) when allocation fails.
+On Tue, Apr 12, 2022 at 04:00:20PM +0300, Heikki Krogerus wrote:
+> Hi,
 > 
-> Simlarlly, it should return -EIO when rio_karma_send_command() fails.
+> In this version the USB Power Delivery support is now completely
+> separated into its own little subsystem. The USB Power Delivery
+> objects are not devices, but they are also no longer tied to any
+> device by default. This change makes it possible to share the USB PD
+> objects between multiple devices on top of being able to select the
+> objects that we want the device to use.
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: dfe0d3ba20e8 ("USB Storage: add rio karma eject support")
-> Signed-off-by: Lin Ma <linma@zju.edu.cn>
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> ---
->  drivers/usb/storage/karma.c | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
+> The USB Power Delivery objects are now placed under
+> /sys/kernel/usb_power_delivery directory. As an example:
 > 
-> diff --git a/drivers/usb/storage/karma.c b/drivers/usb/storage/karma.c
-> index 05cec81dcd3f..38ddfedef629 100644
-> --- a/drivers/usb/storage/karma.c
-> +++ b/drivers/usb/storage/karma.c
-> @@ -174,24 +174,25 @@ static void rio_karma_destructor(void *extra)
->  
->  static int rio_karma_init(struct us_data *us)
->  {
-> -	int ret = 0;
->  	struct karma_data *data = kzalloc(sizeof(struct karma_data), GFP_NOIO);
->  
->  	if (!data)
-> -		goto out;
-> +		return -ENOMEM;
->  
->  	data->recv = kmalloc(RIO_RECV_LEN, GFP_NOIO);
->  	if (!data->recv) {
->  		kfree(data);
-> -		goto out;
-> +		return -ENOMEM;
->  	}
->  
->  	us->extra = data;
->  	us->extra_destructor = rio_karma_destructor;
-> -	ret = rio_karma_send_command(RIO_ENTER_STORAGE, us);
-> -	data->in_storage = (ret == 0);
-> -out:
-> -	return ret;
-> +	if (rio_karma_send_command(RIO_ENTER_STORAGE, us))
-> +		return -EIO;
-> +
-> +	data->in_storage = 1;
-> +
-> +	return 0;
->  }
->  
->  static struct scsi_host_template karma_host_template;
-> -- 
-> 2.35.1
+> 	/sys/kernel/usb_power_delivery/pd0
+
+No, sorry, this is a device, it does NOT belong in /sys/kernel/
+
+And this really should be a real device, as I mentioned before, not a
+kobject.
+
+> So now that pd0 can be linked to a device, or devices, that want (or
+> can) use it to negotiate the USB PD contract with. An example where
+> two devices share the PD:
 > 
+> 	/sys/class/typec/port0/usb_power_delivery -> ../../../../../../../kernel/usb_power_delivery/pd0
+> 	/sys/class/typec/port1/usb_power_delivery -> ../../../../../../../kernel/usb_power_delivery/pd0
 
-Hi,
+Point to the pd device, not the kobject.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+> I did not change the directory hierarchy at all, because I'm assuming
+> that it is not a problem anymore:
+> 
+> 	pd0/<message>/<object>/<field>
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+Let's get back to devices first, worry about crazy depth second.
 
 thanks,
 
-greg k-h's patch email bot
+greg k-h
