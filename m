@@ -2,236 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB59E4FE870
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 21:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A758E4FE915
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 21:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352352AbiDLTHv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Apr 2022 15:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
+        id S229822AbiDLTua (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Apr 2022 15:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359017AbiDLTHt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 15:07:49 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B4B37AAE
-        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 12:05:30 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so3922416pjn.3
-        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 12:05:30 -0700 (PDT)
+        with ESMTP id S235970AbiDLTti (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 15:49:38 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A365132B
+        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 12:45:26 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id x9so14277701ilc.3
+        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 12:45:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=hbZ2JvpVm4V1NyD3oXLkLoSzcUMh/DghNlMtHwYuWgc=;
-        b=VG5B71axV5BvnxL7YMW3ZsV1ox6/RJt6t0NDvJYaqQ0WweCjsw/UHzmPLgH2O66fOq
-         x2CiiSEwap+vAQkscai+ycUbO419wl4OJ++ulJuOGR/NI9BKGa9VxRKpxhw9c4eI9fMp
-         7ZumwSpchDiL27xeYtFROYvxv59wm62BEIk+A=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lI0DuedsQHcN01LBgrdT+YVmpU3arY8lVii4JFtG1w8=;
+        b=CF8ERvasaqRtr6QctYSXMMDaKLWFXxgaIDppF2alKAETk9w596Uva0AQKBrJIlcJYx
+         ATa/WwbDL2uvj5V3EqKt0BeoTtRouwsGiiQDHtyEulFW4hyc2YNwtRd9UPx0HKcs25rI
+         650ADfAr+YmuAC+/Oxm1yBBOihUAmsIDqlHzM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=hbZ2JvpVm4V1NyD3oXLkLoSzcUMh/DghNlMtHwYuWgc=;
-        b=WgFA4kkh5PgmphnowKF9IUP7qIlBDJ53pGkLIU8fDeu6VxhOwHPVFgTEKnWU43ktDh
-         TWC+MZsI2qRAGbaDrwhSrENmFPlnYwhQBvmBNIFZBCqbw0ZJvKih+QJAFeonjbpZVL78
-         DR+oDbnfyFHxgE214FGeji7kRdWiGUzLpDIMNqvU8ibLfGixAkpU1e3a9zBfFEI6t1Vv
-         IDwYG2tPfWyvS1enE+6zSOXbU0FSi91azUAetA0S5M6KK+obHDctOq+AQpABxEdMpSKW
-         qInfvlzLkf94EJkA23pYQKvi3LBXXzao3X0WT/Ff3+iE1gSY0HtKd35jnSYLr94zoLE0
-         UpbA==
-X-Gm-Message-State: AOAM5328OAQSDKY3P2WF7tbsmFuUR52Ep4G/+qkhtcSGlbf6YN2ETRVz
-        HT5XgnmozVHMpqT7KKeb/rsquQ==
-X-Google-Smtp-Source: ABdhPJz4PCizcuwzk/1XpOu3RqwYj8RkPLr5CQdo3ml5nHIuAx/hHfrJxCdiVEWg3ujcS7D4q8TaZA==
-X-Received: by 2002:a17:902:ce87:b0:156:5c6e:b6e4 with SMTP id f7-20020a170902ce8700b001565c6eb6e4mr38650268plg.12.1649790329681;
-        Tue, 12 Apr 2022 12:05:29 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:3a41:5079:6f1b:397c])
-        by smtp.gmail.com with UTF8SMTPSA id bh3-20020a056a02020300b00378b62df320sm3494308pgb.73.2022.04.12.12.05.28
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lI0DuedsQHcN01LBgrdT+YVmpU3arY8lVii4JFtG1w8=;
+        b=qYpzn5ERsHpCcSbLdjQzVbM8OGEruN1Ustj694K9s5Y5UZ2HuT2pgjHsyqJA0HTYJP
+         ixb8gstkMrIuMGP7ahrOhGgtAoiqS7g9MCHM9fO5KdodBgeVTaQS5G2V76ppqMbp8TsR
+         l7ZhdHUG0WCwTdOspc/UH/Iqm6HWN2tHYffiEbRNyK9le/FVkgJ8nuugpIKuw7unCHKI
+         w45N0Kal8eYVjCe6rx+caMOBjfRnCndvL6P1CoURzAyCRJ9xEs+Q1lAyX5d/SC7iGgpk
+         bYRgeuLLJfqdB59B8NQYMkZRa/UV1SM3ZxJziH/Xne3NuI3NmMOzwCZzTMlWqVWvJlwp
+         66ig==
+X-Gm-Message-State: AOAM53150xomuMSoaOvsDTnJIawq9lMuDLtpqPGpJPU/7WKMkC4FA3zS
+        Nw6PlQIpT2ntR26AdMROQCxqNWszHAOJYA==
+X-Google-Smtp-Source: ABdhPJz9q8FJRllKE/YAIqAju4CLS0OQAjaDRjLIV4vWlDjFldVOfkz/UDXdZhMC6DC979EmqriS9A==
+X-Received: by 2002:a05:6e02:1905:b0:2c9:e728:46f3 with SMTP id w5-20020a056e02190500b002c9e72846f3mr18135225ilu.213.1649792725429;
+        Tue, 12 Apr 2022 12:45:25 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id b1-20020a92a041000000b002c8214b2f65sm20828291ilm.61.2022.04.12.12.45.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 12:05:29 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 12:05:27 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>
-Cc:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Tue, 12 Apr 2022 12:45:24 -0700 (PDT)
+Subject: Re: [PATCH] usb: usbip: add missing device lock on tweak
+ configuration cmd
+To:     Niels Dossche <dossche.niels@gmail.com>, linux-usb@vger.kernel.org
+Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_ppratap@quicinc.com, quic_kriskura@quicinc.com,
-        quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v13 2/6] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <YlXNd5YkAMW7cbYG@google.com>
-References: <1649704614-31518-1-git-send-email-quic_c_sanm@quicinc.com>
- <1649704614-31518-3-git-send-email-quic_c_sanm@quicinc.com>
- <YlSVec5+SpdMZWCz@google.com>
- <36d22ad7-7f11-2f63-cd68-5d564476161e@quicinc.com>
- <20220412050018.GB2627@hu-pkondeti-hyd.qualcomm.com>
- <259c9e87-a52e-c063-7901-2c6decd42675@quicinc.com>
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220412165055.257113-1-dossche.niels@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <4cd1d9ab-de37-f596-e0c2-f4042d22eb94@linuxfoundation.org>
+Date:   Tue, 12 Apr 2022 13:45:23 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <259c9e87-a52e-c063-7901-2c6decd42675@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220412165055.257113-1-dossche.niels@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 12:08:02PM +0530, Sandeep Maheswaram (Temp) wrote:
-> Hi Pavan,
+On 4/12/22 10:50 AM, Niels Dossche wrote:
+> The function documentation of usb_set_configuration says that its
+> callers should hold the device lock. This lock is held for all
+> callsites except tweak_set_configuration_cmd. The code path can be
+> executed for example when attaching a remote USB device.
+> The solution is to surround the call by the device lock.
 > 
-> On 4/12/2022 10:30 AM, Pavan Kondeti wrote:
-> > Hi Sandeep,
-> > 
-> > On Tue, Apr 12, 2022 at 10:16:39AM +0530, Sandeep Maheswaram (Temp) wrote:
-> > > Hi Matthias,
-> > > 
-> > > On 4/12/2022 2:24 AM, Matthias Kaehlcke wrote:
-> > > > On Tue, Apr 12, 2022 at 12:46:50AM +0530, Sandeep Maheswaram wrote:
-> > > > > During suspend read the status of all port and set hs phy mode
-> > > > > based on current speed. Use this hs phy mode to configure wakeup
-> > > > > interrupts in qcom glue driver.
-> > > > > 
-> > > > > Check wakep-source property for dwc3 core node to set the
-> > > > s/wakep/wakeup/
-> > > Okay. Will update in next version.
-> > > > > wakeup capability. Drop the device_init_wakeup call from
-> > > > > runtime suspend and resume.
-> > > > > 
-> > > > > Also check during suspend if any wakeup capable devices are
-> > > > > connected to the controller (directly or through hubs), if there
-> > > > > are none set a flag to indicate that the PHY is powered
-> > > > > down during suspend.
-> > > > > 
-> > > > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > > > > ---
-> > > > A per-patch change log would be really helpful for reviewers, even
-> > > > if it doesn't include older versions.
-> > > Okay. Will update in next version.
-> > > > >   drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
-> > > > >   drivers/usb/dwc3/core.h |  4 ++++
-> > > > >   drivers/usb/dwc3/host.c | 25 +++++++++++++++++++++++++
-> > > > >   3 files changed, 49 insertions(+), 13 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > > > index 1170b80..effaa43 100644
-> > > > > --- a/drivers/usb/dwc3/core.c
-> > > > > +++ b/drivers/usb/dwc3/core.c
-> > > > > @@ -32,6 +32,7 @@
-> > > > >   #include <linux/usb/gadget.h>
-> > > > >   #include <linux/usb/of.h>
-> > > > >   #include <linux/usb/otg.h>
-> > > > > +#include <linux/usb/hcd.h>
-> > > > >   #include "core.h"
-> > > > >   #include "gadget.h"
-> > > > > @@ -1723,6 +1724,7 @@ static int dwc3_probe(struct platform_device *pdev)
-> > > > >   	platform_set_drvdata(pdev, dwc);
-> > > > >   	dwc3_cache_hwparams(dwc);
-> > > > > +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
-> > > > >   	spin_lock_init(&dwc->lock);
-> > > > >   	mutex_init(&dwc->mutex);
-> > > > > @@ -1865,6 +1867,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > > >   {
-> > > > >   	unsigned long	flags;
-> > > > >   	u32 reg;
-> > > > > +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
-> > > > >   	switch (dwc->current_dr_role) {
-> > > > >   	case DWC3_GCTL_PRTCAP_DEVICE:
-> > > > > @@ -1877,10 +1880,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > > >   		dwc3_core_exit(dwc);
-> > > > >   		break;
-> > > > >   	case DWC3_GCTL_PRTCAP_HOST:
-> > > > > -		if (!PMSG_IS_AUTO(msg)) {
-> > > > > -			dwc3_core_exit(dwc);
-> > > > > -			break;
-> > > > > -		}
-> > > > > +		dwc3_check_phy_speed_mode(dwc);
-> > > > >   		/* Let controller to suspend HSPHY before PHY driver suspends */
-> > > > >   		if (dwc->dis_u2_susphy_quirk ||
-> > > > > @@ -1896,6 +1896,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > > >   		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
-> > > > >   		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> > > > > +
-> > > > > +		if (!PMSG_IS_AUTO(msg)) {
-> > > > > +			if (device_may_wakeup(dwc->dev) &&
-> > > > > +			    usb_wakeup_enabled_descendants(hcd->self.root_hub)) {
-> > > > You did not answer my question on v12, reposting it:
-> > > > 
-> > > >    Did you ever try whether you could use device_children_wakeup_capable() from
-> > > >    [1] instead of usb_wakeup_enabled_descendants()?
-> > > > 
-> > > >    [1] https://patchwork.kernel.org/project/linux-usb/patch/1635753224-23975-2-git-send-email-quic_c_sanm@quicinc.com/#24566065
-> > > Sorry ..I have replied in mail yesterday but it is not showing up in
-> > > patchwork link.
-> > > 
-> > > Tried with  device_children_wakeup_capable(dwc->dev) instead of
-> > > usb_wakeup_enabled_descendants and it always returns true even
-> > > 
-> > > when no devices are connected.
-> > > 
-> > What do you mean by when no devices are connected? There is always
-> > root hub connected and we should not power down the DWC3 here even
-> > when remote wakeup for root hub is enabled. Essentially
-> > usb_wakeup_enabled_descendants() returns true even without any
-> > physical devices connected.
-> > 
-> > What does device_children_wakeup_capable() do? Sorry, I could not
-> > find this function definition.
-> > 
-> > Thanks,
-> > Pavan
+> This bug was found using my experimental own-developed static analysis
+> tool, which reported the missing lock on v5.17.2. I manually verified
+> this bug report by doing code review as well. I runtime checked that
+> the required lock is not held. I compiled and runtime tested this on
+> x86_64 with a USB mouse. After applying this patch, my analyser no
+> longer reports this potential bug.
 > 
-> usb_wakeup_enabled_descendants() doesn't consider hubs. It only returns true if any devices
-> are connected with wakeup capability apart from hubs.
 
-Actually it considers hubs:
+How did you run-time check that the lock isn't held? Also x86_64 with a
+USB mouse - did you test it over loopback?
 
-unsigned usb_wakeup_enabled_descendants(struct usb_device *udev)
-{
-	struct usb_hub *hub = usb_hub_to_struct_hub(udev);
-
-	return udev->do_remote_wakeup +
-		(hub ? hub->wakeup_enabled_descendants : 0);
-}
-
-'udev' may or may not be a hub, if 'do_remote_wakeup' is set then the
-device is considered a wakeup enabled descendant.
-
-And for system suspebd 'do_remote_wakeup' is set based on the wakeup
-config of the device:
-
-static void choose_wakeup(struct usb_device *udev, pm_message_t msg)
-{
-	...
-	w = device_may_wakeup(&udev->dev);
-	...
-	udev->do_remote_wakeup = w;
-}
-
-I checked on three systems with different Linux distributions, on all of
-the wakeup flag of a connected hub is 'disabled'. Wakeup still works, so
-apparently that flag doesn't really have an impact for child ports.
-
-> If we consider hubs also dwc3 core exit and phy exit will never be called.
+> Fixes: 2c8c98158946 ("staging: usbip: let client choose device configuration")
+> Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+> ---
 > 
-> device_children_wakeup_capable() implementation was shared by Matthias in below thread
-> https://patchwork.kernel.org/project/linux-usb/patch/1635753224-23975-2-git-send-email-quic_c_sanm@quicinc.com/#24566065
+> I'm developing this tool as part of my master's dissertation in order to
+> obtain my master's degree. If you'd like more information about the
+> details of the tool, please let me know.
 > 
-> Probably device_children_wakeup_capable() is returning true because it considers hubs also.
+>   drivers/usb/usbip/stub_rx.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
+> index 325c22008e53..5dd41e8215e0 100644
+> --- a/drivers/usb/usbip/stub_rx.c
+> +++ b/drivers/usb/usbip/stub_rx.c
+> @@ -138,7 +138,9 @@ static int tweak_set_configuration_cmd(struct urb *urb)
+>   	req = (struct usb_ctrlrequest *) urb->setup_packet;
+>   	config = le16_to_cpu(req->wValue);
+>   
+> +	usb_lock_device(sdev->udev);
+>   	err = usb_set_configuration(sdev->udev, config);
+> +	usb_unlock_device(sdev->udev);
+>   	if (err && err != -ENODEV)
+>   		dev_err(&sdev->udev->dev, "can't set config #%d, error %d\n",
+>   			config, err);
+> 
 
-I thought I did a basic test when I sent the patch, I did another (?) one
-with v13 of your patch set. In this tests with a hub connected the
-function returns true when an HID device is connected, and false when
-nothing is connected. The wakeup flag of the hub is disabled (default).
+Looks good to me with the above questions answered.
 
-Sandeep, are the wakeup flags of the child hub(s) set to 'enabled' on
-the system you tested on?
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+
+Greg, please pick this patch up.
+
+thanks,
+-- Shuah
