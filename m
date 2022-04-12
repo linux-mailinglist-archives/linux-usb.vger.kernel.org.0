@@ -2,54 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384314FCB7D
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 03:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC4C4FC9C8
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 02:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344531AbiDLBF2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Apr 2022 21:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
+        id S243165AbiDLAsY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Apr 2022 20:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351244AbiDLBBO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 21:01:14 -0400
-X-Greylist: delayed 1084 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Apr 2022 17:56:53 PDT
-Received: from ns3.fnarfbargle.com (ns3.fnarfbargle.com [103.4.19.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE49425E8A
-        for <linux-usb@vger.kernel.org>; Mon, 11 Apr 2022 17:56:53 -0700 (PDT)
-Received: from [10.8.0.1] (helo=srv.home)
-        by ns3.fnarfbargle.com with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lists2009@fnarfbargle.com>)
-        id 1ne4YE-0002Dz-Go; Tue, 12 Apr 2022 10:38:34 +1000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=fnarfbargle.com; s=mail; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=75zc1CLHBd74vMtirgEpPu7dForNVXaMUs389xOB3TU=; b=D+eIObny/lMzhDF42M+zs+Qa3r
-        +1gZYN6y7UHoongUgNeKrGgnvtl6mXherfXjbdQz6Lgmfyt8ZTf4sB94SlXQVwSz/6vFLvfZhq6JC
-        uOP03bxUPp2Z8P/x1FissDQiw6XiaS4qJCKiM0SLcSiXWr1i0X7yLOzAOH8DV1ioiT/s=;
-Message-ID: <aec54314-6e6a-e295-610e-bbcae98eb709@fnarfbargle.com>
-Date:   Tue, 12 Apr 2022 08:38:29 +0800
+        with ESMTP id S242887AbiDLAsG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 20:48:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9860B2ED5C;
+        Mon, 11 Apr 2022 17:45:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21B5B617F3;
+        Tue, 12 Apr 2022 00:45:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 686A2C385AD;
+        Tue, 12 Apr 2022 00:45:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649724349;
+        bh=Bcm/L4B9jJWb+jV5TvnT5U/PTAjme2W/RGdOOBuZDt8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QZOkFu1e6B7vGBK+a0X7vUxMUGLheKeypelhJb+TyGu3TytzMeDB9B8wqBazeZnMJ
+         cvurx3zLXW+AuTvd0q89yT+MEswJbtvg033W/GvQ44AhgBOwLnvtLSv4NlQCn/GUbi
+         WhZCuPFj6pBZ6pclhKJiUlS2JFbHUgMwLHxV//fG1YEm+aO7Syiwz3P0lgezHo9LUd
+         W1aUXbDqZrynzH3LZRLv8DgKFTcmeuOc+e3kvEGbXxIc0tMiRuWok0YupC9wKAEsKN
+         Jg2JY8rBKyOORcV7waPaF20BcrdwrCPYKXPGtTdDVsDPOWHtqg4uBvLk9n7q8F+ZA6
+         UMeWKD1L0BL+Q==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Marcin Kozlowski <marcinguy@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, kuba@kernel.org,
+        pabeni@redhat.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 32/49] net: usb: aqc111: Fix out-of-bounds accesses in RX fixup
+Date:   Mon, 11 Apr 2022 20:43:50 -0400
+Message-Id: <20220412004411.349427-32-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220412004411.349427-1-sashal@kernel.org>
+References: <20220412004411.349427-1-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 1/4] thunderbolt: Fix typo in comment
-Content-Language: en-US
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>
-References: <20220411130049.53656-1-mika.westerberg@linux.intel.com>
-From:   Brad Campbell <lists2009@fnarfbargle.com>
-In-Reply-To: <20220411130049.53656-1-mika.westerberg@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,33 +58,54 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/4/22 21:00, Mika Westerberg wrote:
-> Should be 'in' instead of 'bin'. Fix it.
-> 
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> ---
->  drivers/thunderbolt/nhi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-> index 4a582183f675..6221ca4ea287 100644
-> --- a/drivers/thunderbolt/nhi.c
-> +++ b/drivers/thunderbolt/nhi.c
-> @@ -1207,7 +1207,7 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  
->  	nhi->pdev = pdev;
->  	nhi->ops = (const struct tb_nhi_ops *)id->driver_data;
-> -	/* cannot fail - table is allocated bin pcim_iomap_regions */
-> +	/* cannot fail - table is allocated in pcim_iomap_regions */
->  	nhi->iobase = pcim_iomap_table(pdev)[0];
->  	nhi->hop_count = ioread32(nhi->iobase + REG_HOP_COUNT) & 0x3ff;
->  	dev_dbg(&pdev->dev, "total paths: %d\n", nhi->hop_count);
+From: Marcin Kozlowski <marcinguy@gmail.com>
 
-You can add 
+[ Upstream commit afb8e246527536848b9b4025b40e613edf776a9d ]
 
-Tested-by: Brad Campbell <lists2009@fnarfbargle.com> 
+aqc111_rx_fixup() contains several out-of-bounds accesses that can be
+triggered by a malicious (or defective) USB device, in particular:
 
-to the whole series.
+ - The metadata array (desc_offset..desc_offset+2*pkt_count) can be out of bounds,
+   causing OOB reads and (on big-endian systems) OOB endianness flips.
+ - A packet can overlap the metadata array, causing a later OOB
+   endianness flip to corrupt data used by a cloned SKB that has already
+   been handed off into the network stack.
+ - A packet SKB can be constructed whose tail is far beyond its end,
+   causing out-of-bounds heap data to be considered part of the SKB's
+   data.
 
-Regards,
-Brad
+Found doing variant analysis. Tested it with another driver (ax88179_178a), since
+I don't have a aqc111 device to test it, but the code looks very similar.
+
+Signed-off-by: Marcin Kozlowski <marcinguy@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/aqc111.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
+index ea06d10e1c21..ca409d450a29 100644
+--- a/drivers/net/usb/aqc111.c
++++ b/drivers/net/usb/aqc111.c
+@@ -1102,10 +1102,15 @@ static int aqc111_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 	if (start_of_descs != desc_offset)
+ 		goto err;
+ 
+-	/* self check desc_offset from header*/
+-	if (desc_offset >= skb_len)
++	/* self check desc_offset from header and make sure that the
++	 * bounds of the metadata array are inside the SKB
++	 */
++	if (pkt_count * 2 + desc_offset >= skb_len)
+ 		goto err;
+ 
++	/* Packets must not overlap the metadata array */
++	skb_trim(skb, desc_offset);
++
+ 	if (pkt_count == 0)
+ 		goto err;
+ 
+-- 
+2.35.1
+
