@@ -2,110 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD1E4FCB78
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 03:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4362D4FCBDF
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 03:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343838AbiDLBFT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Apr 2022 21:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
+        id S232828AbiDLB2o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Apr 2022 21:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345256AbiDLA6b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 20:58:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A2A2FE76;
-        Mon, 11 Apr 2022 17:51:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B2C4B815C8;
-        Tue, 12 Apr 2022 00:51:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE46AC385A4;
-        Tue, 12 Apr 2022 00:51:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649724685;
-        bh=Wlepa6YIr2hY5FeD4yQs2YIwB5qn8KB5kc30quQBXrE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sp29ux/f+ByKrw1tqDZig35b/jNAf7dvxrjR0vgnNbRRvi6Jzov75lNCyGz+AoS0y
-         RehVpAV8dtxLFIcnOQVtufvZ4W5MCV9kYsIjfTSwsuLquYPIXYhFYQNrbsA7l2e3r9
-         9e9RaZDsMypH+IB5cfxxFKLvOrIMpLe18Yl8bLfqQdbLKUW+LsQALm0Eig2U/kBr3x
-         u5DJWrW7d+Xcivsk8kKsvDP/CmKEuueGd7v6Rmm4Md6vEsS2E4MV8wC/HvnS8kRDig
-         +k0Xs1bQ6mVKDzaygkW8qUgMZ1D7ENll/GLIJv5RQdGM2WGin+vJmz2PYMHVDkc8KN
-         lzjd4bGmBrSIw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Marcin Kozlowski <marcinguy@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, kuba@kernel.org,
-        pabeni@redhat.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 15/21] net: usb: aqc111: Fix out-of-bounds accesses in RX fixup
-Date:   Mon, 11 Apr 2022 20:50:34 -0400
-Message-Id: <20220412005042.351105-15-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412005042.351105-1-sashal@kernel.org>
-References: <20220412005042.351105-1-sashal@kernel.org>
+        with ESMTP id S230259AbiDLB2n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 21:28:43 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DF21A838;
+        Mon, 11 Apr 2022 18:26:28 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id j8so15372092pll.11;
+        Mon, 11 Apr 2022 18:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VxXbudBApxhZGcBQ0qzcnlkDnqM7YeuExCtSNL/Eqvw=;
+        b=gPhy/sTiFvw/el2eqjcLE3TmNLvKNHw98liUoLS8thb8poOFSm9QDgb6iOhhapdJzg
+         mg9Pf39+pqsq6GDIdkohKFMvHKXqtprbKumJnV3K8haL06rSMJcsOBeIV2hk8EnkFVMn
+         3PyRytXFHGJZyLNYWk4sUtKxlQiTZcwygYcoQmMwaeukeTocT7K67IZNXs4PmDVcWzBn
+         /kk8ZVM32CNsJffpyVClMspjMBE/yhh3W4h6kpYMQShY4pwVjV6SmYpqazYU+3a1SwOr
+         f9jX84jqYaVdRnxNCUMzV8icUYaZHKpVnCHGTS10ToIx71Ne93GZ15kqdGkiry/aDmHQ
+         6cSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VxXbudBApxhZGcBQ0qzcnlkDnqM7YeuExCtSNL/Eqvw=;
+        b=UxklTdzcfN0AU9kFu+7twsV+sd7Hq8PAE/9vFb2JzIxfyKiGl/km6wgTeRZDJNEcHd
+         WSpQ8CWO5pPhzc7tg+eYd3iJOTsVgSbv6mTp8XWpf/+a+5V/DJzHBFdr6d/xMjH4hhvP
+         pRd+S0v3QlHqf+ntmRujE7vb69C4pyIVIx7wFMTT2nqN/rR5xK3kqS+41avON7TM9GDx
+         +eh9+WetT0VCknMe0tR32cWKkT7U+7+LLIGTzucFmqRzViqxRMpdiWWPuAKZ3zZ9bJbX
+         ixrjW7MOJwl9oaAmEX32J8lmOmDLEyevqYbVRJ1VZxbka0kczpdwe4Gq5Qr6BtlPYxOk
+         cXFQ==
+X-Gm-Message-State: AOAM5303za7nUxwmx10IiU+RZLymTQuaa2khtrknWbOApL1Rfcuvteq5
+        JF/lCZOlOSUSqxB5VyKaH04=
+X-Google-Smtp-Source: ABdhPJwhEMQKP7S6/uyBvYw37FlDMIqUEsk1tQugjoKXwy2sj+PiM58nGoeWK2Ox8uN97L91Q0uBuA==
+X-Received: by 2002:a17:902:a9c2:b0:156:1859:2d05 with SMTP id b2-20020a170902a9c200b0015618592d05mr35878669plr.86.1649726787534;
+        Mon, 11 Apr 2022 18:26:27 -0700 (PDT)
+Received: from [10.11.37.162] ([103.84.139.53])
+        by smtp.gmail.com with ESMTPSA id d16-20020a17090ad99000b001bcbc4247a0sm665768pjv.57.2022.04.11.18.26.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 18:26:27 -0700 (PDT)
+Message-ID: <992417be-97f1-09bd-f847-b279460d595b@gmail.com>
+Date:   Tue, 12 Apr 2022 09:26:21 +0800
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] usb: usbip: fix a refcount leak in stub_probe()
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        valentina.manea.m@gmail.com, shuah@kernel.org,
+        gregkh@linuxfoundation.org, khoroshilov@ispras.ru
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220407022204.10730-1-hbh25y@gmail.com>
+ <7c584e2d-1c23-3df9-7e4e-c4d9a9014224@linuxfoundation.org>
+ <d40cb8cf-a92d-3f87-3af1-0422f8d8264f@gmail.com>
+ <91089407-cc21-ba05-5346-4f546cca7555@linuxfoundation.org>
+ <55d22e24-09ad-20b8-e1de-8d7c2f8ab1a8@gmail.com>
+ <16876455-ed60-65c6-1375-ac88e4209cb2@linuxfoundation.org>
+From:   Hangyu Hua <hbh25y@gmail.com>
+In-Reply-To: <16876455-ed60-65c6-1375-ac88e4209cb2@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Marcin Kozlowski <marcinguy@gmail.com>
+On 2022/4/12 03:38, Shuah Khan wrote:
+> On 4/10/22 11:29 PM, Hangyu Hua wrote:
+>> On 2022/4/8 23:04, Shuah Khan wrote:
+>>> On 4/7/22 7:59 PM, Hangyu Hua wrote:
+>>>> Hi Shuah,
+>>>>
+>>>> I find this by code review. Do i really need to add this to commit 
+>>>> log? This look like a little weird.
+>>>>
+>>>
+>>> Great. Good find.
+>>>
+>>> It is important to understand how the problem is found. Please add it
+>>> the change log. We usually expect dmesg or such info. that revealed
+>>> refcount leak, since this one is found during code review, we would
+>>> like to see that information the commit log.
+>>>
+>>> Also please remember to avoid top posting.
+>>
+>> I get what you meant now. But i don't know how to get a clear dmesg or 
+>> any other log. The kernel will not crash because of this. I just used 
+>> gdb to find that udev->dev->kobj->kref gets bigger and bigger whenever 
+>> I call stub_probe with busid_priv->status = STUB_BUSID_REMOV.
+>>
+>> Thanks for telling me the rules.
+>>
+> 
+> There is no need to gather dmesg etc. Just add a note that you found
+> the problem during code review. Having complete information about why
+> a change is made will be helpful for future changes to this code and
+> somebody new trying understand the changes made to this file/routine
+> and why.
+> 
+> thanks,
+> -- Shuah
 
-[ Upstream commit afb8e246527536848b9b4025b40e613edf776a9d ]
+I get it. I will submit a v3.
 
-aqc111_rx_fixup() contains several out-of-bounds accesses that can be
-triggered by a malicious (or defective) USB device, in particular:
-
- - The metadata array (desc_offset..desc_offset+2*pkt_count) can be out of bounds,
-   causing OOB reads and (on big-endian systems) OOB endianness flips.
- - A packet can overlap the metadata array, causing a later OOB
-   endianness flip to corrupt data used by a cloned SKB that has already
-   been handed off into the network stack.
- - A packet SKB can be constructed whose tail is far beyond its end,
-   causing out-of-bounds heap data to be considered part of the SKB's
-   data.
-
-Found doing variant analysis. Tested it with another driver (ax88179_178a), since
-I don't have a aqc111 device to test it, but the code looks very similar.
-
-Signed-off-by: Marcin Kozlowski <marcinguy@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/aqc111.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
-index 7e44110746dd..68912e266826 100644
---- a/drivers/net/usb/aqc111.c
-+++ b/drivers/net/usb/aqc111.c
-@@ -1102,10 +1102,15 @@ static int aqc111_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
- 	if (start_of_descs != desc_offset)
- 		goto err;
- 
--	/* self check desc_offset from header*/
--	if (desc_offset >= skb_len)
-+	/* self check desc_offset from header and make sure that the
-+	 * bounds of the metadata array are inside the SKB
-+	 */
-+	if (pkt_count * 2 + desc_offset >= skb_len)
- 		goto err;
- 
-+	/* Packets must not overlap the metadata array */
-+	skb_trim(skb, desc_offset);
-+
- 	if (pkt_count == 0)
- 		goto err;
- 
--- 
-2.35.1
-
+Thanks.
