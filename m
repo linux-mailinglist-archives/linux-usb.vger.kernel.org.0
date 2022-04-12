@@ -2,72 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74ABF4FE94F
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 22:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCFE4FE95E
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 22:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbiDLUIZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Apr 2022 16:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
+        id S232198AbiDLUNB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Apr 2022 16:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235969AbiDLUHp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 16:07:45 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED9F60E0
-        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 13:01:43 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id k23so39448407ejd.3
-        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 13:01:43 -0700 (PDT)
+        with ESMTP id S236914AbiDLUMv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 16:12:51 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519836E8FA
+        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 13:10:32 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id r11so14345928ila.1
+        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 13:10:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dzAtYmmpNLd7sqaUOk8FqxBqdyPrtSZmspQRHKyTfwY=;
-        b=QSCwXXaUViMYRzkhS2zhtuojrB5L2+5fQ+w51cqx13N/YHJawodwu1fm5sv8SPd7Yl
-         1S7j9nQ+GAZARRFIjmtsTPOPK1HCDsmYGbKYnHfHtvVxuW0g0EzEDEFFg8kfUOKon25B
-         BU01BaUSGKjWLRSRfNF38p/ZX0WDY+e1bj3rhs8M09UC6ri81UI3YqvBGDJFNXRBSF4/
-         0ud62vFj6c8Da6UQhBfeolwOgu2BP45OJhiooL5ArQE1pGWhvWK/RGhWt4svD8ZSefzx
-         0+Q2CiPQK8VvYjkNWK+X0R+L1pNB8NyzGgB8n1H7ovEanvVNauqc5z1t5HJvRc81DCvJ
-         moWQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7Fx5eSr213KwpvepDfvdU7WttF9JpZIPuAQa3PQibJo=;
+        b=bkxSxqgmCDKI5kxj2ytfRamj2aNEb/cjtymMDZPg+x3YuFj3K7AHSx2RkKNq1jCqTB
+         caDXvSWrIs93+pwKQdrHlyPfqptpcBoajk996Yz+N9RwOZtB9gyOpwtY1uJj3pDph2A4
+         XGRikuDrlL0GDY03KqAvw2ERCIfQd0sXm4vTY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=dzAtYmmpNLd7sqaUOk8FqxBqdyPrtSZmspQRHKyTfwY=;
-        b=mAK4C4P5ZvTy65ert20rAS6jRUnOoL8GiVWng3M+X60c1LRhWHmm/PaCzQUYK8VkUK
-         pwinlB7J7E2zXYNyuV5vO1aNikil/l4ezzKCPAAwz7FVRXBr47/FB6CU4WX/4DQ8B+Na
-         dJuzkFK/lLNBboiEQq9mmTv1LiuX+ZjcJqLH6GLwHzf6rqMG90zAcOl71Epz53AWPtFW
-         qBz6TuBcX/5mmG+Dexsit6N7xXNsVE9oPCXqhxyQA2XbJmaKgwZvCTg3+n+2DqsHmavi
-         YijdYrZh9DX+GmnU6uQq9nsIDHBmNAZs/cp47MSK/85Tfzi/+1KTMhQ6jZbgHDA/7JR4
-         n4ew==
-X-Gm-Message-State: AOAM532fIzfX4AcivQs0VX6YCfZjXz3pimlzI1v74g0IXX07f79c9Hw5
-        GOL7v9Bf1XtDwxgZFQfVQ2zkeWwmsks=
-X-Google-Smtp-Source: ABdhPJx/mMTloCm4HbrcHUb0L1jJemg++NqW+29AXyw9f2+RG8yALXl+K3C76Pw/1B4Y7ncnGmFeNA==
-X-Received: by 2002:a17:907:7e95:b0:6e8:968c:8ecd with SMTP id qb21-20020a1709077e9500b006e8968c8ecdmr9897410ejc.187.1649793701381;
-        Tue, 12 Apr 2022 13:01:41 -0700 (PDT)
-Received: from [192.168.0.59] (178-117-137-225.access.telenet.be. [178.117.137.225])
-        by smtp.gmail.com with ESMTPSA id k14-20020a50e18e000000b0041b6f23f7f6sm204749edl.22.2022.04.12.13.01.40
+        bh=7Fx5eSr213KwpvepDfvdU7WttF9JpZIPuAQa3PQibJo=;
+        b=spT2y70mZuHh7MQtiBJwue4475rN51Wq5OHNEpcC+4tzf25iIrcjNHyHi/liG34xxv
+         mfwc7h0EUIni++FakAGVmDkEAwTdb7RqS86gmbxUXYeGHb/eFDdJylU7aGfQpL1zqjko
+         eEd2FOU8cJhQVtRpxd1+GPU6CIA+bWohEGYilLIn+sdq/uLv4e82mj5z5UivG6NOMa2g
+         meL59f+ddMgd92ua6cyoYF98afakKq1Vb65NXDkz3pccKMw/m4mo5Qav3diE12/ExYBJ
+         C9Ly8dAG06iHaS9n28VLqjyIZlh9e8ZTBEkJIOE01OfaD/0MabiCMjTlO9c/ityG/XwU
+         khjA==
+X-Gm-Message-State: AOAM532bnnVnZRJ0Z78DlAKnE98ogFPPRACsroRLtTQII1hYIEZWg3U3
+        iMCRRKy6eQX5IhHiQQBHqLdn6Q==
+X-Google-Smtp-Source: ABdhPJy8JLLx0X+vL+iT3wSf2Wvie2g/laJ0h4T8IKqe6a1xRukC7YUe+cDEr6hIkrfek/45UBVepg==
+X-Received: by 2002:a05:6e02:1b0f:b0:2c7:9a3f:6e84 with SMTP id i15-20020a056e021b0f00b002c79a3f6e84mr15837970ilv.32.1649794042016;
+        Tue, 12 Apr 2022 13:07:22 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id o15-20020a6bcf0f000000b00649c4056879sm22168958ioa.50.2022.04.12.13.07.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 13:01:41 -0700 (PDT)
-Message-ID: <0fccca9a-c11b-fc26-0d01-606c2fa60dc9@gmail.com>
-Date:   Tue, 12 Apr 2022 22:01:39 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
+        Tue, 12 Apr 2022 13:07:21 -0700 (PDT)
 Subject: Re: [PATCH] usb: usbip: add missing device lock on tweak
  configuration cmd
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>, linux-usb@vger.kernel.org
+To:     Niels Dossche <dossche.niels@gmail.com>, linux-usb@vger.kernel.org
 Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
         Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 References: <20220412165055.257113-1-dossche.niels@gmail.com>
  <4cd1d9ab-de37-f596-e0c2-f4042d22eb94@linuxfoundation.org>
-From:   Niels Dossche <dossche.niels@gmail.com>
-In-Reply-To: <4cd1d9ab-de37-f596-e0c2-f4042d22eb94@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+ <0fccca9a-c11b-fc26-0d01-606c2fa60dc9@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <24cca71b-cce7-74ea-7a64-975baa2f1be9@linuxfoundation.org>
+Date:   Tue, 12 Apr 2022 14:07:20 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <0fccca9a-c11b-fc26-0d01-606c2fa60dc9@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,66 +75,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/12/22 21:45, Shuah Khan wrote:
-> On 4/12/22 10:50 AM, Niels Dossche wrote:
->> The function documentation of usb_set_configuration says that its
->> callers should hold the device lock. This lock is held for all
->> callsites except tweak_set_configuration_cmd. The code path can be
->> executed for example when attaching a remote USB device.
->> The solution is to surround the call by the device lock.
+On 4/12/22 2:01 PM, Niels Dossche wrote:
+> On 4/12/22 21:45, Shuah Khan wrote:
+>> On 4/12/22 10:50 AM, Niels Dossche wrote:
+>>> The function documentation of usb_set_configuration says that its
+>>> callers should hold the device lock. This lock is held for all
+>>> callsites except tweak_set_configuration_cmd. The code path can be
+>>> executed for example when attaching a remote USB device.
+>>> The solution is to surround the call by the device lock.
+>>>
+>>> This bug was found using my experimental own-developed static analysis
+>>> tool, which reported the missing lock on v5.17.2. I manually verified
+>>> this bug report by doing code review as well. I runtime checked that
+>>> the required lock is not held. I compiled and runtime tested this on
+>>> x86_64 with a USB mouse. After applying this patch, my analyser no
+>>> longer reports this potential bug.
+>>>
 >>
->> This bug was found using my experimental own-developed static analysis
->> tool, which reported the missing lock on v5.17.2. I manually verified
->> this bug report by doing code review as well. I runtime checked that
->> the required lock is not held. I compiled and runtime tested this on
->> x86_64 with a USB mouse. After applying this patch, my analyser no
->> longer reports this potential bug.
->>
+>> How did you run-time check that the lock isn't held? Also x86_64 with a
+>> USB mouse - did you test it over loopback?
 > 
-> How did you run-time check that the lock isn't held? Also x86_64 with a
-> USB mouse - did you test it over loopback?
+> I checked the lock isn't held with lockdep_assert_not_held and also by
+> checking the return value of usb_trylock_device to be equal to 1 in my testing.
+> I checked my USB mouse over loopback yes, binding the mouse for remote use and
+> attaching on loopback.
+> 
 
-I checked the lock isn't held with lockdep_assert_not_held and also by
-checking the return value of usb_trylock_device to be equal to 1 in my testing.
-I checked my USB mouse over loopback yes, binding the mouse for remote use and
-attaching on loopback.
-
-Thank you
-Niels
+Great. Thank you for a detailed answer.
 
 > 
->> Fixes: 2c8c98158946 ("staging: usbip: let client choose device configuration")
->> Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
->> ---
 >>
->> I'm developing this tool as part of my master's dissertation in order to
->> obtain my master's degree. If you'd like more information about the
->> details of the tool, please let me know.
+>>> Fixes: 2c8c98158946 ("staging: usbip: let client choose device configuration")
+>>> Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+>>> ---
+>>>
+
 >>
->>   drivers/usb/usbip/stub_rx.c | 2 ++
->>   1 file changed, 2 insertions(+)
+>> Looks good to me with the above questions answered.
 >>
->> diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
->> index 325c22008e53..5dd41e8215e0 100644
->> --- a/drivers/usb/usbip/stub_rx.c
->> +++ b/drivers/usb/usbip/stub_rx.c
->> @@ -138,7 +138,9 @@ static int tweak_set_configuration_cmd(struct urb *urb)
->>       req = (struct usb_ctrlrequest *) urb->setup_packet;
->>       config = le16_to_cpu(req->wValue);
->>   +    usb_lock_device(sdev->udev);
->>       err = usb_set_configuration(sdev->udev, config);
->> +    usb_unlock_device(sdev->udev);
->>       if (err && err != -ENODEV)
->>           dev_err(&sdev->udev->dev, "can't set config #%d, error %d\n",
->>               config, err);
+>> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 >>
-> 
-> Looks good to me with the above questions answered.
-> 
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
-> Greg, please pick this patch up.
-> 
-> thanks,
-> -- Shuah
+>> Greg, please pick this patch up.
+>>
+
+thanks,
+-- Shuah
 
