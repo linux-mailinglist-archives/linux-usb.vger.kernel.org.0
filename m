@@ -2,111 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358344FE64D
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 18:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A7F4FE6D3
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 19:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357855AbiDLQxZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Apr 2022 12:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S1357152AbiDLRaX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Apr 2022 13:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357854AbiDLQxX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 12:53:23 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A759C574A0
-        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 09:51:01 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id z99so14486556ede.5
-        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 09:51:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bVbqjA7ErtCWshTPBZJd5FGzyo/s6SwwCQGBMNVlD5s=;
-        b=JOF/v8Rp/oA3NQPEGqGx/QIl1q3IhHN+4Z2WsvfgotRyytqVe8QlYNF7b6oj9Sms7H
-         aAmAtKAWU9mUxbMPg1wzVJ7ATQUZRbFSoCuk1lENwRhy14Z9oPY/hgRCxJG9yLJLNk2u
-         xSCPng06lL6MPqQF2o1UDBa/IfzvbbjzbOQzWXOJ/V35aJlPbOvysAkPA6Xkzz3VabjI
-         QBw41u/GZRDcq+jGqmgAmTdRSJ4kYSsGrmVViCz8IvrGpoID7WJYPmUA7JaAEnP7Y7qz
-         jzXpYEeM99i4TT7Heh9HKfgAiOvrVAv7b4Qne58+qXGaGDVILXhN2bLbi9A86Z6CXnO7
-         qspg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bVbqjA7ErtCWshTPBZJd5FGzyo/s6SwwCQGBMNVlD5s=;
-        b=xpkF0Ei08z1rPRbLX0I2eq+Aa57OBLgWyarmJeMFgtBYLlMUqP1drAzy5bWZdKmpkz
-         /FcSsojup2Tcz9ZC+1/3IaHrFvCDY+YDvARhNECv5ZfQrIehbLIQjHgTarT3Tg8CuNFr
-         i5dcRihzqZz4bm7TdPQh8gzS4U4GsklzXvuJHFglXoNdFoOr2pzDdWptAMjudXBssMTr
-         R4/9uheVCSy8dNfTDtM+pWhh9aTKSXttlyRD180Z2LkHgEqje4wu0C88z9kFP7Cf/SbI
-         r0ZHpQDUfv8dSJjshbtnfj34LwBEY9Tv5cR9jibtbTd8sc8Hkc11KuhzHZnIRPDp1PGC
-         n5Gw==
-X-Gm-Message-State: AOAM530H2v/OO/CKfEn3B49fB/e0Ih38rqCbGp2yRpFdS3bqqRzIX/Xh
-        ZqoqjZhNoG7MKHUAHAAOAmb3G26ntGj4Kqjaz8k=
-X-Google-Smtp-Source: ABdhPJx4HkuCZSyCn+igVr3Q8ARPWF5BtXctg1uPtxanRWFvB5AdXJBR1ihXTA7vm89gSnB8ZJgMxw==
-X-Received: by 2002:a05:6402:22c4:b0:41d:78b1:349 with SMTP id dm4-20020a05640222c400b0041d78b10349mr13602150edb.365.1649782260157;
-        Tue, 12 Apr 2022 09:51:00 -0700 (PDT)
-Received: from localhost.localdomain (ptr-dvafnx6088d6pfrb8pc.18120a2.ip6.access.telenet.be. [2a02:1811:ce3a:3400:364:f5e0:d796:a7d0])
-        by smtp.gmail.com with ESMTPSA id o15-20020a50d80f000000b0041cc1f4f5e0sm6173edj.62.2022.04.12.09.50.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 09:50:59 -0700 (PDT)
-From:   Niels Dossche <dossche.niels@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Niels Dossche <dossche.niels@gmail.com>
-Subject: [PATCH] usb: usbip: add missing device lock on tweak configuration cmd
-Date:   Tue, 12 Apr 2022 18:50:55 +0200
-Message-Id: <20220412165055.257113-1-dossche.niels@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S235665AbiDLRaV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 13:30:21 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC8C53722;
+        Tue, 12 Apr 2022 10:28:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649784483; x=1681320483;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MTrQUb89ytH2QRNrlqQ8N1/cVixUkR7ofVo0qRQ1nuA=;
+  b=XUv67KDU9qqY7sgjYaaWHjegL4dDeARJ6kGurTi7mah4PMF84czutf9s
+   FFrEdOxztbmvTUU8bJMvFnssN+NGOAZf+TiBn7zZyBz3GP28Vkz40xEgF
+   0kPAkwBw7iInkoDSFh5teBPQxWWiaRRR13GNK7DmM37hlm//ljnPttbfA
+   vDIpODirlqEGwUxbcdDe11SUCawmLCI8/5jiCjNa9yx/x9Wy0x+YkGXd3
+   yk4KgbRfCsyB9l7EFv0wmYPbmJV69COTxaGZTqz0bRESXbv0kGLvKYCUF
+   ZTU/TnHdrvAbMj7ikLnMIzzYLoQMoXUJCXcNgMp4pzh4XY5LZ4RhsEJ9C
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="260045761"
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="260045761"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 10:26:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="611550097"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Apr 2022 10:26:21 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1neKGD-00031g-0G;
+        Tue, 12 Apr 2022 17:25:01 +0000
+Date:   Wed, 13 Apr 2022 01:24:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Jameson Thies <jthies@google.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] usb: typec: USB Power Deliver helpers for ports
+ and partners
+Message-ID: <202204130102.YjEnm3E0-lkp@intel.com>
+References: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The function documentation of usb_set_configuration says that its
-callers should hold the device lock. This lock is held for all
-callsites except tweak_set_configuration_cmd. The code path can be
-executed for example when attaching a remote USB device.
-The solution is to surround the call by the device lock.
+Hi Heikki,
 
-This bug was found using my experimental own-developed static analysis
-tool, which reported the missing lock on v5.17.2. I manually verified
-this bug report by doing code review as well. I runtime checked that
-the required lock is not held. I compiled and runtime tested this on
-x86_64 with a USB mouse. After applying this patch, my analyser no
-longer reports this potential bug.
+I love your patch! Perhaps something to improve:
 
-Fixes: 2c8c98158946 ("staging: usbip: let client choose device configuration")
-Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
----
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on chrome-platform/for-next v5.18-rc2 next-20220412]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I'm developing this tool as part of my master's dissertation in order to
-obtain my master's degree. If you'd like more information about the
-details of the tool, please let me know.
+url:    https://github.com/intel-lab-lkp/linux/commits/Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: i386-randconfig-a004-20220411 (https://download.01.org/0day-ci/archive/20220413/202204130102.YjEnm3E0-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/98fece77872792e49f1005617761a533089f319d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
+        git checkout 98fece77872792e49f1005617761a533089f319d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/typec/
 
- drivers/usb/usbip/stub_rx.c | 2 ++
- 1 file changed, 2 insertions(+)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
-index 325c22008e53..5dd41e8215e0 100644
---- a/drivers/usb/usbip/stub_rx.c
-+++ b/drivers/usb/usbip/stub_rx.c
-@@ -138,7 +138,9 @@ static int tweak_set_configuration_cmd(struct urb *urb)
- 	req = (struct usb_ctrlrequest *) urb->setup_packet;
- 	config = le16_to_cpu(req->wValue);
- 
-+	usb_lock_device(sdev->udev);
- 	err = usb_set_configuration(sdev->udev, config);
-+	usb_unlock_device(sdev->udev);
- 	if (err && err != -ENODEV)
- 		dev_err(&sdev->udev->dev, "can't set config #%d, error %d\n",
- 			config, err);
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/typec/class.c:30:27: warning: unused variable 'cap_name' [-Wunused-const-variable]
+   static const char * const cap_name[] = {
+                             ^
+   1 warning generated.
+--
+>> drivers/usb/typec/pd.c:669: warning: expecting prototype for pd_register(). Prototype was for pd_unregister() instead
+>> drivers/usb/typec/pd.c:717: warning: expecting prototype for pd_link_device(). Prototype was for pd_unlink_device() instead
+--
+>> drivers/usb/typec/class.c:1222: warning: expecting prototype for typec_port_set_pd_capabilities(). Prototype was for typec_port_set_pd() instead
+
+
+vim +/cap_name +30 drivers/usb/typec/class.c
+
+    29	
+  > 30	static const char * const cap_name[] = {
+    31		[TYPEC_SINK]		= "sink-capabilities",
+    32		[TYPEC_SOURCE]		= "source-capabilities",
+    33	};
+    34	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
