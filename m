@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC4C4FC9C8
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 02:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9D74FCA7D
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 02:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243165AbiDLAsY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Apr 2022 20:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
+        id S245341AbiDLAyF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Apr 2022 20:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242887AbiDLAsG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 20:48:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9860B2ED5C;
-        Mon, 11 Apr 2022 17:45:50 -0700 (PDT)
+        with ESMTP id S1343975AbiDLAxY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 20:53:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E70433EB6;
+        Mon, 11 Apr 2022 17:48:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21B5B617F3;
-        Tue, 12 Apr 2022 00:45:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 686A2C385AD;
-        Tue, 12 Apr 2022 00:45:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5EEEB819C4;
+        Tue, 12 Apr 2022 00:48:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A7CC385AC;
+        Tue, 12 Apr 2022 00:48:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649724349;
-        bh=Bcm/L4B9jJWb+jV5TvnT5U/PTAjme2W/RGdOOBuZDt8=;
+        s=k20201202; t=1649724492;
+        bh=v6yuNXdoFIyZYpzpbSX09Y32GwEic8VWpyIkKO0cXjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QZOkFu1e6B7vGBK+a0X7vUxMUGLheKeypelhJb+TyGu3TytzMeDB9B8wqBazeZnMJ
-         cvurx3zLXW+AuTvd0q89yT+MEswJbtvg033W/GvQ44AhgBOwLnvtLSv4NlQCn/GUbi
-         WhZCuPFj6pBZ6pclhKJiUlS2JFbHUgMwLHxV//fG1YEm+aO7Syiwz3P0lgezHo9LUd
-         W1aUXbDqZrynzH3LZRLv8DgKFTcmeuOc+e3kvEGbXxIc0tMiRuWok0YupC9wKAEsKN
-         Jg2JY8rBKyOORcV7waPaF20BcrdwrCPYKXPGtTdDVsDPOWHtqg4uBvLk9n7q8F+ZA6
-         UMeWKD1L0BL+Q==
+        b=GIMjmEUb/0BEpQPJPNfqjPvWgXzFxPOcWRm/sL4ucM8Cjm+X/MF2K8CjiTLxLSfoE
+         9oXHbouHG4lKOjne2HZZJK5/oFXReWQDDqoM0erV5qQDodThDyziPRWD7R2/RyzPYx
+         DCJUYp6ZHQ2knujJlDyF6RLUm8rYZ5fItlkeGK1qIYwh1sR+NmARvOgp/ri2e26YIY
+         OK3vKjy7Hp/EB7BjRLk1EbQoiTsaSmmZKXwz05p8iJoxo3WcOzGh2rwKhW5+w8yZIq
+         aGO7p/8j/qRq9TcGxzDardNRGmmhirb2X3y1l7q1/allC/iN5Hynixp7JMzupA6d1+
+         KiD2AH0wENkFg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Marcin Kozlowski <marcinguy@gmail.com>,
@@ -38,12 +38,12 @@ Cc:     Marcin Kozlowski <marcinguy@gmail.com>,
         Sasha Levin <sashal@kernel.org>, kuba@kernel.org,
         pabeni@redhat.com, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 32/49] net: usb: aqc111: Fix out-of-bounds accesses in RX fixup
-Date:   Mon, 11 Apr 2022 20:43:50 -0400
-Message-Id: <20220412004411.349427-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 26/41] net: usb: aqc111: Fix out-of-bounds accesses in RX fixup
+Date:   Mon, 11 Apr 2022 20:46:38 -0400
+Message-Id: <20220412004656.350101-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412004411.349427-1-sashal@kernel.org>
-References: <20220412004411.349427-1-sashal@kernel.org>
+In-Reply-To: <20220412004656.350101-1-sashal@kernel.org>
+References: <20220412004656.350101-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -85,7 +85,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
-index ea06d10e1c21..ca409d450a29 100644
+index 73b97f4cc1ec..e8d49886d695 100644
 --- a/drivers/net/usb/aqc111.c
 +++ b/drivers/net/usb/aqc111.c
 @@ -1102,10 +1102,15 @@ static int aqc111_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
