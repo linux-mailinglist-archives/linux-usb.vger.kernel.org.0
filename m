@@ -2,55 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2174FCC41
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 04:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85EBF4FCCCB
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 05:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242785AbiDLCQ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Apr 2022 22:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
+        id S235747AbiDLDCP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Apr 2022 23:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiDLCQz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 22:16:55 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57F8013F70;
-        Mon, 11 Apr 2022 19:14:38 -0700 (PDT)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Tue, 12 Apr 2022 10:14:34
- +0800 (GMT+08:00)
-X-Originating-IP: [222.205.1.189]
-Date:   Tue, 12 Apr 2022 10:14:34 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "Lin Ma" <linma@zju.edu.cn>
-To:     "Alan Stern" <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        mdharm-usb@one-eyed-alien.net, stable@vger.kernel.org
-Subject: Re: [PATCH v2] USB: storage: karma: fix rio_karma_init return
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <YlQ67AgfvMXkUWEZ@rowland.harvard.edu>
-References: <20220411060246.9887-1-linma@zju.edu.cn>
- <YlQ67AgfvMXkUWEZ@rowland.harvard.edu>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
-MIME-Version: 1.0
-Message-ID: <7fe78961.7c1e.1801b8d1dbd.Coremail.linma@zju.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID: cC_KCgDnHtSK4FRig4TuAQ--.35697W
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/1tbiAwQRElNG3GSkJgAEsv
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW5Jw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229488AbiDLDCO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 23:02:14 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A054659E;
+        Mon, 11 Apr 2022 19:59:58 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id j17so14800914pfi.9;
+        Mon, 11 Apr 2022 19:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=4HEn9aQT2Xyo1V0+OmTqoITISvx7Z9FPkvjacOVf/Fw=;
+        b=LfewqGbIa1uS12VTuj9doa2iMGKMNJJRqku3NZDmwJH6m35LpfdUI1T6lfr7i+kiJp
+         jIWrXAZixia+5eNSGPQ/CJezPeKGjtrik6aE4NKeC5IC/sNqwcTMiRRbLaT4g6ZjAutC
+         wcug6E3n5AOyEATsgiYOfOkCUhyU1u6JVaVYFKdpjiI80rYugp6SjlXY6ntcUyangnu5
+         tyU99dj7gEv1yvQCVF80qo6NueplTtxJs42EgC5VCh/C1y640Lf7Ovm/j7GszXU1QUKO
+         ratf+1cky8YOKvNcM/RZrtttX7wB9X9GcE+9IA8pTLl7ZhzwXuxtQgDxCQfTIOmpdLLS
+         yqKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=4HEn9aQT2Xyo1V0+OmTqoITISvx7Z9FPkvjacOVf/Fw=;
+        b=t06qvKQ6w01ZGEDuyf+QSRruRuLd2sheX595kwx/niWy21vcwYQ1SVsZfVMLoiy3QK
+         gOv0aqw4+nqrDg+zcAASYuplpOqthiTK81EMl64vbQzN9qo6hsqJCIfT9o6LAC34NVbp
+         VYp1Muj2m1JgSaWTTmS0/i6Nc0LnyPfxQLY9+DQ634ufYER7OzkLLirPHyV//Lg2fZsw
+         rJFQXwzLbeZ05GJOznpmjf7Rh14dsVXe2E026/mWqG9XOstobdBWOPxFuUKbdlz5s5C+
+         XSNy9XqVdJzhSyHie2GuNceFVF1gdcOLN88vWDGm07kY2RC7kI4nqvhsRv0TrzXTRLOW
+         N43g==
+X-Gm-Message-State: AOAM533ha4XenZM2uvB747qmkJVdVcLxeX96uH70kP8OUGa1Slc/6FB/
+        D6nsXKqiIZlD9s44/B0qfNHlyxklpwUL+x7M
+X-Google-Smtp-Source: ABdhPJzblnrYZ9X//RhXdmf23Z5K7RDDmHB+egY4r2Cheljm4QxBVyuOaOo18vdsxAcPdfG5tsWQTw==
+X-Received: by 2002:a63:1d1f:0:b0:399:5cd:15b6 with SMTP id d31-20020a631d1f000000b0039905cd15b6mr27721571pgd.91.1649732397922;
+        Mon, 11 Apr 2022 19:59:57 -0700 (PDT)
+Received: from zeshkernups01.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id kb13-20020a17090ae7cd00b001c7de069bacsm814941pjb.42.2022.04.11.19.59.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 19:59:57 -0700 (PDT)
+From:   Surong Pang <surong.pang@gmail.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V1 1/1] usb/host: To get "usb3-slow-suspend" property, then to set xhci quirks
+Date:   Tue, 12 Apr 2022 10:59:52 +0800
+Message-Id: <20220412025952.21062-1-surong.pang@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGVsbG8gQWxhbgoKPiAKPiBBY2tlZC1ieTogQWxhbiBTdGVybiA8c3Rlcm5Acm93bGFuZC5oYXJ2
-YXJkLmVkdT4KPiAKCkdvdGNoYSwgc29ycnkgYWdhaW4gZm9yIHRoZSBpbmNvbnZlbmllbmNlLgpU
-aGUgbmV3IG9uZTogaHR0cHM6Ly9tYXJjLmluZm8vP2w9bGludXgtdXNiJm09MTY0OTcyOTU5OTA3
-MDQ5Jnc9MgoKUmVnYXJkcwpMaW4gTWE=
+From: Surong Pang <surong.pang@unisoc.com>
+
+To set xhci->quirks value according to "usb3-slow-suspend" property
+
+Signed-off-by: Surong Pang <surong.pang@unisoc.com>
+---
+ drivers/usb/host/xhci-plat.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 649ffd861b44..6bc456bc6468 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -302,6 +302,9 @@ static int xhci_plat_probe(struct platform_device *pdev)
+ 		if (device_property_read_bool(tmpdev, "usb3-lpm-capable"))
+ 			xhci->quirks |= XHCI_LPM_SUPPORT;
+ 
++		if (device_property_read_bool(tmpdev, "usb3-slow-suspend"))
++			xhci->quirks |= XHCI_SLOW_SUSPEND;
++
+ 		if (device_property_read_bool(tmpdev, "quirk-broken-port-ped"))
+ 			xhci->quirks |= XHCI_BROKEN_PORT_PED;
+ 
+-- 
+2.17.1
+
