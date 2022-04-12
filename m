@@ -2,53 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBEB54FCBE8
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 03:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D624FCC1C
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 04:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240601AbiDLBgH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Apr 2022 21:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
+        id S239754AbiDLCFc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Apr 2022 22:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiDLBgG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 21:36:06 -0400
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B9819C21;
-        Mon, 11 Apr 2022 18:33:50 -0700 (PDT)
-Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 3A276404CA;
-        Tue, 12 Apr 2022 01:33:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1649727230; bh=b9rZPdo/xNFCKfdrAM8qTsXc1lxV16YeecqOvKcWCbY=;
-        h=Date:From:Subject:To:Cc:From;
-        b=IGK5Dos4N4vKeey6PVzC7uSLyRClw3xRqwMxrkbdYNoWiFqAftDwv4dIYrLgJFGo8
-         zTVutN2YMjdUD/BpFRqhx2PzV67qjqQefvD1tuCji2i0xnJlQfJqU+1CIj389PAPML
-         0Z4BChGDLhhL23gFbBKVYVtmnQGL8uTqt7lhICVPdlcH3a+qQW8RjqvQr8X1Jw5AsV
-         P2f2/wwLk9gpT+iCEZuxcg+zg3Trhc27r85Gi0pIY8fWngd9dcNNbsn7xMBQquWjKh
-         WiFbPOCuvlRmv1Q8/aF2Plcscb9IGqc1xPZFaAoz7G5KjLgjoOy6RwtyzHREhRURHL
-         LAF1FCUGSs39A==
-Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 47D5AA0065;
-        Tue, 12 Apr 2022 01:33:47 +0000 (UTC)
-Received: by te-lab16-v2 (sSMTP sendmail emulation); Mon, 11 Apr 2022 18:33:47 -0700
-Date:   Mon, 11 Apr 2022 18:33:47 -0700
-Message-Id: <cccfce990b11b730b0dae42f9d217dc6fb988c90.1649727139.git.Thinh.Nguyen@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH] usb: dwc3: core: Fix tx/rx threshold settings
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        <stable@vger.kernel.org>
+        with ESMTP id S231782AbiDLCFa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 22:05:30 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3128C31507;
+        Mon, 11 Apr 2022 19:03:15 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id f3so16188349pfe.2;
+        Mon, 11 Apr 2022 19:03:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OSPq/f1fzEIxN+j0n/fpdsesVfU3t6cZSqHyG+8nEUw=;
+        b=RcYztbCbPhBXbYovGgjFPRLBCJsHH6c1flVWzZH88rkHm/9Umin1lcC94mtpi/dFVC
+         lr4yHI9oOQaWDTh5B3RIr6rjyTjIC0aKPjai6XDzubcYDW/HZWagEyrh+bx1UcF+yV14
+         /VKQYxNnqiEblRGFI0TozfNnoUVE5oYX1AFsJjOfnbEZCil1NZnG/IUqZVSXbV5N/luq
+         EzSk65bCPW0iQsIcTTWDgYGLx4nLsRrrdS/yTA5pXgmYTwP5LC52j+UvFaFImT7KFzEK
+         TCxpXMM1gu7J/XtWEkw60AhuD/tb+GibGf1V91voqg6M5zxXF3DhmZFFOPbaXFIBJ6IX
+         P1tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OSPq/f1fzEIxN+j0n/fpdsesVfU3t6cZSqHyG+8nEUw=;
+        b=yFHQ8vJ7J77WMeaFiSyREtKVh7a/Bc86NbGMq02AIFFaN5L5IqHnRpq0zwk5FtIuts
+         0Ucmr3bRc78XAApPMxHsJfD0HokpGr2SPUQO/Uy060B9hcymJDlsrYQwWb0gtYHFen0b
+         DKRSPQUxHNThAeds/pUa/7sK2oh9H8citV2MBs0cgl6jmqOjqK4o/dsZSajljb9BEA1j
+         +wWRZOdo3siT9PGpUOMKrtkAfDKI0UX9AgCTt5XugOv+eNrPzlKvFn2uoUEdU2VlI16d
+         pYFg9g0yb2troqnYSYs20z+a0RvsKrwH9OrKyV9UHcEZTl2znjUnb8IzaMwDRZaM9MyG
+         tqHw==
+X-Gm-Message-State: AOAM530/ytmguP7F+b49jR5m8WLh04RhPLxzl25jOdMIVkCxC9KjNRHe
+        KcF2ZbSPM8aW+qvE3qj4Q2o=
+X-Google-Smtp-Source: ABdhPJxcGtGNDGExUYjmMBb9Ulvg9NSvIJc0BHvmswwX+/ZwbzhpxdEKSghq+Zv3Np6rG2vp10zy5A==
+X-Received: by 2002:a05:6a00:891:b0:4fe:1262:9b4e with SMTP id q17-20020a056a00089100b004fe12629b4emr2204928pfj.21.1649728994725;
+        Mon, 11 Apr 2022 19:03:14 -0700 (PDT)
+Received: from slim.das-security.cn ([103.84.139.54])
+        by smtp.gmail.com with ESMTPSA id m21-20020a17090a7f9500b001c97c6bcaf4sm749289pjl.39.2022.04.11.19.03.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 19:03:14 -0700 (PDT)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     valentina.manea.m@gmail.com, shuah@kernel.org,
+        gregkh@linuxfoundation.org, khoroshilov@ispras.ru,
+        skhan@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH v3] usb: usbip: fix a refcount leak in stub_probe()
+Date:   Tue, 12 Apr 2022 10:02:57 +0800
+Message-Id: <20220412020257.9767-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,39 +69,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The current driver logic checks against 0 to determine whether the
-periodic tx/rx threshold settings are set, but we may get bogus values
-from uninitialized variables if no device property is set. Properly
-default these variables to 0.
+usb_get_dev() is called in stub_device_alloc(). When stub_probe() fails
+after that, usb_put_dev() needs to be called to release the reference.
 
-Cc: <stable@vger.kernel.org>
-Fixes: 938a5ad1d305 ("usb: dwc3: Check for ESS TX/RX threshold config")
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Fix this by moving usb_put_dev() to sdev_free error path handling.
+
+Find this by code review.
+
+Fixes: 3ff67445750a ("usbip: fix error handling in stub_probe()")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- drivers/usb/dwc3/core.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 1170b800acdc..1e068551dc7a 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1377,10 +1377,10 @@ static void dwc3_get_properties(struct dwc3 *dwc)
- 	u8			lpm_nyet_threshold;
- 	u8			tx_de_emphasis;
- 	u8			hird_threshold;
--	u8			rx_thr_num_pkt_prd;
--	u8			rx_max_burst_prd;
--	u8			tx_thr_num_pkt_prd;
--	u8			tx_max_burst_prd;
-+	u8			rx_thr_num_pkt_prd = 0;
-+	u8			rx_max_burst_prd = 0;
-+	u8			tx_thr_num_pkt_prd = 0;
-+	u8			tx_max_burst_prd = 0;
- 	u8			tx_fifo_resize_max_num;
- 	const char		*usb_psy_name;
- 	int			ret;
+v2: add more description of this patch.
 
-base-commit: b3fa25de31fb7e9afebe9599b8ff32eda13d7c94
+v3: add how to find the problem.
+
+ drivers/usb/usbip/stub_dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
+index d8d3892e5a69..3c6d452e3bf4 100644
+--- a/drivers/usb/usbip/stub_dev.c
++++ b/drivers/usb/usbip/stub_dev.c
+@@ -393,7 +393,6 @@ static int stub_probe(struct usb_device *udev)
+ 
+ err_port:
+ 	dev_set_drvdata(&udev->dev, NULL);
+-	usb_put_dev(udev);
+ 
+ 	/* we already have busid_priv, just lock busid_lock */
+ 	spin_lock(&busid_priv->busid_lock);
+@@ -408,6 +407,7 @@ static int stub_probe(struct usb_device *udev)
+ 	put_busid_priv(busid_priv);
+ 
+ sdev_free:
++	usb_put_dev(udev);
+ 	stub_device_free(sdev);
+ 
+ 	return rc;
 -- 
-2.28.0
+2.25.1
 
