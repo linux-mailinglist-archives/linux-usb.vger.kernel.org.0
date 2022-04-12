@@ -2,179 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6D54FE4D9
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 17:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 091EC4FE4DF
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 17:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357001AbiDLPi1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Apr 2022 11:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
+        id S1357130AbiDLPjm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Apr 2022 11:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357131AbiDLPiZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 11:38:25 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215BB5839A;
-        Tue, 12 Apr 2022 08:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649777763; x=1681313763;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Spu/bhtmnuIg6Wi9yv/iXZ31D/WFe0Ipz3ysdwlpdic=;
-  b=Gf7yrMiUcjZagdYHr0dr5SPReg/aWFoxBc4ZIewVTjd8PLkibxfMbAoZ
-   Ou+q1Xf1osezsJCjn1rOkNUFfJV2WiC3eb7KUJJ3XeqS4eWXvSVPO9OeI
-   sqo9e5kfLWZjTJpJvoTe6Pw3ohWS3bcJCYT6UlZIMaZt6I3hxEZvz3lYL
-   3iS1TnnvOkob/aAwgURbbSpzF33t1nxhQORqIM27rQEwsdjZZ4b6DfcK8
-   WNc7DueuLlKrJxrPA1Z++L8uHULeI2NFlKG/d47m1m0llxPZ3skCyKVKd
-   SiJe8PZL0fVL5dkME0DqAqgrtqYRkuA0NXTbInbk8y3JoUgKKM7z3n/iw
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="322847250"
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="322847250"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 08:36:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="611492406"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Apr 2022 08:35:59 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neIYh-0002wW-94;
-        Tue, 12 Apr 2022 15:35:59 +0000
-Date:   Tue, 12 Apr 2022 23:35:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@lists.01.org, Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Jameson Thies <jthies@google.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] usb: typec: USB Power Deliver helpers for ports
- and partners
-Message-ID: <202204122323.iqiRhgAI-lkp@intel.com>
-References: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
+        with ESMTP id S1354966AbiDLPjl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 11:39:41 -0400
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153F457B38
+        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 08:37:23 -0700 (PDT)
+Received: by mail-vk1-xa31.google.com with SMTP id bc42so9218943vkb.12
+        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 08:37:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=wEotUkSgv2wWdU4gicQSxgdHhAYJK3Hz6SwZFhk6ap0=;
+        b=PdB322TzL+XRMbaobBMHXILthQxKFmd4cPSwjQMMpV0W2glUjRFW+VaGkUZZpm+N+H
+         VGMl5oHe6KPqBODAYD3jf39wJXOBTIYD5hoAem8dx7f9VbE9vl6VEqt5+yiV509/vteO
+         1axUH0vef5C5ZNBze6ONrbmd9mi1bS0Thj2P8OsgFQaaTZrjWcxFQcHe0z5CdlOtIDUU
+         EwkNjjPy59e62RIXML9TC/ZtbC/zrGlkTmBzWctiS+A8cYozR2oJcok6/X+WUeU5jEKV
+         Wmt6Gq7Q7708asAyKO73OEcf6KDuzZIOa78/Qk+efQebJfjdPVoJvCMgq6FptSG5eSc+
+         bhUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=wEotUkSgv2wWdU4gicQSxgdHhAYJK3Hz6SwZFhk6ap0=;
+        b=RJV8TkH98uOLiAT/4pphdItB3HgIeGPhz5gwHNtvYYPnZJC29zUTGerjWyiXk3+1gR
+         u+3CKRu55BEm4gpRbc0r4Ks4wA3RDLId48dfTWfisjZlOTnit7YYFwnhemVKQMV4p8XM
+         59r+itMeZmhaR9x7SEn3Rshd3lgX4C72Ph0yY4AVGvQenWDZy+a5Y42MBvFKRbgwQ0wi
+         5xiLLzdFjRu5tL9wowWxG+wqG0vZ8nqNOBnJz4gA0K56WcOkHgQzGQkQEWgQM/72LVDT
+         1p+q2oeOAkKJLZ7Jhos5GJQ9rlSUay9gJo2Vp4yyIpmeyQZYWe6P1VvMpLPg+a4Fjla/
+         WjcA==
+X-Gm-Message-State: AOAM532XIY5Os7HPDmsj0221ga6b0z311eNamYsBKlcMatVEslNXEgby
+        plrFOO12S4wUTVsSt8KBg7+uEZ8mMZKm0lxHv8s=
+X-Google-Smtp-Source: ABdhPJzOMeXvdS3R1+MpR5cpH5k/zdHRSJ65MN31ua7qE1xONBLCSeATi5aitDgB60yy/A00xwM5c8s0XIG/bfzhXIg=
+X-Received: by 2002:ac5:c3d0:0:b0:344:44f4:25c3 with SMTP id
+ t16-20020ac5c3d0000000b0034444f425c3mr12419124vkk.23.1649777841094; Tue, 12
+ Apr 2022 08:37:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412130023.83927-3-heikki.krogerus@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAHCN7xK9sZGXruaLzbam+t2REqvKiTrWbZ-GdA3gXux=9B-2Lw@mail.gmail.com>
+In-Reply-To: <CAHCN7xK9sZGXruaLzbam+t2REqvKiTrWbZ-GdA3gXux=9B-2Lw@mail.gmail.com>
+From:   Jun Li <lijun.kernel@gmail.com>
+Date:   Tue, 12 Apr 2022 23:37:10 +0800
+Message-ID: <CAKgpwJXD-fju1=zHZY2vOxcKMY6gLOfCi+Cp543NoC9sa_3=oA@mail.gmail.com>
+Subject: Re: Using PTN5110 w/ USB Hub
+To:     Adam Ford <aford173@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        USB list <linux-usb@vger.kernel.org>, Li Jun <jun.li@nxp.com>,
+        xu.yang_2@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+Adam Ford <aford173@gmail.com> =E4=BA=8E2022=E5=B9=B44=E6=9C=8812=E6=97=A5=
+=E5=91=A8=E4=BA=8C 08:24=E5=86=99=E9=81=93=EF=BC=9A
+>
+> I have a board with a dual role USB conttroller connected to a dual
+> role hub
 
-I love your patch! Perhaps something to improve:
+Could you please explain more about what's "a dual role hub"?
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on chrome-platform/for-next v5.18-rc2 next-20220412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> connected to a PTN5110 for enabing power to the USB-C.
+>
+> SoC -> Hub -> PTN-> USB-C
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220412/202204122323.iqiRhgAI-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/98fece77872792e49f1005617761a533089f319d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Heikki-Krogerus/usb-typec-Separate-sysfs-directory-for-all-USB-PD-objects/20220412-211628
-        git checkout 98fece77872792e49f1005617761a533089f319d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/usb/typec/
+What signals of Hub chip connect to PTN5110 chip?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+>
+> The hope was the PTN5110 would enable/disable the src_en pin when I
+> connect a device that needs power.  Unfortunately, most of the
+> examples I can see for the device trees on a PTN5110 show some sort of
+> connection to a USB controller, but  I am going through a hub, not a
+> controller.
+>
+> Is it possible to configure the PTN5110 to either not require
+> connection to a USB controller or plumb it to a USB hub?
 
-All warnings (new ones prefixed by >>):
+My understanding PTN5110(TCPCI controller with PD PHY) is independent
+with USB data path, for USB data path, I think it should be:
+SoC -> Hub -> USB-C
+PTN5110 should not care or know if there is a Hub between type-C connector
+and USB controller.
+If the type-C connector connects to a Hub, then it's a DFP only on data,
+and from power point view, you also only power source role, right?
 
->> drivers/usb/typec/pd.c:669: warning: expecting prototype for pd_register(). Prototype was for pd_unregister() instead
->> drivers/usb/typec/pd.c:717: warning: expecting prototype for pd_link_device(). Prototype was for pd_unlink_device() instead
---
->> drivers/usb/typec/class.c:1222: warning: expecting prototype for typec_port_set_pd_capabilities(). Prototype was for typec_port_set_pd() instead
-
-
-vim +717 drivers/usb/typec/pd.c
-
-c99df888db9e4c Heikki Krogerus 2022-04-12  663  
-c99df888db9e4c Heikki Krogerus 2022-04-12  664  /**
-c99df888db9e4c Heikki Krogerus 2022-04-12  665   * pd_register - Unregister USB Power Delivery Support.
-c99df888db9e4c Heikki Krogerus 2022-04-12  666   * @pd: The USB PD contract.
-c99df888db9e4c Heikki Krogerus 2022-04-12  667   */
-c99df888db9e4c Heikki Krogerus 2022-04-12  668  void pd_unregister(struct pd *pd)
-c99df888db9e4c Heikki Krogerus 2022-04-12 @669  {
-c99df888db9e4c Heikki Krogerus 2022-04-12  670  	if (IS_ERR_OR_NULL(pd))
-c99df888db9e4c Heikki Krogerus 2022-04-12  671  		return;
-c99df888db9e4c Heikki Krogerus 2022-04-12  672  
-c99df888db9e4c Heikki Krogerus 2022-04-12  673  	kobject_put(&pd->kobj);
-c99df888db9e4c Heikki Krogerus 2022-04-12  674  }
-c99df888db9e4c Heikki Krogerus 2022-04-12  675  EXPORT_SYMBOL_GPL(pd_unregister);
-c99df888db9e4c Heikki Krogerus 2022-04-12  676  
-c99df888db9e4c Heikki Krogerus 2022-04-12  677  /**
-c99df888db9e4c Heikki Krogerus 2022-04-12  678   * pd_link_device - Link device to its USB PD object.
-c99df888db9e4c Heikki Krogerus 2022-04-12  679   * @pd: The USB PD instance.
-c99df888db9e4c Heikki Krogerus 2022-04-12  680   * @dev: The device.
-c99df888db9e4c Heikki Krogerus 2022-04-12  681   *
-c99df888db9e4c Heikki Krogerus 2022-04-12  682   * This function can be used to create a symlink named "usb_power_delivery" for
-c99df888db9e4c Heikki Krogerus 2022-04-12  683   * @dev that points to @pd.
-c99df888db9e4c Heikki Krogerus 2022-04-12  684   */
-c99df888db9e4c Heikki Krogerus 2022-04-12  685  int pd_link_device(struct pd *pd, struct device *dev)
-c99df888db9e4c Heikki Krogerus 2022-04-12  686  {
-c99df888db9e4c Heikki Krogerus 2022-04-12  687  	int ret;
-c99df888db9e4c Heikki Krogerus 2022-04-12  688  
-c99df888db9e4c Heikki Krogerus 2022-04-12  689  	if (IS_ERR_OR_NULL(pd) || !dev)
-c99df888db9e4c Heikki Krogerus 2022-04-12  690  		return 0;
-c99df888db9e4c Heikki Krogerus 2022-04-12  691  
-c99df888db9e4c Heikki Krogerus 2022-04-12  692  	ret = sysfs_create_link(&dev->kobj, &pd->kobj, "usb_power_delivery");
-c99df888db9e4c Heikki Krogerus 2022-04-12  693  	if (ret)
-c99df888db9e4c Heikki Krogerus 2022-04-12  694  		return ret;
-c99df888db9e4c Heikki Krogerus 2022-04-12  695  
-c99df888db9e4c Heikki Krogerus 2022-04-12  696  	ret = sysfs_create_link(&pd->kobj, &dev->kobj, dev_name(dev));
-c99df888db9e4c Heikki Krogerus 2022-04-12  697  	if (ret) {
-c99df888db9e4c Heikki Krogerus 2022-04-12  698  		sysfs_remove_link(&dev->kobj, "usb_power_delivery");
-c99df888db9e4c Heikki Krogerus 2022-04-12  699  		return ret;
-c99df888db9e4c Heikki Krogerus 2022-04-12  700  	}
-c99df888db9e4c Heikki Krogerus 2022-04-12  701  
-c99df888db9e4c Heikki Krogerus 2022-04-12  702  	kobject_get(&pd->kobj);
-c99df888db9e4c Heikki Krogerus 2022-04-12  703  	get_device(dev);
-c99df888db9e4c Heikki Krogerus 2022-04-12  704  
-c99df888db9e4c Heikki Krogerus 2022-04-12  705  	return 0;
-c99df888db9e4c Heikki Krogerus 2022-04-12  706  }
-c99df888db9e4c Heikki Krogerus 2022-04-12  707  EXPORT_SYMBOL_GPL(pd_link_device);
-c99df888db9e4c Heikki Krogerus 2022-04-12  708  
-c99df888db9e4c Heikki Krogerus 2022-04-12  709  /**
-c99df888db9e4c Heikki Krogerus 2022-04-12  710   * pd_link_device - Unlink device from its USB PD object.
-c99df888db9e4c Heikki Krogerus 2022-04-12  711   * @pd: The USB PD instance.
-c99df888db9e4c Heikki Krogerus 2022-04-12  712   * @dev: The device.
-c99df888db9e4c Heikki Krogerus 2022-04-12  713   *
-c99df888db9e4c Heikki Krogerus 2022-04-12  714   * Remove the symlink that was previously created with pd_link_device().
-c99df888db9e4c Heikki Krogerus 2022-04-12  715   */
-c99df888db9e4c Heikki Krogerus 2022-04-12  716  void pd_unlink_device(struct pd *pd, struct device *dev)
-c99df888db9e4c Heikki Krogerus 2022-04-12 @717  {
-c99df888db9e4c Heikki Krogerus 2022-04-12  718  	if (IS_ERR_OR_NULL(pd) || !dev)
-c99df888db9e4c Heikki Krogerus 2022-04-12  719  		return;
-c99df888db9e4c Heikki Krogerus 2022-04-12  720  
-c99df888db9e4c Heikki Krogerus 2022-04-12  721  	sysfs_remove_link(&dev->kobj, "usb_power_delivery");
-c99df888db9e4c Heikki Krogerus 2022-04-12  722  	sysfs_remove_link(&pd->kobj, dev_name(dev));
-c99df888db9e4c Heikki Krogerus 2022-04-12  723  	kobject_put(&pd->kobj);
-c99df888db9e4c Heikki Krogerus 2022-04-12  724  	put_device(dev);
-c99df888db9e4c Heikki Krogerus 2022-04-12  725  }
-c99df888db9e4c Heikki Krogerus 2022-04-12  726  EXPORT_SYMBOL_GPL(pd_unlink_device);
-c99df888db9e4c Heikki Krogerus 2022-04-12  727  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+thanks
+Li Jun
+>
+> thanks
+>
+> adam
