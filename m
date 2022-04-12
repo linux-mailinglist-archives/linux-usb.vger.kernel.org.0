@@ -2,106 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 267DF4FE639
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 18:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358344FE64D
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 18:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357890AbiDLQr5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Apr 2022 12:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
+        id S1357855AbiDLQxZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Apr 2022 12:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357903AbiDLQrx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 12:47:53 -0400
-Received: from out28-145.mail.aliyun.com (out28-145.mail.aliyun.com [115.124.28.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07AA49930;
-        Tue, 12 Apr 2022 09:45:33 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09321077|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0642605-0.00489878-0.930841;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047199;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.NPL4wXj_1649781929;
-Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NPL4wXj_1649781929)
-          by smtp.aliyun-inc.com(33.37.67.126);
-          Wed, 13 Apr 2022 00:45:30 +0800
-Subject: Re: [PATCH 2/2] USB: dwc2: Add OTG support for Ingenic SoCs.
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, hminas@synopsys.com,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
-        jun.jiang@ingenic.com, sernia.zhou@foxmail.com,
-        =?UTF-8?Q?Dragan_=c4=8ce=c4=8davac?= <dragancecavac@yahoo.com>
-References: <1627116521-124612-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1627116521-124612-3-git-send-email-zhouyanjie@wanyeetech.com>
- <IQWQWQ.9EAMZ76IPL892@crapouillou.net>
- <e4f7897a-6b70-d936-a968-e66556382851@wanyeetech.com>
- <8735s37slq.fsf@kernel.org>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <021ece97-5e62-c07f-bb6d-b69c93d73b31@wanyeetech.com>
-Date:   Wed, 13 Apr 2022 00:45:29 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        with ESMTP id S1357854AbiDLQxX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 12:53:23 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A759C574A0
+        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 09:51:01 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id z99so14486556ede.5
+        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 09:51:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bVbqjA7ErtCWshTPBZJd5FGzyo/s6SwwCQGBMNVlD5s=;
+        b=JOF/v8Rp/oA3NQPEGqGx/QIl1q3IhHN+4Z2WsvfgotRyytqVe8QlYNF7b6oj9Sms7H
+         aAmAtKAWU9mUxbMPg1wzVJ7ATQUZRbFSoCuk1lENwRhy14Z9oPY/hgRCxJG9yLJLNk2u
+         xSCPng06lL6MPqQF2o1UDBa/IfzvbbjzbOQzWXOJ/V35aJlPbOvysAkPA6Xkzz3VabjI
+         QBw41u/GZRDcq+jGqmgAmTdRSJ4kYSsGrmVViCz8IvrGpoID7WJYPmUA7JaAEnP7Y7qz
+         jzXpYEeM99i4TT7Heh9HKfgAiOvrVAv7b4Qne58+qXGaGDVILXhN2bLbi9A86Z6CXnO7
+         qspg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bVbqjA7ErtCWshTPBZJd5FGzyo/s6SwwCQGBMNVlD5s=;
+        b=xpkF0Ei08z1rPRbLX0I2eq+Aa57OBLgWyarmJeMFgtBYLlMUqP1drAzy5bWZdKmpkz
+         /FcSsojup2Tcz9ZC+1/3IaHrFvCDY+YDvARhNECv5ZfQrIehbLIQjHgTarT3Tg8CuNFr
+         i5dcRihzqZz4bm7TdPQh8gzS4U4GsklzXvuJHFglXoNdFoOr2pzDdWptAMjudXBssMTr
+         R4/9uheVCSy8dNfTDtM+pWhh9aTKSXttlyRD180Z2LkHgEqje4wu0C88z9kFP7Cf/SbI
+         r0ZHpQDUfv8dSJjshbtnfj34LwBEY9Tv5cR9jibtbTd8sc8Hkc11KuhzHZnIRPDp1PGC
+         n5Gw==
+X-Gm-Message-State: AOAM530H2v/OO/CKfEn3B49fB/e0Ih38rqCbGp2yRpFdS3bqqRzIX/Xh
+        ZqoqjZhNoG7MKHUAHAAOAmb3G26ntGj4Kqjaz8k=
+X-Google-Smtp-Source: ABdhPJx4HkuCZSyCn+igVr3Q8ARPWF5BtXctg1uPtxanRWFvB5AdXJBR1ihXTA7vm89gSnB8ZJgMxw==
+X-Received: by 2002:a05:6402:22c4:b0:41d:78b1:349 with SMTP id dm4-20020a05640222c400b0041d78b10349mr13602150edb.365.1649782260157;
+        Tue, 12 Apr 2022 09:51:00 -0700 (PDT)
+Received: from localhost.localdomain (ptr-dvafnx6088d6pfrb8pc.18120a2.ip6.access.telenet.be. [2a02:1811:ce3a:3400:364:f5e0:d796:a7d0])
+        by smtp.gmail.com with ESMTPSA id o15-20020a50d80f000000b0041cc1f4f5e0sm6173edj.62.2022.04.12.09.50.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 09:50:59 -0700 (PDT)
+From:   Niels Dossche <dossche.niels@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Niels Dossche <dossche.niels@gmail.com>
+Subject: [PATCH] usb: usbip: add missing device lock on tweak configuration cmd
+Date:   Tue, 12 Apr 2022 18:50:55 +0200
+Message-Id: <20220412165055.257113-1-dossche.niels@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <8735s37slq.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe,
+The function documentation of usb_set_configuration says that its
+callers should hold the device lock. This lock is held for all
+callsites except tweak_set_configuration_cmd. The code path can be
+executed for example when attaching a remote USB device.
+The solution is to surround the call by the device lock.
 
-On 2021/7/24 下午9:24, Felipe Balbi wrote:
-> Hi Zhou,
->
-> Zhou Yanjie writes:
->>>> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
->>>> index 67c5eb1..a7a1b50 100644
->>>> --- a/drivers/usb/dwc2/params.c
->>>> +++ b/drivers/usb/dwc2/params.c
->>>> @@ -71,6 +71,47 @@ static void dwc2_set_his_params(struct
->>>> dwc2_hsotg *hsotg)
->>>>       p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
->>>>   }
->>>>
->>>> +static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
->>>> +{
->>>> +    struct dwc2_core_params *p = &hsotg->params;
->>>> +
->>>> +    p->otg_cap = DWC2_CAP_PARAM_NO_HNP_SRP_CAPABLE;
->>>> +    p->speed = DWC2_SPEED_PARAM_HIGH;
->>>> +    p->phy_type = DWC2_PHY_TYPE_PARAM_UTMI;
->>>> +    p->phy_utmi_width = 16;
->>>> +    p->deactivate_ingenic_overcurrent_detection =
->>>> +        device_property_read_bool(hsotg->dev, "disable-over-current");
->>> That device property was not documented in the previous patch. Also
->>> this probably should be "ingenic,disable-over-current".
->>>
->> This device property already exists (it has been used in the
->> "dwc2_get_device_properties()" function below).
->>
->> Under normal circumstances, after using this device attribute, it
->> should be possible to turn off the overcurrent
->>
->> detection, but on the Ingenic processors, somehow it did not take
->> effect normally, and we must operate the
->>
->> "VBVALOEN" bit and "VBVALOVAL" bit of "GOTGCTL" register to make it normal.
-> I believe what Paul is suggesting is that this property lacks
-> documentation under Documentation/devicetree/bindings/. If that's the
-> case, you could take the opportunity to document the property and,
-> perhaps, add the missing prefix.
+This bug was found using my experimental own-developed static analysis
+tool, which reported the missing lock on v5.17.2. I manually verified
+this bug report by doing code review as well. I runtime checked that
+the required lock is not held. I compiled and runtime tested this on
+x86_64 with a USB mouse. After applying this patch, my analyser no
+longer reports this potential bug.
 
+Fixes: 2c8c98158946 ("staging: usbip: let client choose device configuration")
+Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+---
 
-Sorry for the long time delay.
+I'm developing this tool as part of my master's dissertation in order to
+obtain my master's degree. If you'd like more information about the
+details of the tool, please let me know.
 
-Looks like Krzysztof has done the job, I will send v2 soon.
+ drivers/usb/usbip/stub_rx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-Thanks and best regards!
-
+diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
+index 325c22008e53..5dd41e8215e0 100644
+--- a/drivers/usb/usbip/stub_rx.c
++++ b/drivers/usb/usbip/stub_rx.c
+@@ -138,7 +138,9 @@ static int tweak_set_configuration_cmd(struct urb *urb)
+ 	req = (struct usb_ctrlrequest *) urb->setup_packet;
+ 	config = le16_to_cpu(req->wValue);
+ 
++	usb_lock_device(sdev->udev);
+ 	err = usb_set_configuration(sdev->udev, config);
++	usb_unlock_device(sdev->udev);
+ 	if (err && err != -ENODEV)
+ 		dev_err(&sdev->udev->dev, "can't set config #%d, error %d\n",
+ 			config, err);
+-- 
+2.35.1
 
