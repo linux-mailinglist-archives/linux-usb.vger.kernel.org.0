@@ -2,120 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F077A4FE070
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 14:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB55B4FE135
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 14:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350598AbiDLMkj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Apr 2022 08:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
+        id S1344329AbiDLMzF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Apr 2022 08:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355480AbiDLMjN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 08:39:13 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49281312
-        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 05:02:21 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id v4so8552383edl.7
-        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 05:02:21 -0700 (PDT)
+        with ESMTP id S1355242AbiDLMxz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 08:53:55 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4204DF6A;
+        Tue, 12 Apr 2022 05:25:31 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id b15so17371227pfm.5;
+        Tue, 12 Apr 2022 05:25:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QYvAQySo1sPsIjLPmB8FIvK2SiEiPIvz4SF0+8IYqQw=;
-        b=GTUU/BAw/7g1icPdyU1gicA+0STlI2aa4ncYMDx5RcmR/waZhtMZOSNr5gntvcxXkt
-         ZcRHjnk7S6mc7uTCeRabTQc9vxmnqPhg/QUV1E1kipzO+L0EyqtazSu7D+hHcyFzdRLY
-         xlaIvsEwqmFdCFMNA4xJ9nRZ+ILKSUyNWulsjOL3z46V0yzJoqFbUAbnwraaVq0bvp0w
-         uQlLLo3GU0MuerdCEEYIRrKWoo1PeJ1qi1IWeo5hFJP3kug2vwZN2B3S0Y7+T7Bi3itQ
-         QkRrJweOerYJHTf6hdqjrPxD+bLYZnhDzB85b3xjzrAz6MkqmXpnRN5ocAoLtSeLuVE7
-         z05w==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=33bKbKDNXAx3ppOPWZ4HVLiAbWGiHxY2Mxqx6kKUUjc=;
+        b=Uk8ggJ2OS0JkLBPm8p9999h8xf6fanlr6yaF1MHsctGgvCL+nUTWR57jYjdU8W3KLo
+         thpNjNrkq6k3/C2AqoXqGHtdbhL07ntH4o2jspWqz9ctAkoGHLsqz8S6qjYamQMfuE9C
+         C6vuU2r+ZUiew5O5Qah6wwZupIt9NN2Qtiyid1BH5oTZ+sL8YOn199jMxus2Bsjvna1t
+         U8isN3WQ95nAnf4JlxcLkWdCMR5jHns2sqByP5M/QK8tG1g9GzEUCdmuUbtgDjFmWL+m
+         98CmW59ozWwfJD+Mj3gcSPxzaJAz7/hDiNrL7yEIL+VH2HbMomYoEWMOGG+HuSu0UUZJ
+         30fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QYvAQySo1sPsIjLPmB8FIvK2SiEiPIvz4SF0+8IYqQw=;
-        b=PwnM9JLs5CQUTX2C9/9JqeE8fB7lphNaxyIjnsgsPrQ6WJHA3TFvN/KyzAmm9/nLK4
-         pQOzy1Y4zVAn7ags1V4XA397lnuIfxOBslTNjLgzLATf20J3Yb+UH9q3z3lbLq7B9NmU
-         KB7SFCVkcCPkdWT25IqcLtZfuctAVbfSiiOdFRO0sNHrA7+09HXFRherD33LqA/YxCG2
-         Rwtlmy4e/H4gtD+X13a9hwlEMQDsdnPwlyZhp24iK9aELSY6kC1PkcZzYDQvbW/UPlTM
-         LmBNYA7i5S61WYSO/abGWfCjL+JYFCI8makMtmUp4bmpxkdli5TVn+vbzP9ozCKlFJc9
-         4mVA==
-X-Gm-Message-State: AOAM5304YI8FCJTn0EUcHd4UsBIT0olCseIPa6FiO4Vr4k06NXMl5zhc
-        UdANVnJpDIpBYV1BLn4NXpYu3Q==
-X-Google-Smtp-Source: ABdhPJzxtTWRt335RkLqbr9SGrvPqsb0D1/lwfuPdhnA0WbWgovri7fB6O1ERz8pptVoCEjSQJ+L3w==
-X-Received: by 2002:a05:6402:438d:b0:419:4550:d52b with SMTP id o13-20020a056402438d00b004194550d52bmr38259034edc.83.1649764939866;
-        Tue, 12 Apr 2022 05:02:19 -0700 (PDT)
-Received: from [192.168.0.195] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id jw12-20020a17090776ac00b006e87137194esm4001892ejc.150.2022.04.12.05.02.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 05:02:19 -0700 (PDT)
-Message-ID: <37b21c24-22e0-2de2-697f-d22ff92b90c2@linaro.org>
-Date:   Tue, 12 Apr 2022 14:02:17 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v13 1/6] dt-bindings: usb: dwc3: Add wakeup-source
- property support
-Content-Language: en-US
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_kriskura@quicinc.com, quic_vpulyala@quicinc.com
-References: <1649704614-31518-1-git-send-email-quic_c_sanm@quicinc.com>
- <1649704614-31518-2-git-send-email-quic_c_sanm@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1649704614-31518-2-git-send-email-quic_c_sanm@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=33bKbKDNXAx3ppOPWZ4HVLiAbWGiHxY2Mxqx6kKUUjc=;
+        b=axqB5YwDcd83Augn9tPxh7M1cLinKjtw4dtrgW4HWNoPMEjUy3FiyVSpGrk7VNkPeo
+         9BYi6WnfuZtcnbsauus+83q99ZzbCGoQGhAdpOB6xd+rW1zeVg16EgKGDaujNxSR0ie/
+         AQ9jHLEN8DFJGzTtF1jt3XxDGGxzAUeLN6igS9pzqyWhiPx1v2o+QmaVnYWfrXw/sxVx
+         ffRdmz2l5MX1UEXIpwUNnx/vrTSp1DAm87NhgkPG2g1E6NK7DD3hJC2AYj/vRETMzFF/
+         hb4S3wOQfSBGbB5bhLJQwJApDezaPNZKF/u3D6HiZZB3pZlb3Wg99nFTzFFatrBUro86
+         7rIA==
+X-Gm-Message-State: AOAM531qdgbjXfutW9pH3yFzAQw0MF4t+xRWWUhZdNrvlHrKCy0Cyl5D
+        lIs/VmVfNBs0bHDqdgsvFF8=
+X-Google-Smtp-Source: ABdhPJycdPSZCbu4EHe5zFWxs7bVf9Z8wj+a4S2NpyQ6vGtHFc/5+yrhOdtwaM19rmz4m1S8g0UlRg==
+X-Received: by 2002:a63:c1b:0:b0:39d:93f7:4b7b with SMTP id b27-20020a630c1b000000b0039d93f74b7bmr2723057pgl.595.1649766331348;
+        Tue, 12 Apr 2022 05:25:31 -0700 (PDT)
+Received: from zeshkernups01.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id a16-20020a637050000000b00385f92b13d1sm2788915pgn.43.2022.04.12.05.25.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 05:25:30 -0700 (PDT)
+From:   Surong Pang <surong.pang@gmail.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V1 1/1] usb/host: Let usb phy shutdown later
+Date:   Tue, 12 Apr 2022 20:25:24 +0800
+Message-Id: <20220412122524.26966-1-surong.pang@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/04/2022 21:16, Sandeep Maheswaram wrote:
-> Added support for wakeup-source property. This property can be
-> used to check and power down the phy during system suspend if
-> wake up is not supported.
-> 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index f4471f8..4d4de2f 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -341,6 +341,11 @@ properties:
->        This port is used with the 'usb-role-switch' property  to connect the
->        dwc3 to type C connector.
->  
-> +  wakeup-source:
-> +    $ref: /schemas/types.yaml#/definitions/flag
+From: Surong Pang <surong.pang@unisoc.com>
 
-I would prefer to use shorter "type: boolean", but in any case:
+Let usb phy shutdown later in xhci_plat_remove function.
+Some phy driver doesn't divide 3.0/2.0 very clear.
+If calls usb_phy_shutdown earlier than usb_remove_hcd(hcd),
+It will case 10s cmd timeout issue.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Call usb phy shutdown later has better compatibility.
 
-> +    description:
-> +      Enable USB remote wakeup.
+Signed-off-by: Surong Pang <surong.pang@unisoc.com>
+---
+ drivers/usb/host/xhci-plat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 649ffd861b44..dc73a81cbe9b 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -390,7 +390,6 @@ static int xhci_plat_remove(struct platform_device *dev)
+ 
+ 	usb_remove_hcd(shared_hcd);
+ 	xhci->shared_hcd = NULL;
+-	usb_phy_shutdown(hcd->usb_phy);
+ 
+ 	usb_remove_hcd(hcd);
+ 	usb_put_hcd(shared_hcd);
+@@ -398,6 +397,7 @@ static int xhci_plat_remove(struct platform_device *dev)
+ 	clk_disable_unprepare(clk);
+ 	clk_disable_unprepare(reg_clk);
+ 	usb_put_hcd(hcd);
++	usb_phy_shutdown(hcd->usb_phy);
+ 
+ 	pm_runtime_disable(&dev->dev);
+ 	pm_runtime_put_noidle(&dev->dev);
+-- 
+2.17.1
 
-Best regards,
-Krzysztof
