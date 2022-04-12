@@ -2,96 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6434FE3F9
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 16:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B674FE40F
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 16:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245315AbiDLOk4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Apr 2022 10:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52500 "EHLO
+        id S1351628AbiDLOqc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Apr 2022 10:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbiDLOky (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 10:40:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5C25F266;
-        Tue, 12 Apr 2022 07:38:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A28660EC1;
-        Tue, 12 Apr 2022 14:38:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83018C385A1;
-        Tue, 12 Apr 2022 14:38:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649774316;
-        bh=lcIKnqX7ND/P1RbiqjkdmPWf/TRA+1K8M7N7NXSFRw0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RsBwi3/WtJtFYWnmy7meXcP0++2CjGti6kYk2bXS0e2jXcizaYzuZMdxn7HFJVnA5
-         R61xgErVwVl+UZkbuvdB2yOsDVIoVF/bqu1chYHRJXE+mcGTCQ8id1bBvSy5HaRmbE
-         7aL1gzWpl57xnz0CFtzDr7ii88W+RFuLOXgtj99g=
-Date:   Tue, 12 Apr 2022 16:38:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Jameson Thies <jthies@google.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] usb: typec: Separate sysfs directory for all USB
- PD objects
-Message-ID: <YlWO6UbZ8zM4f6b6@kroah.com>
-References: <20220412130023.83927-1-heikki.krogerus@linux.intel.com>
+        with ESMTP id S241788AbiDLOqa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 10:46:30 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96770120BD;
+        Tue, 12 Apr 2022 07:44:09 -0700 (PDT)
+Received: from localhost.localdomain (unknown [222.205.9.127])
+        by mail-app3 (Coremail) with SMTP id cC_KCgD3ScowkFViL2n8AQ--.1229S4;
+        Tue, 12 Apr 2022 22:44:01 +0800 (CST)
+From:   Lin Ma <linma@zju.edu.cn>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        mdharm-usb@one-eyed-alien.net
+Cc:     Lin Ma <linma@zju.edu.cn>, stable@vger.kernel.org
+Subject: [PATCH v4] USB: storage: karma: fix rio_karma_init return
+Date:   Tue, 12 Apr 2022 22:43:59 +0800
+Message-Id: <20220412144359.28447-1-linma@zju.edu.cn>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412130023.83927-1-heikki.krogerus@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cC_KCgD3ScowkFViL2n8AQ--.1229S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7CrWUtw48GFW5XFWDtFyUtrb_yoW8Ar4Dpa
+        ykGry5CrWUJF1fXr9rXryUuFy5Can7tFWjga4fK3ZI9rsrtF18CF12v3W0g3ZYqrySk3Wx
+        tF1v9Fy2gr1DAFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 04:00:20PM +0300, Heikki Krogerus wrote:
-> Hi,
-> 
-> In this version the USB Power Delivery support is now completely
-> separated into its own little subsystem. The USB Power Delivery
-> objects are not devices, but they are also no longer tied to any
-> device by default. This change makes it possible to share the USB PD
-> objects between multiple devices on top of being able to select the
-> objects that we want the device to use.
-> 
-> The USB Power Delivery objects are now placed under
-> /sys/kernel/usb_power_delivery directory. As an example:
-> 
-> 	/sys/kernel/usb_power_delivery/pd0
+The function rio_karam_init() should return -ENOMEM instead of
+value 0 (USB_STOR_TRANSPORT_GOOD) when allocation fails.
 
-No, sorry, this is a device, it does NOT belong in /sys/kernel/
+Similarly, it should return -EIO when rio_karma_send_command() fails.
 
-And this really should be a real device, as I mentioned before, not a
-kobject.
+Cc: stable@vger.kernel.org
+Fixes: dfe0d3ba20e8 ("USB Storage: add rio karma eject support")
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+---
+V3 -> V4: fix spelling mistake: Simlarly -> Similarly
+V2 -> V3: add Acked-by: Alan Stern <stern@rowland.harvard.edu>
+V1 -> V2: add Cc: stable@vger.kernel.org
+V0 -> V1: use -ENOMEM rather than USB_STOR_TRANSPORT_ERROR;
+          take care of rio_karma_send_command() too
 
-> So now that pd0 can be linked to a device, or devices, that want (or
-> can) use it to negotiate the USB PD contract with. An example where
-> two devices share the PD:
-> 
-> 	/sys/class/typec/port0/usb_power_delivery -> ../../../../../../../kernel/usb_power_delivery/pd0
-> 	/sys/class/typec/port1/usb_power_delivery -> ../../../../../../../kernel/usb_power_delivery/pd0
+ drivers/usb/storage/karma.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-Point to the pd device, not the kobject.
+diff --git a/drivers/usb/storage/karma.c b/drivers/usb/storage/karma.c
+index 05cec81dcd3f..38ddfedef629 100644
+--- a/drivers/usb/storage/karma.c
++++ b/drivers/usb/storage/karma.c
+@@ -174,24 +174,25 @@ static void rio_karma_destructor(void *extra)
+ 
+ static int rio_karma_init(struct us_data *us)
+ {
+-	int ret = 0;
+ 	struct karma_data *data = kzalloc(sizeof(struct karma_data), GFP_NOIO);
+ 
+ 	if (!data)
+-		goto out;
++		return -ENOMEM;
+ 
+ 	data->recv = kmalloc(RIO_RECV_LEN, GFP_NOIO);
+ 	if (!data->recv) {
+ 		kfree(data);
+-		goto out;
++		return -ENOMEM;
+ 	}
+ 
+ 	us->extra = data;
+ 	us->extra_destructor = rio_karma_destructor;
+-	ret = rio_karma_send_command(RIO_ENTER_STORAGE, us);
+-	data->in_storage = (ret == 0);
+-out:
+-	return ret;
++	if (rio_karma_send_command(RIO_ENTER_STORAGE, us))
++		return -EIO;
++
++	data->in_storage = 1;
++
++	return 0;
+ }
+ 
+ static struct scsi_host_template karma_host_template;
+-- 
+2.35.1
 
-> I did not change the directory hierarchy at all, because I'm assuming
-> that it is not a problem anymore:
-> 
-> 	pd0/<message>/<object>/<field>
-
-Let's get back to devices first, worry about crazy depth second.
-
-thanks,
-
-greg k-h
