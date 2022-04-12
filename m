@@ -2,76 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4362D4FCBDF
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 03:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBEB54FCBE8
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Apr 2022 03:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232828AbiDLB2o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Apr 2022 21:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
+        id S240601AbiDLBgH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Apr 2022 21:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiDLB2n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 21:28:43 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DF21A838;
-        Mon, 11 Apr 2022 18:26:28 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id j8so15372092pll.11;
-        Mon, 11 Apr 2022 18:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VxXbudBApxhZGcBQ0qzcnlkDnqM7YeuExCtSNL/Eqvw=;
-        b=gPhy/sTiFvw/el2eqjcLE3TmNLvKNHw98liUoLS8thb8poOFSm9QDgb6iOhhapdJzg
-         mg9Pf39+pqsq6GDIdkohKFMvHKXqtprbKumJnV3K8haL06rSMJcsOBeIV2hk8EnkFVMn
-         3PyRytXFHGJZyLNYWk4sUtKxlQiTZcwygYcoQmMwaeukeTocT7K67IZNXs4PmDVcWzBn
-         /kk8ZVM32CNsJffpyVClMspjMBE/yhh3W4h6kpYMQShY4pwVjV6SmYpqazYU+3a1SwOr
-         f9jX84jqYaVdRnxNCUMzV8icUYaZHKpVnCHGTS10ToIx71Ne93GZ15kqdGkiry/aDmHQ
-         6cSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VxXbudBApxhZGcBQ0qzcnlkDnqM7YeuExCtSNL/Eqvw=;
-        b=UxklTdzcfN0AU9kFu+7twsV+sd7Hq8PAE/9vFb2JzIxfyKiGl/km6wgTeRZDJNEcHd
-         WSpQ8CWO5pPhzc7tg+eYd3iJOTsVgSbv6mTp8XWpf/+a+5V/DJzHBFdr6d/xMjH4hhvP
-         pRd+S0v3QlHqf+ntmRujE7vb69C4pyIVIx7wFMTT2nqN/rR5xK3kqS+41avON7TM9GDx
-         +eh9+WetT0VCknMe0tR32cWKkT7U+7+LLIGTzucFmqRzViqxRMpdiWWPuAKZ3zZ9bJbX
-         ixrjW7MOJwl9oaAmEX32J8lmOmDLEyevqYbVRJ1VZxbka0kczpdwe4Gq5Qr6BtlPYxOk
-         cXFQ==
-X-Gm-Message-State: AOAM5303za7nUxwmx10IiU+RZLymTQuaa2khtrknWbOApL1Rfcuvteq5
-        JF/lCZOlOSUSqxB5VyKaH04=
-X-Google-Smtp-Source: ABdhPJwhEMQKP7S6/uyBvYw37FlDMIqUEsk1tQugjoKXwy2sj+PiM58nGoeWK2Ox8uN97L91Q0uBuA==
-X-Received: by 2002:a17:902:a9c2:b0:156:1859:2d05 with SMTP id b2-20020a170902a9c200b0015618592d05mr35878669plr.86.1649726787534;
-        Mon, 11 Apr 2022 18:26:27 -0700 (PDT)
-Received: from [10.11.37.162] ([103.84.139.53])
-        by smtp.gmail.com with ESMTPSA id d16-20020a17090ad99000b001bcbc4247a0sm665768pjv.57.2022.04.11.18.26.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 18:26:27 -0700 (PDT)
-Message-ID: <992417be-97f1-09bd-f847-b279460d595b@gmail.com>
-Date:   Tue, 12 Apr 2022 09:26:21 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] usb: usbip: fix a refcount leak in stub_probe()
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org, khoroshilov@ispras.ru
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220407022204.10730-1-hbh25y@gmail.com>
- <7c584e2d-1c23-3df9-7e4e-c4d9a9014224@linuxfoundation.org>
- <d40cb8cf-a92d-3f87-3af1-0422f8d8264f@gmail.com>
- <91089407-cc21-ba05-5346-4f546cca7555@linuxfoundation.org>
- <55d22e24-09ad-20b8-e1de-8d7c2f8ab1a8@gmail.com>
- <16876455-ed60-65c6-1375-ac88e4209cb2@linuxfoundation.org>
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <16876455-ed60-65c6-1375-ac88e4209cb2@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        with ESMTP id S230259AbiDLBgG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Apr 2022 21:36:06 -0400
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B9819C21;
+        Mon, 11 Apr 2022 18:33:50 -0700 (PDT)
+Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 3A276404CA;
+        Tue, 12 Apr 2022 01:33:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1649727230; bh=b9rZPdo/xNFCKfdrAM8qTsXc1lxV16YeecqOvKcWCbY=;
+        h=Date:From:Subject:To:Cc:From;
+        b=IGK5Dos4N4vKeey6PVzC7uSLyRClw3xRqwMxrkbdYNoWiFqAftDwv4dIYrLgJFGo8
+         zTVutN2YMjdUD/BpFRqhx2PzV67qjqQefvD1tuCji2i0xnJlQfJqU+1CIj389PAPML
+         0Z4BChGDLhhL23gFbBKVYVtmnQGL8uTqt7lhICVPdlcH3a+qQW8RjqvQr8X1Jw5AsV
+         P2f2/wwLk9gpT+iCEZuxcg+zg3Trhc27r85Gi0pIY8fWngd9dcNNbsn7xMBQquWjKh
+         WiFbPOCuvlRmv1Q8/aF2Plcscb9IGqc1xPZFaAoz7G5KjLgjoOy6RwtyzHREhRURHL
+         LAF1FCUGSs39A==
+Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 47D5AA0065;
+        Tue, 12 Apr 2022 01:33:47 +0000 (UTC)
+Received: by te-lab16-v2 (sSMTP sendmail emulation); Mon, 11 Apr 2022 18:33:47 -0700
+Date:   Mon, 11 Apr 2022 18:33:47 -0700
+Message-Id: <cccfce990b11b730b0dae42f9d217dc6fb988c90.1649727139.git.Thinh.Nguyen@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH] usb: dwc3: core: Fix tx/rx threshold settings
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        <stable@vger.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,42 +56,39 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2022/4/12 03:38, Shuah Khan wrote:
-> On 4/10/22 11:29 PM, Hangyu Hua wrote:
->> On 2022/4/8 23:04, Shuah Khan wrote:
->>> On 4/7/22 7:59 PM, Hangyu Hua wrote:
->>>> Hi Shuah,
->>>>
->>>> I find this by code review. Do i really need to add this to commit 
->>>> log? This look like a little weird.
->>>>
->>>
->>> Great. Good find.
->>>
->>> It is important to understand how the problem is found. Please add it
->>> the change log. We usually expect dmesg or such info. that revealed
->>> refcount leak, since this one is found during code review, we would
->>> like to see that information the commit log.
->>>
->>> Also please remember to avoid top posting.
->>
->> I get what you meant now. But i don't know how to get a clear dmesg or 
->> any other log. The kernel will not crash because of this. I just used 
->> gdb to find that udev->dev->kobj->kref gets bigger and bigger whenever 
->> I call stub_probe with busid_priv->status = STUB_BUSID_REMOV.
->>
->> Thanks for telling me the rules.
->>
-> 
-> There is no need to gather dmesg etc. Just add a note that you found
-> the problem during code review. Having complete information about why
-> a change is made will be helpful for future changes to this code and
-> somebody new trying understand the changes made to this file/routine
-> and why.
-> 
-> thanks,
-> -- Shuah
+The current driver logic checks against 0 to determine whether the
+periodic tx/rx threshold settings are set, but we may get bogus values
+from uninitialized variables if no device property is set. Properly
+default these variables to 0.
 
-I get it. I will submit a v3.
+Cc: <stable@vger.kernel.org>
+Fixes: 938a5ad1d305 ("usb: dwc3: Check for ESS TX/RX threshold config")
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+ drivers/usb/dwc3/core.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Thanks.
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 1170b800acdc..1e068551dc7a 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1377,10 +1377,10 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+ 	u8			lpm_nyet_threshold;
+ 	u8			tx_de_emphasis;
+ 	u8			hird_threshold;
+-	u8			rx_thr_num_pkt_prd;
+-	u8			rx_max_burst_prd;
+-	u8			tx_thr_num_pkt_prd;
+-	u8			tx_max_burst_prd;
++	u8			rx_thr_num_pkt_prd = 0;
++	u8			rx_max_burst_prd = 0;
++	u8			tx_thr_num_pkt_prd = 0;
++	u8			tx_max_burst_prd = 0;
+ 	u8			tx_fifo_resize_max_num;
+ 	const char		*usb_psy_name;
+ 	int			ret;
+
+base-commit: b3fa25de31fb7e9afebe9599b8ff32eda13d7c94
+-- 
+2.28.0
+
