@@ -2,128 +2,208 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A2E4FF6EB
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Apr 2022 14:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E41E54FF6FA
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Apr 2022 14:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233183AbiDMMjc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Apr 2022 08:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S235585AbiDMMmV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Apr 2022 08:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232694AbiDMMjb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Apr 2022 08:39:31 -0400
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C14E434B7;
-        Wed, 13 Apr 2022 05:37:09 -0700 (PDT)
-Received: by mail-vk1-xa36.google.com with SMTP id o14so769167vkf.13;
-        Wed, 13 Apr 2022 05:37:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=l91PaoNzkraHqeajdUVuvzQMezggMyac9Bnl2PBAwYE=;
-        b=GY+Nx/NLjsUDY2KpKhXCF0f+wm3O1zKwOqSZqRMwSH/56LljWI42nzXFPSbOLyCzgT
-         38WLFUE7x1wXVcgpN+m50/DObAWM4TnxUxxRmFhI/C9OoGZK4NuzYTGMq2Rm5gfC2W59
-         5NLo7/rvy6vTcgAgP/s6fT6oILUlEPqJR7TkH7m5VJYlOAMtELQhO2QUn7l50LFhFp3p
-         v6oSBLHRPNRnN3wVuNHT3YkYnjj2RPzO9KpRP3DWjy1xFP4HW+Br7ccBiLlarZcjMUVS
-         U6i/JaRu2U861B3HZ466iOe9s1qpyrndnCtwiKI+X1ic2HRWNvuQH1WT8I3bhjPSOUIu
-         CFHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l91PaoNzkraHqeajdUVuvzQMezggMyac9Bnl2PBAwYE=;
-        b=K/9w5RqodWriEVvuKJ+pEH4qI4xncynenFD3UvhoB/swI2yswB1sTEYy3YcZDN7oQp
-         dYp6UQhjUPh4RABVdSpizJpPeFnPtWiqMSgu2A6bHmtbsKKj4M3wIkjrAlUgo/u+HFRz
-         67kkLnEGxV3x30urhkrXa8/fzukfWgN/czoQT0+Z8TklKwJj3E1ud2+4BOqHRuGQKW2V
-         0r5PSrZoFLN5956z6+DGKX2iIfQoITySOijvaEyOMaA4ovF8Xub5rJgxtULBvXpv8sMF
-         RLmKzmHHQSxZc8kRcY6KWLTOGMyyB22VLlG2ePJ62EpZe/9ZBHi4+JZrIpDZgDcrOh8t
-         kz8A==
-X-Gm-Message-State: AOAM5320VnjBgaWSL1kURKVF/+yVcKOIpCpDMjVMdMz80TE6cqcN+OgO
-        YJGu5KcMZDv24xi8o/Mt1ep0tyZVrO0X7KZK1lg=
-X-Google-Smtp-Source: ABdhPJxGJlkfPgu8vJf3w4y+p8nnMcci1I50j/3AishPt40LSnppecm72DbL0epYWf0Sht2/EZHHGcU9xC0srQzNp3g=
-X-Received: by 2002:a1f:ac95:0:b0:345:2ade:e54b with SMTP id
- v143-20020a1fac95000000b003452adee54bmr8524580vke.3.1649853428705; Wed, 13
- Apr 2022 05:37:08 -0700 (PDT)
+        with ESMTP id S233514AbiDMMmU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Apr 2022 08:42:20 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDEE1CB27
+        for <linux-usb@vger.kernel.org>; Wed, 13 Apr 2022 05:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649853599; x=1681389599;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Y1uhrIu6CQ0WQ7zQxY/F/nh1VSpZRva8ea2YDEdWIbE=;
+  b=VsqmtHY4A8lGxZmLOwqtlL6HM7GgFH3W9tsmpiha7BmhnFFCqYKnbov6
+   swMLUt0gyndGWatc+9g4odllthrcYQScNMyzuQG3jkLhaFs6wO4PWuVc/
+   /2sieKTkvAblXjKQQ2B+qLKSNRNFyvqHZVy6GqSjxbXsIoH2GRVo0PYTw
+   E8+A2Kn/uG5QD4lDvi0ooq0bBoZF9uso8apaAUdfuPmbDinn9yMwAacZb
+   ZIH6OHzHB3cSMqusVwykW0+/qgDhbH13Lqj7qVUpX7ecFCvOkI4JURfQt
+   oS1d3khwL310JOSv/zGaims5KHwyvl1Ldqb49/la9FRGmKQByi1hpYhsH
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="325556314"
+X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
+   d="scan'208";a="325556314"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 05:39:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
+   d="scan'208";a="700230607"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 13 Apr 2022 05:39:56 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 13 Apr 2022 15:39:55 +0300
+Date:   Wed, 13 Apr 2022 15:39:55 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>
+Subject: Re: [PATCH v3 4/4] usb: typec: ucsi: retry find role swithch when
+ module load late
+Message-ID: <YlbEm31fOaMsFW6C@kuha.fi.intel.com>
+References: <1649843891-15554-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1649843891-15554-5-git-send-email-quic_linyyuan@quicinc.com>
 MIME-Version: 1.0
-References: <20220404151036.265901-1-k.kahurani@gmail.com> <20220404153151.GF3293@kadam>
-In-Reply-To: <20220404153151.GF3293@kadam>
-From:   David Kahurani <k.kahurani@gmail.com>
-Date:   Wed, 13 Apr 2022 15:36:57 +0300
-Message-ID: <CAAZOf25i_mLO9igOY5wiUaxLOsxMt3jrvytSm1wm95R-bdKysA@mail.gmail.com>
-Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read errors
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     netdev@vger.kernel.org,
-        syzbot <syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com>,
-        davem@davemloft.net, jgg@ziepe.ca, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Phillip Potter <phil@philpotter.co.uk>,
-        syzkaller-bugs@googlegroups.com, arnd@arndb.de,
-        Pavel Skripkin <paskripkin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1649843891-15554-5-git-send-email-quic_linyyuan@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 6:32 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+Hi,
 
-Hi Dan
+You have to make the subject line a bit more clear. Perhaps you could
+just say "Wait for the USB role switches".
 
-> >       int ret;
-> >       int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
-> > @@ -201,9 +202,12 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> >       ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
-> >                value, index, data, size);
-> >
-> > -     if (unlikely(ret < 0))
-> > +     if (unlikely(ret < size)) {
-> > +             ret = ret < 0 ? ret : -ENODATA;
-> > +
-> >               netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
-> >                           index, ret);
-> > +     }
-> >
-> >       return ret;
->
-> It would be better to make __ax88179_read_cmd() return 0 on success
-> instead of returning size on success.  Non-standard returns lead to bugs.
->
+On Wed, Apr 13, 2022 at 05:58:11PM +0800, Linyu Yuan wrote:
+> When role switch enabled, return -EAGAIN if fail to find it due to
+> module load ordering issue, then restart ucsi init work to find
+> it again every 100ms.
 
-I don't suppose this would have much effect on the structure of the
-code and indeed plan to do this but just some minor clarification.
+It looks like you did not update that.
 
-Isn't it standard for reader functions to return the number of bytes read?
+> It also means change ucsi init work to delayed_work.
 
-Regards,
-David.
+So from where does that 100ms come from?
 
->
-> > @@ -1060,16 +1151,30 @@ static int ax88179_check_eeprom(struct usbnet *dev)
-> >
-> >               jtimeout = jiffies + delay;
-> >               do {
-> > -                     ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_CMD,
-> > -                                      1, 1, &buf);
-> > +                 ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_CMD,
-> > +                                        1, 1, &buf);
-> > +
-> > +                 if (ret < 0) {
-> > +                         netdev_dbg(dev->net,
-> > +                                    "Failed to read SROM_CMD: %d\n",
-> > +                                    ret);
-> > +                         return ret;
-> > +                 }
-> >
-> >                       if (time_after(jiffies, jtimeout))
-> >                               return -EINVAL;
->
-> The indenting here is wrong.  Run scripts/checkpatch.pl on your patches.
->
-> regards,
-> dan carpenter
->
+> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> ---
+> v2: keep original con->num in debug log
+> v3: change return value from -EAGAIN to PTR_ERR()
+> 
+>  drivers/usb/typec/ucsi/ucsi.c | 28 ++++++++++++++++------------
+>  drivers/usb/typec/ucsi/ucsi.h |  2 +-
+>  2 files changed, 17 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index ce9192e..63c25dd 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1053,6 +1053,14 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  	con->num = index + 1;
+>  	con->ucsi = ucsi;
+>  
+> +	cap->fwnode = ucsi_find_fwnode(con);
+> +	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
+> +	if (IS_ERR(con->usb_role_sw)) {
+> +		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
+> +			con->num);
+> +		return PTR_ERR(con->usb_role_sw);
+> +	}
+> +
+>  	/* Delay other interactions with the con until registration is complete */
+>  	mutex_lock(&con->lock);
+>  
+> @@ -1088,7 +1096,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  	if (con->cap.op_mode & UCSI_CONCAP_OPMODE_DEBUG_ACCESSORY)
+>  		*accessory = TYPEC_ACCESSORY_DEBUG;
+>  
+> -	cap->fwnode = ucsi_find_fwnode(con);
+>  	cap->driver_data = con;
+>  	cap->ops = &ucsi_ops;
+>  
+> @@ -1147,13 +1154,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  		ucsi_port_psy_changed(con);
+>  	}
+>  
+> -	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
+> -	if (IS_ERR(con->usb_role_sw)) {
+> -		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
+> -			con->num);
+> -		con->usb_role_sw = NULL;
+> -	}
+> -
+>  	/* Only notify USB controller if partner supports USB data */
+>  	if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) & UCSI_CONSTAT_PARTNER_FLAG_USB))
+>  		u_role = USB_ROLE_NONE;
+> @@ -1286,12 +1286,16 @@ static int ucsi_init(struct ucsi *ucsi)
+>  
+>  static void ucsi_init_work(struct work_struct *work)
+>  {
+> -	struct ucsi *ucsi = container_of(work, struct ucsi, work);
+> +	struct ucsi *ucsi = container_of(work, struct ucsi, work.work);
+>  	int ret;
+>  
+>  	ret = ucsi_init(ucsi);
+>  	if (ret)
+>  		dev_err(ucsi->dev, "PPM init failed (%d)\n", ret);
+> +
+> +
+
+Extra line.
+
+> +	if (ret == -EPROBE_DEFER)
+> +		queue_delayed_work(system_long_wq, &ucsi->work, HZ/10);
+
+You have to stop queueing that eventually. You need a counter.
+
+I'm still not sure why do you want to queue this same work again and
+again? Why not just call ucsi_init() in a loop?
+
+        int my_counter = 1000;
+
+        while (ucsi_init(ucsi) == -EPROBE_DEFER && my_counter--)
+                msleep(10);
+
+>  }
+>  
+>  /**
+> @@ -1331,7 +1335,7 @@ struct ucsi *ucsi_create(struct device *dev, const struct ucsi_operations *ops)
+>  	if (!ucsi)
+>  		return ERR_PTR(-ENOMEM);
+>  
+> -	INIT_WORK(&ucsi->work, ucsi_init_work);
+> +	INIT_DELAYED_WORK(&ucsi->work, ucsi_init_work);
+>  	mutex_init(&ucsi->ppm_lock);
+>  	ucsi->dev = dev;
+>  	ucsi->ops = ops;
+> @@ -1366,7 +1370,7 @@ int ucsi_register(struct ucsi *ucsi)
+>  	if (!ucsi->version)
+>  		return -ENODEV;
+>  
+> -	queue_work(system_long_wq, &ucsi->work);
+> +	queue_delayed_work(system_long_wq, &ucsi->work, 0);
+>  
+>  	return 0;
+>  }
+> @@ -1383,7 +1387,7 @@ void ucsi_unregister(struct ucsi *ucsi)
+>  	u64 cmd = UCSI_SET_NOTIFICATION_ENABLE;
+>  
+>  	/* Make sure that we are not in the middle of driver initialization */
+> -	cancel_work_sync(&ucsi->work);
+> +	cancel_delayed_work_sync(&ucsi->work);
+>  
+>  	/* Disable notifications */
+>  	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index 280f1e1..3812017 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -287,7 +287,7 @@ struct ucsi {
+>  	struct ucsi_capability cap;
+>  	struct ucsi_connector *connector;
+>  
+> -	struct work_struct work;
+> +	struct delayed_work work;
+>  
+>  	/* PPM Communication lock */
+>  	struct mutex ppm_lock;
+> -- 
+> 2.7.4
+
+thanks,
+
+-- 
+heikki
