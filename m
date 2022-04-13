@@ -2,65 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3A84FF085
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Apr 2022 09:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306C34FF0B3
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Apr 2022 09:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232106AbiDMH2S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Apr 2022 03:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
+        id S233412AbiDMHkq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Apr 2022 03:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiDMH2R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Apr 2022 03:28:17 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679E638BCD
-        for <linux-usb@vger.kernel.org>; Wed, 13 Apr 2022 00:25:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649834576;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=jSef++PqlCRC5a4E7G9ko+rR3cG0lpZnUPx+3xD3i7k=;
-    b=MiFx7X19KcZviO8N1lBrrnZQxFqdpVnskMF7uzqQgRP/aJm+jDz2EM+ReZG3FMkR5v
-    JdYIVJZzej7TkIId6fWcDIni7CLtCBG9UGi0/kPPjn4TZ6CeqPKlF9q9iqr3wv6s4+k7
-    Tz0eSNte16z2hyyaXk0SB3UP4ym/Jdr5XGXjLP2mMS2fJqvMe+OrN32QNsghhrpo2WBe
-    R60work5jkLFacohwDMRmCtDdfPWaSS4E56DF762marMk6BUmQpfVSd+n+KkoPYLoC7L
-    Jc+D0HRXsRjoRhFKBPZjttEZZGcvs7R6zY9G0Mi6skCLwoZtATU6BlU9mAGFD0BkLI6b
-    slsw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw4nvnQ=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
-    with ESMTPSA id k708cfy3D7Mt7tg
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Wed, 13 Apr 2022 09:22:55 +0200 (CEST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v2 1/2] dt-bindings: dwc2: Add bindings for new Ingenic
- SoCs.
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <1649788201-87620-2-git-send-email-zhouyanjie@wanyeetech.com>
-Date:   Wed, 13 Apr 2022 09:22:54 +0200
+        with ESMTP id S233296AbiDMHkp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Apr 2022 03:40:45 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFBBDBC
+        for <linux-usb@vger.kernel.org>; Wed, 13 Apr 2022 00:38:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649835504; x=1681371504;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=o9zSesFIi1JOFxVcXN76qoS0XQAQ9WgXX8LDf+ul7zg=;
+  b=A2dvDSQCxsN0Z8dQBTrsLzFbahH3HCIs1VOK36Dxv8yZQt08tTWibU6N
+   UWN9QFtoWCQ6ecBsPwoHLHEuQb0ll1XCi/7Oc2O3h07Rvjrgiw8gSzSen
+   BPejbe7qvMesEUHtZO/rl5mS63+FZFKyO1++HdYnMQ52ZRNTF9QkL1Gy8
+   lpEFO8bUH+fVbg6qs0cB9kXp5FIMFAdbGBmCfzJALJzl3iX6hnXFzt0GO
+   fgN2+8bfjr7K8rBKoL34Y23PWeQJyRKkSLpRRUAk1vr1iQIFD9I6rMyX2
+   jiD7cNE9Isi8GAL1bCsf2k0GVrh57BsvFwv02xqE3Ivm4hd19rqUeYuFl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="261446716"
+X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
+   d="scan'208";a="261446716"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 00:38:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
+   d="scan'208";a="700148774"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 13 Apr 2022 00:38:22 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 13 Apr 2022 10:38:21 +0300
+Date:   Wed, 13 Apr 2022 10:38:21 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        hminas@synopsys.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dragancecavac@yahoo.com, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, reimu@sudomaker.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <6F03670F-9040-4560-AD78-CC7A03EC678F@goldelico.com>
-References: <1649788201-87620-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1649788201-87620-2-git-send-email-zhouyanjie@wanyeetech.com>
-To:     =?utf-8?B?IuWRqOeQsOadsCAoWmhvdSBZYW5qaWUpIg==?= 
-        <zhouyanjie@wanyeetech.com>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        linux-usb@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>
+Subject: Re: [PATCH 2/3] usb: typec: ucsi: add a common function
+ ucsi_connector_clean()
+Message-ID: <YlZ97SSX2kTwzj5z@kuha.fi.intel.com>
+References: <1649759407-24049-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1649759407-24049-3-git-send-email-quic_linyyuan@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1649759407-24049-3-git-send-email-quic_linyyuan@quicinc.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,69 +62,110 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-> Am 12.04.2022 um 20:30 schrieb =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou =
-Yanjie) <zhouyanjie@wanyeetech.com>:
->=20
-> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000
-> SoC, the X1600 SoC, the X1700 SoC, the X1830 SoC, and the X2000 SoC
-> from Ingenic.
->=20
-> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) =
-<zhouyanjie@wanyeetech.com>
-> Acked-by: Rob Herring <robh@kernel.org>
+On Tue, Apr 12, 2022 at 06:30:06PM +0800, Linyu Yuan wrote:
+> In error path of ucsi_init(), it will clean all valid ucsi connector,
+> and samiliar operation also happen in ucsi_unregister(),
+> add a common function for two places.
+> 
+> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 > ---
->=20
-> Notes:
->    v1->v2:
->    Add Rob Herring's Acked-by.
->=20
-> Documentation/devicetree/bindings/usb/dwc2.yaml | 7 +++++++
-> 1 file changed, 7 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml =
-b/Documentation/devicetree/bindings/usb/dwc2.yaml
-> index 4cebce6..c6e8c0b 100644
-> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
-> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
-> @@ -17,6 +17,13 @@ properties:
->     oneOf:
->       - const: brcm,bcm2835-usb
->       - const: hisilicon,hi6220-usb
-> +      - const: ingenic,jz4775-otg
-> +      - const: ingenic,jz4780-otg
-> +      - const: ingenic,x1000-otg
-> +      - const: ingenic,x1600-otg
-> +      - const: ingenic,x1700-otg
-> +      - const: ingenic,x1830-otg
-> +      - const: ingenic,x2000-otg
+>  drivers/usb/typec/ucsi/ucsi.c | 46 +++++++++++++++++++++----------------------
+>  1 file changed, 23 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 77ac0b7..684fc4f 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1187,6 +1187,27 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  	return ret;
+>  }
+>  
+> +static void ucsi_connector_clean(struct ucsi *ucsi)
+> +{
+> +	struct ucsi_connector *con;
+> +
+> +	if (!ucsi->connector)
+> +		return;
+> +
+> +	for (con = ucsi->connector; con->port; con++) {
+> +		cancel_work_sync(&con->work);
+> +		ucsi_unregister_partner(con);
+> +		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
+> +		ucsi_unregister_port_psy(con);
+> +		if (con->wq)
+> +			destroy_workqueue(con->wq);
+> +		typec_unregister_port(con->port);
+> +	}
+> +
+> +	kfree(ucsi->connector);
+> +	ucsi->connector = NULL;
+> +}
 
-I have merged it with my recently proposed removal of
-ingenic,jz4780-otg in jz4780.dtsi but there was no dtbscheck
-complaint about missing snps,dwc2.
+This looks OK, but the name of the function is confusing to me. Can
+you make that ucsi_remove_connectors(), or perhaps
+ucsi_unregister_connectors() to keep it alligned with the other
+function names in this driver?
 
-So I think should it be:
-
-      - items:
-          - enum:
-              - const: ingenic,jz4775-otg
-              - const: ingenic,jz4780-otg
-              - const: ingenic,x1000-otg
-              - const: ingenic,x1600-otg
-              - const: ingenic,x1700-otg
-              - const: ingenic,x1830-otg
-              - const: ingenic,x2000-otg
-          - const: snps,dwc2
-
-similar to the entry for amlogic?
-
->       - items:
->           - const: rockchip,rk3066-usb
->           - const: snps,dwc2
-> --=20
+>  /**
+>   * ucsi_init - Initialize UCSI interface
+>   * @ucsi: UCSI to be initialized
+> @@ -1195,7 +1216,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>   */
+>  static int ucsi_init(struct ucsi *ucsi)
+>  {
+> -	struct ucsi_connector *con;
+>  	u64 command;
+>  	int ret;
+>  	int i;
+> @@ -1250,15 +1270,7 @@ static int ucsi_init(struct ucsi *ucsi)
+>  	return 0;
+>  
+>  err_unregister:
+> -	for (con = ucsi->connector; con->port; con++) {
+> -		ucsi_unregister_partner(con);
+> -		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
+> -		ucsi_unregister_port_psy(con);
+> -		if (con->wq)
+> -			destroy_workqueue(con->wq);
+> -		typec_unregister_port(con->port);
+> -		con->port = NULL;
+> -	}
+> +	ucsi_connector_clean(ucsi);
+>  
+>  err_reset:
+>  	memset(&ucsi->cap, 0, sizeof(ucsi->cap));
+> @@ -1364,7 +1376,6 @@ EXPORT_SYMBOL_GPL(ucsi_register);
+>  void ucsi_unregister(struct ucsi *ucsi)
+>  {
+>  	u64 cmd = UCSI_SET_NOTIFICATION_ENABLE;
+> -	int i;
+>  
+>  	/* Make sure that we are not in the middle of driver initialization */
+>  	cancel_work_sync(&ucsi->work);
+> @@ -1372,18 +1383,7 @@ void ucsi_unregister(struct ucsi *ucsi)
+>  	/* Disable notifications */
+>  	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
+>  
+> -	for (i = 0; i < ucsi->cap.num_connectors; i++) {
+> -		cancel_work_sync(&ucsi->connector[i].work);
+> -		ucsi_unregister_partner(&ucsi->connector[i]);
+> -		ucsi_unregister_altmodes(&ucsi->connector[i],
+> -					 UCSI_RECIPIENT_CON);
+> -		ucsi_unregister_port_psy(&ucsi->connector[i]);
+> -		if (ucsi->connector[i].wq)
+> -			destroy_workqueue(ucsi->connector[i].wq);
+> -		typec_unregister_port(ucsi->connector[i].port);
+> -	}
+> -
+> -	kfree(ucsi->connector);
+> +	ucsi_connector_clean(ucsi);
+>  }
+>  EXPORT_SYMBOL_GPL(ucsi_unregister);
+>  
+> -- 
 > 2.7.4
->=20
 
-BR and thanks,
-Nikolaus=
+thanks,
+
+-- 
+heikki
