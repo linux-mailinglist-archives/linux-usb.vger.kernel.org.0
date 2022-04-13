@@ -2,193 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651594FF669
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Apr 2022 14:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A2E4FF6EB
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Apr 2022 14:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235442AbiDMMLU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Apr 2022 08:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55290 "EHLO
+        id S233183AbiDMMjc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Apr 2022 08:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235422AbiDMMLT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Apr 2022 08:11:19 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3A15D1B8
-        for <linux-usb@vger.kernel.org>; Wed, 13 Apr 2022 05:08:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649851736; x=1681387736;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LTNCzDZKbtndFAmRAh6gWs6lgPmEjLZnYzpr6t7R/jI=;
-  b=NqEfc23GbQ1Z1GPhiX+Y5FZKgFe6WNN2ZLheS01IeiMdmCRSE5P+PH3D
-   iwyUuSkhB9/J/WU2swxL/FBtBMljw2Ypg3TAGguSSm89Lq660I8tgJKW8
-   ir38zaCWFUi9PQuxHajIoZbJR91CdPgzzo5lrMt9pBv/mMbGXZ1W0mVWl
-   tH3835zs36sqGW0k2aeAELcdyRcq+cE4F55jvQ7Atyq451giZtmxvfZHH
-   7wkDWtCoiZ4WdkfSbWwLM3E7M3Vo235NRSEQYCQgitQ+iPZfiWv1G2vsJ
-   OgNEr5jC6G7LjGLcQ6ibUb0bzPLPcLxvqQKE5IjGH131N/el3Y/EQ2mLE
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="249935308"
-X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="249935308"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 05:08:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,256,1643702400"; 
-   d="scan'208";a="700222200"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 13 Apr 2022 05:08:53 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 13 Apr 2022 15:08:52 +0300
-Date:   Wed, 13 Apr 2022 15:08:52 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>
-Subject: Re: [PATCH v3 2/4] usb: typec: ucsi: add a common function
- ucsi_unregister_connectors()
-Message-ID: <Yla9VGMpcDcpJR0f@kuha.fi.intel.com>
-References: <1649843891-15554-1-git-send-email-quic_linyyuan@quicinc.com>
- <1649843891-15554-3-git-send-email-quic_linyyuan@quicinc.com>
+        with ESMTP id S232694AbiDMMjb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Apr 2022 08:39:31 -0400
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C14E434B7;
+        Wed, 13 Apr 2022 05:37:09 -0700 (PDT)
+Received: by mail-vk1-xa36.google.com with SMTP id o14so769167vkf.13;
+        Wed, 13 Apr 2022 05:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l91PaoNzkraHqeajdUVuvzQMezggMyac9Bnl2PBAwYE=;
+        b=GY+Nx/NLjsUDY2KpKhXCF0f+wm3O1zKwOqSZqRMwSH/56LljWI42nzXFPSbOLyCzgT
+         38WLFUE7x1wXVcgpN+m50/DObAWM4TnxUxxRmFhI/C9OoGZK4NuzYTGMq2Rm5gfC2W59
+         5NLo7/rvy6vTcgAgP/s6fT6oILUlEPqJR7TkH7m5VJYlOAMtELQhO2QUn7l50LFhFp3p
+         v6oSBLHRPNRnN3wVuNHT3YkYnjj2RPzO9KpRP3DWjy1xFP4HW+Br7ccBiLlarZcjMUVS
+         U6i/JaRu2U861B3HZ466iOe9s1qpyrndnCtwiKI+X1ic2HRWNvuQH1WT8I3bhjPSOUIu
+         CFHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l91PaoNzkraHqeajdUVuvzQMezggMyac9Bnl2PBAwYE=;
+        b=K/9w5RqodWriEVvuKJ+pEH4qI4xncynenFD3UvhoB/swI2yswB1sTEYy3YcZDN7oQp
+         dYp6UQhjUPh4RABVdSpizJpPeFnPtWiqMSgu2A6bHmtbsKKj4M3wIkjrAlUgo/u+HFRz
+         67kkLnEGxV3x30urhkrXa8/fzukfWgN/czoQT0+Z8TklKwJj3E1ud2+4BOqHRuGQKW2V
+         0r5PSrZoFLN5956z6+DGKX2iIfQoITySOijvaEyOMaA4ovF8Xub5rJgxtULBvXpv8sMF
+         RLmKzmHHQSxZc8kRcY6KWLTOGMyyB22VLlG2ePJ62EpZe/9ZBHi4+JZrIpDZgDcrOh8t
+         kz8A==
+X-Gm-Message-State: AOAM5320VnjBgaWSL1kURKVF/+yVcKOIpCpDMjVMdMz80TE6cqcN+OgO
+        YJGu5KcMZDv24xi8o/Mt1ep0tyZVrO0X7KZK1lg=
+X-Google-Smtp-Source: ABdhPJxGJlkfPgu8vJf3w4y+p8nnMcci1I50j/3AishPt40LSnppecm72DbL0epYWf0Sht2/EZHHGcU9xC0srQzNp3g=
+X-Received: by 2002:a1f:ac95:0:b0:345:2ade:e54b with SMTP id
+ v143-20020a1fac95000000b003452adee54bmr8524580vke.3.1649853428705; Wed, 13
+ Apr 2022 05:37:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1649843891-15554-3-git-send-email-quic_linyyuan@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220404151036.265901-1-k.kahurani@gmail.com> <20220404153151.GF3293@kadam>
+In-Reply-To: <20220404153151.GF3293@kadam>
+From:   David Kahurani <k.kahurani@gmail.com>
+Date:   Wed, 13 Apr 2022 15:36:57 +0300
+Message-ID: <CAAZOf25i_mLO9igOY5wiUaxLOsxMt3jrvytSm1wm95R-bdKysA@mail.gmail.com>
+Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read errors
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     netdev@vger.kernel.org,
+        syzbot <syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com>,
+        davem@davemloft.net, jgg@ziepe.ca, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Phillip Potter <phil@philpotter.co.uk>,
+        syzkaller-bugs@googlegroups.com, arnd@arndb.de,
+        Pavel Skripkin <paskripkin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 05:58:09PM +0800, Linyu Yuan wrote:
-> In error path of ucsi_init(), it will unregister all valid ucsi connector,
-> and samiliar operation also happen in ucsi_unregister(),
+On Mon, Apr 4, 2022 at 6:32 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
 
-Sorry but I have to confirm this: with "samiliar" you mean "the same",
-right?
+Hi Dan
 
-> add a common function for two places.
-> 
-> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
-> ---
-> v2: improve ucsi_connector_clean(), check total number of connector.
-> v3: rename to ucsi_unregister_connectors(), suggest by maintainer
-> 
->  drivers/usb/typec/ucsi/ucsi.c | 51 ++++++++++++++++++++++++-------------------
->  1 file changed, 28 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 77ac0b7..af9a2a1 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1187,6 +1187,32 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
->  	return ret;
->  }
->  
-> +static void ucsi_unregister_connectors(struct ucsi *ucsi)
-> +{
-> +	struct ucsi_connector *con;
-> +	int i;
-> +
-> +	if (!ucsi->connector)
-> +		return;
+> >       int ret;
+> >       int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
+> > @@ -201,9 +202,12 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+> >       ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+> >                value, index, data, size);
+> >
+> > -     if (unlikely(ret < 0))
+> > +     if (unlikely(ret < size)) {
+> > +             ret = ret < 0 ? ret : -ENODATA;
+> > +
+> >               netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
+> >                           index, ret);
+> > +     }
+> >
+> >       return ret;
+>
+> It would be better to make __ax88179_read_cmd() return 0 on success
+> instead of returning size on success.  Non-standard returns lead to bugs.
+>
 
-Can that actually ever happen?
+I don't suppose this would have much effect on the structure of the
+code and indeed plan to do this but just some minor clarification.
 
-> +	for (i = 0; i < ucsi->cap.num_connectors; i++) {
-> +		con = &ucsi->connector[i];
-> +		if (!con->port)
-> +			break;
-> +
-> +		cancel_work_sync(&con->work);
-> +		ucsi_unregister_partner(con);
-> +		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
-> +		ucsi_unregister_port_psy(con);
-> +		if (con->wq)
-> +			destroy_workqueue(con->wq);
-> +		typec_unregister_port(con->port);
-> +	}
-> +
-> +	kfree(ucsi->connector);
-> +	ucsi->connector = NULL;
-> +}
+Isn't it standard for reader functions to return the number of bytes read?
 
-Another way of doing this would be to just remove a single connector
-in the function, and leave the loops to the callers.
+Regards,
+David.
 
-static void ucsi_unregister_connector(struct ucsi_connector *con)
-{
-        cancel_work_sync(&con->work);
-        ucsi_unregister_partner(con);
-        ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
-        ucsi_unregister_port_psy(con);
-        if (con->wq)
-                destroy_workqueue(con->wq);
-        typec_unregister_port(con->port);
-}
-
-I wonder would it actually be a bit more clearer to do it like that...
-I'll leave the decision to you.
-
->  /**
->   * ucsi_init - Initialize UCSI interface
->   * @ucsi: UCSI to be initialized
-> @@ -1195,7 +1221,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
->   */
->  static int ucsi_init(struct ucsi *ucsi)
->  {
-> -	struct ucsi_connector *con;
->  	u64 command;
->  	int ret;
->  	int i;
-> @@ -1250,15 +1275,7 @@ static int ucsi_init(struct ucsi *ucsi)
->  	return 0;
->  
->  err_unregister:
-> -	for (con = ucsi->connector; con->port; con++) {
-> -		ucsi_unregister_partner(con);
-> -		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
-> -		ucsi_unregister_port_psy(con);
-> -		if (con->wq)
-> -			destroy_workqueue(con->wq);
-> -		typec_unregister_port(con->port);
-> -		con->port = NULL;
-> -	}
-> +	ucsi_unregister_connectors(ucsi);
->  
->  err_reset:
->  	memset(&ucsi->cap, 0, sizeof(ucsi->cap));
-> @@ -1364,7 +1381,6 @@ EXPORT_SYMBOL_GPL(ucsi_register);
->  void ucsi_unregister(struct ucsi *ucsi)
->  {
->  	u64 cmd = UCSI_SET_NOTIFICATION_ENABLE;
-> -	int i;
->  
->  	/* Make sure that we are not in the middle of driver initialization */
->  	cancel_work_sync(&ucsi->work);
-> @@ -1372,18 +1388,7 @@ void ucsi_unregister(struct ucsi *ucsi)
->  	/* Disable notifications */
->  	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
->  
-> -	for (i = 0; i < ucsi->cap.num_connectors; i++) {
-> -		cancel_work_sync(&ucsi->connector[i].work);
-> -		ucsi_unregister_partner(&ucsi->connector[i]);
-> -		ucsi_unregister_altmodes(&ucsi->connector[i],
-> -					 UCSI_RECIPIENT_CON);
-> -		ucsi_unregister_port_psy(&ucsi->connector[i]);
-> -		if (ucsi->connector[i].wq)
-> -			destroy_workqueue(ucsi->connector[i].wq);
-> -		typec_unregister_port(ucsi->connector[i].port);
-> -	}
-> -
-> -	kfree(ucsi->connector);
-> +	ucsi_unregister_connectors(ucsi);
->  }
->  EXPORT_SYMBOL_GPL(ucsi_unregister);
-
-thanks,
-
--- 
-heikki
+>
+> > @@ -1060,16 +1151,30 @@ static int ax88179_check_eeprom(struct usbnet *dev)
+> >
+> >               jtimeout = jiffies + delay;
+> >               do {
+> > -                     ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_CMD,
+> > -                                      1, 1, &buf);
+> > +                 ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_CMD,
+> > +                                        1, 1, &buf);
+> > +
+> > +                 if (ret < 0) {
+> > +                         netdev_dbg(dev->net,
+> > +                                    "Failed to read SROM_CMD: %d\n",
+> > +                                    ret);
+> > +                         return ret;
+> > +                 }
+> >
+> >                       if (time_after(jiffies, jtimeout))
+> >                               return -EINVAL;
+>
+> The indenting here is wrong.  Run scripts/checkpatch.pl on your patches.
+>
+> regards,
+> dan carpenter
+>
