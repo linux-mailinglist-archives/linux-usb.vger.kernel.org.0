@@ -2,238 +2,250 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95824FFA4E
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Apr 2022 17:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891244FFABB
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Apr 2022 17:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236567AbiDMPfl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Apr 2022 11:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S235108AbiDMP6t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Apr 2022 11:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiDMPfk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Apr 2022 11:35:40 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEB638BD4;
-        Wed, 13 Apr 2022 08:33:18 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23DFNb43003034;
-        Wed, 13 Apr 2022 15:33:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=xsCPrRu8eCxPxpMiMB4WZe9ljm5FA9oNfN+KZ3E9hZI=;
- b=Ay7GuMRrdr9vysZ+OQ3fFzjn5On7M/Kdk/SO+OZ55x8ScoxR+R57Z7zNt+v+RQR+PbQ+
- Uu/nxtJj4uDPcrvE5cbCVR2qayN4aAGvLOEuSOfmxppraCOT8TMrW4Ct9Jsdf1fJ8JOZ
- hgNYiq13gOs+oVsJ63jYto9EvvPtkEPuK+C/sFh2ioiTA1gz9Za1timKcOQ2e+g1uu5Y
- Ib85pWUJ+OD75a7v9lZcy8FNp95cVSmFoOjo/001OuVw+ihYSpWWWcc87SOlGzawqs/c
- /E+XQ0SBJQEA4F/a9i9tVcgHyGIhPM4PvY33bf9WLDKoWI9f+BPp2KL4t6e/+mLLA4wq Xw== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3fb0x2jaue-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Apr 2022 15:33:05 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23DFFnmO006520;
-        Wed, 13 Apr 2022 15:33:05 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2170.outbound.protection.outlook.com [104.47.57.170])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fb0k49rjv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Apr 2022 15:33:04 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kjhlIh6bnN9s34Lxk71HbGR2odY7ZUZWyNOG8adsbFt/Kegy/b3zgDBq+waLdRbdr3BfsGsJfUSnsvzy14Gx7VMfi65TROFdzPtlDkq8qyx7WERqpIZeK1Ddn59w/ipA+T42vK6+HhHpo5SDJcgagiDXIdXIMzsXLhOHHn14Qm4nyoDH7NExzcs7pXs9XsJJr5k0RO08LAOc5J59PNfNZ6dsfTebG4sFtcSOutEDjnkmoVdVys24hpK9MpYzCWlSeEur/wltBuV9fnm15TrihuNJrPEDmEjY3CbNhV9Zx6wmU4eMY+PQsX02lCBmFPar9XzkwP9SMH4M1MhO5xrUow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xsCPrRu8eCxPxpMiMB4WZe9ljm5FA9oNfN+KZ3E9hZI=;
- b=ZqegNSMKPSI8W0XM4qVYADsjzYkgDPJdLj1dfBZ08QDZgmCByET9Ycj3GnYqLU0vkLSKiOSww23CFynAdXVclIIL+zaAeBXeoSjCHZAxU6VVfSddVFQSud5J4+24M/2YfbXYxUcmNPgsNntLTq8gtswPWa48Zg7Z05k7Wvmkfl8ruxLXdTFPcwYQNYSCwvmhgH3SengiPSeiEwwX/zKDhcgfaQ9QnYMknl9a59iUHisv93bSr3x7JstGag+zePPWVhFfKO5zNud/XoqD7U50r91N1ddI/W7zBan83TgFYaAEiATpZl6/cbbtRzYz/yZZqfTMjfz7+QYxX1JJ5XWg5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        with ESMTP id S235121AbiDMP6s (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Apr 2022 11:58:48 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CB06350D
+        for <linux-usb@vger.kernel.org>; Wed, 13 Apr 2022 08:56:25 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id o5so2488631pjr.0
+        for <linux-usb@vger.kernel.org>; Wed, 13 Apr 2022 08:56:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xsCPrRu8eCxPxpMiMB4WZe9ljm5FA9oNfN+KZ3E9hZI=;
- b=An/2h1VseMJ2sSnzKP94XkuQS/au5cqg1L54fRYE4c0t5Rj4WGzEBFA/36mXRPoXhx5WOLPYQ8DiFC04nOiVTuNV9qgbHEw37TMiyiCwYvkRypnShreAJdlilViwKE5wCs3GRKSxqUlLITsyw6/iqgmB2EkRJ4SIJAU59d3n6IM=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by CO1PR10MB5507.namprd10.prod.outlook.com
- (2603:10b6:303:162::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Wed, 13 Apr
- 2022 15:33:03 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5144.022; Wed, 13 Apr 2022
- 15:33:02 +0000
-Date:   Wed, 13 Apr 2022 18:32:49 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     David Kahurani <k.kahurani@gmail.com>
-Cc:     netdev@vger.kernel.org,
-        syzbot <syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com>,
-        davem@davemloft.net, jgg@ziepe.ca, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Phillip Potter <phil@philpotter.co.uk>,
-        syzkaller-bugs@googlegroups.com, arnd@arndb.de,
-        Pavel Skripkin <paskripkin@gmail.com>
-Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read
- errors
-Message-ID: <20220413153249.GZ12805@kadam>
-References: <20220404151036.265901-1-k.kahurani@gmail.com>
- <20220404153151.GF3293@kadam>
- <CAAZOf25i_mLO9igOY5wiUaxLOsxMt3jrvytSm1wm95R-bdKysA@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAZOf25i_mLO9igOY5wiUaxLOsxMt3jrvytSm1wm95R-bdKysA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MR2P264CA0136.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:30::28) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=M4yQ1ycSiUY4LFg4d65ixOTD9dqKMYw4YlLa4p4gnoc=;
+        b=IHy8LoSo/+3dZ1GBrWG3sY2d55Q2Lp/yGjaDiSLiw+tpzB/1QTMC0GJlEh9wk2LqGK
+         b4GNO5cFj0iDjZavUyFvXWdDXgNf7hfmDMyzWVbPswJBSwrn63IENINt9qqHnya5RHiA
+         5yssxiYvQU3uy7ZxXBzsYU9tRhS7gwb0owdlM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=M4yQ1ycSiUY4LFg4d65ixOTD9dqKMYw4YlLa4p4gnoc=;
+        b=f+5ZcCn5WzvCOyvm6SzVPYEHDVh5Ct7QcBpA1/3JrBpfqBKikVji/2W6t8W6jrThkH
+         sreoL0/X2ci954veJSPjxjd83oRV6k+ZELNak48Kdoto2E2sknkwuadC1nTGY6OY18ET
+         lQftHF/HIJtSmawgKLR0RnLIV/ZHHsy9r60Rmd8krQANct24O7t6dNkUAynh2XkHKlbR
+         F/YOrZcn3067F9F/ypXSwcSwf+3uZk1cbZYV5IpHRkPQRVMBwHvonDHWyBos8Y3qISFS
+         euojj6CAxOERQAn+wIWMMwPLAPjdtH6GTRIwWpOh8ztiC11t6OHjGhNwzPaA6/R+c5zA
+         S12Q==
+X-Gm-Message-State: AOAM5326R9dcmntstg2RAh8rxaTAzY+UZUcQHfKZtwnd1SKcD3XwO8pF
+        D80+MhOERoMm2oYwsqoxkevv6g==
+X-Google-Smtp-Source: ABdhPJzeYBBUcHlcRv47oyjP3gk/zRcuNDVaq68uvTW0vlxUZLXNuNEKYLyRLPRicCq4CSb8ffb+Ew==
+X-Received: by 2002:a17:902:d051:b0:158:5910:d67a with SMTP id l17-20020a170902d05100b001585910d67amr17116579pll.15.1649865385130;
+        Wed, 13 Apr 2022 08:56:25 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:6a4f:9277:743f:c648])
+        by smtp.gmail.com with UTF8SMTPSA id nl17-20020a17090b385100b001c70883f6ccsm3604591pjb.36.2022.04.13.08.56.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 08:56:24 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 08:56:22 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>
+Cc:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_ppratap@quicinc.com, quic_kriskura@quicinc.com,
+        quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v13 2/6] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <YlbyptYB/VFUDF0Q@google.com>
+References: <1649704614-31518-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1649704614-31518-3-git-send-email-quic_c_sanm@quicinc.com>
+ <YlSVec5+SpdMZWCz@google.com>
+ <36d22ad7-7f11-2f63-cd68-5d564476161e@quicinc.com>
+ <20220412050018.GB2627@hu-pkondeti-hyd.qualcomm.com>
+ <259c9e87-a52e-c063-7901-2c6decd42675@quicinc.com>
+ <YlXNd5YkAMW7cbYG@google.com>
+ <ee38105f-e2f4-4e40-3c89-224301f1eb12@quicinc.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0d8fb6e5-bf60-445c-6a8b-08da1d62e5d7
-X-MS-TrafficTypeDiagnostic: CO1PR10MB5507:EE_
-X-Microsoft-Antispam-PRVS: <CO1PR10MB5507C88CCCF21FFCAE99E8948EEC9@CO1PR10MB5507.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ShitkBKOAwmKMqSgjZkTYIk2BmheBu2CyTxJHcpbF23ed7YnWMSXroCrHqy/TIUKYfw+m3jgxZn2IXfeXrN2+l8I8V3+kR3GBBMN4R1T6j5iHEJtIhsj0wfufNQeLCSAwWL1HsH+SJ3SIodSOatZJvfsTDofP+UnwhFz/jKXKiVeiQw0/imyV/sKRSZurdLdHnH0TXmlXllpvFnoDsPvMa2tP1XdUIApNmh6n2WROkjw5nMo1nHE1hCn2jEJpImT68INi3lWB312/dIDTDC9kID3O1fOs2bzVF5hNPfdSzfS+BZ3HMXq4vvspjxGohKNsvEcrnNjfhA9E85E4++RlSlpCW5szY6efMXl582rrmaaEgOvOY+iH4/bdtbvRxmhLaldbCf4tlI+CEtRwerl4w6KiymaxZ8GJiHP6j0Ba65s8veWYyDTbkBdohft5mAeln52n8XhKnUT7fkCu4tO186+HUpxLXx3WstywZw20B6uohL13mgoq7kgZiVQGM8cYaRvBdsm8gt1gOjIjValy0zqtdn3myWbvJwN9Xa+CkOAUrAFYkIaMXOW/zBCyJj69I7YxKeDTti9rqpzwylOrr9mWvJUtl5KWM/Bo99IeIL36LjQjQd2VzZ40QVfwHRQPwuelzj6iAgtD1qHU3TUeIEZOLOEufd/q4nHSjz7/ai5F3SPmNHauxomp4O56xnF2JoLczHRZwPEXUGye2UAjA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(66946007)(186003)(8676002)(4326008)(33716001)(2906002)(5660300002)(7416002)(38100700002)(44832011)(38350700002)(316002)(33656002)(508600001)(1076003)(8936002)(26005)(6512007)(86362001)(6506007)(6666004)(52116002)(53546011)(6486002)(54906003)(6916009)(66476007)(9686003)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6hbg0AMMfcfbGrIzPGU3CYjKg5K9RD9FT1VZkcOgNG+7QLWedt4jERXEhSpz?=
- =?us-ascii?Q?9hpqxYL0QgXU16bw9vsZiDqjH7TA8WU0pB9F/Ib0prLFFpjcv+uahRE5qdas?=
- =?us-ascii?Q?/XTF2GA1Fm5VeoyxP0o19v3BRgofA0WvZSVSUVWqtkmx362A0SwZSPwY3s7I?=
- =?us-ascii?Q?yEq4tuHntdOH10mSq0/rvFhNpAreUqRoYaHx1VwReB5ndqA0I/Coidi2KjdR?=
- =?us-ascii?Q?Mg5NjfPR+eDx3oEgNzJzG/e/e7lZY6uRetYOdMI1z28d9y0/Rx4ThqTm82ow?=
- =?us-ascii?Q?uFisaLhCFYeAfAxqFXtqHVyAice+RhSJpx57sPtpCRFRf2s9NZdc8o6wfLnQ?=
- =?us-ascii?Q?GEI8j5RzwfWQo4WHqRwBLG0dZqTjvNpD98HxXKN3hUPT76rrtRfOT/N0FqGV?=
- =?us-ascii?Q?BlV3FfoD+jPH5QB3OSaidycHdLA0+0WQli/+XPmYq6Fw+0FMm+cEL7UUybRT?=
- =?us-ascii?Q?SQ5yJfyFfq5QJrfh0CXLxfcSAe0KPVRL6x3KIDnun3qG++DmqER6Q8PQ2K2p?=
- =?us-ascii?Q?pzpPnCHXDGgAweNprep3PIN4WZDeAOZcobamUzOaKSqnHy5RHLWqxRhi415G?=
- =?us-ascii?Q?BTzgl+s7z8jAbvLtwjpR8Bf6Yk8uFVccOKhwlBuV+oNmFcxe1hDGY29WF4WE?=
- =?us-ascii?Q?6wTZBP5iwK+7Ffcgy6b2ITIRhtzoe59dNTDocmKq6IE3T/FR2paiT5qkffoK?=
- =?us-ascii?Q?wnb9fbpkDI6Gw0HP/EpxhVGsTQZImxg0/zYPanjc2H4DMnQqGd6sIcmg97eP?=
- =?us-ascii?Q?evEfSWqtIoKALARuwMfvSiuxJphr7zF+ymVKmafSIvybG3e0XnkgPK7CVclg?=
- =?us-ascii?Q?YzccXO6KYd6KzDm/N5wf62CTpIlFpplGWVYyc5DUQUOEcuzQXRLMjrOCEpm5?=
- =?us-ascii?Q?IoM+WfjbX5Cd2T2ga3tNr5a5xYJx1D+2qY92gYkUOVJd+k3CU+CIJHSw0deS?=
- =?us-ascii?Q?a68Y3ABzCrX2RcUdzYP4B7wbpPHuYV8bu9SVSj4ZqJea3MEqV22xx+z2OgPn?=
- =?us-ascii?Q?XXvNuUZ0dcPEYWcs2G68Ss8Z0k9pwu3xNoyRlUvFIXY8lMW2PO1c0jL0TPom?=
- =?us-ascii?Q?4r0Sb4U8ZT70TBq6dxUxBRJrZ9UyhDghmy4K2YPZmB6fGqMVylLg3eju90OB?=
- =?us-ascii?Q?IfmYab3/6YggH+56EzrFUb0WxUvKLYFPG82oVCAXEjjHx+c/8uK+Yt0vPcSL?=
- =?us-ascii?Q?R2LQuRLAta+W576GlRO9ep9Ugl6+sO2yxfGYw4bOThyB7oSwlL/wnDNEo38s?=
- =?us-ascii?Q?+vRmRh/E0/MhYcB1w/zTBMqFkQye4ww3EKYslXaGh8NDojPygKPqrhvlurdN?=
- =?us-ascii?Q?zejh5tM13u5C43pMxWAHqhlYN2DF35ONgXSJDvM+WlRlmRnxvsItBcI2q0Jx?=
- =?us-ascii?Q?bBVcXmWjs8NUFDj3QOgBmZGoBkbLhGo50NXyGKahtFwpp96LweY3xoVwrSgq?=
- =?us-ascii?Q?ff3minDc43MuFc5jShUDDrRuunM9MfCchN/ZWALH4/vFOszAkLI8GmcEuYyH?=
- =?us-ascii?Q?zr6CtTYyspEQl0CHDlAgXK02NgXRPygcbFkE0RkrcHOpnLX6N4SC1wlz8GFZ?=
- =?us-ascii?Q?d8hlebSzeSp+fSvZzA7gqXNkwjkm4s/36Uqz/+XtXnSlYOzfz/W1zOlb5VAM?=
- =?us-ascii?Q?6jXxo6cmF8jxqenLlKxkK1NW4NbAxb09W6KnAySwM/8VgvWfOjxhV+EfW4Ha?=
- =?us-ascii?Q?ZqmEcx6TlBWL1ZTLhIRM2DoK/A7ERJrva2HvMfZ1VooBsQ/++Q5ZbzOc+qxg?=
- =?us-ascii?Q?WamB32K2Yq0qJ//zxQa6HxetqPqzh3c=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d8fb6e5-bf60-445c-6a8b-08da1d62e5d7
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 15:33:02.9103
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ymlfWWOHnqyJf973DGkg+3X9TpOxkO2eabSXrGATOOps+o1oO6gSaJ2RXRfqwniJws3mK022DK89H5X1X7w5GNfZcRs+risGBoJiUWaU2dQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB5507
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
- definitions=2022-04-13_02:2022-04-13,2022-04-13 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=967 malwarescore=0
- mlxscore=0 phishscore=0 suspectscore=0 spamscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204130082
-X-Proofpoint-ORIG-GUID: 7wW3BczcsnMJG3xBxHT5caX1egkUtKIn
-X-Proofpoint-GUID: 7wW3BczcsnMJG3xBxHT5caX1egkUtKIn
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ee38105f-e2f4-4e40-3c89-224301f1eb12@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 03:36:57PM +0300, David Kahurani wrote:
-> On Mon, Apr 4, 2022 at 6:32 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+On Wed, Apr 13, 2022 at 02:38:33PM +0530, Sandeep Maheswaram (Temp) wrote:
+> Hi Matthias,
 > 
-> Hi Dan
+> On 4/13/2022 12:35 AM, Matthias Kaehlcke wrote:
+> > On Tue, Apr 12, 2022 at 12:08:02PM +0530, Sandeep Maheswaram (Temp) wrote:
+> > > Hi Pavan,
+> > > 
+> > > On 4/12/2022 10:30 AM, Pavan Kondeti wrote:
+> > > > Hi Sandeep,
+> > > > 
+> > > > On Tue, Apr 12, 2022 at 10:16:39AM +0530, Sandeep Maheswaram (Temp) wrote:
+> > > > > Hi Matthias,
+> > > > > 
+> > > > > On 4/12/2022 2:24 AM, Matthias Kaehlcke wrote:
+> > > > > > On Tue, Apr 12, 2022 at 12:46:50AM +0530, Sandeep Maheswaram wrote:
+> > > > > > > During suspend read the status of all port and set hs phy mode
+> > > > > > > based on current speed. Use this hs phy mode to configure wakeup
+> > > > > > > interrupts in qcom glue driver.
+> > > > > > > 
+> > > > > > > Check wakep-source property for dwc3 core node to set the
+> > > > > > s/wakep/wakeup/
+> > > > > Okay. Will update in next version.
+> > > > > > > wakeup capability. Drop the device_init_wakeup call from
+> > > > > > > runtime suspend and resume.
+> > > > > > > 
+> > > > > > > Also check during suspend if any wakeup capable devices are
+> > > > > > > connected to the controller (directly or through hubs), if there
+> > > > > > > are none set a flag to indicate that the PHY is powered
+> > > > > > > down during suspend.
+> > > > > > > 
+> > > > > > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > > > > > > ---
+> > > > > > A per-patch change log would be really helpful for reviewers, even
+> > > > > > if it doesn't include older versions.
+> > > > > Okay. Will update in next version.
+> > > > > > >    drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
+> > > > > > >    drivers/usb/dwc3/core.h |  4 ++++
+> > > > > > >    drivers/usb/dwc3/host.c | 25 +++++++++++++++++++++++++
+> > > > > > >    3 files changed, 49 insertions(+), 13 deletions(-)
+> > > > > > > 
+> > > > > > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > > > > > > index 1170b80..effaa43 100644
+> > > > > > > --- a/drivers/usb/dwc3/core.c
+> > > > > > > +++ b/drivers/usb/dwc3/core.c
+> > > > > > > @@ -32,6 +32,7 @@
+> > > > > > >    #include <linux/usb/gadget.h>
+> > > > > > >    #include <linux/usb/of.h>
+> > > > > > >    #include <linux/usb/otg.h>
+> > > > > > > +#include <linux/usb/hcd.h>
+> > > > > > >    #include "core.h"
+> > > > > > >    #include "gadget.h"
+> > > > > > > @@ -1723,6 +1724,7 @@ static int dwc3_probe(struct platform_device *pdev)
+> > > > > > >    	platform_set_drvdata(pdev, dwc);
+> > > > > > >    	dwc3_cache_hwparams(dwc);
+> > > > > > > +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
+> > > > > > >    	spin_lock_init(&dwc->lock);
+> > > > > > >    	mutex_init(&dwc->mutex);
+> > > > > > > @@ -1865,6 +1867,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > > > > >    {
+> > > > > > >    	unsigned long	flags;
+> > > > > > >    	u32 reg;
+> > > > > > > +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
+> > > > > > >    	switch (dwc->current_dr_role) {
+> > > > > > >    	case DWC3_GCTL_PRTCAP_DEVICE:
+> > > > > > > @@ -1877,10 +1880,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > > > > >    		dwc3_core_exit(dwc);
+> > > > > > >    		break;
+> > > > > > >    	case DWC3_GCTL_PRTCAP_HOST:
+> > > > > > > -		if (!PMSG_IS_AUTO(msg)) {
+> > > > > > > -			dwc3_core_exit(dwc);
+> > > > > > > -			break;
+> > > > > > > -		}
+> > > > > > > +		dwc3_check_phy_speed_mode(dwc);
+> > > > > > >    		/* Let controller to suspend HSPHY before PHY driver suspends */
+> > > > > > >    		if (dwc->dis_u2_susphy_quirk ||
+> > > > > > > @@ -1896,6 +1896,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > > > > >    		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
+> > > > > > >    		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+> > > > > > > +
+> > > > > > > +		if (!PMSG_IS_AUTO(msg)) {
+> > > > > > > +			if (device_may_wakeup(dwc->dev) &&
+> > > > > > > +			    usb_wakeup_enabled_descendants(hcd->self.root_hub)) {
+> > > > > > You did not answer my question on v12, reposting it:
+> > > > > > 
+> > > > > >     Did you ever try whether you could use device_children_wakeup_capable() from
+> > > > > >     [1] instead of usb_wakeup_enabled_descendants()?
+> > > > > > 
+> > > > > >     [1] https://patchwork.kernel.org/project/linux-usb/patch/1635753224-23975-2-git-send-email-quic_c_sanm@quicinc.com/#24566065
+> > > > > Sorry ..I have replied in mail yesterday but it is not showing up in
+> > > > > patchwork link.
+> > > > > 
+> > > > > Tried with  device_children_wakeup_capable(dwc->dev) instead of
+> > > > > usb_wakeup_enabled_descendants and it always returns true even
+> > > > > 
+> > > > > when no devices are connected.
+> > > > > 
+> > > > What do you mean by when no devices are connected? There is always
+> > > > root hub connected and we should not power down the DWC3 here even
+> > > > when remote wakeup for root hub is enabled. Essentially
+> > > > usb_wakeup_enabled_descendants() returns true even without any
+> > > > physical devices connected.
+> > > > 
+> > > > What does device_children_wakeup_capable() do? Sorry, I could not
+> > > > find this function definition.
+> > > > 
+> > > > Thanks,
+> > > > Pavan
+> > > usb_wakeup_enabled_descendants() doesn't consider hubs. It only returns true if any devices
+> > > are connected with wakeup capability apart from hubs.
+> > Actually it considers hubs:
+> > 
+> > unsigned usb_wakeup_enabled_descendants(struct usb_device *udev)
+> > {
+> > 	struct usb_hub *hub = usb_hub_to_struct_hub(udev);
+> > 
+> > 	return udev->do_remote_wakeup +
+> > 		(hub ? hub->wakeup_enabled_descendants : 0);
+> > }
+> > 
+> > 'udev' may or may not be a hub, if 'do_remote_wakeup' is set then the
+> > device is considered a wakeup enabled descendant.
+> > 
+> > And for system suspebd 'do_remote_wakeup' is set based on the wakeup
+> > config of the device:
+> > 
+> > static void choose_wakeup(struct usb_device *udev, pm_message_t msg)
+> > {
+> > 	...
+> > 	w = device_may_wakeup(&udev->dev);
+> > 	...
+> > 	udev->do_remote_wakeup = w;
+> > }
+> > 
+> > I checked on three systems with different Linux distributions, on all of
+> > the wakeup flag of a connected hub is 'disabled'. Wakeup still works, so
+> > apparently that flag doesn't really have an impact for child ports.
+> > 
+> > > If we consider hubs also dwc3 core exit and phy exit will never be called.
+> > > 
+> > > device_children_wakeup_capable() implementation was shared by Matthias in below thread
+> > > https://patchwork.kernel.org/project/linux-usb/patch/1635753224-23975-2-git-send-email-quic_c_sanm@quicinc.com/#24566065
+> > > 
+> > > Probably device_children_wakeup_capable() is returning true because it considers hubs also.
+> > I thought I did a basic test when I sent the patch, I did another (?) one
+> > with v13 of your patch set. In this tests with a hub connected the
+> > function returns true when an HID device is connected, and false when
+> > nothing is connected. The wakeup flag of the hub is disabled (default).
+> > 
+> > Sandeep, are the wakeup flags of the child hub(s) set to 'enabled' on
+> > the system you tested on?
 > 
-> > >       int ret;
-> > >       int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
-> > > @@ -201,9 +202,12 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> > >       ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
-> > >                value, index, data, size);
-> > >
-> > > -     if (unlikely(ret < 0))
-> > > +     if (unlikely(ret < size)) {
-> > > +             ret = ret < 0 ? ret : -ENODATA;
-> > > +
-> > >               netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
-> > >                           index, ret);
-> > > +     }
-> > >
-> > >       return ret;
-> >
-> > It would be better to make __ax88179_read_cmd() return 0 on success
-> > instead of returning size on success.  Non-standard returns lead to bugs.
-> >
+> The wakeup flags of hub is 'disabled' on system I tested.
 > 
-> I don't suppose this would have much effect on the structure of the
-> code and indeed plan to do this but just some minor clarification.
-> 
-> Isn't it standard for reader functions to return the number of bytes read?
-> 
+> What is the input param you are giving to device_children_wakeup_capable() function ?
 
-Not really.
+I passed '&hcd->self.root_hub->dev'
 
-There are some functions that do it, but it has historically lead to bug
-after bug.  For example, see commit 719b8f2850d3 ("USB: add
-usb_control_msg_send() and usb_control_msg_recv()") where USB is moving
-away from that to avoid bugs.
+> I was passing the dwc->dev like this device_children_wakeup_capable(dwc->dev) .Is it right?
 
-If you return zero on success then it's simple:
-
-	if (ret)
-		return ret;
-
-If you return the bytes people will try call kinds of things:
-
-	if (ret)
-		return ret;
-
-Bug: Now the driver is broken.  (Not everyone can test the hardware).
-
-	if (ret != size)
-		return ret;
-
-Bug: returns a positive.
-
-	if (ret != size)
-		return -EIO;
-
-Bug: forgot to propagate the error code.
-
-	if (ret < sizeof(foo))
-		return -EIO;
-
-Bug: because of type promotion negative error codes are treated as
-     success.
-
-	if (ret < 0)
-		return ret;
-
-Bug: buffer partially filled.  Information leak.
-
-If you return the bytes then the only correct way to write error
-handling is:
-
-	if (ret < 0)
-		return ret;
-	if (ret != size)
-		return -EIO;
-
-regards,
-dan carpenter
-
-
+The DWC doesn't know anything about the connected USB devices, so this only
+checks wakeup capability/policy of the DWC itself.
