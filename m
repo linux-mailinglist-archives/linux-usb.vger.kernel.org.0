@@ -2,181 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2674FEAB8
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Apr 2022 01:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6556C4FEBD2
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Apr 2022 02:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiDLXpu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Apr 2022 19:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
+        id S230096AbiDMAOl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Apr 2022 20:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbiDLXpZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 19:45:25 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC24165CD
-        for <linux-usb@vger.kernel.org>; Tue, 12 Apr 2022 16:31:59 -0700 (PDT)
+        with ESMTP id S229998AbiDMAOl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 20:14:41 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF602183C;
+        Tue, 12 Apr 2022 17:12:21 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id o16so316070ljp.3;
+        Tue, 12 Apr 2022 17:12:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649806320; x=1681342320;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MZy71ISFwG4Ckw3rSTAbXfMb6HhVe3vlXzj/v7FwT5Q=;
-  b=uHX9LsJjyBMcyxSohBVuDAeQAUqH4w8T5qZaUAStV1d1Eq14ujuGidt9
-   0zkUD2IDjXr/Pij9alXv0+mQrRi4tJOwnxGu1bF2n2JGx2v+Zl7YyvkZ5
-   fD4kf2Zr09kWReNTl0y78O0ZzZ/hQIbUIiIigwvYEu9ERYBIXU53hPm/3
-   0=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 12 Apr 2022 16:32:00 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 16:31:59 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 12 Apr 2022 16:31:59 -0700
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 12 Apr 2022 16:31:57 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
-        "Linyu Yuan" <quic_linyyuan@quicinc.com>
-Subject: [PATCH v2 4/4] usb: typec: ucsi: retry find role swithch when module load late
-Date:   Wed, 13 Apr 2022 07:31:45 +0800
-Message-ID: <1649806305-19070-5-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1649806305-19070-1-git-send-email-quic_linyyuan@quicinc.com>
-References: <1649806305-19070-1-git-send-email-quic_linyyuan@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4OPQe8Z64vrzGUtC9itK+hO8CUXeLDKwiSIbnDFvsio=;
+        b=Qcl/bQDuv6FgjogykXNz3P50kh0Fny/pYqWwHCXoyf+LwCq8hN36c7caeFxWPWs9EZ
+         5Qfy/1zPjwbGYW/MYYJIGOUVlALJH69RLnqH4by+WrIegLTfQlS82zU4a9Rev85yWGUt
+         dQrbOxKzATK8LTefZLLR9SASz2S4sw0KF1TEc9SRasauouBDJ+waFYtWYX8KcNZ/ZLlS
+         eqIXLaSDnX1C1apEMO2FWSBNnhSMse9fw+PpQ1kBlgQE2G4+z0qm+sEebIB5vOR14Kg3
+         hJE6HKaRIkdqxtptxfx0jknvC+LRS1RZbnntuxZJBz+TRx97bNXFVzQ0q62QnLh3jZwi
+         +z3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4OPQe8Z64vrzGUtC9itK+hO8CUXeLDKwiSIbnDFvsio=;
+        b=b/dCu9qGQFYE0VrA0hjMEJaNgPihSnXYSau6lELQjDoBGmMskbSv33D3LLFbQKdCmP
+         FzK0ogaPYsniEg0pX2f43AuJNQyvVhlvLyOfpra6ffRVMWOVoyNIqwHxgxSNkIosfN2q
+         +vIWSwtkWwdb27Vv2lOgYYAMHKYeMs/2gvRbV50hkmmKobhors0Ii3TFyQ0W14vqNrum
+         FfjRAZUYFypXU0A0cV63LXKUq1TA043mohsELB4vzJGB5o2uJQepRzEHwDtaWWxJA8DU
+         CfQFzrpczfJ/6cnnQ/Di8ygfwzcWR63RsHaiSnkQjJHjRFGXyifH9Dap1ip9G57PrGU1
+         zuxA==
+X-Gm-Message-State: AOAM530j/EHjO0290ltfxqT7C+MuhVOCdx3IvNFdKrLOxFE39W/MVTQ7
+        t2iLUYGTWcanDpYzz7f3hS2Ho15qvvX6PQ==
+X-Google-Smtp-Source: ABdhPJyG9GO1U13AiTli5L9QAhS9q1HO0x593NdqIL8d8TnL+6qJ6Vm6Zjjap7s9I/b+XKcyOsfoSg==
+X-Received: by 2002:a2e:9e81:0:b0:24b:4d4:aba0 with SMTP id f1-20020a2e9e81000000b0024b04d4aba0mr24977242ljk.283.1649808739436;
+        Tue, 12 Apr 2022 17:12:19 -0700 (PDT)
+Received: from rafiki.local ([2001:470:6180::c8d])
+        by smtp.gmail.com with ESMTPSA id d6-20020a2e96c6000000b0024b4cd1b611sm1611731ljj.91.2022.04.12.17.12.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 17:12:18 -0700 (PDT)
+From:   Lech Perczak <lech.perczak@gmail.com>
+To:     netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Lech Perczak <lech.perczak@gmail.com>,
+        Kristian Evensen <kristian.evensen@gmail.com>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        Oliver Neukum <oliver@neukum.org>
+Subject: [PATCH v2 0/3] rndis_host: handle bogus MAC addresses in ZTE RNDIS devices
+Date:   Wed, 13 Apr 2022 02:11:55 +0200
+Message-Id: <20220413001158.1202194-1-lech.perczak@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When role switch enabled, return -EAGAIN if fail to find it due to
-module load ordering issue, then restart ucsi init work to find
-it again every 100ms.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-It also means change ucsi init work to delayed_work.
+When porting support of ZTE MF286R to OpenWrt [1], it was discovered,
+that its built-in LTE modem fails to adjust its target MAC address,
+when a random MAC address is assigned to the interface, due to detection of
+"locally-administered address" bit. This leads to dropping of ingress
+trafficat the host. The modem uses RNDIS as its primary interface,
+with some variants exposing both of them simultaneously.
 
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
-v2: keep original con->num in debug log
+Then it was discovered, that cdc_ether driver contains a fixup for that
+exact issue, also appearing on CDC ECM interfaces.
+I discussed how to proceed with that with Bjørn Mork at OpenWrt forum [3],
+with the first approach would be to trust the locally-administered MAC
+again, and add a quirk for the problematic ZTE devices, as suggested by
+Kristian Evensen. before [4], but reusing the fixup from cdc_ether looks
+like a safer and more generic solution.
 
- drivers/usb/typec/ucsi/ucsi.c | 28 ++++++++++++++++------------
- drivers/usb/typec/ucsi/ucsi.h |  2 +-
- 2 files changed, 17 insertions(+), 13 deletions(-)
+Finally, according to Bjørn's suggestion. limit the scope of bogus MAC
+addressdetection to ZTE devices, the same way as it is done in cdc_ether,
+as this trait wasn't really observed outside of ZTE devices.
+Do that for both flavours of RNDIS devices, with interface classes
+02/02/ff and e0/01/03, as both types are reported by different modems.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 0a0cbf6..2a36482 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1053,6 +1053,14 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 	con->num = index + 1;
- 	con->ucsi = ucsi;
- 
-+	cap->fwnode = ucsi_find_fwnode(con);
-+	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
-+	if (IS_ERR(con->usb_role_sw)) {
-+		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
-+			con->num);
-+		return -EAGAIN;
-+	}
-+
- 	/* Delay other interactions with the con until registration is complete */
- 	mutex_lock(&con->lock);
- 
-@@ -1088,7 +1096,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 	if (con->cap.op_mode & UCSI_CONCAP_OPMODE_DEBUG_ACCESSORY)
- 		*accessory = TYPEC_ACCESSORY_DEBUG;
- 
--	cap->fwnode = ucsi_find_fwnode(con);
- 	cap->driver_data = con;
- 	cap->ops = &ucsi_ops;
- 
-@@ -1147,13 +1154,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 		ucsi_port_psy_changed(con);
- 	}
- 
--	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
--	if (IS_ERR(con->usb_role_sw)) {
--		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
--			con->num);
--		con->usb_role_sw = NULL;
--	}
--
- 	/* Only notify USB controller if partner supports USB data */
- 	if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) & UCSI_CONSTAT_PARTNER_FLAG_USB))
- 		u_role = USB_ROLE_NONE;
-@@ -1286,12 +1286,16 @@ static int ucsi_init(struct ucsi *ucsi)
- 
- static void ucsi_init_work(struct work_struct *work)
- {
--	struct ucsi *ucsi = container_of(work, struct ucsi, work);
-+	struct ucsi *ucsi = container_of(work, struct ucsi, work.work);
- 	int ret;
- 
- 	ret = ucsi_init(ucsi);
- 	if (ret)
- 		dev_err(ucsi->dev, "PPM init failed (%d)\n", ret);
-+
-+
-+	if (ret == -EAGAIN)
-+		queue_delayed_work(system_long_wq, &ucsi->work, HZ/10);
- }
- 
- /**
-@@ -1331,7 +1335,7 @@ struct ucsi *ucsi_create(struct device *dev, const struct ucsi_operations *ops)
- 	if (!ucsi)
- 		return ERR_PTR(-ENOMEM);
- 
--	INIT_WORK(&ucsi->work, ucsi_init_work);
-+	INIT_DELAYED_WORK(&ucsi->work, ucsi_init_work);
- 	mutex_init(&ucsi->ppm_lock);
- 	ucsi->dev = dev;
- 	ucsi->ops = ops;
-@@ -1366,7 +1370,7 @@ int ucsi_register(struct ucsi *ucsi)
- 	if (!ucsi->version)
- 		return -ENODEV;
- 
--	queue_work(system_long_wq, &ucsi->work);
-+	queue_delayed_work(system_long_wq, &ucsi->work, 0);
- 
- 	return 0;
- }
-@@ -1383,7 +1387,7 @@ void ucsi_unregister(struct ucsi *ucsi)
- 	u64 cmd = UCSI_SET_NOTIFICATION_ENABLE;
- 
- 	/* Make sure that we are not in the middle of driver initialization */
--	cancel_work_sync(&ucsi->work);
-+	cancel_delayed_work_sync(&ucsi->work);
- 
- 	/* Disable notifications */
- 	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 280f1e1..3812017 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -287,7 +287,7 @@ struct ucsi {
- 	struct ucsi_capability cap;
- 	struct ucsi_connector *connector;
- 
--	struct work_struct work;
-+	struct delayed_work work;
- 
- 	/* PPM Communication lock */
- 	struct mutex ppm_lock;
+[1] https://git.openwrt.org/?p=openwrt/openwrt.git;a=commit;h=7ac8da00609f42b8aba74b7efc6b0d055b7cef3e
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bfe9b9d2df669a57a95d641ed46eb018e204c6ce
+[3] https://forum.openwrt.org/t/problem-with-modem-in-zte-mf286r/120988
+[4] https://lore.kernel.org/all/CAKfDRXhDp3heiD75Lat7cr1JmY-kaJ-MS0tt7QXX=s8RFjbpUQ@mail.gmail.com/T/
+
+Cc: Kristian Evensen <kristian.evensen@gmail.com>
+Cc: Bjørn Mork <bjorn@mork.no>
+Cc: Oliver Neukum <oliver@neukum.org>
+
+v2: ensure that MAC fixup is applied to all Ethernet frames in RNDIS
+batch, by introducing a driver flag, and integrating the fixup inside
+rndis_rx_fixup().
+
+Lech Perczak (3):
+  cdc_ether: export usbnet_cdc_zte_rx_fixup
+  rndis_host: enable the bogus MAC fixup for ZTE devices from cdc_ether
+  rndis_host: limit scope of bogus MAC address detection to ZTE devices
+
+ drivers/net/usb/cdc_ether.c    |  3 ++-
+ drivers/net/usb/rndis_host.c   | 48 ++++++++++++++++++++++++++++++----
+ include/linux/usb/rndis_host.h |  1 +
+ include/linux/usb/usbnet.h     |  1 +
+ 4 files changed, 47 insertions(+), 6 deletions(-)
+
 -- 
-2.7.4
+2.30.2
 
