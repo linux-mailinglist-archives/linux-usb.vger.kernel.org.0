@@ -2,65 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3DD4FF79A
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Apr 2022 15:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17D04FF7FE
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Apr 2022 15:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbiDMNaS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Apr 2022 09:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        id S235899AbiDMNpT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Apr 2022 09:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232537AbiDMNaR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Apr 2022 09:30:17 -0400
-Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.140.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE765D5F1
-        for <linux-usb@vger.kernel.org>; Wed, 13 Apr 2022 06:27:56 -0700 (PDT)
+        with ESMTP id S233893AbiDMNpR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Apr 2022 09:45:17 -0400
+Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.142.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C8660077
+        for <linux-usb@vger.kernel.org>; Wed, 13 Apr 2022 06:42:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
-  t=1649856476; x=1650461276;
+  t=1649857376; x=1650462176;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=pKQuBEXjOaUF7RC3Pm9x1y2NppiZxx2JMWZBED8h4ik=;
-  b=dVmOQqX4nxFgMRTEl/bt7UeT04WJgeb/ZJ8VAf+a06Qn50NjM+N1y2Xv
-   /Wo95Of7IqTTxLhoHU+yiM+AHlJc/v7a0NTYcp6DcsJZ6fboO+uqDDbhZ
-   2tG2YYZw+XZLLgLwz0oq+XOWZh01SmLtnKM51b0cOjbEdkAf9JUOt81BI
-   I=;
-Received: from mail-co1nam11lp2176.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) ([104.47.56.176])
-  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 13:27:55 +0000
+  bh=iD+N0PcyDET408BbdwSQFl0QH2wJbDRwmyeMxeNIgb8=;
+  b=uSvCiX5UWtTUlnTAY3pXWKcBLvPMhPm2QyO9BdO8c/D+7kjt99/or85r
+   wAx/wwFky8fGayUTQ8CbzQ08mwpxG2DQ7byNPLuaJPA/ma9NSTgzwnL+W
+   c6E6w8iEZdnxy2OSXKS7eDe+YWaXKhr/b9P0YhR/UuW6tM0b5wBZElpsI
+   k=;
+Received: from mail-bn8nam08lp2048.outbound.protection.outlook.com (HELO NAM04-BN8-obe.outbound.protection.outlook.com) ([104.47.74.48])
+  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 13:42:55 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i10gDiXPw8NIsefua0DYvBGXGiDP+UdkgVA9XPHIrtTYLMGYMkgP1iaTgbF8sY3He5vT0OlOEYcGhJTegt5P3WctKEd6Ji1HVHeRsNctQnMrXuGOz2uwtXfmNCyO9t/WM7BFnBxeY8NTKoSnFU87leGDV5ZQuP95Ow6mwv/vr43LmRzcNBf+38ncQXTa3bSxK6WUmhk5QpExh+z4TaQR/h3u8SLgD/yxAdo6ocBYZCCBesYlGTKcuPijSEw6jDXmc98c1t1m3HMZi7qOC/hDVJeb19aqVIVQRFTvNbOw6ZaVaGNOyg77RoWN0YAKE5169G5y79CV1Pw+trTyHOTr2Q==
+ b=izW/lk8Qury69arMeRh4rUZrA/gVemmUrfDnK0EII/1LA0Miu/FVb9+Len+YWH2NwAOdiEi7I3x+IetUL7OgWWZg2dY1hTgx792bMw+m23VKXykcrT8QkmSCOk7No9l1idL+KyMkoF+hGOQOw+5NoWwUwJELeImW3PcaEnBlLXQ+2yDPwqF/x2OuE6RfLiyyIafrIkOrZZdRySeWXlkpiVsxJGKqFb/HN5J0ZAlAmOs5dNbv/4poom93u4I0o7vU8Bmuv44cU//tfOLIGOj3nIIqAhGJte5FFNJu5YEAv3CiXWdzLNjE0XC3mY18i/QxCmPCYnq/Uu6nJU48C6osBQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pKQuBEXjOaUF7RC3Pm9x1y2NppiZxx2JMWZBED8h4ik=;
- b=SJKPMQkKOjHNrQjAdYenxGQrI9pplNognWzS4FYp+RI1gCCZmJoP/VcithNv6A3CqyNaxXol9bF0J+eZB+iRoki+DMYxhExhsz4jVqYE1MHWtfFPI40VWOjjFjMQUSNeOvrhRlo0//BuqKDIN81p3DeZ2YWZt3HSw7Q4cjJUE52xFNy9D59HGQIje+bLa/n6pvKtk5WznArwrR2iZaoFwZv2tbkP+2NeAXzg6tkDEx6nw2Zm8gqEY0+cbtA6nRRzL82/ejkq0Fg4cU3qSu5M/k6FLrCr3ON5D5x9Sv9YV+kZJBowpdHsyVUI2N0Z5dZTxMBg76P6O2kgD3uNkTqnVA==
+ bh=iD+N0PcyDET408BbdwSQFl0QH2wJbDRwmyeMxeNIgb8=;
+ b=QDAabb6lQlXQeUcVj1d8tAQiQlunZ1/OZt6b3jglc5u+y/yeq5Cg7+/NXSNqBv8KhnBBaBVD6xspZbaCToXt4qi1hbLLokl4z5L7btwMr+nQwsSdr4L1BfQroCv2fcHlml4nXsZaS/Lz4ShRD9ojqfnTJrYmpZS7sE+f0VLp2+0RT5RJ3Alf0Ww3MnZ9w6l0mf16eKGFUMRvOAYgUcMAAjGDCVh8DP+Ox/7q5byEXfOZm4uFTb+h3lk4p1NmHE6CfOLd6bRNHm9NHVoM8ocXlpT1xjdH/a8tnCPR0kNi1xjWhPFuLJijlHo2ZMfmqR2v4USq5x1l1R7NL4dQxze0+w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
  dkim=pass header.d=quicinc.com; arc=none
 Received: from DM8PR02MB8198.namprd02.prod.outlook.com (2603:10b6:8:4::7) by
- SN1PR02MB3822.namprd02.prod.outlook.com (2603:10b6:802:31::32) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5164.18; Wed, 13 Apr 2022 13:27:52 +0000
+ CY4PR02MB2725.namprd02.prod.outlook.com (2603:10b6:903:128::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Wed, 13 Apr
+ 2022 13:42:52 +0000
 Received: from DM8PR02MB8198.namprd02.prod.outlook.com
  ([fe80::15d6:317e:e736:e9ad]) by DM8PR02MB8198.namprd02.prod.outlook.com
  ([fe80::15d6:317e:e736:e9ad%5]) with mapi id 15.20.5164.018; Wed, 13 Apr 2022
- 13:27:52 +0000
+ 13:42:52 +0000
 From:   "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
 CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "Jack Pham (QUIC)" <quic_jackp@quicinc.com>
-Subject: RE: [PATCH v3 2/4] usb: typec: ucsi: add a common function
- ucsi_unregister_connectors()
-Thread-Topic: [PATCH v3 2/4] usb: typec: ucsi: add a common function
- ucsi_unregister_connectors()
-Thread-Index: AQHYTx0Dc3wvnkQxNEm3ijXhHJLFz6zuNZkA//+dchA=
-Date:   Wed, 13 Apr 2022 13:27:52 +0000
-Message-ID: <DM8PR02MB81985719835CC9DC2AAF1E6EE3EC9@DM8PR02MB8198.namprd02.prod.outlook.com>
+Subject: RE: [PATCH v3 4/4] usb: typec: ucsi: retry find role swithch when
+ module load late
+Thread-Topic: [PATCH v3 4/4] usb: typec: ucsi: retry find role swithch when
+ module load late
+Thread-Index: AQHYTx0F90xU2/wxzkix8ByZL1bktazuPkaA//+YNgA=
+Date:   Wed, 13 Apr 2022 13:42:52 +0000
+Message-ID: <DM8PR02MB8198A080766C934496479FE2E3EC9@DM8PR02MB8198.namprd02.prod.outlook.com>
 References: <1649843891-15554-1-git-send-email-quic_linyyuan@quicinc.com>
- <1649843891-15554-3-git-send-email-quic_linyyuan@quicinc.com>
- <Yla9VGMpcDcpJR0f@kuha.fi.intel.com>
-In-Reply-To: <Yla9VGMpcDcpJR0f@kuha.fi.intel.com>
+ <1649843891-15554-5-git-send-email-quic_linyyuan@quicinc.com>
+ <YlbEm31fOaMsFW6C@kuha.fi.intel.com>
+In-Reply-To: <YlbEm31fOaMsFW6C@kuha.fi.intel.com>
 Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -69,60 +70,60 @@ authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=quicinc.com;
 x-ms-exchange-messagesentrepresentingtype: 1
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 34e25f10-7437-42c8-44b4-08da1d51698a
-x-ms-traffictypediagnostic: SN1PR02MB3822:EE_
+x-ms-office365-filtering-correlation-id: 316eb9bd-2e75-4805-d6d2-08da1d5381dd
+x-ms-traffictypediagnostic: CY4PR02MB2725:EE_
 x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-microsoft-antispam-prvs: <SN1PR02MB3822C519111850E8B32E0ACF9FEC9@SN1PR02MB3822.namprd02.prod.outlook.com>
+x-microsoft-antispam-prvs: <CY4PR02MB272554E79EDF02DD399D3E479FEC9@CY4PR02MB2725.namprd02.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0F4tpDRg8uwf5Izpqoa57d+dJmeBGyv53JfViUkXcwxfIvtY4Xu1fxv6j12sNCzdLwXViR/Pb30b4T/AFY2n3zASr0AyyNkqCvpdx/5c4oxTKohgWqotAMQpr8ZMue6YvOKWcAsC82tn5OCPHzbMT3FAQpEgasb8XmjKjQgE6biejVVgEW6TvCB/3+/37mAWwV90Fa8y3k4npSkbH5qNHSc0NI/vKpkb8amhdiANnECgnPu+CP1svuMKmEH7ZMef8qdJ6bfSxY9O6Jr2ZbkJXYAUWwV5oreNAv3d62b0qH1wdUa6LKwunDnSntS0ynDwUpjYTb+qUMnq5K4PsU2M+ygDdgSMfJ2yfFVjwuC1LTcDUjnr+EyDcUimYclYRw96vYOLhrhqe/fKedENrXgUZAp86LiL56cdYVDXGmQHWsURXK76GGXcDtdsSHS8pyTD+KY0jiDNsc8XK11E/ZeNxTIIjq0K7CUc8l+tnMipO6EKCmdQvE6MoeehrO+5o18xyBuUOO+EQGwVq6k/nW2j6tUxG2J/xR+lCdqwIvRzli1zXAQ08GuUwcljY0MRY2eEIr6WV6n55br1ltOxQt038Jtcgbu0LT94E2iGhssiLWtJJ1Hlu2x6wqH+uoXIcmXi/6vAdHmpbRefPb6ZQaF9LLiT61wc2gRJ3obBxHSQV5iY/xlRrc6RI1bSQxBp5O8jc17pSBHOxtjA9CqOm/kwbQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR02MB8198.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(5660300002)(66556008)(71200400001)(2906002)(66946007)(186003)(26005)(66446008)(66476007)(64756008)(4326008)(8676002)(83380400001)(52536014)(55016003)(33656002)(76116006)(107886003)(316002)(110136005)(508600001)(86362001)(38100700002)(9686003)(122000001)(7696005)(6506007)(38070700005)(53546011)(54906003);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: 5TBUJfSQNmdqb/bPlquFT2mWuDEhNNHHUphvSGlpGBmhXNiLFUpNQV6mfmvsuORV5Hm51q/b//biU6it1zmodK2BxZImhHGT4gcbmZos4+PblSoulzhwtrCC73KCUioeOpNYtY+IS5TGSFm3VPSLKTnMmAjYCfFjAyf6UEtZ+6QfhpMqaFcU6sUsBuysteu/DD8nb/tYB1I+dbG2uAavYTz9cPFl6HB08fMlr/7KxnURwTMQJZELQSi3W9JqY30H58rTu3/FHjt8rva6hwyM703szsH/RxAfapyGwXUKra6pmR2+9iSpr7vKBkWl2sUZfUqYipp4yY33X0i4agXBN6dkLTkx8YNfgnJnThvcIiB5NcMXeAs4w4D9zzCGfeIM1JWVN6K2gYDOCB0Vot0TxBsKViEHPIFepahnbnIfWNFMc1AVkjEQg5csHol8e5u+Jr3D+6IZDjXxpzGfdTOIeLFbLSPsFddlO0LNSy59Pe/61zPj09Uqpeb+z1pTJl/RY+gpOI4lX1eDRqpmCsMOfdexeqY+1U8HPYzQ6FYFi7kKvu61t95dP9vF/fuoqjeb/dBsgy/hhzhXjP9+SCQBlrAi78FfU8Rvhc24ASjhtN7iZ6wRHRKduUM/n3/BU2XXAyswRKH0aFkosc3l8Hv705BMkVSMdOGi6YVWEAUQGPGN6A0P1y4PQkZXGL/i/kbFDdSarOVIobVPqdxrvT9aWQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR02MB8198.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(33656002)(186003)(54906003)(110136005)(66556008)(64756008)(508600001)(8676002)(76116006)(66946007)(4326008)(66446008)(38100700002)(66476007)(122000001)(316002)(55016003)(2906002)(5660300002)(71200400001)(38070700005)(83380400001)(107886003)(26005)(86362001)(52536014)(7696005)(6506007)(9686003)(53546011)(8936002);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9aUKavArja1Wb+ChMt9K7qrAm5SZDvbazIlU/bsSZlJpy/Qr+qGHbw3HQV2w?=
- =?us-ascii?Q?zA9OdhNTBF7wRYWueq2wn+38N/2rCZ/watKlkVfDfWQq+lUX50W9ABx9cNuA?=
- =?us-ascii?Q?sz+3PlQ1EPJk/UhpM866euZ+v9HfbiMKtlh+FTL7ViNdQsmIFTsXZnnougVP?=
- =?us-ascii?Q?P034vB9gP97L/u+rqgRn81COWIjS6bAp39ZaX0F1b1qAhwJdzg93jI4N/r3W?=
- =?us-ascii?Q?JsZlGMRMSzGIkHiqpyr7y+C9aRaIHR4xRWvFeRJVS7vKwSlmCrxrmtaKbOlR?=
- =?us-ascii?Q?WVoFrwVCEnfhblklDDh6MDZApOmptt8YY5y9S5k+H3/FJOvXdiZAe+dP//zy?=
- =?us-ascii?Q?7KGif4bh8D/JH27WoSpRNox1EMa12fnJvA1JEOYIIpDIVp/87DRub+CYwaIC?=
- =?us-ascii?Q?mLIaM4nWitYpEiwMu9Glg7VQrl9m/ytmmnU0JW4/juEmOvf8nbxUxNQnNlgF?=
- =?us-ascii?Q?oy47VKlTFdfXnlKTTWtuBAScqOqkijaqoYRjs1mkwLBrGz8ZXAaXgwVvzjVY?=
- =?us-ascii?Q?BLy2d+ifJAx/HIgQFGvmqu1SIc6sTvU2WtCuiI0zgr+xJLwyrAnO60116Dt9?=
- =?us-ascii?Q?283SKqtwxYYpD/U1cZ/v2iiOqfAV9yX8OwF1kZjFhk3NP4KUWjOl6ND3X2qc?=
- =?us-ascii?Q?lHhAYd7S4pebjtbIjf+tLfFUEYofwlLI6c8r6+V9j1zK2X72ZqlPceSO3OWq?=
- =?us-ascii?Q?Fa0UXb8e2bZFMjDbsXEpKQM+rtLsWpVmNPJ6u6fBqYyW/UyVqOYYJW0j0Ry9?=
- =?us-ascii?Q?+RyTTIJ7sYIowuLLRX6CSVybDM6KBSxW/uM4ZLoMZ7pi2a/2hz2m4wK9Q+XQ?=
- =?us-ascii?Q?Xpukho1L+iG2KxzI4iB54Pl+qCjq5e5QFL2WD/0qMtxATvGLDB+1M/RV79f9?=
- =?us-ascii?Q?FdtjKvx7/x+//Xgmz3jFh0m0p1Br4ZlBDhBIMq6O/k+NQd9Y7fQwJ/SQUOlC?=
- =?us-ascii?Q?Yb5vSsgsRiCYUthWpUwrVfHpJMazRROB8K2G7penvIwB8VPh40jd5hJUCOMa?=
- =?us-ascii?Q?41Y6AXVHqRDgbDZrKJ6ioeR3ok9qEfTeznII/n5TO9Vwkuia9r07vIadHer5?=
- =?us-ascii?Q?/7U4ZmbTOP7NK7bdhj9AZn1GdId5u+FKtrNGKMSkfg1UQCvmb54TxHhcwKO0?=
- =?us-ascii?Q?Rq5p4woW53SRzS7E4jvcqcPK6kuMRpI8iy+wb0xEjDAkvXDVdfmCxfx6Dg8m?=
- =?us-ascii?Q?I6jXC8RSUn6o2fIrZxCBYYdV7r2AFRPfb7CLmti19/NBP+zVSUR8Ni0k1g7B?=
- =?us-ascii?Q?HqDuFGJdZCE/j2p978bpSwrbk6zpl5qasdLa4xA34I6dBpD0owYNkpD9y2II?=
- =?us-ascii?Q?9X0AzwdYtVSPvFk3KUIQgSNpinBaXeA+mw8Fg7W7hilaoAQ0ZHYbn4R2gM0k?=
- =?us-ascii?Q?onRZTWNpJPJYp5dbTHUDuR2oI0dTPl7sSq1eZRA9+g+fPCkQQryS8xpMW/6b?=
- =?us-ascii?Q?2OEcnfEOVwE5w6ptJYImFUPKVvgzv6phEp4ud+r+Qcge/zbw5cTcFNKmn3/V?=
- =?us-ascii?Q?N9hHXlb6VtpOOnRIqqRB7HD91dr0IPBk3QPm0HGiSLTsn3gKoyJK8IFE1ys2?=
- =?us-ascii?Q?ixMuCZY5VYxdAdbWsW0zS+XAreeacXgzTf8hTK6jv9hCQ4X7BVobeoXQjW2d?=
- =?us-ascii?Q?vGiXgmgof1qoBvYk5RE2AHvxYpMqWyIRFifqcH8uj3GEo4nA8L7EchJpg7WP?=
- =?us-ascii?Q?8CvfrQndrc1ccuUKVWjJm8sj5T4SIIaFDXtYskO0IGKJjFqvvnjkqXW0OooF?=
- =?us-ascii?Q?cFqjeEb9Vw=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xlcB+7oXyccOfZcLDmnGhnjFKlGliOkAeh0mQ2ZxaVCe8NC3ai8ttn+niSMG?=
+ =?us-ascii?Q?U7GsDFtxDH5+U+YjlTf60aHbTXV+TsODUjlwLB3gcTo1TIuCtguFM5vuTttt?=
+ =?us-ascii?Q?OeBVwFa0HZ6EpxiW8wLMABUvnqOTv4r/mo8Lkgn2FCCm0xXpzettrXlro4Xn?=
+ =?us-ascii?Q?NirU1W2HZoud90GM4pdpSb92E8rtK+kZ8cq022vqShCAuW07lR+IAF3w4nZP?=
+ =?us-ascii?Q?jkTbdu4lOYEwmnJWFb71SKC5fRkAVoMyVsYJucaVmUir6YtRy5707cocrh7/?=
+ =?us-ascii?Q?SheXnMAIPL34IedJZ0ph+jJuxGl6yracL7GA61qzLqtvbNyjIqm1RPmn98EV?=
+ =?us-ascii?Q?Pz9zy/EJl7IatZjn4aCVRsfAPQRyrSp5okJScheJ9Qdp9aIicbZvQDwiMcHF?=
+ =?us-ascii?Q?qkNk0S+x+x9ENEHlKS3desx7d1THU324QIP2FQnB9Uv+yO5RDT9GJxLPSQZL?=
+ =?us-ascii?Q?34xaxzfM/Pod74tpQ1MbZTur0TT5AJrENJXm5r+G9pcOlIChkhrz96oqhX1S?=
+ =?us-ascii?Q?ZkYbBzbJL9ARkZjm6XkVgcBfOxllDrQTc2qJevWckm202AVY6CYNVjr/K0s9?=
+ =?us-ascii?Q?NF8kAnFoF7r+4+or7V2jkRBgZQYi+FdlcFfQu/bzbTZmJeSjA1IFxjAVWN1x?=
+ =?us-ascii?Q?oU9+p9IMWpltkG5onBV4GyZZxQ8w3dMllwuiWOwIsNoR3Z3O08EgtjVfD61S?=
+ =?us-ascii?Q?sTUthLGf0eROW+Y1OaVu3/TiDXSIEoSCrOod9xRs+hLN5RCKTxhW6bQtKKwA?=
+ =?us-ascii?Q?U1rVZsEmrfLxXPMtlG7QWleXhj+URJqa+uNmUo+JJJ0hy1/OiEzfpzhcSuFv?=
+ =?us-ascii?Q?Odk3z6mOJM5XbtPqgdcNEs2bwmbzMNmlFJLfFiS/24oBmhxMUd62Dfj6GQIL?=
+ =?us-ascii?Q?5yYXzz3AI+aLTNfkQi1dvJiQ1ouNhoi5xVXAS098rKqg+U/CORuxpUVL6bCV?=
+ =?us-ascii?Q?PreRho+RFU6uSao+fNK668F3d/mzWVMV/0QJ51AS0NahGkydGIzpF8ZytU9S?=
+ =?us-ascii?Q?2XqU457BDcUX56E2Jd2erRcGbsHfqYCyQ3LGY1tkCvOHF3JA4EMRPmmXWYYh?=
+ =?us-ascii?Q?UHcylpSWxyAxhrnzraOS0gR7Ul3tVRUBDEYgdBseLqeIlk49xQYg8TQOXkwS?=
+ =?us-ascii?Q?PFhDx6WqBsM7XsgybtxM9rLy4SwjW8tQQbLUTMrUUtUxuTu2umNXx4gT2i08?=
+ =?us-ascii?Q?hnKE1FkXRJpzP0F75OHmyfdWnpf2fnjLSCdxsmTWRiTjSk1gYvHzrRbIdswF?=
+ =?us-ascii?Q?wpgxSEN6blaIXWjK2GNOfw2VL8KKszFHMjfeeWmipR2U8vPfo6q8QqFNiHkP?=
+ =?us-ascii?Q?8a//spnZ3ouNCXxY1elVsLnQxP3c9dS+OQkKL6Jioql9uIUeOH4hwe2gLslL?=
+ =?us-ascii?Q?O7XZR1HJIwPrCD2q98vfeUFxKC22Bmmc8cHjyW0Vbsw4WBoNbH7t2poxk+W9?=
+ =?us-ascii?Q?HWdp/16/sNsaXcSAMexBrXcLOmVh4vcQe2PgcLi/hF5S1BCSmf5ruWEh1F/A?=
+ =?us-ascii?Q?1feiZPKJo96hfTJWPYnbm0DR8pzfUfOJBkPpF27JtM8c/Ngrx7hg0bbnbQup?=
+ =?us-ascii?Q?fDbPB/sjOuYM6Z6vObFc5WieDKFosf+D6UFKiTVYBmNNO/FLZkn7tBwcjx2O?=
+ =?us-ascii?Q?B+Caqbscr5xr/dbaPynKbjSOnnD1sFn5oiWXVtWNdZjgs7SHNP4esAd1R9ps?=
+ =?us-ascii?Q?KuUboyRHPFpp97GjYzGlt37CmlicsSzqmEphkLL9XkAhbMYHza5qGD5Cz8x2?=
+ =?us-ascii?Q?WjMFcZxfog=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: quicinc.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DM8PR02MB8198.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 34e25f10-7437-42c8-44b4-08da1d51698a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Apr 2022 13:27:52.5322
+X-MS-Exchange-CrossTenant-Network-Message-Id: 316eb9bd-2e75-4805-d6d2-08da1d5381dd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Apr 2022 13:42:52.3386
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DQ8rfsCUw8BRF9t11+k88JeM0GzUC4knC4lhs1kmKagg8m3FK7h8qPubFEcCHdIcxhgWW7m9X4zO3pRi43iUo+z/siM1zEgBfmdIv2CLNgw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR02MB3822
+X-MS-Exchange-CrossTenant-userprincipalname: h9md3Erqmv2ZuAwT+SG1dENvefea93Jv5Fj6d1XjFhi96Wpn7DxIOrdPlV4lVhJf4O1jhsvEOZrW0mpA85JXVj5XYOZpv+hkksFMeUaBUzo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB2725
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -134,165 +135,191 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Sent: Wednesday, April 13, 2022 8:09 PM
+> Sent: Wednesday, April 13, 2022 8:40 PM
 > To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
 > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; linux-
 > usb@vger.kernel.org; Jack Pham (QUIC) <quic_jackp@quicinc.com>
-> Subject: Re: [PATCH v3 2/4] usb: typec: ucsi: add a common function
-> ucsi_unregister_connectors()
+> Subject: Re: [PATCH v3 4/4] usb: typec: ucsi: retry find role swithch whe=
+n
+> module load late
 >=20
-> On Wed, Apr 13, 2022 at 05:58:09PM +0800, Linyu Yuan wrote:
-> > In error path of ucsi_init(), it will unregister all valid ucsi connect=
-or,
-> > and samiliar operation also happen in ucsi_unregister(),
+> Hi,
 >=20
-> Sorry but I have to confirm this: with "samiliar" you mean "the same",
-> right?
+> You have to make the subject line a bit more clear. Perhaps you could
+> just say "Wait for the USB role switches".
 
-Only one small difference for original code which is no cancel_work_sync() =
-of each connector in ucsi _init(),
-But in ucsi_register_port(), we get role switch after connector work initia=
-lized,
-So I think it is safe to call cancel_work_sync() to connector work if role =
-switch return -EPROBE_DEFER.
+Sound great, will change once all discussion in this thread done.
 
 >=20
-> > add a common function for two places.
-> >
+> On Wed, Apr 13, 2022 at 05:58:11PM +0800, Linyu Yuan wrote:
+> > When role switch enabled, return -EAGAIN if fail to find it due to
+> > module load ordering issue, then restart ucsi init work to find
+> > it again every 100ms.
+>=20
+> It looks like you did not update that.
+
+Sorry, will update later.
+
+>=20
+> > It also means change ucsi init work to delayed_work.
+>=20
+> So from where does that 100ms come from?
+
+Yes, no place define it, just an experiment value.
+Any suggestion ?
+
+>=20
 > > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 > > ---
-> > v2: improve ucsi_connector_clean(), check total number of connector.
-> > v3: rename to ucsi_unregister_connectors(), suggest by maintainer
+> > v2: keep original con->num in debug log
+> > v3: change return value from -EAGAIN to PTR_ERR()
 > >
-> >  drivers/usb/typec/ucsi/ucsi.c | 51 ++++++++++++++++++++++++-----------
-> --------
-> >  1 file changed, 28 insertions(+), 23 deletions(-)
+> >  drivers/usb/typec/ucsi/ucsi.c | 28 ++++++++++++++++------------
+> >  drivers/usb/typec/ucsi/ucsi.h |  2 +-
+> >  2 files changed, 17 insertions(+), 13 deletions(-)
 > >
 > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucs=
 i.c
-> > index 77ac0b7..af9a2a1 100644
+> > index ce9192e..63c25dd 100644
 > > --- a/drivers/usb/typec/ucsi/ucsi.c
 > > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > @@ -1187,6 +1187,32 @@ static int ucsi_register_port(struct ucsi *ucsi,=
+> > @@ -1053,6 +1053,14 @@ static int ucsi_register_port(struct ucsi *ucsi,=
  int
 > index)
-> >  	return ret;
-> >  }
+> >  	con->num =3D index + 1;
+> >  	con->ucsi =3D ucsi;
 > >
-> > +static void ucsi_unregister_connectors(struct ucsi *ucsi)
-> > +{
-> > +	struct ucsi_connector *con;
-> > +	int i;
-> > +
-> > +	if (!ucsi->connector)
-> > +		return;
->=20
-> Can that actually ever happen?
-
-Consider a case, ucsi_init() failed, we will call ucsi_unregister_connector=
-s() to free all connectors,
-After that the UCSI implementation like ucsi_acpi call ucsi_unregister() ag=
-ain,
-It should not unregister connectors again.
-
->=20
-> > +	for (i =3D 0; i < ucsi->cap.num_connectors; i++) {
-> > +		con =3D &ucsi->connector[i];
-> > +		if (!con->port)
-> > +			break;
-> > +
-> > +		cancel_work_sync(&con->work);
-> > +		ucsi_unregister_partner(con);
-> > +		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
-> > +		ucsi_unregister_port_psy(con);
-> > +		if (con->wq)
-> > +			destroy_workqueue(con->wq);
-> > +		typec_unregister_port(con->port);
+> > +	cap->fwnode =3D ucsi_find_fwnode(con);
+> > +	con->usb_role_sw =3D fwnode_usb_role_switch_get(cap->fwnode);
+> > +	if (IS_ERR(con->usb_role_sw)) {
+> > +		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
+> > +			con->num);
+> > +		return PTR_ERR(con->usb_role_sw);
 > > +	}
 > > +
-> > +	kfree(ucsi->connector);
-> > +	ucsi->connector =3D NULL;
-> > +}
->=20
-> Another way of doing this would be to just remove a single connector
-> in the function, and leave the loops to the callers.
->=20
-> static void ucsi_unregister_connector(struct ucsi_connector *con)
-> {
->         cancel_work_sync(&con->work);
->         ucsi_unregister_partner(con);
->         ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
->         ucsi_unregister_port_psy(con);
->         if (con->wq)
->                 destroy_workqueue(con->wq);
->         typec_unregister_port(con->port);
-> }
->=20
-> I wonder would it actually be a bit more clearer to do it like that...
-> I'll leave the decision to you.
-
-I will keep it,
-There will be no duplicate loop entry in two function, a little lazy.
-
->=20
-> >  /**
-> >   * ucsi_init - Initialize UCSI interface
-> >   * @ucsi: UCSI to be initialized
-> > @@ -1195,7 +1221,6 @@ static int ucsi_register_port(struct ucsi *ucsi, =
+> >  	/* Delay other interactions with the con until registration is comple=
+te
+> */
+> >  	mutex_lock(&con->lock);
+> >
+> > @@ -1088,7 +1096,6 @@ static int ucsi_register_port(struct ucsi *ucsi, =
 int
 > index)
-> >   */
-> >  static int ucsi_init(struct ucsi *ucsi)
-> >  {
-> > -	struct ucsi_connector *con;
-> >  	u64 command;
-> >  	int ret;
-> >  	int i;
-> > @@ -1250,15 +1275,7 @@ static int ucsi_init(struct ucsi *ucsi)
-> >  	return 0;
+> >  	if (con->cap.op_mode &
+> UCSI_CONCAP_OPMODE_DEBUG_ACCESSORY)
+> >  		*accessory =3D TYPEC_ACCESSORY_DEBUG;
 > >
-> >  err_unregister:
-> > -	for (con =3D ucsi->connector; con->port; con++) {
-> > -		ucsi_unregister_partner(con);
-> > -		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
-> > -		ucsi_unregister_port_psy(con);
-> > -		if (con->wq)
-> > -			destroy_workqueue(con->wq);
-> > -		typec_unregister_port(con->port);
-> > -		con->port =3D NULL;
+> > -	cap->fwnode =3D ucsi_find_fwnode(con);
+> >  	cap->driver_data =3D con;
+> >  	cap->ops =3D &ucsi_ops;
+> >
+> > @@ -1147,13 +1154,6 @@ static int ucsi_register_port(struct ucsi *ucsi,=
+ int
+> index)
+> >  		ucsi_port_psy_changed(con);
+> >  	}
+> >
+> > -	con->usb_role_sw =3D fwnode_usb_role_switch_get(cap->fwnode);
+> > -	if (IS_ERR(con->usb_role_sw)) {
+> > -		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
+> > -			con->num);
+> > -		con->usb_role_sw =3D NULL;
 > > -	}
-> > +	ucsi_unregister_connectors(ucsi);
+> > -
+> >  	/* Only notify USB controller if partner supports USB data */
+> >  	if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) &
+> UCSI_CONSTAT_PARTNER_FLAG_USB))
+> >  		u_role =3D USB_ROLE_NONE;
+> > @@ -1286,12 +1286,16 @@ static int ucsi_init(struct ucsi *ucsi)
 > >
-> >  err_reset:
-> >  	memset(&ucsi->cap, 0, sizeof(ucsi->cap));
-> > @@ -1364,7 +1381,6 @@ EXPORT_SYMBOL_GPL(ucsi_register);
-> >  void ucsi_unregister(struct ucsi *ucsi)
+> >  static void ucsi_init_work(struct work_struct *work)
 > >  {
+> > -	struct ucsi *ucsi =3D container_of(work, struct ucsi, work);
+> > +	struct ucsi *ucsi =3D container_of(work, struct ucsi, work.work);
+> >  	int ret;
+> >
+> >  	ret =3D ucsi_init(ucsi);
+> >  	if (ret)
+> >  		dev_err(ucsi->dev, "PPM init failed (%d)\n", ret);
+> > +
+> > +
+>=20
+> Extra line.
+>=20
+> > +	if (ret =3D=3D -EPROBE_DEFER)
+> > +		queue_delayed_work(system_long_wq, &ucsi->work,
+> HZ/10);
+>=20
+> You have to stop queueing that eventually. You need a counter.
+>=20
+> I'm still not sure why do you want to queue this same work again and
+> again? Why not just call ucsi_init() in a loop?
+
+Will follow your suggestion below.
+
+>=20
+>         int my_counter =3D 1000;
+So you prefer 10 second in total ?
+If so, next version, I will change it to 500, as msleep(20), check next.
+>=20
+>         while (ucsi_init(ucsi) =3D=3D -EPROBE_DEFER && my_counter--)
+>                 msleep(10);
+In checkpatch.pl, it suggest msleep no less than 20ms each time.
+msleep(20) ?
+
+>=20
+> >  }
+
+Great idea, it will be less code change.
+
+> >
+> >  /**
+> > @@ -1331,7 +1335,7 @@ struct ucsi *ucsi_create(struct device *dev, cons=
+t
+> struct ucsi_operations *ops)
+> >  	if (!ucsi)
+> >  		return ERR_PTR(-ENOMEM);
+> >
+> > -	INIT_WORK(&ucsi->work, ucsi_init_work);
+> > +	INIT_DELAYED_WORK(&ucsi->work, ucsi_init_work);
+> >  	mutex_init(&ucsi->ppm_lock);
+> >  	ucsi->dev =3D dev;
+> >  	ucsi->ops =3D ops;
+> > @@ -1366,7 +1370,7 @@ int ucsi_register(struct ucsi *ucsi)
+> >  	if (!ucsi->version)
+> >  		return -ENODEV;
+> >
+> > -	queue_work(system_long_wq, &ucsi->work);
+> > +	queue_delayed_work(system_long_wq, &ucsi->work, 0);
+> >
+> >  	return 0;
+> >  }
+> > @@ -1383,7 +1387,7 @@ void ucsi_unregister(struct ucsi *ucsi)
 > >  	u64 cmd =3D UCSI_SET_NOTIFICATION_ENABLE;
-> > -	int i;
 > >
 > >  	/* Make sure that we are not in the middle of driver initialization *=
 /
-> >  	cancel_work_sync(&ucsi->work);
-> > @@ -1372,18 +1388,7 @@ void ucsi_unregister(struct ucsi *ucsi)
+> > -	cancel_work_sync(&ucsi->work);
+> > +	cancel_delayed_work_sync(&ucsi->work);
+> >
 > >  	/* Disable notifications */
 > >  	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
+> > diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucs=
+i.h
+> > index 280f1e1..3812017 100644
+> > --- a/drivers/usb/typec/ucsi/ucsi.h
+> > +++ b/drivers/usb/typec/ucsi/ucsi.h
+> > @@ -287,7 +287,7 @@ struct ucsi {
+> >  	struct ucsi_capability cap;
+> >  	struct ucsi_connector *connector;
 > >
-> > -	for (i =3D 0; i < ucsi->cap.num_connectors; i++) {
-> > -		cancel_work_sync(&ucsi->connector[i].work);
-> > -		ucsi_unregister_partner(&ucsi->connector[i]);
-> > -		ucsi_unregister_altmodes(&ucsi->connector[i],
-> > -					 UCSI_RECIPIENT_CON);
-> > -		ucsi_unregister_port_psy(&ucsi->connector[i]);
-> > -		if (ucsi->connector[i].wq)
-> > -			destroy_workqueue(ucsi->connector[i].wq);
-> > -		typec_unregister_port(ucsi->connector[i].port);
-> > -	}
-> > -
-> > -	kfree(ucsi->connector);
-> > +	ucsi_unregister_connectors(ucsi);
-> >  }
-> >  EXPORT_SYMBOL_GPL(ucsi_unregister);
+> > -	struct work_struct work;
+> > +	struct delayed_work work;
+> >
+> >  	/* PPM Communication lock */
+> >  	struct mutex ppm_lock;
+> > --
+> > 2.7.4
 >=20
 > thanks,
 >=20
