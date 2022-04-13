@@ -2,72 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0D04FEC2D
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Apr 2022 03:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1424FEC6D
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Apr 2022 03:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbiDMBZt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Apr 2022 21:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
+        id S231564AbiDMBqr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Apr 2022 21:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiDMBZs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 21:25:48 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26362899F;
-        Tue, 12 Apr 2022 18:23:25 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id k5so845899lfg.9;
-        Tue, 12 Apr 2022 18:23:25 -0700 (PDT)
+        with ESMTP id S231425AbiDMBqr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Apr 2022 21:46:47 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30CE527C5;
+        Tue, 12 Apr 2022 18:44:27 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id b21so466950ljf.4;
+        Tue, 12 Apr 2022 18:44:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qKK7F55fvPxfwHvUeGcsnCfPeejSbawXKaUujgRE1VU=;
-        b=qmeXoJ4HsVpKd0Y9Qxco39Vg9+JwdZ5ICugBMgSXaXZSImgUEBgJ+y7sCP+YnbUwWu
-         4aFykSMLTQ/3I1ivRKgoYxQq6GO9ozpDVbfgiQF66bVljr+YzmcjEc/P0WmV11pMSsx3
-         Ygw4pUJjdyh23yJ/znLI1sepVVGorucyG88A6auvWJgM32DBh3eOMC+GiQN1nDRDJrT3
-         vk/iIk6pyAQhMnaX0CfM4esaczKdqJ43FhmuwWqJCShJZAK+74TF9vW4R5UvpdMBh7+2
-         O2bA4+4haEqBJeT9z311xSDXLb9SzZjgP134MwpQMCzBXOyJHsorif8uXp0TSiNzuNt3
-         ldYQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ySiyIpfROIPLrNfxp6ftud+YvGVma3cO1KHhZiW0jOM=;
+        b=nSUWqZdSI/kAJg7fzVB/bNESSfXx77XC4BL8V3C4CWbzMgp/9ELT+n4cP+QU7kQzWr
+         dWWCxSSIX9rB4owJGKAJvJKGVSv4S8KnTa1xKIRv5RlocHDH+lhmQWx6wcHp0Z7dDjLy
+         UxqjocVCeBilJOGf7Dfqui7ITgYYT3GqFrd90njzox2H2pFaPYEcgHlOcn4tBtgduY6q
+         JLt5Gamie+R1Dg79U11B42dP3stz6F8YNTSdLnP6kUMbRaWdZ/R3VuPs56hEsxGDGchr
+         EEJzT4wxEANHI67qXStsIfIuNqIwoUZ0upome9MyKYgtCHPdm0qe4I3CCFIDtF0FpRQ7
+         r4oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=qKK7F55fvPxfwHvUeGcsnCfPeejSbawXKaUujgRE1VU=;
-        b=YFoiI5J5fTJSxVQkY3KKTgjiL7Y9Xf5RT32XId0b+6g4hcGH7n+nJOE1HSpPtHetKA
-         lI+EQPkfsX3boMFVLHDHEQphnl5IZoKrWD74yEnoGgeDM1LZIGb9YffyQpbbJiuLS/lo
-         G+GALj96F3DHfdiHGFJRi3SOQh4UedtJCKt1S4w08uOztsVPC9WnmsDPs/33dxLmUUz5
-         zb/8foXB6AzWPmPhyz1zwq5fbUAQVMfXYA/KcwhDd0v17HVVxzXyv97rWi7C4oITzewR
-         tCvAScPwvm8oXH83yEfPsWmHnIzToDACX9LoLaZrlAuzB9Tlrz7EfGihLeQEDPyxMfwt
-         +trA==
-X-Gm-Message-State: AOAM532Go++U7zwjl89v4T0hHTujaMflN8SimmJ/nJAVoTHm4G78vcVF
-        YJQ/jqqEYLWxfIwRdZF3SJQT8WAMR5zbTQ==
-X-Google-Smtp-Source: ABdhPJx+HALY5x4EMB0lD4M2/rknLJURVhZQWBiOjxtnGRI6kS21TbnVJxYT9CoT48k12xB5tgBDtQ==
-X-Received: by 2002:a05:6512:3c97:b0:46b:92c5:5bcb with SMTP id h23-20020a0565123c9700b0046b92c55bcbmr13104677lfv.429.1649813003750;
-        Tue, 12 Apr 2022 18:23:23 -0700 (PDT)
-Received: from ?IPV6:2001:470:6180:0:a105:2443:47df:c2c9? ([2001:470:6180:0:a105:2443:47df:c2c9])
-        by smtp.googlemail.com with ESMTPSA id m1-20020a05651202e100b0046cd451b8easm63972lfq.22.2022.04.12.18.23.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 18:23:23 -0700 (PDT)
-Message-ID: <2efc5cef-c466-4c7f-cb7d-c461ac342361@gmail.com>
-Date:   Wed, 13 Apr 2022 03:23:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 2/3] rndis_host: enable the bogus MAC fixup for ZTE
- devices from cdc_ether
-Content-Language: en-GB
+        bh=ySiyIpfROIPLrNfxp6ftud+YvGVma3cO1KHhZiW0jOM=;
+        b=Me+tnykxr2RwYbRUDjPqitjRFWi4lUTz+FMlDTfcPtZA6OFFxR0ny12fPLALf9n7vJ
+         2eQHvamj4V3CQPEWhGHDp6IazG26Q0J4iUIPKf9jAzQ+a1wXkXIfAPXFyXxdy3R/2ism
+         9yvcEKS70AUi14BB0haylgV8qKojRklWbeC4WvwK4tROA793aZweJoTv9hkabl0vacg9
+         GGXNJfCk2TFB4tbPudQQTM10OnWkyhUbQD3+42ysU+K858r9sAR8O+aprANo0/vGAn2g
+         XYaQEiY75PQcJfgZLJskfAUCXF797me+GUlS+KTwAOFNpmVv160mrF8SeQgqiNKBoP42
+         GUhw==
+X-Gm-Message-State: AOAM5323qhCTKDViQRrZaihypv/oyspRUeYDooTiCk319aMSUMKF+ctb
+        dtauMtYyBRaLenXrKc2vOY/UwGkRUwKrJg==
+X-Google-Smtp-Source: ABdhPJzx+4OqoNSYlqC69DXgtoU/1lrwk9CSja+PwVK+gr3ciqy1EgnHHVTr0JLR8Ban5KIDRBxnwQ==
+X-Received: by 2002:a2e:5817:0:b0:24b:50a2:86f0 with SMTP id m23-20020a2e5817000000b0024b50a286f0mr15043837ljb.230.1649814265896;
+        Tue, 12 Apr 2022 18:44:25 -0700 (PDT)
+Received: from rafiki.local ([2001:470:6180::c8d])
+        by smtp.gmail.com with ESMTPSA id u3-20020a197903000000b00464f4c76ebbsm1915574lfc.94.2022.04.12.18.44.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 18:44:25 -0700 (PDT)
+From:   Lech Perczak <lech.perczak@gmail.com>
 To:     netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>,
+Cc:     Lech Perczak <lech.perczak@gmail.com>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
         Kristian Evensen <kristian.evensen@gmail.com>,
         Oliver Neukum <oliver@neukum.org>
-References: <20220413001158.1202194-1-lech.perczak@gmail.com>
- <20220413001158.1202194-3-lech.perczak@gmail.com>
-From:   Lech Perczak <lech.perczak@gmail.com>
-In-Reply-To: <20220413001158.1202194-3-lech.perczak@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: [PATCH v3 0/3] rndis_host: handle bogus MAC addresses in ZTE RNDIS devices
+Date:   Wed, 13 Apr 2022 03:44:13 +0200
+Message-Id: <20220413014416.2306843-1-lech.perczak@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,138 +70,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-W dniu 2022-04-13 o 02:11, Lech Perczak pisze:
-> Certain ZTE modems, namely: MF823. MF831, MF910, built-in modem from
-> MF286R, expose both CDC-ECM and RNDIS network interfaces.
-> They have a trait of ignoring the locally-administered MAC address
-> configured on the interface both in CDC-ECM and RNDIS part,
-> and this leads to dropping of incoming traffic by the host.
-> However, the workaround was only present in CDC-ECM, and MF286R
-> explicitly requires it in RNDIS mode.
->
-> Re-use the workaround in rndis_host as well, to fix operation of MF286R
-> module, some versions of which expose only the RNDIS interface. Do so by
-> introducing new flag, RNDIS_DRIVER_DATA_BOGUS_MAC, and testing for it in
-And I just noticed that I forgot to rename that flag here, as well as
-one unneded whitespace change creeped in. Will resend V3 shortly.
-> rndis_rx_fixup. This is required, as RNDIS uses frame batching, and all
-> of the packets inside the batch need the fixup. This might introduce a
-> performance penalty, because test is done for every returned Ethernet
-> frame.
->
-> Apply the workaround to both "flavors" of RNDIS interfaces, as older ZTE
-> modems, like MF823 found in the wild, report the USB_CLASS_COMM class
-> interfaces, while MF286R reports USB_CLASS_WIRELESS_CONTROLLER.
->
-> Suggested-by: Bjørn Mork <bjorn@mork.no>
-> Cc: Kristian Evensen <kristian.evensen@gmail.com>
-> Cc: Oliver Neukum <oliver@neukum.org>
-> Signed-off-by: Lech Perczak <lech.perczak@gmail.com>
-> ---
-> v2:
-> - Ensured that MAC fixup is applied to all Ethernet frames inside an
->    RNDIS batch. Thanks to Bjørn for finding the issue.
-> - Introduced new driver flag to facilitate the above.
->
->   drivers/net/usb/rndis_host.c   | 33 ++++++++++++++++++++++++++++++++-
->   include/linux/usb/rndis_host.h |  1 +
->   2 files changed, 33 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/usb/rndis_host.c b/drivers/net/usb/rndis_host.c
-> index 247f58cb0f84..18b27a4ed8bd 100644
-> --- a/drivers/net/usb/rndis_host.c
-> +++ b/drivers/net/usb/rndis_host.c
-> @@ -485,10 +485,14 @@ EXPORT_SYMBOL_GPL(rndis_unbind);
->    */
->   int rndis_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
->   {
-> +	bool dst_mac_fixup;
-> +
->   	/* This check is no longer done by usbnet */
->   	if (skb->len < dev->net->hard_header_len)
->   		return 0;
->   
-> +	dst_mac_fixup = !!(dev->driver_info->data & RNDIS_DRIVER_DATA_DST_MAC_FIXUP);
-> +
->   	/* peripheral may have batched packets to us... */
->   	while (likely(skb->len)) {
->   		struct rndis_data_hdr	*hdr = (void *)skb->data;
-> @@ -523,10 +527,17 @@ int rndis_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
->   			break;
->   		skb_pull(skb, msg_len - sizeof *hdr);
->   		skb_trim(skb2, data_len);
-> +
-> +		if (unlikely(dst_mac_fixup))
-> +			usbnet_cdc_zte_rx_fixup(dev, skb2);
-> +
->   		usbnet_skb_return(dev, skb2);
->   	}
->   
->   	/* caller will usbnet_skb_return the remaining packet */
-> +	if (unlikely(dst_mac_fixup))
-> +		usbnet_cdc_zte_rx_fixup(dev, skb);
-> +
->   	return 1;
->   }
->   EXPORT_SYMBOL_GPL(rndis_rx_fixup);
-> @@ -578,7 +589,6 @@ rndis_tx_fixup(struct usbnet *dev, struct sk_buff *skb, gfp_t flags)
->   }
->   EXPORT_SYMBOL_GPL(rndis_tx_fixup);
->   
-> -
->   static const struct driver_info	rndis_info = {
->   	.description =	"RNDIS device",
->   	.flags =	FLAG_ETHER | FLAG_POINTTOPOINT | FLAG_FRAMING_RN | FLAG_NO_SETINT,
-> @@ -600,6 +610,17 @@ static const struct driver_info	rndis_poll_status_info = {
->   	.tx_fixup =	rndis_tx_fixup,
->   };
->   
-> +static const struct driver_info	zte_rndis_info = {
-> +	.description =	"ZTE RNDIS device",
-> +	.flags =	FLAG_ETHER | FLAG_POINTTOPOINT | FLAG_FRAMING_RN | FLAG_NO_SETINT,
-> +	.data =		RNDIS_DRIVER_DATA_DST_MAC_FIXUP,
-> +	.bind =		rndis_bind,
-> +	.unbind =	rndis_unbind,
-> +	.status =	rndis_status,
-> +	.rx_fixup =	rndis_rx_fixup,
-> +	.tx_fixup =	rndis_tx_fixup,
-> +};
-> +
->   /*-------------------------------------------------------------------------*/
->   
->   static const struct usb_device_id	products [] = {
-> @@ -613,6 +634,16 @@ static const struct usb_device_id	products [] = {
->   	USB_VENDOR_AND_INTERFACE_INFO(0x238b,
->   				      USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
->   	.driver_info = (unsigned long)&rndis_info,
-> +}, {
-> +	/* ZTE WWAN modules */
-> +	USB_VENDOR_AND_INTERFACE_INFO(0x19d2,
-> +				      USB_CLASS_WIRELESS_CONTROLLER, 1, 3),
-> +	.driver_info = (unsigned long)&zte_rndis_info,
-> +}, {
-> +	/* ZTE WWAN modules, ACM flavour */
-> +	USB_VENDOR_AND_INTERFACE_INFO(0x19d2,
-> +				      USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
-> +	.driver_info = (unsigned long)&zte_rndis_info,
->   }, {
->   	/* RNDIS is MSFT's un-official variant of CDC ACM */
->   	USB_INTERFACE_INFO(USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
-> diff --git a/include/linux/usb/rndis_host.h b/include/linux/usb/rndis_host.h
-> index 809bccd08455..cc42db51bbba 100644
-> --- a/include/linux/usb/rndis_host.h
-> +++ b/include/linux/usb/rndis_host.h
-> @@ -197,6 +197,7 @@ struct rndis_keepalive_c {	/* IN (optionally OUT) */
->   
->   /* Flags for driver_info::data */
->   #define RNDIS_DRIVER_DATA_POLL_STATUS	1	/* poll status before control */
-> +#define RNDIS_DRIVER_DATA_DST_MAC_FIXUP	2	/* device ignores configured MAC address */
->   
->   extern void rndis_status(struct usbnet *dev, struct urb *urb);
->   extern int
+When porting support of ZTE MF286R to OpenWrt [1], it was discovered,
+that its built-in LTE modem fails to adjust its target MAC address,
+when a random MAC address is assigned to the interface, due to detection of
+"locally-administered address" bit. This leads to dropping of ingress
+trafficat the host. The modem uses RNDIS as its primary interface,
+with some variants exposing both of them simultaneously.
 
+Then it was discovered, that cdc_ether driver contains a fixup for that
+exact issue, also appearing on CDC ECM interfaces.
+I discussed how to proceed with that with Bjørn Mork at OpenWrt forum [3],
+with the first approach would be to trust the locally-administered MAC
+again, and add a quirk for the problematic ZTE devices, as suggested by
+Kristian Evensen. before [4], but reusing the fixup from cdc_ether looks
+like a safer and more generic solution.
+
+Finally, according to Bjørn's suggestion. limit the scope of bogus MAC
+addressdetection to ZTE devices, the same way as it is done in cdc_ether,
+as this trait wasn't really observed outside of ZTE devices.
+Do that for both flavours of RNDIS devices, with interface classes
+02/02/ff and e0/01/03, as both types are reported by different modems.
+
+[1] https://git.openwrt.org/?p=openwrt/openwrt.git;a=commit;h=7ac8da00609f42b8aba74b7efc6b0d055b7cef3e
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bfe9b9d2df669a57a95d641ed46eb018e204c6ce
+[3] https://forum.openwrt.org/t/problem-with-modem-in-zte-mf286r/120988
+[4] https://lore.kernel.org/all/CAKfDRXhDp3heiD75Lat7cr1JmY-kaJ-MS0tt7QXX=s8RFjbpUQ@mail.gmail.com/T/
+
+Cc: Bjørn Mork <bjorn@mork.no>
+Cc: Kristian Evensen <kristian.evensen@gmail.com>
+Cc: Oliver Neukum <oliver@neukum.org>
+
+v3: Fixed wrong identifier commit description and whitespace in patch 2.
+
+v2: ensure that MAC fixup is applied to all Ethernet frames in RNDIS
+batch, by introducing a driver flag, and integrating the fixup inside
+rndis_rx_fixup().
+
+Lech Perczak (3):
+  cdc_ether: export usbnet_cdc_zte_rx_fixup
+  rndis_host: enable the bogus MAC fixup for ZTE devices from cdc_ether
+  rndis_host: limit scope of bogus MAC address detection to ZTE devices
+
+ drivers/net/usb/cdc_ether.c    |  3 ++-
+ drivers/net/usb/rndis_host.c   | 47 +++++++++++++++++++++++++++++++---
+ include/linux/usb/rndis_host.h |  1 +
+ include/linux/usb/usbnet.h     |  1 +
+ 4 files changed, 47 insertions(+), 5 deletions(-)
 
 -- 
-Pozdrawiam/Kind regards,
-Lech Perczak
+2.30.2
 
