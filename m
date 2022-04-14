@@ -2,96 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA5C500BB4
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Apr 2022 12:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D29B500BBB
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Apr 2022 13:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237075AbiDNLBb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Apr 2022 07:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
+        id S241091AbiDNLEi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Apr 2022 07:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiDNLB1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Apr 2022 07:01:27 -0400
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9647DE0C
-        for <linux-usb@vger.kernel.org>; Thu, 14 Apr 2022 03:59:03 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 525E62805D231;
-        Thu, 14 Apr 2022 12:58:58 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 4869B562CA; Thu, 14 Apr 2022 12:58:58 +0200 (CEST)
-Date:   Thu, 14 Apr 2022 12:58:58 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jann Horn <jannh@google.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Jacky Chou <jackychou@asix.com.tw>, Willy Tarreau <w@1wt.eu>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH] usbnet: Fix use-after-free on disconnect
-Message-ID: <20220414105858.GA9106@wunner.de>
-References: <127121d9d933ebe3fc13f9f91cc33363d6a8a8ac.1649859147.git.lukas@wunner.de>
- <614e6498-3c3e-0104-591e-8ea296dfd887@suse.com>
+        with ESMTP id S238053AbiDNLEh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Apr 2022 07:04:37 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367CE3C4B7
+        for <linux-usb@vger.kernel.org>; Thu, 14 Apr 2022 04:02:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BB5F321616;
+        Thu, 14 Apr 2022 11:02:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649934131; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=q5TykUprMphVemzLHWKE3YzGn08eagQq5Z8QGXkgC2Q=;
+        b=J+1seKhFCSWdV2pvvx84ma4lhNJZZ5I4os0IXxxBz0qf3Bz1sqdFoCP++MOVv0IA8kJhP/
+        GHg+WWFdJgVC1XqOzHUQWnVMnW5l1+ohOW/hOJJn3GuzduYNpe48AfS0ngKPD10f5yPEms
+        o/O12b0Qq5gamrtr++uNugNih0dv8WQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 87CBB132C0;
+        Thu, 14 Apr 2022 11:02:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id DYVhHzP/V2KaCwAAMHmgww
+        (envelope-from <oneukum@suse.com>); Thu, 14 Apr 2022 11:02:11 +0000
+From:   Oliver Neukum <oneukum@suse.com>
+To:     linux-usb@vger.kernel.org, gregKH@linuxfoundation.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] quirks: add a Realtek card reader
+Date:   Thu, 14 Apr 2022 13:02:09 +0200
+Message-Id: <20220414110209.30924-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <614e6498-3c3e-0104-591e-8ea296dfd887@suse.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 08:59:48PM +0200, Oliver Neukum wrote:
-> On 13.04.22 16:16, Lukas Wunner wrote:
-> > Jann Horn reports a use-after-free on disconnect of a USB Ethernet
-> > (ax88179_178a.c).  Oleksij Rempel has witnessed the same issue with a
-> > different driver (ax88172a.c).
-> 
-> I see. Very good catch
-> 
-> > --- a/drivers/net/usb/usbnet.c
-> > +++ b/drivers/net/usb/usbnet.c
-> > @@ -469,6 +469,9 @@ static enum skb_state defer_bh(struct usbnet *dev, struct sk_buff *skb,
-> >   */
-> >  void usbnet_defer_kevent (struct usbnet *dev, int work)
-> >  {
-> > +	if (dev->intf->condition == USB_INTERFACE_UNBINDING)
-> > +		return;
-> 
-> But, no, you cannot do this. This is a very blatant layering violation.
-> You cannot use states internal to usb core like that in a driver.
+This device is reported to stall when enummerated.
 
-Why do you think it's internal?
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/core/quirks.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-enum usb_interface_condition is defined in include/linux/usb.h
-for everyone to see and use.  If it was meant to be private,
-I'd expect it to be marked as such or live in drivers/usb/core/usb.h.
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index d3c14b5ed4a1..8ce8c0d06c66 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -404,6 +404,9 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	{ USB_DEVICE(0x0b05, 0x17e0), .driver_info =
+ 			USB_QUIRK_IGNORE_REMOTE_WAKEUP },
+ 
++	/* Realtek Semiconductor Corp. Mass Storage Device (Multicard Reader)*/
++	{ USB_DEVICE(0x0bda, 0x0151), .driver_info = USB_QUIRK_CONFIG_INTF_STRINGS },
++
+ 	/* Realtek hub in Dell WD19 (Type-C) */
+ 	{ USB_DEVICE(0x0bda, 0x0487), .driver_info = USB_QUIRK_NO_LPM },
+ 
+-- 
+2.34.1
 
-Adding Greg to clarify.
-
-
-> I see two options.
-> 1. A dedicated flag in usbnet (then please with the correct smp barriers)
-> 2. You introduce an API to usb core to query this.
-
-I'd definitely prefer option 2 as I'd hate to duplicate functionality.
-
-What do you have in mind?  A simple accessor to return intf->condition
-or something like usb_interface_unbinding() which returns a bool?
-
-Thanks,
-
-Lukas
