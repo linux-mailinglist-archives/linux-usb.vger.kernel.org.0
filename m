@@ -2,104 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C52501BE0
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Apr 2022 21:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0682A501C7B
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Apr 2022 22:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345509AbiDNT20 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Apr 2022 15:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
+        id S1346193AbiDNUT0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Apr 2022 16:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345477AbiDNT2W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Apr 2022 15:28:22 -0400
-Received: from out28-75.mail.aliyun.com (out28-75.mail.aliyun.com [115.124.28.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75D1E33B5;
-        Thu, 14 Apr 2022 12:25:56 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1325045|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0344537-0.000618227-0.964928;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047199;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.NQo2Nje_1649964351;
-Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NQo2Nje_1649964351)
-          by smtp.aliyun-inc.com(33.40.38.164);
-          Fri, 15 Apr 2022 03:25:52 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     gregkh@linuxfoundation.org, hminas@synopsys.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
-        paul@crapouillou.net
-Cc:     linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dragancecavac@yahoo.com, hns@goldelico.com,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-Subject: [PATCH v3 3/3] MIPS: Ingenic: Refresh USB nodes to match driver changes.
-Date:   Fri, 15 Apr 2022 03:25:37 +0800
-Message-Id: <1649964337-114337-4-git-send-email-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1649964337-114337-1-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1649964337-114337-1-git-send-email-zhouyanjie@wanyeetech.com>
+        with ESMTP id S237932AbiDNUTW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Apr 2022 16:19:22 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id EBA9CEB08C
+        for <linux-usb@vger.kernel.org>; Thu, 14 Apr 2022 13:16:56 -0700 (PDT)
+Received: (qmail 460007 invoked by uid 1000); 14 Apr 2022 16:16:55 -0400
+Date:   Thu, 14 Apr 2022 16:16:55 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Evan Green <evgreen@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rajat Jain <rajatja@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Youngjin Jang <yj84.jang@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: hcd-pci: Fully suspend across freeze/thaw cycle
+Message-ID: <YliBN9sLwj8UOkU8@rowland.harvard.edu>
+References: <CAE=gft7Zi9tpJ74Tf2iqPRbwJkmSLiKJt-WhwD+h-DxQh75D6g@mail.gmail.com>
+ <YlDoSY19HYNJGI50@rowland.harvard.edu>
+ <022a50ac-7866-2140-1b40-776255f3a036@linux.intel.com>
+ <YlRATrMxRWt9gVqt@rowland.harvard.edu>
+ <4353a956-9855-9c14-7dbf-bf16580abe32@linux.intel.com>
+ <YlWdfWRXYjkfHLIP@rowland.harvard.edu>
+ <b1df80e4-af6a-e84f-f49d-c74500bdec05@linux.intel.com>
+ <Ylgt8Y7Mz4nOAhtv@rowland.harvard.edu>
+ <CAE=gft7fvjUX7SdjubHBpd=v3abQ=gJrhM-Oc_RxxqSkoG6mSA@mail.gmail.com>
+ <039bb05f-32e4-2dd1-89ca-b51c17984a7f@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <039bb05f-32e4-2dd1-89ca-b51c17984a7f@linux.intel.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Refresh USB nodes in the jz4780.dtsi, x1000.dtsi, and x1830.dtsi files.
+On Thu, Apr 14, 2022 at 08:06:32PM +0300, Mathias Nyman wrote:
+> On 14.4.2022 19.30, Evan Green wrote:
+> > Hi Alan and Mathias,
+> > 
+> > On Thu, Apr 14, 2022 at 7:21 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >> Evan, this discussion suggests that you rewrite your patch as a series
+> >> of three:
+> >>
+> >>      1. Change choose_wakeup() so that for PM_EVENT_FREEZE, wakeup is
+> >>         always disabled.
+> > 
+> > If I understand this correctly, this means potentially runtime
+> > resuming the device so its wakeup setting can be consistently set to
+> > wakeups disabled across a freeze transition.
 
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
----
+The kernel already does this for you.  All you have to do is change the 
+routine so that it always decides that wakeup should be off for FREEZE.
 
-Notes:
-    v3:
-    New patch.
+> >  Got it I think in terms
+> > of the "how".
 
- arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
- arch/mips/boot/dts/ingenic/x1000.dtsi  | 2 +-
- arch/mips/boot/dts/ingenic/x1830.dtsi  | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+> >>      2. Change the xhci-hcd interrupt handler so that port-status
+> >>         changes are ignored if the port's root hub is suspended with
+> >>         wakeup disabled.
+> > 
+> > This part confuses me. This would be way deep under
+> > xhci_handle_event(), probably in handle_port_status(), just throwing
+> > away certain events that come in the ring. How would we know to go
+> > back and process those events later?
 
-diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-index b998301..c182a65 100644
---- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-@@ -577,7 +577,7 @@
- 	};
- 
- 	otg: usb@13500000 {
--		compatible = "ingenic,jz4780-otg", "snps,dwc2";
-+		compatible = "ingenic,jz4780-otg";
- 		reg = <0x13500000 0x40000>;
- 
- 		interrupt-parent = <&intc>;
-diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
-index 8bd27ede..343818a2 100644
---- a/arch/mips/boot/dts/ingenic/x1000.dtsi
-+++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
-@@ -366,7 +366,7 @@
- 	};
- 
- 	otg: usb@13500000 {
--		compatible = "ingenic,x1000-otg", "snps,dwc2";
-+		compatible = "ingenic,x1000-otg";
- 		reg = <0x13500000 0x40000>;
- 
- 		interrupt-parent = <&intc>;
-diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi b/arch/mips/boot/dts/ingenic/x1830.dtsi
-index 2595df8..6aff19f 100644
---- a/arch/mips/boot/dts/ingenic/x1830.dtsi
-+++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
-@@ -355,7 +355,7 @@
- 	};
- 
- 	otg: usb@13500000 {
--		compatible = "ingenic,x1830-otg", "snps,dwc2";
-+		compatible = "ingenic,x1830-otg";
- 		reg = <0x13500000 0x40000>;
- 
- 		interrupt-parent = <&intc>;
--- 
-2.7.4
+We wouldn't.  There's no need to process the events later.  When a hub 
+(including a root hub) is resumed, the hub driver checks the state of 
+each port and takes whatever actions are needed to handle any changes 
+that occurred while the hub was suspended.
 
+In fact, processing these events wouldnn't really accomplish very much 
+in any case.  The driver would request that the root hub be resumed, 
+that request would be submitted to a work queue, and then nothing would 
+happen because the work queue, like many other kernel threads, gets 
+frozen during a hibernation transition.
+
+All that's really needed is to guarantee that the root hub would be 
+resumed when we leave hibernation.  And of course, this always happens 
+regardless of what events were received in the meantime.
+
+> >  I think we don't need to do this
+> > if we suspend the controller as in #3 below. The suspended (halted)
+> > controller wouldn't generate event interrupts (since the spec mentions
+> > port status change generation is gated on HCHalted). So we're already
+> > covered against receiving interrupts in this zone by halting the
+> > controller, and the events stay nicely pending for when we restart it
+> > in thaw.
+> 
+> Was thinking the same here. It would be nice to have this to comply with
+> usb spec, keeping roothub from propagating connect/disconnect events
+> immediately after suspending it with wake flags cleared.
+> 
+> But it's a lot of work to implement this, and for this issue, and linux 
+> hibernate point of view I don't think it has any real benefit.
+> The actual device generating the interrupt is the host (parent of roothub),
+> and that will stop once freeze() is called for it in #3 
+
+The only reason that approach works is because we never disable resume 
+requests during runtime suspend.  But okay...
+
+> > Is the goal of #1 purely a setup change for #2, or does it stand on
+> > its own even if we nixed #2? Said differently, is #1 trying to ensure
+> > that wake signaling doesn't occur at all between freeze and thaw, even
+> > when the controller is suspended and guaranteed not to generate
+> > interrupts via its "normal" mechanism? I don't have a crisp mental
+> > picture of how the wake signaling works, but if the controller wake
+> > mechanism sidesteps the original problem of sending an MSI to a dead
+> > CPU (as in, it does not use MSIs), then it might be ok as-is.
+> 
+> #1 is needed because xHCI can generate wake events even when halted if
+> device initiated resume signaling is detected on a roothub port.
+> Just like it can generate wake events on connect/disconnect if wake flags
+> are set. (xhci spec figure 4-34, see PLS=Resume)
+> We want to avoid those wakeups between freeze-thaw
+
+Think of it this way: All USB hubs, including root hubs, always relay 
+a resume request upstream when one is received on a downstream port, no 
+matter what their wakeup setting is.  A hub's wakeup setting only 
+controls whether it generates a resume request on its own in response 
+to a port-status change.
+
+> So just #1 and #3 should probably solve this, and be an easier change. 
+
+Let's try it and see.
+
+Alan Stern
