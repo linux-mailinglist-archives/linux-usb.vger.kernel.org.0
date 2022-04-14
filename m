@@ -2,56 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25FCE50071A
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Apr 2022 09:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2CC500781
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Apr 2022 09:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237472AbiDNHlj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Apr 2022 03:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57206 "EHLO
+        id S240592AbiDNHtQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Apr 2022 03:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233934AbiDNHlj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Apr 2022 03:41:39 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C93A56752;
-        Thu, 14 Apr 2022 00:39:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649921955; x=1681457955;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=wxmRBxyHS+dg9xLU3QSbb0YU+y3j4+3+2rDE+ovnt+E=;
-  b=jUB0q3x976/f9P62HoxD6NTb+E38F0AUp4My84Ng3nGNYG3xgk21JLpo
-   86asEU8VSCwi4eNNJiqaXB7PGFLlMCJJpTZUz/M4lcfRWOwgoGuAEVoEn
-   511tQhT4MnXItN+Bb/+aQsdCmY+2lOaPhu8h0k1uo/LrbXNVa7g8dhpe+
-   k=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 14 Apr 2022 00:39:15 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 00:39:15 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 14 Apr 2022 00:39:14 -0700
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 14 Apr 2022 00:39:14 -0700
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_jackp@quicinc.com>, <quic_pkondeti@quicinc.com>,
-        <Thinh.Nguyen@synopsys.com>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v2] usb: dwc3: EP clear halt leading to clearing of delayed_status
-Date:   Thu, 14 Apr 2022 00:39:02 -0700
-Message-ID: <20220414073902.21960-1-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S241436AbiDNHsT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Apr 2022 03:48:19 -0400
+Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47B1B5BD25;
+        Thu, 14 Apr 2022 00:45:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=QUIdS
+        H5S9XcWXxCUY4HCK2YAdAec2apaxrqVFd637JQ=; b=F+PaiP0/jxp/dEZUiKzM2
+        RoAx++fZzG5XUF8RCoaIZn6BumMkO3VsDGCvHZa3GE287s+fPDbM78/8eYRFsbUX
+        tpND4r6tUnMlUoTlYNnTTHxtSXbAMOuFyEIk+Cy3D6XszSpmDapzaLctanzSsmW5
+        KUYBMq0ZRUhao0iDRKd/sQ=
+Received: from localhost.localdomain (unknown [223.104.68.55])
+        by smtp8 (Coremail) with SMTP id DMCowAAHBv3r0FdiwljaBA--.54991S2;
+        Thu, 14 Apr 2022 15:44:45 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] USB: serial: option: Adding support for Cinterion MV32-WA/MV32-WB
+Date:   Thu, 14 Apr 2022 15:44:34 +0800
+Message-Id: <20220414074434.5699-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DMCowAAHBv3r0FdiwljaBA--.54991S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZr4fZr45AF18XF1xXF1DJrb_yoW5Zr1rpF
+        W5AFW3ZFyUGF47ZF9rtF1fCF95uan7K3yIkanrAwsIvFWIyrnFq3yUt3yxAF12gw1SgrsF
+        vF4DK34UGa95C3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRpc_cUUUUU=
+X-Originating-IP: [223.104.68.55]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiJQ7iZGAJnZatEQAAsz
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,95 +51,71 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The usb_ep_clear_halt() API can be called from the function driver, and
-translates to dwc3_gadget_ep_set_halt().  This routine is shared with when
-the host issues a clear feature ENDPOINT_HALT, and is differentiated by the
-protocol argument.  If the following sequence occurs, there can be a
-situation where the delayed_status flag is improperly cleared for the wrong
-SETUP transaction:
+Adding support for Cinterion device MV32-WA/MV32-WB.
+MV32-WA PID is 0x00F1, and MV32-WB PID is 0x00F2.
 
-1. Vendor specific control transfer returns USB_GADGET_DELAYED_STATUS.
-2. DWC3 gadget sets dwc->delayed_status to '1'.
-3. Another function driver issues a usb_ep_clear_halt() call.
-4. DWC3 gadget issues dwc3_stop_active_transfer() and sets
-   DWC3_EP_PENDING_CLEAR_STALL.
-5. EP command complete interrupt triggers for the end transfer, and
-   dwc3_ep0_send_delayed_status() is allowed to run, as delayed_status
-   is '1' due to step#1.
-6. STATUS phase is sent, and delayed_status is cleared.
-7. Vendor specific control transfer is finished being handled, and issues
-   usb_composite_setup_continue().  This results in queuing of a data
-   phase.
+Test evidence as below:
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+P:  Vendor=1e2d ProdID=00f1 Rev=05.04
+S:  Manufacturer=Cinterion
+S:  Product=Cinterion PID 0x00F1 USB Mobile Broadband
+S:  SerialNumber=78ada8c4
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
 
-Cache the protocol flag so that DWC3 gadget is aware of when the clear halt
-is due to a SETUP request from the host versus when it is sourced from a
-function driver.  This allows for the EP command complete interrupt to know
-if it needs to issue a delayed status phase.
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+P:  Vendor=1e2d ProdID=00f2 Rev=05.04
+S:  Manufacturer=Cinterion
+S:  Product=Cinterion PID 0x00F2 USB Mobile Broadband
+S:  SerialNumber=cdd06a78
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+Interface 0&1: MBIM, 2:Modem, 3: GNSS, 4: NMEA, 5: Diag
+GNSS port don't use serial driver.
+
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
 ---
-Changes in v2:
- - Modified clear_stall_protocol to carry the ep num for the clear halt
-   from PC.  Clear halts on other endpoints in parallel should not
-   affect/interrupt the clear halt from the host.
+ drivers/usb/serial/option.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
- drivers/usb/dwc3/core.h   | 2 ++
- drivers/usb/dwc3/ep0.c    | 1 +
- drivers/usb/dwc3/gadget.c | 5 ++++-
- 3 files changed, 7 insertions(+), 1 deletion(-)
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index e7755d9cfc61..d947357881c3 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -432,7 +432,8 @@ static void option_instat_callback(struct urb *urb);
+ #define CINTERION_PRODUCT_CLS8			0x00b0
+ #define CINTERION_PRODUCT_MV31_MBIM		0x00b3
+ #define CINTERION_PRODUCT_MV31_RMNET		0x00b7
+-
++#define CINTERION_PRODUCT_MV32_WA		0x00f1
++#define CINTERION_PRODUCT_MV32_WB		0x00f2
+ /* Olivetti products */
+ #define OLIVETTI_VENDOR_ID			0x0b3c
+ #define OLIVETTI_PRODUCT_OLICARD100		0xc000
+@@ -1969,6 +1970,10 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(3)},
+ 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV31_RMNET, 0xff),
+ 	  .driver_info = RSVD(0)},
++	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WA, 0xff),
++	  .driver_info = RSVD(3)},
++	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB, 0xff),
++	  .driver_info = RSVD(3)},
+ 	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD100),
+ 	  .driver_info = RSVD(4) },
+ 	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD120),
+-- 
+2.25.1
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 5c9d467195a6..81c486b3941c 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1046,6 +1046,7 @@ struct dwc3_scratchpad_array {
-  * @tx_thr_num_pkt_prd: periodic ESS transmit packet count
-  * @tx_max_burst_prd: max periodic ESS transmit burst size
-  * @tx_fifo_resize_max_num: max number of fifos allocated during txfifo resize
-+ * @clear_stall_protocol: endpoint number that requires a delayed status phase
-  * @hsphy_interface: "utmi" or "ulpi"
-  * @connected: true when we're connected to a host, false otherwise
-  * @softconnect: true when gadget connect is called, false when disconnect runs
-@@ -1266,6 +1267,7 @@ struct dwc3 {
- 	u8			tx_thr_num_pkt_prd;
- 	u8			tx_max_burst_prd;
- 	u8			tx_fifo_resize_max_num;
-+	u8			clear_stall_protocol;
- 
- 	const char		*hsphy_interface;
- 
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index 1064be5518f6..aa8476da222d 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -1080,6 +1080,7 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
- 	unsigned int direction = !dwc->ep0_expect_in;
- 
- 	dwc->delayed_status = false;
-+	dwc->clear_stall_protocol = 0;
- 
- 	if (dwc->ep0state != EP0_STATUS_PHASE)
- 		return;
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index ab725d2262d6..ce1b130202c5 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2152,6 +2152,9 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
- 		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING ||
- 		    (dep->flags & DWC3_EP_DELAY_STOP)) {
- 			dep->flags |= DWC3_EP_PENDING_CLEAR_STALL;
-+			if (protocol)
-+				dwc->clear_stall_protocol = dep->number;
-+
- 			return 0;
- 		}
- 
-@@ -3483,7 +3486,7 @@ static void dwc3_gadget_endpoint_command_complete(struct dwc3_ep *dep,
- 		}
- 
- 		dep->flags &= ~(DWC3_EP_STALL | DWC3_EP_WEDGE);
--		if (dwc->delayed_status)
-+		if (dwc->clear_stall_protocol == dep->number)
- 			dwc3_ep0_send_delayed_status(dwc);
- 	}
- 
