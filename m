@@ -2,144 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0682A501C7B
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Apr 2022 22:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C89A0501DA6
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Apr 2022 23:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346193AbiDNUT0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Apr 2022 16:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S241674AbiDNVrZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Apr 2022 17:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237932AbiDNUTW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Apr 2022 16:19:22 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id EBA9CEB08C
-        for <linux-usb@vger.kernel.org>; Thu, 14 Apr 2022 13:16:56 -0700 (PDT)
-Received: (qmail 460007 invoked by uid 1000); 14 Apr 2022 16:16:55 -0400
-Date:   Thu, 14 Apr 2022 16:16:55 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Evan Green <evgreen@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rajat Jain <rajatja@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Youngjin Jang <yj84.jang@samsung.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: hcd-pci: Fully suspend across freeze/thaw cycle
-Message-ID: <YliBN9sLwj8UOkU8@rowland.harvard.edu>
-References: <CAE=gft7Zi9tpJ74Tf2iqPRbwJkmSLiKJt-WhwD+h-DxQh75D6g@mail.gmail.com>
- <YlDoSY19HYNJGI50@rowland.harvard.edu>
- <022a50ac-7866-2140-1b40-776255f3a036@linux.intel.com>
- <YlRATrMxRWt9gVqt@rowland.harvard.edu>
- <4353a956-9855-9c14-7dbf-bf16580abe32@linux.intel.com>
- <YlWdfWRXYjkfHLIP@rowland.harvard.edu>
- <b1df80e4-af6a-e84f-f49d-c74500bdec05@linux.intel.com>
- <Ylgt8Y7Mz4nOAhtv@rowland.harvard.edu>
- <CAE=gft7fvjUX7SdjubHBpd=v3abQ=gJrhM-Oc_RxxqSkoG6mSA@mail.gmail.com>
- <039bb05f-32e4-2dd1-89ca-b51c17984a7f@linux.intel.com>
+        with ESMTP id S241439AbiDNVrW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Apr 2022 17:47:22 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50F13633E;
+        Thu, 14 Apr 2022 14:44:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649972696; x=1681508696;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=rq7yUoLN5kZ74ztwyG29HHmd6+Kid7Wc5fWXZhevA0E=;
+  b=ctHaCHRU3YF5OiAcXN5Qu8ufatuiR4+LZFXmievZErVeQjBQXy1njkLk
+   xs2KEFWzBcVBdq8YMojfVSV6YPmtfm1gQKRc8xrrtkN3BI3v0BYDgMZWs
+   GcFjmnOtLVsKrdzvogOd/E9VqQ5RNQ80unIHnGMjtXGVpPRaC6rejPjA3
+   0=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 14 Apr 2022 14:44:55 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 14:44:55 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 14 Apr 2022 14:44:55 -0700
+Received: from [10.110.74.74] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 14 Apr
+ 2022 14:44:54 -0700
+Message-ID: <10f77fe4-a1a7-60a2-af98-a6060318ab0d@quicinc.com>
+Date:   Thu, 14 Apr 2022 14:44:53 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <039bb05f-32e4-2dd1-89ca-b51c17984a7f@linux.intel.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: Re: [PATCH] usb: dwc3: EP clear halt leading to incorrect submission
+ of delayed_status
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220407015336.19455-1-quic_wcheng@quicinc.com>
+ <20220411154803.GA26372@hu-pkondeti-hyd.qualcomm.com>
+Content-Language: en-US
+In-Reply-To: <20220411154803.GA26372@hu-pkondeti-hyd.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 08:06:32PM +0300, Mathias Nyman wrote:
-> On 14.4.2022 19.30, Evan Green wrote:
-> > Hi Alan and Mathias,
-> > 
-> > On Thu, Apr 14, 2022 at 7:21 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >> Evan, this discussion suggests that you rewrite your patch as a series
-> >> of three:
-> >>
-> >>      1. Change choose_wakeup() so that for PM_EVENT_FREEZE, wakeup is
-> >>         always disabled.
-> > 
-> > If I understand this correctly, this means potentially runtime
-> > resuming the device so its wakeup setting can be consistently set to
-> > wakeups disabled across a freeze transition.
+Hi Pavan,
 
-The kernel already does this for you.  All you have to do is change the 
-routine so that it always decides that wakeup should be off for FREEZE.
-
-> >  Got it I think in terms
-> > of the "how".
-
-> >>      2. Change the xhci-hcd interrupt handler so that port-status
-> >>         changes are ignored if the port's root hub is suspended with
-> >>         wakeup disabled.
-> > 
-> > This part confuses me. This would be way deep under
-> > xhci_handle_event(), probably in handle_port_status(), just throwing
-> > away certain events that come in the ring. How would we know to go
-> > back and process those events later?
-
-We wouldn't.  There's no need to process the events later.  When a hub 
-(including a root hub) is resumed, the hub driver checks the state of 
-each port and takes whatever actions are needed to handle any changes 
-that occurred while the hub was suspended.
-
-In fact, processing these events wouldnn't really accomplish very much 
-in any case.  The driver would request that the root hub be resumed, 
-that request would be submitted to a work queue, and then nothing would 
-happen because the work queue, like many other kernel threads, gets 
-frozen during a hibernation transition.
-
-All that's really needed is to guarantee that the root hub would be 
-resumed when we leave hibernation.  And of course, this always happens 
-regardless of what events were received in the meantime.
-
-> >  I think we don't need to do this
-> > if we suspend the controller as in #3 below. The suspended (halted)
-> > controller wouldn't generate event interrupts (since the spec mentions
-> > port status change generation is gated on HCHalted). So we're already
-> > covered against receiving interrupts in this zone by halting the
-> > controller, and the events stay nicely pending for when we restart it
-> > in thaw.
+On 4/11/2022 8:48 AM, Pavan Kondeti wrote:
+> Hi Wesley,
 > 
-> Was thinking the same here. It would be nice to have this to comply with
-> usb spec, keeping roothub from propagating connect/disconnect events
-> immediately after suspending it with wake flags cleared.
+> On Wed, Apr 06, 2022 at 06:53:36PM -0700, Wesley Cheng wrote:
+>> The usb_ep_clear_halt() API can be called from the function driver, and
+>> translates to dwc3_gadget_ep_set_halt().  This routine is shared with when
+>> the host issues a clear feature ENDPOINT_HALT, and is differentiated by the
+>> protocol argument.  If the following sequence occurs, there can be a
+>> situation where the delayed_status flag is improperly cleared for the wrong
+>> SETUP transaction:
+>>
+>> 1. Vendor specific control transfer returns USB_GADGET_DELAYED_STATUS.
+>> 2. DWC3 gadget sets dwc->delayed_status to '1'.
+>> 3. Another function driver issues a usb_ep_clear_halt() call.
+>> 4. DWC3 gadget issues dwc3_stop_active_transfer() and sets
+>>     DWC3_EP_PENDING_CLEAR_STALL.
+>> 5. EP command complete interrupt triggers for the end transfer, and
+>>     dwc3_ep0_send_delayed_status() is allowed to run, as delayed_status
+>>     is '1' due to step#1.
+>> 6. STATUS phase is sent, and delayed_status is cleared.
+>> 7. Vendor specific control transfer is finished being handled, and issues
+>>     usb_composite_setup_continue().  This results in queuing of a data
+>>     phase.
+>>
+>> Cache the protocol flag so that DWC3 gadget is aware of when the clear halt
+>> is due to a SETUP request from the host versus when it is sourced from a
+>> function driver.  This allows for the EP command complete interrupt to know
+>> if it needs to issue a delayed status phase.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/core.h   | 1 +
+>>   drivers/usb/dwc3/ep0.c    | 1 +
+>>   drivers/usb/dwc3/gadget.c | 3 ++-
+>>   3 files changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index 5c9d467195a6..55f98485c54c 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -1272,6 +1272,7 @@ struct dwc3 {
+>>   	unsigned		connected:1;
+>>   	unsigned		softconnect:1;
+>>   	unsigned		delayed_status:1;
+>> +	unsigned		clear_stall_protocol:1;
+>>   	unsigned		ep0_bounced:1;
+>>   	unsigned		ep0_expect_in:1;
+>>   	unsigned		has_hibernation:1;
+>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+>> index 1064be5518f6..aa8476da222d 100644
+>> --- a/drivers/usb/dwc3/ep0.c
+>> +++ b/drivers/usb/dwc3/ep0.c
+>> @@ -1080,6 +1080,7 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
+>>   	unsigned int direction = !dwc->ep0_expect_in;
+>>   
+>>   	dwc->delayed_status = false;
+>> +	dwc->clear_stall_protocol = 0;
+>>   
+>>   	if (dwc->ep0state != EP0_STATUS_PHASE)
+>>   		return;
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index ab725d2262d6..c427ddae016f 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -2152,6 +2152,7 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
+>>   		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING ||
+>>   		    (dep->flags & DWC3_EP_DELAY_STOP)) {
+>>   			dep->flags |= DWC3_EP_PENDING_CLEAR_STALL;
+>> +			dwc->clear_stall_protocol = protocol;
+>>   			return 0;
+>>   		}
+>>   
+>> @@ -3483,7 +3484,7 @@ static void dwc3_gadget_endpoint_command_complete(struct dwc3_ep *dep,
+>>   		}
+>>   
+>>   		dep->flags &= ~(DWC3_EP_STALL | DWC3_EP_WEDGE);
+>> -		if (dwc->delayed_status)
+>> +		if (dwc->clear_stall_protocol)
+>>   			dwc3_ep0_send_delayed_status(dwc);
+>>   	}
+>>   
 > 
-> But it's a lot of work to implement this, and for this issue, and linux 
-> hibernate point of view I don't think it has any real benefit.
-> The actual device generating the interrupt is the host (parent of roothub),
-> and that will stop once freeze() is called for it in #3 
-
-The only reason that approach works is because we never disable resume 
-requests during runtime suspend.  But okay...
-
-> > Is the goal of #1 purely a setup change for #2, or does it stand on
-> > its own even if we nixed #2? Said differently, is #1 trying to ensure
-> > that wake signaling doesn't occur at all between freeze and thaw, even
-> > when the controller is suspended and guaranteed not to generate
-> > interrupts via its "normal" mechanism? I don't have a crisp mental
-> > picture of how the wake signaling works, but if the controller wake
-> > mechanism sidesteps the original problem of sending an MSI to a dead
-> > CPU (as in, it does not use MSIs), then it might be ok as-is.
+> Is it safe to maintain clear_stall_protocol per dwc3 instance? What if
+> CLEAR_FEATURE(halt_endpoint) and usb_ep_clear_halt() are interleaved and
+> We come here as part of usb_ep_clear_halt()'s endpoint command complete.
+> We may simply send the delayed status corresponding to the protocol clear
+> stall.
 > 
-> #1 is needed because xHCI can generate wake events even when halted if
-> device initiated resume signaling is detected on a roothub port.
-> Just like it can generate wake events on connect/disconnect if wake flags
-> are set. (xhci spec figure 4-34, see PLS=Resume)
-> We want to avoid those wakeups between freeze-thaw
+> We can still maintain a global flag if we cache endpoint number in it so
+> that we can cross check against the endpoint for which completion received.
+> 
+> Thanks,
+> Pavan
+> 
 
-Think of it this way: All USB hubs, including root hubs, always relay 
-a resume request upstream when one is received on a downstream port, no 
-matter what their wakeup setting is.  A hub's wakeup setting only 
-controls whether it generates a resume request on its own in response 
-to a port-status change.
+Thanks for the comments/feedback.  I agree with what you mentioned, and 
+will fix that potential condition.  Will resubmit a new rev, after some 
+testing.
 
-> So just #1 and #3 should probably solve this, and be an easier change. 
-
-Let's try it and see.
-
-Alan Stern
+Thanks
+Wesley Cheng
