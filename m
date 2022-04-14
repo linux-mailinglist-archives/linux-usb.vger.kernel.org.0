@@ -2,107 +2,210 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E07B50182B
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Apr 2022 18:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E337750194A
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Apr 2022 18:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242907AbiDNQB4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Apr 2022 12:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
+        id S242575AbiDNQ7m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Apr 2022 12:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352656AbiDNPRk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Apr 2022 11:17:40 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A627F61A35;
-        Thu, 14 Apr 2022 08:02:35 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id u15so10544016ejf.11;
-        Thu, 14 Apr 2022 08:02:35 -0700 (PDT)
+        with ESMTP id S1343882AbiDNQ60 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Apr 2022 12:58:26 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAAF14B858
+        for <linux-usb@vger.kernel.org>; Thu, 14 Apr 2022 09:31:08 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id w127so5932693oig.10
+        for <linux-usb@vger.kernel.org>; Thu, 14 Apr 2022 09:31:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NaW3uwRS/6FaXBKfVrvwdBzKWMrtN62MAAhE0D3p16s=;
-        b=Ftmn2tslRoFo5kjZZYcZh376SNswuFaAST8TXXySj1EQZyxHD/y2bW4tGghR0A6pfi
-         TP6wVNRcGA0ZENqH6SN3h1Jrxlc19ZJa3qeVQs8hu1iLq0WPWehSREUluuICNIDkvPTd
-         CQuwy7NS5c3v571sugYalQ3qxjjt/HUKyt0ddL+suHPyPl/N0XIwxBrxJJ5YqBvoJyTI
-         WTFH5x5Nc6Q/DbGAY+BLdbSD8oG4QWfU2UigHgSPVDALH+dsEGEmeuNZ9HpFAz0LgU8C
-         i1pEdHZb3Jjb5g1b3vJds6l+/dWEow0QWj37myQqXHCgZKBT34dyrqMPz1oUOsq1656l
-         d5Dw==
+         :cc;
+        bh=F8L5e1xKbydF7d2L0TADvbJn6wqVOYq7/kZpJYa2SRw=;
+        b=AFJ0ednJxVwEVa8ibNzKw/zNCLJmlAKPerqWu/u+AY66jzOv4zx/Oesal+C140g0H0
+         SuB4t0aZsJKwV7aL4NCyotrpd2DhcWfCCAdG0BvTPA5/fVu/bLyZqerILW1RprlCifdD
+         qLqxjtAHsRLIYO4nB3X5MjYmJNtkw1UEHcxWk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NaW3uwRS/6FaXBKfVrvwdBzKWMrtN62MAAhE0D3p16s=;
-        b=RlZYhJDYkKvgPOsNLVRKzKDGzjvriXKINLF9g6/eRfpOO1di35xIO38TR1Di8H7cCk
-         Jaa9HxWTssVtRW7aq7lGc+XogTYHekvYv6YCrI8lDtTLnWyIJzotEJydIZf/s5GqUBYH
-         f3s0q07SZIerYQWLtCQtnnMP17m+jc8zYJEyR6BO6YMPQdVn7qGpUwXF/CYWoDTH77hv
-         lfjf0a1o+GTa92rsE7E6y07+RraKCwKgVQqWtzr5QNRd6V98AUTyrXanW1j8rMjCKEcl
-         c3hgLIz09eMLx4e5FB9WFJzUj1zHkuBsxxv/0dPJx3rmt54gVXY6piDAxtHBmdiAr4GX
-         eI7g==
-X-Gm-Message-State: AOAM533W95JoXOVLTc9txkL8WDYlE2oQuGkYtvTw8e8/Tv+rbOOCaD/c
-        xS7rxKcXrYJRt1xU/sgd75YSKJ2oNOsriOnN3S4=
-X-Google-Smtp-Source: ABdhPJxsfCiDGHoztilISww5idTIll6LpIs4Gm/tQhfvSoxH+J/SSbqV2+n5Tfdxyh4VfsvxmoLehq2tfeBEWE0xEU8=
-X-Received: by 2002:a17:907:8a14:b0:6e8:9691:62f7 with SMTP id
- sc20-20020a1709078a1400b006e8969162f7mr2720540ejc.497.1649948554022; Thu, 14
- Apr 2022 08:02:34 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=F8L5e1xKbydF7d2L0TADvbJn6wqVOYq7/kZpJYa2SRw=;
+        b=Qk8JvnW+9Jcx0He5a/WyczdB80UGhwHu3djgdPtjhH93MclHLljQpNcntVzqyfeh6j
+         3pfLy98qot0iA7bbKfqXtFzyiDQxIR5QZU44drxuEwrrJF69cQiQ6xNRUJTh2DxGuzAK
+         Vi4L5cIc/ViFssxEGEnmy1hVLA+gm7TSGb9D7qFv3GvGCtlrKDe7EZuOePpdFLJFsKlJ
+         qArjUoAHo2GO3JKQxJCJD48L5rda39nUKbzZSXEna29Ugt56fLCOIfYkZyYJTqtpvpqp
+         eIEe5j5oW8O2q5Gl8ph9hjfwwmm2ixl4mYpYfw3V643WA1yXQFojfxQWYsO8HHtqQcux
+         eIQw==
+X-Gm-Message-State: AOAM532e7Tcemx14s3Mj2lVD/vGqt2GfQsl4XmvxHVzWZbIAMJyMEs//
+        HdFIXDOiW7hVHJvCXlaosoW8SockDZ/X7g==
+X-Google-Smtp-Source: ABdhPJz8EEFtJhLwkeUE4jzvZc1RH6265K+I92doOTW1Mg5exyn1V8ulkHv57z/3Qrjgo6NmWyv+Kw==
+X-Received: by 2002:a54:488a:0:b0:2ec:f48f:8eea with SMTP id r10-20020a54488a000000b002ecf48f8eeamr1950073oic.166.1649953867079;
+        Thu, 14 Apr 2022 09:31:07 -0700 (PDT)
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com. [209.85.160.43])
+        by smtp.gmail.com with ESMTPSA id d20-20020a056830005400b005b22a187045sm178802otp.11.2022.04.14.09.31.03
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 09:31:04 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-df02f7e2c9so5752305fac.10
+        for <linux-usb@vger.kernel.org>; Thu, 14 Apr 2022 09:31:03 -0700 (PDT)
+X-Received: by 2002:a05:6870:f295:b0:e1:ea02:2001 with SMTP id
+ u21-20020a056870f29500b000e1ea022001mr1597770oap.241.1649953863199; Thu, 14
+ Apr 2022 09:31:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220409120901.267526-1-dzm91@hust.edu.cn> <YlQbqnYP/jcYinvz@hovoldconsulting.com>
-In-Reply-To: <YlQbqnYP/jcYinvz@hovoldconsulting.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 14 Apr 2022 18:01:57 +0300
-Message-ID: <CAHp75VeTqmdLhavZ+VbBYSFMDHr0FG4iKFGdbzE-wo5MCNikAA@mail.gmail.com>
-Subject: Re: [PATCH] driver: usb: nullify dangling pointer in cdc_ncm_free
-To:     Johan Hovold <johan@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzbot+eabbf2aaa999cc507108@syzkaller.appspotmail.com,
-        USB <linux-usb@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220407115918.1.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
+ <YlBGvFFSp/R2CBmh@rowland.harvard.edu> <CAE=gft7Zi9tpJ74Tf2iqPRbwJkmSLiKJt-WhwD+h-DxQh75D6g@mail.gmail.com>
+ <YlDoSY19HYNJGI50@rowland.harvard.edu> <022a50ac-7866-2140-1b40-776255f3a036@linux.intel.com>
+ <YlRATrMxRWt9gVqt@rowland.harvard.edu> <4353a956-9855-9c14-7dbf-bf16580abe32@linux.intel.com>
+ <YlWdfWRXYjkfHLIP@rowland.harvard.edu> <b1df80e4-af6a-e84f-f49d-c74500bdec05@linux.intel.com>
+ <Ylgt8Y7Mz4nOAhtv@rowland.harvard.edu>
+In-Reply-To: <Ylgt8Y7Mz4nOAhtv@rowland.harvard.edu>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Thu, 14 Apr 2022 09:30:26 -0700
+X-Gmail-Original-Message-ID: <CAE=gft7fvjUX7SdjubHBpd=v3abQ=gJrhM-Oc_RxxqSkoG6mSA@mail.gmail.com>
+Message-ID: <CAE=gft7fvjUX7SdjubHBpd=v3abQ=gJrhM-Oc_RxxqSkoG6mSA@mail.gmail.com>
+Subject: Re: [PATCH] USB: hcd-pci: Fully suspend across freeze/thaw cycle
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rajat Jain <rajatja@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Youngjin Jang <yj84.jang@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 9:33 PM Johan Hovold <johan@kernel.org> wrote:
-> On Sat, Apr 09, 2022 at 08:09:00PM +0800, Dongliang Mu wrote:
-> > From: Dongliang Mu <mudongliangabcd@gmail.com>
-> >
-> > cdc_ncm_bind calls cdc_ncm_bind_common and sets dev->data[0]
-> > with ctx. However, in the unbind function - cdc_ncm_unbind,
-> > it calls cdc_ncm_free and frees ctx, leaving dev->data[0] as
-> > a dangling pointer. The following ioctl operation will trigger
-> > the UAF in the function cdc_ncm_set_dgram_size.
-> >
-> > Fix this by setting dev->data[0] as zero.
+Hi Alan and Mathias,
+
+On Thu, Apr 14, 2022 at 7:21 AM Alan Stern <stern@rowland.harvard.edu> wrote:
 >
-> This sounds like a poor band-aid. Please explain how this prevent the
-> ioctl() from racing with unbind().
+> On Thu, Apr 14, 2022 at 05:00:12PM +0300, Mathias Nyman wrote:
+> > On 12.4.2022 18.40, Alan Stern wrote:
+> > > On Tue, Apr 12, 2022 at 05:56:42PM +0300, Mathias Nyman wrote:
+> > >> On 11.4.2022 17.50, Alan Stern wrote:
+> > >>> For example, what would happen if the user unplugs a device right in the
+> > >>> middle of the freeze transition, after the root hub has been frozen but
+> > >>> before the controller is frozen?  We don't want such an unplug event to
+> > >>> prevent the system from going into hibernation -- especially if the root
+> > >>> hub was not enabled for wakeup.
+> > >>
+> > >> We should be able to let system go to hibernate even if we get a disconnect
+> > >> interrupt between roothub and host controller freeze.
+> > >> Host is not yet suspended so no PME# wake is generated, only an interrupt.
+> > >>
+> > >> From Linux PM point of view it should be ok as well as the actual xhci
+> > >> device that is generating the interrupt is hasnt completer freeze()
+> > >>
+> > >> The xhci interrupt handler just needs to make sure that the disconnect
+> > >> isn't propagated if roothub is suspended and wake on disconnect
+> > >> is not set. And definitely make sure xhci doesn't start roothub polling.
+> > >>
+> > >> When freeze() is called for the host we should prevent the host from
+> > >> generating interrupts.
+> > >
+> > > I guess that means adding a new callback.  Or we could just suspend the
+> > > controller, like Evan proposed originally
+> >
+> > Suspending the host in freeze should work.
+> > It will do an extra xhci controller state save stage, but that should be harmless.
+> >
+> > But is there really a need for the suggested noirq part?
+> >
+> > +     .freeze_noirq   = hcd_pci_suspend_noirq,
+> >
+> > That will try to set the host to PCI D3 state.
+> > It seems a bit unnecessary for freeze.
+>
+> Agreed.
+>
+> > >>> (If the root hub _is_ enabled for wakeup then it's questionable.
+> > >>> Unplugging a device would be a wakeup event, so you could easily argue
+> > >>> that it _should_ prevent the system from going into hibernation.  After
+> > >>> all, if the unplug happened a few milliseconds later, after the system
+> > >>> had fully gone into hibernation, then it would cause the system to wake
+> > >>> up.)
+> > >>>
+> > >>>> Would it make sense prevent xHCI interrupt generation in the host
+> > >>>> freeze() stage, clearing the xHCI EINT bit in addition to calling
+> > >>>> check_roothub_suspend()?
+> > >>>> Then enable it back in thaw()
+> > >>>
+> > >>> That won't fully eliminate the problem mentioned in the preceding
+> > >>> paragraphs, although I guess it would help somewhat.
+> > >>
+> > >> Would the following steps solve this?
+> > >>
+> > >> 1. Disable device initiated resume for connected usb devices in freeze()
+> > >>
+> > >> 2. Don't propagate connect or OC changes if roothub is suspended and port wake
+> > >>    flags are disabled. I.E don't kick roothub polling in xhci interrupt
+> > >>    handler here.
+> > >
+> > > I guess you can't just halt the entire host controller when only one of
+> > > the root hubs is suspended with wakeup disabled.  That does complicate
+> > > things.  But you could halt it as soon as both of the root hubs are
+> > > frozen.  Wouldn't that prevent interrupt generation?
+> >
+> > True, but probably easier to just suspend host in freeze() as you stated above.
+>
+> Okay.
+>
+> Evan, this discussion suggests that you rewrite your patch as a series
+> of three:
+>
+>      1. Change choose_wakeup() so that for PM_EVENT_FREEZE, wakeup is
+>         always disabled.
 
-Good question. Isn't it the commit 2c9d6c2b871d ("usbnet: run unbind()
-before unregister_netdev()") which changed the ordering of the
-interface shutdown and basically makes this race happen? I don't see
-how we can guarantee that IOCTL won't be called until we quiescence
-the network device =E2=80=94 my understanding that on device surprise remov=
-al
-we have to first shutdown what it created and then unbind the device.
-If I understand the original issue correctly then the problem is in
-usbnet->unbind and it should actually be split to two hooks, otherwise
-it seems every possible IOCTL callback must have some kind of
-reference counting and keep an eye on the surprise removal.
+If I understand this correctly, this means potentially runtime
+resuming the device so its wakeup setting can be consistently set to
+wakeups disabled across a freeze transition. Got it I think in terms
+of the "how".
 
-Johan, can you correct me if my understanding is wrong?
+>
+>      2. Change the xhci-hcd interrupt handler so that port-status
+>         changes are ignored if the port's root hub is suspended with
+>         wakeup disabled.
 
---=20
-With Best Regards,
-Andy Shevchenko
+This part confuses me. This would be way deep under
+xhci_handle_event(), probably in handle_port_status(), just throwing
+away certain events that come in the ring. How would we know to go
+back and process those events later? I think we don't need to do this
+if we suspend the controller as in #3 below. The suspended (halted)
+controller wouldn't generate event interrupts (since the spec mentions
+port status change generation is gated on HCHalted). So we're already
+covered against receiving interrupts in this zone by halting the
+controller, and the events stay nicely pending for when we restart it
+in thaw.
+
+Is the goal of #1 purely a setup change for #2, or does it stand on
+its own even if we nixed #2? Said differently, is #1 trying to ensure
+that wake signaling doesn't occur at all between freeze and thaw, even
+when the controller is suspended and guaranteed not to generate
+interrupts via its "normal" mechanism? I don't have a crisp mental
+picture of how the wake signaling works, but if the controller wake
+mechanism sidesteps the original problem of sending an MSI to a dead
+CPU (as in, it does not use MSIs), then it might be ok as-is.
+
+>
+>      3. As in the original patch, make the .freeze and .thaw callbacks
+>         in hcd-pci.c call the appropriate suspend and resume routines,
+>         but don't do anything for .freeze_noirq and .thaw_noirq.
+
+Sure. I had made the _noirq paths match suspend for consistency, I
+wasn't sure if those could mix n match without issues. I'll try it out
+leaving the _noirq callbacks alone.
+-Evan
+
+>
+> How does that sound?
+>
+> Alan Stern
