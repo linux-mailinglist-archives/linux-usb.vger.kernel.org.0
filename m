@@ -2,133 +2,209 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F3C502C5A
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Apr 2022 17:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0607F502E3D
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Apr 2022 19:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354844AbiDOPJ7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Apr 2022 11:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
+        id S1344647AbiDORJ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Apr 2022 13:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354841AbiDOPJu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Apr 2022 11:09:50 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8E9CF4B0;
-        Fri, 15 Apr 2022 08:07:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1650035240; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/NRTmVUFKuE8CMESQAm4DH0fvEVp7eM4RIJTXRaTSSI=;
-        b=dbSqEuCyvoj2avoBIOZeoZYeD+m6qVjmB80MGk1eLm/4t3/fU5GFQR8WuXRw7lD2s6WQy/
-        wAZEF5D4gXqpcsazI8DHZ6rVHCCAP8B36cybPL8cS0/1dQPRuAfZxSlFRY/u9V6iCTDexR
-        eyRWsGoDHy22VKQHGyZmYhESb3boylQ=
-Date:   Fri, 15 Apr 2022 16:07:08 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v3 3/3] MIPS: Ingenic: Refresh USB nodes to match driver
- changes.
-To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
-Cc:     gregkh@linuxfoundation.org, hminas@synopsys.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
-        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dragancecavac@yahoo.com, hns@goldelico.com,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-Message-Id: <WBZDAR.1ZU7BOCJE9S11@crapouillou.net>
-In-Reply-To: <1649964337-114337-4-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1649964337-114337-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1649964337-114337-4-git-send-email-zhouyanjie@wanyeetech.com>
+        with ESMTP id S235654AbiDORJz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Apr 2022 13:09:55 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C5495A29
+        for <linux-usb@vger.kernel.org>; Fri, 15 Apr 2022 10:07:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650042447; x=1681578447;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=p2JgkKk/W9T915Bh6u++1p8mgTLGOvcREE1jGDFfdRQ=;
+  b=A8CED9/Ec66slh0CpRw2XomXDA8bUE7xGIuiUE+0MBqe/HWNh7HYceOT
+   Bq8gGf4nDy+04p0K2xoL4UJxG3AiMhRGMN2MCQXU8i1Mi/dG3fgupR08K
+   U5h2JO6vLrh/sHf6uLsfnMWWXDXZPFYOPZ9FI1IFUSHPmnooccLcqXVN4
+   M9G6sC/m88GyH0azxZRwz5oYLGt7Msp+ZwgV48v9CqRoICnMl2NCzdj05
+   KMDWPqObZAOmOsG5g74+4Xi/DzDrn/Nj6oujwfU58mY98iwEiN9xHubMI
+   XAAnfs85BQxE9oe+CJyaQL3iZtb7e7vVvfVoFSRGPQoQzmAmx2pmFymBW
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="349632834"
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="349632834"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 10:07:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="527472561"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 15 Apr 2022 10:07:25 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfPPo-0002D1-Lt;
+        Fri, 15 Apr 2022 17:07:24 +0000
+Date:   Sat, 16 Apr 2022 01:06:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ ec547af8a9ea6441864bad34172676b5652ceb96
+Message-ID: <6259a630.GrRXgMx0LQ0kXJhO%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Zhou,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: ec547af8a9ea6441864bad34172676b5652ceb96  USB: quirks: add STRING quirk for VCOM device
 
+elapsed time: 1384m
 
-Le ven., avril 15 2022 at 03:25:37 +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou=
- Yanjie)=20
-<zhouyanjie@wanyeetech.com> a =C3=A9crit :
-> Refresh USB nodes in the jz4780.dtsi, x1000.dtsi, and x1830.dtsi=20
-> files.
->=20
-> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
-eetech.com>
-> ---
->=20
-> Notes:
->     v3:
->     New patch.
->=20
->  arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
->  arch/mips/boot/dts/ingenic/x1000.dtsi  | 2 +-
->  arch/mips/boot/dts/ingenic/x1830.dtsi  | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi=20
-> b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-> index b998301..c182a65 100644
-> --- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
-> +++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-> @@ -577,7 +577,7 @@
->  	};
->=20
->  	otg: usb@13500000 {
-> -		compatible =3D "ingenic,jz4780-otg", "snps,dwc2";
-> +		compatible =3D "ingenic,jz4780-otg";
+configs tested: 123
+configs skipped: 3
 
-Could you refresh my memory - why are the "snps,dwc2" fallback strings=20
-removed?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-To me it seems like they should be here, since the OTG IP in Ingenic=20
-SoCs is derived from the DWC2 IP.
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+powerpc              randconfig-c003-20220414
+sh                   secureedge5410_defconfig
+powerpc                   motionpro_defconfig
+arc                     haps_hs_smp_defconfig
+arc                          axs103_defconfig
+m68k                        stmark2_defconfig
+sparc                       sparc64_defconfig
+sh                          rsk7264_defconfig
+mips                           xway_defconfig
+xtensa                       common_defconfig
+powerpc64                           defconfig
+powerpc                      bamboo_defconfig
+microblaze                          defconfig
+sparc                            allyesconfig
+mips                     loongson1b_defconfig
+arm                          pxa910_defconfig
+powerpc                         wii_defconfig
+arc                        vdk_hs38_defconfig
+mips                           jazz_defconfig
+sh                           se7724_defconfig
+arm                           imxrt_defconfig
+arm                            mps2_defconfig
+mips                     decstation_defconfig
+s390                          debug_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220414
+arm                  randconfig-c002-20220415
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220414
+riscv                randconfig-r042-20220415
+arc                  randconfig-r043-20220415
+s390                 randconfig-r044-20220415
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
 
-Cheers,
--Paul
+clang tested configs:
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220414
+arm                  randconfig-c002-20220414
+i386                          randconfig-c001
+riscv                randconfig-c006-20220414
+x86_64                           allyesconfig
+mips                           ip28_defconfig
+powerpc                 mpc8313_rdb_defconfig
+powerpc                      acadia_defconfig
+powerpc                      obs600_defconfig
+riscv                             allnoconfig
+powerpc                     kmeter1_defconfig
+arm                       mainstone_defconfig
+mips                       rbtx49xx_defconfig
+arm                      tct_hammer_defconfig
+powerpc                     tqm5200_defconfig
+arm                        multi_v5_defconfig
+mips                           mtx1_defconfig
+arm                        spear3xx_defconfig
+arm                        vexpress_defconfig
+arm                          collie_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+riscv                randconfig-r042-20220414
+hexagon              randconfig-r041-20220414
+hexagon              randconfig-r045-20220414
+s390                 randconfig-r044-20220414
 
->  		reg =3D <0x13500000 0x40000>;
->=20
->  		interrupt-parent =3D <&intc>;
-> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi=20
-> b/arch/mips/boot/dts/ingenic/x1000.dtsi
-> index 8bd27ede..343818a2 100644
-> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
-> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
-> @@ -366,7 +366,7 @@
->  	};
->=20
->  	otg: usb@13500000 {
-> -		compatible =3D "ingenic,x1000-otg", "snps,dwc2";
-> +		compatible =3D "ingenic,x1000-otg";
->  		reg =3D <0x13500000 0x40000>;
->=20
->  		interrupt-parent =3D <&intc>;
-> diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi=20
-> b/arch/mips/boot/dts/ingenic/x1830.dtsi
-> index 2595df8..6aff19f 100644
-> --- a/arch/mips/boot/dts/ingenic/x1830.dtsi
-> +++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
-> @@ -355,7 +355,7 @@
->  	};
->=20
->  	otg: usb@13500000 {
-> -		compatible =3D "ingenic,x1830-otg", "snps,dwc2";
-> +		compatible =3D "ingenic,x1830-otg";
->  		reg =3D <0x13500000 0x40000>;
->=20
->  		interrupt-parent =3D <&intc>;
-> --
-> 2.7.4
->=20
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
