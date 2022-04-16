@@ -2,73 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E830650363E
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Apr 2022 13:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7CAF503673
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Apr 2022 14:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbiDPLMn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 16 Apr 2022 07:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
+        id S231829AbiDPLw1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 16 Apr 2022 07:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231701AbiDPLMk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Apr 2022 07:12:40 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0D4AD133;
-        Sat, 16 Apr 2022 04:10:05 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id k5so17459324lfg.9;
-        Sat, 16 Apr 2022 04:10:05 -0700 (PDT)
+        with ESMTP id S231835AbiDPLwV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Apr 2022 07:52:21 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3B563C3;
+        Sat, 16 Apr 2022 04:49:49 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id i186so8894634vsc.9;
+        Sat, 16 Apr 2022 04:49:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to;
-        bh=WB4+/QFKrNI2ywCG/GzNlM3DCuj5PqjLAYqkAja7LNQ=;
-        b=eQFEvZGK1REM/iYJ7t3YApZEf9rPnXCuY8ghxes2VWwUXBKzydLKBWFFPpJuYndvYr
-         +e8EhVXML4xiOCJ/wPAIiBa+yKAj8zcLO3hxFcYL/Z4FDl4KQ6uLs8l5v+tAxja33uXS
-         APHwJLopceBqaGRLnzuuY9JtoEtrgnkdAxOpRAWB5r1sm0oLkDt2TbHXed5Zm89cekU7
-         V9vcj24cw6AsGhsbdjTaPOiSjJi/lLBfzWWhqCNNK6OHm9e3Y2NLunNqDS9xgpyEc0LD
-         kEwAKxlwkBIa9sDlgLXW7h9O750B5sy97cm+YRCjQt4fc61vFhcQAX6XNv5jKoDDgo9y
-         3sDQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/pFssxoLZmPuWgKi5vncIMSo1DCdax1EcoWBNQif+HM=;
+        b=D+xkEg1a6hjF1V3UTFFTmAqCKPMeLHkneGOn8hpsmi57kTSwyip+IMCZrj+bER4Duk
+         7v4NA8FQMiEUz6XzVEOxu+E8Lj9Dauk/WdZI52PlGVbMNo8QArXOZoJQRVcaug2ySAq7
+         DnBrKrjR5D3dtThLWaHXkpg/aCaur5J7NdvtsHEizAs4AOkTeygAgYIuq/Ww0Ovh+zzs
+         uHuYtYF0W8DrUNDC1Pj3cYALQF0w9AGPkBuFBfBpow1WomPdiJsKmw6BUnqiIgYPMe2W
+         r4JxsTdMAV5dbdj2VnLno8e3cMna5cgyt3XIk3V/QxUdFB8KoUa9W1KkDKzacrMCCogA
+         kHBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to;
-        bh=WB4+/QFKrNI2ywCG/GzNlM3DCuj5PqjLAYqkAja7LNQ=;
-        b=NMQy74sKvRcKCj2LxHjg+ffm4GUgMwDwmtGBKtct+tNhgoCoqdWe0DSrwG3s6hxGbt
-         kBADxOQyh+bDzdfgOaI9VwKeU5QilqdNPBIJ+g+dBKe5ZjQrBUqvB0yxszSQF6sDaq3K
-         bUtw0HU0Z7seA3wOSYFNCrhMLVNBi9pAWLnnbs/XM0JN3Q9lmzGohGhC7CF7R/g7AfaM
-         CzLV/Z/UlJzEdyYd7mFnogKEIE6rYMlNV0nia16uWKWwaNLwmyAmIj/Wh88fPeWEdZ5e
-         6Fd0hCIto2UnxcYr4fmiorZUd9AxogOifdcbtokIkG3mHq4FajRI6Sqfj2yqUj1ZXWKa
-         fJag==
-X-Gm-Message-State: AOAM532fWAJRQE0+avBgINWLh+C4doI0EesYQj8uuLwkgPgKdPJLMTvG
-        JcKZt8QiouX6GNQ8UjtBbNk=
-X-Google-Smtp-Source: ABdhPJzay9IdzNfAP4GnLTie2+6uI6ofL7xWiBnDDXbJfZbV05tiRSwdVw4hAl2ShXJQIk7NPz/NbA==
-X-Received: by 2002:ac2:5223:0:b0:448:5100:e427 with SMTP id i3-20020ac25223000000b004485100e427mr2150728lfl.87.1650107403960;
-        Sat, 16 Apr 2022 04:10:03 -0700 (PDT)
-Received: from [192.168.1.11] ([94.103.225.17])
-        by smtp.gmail.com with ESMTPSA id x22-20020a2e9c96000000b0024da6072587sm433287lji.80.2022.04.16.04.10.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Apr 2022 04:10:03 -0700 (PDT)
-Message-ID: <65c52645-26e8-ff2b-86dc-b5dd697317f9@gmail.com>
-Date:   Sat, 16 Apr 2022 14:10:02 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/pFssxoLZmPuWgKi5vncIMSo1DCdax1EcoWBNQif+HM=;
+        b=LaLqS9ABqkDC80eKzcyj69ohKFcVhF58E2ZzW9qTBOwUykszinhXk//+QCyFe4B8fD
+         tuvgRtWbSdBUDskdbXMEmPFMztlQXwMfWC91pOurZyZAbVhG5l3kQ4dRK7C7Mx/AKnKf
+         a1UxwGV4gdEhSTReHAoaru4l01TteMdGrAFY1ad+GOX6k8vpU7+0h50M5WrjPwkI+42g
+         8bsJt3ysnda6L+nQZsr88zA4Fe9OWVeKqofRlpD3yCRmjfrNgmWV8pPGhm4oClv9ReoL
+         knueG6ghplpWruDP02h8YUOs64yV0AsGxXrCkxe5g7ti+tFykjluJtTrtcxswET00WVA
+         vXeQ==
+X-Gm-Message-State: AOAM533FnDfx7HR5+l7UbmUnfYskWKg4qu+Zq/hL6nGktJ6KoBk3ia3i
+        IpWWb14Ksk8dSmdK1d9pb+rNBa0ViT/plEoSg90=
+X-Google-Smtp-Source: ABdhPJzV0vJqdRlkVn0eXLetCb0I4Oj/t7WT0wQIPKQWRfA8TMOAoDvltO8LyX0LPgc4HoeBZl/BvARKr7B62um/xHU=
+X-Received: by 2002:a67:2d51:0:b0:32a:c2b:78c4 with SMTP id
+ t78-20020a672d51000000b0032a0c2b78c4mr758801vst.36.1650109788662; Sat, 16 Apr
+ 2022 04:49:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read
- errors
-Content-Language: en-US
-To:     David Kahurani <k.kahurani@gmail.com>, netdev@vger.kernel.org
-Cc:     syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com,
+References: <20220416074817.571160-1-k.kahurani@gmail.com> <65c52645-26e8-ff2b-86dc-b5dd697317f9@gmail.com>
+In-Reply-To: <65c52645-26e8-ff2b-86dc-b5dd697317f9@gmail.com>
+From:   David Kahurani <k.kahurani@gmail.com>
+Date:   Sat, 16 Apr 2022 14:49:37 +0300
+Message-ID: <CAAZOf27Q-QQ51pGO1gFETNR0ASg6zmxF4HUFUVn77oL3Cs7LEg@mail.gmail.com>
+Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read errors
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     netdev@vger.kernel.org,
+        syzbot <syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com>,
         davem@davemloft.net, jgg@ziepe.ca, kuba@kernel.org,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        phil@philpotter.co.uk, syzkaller-bugs@googlegroups.com,
-        arnd@arndb.de, dan.carpenter@oracle.com
-References: <20220416074817.571160-1-k.kahurani@gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220416074817.571160-1-k.kahurani@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------x70JgzBdQ5jV31EERnjUlnC7"
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        Phillip Potter <phil@philpotter.co.uk>,
+        syzkaller-bugs@googlegroups.com, arnd@arndb.de,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,82 +70,71 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------x70JgzBdQ5jV31EERnjUlnC7
-Content-Type: multipart/mixed; boundary="------------1qnCSQxy3NKX4amAmcXuvQ5M";
- protected-headers="v1"
-From: Pavel Skripkin <paskripkin@gmail.com>
-To: David Kahurani <k.kahurani@gmail.com>, netdev@vger.kernel.org
-Cc: syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com,
- davem@davemloft.net, jgg@ziepe.ca, kuba@kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- phil@philpotter.co.uk, syzkaller-bugs@googlegroups.com, arnd@arndb.de,
- dan.carpenter@oracle.com
-Message-ID: <65c52645-26e8-ff2b-86dc-b5dd697317f9@gmail.com>
-Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read
- errors
-References: <20220416074817.571160-1-k.kahurani@gmail.com>
-In-Reply-To: <20220416074817.571160-1-k.kahurani@gmail.com>
+On Sat, Apr 16, 2022 at 2:10 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
+>
+> Hi David,
 
---------------1qnCSQxy3NKX4amAmcXuvQ5M
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Hi Pavel.
 
-SGkgRGF2aWQsDQoNCm9uZSBtb3JlIHNtYWxsIGNvbW1lbnQNCg0KT24gNC8xNi8yMiAxMDo0
-OCwgRGF2aWQgS2FodXJhbmkgd3JvdGU6DQo+IFJlYWRzIHRoYXQgYXJlIGxlc3NlciB0aGFu
-IHRoZSByZXF1ZXN0ZWQgc2l6ZSBsZWFkIHRvIHVuaW5pdC12YWx1ZSBidWdzLg0KPiBJbiB0
-aGlzIHBhcnRpY3VsYXIgY2FzZSBhIHZhcmlhYmxlIHdoaWNoIHdhcyBzdXBwb3NlZCB0byBi
-ZSBpbml0aWFsaXplZA0KPiBhZnRlciBhIHJlYWQgaXMgbGVmdCB1bmluaXRpYWxpemVkIGFm
-dGVyIGEgcGFydGlhbCByZWFkLg0KPiANCj4gUXVhbGlmeSBzdWNoIHJlYWRzIGFzIGVycm9y
-cyBhbmQgaGFuZGxlIHRoZW0gY29ycmVjdGx5IGFuZCB3aGlsZSBhdCBpdA0KPiBjb252ZXJ0
-IHRoZSByZWFkZXIgZnVuY3Rpb25zIHRvIHJldHVybiB6ZXJvIG9uIHN1Y2Nlc3MgZm9yIGVh
-c2llciBlcnJvcg0KPiBoYW5kbGluZy4NCj4gDQo+IEZpeGVzOiBlMmNhOTBjMjc2ZTEgKCJh
-eDg4MTc5XzE3OGE6IEFTSVggQVg4ODE3OV8xNzhBIFVTQiAzLjAvMi4wIHRvDQo+IGdpZ2Fi
-aXQgZXRoZXJuZXQgYWRhcHRlciBkcml2ZXIiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBEYXZpZCBL
-YWh1cmFuaSA8ay5rYWh1cmFuaUBnbWFpbC5jb20+DQo+IFJlcG9ydGVkLWFuZC10ZXN0ZWQt
-Ynk6IHN5emJvdCtkM2RiZGYzMWZiZTlkOGY1ZjMxMUBzeXprYWxsZXIuYXBwc3BvdG1haWwu
-Y29tDQo+IC0tLQ0KDQpbY29kZSBzbmlwXQ0KDQo+IEBAIC0xMjk1LDYgKzE0MzksNyBAQCBz
-dGF0aWMgaW50IGF4ODgxNzlfbGVkX3NldHRpbmcoc3RydWN0IHVzYm5ldCAqZGV2KQ0KPiAg
-IHN0YXRpYyB2b2lkIGF4ODgxNzlfZ2V0X21hY19hZGRyKHN0cnVjdCB1c2JuZXQgKmRldikN
-Cj4gICB7DQo+ICAgCXU4IG1hY1tFVEhfQUxFTl07DQo+ICsJaW50IHJldDsNCj4gICANCj4g
-ICAJbWVtc2V0KG1hYywgMCwgc2l6ZW9mKG1hYykpOw0KPiAgIA0KPiBAQCAtMTMwMyw4ICsx
-NDQ4LDEyIEBAIHN0YXRpYyB2b2lkIGF4ODgxNzlfZ2V0X21hY19hZGRyKHN0cnVjdCB1c2Ju
-ZXQgKmRldikNCj4gICAJCW5ldGlmX2RiZyhkZXYsIGlmdXAsIGRldi0+bmV0LA0KPiAgIAkJ
-CSAgIk1BQyBhZGRyZXNzIHJlYWQgZnJvbSBkZXZpY2UgdHJlZSIpOw0KPiAgIAl9IGVsc2Ug
-ew0KPiAtCQlheDg4MTc5X3JlYWRfY21kKGRldiwgQVhfQUNDRVNTX01BQywgQVhfTk9ERV9J
-RCwgRVRIX0FMRU4sDQo+IC0JCQkJIEVUSF9BTEVOLCBtYWMpOw0KPiArCQlyZXQgPSBheDg4
-MTc5X3JlYWRfY21kKGRldiwgQVhfQUNDRVNTX01BQywgQVhfTk9ERV9JRCwgRVRIX0FMRU4s
-DQo+ICsJCQkJICAgICAgIEVUSF9BTEVOLCBtYWMpOw0KPiArDQo+ICsJCWlmIChyZXQpDQo+
-ICsJCQluZXRkZXZfZGJnKGRldi0+bmV0LCAiRmFpbGVkIHRvIHJlYWQgTk9ERV9JRDogJWQi
-LCByZXQpOw0KPiArDQo+ICAgCQluZXRpZl9kYmcoZGV2LCBpZnVwLCBkZXYtPm5ldCwNCj4g
-ICAJCQkgICJNQUMgYWRkcmVzcyByZWFkIGZyb20gQVNJWCBjaGlwIik7DQo+ICAgCX0NCg0K
-DQpUaGlzIG1lc3NhZ2Ugc2VxdWVuY2UgaXMgY29uZnVzaW5nLg0KDQpJbiBjYXNlIG9mIGF4
-ODgxNzlfcmVhZF9jbWQoKSBmYWlsdXJlIG1hYyByZWFkIGZyb20gZGV2aWNlIGFjdHVhbGx5
-IA0KZmFpbGVkLCBidXQgbWVzc2FnZSBzYXlzLCB0aGF0IGl0IHdhcyBzdWNjZXNzZnVsbHkg
-ZmluaXNoZWQuDQoNCg0KDQoNCg0KV2l0aCByZWdhcmRzLA0KUGF2ZWwgU2tyaXBraW4NCg==
+>
+> one more small comment
+>
+> On 4/16/22 10:48, David Kahurani wrote:
+> > Reads that are lesser than the requested size lead to uninit-value bugs.
+> > In this particular case a variable which was supposed to be initialized
+> > after a read is left uninitialized after a partial read.
+> >
+> > Qualify such reads as errors and handle them correctly and while at it
+> > convert the reader functions to return zero on success for easier error
+> > handling.
+> >
+> > Fixes: e2ca90c276e1 ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to
+> > gigabit ethernet adapter driver")
+> > Signed-off-by: David Kahurani <k.kahurani@gmail.com>
+> > Reported-and-tested-by: syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com
+> > ---
+>
+> [code snip]
+>
+> > @@ -1295,6 +1439,7 @@ static int ax88179_led_setting(struct usbnet *dev)
+> >   static void ax88179_get_mac_addr(struct usbnet *dev)
+> >   {
+> >       u8 mac[ETH_ALEN];
+> > +     int ret;
+> >
+> >       memset(mac, 0, sizeof(mac));
+> >
+> > @@ -1303,8 +1448,12 @@ static void ax88179_get_mac_addr(struct usbnet *dev)
+> >               netif_dbg(dev, ifup, dev->net,
+> >                         "MAC address read from device tree");
+> >       } else {
+> > -             ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_NODE_ID, ETH_ALEN,
+> > -                              ETH_ALEN, mac);
+> > +             ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_NODE_ID, ETH_ALEN,
+> > +                                    ETH_ALEN, mac);
+> > +
+> > +             if (ret)
+> > +                     netdev_dbg(dev->net, "Failed to read NODE_ID: %d", ret);
+> > +
+> >               netif_dbg(dev, ifup, dev->net,
+> >                         "MAC address read from ASIX chip");
+> >       }
+>
+>
+> This message sequence is confusing.
+>
+> In case of ax88179_read_cmd() failure mac read from device actually
+> failed, but message says, that it was successfully finished.
 
+I suppose the code should return in case of an error that way the next
+message does not get executed.
 
---------------1qnCSQxy3NKX4amAmcXuvQ5M--
+Thanks for the review! Will fix it and the other issue in the next version.
 
---------------x70JgzBdQ5jV31EERnjUlnC7
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmJapAoFAwAAAAAACgkQbk1w61LbBA2d
-NQ/+LRLQ+4EWTwl4i14awbRI8pi8zuwIgTzqbsdj2ihlIVPcSLl0cOf/3zZUpgMKWgUsl5JUJolj
-+W5JVmpZ5QBmAOUEN46P5waH1wnYOI+cab8hkNGPRNEPbO6tj5kKRAnjBkHEtqyHJaLs9UVEiwp4
-RYZV3Zl6I3S8XL3NAMGt/mXwhEUeHHE7RYD0eSxjRnEI3UieSRni6XxrduEguxURLQZCJPTyHkji
-ZXinqDnpsF/3zKamcpV9X9AJaVGR71xZP9/6cUh4AguzTC4eOppcb600/vKajzmV4jnS2S/UYIXH
-NfLpVkp5uS9RYttqQYz6u1fmMi7Add4Kp554qj603TWyUCBQUwVnYEkMXXWJdByIeAVSDamvPFDg
-C/5WumweoSOiRhBsqJ3pA3wKar5C5C+PE8/C3qUfydczCZ0o6K5pUzgaFqz1m85xv9v7k/+iWYyc
-9l/CcwdIqnkaGed0DtwOtfQlvmzqW+bTS8Qa6asftjTJ8HC55wj2lQIeWJ9lMBZGwvugtyrJ5vMu
-45KVO4CKafRkSYwratiIFgYu8LzEmIzco1Eyj94+KSV1vKvGNew8h4d4uVYriWnTY6F0UjgTbo0A
-YzC8IwgCFgpIphdzJIUTvVEs6p+9CSR8+Fg8wbyNVCWSaOTTYRgDE8n/NXSqZv31/xwX+2mf2X5N
-TxA=
-=bUPz
------END PGP SIGNATURE-----
-
---------------x70JgzBdQ5jV31EERnjUlnC7--
+>
+>
+>
+>
+>
+> With regards,
+> Pavel Skripkin
