@@ -2,124 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3638A5045D5
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Apr 2022 02:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2215046E9
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Apr 2022 09:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232132AbiDQAql (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 16 Apr 2022 20:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
+        id S233541AbiDQHNU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 17 Apr 2022 03:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232059AbiDQAqj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Apr 2022 20:46:39 -0400
-X-Greylist: delayed 463 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 16 Apr 2022 17:44:05 PDT
-Received: from relay.hostedemail.com (relay.a.hostedemail.com [64.99.140.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BE92A739
-        for <linux-usb@vger.kernel.org>; Sat, 16 Apr 2022 17:44:05 -0700 (PDT)
-Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay09.hostedemail.com (Postfix) with ESMTP id BC1D923E29;
-        Sun, 17 Apr 2022 00:36:20 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id 951B12002D;
-        Sun, 17 Apr 2022 00:36:18 +0000 (UTC)
-Message-ID: <817a2890f5483e9a4b51ff6cc3eaab966e4f0537.camel@perches.com>
-Subject: Re: [PATCH] usb: gadget: tegra-xudc: clean up comments
-From:   Joe Perches <joe@perches.com>
-To:     Tom Rix <trix@redhat.com>, balbi@kernel.org,
-        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, waynec@nvidia.com,
-        rikard.falkeborn@gmail.com, zhangqilong3@huawei.com,
-        jakobkoschel@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 16 Apr 2022 17:36:17 -0700
-In-Reply-To: <20220416223921.2881719-1-trix@redhat.com>
-References: <20220416223921.2881719-1-trix@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        with ESMTP id S231880AbiDQHNT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 17 Apr 2022 03:13:19 -0400
+X-Greylist: delayed 379 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 17 Apr 2022 00:10:42 PDT
+Received: from mailout3.hostsharing.net (mailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f236:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FD83E5F3;
+        Sun, 17 Apr 2022 00:10:42 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by mailout3.hostsharing.net (Postfix) with ESMTPS id 6ADFD101E9E63;
+        Sun, 17 Apr 2022 09:04:21 +0200 (CEST)
+Received: from localhost (unknown [89.246.108.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 2449D621EA2E;
+        Sun, 17 Apr 2022 09:04:21 +0200 (CEST)
+X-Mailbox-Line: From 18b3541e5372bc9b9fc733d422f4e698c089077c Mon Sep 17 00:00:00 2001
+Message-Id: <18b3541e5372bc9b9fc733d422f4e698c089077c.1650177997.git.lukas@wunner.de>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Sun, 17 Apr 2022 09:04:19 +0200
+Subject: [PATCH] net: linkwatch: ignore events for unregistered netdevs
+To:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jann Horn <jannh@google.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jacky Chou <jackychou@asix.com.tw>, Willy Tarreau <w@1wt.eu>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Stat-Signature: wuornyiqc99zd7iwgpzr4a7oge57cej1
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 951B12002D
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18BKswQqLwj8nM6sM5bfVkhWxaiS5zBNx0=
-X-HE-Tag: 1650155778-741580
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 2022-04-16 at 18:39 -0400, Tom Rix wrote:
-> Spelling replacements
-> cancelled to canceled
+Jann Horn reports a use-after-free on disconnect of a USB Ethernet
+(ax88179_178a.c).  Oleksij Rempel has witnessed the same issue with a
+different driver (ax88172a.c).
 
-cancelled is a generally accepted variant.
+Jann's report (linked below) explains the root cause in great detail,
+but the gist is that USB Ethernet drivers call linkwatch_fire_event()
+between unregister_netdev() and free_netdev().  The asynchronous work
+linkwatch_event() may thus access the netdev after it's been freed.
 
-https://www.dictionary.com/browse/cancelled
+USB Ethernet may not even be the only culprit.  To address the problem
+in the most general way, ignore link events once a netdev's state has
+been set to NETREG_UNREGISTERED.
 
-> endpiont to endpoint
+That happens in netdev_run_todo() immediately before the call to
+linkwatch_forget_dev().  Note that lweventlist_lock (and its implied
+memory barrier) guarantees that a linkwatch_add_event() running after
+linkwatch_forget_dev() will see the netdev's new state and bail out.
+An unregistered netdev is therefore never added to link_watch_list
+(but may have its __LINK_STATE_LINKWATCH_PENDING bit set, which should
+not matter).  That obviates the need to invoke linkwatch_run_queue() in
+netdev_wait_allrefs(), so drop it.
 
-ok.
+In a sense, the present commit is to *no longer* registered netdevs as
+commit b47300168e77 ("net: Do not fire linkwatch events until the device
+is registered.") is to *not yet* registered netdevs.
 
-> Compliance to Compliance
+Reported-by: Jann Horn <jannh@google.com>
+Link: https://lore.kernel.org/netdev/CAG48ez0MHBbENX5gCdHAUXZ7h7s20LnepBF-pa5M=7Bi-jZrEA@mail.gmail.com/
+Reported-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Link: https://lore.kernel.org/netdev/20220315113841.GA22337@pengutronix.de/
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Cc: stable@vger.kernel.org
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Oliver Neukum <oneukum@suse.com>
+Cc: Andrew Lunn <andrew@lunn.ch>
+---
+ include/linux/netdevice.h |  2 --
+ net/core/dev.c            | 17 -----------------
+ net/core/link_watch.c     | 10 ++--------
+ 3 files changed, 2 insertions(+), 27 deletions(-)
 
-huh?  a == a
-
-
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/usb/gadget/udc/tegra-xudc.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-> index d9c406bdb680..0aaf01e1551f 100644
-> --- a/drivers/usb/gadget/udc/tegra-xudc.c
-> +++ b/drivers/usb/gadget/udc/tegra-xudc.c
-> @@ -1330,7 +1330,7 @@ static void squeeze_transfer_ring(struct tegra_xudc_ep *ep,
->  	bool pcs;
->  
->  	/*
-> -	 * Clear out all the TRBs part of or after the cancelled request,
-> +	 * Clear out all the TRBs part of or after the canceled request,
->  	 * and must correct trb cycle bit to the last un-enqueued state.
->  	 */
->  	while (trb != &ep->transfer_ring[ep->enq_ptr]) {
-> @@ -1343,11 +1343,11 @@ static void squeeze_transfer_ring(struct tegra_xudc_ep *ep,
->  			trb = ep->transfer_ring;
->  	}
->  
-> -	/* Requests will be re-queued at the start of the cancelled request. */
-> +	/* Requests will be re-queued at the start of the canceled request. */
->  	ep->enq_ptr = req->first_trb - ep->transfer_ring;
->  	/*
->  	 * Retrieve the correct cycle bit state from the first trb of
-> -	 * the cancelled request.
-> +	 * the canceled request.
->  	 */
->  	ep->pcs = pcs_enq;
->  	ep->ring_full = false;
-> @@ -1434,7 +1434,7 @@ __tegra_xudc_ep_dequeue(struct tegra_xudc_ep *ep,
->  		return 0;
->  	}
->  
-> -	/* Halt DMA for this endpiont. */
-> +	/* Halt DMA for this endpoint. */
->  	if (ep_ctx_read_state(ep->context) == EP_STATE_RUNNING) {
->  		ep_pause(xudc, ep->index);
->  		ep_wait_for_inactive(xudc, ep->index);
-> @@ -3423,7 +3423,7 @@ static void tegra_xudc_device_params_init(struct tegra_xudc *xudc)
->  	}
->  
->  	/*
-> -	 * Compliacne suite appears to be violating polling LFPS tBurst max
-> +	 * Compliance suite appears to be violating polling LFPS tBurst max
->  	 * of 1.4us.  Send 1.45us instead.
->  	 */
->  	val = xudc_readl(xudc, SSPX_CORE_CNT32);
-
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 59e27a2b7bf0..5d950b45b59d 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -4805,8 +4805,6 @@ extern const struct kobj_ns_type_operations net_ns_type_operations;
+ 
+ const char *netdev_drivername(const struct net_device *dev);
+ 
+-void linkwatch_run_queue(void);
+-
+ static inline netdev_features_t netdev_intersect_features(netdev_features_t f1,
+ 							  netdev_features_t f2)
+ {
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 8c6c08446556..0ee56965ff76 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -10140,23 +10140,6 @@ static struct net_device *netdev_wait_allrefs_any(struct list_head *list)
+ 			list_for_each_entry(dev, list, todo_list)
+ 				call_netdevice_notifiers(NETDEV_UNREGISTER, dev);
+ 
+-			__rtnl_unlock();
+-			rcu_barrier();
+-			rtnl_lock();
+-
+-			list_for_each_entry(dev, list, todo_list)
+-				if (test_bit(__LINK_STATE_LINKWATCH_PENDING,
+-					     &dev->state)) {
+-					/* We must not have linkwatch events
+-					 * pending on unregister. If this
+-					 * happens, we simply run the queue
+-					 * unscheduled, resulting in a noop
+-					 * for this device.
+-					 */
+-					linkwatch_run_queue();
+-					break;
+-				}
+-
+ 			__rtnl_unlock();
+ 
+ 			rebroadcast_time = jiffies;
+diff --git a/net/core/link_watch.c b/net/core/link_watch.c
+index 95098d1a49bd..9a0ea7cd68e4 100644
+--- a/net/core/link_watch.c
++++ b/net/core/link_watch.c
+@@ -107,7 +107,8 @@ static void linkwatch_add_event(struct net_device *dev)
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&lweventlist_lock, flags);
+-	if (list_empty(&dev->link_watch_list)) {
++	if (list_empty(&dev->link_watch_list) &&
++	    dev->reg_state < NETREG_UNREGISTERED) {
+ 		list_add_tail(&dev->link_watch_list, &lweventlist);
+ 		dev_hold_track(dev, &dev->linkwatch_dev_tracker, GFP_ATOMIC);
+ 	}
+@@ -250,13 +251,6 @@ void linkwatch_forget_dev(struct net_device *dev)
+ }
+ 
+ 
+-/* Must be called with the rtnl semaphore held */
+-void linkwatch_run_queue(void)
+-{
+-	__linkwatch_run_queue(0);
+-}
+-
+-
+ static void linkwatch_event(struct work_struct *dummy)
+ {
+ 	rtnl_lock();
+-- 
+2.35.2
 
