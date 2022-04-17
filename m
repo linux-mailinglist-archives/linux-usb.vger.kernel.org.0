@@ -2,112 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9477D504735
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Apr 2022 10:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE794504766
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Apr 2022 11:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233708AbiDQIiJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 17 Apr 2022 04:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
+        id S233815AbiDQJaS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 17 Apr 2022 05:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233710AbiDQIhz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 17 Apr 2022 04:37:55 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917BA2BB01
-        for <linux-usb@vger.kernel.org>; Sun, 17 Apr 2022 01:35:19 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id md4so10798039pjb.4
-        for <linux-usb@vger.kernel.org>; Sun, 17 Apr 2022 01:35:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=z+v8ugHyK4Bi1bsAOtuex5rzJWIULuLfF++ZnJg6JJs=;
-        b=oNJc2INf8Rhr5FB/7dmVLUtXIN32Zpr+JOws5mZo8yLIZkx20k3ktobg4cFsyHfo10
-         opyovUTmrMqZBrjIIPL8dwM3Cl42hbyZvaLR8TbrZDbPh7rgV94AneypUIz7gx5LvazE
-         zDLFkcDX1nbPbvLE1YDjvnnDO6sd+MeRRKk7hJojVtPLOuB8iX7Tisqm37Yqye5BOvOD
-         qrtEmC9HZPFnF8UhgjxviHDBiEkp+KFrjrNS6AiUfUOujeKcrIPlTDjJJypvibkN2ZRc
-         Fcc5bL7t8fX01QLLow126XRV2cU5sFntAnAB/7YbhrXrCEA2hg1PeuWagasZGrwW/+fq
-         MCiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=z+v8ugHyK4Bi1bsAOtuex5rzJWIULuLfF++ZnJg6JJs=;
-        b=TwG3UuNGR1kecUlfIa069iU1NSu4taABYvPiVlWaPuz9d+RZArNCEBxu4fKS8v5tKW
-         /HFCOF06cm+yNXhmI3vblEQa/I4Tu740Ry1bK3XDxeWmFiV5elylDk4OiQkQy4Y5sEjb
-         9wZgfnpRwsbbelJGO5QW0nI5RSo0fbANSEKcfkvZ6ARDPbb87u+jwCuxtM2ynIBtNVcG
-         ICwZ7QaHP8/g3RRAOlQlFPEQEskMSXEww1KKyBGeqG8QDAjFMrVJj4/MQgLyozyCX42D
-         lzkx5IhV20PdgB8GF+hWEjIJjxXbh2/hGjCOeLKkZ0lwRBBPyrYtRa3OfZGOWK6kHem6
-         VVqQ==
-X-Gm-Message-State: AOAM531JxzhR5u6ygmyE3FlrXaDksL5GPRCDgwWxdVxGQCicELt/NkHX
-        GJWlwxnSs82hdxsdB6/xvaNfq5W0bsRN35sZ1eHKr50VV9gSUfTf3ns=
-X-Google-Smtp-Source: ABdhPJw9Xt2OFrIK7hURg4kp9HjRikv5sLzHEzVl1NzDr5ZjkMyPbwTBECFNWcwqZlk35V3UQisOkE0Lf5eHqEkQTho=
-X-Received: by 2002:a1f:5105:0:b0:345:252e:b0f5 with SMTP id
- f5-20020a1f5105000000b00345252eb0f5mr1463329vkb.22.1650184508047; Sun, 17 Apr
- 2022 01:35:08 -0700 (PDT)
+        with ESMTP id S233795AbiDQJaR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 17 Apr 2022 05:30:17 -0400
+Received: from out28-101.mail.aliyun.com (out28-101.mail.aliyun.com [115.124.28.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D65A387A1;
+        Sun, 17 Apr 2022 02:27:41 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09126422|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0227706-0.0250717-0.952158;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.NSFwFyR_1650187655;
+Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NSFwFyR_1650187655)
+          by smtp.aliyun-inc.com(33.37.71.29);
+          Sun, 17 Apr 2022 17:27:36 +0800
+Subject: Re: [PATCH v3 1/3] dt-bindings: dwc2: Add bindings for new Ingenic
+ SoCs.
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     gregkh@linuxfoundation.org, hminas@synopsys.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dragancecavac@yahoo.com, hns@goldelico.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, reimu@sudomaker.com
+References: <1649964337-114337-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1649964337-114337-2-git-send-email-zhouyanjie@wanyeetech.com>
+ <J1YFAR.2881WOMSYUZM2@crapouillou.net>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <62d961c6-6c3e-393e-2348-cb874320316e@wanyeetech.com>
+Date:   Sun, 17 Apr 2022 17:27:34 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Received: by 2002:a05:612c:2303:b0:2a3:2b46:b7d with HTTP; Sun, 17 Apr 2022
- 01:35:07 -0700 (PDT)
-Reply-To: markwillima00@gmail.com
-From:   Mark <muhammadsuleima888@gmail.com>
-Date:   Sun, 17 Apr 2022 01:35:07 -0700
-Message-ID: <CANCcrFBrB3Qw8Ab_hBy19n0Ch6+XNpkXj3PjXKrc26cej7s+Kg@mail.gmail.com>
-Subject: Re: Greetings!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1044 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [markwillima00[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [muhammadsuleima888[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [muhammadsuleima888[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+In-Reply-To: <J1YFAR.2881WOMSYUZM2@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Paul,
 
-The HSBC Bank is a financial institution in United Kingdom. We
-promotes long-term,sustainable and broad-based economic growth in
-developing and emerging countries by providing financial support like
-loans and investment to large, small and
-medium-sized companies (SMEs) as well as fast-growing enterprises
-which in turn helps to create secure and permanent jobs and reduce
-poverty.
+On 2022/4/17 上午12:34, Paul Cercueil wrote:
+> Hi Zhou,
+>
+> Le ven., avril 15 2022 at 03:25:35 +0800, 周琰杰 (Zhou Yanjie) 
+> <zhouyanjie@wanyeetech.com> a écrit :
+>> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000
+>> SoC, the X1600 SoC, the X1700 SoC, the X1830 SoC, and the X2000 SoC
+>> from Ingenic.
+>>
+>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>> Acked-by: Rob Herring <robh@kernel.org>
+>> ---
+>>
+>> Notes:
+>>     v1->v2:
+>>     Add Rob Herring's Acked-by.
+>>
+>>     v2->v3:
+>>     No change.
+>>
+>>  Documentation/devicetree/bindings/usb/dwc2.yaml | 7 +++++++
+>>  1 file changed, 7 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml 
+>> b/Documentation/devicetree/bindings/usb/dwc2.yaml
+>> index 4cebce6..c6e8c0b 100644
+>> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
+>> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+>> @@ -17,6 +17,13 @@ properties:
+>>      oneOf:
+>>        - const: brcm,bcm2835-usb
+>>        - const: hisilicon,hi6220-usb
+>> +      - const: ingenic,jz4775-otg
+>> +      - const: ingenic,jz4780-otg
+>> +      - const: ingenic,x1000-otg
+>
+> The driver handles the JZ4775, JZ4780 and X1000 the exact same way. 
+> Maybe the latter two should use the JZ4775 string as the fallback? Do 
+> you know if the IP cores are any different?
+>
 
-If you need fund to promotes your business, project(Project Funding),
-Loan, planning, budgeting and expansion of your business(s) , do not
-hesitate to indicate your interest as we are here to serve you better
-by granting your request.
+ From the manual, it seems that JZ4775 and JZ4780 should have the same 
+specifications,
+but in fact, the behavior of JZ4775 and JZ4780 is different, especially 
+if the JZ4780
+does not turn off overcurrent detection, there will be a high 
+probability of affecting
+the use, while the JZ4775 does not have this problem, so I think they 
+should actually
+be different.
+
+The manual of X1000 shows that it has only 8 endpoints, which is 
+different from JZ4775
+and JZ4780.
+
+ From the experimental results, it seems that the three of them can use 
+the same set of
+parameters, but in order to avoid hidden dangers that have not been 
+found for the time
+being, I think it seems necessary to keep three independent compatible 
+strings.
 
 
-Thank you
-Mr:Mark
+>> +      - const: ingenic,x1600-otg
+>> +      - const: ingenic,x1700-otg
+>> +      - const: ingenic,x1830-otg
+>
+> Same here (and btw, first time I hear about the X1600 and X1700 ;))
+
+
+The OTG of X1600 and X1700 seem to be the same, I will remove the 
+compatibility string
+of X1700 in the next version, but the device tree of X1830 in Ingenic 
+SDK is configured
+with different parameters from X1600/X1700, so I believe the X1830 
+should be a little
+different from the X1600/X1700, so although the experimental results 
+show that the three
+of them seem to be able to use the same parameters, it seems that it is 
+more appropriate
+to keep the compatibe string of X1830.
+
+I also heard about the X1600 and X1700 not long ago. From the existing 
+information, the
+X1600 should be the only SoC with CAN in the known models of Ingenic. 
+And the X1700 is
+more like an SoC that focuses on display applications.
+
+
+Thanks and best regards!
+
+
+>
+> Cheers,
+> -Paul
+>
+>> +      - const: ingenic,x2000-otg
+>>        - items:
+>>            - const: rockchip,rk3066-usb
+>>            - const: snps,dwc2
+>> -- 
+>> 2.7.4
+>>
+>
