@@ -2,107 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0914A505306
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Apr 2022 14:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 899AA505A3B
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Apr 2022 16:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240233AbiDRMzD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Apr 2022 08:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
+        id S245568AbiDROti (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Apr 2022 10:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240237AbiDRMyr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Apr 2022 08:54:47 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BC313DFC;
-        Mon, 18 Apr 2022 05:35:01 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso6985564pjj.3;
-        Mon, 18 Apr 2022 05:35:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BwBQWoszPE0WyBmS8eEzNdPIlmwnL6neVdJfMqZdeYs=;
-        b=puV6g1yAwYY4foiMBzImH0StiMfyjOvPeJvoVgBw5FXrWP12gxeBSDewkBPPDL0UMP
-         OnsiSeTUOtD2dt28KD7TjjUfMcvCct7teSPmd01Mi++avp/moQxkogI9938ZARZOvatB
-         C4EScWnZgyPc73V+fzOmIWkXlnn8OLQTiVroOwHGt5yhPvFJkoyINAFS87YaVa3mGo38
-         VEGR6u6xAArgzgf7QhRhwcvQ75y5W/MgnOYNyz4cJ+9uIeKR2I13+vuEW7Zr/EKeibDw
-         shtLw3sOFM7PuhJQANQts3YHpCDaT3zWuqzqNXCIuetd6O1sjU+ogdCSvutPYNDmBp60
-         ffKA==
+        with ESMTP id S1345403AbiDROtC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Apr 2022 10:49:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6866127CDA
+        for <linux-usb@vger.kernel.org>; Mon, 18 Apr 2022 06:36:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650288987;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HJVF54/3gAvDeSSKK9/o5NZIye3nCH1ybK4Z5ZzOhi4=;
+        b=KWhG7eJ7wu3pcO6cSZ/52NP1R8MrlCRokJuaK6D5hs/aZEu3cDt55uJYLHPhvkMgOb3BRp
+        meR9RXhE31fklkCecELVrGbkVbhvNZdJHT9kWIEqg1K0IKd2DuP5EIFCNsEKs2dEodG2AT
+        d5+/3FSBVZzYMTlxlDBMn+I9rOip5Jg=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-515-aSM-yEgQO8CLn03wSMoMyg-1; Mon, 18 Apr 2022 09:36:26 -0400
+X-MC-Unique: aSM-yEgQO8CLn03wSMoMyg-1
+Received: by mail-qt1-f197.google.com with SMTP id o19-20020a05622a009300b002f24529993cso237128qtw.0
+        for <linux-usb@vger.kernel.org>; Mon, 18 Apr 2022 06:36:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=BwBQWoszPE0WyBmS8eEzNdPIlmwnL6neVdJfMqZdeYs=;
-        b=Xb8utgI4FArzRafGLJgLFuTd4xNzbFxyF3GkDn85H0HNmSTMcVbFTVeumyFDkBeDqX
-         z4h78P2QFEzjjVW0zTkYWbbCpnWxI+6HGmebgQw8Yd8GavDG9UArZ65ixsgI8KrPWglo
-         vRDlLuMGOrnugl5uYUj2ZPtuDEcwzKHuhpI+liiEF1GViP19Sstf7CmCRA0jXG3VL41S
-         w4c5a/njDXV2GJXFVC9DZRhkl7QXcJXlCfX764R1EZbdribBq/6agKvlmjhjqJa3DH0W
-         vWIgJrCgV+5Z7CJxvHHwQE734RR366P/jIR+9qnvfFmjWDdK+Q6ctS97tc5QKSwZwhvK
-         ipdQ==
-X-Gm-Message-State: AOAM533zzDQtTM6xXsKiJlKWNTduKJwwArHlLf3YTqM4TrdSJGTcHoo2
-        E+IwuDTiqZR+eDYJpL7318U=
-X-Google-Smtp-Source: ABdhPJzzDcDZsjDzFZEes1dI7IHd8sgP2uwsDyC+87JYg88yja6QtTIVb54SIoCzIBV43/NDyFAWCA==
-X-Received: by 2002:a17:902:e9c4:b0:158:f77d:afb7 with SMTP id 4-20020a170902e9c400b00158f77dafb7mr6454683plk.143.1650285300765;
-        Mon, 18 Apr 2022 05:35:00 -0700 (PDT)
-Received: from localhost ([58.251.76.82])
-        by smtp.gmail.com with ESMTPSA id y131-20020a626489000000b00505a8f36965sm12354645pfb.184.2022.04.18.05.35.00
+        bh=HJVF54/3gAvDeSSKK9/o5NZIye3nCH1ybK4Z5ZzOhi4=;
+        b=bjmqYrHMzo1hcskUh5Jm98TatI9O0LZAo/bUt/JgqH4T5bBO+t405tsfHIEgN3Pc0R
+         MSpEf1AL2j2eA0uZpgb9WFHyq09ILYkUbl+AqQkGpAV7CHXyz7lPiaKR8MfuvQv4uE60
+         qgUkowavSVcPRJtwpIehdWIdphGpljNojGLMRymG2xpheA9qaZ7F/rTE74zhOYEwFRzB
+         dlmOfe9KXDoSR0WmM0/wG+OK8OApXTIIQPofbNGivt9eBdjc3tOehHtNMDlzdAuAl+Iw
+         fUEnKZs6im2+FFxl/iLcqytv2KEbfNnCZ/oWUgvWs2viOXheF/0A8b9c2SbnoRGcKnjN
+         wXcA==
+X-Gm-Message-State: AOAM532bEx/gPnCeYBFBQg0i0/SWizSCm3VZH1sNyzBSbFCK90NIaZNu
+        jxkDMPZRk2f9oJ8Bd9Ijrtuet9fxGSdtN2Zr5iHrpeNLmWXYGBlYrUuAn+tqciPQdlai6rUiKNm
+        kdQ9RShcaDN9XkAqgQQDt
+X-Received: by 2002:ac8:5d8e:0:b0:2f1:fbc6:ae89 with SMTP id d14-20020ac85d8e000000b002f1fbc6ae89mr3886138qtx.647.1650288985600;
+        Mon, 18 Apr 2022 06:36:25 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwjY9HHU1Y5nCsGyqMaQmlAvvvIyplvs6JQhMWT7GuPBWxawLkRWfdB8kSBfOyuPiFM6FLzWA==
+X-Received: by 2002:ac8:5d8e:0:b0:2f1:fbc6:ae89 with SMTP id d14-20020ac85d8e000000b002f1fbc6ae89mr3886118qtx.647.1650288985408;
+        Mon, 18 Apr 2022 06:36:25 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id c22-20020a05620a201600b0069e8e5f1c84sm2147674qka.35.2022.04.18.06.36.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 05:35:00 -0700 (PDT)
-From:   Yunbo Yu <yuyunbo519@gmail.com>
-To:     oliver@neukum.org, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yunbo Yu <yuyunbo519@gmail.com>
-Subject: [PATCH] net: cdc-ncm:  Move spin_lock_bh() to spin_lock()
-Date:   Mon, 18 Apr 2022 20:34:38 +0800
-Message-Id: <20220418123438.1240676-1-yuyunbo519@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 18 Apr 2022 06:36:24 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org, krzk@kernel.org,
+        jakobkoschel@gmail.com, gustavoars@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] usb: gadget: s3c-hsudc: clean up comments
+Date:   Mon, 18 Apr 2022 09:36:19 -0400
+Message-Id: <20220418133619.2852678-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It is unnecessary to call spin_lock_bh() for you are already in a tasklet.
+Spelling replacements
+occured to occurred
+currenty to currently
 
-Signed-off-by: Yunbo Yu <yuyunbo519@gmail.com>
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/net/usb/cdc_ncm.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/usb/gadget/udc/s3c-hsudc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index 15f91d691bba..cdca00c0dc1f 100644
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -1492,19 +1492,19 @@ static void cdc_ncm_txpath_bh(struct tasklet_struct *t)
- 	struct cdc_ncm_ctx *ctx = from_tasklet(ctx, t, bh);
- 	struct usbnet *dev = ctx->dev;
- 
--	spin_lock_bh(&ctx->mtx);
-+	spin_lock(&ctx->mtx);
- 	if (ctx->tx_timer_pending != 0) {
- 		ctx->tx_timer_pending--;
- 		cdc_ncm_tx_timeout_start(ctx);
--		spin_unlock_bh(&ctx->mtx);
-+		spin_unlock(&ctx->mtx);
- 	} else if (dev->net != NULL) {
- 		ctx->tx_reason_timeout++;	/* count reason for transmitting */
--		spin_unlock_bh(&ctx->mtx);
-+		spin_unlock(&ctx->mtx);
- 		netif_tx_lock_bh(dev->net);
- 		usbnet_start_xmit(NULL, dev->net);
- 		netif_tx_unlock_bh(dev->net);
- 	} else {
--		spin_unlock_bh(&ctx->mtx);
-+		spin_unlock(&ctx->mtx);
- 	}
+diff --git a/drivers/usb/gadget/udc/s3c-hsudc.c b/drivers/usb/gadget/udc/s3c-hsudc.c
+index bf803e013458..4b7eb7701470 100644
+--- a/drivers/usb/gadget/udc/s3c-hsudc.c
++++ b/drivers/usb/gadget/udc/s3c-hsudc.c
+@@ -126,7 +126,7 @@ struct s3c_hsudc_req {
+ /**
+  * struct s3c_hsudc - Driver's abstraction of the device controller.
+  * @gadget: Instance of usb_gadget which is referenced by gadget driver.
+- * @driver: Reference to currenty active gadget driver.
++ * @driver: Reference to currently active gadget driver.
+  * @dev: The device reference used by probe function.
+  * @lock: Lock to synchronize the usage of Endpoints (EP's are indexed).
+  * @regs: Remapped base address of controller's register space.
+@@ -633,7 +633,7 @@ static void s3c_hsudc_process_setup(struct s3c_hsudc *hsudc)
  }
  
+ /** s3c_hsudc_handle_ep0_intr - Handle endpoint 0 interrupt.
+- * @hsudc: Device controller on which endpoint 0 interrupt has occured.
++ * @hsudc: Device controller on which endpoint 0 interrupt has occurred.
+  *
+  * Handle endpoint 0 interrupt when it occurs. EP0 interrupt could occur
+  * when a stall handshake is sent to host or data is sent/received on
 -- 
-2.25.1
+2.27.0
 
