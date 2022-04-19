@@ -2,68 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B34F9506FFF
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 16:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D98C0507095
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 16:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236113AbiDSOYT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Apr 2022 10:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
+        id S232971AbiDSOfc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Apr 2022 10:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237290AbiDSOYQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 10:24:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0591D30E
-        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 07:21:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBEB760929
-        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 14:21:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91782C385A5;
-        Tue, 19 Apr 2022 14:21:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650378093;
-        bh=RG8UQr4hAGaeEY3m6VhGC4bLISA52DC4/GVtv7ffby8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fEbPVsCF5YuRzw+E5xpAFFoRlN9zEeHUXrsOLvHXqAYtntM1P2BJZa10kvI+N8KcZ
-         5TkKrv+LuSxaT0/fVMaq5Zvt8jlBXB802gn+rX8rm4zZsHzYcO5bL1bHMsD4ttUhW/
-         Xfk5HmpC1wJASNFiTotrAA2iLxwDbateL9VadHfk=
-Date:   Tue, 19 Apr 2022 16:21:29 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        paul.elder@ideasonboard.com, kieran.bingham@ideasonboard.com,
-        nicolas@ndufresne.ca, laurent.pinchart@ideasonboard.com,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 5/5] usb: gadget: uvc: stop the pump on more conditions
-Message-ID: <Yl7FaUj6TYYzUhGz@kroah.com>
-References: <20220402233914.3625405-1-m.grzeschik@pengutronix.de>
- <20220402233914.3625405-6-m.grzeschik@pengutronix.de>
- <20220404130758.GB6952@pengutronix.de>
+        with ESMTP id S1353351AbiDSOfc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 10:35:32 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id F09281B792
+        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 07:32:48 -0700 (PDT)
+Received: (qmail 593923 invoked by uid 1000); 19 Apr 2022 10:32:47 -0400
+Date:   Tue, 19 Apr 2022 10:32:47 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: USB device disconnects on resume
+Message-ID: <Yl7ID1Vxp5+wR1py@rowland.harvard.edu>
+References: <f03916f62a976fd10b9808f77eace9c230ca4ebc.camel@puri.sm>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220404130758.GB6952@pengutronix.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <f03916f62a976fd10b9808f77eace9c230ca4ebc.camel@puri.sm>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 03:07:58PM +0200, Michael Grzeschik wrote:
-> I think we can skip this patch for now, since it is depending on this series:
+On Tue, Apr 19, 2022 at 11:28:21AM +0200, Martin Kepplinger wrote:
+> hi,
 > 
-> https://lore.kernel.org/linux-usb/20220315143356.3919911-1-m.grzeschik@pengutronix.de/
+> I'm seeing resets and re-enumerations on runtime-resume for one device
+> a lot. It's a modem connected to the USB2642 Microchip (SMSC) USB2 hub,
+> that's connected to an xhci HC.
 > 
-> The other Patches of this series have no dependencies.
+> A remote wakeup *sometimes* makes the hub say "physically disconnected"
+> during resume in hub_activate(), and thus sets reset_resume. Then the
+> device comes up as low-speed device once, which again is not allowed
+> during normal runtime resume, so would itself trigger a reset.
 
-Can you please fix up and resend then?  Our tools want to apply the
-whole series at once, for obvious reasons.
+Does the reset-resume always fail in this way?
 
-thanks,
+> The Hub and device is permanently connected on the PCB, so the hub is
+> interpreting it in a wrong way.
 
-greg k-h
+What is the hub is interpreting in a wrong way?  Why should a permanent 
+connection on the PCB have anything to do with whether the resume 
+signals are misinterpreted?
+
+>  I found an email that describes what I
+> see from Sarah Sharp in 2013 here:
+> https://marc.info/?l=linux-usb&m=137754385421825&w=2 Where she says:
+> 
+> "Occasionally, the host controller was sending the SoFs too soon on
+> resume, and the device would interpret it as a low-speed chirp.  The
+> device would disconnect, and transform from a high speed device to a
+> low speed device.  I don't think increasing the 10 ms time out will
+> help at all in this case, but you did ask what USB device disconnect
+> scenarios I've seen."
+
+Read the following messages in that email thread.  Sarah said that she 
+would fix the SoF signal timing in xhci-hcd ("I agree that this seems 
+like an xHCI driver issue, and I'll fix it in the driver").  I have no 
+idea whether this helped the faulty devices; my guess is that it didn't.
+
+(She never did respond to my comment that there is no such thing as a 
+"low-speed chirp".)
+
+> I can't find any reference to that bug yet. Has anyone experienced
+> something (similar) and knows where I can at least try to work around
+> that?
+> 
+> I don't know Sarahs' current email, could we forward this question to
+> her?
+
+Sarah hasn't worked on Linux or xhci-hcd for many years.  It's probably 
+not worth trying to ask her about this.
+
+Alan Stern
