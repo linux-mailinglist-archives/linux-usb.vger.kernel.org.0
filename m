@@ -2,104 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBEF1506FC0
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 16:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76616506FF5
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 16:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347184AbiDSOJU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Apr 2022 10:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
+        id S1347946AbiDSOSb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Apr 2022 10:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351293AbiDSOJS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 10:09:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AFD22A701
-        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 07:06:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650377194;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=UrvBWaRXV3DlLVU6RimSG2jNQYfccJ/kwX+dgBkIis4=;
-        b=dhWVkO0z5IhByvCWbQ3TO8Qm2V1gZDYcPXki3l2UFdqWUUD/Mm4vSq3H+1Vpm4pGQfXJAJ
-        HlVidfvAKEDhHFpyRehX7B6UQLJneE762ummu9gyNV9Q/4bVTdfeIvDh7AyYL6E88B/Jr6
-        nxxXQKovb+NMG5eXZX/UsmdhoWSM87U=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-325-_614p9wsOPyF2k89PzLABQ-1; Tue, 19 Apr 2022 10:06:32 -0400
-X-MC-Unique: _614p9wsOPyF2k89PzLABQ-1
-Received: by mail-qk1-f197.google.com with SMTP id s63-20020a372c42000000b0069ec0715d5eso1708406qkh.10
-        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 07:06:32 -0700 (PDT)
+        with ESMTP id S1348082AbiDSOSW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 10:18:22 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA4B6241
+        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 07:15:38 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id w1so6263113lfa.4
+        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 07:15:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qxyAAJCwk86YjxNZvzK22H+Q1D0EYzqfXkSlEcQ3oGI=;
+        b=U8TznkIEfkbn6wBOe66bedzDevL3UCKOj2LIyC+yTGFJGe6H3CAWKuIFxq5wvflo2M
+         YPqSiNhdSo2UNK5R9O5lCdht+dpY1uQXmpjL/Z2JFciY07hF8cmoQIVlKVZcMQkrMdzh
+         xQm2rYQ0y3EHpvQGdBCAJQhmqrJzsgMGbbKb5iv69GK1zwsTBUeeLrPf+fWbm8h+OHA8
+         vn0GNOWufxa2UwVQxTLp7VsjdfB/OMoUd3kiZk3aI2ynnkLj6hV4IE9GaixWqYMB2hOy
+         2zvKaEDzVunsnL9lz2/5ZLP2otiiwePv+BwjP1+txAY9RzGc80diIVCJYeA3N5BV6gHd
+         SN9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UrvBWaRXV3DlLVU6RimSG2jNQYfccJ/kwX+dgBkIis4=;
-        b=kBUeyBly4bhL0HmeqRNT6XKoI8pt4SBVJXP1P4UiM2hxJNQx1SF/MGzhhHHDR07Mn9
-         fo1EebNbcij/KuXdr1uwWIL2FnIRKwzgkYlHQ3JPpNt5CA9PPQnb//xgfWaoFm5UH5XR
-         1l5WqaDKDeZw9YJ2l1lF+nq3eXRM84qM0OiRPTE5AIiaqzaZXuXfiMlYn9Xo/418X/qX
-         NhQUDJowlGWISW+ml5CJpeQZOtdd2d1w1mu9lDT9Ndr0Gm4gRaFBC4Z0nY+cQeaWUBip
-         2VOvwEC3QsRZHTOpuoKF2Ssv1Z5unDowv63oG9vXCVFlqP6sUICJ86mFL0CBVvPqSJk0
-         FLew==
-X-Gm-Message-State: AOAM532pc4g8Z0/QrgRmZ+f2WBXmRJ+wmNXijY2NpEQ+Z7+WpMKeQq4z
-        PjSvugd4P9M2wOvOQHZVwtoiDSAvoQKrUwLDMf5YrcCf0T9glum1mBCCc9kfOymqyDu0tip/dlM
-        C1KoQL059KT6eV57drMds
-X-Received: by 2002:a05:620a:258b:b0:680:f66e:3381 with SMTP id x11-20020a05620a258b00b00680f66e3381mr9472894qko.291.1650377192266;
-        Tue, 19 Apr 2022 07:06:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyB9cTVt0zydUHqWyNffYIDfCm9PGrZ/QTxmXsfj7ORbXn7UsWYrkuGD73ZFStBSxvCCJ7yOg==
-X-Received: by 2002:a05:620a:258b:b0:680:f66e:3381 with SMTP id x11-20020a05620a258b00b00680f66e3381mr9472870qko.291.1650377192017;
-        Tue, 19 Apr 2022 07:06:32 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id 2-20020a05620a06c200b0069ea498aec7sm59151qky.16.2022.04.19.07.06.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 07:06:31 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] USB2NET : SR9800 : change SR9800_BULKIN_SIZE from global to static
-Date:   Tue, 19 Apr 2022 10:06:25 -0400
-Message-Id: <20220419140625.2886328-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qxyAAJCwk86YjxNZvzK22H+Q1D0EYzqfXkSlEcQ3oGI=;
+        b=ulwmOONJUtT69CgtOWwSRzJRpN2icFtYM4xIincyzM81/MUPjEAV9K58s72j7qNfxX
+         T8wM1tz07EgJW/eEs4ZXdAOuXwVYdBuJT2QxMRt+ntrI0zb3ezC2YoOdOy2S+dKIoR2s
+         CwUmsrCZd0G9AL7NAgnFI52stwp8twbVaBJJMKWsUbw6/CpiBZ5pbvf5r3Zh+YzL5QA8
+         tfJLSGogiv3qF0nog76azpj6qbNBc9nO1t3QA0Yx9t2T7qhwArl6LlE6qItSJUtd4pNa
+         0tJkwUax5vbukZkUSzWDfPaXxmsTGsFDSoIgp9+XyLRa+DEd8+pe8UaGyygCUfFWduoB
+         btdg==
+X-Gm-Message-State: AOAM530qz4hC5uXDUWZRZZPn0IN2wXeI8ncpO4mKH7Ro4waR3awq1WDE
+        ce7MCIpMl7MOBRYnyxVN9qx+xZ40A+AvJg1EvBQZLQ==
+X-Google-Smtp-Source: ABdhPJxIT9MKS48QeVlFyb2PryH3hNOoBA+EcM/qYaYW4YqWA7WkuSzrRWCJdkdrX1W/EdQ0V2GdotZdJALOaahglbM=
+X-Received: by 2002:a05:6512:2627:b0:44a:f55c:ded9 with SMTP id
+ bt39-20020a056512262700b0044af55cded9mr11491748lfb.373.1650377736569; Tue, 19
+ Apr 2022 07:15:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220419133723.1394715-1-arnd@kernel.org>
+In-Reply-To: <20220419133723.1394715-1-arnd@kernel.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 19 Apr 2022 16:15:00 +0200
+Message-ID: <CAPDyKFpNx9xt1xwO-EKAx_qYtfcM5RUC6=Kh9NZ5o+A=H5ut6A@mail.gmail.com>
+Subject: Re: [PATCH 00/41] OMAP1 full multiplatform conversion
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-omap@vger.kernel.org, tony@atomide.com, aaro.koskinen@iki.fi,
+        jmkrzyszt@gmail.com, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Paul Walmsley <paul@pwsan.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Mark Brown <broonie@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Smatch reports this issue
-sr9800.h:166:53: warning: symbol 'SR9800_BULKIN_SIZE' was not declared. Should it be static?
+On Tue, 19 Apr 2022 at 15:37, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> This is the full series for converting OMAP1 to multiplatform, rebased
+> from my 2019 attempt to do the same thing. The soc tree contains simpler
+> patches to do the same for iop32x, ixp4xx, ep93xx and s3c24xx, which
+> means we are getting closer to completing this for all ARMv5 platforms
+> (I have patches for PXA, which is the last one remaining).
+>
+> Janusz already tested the branch separately and did the missing work
+> for the common-clk conversion after my previous approach was broken.
+>
+> The fbdev, mmc and ASoC portion of Janusz' work already went into the
+> corresponding maintainer tree, but I include them here for reference.
+> Unless there are any objections, I would add the entire series to the
+> for-next branch of the soc tree, but only send the first 36 patches early
+> in the merge window. After everything else has made it in, I would rebase
+> the last two patches and send them separately, which may or may not make
+> it in the merge window.
 
-Global variables should not be defined in header files.
-This only works because sr9800.h in only included by sr9800.c
-Change the storage-class specifier to static.
-And since it does not change add type qualifier const.
+Sounds like a good plan to me. I usually send the MMC pull-request on
+Mondays, the first day of the merge window.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/usb/sr9800.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[...]
 
-diff --git a/drivers/net/usb/sr9800.h b/drivers/net/usb/sr9800.h
-index 18f670251275..952e6f7c0321 100644
---- a/drivers/net/usb/sr9800.h
-+++ b/drivers/net/usb/sr9800.h
-@@ -163,7 +163,7 @@
- #define SR9800_MAX_BULKIN_24K		6
- #define SR9800_MAX_BULKIN_32K		7
- 
--struct {unsigned short size, byte_cnt, threshold; } SR9800_BULKIN_SIZE[] = {
-+static const struct {unsigned short size, byte_cnt, threshold; } SR9800_BULKIN_SIZE[] = {
- 	/* 2k */
- 	{2048, 0x8000, 0x8001},
- 	/* 4k */
--- 
-2.27.0
-
+Kind regards
+Uffe
