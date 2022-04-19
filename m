@@ -2,102 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2CE5070EB
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 16:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C27DB507205
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 17:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353609AbiDSOrH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Apr 2022 10:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        id S1353966AbiDSPoZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 19 Apr 2022 11:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352966AbiDSOq4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 10:46:56 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9233AA41;
-        Tue, 19 Apr 2022 07:43:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650379434; x=1681915434;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=GwM+DgH8oZbX2+k4dVfjkTJ+j6PIjW/gXCWsMBhCD78=;
-  b=CSi6jZFAAqwe4eSgfcVFWhKFG/eiOQuovTKtaMn2kusSx5APg055CkM8
-   WjYBvDmfn6f0/1jzK1KqCsSlVNSuuGEUq1PDfKcvCxdxACcAQoP7t2yrV
-   qHNb3MA9zjaufoFbZtCz2KqTAi5S1iij6OTrxBC0rRj4f1wK3YrOWfWK5
-   Y+EppsUeEQVImqOibpeozRy7iSGNfLWxZLSCFv7TXSdwYaGroGU2k5Q6n
-   mHDbbKv1nQkr1RrbAjDMDS2tCsfe7iyEzzl7WmKmvl/tCdHiVzBbTBkWC
-   JiP0gKwwXqB7L/atPSEFVkmvzvA7fvxqsC0BtfsgyfX6IK8EONLlAiPml
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="243713020"
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="243713020"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 07:43:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="727090766"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga005.jf.intel.com with ESMTP; 19 Apr 2022 07:43:52 -0700
-To:     Surong Pang <surong.pang@gmail.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220412122524.26966-1-surong.pang@gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH V1 1/1] usb/host: Let usb phy shutdown later
-Message-ID: <610871b2-1707-dfba-868f-4ddecc4d554d@linux.intel.com>
-Date:   Tue, 19 Apr 2022 17:45:49 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        with ESMTP id S1354090AbiDSPmw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 11:42:52 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF1C11A26
+        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 08:40:07 -0700 (PDT)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id C7CEDE0011
+        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 15:40:02 +0000 (UTC)
+Message-ID: <cc3fbe613f52f958f2ebe77cad806c18625a8663.camel@hadess.net>
+Subject: Debugging problems with USB3 SATA dock
+From:   Bastien Nocera <hadess@hadess.net>
+To:     linux-usb@vger.kernel.org
+Date:   Tue, 19 Apr 2022 17:40:02 +0200
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
 MIME-Version: 1.0
-In-Reply-To: <20220412122524.26966-1-surong.pang@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12.4.2022 15.25, Surong Pang wrote:
-> From: Surong Pang <surong.pang@unisoc.com>
-> 
-> Let usb phy shutdown later in xhci_plat_remove function.
-> Some phy driver doesn't divide 3.0/2.0 very clear.
-> If calls usb_phy_shutdown earlier than usb_remove_hcd(hcd),
-> It will case 10s cmd timeout issue.
-> 
-> Call usb phy shutdown later has better compatibility.
-> 
-> Signed-off-by: Surong Pang <surong.pang@unisoc.com>
-> ---
->  drivers/usb/host/xhci-plat.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> index 649ffd861b44..dc73a81cbe9b 100644
-> --- a/drivers/usb/host/xhci-plat.c
-> +++ b/drivers/usb/host/xhci-plat.c
-> @@ -390,7 +390,6 @@ static int xhci_plat_remove(struct platform_device *dev)
->  
->  	usb_remove_hcd(shared_hcd);
->  	xhci->shared_hcd = NULL;
-> -	usb_phy_shutdown(hcd->usb_phy);
->  
->  	usb_remove_hcd(hcd);
->  	usb_put_hcd(shared_hcd);
-> @@ -398,6 +397,7 @@ static int xhci_plat_remove(struct platform_device *dev)
->  	clk_disable_unprepare(clk);
->  	clk_disable_unprepare(reg_clk);
->  	usb_put_hcd(hcd);
-> +	usb_phy_shutdown(hcd->usb_phy);
+Hey,
 
-hcd might be freed already here.
-maybe call usb_phy_shutdown(hcd->usb_phy) before usb_put_hcd(hcd)
+I ran into some problems with a non-UAS USB3 SATA dock I've had for
+about a decade in that it simply refuses to work on my system's USB3
+ports, constantly connecting and disconnecting.
 
--Mathias
+I used some 5.17, and some current git trunk kernels. It refuses to
+work in the USB 3.1 Gen 1 and USB 3.1 Gen 2 front ports on my system,
+but works correctly when plugged in through a USB 2 port at the back of
+my desktop.
+
+Dock identifies as "04c5:201d".
+
+The same dock/HDD combo also works correctly when plugged in to a
+MacBook Air running macOS.
+
+What info would I need to get to debug this issue?
+
+Cheers
+
+dmesg when plugged in the USB2 port (working):
+Apr 19 17:26:18 classic kernel: usb 1-3: new high-speed USB device number 10 using xhci_hcd
+Apr 19 17:26:18 classic kernel: usb 1-3: New USB device found, idVendor=04c5, idProduct=201d, bcdDevice= 0.01
+Apr 19 17:26:18 classic kernel: usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+Apr 19 17:26:18 classic kernel: usb 1-3: Product: MB86C30A-REB
+Apr 19 17:26:18 classic kernel: usb 1-3: Manufacturer: FUJITSU
+Apr 19 17:26:18 classic kernel: usb 1-3: SerialNumber:         K62TT962G9AB
+Apr 19 17:26:18 classic kernel: usb-storage 1-3:1.0: USB Mass Storage device detected
+Apr 19 17:26:18 classic kernel: scsi host7: usb-storage 1-3:1.0
+Apr 19 17:26:18 classic mtp-probe[43260]: checking bus 1, device 10: "/sys/devices/pci0000:00/0000:00:14.0/usb1/1-3"
+Apr 19 17:26:18 classic mtp-probe[43260]: bus: 1, device: 10 was not an MTP device
+Apr 19 17:26:18 classic mtp-probe[43263]: checking bus 1, device 10: "/sys/devices/pci0000:00/0000:00:14.0/usb1/1-3"
+Apr 19 17:26:18 classic mtp-probe[43263]: bus: 1, device: 10 was not an MTP device
+Apr 19 17:26:19 classic kernel: scsi 7:0:0:0: Direct-Access     FUJITSU  MHZ2160BH G2     008B PQ: 0 ANSI: 5
+Apr 19 17:26:19 classic kernel: sd 7:0:0:0: Attached scsi generic sg1 type 0
+Apr 19 17:26:19 classic kernel: sd 7:0:0:0: [sda] 312581808 512-byte logical blocks: (160 GB/149 GiB)
+Apr 19 17:26:19 classic kernel: sd 7:0:0:0: [sda] Write Protect is off
+Apr 19 17:26:19 classic kernel: sd 7:0:0:0: [sda] Mode Sense: 17 00 00 08
+Apr 19 17:26:19 classic kernel: sd 7:0:0:0: [sda] No Caching mode page found
+Apr 19 17:26:19 classic kernel: sd 7:0:0:0: [sda] Assuming drive cache: write through
+Apr 19 17:26:19 classic kernel:  sda: sda1
+Apr 19 17:26:19 classic kernel: sd 7:0:0:0: [sda] Attached SCSI disk
+*filesystem gets mounted and stays available from here on out*
 
 
+dmesg when plugged in the USB3 port (not working):
+Apr 19 17:36:17 classic kernel: usb 2-4: new SuperSpeed USB device number 20 using xhci_hcd
+Apr 19 17:36:17 classic kernel: usb 2-4: New USB device found, idVendor=04c5, idProduct=201d, bcdDevice= 0.01
+Apr 19 17:36:17 classic kernel: usb 2-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+Apr 19 17:36:17 classic kernel: usb 2-4: Product: MB86C30A-REB
+Apr 19 17:36:17 classic kernel: usb 2-4: Manufacturer: FUJITSU
+Apr 19 17:36:17 classic kernel: usb 2-4: SerialNumber:         K62TT962G9AB
+Apr 19 17:36:17 classic kernel: usb-storage 2-4:1.0: USB Mass Storage device detected
+Apr 19 17:36:17 classic kernel: scsi host7: usb-storage 2-4:1.0
+Apr 19 17:36:17 classic mtp-probe[44111]: checking bus 2, device 20: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-4"
+Apr 19 17:36:17 classic mtp-probe[44111]: bus: 2, device: 20 was not an MTP device
+Apr 19 17:36:17 classic mtp-probe[44114]: checking bus 2, device 20: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-4"
+Apr 19 17:36:17 classic mtp-probe[44114]: bus: 2, device: 20 was not an MTP device
+Apr 19 17:36:18 classic kernel: scsi 7:0:0:0: Direct-Access     FUJITSU  MHZ2160BH G2     008B PQ: 0 ANSI: 5
+Apr 19 17:36:18 classic kernel: sd 7:0:0:0: Attached scsi generic sg1 type 0
+Apr 19 17:36:18 classic kernel: sd 7:0:0:0: [sda] 312581808 512-byte logical blocks: (160 GB/149 GiB)
+Apr 19 17:36:18 classic kernel: sd 7:0:0:0: [sda] Write Protect is off
+Apr 19 17:36:18 classic kernel: sd 7:0:0:0: [sda] Mode Sense: 17 00 00 08
+Apr 19 17:36:18 classic kernel: sd 7:0:0:0: [sda] No Caching mode page found
+Apr 19 17:36:18 classic kernel: sd 7:0:0:0: [sda] Assuming drive cache: write through
+Apr 19 17:36:19 classic kernel: usb 2-4: USB disconnect, device number 20
+Apr 19 17:36:19 classic kernel: xhci_hcd 0000:00:14.0: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state.
+Apr 19 17:36:19 classic kernel: I/O error, dev sda, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
+Apr 19 17:36:19 classic kernel: Buffer I/O error on dev sda, logical block 0, async page read
+Apr 19 17:36:19 classic kernel: I/O error, dev sda, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
+Apr 19 17:36:19 classic kernel: Buffer I/O error on dev sda, logical block 0, async page read
+Apr 19 17:36:19 classic kernel: I/O error, dev sda, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
+Apr 19 17:36:19 classic kernel: Buffer I/O error on dev sda, logical block 0, async page read
+Apr 19 17:36:19 classic kernel: ldm_validate_partition_table(): Disk read failed.
+Apr 19 17:36:19 classic kernel: I/O error, dev sda, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
+Apr 19 17:36:19 classic kernel: Buffer I/O error on dev sda, logical block 0, async page read
+Apr 19 17:36:19 classic kernel: I/O error, dev sda, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
+Apr 19 17:36:19 classic kernel: Buffer I/O error on dev sda, logical block 0, async page read
+Apr 19 17:36:19 classic kernel: I/O error, dev sda, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
+Apr 19 17:36:19 classic kernel: Buffer I/O error on dev sda, logical block 0, async page read
+Apr 19 17:36:19 classic kernel: I/O error, dev sda, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
+Apr 19 17:36:19 classic kernel: Buffer I/O error on dev sda, logical block 0, async page read
+Apr 19 17:36:19 classic kernel:  sda: unable to read partition table
+Apr 19 17:36:19 classic kernel: sd 7:0:0:0: [sda] Read Capacity(10) failed: Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK
+Apr 19 17:36:19 classic kernel: sd 7:0:0:0: [sda] Sense not available.
+Apr 19 17:36:19 classic kernel: sd 7:0:0:0: [sda] 0 512-byte logical blocks: (0 B/0 B)
+Apr 19 17:36:19 classic kernel: sda: detected capacity change from 312581808 to 0
+Apr 19 17:36:19 classic kernel: sd 7:0:0:0: [sda] Attached SCSI disk
+Apr 19 17:36:19 classic systemd-udevd[44116]: sda: /usr/lib/udev/rules.d/60-block-scheduler.rules:6 Failed to write ATTR{/sys/devices/pci0000:00/0000:00:14.0/usb2/2-4/2-4:1.0/host7/target7:0:0/7:0:0:0/block/sda/queue/scheduler}, ignoring: No such file or directory
+*device reconnects as at the start of this log, then disconnects, etc.*
