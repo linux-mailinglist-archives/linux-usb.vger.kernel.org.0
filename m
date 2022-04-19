@@ -2,70 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B287505F17
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Apr 2022 23:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BEB1506326
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 06:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiDRVEZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Apr 2022 17:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
+        id S1348198AbiDSEU3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Apr 2022 00:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347866AbiDRVER (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Apr 2022 17:04:17 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD672A258
-        for <linux-usb@vger.kernel.org>; Mon, 18 Apr 2022 14:01:36 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d15so13303192pll.10
-        for <linux-usb@vger.kernel.org>; Mon, 18 Apr 2022 14:01:36 -0700 (PDT)
+        with ESMTP id S1347491AbiDSEU2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 00:20:28 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9E62BB20
+        for <linux-usb@vger.kernel.org>; Mon, 18 Apr 2022 21:17:46 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id k14so22691208pga.0
+        for <linux-usb@vger.kernel.org>; Mon, 18 Apr 2022 21:17:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=k9zAsbJbbMkbkhGPC3AiZK56sfvnFwgtRHAzZ3j6nuo=;
-        b=LXaDrlWX1IzYqRN2I3vgl3tGCggTtV1OtXzNrURe7q91ArQBRtZK39bEfj1eR2FSJN
-         U5QWDaSAL43GTHUwnJPVIXuSz4jZGctINjNXSlnl+HXZci4ELdfcUBNccDAhW0SFPVb7
-         XnaFLHO3P7c55YnsXK9dBmYtmM5mCnDTn5IuQ=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ua3DWHoWYRZ0Hj18kv0a4L5TFGQ8YVkye6cMbl2VF6s=;
+        b=YyIlytPr7dhGhZh1n4740x8jTXToacvwiuTjRhl7OryQkWqeaG4t9xBbEXMJhWhGiC
+         m1Cq5gcWdtSctAcUnt83MwRhiXBJ+a94dBQ6qGS4tuqqY9RyN8+RbAn8Tl+U55POKAuB
+         D9wVkDFJdg8rIbtS5hisU04sNYtpwd+4rgebs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=k9zAsbJbbMkbkhGPC3AiZK56sfvnFwgtRHAzZ3j6nuo=;
-        b=kObwBIBEKPIp3OL9hIsv52olD0fsmd1MNAvOrifSKJw1Pf7nJn2y4QLeCyNSInTYTp
-         qxOQVDITX1VqWmQ5GOedv6rrABbTXAoU6QSK0zcUcvplx3NdRqFLIDm/sHXGF8zDpfuO
-         VIlby1or+f5kRXnUEanIRRGamF/c+O6A2c5RLvb6OPvBAc/9tYBDvvQPFAS0EIjWEGWK
-         ZQBK5KSEyjyewQUA/78BLQuFePgldXdKF1MusWS17O/1lopOWP5/BhW76yJ0GEILK9Y6
-         4WBs29NmkRUf+R2rO0KJ3eOyLxMxecaG57+cPxKHJFPOSVOZWHJI/5PMkshq3Wr0MCKD
-         gYEQ==
-X-Gm-Message-State: AOAM533QaL7/psXnnm+sjXuKhE8GE8muslJTfh26zF+sNIxk1hfs5OK/
-        I2w+6qY4fVrgE+IKhXotonZzTg==
-X-Google-Smtp-Source: ABdhPJxDQoIjPsWukM/9io/GhkgaoR5AO2cMZ4/8BJxG9Tm1JsIno+GplwiXnrxrFareEk5G+VGfQA==
-X-Received: by 2002:a17:902:e3c1:b0:158:faf5:a0be with SMTP id r1-20020a170902e3c100b00158faf5a0bemr6899956ple.102.1650315696029;
-        Mon, 18 Apr 2022 14:01:36 -0700 (PDT)
-Received: from evgreen-glaptop.lan ([98.47.98.87])
-        by smtp.gmail.com with ESMTPSA id y15-20020a17090a1f4f00b001c7ecaf9e13sm14047973pjy.35.2022.04.18.14.01.34
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ua3DWHoWYRZ0Hj18kv0a4L5TFGQ8YVkye6cMbl2VF6s=;
+        b=gT8FjAUyPD7Nl+WZ1t5yRNPiFV602PpKfAhFVPLGtSYGEf/U9ATkyc+FN252TS5i4N
+         pn5VPluH1YEgQ5BCRqshHwiPmgUSPl2DbnuWhI3W1pdooZDBFqegDgTpMW73jXHrZiL+
+         gy1bMfMk1tRwoS3pk4UXkeH7IiV9p8/uDQ/L3lPOATes7nKI+Fqpr2FPqrh5RZDwspJc
+         BeWZk794KOUhpc5NrbX4cIB5Igh63TS9Bb8qsx/XDIu04AFmVrO+ZAxZKICPF3EYLmtb
+         YnJlaSB19oTHIEDJ8Dt6eNuTyqq0wRtJZyWFfpHu+D5PCR/5eUydx49rD9+RJ0BMocBH
+         Xfmw==
+X-Gm-Message-State: AOAM531BAJ5Gy/L7iUeQdkc3ptrTPsE0PSGcu5zxR7aLQGGPlQ2mpoWC
+        B+7VwNimCc2ytQeC3SkpBwL+0A==
+X-Google-Smtp-Source: ABdhPJwQw3NsHIw/XF+SqI6c8xAkwRGZeUj6+GKduWwmPu+iYojpSIIWD9kahjFqaEKb/F+KzBSWsw==
+X-Received: by 2002:a63:fd53:0:b0:386:66d:b40c with SMTP id m19-20020a63fd53000000b00386066db40cmr12741689pgj.266.1650341866296;
+        Mon, 18 Apr 2022 21:17:46 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k5-20020a17090ac50500b001cd5ffcca96sm16726552pjt.27.2022.04.18.21.17.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 14:01:35 -0700 (PDT)
-From:   Evan Green <evgreen@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rajat Jain <rajatja@chromium.org>,
-        Evan Green <evgreen@chromium.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Youngjin Jang <yj84.jang@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v2 2/2] USB: hcd-pci: Fully suspend across freeze/thaw cycle
-Date:   Mon, 18 Apr 2022 14:00:46 -0700
-Message-Id: <20220418135819.v2.2.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220418210046.2060937-1-evgreen@chromium.org>
-References: <20220418210046.2060937-1-evgreen@chromium.org>
+        Mon, 18 Apr 2022 21:17:45 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        kernel test robot <lkp@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] USB: serial: Fix heap overflow in WHITEHEAT_GET_DTR_RTS
+Date:   Mon, 18 Apr 2022 21:17:42 -0700
+Message-Id: <20220419041742.4117026-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2631; h=from:subject; bh=gIgxtgBXPkDpXaGP7aAQI8PBhl9DxARQALU32sCb0HQ=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiXjfmXFgU+SMJsQUdOjA7WslYjSoG7qjHLuLjYkEv G8abkvKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYl435gAKCRCJcvTf3G3AJp63D/ 4u5P63EDXyGqn9YU26NnZ4oNbGN5YfchlZolAZ5r7qKja5KmvCpyan3HLHJQzoovP5H6CWwbwM4QTY XjQ/LVQaTjZRVaCncCJssE5JSCjhPD90lGAE2pmRQOSfFmcE7v9ehLPv19DYz8Ie1aCTB2DNzkhjlB QmThEiUSrtoskck4SemCz6ln0JlndvsjvGiP7VKxkfb2HWvSo5ay0G1PH90uIcsQcKMRjM2b/Iurk5 4UTUTTzZ32raGPjjCsk5FM9t9av+wz0+NgIX3UGlRKDCy0dusVFy+S9sMziYi7mcBrtpCYK5rD/tuz NeKbQLIcojtNN0dCK7KqqR3HNovH2IflWaQHcwkMCsU32I77BFPLuVUX/jIKdCovAxxYBZZGU2XSyq FEqxXjkXhrAOmTzwuSbBrACNI+l/5VvYdPtVEVqxByueJB0CGu9wPwMR7LGbcnrAVFNQG1oxUcUKCr RQF9gxiXS4zAAatKoYWtc3GZbs1bVuj4GmAEioGA+suoeWzzqFtxjqi8utTGTyME41Qap3JHar7H60 gCxE+RDQqwhIpf5GJmbKhtjIhv/rH0zv+Uq/sjQa9ALXM2I0nc2CRCTNpu54amWZOksJmqEqLiPdC5 cqrFa981hQyEKx3L91aZUiGHEmA5huIG90V2xEdEG0CteJipVqv3KQ9tJSgw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,46 +69,58 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The documentation for the freeze() method says that it "should quiesce
-the device so that it doesn't generate IRQs or DMA". The unspoken
-consequence of not doing this is that MSIs aimed at non-boot CPUs may
-get fully lost if they're sent during the period where the target CPU is
-offline.
+This looks like it's harmless, as both the source and the destinations are
+currently the same allocation size (4 bytes) and don't use their padding,
+but if anything were to ever be added after the "mcr" member in "struct
+whiteheat_private", it would be overwritten. The structs both have a
+single u8 "mcr" member, but are 4 bytes in padded size. The memcpy()
+destination was explicitly targeting the u8 member (size 1) with the
+length of the whole structure (size 4), triggering the memcpy buffer
+overflow warning:
 
-The current callbacks for USB HCD do not fully quiesce interrupts,
-specifically on XHCI. Change to use the full suspend/resume flow for
-freeze/thaw to ensure interrupts are fully quiesced. This fixes issues
-where USB devices fail to thaw during hibernation because XHCI misses
-its interrupt and cannot recover.
+In file included from include/linux/string.h:253,
+                 from include/linux/bitmap.h:11,
+                 from include/linux/cpumask.h:12,
+                 from include/linux/smp.h:13,
+                 from include/linux/lockdep.h:14,
+                 from include/linux/spinlock.h:62,
+                 from include/linux/mmzone.h:8,
+                 from include/linux/gfp.h:6,
+                 from include/linux/slab.h:15,
+                 from drivers/usb/serial/whiteheat.c:17:
+In function 'fortify_memcpy_chk',
+    inlined from 'firm_send_command' at drivers/usb/serial/whiteheat.c:587:4:
+include/linux/fortify-string.h:328:25: warning: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+  328 |                         __write_overflow_field(p_size_field, size);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Signed-off-by: Evan Green <evgreen@chromium.org>
+Expand the memcpy() to the entire structure, though perhaps the correct
+solution is to mark all the USB command structures as "__packed".
 
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202204142318.vDqjjSFn-lkp@intel.com
+Cc: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
+ drivers/usb/serial/whiteheat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes in v2:
- - Added the patch modifying the remote wakeup state
- - Removed the change to freeze_noirq/thaw_noirq
-
- drivers/usb/core/hcd-pci.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-index 8176bc81a635d6..ae5e6d572376be 100644
---- a/drivers/usb/core/hcd-pci.c
-+++ b/drivers/usb/core/hcd-pci.c
-@@ -616,10 +616,10 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
- 	.suspend_noirq	= hcd_pci_suspend_noirq,
- 	.resume_noirq	= hcd_pci_resume_noirq,
- 	.resume		= hcd_pci_resume,
--	.freeze		= check_root_hub_suspended,
-+	.freeze		= hcd_pci_suspend,
- 	.freeze_noirq	= check_root_hub_suspended,
- 	.thaw_noirq	= NULL,
--	.thaw		= NULL,
-+	.thaw		= hcd_pci_resume,
- 	.poweroff	= hcd_pci_suspend,
- 	.poweroff_noirq	= hcd_pci_suspend_noirq,
- 	.restore_noirq	= hcd_pci_resume_noirq,
+diff --git a/drivers/usb/serial/whiteheat.c b/drivers/usb/serial/whiteheat.c
+index da65d14c9ed5..6e00498843fb 100644
+--- a/drivers/usb/serial/whiteheat.c
++++ b/drivers/usb/serial/whiteheat.c
+@@ -584,7 +584,7 @@ static int firm_send_command(struct usb_serial_port *port, __u8 command,
+ 		switch (command) {
+ 		case WHITEHEAT_GET_DTR_RTS:
+ 			info = usb_get_serial_port_data(port);
+-			memcpy(&info->mcr, command_info->result_buffer,
++			memcpy(info, command_info->result_buffer,
+ 					sizeof(struct whiteheat_dr_info));
+ 				break;
+ 		}
 -- 
-2.31.0
+2.32.0
 
