@@ -2,72 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3F25078DA
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 20:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22735079A6
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 21:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353211AbiDSS3M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Apr 2022 14:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
+        id S1348017AbiDSTDX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Apr 2022 15:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357507AbiDSS2O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 14:28:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F40A3DA60
-        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 11:21:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650392508;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=lWTHKMQjdn7m9FQKkTKQCYJuIOK57zO3rzKobW88z1Q=;
-        b=WXdVBCkS6JzGNteX2DBURbPEWqGtOQNFQdMfTbZo7XdvGGsmUC3846F2DIV8HvKn73oN6i
-        ScxfM1Jii4U+f6qjltSfDLv65zCCFrNS8V3jbs9siSkkLno4SvmOm/fREbyXFz7u9LQSgp
-        6+boS+b6IxF7KmyMtwjTkBLD3mey+vU=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-153-DYTh3chUPvqD1ptD5TeVFg-1; Tue, 19 Apr 2022 14:21:47 -0400
-X-MC-Unique: DYTh3chUPvqD1ptD5TeVFg-1
-Received: by mail-qk1-f197.google.com with SMTP id u7-20020ae9d807000000b00680a8111ef6so13009441qkf.17
-        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 11:21:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lWTHKMQjdn7m9FQKkTKQCYJuIOK57zO3rzKobW88z1Q=;
-        b=UYln/HWbQvtc0F96fie78okKbO8bVnN/ld0BmABZHQBTAT0CFDRVSMOAYWzg4BTngC
-         CrdYhjdPMPv7QXiSjIv7g+l2BM+BSWeN/gRaREK99Swzm+LMusvsNvRetkEzFUt3R5ol
-         /TQmHGByso2+4cBpsYtlUrwGU69nlw/XS8n98EBqHW1fg5emDyXEt5Bc01TWJRUg5914
-         4WTq6wXjWfiTkUIvBjumOMLTDEd6kBfppzYoMi5e0SpzFlg24Jvx8izLahOVeOA8CnIS
-         rgKlhmWDS0Q1P4FDU96A8O/0mUuZ+TP2aBnOpDVT2tV6wJWncGXsDbiVmxh2EKDUUuI6
-         USUg==
-X-Gm-Message-State: AOAM533gLF7Z2BguJdhoVtnoiWPSPszxBVFNR6fbARnf0cZFbDcLdCJI
-        jkDTXkMCEflHhGKrfKXyq5fw7kcbxjimyLZSQL/yYhuPVR6zfBlniNtfBeFLZ93OzRHXtu9YDew
-        elyhG1Sg9bHn7g/tLsCik
-X-Received: by 2002:a05:622a:52:b0:2f3:3e3b:8d05 with SMTP id y18-20020a05622a005200b002f33e3b8d05mr1167021qtw.159.1650392506155;
-        Tue, 19 Apr 2022 11:21:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxCDAj7ir4s3pP6W0rSrBZtTkPI1yRL/hmNRGfB1yQs8OUlkx6UOtPpKbXFB/CBhC0UzH/F1g==
-X-Received: by 2002:a05:622a:52:b0:2f3:3e3b:8d05 with SMTP id y18-20020a05622a005200b002f33e3b8d05mr1167006qtw.159.1650392505973;
-        Tue, 19 Apr 2022 11:21:45 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id y13-20020a05622a164d00b002f1ff52c518sm453121qtj.28.2022.04.19.11.21.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 11:21:45 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org, colin.king@intel.com,
-        stern@rowland.harvard.edu, jakobkoschel@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] usb: gadget: net2272: clean up comments
-Date:   Tue, 19 Apr 2022 14:21:42 -0400
-Message-Id: <20220419182142.1805918-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        with ESMTP id S1357479AbiDSTDP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 15:03:15 -0400
+Received: from cable.insite.cz (cable.insite.cz [84.242.75.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0EF3F314
+        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 12:00:29 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id E3421A1A3D401;
+        Tue, 19 Apr 2022 21:00:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1650394825; bh=ei80KLhS8JeXI2KkC74qhfKf32RChLstTSR7djluLLQ=;
+        h=Subject:From:To:References:Date:In-Reply-To:From;
+        b=PIhvRff7IS5hQ5QO1agZspI1pPcafOI6SbOje2htr4BXbksyUyvDcR+umMdOZ2TfX
+         ZMvLmNj3vI3G63q1QMCFIJPrO6yXWA4gm4gBa0j/mmCrpb7zmTPeWNVhVtkedphTXh
+         0e51YdcXlTjWbP9pQb2dA0IUCBljx1CIt3yrr9kE=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id FV0sb8zprIDO; Tue, 19 Apr 2022 21:00:20 +0200 (CEST)
+Received: from [192.168.105.156] (dustin.pilsfree.net [81.201.58.138])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 17D85A1A3D400;
+        Tue, 19 Apr 2022 21:00:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1650394820; bh=ei80KLhS8JeXI2KkC74qhfKf32RChLstTSR7djluLLQ=;
+        h=Subject:From:To:References:Date:In-Reply-To:From;
+        b=T6S4pXv/BMYEn+ykYmETdvSa4jTiYGrnOYoRZba/h1AMOjj+jgYakqlxluPszLSJY
+         43JfzGJLKE2CV6HYJoBdXVRgIRGOZO3Kkoo9k8ntqCU27h0/GAdY3M/RgsWsfHl3Vk
+         Q6XoLuWp3MEnkAGmnapqFt6hBB3SUJd0Z0Ze/+pA=
+Subject: Re: usb:dwc2: '-EPROBE_DEFER: supplier soc:power not ready' in RPi4
+ 5.18-rc2
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+References: <bcd1a2a7-c8cc-948a-a6dd-5fdf2b9bb79c@ivitera.com>
+Message-ID: <36ff21cb-c1ec-bbf5-6a43-9f21684a5084@ivitera.com>
+Date:   Tue, 19 Apr 2022 21:00:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+In-Reply-To: <bcd1a2a7-c8cc-948a-a6dd-5fdf2b9bb79c@ivitera.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,47 +61,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Spelling replacements
-definiton to definition
-acceptible to acceptable
-seperately to separately
+Dne 13. 04. 22 v 13:30 Pavel Hofman napsal(a):
+> Hi,
+> 
+> In 5.18 RC2 module dwc2 (gadget mode) quits when being probed on RPi4 
+> with message
+> 
+> -EPROBE_DEFER: supplier soc:power not ready
+> 
+> 5.17 works fine, with identical .config setup.
+> 
+> I am testing on RPi-patched repo 
+> https://github.com/raspberrypi/linux/tree/rpi-5.18.y. RPi devs say they 
+> have pushed all their platform-specific patches to their 5.18 tree 
+> already 
+> https://github.com/raspberrypi/linux/issues/4992#issuecomment-1097896392
+> 
+> Perhaps some newly-added DTS node missing, being required by the new 
+> dwc2 version?
+> 
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/usb/gadget/udc/net2272.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+The problem turned out to be missing config CONFIG_RASPBERRYPI_POWER=y 
+in some of the defconfig files pushed by RPi devs to their 5.18 tree 
+https://github.com/raspberrypi/linux/issues/4992#issuecomment-1100070149. 
+No mainline issue then, good.
 
-diff --git a/drivers/usb/gadget/udc/net2272.c b/drivers/usb/gadget/udc/net2272.c
-index 6a8884632273..c97cd4bc817c 100644
---- a/drivers/usb/gadget/udc/net2272.c
-+++ b/drivers/usb/gadget/udc/net2272.c
-@@ -71,7 +71,7 @@ static ushort dma_ep = 1;
- module_param(dma_ep, ushort, 0644);
- 
- /*
-- * dma_mode: net2272 dma mode setting (see LOCCTL1 definiton):
-+ * dma_mode: net2272 dma mode setting (see LOCCTL1 definition):
-  *	mode 0 == Slow DREQ mode
-  *	mode 1 == Fast DREQ mode
-  *	mode 2 == Burst mode
-@@ -97,7 +97,7 @@ module_param(fifo_mode, ushort, 0644);
- /*
-  * enable_suspend: When enabled, the driver will respond to
-  * USB suspend requests by powering down the NET2272.  Otherwise,
-- * USB suspend requests will be ignored.  This is acceptible for
-+ * USB suspend requests will be ignored.  This is acceptable for
-  * self-powered devices.  For bus powered devices set this to 1.
-  */
- static ushort enable_suspend = 0;
-@@ -288,7 +288,7 @@ static void net2272_ep_reset(struct net2272_ep *ep)
- 			  | (1 << LOCAL_OUT_ZLP)
- 			  | (1 << BUFFER_FLUSH));
- 
--	/* fifo size is handled seperately */
-+	/* fifo size is handled separately */
- }
- 
- static int net2272_disable(struct usb_ep *_ep)
--- 
-2.27.0
+Best regards,
 
+Pavel.
