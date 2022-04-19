@@ -2,82 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E231B5076CC
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 19:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927D95076DD
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 19:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356063AbiDSRv7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Apr 2022 13:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
+        id S1343876AbiDSR6d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Apr 2022 13:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356059AbiDSRv6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 13:51:58 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5D14711A18
-        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 10:49:15 -0700 (PDT)
-Received: (qmail 600832 invoked by uid 1000); 19 Apr 2022 13:49:14 -0400
-Date:   Tue, 19 Apr 2022 13:49:14 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Evan Green <evgreen@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rajat Jain <rajatja@chromium.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Razvan Heghedus <heghedus.razvan@gmail.com>,
-        Wei Ming Chen <jj251510319013@gmail.com>,
-        Youngjin Jang <yj84.jang@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] USB: Quiesce interrupts across pm freeze
-Message-ID: <Yl72GjATzVoJpSlA@rowland.harvard.edu>
-References: <20220418210046.2060937-1-evgreen@chromium.org>
- <9f2752b5-8717-8ea3-1462-69bcfe42bb0e@suse.com>
- <Yl7Iz/lGk3fITzMK@rowland.harvard.edu>
- <8321b2c6-5bdb-2853-6812-50cd4e4d1bc7@suse.com>
+        with ESMTP id S243323AbiDSR6c (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 13:58:32 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E80AE40;
+        Tue, 19 Apr 2022 10:55:49 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id e4so18959504oif.2;
+        Tue, 19 Apr 2022 10:55:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=G53IGdSl4eKD/pKBUNFtH8S3ZJw3xBhGFrzG2Kwc3lo=;
+        b=0tZlbuT/p3sJcbqRkmQHmMr5OqijfQXcII8oALu7NTFpt2dQKPqUY06QpcArfZWzqN
+         c4S2xXiNWr8i/iPceQVkLPI2y+QvmFeC9Fg137WhaccyIpMyIbJgKBR0fCuGcQCt/cZ9
+         vpdR0VJpdUZf8Dr1nIu7vxOHBH+PlNDHU3mWrFe7HZ1DdO/Edn2lU/CZmmwqMRWcBOj4
+         nkiz5TXrcdf7vj5FuyNkYm8MBsLH+xsqOgje0iESjz6iFv4a4R3+wRYQo/m/m6xxUTJ0
+         jU5+k95JkXN9vtQxUOaE8gRUDoTaTOQAEYpAmPdtf4GiWmCRMIqbxyI8STjxWI1I/z4T
+         OTDg==
+X-Gm-Message-State: AOAM530UVCJCT9tg04DC01S6csSc61XAAnLgoX54L1vjcFIPyUQm0/G+
+        zQOFaLnd1/BsVuKPtqJKpw==
+X-Google-Smtp-Source: ABdhPJxndRV5nmSseK/j2Lgy/q7El5d7cQm60BIp4GkP1mhx/Cvfniq4V1aBmaIujM+XiM8WMJ/UsA==
+X-Received: by 2002:a05:6808:bd1:b0:322:3523:f30c with SMTP id o17-20020a0568080bd100b003223523f30cmr7819510oik.234.1650390948421;
+        Tue, 19 Apr 2022 10:55:48 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m5-20020a056808024500b003222ff73171sm5274286oie.17.2022.04.19.10.55.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 10:55:47 -0700 (PDT)
+Received: (nullmailer pid 3052225 invoked by uid 1000);
+        Tue, 19 Apr 2022 17:55:46 -0000
+Date:   Tue, 19 Apr 2022 12:55:46 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>
+Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add documentation for AM62 USB
+ Wrapper module
+Message-ID: <Yl73orZuOaPG7KgV@robh.at.kernel.org>
+References: <20220414103211.16202-1-a-govindraju@ti.com>
+ <20220414103211.16202-2-a-govindraju@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8321b2c6-5bdb-2853-6812-50cd4e4d1bc7@suse.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220414103211.16202-2-a-govindraju@ti.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 05:51:38PM +0200, Oliver Neukum wrote:
+On Thu, 14 Apr 2022 16:02:08 +0530, Aswath Govindraju wrote:
+> Add bindings for the TI's AM62 wrapper module for the Synopsys USBSS-DRD
+> controller.
 > 
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> ---
 > 
-> On 19.04.22 16:35, Alan Stern wrote:
-> > On Tue, Apr 19, 2022 at 09:05:53AM +0200, Oliver Neukum wrote:
-> >
-> >
-> > We have a set of quirky devices that need HID_QUIRK_ALWAYS_POLL.
-> > They have the nasty firmware bug that, if you suspend them without
-> > remote wakeup, they will crash or reset themselves.
-> > I am afraid that has an obvious relevance to your cool patches.
-> > I am not completely sure how to deal with this. It seems to me that the
-> > quirk will need to be shifted from HID to core USB and thaw() needs to
-> > be translated into usb_device_reset() + reset_resume() for them,
-> > but I am not really sure about the optimal mechanism.
-> > We may not need to do anything.  This patch specifically addresses 
-> > hibernation, not system suspend or runtime suspend.  A device crashing 
-> > or resetting during hibernation is not at all unusual; we should be able 
-> > to handle such cases properly.
-> >
-> > The THAW part of suspend-to-hibernation is used only for writing the 
-> > memory image to permanent storage.  I doubt that a malfunctioning HID 
-> > device would interfere with this process.
-> >
-> True, if and only if all goes well. At the time thaw() has run writing
-> the image to disk can still fail. In that case the devices will still
-> be needed.
+> Changes since v3:
+> - As VBUS_VALID interrupt is not being used, removed the interrupts
+>   property from the bindings. As there is change in the properties
+>   I did not pick the reviewed-by tags from the earlier version of
+>   the series.
+> 
+>  .../devicetree/bindings/usb/ti,am62-usb.yaml  | 103 ++++++++++++++++++
+>  1 file changed, 103 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
+> 
 
-Consider adding a mechanism to usbcore which would allow an interface 
-driver to request that the next time its device is resumed, the core 
-should perform a reset-resume.  Would that help?
-
-Alan Stern
+Reviewed-by: Rob Herring <robh@kernel.org>
