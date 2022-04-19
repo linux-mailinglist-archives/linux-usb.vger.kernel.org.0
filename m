@@ -2,89 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927D95076DD
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 19:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3F25078DA
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 20:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343876AbiDSR6d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Apr 2022 13:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
+        id S1353211AbiDSS3M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Apr 2022 14:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243323AbiDSR6c (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 13:58:32 -0400
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E80AE40;
-        Tue, 19 Apr 2022 10:55:49 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id e4so18959504oif.2;
-        Tue, 19 Apr 2022 10:55:49 -0700 (PDT)
+        with ESMTP id S1357507AbiDSS2O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 14:28:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F40A3DA60
+        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 11:21:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650392508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lWTHKMQjdn7m9FQKkTKQCYJuIOK57zO3rzKobW88z1Q=;
+        b=WXdVBCkS6JzGNteX2DBURbPEWqGtOQNFQdMfTbZo7XdvGGsmUC3846F2DIV8HvKn73oN6i
+        ScxfM1Jii4U+f6qjltSfDLv65zCCFrNS8V3jbs9siSkkLno4SvmOm/fREbyXFz7u9LQSgp
+        6+boS+b6IxF7KmyMtwjTkBLD3mey+vU=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-153-DYTh3chUPvqD1ptD5TeVFg-1; Tue, 19 Apr 2022 14:21:47 -0400
+X-MC-Unique: DYTh3chUPvqD1ptD5TeVFg-1
+Received: by mail-qk1-f197.google.com with SMTP id u7-20020ae9d807000000b00680a8111ef6so13009441qkf.17
+        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 11:21:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=G53IGdSl4eKD/pKBUNFtH8S3ZJw3xBhGFrzG2Kwc3lo=;
-        b=0tZlbuT/p3sJcbqRkmQHmMr5OqijfQXcII8oALu7NTFpt2dQKPqUY06QpcArfZWzqN
-         c4S2xXiNWr8i/iPceQVkLPI2y+QvmFeC9Fg137WhaccyIpMyIbJgKBR0fCuGcQCt/cZ9
-         vpdR0VJpdUZf8Dr1nIu7vxOHBH+PlNDHU3mWrFe7HZ1DdO/Edn2lU/CZmmwqMRWcBOj4
-         nkiz5TXrcdf7vj5FuyNkYm8MBsLH+xsqOgje0iESjz6iFv4a4R3+wRYQo/m/m6xxUTJ0
-         jU5+k95JkXN9vtQxUOaE8gRUDoTaTOQAEYpAmPdtf4GiWmCRMIqbxyI8STjxWI1I/z4T
-         OTDg==
-X-Gm-Message-State: AOAM530UVCJCT9tg04DC01S6csSc61XAAnLgoX54L1vjcFIPyUQm0/G+
-        zQOFaLnd1/BsVuKPtqJKpw==
-X-Google-Smtp-Source: ABdhPJxndRV5nmSseK/j2Lgy/q7El5d7cQm60BIp4GkP1mhx/Cvfniq4V1aBmaIujM+XiM8WMJ/UsA==
-X-Received: by 2002:a05:6808:bd1:b0:322:3523:f30c with SMTP id o17-20020a0568080bd100b003223523f30cmr7819510oik.234.1650390948421;
-        Tue, 19 Apr 2022 10:55:48 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m5-20020a056808024500b003222ff73171sm5274286oie.17.2022.04.19.10.55.47
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lWTHKMQjdn7m9FQKkTKQCYJuIOK57zO3rzKobW88z1Q=;
+        b=UYln/HWbQvtc0F96fie78okKbO8bVnN/ld0BmABZHQBTAT0CFDRVSMOAYWzg4BTngC
+         CrdYhjdPMPv7QXiSjIv7g+l2BM+BSWeN/gRaREK99Swzm+LMusvsNvRetkEzFUt3R5ol
+         /TQmHGByso2+4cBpsYtlUrwGU69nlw/XS8n98EBqHW1fg5emDyXEt5Bc01TWJRUg5914
+         4WTq6wXjWfiTkUIvBjumOMLTDEd6kBfppzYoMi5e0SpzFlg24Jvx8izLahOVeOA8CnIS
+         rgKlhmWDS0Q1P4FDU96A8O/0mUuZ+TP2aBnOpDVT2tV6wJWncGXsDbiVmxh2EKDUUuI6
+         USUg==
+X-Gm-Message-State: AOAM533gLF7Z2BguJdhoVtnoiWPSPszxBVFNR6fbARnf0cZFbDcLdCJI
+        jkDTXkMCEflHhGKrfKXyq5fw7kcbxjimyLZSQL/yYhuPVR6zfBlniNtfBeFLZ93OzRHXtu9YDew
+        elyhG1Sg9bHn7g/tLsCik
+X-Received: by 2002:a05:622a:52:b0:2f3:3e3b:8d05 with SMTP id y18-20020a05622a005200b002f33e3b8d05mr1167021qtw.159.1650392506155;
+        Tue, 19 Apr 2022 11:21:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxCDAj7ir4s3pP6W0rSrBZtTkPI1yRL/hmNRGfB1yQs8OUlkx6UOtPpKbXFB/CBhC0UzH/F1g==
+X-Received: by 2002:a05:622a:52:b0:2f3:3e3b:8d05 with SMTP id y18-20020a05622a005200b002f33e3b8d05mr1167006qtw.159.1650392505973;
+        Tue, 19 Apr 2022 11:21:45 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id y13-20020a05622a164d00b002f1ff52c518sm453121qtj.28.2022.04.19.11.21.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 10:55:47 -0700 (PDT)
-Received: (nullmailer pid 3052225 invoked by uid 1000);
-        Tue, 19 Apr 2022 17:55:46 -0000
-Date:   Tue, 19 Apr 2022 12:55:46 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add documentation for AM62 USB
- Wrapper module
-Message-ID: <Yl73orZuOaPG7KgV@robh.at.kernel.org>
-References: <20220414103211.16202-1-a-govindraju@ti.com>
- <20220414103211.16202-2-a-govindraju@ti.com>
+        Tue, 19 Apr 2022 11:21:45 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org, colin.king@intel.com,
+        stern@rowland.harvard.edu, jakobkoschel@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] usb: gadget: net2272: clean up comments
+Date:   Tue, 19 Apr 2022 14:21:42 -0400
+Message-Id: <20220419182142.1805918-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414103211.16202-2-a-govindraju@ti.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 14 Apr 2022 16:02:08 +0530, Aswath Govindraju wrote:
-> Add bindings for the TI's AM62 wrapper module for the Synopsys USBSS-DRD
-> controller.
-> 
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> ---
-> 
-> Changes since v3:
-> - As VBUS_VALID interrupt is not being used, removed the interrupts
->   property from the bindings. As there is change in the properties
->   I did not pick the reviewed-by tags from the earlier version of
->   the series.
-> 
->  .../devicetree/bindings/usb/ti,am62-usb.yaml  | 103 ++++++++++++++++++
->  1 file changed, 103 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
-> 
+Spelling replacements
+definiton to definition
+acceptible to acceptable
+seperately to separately
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/usb/gadget/udc/net2272.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/net2272.c b/drivers/usb/gadget/udc/net2272.c
+index 6a8884632273..c97cd4bc817c 100644
+--- a/drivers/usb/gadget/udc/net2272.c
++++ b/drivers/usb/gadget/udc/net2272.c
+@@ -71,7 +71,7 @@ static ushort dma_ep = 1;
+ module_param(dma_ep, ushort, 0644);
+ 
+ /*
+- * dma_mode: net2272 dma mode setting (see LOCCTL1 definiton):
++ * dma_mode: net2272 dma mode setting (see LOCCTL1 definition):
+  *	mode 0 == Slow DREQ mode
+  *	mode 1 == Fast DREQ mode
+  *	mode 2 == Burst mode
+@@ -97,7 +97,7 @@ module_param(fifo_mode, ushort, 0644);
+ /*
+  * enable_suspend: When enabled, the driver will respond to
+  * USB suspend requests by powering down the NET2272.  Otherwise,
+- * USB suspend requests will be ignored.  This is acceptible for
++ * USB suspend requests will be ignored.  This is acceptable for
+  * self-powered devices.  For bus powered devices set this to 1.
+  */
+ static ushort enable_suspend = 0;
+@@ -288,7 +288,7 @@ static void net2272_ep_reset(struct net2272_ep *ep)
+ 			  | (1 << LOCAL_OUT_ZLP)
+ 			  | (1 << BUFFER_FLUSH));
+ 
+-	/* fifo size is handled seperately */
++	/* fifo size is handled separately */
+ }
+ 
+ static int net2272_disable(struct usb_ep *_ep)
+-- 
+2.27.0
+
