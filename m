@@ -2,38 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2AD05070D1
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 16:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 717415070EE
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 16:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351170AbiDSOoG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Apr 2022 10:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
+        id S1352460AbiDSOqb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Apr 2022 10:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351592AbiDSOoF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 10:44:05 -0400
+        with ESMTP id S1352144AbiDSOqZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 10:46:25 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3D36A23175
-        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 07:41:22 -0700 (PDT)
-Received: (qmail 594199 invoked by uid 1000); 19 Apr 2022 10:41:21 -0400
-Date:   Tue, 19 Apr 2022 10:41:21 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id D519B3B2A6
+        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 07:43:18 -0700 (PDT)
+Received: (qmail 594300 invoked by uid 1000); 19 Apr 2022 10:43:02 -0400
+Date:   Tue, 19 Apr 2022 10:43:02 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Evan Green <evgreen@chromium.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Mathias Nyman <mathias.nyman@intel.com>,
         Rajat Jain <rajatja@chromium.org>,
-        Razvan Heghedus <heghedus.razvan@gmail.com>,
-        Wei Ming Chen <jj251510319013@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Youngjin Jang <yj84.jang@samsung.com>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] USB: core: Disable remote wakeup for
- freeze/quiesce
-Message-ID: <Yl7KEX++hJac8T6I@rowland.harvard.edu>
+Subject: Re: [PATCH v2 2/2] USB: hcd-pci: Fully suspend across freeze/thaw
+ cycle
+Message-ID: <Yl7KdjrrUrqMkzq8@rowland.harvard.edu>
 References: <20220418210046.2060937-1-evgreen@chromium.org>
- <20220418135819.v2.1.I2c636c4decc358f5e6c27b810748904cc69beada@changeid>
+ <20220418135819.v2.2.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220418135819.v2.1.I2c636c4decc358f5e6c27b810748904cc69beada@changeid>
+In-Reply-To: <20220418135819.v2.2.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
@@ -43,75 +44,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 02:00:45PM -0700, Evan Green wrote:
-> The PM_EVENT_FREEZE and PM_EVENT_QUIESCE messages should cause the
-> device to stop generating interrupts. USB core was previously allowing
-> devices that were already runtime suspended to keep remote wakeup
-> enabled if they had gone down that way. This violates the contract with
-> pm, and can potentially cause MSI interrupts to be lost.
+On Mon, Apr 18, 2022 at 02:00:46PM -0700, Evan Green wrote:
+> The documentation for the freeze() method says that it "should quiesce
+> the device so that it doesn't generate IRQs or DMA". The unspoken
+> consequence of not doing this is that MSIs aimed at non-boot CPUs may
+> get fully lost if they're sent during the period where the target CPU is
+> offline.
 > 
-> Change that so that if a device is runtime suspended with remote wakeups
-> enabled, it will be resumed to ensure remote wakeup is always disabled
-> across a freeze.
+> The current callbacks for USB HCD do not fully quiesce interrupts,
+> specifically on XHCI. Change to use the full suspend/resume flow for
+> freeze/thaw to ensure interrupts are fully quiesced. This fixes issues
+> where USB devices fail to thaw during hibernation because XHCI misses
+> its interrupt and cannot recover.
 > 
 > Signed-off-by: Evan Green <evgreen@chromium.org>
+> 
 > ---
-> 
-> (no changes since v1)
-> 
->  drivers/usb/core/driver.c | 20 +++++++++-----------
->  1 file changed, 9 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> index 355ed33a21792b..93c8cf66adccec 100644
-> --- a/drivers/usb/core/driver.c
-> +++ b/drivers/usb/core/driver.c
-> @@ -1533,20 +1533,18 @@ static void choose_wakeup(struct usb_device *udev, pm_message_t msg)
->  {
->  	int	w;
->  
-> -	/* Remote wakeup is needed only when we actually go to sleep.
-> -	 * For things like FREEZE and QUIESCE, if the device is already
-> -	 * autosuspended then its current wakeup setting is okay.
-> +	/* For FREEZE/QUIESCE, disable remote wakeups so no interrupts get generated
-> +	 * by the device.
-
-You mean "by the host controller".  USB devices don't generate 
-interrupts; they generate wakeup requests (which can cause a host 
-controller to generate an interrupt).
-
->  	 */
->  	if (msg.event == PM_EVENT_FREEZE || msg.event == PM_EVENT_QUIESCE) {
-> -		if (udev->state != USB_STATE_SUSPENDED)
-> -			udev->do_remote_wakeup = 0;
-> -		return;
-> -	}
-> +		w = 0;
->  
-> -	/* Enable remote wakeup if it is allowed, even if no interface drivers
-> -	 * actually want it.
-> -	 */
-> -	w = device_may_wakeup(&udev->dev);
-> +	} else {
-> +		/* Enable remote wakeup if it is allowed, even if no interface drivers
-> +		 * actually want it.
-> +		 */
-> +		w = device_may_wakeup(&udev->dev);
-> +	}
->  
->  	/* If the device is autosuspended with the wrong wakeup setting,
->  	 * autoresume now so the setting can be changed.
-> -- 
-
-I would prefer it if you reformatted the comments to agree with the 
-current style:
-
-	/*
-	 * Blah blah blah
-	 */
-
-and to avoid line wrap beyond 80 columns.  Apart from that:
 
 Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Alan Stern
+> Changes in v2:
+>  - Added the patch modifying the remote wakeup state
+
+That wasn't a change to this patch.  No matter.
+
+>  - Removed the change to freeze_noirq/thaw_noirq
+> 
+>  drivers/usb/core/hcd-pci.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+> index 8176bc81a635d6..ae5e6d572376be 100644
+> --- a/drivers/usb/core/hcd-pci.c
+> +++ b/drivers/usb/core/hcd-pci.c
+> @@ -616,10 +616,10 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
+>  	.suspend_noirq	= hcd_pci_suspend_noirq,
+>  	.resume_noirq	= hcd_pci_resume_noirq,
+>  	.resume		= hcd_pci_resume,
+> -	.freeze		= check_root_hub_suspended,
+> +	.freeze		= hcd_pci_suspend,
+>  	.freeze_noirq	= check_root_hub_suspended,
+>  	.thaw_noirq	= NULL,
+> -	.thaw		= NULL,
+> +	.thaw		= hcd_pci_resume,
+>  	.poweroff	= hcd_pci_suspend,
+>  	.poweroff_noirq	= hcd_pci_suspend_noirq,
+>  	.restore_noirq	= hcd_pci_resume_noirq,
