@@ -2,44 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD654507B2C
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 22:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA7E507B28
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Apr 2022 22:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244546AbiDSUtZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Apr 2022 16:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S1346528AbiDSUth (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Apr 2022 16:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346528AbiDSUtW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 16:49:22 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A61D40E7F;
-        Tue, 19 Apr 2022 13:46:39 -0700 (PDT)
+        with ESMTP id S1357721AbiDSUtf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Apr 2022 16:49:35 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8E64131D
+        for <linux-usb@vger.kernel.org>; Tue, 19 Apr 2022 13:46:52 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (85-76-5-145-nat.elisa-mobile.fi [85.76.5.145])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6080525B;
-        Tue, 19 Apr 2022 22:46:36 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BAF3125B;
+        Tue, 19 Apr 2022 22:46:44 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1650401197;
-        bh=rwfL+M0TxWM76tUhVeJH7ficDjSMRpORDcGVV4xgDOM=;
+        s=mail; t=1650401210;
+        bh=BzxNdveBM9OgGYtx46hoxaGKB/I5Faglz7RKXvfCKUs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bl/4nH37/PNu+89JvZmpj4TNQWr2NUJd0MfOJEOBuo7dikyoWwPBpoKbS0zbu8ZWO
-         r0Fq9xjQsQExCXCFwDTK78Gsyw32IpCrOR4D6neDnY91bK1+kPF3OA9x2DShl1FVVv
-         s1WkbQU2uCnR8nuuwmrBzNgXzK1xtL0HGmkZN2b4=
-Date:   Tue, 19 Apr 2022 23:46:37 +0300
+        b=NEkdTGBDTI+Sa8dFEwPGsgnUDvg2Xz6sbo98gwNWC5FRptktaVAWmLqmFOQBLXZdl
+         wCGq2nsaowzlufRMWnH98vOkuXO3aPvn8f2ii+E0mx4urAUmYi8GtpT6dknq4+hZuK
+         BBOh00I63WCRogEo0haZpUzL8LGebWxmY1bXKaZk=
+Date:   Tue, 19 Apr 2022 23:46:44 +0300
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dan Vacura <w36195@motorola.com>
-Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bhupesh Sharma <bhupesh.sharma@st.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: gadget: uvc: Fix crash when encoding data for
- usb request
-Message-ID: <Yl8frWT5VYRdt5zA@pendragon.ideasonboard.com>
-References: <20220331184024.23918-1-w36195@motorola.com>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
+        paul.elder@ideasonboard.com, kernel@pengutronix.de,
+        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH 2/5] usb: gadget: uvc: calculate the number of request
+ depending on framesize
+Message-ID: <Yl8ftLtM4hOIVf/s@pendragon.ideasonboard.com>
+References: <20220402233914.3625405-1-m.grzeschik@pengutronix.de>
+ <20220402233914.3625405-3-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220331184024.23918-1-w36195@motorola.com>
+In-Reply-To: <20220402233914.3625405-3-m.grzeschik@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -49,97 +48,66 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dan,
+Hi Michael,
 
 Thank you for the patch.
 
-On Thu, Mar 31, 2022 at 01:40:23PM -0500, Dan Vacura wrote:
-> During the uvcg_video_pump() process, if an error occurs and
-> uvcg_queue_cancel() is called, the buffer queue will be cleared out, but
-> the current marker (queue->buf_used) of the active buffer (no longer
-> active) is not reset. On the next iteration of uvcg_video_pump() the
-> stale buf_used count will be used and the logic of min((unsigned
-> int)len, buf->bytesused - queue->buf_used) may incorrectly calculate a
-> nbytes size, causing an invalid memory access.
-> 
-> [80802.185460][  T315] configfs-gadget gadget: uvc: VS request completed
-> with status -18.
-> [80802.185519][  T315] configfs-gadget gadget: uvc: VS request completed
-> with status -18.
-> ...
-> uvcg_queue_cancel() is called and the queue is cleared out, but the
-> marker queue->buf_used is not reset.
-> ...
-> [80802.262328][ T8682] Unable to handle kernel paging request at virtual
-> address ffffffc03af9f000
-> ...
-> ...
-> [80802.263138][ T8682] Call trace:
-> [80802.263146][ T8682]  __memcpy+0x12c/0x180
-> [80802.263155][ T8682]  uvcg_video_pump+0xcc/0x1e0
-> [80802.263165][ T8682]  process_one_work+0x2cc/0x568
-> [80802.263173][ T8682]  worker_thread+0x28c/0x518
-> [80802.263181][ T8682]  kthread+0x160/0x170
-> [80802.263188][ T8682]  ret_from_fork+0x10/0x18
-> [80802.263198][ T8682] Code: a8c12829 a88130cb a8c130
-> 
-> Fixes: d692522577c0 ("usb: gadget/uvc: Port UVC webcam gadget to use videobuf2 framework")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Dan Vacura <w36195@motorola.com>
+On Sun, Apr 03, 2022 at 01:39:11AM +0200, Michael Grzeschik wrote:
+> The current limitation of possible number of requests being handled is
+> dependent on the gadget speed. It makes more sense to depend on the
+> typical frame size when calculating the number of requests. This patch
+> is changing this and is using the previous limits as boundaries for
+> reasonable minimum and maximum number of requests.
 
-This indeed fixes an issue, so I think we can merge the patch, but I
-also believe we need further improvements on top (of course if you would
-like to improve the implementation in a v4, I won't complain :-))
+What are typical values you get for the number of requests in your use
+cases with this change ? Could you mention them in the commit message ?
 
-As replied in v2 (sorry for the late reply), it seems that this error
-can occur under normal conditions. This means we shouldn't cancel the
-queue, at least when the error is intermitent (if all URBs fail that's
-another story).
-
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 > ---
-> Changes in v3:
-> - Cc stable
-> Changes in v2:
-> - Add Fixes tag
-> 
->  drivers/usb/gadget/function/uvc_queue.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  drivers/usb/gadget/function/uvc_queue.c | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
 > 
 > diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-> index d852ac9e47e7..2cda982f3765 100644
+> index cfa0ac4adb04d5..2a091cf07981e1 100644
 > --- a/drivers/usb/gadget/function/uvc_queue.c
 > +++ b/drivers/usb/gadget/function/uvc_queue.c
-> @@ -264,6 +264,8 @@ void uvcg_queue_cancel(struct uvc_video_queue *queue, int disconnect)
->  		buf->state = UVC_BUF_STATE_ERROR;
->  		vb2_buffer_done(&buf->buf.vb2_buf, VB2_BUF_STATE_ERROR);
->  	}
-
-A blank line would be nice here, and I would also like a comment to
-state that further improvements are required:
-
-	/*
-	 * When the queue is cancelled due to an error (either when queuing a
-	 * USB request, or in the request completion handler), the we empty the
-	 * irqqueue but userspace may queue futher buffers. We need to reset
-	 * buf_used to 0 or uvcg_video_pump() will use an incorrect stale value.
-	 *
-	 * TODO: It seems that a -EXDEV error can occur in the request
-	 * completion handler under normal circumstances. Don't cancel the queue
-	 * in that case but recover gracefully (likely with rate-limiting, to
-	 * still cancel the queue if errors occur too often).
-	 */
-
-We likely need to differentiate between -EXDEV and other errors in
-uvc_video_complete(), as I'd like to be conservative and cancel the
-queue for unknown errors. We also need to improve the queue cancellation
-implementation so that userspace gets an error when queuing further
-buffers.
-
-> +	queue->buf_used = 0;
+> @@ -44,7 +44,8 @@ static int uvc_queue_setup(struct vb2_queue *vq,
+>  {
+>  	struct uvc_video_queue *queue = vb2_get_drv_priv(vq);
+>  	struct uvc_video *video = container_of(queue, struct uvc_video, queue);
+> -	struct usb_composite_dev *cdev = video->uvc->func.config->cdev;
+> +	unsigned int req_size;
+> +	unsigned int nreq;
+>  
+>  	if (*nbuffers > UVC_MAX_VIDEO_BUFFERS)
+>  		*nbuffers = UVC_MAX_VIDEO_BUFFERS;
+> @@ -53,10 +54,14 @@ static int uvc_queue_setup(struct vb2_queue *vq,
+>  
+>  	sizes[0] = video->imagesize;
+>  
+> -	if (cdev->gadget->speed < USB_SPEED_SUPER)
+> -		video->uvc_num_requests = 4;
+> -	else
+> -		video->uvc_num_requests = 64;
+> +	req_size = video->ep->maxpacket
+> +		 * max_t(unsigned int, video->ep->maxburst, 1)
+> +		 * (video->ep->mult);
 > +
->  	/* This must be protected by the irqlock spinlock to avoid race
->  	 * conditions between uvc_queue_buffer and the disconnection event that
->  	 * could result in an interruptible wait in uvc_dequeue_buffer. Do not
+> +	nreq = DIV_ROUND_UP(DIV_ROUND_UP(sizes[0], 2), req_size);
+
+Where does the division by 2 come from ?
+
+> +	nreq = min_t(unsigned int, nreq, 64);
+> +	nreq = max_t(unsigned int, nreq, 4);
+
+You can use clamp():
+
+	video->uvc_num_requests = clamp(nreq, 4U, 64U);
+
+> +	video->uvc_num_requests = nreq;
+>  
+>  	return 0;
+>  }
 
 -- 
 Regards,
