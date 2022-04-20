@@ -2,102 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC355089BD
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 15:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9220508A6D
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 16:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379198AbiDTNv3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Apr 2022 09:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
+        id S1379449AbiDTOQT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Apr 2022 10:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234412AbiDTNv0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 09:51:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A58543493;
-        Wed, 20 Apr 2022 06:48:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03ECBB81F18;
-        Wed, 20 Apr 2022 13:48:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3157C385B0;
-        Wed, 20 Apr 2022 13:48:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650462517;
-        bh=r5gIACVwFwXfu+L0SjHY63rmQTmlBYIcuCScaOsuAjk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=E8Em2MQWztm+C2EmlV1FQe3I0FTSV2DiJcyK2iihaFQo51NM0DFE/rYOIE+wyx1wp
-         /VWN0/71ZwssYkNVh129T8UpZm6AUkLIGuMiY6fzJStQ7ZZZzsLu+YfHMjswZ9W7YM
-         mjdK3DJxHlIkGZPSUsh/8dFkbBcT5Jm8E77pDoGNiEZG4/4EPstw+51gVak16za2ga
-         dhu7kZkcOynk9SMtnhYtXUgL6zQdymwzczZfSDpnrDpvJEhYxBXYfvKUUxyNISj4vp
-         /lSN3yrqnyEcDKHRIhkxeNkjouxpUUs1/5w5lM+l5Iw8Csip1eFb3F0IQ3ctyogPeM
-         5m+eazxPFDoqg==
-Received: by mail-wr1-f44.google.com with SMTP id p18so2362232wru.5;
-        Wed, 20 Apr 2022 06:48:37 -0700 (PDT)
-X-Gm-Message-State: AOAM5314VcoKSUO2df9/UV2WWtZ74zAVJ6/84WF1Vw3vWjbKXqaEVb8b
-        SEDqrsFliZOFpFCpdAgMviERW/E84s9t8n1stW8=
-X-Google-Smtp-Source: ABdhPJwSpIclw+ZwqVR57edT/aQRpFn5BaY64Phs17aAgIE6n54XF3PED3yv14Fv9AL2uDPz7qCh2GbTzsHglUZV1DA=
-X-Received: by 2002:a5d:6389:0:b0:207:a7d8:2b64 with SMTP id
- p9-20020a5d6389000000b00207a7d82b64mr15595597wru.12.1650462515957; Wed, 20
- Apr 2022 06:48:35 -0700 (PDT)
+        with ESMTP id S1379599AbiDTOP7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 10:15:59 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 580D546B0E
+        for <linux-usb@vger.kernel.org>; Wed, 20 Apr 2022 07:09:06 -0700 (PDT)
+Received: (qmail 631132 invoked by uid 1000); 20 Apr 2022 10:09:05 -0400
+Date:   Wed, 20 Apr 2022 10:09:05 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Evan Green <evgreen@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rajat Jain <rajatja@chromium.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Razvan Heghedus <heghedus.razvan@gmail.com>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        Youngjin Jang <yj84.jang@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] USB: Quiesce interrupts across pm freeze
+Message-ID: <YmAUAVzveDE0oiTt@rowland.harvard.edu>
+References: <20220418210046.2060937-1-evgreen@chromium.org>
+ <9f2752b5-8717-8ea3-1462-69bcfe42bb0e@suse.com>
+ <Yl7Iz/lGk3fITzMK@rowland.harvard.edu>
+ <8321b2c6-5bdb-2853-6812-50cd4e4d1bc7@suse.com>
+ <Yl72GjATzVoJpSlA@rowland.harvard.edu>
+ <95e1bd39-b159-f7a1-f51e-115dd0e60500@suse.com>
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-41-arnd@kernel.org>
- <20220420134305.fq7pc3fsz5fxkryj@mercury.elektranox.org>
-In-Reply-To: <20220420134305.fq7pc3fsz5fxkryj@mercury.elektranox.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 20 Apr 2022 15:48:19 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Mv-gUoc3hpqvCa1tzvEEwHN6wXDxmy8K5rN8sULQnMw@mail.gmail.com>
-Message-ID: <CAK8P3a2Mv-gUoc3hpqvCa1tzvEEwHN6wXDxmy8K5rN8sULQnMw@mail.gmail.com>
-Subject: Re: [PATCH 40/48] ARM: pxa: tosa: use gpio lookup for battery
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <95e1bd39-b159-f7a1-f51e-115dd0e60500@suse.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 3:43 PM Sebastian Reichel <sre@kernel.org> wrote:
-> > @@ -15,11 +15,16 @@
-> >  #include <linux/gpio.h>
->
-> This should be <linux/gpio/consumer.h> now.
->
-Fixed now, thanks!
+On Wed, Apr 20, 2022 at 10:47:27AM +0200, Oliver Neukum wrote:
+> 
+> 
+> On 19.04.22 19:49, Alan Stern wrote:
+> > On Tue, Apr 19, 2022 at 05:51:38PM +0200, Oliver Neukum wrote:
+> >>
+> >> On 19.04.22 16:35, Alan Stern wrote:
+> >>> On Tue, Apr 19, 2022 at 09:05:53AM +0200, Oliver Neukum wrote:
+> >>>
+> >>>
+> >>> The THAW part of suspend-to-hibernation is used only for writing the 
+> >>> memory image to permanent storage.  I doubt that a malfunctioning HID 
+> >>> device would interfere with this process.
+> >>>
+> >> True, if and only if all goes well. At the time thaw() has run writing
+> >> the image to disk can still fail. In that case the devices will still
+> >> be needed.
+> > Consider adding a mechanism to usbcore which would allow an interface 
+> > driver to request that the next time its device is resumed, the core 
+> > should perform a reset-resume.  Would that help?
+> >
+> >
+> 
+> Strictly speaking no. We already have that in form of the RESET_RESUME
+> quirk. The broken devices we are talking about here can do runtime PM
+> perfectly fine, if and only if remote wakeup is requested.
+> So we need that flag to translate only in freeze()/thaw() resulting in that
+> behavior, as opposed to every pair of suspend()/resume()
 
-     Arnd
+That was my point.  The HID driver can check at suspend time whether or 
+not remote wakeup will be enabled.  If yes, well and good, no changes 
+are needed.  If not, the driver can then request that the following 
+resume be a runtime-resume.
+
+Another possibility is, as you mentioned before, adding a USB quirk for 
+devices which require reset-resume whenever they are resumed with wakeup 
+disabled.
+
+Alan Stern
