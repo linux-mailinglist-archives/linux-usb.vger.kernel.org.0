@@ -2,110 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7C150883D
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 14:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FFAD508917
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 15:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378553AbiDTMgm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Apr 2022 08:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49058 "EHLO
+        id S1378910AbiDTNVr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Apr 2022 09:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345052AbiDTMgl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 08:36:41 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125A042498
-        for <linux-usb@vger.kernel.org>; Wed, 20 Apr 2022 05:33:55 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id ks6so3289059ejb.1
-        for <linux-usb@vger.kernel.org>; Wed, 20 Apr 2022 05:33:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YK1gwQHfzWNPMKl1EIpM7XtIAL3qDFBevpSSKsKoNRY=;
-        b=nPa8hfPZywMg937IwHbiNMiNe8EsqyiDAnCYtzJBpjQaHy1d4TpWnr2834Me5gYmy6
-         qTW2rv5tNUcbKvQgNCcpb7eEm7/s0Pg6OtLyEXP2aL8WySIbMfxMX/Cc9L+LqMsCMvYJ
-         bjgQaQ25ApPqwrTi0/ibvD/VIeeh6l3EQ5Jd1NTSscsl8uaVbtXR6ekbs9Lpnori+E50
-         2ah6ROt2CtGASMwpjB3xM1pNorO2ZOpzRd5sEsXlmPay6hjuSlTelSxM3gUyxMmJzU9e
-         6T29Qsgm2Q9D5xKR0YMR4TKrumrG7NXHLcHv3ufx+hwDy1gq66fKoJ7AtqK6OORx8kRO
-         Tpfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YK1gwQHfzWNPMKl1EIpM7XtIAL3qDFBevpSSKsKoNRY=;
-        b=qzlHALiovyQsErS8+23KF5nLcIDMoSj6TJd1FAjmOKzywlSMvuQLxozdTj4KiISMSH
-         oYQgGCNwuDFEKeQnqR2EfKeLlTX4Z/ojZvmWRjksVi7lX6BXEcwdesELyTc8fX3cbzQk
-         HaTF3nQG0ji0hj3StCPpmLPraBXSokPHonW0mWuhVvKFp+/OaFMbj3iWg5V42u0K1sOB
-         Kqyf1CmBYSpzKQgLKo646Pi0HdRpIkJ7+gJ9Io6WNnB4w9+7ja8Rh3qfqG9pRhKFpqJv
-         JdvV/b+5f7BJUieJubDG676gIpjBKDYAFjqNbVtha/KtAZkgpTEo3ygLs6+9xk2xBxvN
-         5juA==
-X-Gm-Message-State: AOAM530jN/hy7/QKDYiiO1OsYILLf4Cy106O+eM8NKkKn14UDDNNEnPK
-        J4wW+lKH577BQO9/okGdni0AmIxt0iR3yKVjMgv7zo1rjLxZYQ==
-X-Google-Smtp-Source: ABdhPJxQh4qATIg7fh2d/Rn6HYLS5+wfjP3gtV1tUSHmAmwfdypDh6a+tcEIkZGaV0XlelDf1q6MHbymQ5w2b/7dafg=
-X-Received: by 2002:a05:651c:1546:b0:24c:7e0c:38b1 with SMTP id
- y6-20020a05651c154600b0024c7e0c38b1mr13233370ljp.375.1650458022985; Wed, 20
- Apr 2022 05:33:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220419041742.4117026-1-keescook@chromium.org> <Yl+8K++wZUJCthMj@hovoldconsulting.com>
-In-Reply-To: <Yl+8K++wZUJCthMj@hovoldconsulting.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Wed, 20 Apr 2022 14:33:06 +0200
-Message-ID: <CAG48ez2Pikm5g2RfJxae=jz1C7KSCWc99sCa7fXFBKvDOPJubA@mail.gmail.com>
-Subject: Re: [PATCH] USB: serial: Fix heap overflow in WHITEHEAT_GET_DTR_RTS
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Johan Hovold <johan@kernel.org>, kernel test robot <lkp@intel.com>,
+        with ESMTP id S242970AbiDTNVq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 09:21:46 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4757F42A11;
+        Wed, 20 Apr 2022 06:19:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650460740; x=1681996740;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=E9RTNBXOoMcT8m9LfR3nKt3g7nqLHXacsFd0iJAtk8s=;
+  b=grYJ0Elp/nDOrtMJNahoNH5gOm4UvEE5UIRTpAm+hsuzH8o374d2QS7t
+   5RBVUlimRkf3t2IuTfZ2NB9DAEDmYelFFlWDKJicuRHl+BQPKtXjRGIQA
+   3WRaVoCBESt71M/MfGf1urQL3fIypaQAGeqTBI5+QF0DiqdksVPw2bNZA
+   IZ4NA0EcnfDxY0/6WhM8CgUSEyPR+UXbS20dCizRW9bWZNEMtAFDXgwUb
+   7z2QzTupUepR55uS/6h+tPLpZpZnF6MlZS666udkKN5cCjHTMI+x+miCB
+   Ivk6YQbvGUHIfpx/TABFBV2CwSKWhiCNCRJLO0x11qblui8XsNFxnqvqX
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="243954024"
+X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
+   d="scan'208";a="243954024"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 06:18:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
+   d="scan'208";a="727490441"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga005.jf.intel.com with ESMTP; 20 Apr 2022 06:18:55 -0700
+To:     "Sandeep Maheswaram (Temp) (QUIC)" <quic_c_sanm@quicinc.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Pavan Kumar Kondeti (QUIC)" <quic_pkondeti@quicinc.com>,
+        "Pratham Pratap (QUIC)" <quic_ppratap@quicinc.com>,
+        "Krishna Kurapati PSSNV (QUIC)" <quic_kriskura@quicinc.com>,
+        "Vidya Sagar Pulyala (Temp) (QUIC)" <quic_vpulyala@quicinc.com>
+References: <1649323888-12420-1-git-send-email-quic_c_sanm@quicinc.com>
+ <DM6PR02MB4857A0ADCDA1558DE58E103ADFF29@DM6PR02MB4857.namprd02.prod.outlook.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v3 0/2] Skip phy initialization for DWC3 USB Controllers
+Message-ID: <4b34735f-8e1f-bf37-398f-9b4a8aa2e939@linux.intel.com>
+Date:   Wed, 20 Apr 2022 16:20:52 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <DM6PR02MB4857A0ADCDA1558DE58E103ADFF29@DM6PR02MB4857.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:14 AM Johan Hovold <johan@kernel.org> wrote:
-> On Mon, Apr 18, 2022 at 09:17:42PM -0700, Kees Cook wrote:
-> > This looks like it's harmless, as both the source and the destinations are
-> > currently the same allocation size (4 bytes) and don't use their padding,
-> > but if anything were to ever be added after the "mcr" member in "struct
-> > whiteheat_private", it would be overwritten. The structs both have a
-> > single u8 "mcr" member, but are 4 bytes in padded size. The memcpy()
-> > destination was explicitly targeting the u8 member (size 1) with the
-> > length of the whole structure (size 4), triggering the memcpy buffer
-> > overflow warning:
->
-> Ehh... No. The size of a structure with a single u8 is 1, not 4. There's
-> nothing wrong with the current code even if the use of memcpy for this
-> is a bit odd.
->
-> > In file included from include/linux/string.h:253,
-> >                  from include/linux/bitmap.h:11,
-> >                  from include/linux/cpumask.h:12,
-> >                  from include/linux/smp.h:13,
-> >                  from include/linux/lockdep.h:14,
-> >                  from include/linux/spinlock.h:62,
-> >                  from include/linux/mmzone.h:8,
-> >                  from include/linux/gfp.h:6,
-> >                  from include/linux/slab.h:15,
-> >                  from drivers/usb/serial/whiteheat.c:17:
-> > In function 'fortify_memcpy_chk',
-> >     inlined from 'firm_send_command' at drivers/usb/serial/whiteheat.c:587:4:
-> > include/linux/fortify-string.h:328:25: warning: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
-> >   328 |                         __write_overflow_field(p_size_field, size);
-> >       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> So something is confused here.
+On 19.4.2022 13.17, Sandeep Maheswaram (Temp) (QUIC) wrote:
+> Hi Mathias, Felipe,
+> 
+>> -----Original Message-----
+>> From: Sandeep Maheswaram (Temp) (QUIC) <quic_c_sanm@quicinc.com>
+>> Sent: Thursday, April 7, 2022 3:01 PM
+>> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Felipe Balbi
+>> <balbi@kernel.org>; Stephen Boyd <swboyd@chromium.org>; Doug
+>> Anderson <dianders@chromium.org>; Matthias Kaehlcke
+>> <mka@chromium.org>; Mathias Nyman <mathias.nyman@intel.com>
+>> Cc: linux-arm-msm@vger.kernel.org; linux-usb@vger.kernel.org; linux-
+>> kernel@vger.kernel.org; Pavan Kumar Kondeti (QUIC)
+>> <quic_pkondeti@quicinc.com>; Pratham Pratap (QUIC)
+>> <quic_ppratap@quicinc.com>; Krishna Kurapati PSSNV (QUIC)
+>> <quic_kriskura@quicinc.com>; Vidya Sagar Pulyala (Temp) (QUIC)
+>> <quic_vpulyala@quicinc.com>; Sandeep Maheswaram (Temp) (QUIC)
+>> <quic_c_sanm@quicinc.com>
+>> Subject: [PATCH v3 0/2] Skip phy initialization for DWC3 USB Controllers
+>>
+>> Runtime suspend of phy drivers was failing from DWC3 driver as runtime
+>> usage value is 2 because the phy is initialized from
+>> DWC3 core and HCD core.
+>> Some controllers like DWC3 and CDNS3 manage phy in their core drivers.
+>> This property can be set to avoid phy initialization in HCD core.
+>>
+>> v3:
+>> Coming back to this series based on discussion at below thread
+>> https://patchwork.kernel.org/project/linux-arm-msm/patch/1648103831-
+>> 12347-4-git-send-email-quic_c_sanm@quicinc.com/
+>> Dropped the dt bindings PATCH 1/3 in v2
+>> https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-
+>> 25582-1-git-send-email-quic_c_sanm@quicinc.com/
+>>
+>> v2:
+>> Updated the commit descriptions.
+>> Changed subject prefix from dwc to dwc3.
+>> Increased props array size.
+>>
+>> Sandeep Maheswaram (2):
+>>   usb: host: xhci-plat: Add device property to set XHCI_SKIP_PHY_INIT
+>>     quirk
+>>   usb: dwc3: host: Set the property usb-skip-phy-init
+>>
+>>  drivers/usb/dwc3/host.c      | 4 +++-
+>>  drivers/usb/host/xhci-plat.c | 3 +++
+>>  2 files changed, 6 insertions(+), 1 deletion(-)
+>>
+>> --
+>> 2.7.4
+> 
+> Please let me know your opinion about this series.
 
-So something's going wrong in fortify_memcpy_chk()? It looks like it
-is called with constant "size" equal to 1, and the condition
-"p_size_field < size" (with an unsigned comparison) is either true
-(meaning p_size_field would have to be 0) or not known at compile
-time?
+Otherwise looks good but wondering if we should document that new device
+property somewhere. 
 
-The original report says it happened when compiling with
-CONFIG_CC_OPTIMIZE_FOR_SIZE=y, maybe that matters?
+Couldn't find a standard way how those device properties excluded from
+Documentation/devicetree/binding are documented
+
+Thanks
+-Mathias
+
