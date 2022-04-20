@@ -2,82 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C67115084AA
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 11:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 830D15084BE
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 11:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377100AbiDTJSQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Apr 2022 05:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
+        id S1377058AbiDTJVf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Apr 2022 05:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355436AbiDTJSP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 05:18:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EB53BFA3
-        for <linux-usb@vger.kernel.org>; Wed, 20 Apr 2022 02:15:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 012BDB81D71
-        for <linux-usb@vger.kernel.org>; Wed, 20 Apr 2022 09:15:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C8AC385A1;
-        Wed, 20 Apr 2022 09:15:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650446127;
-        bh=YZpgm2oLQIhGYSsJHeZt6621ZcIMfilgUqq05fnGaHw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ay0CYfaov/syyJpC3MEn++aJaSN4ZYTppaQhYyLpt76Du+VvvnDkKhqmrbbrK0KOq
-         WTQMwmOwYpvJc0weS8K0SoT1hUb3WIysylBicOcrRDUvi2HGgenZ1kOSEvefokoevl
-         dQ6AMfoOQFHJ5j9jqxudMP2Slblot7tH6/1WTsB1cz6Lr+7/s5V1lSDlixVh0kxGFV
-         3F8sx/VlfsSz1/DrKlvPgFA4sYCMkPkETIx+mdF+hg0r0SkPZkK91ul8IDj20LXaQx
-         6ldIsvPmLKJKDqvVpjpX74wellsf2b3OfJGkTVVlBggwzAGPr0jkBBrdUzCxQAtNhy
-         bOLzfzBGZ/UzQ==
-Date:   Wed, 20 Apr 2022 14:45:23 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Jules Maselbas <jmaselbas@kalray.eu>
-Cc:     linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Amelie DELAUNAY <amelie.delaunay@foss.st.com>,
-        Yann Sionneau <ysionneau@kalray.eu>,
-        Michael Grzeschik <mgr@pengutronix.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH RESEND v3 0/3] Cleanup the call ordering of phy_init and
- phy_power_on
-Message-ID: <Yl/PK6Mw4BQeoAOA@matsya>
-References: <20220407102108.24211-1-jmaselbas@kalray.eu>
+        with ESMTP id S1359423AbiDTJVf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 05:21:35 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E363D49F;
+        Wed, 20 Apr 2022 02:18:49 -0700 (PDT)
+X-UUID: 73dc67efba0a4edea8631f75926afc2d-20220420
+X-UUID: 73dc67efba0a4edea8631f75926afc2d-20220420
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 145167488; Wed, 20 Apr 2022 17:18:41 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 20 Apr 2022 17:18:40 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 20 Apr 2022 17:18:39 +0800
+Message-ID: <37276fd01a518dadff57ef66c7971b78baa9dc15.camel@mediatek.com>
+Subject: Re: [PATCH] usb: mtu3: fix USB 3.0 dual-role-switch from device to
+ host
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Macpaul Lin <macpaul.lin@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Miles Chen <miles.chen@mediatek.com>,
+        Bear Wang <bear.wang@mediatek.com>,
+        Pablo Sun <pablo.sun@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul@gmail.com>, <stable@vger.kernel.org>,
+        Tainping Fang <tianping.fang@mediatek.com>
+Date:   Wed, 20 Apr 2022 17:18:38 +0800
+In-Reply-To: <20220419081245.21015-1-macpaul.lin@mediatek.com>
+References: <20220419081245.21015-1-macpaul.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407102108.24211-1-jmaselbas@kalray.eu>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 07-04-22, 12:21, Jules Maselbas wrote:
-> Hi,
+On Tue, 2022-04-19 at 16:12 +0800, Macpaul Lin wrote:
+> Issue description:
+>   When an OTG port has been switched to device role and then switch
+> back
+>   to host role again, the USB 3.0 Host (XHCI) will not be able to
+> detect
+>   "plug in event of a connected USB 2.0/1.0 ((Highspeed and
+> Fullspeed)
+>   devices until system reboot.
 > 
-> Last year Ahmad asked what is the correct order when calling phy_init
-> and phy_power_on. Since then, I didn't see the situation improve much
-> and I am once again toying around with usb phy driver.
+> Root cause and Solution:
+>   There is a condition checking flag "ssusb->otg_switch.is_u3_drd" in
+>   toggle_opstate(). At the end of role switch procedure,
+> toggle_opstate()
+>   will be called to set DC_SESSION and SOFT_CONN bit. If "is_u3_drd"
+> was
+>   set and switched the role to USB host 3.0, bit DC_SESSION and
+> SOFT_CONN
+>   will be skipped hence caused the port cannot detect connected USB
+> 2.0
+>   (Highspeed and Fullspeed) devices. Simply remove the condition
+> check to
+>   solve this issue.
 > 
-> The following two patches were in my tree for a year... Last year i
-> previously tried to change the call order in the dwc2 driver but this
-> requires the relevent phy to be also compatible with the "new" ordering.
-> The stm32-usbphyc driver wasn't compatible, I am not sure if that is
-> still is the case.
+> Fixes: d0ed062a8b75 ("usb: mtu3: dual-role mode support")
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> Signed-off-by: Tainping Fang <tianping.fang@mediatek.com>
+> Tested-by: Fabien Parent <fparent@baylibre.com>
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/usb/mtu3/mtu3_dr.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> For now simply add documentation, hopefully correct, but I am not an
-> expert on actual phy sementics or usage in the kernel. And add warning
-> when the order is not what's expected.
+> diff --git a/drivers/usb/mtu3/mtu3_dr.c b/drivers/usb/mtu3/mtu3_dr.c
+> index ec6ec621838b..b820724c56e4 100644
+> --- a/drivers/usb/mtu3/mtu3_dr.c
+> +++ b/drivers/usb/mtu3/mtu3_dr.c
+> @@ -21,10 +21,8 @@ static inline struct ssusb_mtk
+> *otg_sx_to_ssusb(struct otg_switch_mtk *otg_sx)
+>  
+>  static void toggle_opstate(struct ssusb_mtk *ssusb)
+>  {
+> -	if (!ssusb->otg_switch.is_u3_drd) {
+> -		mtu3_setbits(ssusb->mac_base, U3D_DEVICE_CONTROL,
+> DC_SESSION);
+> -		mtu3_setbits(ssusb->mac_base, U3D_POWER_MANAGEMENT,
+> SOFT_CONN);
+> -	}
+> +	mtu3_setbits(ssusb->mac_base, U3D_DEVICE_CONTROL, DC_SESSION);
+> +	mtu3_setbits(ssusb->mac_base, U3D_POWER_MANAGEMENT, SOFT_CONN);
+>  }
+>  
+Reviewed-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-Applied, thanks
+Thanks
 
--- 
-~Vinod
+>  /* only port0 supports dual-role mode */
+
