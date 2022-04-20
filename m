@@ -2,73 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A78B5081E9
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 09:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7157D5082F7
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 09:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359667AbiDTHX3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Apr 2022 03:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39914 "EHLO
+        id S1376547AbiDTH6h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Apr 2022 03:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359662AbiDTHX2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 03:23:28 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9861A25C5F
-        for <linux-usb@vger.kernel.org>; Wed, 20 Apr 2022 00:20:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E0E88CE1C33
-        for <linux-usb@vger.kernel.org>; Wed, 20 Apr 2022 07:20:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 382C7C385A1;
-        Wed, 20 Apr 2022 07:20:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650439240;
-        bh=sADFl038bQdXB017XGFd9vnCTHD7TNCvCf/2BYGKHSA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tWtnCHJBGHWJOEo4iXkV3snrPccnZBBGpCWL4bg8XZOF6TzkoSMB36V39F+Y7gMdc
-         iKp6alwG+kCL1hSMMNP+b5daNNjTpx0KLshkLa1QQCLSEztSo6JmP9qZBvqjBpTE7m
-         kDxq9qbwDZd7VeWQUUVCzZN7aAoHdSKTCd/I9ArzwUWLxg8CX90RZshiGz6fsfR/Gu
-         J3UnU0uLIr4Qn4OVhvITvIInCZe/jRb/WW6GwOa8ZlEJOmlWK0OVze0MAkED4NtMu2
-         rsAveMekF0FjQNR2c1m7GJtcoquH6byflLg15YrqpopE1AFyHRcNGXlRSB1X2T2Vir
-         oGJ68wgZe8qpA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nh4dc-0002MH-KT; Wed, 20 Apr 2022 09:20:32 +0200
-Date:   Wed, 20 Apr 2022 09:20:32 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] USB: serial: cp210x: add PIDs for Kamstrup USB Meter
- Reader
-Message-ID: <Yl+0QKi1k+JTSP4H@hovoldconsulting.com>
-References: <20220414081202.5591-1-bruno.thomsen@gmail.com>
+        with ESMTP id S1376388AbiDTH6h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 03:58:37 -0400
+X-Greylist: delayed 529 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 Apr 2022 00:55:51 PDT
+Received: from mail.fixingbiz.pl (mail.fixingbiz.pl [217.61.22.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CAE2668
+        for <linux-usb@vger.kernel.org>; Wed, 20 Apr 2022 00:55:51 -0700 (PDT)
+Received: by mail.fixingbiz.pl (Postfix, from userid 1001)
+        id B91D8A2EE0; Wed, 20 Apr 2022 08:42:01 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fixingbiz.pl; s=mail;
+        t=1650440690; bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
+        h=Date:From:To:Subject:From;
+        b=Gs1XElbWeKQWp12xyMEjAOSKuUpfwEAGl/daKrnuHO74uW2lu7K+3zT3bAe2RDaeJ
+         Wgs+urGCXgyR0btRuw8oq+R5ZrnYx/GrYZSIUvnlTcGbH4a4gTvwSnMNkiQtQ/NMBm
+         AMrkqO+kkBee5gKU/aIUgOUhW1SSyxjIFXwyFkMzjW8lsILlAAjiUuTl/5UByHsv6a
+         mIZlT8ihNMbiVVZL2lBTusMEzopKkdIaB0Tws9f4Nl9k45MwFao5X/X39Trdsg2E9H
+         nibFQjRt+CI4Ezb6v2/VX8eZl7lQEtacgjxOq560vltdCLKiWJKAzBi7Q8NNv4WPJg
+         mpNWW5foGHtLA==
+Received: by mail.fixingbiz.pl for <linux-usb@vger.kernel.org>; Wed, 20 Apr 2022 07:40:53 GMT
+Message-ID: <20220420074501-0.1.1x.6udv.0.hu0er1a4ra@fixingbiz.pl>
+Date:   Wed, 20 Apr 2022 07:40:53 GMT
+From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
+        <przemyslaw.wroblewski@fixingbiz.pl>
+To:     <linux-usb@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.fixingbiz.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414081202.5591-1-bruno.thomsen@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 10:12:02AM +0200, Bruno Thomsen wrote:
-> Wireless reading of water and heat meters using 868MHz wM-Bus mode C1.
-> 
-> The two different product IDs allow detection of dongle antenna
-> solution:
-> - Internal antenna
-> - External antenna using SMA connector
-> 
-> https://www.kamstrup.com/en-en/water-solutions/water-meter-reading/usb-meter-reader
-> 
-> Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+Dzie=C5=84 dobry,
 
-Now applied, thanks.
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-Johan
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam,
+Przemys=C5=82aw Wr=C3=B3blewski
