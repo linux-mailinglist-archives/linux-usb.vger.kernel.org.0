@@ -2,74 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E26450907C
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 21:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619685090F8
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 22:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349968AbiDTTdq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Apr 2022 15:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
+        id S1381998AbiDTUDY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Apr 2022 16:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232645AbiDTTdp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 15:33:45 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD883A196
-        for <linux-usb@vger.kernel.org>; Wed, 20 Apr 2022 12:30:57 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-e656032735so1792479fac.0
-        for <linux-usb@vger.kernel.org>; Wed, 20 Apr 2022 12:30:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xIiCDpfY7BZIAGghFoSj6HCmwvDL6jlr0Z/Ms0MR3R0=;
-        b=MzcWDOfLJXWY1gU7R6uLN9tTgWJgCIPTmOVBFgypmQomMAdfqWQrQ+tCAazxJ7/ZQH
-         alBWfDT4XTNGp7PZEVQFDX3JmtVRlFCJkGk1mKRBmyj1miJRPaU6qlBq0L9Su1X0oMUw
-         0SlnxE7v9xuiYt8MHPByf/Xo+21xDn+XMABhQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xIiCDpfY7BZIAGghFoSj6HCmwvDL6jlr0Z/Ms0MR3R0=;
-        b=sBKDDAcxf5EBCXNqXFzqvctyz559TVVyQQ/3y2n7go7J6/KbrrfXOeLKUM1xxNuPLU
-         B4bByouYt/VVcTUM/dCPduy95EOixM4KcJpLeByX9Y44AYdHnWidfA7sh2zTTsJVrwOA
-         IYiQlBTmxPQf9tbrawzadPVcZhEa0Qi/kgOCjRSSFBaMBUebURgLBVaI+L2fEhYbvHxx
-         jtzvb5H8UdxoAi2W2RlK05vinLgJfecXzlmoWIKwcO+pyolSuTmDVsg3WOTj2y6Jf01Y
-         w0rMcMFlmrAsntBbFZ3g/DMSfjEsUvvX+LMp0wdZG3vcEqaKxEY2LBdrgn52teDe0WE7
-         WutQ==
-X-Gm-Message-State: AOAM531UMedhVaYuS8CnTI03lDsukQDVbnZ9Qq3fWy75SrxkNZZ/+A2u
-        lsRAKxh8zTltSZHz6JDm1BgjRPl44ktiQw==
-X-Google-Smtp-Source: ABdhPJw1PIjDNz++wEdGM6hs2lzA0HjH7BEBqWCVTpo78hxojYBPPZZ+syNzhRJoeZ24/07LjrGtkg==
-X-Received: by 2002:a05:6870:e990:b0:de:9b72:c80 with SMTP id r16-20020a056870e99000b000de9b720c80mr2328397oao.118.1650483056061;
-        Wed, 20 Apr 2022 12:30:56 -0700 (PDT)
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com. [209.85.167.176])
-        by smtp.gmail.com with ESMTPSA id z1-20020a056830128100b0060542867875sm5522447otp.70.2022.04.20.12.30.53
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 12:30:54 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id b188so3167360oia.13
-        for <linux-usb@vger.kernel.org>; Wed, 20 Apr 2022 12:30:53 -0700 (PDT)
-X-Received: by 2002:a54:4197:0:b0:322:c080:4d4c with SMTP id
- 23-20020a544197000000b00322c0804d4cmr2492033oiy.241.1650483052521; Wed, 20
- Apr 2022 12:30:52 -0700 (PDT)
+        with ESMTP id S1381982AbiDTUDW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 16:03:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEF73DDEC;
+        Wed, 20 Apr 2022 13:00:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47C1EB82171;
+        Wed, 20 Apr 2022 20:00:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BCB3C385A0;
+        Wed, 20 Apr 2022 20:00:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650484831;
+        bh=6LaU3F/jCQfZw6zxuK9X0ySvN6qUfHqEJ6lGydnop44=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tTTSInI8F99rxgu1B0qJWLeIul55SHmcfk2XoOQ90GefTf3tYCCewlSGv0XDMfDh7
+         Z0gfO8BUWwpRe7vFNr0stA2fvpU+veeqGj8X4dtAAMP+71o6mJUg/sPSqUxlu+ULuo
+         oT0S6xjq4cbwogY8eYCb+x8No/lm+/RcuSLbCGjk19uugO+JINpbLTFeEWyaEopW/x
+         lweTuMOOUBVuFVg4/k2kXIP8mpZn+WouT6CWBwWGzqmjZqAjIfMK2WcT4xN9+P5OGu
+         53fTbKDiRNLPpY+ZJg9cT17Ibl1y8hQ/1xJAqK44EW7UAoTFJbIP4klfgcYI29A7th
+         eAbyB39usRP9w==
+Received: by mail-wr1-f51.google.com with SMTP id b19so3690567wrh.11;
+        Wed, 20 Apr 2022 13:00:30 -0700 (PDT)
+X-Gm-Message-State: AOAM5317GF9EwsnxWtm6HV5fMbJTWScVhoabz9V7AIKLLwMfVJLU/Wrj
+        o60vR0Z1yucWuBWUQOyIfDbtVdkGrmXb4+/wQmc=
+X-Google-Smtp-Source: ABdhPJwLyvz/ceR9rvvT4XHyqR02gbMMBhrAsRpzGtmhlle4bD/ec4+YXpGg4bc2rqdxlPo8PGopdbH+2zzsbpztAUk=
+X-Received: by 2002:a5d:6da5:0:b0:20a:8805:6988 with SMTP id
+ u5-20020a5d6da5000000b0020a88056988mr15481338wrs.317.1650484829308; Wed, 20
+ Apr 2022 13:00:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220418210046.2060937-1-evgreen@chromium.org>
- <20220418135819.v2.1.I2c636c4decc358f5e6c27b810748904cc69beada@changeid> <Yl7KEX++hJac8T6I@rowland.harvard.edu>
-In-Reply-To: <Yl7KEX++hJac8T6I@rowland.harvard.edu>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Wed, 20 Apr 2022 12:30:16 -0700
-X-Gmail-Original-Message-ID: <CAE=gft7DAXo628WjdmMkogVM5th4FSaG44poZhyyG=45sCMxfA@mail.gmail.com>
-Message-ID: <CAE=gft7DAXo628WjdmMkogVM5th4FSaG44poZhyyG=45sCMxfA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] USB: core: Disable remote wakeup for freeze/quiesce
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rajat Jain <rajatja@chromium.org>,
-        Razvan Heghedus <heghedus.razvan@gmail.com>,
-        Wei Ming Chen <jj251510319013@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20220419133723.1394715-1-arnd@kernel.org> <20220420170836.GB1947@darkstar.musicnaut.iki.fi>
+In-Reply-To: <20220420170836.GB1947@darkstar.musicnaut.iki.fi>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 20 Apr 2022 22:00:13 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1+sOrn8BWPVc7f+QFZ5=7fE6=MLsMYV9t+HJcG2aRCXA@mail.gmail.com>
+Message-ID: <CAK8P3a1+sOrn8BWPVc7f+QFZ5=7fE6=MLsMYV9t+HJcG2aRCXA@mail.gmail.com>
+Subject: Re: [PATCH 00/41] OMAP1 full multiplatform conversion
+To:     Aaro Koskinen <aaro.koskinen@iki.fi>
+Cc:     linux-omap <linux-omap@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Paul Walmsley <paul@pwsan.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Mark Brown <broonie@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        dmaengine@vger.kernel.org,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,89 +89,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 7:41 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+On Wed, Apr 20, 2022 at 7:08 PM Aaro Koskinen <aaro.koskinen@iki.fi> wrote:
+> On Tue, Apr 19, 2022 at 03:36:42PM +0200, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > This is the full series for converting OMAP1 to multiplatform, rebased
+> > from my 2019 attempt to do the same thing. The soc tree contains simpler
+> > patches to do the same for iop32x, ixp4xx, ep93xx and s3c24xx, which
+> > means we are getting closer to completing this for all ARMv5 platforms
+> > (I have patches for PXA, which is the last one remaining).
+> >
+> > Janusz already tested the branch separately and did the missing work
+> > for the common-clk conversion after my previous approach was broken.
 >
-> On Mon, Apr 18, 2022 at 02:00:45PM -0700, Evan Green wrote:
-> > The PM_EVENT_FREEZE and PM_EVENT_QUIESCE messages should cause the
-> > device to stop generating interrupts. USB core was previously allowing
-> > devices that were already runtime suspended to keep remote wakeup
-> > enabled if they had gone down that way. This violates the contract with
-> > pm, and can potentially cause MSI interrupts to be lost.
-> >
-> > Change that so that if a device is runtime suspended with remote wakeups
-> > enabled, it will be resumed to ensure remote wakeup is always disabled
-> > across a freeze.
-> >
-> > Signed-off-by: Evan Green <evgreen@chromium.org>
-> > ---
-> >
-> > (no changes since v1)
-> >
-> >  drivers/usb/core/driver.c | 20 +++++++++-----------
-> >  1 file changed, 9 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> > index 355ed33a21792b..93c8cf66adccec 100644
-> > --- a/drivers/usb/core/driver.c
-> > +++ b/drivers/usb/core/driver.c
-> > @@ -1533,20 +1533,18 @@ static void choose_wakeup(struct usb_device *udev, pm_message_t msg)
-> >  {
-> >       int     w;
-> >
-> > -     /* Remote wakeup is needed only when we actually go to sleep.
-> > -      * For things like FREEZE and QUIESCE, if the device is already
-> > -      * autosuspended then its current wakeup setting is okay.
-> > +     /* For FREEZE/QUIESCE, disable remote wakeups so no interrupts get generated
-> > +      * by the device.
+> I tested the full series on the following OMAP1 boards: ams-delta,
+> nokia770, osk, palmte and sx1 (QEMU only).
 >
-> You mean "by the host controller".  USB devices don't generate
-> interrupts; they generate wakeup requests (which can cause a host
-> controller to generate an interrupt).
+> Apart from the earlyprintk breakage, everything seemed to work OK.
 
-Right, I guess I mean "at the behest of the device". I could probably
-just delete "by the device", since the goal of the comment is simply
-to highlight that we're trying to kill interrupts, and describing
-their provenance isn't as relevant.
+Nice, thanks a lot for testing!
 
->
-> >        */
-> >       if (msg.event == PM_EVENT_FREEZE || msg.event == PM_EVENT_QUIESCE) {
-> > -             if (udev->state != USB_STATE_SUSPENDED)
-> > -                     udev->do_remote_wakeup = 0;
-> > -             return;
-> > -     }
-> > +             w = 0;
-> >
-> > -     /* Enable remote wakeup if it is allowed, even if no interface drivers
-> > -      * actually want it.
-> > -      */
-> > -     w = device_may_wakeup(&udev->dev);
-> > +     } else {
-> > +             /* Enable remote wakeup if it is allowed, even if no interface drivers
-> > +              * actually want it.
-> > +              */
-> > +             w = device_may_wakeup(&udev->dev);
-> > +     }
-> >
-> >       /* If the device is autosuspended with the wrong wakeup setting,
-> >        * autoresume now so the setting can be changed.
-> > --
->
-> I would prefer it if you reformatted the comments to agree with the
-> current style:
->
->         /*
->          * Blah blah blah
->          */
->
-> and to avoid line wrap beyond 80 columns.  Apart from that:
+> A minor note, zImage grows about 50 KB with a minimal kernel config. This
+> is not yet critical, there's still about 7% headroom on 770 to the 2 MB
+> bootloader limit on my setup. Also the decompression time is approaching
+> the hardcoded watchdog timeout...
 
-Sure, I can fix these up, add your tags, and repost.
+I suspect that most of this is for the added devicetree code, and some
+more for the common-clk layer. For the omap1_defconfig, there is some
+hope to get part of the overhead back eventually by replacing board files
+with dts descriptions that are not part of the zImage itself, but it's unlikely
+to ever get smaller than it was.
 
->
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
-Thanks!
-
->
-> Alan Stern
+       Arnd
