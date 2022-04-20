@@ -2,126 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F295082E7
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 09:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F179C508345
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 10:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376493AbiDTH5R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Apr 2022 03:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S1376672AbiDTIWu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Apr 2022 04:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376353AbiDTH5Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 03:57:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCB23BFB6;
-        Wed, 20 Apr 2022 00:54:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79EC8B81D57;
-        Wed, 20 Apr 2022 07:54:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37635C385A1;
-        Wed, 20 Apr 2022 07:54:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650441268;
-        bh=m7SJlIg5E2sbLVUQXHfM+atL0bL9CBE9VGEBCjYDBYM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=shbRd2h+1XWVxCtCQFYLTVN1JLc40NI/8P2gc/nlY1N6zvh7LZ6XF5Bt007nNKVdi
-         T10A+G1qYoY9qxbTCHwkIaxtYAR9BEFM5topBWGcAR/d9oHT4o972uquZd/marHEQx
-         jh/QJb/sIZ4k9/7JcO6tVj4xNdyRcXDveJ2mfLLnUmXMp0NHFb4xScjuxOjaDjVl6E
-         8FdH4yLhauzytLYejaEOcWkzeYCKs7bBII+8uHp0vXU7xnIiI+KtNrQt14j9i4dtSw
-         QnCOCggp47eWVzu2B622QBD8wtI55rtgpyxQk6ZH4pr+3QKMypgwKH3lZdVcmCeGWP
-         jAxfeGQis/GGQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nh5AJ-0006YM-O9; Wed, 20 Apr 2022 09:54:20 +0200
-Date:   Wed, 20 Apr 2022 09:54:19 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: Fix heap overflow in WHITEHEAT_GET_DTR_RTS
-Message-ID: <Yl+8K++wZUJCthMj@hovoldconsulting.com>
-References: <20220419041742.4117026-1-keescook@chromium.org>
+        with ESMTP id S1376653AbiDTIWt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 04:22:49 -0400
+X-Greylist: delayed 2782 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 Apr 2022 01:20:01 PDT
+Received: from m1379.mail.163.com (m1379.mail.163.com [220.181.13.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C249CB862;
+        Wed, 20 Apr 2022 01:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=4pQOI
+        0lXv/1b8La+IhVdVvh0mn/IVS55aNoj0KtmFpE=; b=L/qKbSncgKY/qPz3w0S78
+        WcYqMvLOrTCZIFPfxljHSsPWF2nIvmWp+BBSavxYGjWZQy903zlY6dxM1Ypzw25I
+        AzRAofgSe2IGS7lsROTk9rYRSkK5q5ESfc78Ls4qTmhPFL04CYamIv/Hr6v8P4ao
+        ib5/z/V4+BQbLZTHM4aRjw=
+Received: from slark_xiao$163.com ( [112.97.59.179] ) by
+ ajax-webmail-wmsvr79 (Coremail) ; Wed, 20 Apr 2022 15:33:09 +0800 (CST)
+X-Originating-IP: [112.97.59.179]
+Date:   Wed, 20 Apr 2022 15:33:09 +0800 (CST)
+From:   "Slark Xiao" <slark_xiao@163.com>
+To:     "Johan Hovold" <johan@kernel.org>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH] USB: serial: option: Adding support for Cinterion
+ MV32-WA/MV32-WB
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <Yl+zNlWflAzLMcPA@hovoldconsulting.com>
+References: <20220414074434.5699-1-slark_xiao@163.com>
+ <Yl+zNlWflAzLMcPA@hovoldconsulting.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419041742.4117026-1-keescook@chromium.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <73e2184.29b2.18045e3a85d.Coremail.slark_xiao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: T8GowACXpfk1t19iGUsRAA--.55648W
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRwXoZFc7XBuVsQACsD
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 09:17:42PM -0700, Kees Cook wrote:
-> This looks like it's harmless, as both the source and the destinations are
-> currently the same allocation size (4 bytes) and don't use their padding,
-> but if anything were to ever be added after the "mcr" member in "struct
-> whiteheat_private", it would be overwritten. The structs both have a
-> single u8 "mcr" member, but are 4 bytes in padded size. The memcpy()
-> destination was explicitly targeting the u8 member (size 1) with the
-> length of the whole structure (size 4), triggering the memcpy buffer
-> overflow warning:
-
-Ehh... No. The size of a structure with a single u8 is 1, not 4. There's
-nothing wrong with the current code even if the use of memcpy for this
-is a bit odd.
-
-> In file included from include/linux/string.h:253,
->                  from include/linux/bitmap.h:11,
->                  from include/linux/cpumask.h:12,
->                  from include/linux/smp.h:13,
->                  from include/linux/lockdep.h:14,
->                  from include/linux/spinlock.h:62,
->                  from include/linux/mmzone.h:8,
->                  from include/linux/gfp.h:6,
->                  from include/linux/slab.h:15,
->                  from drivers/usb/serial/whiteheat.c:17:
-> In function 'fortify_memcpy_chk',
->     inlined from 'firm_send_command' at drivers/usb/serial/whiteheat.c:587:4:
-> include/linux/fortify-string.h:328:25: warning: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
->   328 |                         __write_overflow_field(p_size_field, size);
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-So something is confused here.
- 
-> Expand the memcpy() to the entire structure, though perhaps the correct
-> solution is to mark all the USB command structures as "__packed".
-
-Again no, why would you potentially overwrite the whole structure just to
-update a single field? This is just wrong.
-
-And the only structure that needs a __packed which doesn't have it
-already is the unused struct whiteheat_dump.
-
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/lkml/202204142318.vDqjjSFn-lkp@intel.com
-> Cc: Johan Hovold <johan@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  drivers/usb/serial/whiteheat.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/serial/whiteheat.c b/drivers/usb/serial/whiteheat.c
-> index da65d14c9ed5..6e00498843fb 100644
-> --- a/drivers/usb/serial/whiteheat.c
-> +++ b/drivers/usb/serial/whiteheat.c
-> @@ -584,7 +584,7 @@ static int firm_send_command(struct usb_serial_port *port, __u8 command,
->  		switch (command) {
->  		case WHITEHEAT_GET_DTR_RTS:
->  			info = usb_get_serial_port_data(port);
-> -			memcpy(&info->mcr, command_info->result_buffer,
-> +			memcpy(info, command_info->result_buffer,
->  					sizeof(struct whiteheat_dr_info));
->  				break;
->  		}
-
-Johan
+ClRoYW5rcyBmb3IgdGhlIHN1Z2dlc3Rpb24uCkF0IDIwMjItMDQtMjAgMTU6MTY6MDYsICJKb2hh
+biBIb3ZvbGQiIDxqb2hhbkBrZXJuZWwub3JnPiB3cm90ZToKPk9uIFRodSwgQXByIDE0LCAyMDIy
+IGF0IDAzOjQ0OjM0UE0gKzA4MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4+IEFkZGluZyBzdXBwb3J0
+IGZvciBDaW50ZXJpb24gZGV2aWNlIE1WMzItV0EvTVYzMi1XQi4KPgo+Tml0OiBQbGVhc2UgdXNl
+IGltcGVyYXRpdmUgbW9vZCBpbiB5b3VyIGNvbW1pdCBtZXNzYWdlIChlLmcuIHVzZSAiYWRkIgo+
+aW5zdGVhZCBvZiAiYWRkaW5nIikuCkdvdCBpdC4gQWN0dWFsbHkgSSBqdXN0IHdhbnQgdG8gYWxp
+Z24gaXQgd2l0aCBwcmV2aW91cyBNVjMxLVcgY29tbWl0LgpJIHdpbGwgbm90aWNlIHRoaXMgaW4g
+bmV4dCB0aW1lLgpUaGFua3MhCj4KPj4gTVYzMi1XQSBQSUQgaXMgMHgwMEYxLCBhbmQgTVYzMi1X
+QiBQSUQgaXMgMHgwMEYyLgo+PiAKPj4gVGVzdCBldmlkZW5jZSBhcyBiZWxvdzoKPj4gVDogIEJ1
+cz0wNCBMZXY9MDEgUHJudD0wMSBQb3J0PTAxIENudD0wMSBEZXYjPSAgNCBTcGQ9NTAwMCBNeENo
+PSAwCj4+IEQ6ICBWZXI9IDMuMjAgQ2xzPWVmKG1pc2MgKSBTdWI9MDIgUHJvdD0wMSBNeFBTPSA5
+ICNDZmdzPSAgMQo+PiBQOiAgVmVuZG9yPTFlMmQgUHJvZElEPTAwZjEgUmV2PTA1LjA0Cj4+IFM6
+ICBNYW51ZmFjdHVyZXI9Q2ludGVyaW9uCj4+IFM6ICBQcm9kdWN0PUNpbnRlcmlvbiBQSUQgMHgw
+MEYxIFVTQiBNb2JpbGUgQnJvYWRiYW5kCj4+IFM6ICBTZXJpYWxOdW1iZXI9NzhhZGE4YzQKPj4g
+QzogICNJZnM9IDYgQ2ZnIz0gMSBBdHI9YTAgTXhQd3I9ODk2bUEKPj4gSTogIElmIz0weDAgQWx0
+PSAwICNFUHM9IDEgQ2xzPTAyKGNvbW1jKSBTdWI9MGUgUHJvdD0wMCBEcml2ZXI9Y2RjX21iaW0K
+Pj4gSTogIElmIz0weDEgQWx0PSAxICNFUHM9IDIgQ2xzPTBhKGRhdGEgKSBTdWI9MDAgUHJvdD0w
+MiBEcml2ZXI9Y2RjX21iaW0KPj4gSTogIElmIz0weDIgQWx0PSAwICNFUHM9IDMgQ2xzPWZmKHZl
+bmQuKSBTdWI9ZmYgUHJvdD00MCBEcml2ZXI9b3B0aW9uCj4+IEk6ICBJZiM9MHgzIEFsdD0gMCAj
+RVBzPSAxIENscz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYgRHJpdmVyPShub25lKQo+PiBJOiAg
+SWYjPTB4NCBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj1mZiBQcm90PTYwIERyaXZl
+cj1vcHRpb24KPj4gSTogIElmIz0weDUgQWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9
+ZmYgUHJvdD0zMCBEcml2ZXI9b3B0aW9uCj4+IAo+PiBUOiAgQnVzPTA0IExldj0wMSBQcm50PTAx
+IFBvcnQ9MDEgQ250PTAxIERldiM9ICAzIFNwZD01MDAwIE14Q2g9IDAKPj4gRDogIFZlcj0gMy4y
+MCBDbHM9ZWYobWlzYyApIFN1Yj0wMiBQcm90PTAxIE14UFM9IDkgI0NmZ3M9ICAxCj4+IFA6ICBW
+ZW5kb3I9MWUyZCBQcm9kSUQ9MDBmMiBSZXY9MDUuMDQKPj4gUzogIE1hbnVmYWN0dXJlcj1DaW50
+ZXJpb24KPj4gUzogIFByb2R1Y3Q9Q2ludGVyaW9uIFBJRCAweDAwRjIgVVNCIE1vYmlsZSBCcm9h
+ZGJhbmQKPj4gUzogIFNlcmlhbE51bWJlcj1jZGQwNmE3OAo+PiBDOiAgI0lmcz0gNiBDZmcjPSAx
+IEF0cj1hMCBNeFB3cj04OTZtQQo+PiBJOiAgSWYjPTB4MCBBbHQ9IDAgI0VQcz0gMSBDbHM9MDIo
+Y29tbWMpIFN1Yj0wZSBQcm90PTAwIERyaXZlcj1jZGNfbWJpbQo+PiBJOiAgSWYjPTB4MSBBbHQ9
+IDEgI0VQcz0gMiBDbHM9MGEoZGF0YSApIFN1Yj0wMCBQcm90PTAyIERyaXZlcj1jZGNfbWJpbQo+
+PiBJOiAgSWYjPTB4MiBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj1mZiBQcm90PTQw
+IERyaXZlcj1vcHRpb24KPj4gSTogIElmIz0weDMgQWx0PSAwICNFUHM9IDEgQ2xzPWZmKHZlbmQu
+KSBTdWI9ZmYgUHJvdD1mZiBEcml2ZXI9KG5vbmUpCj4+IEk6ICBJZiM9MHg0IEFsdD0gMCAjRVBz
+PSAzIENscz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9NjAgRHJpdmVyPW9wdGlvbgo+PiBJOiAgSWYj
+PTB4NSBBbHQ9IDAgI0VQcz0gMiBDbHM9ZmYodmVuZC4pIFN1Yj1mZiBQcm90PTMwIERyaXZlcj1v
+cHRpb24KPj4gCj4+IEludGVyZmFjZSAwJjE6IE1CSU0sIDI6TW9kZW0sIDM6IEdOU1MsIDQ6IE5N
+RUEsIDU6IERpYWcKPj4gR05TUyBwb3J0IGRvbid0IHVzZSBzZXJpYWwgZHJpdmVyLgo+PiAKPj4g
+U2lnbmVkLW9mZi1ieTogU2xhcmsgWGlhbyA8c2xhcmtfeGlhb0AxNjMuY29tPgo+PiAtLS0KPj4g
+IGRyaXZlcnMvdXNiL3NlcmlhbC9vcHRpb24uYyB8IDcgKysrKysrLQo+PiAgMSBmaWxlIGNoYW5n
+ZWQsIDYgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+PiAKPj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvdXNiL3NlcmlhbC9vcHRpb24uYyBiL2RyaXZlcnMvdXNiL3NlcmlhbC9vcHRpb24uYwo+
+PiBpbmRleCBlNzc1NWQ5Y2ZjNjEuLmQ5NDczNTc4ODFjMyAxMDA2NDQKPj4gLS0tIGEvZHJpdmVy
+cy91c2Ivc2VyaWFsL29wdGlvbi5jCj4+ICsrKyBiL2RyaXZlcnMvdXNiL3NlcmlhbC9vcHRpb24u
+Ywo+PiBAQCAtNDMyLDcgKzQzMiw4IEBAIHN0YXRpYyB2b2lkIG9wdGlvbl9pbnN0YXRfY2FsbGJh
+Y2soc3RydWN0IHVyYiAqdXJiKTsKPj4gICNkZWZpbmUgQ0lOVEVSSU9OX1BST0RVQ1RfQ0xTOAkJ
+CTB4MDBiMAo+PiAgI2RlZmluZSBDSU5URVJJT05fUFJPRFVDVF9NVjMxX01CSU0JCTB4MDBiMwo+
+PiAgI2RlZmluZSBDSU5URVJJT05fUFJPRFVDVF9NVjMxX1JNTkVUCQkweDAwYjcKPj4gLQo+Cj5X
+aHkgcmVtb3ZlIHRoZSBzZWN0aW9uIHNlcGFyYXRpbmcgbmV3bGluZT8KU29ycnkgZm9yIHRoaXMg
+bWlzdGFrZS4KPgo+PiArI2RlZmluZSBDSU5URVJJT05fUFJPRFVDVF9NVjMyX1dBCQkweDAwZjEK
+Pj4gKyNkZWZpbmUgQ0lOVEVSSU9OX1BST0RVQ1RfTVYzMl9XQgkJMHgwMGYyCj4+ICAvKiBPbGl2
+ZXR0aSBwcm9kdWN0cyAqLwo+PiAgI2RlZmluZSBPTElWRVRUSV9WRU5ET1JfSUQJCQkweDBiM2MK
+Pj4gICNkZWZpbmUgT0xJVkVUVElfUFJPRFVDVF9PTElDQVJEMTAwCQkweGMwMDAKPj4gQEAgLTE5
+NjksNiArMTk3MCwxMCBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHVzYl9kZXZpY2VfaWQgb3B0aW9u
+X2lkc1tdID0gewo+PiAgCSAgLmRyaXZlcl9pbmZvID0gUlNWRCgzKX0sCj4+ICAJeyBVU0JfREVW
+SUNFX0lOVEVSRkFDRV9DTEFTUyhDSU5URVJJT05fVkVORE9SX0lELCBDSU5URVJJT05fUFJPRFVD
+VF9NVjMxX1JNTkVULCAweGZmKSwKPj4gIAkgIC5kcml2ZXJfaW5mbyA9IFJTVkQoMCl9LAo+PiAr
+CXsgVVNCX0RFVklDRV9JTlRFUkZBQ0VfQ0xBU1MoQ0lOVEVSSU9OX1ZFTkRPUl9JRCwgQ0lOVEVS
+SU9OX1BST0RVQ1RfTVYzMl9XQSwgMHhmZiksCj4+ICsJICAuZHJpdmVyX2luZm8gPSBSU1ZEKDMp
+fSwKPj4gKwl7IFVTQl9ERVZJQ0VfSU5URVJGQUNFX0NMQVNTKENJTlRFUklPTl9WRU5ET1JfSUQs
+IENJTlRFUklPTl9QUk9EVUNUX01WMzJfV0IsIDB4ZmYpLAo+PiArCSAgLmRyaXZlcl9pbmZvID0g
+UlNWRCgzKX0sCj4+ICAJeyBVU0JfREVWSUNFKE9MSVZFVFRJX1ZFTkRPUl9JRCwgT0xJVkVUVElf
+UFJPRFVDVF9PTElDQVJEMTAwKSwKPj4gIAkgIC5kcml2ZXJfaW5mbyA9IFJTVkQoNCkgfSwKPj4g
+IAl7IFVTQl9ERVZJQ0UoT0xJVkVUVElfVkVORE9SX0lELCBPTElWRVRUSV9QUk9EVUNUX09MSUNB
+UkQxMjApLAo+Cj5Mb29rcyBnb29kIG90aGVyd2lzZS4gSSd2ZSBmaXhlZCB1cCB0aGUgaXNzdWVz
+IHBvaW50ZWQgb3V0IGFib3ZlLCBidXQKPnBsZWFzZSBrZWVwIGl0IGluIG1pbmQgZm9yIG5leHQg
+dGltZS4KPgo+Sm9oYW4K
