@@ -2,82 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83838508F82
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 20:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D9C509034
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 21:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354525AbiDTShH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Apr 2022 14:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56140 "EHLO
+        id S1381698AbiDTTTA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Apr 2022 15:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346657AbiDTShF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 14:37:05 -0400
-Received: from mail1.bemta31.messagelabs.com (mail1.bemta31.messagelabs.com [67.219.246.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB25129;
-        Wed, 20 Apr 2022 11:34:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1650479657; i=@motorola.com;
-        bh=3P37IxzWVK0w9ZSre3qUDtbzzByBCjaQG/eZQCGHfpg=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
-         Content-Transfer-Encoding;
-        b=GtDsQ7/GlJ9DgXMA/L3hF2pttO8t4aMrTzlJC7r3+kMRhn147xf6FaMsDwrWSdwCl
-         rIVvBe27ccQG4ptpi2J1AhQxD3wK70l3XJlFOZpXGNOYWeD7ySp+h1zJwsh1V5dBGy
-         JIJh51smW/P34magU2DuXPEbadjN+4bFj13jExF15YTuZGCy3TTNsk7iG6xLOrzjS9
-         s6jhHsNctIwK1FNUd94s8avJx/uZNpa6paXxPEHupdYTJSged5q3LJtw2w0S5l1oRw
-         kjAxwiMCjYpVq3nCOXtldLOQdlJM7LJU6FXZIOBPEEubeZmnoNDOrS+ZJj6bl8fbbA
-         0yaEfhBe0Rq+Q==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBIsWRWlGSWpSXmKPExsWS8eKJqK56UEK
-  SQdM2K4tjbU/YLZoXr2ezuLxrDpvFomWtzBarFhxgt1jbNIvNgc3jcl8vk8emVZ1sHvvnrmH3
-  2LL/M6PH501yAaxRrJl5SfkVCawZux/+YyzoYK94fnIaewNjN1sXIxeHkMB0Jom2VbuhnCVME
-  q8f7WHsYuTkYBNQk1jwehUziC0iICtx+MpvZpAiZoGXjBJtC/awdDFycAgL+EtMeWgOUsMioC
-  rxeeM6dhCbV8BS4lLTDLBeCQF5iVPLDjJBxAUlTs58wgJiMwPFm7fOZp7AyD0LSWoWktQCRqZ
-  VjBZJRZnpGSW5iZk5uoYGBrqGhia6prpGeolVuol6pcW6qYnFJbqGeonlxXqpxcV6xZW5yTkp
-  enmpJZsYgYGYUsTKtINxYc9PvUOMkhxMSqK8i/gSkoT4kvJTKjMSizPii0pzUosPMWpwcAgsO
-  Td3OpMUS15+XqqSBO9mP6A6waLU9NSKtMwcYLTAlEpw8CiJ8BZaA6V5iwsSc4sz0yFSpxgVpc
-  R5HwYAJQRAEhmleXBtsAi9xCgrJczLyMDAIMRTkFqUm1mCKv+KUZyDUUmYdzXIFJ7MvBK46a+
-  AFjMBLa6eEguyuCQRISXVwDTX5oVptOrkkOhnvaYi53W+sLQs9q6RfvCv0nfNG+eJzqeefjih
-  6/S/urnqtI+u6zaOpAQX+5k/jMyV+BaeaFof5lXTevdRemVrxLZax4T104/e7s09ftLtkVGsl
-  d3+HyG6DFoscndF7p8SUD7w7aySRlv+lKVbZ73JeKymJ9fAfeH7dQb/e74POvk9PlV/0RXw7y
-  1Ifzo39U38UqUwiQVPrHR+XDy4W/np2uOXZAX1FktwVW7Z/5rbgk9+f6WMr6IG28WCI1XFNw0
-  td/Fz/15mbGtbdOaz4qs/N92VXjFomqwz6uT+KspVKcymsUvXymROzZMfP2Nj50q02TrMTtaz
-  KeSvv7CwIoKh1rpBiaU4I9FQi7moOBEAElDTCUsDAAA=
-X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-10.tower-686.messagelabs.com!1650479655!16369!1
-X-Originating-IP: [104.232.228.21]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.85.8; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 27052 invoked from network); 20 Apr 2022 18:34:15 -0000
-Received: from unknown (HELO va32lpfpp01.lenovo.com) (104.232.228.21)
-  by server-10.tower-686.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 20 Apr 2022 18:34:15 -0000
-Received: from va32lmmrp01.lenovo.com (va32lmmrp01.mot.com [10.62.177.113])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S1352685AbiDTTS5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 15:18:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06EB13F30;
+        Wed, 20 Apr 2022 12:16:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4Kk8TM4sCQzgNVW;
-        Wed, 20 Apr 2022 18:34:15 +0000 (UTC)
-Received: from p1g3.. (unknown [10.45.5.21])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: w36195)
-        by va32lmmrp01.lenovo.com (Postfix) with ESMTPSA id 4Kk8TM2n3Mzf6f9;
-        Wed, 20 Apr 2022 18:34:15 +0000 (UTC)
-From:   Dan Vacura <w36195@motorola.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Wesley Cheng <wcheng@codeaurora.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Dan Vacura <w36195@motorola.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: dwc3: gadget: increase tx fifo size for ss isoc endpoints
-Date:   Wed, 20 Apr 2022 13:33:38 -0500
-Message-Id: <20220420183338.445622-1-w36195@motorola.com>
-X-Mailer: git-send-email 2.32.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A49961509;
+        Wed, 20 Apr 2022 19:16:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AE11C385A1;
+        Wed, 20 Apr 2022 19:16:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650482167;
+        bh=90J9aD9zT3htgXVQTw8ouf0HIcIHMtBImhyv16+lDq8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GEEKKPP+Xa4cHqDtv/sxYRbFCUlGsE+oRLXEZCYd29qOuwCx3b0B45rUe2dZmzqA1
+         MFpMFyFOuPjVEgDW1AuGM6rJq4LV0k4RRBrhfy42qFHXC/q6drdTQ6jfEfZJeMoV9e
+         k2xy8GrnwxSZx25lIeuOHUvC2Dw5DaJF+x9BcySE/P1yElQyu3hPc2SdagB5dq/bXk
+         Ms4JUDIihC8WK/nisnuBX6zRnxglchPx2Xdl6OGtrm2IfiqEsk7A9Hcm3lre2crq0e
+         eNS2CvzYRPKnBk4wH1psSdKn5R2u0JcxOhokpTPlhmyE21Vn6dYEDdzc3Nwu1wNHSL
+         CTY+xfFz/mtqw==
+Message-ID: <ae54dbb1-2b02-cba2-5de2-cf3d9a4e35f5@kernel.org>
+Date:   Wed, 20 Apr 2022 22:16:01 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] dt-bindings: usb: tps6598x: Make the interrupts
+ property optional
+Content-Language: en-US
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Martin Kepplinger <martink@posteo.de>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220414083120.22535-1-a-govindraju@ti.com>
+ <20220414083120.22535-2-a-govindraju@ti.com>
+ <be8ab691-98f1-5fb9-fec8-7213a2288d07@kernel.org>
+ <56c72151-af5f-366b-b17f-24b9fb6264da@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <56c72151-af5f-366b-b17f-24b9fb6264da@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,29 +71,76 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Improve performance of isoc transfers in superspeed by increasing the
-number of possible endpoints available, matching that of what was
-configured for bulk transfers.
+Hi,
 
-Signed-off-by: Dan Vacura <w36195@motorola.com>
----
- drivers/usb/dwc3/gadget.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On 18/04/2022 08:19, Aswath Govindraju wrote:
+> Hi Roger,
+> 
+> On 14/04/22 23:40, Roger Quadros wrote:
+>> Hi,
+>>
+>> On 14/04/2022 11:31, Aswath Govindraju wrote:
+>>> Support for polling has been added in the driver, which will be used by
+>>> default if interrupts property is not populated. Therefore, remove
+>>> interrupts and interrupt-names from the required properties and add a note
+>>> under interrupts property describing the above support in driver.
+>>>
+>>> Suggested-by: Roger Quadros <rogerq@kernel.org>
+>>
+>> I did not suggest to make interrupts optional by default.
+>>
+>> What I suggested was that if a DT property exists to explicitly
+>> indicate polling mode then interrupts are not required.
+>>
+> 
+> ohh okay, got it. However, may I know if adding a dt property to
+> indicate polling for aiding the driver, is the correct approach to model it?
+> 
+> In terms of modelling hardware, as interrupts are not connected we are
+> not populating the interrupts property. Shouldn't that be all. If we are
+> adding a property explicitly to indicate polling that can be used by
+> driver, wouldn't that be a software aid being added in the device tree?
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index ab725d2262d6..faffa4f4050c 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -783,7 +783,8 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
- 		num_fifos = 3;
- 
- 	if (dep->endpoint.maxburst > 6 &&
--	    usb_endpoint_xfer_bulk(dep->endpoint.desc) && DWC3_IP_IS(DWC31))
-+	    (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
-+	     usb_endpoint_xfer_isoc(dep->endpoint.desc)) && DWC3_IP_IS(DWC31))
- 		num_fifos = dwc->tx_fifo_resize_max_num;
- 
- 	/* FIFO size for a single buffer */
--- 
-2.32.0
+The hardware (tps6598x chip) has an interrupt pin and is expected to be used
+in normal case.
 
+Some buggy boards might have forgot to connect it. We are adding polling mode only for these buggy boards. ;)
+So polling mode is an exception.
+
+cheers,
+-roger
+
+> 
+> Thanks,
+> Aswath
+> 
+>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/usb/ti,tps6598x.yaml | 4 ++--
+>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+>>> index a4c53b1f1af3..1c4b8c6233e5 100644
+>>> --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+>>> @@ -25,6 +25,8 @@ properties:
+>>>  
+>>>    interrupts:
+>>>      maxItems: 1
+>>> +    description:
+>>> +      If interrupts are not populated then by default polling will be used.
+>>>  
+>>>    interrupt-names:
+>>>      items:
+>>> @@ -33,8 +35,6 @@ properties:
+>>>  required:
+>>>    - compatible
+>>>    - reg
+>>> -  - interrupts
+>>> -  - interrupt-names
+>>>  
+>>>  additionalProperties: true
+>>>  
+>>
+>> cheers,
+>> -roger
