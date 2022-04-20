@@ -2,136 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6FC7508F21
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 20:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83838508F82
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 20:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381427AbiDTSOS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Apr 2022 14:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
+        id S1354525AbiDTShH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Apr 2022 14:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381412AbiDTSOQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 14:14:16 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C21E46645
-        for <linux-usb@vger.kernel.org>; Wed, 20 Apr 2022 11:11:28 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 2so2695573pjw.2
-        for <linux-usb@vger.kernel.org>; Wed, 20 Apr 2022 11:11:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GIRfho/UEmgLKksz3Hef8/60q1Jdf6mHBM1iOrwH5Jc=;
-        b=H7/G2cA+tMU6dhaS4+bs+4ByL91KwkZGMQRvZqTZCWUqUKvbULyIT5oOWTFBeD+/qY
-         CMOoaahlyITn1LWInAQNMlc0b1Zf1piHoFjlFn+sJHnvK9u0oS6Mq5poA3EkpZpa5pR8
-         BJTymtJhTU9IAKHqcSLOujdSNa+6oggXyVj9s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GIRfho/UEmgLKksz3Hef8/60q1Jdf6mHBM1iOrwH5Jc=;
-        b=jbO+HIWCosBYEENKZm8bYWQKViHsiLbZLKNqE/7foRblSETVL3/yedycrQF/uWzSUC
-         GH9VojcbD0jyJ+UP5axpuJaqAdJaBdLr6C0VpRLCCnS0LBxaFRstPyWx3h3/4hYgbQIK
-         yKwygTBVYJkOUp/lkNDK6BgRiicV+usJc/9DcORhlzRcX72KGwF4nwFH3GpNSpqX1rmc
-         RAtFZo9Z++xraR9dtNlBCWSZhbghWDptqBz3Pv5rqTAy07gAsYabjvC/Zh9VrIb36S3r
-         hvuk3Op973/xvOg5tIiVoPBPRKtb80Y9HlmX9d70tDZ1mqB3E1BxqZclhxheQdbku9Ah
-         YafQ==
-X-Gm-Message-State: AOAM531c8oZXuhWXfYf5soxN/kU1fxr8YwRErz0SmXiXvR8g3N47hU7m
-        OOafKWWG0D68TWeAsaAoRJupoA==
-X-Google-Smtp-Source: ABdhPJyS9oAfiiFyBzLmBJinG3UpEtOBofItMsGhYt4Mpr6EgSebHQollxjiU6lvByWJAnP80PxSXg==
-X-Received: by 2002:a17:903:41c4:b0:158:f3af:f5df with SMTP id u4-20020a17090341c400b00158f3aff5dfmr18794348ple.102.1650478288055;
-        Wed, 20 Apr 2022 11:11:28 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q15-20020a056a00084f00b0050ab60bf37fsm5166814pfk.22.2022.04.20.11.11.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 11:11:27 -0700 (PDT)
-Date:   Wed, 20 Apr 2022 11:11:26 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Jann Horn <jannh@google.com>
-Cc:     Johan Hovold <johan@kernel.org>, kernel test robot <lkp@intel.com>,
+        with ESMTP id S1346657AbiDTShF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 14:37:05 -0400
+Received: from mail1.bemta31.messagelabs.com (mail1.bemta31.messagelabs.com [67.219.246.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB25129;
+        Wed, 20 Apr 2022 11:34:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
+        s=Selector; t=1650479657; i=@motorola.com;
+        bh=3P37IxzWVK0w9ZSre3qUDtbzzByBCjaQG/eZQCGHfpg=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
+         Content-Transfer-Encoding;
+        b=GtDsQ7/GlJ9DgXMA/L3hF2pttO8t4aMrTzlJC7r3+kMRhn147xf6FaMsDwrWSdwCl
+         rIVvBe27ccQG4ptpi2J1AhQxD3wK70l3XJlFOZpXGNOYWeD7ySp+h1zJwsh1V5dBGy
+         JIJh51smW/P34magU2DuXPEbadjN+4bFj13jExF15YTuZGCy3TTNsk7iG6xLOrzjS9
+         s6jhHsNctIwK1FNUd94s8avJx/uZNpa6paXxPEHupdYTJSged5q3LJtw2w0S5l1oRw
+         kjAxwiMCjYpVq3nCOXtldLOQdlJM7LJU6FXZIOBPEEubeZmnoNDOrS+ZJj6bl8fbbA
+         0yaEfhBe0Rq+Q==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBIsWRWlGSWpSXmKPExsWS8eKJqK56UEK
+  SQdM2K4tjbU/YLZoXr2ezuLxrDpvFomWtzBarFhxgt1jbNIvNgc3jcl8vk8emVZ1sHvvnrmH3
+  2LL/M6PH501yAaxRrJl5SfkVCawZux/+YyzoYK94fnIaewNjN1sXIxeHkMB0Jom2VbuhnCVME
+  q8f7WHsYuTkYBNQk1jwehUziC0iICtx+MpvZpAiZoGXjBJtC/awdDFycAgL+EtMeWgOUsMioC
+  rxeeM6dhCbV8BS4lLTDLBeCQF5iVPLDjJBxAUlTs58wgJiMwPFm7fOZp7AyD0LSWoWktQCRqZ
+  VjBZJRZnpGSW5iZk5uoYGBrqGhia6prpGeolVuol6pcW6qYnFJbqGeonlxXqpxcV6xZW5yTkp
+  enmpJZsYgYGYUsTKtINxYc9PvUOMkhxMSqK8i/gSkoT4kvJTKjMSizPii0pzUosPMWpwcAgsO
+  Td3OpMUS15+XqqSBO9mP6A6waLU9NSKtMwcYLTAlEpw8CiJ8BZaA6V5iwsSc4sz0yFSpxgVpc
+  R5HwYAJQRAEhmleXBtsAi9xCgrJczLyMDAIMRTkFqUm1mCKv+KUZyDUUmYdzXIFJ7MvBK46a+
+  AFjMBLa6eEguyuCQRISXVwDTX5oVptOrkkOhnvaYi53W+sLQs9q6RfvCv0nfNG+eJzqeefjih
+  6/S/urnqtI+u6zaOpAQX+5k/jMyV+BaeaFof5lXTevdRemVrxLZax4T104/e7s09ftLtkVGsl
+  d3+HyG6DFoscndF7p8SUD7w7aySRlv+lKVbZ73JeKymJ9fAfeH7dQb/e74POvk9PlV/0RXw7y
+  1Ifzo39U38UqUwiQVPrHR+XDy4W/np2uOXZAX1FktwVW7Z/5rbgk9+f6WMr6IG28WCI1XFNw0
+  td/Fz/15mbGtbdOaz4qs/N92VXjFomqwz6uT+KspVKcymsUvXymROzZMfP2Nj50q02TrMTtaz
+  KeSvv7CwIoKh1rpBiaU4I9FQi7moOBEAElDTCUsDAAA=
+X-Env-Sender: w36195@motorola.com
+X-Msg-Ref: server-10.tower-686.messagelabs.com!1650479655!16369!1
+X-Originating-IP: [104.232.228.21]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.85.8; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 27052 invoked from network); 20 Apr 2022 18:34:15 -0000
+Received: from unknown (HELO va32lpfpp01.lenovo.com) (104.232.228.21)
+  by server-10.tower-686.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 20 Apr 2022 18:34:15 -0000
+Received: from va32lmmrp01.lenovo.com (va32lmmrp01.mot.com [10.62.177.113])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4Kk8TM4sCQzgNVW;
+        Wed, 20 Apr 2022 18:34:15 +0000 (UTC)
+Received: from p1g3.. (unknown [10.45.5.21])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: w36195)
+        by va32lmmrp01.lenovo.com (Postfix) with ESMTPSA id 4Kk8TM2n3Mzf6f9;
+        Wed, 20 Apr 2022 18:34:15 +0000 (UTC)
+From:   Dan Vacura <w36195@motorola.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Wesley Cheng <wcheng@codeaurora.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Dan Vacura <w36195@motorola.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: Fix heap overflow in WHITEHEAT_GET_DTR_RTS
-Message-ID: <202204201056.5A1A6BAE04@keescook>
-References: <20220419041742.4117026-1-keescook@chromium.org>
- <Yl+8K++wZUJCthMj@hovoldconsulting.com>
- <CAG48ez2Pikm5g2RfJxae=jz1C7KSCWc99sCa7fXFBKvDOPJubA@mail.gmail.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc3: gadget: increase tx fifo size for ss isoc endpoints
+Date:   Wed, 20 Apr 2022 13:33:38 -0500
+Message-Id: <20220420183338.445622-1-w36195@motorola.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG48ez2Pikm5g2RfJxae=jz1C7KSCWc99sCa7fXFBKvDOPJubA@mail.gmail.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 02:33:06PM +0200, Jann Horn wrote:
-> On Wed, Apr 20, 2022 at 10:14 AM Johan Hovold <johan@kernel.org> wrote:
-> > On Mon, Apr 18, 2022 at 09:17:42PM -0700, Kees Cook wrote:
-> > > This looks like it's harmless, as both the source and the destinations are
-> > > currently the same allocation size (4 bytes) and don't use their padding,
-> > > but if anything were to ever be added after the "mcr" member in "struct
-> > > whiteheat_private", it would be overwritten. The structs both have a
-> > > single u8 "mcr" member, but are 4 bytes in padded size. The memcpy()
-> > > destination was explicitly targeting the u8 member (size 1) with the
-> > > length of the whole structure (size 4), triggering the memcpy buffer
-> > > overflow warning:
-> >
-> > Ehh... No. The size of a structure with a single u8 is 1, not 4. There's
-> > nothing wrong with the current code even if the use of memcpy for this
-> > is a bit odd.
+Improve performance of isoc transfers in superspeed by increasing the
+number of possible endpoints available, matching that of what was
+configured for bulk transfers.
 
-I thought that was surprising too, and suspected it was something
-specific to the build (as Jann also suggested). I tracked it down[1] to
-"-mabi=apcs-gnu", which is from CONFIG_AEABI=n.
+Signed-off-by: Dan Vacura <w36195@motorola.com>
+---
+ drivers/usb/dwc3/gadget.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-whiteheat_private {
-        __u8                       mcr;                  /*     0     1 */
-
-        /* size: 4, cachelines: 1, members: 1 */
-        /* padding: 3 */
-        /* last cacheline: 4 bytes */
-};
-
-
-> >
-> > > In file included from include/linux/string.h:253,
-> > >                  from include/linux/bitmap.h:11,
-> > >                  from include/linux/cpumask.h:12,
-> > >                  from include/linux/smp.h:13,
-> > >                  from include/linux/lockdep.h:14,
-> > >                  from include/linux/spinlock.h:62,
-> > >                  from include/linux/mmzone.h:8,
-> > >                  from include/linux/gfp.h:6,
-> > >                  from include/linux/slab.h:15,
-> > >                  from drivers/usb/serial/whiteheat.c:17:
-> > > In function 'fortify_memcpy_chk',
-> > >     inlined from 'firm_send_command' at drivers/usb/serial/whiteheat.c:587:4:
-> > > include/linux/fortify-string.h:328:25: warning: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
-> > >   328 |                         __write_overflow_field(p_size_field, size);
-> > >       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > So something is confused here.
-> 
-> So something's going wrong in fortify_memcpy_chk()? It looks like it
-> is called with constant "size" equal to 1, and the condition
-
-sizeof(info->mcr) is 1.
-sizeof(struct whiteheat_dr_info) (with CONFIG_AEABI=n) is 4.
-
-Given nothing actually uses "struct whiteheat_dr_info", except for the
-sizing (har har), I suspect the better solution is just to do:
-
-	info->mcr = command_info->result_buffer[0];
-
--Kees
-
-[1] https://godbolt.org/z/3YvM1MYWW
-
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index ab725d2262d6..faffa4f4050c 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -783,7 +783,8 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+ 		num_fifos = 3;
+ 
+ 	if (dep->endpoint.maxburst > 6 &&
+-	    usb_endpoint_xfer_bulk(dep->endpoint.desc) && DWC3_IP_IS(DWC31))
++	    (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
++	     usb_endpoint_xfer_isoc(dep->endpoint.desc)) && DWC3_IP_IS(DWC31))
+ 		num_fifos = dwc->tx_fifo_resize_max_num;
+ 
+ 	/* FIFO size for a single buffer */
 -- 
-Kees Cook
+2.32.0
+
