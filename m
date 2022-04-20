@@ -2,79 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38118508DEA
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 19:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306A4508E13
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Apr 2022 19:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380813AbiDTRFw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Apr 2022 13:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
+        id S1380913AbiDTRLc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Apr 2022 13:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbiDTRFu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 13:05:50 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE74D35A89;
-        Wed, 20 Apr 2022 10:03:01 -0700 (PDT)
-Received: from mail-oa1-f45.google.com ([209.85.160.45]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M60HD-1nocem04Kp-007VIm; Wed, 20 Apr 2022 19:02:59 +0200
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-e5c42b6e31so2561299fac.12;
-        Wed, 20 Apr 2022 10:02:58 -0700 (PDT)
-X-Gm-Message-State: AOAM5310TG6N2w3sGL0co5AYCEC7O0jyUs+x8r5pYCDgBIn4/uqAx+iU
-        Bpy7iJSeGcGKAC01wr+t9yZt0shuQ3TGLDlmJfY=
-X-Google-Smtp-Source: ABdhPJxz6CgjfinOQS1TDRri9Cm3kEssQiWnp6KDkTTbtVxh17jBXPydyZsxE5/5beeTet6sV5HJn89SHelO8Lpy/nw=
-X-Received: by 2002:a05:6870:8896:b0:da:f5e5:5b62 with SMTP id
- m22-20020a056870889600b000daf5e55b62mr2054271oam.229.1650474177531; Wed, 20
- Apr 2022 10:02:57 -0700 (PDT)
+        with ESMTP id S236999AbiDTRLa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Apr 2022 13:11:30 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3478D140E8;
+        Wed, 20 Apr 2022 10:08:43 -0700 (PDT)
+Received: from darkstar.musicnaut.iki.fi (85-76-69-216-nat.elisa-mobile.fi [85.76.69.216])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: aaro.koskinen)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 75C061B00220;
+        Wed, 20 Apr 2022 20:08:38 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1650474519;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=B5msNSogp8zw4YAcAsDj6Qc4zdyDGRTVYmRgqRI/0Bk=;
+        b=kTa4PeKcYbiz8v0d1bG/DaDfDPW+JW/Y5caY8AdpKOUIvDM5o36RCvYnTBodU8x4tUxuiF
+        ktxA1VDWnp4JhwdnVZN87iQgFWmYig18OVXRM8AVMhj39aWpQH20CPI4avqgLCd+YIg1Qy
+        idcTWI4UYPweIAjRUudXT1Zf+FbV1KFQ6CsP671o0mcoZYtmGXBa6OtYrK6P6K3jtGr5MZ
+        EHOyrIqm3R/nP1YaqVIW53HsDJDowGirtgtowbqAHter8eYPWisaRosyEAvgWd8N5xDazf
+        MEVSDjkPCt3ICTrqoO34GRh7hV71rJoxKjbq4SJKV8lZ4881URlm0+K8k78LMA==
+Date:   Wed, 20 Apr 2022 20:08:36 +0300
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-omap@vger.kernel.org, tony@atomide.com, jmkrzyszt@gmail.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Paul Walmsley <paul@pwsan.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Mark Brown <broonie@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH 00/41] OMAP1 full multiplatform conversion
+Message-ID: <20220420170836.GB1947@darkstar.musicnaut.iki.fi>
+References: <20220419133723.1394715-1-arnd@kernel.org>
 MIME-Version: 1.0
-References: <20220420150156.47405-1-nick.hawkins@hpe.com> <20220420150156.47405-9-nick.hawkins@hpe.com>
-In-Reply-To: <20220420150156.47405-9-nick.hawkins@hpe.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 20 Apr 2022 19:02:40 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0CgyM6Mwo0P-Qqej671PNW2qS6oun6dpQh2VHCCy9yJQ@mail.gmail.com>
-Message-ID: <CAK8P3a0CgyM6Mwo0P-Qqej671PNW2qS6oun6dpQh2VHCCy9yJQ@mail.gmail.com>
-Subject: Re: [PATCH v4 09/11] dt-bindings: usb: generic-ochi: Add HPE GXP ochi binding
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>, nick@hpe.com,
-        Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:d1Ipr9Wrkucsr07DWdDP48j5aOehmhWGlTZrVyAs/DF0Q57OGV6
- 2AR5vipNQTt1U9dHFIWAoclRdsoNscNbfr+j3vqVXe6x7N22BnOKScBvyoRPghF7T/VrPMb
- JTHP/hTpkkC92wQwx6rb10KRSAg1fRT2zfhGvxG55NSnPfrNHsudW5ZQ+hMAWoBq2PguBA2
- vuEQX1L2Dn1Mfa2KYpv+A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MmiqQx5ObuM=:hw1frHTBYLSQrbKEl0u7xx
- 9+iDjIxU94U0pgwRcsPoOVL9iI9pHI0KU4Mw4rWE+REyaL0F98dbQqAGmQKg091jCu7l73Gvn
- LQWJWKl1++LFTNYi+xQTHuHoDhnNnj/H/7sGROH/UNEYuNQs0WjFW4jaY9at9s/HFl08TQKpL
- Mc2iubExBWab1mbwSs2oOm7TUIj0arHX5Bt+VG2mYNrgm8WmqIlmNyTqcKH1XW0yjXf38nAAF
- XcThu5zwmifJentM4dCIc21JqZlJX7dWRdqmDVNWy2EMCT7HPlmFfkMOWPCmsO9lyrxfJCyKC
- jy9YbBUWxzE9vuEb5WZOkFPKGTalc000AUh2/GiNBJOKhY1+e+iEB/KdZxFJzG9DIwKF1ojXm
- iSXiGq5B3CFwLTLNr7Pg3JX2koK9YL3+YwXCU76JCRprkqoRcLAJMvADrJOcUUfBBKumRz1r7
- At0uGyGKn4Qe6Xit4s9DRn+3OZX8+8hDmik6VHzjT6A992ciKATxS3iNGGgYm83COADMJyvqM
- IhytB5WLxoG54Y1KbP+zw/ZLSXSNxYUOaVBnyV8xhcA+8QXM78SrbtY55mgtwiGmnxlXrPKO9
- 3SFARYimt1EFFsdM0K+K62SHnueHUfNyEMO5xvvmvpazl0I4YPSsdahuCfYEgQKc7d0h1TEBB
- Uk0dKpGTGpgOQpaHRVVReMPO+TwnkFsC2KYWMXPSeV0GEP8xTxSrZYHCGkGTXChW1FzI=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419133723.1394715-1-arnd@kernel.org>
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1650474519; a=rsa-sha256;
+        cv=none;
+        b=fUP5y+/XQ6zNbth6dMfmG2kN9cICXfnwRNYbkGoVeRNsnY+v6znhO5ch2i5vR5slzPAUec
+        Sztc4GVEZyZOwSwkjLWA4eNpQZV5fEBKgPV4PA0N+8DX6z5GrX6hFbFsM5SltaEfdOE+4X
+        UDuk5UOcv8jYUvEeGfo5RBPyqhwpuA6b4fVpMKqPEFiwGDCvSZdERPOuJX+KlmiYWEjjRQ
+        bzFS2MgkL1ik8EAGHbfrB4YVK4K3DZYBDGcMAmDesHi8ybCiB4PqONwfrj/O7/GLX4DLwE
+        F7s5Eze8miwVNtjGjumlbsWMr0sA8n2Asp4QdugmIsfg6AnQuJaXDQ3ZfwifVA==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1650474519;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=B5msNSogp8zw4YAcAsDj6Qc4zdyDGRTVYmRgqRI/0Bk=;
+        b=uAZuJDKZ7bj4MVqgI3bbcZAOIBMgL+TVcCp9+D4Bx6tcZMUwn0Yukw4zw8doMpCzXb5WaN
+        pJVbadhIweA9yGpQNueUVV9vr1H4bIPdTLnUt9sq85H8sbrTY3WHbuj7hKBBvCPd9hNdLm
+        1ukZgRh1UpuRnt4Qyg6muAqbGwQyb+0ufFu2ZZFIwmdViYeENLfMfCKbIoMvRNyQt/3O2K
+        fLMvlRgaN2w7kyqhajE30yj5vD3Ir8o/PY21vwX9mxyhgmVGkpxJMIAtFXlT8CRNLmGomp
+        hDjQyLXElaOcP4BTszvgdBbpo30Bae+K5TvQUlGAai/EzsAchzF8OdhdOWxG2A==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 5:01 PM <nick.hawkins@hpe.com> wrote:
->
-> From: Nick Hawkins <nick.hawkins@hpe.com>
->
-> Add hpe,gxp-ochi to the generic-ochi list. This is to
-> enable the device tree support.
->
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+Hi,
 
-s/ochi/ohci/
+On Tue, Apr 19, 2022 at 03:36:42PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> This is the full series for converting OMAP1 to multiplatform, rebased
+> from my 2019 attempt to do the same thing. The soc tree contains simpler
+> patches to do the same for iop32x, ixp4xx, ep93xx and s3c24xx, which
+> means we are getting closer to completing this for all ARMv5 platforms
+> (I have patches for PXA, which is the last one remaining).
+> 
+> Janusz already tested the branch separately and did the missing work
+> for the common-clk conversion after my previous approach was broken.
 
-everywhere
+I tested the full series on the following OMAP1 boards: ams-delta,
+nokia770, osk, palmte and sx1 (QEMU only).
+
+Apart from the earlyprintk breakage, everything seemed to work OK.
+
+A minor note, zImage grows about 50 KB with a minimal kernel config. This
+is not yet critical, there's still about 7% headroom on 770 to the 2 MB
+bootloader limit on my setup. Also the decompression time is approaching
+the hardcoded watchdog timeout...
+
+A.
