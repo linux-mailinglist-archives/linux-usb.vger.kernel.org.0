@@ -2,137 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2830450A0E9
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 15:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A3950A0F6
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 15:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386920AbiDUNhn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 09:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
+        id S231718AbiDUNmI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Apr 2022 09:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiDUNhb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 09:37:31 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFD12ED69;
-        Thu, 21 Apr 2022 06:34:41 -0700 (PDT)
-Received: from darkstar.musicnaut.iki.fi (85-76-47-192-nat.elisa-mobile.fi [85.76.47.192])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: aaro.koskinen)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 047811B00252;
-        Thu, 21 Apr 2022 16:34:32 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1650548074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oVFIWam2OH5Kq5QzsfblzUEMIMiatzAi7D5irCcCglk=;
-        b=Xk3qyrppSMBB4y+4boXcQF3oQ0tJICSyEousvelDBkd8/PVx55tQbJieAi/Q0KQa0aNG+G
-        Gh88Z+pM8E36JmzxlWSVvjXm3PFhBwLXYL2LZOWOsctt2/ybfngzEzXevKqVRqqsk+dHOX
-        5L1WRR3RN0Tc57TLDGaoxQzs/vTRLS73kqV8NQ7Pr+rYaKPhEVw6YpbHAi1CUcgHmT/iJb
-        sSsFTNRKlLJoxWjnYPJUSCoDtMuNfYAqp6Y4933cAcgTAbeGBst/0aU+ZHi8x118KnYG/L
-        TTEMpWSI21eBdlKccjScwxNSRB5ywON2ldVT1bI/+m9vyrFPnxxWxtiiOfNC6w==
-Date:   Thu, 21 Apr 2022 16:34:31 +0300
-From:   Aaro Koskinen <aaro.koskinen@iki.fi>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-omap <linux-omap@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Paul Walmsley <paul@pwsan.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Mark Brown <broonie@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        dmaengine@vger.kernel.org,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH 00/41] OMAP1 full multiplatform conversion
-Message-ID: <20220421133431.GE1947@darkstar.musicnaut.iki.fi>
-References: <20220419133723.1394715-1-arnd@kernel.org>
- <20220420170836.GB1947@darkstar.musicnaut.iki.fi>
- <CAK8P3a1+sOrn8BWPVc7f+QFZ5=7fE6=MLsMYV9t+HJcG2aRCXA@mail.gmail.com>
+        with ESMTP id S231147AbiDUNmH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 09:42:07 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E031B36E37;
+        Thu, 21 Apr 2022 06:39:17 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id b7so4901950plh.2;
+        Thu, 21 Apr 2022 06:39:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4R456a2EKx3/Cjhoycmuudv2QP7/h6tZBuPXNUpi9fk=;
+        b=aY6zKoJKeP9CN9vhlxFk2pWZrfR1jzOeVJ1arkhqsuE3RRLxQm16iBaWX8DJVnMABM
+         3/1QoQWIu1D1b1coWR6N3xwQHJPD/i5ZVgAmhvjHXmYg0xA6EUv5BNv4h+5MFiehNm5A
+         8TIcoDKBgYLJ9U35xmwu9M5U6EbaY8fu31HAhvSO4wkqD1R4NmBOUv0k8udHIifxAVI0
+         P0MJs4YqDUXYh6WkkAzktPp5XSKoojxRYcolydFfI3HsGrghxK3UQ58WnKE1Jq8grug3
+         DTETxoSXIXcCK2ehpFpRvECCiMuXKvsNotoicrVOM/HfJs/otkb7FrYJJdUtbgxf/+3g
+         Zo7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4R456a2EKx3/Cjhoycmuudv2QP7/h6tZBuPXNUpi9fk=;
+        b=JjvZ2Ak6ToptgejxNf1tQ18JXOuszmG+kqxeRRTx3aFZu1jqXRMDpScn9+8g/QnQYI
+         I1Iy3ISvikPkpR26StF/VIweTBI8v0Nu9uimAiJNbCvdKqE3eFTyRsE0yqroOj+lhJq1
+         zRHFs/yCG9F0cX7D22nQ0iwjw2gylOx1s6gnzR1ESxvmt7QQCMEc6FJgkMG35a/U9C0A
+         X4n5HhN8LrmxTLcItHOPiSnLKxuxi6lPJwnamvirrdXdKFEKK7UzPUtFYWld5iGXvVSS
+         wNCmDfaO0exzPEz8E50G9hxxQ5gl/wBZFOHvgbTGxLWRrwxVUHcMUYX2J2IqdUzAZbNH
+         PFrA==
+X-Gm-Message-State: AOAM530oRfENmMAX4psCgehRpJFz63fwg14pZ4NB2qk5TjJeOrAW9Qez
+        fKJ1VFcCTEFNsy97TO4ykDE=
+X-Google-Smtp-Source: ABdhPJzPpQ85QGBwdNYl9etr95TwZtPTx+MNyKe7AJV1BfwZeiO1aUHsvfyomdkNEC1hoOk2xONEXw==
+X-Received: by 2002:a17:903:11c7:b0:154:b936:d1d4 with SMTP id q7-20020a17090311c700b00154b936d1d4mr25980651plh.78.1650548357372;
+        Thu, 21 Apr 2022 06:39:17 -0700 (PDT)
+Received: from localhost ([166.111.139.106])
+        by smtp.gmail.com with ESMTPSA id o12-20020a17090aac0c00b001cd4989ff41sm2646989pjq.8.2022.04.21.06.39.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 06:39:16 -0700 (PDT)
+From:   Zixuan Fu <r33s3n6@gmail.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        baijiaju1990@gmail.com, Zixuan Fu <r33s3n6@gmail.com>,
+        TOTE Robot <oslab@tsinghua.edu.cn>
+Subject: [PATCH v2] drivers: usb: host: fix NULL pointer dereferences triggered by unhandled errors in xhci_create_rhub_port_array()
+Date:   Thu, 21 Apr 2022 21:39:02 +0800
+Message-Id: <20220421133902.1132063-1-r33s3n6@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a1+sOrn8BWPVc7f+QFZ5=7fE6=MLsMYV9t+HJcG2aRCXA@mail.gmail.com>
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1650548074; a=rsa-sha256;
-        cv=none;
-        b=ENXGTtwbaVogGy0K8rD23cjHmjO1KDBpZYPSWyAXiJ0/g3DluUJMMqXizYyXV1sh/1O56S
-        hChw4SwQwbKFg4HYlY2SOiU8koj4G0UA6uGgTWSMxSwgySv+tbXfSR2Tt70pNgc6FN/vqj
-        fDExRVdSPenGd/ZTQhfjmyvSX3P7pooRbwh0WQDjEhItMOJyG5yZgN9teFQT3NBHXEEZkO
-        lTJHNaVgxdVFvqiak5FfjdiYOvwW5qr/IFspdks2sOUviaT7JpvKaacUapRAwuXFYtOguN
-        JXEZ3bM5xviSbbt9Tw3xErBDkB9cnwUXXzqGZHNp79d0+eb+sY0cVMOQI8ss7A==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1650548074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oVFIWam2OH5Kq5QzsfblzUEMIMiatzAi7D5irCcCglk=;
-        b=Eu1uUO0EKvbhrdQZfCpIhRELzJA5jQZA+tye8R+aaTvgG9DkVEsXKYWX2Sby3kmhYmBCFx
-        570Cbs63dCqUFZqQdnWOK5t2vzZfwXPpwZynEikAKA3hi3QfuIi/BoBmae0xNSLey+fMmB
-        6AN1xF39YRJln008whjTgBohIBALbd/JXyh+rxwe1mx9rmT55Z+64rbOepQpAj7WZ0ttFr
-        jnTgxti7i7/9Pg4jNgskYWOOvKpXwrgTWzEQwA6H3TD1Jh0kJTMK2AunGS+FmvtC90A9Rp
-        r/9gYERVC+5BvSqEpSaGtYy+3htyiKaREqUWXaB7dxpxJqJYBA33p4txWzgVSw==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+In xhci_create_rhub_port_array(), when rhub->num_ports is zero, 
+rhub->ports would not be set; when kcalloc_node() fails, rhub->ports
+would be set to NULL. In these two cases, xhci_create_rhub_port_array()
+just returns void, and thus its callers are unaware of the error.
 
-On Wed, Apr 20, 2022 at 10:00:13PM +0200, Arnd Bergmann wrote:
-> On Wed, Apr 20, 2022 at 7:08 PM Aaro Koskinen <aaro.koskinen@iki.fi> wrote:
-> > On Tue, Apr 19, 2022 at 03:36:42PM +0200, Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > This is the full series for converting OMAP1 to multiplatform, rebased
-> > > from my 2019 attempt to do the same thing. The soc tree contains simpler
-> > > patches to do the same for iop32x, ixp4xx, ep93xx and s3c24xx, which
-> > > means we are getting closer to completing this for all ARMv5 platforms
-> > > (I have patches for PXA, which is the last one remaining).
-> > >
-> > > Janusz already tested the branch separately and did the missing work
-> > > for the common-clk conversion after my previous approach was broken.
-> >
-> > I tested the full series on the following OMAP1 boards: ams-delta,
-> > nokia770, osk, palmte and sx1 (QEMU only).
-> >
-> > Apart from the earlyprintk breakage, everything seemed to work OK.
-> 
-> Nice, thanks a lot for testing!
+Then rhub->ports is dereferenced in xhci_usb3_hub_descriptor() or 
+xhci_usb2_hub_descriptor().
 
-With the updated patch 26 also earlyprintk now works, so if you still
-update the patches, feel free to add for the whole series:
+To fix the bug, xhci_setup_port_arrays() should return an integer to 
+indicate a possible error, and its callers should handle the error.
 
-Tested-by: Aaro Koskinen <aaro.koskinen@iki.fi>
+In the driver, xhci_create_rhub_port_array() is only used in 
+xhci_setup_port_arrays(), and only xhci_mem_init() calls
+xhci_setup_port_arrays() and does all cleanup work when it fails.
+Specifically, xhci_mem_init() calls xhci_mem_cleanup(), which eventually
+calls kfree(xhci->usb2_rhub.ports) and kfree(xhci->usb3_rhub.ports). For
+this reason, when xhci_create_rhub_port_array() fails, 
+xhci_setup_port_arrays() should return the error code directly, without
+freeing the memory allocated in this function.
 
-Thanks,
+The error log in our fault-injection testing is shown as follows:
 
-A.
+[   24.001309] BUG: kernel NULL pointer dereference, address: 0000000000000000
+...
+[   24.003992] RIP: 0010:xhci_hub_control+0x3f5/0x60d0 [xhci_hcd]
+...
+[   24.009803] Call Trace:
+[   24.010014]  <TASK>
+[   24.011310]  usb_hcd_submit_urb+0x1233/0x1fd0
+[   24.017071]  usb_start_wait_urb+0x115/0x310
+[   24.017641]  usb_control_msg+0x28a/0x450
+[   24.019046]  hub_probe+0xb16/0x2320
+[   24.019757]  usb_probe_interface+0x4f1/0x930
+[   24.019765]  really_probe+0x33d/0x970
+[   24.019768]  __driver_probe_device+0x157/0x210
+[   24.019772]  driver_probe_device+0x4f/0x340
+[   24.019775]  __device_attach_driver+0x2ee/0x3a0
+...
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+---
+v2:
+* Explain the reason why xhci_setup_port_arrays() returns without freeing the memory in error handling code.
+  Thank Greg KH for helpful advice.
+---
+ drivers/usb/host/xhci-mem.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index bbb27ee2c6a3..024515346c39 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -2235,7 +2235,7 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+ 	/* FIXME: Should we disable ports not in the Extended Capabilities? */
+ }
+ 
+-static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
++static int xhci_create_rhub_port_array(struct xhci_hcd *xhci,
+ 					struct xhci_hub *rhub, gfp_t flags)
+ {
+ 	int port_index = 0;
+@@ -2243,11 +2243,11 @@ static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
+ 	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+ 
+ 	if (!rhub->num_ports)
+-		return;
++		return -EINVAL;
+ 	rhub->ports = kcalloc_node(rhub->num_ports, sizeof(*rhub->ports),
+ 			flags, dev_to_node(dev));
+ 	if (!rhub->ports)
+-		return;
++		return -ENOMEM;
+ 
+ 	for (i = 0; i < HCS_MAX_PORTS(xhci->hcs_params1); i++) {
+ 		if (xhci->hw_ports[i].rhub != rhub ||
+@@ -2259,6 +2259,7 @@ static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
+ 		if (port_index == rhub->num_ports)
+ 			break;
+ 	}
++	return 0;
+ }
+ 
+ /*
+@@ -2277,6 +2278,7 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
+ 	int cap_count = 0;
+ 	u32 cap_start;
+ 	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
++	int ret;
+ 
+ 	num_ports = HCS_MAX_PORTS(xhci->hcs_params1);
+ 	xhci->hw_ports = kcalloc_node(num_ports, sizeof(*xhci->hw_ports),
+@@ -2367,8 +2369,13 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
+ 	 * Not sure how the USB core will handle a hub with no ports...
+ 	 */
+ 
+-	xhci_create_rhub_port_array(xhci, &xhci->usb2_rhub, flags);
+-	xhci_create_rhub_port_array(xhci, &xhci->usb3_rhub, flags);
++	ret = xhci_create_rhub_port_array(xhci, &xhci->usb2_rhub, flags);
++	if (ret)
++		return ret;
++
++	ret = xhci_create_rhub_port_array(xhci, &xhci->usb3_rhub, flags);
++	if (ret)
++		return ret;
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
+
