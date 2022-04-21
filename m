@@ -2,118 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4903F509A27
+	by mail.lfdr.de (Postfix) with ESMTP id 94252509A28
 	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 10:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386275AbiDUIBU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 04:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53686 "EHLO
+        id S1386316AbiDUIDN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Apr 2022 04:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386261AbiDUIBT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 04:01:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E3814033;
-        Thu, 21 Apr 2022 00:58:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EF4C61A9C;
-        Thu, 21 Apr 2022 07:58:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F23FDC385A5;
-        Thu, 21 Apr 2022 07:58:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650527910;
-        bh=4cpOHnm1lKbpsJah/8zKxEWJvRBAEiLp0Eg7bpCKpNU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vBLzYz/8W6TyxyPXZoYXU1M72RDm3yqr3OMzlNfs3UpbQMyS9PdTCZ/KKUhsNLMJv
-         rnhacdd6GCpXpJY5PpNveD83C8/YzuYGQkS53wiQM1aX2DxNKaVd0q4QGeaE3BMmV3
-         0FfKaf2/mKFru+Jj+iG8q/v30EjdlZ73VTcsNKrSW8KVfw39gp0Qp3dZYwUYzdY53g
-         j6WFL4VHoChY90gMNMq4yj1OOD284qTgtUhIQHRTPmGnnUrFgacbXVhNxxMicTjc6l
-         ap6CKzlm5+F6KN7SMGMp4vpSr+6rVyFIvE5EKu3go1s50HvKzyzs8iZAIB2/9qaeL8
-         VdKQnEsvNfaAQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nhRhn-0003up-8a; Thu, 21 Apr 2022 09:58:23 +0200
-Date:   Thu, 21 Apr 2022 09:58:23 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jann Horn <jannh@google.com>, kernel test robot <lkp@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] USB: serial: Fix heap overflow in WHITEHEAT_GET_DTR_RTS
-Message-ID: <YmEOn7LrVjJuybvg@hovoldconsulting.com>
-References: <20220419041742.4117026-1-keescook@chromium.org>
- <Yl+8K++wZUJCthMj@hovoldconsulting.com>
- <CAG48ez2Pikm5g2RfJxae=jz1C7KSCWc99sCa7fXFBKvDOPJubA@mail.gmail.com>
- <202204201056.5A1A6BAE04@keescook>
+        with ESMTP id S230142AbiDUIDL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 04:03:11 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C0711C10
+        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 01:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650528022; x=1682064022;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VJYSm9WWfvh7Ek9yEyB3/A47vNPELIRS5c3GwiQy5wA=;
+  b=S7nMAGmfMSoo/LDCutaun2kdGQorgVWN0BaGcMmLgs/FJVXico49MuZk
+   kFkdfDIlvwyfPKYfA3xh5RYjWRPPAJ9iCsbZx+65lVMZ7m8PU3xlN8GVb
+   LDW4D5Km1mkNc7HIcogBh4fdKYUB8gVrL3+vdntlLs4UUeOWvvJQstF96
+   QDdt4IeHtOuoqB+EzCS4M/kOE1HFh52X64xlE4Th+7GhgBySaPs8BJmaY
+   EgR3+G8odE18idMW7wvYwVYwUcQ779c9gNiXb/OzrtlLqC8uEhmIT2GCw
+   B/fD75u47Ax0iy2Kdj5I/ybJHe4BRhTdYYJdmSHeSQ50J0hk+K4uNALKX
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="263740126"
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="263740126"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 01:00:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="702985224"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 21 Apr 2022 01:00:18 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 21 Apr 2022 11:00:17 +0300
+Date:   Thu, 21 Apr 2022 11:00:17 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Jack Pham (QUIC)" <quic_jackp@quicinc.com>
+Subject: Re: [PATCH v3 2/4] usb: typec: ucsi: add a common function
+ ucsi_unregister_connectors()
+Message-ID: <YmEPEUwb9GYJqzJD@kuha.fi.intel.com>
+References: <1649843891-15554-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1649843891-15554-3-git-send-email-quic_linyyuan@quicinc.com>
+ <Yla9VGMpcDcpJR0f@kuha.fi.intel.com>
+ <DM8PR02MB81985719835CC9DC2AAF1E6EE3EC9@DM8PR02MB8198.namprd02.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202204201056.5A1A6BAE04@keescook>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <DM8PR02MB81985719835CC9DC2AAF1E6EE3EC9@DM8PR02MB8198.namprd02.prod.outlook.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[ +CC: Arnd ]
-
-On Wed, Apr 20, 2022 at 11:11:26AM -0700, Kees Cook wrote:
-> On Wed, Apr 20, 2022 at 02:33:06PM +0200, Jann Horn wrote:
-> > On Wed, Apr 20, 2022 at 10:14 AM Johan Hovold <johan@kernel.org> wrote:
-> > > On Mon, Apr 18, 2022 at 09:17:42PM -0700, Kees Cook wrote:
-> > > > This looks like it's harmless, as both the source and the destinations are
-> > > > currently the same allocation size (4 bytes) and don't use their padding,
-> > > > but if anything were to ever be added after the "mcr" member in "struct
-> > > > whiteheat_private", it would be overwritten. The structs both have a
-> > > > single u8 "mcr" member, but are 4 bytes in padded size. The memcpy()
-> > > > destination was explicitly targeting the u8 member (size 1) with the
-> > > > length of the whole structure (size 4), triggering the memcpy buffer
-> > > > overflow warning:
+On Wed, Apr 13, 2022 at 01:27:52PM +0000, Linyu Yuan (QUIC) wrote:
+> > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Sent: Wednesday, April 13, 2022 8:09 PM
+> > To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; linux-
+> > usb@vger.kernel.org; Jack Pham (QUIC) <quic_jackp@quicinc.com>
+> > Subject: Re: [PATCH v3 2/4] usb: typec: ucsi: add a common function
+> > ucsi_unregister_connectors()
+> > 
+> > On Wed, Apr 13, 2022 at 05:58:09PM +0800, Linyu Yuan wrote:
+> > > In error path of ucsi_init(), it will unregister all valid ucsi connector,
+> > > and samiliar operation also happen in ucsi_unregister(),
+> > 
+> > Sorry but I have to confirm this: with "samiliar" you mean "the same",
+> > right?
+> 
+> Only one small difference for original code which is no cancel_work_sync() of each connector in ucsi _init(),
+> But in ucsi_register_port(), we get role switch after connector work initialized,
+> So I think it is safe to call cancel_work_sync() to connector work if role switch return -EPROBE_DEFER.
+> 
+> > 
+> > > add a common function for two places.
 > > >
-> > > Ehh... No. The size of a structure with a single u8 is 1, not 4. There's
-> > > nothing wrong with the current code even if the use of memcpy for this
-> > > is a bit odd.
+> > > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> > > ---
+> > > v2: improve ucsi_connector_clean(), check total number of connector.
+> > > v3: rename to ucsi_unregister_connectors(), suggest by maintainer
+> > >
+> > >  drivers/usb/typec/ucsi/ucsi.c | 51 ++++++++++++++++++++++++-----------
+> > --------
+> > >  1 file changed, 28 insertions(+), 23 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > > index 77ac0b7..af9a2a1 100644
+> > > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > > @@ -1187,6 +1187,32 @@ static int ucsi_register_port(struct ucsi *ucsi, int
+> > index)
+> > >  	return ret;
+> > >  }
+> > >
+> > > +static void ucsi_unregister_connectors(struct ucsi *ucsi)
+> > > +{
+> > > +	struct ucsi_connector *con;
+> > > +	int i;
+> > > +
+> > > +	if (!ucsi->connector)
+> > > +		return;
+> > 
+> > Can that actually ever happen?
 > 
-> I thought that was surprising too, and suspected it was something
-> specific to the build (as Jann also suggested). I tracked it down[1] to
-> "-mabi=apcs-gnu", which is from CONFIG_AEABI=n.
-> 
-> whiteheat_private {
->         __u8                       mcr;                  /*     0     1 */
-> 
->         /* size: 4, cachelines: 1, members: 1 */
->         /* padding: 3 */
->         /* last cacheline: 4 bytes */
-> };
+> Consider a case, ucsi_init() failed, we will call ucsi_unregister_connectors() to free all connectors,
+> After that the UCSI implementation like ucsi_acpi call ucsi_unregister() again,
+> It should not unregister connectors again.
 
-I stand corrected, thanks.
+I'm sorry but I don't understand your answer. I'm trying to ask what
+are you trying to say with the word "samiliar"?
 
-Do we have other ABIs that can increase the alignment of structures like
-this?
+I do not believe there is a word "samiliar" in English language.
 
-Skimming lore reveals a few subsystems that have started depending on
-!OABI to not have to deal with this. Apparently the old ARM ABI is
-deprecated in user space since gcc-4.6:
+thanks,
 
-	https://lore.kernel.org/all/20190304193723.657089-1-arnd@arndb.de/
-
-Perhaps time to drop support from the kernel too?
-
-> Given nothing actually uses "struct whiteheat_dr_info", except for the
-> sizing (har har), I suspect the better solution is just to do:
-> 
-> 	info->mcr = command_info->result_buffer[0];
-
-Yeah, that works for now. Ideally, we'd cast the result buffer to struct
-whiteheat_dr_info and access its single field. But that's not what
-current code does and the above is no less confusing.
-
-Patch applied, thanks.
-
-Johan
+-- 
+heikki
