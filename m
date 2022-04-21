@@ -2,68 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF7850A742
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 19:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1785450A7E0
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 20:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390838AbiDURnC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 13:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
+        id S1390966AbiDUSQD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Apr 2022 14:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390878AbiDURmn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 13:42:43 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8F0CD3
-        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 10:39:52 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id h1so5628034pfv.12
-        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 10:39:52 -0700 (PDT)
+        with ESMTP id S229747AbiDUSQB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 14:16:01 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8514AE34
+        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 11:13:11 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id n11-20020a17090a73cb00b001d1d3a7116bso6207403pjk.0
+        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 11:13:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=aKecDjOh5Hsplgo3DwsxBvjIajRQbWHRMhevzw1bna0=;
-        b=V1hn+scp77WcFmcQyhATr12t5sJq4J1DqwAVjnLg2GNWFaQ3UqKuxkSvEbEuYa3hT1
-         zwWEQeajgdxjNLgebPYSy3rcnmBWGCJW582DzbymfSaPKVf7POKOqMcPOxOiBoeZP+/5
-         yto7g2zpFJqGNlDImmXh37tO7Fycv1DC2LAS4=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=lJhN1mtetWtoQcGidNztP52TwkjHuAbhYwhXQGMD9XQ=;
+        b=aFZ1JRqXlPDvW0SAlxaHHiQdk3oRabw71YHdDlJhFsrxiGA6U4Mw9RdMR6DAXWcLVf
+         +ObfpbrbDez3ZtNYKvQ5ud1sH7rr10JnejK0wu5p0gCb7tTOZskJOtJZDL4c5fySz5KH
+         HH+L+vtSiEDgBfrNwftw2LTpbQ/rRwBdOsQcw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aKecDjOh5Hsplgo3DwsxBvjIajRQbWHRMhevzw1bna0=;
-        b=lRoCH95bn45m6n0K1M+vncMYj9fKgZ237jfuUzVPnSGz66vtnHzpAIdozlUS+4/gTv
-         wx3Y8p86ea9bLsHgcw1hkgbzjFff/MxhmubLvZNlRdmUn7FYsmv+zhQY8/2Xh0UHqXA4
-         SnlFeB5KLhNDuB4sAbuMOq367XG8O3nQK4IyZfF2SXIB94HFHl/dy6To8baDe35Nnr7p
-         T7nuhP3jx7xh8EFHhqRbwKjJvsbZqOdIf7tWf+LCyc3JaqmlzuLkXrfg6KpeTne4VVH8
-         ts6pn2PYamWfvm5vq7jseyAFdim5Xe2ygCekxemdwp4n7AdA2Lf9xsdSrLveZMdDTjND
-         hLTQ==
-X-Gm-Message-State: AOAM530IGedzMknOhaeAjscDcikNqoQmI+l6Ppx6PtWrdcHLqH7oIuAs
-        YnVQW6woiWqzjQo7k1wVENAQaA==
-X-Google-Smtp-Source: ABdhPJwL9UaE6eRPcDU5xb21DeZNmyYxJSDhh/o1itNcLlstR4zRSUJ8oF7krQ403Wz/UTPLZOlAjw==
-X-Received: by 2002:a05:6a00:856:b0:50a:431b:c298 with SMTP id q22-20020a056a00085600b0050a431bc298mr694589pfk.75.1650562792542;
-        Thu, 21 Apr 2022 10:39:52 -0700 (PDT)
-Received: from evgreen-glaptop.lan ([98.47.98.87])
-        by smtp.gmail.com with ESMTPSA id j6-20020a63b606000000b003808b0ea96fsm23237023pgf.66.2022.04.21.10.39.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 10:39:52 -0700 (PDT)
-From:   Evan Green <evgreen@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=lJhN1mtetWtoQcGidNztP52TwkjHuAbhYwhXQGMD9XQ=;
+        b=iMkxEGb7zbUCRnNpwRx6lYNnQxU+qSjVneGl3geiCl0pPrrcB5uAgJQEDKRwNuGcaJ
+         F8NeLXBE08NodwybkD7ovEonTSUlTOWHQ3POqFrtF9fxB9vvaSK24IXFrUM8ZxDbk+Ez
+         ujuQxNx8fNuqwgWwcO/Gfc651Q2/UU559atNgjrd1qnwbJiD7t7ndEWSF5ve8xTMKGGE
+         YbB0VuCKhV34loX01hM05ESrI2mpnOFtTuc74Y7esjtuII0U6i/mRUaUlktXjnDcdWnJ
+         9syf7MJE81FJkyb5ZVipXbQiC1EFa23CtCWVrquVUH1GYgSYh+CbbDWJK9IaAmnP3kbv
+         /0yA==
+X-Gm-Message-State: AOAM531ZO2HsPfY4C2Yj+CBvhgderNSU0RNkaUBHCsfbAikixig73Jx5
+        +GuSSOMGi94RoWf77Of0QDxs8Q==
+X-Google-Smtp-Source: ABdhPJx4vtQYv7ivk8pmhwD7P8ioY0zapzr/HTW7kdNOUbKpPJYVldebkDVUrO5e2cpLBCiMsmB2Fw==
+X-Received: by 2002:a17:90a:8a04:b0:1d5:d64f:a1e5 with SMTP id w4-20020a17090a8a0400b001d5d64fa1e5mr5396855pjn.109.1650564790608;
+        Thu, 21 Apr 2022 11:13:10 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:d426:5807:a72:7b27])
+        by smtp.gmail.com with UTF8SMTPSA id d206-20020a621dd7000000b0050acf2c1303sm5839273pfd.107.2022.04.21.11.13.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 11:13:10 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 11:13:08 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
-        Rajat Jain <rajatja@chromium.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Evan Green <evgreen@chromium.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Youngjin Jang <yj84.jang@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v3 2/2] USB: hcd-pci: Fully suspend across freeze/thaw cycle
-Date:   Thu, 21 Apr 2022 10:39:27 -0700
-Message-Id: <20220421103751.v3.2.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220421173927.2845967-1-evgreen@chromium.org>
-References: <20220421173927.2845967-1-evgreen@chromium.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Li Jun <jun.li@nxp.com>, Peter Chen <peter.chen@nxp.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH v21 0/3] usb: misc: Add onboard_usb_hub driver
+Message-ID: <YmGetA6Huz4Sj/RL@google.com>
+References: <20220217184254.4141705-1-mka@chromium.org>
+ <CAD=FV=XswQj+L6rRuWH-PdoGp9vVsWKTwz1bFM_fagy55tKqEg@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD=FV=XswQj+L6rRuWH-PdoGp9vVsWKTwz1bFM_fagy55tKqEg@mail.gmail.com>
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -73,48 +87,150 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The documentation for the freeze() method says that it "should quiesce
-the device so that it doesn't generate IRQs or DMA". The unspoken
-consequence of not doing this is that MSIs aimed at non-boot CPUs may
-get fully lost if they're sent during the period where the target CPU is
-offline.
+Hi,
 
-The current callbacks for USB HCD do not fully quiesce interrupts,
-specifically on XHCI. Change to use the full suspend/resume flow for
-freeze/thaw to ensure interrupts are fully quiesced. This fixes issues
-where USB devices fail to thaw during hibernation because XHCI misses
-its interrupt and cannot recover.
+On Thu, Apr 07, 2022 at 12:41:22PM -0700, Doug Anderson wrote:
+> Hi,
+> 
+> On Thu, Feb 17, 2022 at 10:43 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> > This series adds:
+> > - the onboard_usb_hub_driver
+> > - glue in the generic HCD code to create and destroy the
+> >   onboard_usb_hub platform devices if needed
+> > - device tree changes that add RTS5411 entries for the QCA SC7180
+> >   based boards trogdor and lazor
+> > - a couple of stubs for platform device functions to avoid
+> >   unresolved symbols with certain kernel configs
+> >
+> > The main issue the driver addresses is that a USB hub needs to be
+> > powered before it can be discovered. For discrete onboard hubs (an
+> > example for such a hub is the Realtek RTS5411) this is often solved
+> > by supplying the hub with an 'always-on' regulator, which is kind
+> > of a hack. Some onboard hubs may require further initialization
+> > steps, like changing the state of a GPIO or enabling a clock, which
+> > requires even more hacks. This driver creates a platform device
+> > representing the hub which performs the necessary initialization.
+> > Currently it only supports switching on a single regulator, support
+> > for multiple regulators or other actions can be added as needed.
+> > Different initialization sequences can be supported based on the
+> > compatible string.
+> >
+> > Besides performing the initialization the driver can be configured
+> > to power the hub off during system suspend. This can help to extend
+> > battery life on battery powered devices which have no requirements
+> > to keep the hub powered during suspend. The driver can also be
+> > configured to leave the hub powered when a wakeup capable USB device
+> > is connected when suspending, and power it off otherwise.
+> >
+> > Changes in v21:
+> > - dropped patch 'driver core: Export device_is_bound()'
+> > - refactored _find_onboard_hub()
+> > - removed 'onboard_hub_dev' symlinks from USB devices
+> > - dropped patch 'arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub'
+> >   (will be sent separately)
+> > - rebased series on v5.17-rc4
+> >
+> > Changes in v20:
+> > - addressed review comments from Stephen
+> > - changed DT node names for hubs
+> >
+> > Changes in v19:
+> > - added VID:PID pairs and compatible strings for RTS5414 hub
+> > - updated comments with RTS5411 USB versions to reflect those
+> >   reported/supported by the hub
+> > - rebased series on v5.16
+> >
+> > Changes in v18:
+> > - introduced hidden Kconfig option to align module vs. builtin
+> >   choice with CONFIG_USB (thanks Doug!)
+> > - added patch 'driver core: Export device_is_bound()'
+> > - also adjust device tree of pompom rev1
+> > - dropped the following patches, which aren't needed anymore by this
+> >   series (though they might still be useful on their own):
+> >   - usb: Specify dependencies on USB_XHCI_PLATFORM with 'depends on'
+> >   - arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM
+> >   - ARM: configs: Explicitly enable USB_XHCI_PLATFORM where needed
+> >
+> > Changes in v17:
+> > - rebased on top of v5.16-rc1
+> > - moved creation of onboard_hub platform devices from xhci_platform
+> >   to the generic HCD code
+> > - addressed review comments for the onboard_hub driver
+> > - moved Kconfig/defconfig changes to the end of the series. The
+> >   onboard_hub driver doesn't depend on XHCI_PLATFORM anymore,
+> >   hence these changes aren't really required for the driver, but
+> >   they still seem to be a worthwhile improvement
+> >
+> > Changes in v16:
+> > - added patch 'ARM: configs: Explicitly enable USB_XHCI_PLATFORM
+> >   where needed' to keep arm32 defconfigs effectively unchanged
+> >
+> > Changes in v15:
+> > - adjusted dependencies of USB_DWC3_CORE to make sure it can only
+> >   be enabled when at least one of USB_DWC3_HOST, USB_DWC3_GADGET
+> >   or USB_DWC3_DUAL_ROLE is selectable
+> >
+> > Changes in v14:
+> > - rebased on top of v5.14-rc1
+> > - dropped DT binding patch which landed in v5.13
+> >
+> > Changes in v13:
+> > - added patch "usb: Specify dependency on USB_XHCI_PLATFORM with
+> >   'depends on'" to the series to avoid Kconfig conflicts
+> > - added patch "arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM"
+> >   to the series to keep effective defconfig unchanged
+> >
+> > Changes in v12:
+> > - onboard_hub driver: use IS_ENABLED(CONFIG_USB_ONBOARD_HUB_MODULE)
+> >   in onboard_hub.h to also check for the driver built as module
+> > - onboard_hub_driver: include onboard_hub.h again to make sure there
+> >   are prototype declarations for the public functions
+> >
+> > Changes in v11:
+> > - support multiple onboard hubs connected to the same parent
+> > - don't include ‘onboard_hub.h’ from the onboard hub driver
+> >
+> > Changes in v10:
+> > - always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
+> > - keep 'regulator-boot-on' property for pp3300_hub
+> >
+> > Changes in v9:
+> > - added dependency on ONBOARD_USB_HUB (or !ONBOARD_USB_HUB) to
+> >   USB_PLATFORM_XHCI
+> >
+> > Changes in v7:
+> > - updated DT binding
+> > - series rebased on qcom/arm64-for-5.13
+> >
+> > Changes in v6:
+> > - updated summary
+> >
+> > Changes in v5:
+> > - cover letter added
+> >
+> > Matthias Kaehlcke (3):
+> >   of/platform: Add stubs for of_platform_device_create/destroy()
+> >   usb: misc: Add onboard_usb_hub driver
+> >   usb: core: hcd: Create platform devices for onboard hubs in probe()
+> >
+> >  .../sysfs-bus-platform-onboard-usb-hub        |   8 +
+> >  MAINTAINERS                                   |   7 +
+> >  drivers/usb/core/hcd.c                        |   6 +
+> >  drivers/usb/misc/Kconfig                      |  23 +
+> >  drivers/usb/misc/Makefile                     |   1 +
+> >  drivers/usb/misc/onboard_usb_hub.c            | 510 ++++++++++++++++++
+> >  include/linux/of_platform.h                   |  22 +-
+> >  include/linux/usb/hcd.h                       |   1 +
+> >  include/linux/usb/onboard_hub.h               |  18 +
+> >  9 files changed, 592 insertions(+), 4 deletions(-)
+> >  create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub
+> >  create mode 100644 drivers/usb/misc/onboard_usb_hub.c
+> >  create mode 100644 include/linux/usb/onboard_hub.h
+> 
+> With v5.18-rc1 out the door, I wonder if it's a good time to look at
+> this series again. Are there any hidden blockers that it's waiting
+> for?
 
-Signed-off-by: Evan Green <evgreen@chromium.org>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
----
-
-(no changes since v2)
-
-Changes in v2:
- - Removed the change to freeze_noirq/thaw_noirq
-
- drivers/usb/core/hcd-pci.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-index 8176bc81a635d6..ae5e6d572376be 100644
---- a/drivers/usb/core/hcd-pci.c
-+++ b/drivers/usb/core/hcd-pci.c
-@@ -616,10 +616,10 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
- 	.suspend_noirq	= hcd_pci_suspend_noirq,
- 	.resume_noirq	= hcd_pci_resume_noirq,
- 	.resume		= hcd_pci_resume,
--	.freeze		= check_root_hub_suspended,
-+	.freeze		= hcd_pci_suspend,
- 	.freeze_noirq	= check_root_hub_suspended,
- 	.thaw_noirq	= NULL,
--	.thaw		= NULL,
-+	.thaw		= hcd_pci_resume,
- 	.poweroff	= hcd_pci_suspend,
- 	.poweroff_noirq	= hcd_pci_suspend_noirq,
- 	.restore_noirq	= hcd_pci_resume_noirq,
--- 
-2.31.0
-
+Greg, please let me know if any further changes are needed or if this
+series can be landed.
