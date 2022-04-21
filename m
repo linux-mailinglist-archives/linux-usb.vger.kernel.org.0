@@ -2,139 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647EE509C5D
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 11:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9CCD509C83
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 11:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387686AbiDUJe4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 05:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
+        id S1387761AbiDUJpe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Apr 2022 05:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387677AbiDUJey (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 05:34:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B4E1572F;
-        Thu, 21 Apr 2022 02:32:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6916AB823A7;
-        Thu, 21 Apr 2022 09:32:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B45BC385A1;
-        Thu, 21 Apr 2022 09:32:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650533522;
-        bh=5tCYODYe4IUZwtg/8f/XY3fbdkY0KtrDaNGpzi8qFUc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yfswzQHoys+STXSwb/IAa5il79nk+s0bn4xbXaq3LJUY4T+natHRxo3gFMZnnHrbr
-         qWtKCmV/Tu/jUBHnKejgruocGkKwQ0AY/s+DLkOHXVgjQPhCrkzNF0uLywNsqc1x/4
-         z88Hhlly+u+82ml4UqP+bBAjzPnflGgUiB3akSNY=
-Date:   Thu, 21 Apr 2022 11:31:59 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "Sandeep Maheswaram (Temp) (QUIC)" <quic_c_sanm@quicinc.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Pavan Kumar Kondeti (QUIC)" <quic_pkondeti@quicinc.com>,
-        "Pratham Pratap (QUIC)" <quic_ppratap@quicinc.com>,
-        "Krishna Kurapati PSSNV (QUIC)" <quic_kriskura@quicinc.com>,
-        "Vidya Sagar Pulyala (Temp) (QUIC)" <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v3 0/2] Skip phy initialization for DWC3 USB Controllers
-Message-ID: <YmEkj3/6+9gvgqAx@kroah.com>
-References: <1649323888-12420-1-git-send-email-quic_c_sanm@quicinc.com>
- <DM6PR02MB4857A0ADCDA1558DE58E103ADFF29@DM6PR02MB4857.namprd02.prod.outlook.com>
- <4b34735f-8e1f-bf37-398f-9b4a8aa2e939@linux.intel.com>
- <YmEL3WnyM7sa8VP9@kuha.fi.intel.com>
- <YmEXqe5IEAzZezU5@kroah.com>
- <YmEYvYA0uXatStZg@kuha.fi.intel.com>
+        with ESMTP id S1382102AbiDUJpd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 05:45:33 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B88AF245AD;
+        Thu, 21 Apr 2022 02:42:44 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id mp16-20020a17090b191000b001cb5efbcab6so7262057pjb.4;
+        Thu, 21 Apr 2022 02:42:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uWPvWJM0Emxp2Wx6FKroXe98tqd593DJ1aphfz514/M=;
+        b=Z93YuQXEhlwck4000PqWf35F2YNJVn7kJ3VHLVT5RF3ybfnWBBnpwh2CnGLKVSgveo
+         t96dppHHcudvpjQ0D8XKvt+iuUG/IvOxxuk/VXyv2skslF8GDdFnvYd0AUxdMyl26NhY
+         tdR1gm5X8/GJhzXbcuJQ/My2s1hqhzcjVDI+NJv9mkcMMNSnqAhqn1bjRZAhkRGhE3yT
+         ws+6YkcLINNQ7JhmTS+0R4kZ4pUZMm/BqIdvQkI4ntaHPkON2hstQEQkg9ext6lqDRsJ
+         2wNIBzdSLbUAb3Uh/MCmfPNkDy2JXTYUlynoEMMyYNtpmfuEvmupE+pJK1rcUY1kEw+h
+         JyGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uWPvWJM0Emxp2Wx6FKroXe98tqd593DJ1aphfz514/M=;
+        b=K9SYCdnt+hImkfjMa04nswBdQ6a8B+G6DOMoos/z7ImLPdrM6JlwXBUc02ShItQfbM
+         SzDAT3hFWYemuDcwU9HbgvphP0b/53nelgI8CaQXoA6Dut5YHgvL/rJQYhh3nOZWoKoH
+         T6IOBn3C3WRQRo2hnDzNKhlawnibm3GP2rQCvGSEBYHAvYbaJ1qMa1lM9wF4zAvqT6BN
+         JVZRKA2LT0d994AXOPtSrc+/K6gua4YBCHRn6+PwtdOPYO0itf0W8D6pzdAQkqCOa3yI
+         iZMXGgduhH+pitrL6PDwfDaXwnHBkf6rdFy7Z1a/19l0oS7nhSOoB92ak0eVS4NLT61g
+         lBig==
+X-Gm-Message-State: AOAM531K3vpSNTsKB2ddk8wg0JEdEvesxWdPpOgl+7s5eWldHHgKmDgm
+        6vVSx28WNU/zwfQ51Wt1wVE=
+X-Google-Smtp-Source: ABdhPJw1yOX/giV9vJeKrw94T6dmHSrFlXl04qkd05ZxxOMhE5d3VzmyoAAzgl6hWB60ZTLCu1nX6Q==
+X-Received: by 2002:a17:90a:fac:b0:1ca:5eb8:f3b2 with SMTP id 41-20020a17090a0fac00b001ca5eb8f3b2mr9426180pjz.37.1650534164234;
+        Thu, 21 Apr 2022 02:42:44 -0700 (PDT)
+Received: from localhost ([166.111.139.106])
+        by smtp.gmail.com with ESMTPSA id l15-20020a62be0f000000b005059cc9cc34sm23268723pff.92.2022.04.21.02.42.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 02:42:43 -0700 (PDT)
+From:   Zixuan Fu <r33s3n6@gmail.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        baijiaju1990@gmail.com, Zixuan Fu <r33s3n6@gmail.com>,
+        TOTE Robot <oslab@tsinghua.edu.cn>
+Subject: [PATCH] drivers: usb: host: fix NULL pointer dereferences triggered by unhandled errors in xhci_create_rhub_port_array()
+Date:   Thu, 21 Apr 2022 17:42:36 +0800
+Message-Id: <20220421094236.1052170-1-r33s3n6@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmEYvYA0uXatStZg@kuha.fi.intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 11:41:33AM +0300, Heikki Krogerus wrote:
-> On Thu, Apr 21, 2022 at 10:36:57AM +0200, Greg Kroah-Hartman wrote:
-> > On Thu, Apr 21, 2022 at 10:46:37AM +0300, Heikki Krogerus wrote:
-> > > On Wed, Apr 20, 2022 at 04:20:52PM +0300, Mathias Nyman wrote:
-> > > > On 19.4.2022 13.17, Sandeep Maheswaram (Temp) (QUIC) wrote:
-> > > > > Hi Mathias, Felipe,
-> > > > > 
-> > > > >> -----Original Message-----
-> > > > >> From: Sandeep Maheswaram (Temp) (QUIC) <quic_c_sanm@quicinc.com>
-> > > > >> Sent: Thursday, April 7, 2022 3:01 PM
-> > > > >> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Felipe Balbi
-> > > > >> <balbi@kernel.org>; Stephen Boyd <swboyd@chromium.org>; Doug
-> > > > >> Anderson <dianders@chromium.org>; Matthias Kaehlcke
-> > > > >> <mka@chromium.org>; Mathias Nyman <mathias.nyman@intel.com>
-> > > > >> Cc: linux-arm-msm@vger.kernel.org; linux-usb@vger.kernel.org; linux-
-> > > > >> kernel@vger.kernel.org; Pavan Kumar Kondeti (QUIC)
-> > > > >> <quic_pkondeti@quicinc.com>; Pratham Pratap (QUIC)
-> > > > >> <quic_ppratap@quicinc.com>; Krishna Kurapati PSSNV (QUIC)
-> > > > >> <quic_kriskura@quicinc.com>; Vidya Sagar Pulyala (Temp) (QUIC)
-> > > > >> <quic_vpulyala@quicinc.com>; Sandeep Maheswaram (Temp) (QUIC)
-> > > > >> <quic_c_sanm@quicinc.com>
-> > > > >> Subject: [PATCH v3 0/2] Skip phy initialization for DWC3 USB Controllers
-> > > > >>
-> > > > >> Runtime suspend of phy drivers was failing from DWC3 driver as runtime
-> > > > >> usage value is 2 because the phy is initialized from
-> > > > >> DWC3 core and HCD core.
-> > > > >> Some controllers like DWC3 and CDNS3 manage phy in their core drivers.
-> > > > >> This property can be set to avoid phy initialization in HCD core.
-> > > > >>
-> > > > >> v3:
-> > > > >> Coming back to this series based on discussion at below thread
-> > > > >> https://patchwork.kernel.org/project/linux-arm-msm/patch/1648103831-
-> > > > >> 12347-4-git-send-email-quic_c_sanm@quicinc.com/
-> > > > >> Dropped the dt bindings PATCH 1/3 in v2
-> > > > >> https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-
-> > > > >> 25582-1-git-send-email-quic_c_sanm@quicinc.com/
-> > > > >>
-> > > > >> v2:
-> > > > >> Updated the commit descriptions.
-> > > > >> Changed subject prefix from dwc to dwc3.
-> > > > >> Increased props array size.
-> > > > >>
-> > > > >> Sandeep Maheswaram (2):
-> > > > >>   usb: host: xhci-plat: Add device property to set XHCI_SKIP_PHY_INIT
-> > > > >>     quirk
-> > > > >>   usb: dwc3: host: Set the property usb-skip-phy-init
-> > > > >>
-> > > > >>  drivers/usb/dwc3/host.c      | 4 +++-
-> > > > >>  drivers/usb/host/xhci-plat.c | 3 +++
-> > > > >>  2 files changed, 6 insertions(+), 1 deletion(-)
-> > > > >>
-> > > > >> --
-> > > > >> 2.7.4
-> > > > > 
-> > > > > Please let me know your opinion about this series.
-> > > > 
-> > > > Otherwise looks good but wondering if we should document that new device
-> > > > property somewhere. 
-> > > > 
-> > > > Couldn't find a standard way how those device properties excluded from
-> > > > Documentation/devicetree/binding are documented
-> > > 
-> > > Couldn't it be just documented in drivers/usb/host/xhci-plat.c for now?
-> > 
-> > That's not where DT properties are documented.
-> 
-> It's not a DT property.
+In xhci_create_rhub_port_array(), when rhub->num_ports is zero, 
+rhub->ports would not be set; when kcalloc_node() fails, rhub->ports
+would be set to NULL. In these two cases, xhci_create_rhub_port_array()
+just returns void, and thus its callers are unaware of the error.
 
-Then what is it and why are the other properties documented?
+Then rhub->ports is dereferenced in xhci_usb3_hub_descriptor() or 
+xhci_usb2_hub_descriptor().
 
-Anyway, a new series has been submitted that does document this so I
-don't think it's an argument anymore :)
+To fix the bug, xhci_setup_port_arrays() should return an integer to 
+indicate a possible error, and its callers should handle the error.
+
+Here is the log when this bug occurred in our fault-injection testing:
+
+[   24.001309] BUG: kernel NULL pointer dereference, address: 0000000000000000
+...
+[   24.003992] RIP: 0010:xhci_hub_control+0x3f5/0x60d0 [xhci_hcd]
+...
+[   24.009803] Call Trace:
+[   24.010014]  <TASK>
+[   24.011310]  usb_hcd_submit_urb+0x1233/0x1fd0
+[   24.017071]  usb_start_wait_urb+0x115/0x310
+[   24.017641]  usb_control_msg+0x28a/0x450
+[   24.019046]  hub_probe+0xb16/0x2320
+[   24.019757]  usb_probe_interface+0x4f1/0x930
+[   24.019765]  really_probe+0x33d/0x970
+[   24.019768]  __driver_probe_device+0x157/0x210
+[   24.019772]  driver_probe_device+0x4f/0x340
+[   24.019775]  __device_attach_driver+0x2ee/0x3a0
+...
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+---
+ drivers/usb/host/xhci-mem.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index bbb27ee2c6a3..024515346c39 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -2235,7 +2235,7 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+ 	/* FIXME: Should we disable ports not in the Extended Capabilities? */
+ }
+ 
+-static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
++static int xhci_create_rhub_port_array(struct xhci_hcd *xhci,
+ 					struct xhci_hub *rhub, gfp_t flags)
+ {
+ 	int port_index = 0;
+@@ -2243,11 +2243,11 @@ static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
+ 	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+ 
+ 	if (!rhub->num_ports)
+-		return;
++		return -EINVAL;
+ 	rhub->ports = kcalloc_node(rhub->num_ports, sizeof(*rhub->ports),
+ 			flags, dev_to_node(dev));
+ 	if (!rhub->ports)
+-		return;
++		return -ENOMEM;
+ 
+ 	for (i = 0; i < HCS_MAX_PORTS(xhci->hcs_params1); i++) {
+ 		if (xhci->hw_ports[i].rhub != rhub ||
+@@ -2259,6 +2259,7 @@ static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
+ 		if (port_index == rhub->num_ports)
+ 			break;
+ 	}
++	return 0;
+ }
+ 
+ /*
+@@ -2277,6 +2278,7 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
+ 	int cap_count = 0;
+ 	u32 cap_start;
+ 	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
++	int ret;
+ 
+ 	num_ports = HCS_MAX_PORTS(xhci->hcs_params1);
+ 	xhci->hw_ports = kcalloc_node(num_ports, sizeof(*xhci->hw_ports),
+@@ -2367,8 +2369,13 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
+ 	 * Not sure how the USB core will handle a hub with no ports...
+ 	 */
+ 
+-	xhci_create_rhub_port_array(xhci, &xhci->usb2_rhub, flags);
+-	xhci_create_rhub_port_array(xhci, &xhci->usb3_rhub, flags);
++	ret = xhci_create_rhub_port_array(xhci, &xhci->usb2_rhub, flags);
++	if (ret)
++		return ret;
++
++	ret = xhci_create_rhub_port_array(xhci, &xhci->usb3_rhub, flags);
++	if (ret)
++		return ret;
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
+
