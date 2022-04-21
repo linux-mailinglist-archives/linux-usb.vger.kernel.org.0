@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01699509989
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 09:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309205099FE
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 09:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386174AbiDUHwA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 03:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
+        id S1386291AbiDUHxL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Apr 2022 03:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbiDUHv6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 03:51:58 -0400
+        with ESMTP id S1386293AbiDUHxD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 03:53:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBBD1AF2F;
-        Thu, 21 Apr 2022 00:49:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAC76325;
+        Thu, 21 Apr 2022 00:50:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F016261B6F;
-        Thu, 21 Apr 2022 07:49:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65B79C385AF;
-        Thu, 21 Apr 2022 07:49:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED79361B83;
+        Thu, 21 Apr 2022 07:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA37C385C1;
+        Thu, 21 Apr 2022 07:50:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650527348;
-        bh=XtL+3anNJRhWOAUuNxErGEglp2qD/anNUiavImUZHSc=;
+        s=k20201202; t=1650527410;
+        bh=scrBCeJL1OsZjxal/hOOJR8xrKpdhNNc3BiRG6d2EkQ=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SI6N8MLwQTi/OcfLRqaIbOWpLPAMJQBKpjNIHGCtcKl3DD8PVnvMmhsDEUqlR1Lus
-         ijmWsDNl11yvTWQOraEUxNHvcWKVb4GNEdT6Fw4raqIHKf0XZ77g0qaxDXG+JYfL7R
-         Zg14HRoH4ZDpkFTKy04n1nNnBFsC0Psbkg+f0gdN5ivSizLqRI8i0jeHcBClfgE37Z
-         mdl7box1eAQsd9gasTSzXmLPf+orNsh5zt9ZG2F88V6PwHFZ+8nrtdMFNcK3zn9Q0M
-         xP1k1BUiPOPifBGUY0w4JZuxYZsVDYgYaD1UzL9Y7+Qqa8uqZET7wW7fl7gSdMScYk
-         LXF79XdsCh00A==
-Received: by mail-wm1-f49.google.com with SMTP id 123-20020a1c1981000000b0038b3616a71aso2783837wmz.4;
-        Thu, 21 Apr 2022 00:49:08 -0700 (PDT)
-X-Gm-Message-State: AOAM531Mm7wNXaqtVuwXdfXcZd91j8pRm/0i87/IGy0QfwGYvDheNEKe
-        NhyRJXeYj57I8Ne0C4h9FZI57FFVjBwiE7k41fo=
-X-Google-Smtp-Source: ABdhPJypuC7jbZN67qXyjmmFNWvxuABrK2IojedrMlrL5Yqv356sc3UpIArFOPSqMrdEiOwiEgmPKU7mdySJIdIBwDI=
-X-Received: by 2002:a05:600c:4e4a:b0:392:88e1:74a7 with SMTP id
- e10-20020a05600c4e4a00b0039288e174a7mr7345266wmq.174.1650527346456; Thu, 21
- Apr 2022 00:49:06 -0700 (PDT)
+        b=I53ZD6Ob3R8QcG8tmbBFOshAoeh0KWTCN+0xytPix2nry7uRQ548WOA6mgeTA8b60
+         xqcd8bPRZq0d9NGREbKcENA/6rrZ++7viLpgU63REWPzgO8q9prVkcA/bzV7MqTM58
+         sUmxO6IoWO0a7H1x5VJkkaFc4lpZjiYA6noI7uY3mGaa0VeH955HVnMBGSpEbC8CAP
+         RSs7zWjx/m1FtilWmdqSWcPG8debp7PnluxDXjtK3iWbHqmoQNSc7t0ehoBzQTENv0
+         9QatR/d4pEc4EkMNyUjBndFN83NNoQCS6otBb5tlBjEwZo7+fypytHRD8fIwU/Q/4/
+         PgYcCLLU9pZKg==
+Received: by mail-wr1-f51.google.com with SMTP id s25so547584wrb.8;
+        Thu, 21 Apr 2022 00:50:10 -0700 (PDT)
+X-Gm-Message-State: AOAM530FfqQfrAh5WqtgnBcKDmL7d8U1P59eapo92IbHGxJmLudy8S4M
+        QWF4Eyy07Y8oD586OwQO9nBQOJ0gntH1UG0RyUE=
+X-Google-Smtp-Source: ABdhPJzRVJ/OmeGnrqJE761/+0TPqsFFrrS+icRdgf4Xe42e9Mrpm76xuvHw8bwt5K0xWAFGMv08ylmpsjeKAOckTf8=
+X-Received: by 2002:adf:e106:0:b0:20a:b31b:213d with SMTP id
+ t6-20020adfe106000000b0020ab31b213dmr3918734wrz.219.1650527408610; Thu, 21
+ Apr 2022 00:50:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220421074204.1284072-1-hch@lst.de> <20220421074204.1284072-3-hch@lst.de>
-In-Reply-To: <20220421074204.1284072-3-hch@lst.de>
+References: <20220421074204.1284072-1-hch@lst.de> <20220421074204.1284072-4-hch@lst.de>
+In-Reply-To: <20220421074204.1284072-4-hch@lst.de>
 From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 21 Apr 2022 09:48:50 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3Y-z+FQWbZo+r_-SGa5D0oJJbKH-YQkk73uG+TOOUKKg@mail.gmail.com>
-Message-ID: <CAK8P3a3Y-z+FQWbZo+r_-SGa5D0oJJbKH-YQkk73uG+TOOUKKg@mail.gmail.com>
-Subject: Re: [PATCH 2/7] ARM: remove dmabounce
+Date:   Thu, 21 Apr 2022 09:49:52 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2Mv++CCGf2BuC-wS4VGb+ZhfnJqVwJkK-VcYAqfiPi8A@mail.gmail.com>
+Message-ID: <CAK8P3a2Mv++CCGf2BuC-wS4VGb+ZhfnJqVwJkK-VcYAqfiPi8A@mail.gmail.com>
+Subject: Re: [PATCH 3/7] ARM: mark various dma-mapping routines static in dma-mapping.c
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Russell King <linux@armlinux.org.uk>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -73,9 +73,11 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 9:41 AM Christoph Hellwig <hch@lst.de> wrote:
+On Thu, Apr 21, 2022 at 9:42 AM Christoph Hellwig <hch@lst.de> wrote:
 >
-> Remove the now unused dmabounce code.
+> With the dmabounce removal these aren't used outside of dma-mapping.c,
+> so mark them static.  Move the dma_map_ops declarations down a bit
+> to avoid lots of forward declarations.
 >
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 
