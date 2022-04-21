@@ -2,81 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F362650A8B9
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 21:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6392750A905
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 21:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386619AbiDUTGL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 15:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
+        id S1389800AbiDUTWu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Apr 2022 15:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244316AbiDUTGK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 15:06:10 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0E34C422
-        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 12:03:20 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id f17so10397409ybj.10
-        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 12:03:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=unnM4fXSMJiSpgzSnbjZz/++wfkdNxCsxaJNQt54SI8=;
-        b=yYOJAm4NGLIM7VhPfoM0A7UQlxtEAXOJ5Za+zj3E+xbN5syIkkj2m+fituMnbqpqbj
-         MAiDcU2LdLTMxmLpV0AKC0h/NbvsMeDpzZgxGjbjWsKQPMZgaKP9BIJDVQd0zMPYF9po
-         Vin2Od6SxsI63H8+mR9FZkeZAgbUt390qhzMJ9L9VZglAp21KMC75thGdhMQ1B/aHqYS
-         JHgmzlaJBQfQHcw6bMyAtY2KogmKKIQN5yTLCjgmdRSeFobyeCCjcO+9mQ4aXUcqs74N
-         9pdTeqIqkQGDgy1DRsyG6X3HORECTQ/njdqXVjfcy3maBanaXCuvlLBjXy9yoTbWWI7Y
-         BNuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=unnM4fXSMJiSpgzSnbjZz/++wfkdNxCsxaJNQt54SI8=;
-        b=7Y7tz19o2AA3JXF5RNhiT5PD8bDgq0h7ehD3y/BwMe7EKLtqiYi1xq+T8m5HyoprPs
-         0WlHthEb3CUShdaD2MMr30Nvmc6OwwFh9yY4fGfERfZPLhk0e1rPv5ZkBVUW4FOqiphp
-         jUyZ8fiLIo44XXFWeBAsEnCU44lYKiEC5GmWJXbz6tQeN3u8MXW/6uYenw41x+DcIebl
-         xbrmUOOrsRC4QRLaeOdZogcPIqeVdUZBn7xDaQsNPLBPinDwk9AScdb9D4FJP/sYFubR
-         YvX5VgjEVjp6/ZzCfKppWa2MmLdE8cUcfVycvkaTPm4dMt5hJl/Kfa447R9/bpy6+Mo5
-         n3zg==
-X-Gm-Message-State: AOAM531KU30F0gtjWHsObI67WaPVlFchBzwVKnP4wa0APlaeOTNEKqtP
-        4xfQ31hrLI6EBBjMoCTMh8nZH1L3ABWPtJqjdjFT9Q==
-X-Google-Smtp-Source: ABdhPJyHzNIYg5C4PJ/cejBQRmSKW/dyS0OVtZsBDIZ2e0UwpSgBZ6Gk8wH3JAqmB8QausXlAat9W0SAdbIea4rEv4c=
-X-Received: by 2002:a25:ae45:0:b0:641:ba5c:7745 with SMTP id
- g5-20020a25ae45000000b00641ba5c7745mr1147553ybe.537.1650567799668; Thu, 21
- Apr 2022 12:03:19 -0700 (PDT)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 22 Apr 2022 00:33:08 +0530
-Message-ID: <CA+G9fYvdfYBq+Q=-XUJcKHSYXdubdoqhExRpjrqCgf_N3pPpHQ@mail.gmail.com>
-Subject: drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
- reduce to an integer constant
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-usb@vger.kernel.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        heikki.krogerus@linux.intel.com, Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S1389394AbiDUTWn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 15:22:43 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8BD24E;
+        Thu, 21 Apr 2022 12:19:51 -0700 (PDT)
+Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23LExwPW027532;
+        Thu, 21 Apr 2022 19:18:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id; s=pps0720;
+ bh=QgBoamMiZEICwB0eYmyKiR9XUsMuhTjNYHT2xlss6Sc=;
+ b=T56p7236YxcGSJ6qtK+XTwx5TAfqCSsloLnoruXEhL5h1oQT6eOaGuCfpzuAnZwvZmfg
+ MjG/MmEJ1V95SPOHRDuLnoHXPrwgz4jieUJjplsYM6xOqt8K++h60+bOe78DZ/t3/Dsy
+ JAC6jm0+fQkUdG724yUdEzRBcJdN2dJytgllZIltmRcCzxBp+mU312GxW/lwFwBQ6k93
+ j/fodB9PlNpQjQwkr3Na6zWBPfI3mcpBEyK8ddP+pDh490n2Tk/w4t85+1mnb7rrsC2w
+ EsGoacuGr5s+25QoaF6YDnJLoJkTjtJBxtsGEavkEoT+DicsEPOi8SR5yOxZNGSQRlQ6 bQ== 
+Received: from g9t5008.houston.hpe.com (g9t5008.houston.hpe.com [15.241.48.72])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3fk9h1j42p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Apr 2022 19:18:42 +0000
+Received: from g9t2301.houston.hpecorp.net (g9t2301.houston.hpecorp.net [16.220.97.129])
+        by g9t5008.houston.hpe.com (Postfix) with ESMTP id CA30B64;
+        Thu, 21 Apr 2022 19:18:40 +0000 (UTC)
+Received: from hpe.com (cigateway-dev.us.rdlabs.hpecorp.net [10.14.73.30])
+        by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id 4B5864A;
+        Thu, 21 Apr 2022 19:18:38 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        gregkh@linuxfoundation.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, linux@armlinux.org.uk, arnd@arndb.de,
+        olof@lixom.net, joel@jms.id.au, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org
+Subject: [PATCH v5 00/11] Introduce HPE GXP Architecture
+Date:   Thu, 21 Apr 2022 14:20:23 -0500
+Message-Id: <20220421192023.109903-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-ORIG-GUID: 4ZJK1Kxp7--H_yyUgkL8iP4CyE-fbXWb
+X-Proofpoint-GUID: 4ZJK1Kxp7--H_yyUgkL8iP4CyE-fbXWb
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-21_04,2022-04-21_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 priorityscore=1501 mlxlogscore=999
+ phishscore=0 bulkscore=0 impostorscore=0 clxscore=1011 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204210102
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Linux mainline and linux next arm64 builds failed with gcc-7.3.x.
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-drivers/usb/typec/tcpm/tcpm.c: In function 'run_state_machine':
-drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
-reduce to an integer constant
-   case BDO_MODE_TESTDATA:
-   ^~~~
-make[4]: *** [scripts/Makefile.build:288: drivers/usb/typec/tcpm/tcpm.o] Error 1
-                                      ^
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Changes since v4:
+ *Fixed version mismatch with patchset across all patches
+ *Fixed typos with ochi -> ohci echi -> ehci
+ *Adjusted Watchdog Kconfig file
+ *Adjusted various commit comments
+ *Removed un-necessary include file
+ *Updated outdated base revision to newer one to resolve merge
+  conflicts as well as pickup vendor binding change for hpe.
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Changes since v3:
+ *Completely redid the dtsi file to represent architecture
+ *Reduced device tree size
+ *Rewrote the timer driver to start the watchdog driver due
+ to similar register region
+ *Made adjustments to timer
+ *Made adjustments to watchdog
+ *Changed gxp.yaml to hpe,gxp.yaml with changes
+ *Updated Maintainers to represent new file names
+ *Added hpe bindings to generic-ehci and generic-ohci
+ *Fixed clock architecture to be accurate
 
-https://ci.linaro.org/view/lkft/job/openembedded-lkft-linux-mainline/DISTRO=lkft,MACHINE=hikey,label=docker-buster-lkft/4259/consoleText
+Changes since v2:
+ *Reduced size of changes, put them into patchset format
+ *Changed from txt->yaml
+
+Changes since v1:
+ *Fixed compiler warnings
+
+The GXP is the HPE BMC SoC that is used in the majority
+of HPE Generation 10 servers. Traditionally the asic will
+last multiple generations of server before being replaced.
+
+Info about SoC:
+
+ HPE GXP is the name of the HPE Soc. This SoC is used to implement
+ many BMC features at HPE. It supports ARMv7 architecture based on
+ the Cortex A9 core. It is capable of using an AXI bus to which
+ a memory controller is attached. It has multiple SPI interfaces
+ to connect boot flash and BIOS flash. It uses a 10/100/1000 MAC
+ for network connectivity. It has multiple i2c engines to drive
+ connectivity with a host infrastructure. The initial patches
+ enable the watchdog and timer enabling the host to be able to
+ boot.
+
+Nick Hawkins (11):
+  archh: arm: mach-hpe: Introduce the HPE GXP architecture
+  arch: arm: configs: multi_v7_defconfig
+  drivers: wdt: Introduce HPE GXP SoC Watchdog
+  clocksource/drivers: Add HPE GXP timer
+  dt-bindings: timer: Add HPE GXP Timer Binding
+  dt-bindings: watchdog: Add HPE GXP Watchdog timer binding
+  dt-bindings: arm: Add HPE GXP Binding
+  dt-bindings: usb: generic-ehci:  Add HPE GXP ehci binding
+  dt-bindings: usb: generic-ohci:  Add HPE GXP ohci binding
+  arch: arm: boot: dts: Introduce HPE GXP Device tree
+  maintainers: Introduce HPE GXP Architecture
+
+ .../devicetree/bindings/arm/hpe,gxp.yaml      |  22 +++
+ .../bindings/timer/hpe,gxp-timer.yaml         |  49 +++++
+ .../devicetree/bindings/usb/generic-ehci.yaml |   1 +
+ .../devicetree/bindings/usb/generic-ohci.yaml |   1 +
+ .../bindings/watchdog/hpe,gxp-wdt.yaml        |  30 +++
+ MAINTAINERS                                   |  13 ++
+ arch/arm/Kconfig                              |   2 +
+ arch/arm/Makefile                             |   1 +
+ arch/arm/boot/dts/Makefile                    |   2 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      |  13 ++
+ arch/arm/boot/dts/hpe-gxp.dtsi                | 128 ++++++++++++
+ arch/arm/configs/multi_v7_defconfig           |   3 +
+ arch/arm/mach-hpe/Kconfig                     |  17 ++
+ arch/arm/mach-hpe/Makefile                    |   1 +
+ arch/arm/mach-hpe/gxp.c                       |  16 ++
+ drivers/clocksource/Kconfig                   |   8 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/timer-gxp.c               | 182 ++++++++++++++++++
+ drivers/watchdog/Kconfig                      |  11 ++
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/gxp-wdt.c                    | 166 ++++++++++++++++
+ 21 files changed, 668 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/hpe,gxp.yaml
+ create mode 100644 Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
+ create mode 100644 arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+ create mode 100644 arch/arm/boot/dts/hpe-gxp.dtsi
+ create mode 100644 arch/arm/mach-hpe/Kconfig
+ create mode 100644 arch/arm/mach-hpe/Makefile
+ create mode 100644 arch/arm/mach-hpe/gxp.c
+ create mode 100644 drivers/clocksource/timer-gxp.c
+ create mode 100644 drivers/watchdog/gxp-wdt.c
+
+-- 
+2.17.1
+
