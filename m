@@ -2,84 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1785450A7E0
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 20:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F362650A8B9
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 21:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390966AbiDUSQD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 14:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
+        id S1386619AbiDUTGL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Apr 2022 15:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiDUSQB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 14:16:01 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8514AE34
-        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 11:13:11 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id n11-20020a17090a73cb00b001d1d3a7116bso6207403pjk.0
-        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 11:13:11 -0700 (PDT)
+        with ESMTP id S244316AbiDUTGK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 15:06:10 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0E34C422
+        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 12:03:20 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id f17so10397409ybj.10
+        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 12:03:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=lJhN1mtetWtoQcGidNztP52TwkjHuAbhYwhXQGMD9XQ=;
-        b=aFZ1JRqXlPDvW0SAlxaHHiQdk3oRabw71YHdDlJhFsrxiGA6U4Mw9RdMR6DAXWcLVf
-         +ObfpbrbDez3ZtNYKvQ5ud1sH7rr10JnejK0wu5p0gCb7tTOZskJOtJZDL4c5fySz5KH
-         HH+L+vtSiEDgBfrNwftw2LTpbQ/rRwBdOsQcw=
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=unnM4fXSMJiSpgzSnbjZz/++wfkdNxCsxaJNQt54SI8=;
+        b=yYOJAm4NGLIM7VhPfoM0A7UQlxtEAXOJ5Za+zj3E+xbN5syIkkj2m+fituMnbqpqbj
+         MAiDcU2LdLTMxmLpV0AKC0h/NbvsMeDpzZgxGjbjWsKQPMZgaKP9BIJDVQd0zMPYF9po
+         Vin2Od6SxsI63H8+mR9FZkeZAgbUt390qhzMJ9L9VZglAp21KMC75thGdhMQ1B/aHqYS
+         JHgmzlaJBQfQHcw6bMyAtY2KogmKKIQN5yTLCjgmdRSeFobyeCCjcO+9mQ4aXUcqs74N
+         9pdTeqIqkQGDgy1DRsyG6X3HORECTQ/njdqXVjfcy3maBanaXCuvlLBjXy9yoTbWWI7Y
+         BNuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=lJhN1mtetWtoQcGidNztP52TwkjHuAbhYwhXQGMD9XQ=;
-        b=iMkxEGb7zbUCRnNpwRx6lYNnQxU+qSjVneGl3geiCl0pPrrcB5uAgJQEDKRwNuGcaJ
-         F8NeLXBE08NodwybkD7ovEonTSUlTOWHQ3POqFrtF9fxB9vvaSK24IXFrUM8ZxDbk+Ez
-         ujuQxNx8fNuqwgWwcO/Gfc651Q2/UU559atNgjrd1qnwbJiD7t7ndEWSF5ve8xTMKGGE
-         YbB0VuCKhV34loX01hM05ESrI2mpnOFtTuc74Y7esjtuII0U6i/mRUaUlktXjnDcdWnJ
-         9syf7MJE81FJkyb5ZVipXbQiC1EFa23CtCWVrquVUH1GYgSYh+CbbDWJK9IaAmnP3kbv
-         /0yA==
-X-Gm-Message-State: AOAM531ZO2HsPfY4C2Yj+CBvhgderNSU0RNkaUBHCsfbAikixig73Jx5
-        +GuSSOMGi94RoWf77Of0QDxs8Q==
-X-Google-Smtp-Source: ABdhPJx4vtQYv7ivk8pmhwD7P8ioY0zapzr/HTW7kdNOUbKpPJYVldebkDVUrO5e2cpLBCiMsmB2Fw==
-X-Received: by 2002:a17:90a:8a04:b0:1d5:d64f:a1e5 with SMTP id w4-20020a17090a8a0400b001d5d64fa1e5mr5396855pjn.109.1650564790608;
-        Thu, 21 Apr 2022 11:13:10 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:d426:5807:a72:7b27])
-        by smtp.gmail.com with UTF8SMTPSA id d206-20020a621dd7000000b0050acf2c1303sm5839273pfd.107.2022.04.21.11.13.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 11:13:10 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 11:13:08 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Li Jun <jun.li@nxp.com>, Peter Chen <peter.chen@nxp.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH v21 0/3] usb: misc: Add onboard_usb_hub driver
-Message-ID: <YmGetA6Huz4Sj/RL@google.com>
-References: <20220217184254.4141705-1-mka@chromium.org>
- <CAD=FV=XswQj+L6rRuWH-PdoGp9vVsWKTwz1bFM_fagy55tKqEg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=unnM4fXSMJiSpgzSnbjZz/++wfkdNxCsxaJNQt54SI8=;
+        b=7Y7tz19o2AA3JXF5RNhiT5PD8bDgq0h7ehD3y/BwMe7EKLtqiYi1xq+T8m5HyoprPs
+         0WlHthEb3CUShdaD2MMr30Nvmc6OwwFh9yY4fGfERfZPLhk0e1rPv5ZkBVUW4FOqiphp
+         jUyZ8fiLIo44XXFWeBAsEnCU44lYKiEC5GmWJXbz6tQeN3u8MXW/6uYenw41x+DcIebl
+         xbrmUOOrsRC4QRLaeOdZogcPIqeVdUZBn7xDaQsNPLBPinDwk9AScdb9D4FJP/sYFubR
+         YvX5VgjEVjp6/ZzCfKppWa2MmLdE8cUcfVycvkaTPm4dMt5hJl/Kfa447R9/bpy6+Mo5
+         n3zg==
+X-Gm-Message-State: AOAM531KU30F0gtjWHsObI67WaPVlFchBzwVKnP4wa0APlaeOTNEKqtP
+        4xfQ31hrLI6EBBjMoCTMh8nZH1L3ABWPtJqjdjFT9Q==
+X-Google-Smtp-Source: ABdhPJyHzNIYg5C4PJ/cejBQRmSKW/dyS0OVtZsBDIZ2e0UwpSgBZ6Gk8wH3JAqmB8QausXlAat9W0SAdbIea4rEv4c=
+X-Received: by 2002:a25:ae45:0:b0:641:ba5c:7745 with SMTP id
+ g5-20020a25ae45000000b00641ba5c7745mr1147553ybe.537.1650567799668; Thu, 21
+ Apr 2022 12:03:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=XswQj+L6rRuWH-PdoGp9vVsWKTwz1bFM_fagy55tKqEg@mail.gmail.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 22 Apr 2022 00:33:08 +0530
+Message-ID: <CA+G9fYvdfYBq+Q=-XUJcKHSYXdubdoqhExRpjrqCgf_N3pPpHQ@mail.gmail.com>
+Subject: drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
+ reduce to an integer constant
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, linux-usb@vger.kernel.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        heikki.krogerus@linux.intel.com, Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,150 +64,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Linux mainline and linux next arm64 builds failed with gcc-7.3.x.
 
-On Thu, Apr 07, 2022 at 12:41:22PM -0700, Doug Anderson wrote:
-> Hi,
-> 
-> On Thu, Feb 17, 2022 at 10:43 AM Matthias Kaehlcke <mka@chromium.org> wrote:
-> >
-> > This series adds:
-> > - the onboard_usb_hub_driver
-> > - glue in the generic HCD code to create and destroy the
-> >   onboard_usb_hub platform devices if needed
-> > - device tree changes that add RTS5411 entries for the QCA SC7180
-> >   based boards trogdor and lazor
-> > - a couple of stubs for platform device functions to avoid
-> >   unresolved symbols with certain kernel configs
-> >
-> > The main issue the driver addresses is that a USB hub needs to be
-> > powered before it can be discovered. For discrete onboard hubs (an
-> > example for such a hub is the Realtek RTS5411) this is often solved
-> > by supplying the hub with an 'always-on' regulator, which is kind
-> > of a hack. Some onboard hubs may require further initialization
-> > steps, like changing the state of a GPIO or enabling a clock, which
-> > requires even more hacks. This driver creates a platform device
-> > representing the hub which performs the necessary initialization.
-> > Currently it only supports switching on a single regulator, support
-> > for multiple regulators or other actions can be added as needed.
-> > Different initialization sequences can be supported based on the
-> > compatible string.
-> >
-> > Besides performing the initialization the driver can be configured
-> > to power the hub off during system suspend. This can help to extend
-> > battery life on battery powered devices which have no requirements
-> > to keep the hub powered during suspend. The driver can also be
-> > configured to leave the hub powered when a wakeup capable USB device
-> > is connected when suspending, and power it off otherwise.
-> >
-> > Changes in v21:
-> > - dropped patch 'driver core: Export device_is_bound()'
-> > - refactored _find_onboard_hub()
-> > - removed 'onboard_hub_dev' symlinks from USB devices
-> > - dropped patch 'arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub'
-> >   (will be sent separately)
-> > - rebased series on v5.17-rc4
-> >
-> > Changes in v20:
-> > - addressed review comments from Stephen
-> > - changed DT node names for hubs
-> >
-> > Changes in v19:
-> > - added VID:PID pairs and compatible strings for RTS5414 hub
-> > - updated comments with RTS5411 USB versions to reflect those
-> >   reported/supported by the hub
-> > - rebased series on v5.16
-> >
-> > Changes in v18:
-> > - introduced hidden Kconfig option to align module vs. builtin
-> >   choice with CONFIG_USB (thanks Doug!)
-> > - added patch 'driver core: Export device_is_bound()'
-> > - also adjust device tree of pompom rev1
-> > - dropped the following patches, which aren't needed anymore by this
-> >   series (though they might still be useful on their own):
-> >   - usb: Specify dependencies on USB_XHCI_PLATFORM with 'depends on'
-> >   - arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM
-> >   - ARM: configs: Explicitly enable USB_XHCI_PLATFORM where needed
-> >
-> > Changes in v17:
-> > - rebased on top of v5.16-rc1
-> > - moved creation of onboard_hub platform devices from xhci_platform
-> >   to the generic HCD code
-> > - addressed review comments for the onboard_hub driver
-> > - moved Kconfig/defconfig changes to the end of the series. The
-> >   onboard_hub driver doesn't depend on XHCI_PLATFORM anymore,
-> >   hence these changes aren't really required for the driver, but
-> >   they still seem to be a worthwhile improvement
-> >
-> > Changes in v16:
-> > - added patch 'ARM: configs: Explicitly enable USB_XHCI_PLATFORM
-> >   where needed' to keep arm32 defconfigs effectively unchanged
-> >
-> > Changes in v15:
-> > - adjusted dependencies of USB_DWC3_CORE to make sure it can only
-> >   be enabled when at least one of USB_DWC3_HOST, USB_DWC3_GADGET
-> >   or USB_DWC3_DUAL_ROLE is selectable
-> >
-> > Changes in v14:
-> > - rebased on top of v5.14-rc1
-> > - dropped DT binding patch which landed in v5.13
-> >
-> > Changes in v13:
-> > - added patch "usb: Specify dependency on USB_XHCI_PLATFORM with
-> >   'depends on'" to the series to avoid Kconfig conflicts
-> > - added patch "arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM"
-> >   to the series to keep effective defconfig unchanged
-> >
-> > Changes in v12:
-> > - onboard_hub driver: use IS_ENABLED(CONFIG_USB_ONBOARD_HUB_MODULE)
-> >   in onboard_hub.h to also check for the driver built as module
-> > - onboard_hub_driver: include onboard_hub.h again to make sure there
-> >   are prototype declarations for the public functions
-> >
-> > Changes in v11:
-> > - support multiple onboard hubs connected to the same parent
-> > - don't include ‘onboard_hub.h’ from the onboard hub driver
-> >
-> > Changes in v10:
-> > - always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
-> > - keep 'regulator-boot-on' property for pp3300_hub
-> >
-> > Changes in v9:
-> > - added dependency on ONBOARD_USB_HUB (or !ONBOARD_USB_HUB) to
-> >   USB_PLATFORM_XHCI
-> >
-> > Changes in v7:
-> > - updated DT binding
-> > - series rebased on qcom/arm64-for-5.13
-> >
-> > Changes in v6:
-> > - updated summary
-> >
-> > Changes in v5:
-> > - cover letter added
-> >
-> > Matthias Kaehlcke (3):
-> >   of/platform: Add stubs for of_platform_device_create/destroy()
-> >   usb: misc: Add onboard_usb_hub driver
-> >   usb: core: hcd: Create platform devices for onboard hubs in probe()
-> >
-> >  .../sysfs-bus-platform-onboard-usb-hub        |   8 +
-> >  MAINTAINERS                                   |   7 +
-> >  drivers/usb/core/hcd.c                        |   6 +
-> >  drivers/usb/misc/Kconfig                      |  23 +
-> >  drivers/usb/misc/Makefile                     |   1 +
-> >  drivers/usb/misc/onboard_usb_hub.c            | 510 ++++++++++++++++++
-> >  include/linux/of_platform.h                   |  22 +-
-> >  include/linux/usb/hcd.h                       |   1 +
-> >  include/linux/usb/onboard_hub.h               |  18 +
-> >  9 files changed, 592 insertions(+), 4 deletions(-)
-> >  create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub
-> >  create mode 100644 drivers/usb/misc/onboard_usb_hub.c
-> >  create mode 100644 include/linux/usb/onboard_hub.h
-> 
-> With v5.18-rc1 out the door, I wonder if it's a good time to look at
-> this series again. Are there any hidden blockers that it's waiting
-> for?
+drivers/usb/typec/tcpm/tcpm.c: In function 'run_state_machine':
+drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
+reduce to an integer constant
+   case BDO_MODE_TESTDATA:
+   ^~~~
+make[4]: *** [scripts/Makefile.build:288: drivers/usb/typec/tcpm/tcpm.o] Error 1
+                                      ^
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Greg, please let me know if any further changes are needed or if this
-series can be landed.
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+https://ci.linaro.org/view/lkft/job/openembedded-lkft-linux-mainline/DISTRO=lkft,MACHINE=hikey,label=docker-buster-lkft/4259/consoleText
