@@ -2,46 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E141C50A617
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 18:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBAF350A628
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 18:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbiDUQsc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 12:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
+        id S232422AbiDUQvf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Apr 2022 12:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiDUQsb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 12:48:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4494D286E0;
-        Thu, 21 Apr 2022 09:45:41 -0700 (PDT)
+        with ESMTP id S232414AbiDUQve (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 12:51:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2CA49690;
+        Thu, 21 Apr 2022 09:48:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEE29B8277F;
-        Thu, 21 Apr 2022 16:45:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9B34C385A1;
-        Thu, 21 Apr 2022 16:45:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74AE861CD9;
+        Thu, 21 Apr 2022 16:48:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 623E5C385A1;
+        Thu, 21 Apr 2022 16:48:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650559538;
-        bh=iJit4IZbsdLEoDo/5VF9pWmAB4FyRHiRZ/6OCKLI55U=;
+        s=korg; t=1650559723;
+        bh=yP8brE5xLFSZ4V+019DWeeykSrtQQtHPVTTnvr0EayY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=McKkPBDYwMTVmBlisTWJhJEh6+NmGKke8WENkF2FvuD8fqbTs5RkhwKHJRBVCeZbH
-         LcbVuTLrtbb/4YQ6xGZg7HWboiCa32Mnrp7cmhjxDKrL3fqhuNT0qkViEAlu54bEox
-         2oqkt3x7eDcC+4lBg622olUQQyFCHthDRmB27obU=
-Date:   Thu, 21 Apr 2022 18:45:35 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hongyu Xie <xy521521@gmail.com>
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hongyu Xie <xiehongyu1@kylinos.cn>,
-        stable@vger.kernel.org, "sheng . huang" <sheng.huang@ecastech.com>
-Subject: Re: [RESEND PATCH -next] USB: serial: pl2303: implement reset_resume
- member
-Message-ID: <YmGKL05dnA+q/HAM@kroah.com>
-References: <20220419065408.2461091-1-xy521521@gmail.com>
+        b=BfT+bMpAmzLMFlJadFbYxAXzctEsG9vI5g3xuKM28TFO9Zb45KHhP/bpb+r2GV6kk
+         LnIH/COSCtqnDsqgMBC7oSwBwVAFvtETfczvM8uWEUBYdKpmqT0hqmscKFDUL4I2tZ
+         uh+tezDqfQH242oZ8+joIgEc5xHBumdbD5JQ71dE=
+Date:   Thu, 21 Apr 2022 18:48:40 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Tao Wang <quic_wat@quicinc.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        quic_linyyuan@quicinc.com
+Subject: Re: [PATCH] usb: hcd: add a flag for whether using shared_hcd priv
+Message-ID: <YmGK6DXDdM5vx3Qe@kroah.com>
+References: <1649299514-64014-1-git-send-email-quic_wat@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220419065408.2461091-1-xy521521@gmail.com>
+In-Reply-To: <1649299514-64014-1-git-send-email-quic_wat@quicinc.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,43 +51,71 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 02:54:08PM +0800, Hongyu Xie wrote:
-> From: Hongyu Xie <xiehongyu1@kylinos.cn>
+On Thu, Apr 07, 2022 at 10:45:14AM +0800, Tao Wang wrote:
+> The shared_hcd->hcd_priv is not used in xhci, so not
+> need to malloc hcd priv memory for shared_hcd.
+
+What is the problem with allocating that memory?  Do you have systems
+with thousands of USB host controllers where this memory is wasted?
+
+> This change add a shared_hcd_no_priv flag to indicate
+> if shared_hcd use priv, and set the flag of xhci to 1.
+
+1 is not a boolean :(
+
 > 
-> pl2303.c doesn't have reset_resume for hibernation.
-> So needs_binding will be set to 1 duiring hibernation.
-> usb_forced_unbind_intf will be called, and the port minor
-> will be released (x in ttyUSBx).
-
-Please use the full 72 columns that you are allowed in a changelog text.
-
-
-> It works fine if you have only one USB-to-serial device.
-> Assume you have 2 USB-to-serial device, nameing A and B.
-> A gets a smaller minor(ttyUSB0), B gets a bigger one.
-> And start to hibernate. When your PC is in hibernation,
-> unplug device A. Then wake up your PC by pressing the
-> power button. After waking up the whole system, device
-> B gets ttyUSB0. This will casuse a problem if you were
-> using those to ports(like opened two minicom process)
-> before hibernation.
-> So member reset_resume is needed in usb_serial_driver
-> pl2303_device.
-
-If you want persistent device naming, use the symlinks that udev creates
-for your for all your serial devices.  Never rely on the number of a USB
-to serial device.
-
-> Codes in pl2303_reset_resume are borrowed from pl2303_open.
+> Signed-off-by: Tao Wang <quic_wat@quicinc.com>
+> ---
+>  drivers/usb/core/hcd.c       | 6 +++++-
+>  drivers/usb/host/xhci-plat.c | 1 +
+>  include/linux/usb/hcd.h      | 1 +
+>  3 files changed, 7 insertions(+), 1 deletion(-)
 > 
-> As a matter of fact, all driver under drivers/usb/serial
-> has the same problem except ch341.c.
-> 
-> Cc: stable@vger.kernel.org
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index 99908d8..f339c3e 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -2419,7 +2419,11 @@ struct usb_hcd *__usb_create_hcd(const struct hc_driver *driver,
+>  {
+>  	struct usb_hcd *hcd;
+>  
+> -	hcd = kzalloc(sizeof(*hcd) + driver->hcd_priv_size, GFP_KERNEL);
+> +	if (primary_hcd && driver->shared_hcd_no_priv)
+> +		hcd = kzalloc(sizeof(*hcd), GFP_KERNEL);
+> +	else
+> +		hcd = kzalloc(sizeof(*hcd) + driver->hcd_priv_size, GFP_KERNEL);
+> +
+>  	if (!hcd)
+>  		return NULL;
+>  	if (primary_hcd == NULL) {
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index 21280a6..223e508 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -236,6 +236,7 @@ static int xhci_plat_probe(struct platform_device *pdev)
+>  		return -ENODEV;
+>  
+>  	driver = &xhci_plat_hc_driver;
+> +	driver->shared_hcd_no_priv = 1;
 
-How does this meet the stable kernel rule requirements?  It would be a
-new feature if it were accepted, right?
+true?
 
+>  
+>  	irq = platform_get_irq(pdev, 0);
+>  	if (irq < 0)
+> diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+> index 2ffafbd..03ac312 100644
+> --- a/include/linux/usb/hcd.h
+> +++ b/include/linux/usb/hcd.h
+> @@ -256,6 +256,7 @@ struct hc_driver {
+>  	const char	*description;	/* "ehci-hcd" etc */
+>  	const char	*product_desc;	/* product/vendor string */
+>  	size_t		hcd_priv_size;	/* size of private data */
+> +	bool		shared_hcd_no_priv;	/* 0 use priv, 1 not use priv*/
+
+Did you check to see how much extra padding you just added to the
+structure?  When writing a change to try to save memory, do not cause
+extra memory to be wasted for everyone.
 
 thanks,
 
