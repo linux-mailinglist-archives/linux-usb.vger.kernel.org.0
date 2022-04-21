@@ -2,52 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51F9509A16
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 10:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15081509A6E
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 10:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386430AbiDUIIW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 04:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
+        id S1386502AbiDUING (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Apr 2022 04:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355609AbiDUIIV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 04:08:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E3C1401F;
-        Thu, 21 Apr 2022 01:05:32 -0700 (PDT)
+        with ESMTP id S1386526AbiDUIM5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 04:12:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955FC6398;
+        Thu, 21 Apr 2022 01:10:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDA1AB82325;
-        Thu, 21 Apr 2022 08:05:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FA6DC385AF;
-        Thu, 21 Apr 2022 08:05:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E69EB8233C;
+        Thu, 21 Apr 2022 08:10:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EA53C385B7;
+        Thu, 21 Apr 2022 08:10:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650528329;
-        bh=pEk2DBnIt9rk2wabkGdOd9ccO0Sp1aN2SsNNj0MBRog=;
+        s=k20201202; t=1650528605;
+        bh=/W8IliiCajYPso0oJDKeh6+LCmFpM9Iq4B+vqL+KHZ4=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qWPM0VbCaFTCX7EfkRcA/rtW+syvpvauja9jw25voq6ipQfgeRSOI8QUgToJUNmSz
-         OKn+BpJ7yAh+6LD2DtMs+LSIbUdCRp6H6euZbGvUFYkZwrKj22SIgqER2cZs6XltKG
-         uftD/9TJgk67j0lF3y11+P7IMrq1mDd8xrKUB6u/Y9WwEa3rdBNgqUdZzQma0dy0CI
-         790z77c82J7gC3xpwqTV0fFgHJcAa9+osqbFiqkFNA6wIBW3hjuispqAohUPdowc1D
-         F0hBhNuydvq2NiVaV67w1yhkK86x6ydkV9tieQgzUuz+QBueVLbjesjV06o9inYPpk
-         zk1SrHXiJ36Lg==
-Received: by mail-wr1-f53.google.com with SMTP id i20so5462547wrb.13;
-        Thu, 21 Apr 2022 01:05:29 -0700 (PDT)
-X-Gm-Message-State: AOAM533q5Qc79/Cz4WoXgzPtxaOQAVT1PqJZE6eGvRn5ic+e4K6Dsvl3
-        PnJfunVG594h5V6UllLmTKbVRvKFAfm/3/yF0jI=
-X-Google-Smtp-Source: ABdhPJywpA6fOGw9KAZbIcns13/kEE7+YRmRr2P9g6saD61ZSVU9a6gQSpL63u+tG5iSukB8FNVqJ9kAQ9Wk1V6Tp0I=
-X-Received: by 2002:adf:e106:0:b0:20a:b31b:213d with SMTP id
- t6-20020adfe106000000b0020ab31b213dmr3969063wrz.219.1650528327698; Thu, 21
- Apr 2022 01:05:27 -0700 (PDT)
+        b=UtxzIvoNdabVELeWIz3V4TclK6xXmq9BMhzfujlm+gFWBoT8rY4aF9GfRX2ccT1vn
+         wDcqT+y+x552llxpM0QL7xb0FLdoLZIo54LK520enQwUc0BbOcQrzNYQiwfY0jTUpi
+         4qNX03YnasClaEAYsxgd8xc9OOZJfmG9mYcvjA+pDQdP70iw48miJ+2lz2WSgyuBbq
+         tmIpimyZgrqkiOqSIOS0XySlX/JLBOUliDNfhAYHogz26OJgf2EClSsKjy3h8/tJZB
+         X4KNgNCuxEid0pr34FAxb4UcPVrvYQRtv4HO3faFNFitLqqrQosV4+qH8YLlMGH9LJ
+         cYb7+DzLwXx7g==
+Received: by mail-wr1-f41.google.com with SMTP id x18so5538452wrc.0;
+        Thu, 21 Apr 2022 01:10:04 -0700 (PDT)
+X-Gm-Message-State: AOAM532gQMIQslZvDRR/JDrpCg7+UnB5TuMBR/wPI+cl36iApq4b3aAc
+        1BMSjNNEWyVyaARlUmKsGksttyissLHt1+hFBjU=
+X-Google-Smtp-Source: ABdhPJw9RSqdGWpafgMW97qQu7yaTHgV5jKD56P0eBxUAQhkvQ6X95c920XjmeJj56kP8+QCXLYB93ISvku4scoF6r4=
+X-Received: by 2002:a5d:6389:0:b0:207:a7d8:2b64 with SMTP id
+ p9-20020a5d6389000000b00207a7d82b64mr18151004wru.12.1650528603264; Thu, 21
+ Apr 2022 01:10:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220421074204.1284072-1-hch@lst.de> <20220421074204.1284072-7-hch@lst.de>
-In-Reply-To: <20220421074204.1284072-7-hch@lst.de>
+References: <20220421074204.1284072-1-hch@lst.de> <20220421074204.1284072-8-hch@lst.de>
+In-Reply-To: <20220421074204.1284072-8-hch@lst.de>
 From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 21 Apr 2022 10:05:11 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3BD5zLiXf=Wr0kcJp-k3+vmhBkEP5DNRw_-H=OX9CoGA@mail.gmail.com>
-Message-ID: <CAK8P3a3BD5zLiXf=Wr0kcJp-k3+vmhBkEP5DNRw_-H=OX9CoGA@mail.gmail.com>
-Subject: Re: [PATCH 6/7] ARM: use the common dma_to_phys/phys_to_dma
- implementation where possible
+Date:   Thu, 21 Apr 2022 10:09:47 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3Y9F8Xb-uON8b+X5bUW9BeWkb6dBuXvdkhL4g15+7_uQ@mail.gmail.com>
+Message-ID: <CAK8P3a3Y9F8Xb-uON8b+X5bUW9BeWkb6dBuXvdkhL4g15+7_uQ@mail.gmail.com>
+Subject: Re: [PATCH 7/7] ARM: use dma-direct unconditionally
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Russell King <linux@armlinux.org.uk>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -76,33 +75,30 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 On Thu, Apr 21, 2022 at 9:42 AM Christoph Hellwig <hch@lst.de> wrote:
 >
-> Only the footbridge platforms provide their own DMA address translation
-> helpers, so switch to the generic version for all other platforms, and
-> consolidate the footbridge implementation to remove two levels of
-> indirection.
+> Use dma-direct unconditionally on arm.  It has already been used for
+> some time for LPAE and nommu configurations.
+>
+> This mostly changes the streaming mapping implementation and the (simple)
+> coherent allocator for device that are DMA coherent.  The existing
+> complex allocator for uncached mappings for non-coherent devices is still
+> used as is using the arch_dma_alloc/arch_dma_free hooks.
 >
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
-
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-
 > ---
-> @@ -335,17 +336,19 @@ unsigned long __bus_to_virt(unsigned long res)
->         return res;
->  }
->  EXPORT_SYMBOL(__bus_to_virt);
-> -
-> -unsigned long __pfn_to_bus(unsigned long pfn)
-> +#else
-> +static inline unsigned long fb_bus_sdram_offset(void)
->  {
-> -       return __pfn_to_phys(pfn) + (fb_bus_sdram_offset() - PHYS_OFFSET);
-> +       return BUS_OFFSET;
->  }
-> -EXPORT_SYMBOL(__pfn_to_bus);
-> +#endif /* CONFIG_FOOTBRIDGE_ADDIN */
+>  arch/arm/Kconfig                   |   4 +-
+>  arch/arm/include/asm/dma-mapping.h |  24 --
+>  arch/arm/mach-highbank/highbank.c  |   2 +-
+>  arch/arm/mach-mvebu/coherency.c    |   2 +-
+>  arch/arm/mm/dma-mapping.c          | 365 ++---------------------------
+>  5 files changed, 19 insertions(+), 378 deletions(-)
+>  delete mode 100644 arch/arm/include/asm/dma-mapping.h
 
-I have an older patch to remove CONFIG_FOOTBRIDGE_ADDIN
-completely, as it does a couple of other nasty things and there are
-apparently no users. Would that help here?
+The diffstat looks really nice!
 
-       Arnd
+I can't really tell from looking at the code if this is an equivalent
+conversion,
+so I have to trust you on that. I did make sure this passes the basic tests
+on kernelci.org, which tests a large number of machines, which is a good
+sign.
+
+Tested-by: Arnd Bergmann <arnd@arndb.de>
