@@ -2,83 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309205099FE
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 09:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BB45099F4
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 09:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386291AbiDUHxL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 03:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
+        id S1386260AbiDUH5S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Apr 2022 03:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386293AbiDUHxD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 03:53:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAC76325;
-        Thu, 21 Apr 2022 00:50:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED79361B83;
-        Thu, 21 Apr 2022 07:50:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA37C385C1;
-        Thu, 21 Apr 2022 07:50:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650527410;
-        bh=scrBCeJL1OsZjxal/hOOJR8xrKpdhNNc3BiRG6d2EkQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=I53ZD6Ob3R8QcG8tmbBFOshAoeh0KWTCN+0xytPix2nry7uRQ548WOA6mgeTA8b60
-         xqcd8bPRZq0d9NGREbKcENA/6rrZ++7viLpgU63REWPzgO8q9prVkcA/bzV7MqTM58
-         sUmxO6IoWO0a7H1x5VJkkaFc4lpZjiYA6noI7uY3mGaa0VeH955HVnMBGSpEbC8CAP
-         RSs7zWjx/m1FtilWmdqSWcPG8debp7PnluxDXjtK3iWbHqmoQNSc7t0ehoBzQTENv0
-         9QatR/d4pEc4EkMNyUjBndFN83NNoQCS6otBb5tlBjEwZo7+fypytHRD8fIwU/Q/4/
-         PgYcCLLU9pZKg==
-Received: by mail-wr1-f51.google.com with SMTP id s25so547584wrb.8;
-        Thu, 21 Apr 2022 00:50:10 -0700 (PDT)
-X-Gm-Message-State: AOAM530FfqQfrAh5WqtgnBcKDmL7d8U1P59eapo92IbHGxJmLudy8S4M
-        QWF4Eyy07Y8oD586OwQO9nBQOJ0gntH1UG0RyUE=
-X-Google-Smtp-Source: ABdhPJzRVJ/OmeGnrqJE761/+0TPqsFFrrS+icRdgf4Xe42e9Mrpm76xuvHw8bwt5K0xWAFGMv08ylmpsjeKAOckTf8=
-X-Received: by 2002:adf:e106:0:b0:20a:b31b:213d with SMTP id
- t6-20020adfe106000000b0020ab31b213dmr3918734wrz.219.1650527408610; Thu, 21
- Apr 2022 00:50:08 -0700 (PDT)
+        with ESMTP id S1386258AbiDUH5Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 03:57:16 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF3611172
+        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 00:54:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650527667; x=1682063667;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EwW/bGZQN14mRm1WFKCe+6xQ0qE/EFHA6x4UarSP1MM=;
+  b=cTrqAPhA7P4x+B1bAxqF3opoo8PIhUn9oJ92xdnXuMoRJvOkeQIeQ9Qm
+   zwmLUfwsvtzCBVMApuSAMQ78m77cJgxXspMr6ZlNaM5XcEpTK2odC39r/
+   3ksc/8Ze4A7/jBN3zTGILDvbKEh6aYLgpIR/c2Be+S4F3HB7kcqZwiilH
+   C8Nt7j5nHCb8bCxmWOcP9YVOSXNVme7SUgbl7sTwHypycFT9qUvsg81x1
+   LswHzKgndovhF15DZ9YOQNkbKf7l/D/59gPCe/NB6w3zPaP2k/qQLLI14
+   GyCA6/4RFxevtdCK2krXtK0Ns0TlM2aq0Q/f8Ggli0ymaxWluaBYocQYU
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="244205054"
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="244205054"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 00:54:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="702983097"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 21 Apr 2022 00:54:25 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 21 Apr 2022 10:54:24 +0300
+Date:   Thu, 21 Apr 2022 10:54:24 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Jack Pham (QUIC)" <quic_jackp@quicinc.com>
+Subject: Re: [PATCH v3 4/4] usb: typec: ucsi: retry find role swithch when
+ module load late
+Message-ID: <YmENsCn6q3dcCMNq@kuha.fi.intel.com>
+References: <1649843891-15554-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1649843891-15554-5-git-send-email-quic_linyyuan@quicinc.com>
+ <YlbEm31fOaMsFW6C@kuha.fi.intel.com>
+ <DM8PR02MB8198A080766C934496479FE2E3EC9@DM8PR02MB8198.namprd02.prod.outlook.com>
+ <DM8PR02MB81981200B7B2E422CA7248D6E3F49@DM8PR02MB8198.namprd02.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220421074204.1284072-1-hch@lst.de> <20220421074204.1284072-4-hch@lst.de>
-In-Reply-To: <20220421074204.1284072-4-hch@lst.de>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 21 Apr 2022 09:49:52 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Mv++CCGf2BuC-wS4VGb+ZhfnJqVwJkK-VcYAqfiPi8A@mail.gmail.com>
-Message-ID: <CAK8P3a2Mv++CCGf2BuC-wS4VGb+ZhfnJqVwJkK-VcYAqfiPi8A@mail.gmail.com>
-Subject: Re: [PATCH 3/7] ARM: mark various dma-mapping routines static in dma-mapping.c
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM8PR02MB81981200B7B2E422CA7248D6E3F49@DM8PR02MB8198.namprd02.prod.outlook.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 9:42 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> With the dmabounce removal these aren't used outside of dma-mapping.c,
-> so mark them static.  Move the dma_map_ops declarations down a bit
-> to avoid lots of forward declarations.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+Hi,
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+On Thu, Apr 21, 2022 at 07:40:56AM +0000, Linyu Yuan (QUIC) wrote:
+> > > >  static void ucsi_init_work(struct work_struct *work)
+> > > >  {
+> > > > -	struct ucsi *ucsi = container_of(work, struct ucsi, work);
+> > > > +	struct ucsi *ucsi = container_of(work, struct ucsi, work.work);
+> > > >  	int ret;
+> > > >
+> > > >  	ret = ucsi_init(ucsi);
+> > > >  	if (ret)
+> > > >  		dev_err(ucsi->dev, "PPM init failed (%d)\n", ret);
+> > > > +
+> > > > +
+> > >
+> > > Extra line.
+> > >
+> > > > +	if (ret == -EPROBE_DEFER)
+> > > > +		queue_delayed_work(system_long_wq, &ucsi->work,
+> > > HZ/10);
+> > >
+> > > You have to stop queueing that eventually. You need a counter.
+> > >
+> > > I'm still not sure why do you want to queue this same work again and
+> > > again? Why not just call ucsi_init() in a loop?
+> > 
+> > Will follow your suggestion below.
+> > 
+> > >
+> > >         int my_counter = 1000;
+> > So you prefer 10 second in total ?
+> > If so, next version, I will change it to 500, as msleep(20), check next.
+> > >
+> > >         while (ucsi_init(ucsi) == -EPROBE_DEFER && my_counter--)
+> > >                 msleep(10);
+> > In checkpatch.pl, it suggest msleep no less than 20ms each time.
+> > msleep(20) ?
+> > 
+> > >
+> > > >  }
+> > 
+> > Great idea, it will be less code change.
+> 
+> 
+> Sorry, I think there is one concern of your suggestion is that
+> As the while loop inside the worker, if we can this worker,
+> It may spent too much time.
+> 
+> Although my original design is crazy(queue worker again inside it),
+> but it allow cancel worker wait short time.
+> 
+> please let me know what is your suggestion now.
+
+OK, that's a good point. So just re-schedule the work like you do.
+
+thanks,
+
+-- 
+heikki
