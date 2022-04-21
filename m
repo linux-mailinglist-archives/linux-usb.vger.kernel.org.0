@@ -2,99 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D18B50AA13
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 22:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0565B50AA88
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 23:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392410AbiDUUjQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 16:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
+        id S1441850AbiDUVRf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Apr 2022 17:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392406AbiDUUjL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 16:39:11 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84624DF4C;
-        Thu, 21 Apr 2022 13:36:20 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id t15so6881987oie.1;
-        Thu, 21 Apr 2022 13:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=pR+ivXQjQ4mpc3bU1lbKrf1OTqhPO5O1eEWuchyFYYM=;
-        b=aUgy7ZQPy9VWQ3sdol3HV/TdeP/hqQr5zfOdNWWD6QeduBPQ0/ElwdKLnErBtzgTGb
-         WCkwtX3AUMiqG3IWexPlK3SDIJzDzLYBTmKfnxRtfnx4smznqkM6F7j2j8FT+l+dl3Kg
-         4/CfCcjq51ubOP/yQEX4ACp6GktE/PUK5na1g0xy+sKXWainyCu3ZdX0NvSbgJXZsG/l
-         9iHOqfYrb75TqJwtaHW7ioSsBv0n+ZxKJuHBNGeSDwh1eLKGkob/fGeRCf4CAHmvUc0W
-         slDG+J55kEkR6bUrAGBuFfpuKrl40ENcSoT555XLpq8RcN3/aKmA3u6bIV2Yxztp9dAk
-         6gOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=pR+ivXQjQ4mpc3bU1lbKrf1OTqhPO5O1eEWuchyFYYM=;
-        b=uBCwBu3iT40KqqsKhFGqzod4XltxUhrof2LvpCIfk5pYvxsmH6EF1SN1k8e+NSzazs
-         XRiCUM0YiKmkIBYClKS0xXLf9g+REpG2IPSTLrAADN3WXrzY6TG6n7bt8bms27qZzzUf
-         eUyeV0AVnJSTnxDIwehCqDQ3j6B9sSdQu/WsOZnOQDY1bM7Mjf8nWAbQE0VdAlQkWK4s
-         2+PssFXlbKxq164DxqdYdvyvfpjumN+RWQxSgI5dEhjoQtRxnc0h1+y2RqNu6H8f+8d5
-         8PnsCm+tkGTic0gsrqP6sPgXoKQT3cXprXvrCk047mRbuJeFWTHfmjkft2OskCdKN3kp
-         fa2A==
-X-Gm-Message-State: AOAM53234oHqxSBznD/LMGefkO/u2KNcbC5n6Ecpm9k/50HieDWMe0QW
-        FJ73SbwgYhvFYK2UUw7ONwWggPoLmmM=
-X-Google-Smtp-Source: ABdhPJzvQDBpW8i8W67TKQjDDBb4cpOmkXvirm1Nq4saLvrBEWABE0GZmwKCUokZxD/YPpaqiqgYJA==
-X-Received: by 2002:a05:6808:e8d:b0:322:4fbe:8c5f with SMTP id k13-20020a0568080e8d00b003224fbe8c5fmr5198699oil.284.1650573378654;
-        Thu, 21 Apr 2022 13:36:18 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a37-20020a9d2628000000b0060563c52952sm15698otb.8.2022.04.21.13.36.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 13:36:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <15b38d01-702c-b39e-7053-54c3905a0794@roeck-us.net>
-Date:   Thu, 21 Apr 2022 13:36:15 -0700
+        with ESMTP id S1441827AbiDUVRd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 17:17:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2FE4A93F
+        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 14:14:41 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1nhe8N-0006XG-Sp; Thu, 21 Apr 2022 23:14:39 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1nhe8O-004R0l-7q; Thu, 21 Apr 2022 23:14:38 +0200
+Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1nhe8M-00EGom-2L; Thu, 21 Apr 2022 23:14:38 +0200
+From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, balbi@kernel.org,
+        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
+        kernel@pengutronix.de, nicolas@ndufresne.ca,
+        kieran.bingham@ideasonboard.com
+Subject: [RESEND v7 0/7] usb: gadget: uvc: use configfs entries for negotiation and v4l2 VIDIOCS
+Date:   Thu, 21 Apr 2022 23:14:20 +0200
+Message-Id: <20220421211427.3400834-1-m.grzeschik@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-usb@vger.kernel.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        heikki.krogerus@linux.intel.com
-References: <CA+G9fYvdfYBq+Q=-XUJcKHSYXdubdoqhExRpjrqCgf_N3pPpHQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
- reduce to an integer constant
-In-Reply-To: <CA+G9fYvdfYBq+Q=-XUJcKHSYXdubdoqhExRpjrqCgf_N3pPpHQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/21/22 12:03, Naresh Kamboju wrote:
-> Linux mainline and linux next arm64 builds failed with gcc-7.3.x.
-> 
-> drivers/usb/typec/tcpm/tcpm.c: In function 'run_state_machine':
-> drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
-> reduce to an integer constant
->     case BDO_MODE_TESTDATA:
->     ^~~~
-> make[4]: *** [scripts/Makefile.build:288: drivers/usb/typec/tcpm/tcpm.o] Error 1
->                                        ^
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> --
+This series improves the uvc video gadget by parsing the configfs
+entries. With the configfs data, the driver now is able to negotiate the
+format with the usb host in the kernel and also exports the supported
+frames/formats/intervals via the v4l2 VIDIOC interface.
 
-That code is several years old, the define is a constant, and I don't see
-a recent change in the code. What am I missing ?
+The uvc userspace stack is also under development. One example is an generic
+v4l2uvcsink gstreamer elemnt, which is currently under discussion. [1]
 
-Guenter
+[1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1304
+
+With the libusbgx library [1] used by the gadget-tool [2] it is now also
+possible to fully describe the configfs layout of the uvc gadget with scheme
+files.
+
+[2] https://github.com/linux-usb-gadgets/libusbgx/pull/61/commits/53231c76f9d512f59fdc23b65cd5c46b7fb09eb4
+
+[3] https://github.com/linux-usb-gadgets/gt/tree/master/examples/systemd
+
+The bigger picture of these patches is to provide a more versatile interface to
+the uvc gadget. The goal is to simply start a uvc-gadget with the following
+commands:
+
+$ gt load uvc.scheme
+$ gst-launch v4l2src ! v4l2uvcsink
+
+--
+
+v1: https://lore.kernel.org/linux-usb/20210530222239.8793-1-m.grzeschik@pengutronix.de/
+v2: https://lore.kernel.org/linux-usb/20211117004432.3763306-1-m.grzeschik@pengutronix.de/
+v3: https://lore.kernel.org/linux-usb/20211117122435.2409362-1-m.grzeschik@pengutronix.de/
+v4: https://lore.kernel.org/linux-usb/20211205225803.268492-1-m.grzeschik@pengutronix.de/
+v5: https://lore.kernel.org/linux-usb/20211209084322.2662616-1-m.grzeschik@pengutronix.de/
+v6: https://lore.kernel.org/linux-usb/20220105115527.3592860-1-m.grzeschik@pengutronix.de/
+
+Regards,
+Michael
+
+Michael Grzeschik (7):
+  media: v4l: move helper functions for fractions from uvc to v4l2-common
+  media: uvcvideo: move uvc_format_desc to common header
+  usb: gadget: uvc: prevent index variables to start from 0
+  usb: gadget: uvc: move structs to common header
+  usb: gadget: uvc: track frames in format entries
+  usb: gadget: uvc: add VIDIOC function
+  usb: gadget: uvc: add format/frame handling code
+
+ drivers/media/usb/uvc/uvc_ctrl.c           |   1 +
+ drivers/media/usb/uvc/uvc_driver.c         | 281 +-------------
+ drivers/media/usb/uvc/uvc_v4l2.c           |  14 +-
+ drivers/media/usb/uvc/uvcvideo.h           | 144 -------
+ drivers/media/v4l2-core/v4l2-common.c      |  82 ++++
+ drivers/usb/gadget/function/f_uvc.c        | 271 +++++++++++++-
+ drivers/usb/gadget/function/uvc.h          |  39 +-
+ drivers/usb/gadget/function/uvc_configfs.c | 148 ++------
+ drivers/usb/gadget/function/uvc_configfs.h | 120 +++++-
+ drivers/usb/gadget/function/uvc_queue.c    |   3 +-
+ drivers/usb/gadget/function/uvc_v4l2.c     | 412 ++++++++++++++++++---
+ drivers/usb/gadget/function/uvc_video.c    |  71 +++-
+ include/media/v4l2-common.h                |   4 +
+ include/media/v4l2-uvc.h                   | 351 ++++++++++++++++++
+ 14 files changed, 1336 insertions(+), 605 deletions(-)
+ create mode 100644 include/media/v4l2-uvc.h
+
+-- 
+2.30.2
+
