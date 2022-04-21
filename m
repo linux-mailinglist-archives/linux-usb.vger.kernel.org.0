@@ -2,82 +2,202 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89234509A18
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 10:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81351509A34
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 10:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386386AbiDUIFZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 04:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
+        id S1386402AbiDUIFn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Apr 2022 04:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386395AbiDUIFX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 04:05:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872461CFFE;
-        Thu, 21 Apr 2022 01:02:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 232BE61ABA;
-        Thu, 21 Apr 2022 08:02:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83C1BC385C5;
-        Thu, 21 Apr 2022 08:02:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650528154;
-        bh=85ztGE8SAOJYsSsE/m/ye56564WWRnDCXfBI1VMh6w8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gx80Hh2cCildDpD/QBFdHR9o5EQI4TZJNxY+M5H7fSxIckh3WEkeA61atMMdcjAs3
-         S1eAqplyh6FpSWhZlnE0zDt0DMoZ8vQJuuaC4Dyt6mtvcJHJGQlslG5tWAyufFpN7U
-         +m0rH/jQNDvZtdE/ERPjRIKmMtCRfEgSCJgh2GuB0cb3cWfOQPdDoOuidIcQKuG0iY
-         Sm9In6QEX7I7ZUBytG03Y7EH+G6pbZrkiy+sLch/OlLXMVfSl9zmTeQMB6R8FT7Xr5
-         vWGQ0s3//ga4gycac/gtSC/F4l8SxARO/sZm4JlDqEsV2KSP7jzaKcflBXrbYPAdoM
-         n/ugXKlhfRznQ==
-Received: by mail-wr1-f53.google.com with SMTP id i20so5451740wrb.13;
-        Thu, 21 Apr 2022 01:02:34 -0700 (PDT)
-X-Gm-Message-State: AOAM5336s/lqLWJqUNhdXZXKtbE1EVKn3nShpPnB/r7QTkBTeoLYM1ET
-        lCvzBB9vXlUTwTgdpgXr3jqQWrak8iOCQkcIclk=
-X-Google-Smtp-Source: ABdhPJwd18r+4oxvbBvNk4Ssn0sgurWbN+G4WyUL66cAw98TCXAYMvuBOOjMpSguCZLqOVEc5MnPUhcs76UVW8oNVSU=
-X-Received: by 2002:a5d:6983:0:b0:207:a226:df4b with SMTP id
- g3-20020a5d6983000000b00207a226df4bmr18349140wru.192.1650528152748; Thu, 21
- Apr 2022 01:02:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220421074204.1284072-1-hch@lst.de> <20220421074204.1284072-6-hch@lst.de>
-In-Reply-To: <20220421074204.1284072-6-hch@lst.de>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 21 Apr 2022 10:02:16 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2M-R+S9SFe2ti3j41qy3KCVgc-povo6GwDQn_Dj_AB4A@mail.gmail.com>
-Message-ID: <CAK8P3a2M-R+S9SFe2ti3j41qy3KCVgc-povo6GwDQn_Dj_AB4A@mail.gmail.com>
-Subject: Re: [PATCH 5/7] ARM: use dma_to_phys/phys_to_dma in the dma-mapping code
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
+        with ESMTP id S1386381AbiDUIFj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 04:05:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AF1B1D0ED
+        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 01:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650528169;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p7er01rcZIWPhWabLFGP6DqeKEF6sxpgGAt7I3QDHYU=;
+        b=LGGiNE3IlLNEJdCIaNw1VVgFAQ20nzCzkR5lLAe1hWTI3uRa+e1TFhnLGGUpnSh/TacLfs
+        aVqUrzSHrSCtkDnkHZsILv+HTL5cOUtNj0FRwwmDEYcNaGydppiv0CeApVlD6XmTPVAJId
+        jn3knIesSRizxdatqIvyth7OgCH0B0Q=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-606-r3LJD4HmP6q0bfff5ymttQ-1; Thu, 21 Apr 2022 04:02:48 -0400
+X-MC-Unique: r3LJD4HmP6q0bfff5ymttQ-1
+Received: by mail-qk1-f199.google.com with SMTP id k15-20020a05620a142f00b0069ebc91caa2so2827418qkj.21
+        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 01:02:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=p7er01rcZIWPhWabLFGP6DqeKEF6sxpgGAt7I3QDHYU=;
+        b=WFoRtPv6Z5PKuDZjnv9Dh2ApeQKkctgTS2FmEiwv6o5Sas3r79ISH+Z/nDSndKZvtQ
+         2CJaZB/Y4B8JcXkK7o3Ya/EJVOOexDTQhBMAopZkHRHpy7eEqigBpk36E1myQjB59mc6
+         zFUq03hye2RnpCgijoYJ93q95glF1UuzdpcjPK1vwkD5hIsZZ5g96T/T7eDRFsDUAYAg
+         PmQKBzDblmS0MADRD/FfQbIgYPru3sDDJ8usJwrqfU430OIu6VJvQR6ugZdgbzzibNEd
+         lI3dvcc44ZfURYEU7EWTNevCbzURqV4qju6BjfNEvFZsRDSMBpOCQPte0hTs1P8kNeff
+         jHeQ==
+X-Gm-Message-State: AOAM532KLvm/b1gXl+lydhzzrwiNYAXEOMzquWphR32PRWDRZ/iYoGB6
+        SH8KfMECROsNF2NSqb/77Qi+2oXpJdIsNIsQIqjnn+3F3pXDlvwyDiE1ppWn+wEpGlKXupO/7Od
+        6l9rPnuPZeehD5J31KP/1
+X-Received: by 2002:a05:622a:1750:b0:2f1:f7c1:894 with SMTP id l16-20020a05622a175000b002f1f7c10894mr15176823qtk.259.1650528167778;
+        Thu, 21 Apr 2022 01:02:47 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy0WIBPn04nK0pxz2TA+z4IAYntqGXRykynS7jdVQ5NR4GVfF/RPYsIsBzqbhXzB1YWmtFl6Q==
+X-Received: by 2002:a05:622a:1750:b0:2f1:f7c1:894 with SMTP id l16-20020a05622a175000b002f1f7c10894mr15176809qtk.259.1650528167518;
+        Thu, 21 Apr 2022 01:02:47 -0700 (PDT)
+Received: from gerbillo.redhat.com (nat-pool-mxp-t.redhat.com. [149.6.153.186])
+        by smtp.gmail.com with ESMTPSA id m10-20020a05622a054a00b002eb965bbc3esm3155926qtx.93.2022.04.21.01.02.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 01:02:46 -0700 (PDT)
+Message-ID: <9325d344e8a6b1a4720022697792a84e545fef62.camel@redhat.com>
+Subject: Re: [PATCH] net: linkwatch: ignore events for unregistered netdevs
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Lukas Wunner <lukas@wunner.de>, Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Jann Horn <jannh@google.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
         Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
+        Jacky Chou <jackychou@asix.com.tw>, Willy Tarreau <w@1wt.eu>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date:   Thu, 21 Apr 2022 10:02:43 +0200
+In-Reply-To: <18b3541e5372bc9b9fc733d422f4e698c089077c.1650177997.git.lukas@wunner.de>
+References: <18b3541e5372bc9b9fc733d422f4e698c089077c.1650177997.git.lukas@wunner.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 9:42 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> Use the helpers as expected by the dma-direct code in the old arm
-> dma-mapping code to ease a gradual switch to the common DMA code.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+On Sun, 2022-04-17 at 09:04 +0200, Lukas Wunner wrote:
+> Jann Horn reports a use-after-free on disconnect of a USB Ethernet
+> (ax88179_178a.c).  Oleksij Rempel has witnessed the same issue with a
+> different driver (ax88172a.c).
+> 
+> Jann's report (linked below) explains the root cause in great detail,
+> but the gist is that USB Ethernet drivers call linkwatch_fire_event()
+> between unregister_netdev() and free_netdev().  The asynchronous work
+> linkwatch_event() may thus access the netdev after it's been freed.
+> 
+> USB Ethernet may not even be the only culprit.  To address the problem
+> in the most general way, ignore link events once a netdev's state has
+> been set to NETREG_UNREGISTERED.
+> 
+> That happens in netdev_run_todo() immediately before the call to
+> linkwatch_forget_dev().  Note that lweventlist_lock (and its implied
+> memory barrier) guarantees that a linkwatch_add_event() running after
+> linkwatch_forget_dev() will see the netdev's new state and bail out.
+> An unregistered netdev is therefore never added to link_watch_list
+> (but may have its __LINK_STATE_LINKWATCH_PENDING bit set, which should
+> not matter).  That obviates the need to invoke linkwatch_run_queue() in
+> netdev_wait_allrefs(), so drop it.
+> 
+> In a sense, the present commit is to *no longer* registered netdevs as
+> commit b47300168e77 ("net: Do not fire linkwatch events until the device
+> is registered.") is to *not yet* registered netdevs.
+> 
+> Reported-by: Jann Horn <jannh@google.com>
+> Link: https://lore.kernel.org/netdev/CAG48ez0MHBbENX5gCdHAUXZ7h7s20LnepBF-pa5M=7Bi-jZrEA@mail.gmail.com/
+> Reported-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Link: https://lore.kernel.org/netdev/20220315113841.GA22337@pengutronix.de/
+> Signed-off-by: Lukas Wunner <lukas@wunner.de>
+> Cc: stable@vger.kernel.org
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Oliver Neukum <oneukum@suse.com>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> ---
+>  include/linux/netdevice.h |  2 --
+>  net/core/dev.c            | 17 -----------------
+>  net/core/link_watch.c     | 10 ++--------
+>  3 files changed, 2 insertions(+), 27 deletions(-)
+> 
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index 59e27a2b7bf0..5d950b45b59d 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -4805,8 +4805,6 @@ extern const struct kobj_ns_type_operations net_ns_type_operations;
+>  
+>  const char *netdev_drivername(const struct net_device *dev);
+>  
+> -void linkwatch_run_queue(void);
+> -
+>  static inline netdev_features_t netdev_intersect_features(netdev_features_t f1,
+>  							  netdev_features_t f2)
+>  {
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 8c6c08446556..0ee56965ff76 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -10140,23 +10140,6 @@ static struct net_device *netdev_wait_allrefs_any(struct list_head *list)
+>  			list_for_each_entry(dev, list, todo_list)
+>  				call_netdevice_notifiers(NETDEV_UNREGISTER, dev);
+>  
+> -			__rtnl_unlock();
+> -			rcu_barrier();
+> -			rtnl_lock();
+> -
+> -			list_for_each_entry(dev, list, todo_list)
+> -				if (test_bit(__LINK_STATE_LINKWATCH_PENDING,
+> -					     &dev->state)) {
+> -					/* We must not have linkwatch events
+> -					 * pending on unregister. If this
+> -					 * happens, we simply run the queue
+> -					 * unscheduled, resulting in a noop
+> -					 * for this device.
+> -					 */
+> -					linkwatch_run_queue();
+> -					break;
+> -				}
+> -
+>  			__rtnl_unlock();
+>  
+>  			rebroadcast_time = jiffies;
+> diff --git a/net/core/link_watch.c b/net/core/link_watch.c
+> index 95098d1a49bd..9a0ea7cd68e4 100644
+> --- a/net/core/link_watch.c
+> +++ b/net/core/link_watch.c
+> @@ -107,7 +107,8 @@ static void linkwatch_add_event(struct net_device *dev)
+>  	unsigned long flags;
+>  
+>  	spin_lock_irqsave(&lweventlist_lock, flags);
+> -	if (list_empty(&dev->link_watch_list)) {
+> +	if (list_empty(&dev->link_watch_list) &&
+> +	    dev->reg_state < NETREG_UNREGISTERED) {
+>  		list_add_tail(&dev->link_watch_list, &lweventlist);
+>  		dev_hold_track(dev, &dev->linkwatch_dev_tracker, GFP_ATOMIC);
+>  	
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+What about testing dev->reg_state in linkwatch_fire_event() before
+setting the __LINK_STATE_LINKWATCH_PENDING bit, so that we don't leave
+the device in an unexpected state?
+
+Other than that, it looks good to me, but potentially quite risky. 
+
+Looking at the original report it looks like the issue could be
+resolved with a more usb-specific change: e.g. it looks like
+usbnet_defer_kevent() is not acquiring a dev reference as it should.
+
+Have you considered that path?
+
+Thanks,
+
+Paolo
+
+
