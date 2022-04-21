@@ -2,21 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C3E50A1D3
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 16:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC3950A1D7
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Apr 2022 16:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381159AbiDUOO5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 10:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
+        id S1389038AbiDUOPb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Apr 2022 10:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389188AbiDUOON (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 10:14:13 -0400
+        with ESMTP id S1388301AbiDUOPW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 10:15:22 -0400
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33E43B2AB;
-        Thu, 21 Apr 2022 07:11:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C5B3B022;
+        Thu, 21 Apr 2022 07:12:32 -0700 (PDT)
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id D28F268B05; Thu, 21 Apr 2022 16:11:08 +0200 (CEST)
-Date:   Thu, 21 Apr 2022 16:11:08 +0200
+        id 9CD7068C4E; Thu, 21 Apr 2022 16:12:29 +0200 (CEST)
+Date:   Thu, 21 Apr 2022 16:12:29 +0200
 From:   Christoph Hellwig <hch@lst.de>
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     Christoph Hellwig <hch@lst.de>,
@@ -35,13 +35,14 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 4/7] ARM: remove the unused virt_to_dma helper
-Message-ID: <20220421141108.GA20492@lst.de>
-References: <20220421074204.1284072-1-hch@lst.de> <20220421074204.1284072-5-hch@lst.de> <CAK8P3a2zSZsiq_FFHJMHex6uLc_7sUfvns8W8-mE52yzxOqhKw@mail.gmail.com>
+Subject: Re: [PATCH 6/7] ARM: use the common dma_to_phys/phys_to_dma
+ implementation where possible
+Message-ID: <20220421141229.GB20492@lst.de>
+References: <20220421074204.1284072-1-hch@lst.de> <20220421074204.1284072-7-hch@lst.de> <CAK8P3a3BD5zLiXf=Wr0kcJp-k3+vmhBkEP5DNRw_-H=OX9CoGA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a2zSZsiq_FFHJMHex6uLc_7sUfvns8W8-mE52yzxOqhKw@mail.gmail.com>
+In-Reply-To: <CAK8P3a3BD5zLiXf=Wr0kcJp-k3+vmhBkEP5DNRw_-H=OX9CoGA@mail.gmail.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -51,16 +52,22 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 10:00:55AM +0200, Arnd Bergmann wrote:
-> I think __virt_to_bus() is now unused as well and could be removed
-> in the same step.
+On Thu, Apr 21, 2022 at 10:05:11AM +0200, Arnd Bergmann wrote:
+> > -unsigned long __pfn_to_bus(unsigned long pfn)
+> > +#else
+> > +static inline unsigned long fb_bus_sdram_offset(void)
+> >  {
+> > -       return __pfn_to_phys(pfn) + (fb_bus_sdram_offset() - PHYS_OFFSET);
+> > +       return BUS_OFFSET;
+> >  }
+> > -EXPORT_SYMBOL(__pfn_to_bus);
+> > +#endif /* CONFIG_FOOTBRIDGE_ADDIN */
+> 
+> I have an older patch to remove CONFIG_FOOTBRIDGE_ADDIN
+> completely, as it does a couple of other nasty things and there are
+> apparently no users. Would that help here?
 
-Yes.
-
-> It looks like __bus_to_virt() is still used in the ISA DMA API, but
-> as that is only used on footbridge and rpc, the generic version of
-> that could be moved into rpc (footbridge already has a custom
-> version).
-
-That sounds like a useful cleanup, but isn't really in scope for
-this series.
+For this series it doesn't really make much of a difference.  The addin
+case actually is simpler than the host mode for DMA,  But overall
+CONFIG_FOOTBRIDGE_ADDIN seems to be a collection of special cases, so
+if it is unused and can be remove that would probably be a good thing.
