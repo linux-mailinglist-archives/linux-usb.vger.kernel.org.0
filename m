@@ -2,49 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABE350B7D1
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Apr 2022 15:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83ACD50B882
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Apr 2022 15:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445117AbiDVNC7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Apr 2022 09:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
+        id S1356983AbiDVNdO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Apr 2022 09:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447763AbiDVNCy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 09:02:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5BB60E4;
-        Fri, 22 Apr 2022 06:00:00 -0700 (PDT)
+        with ESMTP id S1448200AbiDVNdE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 09:33:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42B4457B5
+        for <linux-usb@vger.kernel.org>; Fri, 22 Apr 2022 06:30:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5D14B82D2D;
-        Fri, 22 Apr 2022 12:59:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 038CFC385A8;
-        Fri, 22 Apr 2022 12:59:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42115620C2
+        for <linux-usb@vger.kernel.org>; Fri, 22 Apr 2022 13:30:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3211DC385A0;
+        Fri, 22 Apr 2022 13:30:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650632397;
-        bh=EuI02HnZPhPPNa3QKg88JZRW0CEqpWBj8AMo5mHer+U=;
+        s=korg; t=1650634209;
+        bh=vGzaIzkjnAmXBjCtbcDTqozWT6FKi8rDvg1K7GseeRs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JecLKEygMG9ILc1dRzuK3b4RNTdFfnvWcZF9hCg/xrhiaMRzPmi4nkX9j9cttsj+E
-         Q+DPYQlCUr90BGFxlMdtbFcEpV5ooPCAfjY2FUR2uGa9CDuPrgk1BzJu7WO7zv3E0i
-         ac2V+8AmGIU96/YneETnRD7wZbHagqEmeSD3vPOU=
-Date:   Fri, 22 Apr 2022 14:59:54 +0200
+        b=u895+EeFg+O8jRxaQbX/atM0Ds4GepTEQ+sRlnauvNCXgLJ72NB15TxV+0Cam1EDO
+         kxUPQZRnVKTyVHhJSXn70v59g5sNUX8f3uGNCF8J7TgB/EcAMYO4hvGYdPvrQD47w2
+         7RHTBU6Q+/QiNZB7NIjbJ8MSo5iWAp0J2hINf5Js=
+Date:   Fri, 22 Apr 2022 15:30:06 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Cc:     balbi@kernel.org, joel@jms.id.au, andrew@aj.id.au,
-        rentao.bupt@gmail.com, caihuoqing@baidu.com,
-        benh@kernel.crashing.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] aspeed-vhub: epn: fix an incorrect member check on list
- iterator
-Message-ID: <YmKmysEfb9GY5ng4@kroah.com>
-References: <20220327062431.5847-1-xiam0nd.tong@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [RFC PATCH 0/4] USB: gadget: Create a bus for gadgets
+Message-ID: <YmKt3kH+85kjzdbL@kroah.com>
+References: <YjeEbHL8ITkW692W@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220327062431.5847-1-xiam0nd.tong@gmail.com>
+In-Reply-To: <YjeEbHL8ITkW692W@rowland.harvard.edu>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,24 +49,22 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Mar 27, 2022 at 02:24:31PM +0800, Xiaomeng Tong wrote:
-> The bug is here:
-> 	if (&req->req == u_req) {
+On Sun, Mar 20, 2022 at 03:45:48PM -0400, Alan Stern wrote:
+> Everyone:
 > 
-> The list iterator 'req' will point to a bogus position containing
-> HEAD if the list is empty or no element is found. This case must
-> be checked before any use of the iterator, otherwise it may bypass
-> the 'if (&req->req == u_req) {' check in theory, if '*u_req' obj is
-> just allocated in the same addr with '&req->req'.
+> The following series of patches implements Greg's suggestion that 
+> gadgets should be registered on some sort of bus.  It turns out that the 
+> best way to do this is to create a new "gadget" bus, with specialized 
+> matching and probing routines, rather than using an existing bus.
 > 
-> To fix this bug, just mova all thing inside the loop and return 0,
-> otherwise return error.
+> Patches 1-3 are simple preparations for the big change.  They stand on 
+> their own, make useful little changes, and could be merged by themselves
+> without committing to adding the "gadget" bus.  Patch 4 is main one.
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: 7ecca2a4080cb ("usb/gadget: Add driver for Aspeed SoC virtual hub")
-> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-> ---
->  drivers/usb/gadget/udc/aspeed-vhub/epn.c | 23 ++++++++++-------------
->  1 file changed, 10 insertions(+), 13 deletions(-)
+> I'm posting this series for feedback from the Gadget/UDC maintainer and 
+> others.  If everything works out okay, the patches can be submitted for 
+> real once the upcoming merge window closes.
 
-Does not apply anymore :(
+At first glance, this looks good to me, many thanks for working on this!
+
+greg k-h
