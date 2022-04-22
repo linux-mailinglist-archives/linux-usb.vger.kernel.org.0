@@ -2,104 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B75050B6A5
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Apr 2022 13:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F377E50B71A
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Apr 2022 14:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447221AbiDVMAA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Apr 2022 08:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
+        id S1447281AbiDVMT6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Apr 2022 08:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447214AbiDVL77 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 07:59:59 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753863ED01;
-        Fri, 22 Apr 2022 04:57:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650628626; x=1682164626;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=una0KHCh52R2HL+UriGbWNcELDP4ksfAOACMj6FtIPs=;
-  b=kRseLUuWngxFvBJCbWGiM35dNTXkOKhkUrVXVTgVBZ/QQPoGv0jqgqp6
-   hmi9dZ2KS83qD8uwC1Y6Z91ZbgqICtj9dfcxFh5pfj/oBzm6CmmhJCbbM
-   Kr+RLADYQeDAeC9cftg3pwWNEmfPb9MiP9uTiiEhr6O6TAKfvMrfk9PCs
-   H986E/mkaD/YlpHoHUAIkleJE7rj3UmF0hunziFAW3hEUPvRJyxZpYaK4
-   vsBMQIyCvDwwLbn2VvuKsDUyCtWvpdUNp1f7B3bsAbEPzZWNMYfAp4TvQ
-   qwkkJg6o32XmUwBkACT6AYfvYs0mNKKvrAO2dSNLXJuB50ypJk46aDzD2
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264132747"
-X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="264132747"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 04:57:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="867560850"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Apr 2022 04:57:04 -0700
-To:     surong pang <surong.pang@gmail.com>
-Cc:     mathias.nyman@intel.com, Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Orson.Zhai@unisoc.com, yunguo.wu@unisoc.com
-References: <20220412122524.26966-1-surong.pang@gmail.com>
- <610871b2-1707-dfba-868f-4ddecc4d554d@linux.intel.com>
- <CAEDbmAT=fZ-kpn13sW4KjB9RuFb_6T4j_eripR54NZ3UciZfqA@mail.gmail.com>
- <d6df23a0-6539-f955-5241-5cdfcaa4eca4@linux.intel.com>
- <CAEDbmAT3SoSsEmTkELSYoykGN+AuPgi2N11V2YwKuaC3nKMEmQ@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH V1 1/1] usb/host: Let usb phy shutdown later
-Message-ID: <e05ec742-c3dc-df7c-c5d7-29358d0a7081@linux.intel.com>
-Date:   Fri, 22 Apr 2022 14:59:01 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        with ESMTP id S237402AbiDVMT6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 08:19:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E4055222
+        for <linux-usb@vger.kernel.org>; Fri, 22 Apr 2022 05:17:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E490861FE0
+        for <linux-usb@vger.kernel.org>; Fri, 22 Apr 2022 12:17:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D216C385A8;
+        Fri, 22 Apr 2022 12:17:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650629824;
+        bh=4ODAIy2t2wfbuEeetD4Uzk1Zj9Wlbds8/DsGr0qST14=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FPHJa/hn52EbD2H/EtrsijTyp5v1H1aS+gpGsdtlrCVbND/7vEDkSOvaRgl/oJ8cf
+         6HvaIqdb+xWdbvB58dTww8ycj4C2cssKT2aXLcU1dAn2o1bQyqeWA0OeytSt9sFnBc
+         5sh/OJgYCRJAnw33cYy9aUmEfit5w4R+FhClA6H8=
+Date:   Fri, 22 Apr 2022 14:17:00 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Jack Pham (QUIC)" <quic_jackp@quicinc.com>
+Subject: Re: [PATCH v6 0/5] usb: gadget: configfs: new trace events
+Message-ID: <YmKcvKTQ/UP7VQas@kroah.com>
+References: <1649294865-4388-1-git-send-email-quic_linyyuan@quicinc.com>
+ <YmJqfzmz5N0I3n87@kroah.com>
+ <DM8PR02MB81988A02C692B0760A73AF23E3F79@DM8PR02MB8198.namprd02.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <CAEDbmAT3SoSsEmTkELSYoykGN+AuPgi2N11V2YwKuaC3nKMEmQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM8PR02MB81988A02C692B0760A73AF23E3F79@DM8PR02MB8198.namprd02.prod.outlook.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22.4.2022 13.43, surong pang wrote:
->>>> @@ -398,6 +397,7 @@ static int xhci_plat_remove(struct platform_device *dev)
->>>>       clk_disable_unprepare(clk);
->>>>       clk_disable_unprepare(reg_clk);
->>>> +    usb_phy_shutdown(hcd->usb_phy);
->>>>       usb_put_hcd(hcd);
+On Fri, Apr 22, 2022 at 09:01:13AM +0000, Linyu Yuan (QUIC) wrote:
+> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Sent: Friday, April 22, 2022 4:43 PM
+> > To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
+> > Cc: Felipe Balbi <balbi@kernel.org>; linux-usb@vger.kernel.org; Jack Pham
+> > (QUIC) <quic_jackp@quicinc.com>
+> > Subject: Re: [PATCH v6 0/5] usb: gadget: configfs: new trace events
+> > 
+> > On Thu, Apr 07, 2022 at 09:27:40AM +0800, Linyu Yuan wrote:
+> > > Last year I try to add trace event support for usb gadget configfs [1],
+> > > this time the idea is change a lot, the purpose is trace all user space
+> > > operation to gadget configuration, include gadget and it's function.
+> > 
+> > But why?  Who will use this, and what for?
 > 
-> Is it ok to put usb_phy_shutdown before usb_put_hcd(hcd)? hcd is
-> released at usb_put_hcd.
+> Thanks for review it.
+> It is not used by user space, just for kernel gadget issue debugging.
 
-yes, above looks good.
+So you use it in userspace?  How can you use a tracepoint from somewhere
+else in the kernel?
 
-> 
-> UNISOC DWC3 phy is not divided  USB 2.0/3.0 phy clearly.  Yes, it's
-> UNISOC's issue.
-> It UNISOC's dtsi: phys = <&ssphy>, <&ssphy>;
-> If to shutdown phy too earlier,  it will cost 10s timeout to do xhci_reset.
-> usb_remmove_hcd  --> usb_stop_hcd --> xhci_stop --> xhci_reset  -->
-> xhci_handshake(&xhci->op_regs->command, CMD_RESET, 0, 10 * 1000 *1000)
-> 
-> I want to know this change is acceptable or not?
-> 
-> hcd->usb_phy = devm_usb_get_phy_by_phandle(sysdev, "usb-phy", 0);
-> Why in xhci_plat_remove, just to shutdown "usb-phy"[0], not to
-> shutdown "usb-phy"[1] ?
+> Like android, the user space is complicate to kernel developers,
+> With this trace events, kernel development will understand
+> What is simplified action happen from user space.
 
-xhci-plat.c only takes one phy at index 0, so we only shutdowns that one.
+They do not need this, they can just use ftrace today.  Most of these
+tracepoints you are putting in here are just for a "got to this
+function!" type of thing, which ftrace can show you already.
 
-Looks like usb core hcd code has better phy handling when adding and
-removing hcds. It supports multiple phys.
-If possible use that instead.
+What is the added benefit of these over ftrace?
 
-See drivers/usb/core/hcd.c usb_add_hcd()
+thanks,
 
-Thanks
--Mathias
+greg k-h
