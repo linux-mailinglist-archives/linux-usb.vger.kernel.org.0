@@ -2,115 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB2350B57C
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Apr 2022 12:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBED650B68B
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Apr 2022 13:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446836AbiDVKq4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Apr 2022 06:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
+        id S1447242AbiDVLxI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Apr 2022 07:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446824AbiDVKqx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 06:46:53 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFE0BCA2;
-        Fri, 22 Apr 2022 03:44:00 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id r12so8169473iod.6;
-        Fri, 22 Apr 2022 03:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9mOgppXNPhWimJqU72s6fXNPCFcDPkPEDHvzrtAfbic=;
-        b=ENmreVhV8u52bMxntoqrAwWBbM5PCO0r/Nol68a0fAE7eZaW+4ofl96ZmogULhu1zV
-         DNxIaQcf0wmQVDjly5xrv2Mt48m/jTwNjIuwuAckSntilFAysopuuumDYulXX3FHv6mj
-         VhADvhep9wK2tGVynosU+YD5wneIpN8/+Mj+X7se+8JKa2Wv1K7gi3PF2jxFwehZS9F9
-         +yBpmbiBtzkq0V+4qa3KMlScOSfd51XY77gdCMM2ZKppK0x+4ED9imCXzD4J8w3+vpha
-         worW7C6dcCsEiC+eNZQLZ0cTbB2bKQ6tHKO9YLH8QJiD/+/EA1bz0fhh5ie1NtkhqReG
-         DBnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9mOgppXNPhWimJqU72s6fXNPCFcDPkPEDHvzrtAfbic=;
-        b=vDLLG/GxOkQG/1z1mBCzVzDbQAhSVX8WkboS0ZoWDMSCXdG3pEg0OdZ1c+0PRR7+tq
-         T9J0w+S5ESJslJ94n2M1OlSZ/awlwHbWReQEGabNP1oLVP3i2H6XtZ4dtjyY8XYsAbw9
-         oPl0oGz4unihexwLjdnWV5x5iUUCYT926A2e/WpNy+RO5NLI61dOsHI/dTp2NZGj8oOe
-         bJpwWsQ6YmK+QVmlZg9I7JJZNXSIQMCHtA7aHdky0IgKuv/Erv1fNImkCo3YvJnQlr2m
-         j90XQzCzpys8chwHHArAUuCmCxv5VmidIoKXJuG3jJgLfOz2HolzYaVPqQgUBIRpg3vY
-         vUJQ==
-X-Gm-Message-State: AOAM530Q6PI1z2XA5nRPt0HgA0h4we+eL+AxsT1xWobB3ZsaYsDwm8gS
-        KsPPN1E7SjK6UkzpCNASFHMtu5YMc8BxKJHUdXOgU/U84ERcUWQC
-X-Google-Smtp-Source: ABdhPJxuHA+ovPFyGpEEbXeiptBOygU6YMacm73aSaQQzN5jKfKaI7hqdDVB2vUOkzAAfaoiFekAI7Pm86w4RHS54ng=
-X-Received: by 2002:a05:6638:213:b0:326:5c30:494b with SMTP id
- e19-20020a056638021300b003265c30494bmr1874609jaq.42.1650624240131; Fri, 22
- Apr 2022 03:44:00 -0700 (PDT)
+        with ESMTP id S1447229AbiDVLxG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 07:53:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C6C5620B;
+        Fri, 22 Apr 2022 04:50:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E6AB61FAA;
+        Fri, 22 Apr 2022 11:50:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B2785C385A4;
+        Fri, 22 Apr 2022 11:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650628211;
+        bh=PcOw9NQ5C+DnDyFKtqNAXsbbphJJFP39CACPGGQ2kPI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=VLijD5h0N6yKyMZMFcvK/7sWmsVH6/KJyPrl0cZQwcGL64rg6m1cWvd+BpsDTf/dq
+         kbOfxtiTIHFLWvIlpAmf0LRUu1IZbfwpLZkp1Y74pA24FApj3IF3OK0E2BiFO+Dw+L
+         6U3LtvzrI0+1+L7a33rUCDdrdD+dIfisCOkOfDfEGGjc8eydJItwH60xn5vzXPnHVx
+         kE+FhMh+w2d/nZL4wPngW0zli7R7krjCQD4t/4f0VPlN+VNsFon1r9lU/jKTUKdsmN
+         sE2TFcoDvM3DzqEta/6vaLGY4vihu7OIE8ifrhLemQxSxLt4VeFhk5C01JObGa8czS
+         /YsGxb7T9F1NQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 92D7CE8DBDA;
+        Fri, 22 Apr 2022 11:50:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220412122524.26966-1-surong.pang@gmail.com> <610871b2-1707-dfba-868f-4ddecc4d554d@linux.intel.com>
- <CAEDbmAT=fZ-kpn13sW4KjB9RuFb_6T4j_eripR54NZ3UciZfqA@mail.gmail.com> <d6df23a0-6539-f955-5241-5cdfcaa4eca4@linux.intel.com>
-In-Reply-To: <d6df23a0-6539-f955-5241-5cdfcaa4eca4@linux.intel.com>
-From:   surong pang <surong.pang@gmail.com>
-Date:   Fri, 22 Apr 2022 18:43:48 +0800
-Message-ID: <CAEDbmAT3SoSsEmTkELSYoykGN+AuPgi2N11V2YwKuaC3nKMEmQ@mail.gmail.com>
-Subject: Re: [PATCH V1 1/1] usb/host: Let usb phy shutdown later
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     mathias.nyman@intel.com, Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Orson.Zhai@unisoc.com, yunguo.wu@unisoc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] USB2NET : SR9800 : change SR9800_BULKIN_SIZE from global to
+ static
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165062821159.27289.12403848172811597562.git-patchwork-notify@kernel.org>
+Date:   Fri, 22 Apr 2022 11:50:11 +0000
+References: <20220419140625.2886328-1-trix@redhat.com>
+In-Reply-To: <20220419140625.2886328-1-trix@redhat.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->>> @@ -398,6 +397,7 @@ static int xhci_plat_remove(struct platform_device =
-*dev)
->>>       clk_disable_unprepare(clk);
->>>       clk_disable_unprepare(reg_clk);
->>> +    usb_phy_shutdown(hcd->usb_phy);
->>>       usb_put_hcd(hcd);
+Hello:
 
-Is it ok to put usb_phy_shutdown before usb_put_hcd(hcd)? hcd is
-released at usb_put_hcd.
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-UNISOC DWC3 phy is not divided  USB 2.0/3.0 phy clearly.  Yes, it's
-UNISOC's issue.
-It UNISOC's dtsi: phys =3D <&ssphy>, <&ssphy>;
-If to shutdown phy too earlier,  it will cost 10s timeout to do xhci_reset.
-usb_remmove_hcd  --> usb_stop_hcd --> xhci_stop --> xhci_reset  -->
-xhci_handshake(&xhci->op_regs->command, CMD_RESET, 0, 10 * 1000 *1000)
+On Tue, 19 Apr 2022 10:06:25 -0400 you wrote:
+> Smatch reports this issue
+> sr9800.h:166:53: warning: symbol 'SR9800_BULKIN_SIZE' was not declared. Should it be static?
+> 
+> Global variables should not be defined in header files.
+> This only works because sr9800.h in only included by sr9800.c
+> Change the storage-class specifier to static.
+> And since it does not change add type qualifier const.
+> 
+> [...]
 
-I want to know this change is acceptable or not?
+Here is the summary with links:
+  - USB2NET : SR9800 : change SR9800_BULKIN_SIZE from global to static
+    https://git.kernel.org/netdev/net-next/c/0844d36f771d
 
-hcd->usb_phy =3D devm_usb_get_phy_by_phandle(sysdev, "usb-phy", 0);
-Why in xhci_plat_remove, just to shutdown "usb-phy"[0], not to
-shutdown "usb-phy"[1] ?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Mathias Nyman <mathias.nyman@linux.intel.com> =E4=BA=8E2022=E5=B9=B44=E6=9C=
-=8822=E6=97=A5=E5=91=A8=E4=BA=94 15:51=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 22.4.2022 5.10, surong pang wrote:
-> > shared_hcd might be freed already here, but hcd should not be freed
-> > here, because "usb_put_hcd(hcd)" is called later.
->
-> To me it still looks like this patch calls usb_phy_shutdown(hcd->usb_phy)=
- _after_
-> usb_put_hcd(hcd):
->
-> >>> @@ -398,6 +397,7 @@ static int xhci_plat_remove(struct platform_devic=
-e *dev)
-> >>>       clk_disable_unprepare(clk);
-> >>>       clk_disable_unprepare(reg_clk);
-> >>>       usb_put_hcd(hcd);
-> >>> +     usb_phy_shutdown(hcd->usb_phy);
->
->
-> shared hcd was freed even earlier, before disabling the clocks.
->
-> Thanks
-> Mathias
+
