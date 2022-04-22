@@ -2,60 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF33C50AE6D
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Apr 2022 05:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0104450AEAB
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Apr 2022 06:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443681AbiDVDN3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 23:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
+        id S1443844AbiDVECy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Apr 2022 00:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443675AbiDVDNZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 23:13:25 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937A74C7AD
-        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 20:10:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650597034; x=1682133034;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=oP8IAOh4jshpMSm9wWRdpui+DyZGCN5PkfbFQvdfh58=;
-  b=LQtOFPnBD9EeZnL6YvQ+X+DyituD39O8XiAHmpslRxER2SFJSpCclunI
-   6A6qkSZ71Q2Bfbtn1l7Yztn67GOFrob58+rgaqb77+38I1aO2M2SNZshT
-   loiMl9Jo8T8h3/sy4IOxPMvZzRCFPidfGRkOYaiksDil8a2nMwuH/uLRi
-   o=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 21 Apr 2022 20:10:34 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 20:10:33 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 21 Apr 2022 20:10:33 -0700
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 21 Apr 2022 20:10:31 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
-        "Linyu Yuan" <quic_linyyuan@quicinc.com>
-Subject: [PATCH v5 3/3] usb: typec: ucsi: Wait for the USB role switches
-Date:   Fri, 22 Apr 2022 11:10:22 +0800
-Message-ID: <1650597022-19793-4-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1650597022-19793-1-git-send-email-quic_linyyuan@quicinc.com>
-References: <1650597022-19793-1-git-send-email-quic_linyyuan@quicinc.com>
+        with ESMTP id S1443835AbiDVECx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 00:02:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0DD264E
+        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 21:00:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85A8961C4A
+        for <linux-usb@vger.kernel.org>; Fri, 22 Apr 2022 04:00:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DC0F3C385A4
+        for <linux-usb@vger.kernel.org>; Fri, 22 Apr 2022 04:00:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650600000;
+        bh=dLdSHAYqrmVQbg35A03zgPV2WHURwfTt3gXV9lt8nNo=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=fK6PUgl8fWS9UPhhzjz6DAJR4HP5JhC1kWR33vE4sFmT15nhTwMzAOYfsaD5Es3qO
+         SkJX7cH/TLgK+5jPf13Tl0SwV3GanihCXDRuZjMV1EHVTGdHI3Xlfo1/cLGH/3hEt2
+         IQFBNJUdA0RCQ75DQTMWbwnR0BwUBavfWlPMJZAHVYo/Id3HuBGbCgyIm1NXEibIVL
+         XUnhBFVWn0jyO1gUOjgfs0P7KFJJpboNz5uDKDmHMieP0M9z/iPceFyO16JWWM7sLv
+         GLDP0joQYiI+z3bG3M+UbflSII9/6okgFNeSIBEVUeZ3d8qM1vU/iUkBf6sCaGoYBH
+         C1Kx6ymCbvFeg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id BDF36C05F98; Fri, 22 Apr 2022 04:00:00 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215361] SL-6000 zaurus USB error - 'bad CDC descriptors'
+Date:   Fri, 22 Apr 2022 04:00:00 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: low
+X-Bugzilla-Who: bids.7405@bigpond.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-215361-208809-tchco4jE6F@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215361-208809@https.bugzilla.kernel.org/>
+References: <bug-215361-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,133 +69,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When role switch module probe late than ucsi module,
-fwnode_usb_role_switch_get() will return -EPROBE_DEFER,
-it is better to restart ucsi init work to find
-it again every 100ms, total wait time is 10 second.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215361
 
-It also means change ucsi init work to delayed_work.
+Ross Maynard (bids.7405@bigpond.com) changed:
 
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
-v2: keep original con->num in debug log
-v3: change return value from -EAGAIN to PTR_ERR()
-v4: change subject line,
-    add counter for retry limit,
-    correct commit descripton to match change in V3
-v5: small update of commit description
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |CODE_FIX
 
- drivers/usb/typec/ucsi/ucsi.c | 32 ++++++++++++++++++++------------
- drivers/usb/typec/ucsi/ucsi.h |  6 +++++-
- 2 files changed, 25 insertions(+), 13 deletions(-)
+--=20
+You may reply to this email to add a comment.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index ce9192e..11f8808 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1053,6 +1053,14 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 	con->num = index + 1;
- 	con->ucsi = ucsi;
- 
-+	cap->fwnode = ucsi_find_fwnode(con);
-+	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
-+	if (IS_ERR(con->usb_role_sw)) {
-+		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
-+			con->num);
-+		return PTR_ERR(con->usb_role_sw);
-+	}
-+
- 	/* Delay other interactions with the con until registration is complete */
- 	mutex_lock(&con->lock);
- 
-@@ -1088,7 +1096,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 	if (con->cap.op_mode & UCSI_CONCAP_OPMODE_DEBUG_ACCESSORY)
- 		*accessory = TYPEC_ACCESSORY_DEBUG;
- 
--	cap->fwnode = ucsi_find_fwnode(con);
- 	cap->driver_data = con;
- 	cap->ops = &ucsi_ops;
- 
-@@ -1147,13 +1154,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 		ucsi_port_psy_changed(con);
- 	}
- 
--	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
--	if (IS_ERR(con->usb_role_sw)) {
--		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
--			con->num);
--		con->usb_role_sw = NULL;
--	}
--
- 	/* Only notify USB controller if partner supports USB data */
- 	if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) & UCSI_CONSTAT_PARTNER_FLAG_USB))
- 		u_role = USB_ROLE_NONE;
-@@ -1286,12 +1286,20 @@ static int ucsi_init(struct ucsi *ucsi)
- 
- static void ucsi_init_work(struct work_struct *work)
- {
--	struct ucsi *ucsi = container_of(work, struct ucsi, work);
-+	struct ucsi *ucsi = container_of(work, struct ucsi, work.work);
- 	int ret;
- 
- 	ret = ucsi_init(ucsi);
- 	if (ret)
- 		dev_err(ucsi->dev, "PPM init failed (%d)\n", ret);
-+
-+	if (ret == -EPROBE_DEFER) {
-+		if (ucsi->work_count++ > UCSI_ROLE_SWITCH_WAIT_COUNT)
-+			return;
-+
-+		queue_delayed_work(system_long_wq, &ucsi->work,
-+				   UCSI_ROLE_SWITCH_INTERVAL);
-+	}
- }
- 
- /**
-@@ -1331,7 +1339,7 @@ struct ucsi *ucsi_create(struct device *dev, const struct ucsi_operations *ops)
- 	if (!ucsi)
- 		return ERR_PTR(-ENOMEM);
- 
--	INIT_WORK(&ucsi->work, ucsi_init_work);
-+	INIT_DELAYED_WORK(&ucsi->work, ucsi_init_work);
- 	mutex_init(&ucsi->ppm_lock);
- 	ucsi->dev = dev;
- 	ucsi->ops = ops;
-@@ -1366,7 +1374,7 @@ int ucsi_register(struct ucsi *ucsi)
- 	if (!ucsi->version)
- 		return -ENODEV;
- 
--	queue_work(system_long_wq, &ucsi->work);
-+	queue_delayed_work(system_long_wq, &ucsi->work, 0);
- 
- 	return 0;
- }
-@@ -1383,7 +1391,7 @@ void ucsi_unregister(struct ucsi *ucsi)
- 	u64 cmd = UCSI_SET_NOTIFICATION_ENABLE;
- 
- 	/* Make sure that we are not in the middle of driver initialization */
--	cancel_work_sync(&ucsi->work);
-+	cancel_delayed_work_sync(&ucsi->work);
- 
- 	/* Disable notifications */
- 	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 280f1e1..8eb391e 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -287,7 +287,11 @@ struct ucsi {
- 	struct ucsi_capability cap;
- 	struct ucsi_connector *connector;
- 
--	struct work_struct work;
-+	struct delayed_work work;
-+	int work_count;
-+#define UCSI_ROLE_SWITCH_RETRY_PER_HZ	10
-+#define UCSI_ROLE_SWITCH_INTERVAL	(HZ / UCSI_ROLE_SWITCH_RETRY_PER_HZ)
-+#define UCSI_ROLE_SWITCH_WAIT_COUNT	(10 * UCSI_ROLE_SWITCH_RETRY_PER_HZ)
- 
- 	/* PPM Communication lock */
- 	struct mutex ppm_lock;
--- 
-2.7.4
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
