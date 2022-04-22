@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E1250C469
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Apr 2022 01:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3812850C388
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Apr 2022 01:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233733AbiDVW5y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Apr 2022 18:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
+        id S233826AbiDVW55 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Apr 2022 18:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234207AbiDVW5l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 18:57:41 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96809342C41
-        for <linux-usb@vger.kernel.org>; Fri, 22 Apr 2022 15:21:51 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id 12so10542111oix.12
-        for <linux-usb@vger.kernel.org>; Fri, 22 Apr 2022 15:21:50 -0700 (PDT)
+        with ESMTP id S234188AbiDVW5k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 18:57:40 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983EB343E5D
+        for <linux-usb@vger.kernel.org>; Fri, 22 Apr 2022 15:21:52 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id r8so10582386oib.5
+        for <linux-usb@vger.kernel.org>; Fri, 22 Apr 2022 15:21:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zshTmKTlwWpNs+bPCyPg2G4xzDcF+pfyEHctS9lyUmM=;
-        b=p18Ea3C4s1iYRhpjXGv+Q/z6sLN27GiKyszpjW0gjWX20QRsSCMVqd4yA/Lh7GOi9g
-         /NZuoRazntRsAsm7WAgnDef7b9pUyzSbPBgJLpfKe4YaPvU0WJ0QR75I/vUhDq4iF6RT
-         QUQKylKyqoeB5ZCAIKx5U/i6opxvjNvTD9dkTdx4Ut2k/jC9uC6xqzQstUbv9ArUTpU5
-         eylxKDHkC64LZd0jHtQ00UXgy1/AShQ8KDXPe60eVxQwS3eWzG5ASX7cvsgM48zY4w1Q
-         +k+q0r3URNAs8mcCu2n5GkmNiYnEkray5b5LPhbWNoTNHhoOnpg7Ib3g+qRBL5oC5/Xx
-         q97w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=XENFSBCAxirOMSvN5P45H1Vvs6fWH0AA/S+LYBu5Oow=;
+        b=bACNTkVaiUGXihYZDcQV9PLoJAjDwUaKU0nJbvLHLSp9EtlSmlIOcdlRlODArPFKE4
+         6dTDsPDnHZ3Ufdg74nOFzASENI2z+QVfy254paHTUJrIPVmKsvFSqeOKwY3mrfJU6gil
+         5iDO9pn3xe/hy9WtI0nfvFh/jt00HXQggQPPtjtj5VQ6uU3DUdi4CqCyIeCP1DcXQm3i
+         jHsmBr79i5kdSdgf72LxJpOiQv9Mo7/2UIXm3oHMpNwpTXjwNPP0y07l6kIceye/fjnI
+         8c41lBph9vfCBfv+YSMIpJWeDHUtdXAbQep3lfDzHtN+Y6dIwg69llcmwsNiQpcq8gec
+         f58g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zshTmKTlwWpNs+bPCyPg2G4xzDcF+pfyEHctS9lyUmM=;
-        b=HxiSsuwdnVT0NFoPXZXmVe8HeCpeBRzXYhtbh4lwmYZszsEoTQRrGt4on6YMTkpcdO
-         YEod7ffmKY3jTJIlB+/DfZ6IrnjekeDRYbZ6iIf0H81gAZmD6xd1ZGgyVXFHtb/iE0jx
-         4+9XEdRj+RdHSzUHfnP5DzWNHlvDba6kakfXqkHngZOs9AH+aX1/rNuJD5X+3oNWX60E
-         I26Jv87Ph2o7hUOrlTvFYhjPCzpfPAhBsRr1ULsgZwl+Zk2GQO9JhybB6A7WtfzNj2Xl
-         Ktjzs/WlIEhtPw1TX97xEh7UVNHV0d0WiG0qcrr2C0TO4tU/xPlDe0czhA90NWBQ3G4e
-         sxXg==
-X-Gm-Message-State: AOAM530R8u+ZsZpGYHV1kfzUxUYKoY4t90iLsYtXKnPrCrOX7mE8KYN+
-        Ru82mZGRwfUCbC9fK6DwaVQJsrZimDWAXH2k
-X-Google-Smtp-Source: ABdhPJy2wkzUusvXDfhRYywzAm+d4ZCyFMdNt0N57JRQDI6OHyUJyvx5APLKi6X+9Gnrlb3M4ed0/A==
-X-Received: by 2002:a05:6808:1828:b0:322:4891:8832 with SMTP id bh40-20020a056808182800b0032248918832mr7699862oib.172.1650666110356;
-        Fri, 22 Apr 2022 15:21:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XENFSBCAxirOMSvN5P45H1Vvs6fWH0AA/S+LYBu5Oow=;
+        b=vZAZ1Pfguil99uFoS/+/+bKrmCm31KcEB8FkCHzYmmazuCA4/VzuvyRyRreLbiRtCh
+         eflNcbuPjQcQkfim9OBlsHa1sNMIFsfY/Q+FmpYifxy+XgP77RFbXGVOloOd6dX4r+57
+         S1SSFDY/NLCUtdDciv2p1s2eezzNf+jC4NHyekG3LAtvzrQYPmJlbru0GTBuivc0tnix
+         oltn653xrqyPdvRTIQQxPs/r8rEK8Z+YFhKZqaORN8ahFzs9zfJkyE9s3a4/Dq/an87s
+         I4krr0JelxGhuXNUBF5iLUpsUt5CMClGSfI+9LRHa5RrdVsb52XRD+wTUOTdI7sj6mIM
+         y23Q==
+X-Gm-Message-State: AOAM532fAk+X2uLA6Mxtk4xX4lqBEzaR+8cBv+CUI5p4J42JHHwhnLam
+        cf4eAXIoumwn+VbzfpvfVxq68A==
+X-Google-Smtp-Source: ABdhPJxUu+TIzAagwVAFL737HsQohEi6OYw8fsVfAEoixHQTgXTXln0yE3HNaoph719hM+yRvhkKkw==
+X-Received: by 2002:a05:6808:124b:b0:2da:38f0:945f with SMTP id o11-20020a056808124b00b002da38f0945fmr7623223oiv.171.1650666111443;
+        Fri, 22 Apr 2022 15:21:51 -0700 (PDT)
 Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id js4-20020a056870bac400b000e687cdf5adsm1049224oab.55.2022.04.22.15.21.49
+        by smtp.gmail.com with ESMTPSA id js4-20020a056870bac400b000e687cdf5adsm1049224oab.55.2022.04.22.15.21.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 15:21:49 -0700 (PDT)
+        Fri, 22 Apr 2022 15:21:50 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,55 +59,192 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Hans de Goede <hdegoede@redhat.com>
 Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: [PATCH v5 0/7] typec: mux: Introduce support for multiple USB TypeC muxes
-Date:   Fri, 22 Apr 2022 15:23:44 -0700
-Message-Id: <20220422222351.1297276-1-bjorn.andersson@linaro.org>
+Subject: [PATCH v5 1/7] device property: Add helper to match multiple connections
+Date:   Fri, 22 Apr 2022 15:23:45 -0700
+Message-Id: <20220422222351.1297276-2-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220422222351.1297276-1-bjorn.andersson@linaro.org>
+References: <20220422222351.1297276-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This series introduces a level of indirection between the controller's view of
-a typec_mux/switch and the implementation and then expands that to support
-multiple drivers.
+In some cases multiple connections with the same connection id
+needs to be resolved from a fwnode graph.
 
-This is needed in order to support devices such as the Qualcomm Snapdragon 888
-HDK, which does muxing and orientation handling in the QMP (USB+DP) PHY and SBU
-muxing in the external FSA4480 chip.
+One such example is when separate hardware is used for performing muxing
+and/or orientation switching of the SuperSpeed and SBU lines in a USB
+Type-C connector. In this case the connector needs to belong to a graph
+with multiple matching remote endpoints, and the Type-C controller needs
+to be able to resolve them both.
 
-Bjorn Andersson (7):
-  device property: Add helper to match multiple connections
-  device property: Use multi-connection matchers for single case
-  usb: typec: mux: Check dev_set_name() return value
-  usb: typec: mux: Introduce indirection
-  usb: typec: mux: Allow multiple mux_devs per mux
-  dt-bindings: usb: Add binding for fcs,fsa4480
-  usb: typec: mux: Add On Semi fsa4480 driver
+Add a new API that allows this kind of lookup.
 
- .../devicetree/bindings/usb/fcs,fsa4480.yaml  |  72 +++++
- drivers/base/property.c                       |  96 +++++--
- drivers/usb/typec/bus.c                       |   2 +-
- drivers/usb/typec/mux.c                       | 271 +++++++++++++-----
- drivers/usb/typec/mux.h                       |  12 +-
- drivers/usb/typec/mux/Kconfig                 |  10 +
- drivers/usb/typec/mux/Makefile                |   1 +
- drivers/usb/typec/mux/fsa4480.c               | 218 ++++++++++++++
- drivers/usb/typec/mux/intel_pmc_mux.c         |   8 +-
- drivers/usb/typec/mux/pi3usb30532.c           |   8 +-
- include/linux/property.h                      |   5 +
- include/linux/usb/typec_mux.h                 |  22 +-
- 12 files changed, 614 insertions(+), 111 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
- create mode 100644 drivers/usb/typec/mux/fsa4480.c
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
 
+Changes since v4:
+- Added "Add" to patch subject
+- Added "(Optional)" kernel-doc of fwnode_connection_find_matches()
+
+ drivers/base/property.c  | 109 +++++++++++++++++++++++++++++++++++++++
+ include/linux/property.h |   5 ++
+ 2 files changed, 114 insertions(+)
+
+diff --git a/drivers/base/property.c b/drivers/base/property.c
+index 36401cfe432c..babab8cec7a0 100644
+--- a/drivers/base/property.c
++++ b/drivers/base/property.c
+@@ -1201,6 +1201,40 @@ fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
+ 	return NULL;
+ }
+ 
++static unsigned int fwnode_graph_devcon_matches(struct fwnode_handle *fwnode,
++						const char *con_id, void *data,
++						devcon_match_fn_t match,
++						void **matches,
++						unsigned int matches_len)
++{
++	struct fwnode_handle *node;
++	struct fwnode_handle *ep;
++	unsigned int count = 0;
++	void *ret;
++
++	fwnode_graph_for_each_endpoint(fwnode, ep) {
++		if (matches && count >= matches_len) {
++			fwnode_handle_put(ep);
++			break;
++		}
++
++		node = fwnode_graph_get_remote_port_parent(ep);
++		if (!fwnode_device_is_available(node)) {
++			fwnode_handle_put(node);
++			continue;
++		}
++
++		ret = match(node, con_id, data);
++		fwnode_handle_put(node);
++		if (ret) {
++			if (matches)
++				matches[count] = ret;
++			count++;
++		}
++	}
++	return count;
++}
++
+ static void *
+ fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
+ 		    void *data, devcon_match_fn_t match)
+@@ -1223,6 +1257,37 @@ fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
+ 	return NULL;
+ }
+ 
++static unsigned int fwnode_devcon_matches(struct fwnode_handle *fwnode,
++					  const char *con_id, void *data,
++					  devcon_match_fn_t match,
++					  void **matches,
++					  unsigned int matches_len)
++{
++	struct fwnode_handle *node;
++	unsigned int count = 0;
++	unsigned int i;
++	void *ret;
++
++	for (i = 0; ; i++) {
++		if (matches && count >= matches_len)
++			break;
++
++		node = fwnode_find_reference(fwnode, con_id, i);
++		if (IS_ERR(node))
++			break;
++
++		ret = match(node, NULL, data);
++		fwnode_handle_put(node);
++		if (ret) {
++			if (matches)
++				matches[count] = ret;
++			count++;
++		}
++	}
++
++	return count;
++}
++
+ /**
+  * fwnode_connection_find_match - Find connection from a device node
+  * @fwnode: Device node with the connection
+@@ -1250,3 +1315,47 @@ void *fwnode_connection_find_match(struct fwnode_handle *fwnode,
+ 	return fwnode_devcon_match(fwnode, con_id, data, match);
+ }
+ EXPORT_SYMBOL_GPL(fwnode_connection_find_match);
++
++/**
++ * fwnode_connection_find_matches - Find connections from a device node
++ * @fwnode: Device node with the connection
++ * @con_id: Identifier for the connection
++ * @data: Data for the match function
++ * @match: Function to check and convert the connection description
++ * @matches: (Optional) array of pointers to fill with matches
++ * @matches_len: Length of @matches
++ *
++ * Find up to @matches_len connections with unique identifier @con_id between
++ * @fwnode and other device nodes. @match will be used to convert the
++ * connection description to data the caller is expecting to be returned
++ * through the @matches array.
++ * If @matches is NULL @matches_len is ignored and the total number of resolved
++ * matches is returned.
++ *
++ * Return: Number of matches resolved, or negative errno.
++ */
++int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
++				   const char *con_id, void *data,
++				   devcon_match_fn_t match,
++				   void **matches, unsigned int matches_len)
++{
++	unsigned int count_graph;
++	unsigned int count_ref;
++
++	if (!fwnode || !match)
++		return -EINVAL;
++
++	count_graph = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
++						  matches, matches_len);
++
++	if (matches) {
++		matches += count_graph;
++		matches_len -= count_graph;
++	}
++
++	count_ref = fwnode_devcon_matches(fwnode, con_id, data, match,
++					  matches, matches_len);
++
++	return count_graph + count_ref;
++}
++EXPORT_SYMBOL_GPL(fwnode_connection_find_matches);
+diff --git a/include/linux/property.h b/include/linux/property.h
+index fc24d45632eb..a5b429d623f6 100644
+--- a/include/linux/property.h
++++ b/include/linux/property.h
+@@ -451,6 +451,11 @@ static inline void *device_connection_find_match(struct device *dev,
+ 	return fwnode_connection_find_match(dev_fwnode(dev), con_id, data, match);
+ }
+ 
++int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
++				   const char *con_id, void *data,
++				   devcon_match_fn_t match,
++				   void **matches, unsigned int matches_len);
++
+ /* -------------------------------------------------------------------------- */
+ /* Software fwnode support - when HW description is incomplete or missing */
+ 
 -- 
 2.35.1
 
