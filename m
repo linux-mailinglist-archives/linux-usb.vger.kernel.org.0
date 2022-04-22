@@ -2,126 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC69C50AF6C
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Apr 2022 07:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7068250AF94
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Apr 2022 07:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444088AbiDVFKs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Apr 2022 01:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
+        id S232148AbiDVFjk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Apr 2022 01:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444081AbiDVFKq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 01:10:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB534EF7D;
-        Thu, 21 Apr 2022 22:07:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92E5F61D5C;
-        Fri, 22 Apr 2022 05:07:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C4E4C385A0;
-        Fri, 22 Apr 2022 05:07:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650604073;
-        bh=vzfRtV+6HmzAXkT9LkEyK6PRF7OjBvpXGEf/vM7UJSY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GAHDADhNIu3VnJP6g4TTNtQ0FfdlnND7LMl7VptMN7R2INA3nx+7WA3NECywDHWfz
-         9xRCC1kbenIolxN8xv5PXbDuDllk5jVcic/bI0v57FQ2gD1ke30Pv26tm4A1632yzY
-         EotT7UrnlRuw81WHUt0RlJ3vSyFl4RvWfdpXq/+g=
-Date:   Fri, 22 Apr 2022 07:07:47 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hongyu Xie <xy521521@gmail.com>
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hongyu Xie <xiehongyu1@kylinos.cn>,
-        stable@vger.kernel.org, "sheng . huang" <sheng.huang@ecastech.com>,
-        wangqi@kylinos.cn, xiongxin@kylinos.cn
-Subject: Re: [RESEND PATCH -next] USB: serial: pl2303: implement reset_resume
- member
-Message-ID: <YmI4I9MCLBheMyvr@kroah.com>
-References: <20220419065408.2461091-1-xy521521@gmail.com>
- <YmGKL05dnA+q/HAM@kroah.com>
- <f3f6ea7d-2051-7a7f-61e0-8a5bba8ca8f2@gmail.com>
+        with ESMTP id S233024AbiDVFaf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 01:30:35 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050C04F445
+        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 22:27:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650605262; x=1682141262;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ZDtjdS0EKyXvHECo3L3TkAd5jse0+uLSaytu0Zugtgw=;
+  b=GDPCONWspjGEGaoKVvcwW8VqQc5dLGKlR8RT7FD07I3cCHsSBjwLjaPV
+   MQ6Df1nIIK6btTxA/Qq+Jzm+lZOxwX3CS8YVESPQSqM7O7y12jmd9vX1K
+   /CvgOUubOWFrCQj9H0G4XqynIO4h7SyIUZ4SEM/8iFLGFpk3J+NCUpppk
+   0h6LO0I1J1rf67z/W9PAp1rxXb7D7dGCL1mg9uuzekJ6uraQUPszMprQj
+   JrrFxyYpP1DnXyfmz6WGbgc24+Q5EvBMZFWa6Jshfp+MFzC7dGQlwlE4X
+   PkannL8M0dH7kWd9V7xemP6P6imvfJaN6AvZujdyoD2noMerd/yuUNZRW
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244504106"
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="244504106"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 22:27:42 -0700
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="593997401"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 22:27:39 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 22 Apr 2022 08:26:27 +0300
+Date:   Fri, 22 Apr 2022 08:26:27 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Tomasz =?utf-8?Q?Mo=C5=84?= <desowin@gmail.com>
+Cc:     linux-usb@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: Re: Wake from Thunderbolt dock doesn't work
+Message-ID: <YmI8g2Jaye8Kk+hA@lahna>
+References: <6580ca29cd8e245627c4a742189e27acf79f6b39.camel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <f3f6ea7d-2051-7a7f-61e0-8a5bba8ca8f2@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6580ca29cd8e245627c4a742189e27acf79f6b39.camel@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 10:35:59AM +0800, Hongyu Xie wrote:
+Hi,
+
+On Thu, Apr 21, 2022 at 09:52:18PM +0200, Tomasz Moń wrote:
+> Hello,
 > 
-> Hi greg,
-> On 2022/4/22 00:45, Greg KH wrote:
-> > On Tue, Apr 19, 2022 at 02:54:08PM +0800, Hongyu Xie wrote:
-> > > From: Hongyu Xie <xiehongyu1@kylinos.cn>
-> > > 
-> > > pl2303.c doesn't have reset_resume for hibernation.
-> > > So needs_binding will be set to 1 duiring hibernation.
-> > > usb_forced_unbind_intf will be called, and the port minor
-> > > will be released (x in ttyUSBx).
-> > 
-> > Please use the full 72 columns that you are allowed in a changelog text.
-> > 
-> > 
-> > > It works fine if you have only one USB-to-serial device.
-> > > Assume you have 2 USB-to-serial device, nameing A and B.
-> > > A gets a smaller minor(ttyUSB0), B gets a bigger one.
-> > > And start to hibernate. When your PC is in hibernation,
-> > > unplug device A. Then wake up your PC by pressing the
-> > > power button. After waking up the whole system, device
-> > > B gets ttyUSB0. This will casuse a problem if you were
-> > > using those to ports(like opened two minicom process)
-> > > before hibernation.
-> > > So member reset_resume is needed in usb_serial_driver
-> > > pl2303_device.
-> > 
-> > If you want persistent device naming, use the symlinks that udev creates
-> > for your for all your serial devices.  Never rely on the number of a USB
-> > to serial device.
-> Let me put it this way. Assume you need to record messages output from two
-> machines using 2 USB-to-serial devices(naming A and B, and A is on
-> USB1-port3, B is on USB1-port4) opened by two minicom process.
-> The setting for A in minicom would be like:
-> 	"A -    Serial Device      : /dev/ttyUSB0"
-> The setting for B in minicom would be like:
-> 	"A -    Serial Device      : /dev/ttyUSB1"
-> Then start to hibernate on your computer. When your PC is in
-> hibernation, unplug A. After waking up your computer, "/dev/ttyUSB0"
-> would be released first, then allocated to B. The minicom process used
-> to record outputs from A is now recording B's outputs. The minicom
-> process used to record outputs from B is now recording nothing, because
-> "/dev/ttyUSB1" is not exist anymore. That's the problem I've been
-> talking about. And I don't think using symlinks will solve this problem.
+> I have observed that when I suspend to RAM, I cannot wakeup the host
+> (MacBook Pro 2019) with my low-speed USB keyboard (Microsoft Comfort
+> Curve Keyboard 2000) connected to Thunderbolt 3 dock (CalDigit USB-C
+> Pro Dock).
+> 
+> The host runs on Intel Core i9-9980HK and lspci shows Intel Corporation
+> JHL7540 Thunderbolt 3 NHI [Titan Ridge 4C 2018] and Intel Corporation
+> DSL6540 Thunderbolt 3 Bridge [Alpine Ridge 4C 2015].
+> 
+> On Windows and Mac OS the system can be successfully woken up by
+> pressing key on keyboard connected via the dock.
 
-Yes, symlinks will solve the issue, that is what they are there for.
-Look in /dev/serial/ for a persistent name for them that allows you to
-uniquely open the correct device if they can be described.  Using
-/dev/ttyUSBX is almost never the correct thing to do.
-
-> > > Codes in pl2303_reset_resume are borrowed from pl2303_open.
-> > > 
-> > > As a matter of fact, all driver under drivers/usb/serial
-> > > has the same problem except ch341.c.
-> > > 
-> > > Cc: stable@vger.kernel.org
-> > 
-> > How does this meet the stable kernel rule requirements?  It would be a
-> > new feature if it were accepted, right?
-> It's not a new feature at all. struct usb_serial_driver already has a
-> member name reset_resume, there is no implementation in pl2303.c yet.
-> And ch341.c has one(ch341_reset_resume()), that why I said "all driver
-> under drivers/usb/serial has the same problem except ch341.c"
-
-Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for what is valid stable kernel changes.
-
-thanks,
-
-greg k-h
+Is the system that has the problem an Apple system or a regular PC?
