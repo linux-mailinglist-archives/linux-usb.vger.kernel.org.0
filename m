@@ -2,116 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B5750AD9E
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Apr 2022 04:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A0450ADB3
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Apr 2022 04:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443270AbiDVCOC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Apr 2022 22:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
+        id S1383619AbiDVCZU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Apr 2022 22:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443267AbiDVCOB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 22:14:01 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7AD3881;
-        Thu, 21 Apr 2022 19:11:07 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id g21so7249272iom.13;
-        Thu, 21 Apr 2022 19:11:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=THB/rCWOGRRIRIhECHZDglj7Vx+NGfgUwYSBViBKwtg=;
-        b=R6gjrq2icFejVNYcXyZKoqk7o7RMq25KWkGjFrJq0n6BTM4CiJY3gI4kLHwlYAOgpN
-         zUuARqL8YHsBS5R5oIc1lcT2G8F5IbyMMxj+z9iiwLXG6azdXEyb8PhrCtgXrTcWVcB6
-         exmEstTVrD1M3G600lKq4nt86MrSO+eo5UMi7xN37AezJoqLG9mxwF+Thbcr3xfgV0h+
-         KdGn7vq3LKLgsuY4Pji6OmOyjs1big7nju4AoYGSb4/lYArlzGEYAf12wSe24nmzO6P7
-         fS1SnxUusDfpPdXMBU9rnadro8eOB8NLd+dzYCKB3/SjW9+d8fJUHunIVjfuQgygQxAA
-         AIQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=THB/rCWOGRRIRIhECHZDglj7Vx+NGfgUwYSBViBKwtg=;
-        b=U+JjPIsXiK857R55RX+WCUgjls5oiXv3VQ1CwF2ZO0tubCNQWoMiPR+Ht4kTOcrJsa
-         lTyGz0E3JtYs/VBRgmKiUEhYfhqt0KtZX+rq2n3/Wg/5gGM1SFB4Zsg24Skr5QaHDzR0
-         0oJktE8Z8islNIi+Wo8QAiHL0XRWiG1IeNOB4kUZB2wAcvh38qQ3QQLvE+/SelD64qTz
-         3M7By1MVnbLAe1OWRx5erWeYPNksEu7tGkdxslMJhKjyt9PTb7tUJ7cf8N3tjkbTNnmJ
-         ku8joUVR4FaZ/ZmIhOrLXnsgVE7ZliW93106efTzkedbL6gxy2Dl/aXdmm8is2gZKkT6
-         vbVg==
-X-Gm-Message-State: AOAM5311gD8rBH66BUQ3kO7FXXEC8c/AVpsmAACRhTjDU7jluOYuKnYu
-        7QDI+b3zB9U8QMhbWhRm4mho78/cpdKybwAq9SsQGwdmCuV9A1L6
-X-Google-Smtp-Source: ABdhPJxep6RnbtTNtFPOqoRJAv+wWszzQRdMVGiABj0/cPlaniM4Blm9tZQMnu54F1vQAOLMau/jKbEU4cZfT05x3r8=
-X-Received: by 2002:a05:6602:2f12:b0:654:b304:b016 with SMTP id
- q18-20020a0566022f1200b00654b304b016mr1079035iow.60.1650593466714; Thu, 21
- Apr 2022 19:11:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220412122524.26966-1-surong.pang@gmail.com> <610871b2-1707-dfba-868f-4ddecc4d554d@linux.intel.com>
-In-Reply-To: <610871b2-1707-dfba-868f-4ddecc4d554d@linux.intel.com>
-From:   surong pang <surong.pang@gmail.com>
-Date:   Fri, 22 Apr 2022 10:10:55 +0800
-Message-ID: <CAEDbmAT=fZ-kpn13sW4KjB9RuFb_6T4j_eripR54NZ3UciZfqA@mail.gmail.com>
-Subject: Re: [PATCH V1 1/1] usb/host: Let usb phy shutdown later
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     mathias.nyman@intel.com, Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Orson.Zhai@unisoc.com, yunguo.wu@unisoc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S231551AbiDVCZT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Apr 2022 22:25:19 -0400
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509CA49698
+        for <linux-usb@vger.kernel.org>; Thu, 21 Apr 2022 19:22:28 -0700 (PDT)
+Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 5449941EE3;
+        Fri, 22 Apr 2022 02:22:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1650594147; bh=Mp91rber0KUFB4fdJ8KtaBivx1nJBvDRjcvmhAxBTYM=;
+        h=Date:From:Subject:To:Cc:From;
+        b=Z51gkwWlOa8hWYikPclNoFwHu57MGXkS0vXKgtNX7s8deq3t/r0+RlyT7mCiT1Gch
+         hyMIvd1eaFBFESYAoPPT+RNaadtD86oisEiv5+HgLXYltYnmTfWsmbkziHzno71Nmu
+         MR+buKxWYRBzGK5Y/0V2408M+hcLbnuFvQypkNU8Cd38zoq5EEmQFRhnMJC68pAUXc
+         HE/wGLsl25BoujWFHi2ZFxjtrxyevxnIlv9uzDvMNXm7N5wuxIjQ7w9FLJ82uGoU28
+         0Av3oJNyiVEQqjRncQ0QQPNPgamngu8f6jXgG9QZLmwJq7mW0iOJ1taKpa4YZGzheh
+         VyaNPs1AjUomg==
+Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 5BBF0A006D;
+        Fri, 22 Apr 2022 02:22:24 +0000 (UTC)
+Received: by te-lab16-v2 (sSMTP sendmail emulation); Thu, 21 Apr 2022 19:22:24 -0700
+Date:   Thu, 21 Apr 2022 19:22:24 -0700
+Message-Id: <cover.1650593829.git.Thinh.Nguyen@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH 0/6] usb: dwc3: gadget: Rework pullup
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-shared_hcd might be freed already here, but hcd should not be freed
-here, because "usb_put_hcd(hcd)" is called later.
+This series cleanup and enhance dwc3 pullup() handling to cover different
+corner cases.
 
-Mathias Nyman <mathias.nyman@linux.intel.com> =E4=BA=8E2022=E5=B9=B44=E6=9C=
-=8819=E6=97=A5=E5=91=A8=E4=BA=8C 22:43=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 12.4.2022 15.25, Surong Pang wrote:
-> > From: Surong Pang <surong.pang@unisoc.com>
-> >
-> > Let usb phy shutdown later in xhci_plat_remove function.
-> > Some phy driver doesn't divide 3.0/2.0 very clear.
-> > If calls usb_phy_shutdown earlier than usb_remove_hcd(hcd),
-> > It will case 10s cmd timeout issue.
-> >
-> > Call usb phy shutdown later has better compatibility.
-> >
-> > Signed-off-by: Surong Pang <surong.pang@unisoc.com>
-> > ---
-> >  drivers/usb/host/xhci-plat.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.=
-c
-> > index 649ffd861b44..dc73a81cbe9b 100644
-> > --- a/drivers/usb/host/xhci-plat.c
-> > +++ b/drivers/usb/host/xhci-plat.c
-> > @@ -390,7 +390,6 @@ static int xhci_plat_remove(struct platform_device =
-*dev)
-> >
-> >       usb_remove_hcd(shared_hcd);
-> >       xhci->shared_hcd =3D NULL;
-> > -     usb_phy_shutdown(hcd->usb_phy);
-> >
-> >       usb_remove_hcd(hcd);
-> >       usb_put_hcd(shared_hcd);
-> > @@ -398,6 +397,7 @@ static int xhci_plat_remove(struct platform_device =
-*dev)
-> >       clk_disable_unprepare(clk);
-> >       clk_disable_unprepare(reg_clk);
-> >       usb_put_hcd(hcd);
-> > +     usb_phy_shutdown(hcd->usb_phy);
->
-> hcd might be freed already here.
-> maybe call usb_phy_shutdown(hcd->usb_phy) before usb_put_hcd(hcd)
->
-> -Mathias
->
->
+Would be great to have some Tested-by before picking this series up. Thanks!
+
+
+Thinh Nguyen (6):
+  usb: dwc3: gadget: Prevent repeat pullup()
+  usb: dwc3: gadget: Refactor pullup()
+  usb: dwc3: gadget: Don't modify GEVNTCOUNT in pullup()
+  usb: dwc3: ep0: Don't prepare beyond Setup stage
+  usb: dwc3: gadget: Only End Transfer for ep0 data phase
+  usb: dwc3: gadget: Delay issuing End Transfer
+
+ drivers/usb/dwc3/ep0.c    |   2 +-
+ drivers/usb/dwc3/gadget.c | 126 ++++++++++++++++++++------------------
+ 2 files changed, 69 insertions(+), 59 deletions(-)
+
+
+base-commit: 5c29e864999763baec9eedb9ea5bd557aa4cbd77
+-- 
+2.28.0
+
