@@ -2,119 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0690E50B9F0
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Apr 2022 16:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D4F50BB31
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Apr 2022 17:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448554AbiDVOWE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Apr 2022 10:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41536 "EHLO
+        id S1449150AbiDVPJC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Apr 2022 11:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392400AbiDVOWA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 10:22:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929EB5AEE3
-        for <linux-usb@vger.kernel.org>; Fri, 22 Apr 2022 07:19:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3513BB82D8A
-        for <linux-usb@vger.kernel.org>; Fri, 22 Apr 2022 14:19:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C142C385A8;
-        Fri, 22 Apr 2022 14:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650637144;
-        bh=P51MMtuc9cV2RABg2Z/nQvns0RHea9blN6YvSJrn6k4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YgkjARs0+kO//LVqLaGF+6ebKeI48n0Km7XzxAYJFlxPuSq104QpA/zqtmZhiHqUN
-         N9CbdgNN7lDnO3nX8lYQWXRphltjXJX7gBWlKGcggs0ilL00qRaSoWUtyB0jCwHcSN
-         b0xRr+LLtTbFDRFWOdYgg6IVK0XnHCEF9P+J2azA=
-Date:   Fri, 22 Apr 2022 16:19:01 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 0/9] usb: rework usb_maxpacket() and remove its third
- argument
-Message-ID: <YmK5Vc0+3eOJCXdK@kroah.com>
-References: <20220304105420.1059585-1-mailhol.vincent@wanadoo.fr>
- <20220317035514.6378-1-mailhol.vincent@wanadoo.fr>
- <YmKv37an0DR7/iPE@kroah.com>
- <CAMZ6RqKhJ5aypM+dBF38nL626PDdD-gr2AHJz1ozpov+OSzbAw@mail.gmail.com>
- <CAMZ6RqJrondTGhM8P4uZ47GxUfBiMLO0oc2VDwhUxnStE4Kx_w@mail.gmail.com>
+        with ESMTP id S1449222AbiDVPIg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 11:08:36 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C095D66D
+        for <linux-usb@vger.kernel.org>; Fri, 22 Apr 2022 08:05:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650639939; x=1682175939;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=IcJ1WdY/UPym2FvdokJWT9jtTGAEhd1sZ1in5+B1N/4=;
+  b=Zt3D3x20h2PthaaWzMEMm11oU03RpWyaSoNXS/ZNaa10kKIod9wpTB83
+   fyk0dAt06Bsp7HC+iPlnnVUZnUcJhP+dO+fEDcWRKzeKQoyuBEcqRxiVh
+   8psqTR5SCIjtq6kRzpj87AqCZC1swSff/FDjERd8c2A9dX7ZkO3zzojdf
+   dFLkyFIUAWx6b+zREXU+52+2RUJuMbymQFmzodRN09O+U5xVQnS8lkAD1
+   XXhq07BgrPZNVFynawRhpC9zEhXevpsHxUSlaFKrIhCWpnMyv22hK+K8B
+   PAQxVHFjNXd1P1LzJSuuez+KT9TeMaO2nTJxAOFyn/niAUrsCyCwjpUnR
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="351131617"
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="351131617"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 08:05:38 -0700
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="577936528"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 08:05:35 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 22 Apr 2022 18:05:33 +0300
+Date:   Fri, 22 Apr 2022 18:05:33 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Tomasz =?utf-8?Q?Mo=C5=84?= <desowin@gmail.com>
+Cc:     linux-usb@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: Re: Wake from Thunderbolt dock doesn't work
+Message-ID: <YmLEPWxolnOyCgnP@lahna>
+References: <6580ca29cd8e245627c4a742189e27acf79f6b39.camel@gmail.com>
+ <YmI8g2Jaye8Kk+hA@lahna>
+ <CAOHtt38-+tnyrUX5u0McHyutofEwZLeLF7siZab7XgLYXVdm9Q@mail.gmail.com>
+ <YmJLg3maiAY6cwDp@lahna>
+ <ef495f23d541face3d8495602c2896bf62afbf97.camel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMZ6RqJrondTGhM8P4uZ47GxUfBiMLO0oc2VDwhUxnStE4Kx_w@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ef495f23d541face3d8495602c2896bf62afbf97.camel@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 11:07:17PM +0900, Vincent MAILHOL wrote:
-> On Fri. 22 Apr. 2022 at 23:00, Vincent MAILHOL
-> <mailhol.vincent@wanadoo.fr> wrote:
-> > On Fri. 22 Apr. 2022 at 22:38, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > > On Thu, Mar 17, 2022 at 12:55:05PM +0900, Vincent Mailhol wrote:
-> > > > This series rework usb_maxpacket() to change its prototype from:
-> > > > | static inline __u16
-> > > > | usb_maxpacket(struct usb_device *udev, int pipe, int is_out)
-> > > >
-> > > > into:
-> > > > | static inline u16 usb_maxpacket(struct usb_device *udev, int pipe)
-> > > >
-> > > > and rewrite the function using usb_pipe_endpoint().
-> > > >
-> > > > Rationale:
-> > > >
-> > > >   * The third argument of usb_maxpacket(): is_out can be derived from
-> > > >     its second one: pipe using usb_pipeout(pipe). Furthermore,
-> > > >     usb_pipeout(pipe) is being called within usb_maxpacket()
-> > > >     regardless to confirm the input.
-> > > >
-> > > >   * This function is not exposed to the UAPI so return type should be
-> > > >     u16, not __u16.
-> > > >
-> > > >   * usb_pipe_endpoint() (defined a couple of lines before) does most
-> > > >     of the work. Use it instead of reimplementing the same thing
-> > > >     again.
-> > > >
-> > > > In order to do so, usb_maxpacket() is temporarily changed into a variadic
-> > > > function to ignore its third argument.
-> > > >
-> > > > The series goes as follow:
-> > > >
-> > > >     * Patch 1: make usb_maxpacket() variadic to accommodate during the
-> > > >       migration
-> > > >
-> > > >     * Patch 2 to 7: migrate all the users of usb_maxpacket() (one
-> > > >       patch per tree)
-> > > >
-> > > >     * Patch 8: remove the third argument of usb_maxpacket() now that
-> > > >       everyone is migrated
-> > > >
-> > > >     * Patch 9: rework usb_maxpacket()'s body using usb_pipe_endpoint()
-> > >
-> > > Now queued up, thanks for sticking with this!
-> >
-> > Thanks to you for your patience and explanations!
-> >
-> > > Can you send the follow-up patch that removes the vararg?  I'll keep
-> > > that in my tree to try to catch any remaining things that come in and
-> > > get it merged when it's ok to.
-> >
-> > It is this patch:
-> > https://lore.kernel.org/linux-usb/20220317035514.6378-9-mailhol.vincent@wanadoo.fr/
-> >
-> > Or do you prefer me to resend it on the mailing list?
+On Fri, Apr 22, 2022 at 03:54:16PM +0200, Tomasz Moń wrote:
+> On Fri, 2022-04-22 at 09:30 +0300, Mika Westerberg wrote:
+> > On Fri, Apr 22, 2022 at 08:09:23AM +0200, Tomasz Moń wrote:
+> > > On Fri, Apr 22, 2022 at 7:27 AM Mika Westerberg
+> > > <mika.westerberg@linux.intel.com> wrote:
+> > > > On Thu, Apr 21, 2022 at 09:52:18PM +0200, Tomasz Moń wrote:
+> > > > > I have observed that when I suspend to RAM, I cannot wakeup the
+> > > > > host
+> > > > > (MacBook Pro 2019) with my low-speed USB keyboard (Microsoft
+> > > > > Comfort
+> > > > > Curve Keyboard 2000) connected to Thunderbolt 3 dock (CalDigit
+> > > > > USB-C
+> > > > > Pro Dock).
+> > > > > 
+> > > > > The host runs on Intel Core i9-9980HK and lspci shows Intel
+> > > > > Corporation
+> > > > > JHL7540 Thunderbolt 3 NHI [Titan Ridge 4C 2018] and Intel
+> > > > > Corporation
+> > > > > DSL6540 Thunderbolt 3 Bridge [Alpine Ridge 4C 2015].
+> > > > > 
+> > > > > On Windows and Mac OS the system can be successfully woken up
+> > > > > by
+> > > > > pressing key on keyboard connected via the dock.
+> > > > 
+> > > > Is the system that has the problem an Apple system or a regular
+> > > > PC?
+> > > 
+> > > It is an Apple system (MacBook Pro 2019) as noted in in first
+> > > paragraph. All tests were performed on the same host with the same
+> > > equipment.
+> > 
+> > OK, I see. I was bit confused because you mention that it works in
+> > Windows. I guess you run the Windows on boot camp or so?
 > 
-> Actually, you already added it to your tree:
-> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-testing&id=386311fd6ef976eb1e3febd836b4ce2425f0ef37
-> 
-> I am not sure I understand what you want me to do here. Sorry.
+> Yes, Windows was installed using Boot Camp Assistant.
 
-Ah, sorry, you are right, I was expecting it to be the last patch in the
-series, not second-to-last.  All is good!
+OK.
+
+> > If that's the case then you should be getting same kind of "support"
+> > by passing "thunderbolt.start_icm=1" in the kernel command line.
+> 
+> Passing "thunderbolt.start_icm=1" in the kernel command line made
+> things worse. The system does not wake from suspend at all. It does not
+> wake from USB keyboard connected directly to the host. And it does not
+> wake after opening the lid nor after pressing power button (Touch ID).
+> 
+> The only way to get system back running seemed to be pressing and
+> holding power button long enough until the Apple bootloader starts.
+
+OK. The start_icm=1 starts the connection manager firmware which is one
+thing that Windows relies too. However, all the PM stuff is still not
+there unfortunately.
+
+> > That should do the same than what the boot camp does and start the
+> > TBT firmware connection manager.
+> 
+> I have no idea what boot camp does on the low level, but atleast
+> Windows can wakeup successfully.
+
+please try the same in Linux if that's possible. Running Linux natively
+will likely have issues because all the non-standard stuff in those
+systems.
+
+> > Apple systems by default have the firmware connection manager
+> > disabled so the OS does all the tunneling and in Linux we do not
+> > supportThunderbolt 3 hosts fully in the software connection manager
+> > side (we do support devices, though).  Mostly it's the power
+> > management that is missing and I don't see it being fully supported
+> > in the future either because the Apple systems are not like the most
+> > standardized systems in the market so there are lots of "magic"
+> > things happening that are completely undocumented :(
+> 
+> Apple "magic" is just one thing, but for someone outside Intel it is
+> even worse, as basically the whole JHL7540 is just a black box. Or is
+> there a way for casual programmer to get hold on the Intel Thunderbolt
+> 3 datasheet/specification?
+
+It is not about the TBT spec. It is how Apple wired and implemented the
+power management of it. In PC world it's all standard ACPI methods that
+are used to turn off/on power to the chip and implement the PCIe L2/3
+handshake etc. All that is most likely different in Apple systems.
+
+If you are interested the USB4 spec [1], which is public, describes the
+TBT3 power management but again this is host and it is pretty much
+implementation specific.
+
+[1] https://usb.org/sites/default/files/USB4%20Specification%2020220331.zip
