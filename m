@@ -2,156 +2,261 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C118750CD4C
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Apr 2022 21:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7C550CE01
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Apr 2022 01:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236969AbiDWT6g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Apr 2022 15:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
+        id S233483AbiDWXG6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Apr 2022 19:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236914AbiDWT60 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Apr 2022 15:58:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2115F183FBD;
-        Sat, 23 Apr 2022 12:55:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5E94B80D1C;
-        Sat, 23 Apr 2022 19:55:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA3CC385B5;
-        Sat, 23 Apr 2022 19:55:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650743721;
-        bh=f+gN5VFSk9TvNUY6oLSGkqRdwS9xhEyKvVqBzBXLs0k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PzAHzR20lzvPfCTqt/UUzx12IPhOfz+TRjqNJ8NxEoRI/bWqgErqlZjk7cfTM259a
-         ES9ZLzK7AQ5x5SMPoX4fGuEBvk10IF/bYoYOZNrIybBirPtSW18FdAPqWZza8MudXV
-         vG23F9GYtnFHpHrf84m9ZBvRrLCT6HR3YBoZ5rIdgNbcdWJ4WulW+Ag5txr/fArK/K
-         8hzENh6M4DW/B6aRii4K02sQiyHAgWdV6wTeninHDFb9FTGsk1kC60BC8Ty7Z9oRiu
-         uezNy/Q8OZSv9U2rlimKsK6lo1l+EW6dZRWZhxxZjuCiGNgZmaJtyoN+hSdEOEgF8G
-         ZbIfS2Abjyb2Q==
-Received: by mail-wm1-f48.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso10070118wme.5;
-        Sat, 23 Apr 2022 12:55:21 -0700 (PDT)
-X-Gm-Message-State: AOAM533lGh9EPqhUPg/nNViJ/yIL6iwq+/2Z9XUGtlSB1o1YIthHmVZa
-        ZwNhKnBa6uPnYoSswxFiRZFxxDjgek5kduGVgxM=
-X-Google-Smtp-Source: ABdhPJwI9oPHj0hjS6Y5T/XpNunPLjXzfhDb/y4TSIxWhFvis5ICGMzIa2Kp6ZajGKm/dLFayXeKiCmoNnJ4Fu7pVP8=
-X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id
- s25-20020a1cf219000000b0038c782c03bbmr18417513wmc.94.1650743719480; Sat, 23
- Apr 2022 12:55:19 -0700 (PDT)
+        with ESMTP id S231690AbiDWXG5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Apr 2022 19:06:57 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39354E541D
+        for <linux-usb@vger.kernel.org>; Sat, 23 Apr 2022 16:03:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650755038; x=1682291038;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SpiIF3mfvKyHGDr69zKBzr70L/9GW6KvkX+X8QkvI2M=;
+  b=WNCVW4NJ1E/50n7pBgfnYzxW0xnXeKLiHjezccpQEL7MaSxbjba/nanJ
+   2L8qqsrNUkbKqkPvEim+w/H2i9qHJNoIAUFZBwHIYRCIciiYsrepSWTbo
+   PjS33VXWoInALNcMQvEQOuEMvV+5Ih8Wk96lecAmE7qzd4JtkoW6N4Nuv
+   6T2WisLPycmuC3b3lndBC43BQBEmZ5SlU2VR0YAbrK35K6S7OwPtSNB3i
+   dWUu4bIOtoVihbc7NkVR5id7qPzC4C0vBx30A+SsynFxBvW3bawhxSeR7
+   vkIOjKgp0uHT0AAhZKMRrp0tuEPWPCQu7aj7p7lgJ2AMC9lvZ6zvo9hcu
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="252306057"
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="252306057"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 16:03:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="615935489"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 23 Apr 2022 16:03:56 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1niOnD-0000g9-GG;
+        Sat, 23 Apr 2022 23:03:55 +0000
+Date:   Sun, 24 Apr 2022 07:03:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ da609eda81a8b842417ccf74bdf6bf9b5d403549
+Message-ID: <626485a9.vW1jfYNNQ8J7SPxs%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
- <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
- <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
- <20220422234150.GA3442771@roeck-us.net>
-In-Reply-To: <20220422234150.GA3442771@roeck-us.net>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Sat, 23 Apr 2022 21:55:03 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
-Message-ID: <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 1:41 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Sat, Apr 23, 2022 at 12:04:31AM +0200, Arnd Bergmann wrote:
-> > On Fri, Apr 22, 2022 at 10:55 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > On 4/22/22 12:16, Arnd Bergmann wrote:
-> > > > On Fri, Apr 22, 2022 at 7:05 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > >
-> > > > Which machine did you hit this on? Is this on hardware or in qemu?
-> > > >
-> > > qemu, as always. borzoi, spitz, terrier, tosa, z2, and sx1 fail.
-> > > Also, I just noticed that the failure is not always the same.
-> > > z2 fails to boot from initrd, and sx1 fails to boot completely.
-> >
-> > That's a lot of machines failing, I hope at least we got the same bugs more
-> > than once here.
-> >
-> > For the I/O space, I found now that PXA was not using the standard
-> > virtual I/O address yet, but instead used a NULL-based offset.
-> >
-> > I'm not entirely happy with this patch, but this is an outline of what
-> > I think we need to fix that: https://pastebin.com/3nVgQsEw
-> > This one is probably incomplete, at least it breaks sa1100 for now,
-> > and it adds a bogus CONFIG_PCI dependency. I'm also not sure
-> > in what way the last patch in the series triggers it, rather than the
-> > one that removed mach/io.h.
-> >
-> > I had sx1 booting in qemu at least, with the omap1 multiplatform series only.
-> > If you have a custom config for this one, make sure you get the right
-> > DEBUG_LL address.
-> >
-> > > I'll do another round of bisects.
-> >
->
-> Here is the bisect for the sx1 boot failure.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: da609eda81a8b842417ccf74bdf6bf9b5d403549  Merge tag 'usb-serial-5.18-rc4' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
 
-Odd, I can't reproduce this at all. Do you get any console output at
-all for this?
+elapsed time: 820m
 
-Is this the plain omap1_defconfig, or something else?
+configs tested: 178
+configs skipped: 3
 
-One thing I keep having to apply myself is this snippet:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/arch/arm/mm/proc-arm925.S b/arch/arm/mm/proc-arm925.S
-index 0bfad62ea858..87c695703580 100644
---- a/arch/arm/mm/proc-arm925.S
-+++ b/arch/arm/mm/proc-arm925.S
-@@ -441,7 +441,6 @@ __arm925_setup:
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+arm                       aspeed_g5_defconfig
+sh                          rsk7201_defconfig
+sparc                               defconfig
+arm                             pxa_defconfig
+sparc                       sparc64_defconfig
+xtensa                          iss_defconfig
+ia64                             alldefconfig
+xtensa                  audio_kc705_defconfig
+arm                           imxrt_defconfig
+xtensa                              defconfig
+alpha                               defconfig
+um                                  defconfig
+m68k                          atari_defconfig
+mips                  maltasmvp_eva_defconfig
+arm                          badge4_defconfig
+powerpc                           allnoconfig
+arm                        trizeps4_defconfig
+sh                             shx3_defconfig
+arm                           h3600_defconfig
+xtensa                       common_defconfig
+m68k                        mvme147_defconfig
+sh                  sh7785lcr_32bit_defconfig
+arm                           viper_defconfig
+openrisc                    or1ksim_defconfig
+arc                        vdk_hs38_defconfig
+sh                        edosk7760_defconfig
+arm                             rpc_defconfig
+sh                            hp6xx_defconfig
+openrisc                            defconfig
+ia64                        generic_defconfig
+mips                        bcm47xx_defconfig
+um                               alldefconfig
+sparc64                             defconfig
+sh                               j2_defconfig
+mips                    maltaup_xpa_defconfig
+powerpc                    klondike_defconfig
+arm                         lubbock_defconfig
+sh                           sh2007_defconfig
+powerpc                 mpc837x_mds_defconfig
+xtensa                    xip_kc705_defconfig
+arm                             ezx_defconfig
+arm                         vf610m4_defconfig
+powerpc                         ps3_defconfig
+sh                           se7780_defconfig
+arm                        spear6xx_defconfig
+m68k                            q40_defconfig
+ia64                      gensparse_defconfig
+sh                          lboxre2_defconfig
+powerpc                      chrp32_defconfig
+arm                      footbridge_defconfig
+powerpc                     taishan_defconfig
+h8300                               defconfig
+powerpc                     tqm8541_defconfig
+xtensa                  cadence_csp_defconfig
+sparc64                          alldefconfig
+m68k                         amcore_defconfig
+sh                          landisk_defconfig
+m68k                          sun3x_defconfig
+arc                     nsimosci_hs_defconfig
+sh                           se7722_defconfig
+arm                            xcep_defconfig
+sh                           se7619_defconfig
+arm                            zeus_defconfig
+riscv                            allyesconfig
+arm                            mps2_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220422
+arm                  randconfig-c002-20220424
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220422
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
 
- #ifdef CONFIG_CPU_DCACHE_WRITETHROUGH
-        mov     r0, #4                          @ disable write-back
-on caches explicitly
--       mcr     p15, 7, r0, c15, c0, 0
- #endif
+clang tested configs:
+riscv                randconfig-c006-20220424
+mips                 randconfig-c004-20220424
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+arm                  randconfig-c002-20220424
+powerpc              randconfig-c003-20220424
+arm                        magician_defconfig
+powerpc                      walnut_defconfig
+powerpc                     kilauea_defconfig
+mips                           ip27_defconfig
+powerpc                 mpc8315_rdb_defconfig
+powerpc                      ppc64e_defconfig
+powerpc                      pmac32_defconfig
+arm                  colibri_pxa300_defconfig
+mips                      malta_kvm_defconfig
+arm                         lpc32xx_defconfig
+arm                         hackkit_defconfig
+hexagon                             defconfig
+powerpc                    mvme5100_defconfig
+arm                         mv78xx0_defconfig
+powerpc                      ppc44x_defconfig
+mips                        omega2p_defconfig
+powerpc                     ppa8548_defconfig
+arm                          pxa168_defconfig
+powerpc                 mpc832x_rdb_defconfig
+powerpc                  mpc885_ads_defconfig
+arm                         socfpga_defconfig
+powerpc                     tqm8560_defconfig
+powerpc                 mpc832x_mds_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220422
+riscv                randconfig-r042-20220422
+hexagon              randconfig-r045-20220422
+s390                 randconfig-r044-20220422
+hexagon              randconfig-r041-20220424
+riscv                randconfig-r042-20220424
+hexagon              randconfig-r045-20220424
 
-        adr     r5, arm925_crval
-
-I don't remember what the story is behind this, but I can't actually manage
-to boot omap1_defconfig on qemu with the instruction intact.
-
-       Arnd
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
