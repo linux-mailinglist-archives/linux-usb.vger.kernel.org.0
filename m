@@ -2,71 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3099850C88D
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Apr 2022 11:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A8A50C949
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Apr 2022 12:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234371AbiDWJ2k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Apr 2022 05:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
+        id S234925AbiDWKaX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Apr 2022 06:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233436AbiDWJ2i (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Apr 2022 05:28:38 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B107B82E5
-        for <linux-usb@vger.kernel.org>; Sat, 23 Apr 2022 02:25:42 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id v65so6969710oig.10
-        for <linux-usb@vger.kernel.org>; Sat, 23 Apr 2022 02:25:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=4vfQyttDdobHbBrio36ZO852PxT9+1cO/BhU8vf48uk=;
-        b=ZMnskiOEurOvBkr5sCEXoiyoen5IQhjI5rrymmWxgcSYMvRX7DLtBQZXZl9y9Nll1v
-         tHIOAQtxpP/4JNxPW9Y4GA4rngee32yfQFQFmw9vT4j8a2nxAVGkBU8Q50bV5D7TCL81
-         9gx9X9FVtRieZcZJzT6Jcjwaw5FY0dIUcVwuDRfTkDweqPaRvpwoOmOSJGGI/TgBZegP
-         4rx8WsW3boNNZgGOx5DUwsGR1Flz7GpvdoBu+z34Zo3oUmiQb0p7py2gydXMbMJ4wKsp
-         ogF0G324V//8swuq83xNBp/M/knBojbnf4BXDaSxArFNO+wWmtJeNdtQKoI//bN5OSh+
-         JMoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=4vfQyttDdobHbBrio36ZO852PxT9+1cO/BhU8vf48uk=;
-        b=te8B1LpNdiMVmVsj8sg5lyXTDI2f7nbTk0KAXHtXaNWLhzMVIs6cc6m5AjlgKO56GY
-         fLUNJa92N0RzlqwErv/9QvvPVLBKNU2HKAbVspE+giaHVaYSjKVwg3FovhZ36OZQjN9Q
-         iBGo+xpxXsXbOISgPlMb9SU8KYribqQ8+Q6IDSzTRSaW15LkuuB0HO2SigIYl8rMCLpI
-         w5RX89IJNdbVGnNLacW8ftfj8+COyADf/zAr3zaHHyVNOmOwXuA9t09uZxJs+eG0BI6D
-         5C5/eyabVhwDY+8ylqqWRf23wughDsmni8lBZ9Gcp7mtiLeK4RkQCu9dILnAc43a1CQ8
-         C70A==
-X-Gm-Message-State: AOAM533B0vhgJ3Dwh5TtDcVUg++jZpuHgPS+8417g/Ir3Aya60xdkIHY
-        ZSlU1vI71IvOYF41RL2nVJqJZ8sc2mqQsKHITfM=
-X-Google-Smtp-Source: ABdhPJyS57Y7EDZMpeFgzTKouFojPGorJKQ+OvExeBEnvEUsfmhd8wdtr0CvKds2Su8lbA+dXTQ+bG5upM09nG7K+/A=
-X-Received: by 2002:a05:6808:1ab4:b0:323:e309:facc with SMTP id
- bm52-20020a0568081ab400b00323e309faccmr3463190oib.205.1650705941866; Sat, 23
- Apr 2022 02:25:41 -0700 (PDT)
+        with ESMTP id S234971AbiDWKaU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Apr 2022 06:30:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C47E1BD59A;
+        Sat, 23 Apr 2022 03:27:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 408D060F4E;
+        Sat, 23 Apr 2022 10:27:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 958D3C385A0;
+        Sat, 23 Apr 2022 10:27:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650709635;
+        bh=ddKHEuTRbRut1OsQhp+YMuMz23onGUBMShLMqKxTwJU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YJC/mBali+ZaOBUhChsdgZnicBb+bq6N7bb64+3OnZP+TROX50HxrR4xfieYO162x
+         dhsCX3KlNWOAYKpEryeAQZvHfVEGdx6ZeVq+PfeOiiEeEKiKAb0SNrPkx3ucGF18R+
+         0dtX4SEJb4GPT3zzGZZ2V0bhQtnNEtKkrhaMOzjCZQXPFaQOr8QtJjuw2JL++U03u0
+         EaZ7eaANf8LaDkVOp68CUxX+JmnrMVZFSsUw4MDHdzjdey5M4Q4M3gFyoqTry8S8Vs
+         FUSZAee2FGjz0SblW0KTs0Y1GuzYa6L095a67cWfXJUwp08vEMlcYCZC6t2W9HQ+Y1
+         8AIu+DMm+RV8A==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1niCyv-006Mln-7Y; Sat, 23 Apr 2022 11:27:13 +0100
 MIME-Version: 1.0
-Sender: ogbundubuisi2@gmail.com
-Received: by 2002:a05:6850:d38b:b0:2ec:1f4:f345 with HTTP; Sat, 23 Apr 2022
- 02:25:41 -0700 (PDT)
-From:   Hannah Johnson <hannahjohnson8856@gmail.com>
-Date:   Sat, 23 Apr 2022 09:25:41 +0000
-X-Google-Sender-Auth: nFa70cA4oQXOtAfU9BEB3Phm7vE
-Message-ID: <CAGPSnpi3xe+H+UP-KXdJ-yG9csuhZv91KjXZMq9MP9xZN5mbzw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Sat, 23 Apr 2022 11:27:13 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: fully convert arm to use dma-direct
+In-Reply-To: <CACRpkdbdKBfmXGdyTm3T-MFAK30N-z4KH0k8eD8F7xaYUbDDhA@mail.gmail.com>
+References: <20220421074204.1284072-1-hch@lst.de>
+ <CACRpkdbdKBfmXGdyTm3T-MFAK30N-z4KH0k8eD8F7xaYUbDDhA@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <e3ff279d8f00fb38ee4e9ecda0e56038@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: linus.walleij@linaro.org, hch@lst.de, linux@armlinux.org.uk, arnd@kernel.org, andre.przywara@arm.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, gregkh@linuxfoundation.org, stern@rowland.harvard.edu, laurentiu.tudor@nxp.com, m.szyprowski@samsung.com, robin.murphy@arm.com, iommu@lists.linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 2022-04-22 22:17, Linus Walleij wrote:
+> On Thu, Apr 21, 2022 at 9:42 AM Christoph Hellwig <hch@lst.de> wrote:
+> 
+>> arm is the last platform not using the dma-direct code for directly
+>> mapped DMA.  With the dmaboune removal from Arnd we can easily switch
+>> arm to always use dma-direct now (it already does for LPAE configs
+>> and nommu).  I'd love to merge this series through the dma-mapping 
+>> tree
+>> as it gives us the opportunity for additional core dma-mapping
+>> improvements.
+> (...)
+> 
+>>  b/arch/arm/mach-footbridge/Kconfig                   |    1
+>>  b/arch/arm/mach-footbridge/common.c                  |   19
+>>  b/arch/arm/mach-footbridge/include/mach/dma-direct.h |    8
+>>  b/arch/arm/mach-footbridge/include/mach/memory.h     |    4
+> 
+> I think Marc Z has a Netwinder that he can test this on. Marc?
+> I have one too, just not much in my office because of parental leave.
+
+I'm about to travel for a week. Can this wait until I'm back?
+This is one of the few boxes that isn't hooked up to the PDU,
+so I can't operate it remotely.
+
+         M.
 -- 
-Hello
-Nice to meet you
-my name is Hannah Johnson i will be glad if we get to know each other
-more better and share pictures i am  expecting your reply
-thank you
+Jazz is not dead. It just smells funny...
