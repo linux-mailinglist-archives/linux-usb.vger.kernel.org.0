@@ -2,98 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C6B50CD34
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Apr 2022 21:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C118750CD4C
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Apr 2022 21:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236879AbiDWTjC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Apr 2022 15:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57924 "EHLO
+        id S236969AbiDWT6g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Apr 2022 15:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236881AbiDWTi7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Apr 2022 15:38:59 -0400
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAE03337E
-        for <linux-usb@vger.kernel.org>; Sat, 23 Apr 2022 12:36:00 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 9F4C9280253C4;
-        Sat, 23 Apr 2022 21:35:54 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 9047FAEC9E; Sat, 23 Apr 2022 21:35:54 +0200 (CEST)
-Date:   Sat, 23 Apr 2022 21:35:54 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Jann Horn <jannh@google.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Jacky Chou <jackychou@asix.com.tw>, Willy Tarreau <w@1wt.eu>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] net: linkwatch: ignore events for unregistered netdevs
-Message-ID: <20220423193554.GA14389@wunner.de>
-References: <18b3541e5372bc9b9fc733d422f4e698c089077c.1650177997.git.lukas@wunner.de>
- <9325d344e8a6b1a4720022697792a84e545fef62.camel@redhat.com>
- <20220423160723.GA20330@wunner.de>
+        with ESMTP id S236914AbiDWT60 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Apr 2022 15:58:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2115F183FBD;
+        Sat, 23 Apr 2022 12:55:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5E94B80D1C;
+        Sat, 23 Apr 2022 19:55:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA3CC385B5;
+        Sat, 23 Apr 2022 19:55:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650743721;
+        bh=f+gN5VFSk9TvNUY6oLSGkqRdwS9xhEyKvVqBzBXLs0k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PzAHzR20lzvPfCTqt/UUzx12IPhOfz+TRjqNJ8NxEoRI/bWqgErqlZjk7cfTM259a
+         ES9ZLzK7AQ5x5SMPoX4fGuEBvk10IF/bYoYOZNrIybBirPtSW18FdAPqWZza8MudXV
+         vG23F9GYtnFHpHrf84m9ZBvRrLCT6HR3YBoZ5rIdgNbcdWJ4WulW+Ag5txr/fArK/K
+         8hzENh6M4DW/B6aRii4K02sQiyHAgWdV6wTeninHDFb9FTGsk1kC60BC8Ty7Z9oRiu
+         uezNy/Q8OZSv9U2rlimKsK6lo1l+EW6dZRWZhxxZjuCiGNgZmaJtyoN+hSdEOEgF8G
+         ZbIfS2Abjyb2Q==
+Received: by mail-wm1-f48.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso10070118wme.5;
+        Sat, 23 Apr 2022 12:55:21 -0700 (PDT)
+X-Gm-Message-State: AOAM533lGh9EPqhUPg/nNViJ/yIL6iwq+/2Z9XUGtlSB1o1YIthHmVZa
+        ZwNhKnBa6uPnYoSswxFiRZFxxDjgek5kduGVgxM=
+X-Google-Smtp-Source: ABdhPJwI9oPHj0hjS6Y5T/XpNunPLjXzfhDb/y4TSIxWhFvis5ICGMzIa2Kp6ZajGKm/dLFayXeKiCmoNnJ4Fu7pVP8=
+X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id
+ s25-20020a1cf219000000b0038c782c03bbmr18417513wmc.94.1650743719480; Sat, 23
+ Apr 2022 12:55:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220423160723.GA20330@wunner.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
+ <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
+ <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
+ <20220422234150.GA3442771@roeck-us.net>
+In-Reply-To: <20220422234150.GA3442771@roeck-us.net>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Sat, 23 Apr 2022 21:55:03 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
+Message-ID: <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 06:07:23PM +0200, Lukas Wunner wrote:
-> On Thu, Apr 21, 2022 at 10:02:43AM +0200, Paolo Abeni wrote:
-> > On Sun, 2022-04-17 at 09:04 +0200, Lukas Wunner wrote:
-> > > --- a/net/core/link_watch.c
-> > > +++ b/net/core/link_watch.c
-> > > @@ -107,7 +107,8 @@ static void linkwatch_add_event(struct net_device *dev)
-> > >  	unsigned long flags;
-> > >  
-> > >  	spin_lock_irqsave(&lweventlist_lock, flags);
-> > > -	if (list_empty(&dev->link_watch_list)) {
-> > > +	if (list_empty(&dev->link_watch_list) &&
-> > > +	    dev->reg_state < NETREG_UNREGISTERED) {
-> > >  		list_add_tail(&dev->link_watch_list, &lweventlist);
-> > >  		dev_hold_track(dev, &dev->linkwatch_dev_tracker, GFP_ATOMIC);
-> > >  	
-> > 
-> > What about testing dev->reg_state in linkwatch_fire_event() before
-> > setting the __LINK_STATE_LINKWATCH_PENDING bit, so that we don't leave
-> > the device in an unexpected state?
+On Sat, Apr 23, 2022 at 1:41 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Sat, Apr 23, 2022 at 12:04:31AM +0200, Arnd Bergmann wrote:
+> > On Fri, Apr 22, 2022 at 10:55 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > > On 4/22/22 12:16, Arnd Bergmann wrote:
+> > > > On Fri, Apr 22, 2022 at 7:05 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > > >
+> > > > Which machine did you hit this on? Is this on hardware or in qemu?
+> > > >
+> > > qemu, as always. borzoi, spitz, terrier, tosa, z2, and sx1 fail.
+> > > Also, I just noticed that the failure is not always the same.
+> > > z2 fails to boot from initrd, and sx1 fails to boot completely.
+> >
+> > That's a lot of machines failing, I hope at least we got the same bugs more
+> > than once here.
+> >
+> > For the I/O space, I found now that PXA was not using the standard
+> > virtual I/O address yet, but instead used a NULL-based offset.
+> >
+> > I'm not entirely happy with this patch, but this is an outline of what
+> > I think we need to fix that: https://pastebin.com/3nVgQsEw
+> > This one is probably incomplete, at least it breaks sa1100 for now,
+> > and it adds a bogus CONFIG_PCI dependency. I'm also not sure
+> > in what way the last patch in the series triggers it, rather than the
+> > one that removed mach/io.h.
+> >
+> > I had sx1 booting in qemu at least, with the omap1 multiplatform series only.
+> > If you have a custom config for this one, make sure you get the right
+> > DEBUG_LL address.
+> >
+> > > I'll do another round of bisects.
+> >
+>
+> Here is the bisect for the sx1 boot failure.
 
-About __LINK_STATE_LINKWATCH_PENDING being set even though the netdev
-is not on link_watch_list:
+Odd, I can't reproduce this at all. Do you get any console output at
+all for this?
 
-After this patch (which removes one user of __LINK_STATE_LINKWATCH_PENDING)
-the only purpose of the flag is a small speed-up of linkwatch_fire_event():
-If the netdev is already on link_watch_list, the function skips acquiring
-lweventlist_lock.
+Is this the plain omap1_defconfig, or something else?
 
-I don't think this is a hotpath, so the small speed-up is probably not worth
-it and the flag could be removed completely in a follow-up patch.
+One thing I keep having to apply myself is this snippet:
 
-There is a single other (somewhat oddball) user of the flag in
-bond_should_notify_peers() in drivers/net/bonding/bond_main.c.
-It would be possible to replace it with "!list_empty(&dev->link_watch_list)".
-I don't think acquiring lweventlist_lock is necessary for that because
-test_bit() is unordered (per Documentation/atomic_bitops.txt) and the
-check is racy anyway.
+diff --git a/arch/arm/mm/proc-arm925.S b/arch/arm/mm/proc-arm925.S
+index 0bfad62ea858..87c695703580 100644
+--- a/arch/arm/mm/proc-arm925.S
++++ b/arch/arm/mm/proc-arm925.S
+@@ -441,7 +441,6 @@ __arm925_setup:
 
-Thanks,
+ #ifdef CONFIG_CPU_DCACHE_WRITETHROUGH
+        mov     r0, #4                          @ disable write-back
+on caches explicitly
+-       mcr     p15, 7, r0, c15, c0, 0
+ #endif
 
-Lukas
+        adr     r5, arm925_crval
+
+I don't remember what the story is behind this, but I can't actually manage
+to boot omap1_defconfig on qemu with the instruction intact.
+
+       Arnd
