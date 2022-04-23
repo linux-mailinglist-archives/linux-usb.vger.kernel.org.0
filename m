@@ -2,251 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D95650C54E
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Apr 2022 02:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB95B50C5C2
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Apr 2022 02:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiDVX5Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Apr 2022 19:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S229983AbiDWAj2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Apr 2022 20:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiDVX5X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 19:57:23 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0308187469
-        for <linux-usb@vger.kernel.org>; Fri, 22 Apr 2022 16:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650671668; x=1682207668;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wa2uPNvL9TlgPQkkG0AauQ/KF+fNdSTtPW/ncABc09s=;
-  b=gH8hZnjlfd3ZUa3MLKC1DRww+N0N6Ng+HagVqYGUhvYZGvkICDf3PBcs
-   ilI2SOD5Mq86sBDj6WLvY/o2FAPYCdWd/mnBSNK3Gcwl6Gc2RJ/UgqJ0g
-   Ar3anrf+5nRSV5G2A7abpa98LPfsZbl4t/dPyZdcHeg0wBT7lTJP65z/r
-   k47vTRzz5yHEsHNBOB3s431jtII3MJXtwUwffwS7uJ6/nAtsoLSYGhVph
-   9ItqU9sdA7tArbXf0F1cHiR2xURvc6oghv63tz6dHIBKv7OsWZ+2gAzXS
-   zGfcVg1MeRCsaOD8xvmW30JrxGwkilV7/h7c+3rAXLG7ehokDuxzIOqb4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="245388893"
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="245388893"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 16:54:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="703755435"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Apr 2022 16:54:27 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ni36Y-000AhC-OG;
-        Fri, 22 Apr 2022 23:54:26 +0000
-Date:   Sat, 23 Apr 2022 07:53:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 5c29e864999763baec9eedb9ea5bd557aa4cbd77
-Message-ID: <62634000.0rEz16m0RxTD14cg%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229622AbiDWAj1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Apr 2022 20:39:27 -0400
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3452A1183B9;
+        Fri, 22 Apr 2022 17:36:31 -0700 (PDT)
+Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 7E3C540D64;
+        Sat, 23 Apr 2022 00:36:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1650674191; bh=DnHvG1JYIBFvxuDziZvdv9NZ+DsGNRuiIeCpxELUYMU=;
+        h=Date:From:Subject:To:Cc:From;
+        b=NdhRWpOtkCwdkm/6hJBytJvIrWMhI+kApCtmp8HQBzOsRY7ryIWkZWIppX6Y7eEdx
+         IFsHCQ4Mlqa+XevEV9TEH5AJSrNkJNWJCkkTTl4dCtA2kvjtAjhOCYm9C9lsc+WoZC
+         R4TWWl2LRWU9Xa5ceUHGME62QfCFsO1vuccFekGvfNe7/FjBs/fi5PznMl8P4Y1D3u
+         4mUEd610fNn8GdWktBG1sa0J51AjmQc/YMO6hBYTiStnef+cORIK6bmwmb3ARUDkuy
+         vX6Ex2u2fnmM9w3knhNbQjbdW4FJpVmii6K3lkglDL5cZqyVmClOVFuVazJM/szEP7
+         ikFDKf79HRYXQ==
+Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 6DA9FA0070;
+        Sat, 23 Apr 2022 00:36:28 +0000 (UTC)
+Received: by te-lab16-v2 (sSMTP sendmail emulation); Fri, 22 Apr 2022 17:36:28 -0700
+Date:   Fri, 22 Apr 2022 17:36:28 -0700
+Message-Id: <db2c80108286cfd108adb05bad52138b78d7c3a7.1650673655.git.Thinh.Nguyen@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH] usb: dwc3: gadget: Return proper request status
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        <stable@vger.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: 5c29e864999763baec9eedb9ea5bd557aa4cbd77  usb: musb: mediatek: Use clk_bulk API to simplify clock operations
+If the user sets the usb_request's no_interrupt, then there will be no
+completion event for the request. Currently the driver incorrectly uses
+the event status of a different request to report the status for a
+request with no_interrupt. The dwc3 driver needs to check the TRB status
+associated with the request when reporting its status.
 
-elapsed time: 1775m
+Note: this is only applicable to missed_isoc TRB completion status, but
+the other status are also listed for completeness/documentation.
 
-configs tested: 168
-configs skipped: 5
+Fixes: 6d8a019614f3 ("usb: dwc3: gadget: check for Missed Isoc from event status")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+ drivers/usb/dwc3/gadget.c | 31 ++++++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index ab725d2262d6..0b9c2493844a 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3274,6 +3274,7 @@ static int dwc3_gadget_ep_cleanup_completed_request(struct dwc3_ep *dep,
+ 		const struct dwc3_event_depevt *event,
+ 		struct dwc3_request *req, int status)
+ {
++	int request_status;
+ 	int ret;
+ 
+ 	if (req->request.num_mapped_sgs)
+@@ -3294,7 +3295,35 @@ static int dwc3_gadget_ep_cleanup_completed_request(struct dwc3_ep *dep,
+ 		req->needs_extra_trb = false;
+ 	}
+ 
+-	dwc3_gadget_giveback(dep, req, status);
++	/*
++	 * The event status only reflects the status of the TRB with IOC set.
++	 * For the requests that don't set interrupt on completion, the driver
++	 * needs to check and return the status of the completed TRBs associated
++	 * with the request. Use the status of the last TRB of the request.
++	 */
++	if (req->request.no_interrupt) {
++		struct dwc3_trb *trb;
++
++		trb = dwc3_ep_prev_trb(dep, dep->trb_dequeue);
++		switch (DWC3_TRB_SIZE_TRBSTS(trb->size)) {
++		case DWC3_TRBSTS_MISSED_ISOC:
++			/* Isoc endpoint only */
++			request_status = -EXDEV;
++			break;
++		case DWC3_TRB_STS_XFER_IN_PROG:
++			/* Applicable when End Transfer with ForceRM=0 */
++		case DWC3_TRBSTS_SETUP_PENDING:
++			/* Control endpoint only */
++		case DWC3_TRBSTS_OK:
++		default:
++			request_status = 0;
++			break;
++		}
++	} else {
++		request_status = status;
++	}
++
++	dwc3_gadget_giveback(dep, req, request_status);
+ 
+ out:
+ 	return ret;
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-powerpc                     asp8347_defconfig
-um                           x86_64_defconfig
-powerpc                      ppc40x_defconfig
-powerpc                     redwood_defconfig
-sparc                               defconfig
-arm                       aspeed_g5_defconfig
-sh                          rsk7201_defconfig
-powerpc                 linkstation_defconfig
-sh                 kfr2r09-romimage_defconfig
-sh                          rsk7203_defconfig
-riscv                            allmodconfig
-m68k                          hp300_defconfig
-arm                           imxrt_defconfig
-m68k                         apollo_defconfig
-ia64                             allyesconfig
-nios2                         10m50_defconfig
-openrisc                  or1klitex_defconfig
-sh                           se7721_defconfig
-arm                        realview_defconfig
-ia64                      gensparse_defconfig
-m68k                        m5407c3_defconfig
-um                                  defconfig
-arm                          simpad_defconfig
-powerpc                      pcm030_defconfig
-powerpc                   currituck_defconfig
-powerpc                       ppc64_defconfig
-powerpc                        cell_defconfig
-powerpc                    sam440ep_defconfig
-openrisc                 simple_smp_defconfig
-sh                               alldefconfig
-arm                        shmobile_defconfig
-powerpc                       holly_defconfig
-arm                      footbridge_defconfig
-arc                          axs101_defconfig
-sh                          r7785rp_defconfig
-sh                         apsh4a3a_defconfig
-sparc                       sparc64_defconfig
-m68k                       m5275evb_defconfig
-sh                         microdev_defconfig
-mips                        bcm47xx_defconfig
-sparc64                             defconfig
-um                               alldefconfig
-ia64                        generic_defconfig
-arm                           viper_defconfig
-ia64                         bigsur_defconfig
-sh                        apsh4ad0a_defconfig
-arm                           sama5_defconfig
-alpha                            alldefconfig
-m68k                            mac_defconfig
-sh                           se7705_defconfig
-arm                           stm32_defconfig
-xtensa                    smp_lx200_defconfig
-mips                           xway_defconfig
-xtensa                          iss_defconfig
-sh                          sdk7780_defconfig
-sh                         ecovec24_defconfig
-m68k                       m5475evb_defconfig
-powerpc                 canyonlands_defconfig
-microblaze                          defconfig
-xtensa                  cadence_csp_defconfig
-powerpc                      arches_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220422
-ia64                             allmodconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-arc                  randconfig-r043-20220421
-s390                 randconfig-r044-20220421
-riscv                randconfig-r042-20220421
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-
-clang tested configs:
-riscv                randconfig-c006-20220422
-mips                 randconfig-c004-20220422
-x86_64                        randconfig-c007
-arm                  randconfig-c002-20220422
-powerpc              randconfig-c003-20220422
-i386                          randconfig-c001
-powerpc                    ge_imp3a_defconfig
-arm                       aspeed_g4_defconfig
-powerpc                      acadia_defconfig
-mips                           ip27_defconfig
-riscv                            alldefconfig
-arm                    vt8500_v6_v7_defconfig
-powerpc                     ksi8560_defconfig
-mips                          ath25_defconfig
-powerpc                     tqm8540_defconfig
-arm                         orion5x_defconfig
-mips                     cu1830-neo_defconfig
-powerpc                 mpc832x_rdb_defconfig
-powerpc                      ppc64e_defconfig
-powerpc                  mpc885_ads_defconfig
-arm                         socfpga_defconfig
-powerpc                 mpc8560_ads_defconfig
-mips                           ip22_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220422
-s390                 randconfig-r044-20220422
-riscv                randconfig-r042-20220422
-hexagon              randconfig-r045-20220422
-hexagon              randconfig-r041-20220421
-hexagon              randconfig-r045-20220421
-
+base-commit: f4fd84ae0765a80494b28c43b756a95100351a94
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.28.0
+
