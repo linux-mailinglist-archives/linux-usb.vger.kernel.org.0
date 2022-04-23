@@ -2,106 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A8A50C949
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Apr 2022 12:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E210550C96A
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Apr 2022 12:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234925AbiDWKaX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Apr 2022 06:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        id S235106AbiDWKzy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Apr 2022 06:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234971AbiDWKaU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Apr 2022 06:30:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C47E1BD59A;
-        Sat, 23 Apr 2022 03:27:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 408D060F4E;
-        Sat, 23 Apr 2022 10:27:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 958D3C385A0;
-        Sat, 23 Apr 2022 10:27:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650709635;
-        bh=ddKHEuTRbRut1OsQhp+YMuMz23onGUBMShLMqKxTwJU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YJC/mBali+ZaOBUhChsdgZnicBb+bq6N7bb64+3OnZP+TROX50HxrR4xfieYO162x
-         dhsCX3KlNWOAYKpEryeAQZvHfVEGdx6ZeVq+PfeOiiEeEKiKAb0SNrPkx3ucGF18R+
-         0dtX4SEJb4GPT3zzGZZ2V0bhQtnNEtKkrhaMOzjCZQXPFaQOr8QtJjuw2JL++U03u0
-         EaZ7eaANf8LaDkVOp68CUxX+JmnrMVZFSsUw4MDHdzjdey5M4Q4M3gFyoqTry8S8Vs
-         FUSZAee2FGjz0SblW0KTs0Y1GuzYa6L095a67cWfXJUwp08vEMlcYCZC6t2W9HQ+Y1
-         8AIu+DMm+RV8A==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1niCyv-006Mln-7Y; Sat, 23 Apr 2022 11:27:13 +0100
+        with ESMTP id S235093AbiDWKzv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Apr 2022 06:55:51 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54AA9209060
+        for <linux-usb@vger.kernel.org>; Sat, 23 Apr 2022 03:52:54 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id a21so1055046edb.1
+        for <linux-usb@vger.kernel.org>; Sat, 23 Apr 2022 03:52:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SnLxGyDlH+f6meURmeh/oYKzc3TusTflpKC2msJGp18=;
+        b=VItS62qaFGAceiXdlqbdB9+ruWRpST1ulKyCNtDd1RdC50ct8mS2pXtpi3WWrh+rSP
+         tNzAXjrrpBeQRm2edCURtRh9B01TYKDeSvFO0j1KgfsXpGrSSIyZ2e3MMG3HOY9DL8hc
+         ZU54vrXPFwTwSRqyfF2HVTFct3Po2bvHhvK07vau0AlZfIpmB7dX0dr0VmwLGY/3CObe
+         H2Skf57Xxs1NdFzKHBjz5vbrMTqV9vpv+g/xAmMQHrKLVFBBuPiqgxCsUV7fWaEclL6Y
+         fW2OHrOUyjmGb4pffxxM/PpjN/qdifJtgj3R00F7XzKhLhr65t742qojYxRPGRawS4CE
+         JBOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SnLxGyDlH+f6meURmeh/oYKzc3TusTflpKC2msJGp18=;
+        b=zRzbw0DlLtIed6YXeiTPr1rH4CKbStg2YpucA16vTLVgJ56FLCJAkpGKpX5z46arvY
+         zJZXIJwYkbHkSysp4bZnzEMuvwxAfP6+EY4lj01VQ2q5e4baKLDkFYJ2+/nyBIr6+kh+
+         kvNRe9hjiRANaHyeT7scMjjN5z3dzcxqlgKbMvtTY11sUW+reSgC6JWJkUDUk9AK89E6
+         iF/+quZPosa2chnyCejAQA1Y0mw4C5np23ZTYuh/rr+8MDh8nln7vz1fQ883BELa1PGr
+         7Nreo7N+fXGNZIzNdqynssdBvhE53PcVLE0d6ZM47khyk7tvUAeHXz5IQVpfDOa5HPtH
+         mfbw==
+X-Gm-Message-State: AOAM530vYjTDTdhMSp39vaV2DNXuEoUWf32p/Vy3Q7eEOs0UqakQCFpe
+        Gz71C/1RoUVDIIQQozC5a/rFIw==
+X-Google-Smtp-Source: ABdhPJzFYbwY1hBBb4KD1bsYKaKWZiWZFmm0TdsTCJuQO1GfWSsldiXIzka7E/qihjcWIP8Cyf4sCg==
+X-Received: by 2002:a05:6402:2985:b0:425:d51f:ae4 with SMTP id eq5-20020a056402298500b00425d51f0ae4mr1518847edb.379.1650711172990;
+        Sat, 23 Apr 2022 03:52:52 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d2-20020a170906040200b006e84213fdffsm1591852eja.201.2022.04.23.03.52.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Apr 2022 03:52:52 -0700 (PDT)
+Message-ID: <8a423201-09fc-feec-ac5b-9a8c2bea6c71@linaro.org>
+Date:   Sat, 23 Apr 2022 12:52:51 +0200
 MIME-Version: 1.0
-Date:   Sat, 23 Apr 2022 11:27:13 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: fully convert arm to use dma-direct
-In-Reply-To: <CACRpkdbdKBfmXGdyTm3T-MFAK30N-z4KH0k8eD8F7xaYUbDDhA@mail.gmail.com>
-References: <20220421074204.1284072-1-hch@lst.de>
- <CACRpkdbdKBfmXGdyTm3T-MFAK30N-z4KH0k8eD8F7xaYUbDDhA@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <e3ff279d8f00fb38ee4e9ecda0e56038@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5 08/11] dt-bindings: usb: generic-ehci: Add HPE GXP ehci
+ binding
+Content-Language: en-US
+To:     nick.hawkins@hpe.com, verdun@hpe.com, joel@jms.id.au,
+        arnd@arndb.de, openbmc@lists.ozlabs.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220421192132.109954-1-nick.hawkins@hpe.com>
+ <20220421192132.109954-9-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220421192132.109954-9-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: linus.walleij@linaro.org, hch@lst.de, linux@armlinux.org.uk, arnd@kernel.org, andre.przywara@arm.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, gregkh@linuxfoundation.org, stern@rowland.harvard.edu, laurentiu.tudor@nxp.com, m.szyprowski@samsung.com, robin.murphy@arm.com, iommu@lists.linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2022-04-22 22:17, Linus Walleij wrote:
-> On Thu, Apr 21, 2022 at 9:42 AM Christoph Hellwig <hch@lst.de> wrote:
+On 21/04/2022 21:21, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
->> arm is the last platform not using the dma-direct code for directly
->> mapped DMA.  With the dmaboune removal from Arnd we can easily switch
->> arm to always use dma-direct now (it already does for LPAE configs
->> and nommu).  I'd love to merge this series through the dma-mapping 
->> tree
->> as it gives us the opportunity for additional core dma-mapping
->> improvements.
-> (...)
+> Add hpe,gxp-ehci to the generic-ehci list. This is to
+> enable the device tree.
 > 
->>  b/arch/arm/mach-footbridge/Kconfig                   |    1
->>  b/arch/arm/mach-footbridge/common.c                  |   19
->>  b/arch/arm/mach-footbridge/include/mach/dma-direct.h |    8
->>  b/arch/arm/mach-footbridge/include/mach/memory.h     |    4
-> 
-> I think Marc Z has a Netwinder that he can test this on. Marc?
-> I have one too, just not much in my office because of parental leave.
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 
-I'm about to travel for a week. Can this wait until I'm back?
-This is one of the few boxes that isn't hooked up to the PDU,
-so I can't operate it remotely.
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof
