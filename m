@@ -2,97 +2,262 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACAA50EA7E
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 22:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFCB50EB2D
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 23:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245535AbiDYUb3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 16:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
+        id S245271AbiDYVQm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 17:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245525AbiDYUbP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 16:31:15 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244C013596E
-        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 13:26:31 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id d12so9981076ybc.4
-        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 13:26:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z1ClqhRYmz5HXClsBXkFldoXhUBQuMz5hmz04W+s5Ig=;
-        b=SV3IRHMjAU9BfJwPNilSNBAcSVoAMOWBYYLA0e0oQyYiMxf9Nw9gWUTjBEk1CBmTAs
-         Niw0SWuKhHt9jGq49BeSNAl/1cSwK+zxQlup5uCwMDIJhM2M3gOatO5JAwKArsRPQdPg
-         aZnw8RNIcruOOrZt2tMc7EtM/RvF3NZufVbPaibATHZ20a6nWn0Lox/FXS7nX2R6btqq
-         RMvfSvYfapVFh2Iirdot7fAegoabbm2ZR8ThDF6g4O5Wlaygky63T93y5nfmyCtIjLDp
-         eFIchiZOCIFYoVPeaYVlpwdCHEkCXO0AnC6c+N8pNojcgtdoGD0N+y/GrrBhsPMl4oFk
-         MtOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z1ClqhRYmz5HXClsBXkFldoXhUBQuMz5hmz04W+s5Ig=;
-        b=vfiwY/nUag8SVNJOJpkxQwJIoVZtsxeEj5xXk2la9ZPbHdfccF7Hm/YTRvM8zKlRKW
-         wSBKmljtpJtLGSDIzzTEyhhTmbB9UCUOQBmUcyWR50cVC1thX8xM3LalYaryneeXco1R
-         bgUKwFNdckBtuHQ1L9nxki1ZZWEj75Jkp/yvVmhZN39WkVIKLrKFRQpO4o/Fd6SIoJal
-         f5PNi7VzKpTFUoL46PJJDlHzY0WLkYYOAONyLBOLoOroJ0/7AqlHNuVh4dGYs1qXxvfL
-         Q4oZlEumoyc+1TN79xCgtUCK3rB869CLo54iLcrbH+uXFsKGv5mCSDL/4J42RPZZgMEw
-         FlXg==
-X-Gm-Message-State: AOAM530xmYN/7TVr5qcRyuGg2wy8UPz/sVwmmusbcZ3GumYGwxqymWd8
-        wX4XI0hpr5zoSchufXRIZps2YE0HNpkHiTM65huFXMzqS6w=
-X-Google-Smtp-Source: ABdhPJxB+vfWOOzXZiU6MC4ksRjAF+ObiO6SpIQGl0f3Kgfoajj+j6ai/aqm6x0QGRFBqrGJF5F8tyZTrczeruOnEvI=
-X-Received: by 2002:a25:aa94:0:b0:648:62f2:ef4e with SMTP id
- t20-20020a25aa94000000b0064862f2ef4emr6378314ybi.626.1650918390364; Mon, 25
- Apr 2022 13:26:30 -0700 (PDT)
+        with ESMTP id S234570AbiDYVQl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 17:16:41 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3166C9D063
+        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 14:13:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650921216; x=1682457216;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pqYmsoIXDTLiNTVQlGudceUIOBpGjlsVZbHHOmbGe2E=;
+  b=elZvi3htNzMZ4OHo8Z9el130xawKrXch2seoxgueVzOexGTXhVFQ21NG
+   Sz9QHZcW4UOH5O8elBHuD54iiqrJf3vrFZorAfNgdS4+jtgDz9KaJWwWL
+   U5AVOf+8YyWayfn+EnF2Wl1IQszqh01m8Vs2pSJxOM4vExcx8KKUz6UgA
+   CSETDUY8vV2BVOgA3Pioe6U8RqnfQQZu6MIuhOu8WCHp9azQUoJKF3KPd
+   rCkivUBCvPxLQ/CemCc2GE91zUhoLPAN8vMfqjYOoEP1WaB4jLo98V32s
+   ovt/jZDaIrpOyBxTKk11g9WKZ2TakQV4Ts7RwMcjwD6Ypmfg3aJGwabvo
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="264214557"
+X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
+   d="scan'208";a="264214557"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 14:13:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
+   d="scan'208";a="729916222"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 25 Apr 2022 14:13:32 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nj61U-0002t0-3u;
+        Mon, 25 Apr 2022 21:13:32 +0000
+Date:   Tue, 26 Apr 2022 05:13:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ bdddc253b0938a0063798881d1f6a971ea1d8943
+Message-ID: <62670eed.wvIxx2YsCYoeuD+E%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220425171412.1188485-1-sean.anderson@seco.com> <20220425171412.1188485-2-sean.anderson@seco.com>
-In-Reply-To: <20220425171412.1188485-2-sean.anderson@seco.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 25 Apr 2022 22:26:18 +0200
-Message-ID: <CACRpkdajs2TUe-E+y6RaroSc1bdpHwUOhmZ8FgPrdFj8g4L1Aw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: usb: usb-nop-xceiv: Repurpose vbus-regulator
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-kernel@vger.kernel.org,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 7:14 PM Sean Anderson <sean.anderson@seco.com> wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: bdddc253b0938a0063798881d1f6a971ea1d8943  usb: rework usb_maxpacket() using usb_pipe_endpoint()
 
-> The vbus-regulator property was never actually read from the device tree.
-> Introduce a new property vbus-supply to represent the regulator powering
-> the VBUS when acting as an A-Device. This supply will be enabled and
-> disabled as necessary. Note that this is different from vbus-regulator,
-> which represented the available current available to draw from VBUS in
-> B-Device mode. Because no one was using vbus-regulator, remove it.
->
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-(...)
-> +  vbus-supply:
-> +    description: regulator supplying VBUS. It will be enabled and disabled
-> +                 dynamically in OTG mode.
+elapsed time: 3590m
 
-I would add a small text snippet like this: "If the regulator is controlled by a
-GPIO line, this should be modeled as a regulator-fixed and referenced
-by this supply" - it's helpful because otherwise people tend to start to
-submit weird stuff like adding yet another GPIO for this.
+configs tested: 177
+configs skipped: 4
 
-Either way:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Yours,
-Linus Walleij
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+i386                 randconfig-c001-20220425
+arm                        keystone_defconfig
+arm                        mvebu_v7_defconfig
+powerpc                        cell_defconfig
+mips                         rt305x_defconfig
+h8300                       h8s-sim_defconfig
+arm                             rpc_defconfig
+powerpc                     pq2fads_defconfig
+mips                      maltasmvp_defconfig
+arc                          axs101_defconfig
+arc                          axs103_defconfig
+sh                        edosk7705_defconfig
+arm                      integrator_defconfig
+m68k                            q40_defconfig
+arc                              alldefconfig
+arm                           sunxi_defconfig
+powerpc                    klondike_defconfig
+arm                          badge4_defconfig
+mips                    maltaup_xpa_defconfig
+sh                               j2_defconfig
+arm                         assabet_defconfig
+xtensa                generic_kc705_defconfig
+openrisc                  or1klitex_defconfig
+m68k                       bvme6000_defconfig
+microblaze                          defconfig
+mips                            gpr_defconfig
+sh                        apsh4ad0a_defconfig
+sh                           se7705_defconfig
+powerpc                   currituck_defconfig
+m68k                       m5475evb_defconfig
+powerpc                 canyonlands_defconfig
+powerpc                       holly_defconfig
+sparc                               defconfig
+arm                         lubbock_defconfig
+arc                     haps_hs_smp_defconfig
+arm                           h3600_defconfig
+xtensa                  nommu_kc705_defconfig
+x86_64               randconfig-c001-20220425
+arm                  randconfig-c002-20220425
+arm                  randconfig-c002-20220422
+x86_64                        randconfig-c001
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+x86_64               randconfig-a015-20220425
+x86_64               randconfig-a014-20220425
+x86_64               randconfig-a011-20220425
+x86_64               randconfig-a013-20220425
+x86_64               randconfig-a012-20220425
+x86_64               randconfig-a016-20220425
+i386                 randconfig-a014-20220425
+i386                 randconfig-a012-20220425
+i386                 randconfig-a011-20220425
+i386                 randconfig-a015-20220425
+i386                 randconfig-a013-20220425
+i386                 randconfig-a016-20220425
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220422
+arc                  randconfig-r043-20220425
+s390                 randconfig-r044-20220425
+riscv                randconfig-r042-20220425
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                          rv32_defconfig
+riscv                            allyesconfig
+riscv                               defconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                          rhel-8.3-func
+
+clang tested configs:
+mips                 randconfig-c004-20220424
+arm                  randconfig-c002-20220424
+powerpc              randconfig-c003-20220424
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+riscv                randconfig-c006-20220424
+s390                 randconfig-c005-20220424
+riscv                randconfig-c006-20220425
+mips                 randconfig-c004-20220425
+x86_64               randconfig-c007-20220425
+arm                  randconfig-c002-20220425
+i386                 randconfig-c001-20220425
+powerpc              randconfig-c003-20220425
+powerpc                     kmeter1_defconfig
+mips                  cavium_octeon_defconfig
+powerpc                    mvme5100_defconfig
+powerpc                       ebony_defconfig
+hexagon                          alldefconfig
+powerpc                 xes_mpc85xx_defconfig
+mips                          malta_defconfig
+powerpc                    socrates_defconfig
+mips                       lemote2f_defconfig
+x86_64                           allyesconfig
+arm                           spitz_defconfig
+powerpc                 mpc836x_mds_defconfig
+arm                          ep93xx_defconfig
+powerpc                    gamecube_defconfig
+powerpc                   lite5200b_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+i386                 randconfig-a006-20220425
+i386                 randconfig-a002-20220425
+i386                 randconfig-a005-20220425
+i386                 randconfig-a003-20220425
+i386                 randconfig-a001-20220425
+i386                 randconfig-a004-20220425
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64               randconfig-a002-20220425
+x86_64               randconfig-a004-20220425
+x86_64               randconfig-a003-20220425
+x86_64               randconfig-a001-20220425
+x86_64               randconfig-a005-20220425
+x86_64               randconfig-a006-20220425
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220422
+hexagon              randconfig-r045-20220422
+s390                 randconfig-r044-20220422
+riscv                randconfig-r042-20220422
+hexagon              randconfig-r041-20220425
+hexagon              randconfig-r045-20220425
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
