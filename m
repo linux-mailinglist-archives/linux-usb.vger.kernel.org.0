@@ -2,124 +2,217 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246CC50E09F
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 14:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12C850E0B5
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 14:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236867AbiDYMpb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 08:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46096 "EHLO
+        id S234949AbiDYMwy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 08:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241947AbiDYMp2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 08:45:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 034C7DB0D6;
-        Mon, 25 Apr 2022 05:42:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C37B911FB;
-        Mon, 25 Apr 2022 05:42:21 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5BFC73F5A1;
-        Mon, 25 Apr 2022 05:42:20 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     joro@8bytes.org
-Cc:     baolu.lu@linux.intel.com, andreas.noever@gmail.com,
-        michael.jamet@intel.com, mika.westerberg@linux.intel.com,
-        YehezkelShB@gmail.com, iommu@lists.linux-foundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mario.limonciello@amd.com, hch@lst.de
-Subject: [PATCH v4 4/4] iommu/amd: Indicate whether DMA remap support is enabled
-Date:   Mon, 25 Apr 2022 13:42:05 +0100
-Message-Id: <ce7627fa1c596878ca6515dd9d4381a45b6ee38c.1650878781.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.35.3.dirty
-In-Reply-To: <cover.1650878781.git.robin.murphy@arm.com>
-References: <cover.1650878781.git.robin.murphy@arm.com>
+        with ESMTP id S234797AbiDYMwx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 08:52:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62976FB3A8;
+        Mon, 25 Apr 2022 05:49:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650890989; x=1682426989;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IQAaH6AfCWrFMKcxYIvjsJFZxL3TSSAFCIkxYVb1JK0=;
+  b=Fw2uT0xNLT2Yff/dyxoYTzybs14CLR/oIxqsL0HHhrRWO6n6k73wMVVN
+   6yasPlXVzndj/KGCgsnqYXvYE0yiAmnTeSCYgWdcJKq/Hxlum5EOPqtQR
+   ct7HRiX95rTkf+MfGzhOEKpyEUCBQoVMgBObabcMVnB7BUe1QucsAnmsy
+   h18RF9f4DNfiNYWZorlftieD4F8VHaET6720auZl6DHTy4/lYy9GmIGSf
+   dIX/Lw/C1PYxNNtdKoGlWhhC1F2nEcHsdxPw0MAsO5F5xi4kncmTnsSNj
+   EvZymFKFOQDz4RRqstwz/uQReA8dIxFz2lf+agZ05HX5VZEp5pfoncDWV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="264086893"
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208,217";a="264086893"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 05:49:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208,217";a="704544204"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Apr 2022 05:49:46 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Jameson Thies <jthies@google.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] usb: typec: Separate USB PD from USB Type-C
+Date:   Mon, 25 Apr 2022 15:49:43 +0300
+Message-Id: <20220425124946.13064-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+Hi,
 
-Bit 1 of the IVFS IVInfo field indicates that IOMMU has been used for
-pre-boot DMA protection.
+Now everything is a device. There are now other changes.
 
-Export this capability to allow other places in the kernel to be able to
-check for it on AMD systems.
 
-Link: https://www.amd.com/system/files/TechDocs/48882_IOMMU.pdf
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
+v2 cover letter:
 
-v4: No change
+In this version the USB Power Delivery support is now completely
+separated into its own little subsystem. The USB Power Delivery
+objects are not devices, but they are also no longer tied to any
+device by default. This change makes it possible to share the USB PD
+objects between multiple devices on top of being able to select the
+objects that we want the device to use.
 
- drivers/iommu/amd/amd_iommu_types.h | 4 ++++
- drivers/iommu/amd/init.c            | 3 +++
- drivers/iommu/amd/iommu.c           | 2 ++
- 3 files changed, 9 insertions(+)
+The USB Power Delivery objects are now placed under
+/sys/kernel/usb_power_delivery directory. As an example:
 
-diff --git a/drivers/iommu/amd/amd_iommu_types.h b/drivers/iommu/amd/amd_iommu_types.h
-index 47108ed44fbb..72d0f5e2f651 100644
---- a/drivers/iommu/amd/amd_iommu_types.h
-+++ b/drivers/iommu/amd/amd_iommu_types.h
-@@ -407,6 +407,7 @@
- /* IOMMU IVINFO */
- #define IOMMU_IVINFO_OFFSET     36
- #define IOMMU_IVINFO_EFRSUP     BIT(0)
-+#define IOMMU_IVINFO_DMA_REMAP  BIT(1)
- 
- /* IOMMU Feature Reporting Field (for IVHD type 10h */
- #define IOMMU_FEAT_GASUP_SHIFT	6
-@@ -449,6 +450,9 @@ extern struct irq_remap_table **irq_lookup_table;
- /* Interrupt remapping feature used? */
- extern bool amd_iommu_irq_remap;
- 
-+/* IVRS indicates that pre-boot remapping was enabled */
-+extern bool amdr_ivrs_remap_support;
-+
- /* kmem_cache to get tables with 128 byte alignement */
- extern struct kmem_cache *amd_iommu_irq_cache;
- 
-diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
-index b4a798c7b347..0467918bf7fd 100644
---- a/drivers/iommu/amd/init.c
-+++ b/drivers/iommu/amd/init.c
-@@ -182,6 +182,7 @@ u32 amd_iommu_max_pasid __read_mostly = ~0;
- 
- bool amd_iommu_v2_present __read_mostly;
- static bool amd_iommu_pc_present __read_mostly;
-+bool amdr_ivrs_remap_support __read_mostly;
- 
- bool amd_iommu_force_isolation __read_mostly;
- 
-@@ -326,6 +327,8 @@ static void __init early_iommu_features_init(struct amd_iommu *iommu,
- {
- 	if (amd_iommu_ivinfo & IOMMU_IVINFO_EFRSUP)
- 		iommu->features = h->efr_reg;
-+	if (amd_iommu_ivinfo & IOMMU_IVINFO_DMA_REMAP)
-+		amdr_ivrs_remap_support = true;
- }
- 
- /* Access to l1 and l2 indexed register spaces */
-diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index a1ada7bff44e..991f10ce350e 100644
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -2162,6 +2162,8 @@ static bool amd_iommu_capable(enum iommu_cap cap)
- 		return (irq_remapping_enabled == 1);
- 	case IOMMU_CAP_NOEXEC:
- 		return false;
-+	case IOMMU_CAP_PRE_BOOT_PROTECTION:
-+		return amdr_ivrs_remap_support;
- 	default:
- 		break;
- 	}
+        /sys/kernel/usb_power_delivery/pd0
+
+So now that pd0 can be linked to a device, or devices, that want (or
+can) use it to negotiate the USB PD contract with. An example where
+two devices share the PD:
+
+        /sys/class/typec/port0/usb_power_delivery -> ../../../../../../../kernel/usb_power_delivery/pd0
+        /sys/class/typec/port1/usb_power_delivery -> ../../../../../../../kernel/usb_power_delivery/pd0
+
+I did not change the directory hierarchy at all, because I'm assuming
+that it is not a problem anymore:
+
+        pd0/<message>/<object>/<field>
+
+On top of that change, I also switched to tcpm.c from ucsi.c as
+the first user of this thing.
+
+
+v1 cover letter:
+
+Ideally after this there should be no need to add any new USB Power
+Delivery specific attribute files directly to the USB Type-C devices
+in sysfs. They now have their own directory.
+
+The idea of the series is that any device (so not just USB Type-C
+connectors and the partners attached to them) that supports USB Power
+Delivery can have this separate sub-directory "usb_power_delivery" in
+sysfs, and that sub-directory will have all the USB Power Delivery
+objects and all the other USB Power Delivery details.
+
+There are already ways that allow us to read the USB Power Delivery
+capabilities from potentially any USB PD capable USB device attached
+to the bus - one way is defined in the USB Type-C Bridge
+Specification.
+
+Initially the Capability Messages (i.e. PDOs) are exposed.
+
+This is an example (tree view) of the capabilities that the ports on a
+normal x86 system advertise to the partner. First you have the message
+directory (source_capabilities and sink_capabilities), and that will
+have a sub-directory for each PDO that capability message has. The PDO
+sub-directories are named by their type. The number in front of the
+name is the object position of the PDO:
+
+/sys/class/typec/port0/usb_power_delivery
+|-- revision
+|-- sink_capabilities/
+|   |-- 1:fixed_supply/
+|   |   |-- dual_role_data
+|   |   |-- dual_role_power
+|   |   |-- fast_role_swap_current
+|   |   |-- operational_current
+|   |   |-- unchunked_extended_messages_supported
+|   |   |-- unconstrained_power
+|   |   |-- usb_communication_capable
+|   |   |-- usb_suspend_supported
+|   |   `-- voltage
+|   |-- 2:variable_supply/
+|   |   |-- maximum_voltage
+|   |   |-- minimum_voltage
+|   |   `-- operational_current
+|   `-- 3:battery/
+|       |-- maximum_voltage
+|       |-- minimum_voltage
+|       `-- operational_power
+`-- source_capabilities/
+    `-- 1:fixed_supply/
+        |-- dual_role_data
+        |-- dual_role_power
+        |-- maximum_current
+        |-- unchunked_extended_messages_supported
+        |-- unconstrained_power
+        |-- usb_communication_capable
+        |-- usb_suspend_supported
+        `-- voltage
+
+And these are the capabilities of my Thunderbolt3 dock:
+
+/sys/class/typec/port0-partner/usb_power_delivery
+|-- revision
+|-- sink_capabilities/
+|   `-- 1:fixed_supply/
+|       |-- dual_role_data
+|       |-- dual_role_power
+|       |-- fast_role_swap_current
+|       |-- operational_current
+|       |-- unchunked_extended_messages_supported
+|       |-- unconstrained_power
+|       |-- usb_communication_capable
+|       |-- usb_suspend_supported
+|       `-- voltage
+`-- source_capabilities/
+    |-- 1:fixed_supply/
+    |   |-- dual_role_data
+    |   |-- dual_role_power
+    |   |-- maximum_current
+    |   |-- unchunked_extended_messages_supported
+    |   |-- unconstrained_power
+    |   |-- usb_communication_capable
+    |   |-- usb_suspend_supported
+    |   `-- voltage
+    |-- 2:fixed_supply/
+    |   |-- maximum_current
+    |   `-- voltage
+    |-- 3:fixed_supply/
+    |   |-- maximum_current
+    |   `-- voltage
+    |-- 4:fixed_supply/
+    |   |-- maximum_current
+    |   `-- voltage
+    `-- 5:fixed_supply/
+        |-- maximum_current
+        `-- voltage
+
+
+Heikki Krogerus (3):
+  usb: typec: Separate USB Power Delivery from USB Type-C
+  usb: typec: USB Power Deliver helpers for ports and partners
+  usb: typec: tcpm: Register USB Power Delivery Capabilities
+
+ Documentation/ABI/testing/sysfs-class-typec   |   8 +
+ .../testing/sysfs-class-usb_power_delivery    | 240 ++++++
+ drivers/usb/typec/Makefile                    |   2 +-
+ drivers/usb/typec/class.c                     | 148 ++++
+ drivers/usb/typec/class.h                     |   4 +
+ drivers/usb/typec/pd.c                        | 721 ++++++++++++++++++
+ drivers/usb/typec/pd.h                        |  30 +
+ drivers/usb/typec/tcpm/tcpm.c                 | 142 +++-
+ include/linux/usb/pd.h                        |  35 +
+ include/linux/usb/typec.h                     |  22 +
+ 10 files changed, 1350 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-usb_power_delivery
+ create mode 100644 drivers/usb/typec/pd.c
+ create mode 100644 drivers/usb/typec/pd.h
+
 -- 
-2.35.3.dirty
+2.35.1
 
