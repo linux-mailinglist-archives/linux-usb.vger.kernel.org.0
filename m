@@ -2,115 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800E550D72A
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 04:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5333E50D76A
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 05:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240428AbiDYCwO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 Apr 2022 22:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
+        id S236186AbiDYDRf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 Apr 2022 23:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiDYCwK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Apr 2022 22:52:10 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33526E4CE;
-        Sun, 24 Apr 2022 19:49:08 -0700 (PDT)
+        with ESMTP id S232795AbiDYDRW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Apr 2022 23:17:22 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955275158E;
+        Sun, 24 Apr 2022 20:14:20 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id i62so120585pgd.6;
+        Sun, 24 Apr 2022 20:14:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650854948; x=1682390948;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Lt7d0D8HFzqruaBD/gXwgUjsYO2oRO7TeES1RHdfgc0=;
-  b=kkf39t2mBxYphBUJ2G2MP9CgxtT07WM3WX9JJp/FlZB+3HBV0cNbDaql
-   5SXabtNZ+InVAps7wJavGLU3OL/0+t0NHmjzrIeW6ZptHNzrIVIpuaxnz
-   5/Hz5VvUdemBgtfVGCJrPEFT2yJxAAmpJ/6K+I5rOfuL1bLa5vDI4qJyk
-   U=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 24 Apr 2022 19:49:08 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 19:49:08 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 24 Apr 2022 19:49:07 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 24 Apr 2022 19:49:02 -0700
-Date:   Mon, 25 Apr 2022 08:18:58 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Doug Anderson" <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        <quic_kriskura@quicinc.com>, <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v4 0/3] Skip phy initialization for DWC3 USB Controllers
-Message-ID: <20220425024858.GA7052@hu-pkondeti-hyd.qualcomm.com>
-References: <1650517255-4871-1-git-send-email-quic_c_sanm@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1650517255-4871-1-git-send-email-quic_c_sanm@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=ISQrcSjnxBvSrG6lu02vspGdUWKWWM3Zb596oaYBot4=;
+        b=I/pjKBjt08A8TmbT862cHoga5neTfWNsFcFjfFBel7jBMx3IaZMFbl/agRHw0eTefb
+         C0SuioIO42NiAjhWappX8KG0T+TqKWEqoyg8g80Vy58pUC8v9ayQqNPtPpGdgUdOQ8v1
+         9T8UUl7mvj8b5Sy3tE6+7T9YhqN0MLrPNGdzrnLStG7gcRJavNxK3GsqL3R9PE5dQuot
+         7uPGQR6oo34gbTA5h9f90FKo4Lob1IywbJ6Tl4Kn16tv5iixmaWc4ay2SU49Mxw+mHj+
+         abEZcrA4awdDRz+/m6OrG7vxsN05RaIi87ESO1FYwbucyOds/G5HBpUrVu83F7/G4DIZ
+         s5dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ISQrcSjnxBvSrG6lu02vspGdUWKWWM3Zb596oaYBot4=;
+        b=698khvroCOSjYNl5go+iFyDNNNc7CLSpCsunblpr4ysNMtMncm0PDIswtQHhity/vJ
+         4dJmqQQSmFe94twJmyKkrlWydQiJqsJ1IgiQBfG2qAzDM0Z5RRxFlb1nUsHNjMvG3OIV
+         tdOeBuOHTyu07YVBeJNGJ5dT0invx2lO/dnmfnMbdo6n6JQ7lyiNT1szKjNWhDpdfHIt
+         IZH6mnWwR7RfCT6TMKV/wc9a58+ipJGvSpHzCAEjlNX+2boagIAuAXCvSLcKKy+tZbnG
+         T8K8XxtYlNuVYd63vymdnKcaTq0r0P4VTKzyWBAyXOfQmGjVZXv5n3LPogs73ZZcUmxl
+         ZaJA==
+X-Gm-Message-State: AOAM533S1bFs5/uHwLm2nAfdFvFxOjU2qEEXKGBPdH2/OFqca1vPtqmj
+        zX8wSdZqUUFYlxaSD8VPcBg=
+X-Google-Smtp-Source: ABdhPJwD6D4D1+4gmyKbVvsKQnu5cQQ7kXFTN5Y8i+xfBA+5seHDS+mojT+PnKzTvs4rIMgwlrwvRQ==
+X-Received: by 2002:a65:4947:0:b0:3a4:dd71:be90 with SMTP id q7-20020a654947000000b003a4dd71be90mr13180673pgs.449.1650856460001;
+        Sun, 24 Apr 2022 20:14:20 -0700 (PDT)
+Received: from ethan-Latitude-7280.localdomain (125-228-239-174.hinet-ip.hinet.net. [125.228.239.174])
+        by smtp.googlemail.com with ESMTPSA id y12-20020a17090a784c00b001c6bdafc995sm9229024pjl.3.2022.04.24.20.14.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 20:14:19 -0700 (PDT)
+From:   Ethan Yang <ipis.yang@gmail.com>
+X-Google-Original-From: Ethan Yang <etyang@sierrawireless.com>
+To:     bjorn@mork.no, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     gchiang@sierrawireless.com, Ethan Yang <etyang@sierrawireless.com>
+Subject: [PATCH] add support for Sierra Wireless EM7590 0xc081 composition.
+Date:   Mon, 25 Apr 2022 11:14:11 +0800
+Message-Id: <20220425031411.4030-1-etyang@sierrawireless.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+add support for Sierra Wireless EM7590 0xc081 composition.
 
-On Thu, Apr 21, 2022 at 10:30:52AM +0530, Sandeep Maheswaram wrote:
-> Runtime suspend of phy drivers was failing from DWC3 driver as
-> runtime usage value is 2 because the phy is initialized from
-> DWC3 core and HCD core.
-> Some controllers like DWC3 and CDNS3 manage phy in their core drivers.
-> This property can be set to avoid phy initialization in HCD core.
-> 
-> v4:
-> Added the device tree binding patch in the series.
-> 
-> v3:
-> Coming back to this series based on discussion at below thread
-> https://patchwork.kernel.org/project/linux-arm-msm/patch/1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com/
-> Dropped the dt bindings PATCH 1/3 in v2
-> https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/ 
-> 
-> v2:
-> Updated the commit descriptions.
-> Changed subject prefix from dwc to dwc3.
-> Increased props array size.
-> 
-> 
-> Sandeep Maheswaram (3):
->   dt-bindings: usb: usb-xhci: Add bindings for usb-skip-phy-init
->     property
->   usb: host: xhci-plat: Add device property to set XHCI_SKIP_PHY_INIT
->     quirk
->   usb: dwc3: host: Set the property usb-skip-phy-init
-> 
->  Documentation/devicetree/bindings/usb/usb-xhci.yaml | 4 ++++
->  drivers/usb/dwc3/host.c                             | 4 +++-
->  drivers/usb/host/xhci-plat.c                        | 3 +++
->  3 files changed, 10 insertions(+), 1 deletion(-)
-> 
+Signed-off-by: Ethan Yang <etyang@sierrawireless.com>
+---
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-This is the latest series with bindings added as per Greg's comment. Can you
-please pick up this series if you don't have any further comments.
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 3353e761016d..fa220a13edb6 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1351,6 +1351,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_QUIRK_SET_DTR(0x1199, 0x907b, 8)},	/* Sierra Wireless EM74xx */
+ 	{QMI_QUIRK_SET_DTR(0x1199, 0x907b, 10)},/* Sierra Wireless EM74xx */
+ 	{QMI_QUIRK_SET_DTR(0x1199, 0x9091, 8)},	/* Sierra Wireless EM7565 */
++	{QMI_QUIRK_SET_DTR(0x1199, 0xc081, 8)},	/* Sierra Wireless EM7590 */
+ 	{QMI_FIXED_INTF(0x1bbb, 0x011e, 4)},	/* Telekom Speedstick LTE II (Alcatel One Touch L100V LTE) */
+ 	{QMI_FIXED_INTF(0x1bbb, 0x0203, 2)},	/* Alcatel L800MA */
+ 	{QMI_FIXED_INTF(0x2357, 0x0201, 4)},	/* TP-LINK HSUPA Modem MA180 */
+-- 
+2.17.1
 
-Thanks,
-Pavan
