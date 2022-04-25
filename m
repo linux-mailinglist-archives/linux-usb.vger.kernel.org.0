@@ -2,105 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2934B50D8C0
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 07:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC0B50D8DB
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 07:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241224AbiDYFWD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 01:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
+        id S241259AbiDYFdR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 01:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233628AbiDYFWC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 01:22:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89AD02E9EE;
-        Sun, 24 Apr 2022 22:18:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2D396116D;
-        Mon, 25 Apr 2022 05:18:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B6FEC385A7;
-        Mon, 25 Apr 2022 05:18:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650863938;
-        bh=sGRPAM6q1dJjdfyun9Eq2a1CRwS9s1UjJtDSW1rNewY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VsN9DgXbg2oegJcrqcW1rRopEJqBioPo7KmHANUhJfUsY+JVPYsdjARBaEjofW83Z
-         ZI8NQFKjKZabgPsoG3oCZ4PIdZahX/uDzhF4JblSuAx61t9MfqBo62f3xa95gdMTV8
-         DfhymszbsoFIfcanbbCskzOW34yAbxa3tJJHpPrY=
-Date:   Mon, 25 Apr 2022 07:18:53 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ethan Yang <ipis.yang@gmail.com>
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gchiang@sierrawireless.com,
-        Ethan Yang <etyang@sierrawireless.com>
-Subject: Re: [PATCH v2] add support for Sierra Wireless EM7590 0xc080 and
- 0xc081 compositions.
-Message-ID: <YmYvPXeqQzyms91m@kroah.com>
-References: <20220425034204.4345-1-etyang@sierrawireless.com>
- <20220425035520.4717-1-etyang@sierrawireless.com>
+        with ESMTP id S241305AbiDYFdN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 01:33:13 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03BB63B9
+        for <linux-usb@vger.kernel.org>; Sun, 24 Apr 2022 22:30:03 -0700 (PDT)
+Received: from fsav120.sakura.ne.jp (fsav120.sakura.ne.jp [27.133.134.247])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 23P5TXtW098391;
+        Mon, 25 Apr 2022 14:29:33 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav120.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav120.sakura.ne.jp);
+ Mon, 25 Apr 2022 14:29:33 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav120.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 23P5TVwx098387
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 25 Apr 2022 14:29:33 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <5a06c7f1-9a29-99e4-c700-fec3f09509d2@I-love.SAKURA.ne.jp>
+Date:   Mon, 25 Apr 2022 14:29:26 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425035520.4717-1-etyang@sierrawireless.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: possible deadlock in display_open
+Content-Language: en-US
+To:     Jarod Wilson <jarod@redhat.com>, Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <00000000000043b599058faf0145@google.com>
+Cc:     syzbot <syzbot+c558267ad910fc494497@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <00000000000043b599058faf0145@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 11:55:20AM +0800, Ethan Yang wrote:
-> add support for Sierra Wireless EM7590 0xc080 and 0xc081
+Since usb_register_dev() from imon_init_display() from imon_probe() holds
+minor_rwsem while display_open() which holds driver_lock and ictx->lock is
+called with minor_rwsem held from usb_open(), holding driver_lock or
+ictx->lock when calling usb_register_dev() causes circular locking
+dependency problem.
+
+Since usb_deregister_dev() from imon_disconnect() holds minor_rwsem while
+display_open() which holds driver_lock is called with minor_rwsem held,
+holding driver_lock when calling usb_deregister_dev() also causes circular
+locking dependency problem.
+
+But actually do we need to hold these locks?
+Could you explain possible race scenario if we do below?
+
+ drivers/media/rc/imon.c | 21 ---------------------
+ 1 file changed, 21 deletions(-)
+
+diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
+index 54da6f60079b..e0e893d96cf3 100644
+--- a/drivers/media/rc/imon.c
++++ b/drivers/media/rc/imon.c
+@@ -439,9 +439,6 @@ static struct usb_driver imon_driver = {
+ 	.id_table	= imon_usb_id_table,
+ };
+ 
+-/* to prevent races between open() and disconnect(), probing, etc */
+-static DEFINE_MUTEX(driver_lock);
+-
+ /* Module bookkeeping bits */
+ MODULE_AUTHOR(MOD_AUTHOR);
+ MODULE_DESCRIPTION(MOD_DESC);
+@@ -499,9 +496,6 @@ static int display_open(struct inode *inode, struct file *file)
+ 	int subminor;
+ 	int retval = 0;
+ 
+-	/* prevent races with disconnect */
+-	mutex_lock(&driver_lock);
+-
+ 	subminor = iminor(inode);
+ 	interface = usb_find_interface(&imon_driver, subminor);
+ 	if (!interface) {
+@@ -534,7 +528,6 @@ static int display_open(struct inode *inode, struct file *file)
+ 	mutex_unlock(&ictx->lock);
+ 
+ exit:
+-	mutex_unlock(&driver_lock);
+ 	return retval;
+ }
+ 
+@@ -2416,9 +2409,6 @@ static int imon_probe(struct usb_interface *interface,
+ 	dev_dbg(dev, "%s: found iMON device (%04x:%04x, intf%d)\n",
+ 		__func__, vendor, product, ifnum);
+ 
+-	/* prevent races probing devices w/multiple interfaces */
+-	mutex_lock(&driver_lock);
+-
+ 	first_if = usb_ifnum_to_if(usbdev, 0);
+ 	if (!first_if) {
+ 		ret = -ENODEV;
+@@ -2456,8 +2446,6 @@ static int imon_probe(struct usb_interface *interface,
+ 	usb_set_intfdata(interface, ictx);
+ 
+ 	if (ifnum == 0) {
+-		mutex_lock(&ictx->lock);
+-
+ 		if (product == 0xffdc && ictx->rf_device) {
+ 			sysfs_err = sysfs_create_group(&interface->dev.kobj,
+ 						       &imon_rf_attr_group);
+@@ -2468,21 +2456,17 @@ static int imon_probe(struct usb_interface *interface,
+ 
+ 		if (ictx->display_supported)
+ 			imon_init_display(ictx, interface);
+-
+-		mutex_unlock(&ictx->lock);
+ 	}
+ 
+ 	dev_info(dev, "iMON device (%04x:%04x, intf%d) on usb<%d:%d> initialized\n",
+ 		 vendor, product, ifnum,
+ 		 usbdev->bus->busnum, usbdev->devnum);
+ 
+-	mutex_unlock(&driver_lock);
+ 	usb_put_dev(usbdev);
+ 
+ 	return 0;
+ 
+ fail:
+-	mutex_unlock(&driver_lock);
+ 	usb_put_dev(usbdev);
+ 	dev_err(dev, "unable to register, err %d\n", ret);
+ 
+@@ -2498,9 +2482,6 @@ static void imon_disconnect(struct usb_interface *interface)
+ 	struct device *dev;
+ 	int ifnum;
+ 
+-	/* prevent races with multi-interface device probing and display_open */
+-	mutex_lock(&driver_lock);
+-
+ 	ictx = usb_get_intfdata(interface);
+ 	dev = ictx->dev;
+ 	ifnum = interface->cur_altsetting->desc.bInterfaceNumber;
+@@ -2545,8 +2526,6 @@ static void imon_disconnect(struct usb_interface *interface)
+ 	if (!ictx->dev_present_intf0 && !ictx->dev_present_intf1)
+ 		free_imon_context(ictx);
+ 
+-	mutex_unlock(&driver_lock);
+-
+ 	dev_dbg(dev, "%s: iMON device (intf%d) disconnected\n",
+ 		__func__, ifnum);
+ }
+-- 
+2.34.1
+
+On 2019/08/09 22:18, syzbot wrote:
+> Hello,
 > 
-> Signed-off-by: Ethan Yang <etyang@sierrawireless.com>
-> ---
->  drivers/usb/serial/qcserial.c | 2 ++
->  1 file changed, 2 insertions(+)
+> syzbot found the following crash on:
 > 
-> diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-> index c18bf8164bc2..586ef5551e76 100644
-> --- a/drivers/usb/serial/qcserial.c
-> +++ b/drivers/usb/serial/qcserial.c
-> @@ -166,6 +166,8 @@ static const struct usb_device_id id_table[] = {
->  	{DEVICE_SWI(0x1199, 0x9090)},	/* Sierra Wireless EM7565 QDL */
->  	{DEVICE_SWI(0x1199, 0x9091)},	/* Sierra Wireless EM7565 */
->  	{DEVICE_SWI(0x1199, 0x90d2)},	/* Sierra Wireless EM9191 QDL */
-> +	{DEVICE_SWI(0x1199, 0xc080)},	/* Sierra Wireless EM7590 QDL */
-> +	{DEVICE_SWI(0x1199, 0xc081)},	/* Sierra Wireless EM7590 */
->  	{DEVICE_SWI(0x413c, 0x81a2)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
->  	{DEVICE_SWI(0x413c, 0x81a3)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
->  	{DEVICE_SWI(0x413c, 0x81a4)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
-> -- 
-> 2.17.1
+> HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13b29b26600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=c558267ad910fc494497
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15427002600000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=111cb61c600000
 > 
-
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+c558267ad910fc494497@syzkaller.appspotmail.com
