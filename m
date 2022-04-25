@@ -2,191 +2,630 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D6950DC58
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 11:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1D050DD13
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 11:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbiDYJX3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 05:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
+        id S235956AbiDYJs1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 05:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236323AbiDYJXW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 05:23:22 -0400
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6223766B;
-        Mon, 25 Apr 2022 02:20:14 -0700 (PDT)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 06FDC1002D8; Mon, 25 Apr 2022 10:20:11 +0100 (BST)
-Date:   Mon, 25 Apr 2022 10:20:11 +0100
-From:   Sean Young <sean@mess.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Jarod Wilson <jarod@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        syzbot <syzbot+c558267ad910fc494497@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: possible deadlock in display_open
-Message-ID: <YmZny7mzugFe0t+X@gofer.mess.org>
-References: <00000000000043b599058faf0145@google.com>
- <5a06c7f1-9a29-99e4-c700-fec3f09509d2@I-love.SAKURA.ne.jp>
+        with ESMTP id S230487AbiDYJsT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 05:48:19 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5BD3DA44
+        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 02:45:11 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 96563DFE1E;
+        Mon, 25 Apr 2022 02:45:10 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id FWfPYS7jkI30; Mon, 25 Apr 2022 02:45:09 -0700 (PDT)
+Message-ID: <b80c032c350c525d620968e95b7a653fc855d806.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1650879909; bh=zPe1pgPV95o762MWi14JloV7Ss1PB6kIVLXea8r9rcA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=WX+EllSEar4fLcsTcIJckalbrifXSzP6Faq+K7/irZk0MCGTNcGC71aLXnU+E3805
+         0232EZsG3MuOv54pKgwfeh1gJc1NPjARnoeLh5sOUqWK9dmLBpOFrP8mGzwvjPDwKI
+         uEKGb64cqZRtiahvH4qQTbicgqoxuAGEQ2SVe8ZhYJetrbUweumvHCIkSlVY9SuJ6J
+         Cy6+6rpaAVfBD5KROB6U5etnrPrxTR/CROGXbQZ5TOr806euZ9TT7zmqgSTDokUaNj
+         YsZHRGr836BqPI6QmMnw8R4wnnXktM8Z1tBsGZvBAzzc/PC6UfAUxhynXFwjGYCC9W
+         S9RQQ+170C0uQ==
+Subject: Re: USB device disconnects on resume
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org
+Date:   Mon, 25 Apr 2022 11:45:05 +0200
+In-Reply-To: <YmFpMFlTt83s90an@rowland.harvard.edu>
+References: <f03916f62a976fd10b9808f77eace9c230ca4ebc.camel@puri.sm>
+         <Yl7ID1Vxp5+wR1py@rowland.harvard.edu>
+         <5117280ddbcd07007adef1680f689bdea6af32e5.camel@puri.sm>
+         <YmAbZDd6LJwCCvkB@rowland.harvard.edu>
+         <4fb8bd5842135a9f723bbe0406ed1afc023c25fe.camel@puri.sm>
+         <YmFpMFlTt83s90an@rowland.harvard.edu>
+Content-Type: multipart/mixed; boundary="=-IeHed/e2wsmFilVAngW7"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5a06c7f1-9a29-99e4-c700-fec3f09509d2@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
 
-On Mon, Apr 25, 2022 at 02:29:26PM +0900, Tetsuo Handa wrote:
-> Since usb_register_dev() from imon_init_display() from imon_probe() holds
-> minor_rwsem while display_open() which holds driver_lock and ictx->lock is
-> called with minor_rwsem held from usb_open(), holding driver_lock or
-> ictx->lock when calling usb_register_dev() causes circular locking
-> dependency problem.
+--=-IeHed/e2wsmFilVAngW7
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+
+Alan, thanks so much for asking these questions and thinking this
+through! It helps.
+
+Am Donnerstag, dem 21.04.2022 um 10:24 -0400 schrieb Alan Stern:
+> On Thu, Apr 21, 2022 at 12:38:56PM +0200, Martin Kepplinger wrote:
+> > Am Mittwoch, dem 20.04.2022 um 10:40 -0400 schrieb Alan Stern:
+> > > On Wed, Apr 20, 2022 at 12:37:36PM +0200, Martin Kepplinger
+> > > wrote:
+> > > > Resetting itself doesn't usually fail in the sense that a
+> > > > device
+> > > > would
+> > > > not work anymore after resetting. The problem is that the
+> > > > resets
+> > > > happen
+> > > > in the first place. 90+% of runtime-resumes are fine - auto-
+> > > > and
+> > > > wakeup-resume. Resetting is a major problem though, imagine a
+> > > > modem
+> > > > device being re-enumerated during a phone call or "realtime"
+> > > > data
+> > > > connection. I see that a lot.
+> > > 
+> > > Okay, I see.
 > 
-> Since usb_deregister_dev() from imon_disconnect() holds minor_rwsem while
-> display_open() which holds driver_lock is called with minor_rwsem held,
-> holding driver_lock when calling usb_deregister_dev() also causes circular
-> locking dependency problem.
-> 
-> But actually do we need to hold these locks?
-> Could you explain possible race scenario if we do below?
+> By the way, I assume that while resetting the modem is a major
+> problem 
+> for your potential use cases, having it crash with no hope of
+> recovery 
+> is even worse.Â  But maybe I'm wrong...
 
-The problem is there are imon devices which have two usb interfaces, even
-though it is one device. The probe and disconnect function of both usb
-interfaces can run concurrently.
-
-If the imon_probe is running for interface 1, and the probe for interface 0
-has not completed yet, then the driver may erronously think the probe for
-interface 0 failed at `if (!first_if_ctx) {` on line 2442.
-
-Of course, this depends on probe/disconnect functions being allowed to run
-concurrently on different interfaces of the same usb device.
-
-This code is rather tricky, and I'm sure there must be a better way of
-dealing with multiple interfaces for a usb driver than what imon.c does.
-
-Thanks
-Sean
+Sure that's true (and I have other usb-related problems too that result
+in the xhci HC dying even, when I see "xhci-hcd.4.auto: Port resume
+timed out, port 1-1: 0xfe3", so the Hub where the modem is connected)
+but these resets are a seperate issue I want to tackle now and see
+whether it help with other usb-related problems, so let's focus on this
+disconnect/reset situation. So let's not get confused :)
 
 > 
->  drivers/media/rc/imon.c | 21 ---------------------
->  1 file changed, 21 deletions(-)
-> 
-> diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
-> index 54da6f60079b..e0e893d96cf3 100644
-> --- a/drivers/media/rc/imon.c
-> +++ b/drivers/media/rc/imon.c
-> @@ -439,9 +439,6 @@ static struct usb_driver imon_driver = {
->  	.id_table	= imon_usb_id_table,
->  };
->  
-> -/* to prevent races between open() and disconnect(), probing, etc */
-> -static DEFINE_MUTEX(driver_lock);
-> -
->  /* Module bookkeeping bits */
->  MODULE_AUTHOR(MOD_AUTHOR);
->  MODULE_DESCRIPTION(MOD_DESC);
-> @@ -499,9 +496,6 @@ static int display_open(struct inode *inode, struct file *file)
->  	int subminor;
->  	int retval = 0;
->  
-> -	/* prevent races with disconnect */
-> -	mutex_lock(&driver_lock);
-> -
->  	subminor = iminor(inode);
->  	interface = usb_find_interface(&imon_driver, subminor);
->  	if (!interface) {
-> @@ -534,7 +528,6 @@ static int display_open(struct inode *inode, struct file *file)
->  	mutex_unlock(&ictx->lock);
->  
->  exit:
-> -	mutex_unlock(&driver_lock);
->  	return retval;
->  }
->  
-> @@ -2416,9 +2409,6 @@ static int imon_probe(struct usb_interface *interface,
->  	dev_dbg(dev, "%s: found iMON device (%04x:%04x, intf%d)\n",
->  		__func__, vendor, product, ifnum);
->  
-> -	/* prevent races probing devices w/multiple interfaces */
-> -	mutex_lock(&driver_lock);
-> -
->  	first_if = usb_ifnum_to_if(usbdev, 0);
->  	if (!first_if) {
->  		ret = -ENODEV;
-> @@ -2456,8 +2446,6 @@ static int imon_probe(struct usb_interface *interface,
->  	usb_set_intfdata(interface, ictx);
->  
->  	if (ifnum == 0) {
-> -		mutex_lock(&ictx->lock);
-> -
->  		if (product == 0xffdc && ictx->rf_device) {
->  			sysfs_err = sysfs_create_group(&interface->dev.kobj,
->  						       &imon_rf_attr_group);
-> @@ -2468,21 +2456,17 @@ static int imon_probe(struct usb_interface *interface,
->  
->  		if (ictx->display_supported)
->  			imon_init_display(ictx, interface);
-> -
-> -		mutex_unlock(&ictx->lock);
->  	}
->  
->  	dev_info(dev, "iMON device (%04x:%04x, intf%d) on usb<%d:%d> initialized\n",
->  		 vendor, product, ifnum,
->  		 usbdev->bus->busnum, usbdev->devnum);
->  
-> -	mutex_unlock(&driver_lock);
->  	usb_put_dev(usbdev);
->  
->  	return 0;
->  
->  fail:
-> -	mutex_unlock(&driver_lock);
->  	usb_put_dev(usbdev);
->  	dev_err(dev, "unable to register, err %d\n", ret);
->  
-> @@ -2498,9 +2482,6 @@ static void imon_disconnect(struct usb_interface *interface)
->  	struct device *dev;
->  	int ifnum;
->  
-> -	/* prevent races with multi-interface device probing and display_open */
-> -	mutex_lock(&driver_lock);
-> -
->  	ictx = usb_get_intfdata(interface);
->  	dev = ictx->dev;
->  	ifnum = interface->cur_altsetting->desc.bInterfaceNumber;
-> @@ -2545,8 +2526,6 @@ static void imon_disconnect(struct usb_interface *interface)
->  	if (!ictx->dev_present_intf0 && !ictx->dev_present_intf1)
->  		free_imon_context(ictx);
->  
-> -	mutex_unlock(&driver_lock);
-> -
->  	dev_dbg(dev, "%s: iMON device (intf%d) disconnected\n",
->  		__func__, ifnum);
->  }
-> -- 
-> 2.34.1
-> 
-> On 2019/08/09 22:18, syzbot wrote:
-> > Hello,
+> > > > Let me record what hub.c says when leading up to the reset of
+> > > > 1-1.2
+> > > > (the modem), with logs of a normal runtime resume/suspend cycle
+> > > > included before that, as reference:
+> > > > 
+> > > > 1650447001.174798 pureos kernel: usb 1-1: usb auto-resume
+> > > > 1650447001.242810 pureos kernel: usb 1-1: Waited 0ms for
+> > > > CONNECT
+> > > > 1650447001.247853 pureos kernel: usb 1-1: finish resume
+> > > > 1650447001.249697 pureos kernel: hub 1-1:1.0: hub_resume
+> > > > 1650447001.251409 pureos kernel: usb 1-1-port1: status 0507
+> > > > change
+> > > > 0000
+> > > > 1650447001.251624 pureos kernel: usb 1-1-port2: status 0507
+> > > > change
+> > > > 0000
+> > > > 1650447001.251793 pureos kernel: hub 1-1:1.0: state 7 ports 3
+> > > > chg
+> > > > 0000
+> > > > evt 0000
+> > > > 1650447001.253052 pureos kernel: usb 1-1.2: usb auto-resume
+> > > 
+> > > What is the cause of this runtime resume?Â  According to the port
+> > > status 
+> > > above, the 1-1.2 device did not send a wakeup request.
 > > 
-> > syzbot found the following crash on:
+> > How would I find out? Recording via usbmon is next on my todo list.
+> 
+> That's a good thing to try in any case.
+> 
+> I asked because it seemed possible that you had manually caused the 
+> resume somehow.
+
+I use the modem "a lot" in order to wake it up often, that's all.
+
+> 
+> > > > 1650447001.318845 pureos kernel: usb 1-1.2: Waited 0ms for
+> > > > CONNECT
+> > > > 1650447001.324925 pureos kernel: usb 1-1.2: finish resume
+> > > > 1650447003.831095 pureos kernel: usb 1-1.2: usb auto-suspend,
+> > > > wakeup 1
+> > > > 1650447003.854701 pureos kernel: hub 1-1:1.0: hub_suspend
+> > > > 1650447003.874773 pureos kernel: usb 1-1: usb auto-suspend,
+> > > > wakeup
+> > > > 1
+> > > > 1650447003.922054 pureos kernel: usb 1-1: usb wakeup-resume
+> > > 
+> > > This wakeup occurred only 48 ms after the hub was runtime
+> > > suspended.Â 
+> > > But here at least the cause is evident: The hub sent a wakeup
+> > > request
+> > > because its child (the 1-1.2 modem) disconnected.
 > > 
-> > HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=13b29b26600000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=c558267ad910fc494497
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15427002600000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=111cb61c600000
+> > fwiw, that wakeup-resume *always* comes about 50 ms after the last
+> > runtime suspend.
+> 
+> Maybe the modem's firmware has some 50-ms timeout that expires and
+> then 
+> causes the crash.
+
+I now recorded usbmon (1u) traffic of a similar sequence I sent here,
+with a few usbmon-timestamps in the logs:
+
+https://source.puri.sm/Librem5/linux/-/issues/303#note_197913
+
+the usbmon log textfile is attached in that comment link and in this
+email.
+
+> 
+> > > > 1650447003.942066 pureos kernel: usb 1-1: Waited 0ms for
+> > > > CONNECT
+> > > > 1650447003.945755 pureos kernel: usb 1-1: finish resume
+> > > > 1650447003.947589 pureos kernel: hub 1-1:1.0: hub_resume
+> > > > 1650447003.949226 pureos kernel: usb 1-1-port1: status 0507
+> > > > change
+> > > > 0000
+> > > > 1650447003.949430 pureos kernel: usb 1-1-port2: status 0101
+> > > > change
+> > > > 0005
+> > > > 1650447004.058779 pureos kernel: hub 1-1:1.0: state 7 ports 3
+> > > > chg
+> > > > 0004
+> > > > evt 0000
+> > > > 1650447004.074089 pureos kernel: usb 1-1.2: usb wakeup-resume
+> > > > 1650447004.094056 pureos kernel: usb 1-1.2: Waited 0ms for
+> > > > CONNECT
+> > > > 1650447004.097255 pureos kernel: usb 1-1.2: finish reset-resume
+> > > > 1650447004.182333 pureos kernel: usb 1-1.2: reset high-speed
+> > > > USB
+> > > > device
+> > > > number 5 using xhci-hcd
+> > > > 1650447004.314425 pureos kernel: usb 1-1-port2: resume, status
+> > > > 0
+> > > > 1650447004.317628 pureos kernel: usb 1-1-port2: status 0101,
+> > > > change
+> > > > 0004, 12 Mb/s
+> > > > 1650447004.318673 pureos kernel: usb 1-1.2: USB disconnect,
+> > > > device
+> > > > number 5
+> > > > 1650447004.323374 pureos kernel: usb 1-1.2: unregistering
+> > > > device
+> > > 
+> > > And it looks like in this case, the reset-resume failed.
 > > 
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+c558267ad910fc494497@syzkaller.appspotmail.com
+> > Well, at least reset_resume has been set, which I want to avoid.
+> 
+> Do you mean you would prefer to have the modem disconnect permanently
+> (or at least until the next reboot)?
+
+no. I mean I'd prefer the kernel keep the device usable when such a
+disconnect happens - after a short pause until the modem is up again -
+and not re-enumerate.
+
+An audio stream is not being interrupted by such a usb disconnect and
+if I'd keep the ttyUSB device for userspace, I'd keep an opened ttyUSB
+controllable - even if possibly with a large latency spike. That would
+stay a bad workaround of course. Do you know what I'm thinking about?
+
+> 
+> > > > So before resetting, the hub reads
+> > > > "usb 1-1-port2: status 0101 change 0005" instead of normally
+> > > > "usb 1-1-port2: status 0507 change 0000"
+> > > > 
+> > > > but I don't know why. That portstatus/portchange doesn't change
+> > > > over
+> > > > time when I just keep reading portstatus/portchange in
+> > > > hub_activate()
+> > > > in a loop.
+> > > 
+> > > You mean that if the port status and change values are originally
+> > > 0101 and 0005 in hub_activate(), they remain equal to those
+> > > values?Â 
+> > > And 
+> > > similarly if they are originally 0507 and 0000?
+> > > 
+> > > That is to be expected.Â  Nothing happens to make those values
+> > > change 
+> > > until hub_activate() sends some commands to the hub.
+> > 
+> > I see.
+> > 
+> > Of course this doesn't make much sense, but just so you know: if I
+> > just
+> > don't let hub_activate() set udev->reset_resume to 1, then
+> > check_port_resume_type() will do so, and thus again
+> > finish_port_resume() will reset the device by calling
+> > usb_reset_and_verify_device().
+> 
+> Yeah, there's some redundancy in there.Â  The core really tries pretty
+> hard to make sure that devices don't get lost just because they have 
+> trouble handling a suspend + resume.
+> 
+> > > What it means is that the modem was electronically disconnected
+> > > from
+> > > the 
+> > > USB bus.Â  In theory this could be the result of a mixup in the
+> > > resume
+> > > signals, but it's more likely that the modem did this
+> > > deliberately 
+> > > because its firmware crashed.Â  (Why it should crash while it is 
+> > > suspended is a good question, though...)
+> > 
+> > ok. assuming such a firmware bug, if I set a new quirk for the
+> > device,
+> > do you think I can work around that (in hub.c?) in a way that
+> > userspace
+> > doesn't really notice?
+> 
+> One thing you can do pretty easily, without changing the kernel, is 
+> prevent the modem from going into runtime suspend in the first
+> place.Â  
+> For example, if you have a program like powertop overseeing your
+> runtime 
+> power management, you could tell it not to let the modem suspend.Â  Or
+> if 
+> you want to set it up by hand, the command is:
+> 
+> Â Â Â Â Â Â Â Â echo on >/sys/bus/usb/devices/.../power/control
+> 
+> (where "..." is the appropriate path for the modem device, such as 
+> "1-1.2").Â  You can even write a udev script to do this automatically 
+> whenever the modem is detected.
+
+I know that this "solves" my problems but that also prevents the usb2
+hub (1-1) from suspending and that's not a practical solution. The hub
+uses a *lot* of power.
+
+> 
+> > In theory, if I know this behaviour in advance, I think I should be
+> > able to somehow wait until the device is ready again instead of
+> > resetting.
+> 
+> What if the modem never becomes ready again (or not until you
+> reboot)?Â  
+> I think that sort of behavior is not at all unlikely.Â  You can test
+> this 
+> by disabling the code in finish_port_resume() that does reset-
+> resumes.
+
+if I just do that, I get "gone after usb resume? status -5" and thus a
+reset is triggered after all (also, when I do msleep(500) instead of
+reset_and_verify_device() there).
+
+> 
+> Alan Stern
+
+
+--=-IeHed/e2wsmFilVAngW7
+Content-Disposition: attachment; filename="1_usbmon.txt"
+Content-Type: text/plain; name="1_usbmon.txt"; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+ZmZmZjAwMDBiZjMzNGEwMCAzNDExODAzODU5IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA0
+NDBjMmEwMCAzNDExODA0MTYyIEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA0NDBjMjUwMCAz
+NDExODA0MTcwIEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA0NDBjMmQwMCAzNDExODA0MTc1
+IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA0NDBjMjkwMCAzNDExODA0MTgzIEMgQmk6MTow
+MDY6OCAtMTA0IDAKZmZmZjAwMDA0NDBjMmMwMCAzNDExODA0MTg3IEMgQmk6MTowMDY6OCAtMTA0
+IDAKZmZmZjAwMDA0NDBjMmYwMCAzNDExODA0MTkzIEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAw
+MDAyNDcyZGUwMCAzNDExODA0MjAxIEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA0NDBjMjQw
+MCAzNDExODA0NTM4IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA0NDBjMjYwMCAzNDExODA0
+NTQ3IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA0NDBjMmUwMCAzNDExODA0ODA4IEMgQmk6
+MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA0NDBjMmIwMCAzNDExODA0ODE3IEMgQmk6MTowMDY6OCAt
+MTA0IDAKZmZmZjAwMDBiZjI3MTgwMCAzNDExODA0ODI1IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZm
+ZjAwMDA0NDBjMjIwMCAzNDExODA0ODMxIEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDAwMDll
+OTUwMCAzNDExODA0ODM3IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDBiZjE0YmEwMCAzNDEx
+ODA0ODQ1IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA0NDBjMjcwMCAzNDExODA0ODUyIEMg
+Qmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA1NWQxYjYwMCAzNDExODA1MjA1IEMgQmk6MTowMDY6
+OCAtMTA0IDAKZmZmZjAwMDA1NWQxYjEwMCAzNDExODA1MjEyIEMgQmk6MTowMDY6OCAtMTA0IDAK
+ZmZmZjAwMDA1NWQxYjQwMCAzNDExODA1MjIxIEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA1
+MjBlNWEwMCAzNDExODA1MjI3IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA1MjBlNTgwMCAz
+NDExODA1MjM1IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA1MjBlNTcwMCAzNDExODA1MjQx
+IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA1MjBlNWMwMCAzNDExODA1MjQ1IEMgQmk6MTow
+MDY6OCAtMTA0IDAKZmZmZjAwMDA1NWQxYjgwMCAzNDExODA1MjU2IEMgQmk6MTowMDY6OCAtMTA0
+IDAKZmZmZjAwMDA1MjBlNWQwMCAzNDExODA1NjA3IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAw
+MDA1MjBlNTUwMCAzNDExODA1NjE1IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA0NzAzNmEw
+MCAzNDExODA1NjIzIEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDAyOTBlZTgwMCAzNDExODA1
+NjMwIEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDAyY2M3NDYwMCAzNDExODA1NjQxIEMgQmk6
+MTowMDY6OCAtMTA0IDAKZmZmZjAwMDAyNmRkYjkwMCAzNDExODA1NjUxIEMgQmk6MTowMDY6OCAt
+MTA0IDAKZmZmZjAwMDAwMDk5NzAwMCAzNDExODA1NjU3IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZm
+ZjAwMDA1MjBlNTYwMCAzNDExODA1NjYzIEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDAwZDVm
+Y2YwMCAzNDExODA1OTY4IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDBiYmY0NDgwMCAzNDEx
+ODA1OTc2IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDAxZmQyZDIwMCAzNDExODA1OTg2IEMg
+Qmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDAxZmQyZDMwMCAzNDExODA1OTk0IEMgQmk6MTowMDY6
+OCAtMTA0IDAKZmZmZjAwMDAwZDVmY2QwMCAzNDExODA2MDAxIEMgQmk6MTowMDY6OCAtMTA0IDAK
+ZmZmZjAwMDAwNDNkMDcwMCAzNDExODA2MzY5IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDAw
+NDNkMDMwMCAzNDExODA2Mzc4IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDAwNDNkMGYwMCAz
+NDExODA2MzkyIEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDAwNDNkMDUwMCAzNDExODA2Mzk4
+IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA1MmUwYjgwMCAzNDExODA2NDA0IEMgQmk6MTow
+MDY6OCAtMTA0IDAKZmZmZjAwMDA1MmUwYjUwMCAzNDExODA2NDEyIEMgQmk6MTowMDY6OCAtMTA0
+IDAKZmZmZjAwMDA0NmU4YTIwMCAzNDExODA2NDE5IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAw
+MDA1MmUwYmIwMCAzNDExODA2NzA5IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA1MmUwYmMw
+MCAzNDExODA2NzI2IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA1MmUwYjAwMCAzNDExODA2
+NzM0IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA1MmUwYmUwMCAzNDExODA2NzQ0IEMgQmk6
+MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA1MmUwYjIwMCAzNDExODA2NzUyIEMgQmk6MTowMDY6OCAt
+MTA0IDAKZmZmZjAwMDA0NmYwM2MwMCAzNDExODA3MDkzIEMgQmk6MTowMDY6OCAtMTA0IDAKZmZm
+ZjAwMDA1NWJmZTkwMCAzNDExODA3MTAyIEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDBiYzdl
+ZjMwMCAzNDExODA3MTEwIEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDBiYzdlZjIwMCAzNDEx
+ODA3MTUwIEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA0NmY1MzcwMCAzNDExODA3MTYyIEMg
+Qmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA0NzM5OTEwMCAzNDExODA3MTY3IEMgQmk6MTowMDY6
+OCAtMTA0IDAKZmZmZjAwMDA1MmUwYmQwMCAzNDExODA3MTc4IEMgQmk6MTowMDY6OCAtMTA0IDAK
+ZmZmZjAwMDA0NzM5OTAwMCAzNDExODA3NDM5IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDAy
+NDcyZDMwMCAzNDExODA3NDQ5IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDA0NzM5OTIwMCAz
+NDExODA3NDU1IEMgQmk6MTowMDY6OCAtMTA0IDAKZmZmZjAwMDBiYmU1MWQwMCAzNDExODA3OTYy
+IEMgSWk6MTowMDY6NyAtMjoxNiAwCmZmZmYwMDAwNDgzNGZjMDAgMzQxMTgxMDI2NiBDIEJpOjE6
+MDA2OjQgLTIgMApmZmZmMDAwMGJjNWUwMjAwIDM0MTE4MTA0NjEgQyBCaToxOjAwNjo0IC0yIDAK
+ZmZmZjAwMDBiYzVlMDMwMCAzNDExODExMzk4IEMgQmk6MTowMDY6NCAtMiAwCmZmZmYwMDAwYmM1
+ZTA0MDAgMzQxMTgxMTU5NSBDIEJpOjE6MDA2OjQgLTIgMApmZmZmMDAwMDQ4MzRmNTAwIDM0MTE4
+MTE3OTMgQyBJaToxOjAwNjozIC0yOjE2IDAKZmZmZjAwMDAzMTUxMWYwMCAzNDExODEyNzU5IEMg
+Qmk6MTowMDY6MiAtMiAwCmZmZmYwMDAwMzE1MTEyMDAgMzQxMTgxMzY1MCBDIEJpOjE6MDA2OjIg
+LTIgMApmZmZmMDAwMDMxNTExYjAwIDM0MTE4MTQ1MjIgQyBCaToxOjAwNjoyIC0yIDAKZmZmZjAw
+MDAzMTUxMWQwMCAzNDExODE0NzU0IEMgQmk6MTowMDY6MiAtMiAwCmZmZmYwMDAwMWZkMmRmMDAg
+MzQxMTgxNTcyMSBDIEJpOjE6MDA2OjEgLTIgMApmZmZmMDAwMDFmZDJkMDAwIDM0MTE4MTU4OTUg
+QyBCaToxOjAwNjoxIC0yIDAKZmZmZjAwMDAwZTkwNDEwMCAzNDExODE2ODI0IEMgQmk6MTowMDY6
+MSAtMiAwCmZmZmYwMDAwMTQ4MzgwMDAgMzQxMTgxNzcwNCBDIEJpOjE6MDA2OjEgLTIgMApmZmZm
+MDAwMDQ2ZjUzNzAwIDM0MTE4MTc4NjIgUyBDbzoxOjAwNjowIHMgMDAgMDMgMDAwMSAwMDAwIDAw
+MDAgMApmZmZmMDAwMDQ2ZjUzNzAwIDM0MTE4MTg4OTQgQyBDbzoxOjAwNjowIDAgMApmZmZmMDAw
+MDQ2ZjUzNzAwIDM0MTE4MTg5NTkgUyBDbzoxOjAwMjowIHMgMjMgMDMgMDAwMiAwMDAyIDAwMDAg
+MApmZmZmMDAwMDQ2ZjUzNzAwIDM0MTE4MTkwNzEgQyBDbzoxOjAwMjowIDAgMApmZmZmMDAwMGJl
+ZmNkYTAwIDM0MTE4NDE2NDEgQyBJaToxOjAwMjoxIC0yOjIwNDggMApmZmZmMDAwMDQ2ZjUzNzAw
+IDM0MTE4NDE3NTkgUyBDbzoxOjAwMjowIHMgMDAgMDMgMDAwMSAwMDAwIDAwMDAgMApmZmZmMDAw
+MDQ2ZjUzNzAwIDM0MTE4NDE4NDAgQyBDbzoxOjAwMjowIDAgMApmZmZmMDAwMDQ2ZjUzNzAwIDM0
+MTE4NDE4NjUgUyBDbzoxOjAwMTowIHMgMjMgMDMgMDAwMiAwMDAxIDAwMDAgMApmZmZmMDAwMDQ2
+ZjUzNzAwIDM0MTE4NjQ4MzggQyBDbzoxOjAwMTowIDAgMApmZmZmMDAwMGJmMDM1ZTAwIDM0MTE4
+ODg5NjcgQyBJaToxOjAwMToxIC0yOjIwNDggMApmZmZmMDAwMDQ2ZjUzNzAwIDM0MTIyNDAyMjkg
+UyBDaToxOjAwMTowIHMgYTMgMDAgMDAwMCAwMDAxIDAwMDQgNCA8CmZmZmYwMDAwNDZmNTM3MDAg
+MzQxMjI0MDUwNyBDIENpOjE6MDAxOjAgMCA0ID0gMDcwNTAwMDAKZmZmZjAwMDBiZjAzNWUwMCAz
+NDEyMjQwNjQxIFMgSWk6MTowMDE6MSAtMTE1OjIwNDggNCA8CmZmZmYwMDAwYmYwMzVlMDAgMzQx
+MjI4MDg3NyBDIElpOjE6MDAxOjEgMDoyMDQ4IDEgPSAwMgpmZmZmMDAwMGJmMDM1ZTAwIDM0MTIy
+ODEwMzEgUyBJaToxOjAwMToxIC0xMTU6MjA0OCA0IDwKZmZmZjAwMDA0NmY1MzcwMCAzNDEyMjgx
+MzM5IFMgQ2k6MTowMDE6MCBzIGEzIDAwIDAwMDAgMDAwMSAwMDA0IDQgPApmZmZmMDAwMDQ2ZjUz
+NzAwIDM0MTIyODE2NTkgQyBDaToxOjAwMTowIDAgNCA9IDAzMDUwNDAwCmZmZmYwMDAwNDZmNTM3
+MDAgMzQxMjI4MTcwMSBTIENvOjE6MDAxOjAgcyAyMyAwMSAwMDEyIDAwMDEgMDAwMCAwCmZmZmYw
+MDAwNDZmNTM3MDAgMzQxMjI4MTcyOSBDIENvOjE6MDAxOjAgMCAwCmZmZmYwMDAwNDZmNTM3MDAg
+MzQxMjMwMDkzMSBTIENpOjE6MDAxOjAgcyBhMyAwMCAwMDAwIDAwMDEgMDAwNCA0IDwKZmZmZjAw
+MDA0NmY1MzcwMCAzNDEyMzAxMDI5IEMgQ2k6MTowMDE6MCAwIDQgPSAwMzA1MDAwMApmZmZmMDAw
+MDQ2ZjUzNzAwIDM0MTIzMjA4NTEgUyBDaToxOjAwMjowIHMgODAgMDAgMDAwMCAwMDAwIDAwMDIg
+MiA8CmZmZmYwMDAwNDZmNTM3MDAgMzQxMjMyMTIxMCBDIENpOjE6MDAyOjAgMCAyID0gMDMwMApm
+ZmZmMDAwMDQ2ZjUzNzAwIDM0MTIzMjEyMzkgUyBDbzoxOjAwMjowIHMgMDAgMDEgMDAwMSAwMDAw
+IDAwMDAgMApmZmZmMDAwMDQ2ZjUzNzAwIDM0MTIzMjEzMTIgQyBDbzoxOjAwMjowIDAgMApmZmZm
+MDAwMDQ2ZjUzNzAwIDM0MTIzMjEzOTcgUyBDaToxOjAwMjowIHMgYTMgMDAgMDAwMCAwMDAxIDAw
+MDQgNCA8CmZmZmYwMDAwNDZmNTM3MDAgMzQxMjMyMTQ3NiBDIENpOjE6MDAyOjAgMCA0ID0gMDcw
+NTAwMDAKZmZmZjAwMDA0NmY1MzcwMCAzNDEyMzIxNTM2IFMgQ2k6MTowMDI6MCBzIGEzIDAwIDAw
+MDAgMDAwMiAwMDA0IDQgPApmZmZmMDAwMDQ2ZjUzNzAwIDM0MTIzMjE2MTUgQyBDaToxOjAwMjow
+IDAgNCA9IDAzMDUwNDAwCmZmZmYwMDAwNDZmNTM3MDAgMzQxMjMyMTY1NyBTIENpOjE6MDAyOjAg
+cyBhMyAwMCAwMDAwIDAwMDMgMDAwNCA0IDwKZmZmZjAwMDA0NmY1MzcwMCAzNDEyMzIxNzMxIEMg
+Q2k6MTowMDI6MCAwIDQgPSAwMDAxMDAwMApmZmZmMDAwMGJlZmNkYTAwIDM0MTIzMjE3NTYgUyBJ
+aToxOjAwMjoxIC0xMTU6MjA0OCAxIDwKZmZmZjAwMDA0NmY1MzcwMCAzNDEyMzIyMDE4IFMgQ2k6
+MTowMDI6MCBzIGEzIDAwIDAwMDAgMDAwMiAwMDA0IDQgPApmZmZmMDAwMDQ2ZjUzNzAwIDM0MTIz
+MjIwOTEgQyBDaToxOjAwMjowIDAgNCA9IDAzMDUwNDAwCmZmZmYwMDAwNDZmNTM3MDAgMzQxMjMy
+MjExNSBTIENvOjE6MDAyOjAgcyAyMyAwMSAwMDEyIDAwMDIgMDAwMCAwCmZmZmYwMDAwNDZmNTM3
+MDAgMzQxMjMyMjE3MSBDIENvOjE6MDAyOjAgMCAwCmZmZmYwMDAwNDZmNTM3MDAgMzQxMjM0MTAx
+OSBTIENpOjE6MDAyOjAgcyBhMyAwMCAwMDAwIDAwMDIgMDAwNCA0IDwKZmZmZjAwMDA0NmY1Mzcw
+MCAzNDEyMzQxMzAzIEMgQ2k6MTowMDI6MCAwIDQgPSAwMzA1MDAwMApmZmZmMDAwMDQ2ZjUzNzAw
+IDM0MTIzNjA5ODggUyBDaToxOjAwNjowIHMgODAgMDAgMDAwMCAwMDAwIDAwMDIgMiA8CmZmZmYw
+MDAwNDZmNTM3MDAgMzQxMjM2MTQ1NyBDIENpOjE6MDA2OjAgMCAyID0gMDIwMApmZmZmMDAwMDQ2
+ZjUzNzAwIDM0MTIzNjE1MDEgUyBDbzoxOjAwNjowIHMgMDAgMDEgMDAwMSAwMDAwIDAwMDAgMApm
+ZmZmMDAwMDQ2ZjUzNzAwIDM0MTIzNjE2NzkgQyBDbzoxOjAwNjowIDAgMApmZmZmMDAwMDFmZDJk
+ZjAwIDM0MTIzNjE3OTAgUyBCaToxOjAwNjoxIC0xMTUgNDA5NiA8CmZmZmYwMDAwMWZkMmQwMDAg
+MzQxMjM2MTg0OCBTIEJpOjE6MDA2OjEgLTExNSA0MDk2IDwKZmZmZjAwMDAwZTkwNDEwMCAzNDEy
+MzYxODczIFMgQmk6MTowMDY6MSAtMTE1IDQwOTYgPApmZmZmMDAwMDE0ODM4MDAwIDM0MTIzNjE4
+OTcgUyBCaToxOjAwNjoxIC0xMTUgNDA5NiA8CmZmZmYwMDAwMzE1MTFmMDAgMzQxMjM2MTk2MiBT
+IEJpOjE6MDA2OjIgLTExNSA0MDk2IDwKZmZmZjAwMDAzMTUxMTIwMCAzNDEyMzYxOTk3IFMgQmk6
+MTowMDY6MiAtMTE1IDQwOTYgPApmZmZmMDAwMDMxNTExYjAwIDM0MTIzNjIwMjQgUyBCaToxOjAw
+NjoyIC0xMTUgNDA5NiA8CmZmZmYwMDAwMzE1MTFkMDAgMzQxMjM2MjA1MSBTIEJpOjE6MDA2OjIg
+LTExNSA0MDk2IDwKZmZmZjAwMDA0ODM0ZjUwMCAzNDEyMzYyMTE3IFMgSWk6MTowMDY6MyAtMTE1
+OjE2IDY0IDwKZmZmZjAwMDA0ODM0ZmMwMCAzNDEyMzYyMTU3IFMgQmk6MTowMDY6NCAtMTE1IDQw
+OTYgPApmZmZmMDAwMGJjNWUwMjAwIDM0MTIzNjIxOTMgUyBCaToxOjAwNjo0IC0xMTUgNDA5NiA8
+CmZmZmYwMDAwYmM1ZTAzMDAgMzQxMjM2MjIxNiBTIEJpOjE6MDA2OjQgLTExNSA0MDk2IDwKZmZm
+ZjAwMDBiYzVlMDQwMCAzNDEyMzYyMjM5IFMgQmk6MTowMDY6NCAtMTE1IDQwOTYgPApmZmZmMDAw
+MGJiZTUxZDAwIDM0MTIzNjIzMjkgUyBJaToxOjAwNjo3IC0xMTU6MTYgNjQgPApmZmZmMDAwMDQ2
+ZjUzNzAwIDM0MTIzNjI0NDcgUyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYwMDAwNDZmNTMx
+MDAgMzQxMjM2MjUwNCBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwKZmZmZjAwMDA0NmY1MzcwMCAz
+NDEyMzYyNTc1IEMgQmk6MTowMDY6OCAwIDU4OCA9IDQ1MDAwMjRjIDViOWU0MDAwIDM0MDY4ZjI0
+IDU1ZDA2MTJhIDBhOTE5ODVlIDIzMjhlOGQ2IDkxOGViOTMxIDgzYmRiOTU5CmZmZmYwMDAwNDZm
+NTM3MDAgMzQxMjM2MjYzNCBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwKZmZmZjAwMDA0NmY1M2Mw
+MCAzNDEyMzYyNzU0IFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApmZmZmMDAwMDQ2ZjUzZDAwIDM0
+MTIzNjI3ODAgUyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYwMDAwNDZmNTNhMDAgMzQxMjM2
+MjgwNiBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwKZmZmZjAwMDA0NzM5OTIwMCAzNDEyMzYyODMz
+IFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApmZmZmMDAwMDQ3Mzk5MDAwIDM0MTIzNjI4NTYgUyBC
+aToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYwMDAwNDczOTkxMDAgMzQxMjM2Mjg4MyBTIEJpOjE6
+MDA2OjggLTExNSAxNTAwIDwKZmZmZjAwMDBiYzdlZjIwMCAzNDEyMzYyOTExIFMgQmk6MTowMDY6
+OCAtMTE1IDE1MDAgPApmZmZmMDAwMGJjN2VmMzAwIDM0MTIzNjI5NDEgUyBCaToxOjAwNjo4IC0x
+MTUgMTUwMCA8CmZmZmYwMDAwNTViZmU5MDAgMzQxMjM2Mjk3MyBTIEJpOjE6MDA2OjggLTExNSAx
+NTAwIDwKZmZmZjAwMDA0NmU4YTIwMCAzNDEyMzYzMDA4IFMgQmk6MTowMDY6OCAtMTE1IDE1MDAg
+PApmZmZmMDAwMDUyZTBiZDAwIDM0MTIzNjM3NzUgUyBCbzoxOjAwNjo1IC0xMTUgNTIgPSA0NTAw
+MDAzNCA1NDUxNDAwMCA0MDA2OGM4OSAwYTkxOTg1ZSA1NWQwNjEyYSBlOGQ2MjMyOCA4M2JkYjk1
+OSA5MThlYmI0OQpmZmZmMDAwMDUyZTBiZTAwIDM0MTIzNjQxNzMgUyBCaToxOjAwNjo4IC0xMTUg
+MTUwMCA8CmZmZmYwMDAwNTJlMGIyMDAgMzQxMjM2NDE5NCBTIEJpOjE6MDA2OjggLTExNSAxNTAw
+IDwKZmZmZjAwMDA1MmUwYjAwMCAzNDEyMzY0MjMxIFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApm
+ZmZmMDAwMDUyZTBiYzAwIDM0MTIzNjQyNTYgUyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYw
+MDAwNTJlMGJiMDAgMzQxMjM2NDI4MiBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwKZmZmZjAwMDA1
+MmUwYjUwMCAzNDEyMzY0MzA4IFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApmZmZmMDAwMDUyZTBi
+ODAwIDM0MTIzNjQzMzUgUyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYwMDAwN2E3ZjJkMDAg
+MzQxMjM2NDM5MCBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwKZmZmZjAwMDA3YTdmMjEwMCAzNDEy
+MzY0NDE5IFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApmZmZmMDAwMDdhN2YyMzAwIDM0MTIzNjQ0
+NDggUyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYwMDAwNTJlMGJkMDAgMzQxMjM2NDQ3NyBD
+IEJvOjE6MDA2OjUgMCA1MiA+CmZmZmYwMDAwN2E3ZjI0MDAgMzQxMjM2NDYyMyBTIEJpOjE6MDA2
+OjggLTExNSAxNTAwIDwKZmZmZjAwMDA3YTdmMmMwMCAzNDEyMzY0NjU0IFMgQmk6MTowMDY6OCAt
+MTE1IDE1MDAgPApmZmZmMDAwMDdhN2YyYTAwIDM0MTIzNjQ3MTEgUyBCaToxOjAwNjo4IC0xMTUg
+MTUwMCA8CmZmZmYwMDAwN2E3ZjIyMDAgMzQxMjM2NDc0MCBTIEJpOjE6MDA2OjggLTExNSAxNTAw
+IDwKZmZmZjAwMDA3YTdmMjAwMCAzNDEyMzY0NzcxIFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApm
+ZmZmMDAwMDdhN2YyZTAwIDM0MTIzNjQ3OTggUyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYw
+MDAwN2E3ZjJmMDAgMzQxMjM2NDgyMyBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwKZmZmZjAwMDA3
+YTdmMjkwMCAzNDEyMzY0OTExIFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApmZmZmMDAwMDUyZTBi
+ZDAwIDM0MTIzNjQ5NDAgUyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYwMDAwNDgzYmI3MDAg
+MzQxMjM2NDk4MCBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwKZmZmZjAwMDAyODdmNGUwMCAzNDEy
+MzY1MDIwIFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApmZmZmMDAwMDI4N2Y0NzAwIDM0MTIzNjUw
+NTYgUyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYwMDAwYmM3OWVkMDAgMzQxMjM2NTA5MCBT
+IEJpOjE6MDA2OjggLTExNSAxNTAwIDwKZmZmZjAwMDAwZWNiM2QwMCAzNDEyMzY1MTE3IFMgQmk6
+MTowMDY6OCAtMTE1IDE1MDAgPApmZmZmMDAwMDBlY2IzNjAwIDM0MTIzNjUxNDMgUyBCaToxOjAw
+Njo4IC0xMTUgMTUwMCA8CmZmZmYwMDAwMGVjYjM4MDAgMzQxMjM2NTE2OSBTIEJpOjE6MDA2Ojgg
+LTExNSAxNTAwIDwKZmZmZjAwMDAwZTlkZGEwMCAzNDEyMzY1MjEwIFMgQmk6MTowMDY6OCAtMTE1
+IDE1MDAgPApmZmZmMDAwMDUyNjY3YzAwIDM0MTIzNjUyMzggUyBCaToxOjAwNjo4IC0xMTUgMTUw
+MCA8CmZmZmYwMDAwNTI0OTVlMDAgMzQxMjM2NTI3MyBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwK
+ZmZmZjAwMDA1MjQ5NTgwMCAzNDEyMzY1MzAwIFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApmZmZm
+MDAwMDUyNDk1NzAwIDM0MTIzNjUzMzMgUyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYwMDAw
+NTI0OTUzMDAgMzQxMjM2NTM2MSBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwKZmZmZjAwMDA1MjQ5
+NTQwMCAzNDEyMzY1Mzg4IFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApmZmZmMDAwMGJjODg5ZjAw
+IDM0MTIzNjU0MTkgUyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYwMDAwNmM1M2U4MDAgMzQx
+MjM2NTQ2MiBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwKZmZmZjAwMDBiYmIwMGEwMCAzNDEyMzY1
+NTE4IFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApmZmZmMDAwMGJlZTY1YjAwIDM0MTIzNjU1NTMg
+UyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYwMDAwNDQxMDdiMDAgMzQxMjM2NTU4NyBTIEJp
+OjE6MDA2OjggLTExNSAxNTAwIDwKZmZmZjAwMDAzMGRmZjgwMCAzNDEyMzY1NjIwIFMgQmk6MTow
+MDY6OCAtMTE1IDE1MDAgPApmZmZmMDAwMDIyYTcyNDAwIDM0MTIzNjU2NTkgUyBCaToxOjAwNjo4
+IC0xMTUgMTUwMCA8CmZmZmYwMDAwNDZmNmEyMDAgMzQxMjM2NTcwMiBTIEJpOjE6MDA2OjggLTEx
+NSAxNTAwIDwKZmZmZjAwMDA0NmY2YTUwMCAzNDEyMzY1NzQ0IFMgQmk6MTowMDY6OCAtMTE1IDE1
+MDAgPApmZmZmMDAwMDQ2ZjZhMzAwIDM0MTIzNjU3NzMgUyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8
+CmZmZmYwMDAwNDZmNmE0MDAgMzQxMjM2NTgwMiBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwKZmZm
+ZjAwMDA0NmY2YWIwMCAzNDEyMzY1ODI5IFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApmZmZmMDAw
+MDQ2ZjZhZDAwIDM0MTIzNjU4NjMgUyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYwMDAwMjQ3
+MmQzMDAgMzQxMjM2NTkwMCBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwKZmZmZjAwMDAyNDcyZGUw
+MCAzNDEyMzY1OTI2IFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApmZmZmMDAwMDQ2ZjUzNzAwIDM0
+MTQ0NDk3MjcgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDQ2ZjUzYzAwIDM0MTQ0NDk4OTYg
+QyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDQ2ZjUzZDAwIDM0MTQ0NDk5MDIgQyBCaToxOjAw
+Njo4IC0xMDQgMApmZmZmMDAwMDQ2ZjUzYTAwIDM0MTQ0NDk5MDkgQyBCaToxOjAwNjo4IC0xMDQg
+MApmZmZmMDAwMDQ3Mzk5MjAwIDM0MTQ0NDk5MjMgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAw
+MDQ3Mzk5MDAwIDM0MTQ0NDk5MjcgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDQ3Mzk5MTAw
+IDM0MTQ0NDk5MzQgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDQ2ZjUzMTAwIDM0MTQ0NDk5
+MzkgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMGJjN2VmMzAwIDM0MTQ0NTAyNTMgQyBCaTox
+OjAwNjo4IC0xMDQgMApmZmZmMDAwMDU1YmZlOTAwIDM0MTQ0NTAyNjEgQyBCaToxOjAwNjo4IC0x
+MDQgMApmZmZmMDAwMDQ2ZThhMjAwIDM0MTQ0NTAyNjcgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZm
+MDAwMGJjN2VmMjAwIDM0MTQ0NTAyNzMgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDUyZTBi
+MjAwIDM0MTQ0NTA0OTkgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDUyZTBiMDAwIDM0MTQ0
+NTA1MTEgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDUyZTBiYzAwIDM0MTQ0NTA1MjQgQyBC
+aToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDUyZTBiYjAwIDM0MTQ0NTA1MzAgQyBCaToxOjAwNjo4
+IC0xMDQgMApmZmZmMDAwMDUyZTBiZTAwIDM0MTQ0NTA1MzggQyBCaToxOjAwNjo4IC0xMDQgMApm
+ZmZmMDAwMDUyZTBiODAwIDM0MTQ0NTA3NDUgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDdh
+N2YyZDAwIDM0MTQ0NTA3NTUgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDUyZTBiNTAwIDM0
+MTQ0NTA3NjEgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDdhN2YyMzAwIDM0MTQ0NTEwMjIg
+QyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDdhN2YyNDAwIDM0MTQ0NTEwMjcgQyBCaToxOjAw
+Njo4IC0xMDQgMApmZmZmMDAwMDdhN2YyYzAwIDM0MTQ0NTEwMzMgQyBCaToxOjAwNjo4IC0xMDQg
+MApmZmZmMDAwMDdhN2YyYTAwIDM0MTQ0NTEwMzYgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAw
+MDdhN2YyMjAwIDM0MTQ0NTEwNTAgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDdhN2YyMDAw
+IDM0MTQ0NTEwNTggQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDdhN2YyMTAwIDM0MTQ0NTEw
+NjQgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDdhN2YyZjAwIDM0MTQ0NTEyNjIgQyBCaTox
+OjAwNjo4IC0xMDQgMApmZmZmMDAwMDdhN2YyZTAwIDM0MTQ0NTEyNjkgQyBCaToxOjAwNjo4IC0x
+MDQgMApmZmZmMDAwMDUyZTBiZDAwIDM0MTQ0NTE1MTkgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZm
+MDAwMDQ4M2JiNzAwIDM0MTQ0NTE1MjYgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDI4N2Y0
+ZTAwIDM0MTQ0NTE1MzEgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDI4N2Y0NzAwIDM0MTQ0
+NTE1MzcgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMGJjNzllZDAwIDM0MTQ0NTE1NDUgQyBC
+aToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDdhN2YyOTAwIDM0MTQ0NTE1NTIgQyBCaToxOjAwNjo4
+IC0xMDQgMApmZmZmMDAwMDBlY2IzNjAwIDM0MTQ0NTE3NDIgQyBCaToxOjAwNjo4IC0xMDQgMApm
+ZmZmMDAwMDBlY2IzZDAwIDM0MTQ0NTE3NTMgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDBl
+OWRkYTAwIDM0MTQ0NTIwNTIgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDUyNjY3YzAwIDM0
+MTQ0NTIwNjUgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDUyNDk1ZTAwIDM0MTQ0NTIwNzIg
+QyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDUyNDk1ODAwIDM0MTQ0NTIwNzggQyBCaToxOjAw
+Njo4IC0xMDQgMApmZmZmMDAwMDUyNDk1NzAwIDM0MTQ0NTIwODYgQyBCaToxOjAwNjo4IC0xMDQg
+MApmZmZmMDAwMDUyNDk1MzAwIDM0MTQ0NTIwOTMgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAw
+MDUyNDk1NDAwIDM0MTQ0NTIxMDAgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDBlY2IzODAw
+IDM0MTQ0NTIxMDUgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDZjNTNlODAwIDM0MTQ0NTI0
+MDIgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMGJjODg5ZjAwIDM0MTQ0NTI0MTggQyBCaTox
+OjAwNjo4IC0xMDQgMApmZmZmMDAwMGJlZTY1YjAwIDM0MTQ0NTI2MzEgQyBCaToxOjAwNjo4IC0x
+MDQgMApmZmZmMDAwMDQ0MTA3YjAwIDM0MTQ0NTI2NDAgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZm
+MDAwMGJiYjAwYTAwIDM0MTQ0NTI2NDggQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDIyYTcy
+NDAwIDM0MTQ0NTI5MDIgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDQ2ZjZhMjAwIDM0MTQ0
+NTI5MTEgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDQ2ZjZhNTAwIDM0MTQ0NTI5MTggQyBC
+aToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDMwZGZmODAwIDM0MTQ0NTI5MjUgQyBCaToxOjAwNjo4
+IC0xMDQgMApmZmZmMDAwMDQ2ZjZhNDAwIDM0MTQ0NTMxMzQgQyBCaToxOjAwNjo4IC0xMDQgMApm
+ZmZmMDAwMDQ2ZjZhYjAwIDM0MTQ0NTMxNDggQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDQ2
+ZjZhMzAwIDM0MTQ0NTMxNTQgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDI0NzJkMzAwIDM0
+MTQ0NTM0MzYgQyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDI0NzJkZTAwIDM0MTQ0NTM0NDMg
+QyBCaToxOjAwNjo4IC0xMDQgMApmZmZmMDAwMDQ2ZjZhZDAwIDM0MTQ0NTM0NTIgQyBCaToxOjAw
+Njo4IC0xMDQgMApmZmZmMDAwMGJiZTUxZDAwIDM0MTQ0NTQ2MDYgQyBJaToxOjAwNjo3IC0yOjE2
+IDAKZmZmZjAwMDA0ODM0ZmMwMCAzNDE0NDU1NzM3IEMgQmk6MTowMDY6NCAtMiAwCmZmZmYwMDAw
+YmM1ZTAyMDAgMzQxNDQ1NjY4OCBDIEJpOjE6MDA2OjQgLTIgMApmZmZmMDAwMGJjNWUwMzAwIDM0
+MTQ0NTY4OTYgQyBCaToxOjAwNjo0IC0yIDAKZmZmZjAwMDBiYzVlMDQwMCAzNDE0NDU3NzcyIEMg
+Qmk6MTowMDY6NCAtMiAwCmZmZmYwMDAwNDgzNGY1MDAgMzQxNDQ1ODY3NyBDIElpOjE6MDA2OjMg
+LTI6MTYgMApmZmZmMDAwMDMxNTExZjAwIDM0MTQ0NTk2MjYgQyBCaToxOjAwNjoyIC0yIDAKZmZm
+ZjAwMDAzMTUxMTIwMCAzNDE0NDU5ODQ1IEMgQmk6MTowMDY6MiAtMiAwCmZmZmYwMDAwMzE1MTFi
+MDAgMzQxNDQ2MDAzMSBDIEJpOjE6MDA2OjIgLTIgMApmZmZmMDAwMDMxNTExZDAwIDM0MTQ0NjA5
+MjQgQyBCaToxOjAwNjoyIC0yIDAKZmZmZjAwMDAxZmQyZGYwMCAzNDE0NDYxOTA5IEMgQmk6MTow
+MDY6MSAtMiAwCmZmZmYwMDAwMWZkMmQwMDAgMzQxNDQ2MjA4NSBDIEJpOjE6MDA2OjEgLTIgMApm
+ZmZmMDAwMDBlOTA0MTAwIDM0MTQ0NjMwNDkgQyBCaToxOjAwNjoxIC0yIDAKZmZmZjAwMDAxNDgz
+ODAwMCAzNDE0NDYzMjE2IEMgQmk6MTowMDY6MSAtMiAwCmZmZmYwMDAwMGJjM2MzMDAgMzQxNDQ2
+MzM1MyBTIENvOjE6MDA2OjAgcyAwMCAwMyAwMDAxIDAwMDAgMDAwMCAwCmZmZmYwMDAwMGJjM2Mz
+MDAgMzQxNDQ2MzY1NCBDIENvOjE6MDA2OjAgMCAwCmZmZmYwMDAwMGJjM2MzMDAgMzQxNDQ2Mzcw
+OSBTIENvOjE6MDAyOjAgcyAyMyAwMyAwMDAyIDAwMDIgMDAwMCAwCmZmZmYwMDAwMGJjM2MzMDAg
+MzQxNDQ2Mzc5NSBDIENvOjE6MDAyOjAgMCAwCmZmZmYwMDAwYmVmY2RhMDAgMzQxNDQ4NTMzMyBD
+IElpOjE6MDAyOjEgLTI6MjA0OCAwCmZmZmYwMDAwMGJjM2MzMDAgMzQxNDQ4NTQ0MyBTIENvOjE6
+MDAyOjAgcyAwMCAwMyAwMDAxIDAwMDAgMDAwMCAwCmZmZmYwMDAwMGJjM2MzMDAgMzQxNDQ4NTUz
+NSBDIENvOjE6MDAyOjAgMCAwCmZmZmYwMDAwMGJjM2MzMDAgMzQxNDQ4NTU2MyBTIENvOjE6MDAx
+OjAgcyAyMyAwMyAwMDAyIDAwMDEgMDAwMCAwCmZmZmYwMDAwMGJjM2MzMDAgMzQxNDUwNDg3NCBD
+IENvOjE6MDAxOjAgMCAwCmZmZmYwMDAwYmYwMzVlMDAgMzQxNDU0ODgwNyBDIElpOjE6MDAxOjEg
+MDoyMDQ4IDEgPSAwMgpmZmZmMDAwMGJmMDM1ZTAwIDM0MTQ1NDg5MzcgUyBJaToxOjAwMToxIC0x
+MTU6MjA0OCA0IDwKZmZmZjAwMDBiYzVhMDYwMCAzNDE0NTQ5MTg4IFMgQ2k6MTowMDE6MCBzIGEz
+IDAwIDAwMDAgMDAwMSAwMDA0IDQgPApmZmZmMDAwMGJjNWEwNjAwIDM0MTQ1NTAxMjUgQyBDaTox
+OjAwMTowIDAgNCA9IDAzMDUwNDAwCmZmZmYwMDAwYmM1YTA2MDAgMzQxNDU1MDIyNCBTIENvOjE6
+MDAxOjAgcyAyMyAwMSAwMDEyIDAwMDEgMDAwMCAwCmZmZmYwMDAwYmM1YTA2MDAgMzQxNDU1MDI1
+MyBDIENvOjE6MDAxOjAgMCAwCmZmZmYwMDAwYmM1YTA2MDAgMzQxNDU3MjI1NyBTIENpOjE6MDAx
+OjAgcyBhMyAwMCAwMDAwIDAwMDEgMDAwNCA0IDwKZmZmZjAwMDBiYzVhMDYwMCAzNDE0NTcyMzYz
+IEMgQ2k6MTowMDE6MCAwIDQgPSAwMzA1MDAwMApmZmZmMDAwMGJjNWEwNjAwIDM0MTQ1OTIyMDkg
+UyBDaToxOjAwMjowIHMgODAgMDAgMDAwMCAwMDAwIDAwMDIgMiA8CmZmZmYwMDAwYmM1YTA2MDAg
+MzQxNDU5MzE5NSBDIENpOjE6MDAyOjAgMCAyID0gMDMwMApmZmZmMDAwMGJjNWEwNjAwIDM0MTQ1
+OTMyNDkgUyBDbzoxOjAwMjowIHMgMDAgMDEgMDAwMSAwMDAwIDAwMDAgMApmZmZmMDAwMGJjNWEw
+NjAwIDM0MTQ1OTQwMjIgQyBDbzoxOjAwMjowIDAgMApmZmZmMDAwMGJjNWEwNjAwIDM0MTQ1OTQx
+MzQgUyBDaToxOjAwMjowIHMgYTMgMDAgMDAwMCAwMDAxIDAwMDQgNCA8CmZmZmYwMDAwYmM1YTA2
+MDAgMzQxNDU5NDg1NCBDIENpOjE6MDAyOjAgMCA0ID0gMDcwNTAwMDAKZmZmZjAwMDBiYzVhMDYw
+MCAzNDE0NTk0OTE3IFMgQ2k6MTowMDI6MCBzIGEzIDAwIDAwMDAgMDAwMiAwMDA0IDQgPApmZmZm
+MDAwMGJjNWEwNjAwIDM0MTQ1OTU2NzQgQyBDaToxOjAwMjowIDAgNCA9IDAxMDEwNTAwCmZmZmYw
+MDAwYmM1YTA2MDAgMzQxNDU5NTcyMyBTIENvOjE6MDAyOjAgcyAyMyAwMSAwMDEwIDAwMDIgMDAw
+MCAwCmZmZmYwMDAwYmM1YTA2MDAgMzQxNDU5NjQ3MSBDIENvOjE6MDAyOjAgMCAwCmZmZmYwMDAw
+YmM1YTA2MDAgMzQxNDU5Njg4NSBTIENpOjE6MDAyOjAgcyBhMyAwMCAwMDAwIDAwMDMgMDAwNCA0
+IDwKZmZmZjAwMDBiYzVhMDYwMCAzNDE0NTk3NjYxIEMgQ2k6MTowMDI6MCAwIDQgPSAwMDAxMDAw
+MApmZmZmMDAwMGJlZmNkYTAwIDM0MTQ3MDQ4MTUgUyBJaToxOjAwMjoxIC0xMTU6MjA0OCAxIDwK
+ZmZmZjAwMDBiYzVhMDYwMCAzNDE0NzA1NDU2IFMgQ2k6MTowMDI6MCBzIGEzIDAwIDAwMDAgMDAw
+MiAwMDA0IDQgPApmZmZmMDAwMGJjNWEwNjAwIDM0MTQ3MDU2NjggQyBDaToxOjAwMjowIDAgNCA9
+IDAxMDEwNTAwCmZmZmYwMDAwYmM1YTA2MDAgMzQxNDcwNTcwNiBTIENvOjE6MDAyOjAgcyAyMyAw
+MSAwMDEwIDAwMDIgMDAwMCAwCmZmZmYwMDAwYmM1YTA2MDAgMzQxNDcwNTc4MSBDIENvOjE6MDAy
+OjAgMCAwCmZmZmYwMDAwYmM1YTA2MDAgMzQxNDcwNTgxMCBTIENvOjE6MDAyOjAgcyAyMyAwMSAw
+MDEyIDAwMDIgMDAwMCAwCmZmZmYwMDAwYmM1YTA2MDAgMzQxNDcwNTg3NiBDIENvOjE6MDAyOjAg
+MCAwCmZmZmYwMDAwYmM1YTA2MDAgMzQxNDcyODI3MyBTIENpOjE6MDAyOjAgcyBhMyAwMCAwMDAw
+IDAwMDIgMDAwNCA0IDwKZmZmZjAwMDBiYzVhMDYwMCAzNDE0NzI5MDQ1IEMgQ2k6MTowMDI6MCAw
+IDQgPSAwMTAxMDAwMApmZmZmMDAwMGJjNWEwNjAwIDM0MTQ3NDk2MjMgUyBDbzoxOjAwMjowIHMg
+MjMgMDMgMDAwNCAwMDAyIDAwMDAgMApmZmZmMDAwMGJjNWEwNjAwIDM0MTQ3NTAzODggQyBDbzox
+OjAwMjowIDAgMApmZmZmMDAwMGJjNWEwNjAwIDM0MTQ3NzI3ODIgUyBDaToxOjAwMjowIHMgYTMg
+MDAgMDAwMCAwMDAyIDAwMDQgNCA8CmZmZmYwMDAwYmM1YTA2MDAgMzQxNDc3MzU2MSBDIENpOjE6
+MDAyOjAgMCA0ID0gMDMwNTEwMDAKZmZmZjAwMDBiYzVhMDYwMCAzNDE0NzczNjA2IFMgQ286MTow
+MDI6MCBzIDIzIDAxIDAwMTQgMDAwMiAwMDAwIDAKZmZmZjAwMDBiYzVhMDYwMCAzNDE0NzczNjc3
+IEMgQ286MTowMDI6MCAwIDAKZmZmZjAwMDBiYzVhMDYwMCAzNDE0ODU3MzQzIFMgQ2k6MTowMDA6
+MCBzIDgwIDA2IDAxMDAgMDAwMCAwMDQwIDY0IDwKZmZmZjAwMDBiYzVhMDYwMCAzNDE0ODU3ODEz
+IEMgQ2k6MTowMDA6MCAwIDE4ID0gMTIwMTAwMDIgMDAwMDAwNDAgMjAyMDYwMjAgMDAwMDAzMDIg
+MDQwMQpmZmZmMDAwMGJjNWEwNjAwIDM0MTQ4NTc5MjIgUyBDbzoxOjAwMjowIHMgMjMgMDMgMDAw
+NCAwMDAyIDAwMDAgMApmZmZmMDAwMGJjNWEwNjAwIDM0MTQ4NTgwMTUgQyBDbzoxOjAwMjowIDAg
+MApmZmZmMDAwMGJjNWEwNjAwIDM0MTQ4NzYzOTUgUyBDaToxOjAwMjowIHMgYTMgMDAgMDAwMCAw
+MDAyIDAwMDQgNCA8CmZmZmYwMDAwYmM1YTA2MDAgMzQxNDg3NzM3MSBDIENpOjE6MDAyOjAgMCA0
+ID0gMDMwNTEwMDAKZmZmZjAwMDBiYzVhMDYwMCAzNDE0ODc4MzMyIFMgQ286MTowMDI6MCBzIDIz
+IDAxIDAwMTQgMDAwMiAwMDAwIDAKZmZmZjAwMDBiYzVhMDYwMCAzNDE0ODc4NDUwIEMgQ286MTow
+MDI6MCAwIDAKZmZmZjAwMDBiYzVhMDYwMCAzNDE0OTU2NzkwIFMgQ2k6MTowMDY6MCBzIDgwIDA2
+IDAxMDAgMDAwMCAwMDEyIDE4IDwKZmZmZjAwMDBiYzVhMDYwMCAzNDE0OTU3ODY3IEMgQ2k6MTow
+MDY6MCAwIDE4ID0gMTIwMTAwMDIgMDAwMDAwNDAgMjAyMDYwMjAgMDAwMDAzMDIgMDQwMQpmZmZm
+MDAwMGJjNWEwMzAwIDM0MTQ5NTgxMjAgUyBDaToxOjAwNjowIHMgODAgMDYgMDIwMCAwMDAwIDAw
+OTEgMTQ1IDwKZmZmZjAwMDBiYzVhMDMwMCAzNDE0OTU5MTM3IEMgQ2k6MTowMDY6MCAwIDE0NSA9
+IDA5MDI5MTAwIDA1MDEwMWUwIGZhMDkwNDAwIDAwMDJmZmZmIGZmMDAwNzA1IDgxMDIwMDAyIDAw
+MDcwNTAxIDAyMDAwMjAwCmZmZmYwMDAwYmM1YTA2MDAgMzQxNDk4MzA4OCBTIENvOjE6MDA2OjAg
+cyAwMCAwOSAwMDAxIDAwMDAgMDAwMCAwCmZmZmYwMDAwYmM1YTA2MDAgMzQxNDk4NDM5NSBDIENv
+OjE6MDA2OjAgMCAwCmZmZmYwMDAwYmM1YTA2MDAgMzQxNDk4ODQ5NyBTIENpOjE6MDA2OjAgcyA4
+MCAwMCAwMDAwIDAwMDAgMDAwMiAyIDwKZmZmZjAwMDBiYzVhMDYwMCAzNDE0OTg4ODQ3IEMgQ2k6
+MTowMDY6MCAwIDIgPSAwMDAwCmZmZmYwMDAwYmJlNTFkMDAgMzQxNDk4OTYxOCBTIElpOjE6MDA2
+OjcgLTExNToxNiA2NCA8CmZmZmYwMDAwYmM1YTA2MDAgMzQxNDk4OTc0NiBTIEJpOjE6MDA2Ojgg
+LTExNSAxNTAwIDwKZmZmZjAwMDBiYzVhMDMwMCAzNDE0OTg5Nzc4IFMgQmk6MTowMDY6OCAtMTE1
+IDE1MDAgPApmZmZmMDAwMGJjNWEwMjAwIDM0MTQ5ODk4MDcgUyBCaToxOjAwNjo4IC0xMTUgMTUw
+MCA8CmZmZmYwMDAwYmM1YTA0MDAgMzQxNDk4OTgzNSBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwK
+ZmZmZjAwMDA0ODFiOGMwMCAzNDE0OTg5ODY3IFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApmZmZm
+MDAwMDQ4MWI4YTAwIDM0MTQ5ODk4OTEgUyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYwMDAw
+NDgxYjg0MDAgMzQxNDk4OTkxNSBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwKZmZmZjAwMDA0ODFi
+ODMwMCAzNDE0OTg5OTM1IFMgQmk6MTowMDY6OCAtMTE1IDE1MDAgPApmZmZmMDAwMDQ4MWI4ZDAw
+IDM0MTQ5ODk5NTkgUyBCaToxOjAwNjo4IC0xMTUgMTUwMCA8CmZmZmYwMDAwNDgxYjg5MDAgMzQx
+NDk4OTk4NCBTIEJpOjE6MDA2OjggLTExNSAxNTAwIDwK
+
+
+--=-IeHed/e2wsmFilVAngW7--
+
