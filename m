@@ -2,94 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7131C50D90F
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 08:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AE950DA0E
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 09:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238037AbiDYGCS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 02:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S235234AbiDYH3Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 03:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238043AbiDYGCI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 02:02:08 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4F639167;
-        Sun, 24 Apr 2022 22:59:04 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id j8so24639064pll.11;
-        Sun, 24 Apr 2022 22:59:04 -0700 (PDT)
+        with ESMTP id S229744AbiDYH3R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 03:29:17 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E09D65F8
+        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 00:26:11 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 15so4330517pgf.4
+        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 00:26:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=fi7c2Ax/VCFNVFgm2nwELIS3JlCMe6WYe6H9+qK+G/U=;
-        b=cLVmPjqmCvUEDd4fjcseFK6HQjuoPAQB3y1G78k2XJC68fMNrW4Gdo6y3TSMqS08LW
-         LTjWAKPSwDh/KE/ozu8vxNpq+7UWmn3lUz6iVamBgeHJMv57A+LNGZG6basaSgdWfRIP
-         zv/NxzSucM/VD/z2xsy6BzOpPtE01eBUy2F9HIiaRuTRyaQQ/1YQW8lrN89FRMcajlVc
-         URcmq3gbgC15lt8n+iroJ1xmhDplodSb1kOKbqBkcwOysbGbaLN5fDdHqSnGXCfegH+f
-         iCpH/owWlr2cN0Y7lWA+GmmVfFuK5hWtisTSIi7yZtxo69lne4Hom8eCBEdcG1+UDjNo
-         BC2w==
+        d=labau-com-tw.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=SVcSJrLVlUR4iRgJZ+k1PIE6YPEQEIKfqaOT7sVPQDU=;
+        b=E0GNopUdniQekEhAdER+HF2LWeozVsORZqOwGOgVIxM9fyOv+94wzt0kwod2wnPfI+
+         IAOaoXBj9fuNz/bJkR+eE/zHUpPcV6JBsiEIkKpWnzymDZnTE8kDMyXpvINYsOmFqtAM
+         G57IQd55ZvBoqVF34ITGioJP4bMOIe05krZgSQp2NjqDYypN2K+0ZsVdpQQHyetH5V2q
+         YrJwM5nV2ZmMXPNgvpdUmfS5SH8GU/FiYuN/wJl/HsieYWk4z4meOwtmKhfzYDEf4/Ua
+         rkUB2+LMRqOtUs/YRE5fj3QtBhzUcYXgL5s1vQ6vDMjE4RuzBL8cbtVXQcg94vIIZ22b
+         e/kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=fi7c2Ax/VCFNVFgm2nwELIS3JlCMe6WYe6H9+qK+G/U=;
-        b=Vuv5L0q5yHv1ovlzgQyeAbYXmMVOrWApg22GoBt2l4XRrkBwsexU3p6sFeU5/XXat0
-         m8d+pLhA6KvUXDZtQlgcriV+28OnmGB/niIOvwEtJRNadOSIjkjdIoDQCVWVORv0HhOY
-         k0eHRS+h0HfFTNEBrCI7JQ1xD9Rfmli/OelpeciibYKsbbgIJVnKHKfxaChUV0ZFZmJX
-         foqKg4iVBCk6EYW8+5oeWR8KhByvTsiB7otWFD7uKTOMJbJiGs4innzhZFmJZioLCS8t
-         UmYj8RsneyL0f61Gdfhry29jMxTtPkWueItwo2fGabJZAKR8FVuGzIiZC3i4RL9tBbea
-         Sj7w==
-X-Gm-Message-State: AOAM531xIa4x6PC4PkaIC+kn4Q54OCY3eZA8RxQsYQfBEW57DpdHBsJR
-        0vJj3F0KiUWWO2Lkt1LJNqI=
-X-Google-Smtp-Source: ABdhPJwkx4IuJWr3uzNSEZGGA6UERFPRYUBcQ/tmL1ZMH7YujU7Bz9EWin5t1K6GxoyOQsiYuxG6pg==
-X-Received: by 2002:a17:90a:3d02:b0:1ca:7f92:1bf1 with SMTP id h2-20020a17090a3d0200b001ca7f921bf1mr29785221pjc.177.1650866344096;
-        Sun, 24 Apr 2022 22:59:04 -0700 (PDT)
-Received: from ethan-Latitude-7280.localdomain (125-228-239-174.hinet-ip.hinet.net. [125.228.239.174])
-        by smtp.googlemail.com with ESMTPSA id t29-20020a62d15d000000b0050d42864753sm1445595pfl.49.2022.04.24.22.59.02
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=SVcSJrLVlUR4iRgJZ+k1PIE6YPEQEIKfqaOT7sVPQDU=;
+        b=VPn9WRdT1+mG53gUsj68l6iQO+pkIobe1dYSb/5gJyeFUG1luSrObL6oBUSCI/yDWJ
+         0hYEe7WcFaa3sClTquNCAJM0fVuDjU8akNheQ0fsvTET61y4c1GiadJjWGfgus9Y3PLo
+         nzMcrrkt16lqJjtAUgLA7UDTbcG7SiPKn2Vkaq6hE9vKS/Omhb6IdorQd2/yoshL6XGU
+         e1GaCGxzl4p6i2/g1sjQ8DrM041pB2AHMP08QHvNC5w35zdfLM1XtsbMUefjQPB8iHgq
+         wlxyh7JtS0lFuiSS6kxYGWrTjgAouxyGyM2+c7BD0doayy8h7qDa0reeHkVl0qbndBvA
+         8WVw==
+X-Gm-Message-State: AOAM530aPDOGO8fuy9i8af2nfdIo4+lfqpYioUCkgHR9J1ME8Bh96Azn
+        b3uslgl0GBVTsJfCqP/pO8UdVg==
+X-Google-Smtp-Source: ABdhPJyaDvaXzr5/wijEbfyZ+WiQkxGfqFvUUpgb9pQ7tStNFYCNcH0YYpvkKNfxSxYxECWGzwhvJQ==
+X-Received: by 2002:a63:105:0:b0:3ab:e98:5844 with SMTP id 5-20020a630105000000b003ab0e985844mr6839135pgb.218.1650871570834;
+        Mon, 25 Apr 2022 00:26:10 -0700 (PDT)
+Received: from labau-virtual-machine.localdomain (61-228-66-64.dynamic-ip.hinet.net. [61.228.66.64])
+        by smtp.gmail.com with ESMTPSA id d21-20020a056a0010d500b004fd9ee64134sm10420849pfu.74.2022.04.25.00.26.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 22:59:03 -0700 (PDT)
-From:   ipis.yang@gmail.com
-X-Google-Original-From: etyang@sierrawireless.com
-To:     johan@kernel.org, gregkh@linuxfoundation.org,
+        Mon, 25 Apr 2022 00:26:10 -0700 (PDT)
+From:   Scott Chen <scott@labau.com.tw>
+Cc:     young@labau.com.tw, roger@labau.com.tw,
+        Scott Chen <scott@labau.com.tw>,
+        Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     gchiang@sierrawireless.com, ipis.yang@gmail.com,
-        Ethan Yang <etyang@sierrawireless.com>
-Subject: [PATCH v3] usb: serial: qcserial: add support for Sierra Wireless EM7590
-Date:   Mon, 25 Apr 2022 13:58:40 +0800
-Message-Id: <20220425055840.5693-1-etyang@sierrawireless.com>
+Subject: [PATCH] USB: serial: pl2303: add device id for HP LM930 Display
+Date:   Mon, 25 Apr 2022 15:24:52 +0800
+Message-Id: <20220425072454.33126-1-scott@labau.com.tw>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <YmYvPXeqQzyms91m@kroah.com>
-References: <YmYvPXeqQzyms91m@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Ethan Yang <etyang@sierrawireless.com>
+Add the device id for the HPLM930Display which is a PL2303GC based device
 
-add support for Sierra Wireless EM7590 0xc080/0xc081 compositions
-
-Signed-off-by: Ethan Yang <etyang@sierrawireless.com>
+Signed-off-by: Scott Chen <scott@labau.com.tw>
 ---
- drivers/usb/serial/qcserial.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/serial/pl2303.c | 1 +
+ drivers/usb/serial/pl2303.h | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-index c18bf8164bc2..586ef5551e76 100644
---- a/drivers/usb/serial/qcserial.c
-+++ b/drivers/usb/serial/qcserial.c
-@@ -166,6 +166,8 @@ static const struct usb_device_id id_table[] = {
- 	{DEVICE_SWI(0x1199, 0x9090)},	/* Sierra Wireless EM7565 QDL */
- 	{DEVICE_SWI(0x1199, 0x9091)},	/* Sierra Wireless EM7565 */
- 	{DEVICE_SWI(0x1199, 0x90d2)},	/* Sierra Wireless EM9191 QDL */
-+	{DEVICE_SWI(0x1199, 0xc080)},	/* Sierra Wireless EM7590 QDL */
-+	{DEVICE_SWI(0x1199, 0xc081)},	/* Sierra Wireless EM7590 */
- 	{DEVICE_SWI(0x413c, 0x81a2)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
- 	{DEVICE_SWI(0x413c, 0x81a3)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
- 	{DEVICE_SWI(0x413c, 0x81a4)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
+diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+index 88b284d61681..1d878d05a658 100644
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -106,6 +106,7 @@ static const struct usb_device_id id_table[] = {
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LCM220_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LCM960_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LM920_PRODUCT_ID) },
++	{ USB_DEVICE(HP_VENDOR_ID, HP_LM930_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_LM940_PRODUCT_ID) },
+ 	{ USB_DEVICE(HP_VENDOR_ID, HP_TD620_PRODUCT_ID) },
+ 	{ USB_DEVICE(CRESSI_VENDOR_ID, CRESSI_EDY_PRODUCT_ID) },
+diff --git a/drivers/usb/serial/pl2303.h b/drivers/usb/serial/pl2303.h
+index c5406452b774..9d8102639e16 100644
+--- a/drivers/usb/serial/pl2303.h
++++ b/drivers/usb/serial/pl2303.h
+@@ -135,6 +135,7 @@
+ #define HP_TD620_PRODUCT_ID	0x0956
+ #define HP_LD960_PRODUCT_ID	0x0b39
+ #define HP_LD381_PRODUCT_ID	0x0f7f
++#define HP_LM930_PRODUCT_ID     0x0f9b
+ #define HP_LCM220_PRODUCT_ID	0x3139
+ #define HP_LCM960_PRODUCT_ID	0x3239
+ #define HP_LD220_PRODUCT_ID	0x3524
 -- 
 2.17.1
 
