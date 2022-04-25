@@ -2,101 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04AE950DA0E
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 09:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D6D50DAE0
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 10:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235234AbiDYH3Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 03:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
+        id S232133AbiDYINV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 04:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiDYH3R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 03:29:17 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E09D65F8
-        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 00:26:11 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 15so4330517pgf.4
-        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 00:26:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=labau-com-tw.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=SVcSJrLVlUR4iRgJZ+k1PIE6YPEQEIKfqaOT7sVPQDU=;
-        b=E0GNopUdniQekEhAdER+HF2LWeozVsORZqOwGOgVIxM9fyOv+94wzt0kwod2wnPfI+
-         IAOaoXBj9fuNz/bJkR+eE/zHUpPcV6JBsiEIkKpWnzymDZnTE8kDMyXpvINYsOmFqtAM
-         G57IQd55ZvBoqVF34ITGioJP4bMOIe05krZgSQp2NjqDYypN2K+0ZsVdpQQHyetH5V2q
-         YrJwM5nV2ZmMXPNgvpdUmfS5SH8GU/FiYuN/wJl/HsieYWk4z4meOwtmKhfzYDEf4/Ua
-         rkUB2+LMRqOtUs/YRE5fj3QtBhzUcYXgL5s1vQ6vDMjE4RuzBL8cbtVXQcg94vIIZ22b
-         e/kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=SVcSJrLVlUR4iRgJZ+k1PIE6YPEQEIKfqaOT7sVPQDU=;
-        b=VPn9WRdT1+mG53gUsj68l6iQO+pkIobe1dYSb/5gJyeFUG1luSrObL6oBUSCI/yDWJ
-         0hYEe7WcFaa3sClTquNCAJM0fVuDjU8akNheQ0fsvTET61y4c1GiadJjWGfgus9Y3PLo
-         nzMcrrkt16lqJjtAUgLA7UDTbcG7SiPKn2Vkaq6hE9vKS/Omhb6IdorQd2/yoshL6XGU
-         e1GaCGxzl4p6i2/g1sjQ8DrM041pB2AHMP08QHvNC5w35zdfLM1XtsbMUefjQPB8iHgq
-         wlxyh7JtS0lFuiSS6kxYGWrTjgAouxyGyM2+c7BD0doayy8h7qDa0reeHkVl0qbndBvA
-         8WVw==
-X-Gm-Message-State: AOAM530aPDOGO8fuy9i8af2nfdIo4+lfqpYioUCkgHR9J1ME8Bh96Azn
-        b3uslgl0GBVTsJfCqP/pO8UdVg==
-X-Google-Smtp-Source: ABdhPJyaDvaXzr5/wijEbfyZ+WiQkxGfqFvUUpgb9pQ7tStNFYCNcH0YYpvkKNfxSxYxECWGzwhvJQ==
-X-Received: by 2002:a63:105:0:b0:3ab:e98:5844 with SMTP id 5-20020a630105000000b003ab0e985844mr6839135pgb.218.1650871570834;
-        Mon, 25 Apr 2022 00:26:10 -0700 (PDT)
-Received: from labau-virtual-machine.localdomain (61-228-66-64.dynamic-ip.hinet.net. [61.228.66.64])
-        by smtp.gmail.com with ESMTPSA id d21-20020a056a0010d500b004fd9ee64134sm10420849pfu.74.2022.04.25.00.26.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 00:26:10 -0700 (PDT)
-From:   Scott Chen <scott@labau.com.tw>
-Cc:     young@labau.com.tw, roger@labau.com.tw,
-        Scott Chen <scott@labau.com.tw>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: serial: pl2303: add device id for HP LM930 Display
-Date:   Mon, 25 Apr 2022 15:24:52 +0800
-Message-Id: <20220425072454.33126-1-scott@labau.com.tw>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S235553AbiDYIMr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 04:12:47 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EA918E08
+        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 01:09:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650874184; x=1682410184;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RO4blfivGMaQnE/1LKJoiOc8KbJQVTezXHB5aGBOe0Q=;
+  b=YHFUJHkS11p9tdxvi+wlDKNypovMEIOaFrgnL/PRl6LKTrONwzN0H0Sg
+   +k7JjOPEnbJMN/0oEBG5c8HQJQCWyqeOaZleK4HlRfVHN/DMB5kVlbTOM
+   NlaYILUKCCUsIhBvmPqVro6yCVKKfdBlVLi35tEOGHjc+Gy9qnqOeMPQE
+   lO5t3jSE/HT8UJoGY3XLMku387sqUcUWSKKegUF2xt/ibPAfozaxUjdtn
+   iSwVg/kzSTNcAgKML3QXZrhfFYtKkV/aNEnNjUPzTVaixI1tDzroRaVOu
+   3SVgSUhiBxn/XNIw/I/rA0isUu2a/gElaZC8PDfVQv67LMC69PsPm0Vhs
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="265344055"
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="265344055"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 01:09:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="704457501"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 25 Apr 2022 01:09:41 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 25 Apr 2022 11:09:41 +0300
+Date:   Mon, 25 Apr 2022 11:09:41 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>
+Subject: Re: [PATCH v5 1/3] usb: typec: ucsi: add a common function
+ ucsi_unregister_connectors()
+Message-ID: <YmZXRQYPQe6KQf0m@kuha.fi.intel.com>
+References: <1650597022-19793-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1650597022-19793-2-git-send-email-quic_linyyuan@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650597022-19793-2-git-send-email-quic_linyyuan@quicinc.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the device id for the HPLM930Display which is a PL2303GC based device
+On Fri, Apr 22, 2022 at 11:10:20AM +0800, Linyu Yuan wrote:
+> As con->port will be used in error path of ucsi_init(),
+> it should be NULL or valid.
+> 
+> In error path of ucsi_init(), it will unregister all valid ucsi connectors,
+> and similar operation also happen in ucsi_unregister(),
+> add a common function for two places.
+> 
+> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> ---
+> v2: improve ucsi_connector_clean(), check total number of connector.
+> v3: rename to ucsi_unregister_connectors(), suggest by maintainer
+> v4: merge patch#1 in V3, fix a typo samiliar -> similar in commit description
+> v5: no change
+> 
+>  drivers/usb/typec/ucsi/ucsi.c | 52 ++++++++++++++++++++++++-------------------
+>  1 file changed, 29 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index f0c2fa1..af9a2a1 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1100,6 +1100,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  	con->port = typec_register_port(ucsi->dev, cap);
+>  	if (IS_ERR(con->port)) {
+>  		ret = PTR_ERR(con->port);
+> +		con->port = NULL;
 
-Signed-off-by: Scott Chen <scott@labau.com.tw>
----
- drivers/usb/serial/pl2303.c | 1 +
- drivers/usb/serial/pl2303.h | 1 +
- 2 files changed, 2 insertions(+)
+I'm not sure you need to add that line. See below.
 
-diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-index 88b284d61681..1d878d05a658 100644
---- a/drivers/usb/serial/pl2303.c
-+++ b/drivers/usb/serial/pl2303.c
-@@ -106,6 +106,7 @@ static const struct usb_device_id id_table[] = {
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LCM220_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LCM960_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LM920_PRODUCT_ID) },
-+	{ USB_DEVICE(HP_VENDOR_ID, HP_LM930_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LM940_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_TD620_PRODUCT_ID) },
- 	{ USB_DEVICE(CRESSI_VENDOR_ID, CRESSI_EDY_PRODUCT_ID) },
-diff --git a/drivers/usb/serial/pl2303.h b/drivers/usb/serial/pl2303.h
-index c5406452b774..9d8102639e16 100644
---- a/drivers/usb/serial/pl2303.h
-+++ b/drivers/usb/serial/pl2303.h
-@@ -135,6 +135,7 @@
- #define HP_TD620_PRODUCT_ID	0x0956
- #define HP_LD960_PRODUCT_ID	0x0b39
- #define HP_LD381_PRODUCT_ID	0x0f7f
-+#define HP_LM930_PRODUCT_ID     0x0f9b
- #define HP_LCM220_PRODUCT_ID	0x3139
- #define HP_LCM960_PRODUCT_ID	0x3239
- #define HP_LD220_PRODUCT_ID	0x3524
+>  		goto out;
+>  	}
+>  
+> @@ -1186,6 +1187,32 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  	return ret;
+>  }
+>  
+> +static void ucsi_unregister_connectors(struct ucsi *ucsi)
+> +{
+> +	struct ucsi_connector *con;
+> +	int i;
+> +
+> +	if (!ucsi->connector)
+> +		return;
+> +
+> +	for (i = 0; i < ucsi->cap.num_connectors; i++) {
+> +		con = &ucsi->connector[i];
+> +		if (!con->port)
+> +			break;
+
+                if (IS_ERR_OR_NULL(con->port))
+                        break;
+
+> +		cancel_work_sync(&con->work);
+> +		ucsi_unregister_partner(con);
+> +		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
+> +		ucsi_unregister_port_psy(con);
+> +		if (con->wq)
+> +			destroy_workqueue(con->wq);
+> +		typec_unregister_port(con->port);
+> +	}
+> +
+> +	kfree(ucsi->connector);
+> +	ucsi->connector = NULL;
+> +}
+> +
+>  /**
+>   * ucsi_init - Initialize UCSI interface
+>   * @ucsi: UCSI to be initialized
+> @@ -1194,7 +1221,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>   */
+>  static int ucsi_init(struct ucsi *ucsi)
+>  {
+> -	struct ucsi_connector *con;
+>  	u64 command;
+>  	int ret;
+>  	int i;
+> @@ -1249,15 +1275,7 @@ static int ucsi_init(struct ucsi *ucsi)
+>  	return 0;
+>  
+>  err_unregister:
+> -	for (con = ucsi->connector; con->port; con++) {
+> -		ucsi_unregister_partner(con);
+> -		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
+> -		ucsi_unregister_port_psy(con);
+> -		if (con->wq)
+> -			destroy_workqueue(con->wq);
+> -		typec_unregister_port(con->port);
+> -		con->port = NULL;
+> -	}
+> +	ucsi_unregister_connectors(ucsi);
+>  
+>  err_reset:
+>  	memset(&ucsi->cap, 0, sizeof(ucsi->cap));
+> @@ -1363,7 +1381,6 @@ EXPORT_SYMBOL_GPL(ucsi_register);
+>  void ucsi_unregister(struct ucsi *ucsi)
+>  {
+>  	u64 cmd = UCSI_SET_NOTIFICATION_ENABLE;
+> -	int i;
+>  
+>  	/* Make sure that we are not in the middle of driver initialization */
+>  	cancel_work_sync(&ucsi->work);
+> @@ -1371,18 +1388,7 @@ void ucsi_unregister(struct ucsi *ucsi)
+>  	/* Disable notifications */
+>  	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
+>  
+> -	for (i = 0; i < ucsi->cap.num_connectors; i++) {
+> -		cancel_work_sync(&ucsi->connector[i].work);
+> -		ucsi_unregister_partner(&ucsi->connector[i]);
+> -		ucsi_unregister_altmodes(&ucsi->connector[i],
+> -					 UCSI_RECIPIENT_CON);
+> -		ucsi_unregister_port_psy(&ucsi->connector[i]);
+> -		if (ucsi->connector[i].wq)
+> -			destroy_workqueue(ucsi->connector[i].wq);
+> -		typec_unregister_port(ucsi->connector[i].port);
+> -	}
+> -
+> -	kfree(ucsi->connector);
+> +	ucsi_unregister_connectors(ucsi);
+>  }
+>  EXPORT_SYMBOL_GPL(ucsi_unregister);
+
+thanks,
+
 -- 
-2.17.1
-
+heikki
