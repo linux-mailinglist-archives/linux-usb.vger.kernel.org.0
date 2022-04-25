@@ -2,111 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621ED50E41F
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 17:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E5350E434
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 17:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242765AbiDYPQ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 11:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S239234AbiDYPUh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 25 Apr 2022 11:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232572AbiDYPQ4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 11:16:56 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DB786E32
-        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 08:13:52 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2ebf4b91212so151785417b3.8
-        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 08:13:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lGJfET6zx2lX9xnmjZgx/ZL4hWK8L5YfaTTc8LihlQo=;
-        b=m4gmv4xavyUPw0oMD1Z+6Roct3zB8Mf5Wcqt27bR5K2Psvm5OMmi9wQEkP9Hr6dGco
-         orJjkUP5PoVwwd82xhZuDi3f9wMfXMucJzwSszpmftVZTnPNEH4N7n6PicB5/p+8d5l7
-         o5rWDXncnbfRFj3Q4GsasbJZuSKB43YnqLLgRflBydPcE8J4sJNIp4gpM+9oaTbwFLe+
-         hD0DcU/i0QhZmCIU5hpObP2EqkIJS4jLAhiur+S3/iNz9GbB3A9g7Btu4Gz98z3lCzKp
-         henIbLp3qsbCIgWrxXseP4Y/UGkWLMHPAzYRg6PkamWN5u0Cd2cTKMOtaJR9jMWpUs0M
-         C+rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lGJfET6zx2lX9xnmjZgx/ZL4hWK8L5YfaTTc8LihlQo=;
-        b=ka6p8xMQKYV99btttAp7wJPUfckAiRw8JxrC5DZ6MtR069XCyrxMtsFQnmXZNte1jT
-         apWVZxWQdvYVhy8j0lS5OfDzMBDVGKVWj4neWVbRCQtbWtb05nkUaXH0eju6FvMwWswK
-         JMgGytGFvoczneOQ5mCHzHvUTdv3lECpGyobPUdCNxz5oddLqqnp4N39zSe8J0tc/eeS
-         H16tpBvh6j2eisS7eMbdZUHgZeecvDraFMzpDeND0jYObqqTeVPGENScjd/REh6slrhM
-         idcxSs2INnedHysXDFI6Lz0k30XprvaEGUD5VY1PgCgKIurVxnHcUzg97964AkSD3uSE
-         41vg==
-X-Gm-Message-State: AOAM530js2V66AqbskEp2N2jM9WbIMKZJ9a+CZbKw9fz4rGhtozNcsoI
-        9PKoh01RBfJXE5PvPHM68IS24lyBdYrUSCYW0Nd2vQ==
-X-Google-Smtp-Source: ABdhPJxtt0sOYUftXeVvAkArJFxFgYPfuiavJQLewGE6UdXj7fIzOhFtlIGOSC/JTAEjC1rHgiqOwpC1GwEw8Ob710I=
-X-Received: by 2002:a81:a016:0:b0:2f7:cfa3:4dc3 with SMTP id
- x22-20020a81a016000000b002f7cfa34dc3mr8207683ywg.467.1650899631646; Mon, 25
- Apr 2022 08:13:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <18b3541e5372bc9b9fc733d422f4e698c089077c.1650177997.git.lukas@wunner.de>
- <9325d344e8a6b1a4720022697792a84e545fef62.camel@redhat.com>
- <20220423160723.GA20330@wunner.de> <20220425074146.1fa27d5f@kernel.org>
- <CAG48ez3ibQjhs9Qxb0AAKE4-UZiZ5UdXG1JWcPWHAWBoO-1fVw@mail.gmail.com> <20220425080057.0fc4ef66@kernel.org>
-In-Reply-To: <20220425080057.0fc4ef66@kernel.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 25 Apr 2022 08:13:40 -0700
-Message-ID: <CANn89iLwvqUJHBNifLESJyBQ85qjK42sK85Fs=QV4M7HqUXmxQ@mail.gmail.com>
-Subject: Re: [PATCH] net: linkwatch: ignore events for unregistered netdevs
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Jann Horn <jannh@google.com>, Lukas Wunner <lukas@wunner.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        netdev <netdev@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jacky Chou <jackychou@asix.com.tw>, Willy Tarreau <w@1wt.eu>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        with ESMTP id S237175AbiDYPUg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 11:20:36 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6D9B53CC
+        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 08:17:31 -0700 (PDT)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id A6DB0240004;
+        Mon, 25 Apr 2022 15:17:28 +0000 (UTC)
+Message-ID: <1d82343a5987a308ac9bd3f6fd481bc12a608a24.camel@hadess.net>
+Subject: Re: [RFC v1] USB: core: add USBDEVFS_REVOKE ioctl
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>
+Date:   Mon, 25 Apr 2022 17:17:28 +0200
+In-Reply-To: <Yma3k3lRMIEFypMN@kroah.com>
+References: <20220425132315.924477-1-hadess@hadess.net>
+         <YmarwaNQYn1GwFbQ@kroah.com>
+         <e73035d1bae5d0c355166fb46f0f5f2f07752b3c.camel@hadess.net>
+         <Yma3k3lRMIEFypMN@kroah.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 8:01 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Mon, 25 Apr 2022 16:49:34 +0200 Jann Horn wrote:
-> > > Doesn't mean we should make it legal. We can add a warning to catch
-> > > abuses.
-> >
-> > That was the idea with
-> > https://lore.kernel.org/netdev/20220128014303.2334568-1-jannh@google.com/,
-> > but I didn't get any replies when I asked what the precise semantics
-> > of dev_hold() are supposed to be
-> > (https://lore.kernel.org/netdev/CAG48ez1-OyZETvrYAfaHicYW1LbrQUVp=C0EukSWqZrYMej73w@mail.gmail.com/),
-> > so I don't know how to proceed...
->
-> Yeah, I think after you pointed out that the netdev per cpu refcounting
-> is fundamentally broken everybody decided to hit themselves with the
-> obliviate spell :S
+On Mon, 2022-04-25 at 17:00 +0200, Greg Kroah-Hartman wrote:
+> On Mon, Apr 25, 2022 at 04:28:40PM +0200, Bastien Nocera wrote:
+> > On Mon, 2022-04-25 at 16:10 +0200, Greg Kroah-Hartman wrote:
+> > > On Mon, Apr 25, 2022 at 03:23:15PM +0200, Bastien Nocera wrote:
+> > > > There is a need for userspace applications to open USB devices
+> > > > directly,
+> > > > for all the USB devices without a kernel-level class driver,
+> > > > and
+> > > > implemented in user-space.
+> > > > 
+> > > > End-user access is usually handled by the uaccess tag in
+> > > > systemd,
+> > > > shipping application-specific udev rules that implement this
+> > > > without too
+> > > > much care for sandboxed applications, or overall security, or
+> > > > just
+> > > > sudo.
+> > > > 
+> > > > A better approach is what we already have for evdev devices:
+> > > > give
+> > > > the
+> > > > application a file descriptor and revoke it when it may no
+> > > > longer
+> > > > access
+> > > > that device.
+> > > 
+> > > Who is going to use this "better" approach?  Is there support in
+> > > libusb
+> > > for it?  Who talks raw usbfs other than libusb these days?
+> > 
+> > Did you read the follow-up mail with the links to example code for
+> > the
+> > hid revoke support?
+> 
+> HID revoke does not mess with usbfs though.  Or if it does, I don't
+> understand the connection.
 
-dev_hold() has been an increment of a refcount, and dev_put() a decrement.
+evdev, HID and USB revoke are 3 separate implementations that are
+necessary for common device accesses to be revocable.
 
-Not sure why it is fundamentally broken.
+The HID patch shows how device access is implemented in systemd, with
+the seat leader (usually the compositor) being able to request fds from
+logind if the user doesn't already have access.
 
-There are specific steps at device dismantles making sure no more
-users can dev_hold()
+logind would then be responsible for closing the USB devices the user
+doesn't have access to anymore when logging out, or switching user. It
+could either close fds it passed out, or use BPF to revoke opened HID
+and USB devices without needing to act as an intermediary.
 
-It is a contract. Any buggy layer can overwrite any piece of memory,
-including a refcount_t.
+In short:
+- libusb programme opens USB device, either directly, or after asking
+the compositor to pass a fd (and being authorised to do so)
+- programme does its thing
+- fast user switch to another user
+- logind revokes libusb access for the old user
+- new user can use the device without problems
 
-Traditionally we could not add a test in dev_hold() to prevent an
-increment if the device is in dismantle phase.
-Maybe the situation is better nowadays.
+Note that user switching could also be a toggle to revoke USB device
+access for a sandbox.
+
+> And usually the 0/X email has the context, not follow-on messages
+> that I
+> didn't read yet :)
+
+Sorry, I'm not used to the horrendous workflow around email patches. In
+a "forge" that follow-up mail would have been separate from the commit
+messages.
+
+Let me know what you need to get up to speed after reading that follow-
+up mail (and this current one), so I know what to add to future cover
+letters and/or commit messages.
+
+> 
+> 
+> > > > This patch is the USB equivalent to the EVIOCREVOKE ioctl, see
+> > > > commit c7dc65737c9a607d3e6f8478659876074ad129b8 for full
+> > > > details.
+> > > 
+> > > c7dc65737c9a ("Input: evdev - add EVIOCREVOKE ioctl") is how I
+> > > thought
+> > > we were supposed to write out commits in changelogs these days :)
+> > > 
+> > > > 
+> > > > Note that this variant needs to do a few things that the evdev
+> > > > revoke
+> > > > doesn't need to handle, particular:
+> > > > - cancelling pending async transfers
+> > > > - making sure to release claimed interfaces on revoke so they
+> > > > can
+> > > > be
+> > > >   opened by another process/user, as USB interfaces require
+> > > > being
+> > > >   exclusively claimed to be used.
+> > > 
+> > > I love the idea of a real revoke() someday, but can't you just do
+> > > the
+> > > "unbind/bind" hack instead if you really want to do this?  Who
+> > > wants
+> > > to
+> > > pass usbfs file descriptors around these days?
+> > 
+> > Again, please read the follow-up mail where I talk of the BPF
+> > support
+> > patch that would allow revoking USB fds without relying on a
+> > service in
+> > the middle to access devices (although that's eventually going to
+> > be
+> > the way to do things to allow elevating access to devices).
+> 
+> So would bpf be working at the usbfs level here?  I still don't
+> understand the connection...
+
+The explanation is here (for hidraw):
+https://gitlab.freedesktop.org/bentiss/logind-hidraw/
