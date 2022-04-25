@@ -2,60 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F60C50E437
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 17:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4F050E451
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 17:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240595AbiDYPWm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 11:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
+        id S242836AbiDYP05 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 11:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240093AbiDYPWf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 11:22:35 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C521CB821D
-        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 08:19:29 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id m23so7432710ljc.0
-        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 08:19:29 -0700 (PDT)
+        with ESMTP id S233952AbiDYP04 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 11:26:56 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECF8E0AF8
+        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 08:23:51 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id g28so8305161ybj.10
+        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 08:23:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gbvN9hifJhOg9ssdtEKH3hyyXss5ViI49409FnezR30=;
-        b=mhWd5JhrqBrkQMZ4LpkSfxLs7Bb7WTE3Tn6mFhB+1844PEjg8kDve9OzQGc7iwNFKW
-         Q1rbD+9VfOORQLxkKhmMNQfNFDffwtvikZ8lknpV0bVib3fNE1NFjpxzGUEnSW/2tPsf
-         JwNerpQfSP9hmNROder9/tHnu6owF8gcoau9RbuZMevZE9i8VGsZvpmgJ7FIVMQPKBUH
-         sA00wE55FdFQbN4gclqDNOSdylHlH5PxKuI7WU5tFxiGiDa2NrUP/cbDxT4VLx+3aHpC
-         4oVIgumoL86fcatp0cYWHmYaG783pi3INQb72P9sk+MCHyEiBwmV6s2j8jkfIW+UoQAg
-         8wwQ==
+        bh=BZd5EczkiGolyHz5oEhmG3wS2R1SFCBG80Ty4+Hqe/Y=;
+        b=GcboBtoiKJtIAtpmX3AM3BFMDpK5D38mI7ywJfCiWDm4k2edplCfHaCLEeePZG1c8c
+         RrSsK+NIDYhEmaB2MDE0+wSrXHr8LQfDfaI9UOnEdwteobsoUvXq1EZcKVo1sWKs6WbB
+         feArJIXcNSU6TZR/ECZc41dV+83hSS6c3Hz3JJeo1MsKenLZTgrLzDZUD1He2II29+Ta
+         ihY9jk5aqOkMJksYhVjGWP3lcdPASIPGxPm5wl9+Cz0qarjk3eSZM55C08gZF26XQLNn
+         M5gKlruOj79UPwrl+BglX75cXqIVnuSvcJwPTMRAJ21WtqsNZbZ4OBgzieuOejAhZ1YD
+         wRNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gbvN9hifJhOg9ssdtEKH3hyyXss5ViI49409FnezR30=;
-        b=g5+kEfQE3J3NZ7IzRE4g1zCos8pcIuxGiH7YFFceAJt/M5Dl8uaw8pNzovWOWaLlSG
-         GR/aaQK3knSjUtYhgwdbrf8Fl7qmeCrrrGzoBA69fvxbPzJtctkCCx0PRds8peZ+1Ksz
-         A8YrAmAkjGNBiaaGfGsrW6pUg+3q9bNvie1g9nhHkGILdKxE1gVcM+FH7lLG7r5tay5g
-         6DYgiTz9svmgAFweSJhCOiJuVx1RGLes4GzQO37jN+T7aY8f5VLfez/WBHxcNrdOGnVA
-         scHKClDj/u1cBPEh17fzkYwRAOFhnw2oq7Q+4zBg14JiHbLYWMPRAjEJvyM4kGwWH81o
-         iyzw==
-X-Gm-Message-State: AOAM531uqCLPNuOW71h2Gl3vqRV0PptJK9SI+3nQ5dRiF1tEnSRtaVwG
-        MaklQSZazA7LHyUk5OBj7wBWPqg3ZvqH5U8z6XnVJQ==
-X-Google-Smtp-Source: ABdhPJwmOc4cvVDxnf+KGjHnQOYKHQsW5SoWUwnmH2b0GVOv94G6awKy+KqGoTu4g1XRGR8HMhlKjp0+yaDzmcgntRQ=
-X-Received: by 2002:a05:651c:1204:b0:24e:e127:f509 with SMTP id
- i4-20020a05651c120400b0024ee127f509mr11115488lja.459.1650899967782; Mon, 25
- Apr 2022 08:19:27 -0700 (PDT)
+        bh=BZd5EczkiGolyHz5oEhmG3wS2R1SFCBG80Ty4+Hqe/Y=;
+        b=RgivUdXWfjLL7M6ePT22nWg4ZTSzd7hsOM02rVTqN7jFFFfC5JdhphQQYd9nzDzLzr
+         G01HnVbmSgKBSjYIcYAAcYA77VB4p2XUrEonwVJ9XlFIqtXL6OHRPBFFhCAJsBRZC9oy
+         WEy23E7V1QCm6d25Xhe+uHRrNBOglrHWAFo56f2YGBPwVjcVELDBQMzcfgQIgyGhddy0
+         v/2ev2q4yYPWKWq69q+i1tKyZ9EJWb9DeTBytrUsmVWq9YYpmKB7LCgShkGaxvF71av6
+         VH36Xu4milopYF/2xAMN9tEwczck5/pDyBJIovDyrboZ8NOdIn7s+3SXgc4ld324EBQU
+         Wv5Q==
+X-Gm-Message-State: AOAM531Ce96OcVfqXNMB1sDXVU1VajYFaIRfjnsiBnpRMFlZdn8kRMGA
+        7Qh0Ua6p5sib++p5nF6R+gmNFSo/+t22Xv/YdoItuw==
+X-Google-Smtp-Source: ABdhPJxV6g+y5nHfcRBllZjQaubOgiLxY2wa47b9YbV6qUtn4EzoIF/m3VGazpK8z7zqaeAE1dTwvL+zEv9GMqHsGhg=
+X-Received: by 2002:a05:6902:72f:b0:63d:6201:fa73 with SMTP id
+ l15-20020a056902072f00b0063d6201fa73mr2453543ybt.55.1650900230816; Mon, 25
+ Apr 2022 08:23:50 -0700 (PDT)
 MIME-Version: 1.0
 References: <18b3541e5372bc9b9fc733d422f4e698c089077c.1650177997.git.lukas@wunner.de>
  <9325d344e8a6b1a4720022697792a84e545fef62.camel@redhat.com>
  <20220423160723.GA20330@wunner.de> <20220425074146.1fa27d5f@kernel.org>
  <CAG48ez3ibQjhs9Qxb0AAKE4-UZiZ5UdXG1JWcPWHAWBoO-1fVw@mail.gmail.com>
  <20220425080057.0fc4ef66@kernel.org> <CANn89iLwvqUJHBNifLESJyBQ85qjK42sK85Fs=QV4M7HqUXmxQ@mail.gmail.com>
-In-Reply-To: <CANn89iLwvqUJHBNifLESJyBQ85qjK42sK85Fs=QV4M7HqUXmxQ@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Mon, 25 Apr 2022 17:18:51 +0200
-Message-ID: <CAG48ez0nw7coDXYozaUOTThWLkHWZuKVUpMosY2hgVSSfeM4Pw@mail.gmail.com>
+ <CAG48ez0nw7coDXYozaUOTThWLkHWZuKVUpMosY2hgVSSfeM4Pw@mail.gmail.com>
+In-Reply-To: <CAG48ez0nw7coDXYozaUOTThWLkHWZuKVUpMosY2hgVSSfeM4Pw@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 25 Apr 2022 08:23:39 -0700
+Message-ID: <CANn89iLSmXqtrTT799naEDW-FnNRQoZv+Uo6N49-MSUxAZYwYQ@mail.gmail.com>
 Subject: Re: [PATCH] net: linkwatch: ignore events for unregistered netdevs
-To:     Eric Dumazet <edumazet@google.com>
+To:     Jann Horn <jannh@google.com>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Lukas Wunner <lukas@wunner.de>,
         Paolo Abeni <pabeni@redhat.com>,
         Oliver Neukum <oneukum@suse.com>,
@@ -81,39 +82,52 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 5:13 PM Eric Dumazet <edumazet@google.com> wrote:
-> On Mon, Apr 25, 2022 at 8:01 AM Jakub Kicinski <kuba@kernel.org> wrote:
-> >
-> > On Mon, 25 Apr 2022 16:49:34 +0200 Jann Horn wrote:
-> > > > Doesn't mean we should make it legal. We can add a warning to catch
-> > > > abuses.
+On Mon, Apr 25, 2022 at 8:19 AM Jann Horn <jannh@google.com> wrote:
+>
+> On Mon, Apr 25, 2022 at 5:13 PM Eric Dumazet <edumazet@google.com> wrote:
+> > On Mon, Apr 25, 2022 at 8:01 AM Jakub Kicinski <kuba@kernel.org> wrote:
 > > >
-> > > That was the idea with
-> > > https://lore.kernel.org/netdev/20220128014303.2334568-1-jannh@google.com/,
-> > > but I didn't get any replies when I asked what the precise semantics
-> > > of dev_hold() are supposed to be
-> > > (https://lore.kernel.org/netdev/CAG48ez1-OyZETvrYAfaHicYW1LbrQUVp=C0EukSWqZrYMej73w@mail.gmail.com/),
-> > > so I don't know how to proceed...
+> > > On Mon, 25 Apr 2022 16:49:34 +0200 Jann Horn wrote:
+> > > > > Doesn't mean we should make it legal. We can add a warning to catch
+> > > > > abuses.
+> > > >
+> > > > That was the idea with
+> > > > https://lore.kernel.org/netdev/20220128014303.2334568-1-jannh@google.com/,
+> > > > but I didn't get any replies when I asked what the precise semantics
+> > > > of dev_hold() are supposed to be
+> > > > (https://lore.kernel.org/netdev/CAG48ez1-OyZETvrYAfaHicYW1LbrQUVp=C0EukSWqZrYMej73w@mail.gmail.com/),
+> > > > so I don't know how to proceed...
+> > >
+> > > Yeah, I think after you pointed out that the netdev per cpu refcounting
+> > > is fundamentally broken everybody decided to hit themselves with the
+> > > obliviate spell :S
 > >
-> > Yeah, I think after you pointed out that the netdev per cpu refcounting
-> > is fundamentally broken everybody decided to hit themselves with the
-> > obliviate spell :S
+> > dev_hold() has been an increment of a refcount, and dev_put() a decrement.
+> >
+> > Not sure why it is fundamentally broken.
 >
-> dev_hold() has been an increment of a refcount, and dev_put() a decrement.
+> Well, it's not quite a refcount. It's a count that can be incremented
+> and decremented but can't be read while the device is alive, and then
+> at some point it turns into a count that can be read and decremented
+> but can't be incremented (see
+> https://lore.kernel.org/netdev/CAG48ez1-OyZETvrYAfaHicYW1LbrQUVp=C0EukSWqZrYMej73w@mail.gmail.com/).
+> Normal refcounts allow anyone who is holding a reference to add
+> another reference.
+
+On a live netdev nothing wants to read the 'current refcount'.
+We basically do not care.
+
 >
-> Not sure why it is fundamentally broken.
+> > There are specific steps at device dismantles making sure no more
+> > users can dev_hold()
+>
+> So you're saying it's intentional that even if you're already holding
+> a dev_hold() reference, you may not be allowed to call dev_hold()
+> again?
 
-Well, it's not quite a refcount. It's a count that can be incremented
-and decremented but can't be read while the device is alive, and then
-at some point it turns into a count that can be read and decremented
-but can't be incremented (see
-https://lore.kernel.org/netdev/CAG48ez1-OyZETvrYAfaHicYW1LbrQUVp=C0EukSWqZrYMej73w@mail.gmail.com/).
-Normal refcounts allow anyone who is holding a reference to add
-another reference.
+I think you can/should not.
+We might add a test in dev_hold() and catch offenders.
 
-> There are specific steps at device dismantles making sure no more
-> users can dev_hold()
-
-So you're saying it's intentional that even if you're already holding
-a dev_hold() reference, you may not be allowed to call dev_hold()
-again?
+Then add a new api, (dev_hold() is void and can not propagate an
+error), and eventually
+fix offenders.
