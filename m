@@ -2,89 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C065450E311
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 16:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B50BC50E319
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 16:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242354AbiDYO3T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 10:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
+        id S232230AbiDYObt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 25 Apr 2022 10:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238004AbiDYO3N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 10:29:13 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEAE18E16
-        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 07:26:08 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id p62so16049227iod.0
-        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 07:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Y5wBcOfazqbglU7XX1dJt4fZzKnlLY04C3llpIX2pRs=;
-        b=FkNXvsGXHZhlPP2iAD7uLQFqxU2NG+MkhcJD7H7ESYyMwmnBCFTYQ+NfMNZsK7Sypn
-         GRnki9xT4QEzQtmYi9m7Mxx7dGOMztlxGcPJqL4HKgLpxk+v1ZCeb9qlxQ1BRsXD7A/0
-         0Wm404//Vh0R5hDYCFXpynyppgGIroBFEBMFw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Y5wBcOfazqbglU7XX1dJt4fZzKnlLY04C3llpIX2pRs=;
-        b=UY2L8LkjNyu/Apx9E2GHnpE7JSCgqZiRzwWA7vHXxXtwTtrLwC8Re9P/DWiUH1wzzb
-         Ygp8A/xeyleToaWXyI5izDwGCtMZf45zO1DVYWLwYAvKeVL0Pi6TMC0NRRFA6IcLXd0m
-         BfBFZEJSBkuZ5LIaayrez6+bBsIeWwwVRQuNw8qYYDgTGP2BcXe4zN277wt1sja+K6jL
-         9ByUb/5w/apCVlpfOYy1y2NL1lcicDqcJ8UdgL2F62eNmF1EV0vkYqzeRmc1D3PDGbUk
-         aSHeBi5OoSwpHxof9eVATmvOUsOIVLkPuzZi/+3P8FZ8kU8kac/8uTirwjoHKAcWd3wC
-         1UBA==
-X-Gm-Message-State: AOAM532qqStFhPwCf1ANJOP1C3HliA4YZNdcQ8/wXEyjCtKzsJ3mwJtL
-        CbBku0ctMe0pfP18LPPeocmq3A==
-X-Google-Smtp-Source: ABdhPJz1GlbD4jJcDwHaCDL32bx5zqfKkG5eIjqaeobQ72MW4LyenSfQL69TR5/qzzopE6aHcr5jnA==
-X-Received: by 2002:a05:6638:204e:b0:323:e3b1:1c2c with SMTP id t14-20020a056638204e00b00323e3b11c2cmr7777096jaj.222.1650896767753;
-        Mon, 25 Apr 2022 07:26:07 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id c15-20020a5d8b4f000000b00648f75d0289sm7516486iot.6.2022.04.25.07.26.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 07:26:07 -0700 (PDT)
-Subject: Re: [PATCH] usb: gadget: mv_udc_core: clean up comments
-To:     Tom Rix <trix@redhat.com>, balbi@kernel.org,
-        gregkh@linuxfoundation.org, jakobkoschel@gmail.com,
-        christophe.jaillet@wanadoo.fr, peter.chen@kernel.or,
-        johan@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220425131749.1185511-1-trix@redhat.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ed5a845c-d338-d6b3-dcbf-3ae31fe50991@linuxfoundation.org>
-Date:   Mon, 25 Apr 2022 08:26:06 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        with ESMTP id S229648AbiDYObs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 10:31:48 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE292E6AA
+        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 07:28:43 -0700 (PDT)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2138560008;
+        Mon, 25 Apr 2022 14:28:40 +0000 (UTC)
+Message-ID: <e73035d1bae5d0c355166fb46f0f5f2f07752b3c.camel@hadess.net>
+Subject: Re: [RFC v1] USB: core: add USBDEVFS_REVOKE ioctl
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>
+Date:   Mon, 25 Apr 2022 16:28:40 +0200
+In-Reply-To: <YmarwaNQYn1GwFbQ@kroah.com>
+References: <20220425132315.924477-1-hadess@hadess.net>
+         <YmarwaNQYn1GwFbQ@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
 MIME-Version: 1.0
-In-Reply-To: <20220425131749.1185511-1-trix@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/25/22 7:17 AM, Tom Rix wrote:
-> Spelling replacements
-> occure occur
-> reqest to request
-> acces to access
+On Mon, 2022-04-25 at 16:10 +0200, Greg Kroah-Hartman wrote:
+> On Mon, Apr 25, 2022 at 03:23:15PM +0200, Bastien Nocera wrote:
+> > There is a need for userspace applications to open USB devices
+> > directly,
+> > for all the USB devices without a kernel-level class driver, and
+> > implemented in user-space.
+> > 
+> > End-user access is usually handled by the uaccess tag in systemd,
+> > shipping application-specific udev rules that implement this
+> > without too
+> > much care for sandboxed applications, or overall security, or just
+> > sudo.
+> > 
+> > A better approach is what we already have for evdev devices: give
+> > the
+> > application a file descriptor and revoke it when it may no longer
+> > access
+> > that device.
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
+> Who is going to use this "better" approach?  Is there support in
+> libusb
+> for it?  Who talks raw usbfs other than libusb these days?
 
-I get that this is a trivial spelling patch - however a proper
-commit log is still imortant. Please write a proper one and
-include some information on how your found these.
+Did you read the follow-up mail with the links to example code for the
+hid revoke support?
 
-thanks,
--- Shuah
+> 
+> > 
+> > This patch is the USB equivalent to the EVIOCREVOKE ioctl, see
+> > commit c7dc65737c9a607d3e6f8478659876074ad129b8 for full details.
+> 
+> c7dc65737c9a ("Input: evdev - add EVIOCREVOKE ioctl") is how I
+> thought
+> we were supposed to write out commits in changelogs these days :)
+> 
+> > 
+> > Note that this variant needs to do a few things that the evdev
+> > revoke
+> > doesn't need to handle, particular:
+> > - cancelling pending async transfers
+> > - making sure to release claimed interfaces on revoke so they can
+> > be
+> >   opened by another process/user, as USB interfaces require being
+> >   exclusively claimed to be used.
+> 
+> I love the idea of a real revoke() someday, but can't you just do the
+> "unbind/bind" hack instead if you really want to do this?  Who wants
+> to
+> pass usbfs file descriptors around these days?
+
+Again, please read the follow-up mail where I talk of the BPF support
+patch that would allow revoking USB fds without relying on a service in
+the middle to access devices (although that's eventually going to be
+the way to do things to allow elevating access to devices).
+
+Cheers
