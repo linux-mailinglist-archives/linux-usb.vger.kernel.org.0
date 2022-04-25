@@ -2,92 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7E450D7E6
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 05:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 743C550D8A5
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 07:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240792AbiDYD7R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 Apr 2022 23:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
+        id S238207AbiDYFMA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 01:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240612AbiDYD7Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Apr 2022 23:59:16 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59662326E0;
-        Sun, 24 Apr 2022 20:56:11 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id k14so12386896pga.0;
-        Sun, 24 Apr 2022 20:56:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=nRYoxd4SVcaYEgYokuQbUOJXKX9A1z1JFiyvn7Q7fAk=;
-        b=jdKLJO/DgNU4XwfRtwLmT6K93znOtIz79LvBpvHyt225nnMskN7zRJBDrfqWJer7sz
-         QMRi9NB5nwrMvxTV8AjMpnlshoKu0El3zZCjMDi7hw6/cBI03oFILfUJ1IIXdPoJM54o
-         RVvRH/sZA0lmE1OcMEVOJrIXwy7k3HLB+e5ll2AVmopvYJJsLgp4BOCNWsXun903qiMV
-         XCOQnHxHHZzIsc+3EOgDJEJ1fSpfSkuHJCf6OCy7y7ZVTsVz33bGsMk3qhCuynOn7WMS
-         nCjyxjh54j4MR+AzSIvSQGxML5D/1ra8EJCXXhiWBUcL4mzVerTMXlJeijdm3dN5k5FF
-         5rSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=nRYoxd4SVcaYEgYokuQbUOJXKX9A1z1JFiyvn7Q7fAk=;
-        b=F7bhBiR69XDF8oDcU/ub9kH1L6cJQahVl4A5HOfWYw+tjSo75EggG00nUhDSh7umK/
-         oj82Lsvbu/wGRj5eAObRevENFdoOow72Av36WLY4JY23LkdTFA9bfeElYvL4spk2xtgD
-         uGOjxRLXVcVyxbMOpdvYASYsNrE0AwwYDgVYCghtPy7BZPg2KXfEBaZ1LHSUdwA1ejE0
-         K7aLUK7/WknRslTL27Z+jeuTkkapZAEe5yeZqIYwERTI9W+RjVLP2L9JE3FjUkhrfE5K
-         u48+iIbpN/lA5ijNHAf3Pr8997GZxaudjmW05P2RRQo4MyOcK+m5yH0gcUbmH8wbIGzd
-         cVsA==
-X-Gm-Message-State: AOAM53150z91Or9YNf5viTsdVTeJiI0KXLxQ/PCVot30Ojb1tQpBEziZ
-        YWBPlrAhN8N3Yl1FfXyOyX5h7y6spHuUKw==
-X-Google-Smtp-Source: ABdhPJyvohF2mxJIDNu78p/OKu6B2/C8x6iyU+yZ8mxW1TvHW9NQI2XkF2PBcDR24NESDzSLO4NMxA==
-X-Received: by 2002:a63:fd07:0:b0:3aa:1cd9:194f with SMTP id d7-20020a63fd07000000b003aa1cd9194fmr13536057pgh.509.1650858970763;
-        Sun, 24 Apr 2022 20:56:10 -0700 (PDT)
-Received: from ethan-Latitude-7280.localdomain (125-228-239-174.hinet-ip.hinet.net. [125.228.239.174])
-        by smtp.googlemail.com with ESMTPSA id n59-20020a17090a5ac100b001cd498dc153sm15123367pji.3.2022.04.24.20.56.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 20:56:10 -0700 (PDT)
-From:   Ethan Yang <ipis.yang@gmail.com>
-X-Google-Original-From: Ethan Yang <etyang@sierrawireless.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     gchiang@sierrawireless.com, ipis.yang@gmail.com,
-        Ethan Yang <etyang@sierrawireless.com>
-Subject: [PATCH v2] add support for Sierra Wireless EM7590 0xc080 and 0xc081 compositions.
-Date:   Mon, 25 Apr 2022 11:55:20 +0800
-Message-Id: <20220425035520.4717-1-etyang@sierrawireless.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220425034204.4345-1-etyang@sierrawireless.com>
-References: <20220425034204.4345-1-etyang@sierrawireless.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S236332AbiDYFL7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 01:11:59 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EE52612F
+        for <linux-usb@vger.kernel.org>; Sun, 24 Apr 2022 22:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650863336; x=1682399336;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=SLR87paKOScBz9mYncHcTRVp2yKDS+E2EVRO4giEx68=;
+  b=jZ861Y9DvwiQAfbnWjaA/mMnmVEDztmQJXOtYY7QrOkFHBAwNidEcaLe
+   /k2MQMRFk7PbHcMrskmJSvdG9L3G2dny+9JKOJT9zIJG1af32G9DZkmbG
+   B1q+8oAR941PYkKBol5wtp/tLX4+0p4Jq86SpPOp7bqQGR6bDbB9AssN3
+   MGD/TYIzTiJdXrCnlKwqRTjy0X/PkXp7jhlE4QuYdgpdxyjpWWAkG/TK8
+   D7UfnqtzbfEyJ+tNbtLFoXKsTGHTJCAa48K6eWDjoTvpGilpg4G7hWGxJ
+   ZT7djOaunJ7jww86CdHI5zKiOmeztC7K7R/Q4bpejYq4JuU6pLf+MMjFs
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="262739473"
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="262739473"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 22:08:56 -0700
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="531929563"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 22:08:53 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 25 Apr 2022 08:05:20 +0300
+Date:   Mon, 25 Apr 2022 08:05:20 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Tomasz =?utf-8?Q?Mo=C5=84?= <desowin@gmail.com>
+Cc:     linux-usb@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: Re: Wake from Thunderbolt dock doesn't work
+Message-ID: <YmYsEARNTc99uwLt@lahna>
+References: <6580ca29cd8e245627c4a742189e27acf79f6b39.camel@gmail.com>
+ <YmI8g2Jaye8Kk+hA@lahna>
+ <CAOHtt38-+tnyrUX5u0McHyutofEwZLeLF7siZab7XgLYXVdm9Q@mail.gmail.com>
+ <YmJLg3maiAY6cwDp@lahna>
+ <ef495f23d541face3d8495602c2896bf62afbf97.camel@gmail.com>
+ <YmLEPWxolnOyCgnP@lahna>
+ <76629b1698c129864b9853348f69520f19bd6b4c.camel@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <76629b1698c129864b9853348f69520f19bd6b4c.camel@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-add support for Sierra Wireless EM7590 0xc080 and 0xc081
+On Fri, Apr 22, 2022 at 10:38:29PM +0200, Tomasz Moń wrote:
+> On Fri, 2022-04-22 at 18:05 +0300, Mika Westerberg wrote:
+> > On Fri, Apr 22, 2022 at 03:54:16PM +0200, Tomasz Moń wrote:
+> > > On Fri, 2022-04-22 at 09:30 +0300, Mika Westerberg wrote:
+> > > > If that's the case then you should be getting same kind of "support"
+> > > > by passing "thunderbolt.start_icm=1" in the kernel command line.
+> > > 
+> > > Passing "thunderbolt.start_icm=1" in the kernel command line made
+> > > things worse. The system does not wake from suspend at all. It does not
+> > > wake from USB keyboard connected directly to the host. And it does not
+> > > wake after opening the lid nor after pressing power button (Touch ID).
+> > > 
+> > > The only way to get system back running seemed to be pressing and
+> > > holding power button long enough until the Apple bootloader starts.
+> > 
+> > OK. The start_icm=1 starts the connection manager firmware which is one
+> > thing that Windows relies too. However, all the PM stuff is still not
+> > there unfortunately.
+> 
+> Is the connection manager firmware interface (from Linux perspective)
+> implementation specific or is it standarized?
 
-Signed-off-by: Ethan Yang <etyang@sierrawireless.com>
----
- drivers/usb/serial/qcserial.c | 2 ++
- 1 file changed, 2 insertions(+)
+Implementation specific. Apple does not use it on macOS at all and this
+is the behaviour you get when you boot Linux there too (on bare metal).
+However, with boot camp the firmware is started and the whole
+environment (PM stuff) is made more standardized so that Windows can run
+on it.
 
-diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-index c18bf8164bc2..586ef5551e76 100644
---- a/drivers/usb/serial/qcserial.c
-+++ b/drivers/usb/serial/qcserial.c
-@@ -166,6 +166,8 @@ static const struct usb_device_id id_table[] = {
- 	{DEVICE_SWI(0x1199, 0x9090)},	/* Sierra Wireless EM7565 QDL */
- 	{DEVICE_SWI(0x1199, 0x9091)},	/* Sierra Wireless EM7565 */
- 	{DEVICE_SWI(0x1199, 0x90d2)},	/* Sierra Wireless EM9191 QDL */
-+	{DEVICE_SWI(0x1199, 0xc080)},	/* Sierra Wireless EM7590 QDL */
-+	{DEVICE_SWI(0x1199, 0xc081)},	/* Sierra Wireless EM7590 */
- 	{DEVICE_SWI(0x413c, 0x81a2)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
- 	{DEVICE_SWI(0x413c, 0x81a3)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
- 	{DEVICE_SWI(0x413c, 0x81a4)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
--- 
-2.17.1
+> 
+> > > > That should do the same than what the boot camp does and start the TBT firmware connection manager.
+> > > 
+> > > I have no idea what boot camp does on the low level, but atleast
+> > > Windows can wakeup successfully.
+> > 
+> > please try the same in Linux if that's possible. Running Linux natively
+> > will likely have issues because all the non-standard stuff in those
+> > systems.
+> 
+> What do you mean by trying the same in Linux? I would like to, but I
+> simply don't know how.
 
+I'm suggesting to boot linux on the boot camp too. I have no idea if
+that is even posible but if it is then that would be the closest to get
+similar behaviour between Windows on Apple and Linux.
