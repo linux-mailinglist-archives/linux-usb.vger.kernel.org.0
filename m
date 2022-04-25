@@ -2,183 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC0B50D8DB
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 07:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F25C650D8E6
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 07:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241259AbiDYFdR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 01:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
+        id S241321AbiDYFoJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 01:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241305AbiDYFdN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 01:33:13 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03BB63B9
-        for <linux-usb@vger.kernel.org>; Sun, 24 Apr 2022 22:30:03 -0700 (PDT)
-Received: from fsav120.sakura.ne.jp (fsav120.sakura.ne.jp [27.133.134.247])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 23P5TXtW098391;
-        Mon, 25 Apr 2022 14:29:33 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav120.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav120.sakura.ne.jp);
- Mon, 25 Apr 2022 14:29:33 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav120.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 23P5TVwx098387
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 25 Apr 2022 14:29:33 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <5a06c7f1-9a29-99e4-c700-fec3f09509d2@I-love.SAKURA.ne.jp>
-Date:   Mon, 25 Apr 2022 14:29:26 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: possible deadlock in display_open
-Content-Language: en-US
-To:     Jarod Wilson <jarod@redhat.com>, Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <00000000000043b599058faf0145@google.com>
-Cc:     syzbot <syzbot+c558267ad910fc494497@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <00000000000043b599058faf0145@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S232594AbiDYFoH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 01:44:07 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B35BCB7;
+        Sun, 24 Apr 2022 22:41:04 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id b12so9796334plg.4;
+        Sun, 24 Apr 2022 22:41:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=JxYkM6W+dvTeexYmxSuaWBeHj74cng1RGH8kRqDlTvg=;
+        b=p3XZOmKAdm8qtiJ6755OBSjAUxfX3a5ZWWVA0b9Y+PGOU4xNxPEFMLS91AxfurvoUc
+         JGaA/xYkPEg+JR9ure0hw/htAMzZFEkaondVTyoZZy24HgL9trHATQ62Bf17bF8ItFgf
+         E9fhfZufV4h+XhNzq0ZaTMEPocJcYJAP6DINhjmXZysjXVwuDuoGFxHXKGIOMJvZlZ+J
+         bDaK5Nj5GNP7G7MDz/X1sxcsX9B+UHgk8OZrV8Sj/vp1sfVa7oxQ9ct4outXCpHDRw7e
+         kEGtG6RYwJbH3h6qeROkrcVZLn9i2wKDmplZ61PqeJOLU7Dp5Ztm7nvqIwPFkoSIWX6u
+         /wMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=JxYkM6W+dvTeexYmxSuaWBeHj74cng1RGH8kRqDlTvg=;
+        b=R3LWDj9h0koWk5uRYAbJzb6yCiv0rSfHY9//K4zYS/rHctgqUxyMlu8lFBzOfcLlvL
+         t/wUSSvLOuQa5znsRv/wWbh9uk0/4j3hpL7wXFdyxavQ4/xhH/ejGOD7YgfxUJf3XfOd
+         lKRoqxuYMLtNYkbTOiB7uM2mikJwx6fFsH6BnUMZHY2JGY9EAg+AnJF+2tzFbrm8klaT
+         iNwRqQIvhzjLD12JcDHAhDgI8ZDzoxaNCE3O9mCPHPJvvMFZSkBV/aK9FtPol1DF1kr1
+         nCXQ32CeCx9+/tlWPlGhw/vc9MEihyYpssYzRWxvL60YWd+FITS5XN/HaWMWjFA8gIGt
+         m3JA==
+X-Gm-Message-State: AOAM533px/ofvXcVOpi/b++rDylVJozVP+5sMbZEOwHPl2d9LZgNscXQ
+        iy8kbUwJcFpn0eEFf2u5WOc=
+X-Google-Smtp-Source: ABdhPJzV/LwlXdEOgRy4/tlj9gigIiBYQIoPSqJUWAkABHmK588wtf87KiGY++Y08CLCdrElXsGeBQ==
+X-Received: by 2002:a17:902:768a:b0:159:71e:971e with SMTP id m10-20020a170902768a00b00159071e971emr16382183pll.163.1650865263682;
+        Sun, 24 Apr 2022 22:41:03 -0700 (PDT)
+Received: from ethan-Latitude-7280.localdomain (125-228-239-174.hinet-ip.hinet.net. [125.228.239.174])
+        by smtp.googlemail.com with ESMTPSA id j127-20020a62c585000000b0050d45a85080sm825440pfg.215.2022.04.24.22.41.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 22:41:03 -0700 (PDT)
+From:   ipis.yang@gmail.com
+X-Google-Original-From: etyang@sierrawireless.com
+To:     bjorn@mork.no, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     gchiang@sierrawireless.com, ipis.yang@gmail.com,
+        Ethan Yang <etyang@sierrawireless.com>
+Subject: [PATCH v2] net: usb: qmi_wwan: add support for Sierra Wireless EM7590
+Date:   Mon, 25 Apr 2022 13:40:28 +0800
+Message-Id: <20220425054028.5444-1-etyang@sierrawireless.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <87bkwpkayv.fsf@miraculix.mork.no>
+References: <87bkwpkayv.fsf@miraculix.mork.no>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since usb_register_dev() from imon_init_display() from imon_probe() holds
-minor_rwsem while display_open() which holds driver_lock and ictx->lock is
-called with minor_rwsem held from usb_open(), holding driver_lock or
-ictx->lock when calling usb_register_dev() causes circular locking
-dependency problem.
+From: Ethan Yang <etyang@sierrawireless.com>
 
-Since usb_deregister_dev() from imon_disconnect() holds minor_rwsem while
-display_open() which holds driver_lock is called with minor_rwsem held,
-holding driver_lock when calling usb_deregister_dev() also causes circular
-locking dependency problem.
+add support for Sierra Wireless EM7590 0xc081 composition.
 
-But actually do we need to hold these locks?
-Could you explain possible race scenario if we do below?
+Signed-off-by: Ethan Yang <etyang@sierrawireless.com>
+---
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- drivers/media/rc/imon.c | 21 ---------------------
- 1 file changed, 21 deletions(-)
-
-diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
-index 54da6f60079b..e0e893d96cf3 100644
---- a/drivers/media/rc/imon.c
-+++ b/drivers/media/rc/imon.c
-@@ -439,9 +439,6 @@ static struct usb_driver imon_driver = {
- 	.id_table	= imon_usb_id_table,
- };
- 
--/* to prevent races between open() and disconnect(), probing, etc */
--static DEFINE_MUTEX(driver_lock);
--
- /* Module bookkeeping bits */
- MODULE_AUTHOR(MOD_AUTHOR);
- MODULE_DESCRIPTION(MOD_DESC);
-@@ -499,9 +496,6 @@ static int display_open(struct inode *inode, struct file *file)
- 	int subminor;
- 	int retval = 0;
- 
--	/* prevent races with disconnect */
--	mutex_lock(&driver_lock);
--
- 	subminor = iminor(inode);
- 	interface = usb_find_interface(&imon_driver, subminor);
- 	if (!interface) {
-@@ -534,7 +528,6 @@ static int display_open(struct inode *inode, struct file *file)
- 	mutex_unlock(&ictx->lock);
- 
- exit:
--	mutex_unlock(&driver_lock);
- 	return retval;
- }
- 
-@@ -2416,9 +2409,6 @@ static int imon_probe(struct usb_interface *interface,
- 	dev_dbg(dev, "%s: found iMON device (%04x:%04x, intf%d)\n",
- 		__func__, vendor, product, ifnum);
- 
--	/* prevent races probing devices w/multiple interfaces */
--	mutex_lock(&driver_lock);
--
- 	first_if = usb_ifnum_to_if(usbdev, 0);
- 	if (!first_if) {
- 		ret = -ENODEV;
-@@ -2456,8 +2446,6 @@ static int imon_probe(struct usb_interface *interface,
- 	usb_set_intfdata(interface, ictx);
- 
- 	if (ifnum == 0) {
--		mutex_lock(&ictx->lock);
--
- 		if (product == 0xffdc && ictx->rf_device) {
- 			sysfs_err = sysfs_create_group(&interface->dev.kobj,
- 						       &imon_rf_attr_group);
-@@ -2468,21 +2456,17 @@ static int imon_probe(struct usb_interface *interface,
- 
- 		if (ictx->display_supported)
- 			imon_init_display(ictx, interface);
--
--		mutex_unlock(&ictx->lock);
- 	}
- 
- 	dev_info(dev, "iMON device (%04x:%04x, intf%d) on usb<%d:%d> initialized\n",
- 		 vendor, product, ifnum,
- 		 usbdev->bus->busnum, usbdev->devnum);
- 
--	mutex_unlock(&driver_lock);
- 	usb_put_dev(usbdev);
- 
- 	return 0;
- 
- fail:
--	mutex_unlock(&driver_lock);
- 	usb_put_dev(usbdev);
- 	dev_err(dev, "unable to register, err %d\n", ret);
- 
-@@ -2498,9 +2482,6 @@ static void imon_disconnect(struct usb_interface *interface)
- 	struct device *dev;
- 	int ifnum;
- 
--	/* prevent races with multi-interface device probing and display_open */
--	mutex_lock(&driver_lock);
--
- 	ictx = usb_get_intfdata(interface);
- 	dev = ictx->dev;
- 	ifnum = interface->cur_altsetting->desc.bInterfaceNumber;
-@@ -2545,8 +2526,6 @@ static void imon_disconnect(struct usb_interface *interface)
- 	if (!ictx->dev_present_intf0 && !ictx->dev_present_intf1)
- 		free_imon_context(ictx);
- 
--	mutex_unlock(&driver_lock);
--
- 	dev_dbg(dev, "%s: iMON device (intf%d) disconnected\n",
- 		__func__, ifnum);
- }
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 3353e761016d..fa220a13edb6 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1351,6 +1351,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_QUIRK_SET_DTR(0x1199, 0x907b, 8)},	/* Sierra Wireless EM74xx */
+ 	{QMI_QUIRK_SET_DTR(0x1199, 0x907b, 10)},/* Sierra Wireless EM74xx */
+ 	{QMI_QUIRK_SET_DTR(0x1199, 0x9091, 8)},	/* Sierra Wireless EM7565 */
++	{QMI_QUIRK_SET_DTR(0x1199, 0xc081, 8)},	/* Sierra Wireless EM7590 */
+ 	{QMI_FIXED_INTF(0x1bbb, 0x011e, 4)},	/* Telekom Speedstick LTE II (Alcatel One Touch L100V LTE) */
+ 	{QMI_FIXED_INTF(0x1bbb, 0x0203, 2)},	/* Alcatel L800MA */
+ 	{QMI_FIXED_INTF(0x2357, 0x0201, 4)},	/* TP-LINK HSUPA Modem MA180 */
 -- 
-2.34.1
+2.17.1
 
-On 2019/08/09 22:18, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13b29b26600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
-> dashboard link: https://syzkaller.appspot.com/bug?extid=c558267ad910fc494497
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15427002600000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=111cb61c600000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+c558267ad910fc494497@syzkaller.appspotmail.com
