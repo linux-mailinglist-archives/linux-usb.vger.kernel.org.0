@@ -2,60 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9997B50DBF1
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 11:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D6950DC58
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 11:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241247AbiDYJGA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 05:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
+        id S232528AbiDYJX3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 05:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241011AbiDYJFZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 05:05:25 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0933916F
-        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 02:01:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650877285; x=1682413285;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OrtKSG7wcKqC49pUz74kSxLCR1HK2+UQQVFQC2sr7eI=;
-  b=pvTW6U6+P+xhBnvYgp5RjKkdGRuaGfPJnelp7Jby+kqWh/O4+AHJ5lfa
-   UCnJt4PFGSm8WYtI3BdePpe90tlahAooKWlfqOrBurRq4U08r7Z5OSnDi
-   uZT4fG9LlcqHjoNTH17HiWz1LySvItKfj35J2cadaqnNo5TVn2up3MruV
-   Q=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 Apr 2022 02:01:04 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 02:01:03 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 25 Apr 2022 02:01:03 -0700
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 25 Apr 2022 02:01:01 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
-        "Linyu Yuan" <quic_linyyuan@quicinc.com>
-Subject: [PATCH v6 2/2] usb: typec: ucsi: Wait for the USB role switches
-Date:   Mon, 25 Apr 2022 17:00:52 +0800
-Message-ID: <1650877252-10401-3-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1650877252-10401-1-git-send-email-quic_linyyuan@quicinc.com>
-References: <1650877252-10401-1-git-send-email-quic_linyyuan@quicinc.com>
+        with ESMTP id S236323AbiDYJXW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 05:23:22 -0400
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6223766B;
+        Mon, 25 Apr 2022 02:20:14 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 06FDC1002D8; Mon, 25 Apr 2022 10:20:11 +0100 (BST)
+Date:   Mon, 25 Apr 2022 10:20:11 +0100
+From:   Sean Young <sean@mess.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Jarod Wilson <jarod@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        syzbot <syzbot+c558267ad910fc494497@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: possible deadlock in display_open
+Message-ID: <YmZny7mzugFe0t+X@gofer.mess.org>
+References: <00000000000043b599058faf0145@google.com>
+ <5a06c7f1-9a29-99e4-c700-fec3f09509d2@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5a06c7f1-9a29-99e4-c700-fec3f09509d2@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,135 +41,152 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When role switch module probe late than ucsi module,
-fwnode_usb_role_switch_get() will return -EPROBE_DEFER,
-it is better to restart ucsi init work to find
-it again every 100ms, total wait time is 10 second.
+Hello,
 
-It also means change ucsi init work to delayed_work.
+On Mon, Apr 25, 2022 at 02:29:26PM +0900, Tetsuo Handa wrote:
+> Since usb_register_dev() from imon_init_display() from imon_probe() holds
+> minor_rwsem while display_open() which holds driver_lock and ictx->lock is
+> called with minor_rwsem held from usb_open(), holding driver_lock or
+> ictx->lock when calling usb_register_dev() causes circular locking
+> dependency problem.
+> 
+> Since usb_deregister_dev() from imon_disconnect() holds minor_rwsem while
+> display_open() which holds driver_lock is called with minor_rwsem held,
+> holding driver_lock when calling usb_deregister_dev() also causes circular
+> locking dependency problem.
+> 
+> But actually do we need to hold these locks?
+> Could you explain possible race scenario if we do below?
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
-v2: keep original con->num in debug log
-v3: change return value from -EAGAIN to PTR_ERR()
-v4: change subject line,
-    add counter for retry limit,
-    correct commit descripton to match change in V3
-v5: small update of commit description
-v6: add Reviewed-by tag of ucsi maintainer.
+The problem is there are imon devices which have two usb interfaces, even
+though it is one device. The probe and disconnect function of both usb
+interfaces can run concurrently.
 
- drivers/usb/typec/ucsi/ucsi.c | 32 ++++++++++++++++++++------------
- drivers/usb/typec/ucsi/ucsi.h |  6 +++++-
- 2 files changed, 25 insertions(+), 13 deletions(-)
+If the imon_probe is running for interface 1, and the probe for interface 0
+has not completed yet, then the driver may erronously think the probe for
+interface 0 failed at `if (!first_if_ctx) {` on line 2442.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 981b561..20d368a 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1053,6 +1053,14 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 	con->num = index + 1;
- 	con->ucsi = ucsi;
- 
-+	cap->fwnode = ucsi_find_fwnode(con);
-+	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
-+	if (IS_ERR(con->usb_role_sw)) {
-+		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
-+			con->num);
-+		return PTR_ERR(con->usb_role_sw);
-+	}
-+
- 	/* Delay other interactions with the con until registration is complete */
- 	mutex_lock(&con->lock);
- 
-@@ -1088,7 +1096,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 	if (con->cap.op_mode & UCSI_CONCAP_OPMODE_DEBUG_ACCESSORY)
- 		*accessory = TYPEC_ACCESSORY_DEBUG;
- 
--	cap->fwnode = ucsi_find_fwnode(con);
- 	cap->driver_data = con;
- 	cap->ops = &ucsi_ops;
- 
-@@ -1146,13 +1153,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 		ucsi_port_psy_changed(con);
- 	}
- 
--	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
--	if (IS_ERR(con->usb_role_sw)) {
--		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
--			con->num);
--		con->usb_role_sw = NULL;
--	}
--
- 	/* Only notify USB controller if partner supports USB data */
- 	if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) & UCSI_CONSTAT_PARTNER_FLAG_USB))
- 		u_role = USB_ROLE_NONE;
-@@ -1285,12 +1285,20 @@ static int ucsi_init(struct ucsi *ucsi)
- 
- static void ucsi_init_work(struct work_struct *work)
- {
--	struct ucsi *ucsi = container_of(work, struct ucsi, work);
-+	struct ucsi *ucsi = container_of(work, struct ucsi, work.work);
- 	int ret;
- 
- 	ret = ucsi_init(ucsi);
- 	if (ret)
- 		dev_err(ucsi->dev, "PPM init failed (%d)\n", ret);
-+
-+	if (ret == -EPROBE_DEFER) {
-+		if (ucsi->work_count++ > UCSI_ROLE_SWITCH_WAIT_COUNT)
-+			return;
-+
-+		queue_delayed_work(system_long_wq, &ucsi->work,
-+				   UCSI_ROLE_SWITCH_INTERVAL);
-+	}
- }
- 
- /**
-@@ -1330,7 +1338,7 @@ struct ucsi *ucsi_create(struct device *dev, const struct ucsi_operations *ops)
- 	if (!ucsi)
- 		return ERR_PTR(-ENOMEM);
- 
--	INIT_WORK(&ucsi->work, ucsi_init_work);
-+	INIT_DELAYED_WORK(&ucsi->work, ucsi_init_work);
- 	mutex_init(&ucsi->ppm_lock);
- 	ucsi->dev = dev;
- 	ucsi->ops = ops;
-@@ -1365,7 +1373,7 @@ int ucsi_register(struct ucsi *ucsi)
- 	if (!ucsi->version)
- 		return -ENODEV;
- 
--	queue_work(system_long_wq, &ucsi->work);
-+	queue_delayed_work(system_long_wq, &ucsi->work, 0);
- 
- 	return 0;
- }
-@@ -1382,7 +1390,7 @@ void ucsi_unregister(struct ucsi *ucsi)
- 	u64 cmd = UCSI_SET_NOTIFICATION_ENABLE;
- 
- 	/* Make sure that we are not in the middle of driver initialization */
--	cancel_work_sync(&ucsi->work);
-+	cancel_delayed_work_sync(&ucsi->work);
- 
- 	/* Disable notifications */
- 	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 280f1e1..8eb391e 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -287,7 +287,11 @@ struct ucsi {
- 	struct ucsi_capability cap;
- 	struct ucsi_connector *connector;
- 
--	struct work_struct work;
-+	struct delayed_work work;
-+	int work_count;
-+#define UCSI_ROLE_SWITCH_RETRY_PER_HZ	10
-+#define UCSI_ROLE_SWITCH_INTERVAL	(HZ / UCSI_ROLE_SWITCH_RETRY_PER_HZ)
-+#define UCSI_ROLE_SWITCH_WAIT_COUNT	(10 * UCSI_ROLE_SWITCH_RETRY_PER_HZ)
- 
- 	/* PPM Communication lock */
- 	struct mutex ppm_lock;
--- 
-2.7.4
+Of course, this depends on probe/disconnect functions being allowed to run
+concurrently on different interfaces of the same usb device.
 
+This code is rather tricky, and I'm sure there must be a better way of
+dealing with multiple interfaces for a usb driver than what imon.c does.
+
+Thanks
+Sean
+
+> 
+>  drivers/media/rc/imon.c | 21 ---------------------
+>  1 file changed, 21 deletions(-)
+> 
+> diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
+> index 54da6f60079b..e0e893d96cf3 100644
+> --- a/drivers/media/rc/imon.c
+> +++ b/drivers/media/rc/imon.c
+> @@ -439,9 +439,6 @@ static struct usb_driver imon_driver = {
+>  	.id_table	= imon_usb_id_table,
+>  };
+>  
+> -/* to prevent races between open() and disconnect(), probing, etc */
+> -static DEFINE_MUTEX(driver_lock);
+> -
+>  /* Module bookkeeping bits */
+>  MODULE_AUTHOR(MOD_AUTHOR);
+>  MODULE_DESCRIPTION(MOD_DESC);
+> @@ -499,9 +496,6 @@ static int display_open(struct inode *inode, struct file *file)
+>  	int subminor;
+>  	int retval = 0;
+>  
+> -	/* prevent races with disconnect */
+> -	mutex_lock(&driver_lock);
+> -
+>  	subminor = iminor(inode);
+>  	interface = usb_find_interface(&imon_driver, subminor);
+>  	if (!interface) {
+> @@ -534,7 +528,6 @@ static int display_open(struct inode *inode, struct file *file)
+>  	mutex_unlock(&ictx->lock);
+>  
+>  exit:
+> -	mutex_unlock(&driver_lock);
+>  	return retval;
+>  }
+>  
+> @@ -2416,9 +2409,6 @@ static int imon_probe(struct usb_interface *interface,
+>  	dev_dbg(dev, "%s: found iMON device (%04x:%04x, intf%d)\n",
+>  		__func__, vendor, product, ifnum);
+>  
+> -	/* prevent races probing devices w/multiple interfaces */
+> -	mutex_lock(&driver_lock);
+> -
+>  	first_if = usb_ifnum_to_if(usbdev, 0);
+>  	if (!first_if) {
+>  		ret = -ENODEV;
+> @@ -2456,8 +2446,6 @@ static int imon_probe(struct usb_interface *interface,
+>  	usb_set_intfdata(interface, ictx);
+>  
+>  	if (ifnum == 0) {
+> -		mutex_lock(&ictx->lock);
+> -
+>  		if (product == 0xffdc && ictx->rf_device) {
+>  			sysfs_err = sysfs_create_group(&interface->dev.kobj,
+>  						       &imon_rf_attr_group);
+> @@ -2468,21 +2456,17 @@ static int imon_probe(struct usb_interface *interface,
+>  
+>  		if (ictx->display_supported)
+>  			imon_init_display(ictx, interface);
+> -
+> -		mutex_unlock(&ictx->lock);
+>  	}
+>  
+>  	dev_info(dev, "iMON device (%04x:%04x, intf%d) on usb<%d:%d> initialized\n",
+>  		 vendor, product, ifnum,
+>  		 usbdev->bus->busnum, usbdev->devnum);
+>  
+> -	mutex_unlock(&driver_lock);
+>  	usb_put_dev(usbdev);
+>  
+>  	return 0;
+>  
+>  fail:
+> -	mutex_unlock(&driver_lock);
+>  	usb_put_dev(usbdev);
+>  	dev_err(dev, "unable to register, err %d\n", ret);
+>  
+> @@ -2498,9 +2482,6 @@ static void imon_disconnect(struct usb_interface *interface)
+>  	struct device *dev;
+>  	int ifnum;
+>  
+> -	/* prevent races with multi-interface device probing and display_open */
+> -	mutex_lock(&driver_lock);
+> -
+>  	ictx = usb_get_intfdata(interface);
+>  	dev = ictx->dev;
+>  	ifnum = interface->cur_altsetting->desc.bInterfaceNumber;
+> @@ -2545,8 +2526,6 @@ static void imon_disconnect(struct usb_interface *interface)
+>  	if (!ictx->dev_present_intf0 && !ictx->dev_present_intf1)
+>  		free_imon_context(ictx);
+>  
+> -	mutex_unlock(&driver_lock);
+> -
+>  	dev_dbg(dev, "%s: iMON device (intf%d) disconnected\n",
+>  		__func__, ifnum);
+>  }
+> -- 
+> 2.34.1
+> 
+> On 2019/08/09 22:18, syzbot wrote:
+> > Hello,
+> > 
+> > syzbot found the following crash on:
+> > 
+> > HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=13b29b26600000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=cfa2c18fb6a8068e
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=c558267ad910fc494497
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15427002600000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=111cb61c600000
+> > 
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+c558267ad910fc494497@syzkaller.appspotmail.com
