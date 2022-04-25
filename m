@@ -2,76 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF3150DFC7
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 14:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067E050E09C
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 14:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235874AbiDYMS6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 08:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        id S233056AbiDYMpS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 08:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232982AbiDYMSv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 08:18:51 -0400
-Received: from mxout03.lancloud.ru (mxout03.lancloud.ru [45.84.86.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25FC1A04A;
-        Mon, 25 Apr 2022 05:15:45 -0700 (PDT)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru C9C9520DF1ED
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH] USB: serial: pl2303: add device id for HP LM930 Display
-To:     Scott Chen <scott@labau.com.tw>
-CC:     <young@labau.com.tw>, <roger@labau.com.tw>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220425072454.33126-1-scott@labau.com.tw>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <3e03878f-2930-20fb-1983-bc56f23e1dc8@omp.ru>
-Date:   Mon, 25 Apr 2022 15:15:42 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S231204AbiDYMpO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 08:45:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3350D891A;
+        Mon, 25 Apr 2022 05:42:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A817ED1;
+        Mon, 25 Apr 2022 05:42:10 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 01FFE3F5A1;
+        Mon, 25 Apr 2022 05:42:08 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     joro@8bytes.org
+Cc:     baolu.lu@linux.intel.com, andreas.noever@gmail.com,
+        michael.jamet@intel.com, mika.westerberg@linux.intel.com,
+        YehezkelShB@gmail.com, iommu@lists.linux-foundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mario.limonciello@amd.com, hch@lst.de
+Subject: [PATCH v4 0/4] iommu, thunderbolt: Make iommu_dma_protection more accurate
+Date:   Mon, 25 Apr 2022 13:42:01 +0100
+Message-Id: <cover.1650878781.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.35.3.dirty
 MIME-Version: 1.0
-In-Reply-To: <20220425072454.33126-1-scott@labau.com.tw>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+Hi all, 
 
-On 4/25/22 10:24 AM, Scott Chen wrote:
+As promised, here's the really-actually-final version, cleaning up the
+new interface in patch #1 to not introduce the new parameter before it's
+ready, and rebased to make sure it correctly applies on -rc3.
 
-> Add the device id for the HPLM930Display which is a PL2303GC based device
-> 
-> Signed-off-by: Scott Chen <scott@labau.com.tw>
+Thanks,
+Robin.
 
-[...]
-> diff --git a/drivers/usb/serial/pl2303.h b/drivers/usb/serial/pl2303.h
-> index c5406452b774..9d8102639e16 100644
-> --- a/drivers/usb/serial/pl2303.h
-> +++ b/drivers/usb/serial/pl2303.h
-> @@ -135,6 +135,7 @@
->  #define HP_TD620_PRODUCT_ID	0x0956
->  #define HP_LD960_PRODUCT_ID	0x0b39
->  #define HP_LD381_PRODUCT_ID	0x0f7f
-> +#define HP_LM930_PRODUCT_ID     0x0f9b
 
-  Indent with a tab please, like the entries above and below.
+Mario Limonciello (1):
+  iommu/amd: Indicate whether DMA remap support is enabled
 
->  #define HP_LCM220_PRODUCT_ID	0x3139
->  #define HP_LCM960_PRODUCT_ID	0x3239
->  #define HP_LD220_PRODUCT_ID	0x3524
+Robin Murphy (3):
+  iommu: Introduce device_iommu_capable()
+  iommu: Add capability for pre-boot DMA protection
+  thunderbolt: Make iommu_dma_protection more accurate
 
-MBR, Sergey
+ drivers/iommu/amd/amd_iommu_types.h |  4 +++
+ drivers/iommu/amd/init.c            |  3 ++
+ drivers/iommu/amd/iommu.c           |  2 ++
+ drivers/iommu/intel/iommu.c         |  2 ++
+ drivers/iommu/iommu.c               | 23 +++++++++++++++
+ drivers/thunderbolt/domain.c        | 12 ++------
+ drivers/thunderbolt/nhi.c           | 44 +++++++++++++++++++++++++++++
+ include/linux/iommu.h               |  8 ++++++
+ include/linux/thunderbolt.h         |  2 ++
+ 9 files changed, 91 insertions(+), 9 deletions(-)
+
+-- 
+2.35.3.dirty
+
