@@ -2,58 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D6D50DAE0
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 10:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4DD50DAEB
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 10:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232133AbiDYINV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 04:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S231897AbiDYIQv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 04:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235553AbiDYIMr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 04:12:47 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EA918E08
-        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 01:09:44 -0700 (PDT)
+        with ESMTP id S229516AbiDYIQu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 04:16:50 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE34157162
+        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 01:13:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650874184; x=1682410184;
+  t=1650874424; x=1682410424;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=RO4blfivGMaQnE/1LKJoiOc8KbJQVTezXHB5aGBOe0Q=;
-  b=YHFUJHkS11p9tdxvi+wlDKNypovMEIOaFrgnL/PRl6LKTrONwzN0H0Sg
-   +k7JjOPEnbJMN/0oEBG5c8HQJQCWyqeOaZleK4HlRfVHN/DMB5kVlbTOM
-   NlaYILUKCCUsIhBvmPqVro6yCVKKfdBlVLi35tEOGHjc+Gy9qnqOeMPQE
-   lO5t3jSE/HT8UJoGY3XLMku387sqUcUWSKKegUF2xt/ibPAfozaxUjdtn
-   iSwVg/kzSTNcAgKML3QXZrhfFYtKkV/aNEnNjUPzTVaixI1tDzroRaVOu
-   3SVgSUhiBxn/XNIw/I/rA0isUu2a/gElaZC8PDfVQv67LMC69PsPm0Vhs
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="265344055"
+  bh=0/Lqx6rK1nzQbOEg3GJ9LN0HLopbgD9x5/V9J3CbkG4=;
+  b=dgR5nZousEZUP8BD75VELpr6CTDT79ixsFcN5ksXEp/56PE8UN6an21d
+   MSSSOVemNwHoh5SbwkwzSaadDQvG2ar/Jz369vm7Oj7Lo+1q0KUsiTsou
+   YzFbm0wc2/UndMJE2xcgOATXUoHMJjAoo72h44ibKSJvQD66ZHUV+63gD
+   xBpWesR9P+NwIh3AMBONCtziP/lEt+c8uBeE2AtxWhOww33DRtSd5TiO1
+   2QiVbd6++7cENnBEDaSN9No0Tgif/wqSvHpeibUZCul6uRNexDkaAGWSV
+   mFMQkeGh/STyda3sceKpPEcSaVZzGzWbjO08UljYq4sKpuqrnKzwLA6cw
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="351626784"
 X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="265344055"
+   d="scan'208";a="351626784"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 01:09:44 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 01:13:44 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="704457501"
+   d="scan'208";a="704458771"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 25 Apr 2022 01:09:41 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 25 Apr 2022 11:09:41 +0300
-Date:   Mon, 25 Apr 2022 11:09:41 +0300
+  by fmsmga001.fm.intel.com with SMTP; 25 Apr 2022 01:13:42 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 25 Apr 2022 11:13:41 +0300
+Date:   Mon, 25 Apr 2022 11:13:41 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Linyu Yuan <quic_linyyuan@quicinc.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>
-Subject: Re: [PATCH v5 1/3] usb: typec: ucsi: add a common function
- ucsi_unregister_connectors()
-Message-ID: <YmZXRQYPQe6KQf0m@kuha.fi.intel.com>
+Subject: Re: [PATCH v5 2/3] usb: typec: ucsi: do not allocate one extra
+ unused connector
+Message-ID: <YmZYNWewOiHNu+9D@kuha.fi.intel.com>
 References: <1650597022-19793-1-git-send-email-quic_linyyuan@quicinc.com>
- <1650597022-19793-2-git-send-email-quic_linyyuan@quicinc.com>
+ <1650597022-19793-3-git-send-email-quic_linyyuan@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1650597022-19793-2-git-send-email-quic_linyyuan@quicinc.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+In-Reply-To: <1650597022-19793-3-git-send-email-quic_linyyuan@quicinc.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,127 +61,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 11:10:20AM +0800, Linyu Yuan wrote:
-> As con->port will be used in error path of ucsi_init(),
-> it should be NULL or valid.
+On Fri, Apr 22, 2022 at 11:10:21AM +0800, Linyu Yuan wrote:
+> In ucsi_init(), it allocate number of (ucsi->cap.num_connectors + 1)
+> connectors, there is one extra as the ending.
+> ucsi_unregister_connectors() is safe to unregister all ucsi connectors
+> according ucsi->cap.num_connectors.
 > 
-> In error path of ucsi_init(), it will unregister all valid ucsi connectors,
-> and similar operation also happen in ucsi_unregister(),
-> add a common function for two places.
-> 
+> Let's remove the extra one connector to save memory.
+
+Maybe you could just merge this one into the first patch.
+
 > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 > ---
-> v2: improve ucsi_connector_clean(), check total number of connector.
-> v3: rename to ucsi_unregister_connectors(), suggest by maintainer
-> v4: merge patch#1 in V3, fix a typo samiliar -> similar in commit description
-> v5: no change
+> v2: new change
+> v3: no change
+> v4: fix a typo extral -> extra in commit description
+> v5: update commit description
 > 
->  drivers/usb/typec/ucsi/ucsi.c | 52 ++++++++++++++++++++++++-------------------
->  1 file changed, 29 insertions(+), 23 deletions(-)
+>  drivers/usb/typec/ucsi/ucsi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index f0c2fa1..af9a2a1 100644
+> index af9a2a1..ce9192e 100644
 > --- a/drivers/usb/typec/ucsi/ucsi.c
 > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1100,6 +1100,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
->  	con->port = typec_register_port(ucsi->dev, cap);
->  	if (IS_ERR(con->port)) {
->  		ret = PTR_ERR(con->port);
-> +		con->port = NULL;
-
-I'm not sure you need to add that line. See below.
-
->  		goto out;
+> @@ -1251,7 +1251,7 @@ static int ucsi_init(struct ucsi *ucsi)
 >  	}
 >  
-> @@ -1186,6 +1187,32 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
->  	return ret;
->  }
->  
-> +static void ucsi_unregister_connectors(struct ucsi *ucsi)
-> +{
-> +	struct ucsi_connector *con;
-> +	int i;
-> +
-> +	if (!ucsi->connector)
-> +		return;
-> +
-> +	for (i = 0; i < ucsi->cap.num_connectors; i++) {
-> +		con = &ucsi->connector[i];
-> +		if (!con->port)
-> +			break;
-
-                if (IS_ERR_OR_NULL(con->port))
-                        break;
-
-> +		cancel_work_sync(&con->work);
-> +		ucsi_unregister_partner(con);
-> +		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
-> +		ucsi_unregister_port_psy(con);
-> +		if (con->wq)
-> +			destroy_workqueue(con->wq);
-> +		typec_unregister_port(con->port);
-> +	}
-> +
-> +	kfree(ucsi->connector);
-> +	ucsi->connector = NULL;
-> +}
-> +
->  /**
->   * ucsi_init - Initialize UCSI interface
->   * @ucsi: UCSI to be initialized
-> @@ -1194,7 +1221,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
->   */
->  static int ucsi_init(struct ucsi *ucsi)
->  {
-> -	struct ucsi_connector *con;
->  	u64 command;
->  	int ret;
->  	int i;
-> @@ -1249,15 +1275,7 @@ static int ucsi_init(struct ucsi *ucsi)
->  	return 0;
->  
->  err_unregister:
-> -	for (con = ucsi->connector; con->port; con++) {
-> -		ucsi_unregister_partner(con);
-> -		ucsi_unregister_altmodes(con, UCSI_RECIPIENT_CON);
-> -		ucsi_unregister_port_psy(con);
-> -		if (con->wq)
-> -			destroy_workqueue(con->wq);
-> -		typec_unregister_port(con->port);
-> -		con->port = NULL;
-> -	}
-> +	ucsi_unregister_connectors(ucsi);
->  
->  err_reset:
->  	memset(&ucsi->cap, 0, sizeof(ucsi->cap));
-> @@ -1363,7 +1381,6 @@ EXPORT_SYMBOL_GPL(ucsi_register);
->  void ucsi_unregister(struct ucsi *ucsi)
->  {
->  	u64 cmd = UCSI_SET_NOTIFICATION_ENABLE;
-> -	int i;
->  
->  	/* Make sure that we are not in the middle of driver initialization */
->  	cancel_work_sync(&ucsi->work);
-> @@ -1371,18 +1388,7 @@ void ucsi_unregister(struct ucsi *ucsi)
->  	/* Disable notifications */
->  	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
->  
-> -	for (i = 0; i < ucsi->cap.num_connectors; i++) {
-> -		cancel_work_sync(&ucsi->connector[i].work);
-> -		ucsi_unregister_partner(&ucsi->connector[i]);
-> -		ucsi_unregister_altmodes(&ucsi->connector[i],
-> -					 UCSI_RECIPIENT_CON);
-> -		ucsi_unregister_port_psy(&ucsi->connector[i]);
-> -		if (ucsi->connector[i].wq)
-> -			destroy_workqueue(ucsi->connector[i].wq);
-> -		typec_unregister_port(ucsi->connector[i].port);
-> -	}
-> -
-> -	kfree(ucsi->connector);
-> +	ucsi_unregister_connectors(ucsi);
->  }
->  EXPORT_SYMBOL_GPL(ucsi_unregister);
+>  	/* Allocate the connectors. Released in ucsi_unregister() */
+> -	ucsi->connector = kcalloc(ucsi->cap.num_connectors + 1,
+> +	ucsi->connector = kcalloc(ucsi->cap.num_connectors,
+>  				  sizeof(*ucsi->connector), GFP_KERNEL);
+>  	if (!ucsi->connector) {
+>  		ret = -ENOMEM;
+> -- 
+> 2.7.4
 
 thanks,
 
