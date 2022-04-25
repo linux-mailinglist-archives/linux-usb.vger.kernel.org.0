@@ -2,92 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81F950E384
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 16:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AF350E38D
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 16:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242557AbiDYOox (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 10:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
+        id S239283AbiDYOsO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 10:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241180AbiDYOow (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 10:44:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CF41C925;
-        Mon, 25 Apr 2022 07:41:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7FCC61677;
-        Mon, 25 Apr 2022 14:41:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AF37C385A4;
-        Mon, 25 Apr 2022 14:41:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650897708;
-        bh=yNdFolgM9KVEAn96D1w8vouWroP4KcIs2PEb4lnd29k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iU1Ld6X4usl6+rO7oLGaqW98KMN1RGyODRCtxZJ7/78Kh4DG48bFmrAFT0nWoBY4Q
-         foBcnFn5jlW3Es7O3fuXRsZ4PmDeJGr2wTho4xl/yHNoktxcQmBN6hPA4wJ33GhgAa
-         lgpuW9cINqir9rdvuwVm251DQm9OMdHELMu4MJW9LfS6s0Apn9ke12jjkTtn3+vbW4
-         LTH+2GiHc2WbJrK96zfTGaPZg2OTYnRDfrqmDey4WxIWElIgpm2QIfnxI1/bj/wRgI
-         2kC23R9KONs7MA6rVMhKRi+VB7D+TVP+hsDRUJ7WW9/uzmnIcfSv7lNxiyvMfSVm1D
-         lL7QXz6dPxM5w==
-Date:   Mon, 25 Apr 2022 07:41:46 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Paolo Abeni <pabeni@redhat.com>, Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jann Horn <jannh@google.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Jacky Chou <jackychou@asix.com.tw>, Willy Tarreau <w@1wt.eu>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] net: linkwatch: ignore events for unregistered netdevs
-Message-ID: <20220425074146.1fa27d5f@kernel.org>
-In-Reply-To: <20220423160723.GA20330@wunner.de>
-References: <18b3541e5372bc9b9fc733d422f4e698c089077c.1650177997.git.lukas@wunner.de>
-        <9325d344e8a6b1a4720022697792a84e545fef62.camel@redhat.com>
-        <20220423160723.GA20330@wunner.de>
+        with ESMTP id S235491AbiDYOsN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 10:48:13 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB64C5D
+        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 07:45:07 -0700 (PDT)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id BA1B560007;
+        Mon, 25 Apr 2022 14:45:04 +0000 (UTC)
+Message-ID: <560fd2754f549c904300327f0a609085015f37f4.camel@hadess.net>
+Subject: Re: [RFC v1] USB: core: add USBDEVFS_REVOKE ioctl
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>
+Date:   Mon, 25 Apr 2022 16:45:04 +0200
+In-Reply-To: <903b294f-8407-3438-54a9-3c96e361be41@suse.com>
+References: <20220425132315.924477-1-hadess@hadess.net>
+         <903b294f-8407-3438-54a9-3c96e361be41@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 23 Apr 2022 18:07:23 +0200 Lukas Wunner wrote:
-> > Looking at the original report it looks like the issue could be
-> > resolved with a more usb-specific change: e.g. it looks like
-> > usbnet_defer_kevent() is not acquiring a dev reference as it should.
-> > 
-> > Have you considered that path?  
-> 
-> First of all, the diffstat of the patch shows this is an opportunity
-> to reduce LoC as well as simplify and speed up device teardown.
-> 
-> Second, the approach you're proposing won't work if a driver calls
-> netif_carrier_on/off() after unregister_netdev().
-> 
-> It seems prudent to prevent such a misbehavior in *any* driver,
-> not just usbnet.  usbnet may not be the only one doing it wrong.
-> Jann pointed out that there are more syzbot reports related
-> to a UAF in linkwatch:
-> 
-> https://lore.kernel.org/netdev/?q=__linkwatch_run_queue+syzbot
-> 
-> Third, I think an API which schedules work, invisibly to the driver,
-> is dangerous and misguided.  If it is illegal to call
-> netif_carrier_on/off() for an unregistered but not yet freed netdev,
-> catch that in core networking code and don't expect drivers to respect
-> a rule which isn't even documented.
+T24gTW9uLCAyMDIyLTA0LTI1IGF0IDE1OjQ5ICswMjAwLCBPbGl2ZXIgTmV1a3VtIHdyb3RlOgo+
+IAo+IAo+IE9uIDI1LjA0LjIyIDE1OjIzLCBCYXN0aWVuIE5vY2VyYSB3cm90ZToKPiA+IMKgc3Ry
+dWN0IHVzYl9tZW1vcnkgewo+ID4gQEAgLTIzNyw2ICsyMzgsOSBAQCBzdGF0aWMgaW50IHVzYmRl
+dl9tbWFwKHN0cnVjdCBmaWxlICpmaWxlLAo+ID4gc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEp
+Cj4gPiDCoMKgwqDCoMKgwqDCoMKgZG1hX2FkZHJfdCBkbWFfaGFuZGxlOwo+ID4gwqDCoMKgwqDC
+oMKgwqDCoGludCByZXQ7Cj4gPiDCoAo+ID4gK8KgwqDCoMKgwqDCoMKgaWYgKCFjb25uZWN0ZWQo
+cHMpIHx8IHBzLT5yZXZva2VkKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJl
+dHVybiAtRU5PREVWOwo+ID4gKwo+IFRoaXMgbGFja3MgbG9ja2luZy4KCkFkZGVkIGxvY2tpbmcu
+Cgo+ID4gwqAKPiA+ICtzdGF0aWMgaW50IHVzYmRldl9yZXZva2Uoc3RydWN0IHVzYl9kZXZfc3Rh
+dGUgKnBzKQo+ID4gK3sKPiA+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCB1c2JfZGV2aWNlICpkZXYg
+PSBwcy0+ZGV2Owo+ID4gK8KgwqDCoMKgwqDCoMKgdW5zaWduZWQgaW50IGlmbnVtOwo+ID4gK8Kg
+wqDCoMKgwqDCoMKgc3RydWN0IGFzeW5jICphczsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoGlm
+IChwcy0+cmV2b2tlZCkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4g
+LUVOT0RFVjsKPiA+ICvCoMKgwqDCoMKgwqDCoHBzLT5yZXZva2VkID0gdHJ1ZTsKPiA+ICsKPiA+
+ICvCoMKgwqDCoMKgwqDCoHVzYl9sb2NrX2RldmljZShkZXYpOwo+IEFuZCBoZXJlIHlvdSBsb2Nr
+IHRoZSBkZXZpY2UgYSBzZWNvbmQgdGltZS4gVGhhdCBpcyBhIGJhZCBpZGVhLgoKSSd2ZSByZW1v
+dmVkIHRoZSBsb2NraW5nIGluIHRoaXMgZnVuY3Rpb24uCgo+ID4gK8KgwqDCoMKgwqDCoMKgZm9y
+IChpZm51bSA9IDA7IHBzLT5pZmNsYWltZWQgJiYgaWZudW0gPCA4KnNpemVvZihwcy0KPiA+ID5p
+ZmNsYWltZWQpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBpZm51bSsrKSB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHRl
+c3RfYml0KGlmbnVtLCAmcHMtPmlmY2xhaW1lZCkpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlbGVhc2VpbnRmKHBzLCBpZm51bSk7Cj4gPiArwqDC
+oMKgwqDCoMKgwqB9Cj4gPiArwqDCoMKgwqDCoMKgwqBkZXN0cm95X2FsbF9hc3luYyhwcyk7Cj4g
+PiArwqDCoMKgwqDCoMKgwqB1c2JfdW5sb2NrX2RldmljZShkZXYpOwo+ID4gKwo+ID4gK8KgwqDC
+oMKgwqDCoMKgYXMgPSBhc3luY19nZXRjb21wbGV0ZWQocHMpOwo+ID4gK8KgwqDCoMKgwqDCoMKg
+d2hpbGUgKGFzKSB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZnJlZV9hc3lu
+Yyhhcyk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYXMgPSBhc3luY19nZXRj
+b21wbGV0ZWQocHMpOwo+ID4gK8KgwqDCoMKgwqDCoMKgfQo+ID4gKwo+ID4gK8KgwqDCoMKgwqDC
+oMKgcmV0dXJuIDA7Cj4gPiArfQo+IEdldHRpbmcgeW91ciBmaWxlIGRlc2NyaXB0b3IgcmV2b2tl
+ZCBzaG91bGQgd2FrZSB5b3UgdXAKPiBmcm9tIHBvbGwoKSwgc2hvdWxkbid0IGl0PwoKQWRkZWQg
+YSB3YWtldXAuCgo+IAo+ID4gKwo+ID4gwqAvKgo+ID4gwqAgKiBOT1RFOsKgIEFsbCByZXF1ZXN0
+cyBoZXJlIHRoYXQgaGF2ZSBpbnRlcmZhY2UgbnVtYmVycyBhcwo+ID4gcGFyYW1ldGVycwo+ID4g
+wqAgKiBhcmUgYXNzdW1pbmcgdGhhdCBzb21laG93IHRoZSBjb25maWd1cmF0aW9uIGhhcyBiZWVu
+IHByZXZlbnRlZAo+ID4gZnJvbQo+ID4gQEAgLTI2MTksNyArMjY2MCw3IEBAIHN0YXRpYyBsb25n
+IHVzYmRldl9kb19pb2N0bChzdHJ1Y3QgZmlsZQo+ID4gKmZpbGUsIHVuc2lnbmVkIGludCBjbWQs
+Cj4gPiDCoCNlbmRpZgo+ID4gwqDCoMKgwqDCoMKgwqDCoH0KPiA+IMKgCj4gPiAtwqDCoMKgwqDC
+oMKgwqBpZiAoIWNvbm5lY3RlZChwcykpIHsKPiA+ICvCoMKgwqDCoMKgwqDCoGlmICghY29ubmVj
+dGVkKHBzKSB8fCBwcy0+cmV2b2tlZCkgewo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqB1c2JfdW5sb2NrX2RldmljZShkZXYpOwo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqByZXR1cm4gLUVOT0RFVjsKPiA+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiBAQCAtMjc3
+OSw2ICsyODIwLDExIEBAIHN0YXRpYyBsb25nIHVzYmRldl9kb19pb2N0bChzdHJ1Y3QgZmlsZQo+
+ID4gKmZpbGUsIHVuc2lnbmVkIGludCBjbWQsCj4gPiDCoMKgwqDCoMKgwqDCoMKgY2FzZSBVU0JE
+RVZGU19XQUlUX0ZPUl9SRVNVTUU6Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oHJldCA9IHByb2Nfd2FpdF9mb3JfcmVzdW1lKHBzKTsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgYnJlYWs7Cj4gPiArwqDCoMKgwqDCoMKgwqBjYXNlIFVTQkRFVkZTX1JFVk9L
+RToKPiBZb3UgYXJlIHN0aWxsIGluIHVzYl9sb2NrX2RldmljZSgpCgpOb3RlZC4KCj4gCj4gwqDC
+oMKgIFJlZ2FyZHMKPiDCoMKgwqAgwqDCoMKgIE9saXZlcgo+IAoKSSdsbCBwb3N0IHRob3NlIGNo
+YW5nZXMgaW4gdjIsIHRoYW5rcy4K
 
-Doesn't mean we should make it legal. We can add a warning to catch
-abuses.
