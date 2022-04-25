@@ -2,416 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D34050E358
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 16:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6613750E348
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 16:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242507AbiDYOjC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 10:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
+        id S237230AbiDYOiP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 10:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234498AbiDYOi5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 10:38:57 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AECD2ACB;
-        Mon, 25 Apr 2022 07:35:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650897353; x=1682433353;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=EAeVfMY9989HIon9C9ryOLtgk/851k0TfgR69R01gyk=;
-  b=XEnH03gptJ16JrwmnSOR0WK3ZPLe+YjoRECjQ6hZniFEcrJOh/weJ4u9
-   FKWxpZVrlCw7q4t+QxGbE/mJSKHAsx30BInhUlWqLM6tRoPOrVi1tgnUO
-   qAfIaPtzwi/xAam7WoOloOmmYiqNlyDLfjeY53i2N8oLj6BOUiwYaLbdn
-   uJXGXr1WtG6rs35eWtfDOU6wVee0nEvIQPt9sBG5t3hKWQPBDP3Aye4fu
-   YJ35OomEyR6nFfDkm87goE89eKtLFkjTWs/pT2ekjBOejUkQsAmNGGGiS
-   F3ssL4WvprzI9mYkdwrf5mw1XBcBuSkWAuEuaFuu2D3Q7n76onc5yqvXR
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="325752310"
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="325752310"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:35:52 -0700
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="579316026"
-Received: from lpuglia-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.217.93])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:35:42 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Vicente Bergas <vicencb@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Johan Hovold <johan@kernel.org>, heiko@sntech.de,
-        giulio.benetti@micronovasrl.com,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-api@vger.kernel.org,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v4 08/13] serial: termbits: ADDRB to indicate 9th bit addressing mode
-Date:   Mon, 25 Apr 2022 17:34:05 +0300
-Message-Id: <20220425143410.12703-9-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220425143410.12703-1-ilpo.jarvinen@linux.intel.com>
-References: <20220425143410.12703-1-ilpo.jarvinen@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S236898AbiDYOiE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 10:38:04 -0400
+Received: from mail.schwermer.no (mail.schwermer.no [49.12.228.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D35D35255;
+        Mon, 25 Apr 2022 07:34:59 -0700 (PDT)
+X-Virus-Scanned: Yes
+From:   sven@svenschwermer.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=svenschwermer.de;
+        s=mail; t=1650897296;
+        bh=bCqpzZ7ENFdi2f0fLeph5m6zYDRJ0s1xvrInntYSd8w=;
+        h=From:To:Cc:Subject;
+        b=Uzu32iGLmRoJgIKniK9obUXGrGUH5nQjNTpMXM1KDCFtYeCu2HLk/3a1deAKb/1hd
+         aQ26gDuGquv6yoKqzSnsZYxcTPGYtVIHq2QSJ8WXMdVZTP8LszLoMf7q0UAwy2hii1
+         Idh1Kzfi6sn1LTCmj5B4M05jBm7NmgwJxbPr8Rr4+670AjiqUxb4F23F8i4p3uIplJ
+         p88M9PiamyIfrU90E15Xqucn/9FEcInb2p4ZhsfsuS3dz6S7MYcxsusr9i7PhGv1u6
+         eKGSVanRBg8+7/LgC23LZO8h5UxAsObDkx/ZPDUi4VExDzuiG0UdCwTXW6de/1sUpB
+         hLofhdaNhXPWw==
+To:     linux-usb@vger.kernel.org
+Cc:     Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        linux-kernel@vger.kernel.org, johan@kernel.org
+Subject: [PATCH v3 1/2] usb: serial: option: Add Fibocom L610 modem
+Date:   Mon, 25 Apr 2022 16:34:49 +0200
+Message-Id: <20220425143450.44886-1-sven@svenschwermer.de>
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add ADDRB to termbits to indicate 9th bit addressing mode. This change
-is necessary for supporting devices with RS485 multipoint addressing
-[*]. A later patch in the patch series adds support for Synopsys
-Designware UART capable for 9th bit addressing mode. In this mode, 9th
-bit is used to indicate an address (byte) within the communication
-line. The 9th bit addressing mode is selected using ADDRB introduced by
-an earlier patch.
+From: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
 
-[*] Technically, RS485 is just an electronic spec and does not itself
-specify the 9th bit addressing mode but 9th bit seems at least
-"semi-standard" way to do addressing with RS485.
+The L610 modem has 3 USB configurations that are configurable via the AT
+command AT+GTUSBMODE={31,32,33} which make the modem enumerate with the
+following interfaces, respectively:
 
-Cc: linux-api@vger.kernel.org
-Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: linux-alpha@vger.kernel.org
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: linux-parisc@vger.kernel.org
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: sparclinux@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+31: Modem + NV + MOS + Diag + LOG + AT + AT
+32: ECM + Modem + NV + MOS + Diag + LOG + AT + AT
+33: RNDIS + Modem + NV + MOS + Diag + LOG + AT + AT
+
+A detailed description of the USB configuration for each mode follows:
+
++GTUSBMODE: 31
+--------------
+T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#=124 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1782 ProdID=4d10 Rev= 0.00
+S:  Manufacturer=FIBOCOM
+S:  Product=L610
+C:* #Ifs= 7 Cfg#= 1 Atr=e0 MxPwr=400mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
++GTUSBMODE: 32
+--------------
+T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#=122 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1782 ProdID=4d11 Rev= 0.00
+S:  Manufacturer=FIBOCOM
+S:  Product=L610
+C:* #Ifs= 9 Cfg#= 1 Atr=e0 MxPwr=400mA
+A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
++GTUSBMODE: 33
+--------------
+T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#=126 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1782 ProdID=4d11 Rev= 0.00
+S:  Manufacturer=FIBOCOM
+S:  Product=L610
+C:* #Ifs= 9 Cfg#= 1 Atr=e0 MxPwr=400mA
+A:  FirstIf#= 0 IfCount= 2 Cls=e0(wlcon) Sub=01 Prot=03
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=4096ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+Signed-off-by: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
 ---
- arch/alpha/include/uapi/asm/termbits.h   | 1 +
- arch/mips/include/uapi/asm/termbits.h    | 1 +
- arch/parisc/include/uapi/asm/termbits.h  | 1 +
- arch/powerpc/include/uapi/asm/termbits.h | 1 +
- arch/sparc/include/uapi/asm/termbits.h   | 1 +
- drivers/char/pcmcia/synclink_cs.c        | 2 ++
- drivers/ipack/devices/ipoctal.c          | 2 ++
- drivers/mmc/core/sdio_uart.c             | 2 ++
- drivers/net/usb/hso.c                    | 3 ++-
- drivers/s390/char/tty3270.c              | 3 +++
- drivers/staging/greybus/uart.c           | 2 ++
- drivers/tty/amiserial.c                  | 6 +++++-
- drivers/tty/moxa.c                       | 1 +
- drivers/tty/mxser.c                      | 1 +
- drivers/tty/serial/serial_core.c         | 2 ++
- drivers/tty/synclink_gt.c                | 2 ++
- drivers/tty/tty_ioctl.c                  | 2 ++
- drivers/usb/class/cdc-acm.c              | 2 ++
- drivers/usb/serial/usb-serial.c          | 6 ++++--
- include/uapi/asm-generic/termbits.h      | 1 +
- net/bluetooth/rfcomm/tty.c               | 2 ++
- 21 files changed, 40 insertions(+), 4 deletions(-)
+V2 -> V3: Add this changelog
+V1 -> V2: Use USB_DEVICE_INTERFACE_CLASS, add comments
 
-diff --git a/arch/alpha/include/uapi/asm/termbits.h b/arch/alpha/include/uapi/asm/termbits.h
-index 4575ba34a0ea..0c123e715486 100644
---- a/arch/alpha/include/uapi/asm/termbits.h
-+++ b/arch/alpha/include/uapi/asm/termbits.h
-@@ -180,6 +180,7 @@ struct ktermios {
- #define HUPCL	00040000
- 
- #define CLOCAL	00100000
-+#define ADDRB	004000000000		/* address bit */
- #define CMSPAR	  010000000000		/* mark or space (stick) parity */
- #define CRTSCTS	  020000000000		/* flow control */
- 
-diff --git a/arch/mips/include/uapi/asm/termbits.h b/arch/mips/include/uapi/asm/termbits.h
-index dfeffba729b7..4732d31b0e4e 100644
---- a/arch/mips/include/uapi/asm/termbits.h
-+++ b/arch/mips/include/uapi/asm/termbits.h
-@@ -182,6 +182,7 @@ struct ktermios {
- #define	 B3500000 0010016
- #define	 B4000000 0010017
- #define CIBAUD	  002003600000	/* input baud rate */
-+#define ADDRB	  004000000000	/* address bit */
- #define CMSPAR	  010000000000	/* mark or space (stick) parity */
- #define CRTSCTS	  020000000000	/* flow control */
- 
-diff --git a/arch/parisc/include/uapi/asm/termbits.h b/arch/parisc/include/uapi/asm/termbits.h
-index 40e920f8d683..d6bbd10d92ba 100644
---- a/arch/parisc/include/uapi/asm/termbits.h
-+++ b/arch/parisc/include/uapi/asm/termbits.h
-@@ -159,6 +159,7 @@ struct ktermios {
- #define  B3500000 0010016
- #define  B4000000 0010017
- #define CIBAUD    002003600000		/* input baud rate */
-+#define ADDRB	  004000000000		/* address bit */
- #define CMSPAR    010000000000          /* mark or space (stick) parity */
- #define CRTSCTS   020000000000          /* flow control */
- 
-diff --git a/arch/powerpc/include/uapi/asm/termbits.h b/arch/powerpc/include/uapi/asm/termbits.h
-index ed18bc61f63d..c6a033732f39 100644
---- a/arch/powerpc/include/uapi/asm/termbits.h
-+++ b/arch/powerpc/include/uapi/asm/termbits.h
-@@ -171,6 +171,7 @@ struct ktermios {
- #define HUPCL	00040000
- 
- #define CLOCAL	00100000
-+#define ADDRB	004000000000		/* address bit */
- #define CMSPAR	  010000000000		/* mark or space (stick) parity */
- #define CRTSCTS	  020000000000		/* flow control */
- 
-diff --git a/arch/sparc/include/uapi/asm/termbits.h b/arch/sparc/include/uapi/asm/termbits.h
-index ce5ad5d0f105..5eb1d547b5c4 100644
---- a/arch/sparc/include/uapi/asm/termbits.h
-+++ b/arch/sparc/include/uapi/asm/termbits.h
-@@ -201,6 +201,7 @@ struct ktermios {
- #define B3500000  0x00001012
- #define B4000000  0x00001013  */
- #define CIBAUD	  0x100f0000  /* input baud rate (not used) */
-+#define ADDRB	  0x20000000  /* address bit */
- #define CMSPAR	  0x40000000  /* mark or space (stick) parity */
- #define CRTSCTS	  0x80000000  /* flow control */
- 
-diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
-index 78baba55a8b5..d179b9b57a25 100644
---- a/drivers/char/pcmcia/synclink_cs.c
-+++ b/drivers/char/pcmcia/synclink_cs.c
-@@ -2287,6 +2287,8 @@ static void mgslpc_set_termios(struct tty_struct *tty, struct ktermios *old_term
- 		== RELEVANT_IFLAG(old_termios->c_iflag)))
- 	  return;
- 
-+	tty->termios.c_cflag &= ~ADDRB;
-+
- 	mgslpc_change_params(info, tty);
- 
- 	/* Handle transition to B0 status */
-diff --git a/drivers/ipack/devices/ipoctal.c b/drivers/ipack/devices/ipoctal.c
-index 20d2b9ec1227..d66cc9683ebc 100644
---- a/drivers/ipack/devices/ipoctal.c
-+++ b/drivers/ipack/devices/ipoctal.c
-@@ -506,6 +506,8 @@ static void ipoctal_set_termios(struct tty_struct *tty,
- 	struct ipoctal_channel *channel = tty->driver_data;
- 	speed_t baud;
- 
-+	tty->termios.c_cflag &= ~ADDRB;
-+
- 	cflag = tty->termios.c_cflag;
- 
- 	/* Disable and reset everything before change the setup */
-diff --git a/drivers/mmc/core/sdio_uart.c b/drivers/mmc/core/sdio_uart.c
-index 04c0823e0359..7432b01379ef 100644
---- a/drivers/mmc/core/sdio_uart.c
-+++ b/drivers/mmc/core/sdio_uart.c
-@@ -880,6 +880,8 @@ static void sdio_uart_set_termios(struct tty_struct *tty,
- 	if (sdio_uart_claim_func(port) != 0)
- 		return;
- 
-+	tty->termios.c_cflag &= ~ADDRB;
-+
- 	sdio_uart_change_speed(port, &tty->termios, old_termios);
- 
- 	/* Handle transition to B0 status */
-diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
-index f97813a4e8d1..b687327bc7b1 100644
---- a/drivers/net/usb/hso.c
-+++ b/drivers/net/usb/hso.c
-@@ -1099,7 +1099,8 @@ static void _hso_serial_set_termios(struct tty_struct *tty)
- 		~(CSIZE		/* no size */
- 		| PARENB	/* disable parity bit */
- 		| CBAUD		/* clear current baud rate */
--		| CBAUDEX);	/* clear current buad rate */
-+		| CBAUDEX	/* clear current baud rate */
-+		| ADDRB);	/* disable 9th (addr) bit */
- 
- 	tty->termios.c_cflag |= CS8;	/* character size 8 bits */
- 
-diff --git a/drivers/s390/char/tty3270.c b/drivers/s390/char/tty3270.c
-index 5c83f71c1d0e..253d2997a1d3 100644
---- a/drivers/s390/char/tty3270.c
-+++ b/drivers/s390/char/tty3270.c
-@@ -1768,6 +1768,9 @@ tty3270_set_termios(struct tty_struct *tty, struct ktermios *old)
- 	tp = tty->driver_data;
- 	if (!tp)
- 		return;
-+
-+	tty->termios.c_cflag &= ~ADDRB;
-+
- 	spin_lock_bh(&tp->view.lock);
- 	if (L_ICANON(tty)) {
- 		new = L_ECHO(tty) ? TF_INPUT: TF_INPUTN;
-diff --git a/drivers/staging/greybus/uart.c b/drivers/staging/greybus/uart.c
-index dc4ed0ff1ae2..83e73aefde0f 100644
---- a/drivers/staging/greybus/uart.c
-+++ b/drivers/staging/greybus/uart.c
-@@ -487,6 +487,8 @@ static void gb_tty_set_termios(struct tty_struct *tty,
- 	struct ktermios *termios = &tty->termios;
- 	u8 newctrl = gb_tty->ctrlout;
- 
-+	termios->c_cflag &= ~ADDRB;
-+
- 	newline.rate = cpu_to_le32(tty_get_baud_rate(tty));
- 	newline.format = termios->c_cflag & CSTOPB ?
- 				GB_SERIAL_2_STOP_BITS : GB_SERIAL_1_STOP_BITS;
-diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
-index 533d02b38e02..3ca97007bd6e 100644
---- a/drivers/tty/amiserial.c
-+++ b/drivers/tty/amiserial.c
-@@ -1175,7 +1175,11 @@ static void rs_set_termios(struct tty_struct *tty, struct ktermios *old_termios)
- {
- 	struct serial_state *info = tty->driver_data;
- 	unsigned long flags;
--	unsigned int cflag = tty->termios.c_cflag;
-+	unsigned int cflag;
-+
-+	tty->termios.c_cflag &= ~ADDRB;
-+
-+	cflag = tty->termios.c_cflag;
- 
- 	change_speed(tty, info, old_termios);
- 
-diff --git a/drivers/tty/moxa.c b/drivers/tty/moxa.c
-index f3c72ab1476c..07cd88152d58 100644
---- a/drivers/tty/moxa.c
-+++ b/drivers/tty/moxa.c
-@@ -2050,6 +2050,7 @@ static int MoxaPortSetTermio(struct moxa_port *port, struct ktermios *termio,
- 
- 	ofsAddr = port->tableAddr;
- 
-+	termio->c_cflag &= ~ADDRB;
- 	mode = termio->c_cflag & CSIZE;
- 	if (mode == CS5)
- 		mode = MX_CS5;
-diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
-index 836c9eca2946..220676363a07 100644
---- a/drivers/tty/mxser.c
-+++ b/drivers/tty/mxser.c
-@@ -577,6 +577,7 @@ static void mxser_change_speed(struct tty_struct *tty, struct ktermios *old_term
- 	struct mxser_port *info = tty->driver_data;
- 	unsigned cflag, cval;
- 
-+	tty->termios.c_cflag &= ~ADDRB;
- 	cflag = tty->termios.c_cflag;
- 
- 	if (mxser_set_baud(tty, tty_get_baud_rate(tty))) {
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index c6ac91033e38..de198c2acefe 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -1493,6 +1493,8 @@ static void uart_set_termios(struct tty_struct *tty,
- 		goto out;
- 	}
- 
-+	tty->termios.c_cflag &= ~ADDRB;
-+
- 	uart_change_speed(tty, state, old_termios);
- 	/* reload cflag from termios; port driver may have overridden flags */
- 	cflag = tty->termios.c_cflag;
-diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
-index 25c558e65ece..ee767cea18ed 100644
---- a/drivers/tty/synclink_gt.c
-+++ b/drivers/tty/synclink_gt.c
-@@ -714,6 +714,8 @@ static void set_termios(struct tty_struct *tty, struct ktermios *old_termios)
- 
- 	DBGINFO(("%s set_termios\n", tty->driver->name));
- 
-+	tty->termios.c_cflag &= ~ADDRB;
-+
- 	change_params(info);
- 
- 	/* Handle transition to B0 status */
-diff --git a/drivers/tty/tty_ioctl.c b/drivers/tty/tty_ioctl.c
-index 63181925ec1a..934037d78868 100644
---- a/drivers/tty/tty_ioctl.c
-+++ b/drivers/tty/tty_ioctl.c
-@@ -319,6 +319,8 @@ unsigned char tty_get_frame_size(unsigned int cflag)
- 		bits++;
- 	if (cflag & PARENB)
- 		bits++;
-+	if (cflag & ADDRB)
-+		bits++;
- 
- 	return bits;
- }
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 9b9aea24d58c..fd246ec70da8 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1056,6 +1056,8 @@ static void acm_tty_set_termios(struct tty_struct *tty,
- 	struct usb_cdc_line_coding newline;
- 	int newctrl = acm->ctrlout;
- 
-+	termios->c_cflag &= ~ADDRB;
-+
- 	newline.dwDTERate = cpu_to_le32(tty_get_baud_rate(tty));
- 	newline.bCharFormat = termios->c_cflag & CSTOPB ? 2 : 0;
- 	newline.bParityType = termios->c_cflag & PARENB ?
-diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
-index 24101bd7fcad..8d1d170eb7e6 100644
---- a/drivers/usb/serial/usb-serial.c
-+++ b/drivers/usb/serial/usb-serial.c
-@@ -525,10 +525,12 @@ static void serial_set_termios(struct tty_struct *tty, struct ktermios *old)
- 
- 	dev_dbg(&port->dev, "%s\n", __func__);
- 
--	if (port->serial->type->set_termios)
-+	if (port->serial->type->set_termios) {
-+		tty->termios.c_cflag &= ~ADDRB;
- 		port->serial->type->set_termios(tty, port, old);
--	else
-+	} else {
- 		tty_termios_copy_hw(&tty->termios, old);
-+	}
- }
- 
- static int serial_break(struct tty_struct *tty, int break_state)
-diff --git a/include/uapi/asm-generic/termbits.h b/include/uapi/asm-generic/termbits.h
-index 2fbaf9ae89dd..e06eaa9cf8be 100644
---- a/include/uapi/asm-generic/termbits.h
-+++ b/include/uapi/asm-generic/termbits.h
-@@ -158,6 +158,7 @@ struct ktermios {
- #define  B3500000 0010016
- #define  B4000000 0010017
- #define CIBAUD	  002003600000	/* input baud rate */
-+#define ADDRB	  004000000000	/* address bit */
- #define CMSPAR	  010000000000	/* mark or space (stick) parity */
- #define CRTSCTS	  020000000000	/* flow control */
- 
-diff --git a/net/bluetooth/rfcomm/tty.c b/net/bluetooth/rfcomm/tty.c
-index ebd78fdbd6e8..832e725f23ab 100644
---- a/net/bluetooth/rfcomm/tty.c
-+++ b/net/bluetooth/rfcomm/tty.c
-@@ -871,6 +871,8 @@ static void rfcomm_tty_set_termios(struct tty_struct *tty, struct ktermios *old)
- 	if (!dev || !dev->dlc || !dev->dlc->session)
- 		return;
- 
-+	new->c_cflag &= ~ADDRB;
-+
- 	/* Handle turning off CRTSCTS */
- 	if ((old->c_cflag & CRTSCTS) && !(new->c_cflag & CRTSCTS))
- 		BT_DBG("Turning off CRTSCTS unsupported");
+ drivers/usb/serial/option.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index e7755d9cfc61..e0af45e3a6f7 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2111,6 +2111,8 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(3) },
+ 	{ USB_DEVICE(0x1508, 0x1001),						/* Fibocom NL668 (IOT version) */
+ 	  .driver_info = RSVD(4) | RSVD(5) | RSVD(6) },
++	{ USB_DEVICE(0x1782, 0x4d10) },						/* Fibocom L610 (AT mode) */
++	{ USB_DEVICE_INTERFACE_CLASS(0x1782, 0x4d11, 0xff) },			/* Fibocom L610 (ECM/RNDIS mode) */
+ 	{ USB_DEVICE(0x2cb7, 0x0104),						/* Fibocom NL678 series */
+ 	  .driver_info = RSVD(4) | RSVD(5) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),			/* Fibocom NL678 series */
 -- 
-2.30.2
+2.36.0
 
