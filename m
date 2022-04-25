@@ -2,185 +2,357 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEEC50DB0E
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 10:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD5150DBA2
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Apr 2022 10:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237090AbiDYI1V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 04:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
+        id S238003AbiDYIxZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Apr 2022 04:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240068AbiDYI1K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 04:27:10 -0400
-Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.140.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A321DA49
-        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 01:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
-  t=1650875043; x=1651479843;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=R5qZRM9CuV1j92lo9WPHutz9AyB/SJ2tmFPd/aJKHVY=;
-  b=q7QivCZbKa21Y4pYFFA2qfzJ2aY8lJxQALS4pL8CBBpN4sMYObx7f5yW
-   8oVk0diZ8f5F6DFBzKPlAP+Sus2k1qC4COCU7EBRu1LrO8JJj/9Tw76dv
-   h7Fe7P+PaQhsGzKHPrgI/wQsvHUpwMgB2FllCSVEG9ofAHhi9Z1+83vw5
-   A=;
-Received: from mail-bn8nam08lp2044.outbound.protection.outlook.com (HELO NAM04-BN8-obe.outbound.protection.outlook.com) ([104.47.74.44])
-  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 08:23:57 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BvWutwTZuS3uS+XKwUnVtyLyJBeDlisNnKNlMs84qLvRH6hS1WzyM0fg1kg+stkO9YEBE51VoL8DRJhiBqKQ0Jr+b/PqARZ7hbvr5YdwLj8VGkXIVf2VpfkvP5t3i0tKyXYoXz4DLfh2tlPw8Huh5mK7gBxuBJ0oStQoRRQQJ86t5uSqGRcKOJtRaZUokhYtCUKMejrgFSNQ9chxdqcMeCCCsGnkzvGKNlyP0D72M2Ffrs3FLIMwsJlTIE92d2w6QrB7N5noOXsxW0AhsBMePLiRo/HPjoQE/jDknFjidXWmU27nvwkbbj040F572KwOw3QQbMrepq11XjxjPe9OPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R5qZRM9CuV1j92lo9WPHutz9AyB/SJ2tmFPd/aJKHVY=;
- b=G6ENACRhR6l0poNScCLaku8Hz0PprL4JX71gU0fA8elZ+XM3KUklJb/6vKRSXJJ/1R925N9pMFq7A/4xwJm/qabdRzk5pkjhKSSgtWfWIdXgQwpM///Wp/w2LARqXhNNVhKV7j7oiIZH6YIZMi/vnbH+Oqo/IcubUJ+qiGz0IqiaHEE59YAPXQgVP9yZkw77vdnQzBrnlAx8Rg5TgLm/uLdhBH2x14pnpCntbsRdEr9X6gjebNglzhyBzxWCJREnVQ2rD/ZyC/n1jDhaoi0LdnxveSqtAK0RR6g2cPtTGfVZmIH8aXagdMOfewbJ9Iihdm7x6O3/Z5HhBcIRuF5UIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
- dkim=pass header.d=quicinc.com; arc=none
-Received: from DM8PR02MB8198.namprd02.prod.outlook.com (2603:10b6:8:4::7) by
- BL0PR02MB4356.namprd02.prod.outlook.com (2603:10b6:208:41::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5186.14; Mon, 25 Apr 2022 08:23:55 +0000
-Received: from DM8PR02MB8198.namprd02.prod.outlook.com
- ([fe80::15d6:317e:e736:e9ad]) by DM8PR02MB8198.namprd02.prod.outlook.com
- ([fe80::15d6:317e:e736:e9ad%5]) with mapi id 15.20.5186.021; Mon, 25 Apr 2022
- 08:23:55 +0000
-From:   "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Jack Pham (QUIC)" <quic_jackp@quicinc.com>
-Subject: RE: [PATCH v5 2/3] usb: typec: ucsi: do not allocate one extra unused
- connector
-Thread-Topic: [PATCH v5 2/3] usb: typec: ucsi: do not allocate one extra
- unused connector
-Thread-Index: AQHYVfaGbzqgVrkTVk6KghisfL1e7a0AwiqA//+NXTA=
-Date:   Mon, 25 Apr 2022 08:23:55 +0000
-Message-ID: <DM8PR02MB81981793F2E9A2BB672E0983E3F89@DM8PR02MB8198.namprd02.prod.outlook.com>
-References: <1650597022-19793-1-git-send-email-quic_linyyuan@quicinc.com>
- <1650597022-19793-3-git-send-email-quic_linyyuan@quicinc.com>
- <YmZYNWewOiHNu+9D@kuha.fi.intel.com>
-In-Reply-To: <YmZYNWewOiHNu+9D@kuha.fi.intel.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=quicinc.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 03d4e738-d21e-41f3-58b3-08da2694f01a
-x-ms-traffictypediagnostic: BL0PR02MB4356:EE_
-x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-microsoft-antispam-prvs: <BL0PR02MB4356B60B13EEBB4BE0922CD79FF89@BL0PR02MB4356.namprd02.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tBmcuYIOhn+Of768ZbpT6FBt2UeyVCBkiPpMsrEfIByKhgCz1xBrlPX46f7nxxDwTQDaSOUMVduHZg02CtsKEsQF2eSOpF670JcPRwz3PZMYer3TLG0T99deawYwS29lGIy7IxmPLUce1Rlk6HCYvjNX8GayQtZaaSpqhIRd6bv/+LfpWHXH/tliegqMYWaFUli7f43s4fxG2/Pu5xY3iyFMLddLz5xaIydeffdTq+0bYID+ImVvB0KSUNGE4EJpTIMMD/BIEQXS08x0X+OK7eOAnh+Y2kJB5yT5Up/kLmx3vAPkjsdLdm7BbOPnti2os4uTZDpG2/pYh4fZkGahmER9v18IIFyADelzFlIStHU4b65W/QcmUZPUaSjGiff+nJkf1Z3fqevtgIIutqoWsp/RzcFw5pselmG0PgzIriFyGXXqq0BXKwRm6XaRkCJXN4XYd/ZkR9Vaui/M8lZ5xQc8iuMhnKdi1Qjj9uhtiA+db45OrphFooh/7xOFs6W45zkzy+MllQjF2lm5X8eBLHcyq1VkjqZ+T4qOtfFs48GRXu75yJbBx2RDSyOiu5HYSkQAJOAlkavwM6NstABBad3WK/IMJehV5UI9oZsT1OlvOJ6KWF0C6UWm8gZ6nIBOHZ2OZgfVmFcRpWQcVeI1RjmMOVPzGex7yElP2pMcZ76gzyAZR2kupHkwkRgz4o6u/mPGdWCuhs8TaRSzBe4Hhw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR02MB8198.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(2906002)(7696005)(5660300002)(53546011)(107886003)(186003)(8936002)(9686003)(83380400001)(26005)(508600001)(55016003)(110136005)(4326008)(316002)(33656002)(54906003)(122000001)(52536014)(38070700005)(66946007)(38100700002)(71200400001)(66476007)(8676002)(66556008)(66446008)(76116006)(64756008)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?dRZoMt9C5favXrKHO+BNFn1wt3Q1Gn9o+p8sVeoqmVf/Hiph1T1Q5JVBwMhd?=
- =?us-ascii?Q?CONI+sKi5Fq2TpUoUY/12wuf6Yj2xhqFbf3AI37P8VpP1YL09OK08Vl+wSWc?=
- =?us-ascii?Q?iwGOgs6fHkXX6YjaxSGknF7tXIqiYRGz6w+B9swP0IAkv609ppiWISS8i1ww?=
- =?us-ascii?Q?2gtkMn3ECR62aE9URTXnVeryuY9lBInTW2/rCqekSoztx7WmD95lkFPTHx93?=
- =?us-ascii?Q?kDflqtuFhdZ755w28SWl2eBfYxoOt0SX0ieNVk7gdFvRIHIxODxOGBYZZZoi?=
- =?us-ascii?Q?6n+GopeSjjc21Ytf+gSX9mlO3RrlZleD7BNZTqZ2wiMwJfICU5vlpLOAF/pN?=
- =?us-ascii?Q?CGgrrxkThFPHdZq0wegLBkuolwN2wNZ7jghXPndKYk7OxTVnLNPhJSQgtdjq?=
- =?us-ascii?Q?wOBdk07wIMAspnkuYqIQXrK4EvkVOOFzeAOmPDoCjj1kLzhIsAFJR5uG0SEV?=
- =?us-ascii?Q?fa4b2p/8pqZFGxUGlzxlkunsC02fFlFK5qQap3mTWHb6ra9iB82s8bA3taEf?=
- =?us-ascii?Q?CSihQgMjCbdm1HKhPdpLNu2oKkxY9DMp0kzEbVxnBgn5tld6ZOJNbGb1RJNb?=
- =?us-ascii?Q?OIV2ZHOjHEz+/vEr5IwHqcCgmVtGu3VM+pN6iFAxTjkGHT69HruCzstmHKAu?=
- =?us-ascii?Q?H1IIeE86Jad1vne1mXGMFhTNuPU2FHrM/aI3qkcmkv0RO5KK45mi8E13qZ9L?=
- =?us-ascii?Q?9/T2M9Xr/E97fd247E0N8lHSgUhu+n/py/Fpqaxb0vgoj5OyIZUsDaA+OU2D?=
- =?us-ascii?Q?t22qtEycQvx9VXZg61SkhV5Z9xZWoODZXlPt02Cmg0WJFRA4wABIKhkgYSNo?=
- =?us-ascii?Q?jAc4VfORJe7DphcLTth4xFiWXmWOTmdxBW8MFMACRUf+z5Q5W7GbCr7AvyuU?=
- =?us-ascii?Q?rEI2DazvQl77Uge0u4KC5LOpWsxFkqis7eOJHucHOl7ug9+L0Mb+F1WKJzn6?=
- =?us-ascii?Q?mV4y+SanQ8EohLEAbNSCeOIa4X8edP5/orDSk8GhHRIjPT7pCpZfrfRLG48Y?=
- =?us-ascii?Q?oX72/Z7k1PJuxbZZfUwm1qXHpmxgGKiiNLVojNFl3bHx0oMT3TvNyIT7lZLb?=
- =?us-ascii?Q?qYguPsMzGA86ZXXG0lEQgCIq9CEu0KzqoY2OiB+kKpkeUhjw36JyCwy0x+ah?=
- =?us-ascii?Q?jGOhpoivUP5X7h9ZJDy0osioMCXu5y6tY1XMXN/PnvAXNYr7rqojyVV+yJ8F?=
- =?us-ascii?Q?4ni8nC9Zy2CT/GCgQArZxU3TU05x2Lxg/ZNAuq92HSkavMmF98qyuNdvwdfD?=
- =?us-ascii?Q?vyPIChNjDBa4h/rgCrqXl/Eh3BFfmrd3CsJczmC1DvfTdW0TUVvoYrklDUY2?=
- =?us-ascii?Q?Njne4DOBBkVCcZlrRHqlROdPTl9XAMyr6O19qicph+s5m4u4BalMzr/E6dY9?=
- =?us-ascii?Q?F9JsLHmSqKPp0b1a1TsoKqLo8Wj3FxK0I0rL/9Z2z75coajgE3YlNz1UGtnK?=
- =?us-ascii?Q?wFACqeOltt86wmwA62v8jGzec96ims4WXOdpW/dDDVhGPdmxyFGvLcb0wdbC?=
- =?us-ascii?Q?SdedL/ZLKq+vmE6buo5B3qiRfAhP/fm6k+A5rpGIlq6H2jPDTRdYc2JhVxei?=
- =?us-ascii?Q?naPHAJaP65/8ycMJcmZl9fXUZDmzBoGHnYW9S+xAMaJua77Zb2GfX19WSYh/?=
- =?us-ascii?Q?kCloL1O5t29dHOqhoCJwrYyGBp3Di3bJ5G3gwdWKAiEr6+MiNkocJt+41Yt8?=
- =?us-ascii?Q?8JH4gVvAMJGXETLPHPiqqjiwuVnEKAd6n1snOKowkPewCY7cvQo7Bx6dE2xC?=
- =?us-ascii?Q?yxeyGIh/yg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S234310AbiDYIxW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 04:53:22 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86B4B1887;
+        Mon, 25 Apr 2022 01:50:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650876617; x=1682412617;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lgfwzF/QUvAmGUo4sQq1gEPq7nKsV+VBzxrAk5mJJsU=;
+  b=DsrsMqjsduQ34qU6eZTqDLImGH/SBdwmZJrBS4VZcTA13ylpWmPBfV7q
+   mUfrweWCJaJedt9atd/Iji7Xmv+yz7Ar/s2xTWcCtdZ4ReBs3tEIFkWW0
+   JA+wVOLa4GR9Y5/HqhHQFPu+4PwD2MGyTYNZ8NbS77GC1Zzbr7olgQUai
+   rlymIpFyr1M192fF4rZi2DLVsfxvzQG32VTfC77tQr/8NgRS4JnBIzslM
+   T9vmVHKSEdDvOhXkG8YL4+cdlSdQLD9PyW4hBM+dx8LefKu/fkiCakpfE
+   IwAO4R9JgrpaFaQ4JhAADGoQyuLtx2noRzrCjxtEpb7+yEvOnGC2y7m33
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="351633971"
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="351633971"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 01:50:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="704469162"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 25 Apr 2022 01:50:12 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 25 Apr 2022 11:50:11 +0300
+Date:   Mon, 25 Apr 2022 11:50:11 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v5 7/7] usb: typec: mux: Add On Semi fsa4480 driver
+Message-ID: <YmZgw7TnJmy9db2W@kuha.fi.intel.com>
+References: <20220422222351.1297276-1-bjorn.andersson@linaro.org>
+ <20220422222351.1297276-8-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-X-OriginatorOrg: quicinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR02MB8198.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03d4e738-d21e-41f3-58b3-08da2694f01a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Apr 2022 08:23:55.1151
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jjxMkH8yG/nwAhWmGq7Ev7dHLFPHRncgEkHnezUdxUCaOn3f9u/4xw1oSSGwEkOz4VZj5k4YL7vYd0DFU+KE10CL4ZsbzKceykL6s4iO09Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB4356
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422222351.1297276-8-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Sent: Monday, April 25, 2022 4:14 PM
-> To: Linyu Yuan (QUIC) <quic_linyyuan@quicinc.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; linux-
-> usb@vger.kernel.org; Jack Pham (QUIC) <quic_jackp@quicinc.com>
-> Subject: Re: [PATCH v5 2/3] usb: typec: ucsi: do not allocate one extra
-> unused connector
->=20
-> On Fri, Apr 22, 2022 at 11:10:21AM +0800, Linyu Yuan wrote:
-> > In ucsi_init(), it allocate number of (ucsi->cap.num_connectors + 1)
-> > connectors, there is one extra as the ending.
-> > ucsi_unregister_connectors() is safe to unregister all ucsi connectors
-> > according ucsi->cap.num_connectors.
-> >
-> > Let's remove the extra one connector to save memory.
->=20
-> Maybe you could just merge this one into the first patch.
+On Fri, Apr 22, 2022 at 03:23:51PM -0700, Bjorn Andersson wrote:
+> The ON Semiconductor FSA4480 is a USB Type-C port multimedia switch with
+> support for analog audio headsets. It allows sharing a common USB Type-C
+> port to pass USB2.0 signal, analog audio, sideband use wires and analog
+> microphone signal.
+> 
+> Due to lacking upstream audio support for testing, the audio muxing is
+> left untouched, but implementation of muxing the SBU lines is provided
+> as a pair of Type-C mux and switch devices. This provides the necessary
+> support for enabling the DisplayPort altmode on devices with this
+> circuit.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Sure, thanks, will merge next version.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
->=20
-> > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
-> > ---
-> > v2: new change
-> > v3: no change
-> > v4: fix a typo extral -> extra in commit description
-> > v5: update commit description
-> >
-> >  drivers/usb/typec/ucsi/ucsi.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucs=
-i.c
-> > index af9a2a1..ce9192e 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > @@ -1251,7 +1251,7 @@ static int ucsi_init(struct ucsi *ucsi)
-> >  	}
-> >
-> >  	/* Allocate the connectors. Released in ucsi_unregister() */
-> > -	ucsi->connector =3D kcalloc(ucsi->cap.num_connectors + 1,
-> > +	ucsi->connector =3D kcalloc(ucsi->cap.num_connectors,
-> >  				  sizeof(*ucsi->connector), GFP_KERNEL);
-> >  	if (!ucsi->connector) {
-> >  		ret =3D -ENOMEM;
-> > --
-> > 2.7.4
->=20
-> thanks,
->=20
-> --
-> heikki
+> ---
+> 
+> Changes since v4:
+> - Disable locking of the regmap
+> - Use dev_fwnode() instead of explicit dereference
+> 
+>  drivers/usb/typec/mux/Kconfig   |  10 ++
+>  drivers/usb/typec/mux/Makefile  |   1 +
+>  drivers/usb/typec/mux/fsa4480.c | 218 ++++++++++++++++++++++++++++++++
+>  3 files changed, 229 insertions(+)
+>  create mode 100644 drivers/usb/typec/mux/fsa4480.c
+> 
+> diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
+> index edead555835e..5eb2c17d72c1 100644
+> --- a/drivers/usb/typec/mux/Kconfig
+> +++ b/drivers/usb/typec/mux/Kconfig
+> @@ -2,6 +2,16 @@
+>  
+>  menu "USB Type-C Multiplexer/DeMultiplexer Switch support"
+>  
+> +config TYPEC_MUX_FSA4480
+> +	tristate "ON Semi FSA4480 Analog Audio Switch driver"
+> +	depends on I2C
+> +	select REGMAP_I2C
+> +	help
+> +	  Driver for the ON Semiconductor FSA4480 Analog Audio Switch, which
+> +	  provides support for muxing analog audio and sideband signals on a
+> +	  common USB Type-C connector.
+> +	  If compiled as a module, the module will be named fsa4480.
+> +
+>  config TYPEC_MUX_PI3USB30532
+>  	tristate "Pericom PI3USB30532 Type-C cross switch driver"
+>  	depends on I2C
+> diff --git a/drivers/usb/typec/mux/Makefile b/drivers/usb/typec/mux/Makefile
+> index 280a6f553115..e52a56c16bfb 100644
+> --- a/drivers/usb/typec/mux/Makefile
+> +++ b/drivers/usb/typec/mux/Makefile
+> @@ -1,4 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> +obj-$(CONFIG_TYPEC_MUX_FSA4480)		+= fsa4480.o
+>  obj-$(CONFIG_TYPEC_MUX_PI3USB30532)	+= pi3usb30532.o
+>  obj-$(CONFIG_TYPEC_MUX_INTEL_PMC)	+= intel_pmc_mux.o
+> diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
+> new file mode 100644
+> index 000000000000..6184f5367190
+> --- /dev/null
+> +++ b/drivers/usb/typec/mux/fsa4480.c
+> @@ -0,0 +1,218 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2021-2022 Linaro Ltd.
+> + * Copyright (C) 2018-2020 The Linux Foundation
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/i2c.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/regmap.h>
+> +#include <linux/usb/typec_dp.h>
+> +#include <linux/usb/typec_mux.h>
+> +
+> +#define FSA4480_SWITCH_ENABLE	0x04
+> +#define FSA4480_SWITCH_SELECT	0x05
+> +#define FSA4480_SWITCH_STATUS1	0x07
+> +#define FSA4480_SLOW_L		0x08
+> +#define FSA4480_SLOW_R		0x09
+> +#define FSA4480_SLOW_MIC	0x0a
+> +#define FSA4480_SLOW_SENSE	0x0b
+> +#define FSA4480_SLOW_GND	0x0c
+> +#define FSA4480_DELAY_L_R	0x0d
+> +#define FSA4480_DELAY_L_MIC	0x0e
+> +#define FSA4480_DELAY_L_SENSE	0x0f
+> +#define FSA4480_DELAY_L_AGND	0x10
+> +#define FSA4480_RESET		0x1e
+> +#define FSA4480_MAX_REGISTER	0x1f
+> +
+> +#define FSA4480_ENABLE_DEVICE	BIT(7)
+> +#define FSA4480_ENABLE_SBU	GENMASK(6, 5)
+> +#define FSA4480_ENABLE_USB	GENMASK(4, 3)
+> +
+> +#define FSA4480_SEL_SBU_REVERSE	GENMASK(6, 5)
+> +#define FSA4480_SEL_USB		GENMASK(4, 3)
+> +
+> +struct fsa4480 {
+> +	struct i2c_client *client;
+> +
+> +	/* used to serialize concurrent change requests */
+> +	struct mutex lock;
+> +
+> +	struct typec_switch_dev *sw;
+> +	struct typec_mux_dev *mux;
+> +
+> +	struct regmap *regmap;
+> +
+> +	u8 cur_enable;
+> +	u8 cur_select;
+> +};
+> +
+> +static const struct regmap_config fsa4480_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.max_register = FSA4480_MAX_REGISTER,
+> +	/* Accesses only done under fsa4480->lock */
+> +	.disable_locking = true,
+> +};
+> +
+> +static int fsa4480_switch_set(struct typec_switch_dev *sw,
+> +			      enum typec_orientation orientation)
+> +{
+> +	struct fsa4480 *fsa = typec_switch_get_drvdata(sw);
+> +	u8 new_sel;
+> +
+> +	mutex_lock(&fsa->lock);
+> +	new_sel = FSA4480_SEL_USB;
+> +	if (orientation == TYPEC_ORIENTATION_REVERSE)
+> +		new_sel |= FSA4480_SEL_SBU_REVERSE;
+> +
+> +	if (new_sel == fsa->cur_select)
+> +		goto out_unlock;
+> +
+> +	if (fsa->cur_enable & FSA4480_ENABLE_SBU) {
+> +		/* Disable SBU output while re-configuring the switch */
+> +		regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE,
+> +			     fsa->cur_enable & ~FSA4480_ENABLE_SBU);
+> +
+> +		/* 35us to allow the SBU switch to turn off */
+> +		usleep_range(35, 1000);
+> +	}
+> +
+> +	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, new_sel);
+> +	fsa->cur_select = new_sel;
+> +
+> +	if (fsa->cur_enable & FSA4480_ENABLE_SBU) {
+> +		regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, fsa->cur_enable);
+> +
+> +		/* 15us to allow the SBU switch to turn on again */
+> +		usleep_range(15, 1000);
+> +	}
+> +
+> +out_unlock:
+> +	mutex_unlock(&fsa->lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static int fsa4480_mux_set(struct typec_mux_dev *mux, struct typec_mux_state *state)
+> +{
+> +	struct fsa4480 *fsa = typec_mux_get_drvdata(mux);
+> +	u8 new_enable;
+> +
+> +	mutex_lock(&fsa->lock);
+> +
+> +	new_enable = FSA4480_ENABLE_DEVICE | FSA4480_ENABLE_USB;
+> +	if (state->mode >= TYPEC_DP_STATE_A)
+> +		new_enable |= FSA4480_ENABLE_SBU;
+> +
+> +	if (new_enable == fsa->cur_enable)
+> +		goto out_unlock;
+> +
+> +	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, new_enable);
+> +	fsa->cur_enable = new_enable;
+> +
+> +	if (new_enable & FSA4480_ENABLE_SBU) {
+> +		/* 15us to allow the SBU switch to turn off */
+> +		usleep_range(15, 1000);
+> +	}
+> +
+> +out_unlock:
+> +	mutex_unlock(&fsa->lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static int fsa4480_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct typec_switch_desc sw_desc = { };
+> +	struct typec_mux_desc mux_desc = { };
+> +	struct fsa4480 *fsa;
+> +
+> +	fsa = devm_kzalloc(dev, sizeof(*fsa), GFP_KERNEL);
+> +	if (!fsa)
+> +		return -ENOMEM;
+> +
+> +	fsa->client = client;
+> +	mutex_init(&fsa->lock);
+> +
+> +	fsa->regmap = devm_regmap_init_i2c(client, &fsa4480_regmap_config);
+> +	if (IS_ERR(fsa->regmap))
+> +		return dev_err_probe(dev, PTR_ERR(fsa->regmap), "failed to initialize regmap\n");
+> +
+> +	fsa->cur_enable = FSA4480_ENABLE_DEVICE | FSA4480_ENABLE_USB;
+> +	fsa->cur_select = FSA4480_SEL_USB;
+> +
+> +	/* set default settings */
+> +	regmap_write(fsa->regmap, FSA4480_SLOW_L, 0x00);
+> +	regmap_write(fsa->regmap, FSA4480_SLOW_R, 0x00);
+> +	regmap_write(fsa->regmap, FSA4480_SLOW_MIC, 0x00);
+> +	regmap_write(fsa->regmap, FSA4480_SLOW_SENSE, 0x00);
+> +	regmap_write(fsa->regmap, FSA4480_SLOW_GND, 0x00);
+> +	regmap_write(fsa->regmap, FSA4480_DELAY_L_R, 0x00);
+> +	regmap_write(fsa->regmap, FSA4480_DELAY_L_MIC, 0x00);
+> +	regmap_write(fsa->regmap, FSA4480_DELAY_L_SENSE, 0x00);
+> +	regmap_write(fsa->regmap, FSA4480_DELAY_L_AGND, 0x09);
+> +	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, fsa->cur_select);
+> +	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, fsa->cur_enable);
+> +
+> +	sw_desc.drvdata = fsa;
+> +	sw_desc.fwnode = dev_fwnode(dev);
+> +	sw_desc.set = fsa4480_switch_set;
+> +
+> +	fsa->sw = typec_switch_register(dev, &sw_desc);
+> +	if (IS_ERR(fsa->sw))
+> +		return dev_err_probe(dev, PTR_ERR(fsa->sw), "failed to register typec switch\n");
+> +
+> +	mux_desc.drvdata = fsa;
+> +	mux_desc.fwnode = dev_fwnode(dev);
+> +	mux_desc.set = fsa4480_mux_set;
+> +
+> +	fsa->mux = typec_mux_register(dev, &mux_desc);
+> +	if (IS_ERR(fsa->mux)) {
+> +		typec_switch_unregister(fsa->sw);
+> +		return dev_err_probe(dev, PTR_ERR(fsa->mux), "failed to register typec mux\n");
+> +	}
+> +
+> +	i2c_set_clientdata(client, fsa);
+> +	return 0;
+> +}
+> +
+> +static int fsa4480_remove(struct i2c_client *client)
+> +{
+> +	struct fsa4480 *fsa = i2c_get_clientdata(client);
+> +
+> +	typec_mux_unregister(fsa->mux);
+> +	typec_switch_unregister(fsa->sw);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct i2c_device_id fsa4480_table[] = {
+> +	{ "fsa4480" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, fsa4480_table);
+> +
+> +static const struct of_device_id fsa4480_of_table[] = {
+> +	{ .compatible = "fcs,fsa4480" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, fsa4480_of_table);
+> +
+> +static struct i2c_driver fsa4480_driver = {
+> +	.driver = {
+> +		.name = "fsa4480",
+> +		.of_match_table = fsa4480_of_table,
+> +	},
+> +	.probe_new	= fsa4480_probe,
+> +	.remove		= fsa4480_remove,
+> +	.id_table	= fsa4480_table,
+> +};
+> +module_i2c_driver(fsa4480_driver);
+> +
+> +MODULE_DESCRIPTION("ON Semiconductor FSA4480 driver");
+> +MODULE_LICENSE("GPL v2");
+> -- 
+> 2.35.1
+
+-- 
+heikki
