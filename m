@@ -2,43 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE54C50FBE9
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 13:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 444FE50FBEC
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 13:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349522AbiDZL2w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Apr 2022 07:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S1349518AbiDZL2y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Apr 2022 07:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240073AbiDZL2u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 07:28:50 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A169418397
+        with ESMTP id S236771AbiDZL2w (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 07:28:52 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A120C15725
         for <linux-usb@vger.kernel.org>; Tue, 26 Apr 2022 04:25:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650972342; x=1682508342;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lp+/YJxKd4cEPqvP8d//5aAitI+nT/oXEftZJYvZop0=;
-  b=E7ud1ASWtsKxE4CxZr+YjMAEEowcgaXSA0FlNYm8gXVfzeqvCMJrv9oF
-   X5r2Fg5w5Odr9R7fi9ObuAFrWMYlw0L5FoVm1t3SWqbTnusxvBo5nZvFk
-   MJFW+OgSX92yoL8FHVeMowsfo6Et5GKa0S/fKY2fHe2A1TfON98k5c5vE
-   tXYfxVh1JpiBI6AMUVe3DBRVgQUNtOK6Ou1tuGq6tGmeCQAdBaaVZa9Is
-   sYuey12qKIvpf52hWUQIvqujcwEAWot+ycj/Fp6HC+tJxtPFRd4LdZoTa
-   Ke4NEeplL/PVnDlZ/HFu7aqDHICEoeQbTTVWORbOLdoohEq5MZpH66XVh
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="290688237"
+  t=1650972345; x=1682508345;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=m11dKeme3P2DhkuylIoMXOq+40TPqN8pZVRxH7ehsXc=;
+  b=C4OnG5aEXZlTc3PNh0Y+9oZma0urhbfE8P7HuIsRfkIXhV8DToSXI6Qd
+   YYk4q+2S73iD+GfeRqXZb8SbspmqMVDtm0DoktN0WIWXggexv6VkR5rkx
+   I4HzicB903hqNvnOZ1fwLNGCmV9SSxaBsNqKKnhE7iWrjCWK4PtM7GYqt
+   79TQWQIQ83wKRLaMXc/1XelToMWSIWqqZURAh2SEPDro2FKwrX8NiRpdt
+   MDC3l1sR9usRinEigdzWd0ZU7mAfBIPXzlY1rY+bsZdu/K0x58j24nLyD
+   ltCAGVZRO/jtWIaFlBIqc8pXZuRDdb7nmmv6TN4U3X6mMaGqqZvl0CmLT
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="351988561"
 X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="290688237"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 04:25:42 -0700
+   d="scan'208";a="351988561"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 04:25:41 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="579837529"
+   d="scan'208";a="650158831"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 26 Apr 2022 04:25:40 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Apr 2022 04:25:40 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 533454E1; Tue, 26 Apr 2022 14:25:40 +0300 (EEST)
+        id 5ECD8179; Tue, 26 Apr 2022 14:25:40 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -46,53 +46,51 @@ Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
         Andreas Noever <andreas.noever@gmail.com>,
         Lukas Wunner <lukas@wunner.de>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 0/5] thunderbolt: Add support for XDomain lane bonding
-Date:   Tue, 26 Apr 2022 14:25:35 +0300
-Message-Id: <20220426112540.6053-1-mika.westerberg@linux.intel.com>
+Subject: [PATCH 1/5] thunderbolt: Add debug logging when lane is enabled/disabled
+Date:   Tue, 26 Apr 2022 14:25:36 +0300
+Message-Id: <20220426112540.6053-2-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220426112540.6053-1-mika.westerberg@linux.intel.com>
+References: <20220426112540.6053-1-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi all,
+This is useful when debugging possible issues.
 
-So far connecting two Thunderbolt/USB4 domains (hosts) the high-speed link
-has been using a single lane. The reason for this was simplicity and also
-the fact that the host DMA was not able to go over the 20 Gbit/s even if
-the lanes were bonded. However, Intel Alder Lake and beyond actually can go
-higher than that so now it makes more sense to take advantage of the lane
-bonding. The USB4 Inter-Domain Service specification describes the
-protocol and this patch series implements it for the Linux Thunderbolt/USB4
-driver.
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ drivers/thunderbolt/switch.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-If both sides (hosts) of the link announce supporting this, we will
-establish bonded link. This is only possible on systems with software based
-connection manager (so Intel Alder Lake and beyond).
-
-Mika Westerberg (5):
-  thunderbolt: Add debug logging when lane is enabled/disabled
-  thunderbolt: Move tb_port_state() prototype to correct place
-  thunderbolt: Split setting link width and lane bonding into own functions
-  thunderbolt: Ignore port locked error in tb_port_wait_for_link_width()
-  thunderbolt: Add support for XDomain lane bonding
-
- drivers/thunderbolt/switch.c  | 109 ++++--
- drivers/thunderbolt/tb.c      |   6 -
- drivers/thunderbolt/tb.h      |   4 +-
- drivers/thunderbolt/tb_msgs.h |  39 +++
- drivers/thunderbolt/tb_regs.h |   5 +
- drivers/thunderbolt/xdomain.c | 609 ++++++++++++++++++++++++++++++----
- include/linux/thunderbolt.h   |  19 +-
- 7 files changed, 688 insertions(+), 103 deletions(-)
-
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index ac87e8b50e52..2d8a0fd3469c 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -693,8 +693,14 @@ static int __tb_port_enable(struct tb_port *port, bool enable)
+ 	else
+ 		phy |= LANE_ADP_CS_1_LD;
+ 
+-	return tb_port_write(port, &phy, TB_CFG_PORT,
+-			     port->cap_phy + LANE_ADP_CS_1, 1);
++
++	ret = tb_port_write(port, &phy, TB_CFG_PORT,
++			    port->cap_phy + LANE_ADP_CS_1, 1);
++	if (ret)
++		return ret;
++
++	tb_port_dbg(port, "lane %sabled\n", enable ? "en" : "dis");
++	return 0;
+ }
+ 
+ /**
 -- 
 2.35.1
 
