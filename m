@@ -2,39 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B97151013A
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 16:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E3951022C
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 17:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351847AbiDZPBl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Apr 2022 11:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
+        id S1352539AbiDZPx2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Apr 2022 11:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351843AbiDZPBi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 11:01:38 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 81118B1A9B
-        for <linux-usb@vger.kernel.org>; Tue, 26 Apr 2022 07:58:29 -0700 (PDT)
-Received: (qmail 841292 invoked by uid 1000); 26 Apr 2022 10:58:28 -0400
-Date:   Tue, 26 Apr 2022 10:58:28 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: USB device disconnects on resume
-Message-ID: <YmgIlFBC8mYQ2xwJ@rowland.harvard.edu>
-References: <f03916f62a976fd10b9808f77eace9c230ca4ebc.camel@puri.sm>
- <Yl7ID1Vxp5+wR1py@rowland.harvard.edu>
- <5117280ddbcd07007adef1680f689bdea6af32e5.camel@puri.sm>
- <YmAbZDd6LJwCCvkB@rowland.harvard.edu>
- <4fb8bd5842135a9f723bbe0406ed1afc023c25fe.camel@puri.sm>
- <YmFpMFlTt83s90an@rowland.harvard.edu>
- <b80c032c350c525d620968e95b7a653fc855d806.camel@puri.sm>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        with ESMTP id S1344512AbiDZPx1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 11:53:27 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2042.outbound.protection.outlook.com [40.107.22.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71121BC11;
+        Tue, 26 Apr 2022 08:50:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Gn6QDtk1GDp/jqim2ha2W3nwDityXVJ04PuYX7eX/qgqixia5H/h+cbnEGV388YJ0ivczQAqa43x5VG1DGeMO6vVA9mUXn8KSrgPBP0dIvzcCGN5Y5U0YNWNAdhexKWOPmHS9JlHYvqpLPCfmRAu9UxceZsOPD9MinicEtLb5wIAegjEnvF1uDQuJmj+FEX9/3xMCfS9iRPceq9gyHYI+LrTb+xDA+cztha7OlQARAIfq4D1WzFIkl++ZtbyyjJjAqKXwi6LgMLIthP04/61/WC1db4cvn3wcF4rerr6SeeHitYLh3N7eHPExJMUB2xK+7DTey5EL/O2aF/+m7bJBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DUgRLN7fqyOS2Xx2PtFxBwV8emY9TH49nkqM3ioASZ0=;
+ b=D4Uuic95PBqG8rU2SW+2FEpAlQlorceEUeDwe6jJ68HcWj8cLm+BNy2nYPZ3zFJN8/PotDkvR1uyBWh6OIXfl04/xy9ka7BAZ36uxuvYZ5OLKuneSbMCEabA5n8+omKU1qoAay8azXsA6l6kmyyCq9WS6cB+XYdrZ1t6Xdh9a4y2H3mZuXT7Lky3lwMsmqpGRe/nKvV3e1yMmWmQMNw/aeIcU2KljvbcnxUgiLtu0E0d+pRNt/gNyrya131cM9fxDezz3cBcLsAS2rPebsYCRDaICy7RnNXoY/P6neTeZIfjlEIea3wQp2j9xNKSWa9NshPbhtxK04nW4QuSC+A+4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DUgRLN7fqyOS2Xx2PtFxBwV8emY9TH49nkqM3ioASZ0=;
+ b=iGK2nlbcGoP4j09994JQlF8a0AxtcCL/sBZfezxXj8JIWEWBnA0lDOQpEVhBDTwZiG38vUTNmFT+YofThOJ1Al5NVDCG1OYcTq9+u0snz6F3Rqy4aq+SUIJlA7fNXC+hMRi+SSTzqHCuIAgiNrS0mHHomVXU6r2b+iMw83sJwOo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9186.eurprd04.prod.outlook.com (2603:10a6:102:232::18)
+ by VE1PR04MB7230.eurprd04.prod.outlook.com (2603:10a6:800:1ab::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.21; Tue, 26 Apr
+ 2022 15:50:16 +0000
+Received: from PAXPR04MB9186.eurprd04.prod.outlook.com
+ ([fe80::adc5:45f8:fa40:1b8a]) by PAXPR04MB9186.eurprd04.prod.outlook.com
+ ([fe80::adc5:45f8:fa40:1b8a%7]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
+ 15:50:16 +0000
+From:   Frank Li <Frank.Li@nxp.com>
+To:     peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
+        a-govindraju@ti.com, linux-usb@vger.kernel.org, jun.li@nxp.com,
+        lznuaa@gmail.com
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] usb: cdns3: allocate TX FIFO size according to composite EP number
+Date:   Tue, 26 Apr 2022 10:49:54 -0500
+Message-Id: <20220426154954.994747-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.35.1
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b80c032c350c525d620968e95b7a653fc855d806.camel@puri.sm>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR05CA0022.namprd05.prod.outlook.com
+ (2603:10b6:a03:33b::27) To PAXPR04MB9186.eurprd04.prod.outlook.com
+ (2603:10a6:102:232::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 42ba8901-a166-4d68-33d5-08da279c74e9
+X-MS-TrafficTypeDiagnostic: VE1PR04MB7230:EE_
+X-Microsoft-Antispam-PRVS: <VE1PR04MB7230FBFF3FCAAC23BC3A09ED88FB9@VE1PR04MB7230.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 83xIJugYgbcsYowKdk6eAoUs2WitiHtOn6I/7dLqhQkK/JbZoqtwv89TX+1K+Sy76z07Rk5yxyp5ETCGLGyTx8XPQHosxfn9qVZjwwoUPZpeVL0az7q2Qq1d/O06OyAzXCUV0QBiaBmMNVbaY1Gk0lYv8Az0qOJaLXNUqfwTaBsQ7+IxRxuv1jnlpkixW5JLHMyO+DNAK1L5XWYeMJ56olnh62m98O/AYKWEzrhoWPtHJOz9kOc0H903ovpCcQPadfdPaBLjbI5MU+TU4iAghQ+CaCcglruZS2V7FziRPbcM6oZdbdzoQERlR99Sq/jIi7gncmlx48SSW7P84Msxiupjym5G3wNpYwu7aEoDI9O82mpgmTOiCzKP6j4CpI3fQ+2PWrz3STsS++dRHAX5U0vK2zMKcTRXGhvI44UqH1LggaGK3GJJFLL8dwsn2y0pQi9eMgy6ie4gAm+r4bWlaoXVRzKPSfyFlYv5km18Iqler/PLwy0+iXOgBAxLyz1WxWCwB54uZtS+MwuhWdBURCEVj9MFEg91JtLlCJbF2P89uYHe1uECJrHzAEtTo4oKaYg7lV/xy0bsCMawP7uaZ9lsA8dli2mJozaApFYkgROXuzRf7qMPISlMSFe0nX4E6ST2ylAtS3xCKAv1u3FQNB5yQQ15KH/sjC6eLbDeYcMHZf6hvcIWCGzM9EOskgrGhrtGgLIYcxM8d723tu/YtQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9186.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(2906002)(5660300002)(8676002)(6486002)(66476007)(4326008)(2616005)(52116002)(186003)(83380400001)(1076003)(38350700002)(38100700002)(6506007)(86362001)(6666004)(8936002)(26005)(66946007)(66556008)(316002)(36756003)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Gp4rdgV/yegQ5MudtNzl7yfe50McDSV7YMer5GcJbRUjl5OWOVmGHi/stXUP?=
+ =?us-ascii?Q?SQoBYAxYXAP13ahd9TqFLvVol15COaQFLuOAiQ7TuARm8Ka95/YE4j2NkXHW?=
+ =?us-ascii?Q?mcvKdLUjMzQKWxYlPNmfkJo1lbk1aFbGEwc63eeF3XUcB0LUjqYJOcz9RNZI?=
+ =?us-ascii?Q?LR9iUgej38wNilkzYFcv0/0xcDxaKodNsdLbgqV71osyO54pPTglRcLizKdV?=
+ =?us-ascii?Q?2uMEAGQCjKB1MLdCBmGeRW4NQRS3FDHS4UDMWHX1WVDQPqkPPQ0W4OhaKDgt?=
+ =?us-ascii?Q?hDQXi0qTwM8Jq7mHfgrX4WEBXfxXCj0e9XpeXsPh9pjq1cWJxWxxlTOMtkCx?=
+ =?us-ascii?Q?4cDcMFk6G++I10/rJAwG3j6oT9yTPe734sGv9mYppqy06re4xf5eeAykn6L6?=
+ =?us-ascii?Q?b6rOyKvHHh89M5HrVYOKNV6mzGW+YCkxLfFhTVsOMAox1Jzi04UUBT03k3na?=
+ =?us-ascii?Q?vcmSe4izXYmYKfgVfPgzM85mTfTu6gYMvQ+hKbGjG1+RmJF3SzkpMd2x+POh?=
+ =?us-ascii?Q?pIVN5KxilsvknggvlQBabnVHWrn6gewoA1tgm4WHC18BZbwCAftuhmLu3aH0?=
+ =?us-ascii?Q?6o78Xvsoh19ikI6SJ6zpm1huqx5bQUTTqwciZaXx8A0iZiixAIQ3fH82iySP?=
+ =?us-ascii?Q?DGfOX7osOYFzxen7z1/gYOwEsJ3dHrbF3tGMFosvCPPup3h2w3FUJMjMwXyk?=
+ =?us-ascii?Q?LuDARaV9E0/0G5gr7MIznwRxydmx8NArMmdKvmpgmM/24YSshFfkyKhrGvIA?=
+ =?us-ascii?Q?oaf/fN+Cs6QjLL56ZWjOyUjJx0IKiJg4ZPsdB6azROuLAKpje4hfRyeNL9aX?=
+ =?us-ascii?Q?JbVV324DErTRcfg6a2fTNL3VOlLYu4eIPWdg2irmDIaQjK+2N9g5C+uhJwdq?=
+ =?us-ascii?Q?cawqgWjB1PmhXVCn80Apf1RutIVFz0YW/1qDhc8d8zhzctCpzLGuSeR/tJwD?=
+ =?us-ascii?Q?ujbTyEWcAmr86R8JWBJmb0Uk4eSh9LK2aEwD4/LDLkyMX3n6HKJuSmyn/QXm?=
+ =?us-ascii?Q?4pEz2Vlnj8a69pAoG5+9Z2hRgK8IYArKHAo+In9E8MkjAjSMTGYzF/9N/yyy?=
+ =?us-ascii?Q?J/YhKXEQwLACx8WwR44uKvrdv0KP4dQC2bcYsd/EdYxaSXzjyJVLC7yJ53lO?=
+ =?us-ascii?Q?ktLHNaivN5TvZNPsU/dpdboGGYiw6XasN1LGDiOp+IO0Y27c66O+Q/fwHHF4?=
+ =?us-ascii?Q?wus+1JEiQjRlvgXTQgfQSchUqojqiZgAIiDEJz1kxeaAMU2sNoj0/tKG9cCH?=
+ =?us-ascii?Q?6U8Ggp8E5Cx8amrmR6lz7YP14OQxyO2RS/WodeofC4fxLQP9bNfYnJbb3K8w?=
+ =?us-ascii?Q?bxHE4gKBHizPZqKu1z+mx5Op/W5DXlOEbgy+aj6xDdbHefSnssAU4xo9sehh?=
+ =?us-ascii?Q?UJJ1ANK2JK8mXtNRd7jMWIaaz9sHUjXz47UEE9VF2xGIjKEJJH6uy8r+sul8?=
+ =?us-ascii?Q?KgeJVY5IQdjqu6x6LlasBXrTR0v5vlEWKsNwkJpgGihj2z+z9fOdLhe2tZaS?=
+ =?us-ascii?Q?Q1ydt5OrFDW55ryt16ZaVj4Ico8/8268fNZVNGQw02U6nzvTZHDStblJ5Avj?=
+ =?us-ascii?Q?naRUUTqXbdRz49pnSUCvhxJkkx60gXR+gUUYt64/klAmg1J4Lhvuxb4LD/qW?=
+ =?us-ascii?Q?qSKOFVA9N3udp3aNbuY2BklrdAQG0l/28Vbec2lgd/d3Md0bIsNqa2NhPkhq?=
+ =?us-ascii?Q?sV42YYhq6zZYOkvDxAXUeNxmINiowMS0UFc03ZObzL4g74m6faKuQQ2zLvpM?=
+ =?us-ascii?Q?dtgM3V8QMw=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 42ba8901-a166-4d68-33d5-08da279c74e9
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9186.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 15:50:15.9305
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UqXg2Vl+7TEKnDGZT5w1tgWU4Q4QhXpW9BTyvhtSlDAiiDxHCS5K/rFvVULsKUKun67hPoJAr4aSO17gNkyF4g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7230
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,202 +115,154 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 11:45:05AM +0200, Martin Kepplinger wrote:
-> Alan, thanks so much for asking these questions and thinking this
-> through! It helps.
-> 
-> Am Donnerstag, dem 21.04.2022 um 10:24 -0400 schrieb Alan Stern:
-> > On Thu, Apr 21, 2022 at 12:38:56PM +0200, Martin Kepplinger wrote:
-> > > Am Mittwoch, dem 20.04.2022 um 10:40 -0400 schrieb Alan Stern:
-> > > > On Wed, Apr 20, 2022 at 12:37:36PM +0200, Martin Kepplinger
-> > > > wrote:
-> > > > > Resetting itself doesn't usually fail in the sense that a
-> > > > > device
-> > > > > would
-> > > > > not work anymore after resetting. The problem is that the
-> > > > > resets
-> > > > > happen
-> > > > > in the first place. 90+% of runtime-resumes are fine - auto-
-> > > > > and
-> > > > > wakeup-resume. Resetting is a major problem though, imagine a
-> > > > > modem
-> > > > > device being re-enumerated during a phone call or "realtime"
-> > > > > data
-> > > > > connection. I see that a lot.
-> > > > 
-> > > > Okay, I see.
-> > 
-> > By the way, I assume that while resetting the modem is a major
-> > problem 
-> > for your potential use cases, having it crash with no hope of
-> > recovery 
-> > is even worse.  But maybe I'm wrong...
-> 
-> Sure that's true (and I have other usb-related problems too that result
-> in the xhci HC dying even, when I see "xhci-hcd.4.auto: Port resume
-> timed out, port 1-1: 0xfe3", so the Hub where the modem is connected)
-> but these resets are a seperate issue I want to tackle now and see
-> whether it help with other usb-related problems, so let's focus on this
-> disconnect/reset situation. So let's not get confused :)
+Some devices have USB compositions which may require multiple endpoints.
+To get better performance, need bigger CDNS3_EP_BUF_SIZE.
 
-Okay.
+But bigger CDNS3_EP_BUF_SIZE may exceed total hardware FIFO size when
+multiple endpoints.
 
-> > > > > 1650447001.318845 pureos kernel: usb 1-1.2: Waited 0ms for
-> > > > > CONNECT
-> > > > > 1650447001.324925 pureos kernel: usb 1-1.2: finish resume
-> > > > > 1650447003.831095 pureos kernel: usb 1-1.2: usb auto-suspend,
-> > > > > wakeup 1
-> > > > > 1650447003.854701 pureos kernel: hub 1-1:1.0: hub_suspend
-> > > > > 1650447003.874773 pureos kernel: usb 1-1: usb auto-suspend,
-> > > > > wakeup
-> > > > > 1
-> > > > > 1650447003.922054 pureos kernel: usb 1-1: usb wakeup-resume
-> > > > 
-> > > > This wakeup occurred only 48 ms after the hub was runtime
-> > > > suspended. 
-> > > > But here at least the cause is evident: The hub sent a wakeup
-> > > > request
-> > > > because its child (the 1-1.2 modem) disconnected.
-> > > 
-> > > fwiw, that wakeup-resume *always* comes about 50 ms after the last
-> > > runtime suspend.
-> > 
-> > Maybe the modem's firmware has some 50-ms timeout that expires and
-> > then 
-> > causes the crash.
-> 
-> I now recorded usbmon (1u) traffic of a similar sequence I sent here,
-> with a few usbmon-timestamps in the logs:
-> 
-> https://source.puri.sm/Librem5/linux/-/issues/303#note_197913
-> 
-> the usbmon log textfile is attached in that comment link and in this
-> email.
+By introducing the check_config() callback, calculate CDNS3_EP_BUF_SIZE.
 
-Hmmm.  The usbmon trace appears to show a successful reset-resume.  Did
-anything bad happen during that experiment from your point of view?
+Move CDNS3_EP_BUF_SIZE into cnds3_device: ep_buf_size
+Combine CDNS3_EP_ISO_SS_BURST and CDNS3_EP_ISO_HS_MULT into
+ecnds3_device:ep_iso_burst
 
-> > > > > 1650447003.942066 pureos kernel: usb 1-1: Waited 0ms for
-> > > > > CONNECT
-> > > > > 1650447003.945755 pureos kernel: usb 1-1: finish resume
-> > > > > 1650447003.947589 pureos kernel: hub 1-1:1.0: hub_resume
-> > > > > 1650447003.949226 pureos kernel: usb 1-1-port1: status 0507
-> > > > > change
-> > > > > 0000
-> > > > > 1650447003.949430 pureos kernel: usb 1-1-port2: status 0101
-> > > > > change
-> > > > > 0005
-> > > > > 1650447004.058779 pureos kernel: hub 1-1:1.0: state 7 ports 3
-> > > > > chg
-> > > > > 0004
-> > > > > evt 0000
-> > > > > 1650447004.074089 pureos kernel: usb 1-1.2: usb wakeup-resume
-> > > > > 1650447004.094056 pureos kernel: usb 1-1.2: Waited 0ms for
-> > > > > CONNECT
-> > > > > 1650447004.097255 pureos kernel: usb 1-1.2: finish reset-resume
-> > > > > 1650447004.182333 pureos kernel: usb 1-1.2: reset high-speed
-> > > > > USB
-> > > > > device
-> > > > > number 5 using xhci-hcd
-> > > > > 1650447004.314425 pureos kernel: usb 1-1-port2: resume, status
-> > > > > 0
-> > > > > 1650447004.317628 pureos kernel: usb 1-1-port2: status 0101,
-> > > > > change
-> > > > > 0004, 12 Mb/s
+Using a simple algorithm to calculate ep_buf_size.
+ep_buf_size = ep_iso_burst = (onchip_buffers - 2k) / (number of IN EP +
+1).
 
-This line indicates the real source of the trouble.  Shortly after the 
-reset part of the reset-resume, the modem disconnected again.  That is, 
-it disconnected itself twice: Once while it was suspended or right when 
-the resume occurred, and then a second time immediately following the 
-reset.
+Test at 8qxp:
 
-> > > > > 1650447004.323374 pureos kernel: usb 1-1.2: unregistering
-> > > > > device
-> > > > 
-> > > > And it looks like in this case, the reset-resume failed.
-> > > 
-> > > Well, at least reset_resume has been set, which I want to avoid.
-> > 
-> > Do you mean you would prefer to have the modem disconnect permanently
-> > (or at least until the next reboot)?
-> 
-> no. I mean I'd prefer the kernel keep the device usable when such a
-> disconnect happens - after a short pause until the modem is up again -
-> and not re-enumerate.
+	Gadget			ep_buf_size
 
-That's exactly what a reset-resume is supposed to do.  Maybe the pause 
-is too short; you can increase it by adding an msleep() call in 
-finish_port_resume() just before it calls usb_reset_and_verify_device().
+	RNDIS:				5
+	RNDIS+ACM:			3
+	Mass Storage + NCM + ACM	2
 
-> An audio stream is not being interrupted by such a usb disconnect and
-> if I'd keep the ttyUSB device for userspace, I'd keep an opened ttyUSB
-> controllable - even if possibly with a large latency spike. That would
-> stay a bad workaround of course. Do you know what I'm thinking about?
+Previous CDNS3_EP_BUF_SIZE is 4, RNDIS + ACM will be failure because
+exceed FIFO memory.
 
-Certainly.
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+ drivers/usb/cdns3/cdns3-gadget.c | 46 +++++++++++++++++++++++++++++---
+ drivers/usb/cdns3/cdns3-gadget.h |  6 ++---
+ 2 files changed, 45 insertions(+), 7 deletions(-)
 
-> > One thing you can do pretty easily, without changing the kernel, is 
-> > prevent the modem from going into runtime suspend in the first
-> > place.  
-> > For example, if you have a program like powertop overseeing your
-> > runtime 
-> > power management, you could tell it not to let the modem suspend.  Or
-> > if 
-> > you want to set it up by hand, the command is:
-> > 
-> >         echo on >/sys/bus/usb/devices/.../power/control
-> > 
-> > (where "..." is the appropriate path for the modem device, such as 
-> > "1-1.2").  You can even write a udev script to do this automatically 
-> > whenever the modem is detected.
-> 
-> I know that this "solves" my problems but that also prevents the usb2
-> hub (1-1) from suspending and that's not a practical solution. The hub
-> uses a *lot* of power.
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index 1f3b4a1422126..62ea1bd773386 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -2050,7 +2050,7 @@ int cdns3_ep_config(struct cdns3_endpoint *priv_ep, bool enable)
+ 	u8 mult = 0;
+ 	int ret;
+ 
+-	buffering = CDNS3_EP_BUF_SIZE - 1;
++	buffering = priv_dev->ep_buf_size - 1;
+ 
+ 	cdns3_configure_dmult(priv_dev, priv_ep);
+ 
+@@ -2069,7 +2069,7 @@ int cdns3_ep_config(struct cdns3_endpoint *priv_ep, bool enable)
+ 		break;
+ 	default:
+ 		ep_cfg = EP_CFG_EPTYPE(USB_ENDPOINT_XFER_ISOC);
+-		mult = CDNS3_EP_ISO_HS_MULT - 1;
++		mult = priv_dev->ep_iso_burst - 1;
+ 		buffering = mult + 1;
+ 	}
+ 
+@@ -2085,14 +2085,14 @@ int cdns3_ep_config(struct cdns3_endpoint *priv_ep, bool enable)
+ 		mult = 0;
+ 		max_packet_size = 1024;
+ 		if (priv_ep->type == USB_ENDPOINT_XFER_ISOC) {
+-			maxburst = CDNS3_EP_ISO_SS_BURST - 1;
++			maxburst = priv_dev->ep_iso_burst - 1;
+ 			buffering = (mult + 1) *
+ 				    (maxburst + 1);
+ 
+ 			if (priv_ep->interval > 1)
+ 				buffering++;
+ 		} else {
+-			maxburst = CDNS3_EP_BUF_SIZE - 1;
++			maxburst = priv_dev->ep_buf_size - 1;
+ 		}
+ 		break;
+ 	default:
+@@ -2970,6 +2970,43 @@ static int cdns3_gadget_udc_stop(struct usb_gadget *gadget)
+ 	return 0;
+ }
+ 
++/**
++ * cdns3_gadget_check_config - ensure cdns3 can support the USB configuration
++ * @gadget: pointer to the USB gadget
++ *
++ * Used to record the maximum number of endpoints being used in a USB composite
++ * device. (across all configurations)  This is to be used in the calculation
++ * of the TXFIFO sizes when resizing internal memory for individual endpoints.
++ * It will help ensured that the resizing logic reserves enough space for at
++ * least one max packet.
++ */
++static int cdns3_gadget_check_config(struct usb_gadget *gadget)
++{
++	struct cdns3_device *priv_dev = gadget_to_cdns3_device(gadget);
++	struct usb_ep *ep;
++	int n_in = 0;
++	int total;
++
++	list_for_each_entry(ep, &gadget->ep_list, ep_list) {
++		if (ep->claimed && (ep->address & USB_DIR_IN))
++			n_in++;
++	}
++
++	priv_dev->ep_buf_size = 1;
++	priv_dev->ep_iso_burst = 1;
++
++	/* 2KB are reserved for EP0, 1KB for out*/
++	total = 2 + n_in + 1;
++
++	if (total > priv_dev->onchip_buffers)
++		return -ENOMEM;
++
++	priv_dev->ep_buf_size = priv_dev->ep_iso_burst =
++			(priv_dev->onchip_buffers - 2) / (n_in + 1);
++
++	return 0;
++}
++
+ static const struct usb_gadget_ops cdns3_gadget_ops = {
+ 	.get_frame = cdns3_gadget_get_frame,
+ 	.wakeup = cdns3_gadget_wakeup,
+@@ -2978,6 +3015,7 @@ static const struct usb_gadget_ops cdns3_gadget_ops = {
+ 	.udc_start = cdns3_gadget_udc_start,
+ 	.udc_stop = cdns3_gadget_udc_stop,
+ 	.match_ep = cdns3_gadget_match_ep,
++	.check_config = cdns3_gadget_check_config,
+ };
+ 
+ static void cdns3_free_all_eps(struct cdns3_device *priv_dev)
+diff --git a/drivers/usb/cdns3/cdns3-gadget.h b/drivers/usb/cdns3/cdns3-gadget.h
+index c5660f2c4293f..f333c34b93ffb 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.h
++++ b/drivers/usb/cdns3/cdns3-gadget.h
+@@ -1094,9 +1094,6 @@ struct cdns3_trb {
+ #define CDNS3_ENDPOINTS_MAX_COUNT	32
+ #define CDNS3_EP_ZLP_BUF_SIZE		1024
+ 
+-#define CDNS3_EP_BUF_SIZE		4	/* KB */
+-#define CDNS3_EP_ISO_HS_MULT		3
+-#define CDNS3_EP_ISO_SS_BURST		3
+ #define CDNS3_MAX_NUM_DESCMISS_BUF	32
+ #define CDNS3_DESCMIS_BUF_SIZE		2048	/* Bytes */
+ #define CDNS3_WA2_NUM_BUFFERS		128
+@@ -1333,6 +1330,9 @@ struct cdns3_device {
+ 	/*in KB */
+ 	u16				onchip_buffers;
+ 	u16				onchip_used_size;
++
++	u16				ep_buf_size;
++	u16				ep_iso_burst;
+ };
+ 
+ void cdns3_set_register_bit(void __iomem *ptr, u32 mask);
+-- 
+2.35.1
 
-And there's no way to use a different hub -- one that consumes less 
-power -- because the connections are hard-wired on the board.  :-(
-
-> > > In theory, if I know this behaviour in advance, I think I should be
-> > > able to somehow wait until the device is ready again instead of
-> > > resetting.
-> > 
-> > What if the modem never becomes ready again (or not until you
-> > reboot)?  
-> > I think that sort of behavior is not at all unlikely.  You can test
-> > this 
-> > by disabling the code in finish_port_resume() that does reset-
-> > resumes.
-> 
-> if I just do that, I get "gone after usb resume? status -5" and thus a
-> reset is triggered after all (also, when I do msleep(500) instead of
-> reset_and_verify_device() there).
-
-Here's a quick low-level description of what's going on.
-
-When a hub gets a disconnect event on one of its ports, it disables the 
-port.  The port then remains disabled, even if another device is plugged 
-in, until a successful port reset occurs.  In other words, the _only_ 
-way to re-enable a port is to issue a reset.
-
-The reset-resume mechanism in the kernel takes care of issuing the 
-reset, and it checks to make sure that the device attached to the port 
-hasn't been changed (i.e., it's still the same device as before, not a 
-new one).  If that works, the device is put back in its former operating 
-state and should keep on functioning normally.  If that doesn't work, or 
-if there is a new device attached to the port, the kernel treats the 
-event just like a normal disconnect + connect.
-
-So what you want really _is_ a reset-resume.  If successful, it will 
-give the behavior you mentioned above: continued transmission with maybe 
-some data loss and a big latency spike at one point.  Anything other 
-than a successful reset-resume will cause the ttyUSB file to become 
-unusable, exactly what you don't want.
-
-So the real question you need to answer is why a reset-resume sometimes 
-fails with this modem.  I suspect the answer will be that the modem is 
-buggy, and there may not be any way to work around the bug.  But try 
-putting the msleep(500) just before the usb_reset_and_verify_device() 
-call; maybe it will help.
-
-Alan Stern
