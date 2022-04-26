@@ -2,137 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 264CD510287
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 18:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 186D65103A7
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 18:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352791AbiDZQHl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Apr 2022 12:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
+        id S1353036AbiDZQkP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Apr 2022 12:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352785AbiDZQHh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 12:07:37 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628A943AEC;
-        Tue, 26 Apr 2022 09:04:29 -0700 (PDT)
+        with ESMTP id S1353028AbiDZQkM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 12:40:12 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0687DEA1;
+        Tue, 26 Apr 2022 09:37:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650989069; x=1682525069;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mqAl6GT0VmvVsoiieDZ39Jw7aD8/OaezIaNnGD3XhX0=;
-  b=GMO1UOVeRGcWOBPOqi9WE+zgHoHJ00CpBAOhk9YQz6058jmtQFgSYMGZ
-   dmj1n46ybuG9MpzY8CjVdad1VCHzU25GIK1E33D3Iq9/AIpOMMTfMdTXd
-   vOzmqWaAoMnYBwc9cLkli97tTmUZFH/fGljD3CVvzzIX2nQtuy7iiF2Z7
-   O9WReeaP38e8j1UGMfcD7BTfqiqmfqMMnFdWp2qEDVdY37A/9adRTTX3s
-   ekVDNAl/0E/87t8JtxcXjJhgr0/eqvynJm9qW1hHIQC7qu8yx8dy6HAiI
-   fjUaHPGHxmH9DnKr3x2DrSbNLj1snwtSbTcHyZ+fSnPf2Lz30GyQELa95
+  t=1650991024; x=1682527024;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=YkchwpoFBWYE6wjpBeZGz+2BPwCBUpcUNyTQQIFBqC8=;
+  b=fLbV+umM1okXVQ+opaeKUa4wNxnCdAzm4VnPEF/Hs9JbF7BotaUAB3lF
+   +8/U7u3Q0z9WIhRb4GSFMsLJ4/V1+i8kJ/QFzbju8etjyTdBQgzzCEg+M
+   7fWePO0cEhsoNrbvSI9kO9ya5OtaK5FqwGgSJfNizUGe9P02X6uPCDMUa
+   133RzbODLblYJbbu6rmBDBLeZc7moxEYOB6eaAoFFtFKnNyYUw5uQyWsM
+   6Gt7zJ5+Fmll5TXWf9FkU0QzYKrCfj9UxWoEpprDy6gIKahKLqoSTHBfu
+   KE7QWlVl8q1PdUqJXKm+WtUxY+nBv1lX9BsdJOHLBPRfY69g6ARz9eS2H
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="328566878"
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="290789633"
 X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="328566878"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 09:03:46 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="290789633"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 09:29:19 -0700
 X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="874822226"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Apr 2022 09:03:42 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njNfC-0003mk-5b;
-        Tue, 26 Apr 2022 16:03:42 +0000
-Date:   Wed, 27 Apr 2022 00:02:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daehwan Jung <dh10.jung@samsung.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>,
-        Daehwan Jung <dh10.jung@samsung.com>, sc.suh@samsung.com,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v4 1/5] usb: host: export symbols for xhci-exynos to use
- xhci hooks
-Message-ID: <202204262306.mzMIKFKO-lkp@intel.com>
-References: <1650964728-175347-2-git-send-email-dh10.jung@samsung.com>
+   d="scan'208";a="580016188"
+Received: from mmilkovx-mobl.amr.corp.intel.com ([10.249.47.245])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 09:29:11 -0700
+Date:   Tue, 26 Apr 2022 19:29:08 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?ISO-8859-15?Q?Uwe_Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Vicente Bergas <vicencb@gmail.com>,
+        Johan Hovold <johan@kernel.org>, heiko@sntech.de,
+        giulio.benetti@micronovasrl.com,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-api@vger.kernel.org,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v5 05/10] serial: termbits: ADDRB to indicate 9th bit
+ addressing mode
+In-Reply-To: <Ymf9UhyXj7o8cNhq@kroah.com>
+Message-ID: <9a9dda88-b239-9c63-82d-2f7678fdbf9@linux.intel.com>
+References: <20220426122448.38997-1-ilpo.jarvinen@linux.intel.com> <20220426122448.38997-6-ilpo.jarvinen@linux.intel.com> <Ymfq+jUXfZcNM/P/@kroah.com> <b667479-fb27-8712-cec8-938eed179240@linux.intel.com> <17547658-4737-7ec1-9ef9-c61c6287b8b@linux.intel.com>
+ <Ymf9UhyXj7o8cNhq@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650964728-175347-2-git-send-email-dh10.jung@samsung.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1964830911-1650990558=:1644"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Daehwan,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Thank you for the patch! Perhaps something to improve:
+--8323329-1964830911-1650990558=:1644
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on krzk/for-next char-misc/char-misc-testing v5.18-rc4 next-20220426]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Tue, 26 Apr 2022, Greg KH wrote:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daehwan-Jung/usb-host-export-symbols-for-xhci-exynos-to-use-xhci-hooks/20220426-181936
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220426/202204262306.mzMIKFKO-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/05a4937860cedb97b77200b7312a6f009aca2fc6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daehwan-Jung/usb-host-export-symbols-for-xhci-exynos-to-use-xhci-hooks/20220426-181936
-        git checkout 05a4937860cedb97b77200b7312a6f009aca2fc6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/usb/host/
+> On Tue, Apr 26, 2022 at 05:01:31PM +0300, Ilpo Järvinen wrote:
+> > 
+> > ADDRB value is the same for all archs (it's just this octal vs hex 
+> > notation I've followed as per the nearby defines within the same file
+> > which makes them look different).
+> > 
+> > Should I perhaps add to my cleanup list conversion of all those octal ones 
+> > to hex?
+> 
+> Argh, yes, please, let's do that now, I totally missed that.  Will let
+> us see how to unify them as well.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Unifying them might turn out impractical, here's a rough idea now many
+copies ... | uniq -c finds for the defines (based on more aggressively 
+cleaned up lines than the patch will have):
+     89 1
+     74 2
+     14 3
+     58 4
+     11 5
+     54 6
+There just tends to be 1 or 2 archs which are different from the others.
 
-All warnings (new ones prefixed by >>):
-
-   drivers/usb/host/xhci-mem.c:68:6: warning: no previous prototype for 'xhci_segment_free' [-Wmissing-prototypes]
-      68 | void xhci_segment_free(struct xhci_hcd *xhci, struct xhci_segment *seg)
-         |      ^~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci-mem.c:100:6: warning: no previous prototype for 'xhci_link_segments' [-Wmissing-prototypes]
-     100 | void xhci_link_segments(struct xhci_segment *prev,
-         |      ^~~~~~~~~~~~~~~~~~
->> drivers/usb/host/xhci-mem.c:261:6: warning: no previous prototype for 'xhci_remove_stream_mapping' [-Wmissing-prototypes]
-     261 | void xhci_remove_stream_mapping(struct xhci_ring *ring)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci-mem.c:1974:5: warning: no previous prototype for 'xhci_check_trb_in_td_math' [-Wmissing-prototypes]
-    1974 | int xhci_check_trb_in_td_math(struct xhci_hcd *xhci)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/xhci_remove_stream_mapping +261 drivers/usb/host/xhci-mem.c
-
-   260	
- > 261	void xhci_remove_stream_mapping(struct xhci_ring *ring)
-   262	{
-   263		struct xhci_segment *seg;
-   264	
-   265		if (WARN_ON_ONCE(ring->trb_address_map == NULL))
-   266			return;
-   267	
-   268		seg = ring->first_seg;
-   269		do {
-   270			xhci_remove_segment_mapping(ring->trb_address_map, seg);
-   271			seg = seg->next;
-   272		} while (seg != ring->first_seg);
-   273	}
-   274	EXPORT_SYMBOL_GPL(xhci_remove_stream_mapping);
-   275	
+...I'll send the actual octal-to-hex patch once the arch builds complete.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+ i.
+
+--8323329-1964830911-1650990558=:1644--
