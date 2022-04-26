@@ -2,101 +2,251 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C8D50FE57
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 15:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B92750FE9C
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 15:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241162AbiDZNMB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Apr 2022 09:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
+        id S1350738AbiDZNQS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Apr 2022 09:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350635AbiDZNL6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 09:11:58 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCCB506CA
-        for <linux-usb@vger.kernel.org>; Tue, 26 Apr 2022 06:08:50 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id m23so11047203ljc.0
-        for <linux-usb@vger.kernel.org>; Tue, 26 Apr 2022 06:08:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=nIgHZXIaeZhf23re2WIWSl8FwNzY4XssmB5G+OP1fgY=;
-        b=Rp5M6DGffMumgwzkfOxSGjjr4ftDhLODR5a1+q5sbrDoKirJOLXuBQ71oayOURisMO
-         9Molv9WeL2gfac8WqaGpduQH6/7pR2Awbo44GWSqvV/tk4K9F8weG4VpvHx3pAej7BNF
-         HPsLeLucDBWWTffw5HaUQ6d+hbLv1YrsXfNgFQjlReZshnJhK+b55jz4gAES9FItZNOi
-         ymE+uxRgs1h7TzFLT3kZQoLIR5mQQlJk9p5lSj+3Yfbs/exThc/f68iWae4fMOA+yfl3
-         zGmd3Lvb8K9xbkqQ9nEiwqb4AGeMmEHL8FjHscFDPpE4nQwcz4BC7KcbbB39dik+ISmK
-         4QiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=nIgHZXIaeZhf23re2WIWSl8FwNzY4XssmB5G+OP1fgY=;
-        b=U0aKzaBTHdv9bQSfu+1nXJxX2dRhcRDoweYOiE5eY0gf2GcHfOpST53XFSzh6IwAl7
-         N4Kw3FY+Nr910AfffF12BHSmG3Q7/IrIJRHVvmCbCny91DGzOVd4iG2MnDZsAsaNH6mn
-         ghxDm2L5s4WThddd3vQxOtJp1M+GhgEcDox3pyAIlwQ9dEXIYM+dkvgU1TggV12HyDBC
-         /DNYSpRnoDntF90VPX/9O/79C4fCQ6iuQQxL1Qxy8E7XiGkn8MQWWRMntLRQP8qXYOJX
-         ap9Wyyh3rFoQ9r0Bv3jGA4BK7SrMM5IkDZrq9EgXPdaklmeJDf0g6XfAYC5Ndul+pjDG
-         Z9LQ==
-X-Gm-Message-State: AOAM532Cbe7jSAblphI3fWHt7EWgoCYxofW/DULBQtTj3woSkAi+9L+s
-        xwT9bq/7GH+vyqEfeXvp5UcHTx+2snEkEdPRYYE=
-X-Google-Smtp-Source: ABdhPJxJgeVKOFA/6frHypReElNZg7XGWMv45cKJWIMCxQMjsLYM6e2ktns33x2pek7Zln0pYRmYoOJAo4wHgFeZBcM=
-X-Received: by 2002:a2e:9c43:0:b0:24b:469:2bb6 with SMTP id
- t3-20020a2e9c43000000b0024b04692bb6mr15136354ljj.248.1650978528342; Tue, 26
- Apr 2022 06:08:48 -0700 (PDT)
+        with ESMTP id S234550AbiDZNQQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 09:16:16 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A81566F9D;
+        Tue, 26 Apr 2022 06:13:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650978787; x=1682514787;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=4mkD7GLX3iLI2eXfIKWZSJugD5xfyLr658aN5QzAUA4=;
+  b=ADYLKnMtbizfbSF1o/kD2nPu5m/Ui0WFrU3lFWaWpeyldIqtefsCMvPT
+   7Lf1JBD5qTLueW1Bg0xoML6zG3vXEb5/rEPz5xOQYqUNpw/8aTn7w7V7B
+   vVKwHhoPnG4DEnNs74Dv3XaWAihV3wOk2X4ned7F849JrnXI0ZyHh7UPu
+   NDeK9NaNglDebUGrE0fGpdI7Ckwj7B7nwAY4aUKUr8NVGUGt7thzVSyBU
+   RRG1T9oqMduxu6E9+OtiYehqk89tvY8r15Dv4qRU2TSXMDGrSsJQURRGP
+   dB6BQwQ/WQYOEvvH8303zUdcWuulUQnfyZ1lUa3aqxcjG3wzn70Ql9SQ/
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="263166228"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="263166228"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:13:07 -0700
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="579884765"
+Received: from mmilkovx-mobl.amr.corp.intel.com ([10.249.47.245])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:12:59 -0700
+Date:   Tue, 26 Apr 2022 16:12:57 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?ISO-8859-15?Q?Uwe_Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Vicente Bergas <vicencb@gmail.com>,
+        Johan Hovold <johan@kernel.org>, heiko@sntech.de,
+        giulio.benetti@micronovasrl.com,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-api@vger.kernel.org,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v5 05/10] serial: termbits: ADDRB to indicate 9th bit
+ addressing mode
+In-Reply-To: <Ymfq+jUXfZcNM/P/@kroah.com>
+Message-ID: <b667479-fb27-8712-cec8-938eed179240@linux.intel.com>
+References: <20220426122448.38997-1-ilpo.jarvinen@linux.intel.com> <20220426122448.38997-6-ilpo.jarvinen@linux.intel.com> <Ymfq+jUXfZcNM/P/@kroah.com>
 MIME-Version: 1.0
-Received: by 2002:aa6:cb41:0:b0:1be:7e9f:f9a6 with HTTP; Tue, 26 Apr 2022
- 06:08:47 -0700 (PDT)
-Reply-To: usarmy.jameston1@gmail.com
-From:   Major James Walton <josephinmnyinge70@gmail.com>
-Date:   Tue, 26 Apr 2022 14:08:47 +0100
-Message-ID: <CAEH2Oon1-iK2-v5D9jvDrtSNmU1_Pm6ePrZ8FNs74Jpb3_goVA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:234 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4070]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [josephinmnyinge70[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [usarmy.jameston1[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [josephinmnyinge70[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: multipart/mixed; BOUNDARY="8323329-1902298920-1650977784=:1644"
+Content-ID: <9e9c7513-c53e-c92d-85d3-28ac5a3a7a22@linux.intel.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-1902298920-1650977784=:1644
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <cd9fe5-9b4f-51fb-d37a-75d923e2ccc1@linux.intel.com>
+
+On Tue, 26 Apr 2022, Greg KH wrote:
+
+> On Tue, Apr 26, 2022 at 03:24:43PM +0300, Ilpo Järvinen wrote:
+> > Add ADDRB to termbits to indicate 9th bit addressing mode. This change
+> > is necessary for supporting devices with RS485 multipoint addressing
+> > [*]. A later patch in the patch series adds support for Synopsys
+> > Designware UART capable for 9th bit addressing mode. In this mode, 9th
+> > bit is used to indicate an address (byte) within the communication
+> > line. The 9th bit addressing mode is selected using ADDRB introduced by
+> > an earlier patch.
+> > 
+> > [*] Technically, RS485 is just an electronic spec and does not itself
+> > specify the 9th bit addressing mode but 9th bit seems at least
+> > "semi-standard" way to do addressing with RS485.
+> > 
+> > Cc: linux-api@vger.kernel.org
+> > Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+> > Cc: Matt Turner <mattst88@gmail.com>
+> > Cc: linux-alpha@vger.kernel.org
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> > Cc: Helge Deller <deller@gmx.de>
+> > Cc: linux-parisc@vger.kernel.org
+> > Cc: Michael Ellerman <mpe@ellerman.id.au>
+> > Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> > Cc: Paul Mackerras <paulus@samba.org>
+> > Cc: linuxppc-dev@lists.ozlabs.org
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: sparclinux@vger.kernel.org
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: linux-arch@vger.kernel.org
+> > Cc: linux-usb@vger.kernel.org
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> >  arch/alpha/include/uapi/asm/termbits.h   | 1 +
+> >  arch/mips/include/uapi/asm/termbits.h    | 1 +
+> >  arch/parisc/include/uapi/asm/termbits.h  | 1 +
+> >  arch/powerpc/include/uapi/asm/termbits.h | 1 +
+> >  arch/sparc/include/uapi/asm/termbits.h   | 1 +
+> >  drivers/char/pcmcia/synclink_cs.c        | 2 ++
+> >  drivers/ipack/devices/ipoctal.c          | 2 ++
+> >  drivers/mmc/core/sdio_uart.c             | 2 ++
+> >  drivers/net/usb/hso.c                    | 3 ++-
+> >  drivers/s390/char/tty3270.c              | 3 +++
+> >  drivers/staging/greybus/uart.c           | 2 ++
+> >  drivers/tty/amiserial.c                  | 6 +++++-
+> >  drivers/tty/moxa.c                       | 1 +
+> >  drivers/tty/mxser.c                      | 1 +
+> >  drivers/tty/serial/serial_core.c         | 2 ++
+> >  drivers/tty/synclink_gt.c                | 2 ++
+> >  drivers/tty/tty_ioctl.c                  | 2 ++
+> >  drivers/usb/class/cdc-acm.c              | 2 ++
+> >  drivers/usb/serial/usb-serial.c          | 6 ++++--
+> >  include/uapi/asm-generic/termbits.h      | 1 +
+> >  net/bluetooth/rfcomm/tty.c               | 2 ++
+> >  21 files changed, 40 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/alpha/include/uapi/asm/termbits.h b/arch/alpha/include/uapi/asm/termbits.h
+> > index 4575ba34a0ea..0c123e715486 100644
+> > --- a/arch/alpha/include/uapi/asm/termbits.h
+> > +++ b/arch/alpha/include/uapi/asm/termbits.h
+> > @@ -180,6 +180,7 @@ struct ktermios {
+> >  #define HUPCL	00040000
+> >  
+> >  #define CLOCAL	00100000
+> > +#define ADDRB	004000000000		/* address bit */
+> >  #define CMSPAR	  010000000000		/* mark or space (stick) parity */
+> >  #define CRTSCTS	  020000000000		/* flow control */
+> >  
+> > diff --git a/arch/mips/include/uapi/asm/termbits.h b/arch/mips/include/uapi/asm/termbits.h
+> > index dfeffba729b7..4732d31b0e4e 100644
+> > --- a/arch/mips/include/uapi/asm/termbits.h
+> > +++ b/arch/mips/include/uapi/asm/termbits.h
+> > @@ -182,6 +182,7 @@ struct ktermios {
+> >  #define	 B3500000 0010016
+> >  #define	 B4000000 0010017
+> >  #define CIBAUD	  002003600000	/* input baud rate */
+> > +#define ADDRB	  004000000000	/* address bit */
+> >  #define CMSPAR	  010000000000	/* mark or space (stick) parity */
+> >  #define CRTSCTS	  020000000000	/* flow control */
+> >  
+> > diff --git a/arch/parisc/include/uapi/asm/termbits.h b/arch/parisc/include/uapi/asm/termbits.h
+> > index 40e920f8d683..d6bbd10d92ba 100644
+> > --- a/arch/parisc/include/uapi/asm/termbits.h
+> > +++ b/arch/parisc/include/uapi/asm/termbits.h
+> > @@ -159,6 +159,7 @@ struct ktermios {
+> >  #define  B3500000 0010016
+> >  #define  B4000000 0010017
+> >  #define CIBAUD    002003600000		/* input baud rate */
+> > +#define ADDRB	  004000000000		/* address bit */
+> 
+> tabs where the rest were not?
+> 
+> >  #define CMSPAR    010000000000          /* mark or space (stick) parity */
+> >  #define CRTSCTS   020000000000          /* flow control */
+> >  
+> > diff --git a/arch/powerpc/include/uapi/asm/termbits.h b/arch/powerpc/include/uapi/asm/termbits.h
+> > index ed18bc61f63d..c6a033732f39 100644
+> > --- a/arch/powerpc/include/uapi/asm/termbits.h
+> > +++ b/arch/powerpc/include/uapi/asm/termbits.h
+> > @@ -171,6 +171,7 @@ struct ktermios {
+> >  #define HUPCL	00040000
+> >  
+> >  #define CLOCAL	00100000
+> > +#define ADDRB	004000000000		/* address bit */
+> >  #define CMSPAR	  010000000000		/* mark or space (stick) parity */
+> >  #define CRTSCTS	  020000000000		/* flow control */
+> >  
+> > diff --git a/arch/sparc/include/uapi/asm/termbits.h b/arch/sparc/include/uapi/asm/termbits.h
+> > index ce5ad5d0f105..5eb1d547b5c4 100644
+> > --- a/arch/sparc/include/uapi/asm/termbits.h
+> > +++ b/arch/sparc/include/uapi/asm/termbits.h
+> > @@ -201,6 +201,7 @@ struct ktermios {
+> >  #define B3500000  0x00001012
+> >  #define B4000000  0x00001013  */
+> >  #define CIBAUD	  0x100f0000  /* input baud rate (not used) */
+> > +#define ADDRB	  0x20000000  /* address bit */
+> >  #define CMSPAR	  0x40000000  /* mark or space (stick) parity */
+> >  #define CRTSCTS	  0x80000000  /* flow control */
+> 
+> Why all the different values?  Can't we pick one and use it for all
+> arches?  Having these be different in different arches and userspace
+> should not be a thing for new fields, right?
+> 
+> > diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
+> > index 78baba55a8b5..d179b9b57a25 100644
+> > --- a/drivers/char/pcmcia/synclink_cs.c
+> > +++ b/drivers/char/pcmcia/synclink_cs.c
+> > @@ -2287,6 +2287,8 @@ static void mgslpc_set_termios(struct tty_struct *tty, struct ktermios *old_term
+> >  		== RELEVANT_IFLAG(old_termios->c_iflag)))
+> >  	  return;
+> >  
+> > +	tty->termios.c_cflag &= ~ADDRB;
+> 
+> Having to do this for all drivers feels wrong.  It isn't needed for any
+> other flag, right?
+
+My understanding is that it would be needed for other flags too, it's just 
+that many drivers probably haven't cared enough. Some drivers certainly 
+clear a few flags they don't support while others don't clear any but
+it's also challenging to determine it which flags which driver supports. 
+How bad the impact is per flag varies.
+
+> That makes me really not like this change as it
+> feels very ackward and
+> yet-another-thing-a-serial-driver-has-to-remember.
+
+It would be nice to have some mask for supported bits per driver. But it
+will be challenging to add at this point and I'm far from sure I could get 
+them right per driver even if carefully trying to.
+
+> And as you are wanting to pass this bit to userspace, where is that
+> documented?
+
+Ah, I probably should add it to driver-api/serial/driver.rst too but ADDRB
+is certainly mentioned alongside with other addressing mode documentation
+I wrote for the later changes in this series.
+
 -- 
-I am Major James Walton,currently serving with the 3rd Brigade Support
-Battalion in Iraq.I have a proposal for you. Kindly reply for
-details.Reply to: usarmy.jameston1@gmail.com
-
-
-Regards,
-Major James Walton.
+ i.
+--8323329-1902298920-1650977784=:1644--
