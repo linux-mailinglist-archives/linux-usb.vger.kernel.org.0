@@ -2,352 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105B850F634
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 10:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3006150F797
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 11:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235122AbiDZIwS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Apr 2022 04:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
+        id S239901AbiDZJLN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Apr 2022 05:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346298AbiDZIos (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 04:44:48 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09DE8595F;
-        Tue, 26 Apr 2022 01:34:33 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id y19so9727928ljd.4;
-        Tue, 26 Apr 2022 01:34:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=FInGpHNCcK/TD9SeWZQkc/p1sMIqORL6XIEEOHsCc5Y=;
-        b=CLHRbStTr+GP4H1R32XYex1OOt6UMLD5DVs8Y8EppitDdNDDEv0K1BqpOO1nDGDLMg
-         hJUmM6Ct1NCX9Y/dkzc9REBoM5lxcvFeqQxnHg80MVzrsD8euorL5+x4rx9dTAKtpQbv
-         ill+cLT7m/IGnGVSKzNglJwi1X6rpeCyAQd1j1+GBdy2wgoTh0NGPUJ9fGWS0KZokdH4
-         /OsnqYPGkXtpFRbJ89GF22UABmikkL8DZNS0NNfTlireooayv+sMOgC/kZ8LAs1sDnc7
-         TjjWm1xCrlXJNyfL5uatUqV7peHIfAgYeAMsWncycgiRKl2w0EQQU2X9yBpc91yYyJ95
-         l+2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=FInGpHNCcK/TD9SeWZQkc/p1sMIqORL6XIEEOHsCc5Y=;
-        b=XknsHJIYonIwDZ2e9Yz+K2ctJW6E7tMKmaf1qfsD6AhDCcnWAAKQUEjr/UBAA5s1ni
-         enho2CW/gIJhrT5fSxBKPNGEQunZ54WdI5coYrcX1M8Oyi8QF4Y6KRoDIx+TgabkcLo+
-         JkX/66MruvfA1jHEHBmw2oH0IhOCzozyZIEpzpJZQJBYasCB8X0W7xk10xbGjpT69X8j
-         +WvShIvu7k4IocIyH+GyMubNDT13ycCFn5gi2cnPrPUb1c7lL3QywggIznLGsGcIiO/P
-         KhssPIPhPxbiQxzsmfYEf16BCgvxXGkCCQvqFrjseuyUH/9YDGsysW/Ze0+QnyWCaQZa
-         Es3Q==
-X-Gm-Message-State: AOAM531oJ4Kas0iZz/iLUPUeWn7I9kNK+XETvhIIPYZMxSNgcU1sput1
-        tcu8pwxaiwo5ioLFH5jTSCCaVxn7l34+2p9XXqI=
-X-Google-Smtp-Source: ABdhPJxeMid+gRhAqzBjhRPHQFzn6lFG1yCpNvUP7oiHdtWHc0z7NiIkWEb0UaQ2oPUse7gCnz2myidtn5jCf4tPuwk=
-X-Received: by 2002:a2e:8e91:0:b0:24d:aac1:f855 with SMTP id
- z17-20020a2e8e91000000b0024daac1f855mr14178666ljk.28.1650962072007; Tue, 26
- Apr 2022 01:34:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <1646393418-26421-1-git-send-email-vincent.sunplus@gmail.com>
- <1646393418-26421-2-git-send-email-vincent.sunplus@gmail.com> <YlactHJyZ6QnNV5j@matsya>
-In-Reply-To: <YlactHJyZ6QnNV5j@matsya>
-From:   =?UTF-8?B?5pa96YyV6bS7?= <vincent.sunplus@gmail.com>
-Date:   Tue, 26 Apr 2022 16:37:08 +0800
-Message-ID: <CAPvp3RgEic_mR1meQqyg1JR3vuuRpsNHMGqyvu3d63TGhn-k6Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] phy: usb: Add USB2.0 phy driver for Sunplus SP7021
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     kishon@ti.com, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, wells.lu@sunplus.com
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S1347909AbiDZJGW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 05:06:22 -0400
+Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.109.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DE9B6453
+        for <linux-usb@vger.kernel.org>; Tue, 26 Apr 2022 01:47:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1650962825;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DiMUCbjp8ATx6p7cgr1v4Jwa1cFU0Wr9lQRkLFyBx7g=;
+        b=dvKITPEP8FxizqeJU58gVZml5YNEPFec8OdxuziFci910TlA4e/gu9KldkpjQxlTKCmR2g
+        wGEupuSKCUs9WMuVwUZYy0FfJ3Z+x/oiNcHUZXVdR/VQbp0b8MDQPlyRZYE5c/WNLHPd16
+        NbBpcCgrVzgiZkgyvHRtaLM08QRfo8Y=
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com
+ (mail-he1eur01lp2053.outbound.protection.outlook.com [104.47.0.53]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-5-j4-PAPdJOqijuhsUVJaZGA-1; Tue, 26 Apr 2022 10:47:03 +0200
+X-MC-Unique: j4-PAPdJOqijuhsUVJaZGA-1
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gmVWN27FRFo5Dvztn9KA70aJsAtWOZgMED2UcWxoOD4y2N8gmMO10t9JcXaREADbXZUKpv9gZVAdds5NW+rlcTPZOFuUwmAdLHMSp+45ge6pc6C0ORk9/wT4htJ695izZM+LqtTxmZUierNP5k+HYDpJQG60y7lvRUa+4vcKdLu0Mx9ayYgIbrb9w1pMVAAgcjuc0twowP+DUzYwF1zzfro6K2Bk9mXaBqJetBcL0ibb6dI/grl5jBM715sbcwuCsx/geaEvy2VKb2Xxja/EgI44gKDewXjXFcLVsXsvILTb+J4zlvwtE/8L3Amvvo0GYbbADNRNnP9UQEKt6pu6zQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=K3kCEHbe/YgnJOg45K9JdN0qAo13MTHbdTzZpemczGU=;
+ b=VJR7fEUGTSwYJlJ3YuEe6UQb/iDCMMTy7QwNVORXJ48UQRlP5a60t29QCV6EEkhZZ/xPDvcmE4gfvyP+jNCDJsri4oLT2AarymXC+zvnariYLcmf4W0ONkW/v5X7uaJE40lCmwYqj574g+8X/Y+5kemSkZhlHTrBFJ91t9rLBaKT8yrZE4fv+CMTofwkzAvoEAtJbALKAc6LA5PsrLfQRouUlPIWlrbOLloI/xIo1FTi8NIaxclalre0q+fkfme7nZv+6AdkGhjS69miR3/jjc6UaDh/EDrZT2lF/11NbmdSaoGKG0CWm7Nc2tm29smNukRM9ZVZvph4Vp3FBsau+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
+ (2603:10a6:800:58::16) by VI1PR04MB5903.eurprd04.prod.outlook.com
+ (2603:10a6:803:e0::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.21; Tue, 26 Apr
+ 2022 08:47:01 +0000
+Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
+ ([fe80::8c82:19c5:ce96:491b]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
+ ([fe80::8c82:19c5:ce96:491b%4]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
+ 08:47:01 +0000
+Message-ID: <fcb10f35-3064-851b-8f53-e88a3b51c930@suse.com>
+Date:   Tue, 26 Apr 2022 10:46:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [RFC v1] USB: core: add USBDEVFS_REVOKE ioctl
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>
+CC:     Peter Hutterer <peter.hutterer@who-t.net>,
+        Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+References: <20220425132315.924477-1-hadess@hadess.net>
+ <YmarwaNQYn1GwFbQ@kroah.com>
+ <e73035d1bae5d0c355166fb46f0f5f2f07752b3c.camel@hadess.net>
+ <Yma3k3lRMIEFypMN@kroah.com>
+ <1d82343a5987a308ac9bd3f6fd481bc12a608a24.camel@hadess.net>
+ <YmbCBwEMvKO5z0Dh@kroah.com> <YmdYfK5Vi+lEl7FX@quokka>
+ <7def25c7-0870-accc-c689-4d8eef1b7acf@suse.com> <YmedlsENjNjc8yML@kroah.com>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <YmedlsENjNjc8yML@kroah.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: FR0P281CA0065.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:49::18) To VI1PR0401MB2526.eurprd04.prod.outlook.com
+ (2603:10a6:800:58::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d5814728-2940-4099-bf44-08da276154a3
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5903:EE_
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-Microsoft-Antispam-PRVS: <VI1PR04MB590310ACAE6493FB4610E48EC7FB9@VI1PR04MB5903.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LPAK8C88e0u2GQeaqc4XqULDsV15QYdXSD9gBmMbcyLJjpLlDnku0CD/lP7mweUmXFp9KrSgUTUU06BDQLRggH3gMOYDz+UvrRRfjFTUP9ThYM/+i3T9L37fUf2ynhjcYT+JCvi6wc/jc5Fwlr0jaiSOU/edc8O4yrlITQk5dgMgOdJ6Sxt9eTi9ec5R7yLfGh6PS4xVIRayu5fzVo0T5xVivbTt3j9vaHwHilS2UL/ps4yP5OVY3UYmWdaHjActAeubtlmfBLCe3dl+o+0rNVnDRWxoKNSObdhO0DhnXTm8dCeyRD0jPSdF0cLRFgH4lXHGdlrxVuLBirbAn5NssrPqj9j4BCQASTBE5HWGchIJpBF99blnWlNgZVFtEkTK/lRBDcaaMcaxwMzibnpUR0/GGh0Kemdr+m96UjM+bF48szUhKxX5Lw9gzHWbI8XcStCdB41I78GLZXtY7bXTGY4xE60SM3ILxOLJp+kwpnydmkMWNBxmqKWW6qiYhLPrajhJZswxeanYWIUZk+0UTDmWon1v+uPot/tnannu7E3XiUc66cb+qyTKsBoT2fXz4XJVrFpxrHS8u7V8cuvZ+x2EBR1efTQYB/1M1anTZtVqyDaXuO6QhVfzuzQDVgeGKHGtmAs2SgQdHaGhQN3OyrTtv4d6sY8YKMnkU4Z9BJlIAqB3rPGtuum43Mlv9H36lbs1FiOmXGLMBF4Ukow74LWD6g8Ne4Llk20GuSdJ0S0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6512007)(31686004)(8936002)(110136005)(86362001)(5660300002)(316002)(6666004)(186003)(36756003)(6506007)(53546011)(2616005)(54906003)(4744005)(38100700002)(2906002)(31696002)(508600001)(6486002)(8676002)(4326008)(66476007)(66556008)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5lZZON36ukSeWuHK57EWXaupeFQE9fHELOKcwCFaDNwVv0Dc8UL+XDffxpgN?=
+ =?us-ascii?Q?SA1iColHwHw2F/ZTj1oPdTrIDy7tzkbZPbFXVbJFoesHEHKOZ4QAn4Ss+GWC?=
+ =?us-ascii?Q?Fw5R/2yYPrQoZmoupN402iEiHkD5gjd7XoE6Gx9IOIV38Hlz8XwNMGKR99oE?=
+ =?us-ascii?Q?ENfW5gQ6b59a782Of2psm9DGEDnKlyPCNMga86bNv7wfQz5UaSUP1iP0m3Yv?=
+ =?us-ascii?Q?2+BtXkvwLtAjLkMYws+BcRxhya2st7ACpc3sYz4AWOMbTVgDKWx3awMSGyjj?=
+ =?us-ascii?Q?AUIN6htOvpgMnWJ0fA1BOEm4Ap4/y1TV4XF5MAHvcH7QTXcmJX5Z2slftHtf?=
+ =?us-ascii?Q?3QWzKmoX8BYhl/FjwclP7otfvoNW+5Cb6DkZzf5hg8vuFNaCEQNEH9hjUaHN?=
+ =?us-ascii?Q?+28SNyYM1DireIzvGT5VAjnZNKjU1eZunOkwtzOz9+C5ey0Wo0lGDM7sAj1S?=
+ =?us-ascii?Q?XIb1vVJhmjgYQbWO3HFAnfpIDJuyaiHnuAvcH8p2DW1KzWqZZoEc3OA1EYLu?=
+ =?us-ascii?Q?2f/JvyEJEhZUSfGmKO2fAm2FOkJbd7Nccxrh+zteP59YL629UJ3F6wPvjFaK?=
+ =?us-ascii?Q?54mIURuIwTuJSqb2u6Vwow+fOTuLfKuqmEGUDCVGigdw3wicoTo2IdgJ116O?=
+ =?us-ascii?Q?meNKJoQaoJFP6zyDymiVwXqlLGNjjyud/8FfymS6usi5z8SKAl9Q4/K2AART?=
+ =?us-ascii?Q?Wft55fa0pPzqpHP2WcpynstA9cacKahTE7/bhE4tFJaVs1Jl3anVAtL9NfJE?=
+ =?us-ascii?Q?L41rb+aZXaM/m7Tw+akz/X4LNIKAfaeeTafLSlp6eExIB2js98IHPIOHsKmB?=
+ =?us-ascii?Q?vDA71GZVReqVRM1TfZwNwPCJQO179WZbdw4KAWYT6r5p3jRw5Z8+cslJccZ4?=
+ =?us-ascii?Q?sja26mLUztxF7/wl7rER7Rao+aueHNrjmD7M2+0kubKXNvVxvcpyT+f9+wx/?=
+ =?us-ascii?Q?T3RNwqynfBV+dJw/aOd6kj0mmNGTfGdYcQJwiTqe1QyoXfE9qEGmPnw8Fnt4?=
+ =?us-ascii?Q?zO7kVCyxX43YDT03/DpvCXzTmgze/HMtV6/hKGjI0TU4Wtj3+5XopoJI1g3Q?=
+ =?us-ascii?Q?lNr7N9ssguAh+28aAjxa2jor5r0998mKIFzOcZNJt1x1xR9fWnIUS+YDQjmk?=
+ =?us-ascii?Q?ni7Sg92QPj/10NC359MAaspfOiTHM7x7r1RcsAHIrBvZrGIzYbk1kUARzQOG?=
+ =?us-ascii?Q?kz9zUcTZPA8UoxswaleAXLhyMJOR3mvqoMM+Gr8GraGOzIxexlkTlKCewdKu?=
+ =?us-ascii?Q?VwCyu108p6XcBoqYI+Jn11tYzCcd1YDYDrboEtdDdAvkmH1YwqHOL95a4p9N?=
+ =?us-ascii?Q?AGxmAsFQNdDyjxQnYbPZHx2X6oof6lyCGIVqeyaPQnZ6LOKnpFnIi3BjTjh/?=
+ =?us-ascii?Q?xO/cSit4kKebWJQ08mHzM2hkLoTzDCy78qPUDK9xtlDF05Yjds2U51TWXqfp?=
+ =?us-ascii?Q?rp2TF1yqtlcAfgCD32Juh5fWz3hy7ePZ6Aj1jkq8kdkfKoI7SfH43ui/SZCA?=
+ =?us-ascii?Q?XeB9wEqmxTTRIJMAqCIukoEWzI0qQS6iDru31cgJOSBcjfYEj0SJjPG7b78R?=
+ =?us-ascii?Q?erOyss630tZwdTQ4hxVkvEXq+uvCrBDNo7cR4x7mUPIS2q+/HHV6GZ1RMg8g?=
+ =?us-ascii?Q?Gv1L3Ltqnzhxqd9zrDZNoKeYo4Bzai5ITPhA4vDxBdgwzW72rCuPlIbGCiNP?=
+ =?us-ascii?Q?hgeYO59orpNZ/EhXHEqW8J7g2ZoetaB7JrIJnqp8ZC3Quc38m78Fp7woTZSn?=
+ =?us-ascii?Q?oLLhz/iZLr/qItkkZp9fILc2HX3iKFwZSZOJV0p3GiTGx1f60k52c+VBNjkT?=
+X-MS-Exchange-AntiSpam-MessageData-1: jPgMFgX8mJonmg==
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5814728-2940-4099-bf44-08da276154a3
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 08:47:01.3862
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bpX5Jq5/G3CMudERD9NKKa6o/mJ+wAaNV+6/i4osJ6WQFidTVGUCjuVQSN5lFqL42at1zC7AJJSxGygY1v3HPQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5903
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Vinod Koul <vkoul@kernel.org> =E6=96=BC 2022=E5=B9=B44=E6=9C=8813=E6=97=A5 =
-=E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=885:49=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On 04-03-22, 19:30, Vincent Shih wrote:
-> > Add USB2.0 phy driver for Sunplus SP7021
-> >
-> > Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
-> > ---
-> >  MAINTAINERS                            |   8 ++
-> >  drivers/phy/Kconfig                    |   1 +
-> >  drivers/phy/Makefile                   |   1 +
-> >  drivers/phy/sunplus/Kconfig            |  12 ++
-> >  drivers/phy/sunplus/Makefile           |   2 +
-> >  drivers/phy/sunplus/phy-sunplus-usb2.c | 248 +++++++++++++++++++++++++=
-++++++++
-> >  6 files changed, 272 insertions(+)
-> >  create mode 100644 drivers/phy/sunplus/Kconfig
-> >  create mode 100644 drivers/phy/sunplus/Makefile
-> >  create mode 100644 drivers/phy/sunplus/phy-sunplus-usb2.c
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 80eebc1..a3bb35e 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -17947,6 +17947,14 @@ L:   netdev@vger.kernel.org
-> >  S:   Maintained
-> >  F:   drivers/net/ethernet/dlink/sundance.c
-> >
-> > +SUNPLUS USB2 PHY DRIVER
-> > +M:   Vincent Shih <vincent.sunplus@gmail.com>
-> > +L:   linux-usb@vger.kernel.org
-> > +S:   Maintained
-> > +F:   drivers/phy/sunplus/Kconfig
-> > +F:   drivers/phy/sunplus/Makefile
-> > +F:   drivers/phy/sunplus/phy-sunplus-usb2.c
-> > +
-> >  SUPERH
-> >  M:   Yoshinori Sato <ysato@users.sourceforge.jp>
-> >  M:   Rich Felker <dalias@libc.org>
-> > diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-> > index 82b63e6..d97e22e 100644
-> > --- a/drivers/phy/Kconfig
-> > +++ b/drivers/phy/Kconfig
-> > @@ -90,6 +90,7 @@ source "drivers/phy/rockchip/Kconfig"
-> >  source "drivers/phy/samsung/Kconfig"
-> >  source "drivers/phy/socionext/Kconfig"
-> >  source "drivers/phy/st/Kconfig"
-> > +source "drivers/phy/sunplus/Kconfig"
-> >  source "drivers/phy/tegra/Kconfig"
-> >  source "drivers/phy/ti/Kconfig"
-> >  source "drivers/phy/intel/Kconfig"
-> > diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-> > index 01e9eff..ed88b6f 100644
-> > --- a/drivers/phy/Makefile
-> > +++ b/drivers/phy/Makefile
-> > @@ -31,6 +31,7 @@ obj-y                                       +=3D allw=
-inner/   \
-> >                                          samsung/     \
-> >                                          socionext/   \
-> >                                          st/          \
-> > +                                        sunplus/             \
-> >                                          tegra/       \
-> >                                          ti/          \
-> >                                          xilinx/
-> > diff --git a/drivers/phy/sunplus/Kconfig b/drivers/phy/sunplus/Kconfig
-> > new file mode 100644
-> > index 0000000..beb85f4
-> > --- /dev/null
-> > +++ b/drivers/phy/sunplus/Kconfig
-> > @@ -0,0 +1,12 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +
-> > +config PHY_SUNPLUS_USB
-> > +     tristate "Sunplus USB2 PHY driver"
-> > +     depends on OF && (SOC_SP7021 || COMPILE_TEST)
-> > +     select GENERIC_PHY
-> > +     help
-> > +       Enable this to support the USB 2.0 PHY on Sunplus SP7021
-> > +       SoC. The USB 2.0 PHY controller supports battery charger
-> > +       and synchronous signals, various power down modes including
-> > +       operating, partial and suspend modes, and high-speed,
-> > +       full-speed and low-speed data transfer.
-> > diff --git a/drivers/phy/sunplus/Makefile b/drivers/phy/sunplus/Makefil=
-e
-> > new file mode 100644
-> > index 0000000..71754d5
-> > --- /dev/null
-> > +++ b/drivers/phy/sunplus/Makefile
-> > @@ -0,0 +1,2 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +obj-$(CONFIG_PHY_SUNPLUS_USB)        +=3D phy-sunplus-usb2.o
-> > diff --git a/drivers/phy/sunplus/phy-sunplus-usb2.c b/drivers/phy/sunpl=
-us/phy-sunplus-usb2.c
-> > new file mode 100644
-> > index 0000000..a2c17ca
-> > --- /dev/null
-> > +++ b/drivers/phy/sunplus/phy-sunplus-usb2.c
-> > @@ -0,0 +1,248 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +/*
-> > + * Sunplus SP7021 USB 2.0 phy driver
-> > + *
-> > + * Copyright (C) 2021 Sunplus Technology Inc., All rights reserved.
->
-> 2022
->
 
-I will modify it.
 
-> > + *
-> > + * Note 1 : non-posted write command for the registers accesses of
-> > + * Sunplus SP7021.
-> > + *
-> > + */
-> > +
-> > +#include <linux/bitfield.h>
-> > +#include <linux/clk.h>
-> > +#include <linux/delay.h>
-> > +#include <linux/io.h>
-> > +#include <linux/module.h>
-> > +#include <linux/nvmem-consumer.h>
-> > +#include <linux/of_platform.h>
-> > +#include <linux/phy/phy.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/reset.h>
-> > +
-> > +#define RF_MASK_V(_mask, _val)                       (((_mask) << 16) =
-| (_val))
-> > +#define RF_MASK_V_CLR(_mask)                 (((_mask) << 16) | 0)
->
-> Please use FIELD_PREP and FIELD_GET macros for these
->
+On 26.04.22 09:21, Greg Kroah-Hartman wrote:
+> Yes, but, it's not so simple.  Many people have asked for revoke() to be
+> added as a syscall like is in the BSDs, but the BSDs only allow that for
+> a very small subset of file descriptor types, and doing it in a generic
+> fashion seems very difficult (I tried a few years ago and gave up, but
+> my knowledge of the vfs layer is minimal.)
+Well, then we should go for the minimalist approach and just
+add a hook to VFS. Multiple different ioctl()s are definitely a bad idea.
+An frevoke() looks much easier to do than one based on paths.
+If I understand the issue behind the proposal correctly the caller
+has opened the device.
 
-I will modify it.
+=C2=A0=C2=A0=C2=A0 Regards
+=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
 
-> > +
-> > +#define MASK_BITS                            0xffff
-> > +#define OTP_DISC_LEVEL_DEFAULT                       0xd
-> > +
-> > +// GROUP UPHY
-> > +#define CONFIG1                                      0x4
-> > +#define J_HS_TX_PWRSAV                               BIT(5)
-> > +#define CONFIG3                                      0xc
->
-> GENAMSK() ?
->
-
-I will modify it.
-
->
-> > +#define J_FORCE_DISC_ON                              BIT(5)
-> > +#define J_DEBUG_CTRL_ADDR_MACRO                      BIT(0)
-> > +#define CONFIG7                                      0x1c
-> > +#define J_DISC                                       0X1f
-> > +#define CONFIG9                                      0x24
-> > +#define J_ECO_PATH                           BIT(6)
-> > +#define CONFIG16                             0x40
-> > +#define J_TBCWAIT_MASK                               GENMASK(6, 5)
-> > +#define J_TBCWAIT_1P1_MS                     FIELD_PREP(J_TBCWAIT_MASK=
-, 0)
-> > +#define J_TVDM_SRC_DIS_MASK                  GENMASK(4, 3)
-> > +#define J_TVDM_SRC_DIS_8P2_MS                        FIELD_PREP(J_TVDM=
-_SRC_DIS_MASK, 3)
-> > +#define J_TVDM_SRC_EN_MASK                   GENMASK(2, 1)
-> > +#define J_TVDM_SRC_EN_1P6_MS                 FIELD_PREP(J_TVDM_SRC_EN_=
-MASK, 0)
-> > +#define J_BC_EN                                      BIT(0)
-> > +#define CONFIG17                             0x44
-> > +#define IBG_TRIM0_MASK                               GENMASK(7, 5)
-> > +#define IBG_TRIM0_SSLVHT                     FIELD_PREP(IBG_TRIM0_MASK=
-, 4)
-> > +#define J_VDATREE_TRIM_MASK                  GENMASK(4, 1)
-> > +#define J_VDATREE_TRIM_DEFAULT                       FIELD_PREP(J_VDAT=
-REE_TRIM_MASK, 9)
-> > +#define CONFIG23                             0x5c
-> > +#define PROB_MASK                            GENMASK(5, 3)
-> > +#define PROB                                 FIELD_PREP(PROB_MASK, 7)
-> > +
-> > +// GROUP MOON4
->
-> wrong comments style
->
-
-I will modify it.
-
-> > +static int sp_uphy_init(struct phy *phy)
-> > +{
-> > +     struct sp_usbphy *usbphy =3D phy_get_drvdata(phy);
-> > +     struct nvmem_cell *cell;
-> > +     char *disc_name =3D "disc_vol";
-> > +     ssize_t otp_l =3D 0;
-> > +     char *otp_v;
-> > +     u32 val, set, pll_pwr_on, pll_pwr_off;
-> > +
-> > +     /* Default value modification */
-> > +     writel(RF_MASK_V(MASK_BITS, 0x4002), usbphy->moon4_regs + UPHY_CO=
-NTROL0);
-> > +     writel(RF_MASK_V(MASK_BITS, 0x8747), usbphy->moon4_regs + UPHY_CO=
-NTROL1);
-> > +
-> > +     /* PLL power off/on twice */
-> > +     pll_pwr_off =3D (readl(usbphy->moon4_regs + UPHY_CONTROL3) & ~MAS=
-K_BITS)
-> > +                     | MO1_UPHY_PLL_POWER_OFF_SEL | MO1_UPHY_PLL_POWER=
-_OFF;
-> > +     pll_pwr_on =3D (readl(usbphy->moon4_regs + UPHY_CONTROL3) & ~MASK=
-_BITS)
-> > +                     | MO1_UPHY_PLL_POWER_OFF_SEL;
-> > +
-> > +     writel(RF_MASK_V(MASK_BITS, pll_pwr_off), usbphy->moon4_regs + UP=
-HY_CONTROL3);
-> > +     mdelay(1);
-> > +     writel(RF_MASK_V(MASK_BITS, pll_pwr_on), usbphy->moon4_regs + UPH=
-Y_CONTROL3);
-> > +     mdelay(1);
-> > +     writel(RF_MASK_V(MASK_BITS, pll_pwr_off), usbphy->moon4_regs + UP=
-HY_CONTROL3);
-> > +     mdelay(1);
-> > +     writel(RF_MASK_V(MASK_BITS, pll_pwr_on), usbphy->moon4_regs + UPH=
-Y_CONTROL3);
-> > +     mdelay(1);
->
-> why delay on each register write?
->
-
-They are for the stabilities of capacitors charge/discharge in the PCB boar=
-d.
-
-> > +     writel(RF_MASK_V(MASK_BITS, 0x0), usbphy->moon4_regs + UPHY_CONTR=
-OL3);
-> > +
-> > +     /* board uphy 0 internal register modification for tid certificat=
-ion */
-> > +     cell =3D nvmem_cell_get(usbphy->dev, disc_name);
-> > +     if (IS_ERR_OR_NULL(cell)) {
-> > +             if (PTR_ERR(cell) =3D=3D -EPROBE_DEFER)
-> > +                     return -EPROBE_DEFER;
-> > +     }
-> > +
-> > +     otp_v =3D nvmem_cell_read(cell, &otp_l);
-> > +     nvmem_cell_put(cell);
-> > +
-> > +     if (otp_v) {
-> > +             set =3D *(otp_v + 1);
-> > +             set =3D (set << (sizeof(char) * 8)) | *otp_v;
-> > +             set =3D (set >> usbphy->disc_vol_addr_off) & J_DISC;
-> > +     }
-> > +
-> > +     if (!otp_v || set =3D=3D 0)
-> > +             set =3D OTP_DISC_LEVEL_DEFAULT;
-> > +
-> > +     val =3D readl(usbphy->phy_regs + CONFIG7);
-> > +     val =3D (val & ~J_DISC) | set;
-> > +     writel(val, usbphy->phy_regs + CONFIG7);
->
-> maybe add a updatel() macro
-
-I will add it.
-
->
-> > +static const struct phy_ops sp_uphy_ops =3D {
-> > +     .init           =3D sp_uphy_init,
->
-> no power_on/off/exit routines??
-
-I will implement them.
-
->
-> > +static const struct of_device_id sp_uphy_dt_ids[] =3D {
-> > +     {.compatible =3D "sunplus,sp7021-usb2-phy",
-> > +      .data =3D &sp_uphy_ops,},
->
-> why should the ops be in driver data?
-
-I will modify it.
-
->
-> --
-> ~Vinod
-
-Thanks for your review.
