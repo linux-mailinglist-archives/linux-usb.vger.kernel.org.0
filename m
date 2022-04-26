@@ -2,175 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A828550EEBF
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 04:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF19850F155
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 08:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235430AbiDZCaa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Apr 2022 22:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
+        id S245667AbiDZGqA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Apr 2022 02:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233387AbiDZCa3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Apr 2022 22:30:29 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA08113C88
-        for <linux-usb@vger.kernel.org>; Mon, 25 Apr 2022 19:27:19 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 1A9913200930;
-        Mon, 25 Apr 2022 22:27:16 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 25 Apr 2022 22:27:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1650940035; x=
-        1651026435; bh=2/n5GFyB9Vm/0g2bs3DtqcyNVtUxHzHDKhLh25AsC60=; b=G
-        wBbh2coxLqJG1WLmkCxpQNs4j4bZOsZj2RutlxxgSdlnZWlGcpnBrbe9DyPNR2q9
-        O3CEAvxIc8KvcTmclIGRoMIR84UAJUfEJixe0k6dCTDsDRuAWeXb+kTG6MIoFNrs
-        KJ7Gae2G2w1xBWhffTjypWX+SnyqTjdDEepY7buaT/yaBEHdWhDHO1YYP+nfnitQ
-        uTY6Ek9u9o7AdCLDRuain007T+IwBgbS6cKtFBg+7urBX3sLXI3Uj4Wwa6r5E8ns
-        VPj1WpbiApyIedPoIKFLCYFZ+8s0k/u4drVC/j/+apactcEMqPKPzcc6YtNfCYs+
-        MVft4jy3G9QSMwnKpMKhw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1650940035; x=1651026435; bh=2/n5GFyB9Vm/0
-        g2bs3DtqcyNVtUxHzHDKhLh25AsC60=; b=vNCyFH7f0iOE7MBQKvulZH90lnyBg
-        dBpxhJJHZ3M4oV5Bi14kgv2tJu58ZQk9wQU0a9GqRaHFMKDZhHVDZ+hSDD9WA8kG
-        tZs6mdfl7a8uBwt7DyLRFK5Pj9K2+wu8tQD9hmJLfPAhwDkPSOSM1IHhkuhZPwVP
-        cCTfRP6b6hYu9LHcqLPhzErqkq3zsQQtX8re0J73ZXVrqvZrajTTlpUuUBOI3LGN
-        06FMjapumWEYnSFls3vMcEHYAwg0N9AgHMEfPHd5rpZkqkko+g3fZ+n54Aa9aZHC
-        SEvVQq/HmSiIsWwj4YDSsW1zlRPWFSAATczXiUOekLD+CFPSiSY3wqoOg==
-X-ME-Sender: <xms:g1hnYjmY09fUj2IYIKsQfNceoqG45t4G7nRcZDonHCPMzr5ZI7BXPA>
-    <xme:g1hnYm0iXQrqvfYCH0YgmmER_ilPFg3Sfq2pGUCZQx36IZCznPyUbl7jr98D6RydA
-    1HMEIkPTYhjXm3ELrw>
-X-ME-Received: <xmr:g1hnYprucVBCVwJCxbLL0Oj4JFYTCDcG3Lu5RPEXcKPfOpHoQJCjIP1KpfKjC4B-hQtlx9h50JAr9mgk8-drkz7bYY4Jt5zmXw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddvgdehiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomheprfgvthgv
-    rhcujfhuthhtvghrvghruceophgvthgvrhdrhhhuthhtvghrvghrseifhhhoqdhtrdhnvg
-    htqeenucggtffrrghtthgvrhhnpedthefgudekhfduudejveeggefhkeehgedvhfdugfdv
-    uddvudehvddvhfejheeltdenucffohhmrghinhepfhhrvggvuggvshhkthhophdrohhrgh
-    dpghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehm
-    rghilhhfrhhomhepphgvthgvrhdrhhhuthhtvghrvghrseifhhhoqdhtrdhnvght
-X-ME-Proxy: <xmx:g1hnYrlfvGMOc3bS8Ht5NO97T83S3oUdYJ3r1l0VVBG4bzQgoyPlDg>
-    <xmx:g1hnYh28BJ7gTOYkd5gt5lYd-ErvtFDBQNc0BzBkkfM1x9suncVYpQ>
-    <xmx:g1hnYqvCqJpt-x9qkPIIEWEU_zodT-KNQ-5Bn_b6Gv_JYRYq71rRvA>
-    <xmx:g1hnYqyyCP4EnZfcCkySKvsuwHW6eUaNnGgFsPZ9rzsQoKA1hZyZjQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 25 Apr 2022 22:27:13 -0400 (EDT)
-Date:   Tue, 26 Apr 2022 12:27:08 +1000
-From:   Peter Hutterer <peter.hutterer@who-t.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [RFC v1] USB: core: add USBDEVFS_REVOKE ioctl
-Message-ID: <YmdYfK5Vi+lEl7FX@quokka>
-References: <20220425132315.924477-1-hadess@hadess.net>
- <YmarwaNQYn1GwFbQ@kroah.com>
- <e73035d1bae5d0c355166fb46f0f5f2f07752b3c.camel@hadess.net>
- <Yma3k3lRMIEFypMN@kroah.com>
- <1d82343a5987a308ac9bd3f6fd481bc12a608a24.camel@hadess.net>
- <YmbCBwEMvKO5z0Dh@kroah.com>
+        with ESMTP id S245658AbiDZGp6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 02:45:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276B213E1A;
+        Mon, 25 Apr 2022 23:42:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C630DB81C58;
+        Tue, 26 Apr 2022 06:42:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60CB6C385A0;
+        Tue, 26 Apr 2022 06:42:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650955360;
+        bh=Qj1iBgDmQNO80MoLSfQRprtZnwXJZ3zOv82xv0l0JOk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Nyia3qPWjSPOI+GpHMP1BShry0rDvyRrd+RsE8vQ4OOFPjybgraCtD/fqtcN6yOCV
+         iqV9edZMMR5kNTVGkliDraRWGpYShEGd2G/s1oG6z+Oo3rirv+UjwI2TSwUeVc1xeX
+         5QIWFlKOad1wTwqb9Dp6X5yvz3LX/Vuv94P0Sb3VwIk/SHovMVa/qRGG3GQlRRwDqO
+         7i2xC5b4+jWfRwHo3hCC4wPeyxaDRVOp70wRXvbc8kwFeLb0USLzAfXknK03R7WTS0
+         TtkaGeKOi1FTVQD8AfonZD17tzZVqAtd/hrPDoBgvERjJI5CoaxrgOnd21BBucm6kw
+         0GGKivNxOCnCA==
+Message-ID: <89f7d69a-4fc8-33cc-d9ca-5c50dc5381ab@kernel.org>
+Date:   Tue, 26 Apr 2022 09:42:31 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YmbCBwEMvKO5z0Dh@kroah.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] dt-bindings: usb: tps6598x: Make the interrupts
+ property optional
+Content-Language: en-US
+To:     Aswath Govindraju <a-govindraju@ti.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Martin Kepplinger <martink@posteo.de>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220414083120.22535-1-a-govindraju@ti.com>
+ <20220414083120.22535-2-a-govindraju@ti.com>
+ <be8ab691-98f1-5fb9-fec8-7213a2288d07@kernel.org>
+ <56c72151-af5f-366b-b17f-24b9fb6264da@ti.com>
+ <ae54dbb1-2b02-cba2-5de2-cf3d9a4e35f5@kernel.org>
+ <c1de4293-a058-5e25-9be2-b61ac39f43a3@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <c1de4293-a058-5e25-9be2-b61ac39f43a3@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 05:45:11PM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Apr 25, 2022 at 05:17:28PM +0200, Bastien Nocera wrote:
-> > > > Again, please read the follow-up mail where I talk of the BPF
-> > > > support
-> > > > patch that would allow revoking USB fds without relying on a
-> > > > service in
-> > > > the middle to access devices (although that's eventually going to
-> > > > be
-> > > > the way to do things to allow elevating access to devices).
-> > > 
-> > > So would bpf be working at the usbfs level here?  I still don't
-> > > understand the connection...
-> > 
-> > The explanation is here (for hidraw):
-> > https://gitlab.freedesktop.org/bentiss/logind-hidraw/
+Hi,
+
+On 22/04/2022 08:07, Aswath Govindraju wrote:
+> Hi Roger,
 > 
-> usbfs is not in that explanation at all.  Will there be a logind-libusb
-> process as well?
-
-chiming in here: the hidraw ioctl is independent (as already mentioned)
-but it's basically the same approach and/or intent. The hidraw revoke ioctl is
-"the evdev revoke, but for hidraw", this one is "the evdev revoke, but for
-usb". Not very creative, but at least we can point to prior art and say "this
-seems to be useful" :)
-
-The primary focus of all this are joystick devices (unless I missed some other
-grand plans Bastien had that I'm not aware of), that should put things in
-context a bit. 
-
-Neither ioctl requires a new logind process - logind has TakeDevice(path) and
-ReleaseDevice() as equivalent to open()/close() and updating the logind
-*implementation* allows us to "take" a /dev/$whatever node. The (quite short)
-diff to logind for hidraw is here:
-https://github.com/systemd/systemd/pull/23140/files
-It's basically adding a new enum value and then the check for /dev/hidraw
-instead of /dev/input/event. Imagine the same thing for usb devices.
-
-With the ioctls, we need a chain which will require updating libusb etc. so
-a sandboxed application would do this:
-   application → portal → compositor → logind → open()
-and the fd being passed back up from that to be used in the application.
-Ideally libusb can abstract this transparently.
-
-This chain is the ideal solution since it allows for tight controls of what
-the application can access, including the required "are you sure?" UI inserted
-where needed. Both logind and the portal would have a copy of the fd to call
-revoke on it when required (e.g. user switch or something interactive in the
-portal). Alas, this chain requires updates to how the application opens the
-fd.
-
-Benjamin's suggestion of using BPF (in addition to the ioctl) allows us to
-implement permission checks without that chain in place. With the right BPF
-program loaded, logind can effectively revoke an fd even where logind wasn't
-in the actual open() chain. For user-switching this immediately works, we need
-no application updates. For the "are you sure?" UI part it's more complicated
-but as a thought exercise: the portal could tell logind that $path was ok to
-be opened by any application, logind then allows that. If the portal tells
-logind that it's not longer ok, it can revoke any open fd. The portal does not
-need to know who actually has an fd open. There's some discussion on this
-"how's this actually going to work?" issue here:
-https://gitlab.freedesktop.org/bentiss/logind-hidraw/-/issues/1
-just mentally substitute hidraw with usb. Notably, the application itself does
-not need updates.
-
-There are other efforts like that complement all this, like the proposal to
-tag "safe enough" joystick devices as such so they can be opened by an
-application: https://github.com/systemd/systemd/pull/22860
-
-> But back to the original question, what programs would use this that
-> today offer direct access to USB devices through libusb?  I can maybe
-> think of some fingerprint scanners and some flatbed scanners (printers?)
-> But those are generally rare and the fingerprint scanners only have
-> limited access to the device already.
+> On 21/04/22 00:46, Roger Quadros wrote:
+>> Hi,
+>>
+>> On 18/04/2022 08:19, Aswath Govindraju wrote:
+>>> Hi Roger,
+>>>
+>>> On 14/04/22 23:40, Roger Quadros wrote:
+>>>> Hi,
+>>>>
+>>>> On 14/04/2022 11:31, Aswath Govindraju wrote:
+>>>>> Support for polling has been added in the driver, which will be used by
+>>>>> default if interrupts property is not populated. Therefore, remove
+>>>>> interrupts and interrupt-names from the required properties and add a note
+>>>>> under interrupts property describing the above support in driver.
+>>>>>
+>>>>> Suggested-by: Roger Quadros <rogerq@kernel.org>
+>>>>
+>>>> I did not suggest to make interrupts optional by default.
+>>>>
+>>>> What I suggested was that if a DT property exists to explicitly
+>>>> indicate polling mode then interrupts are not required.
+>>>>
+>>>
+>>> ohh okay, got it. However, may I know if adding a dt property to
+>>> indicate polling for aiding the driver, is the correct approach to model it?
+>>>
+>>> In terms of modelling hardware, as interrupts are not connected we are
+>>> not populating the interrupts property. Shouldn't that be all. If we are
+>>> adding a property explicitly to indicate polling that can be used by
+>>> driver, wouldn't that be a software aid being added in the device tree?
+>>
+>> The hardware (tps6598x chip) has an interrupt pin and is expected to be used
+>> in normal case.
+>>
+>> Some buggy boards might have forgot to connect it. We are adding polling mode only for these buggy boards. ;)
+>> So polling mode is an exception.
+>>
 > 
-> You're going to have to test this somehow with some program, what are
-> you using today for this?
+> Yes as you mentioned the interrupt line is expected to connected but
+> there could be cases where there are not enough pins on the SoC and
+> polling is used intentionally. In these cases this would be a feature
+> rather than a bug.
 
-I have a very simple hidraw tester here:
-https://github.com/whot/hidiocrevoke-test/blob/master/revoke.c
-Updating that to take usb devices can't be that hard :)
+I do not agree that this is a feature but a board defect. You can always use
+a GPIO expander to add more GPIOs than the SoC can provide.
 
-hth
+Type-C events are asynchronous and polling is a waste of CPU time.
+What will you do if system suspends and you need to wake up on Type-C
+status change?
+So polling mode is just an exception for the defective boards or could
+be used for debugging.
 
-Cheers,
-  Peter
+> 
+> Also, I feel like not adding interrupts property in the dt nodes will
+> indicate polling. My question is why are we adding an extra property
+> (which is being used only as an aid in the driver) when this feature can
+> be modeled by making interrupts property optional.
+
+Because interrupt property was not originally optional for this driver.
+
+I would like to hear what Heikki has to say about this.
+
+Any thoughts Heikki?
+
+cheers,
+-roger
+
+> 
+> Thanks,
+> Aswath
+> 
+>> cheers,
+>> -roger
+>>
+>>>
+>>> Thanks,
+>>> Aswath
+>>>
+>>>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>>>>> ---
+>>>>>  Documentation/devicetree/bindings/usb/ti,tps6598x.yaml | 4 ++--
+>>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+>>>>> index a4c53b1f1af3..1c4b8c6233e5 100644
+>>>>> --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+>>>>> @@ -25,6 +25,8 @@ properties:
+>>>>>  
+>>>>>    interrupts:
+>>>>>      maxItems: 1
+>>>>> +    description:
+>>>>> +      If interrupts are not populated then by default polling will be used.
+>>>>>  
+>>>>>    interrupt-names:
+>>>>>      items:
+>>>>> @@ -33,8 +35,6 @@ properties:
+>>>>>  required:
+>>>>>    - compatible
+>>>>>    - reg
+>>>>> -  - interrupts
+>>>>> -  - interrupt-names
+>>>>>  
+>>>>>  additionalProperties: true
+>>>>>  
+>>>>
+>>>> cheers,
+>>>> -roger
+> 
+> 
