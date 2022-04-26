@@ -2,106 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C3D50FA4A
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 12:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3AF50FA70
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 12:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240821AbiDZKZp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Apr 2022 06:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
+        id S1348785AbiDZKbC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 26 Apr 2022 06:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348835AbiDZKX2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 06:23:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABB3340D6;
-        Tue, 26 Apr 2022 02:54:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04B68B81D43;
-        Tue, 26 Apr 2022 09:54:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DFE9C385A4;
-        Tue, 26 Apr 2022 09:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650966860;
-        bh=dgZLzHPox+J+i5Ksh1CcZ3C8j6e4jGpAgkA7LMle0ME=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IHzpt6bZh9xKCjuCxn89GOm1pLinNuvXh2c5ZRsm2+sDH4KUK9TG93MtfpcRuR8OU
-         JzE0dWvLvgMVOCc4RRzPzpilvDdVxVOF9z0qKpmbGarVh1ZynncQiAy4kjdXGsawOK
-         EcRjRVZzafDnrOBU1S74oY9X+/AEHKYG5ZL3ZxeU=
-Date:   Tue, 26 Apr 2022 11:54:16 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH v4 1/5] usb: host: export symbols for xhci-exynos to use
- xhci hooks
-Message-ID: <YmfBSLDiZGkvu3sG@kroah.com>
-References: <1650964728-175347-1-git-send-email-dh10.jung@samsung.com>
- <CGME20220426092021epcas2p4071f2b7621558a015579131990486a3c@epcas2p4.samsung.com>
- <1650964728-175347-2-git-send-email-dh10.jung@samsung.com>
+        with ESMTP id S240733AbiDZKab (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 06:30:31 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18ED8EB151
+        for <linux-usb@vger.kernel.org>; Tue, 26 Apr 2022 03:07:18 -0700 (PDT)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 241BDE0006;
+        Tue, 26 Apr 2022 10:07:15 +0000 (UTC)
+Message-ID: <3e6af5eff95968d6a871cc26233328d9890730b3.camel@hadess.net>
+Subject: Re: [RFC v1] USB: core: add USBDEVFS_REVOKE ioctl
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>
+Date:   Tue, 26 Apr 2022 12:07:15 +0200
+In-Reply-To: <YmbCBwEMvKO5z0Dh@kroah.com>
+References: <20220425132315.924477-1-hadess@hadess.net>
+         <YmarwaNQYn1GwFbQ@kroah.com>
+         <e73035d1bae5d0c355166fb46f0f5f2f07752b3c.camel@hadess.net>
+         <Yma3k3lRMIEFypMN@kroah.com>
+         <1d82343a5987a308ac9bd3f6fd481bc12a608a24.camel@hadess.net>
+         <YmbCBwEMvKO5z0Dh@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650964728-175347-2-git-send-email-dh10.jung@samsung.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 06:18:44PM +0900, Daehwan Jung wrote:
-> Export symbols for xhci hooks usage:
->     xhci_get_slot_ctx
->     xhci_get_endpoint_address
->     - Allow xhci hook to get ep_ctx from the xhci_container_ctx for
->       getting the ep_ctx information to know which ep is offloading and
->       comparing the context in remote subsystem memory if needed.
-> 
->     xhci_ring_alloc
->     - Allow xhci hook to allocate vendor specific ring. Vendors could
->       alloc additional event ring.
-> 
->     xhci_trb_virt_to_dma
->     - Used to retrieve the DMA address of vendor specific ring. Vendors
->       could get dequeue address of event ring.
-> 
->     xhci_segment_free
->     xhci_link_segments
->     - Allow xhci hook to handle vendor specific segment. Vendors could
->       directly free or link segments of vendor specific ring.
-> 
->     xhci_initialize_ring_info
->     - Allow xhci hook to initialize vendor specific ring.
-> 
->     xhci_check_trb_in_td_math
->     - Allow xhci hook to Check TRB math for validation. Vendors could
->       check trb when allocating vendor specific ring.
-> 
->     xhci_address_device
->     - Allow override to give configuration info to Co-processor.
-> 
->     xhci_bus_suspend
->     xhci_bus_resume
->     - Allow override of suspend and resume for power scenario.
-> 
->     xhci_remove_stream_mapping
->     - Allow to xhci hook to remove stream mapping. Vendors need to do it
->       when free-ing vendor specific ring if it's stream type.
-> 
+On Mon, 2022-04-25 at 17:45 +0200, Greg Kroah-Hartman wrote:
+> But back to the original question, what programs would use this that
+> today offer direct access to USB devices through libusb?  I can maybe
+> think of some fingerprint scanners and some flatbed scanners
+> (printers?)
+> But those are generally rare and the fingerprint scanners only have
+> limited access to the device already.
 
-For the static functions that you are now exporting, they need to have
-their functions declared in a .h file.  If not, you now get warnings
-when you run sparse after applying this commit, right?
+fingerprint readers are handled through a privileged daemon for the
+past 14 years:
+https://fprint.freedesktop.org/
 
-thanks,
+Looking through libusb_open() users on the Debian repo[1], I could find
+those types of devices that could make use of sandboxing:
+- all manners of single-board computers and programmable chips and
+devices (avrdude, STLink, sunxi bootloader, flashrom, etc.)
+- 3D printers
+- scanners
+- LCD "displays"
+- user-space webcam and still cameras
+- game controllers
+- video/audio capture devices
+- sensors
+- software-defined radios
+- DJ/music equipment
+- protocol analysers
 
-greg k-h
+There's also Rio500 support which I'm particularly attached to, and
+many many more device types, including one that should eventually get a
+kernel driver, because prototyping in user-space in Python or
+Javascript is probably easier than in C.
+
+[1]:
+https://codesearch.debian.net/search?q=libusb_open&literal=1&perpkg=1
