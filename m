@@ -2,126 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AC450FBC3
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 13:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE54C50FBE9
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 13:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345831AbiDZLPk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Apr 2022 07:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S1349522AbiDZL2w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Apr 2022 07:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349487AbiDZLNx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 07:13:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C542D45ADC
-        for <linux-usb@vger.kernel.org>; Tue, 26 Apr 2022 04:10:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 49950CE1A4F
-        for <linux-usb@vger.kernel.org>; Tue, 26 Apr 2022 11:10:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03865C385A0;
-        Tue, 26 Apr 2022 11:10:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650971442;
-        bh=PSnB5n9Oy0FIntYg4S3JiHi7XxetpXLfpd8AjK/N1X8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fo6FU028U1Zlx5FJF/QLeOVXx60XRSn2JVhhbZ0B1zdEr7Nmr+5QIwgi7dNF80UXR
-         o3eQbsxKwvsBTKby2gXdqw6i9rrpFh0Z2aWFaJqVRq3bbbPM49i+vtH7fyqKHq/aCU
-         Lxq+FRy9vt9H4aE6ngK5MeyqDictrDLRrbGj+BR0=
-Date:   Tue, 26 Apr 2022 13:10:39 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [RFC v1] USB: core: add USBDEVFS_REVOKE ioctl
-Message-ID: <YmfTL1gsV7lNS8iE@kroah.com>
-References: <Yma3k3lRMIEFypMN@kroah.com>
- <1d82343a5987a308ac9bd3f6fd481bc12a608a24.camel@hadess.net>
- <YmbCBwEMvKO5z0Dh@kroah.com>
- <YmdYfK5Vi+lEl7FX@quokka>
- <7def25c7-0870-accc-c689-4d8eef1b7acf@suse.com>
- <YmedlsENjNjc8yML@kroah.com>
- <fcb10f35-3064-851b-8f53-e88a3b51c930@suse.com>
- <d49aeb3cd8f67674eb87bf4bc93f617937649bc7.camel@hadess.net>
- <YmfJr46kLZ3MtiCU@kroah.com>
- <e43f9fe95a763efbe959084ea3f2dcd0a75f666f.camel@hadess.net>
+        with ESMTP id S240073AbiDZL2u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 07:28:50 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A169418397
+        for <linux-usb@vger.kernel.org>; Tue, 26 Apr 2022 04:25:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650972342; x=1682508342;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lp+/YJxKd4cEPqvP8d//5aAitI+nT/oXEftZJYvZop0=;
+  b=E7ud1ASWtsKxE4CxZr+YjMAEEowcgaXSA0FlNYm8gXVfzeqvCMJrv9oF
+   X5r2Fg5w5Odr9R7fi9ObuAFrWMYlw0L5FoVm1t3SWqbTnusxvBo5nZvFk
+   MJFW+OgSX92yoL8FHVeMowsfo6Et5GKa0S/fKY2fHe2A1TfON98k5c5vE
+   tXYfxVh1JpiBI6AMUVe3DBRVgQUNtOK6Ou1tuGq6tGmeCQAdBaaVZa9Is
+   sYuey12qKIvpf52hWUQIvqujcwEAWot+ycj/Fp6HC+tJxtPFRd4LdZoTa
+   Ke4NEeplL/PVnDlZ/HFu7aqDHICEoeQbTTVWORbOLdoohEq5MZpH66XVh
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="290688237"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="290688237"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 04:25:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="579837529"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 26 Apr 2022 04:25:40 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 533454E1; Tue, 26 Apr 2022 14:25:40 +0300 (EEST)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 0/5] thunderbolt: Add support for XDomain lane bonding
+Date:   Tue, 26 Apr 2022 14:25:35 +0300
+Message-Id: <20220426112540.6053-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e43f9fe95a763efbe959084ea3f2dcd0a75f666f.camel@hadess.net>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 12:37:14PM +0200, Bastien Nocera wrote:
-> On Tue, 2022-04-26 at 12:30 +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Apr 26, 2022 at 12:07:32PM +0200, Bastien Nocera wrote:
-> > > On Tue, 2022-04-26 at 10:46 +0200, Oliver Neukum wrote:
-> > > > 
-> > > > 
-> > > > On 26.04.22 09:21, Greg Kroah-Hartman wrote:
-> > > > > Yes, but, it's not so simple.  Many people have asked for
-> > > > > revoke()
-> > > > > to be
-> > > > > added as a syscall like is in the BSDs, but the BSDs only allow
-> > > > > that for
-> > > > > a very small subset of file descriptor types, and doing it in a
-> > > > > generic
-> > > > > fashion seems very difficult (I tried a few years ago and gave
-> > > > > up,
-> > > > > but
-> > > > > my knowledge of the vfs layer is minimal.)
-> > > > Well, then we should go for the minimalist approach and just
-> > > > add a hook to VFS. Multiple different ioctl()s are definitely a
-> > > > bad
-> > > > idea.
-> > > > An frevoke() looks much easier to do than one based on paths.
-> > > > If I understand the issue behind the proposal correctly the
-> > > > caller
-> > > > has opened the device.
-> > > 
-> > > Doesn't look like FreeBSD at least has an frevoke() syscall
-> > > anymore, it
-> > > had an FREVOKE flag, which is now a define for the O_VERIFY option
-> > > which has quite different semantics:
-> > > https://www.freebsd.org/cgi/man.cgi?sektion=2&query=open
-> > 
-> > Take a look at this implementation:
-> >         https://man.openbsd.org/revoke.2
-> > 
-> I don't think anyone wants to implement path based syscalls, and again,
-> it's equivalent to remote closing the fd, not to disabling the access
-> to the device:
-> "If the file is a special file for a device which is open, the device
-> close function is called as if all open references to the file had been
-> closed."
+Hi all,
 
-You forgot the sentence before that which is the functionality we want
-here:
-	Subsequent operations on any such descriptors fail, with the
-	exceptions that a read() from a tty which has been revoked
-	returns a count of zero (end of file), and a close() call will
-	succeed.
+So far connecting two Thunderbolt/USB4 domains (hosts) the high-speed link
+has been using a single lane. The reason for this was simplicity and also
+the fact that the host DMA was not able to go over the 20 Gbit/s even if
+the lanes were bonded. However, Intel Alder Lake and beyond actually can go
+higher than that so now it makes more sense to take advantage of the lane
+bonding. The USB4 Inter-Domain Service specification describes the
+protocol and this patch series implements it for the Linux Thunderbolt/USB4
+driver.
 
-And don't do it only for a tty device, but for any device that
-implements it.
+If both sides (hosts) of the link announce supporting this, we will
+establish bonded link. This is only possible on systems with software based
+connection manager (so Intel Alder Lake and beyond).
 
-And yes, we don't want to work off of a path, but a file descriptor:
-	int revoke(int fd);
+Mika Westerberg (5):
+  thunderbolt: Add debug logging when lane is enabled/disabled
+  thunderbolt: Move tb_port_state() prototype to correct place
+  thunderbolt: Split setting link width and lane bonding into own functions
+  thunderbolt: Ignore port locked error in tb_port_wait_for_link_width()
+  thunderbolt: Add support for XDomain lane bonding
 
-> If there's an implementation done at the VFS level, it should probably
-> try to steer away from those earlier disparate implementations.
+ drivers/thunderbolt/switch.c  | 109 ++++--
+ drivers/thunderbolt/tb.c      |   6 -
+ drivers/thunderbolt/tb.h      |   4 +-
+ drivers/thunderbolt/tb_msgs.h |  39 +++
+ drivers/thunderbolt/tb_regs.h |   5 +
+ drivers/thunderbolt/xdomain.c | 609 ++++++++++++++++++++++++++++++----
+ include/linux/thunderbolt.h   |  19 +-
+ 7 files changed, 688 insertions(+), 103 deletions(-)
 
-Agreed.
+-- 
+2.35.1
 
-thanks,
-
-greg k-h
