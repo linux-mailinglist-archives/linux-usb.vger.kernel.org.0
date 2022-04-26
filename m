@@ -2,477 +2,242 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6523510090
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 16:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B97151013A
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Apr 2022 16:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351736AbiDZOjL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Apr 2022 10:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
+        id S1351847AbiDZPBl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Apr 2022 11:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239978AbiDZOi0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 10:38:26 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307091262F
-        for <linux-usb@vger.kernel.org>; Tue, 26 Apr 2022 07:35:17 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id d5so10561223wrb.6
-        for <linux-usb@vger.kernel.org>; Tue, 26 Apr 2022 07:35:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=99rqLjuJiZm3S/4RDDXISt2T62Ql1SvppM7Vtahqi9Q=;
-        b=i22Jb6/vSjd+vR9mwv3uNCrndT/mRL8Ru7HkE4Y0+GVJOGzWgq0qBVFUSenAEYt9TF
-         0t2vNZ1rV/ZUZyhkVgs2Vsv+5q7J0EF9AzQBmZHj0lqYtpdj5xPvRxscqeb5bmUatTv5
-         IsN0KEkqThzAGKzhQ9sRfAHeikRao42RdG96kH9b+tgJHrNZrtaIx5Lmdsm2izEpS8rx
-         9INCip0IOAzsVmSMszyp3dcjnlXeCHYpOnuK2y59I5PkSRyzVlKk0S1C5Oh9Jxz93eFH
-         5p97lw0vHk24JqOh+HqPA1T2u70RGIfH56LHf3DKZKlflcqFEdRZeM8QDdpOMRlRqkjD
-         t9HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=99rqLjuJiZm3S/4RDDXISt2T62Ql1SvppM7Vtahqi9Q=;
-        b=gfdWEtjiFbdVXIwGV11XXlAWmdD9OMszJDU/9Gmmq8Auk+uLSdGNNE5b0cSfrh1wFG
-         3WPcJ52apGyFiVPRuTL1Nq7NRfzKaBGTYf/BDTSQtE6880qEqI4NzLhsOkTG3WRnSuPC
-         6G0hibEtQVHBSQhSm6UM3LkaoAP7mKTpCDRYcmYulQ+7xYRqPojWGe3g6l08FgMSouFe
-         OUAiQYARP2M+6nZjX1k5tKnI5LQwsGWS/brhdSB9Wg7SsicNrmmMkXkEl8V8FCzpzb8q
-         jE/fz1KgThyGuX1ufOVQbT9eNIADRhk2OvC8wJmfAxanlJ1+UQijgPPclfTVCz+89JnV
-         xC+Q==
-X-Gm-Message-State: AOAM533V4FnspjiyjyScuubgXcIdb4yGuisxWuaHStdVpYY9uclQ1/QF
-        Tk4FGGruJ4WupCpDqmKm2TZ6zQ==
-X-Google-Smtp-Source: ABdhPJzjgG01TYya4jcZk6oLgp+laNhKTdtm5mHUqtThy9W/B+BMHI1/qxQgVSTkp0kJ8PT3psQ3tA==
-X-Received: by 2002:adf:d230:0:b0:20a:da1f:aaaf with SMTP id k16-20020adfd230000000b0020ada1faaafmr8765862wrh.616.1650983714991;
-        Tue, 26 Apr 2022 07:35:14 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id h10-20020a05600c414a00b0038ebb6884d8sm12806482wmm.0.2022.04.26.07.35.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 07:35:14 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 15:35:12 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     frank zago <frank@zago.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-usb@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] mfd: ch341: add core driver for the WCH CH341 in
- I2C/SPI/GPIO mode
-Message-ID: <YmgDID8pRYDFK8vi@google.com>
-References: <20220401023306.79532-1-frank@zago.net>
- <20220401023306.79532-2-frank@zago.net>
+        with ESMTP id S1351843AbiDZPBi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Apr 2022 11:01:38 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 81118B1A9B
+        for <linux-usb@vger.kernel.org>; Tue, 26 Apr 2022 07:58:29 -0700 (PDT)
+Received: (qmail 841292 invoked by uid 1000); 26 Apr 2022 10:58:28 -0400
+Date:   Tue, 26 Apr 2022 10:58:28 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: USB device disconnects on resume
+Message-ID: <YmgIlFBC8mYQ2xwJ@rowland.harvard.edu>
+References: <f03916f62a976fd10b9808f77eace9c230ca4ebc.camel@puri.sm>
+ <Yl7ID1Vxp5+wR1py@rowland.harvard.edu>
+ <5117280ddbcd07007adef1680f689bdea6af32e5.camel@puri.sm>
+ <YmAbZDd6LJwCCvkB@rowland.harvard.edu>
+ <4fb8bd5842135a9f723bbe0406ed1afc023c25fe.camel@puri.sm>
+ <YmFpMFlTt83s90an@rowland.harvard.edu>
+ <b80c032c350c525d620968e95b7a653fc855d806.camel@puri.sm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220401023306.79532-2-frank@zago.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <b80c032c350c525d620968e95b7a653fc855d806.camel@puri.sm>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 31 Mar 2022, frank zago wrote:
-
-> The CH341 is a multifunction chip, presenting 3 different USB PID. One
-> of these functions is for I2C/SPI/GPIO. This new set of drivers will
-> manage I2C and GPIO.
+On Mon, Apr 25, 2022 at 11:45:05AM +0200, Martin Kepplinger wrote:
+> Alan, thanks so much for asking these questions and thinking this
+> through! It helps.
 > 
-> Signed-off-by: frank zago <frank@zago.net>
-> ---
->  Documentation/misc-devices/ch341.rst | 114 +++++++++++++++++++++++++++
->  Documentation/misc-devices/index.rst |   1 +
-
-Not sure I've seen this bundled with an MFD driver before.
-
-Please separate them into their own patches.
-
->  MAINTAINERS                          |   7 ++
->  drivers/mfd/Kconfig                  |  10 +++
->  drivers/mfd/Makefile                 |   1 +
->  drivers/mfd/ch341-core.c             |  99 +++++++++++++++++++++++
->  include/linux/mfd/ch341.h            |  26 ++++++
->  7 files changed, 258 insertions(+)
->  create mode 100644 Documentation/misc-devices/ch341.rst
->  create mode 100644 drivers/mfd/ch341-core.c
->  create mode 100644 include/linux/mfd/ch341.h
+> Am Donnerstag, dem 21.04.2022 um 10:24 -0400 schrieb Alan Stern:
+> > On Thu, Apr 21, 2022 at 12:38:56PM +0200, Martin Kepplinger wrote:
+> > > Am Mittwoch, dem 20.04.2022 um 10:40 -0400 schrieb Alan Stern:
+> > > > On Wed, Apr 20, 2022 at 12:37:36PM +0200, Martin Kepplinger
+> > > > wrote:
+> > > > > Resetting itself doesn't usually fail in the sense that a
+> > > > > device
+> > > > > would
+> > > > > not work anymore after resetting. The problem is that the
+> > > > > resets
+> > > > > happen
+> > > > > in the first place. 90+% of runtime-resumes are fine - auto-
+> > > > > and
+> > > > > wakeup-resume. Resetting is a major problem though, imagine a
+> > > > > modem
+> > > > > device being re-enumerated during a phone call or "realtime"
+> > > > > data
+> > > > > connection. I see that a lot.
+> > > > 
+> > > > Okay, I see.
+> > 
+> > By the way, I assume that while resetting the modem is a major
+> > problem 
+> > for your potential use cases, having it crash with no hope of
+> > recovery 
+> > is even worse.† But maybe I'm wrong...
 > 
-> diff --git a/Documentation/misc-devices/ch341.rst b/Documentation/misc-devices/ch341.rst
-> new file mode 100644
-> index 000000000000..bf0b83f2eb85
-> --- /dev/null
-> +++ b/Documentation/misc-devices/ch341.rst
-> @@ -0,0 +1,114 @@
-> +.. SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +===========================================================
-> +WinChipHead (Ê≤ÅÊÅí) CH341 linux driver for I2C and GPIO mode
-> +===========================================================
-> +
-> +The CH341 is declined in several flavors, and may support one or more
-> +of UART, SPI, I2C and GPIO, but not always simultaneously:
-> +
-> +  - CH341 A/B/F: UART, Printer, SPI, I2C and GPIO
-> +  - CH341 C/T: UART and I2C
-> +  - CH341 H: SPI
-> +
-> +They work in 3 different modes, with only one being presented
-> +depending on the USB PID:
-> +
-> +  - 0x5523: UART mode, covered by the USB `ch341` serial driver
-> +  - 0x5512: SPI/I2C/GPIO mode, covered by the ch341 MFD drivers
-> +  - 0x5584: Parallel printer mode, covered by the USB `usblp` driver
-> +
-> +Mode selection is done at the hardware level by tying some
-> +pins. Breakout boards with one of the CH341 chip usually have one or
-> +more jumpers to select which mode they work on. At least one model
-> +(CJMCU-341) appears to need bridging some solder pads to select a
-> +different default. Breakout boards also don't usually offer an option
-> +to configure the chip into printer mode; for that case, connect the
-> +SCL and SDA lines directly together.
-> +
-> +The various CH341 appear to be indistinguishable from the
-> +software. For instance the ch341 MFD driver will present a GPIO
-> +interface for the CH341T although physical pins are not present, and
-> +the device will accept GPIO commands.
-> +
-> +The ch341 MFD driver has been tested with a CH341A, CH341B and
-> +CH341T.
-> +
-> +Some breakout boards work in 3.3V and 5V depending on some jumpers.
-> +
-> +The black chip programmer with a ZIF socket will power the CH341 at
-> +3.3V if a jumper is set, but will only output 5V to the chips to be
-> +programmed, which is not always desirable. A hardware hack to use 3.3V
-> +everywhere, involving some soldering, is available at
-> +https://eevblog.com/forum/repair/ch341a-serial-memory-programmer-power-supply-fix/
-> +
-> +Some sample code for the CH341 is available at the manufacturer
-> +website, at http://wch-ic.com/products/CH341.html
-> +
-> +The repository at https://github.com/boseji/CH341-Store contains a lot
-> +of information on these chips, including datasheets.
-> +
-> +This driver is based on the pre-existing work at
-> +https://github.com/gschorcht/i2c-ch341-usb
-> +
-> +
-> +I2C Caveats
-> +-----------
-> +
-> +The ch341 doesn't work with a Wii nunchuk, possibly because the
-> +pull-up value is too low (1500 ohms).
-> +
-> +i2c AT24 eeproms can be read but not programmed properly because the
-> +at24 linux driver tries to write a byte at a time, and doesn't wait at
-> +all (or enough) between writes. Data corruption on writes does occur.
-> +
-> +The driver doesn't support detection of I2C devices present on the
-> +bus. Apparently when a device is not present at a given address, the
-> +CH341 will return an extra byte of data, but the driver doesn't
-> +support that. This may be addressed in the future.
-> +
-> +
-> +The GPIOs
-> +---------
-> +
-> +16 GPIOs are available on the CH341 A/B/F. The first 6 are input/output,
-> +and the last 10 are input only.
-> +
-> +Pinout and their names as they appear on some breakout boards::
-> +
-> +  CH341A/B/F     GPIO  Names                    Mode
-> +    pin          line
-> +
-> +   15             0     D0, CS0                  input/output
-> +   16             1     D1, CS1                  input/output
-> +   17             2     D2, CS2                  input/output
-> +   18             3     D3, SCK, DCK             input/output
-> +   19             4     D4, DOUT2, CS3           input/output
-> +   20             5     D5, MOSI, DOUT, SDO      input/output
-> +   21             6     D6, DIN2                 input
-> +   22             7     D7, MISO, DIN            input
-> +    5             8     ERR                      input
-> +    6             9     PEMP                     input
-> +    7            10     INT                      input
-> +    8            11     SLCT (SELECT)            input
-> +   26            12     RST# (?)                 input
-> +   27            13     WT (WAIT)                input
-> +    4            14     DS (Data Select?)        input
-> +    3            15     AS (Address Select?)     input
-> +
-> +
-> +GPIO interrupt
-> +~~~~~~~~~~~~~~
-> +
-> +The INT pin, corresponding to GPIO 10 is an input pin that can trigger
-> +an interrupt on a rising edge. Only that pin is able to generate an
-> +interrupt, and only on a rising edge. Trying to monitor events on
-> +another GPIO, or that GPIO on something other than a rising edge, will
-> +be rejected.
-> +
-> +
-> +SPI
-> +---
-> +
-> +This driver doesn't offer an SPI interface (yet) due to the
-> +impossibility of declaring an SPI device like I2C does.
-> diff --git a/Documentation/misc-devices/index.rst b/Documentation/misc-devices/index.rst
-> index 30ac58f81901..52d03715601e 100644
-> --- a/Documentation/misc-devices/index.rst
-> +++ b/Documentation/misc-devices/index.rst
-> @@ -19,6 +19,7 @@ fit into other categories.
->     bh1770glc
->     eeprom
->     c2port
-> +   ch341
->     dw-xdata-pcie
->     ibmvmc
->     ics932s401
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cbbd3ce7e0c2..b61af813fb9f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21211,6 +21211,13 @@ M:	David H√§rdeman <david@hardeman.nu>
->  S:	Maintained
->  F:	drivers/media/rc/winbond-cir.c
->  
-> +WINCHIPHEAD CH341 I2C/GPIO MFD DRIVER
-> +M:	Frank Zago <frank@zago.net>
-> +L:	linux-usb@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/mfd/ch341-core.c
-> +F:	include/linux/mfd/ch341.h
-> +
->  WINSYSTEMS EBC-C384 WATCHDOG DRIVER
->  M:	William Breathitt Gray <vilhelm.gray@gmail.com>
->  L:	linux-watchdog@vger.kernel.org
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 3b59456f5545..893acc821a42 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1784,6 +1784,16 @@ config MFD_LOCHNAGAR
->  	help
->  	  Support for Cirrus Logic Lochnagar audio development board.
->  
-> +config MFD_CH341
-> +	tristate "WinChipHead CH341 in I2C/SPI/GPIO mode"
-> +	depends on USB
-> +	help
-> +	  If you say yes to this option, support for the CH341 series
-> +	  of chips, running in I2C/SPI/GPIO mode will be included.
-> +
-> +	  This driver can also be built as a module.  If so, the
-> +	  module will be called ch341-core.
-> +
->  config MFD_ARIZONA
->  	select REGMAP
->  	select REGMAP_IRQ
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 858cacf659d6..fd615ab3929f 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -13,6 +13,7 @@ obj-$(CONFIG_MFD_ASIC3)		+= asic3.o tmio_core.o
->  obj-$(CONFIG_ARCH_BCM2835)	+= bcm2835-pm.o
->  obj-$(CONFIG_MFD_BCM590XX)	+= bcm590xx.o
->  obj-$(CONFIG_MFD_BD9571MWV)	+= bd9571mwv.o
-> +obj-$(CONFIG_MFD_CH341)		+= ch341-core.o
->  obj-$(CONFIG_MFD_CROS_EC_DEV)	+= cros_ec_dev.o
->  obj-$(CONFIG_MFD_ENE_KB3930)	+= ene-kb3930.o
->  obj-$(CONFIG_MFD_EXYNOS_LPASS)	+= exynos-lpass.o
-> diff --git a/drivers/mfd/ch341-core.c b/drivers/mfd/ch341-core.c
-> new file mode 100644
-> index 000000000000..0bb6eb8057e9
-> --- /dev/null
-> +++ b/drivers/mfd/ch341-core.c
-> @@ -0,0 +1,99 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Core driver for the CH341A, CH341B and CH341T in I2C/SPI/GPIO
-> + * mode. There are cell drivers available for I2C and GPIO. SPI is not
-> + * yet supported.
-> + *
-> + * Copyright 2022, Frank Zago
-> + * Copyright (c) 2017 Gunar Schorcht (gunar@schorcht.net)
-> + * Copyright (c) 2016 Tse Lun Bien
-> + * Copyright (c) 2014 Marco Gittler
-> + * Copyright (c) 2006-2007 Till Harbaum (Till@Harbaum.org)
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/ch341.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +#include <linux/usb.h>
-> +
-> +static const struct mfd_cell ch341_devs[] = {
-> +};
-> +
-> +static int ch341_usb_probe(struct usb_interface *iface,
-> +			   const struct usb_device_id *usb_id)
-> +{
-> +	struct usb_host_endpoint *endpoints;
-> +	struct ch341_device *dev;
+> Sure that's true (and I have other usb-related problems too that result
+> in the xhci HC dying even, when I see "xhci-hcd.4.auto: Port resume
+> timed out, port 1-1: 0xfe3", so the Hub where the modem is connected)
+> but these resets are a seperate issue I want to tackle now and see
+> whether it help with other usb-related problems, so let's focus on this
+> disconnect/reset situation. So let's not get confused :)
 
-Please rename this struct 'ch341_ddata' and s/dev/ddata/.
+Okay.
 
-> +	int rc;
+> > > > > 1650447001.318845 pureos kernel: usb 1-1.2: Waited 0ms for
+> > > > > CONNECT
+> > > > > 1650447001.324925 pureos kernel: usb 1-1.2: finish resume
+> > > > > 1650447003.831095 pureos kernel: usb 1-1.2: usb auto-suspend,
+> > > > > wakeup 1
+> > > > > 1650447003.854701 pureos kernel: hub 1-1:1.0: hub_suspend
+> > > > > 1650447003.874773 pureos kernel: usb 1-1: usb auto-suspend,
+> > > > > wakeup
+> > > > > 1
+> > > > > 1650447003.922054 pureos kernel: usb 1-1: usb wakeup-resume
+> > > > 
+> > > > This wakeup occurred only 48 ms after the hub was runtime
+> > > > suspended.†
+> > > > But here at least the cause is evident: The hub sent a wakeup
+> > > > request
+> > > > because its child (the 1-1.2 modem) disconnected.
+> > > 
+> > > fwiw, that wakeup-resume *always* comes about 50 ms after the last
+> > > runtime suspend.
+> > 
+> > Maybe the modem's firmware has some 50-ms timeout that expires and
+> > then 
+> > causes the crash.
+> 
+> I now recorded usbmon (1u) traffic of a similar sequence I sent here,
+> with a few usbmon-timestamps in the logs:
+> 
+> https://source.puri.sm/Librem5/linux/-/issues/303#note_197913
+> 
+> the usbmon log textfile is attached in that comment link and in this
+> email.
 
-'ret' please.
+Hmmm.  The usbmon trace appears to show a successful reset-resume.  Did
+anything bad happen during that experiment from your point of view?
 
-> +	dev = devm_kzalloc(&iface->dev, sizeof(*dev), GFP_KERNEL);
-> +	if (!dev)
-> +		return -ENOMEM;
-> +
-> +	dev->usb_dev = usb_get_dev(interface_to_usbdev(iface));
+> > > > > 1650447003.942066 pureos kernel: usb 1-1: Waited 0ms for
+> > > > > CONNECT
+> > > > > 1650447003.945755 pureos kernel: usb 1-1: finish resume
+> > > > > 1650447003.947589 pureos kernel: hub 1-1:1.0: hub_resume
+> > > > > 1650447003.949226 pureos kernel: usb 1-1-port1: status 0507
+> > > > > change
+> > > > > 0000
+> > > > > 1650447003.949430 pureos kernel: usb 1-1-port2: status 0101
+> > > > > change
+> > > > > 0005
+> > > > > 1650447004.058779 pureos kernel: hub 1-1:1.0: state 7 ports 3
+> > > > > chg
+> > > > > 0004
+> > > > > evt 0000
+> > > > > 1650447004.074089 pureos kernel: usb 1-1.2: usb wakeup-resume
+> > > > > 1650447004.094056 pureos kernel: usb 1-1.2: Waited 0ms for
+> > > > > CONNECT
+> > > > > 1650447004.097255 pureos kernel: usb 1-1.2: finish reset-resume
+> > > > > 1650447004.182333 pureos kernel: usb 1-1.2: reset high-speed
+> > > > > USB
+> > > > > device
+> > > > > number 5 using xhci-hcd
+> > > > > 1650447004.314425 pureos kernel: usb 1-1-port2: resume, status
+> > > > > 0
+> > > > > 1650447004.317628 pureos kernel: usb 1-1-port2: status 0101,
+> > > > > change
+> > > > > 0004, 12 Mb/s
 
-Can this come later?
+This line indicates the real source of the trouble.  Shortly after the 
+reset part of the reset-resume, the modem disconnected again.  That is, 
+it disconnected itself twice: Once while it was suspended or right when 
+the resume occurred, and then a second time immediately following the 
+reset.
 
-It would save on the goto dance.
+> > > > > 1650447004.323374 pureos kernel: usb 1-1.2: unregistering
+> > > > > device
+> > > > 
+> > > > And it looks like in this case, the reset-resume failed.
+> > > 
+> > > Well, at least reset_resume has been set, which I want to avoid.
+> > 
+> > Do you mean you would prefer to have the modem disconnect permanently
+> > (or at least until the next reboot)?
+> 
+> no. I mean I'd prefer the kernel keep the device usable when such a
+> disconnect happens - after a short pause until the modem is up again -
+> and not re-enumerate.
 
-> +	dev->iface = iface;
-> +	mutex_init(&dev->usb_lock);
-> +
-> +	if (iface->cur_altsetting->desc.bNumEndpoints != 3) {
+That's exactly what a reset-resume is supposed to do.  Maybe the pause 
+is too short; you can increase it by adding an msleep() call in 
+finish_port_resume() just before it calls usb_reset_and_verify_device().
 
-Why 3?
+> An audio stream is not being interrupted by such a usb disconnect and
+> if I'd keep the ttyUSB device for userspace, I'd keep an opened ttyUSB
+> controllable - even if possibly with a large latency spike. That would
+> stay a bad workaround of course. Do you know what I'm thinking about?
 
-> +		rc = -ENODEV;
-> +		goto free_dev;
-> +	}
-> +
-> +	endpoints = iface->cur_altsetting->endpoint;
-> +	if (!usb_endpoint_is_bulk_in(&endpoints[0].desc) ||
-> +	    !usb_endpoint_is_bulk_out(&endpoints[1].desc) ||
-> +	    !usb_endpoint_xfer_int(&endpoints[2].desc)) {
+Certainly.
 
-What has happened if we get here?
+> > One thing you can do pretty easily, without changing the kernel, is 
+> > prevent the modem from going into runtime suspend in the first
+> > place.† 
+> > For example, if you have a program like powertop overseeing your
+> > runtime 
+> > power management, you could tell it not to let the modem suspend.† Or
+> > if 
+> > you want to set it up by hand, the command is:
+> > 
+> > ††††††††echo on >/sys/bus/usb/devices/.../power/control
+> > 
+> > (where "..." is the appropriate path for the modem device, such as 
+> > "1-1.2").† You can even write a udev script to do this automatically 
+> > whenever the modem is detected.
+> 
+> I know that this "solves" my problems but that also prevents the usb2
+> hub (1-1) from suspending and that's not a practical solution. The hub
+> uses a *lot* of power.
 
-Perhaps a comment would be useful?
+And there's no way to use a different hub -- one that consumes less 
+power -- because the connections are hard-wired on the board.  :-(
 
-> +		rc = -ENODEV;
-> +		goto free_dev;
-> +	}
-> +
-> +	dev->ep_in = endpoints[0].desc.bEndpointAddress;
-> +	dev->ep_out = endpoints[1].desc.bEndpointAddress;
-> +	dev->ep_intr = endpoints[2].desc.bEndpointAddress;
-> +	dev->ep_intr_interval = endpoints[2].desc.bInterval;
-> +
-> +	usb_set_intfdata(iface, dev);
-> +
-> +	rc = mfd_add_hotplug_devices(&iface->dev, ch341_devs,
+> > > In theory, if I know this behaviour in advance, I think I should be
+> > > able to somehow wait until the device is ready again instead of
+> > > resetting.
+> > 
+> > What if the modem never becomes ready again (or not until you
+> > reboot)?† 
+> > I think that sort of behavior is not at all unlikely.† You can test
+> > this 
+> > by disabling the code in finish_port_resume() that does reset-
+> > resumes.
+> 
+> if I just do that, I get "gone after usb resume? status -5" and thus a
+> reset is triggered after all (also, when I do msleep(500) instead of
+> reset_and_verify_device() there).
 
-Why are you using 'hotplug' here?
+Here's a quick low-level description of what's going on.
 
-ch341_devs is empty right?
+When a hub gets a disconnect event on one of its ports, it disables the 
+port.  The port then remains disabled, even if another device is plugged 
+in, until a successful port reset occurs.  In other words, the _only_ 
+way to re-enable a port is to issue a reset.
 
-So no child devices are registered.
+The reset-resume mechanism in the kernel takes care of issuing the 
+reset, and it checks to make sure that the device attached to the port 
+hasn't been changed (i.e., it's still the same device as before, not a 
+new one).  If that works, the device is put back in its former operating 
+state and should keep on functioning normally.  If that doesn't work, or 
+if there is a new device attached to the port, the kernel treats the 
+event just like a normal disconnect + connect.
 
-In which case this is not (yet) an MFD and cannot be accepted.
+So what you want really _is_ a reset-resume.  If successful, it will 
+give the behavior you mentioned above: continued transmission with maybe 
+some data loss and a big latency spike at one point.  Anything other 
+than a successful reset-resume will cause the ttyUSB file to become 
+unusable, exactly what you don't want.
 
-Please add the children.
+So the real question you need to answer is why a reset-resume sometimes 
+fails with this modem.  I suspect the answer will be that the modem is 
+buggy, and there may not be any way to work around the bug.  But try 
+putting the msleep(500) just before the usb_reset_and_verify_device() 
+call; maybe it will help.
 
-> +				     ARRAY_SIZE(ch341_devs));
-> +	if (rc) {
-> +		rc = dev_err_probe(&iface->dev, rc,
-> +				   "Failed to add mfd devices to core\n");
-
-I'm not even sure what this means.  Should be:
-
-"Failed to register child devices\n"
-
-> +		goto free_dev;
-> +	}
-> +
-> +	return 0;
-> +
-> +free_dev:
-> +	usb_put_dev(dev->usb_dev);
-> +
-> +	return rc;
-> +}
-> +
-> +static void ch341_usb_disconnect(struct usb_interface *usb_if)
-> +{
-> +	struct ch341_device *dev = usb_get_intfdata(usb_if);
-> +
-> +	mfd_remove_devices(&usb_if->dev);
-> +	usb_put_dev(dev->usb_dev);
-> +}
-> +
-> +static const struct usb_device_id ch341_usb_table[] = {
-> +	{ USB_DEVICE(0x1a86, 0x5512) },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(usb, ch341_usb_table);
-> +
-> +static struct usb_driver ch341_usb_driver = {
-> +	.name       = "ch341-mfd",
-> +	.id_table   = ch341_usb_table,
-> +	.probe      = ch341_usb_probe,
-> +	.disconnect = ch341_usb_disconnect,
-> +};
-> +module_usb_driver(ch341_usb_driver);
-> +
-> +MODULE_AUTHOR("Various");
-
-This does not look valid.  Please drop it.
-
-> +MODULE_DESCRIPTION("CH341 USB to I2C/SPI/GPIO adapter");
-
-Is it?  What makes it one of those?
-
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/linux/mfd/ch341.h b/include/linux/mfd/ch341.h
-> new file mode 100644
-> index 000000000000..a87b23e30123
-> --- /dev/null
-> +++ b/include/linux/mfd/ch341.h
-> @@ -0,0 +1,26 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Definitions for the CH341 MFD driver */
-
-Drop the term MFD please.
-
-> +#include <linux/mutex.h>
-> +#include <linux/types.h>
-> +
-> +#define DEFAULT_TIMEOUT_MS 1000	/* 1s USB requests timeout */
-
-Where is this used?
-
-> +/* All commands fit inside a 32-byte segment. There may be several
-> + * of these segments in a USB command.
-> + */
-
-This is not a properly formatted multi-line comment.
-
-> +#define SEG_SIZE 32
-> +
-> +struct usb_device;
-> +struct usb_interface;
-> +
-> +struct ch341_device {
-> +	struct usb_device *usb_dev;
-> +	struct usb_interface *iface;
-> +	struct mutex usb_lock;
-> +
-> +	int ep_in;
-> +	int ep_out;
-> +	int ep_intr;
-> +	u8 ep_intr_interval;
-> +};
-
--- 
-Lee Jones [ÊùéÁêºÊñØ]
-Principal Technical Lead - Developer Services
-Linaro.org ‚îÇ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Alan Stern
