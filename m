@@ -2,69 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D1951164F
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 13:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC18F511776
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 14:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232265AbiD0LUE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Apr 2022 07:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
+        id S233139AbiD0LyM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Apr 2022 07:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbiD0LUD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 07:20:03 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B84165A3;
-        Wed, 27 Apr 2022 04:16:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651058212; x=1682594212;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HIRF5W5o/gV3DIQXa4xMa+ibJZeT9Xrw34R4dA4zxYo=;
-  b=B7o9vEFrJCS65f5xHiQWVGGAYQxaHrCOLKifntW21gPsPdFDeolQcxSN
-   +aR2ugrsv5ZnxFCisIUa0mlCt7HW9nvMPT6IRFlCK3F8GVBJnTrS322DU
-   3ffrpeUBKwG+6feTZeUB0ogkPE4Lz58S6AzFLYa14VjSSsoD3ZsQ9wuaw
-   w129/zZ6e0d5iPQubJOwVZpU9XBTZbIMBHhLkFM3XCCTJ21QoV8JWeq9F
-   9iQH3IZjHnkp9fnsLXKOADivJnsUFca9hxrBVsR5FBepY8RVrkbbTw7jW
-   K/nwgc4JPkn+LhgcdIqX/aOL/vgarfssuAelZiyEzXxumSxOK9nRK3Zax
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="291045239"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="291045239"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 04:16:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="705498756"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 27 Apr 2022 04:16:49 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 27 Apr 2022 14:16:48 +0300
-Date:   Wed, 27 Apr 2022 14:16:48 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Jameson Thies <jthies@google.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] usb: typec: Separate USB Power Delivery from USB
- Type-C
-Message-ID: <YmkmILWlbvoZaXKZ@kuha.fi.intel.com>
-References: <20220425124946.13064-1-heikki.krogerus@linux.intel.com>
- <20220425124946.13064-2-heikki.krogerus@linux.intel.com>
- <YmfgfRA1ecJwf12i@kroah.com>
- <YmjlyxLk8wfziq9l@kuha.fi.intel.com>
- <YmjxFkpCwxz4fgqb@kroah.com>
- <Ymj8LWUgk6X/Alze@kuha.fi.intel.com>
- <YmkD2/r1imDT5qTz@kroah.com>
+        with ESMTP id S233100AbiD0LyM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 07:54:12 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1AD81656;
+        Wed, 27 Apr 2022 04:51:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=B0DGrj8gjA7CDp3u5XWWbAMnHrzUw9RKhTFVio8B3QA=; b=JKZHvzifzVQVHvHdBafJUb/wyh
+        /rBcOPhBoNnnZhf28r3cqZheonp6eUBrEP6TpALa5UcO1NA8+/8GcSltoA0qfstH5y4T2laIdZkjM
+        2eG7R9pog8598e94TJEbKTpqlLPGa07SVPbr0RiLKhR3aQ4IFME2MyAqH2BFc5jaxCJQ=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1njgBu-0006Sa-WE; Wed, 27 Apr 2022 13:50:43 +0200
+Date:   Wed, 27 Apr 2022 13:50:42 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH net-next 4/7] usbnet: smsc95xx: Avoid link settings race
+ on interrupt reception
+Message-ID: <YmkuEtyhwuayYdWJ@lunn.ch>
+References: <cover.1651037513.git.lukas@wunner.de>
+ <28fd5a3d53a401cdf8ae0a116108702a46d2c7a2.1651037513.git.lukas@wunner.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmkD2/r1imDT5qTz@kroah.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <28fd5a3d53a401cdf8ae0a116108702a46d2c7a2.1651037513.git.lukas@wunner.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,51 +60,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 10:50:35AM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Apr 27, 2022 at 11:17:49AM +0300, Heikki Krogerus wrote:
-> > On Wed, Apr 27, 2022 at 09:30:30AM +0200, Greg Kroah-Hartman wrote:
-> > > > > "struct pd" is just about the shortest structure name I've seen in the
-> > > > > kernel so far.  How about using some more letters?  :)
-> > > > 
-> > > > Okay, I'll make it usbpd.
-> > > 
-> > > How about some more vowels: "struct usb_power_delivery" please.  This
-> > > isn't the 1980's :)
-> > 
-> > "struct usb_power_delivery" is fine, but I would still really really
-> > want to use "struct usbpd_capabilities" instead of
-> > "struct usb_power_delivery_capabilities" - it's just too long.
-> > Is that okay?
-> 
-> Nah, spell it out please, we don't use "usbpd" anywhere, and again, we
-> don't have a limit of characters.  Most editors should auto-complete
-> anyway :)
+>  static void smsc95xx_status(struct usbnet *dev, struct urb *urb)
+> @@ -607,7 +607,7 @@ static void smsc95xx_status(struct usbnet *dev, struct urb *urb)
+>  	netif_dbg(dev, link, dev->net, "intdata: 0x%08X\n", intdata);
+>  
+>  	if (intdata & INT_ENP_PHY_INT_)
+> -		usbnet_defer_kevent(dev, EVENT_LINK_RESET);
+> +		;
+>  	else
+>  		netdev_warn(dev->net, "unexpected interrupt, intdata=0x%08X\n",
+>  			    intdata);
 
-Very well.
+Hi Lukas
 
-> > > > > The kobject question above goes to the code as well.  You are creating a
-> > > > > bunch of raw kobjects still, why?  This should all fit into the driver
-> > > > > model and kobjects shouldn't be needed.  Are you trying to nest too deep
-> > > > > in the attributes?  If so, kobjects will not work as userspace tools
-> > > > > will not realize they are there and are attributes at all.
-> > > > 
-> > > > They are not raw kobjects, they are all devices now. That header just
-> > > > needs to be fixed.
-> > > 
-> > > You have loads of kobject attributes in the .c file.  Either I read it
-> > > wrong, or you are doing something wrong, as that should never be the
-> > > case for a driver or device.
-> > 
-> > Hmm, I'm probable still doing something wrong...
-> 
-> All of your sysfs callbacks should have a struct device, not a kobject.
-> You might just be getting lucky in that we are casting around a pointer
-> of the correct layout.  But the compiler should have caught that
-> somewhere, please look into it.
+It would probably make sense to invert the condition and remove the ;
 
-I'll fix this.
-
-thanks,
-
--- 
-heikki
+   Andrew
