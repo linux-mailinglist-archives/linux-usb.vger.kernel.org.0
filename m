@@ -2,96 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF375121DD
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 20:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B315122BD
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 21:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbiD0TAz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Apr 2022 15:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
+        id S233598AbiD0Tb0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Apr 2022 15:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232452AbiD0TAn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 15:00:43 -0400
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F5F113CA3;
-        Wed, 27 Apr 2022 11:46:23 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id j2so5109837ybu.0;
-        Wed, 27 Apr 2022 11:46:22 -0700 (PDT)
+        with ESMTP id S234208AbiD0TbB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 15:31:01 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6759E49FBA
+        for <linux-usb@vger.kernel.org>; Wed, 27 Apr 2022 12:26:55 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id b12so2439709plg.4
+        for <linux-usb@vger.kernel.org>; Wed, 27 Apr 2022 12:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lh6OruqftWVABxdIhH7SnyaHoA0qU1W0oHzil2WC0bg=;
+        b=H0ewu+vW4sL/wxXv5X+gxum+hcUKmJMcww5kKUqczHc+mt9UWe4iAcmFIOaIegviYl
+         1KtltKngsgPch0KyCv8oHKs0gCtlctGXfAeFsjCNYBte1GWRnnULtzmsiTAVLFGRV7TN
+         TCG9LVKiDkogUp2z6Xx88Zrypj0MifR0YbOKF/Xvuml+2xWKYAGs/WFzo34zSRW9fj2h
+         7yxP6QN5uFqUYISM++GywuuzpNybpaomxtqAic/1nJ2Aj/oYHMMNvMJq7pKrZkXYpkHj
+         Xey2h2t9/BHaCB2X02MMnLHqwaU4z4QeI9neMwW4alJVjhzlfgL9+bi8IVPwa0iE50EM
+         sRmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0cdA+JI48kZS+AxlzBx4Qt8iIGll7kLbRjF8CRRc1mE=;
-        b=OaGyrRoSv87NfVAv27V/6TqlLXkvlnh9pdHNpxbZEfuw6UzLqHMGOs+Aa93jRSka42
-         tbVHc8FgVwcE72i2vK8DpC3+PQD6tkL9r98PE/oFOFQQvbSjtKes/TuUxb/RmRv6Uq8B
-         F6w2fyeV4QbFRbkUDz+tJOfQ2MrzseKQjBkQi+si732f8FNn7DQUKhMZJvFur+VfzGiM
-         QpTSy8ZWIIQxU+CG8aTqgfOTJmM3ZWZF/FvOl1Y/IHi0YuTTafXgPfh2I3mVgNHCpxpD
-         Q/6jcXhbLDWvVJ/doGOZP+ygHMQKRJwZ++t2UpWU3FFB7trTbXf9poGlS/8QUvPrRtaR
-         hLsA==
-X-Gm-Message-State: AOAM530xjjY9c8bxla3SMqW03parMTAdfLHzH6fL7KdLTbNBvVuxjbce
-        av6lypbhPRsIGB+T4Ja5xWQzndGcH77X5VFpMe1g7w75
-X-Google-Smtp-Source: ABdhPJwT3huBGS2K+bNnsZ8eZSYIdoXsCaigBa/fDfOditHuurhLrxP5JNE15oQnd6/c0CSljL/aM4n6to8/57goMo0=
-X-Received: by 2002:a25:da84:0:b0:648:423e:57b0 with SMTP id
- n126-20020a25da84000000b00648423e57b0mr19076088ybf.137.1651085182297; Wed, 27
- Apr 2022 11:46:22 -0700 (PDT)
+        bh=lh6OruqftWVABxdIhH7SnyaHoA0qU1W0oHzil2WC0bg=;
+        b=4Mq8dDW4J4l4bwh+AShcQ0ubWIUkQQdnjenDBoN5NjNEITpvg2Pk7KtcYnMGMiJ0xu
+         KJdGidCpoo3/U7zw6Q12xx0f295dvFr8NrE05sk48Ln99y8EKnCE8ahgUTQg5Aif/lLa
+         bPVSyyRlrvFGHHcr5lITHo+Cov4w5V2SbAy7046O2KQzdxmCJ7ZKOXenGGN30h264eOO
+         wbVHj4lBgfPu/UtSZ4nIZRPg8gO9kzAL3wM01Iywir2eAjhmCgw96LOMFfbWZ01IZUws
+         qQtbU+Sckf1aFCmH1HoIxk1SW7VTx6pzfhafv/gncUmKAiZvp+o/FXP4zp+bggCiLPuy
+         Y3vA==
+X-Gm-Message-State: AOAM531ovGZI6QPHOuZIftCp8ZsoFm7tKr4HftRzq1SLArsZMoXJM5D7
+        tMOYjsjLxVAL1LGJtIHi5rMqyhpkCJKSR5L/oPwJLACtkXs=
+X-Google-Smtp-Source: ABdhPJy/L2J+5OoIpxaGiRpuV3AwRbWlKTOcnXs7FNJGXIHoh6wHrVu8SWrx9z06Lb4N/QlJ6EwayAMjLnq71CnqN+8=
+X-Received: by 2002:a17:90a:af98:b0:1d4:67d4:d122 with SMTP id
+ w24-20020a17090aaf9800b001d467d4d122mr34597645pjq.166.1651087614892; Wed, 27
+ Apr 2022 12:26:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220425114544.37595-1-heikki.krogerus@linux.intel.com> <Ymfa3F83zxgqD2pk@kroah.com>
-In-Reply-To: <Ymfa3F83zxgqD2pk@kroah.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 27 Apr 2022 20:46:11 +0200
-Message-ID: <CAJZ5v0hBjWomOxTw8Nfa83FEyDqGm+5B8W9WPEHfZR3uwUUdOw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] acpi: Remove acpi_release_memory()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>
+References: <20220427161126.647073-1-krzysztof.kozlowski@linaro.org>
+ <20220427161126.647073-5-krzysztof.kozlowski@linaro.org> <YmmJfInA0hNQOhDN@robh.at.kernel.org>
+In-Reply-To: <YmmJfInA0hNQOhDN@robh.at.kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Date:   Wed, 27 Apr 2022 21:26:41 +0200
+Message-ID: <CAGE=qrp1GAVxDF4b1iBigdvbONwsF0jhfcLG-Xt3pjm8VAEdiQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] ARM: dts: am33xx: use new 'dma-channels/requests' properties
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>, Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Vinod Koul <vkoul@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        dmaengine@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 1:43 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Wed, 27 Apr 2022 at 20:20, Rob Herring <robh@kernel.org> wrote:
+> > diff --git a/arch/arm/boot/dts/am33xx.dtsi b/arch/arm/boot/dts/am33xx.dtsi
+> > index f6ec85d58dd1..55ffb0813ded 100644
+> > --- a/arch/arm/boot/dts/am33xx.dtsi
+> > +++ b/arch/arm/boot/dts/am33xx.dtsi
+> > @@ -461,8 +461,8 @@ cppi41dma: dma-controller@2000 {
+> >                               interrupts = <17>;
+> >                               interrupt-names = "glue";
+> >                               #dma-cells = <2>;
+> > -                             #dma-channels = <30>;
+> > -                             #dma-requests = <256>;
+> > +                             dma-channels = <30>;
+> > +                             dma-requests = <256>;
 >
-> On Mon, Apr 25, 2022 at 02:45:42PM +0300, Heikki Krogerus wrote:
-> > Hi,
-> >
-> > It seems there never were and there never will be actual devices that
-> > expose the UCSI ACPI mailbox interface. There are now PD controllers
-> > that support the UCSI interface, but they do not use the ACPI mailbox.
-> >
-> > So there is no point in mapping the mailbox with ioremap(), we can
-> > just use memremap(). That should make it possible to also remove the
-> > function acpi_release_memory(). That function was only there to make
-> > it possible to use ioremap() in the UCSI ACPI driver.
-> >
-> > thanks,
-> >
-> > Heikki Krogerus (2):
-> >   usb: typec: ucsi: acpi: Map the mailbox with memremap()
-> >   acpi: Remove the helper for deactivating memory region
-> >
-> >  drivers/acpi/osl.c                 | 86 ------------------------------
-> >  drivers/usb/typec/ucsi/ucsi_acpi.c | 19 ++-----
-> >  include/linux/acpi.h               |  3 --
-> >  3 files changed, 4 insertions(+), 104 deletions(-)
-> >
-> > --
-> > 2.35.1
-> >
->
-> Look good to me, Rafael, want me to take this through the USB tree?  Or
-> if you want to take it through the USB tree, here's my reviewed-by:
-> either is fine with me.
->
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> You could keep the old properties for compatibility and to apply
+> immediately.
 
-I've taken this into the ACPI tree (for 5.19) with your R-by, thanks!
+Indeed, that's a nice solution. Any preference from TI SoC maintainers?
+
+Best regards,
+Krzysztof
