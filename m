@@ -2,62 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10EF511168
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 08:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AAB51124A
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 09:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358222AbiD0Gpj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Apr 2022 02:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
+        id S1358735AbiD0HXS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Apr 2022 03:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242894AbiD0Gpi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 02:45:38 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF2D12FEF4;
-        Tue, 26 Apr 2022 23:42:28 -0700 (PDT)
+        with ESMTP id S239885AbiD0HXR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 03:23:17 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1731CFF8;
+        Wed, 27 Apr 2022 00:20:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651041748; x=1682577748;
+  t=1651044006; x=1682580006;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=M0Yim+wzgXBIfpDKLfu6Nj6r7PJaxMbByiW4szopul4=;
-  b=i4igcz0NYHy0hwhxIfrJgTimlFEve1b9tZUqr02Q/EB8twoBfh1amCPT
-   eimuG/X8PAmxsIn4yibSc0jmT11VvoDcctHIj4PeaLHdeVBJTaZIBMTOC
-   PX7YO9eq/Po58t+WBFGfeFOBCFt0Bpiw0f5eoUyUcIPw0gVD7jxRxuO9i
-   JlbbMDvETY68qo+kXcAiFRlybRaNc+5yTj/SbVqF4U1qLPS7Ovw+Izg9s
-   CS4e9HnZdnBguhOKg7CBeLNpT1MTkEoy7mzPRnhc+HA7UFXFjrl8DWm0F
-   p6Y1lHqsE4r8Brw81Gt8NoYbiwN1rwMEuwD9nJ6+CVzGZMTGjZX3Vo/gF
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265644130"
+  bh=HwM8nfr+sAMSwiE6LUzMo0EfJPHJ3P1NXafGW7GSrxQ=;
+  b=DmrU8RuuiubvlFFbd0Ht/w2YoM8lApLU41fHjTztvCiaSrHaR3GLpOAd
+   AeAC8sqO2RdsAARMwUd+0TmRCClADA91tALmfXXGGATF9mQ6pfMVaq1ct
+   tD9rmYlhsRwsFcWxfjeO4z4hyq95ooq9ZuX/o+TD7DB/1X90Nr57idwV+
+   cjK+Y+2JQdqWBsL4JUoSYxvpZV1KXOTo0MNBt7YxPScQO08872wSebt63
+   VIYWwbQSAtgZav/cQyjupOJs8RmLOM96Vx9zrbwGyakOwN8Ai4vHO+hp9
+   gpEBl8F6RJRCrb8pbV/mFubnyA6kukbPiiRDd/+jr+qqaaL63B31598u1
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="246409277"
 X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="265644130"
+   d="scan'208";a="246409277"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 23:42:26 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 00:20:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="705407344"
+   d="scan'208";a="705422204"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 26 Apr 2022 23:42:20 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 27 Apr 2022 09:42:19 +0300
-Date:   Wed, 27 Apr 2022 09:42:19 +0300
+  by fmsmga001.fm.intel.com with SMTP; 27 Apr 2022 00:20:02 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 27 Apr 2022 10:20:01 +0300
+Date:   Wed, 27 Apr 2022 10:20:01 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Jameson Thies <jthies@google.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] usb: typec: Separate USB Power Delivery from USB
- Type-C
-Message-ID: <YmjlyxLk8wfziq9l@kuha.fi.intel.com>
-References: <20220425124946.13064-1-heikki.krogerus@linux.intel.com>
- <20220425124946.13064-2-heikki.krogerus@linux.intel.com>
- <YmfgfRA1ecJwf12i@kroah.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        USB <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/2] usb: core: acpi: Use the sysdev pointer instead
+ of controller device
+Message-ID: <YmjuofeN89UvqDMf@kuha.fi.intel.com>
+References: <20220425121340.1362-1-heikki.krogerus@linux.intel.com>
+ <20220425121340.1362-2-heikki.krogerus@linux.intel.com>
+ <CAHp75Vdch3shuX6D6YU8=JrFLKq4h_WNYAQPd_bj-hmV6QoQkg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmfgfRA1ecJwf12i@kroah.com>
+In-Reply-To: <CAHp75Vdch3shuX6D6YU8=JrFLKq4h_WNYAQPd_bj-hmV6QoQkg@mail.gmail.com>
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -67,72 +67,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On Tue, Apr 26, 2022 at 02:07:25PM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Apr 25, 2022 at 03:49:44PM +0300, Heikki Krogerus wrote:
-> > --- /dev/null
-> > +++ b/drivers/usb/typec/pd.h
-> > @@ -0,0 +1,30 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +
-> > +#ifndef __USB_POWER_DELIVERY__
-> > +#define __USB_POWER_DELIVERY__
-> > +
-> > +#include <linux/kobject.h>
+On Tue, Apr 26, 2022 at 12:18:24PM +0200, Andy Shevchenko wrote:
+> On Mon, Apr 25, 2022 at 3:41 PM Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> >
+> > The controller device (hcd) does not always have the ACPI
+> > companion assigned to it at all. We can not rely on it when
+> > finding the ACPI companion for the root hub. Instead we need
+> > to use the sysdev pointer here.
 > 
-> Why kobject.h when:
-
-Oops, that should now be "#include <linux/device.h>".
-
-> > +
-> > +struct pd_capabilities {
-> > +	struct device dev;
+> ...
 > 
-> This is a device?
+> >         if (!udev->parent) {
+> >                 /* root hub is only child (_ADR=0) under its parent, the HC */
 > 
-> > +	struct pd *pd;
-> > +	enum typec_role role;
-> > +};
-> > +
-> > +struct pd {
-> > +	struct device		dev;
-> > +	int			id;
-> > +
-> > +	u16			revision; /* 0300H = "3.0" */
-> 
-> So BCD?
+> I believe the comment can be amended now to point out that we use the
+> physical device representing the parent of this child, and not
+> (always) a direct parent of the device in terms of Linux device model.
 
-Yes.
+Okay, I'll try to improve the comment.
 
-> > +	u16			version;
-> > +};
-> 
-> > +
-> > +#define to_pd_capabilities(o) container_of(o, struct pd_capabilities, dev)
-> > +#define to_pd(o) container_of(o, struct pd, dev)
-> > +
-> > +struct pd *pd_find(const char *name);
-> 
-> "struct pd" is just about the shortest structure name I've seen in the
-> kernel so far.  How about using some more letters?  :)
+> > -               adev = ACPI_COMPANION(udev->dev.parent);
+> > +               adev = ACPI_COMPANION(udev->bus->sysdev);
+> >                 return acpi_find_child_device(adev, 0, false);
+> >         }
 
-Okay, I'll make it usbpd.
-
-> > +
-> > +int pd_init(void);
-> > +void pd_exit(void);
-> 
-> The kobject question above goes to the code as well.  You are creating a
-> bunch of raw kobjects still, why?  This should all fit into the driver
-> model and kobjects shouldn't be needed.  Are you trying to nest too deep
-> in the attributes?  If so, kobjects will not work as userspace tools
-> will not realize they are there and are attributes at all.
-
-They are not raw kobjects, they are all devices now. That header just
-needs to be fixed.
-
-Br,
+thanks,
 
 -- 
 heikki
