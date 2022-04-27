@@ -2,31 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1D55117C3
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 14:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D31511783
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 14:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234235AbiD0M3m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Apr 2022 08:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
+        id S234470AbiD0Mkv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Apr 2022 08:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233889AbiD0M3k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 08:29:40 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F1F37A14;
-        Wed, 27 Apr 2022 05:26:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=eVg2d15Vr7wg3dfGyW7fAtoN0Xx+vU3DpeqHOZFF7+A=; b=2/b8paztp0zEpXANwdQVMZcl9g
-        Jp1mXWYGi86/C8Jmm0aB1yTP62j/mDtGH+6lFEF5tmSOYx8mOTSNMwFpvduoE+SK9mwb8ibx6YZ0l
-        MSsxZKrzc+58tta+ja7FrL5Q7IltMtc2wj01aCY/o5WMIHt0raajioDhe9NzkjVfqtBk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1njgkM-0006ny-ER; Wed, 27 Apr 2022 14:26:18 +0200
-Date:   Wed, 27 Apr 2022 14:26:18 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
+        with ESMTP id S234498AbiD0Mkq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 08:40:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9C25623C
+        for <linux-usb@vger.kernel.org>; Wed, 27 Apr 2022 05:37:33 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1njgv1-0001gD-RO; Wed, 27 Apr 2022 14:37:19 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1njgux-0006zz-Ra; Wed, 27 Apr 2022 14:37:15 +0200
+Date:   Wed, 27 Apr 2022 14:37:15 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     Lukas Wunner <lukas@wunner.de>
 Cc:     Steve Glendinning <steve.glendinning@shawell.net>,
         UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
@@ -34,91 +31,71 @@ Cc:     Steve Glendinning <steve.glendinning@shawell.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         linux-usb@vger.kernel.org, Andre Edich <andre.edich@microchip.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
         Martyn Welch <martyn.welch@collabora.com>,
         Gabriel Hojda <ghojda@yo2urs.ro>,
         Christoph Fritz <chf.fritz@googlemail.com>,
         Lino Sanfilippo <LinoSanfilippo@gmx.de>,
         Philipp Rosenberger <p.rosenberger@kunbus.com>,
         Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
         Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH net-next 5/7] usbnet: smsc95xx: Forward PHY interrupts to
- PHY driver to avoid polling
-Message-ID: <Ymk2agSoHnlCMUzB@lunn.ch>
+Subject: Re: [PATCH net-next 0/7] Polling be gone on LAN95xx
+Message-ID: <20220427123715.GC17577@pengutronix.de>
 References: <cover.1651037513.git.lukas@wunner.de>
- <276a1b50cf9fcca5168ca2770a863cb56069a277.1651037513.git.lukas@wunner.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <276a1b50cf9fcca5168ca2770a863cb56069a277.1651037513.git.lukas@wunner.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1651037513.git.lukas@wunner.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 14:27:44 up 28 days, 57 min, 81 users,  load average: 0.07, 0.09,
+ 0.13
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 07:48:05AM +0200, Lukas Wunner wrote:
-> Link status of SMSC LAN95xx chips is polled once per second, even though
-> they're capable of signaling PHY interrupts through the MAC layer.
+On Wed, Apr 27, 2022 at 07:48:00AM +0200, Lukas Wunner wrote:
+> Do away with link status polling on LAN95XX USB Ethernet
+> and rely on interrupts instead, thereby reducing bus traffic,
+> CPU overhead and improving interface bringup latency.
 > 
-> Forward those interrupts to the PHY driver to avoid polling.  Benefits
-> are reduced bus traffic, reduced CPU overhead and quicker interface
-> bringup.
+> The meat of the series is in patch [5/7].  The preceding and
+> following patches are various cleanups to prepare for and
+> adjust to interrupt-driven link state detection.
 > 
-> Polling was introduced in 2016 by commit d69d16949346 ("usbnet:
-> smsc95xx: fix link detection for disabled autonegotiation").
-> Back then, the LAN95xx driver neglected to enable the ENERGYON interrupt,
-> hence couldn't detect link-up events when auto-negotiation was disabled.
-> The proper solution would have been to enable the ENERGYON interrupt
-> instead of polling.
-> 
-> Since then, PHY handling was moved from the LAN95xx driver to the SMSC
-> PHY driver with commit 05b35e7eb9a1 ("smsc95xx: add phylib support").
-> That PHY driver is capable of link detection with auto-negotiation
-> disabled because it enables the ENERGYON interrupt.
-> 
-> Note that signaling interrupts through the MAC layer not only works with
-> the integrated PHY, but also with an external PHY, provided its
-> interrupt pin is attached to LAN95xx's nPHY_INT pin.
-> 
-> In the unlikely event that the interrupt pin of an external PHY is
-> attached to a GPIO of the SoC (or not connected at all), the driver can
-> be amended to retrieve the irq from the PHY's of_node.
-> 
-> To forward PHY interrupts to phylib, it is not sufficient to call
-> phy_mac_interrupt().  Instead, the PHY's interrupt handler needs to run
-> so that PHY interrupts are cleared.  That's because according to page
-> 119 of the LAN950x datasheet, "The source of this interrupt is a level.
-> The interrupt persists until it is cleared in the PHY."
-> 
-> https://www.microchip.com/content/dam/mchp/documents/UNG/ProductDocuments/DataSheets/LAN950x-Data-Sheet-DS00001875D.pdf
-> 
-> Therefore, create an IRQ domain with a single IRQ for the PHY.  In the
-> future, the IRQ domain may be extended to support the 11 GPIOs on the
-> LAN95xx.
-> 
-> Normally the PHY interrupt should be masked until the PHY driver has
-> cleared it.  However masking requires a (sleeping) USB transaction and
-> interrupts are received in (non-sleepable) softirq context.  I decided
-> not to mask the interrupt at all (by using the dummy_irq_chip's noop
-> ->irq_mask() callback):  The USB interrupt endpoint is polled in 1 msec
-> intervals and normally that's sufficient to wake the PHY driver's IRQ
-> thread and have it clear the interrupt.  If it does take longer, worst
-> thing that can happen is the IRQ thread is woken again.  No big deal.
-> 
-> Because PHY interrupts are now perpetually enabled, there's no need to
-> selectively enable them on suspend.  So remove all invocations of
-> smsc95xx_enable_phy_wakeup_interrupts().
-> 
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> Cc: Andre Edich <andre.edich@microchip.com>
+> Please review and test.  Thanks!
 
-This looks reasonable from a PHY perspective. I cannot say much about
-USB though.
+Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Tested on:
+- LAN9514 (RPi2)
+- LAN9512 (EVB)
+- LAN9500 (EVB)
 
-    Andrew
+On USB unplug i get some not usable kernel message, but it is not the
+show stopper for me:
+smsc95xx 1-1.4.1:1.0 eth1: Error updating MAC full duplex mode
+smsc95xx 1-1.4.1:1.0 eth1: hardware isn't capable of remote wakeup
+
+Thank you!
+
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
