@@ -2,82 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872F45120A9
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 20:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7564A512114
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 20:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244857AbiD0SYd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Apr 2022 14:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
+        id S229653AbiD0SnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Apr 2022 14:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244770AbiD0SY3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 14:24:29 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01A65DA6A;
-        Wed, 27 Apr 2022 11:21:16 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-e656032735so2893463fac.0;
-        Wed, 27 Apr 2022 11:21:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WsYDuXPegcs6f9tp8fheu6FbPuk3QsMls6zqmXPbmEE=;
-        b=YdV8G9XyiFTBlhudb8qfohnIpo5tpln9sHb1c0Mpm/z7LTkkqn0dNIUL+xBel4k5Z1
-         DTgzfx49gQQHkjdwWCRCq2FDrUhW7ms8oFPx2aP1nqieA34hQgaYRdw10zrXZ0mF+Uzp
-         kX5IbH5xBNOeumnHEOt8ScSIEvGK1aV0adZam0+MPM20rBC8xE26O7J3ungitcIr4DmT
-         ZWD0FlKs1KRbTMxond5fnWinyynRmjlljj/0Vwz2bsa8SgxybittggYsxca8X9FpaABt
-         +7Nw6QMmJIE6HVYbl0bw6EV/7wKjA2b4n/gG7rq0saF9jZXJI6KBl58yynCjrfxuGb8q
-         HEJw==
-X-Gm-Message-State: AOAM533v7xLHj7KnV8qt3fUThWL7wU/oMJK7fNYOXSZ7CSar37yzRMzK
-        RCOSSlzWfZwaSSyWdEfMoA==
-X-Google-Smtp-Source: ABdhPJzgU0HHsm95TLwFYuXoFQX+M/segP96UyaML8aS6DQ8ywf0LtF6M67ewOlEgjqzkHt5YHSkmg==
-X-Received: by 2002:a05:6870:581b:b0:e5:9baf:cd2a with SMTP id r27-20020a056870581b00b000e59bafcd2amr15855139oap.233.1651083675890;
-        Wed, 27 Apr 2022 11:21:15 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g17-20020a544f91000000b003255010d173sm2631103oiy.54.2022.04.27.11.21.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 11:21:15 -0700 (PDT)
-Received: (nullmailer pid 401474 invoked by uid 1000);
-        Wed, 27 Apr 2022 18:21:14 -0000
-Date:   Wed, 27 Apr 2022 13:21:14 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-omap@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        Tony Lindgren <tony@atomide.com>, Sekhar Nori <nsekhar@ti.com>,
-        =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH v2 2/6] dt-bindings: usb: da8xx-usb: deprecate
- '#dma-channels'
-Message-ID: <YmmJmjDzN9LYrcpW@robh.at.kernel.org>
-References: <20220427161126.647073-1-krzysztof.kozlowski@linaro.org>
- <20220427161126.647073-3-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S229907AbiD0Smj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 14:42:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D44DFD69;
+        Wed, 27 Apr 2022 11:24:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16B6BB828C1;
+        Wed, 27 Apr 2022 18:24:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D194C385A7;
+        Wed, 27 Apr 2022 18:24:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651083852;
+        bh=MHOjsKIOkpl16ebEdUT862xHxIQgQNSBZr99E2fUavA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TGlNsS/Z6o3YV+926hptUWTKnsTRp7heWZ5Sx4cB7Ed8xGLlg+DJgQB4emoRTe09z
+         qDlLLw6riouzegkNRLdcVdiagWJIaRw1/hRj1J+wba3EDSV1v3ViVHQG8b99DEj60k
+         6mXDE95qsqqFXeDBIijymkuD4gYLLeFcmFVI0uJeXBh20wbah/LZkUD9YpmtmY/oW+
+         /G7B5QmVHBAMdYtE/6MjWdPbubW9GQ4KpCHW68b9QfCsCQjOuVbuEISqtlg8rzemsS
+         bVDtmIv9lhUD1KJX/Zgk6o/PftEQC6xMoioEsYujvhUN67it62vEfo/dW869BE+0ye
+         DMvK1OHckWI8A==
+Message-ID: <fe81598e-e2de-5923-248c-5fb3ad7e70bb@kernel.org>
+Date:   Wed, 27 Apr 2022 20:24:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427161126.647073-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 0/5] add xhci-exynos driver
+Content-Language: en-US
+To:     Jung Daehwan <dh10.jung@samsung.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+References: <CGME20220426092019epcas2p2ef5dfde273edaaadc2ff74414f1b2c7a@epcas2p2.samsung.com>
+ <1650964728-175347-1-git-send-email-dh10.jung@samsung.com>
+ <3ce5f3b8-3c6b-1e83-94c2-84f4ad8aa9dc@kernel.org>
+ <20220427094942.GE145620@ubuntu>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220427094942.GE145620@ubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 27 Apr 2022 18:11:22 +0200, Krzysztof Kozlowski wrote:
-> The generic property, used in most of the drivers and defined in generic
-> dma-common DT bindings, is 'dma-channels'.
+On 27/04/2022 11:49, Jung Daehwan wrote:
+>> 1. What is this based on? Output of: git describe
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/usb/da8xx-usb.txt | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+> url = https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next
+> fetch = +refs/heads/*:refs/remotes/origin/*
 > 
+> or
+> 
+> url = https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> fetch = +refs/heads/*:refs/remotes/origin/*
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thanks, although it is not what I asked for. It's not the output of `git
+describe`. To get the output of git describe, execute commands in the
+shell in the Git repository on your branch with these commits:
+  $ git describe
+
+>> 2. What does the scripts/get_maintainers.pl print when you run on this
+>> patchset?
+> 
+> I don't see your name in xhci even for whole usb/host directory.
+> I see same result on above 2 gits.
+> 
+> jdh@PlatFormDev3:~/works/mainline/linux-next$ ./scripts/get_maintainer.pl drivers/usb/host/
+
+That's not the proper way to get list of people to Cc when submitting
+patches because it does not include the contents of the directory and
+contents of other parts of the kernel which you might change.
+
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM,commit_signer:170/184=92%)
+> Mathias Nyman <mathias.nyman@linux.intel.com> (commit_signer:52/184=28%,authored:25/184=14%)
+> Alan Stern <stern@rowland.harvard.edu> (commit_signer:30/184=16%)
+> Chunfeng Yun <chunfeng.yun@mediatek.com> (commit_signer:23/184=12%,authored:21/184=11%)
+> linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
+> linux-kernel@vger.kernel.org (open list)
+
+So either you run it in wrong way (not on the patchset but on some parts
+of tree) or you still have it based on some different tree.
+
+I just applied your patchset on linux-next and as expected output is
+entirely different:
+
+$ git format-patch -5
+$ scripts/get_maintainer.pl 0*
+(... skipping entries which you pasted)
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+(maintainer:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM
+ARCHITECTURES,authored:1/7=14%,added_lines:4/25=16%,removed_lines:2/13=15%)
+
+linux-arm-kernel@lists.infradead.org (moderated list:ARM/SAMSUNG S3C,
+S5P AND EXYNOS ARM ARCHITECTURES)
+
+linux-samsung-soc@vger.kernel.org (open list:ARM/SAMSUNG S3C, S5P AND
+EXYNOS ARM ARCHITECTURES)
+
+
+
+> In fact, I manually tried adding you as you commendted previous patchset.
+> But, It seems you changed email id and domain..
+
+Up to date email is printed by scripts/get_maintainers.pl. If you don't
+use that tool but add addresses manually - might work, might not.
+
+Anyway, it's not only about my email - you did not Cc relevant mailing
+lists, which I mentioned weeks ago as well.
+
+Best regards,
+Krzysztof
