@@ -2,88 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48919511B05
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 16:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A46511A05
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 16:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236575AbiD0Nmg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Apr 2022 09:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
+        id S236982AbiD0ODW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Apr 2022 10:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236599AbiD0Nmb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 09:42:31 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4709178FE8;
-        Wed, 27 Apr 2022 06:39:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651066760; x=1682602760;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=dfk3Suit7AqCsR5KJXi6CZ5BVLPLOX8lEzuwltBe4Us=;
-  b=LJZaUItABJB1Lklp6v/3cHi9ouPSbwmaHbgfJLZI6eVbWo1GlFRi/czn
-   tqLRLXdRm4eTkbLDHnTv3MV32XkQQe42Y5trKcjZZPNNo1S3GKuhm3Ysy
-   mvBn3gq2hQYyZ+epfJAT2bbbQ68idOGVA8sH62Le762AphiJ7JigU65h8
-   91LTWUy2HGK/OQ+8bUXYHK3v2azhj44lm0HekgX4ZjHk/19ID+gKTR8ht
-   ymnd6pOGMySovV2llGa9Vv3zKIAGRM3Mn8YMe2AWkJdYa4SY9pjcHkcuV
-   DF/KHOH0u7pk+zz01bu1up/4seDKz3UAay/5qoRLd6wTAerJkW2mWif5D
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="263516435"
-X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
-   d="scan'208";a="263516435"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 06:39:12 -0700
-X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
-   d="scan'208";a="565079399"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 06:39:08 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id CD2562024B;
-        Wed, 27 Apr 2022 16:38:36 +0300 (EEST)
-Date:   Wed, 27 Apr 2022 16:38:36 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v5 0/7] typec: mux: Introduce support for multiple USB
- TypeC muxes
-Message-ID: <YmlHXKRjzPIAv+iV@paasikivi.fi.intel.com>
-References: <20220422222351.1297276-1-bjorn.andersson@linaro.org>
+        with ESMTP id S236807AbiD0ODV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 10:03:21 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id F10184755C
+        for <linux-usb@vger.kernel.org>; Wed, 27 Apr 2022 07:00:09 -0700 (PDT)
+Received: (qmail 874063 invoked by uid 1000); 27 Apr 2022 10:00:08 -0400
+Date:   Wed, 27 Apr 2022 10:00:08 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH net] usbnet: smsc95xx: Fix deadlock on runtime resume
+Message-ID: <YmlMaE53+EhRz5it@rowland.harvard.edu>
+References: <6710d8c18ff54139cdc538763ba544187c5a0cee.1651041411.git.lukas@wunner.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220422222351.1297276-1-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <6710d8c18ff54139cdc538763ba544187c5a0cee.1651041411.git.lukas@wunner.de>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Björn,
-
-On Fri, Apr 22, 2022 at 03:23:44PM -0700, Bjorn Andersson wrote:
-> This series introduces a level of indirection between the controller's view of
-> a typec_mux/switch and the implementation and then expands that to support
-> multiple drivers.
+On Wed, Apr 27, 2022 at 08:41:49AM +0200, Lukas Wunner wrote:
+> Commit 05b35e7eb9a1 ("smsc95xx: add phylib support") amended
+> smsc95xx_resume() to call phy_init_hw().  That function waits for the
+> device to runtime resume even though it is placed in the runtime resume
+> path, causing a deadlock.
 > 
-> This is needed in order to support devices such as the Qualcomm Snapdragon 888
-> HDK, which does muxing and orientation handling in the QMP (USB+DP) PHY and SBU
-> muxing in the external FSA4480 chip.
+> The problem is that phy_init_hw() calls down to smsc95xx_mdiobus_read(),
+> which never uses the _nopm variant of usbnet_read_cmd().  Amend it to
+> autosense that it's called from the runtime resume/suspend path and use
+> the _nopm variant if so.
 
-For patches 1 and 2:
+...
 
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+> index 4ef61f6b85df..82b8feaa5162 100644
+> --- a/drivers/net/usb/smsc95xx.c
+> +++ b/drivers/net/usb/smsc95xx.c
+> @@ -285,11 +285,21 @@ static void smsc95xx_mdio_write_nopm(struct usbnet *dev, int idx, int regval)
+>  	__smsc95xx_mdio_write(dev, pdata->phydev->mdio.addr, idx, regval, 1);
+>  }
+>  
+> +static bool smsc95xx_in_pm(struct usbnet *dev)
+> +{
+> +#ifdef CONFIG_PM
+> +	return dev->udev->dev.power.runtime_status == RPM_RESUMING ||
+> +	       dev->udev->dev.power.runtime_status == RPM_SUSPENDING;
+> +#else
+> +	return false;
+> +#endif
+> +}
 
--- 
-Sakari Ailus
+This does not do what you want.  You want to know if this function is 
+being called in the resume pathway, but all it really tells you is 
+whether the function is being called while a resume is in progress (and 
+it doesn't even do that very precisely because the code does not use the 
+runtime-pm spinlock).  The resume could be running in a different 
+thread, in which case you most definitely _would_ want to want for it to 
+complete.
+
+Alan Stern
