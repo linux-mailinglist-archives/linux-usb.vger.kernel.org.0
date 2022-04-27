@@ -2,95 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840E8511A16
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 16:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48919511B05
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 16:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235051AbiD0My0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Apr 2022 08:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
+        id S236575AbiD0Nmg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Apr 2022 09:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234850AbiD0MyZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 08:54:25 -0400
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78DD1BA79F;
-        Wed, 27 Apr 2022 05:51:13 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 2224E1030E54B;
-        Wed, 27 Apr 2022 14:51:11 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id EED221191E9; Wed, 27 Apr 2022 14:51:10 +0200 (CEST)
-Date:   Wed, 27 Apr 2022 14:51:10 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, Andre Edich <andre.edich@microchip.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Gabriel Hojda <ghojda@yo2urs.ro>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH net-next 6/7] net: phy: smsc: Cache interrupt mask
-Message-ID: <20220427125110.GA7941@wunner.de>
-References: <cover.1651037513.git.lukas@wunner.de>
- <7603f74ddc32bbaa55e9f1bea5d4024b6e376035.1651037513.git.lukas@wunner.de>
- <Ymkzno2IbyNbFrEL@lunn.ch>
+        with ESMTP id S236599AbiD0Nmb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 09:42:31 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4709178FE8;
+        Wed, 27 Apr 2022 06:39:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651066760; x=1682602760;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=dfk3Suit7AqCsR5KJXi6CZ5BVLPLOX8lEzuwltBe4Us=;
+  b=LJZaUItABJB1Lklp6v/3cHi9ouPSbwmaHbgfJLZI6eVbWo1GlFRi/czn
+   tqLRLXdRm4eTkbLDHnTv3MV32XkQQe42Y5trKcjZZPNNo1S3GKuhm3Ysy
+   mvBn3gq2hQYyZ+epfJAT2bbbQ68idOGVA8sH62Le762AphiJ7JigU65h8
+   91LTWUy2HGK/OQ+8bUXYHK3v2azhj44lm0HekgX4ZjHk/19ID+gKTR8ht
+   ymnd6pOGMySovV2llGa9Vv3zKIAGRM3Mn8YMe2AWkJdYa4SY9pjcHkcuV
+   DF/KHOH0u7pk+zz01bu1up/4seDKz3UAay/5qoRLd6wTAerJkW2mWif5D
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="263516435"
+X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
+   d="scan'208";a="263516435"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 06:39:12 -0700
+X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
+   d="scan'208";a="565079399"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 06:39:08 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id CD2562024B;
+        Wed, 27 Apr 2022 16:38:36 +0300 (EEST)
+Date:   Wed, 27 Apr 2022 16:38:36 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v5 0/7] typec: mux: Introduce support for multiple USB
+ TypeC muxes
+Message-ID: <YmlHXKRjzPIAv+iV@paasikivi.fi.intel.com>
+References: <20220422222351.1297276-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Ymkzno2IbyNbFrEL@lunn.ch>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220422222351.1297276-1-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 02:14:22PM +0200, Andrew Lunn wrote:
-> On Wed, Apr 27, 2022 at 07:48:06AM +0200, Lukas Wunner wrote:
-> > Cache the interrupt mask to avoid re-reading it from the PHY upon every
-> > interrupt.  The PHY may be located on a USB device, so the additional
-> > read may unnecessarily increase interrupt overhead and latency.
+Hi Björn,
+
+On Fri, Apr 22, 2022 at 03:23:44PM -0700, Bjorn Andersson wrote:
+> This series introduces a level of indirection between the controller's view of
+> a typec_mux/switch and the implementation and then expands that to support
+> multiple drivers.
 > 
-> I don't think your justification is valid. The MDIO bus is clocked at
-> 2.5MHz. So even if you are using USB 1.1 at 12MHz, the USB overheads
-> are not particularly large. At 480Mbps they are pretty insignificant.
-> 
-> In general, we consider PHYs as slow devices, they take over 1 second
-> to negotiate a link and declare it up. So we don't do this sort of
-> micro optimization.
-> 
-> What i think is relevant here is that you could have an interrupt
-> storm going on because you don't mask interrupts? It is not a true
-> storm, due to the way USB works, more of a light shower. Do you have
-> any statistics to show this code actually reduces the amount of rain
-> in a significant way?
+> This is needed in order to support devices such as the Qualcomm Snapdragon 888
+> HDK, which does muxing and orientation handling in the QMP (USB+DP) PHY and SBU
+> muxing in the external FSA4480 chip.
 
-TBH the primary motivation for this change is that it simplifies the
-succeeding commit ("Cope with hot-removal in interrupt handler").
+For patches 1 and 2:
 
-Additionally it seemed silly to me to re-read the interrupt mask
-every time for no reason at all.  To test and debug this series
-I logged every MDIO read/write and these nonsensical transactions
-are very visible and very annoying in the log output.
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-So yeah, maybe the latency argument isn't very strong, but there
-are other arguments which I didn't deem necessary mentioning in
-the commit message as they seemed somewhat egotistical. :)
-
-Thanks,
-
-Lukas
+-- 
+Sakari Ailus
