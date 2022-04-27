@@ -2,97 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10AAB51124A
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 09:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B127151127D
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 09:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358735AbiD0HXS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Apr 2022 03:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
+        id S1358828AbiD0Hck (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Apr 2022 03:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239885AbiD0HXR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 03:23:17 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1731CFF8;
-        Wed, 27 Apr 2022 00:20:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651044006; x=1682580006;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HwM8nfr+sAMSwiE6LUzMo0EfJPHJ3P1NXafGW7GSrxQ=;
-  b=DmrU8RuuiubvlFFbd0Ht/w2YoM8lApLU41fHjTztvCiaSrHaR3GLpOAd
-   AeAC8sqO2RdsAARMwUd+0TmRCClADA91tALmfXXGGATF9mQ6pfMVaq1ct
-   tD9rmYlhsRwsFcWxfjeO4z4hyq95ooq9ZuX/o+TD7DB/1X90Nr57idwV+
-   cjK+Y+2JQdqWBsL4JUoSYxvpZV1KXOTo0MNBt7YxPScQO08872wSebt63
-   VIYWwbQSAtgZav/cQyjupOJs8RmLOM96Vx9zrbwGyakOwN8Ai4vHO+hp9
-   gpEBl8F6RJRCrb8pbV/mFubnyA6kukbPiiRDd/+jr+qqaaL63B31598u1
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="246409277"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="246409277"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 00:20:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="705422204"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 27 Apr 2022 00:20:02 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 27 Apr 2022 10:20:01 +0300
-Date:   Wed, 27 Apr 2022 10:20:01 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        USB <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 1/2] usb: core: acpi: Use the sysdev pointer instead
- of controller device
-Message-ID: <YmjuofeN89UvqDMf@kuha.fi.intel.com>
-References: <20220425121340.1362-1-heikki.krogerus@linux.intel.com>
- <20220425121340.1362-2-heikki.krogerus@linux.intel.com>
- <CAHp75Vdch3shuX6D6YU8=JrFLKq4h_WNYAQPd_bj-hmV6QoQkg@mail.gmail.com>
+        with ESMTP id S1358832AbiD0Hcf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 03:32:35 -0400
+Received: from mail.fixingbiz.pl (mail.fixingbiz.pl [217.61.22.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F467DE09
+        for <linux-usb@vger.kernel.org>; Wed, 27 Apr 2022 00:29:26 -0700 (PDT)
+Received: by mail.fixingbiz.pl (Postfix, from userid 1001)
+        id 1CFE6A4F92; Wed, 27 Apr 2022 08:28:48 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fixingbiz.pl; s=mail;
+        t=1651044564; bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
+        h=Date:From:To:Subject:From;
+        b=t+t7vivgHDbvYN2NrHOImPAz76I9AghmKqJ8HqZQbbdsboqi7GLREPk0uJENeXo+Y
+         J9WC5j89nt/6f+O4ykQG+3neK3qmgWautTHpjD4jjyMSYhwtCyaeFDzBDg8Pbnd4+C
+         FwhUZVx/tVWIouxF4Pb/wAMWJ/vGI132bIHcGgiKFPqPXy6fdTeX40SUjg/ZYKBKou
+         tBCx2SQDeFRCjWMD7hJLfGfK8yWy7R7SCM1AgHvtrIczDiW64gwApGNKDwPXJS+SQH
+         netvSRr8BgXGC9Em3g3xeDiwjQj4cm6mtaYCh2zv4XHOrIQEogz9Fn9OD3rwTKz6kJ
+         egitIyxoZewog==
+Received: by mail.fixingbiz.pl for <linux-usb@vger.kernel.org>; Wed, 27 Apr 2022 07:28:09 GMT
+Message-ID: <20220427073002-0.1.22.aity.0.u00verqmkb@fixingbiz.pl>
+Date:   Wed, 27 Apr 2022 07:28:09 GMT
+From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
+        <przemyslaw.wroblewski@fixingbiz.pl>
+To:     <linux-usb@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.fixingbiz.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vdch3shuX6D6YU8=JrFLKq4h_WNYAQPd_bj-hmV6QoQkg@mail.gmail.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 12:18:24PM +0200, Andy Shevchenko wrote:
-> On Mon, Apr 25, 2022 at 3:41 PM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > The controller device (hcd) does not always have the ACPI
-> > companion assigned to it at all. We can not rely on it when
-> > finding the ACPI companion for the root hub. Instead we need
-> > to use the sysdev pointer here.
-> 
-> ...
-> 
-> >         if (!udev->parent) {
-> >                 /* root hub is only child (_ADR=0) under its parent, the HC */
-> 
-> I believe the comment can be amended now to point out that we use the
-> physical device representing the parent of this child, and not
-> (always) a direct parent of the device in terms of Linux device model.
+Dzie=C5=84 dobry,
 
-Okay, I'll try to improve the comment.
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-> > -               adev = ACPI_COMPANION(udev->dev.parent);
-> > +               adev = ACPI_COMPANION(udev->bus->sysdev);
-> >                 return acpi_find_child_device(adev, 0, false);
-> >         }
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
-thanks,
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
--- 
-heikki
+
+Pozdrawiam,
+Przemys=C5=82aw Wr=C3=B3blewski
