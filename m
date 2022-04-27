@@ -2,48 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC03A511DD1
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 20:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 201125120B8
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 20:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244754AbiD0SXG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Apr 2022 14:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54510 "EHLO
+        id S244780AbiD0SYA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Apr 2022 14:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244722AbiD0SXE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 14:23:04 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2E20B56406
-        for <linux-usb@vger.kernel.org>; Wed, 27 Apr 2022 11:19:51 -0700 (PDT)
-Received: (qmail 884473 invoked by uid 1000); 27 Apr 2022 14:19:51 -0400
-Date:   Wed, 27 Apr 2022 14:19:51 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, Andre Edich <andre.edich@microchip.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Gabriel Hojda <ghojda@yo2urs.ro>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH net] usbnet: smsc95xx: Fix deadlock on runtime resume
-Message-ID: <YmmJR8i+bCl8ueSX@rowland.harvard.edu>
-References: <6710d8c18ff54139cdc538763ba544187c5a0cee.1651041411.git.lukas@wunner.de>
- <YmlgQhauzZ/tkX/v@lunn.ch>
- <20220427153851.GA15329@wunner.de>
+        with ESMTP id S244725AbiD0SX6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 14:23:58 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C5B35843;
+        Wed, 27 Apr 2022 11:20:46 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-e5ca5c580fso2845814fac.3;
+        Wed, 27 Apr 2022 11:20:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=erT8GaO5VJG+GW9l/VolBcF/EAyslpb9BP1kfnKesbQ=;
+        b=HwbO4/mftBDDaZsyCpd7QWBYOiG2tw0p83olRh2g3ZNkOdEt5BvZXLh5ndYhDAdgHW
+         KQVqVAz9NIBd2o0cENZCYZTbLbpuXgvXBMtqzIRJkEikoZoLty2PrCgfTckQOgU/CnKr
+         9tSZHWA5Dv7fnKX12lK/YxbenmaszV/JL8ivhXJlibRSa6r8dyW7QvHzBUgxX39LfQXc
+         0dU6bridxsRji9rGbLUPvCro4C83nGp7QxKRg+c9FO1bIv45Sz2GI7D624dsUoqTvuEA
+         dmIleks7qtHudNXFSWCFZEfrRiAUbJvN9Af3YsL31KbZDTu9C4UPYzZb5/JwvsI9z/45
+         MbrA==
+X-Gm-Message-State: AOAM530izG8CG2H/JfNa/WYzvJYzsXyE5wSQMoWxgkiFfWIsgldTKkPH
+        rCajitqeqF5xIUS0efWOuQ==
+X-Google-Smtp-Source: ABdhPJwD3AlwDSbDDJxgnqmixNW2BPvjNJ83aCGRkV3w9EnlDDeJMSilHkwvvkRGfHszHyhiPM7+Vg==
+X-Received: by 2002:a05:6870:b402:b0:d3:3712:efa7 with SMTP id x2-20020a056870b40200b000d33712efa7mr11833514oap.88.1651083645769;
+        Wed, 27 Apr 2022 11:20:45 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t3-20020a05687044c300b000e686d13892sm952200oai.44.2022.04.27.11.20.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 11:20:45 -0700 (PDT)
+Received: (nullmailer pid 400627 invoked by uid 1000);
+        Wed, 27 Apr 2022 18:20:44 -0000
+Date:   Wed, 27 Apr 2022 13:20:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>, Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Vinod Koul <vkoul@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        dmaengine@vger.kernel.org
+Subject: Re: [PATCH v2 4/6] ARM: dts: am33xx: use new 'dma-channels/requests'
+ properties
+Message-ID: <YmmJfInA0hNQOhDN@robh.at.kernel.org>
+References: <20220427161126.647073-1-krzysztof.kozlowski@linaro.org>
+ <20220427161126.647073-5-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220427153851.GA15329@wunner.de>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+In-Reply-To: <20220427161126.647073-5-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,53 +70,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 05:38:51PM +0200, Lukas Wunner wrote:
-> On Wed, Apr 27, 2022 at 05:24:50PM +0200, Andrew Lunn wrote:
-> > On Wed, Apr 27, 2022 at 08:41:49AM +0200, Lukas Wunner wrote:
-> > > Commit 05b35e7eb9a1 ("smsc95xx: add phylib support") amended
-> > > smsc95xx_resume() to call phy_init_hw().  That function waits for the
-> > > device to runtime resume even though it is placed in the runtime resume
-> > > path, causing a deadlock.
-> > 
-> > You have looked at this code, tried a few different things, so this is
-> > probably a dumb question.
-> > 
-> > Do you actually need to call phy_init_hw()?
-> > 
-> > mdio_bus_phy_resume() will call phy_init_hw(). So long as you first
-> > resume the MAC and then the PHY, shouldn't this just work?
+On Wed, Apr 27, 2022 at 06:11:24PM +0200, Krzysztof Kozlowski wrote:
+> The '#dma-channels' and '#dma-requests' properties were deprecated in
+> favor of these defined by generic dma-common DT bindings.
 > 
-> mdio_bus_phy_resume() is only called for system sleep.  But this is about
-> *runtime* PM.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  arch/arm/boot/dts/am33xx.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> mdio_bus_phy_pm_ops does not define runtime PM callbacks.  So runtime PM
-> is disabled on PHYs, no callback is invoked for them when the MAC runtime
-> suspends, hence the onus is on the MAC to runtime suspend the PHY (which
-> is a child of the MAC).  Same on runtime resume.
+> diff --git a/arch/arm/boot/dts/am33xx.dtsi b/arch/arm/boot/dts/am33xx.dtsi
+> index f6ec85d58dd1..55ffb0813ded 100644
+> --- a/arch/arm/boot/dts/am33xx.dtsi
+> +++ b/arch/arm/boot/dts/am33xx.dtsi
+> @@ -461,8 +461,8 @@ cppi41dma: dma-controller@2000 {
+>  				interrupts = <17>;
+>  				interrupt-names = "glue";
+>  				#dma-cells = <2>;
+> -				#dma-channels = <30>;
+> -				#dma-requests = <256>;
+> +				dma-channels = <30>;
+> +				dma-requests = <256>;
+
+You could keep the old properties for compatibility and to apply 
+immediately.
+
+>  			};
+>  		};
+>  
+> -- 
+> 2.32.0
 > 
-> Let's say I enable runtime PM on the PHY and use pm_runtime_force_suspend()
-> to suspend the PHY from the MAC's ->runtime_suspend callback.  At that
-> point the MAC already has status RPM_SUSPENDING.  Boom, deadlock.
 > 
-> The runtime PM core lacks the capability to declare that children should
-> be force runtime suspended before a device can runtime suspend, that's
-> the problem.
-
-This might work out if you copy the scheme we use for USB devices and 
-interfaces.
-
-A USB interface is only a logical part of its parent device, and as such 
-does not have a separate runtime power state of its own (in USB-2, at 
-least).  Therefore the USB core calls pm_runtime_no_callbacks() for each 
-interface as it is created, and handles the runtime power management for 
-the interface (i.e., invoking the interface driver's runtime_suspend and 
-runtime_resume callbacks) from within the device's runtime PM routines 
--- independent of the PM core's notion of what the interface's power 
-state should be.
-
-Similarly, you could call pm_runtime_no_callbacks() for the PHY when it 
-is created, and manage the PHY's actual power state from within the 
-MAC's runtime-PM routines directly (i.e., without going through the PM 
-core).
-
-Alan Stern
