@@ -2,144 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5877A511167
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 08:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B10EF511168
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 08:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358218AbiD0GpD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Apr 2022 02:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
+        id S1358222AbiD0Gpj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Apr 2022 02:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242894AbiD0GpC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 02:45:02 -0400
-Received: from mailout1.hostsharing.net (mailout1.hostsharing.net [83.223.95.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906561D0CE;
-        Tue, 26 Apr 2022 23:41:52 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by mailout1.hostsharing.net (Postfix) with ESMTPS id 0E0401007A26C;
-        Wed, 27 Apr 2022 08:41:51 +0200 (CEST)
-Received: from localhost (unknown [89.246.108.87])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id D28186000F33;
-        Wed, 27 Apr 2022 08:41:50 +0200 (CEST)
-X-Mailbox-Line: From 6710d8c18ff54139cdc538763ba544187c5a0cee Mon Sep 17 00:00:00 2001
-Message-Id: <6710d8c18ff54139cdc538763ba544187c5a0cee.1651041411.git.lukas@wunner.de>
-From:   Lukas Wunner <lukas@wunner.de>
-Date:   Wed, 27 Apr 2022 08:41:49 +0200
-Subject: [PATCH net] usbnet: smsc95xx: Fix deadlock on runtime resume
-To:     Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Andre Edich <andre.edich@microchip.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Gabriel Hojda <ghojda@yo2urs.ro>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Russell King <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S242894AbiD0Gpi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 02:45:38 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF2D12FEF4;
+        Tue, 26 Apr 2022 23:42:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651041748; x=1682577748;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=M0Yim+wzgXBIfpDKLfu6Nj6r7PJaxMbByiW4szopul4=;
+  b=i4igcz0NYHy0hwhxIfrJgTimlFEve1b9tZUqr02Q/EB8twoBfh1amCPT
+   eimuG/X8PAmxsIn4yibSc0jmT11VvoDcctHIj4PeaLHdeVBJTaZIBMTOC
+   PX7YO9eq/Po58t+WBFGfeFOBCFt0Bpiw0f5eoUyUcIPw0gVD7jxRxuO9i
+   JlbbMDvETY68qo+kXcAiFRlybRaNc+5yTj/SbVqF4U1qLPS7Ovw+Izg9s
+   CS4e9HnZdnBguhOKg7CBeLNpT1MTkEoy7mzPRnhc+HA7UFXFjrl8DWm0F
+   p6Y1lHqsE4r8Brw81Gt8NoYbiwN1rwMEuwD9nJ6+CVzGZMTGjZX3Vo/gF
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265644130"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="265644130"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 23:42:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="705407344"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 26 Apr 2022 23:42:20 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 27 Apr 2022 09:42:19 +0300
+Date:   Wed, 27 Apr 2022 09:42:19 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Jameson Thies <jthies@google.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] usb: typec: Separate USB Power Delivery from USB
+ Type-C
+Message-ID: <YmjlyxLk8wfziq9l@kuha.fi.intel.com>
+References: <20220425124946.13064-1-heikki.krogerus@linux.intel.com>
+ <20220425124946.13064-2-heikki.krogerus@linux.intel.com>
+ <YmfgfRA1ecJwf12i@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmfgfRA1ecJwf12i@kroah.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 05b35e7eb9a1 ("smsc95xx: add phylib support") amended
-smsc95xx_resume() to call phy_init_hw().  That function waits for the
-device to runtime resume even though it is placed in the runtime resume
-path, causing a deadlock.
+Hi,
 
-The problem is that phy_init_hw() calls down to smsc95xx_mdiobus_read(),
-which never uses the _nopm variant of usbnet_read_cmd().  Amend it to
-autosense that it's called from the runtime resume/suspend path and use
-the _nopm variant if so.
+On Tue, Apr 26, 2022 at 02:07:25PM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Apr 25, 2022 at 03:49:44PM +0300, Heikki Krogerus wrote:
+> > --- /dev/null
+> > +++ b/drivers/usb/typec/pd.h
+> > @@ -0,0 +1,30 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +
+> > +#ifndef __USB_POWER_DELIVERY__
+> > +#define __USB_POWER_DELIVERY__
+> > +
+> > +#include <linux/kobject.h>
+> 
+> Why kobject.h when:
 
-Stacktrace for posterity:
+Oops, that should now be "#include <linux/device.h>".
 
-  INFO: task kworker/2:1:49 blocked for more than 122 seconds.
-  Workqueue: usb_hub_wq hub_event
-  schedule
-  rpm_resume
-  __pm_runtime_resume
-  usb_autopm_get_interface
-  usbnet_read_cmd
-  __smsc95xx_read_reg
-  __smsc95xx_phy_wait_not_busy
-  __smsc95xx_mdio_read
-  smsc95xx_mdiobus_read
-  __mdiobus_read
-  mdiobus_read
-  smsc_phy_reset
-  phy_init_hw
-  smsc95xx_resume
-  usb_resume_interface
-  usb_resume_both
-  usb_runtime_resume
-  __rpm_callback
-  rpm_callback
-  rpm_resume
-  __pm_runtime_resume
-  usb_autoresume_device
-  hub_event
-  process_one_work
+> > +
+> > +struct pd_capabilities {
+> > +	struct device dev;
+> 
+> This is a device?
+> 
+> > +	struct pd *pd;
+> > +	enum typec_role role;
+> > +};
+> > +
+> > +struct pd {
+> > +	struct device		dev;
+> > +	int			id;
+> > +
+> > +	u16			revision; /* 0300H = "3.0" */
+> 
+> So BCD?
 
-Fixes: 05b35e7eb9a1 ("smsc95xx: add phylib support")
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Cc: stable@vger.kernel.org # v5.10+
-Cc: Andre Edich <andre.edich@microchip.com>
----
- drivers/net/usb/smsc95xx.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+Yes.
 
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index 4ef61f6b85df..82b8feaa5162 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -285,11 +285,21 @@ static void smsc95xx_mdio_write_nopm(struct usbnet *dev, int idx, int regval)
- 	__smsc95xx_mdio_write(dev, pdata->phydev->mdio.addr, idx, regval, 1);
- }
- 
-+static bool smsc95xx_in_pm(struct usbnet *dev)
-+{
-+#ifdef CONFIG_PM
-+	return dev->udev->dev.power.runtime_status == RPM_RESUMING ||
-+	       dev->udev->dev.power.runtime_status == RPM_SUSPENDING;
-+#else
-+	return false;
-+#endif
-+}
-+
- static int smsc95xx_mdiobus_read(struct mii_bus *bus, int phy_id, int idx)
- {
- 	struct usbnet *dev = bus->priv;
- 
--	return __smsc95xx_mdio_read(dev, phy_id, idx, 0);
-+	return __smsc95xx_mdio_read(dev, phy_id, idx, smsc95xx_in_pm(dev));
- }
- 
- static int smsc95xx_mdiobus_write(struct mii_bus *bus, int phy_id, int idx,
-@@ -297,7 +307,7 @@ static int smsc95xx_mdiobus_write(struct mii_bus *bus, int phy_id, int idx,
- {
- 	struct usbnet *dev = bus->priv;
- 
--	__smsc95xx_mdio_write(dev, phy_id, idx, regval, 0);
-+	__smsc95xx_mdio_write(dev, phy_id, idx, regval, smsc95xx_in_pm(dev));
- 	return 0;
- }
- 
+> > +	u16			version;
+> > +};
+> 
+> > +
+> > +#define to_pd_capabilities(o) container_of(o, struct pd_capabilities, dev)
+> > +#define to_pd(o) container_of(o, struct pd, dev)
+> > +
+> > +struct pd *pd_find(const char *name);
+> 
+> "struct pd" is just about the shortest structure name I've seen in the
+> kernel so far.  How about using some more letters?  :)
+
+Okay, I'll make it usbpd.
+
+> > +
+> > +int pd_init(void);
+> > +void pd_exit(void);
+> 
+> The kobject question above goes to the code as well.  You are creating a
+> bunch of raw kobjects still, why?  This should all fit into the driver
+> model and kobjects shouldn't be needed.  Are you trying to nest too deep
+> in the attributes?  If so, kobjects will not work as userspace tools
+> will not realize they are there and are attributes at all.
+
+They are not raw kobjects, they are all devices now. That header just
+needs to be fixed.
+
+Br,
+
 -- 
-2.35.2
-
+heikki
