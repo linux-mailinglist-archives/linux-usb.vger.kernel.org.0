@@ -2,134 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7564A512114
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 20:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF375121DD
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Apr 2022 20:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiD0SnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Apr 2022 14:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
+        id S231888AbiD0TAz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Apr 2022 15:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiD0Smj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 14:42:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D44DFD69;
-        Wed, 27 Apr 2022 11:24:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16B6BB828C1;
-        Wed, 27 Apr 2022 18:24:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D194C385A7;
-        Wed, 27 Apr 2022 18:24:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651083852;
-        bh=MHOjsKIOkpl16ebEdUT862xHxIQgQNSBZr99E2fUavA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TGlNsS/Z6o3YV+926hptUWTKnsTRp7heWZ5Sx4cB7Ed8xGLlg+DJgQB4emoRTe09z
-         qDlLLw6riouzegkNRLdcVdiagWJIaRw1/hRj1J+wba3EDSV1v3ViVHQG8b99DEj60k
-         6mXDE95qsqqFXeDBIijymkuD4gYLLeFcmFVI0uJeXBh20wbah/LZkUD9YpmtmY/oW+
-         /G7B5QmVHBAMdYtE/6MjWdPbubW9GQ4KpCHW68b9QfCsCQjOuVbuEISqtlg8rzemsS
-         bVDtmIv9lhUD1KJX/Zgk6o/PftEQC6xMoioEsYujvhUN67it62vEfo/dW869BE+0ye
-         DMvK1OHckWI8A==
-Message-ID: <fe81598e-e2de-5923-248c-5fb3ad7e70bb@kernel.org>
-Date:   Wed, 27 Apr 2022 20:24:04 +0200
+        with ESMTP id S232452AbiD0TAn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Apr 2022 15:00:43 -0400
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F5F113CA3;
+        Wed, 27 Apr 2022 11:46:23 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id j2so5109837ybu.0;
+        Wed, 27 Apr 2022 11:46:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0cdA+JI48kZS+AxlzBx4Qt8iIGll7kLbRjF8CRRc1mE=;
+        b=OaGyrRoSv87NfVAv27V/6TqlLXkvlnh9pdHNpxbZEfuw6UzLqHMGOs+Aa93jRSka42
+         tbVHc8FgVwcE72i2vK8DpC3+PQD6tkL9r98PE/oFOFQQvbSjtKes/TuUxb/RmRv6Uq8B
+         F6w2fyeV4QbFRbkUDz+tJOfQ2MrzseKQjBkQi+si732f8FNn7DQUKhMZJvFur+VfzGiM
+         QpTSy8ZWIIQxU+CG8aTqgfOTJmM3ZWZF/FvOl1Y/IHi0YuTTafXgPfh2I3mVgNHCpxpD
+         Q/6jcXhbLDWvVJ/doGOZP+ygHMQKRJwZ++t2UpWU3FFB7trTbXf9poGlS/8QUvPrRtaR
+         hLsA==
+X-Gm-Message-State: AOAM530xjjY9c8bxla3SMqW03parMTAdfLHzH6fL7KdLTbNBvVuxjbce
+        av6lypbhPRsIGB+T4Ja5xWQzndGcH77X5VFpMe1g7w75
+X-Google-Smtp-Source: ABdhPJwT3huBGS2K+bNnsZ8eZSYIdoXsCaigBa/fDfOditHuurhLrxP5JNE15oQnd6/c0CSljL/aM4n6to8/57goMo0=
+X-Received: by 2002:a25:da84:0:b0:648:423e:57b0 with SMTP id
+ n126-20020a25da84000000b00648423e57b0mr19076088ybf.137.1651085182297; Wed, 27
+ Apr 2022 11:46:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 0/5] add xhci-exynos driver
-Content-Language: en-US
-To:     Jung Daehwan <dh10.jung@samsung.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-References: <CGME20220426092019epcas2p2ef5dfde273edaaadc2ff74414f1b2c7a@epcas2p2.samsung.com>
- <1650964728-175347-1-git-send-email-dh10.jung@samsung.com>
- <3ce5f3b8-3c6b-1e83-94c2-84f4ad8aa9dc@kernel.org>
- <20220427094942.GE145620@ubuntu>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220427094942.GE145620@ubuntu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220425114544.37595-1-heikki.krogerus@linux.intel.com> <Ymfa3F83zxgqD2pk@kroah.com>
+In-Reply-To: <Ymfa3F83zxgqD2pk@kroah.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 27 Apr 2022 20:46:11 +0200
+Message-ID: <CAJZ5v0hBjWomOxTw8Nfa83FEyDqGm+5B8W9WPEHfZR3uwUUdOw@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] acpi: Remove acpi_release_memory()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 27/04/2022 11:49, Jung Daehwan wrote:
->> 1. What is this based on? Output of: git describe
-> 
-> url = https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next
-> fetch = +refs/heads/*:refs/remotes/origin/*
-> 
-> or
-> 
-> url = https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> fetch = +refs/heads/*:refs/remotes/origin/*
+On Tue, Apr 26, 2022 at 1:43 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Apr 25, 2022 at 02:45:42PM +0300, Heikki Krogerus wrote:
+> > Hi,
+> >
+> > It seems there never were and there never will be actual devices that
+> > expose the UCSI ACPI mailbox interface. There are now PD controllers
+> > that support the UCSI interface, but they do not use the ACPI mailbox.
+> >
+> > So there is no point in mapping the mailbox with ioremap(), we can
+> > just use memremap(). That should make it possible to also remove the
+> > function acpi_release_memory(). That function was only there to make
+> > it possible to use ioremap() in the UCSI ACPI driver.
+> >
+> > thanks,
+> >
+> > Heikki Krogerus (2):
+> >   usb: typec: ucsi: acpi: Map the mailbox with memremap()
+> >   acpi: Remove the helper for deactivating memory region
+> >
+> >  drivers/acpi/osl.c                 | 86 ------------------------------
+> >  drivers/usb/typec/ucsi/ucsi_acpi.c | 19 ++-----
+> >  include/linux/acpi.h               |  3 --
+> >  3 files changed, 4 insertions(+), 104 deletions(-)
+> >
+> > --
+> > 2.35.1
+> >
+>
+> Look good to me, Rafael, want me to take this through the USB tree?  Or
+> if you want to take it through the USB tree, here's my reviewed-by:
+> either is fine with me.
+>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Thanks, although it is not what I asked for. It's not the output of `git
-describe`. To get the output of git describe, execute commands in the
-shell in the Git repository on your branch with these commits:
-  $ git describe
-
->> 2. What does the scripts/get_maintainers.pl print when you run on this
->> patchset?
-> 
-> I don't see your name in xhci even for whole usb/host directory.
-> I see same result on above 2 gits.
-> 
-> jdh@PlatFormDev3:~/works/mainline/linux-next$ ./scripts/get_maintainer.pl drivers/usb/host/
-
-That's not the proper way to get list of people to Cc when submitting
-patches because it does not include the contents of the directory and
-contents of other parts of the kernel which you might change.
-
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM,commit_signer:170/184=92%)
-> Mathias Nyman <mathias.nyman@linux.intel.com> (commit_signer:52/184=28%,authored:25/184=14%)
-> Alan Stern <stern@rowland.harvard.edu> (commit_signer:30/184=16%)
-> Chunfeng Yun <chunfeng.yun@mediatek.com> (commit_signer:23/184=12%,authored:21/184=11%)
-> linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-> linux-kernel@vger.kernel.org (open list)
-
-So either you run it in wrong way (not on the patchset but on some parts
-of tree) or you still have it based on some different tree.
-
-I just applied your patchset on linux-next and as expected output is
-entirely different:
-
-$ git format-patch -5
-$ scripts/get_maintainer.pl 0*
-(... skipping entries which you pasted)
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-(maintainer:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM
-ARCHITECTURES,authored:1/7=14%,added_lines:4/25=16%,removed_lines:2/13=15%)
-
-linux-arm-kernel@lists.infradead.org (moderated list:ARM/SAMSUNG S3C,
-S5P AND EXYNOS ARM ARCHITECTURES)
-
-linux-samsung-soc@vger.kernel.org (open list:ARM/SAMSUNG S3C, S5P AND
-EXYNOS ARM ARCHITECTURES)
-
-
-
-> In fact, I manually tried adding you as you commendted previous patchset.
-> But, It seems you changed email id and domain..
-
-Up to date email is printed by scripts/get_maintainers.pl. If you don't
-use that tool but add addresses manually - might work, might not.
-
-Anyway, it's not only about my email - you did not Cc relevant mailing
-lists, which I mentioned weeks ago as well.
-
-Best regards,
-Krzysztof
+I've taken this into the ACPI tree (for 5.19) with your R-by, thanks!
