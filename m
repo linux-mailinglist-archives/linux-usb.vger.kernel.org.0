@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E29E512D4E
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Apr 2022 09:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDCA512D7C
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Apr 2022 09:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245715AbiD1Hur (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Apr 2022 03:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        id S241597AbiD1H6A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Apr 2022 03:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231452AbiD1Huq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Apr 2022 03:50:46 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61BD9D4D7
-        for <linux-usb@vger.kernel.org>; Thu, 28 Apr 2022 00:47:29 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220428074725epoutp0140232f246714bc41f8bdd38b4503321b~p-9jfy-vc2230822308epoutp01R
-        for <linux-usb@vger.kernel.org>; Thu, 28 Apr 2022 07:47:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220428074725epoutp0140232f246714bc41f8bdd38b4503321b~p-9jfy-vc2230822308epoutp01R
+        with ESMTP id S231270AbiD1H57 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Apr 2022 03:57:59 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5572A5F243
+        for <linux-usb@vger.kernel.org>; Thu, 28 Apr 2022 00:54:44 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220428075442epoutp03760b63967a229b326a957d5d7fc00ce2~qAD6XOmT12177021770epoutp036
+        for <linux-usb@vger.kernel.org>; Thu, 28 Apr 2022 07:54:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220428075442epoutp03760b63967a229b326a957d5d7fc00ce2~qAD6XOmT12177021770epoutp036
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651132045;
-        bh=HQRC+VtJnl9YavkblQxCVXOk9smOC+ybXoGKxD9XrAk=;
+        s=mail20170921; t=1651132482;
+        bh=ezbrraO8aVmu2laJsDo6jcJ3FLv2F245TKkCYuIqyHc=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kSRl0uKGsY90U+ZytBR145Ggp55cC0+k/C+xmtPgNX1jyDpVLN1aTThOZwlyLY61B
-         lmw5m0x0NfTHbkpoZGZ1ls9pspQw2qggn7BDzvg2l1/dbqcJukh5PjlhxJlgt2pRQt
-         CuJAax0lL25mssK4g1ywUpWtnT6P4+j8uZ5DHHbI=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20220428074724epcas2p16cc535cbc4d8b2a8867ee5ea4c401516~p-9i6Z6aS0610406104epcas2p1T;
-        Thu, 28 Apr 2022 07:47:24 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.92]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4KpnlB0wylz4x9QZ; Thu, 28 Apr
-        2022 07:47:18 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        58.BA.09764.3864A626; Thu, 28 Apr 2022 16:47:15 +0900 (KST)
+        b=otWKbaVxjlX9bFAq8CJP7AuCPO/c3nf7Dwxf8uzjg8fkLTzcODn0QwDaoZcJyde4V
+         YxhdO9Ospw9Wz27OSLhM5JSXF0NN0fT29DDl+dV4GZjc68k+8aJLoNpebJV7zzi40u
+         IO7k4P6S0yVy747u/9mVRaZ5FaaI7OIPNUj2T7KI=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20220428075441epcas2p4a1cccd2ad3e178104bc6098cf5ebe21d~qAD5e1PfZ1539415394epcas2p4a;
+        Thu, 28 Apr 2022 07:54:41 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Kpnvg4HGqz4x9Q3; Thu, 28 Apr
+        2022 07:54:39 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E9.35.10069.B384A626; Thu, 28 Apr 2022 16:54:35 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
         epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220428074715epcas2p12f9d8b4f9148ac6e3cba02facc2f8341~p-9aZ9ZmN2308523085epcas2p1e;
-        Thu, 28 Apr 2022 07:47:15 +0000 (GMT)
+        20220428075434epcas2p1792bc1c96afd57aff3af85c82761b99e~qADzfhaZZ1912219122epcas2p1L;
+        Thu, 28 Apr 2022 07:54:34 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220428074715epsmtrp109c7a3a19e3d81291ff5bd880ce26a5a~p-9aY9Z0G1142111421epsmtrp19;
-        Thu, 28 Apr 2022 07:47:15 +0000 (GMT)
-X-AuditID: b6c32a46-f8bff70000002624-ad-626a46833528
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        20220428075434epsmtrp109bfd176b36bf1fff984b3ba672a5bad~qADzev3nA1575615756epsmtrp1R;
+        Thu, 28 Apr 2022 07:54:34 +0000 (GMT)
+X-AuditID: b6c32a45-a8fff70000002755-c1-626a483bf3ed
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        88.2F.08924.3864A626; Thu, 28 Apr 2022 16:47:15 +0900 (KST)
-Received: from ubuntu (unknown [10.229.95.128]) by epsmtip2.samsung.com
+        25.BF.08924.A384A626; Thu, 28 Apr 2022 16:54:34 +0900 (KST)
+Received: from ubuntu (unknown [10.229.95.128]) by epsmtip1.samsung.com
         (KnoxPortal) with ESMTPA id
-        20220428074715epsmtip2e31cfc8428817a05f987aade42f66804~p-9aMt3nn0923509235epsmtip2S;
-        Thu, 28 Apr 2022 07:47:15 +0000 (GMT)
-Date:   Thu, 28 Apr 2022 16:45:45 +0900
+        20220428075434epsmtip12106b10af694ea89b2a9eaf5a55e51f9~qADzSWFpf1899518995epsmtip14;
+        Thu, 28 Apr 2022 07:54:34 +0000 (GMT)
+Date:   Thu, 28 Apr 2022 16:53:05 +0900
 From:   Jung Daehwan <dh10.jung@samsung.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         Howard Yen <howardyen@google.com>,
@@ -64,47 +64,47 @@ Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
         "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Subject: Re: [PATCH v4 5/5] usb: host: add xhci-exynos driver
-Message-ID: <20220428074545.GG151827@ubuntu>
+Message-ID: <20220428075305.GH151827@ubuntu>
 MIME-Version: 1.0
-In-Reply-To: <Ymo4Hdi9fuBT7im7@kroah.com>
+In-Reply-To: <fa113ba0-1221-de93-a18f-e4e942cdb261@kernel.org>
 User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJJsWRmVeSWpSXmKPExsWy7bCmqW6zW1aSwb75VhZPjixit2hevJ7N
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJJsWRmVeSWpSXmKPExsWy7bCmma61R1aSwfcHYhZPjixit2hevJ7N
         4vqf94wW7c8vsFmcP7+B3WLj2x9MFpd3zWGzWLSsldmiedMUVouZa5Utuu7eYHTg9pjV0Mvm
         cbmvl8ljwaZSj8V7XjJ5bFrVyeaxf+4ado++LasYPT5vkgvgiMq2yUhNTEktUkjNS85PycxL
         t1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXLzAG6U0mhLDGnFCgUkFhcrKRvZ1OUX1qS
-        qpCRX1xiq5RakJJTYF6gV5yYW1yal66Xl1piZWhgYGQKVJiQnbH81Wzmgq/aFee7HrM2ME5T
-        6mLk5JAQMJFYeWMrG4gtJLCDUWLyntwuRi4g+xOjxNY111ghnM+MEi9WTGaE6Zi2Yw0zRGIX
-        o8TJy3MYIZwnjBK7Hz9hAaliEVCVWD95FjuIzSagJXHvxwlmEFtEwFii/yxInIuDWWASs8Sm
-        u9uYQBLCArYSv7buBFvBK6AjsW3pQ1YIW1Di5EyIoZwCmhItzxuAbA4OUQEViVcH60HmSAis
-        5ZC4s/UTK8R5LhKNt6dD2cISr45vYYewpSRe9rdB2cUSuz61MkE0NzBKND6AuE4C6LpZz9rB
-        jmAWyJBYfOgsO8gyCQFliSO3WCDCfBIdh/9ChXklOtqEIDqVJaZfngC1VlLi4OtzUBM9JL49
-        3cgGCaBFzBJH539jnsAoPwvJa7OQbIOwdSQW7P7ENgtoBbOAtMTyfxwQpqbE+l36CxhZVzGK
-        pRYU56anFhsVGMFjOzk/dxMjOA1rue1gnPL2g94hRiYOxkOMEhzMSiK8X3ZnJAnxpiRWVqUW
-        5ccXleakFh9iNAVG1ERmKdHkfGAmyCuJNzSxNDAxMzM0NzI1MFcS5/VK2ZAoJJCeWJKanZpa
-        kFoE08fEwSnVwCT6njHjn2H8WRfRHa3CE1I9rK1Tv3AxFLYryBxy4VglKB2/2CvulHsN86PD
-        j54YhJnpTkjVvvvwbUHBXHf/KYWsh9tuOkxddeXSxqVb5Bsr5gWdrTONsqrbt/hR0T4JgQft
-        zZ2bPQJTP7xrbOIsM/j3q3rl7NsOQclrWks2HZzzrui/8MdZwdov9/LO3nmvY2pMysTTvvtF
-        +y+/ipjwviG8/MFD641RIe/m/+C6GlIhP/f35S+HYxqmzNRaFPBofn/a8ubE/d8/bjv+8rVU
-        Q+dG3oiortAfE5cvUjnhk3Bd4665iMyi3TfbmB09fdnKv7tsOWDv9Om33uIw30crJifcSJu+
-        f0pK49K/U3XDnsYosRRnJBpqMRcVJwIAwbrHPEwEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHLMWRmVeSWpSXmKPExsWy7bCSvG6zW1aSwbe5MhZPjixit2hevJ7N
+        qpCRX1xiq5RakJJTYF6gV5yYW1yal66Xl1piZWhgYGQKVJiQnXFixlLmgp+cFS/2ujUw9nJ0
+        MXJySAiYSLQu3M7SxcjFISSwg1Hia89iKOcTo8SFp6sZIZzPQJm9C5hhWn69WcoKkdjFKNF3
+        6hg7hPOEUeLfsRdMIFUsAqoSc9cfZgOx2QS0JO79OAHWLSKgKXH973ewbmaBOcwS15bcYAFJ
+        CAvYSvzaupMRxOYV0JFoXvmQDcIWlDg58wlYDaeAncTxFf+BBnFwiAqoSLw6WA8yR0JgJYfE
+        7MWrmSDOc5H48vMDK4QtLPHq+BZ2CFtK4mV/G5RdLLHrUysTRHMDo0TjgxNQvxlLzHrWDnYE
+        s0CGxMqWtWwgyyQElCWO3GKBCPNJdBz+yw4R5pXoaBOC6FSWmH55AtRaSYmDr89BTfSQ+PZ0
+        IxskgHYySxy5MZttAqP8LCSvzUKyDcLWkViw+xOQzQFkS0ss/8cBYWpKrN+lv4CRdRWjWGpB
+        cW56arFRgSE8tpPzczcxgtOwlusOxslvP+gdYmTiYDzEKMHBrCTC+2V3RpIQb0piZVVqUX58
+        UWlOavEhRlNgRE1klhJNzgdmgrySeEMTSwMTMzNDcyNTA3MlcV6vlA2JQgLpiSWp2ampBalF
+        MH1MHJxSDUzzmNYmzfkn3SOxcLu0bPMb6xmTb/ry6X+/69ViwLnr459P5dP0HRL+2zPNcJd9
+        HeKuJ9S7dPOWM8p2vio8p87cbPzewjdjgVvEBBGdrkNvQ3fuLZ8bfaKjeaMdc8Pi5eyqD3u6
+        rgXqpopUytz6msfxY0vYh0ftHQ9sllqs+jXpRes2hT95FhLmHn1aDbFvVX7+mXF4w5zS1x4f
+        0vdXzSi/4Ptejf213vHP0T8fPJ9gcHVCiOWJmvtZNxVjFxyJOVt4pjLM99Gqfw+Wmk3v4Fqm
+        ac3EbV3P0/Lk/++HoTMEp8zb1paRIMgvve1pt3fls3Pak3QXb9BkeeC33FH8+p47nPYLHjxr
+        5Nl+bXLo1IRrSizFGYmGWsxFxYkA/pV5/UwEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrLLMWRmVeSWpSXmKPExsWy7bCSnK6VR1aSwdsv2hZPjixit2hevJ7N
         4vqf94wW7c8vsFmcP7+B3WLj2x9MFpd3zWGzWLSsldmiedMUVouZa5Utuu7eYHTg9pjV0Mvm
-        cbmvl8ljwaZSj8V7XjJ5bFrVyeaxf+4ado++LasYPT5vkgvgiOKySUnNySxLLdK3S+DK6Jx9
-        jr1gq2bFlVX3mRsY38t3MXJySAiYSEzbsYa5i5GLQ0hgB6PEw12LWCASkhJL595gh7CFJe63
-        HGGFKHrEKHH80mpmkASLgKrE+smzwIrYBLQk7v04ARYXETCW6D8LEufiYBaYxizR8nsCI0hC
-        WMBW4tfWnWA2r4COxLalD1lBbCGBJcwSB19KQMQFJU7OfAJ2BTPQ0Bv/XjJ1MXIA2dISy/9x
-        gIQ5BTQlWp43sICERQVUJF4drJ/AKDgLSfMsJM2zEJoXMDKvYpRMLSjOTc8tNiwwykst1ytO
-        zC0uzUvXS87P3cQIjiItrR2Me1Z90DvEyMTBeIhRgoNZSYT3y+6MJCHelMTKqtSi/Pii0pzU
-        4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqYbE5H37mmK/OEUzXPrr6x/9BvOwlN
-        OaUtmnrnVrgkrNy1pC47R1rtwuEwnhadwsib9/s2hiZ8e7XRT3YNP7eN0S7+hu+zn1WeXem5
-        8c6pi5vtar5+ncz0zNsr+kj2MvMODzWXuw0FNyO0pe205X43Tvbw+fLBv+I4B0NzxOEvzmVd
-        i2L/dXrMe/myLbF01zG3o95LFyf12kVb101//qK9/LFVvKv8vT2ObnFVJ/itNhufmWrMLBKo
-        rO8bF+Kx1O31+YIHQepLpmXHn/ip9ktF5tS/o15/J8vu9LRLtWL692p6d8mZ58siXs6RuSv0
-        d7/PTuZLPwRFz2sZNUcvDFj63eBMG9OrWcud1qwUy1ZXYinOSDTUYi4qTgQAj7W1EhEDAAA=
-X-CMS-MailID: 20220428074715epcas2p12f9d8b4f9148ac6e3cba02facc2f8341
+        cbmvl8ljwaZSj8V7XjJ5bFrVyeaxf+4ado++LasYPT5vkgvgiOKySUnNySxLLdK3S+DK2L/a
+        oGAne8WpZWcZGxifsXYxcnJICJhI/HqzFMwWEtjBKDHneT1EXFJi6dwb7BC2sMT9liNANVxA
+        NY8YJaZv2s8IkmARUJWYu/4wG4jNJqAlce/HCWYQW0RAU+L63+9gDcwCC5glzrXNAysSFrCV
+        +LV1J1gzr4CORPPKh2wQU3cyS7Q3NkIlBCVOznzCAmIzA0298e8lUxcjB5AtLbH8HwdImFPA
+        TuL4iv/MIGFRARWJVwfrJzAKzkLSPAtJ8yyE5gWMzKsYJVMLinPTc4sNC4zyUsv1ihNzi0vz
+        0vWS83M3MYJjSEtrB+OeVR/0DjEycTAeYpTgYFYS4f2yOyNJiDclsbIqtSg/vqg0J7X4EKM0
+        B4uSOO+FrpPxQgLpiSWp2ampBalFMFkmDk6pBqYzJlnqBcInOuzmOm5ewuAYuOWNVWhn1tFV
+        hy6yLX15avLiguSYM3/+VO35cffjsrjNVRxnfnx6nemtxqUlzsXye9uk+HcJ89YH2zS/rLnp
+        mpucnHpulY31ep43Z4KOTZkuJ3nNXoNRtP3Ens9/LvsFfLtk0bNzWq0g+5bcqyX3Nwmd+bTs
+        +rLAuu+h67wPdJZpvRFZl3b556zVAf8yHWWcWZj/XFmp56X8TS9CjmV3a5D+Vn6uf+J2p8RM
+        nB6VtorcY7OVvb9frKrCqcuh4JJI3/cz7jMM2K+ePK/Voj57hm+ef1/615Oq8lWOvay3j24T
+        i22qKLVguxcXuPfEkpJ7Qa/VPHUDc3fLcSauSlRiKc5INNRiLipOBAAAHGPbEAMAAA==
+X-CMS-MailID: 20220428075434epcas2p1792bc1c96afd57aff3af85c82761b99e
 X-Msg-Generator: CA
 Content-Type: multipart/mixed;
-        boundary="----s9reHD3dvq.Swzu4OgS99nNlXP7CLa0djtt04wdzZepsPVyA=_31dee_"
+        boundary="----ibIraZXel8vAP7k4n32fW3YR3bsCcgqvt7YD6UTr0n_RukWR=_31fa8_"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
@@ -116,7 +116,8 @@ References: <1650964728-175347-1-git-send-email-dh10.jung@samsung.com>
         <a9438aef-78a3-e8ab-2b78-cc872447df08@kernel.org>
         <20220428012941.GF145620@ubuntu>
         <01ec9962-e210-ce47-57cd-8849cca0a9df@kernel.org>
-        <20220428063634.GF151827@ubuntu> <Ymo4Hdi9fuBT7im7@kroah.com>
+        <20220428063634.GF151827@ubuntu>
+        <fa113ba0-1221-de93-a18f-e4e942cdb261@kernel.org>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
@@ -127,142 +128,39 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-------s9reHD3dvq.Swzu4OgS99nNlXP7CLa0djtt04wdzZepsPVyA=_31dee_
+------ibIraZXel8vAP7k4n32fW3YR3bsCcgqvt7YD6UTr0n_RukWR=_31fa8_
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
 
-On Thu, Apr 28, 2022 at 08:45:49AM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Apr 28, 2022 at 03:36:34PM +0900, Jung Daehwan wrote:
-> > On Thu, Apr 28, 2022 at 07:19:04AM +0200, Krzysztof Kozlowski wrote:
-> > > On 28/04/2022 03:29, Jung Daehwan wrote:
-> > > > On Tue, Apr 26, 2022 at 02:59:57PM +0200, Krzysztof Kozlowski wrote:
-> > > >> On 26/04/2022 11:18, Daehwan Jung wrote:
-> > > >>> This driver is for Samsung Exynos xhci host conroller. It uses xhci-plat
-> > > >>> driver mainly and extends some functions by xhci hooks and overrides.
-> > > >>>
-> > > >>> It supports USB Audio offload with Co-processor. It only cares DCBAA,
-> > > >>> Device Context, Transfer Ring, Event Ring, and ERST. They are allocated
-> > > >>> on specific address with xhci hooks. Co-processor could use them directly
-> > > >>> without xhci driver after then.
-> > > >>
-> > > >> This does not look like developed in current Linux kernel, but something
-> > > >> out-of-tree, with some other unknown modifications. This is not how the
-> > > >> code should be developed. Please rebase on linux-next and drop any
-> > > >> unrelated modifications (these which are not sent with this patchset).
-> > > >>
-> > > > 
-> > > > I've been developing on linux-next and I rebase before submitting.
-> > > > Could you tell me one of dropped modifications or patches?
-> > > > 
-> > > >> (...)
-> > > >>
-> > > >>> +
-> > > >>> +static int xhci_exynos_suspend(struct device *dev)
-> > > >>> +{
-> > > >>> +	struct usb_hcd	*hcd = dev_get_drvdata(dev);
-> > > >>> +	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-> > > >>> +
-> > > >>> +	/* TODO: AP sleep scenario*/
-> > > >>
-> > > >> Shall the patchset be called RFC?
-> > > >>
-> > > > OK. I will add RFC for this patch on next submission.
-> > > > 
-> > > >>> +
-> > > >>> +	return xhci_suspend(xhci, device_may_wakeup(dev));
-> > > >>> +}
-> > > >>> +
-> > > >>> +static int xhci_exynos_resume(struct device *dev)
-> > > >>> +{
-> > > >>> +	struct usb_hcd	*hcd = dev_get_drvdata(dev);
-> > > >>> +	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-> > > >>> +	int ret;
-> > > >>> +
-> > > >>> +	/* TODO: AP resume scenario*/
-> > > >>> +
-> > > >>> +	ret = xhci_resume(xhci, 0);
-> > > >>> +	if (ret)
-> > > >>> +		return ret;
-> > > >>> +
-> > > >>> +	pm_runtime_disable(dev);
-> > > >>> +	pm_runtime_set_active(dev);
-> > > >>> +	pm_runtime_enable(dev);
-> > > >>> +
-> > > >>> +	return 0;
-> > > >>> +}
-> > > >>> +
-> > > >>> +static const struct dev_pm_ops xhci_exynos_pm_ops = {
-> > > >>> +	SET_SYSTEM_SLEEP_PM_OPS(xhci_exynos_suspend, xhci_exynos_resume)
-> > > >>> +};
-> > > >>> +
-> > > >>> +MODULE_DESCRIPTION("xHCI Exynos Host Controller Driver");
-> > > >>> +MODULE_LICENSE("GPL");
-> > > >>
-> > > >> You don't have list of compatibles (and missing bindings), driver
-> > > >> definition, driver registration. Entire solution is not used - nothing
-> > > >> calls xhci_exynos_vendor_init(), because nothign uses "ops".
-> > > >>
-> > > > 
-> > > > xhci_exynos_vendor_init is called in xhci-plat.c (xhci_vendor_init)
-> > > > [v4,2/5] usb: host: add xhci hooks for xhci-exynos
-> > > > ops are used in some files(xhci-mem.c, xhci.c ..) and the body of ops is in
-> > > > all xhci-exynos.
-> > > 
-> > > 
-> > > Nothing uses the "ops" except xhci_exynos_register_vendor_ops() which is
-> > > not called anywhere, so the xhci_vendor_init() does not call
-> > > xhci_exynos_vendor_init().
-> > > 
-> > 
-> > You are right. xhci_exynos_register_vendor_ops should be called by other
-> > module. It's only thing not called anywhere in this patchset. I don't uses
-> > xhci-exynos alone in my scenario. Other module loads this on runtime.
-> > 
-> > > > 
-> > > > xhci-exynos is not a standalone driver. It could be enabled when other module
-> > > > makes xhci platform driver probed as it uses xhci platform mainly.
-> > > 
-> > > It "could be" or "will be"? We do not talk here about theoretical usage
-> > > of the driver, but a real one.
-> > > 
-> > > > I thought I just used existing compltible not adding new one.
-> > > > I will add them if needed.
-> > > 
-> > > Since you called everything here as "exynos" it is specific to one
-> > > hardware and not-reusable on anything else. How can then you use some
-> > > other compatible? It would be a misuse of Devicetree bindings.
-> > > 
+On Thu, Apr 28, 2022 at 09:31:56AM +0200, Krzysztof Kozlowski wrote:
+> On 28/04/2022 08:36, Jung Daehwan wrote:
+> >>
+> >> Since you called everything here as "exynos" it is specific to one
+> >> hardware and not-reusable on anything else. How can then you use some
+> >> other compatible? It would be a misuse of Devicetree bindings.
+> >>
 > > 
 > > I got it. Let me add them. Is it still necessary if it is only used by
 > > other module on runtime as I said above?
 > 
-> Please submit a full, working driver so these changes can be able to be
-> properly reviewed.  Otherwise it is just a waste of time for us to even
-> read them, right?
+> Except what Greg wrote, if by "other module" you mean out-of-tree, then
+> the patchset will not be accepted as it is unusable for Linux users.
+> Basically it would be a dead code in Linux kernel.
 > 
-> We do not add changes to the kernel that do not work or do anything,
-> that would be pointless, and cause us extra work and maintenance.
+> Best regards,
+> Krzysztof
 > 
 
-We have several drivers including this and some drivers depends on other
-drivers. I can't submit all drivers at the same time and It would be harder
-if I did. That's why I submitted only patches in xhci without any dependancy.
-I wanted to submit our all drivers one by one after then.
-I will add it on next submission. New patch would be about dwc3-exynos.c not
-in xhci.
+I wanted to submit patches of just xhci. Let me add a patch together of other
+module(dwc3-exynos) that is in-tree on next submission.
 
-I'm sorry to bother you but I hope you wouldn't think it's waste of time..
+Is it still necessary to add compatible or bindings in this case?
 
 Best Regards,
 Jung Daehwan
 
-> thanks,
-> 
-> greg k-h
-> 
-
-------s9reHD3dvq.Swzu4OgS99nNlXP7CLa0djtt04wdzZepsPVyA=_31dee_
+------ibIraZXel8vAP7k4n32fW3YR3bsCcgqvt7YD6UTr0n_RukWR=_31fa8_
 Content-Type: text/plain; charset="utf-8"
 
 
-------s9reHD3dvq.Swzu4OgS99nNlXP7CLa0djtt04wdzZepsPVyA=_31dee_--
+------ibIraZXel8vAP7k4n32fW3YR3bsCcgqvt7YD6UTr0n_RukWR=_31fa8_--
