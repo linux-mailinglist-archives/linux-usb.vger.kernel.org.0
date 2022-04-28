@@ -2,48 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B8F513BCC
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Apr 2022 20:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16546513BF8
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Apr 2022 21:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351241AbiD1Svp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Apr 2022 14:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
+        id S1351353AbiD1TIK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Apr 2022 15:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233258AbiD1Svl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Apr 2022 14:51:41 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1407C7BC;
-        Thu, 28 Apr 2022 11:48:25 -0700 (PDT)
+        with ESMTP id S1351350AbiD1TIK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Apr 2022 15:08:10 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F37BAB86;
+        Thu, 28 Apr 2022 12:04:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651171705; x=1682707705;
+  t=1651172695; x=1682708695;
   h=from:to:cc:subject:date:message-id:mime-version;
   bh=2+AjbD7jqLLejH2LIwYZzfLa2wTbFMTWJ4g7CUb1Q6A=;
-  b=kiIDLYIprQ3fnULc2kIRrGw64Lo9lAY33ir4jsrujOYL90B8Qoi1//tK
-   mw3xv1KYUACmXllyRtwMI/mTgXDKuQB9ETRWvtVBOvfdaCWcbJtFiP9D3
-   Zwt4+y3wuwKVmt7VSMSfIHfQyuCj9kE597vgEMYB92VkmK93gbOJBehWy
-   Q=;
+  b=R1ycRTRbOB/ouqQTrpzbsfAM2jnVZPxiBp45XF+AifAd2fgiUjO3w/0c
+   sqh0CiVzgQDd0pg78imi6UkgWb7BToS5+0xVuzgZIrFBl8QSLseV+UKMT
+   x1YfMq8FxvJBQ1X0gMXDaG/p5UvQ9yenLOlDflt3k8nqpdDk9nbOs8EKf
+   w=;
 Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Apr 2022 11:48:25 -0700
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Apr 2022 12:04:54 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 11:48:24 -0700
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 12:04:54 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 28 Apr 2022 11:48:24 -0700
+ 15.2.986.22; Thu, 28 Apr 2022 12:04:54 -0700
 Received: from hu-mrana-lv.qualcomm.com (10.49.16.6) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 28 Apr 2022 11:48:24 -0700
+ 15.2.986.22; Thu, 28 Apr 2022 12:04:53 -0700
 From:   Mayank Rana <quic_mrana@quicinc.com>
 To:     <peter.chen@kernel.org>, <balbi@kernel.org>,
-        <gregkh@linuxfoundation.org>
+        <mathias.nyman@linux.intel.com>, <stern@rowland.harvard.edu>,
+        <chunfeng.yun@mediatek.com>, <gregkh@linuxfoundation.org>
 CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
         Mayank Rana <quic_mrana@quicinc.com>
-Subject: [PATCH] xhci: Use xhci_get_virt_ep() to validate ep_index
-Date:   Thu, 28 Apr 2022 11:47:52 -0700
-Message-ID: <1651171672-9774-1-git-send-email-quic_mrana@quicinc.com>
+Subject: [PATCH RESEND] xhci: Use xhci_get_virt_ep() to validate ep_index
+Date:   Thu, 28 Apr 2022 12:04:48 -0700
+Message-ID: <1651172688-21439-1-git-send-email-quic_mrana@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
