@@ -2,104 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16546513BF8
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Apr 2022 21:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FFF513C0B
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Apr 2022 21:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351353AbiD1TIK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Apr 2022 15:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
+        id S1351382AbiD1TQl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Apr 2022 15:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351350AbiD1TIK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Apr 2022 15:08:10 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F37BAB86;
-        Thu, 28 Apr 2022 12:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651172695; x=1682708695;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=2+AjbD7jqLLejH2LIwYZzfLa2wTbFMTWJ4g7CUb1Q6A=;
-  b=R1ycRTRbOB/ouqQTrpzbsfAM2jnVZPxiBp45XF+AifAd2fgiUjO3w/0c
-   sqh0CiVzgQDd0pg78imi6UkgWb7BToS5+0xVuzgZIrFBl8QSLseV+UKMT
-   x1YfMq8FxvJBQ1X0gMXDaG/p5UvQ9yenLOlDflt3k8nqpdDk9nbOs8EKf
-   w=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Apr 2022 12:04:54 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 12:04:54 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 28 Apr 2022 12:04:54 -0700
-Received: from hu-mrana-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 28 Apr 2022 12:04:53 -0700
-From:   Mayank Rana <quic_mrana@quicinc.com>
-To:     <peter.chen@kernel.org>, <balbi@kernel.org>,
-        <mathias.nyman@linux.intel.com>, <stern@rowland.harvard.edu>,
-        <chunfeng.yun@mediatek.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Mayank Rana <quic_mrana@quicinc.com>
-Subject: [PATCH RESEND] xhci: Use xhci_get_virt_ep() to validate ep_index
-Date:   Thu, 28 Apr 2022 12:04:48 -0700
-Message-ID: <1651172688-21439-1-git-send-email-quic_mrana@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S230013AbiD1TQk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Apr 2022 15:16:40 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id E4CDFBABBC
+        for <linux-usb@vger.kernel.org>; Thu, 28 Apr 2022 12:13:24 -0700 (PDT)
+Received: (qmail 922515 invoked by uid 1000); 28 Apr 2022 15:13:24 -0400
+Date:   Thu, 28 Apr 2022 15:13:24 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: USB device disconnects on resume
+Message-ID: <YmrnVHA2/kttJQJa@rowland.harvard.edu>
+References: <f03916f62a976fd10b9808f77eace9c230ca4ebc.camel@puri.sm>
+ <Yl7ID1Vxp5+wR1py@rowland.harvard.edu>
+ <5117280ddbcd07007adef1680f689bdea6af32e5.camel@puri.sm>
+ <YmAbZDd6LJwCCvkB@rowland.harvard.edu>
+ <4fb8bd5842135a9f723bbe0406ed1afc023c25fe.camel@puri.sm>
+ <YmFpMFlTt83s90an@rowland.harvard.edu>
+ <b80c032c350c525d620968e95b7a653fc855d806.camel@puri.sm>
+ <YmgIlFBC8mYQ2xwJ@rowland.harvard.edu>
+ <232334eeb9d7321df1632e453839a6d433e6be45.camel@puri.sm>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <232334eeb9d7321df1632e453839a6d433e6be45.camel@puri.sm>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-ring_doorbell_for_active_rings() API is being called from
-multiple context. This specific API tries to get virt_dev
-based endpoint using passed slot_id and ep_index. Some caller
-API is having check against slot_id and ep_index using
-xhci_get_virt_ep() API whereas xhci_handle_cmd_config_ep() API
-only check ep_index against -1 value but not upper bound i.e.
-EP_CTX_PER_DEV. Hence use xhci_get_virt_ep() API to get virt_dev
-based endpoint which checks both slot_id and ep_index to get
-valid endpoint.
+On Thu, Apr 28, 2022 at 09:01:50AM +0200, Martin Kepplinger wrote:
+> Am Dienstag, dem 26.04.2022 um 10:58 -0400 schrieb Alan Stern:
+> > Here's a quick low-level description of what's going on.
+> > 
+> > When a hub gets a disconnect event on one of its ports, it disables
+> > the 
+> > port.  The port then remains disabled, even if another device is
+> > plugged 
+> > in, until a successful port reset occurs.  In other words, the _only_
+> > way to re-enable a port is to issue a reset.
+> > 
+> > The reset-resume mechanism in the kernel takes care of issuing the 
+> > reset, and it checks to make sure that the device attached to the
+> > port 
+> > hasn't been changed (i.e., it's still the same device as before, not
+> > a 
+> > new one).  If that works, the device is put back in its former
+> > operating 
+> > state and should keep on functioning normally.  If that doesn't work,
+> > or 
+> > if there is a new device attached to the port, the kernel treats the 
+> > event just like a normal disconnect + connect.
+> > 
+> > So what you want really _is_ a reset-resume.  If successful, it will 
+> > give the behavior you mentioned above: continued transmission with
+> > maybe 
+> > some data loss and a big latency spike at one point.  Anything other 
+> > than a successful reset-resume will cause the ttyUSB file to become 
+> > unusable, exactly what you don't want.
+> > 
+> > So the real question you need to answer is why a reset-resume
+> > sometimes 
+> > fails with this modem.  I suspect the answer will be that the modem
+> > is 
+> > buggy, and there may not be any way to work around the bug.  But try 
+> > putting the msleep(500) just before the usb_reset_and_verify_device()
+> > call; maybe it will help.
+> > 
+> > Alan Stern
+> 
+> ok. thanks a lot for that suggestion! I added an extremely long
+> msleep(5000) there and the behaviour indeed consistently changes a bit.
+> (almost consistently, rarely I see the modem coming up as low-speed
+> device, which is not allowed by hub.c and thus re-enumeration is
+> triggered) but I added more debug messages and almost always that's how
+> it looks like. I hope my added messages are understandable enough:
+> 
+> 11:43:50.800648: hub 1-1:1.0: hub_suspend
+> 11:43:50.820074: usb 1-1: usb auto-suspend, wakeup 1
+> 11:43:50.880637: usb 1-1: usb wakeup-resume
+> 11:43:50.908646: usb 1-1: Waited 0ms for CONNECT
+> 11:43:50.910445: usb 1-1: finish resume
+> 11:43:50.911865: hub 1-1:1.0: hub_resume
+> 11:43:50.913842: usb 1-1-port1: status 0507 change 0000
+> 11:43:50.914026: usb 1-1-port2: status 0101 change 0005
+> 11:43:51.020887: usb usb1-port1: resume, status 0
+> 11:43:51.021205: hub 1-1:1.0: state 7 ports 3 chg 0004 evt 0000
+> 11:43:51.048658: usb 1-1.2: usb wakeup-resume
+> 11:43:51.076670: usb 1-1.2: Waited 0ms for CONNECT
+> 11:43:51.078573: usb 1-1.2: finish reset-resume
+> 11:43:56.305074: usb 1-1-port2: hub_port_reset: starting try 0 of 5
+> 11:43:56.328683: hub 1-1:1.0: port_wait_reset: err = -11
 
-Signed-off-by: Mayank Rana <quic_mrana@quicinc.com>
----
- drivers/usb/host/xhci-ring.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+-EAGAIN means that the modem disconnected around the time of the reset, 
+so the reset failed.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index d0b6806..3bab4f3 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -62,6 +62,9 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
- 			 u32 field1, u32 field2,
- 			 u32 field3, u32 field4, bool command_must_succeed);
- 
-+static struct xhci_virt_ep *xhci_get_virt_ep(struct xhci_hcd *xhci,
-+			unsigned int slot_id, unsigned int ep_index);
-+
- /*
-  * Returns zero if the TRB isn't in this segment, otherwise it returns the DMA
-  * address of the TRB.
-@@ -457,7 +460,9 @@ static void ring_doorbell_for_active_rings(struct xhci_hcd *xhci,
- 	unsigned int stream_id;
- 	struct xhci_virt_ep *ep;
- 
--	ep = &xhci->devs[slot_id]->eps[ep_index];
-+	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
-+	if (!ep)
-+		return;
- 
- 	/* A ring has pending URBs if its TD list is not empty */
- 	if (!(ep->ep_state & EP_HAS_STREAMS)) {
--- 
-2.7.4
+> 11:43:56.333794: usb 1-1-port2: not enabled, trying reset again... 0 of
+> 5. status=-11
+> 11:43:56.334074: usb 1-1-port2: hub_port_reset: starting try 1 of 5
+> 11:43:56.536645: usb 1-1-port2: hub_port_reset: no superspeed. status:
+> 0. bail out
 
+Not sure what that means.
+
+> 11:43:56.628824: usb 1-1.2: reset high-speed USB device number 6 using
+> xhci-hcd
+> 11:43:56.640305: usb 1-1-port2: hub_port_reset: starting try 0 of 5
+> 11:43:56.656735: usb 1-1-port2: hub_port_reset: no superspeed. status:
+> 0. bail out
+> 11:43:56.752738: usb 1-1-port2: resume, status 0
+
+And it's hard to tell exactly what that refers to.
+
+> 11:43:56.755442: usb 1-1-port2: port_event: call
+> hub_port_connect_change because connect_change is 1
+> 11:43:56.756663: usb 1-1-port2: status 0101, change 0004, 12 Mb/s
+> 11:43:56.756942: usb 1-1.2: hub_port_connect_change: not resuscitating.
+> 11:43:56.762495: usb 1-1-port2: hub_port_connect_change: could not
+> revalidate the connection. call hub_port_connect.
+> 11:43:56.762797: usb 1-1.2: USB disconnect, device number 6
+> 11:43:56.765481: usb 1-1.2: unregistering device
+
+It looks like these things happened after the reset-resume failed.  But 
+the control flow isn't clear (more log messages might help).
+
+> I'm sending this before analyzing it further. I'll do so soon but
+> wanted to show you that already.
+
+Okay.  But it seems that the modem refused to be reset properly.  When 
+that happens there's no way to avoid disconnection.  And in fact I would 
+expect that re-initialization and enumeration would then be impossible, 
+since the first step of initialization is to perform a reset.
+
+Alan Stern
