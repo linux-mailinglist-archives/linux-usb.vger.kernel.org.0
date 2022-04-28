@@ -2,101 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B51513225
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Apr 2022 13:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1AC51325E
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Apr 2022 13:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345463AbiD1LOU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Apr 2022 07:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
+        id S232908AbiD1LZY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 28 Apr 2022 07:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345455AbiD1LOR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Apr 2022 07:14:17 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56908220CB;
-        Thu, 28 Apr 2022 04:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651144263; x=1682680263;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RcJmmFSAKdqn8rkcY+jzES/FkuNtJTKacj4WSDA1mlk=;
-  b=YoJAWzuC4pjd3NKINrFsYrFRa1EYDqQt05aYvMxm4vgXpUJcIY850p1h
-   eTJ6rd0MHpE9L9ly58xb6SPQfu3z9Lh7eyMaWloR6+CzYqgQfjVFUaGDo
-   zJ1FFN8rmaaNcWqePzCvcpNTs2EO2jEzxH91iovWE7XrUcIt7jPWdFi0A
-   aU+H+zNVg3yfrfvJ3J3e1sCcmhvls4q7o8zZoEDKANb9evSEozvjGRXVn
-   M3McV4dZ3Ym1adVqMPKOIaSKqB6jVGwaPEn52TAynzw8fmN/k1qRP/mBV
-   VW/yQreI0c5tmXr94osw2wXWmUKvn0cI5q+RWqgoM+2YldWyro55yXQiZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="291414554"
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="291414554"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 04:11:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="706011971"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Apr 2022 04:11:00 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] usb: dwc3: host: Stop setting the ACPI companion
-Date:   Thu, 28 Apr 2022 14:10:56 +0300
-Message-Id: <20220428111056.3558-3-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220428111056.3558-1-heikki.krogerus@linux.intel.com>
-References: <20220428111056.3558-1-heikki.krogerus@linux.intel.com>
+        with ESMTP id S245064AbiD1LZU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Apr 2022 07:25:20 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB435EDE1
+        for <linux-usb@vger.kernel.org>; Thu, 28 Apr 2022 04:22:05 -0700 (PDT)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id CF5CE24000E;
+        Thu, 28 Apr 2022 11:22:00 +0000 (UTC)
+Message-ID: <d4c72d3d8d25f25bd12cdfbf3e7efe3ea1c3f0a7.camel@hadess.net>
+Subject: Re: [RFC v1] USB: core: add USBDEVFS_REVOKE ioctl
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Oliver Neukum <oneukum@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Peter Hutterer <peter.hutterer@who-t.net>,
+        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Thu, 28 Apr 2022 13:21:54 +0200
+In-Reply-To: <fbc988f7-5cd3-2ac8-12cc-f09ae005247d@suse.com>
+References: <YmarwaNQYn1GwFbQ@kroah.com>
+         <e73035d1bae5d0c355166fb46f0f5f2f07752b3c.camel@hadess.net>
+         <Yma3k3lRMIEFypMN@kroah.com>
+         <1d82343a5987a308ac9bd3f6fd481bc12a608a24.camel@hadess.net>
+         <YmbCBwEMvKO5z0Dh@kroah.com> <YmdYfK5Vi+lEl7FX@quokka>
+         <7def25c7-0870-accc-c689-4d8eef1b7acf@suse.com>
+         <YmedlsENjNjc8yML@kroah.com>
+         <fcb10f35-3064-851b-8f53-e88a3b51c930@suse.com>
+         <d49aeb3cd8f67674eb87bf4bc93f617937649bc7.camel@hadess.net>
+         <YmfJr46kLZ3MtiCU@kroah.com>
+         <e43f9fe95a763efbe959084ea3f2dcd0a75f666f.camel@hadess.net>
+         <fbc988f7-5cd3-2ac8-12cc-f09ae005247d@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It is no longer needed. The sysdev pointer is now used when
-assigning the ACPI companions to the xHCI ports and USB
-devices.
+On Thu, 2022-04-28 at 12:28 +0200, Oliver Neukum wrote:
+> 
+> 
+> On 26.04.22 12:37, Bastien Nocera wrote:
+> > 
+> > I don't think anyone wants to implement path based syscalls,
+> > and again,
+> > it's equivalent to remote closing the fd, not to disabling the
+> > access
+> > to the device:
+> > "If the file is a special file for a device which is open, the
+> > device
+> > close function is called as if all open references to the file had
+> > been
+> > closed."
+> OK, so do we still have a need to discuss this specifically to usbfs?
+> I suppose if you put this into VFS, you will need a hook to map the
+> syscall to drivers that need to handling ioctl() having effects
+> beyond
+> their syscall abstractly speaking.
 
-Assigning the ACPI companion here resulted in the
-fwnode->secondary pointer to be replaced also for the parent
-dwc3 device since the primary fwnode (the ACPI companion)
-was shared. That was unintentional and it created potential
-side effects like resource leaks.
+I'm afraid that I don't have any intentions on working on this feature
+at the vfs level. As I already mentioned, I think that the semantics
+are too different to make sense at that level.
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/dwc3/host.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index eda871973d6cc..f56c30cf151e4 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -7,7 +7,6 @@
-  * Authors: Felipe Balbi <balbi@ti.com>,
-  */
- 
--#include <linux/acpi.h>
- #include <linux/irq.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-@@ -83,7 +82,6 @@ int dwc3_host_init(struct dwc3 *dwc)
- 	}
- 
- 	xhci->dev.parent	= dwc->dev;
--	ACPI_COMPANION_SET(&xhci->dev, ACPI_COMPANION(dwc->dev));
- 
- 	dwc->xhci = xhci;
- 
--- 
-2.35.1
-
+I'm instead investigating having an ioctl-less BPF interface, with the
+help of Benjamin and Peter.
