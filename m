@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5746C512E58
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Apr 2022 10:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCCA512E7D
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Apr 2022 10:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344246AbiD1IbN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Apr 2022 04:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
+        id S231519AbiD1IbP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Apr 2022 04:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344156AbiD1IbE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Apr 2022 04:31:04 -0400
+        with ESMTP id S1344205AbiD1IbJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Apr 2022 04:31:09 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EED1A0BD7;
-        Thu, 28 Apr 2022 01:27:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32F9A0BCC;
+        Thu, 28 Apr 2022 01:27:53 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id ECFC21F899;
-        Thu, 28 Apr 2022 08:27:48 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7237D1F88A;
+        Thu, 28 Apr 2022 08:27:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651134468; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1651134472; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7TSQqudTcVLuLhQNOY3wWT3BirutbrjVm/F1DYUL/Jc=;
-        b=bXQFN0N+BgI1kmZyCngmvHVCA1I+1WiKiyl4AoNXMJlXEBLY1bscsQfLjv+ocbOnCYApPF
-        Bj/5Cq72navU9MxLn+AfqK7WV3/FX3gM1bLJgJ28Gl0hLTxsS7SNqZ8qKkurAL6KoXX2bH
-        6ofYmp6Du47LiNOIHekEpuVElAnDZSs=
+        bh=7cqwaPLtFzhyk9LMWncXmAETsj1bDnyp+ydH1my5u10=;
+        b=XTUSjtzPzruE8bhqvv73TtSTB50qK9+aNrXbuRtAJ9c6hvz9KnGSHEC+p8iV6zrfVFvbr7
+        Me2MbBlNtrfCJ/FKyPE9+PGYOV6x5DQhu0AqYudjZTvyTvrfxBYt3eMH0Ldo8Fj7KYWYxl
+        hQkceNSNaNLcPkHDy8rh2e1023pRJhY=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BDE1313491;
-        Thu, 28 Apr 2022 08:27:48 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 43ED413491;
+        Thu, 28 Apr 2022 08:27:52 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id OFX/LARQamIBLgAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 28 Apr 2022 08:27:48 +0000
+        id QF5XDwhQamIBLgAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 28 Apr 2022 08:27:52 +0000
 From:   Juergen Gross <jgross@suse.com>
 To:     xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Juergen Gross <jgross@suse.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v2 04/19] xen/usb: switch xen-hcd to use INVALID_GRANT_REF
-Date:   Thu, 28 Apr 2022 10:27:28 +0200
-Message-Id: <20220428082743.16593-5-jgross@suse.com>
+Subject: [PATCH v2 17/19] xen/usbfront: use xenbus_setup_ring() and xenbus_teardown_ring()
+Date:   Thu, 28 Apr 2022 10:27:41 +0200
+Message-Id: <20220428082743.16593-18-jgross@suse.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220428082743.16593-1-jgross@suse.com>
 References: <20220428082743.16593-1-jgross@suse.com>
@@ -61,61 +61,101 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Instead of using a private macro for an invalid grant reference use
-the common one.
+Simplify xen-hcd's ring creation and removal via xenbus_setup_ring()
+and xenbus_teardown_ring().
 
 Signed-off-by: Juergen Gross <jgross@suse.com>
 Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/host/xen-hcd.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/usb/host/xen-hcd.c | 61 ++++++++++----------------------------
+ 1 file changed, 15 insertions(+), 46 deletions(-)
 
 diff --git a/drivers/usb/host/xen-hcd.c b/drivers/usb/host/xen-hcd.c
-index 3e487baf8422..9cbc7c2dab02 100644
+index 9cbc7c2dab02..de1b09158318 100644
 --- a/drivers/usb/host/xen-hcd.c
 +++ b/drivers/usb/host/xen-hcd.c
-@@ -87,8 +87,6 @@ struct xenhcd_info {
- 	bool error;
- };
- 
--#define GRANT_INVALID_REF 0
--
- #define XENHCD_RING_JIFFIES (HZ/200)
- #define XENHCD_SCAN_JIFFIES 1
- 
-@@ -1100,17 +1098,17 @@ static void xenhcd_destroy_rings(struct xenhcd_info *info)
+@@ -1098,19 +1098,10 @@ static void xenhcd_destroy_rings(struct xenhcd_info *info)
  		unbind_from_irqhandler(info->irq, info);
  	info->irq = 0;
  
--	if (info->urb_ring_ref != GRANT_INVALID_REF) {
-+	if (info->urb_ring_ref != INVALID_GRANT_REF) {
- 		gnttab_end_foreign_access(info->urb_ring_ref,
- 					  (unsigned long)info->urb_ring.sring);
--		info->urb_ring_ref = GRANT_INVALID_REF;
-+		info->urb_ring_ref = INVALID_GRANT_REF;
- 	}
- 	info->urb_ring.sring = NULL;
- 
--	if (info->conn_ring_ref != GRANT_INVALID_REF) {
-+	if (info->conn_ring_ref != INVALID_GRANT_REF) {
- 		gnttab_end_foreign_access(info->conn_ring_ref,
- 					  (unsigned long)info->conn_ring.sring);
--		info->conn_ring_ref = GRANT_INVALID_REF;
-+		info->conn_ring_ref = INVALID_GRANT_REF;
- 	}
- 	info->conn_ring.sring = NULL;
+-	if (info->urb_ring_ref != INVALID_GRANT_REF) {
+-		gnttab_end_foreign_access(info->urb_ring_ref,
+-					  (unsigned long)info->urb_ring.sring);
+-		info->urb_ring_ref = INVALID_GRANT_REF;
+-	}
+-	info->urb_ring.sring = NULL;
+-
+-	if (info->conn_ring_ref != INVALID_GRANT_REF) {
+-		gnttab_end_foreign_access(info->conn_ring_ref,
+-					  (unsigned long)info->conn_ring.sring);
+-		info->conn_ring_ref = INVALID_GRANT_REF;
+-	}
+-	info->conn_ring.sring = NULL;
++	xenbus_teardown_ring((void **)&info->urb_ring.sring, 1,
++			     &info->urb_ring_ref);
++	xenbus_teardown_ring((void **)&info->conn_ring.sring, 1,
++			     &info->conn_ring_ref);
  }
-@@ -1123,8 +1121,8 @@ static int xenhcd_setup_rings(struct xenbus_device *dev,
- 	grant_ref_t gref;
+ 
+ static int xenhcd_setup_rings(struct xenbus_device *dev,
+@@ -1118,46 +1109,24 @@ static int xenhcd_setup_rings(struct xenbus_device *dev,
+ {
+ 	struct xenusb_urb_sring *urb_sring;
+ 	struct xenusb_conn_sring *conn_sring;
+-	grant_ref_t gref;
  	int err;
  
--	info->urb_ring_ref = GRANT_INVALID_REF;
--	info->conn_ring_ref = GRANT_INVALID_REF;
-+	info->urb_ring_ref = INVALID_GRANT_REF;
-+	info->conn_ring_ref = INVALID_GRANT_REF;
+-	info->urb_ring_ref = INVALID_GRANT_REF;
+ 	info->conn_ring_ref = INVALID_GRANT_REF;
+-
+-	urb_sring = (struct xenusb_urb_sring *)get_zeroed_page(
+-							GFP_NOIO | __GFP_HIGH);
+-	if (!urb_sring) {
+-		xenbus_dev_fatal(dev, -ENOMEM, "allocating urb ring");
+-		return -ENOMEM;
+-	}
+-	SHARED_RING_INIT(urb_sring);
+-	FRONT_RING_INIT(&info->urb_ring, urb_sring, PAGE_SIZE);
+-
+-	err = xenbus_grant_ring(dev, urb_sring, 1, &gref);
+-	if (err < 0) {
+-		free_page((unsigned long)urb_sring);
+-		info->urb_ring.sring = NULL;
+-		goto fail;
+-	}
+-	info->urb_ring_ref = gref;
+-
+-	conn_sring = (struct xenusb_conn_sring *)get_zeroed_page(
+-							GFP_NOIO | __GFP_HIGH);
+-	if (!conn_sring) {
+-		xenbus_dev_fatal(dev, -ENOMEM, "allocating conn ring");
+-		err = -ENOMEM;
+-		goto fail;
++	err = xenbus_setup_ring(dev, GFP_NOIO | __GFP_HIGH,
++				(void **)&urb_sring, 1, &info->urb_ring_ref);
++	if (err) {
++		xenbus_dev_fatal(dev, err, "allocating urb ring");
++		return err;
+ 	}
+-	SHARED_RING_INIT(conn_sring);
+-	FRONT_RING_INIT(&info->conn_ring, conn_sring, PAGE_SIZE);
++	XEN_FRONT_RING_INIT(&info->urb_ring, urb_sring, PAGE_SIZE);
  
- 	urb_sring = (struct xenusb_urb_sring *)get_zeroed_page(
- 							GFP_NOIO | __GFP_HIGH);
+-	err = xenbus_grant_ring(dev, conn_sring, 1, &gref);
+-	if (err < 0) {
+-		free_page((unsigned long)conn_sring);
+-		info->conn_ring.sring = NULL;
++	err = xenbus_setup_ring(dev, GFP_NOIO | __GFP_HIGH,
++				(void **)&conn_sring, 1, &info->conn_ring_ref);
++	if (err) {
++		xenbus_dev_fatal(dev, err, "allocating conn ring");
+ 		goto fail;
+ 	}
+-	info->conn_ring_ref = gref;
++	XEN_FRONT_RING_INIT(&info->conn_ring, conn_sring, PAGE_SIZE);
+ 
+ 	err = xenbus_alloc_evtchn(dev, &info->evtchn);
+ 	if (err) {
 -- 
 2.34.1
 
