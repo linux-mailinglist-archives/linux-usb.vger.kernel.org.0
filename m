@@ -2,130 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2740C5153FF
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Apr 2022 20:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2229251542D
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Apr 2022 21:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359160AbiD2SzR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Apr 2022 14:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
+        id S1380200AbiD2TFY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Apr 2022 15:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356733AbiD2SzQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Apr 2022 14:55:16 -0400
-Received: from mail1.bemta31.messagelabs.com (mail1.bemta31.messagelabs.com [67.219.246.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7FEC3E0E
-        for <linux-usb@vger.kernel.org>; Fri, 29 Apr 2022 11:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1651258317; i=@motorola.com;
-        bh=353u44s4GB1PlfP/MspD2JdzoFUrHg9PkClsot04B0I=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=eigeOU9u6HguWvySyA4jswCWgAW+vwwXsG+6ub+NnXKQq58lV9by7+GMHO3EXiBdh
-         tGcocNYbrVUlETWiiNjt8nK6iM6FgpjmK9c2X+3TNSXE49qjB1sGQm5DNrSV82hut5
-         C4QX6XoucXjnuAkdbFucDJibomU82fS7CEym4qGDRlw2ECB0UfbZ/Is5/iCefRJD+d
-         XlkeHMUhDHe15ykV9euOwiGmT+cfXBW0alXsGJJxn2ohdze46NOiGYCTzsFidg8Qzu
-         mKPAwuWvmK2PPfqsTQeU0OT2ypKQXthuaulNGG1mHgJbydWtKKbUkZrSznZXfNC2bs
-         /7qhNxp8oXcJA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKIsWRWlGSWpSXmKPExsWS8eKJqO4Z45w
-  kg7+9bBbH2p6wW6yaupPFYtvp36wWnROXsFssWtbKbLGl7QqTxadTO5ktfvzpY3bg8JjdMZPV
-  Y9OqTjaPzS+6mT36/xp4fN4kF8AaxZqZl5RfkcCa8W3pBPaCP1wVF9/PZW1g/MfRxcjJISQwl
-  Umi8WVQFyMXkL2ISWLl+4lsIAkWAVWJq6umsILYbAJqEgter2IGsUUELCR6F01nBGlgFjjLKN
-  F9bj1Yg7CAr8STvZsZQWxeAWWJnye62CCmLmeU+Lz9FBtEQlDi5MwnLCA2s4CWxI1/L5m6GDm
-  AbGmJ5RAXcQpYSfzr28AygZF3FpKOWUg6ZiF0LGBkXsVomVSUmZ5RkpuYmaNraGCga2hoogsk
-  LfQSq3QT9UqLdVMTi0t0DfUSy4v1UouL9Yorc5NzUvTyUks2MQJDPKWIQWgH49Gen3qHGCU5m
-  JREeXdp5iQJ8SXlp1RmJBZnxBeV5qQWH2KU4eBQkuDdagiUEyxKTU+tSMvMAcYbTFqCg0dJhN
-  dUGyjNW1yQmFucmQ6ROsWoy3Hp0JW9zEIsefl5qVLivGeNgIoEQIoySvPgRsBi/xKjrJQwLyM
-  DA4MQT0FqUW5mCar8K0ZxDkYlYd7vIFN4MvNK4Da9AjqCCeiIlUWZIEeUJCKkpBqY1MTDN+Uy
-  N7p8K5/IJ9l8hftUflM/67zJ63yTT/9P3Vlu5aQxwea6Xu6Mswu/sVUe++P/u/p4kPvxkOlPZ
-  kt4d2QlrbppP2PjljsbI6Y43tx46fiM97P1/Lv2+byy+hUl/C5/m+vh+7PO/sr8+3pDSwxTzu
-  8ppVe5pt58p3Op65d/432tNUp9effWPxZ/Ob/2ZOE9LV3ff217xP/676o+rWD00C7c4OuPW0k
-  t67PMNBy0gi4YZz67JtTxIlDYsfcG74/J2T0uxVudc1llCsSPMHNlpAYm/P6zMzyteYMny1/2
-  GSJt9avW6P64/4VxRle2dI+qru2mrcvVGH873BHecnQbk1D2Us1wB7tzP5xnKrEUZyQaajEXF
-  ScCAL2OHn94AwAA
-X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-17.tower-686.messagelabs.com!1651258315!10985!1
-X-Originating-IP: [104.232.228.21]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.86.4; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 12364 invoked from network); 29 Apr 2022 18:51:56 -0000
-Received: from unknown (HELO va32lpfpp01.lenovo.com) (104.232.228.21)
-  by server-17.tower-686.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 29 Apr 2022 18:51:56 -0000
-Received: from ilclmmrp01.lenovo.com (ilclmmrp01.mot.com [100.65.83.165])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4KqhRb5r3SzgQ3G;
-        Fri, 29 Apr 2022 18:51:55 +0000 (UTC)
-Received: from p1g3 (unknown [10.45.4.153])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: w36195)
-        by ilclmmrp01.lenovo.com (Postfix) with ESMTPSA id 4KqhRb3RbZzbvDd;
-        Fri, 29 Apr 2022 18:51:55 +0000 (UTC)
-Date:   Fri, 29 Apr 2022 13:51:48 -0500
-From:   Dan Vacura <w36195@motorola.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-usb@vger.kernel.org, balbi@kernel.org,
-        paul.elder@ideasonboard.com, kernel@pengutronix.de,
-        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH 3/5] usb: gadget: uvc: increase worker prio to WQ_HIGHPRI
-Message-ID: <YmwzxIV5/a+ZNLXI@p1g3>
-References: <20220402233914.3625405-1-m.grzeschik@pengutronix.de>
- <20220402233914.3625405-4-m.grzeschik@pengutronix.de>
- <Yl8fwdOuxYDVrujW@pendragon.ideasonboard.com>
+        with ESMTP id S1355618AbiD2TFU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Apr 2022 15:05:20 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8333F40E5E;
+        Fri, 29 Apr 2022 12:01:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651258919; x=1682794919;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JxXH6qZNpKStuvxqb0XVzzN+BiIbkVYJf0lQRQMSs0s=;
+  b=dIkI8vffiQk0ijycrtrzCu08LwSUXgA/oL+Vmwn4A9BCswHE9qPC//Er
+   rqYGwuiG89t2MfTuXJxex2pxZD8ASfjq0kfPv4chrHydhO1XTFq0ADvup
+   DwIUGrvJYC8SB2YNXFLLPWndj0x970b1jXywF2gzclFFT+1SNh+avvSVI
+   I=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 29 Apr 2022 12:01:59 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 12:01:59 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 29 Apr 2022 12:01:58 -0700
+Received: from [10.110.49.150] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 29 Apr
+ 2022 12:01:57 -0700
+Message-ID: <d7baf8d8-5643-fb90-8a14-f25a24317516@quicinc.com>
+Date:   Fri, 29 Apr 2022 12:01:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yl8fwdOuxYDVrujW@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH RESEND] xhci: Use xhci_get_virt_ep() to validate ep_index
+Content-Language: en-US
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <peter.chen@kernel.org>, <balbi@kernel.org>,
+        <stern@rowland.harvard.edu>, <chunfeng.yun@mediatek.com>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <1651172688-21439-1-git-send-email-quic_mrana@quicinc.com>
+ <71347c81-3887-d80e-707b-c0f1018b1a50@linux.intel.com>
+ <06d5e94f-1c3b-9ab1-b4ff-79007026585a@linux.intel.com>
+From:   Mayank Rana <quic_mrana@quicinc.com>
+In-Reply-To: <06d5e94f-1c3b-9ab1-b4ff-79007026585a@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael,
+On 4/29/2022 3:13 AM, Mathias Nyman wrote:
+> On 29.4.2022 12.49, Mathias Nyman wrote:
+>> On 28.4.2022 22.04, Mayank Rana wrote:
+>>> ring_doorbell_for_active_rings() API is being called from
+>>> multiple context. This specific API tries to get virt_dev
+>>> based endpoint using passed slot_id and ep_index. Some caller
+>>> API is having check against slot_id and ep_index using
+>>> xhci_get_virt_ep() API whereas xhci_handle_cmd_config_ep() API
+>>> only check ep_index against -1 value but not upper bound i.e.
+>>> EP_CTX_PER_DEV. Hence use xhci_get_virt_ep() API to get virt_dev
+>>> based endpoint which checks both slot_id and ep_index to get
+>>> valid endpoint.
+>> ep_index upper bound is known to be in range as EP_CTX_PER_DEV is 31,
+>> and ep_index = fls(u32 value)  - 1 - 1;
+>>
+>> We can change to use xhci_get_virt_ep(), but this would be more useful
+>> earlier in xhci_handle_cmd_config_ep() where we touch the ep before
+>> calling ring_doorbell_for_active_rings()
+>>
+> After a second look I would appreciate if you could clean up
+> ep_index checking in xhci_handle_cmd_config_ep()
+>
+> It currenty does some horrible typecasting.
+> ep_index is an unsigned int, so the fls() -1 operation might wrap it around.
+> Checking this was solved by typecasting a -1 to an unsigned int.
+>
+> if (ep_index != (unsigned int) -1)
+>
+> Thanks
+> Mathias
 
-Thanks for this change it improves the performance with the DWC3
-controller on QCOM chips in an Android 5.10 kernel. I haven't tested the
-scatter/gather path, so memcpy was used here via
-uvc_video_encode_isoc(). I was able to get around 30% improvement (fps
-on host side). I did modify the alloc to only set the WQ_HIGHPRI flag.
+Thanks Mathias for review and suggestion here.
+let me try to clean up xhci_handle_cmd_config_ep() API based ep_index 
+usage.
 
-On Tue, Apr 19, 2022 at 11:46:57PM +0300, Laurent Pinchart wrote:
-> Hi Michael,
-> 
-> Thank you for the patch.
-> 
-> On Sun, Apr 03, 2022 at 01:39:12AM +0200, Michael Grzeschik wrote:
-> > Likewise to the uvcvideo hostside driver, this patch is changing the
-> > simple workqueue to an async_wq with higher priority. This ensures that
-> > the worker will not be scheduled away while the video stream is handled.
-> > 
-> > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> > +	video->async_wq = alloc_workqueue("uvcvideo", WQ_UNBOUND | WQ_HIGHPRI, 0);
-> 
-> Unless I'm mistaken, an unbound work queue means that multiple CPUs will
-> handle tasks in parallel. Is that safe ?
-
-I found that with the WQ_UNBOUND flag I didn't see any performance
-improvement to the baseline, perhaps related to cpu caching or
-scheduling delays. I didn't notice any stability problems or concurrent
-execution. Do you see any benefit to keeping the WQ_UNBOUND flag?
-
-> 
-> > +	if (!video->async_wq)
-> > +		return -EINVAL;
-> 
-> -- 
-> Regards,
-> 
-> Laurent Pinchart
-
-Thanks,
-
-Dan
