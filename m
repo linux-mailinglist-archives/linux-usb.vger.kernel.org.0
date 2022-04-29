@@ -2,114 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1015152F4
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Apr 2022 19:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EED5153D1
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Apr 2022 20:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379802AbiD2RwB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Apr 2022 13:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
+        id S1380060AbiD2Sml (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Apr 2022 14:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379808AbiD2Rv6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Apr 2022 13:51:58 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E046AD3D90;
-        Fri, 29 Apr 2022 10:48:38 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id m11so9239827oib.11;
-        Fri, 29 Apr 2022 10:48:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=m5t7cdt/CWgC/r7ZaFwRZ/Pe0JhVgK8SGggmxnAqq8E=;
-        b=OnQlHi3ErSMC6qSiLPAQK9tsaNNmGUsK/yx8P84vl8ZH25FjCToTTPCP6xYzUtp823
-         nQu8zFOChn7TRclx0bhUluxvWGG31ISy3vYfQGsDQqCS3EjmUrqIVRNyq2psGtG3IDpi
-         1W6Ytq3a5RYAKQBAidu7fUxQYTQpt+5vW3SEkCPANbWWQlmsLBqc9x1cEkbQPaLnW01H
-         /gSIWuD7kQ5j7LODOU/HAxL6B5EQxZzhqJDbdqVUp7cmUle2rokPIwVHwnAzyzTxiKGl
-         riWnsbp5SbzhiGJgU3qP8CBvVkoxV+4fTE0nup4rFZ2hllcAmSpZXHHWttMly/Jd1ESk
-         NA5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=m5t7cdt/CWgC/r7ZaFwRZ/Pe0JhVgK8SGggmxnAqq8E=;
-        b=udmPLQBOZ0l0YxVOjotvF9nbHe5bj0fFvHlEfo190PuI0Y0u0HSbhBqy8Y3WAFVMmc
-         zU5QqximbdIUopnrej6PQSFEKvupe3fZIgRz1pEjegLnyrqguPoTaoLy0aHChaBFTAcG
-         fWmDV93KiodLGEeM8Ysk7+FcvAI1YRUMlNR6wGFUYT9Kq+4tkLd1TR2eA6gaxXW/XBNN
-         MV3d0//EYER7AzemZWUeWestg/pOil66ViLoX5lrp8b4pyUHswsIGssCQ//TJtPre7mV
-         GR/ELhsXBJAKuWXCY5QELuHRDRmdrbvg4yZCS0uFjZt7XkIq1AuE6pmqkT0SxcDdiu87
-         aVEg==
-X-Gm-Message-State: AOAM533rAFbWNzed8JHj2loMEujnerVvJuj9A2OvVCDkgNcIXgwhoCAZ
-        pzqfnobXL0AntLf1UXJXTXk=
-X-Google-Smtp-Source: ABdhPJxkF8A90UBe5FIUXgDpVBp8codcF4hzbNyKrz59fIRSWDCgfC0jKHUvcyNxHQ5kW9qHkRB58A==
-X-Received: by 2002:a05:6808:11ca:b0:2d4:6861:2a9e with SMTP id p10-20020a05680811ca00b002d468612a9emr282421oiv.114.1651254518245;
-        Fri, 29 Apr 2022 10:48:38 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b7-20020a9d5d07000000b00605e7b6b19dsm1261051oti.39.2022.04.29.10.48.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 10:48:37 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net>
-Date:   Fri, 29 Apr 2022 10:48:33 -0700
+        with ESMTP id S1359759AbiD2Smk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Apr 2022 14:42:40 -0400
+Received: from mail1.bemta35.messagelabs.com (mail1.bemta35.messagelabs.com [67.219.250.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07005D64C7;
+        Fri, 29 Apr 2022 11:39:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
+        s=Selector; t=1651257560; i=@motorola.com;
+        bh=m1WVYkVymN+qEiuNhv+8BRhPhexi6XHOEfprm3oobaw=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=iiXEw8WTWjSPbCvWKYaVlzfpbajHZ+S+1A262rKA/jdQXUAEk5+SbSklUiuK4j9+f
+         qGwZz82FOPUmRcrYRFHOJnzs4pm+Fgz6DWFFfSW5ySTe1jTUOtzXNrq87fU9LfA2mL
+         uV7Lppv2IU0fhywmTsgGWYGaLuL3ytW+ofH5IvlTqBVEar5O8/TWvDN5ovDEz+2KxD
+         HH9HFGSSJ9zf5Z+YgegMzphpA6zSQZ+nnbTfSbp++lwXTNIpOtNJNHdMMWsB0jPt/v
+         UVZc3wit6Al11hDPVEymS78OeyQuynUrA1U/ljk9AG+aV5LmzW5Q95T52NDNuBS1GH
+         kJ9DvOd2ioR7w==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrAIsWRWlGSWpSXmKPExsWS8eKJqO55g5w
+  kg8XfjSyOtT1ht1i9+CqTRfPi9WwWnROXsFtc3jWHzWLRslZmiy1tV5gsFmx8xOjA4TG7Yyar
+  x6ZVnWwe++euYffo/2vg8fTHXmaPz5vkAtiiWDPzkvIrElgzWnfOYSzYq1vxf9llpgbG1ypdj
+  FwcQgJTmSSmTmljhXAWMUmc3rwQyOHkYBFQlVg47xYbiM0moCax4PUqZhBbRMBConfRdEYQm1
+  mgiUni2qEUEFtYIFzia/93sBpeAWWJy5sesEEMXc8ocXLXcxaIhKDEyZlPWCCatSRu/HvJ1MX
+  IAWRLSyz/xwES5hSwklh7ZQ3LBEbeWUg6ZiHpmIXQsYCReRWjdVJRZnpGSW5iZo6uoYGBrqGh
+  CZg2tdBLrNJN1Cst1i1PLS7RNdJLLC/WSy0u1iuuzE3OSdHLSy3ZxAgM+JSiFKsdjJP6f+odY
+  pTkYFIS5d2lmZMkxJeUn1KZkVicEV9UmpNafIhRhoNDSYK3SRcoJ1iUmp5akZaZA4w+mLQEB4
+  +SCK+pNlCat7ggMbc4Mx0idYpRUUqct0IBKCEAksgozYNrg0X8JUZZKWFeRgYGBiGegtSi3Mw
+  SVPlXjOIcjErCvCX6QFN4MvNK4Ka/AlrMBLR4ZVEmyOKSRISUVANTGafJFr1LR502+NiFHoks
+  ObU/om6Vck4266p/DrwX9OXqqyXeRPlMjTHgWK1/yGGH63qe+LMP042Wu0eUZ+Rctrtw86efq
+  Z+Ka9bfj4dLHj20PWDjVmmZrdYf/KB5h9Hz5Ix6FY7fExeWPDmScaF7hkH1Z/7rPsc7XyQI7E
+  m+l1Fn0X5H8d6dJeq8tju71z/o1fHX+XnMRufW18zHL+1uSXwPejJVdP6ZyM5WvtdCAS68B/7
+  H6re9dSipcH0knGJ96MD2fYm5e2dasK4wO/rV8MmizvNfhT/cODDh0+39DGLZlxaxudt9uTX1
+  m/YpR5Vw59ZPkTIT2/W/1TKzbb/F5J4mv6O/xszsSsRduSwlluKMREMt5qLiRAAlu9yAcwMAA
+  A==
+X-Env-Sender: w36195@motorola.com
+X-Msg-Ref: server-18.tower-655.messagelabs.com!1651257550!19896!1
+X-Originating-IP: [104.232.228.21]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.86.4; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 21481 invoked from network); 29 Apr 2022 18:39:11 -0000
+Received: from unknown (HELO va32lpfpp01.lenovo.com) (104.232.228.21)
+  by server-18.tower-655.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 29 Apr 2022 18:39:11 -0000
+Received: from ilclmmrp01.lenovo.com (ilclmmrp01.mot.com [100.65.83.165])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4Kqh8t48TRzgQ3G;
+        Fri, 29 Apr 2022 18:39:10 +0000 (UTC)
+Received: from p1g3 (unknown [10.45.4.153])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: w36195)
+        by ilclmmrp01.lenovo.com (Postfix) with ESMTPSA id 4Kqh8t1yGQzbvDd;
+        Fri, 29 Apr 2022 18:39:10 +0000 (UTC)
+Date:   Fri, 29 Apr 2022 13:39:04 -0500
+From:   Dan Vacura <w36195@motorola.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bhupesh Sharma <bhupesh.sharma@st.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb: gadget: uvc: Fix crash when encoding data for
+ usb request
+Message-ID: <YmwwyMg08P1Yol8j@p1g3>
+References: <20220331184024.23918-1-w36195@motorola.com>
+ <Yl8frWT5VYRdt5zA@pendragon.ideasonboard.com>
+ <YmB6v8AbzdOgITT8@p1g3>
+ <YmXWLFfN4KTFp0wW@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-References: <20220419163810.2118169-1-arnd@kernel.org>
- <20220422170530.GA2338209@roeck-us.net>
- <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
- <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net>
- <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
- <20220422234150.GA3442771@roeck-us.net>
- <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
- <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net>
- <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
- <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
- <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
- <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmXWLFfN4KTFp0wW@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -117,44 +92,126 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/28/22 06:44, Arnd Bergmann wrote:
-> On Sun, Apr 24, 2022 at 8:48 PM Arnd Bergmann <arnd@kernel.org> wrote:
->> On Sun, Apr 24, 2022 at 5:28 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>> On 4/24/22 01:52, Arnd Bergmann wrote:
->>>> On Sun, Apr 24, 2022 at 4:09 AM Guenter Roeck <linux@roeck-us.net> wrote:
->>>> into the defconfig file, otherwise the multiplatform target defaults to
->>>> an ARMv7 instead of ARMv5 build. For an OMAP15xx as in the SX1,
->>>> you also need to enable CONFIG_ARCH_MULTI_V4T.
->>>>
->>>> This is slightly unfortunate, but I don't see any way to avoid it, and the
->>>> modified defconfig will still work fine with older kernel trees.
->>>>
->>>
->>> Yes, that works. I changed it in my configuration.
->>
->> Ok, great!. I managed to boot the z2 machine with PCMCIA support
->> and it gets around the issue with my patch, correctly detecting the
->> CF card.
-> 
-> Hi Guenter,
-> 
-> I have now sent out a fix that I'm happy with, and applied it to the
-> pxa-multiplatform-5.18 branch of the soc tree as well as the
-> combined arm/multiplatform tree.
-> 
-> I have not merged this new version into the for-next branch
-> since I would like to see if there are any other regressions first.
-> 
-> Can you run your boot tests on the arm/multiplatform branch
-> and let me know if that fixes everything you found? If that
-> takes a lot of manual steps on your side, I'd just wait for the
-> build bots and merge it after all there are no new compile-time
-> issues.
-> 
+Hi Laurent,
 
-I tried the pxa-multiplatform-5.18 branch. Its failures match
-those in v5.18-rc1.
+ccing Michael for comments about returning v4l2 bufs too early.
 
-Should I try soc/arm/multiplatform as well ?
+On Mon, Apr 25, 2022 at 01:58:52AM +0300, Laurent Pinchart wrote:
+> Hi Dan,
+> 
+> On Wed, Apr 20, 2022 at 04:27:27PM -0500, Dan Vacura wrote:
+> > On Tue, Apr 19, 2022 at 11:46:37PM +0300, Laurent Pinchart wrote:
+> > > 
+> > > This indeed fixes an issue, so I think we can merge the patch, but I
+> > > also believe we need further improvements on top (of course if you would
+> > > like to improve the implementation in a v4, I won't complain :-))
+> > 
+> > It looks like Greg has already accepted the change and it's in
+> > linux-next. We can discuss here how to better handle these -EXDEV errors
+> > for future improvements, as it seems like it's been an issue in the past
+> > as well:
+> > https://www.mail-archive.com/linux-usb@vger.kernel.org/msg105615.html
+> > 
+> > > As replied in v2 (sorry for the late reply), it seems that this error
+> > > can occur under normal conditions. This means we shouldn't cancel the
+> > > queue, at least when the error is intermitent (if all URBs fail that's
+> > > another story).
+> > 
+> > My impression was that canceling the queue was still necessary as we may
+> > be in progress for the current frame. Perhaps we don't need to flush all
+> > the frames from the queue, but at a minimum we need to reset the
+> > buf_used value.
+> 
+> I think we have three classes of errors:
+> 
+> - "Packet-level" errors, resulting in either data loss or erroneous data
+>   being transferred to the host for one (or more) packets in a frame.
+>   When such errors occur, we should probably notify the application (on
+>   the gadget side), but we can continue sending the rest of the frame.
+> 
+> - "Frame-level" errors, resulting in errors in the rest of the frame.
+>   When such an error occurs, we should notify the application, and stop
+>   sending data for the current frame, moving to the next frame.
+> 
+> - "Stream-level" errors, resulting in errors in all subsequent frames.
+>   When such an error occurs, we should notify the application and stop
+>   sending data until the application takes corrective measures.
+> 
+> I'm not sure if packet-level errors make sense, if data is lost, maybe
+> we would be better off just cancelling the current frame and moving to
+> the next one.
+> 
+> For both packet-level errors and frame-level errors, the buffer should
+> be marked as erroneous to notify the application, but there should be no
+> need to cancel the queue and drop all queued buffers. We can just move
+> to the next buffer.
+> 
+> For stream-level errors, I would cancel the queue, and additionally
+> prevent new buffers from being queued until the application stops and
+> restarts the stream.
+> 
+> Finally, which class an error belongs to may not be an intrinsic
+> property of the error itself, packet-level or frame-level errors that
+> occur too often may be worth cancelling the queue (I'm not sure how to
+> quantify "too often" though).
+> 
+> Does this make sense ?
 
-Guenter
+Yes, this makes sense, but I'm not sure if the USB controllers send back
+that info and/or if it's all standardized. For example in the dwc3
+controller I see the following status values returned: -EPIPE,
+-ECONNRESET, -ESHUTDOWN, and -EXDEV; whereas in the musb controller
+doesn't appear to return -EXDEV. 
+
+> 
+> > > We likely need to differentiate between -EXDEV and other errors in
+> > > uvc_video_complete(), as I'd like to be conservative and cancel the
+> > > queue for unknown errors. We also need to improve the queue cancellation
+> > > implementation so that userspace gets an error when queuing further
+> > > buffers.
+> > 
+> > We already feedback to userspace the error, via the state of
+> > vb2_buffer_done(). When userspace dequeues the buffer it can check if
+> > v4l2_buffer.flags has V4L2_BUF_FLAG_ERROR to see if things failed, then
+> > decide what to do like re-queue that frame. However, this appears to not
+> > always occur since I believe the pump thread is independent of the
+> > uvc_video_complete() callback. As a result, the complete callback of the
+> > failed URB may be associated with a buffer that was already released
+> > back to the userspace client.
+> 
+> Good point. That would only be the case for errors in the last
+> request(s) for a frame, right ?
+
+From logging it seems it can be up to the last few requests that come
+back, where the queue is already empty. I guess this is timing dependent
+on the hw, the system scheduling, and how deep the request queue is.
+
+> 
+> > In this case, I don't know if there's
+> > anything to be done, since a new buffer and subsequent URBs might
+> > already be queued up. You suggested an error on a subsequent buffer
+> > queue, but I don't know how helpful that'd be at this point, perhaps in
+> > the scenario that all URBs are failing?
+> 
+> Should we delay sending the buffer back to userspace until all the
+> requests for the buffer have completed ?
+
+Yes, I had that same thought later on. We'll either need a new
+pending_complete_queue to move the buffer from the current queue, or
+create logic to leverage the existing uvc_buffer_state flags; like
+uvcg_queue_head() looks for the first buffer with UVC_BUF_STATE_QUEUED.
+When the complete call comes in we'll have to identify if the request is
+the last completed one for that buffer. It looks like the UVC_STREAM_EOF
+flag will be present, hopefully that's sufficient to rely on. Also,
+since this is a FIFO queue, we can assume that the first buffer with
+UVC_BUF_STATE_DONE can be vb2_buffer_done()'d. If we implement this type
+of logic then we can probably remove this change:
+https://lore.kernel.org/r/20220402232744.3622565-3-m.grzeschik@pengutronix.de
+since its purpose is similar. How does that sound and do you have an
+opinion on a new queue or creating logic around uvc_buffer_state flags?
+
+> 
+> -- 
+> Regards,
+> 
+> Laurent Pinchart
