@@ -2,81 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57979515463
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Apr 2022 21:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40266515447
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Apr 2022 21:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380287AbiD2TXp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Apr 2022 15:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
+        id S1380234AbiD2TVD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Apr 2022 15:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380279AbiD2TXn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Apr 2022 15:23:43 -0400
-Received: from mail1.bemta31.messagelabs.com (mail1.bemta31.messagelabs.com [67.219.246.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9650BDF69;
-        Fri, 29 Apr 2022 12:20:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1651260018; i=@motorola.com;
-        bh=lBsFaHd+QeW7GWXld2WKmUbZKO4xq3nXEJC9yAr2wco=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
-         Content-Transfer-Encoding;
-        b=ndxa+MX0Aj4mFIbevnWYeX/b9KFmsujDSRs6HJ9f44cHRZrsI5GRyZjE7kY2VxyBC
-         JXNRFf4gBMMCU0f863pvgXKmGoeKvlF/puDEUR92FpuQ2dO0tEHAaywYpMFYhZTUmv
-         IhPFpo8Ecqp74OJLXCWVSvEZJO4RKqhbMBnnDJ5IQAAdQ0jG+dik4si0d23tnHxnOw
-         83Zjqf7gtbsX2Q6zRbSBlOBY35CNVCcruJvaUNVDHx7/y4S2+/xJPWBIzrFt8QwLd2
-         dZUxsViVlORLAQxIhyUSM72u5e/85HZU+o/tD3+kvpD75opzOGEL11GxRViwIWCJfy
-         F2W4GRagcwyfA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPIsWRWlGSWpSXmKPExsWS8eKJqG6hVU6
-  Swd5H+hbH2p6wWzQvXs9m0TlxCbvF5V1z2CwWLWtldmD1mN0xk9Vj06pONo/9c9ewe3zeJBfA
-  EsWamZeUX5HAmtG29Dd7wWnNiiV991kbGCerdDFycQgJTGeSaD1ymhnCWcok8Wb9NtYuRk4ON
-  gE1iQWvVzGD2CICshKHr/wGs5kFzjFKPJgqCmILC/hI/N/8jg3EZhFQldi3eD8jiM0rYClx6P
-  sVJhBbQkBe4tSyg0wQcUGJkzOfsEDMkZdo3jqbeQIj9ywkqVlIUgsYmVYxWiYVZaZnlOQmZub
-  oGhoY6Boamuia6lpY6iVW6SbqlRbrpiYWl+ga6iWWF+ulFhfrFVfmJuek6OWllmxiBIZdShFr
-  5A7G2T0/9Q4xSnIwKYnyVljmJAnxJeWnVGYkFmfEF5XmpBYfYpTh4FCS4K21AMoJFqWmp1akZ
-  eYAYwAmLcHBoyTCW20GlOYtLkjMLc5Mh0idYtTluHToyl5mIZa8/LxUKXHeMyDzBUCKMkrz4E
-  bA4vESo6yUMC8jAwODEE9BalFuZgmq/CtGcQ5GJWHe0yBTeDLzSuA2vQI6ggnoiJVFmSBHlCQ
-  ipKQamIQq8/dd7+LYOO/+ot13XwtGTuUVMbFfLx4251+3U1W6ZwVr7H61akHlpPTTa0NMlQU/
-  iIiplrAxzGu/x1SuZyz8WG33JN8e2YJil6yMtpMX7N6LzzTKN2Coq/uUv3xxQvrl1S634jPz/
-  /VsDPXMmssX9OTZlLDfFfZHmGe4pr/wWvfiqu3ruG97GBzszvee++DZcuNty+fUH78vzKzykS
-  vZlZBvIuj8eqv38nnnpSR9G+9dltsTarzydXzav+zbd/IMapbedZLP3v1oZx67pMGhjF16Ck/
-  6zeYeEviw8/J3N4ukmL9vXqlwOLVf0GD9/nG9vnL2UeOIliSPY19yNMN3P5MqKS15/83avX+O
-  EktxRqKhFnNRcSIAiCGqj0IDAAA=
-X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-11.tower-706.messagelabs.com!1651260017!82!1
-X-Originating-IP: [104.232.228.21]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.86.4; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 20191 invoked from network); 29 Apr 2022 19:20:17 -0000
-Received: from unknown (HELO va32lpfpp01.lenovo.com) (104.232.228.21)
-  by server-11.tower-706.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 29 Apr 2022 19:20:17 -0000
-Received: from va32lmmrp02.lenovo.com (va32lmmrp02.mot.com [10.62.176.191])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4Kqj4K3smvzgQ3G;
-        Fri, 29 Apr 2022 19:20:17 +0000 (UTC)
-Received: from p1g3.. (unknown [10.45.4.153])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: w36195)
-        by va32lmmrp02.lenovo.com (Postfix) with ESMTPSA id 4Kqj4K1z6Dzf6Wp;
-        Fri, 29 Apr 2022 19:20:17 +0000 (UTC)
-From:   Dan Vacura <w36195@motorola.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Dan Vacura <w36195@motorola.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: uvc: allow for application to cleanly shutdown
-Date:   Fri, 29 Apr 2022 14:20:01 -0500
-Message-Id: <20220429192001.385636-1-w36195@motorola.com>
-X-Mailer: git-send-email 2.32.0
+        with ESMTP id S237522AbiD2TVA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Apr 2022 15:21:00 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A1041FAD;
+        Fri, 29 Apr 2022 12:17:40 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id x33so15747634lfu.1;
+        Fri, 29 Apr 2022 12:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=XcJewk131Nd463Vs+g3KY8Ye0plJDqJlnu99DciXENY=;
+        b=Ao2DTWWgNWhqlZ5g4JZt6z6nIIV3nwRQDJjtKCvXqMM8brGdFiOnzbuG6DE6HD9Q3R
+         shmLGN6pJINTqvRGZnSTBbLCvUvUSCu+GogJKA5IzH4AYL/DmJzETpzz6lRrlfbgBWI0
+         9JWz3rtqLWQnRDzYg1VXv3ZC67dZqiqL+wMh75I+/Jgg5MiL65p5246FtnBi5RaS5TaJ
+         sp+KGmysK11HzTw3dNTD/PCzqtCO6XgltKvqdQq0JKnIT2BvSOo4uYyj0cHNE5CUxlN8
+         7qbQKWw+1Us9xaaDm+yiCqT8AGc8rzCkMIgXzttzdmMmHxvPIoeFe4e6iAdNgbqWGST7
+         qDyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=XcJewk131Nd463Vs+g3KY8Ye0plJDqJlnu99DciXENY=;
+        b=i70jc/5lIg2Xmq1avdMDNLKp5DBNyq5fBXKQwh6r/Y9Z5IO/GOO2oUio08feap3c7F
+         FfjpTZB7MxioUppFS9YTim0Rn3QaS1/tbVTViDN2o6fmsujEGzZwC2YFrHAp+QraLKMk
+         MtAQYhfzVAKX78TEsc1hGBvkSOLeFICjkVyQLWyCSCUZo30KsW/e8L52bp2n+N6NFniJ
+         u6N6Rr0C74k7S6RzGdT1iTmD0dmb/SV4YCI4vu4SY6F36q8bvfe/dMwjvwtUnxk9qbkx
+         dRhxYcj8u6n51wpj2VHNy00CSbKbE2Tp2d8Y46AWmBJql6yhyy1Kdd1iXCzWq33ykOSH
+         gZSQ==
+X-Gm-Message-State: AOAM532/7fyVeozQPwEC/1k5V14bBY1kLQBBl2LSd3NLmx2+ausuAVZW
+        tbT9DJqTbRdMJZGiqm8OwBw=
+X-Google-Smtp-Source: ABdhPJx5mQ7kmdRwb7GYfpJwo6MNK5CFZ8EHsuzhivBmvovVjmxexQacSX4WEvZ23WKGMMkDpd1bxw==
+X-Received: by 2002:a05:6512:1109:b0:472:25d9:d262 with SMTP id l9-20020a056512110900b0047225d9d262mr538829lfg.128.1651259858641;
+        Fri, 29 Apr 2022 12:17:38 -0700 (PDT)
+Received: from [10.0.0.42] (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
+        by smtp.gmail.com with ESMTPSA id s3-20020ac25fe3000000b0047255d2111esm3178lfg.77.2022.04.29.12.17.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 12:17:38 -0700 (PDT)
+Message-ID: <a9e1b5ce-861f-021b-b41f-62e5298c11e5@gmail.com>
+Date:   Fri, 29 Apr 2022 22:24:19 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, linux-omap@vger.kernel.org,
+        tony@atomide.com, aaro.koskinen@iki.fi, jmkrzyszt@gmail.com
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Paul Walmsley <paul@pwsan.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Mark Brown <broonie@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org
+References: <20220419133723.1394715-1-arnd@kernel.org>
+ <20220419133723.1394715-20-arnd@kernel.org>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+Subject: Re: [PATCH 19/41] ARM: omap: dma: make usb support optional
+In-Reply-To: <20220419133723.1394715-20-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,142 +95,169 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Several types of kernel panics can occur due to timing during the uvc
-gadget removal. This appears to be a problem with gadget resources being
-managed by both the client application's v4l2 open/close and the UDC
-gadget bind/unbind. Since the concept of USB_GADGET_DELAYED_STATUS
-doesn't exist for unbind, add a wait to allow for the application to
-close out.
 
-Some examples of the panics that can occur are:
 
-<1>[ 1147.652313] Unable to handle kernel NULL pointer dereference at
-virtual address 0000000000000028
-<4>[ 1147.652510] Call trace:
-<4>[ 1147.652514]  usb_gadget_disconnect+0x74/0x1f0
-<4>[ 1147.652516]  usb_gadget_deactivate+0x38/0x168
-<4>[ 1147.652520]  usb_function_deactivate+0x54/0x90
-<4>[ 1147.652524]  uvc_function_disconnect+0x14/0x38
-<4>[ 1147.652527]  uvc_v4l2_release+0x34/0xa0
-<4>[ 1147.652537]  __fput+0xdc/0x2c0
-<4>[ 1147.652540]  ____fput+0x10/0x1c
-<4>[ 1147.652545]  task_work_run+0xe4/0x12c
-<4>[ 1147.652549]  do_notify_resume+0x108/0x168
+On 4/19/22 16:37, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Most of the plat-omap/dma.c code is specific to the USB
+> driver.
 
-<1>[  282.950561][ T1472] Unable to handle kernel NULL pointer
-dereference at virtual address 00000000000005b8
-<6>[  282.953111][ T1472] Call trace:
-<6>[  282.953121][ T1472]  usb_function_deactivate+0x54/0xd4
-<6>[  282.953134][ T1472]  uvc_v4l2_release+0xac/0x1e4
-<6>[  282.953145][ T1472]  v4l2_release+0x134/0x1f0
-<6>[  282.953167][ T1472]  __fput+0xf4/0x428
-<6>[  282.953178][ T1472]  ____fput+0x14/0x24
-<6>[  282.953193][ T1472]  task_work_run+0xac/0x130
+The reason is simple: the omap_udc is the only driver which has not been
+ported to DMAengine.
+I had a patch if I recall to convert it, but I don't have a way to test
+it and the omap_udc sets some funky bits for DMA which we can not figure
+out on how to handle.
 
-<3>[  213.410077][   T29] configfs-gadget gadget: uvc: Failed to queue
-request (-108).
-<1>[  213.410116][   T29] Unable to handle kernel NULL pointer
-dereference at virtual address 0000000000000003
-<6>[  213.413460][   T29] Call trace:
-<6>[  213.413474][   T29]  uvcg_video_pump+0x1f0/0x384
-<6>[  213.413489][   T29]  process_one_work+0x2a4/0x544
-<6>[  213.413502][   T29]  worker_thread+0x350/0x784
-<6>[  213.413515][   T29]  kthread+0x2ac/0x320
-<6>[  213.413528][   T29]  ret_from_fork+0x10/0x30
+> Hide that code when it is not in use, to make it
+> clearer which parts are actually still required.
 
-Signed-off-by: Dan Vacura <w36195@motorola.com>
----
- drivers/usb/gadget/function/f_uvc.c    | 24 ++++++++++++++++++++++++
- drivers/usb/gadget/function/uvc.h      |  2 ++
- drivers/usb/gadget/function/uvc_v4l2.c |  3 ++-
- 3 files changed, 28 insertions(+), 1 deletion(-)
+Reviewed-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 50e6e7a58b41..3cc8cf24a7c7 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -892,13 +892,36 @@ static void uvc_function_unbind(struct usb_configuration *c,
- {
- 	struct usb_composite_dev *cdev = c->cdev;
- 	struct uvc_device *uvc = to_uvc(f);
-+	int wait_ret = 1;
- 
- 	uvcg_info(f, "%s()\n", __func__);
- 
-+	/* If we know we're connected via v4l2, then there should be a cleanup
-+	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
-+	 * though the video device removal uevent. Allow some time for the
-+	 * application to close out before things get deleted.
-+	 */
-+	if (uvc->func_connected) {
-+		uvcg_info(f, "%s waiting for clean disconnect\n", __func__);
-+		wait_ret = wait_event_interruptible_timeout(uvc->func_connected_queue,
-+				uvc->func_connected == false, msecs_to_jiffies(500));
-+		uvcg_info(f, "%s done waiting with ret: %u\n", __func__, wait_ret);
-+	}
-+
- 	device_remove_file(&uvc->vdev.dev, &dev_attr_function_name);
- 	video_unregister_device(&uvc->vdev);
- 	v4l2_device_unregister(&uvc->v4l2_dev);
- 
-+	if (uvc->func_connected) {
-+		/* Wait for the release to occur to ensure there are no longer any
-+		 * pending operations that may cause panics when resources are cleaned
-+		 * up.
-+		 */
-+		uvcg_warn(f, "%s no clean disconnect, wait for release\n", __func__);
-+		wait_ret = wait_event_interruptible_timeout(uvc->func_connected_queue,
-+				uvc->func_connected == false, msecs_to_jiffies(1000));
-+	}
-+
- 	usb_ep_free_request(cdev->gadget->ep0, uvc->control_req);
- 	kfree(uvc->control_buf);
- 
-@@ -917,6 +940,7 @@ static struct usb_function *uvc_alloc(struct usb_function_instance *fi)
- 
- 	mutex_init(&uvc->video.mutex);
- 	uvc->state = UVC_STATE_DISCONNECTED;
-+	init_waitqueue_head(&uvc->func_connected_queue);
- 	opts = fi_to_f_uvc_opts(fi);
- 
- 	mutex_lock(&opts->lock);
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index 9eec104b3666..58e383afdd44 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -14,6 +14,7 @@
- #include <linux/spinlock.h>
- #include <linux/usb/composite.h>
- #include <linux/videodev2.h>
-+#include <linux/wait.h>
- 
- #include <media/v4l2-device.h>
- #include <media/v4l2-dev.h>
-@@ -130,6 +131,7 @@ struct uvc_device {
- 	struct usb_function func;
- 	struct uvc_video video;
- 	bool func_connected;
-+	wait_queue_head_t func_connected_queue;
- 
- 	/* Descriptors */
- 	struct {
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index a2c78690c5c2..fd8f73bb726d 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -253,10 +253,11 @@ uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
- 
- static void uvc_v4l2_disable(struct uvc_device *uvc)
- {
--	uvc->func_connected = false;
- 	uvc_function_disconnect(uvc);
- 	uvcg_video_enable(&uvc->video, 0);
- 	uvcg_free_buffers(&uvc->video.queue);
-+	uvc->func_connected = false;
-+	wake_up_interruptible(&uvc->func_connected_queue);
- }
- 
- static int
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/plat-omap/dma.c       | 45 +++++++++++++++++-----------------
+>  drivers/usb/gadget/udc/Kconfig |  2 +-
+>  include/linux/omap-dma.h       |  5 +++-
+>  3 files changed, 27 insertions(+), 25 deletions(-)
+> 
+> diff --git a/arch/arm/plat-omap/dma.c b/arch/arm/plat-omap/dma.c
+> index 700ba9b600e7..b7757864d0aa 100644
+> --- a/arch/arm/plat-omap/dma.c
+> +++ b/arch/arm/plat-omap/dma.c
+> @@ -66,7 +66,6 @@ enum { DMA_CHAIN_STARTED, DMA_CHAIN_NOTSTARTED };
+>  
+>  static struct omap_system_dma_plat_info *p;
+>  static struct omap_dma_dev_attr *d;
+> -static void omap_clear_dma(int lch);
+>  static int enable_1510_mode;
+>  static u32 errata;
+>  
+> @@ -90,19 +89,16 @@ static int omap_dma_reserve_channels;
+>  static DEFINE_SPINLOCK(dma_chan_lock);
+>  static struct omap_dma_lch *dma_chan;
+>  
+> -static inline void disable_lnk(int lch);
+> -static void omap_disable_channel_irq(int lch);
+> -static inline void omap_enable_channel_irq(int lch);
+> -
+> -#ifdef CONFIG_ARCH_OMAP15XX
+> -/* Returns 1 if the DMA module is in OMAP1510-compatible mode, 0 otherwise */
+> -static int omap_dma_in_1510_mode(void)
+> +static inline void omap_disable_channel_irq(int lch)
+>  {
+> -	return enable_1510_mode;
+> +	/* disable channel interrupts */
+> +	p->dma_write(0, CICR, lch);
+> +	/* Clear CSR */
+> +	if (dma_omap1())
+> +		p->dma_read(CSR, lch);
+> +	else
+> +		p->dma_write(OMAP2_DMA_CSR_CLEAR_MASK, CSR, lch);
+>  }
+> -#else
+> -#define omap_dma_in_1510_mode()		0
+> -#endif
+>  
+>  #ifdef CONFIG_ARCH_OMAP1
+>  static inline void set_gdma_dev(int req, int dev)
+> @@ -169,6 +165,17 @@ void omap_set_dma_priority(int lch, int dst_port, int priority)
+>  #endif
+>  EXPORT_SYMBOL(omap_set_dma_priority);
+>  
+> +#if IS_ENABLED(CONFIG_USB_OMAP)
+> +#ifdef CONFIG_ARCH_OMAP15XX
+> +/* Returns 1 if the DMA module is in OMAP1510-compatible mode, 0 otherwise */
+> +static int omap_dma_in_1510_mode(void)
+> +{
+> +	return enable_1510_mode;
+> +}
+> +#else
+> +#define omap_dma_in_1510_mode()		0
+> +#endif
+> +
+>  void omap_set_dma_transfer_params(int lch, int data_type, int elem_count,
+>  				  int frame_count, int sync_mode,
+>  				  int dma_trigger, int src_or_dst_synch)
+> @@ -418,17 +425,6 @@ static inline void omap_enable_channel_irq(int lch)
+>  	p->dma_write(dma_chan[lch].enabled_irqs, CICR, lch);
+>  }
+>  
+> -static inline void omap_disable_channel_irq(int lch)
+> -{
+> -	/* disable channel interrupts */
+> -	p->dma_write(0, CICR, lch);
+> -	/* Clear CSR */
+> -	if (dma_omap1())
+> -		p->dma_read(CSR, lch);
+> -	else
+> -		p->dma_write(OMAP2_DMA_CSR_CLEAR_MASK, CSR, lch);
+> -}
+> -
+>  void omap_disable_dma_irq(int lch, u16 bits)
+>  {
+>  	dma_chan[lch].enabled_irqs &= ~bits;
+> @@ -473,6 +469,7 @@ static inline void disable_lnk(int lch)
+>  	p->dma_write(l, CLNK_CTRL, lch);
+>  	dma_chan[lch].flags &= ~OMAP_DMA_ACTIVE;
+>  }
+> +#endif
+>  
+>  int omap_request_dma(int dev_id, const char *dev_name,
+>  		     void (*callback)(int lch, u16 ch_status, void *data),
+> @@ -572,6 +569,7 @@ static void omap_clear_dma(int lch)
+>  	local_irq_restore(flags);
+>  }
+>  
+> +#if IS_ENABLED(CONFIG_USB_OMAP)
+>  void omap_start_dma(int lch)
+>  {
+>  	u32 l;
+> @@ -792,6 +790,7 @@ int omap_get_dma_active_status(int lch)
+>  	return (p->dma_read(CCR, lch) & OMAP_DMA_CCR_EN) != 0;
+>  }
+>  EXPORT_SYMBOL(omap_get_dma_active_status);
+> +#endif
+>  
+>  int omap_dma_running(void)
+>  {
+> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
+> index cee934dce4f0..69394dc1cdfb 100644
+> --- a/drivers/usb/gadget/udc/Kconfig
+> +++ b/drivers/usb/gadget/udc/Kconfig
+> @@ -128,7 +128,7 @@ config USB_GR_UDC
+>  
+>  config USB_OMAP
+>  	tristate "OMAP USB Device Controller"
+> -	depends on ARCH_OMAP1 || (ARCH_OMAP && COMPILE_TEST)
+> +	depends on ARCH_OMAP1
+>  	depends on ISP1301_OMAP || !(MACH_OMAP_H2 || MACH_OMAP_H3)
+>  	help
+>  	   Many Texas Instruments OMAP processors have flexible full
+> diff --git a/include/linux/omap-dma.h b/include/linux/omap-dma.h
+> index 5e228428fda1..07fa58ae9902 100644
+> --- a/include/linux/omap-dma.h
+> +++ b/include/linux/omap-dma.h
+> @@ -299,8 +299,9 @@ extern void omap_set_dma_priority(int lch, int dst_port, int priority);
+>  extern int omap_request_dma(int dev_id, const char *dev_name,
+>  			void (*callback)(int lch, u16 ch_status, void *data),
+>  			void *data, int *dma_ch);
+> -extern void omap_disable_dma_irq(int ch, u16 irq_bits);
+>  extern void omap_free_dma(int ch);
+> +#if IS_ENABLED(CONFIG_USB_OMAP)
+> +extern void omap_disable_dma_irq(int ch, u16 irq_bits);
+>  extern void omap_start_dma(int lch);
+>  extern void omap_stop_dma(int lch);
+>  extern void omap_set_dma_transfer_params(int lch, int data_type,
+> @@ -326,6 +327,8 @@ extern void omap_set_dma_dest_burst_mode(int lch,
+>  extern dma_addr_t omap_get_dma_src_pos(int lch);
+>  extern dma_addr_t omap_get_dma_dst_pos(int lch);
+>  extern int omap_get_dma_active_status(int lch);
+> +#endif
+> +
+>  extern int omap_dma_running(void);
+>  
+>  #if IS_ENABLED(CONFIG_FB_OMAP)
+
 -- 
-2.32.0
-
+Péter
