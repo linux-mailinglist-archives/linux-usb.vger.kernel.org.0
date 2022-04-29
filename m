@@ -2,128 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A18514062
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Apr 2022 03:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BA05140C1
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Apr 2022 05:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353775AbiD2B6T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Apr 2022 21:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
+        id S235596AbiD2DJP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Apr 2022 23:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231922AbiD2B6S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Apr 2022 21:58:18 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB57BB0AE;
-        Thu, 28 Apr 2022 18:54:58 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id m6so4230336iob.4;
-        Thu, 28 Apr 2022 18:54:58 -0700 (PDT)
+        with ESMTP id S234945AbiD2DJN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Apr 2022 23:09:13 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5DDBB913;
+        Thu, 28 Apr 2022 20:05:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YNr4dv3JNnMf5I1DjV2JKVssdmjDHBNzpOU5voLiAd8=;
-        b=bcY/QvagGm6wnaiLh7HIpm1nJWUo0J8Kqi7JVPwT+GO7FzLIYnLE1hJw6pEk0+2QjV
-         nRgH/n2ha4GRwWYv7HPeegKvd7hmjZyNyvakANTKr6MaHAKhnHyqqvFXBhVgoVi3oV0x
-         res1FAtFZeEoHWekc5USVup5nCF3f4vICvBqeiI1s5NYtkbVciu4T+ZQD5QB9mS07l6M
-         be795bir8IC5jm3+Hix/ZynnWwSmODOQ90A5111DskfACowJFBU6HwZvKdNf53mhtBGf
-         ZQO5lrNRhWCdDyyUNtaLbag/YFYTLtoleHt1Y9yWvvLy909Us6mZ6xyB0nM7Iw9IiWQ8
-         TQuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YNr4dv3JNnMf5I1DjV2JKVssdmjDHBNzpOU5voLiAd8=;
-        b=7p8AsfAVceQgzRqwTod56Po0bSkYNIFpx64eZBhQ/k+qfR+G53jvjrjJNvYC8IoRmk
-         gyOVbEC7NzUJZLC6L+j2I7/AExu5nhzTcEKUHZgg737Sk6LpTje0wW+PA5ebS5WHcDzQ
-         PZHBswHPk87SINF48b6fuM64iAdGWOUd4L7eadMGC/re0cj7rua0vJHM3EHet8cuAEJ3
-         Da8LrEcVFrIBD3khIDIKhcaO1N9mESCWCCGrWTtzmaq3oTmjWhSkXsHe66nefDMRQ5+5
-         8txnAXuuyDKMzbZZv7m9uxMJrUCtieyVP0cQ8CE0AJ/4oxg1zvSVLSER40ocJ/eHq7dX
-         9tOw==
-X-Gm-Message-State: AOAM5326yT/Oacy51HyKbDKPggu2MzlgWcdm2l8XYsE61zBYcR4NVbbW
-        XI2ryIEzHtbVAH9r/wQ8LLPFNM6ShxZVvEpSAXo=
-X-Google-Smtp-Source: ABdhPJxtaktnOnC6Jze7ekAknMust1zCbi4KjcY7JcVhMPZwKAzxl/2IgeH/EkSzRJoUAingHwsKsKx7qHhnv1wmfMo=
-X-Received: by 2002:a05:6602:2f12:b0:654:b304:b016 with SMTP id
- q18-20020a0566022f1200b00654b304b016mr14632824iow.60.1651197297569; Thu, 28
- Apr 2022 18:54:57 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651201556; x=1682737556;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n9GSRz3I8hm7PZYmgP8cDouLfs9ShB/oLPDbfepHXII=;
+  b=DduetlMwvcRqsyDCyUfX/nMyXYAf04xHOYwwVTMlkrARy145HY5+DOSV
+   hgbO741rfYrG12/CYxbDbcNAyrR6M5l9N7wjBbN84Bv2xtsEs+8mlHua1
+   cnTZKvsDlj3jneySSjwUEB2LA+Pc0aEsruQBAxgECKzvXZUTyW2iSVQoW
+   U=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Apr 2022 20:05:55 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 20:05:55 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 28 Apr 2022 20:05:54 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 28 Apr 2022 20:05:48 -0700
+Date:   Fri, 29 Apr 2022 08:35:44 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+        "quic_kriskura@quicinc.com" <quic_kriskura@quicinc.com>,
+        "quic_vpulyala@quicinc.com" <quic_vpulyala@quicinc.com>
+Subject: Re: [PATCH v4 0/3] Skip phy initialization for DWC3 USB Controllers
+Message-ID: <20220429030544.GC16319@hu-pkondeti-hyd.qualcomm.com>
+References: <1650517255-4871-1-git-send-email-quic_c_sanm@quicinc.com>
+ <20220425024858.GA7052@hu-pkondeti-hyd.qualcomm.com>
+ <1287c649-de62-c7d8-1c1d-a30ede7505c9@synopsys.com>
 MIME-Version: 1.0
-References: <e05ec742-c3dc-df7c-c5d7-29358d0a7081@linux.intel.com>
- <20220424015757.21993-1-surong.pang@gmail.com> <YmfdN97xtmwSOo59@kroah.com> <CAEDbmAQmYQdMNY8sANnSuauBcsemrV1MFR3bB83JJ7cHNdWGmA@mail.gmail.com>
-In-Reply-To: <CAEDbmAQmYQdMNY8sANnSuauBcsemrV1MFR3bB83JJ7cHNdWGmA@mail.gmail.com>
-From:   surong pang <surong.pang@gmail.com>
-Date:   Fri, 29 Apr 2022 09:54:46 +0800
-Message-ID: <CAEDbmARx0EvvUo_d7w5-gtTvSp3YiTatsMZoBJVZc2O7-M+cWw@mail.gmail.com>
-Subject: Re: [PATCH V2] xhci-plat: Let usb phy shutdown later
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        mathias.nyman@intel.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Orson.Zhai@unisoc.com,
-        yunguo.wu@unisoc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1287c649-de62-c7d8-1c1d-a30ede7505c9@synopsys.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Greg,
-Sorry for html email response.
-Yes, The subject should say "xhci-plat". And it didn't fix a specific commi=
-t id.
+Hi Thinh,
 
-surong pang <surong.pang@gmail.com> =E4=BA=8E2022=E5=B9=B44=E6=9C=8828=E6=
-=97=A5=E5=91=A8=E5=9B=9B 14:26=E5=86=99=E9=81=93=EF=BC=9A
->
-> Dear Greg,
-> No,  It's just a patch to call usb_phy_shutdown later.
->
->
-> Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B44=E6=9C=8826=
-=E6=97=A5=E5=91=A8=E4=BA=8C 19:53=E5=86=99=E9=81=93=EF=BC=9A
->>
->> On Sun, Apr 24, 2022 at 09:57:57AM +0800, Surong Pang wrote:
->> > From: Surong Pang <surong.pang@unisoc.com>
->> >
->> > Let usb phy shutdown later in xhci_plat_remove function.
->> > Some phy driver doesn't divide 3.0/2.0 very clear.
->> > If calls usb_phy_shutdown earlier than usb_remove_hcd(hcd),
->> > It will case 10s cmd timeout issue.
->> >
->> > Call usb phy shutdown later has better compatibility.
->> >
->> > Signed-off-by: Surong Pang <surong.pang@unisoc.com>
->>
->> The subject should say "xhci-plat", right?
->>
->> > ---
->> >  drivers/usb/host/xhci-plat.c | 2 +-
->> >  1 file changed, 1 insertion(+), 1 deletion(-)
->> >
->> > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat=
-.c
->> > index 649ffd861b44..fe492ed99cb7 100644
->> > --- a/drivers/usb/host/xhci-plat.c
->> > +++ b/drivers/usb/host/xhci-plat.c
->> > @@ -390,13 +390,13 @@ static int xhci_plat_remove(struct platform_devi=
-ce *dev)
->> >
->> >       usb_remove_hcd(shared_hcd);
->> >       xhci->shared_hcd =3D NULL;
->> > -     usb_phy_shutdown(hcd->usb_phy);
->> >
->> >       usb_remove_hcd(hcd);
->> >       usb_put_hcd(shared_hcd);
->> >
->> >       clk_disable_unprepare(clk);
->> >       clk_disable_unprepare(reg_clk);
->> > +     usb_phy_shutdown(hcd->usb_phy);
->> >       usb_put_hcd(hcd);
->>
->> Does this fix a specific commit id?
->>
->> thanks,
->>
->> greg k-h
+On Tue, Apr 26, 2022 at 01:12:17AM +0000, Thinh Nguyen wrote:
+> Hi,
+> 
+> Pavan Kondeti wrote:
+> > Hi Mathias,
+> > 
+> > On Thu, Apr 21, 2022 at 10:30:52AM +0530, Sandeep Maheswaram wrote:
+> >> Runtime suspend of phy drivers was failing from DWC3 driver as
+> >> runtime usage value is 2 because the phy is initialized from
+> >> DWC3 core and HCD core.
+> >> Some controllers like DWC3 and CDNS3 manage phy in their core drivers.
+> >> This property can be set to avoid phy initialization in HCD core.
+> >>
+> >> v4:
+> >> Added the device tree binding patch in the series.
+> >>
+> >> v3:
+> >> Coming back to this series based on discussion at below thread
+> >> https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-arm-msm/patch/1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com/__;!!A4F2R9G_pg!fykTNTBuKk9ci6zKdcuQNbuZQdVi_HekU3jetzud-PQVhbRaVhhZHKz0k_LfG0cgwaX4bQM5bLI0ep6tYyikgvYK7b5SdA$ 
+> >> Dropped the dt bindings PATCH 1/3 in v2
+> >> https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/__;!!A4F2R9G_pg!fykTNTBuKk9ci6zKdcuQNbuZQdVi_HekU3jetzud-PQVhbRaVhhZHKz0k_LfG0cgwaX4bQM5bLI0ep6tYyikgva2VXahOQ$  
+> >>
+> >> v2:
+> >> Updated the commit descriptions.
+> >> Changed subject prefix from dwc to dwc3.
+> >> Increased props array size.
+> >>
+> >>
+> >> Sandeep Maheswaram (3):
+> >>   dt-bindings: usb: usb-xhci: Add bindings for usb-skip-phy-init
+> >>     property
+> >>   usb: host: xhci-plat: Add device property to set XHCI_SKIP_PHY_INIT
+> >>     quirk
+> >>   usb: dwc3: host: Set the property usb-skip-phy-init
+> >>
+> >>  Documentation/devicetree/bindings/usb/usb-xhci.yaml | 4 ++++
+> >>  drivers/usb/dwc3/host.c                             | 4 +++-
+> >>  drivers/usb/host/xhci-plat.c                        | 3 +++
+> >>  3 files changed, 10 insertions(+), 1 deletion(-)
+> >>
+> > 
+> > This is the latest series with bindings added as per Greg's comment. Can you
+> > please pick up this series if you don't have any further comments.
+> > 
+> 
+> We've had this conversation going on for a while. Seems there's no good
+> one solution with everyone fully getting on-board.
+> 
+> I've tried to get some of the quirks out before also, but ran into the
+> same problem. [1]
+> 
+> As Mathias noted [2] before, maybe we can create a new xhci-snps
+> platform glue driver.
+> 
+> The problem with the current implementation is passing dwc3's related
+> info to xhci-plat generic driver is very clunky. We can teach the new
+> glue driver with all the info necessary to drive the controller.
+> 
+> We can just pass the controller's version (and subversion) as a property
+> for platform device. This way, we can:
+> 
+> 1) Separate the quirks from xhci-plat glue. Most common quirks can be
+> detected just base on the controller's version
+> 
+> 2) Avoid having to create duplicate "snps,*" properties
+> 
+> 3) Get access to the common xhci quirk flags while maintain abstraction
+> 
+> 4) Potentially add compatibility string as part of the controller's
+> version and let the glue driver handle the rest
+> 
+> 5) Reduce introducing new "quirks" in the future
+> 
+> I can get started with this. Let me know if you have any comment.
+
+Sorry, could not reply earlier. The proposal sounds good to me.
+
+The xhci-plat is a thin wrapper, so having a separate wrapper for SNPS
+controller is definitely not an overkill and gives lot of flexibility
+in abstracting dwc3 specifics. Also dwc3/host.c becomes just a platform
+device creation wrapper and xHC specifics are completely taken out.
+
+Thanks,
+Pavan
+
+
