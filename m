@@ -2,168 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BA05140C1
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Apr 2022 05:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 742A05142CF
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Apr 2022 09:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235596AbiD2DJP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Apr 2022 23:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
+        id S1354869AbiD2HEx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Apr 2022 03:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234945AbiD2DJN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Apr 2022 23:09:13 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5DDBB913;
-        Thu, 28 Apr 2022 20:05:55 -0700 (PDT)
+        with ESMTP id S1354849AbiD2HEx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Apr 2022 03:04:53 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BE8B822D;
+        Fri, 29 Apr 2022 00:01:36 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id b12so6387964plg.4;
+        Fri, 29 Apr 2022 00:01:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651201556; x=1682737556;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n9GSRz3I8hm7PZYmgP8cDouLfs9ShB/oLPDbfepHXII=;
-  b=DduetlMwvcRqsyDCyUfX/nMyXYAf04xHOYwwVTMlkrARy145HY5+DOSV
-   hgbO741rfYrG12/CYxbDbcNAyrR6M5l9N7wjBbN84Bv2xtsEs+8mlHua1
-   cnTZKvsDlj3jneySSjwUEB2LA+Pc0aEsruQBAxgECKzvXZUTyW2iSVQoW
-   U=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Apr 2022 20:05:55 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 20:05:55 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 28 Apr 2022 20:05:54 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 28 Apr 2022 20:05:48 -0700
-Date:   Fri, 29 Apr 2022 08:35:44 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_kriskura@quicinc.com" <quic_kriskura@quicinc.com>,
-        "quic_vpulyala@quicinc.com" <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v4 0/3] Skip phy initialization for DWC3 USB Controllers
-Message-ID: <20220429030544.GC16319@hu-pkondeti-hyd.qualcomm.com>
-References: <1650517255-4871-1-git-send-email-quic_c_sanm@quicinc.com>
- <20220425024858.GA7052@hu-pkondeti-hyd.qualcomm.com>
- <1287c649-de62-c7d8-1c1d-a30ede7505c9@synopsys.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1287c649-de62-c7d8-1c1d-a30ede7505c9@synopsys.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=pdWoFntDmNAHiZiZCTeweiYZFMR7Piu/j2Z6JLXwGIo=;
+        b=XMp1maNaXEMUzDVgoJXO5QV1/Y9cuqyrVs5g1scvVf/4lItiPZhGIE2WoegQ2TBEn+
+         rh17aJdmIpxrIiAv7E61hpXe/5byYW4N759aAH8F+Uz3PlQLFJlz0sinLZ8mTxZXFUhW
+         rpT4vunau3AI2zXerYrnav87JSq6FVYGPtAzeqH4iK/eIOBibY98utzJIJSe68DIUMno
+         Uzbo9492bwFZGDNe81zZJ28dLZCNZSIADY0GWxSR2NvsJNSC4RHAQhQXy2ZeFTr5fEz7
+         TGo1m/FtaoRaVa2PJckAUDbWAFXoY7AvPAPwwopDl7O28aUsyBQG1yP3fd4/yfzyljoW
+         ZHfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=pdWoFntDmNAHiZiZCTeweiYZFMR7Piu/j2Z6JLXwGIo=;
+        b=O2RxudCPsf3vQegfhGtSYFX8HJrk1SdIMsFsQ/YTQQRC1B9A8kjBgbZ439fil+b+bK
+         x3pdIKdpFajudFhcgs3qL3tvvQBn37bHFN43wv/Fl6KnE+zWwZnzPZmvUIgG/IcyT76k
+         GGNbp9/S1nDbhab8s1XLOV1l8Jt9Kx0H8WMetoZJEXfSwMLwNBnmbrSCkokMjXcEwinI
+         00lkXsT986S/RR5Kz/KC/ngm1Gt2XkcT+p/TIaJVUoA9lmaLjsx3fifwVgW155TI+rIk
+         roEKSYod9YFxobN2fKOcASB5+byXbX/39qjtixObRLan9u7FqUt6nb2dH2l53umok+rs
+         le6A==
+X-Gm-Message-State: AOAM533DqD4en00ogqwmuFkixnuX2ed57hZbmsPXqyV/hEKBE4p/0/gi
+        24Evq0wD2Kj3FyrjFy9s6XQ=
+X-Google-Smtp-Source: ABdhPJzSQNNalj5Kwle6Zs5nq6sHji8rfSG7vF8HuA8c7RxvTqs9azRIClEYnYwIfM9f7uyoZGexAg==
+X-Received: by 2002:a17:902:da85:b0:15d:3a9a:aad1 with SMTP id j5-20020a170902da8500b0015d3a9aaad1mr15976961plx.113.1651215695438;
+        Fri, 29 Apr 2022 00:01:35 -0700 (PDT)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id iy19-20020a17090b16d300b001cd4989fee6sm13148106pjb.50.2022.04.29.00.01.32
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 29 Apr 2022 00:01:34 -0700 (PDT)
+From:   Vincent Shih <vincent.sunplus@gmail.com>
+To:     kishon@ti.com, vkoul@kernel.org, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com
+Cc:     Vincent Shih <vincent.sunplus@gmail.com>
+Subject: [PATCH v2 0/2] Add USB2.0 phy driver for Sunplus SP7021
+Date:   Fri, 29 Apr 2022 15:00:54 +0800
+Message-Id: <1651215656-19024-1-git-send-email-vincent.sunplus@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh,
+This is a patch series for USB2.0 phy driver for Sunplus SP7021 SoC.
 
-On Tue, Apr 26, 2022 at 01:12:17AM +0000, Thinh Nguyen wrote:
-> Hi,
-> 
-> Pavan Kondeti wrote:
-> > Hi Mathias,
-> > 
-> > On Thu, Apr 21, 2022 at 10:30:52AM +0530, Sandeep Maheswaram wrote:
-> >> Runtime suspend of phy drivers was failing from DWC3 driver as
-> >> runtime usage value is 2 because the phy is initialized from
-> >> DWC3 core and HCD core.
-> >> Some controllers like DWC3 and CDNS3 manage phy in their core drivers.
-> >> This property can be set to avoid phy initialization in HCD core.
-> >>
-> >> v4:
-> >> Added the device tree binding patch in the series.
-> >>
-> >> v3:
-> >> Coming back to this series based on discussion at below thread
-> >> https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-arm-msm/patch/1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com/__;!!A4F2R9G_pg!fykTNTBuKk9ci6zKdcuQNbuZQdVi_HekU3jetzud-PQVhbRaVhhZHKz0k_LfG0cgwaX4bQM5bLI0ep6tYyikgvYK7b5SdA$ 
-> >> Dropped the dt bindings PATCH 1/3 in v2
-> >> https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/__;!!A4F2R9G_pg!fykTNTBuKk9ci6zKdcuQNbuZQdVi_HekU3jetzud-PQVhbRaVhhZHKz0k_LfG0cgwaX4bQM5bLI0ep6tYyikgva2VXahOQ$  
-> >>
-> >> v2:
-> >> Updated the commit descriptions.
-> >> Changed subject prefix from dwc to dwc3.
-> >> Increased props array size.
-> >>
-> >>
-> >> Sandeep Maheswaram (3):
-> >>   dt-bindings: usb: usb-xhci: Add bindings for usb-skip-phy-init
-> >>     property
-> >>   usb: host: xhci-plat: Add device property to set XHCI_SKIP_PHY_INIT
-> >>     quirk
-> >>   usb: dwc3: host: Set the property usb-skip-phy-init
-> >>
-> >>  Documentation/devicetree/bindings/usb/usb-xhci.yaml | 4 ++++
-> >>  drivers/usb/dwc3/host.c                             | 4 +++-
-> >>  drivers/usb/host/xhci-plat.c                        | 3 +++
-> >>  3 files changed, 10 insertions(+), 1 deletion(-)
-> >>
-> > 
-> > This is the latest series with bindings added as per Greg's comment. Can you
-> > please pick up this series if you don't have any further comments.
-> > 
-> 
-> We've had this conversation going on for a while. Seems there's no good
-> one solution with everyone fully getting on-board.
-> 
-> I've tried to get some of the quirks out before also, but ran into the
-> same problem. [1]
-> 
-> As Mathias noted [2] before, maybe we can create a new xhci-snps
-> platform glue driver.
-> 
-> The problem with the current implementation is passing dwc3's related
-> info to xhci-plat generic driver is very clunky. We can teach the new
-> glue driver with all the info necessary to drive the controller.
-> 
-> We can just pass the controller's version (and subversion) as a property
-> for platform device. This way, we can:
-> 
-> 1) Separate the quirks from xhci-plat glue. Most common quirks can be
-> detected just base on the controller's version
-> 
-> 2) Avoid having to create duplicate "snps,*" properties
-> 
-> 3) Get access to the common xhci quirk flags while maintain abstraction
-> 
-> 4) Potentially add compatibility string as part of the controller's
-> version and let the glue driver handle the rest
-> 
-> 5) Reduce introducing new "quirks" in the future
-> 
-> I can get started with this. Let me know if you have any comment.
+Sunplus SP7021 is an ARM Coretex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD Card and
+etc.) into a single chip. It is designed for industrial control.
 
-Sorry, could not reply earlier. The proposal sounds good to me.
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-The xhci-plat is a thin wrapper, so having a separate wrapper for SNPS
-controller is definitely not an overkill and gives lot of flexibility
-in abstracting dwc3 specifics. Also dwc3/host.c becomes just a platform
-device creation wrapper and xHC specifics are completely taken out.
+Vincent Shih (2):
+  phy: usb: Add USB2.0 phy driver for Sunplus SP7021
+  dt-bindings: phy: Add bindings doc for Sunplus USB2 PHY driver
 
-Thanks,
-Pavan
+ .../bindings/phy/sunplus,sp7021-usb2-phy.yaml      |  73 +++++
+ MAINTAINERS                                        |   9 +
+ drivers/phy/Kconfig                                |   1 +
+ drivers/phy/Makefile                               |   1 +
+ drivers/phy/sunplus/Kconfig                        |  13 +
+ drivers/phy/sunplus/Makefile                       |   2 +
+ drivers/phy/sunplus/phy-sunplus-usb2.c             | 296 +++++++++++++++++++++
+ 7 files changed, 395 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
+ create mode 100644 drivers/phy/sunplus/Kconfig
+ create mode 100644 drivers/phy/sunplus/Makefile
+ create mode 100644 drivers/phy/sunplus/phy-sunplus-usb2.c
 
+-- 
+2.7.4
 
