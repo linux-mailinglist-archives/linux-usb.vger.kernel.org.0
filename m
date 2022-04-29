@@ -2,98 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63525146DB
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Apr 2022 12:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2656D5147F1
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Apr 2022 13:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357527AbiD2Kjx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Apr 2022 06:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
+        id S1358252AbiD2LVt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Apr 2022 07:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357525AbiD2Kjw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Apr 2022 06:39:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0070C1C92;
-        Fri, 29 Apr 2022 03:36:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63DF3B83441;
-        Fri, 29 Apr 2022 10:36:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59562C385A4;
-        Fri, 29 Apr 2022 10:36:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651228589;
-        bh=Ktc5N4HFPxecyJ36RymVwadyVAhPiXQsm4iiUN/wNrQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PIclIxoJOVTjjC0URkszf8a4BQAe86WJXc+ViQFV7wUKzWuQW+ip4vBS6XJcM6DI5
-         lrv7pQ4IQS/1mXk0TrAF4e4zuYSFN9s0JMeNTTFFN1ah0+4LkLx59P7iCHkMCHZ8H6
-         N5PXOkOAdQ2zbbibCPwxhImuQRspjvhQa50TdPr8=
-Date:   Fri, 29 Apr 2022 12:36:26 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Mayank Rana <quic_mrana@quicinc.com>, peter.chen@kernel.org,
-        balbi@kernel.org, stern@rowland.harvard.edu,
-        chunfeng.yun@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH RESEND] xhci: Use xhci_get_virt_ep() to validate ep_index
-Message-ID: <Ymu/qqxpf68tF1FX@kroah.com>
-References: <1651172688-21439-1-git-send-email-quic_mrana@quicinc.com>
- <71347c81-3887-d80e-707b-c0f1018b1a50@linux.intel.com>
- <Ymu3mZyNisr0Bzf7@kroah.com>
- <364cb857-71f0-b89d-54fb-5acb129451d2@linux.intel.com>
+        with ESMTP id S231253AbiD2LVq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Apr 2022 07:21:46 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B108566A
+        for <linux-usb@vger.kernel.org>; Fri, 29 Apr 2022 04:18:28 -0700 (PDT)
+Received: from fsav119.sakura.ne.jp (fsav119.sakura.ne.jp [27.133.134.246])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 23TBIQZL003504;
+        Fri, 29 Apr 2022 20:18:26 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav119.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp);
+ Fri, 29 Apr 2022 20:18:26 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 23TBIPiV003500
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 29 Apr 2022 20:18:26 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <3ec24824-00b6-4fc3-8bcf-71b9bbcb69c2@I-love.SAKURA.ne.jp>
+Date:   Fri, 29 Apr 2022 20:18:21 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <364cb857-71f0-b89d-54fb-5acb129451d2@linux.intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: [PATCH] ath9k: fix use-after-free read at ath9k_hif_usb_rx_cb()
+Content-Language: en-US
+To:     Toke Hoiland-Jorgensen <toke@toke.dk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pavel Skripkin <paskripkin@gmail.com>
+References: <00000000000055348705b43c701d@google.com>
+Cc:     syzbot <syzbot+03110230a11411024147@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <00000000000055348705b43c701d@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 01:23:50PM +0300, Mathias Nyman wrote:
-> On 29.4.2022 13.02, Greg KH wrote:
-> > On Fri, Apr 29, 2022 at 12:49:59PM +0300, Mathias Nyman wrote:
-> >> On 28.4.2022 22.04, Mayank Rana wrote:
-> >>> ring_doorbell_for_active_rings() API is being called from
-> >>> multiple context. This specific API tries to get virt_dev
-> >>> based endpoint using passed slot_id and ep_index. Some caller
-> >>> API is having check against slot_id and ep_index using
-> >>> xhci_get_virt_ep() API whereas xhci_handle_cmd_config_ep() API
-> >>> only check ep_index against -1 value but not upper bound i.e.
-> >>> EP_CTX_PER_DEV. Hence use xhci_get_virt_ep() API to get virt_dev
-> >>> based endpoint which checks both slot_id and ep_index to get
-> >>> valid endpoint.
-> >>
-> >> ep_index upper bound is known to be in range as EP_CTX_PER_DEV is 31,
-> >> and ep_index = fls(u32 value)  - 1 - 1; 
-> >>
-> >> We can change to use xhci_get_virt_ep(), but this would be more useful
-> >> earlier in xhci_handle_cmd_config_ep() where we touch the ep before
-> >> calling ring_doorbell_for_active_rings()
-> >>
-> >> Also note that this codepath is only used for some prototype
-> >> xHC controller that probably never made it to the market about 10 years ago.
-> > 
-> > Can we just delete the codepath entirely then?
-> 
-> Probably.
-> Commit ac9d8fe7c6a8 USB: xhci: Add quirk for Fresco Logic xHCI hardware.
-> that added this states:
-> 
-> "This patch is for prototype hardware that will be given to other companies
-> for evaluation purposes only, and should not reach consumer hands.  Fresco
-> Logic's next chip rev should have this bug fixed."
-> 
-> Should we print some warning instead if this controller is used?
-> just in case. 
+Although hif_dev->htc_handle is allocated by ath9k_htc_hw_alloc() from
+ath9k_hif_usb_firmware_cb(), hif_dev->htc_handle->drv_priv is not assigned
+until ieee80211_alloc_hw() from ath9k_htc_probe_device() from
+ath9k_htc_hw_init() from ath9k_hif_usb_firmware_cb() returns. However, as
+soon as ath9k_hif_usb_alloc_rx_urbs() from ath9k_hif_usb_alloc_urbs() from
+ath9k_hif_usb_dev_init() from ath9k_hif_usb_firmware_cb() returns, a timer
+interrupt can access hif_dev->htc_handle->drv_priv via RX_STAT_INC() from
+ath9k_hif_usb_rx_stream() from ath9k_hif_usb_rx_cb() from
+usb_hcd_giveback_urb(), which results in NULL pointer deference problem.
 
-Would be a good idea, see if that hardware did actually get out into the
-wild.
+Also, even after htc_handle->drv_priv is assigned, when
+ath9k_htc_wait_for_target() from ath9k_htc_probe_device() from
+ath9k_htc_hw_init() from ath9k_hif_usb_firmware_cb() fails,
+ieee80211_free_hw() (which does not reset hif_dev->htc_handle->drv_priv)
+is immediately called due to "goto err_free;". As a result, a timer
+interrupt which happens after ieee80211_free_hw() triggers use-after-free
+problem at the abovementioned location.
 
-thanks,
+We can flush in-flight requests by calling ath9k_hif_usb_dealloc_urbs()
+before calling ieee80211_free_hw(). But we need to take from two choices
+for not yet assigned case. One is to change e.g. RX_STAT_INC() to check
+for NULL because it depends on CONFIG_ATH9K_HTC_DEBUGFS=y. The other is to
+assign a dummy object which is used until initialization. This patch took
+the latter.
 
-greg k-h
+Link: https://syzkaller.appspot.com/bug?extid=03110230a11411024147
+Reported-by: syzbot <syzbot+03110230a11411024147@syzkaller.appspotmail.com>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Tested-by: syzbot <syzbot+03110230a11411024147@syzkaller.appspotmail.com>
+---
+Pavel Skripkin has tested "check for NULL" approach, but not yet accepted.
+What was wrong with Pavel's approach?
+
+ drivers/net/wireless/ath/ath9k/htc_drv_init.c | 6 +++---
+ drivers/net/wireless/ath/ath9k/htc_hst.c      | 5 +++++
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_init.c b/drivers/net/wireless/ath/ath9k/htc_drv_init.c
+index ff61ae34ecdf..e497a44aff88 100644
+--- a/drivers/net/wireless/ath/ath9k/htc_drv_init.c
++++ b/drivers/net/wireless/ath/ath9k/htc_drv_init.c
+@@ -931,7 +931,6 @@ static int ath9k_init_device(struct ath9k_htc_priv *priv,
+ int ath9k_htc_probe_device(struct htc_target *htc_handle, struct device *dev,
+ 			   u16 devid, char *product, u32 drv_info)
+ {
+-	struct hif_device_usb *hif_dev;
+ 	struct ath9k_htc_priv *priv;
+ 	struct ieee80211_hw *hw;
+ 	int ret;
+@@ -969,10 +968,11 @@ int ath9k_htc_probe_device(struct htc_target *htc_handle, struct device *dev,
+ 
+ err_init:
+ 	ath9k_stop_wmi(priv);
+-	hif_dev = (struct hif_device_usb *)htc_handle->hif_dev;
+-	ath9k_hif_usb_dealloc_urbs(hif_dev);
++	ath9k_hif_usb_dealloc_urbs((struct hif_device_usb *)htc_handle->hif_dev);
+ 	ath9k_destroy_wmi(priv);
+ err_free:
++	ath9k_hif_usb_dealloc_urbs((struct hif_device_usb *)htc_handle->hif_dev);
++	htc_handle->drv_priv = NULL;
+ 	ieee80211_free_hw(hw);
+ 	return ret;
+ }
+diff --git a/drivers/net/wireless/ath/ath9k/htc_hst.c b/drivers/net/wireless/ath/ath9k/htc_hst.c
+index 994ec48b2f66..d461eca389ab 100644
+--- a/drivers/net/wireless/ath/ath9k/htc_hst.c
++++ b/drivers/net/wireless/ath/ath9k/htc_hst.c
+@@ -468,6 +468,9 @@ void ath9k_htc_rx_msg(struct htc_target *htc_handle,
+ 	}
+ }
+ 
++/* A dummy object used until device is initialized. */
++static struct ath9k_htc_priv ath9k_uninitialized_htc_priv;
++
+ struct htc_target *ath9k_htc_hw_alloc(void *hif_handle,
+ 				      struct ath9k_htc_hif *hif,
+ 				      struct device *dev)
+@@ -493,6 +496,8 @@ struct htc_target *ath9k_htc_hw_alloc(void *hif_handle,
+ 
+ 	atomic_set(&target->tgt_ready, 0);
+ 
++	target->drv_priv = &ath9k_uninitialized_htc_priv;
++
+ 	return target;
+ }
+ 
+-- 
+2.34.1
+
+
