@@ -2,86 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5EED5153D1
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Apr 2022 20:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2740C5153FF
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Apr 2022 20:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380060AbiD2Sml (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Apr 2022 14:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
+        id S1359160AbiD2SzR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Apr 2022 14:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359759AbiD2Smk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Apr 2022 14:42:40 -0400
-Received: from mail1.bemta35.messagelabs.com (mail1.bemta35.messagelabs.com [67.219.250.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07005D64C7;
-        Fri, 29 Apr 2022 11:39:20 -0700 (PDT)
+        with ESMTP id S1356733AbiD2SzQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Apr 2022 14:55:16 -0400
+Received: from mail1.bemta31.messagelabs.com (mail1.bemta31.messagelabs.com [67.219.246.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7FEC3E0E
+        for <linux-usb@vger.kernel.org>; Fri, 29 Apr 2022 11:51:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1651257560; i=@motorola.com;
-        bh=m1WVYkVymN+qEiuNhv+8BRhPhexi6XHOEfprm3oobaw=;
+        s=Selector; t=1651258317; i=@motorola.com;
+        bh=353u44s4GB1PlfP/MspD2JdzoFUrHg9PkClsot04B0I=;
         h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
          Content-Type:In-Reply-To;
-        b=iiXEw8WTWjSPbCvWKYaVlzfpbajHZ+S+1A262rKA/jdQXUAEk5+SbSklUiuK4j9+f
-         qGwZz82FOPUmRcrYRFHOJnzs4pm+Fgz6DWFFfSW5ySTe1jTUOtzXNrq87fU9LfA2mL
-         uV7Lppv2IU0fhywmTsgGWYGaLuL3ytW+ofH5IvlTqBVEar5O8/TWvDN5ovDEz+2KxD
-         HH9HFGSSJ9zf5Z+YgegMzphpA6zSQZ+nnbTfSbp++lwXTNIpOtNJNHdMMWsB0jPt/v
-         UVZc3wit6Al11hDPVEymS78OeyQuynUrA1U/ljk9AG+aV5LmzW5Q95T52NDNuBS1GH
-         kJ9DvOd2ioR7w==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrAIsWRWlGSWpSXmKPExsWS8eKJqO55g5w
-  kg8XfjSyOtT1ht1i9+CqTRfPi9WwWnROXsFtc3jWHzWLRslZmiy1tV5gsFmx8xOjA4TG7Yyar
-  x6ZVnWwe++euYffo/2vg8fTHXmaPz5vkAtiiWDPzkvIrElgzWnfOYSzYq1vxf9llpgbG1ypdj
-  FwcQgJTmSSmTmljhXAWMUmc3rwQyOHkYBFQlVg47xYbiM0moCax4PUqZhBbRMBConfRdEYQm1
-  mgiUni2qEUEFtYIFzia/93sBpeAWWJy5sesEEMXc8ocXLXcxaIhKDEyZlPWCCatSRu/HvJ1MX
-  IAWRLSyz/xwES5hSwklh7ZQ3LBEbeWUg6ZiHpmIXQsYCReRWjdVJRZnpGSW5iZo6uoYGBrqGh
-  CZg2tdBLrNJN1Cst1i1PLS7RNdJLLC/WSy0u1iuuzE3OSdHLSy3ZxAgM+JSiFKsdjJP6f+odY
-  pTkYFIS5d2lmZMkxJeUn1KZkVicEV9UmpNafIhRhoNDSYK3SRcoJ1iUmp5akZaZA4w+mLQEB4
-  +SCK+pNlCat7ggMbc4Mx0idYpRUUqct0IBKCEAksgozYNrg0X8JUZZKWFeRgYGBiGegtSi3Mw
-  SVPlXjOIcjErCvCX6QFN4MvNK4Ka/AlrMBLR4ZVEmyOKSRISUVANTGafJFr1LR502+NiFHoks
-  ObU/om6Vck4266p/DrwX9OXqqyXeRPlMjTHgWK1/yGGH63qe+LMP042Wu0eUZ+Rctrtw86efq
-  Z+Ka9bfj4dLHj20PWDjVmmZrdYf/KB5h9Hz5Ix6FY7fExeWPDmScaF7hkH1Z/7rPsc7XyQI7E
-  m+l1Fn0X5H8d6dJeq8tju71z/o1fHX+XnMRufW18zHL+1uSXwPejJVdP6ZyM5WvtdCAS68B/7
-  H6re9dSipcH0knGJ96MD2fYm5e2dasK4wO/rV8MmizvNfhT/cODDh0+39DGLZlxaxudt9uTX1
-  m/YpR5Vw59ZPkTIT2/W/1TKzbb/F5J4mv6O/xszsSsRduSwlluKMREMt5qLiRAAlu9yAcwMAA
-  A==
+        b=eigeOU9u6HguWvySyA4jswCWgAW+vwwXsG+6ub+NnXKQq58lV9by7+GMHO3EXiBdh
+         tGcocNYbrVUlETWiiNjt8nK6iM6FgpjmK9c2X+3TNSXE49qjB1sGQm5DNrSV82hut5
+         C4QX6XoucXjnuAkdbFucDJibomU82fS7CEym4qGDRlw2ECB0UfbZ/Is5/iCefRJD+d
+         XlkeHMUhDHe15ykV9euOwiGmT+cfXBW0alXsGJJxn2ohdze46NOiGYCTzsFidg8Qzu
+         mKPAwuWvmK2PPfqsTQeU0OT2ypKQXthuaulNGG1mHgJbydWtKKbUkZrSznZXfNC2bs
+         /7qhNxp8oXcJA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKIsWRWlGSWpSXmKPExsWS8eKJqO4Z45w
+  kg7+9bBbH2p6wW6yaupPFYtvp36wWnROXsFssWtbKbLGl7QqTxadTO5ktfvzpY3bg8JjdMZPV
+  Y9OqTjaPzS+6mT36/xp4fN4kF8AaxZqZl5RfkcCa8W3pBPaCP1wVF9/PZW1g/MfRxcjJISQwl
+  Umi8WVQFyMXkL2ISWLl+4lsIAkWAVWJq6umsILYbAJqEgter2IGsUUELCR6F01nBGlgFjjLKN
+  F9bj1Yg7CAr8STvZsZQWxeAWWJnye62CCmLmeU+Lz9FBtEQlDi5MwnLCA2s4CWxI1/L5m6GDm
+  AbGmJ5RAXcQpYSfzr28AygZF3FpKOWUg6ZiF0LGBkXsVomVSUmZ5RkpuYmaNraGCga2hoogsk
+  LfQSq3QT9UqLdVMTi0t0DfUSy4v1UouL9Yorc5NzUvTyUks2MQJDPKWIQWgH49Gen3qHGCU5m
+  JREeXdp5iQJ8SXlp1RmJBZnxBeV5qQWH2KU4eBQkuDdagiUEyxKTU+tSMvMAcYbTFqCg0dJhN
+  dUGyjNW1yQmFucmQ6ROsWoy3Hp0JW9zEIsefl5qVLivGeNgIoEQIoySvPgRsBi/xKjrJQwLyM
+  DA4MQT0FqUW5mCar8K0ZxDkYlYd7vIFN4MvNK4Da9AjqCCeiIlUWZIEeUJCKkpBqY1MTDN+Uy
+  N7p8K5/IJ9l8hftUflM/67zJ63yTT/9P3Vlu5aQxwea6Xu6Mswu/sVUe++P/u/p4kPvxkOlPZ
+  kt4d2QlrbppP2PjljsbI6Y43tx46fiM97P1/Lv2+byy+hUl/C5/m+vh+7PO/sr8+3pDSwxTzu
+  8ppVe5pt58p3Op65d/432tNUp9effWPxZ/Ob/2ZOE9LV3ff217xP/676o+rWD00C7c4OuPW0k
+  t67PMNBy0gi4YZz67JtTxIlDYsfcG74/J2T0uxVudc1llCsSPMHNlpAYm/P6zMzyteYMny1/2
+  GSJt9avW6P64/4VxRle2dI+qru2mrcvVGH873BHecnQbk1D2Us1wB7tzP5xnKrEUZyQaajEXF
+  ScCAL2OHn94AwAA
 X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-18.tower-655.messagelabs.com!1651257550!19896!1
+X-Msg-Ref: server-17.tower-686.messagelabs.com!1651258315!10985!1
 X-Originating-IP: [104.232.228.21]
 X-SYMC-ESS-Client-Auth: outbound-route-from=pass
 X-StarScan-Received: 
 X-StarScan-Version: 9.86.4; banners=-,-,-
 X-VirusChecked: Checked
-Received: (qmail 21481 invoked from network); 29 Apr 2022 18:39:11 -0000
+Received: (qmail 12364 invoked from network); 29 Apr 2022 18:51:56 -0000
 Received: from unknown (HELO va32lpfpp01.lenovo.com) (104.232.228.21)
-  by server-18.tower-655.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 29 Apr 2022 18:39:11 -0000
+  by server-17.tower-686.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 29 Apr 2022 18:51:56 -0000
 Received: from ilclmmrp01.lenovo.com (ilclmmrp01.mot.com [100.65.83.165])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4Kqh8t48TRzgQ3G;
-        Fri, 29 Apr 2022 18:39:10 +0000 (UTC)
+        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4KqhRb5r3SzgQ3G;
+        Fri, 29 Apr 2022 18:51:55 +0000 (UTC)
 Received: from p1g3 (unknown [10.45.4.153])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: w36195)
-        by ilclmmrp01.lenovo.com (Postfix) with ESMTPSA id 4Kqh8t1yGQzbvDd;
-        Fri, 29 Apr 2022 18:39:10 +0000 (UTC)
-Date:   Fri, 29 Apr 2022 13:39:04 -0500
+        by ilclmmrp01.lenovo.com (Postfix) with ESMTPSA id 4KqhRb3RbZzbvDd;
+        Fri, 29 Apr 2022 18:51:55 +0000 (UTC)
+Date:   Fri, 29 Apr 2022 13:51:48 -0500
 From:   Dan Vacura <w36195@motorola.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bhupesh Sharma <bhupesh.sharma@st.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: gadget: uvc: Fix crash when encoding data for
- usb request
-Message-ID: <YmwwyMg08P1Yol8j@p1g3>
-References: <20220331184024.23918-1-w36195@motorola.com>
- <Yl8frWT5VYRdt5zA@pendragon.ideasonboard.com>
- <YmB6v8AbzdOgITT8@p1g3>
- <YmXWLFfN4KTFp0wW@pendragon.ideasonboard.com>
+Cc:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-usb@vger.kernel.org, balbi@kernel.org,
+        paul.elder@ideasonboard.com, kernel@pengutronix.de,
+        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH 3/5] usb: gadget: uvc: increase worker prio to WQ_HIGHPRI
+Message-ID: <YmwzxIV5/a+ZNLXI@p1g3>
+References: <20220402233914.3625405-1-m.grzeschik@pengutronix.de>
+ <20220402233914.3625405-4-m.grzeschik@pengutronix.de>
+ <Yl8fwdOuxYDVrujW@pendragon.ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmXWLFfN4KTFp0wW@pendragon.ideasonboard.com>
+In-Reply-To: <Yl8fwdOuxYDVrujW@pendragon.ideasonboard.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -92,126 +88,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Laurent,
+Hi Michael,
 
-ccing Michael for comments about returning v4l2 bufs too early.
+Thanks for this change it improves the performance with the DWC3
+controller on QCOM chips in an Android 5.10 kernel. I haven't tested the
+scatter/gather path, so memcpy was used here via
+uvc_video_encode_isoc(). I was able to get around 30% improvement (fps
+on host side). I did modify the alloc to only set the WQ_HIGHPRI flag.
 
-On Mon, Apr 25, 2022 at 01:58:52AM +0300, Laurent Pinchart wrote:
-> Hi Dan,
+On Tue, Apr 19, 2022 at 11:46:57PM +0300, Laurent Pinchart wrote:
+> Hi Michael,
 > 
-> On Wed, Apr 20, 2022 at 04:27:27PM -0500, Dan Vacura wrote:
-> > On Tue, Apr 19, 2022 at 11:46:37PM +0300, Laurent Pinchart wrote:
-> > > 
-> > > This indeed fixes an issue, so I think we can merge the patch, but I
-> > > also believe we need further improvements on top (of course if you would
-> > > like to improve the implementation in a v4, I won't complain :-))
+> Thank you for the patch.
+> 
+> On Sun, Apr 03, 2022 at 01:39:12AM +0200, Michael Grzeschik wrote:
+> > Likewise to the uvcvideo hostside driver, this patch is changing the
+> > simple workqueue to an async_wq with higher priority. This ensures that
+> > the worker will not be scheduled away while the video stream is handled.
 > > 
-> > It looks like Greg has already accepted the change and it's in
-> > linux-next. We can discuss here how to better handle these -EXDEV errors
-> > for future improvements, as it seems like it's been an issue in the past
-> > as well:
-> > https://www.mail-archive.com/linux-usb@vger.kernel.org/msg105615.html
-> > 
-> > > As replied in v2 (sorry for the late reply), it seems that this error
-> > > can occur under normal conditions. This means we shouldn't cancel the
-> > > queue, at least when the error is intermitent (if all URBs fail that's
-> > > another story).
-> > 
-> > My impression was that canceling the queue was still necessary as we may
-> > be in progress for the current frame. Perhaps we don't need to flush all
-> > the frames from the queue, but at a minimum we need to reset the
-> > buf_used value.
+> > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> > +	video->async_wq = alloc_workqueue("uvcvideo", WQ_UNBOUND | WQ_HIGHPRI, 0);
 > 
-> I think we have three classes of errors:
-> 
-> - "Packet-level" errors, resulting in either data loss or erroneous data
->   being transferred to the host for one (or more) packets in a frame.
->   When such errors occur, we should probably notify the application (on
->   the gadget side), but we can continue sending the rest of the frame.
-> 
-> - "Frame-level" errors, resulting in errors in the rest of the frame.
->   When such an error occurs, we should notify the application, and stop
->   sending data for the current frame, moving to the next frame.
-> 
-> - "Stream-level" errors, resulting in errors in all subsequent frames.
->   When such an error occurs, we should notify the application and stop
->   sending data until the application takes corrective measures.
-> 
-> I'm not sure if packet-level errors make sense, if data is lost, maybe
-> we would be better off just cancelling the current frame and moving to
-> the next one.
-> 
-> For both packet-level errors and frame-level errors, the buffer should
-> be marked as erroneous to notify the application, but there should be no
-> need to cancel the queue and drop all queued buffers. We can just move
-> to the next buffer.
-> 
-> For stream-level errors, I would cancel the queue, and additionally
-> prevent new buffers from being queued until the application stops and
-> restarts the stream.
-> 
-> Finally, which class an error belongs to may not be an intrinsic
-> property of the error itself, packet-level or frame-level errors that
-> occur too often may be worth cancelling the queue (I'm not sure how to
-> quantify "too often" though).
-> 
-> Does this make sense ?
+> Unless I'm mistaken, an unbound work queue means that multiple CPUs will
+> handle tasks in parallel. Is that safe ?
 
-Yes, this makes sense, but I'm not sure if the USB controllers send back
-that info and/or if it's all standardized. For example in the dwc3
-controller I see the following status values returned: -EPIPE,
--ECONNRESET, -ESHUTDOWN, and -EXDEV; whereas in the musb controller
-doesn't appear to return -EXDEV. 
+I found that with the WQ_UNBOUND flag I didn't see any performance
+improvement to the baseline, perhaps related to cpu caching or
+scheduling delays. I didn't notice any stability problems or concurrent
+execution. Do you see any benefit to keeping the WQ_UNBOUND flag?
 
 > 
-> > > We likely need to differentiate between -EXDEV and other errors in
-> > > uvc_video_complete(), as I'd like to be conservative and cancel the
-> > > queue for unknown errors. We also need to improve the queue cancellation
-> > > implementation so that userspace gets an error when queuing further
-> > > buffers.
-> > 
-> > We already feedback to userspace the error, via the state of
-> > vb2_buffer_done(). When userspace dequeues the buffer it can check if
-> > v4l2_buffer.flags has V4L2_BUF_FLAG_ERROR to see if things failed, then
-> > decide what to do like re-queue that frame. However, this appears to not
-> > always occur since I believe the pump thread is independent of the
-> > uvc_video_complete() callback. As a result, the complete callback of the
-> > failed URB may be associated with a buffer that was already released
-> > back to the userspace client.
-> 
-> Good point. That would only be the case for errors in the last
-> request(s) for a frame, right ?
-
-From logging it seems it can be up to the last few requests that come
-back, where the queue is already empty. I guess this is timing dependent
-on the hw, the system scheduling, and how deep the request queue is.
-
-> 
-> > In this case, I don't know if there's
-> > anything to be done, since a new buffer and subsequent URBs might
-> > already be queued up. You suggested an error on a subsequent buffer
-> > queue, but I don't know how helpful that'd be at this point, perhaps in
-> > the scenario that all URBs are failing?
-> 
-> Should we delay sending the buffer back to userspace until all the
-> requests for the buffer have completed ?
-
-Yes, I had that same thought later on. We'll either need a new
-pending_complete_queue to move the buffer from the current queue, or
-create logic to leverage the existing uvc_buffer_state flags; like
-uvcg_queue_head() looks for the first buffer with UVC_BUF_STATE_QUEUED.
-When the complete call comes in we'll have to identify if the request is
-the last completed one for that buffer. It looks like the UVC_STREAM_EOF
-flag will be present, hopefully that's sufficient to rely on. Also,
-since this is a FIFO queue, we can assume that the first buffer with
-UVC_BUF_STATE_DONE can be vb2_buffer_done()'d. If we implement this type
-of logic then we can probably remove this change:
-https://lore.kernel.org/r/20220402232744.3622565-3-m.grzeschik@pengutronix.de
-since its purpose is similar. How does that sound and do you have an
-opinion on a new queue or creating logic around uvc_buffer_state flags?
-
+> > +	if (!video->async_wq)
+> > +		return -EINVAL;
 > 
 > -- 
 > Regards,
 > 
 > Laurent Pinchart
+
+Thanks,
+
+Dan
