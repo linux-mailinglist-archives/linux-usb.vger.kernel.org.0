@@ -2,205 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A4A515A08
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Apr 2022 05:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3506B515AFB
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Apr 2022 09:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382113AbiD3DPY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Apr 2022 23:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
+        id S1382281AbiD3HfL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 Apr 2022 03:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238217AbiD3DPX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Apr 2022 23:15:23 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE28433B6;
-        Fri, 29 Apr 2022 20:12:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651288323; x=1682824323;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mForJUYNnKPSCqNaig1pMrtjG1IwLz5LvyPwt3h2lJ0=;
-  b=aNrmsFe2POxgrdUXNE+xJeO0yVICvG49pBesmGrmMkq1NbyeA20fsYy5
-   huOlfpj85fVJKe4K3wQWZQcPSP9eekd0xPNHp6h2PgSGUz5k5UUSe46eB
-   fjgMmcr521J4nmb9kvW/vgI435I8kpARERzfuKHKktJTRCiFhQ4AdHKgD
-   g=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 29 Apr 2022 20:12:02 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 20:12:01 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 29 Apr 2022 20:11:42 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 29 Apr 2022 20:11:34 -0700
-Date:   Sat, 30 Apr 2022 08:41:30 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        "Rob Herring" <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Len Brown <len.brown@intel.com>, "Pavel Machek" <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_kriskura@quicinc.com>,
-        <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v14 2/7] PM / wakeup: Add device_children_wakeup_capable()
-Message-ID: <20220430031130.GE16319@hu-pkondeti-hyd.qualcomm.com>
-References: <1650395470-31333-1-git-send-email-quic_c_sanm@quicinc.com>
- <1650395470-31333-3-git-send-email-quic_c_sanm@quicinc.com>
- <CAJZ5v0h2ZKPN6SERPnASPywZfeOWXWncJgNZ1WZa80+=M4DCiQ@mail.gmail.com>
- <YmL3lMaR79wPMEfY@google.com>
- <20220425130303.GA16319@hu-pkondeti-hyd.qualcomm.com>
- <20220429125956.GD16319@hu-pkondeti-hyd.qualcomm.com>
- <Ymw6Og/qhg3D0mx+@google.com>
+        with ESMTP id S1382259AbiD3HfK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 Apr 2022 03:35:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E70FB18BD
+        for <linux-usb@vger.kernel.org>; Sat, 30 Apr 2022 00:31:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651303908;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ecJA9Itfla76EvqMIcL7rLch0zXtk0g57WPeiqFPCPg=;
+        b=LF98iaVXPrMEK6jA3Q7WsViPCI8DvFNxHpd4Z04BZjirrfN8i5alp3DGgvWa8ZD+6dIfeL
+        7e6lSHTHGosMiRZWHGBBXxryqjda4sOSFR/S1tk6O7IVSfDCxQ/UJrKT4WJ4GtiGFkrZ6I
+        brH7T8cxhTRdOllUd1QLoGdvTlocN1s=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-547-FOQIJa6bNiSK4FJenm0g2g-1; Sat, 30 Apr 2022 03:31:47 -0400
+X-MC-Unique: FOQIJa6bNiSK4FJenm0g2g-1
+Received: by mail-qv1-f70.google.com with SMTP id 33-20020a0c8024000000b0043d17ffb0bdso7500822qva.18
+        for <linux-usb@vger.kernel.org>; Sat, 30 Apr 2022 00:31:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ecJA9Itfla76EvqMIcL7rLch0zXtk0g57WPeiqFPCPg=;
+        b=WMiFDsqwbsngjPn/Q1Wz3mXjnDX18uTs6GhsjifiG2M5LjsJUgZk3h4t0P8llHrHax
+         bYX865t2C1D+xzK0I/BaCUqZzGpXv/0HfyWfaYuFAj5OI18OvdkGqnpKRQzNetg0ncEt
+         blcU4YLvUgR+gRdcW1bl9SwAZM1e+Pmmb3klJy1Kp5uPG2QfmO7gOlOrd/CwK4sjB5Ll
+         EhyLo6OujNoU67xT386rqdEnjL7szOaB+xV7Ju1DUPm0CHoNTcmRBo7pXspJGNsw2JJ1
+         /MdA436M6fQaP/vV/J2+NehAtCivs0QY4H3qmmtwwa6iN1N8mEhhKaaSO2mwuicLFz49
+         NrZQ==
+X-Gm-Message-State: AOAM533tTsgo7r1bOsk4sXlFHfJxvRCcqLTqnMfPQQO/3oyGQHBahqxo
+        FXOtmE8+wmITc6qafzlvU6yZ1MSqpiWS3Fw57TZ5z58sopxoYfWeYUpxcEsBrxVwhN9Sgg6ml0y
+        y/J+S+YV8U0lwt4Q2Hdqn65rqoIp1orkBMP8k
+X-Received: by 2002:a05:6214:1c46:b0:456:3704:3d71 with SMTP id if6-20020a0562141c4600b0045637043d71mr2256883qvb.118.1651303906751;
+        Sat, 30 Apr 2022 00:31:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz6IDJn0FWqtw1yqSx6hDwlKl3BuWSpPgBbmNyu7reyoKtdlQueA3u46URMwhLCVM9jA//m/4KsHNEpaSrQrLQ=
+X-Received: by 2002:a05:6214:1c46:b0:456:3704:3d71 with SMTP id
+ if6-20020a0562141c4600b0045637043d71mr2256869qvb.118.1651303906469; Sat, 30
+ Apr 2022 00:31:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Ymw6Og/qhg3D0mx+@google.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220429153138.935435-1-jtornosm@redhat.com> <YmyMupSnd4X8LjXc@rowland.harvard.edu>
+In-Reply-To: <YmyMupSnd4X8LjXc@rowland.harvard.edu>
+From:   Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Date:   Sat, 30 Apr 2022 09:31:35 +0200
+Message-ID: <CABk-BGtmoX3arVr1fTnriP1+iO4A2YDm-grMNdNFDqvJxmjb2A@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: btusb: CSR chip hangs when unbound
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        marcel@holtmann.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Matthias,
+Hello Alan,
 
-On Fri, Apr 29, 2022 at 12:19:22PM -0700, Matthias Kaehlcke wrote:
-> Hi Pavan,
-> 
-> On Fri, Apr 29, 2022 at 06:29:56PM +0530, Pavan Kondeti wrote:
-> > Hi Matthias,
-> > 
-> > On Mon, Apr 25, 2022 at 06:33:03PM +0530, Pavan Kondeti wrote:
-> > > Hi Matthias,
-> > > 
-> > > On Fri, Apr 22, 2022 at 11:44:36AM -0700, Matthias Kaehlcke wrote:
-> > > > On Fri, Apr 22, 2022 at 01:57:17PM +0200, Rafael J. Wysocki wrote:
-> > > > > On Tue, Apr 19, 2022 at 9:11 PM Sandeep Maheswaram
-> > > > > <quic_c_sanm@quicinc.com> wrote:
-> > > > > >
-> > > > > > From: Matthias Kaehlcke <mka@chromium.org>
-> > > > > >
-> > > > > > Add device_children_wakeup_capable() which checks whether the device itself
-> > > > > > or one if its descendants is wakeup capable.
-> > > > > 
-> > > > > device_wakeup_path() exists for a very similar purpose.
-> > > > > 
-> > > > > Is it not usable for whatever you need the new function introduced here?
-> > > > 
-> > > > I wasn't aware of it's function, there are no doc comments and the
-> > > > name isn't really self explanatory.
-> > > > 
-> > > > In a quick test device_wakeup_path() returned inconsistent values for the
-> > > > root hub, sometimes true, others false when a wakeup capable USB device was
-> > > > connected.
-> > > 
-> > > We will also test the same to double confirm the behavior of
-> > > device_wakeup_path(). I am assuming that you checked device_wakeup_path()
-> > > only during system suspend path.
-> > > 
-> > > Here is what I understood by looking at __device_suspend(). Please share
-> > > your thoughts on this.
-> > > 
-> > > power.wakeup_path is set to true for the parent *after* a wakeup capable
-> > > device is suspended. This means when the root hub(s) is suspended, it is
-> > > propagated to xhci-plat and when xhci-plat is suspended, it is propagated
-> > > to dwc3. bottom up propgation during system suspend.
-> > > 
-> > > I believe we can directly check something like this in the dwc3 driver
-> > > instead of having another wrapper like device_children_wakeup_capable().
-> > > 
-> > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > index 1170b80..a783257 100644
-> > > --- a/drivers/usb/dwc3/core.c
-> > > +++ b/drivers/usb/dwc3/core.c
-> > > @@ -1878,8 +1878,14 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > >  		break;
-> > >  	case DWC3_GCTL_PRTCAP_HOST:
-> > >  		if (!PMSG_IS_AUTO(msg)) {
-> > > +			/*
-> > > +			 * Don't kill the host when dwc3 is wakeup capable and
-> > > +			 * its children needs wakeup.
-> > > +			 */
-> > > +			if (device_may_wakeup(dwc->dev) && device_wakeup_path(dwc->dev))
-> > > +				handle_it();
-> > > +		} else {
-> > >  			dwc3_core_exit(dwc);
-> > > -			break;
-> > >  		}
-> > >  
-> > >  		/* Let controller to suspend HSPHY before PHY driver suspends */
-> > > 
-> > 
-> > device_wakeup_path(dwc->dev) is returning true all the time irrespective of
-> > the wakeup capability (and enabled status) of the connected USB devices. That
-> > is because xhci-plat device is configured to wakeup all the time. Since the
-> > child is wakeup capable, its parent i.e dwc3 has device_wakeup_path() set.
-> > device_children_wakeup_capable() will also suffer the problem. However,
-> > 
-> > device_children_wakeup_capable(&hcd->self.root_hub->dev) is what Sandeep's
-> > patch is using. That is not correct. we have two root hubs (HS and SS) associated
-> > with a USB3 controller and calling it on one root hub is incorrect. 
-> > device_children_wakeup_capable() must be called on xhci-plat so that it covers
-> > both HS and SS root hubs
-> 
-> Thanks for pointing that out!
-> 
-> > I am thinking of dynamically enabling/disabling xhci-plat wakeup capability so
-> > that the wakeup path is correctly propagated to dwc3. something like below.
-> > Does it make sense to you?
-> > 
-> > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> > index 649ffd8..be0c55b 100644
-> > --- a/drivers/usb/host/xhci-plat.c
-> > +++ b/drivers/usb/host/xhci-plat.c
-> > @@ -412,6 +412,9 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
-> >  	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-> >  	int ret;
-> >  
-> > +	if (!device_wakeup_path(dev))
-> > +		device_wakeup_disable(dev);
-> > +
-> >  	if (pm_runtime_suspended(dev))
-> >  		pm_runtime_resume(dev);
-> >  
-> > @@ -443,6 +446,8 @@ static int __maybe_unused xhci_plat_resume(struct device *dev)
-> >  	pm_runtime_set_active(dev);
-> >  	pm_runtime_enable(dev);
-> >  
-> > +	device_wakeup_enable(dev);
-> 
-> I think this also needs to be done conditionally, otherwise it would
-> create a new wake source on every resume when wakeup is already
-> enabled.
-> 
-Right, this needs to be done conditionally. However, there is a silent
-warning inside device_wakeup_enable() if it is called during system
-transition. Not sure if we really need to worry about that or not.
+Ok, I will prepare a new patch in that way.
 
-Thanks,
-Pavan
+Thanks
+
+Best regards
+Jos=C3=A9 Ignacio
+
+
+On Sat, Apr 30, 2022 at 3:18 AM Alan Stern <stern@rowland.harvard.edu> wrot=
+e:
+>
+> On Fri, Apr 29, 2022 at 05:31:38PM +0200, Jose Ignacio Tornos Martinez wr=
+ote:
+> > Bluetooth Dongles with CSR chip (i.e. USB Bluetooth V4.0 Dongle by
+> > Trust) hang when they are unbound from 'unbind' sysfs entry and
+> > can not be bound again.
+> >
+> > The reason is CSR chip hangs when usb configuration command with
+> > index 0 (used to unconfigure) is sent during disconnection.
+> >
+> > To avoid this unwanted result, it is necessary not to send this
+> > command for CSR chip when usb device is unbound.
+> > Besides, "skip_unconfigure" sysfs entry has been created for
+> > testing purposes with these or other devices.
+>
+> I don't see any good reason for adding this sysfs entry.  Normal users
+> won't want to do it, and developers can add their own quirks to their
+> kernels.  Also, see below.
+>
+> > Athough device is not unconfigured, it is better to avoid device
+> > hanging to be able to operate. Even bluetooth can be previously
+> > turned off.
+> > On the other hand, this is not important if usb device is going to
+> > be bound again (normal behavior), i.e. with usbip.
+> >
+> > Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+> > ---
+> >  drivers/bluetooth/btusb.c  |  8 +++++++-
+> >  drivers/usb/core/generic.c |  2 +-
+> >  drivers/usb/core/sysfs.c   | 36 ++++++++++++++++++++++++++++++++++++
+> >  include/linux/usb.h        |  2 ++
+> >  4 files changed, 46 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/linux/usb.h b/include/linux/usb.h
+> > index 86a73d834e38..55828cd0a0d1 100644
+> > --- a/include/linux/usb.h
+> > +++ b/include/linux/usb.h
+> > @@ -618,6 +618,7 @@ struct usb3_lpm_parameters {
+> >   *   parent->hub_delay + wHubDelay + tTPTransmissionDelay (40ns)
+> >   *   Will be used as wValue for SetIsochDelay requests.
+> >   * @use_generic_driver: ask driver core to reprobe using the generic d=
+river.
+> > + * @skip_unconfigure: disable unconfigure operation for devices withou=
+t support.
+> >   *
+> >   * Notes:
+> >   * Usbcore drivers should not set usbdev->state directly.  Instead use
+> > @@ -704,6 +705,7 @@ struct usb_device {
+> >
+> >       u16 hub_delay;
+> >       unsigned use_generic_driver:1;
+> > +     unsigned skip_unconfigure:1;
+> >  };
+> >  #define      to_usb_device(d) container_of(d, struct usb_device, dev)
+>
+> This is not a good way to do it.  Instead you should create a new USB
+> device quirk bit.  An advantage of this is that there is already a
+> mechanism for users to manually set a quirk flag for a device (the
+> "quirks" sysfs module file).
+>
+> Alan Stern
+>
+
