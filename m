@@ -2,163 +2,273 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33001515B55
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Apr 2022 10:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA91515C22
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Apr 2022 12:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382362AbiD3IIf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 Apr 2022 04:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
+        id S1382558AbiD3KJh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 Apr 2022 06:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbiD3IIc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 Apr 2022 04:08:32 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADA81F601;
-        Sat, 30 Apr 2022 01:05:08 -0700 (PDT)
-Received: from mail-yw1-f179.google.com ([209.85.128.179]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MHX7f-1ngZDn1G89-00DXMm; Sat, 30 Apr 2022 10:05:06 +0200
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2f7d7e3b5bfso105925027b3.5;
-        Sat, 30 Apr 2022 01:05:04 -0700 (PDT)
-X-Gm-Message-State: AOAM533xqCo+pqTgEdk3t68FdBEfQCR1LcHYhjkFQWze4r6WRwPe/SKf
-        djy1ZfzlVfSGf7Cty2LlR1MqsdZ6atlEV7pEziI=
-X-Google-Smtp-Source: ABdhPJxIMDnLMjNypqGxsmgcfR7ZUL75Dsm3yzSBDwMin5TKOLRH68mEJhbPriu8EYo0bqonSau57unAkS8+mfbVn7s=
-X-Received: by 2002:a0d:fc83:0:b0:2e5:b0f4:c125 with SMTP id
- m125-20020a0dfc83000000b002e5b0f4c125mr3009265ywf.347.1651305903889; Sat, 30
- Apr 2022 01:05:03 -0700 (PDT)
+        with ESMTP id S241415AbiD3KJM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 Apr 2022 06:09:12 -0400
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B24289B3
+        for <linux-usb@vger.kernel.org>; Sat, 30 Apr 2022 03:05:49 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 92A0830000648;
+        Sat, 30 Apr 2022 12:05:41 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 8127711B170; Sat, 30 Apr 2022 12:05:41 +0200 (CEST)
+Date:   Sat, 30 Apr 2022 12:05:41 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Paolo Abeni <pabeni@redhat.com>, Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jann Horn <jannh@google.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Jacky Chou <jackychou@asix.com.tw>, Willy Tarreau <w@1wt.eu>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] net: linkwatch: ignore events for unregistered netdevs
+Message-ID: <20220430100541.GA18507@wunner.de>
+References: <18b3541e5372bc9b9fc733d422f4e698c089077c.1650177997.git.lukas@wunner.de>
+ <9325d344e8a6b1a4720022697792a84e545fef62.camel@redhat.com>
+ <20220423160723.GA20330@wunner.de>
+ <20220425074146.1fa27d5f@kernel.org>
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
- <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
- <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
- <20220422234150.GA3442771@roeck-us.net> <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
- <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net> <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
- <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net> <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
- <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
- <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net> <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
- <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com> <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net>
-In-Reply-To: <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 30 Apr 2022 10:04:47 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
-Message-ID: <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:6ELo6aWZ/AVT/h2IKTPL1/oF3s8PLFtinj2cmsv3MhMMbc5hjot
- hLyyhifXaK+a6ahQyyWy1km/IWQxSq3MLQ0ISIDZNjnHBeGaFURioUFgLw+WjNYxKuw5EVS
- dimLcxr+iyF1IKTlkTu/NvMwHi0G+6LLreUrPUSYPAx+Hh/aFHCg9q0MRcjevaEZnfEfp7/
- CFqGylxWC7n4sP9ADC09g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KdWF3kDIRlY=:U6mK5dyEyj/AbvznimN/C3
- Ts0726ANLRkytNW2iGPeTTb3UDc2gTD9XQrqQ6M2mcIIHr2fwn5llpqh2MPqiFnO/wevWwbm1
- U9SHSgo4duBCZCv7iDkGmHeAIfWFyJ29KEgJKNddc96IC3ISz36PmQTIQ6mgCP9NM53g5IDrh
- HD8pSbzqX7srB94lmmCy6h1CnPJ/A1f6OPnMXai3ddugX/eRFpsknp7O+YgzYth9dH2KhGWhe
- 2ISBVhjgGvBVkK991IYW4EOOTYDLSNgehunxyDxOiia8WaSTuHbHn4Q2yP6M8Trg8mgoAbtFD
- Oilf4QNYgJJkgJRNVfYhZmooyltnz0ebcpKUfTX/pcHLognokKq0PkmeHBPdBLXcQuLR4JAWg
- DpFM2DU7O6/Z3IN9sQOwYJVm3k1PkgIBOEhTXeOEi6E/VmDMKOvohKdCxnLDW6L6HFUKxmjnD
- kwZTQgy4VZD+uVXm+Wcoyog8ULwuE4TqhjJ3URUvzZfX2nzN1t1Rd+YIKMlDAl15NfKTcxFAB
- sw32bWvqXoa7We/cN9kIvFc4rOmZyu+hbClBZMjep/QjwB5aXOoLVCclqsgvNPoyx7S73aYuh
- ORyBsz2YkCDXDpYrFcR8aki4b0lOAMo+NR7rj71DVR4jVJGVu6PijUylsX5pSZNau1+SCU32P
- Zq80V50uf8PbyozzcFXQfkuSmXj9VCsKB2COSp5fNhvLY9LEY5kq3MlMFDIapn/0SGjfEyTwJ
- rSqd7cqtK8k891zj+D8VJhKOSxsLbpUW2R+dB7w5tEiuFV7ta6e/aWpRwDtbDgaJ5pQVUttvM
- A75m099WaHVuaoYkbgtarYJh/WtWNVgeo1oP1Ga3MpX+ESVqfA=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425074146.1fa27d5f@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 1:09 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> On 4/29/22 14:46, Arnd Bergmann wrote:
-> > On Fri, Apr 29, 2022 at 10:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >> On 4/29/22 10:48, Guenter Roeck wrote:
-> >>>
-> >>> I tried the pxa-multiplatform-5.18 branch. Its failures match
-> >>> those in v5.18-rc1.
-> >>>
-> >>
-> >> Uuh, wait, the build wasn't complete. There are still some
-> >> failures. I'll report later.
-> >
-> > Sorry about the breakage, I got a few more reports about minor build errors
-> > and warnings, the newly uploaded branches should address all of the ones
-> > I got reports for.
-> >
->
-> Unless I am missing something the failures are the same as before. See
-> https://kerneltests.org/builders/qemu-arm-testing/builds/74/steps/qemubuildcommand/logs/stdio
->
-> This is with v5.18-rc1-49-ge8ab9a9a2745 which is the tip of
-> soc/pxa-multiplatform-5.18.
->
-> Should I check a different branch ?
+On Mon, Apr 25, 2022 at 07:41:46AM -0700, Jakub Kicinski wrote:
+> On Sat, 23 Apr 2022 18:07:23 +0200 Lukas Wunner wrote:
+> > > Looking at the original report it looks like the issue could be
+> > > resolved with a more usb-specific change: e.g. it looks like
+> > > usbnet_defer_kevent() is not acquiring a dev reference as it should.
+> > > 
+> > > Have you considered that path?
+> > 
+> > First of all, the diffstat of the patch shows this is an opportunity
+> > to reduce LoC as well as simplify and speed up device teardown.
+> > 
+> > Second, the approach you're proposing won't work if a driver calls
+> > netif_carrier_on/off() after unregister_netdev().
+> > 
+> > It seems prudent to prevent such a misbehavior in *any* driver,
+> > not just usbnet.  usbnet may not be the only one doing it wrong.
+> > Jann pointed out that there are more syzbot reports related
+> > to a UAF in linkwatch:
+> > 
+> > https://lore.kernel.org/netdev/?q=__linkwatch_run_queue+syzbot
+> > 
+> > Third, I think an API which schedules work, invisibly to the driver,
+> > is dangerous and misguided.  If it is illegal to call
+> > netif_carrier_on/off() for an unregistered but not yet freed netdev,
+> > catch that in core networking code and don't expect drivers to respect
+> > a rule which isn't even documented.
+> 
+> Doesn't mean we should make it legal. We can add a warning to catch
+> abuses.
 
-I only addressed the pcmcia probe failure that you reported for the
-final pxa patch, which
-previously caused a NULL pointer reference here:
+It turns out that no, we *cannot* add a warning to catch abuses.
 
-[    1.405319] PC is at pcmcia_init_one+0xf8/0x27c
-[    1.405476] LR is at devres_add+0x40/0x6c
-[    1.405611] pc : [<c04bdea0>]    lr : [<c044d808>]    psr: a0000113
-[    1.405846] sp : c48a5d00  ip : c15f4220  fp : 60000113
-[    1.406026] r10: 00000000  r9 : c48b000e  r8 : c48b0000
-[    1.406195] r7 : feeb0000  r6 : feeb000e  r5 : c15ec090  r4 : c15ec020
-[    1.406395] r3 : 00000002  r2 : 00000000  r1 : c15f4200  r0 : feeb000e
+I've identified all the places in USB Ethernet drivers which are
+susceptible to calling linkwatch_fire_event() after unregister_netdev(),
+see patch below.
 
-This now seems to work:
+I'm fixing each one like this:
 
-[    1.435846] pcmcia_socket pcmcia_socket1: pccard: PCMCIA card
-inserted into slot 1
-[    1.456350] pcmcia_socket pcmcia_socket0: pccard: PCMCIA card
-inserted into slot 0
-[    1.457489] pcmcia 0.0: pcmcia: registering new device pcmcia0.0 (IRQ: 217)
-[    1.460275] pata_pcmcia: probe of 0.0 failed with error -12
+-		netif_carrier_on(dev->net);
++		dev_hold(dev->net);
++		if (dev->net->reg_state < NETREG_UNREGISTERED)
++			netif_carrier_on(dev->net);
++		dev_put(dev->net);
 
-So it sounds like there are additional bugs that I have to look at. I
-probably won't
-be able to do that in time for the merge window. The logs contain a number of
-warnings, but I have no idea which ones of those are preexisting issue. I had
-a look at
+If this is called after unregister_netdev(), it becomes a no-op.
 
-[    0.689982] pxa-dma pxa-dma.0: error -ENXIO: IRQ index 1 not found
+However if it is called concurrently to unregister_netdev(),
+the reg_state may change to NETREG_UNREGISTERED after the if-clause
+has been evaluated and before netif_carrier_on() is called.
+Then a linkwatch event *will* be fired.  There won't be a use-after-free
+because of the ref I'm acquiring here.  (unregister_netdev() will spin
+in netdev_wait_allrefs_any() until the linkwatch event has been handled.)
 
-and concluded that it must have done this for a long time. In my own qemu
-instance, I see a crash from iWMMXt, but that works fine on your machine.
-OTOH, your failed instances all look like they either time out or
-failed to find a
-rootfs. I tried passing an MMC device as root, and that works here.
+But this means that we may still call linkwatch_fire_event() after
+unregister_netdev()!  So we cannot emit a WARN splat and we cannot
+catch use-after-frees outside of the USB Ethernet drivers I'm fixing
+in the below patch.  It may thus very well happen that a use-after-free
+may still occur for such other drivers and we cannot even WARN about it.
 
-         Arnd
+For this reason I would strongly prefer the $SUBJECT_PATCH ("net: linkwatch:
+ignore events for unregistered netdevs") instead of the patch below.
+I think you are wrong to stall the patch.  It avoids UAFs in *any*
+driver, not just the USB Ethernet ones, it reduces LoC and speeds up
+netdev unregistration.  What more do you want?
+
+Thanks,
+
+Lukas
+
+-- >8 --
+
+diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
+index ea06d10..279a7ca 100644
+--- a/drivers/net/usb/aqc111.c
++++ b/drivers/net/usb/aqc111.c
+@@ -962,7 +962,11 @@ static int aqc111_link_reset(struct usbnet *dev)
+ 		aqc111_write16_cmd(dev, AQ_ACCESS_MAC, SFR_RX_CTL,
+ 				   2, &aqc111_data->rxctl);
+ 
+-		netif_carrier_on(dev->net);
++		dev_hold(dev->net);
++		if (dev->net->reg_state < NETREG_UNREGISTERED)
++			netif_carrier_on(dev->net);
++		dev_put(dev->net);
++
+ 	} else {
+ 		aqc111_read16_cmd(dev, AQ_ACCESS_MAC, SFR_MEDIUM_STATUS_MODE,
+ 				  2, &reg16);
+@@ -981,7 +985,10 @@ static int aqc111_link_reset(struct usbnet *dev)
+ 		aqc111_write_cmd(dev, AQ_ACCESS_MAC, SFR_BULK_OUT_CTRL,
+ 				 1, 1, &reg8);
+ 
+-		netif_carrier_off(dev->net);
++		dev_hold(dev->net);
++		if (dev->net->reg_state < NETREG_UNREGISTERED)
++			netif_carrier_off(dev->net);
++		dev_put(dev->net);
+ 	}
+ 	return 0;
+ }
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index 0872ca12..1e97c0a 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -173,7 +173,11 @@ static int ax88172_link_reset(struct usbnet *dev)
+ 	u8 mode;
+ 	struct ethtool_cmd ecmd = { .cmd = ETHTOOL_GSET };
+ 
+-	mii_check_media(&dev->mii, 1, 1);
++	dev_hold(dev->net);
++	if (dev->net->reg_state < NETREG_UNREGISTERED)
++		mii_check_media(&dev->mii, 1, 1);
++	dev_put(dev->net);
++
+ 	mii_ethtool_gset(&dev->mii, &ecmd);
+ 	mode = AX88172_MEDIUM_DEFAULT;
+ 
+@@ -1013,7 +1017,11 @@ static int ax88178_link_reset(struct usbnet *dev)
+ 
+ 	netdev_dbg(dev->net, "ax88178_link_reset()\n");
+ 
+-	mii_check_media(&dev->mii, 1, 1);
++	dev_hold(dev->net);
++	if (dev->net->reg_state < NETREG_UNREGISTERED)
++		mii_check_media(&dev->mii, 1, 1);
++	dev_put(dev->net);
++
+ 	mii_ethtool_gset(&dev->mii, &ecmd);
+ 	mode = AX88178_MEDIUM_DEFAULT;
+ 	speed = ethtool_cmd_speed(&ecmd);
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index a310989..279ddf2 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -1632,7 +1632,10 @@ static int ax88179_link_reset(struct usbnet *dev)
+ 
+ 	ax179_data->eee_enabled = ax88179_chk_eee(dev);
+ 
+-	netif_carrier_on(dev->net);
++	dev_hold(dev->net);
++	if (dev->net->reg_state < NETREG_UNREGISTERED)
++		netif_carrier_on(dev->net);
++	dev_put(dev->net);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/net/usb/ch9200.c b/drivers/net/usb/ch9200.c
+index f69d9b9..5c7904c 100644
+--- a/drivers/net/usb/ch9200.c
++++ b/drivers/net/usb/ch9200.c
+@@ -214,7 +214,11 @@ static int ch9200_link_reset(struct usbnet *dev)
+ {
+ 	struct ethtool_cmd ecmd;
+ 
+-	mii_check_media(&dev->mii, 1, 1);
++	dev_hold(dev->net);
++	if (dev->net->reg_state < NETREG_UNREGISTERED)
++		mii_check_media(&dev->mii, 1, 1);
++	dev_put(dev->net);
++
+ 	mii_ethtool_gset(&dev->mii, &ecmd);
+ 
+ 	netdev_dbg(dev->net, "%s() speed:%d duplex:%d\n",
+diff --git a/drivers/net/usb/sierra_net.c b/drivers/net/usb/sierra_net.c
+index bb4cbe8f..9ae9359 100644
+--- a/drivers/net/usb/sierra_net.c
++++ b/drivers/net/usb/sierra_net.c
+@@ -427,7 +427,11 @@ static void sierra_net_handle_lsi(struct usbnet *dev, char *data,
+ 	} else {
+ 		priv->link_up = 0;
+ 	}
+-	usbnet_link_change(dev, link_up, 0);
++
++	dev_hold(dev->net);
++	if (dev->net->reg_state < NETREG_UNREGISTERED)
++		usbnet_link_change(dev, link_up, 0);
++	dev_put(dev->net);
+ }
+ 
+ static void sierra_net_dosync(struct usbnet *dev)
+@@ -758,6 +762,8 @@ static void sierra_net_unbind(struct usbnet *dev, struct usb_interface *intf)
+ 
+ 	dev_dbg(&dev->udev->dev, "%s", __func__);
+ 
++	usbnet_status_stop(dev);
++
+ 	/* kill the timer and work */
+ 	del_timer_sync(&priv->sync_timer);
+ 	cancel_work_sync(&priv->sierra_net_kevent);
+@@ -769,8 +775,6 @@ static void sierra_net_unbind(struct usbnet *dev, struct usb_interface *intf)
+ 		netdev_err(dev->net,
+ 			"usb_control_msg failed, status %d\n", status);
+ 
+-	usbnet_status_stop(dev);
+-
+ 	sierra_net_set_private(dev, NULL);
+ 	kfree(priv);
+ }
+diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
+index 95de452..b7f608a 100644
+--- a/drivers/net/usb/smsc75xx.c
++++ b/drivers/net/usb/smsc75xx.c
+@@ -640,7 +640,11 @@ static int smsc75xx_link_reset(struct usbnet *dev)
+ 		return ret;
+ 	}
+ 
+-	mii_check_media(mii, 1, 1);
++	dev_hold(dev->net);
++	if (dev->net->reg_state < NETREG_UNREGISTERED)
++		mii_check_media(mii, 1, 1);
++	dev_put(dev->net);
++
+ 	mii_ethtool_gset(&dev->mii, &ecmd);
+ 	lcladv = smsc75xx_mdio_read(dev->net, mii->phy_id, MII_ADVERTISE);
+ 	rmtadv = smsc75xx_mdio_read(dev->net, mii->phy_id, MII_LPA);
