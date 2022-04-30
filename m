@@ -2,31 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBAD515984
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Apr 2022 03:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72AC0515999
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Apr 2022 03:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381978AbiD3BOp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Apr 2022 21:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
+        id S243107AbiD3B3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Apr 2022 21:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376930AbiD3BOp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Apr 2022 21:14:45 -0400
+        with ESMTP id S240095AbiD3B3b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Apr 2022 21:29:31 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9A59E5EDC5
-        for <linux-usb@vger.kernel.org>; Fri, 29 Apr 2022 18:11:23 -0700 (PDT)
-Received: (qmail 966237 invoked by uid 1000); 29 Apr 2022 21:11:22 -0400
-Date:   Fri, 29 Apr 2022 21:11:22 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B7B1C7F204
+        for <linux-usb@vger.kernel.org>; Fri, 29 Apr 2022 18:26:11 -0700 (PDT)
+Received: (qmail 966577 invoked by uid 1000); 29 Apr 2022 21:26:11 -0400
+Date:   Fri, 29 Apr 2022 21:26:11 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        marcel@holtmann.org
-Subject: Re: [PATCH] Bluetooth: btusb: CSR chip hangs when unbound
-Message-ID: <YmyMupSnd4X8LjXc@rowland.harvard.edu>
-References: <20220429153138.935435-1-jtornosm@redhat.com>
+To:     Vincent Shih <vincent.sunplus@gmail.com>
+Cc:     gregkh@linuxfoundation.org, p.zabel@pengutronix.de,
+        davem@davemloft.net, vladimir.oltean@nxp.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, wells.lu@sunplus.com
+Subject: Re: [PATCH v4 1/2] usb: host: ehci-sunplus: Add driver for ehci in
+ Sunplus SP7021
+Message-ID: <YmyQM3Yp31E1lfrn@rowland.harvard.edu>
+References: <1651220876-26705-1-git-send-email-vincent.sunplus@gmail.com>
+ <1651220876-26705-2-git-send-email-vincent.sunplus@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220429153138.935435-1-jtornosm@redhat.com>
+In-Reply-To: <1651220876-26705-2-git-send-email-vincent.sunplus@gmail.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
@@ -36,60 +41,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 05:31:38PM +0200, Jose Ignacio Tornos Martinez wrote:
-> Bluetooth Dongles with CSR chip (i.e. USB Bluetooth V4.0 Dongle by
-> Trust) hang when they are unbound from 'unbind' sysfs entry and
-> can not be bound again.
+On Fri, Apr 29, 2022 at 04:27:55PM +0800, Vincent Shih wrote:
+> Add driver for ehci in Sunplus SP7021
 > 
-> The reason is CSR chip hangs when usb configuration command with
-> index 0 (used to unconfigure) is sent during disconnection.
-> 
-> To avoid this unwanted result, it is necessary not to send this
-> command for CSR chip when usb device is unbound.
-> Besides, "skip_unconfigure" sysfs entry has been created for
-> testing purposes with these or other devices.
-
-I don't see any good reason for adding this sysfs entry.  Normal users 
-won't want to do it, and developers can add their own quirks to their 
-kernels.  Also, see below.
-
-> Athough device is not unconfigured, it is better to avoid device
-> hanging to be able to operate. Even bluetooth can be previously
-> turned off.
-> On the other hand, this is not important if usb device is going to
-> be bound again (normal behavior), i.e. with usbip.
-> 
-> Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+> Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
 > ---
->  drivers/bluetooth/btusb.c  |  8 +++++++-
->  drivers/usb/core/generic.c |  2 +-
->  drivers/usb/core/sysfs.c   | 36 ++++++++++++++++++++++++++++++++++++
->  include/linux/usb.h        |  2 ++
->  4 files changed, 46 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/usb.h b/include/linux/usb.h
-> index 86a73d834e38..55828cd0a0d1 100644
-> --- a/include/linux/usb.h
-> +++ b/include/linux/usb.h
-> @@ -618,6 +618,7 @@ struct usb3_lpm_parameters {
->   *	parent->hub_delay + wHubDelay + tTPTransmissionDelay (40ns)
->   *	Will be used as wValue for SetIsochDelay requests.
->   * @use_generic_driver: ask driver core to reprobe using the generic driver.
-> + * @skip_unconfigure: disable unconfigure operation for devices without support.
->   *
->   * Notes:
->   * Usbcore drivers should not set usbdev->state directly.  Instead use
-> @@ -704,6 +705,7 @@ struct usb_device {
->  
->  	u16 hub_delay;
->  	unsigned use_generic_driver:1;
-> +	unsigned skip_unconfigure:1;
->  };
->  #define	to_usb_device(d) container_of(d, struct usb_device, dev)
 
-This is not a good way to do it.  Instead you should create a new USB 
-device quirk bit.  An advantage of this is that there is already a 
-mechanism for users to manually set a quirk flag for a device (the 
-"quirks" sysfs module file).
+> diff --git a/drivers/usb/host/ehci-sunplus.c b/drivers/usb/host/ehci-sunplus.c
+> new file mode 100644
+> index 0000000..4d8e20d
+> --- /dev/null
+> +++ b/drivers/usb/host/ehci-sunplus.c
+
+> +static struct usb_ehci_pdata usb_ehci_pdata = {
+> +	.has_tt = 1,
+> +	.has_synopsys_hc_bug = 1,
+> +	.big_endian_desc = 1,
+> +	.big_endian_mmio = 1,
+> +	.power_on = sp_ehci_platform_power_on,
+> +	.power_suspend = sp_ehci_platform_power_off,
+> +	.power_off = sp_ehci_platform_power_off,
+> +
+> +};
+> +
+> +static int ehci_sunplus_reset(struct usb_hcd *hcd)
+> +{
+> +	struct platform_device *pdev = to_platform_device(hcd->self.controller);
+> +	struct usb_ehci_pdata *pdata = pdev->dev.platform_data;
+> +	struct ehci_hcd *ehci = hcd_to_ehci(hcd);
+> +	int retval;
+> +
+> +	hcd->has_tt = pdata->has_tt;
+> +	ehci->has_synopsys_hc_bug = pdata->has_synopsys_hc_bug;
+> +	ehci->big_endian_desc = pdata->big_endian_desc;
+> +	ehci->big_endian_mmio = pdata->big_endian_mmio;
+
+By the way, you don't need to add all this pdata stuff.  You can just 
+set hcd->has_tt, ehci->has_synopsys_hc_bug, ehci_big_endian_desc, and 
+ehci->big_endian_mmio directly, since you already know what their values 
+should be.
+
+It looks like you simply copied the code from the ehci-platform driver.  
+But that driver has to handle many different kinds of platform devices, 
+so it needs to be told about their individual differences, whereas your 
+driver only has to handle one kind.
+
+In fact, there's no obvious reason why you didn't just use the 
+ehci-platform driver instead of writing your own driver.  
+That's the sort of thing you need to explain the patch description.
 
 Alan Stern
