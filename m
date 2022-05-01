@@ -2,54 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183045167BB
-	for <lists+linux-usb@lfdr.de>; Sun,  1 May 2022 22:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D28851680F
+	for <lists+linux-usb@lfdr.de>; Sun,  1 May 2022 23:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354331AbiEAU1d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 May 2022 16:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
+        id S1355134AbiEAVhy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 1 May 2022 17:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354343AbiEAU1c (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 May 2022 16:27:32 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD4A3EF39
-        for <linux-usb@vger.kernel.org>; Sun,  1 May 2022 13:24:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651436646; x=1682972646;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=qB8FXQ0fDT7sJ4/yVweDns83nJ1kKPZHSiUWavVKEdE=;
-  b=hNo/Xd4OaVppTzN68zXZb1EqFp6B2VeHhiK7uQFLKWKd7GX0TLaKo5n+
-   Wr8p4F4rvbZCXIOPtXC8pezqz3LmhN9vJJWH/ZAewZxTdJpK9QUzr9ZJi
-   I0HH+WMQMqqcsUCZUuF0xwGHsmBOgx314BYODdRe72L7ma15GU4CkbRMY
-   efwp8m+h0TuKiJLwT2aTFXcNQFwoF++PgJ9VUXb07/cnmRiPGAJlXgaVR
-   O7D+1Y2I2a+5FKiLhWBYrQ/WgA8JZL/V6/FjXD4U7iiCMrgU7SvI7rLHB
-   yQF+TsQavM8hhbTEfxCbjJi1+U/b1PkLxm44RjZPzleWki/fR7xg4hkIL
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="247611839"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="247611839"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 13:24:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="583310238"
-Received: from ccdjpclinux26.jer.intel.com ([10.12.48.253])
-  by orsmga008.jf.intel.com with ESMTP; 01 May 2022 13:24:03 -0700
-From:   Gil Fine <gil.fine@intel.com>
-To:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     gil.fine@intel.com, linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: [PATCH 5/5] thunderbolt: Change TMU mode to Hifi-Uni once DP tunneled
-Date:   Sun,  1 May 2022 23:33:21 +0300
-Message-Id: <20220501203321.19021-6-gil.fine@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220501203321.19021-1-gil.fine@intel.com>
-References: <20220501203321.19021-1-gil.fine@intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S1355070AbiEAVhw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 May 2022 17:37:52 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC13A3C705
+        for <linux-usb@vger.kernel.org>; Sun,  1 May 2022 14:34:25 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id i38so23232956ybj.13
+        for <linux-usb@vger.kernel.org>; Sun, 01 May 2022 14:34:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XHDe8NwwI9SjN9yPCfdFZVh4P/kcPQDXEmbvi28Ry+g=;
+        b=UhniDGJRP7jnhKBKyFEU7Wm1oj19NfJgHgLTwiUZocIMzFuZcy6/C6VzBVOL++cBvj
+         LrIdaNUAfF6A3gJNASrFvHnAKvQMpgaI3a+ALVbDTJ8eikxSpYzLlQUmI4nPbtXjDg4D
+         61l+wu6AHbkliq+H0f8Ajl6wMDIrIDWbHXSKpPcelWQXQMMNGkpdczkhdkUi7iNKqqom
+         f4kY22N5GzwsoRBTgxLB4z0sMMH1XkpdSeUqQXDWgVrNldazzOzczD605y1f7K81V1C4
+         4ugAXmyrIfWO1yaViycscWtZgLZGrFY+/HbQHeYpwIpBVHoKMccEQ7oDjW2RE/A2D6ol
+         0zew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XHDe8NwwI9SjN9yPCfdFZVh4P/kcPQDXEmbvi28Ry+g=;
+        b=p7VZVI3vtgk83VLvLcOgG07HE5UHJguHrQmoDk9b8NQTX3M/pnNCnlTn/UGbGfoRZa
+         4fE8o68q+BPf90qSFrHelNrJse04ne1Cw9MOzf1eh1WbNjdxNzUtprxa+M/vxWQxo2aY
+         PhYGgEQZlUeFaMH/cw0rU+KQ/1aMidxQhMnN3DRbf7Gbjv8vakftKiWZUJ68dxoirG0y
+         d0EAAspQMbib//gEQU8OmyuLBxVHW2abQDWdFuWzcKEz/9TeJ4KPRBUETn3IVF3N/rr4
+         cEOkenU6ZvUMmqoqI/oLxcucDvUCS39dioZL2ZknNz2cX1RstCV6DR0Lmrjl5gCRSSo2
+         GHcg==
+X-Gm-Message-State: AOAM532q+SgACTkmeFTsXnWAQk+gXwGM+TSAEIbzHxB4+9DwFU417h+Q
+        MTCHgIJuzOrfkyig9Zc5xf/uoDZnJe/agL0e5oB/rQ==
+X-Google-Smtp-Source: ABdhPJwyu4GO9ZTopFM1Qtp9g0AYWW/G2gCL2Rkf2k0emOIuL58PKSUnjfCPuXZtMMqa2spe4DyjerPL+kd11/8NfmU=
+X-Received: by 2002:a25:aa94:0:b0:648:62f2:ef4e with SMTP id
+ t20-20020a25aa94000000b0064862f2ef4emr8160978ybi.626.1651440865094; Sun, 01
+ May 2022 14:34:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-16-arnd@kernel.org>
+In-Reply-To: <20220419163810.2118169-16-arnd@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 1 May 2022 23:34:13 +0200
+Message-ID: <CACRpkdbdCzeWgLOhQfEPVz6fYMqDeTYtqQ3uunj1MK+RGcZZKA@mail.gmail.com>
+Subject: Re: [PATCH 15/48] ARM: pxa: tosa: use gpio descriptor for audio
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     robert.jarzmik@free.fr, linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,98 +89,20 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Here we configure TMU mode to Hifi-Uni once DP tunnel is created.
-This is due to accuracy requirement for DP tunneling as appears in
-CM guide 1.0, section 7.3.2
-Due to Intel HW limitation, once we changed the TMU mode to Hifi-Uni
-(when DP is tunnel exists), we don't change TMU mode back to Normal-Uni,
-even if DP tunnel is teared-down later.
+On Tue, Apr 19, 2022 at 6:40 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
-Signed-off-by: Gil Fine <gil.fine@intel.com>
----
- drivers/thunderbolt/tb.c | 40 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The audio driver should not use a hardwired gpio number
+> from the header. Change it to use a lookup table.
+>
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
+> Cc: alsa-devel@alsa-project.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 05a084e3e9f6..efe53d221ca8 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -50,6 +50,8 @@ struct tb_hotplug_event {
- };
- 
- static void tb_handle_hotplug(struct work_struct *work);
-+static int tb_enable_tmu_1st_child(struct tb *tb,
-+				   enum tb_switch_tmu_rate rate);
- 
- static void tb_queue_hotplug(struct tb *tb, u64 route, u8 port, bool unplug)
- {
-@@ -118,6 +120,13 @@ static void tb_switch_discover_tunnels(struct tb_switch *sw,
- 		switch (port->config.type) {
- 		case TB_TYPE_DP_HDMI_IN:
- 			tunnel = tb_tunnel_discover_dp(tb, port, alloc_hopids);
-+			/*
-+			 * In case of DP tunnel exists, change TMU mode to
-+			 * HiFi for CL0s to work.
-+			 */
-+			if (tunnel)
-+				tb_enable_tmu_1st_child(tb,
-+						TB_SWITCH_TMU_RATE_HIFI);
- 			break;
- 
- 		case TB_TYPE_PCIE_DOWN:
-@@ -235,6 +244,31 @@ static int tb_enable_tmu(struct tb_switch *sw)
- 	return tb_switch_tmu_enable(sw);
- }
- 
-+/*
-+ * Once a DP tunnel exists in the domain, we set the TMU mode so that
-+ * it meets the accuracy requirements and also enables CLx entry (CL0s).
-+ * We set the TMU mode of the first depth router(s) for CL0s to work.
-+ */
-+static int tb_enable_tmu_1st_child(struct tb *tb, enum tb_switch_tmu_rate rate)
-+{
-+	struct tb_switch *root_sw = tb->root_switch;
-+	struct tb_port *port;
-+
-+	tb_switch_for_each_port(root_sw, port) {
-+		struct tb_switch *sw;
-+		int ret;
-+
-+		if (!tb_port_has_remote(port) || !tb_port_is_null(port))
-+			continue;
-+		sw = port->remote->sw;
-+		tb_switch_tmu_configure(sw, rate, tb_switch_is_clx_enabled(sw));
-+		if (tb_switch_tmu_enable(sw))
-+			tb_dbg(tb, "Fail switching TMU to HiFi for 1st depth router %d\n", ret);
-+	}
-+
-+	return 0;
-+}
-+
- /**
-  * tb_find_unused_port() - return the first inactive port on @sw
-  * @sw: Switch to find the port on
-@@ -981,6 +1015,12 @@ static void tb_tunnel_dp(struct tb *tb)
- 
- 	list_add_tail(&tunnel->list, &tcm->tunnel_list);
- 	tb_reclaim_usb3_bandwidth(tb, in, out);
-+	/*
-+	 * In case of DP tunnel exists, change TMU mode to
-+	 * HiFi for CL0s to work.
-+	 */
-+	tb_enable_tmu_1st_child(tb, TB_SWITCH_TMU_RATE_HIFI);
-+
- 	return;
- 
- err_free:
--- 
-2.17.1
+Looks good to me!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
----------------------------------------------------------------------
-Intel Israel (74) Limited
-
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
-
+Yours,
+Linus Walleij
