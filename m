@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A24D5167B7
-	for <lists+linux-usb@lfdr.de>; Sun,  1 May 2022 22:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2405167B8
+	for <lists+linux-usb@lfdr.de>; Sun,  1 May 2022 22:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347241AbiEAU1Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 May 2022 16:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
+        id S1349185AbiEAU10 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 1 May 2022 16:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245521AbiEAU1X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 May 2022 16:27:23 -0400
+        with ESMTP id S1350727AbiEAU1Z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 May 2022 16:27:25 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2871C3EF39
-        for <linux-usb@vger.kernel.org>; Sun,  1 May 2022 13:23:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433B13EF3B
+        for <linux-usb@vger.kernel.org>; Sun,  1 May 2022 13:23:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651436637; x=1682972637;
+  t=1651436639; x=1682972639;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=8FcK3JT6tLgXermoJZpvyCzZDB/VYzv6Hi6+HVyZybI=;
-  b=bnlqyHkHNSDk8MlZxIsY+8vq685n02xv1/ZDEckW6XeoZPN6QOVlKXtW
-   GVlzA+v3mZfVJLVpoFN2Qp7ZKcPhqaXk4zy00qgmmCRdH7yjx8jc2v1dl
-   1vzy+FNjyNky93NOOTNgDT8bUxjqGBWLpkv/yD+xR6vU1l/swW35Yl8rq
-   7Xc1t6PcctHKytdVF1UQdCA34EtPeixrxescy3X9iTaCv8Zj7NU716TT0
-   4If7RWf3nNb0tz2vw08rcToh5d0hVM2nkdt9E2uf1uKi5QaMyUhskRQmE
-   lYBEvUY+8cuI2IC8im5FnuDT7eThidvEkbqzD+wr+W9iopgIdAtMIsqQp
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="247611826"
+  bh=IEyQOyW3hNL974+61WXnKmMPgwKRZ6TSermT7En55bk=;
+  b=FhmjCOJBGIUBHk3jipiSa15BDaYE8S+iupo8lZUIOmB6j6yGT0IeR6nC
+   oxjfnLnO2kDmlENTO+7XvrvvfOEXhpqf5+Cr7lRwobkq41M5qbStJnOP3
+   x+oWQLmIL/7SF98b/W4uSMDidLyqhS+NFQfPrcZhqBGiLlFwmnJPbw0Ql
+   qpHpphNXeo1RnGzPFwmcUD3Jpvfvd+3QXW5VMMxq0n0R5DxgROHs5uH1n
+   e6V8LCnFRdjpa/K3IpRR8x++8sIfsV0yrKHC9Q0RvMC1ni8T5LuzxGaW+
+   dNh8n8mFA+qVfBpjCw9wtgSPyeXMwaMZWjwIZDxPixcBE0lPdkRpIcVP8
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="247611830"
 X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="247611826"
+   d="scan'208";a="247611830"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 13:23:56 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 13:23:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="583310203"
+   d="scan'208";a="583310212"
 Received: from ccdjpclinux26.jer.intel.com ([10.12.48.253])
-  by orsmga008.jf.intel.com with ESMTP; 01 May 2022 13:23:54 -0700
+  by orsmga008.jf.intel.com with ESMTP; 01 May 2022 13:23:57 -0700
 From:   Gil Fine <gil.fine@intel.com>
 To:     andreas.noever@gmail.com, michael.jamet@intel.com,
         mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
 Cc:     gil.fine@intel.com, linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: [PATCH 1/5] thunderbolt: Silently ignore CLx enabling in case CLx is not supported
-Date:   Sun,  1 May 2022 23:33:17 +0300
-Message-Id: <20220501203321.19021-2-gil.fine@intel.com>
+Subject: [PATCH 2/5] thunderbolt: CLx disable before system suspend only if previously enabled
+Date:   Sun,  1 May 2022 23:33:18 +0300
+Message-Id: <20220501203321.19021-3-gil.fine@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220501203321.19021-1-gil.fine@intel.com>
 References: <20220501203321.19021-1-gil.fine@intel.com>
@@ -57,55 +57,54 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We can't enable CLx if it is not supported either by the host or device,
-or by the USB4/TBT link (e.g. when an optical cable is used).
-We silently ignore CLx enabling in this case.
+Disable CLx before system suspended only if previously was enabled.
+Also fix few typos.
 
 Signed-off-by: Gil Fine <gil.fine@intel.com>
 ---
- drivers/thunderbolt/tb.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/thunderbolt/switch.c | 8 +++++---
+ drivers/thunderbolt/tmu.c    | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 44d04b651a8b..7419cd1aefba 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -581,6 +581,7 @@ static void tb_scan_port(struct tb_port *port)
- 	struct tb_cm *tcm = tb_priv(port->sw->tb);
- 	struct tb_port *upstream_port;
- 	struct tb_switch *sw;
-+	int ret;
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index ac87e8b50e52..42b7daaf9c4d 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -3063,8 +3063,10 @@ void tb_switch_suspend(struct tb_switch *sw, bool runtime)
+ 	 * Actually only needed for Titan Ridge but for simplicity can be
+ 	 * done for USB4 device too as CLx is re-enabled at resume.
+ 	 */
+-	if (tb_switch_disable_clx(sw, TB_CL0S))
+-		tb_sw_warn(sw, "failed to disable CLx on upstream port\n");
++	if (tb_switch_is_clx_enabled(sw)) {
++		if (tb_switch_disable_clx(sw, TB_CL0S))
++			tb_sw_warn(sw, "failed to disable CLx on upstream port\n");
++	}
  
- 	if (tb_is_upstream_port(port))
- 		return;
-@@ -669,7 +670,9 @@ static void tb_scan_port(struct tb_port *port)
- 	tb_switch_lane_bonding_enable(sw);
- 	/* Set the link configured */
- 	tb_switch_configure_link(sw);
--	if (tb_switch_enable_clx(sw, TB_CL0S))
-+	/* Silently ignore CLx enabling in case CLx is not supported */
-+	ret = tb_switch_enable_clx(sw, TB_CL0S);
-+	if (ret && ret != -EOPNOTSUPP)
- 		tb_sw_warn(sw, "failed to enable CLx on upstream port\n");
- 
- 	tb_switch_tmu_configure(sw, TB_SWITCH_TMU_RATE_HIFI,
-@@ -1452,12 +1455,15 @@ static int tb_suspend_noirq(struct tb *tb)
- static void tb_restore_children(struct tb_switch *sw)
- {
- 	struct tb_port *port;
-+	int ret;
- 
- 	/* No need to restore if the router is already unplugged */
- 	if (sw->is_unplugged)
- 		return;
- 
--	if (tb_switch_enable_clx(sw, TB_CL0S))
-+	/* Silently ignore CLx re-enabling in case CLx is not supported */
-+	ret = tb_switch_enable_clx(sw, TB_CL0S);
-+	if (ret && ret != -EOPNOTSUPP)
- 		tb_sw_warn(sw, "failed to re-enable CLx on upstream port\n");
- 
- 	/*
+ 	err = tb_plug_events_active(sw, false);
+ 	if (err)
+@@ -3483,7 +3485,7 @@ static int tb_switch_enable_cl0s(struct tb_switch *sw)
+  * to improve performance. CLx is enabled only if both sides of the link
+  * support CLx, and if both sides of the link are not configured as two
+  * single lane links and only if the link is not inter-domain link. The
+- * complete set of conditions is descibed in CM Guide 1.0 section 8.1.
++ * complete set of conditions is described in CM Guide 1.0 section 8.1.
+  *
+  * Return: Returns 0 on success or an error code on failure.
+  */
+diff --git a/drivers/thunderbolt/tmu.c b/drivers/thunderbolt/tmu.c
+index e4a07a26f693..b656659d02fb 100644
+--- a/drivers/thunderbolt/tmu.c
++++ b/drivers/thunderbolt/tmu.c
+@@ -606,7 +606,7 @@ int tb_switch_tmu_enable(struct tb_switch *sw)
+ /**
+  * tb_switch_tmu_configure() - Configure the TMU rate and directionality
+  * @sw: Router whose mode to change
+- * @rate: Rate to configure Off/LowRes/HiFi
++ * @rate: Rate to configure Off/Normal/HiFi
+  * @unidirectional: If uni-directional (bi-directional otherwise)
+  *
+  * Selects the rate of the TMU and directionality (uni-directional or
 -- 
 2.17.1
 
