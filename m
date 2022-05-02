@@ -2,120 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6415177C3
-	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 22:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A641E51782E
+	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 22:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347604AbiEBUMK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 16:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S1352755AbiEBUgk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 16:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387257AbiEBUMB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 16:12:01 -0400
-Received: from m13123.mail.163.com (m13123.mail.163.com [220.181.13.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEC8ABCB2
-        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 13:08:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=o/+Es
-        28ZZz9ebTEF2zfcp05oljhkyKKFyf6y/aIyItc=; b=AdkFnr7VXvvzv48G7vOy6
-        tEU2KKmcuLVUPe+COyQxAN6ZcFJaG/JkeTqbiuffdQwxbOWj9w9dqWUhvfnlZYqE
-        wcucmer5IwlhG00OXnk2zuBG7cGD3lL8VcW0RviRVU418wZCHJhhyQTD0JRAPMd5
-        HpJbAewX0fFM8ZctmArreA=
-Received: from yxj790222$163.com ( [124.126.178.177] ) by
- ajax-webmail-wmsvr123 (Coremail) ; Tue, 3 May 2022 04:07:38 +0800 (CST)
-X-Originating-IP: [124.126.178.177]
-Date:   Tue, 3 May 2022 04:07:38 +0800 (CST)
-From:   =?UTF-8?B?5bCk5pmT5p2w?= <yxj790222@163.com>
-To:     "Alan Stern" <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org
-Subject: Re:Re: Re: BUG report: ohci-pci ehci-pci , newer nec chip failed
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <YnAzjG+wU0yCI29O@rowland.harvard.edu>
-References: <2b564264.1963.18084f0e7a6.Coremail.yxj790222@163.com>
- <Ym/s33/hFybb2JfH@rowland.harvard.edu>
- <1582a60e.34.1808632ac75.Coremail.yxj790222@163.com>
- <YnAzjG+wU0yCI29O@rowland.harvard.edu>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S234495AbiEBUgj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 16:36:39 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8BDB1E2;
+        Mon,  2 May 2022 13:33:09 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id b24so17863689edu.10;
+        Mon, 02 May 2022 13:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Wh7RFLAlxXTGynBVcJhXTtdINHjpn6RYvr2KI/GMVUY=;
+        b=eRKnFR2ca4mxzi0hy8vMLUf89tGPy5CMuxWeIVUcP0gncA/QrdtwsBaZM3XAm+DIYc
+         VC5niphMLXAFwe6GJHS49Iyf61CPIuFayA3a/Jx9euE6VNj4G2UkX9Oujik3XHMrJgy3
+         kG1a1PKS7KxF6YY+xtXvbkn6TxBXaDI2aRf9/4QxltgrbcPWly6TmyqDNT9g9yTu+py8
+         QMtBHz3twpRZeX8pQS4QMcVfA7FEYWOFTY2q/GiQKaS2vQQPMgrNDU+PAAI9b18QTQeo
+         fKlL+R+1Osjrtyf9gurnVR0FJhWT7//dHX/4TR2XnQEoXGDviV+kyD9XDTuemAYpsXKH
+         0rhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Wh7RFLAlxXTGynBVcJhXTtdINHjpn6RYvr2KI/GMVUY=;
+        b=Y0zJyFWg/azqBgIgaRcct+q5rT/LnmRP26XdvhtmP28vkgfsuZY7ixGIwM1aer1qNy
+         FFk+8ashWYgsHyaoHAHY3b62/Pd8shBDDWPtnxeaftN4hqcw3N5CAHTAyjrFzbwipak9
+         BFGsh8/Yk+3h2HLanPbfMzRq220eba+VeRLozPNOWsb44OZ0jtlR5g2yD30X1VG9LoYz
+         Oc99m6R0Y57u6CgkPJF1r8gmbtzmhgYDxi5/P9lUxfiH2+o+wmCyYl4Kn8sH5DSoEFrG
+         xSuQ62GNkOR8Y3eL5Fp2yDK/ydPEL3WvyA7B9SZmhDttYz7z0L8GBDICRd4lOX9IB5WN
+         s6wA==
+X-Gm-Message-State: AOAM533SAmR2BqV+1l4f5xEijfBCnyeHKsvoyGakR5Svr/2veMgjrCjE
+        NCr/dQBNNr1l9fPzIq1/P+4=
+X-Google-Smtp-Source: ABdhPJzE+24samQpCpujcRhbsw/DBwZzZ+rYxPc+cVaLlcBmfq4YMXEJ/BR7id/kWBXMZqsBqqqnLw==
+X-Received: by 2002:a05:6402:d4c:b0:410:a415:fd95 with SMTP id ec12-20020a0564020d4c00b00410a415fd95mr14774431edb.288.1651523587757;
+        Mon, 02 May 2022 13:33:07 -0700 (PDT)
+Received: from ?IPV6:2a02:a466:68ed:1:fdc8:e41f:9a1d:6f82? (2a02-a466-68ed-1-fdc8-e41f-9a1d-6f82.fixed6.kpn.net. [2a02:a466:68ed:1:fdc8:e41f:9a1d:6f82])
+        by smtp.gmail.com with ESMTPSA id cy19-20020a0564021c9300b0042617ba6386sm6936551edb.16.2022.05.02.13.33.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 13:33:07 -0700 (PDT)
+Message-ID: <a9fcc952-a55f-1eae-c584-d58644bae00d@gmail.com>
+Date:   Mon, 2 May 2022 22:33:06 +0200
 MIME-Version: 1.0
-Message-ID: <4e2276ec.63.1808662b754.Coremail.yxj790222@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: e8GowADX348KOnBi7xghAA--.49462W
-X-CM-SenderInfo: 510mlmaqssjqqrwthudrp/xtbB0Rb0vFzIAbIb+QABsL
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net-next 0/7] Polling be gone on LAN95xx
+Content-Language: en-US
+To:     Lukas Wunner <lukas@wunner.de>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>
+References: <cover.1651037513.git.lukas@wunner.de>
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <cover.1651037513.git.lukas@wunner.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Cgp5ZXMsIHRoaXMgbGluZSBpcyBzdHJhbmdlICwgbm9uZSBpL28gbm9uZSBtZW0sIHNvbWV0aGlu
-ZyB3cm9uZy4gb25seSBvaGNpLgoKCgowNjowMC4wIFVTQiBjb250cm9sbGVyOiBORUMgQ29ycG9y
-YXRpb24gT0hDSSBVU0IgQ29udHJvbGxlciAocmV2IDQ0KSAocHJvZy1pZiAxMCBbT0hDSV0pCsKg
-wqAgwqBTdWJzeXN0ZW06IE5FQyBDb3Jwb3JhdGlvbiBVU0IgQ29udHJvbGxlcgrCoMKgIMKgQ29u
-dHJvbDogSS9PLSBNZW0tIEJ1c01hc3Rlci0gU3BlY0N5Y2xlLSBNZW1XSU5WLSBWR0FTbm9vcC0g
-UGFyRXJyLSBTdGVwcGluZy0gU0VSUi0gRmFzdEIyQi0gRGlzSU5UeC0KwqDCoCDCoFN0YXR1czog
-Q2FwKyA2Nk1Iei0gVURGLSBGYXN0QjJCLSBQYXJFcnItIERFVlNFTD1tZWRpdW0gPlRBYm9ydC0g
-PFRBYm9ydC0gPE1BYm9ydC0gPlNFUlItIDxQRVJSLSBJTlR4LQrCoMKgIMKgSW50ZXJydXB0OiBw
-aW4gQSByb3V0ZWQgdG8gSVJRIDIyCsKgwqAgwqBSZWdpb24gMDogTWVtb3J5IGF0IGEwMDAwMDAw
-ICgzMi1iaXQsIG5vbi1wcmVmZXRjaGFibGUpIFt2aXJ0dWFsXSBbc2l6ZT00S10KwqDCoCDCoENh
-cGFiaWxpdGllczogW2ZjXSBOdWxsCsKgwqAgwqBLZXJuZWwgbW9kdWxlczogb2hjaV9wY2kKCjA2
-OjAwLjEgVVNCIGNvbnRyb2xsZXI6IE5FQyBDb3Jwb3JhdGlvbiB1UEQ3MjAxMHggVVNCIDIuMCBD
-b250cm9sbGVyIChyZXYgMDUpIChwcm9nLWlmIDIwIFtFSENJXSkKwqDCoCDCoFN1YnN5c3RlbTog
-TkVDIENvcnBvcmF0aW9uIHVQRDcyMDEweCBVU0IgMi4wIENvbnRyb2xsZXIKwqDCoCDCoENvbnRy
-b2w6IEkvTy0gTWVtKyBCdXNNYXN0ZXItIFNwZWNDeWNsZS0gTWVtV0lOVi0gVkdBU25vb3AtIFBh
-ckVyci0gU3RlcHBpbmctIFNFUlItIEZhc3RCMkItIERpc0lOVHgtCsKgwqAgwqBTdGF0dXM6IENh
-cCsgNjZNSHotIFVERi0gRmFzdEIyQi0gUGFyRXJyLSBERVZTRUw9bWVkaXVtID5UQWJvcnQtIDxU
-QWJvcnQtIDxNQWJvcnQtID5TRVJSLSA8UEVSUi0gSU5UeC0KwqDCoCDCoEludGVycnVwdDogcGlu
-IEEgcm91dGVkIHRvIElSUSAyMgrCoMKgIMKgUmVnaW9uIDA6IE1lbW9yeSBhdCBhMDAwMTAwMCAo
-MzItYml0LCBub24tcHJlZmV0Y2hhYmxlKSBbdmlydHVhbF0gW3NpemU9MjU2XQrCoMKgIMKgQ2Fw
-YWJpbGl0aWVzOiBbZmNdIE51bGwKwqDCoCDCoEtlcm5lbCBtb2R1bGVzOiBlaGNpX3BjaQoKCgpj
-b21wYXJlZCB3aXRoIG9sZCBjaGlwCgoKMDY6MDAuMCBVU0IgY29udHJvbGxlcjogTkVDIENvcnBv
-cmF0aW9uIE9IQ0kgVVNCIENvbnRyb2xsZXIgKHJldiA0MykgKHByb2ctaWYgMTAgW09IQ0ldKQrC
-oMKgIMKgU3Vic3lzdGVtOiBBZGFwdGVjIE9IQ0kgVVNCIENvbnRyb2xsZXIKwqDCoCDCoENvbnRy
-b2w6IEkvTy0gTWVtKyBCdXNNYXN0ZXIrIFNwZWNDeWNsZS0gTWVtV0lOVi0gVkdBU25vb3AtIFBh
-ckVyci0gU3RlcHBpbmctIFNFUlItIEZhc3RCMkItIERpc0lOVHgtCsKgwqAgwqBTdGF0dXM6IENh
-cCsgNjZNSHotIFVERi0gRmFzdEIyQi0gUGFyRXJyLSBERVZTRUw9bWVkaXVtID5UQWJvcnQtIDxU
-QWJvcnQtIDxNQWJvcnQtID5TRVJSLSA8UEVSUi0gSU5UeC0KwqDCoCDCoExhdGVuY3k6IDY0ICgy
-NTBucyBtaW4sIDEwNTAwbnMgbWF4KSwgQ2FjaGUgTGluZSBTaXplOiAzMiBieXRlcwrCoMKgIMKg
-SW50ZXJydXB0OiBwaW4gQSByb3V0ZWQgdG8gSVJRIDIyCsKgwqAgwqBSZWdpb24gMDogTWVtb3J5
-IGF0IGEwMDAwMDAwICgzMi1iaXQsIG5vbi1wcmVmZXRjaGFibGUpIFtzaXplPTRLXQrCoMKgIMKg
-Q2FwYWJpbGl0aWVzOiBbNDBdIFBvd2VyIE1hbmFnZW1lbnQgdmVyc2lvbiAyCsKgwqAgwqDCoMKg
-wqAgRmxhZ3M6IFBNRUNsay0gRFNJLSBEMSsgRDIrIEF1eEN1cnJlbnQ9MG1BIFBNRShEMCssRDEr
-LEQyKyxEM2hvdCssRDNjb2xkLSkKwqDCoCDCoMKgwqDCoCBTdGF0dXM6IEQwIE5vU29mdFJzdC0g
-UE1FLUVuYWJsZS0gRFNlbD0wIERTY2FsZT0wIFBNRSsKwqDCoCDCoEtlcm5lbCBkcml2ZXIgaW4g
-dXNlOiBvaGNpLXBjaQrCoMKgIMKgS2VybmVsIG1vZHVsZXM6IG9oY2lfcGNpCgowNjowMC4xIFVT
-QiBjb250cm9sbGVyOiBORUMgQ29ycG9yYXRpb24gT0hDSSBVU0IgQ29udHJvbGxlciAocmV2IDQz
-KSAocHJvZy1pZiAxMCBbT0hDSV0pCsKgwqAgwqBTdWJzeXN0ZW06IEFkYXB0ZWMgT0hDSSBVU0Ig
-Q29udHJvbGxlcgrCoMKgIMKgQ29udHJvbDogSS9PLSBNZW0rIEJ1c01hc3RlcisgU3BlY0N5Y2xl
-LSBNZW1XSU5WLSBWR0FTbm9vcC0gUGFyRXJyLSBTdGVwcGluZy0gU0VSUi0gRmFzdEIyQi0gRGlz
-SU5UeC0KwqDCoCDCoFN0YXR1czogQ2FwKyA2Nk1Iei0gVURGLSBGYXN0QjJCLSBQYXJFcnItIERF
-VlNFTD1tZWRpdW0gPlRBYm9ydC0gPFRBYm9ydC0gPE1BYm9ydC0gPlNFUlItIDxQRVJSLSBJTlR4
-LQrCoMKgIMKgTGF0ZW5jeTogNjQgKDI1MG5zIG1pbiwgMTA1MDBucyBtYXgpLCBDYWNoZSBMaW5l
-IFNpemU6IDMyIGJ5dGVzCsKgwqAgwqBJbnRlcnJ1cHQ6IHBpbiBCIHJvdXRlZCB0byBJUlEgMjIK
-wqDCoCDCoFJlZ2lvbiAwOiBNZW1vcnkgYXQgYTAwMDEwMDAgKDMyLWJpdCwgbm9uLXByZWZldGNo
-YWJsZSkgW3NpemU9NEtdCsKgwqAgwqBDYXBhYmlsaXRpZXM6IFs0MF0gUG93ZXIgTWFuYWdlbWVu
-dCB2ZXJzaW9uIDIKwqDCoCDCoMKgwqDCoCBGbGFnczogUE1FQ2xrLSBEU0ktIEQxKyBEMisgQXV4
-Q3VycmVudD0wbUEgUE1FKEQwKyxEMSssRDIrLEQzaG90KyxEM2NvbGQtKQrCoMKgIMKgwqDCoMKg
-IFN0YXR1czogRDAgTm9Tb2Z0UnN0LSBQTUUtRW5hYmxlLSBEU2VsPTAgRFNjYWxlPTAgUE1FKwrC
-oMKgIMKgS2VybmVsIGRyaXZlciBpbiB1c2U6IG9oY2ktcGNpCsKgwqAgwqBLZXJuZWwgbW9kdWxl
-czogb2hjaV9wY2kKCjA2OjAwLjIgVVNCIGNvbnRyb2xsZXI6IE5FQyBDb3Jwb3JhdGlvbiB1UEQ3
-MjAxMHggVVNCIDIuMCBDb250cm9sbGVyIChyZXYgMDQpIChwcm9nLWlmIDIwIFtFSENJXSkKwqDC
-oCDCoFN1YnN5c3RlbTogQWRhcHRlYyB1UEQ3MjAxMHggVVNCIDIuMCBDb250cm9sbGVyCsKgwqAg
-wqBDb250cm9sOiBJL08tIE1lbSsgQnVzTWFzdGVyKyBTcGVjQ3ljbGUtIE1lbVdJTlYrIFZHQVNu
-b29wLSBQYXJFcnItIFN0ZXBwaW5nLSBTRVJSLSBGYXN0QjJCLSBEaXNJTlR4LQrCoMKgIMKgU3Rh
-dHVzOiBDYXArIDY2TUh6LSBVREYtIEZhc3RCMkItIFBhckVyci0gREVWU0VMPW1lZGl1bSA+VEFi
-b3J0LSA8VEFib3J0LSA8TUFib3J0LSA+U0VSUi0gPFBFUlItIElOVHgtCsKgwqAgwqBMYXRlbmN5
-OiA2OCAoNDAwMG5zIG1pbiwgODUwMG5zIG1heCksIENhY2hlIExpbmUgU2l6ZTogMzIgYnl0ZXMK
-wqDCoCDCoEludGVycnVwdDogcGluIEMgcm91dGVkIHRvIElSUSAyMgrCoMKgIMKgUmVnaW9uIDA6
-IE1lbW9yeSBhdCBhMDAwMjAwMCAoMzItYml0LCBub24tcHJlZmV0Y2hhYmxlKSBbc2l6ZT0yNTZd
-CsKgwqAgwqBDYXBhYmlsaXRpZXM6IFs0MF0gUG93ZXIgTWFuYWdlbWVudCB2ZXJzaW9uIDIKwqDC
-oCDCoMKgwqDCoCBGbGFnczogUE1FQ2xrLSBEU0ktIEQxKyBEMisgQXV4Q3VycmVudD0wbUEgUE1F
-KEQwKyxEMSssRDIrLEQzaG90KyxEM2NvbGQtKQrCoMKgIMKgwqDCoMKgIFN0YXR1czogRDAgTm9T
-b2Z0UnN0LSBQTUUtRW5hYmxlLSBEU2VsPTAgRFNjYWxlPTAgUE1FLQrCoMKgIMKgS2VybmVsIGRy
-aXZlciBpbiB1c2U6IGVoY2ktcGNpCsKgwqAgwqBLZXJuZWwgbW9kdWxlczogZWhjaV9wY2kKCg==
 
+Hi,
+Op 27-04-2022 om 07:48 schreef Lukas Wunner:
+> Do away with link status polling on LAN95XX USB Ethernet
+> and rely on interrupts instead, thereby reducing bus traffic,
+> CPU overhead and improving interface bringup latency.
+> 
+> The meat of the series is in patch [5/7].  The preceding and
+> following patches are various cleanups to prepare for and
+> adjust to interrupt-driven link state detection.
+> 
+> Please review and test.  Thanks!
+> 
+> Lukas Wunner (7):
+>    usbnet: Run unregister_netdev() before unbind() again
+>    usbnet: smsc95xx: Don't clear read-only PHY interrupt
+>    usbnet: smsc95xx: Don't reset PHY behind PHY driver's back
+>    usbnet: smsc95xx: Avoid link settings race on interrupt reception
+>    usbnet: smsc95xx: Forward PHY interrupts to PHY driver to avoid
+>      polling
+>    net: phy: smsc: Cache interrupt mask
+>    net: phy: smsc: Cope with hot-removal in interrupt handler
+> 
+>   drivers/net/phy/smsc.c         |  28 +++---
+>   drivers/net/usb/asix_devices.c |   6 +-
+>   drivers/net/usb/smsc95xx.c     | 155 ++++++++++++++++-----------------
+>   drivers/net/usb/usbnet.c       |   6 +-
+>   4 files changed, 91 insertions(+), 104 deletions(-)
+> 
+
+Tested-by: Ferry Toth <fntoth@gmail.com> (Intel Edison-Arduino)
+
+(linux v5.17 + the series + usbnet: smsc95xx: Fix deadlock on runtime 
+resume)
+
+While testing I noted another problem. I have "DMA-API: debugging 
+enabled by kernel config" and this (I guess) shows me before and after 
+the patches:
+
+------------[ cut here ]------------
+DMA-API: xhci-hcd xhci-hcd.1.auto: cacheline tracking EEXIST, 
+overlapping mappings aren't supported
+WARNING: CPU: 0 PID: 24 at kernel/dma/debug.c:570 add_dma_entry+0x1d9/0x270
+Modules linked in: mmc_block extcon_intel_mrfld sdhci_pci cqhci sdhci 
+led_class mmc_core intel_soc_pmic_mrfld btrfs libcrc32c xor zlib_deflate 
+raid6_pq zstd_c>
+CPU: 0 PID: 24 Comm: kworker/0:1 Not tainted 5.17.0-edison-acpi-standard #1
+Hardware name: Intel Corporation Merrifield/BODEGA BAY, BIOS 542 
+2015.01.21:18.19.48
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:add_dma_entry+0x1d9/0x270
+Code: ff 0f 84 97 00 00 00 4c 8b 67 50 4d 85 e4 75 03 4c 8b 27 e8 29 a4 
+52 00 48 89 c6 4c 89 e2 48 c7 c7 78 9d 7e 98 e8 b3 f7 b6 00 <0f> 0b 48 
+85 ed 0f 85 d3 >
+RSP: 0018:ffffb2ce000d7ad0 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 00000000ffffffff RCX: 0000000000000000
+RDX: 0000000000000001 RSI: 00000000ffffffea RDI: 00000000ffffffff
+RBP: ffff9dea81239a00 R08: ffffffff98b356c8 R09: 00000000ffffdfff
+R10: ffffffff98a556e0 R11: ffffffff98a556e0 R12: ffff9dea87397180
+R13: 0000000000000001 R14: 0000000000000206 R15: 0000000000046c59
+FS:  0000000000000000(0000) GS:ffff9deabe200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005595807522e0 CR3: 0000000006be2000 CR4: 00000000001006f0
+Call Trace:
+  <TASK>
+  dma_map_page_attrs+0xfc/0x240
+  ? usb_hcd_link_urb_to_ep+0x6e/0xa0
+  ? preempt_count_add+0x63/0x90
+  usb_hcd_map_urb_for_dma+0x3f3/0x580
+  usb_hcd_submit_urb+0x93/0xb90
+  ? _raw_spin_lock+0xe/0x30
+  ? _raw_spin_unlock+0xd/0x20
+  ? usb_hcd_link_urb_to_ep+0x6e/0xa0
+  ? prepare_transfer+0xff/0x140
+  usb_start_wait_urb+0x60/0x160
+  usb_control_msg+0xdc/0x140
+  hub_ext_port_status+0x82/0x100
+  hub_event+0x1b2/0x1880
+  ? hub_activate+0x59c/0x880
+  process_one_work+0x1d3/0x3a0
+  worker_thread+0x48/0x3c0
+  ? rescuer_thread+0x380/0x380
+  kthread+0xe2/0x110
+  ? kthread_complete_and_exit+0x20/0x20
+  ret_from_fork+0x22/0x30
+  </TASK>
+---[ end trace 0000000000000000 ]---
+DMA-API: Mapped at:
+  debug_dma_map_page+0x60/0xf0
+  dma_map_page_attrs+0xfc/0x240
+  usb_hcd_map_urb_for_dma+0x3f3/0x580
+  usb_hcd_submit_urb+0x93/0xb90
+  usb_start_wait_urb+0x60/0x160
+usb 1-1.1: new high-speed USB device number 3 using xhci-hcd
+usb 1-1.1: New USB device found, idVendor=0424, idProduct=ec00, 
+bcdDevice= 2.00
+usb 1-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-1.1: Product: LAN9514
+usb 1-1.1: Manufacturer: SMSC
+usb 1-1.1: SerialNumber: 00951d0d
+
+Any ideas on this?
