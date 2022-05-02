@@ -2,54 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACAF0516B14
-	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 09:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FEB1516BAD
+	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 10:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358493AbiEBHLe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 03:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
+        id S1383630AbiEBIJl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 04:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354251AbiEBHLc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 03:11:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CA2E369FC
-        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 00:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651475284;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Q0MdT8wV/+aiB+RqQZTDcoaBUC3v+WT+dHQmdgPXELM=;
-        b=MnOiCjimmX93bHJK5pQ3pO4e9Ukt13GE52+j/JNs2bGOysMpdoqJ7oDQJu8GxDk12THtjx
-        3K6nEVDOUTY+FLT9Ulci0RbNcGhzKd2GoKFIBpZjS5dAN3JBXcZYaPsZQw6rELEmXHGLs/
-        P0pfF3YFOg6EhhfxNDCrbHzRH99LW14=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-383-KR1y3eeeMm2PfWzGONhv0A-1; Mon, 02 May 2022 03:08:02 -0400
-X-MC-Unique: KR1y3eeeMm2PfWzGONhv0A-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6A0CA833962;
-        Mon,  2 May 2022 07:08:02 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.193.125])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B3FD3403152;
-        Mon,  2 May 2022 07:08:00 +0000 (UTC)
-From:   Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org
-Cc:     marcel@holtmann.org,
-        Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Subject: [PATCH] Bluetooth: btusb: CSR chip hangs when unbound
-Date:   Mon,  2 May 2022 09:07:58 +0200
-Message-Id: <20220502070758.67396-1-jtornosm@redhat.com>
+        with ESMTP id S1383669AbiEBIJL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 04:09:11 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A259538BD2
+        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 01:05:42 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nlR3m-0003jl-1R; Mon, 02 May 2022 10:05:34 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nlR3l-006UqM-Jj; Mon, 02 May 2022 10:05:32 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nlR3j-0071Td-Ee; Mon, 02 May 2022 10:05:31 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Jun Li <jun.li@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH] usb: typec: tcpci: Don't skip cleanup in .remove() on error
+Date:   Mon,  2 May 2022 10:04:56 +0200
+Message-Id: <20220502080456.21568-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1705; h=from:subject; bh=uDYqdZ2OtkjakPB5cPgF980lQTyNVMaqkLyWNK4L9jE=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBib5ClJZ45LzYtkGm1sDiHiZp/yOKj57h3dokLgecK TdO2n2eJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYm+QpQAKCRDB/BR4rcrsCf71B/ 9gNbAl1pnkLY4b0czHM68MUN9FiWX4JBFJJKB1EDznQzDpzsQsjMbM3Q292lkbr9CpXJkKB9mOY3tc 7e5xilYrDsSqwUiUh3x6TIOBHkITXJadVzovU/svDfj54YYXLFvq3D50Qpf/0YHqXICp8JmyRq9ouS TT4PNjAjhrc01BDOlESDVMLxNngrGgLwojQD+wisPBcc0YgUfNt0PZatbtHA0T/cQA4NckvgG37Fbu 5xHD/JoCnM96CDK+zBGK1V4eyoOMQxlvwUW/gL1t09lUTGXHXa55gDEJHwENQS38VDgUOekFPcLUE1 tuNT1Tn4YF25NlPBpOqIReutVEN5+B
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,75 +55,46 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Bluetooth Dongles with CSR chip (i.e. USB Bluetooth V4.0 Dongle by
-Trust) hang when they are unbound from 'unbind' sysfs entry and
-can not be bound again.
+Returning an error value in an i2c remove callback results in an error
+message being emitted by the i2c core, but otherwise it doesn't make a
+difference. The device goes away anyhow and the devm cleanups are
+called.
 
-The reason is CSR chip hangs when usb configuration command with
-index 0 (used to unconfigure) is sent during disconnection.
+In this case the remove callback even returns early without stopping the
+tcpm worker thread and various timers. A work scheduled on the work
+queue, or a firing timer after tcpci_remove() returned probably results
+in a use-after-free situation because the regmap and driver data were
+freed. So better make sure that tcpci_unregister_port() is called even
+if disabling the irq failed.
 
-To avoid this unwanted result, it is necessary not to send this
-command for CSR chip when usb device is unbound, so a new quirk
-has been created for this device.
+Also emit a more specific error message instead of the i2c core's
+"remove failed (EIO), will be ignored" and return 0 to suppress the
+core's warning.
 
-Athough device is not unconfigured, it is better to avoid device
-hanging to be able to operate. Even bluetooth can be previously
-turned off.
-On the other hand, this is not important if usb device is going to
-be bound again (normal behavior), i.e. with usbip.
+This patch is (also) a preparation for making i2c remove callbacks
+return void.
+
+Fixes: 3ba76256fc4e ("usb: typec: tcpci: mask event interrupts when remove driver")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/usb/core/generic.c | 3 ++-
- drivers/usb/core/quirks.c  | 3 +++
- include/linux/usb/quirks.h | 3 +++
- 3 files changed, 8 insertions(+), 1 deletion(-)
+ drivers/usb/typec/tcpm/tcpci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
-index 740342a2812a..ea770b83d876 100644
---- a/drivers/usb/core/generic.c
-+++ b/drivers/usb/core/generic.c
-@@ -22,6 +22,7 @@
- #include <linux/usb.h>
- #include <linux/usb/hcd.h>
- #include <uapi/linux/usb/audio.h>
-+#include <linux/usb/quirks.h>
- #include "usb.h"
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index e07d26a3cd8e..f33e08eb7670 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -877,7 +877,7 @@ static int tcpci_remove(struct i2c_client *client)
+ 	/* Disable chip interrupts before unregistering port */
+ 	err = tcpci_write16(chip->tcpci, TCPC_ALERT_MASK, 0);
+ 	if (err < 0)
+-		return err;
++		dev_warn(&client->dev, "Failed to disable irqs (%pe)\n", ERR_PTR(err));
  
- static inline const char *plural(int n)
-@@ -256,7 +257,7 @@ void usb_generic_driver_disconnect(struct usb_device *udev)
+ 	tcpci_unregister_port(chip->tcpci);
  
- 	/* if this is only an unbind, not a physical disconnect, then
- 	 * unconfigure the device */
--	if (udev->actconfig)
-+	if (!(udev->quirks & USB_QUIRK_SKIP_UNCONFIGURE) && udev->actconfig)
- 		usb_set_configuration(udev, -1);
- }
- 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index d3c14b5ed4a1..13989629d743 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -510,6 +510,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	/* INTEL VALUE SSD */
- 	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
- 
-+	/* CSR Bluetooth */
-+	{ USB_DEVICE(0x0a12, 0x0001), .driver_info = USB_QUIRK_SKIP_UNCONFIGURE },
-+
- 	{ }  /* terminating entry must be last */
- };
- 
-diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
-index eeb7c2157c72..84ab0a369931 100644
---- a/include/linux/usb/quirks.h
-+++ b/include/linux/usb/quirks.h
-@@ -72,4 +72,7 @@
- /* device has endpoints that should be ignored */
- #define USB_QUIRK_ENDPOINT_IGNORE		BIT(15)
- 
-+/* device doesn't support unconfigure when unbound. */
-+#define USB_QUIRK_SKIP_UNCONFIGURE		BIT(16)
-+
- #endif /* __LINUX_USB_QUIRKS_H */
+
+base-commit: 3123109284176b1532874591f7c81f3837bbdc17
 -- 
 2.35.1
 
