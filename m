@@ -2,81 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5C8516A4B
-	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 07:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78613516AF0
+	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 08:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383334AbiEBFez (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 01:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
+        id S1383491AbiEBGqo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 02:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236108AbiEBFew (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 01:34:52 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E87F1BEBC;
-        Sun,  1 May 2022 22:31:23 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2425UpP3091238;
-        Mon, 2 May 2022 00:30:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1651469451;
-        bh=BUXxiuFFD86bcXlTaA9jXgKOVSHgEET95R0XpQs0bMQ=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=l3Jlr9Z5xiaWfnZKQS6pfGDWppRzOuu750uIjqgtewkBtXalcoGjkX1/tIK3Q4Mki
-         +t4JRYNurXz8MEcaPRvQ6d+NMBLawRFzG/8KucDFd5pec7ndEVlfhfk+tLkR9LT6FR
-         8ZawmYDt5bKQPO73r4XMmLzF/Dp2vd1Pa2eG9Ems=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2425Upaj064608
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 2 May 2022 00:30:51 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 2
- May 2022 00:30:50 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 2 May 2022 00:30:49 -0500
-Received: from [172.24.145.198] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2425UjCk005241;
-        Mon, 2 May 2022 00:30:45 -0500
-Message-ID: <f714ee55-ef47-317d-81b9-57020dda064b@ti.com>
-Date:   Mon, 2 May 2022 11:00:44 +0530
+        with ESMTP id S1343598AbiEBGqn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 02:46:43 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864202CE1D;
+        Sun,  1 May 2022 23:43:12 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id x23so6319744pff.9;
+        Sun, 01 May 2022 23:43:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=iAuUa0BGKm3Umq1FBvXS7xo05qV6QmFyZ/a1PtsOX5E=;
+        b=P+qxbf4Lv1EeTjOjULUDyzWnjjnjEl3cIx5tdseFK+GRpnp0zV6XDF8vlDr4Ja4iXx
+         u9qrpIGpr7qdbZHwZlBFg4P0udLosxtDbk0LgGOtAmAjYAlOc8nvcybd3+hve19ZdhDu
+         oPlLwBWiP6KIvd7rp5p6S2oWYS/GrRAYqaIJDLL8JW42LeChQFvENah0cuIJIX8/NQDZ
+         q1G1O6xJ5IEIDrPK8DDotFvvDswPofCe92W6NZGMLQ7LNhZHnxx5aNkB9hG0m2RBl7ot
+         C2KIjK3DtCgJmbENPMSXmwrYpQu313cs+I0uc6KISVuarAN10eMIe66loQy4n9NNG4n3
+         pooQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=iAuUa0BGKm3Umq1FBvXS7xo05qV6QmFyZ/a1PtsOX5E=;
+        b=4cfpxpDCYoxeNWaTvf8JLImmiz2A62NHNdg4ScYke8jYQWeA1mcAzCcpY6EL0MOJik
+         wPY8XlUEGst+/YGDJiCZ/WbCbbOH5FD9HcbSEnKKiLT6gwLlT7IN9gIXRX0R5xPVGctP
+         XeXRUGShEMPzRQE3yE7idrZIk0MpJhwFqoqfKH7r6rvxlPcu8F3ahXrIdVmHBpn2d/0J
+         WlStRJftBrF2F8vo2QhUIBW4wunSRH5ImhF43yI3MdRsU+3jv4mhvr17X7SLSSy1JlKP
+         vPpq+Nek8K71Q6npZaqSxLP/J239+kK3+iDvPflOY4+CK4YarZinDVuZpPVkAvOcIsSH
+         TwtA==
+X-Gm-Message-State: AOAM533d1XiyN/SAwCNDO8+8g+s8HyT5hPYJmicQEO2uOedIlY1tgPax
+        gpi7mAdGjYXnMRb2/0TM+DsHqRoGGmylgs1v7aMTwVCigng=
+X-Google-Smtp-Source: ABdhPJxb5VYu7eov/l6wnOftz0i68FF37AZ58mVmsnou3EO+HGkwtWZqq1kKfFpx+aHz3h/nSDzLjRUdwY5FEmLR0To=
+X-Received: by 2002:a63:e849:0:b0:3c1:cf88:7b17 with SMTP id
+ a9-20020a63e849000000b003c1cf887b17mr8186947pgk.590.1651473792044; Sun, 01
+ May 2022 23:43:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] dt-bindings: usb: tps6598x: Make the interrupts
- property optional
-Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Martin Kepplinger <martink@posteo.de>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220414083120.22535-1-a-govindraju@ti.com>
- <20220414083120.22535-2-a-govindraju@ti.com>
- <be8ab691-98f1-5fb9-fec8-7213a2288d07@kernel.org>
- <56c72151-af5f-366b-b17f-24b9fb6264da@ti.com>
- <ae54dbb1-2b02-cba2-5de2-cf3d9a4e35f5@kernel.org>
- <c1de4293-a058-5e25-9be2-b61ac39f43a3@ti.com>
- <89f7d69a-4fc8-33cc-d9ca-5c50dc5381ab@kernel.org>
- <YmeXw8nerjpuKPC9@kuha.fi.intel.com>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-In-Reply-To: <YmeXw8nerjpuKPC9@kuha.fi.intel.com>
+From:   Forest Crossman <cyrozap@gmail.com>
+Date:   Mon, 2 May 2022 01:43:00 -0500
+Message-ID: <CAO3ALPzKEStzf5-mgSLJ_jsCSbRq_2JzZ6de2rXuETV5RC-V8w@mail.gmail.com>
+Subject: Realtek RTL8156 devices defaulting to CDC-NCM instead of vendor mode,
+ resulting in reduced performance
+To:     hayeswang@realtek.com, davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,135 +61,52 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
+Hi, all,
 
-On 26/04/22 12:27, Heikki Krogerus wrote:
-> On Tue, Apr 26, 2022 at 09:42:31AM +0300, Roger Quadros wrote:
->> Hi,
->>
->> On 22/04/2022 08:07, Aswath Govindraju wrote:
->>> Hi Roger,
->>>
->>> On 21/04/22 00:46, Roger Quadros wrote:
->>>> Hi,
->>>>
->>>> On 18/04/2022 08:19, Aswath Govindraju wrote:
->>>>> Hi Roger,
->>>>>
->>>>> On 14/04/22 23:40, Roger Quadros wrote:
->>>>>> Hi,
->>>>>>
->>>>>> On 14/04/2022 11:31, Aswath Govindraju wrote:
->>>>>>> Support for polling has been added in the driver, which will be used by
->>>>>>> default if interrupts property is not populated. Therefore, remove
->>>>>>> interrupts and interrupt-names from the required properties and add a note
->>>>>>> under interrupts property describing the above support in driver.
->>>>>>>
->>>>>>> Suggested-by: Roger Quadros <rogerq@kernel.org>
->>>>>>
->>>>>> I did not suggest to make interrupts optional by default.
->>>>>>
->>>>>> What I suggested was that if a DT property exists to explicitly
->>>>>> indicate polling mode then interrupts are not required.
->>>>>>
->>>>>
->>>>> ohh okay, got it. However, may I know if adding a dt property to
->>>>> indicate polling for aiding the driver, is the correct approach to model it?
->>>>>
->>>>> In terms of modelling hardware, as interrupts are not connected we are
->>>>> not populating the interrupts property. Shouldn't that be all. If we are
->>>>> adding a property explicitly to indicate polling that can be used by
->>>>> driver, wouldn't that be a software aid being added in the device tree?
->>>>
->>>> The hardware (tps6598x chip) has an interrupt pin and is expected to be used
->>>> in normal case.
->>>>
->>>> Some buggy boards might have forgot to connect it. We are adding polling mode only for these buggy boards. ;)
->>>> So polling mode is an exception.
->>>>
->>>
->>> Yes as you mentioned the interrupt line is expected to connected but
->>> there could be cases where there are not enough pins on the SoC and
->>> polling is used intentionally. In these cases this would be a feature
->>> rather than a bug.
->>
->> I do not agree that this is a feature but a board defect. You can always use
->> a GPIO expander to add more GPIOs than the SoC can provide.
->>
->> Type-C events are asynchronous and polling is a waste of CPU time.
->> What will you do if system suspends and you need to wake up on Type-C
->> status change?
->> So polling mode is just an exception for the defective boards or could
->> be used for debugging.
->>
->>>
->>> Also, I feel like not adding interrupts property in the dt nodes will
->>> indicate polling. My question is why are we adding an extra property
->>> (which is being used only as an aid in the driver) when this feature can
->>> be modeled by making interrupts property optional.
->>
->> Because interrupt property was not originally optional for this driver.
->>
->> I would like to hear what Heikki has to say about this.
->>
->> Any thoughts Heikki?
-> 
-> I think the question is generic. How should DT describe the
-> connection/lack of connection? Rob should comment on this.
-> 
+I recently purchased a pair of USB to 2.5G Ethernet dongles based on
+the RTL8156, and have so far been very happy with them, but only after
+adding some udev rules[0] to to take advantage of the r8152 driver by
+switching the devices from their default CDC-NCM mode to the vendor
+mode. I was prompted to use those rules to switch the driver because
+one of the adapters (based on the RTL8156A) would get very hot, up to
+120 F (49 C) even while idle, and the round-trip latency directly
+between the pair of adapters was about 3 ms, and I couldn't help but
+wonder if maybe the vendor mode might be more efficient.
 
-A gentle ping regarding this.
+After performing some tests of latency and power consumption, testing
+first with both adapters in NCM mode and then again with both in
+vendor mode, I proved my hunch correct. I discovered that, in a
+disconnected state, the RTL8156A adapter used about half as much power
+(0.64 W -> 0.30 W) while the RTL8156B adapter saw a 21% reduction in
+power (0.34 W -> 0.27 W). Similarly, in a connected-but-idle state the
+RTL8156A again saw about a 55% savings in power consumption (2.17 W ->
+0.97 W) and a 40% savings in the RTL8156B adapter (0.94 W -> 0.56 W).
+It was only under full load that the fewest power savings were seen,
+with a reduction of only 15% in the RTL8156A (2.23 W -> 1.90 W) and no
+savings for the RTL8156B (0.96 W). Similarly, round-trip latency while
+idle went from 3 ms to 0.6 ms. I also tested under load and saw much
+larger latency savings and reduced packet loss, but forgot to write
+down the numbers (I can run the tests again if someone really wants me
+too). Also, jumbo frames drastically reduced performance under NCM
+mode, while vendor mode handled it like a champ (again, I forgot to
+write down the numbers but can test again if asked).
 
-Thanks,
-Aswath
+So, with all the benefits I've seen from using these adapters in their
+vendor mode, is there still a reason to let the kernel prefer their
+NCM mode? It'd be nice to be able to get the maximum performance from
+these adapters on any Linux system I plug them into, without having to
+install a udev rule on every one of those systems.
 
-> thanks,
-> 
-> 
->> cheers,
->> -roger
->>
->>>
->>> Thanks,
->>> Aswath
->>>
->>>> cheers,
->>>> -roger
->>>>
->>>>>
->>>>> Thanks,
->>>>> Aswath
->>>>>
->>>>>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
->>>>>>> ---
->>>>>>>  Documentation/devicetree/bindings/usb/ti,tps6598x.yaml | 4 ++--
->>>>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>>>
->>>>>>> diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
->>>>>>> index a4c53b1f1af3..1c4b8c6233e5 100644
->>>>>>> --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
->>>>>>> +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
->>>>>>> @@ -25,6 +25,8 @@ properties:
->>>>>>>  
->>>>>>>    interrupts:
->>>>>>>      maxItems: 1
->>>>>>> +    description:
->>>>>>> +      If interrupts are not populated then by default polling will be used.
->>>>>>>  
->>>>>>>    interrupt-names:
->>>>>>>      items:
->>>>>>> @@ -33,8 +35,6 @@ properties:
->>>>>>>  required:
->>>>>>>    - compatible
->>>>>>>    - reg
->>>>>>> -  - interrupts
->>>>>>> -  - interrupt-names
->>>>>>>  
->>>>>>>  additionalProperties: true
->>>>>>>  
->>>>>>
->>>>>> cheers,
->>>>>> -roger
->>>
->>>
->
+If anyone would like to try replicating the results I listed here, or
+to perform new tests, the specific RTL8156A adapter I used is the
+Ugreen CM275[1] and the RTL8156B adapter is the Inateck ET1001[2].
+
+
+Curious to hear your thoughts on this,
+
+Forest
+
+
+[0]: https://github.com/bb-qq/r8152/blob/160fb96d2319cdf64ae7597e8739972934ac83b2/50-usb-realtek-net.rules
+[1]: https://www.amazon.com/gp/product/B081TY1WQX/
+[2]: https://www.amazon.com/gp/product/B08VN3DGK6/
