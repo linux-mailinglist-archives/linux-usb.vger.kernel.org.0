@@ -2,83 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839675169BC
-	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 06:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5C8516A4B
+	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 07:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357490AbiEBEPQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 00:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S1383334AbiEBFez (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 01:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357492AbiEBEPM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 00:15:12 -0400
-Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF90DFC0;
-        Sun,  1 May 2022 21:11:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1651464703; i=@motorola.com;
-        bh=eH/1/pgPyZWGp/9S1ke2bugzLKOrlj8TXZ/Qgsu3Tlw=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=Qii8V64zUlwFnEDs8JwLgizcC1ajNfJ886cKMc4YV/z/H9A5rU7Af8WTKqF0I+MTk
-         eu8s47eBBEr8Xlg50NvgmQganehTzYw0pIC2W6+WDaTNHMCI973V5iETpXlc3xTa5Y
-         saEQ7knT8tukQ8LaG/LacJLcSp3u+/tFvTUkg5TlywhHe72qyBiS5cH/nBnRb/B56q
-         sAiXzKjYpy3KDab9hyHyn5MTi9FNs/BCVs8FbdcpWQSJEMft9/az329jb+0tBvsLPS
-         trqxXY5nHOY3fdMZI/vixbl75ystPLsl1KXtj80RoyXSy27gkvRtgaiTbzUbqkavo5
-         8GgCpZxxzDCzw==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEIsWRWlGSWpSXmKPExsUyYU+Ds+7/yPw
-  kg/knGS2OtT1ht2hevJ7NonPiEnaLy7vmsFksWtbK7MDqMbtjJqvHplWdbB77565h9/i8SS6A
-  JYo1My8pvyKBNWPip61sBXcVKj72bWJrYOyS7mLk4hASmMYk8W3OIuYuRk4gZxGQ85EVxGYRU
-  JH4++MDE4jNJqAmseD1KrAaEQFjif6zs9hBmpkFpjBKvD+8ghEkISwQKNEy5wZLFyMHB6+Ass
-  SHL6YQM8MlXjxqBJvDKyAocXLmExYQm1lAS+LGv5dMIOXMAtISy/9xgIQ5BTQlJnxbyDyBkXc
-  Wko5ZSDpmIXQsYGRexWidVJSZnlGSm5iZo2toYKBraGiia2apa2RsqpdYpZuoV1qsm5pYXKJr
-  pJdYXqyXWlysV1yZm5yTopeXWrKJERi8KUWur3cwPlr5U+8QoyQHk5Ior+SHvCQhvqT8lMqMx
-  OKM+KLSnNTiQ4wyHBxKErw+gflJQoJFqempFWmZOcBIgklLcPAoifCqhQKleYsLEnOLM9MhUq
-  cYdTkuHbqyl1mIJS8/L1VKnJcFGJdCAiBFGaV5cCNgUX2JUVZKmJeRgYFBiKcgtSg3swRV/hW
-  jOAejkjDv4wigKTyZeSVwm14BHcEEdERTei7IESWJCCmpBqZlBxqjjR9+DTs7KSFjh4KEZ2VG
-  +gkBL+mZyzT83PawaUzOcMyUuc22kXeuTu4n8RcrllnOW8RydLmKUvypOIPbvLv7A/fq+sno9
-  0999O6gjG2FisfU5fnCuq2Cn5/uTolfmiMkb1P/4Gv5O6l1Sg7LqqM3ei5M+aMXsD3G1teYm9
-  ty41m9LgOrS+9i+SRWdKmnvmvW25X53ZiJ/ambvsOH0DWJLBYuStetLZazdMSGVCe/3behYKm
-  FydscRS+xhZI3w1ce7LJvMemQrhOZeeXk9CWll/Y9m1Lg619enCtyVGRbwo/vv0299uWyphp1
-  3r7ta53+sKhvZqhhAsONJPawnV/aQhz21nYwVQkosRRnJBpqMRcVJwIApyHYtWUDAAA=
-X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-15.tower-715.messagelabs.com!1651464702!208247!1
-X-Originating-IP: [144.188.128.67]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.86.4; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 4682 invoked from network); 2 May 2022 04:11:42 -0000
-Received: from unknown (HELO ilclpfpp01.lenovo.com) (144.188.128.67)
-  by server-15.tower-715.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 2 May 2022 04:11:42 -0000
-Received: from va32lmmrp02.lenovo.com (va32lmmrp02.mot.com [10.62.176.191])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by ilclpfpp01.lenovo.com (Postfix) with ESMTPS id 4Ks8mZ3qS9zfBZq;
-        Mon,  2 May 2022 04:11:42 +0000 (UTC)
-Received: from p1g3 (unknown [10.45.4.59])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: w36195)
-        by va32lmmrp02.lenovo.com (Postfix) with ESMTPSA id 4Ks8mZ16gBzf6WS;
-        Mon,  2 May 2022 04:11:42 +0000 (UTC)
-Date:   Sun, 1 May 2022 23:11:36 -0500
-From:   Dan Vacura <w36195@motorola.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: uvc: allow for application to cleanly
- shutdown
-Message-ID: <Ym9Z+BfHcwDKlwjy@p1g3>
-References: <20220429192001.385636-1-w36195@motorola.com>
- <YmzrwgiEO2hoKM4U@kroah.com>
+        with ESMTP id S236108AbiEBFew (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 01:34:52 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E87F1BEBC;
+        Sun,  1 May 2022 22:31:23 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2425UpP3091238;
+        Mon, 2 May 2022 00:30:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651469451;
+        bh=BUXxiuFFD86bcXlTaA9jXgKOVSHgEET95R0XpQs0bMQ=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=l3Jlr9Z5xiaWfnZKQS6pfGDWppRzOuu750uIjqgtewkBtXalcoGjkX1/tIK3Q4Mki
+         +t4JRYNurXz8MEcaPRvQ6d+NMBLawRFzG/8KucDFd5pec7ndEVlfhfk+tLkR9LT6FR
+         8ZawmYDt5bKQPO73r4XMmLzF/Dp2vd1Pa2eG9Ems=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2425Upaj064608
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 2 May 2022 00:30:51 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 2
+ May 2022 00:30:50 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 2 May 2022 00:30:49 -0500
+Received: from [172.24.145.198] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2425UjCk005241;
+        Mon, 2 May 2022 00:30:45 -0500
+Message-ID: <f714ee55-ef47-317d-81b9-57020dda064b@ti.com>
+Date:   Mon, 2 May 2022 11:00:44 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmzrwgiEO2hoKM4U@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] dt-bindings: usb: tps6598x: Make the interrupts
+ property optional
+Content-Language: en-US
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Martin Kepplinger <martink@posteo.de>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220414083120.22535-1-a-govindraju@ti.com>
+ <20220414083120.22535-2-a-govindraju@ti.com>
+ <be8ab691-98f1-5fb9-fec8-7213a2288d07@kernel.org>
+ <56c72151-af5f-366b-b17f-24b9fb6264da@ti.com>
+ <ae54dbb1-2b02-cba2-5de2-cf3d9a4e35f5@kernel.org>
+ <c1de4293-a058-5e25-9be2-b61ac39f43a3@ti.com>
+ <89f7d69a-4fc8-33cc-d9ca-5c50dc5381ab@kernel.org>
+ <YmeXw8nerjpuKPC9@kuha.fi.intel.com>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+In-Reply-To: <YmeXw8nerjpuKPC9@kuha.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,97 +84,135 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 09:56:50AM +0200, Greg Kroah-Hartman wrote:
-> On Fri, Apr 29, 2022 at 02:20:01PM -0500, Dan Vacura wrote:
-> > Several types of kernel panics can occur due to timing during the uvc
-> > gadget removal. This appears to be a problem with gadget resources being
-> > managed by both the client application's v4l2 open/close and the UDC
-> > gadget bind/unbind. Since the concept of USB_GADGET_DELAYED_STATUS
-> > doesn't exist for unbind, add a wait to allow for the application to
-> > close out.
-> > 
-> > Some examples of the panics that can occur are:
-> > 
-> > <1>[ 1147.652313] Unable to handle kernel NULL pointer dereference at
-> > virtual address 0000000000000028
-> > <4>[ 1147.652510] Call trace:
-> > <4>[ 1147.652514]  usb_gadget_disconnect+0x74/0x1f0
-> > <4>[ 1147.652516]  usb_gadget_deactivate+0x38/0x168
-> > <4>[ 1147.652520]  usb_function_deactivate+0x54/0x90
-> > <4>[ 1147.652524]  uvc_function_disconnect+0x14/0x38
-> > <4>[ 1147.652527]  uvc_v4l2_release+0x34/0xa0
-> > <4>[ 1147.652537]  __fput+0xdc/0x2c0
-> > <4>[ 1147.652540]  ____fput+0x10/0x1c
-> > <4>[ 1147.652545]  task_work_run+0xe4/0x12c
-> > <4>[ 1147.652549]  do_notify_resume+0x108/0x168
-> > 
-> > <1>[  282.950561][ T1472] Unable to handle kernel NULL pointer
-> > dereference at virtual address 00000000000005b8
-> > <6>[  282.953111][ T1472] Call trace:
-> > <6>[  282.953121][ T1472]  usb_function_deactivate+0x54/0xd4
-> > <6>[  282.953134][ T1472]  uvc_v4l2_release+0xac/0x1e4
-> > <6>[  282.953145][ T1472]  v4l2_release+0x134/0x1f0
-> > <6>[  282.953167][ T1472]  __fput+0xf4/0x428
-> > <6>[  282.953178][ T1472]  ____fput+0x14/0x24
-> > <6>[  282.953193][ T1472]  task_work_run+0xac/0x130
-> > 
-> > <3>[  213.410077][   T29] configfs-gadget gadget: uvc: Failed to queue
-> > request (-108).
-> > <1>[  213.410116][   T29] Unable to handle kernel NULL pointer
-> > dereference at virtual address 0000000000000003
-> > <6>[  213.413460][   T29] Call trace:
-> > <6>[  213.413474][   T29]  uvcg_video_pump+0x1f0/0x384
-> > <6>[  213.413489][   T29]  process_one_work+0x2a4/0x544
-> > <6>[  213.413502][   T29]  worker_thread+0x350/0x784
-> > <6>[  213.413515][   T29]  kthread+0x2ac/0x320
-> > <6>[  213.413528][   T29]  ret_from_fork+0x10/0x30
-> > 
-> > Signed-off-by: Dan Vacura <w36195@motorola.com>
-> > ---
-> >  drivers/usb/gadget/function/f_uvc.c    | 24 ++++++++++++++++++++++++
-> >  drivers/usb/gadget/function/uvc.h      |  2 ++
-> >  drivers/usb/gadget/function/uvc_v4l2.c |  3 ++-
-> >  3 files changed, 28 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-> > index 50e6e7a58b41..3cc8cf24a7c7 100644
-> > --- a/drivers/usb/gadget/function/f_uvc.c
-> > +++ b/drivers/usb/gadget/function/f_uvc.c
-> > @@ -892,13 +892,36 @@ static void uvc_function_unbind(struct usb_configuration *c,
-> >  {
-> >  	struct usb_composite_dev *cdev = c->cdev;
-> >  	struct uvc_device *uvc = to_uvc(f);
-> > +	int wait_ret = 1;
-> >  
-> >  	uvcg_info(f, "%s()\n", __func__);
-> 
-> Ick, wait, is that in the kernel?  That needs to be removed, ftrace can
-> do that for you.
+Hi Rob,
 
-Yes, part of the kernel, and tbh, I find it to be quite helpful in
-debugging field issues from customers, where enabling ftrace isn't
-practical. If you still want to remove, there are other locations in
-this gadget driver that log function entry. Perhaps it'd be better to
-do a separate change that cleans up logging a bit or do you prefer to
-just refactor this one now?
-
+On 26/04/22 12:27, Heikki Krogerus wrote:
+> On Tue, Apr 26, 2022 at 09:42:31AM +0300, Roger Quadros wrote:
+>> Hi,
+>>
+>> On 22/04/2022 08:07, Aswath Govindraju wrote:
+>>> Hi Roger,
+>>>
+>>> On 21/04/22 00:46, Roger Quadros wrote:
+>>>> Hi,
+>>>>
+>>>> On 18/04/2022 08:19, Aswath Govindraju wrote:
+>>>>> Hi Roger,
+>>>>>
+>>>>> On 14/04/22 23:40, Roger Quadros wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>> On 14/04/2022 11:31, Aswath Govindraju wrote:
+>>>>>>> Support for polling has been added in the driver, which will be used by
+>>>>>>> default if interrupts property is not populated. Therefore, remove
+>>>>>>> interrupts and interrupt-names from the required properties and add a note
+>>>>>>> under interrupts property describing the above support in driver.
+>>>>>>>
+>>>>>>> Suggested-by: Roger Quadros <rogerq@kernel.org>
+>>>>>>
+>>>>>> I did not suggest to make interrupts optional by default.
+>>>>>>
+>>>>>> What I suggested was that if a DT property exists to explicitly
+>>>>>> indicate polling mode then interrupts are not required.
+>>>>>>
+>>>>>
+>>>>> ohh okay, got it. However, may I know if adding a dt property to
+>>>>> indicate polling for aiding the driver, is the correct approach to model it?
+>>>>>
+>>>>> In terms of modelling hardware, as interrupts are not connected we are
+>>>>> not populating the interrupts property. Shouldn't that be all. If we are
+>>>>> adding a property explicitly to indicate polling that can be used by
+>>>>> driver, wouldn't that be a software aid being added in the device tree?
+>>>>
+>>>> The hardware (tps6598x chip) has an interrupt pin and is expected to be used
+>>>> in normal case.
+>>>>
+>>>> Some buggy boards might have forgot to connect it. We are adding polling mode only for these buggy boards. ;)
+>>>> So polling mode is an exception.
+>>>>
+>>>
+>>> Yes as you mentioned the interrupt line is expected to connected but
+>>> there could be cases where there are not enough pins on the SoC and
+>>> polling is used intentionally. In these cases this would be a feature
+>>> rather than a bug.
+>>
+>> I do not agree that this is a feature but a board defect. You can always use
+>> a GPIO expander to add more GPIOs than the SoC can provide.
+>>
+>> Type-C events are asynchronous and polling is a waste of CPU time.
+>> What will you do if system suspends and you need to wake up on Type-C
+>> status change?
+>> So polling mode is just an exception for the defective boards or could
+>> be used for debugging.
+>>
+>>>
+>>> Also, I feel like not adding interrupts property in the dt nodes will
+>>> indicate polling. My question is why are we adding an extra property
+>>> (which is being used only as an aid in the driver) when this feature can
+>>> be modeled by making interrupts property optional.
+>>
+>> Because interrupt property was not originally optional for this driver.
+>>
+>> I would like to hear what Heikki has to say about this.
+>>
+>> Any thoughts Heikki?
 > 
-> > +	/* If we know we're connected via v4l2, then there should be a cleanup
-> > +	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
-> > +	 * though the video device removal uevent. Allow some time for the
-> > +	 * application to close out before things get deleted.
-> > +	 */
-> > +	if (uvc->func_connected) {
-> > +		uvcg_info(f, "%s waiting for clean disconnect\n", __func__);
-> > +		wait_ret = wait_event_interruptible_timeout(uvc->func_connected_queue,
-> > +				uvc->func_connected == false, msecs_to_jiffies(500));
-> > +		uvcg_info(f, "%s done waiting with ret: %u\n", __func__, wait_ret);
+> I think the question is generic. How should DT describe the
+> connection/lack of connection? Rob should comment on this.
 > 
-> Please remove debugging code before submitting patches.
 
-Will do.
+A gentle ping regarding this.
 
-> 
+Thanks,
+Aswath
+
 > thanks,
 > 
-> greg k-h
+> 
+>> cheers,
+>> -roger
+>>
+>>>
+>>> Thanks,
+>>> Aswath
+>>>
+>>>> cheers,
+>>>> -roger
+>>>>
+>>>>>
+>>>>> Thanks,
+>>>>> Aswath
+>>>>>
+>>>>>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>>>>>>> ---
+>>>>>>>  Documentation/devicetree/bindings/usb/ti,tps6598x.yaml | 4 ++--
+>>>>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+>>>>>>> index a4c53b1f1af3..1c4b8c6233e5 100644
+>>>>>>> --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+>>>>>>> +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+>>>>>>> @@ -25,6 +25,8 @@ properties:
+>>>>>>>  
+>>>>>>>    interrupts:
+>>>>>>>      maxItems: 1
+>>>>>>> +    description:
+>>>>>>> +      If interrupts are not populated then by default polling will be used.
+>>>>>>>  
+>>>>>>>    interrupt-names:
+>>>>>>>      items:
+>>>>>>> @@ -33,8 +35,6 @@ properties:
+>>>>>>>  required:
+>>>>>>>    - compatible
+>>>>>>>    - reg
+>>>>>>> -  - interrupts
+>>>>>>> -  - interrupt-names
+>>>>>>>  
+>>>>>>>  additionalProperties: true
+>>>>>>>  
+>>>>>>
+>>>>>> cheers,
+>>>>>> -roger
+>>>
+>>>
+>
