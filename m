@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC3A516F38
-	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 14:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4A0516F39
+	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 14:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384853AbiEBMHe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 08:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
+        id S1384852AbiEBMHz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 08:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384852AbiEBMHc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 08:07:32 -0400
+        with ESMTP id S1384864AbiEBMHy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 08:07:54 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C1812AFA
-        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 05:04:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD74613F9D
+        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 05:04:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08F08B816D6
-        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 12:04:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99F79C385A4;
-        Mon,  2 May 2022 12:04:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86EC9B816DC
+        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 12:04:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35291C385A4;
+        Mon,  2 May 2022 12:04:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651493041;
-        bh=Uv7zEFieoCbkp5+e/uDDBa5Pa14M+xMfNL1dpd3klvo=;
+        s=korg; t=1651493062;
+        bh=+hqDnjgQtxdYI/uPmlkja47RcGs/Q0+0Vf2cx5FYnxc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zEuAFesiZZlDpisqG1+PeHIjzQcdKXxzCNtBgGOmywh+thadhKM4rWNSmIxocKY7C
-         a6/oxAk+8vlaTkpfo5S+TH1NXMjTTyyq46DsAAEj0Ko7rc4AAHw3dEd6jWKA5cEyni
-         xoj4CjdqLxE1NxRGMdc2hKO6qgYEvN4mZL3PH00s=
-Date:   Mon, 2 May 2022 14:04:00 +0200
+        b=TIBcv77X61Qe3HA2ptGe0q/cyerzIN5KvB1iQPCXe017qAsuNNfuMUt/igdbRo0Eg
+         MD1uDXtNpPv8PMR608yH0sn7CF6SUK+CR9Xseu23hNPZq4Bfg8mvLVpxncc7W2cN0W
+         nvy34cZWaaUir5FO0UVdc9T7pAPpICnsIKk26k2o=
+Date:   Mon, 2 May 2022 14:04:21 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
 Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
         marcel@holtmann.org
 Subject: Re: [PATCH] Bluetooth: btusb: CSR chip hangs when unbound
-Message-ID: <Ym/IsLbK89XAj309@kroah.com>
+Message-ID: <Ym/IxTMU+Ea9zBCY@kroah.com>
 References: <20220502070758.67396-1-jtornosm@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -82,9 +82,6 @@ On Mon, May 02, 2022 at 09:07:58AM +0200, Jose Ignacio Tornos Martinez wrote:
 >  #include <linux/usb/hcd.h>
 >  #include <uapi/linux/usb/audio.h>
 > +#include <linux/usb/quirks.h>
-
-Shouldn't that be above the uapi include?
-
 >  #include "usb.h"
 >  
 >  static inline const char *plural(int n)
@@ -107,10 +104,50 @@ Shouldn't that be above the uapi include?
 >  
 > +	/* CSR Bluetooth */
 > +	{ USB_DEVICE(0x0a12, 0x0001), .driver_info = USB_QUIRK_SKIP_UNCONFIGURE },
+> +
+>  	{ }  /* terminating entry must be last */
+>  };
+>  
+> diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
+> index eeb7c2157c72..84ab0a369931 100644
+> --- a/include/linux/usb/quirks.h
+> +++ b/include/linux/usb/quirks.h
+> @@ -72,4 +72,7 @@
+>  /* device has endpoints that should be ignored */
+>  #define USB_QUIRK_ENDPOINT_IGNORE		BIT(15)
+>  
+> +/* device doesn't support unconfigure when unbound. */
+> +#define USB_QUIRK_SKIP_UNCONFIGURE		BIT(16)
+> +
+>  #endif /* __LINUX_USB_QUIRKS_H */
+> -- 
+> 2.35.1
+> 
 
-Please read the big comment at the top of this list of entries.  It says
-it must be in sorder order, which this is not :(
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch does not have a Signed-off-by: line.  Please read the
+  kernel file, Documentation/SubmittingPatches and resend it after
+  adding that line.  Note, the line needs to be in the body of the
+  email, before the patch, not at the bottom of the patch or in the
+  email signature.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
