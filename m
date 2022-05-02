@@ -2,167 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C73516DE8
-	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 12:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF338516E21
+	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 12:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351588AbiEBKNQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 06:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
+        id S1377522AbiEBKby (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 06:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiEBKNP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 06:13:15 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8888F7D
-        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 03:09:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651486186; x=1683022186;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AnOcEUVp5xrtrFxHrw9GA2aCQlnHve2SUJFO3cEfbWo=;
-  b=TuT1+1QczuGAWvmyGpSxPZXWNwybw6A3J+yQko3fR3pBwxTubka1fF2T
-   QmOjzKUI1igelW2NNq042GWHTVZmLSWQ7b3fjLkd7j5gzuHP+fFKfoyXp
-   Ff9gQEeHUwhr7bMRB8Kt63xFQbSgFAkmNGjNvwsVNCv1I+Vae5tpcEV0O
-   UhZUrp2Y8t9gCBz6XB/T1oov1bBFNQ9/GGFaBnhTOY1jpyXsIWss4mdnH
-   GBJib0JypQYiBrX2X6zAY2TkUMeAQBoDeDcui0owMzfPPdva4S00WSJpM
-   JBAHInPpTdsPJqOVIBdIJY4lgR8raZEHAgMJKzRlhZUrgqtiWINevSTeH
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="330158267"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="330158267"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 03:09:46 -0700
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="516009043"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 03:09:43 -0700
-Received: by lahna (sSMTP sendmail emulation); Mon, 02 May 2022 13:09:41 +0300
-Date:   Mon, 2 May 2022 13:09:41 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Gil Fine <gil.fine@intel.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: Re: [PATCH 5/5] thunderbolt: Change TMU mode to Hifi-Uni once DP
- tunneled
-Message-ID: <Ym+t5cI1Qho7B+Sd@lahna>
-References: <20220501203321.19021-1-gil.fine@intel.com>
- <20220501203321.19021-6-gil.fine@intel.com>
+        with ESMTP id S1384600AbiEBKbO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 06:31:14 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BFD1F62D
+        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 03:26:56 -0700 (PDT)
+Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 242AQWhJ056596;
+        Mon, 2 May 2022 19:26:32 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
+ Mon, 02 May 2022 19:26:32 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 242AQV3T056592
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 2 May 2022 19:26:32 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <e144d930-7b82-3310-1163-dae9f7914fa9@I-love.SAKURA.ne.jp>
+Date:   Mon, 2 May 2022 19:26:30 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220501203321.19021-6-gil.fine@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 (resend)] media: imon: reorganize serialization
+Content-Language: en-US
+To:     Sean Young <sean@mess.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jarod Wilson <jarod@redhat.com>,
+        syzbot <syzbot+c558267ad910fc494497@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <5a06c7f1-9a29-99e4-c700-fec3f09509d2@I-love.SAKURA.ne.jp>
+ <YmZny7mzugFe0t+X@gofer.mess.org>
+ <62dddbb9-3053-f284-f9db-3beda5e8e951@I-love.SAKURA.ne.jp>
+ <YmaMY/XKBmEfl8i6@gofer.mess.org> <YmbF071fSKUff6R2@rowland.harvard.edu>
+ <YmbKiPna01aMQhJw@gofer.mess.org>
+ <349f3e34-41ed-f832-3b22-ae10c50e3868@I-love.SAKURA.ne.jp>
+ <Ymel5XtWC7rwpiXF@gofer.mess.org>
+ <e17d6647-2c65-638b-1469-f546da7d0ba8@I-love.SAKURA.ne.jp>
+ <21ffa07a-1bc1-cb1f-eef4-6c3a73953061@I-love.SAKURA.ne.jp>
+ <Ym+myt+bqap21r0O@gofer.mess.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <Ym+myt+bqap21r0O@gofer.mess.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, May 01, 2022 at 11:33:21PM +0300, Gil Fine wrote:
-> Here we configure TMU mode to Hifi-Uni once DP tunnel is created.
-
-DisplayPort (at least use that in the $subject).
-
-> This is due to accuracy requirement for DP tunneling as appears in
-> CM guide 1.0, section 7.3.2
-> Due to Intel HW limitation, once we changed the TMU mode to Hifi-Uni
-
-HW -> hardware
-
-HiFi uni-directional
-
-> (when DP is tunnel exists), we don't change TMU mode back to Normal-Uni,
-
-normal un-idirectional
-
-> even if DP tunnel is teared-down later.
-
-torn down
-
+On 2022/05/02 18:39, Sean Young wrote:
+> So this part of the patch address the issue of driver_lock being
+> unnecessary. This should be in its own patch, so I am going to merge:
 > 
-> Signed-off-by: Gil Fine <gil.fine@intel.com>
-> ---
->  drivers/thunderbolt/tb.c | 40 ++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
+> https://patchwork.linuxtv.org/project/linux-media/patch/349f3e34-41ed-f832-3b22-ae10c50e3868@I-love.SAKURA.ne.jp/
+
+driver_lock is not unnecessary, unless combined with kfree_rcu() approach.
+
+>> +	/*
+>> +	 * We need to wait for RCU grace period in order to allow
+>> +	 * display_open() to safely check ->disconnected and increment ->users.
+>> +	 */
+>> +	struct rcu_head rcu;
 > 
-> diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-> index 05a084e3e9f6..efe53d221ca8 100644
-> --- a/drivers/thunderbolt/tb.c
-> +++ b/drivers/thunderbolt/tb.c
-> @@ -50,6 +50,8 @@ struct tb_hotplug_event {
->  };
->  
->  static void tb_handle_hotplug(struct work_struct *work);
-> +static int tb_enable_tmu_1st_child(struct tb *tb,
-> +				   enum tb_switch_tmu_rate rate);
->  
->  static void tb_queue_hotplug(struct tb *tb, u64 route, u8 port, bool unplug)
->  {
-> @@ -118,6 +120,13 @@ static void tb_switch_discover_tunnels(struct tb_switch *sw,
->  		switch (port->config.type) {
->  		case TB_TYPE_DP_HDMI_IN:
->  			tunnel = tb_tunnel_discover_dp(tb, port, alloc_hopids);
-> +			/*
-> +			 * In case of DP tunnel exists, change TMU mode to
-> +			 * HiFi for CL0s to work.
-> +			 */
-> +			if (tunnel)
-> +				tb_enable_tmu_1st_child(tb,
-> +						TB_SWITCH_TMU_RATE_HIFI);
->  			break;
->  
->  		case TB_TYPE_PCIE_DOWN:
-> @@ -235,6 +244,31 @@ static int tb_enable_tmu(struct tb_switch *sw)
->  	return tb_switch_tmu_enable(sw);
->  }
->  
-> +/*
-> + * Once a DP tunnel exists in the domain, we set the TMU mode so that
-> + * it meets the accuracy requirements and also enables CLx entry (CL0s).
-> + * We set the TMU mode of the first depth router(s) for CL0s to work.
-> + */
-> +static int tb_enable_tmu_1st_child(struct tb *tb, enum tb_switch_tmu_rate rate)
-> +{
-> +	struct tb_switch *root_sw = tb->root_switch;
-> +	struct tb_port *port;
-> +
-> +	tb_switch_for_each_port(root_sw, port) {
+> Is it possible to modify the users/disconnected fields while holding the
+> lock mutex in imon_context? This would make it unnecessary to use rcu and
+> simplify the code.
 
-Can't you use device_for_each_child() here?
+I don't think it is possible, and I don't think it simplifies the code.
 
-> +		struct tb_switch *sw;
-> +		int ret;
-> +
-> +		if (!tb_port_has_remote(port) || !tb_port_is_null(port))
-> +			continue;
-> +		sw = port->remote->sw;
-> +		tb_switch_tmu_configure(sw, rate, tb_switch_is_clx_enabled(sw));
-> +		if (tb_switch_tmu_enable(sw))
-> +			tb_dbg(tb, "Fail switching TMU to HiFi for 1st depth router %d\n", ret);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * tb_find_unused_port() - return the first inactive port on @sw
->   * @sw: Switch to find the port on
-> @@ -981,6 +1015,12 @@ static void tb_tunnel_dp(struct tb *tb)
->  
->  	list_add_tail(&tunnel->list, &tcm->tunnel_list);
->  	tb_reclaim_usb3_bandwidth(tb, in, out);
-> +	/*
-> +	 * In case of DP tunnel exists, change TMU mode to
-> +	 * HiFi for CL0s to work.
-> +	 */
-> +	tb_enable_tmu_1st_child(tb, TB_SWITCH_TMU_RATE_HIFI);
-> +
->  	return;
->  
->  err_free:
-> -- 
-> 2.17.1
+Unless we revive global driver_lock lock (untested delta diff is shown below),
+nothing prevents from calling kfree(ictx) before holding ictx->lock or
+checking ->disconnected or incrementing ->users.
+
+As a whole, I think kfree_rcu() is simpler while removing global lock.
+
+diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
+index 9a4f24e294bc..469a2f869572 100644
+--- a/drivers/media/rc/imon.c
++++ b/drivers/media/rc/imon.c
+@@ -166,11 +166,6 @@ struct imon_context {
+ 	 * imon_disconnect() was already called.
+ 	 */
+ 	bool disconnected;
+-	/*
+-	 * We need to wait for RCU grace period in order to allow
+-	 * display_open() to safely check ->disconnected and increment ->users.
+-	 */
+-	struct rcu_head rcu;
+ };
+ 
+ #define TOUCH_TIMEOUT	(HZ/30)
+@@ -457,6 +452,9 @@ static struct usb_driver imon_driver = {
+ 	.id_table	= imon_usb_id_table,
+ };
+ 
++/* to prevent races between open() and kfree() */
++static DEFINE_MUTEX(driver_lock);
++
+ /* Module bookkeeping bits */
+ MODULE_AUTHOR(MOD_AUTHOR);
+ MODULE_DESCRIPTION(MOD_DESC);
+@@ -516,6 +514,8 @@ static int display_open(struct inode *inode, struct file *file)
+ 	int subminor;
+ 	int retval = 0;
+ 
++	mutex_lock(&driver_lock);
++
+ 	subminor = iminor(inode);
+ 	interface = usb_find_interface(&imon_driver, subminor);
+ 	if (!interface) {
+@@ -524,15 +524,13 @@ static int display_open(struct inode *inode, struct file *file)
+ 		goto exit;
+ 	}
+ 
+-	rcu_read_lock();
+ 	ictx = usb_get_intfdata(interface);
+ 	if (!ictx || ictx->disconnected || !refcount_inc_not_zero(&ictx->users)) {
+-		rcu_read_unlock();
+ 		pr_err("no context found for minor %d\n", subminor);
+ 		retval = -ENODEV;
+ 		goto exit;
+ 	}
+-	rcu_read_unlock();
++	mutex_unlock(&driver_lock);
+ 
+ 	mutex_lock(&ictx->lock);
+ 
+@@ -550,10 +548,15 @@ static int display_open(struct inode *inode, struct file *file)
+ 
+ 	mutex_unlock(&ictx->lock);
+ 
+-	if (retval && refcount_dec_and_test(&ictx->users))
+-		free_imon_context(ictx);
+-
++	if (retval) {
++		mutex_unlock(&driver_lock);
++		if (refcount_dec_and_test(&ictx->users))
++			free_imon_context(ictx);
++		mutex_unlock(&driver_lock);
++	}
++	return retval;
+ exit:
++	mutex_unlock(&driver_lock);
+ 	return retval;
+ }
+ 
+@@ -2497,6 +2500,8 @@ static void imon_disconnect(struct usb_interface *interface)
+ 	struct device *dev;
+ 	int ifnum;
+ 
++	mutex_lock(&driver_lock);
++
+ 	ictx = usb_get_intfdata(interface);
+ 	ictx->disconnected = true;
+ 	dev = ictx->dev;
+@@ -2542,6 +2547,8 @@ static void imon_disconnect(struct usb_interface *interface)
+ 	if (refcount_dec_and_test(&ictx->users))
+ 		free_imon_context(ictx);
+ 
++	mutex_unlock(&driver_lock);
++
+ 	dev_dbg(dev, "%s: iMON device (intf%d) disconnected\n",
+ 		__func__, ifnum);
+ }
