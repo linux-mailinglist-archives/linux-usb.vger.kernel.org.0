@@ -2,99 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FEB1516BAD
-	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 10:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B9F516C00
+	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 10:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383630AbiEBIJl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 04:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        id S1383740AbiEBIaG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 04:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383669AbiEBIJL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 04:09:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A259538BD2
-        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 01:05:42 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nlR3m-0003jl-1R; Mon, 02 May 2022 10:05:34 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nlR3l-006UqM-Jj; Mon, 02 May 2022 10:05:32 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nlR3j-0071Td-Ee; Mon, 02 May 2022 10:05:31 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Jun Li <jun.li@nxp.com>,
+        with ESMTP id S1379079AbiEBIaF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 04:30:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E0B522EB;
+        Mon,  2 May 2022 01:26:36 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2426eC2D030335;
+        Mon, 2 May 2022 08:26:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=c4F418i+uSY5SQ6IJyvNoDoM0QEZy3napvtaDUHfy0I=;
+ b=HzUzLL/HjPhwv8gvMuxpqbDgvJ3kgKRkJVUs5qqeU0YC/hUxnRQ1NRGDmmrlOirZdTMv
+ 8F27mbJ/+KUz6r5LwheWjj620v6GooMCTw/HMrOlJBlDyS3FsrDhKq+dkQlpFX+MF9Vp
+ hJMeDxWGP7W+yPrmbWOF94hhv+SRNhBc8uXPA5Hve4F+LIPFcDDF49C426/9uKu6SKiU
+ 7InuTYLgr+13JbjB6PehCYTu6qvfho2a+NZr7wZr9rzV1X7tDvALmwq8G4Wocn7iinsi
+ H1whJoo7wYmxQlBuIZPeabnJV+zgxd0hoFEl+9ew2JFcjdCDO8uB85DNiBs8LedjniCf KQ== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ft7tmbs5a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 May 2022 08:26:28 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2428D9Km021486;
+        Mon, 2 May 2022 08:26:26 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3frvr8tcct-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 May 2022 08:26:25 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2428QNvX52756784
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 May 2022 08:26:23 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A3C2111C04C;
+        Mon,  2 May 2022 08:26:23 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 562FD11C04A;
+        Mon,  2 May 2022 08:26:23 +0000 (GMT)
+Received: from sig-9-145-11-74.uk.ibm.com (unknown [9.145.11.74])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  2 May 2022 08:26:23 +0000 (GMT)
+Message-ID: <bc46562ab57cfc1e0805280b7fb153b02885c72c.camel@linux.ibm.com>
+Subject: Re: [RFC v2 35/39] usb: handle HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] usb: typec: tcpci: Don't skip cleanup in .remove() on error
-Date:   Mon,  2 May 2022 10:04:56 +0200
-Message-Id: <20220502080456.21568-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1705; h=from:subject; bh=uDYqdZ2OtkjakPB5cPgF980lQTyNVMaqkLyWNK4L9jE=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBib5ClJZ45LzYtkGm1sDiHiZp/yOKj57h3dokLgecK TdO2n2eJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYm+QpQAKCRDB/BR4rcrsCf71B/ 9gNbAl1pnkLY4b0czHM68MUN9FiWX4JBFJJKB1EDznQzDpzsQsjMbM3Q292lkbr9CpXJkKB9mOY3tc 7e5xilYrDsSqwUiUh3x6TIOBHkITXJadVzovU/svDfj54YYXLFvq3D50Qpf/0YHqXICp8JmyRq9ouS TT4PNjAjhrc01BDOlESDVMLxNngrGgLwojQD+wisPBcc0YgUfNt0PZatbtHA0T/cQA4NckvgG37Fbu 5xHD/JoCnM96CDK+zBGK1V4eyoOMQxlvwUW/gL1t09lUTGXHXa55gDEJHwENQS38VDgUOekFPcLUE1 tuNT1Tn4YF25NlPBpOqIReutVEN5+B
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+Date:   Mon, 02 May 2022 10:26:23 +0200
+In-Reply-To: <Ym0yBti0J5w2S59W@rowland.harvard.edu>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+         <20220429135108.2781579-65-schnelle@linux.ibm.com>
+         <Ym0yBti0J5w2S59W@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ewUH-9lsWOSWBJybGhHLJUarXPcD4BQx
+X-Proofpoint-ORIG-GUID: ewUH-9lsWOSWBJybGhHLJUarXPcD4BQx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-02_02,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 suspectscore=0 clxscore=1015 spamscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=781 phishscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205020062
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Returning an error value in an i2c remove callback results in an error
-message being emitted by the i2c core, but otherwise it doesn't make a
-difference. The device goes away anyhow and the devm cleanups are
-called.
+On Sat, 2022-04-30 at 08:56 -0400, Alan Stern wrote:
+> On Fri, Apr 29, 2022 at 03:51:02PM +0200, Niklas Schnelle wrote:
+> > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> > not being declared. We thus need to guard sections of code calling them
+> > as alternative access methods with CONFIG_HAS_IOPORT checks. Similarly
+> > drivers requiring these functions need to depend on HAS_IOPORT.
+> > 
+> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
+> 
+> ...
+> 
+> > diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
+> > index ef08d68b9714..4fd06b48149d 100644
+> > --- a/drivers/usb/host/pci-quirks.c
+> > +++ b/drivers/usb/host/pci-quirks.c
+> > @@ -632,7 +590,53 @@ bool usb_amd_pt_check_port(struct device *device, int port)
+> >  	return !(value & BIT(port_shift));
+> >  }
+> >  EXPORT_SYMBOL_GPL(usb_amd_pt_check_port);
+> > +#endif
+> > @@ -1273,7 +1280,8 @@ static void quirk_usb_early_handoff(struct pci_dev *pdev)
+> >  			 "Can't enable PCI device, BIOS handoff failed.\n");
+> >  		return;
+> >  	}
+> > -	if (pdev->class == PCI_CLASS_SERIAL_USB_UHCI)
+> > +	if (IS_ENABLED(CONFIG_USB_UHCI_HCD) &&
+> > +	    pdev->class == PCI_CLASS_SERIAL_USB_UHCI)
+> >  		quirk_usb_handoff_uhci(pdev);
+> 
+> We discussed this already.  quirk_usb_handoff_uhci() is supposed to be 
+> called even when CONFIG_USB_UHCI_HCD isn't enabled.
 
-In this case the remove callback even returns early without stopping the
-tcpm worker thread and various timers. A work scheduled on the work
-queue, or a firing timer after tcpci_remove() returned probably results
-in a use-after-free situation because the regmap and driver data were
-freed. So better make sure that tcpci_unregister_port() is called even
-if disabling the irq failed.
+Sorry I missed this part. Done.
 
-Also emit a more specific error message instead of the i2c core's
-"remove failed (EIO), will be ignored" and return 0 to suppress the
-core's warning.
+> 
+> ...
+> 
+> > diff --git a/drivers/usb/host/uhci-hcd.h b/drivers/usb/host/uhci-hcd.h
+> > index 8ae5ccd26753..be4aee1f0ca5 100644
+> > --- a/drivers/usb/host/uhci-hcd.h
+> > +++ b/drivers/usb/host/uhci-hcd.h
+> > @@ -505,36 +505,43 @@ static inline bool uhci_is_aspeed(const struct uhci_hcd *uhci)
+> >   * we use memory mapped registers.
+> >   */
+> >  
+> > +#ifdef CONFIG_HAS_IOPORT
+> > +#define UHCI_IN(x)	x
+> > +#define UHCI_OUT(x)	x
+> > +#else
+> > +#define UHCI_IN(x)	0
+> > +#define UHCI_OUT(x)
+> > +#endif
+> 
+> Should have a blank line here.
 
-This patch is (also) a preparation for making i2c remove callbacks
-return void.
+Done
 
-Fixes: 3ba76256fc4e ("usb: typec: tcpci: mask event interrupts when remove driver")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/usb/typec/tcpm/tcpci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> >  #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
+> >  /* Support PCI only */
+> >  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
+> >  {
+> > -	return inl(uhci->io_addr + reg);
+> > +	return UHCI_IN(inl(uhci->io_addr + reg));
+> >  }
+> >  
+> >  static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int reg)
+> >  {
+> > -	outl(val, uhci->io_addr + reg);
+> > +	UHCI_OUT(outl(val, uhci->io_addr + reg));
+> >  }
+> >  
+> >  static inline u16 uhci_readw(const struct uhci_hcd *uhci, int reg)
+> >  {
+> > -	return inw(uhci->io_addr + reg);
+> > +	return UHCI_IN(inw(uhci->io_addr + reg));
+> >  }
+> >  
+> >  static inline void uhci_writew(const struct uhci_hcd *uhci, u16 val, int reg)
+> >  {
+> > -	outw(val, uhci->io_addr + reg);
+> > +	UHCI_OUT(outw(val, uhci->io_addr + reg));
+> >  }
+> >  
+> >  static inline u8 uhci_readb(const struct uhci_hcd *uhci, int reg)
+> >  {
+> > -	return inb(uhci->io_addr + reg);
+> > +	return UHCI_IN(inb(uhci->io_addr + reg));
+> >  }
+> >  
+> >  static inline void uhci_writeb(const struct uhci_hcd *uhci, u8 val, int reg)
+> >  {
+> > -	outb(val, uhci->io_addr + reg);
+> > +	UHCI_OUT(outb(val, uhci->io_addr + reg));
+> >  }
+> >  
+> >  #else
+> 
+> I thought you were going to update the definition of 
+> uhci_has_pci_registers().  It shouldn't do a test at runtime if 
+> CONFIG_HAS_IOPORT is disabled.
+> 
+> Alan Stern
 
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index e07d26a3cd8e..f33e08eb7670 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -877,7 +877,7 @@ static int tcpci_remove(struct i2c_client *client)
- 	/* Disable chip interrupts before unregistering port */
- 	err = tcpci_write16(chip->tcpci, TCPC_ALERT_MASK, 0);
- 	if (err < 0)
--		return err;
-+		dev_warn(&client->dev, "Failed to disable irqs (%pe)\n", ERR_PTR(err));
- 
- 	tcpci_unregister_port(chip->tcpci);
- 
+Good point. Done.
 
-base-commit: 3123109284176b1532874591f7c81f3837bbdc17
--- 
-2.35.1
 
