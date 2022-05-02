@@ -2,142 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA36516E7E
-	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 13:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6B3516F0D
+	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 13:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384740AbiEBLKh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 07:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
+        id S1384793AbiEBLuK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 07:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384700AbiEBLK1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 07:10:27 -0400
-X-Greylist: delayed 377 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 02 May 2022 04:06:55 PDT
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9196720F6E;
-        Mon,  2 May 2022 04:06:55 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S241744AbiEBLuK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 07:50:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE87C165BF;
+        Mon,  2 May 2022 04:46:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 7BCF53FA55;
-        Mon,  2 May 2022 11:06:51 +0000 (UTC)
-From:   Hector Martin <marcan@marcan.st>
-To:     Jacky Chou <jackychou@asix.com.tw>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: [PATCH v2] net: usb: ax88179_178a: Bind only to vendor-specific interface
-Date:   Mon,  2 May 2022 20:06:44 +0900
-Message-Id: <20220502110644.167179-1-marcan@marcan.st>
-X-Mailer: git-send-email 2.35.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A5CF61216;
+        Mon,  2 May 2022 11:46:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E0CBC385AC;
+        Mon,  2 May 2022 11:46:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651492000;
+        bh=MUFykdNVid0aaejhToLZfeDf3CUxpzSoP2z1PtGS1uo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=enpPRHfBVOI08gdtMVVVQ6aNPivGjpflVMCIBXbkX9T7XVKCDIAIMRrKHFeoEZtnn
+         hULZLu0WMW6MCCU0JzE4RkGfY0Yd8R4l53LV9e0KqVkAvqhKn0RN/uSa5cWJXIXjk9
+         RlZ0W6beSn+rqDfcVBoLLYu10B4mmZc2JSQsC3dM=
+Date:   Mon, 2 May 2022 13:46:39 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dan Vacura <w36195@motorola.com>
+Cc:     linux-usb@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: uvc: allow for application to cleanly
+ shutdown
+Message-ID: <Ym/En8EjfkpIVm+a@kroah.com>
+References: <20220429192001.385636-1-w36195@motorola.com>
+ <YmzrwgiEO2hoKM4U@kroah.com>
+ <Ym9Z+BfHcwDKlwjy@p1g3>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ym9Z+BfHcwDKlwjy@p1g3>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Anker PowerExpand USB-C to Gigabit Ethernet adapter uses this
-chipset, but exposes CDC Ethernet configurations as well as the
-vendor specific one. This driver ends up binding first to both CDC
-interfaces, tries to instantiate two Ethernet interfaces talking to
-the same device, and the result is a nice fireworks show.
+On Sun, May 01, 2022 at 11:11:36PM -0500, Dan Vacura wrote:
+> On Sat, Apr 30, 2022 at 09:56:50AM +0200, Greg Kroah-Hartman wrote:
+> > On Fri, Apr 29, 2022 at 02:20:01PM -0500, Dan Vacura wrote:
+> > > Several types of kernel panics can occur due to timing during the uvc
+> > > gadget removal. This appears to be a problem with gadget resources being
+> > > managed by both the client application's v4l2 open/close and the UDC
+> > > gadget bind/unbind. Since the concept of USB_GADGET_DELAYED_STATUS
+> > > doesn't exist for unbind, add a wait to allow for the application to
+> > > close out.
+> > > 
+> > > Some examples of the panics that can occur are:
+> > > 
+> > > <1>[ 1147.652313] Unable to handle kernel NULL pointer dereference at
+> > > virtual address 0000000000000028
+> > > <4>[ 1147.652510] Call trace:
+> > > <4>[ 1147.652514]  usb_gadget_disconnect+0x74/0x1f0
+> > > <4>[ 1147.652516]  usb_gadget_deactivate+0x38/0x168
+> > > <4>[ 1147.652520]  usb_function_deactivate+0x54/0x90
+> > > <4>[ 1147.652524]  uvc_function_disconnect+0x14/0x38
+> > > <4>[ 1147.652527]  uvc_v4l2_release+0x34/0xa0
+> > > <4>[ 1147.652537]  __fput+0xdc/0x2c0
+> > > <4>[ 1147.652540]  ____fput+0x10/0x1c
+> > > <4>[ 1147.652545]  task_work_run+0xe4/0x12c
+> > > <4>[ 1147.652549]  do_notify_resume+0x108/0x168
+> > > 
+> > > <1>[  282.950561][ T1472] Unable to handle kernel NULL pointer
+> > > dereference at virtual address 00000000000005b8
+> > > <6>[  282.953111][ T1472] Call trace:
+> > > <6>[  282.953121][ T1472]  usb_function_deactivate+0x54/0xd4
+> > > <6>[  282.953134][ T1472]  uvc_v4l2_release+0xac/0x1e4
+> > > <6>[  282.953145][ T1472]  v4l2_release+0x134/0x1f0
+> > > <6>[  282.953167][ T1472]  __fput+0xf4/0x428
+> > > <6>[  282.953178][ T1472]  ____fput+0x14/0x24
+> > > <6>[  282.953193][ T1472]  task_work_run+0xac/0x130
+> > > 
+> > > <3>[  213.410077][   T29] configfs-gadget gadget: uvc: Failed to queue
+> > > request (-108).
+> > > <1>[  213.410116][   T29] Unable to handle kernel NULL pointer
+> > > dereference at virtual address 0000000000000003
+> > > <6>[  213.413460][   T29] Call trace:
+> > > <6>[  213.413474][   T29]  uvcg_video_pump+0x1f0/0x384
+> > > <6>[  213.413489][   T29]  process_one_work+0x2a4/0x544
+> > > <6>[  213.413502][   T29]  worker_thread+0x350/0x784
+> > > <6>[  213.413515][   T29]  kthread+0x2ac/0x320
+> > > <6>[  213.413528][   T29]  ret_from_fork+0x10/0x30
+> > > 
+> > > Signed-off-by: Dan Vacura <w36195@motorola.com>
+> > > ---
+> > >  drivers/usb/gadget/function/f_uvc.c    | 24 ++++++++++++++++++++++++
+> > >  drivers/usb/gadget/function/uvc.h      |  2 ++
+> > >  drivers/usb/gadget/function/uvc_v4l2.c |  3 ++-
+> > >  3 files changed, 28 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> > > index 50e6e7a58b41..3cc8cf24a7c7 100644
+> > > --- a/drivers/usb/gadget/function/f_uvc.c
+> > > +++ b/drivers/usb/gadget/function/f_uvc.c
+> > > @@ -892,13 +892,36 @@ static void uvc_function_unbind(struct usb_configuration *c,
+> > >  {
+> > >  	struct usb_composite_dev *cdev = c->cdev;
+> > >  	struct uvc_device *uvc = to_uvc(f);
+> > > +	int wait_ret = 1;
+> > >  
+> > >  	uvcg_info(f, "%s()\n", __func__);
+> > 
+> > Ick, wait, is that in the kernel?  That needs to be removed, ftrace can
+> > do that for you.
+> 
+> Yes, part of the kernel, and tbh, I find it to be quite helpful in
+> debugging field issues from customers, where enabling ftrace isn't
+> practical.
 
-Change all the ID matches to specifically match the vendor-specific
-interface. By default the device comes up in CDC mode and is bound by
-that driver (which works fine); users may switch it to the vendor
-interface using sysfs to set bConfigurationValue, at which point the
-device actually goes through a reconnect cycle and comes back as a
-vendor specific only device, and then this driver binds and works too.
+Why isn't ftrace ok to enable in a running kernel?
 
-v2: Fixed interface protocol match, commit message.
+Worst case, this should be dev_dbg(), right?
 
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- drivers/net/usb/ax88179_178a.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+> If you still want to remove, there are other locations in
+> this gadget driver that log function entry. Perhaps it'd be better to
+> do a separate change that cleans up logging a bit or do you prefer to
+> just refactor this one now?
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index e2fa56b92685..7c7c2f31d9f1 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1914,55 +1914,55 @@ static const struct driver_info at_umc2000sp_info = {
- static const struct usb_device_id products[] = {
- {
- 	/* ASIX AX88179 10/100/1000 */
--	USB_DEVICE(0x0b95, 0x1790),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x1790, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&ax88179_info,
- }, {
- 	/* ASIX AX88178A 10/100/1000 */
--	USB_DEVICE(0x0b95, 0x178a),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x178a, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&ax88178a_info,
- }, {
- 	/* Cypress GX3 SuperSpeed to Gigabit Ethernet Bridge Controller */
--	USB_DEVICE(0x04b4, 0x3610),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x04b4, 0x3610, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&cypress_GX3_info,
- }, {
- 	/* D-Link DUB-1312 USB 3.0 to Gigabit Ethernet Adapter */
--	USB_DEVICE(0x2001, 0x4a00),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x2001, 0x4a00, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&dlink_dub1312_info,
- }, {
- 	/* Sitecom USB 3.0 to Gigabit Adapter */
--	USB_DEVICE(0x0df6, 0x0072),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0df6, 0x0072, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&sitecom_info,
- }, {
- 	/* Samsung USB Ethernet Adapter */
--	USB_DEVICE(0x04e8, 0xa100),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x04e8, 0xa100, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&samsung_info,
- }, {
- 	/* Lenovo OneLinkDock Gigabit LAN */
--	USB_DEVICE(0x17ef, 0x304b),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x17ef, 0x304b, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&lenovo_info,
- }, {
- 	/* Belkin B2B128 USB 3.0 Hub + Gigabit Ethernet Adapter */
--	USB_DEVICE(0x050d, 0x0128),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x050d, 0x0128, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&belkin_info,
- }, {
- 	/* Toshiba USB 3.0 GBit Ethernet Adapter */
--	USB_DEVICE(0x0930, 0x0a13),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0930, 0x0a13, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&toshiba_info,
- }, {
- 	/* Magic Control Technology U3-A9003 USB 3.0 Gigabit Ethernet Adapter */
--	USB_DEVICE(0x0711, 0x0179),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0711, 0x0179, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&mct_info,
- }, {
- 	/* Allied Telesis AT-UMC2000 USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
--	USB_DEVICE(0x07c9, 0x000e),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x000e, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&at_umc2000_info,
- }, {
- 	/* Allied Telesis AT-UMC200 USB 3.0/USB 3.1 Gen 1 to Fast Ethernet Adapter */
--	USB_DEVICE(0x07c9, 0x000f),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x000f, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&at_umc200_info,
- }, {
- 	/* Allied Telesis AT-UMC2000/SP USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
--	USB_DEVICE(0x07c9, 0x0010),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x0010, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&at_umc2000sp_info,
- },
- 	{ },
--- 
-2.35.1
+This commit is fine, it's a separate issue, I just noticed it as it was
+in the context of this change.
 
+> > > +	/* If we know we're connected via v4l2, then there should be a cleanup
+> > > +	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
+> > > +	 * though the video device removal uevent. Allow some time for the
+> > > +	 * application to close out before things get deleted.
+> > > +	 */
+> > > +	if (uvc->func_connected) {
+> > > +		uvcg_info(f, "%s waiting for clean disconnect\n", __func__);
+> > > +		wait_ret = wait_event_interruptible_timeout(uvc->func_connected_queue,
+> > > +				uvc->func_connected == false, msecs_to_jiffies(500));
+> > > +		uvcg_info(f, "%s done waiting with ret: %u\n", __func__, wait_ret);
+> > 
+> > Please remove debugging code before submitting patches.
+> 
+> Will do.
+
+But this should be removed :)
+
+Feel free to change it to dev_dbg(), which gives you the __func__
+automatically without anything extra needed.
+
+thanks,
+
+greg k-h
