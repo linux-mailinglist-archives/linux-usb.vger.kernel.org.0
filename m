@@ -2,173 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C735171B9
-	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 16:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA2B517440
+	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 18:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237952AbiEBOly (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 10:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
+        id S242707AbiEBQ3w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 12:29:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238024AbiEBOlx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 10:41:53 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0359B120BA
-        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 07:38:23 -0700 (PDT)
-Received: (qmail 1049656 invoked by uid 1000); 2 May 2022 10:38:23 -0400
-Date:   Mon, 2 May 2022 10:38:23 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     =?utf-8?B?5bCk5pmT5p2w?= <yxj790222@163.com>
-Cc:     weissg@vienna.at, USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: BUG report: ohci-pci ehci-pci , newer nec chip failed
-Message-ID: <Ym/s33/hFybb2JfH@rowland.harvard.edu>
-References: <2b564264.1963.18084f0e7a6.Coremail.yxj790222@163.com>
+        with ESMTP id S238076AbiEBQ3r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 12:29:47 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CEB7642;
+        Mon,  2 May 2022 09:26:18 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id q8so15268881oif.13;
+        Mon, 02 May 2022 09:26:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=64QIA6q/Jq1SXZtvXAHmkaqaem8y9EOcss9DFzQHU9s=;
+        b=lSCTdreNcz/0Ozt6K1HBv4cRzX5rD5YkQNxljOsfS8tDiCYDoI+IPMQxP7X/EZIUm6
+         nEUbOImYvwji0WLPLOr7WKakqkxdg7JpvGJPTfUXZcQQCuBLI6CBT8jIjTQ6snEColp+
+         42NQ0U8dK6CrK0vLyvJNfr+ZWyi1wOVvde/g8GkgMS8kO99Le/sMzMeHcBDeFPgZnh0r
+         LROiIiUnXvzBr+1b680itD4douFeeTEs3uEVAyKivH87Mp4cNraXu5PlswZdijptsHiy
+         E/tGZIauqoE0htLx1qKBecZCr69Lv4Vi0nEVaQXlcbRczQ9R4I77j4rRVkbcch1Z44Nq
+         l6TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=64QIA6q/Jq1SXZtvXAHmkaqaem8y9EOcss9DFzQHU9s=;
+        b=kNapBUcPZwXpLZ3g9kNgyu9Z5XM9RnsUEVkTsYSXqmuPJC4KNEHppWIsd2zkCGKnuo
+         N9kGqkMKnEAGbB4eOeVqQ2BimR//z9O91gzQNzylBIDoSVIng/ejs+fHd3o2N2KrfV2X
+         BdMooJZTCzIno50wqD8Ot6L2FfK27Ccmz9haJ835eCTF8iMEXrWNHESQVM0dgKu8ojo1
+         GB19Is4FiQD5MvomPb29ddCxDcNNbchEX9fjyosfUjDIZvgCc9mhniFjF2YZjsjz6dNI
+         OP5T+u/y2liR03ufp6TnVg+mJnS1wzeIG6UiGQjUpVGSO01LYxkM7Rk4ZCcKMTfHXkfR
+         hzXQ==
+X-Gm-Message-State: AOAM531rbeQB9qw40jfeG0QqNsgp7Cv7nCBQvWtWQBeGpvHmHFRHP3l3
+        HqhMTF/5mJtrYEvCmax77UM=
+X-Google-Smtp-Source: ABdhPJw9C3TtXs+N7Y0xL4doHaW0x+AFJyxcg+z0+P8jqToBpOw3SVN62D2BXqS+EDk7pkn5yUYINw==
+X-Received: by 2002:a05:6808:140f:b0:322:cbe9:8d29 with SMTP id w15-20020a056808140f00b00322cbe98d29mr7789910oiv.220.1651508777476;
+        Mon, 02 May 2022 09:26:17 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l39-20020a0568302b2700b0060603221256sm3008945otv.38.2022.05.02.09.26.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 09:26:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4dcdbfe2-9edf-320b-d123-3b62c8b5e28e@roeck-us.net>
+Date:   Mon, 2 May 2022 09:26:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2b564264.1963.18084f0e7a6.Coremail.yxj790222@163.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+References: <20220419163810.2118169-1-arnd@kernel.org>
+ <20220422234150.GA3442771@roeck-us.net>
+ <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
+ <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net>
+ <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+ <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
+ <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
+ <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+ <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net>
+ <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
+ <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
+ <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net>
+ <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
+ <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net>
+ <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
+ <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 02, 2022 at 09:23:42PM +0800, 尤晓杰 wrote:
-> dear friend, if I want to report bugs,how to do? where to subsribe email lists?
-
-You should report bugs to the linux-usb@vger.kernel.org mailing list 
-(CC'ed).  You can post on the mailing list without subscribing.
-
-> the fact is I am using richo 475ii pci-card bus bridge,
-> when I plug into two different version of nec cardbus usb2 cards:
-> as following:
+On 4/30/22 07:23, Arnd Bergmann wrote:
+> On Sat, Apr 30, 2022 at 3:32 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>>
+>> On Sat, Apr 30, 2022 at 2:41 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>> On 4/30/22 01:04, Arnd Bergmann wrote:
+>>>> and concluded that it must have done this for a long time. In my own qemu
+>>>> instance, I see a crash from iWMMXt, but that works fine on your machine.
+>>>> OTOH, your failed instances all look like they either time out or
+>>>> failed to find a
+>>>> rootfs. I tried passing an MMC device as root, and that works here.
+>>>>
+>>>
+>>> Booting from mmc works for me as well. Booting from pcmcia worked before,
+>>> so I assume that there must be some regression.
+>>
+>> Ok, got it, and managed to reproduce the hang now. My "ARM: pxa/sa1100: move
+>> I/O space to PCI_IOBASE" patch managed to get it to the point of detecting
+>> the pcmcia device instead of crashing, so I assumed it was enough when it
+>> clearly was not. Before that patch, it still works, afterwards it hangs with
+>> "pata_pcmcia: probe of 0.0 failed with error -12" as mentioned above. I'll
+>> have another look.
 > 
-> 05:06.0 CardBus bridge: Ricoh Co Ltd RL5c475 (rev 80)
-> 06:00.0 USB controller: NEC Corporation OHCI USB Controller (rev 44)
-> 06:00.1 USB controller: NEC Corporation uPD72010x USB 2.0 Controller (rev 05)
-> this newer one panic
+> Got it: as the PCMCIA bus on this machine is the only thing with an I/O space,
+> I assigned it port number range 0-0x1000, with an io_offset of 0, but this
+> was apparently unexpected and triggered this sanity check:
 > 
-> 06:00.0 USB controller: NEC Corporation OHCI USB Controller (rev 43)
-> 06:00.1 USB controller: NEC Corporation OHCI USB Controller (rev 43)
-> 06:00.2 USB controller: NEC Corporation uPD72010x USB 2.0 Controller (rev 04)
-> this one ok
-> so what's wrong?
-> the dmesg:
-> /////////////////////////////////////old version chip////////////////////////////////////////////
-
-This is the new version of the chip, not the old version.
-
-> [  203.672411] pcmcia_socket pcmcia_socket0: pccard: CardBus card inserted into slot 0
-> [  203.672460] pci 0000:06:00.0: [1033:0035] type 00 class 0x0c0310
-> [  203.672491] pci 0000:06:00.0: reg 0x10: [mem 0x00000000-0x00000fff]
-> [  203.672818] pci 0000:06:00.1: [1033:00e0] type 00 class 0x0c0320
-> [  203.672847] pci 0000:06:00.1: reg 0x10: [mem 0x00000000-0x000000ff]
-> [  203.672957] pci 0000:06:00.1: supports D1 D2
-> [  203.672963] pci 0000:06:00.1: PME# supported from D0 D1 D2 D3hot
-> [  203.673146] pci 0000:06:00.0: BAR 0: assigned [mem 0xa0000000-0xa0000fff]
-> [  203.673161] pci 0000:06:00.1: BAR 0: assigned [mem 0xa0001000-0xa00010ff]
-> [  203.673206] pci 0000:06:00.0: enabling device (0000 -> 0002)
-> [  203.713249] ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
-> [  203.717571] ohci-pci: OHCI PCI platform driver
-> [  204.684594] pci 0000:06:00.0: OHCI: BIOS handoff failed (BIOS bug?) ffffffff
-> [  204.684882] pci 0000:06:00.0: quirk_usb_early_handoff+0x0/0x740 took 987793 usecs
-> [  204.685160] ohci-pci 0000:06:00.0: OHCI PCI host controller
-> [  204.685178] ohci-pci 0000:06:00.0: new USB bus registered, assigned bus number 6
-> [  215.022336] ohci-pci 0000:06:00.0: USB HC takeover failed!  (BIOS/SMM bug)
-> [  215.022352] ohci-pci 0000:06:00.0: can't setup: -16
-> [  215.022364] ohci-pci 0000:06:00.0: USB bus 6 deregistered
-> [  215.022569] ohci-pci 0000:06:00.0: init 0000:06:00.0 fail, -16
-> [  215.022578] ohci-pci: probe of 0000:06:00.0 failed with error -16
-
-There is no panic.  The driver failed because the firmware (BIOS) did 
-not behave the way it is supposed to.
-
-> [  215.022620] pci 0000:06:00.1: enabling device (0000 -> 0002)
-> [  215.022787] pci 0000:06:00.1: EHCI: unrecognized capability 31
-> [  215.022993] ehci-pci 0000:06:00.1: enabling device (0000 -> 0002)
-> [  215.023177] ehci-pci 0000:06:00.1: EHCI Host Controller
-> [  215.023193] ehci-pci 0000:06:00.1: new USB bus registered, assigned bus number 6
-> [  215.023270] ehci-pci 0000:06:00.1: can't setup: -19
-> [  215.023278] ehci-pci 0000:06:00.1: USB bus 6 deregistered
-> [  215.023435] ehci-pci 0000:06:00.1: init 0000:06:00.1 fail, -19
-
-There is no panic.  The driver failed, because the chip has an extended 
-capability bit set which the driver doesn't recognize.
-
-If you can provide documentation (that is, the datasheet) for this new 
-chip, I will try to update the driver.
-
-> /////////////////////////////////////////////new version chip////////////////////////////////
-
-This is the old version, not the new version.
-
-> [  246.203555] pcmcia_socket pcmcia_socket0: pccard: card ejected from slot 0
-> [  281.945950] pcmcia_socket pcmcia_socket0: pccard: CardBus card inserted into slot 0
-> [  281.945991] pci 0000:06:00.0: [1033:0035] type 00 class 0x0c0310
-> [  281.946022] pci 0000:06:00.0: reg 0x10: [mem 0x00000000-0x00000fff]
-> [  281.946147] pci 0000:06:00.0: supports D1 D2
-> [  281.946153] pci 0000:06:00.0: PME# supported from D0 D1 D2 D3hot
-> [  281.946353] pci 0000:06:00.1: [1033:0035] type 00 class 0x0c0310
-> [  281.946384] pci 0000:06:00.1: reg 0x10: [mem 0x00000000-0x00000fff]
-> [  281.946494] pci 0000:06:00.1: supports D1 D2
-> [  281.946500] pci 0000:06:00.1: PME# supported from D0 D1 D2 D3hot
-> [  281.946654] pci 0000:06:00.2: [1033:00e0] type 00 class 0x0c0320
-> [  281.946682] pci 0000:06:00.2: reg 0x10: [mem 0x00000000-0x000000ff]
-> [  281.946791] pci 0000:06:00.2: supports D1 D2
-> [  281.946797] pci 0000:06:00.2: PME# supported from D0 D1 D2 D3hot
-> [  281.946940] pci 0000:06:00.0: BAR 0: assigned [mem 0xa0000000-0xa0000fff]
-> [  281.946955] pci 0000:06:00.1: BAR 0: assigned [mem 0xa0001000-0xa0001fff]
-> [  281.946966] pci 0000:06:00.2: BAR 0: assigned [mem 0xa0002000-0xa00020ff]
-> [  281.947015] pci 0000:06:00.0: enabling device (0000 -> 0002)
-> [  281.947602] ohci-pci 0000:06:00.0: OHCI PCI host controller
-> [  281.947620] ohci-pci 0000:06:00.0: new USB bus registered, assigned bus number 6
-> [  281.947671] ohci-pci 0000:06:00.0: irq 22, io mem 0xa0000000
-> [  282.035868] usb usb6: New USB device found, idVendor=1d6b, idProduct=0001, bcdDevice= 5.17
-> [  282.035884] usb usb6: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-> [  282.035890] usb usb6: Product: OHCI PCI host controller
-> [  282.035894] usb usb6: Manufacturer: Linux 5.17.0-1-686-pae ohci_hcd
-> [  282.035898] usb usb6: SerialNumber: 0000:06:00.0
-> [  282.036770] hub 6-0:1.0: USB hub found
-> [  282.036803] hub 6-0:1.0: 3 ports detected
-> [  282.037202] pci 0000:06:00.1: enabling device (0000 -> 0002)
-> [  282.037729] ohci-pci 0000:06:00.1: OHCI PCI host controller
-> [  282.037743] ohci-pci 0000:06:00.1: new USB bus registered, assigned bus number 7
-> [  282.037785] ohci-pci 0000:06:00.1: irq 22, io mem 0xa0001000
-> [  282.123823] usb usb7: New USB device found, idVendor=1d6b, idProduct=0001, bcdDevice= 5.17
-> [  282.123834] usb usb7: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-> [  282.123837] usb usb7: Product: OHCI PCI host controller
-> [  282.123840] usb usb7: Manufacturer: Linux 5.17.0-1-686-pae ohci_hcd
-> [  282.123843] usb usb7: SerialNumber: 0000:06:00.1
-> [  282.124083] hub 7-0:1.0: USB hub found
-> [  282.124097] hub 7-0:1.0: 2 ports detected
-> [  282.124322] pci 0000:06:00.2: enabling device (0000 -> 0002)
-> [  282.274237] ehci-pci 0000:06:00.2: EHCI Host Controller
-> [  282.274264] ehci-pci 0000:06:00.2: new USB bus registered, assigned bus number 8
-> [  282.274352] ehci-pci 0000:06:00.2: irq 22, io mem 0xa0002000
-> [  282.289879] ehci-pci 0000:06:00.2: USB 2.0 started, EHCI 1.00
-> [  282.290070] usb usb8: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 5.17
-> [  282.290082] usb usb8: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-> [  282.290089] usb usb8: Product: EHCI Host Controller
-> [  282.290095] usb usb8: Manufacturer: Linux 5.17.0-1-686-pae ehci_hcd
-> [  282.290100] usb usb8: SerialNumber: 0000:06:00.2
-> [  282.290433] hub 8-0:1.0: USB hub found
-> [  282.290459] hub 8-0:1.0: 5 ports detected
-> [  282.369991] hub 6-0:1.0: USB hub found
-> [  282.370034] hub 6-0:1.0: 3 ports detected
-> [  282.446002] hub 7-0:1.0: USB hub found
-> [  282.446039] hub 7-0:1.0: 2 ports detected
+> static int static_find_io(struct pcmcia_socket *s, unsigned int attr,
+>                          unsigned int *base, unsigned int num,
+>                          unsigned int align, struct resource **parent)
+> {
+>        if (!s->io_offset)
+>                return -EINVAL;
+>        ...
+>        return 0;
+> }
 > 
-> 06:00.0 USB controller: NEC Corporation OHCI USB Controller (rev 44)
-> 06:00.1 USB controller: NEC Corporation uPD72010x USB 2.0 Controller (rev 05)
+> I moved the devices around now, giving zeus/viper I/O space an offset of
+> zero, and moving PCMCIA to offset 0x10000 and 0x11000 for the two slots,
+> which now works because the io_offset is nonzero. I've regenerated the
+> branches again, and confirmed the for-next branch still boots from pcmcia.
 > 
-> 05:06.0 CardBus bridge: Ricoh Co Ltd RL5c475 (rev 80)
-> 06:00.0 USB controller: NEC Corporation OHCI USB Controller (rev 43)
-> 06:00.1 USB controller: NEC Corporation OHCI USB Controller (rev 43)
-> 06:00.2 USB controller: NEC Corporation uPD72010x USB 2.0 Controller (rev 04)
 
-What does "lspci -vv -s 6:00.1" for the new version chip show?
 
-Alan Stern
+With v5.18-rc1-49-gcb813018b5c1, I still get:
+
+[    0.797668] RAMDISK: Couldn't find valid RAM disk image starting at 0.
+[    0.805262] /dev/root: Can't open blockdev
+[    0.805487] VFS: Cannot open root device "(null)" or unknown-block(0,0): error -6
+[    0.805674] Please append a correct "root=" boot option; here are the available partitions:
+
+when trying to boot z2 from initrd.
+
+The other problems are gone.
+
+Guenter
