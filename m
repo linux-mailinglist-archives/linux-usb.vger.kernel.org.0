@@ -2,170 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52FC5174C2
-	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 18:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76CD15174FD
+	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 18:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243156AbiEBQr2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 12:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
+        id S243370AbiEBQzG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 12:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236184AbiEBQrX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 12:47:23 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F22AE42;
-        Mon,  2 May 2022 09:43:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=cZaNmyA5wUJ1C28stjNbm+l6w8z51K+/m7PND4lK+88=; b=nwYcpRVoU+eYIdeAaVQw3FQw3Z
-        ji1Zd+u30eNLLR2pXWT726Ec9iPdOYY+OOAM+AmJ4md2ka60o8HvD6xIyxqvbIcoFcpMcohULqEbJ
-        nv2MOjb0Lo7Cpj0ciZFCqFPbl2d2AjCk1+smg94HyXDqhICEiV4Y0kdY9DOE565RpPaBGPVJLDUTw
-        2frLTJBf9t/QKKopXGznCkChsydW2y+kFwkdc7M149xr0oiUh7oQZvdXFhGj3VVsjb6IstHaeiFiv
-        ai56Odxu9pkI+21qleyBiKEvHnqFDxMlpIDHG+DidUFnR90av7+kzjFy7e1Wqdnxhxs/7xU6f9uXk
-        AJft8n/w==;
-Received: from [8.34.116.185] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nlZ99-001kgW-FN; Mon, 02 May 2022 16:43:39 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        with ESMTP id S241975AbiEBQzB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 12:55:01 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8340964F0
+        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 09:51:31 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id s131so15783015oie.1
+        for <linux-usb@vger.kernel.org>; Mon, 02 May 2022 09:51:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qDbeIX3G7CAdlzYVZYrcGdjlGadN5/397vtFVJ5LGZ0=;
+        b=XooHx68yyT3HJJvAvwlP32zNjixKBDR2DZX+foZ/QUBBANRiEilHqqKIyJMKqQF8l/
+         USWW8mTYv0yD5WnhQ0199oxHJVfYZVVhMtab+xX+vTqWNRBVI827oWnXoJMh9n93ls2F
+         nK8foxy6JPLfD6Nw+a3+4xbM+FHpQjSzk4OnF1T1AEAjbTwArmAnU2215ZyRtP6OZNkY
+         VfkPJ6/gYjrj9tycLldB0fedH/O+ear22oankqOIHZjEeGz14YDpsbV+kvuEmjeijaLl
+         emcOmA1hbgQyUmRUGEEL9AwyWm5TliinL6rXMxDelAdp3wYsyqvMA8t1HxV9X+0HGmEk
+         77zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qDbeIX3G7CAdlzYVZYrcGdjlGadN5/397vtFVJ5LGZ0=;
+        b=T69zjqNy+qvz2S8Stg6FzVJRV40/Ch51K0C1CRX32cP8b3wk8w86YJJjOBD0xYNcQ8
+         eWtUo8sNLuwxlrzMwSL5dd9apgTZonX3pcybP3iB3jPMBQLIEMIATDx4zYZdACI81XtD
+         UgxNDP9lJXI1oJVuzx6/uAkfOeLTKSGb+GyzOmD+ggJPpC0AcLqUpV7q5FLjiJxauZQa
+         RBMuOGxkVHMVQfCrJUUwvZn8B/PedA2KSdcmEO3MvllxMyWnaUjxdHtsAixfDsG+O7M9
+         2gQC59FGZdxQxq0LtmBqgRkRiZLKh9vRFToZS3bAsP+Zi6Uj9+0k9P9D59RkcpfGyj+e
+         6sUw==
+X-Gm-Message-State: AOAM533M7iL/iJqB3eWzMHjOtfZ/zfrwHuw4hSI0juDvj/Wczk39mhUI
+        s6MGOIbAhqJUuTZfzeponHT5sA==
+X-Google-Smtp-Source: ABdhPJzBKz1yiIK2Jf2XUFNV3lOE1PeOdmDd6SS2he3gildxijlbqu95mdYr54pb4q4sU2bTKcztnQ==
+X-Received: by 2002:aca:502:0:b0:2cd:c24:278f with SMTP id 2-20020aca0502000000b002cd0c24278fmr33189oif.150.1651510290838;
+        Mon, 02 May 2022 09:51:30 -0700 (PDT)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id h11-20020a4add8b000000b0035eb4e5a6ccsm4029422oov.34.2022.05.02.09.51.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 09:51:29 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         linux-usb@vger.kernel.org
-Subject: [PATCH 10/10] ARM/dma-mapping: merge IOMMU ops
-Date:   Mon,  2 May 2022 09:43:30 -0700
-Message-Id: <20220502164330.229685-11-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220502164330.229685-1-hch@lst.de>
-References: <20220502164330.229685-1-hch@lst.de>
+Subject: [PATCH v4 0/5] drm/msm/dp: implement HPD notifications handling
+Date:   Mon,  2 May 2022 09:53:11 -0700
+Message-Id: <20220502165316.4167199-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Robin Murphy <robin.murphy@arm.com>
+USB altmodes code would send OOB notifications to the drm_connector
+specified in the device tree. However as the MSM DP driver uses
+drm_bridge_connector, there is no way to receive these event directly.
+Implement a bridge between oob_hotplug_event and drm_bridge's hpd_notify
+and use it to deliver altmode messages to the MSM DP driver.
 
-The dma_sync_* operations are now the only difference between the
-coherent and non-coherent IOMMU ops. Some minor tweaks to make those
-safe for coherent devices with minimal overhead, and we can condense
-down to a single set of DMA ops.
+Note, I left the original 'bool connected' field to be used by the
+notifiers. However I think that it should be replaced in favour of using
+the dp->hpd_state properly.
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- arch/arm/mm/dma-mapping.c | 37 +++++++++++++------------------------
- 1 file changed, 13 insertions(+), 24 deletions(-)
+Bjorn Andersson (2):
+  drm: Add HPD state to drm_connector_oob_hotplug_event()
+  drm/msm/dp: Implement hpd_notify()
 
-diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
-index 10e5e5800d784..dd46cce61579a 100644
---- a/arch/arm/mm/dma-mapping.c
-+++ b/arch/arm/mm/dma-mapping.c
-@@ -1341,6 +1341,9 @@ static void arm_iommu_sync_sg_for_cpu(struct device *dev,
- 	struct scatterlist *s;
- 	int i;
- 
-+	if (dev->dma_coherent)
-+		return;
-+
- 	for_each_sg(sg, s, nents, i)
- 		__dma_page_dev_to_cpu(sg_page(s), s->offset, s->length, dir);
- 
-@@ -1360,6 +1363,9 @@ static void arm_iommu_sync_sg_for_device(struct device *dev,
- 	struct scatterlist *s;
- 	int i;
- 
-+	if (dev->dma_coherent)
-+		return;
-+
- 	for_each_sg(sg, s, nents, i)
- 		__dma_page_cpu_to_dev(sg_page(s), s->offset, s->length, dir);
- }
-@@ -1493,12 +1499,13 @@ static void arm_iommu_sync_single_for_cpu(struct device *dev,
- {
- 	struct dma_iommu_mapping *mapping = to_dma_iommu_mapping(dev);
- 	dma_addr_t iova = handle & PAGE_MASK;
--	struct page *page = phys_to_page(iommu_iova_to_phys(mapping->domain, iova));
-+	struct page *page;
- 	unsigned int offset = handle & ~PAGE_MASK;
- 
--	if (!iova)
-+	if (dev->dma_coherent || !iova)
- 		return;
- 
-+	page = phys_to_page(iommu_iova_to_phys(mapping->domain, iova));
- 	__dma_page_dev_to_cpu(page, offset, size, dir);
- }
- 
-@@ -1507,12 +1514,13 @@ static void arm_iommu_sync_single_for_device(struct device *dev,
- {
- 	struct dma_iommu_mapping *mapping = to_dma_iommu_mapping(dev);
- 	dma_addr_t iova = handle & PAGE_MASK;
--	struct page *page = phys_to_page(iommu_iova_to_phys(mapping->domain, iova));
-+	struct page *page;
- 	unsigned int offset = handle & ~PAGE_MASK;
- 
--	if (!iova)
-+	if (dev->dma_coherent || !iova)
- 		return;
- 
-+	page = phys_to_page(iommu_iova_to_phys(mapping->domain, iova));
- 	__dma_page_cpu_to_dev(page, offset, size, dir);
- }
- 
-@@ -1536,22 +1544,6 @@ static const struct dma_map_ops iommu_ops = {
- 	.unmap_resource		= arm_iommu_unmap_resource,
- };
- 
--static const struct dma_map_ops iommu_coherent_ops = {
--	.alloc		= arm_iommu_alloc_attrs,
--	.free		= arm_iommu_free_attrs,
--	.mmap		= arm_iommu_mmap_attrs,
--	.get_sgtable	= arm_iommu_get_sgtable,
--
--	.map_page	= arm_iommu_map_page,
--	.unmap_page	= arm_iommu_unmap_page,
--
--	.map_sg		= arm_iommu_map_sg,
--	.unmap_sg	= arm_iommu_unmap_sg,
--
--	.map_resource	= arm_iommu_map_resource,
--	.unmap_resource	= arm_iommu_unmap_resource,
--};
--
- /**
-  * arm_iommu_create_mapping
-  * @bus: pointer to the bus holding the client device (for IOMMU calls)
-@@ -1750,10 +1742,7 @@ static void arm_setup_iommu_dma_ops(struct device *dev, u64 dma_base, u64 size,
- 		return;
- 	}
- 
--	if (coherent)
--		set_dma_ops(dev, &iommu_coherent_ops);
--	else
--		set_dma_ops(dev, &iommu_ops);
-+	set_dma_ops(dev, &iommu_ops);
- }
- 
- static void arm_teardown_iommu_dma_ops(struct device *dev)
+Dmitry Baryshkov (3):
+  drm/bridge_connector: stop filtering events in
+    drm_bridge_connector_hpd_cb()
+  drm/bridge_connector: implement oob_hotplug_event
+  drm/msm/dp: remove most of usbpd-related remains
+
+ drivers/gpu/drm/drm_bridge_connector.c   | 17 +++--
+ drivers/gpu/drm/drm_connector.c          |  6 +-
+ drivers/gpu/drm/i915/display/intel_dp.c  | 17 ++++-
+ drivers/gpu/drm/i915/i915_drv.h          |  3 +
+ drivers/gpu/drm/msm/Makefile             |  1 -
+ drivers/gpu/drm/msm/dp/dp_ctrl.h         |  1 -
+ drivers/gpu/drm/msm/dp/dp_debug.c        |  6 +-
+ drivers/gpu/drm/msm/dp/dp_debug.h        |  4 +-
+ drivers/gpu/drm/msm/dp/dp_display.c      | 81 +++++++++++-------------
+ drivers/gpu/drm/msm/dp/dp_display.h      |  1 +
+ drivers/gpu/drm/msm/dp/dp_drm.c          |  3 +
+ drivers/gpu/drm/msm/dp/dp_drm.h          |  2 +
+ drivers/gpu/drm/msm/dp/dp_hpd.c          | 67 --------------------
+ drivers/gpu/drm/msm/dp/dp_hpd.h          | 78 -----------------------
+ drivers/gpu/drm/msm/dp/dp_panel.h        |  1 -
+ drivers/gpu/drm/msm/dp/dp_power.c        |  2 +-
+ drivers/gpu/drm/msm/dp/dp_power.h        |  3 +-
+ drivers/usb/typec/altmodes/displayport.c | 10 +--
+ include/drm/drm_connector.h              |  6 +-
+ 19 files changed, 88 insertions(+), 221 deletions(-)
+ delete mode 100644 drivers/gpu/drm/msm/dp/dp_hpd.c
+ delete mode 100644 drivers/gpu/drm/msm/dp/dp_hpd.h
+
 -- 
-2.30.2
+2.35.1
 
