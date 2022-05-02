@@ -2,40 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A2B517779
-	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 21:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F32F517780
+	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 21:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387150AbiEBTgW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 15:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
+        id S234247AbiEBTn2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 15:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387147AbiEBTgQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 15:36:16 -0400
+        with ESMTP id S232548AbiEBTn1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 15:43:27 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id ED9AC6365
-        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 12:32:46 -0700 (PDT)
-Received: (qmail 1060885 invoked by uid 1000); 2 May 2022 15:32:46 -0400
-Date:   Mon, 2 May 2022 15:32:46 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0BF6765CF
+        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 12:39:56 -0700 (PDT)
+Received: (qmail 1061109 invoked by uid 1000); 2 May 2022 15:39:56 -0400
+Date:   Mon, 2 May 2022 15:39:56 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
-Subject: Re: USB device disconnects on resume
-Message-ID: <YnAx3uvVrK4UXd05@rowland.harvard.edu>
-References: <YmAbZDd6LJwCCvkB@rowland.harvard.edu>
- <4fb8bd5842135a9f723bbe0406ed1afc023c25fe.camel@puri.sm>
- <YmFpMFlTt83s90an@rowland.harvard.edu>
- <b80c032c350c525d620968e95b7a653fc855d806.camel@puri.sm>
- <YmgIlFBC8mYQ2xwJ@rowland.harvard.edu>
- <232334eeb9d7321df1632e453839a6d433e6be45.camel@puri.sm>
- <YmrnVHA2/kttJQJa@rowland.harvard.edu>
- <1cb1cd1178703b4a67db849cc4c074b0c00b1332.camel@puri.sm>
- <YmxI5rIlyxOrPBHD@rowland.harvard.edu>
- <fdc8354e39f9162bcc63ab99f237bdbbe30d6017.camel@puri.sm>
+To:     =?utf-8?B?5bCk5pmT5p2w?= <yxj790222@163.com>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Re: BUG report: ohci-pci ehci-pci , newer nec chip failed
+Message-ID: <YnAzjG+wU0yCI29O@rowland.harvard.edu>
+References: <2b564264.1963.18084f0e7a6.Coremail.yxj790222@163.com>
+ <Ym/s33/hFybb2JfH@rowland.harvard.edu>
+ <1582a60e.34.1808632ac75.Coremail.yxj790222@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fdc8354e39f9162bcc63ab99f237bdbbe30d6017.camel@puri.sm>
+In-Reply-To: <1582a60e.34.1808632ac75.Coremail.yxj790222@163.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
@@ -45,43 +38,61 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 02, 2022 at 03:54:34PM +0200, Martin Kepplinger wrote:
-> Am Freitag, dem 29.04.2022 um 16:21 -0400 schrieb Alan Stern:
-> > I don't see why re-initialization works any better.  It's not likely
-> > to 
-> > be a question of waiting long enough, since you already waited for 5 
-> > seconds.  There must be something different between the reset-resume
-> > and 
-> > the re-initialization, but I can't tell what.
-> 
-> Thanks for this great analysis and clarifications! It really looks like
-> that difference is what I want to find.
-> 
-> > 
-> > Maybe a usbmon trace showing the entire thing, both the reset-resume
-> > and 
-> > the following re-initialization, would help.
-> > 
-> 
-> I append that here. A recording of the whole syslog until the modem is
-> re-enumerated and working again. And the usbmon recording. I added a
-> few usbmon timestampts to the kernel log to be able to correlate the 2
-> a bit easier.
+On Tue, May 03, 2022 at 03:15:09AM +0800, å°¤æ™“æ° wrote:
 
-The usbmon trace shows that quite a lot happens during re-enumeration 
-that doesn't happen during the reset-resume.  No doubt the reason for 
-this is that the cdc-wdm driver doesn't have a real reset-resume 
-handler; the operations it carries out for a reset-resume are the same 
-as for a normal resume, and that clearly is not appropriate here.
+Please use Reply-To-All so that your messages get sent to the mailing 
+list as well as to me.
 
-For example, the usbmon trace shows that the kernel sends a 
-Set-Interface request to the modem during re-enumeration and then does a 
-whole lot of probing that I don't understand.  None of this stuff 
-happens during the reset-resume.  Probably the modem decides that 
-without any of this extra configuration, it doesn't need to do 
-anything -- and that's why it disconnects itself.
+> [33628.797708] pci 0000:06:00.1: EHCI: unrecognized capability 95
+> [33628.797713] pci 0000:06:00.1: EHCI: unrecognized capability 95
+> [33628.797718] pci 0000:06:00.1: EHCI: unrecognized capability 95
+> [33628.797723] pci 0000:06:00.1: EHCI: capability loop?
+> [33628.798098] ehci-pci 0000:06:00.1: EHCI Host Controller
+> [33628.798115] ehci-pci 0000:06:00.1: new USB bus registered, assigned bus number 6
+> [33628.798195] ehci-pci 0000:06:00.1: can't setup: -19
+> [33628.798203] ehci-pci 0000:06:00.1: USB bus 6 deregistered
+> [33628.798358] ehci-pci 0000:06:00.1: init 0000:06:00.1 fail, -19
+> 
+> 
+> 
+> 
+> each time, capability is random.
 
-So the person you need to talk to is the maintainer of the USB CDC 
-drivers, Oliver Neukum (CC'ed).
+That sounds like a bug in the chip.
+
+> allan@debian:~$ sudo lspci -vv -s 6:00.1
+> 06:00.1 USB controller: NEC Corporation uPD72010x USB 2.0 Controller (rev 05) (prog-if 20 [EHCI])
+>     Subsystem: NEC Corporation uPD72010x USB 2.0 Controller
+>     Control: I/O- Mem- BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
+
+That line looks very peculiar.  Do you get the same thing for the older 
+chip version?
+
+>     Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
+>     Interrupt: pin A routed to IRQ 22
+>     Region 0: Memory at a0001000 (32-bit, non-prefetchable) [virtual] [size=256]
+>     Capabilities: [fc] Null
+>     Kernel modules: ehci_pci
+
+Compare this with similar output on my system:
+
+05:04.2 USB controller: VIA Technologies, Inc. USB 2.0 EHCI-Compliant Host-Controller (rev 65) (prog-if 20 [EHCI])
+	Subsystem: VIA Technologies, Inc. USB 2.0 Controller
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV+ VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
+	Latency: 32, Cache Line Size: 64 bytes
+	Interrupt: pin C routed to IRQ 16
+	Region 0: Memory at f7c00000 (32-bit, non-prefetchable) [size=256]
+	Capabilities: [80] Power Management version 2
+		Flags: PMEClk- DSI- D1+ D2+ AuxCurrent=375mA PME(D0+,D1+,D2+,D3hot+,D3cold+)
+		Status: D0 NoSoftRst- PME-Enable- DSel=0 DScale=0 PME-
+	Kernel driver in use: ehci-pci
+
+> by the way, because I use cardbus, is it possible the fault of ricoh cardbus pci bridge's fault?
+
+That's possible.  But then why does it work okay for the earlier version 
+of the chip?
+
+> thanks!!
 
 Alan Stern
