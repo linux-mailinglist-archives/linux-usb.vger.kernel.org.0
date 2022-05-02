@@ -2,398 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E225169A2
-	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 05:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839675169BC
+	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 06:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353671AbiEBDxG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 May 2022 23:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38162 "EHLO
+        id S1357490AbiEBEPQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 00:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352476AbiEBDxF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 May 2022 23:53:05 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6565A09C
-        for <linux-usb@vger.kernel.org>; Sun,  1 May 2022 20:49:35 -0700 (PDT)
-Received: from fsav315.sakura.ne.jp (fsav315.sakura.ne.jp [153.120.85.146])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2423n9Fi010374;
-        Mon, 2 May 2022 12:49:09 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav315.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp);
- Mon, 02 May 2022 12:49:09 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2423n8v4010364
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 2 May 2022 12:49:09 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <21ffa07a-1bc1-cb1f-eef4-6c3a73953061@I-love.SAKURA.ne.jp>
-Date:   Mon, 2 May 2022 12:49:04 +0900
+        with ESMTP id S1357492AbiEBEPM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 00:15:12 -0400
+Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF90DFC0;
+        Sun,  1 May 2022 21:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
+        s=Selector; t=1651464703; i=@motorola.com;
+        bh=eH/1/pgPyZWGp/9S1ke2bugzLKOrlj8TXZ/Qgsu3Tlw=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=Qii8V64zUlwFnEDs8JwLgizcC1ajNfJ886cKMc4YV/z/H9A5rU7Af8WTKqF0I+MTk
+         eu8s47eBBEr8Xlg50NvgmQganehTzYw0pIC2W6+WDaTNHMCI973V5iETpXlc3xTa5Y
+         saEQ7knT8tukQ8LaG/LacJLcSp3u+/tFvTUkg5TlywhHe72qyBiS5cH/nBnRb/B56q
+         sAiXzKjYpy3KDab9hyHyn5MTi9FNs/BCVs8FbdcpWQSJEMft9/az329jb+0tBvsLPS
+         trqxXY5nHOY3fdMZI/vixbl75ystPLsl1KXtj80RoyXSy27gkvRtgaiTbzUbqkavo5
+         8GgCpZxxzDCzw==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEIsWRWlGSWpSXmKPExsUyYU+Ds+7/yPw
+  kg/knGS2OtT1ht2hevJ7NonPiEnaLy7vmsFksWtbK7MDqMbtjJqvHplWdbB77565h9/i8SS6A
+  JYo1My8pvyKBNWPip61sBXcVKj72bWJrYOyS7mLk4hASmMYk8W3OIuYuRk4gZxGQ85EVxGYRU
+  JH4++MDE4jNJqAmseD1KrAaEQFjif6zs9hBmpkFpjBKvD+8ghEkISwQKNEy5wZLFyMHB6+Ass
+  SHL6YQM8MlXjxqBJvDKyAocXLmExYQm1lAS+LGv5dMIOXMAtISy/9xgIQ5BTQlJnxbyDyBkXc
+  Wko5ZSDpmIXQsYGRexWidVJSZnlGSm5iZo2toYKBraGiia2apa2RsqpdYpZuoV1qsm5pYXKJr
+  pJdYXqyXWlysV1yZm5yTopeXWrKJERi8KUWur3cwPlr5U+8QoyQHk5Ior+SHvCQhvqT8lMqMx
+  OKM+KLSnNTiQ4wyHBxKErw+gflJQoJFqempFWmZOcBIgklLcPAoifCqhQKleYsLEnOLM9MhUq
+  cYdTkuHbqyl1mIJS8/L1VKnJcFGJdCAiBFGaV5cCNgUX2JUVZKmJeRgYFBiKcgtSg3swRV/hW
+  jOAejkjDv4wigKTyZeSVwm14BHcEEdERTei7IESWJCCmpBqZlBxqjjR9+DTs7KSFjh4KEZ2VG
+  +gkBL+mZyzT83PawaUzOcMyUuc22kXeuTu4n8RcrllnOW8RydLmKUvypOIPbvLv7A/fq+sno9
+  0999O6gjG2FisfU5fnCuq2Cn5/uTolfmiMkb1P/4Gv5O6l1Sg7LqqM3ei5M+aMXsD3G1teYm9
+  ty41m9LgOrS+9i+SRWdKmnvmvW25X53ZiJ/ambvsOH0DWJLBYuStetLZazdMSGVCe/3behYKm
+  FydscRS+xhZI3w1ce7LJvMemQrhOZeeXk9CWll/Y9m1Lg619enCtyVGRbwo/vv0299uWyphp1
+  3r7ta53+sKhvZqhhAsONJPawnV/aQhz21nYwVQkosRRnJBpqMRcVJwIApyHYtWUDAAA=
+X-Env-Sender: w36195@motorola.com
+X-Msg-Ref: server-15.tower-715.messagelabs.com!1651464702!208247!1
+X-Originating-IP: [144.188.128.67]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.86.4; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 4682 invoked from network); 2 May 2022 04:11:42 -0000
+Received: from unknown (HELO ilclpfpp01.lenovo.com) (144.188.128.67)
+  by server-15.tower-715.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 2 May 2022 04:11:42 -0000
+Received: from va32lmmrp02.lenovo.com (va32lmmrp02.mot.com [10.62.176.191])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by ilclpfpp01.lenovo.com (Postfix) with ESMTPS id 4Ks8mZ3qS9zfBZq;
+        Mon,  2 May 2022 04:11:42 +0000 (UTC)
+Received: from p1g3 (unknown [10.45.4.59])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: w36195)
+        by va32lmmrp02.lenovo.com (Postfix) with ESMTPSA id 4Ks8mZ16gBzf6WS;
+        Mon,  2 May 2022 04:11:42 +0000 (UTC)
+Date:   Sun, 1 May 2022 23:11:36 -0500
+From:   Dan Vacura <w36195@motorola.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: uvc: allow for application to cleanly
+ shutdown
+Message-ID: <Ym9Z+BfHcwDKlwjy@p1g3>
+References: <20220429192001.385636-1-w36195@motorola.com>
+ <YmzrwgiEO2hoKM4U@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: [PATCH v2 (resend)] media: imon: reorganize serialization
-Content-Language: en-US
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Sean Young <sean@mess.org>, Alan Stern <stern@rowland.harvard.edu>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Jarod Wilson <jarod@redhat.com>,
-        syzbot <syzbot+c558267ad910fc494497@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <00000000000043b599058faf0145@google.com>
- <5a06c7f1-9a29-99e4-c700-fec3f09509d2@I-love.SAKURA.ne.jp>
- <YmZny7mzugFe0t+X@gofer.mess.org>
- <62dddbb9-3053-f284-f9db-3beda5e8e951@I-love.SAKURA.ne.jp>
- <YmaMY/XKBmEfl8i6@gofer.mess.org> <YmbF071fSKUff6R2@rowland.harvard.edu>
- <YmbKiPna01aMQhJw@gofer.mess.org>
- <349f3e34-41ed-f832-3b22-ae10c50e3868@I-love.SAKURA.ne.jp>
- <Ymel5XtWC7rwpiXF@gofer.mess.org>
- <e17d6647-2c65-638b-1469-f546da7d0ba8@I-love.SAKURA.ne.jp>
-In-Reply-To: <e17d6647-2c65-638b-1469-f546da7d0ba8@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmzrwgiEO2hoKM4U@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since usb_register_dev() from imon_init_display() from imon_probe() holds
-minor_rwsem while display_open() which holds driver_lock and ictx->lock is
-called with minor_rwsem held from usb_open(), holding driver_lock or
-ictx->lock when calling usb_register_dev() causes circular locking
-dependency problem.
+On Sat, Apr 30, 2022 at 09:56:50AM +0200, Greg Kroah-Hartman wrote:
+> On Fri, Apr 29, 2022 at 02:20:01PM -0500, Dan Vacura wrote:
+> > Several types of kernel panics can occur due to timing during the uvc
+> > gadget removal. This appears to be a problem with gadget resources being
+> > managed by both the client application's v4l2 open/close and the UDC
+> > gadget bind/unbind. Since the concept of USB_GADGET_DELAYED_STATUS
+> > doesn't exist for unbind, add a wait to allow for the application to
+> > close out.
+> > 
+> > Some examples of the panics that can occur are:
+> > 
+> > <1>[ 1147.652313] Unable to handle kernel NULL pointer dereference at
+> > virtual address 0000000000000028
+> > <4>[ 1147.652510] Call trace:
+> > <4>[ 1147.652514]  usb_gadget_disconnect+0x74/0x1f0
+> > <4>[ 1147.652516]  usb_gadget_deactivate+0x38/0x168
+> > <4>[ 1147.652520]  usb_function_deactivate+0x54/0x90
+> > <4>[ 1147.652524]  uvc_function_disconnect+0x14/0x38
+> > <4>[ 1147.652527]  uvc_v4l2_release+0x34/0xa0
+> > <4>[ 1147.652537]  __fput+0xdc/0x2c0
+> > <4>[ 1147.652540]  ____fput+0x10/0x1c
+> > <4>[ 1147.652545]  task_work_run+0xe4/0x12c
+> > <4>[ 1147.652549]  do_notify_resume+0x108/0x168
+> > 
+> > <1>[  282.950561][ T1472] Unable to handle kernel NULL pointer
+> > dereference at virtual address 00000000000005b8
+> > <6>[  282.953111][ T1472] Call trace:
+> > <6>[  282.953121][ T1472]  usb_function_deactivate+0x54/0xd4
+> > <6>[  282.953134][ T1472]  uvc_v4l2_release+0xac/0x1e4
+> > <6>[  282.953145][ T1472]  v4l2_release+0x134/0x1f0
+> > <6>[  282.953167][ T1472]  __fput+0xf4/0x428
+> > <6>[  282.953178][ T1472]  ____fput+0x14/0x24
+> > <6>[  282.953193][ T1472]  task_work_run+0xac/0x130
+> > 
+> > <3>[  213.410077][   T29] configfs-gadget gadget: uvc: Failed to queue
+> > request (-108).
+> > <1>[  213.410116][   T29] Unable to handle kernel NULL pointer
+> > dereference at virtual address 0000000000000003
+> > <6>[  213.413460][   T29] Call trace:
+> > <6>[  213.413474][   T29]  uvcg_video_pump+0x1f0/0x384
+> > <6>[  213.413489][   T29]  process_one_work+0x2a4/0x544
+> > <6>[  213.413502][   T29]  worker_thread+0x350/0x784
+> > <6>[  213.413515][   T29]  kthread+0x2ac/0x320
+> > <6>[  213.413528][   T29]  ret_from_fork+0x10/0x30
+> > 
+> > Signed-off-by: Dan Vacura <w36195@motorola.com>
+> > ---
+> >  drivers/usb/gadget/function/f_uvc.c    | 24 ++++++++++++++++++++++++
+> >  drivers/usb/gadget/function/uvc.h      |  2 ++
+> >  drivers/usb/gadget/function/uvc_v4l2.c |  3 ++-
+> >  3 files changed, 28 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> > index 50e6e7a58b41..3cc8cf24a7c7 100644
+> > --- a/drivers/usb/gadget/function/f_uvc.c
+> > +++ b/drivers/usb/gadget/function/f_uvc.c
+> > @@ -892,13 +892,36 @@ static void uvc_function_unbind(struct usb_configuration *c,
+> >  {
+> >  	struct usb_composite_dev *cdev = c->cdev;
+> >  	struct uvc_device *uvc = to_uvc(f);
+> > +	int wait_ret = 1;
+> >  
+> >  	uvcg_info(f, "%s()\n", __func__);
+> 
+> Ick, wait, is that in the kernel?  That needs to be removed, ftrace can
+> do that for you.
 
-Since usb_deregister_dev() from imon_disconnect() holds minor_rwsem while
-display_open() which holds driver_lock is called with minor_rwsem held,
-holding driver_lock when calling usb_deregister_dev() also causes circular
-locking dependency problem.
+Yes, part of the kernel, and tbh, I find it to be quite helpful in
+debugging field issues from customers, where enabling ftrace isn't
+practical. If you still want to remove, there are other locations in
+this gadget driver that log function entry. Perhaps it'd be better to
+do a separate change that cleans up logging a bit or do you prefer to
+just refactor this one now?
 
-Sean Young explained that the problem is there are imon devices which have
-two usb interfaces, even though it is one device. The probe and disconnect
-function of both usb interfaces can run concurrently.
+> 
+> > +	/* If we know we're connected via v4l2, then there should be a cleanup
+> > +	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
+> > +	 * though the video device removal uevent. Allow some time for the
+> > +	 * application to close out before things get deleted.
+> > +	 */
+> > +	if (uvc->func_connected) {
+> > +		uvcg_info(f, "%s waiting for clean disconnect\n", __func__);
+> > +		wait_ret = wait_event_interruptible_timeout(uvc->func_connected_queue,
+> > +				uvc->func_connected == false, msecs_to_jiffies(500));
+> > +		uvcg_info(f, "%s done waiting with ret: %u\n", __func__, wait_ret);
+> 
+> Please remove debugging code before submitting patches.
 
-Alan Stern responded that the driver and USB cores guarantee that when an
-interface is probed, both the interface and its USB device are locked.
-Ditto for when the disconnect callback gets run. So concurrent probing/
-disconnection of multiple interfaces on the same device is not possible.
+Will do.
 
-Therefore, we don't need locks for handling race between imon_probe() and
-imon_disconnect(). But we still need to handle race between display_open()
-/vfd_write()/lcd_write()/display_close() and imon_disconnect(), for
-disconnect event can happen while file descriptors are in use.
-
-Since "struct file"->private_data is set by display_open(), vfd_write()/
-lcd_write()/display_close() can assume that "struct file"->private_data
-is not NULL even after usb_set_intfdata(interface, NULL) was called.
-
-Replace insufficiently held driver_lock with refcount_t based management.
-Add a boolean flag for recording whether imon_disconnect() was already
-called. Use RCU for accessing this boolean flag and refcount_t.
-
-Since the boolean flag for imon_disconnect() is shared, disconnect event
-on either intf0 or intf1 affects both interfaces. But I assume that this
-change does not matter, for usually disconnect event would not happen
-while interfaces are in use.
-
-Link: https://syzkaller.appspot.com/bug?extid=c558267ad910fc494497
-Reported-by: syzbot <syzbot+c558267ad910fc494497@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Tested-by: syzbot <syzbot+c558267ad910fc494497@syzkaller.appspotmail.com>
-Cc: Sean Young <sean@mess.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
----
-Changes in v2:
-  Defer free_imon_context() using refcount till display_close() is called.
-
- drivers/media/rc/imon.c | 99 +++++++++++++++++++----------------------
- 1 file changed, 47 insertions(+), 52 deletions(-)
-
-diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
-index 54da6f60079b..9a4f24e294bc 100644
---- a/drivers/media/rc/imon.c
-+++ b/drivers/media/rc/imon.c
-@@ -153,6 +153,24 @@ struct imon_context {
- 	const struct imon_usb_dev_descr *dev_descr;
- 					/* device description with key */
- 					/* table for front panels */
-+	/*
-+	 * Fields for deferring free_imon_context().
-+	 *
-+	 * Since reference to "struct imon_context" is stored into
-+	 * "struct file_operations"->private_data, we need to remember
-+	 * how many file descriptors might access this "struct imon_context".
-+	 */
-+	refcount_t users;
-+	/*
-+	 * Use a flag for telling display_open()/vfd_write()/lcd_write() that
-+	 * imon_disconnect() was already called.
-+	 */
-+	bool disconnected;
-+	/*
-+	 * We need to wait for RCU grace period in order to allow
-+	 * display_open() to safely check ->disconnected and increment ->users.
-+	 */
-+	struct rcu_head rcu;
- };
- 
- #define TOUCH_TIMEOUT	(HZ/30)
-@@ -160,18 +178,18 @@ struct imon_context {
- /* vfd character device file operations */
- static const struct file_operations vfd_fops = {
- 	.owner		= THIS_MODULE,
--	.open		= &display_open,
--	.write		= &vfd_write,
--	.release	= &display_close,
-+	.open		= display_open,
-+	.write		= vfd_write,
-+	.release	= display_close,
- 	.llseek		= noop_llseek,
- };
- 
- /* lcd character device file operations */
- static const struct file_operations lcd_fops = {
- 	.owner		= THIS_MODULE,
--	.open		= &display_open,
--	.write		= &lcd_write,
--	.release	= &display_close,
-+	.open		= display_open,
-+	.write		= lcd_write,
-+	.release	= display_close,
- 	.llseek		= noop_llseek,
- };
- 
-@@ -439,9 +457,6 @@ static struct usb_driver imon_driver = {
- 	.id_table	= imon_usb_id_table,
- };
- 
--/* to prevent races between open() and disconnect(), probing, etc */
--static DEFINE_MUTEX(driver_lock);
--
- /* Module bookkeeping bits */
- MODULE_AUTHOR(MOD_AUTHOR);
- MODULE_DESCRIPTION(MOD_DESC);
-@@ -481,9 +496,11 @@ static void free_imon_context(struct imon_context *ictx)
- 	struct device *dev = ictx->dev;
- 
- 	usb_free_urb(ictx->tx_urb);
-+	WARN_ON(ictx->dev_present_intf0);
- 	usb_free_urb(ictx->rx_urb_intf0);
-+	WARN_ON(ictx->dev_present_intf1);
- 	usb_free_urb(ictx->rx_urb_intf1);
--	kfree(ictx);
-+	kfree_rcu(ictx, rcu);
- 
- 	dev_dbg(dev, "%s: iMON context freed\n", __func__);
- }
-@@ -499,9 +516,6 @@ static int display_open(struct inode *inode, struct file *file)
- 	int subminor;
- 	int retval = 0;
- 
--	/* prevent races with disconnect */
--	mutex_lock(&driver_lock);
--
- 	subminor = iminor(inode);
- 	interface = usb_find_interface(&imon_driver, subminor);
- 	if (!interface) {
-@@ -509,13 +523,16 @@ static int display_open(struct inode *inode, struct file *file)
- 		retval = -ENODEV;
- 		goto exit;
- 	}
--	ictx = usb_get_intfdata(interface);
- 
--	if (!ictx) {
-+	rcu_read_lock();
-+	ictx = usb_get_intfdata(interface);
-+	if (!ictx || ictx->disconnected || !refcount_inc_not_zero(&ictx->users)) {
-+		rcu_read_unlock();
- 		pr_err("no context found for minor %d\n", subminor);
- 		retval = -ENODEV;
- 		goto exit;
- 	}
-+	rcu_read_unlock();
- 
- 	mutex_lock(&ictx->lock);
- 
-@@ -533,8 +550,10 @@ static int display_open(struct inode *inode, struct file *file)
- 
- 	mutex_unlock(&ictx->lock);
- 
-+	if (retval && refcount_dec_and_test(&ictx->users))
-+		free_imon_context(ictx);
-+
- exit:
--	mutex_unlock(&driver_lock);
- 	return retval;
- }
- 
-@@ -544,16 +563,9 @@ static int display_open(struct inode *inode, struct file *file)
-  */
- static int display_close(struct inode *inode, struct file *file)
- {
--	struct imon_context *ictx = NULL;
-+	struct imon_context *ictx = file->private_data;
- 	int retval = 0;
- 
--	ictx = file->private_data;
--
--	if (!ictx) {
--		pr_err("no context for device\n");
--		return -ENODEV;
--	}
--
- 	mutex_lock(&ictx->lock);
- 
- 	if (!ictx->display_supported) {
-@@ -568,6 +580,8 @@ static int display_close(struct inode *inode, struct file *file)
- 	}
- 
- 	mutex_unlock(&ictx->lock);
-+	if (refcount_dec_and_test(&ictx->users))
-+		free_imon_context(ictx);
- 	return retval;
- }
- 
-@@ -934,15 +948,12 @@ static ssize_t vfd_write(struct file *file, const char __user *buf,
- 	int offset;
- 	int seq;
- 	int retval = 0;
--	struct imon_context *ictx;
-+	struct imon_context *ictx = file->private_data;
- 	static const unsigned char vfd_packet6[] = {
- 		0x01, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF };
- 
--	ictx = file->private_data;
--	if (!ictx) {
--		pr_err_ratelimited("no context for device\n");
-+	if (ictx->disconnected)
- 		return -ENODEV;
--	}
- 
- 	mutex_lock(&ictx->lock);
- 
-@@ -1018,13 +1029,10 @@ static ssize_t lcd_write(struct file *file, const char __user *buf,
- 			 size_t n_bytes, loff_t *pos)
- {
- 	int retval = 0;
--	struct imon_context *ictx;
-+	struct imon_context *ictx = file->private_data;
- 
--	ictx = file->private_data;
--	if (!ictx) {
--		pr_err_ratelimited("no context for device\n");
-+	if (ictx->disconnected)
- 		return -ENODEV;
--	}
- 
- 	mutex_lock(&ictx->lock);
- 
-@@ -2404,7 +2412,6 @@ static int imon_probe(struct usb_interface *interface,
- 	int ifnum, sysfs_err;
- 	int ret = 0;
- 	struct imon_context *ictx = NULL;
--	struct imon_context *first_if_ctx = NULL;
- 	u16 vendor, product;
- 
- 	usbdev     = usb_get_dev(interface_to_usbdev(interface));
-@@ -2416,17 +2423,12 @@ static int imon_probe(struct usb_interface *interface,
- 	dev_dbg(dev, "%s: found iMON device (%04x:%04x, intf%d)\n",
- 		__func__, vendor, product, ifnum);
- 
--	/* prevent races probing devices w/multiple interfaces */
--	mutex_lock(&driver_lock);
--
- 	first_if = usb_ifnum_to_if(usbdev, 0);
- 	if (!first_if) {
- 		ret = -ENODEV;
- 		goto fail;
- 	}
- 
--	first_if_ctx = usb_get_intfdata(first_if);
--
- 	if (ifnum == 0) {
- 		ictx = imon_init_intf0(interface, id);
- 		if (!ictx) {
-@@ -2434,9 +2436,11 @@ static int imon_probe(struct usb_interface *interface,
- 			ret = -ENODEV;
- 			goto fail;
- 		}
-+		refcount_set(&ictx->users, 1);
- 
- 	} else {
- 		/* this is the secondary interface on the device */
-+		struct imon_context *first_if_ctx = usb_get_intfdata(first_if);
- 
- 		/* fail early if first intf failed to register */
- 		if (!first_if_ctx) {
-@@ -2450,14 +2454,13 @@ static int imon_probe(struct usb_interface *interface,
- 			ret = -ENODEV;
- 			goto fail;
- 		}
-+		refcount_inc(&ictx->users);
- 
- 	}
- 
- 	usb_set_intfdata(interface, ictx);
- 
- 	if (ifnum == 0) {
--		mutex_lock(&ictx->lock);
--
- 		if (product == 0xffdc && ictx->rf_device) {
- 			sysfs_err = sysfs_create_group(&interface->dev.kobj,
- 						       &imon_rf_attr_group);
-@@ -2468,21 +2471,17 @@ static int imon_probe(struct usb_interface *interface,
- 
- 		if (ictx->display_supported)
- 			imon_init_display(ictx, interface);
--
--		mutex_unlock(&ictx->lock);
- 	}
- 
- 	dev_info(dev, "iMON device (%04x:%04x, intf%d) on usb<%d:%d> initialized\n",
- 		 vendor, product, ifnum,
- 		 usbdev->bus->busnum, usbdev->devnum);
- 
--	mutex_unlock(&driver_lock);
- 	usb_put_dev(usbdev);
- 
- 	return 0;
- 
- fail:
--	mutex_unlock(&driver_lock);
- 	usb_put_dev(usbdev);
- 	dev_err(dev, "unable to register, err %d\n", ret);
- 
-@@ -2498,10 +2497,8 @@ static void imon_disconnect(struct usb_interface *interface)
- 	struct device *dev;
- 	int ifnum;
- 
--	/* prevent races with multi-interface device probing and display_open */
--	mutex_lock(&driver_lock);
--
- 	ictx = usb_get_intfdata(interface);
-+	ictx->disconnected = true;
- 	dev = ictx->dev;
- 	ifnum = interface->cur_altsetting->desc.bInterfaceNumber;
- 
-@@ -2542,11 +2539,9 @@ static void imon_disconnect(struct usb_interface *interface)
- 		}
- 	}
- 
--	if (!ictx->dev_present_intf0 && !ictx->dev_present_intf1)
-+	if (refcount_dec_and_test(&ictx->users))
- 		free_imon_context(ictx);
- 
--	mutex_unlock(&driver_lock);
--
- 	dev_dbg(dev, "%s: iMON device (intf%d) disconnected\n",
- 		__func__, ifnum);
- }
--- 
-2.34.1
-
+> 
+> thanks,
+> 
+> greg k-h
