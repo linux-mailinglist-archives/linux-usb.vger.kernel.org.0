@@ -2,52 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFAE516AF1
-	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 08:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC99516B1F
+	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 09:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383505AbiEBGqy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 02:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
+        id S1383554AbiEBHLm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 03:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383496AbiEBGqw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 02:46:52 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8446F2CE30
-        for <linux-usb@vger.kernel.org>; Sun,  1 May 2022 23:43:21 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id m205-20020a6b3fd6000000b006586ca958d2so4814470ioa.22
-        for <linux-usb@vger.kernel.org>; Sun, 01 May 2022 23:43:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=xU21jNma3wnJAcTSyKuLDDf/RK7eubjOe9IzgIAdPS8=;
-        b=M670UCk3Ym8/HcpMeSQBSRs03qHeGLuUYn50Ah+Zbks8IQXjlaRKpdaYCGVWrMvGI2
-         4uxkER14X2H9eF+E8ZAAKbLdlyKsW888JN67mJPwYHbxCdB3qcqNhDZFtIvCqpvf7YgS
-         VVDmIOy4Jfiz3Rj+2RE/rfullas4bl4V9qjqV6p2eh5BJkL4i4wAoyqoZbLHPZXc6Qkf
-         XyRSqgbcqgEFA+tj9r4USqc/KzdvD8H/joWSTavXBYgiiffn14eOnXjh74ulArA5WIQd
-         PcWkpWK3whJvFO4DtzQDdxb7+W0dCBn4veAHbCq/WPE29R2Kx1dtSwxpLymgKx7ACAsz
-         e3vw==
-X-Gm-Message-State: AOAM533ovMY8fxLsgXvg+PIySMfZJOiPG/FnGzMMFgYgIz/wzO/WKNHK
-        A5QWDMhgLkljysyQ6ahfB6rVixzh5J5NqeSzNDhNNV6Cx9hQ
-X-Google-Smtp-Source: ABdhPJwSgS0AR6/oHAUdRRiJ/BA2Td/W1bbexhImX0XzfhXS2ZX0MTKqC/IuU+lyUfUqmHOnpSB9BL3gtldvJyn3+pX5+Lyv2PbU
+        with ESMTP id S1354251AbiEBHLk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 03:11:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0FE38DBC;
+        Mon,  2 May 2022 00:08:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1714DB81147;
+        Mon,  2 May 2022 07:08:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB14C385B4;
+        Mon,  2 May 2022 07:08:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651475289;
+        bh=X5DDZ5cu8Ec0v5TpZDEASVCpiKVJTD3WHl3xILny+5s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ftc66P1KRLtIxbphpeXSRKGK+ku85pG3xcLnI/ILm+zDUqAWSpZi/jH68+mJyw4e4
+         qrSk4knKQzczwh6juw3h25W1EEaFoJp13UogCVeUFApS4IlTRxkiRu31rw+h42AEEo
+         yVvI3NHLHqZRZMWf/GwdXrO0fkciYsoEJY1TJDzJqiHn5YRljNyBweeocP1TAdMDIW
+         SjWUyPk2BlfHWlnvCbBf3F73MPSMg+TT/ecnNgdjKm4f099yYZrBX2f5FXLl9T5/YR
+         SvkcpkVzscWXQHMTAsjSEd0WcjGhlhqUMXSf9/gRaXtg84BSH7Y053ojFgR2kKR7NX
+         cyQX12I4WnqMQ==
+Received: by mail-yb1-f182.google.com with SMTP id m128so24603743ybm.5;
+        Mon, 02 May 2022 00:08:09 -0700 (PDT)
+X-Gm-Message-State: AOAM533YXgNgVBCaIk7s9X4l2uGaKY7PX9fESMeQGr95OIWvy9Hgok5G
+        skFANhKVeVZqhSpAEiicidyCvsqdenyuPV2U89E=
+X-Google-Smtp-Source: ABdhPJzh1sjDRx5OtKZisw0kK2teD3n3NIRAbZSwmRkDNwDLe6EnG5RDGjvENlJGwWWdkEOx8bePQy1Q38g26+xkjEA=
+X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
+ x185-20020a2531c2000000b00641660f230fmr9381815ybx.472.1651475288728; Mon, 02
+ May 2022 00:08:08 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:16d2:b0:323:7285:474b with SMTP id
- g18-20020a05663816d200b003237285474bmr4665475jat.61.1651473800884; Sun, 01
- May 2022 23:43:20 -0700 (PDT)
-Date:   Sun, 01 May 2022 23:43:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000041f67405de01b5cf@google.com>
-Subject: [syzbot] general protection fault in usb_gadget_udc_reset (3)
-From:   syzbot <syzbot+10d79fa6d4fbfacaed2e@syzkaller.appspotmail.com>
-To:     andriy.shevchenko@linux.intel.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, jakobkoschel@gmail.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_wcheng@quicinc.com, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-19-arnd@kernel.org>
+ <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com>
+In-Reply-To: <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 2 May 2022 09:07:52 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com>
+Message-ID: <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com>
+Subject: Re: [PATCH 18/48] ARM: pxa: hx4700: use gpio descriptors for audio
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,105 +92,217 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Sun, May 1, 2022 at 11:41 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> (...)
+> > +static struct gpiod_lookup_table hx4700_audio_gpio_table = {
+> > +       .dev_id = "hx4700-audio",
+> > +       .table = {
+> > +               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
+> > +                           "earphone-ndet", GPIO_ACTIVE_HIGH),
+>
+> This looks wrong. The n in nDET in the end of the name of the GPIO line
+> means active low does it not?
+>
+> What I usually do when I see this is to properly set it to
+> GPIO_ACTIVE_LOW in the descriptor table, then invert the logic
+> where it's getting used.
+>
+> Also rename to earphone-det instead of -ndet
 
-syzbot found the following issue on:
+Thanks for taking a look! I changed it now, but I don't know if
+I got the correct number of inversions in the end. How does this look?
 
-HEAD commit:    d615b5416f8a Merge tag 'f2fs-fix-5.18' of git://git.kernel..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=157d7830f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b6ba81e30e2008b1
-dashboard link: https://syzkaller.appspot.com/bug?extid=10d79fa6d4fbfacaed2e
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+          Arnd
 
-Unfortunately, I don't have any reproducer for this issue yet.
+commit 9d452c9cbee59fc58c940b5f7ae5a40579aab0d2
+Author: Arnd Bergmann <arnd@arndb.de>
+Date:   Wed Sep 11 14:27:13 2019 +0200
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+10d79fa6d4fbfacaed2e@syzkaller.appspotmail.com
+    ARM: pxa: hx4700: use gpio descriptors for audio
 
-general protection fault, probably for non-canonical address 0xdffffc0000000008: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000040-0x0000000000000047]
-CPU: 1 PID: 24 Comm: kworker/1:0 Not tainted 5.18.0-rc4-syzkaller-00006-gd615b5416f8a #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Workqueue: events __usb_queue_reset_device
-RIP: 0010:usb_gadget_udc_reset+0x23/0xb0 drivers/usb/gadget/udc/core.c:1088
-Code: 00 00 00 0f 1f 40 00 41 54 49 89 fc 53 48 89 f3 e8 02 88 b0 fb 48 8d 7b 40 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 70 4c 89 e7 ff 53 40 49 8d bc 24 80 00 00 00 48 b8
-RSP: 0018:ffffc9000072f4e0 EFLAGS: 00010002
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000008 RSI: ffffffff85c7dcee RDI: 0000000000000040
-RBP: ffff888044e50bfc R08: 0000000000000000 R09: ffff888044e50003
-R10: ffffffff85c8e5e7 R11: 0000000000000001 R12: ffff888044e50c00
-R13: ffff888044e50c00 R14: 0000000000000019 R15: ffff88806c056408
-FS:  0000000000000000(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f4d9e2810f8 CR3: 000000006e13f000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- set_link_state+0xc83/0xf70 drivers/usb/gadget/udc/dummy_hcd.c:465
- dummy_hub_control+0x1192/0x1f80 drivers/usb/gadget/udc/dummy_hcd.c:2315
- rh_call_control drivers/usb/core/hcd.c:683 [inline]
- rh_urb_enqueue drivers/usb/core/hcd.c:848 [inline]
- usb_hcd_submit_urb+0xc83/0x2250 drivers/usb/core/hcd.c:1551
- usb_submit_urb+0x86d/0x18a0 drivers/usb/core/urb.c:594
- usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
- usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
- set_port_feature drivers/usb/core/hub.c:439 [inline]
- hub_port_reset+0x26d/0x1ce0 drivers/usb/core/hub.c:2968
- hub_port_init+0x18a/0x2ed0 drivers/usb/core/hub.c:4714
- usb_reset_and_verify_device+0x3a0/0xe10 drivers/usb/core/hub.c:5946
- usb_reset_device+0x4bd/0x9a0 drivers/usb/core/hub.c:6122
- __usb_queue_reset_device+0x68/0x90 drivers/usb/core/message.c:1904
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:usb_gadget_udc_reset+0x23/0xb0 drivers/usb/gadget/udc/core.c:1088
-Code: 00 00 00 0f 1f 40 00 41 54 49 89 fc 53 48 89 f3 e8 02 88 b0 fb 48 8d 7b 40 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 70 4c 89 e7 ff 53 40 49 8d bc 24 80 00 00 00 48 b8
-RSP: 0018:ffffc9000072f4e0 EFLAGS: 00010002
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000008 RSI: ffffffff85c7dcee RDI: 0000000000000040
-RBP: ffff888044e50bfc R08: 0000000000000000 R09: ffff888044e50003
-R10: ffffffff85c8e5e7 R11: 0000000000000001 R12: ffff888044e50c00
-R13: ffff888044e50c00 R14: 0000000000000019 R15: ffff88806c056408
-FS:  0000000000000000(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f4d9e2810f8 CR3: 000000006e13f000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	00 00                	add    %al,(%rax)
-   2:	0f 1f 40 00          	nopl   0x0(%rax)
-   6:	41 54                	push   %r12
-   8:	49 89 fc             	mov    %rdi,%r12
-   b:	53                   	push   %rbx
-   c:	48 89 f3             	mov    %rsi,%rbx
-   f:	e8 02 88 b0 fb       	callq  0xfbb08816
-  14:	48 8d 7b 40          	lea    0x40(%rbx),%rdi
-  18:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  1f:	fc ff df
-  22:	48 89 fa             	mov    %rdi,%rdx
-  25:	48 c1 ea 03          	shr    $0x3,%rdx
-* 29:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2d:	75 70                	jne    0x9f
-  2f:	4c 89 e7             	mov    %r12,%rdi
-  32:	ff 53 40             	callq  *0x40(%rbx)
-  35:	49 8d bc 24 80 00 00 	lea    0x80(%r12),%rdi
-  3c:	00
-  3d:	48                   	rex.W
-  3e:	b8                   	.byte 0xb8
+    The audio driver should not use a hardwired gpio number
+    from the header. Change it to use a lookup table.
 
+    Cc: Philipp Zabel <philipp.zabel@gmail.com>
+    Cc: Paul Parsons <lost.distance@yahoo.com>
+    Acked-by: Mark Brown <broonie@kernel.org>
+    Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
+    Cc: alsa-devel@alsa-project.org
+    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+diff --git a/arch/arm/mach-pxa/hx4700-pcmcia.c
+b/arch/arm/mach-pxa/hx4700-pcmcia.c
+index e8acbfc9ef6c..e2331dfe427d 100644
+--- a/arch/arm/mach-pxa/hx4700-pcmcia.c
++++ b/arch/arm/mach-pxa/hx4700-pcmcia.c
+@@ -10,7 +10,7 @@
+ #include <linux/irq.h>
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ #include <asm/mach-types.h>
+-#include <mach/hx4700.h>
++#include "hx4700.h"
+
+ #include <pcmcia/soc_common.h>
+
+diff --git a/arch/arm/mach-pxa/hx4700.c b/arch/arm/mach-pxa/hx4700.c
+index 140a44cb2989..2ae06edf413c 100644
+--- a/arch/arm/mach-pxa/hx4700.c
++++ b/arch/arm/mach-pxa/hx4700.c
+@@ -41,7 +41,7 @@
+
+ #include "pxa27x.h"
+ #include "addr-map.h"
+-#include <mach/hx4700.h>
++#include "hx4700.h"
+ #include <linux/platform_data/irda-pxaficp.h>
+
+ #include <sound/ak4641.h>
+@@ -834,6 +834,19 @@ static struct i2c_board_info i2c_board_info[]
+__initdata = {
+        },
+ };
+
++static struct gpiod_lookup_table hx4700_audio_gpio_table = {
++       .dev_id = "hx4700-audio",
++       .table = {
++               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
++                           "earphone-det", GPIO_ACTIVE_LOW),
++               GPIO_LOOKUP("gpio-pxa", GPIO92_HX4700_HP_DRIVER,
++                           "hp-driver", GPIO_ACTIVE_HIGH),
++               GPIO_LOOKUP("gpio-pxa", GPIO107_HX4700_SPK_nSD,
++                           "spk-sd", GPIO_ACTIVE_LOW),
++               { },
++       },
++};
++
+ static struct platform_device audio = {
+        .name   = "hx4700-audio",
+        .id     = -1,
+@@ -895,6 +908,7 @@ static void __init hx4700_init(void)
+
+        gpiod_add_lookup_table(&bq24022_gpiod_table);
+        gpiod_add_lookup_table(&gpio_vbus_gpiod_table);
++       gpiod_add_lookup_table(&hx4700_audio_gpio_table);
+        platform_add_devices(devices, ARRAY_SIZE(devices));
+        pwm_add_table(hx4700_pwm_lookup, ARRAY_SIZE(hx4700_pwm_lookup));
+
+diff --git a/arch/arm/mach-pxa/include/mach/hx4700.h
+b/arch/arm/mach-pxa/hx4700.h
+similarity index 99%
+rename from arch/arm/mach-pxa/include/mach/hx4700.h
+rename to arch/arm/mach-pxa/hx4700.h
+index 0c30e6d9c660..ce2db33989e1 100644
+--- a/arch/arm/mach-pxa/include/mach/hx4700.h
++++ b/arch/arm/mach-pxa/hx4700.h
+@@ -10,7 +10,7 @@
+
+ #include <linux/gpio.h>
+ #include <linux/mfd/asic3.h>
+-#include "irqs.h" /* PXA_NR_BUILTIN_GPIO */
++#include <mach/irqs.h> /* PXA_NR_BUILTIN_GPIO */
+
+ #define HX4700_ASIC3_GPIO_BASE PXA_NR_BUILTIN_GPIO
+ #define HX4700_EGPIO_BASE      (HX4700_ASIC3_GPIO_BASE + ASIC3_NUM_GPIOS)
+diff --git a/sound/soc/pxa/hx4700.c b/sound/soc/pxa/hx4700.c
+index 7334fac758de..a0734b742322 100644
+--- a/sound/soc/pxa/hx4700.c
++++ b/sound/soc/pxa/hx4700.c
+@@ -10,7 +10,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/platform_device.h>
+ #include <linux/delay.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+
+ #include <sound/core.h>
+ #include <sound/jack.h>
+@@ -18,10 +18,10 @@
+ #include <sound/pcm_params.h>
+ #include <sound/soc.h>
+
+-#include <mach/hx4700.h>
+ #include <asm/mach-types.h>
+ #include "pxa2xx-i2s.h"
+
++static struct gpio_desc *gpiod_hp_driver, *gpiod_spk_sd;
+ static struct snd_soc_jack hs_jack;
+
+ /* Headphones jack detection DAPM pin */
+@@ -40,9 +40,7 @@ static struct snd_soc_jack_pin hs_jack_pin[] = {
+
+ /* Headphones jack detection GPIO */
+ static struct snd_soc_jack_gpio hs_jack_gpio = {
+-       .gpio           = GPIO75_HX4700_EARPHONE_nDET,
+-       .invert         = true,
+-       .name           = "hp-gpio",
++       .name           = "earphone-det",
+        .report         = SND_JACK_HEADPHONE,
+        .debounce_time  = 200,
+ };
+@@ -81,14 +79,14 @@ static const struct snd_soc_ops hx4700_ops = {
+ static int hx4700_spk_power(struct snd_soc_dapm_widget *w,
+                            struct snd_kcontrol *k, int event)
+ {
+-       gpio_set_value(GPIO107_HX4700_SPK_nSD, !!SND_SOC_DAPM_EVENT_ON(event));
++       gpiod_set_value(gpiod_spk_sd, !!SND_SOC_DAPM_EVENT_ON(event));
+        return 0;
+ }
+
+ static int hx4700_hp_power(struct snd_soc_dapm_widget *w,
+                           struct snd_kcontrol *k, int event)
+ {
+-       gpio_set_value(GPIO92_HX4700_HP_DRIVER, !!SND_SOC_DAPM_EVENT_ON(event));
++       gpiod_set_value(gpiod_hp_driver, !!SND_SOC_DAPM_EVENT_ON(event));
+        return 0;
+ }
+
+@@ -162,11 +160,6 @@ static struct snd_soc_card snd_soc_card_hx4700 = {
+        .fully_routed           = true,
+ };
+
+-static struct gpio hx4700_audio_gpios[] = {
+-       { GPIO107_HX4700_SPK_nSD, GPIOF_OUT_INIT_HIGH, "SPK_POWER" },
+-       { GPIO92_HX4700_HP_DRIVER, GPIOF_OUT_INIT_LOW, "EP_POWER" },
+-};
+-
+ static int hx4700_audio_probe(struct platform_device *pdev)
+ {
+        int ret;
+@@ -174,26 +167,26 @@ static int hx4700_audio_probe(struct
+platform_device *pdev)
+        if (!machine_is_h4700())
+                return -ENODEV;
+
+-       ret = gpio_request_array(hx4700_audio_gpios,
+-                               ARRAY_SIZE(hx4700_audio_gpios));
++       gpiod_hp_driver = devm_gpiod_get(&pdev->dev, "hp-driver",
+GPIOD_OUT_HIGH);
++       ret = PTR_ERR_OR_ZERO(gpiod_hp_driver);
++       if (ret)
++               return ret;
++       gpiod_spk_sd = devm_gpiod_get(&pdev->dev, "spk-sd", GPIOD_OUT_LOW);
++       ret = PTR_ERR_OR_ZERO(gpiod_spk_sd);
+        if (ret)
+                return ret;
+
++       hs_jack_gpio.gpiod_dev = &pdev->dev;
+        snd_soc_card_hx4700.dev = &pdev->dev;
+        ret = devm_snd_soc_register_card(&pdev->dev, &snd_soc_card_hx4700);
+-       if (ret)
+-               gpio_free_array(hx4700_audio_gpios,
+-                               ARRAY_SIZE(hx4700_audio_gpios));
+
+        return ret;
+ }
+
+ static int hx4700_audio_remove(struct platform_device *pdev)
+ {
+-       gpio_set_value(GPIO92_HX4700_HP_DRIVER, 0);
+-       gpio_set_value(GPIO107_HX4700_SPK_nSD, 0);
+-
+-       gpio_free_array(hx4700_audio_gpios, ARRAY_SIZE(hx4700_audio_gpios));
++       gpiod_set_value(gpiod_hp_driver, 0);
++       gpiod_set_value(gpiod_spk_sd, 0);
+        return 0;
+ }
