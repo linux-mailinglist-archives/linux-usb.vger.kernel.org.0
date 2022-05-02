@@ -2,111 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78613516AF0
-	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 08:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFAE516AF1
+	for <lists+linux-usb@lfdr.de>; Mon,  2 May 2022 08:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383491AbiEBGqo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 02:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
+        id S1383505AbiEBGqy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 02:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343598AbiEBGqn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 02:46:43 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864202CE1D;
-        Sun,  1 May 2022 23:43:12 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id x23so6319744pff.9;
-        Sun, 01 May 2022 23:43:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=iAuUa0BGKm3Umq1FBvXS7xo05qV6QmFyZ/a1PtsOX5E=;
-        b=P+qxbf4Lv1EeTjOjULUDyzWnjjnjEl3cIx5tdseFK+GRpnp0zV6XDF8vlDr4Ja4iXx
-         u9qrpIGpr7qdbZHwZlBFg4P0udLosxtDbk0LgGOtAmAjYAlOc8nvcybd3+hve19ZdhDu
-         oPlLwBWiP6KIvd7rp5p6S2oWYS/GrRAYqaIJDLL8JW42LeChQFvENah0cuIJIX8/NQDZ
-         q1G1O6xJ5IEIDrPK8DDotFvvDswPofCe92W6NZGMLQ7LNhZHnxx5aNkB9hG0m2RBl7ot
-         C2KIjK3DtCgJmbENPMSXmwrYpQu313cs+I0uc6KISVuarAN10eMIe66loQy4n9NNG4n3
-         pooQ==
+        with ESMTP id S1383496AbiEBGqw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 02:46:52 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8446F2CE30
+        for <linux-usb@vger.kernel.org>; Sun,  1 May 2022 23:43:21 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id m205-20020a6b3fd6000000b006586ca958d2so4814470ioa.22
+        for <linux-usb@vger.kernel.org>; Sun, 01 May 2022 23:43:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=iAuUa0BGKm3Umq1FBvXS7xo05qV6QmFyZ/a1PtsOX5E=;
-        b=4cfpxpDCYoxeNWaTvf8JLImmiz2A62NHNdg4ScYke8jYQWeA1mcAzCcpY6EL0MOJik
-         wPY8XlUEGst+/YGDJiCZ/WbCbbOH5FD9HcbSEnKKiLT6gwLlT7IN9gIXRX0R5xPVGctP
-         XeXRUGShEMPzRQE3yE7idrZIk0MpJhwFqoqfKH7r6rvxlPcu8F3ahXrIdVmHBpn2d/0J
-         WlStRJftBrF2F8vo2QhUIBW4wunSRH5ImhF43yI3MdRsU+3jv4mhvr17X7SLSSy1JlKP
-         vPpq+Nek8K71Q6npZaqSxLP/J239+kK3+iDvPflOY4+CK4YarZinDVuZpPVkAvOcIsSH
-         TwtA==
-X-Gm-Message-State: AOAM533d1XiyN/SAwCNDO8+8g+s8HyT5hPYJmicQEO2uOedIlY1tgPax
-        gpi7mAdGjYXnMRb2/0TM+DsHqRoGGmylgs1v7aMTwVCigng=
-X-Google-Smtp-Source: ABdhPJxb5VYu7eov/l6wnOftz0i68FF37AZ58mVmsnou3EO+HGkwtWZqq1kKfFpx+aHz3h/nSDzLjRUdwY5FEmLR0To=
-X-Received: by 2002:a63:e849:0:b0:3c1:cf88:7b17 with SMTP id
- a9-20020a63e849000000b003c1cf887b17mr8186947pgk.590.1651473792044; Sun, 01
- May 2022 23:43:12 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=xU21jNma3wnJAcTSyKuLDDf/RK7eubjOe9IzgIAdPS8=;
+        b=M670UCk3Ym8/HcpMeSQBSRs03qHeGLuUYn50Ah+Zbks8IQXjlaRKpdaYCGVWrMvGI2
+         4uxkER14X2H9eF+E8ZAAKbLdlyKsW888JN67mJPwYHbxCdB3qcqNhDZFtIvCqpvf7YgS
+         VVDmIOy4Jfiz3Rj+2RE/rfullas4bl4V9qjqV6p2eh5BJkL4i4wAoyqoZbLHPZXc6Qkf
+         XyRSqgbcqgEFA+tj9r4USqc/KzdvD8H/joWSTavXBYgiiffn14eOnXjh74ulArA5WIQd
+         PcWkpWK3whJvFO4DtzQDdxb7+W0dCBn4veAHbCq/WPE29R2Kx1dtSwxpLymgKx7ACAsz
+         e3vw==
+X-Gm-Message-State: AOAM533ovMY8fxLsgXvg+PIySMfZJOiPG/FnGzMMFgYgIz/wzO/WKNHK
+        A5QWDMhgLkljysyQ6ahfB6rVixzh5J5NqeSzNDhNNV6Cx9hQ
+X-Google-Smtp-Source: ABdhPJwSgS0AR6/oHAUdRRiJ/BA2Td/W1bbexhImX0XzfhXS2ZX0MTKqC/IuU+lyUfUqmHOnpSB9BL3gtldvJyn3+pX5+Lyv2PbU
 MIME-Version: 1.0
-From:   Forest Crossman <cyrozap@gmail.com>
-Date:   Mon, 2 May 2022 01:43:00 -0500
-Message-ID: <CAO3ALPzKEStzf5-mgSLJ_jsCSbRq_2JzZ6de2rXuETV5RC-V8w@mail.gmail.com>
-Subject: Realtek RTL8156 devices defaulting to CDC-NCM instead of vendor mode,
- resulting in reduced performance
-To:     hayeswang@realtek.com, davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org
+X-Received: by 2002:a05:6638:16d2:b0:323:7285:474b with SMTP id
+ g18-20020a05663816d200b003237285474bmr4665475jat.61.1651473800884; Sun, 01
+ May 2022 23:43:20 -0700 (PDT)
+Date:   Sun, 01 May 2022 23:43:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000041f67405de01b5cf@google.com>
+Subject: [syzbot] general protection fault in usb_gadget_udc_reset (3)
+From:   syzbot <syzbot+10d79fa6d4fbfacaed2e@syzkaller.appspotmail.com>
+To:     andriy.shevchenko@linux.intel.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, jakobkoschel@gmail.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_wcheng@quicinc.com, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, all,
+Hello,
 
-I recently purchased a pair of USB to 2.5G Ethernet dongles based on
-the RTL8156, and have so far been very happy with them, but only after
-adding some udev rules[0] to to take advantage of the r8152 driver by
-switching the devices from their default CDC-NCM mode to the vendor
-mode. I was prompted to use those rules to switch the driver because
-one of the adapters (based on the RTL8156A) would get very hot, up to
-120 F (49 C) even while idle, and the round-trip latency directly
-between the pair of adapters was about 3 ms, and I couldn't help but
-wonder if maybe the vendor mode might be more efficient.
+syzbot found the following issue on:
 
-After performing some tests of latency and power consumption, testing
-first with both adapters in NCM mode and then again with both in
-vendor mode, I proved my hunch correct. I discovered that, in a
-disconnected state, the RTL8156A adapter used about half as much power
-(0.64 W -> 0.30 W) while the RTL8156B adapter saw a 21% reduction in
-power (0.34 W -> 0.27 W). Similarly, in a connected-but-idle state the
-RTL8156A again saw about a 55% savings in power consumption (2.17 W ->
-0.97 W) and a 40% savings in the RTL8156B adapter (0.94 W -> 0.56 W).
-It was only under full load that the fewest power savings were seen,
-with a reduction of only 15% in the RTL8156A (2.23 W -> 1.90 W) and no
-savings for the RTL8156B (0.96 W). Similarly, round-trip latency while
-idle went from 3 ms to 0.6 ms. I also tested under load and saw much
-larger latency savings and reduced packet loss, but forgot to write
-down the numbers (I can run the tests again if someone really wants me
-too). Also, jumbo frames drastically reduced performance under NCM
-mode, while vendor mode handled it like a champ (again, I forgot to
-write down the numbers but can test again if asked).
+HEAD commit:    d615b5416f8a Merge tag 'f2fs-fix-5.18' of git://git.kernel..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=157d7830f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b6ba81e30e2008b1
+dashboard link: https://syzkaller.appspot.com/bug?extid=10d79fa6d4fbfacaed2e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-So, with all the benefits I've seen from using these adapters in their
-vendor mode, is there still a reason to let the kernel prefer their
-NCM mode? It'd be nice to be able to get the maximum performance from
-these adapters on any Linux system I plug them into, without having to
-install a udev rule on every one of those systems.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-If anyone would like to try replicating the results I listed here, or
-to perform new tests, the specific RTL8156A adapter I used is the
-Ugreen CM275[1] and the RTL8156B adapter is the Inateck ET1001[2].
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+10d79fa6d4fbfacaed2e@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc0000000008: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000040-0x0000000000000047]
+CPU: 1 PID: 24 Comm: kworker/1:0 Not tainted 5.18.0-rc4-syzkaller-00006-gd615b5416f8a #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Workqueue: events __usb_queue_reset_device
+RIP: 0010:usb_gadget_udc_reset+0x23/0xb0 drivers/usb/gadget/udc/core.c:1088
+Code: 00 00 00 0f 1f 40 00 41 54 49 89 fc 53 48 89 f3 e8 02 88 b0 fb 48 8d 7b 40 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 70 4c 89 e7 ff 53 40 49 8d bc 24 80 00 00 00 48 b8
+RSP: 0018:ffffc9000072f4e0 EFLAGS: 00010002
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000008 RSI: ffffffff85c7dcee RDI: 0000000000000040
+RBP: ffff888044e50bfc R08: 0000000000000000 R09: ffff888044e50003
+R10: ffffffff85c8e5e7 R11: 0000000000000001 R12: ffff888044e50c00
+R13: ffff888044e50c00 R14: 0000000000000019 R15: ffff88806c056408
+FS:  0000000000000000(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4d9e2810f8 CR3: 000000006e13f000 CR4: 0000000000150ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ set_link_state+0xc83/0xf70 drivers/usb/gadget/udc/dummy_hcd.c:465
+ dummy_hub_control+0x1192/0x1f80 drivers/usb/gadget/udc/dummy_hcd.c:2315
+ rh_call_control drivers/usb/core/hcd.c:683 [inline]
+ rh_urb_enqueue drivers/usb/core/hcd.c:848 [inline]
+ usb_hcd_submit_urb+0xc83/0x2250 drivers/usb/core/hcd.c:1551
+ usb_submit_urb+0x86d/0x18a0 drivers/usb/core/urb.c:594
+ usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
+ set_port_feature drivers/usb/core/hub.c:439 [inline]
+ hub_port_reset+0x26d/0x1ce0 drivers/usb/core/hub.c:2968
+ hub_port_init+0x18a/0x2ed0 drivers/usb/core/hub.c:4714
+ usb_reset_and_verify_device+0x3a0/0xe10 drivers/usb/core/hub.c:5946
+ usb_reset_device+0x4bd/0x9a0 drivers/usb/core/hub.c:6122
+ __usb_queue_reset_device+0x68/0x90 drivers/usb/core/message.c:1904
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:usb_gadget_udc_reset+0x23/0xb0 drivers/usb/gadget/udc/core.c:1088
+Code: 00 00 00 0f 1f 40 00 41 54 49 89 fc 53 48 89 f3 e8 02 88 b0 fb 48 8d 7b 40 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 70 4c 89 e7 ff 53 40 49 8d bc 24 80 00 00 00 48 b8
+RSP: 0018:ffffc9000072f4e0 EFLAGS: 00010002
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000008 RSI: ffffffff85c7dcee RDI: 0000000000000040
+RBP: ffff888044e50bfc R08: 0000000000000000 R09: ffff888044e50003
+R10: ffffffff85c8e5e7 R11: 0000000000000001 R12: ffff888044e50c00
+R13: ffff888044e50c00 R14: 0000000000000019 R15: ffff88806c056408
+FS:  0000000000000000(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4d9e2810f8 CR3: 000000006e13f000 CR4: 0000000000150ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess), 1 bytes skipped:
+   0:	00 00                	add    %al,(%rax)
+   2:	0f 1f 40 00          	nopl   0x0(%rax)
+   6:	41 54                	push   %r12
+   8:	49 89 fc             	mov    %rdi,%r12
+   b:	53                   	push   %rbx
+   c:	48 89 f3             	mov    %rsi,%rbx
+   f:	e8 02 88 b0 fb       	callq  0xfbb08816
+  14:	48 8d 7b 40          	lea    0x40(%rbx),%rdi
+  18:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  1f:	fc ff df
+  22:	48 89 fa             	mov    %rdi,%rdx
+  25:	48 c1 ea 03          	shr    $0x3,%rdx
+* 29:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2d:	75 70                	jne    0x9f
+  2f:	4c 89 e7             	mov    %r12,%rdi
+  32:	ff 53 40             	callq  *0x40(%rbx)
+  35:	49 8d bc 24 80 00 00 	lea    0x80(%r12),%rdi
+  3c:	00
+  3d:	48                   	rex.W
+  3e:	b8                   	.byte 0xb8
 
 
-Curious to hear your thoughts on this,
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Forest
-
-
-[0]: https://github.com/bb-qq/r8152/blob/160fb96d2319cdf64ae7597e8739972934ac83b2/50-usb-realtek-net.rules
-[1]: https://www.amazon.com/gp/product/B081TY1WQX/
-[2]: https://www.amazon.com/gp/product/B08VN3DGK6/
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
