@@ -2,284 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF98517A5B
-	for <lists+linux-usb@lfdr.de>; Tue,  3 May 2022 01:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F048517B3A
+	for <lists+linux-usb@lfdr.de>; Tue,  3 May 2022 02:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234273AbiEBXI3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 19:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
+        id S229756AbiECAZo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 20:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233550AbiEBXIT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 19:08:19 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88FE2E6A5
-        for <linux-usb@vger.kernel.org>; Mon,  2 May 2022 16:04:46 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-e2fa360f6dso15740907fac.2
-        for <linux-usb@vger.kernel.org>; Mon, 02 May 2022 16:04:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MBot+Pv2kpTkmpCFLhDzg02YTk9FtWcHP2fcdtBIJ8o=;
-        b=kY6sGqRtKzVTruQJcfNWQAHOrslt+rKBT1XNX7I5j6Cu5cROTBbWoRtHKnV1G9w9xr
-         3mhrtOWrvfw++arBXkDwF+FkKlpmBOIAFUo2wzrqtPt+mlzHI4ItcbOo6Ni7Ce8LlVqC
-         vkTkZnuduzRfbrL4UFZMfiLaw07slkwu676UKI2ayUzzQBGoDh9lDPU3/EYAZ/GwS5Oj
-         4fafKmSDFc/ouXh0X2ZThtJsZRE6f/CPgoMYDXtYNc8fN8wAkiBTCzh6PLLDBoAoHj/I
-         cyJJapmcSZqUpHgtC8s9JA3VxSf1FD7f7aR82aB75gxqM05zQRHjxx3SFTXwbw+NaHEK
-         JFSQ==
+        with ESMTP id S229752AbiECAZn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 20:25:43 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF9237A12;
+        Mon,  2 May 2022 17:22:09 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id z8so16824713oix.3;
+        Mon, 02 May 2022 17:22:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=MBot+Pv2kpTkmpCFLhDzg02YTk9FtWcHP2fcdtBIJ8o=;
-        b=yjChnN9Frb07DoKo4mHHeeApZxfCs1/acsUZhFSrttaHWPUlOMxlbKdtbiCUQleD28
-         YiANWheGOAvHcYJb9jhiZ9fH9CK7Atnv4lKxa9xvOPheyBVoBHkGVHZ6/Y7SARkPDcc4
-         S3MUUdUjKl/WHshXx8InnJ8HJnPuhOwvHMwAHZxSS5N90yGNWRg7fCE2VTqjsl2/qxvt
-         Q+LvtPIi3Qaz6btKXQg1vmU2L5YN/2RvX2UB/jVwQv/iE7adU7W5z0NIdvD4No9MeaUe
-         WmsM84uogCC0aA3tk7B7GHcMC4VGECat2wSM1PzSxmeNNfR/RJ2dwuS48MF3gBdQiWWb
-         h+lg==
-X-Gm-Message-State: AOAM530cBl1cj9l7GmH8Ho/DHMz4GvIGDEP3XT4OmSrMqjM81pm1pWcP
-        X31FL8vx91qzYMtQNRwU5IClKg==
-X-Google-Smtp-Source: ABdhPJwvkv09Sees1/YVaDI2sWo/kOBlFp+6Y07+qxzk+FFDy2/0fgReI3UnggER1CgqWwI+zdGGzw==
-X-Received: by 2002:a05:6871:441:b0:ec:f9dd:734b with SMTP id e1-20020a056871044100b000ecf9dd734bmr661076oag.195.1651532686056;
-        Mon, 02 May 2022 16:04:46 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id bb19-20020a056808169300b00325cda1ff99sm2848131oib.24.2022.05.02.16.04.44
+        bh=PKxuSyP6aAZ5UKADiJVd9CZqptgrT3l/21BfOHSNCtQ=;
+        b=Ik5iPVaBN+Uu2NIVdQYRP1PYlmdnHaEJqgvL9vyd0oc8+U7HeShUV+HXwSo9f14Gdm
+         kmZ2tqSIOIw+4alwdhOpYRnzhEMNZyDjQlNNae4VniFlS5NvVzyeoz6O/5hJu4pKajnl
+         o5uCeCBp2tAFes6KuDo2FyCe/I3YSo8+1Vsdi4Ts/XGMih+jlgQfHxlezdSDJAhB/rfv
+         vwgRgWuibWyHtjz0QgSPVBo3jbqIDn2USDTV65voZen0kPeufeXsjjj3wt62EfL1yVid
+         Cyrv9NPkHheaX6GDY0bc0ZSqHj7QPEyb3DXPev1HLlmgJhzd0fJoVCK48Xo1IJqIY/Nc
+         icyQ==
+X-Gm-Message-State: AOAM530n55C8RBoYn0P/NUcR96KPkox0Cr+V/7f9gjaIUwlnHQde3CoP
+        hIYYJRUA4G/g1p0qH70aiLWwlcToQg==
+X-Google-Smtp-Source: ABdhPJyUirzEkqEwSTX/2vlnZ6E45LPS9/E1ehXdgu4A903pyiY9tgt/pFt0zVjCrc3TjnXcX10V0A==
+X-Received: by 2002:a05:6808:14cd:b0:326:c1a:7a76 with SMTP id f13-20020a05680814cd00b003260c1a7a76mr823639oiw.44.1651537254615;
+        Mon, 02 May 2022 17:20:54 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p124-20020acad882000000b00325cda1ff86sm2863678oig.5.2022.05.02.17.20.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 16:04:45 -0700 (PDT)
-Date:   Mon, 2 May 2022 16:06:30 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 5/5] drm/msm/dp: Implement hpd_notify()
-Message-ID: <YnBj9nObBNuxwWhu@ripper>
-References: <20220502165316.4167199-1-bjorn.andersson@linaro.org>
- <20220502165316.4167199-6-bjorn.andersson@linaro.org>
- <672e7dac-fe3b-591f-6837-3ce06a0b44c2@quicinc.com>
- <YnBbNO31bwNUoRQL@ripper>
- <9e982cdb-3c83-519b-2803-e308da7bc9b2@quicinc.com>
+        Mon, 02 May 2022 17:20:54 -0700 (PDT)
+Received: (nullmailer pid 2093840 invoked by uid 1000);
+        Tue, 03 May 2022 00:20:53 -0000
+Date:   Mon, 2 May 2022 19:20:53 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Daniels Umanovskis <du@axentia.se>
+Cc:     richard.leitner@skidata.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: usb: usb251xb: add documentation for
+ reset-delay-us
+Message-ID: <YnB1ZQwpOBcT4zct@robh.at.kernel.org>
+References: <20220426123329.775-1-du@axentia.se>
+ <20220426123329.775-2-du@axentia.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9e982cdb-3c83-519b-2803-e308da7bc9b2@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220426123329.775-2-du@axentia.se>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 02 May 15:49 PDT 2022, Kuogee Hsieh wrote:
+On Tue, Apr 26, 2022 at 12:33:47PM +0000, Daniels Umanovskis wrote:
+> Next patch implements support for this property
+
+Not a great reason why you need this. This patch should stand on its 
+own.
+
+My first question is whether this is board specific? If the default or 
+what the reference manual says is 500us, but you have a case needing 
+600us, why not just change the driver. I don't think this really needs 
+tuning to each board unless the delay becomes noticeable.
 
 > 
-> On 5/2/2022 3:29 PM, Bjorn Andersson wrote:
-> > On Mon 02 May 13:59 PDT 2022, Kuogee Hsieh wrote:
-> > 
-> > > On 5/2/2022 9:53 AM, Bjorn Andersson wrote:
-> > > > The Qualcomm DisplayPort driver contains traces of the necessary
-> > > > plumbing to hook up USB HPD, in the form of the dp_hpd module and the
-> > > > dp_usbpd_cb struct. Use this as basis for implementing the
-> > > > hpd_notify() callback, by amending the dp_hpd module with the
-> > > > missing logic.
-> > > > 
-> > > > Overall the solution is similar to what's done downstream, but upstream
-> > > > all the code to disect the HPD notification lives on the calling side of
-> > > > drm_connector_oob_hotplug_event().
-> > > > 
-> > > > drm_connector_oob_hotplug_event() performs the lookup of the
-> > > > drm_connector based on fwnode, hence the need to assign the fwnode in
-> > > > dp_drm_connector_init().
-> > > > 
-> > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > > ---
-> > > > 
-> > > > Changes since v3:
-> > > > - Implements hpd_notify instead of oob_hotplug_event
-> > > > - Rebased on new cleanup patch from Dmitry
-> > > > - Set hpd_state to ST_MAINLINK_READY when dp_display_usbpd_configure() succeeds
-> > > > 
-> > > >    drivers/gpu/drm/msm/dp/dp_display.c | 26 ++++++++++++++++++++++++++
-> > > >    drivers/gpu/drm/msm/dp/dp_display.h |  1 +
-> > > >    drivers/gpu/drm/msm/dp/dp_drm.c     |  3 +++
-> > > >    drivers/gpu/drm/msm/dp/dp_drm.h     |  2 ++
-> > > >    4 files changed, 32 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> > > > index b447446d75e9..080294ac6144 100644
-> > > > --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> > > > +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> > > > @@ -83,6 +83,8 @@ struct dp_display_private {
-> > > >    	bool hpd_irq_on;
-> > > >    	bool audio_supported;
-> > > > +	bool connected;
-> > > > +
-> > > >    	struct drm_device *drm_dev;
-> > > >    	struct platform_device *pdev;
-> > > >    	struct dentry *root;
-> > > > @@ -1271,6 +1273,7 @@ static int dp_display_probe(struct platform_device *pdev)
-> > > >    	if (!desc)
-> > > >    		return -EINVAL;
-> > > > +	dp->dp_display.dev = &pdev->dev;
-> > > >    	dp->pdev = pdev;
-> > > >    	dp->name = "drm_dp";
-> > > >    	dp->dp_display.connector_type = desc->connector_type;
-> > > > @@ -1760,3 +1763,26 @@ void dp_bridge_mode_set(struct drm_bridge *drm_bridge,
-> > > >    	dp_display->dp_mode.h_active_low =
-> > > >    		!!(dp_display->dp_mode.drm_mode.flags & DRM_MODE_FLAG_NHSYNC);
-> > > >    }
-> > > > +
-> > > > +void dp_bridge_hpd_notify(struct drm_bridge *bridge,
-> > > > +			  enum drm_connector_status status)
-> > > > +{
-> > > > +	struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
-> > > > +	struct msm_dp *dp = dp_bridge->dp_display;
-> > > > +	struct dp_display_private *dp_display = container_of(dp, struct dp_display_private, dp_display);
-> > > > +	int ret;
-> > > > +
-> > > > +	drm_dbg_dp(dp_display->drm_dev, "status: %d connected: %d\n", status, dp_display->connected);
-> > > > +
-> > > > +	if (!dp_display->connected && status == connector_status_connected) {
-> > > > +		dp_display->connected = true;
-> > > > +		ret = dp_display_usbpd_configure(dp_display);
-> > > > +		if (!ret)
-> > > > +			dp_display->hpd_state = ST_MAINLINK_READY;
-> > > > +	} else if (status != connector_status_connected) {
-> > > > +		dp_display->connected = false;
-> > > > +		dp_display_notify_disconnect(dp_display);
-> > > > +	} else {
-> > > > +		dp_display_usbpd_attention(dp_display);
-> > > > +	}
-> > > > +}
-> > > I would assume dp_bridge_hpd_notify() will server same purpose as
-> > > dp_display_irq_handler() if hpd_notification is enabled.
-> > > 
-> > I agree with this statement.
-> > 
-> > > In that case, should dp_bridge_hpd_notify() add
-> > > EV_HPD_PLUG_INT/EV_IRQ_HPD_INT/EV_HPD_UNPLUG_INT
-> > > 
-> > I tried this originally, but couldn't get it to work and expected that
-> > as the downstream driver doesn't do this, there was some good reason for
-> > me not to do it either.
-> > 
-> > > into event q to kick off corresponding
-> > > dp_hpd_plug_handle()/dp_irq_hpd_handle()/dp_hpd_unplug_handle()?
-> > > 
-> > But since then the driver has been cleaned up significantly, so I
-> > decided to give it a test again.
-> > Unfortunately it still doesn't work, but now it's easier to trace.
-> > 
-> > Replacing the 3 cases with relevant calls to dp_add_event() results in
-> > us inserting a EV_HPD_UNPLUG_INT event really early, before things has
-> > been brought up. This will result in dp_hpd_unplug_handle() trying to
-> > disable the dp_catalog_hpd_config_intr(), which will crash as the
-> > hardware isn't yet clocked up.
-> > 
-> > Further more, this points out the main difference between the normal HPD
-> > code and the USB HPD code; dp_catalog_hpd_config_intr() will enable the
-> > plug/unplug interrupts, which it shouldn't do for USB-controlled.
-> > 
-> > 
-> > So it seems we need two code paths after all.
-> > 
-> > > By the way, I am going to test this patch out.
-> > > 
-> > > Any patches I have to pull in before apply this serial patches?
-> > > 
-> > The patches applies on Dmitry's msm-next-staging, which I've merged on
-> > top of linux-next together with a number of pending patches to get the
-> > DPU up on SM8350 and a pmic_glink driver which I'm about to post.
-> > 
-> > But to validate that it doesn't affect your non-USB case, Dmitry's
-> > branch should be sufficient.
-> > 
-> > Thanks,
-> > Bjorn
+> Signed-off-by: Daniels Umanovskis <du@axentia.se>
+> ---
+>  Documentation/devicetree/bindings/usb/usb251xb.txt | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Hi Bjorn,
-> 
-> Which release image you had flashed?
-> 
-> I have ChromeOS-test-R100-14526.69.0-trogdor.tar flashed.
-> 
-> 1) Is this will work?
-> 
-> 2) how about EC? do I need to upgrade EC image?
-> 
-
-I'm not aware of the state of EC firmware for Trogdor for invoking the
-USB Type-C code path. As of today Trogdor relies on the EC signalling
-HPD using a GPIO.
-
-I'm testing this on SM8350 and SC8180X using pmic_glink. Also, going
-forward we will have to continue supporting both hardware IRQ and this
-oob based HPD interrupts (as both combinations are valid).
-
-Regards,
-Bjorn
-
-> Thanks,
-> 
-> kuogee
+> diff --git a/Documentation/devicetree/bindings/usb/usb251xb.txt b/Documentation/devicetree/bindings/usb/usb251xb.txt
+> index 1a934eab175e..d95c8ae518e7 100644
+> --- a/Documentation/devicetree/bindings/usb/usb251xb.txt
+> +++ b/Documentation/devicetree/bindings/usb/usb251xb.txt
+> @@ -12,6 +12,8 @@ Required properties :
+>  
+>  Optional properties :
+>   - reset-gpios : Should specify the gpio for hub reset
+> + - reset-delay-us: Specifies delay in microseconds after reset deassert
+> +        on hub power-up. (32 bit, default is 500us)
+>   - vdd-supply : Should specify the phandle to the regulator supplying vdd
+>   - skip-config : Skip Hub configuration, but only send the USB-Attach command
+>   - vendor-id : Set USB Vendor ID of the hub (16 bit, default is 0x0424)
+> -- 
+> 2.30.2
 > 
 > 
-> > > > diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
-> > > > index 4f9fe4d7610b..2d2614bc5a14 100644
-> > > > --- a/drivers/gpu/drm/msm/dp/dp_display.h
-> > > > +++ b/drivers/gpu/drm/msm/dp/dp_display.h
-> > > > @@ -11,6 +11,7 @@
-> > > >    #include "disp/msm_disp_snapshot.h"
-> > > >    struct msm_dp {
-> > > > +	struct device *dev;
-> > > >    	struct drm_device *drm_dev;
-> > > >    	struct device *codec_dev;
-> > > >    	struct drm_bridge *bridge;
-> > > > diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-> > > > index 62d58b9c4647..821cfd37b1fb 100644
-> > > > --- a/drivers/gpu/drm/msm/dp/dp_drm.c
-> > > > +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-> > > > @@ -68,6 +68,7 @@ static const struct drm_bridge_funcs dp_bridge_ops = {
-> > > >    	.mode_valid   = dp_bridge_mode_valid,
-> > > >    	.get_modes    = dp_bridge_get_modes,
-> > > >    	.detect       = dp_bridge_detect,
-> > > > +	.hpd_notify   = dp_bridge_hpd_notify,
-> > > >    };
-> > > >    struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *dev,
-> > > > @@ -138,6 +139,8 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
-> > > >    	if (IS_ERR(connector))
-> > > >    		return connector;
-> > > > +	connector->fwnode = fwnode_handle_get(dev_fwnode(dp_display->dev));
-> > > > +
-> > > >    	drm_connector_attach_encoder(connector, dp_display->encoder);
-> > > >    	return connector;
-> > > > diff --git a/drivers/gpu/drm/msm/dp/dp_drm.h b/drivers/gpu/drm/msm/dp/dp_drm.h
-> > > > index f4b1ed1e24f7..3b7480a86844 100644
-> > > > --- a/drivers/gpu/drm/msm/dp/dp_drm.h
-> > > > +++ b/drivers/gpu/drm/msm/dp/dp_drm.h
-> > > > @@ -32,5 +32,7 @@ enum drm_mode_status dp_bridge_mode_valid(struct drm_bridge *bridge,
-> > > >    void dp_bridge_mode_set(struct drm_bridge *drm_bridge,
-> > > >    			const struct drm_display_mode *mode,
-> > > >    			const struct drm_display_mode *adjusted_mode);
-> > > > +void dp_bridge_hpd_notify(struct drm_bridge *bridge,
-> > > > +			  enum drm_connector_status status);
-> > > >    #endif /* _DP_DRM_H_ */
