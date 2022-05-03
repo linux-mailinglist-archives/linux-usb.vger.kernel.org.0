@@ -2,134 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F37518901
-	for <lists+linux-usb@lfdr.de>; Tue,  3 May 2022 17:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F33D5188FF
+	for <lists+linux-usb@lfdr.de>; Tue,  3 May 2022 17:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238670AbiECPxO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 3 May 2022 11:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
+        id S238863AbiECPwJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 May 2022 11:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238616AbiECPxN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 May 2022 11:53:13 -0400
-X-Greylist: delayed 539 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 May 2022 08:49:39 PDT
-Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 152DE33EBC
-        for <linux-usb@vger.kernel.org>; Tue,  3 May 2022 08:49:38 -0700 (PDT)
-Received: from smtpclient.apple (p5b3d276d.dip0.t-ipconnect.de [91.61.39.109])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 85415CECF4;
-        Tue,  3 May 2022 17:40:38 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH] USB: core: skip unconfiguration if device doesn't support
- it
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <20220503153057.105128-1-jtornosm@redhat.com>
-Date:   Tue, 3 May 2022 17:40:38 +0200
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <E493EAE9-2F12-468E-BFBF-24809D78526E@holtmann.org>
-References: <20220503153057.105128-1-jtornosm@redhat.com>
-To:     Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S238630AbiECPwI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 May 2022 11:52:08 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id E2A913A190
+        for <linux-usb@vger.kernel.org>; Tue,  3 May 2022 08:48:34 -0700 (PDT)
+Received: (qmail 1090066 invoked by uid 1000); 3 May 2022 11:48:33 -0400
+Date:   Tue, 3 May 2022 11:48:33 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        USB mailing list <linux-usb@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: Re: [PATCH 4/4] USB: gadget: Add a new bus for gadgets
+Message-ID: <YnFO0Qr8RY7peFCg@rowland.harvard.edu>
+References: <YjeEbHL8ITkW692W@rowland.harvard.edu>
+ <YmKt3kH+85kjzdbL@kroah.com>
+ <YmSc29YZvxgT5fEJ@rowland.harvard.edu>
+ <YmSo6fU1FlNq8cOZ@rowland.harvard.edu>
+ <YmSpKpnWR8WWEk/p@rowland.harvard.edu>
+ <YmSpdxaDNeC2BBOf@rowland.harvard.edu>
+ <alpine.DEB.2.22.394.2205031209030.681336@ramsan.of.borg>
+ <YnFCEn45XwDWM/9Y@rowland.harvard.edu>
+ <CAMuHMdVDK0W0T3=+2c1E6wtwy5JTUemTGYyj3PFuVUhK++AzrA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdVDK0W0T3=+2c1E6wtwy5JTUemTGYyj3PFuVUhK++AzrA@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jose,
+On Tue, May 03, 2022 at 05:27:08PM +0200, Geert Uytterhoeven wrote:
+> Hi Alan,
+> 
+> On Tue, May 3, 2022 at 5:14 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > On Tue, May 03, 2022 at 12:14:30PM +0200, Geert Uytterhoeven wrote:
+> > > On Sat, 23 Apr 2022, Alan Stern wrote:
+> > > > This patch adds a "gadget" bus and uses it for registering gadgets and
+> > > > their drivers.  From now on, bindings will be managed by the driver
+> > > > core rather than through ad-hoc manipulations in the UDC core.
+> > > >
+> > > > As part of this change, the driver_pending_list is removed.  The UDC
+> > > > core won't need to keep track of unbound drivers for later binding,
+> > > > because the driver core handles all of that for us.
+> > > >
+> > > > However, we do need one new feature: a way to prevent gadget drivers
+> > > > from being bound to more than one gadget at a time.  The existing code
+> > > > does this automatically, but the driver core doesn't -- it's perfectly
+> > > > happy to bind a single driver to all the matching devices on the bus.
+> > > > The patch adds a new bitflag to the usb_gadget_driver structure for
+> > > > this purpose.
+> > > >
+> > > > A nice side effect of this change is a reduction in the total lines of
+> > > > code, since now the driver core will do part of the work that the UDC
+> > > > used to do.
+> > > >
+> > > > A possible future patch could add udc devices to the gadget bus, say
+> > > > as a separate device type.
+> > > >
+> > > > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> > >
+> > > Thanks for your patch, which is now commit fc274c1e997314bf ("USB:
+> > > gadget: Add a new bus for gadgets") in usb-next.
+> > >
+> > > This patch cause a regression on the Renesas Salvator-XS development
+> > > board, as R-Car H3 has multiple USB gadget devices:
+> >
+> > Then these gadgets ought to have distinct names in order to avoid the
+> > conflict below:
+> >
+> > >     sysfs: cannot create duplicate filename '/bus/gadget/devices/gadget'
+> > >     CPU: 2 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc1-arm64-renesas-00074-gfc274c1e9973 #1587
+> > >     Hardware name: Renesas Salvator-X 2nd version board based on r8a77951 (DT)
+> > >     Call trace:
+> > >      dump_backtrace+0xcc/0xd8
+> > >      show_stack+0x14/0x30
+> > >      dump_stack_lvl+0x88/0xb0
+> > >      dump_stack+0x14/0x2c
+> > >      sysfs_warn_dup+0x60/0x78
+> > >      sysfs_do_create_link_sd.isra.0+0xe4/0xf0
+> > >      sysfs_create_link+0x20/0x40
+> > >      bus_add_device+0x64/0x110
+> > >      device_add+0x31c/0x850
+> > >      usb_add_gadget+0x124/0x1a0
+> > >      usb_add_gadget_udc_release+0x1c/0x50
+> > >      usb_add_gadget_udc+0x10/0x18
+> > >      renesas_usb3_probe+0x450/0x728
+> > ...
+> >
+> > Having three gadget devices, all named "gadget", doesn't seem like a
+> > good idea.
+> 
+> I'm not so sure where these names are coming from.
+> `git grep '"gadget"'` points to the following likely targets:
+> 
+> drivers/usb/gadget/udc/core.c:  dev_set_name(&gadget->dev, "gadget");
+> drivers/usb/renesas_usbhs/mod_gadget.c: gpriv->mod.name         = "gadget";
+> 
+> Changing both names reveals the problem is actually caused by
+> the former ;-)
 
-> Bluetooth Dongles with CSR chip (i.e. USB Bluetooth V4.0 Dongle by
-> Trust) hang when they are unbound from 'unbind' sysfs entry and
-> can not be bound again.
-> 
-> The reason is CSR chip hangs when usb configuration command with
-> index 0 (used to unconfigure) is sent during disconnection.
-> 
-> To avoid this unwanted result, it is necessary not to send this
-> command for CSR chip, so a new quirk has been created.
-> 
-> Athough device is not unconfigured, it is better to avoid device
-> hanging to be able to operate. Even bluetooth can be previously
-> turned off.
-> On the other hand, this is not important if usb device is going to
-> be bound again (normal behavior), i.e. with usbip.
-> 
-> Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-> ---
-> Documentation/admin-guide/kernel-parameters.txt |  2 ++
-> drivers/usb/core/message.c                      | 12 +++++++++---
-> drivers/usb/core/quirks.c                       |  6 ++++++
-> include/linux/usb/quirks.h                      |  3 +++
-> 4 files changed, 20 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 3f1cc5e317ed..71651b888d14 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -6183,6 +6183,8 @@
-> 					pause after every control message);
-> 				o = USB_QUIRK_HUB_SLOW_RESET (Hub needs extra
-> 					delay after resetting its port);
-> +				p = USB_QUIRK_SKIP_UNCONFIGURE (device doesn't
-> +					support unconfigure);
-> 			Example: quirks=0781:5580:bk,0a5c:5834:gij
-> 
-> 	usbhid.mousepoll=
-> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-> index 4d59d927ae3e..9c6cd0c75f4f 100644
-> --- a/drivers/usb/core/message.c
-> +++ b/drivers/usb/core/message.c
-> @@ -2108,9 +2108,15 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
-> 	}
-> 	kfree(new_interfaces);
-> 
-> -	ret = usb_control_msg_send(dev, 0, USB_REQ_SET_CONFIGURATION, 0,
-> -				   configuration, 0, NULL, 0,
-> -				   USB_CTRL_SET_TIMEOUT, GFP_NOIO);
-> +	if (configuration == 0 && !cp
-> +			&& (dev->quirks & USB_QUIRK_SKIP_UNCONFIGURE)) {
-> +		dev_warn(&dev->dev, "device is not unconfigured!\n");
-> +		ret = 0;
-> +	} else
-> +		ret = usb_control_msg_send(dev, 0, USB_REQ_SET_CONFIGURATION, 0,
-> +					   configuration, 0, NULL, 0,
-> +					   USB_CTRL_SET_TIMEOUT, GFP_NOIO);
-> +
-> 	if (ret && cp) {
-> 		/*
-> 		 * All the old state is gone, so what else can we do?
-> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-> index d3c14b5ed4a1..7d42fdc7404c 100644
-> --- a/drivers/usb/core/quirks.c
-> +++ b/drivers/usb/core/quirks.c
-> @@ -138,6 +138,9 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
-> 			case 'o':
-> 				flags |= USB_QUIRK_HUB_SLOW_RESET;
-> 				break;
-> +			case 'p':
-> +				flags |= USB_QUIRK_SKIP_UNCONFIGURE;
-> +				break;
-> 			/* Ignore unrecognized flag characters */
-> 			}
-> 		}
-> @@ -510,6 +513,9 @@ static const struct usb_device_id usb_quirk_list[] = {
-> 	/* INTEL VALUE SSD */
-> 	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
-> 
-> +	/* CSR Bluetooth */
-> +	{ USB_DEVICE(0x0a12, 0x0001), .driver_info = USB_QUIRK_SKIP_UNCONFIGURE },
-> +
+Ah, good.
 
-NAK. These are billion of devices that are today working correctly. You are not telling these devices they are broken now.
+One way to attack this would be to keep a static counter and dynamically 
+set the name to "gadget.%d" using the counter's value.  Or keep a bitmap 
+of allocated gadget numbers and use the first available number.
 
-Regards
+Felipe, Greg, any opinions?
 
-Marcel
+Ironically, the UDC driver itself provides a name in gadget->name.  But 
+that string isn't unique either (in renesas-usb3, for instance, it is 
+always set to "renesas_usb3"), so it won't help solve this problem.
 
+> > This doesn't seem like it should be too hard to fix, although I'm not
+> > at all familiar with the renesas-usb3 driver.  Do you know who maintains
+> > that driver?  Is it you?
+> 
+> Adding Shimoda-san to CC (but he's enjoying Golden Week).
+
+It looks like the problem has to be solved in the gadget core rather 
+than in the UDC driver.  So we won't need to modify the driver after 
+all.
+
+Alan Stern
