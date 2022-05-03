@@ -2,95 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1112518388
-	for <lists+linux-usb@lfdr.de>; Tue,  3 May 2022 13:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC0651853C
+	for <lists+linux-usb@lfdr.de>; Tue,  3 May 2022 15:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234933AbiECL4E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 May 2022 07:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
+        id S235985AbiECNSi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 May 2022 09:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234927AbiECL4C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 May 2022 07:56:02 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A1725EB6
-        for <linux-usb@vger.kernel.org>; Tue,  3 May 2022 04:52:30 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id g20so19536124edw.6
-        for <linux-usb@vger.kernel.org>; Tue, 03 May 2022 04:52:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=BMjaOxeLvfbAQKL4fJy5lLSzZMNC58W1jnLqgU85Jog=;
-        b=K+c+wJI5HfSExS64NoDAjfANKyor8AYu/r8F5qacXGToOMqrc+g8zGQdBRVPhixbyp
-         tBJ67sdbujQaCXAzZOhk2/NZCFM86f+Urh4n70gji1uu6UWqdZJWw6ELroFo8qW+QiYe
-         +M7GJLsT4iOYXeH6f7xzRbuc8/fSfou/JxUz54W+JDE86+gVmB7+7IyQ8eRikX93KU2B
-         hPEvL0FF6EprlUqqhkZ+BuZv/KNeu6XVmHJMC/++zNTpxvL+BR596hJKwQxq/8sRtR0k
-         HmZ2BtDxd8LfsxNPJeFRy6SrgQQSyirU9lrhvHgcg9EYtgr53bC6HVmMUMuMoNoimqpg
-         HPCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BMjaOxeLvfbAQKL4fJy5lLSzZMNC58W1jnLqgU85Jog=;
-        b=pEWdHPJpSbLJdESv1XgTA3ZGKn/SHtYa1v/IZJgVX2gsQhQL5D6uJisNnT+S8wf4F4
-         WJfiR+bA0SIfkW5ZR1v/muYySsXg3KyCSZQxcN1kGcRFbs9XvbmXRv8Mq+ywB1+jySpS
-         UpIC4igXfKM0h+ZgiBh4suJtQtcPOQFYhkgLpm1YG+WydKA/gswAx97QgcR0WoZtkGMX
-         86BAcf1KkBM0J03q3PFCYrij5vOUf/9ekYE942+eOX00XiM/v2Ku685dSxYeU7oKehP3
-         9Nw4NTfOBIN3/Dlq1jaPbPfBMh50QhH96NNX8asaCnEVTYLaF/whO9vYN91okOyN0or5
-         CMsQ==
-X-Gm-Message-State: AOAM533o8rWmtPH3BTSYmkktrRxyV60FDI3syc0LlvEQ9ssiKp2EsVES
-        kz2z6qshosjn654P4p+IuetW3g==
-X-Google-Smtp-Source: ABdhPJxq19D2Ptf3D9Rscx6BrmIICbLZQxt0F5O6lwAkka0hw//bMvCuFjYKo29efvjaHSsD8ydwvQ==
-X-Received: by 2002:a05:6402:28b6:b0:425:e137:e31a with SMTP id eg54-20020a05640228b600b00425e137e31amr17729400edb.215.1651578748820;
-        Tue, 03 May 2022 04:52:28 -0700 (PDT)
-Received: from [192.168.0.202] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id w24-20020a056402129800b0042617ba6388sm7714160edv.18.2022.05.03.04.52.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 04:52:28 -0700 (PDT)
-Message-ID: <d2268fff-1c47-5dfa-313e-7c0d5a218899@linaro.org>
-Date:   Tue, 3 May 2022 13:52:27 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/4] dt-bindings: usb: qcom,dwc3: Add binding for SDX65
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1651482395-29443-1-git-send-email-quic_rohiagar@quicinc.com>
- <1651482395-29443-3-git-send-email-quic_rohiagar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1651482395-29443-3-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S235385AbiECNSg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 May 2022 09:18:36 -0400
+Received: from mailout3.hostsharing.net (mailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f236:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B432ED6C;
+        Tue,  3 May 2022 06:15:03 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by mailout3.hostsharing.net (Postfix) with ESMTPS id 3AEEC101E6B56;
+        Tue,  3 May 2022 15:15:02 +0200 (CEST)
+Received: from localhost (unknown [89.246.108.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 033F1630FA12;
+        Tue,  3 May 2022 15:15:01 +0200 (CEST)
+X-Mailbox-Line: From 95ff93fffa161a7a96604b4dfe2be933fe740785 Mon Sep 17 00:00:00 2001
+Message-Id: <cover.1651574194.git.lukas@wunner.de>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Tue, 3 May 2022 15:15:00 +0200
+Subject: [PATCH net-next v2 0/7] Polling be gone on LAN95xx
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Ferry Toth <fntoth@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 02/05/2022 11:06, Rohit Agarwal wrote:
-> Add devicetree binding for SDX65 USB controller based on
-> Qcom designware IP.
-> 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+Do away with link status polling on LAN95xx USB Ethernet
+and rely on interrupts instead, thereby reducing bus traffic,
+CPU overhead and improving interface bringup latency.
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
-
-If a tag was not added on purpose, please state why and what changed.
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link to v1:
+https://lore.kernel.org/netdev/cover.1651037513.git.lukas@wunner.de/
 
 
-Best regards,
-Krzysztof
+Changes since v1:
+
+* Patch [4/7]:
+  * Silence "Error updating MAC full duplex mode" warning if it's
+    caused by hot-removal. (Oleksij Rempel)
+  * Explain in commit message why a semicolon on a line by itself is
+    temporarily added in smsc95xx_status(). (Andrew Lunn)
+
+* Patch [5/7]:
+  * Eliminate a checkpatch "no space before tabs" warning.
+  * Explain in commit message why the call to phy_init_hw() is moved
+    in smsc95xx_resume().
+
+* Patch [6/7]:
+  * Expand commit message to explain in greater detail why caching the
+    interrupt mask is beneficial. (Andrew Lunn)
+
+
+Lukas Wunner (7):
+  usbnet: Run unregister_netdev() before unbind() again
+  usbnet: smsc95xx: Don't clear read-only PHY interrupt
+  usbnet: smsc95xx: Don't reset PHY behind PHY driver's back
+  usbnet: smsc95xx: Avoid link settings race on interrupt reception
+  usbnet: smsc95xx: Forward PHY interrupts to PHY driver to avoid
+    polling
+  net: phy: smsc: Cache interrupt mask
+  net: phy: smsc: Cope with hot-removal in interrupt handler
+
+ drivers/net/phy/smsc.c         |  28 +++---
+ drivers/net/usb/asix_devices.c |   6 +-
+ drivers/net/usb/smsc95xx.c     | 157 ++++++++++++++++-----------------
+ drivers/net/usb/usbnet.c       |   6 +-
+ 4 files changed, 93 insertions(+), 104 deletions(-)
+
+-- 
+2.35.2
+
