@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B288517F08
-	for <lists+linux-usb@lfdr.de>; Tue,  3 May 2022 09:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C367F517F12
+	for <lists+linux-usb@lfdr.de>; Tue,  3 May 2022 09:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbiECHkD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 May 2022 03:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
+        id S232397AbiECHpd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 May 2022 03:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231830AbiECHkB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 May 2022 03:40:01 -0400
+        with ESMTP id S231883AbiECHpc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 May 2022 03:45:32 -0400
 Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.109.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A04217
-        for <linux-usb@vger.kernel.org>; Tue,  3 May 2022 00:36:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D82E37BF0
+        for <linux-usb@vger.kernel.org>; Tue,  3 May 2022 00:42:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1651563388;
+        t=1651563718;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Urk04ZIzzma57gkAWgOBIIWgCUVkU3qYY3hWGK5xdvY=;
-        b=nWHu3DJ2LWIIV+N5Et8jegvAQiwDtP2CPGvMpcGhLJZ79TZADMiqdZAjdtP4sKk90sBsF0
-        oKs3Zbiq4IS5cRVGSz6FXJWge+HZblSXxUspRSn3n4KJAzBWCi1nEBZjyefcn8sHExGL9W
-        mEUQeD8WPPw4joQWjIPQOP4eW/AkrKw=
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com
- (mail-db5eur01lp2052.outbound.protection.outlook.com [104.47.2.52]) by
+        bh=VDMxT2GiadU/fJZbsT4xYbKd8FHBCSFHJePSM5SjKwM=;
+        b=H8ou/3FWtbyoCHc8ISYz4k124X8I0ZpuwynxSiYs+4x/6GEZvgRhocczUkcZYzvUf4+hEQ
+        TDWuMGtKN0Z9vqi76opBd4a7GEVNL3SLuh6G6OW1iTPYci4iCP5cr7J7ANXanlKyYkTolq
+        H4Z2wigwSLSMurJKRjdtFRWp/f/mFtQ=
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com
+ (mail-db3eur04lp2051.outbound.protection.outlook.com [104.47.12.51]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-41-gx81_-sZOhStk4mypP7XwQ-2; Tue, 03 May 2022 09:36:26 +0200
-X-MC-Unique: gx81_-sZOhStk4mypP7XwQ-2
+ de-mta-27-fsGUuzGOMh6oYPv0v-RFCw-1; Tue, 03 May 2022 09:41:55 +0200
+X-MC-Unique: fsGUuzGOMh6oYPv0v-RFCw-1
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QMtEaxSUc1YbHrMLuAi/o057y3guVoMQ/toWzdtrvEkfpqIIiHljLOeL66FCSDcwCOakefpr3hzBITrz9IZ5BhRuBBq0DmrhsIQq4cKJEOGF0yE0NP8qlXW+R9pQXmmiZVzciLL7oK3iMhEefddHIob4dCi6seU2a+E2NDQza90h3e/9ABp9HPtM7FivtE08A9/yiwgrotlRVjXk3Sd+U8C70KCWaJLyJNMqLUqUJl273GkTj++8RGM4TXn8auz1eR1SsaqsGNBpXnc/fM1zO6wIBTaXBOj6IfzzoxYnsUOHGgBl39LKTVgopgRrvv4/YfSqHLpY/kiSl3s0Y7eWeg==
+ b=BjJFbuHZ1ts4QzvdG9TL2uJOGJvwT4gaePff9uUDR7Ivyu+UR5N+vOhD1NYYGoX57yLf/Vd4mXoZ0C0cLHVMq6MVTR4Tar9ukYNzg7sL5PZV6nrkeKJuKyC/KyD6QQtEkex6aacgAzhZGWjjVkPW2JOjak2PlM680TJgTe88vBs7uRndp41PonwyTzyAUsvGzeTz8Vd5XpFUe3KvBwRCS9pPlnX2ucAISqdqeORQpO2pzxHNkLd0k/Wl66tX2Wb0K+kKHDKDsQG0DeSHzAxZaROzuE2HZlWqzX4/zj5g9UuBvysEZaRLxhVesgSh6d5jdT20kZeAK0qdvwn5AsajlA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u5iWxLol0FUQMHbyVM+9EveK3l63qiOD2vNaBS0iDhc=;
- b=MYd72TwASQ9Tx5hT2QRr4ptUbYnxPEoKIgMePZeUbuM6gZuzMHTwGxXjlpAgjUlGGo+DQZz7QA5fvUD9djXFzLLV9DVuKLIn7ZT6vB17wefjpX2Lo9d/tQJFMoMvGF2oON0AqIT7Z1SM2tW67zEKAhKDACEqheXfdxv99bhIXwUTEvK0tv+1Bg5L36U1UOmh83yM8fd9V3bECZFucF0V0o1kD2QluqssypZJHpET7W8EDPhoKDoNK9MRdd6mvcLxPPV31Cbh99j6G0oRTc1aoBjRrurVXkPKVcoZBz3iHnUKYYeybI90pSMygNGCazrLdvgGzIz4IRNqMX5dSJgnEg==
+ bh=Z6gWoWzQtIA9c4QzS8v2744nWtmotqZLEGgxAz9MY8w=;
+ b=HdlCrUsaWCOVHBCyo85YCANMWgj0KI2evuUABT8jH/i9T6WheuYnMUMg7E3dSdu1o+xvCUO+6SBt9vKjtESC83iAlAm32D5U/EIo/I1EMlh5BXKBJo7o3uMXG7vIKP/IipqmteGZsya946nNB68GbnBZFzVO+/6MkE744e3NkiKSNBUROrqRwe0Moa5b1j1KFJC1RC6SrkwMT1AbxPZxMMgdk7HWoHAvvorc3Gty9r2scOU2NEm4ZcdyQfPbB2TcfGlrQdBLgS2QGICJhYpdv6JJOtj2NT8co3r61hOMzEbEgiou0WU7Go9NL4Vu//ygZYAJA1DWAtedwlDczhbc+A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
  dkim=pass header.d=suse.com; arc=none
@@ -46,91 +46,97 @@ Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
  (2603:10a6:800:58::16) by AM0PR04MB6354.eurprd04.prod.outlook.com
  (2603:10a6:208:178::30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Tue, 3 May
- 2022 07:36:18 +0000
+ 2022 07:41:53 +0000
 Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
  ([fe80::8c82:19c5:ce96:491b]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
  ([fe80::8c82:19c5:ce96:491b%4]) with mapi id 15.20.5206.024; Tue, 3 May 2022
- 07:36:18 +0000
-Message-ID: <d7a74ca6-589b-61d8-bb5b-aacfb83b6da0@suse.com>
-Date:   Tue, 3 May 2022 09:36:16 +0200
+ 07:41:53 +0000
+Message-ID: <92cf40db-bb38-a85e-76bb-61e985947d20@suse.com>
+Date:   Tue, 3 May 2022 09:41:51 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-Subject: Re: USB device disconnects on resume
+Subject: Re: [PATCH v2 (resend)] media: imon: reorganize serialization
 Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-CC:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
-References: <YmAbZDd6LJwCCvkB@rowland.harvard.edu>
- <4fb8bd5842135a9f723bbe0406ed1afc023c25fe.camel@puri.sm>
- <YmFpMFlTt83s90an@rowland.harvard.edu>
- <b80c032c350c525d620968e95b7a653fc855d806.camel@puri.sm>
- <YmgIlFBC8mYQ2xwJ@rowland.harvard.edu>
- <232334eeb9d7321df1632e453839a6d433e6be45.camel@puri.sm>
- <YmrnVHA2/kttJQJa@rowland.harvard.edu>
- <1cb1cd1178703b4a67db849cc4c074b0c00b1332.camel@puri.sm>
- <YmxI5rIlyxOrPBHD@rowland.harvard.edu>
- <fdc8354e39f9162bcc63ab99f237bdbbe30d6017.camel@puri.sm>
- <YnAx3uvVrK4UXd05@rowland.harvard.edu>
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Oliver Neukum <oneukum@suse.com>, Sean Young <sean@mess.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     Jarod Wilson <jarod@redhat.com>,
+        syzbot <syzbot+c558267ad910fc494497@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <00000000000043b599058faf0145@google.com>
+ <5a06c7f1-9a29-99e4-c700-fec3f09509d2@I-love.SAKURA.ne.jp>
+ <YmZny7mzugFe0t+X@gofer.mess.org>
+ <62dddbb9-3053-f284-f9db-3beda5e8e951@I-love.SAKURA.ne.jp>
+ <YmaMY/XKBmEfl8i6@gofer.mess.org> <YmbF071fSKUff6R2@rowland.harvard.edu>
+ <YmbKiPna01aMQhJw@gofer.mess.org>
+ <349f3e34-41ed-f832-3b22-ae10c50e3868@I-love.SAKURA.ne.jp>
+ <Ymel5XtWC7rwpiXF@gofer.mess.org>
+ <e17d6647-2c65-638b-1469-f546da7d0ba8@I-love.SAKURA.ne.jp>
+ <21ffa07a-1bc1-cb1f-eef4-6c3a73953061@I-love.SAKURA.ne.jp>
+ <6ab13405-b942-ddbe-c2de-dd193fe40795@suse.com>
+ <1b7b9a2a-d52c-ff35-f32d-d22d7980a80f@I-love.SAKURA.ne.jp>
 From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <YnAx3uvVrK4UXd05@rowland.harvard.edu>
+In-Reply-To: <1b7b9a2a-d52c-ff35-f32d-d22d7980a80f@I-love.SAKURA.ne.jp>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: AM6P193CA0086.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:209:88::27) To VI1PR0401MB2526.eurprd04.prod.outlook.com
+X-ClientProxiedBy: AS9P250CA0018.EURP250.PROD.OUTLOOK.COM
+ (2603:10a6:20b:532::21) To VI1PR0401MB2526.eurprd04.prod.outlook.com
  (2603:10a6:800:58::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 00041672-e5e6-4b8d-7cfb-08da2cd79c90
+X-MS-Office365-Filtering-Correlation-Id: 490c5eb3-6717-4483-eed9-08da2cd8645f
 X-MS-TrafficTypeDiagnostic: AM0PR04MB6354:EE_
 X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-Microsoft-Antispam-PRVS: <AM0PR04MB6354F457D1E7F205F81B5505C7C09@AM0PR04MB6354.eurprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <AM0PR04MB6354216DD75FA1AD5EF7B2BDC7C09@AM0PR04MB6354.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EAN/mz+qk2gu9KJBIyF1l9U2l/bJfddqNxWBaBkvPPyHFifKadBdfhw9cMWmXY9k0+xwwhS51FiLyGLMwOO7jSkp2y+67zhbPffDqjz97aW3rpWgrjUmOJXJVfeYme2ojmQP927YHAIxV/UZRY5eriEkQfHTGcoQyf37rnBS4uBKF1XXVcthocOzlcmLZLbqbnuYKEJbjudS1M04sfJwbsJ56uxn9jGRtCergx8Zni6LPOLXCozlU/G8lyGRTaglYec+vCs/09I+QCTq9+W0ZjqDvag+9cK5Ax7Y2gvIFSyW4DzTSBnM+t5mD59wiG5JINsJ7W5F/uKe6NlfY7GcrNFG0ieUgD46N+wnuwbvJHLW00ZfP/9B4v/56y9LdWIROAT9fOBekWiquCMvpbYi+ZhOHOLlFHSEor9Cnabbz+EhloXNWMcqdzSwzXl9uq5riIIJV+htMS3VkMmSI9Z9nuWJcqC+3WlumbdjJO3hPt/aCHlYaIzjvbQWdXe57xSSAF0m3EYfxxqNArVx76OBvgvH1b6akRdN/Du/lyH+CADp1utkaYRqtNFMozOcudoVy546Iw8Gxt9oJzjeAXTqv8n9npVz0SVAzqP+EhSqu2j0eRSe/nFVCuCt1bhYIH3/sKbqGJdr1SYdhykRPWH2p8Oo6brsV2PMDzA9TOo9eoE2daSp8OZwe7be6oimLRx6p1HWnz9E3UvENOCCfl7KlBvvDYsOaLP/8PDqt4zGV98=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2906002)(316002)(8936002)(83380400001)(186003)(110136005)(5660300002)(6486002)(508600001)(66556008)(31686004)(36756003)(4326008)(8676002)(86362001)(66946007)(66476007)(53546011)(38100700002)(31696002)(6506007)(6512007)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: R7YUceDofVJGP0wIWC5Z9bwe6wZdOdshzCY7dU+Ov7InQPoWVEXRR0NHlPkOhGkCRgcz5mIUMjMwjTs/BkgADwVXBWZ2UM/afW9kIwnAT9M/W6djGLtoRkUNGQXR/n95W6vWnyR1JLS6g3B6zKGGg+axkKcubNxzSNpj2oOBB9Hh41McrUiKBslwBK8cLwtJCdTA76+dNnR/90irPMr99ISQQajoIh6IwdkhpMlPPxO0RPRiaPM2ETsJNs1grCy4Lue0kJlumRNLCTi34d0uqzXDbWrXh82jM2kXzdDm9PYbEcz9QwHQhK7GEFJ5emPe0MshFtYGX+ckI8w6HZ5n46M9BPQGtkd6q4OiSPKP94WWoS3aXt5uvmUkNwCnuKcaIA2A9c7UOirL6kbuONt/3v12OQ5aN22qLsfyGkE/d4JVG7SPMJr1ym1o3xf9L9Rh1DyvYCOfIml3EApiUsbTH8iW7P5+vlJu7s5mpLXUTJYbNI97jx9lSP6KPvsVlK5QcWXIc1/RCwgg2wcjB+Up2OOK7q+vPcngy6AAKIpl1CKTS60ke9XktfZcnQ0FAUl3EigeC+W143UTA656i5jItp/6XX16GqKQjKbtQV6XnLVtbRsPYDQfcC3mDqszYahAW143slrbmN4IKAYiBVS9OCn2GiWvB5ZRyZ6twKo4j7XY25ndL5XH/wSQ8Fm1w0hehDXWCxqKUTlzEIAW/DFSir6NB3BCTfOheadUQhPf0tM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(36756003)(66476007)(8676002)(86362001)(66946007)(4326008)(31686004)(5660300002)(508600001)(66556008)(6486002)(2616005)(54906003)(6506007)(6512007)(53546011)(31696002)(38100700002)(316002)(2906002)(7416002)(8936002)(4744005)(110136005)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IceSY7Sc1yRsNHGem6rkeqpcaEfQDD993TM/lb//0gFDVnP2K8UWOgLSVGBc?=
- =?us-ascii?Q?9bQMSQ6BVbN2/KX7lovJDfJgsaI8F/UxTGg8j2RiQLOIhRTbRrCshoFjy9JN?=
- =?us-ascii?Q?yyNXPVg+1XxB07YSvZisr7KB8I1IP9xJjiobgegE9Nk/ft3oG79mj++awr8g?=
- =?us-ascii?Q?WEC5dex94cacXyQ2i6WVXCp0+0LXoum7s6i2T+KCyj1ygJKnUVLV+FmTH6l0?=
- =?us-ascii?Q?Qtziv4x6JRPYe9ogEMDifyJ6C5HgCysIs4yp3FEuLu+9gik4kTOcQ5XQNoBq?=
- =?us-ascii?Q?qKyXaRkiJ99Wjghwf3HFNrCUzEOs6bPVUJmWSC+d6zOlXhvPgD75zPVcNeq6?=
- =?us-ascii?Q?6nNQDlvcku3HTs7wvQXIq5yM2lQKQHHD2g2R6H+xlXdwAMm5Q/3KI7t7AilZ?=
- =?us-ascii?Q?qk4z0RnrZGXlfrA2WwnPXK0stJLXn/eww0usv0j4190XaglHhU2YUl3YofRo?=
- =?us-ascii?Q?D6IlYZrjha0GtFG0iZJ19Wj6OUwfCRaKZceTf/7y3QTWe00sZSgbYgt/5LqM?=
- =?us-ascii?Q?upHGNjkIQqv82SMJS0qyqatrrsthKVhvKtcdntpuF16NMezna/aFnIPu7LjD?=
- =?us-ascii?Q?18gL0YPtar+1o3b/SFHfeovkUoqeSef6vkv8JpgRlX9cmhRMjfXNsVE6C3Ao?=
- =?us-ascii?Q?dpMao8W0meNcCnGy0hJQieKW1iKPSbUsUy4dU02IgPilCAybIaqAlLFZ2Zeh?=
- =?us-ascii?Q?bUyWu7KQ6ghxAtgTVQkaO5uZAsLDyRNKiAohS98t5RjfxZBS6BjcA6HGS4+t?=
- =?us-ascii?Q?PEd7WWAU/t/9348UOQya24CIY2LfAvd7OYhEpbWL+7cAOGENJr11hlu4k4vl?=
- =?us-ascii?Q?M+RzvyaYvrzygHV/XLXOdSV7lnvh0DdgRv3k/iBoGKEeki+IwVSC9HkzKfwM?=
- =?us-ascii?Q?G+aSHBihC272xZosjdDoGsfsaqIgD4KV51+OjCTPnMj1yJiX+rlgP2qTkvJ7?=
- =?us-ascii?Q?DBkO+BeXG3alWUrUKVEGvkCV2j5L0bWN6j6pXMAmGVw3IRdC2WzJ3u0xW46b?=
- =?us-ascii?Q?PoShkxVLNa2802TuTOfpXYvOEzaBkaTd95sPy1buAQnhjC/+QbSdrJNNFzoJ?=
- =?us-ascii?Q?MjrZ/qY/oi5s1iCZ/wgMHby6lEXdkyR3jYz0/IHh9KUTE3jDmnOG+IoEW0bB?=
- =?us-ascii?Q?H9kAtxtuCyHUc9TPJzL/oJxImLJP6gLvlBAZfaFItHGbJZbuoC8lo+NUAe7p?=
- =?us-ascii?Q?HNmjDB1NFTV8Ja19OVn7BN+Xnu1MVHvZHMRMzthr+5LRbW34Mfa42dDBNCMj?=
- =?us-ascii?Q?fKWkhjPpzrKM3Rsge+cYc3P4CkzuxZGOIosTOfN5uKTnMEmHRKMjss68xLQS?=
- =?us-ascii?Q?TK8LYI7Dfm2piEV5pZKKQBWYKDetdgnrQ0US1EmCYI9AWS8m1vcslNa2RjdY?=
- =?us-ascii?Q?v6xtPEZqNUDa0lM1pu6WvRxa5xo2MpNdWFqFoA3Ar07pxU6KhIfNms94QSUM?=
- =?us-ascii?Q?fyqci4xLPLFz5u0ViV/ysLxs+C25i5e2lNFC9BuY1uQ8oowibLA9fukXuZvC?=
- =?us-ascii?Q?5KZUqFjYMUevb8018UJfu7JnqA2BKFKdBfUIDFs6RShjcMteB/49SxW3nDSN?=
- =?us-ascii?Q?Bj8hJGa72CZjDdYv5TveCQL2kuiIHOVJOLJokMbMrw7xceiGZyfzoaFm/5KQ?=
- =?us-ascii?Q?J3NEOT6MhDWMgB/Bj3oaOKDlRUKbEBWdlSOlxsafDsR+ATlLuwYHl35+LUoY?=
- =?us-ascii?Q?qvO28iz9X+Rb8XGrtqA4VCdllTBffMeJXiJwx2zP6DF92jLYcIapDKWMVqVm?=
- =?us-ascii?Q?uHsPfijTW/mG1AZShUxp2cqI9CZoI0mJt2ltTrB+tveF7FHQo4JK8kt1pb8t?=
-X-MS-Exchange-AntiSpam-MessageData-1: 1QctVsG3W+FUFQ==
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kiEusewcRE1LI2c/F38ofFGECkUMeGzmqw39wUmijJ78mzzOTaH1RdEw3tC/?=
+ =?us-ascii?Q?kYjxmu8Jq9R13LhV6dta7KXYu5LCkrFB/R+ju7QRhKuAQilfU2I3lzNrnCKK?=
+ =?us-ascii?Q?VB/4Y6aoHamHqelO8SSciEniCTYC/DS+lRL7spq/goJwVIExtG3umyvd6m/V?=
+ =?us-ascii?Q?5cq5VujffVbMRIE2D2R72a14+8hZ3fQZY4ylbqAlUClc2xrBRiGrFNH0LHuZ?=
+ =?us-ascii?Q?EftSrwiA6VLkrq7TYtxCtmr1JyNV1+raWbsVxGNBZzfyhZrado3MM30cBC94?=
+ =?us-ascii?Q?CQgwElHIL0adtIMAYX6fYIB0i0WKrM8Ua3jQIV935biiXCaVjhR1ssPEZuoj?=
+ =?us-ascii?Q?Cu0/tODw9L6ha6QKmyGXcFNsDrkPl/Tm0Ft0E2V/bVZkF9vklpNcaZhYCH/N?=
+ =?us-ascii?Q?RySMMvpelC64ias01dBEde4DxNhTaFaYVfEYHtLgUIN4vSxHDNj1rj4fSCl/?=
+ =?us-ascii?Q?PUur6VOaf+D+fHe+xohszIRcwL+DlWwMkjeFgsFpSmgCGWKqcChNdUdzqYIH?=
+ =?us-ascii?Q?JFNbHFhGtSnLoGJec/eszkSRDLdkUTSiCX3JPX+a1ibsgz1S+kWACC4MmeyW?=
+ =?us-ascii?Q?dsWFS+2CvZXq4rvK/AawqcV/n3/UsaSHvSRUxGrFVzlU9vdU7+TJP7I4h15P?=
+ =?us-ascii?Q?PWg0ltzSTbTZdpNpFNaaLtDDrz5f2rx70J0DCyZEhQi0CJBmmkXRT5+BlBCg?=
+ =?us-ascii?Q?O+ejQPqx/WMyCOb5NdoI1VaVbYUaOgg1W+yVBS5LJkb81lqirRNCVWdOu/qa?=
+ =?us-ascii?Q?lHnCr7FEi4sCahqmNglne0pYz8PKC1feGYiH2gUntq8JnpELkfyUOJKwzdeR?=
+ =?us-ascii?Q?9Nb4ef+2egOoxaJ9oomDNvlFnk/8+4ck1KFRyFgdAb39cp+EEbfIqpouYwJB?=
+ =?us-ascii?Q?uGOW2z3AYaLjid/Wzyt5fqNg7o7wwMj+PS1xCw4wwg6eBlD33XFMjeYqCQKO?=
+ =?us-ascii?Q?rOKEMkGqkx2hh3WwLDhum+rmiTICj4HN92bCJgMBc6rO2H00Genkyvl18DBH?=
+ =?us-ascii?Q?d7/6l3p6DZdX/YeaWwbOp827P0A3nO2Ki9bl2P3LjbrzNt2Vk55S7P4O6CVx?=
+ =?us-ascii?Q?u/weT0OK2ATPFJ5+EaDo2VhEUFuGn9mtbYQG4AWSkSNvLlGtGrIjkW0dsM/E?=
+ =?us-ascii?Q?0ODwxN2ZDs8zYrLe3v8HwJRbmjhAEVnQDumM1nNqCWllqaZyRZrmijG4OR6U?=
+ =?us-ascii?Q?7Ho9Yu0hBLQm2/Vpw38Mv/+AtKO2gyWI+NoJ1RG+akw1fmAb1WFkvxeOFuWH?=
+ =?us-ascii?Q?+N/IQoe0xQwxfYEgdQIt+nQDyg1i+uEPE3wDBksm+xKiWmhaYn/l68J5d5B1?=
+ =?us-ascii?Q?w4gQxV4Ad/DiYYNftS+FWkhfJ6mDdls5gaIsXGWqkSherwxnScbhUE6Y4m8T?=
+ =?us-ascii?Q?hBHZCGUZPrhuIY5SF56+QNBcaXC/vG1BOKW6/HDIKnZfqw3YlQVhF3KQJnud?=
+ =?us-ascii?Q?eONO2AP7e9ccrZQJGbkYNMg5sVSSg32XIa/sy08Fhj9TNBOrLmAt6kZoBSWl?=
+ =?us-ascii?Q?ZymnsnjGRujZCOdfK5OlVxmvlrNRBtdy9vDGvOEKVJyuGNhdpVBllfMCCE6T?=
+ =?us-ascii?Q?g8BValaard5qOoOpc6O6IpzPzEVTONWyHAyryr85AIMbMtJKrZXQvAqFVor0?=
+ =?us-ascii?Q?B7fEuMDDnCZO9gIAoWIG5Xv0vlWl+kGrHkWJarbWhILAgSCq9o3uzLb23HAy?=
+ =?us-ascii?Q?I1Iln0E//EXaIMSS1J/YFoYh/2BYBCv8RbrrPToyt0oiaSE9WxeehR8CDDOm?=
+ =?us-ascii?Q?SMesoOd35Abz6zk4vE/UYNr439yE2zj93mlak+3ckes/Tt8PgaSMO9YeoR4r?=
+X-MS-Exchange-AntiSpam-MessageData-1: Safd6ramGBF29Q==
 X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00041672-e5e6-4b8d-7cfb-08da2cd79c90
+X-MS-Exchange-CrossTenant-Network-Message-Id: 490c5eb3-6717-4483-eed9-08da2cd8645f
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2022 07:36:18.5308
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2022 07:41:53.6475
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jGCe3RlxlEJMsm//cgGWoBg6AG/pkAZahSu/hX9rrjGTsBe4u+6GzBCopXGWa3SJLKnUxXcYsTBb3PJx/E916w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2xjMIeCf3tasoM0KTroQS9wFdqk8QYJo7d4VxSeCkJcTeXsgSOPVfjR70Da/sUKOmaj5iRmym1sgb13D4uncTg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6354
 X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
@@ -144,30 +150,29 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 02.05.22 21:32, Alan Stern wrote:
-
+On 02.05.22 13:05, Tetsuo Handa wrote:
+> On 2022/05/02 19:46, Oliver Neukum wrote:
+>>
+>> When could this ever happen? Either the device is disconnected, then
+>> you'll go to 'exit' or the refcount will go back to something >0, won't =
+it?
+>>
+> (Step 0) Say, ictx->users is initially 1.
+>
+> (Step 1) display_open() increments via refcount_inc_not_zero(), now is 2.
+>
+> (Step 2) imon_disconnect() decrements via refcount_dec_and_test(), now is=
+ 1.
+>
+> (Step 3) if retval !=3D 0, display_open() needs to undo (Step 1) via
+>          refcount_dec_and_test(), now is 0.
+>
+> because imon_disconnect() can be called while display_open() is in progre=
+ss...
+>
 Hi,
 
-I am happy to help, if I can.
-> The usbmon trace shows that quite a lot happens during re-enumeration=20
-> that doesn't happen during the reset-resume.  No doubt the reason for=20
-> this is that the cdc-wdm driver doesn't have a real reset-resume=20
-> handler; the operations it carries out for a reset-resume are the same=20
-> as for a normal resume, and that clearly is not appropriate here.
-Doing reset_resume() for WDM is problematic. The whole point
-of WDM as a protocol is to put the configuration of a device
-into user space. What is a kernel driver to do in that case.?
-> For example, the usbmon trace shows that the kernel sends a=20
-> Set-Interface request to the modem during re-enumeration and then does a=
-=20
-> whole lot of probing that I don't understand.  None of this stuff=20
-> happens during the reset-resume.  Probably the modem decides that=20
-> without any of this extra configuration, it doesn't need to do=20
-> anything -- and that's why it disconnects itself.
->
-
-Are you sure that stuff comes from CDC-WDM in the case of reenumeration?
-WDM does not do set_interface() in any case.
+thank you. I did not think of error handling. You are correct.
 
 =C2=A0=C2=A0=C2=A0 Regards
 =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
