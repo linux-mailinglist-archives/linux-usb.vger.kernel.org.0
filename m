@@ -2,276 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6D8517FE8
-	for <lists+linux-usb@lfdr.de>; Tue,  3 May 2022 10:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEE85180E1
+	for <lists+linux-usb@lfdr.de>; Tue,  3 May 2022 11:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbiECIrS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 May 2022 04:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
+        id S233369AbiECJYr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 May 2022 05:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiECIrR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 May 2022 04:47:17 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A87A35246
-        for <linux-usb@vger.kernel.org>; Tue,  3 May 2022 01:43:44 -0700 (PDT)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220503084340epoutp036acd1b80205e6c220884949995d70b44~ri9GdMDt02946129461epoutp035
-        for <linux-usb@vger.kernel.org>; Tue,  3 May 2022 08:43:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220503084340epoutp036acd1b80205e6c220884949995d70b44~ri9GdMDt02946129461epoutp035
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651567420;
-        bh=E/kNS8J6LGsDH5KxU/vYXIpphusvX+Z+Ji7rYA+GplI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oW3cf9zrbeA7GMWe//1IljgwZdec8yTRZlsPVrbRDGDB6j/st5K6ch2+Nyutiduk7
-         o3BYWoUlzIsJDELdjbwYbXLKEg4PT0EGs3570pNaw3DQjYe1lkch1SL9gIyMxYXcQI
-         UlayzwL9CR741E3pjoKAXY6iSScCJO54jK6JWx4Q=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20220503084340epcas2p3e77cf06771fd036b1571b72c7fb1f235~ri9F-I4OL1935719357epcas2p3e;
-        Tue,  3 May 2022 08:43:40 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.100]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Kstls2pMhz4x9Q2; Tue,  3 May
-        2022 08:43:37 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        91.9E.09694.93BE0726; Tue,  3 May 2022 17:43:37 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220503084336epcas2p385b5af3e2bd129a9984c9b6c345b51fc~ri9CcSV0g1184411844epcas2p3b;
-        Tue,  3 May 2022 08:43:36 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220503084336epsmtrp2d7ec30bf4e483855e523b6b646a97826~ri9CbfVUF2822328223epsmtrp2x;
-        Tue,  3 May 2022 08:43:36 +0000 (GMT)
-X-AuditID: b6c32a48-47fff700000025de-a5-6270eb391658
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DE.B7.08924.83BE0726; Tue,  3 May 2022 17:43:36 +0900 (KST)
-Received: from ubuntu (unknown [10.229.95.128]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220503084336epsmtip1a9e605007c0456735db18148872a076f~ri9CNlw7t1852718527epsmtip1i;
-        Tue,  3 May 2022 08:43:36 +0000 (GMT)
-Date:   Tue, 3 May 2022 17:41:58 +0900
-From:   Jung Daehwan <dh10.jung@samsung.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH v4 5/5] usb: host: add xhci-exynos driver
-Message-ID: <20220503084158.GA38006@ubuntu>
+        with ESMTP id S232938AbiECJYp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 May 2022 05:24:45 -0400
+Received: from CHE01-ZR0-obe.outbound.protection.outlook.com (mail-zr0che01on2124.outbound.protection.outlook.com [40.107.24.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24651EAFE;
+        Tue,  3 May 2022 02:21:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YAWXFTdAuzVMVSgRXxjvPYeyV0cTpNsTwAR0uh/f5nM3dlNNZxo0R/6PqBahdlR1RD3H0wFnCivpLFRLpza6fRTb6PF8A3p/yQCxaHAordSwkyr2g89qq87q9QRY+qKUwFdScScm5zDD6W3xlm6ypfaSEfQ15oEqDqmGzUjz0CUivC7dRnQoUMv6LYwX8gQHdkEXea0V0t0Cs6+a34HhSMcYKy2MjUtVYx3FvMkem4hX81TW7mprwxtE8RePwcyB7TIrRe21mgA2/9MRg4bh2a/nqIoI3rhYdIvpVzGbh+1PAoOGECT0S+as1G6NmJ7SoCwZgx+kSSq37BPnPGnGnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fYqLkmyXyH3C6czUzC7cBiG4m7prPDQA99ra23mZ5VA=;
+ b=PGHlY0HejYEJG37qbMN2FyLkNWfnHmZRG2RbWtJQApM0DCk4J4d16DlQRwrcA+pOHisAtAQ4VayL7eCRcL0iQZ8+5ogsLp48CcrsvDtvZFwKxJW5UWp+3Vyp3+P3muSEuelhuKj5xBYQGq07OImQYjvMLvIWEjeGppOKxtib0pF84GnHKCE5o4ePXl8s2WbzNtWBn/7hWO1FZa7n+tCb9wzWG2K5CnWGbDI//txg56AN4azgJC6y/XTQC3WPH2oWxUFOOHbinIF3YpFIeYrwGUh2LhSpteO1urYH2OuwJKgdKbQxTIBJZuA5SqrGeygk5GEJK/bpzxC220KSsOqtZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=skidata.com; dmarc=pass action=none header.from=skidata.com;
+ dkim=pass header.d=skidata.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=skidata.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fYqLkmyXyH3C6czUzC7cBiG4m7prPDQA99ra23mZ5VA=;
+ b=nPo2dbbJnacqcBE1Di4zDhIzyIGuouRTGkxJm1DkM+YlricWuM/YcTyDpY4wsU/Doyo/8WIvzdHM3HQgiMTTIBWLS4ET5gGfosGHqtfn/pgEyD+TCLbTp2rzdEPHB8YoearDm8Qg371Xnwu+YCRTDr42D+nhcR5OuCkmNgMAED3bL2wC1k33HigVu1Km5HOmNZALsJtiL1WRE7PG354ZmvQxZsRHx7aHW3HByQcQqO68NSkjly7y0Oap5X8FydsvUeEGqHJ5mORCPzbYM5GC0/iwzUMq3Lu5gj8FFVB011qbGT4G0NUrwHDLEqIT1vZB07M2kTja9TONkN193s850w==
+Received: from ZR0P278MB0798.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:43::8) by
+ ZRAP278MB0224.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5206.13; Tue, 3 May 2022 09:21:10 +0000
+Received: from ZR0P278MB0798.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::e973:80d8:54f3:5be]) by ZR0P278MB0798.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::e973:80d8:54f3:5be%7]) with mapi id 15.20.5206.024; Tue, 3 May 2022
+ 09:21:10 +0000
+From:   Richard Leitner - SKIDATA <Richard.Leitner@skidata.com>
+To:     Daniels Umanovskis <du@axentia.se>
+CC:     Rob Herring <robh@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: usb251xb: add documentation for
+ reset-delay-us
+Thread-Topic: [PATCH 1/2] dt-bindings: usb: usb251xb: add documentation for
+ reset-delay-us
+Thread-Index: AQHYWgoZbQkjr3Sgw0GtZfkqb4z6IK0MUziAgAB9XgCAABmRAA==
+Date:   Tue, 3 May 2022 09:21:10 +0000
+Message-ID: <YnDz/q7hqlTbRqYR@ltleri2>
+References: <20220426123329.775-1-du@axentia.se>
+ <20220426123329.775-2-du@axentia.se> <YnB1ZQwpOBcT4zct@robh.at.kernel.org>
+ <75ed6e33-0d67-c50f-4d3a-7345d5f058b4@axentia.se>
+In-Reply-To: <75ed6e33-0d67-c50f-4d3a-7345d5f058b4@axentia.se>
+Accept-Language: en-AT, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=skidata.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d7b2f106-1bd5-44c3-db3a-08da2ce64322
+x-ms-traffictypediagnostic: ZRAP278MB0224:EE_
+x-microsoft-antispam-prvs: <ZRAP278MB0224441D98C29DF1823606C1F0C09@ZRAP278MB0224.CHEP278.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: C+m2bnmpPQ/vyrehKLfRXai+v1vHEGMkXvO9kNeEzqlsaiP214wLIhRPm9Q9mfPETn1saFRgfp7tme7YcssLX+bsyFkiuQOcIvCQSxQGtKS7TV1glh3Gi+s5CHVzwMl5U4Huvyp0wbOa0YBFcDsKp6oaNEi3nAPKw6BtrLqWCvAvkB5cQRSH0FRKUubLddZAchuGUF7Qr/dBBpvwZECbQsQU1Kw5ekHiobOoHMR7RO+zITyG9AzU0//dzizZeyA994j7UvA33vPDHLgDoNzQs8dMn6PUGO5LW8fuzSFyeT/wHamMw8Pi4NxDLGUQlFO69v7/fU/krriLp5axk8m7aoyU90dkxPo0Xd9l21rDruTgKXlziuu8BW9jWTUzI8WDsRur7eR8cczMLBj2UQXCcVdH/otZmw/+L8PSMcCwEwzFsr58L01+1uBnbFZEoHlrpltmzKggDeVELoBGHmmO/5xlDS219COUFGgC6sWVOOJQQpFwN5t1dIN+qDB96oOn1LSsoURFFLLcaLfWA7Rti2tQ9RgtTxkvgE2RSQP6evpCjS7E9pT5Ip5OBVr/sWvlbyNVrS4BudGPoElZrq3AKk2hCxm7cpnyyhvjambhk/cRaA+s0d/jXv0UG8Wig91fqy9Fhv+FfVtVrYLXuwvXtrzNT3cx+x93LlcXbmOt38881CRBj4IJ9USrxnZ0Ktbn72ZQk9Jhq//apQ8FJGnGJw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0798.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(5660300002)(316002)(54906003)(38070700005)(38100700002)(6916009)(6512007)(83380400001)(26005)(66446008)(64756008)(66476007)(66946007)(66556008)(76116006)(91956017)(186003)(9686003)(4326008)(8676002)(86362001)(71200400001)(33716001)(2906002)(508600001)(8936002)(53546011)(122000001)(6486002)(6506007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?emRkR2FwZzVKV25ia2NsRmRoeVZ1UVdtQU9ENWZFRG1KRUN4S0JvMnpIVXZ1?=
+ =?utf-8?B?MjJmNlIvRzJITUJEeDNqWGRNMXJuUzA4RXhiR3FxdnU2Q1o1QW5FOS9RVTRr?=
+ =?utf-8?B?K3UzcDB4T3pXRlpBaVlvbk93UDZrUkZUNWpjaFYvdUltOHZhbWxRMjErOU9v?=
+ =?utf-8?B?SmpkZG04dEFJNWI2aTlPWHZmSmxtN0E3QTdCVDFMKzlFTC9IU3ZBc1ZLVE0y?=
+ =?utf-8?B?K0dFZ2U0aDRVcmdpN0I1MDdtWllVTTNESGRYSTNzTjJJMUU0dmlxcVplUWJ5?=
+ =?utf-8?B?dDRscDRxbGhxc0dMRjU0VTRVMGIyclBSOXhWS0MrTDZKTm1tcHZsUkEwRDJa?=
+ =?utf-8?B?QkN6VUpLVmg4dUlSUVB0cTIrMGlySEV2UVVZT3VrL29rUUNwRHZ4MlpIU3dh?=
+ =?utf-8?B?bUNVMmlkempaSjRreHFDc29KT1FaVEJCancxSS95Ym54RkZ0cnBFQ2NERWJL?=
+ =?utf-8?B?a1NUTEwwVDhWY3dNKzcxdlg4T3JTK3E0Nzhsek4zWkpkOVhheGRLbTFYVG54?=
+ =?utf-8?B?M3V0c1M4Z3lmS2kxN0ZMTmVzd3d6TStiZUZVVVl6OWN5bTBWcTd0MkMzaU1m?=
+ =?utf-8?B?TDJ1amxTMkpBamJYMzduSDlhV2F3T2puRWNuTHJvdUFoTURyd0llcFhobXI4?=
+ =?utf-8?B?RFVqbjlVYmp0SzBvalAzNGFZbDduNmRXK2J3V05tZnZYMlMxVlJRcS9jd2Ni?=
+ =?utf-8?B?ZVBCL3dBOXUyc2JVS2h4NXc1cjgwK0tQcGhDQ0FnL3BxdGhHWk5TTjdoUmE0?=
+ =?utf-8?B?MStmY2FTTjVPbjNFb3hwWWpNK0c5MzloTStDcVpnQ3JKU1RPR1RaR0kvNU5O?=
+ =?utf-8?B?V3RqdXV2Y0hQTjBGVjAvb04zeFI2NDBESmc5TWtUZmYxQ1lKclF6VnhEZ01S?=
+ =?utf-8?B?aUE1dEpGa1d4TStoUXN5MnpldndWaHUzUVdLOHRJMk40VDRPSkVWOUliVUcr?=
+ =?utf-8?B?MUFhNmxyZi9BM2JEb0p5eFAyTzJCOGtkc2UyVTdtRUwwMERkeURPN0VJSDNQ?=
+ =?utf-8?B?YjRmckJ1cFJYNVNFRjlNQ1VIWXJPb2wySXh6a3JVUnpCK0U2UVltYVFTRXEz?=
+ =?utf-8?B?eDgwOW5HcFd4YkVmWXVDTUxrTUhkeGd2Q3RJVkRrODVZQ3U1NFRkV0pOdU5Y?=
+ =?utf-8?B?bFFRN295L0hiRVl1WCs1MXBBcEh5Vmw3c2kyUXV0ZWRTL0t4Q0Z0MVdNMkpX?=
+ =?utf-8?B?Z0dVK2NKTUhxOVYrQXJ3Zm1BengraTdOSGpsMlBZdW5DMjRaeGQvVTd5bFZB?=
+ =?utf-8?B?dmExSEo2ZElvU2hmaXkvNjFBQmZQWTZwazJPaXQ0enlkM2MxL0VYUzZWd1BX?=
+ =?utf-8?B?LzBZU1BCM1pEOW5mak56RDFlNGVNYU9EOXQvSm9iVUdTTmEzQ09tdmRDWkZU?=
+ =?utf-8?B?QlNieHNIYmNZVEFjQjdoWWYwUWFDZXVPK3NmMWxXZEVpa0ZMbVlFNkQxZWlE?=
+ =?utf-8?B?SmdXMTJjbFNzaUFXSmU5VDkxeWpKMmlYY25oRXFIWTRueHRsVkN3QStJa0xR?=
+ =?utf-8?B?WTFPanZDZXZ2RnhQQWQ2ODJBVmltaStpTFlLZFJ1WmtYaFducjJMOVBjZVlD?=
+ =?utf-8?B?Wm9raHFTV0gvSXlNNVIyZjRhNXd4TWJ2THQ3dmgvcjJhSjZZblFUTytuWDRr?=
+ =?utf-8?B?NkFqTmZ2VUxKZFJ2andHL2Vka2J1M2NVTE9Rb3V2bHRNUXZmQ3lCTGNoZ2lR?=
+ =?utf-8?B?L3Vkc1p0VGlKQXJ5MC9hSWwwaW1qRkZscUR2bmZGaHdUVVJ6dzNjV0lXZGNM?=
+ =?utf-8?B?WUhlcUZiNFJTc0JRdVVCdDJnbGlBMTZxWkVzdkM0TW9qZ0VXVURCS3hYTGtN?=
+ =?utf-8?B?U2srZ0Rzc0JNdENESWluVW5EZCtrM0NBVmM3Nk5EczNudnV0UTJPVXVqcnNB?=
+ =?utf-8?B?Z1E5R0JMM0kzVGFBOThFdGZNUlNXN1lReW5JWVJQc0dGNGFnYmMzMVJPQVRw?=
+ =?utf-8?B?V0w5V1Bwc3F3U05tc3lOLzFSVzJITWJtU3RaejlLbWIwQmFFSnROOFlnMTRX?=
+ =?utf-8?B?VGhnS3JSU29paFNtdkdSVm50M0szZHRmeCtjdS9hMnI0cDl3QWNFSHdURFBH?=
+ =?utf-8?B?czVJaGZQeEtvNkt6MU5Uc05EZk9hUHFBRkRKUWhRS2xoRy9NemU1OTFWbDlL?=
+ =?utf-8?B?bHRua0JraW1MN0hpSC91S0xPL0VxR1d6OVJaaUhzMDIvc0lNUTlNM1dQdHUv?=
+ =?utf-8?B?U3A1TXhwb1JLSisrN0k5S1VyU21DRS9jeUlIdDJ3QktBdFRHWUp1aXU3OFds?=
+ =?utf-8?B?dkw4bVB0T1JyeExkV25RRzAvN0g5WHphTlBpK1pDZHpUekt4bGxKeElFWnFT?=
+ =?utf-8?B?YWJJd2pYMjBWRnRqQnlDRjlNU0MyclliMldENUxVWWJlK0d4NmJSOHJDTXVl?=
+ =?utf-8?Q?TTbuAbM/i5yQFpQjfYkMxYHRndOHQpoEi98rG?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0D846770EF5B2442B21EFAC91549D78A@CHEP278.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <0f84e8d4-451f-693a-d098-517dc6235a0f@linux.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBJsWRmVeSWpSXmKPExsWy7bCmqa7l64Ikg9srWC2eHFnEbtG8eD2b
-        xfU/7xkt2p9fYLPY+PYHk8XlXXPYLBYta2W2aN40hdXi9YcmFouZa5Utuu7eYHTg9pjV0Mvm
-        cbmvl8ljwaZSj8V7XjJ5zDsZ6LF/7hp2j74tqxg9Pm+SC+CIyrbJSE1MSS1SSM1Lzk/JzEu3
-        VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMATpTSaEsMacUKBSQWFyspG9nU5RfWpKq
-        kJFfXGKrlFqQklNgXqBXnJhbXJqXrpeXWmJlaGBgZApUmJCdsXHlDdaCdvWKw3e9GhhvyHUx
-        cnJICJhI3NmwkK2LkYtDSGAHo8StvrWMEM4nRonLHe+hnM+MEu8v9DDDtOx4vYMJIrGLUaK3
-        /zmU84RR4sXMPjaQKhYBFYl3j6aB2WwCWhL3fpwA6xYRMJT4dmk72FhmgTnMEteW3GABSQgL
-        2Er82rqTEcTmFdCWmP5vL5QtKHFy5hOwGk4BZ4kLmx8ADeLgEAVa8OpgPcgcCYGVHBInnh9i
-        hzjPReLTt1ZGCFtY4tXxLVBxKYnP7/ayQdjFErs+tTJBNDcwSjQ+OAH1m7HErGftYM3MAhkS
-        Wx5eZQNZJiGgLHHkFgtEmE+i4/Bfdogwr0RHmxBEp7LE9MsTWCFsSYmDr89BTfSQ+PZ0IzSA
-        3zBJ/Jp4h3kCo/wsJK/NQrINwtaRWLD7E5DNAWRLSyz/xwFhakqs36W/gJF1FaNYakFxbnpq
-        sVGBCTy2k/NzNzGCk7CWxw7G2W8/6B1iZOJgPMQowcGsJMLrvLQgSYg3JbGyKrUoP76oNCe1
-        +BCjKTCiJjJLiSbnA/NAXkm8oYmlgYmZmaG5kamBuZI4r1fKhkQhgfTEktTs1NSC1CKYPiYO
-        TqkGJv3Ec6wPkmWSLhnJiBz2XR8nOa1sWVj4qpCzv87/Waiz75TYG2sOn8qn/Mu1Piot4Vtn
-        ZRdfF8auEDVRMmamz9qTl/TjXN/cdfb57+8UnKD9mePfobsTNsrUvGffkKalLSx4Z3J0UkKJ
-        QOXasG0PH7+aU5ly09uR7Xbinl9hF45HRXA+eLqQY8mvPXGx6mUfpjRXJ0rkTnbiS22QaZpw
-        bPuueVmsfMUdZdM0//ycpvbu2UxhQb7AjVZzPp+ZxvvKim1t/cHVocH7fz5j8do9bXIV672r
-        Nb+OfH0xc/tF8bv+/K9FBXddnfu5PWzRLa3jLVJnRdbFz3iq9eO45KSvVpeOuTHsEXnn3nXq
-        kcxuw8NKLMUZiYZazEXFiQCykvrBSwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHLMWRmVeSWpSXmKPExsWy7bCSnK7F64Ikg+1ThC2eHFnEbtG8eD2b
-        xfU/7xkt2p9fYLPY+PYHk8XlXXPYLBYta2W2aN40hdXi9YcmFouZa5Utuu7eYHTg9pjV0Mvm
-        cbmvl8ljwaZSj8V7XjJ5zDsZ6LF/7hp2j74tqxg9Pm+SC+CI4rJJSc3JLEst0rdL4MqY8uQ/
-        a8FxlYp1L/awNjBulOli5OSQEDCR2PF6B1MXIxeHkMAORomlr96xQyQkJZbOvQFlC0vcbznC
-        ClH0iFFi9dmpbCAJFgEViXePpoHZbAJaEvd+nGAGsUUEDCW+XdrOCNLALLCAWeJc2zywImEB
-        W4lfW3cygti8AtoS0//tZYSY+oZJ4u+v9ywQCUGJkzOfgNnMQFNv/HsJdB8HkC0tsfwfB0iY
-        U8BZ4sLmB8wgYVGgI14drJ/AKDgLSfMsJM2zEJoXMDKvYpRMLSjOTc8tNiwwykst1ytOzC0u
-        zUvXS87P3cQIjiItrR2Me1Z90DvEyMTBeIhRgoNZSYTXeWlBkhBvSmJlVWpRfnxRaU5q8SFG
-        aQ4WJXHeC10n44UE0hNLUrNTUwtSi2CyTBycUg1MgpPZPzFxpL8X2J+us76povAKJ9vlPxcX
-        l/QlPfLlst+VwxTYN2+zYsHz+mfzb+vPlhCZdcYpZpbniUXK03qvS3eYnUxRuSdQkFrfdOdC
-        xsuszf5X1ymaaM7Ld1dqtcrj39d3eRfbt9A7LQHiZlOFJ5w6Zau/nelBs+uCCbceTshmZtq9
-        Ob/G5llsrfLD5ZnpPiWF567Oi2bZZSQn9p7jUV6T/HT3p4c+T/arn61xwl9lFsf8U9qvJ0bc
-        rbKTiLxy7UXdmv+vFqxqmb5BcKa4l9rbfRusPuaFncgK7U4ui8zf1MO/6d12tmud9q2yK06v
-        vX7rkaDU4ym/sjYtSYnqXsscdNXwyBu7/adL1HYfVmIpzkg01GIuKk4EAM8wjLURAwAA
-X-CMS-MailID: 20220503084336epcas2p385b5af3e2bd129a9984c9b6c345b51fc
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----kYpNrMA5Q_pRug.oZbu8Kwk_59qkkrrEmQqQB0Vp_jfuzgSx=_60345_"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220426092023epcas2p32946c087135ca4b7e63b03915060c55d
-References: <1650964728-175347-1-git-send-email-dh10.jung@samsung.com>
-        <CGME20220426092023epcas2p32946c087135ca4b7e63b03915060c55d@epcas2p3.samsung.com>
-        <1650964728-175347-6-git-send-email-dh10.jung@samsung.com>
-        <b9fcc518-cc0d-d346-774e-3a9472e664bc@linux.intel.com>
-        <20220428030319.GA139938@ubuntu>
-        <0f84e8d4-451f-693a-d098-517dc6235a0f@linux.intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: skidata.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0798.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7b2f106-1bd5-44c3-db3a-08da2ce64322
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 May 2022 09:21:10.6492
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e5733095-4425-4f08-b6ba-487b9a46a425
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /vCdp5csbLn1NQuCTEsdXjwtesKkdnDRKRqFmeJMq/jSMRjcHAmcll9QVlIUDqSPmXxVkQ+P9UzkbJrzfJqNW3HiDlbnrB/ISAsOv1t/nEc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0224
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-------kYpNrMA5Q_pRug.oZbu8Kwk_59qkkrrEmQqQB0Vp_jfuzgSx=_60345_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-
-On Thu, Apr 28, 2022 at 03:28:49PM +0300, Mathias Nyman wrote:
-> On 28.4.2022 6.03, Jung Daehwan wrote:
-> > On Wed, Apr 27, 2022 at 07:25:21PM +0300, Mathias Nyman wrote:
-> >> On 26.4.2022 12.18, Daehwan Jung wrote:
-> >>> This driver is for Samsung Exynos xhci host conroller. It uses xhci-plat
-> >>> driver mainly and extends some functions by xhci hooks and overrides.
-> >>>
-> >>> It supports USB Audio offload with Co-processor. It only cares DCBAA,
-> >>> Device Context, Transfer Ring, Event Ring, and ERST. They are allocated
-> >>> on specific address with xhci hooks. Co-processor could use them directly
-> >>> without xhci driver after then.
-> >>>
-> >>> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> >>
-> >> I have to agree with Krzysztof's comments, this is an odd driver stub.
-> >>
-> >> Perhaps open up a bit how the Exynos offloading works so we can figure out
-> >> in more detail what the hardware needs from software.  
-> >>
-> >> (...)
-> > 
-> >>> +static int xhci_alloc_segments_for_ring_uram(struct xhci_hcd *xhci,
-> >>> +		struct xhci_segment **first, struct xhci_segment **last,
-> >>> +		unsigned int num_segs, unsigned int cycle_state,
-> >>> +		enum xhci_ring_type type, unsigned int max_packet, gfp_t flags,
-> >>> +		u32 endpoint_type)
-> >>> +{
-> >>> +	struct xhci_segment *prev;
-> >>> +	bool chain_links = false;
-> >>> +
-> >>> +	while (num_segs > 0) {
-> >>> +		struct xhci_segment *next = NULL;
-> >>> +
-> >>> +		if (!next) {
-> >>> +			prev = *first;
-> >>> +			while (prev) {
-> >>> +				next = prev->next;
-> >>> +				xhci_segment_free(xhci, prev);
-> >>> +				prev = next;
-> >>> +			}
-> >>> +			return -ENOMEM;
-> >>
-> >> This always return -ENOMEM
-> > 
-> > Yes. it's right to return error here.
-> > 
-> 
-> Still don't think that is the case.
-> 
-> So if the num_segs value passed to a function named
-> xhci_alloc_segments_for_ring_uram() is anything else than 0, it will 
-> automatically return -ENOMEM?
-> 
-> >>
-> >> Also this whole function never allocates or remaps any memory.
-> > 
-> > This fuctions is for link segments. Right below function(xhci_ring_alloc_uram)
-> > allocates.
-> 
-> Still doesn't allocate any ring segments.
-> Below function only allocates memory for the
-> ring structure that contains pointers to segments.
-> 
-
-When I re-check it, it has a problem as you said.
-I will modify it on next submission. Thanks.
-
-Best Regards,
-Jung Daehwan
-
-> > 
-> >>
-> >>> +		}
-> >>> +		xhci_link_segments(prev, next, type, chain_links);
-> >>> +
-> >>> +		prev = next;
-> >>> +		num_segs--;
-> >>> +	}
-> >>> +	xhci_link_segments(prev, *first, type, chain_links);
-> >>> +	*last = prev;
-> >>> +
-> >>> +	return 0;
-> >>> +}
-> >>> +
-> >>> +static struct xhci_ring *xhci_ring_alloc_uram(struct xhci_hcd *xhci,
-> >>> +		unsigned int num_segs, unsigned int cycle_state,
-> >>> +		enum xhci_ring_type type, unsigned int max_packet, gfp_t flags,
-> >>> +		u32 endpoint_type)
-> >>> +{
-> >>> +	struct xhci_ring	*ring;
-> >>> +	int ret;
-> >>> +	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
-> >>> +
-> >>> +	ring = kzalloc_node(sizeof(*ring), flags, dev_to_node(dev));
-> >>> +	if (!ring)
-> >>> +		return NULL;
-> >>> +
-> >>> +	ring->num_segs = num_segs;
-> >>> +	ring->bounce_buf_len = max_packet;
-> >>> +	INIT_LIST_HEAD(&ring->td_list);
-> >>> +	ring->type = type;
-> >>> +	if (num_segs == 0)
-> >>> +		return ring;
-> >>> +
-> >>> +	ret = xhci_alloc_segments_for_ring_uram(xhci, &ring->first_seg,
-> >>> +			&ring->last_seg, num_segs, cycle_state, type,
-> >>> +			max_packet, flags, endpoint_type);
-> >>> +	if (ret)
-> >>> +		goto fail;
-> >>> +
-> >>> +	/* Only event ring does not use link TRB */
-> >>> +	if (type != TYPE_EVENT) {
-> >>> +		/* See section 4.9.2.1 and 6.4.4.1 */
-> >>> +		ring->last_seg->trbs[TRBS_PER_SEGMENT - 1].link.control |=
-> >>> +			cpu_to_le32(LINK_TOGGLE);
-> >>
-> >> No memory was allocated for trbs
-> > 
-> > Allcation function for trbs are missed. It's done by ioremap.
-> > I will add it on next submission. Thanks for the comment.
-> > 
-> >>
-> >> A lot of this code seems to exists just to avoid xhci driver from allocating
-> >> dma capable memory, we can refactor the existing xhci_mem_init() and move
-> >> dcbaa and event ring allocation and other code to their own overridable
-> >> functions.
-> >>
-> >> This way we can probably get rid of a lot of the code in this series.
-> > 
-> > Yes right. I think it's proper. Do you agree with it or have better way
-> > to do it?
-> 
-> Could be, but I don't have a good picture of how this Exynos audio offloading
-> works, so it's hard to guess.
-> 
-> Thanks
-> -Mathias
-> 
-
-------kYpNrMA5Q_pRug.oZbu8Kwk_59qkkrrEmQqQB0Vp_jfuzgSx=_60345_
-Content-Type: text/plain; charset="utf-8"
-
-
-------kYpNrMA5Q_pRug.oZbu8Kwk_59qkkrrEmQqQB0Vp_jfuzgSx=_60345_--
+T24gVHVlLCBNYXkgMDMsIDIwMjIgYXQgMDk6NDk6MzZBTSArMDIwMCwgRGFuaWVscyBVbWFub3Zz
+a2lzIHdyb3RlOg0KPiBPbiA1LzMvMjIgMjoyMCBBTSwgUm9iIEhlcnJpbmcgd3JvdGU6DQo+ID4g
+TXkgZmlyc3QgcXVlc3Rpb24gaXMgd2hldGhlciB0aGlzIGlzIGJvYXJkIHNwZWNpZmljPyBJZiB0
+aGUgZGVmYXVsdCBvcg0KPiA+IHdoYXQgdGhlIHJlZmVyZW5jZSBtYW51YWwgc2F5cyBpcyA1MDB1
+cywgYnV0IHlvdSBoYXZlIGEgY2FzZSBuZWVkaW5nDQo+ID4gNjAwdXMsIHdoeSBub3QganVzdCBj
+aGFuZ2UgdGhlIGRyaXZlci4gSSBkb24ndCB0aGluayB0aGlzIHJlYWxseSBuZWVkcw0KPiA+IHR1
+bmluZyB0byBlYWNoIGJvYXJkIHVubGVzcyB0aGUgZGVsYXkgYmVjb21lcyBub3RpY2VhYmxlLg0K
+PiANCj4gVGhpcyBpc24ndCBhIGJvYXJkIHNwZWNpZmljIGlzc3VlLiBJIGRldGVjdGVkIHRoZSBp
+c3N1ZSBvbiBhIGJvYXJkIHdlJ3ZlDQo+IGJlZW4gdXNpbmcgZm9yIGEgbG9uZyB0aW1lLCBpdCdz
+IGR1ZSB0byBhIHNwZWNpZmljIGJhdGNoIG9mIFVTQjI1MTIgaHVicy4NCj4gV2UndmUgaGFkIHNl
+dmVyYWwgYmF0Y2hlcyBvZiB0aGVzZSBodWJzIHRoYXQgd2VyZSBmaW5lLCBidXQgbW9yZSByZWNl
+bnRseQ0KPiByZWNlaXZlZCBhIGJhdGNoIHByb2R1Y2VkIGluIGxhdGUgMjAyMSBhbmQgdGhlIGh1
+YnMgaW4gdGhpcyBiYXRjaCBkbyBub3QNCj4gYmVjb21lIHJlc3BvbnNpdmUgdG8gSTJDIHdpdGhp
+biB0aGUgZXhwZWN0ZWQgNTAwdXMuDQoNCldoYXQncyB0aGUgbWF4aW11bSB0aW1lb3V0IHlvdSd2
+ZSBvYnNlcnZlZD8NCg0KSSBndWVzcyBpdCB3b3VsZCBiZSB0aGUgc2ltcGxlciBhbmQgImJldHRl
+ciIgYXBwcm9hY2ggdG8ganVzdCBpbmNyZWFzZQ0KdGhlIHRpbWVvdXQgaW4gdGhlIGRyaXZlciAo
+aWYgaXQncyBub3QgdG9vIG11Y2ggYWJvdmUgdGhlIDUwMMK1cykuDQoNCj4gDQo+IEkgYXJyaXZl
+ZCBhdCB0aGF0IGJ5IHVzaW5nIGFuIG9zY2lsbG9zY29wZSB0byBvYnNlcnZlIGhvdyBzb29uIGFm
+dGVyDQo+IGRlYXNzZXJ0aW5nIHRoZSByZXNldCBzaWduYWwgdGhlIFVTQiBodWIgaXMgYWJsZSB0
+byByZXNwb25kIHRvIEkyQy4gTW9zdCBvZg0KPiB0aGUgMjUxMnMgd2UgaGF2ZSBkbyB0aGF0IHdp
+dGhpbiA1MDB1cywgdGhlIGxhdGVzdCBiYXRjaCBkb2Vzbid0Lg0KPiANCg0KcmVnYXJkcztybA==
