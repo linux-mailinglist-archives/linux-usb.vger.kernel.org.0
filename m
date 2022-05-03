@@ -2,155 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED52517C1C
-	for <lists+linux-usb@lfdr.de>; Tue,  3 May 2022 04:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFCDA517C27
+	for <lists+linux-usb@lfdr.de>; Tue,  3 May 2022 05:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbiECC7O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 May 2022 22:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S230254AbiECDMh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 May 2022 23:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiECC7K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 22:59:10 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AA2BCB;
-        Mon,  2 May 2022 19:55:39 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id e189so17022318oia.8;
-        Mon, 02 May 2022 19:55:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=ML+ALf4muC9UINFB1D+jUSUaT6Yc1q590//LqncXPBg=;
-        b=i7O9COFXjCPh9mubsfg4ugisxlHT5wiyH0MXCmkS/E9xJKUh9gtudd7mJOdt/lRU5s
-         XviWqp4uUxdnstDiOc3faSUjpvZagNsoavB45X1ONbSZGvYwKqCS3Q4EtrJCw38BFSTy
-         GfNBd7eRD5cCXw35f/BALZfCm/WuBWvrvy8CHiiL2yrOPGPoRYnxiuE92NR59Xn+HZB5
-         KmWN9JXFhIw1dIK45cEVSlCPHBcxANoVGaomRAUVkCZ8j7FysnRmKK/nqDi0QqiAU5qN
-         jRYD07RpfwKLRhTaIOHoyPVauNdPj2DaFQwX8xWbJUP/uVrx5krbwy8PAtKyqKnZh5Fk
-         0gYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=ML+ALf4muC9UINFB1D+jUSUaT6Yc1q590//LqncXPBg=;
-        b=AScAAAfQBs5jsGUnRtMO/HXUdbYQCM4L4yz1STlLCOHqWzq8GhLjJj0QEtr+mHwZzC
-         UR1hGujcZmtfqB50KWZgDd3N8rcbx+rhLdM1Nsax+a7HdWyOaVsSYEmxKSW4ZyIGJlBE
-         1XoW7E5Q+/Ft6MK2sdqL96H0vQTLq9QuhiX4g7Pgh3cx1FPTowE47zfEf8Hh7ycIxROO
-         D9eL5Cs63VjeA/iZfkGd0nMYrMkshj2LXcuI5XeGbWjxVREGgkFBNyafTbeSze4rVa0d
-         qy8Wzda0Yby76G5FfylPPaP2eq00jPzZIMzKC6/DQcZdk5a+Zd0BFk+cEUKojzPgqBLy
-         2Nww==
-X-Gm-Message-State: AOAM5317zaNYQN8hD2cFd2BVU8Nmj/xVpO+LojrlUdYdHny8dK/KzJh9
-        g/g1lqIKcw5nP91qVU3wmT8=
-X-Google-Smtp-Source: ABdhPJznbXpW7jRNt5UM7xwEtyewbcsNlzza6ofH1kXi3NQqMh/99I9VMArk+DRpxcBP+PFc4iZ78A==
-X-Received: by 2002:a05:6808:1115:b0:2ec:e78e:3fc0 with SMTP id e21-20020a056808111500b002ece78e3fc0mr978131oih.207.1651546539238;
-        Mon, 02 May 2022 19:55:39 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m17-20020a9d7e91000000b006060322126csm1564658otp.60.2022.05.02.19.55.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 19:55:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <04840b4f-5b9d-b29a-62f7-e5148d415313@roeck-us.net>
-Date:   Mon, 2 May 2022 19:55:34 -0700
+        with ESMTP id S230217AbiECDMf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 May 2022 23:12:35 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419053917C;
+        Mon,  2 May 2022 20:09:02 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 24338k3kA007504, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 24338k3kA007504
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 3 May 2022 11:08:46 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 3 May 2022 11:08:46 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 3 May 2022 11:08:45 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6]) by
+ RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6%5]) with mapi id
+ 15.01.2308.021; Tue, 3 May 2022 11:08:45 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Forest Crossman <cyrozap@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>
+Subject: RE: Realtek RTL8156 devices defaulting to CDC-NCM instead of vendor mode, resulting in reduced performance
+Thread-Topic: Realtek RTL8156 devices defaulting to CDC-NCM instead of vendor
+ mode, resulting in reduced performance
+Thread-Index: AQHYXe/ogs9OqQEtRUWyhpGpwalf560MbNjg
+Date:   Tue, 3 May 2022 03:08:45 +0000
+Message-ID: <39404cc4bf87474e83ef142fb4cdeb3b@realtek.com>
+References: <CAO3ALPzKEStzf5-mgSLJ_jsCSbRq_2JzZ6de2rXuETV5RC-V8w@mail.gmail.com>
+In-Reply-To: <CAO3ALPzKEStzf5-mgSLJ_jsCSbRq_2JzZ6de2rXuETV5RC-V8w@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.203]
+x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzUvMiDkuIvljYggMTA6MTc6MDA=?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-References: <20220419163810.2118169-1-arnd@kernel.org>
- <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
- <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
- <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
- <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net>
- <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
- <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
- <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net>
- <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
- <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net>
- <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
- <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
- <4dcdbfe2-9edf-320b-d123-3b62c8b5e28e@roeck-us.net>
- <CAK8P3a0ogn1wgPBDHkT=Fb8ufA+y8Ax1Qov2-vRXfC08QqnrQA@mail.gmail.com>
- <c001d58e-9a78-6338-a533-d0f215b3dfd1@roeck-us.net>
- <CAK8P3a1X3YH0RqqmqgqFAaY94yreD-PfY-pvyMf+xU3nGeqvsg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-In-Reply-To: <CAK8P3a1X3YH0RqqmqgqFAaY94yreD-PfY-pvyMf+xU3nGeqvsg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/2/22 14:03, Arnd Bergmann wrote:
-> On Mon, May 2, 2022 at 10:35 PM Guenter Roeck <linux@roeck-us.net> wrote:
->> On 5/2/22 12:21, Arnd Bergmann wrote:
->>>
->>
->> To boot from initrd:
->>
->> qemu-system-arm -M z2 -kernel \
->>        arch/arm/boot/zImage -no-reboot -initrd \
->>        rootfs-armv5.cpio --append \
->>        "panic=-1 slub_debug=FZPUA rdinit=/sbin/init console=ttyS0" -nographic \
->>        -monitor null -serial stdio
->>
->> where rootfs-armv5.cpio is from my repository at github.com.
->>
->> https://github.com/groeck/linux-build-test/blob/master/rootfs/arm/rootfs-armv5.cpio.gz
->>
-> 
-> Ok, that works here with any configuration, I don't see a regression.
-> Could this be a problem with the size increase? The machine only has
-> 32MB of RAM, so it's possible that the multiplatform-enabled kernel
-> with DT support etc pushes it over the edge, especially with an initramfs.
-> 
-
-qemu puts initrd in the middle of available memory. With the image size
-being ~1MB larger than with v5.18-rc, this is too much, and the kernel
-overwrites part of initrd. This causes it to be corrupted.
-
-It looks like that would have happened eventually, your patch series just
-made it happen now. The kernel is just getting too large to run on such small
-systems. I worked around the problem in my version of qemu by loading initrd
-at the end of the (small) RAM. With that, I no longer see the boot failure.
-
-Guenter
+Rm9yZXN0IENyb3NzbWFuIDxjeXJvemFwQGdtYWlsLmNvbT4NCj4gU2VudDogTW9uZGF5LCBNYXkg
+MiwgMjAyMiAyOjQzIFBNDQo+IFRvOiBIYXllcyBXYW5nIDxoYXllc3dhbmdAcmVhbHRlay5jb20+
+OyBkYXZlbUBkYXZlbWxvZnQubmV0Ow0KPiBrdWJhQGtlcm5lbC5vcmcNCj4gQ2M6IG5ldGRldkB2
+Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmVh
+bHRlayBSVEw4MTU2IGRldmljZXMgZGVmYXVsdGluZyB0byBDREMtTkNNIGluc3RlYWQgb2YgdmVu
+ZG9yDQo+IG1vZGUsIHJlc3VsdGluZyBpbiByZWR1Y2VkIHBlcmZvcm1hbmNlDQo+IA0KPiBIaSwg
+YWxsLA0KPiANCj4gSSByZWNlbnRseSBwdXJjaGFzZWQgYSBwYWlyIG9mIFVTQiB0byAyLjVHIEV0
+aGVybmV0IGRvbmdsZXMgYmFzZWQgb24NCj4gdGhlIFJUTDgxNTYsIGFuZCBoYXZlIHNvIGZhciBi
+ZWVuIHZlcnkgaGFwcHkgd2l0aCB0aGVtLCBidXQgb25seSBhZnRlcg0KPiBhZGRpbmcgc29tZSB1
+ZGV2IHJ1bGVzWzBdIHRvIHRvIHRha2UgYWR2YW50YWdlIG9mIHRoZSByODE1MiBkcml2ZXIgYnkN
+Cj4gc3dpdGNoaW5nIHRoZSBkZXZpY2VzIGZyb20gdGhlaXIgZGVmYXVsdCBDREMtTkNNIG1vZGUg
+dG8gdGhlIHZlbmRvcg0KPiBtb2RlLiBJIHdhcyBwcm9tcHRlZCB0byB1c2UgdGhvc2UgcnVsZXMg
+dG8gc3dpdGNoIHRoZSBkcml2ZXIgYmVjYXVzZQ0KPiBvbmUgb2YgdGhlIGFkYXB0ZXJzIChiYXNl
+ZCBvbiB0aGUgUlRMODE1NkEpIHdvdWxkIGdldCB2ZXJ5IGhvdCwgdXAgdG8NCj4gMTIwIEYgKDQ5
+IEMpIGV2ZW4gd2hpbGUgaWRsZSwgYW5kIHRoZSByb3VuZC10cmlwIGxhdGVuY3kgZGlyZWN0bHkN
+Cj4gYmV0d2VlbiB0aGUgcGFpciBvZiBhZGFwdGVycyB3YXMgYWJvdXQgMyBtcywgYW5kIEkgY291
+bGRuJ3QgaGVscCBidXQNCj4gd29uZGVyIGlmIG1heWJlIHRoZSB2ZW5kb3IgbW9kZSBtaWdodCBi
+ZSBtb3JlIGVmZmljaWVudC4NCj4gDQo+IEFmdGVyIHBlcmZvcm1pbmcgc29tZSB0ZXN0cyBvZiBs
+YXRlbmN5IGFuZCBwb3dlciBjb25zdW1wdGlvbiwgdGVzdGluZw0KPiBmaXJzdCB3aXRoIGJvdGgg
+YWRhcHRlcnMgaW4gTkNNIG1vZGUgYW5kIHRoZW4gYWdhaW4gd2l0aCBib3RoIGluDQo+IHZlbmRv
+ciBtb2RlLCBJIHByb3ZlZCBteSBodW5jaCBjb3JyZWN0LiBJIGRpc2NvdmVyZWQgdGhhdCwgaW4g
+YQ0KPiBkaXNjb25uZWN0ZWQgc3RhdGUsIHRoZSBSVEw4MTU2QSBhZGFwdGVyIHVzZWQgYWJvdXQg
+aGFsZiBhcyBtdWNoIHBvd2VyDQo+ICgwLjY0IFcgLT4gMC4zMCBXKSB3aGlsZSB0aGUgUlRMODE1
+NkIgYWRhcHRlciBzYXcgYSAyMSUgcmVkdWN0aW9uIGluDQo+IHBvd2VyICgwLjM0IFcgLT4gMC4y
+NyBXKS4gU2ltaWxhcmx5LCBpbiBhIGNvbm5lY3RlZC1idXQtaWRsZSBzdGF0ZSB0aGUNCj4gUlRM
+ODE1NkEgYWdhaW4gc2F3IGFib3V0IGEgNTUlIHNhdmluZ3MgaW4gcG93ZXIgY29uc3VtcHRpb24g
+KDIuMTcgVyAtPg0KPiAwLjk3IFcpIGFuZCBhIDQwJSBzYXZpbmdzIGluIHRoZSBSVEw4MTU2QiBh
+ZGFwdGVyICgwLjk0IFcgLT4gMC41NiBXKS4NCj4gSXQgd2FzIG9ubHkgdW5kZXIgZnVsbCBsb2Fk
+IHRoYXQgdGhlIGZld2VzdCBwb3dlciBzYXZpbmdzIHdlcmUgc2VlbiwNCj4gd2l0aCBhIHJlZHVj
+dGlvbiBvZiBvbmx5IDE1JSBpbiB0aGUgUlRMODE1NkEgKDIuMjMgVyAtPiAxLjkwIFcpIGFuZCBu
+bw0KPiBzYXZpbmdzIGZvciB0aGUgUlRMODE1NkIgKDAuOTYgVykuIFNpbWlsYXJseSwgcm91bmQt
+dHJpcCBsYXRlbmN5IHdoaWxlDQo+IGlkbGUgd2VudCBmcm9tIDMgbXMgdG8gMC42IG1zLiBJIGFs
+c28gdGVzdGVkIHVuZGVyIGxvYWQgYW5kIHNhdyBtdWNoDQo+IGxhcmdlciBsYXRlbmN5IHNhdmlu
+Z3MgYW5kIHJlZHVjZWQgcGFja2V0IGxvc3MsIGJ1dCBmb3Jnb3QgdG8gd3JpdGUNCj4gZG93biB0
+aGUgbnVtYmVycyAoSSBjYW4gcnVuIHRoZSB0ZXN0cyBhZ2FpbiBpZiBzb21lb25lIHJlYWxseSB3
+YW50cyBtZQ0KPiB0b28pLiBBbHNvLCBqdW1ibyBmcmFtZXMgZHJhc3RpY2FsbHkgcmVkdWNlZCBw
+ZXJmb3JtYW5jZSB1bmRlciBOQ00NCj4gbW9kZSwgd2hpbGUgdmVuZG9yIG1vZGUgaGFuZGxlZCBp
+dCBsaWtlIGEgY2hhbXAgKGFnYWluLCBJIGZvcmdvdCB0bw0KPiB3cml0ZSBkb3duIHRoZSBudW1i
+ZXJzIGJ1dCBjYW4gdGVzdCBhZ2FpbiBpZiBhc2tlZCkuDQo+IA0KPiBTbywgd2l0aCBhbGwgdGhl
+IGJlbmVmaXRzIEkndmUgc2VlbiBmcm9tIHVzaW5nIHRoZXNlIGFkYXB0ZXJzIGluIHRoZWlyDQo+
+IHZlbmRvciBtb2RlLCBpcyB0aGVyZSBzdGlsbCBhIHJlYXNvbiB0byBsZXQgdGhlIGtlcm5lbCBw
+cmVmZXIgdGhlaXINCj4gTkNNIG1vZGU/IEl0J2QgYmUgbmljZSB0byBiZSBhYmxlIHRvIGdldCB0
+aGUgbWF4aW11bSBwZXJmb3JtYW5jZSBmcm9tDQo+IHRoZXNlIGFkYXB0ZXJzIG9uIGFueSBMaW51
+eCBzeXN0ZW0gSSBwbHVnIHRoZW0gaW50bywgd2l0aG91dCBoYXZpbmcgdG8NCj4gaW5zdGFsbCBh
+IHVkZXYgcnVsZSBvbiBldmVyeSBvbmUgb2YgdGhvc2Ugc3lzdGVtcy4NCj4gDQo+IElmIGFueW9u
+ZSB3b3VsZCBsaWtlIHRvIHRyeSByZXBsaWNhdGluZyB0aGUgcmVzdWx0cyBJIGxpc3RlZCBoZXJl
+LCBvcg0KPiB0byBwZXJmb3JtIG5ldyB0ZXN0cywgdGhlIHNwZWNpZmljIFJUTDgxNTZBIGFkYXB0
+ZXIgSSB1c2VkIGlzIHRoZQ0KPiBVZ3JlZW4gQ00yNzVbMV0gYW5kIHRoZSBSVEw4MTU2QiBhZGFw
+dGVyIGlzIHRoZSBJbmF0ZWNrIEVUMTAwMVsyXS4NCj4gDQo+IA0KPiBDdXJpb3VzIHRvIGhlYXIg
+eW91ciB0aG91Z2h0cyBvbiB0aGlzLA0KDQpUaGUgZGVmYXVsdCBjb25maWd1cmF0aW9uIG9mIFVT
+QiBkZXZpY2UgaXMgZGV0ZXJtaW5lZCBieSBVU0ItY29yZSBvZiBMaW51eA0Ka2VybmVsLiBJdCBp
+cyBub3Qgc2VsZWN0ZWQgYnkgdGhlIEV0aGVybmV0IGRyaXZlciBvciBkZXZpY2UuIEkgdHJpZWQg
+dG8NCnN1Ym1pdCBhIHBhdGNoIHRoYXQgY291bGQgc3dpdGNoIHRoZSBjb25maWd1cmF0aW9uIGF1
+dG9tYXRpY2FsbHkgdGhyb3VnaA0KdGhlIGRyaXZlci4gVGhlbiwgdGhlIHVzZXJzIGNvdWxkIHNl
+bGVjdCB0aGVpciBmYXZvcml0ZSBtb2RlIHdoZW4NCmNvbmZpZ3VyaW5nIHRoZSBrZXJuZWwuIEhv
+d2V2ZXIsIHRoZSBwYXRjaCB3YXMgcmVqZWN0ZWQuIFNvbWVvbmUgc2FpZA0KdGhhdCB0aGUga2Vy
+bmVsIHN1cHBvcnQgbXVsdGktY29uZmlndXJhdGlvbnMgZm9yIFVTQiBhbmQgdGhleSBoYXZlIHRv
+IGJlDQpzd2l0Y2hlZCBieSB0aGUgdXNlcnMuIFRoZSBmaW5hbCBjb25jbHVzaW9uIHdhcyB0byBj
+aGFuZ2UgaXQgYXQgcnVuLXRpbWUsDQpvciB1c2UgdWRldiBydWxlLg0KDQpCZXN0IFJlZ2FyZHMs
+DQpIYXllcw0KDQo=
