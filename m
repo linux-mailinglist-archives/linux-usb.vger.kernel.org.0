@@ -2,157 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F2E518884
-	for <lists+linux-usb@lfdr.de>; Tue,  3 May 2022 17:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664A65188B1
+	for <lists+linux-usb@lfdr.de>; Tue,  3 May 2022 17:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238457AbiECPa4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 May 2022 11:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
+        id S238610AbiECPjp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 May 2022 11:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238451AbiECPaz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 May 2022 11:30:55 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3540825E94;
-        Tue,  3 May 2022 08:27:22 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id fu47so13671858qtb.5;
-        Tue, 03 May 2022 08:27:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KTaY5qW8ijHItpwiQrjyZtLK9UVGGZLKbTPeV/f2e4M=;
-        b=F4d8PlZ9kUChsFbwuWexjT/w/DdnxBgrR2gWlzi3utzaOtq6VTOmoQzZFVmEqUA4ZG
-         cxmDt9p5pNl/aQ0J6hxPMJneuOkW2iFrDRsyPAOhEVMcoAvaP5dB4pMUk4BTU8i88W04
-         v/Ipn5A147XE1vMj9ccc0u5y7kWDQ4W8OcECeht47PtBrqwQOlfhfTZBC802NYcAOGe7
-         eEja4/9jEFmaZBJ88/1eTaqR3SOrmb3eM2kfptUpfSivmcOvQHsPnA8W4lEGxj7sF3Ax
-         0QxEnmdm2peGONQgsAzwVX5nVjSO7SnPswb043feJ44RlFo/elYnS+MZrclSiZNWciIv
-         XiGA==
-X-Gm-Message-State: AOAM531KevaRegLSwwig3TM5+WkMLIbiIlHU2vh8omTfbcRUomlOVQcj
-        rr1kgUq60BZne6ZNpsmsf2Rjig8N3yFrDw==
-X-Google-Smtp-Source: ABdhPJywZDspUpMkDpLIbuzbvXowmG5FZup/eYZbKcDpA8hFFb+YUkPADY0H8vLVccId5DDtAgRflw==
-X-Received: by 2002:a05:622a:1c9:b0:2f3:a2cc:b7d6 with SMTP id t9-20020a05622a01c900b002f3a2ccb7d6mr10263209qtw.101.1651591641129;
-        Tue, 03 May 2022 08:27:21 -0700 (PDT)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id h81-20020a379e54000000b0069fe1fc72e7sm3673370qke.90.2022.05.03.08.27.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 08:27:20 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2f83983782fso183713207b3.6;
-        Tue, 03 May 2022 08:27:20 -0700 (PDT)
-X-Received: by 2002:a81:6588:0:b0:2f8:b75e:1e1a with SMTP id
- z130-20020a816588000000b002f8b75e1e1amr16065257ywb.358.1651591640492; Tue, 03
- May 2022 08:27:20 -0700 (PDT)
+        with ESMTP id S238648AbiECPiw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 May 2022 11:38:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FC3C11174
+        for <linux-usb@vger.kernel.org>; Tue,  3 May 2022 08:35:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651592118;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/FaPIqm84MO2exsJwsX8S3DSkpj/qQuctXfjI/v6Ulk=;
+        b=Q/ur3duGa9wq4ycdX32PR8HfcuNsWMipk6dij/IyccQYKCS6e2Ff7dMCB3Ya9RzCPDJqvd
+        WcbW6d07Xe9L5hMyovj/U33us8xkXVP0f32ySYKvTM6Jskduma0P9QAEyK/Rk5KulHjaZT
+        nQbeX6BLU0Z8k/EiltZ5sLO2xOIQyIo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-596-UGAzQVfDOqmpDFOI-Jtg9w-1; Tue, 03 May 2022 11:35:07 -0400
+X-MC-Unique: UGAzQVfDOqmpDFOI-Jtg9w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 05CFAAB2C42;
+        Tue,  3 May 2022 15:31:03 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.192.203])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6B4D5153B897;
+        Tue,  3 May 2022 15:31:01 +0000 (UTC)
+From:   Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        linux-usb@vger.kernel.org
+Cc:     marcel@holtmann.org,
+        Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Subject: [PATCH] USB: core: skip unconfiguration if device doesn't support it
+Date:   Tue,  3 May 2022 17:30:57 +0200
+Message-Id: <20220503153057.105128-1-jtornosm@redhat.com>
 MIME-Version: 1.0
-References: <YjeEbHL8ITkW692W@rowland.harvard.edu> <YmKt3kH+85kjzdbL@kroah.com>
- <YmSc29YZvxgT5fEJ@rowland.harvard.edu> <YmSo6fU1FlNq8cOZ@rowland.harvard.edu>
- <YmSpKpnWR8WWEk/p@rowland.harvard.edu> <YmSpdxaDNeC2BBOf@rowland.harvard.edu>
- <alpine.DEB.2.22.394.2205031209030.681336@ramsan.of.borg> <YnFCEn45XwDWM/9Y@rowland.harvard.edu>
-In-Reply-To: <YnFCEn45XwDWM/9Y@rowland.harvard.edu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 3 May 2022 17:27:08 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVDK0W0T3=+2c1E6wtwy5JTUemTGYyj3PFuVUhK++AzrA@mail.gmail.com>
-Message-ID: <CAMuHMdVDK0W0T3=+2c1E6wtwy5JTUemTGYyj3PFuVUhK++AzrA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] USB: gadget: Add a new bus for gadgets
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        USB mailing list <linux-usb@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+Bluetooth Dongles with CSR chip (i.e. USB Bluetooth V4.0 Dongle by
+Trust) hang when they are unbound from 'unbind' sysfs entry and
+can not be bound again.
 
-On Tue, May 3, 2022 at 5:14 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> On Tue, May 03, 2022 at 12:14:30PM +0200, Geert Uytterhoeven wrote:
-> > On Sat, 23 Apr 2022, Alan Stern wrote:
-> > > This patch adds a "gadget" bus and uses it for registering gadgets and
-> > > their drivers.  From now on, bindings will be managed by the driver
-> > > core rather than through ad-hoc manipulations in the UDC core.
-> > >
-> > > As part of this change, the driver_pending_list is removed.  The UDC
-> > > core won't need to keep track of unbound drivers for later binding,
-> > > because the driver core handles all of that for us.
-> > >
-> > > However, we do need one new feature: a way to prevent gadget drivers
-> > > from being bound to more than one gadget at a time.  The existing code
-> > > does this automatically, but the driver core doesn't -- it's perfectly
-> > > happy to bind a single driver to all the matching devices on the bus.
-> > > The patch adds a new bitflag to the usb_gadget_driver structure for
-> > > this purpose.
-> > >
-> > > A nice side effect of this change is a reduction in the total lines of
-> > > code, since now the driver core will do part of the work that the UDC
-> > > used to do.
-> > >
-> > > A possible future patch could add udc devices to the gadget bus, say
-> > > as a separate device type.
-> > >
-> > > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> >
-> > Thanks for your patch, which is now commit fc274c1e997314bf ("USB:
-> > gadget: Add a new bus for gadgets") in usb-next.
-> >
-> > This patch cause a regression on the Renesas Salvator-XS development
-> > board, as R-Car H3 has multiple USB gadget devices:
->
-> Then these gadgets ought to have distinct names in order to avoid the
-> conflict below:
->
-> >     sysfs: cannot create duplicate filename '/bus/gadget/devices/gadget'
-> >     CPU: 2 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc1-arm64-renesas-00074-gfc274c1e9973 #1587
-> >     Hardware name: Renesas Salvator-X 2nd version board based on r8a77951 (DT)
-> >     Call trace:
-> >      dump_backtrace+0xcc/0xd8
-> >      show_stack+0x14/0x30
-> >      dump_stack_lvl+0x88/0xb0
-> >      dump_stack+0x14/0x2c
-> >      sysfs_warn_dup+0x60/0x78
-> >      sysfs_do_create_link_sd.isra.0+0xe4/0xf0
-> >      sysfs_create_link+0x20/0x40
-> >      bus_add_device+0x64/0x110
-> >      device_add+0x31c/0x850
-> >      usb_add_gadget+0x124/0x1a0
-> >      usb_add_gadget_udc_release+0x1c/0x50
-> >      usb_add_gadget_udc+0x10/0x18
-> >      renesas_usb3_probe+0x450/0x728
-> ...
->
-> Having three gadget devices, all named "gadget", doesn't seem like a
-> good idea.
+The reason is CSR chip hangs when usb configuration command with
+index 0 (used to unconfigure) is sent during disconnection.
 
-I'm not so sure where these names are coming from.
-`git grep '"gadget"'` points to the following likely targets:
+To avoid this unwanted result, it is necessary not to send this
+command for CSR chip, so a new quirk has been created.
 
-drivers/usb/gadget/udc/core.c:  dev_set_name(&gadget->dev, "gadget");
-drivers/usb/renesas_usbhs/mod_gadget.c: gpriv->mod.name         = "gadget";
+Athough device is not unconfigured, it is better to avoid device
+hanging to be able to operate. Even bluetooth can be previously
+turned off.
+On the other hand, this is not important if usb device is going to
+be bound again (normal behavior), i.e. with usbip.
 
-Changing both names reveals the problem is actually caused by
-the former ;-)
+Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+---
+ Documentation/admin-guide/kernel-parameters.txt |  2 ++
+ drivers/usb/core/message.c                      | 12 +++++++++---
+ drivers/usb/core/quirks.c                       |  6 ++++++
+ include/linux/usb/quirks.h                      |  3 +++
+ 4 files changed, 20 insertions(+), 3 deletions(-)
 
-> This doesn't seem like it should be too hard to fix, although I'm not
-> at all familiar with the renesas-usb3 driver.  Do you know who maintains
-> that driver?  Is it you?
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 3f1cc5e317ed..71651b888d14 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6183,6 +6183,8 @@
+ 					pause after every control message);
+ 				o = USB_QUIRK_HUB_SLOW_RESET (Hub needs extra
+ 					delay after resetting its port);
++				p = USB_QUIRK_SKIP_UNCONFIGURE (device doesn't
++					support unconfigure);
+ 			Example: quirks=0781:5580:bk,0a5c:5834:gij
+ 
+ 	usbhid.mousepoll=
+diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+index 4d59d927ae3e..9c6cd0c75f4f 100644
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -2108,9 +2108,15 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
+ 	}
+ 	kfree(new_interfaces);
+ 
+-	ret = usb_control_msg_send(dev, 0, USB_REQ_SET_CONFIGURATION, 0,
+-				   configuration, 0, NULL, 0,
+-				   USB_CTRL_SET_TIMEOUT, GFP_NOIO);
++	if (configuration == 0 && !cp
++			&& (dev->quirks & USB_QUIRK_SKIP_UNCONFIGURE)) {
++		dev_warn(&dev->dev, "device is not unconfigured!\n");
++		ret = 0;
++	} else
++		ret = usb_control_msg_send(dev, 0, USB_REQ_SET_CONFIGURATION, 0,
++					   configuration, 0, NULL, 0,
++					   USB_CTRL_SET_TIMEOUT, GFP_NOIO);
++
+ 	if (ret && cp) {
+ 		/*
+ 		 * All the old state is gone, so what else can we do?
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index d3c14b5ed4a1..7d42fdc7404c 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -138,6 +138,9 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
+ 			case 'o':
+ 				flags |= USB_QUIRK_HUB_SLOW_RESET;
+ 				break;
++			case 'p':
++				flags |= USB_QUIRK_SKIP_UNCONFIGURE;
++				break;
+ 			/* Ignore unrecognized flag characters */
+ 			}
+ 		}
+@@ -510,6 +513,9 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	/* INTEL VALUE SSD */
+ 	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
++	/* CSR Bluetooth */
++	{ USB_DEVICE(0x0a12, 0x0001), .driver_info = USB_QUIRK_SKIP_UNCONFIGURE },
++
+ 	{ }  /* terminating entry must be last */
+ };
+ 
+diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
+index eeb7c2157c72..79cb0616f394 100644
+--- a/include/linux/usb/quirks.h
++++ b/include/linux/usb/quirks.h
+@@ -72,4 +72,7 @@
+ /* device has endpoints that should be ignored */
+ #define USB_QUIRK_ENDPOINT_IGNORE		BIT(15)
+ 
++/* device doesn't support unconfigure. */
++#define USB_QUIRK_SKIP_UNCONFIGURE		BIT(16)
++
+ #endif /* __LINUX_USB_QUIRKS_H */
+-- 
+2.35.1
 
-Adding Shimoda-san to CC (but he's enjoying Golden Week).
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
