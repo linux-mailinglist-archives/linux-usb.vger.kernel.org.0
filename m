@@ -2,54 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B02055199F1
-	for <lists+linux-usb@lfdr.de>; Wed,  4 May 2022 10:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 222D9519A1B
+	for <lists+linux-usb@lfdr.de>; Wed,  4 May 2022 10:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236939AbiEDIj4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 May 2022 04:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
+        id S1346508AbiEDIpz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 May 2022 04:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbiEDIj4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 04:39:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 121E91C934
-        for <linux-usb@vger.kernel.org>; Wed,  4 May 2022 01:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651653380;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=l2/54J4UaHQ0UnqSHXfaM9ipM+s6a++G2efwcmiOmwE=;
-        b=MjXvv4LAgdNhmP1v9WMC/MpY2mGX8zPXpQssc+qDMt68+sZpZuLZdO77TQJdkdkecLuXbk
-        /1abwiuyBDZkBcrdIRQNHAGzkckk3XuEw1kyun16vO4QzgRLokNnYSHGcQ8vi92qdNBo8c
-        1c0kSfHDEkHDhJv/G6H7QYYTn3yU+J4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-86-GW79d4ZYOt6ToV71k4_f9g-1; Wed, 04 May 2022 04:36:17 -0400
-X-MC-Unique: GW79d4ZYOt6ToV71k4_f9g-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD87329A9CCC;
-        Wed,  4 May 2022 08:36:16 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.192.125])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 47CB841372B;
-        Wed,  4 May 2022 08:36:15 +0000 (UTC)
-From:   Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org
-Cc:     marcel@holtmann.org,
-        Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Subject: [PATCH v4] USB: core: skip unconfiguration if device doesn't support it
-Date:   Wed,  4 May 2022 10:36:12 +0200
-Message-Id: <20220504083612.143463-1-jtornosm@redhat.com>
+        with ESMTP id S229727AbiEDIpy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 04:45:54 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA3523BDC;
+        Wed,  4 May 2022 01:42:18 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:1b3c:6996:5378:f253]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nmAaN-0001hU-QJ; Wed, 04 May 2022 10:42:16 +0200
+Message-ID: <76e24afa-ad7d-bf6d-d610-df61851b3e2b@leemhuis.info>
+Date:   Wed, 4 May 2022 10:42:15 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [Bug 215890] New: Regression in 5.18: bcm5974 trackpad causes
+ error: xhci_hcd rejecting DMA map of vmalloc memory
+Content-Language: en-US
+References: <bug-215890-208809@https.bugzilla.kernel.org/>
+Cc:     linux-usb@vger.kernel.org, bugzilla-daemon@kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Satadru Pramanik <satadru@umich.edu>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Henrik Rydberg <rydberg@bitmath.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1651653738;cf4d4252;
+X-HE-SMSGID: 1nmAaN-0001hU-QJ
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,114 +47,149 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Bluetooth Dongles with CSR chip (i.e. USB Bluetooth V4.0 Dongle by
-Trust) hang when they are unbound from 'unbind' sysfs entry and
-can not be bound again.
+Hi, this is your Linux kernel regression tracker.
 
-The reason is CSR chip hangs when usb configuration command with
-index 0 (used to unconfigure) is sent during disconnection.
+Linux-Input developers, do you have any idea what might be causing the
+problem outline below? It's a post 5.17 regression in mainline that was
+reported to bugzilla.kernel.org about a week ago, but didn't even get a
+single reply. Might be some other subsystem that is causing it, not sure.
 
-To avoid this unwanted result, it is necessary not to send this
-command for CSR chip, so a new quirk has been created.
+On 27.04.22 00:42, bugzilla-daemon@kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=215890
+> 
+>             Bug ID: 215890
+>            Summary: Regression in 5.18: bcm5974 trackpad causes error:
+>                     xhci_hcd rejecting DMA map of vmalloc memory
+>            Product: Drivers
+>            Version: 2.5
+>     Kernel Version: 5.18-rc4
+>           Hardware: Intel
+>                 OS: Linux
+>               Tree: Mainline
+>             Status: NEW
+>           Severity: high
+>           Priority: P1
+>          Component: USB
+>           Assignee: drivers_usb@kernel-bugs.kernel.org
+>           Reporter: satadru@umich.edu
+>         Regression: No
+> 
+> The Apple BCM5974 trackpad & keyboard show up in sudo libinput list-devices
+> when booted into 5.17.4.
+> 
+> In 5.18-rc4, the keyboard works, but the trackpad does not. libinput
+> list-devices shows the keyboard, but not the trackpad.
+> 
+> This error shows up in dmesg:
+> 
+> [    7.144632] ------------[ cut here ]------------
+> [    7.144635] xhci_hcd 0000:00:14.0: rejecting DMA map of vmalloc memory
+> [    7.144648] WARNING: CPU: 6 PID: 969 at include/linux/dma-mapping.h:326
+> usb_hcd_map_urb_for_dma+0x4c0/0x4f0
+> [    7.144656] Modules linked in: mei_hdcp x86_pkg_temp_thermal
+> intel_powerclamp snd_hda_codec_cirrus snd_hda_codec_generic ledtrig_audio
+> snd_hda_codec_hdmi btusb btrtl wl(POE) kvm_intel btbcm snd_seq_midi
+> snd_hda_intel btintel snd_seq_midi_event btmtk kvm bluetooth snd_intel_dspcfg
+> snd_intel_sdw_acpi rapl applesmc snd_rawmidi ecdh_generic snd_hda_codec
+> intel_cstate ecc joydev mei_me bcm5974 snd_hda_core input_leds cfg80211
+> efi_pstore(+) snd_hwdep apple_mfi_fastcharge snd_seq snd_pcm mei snd_seq_device
+> snd_timer snd sbs(+) soundcore acpi_als industrialio_triggered_buffer sbshc
+> kfifo_buf apple_gmux industrialio mac_hid apple_bl facetimehd(OE)
+> videobuf2_dma_sg videobuf2_memops videobuf2_v4l2 videobuf2_common videodev mc
+> coretemp ipmi_devintf ipmi_msghandler msr parport_pc ppdev lp parport ip_tables
+> x_tables autofs4 zfs(POE) zunicode(POE) zzstd(OE) zlua(OE) zavl(POE) icp(POE)
+> zcommon(POE) znvpair(POE) spl(OE) z3fold lz4 lz4_compress hid_logitech_hidpp
+> hid_apple hid_logitech_dj hid_generic
+> [    7.144716]  usbhid hid i915 nouveau mxm_wmi wmi drm_buddy i2c_algo_bit
+> drm_ttm_helper ttm drm_dp_helper cec rc_core drm_kms_helper uas syscopyarea
+> usb_storage sysfillrect crct10dif_pclmul crc32_pclmul ghash_clmulni_intel
+> sysimgblt fb_sys_fops aesni_intel nvme crypto_simd i2c_i801 cryptd drm
+> nvme_core thunderbolt lpc_ich i2c_smbus xhci_pci xhci_pci_renesas video
+> [    7.144742] CPU: 6 PID: 969 Comm: systemd-udevd Tainted: P           OE    
+> 5.18.0-rc4 #1
+> [    7.144745] Hardware name: Apple Inc. MacBookPro11,3/Mac-2BD1B31983FE1663,
+> BIOS 432.60.3.0.0 10/27/2021
+> [    7.144746] RIP: 0010:usb_hcd_map_urb_for_dma+0x4c0/0x4f0
+> [    7.144752] Code: 50 c6 05 dd fd 8a 01 01 4d 85 f6 75 03 4d 8b 32 4c 89 d7
+> e8 42 6f ef ff 4c 89 f2 48 c7 c7 e8 3d 43 96 48 89 c6 e8 0f f7 36 00 <0f> 0b e9
+> 58 ff ff ff 48 8b 35 32 e9 4a 01 e9 ae fe ff ff 48 8b 35
+> [    7.144754] RSP: 0018:ffffb4494abd7978 EFLAGS: 00010286
+> [    7.144756] RAX: 0000000000000000 RBX: 0000000000000000 RCX:
+> ffffa0ae6f3a05a8
+> [    7.144757] RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI:
+> ffffa0ae6f3a05a0
+> [    7.144759] RBP: ffffb4494abd79b0 R08: 0000000000000003 R09:
+> 0000000000000001
+> [    7.144760] R10: ffffffffffffffff R11: 0000000000000001 R12:
+> ffffa0ab16e42900
+> [    7.144761] R13: ffffa0ab1e092000 R14: ffffa0ab0155cec0 R15:
+> 00000000000001de
+> [    7.144762] FS:  00007f7696c778c0(0000) GS:ffffa0ae6f380000(0000)
+> knlGS:0000000000000000
+> [    7.144764] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    7.144766] CR2: 00007f76975c1f06 CR3: 000000011eda6005 CR4:
+> 00000000001706e0
+> [    7.144767] Call Trace:
+> [    7.144771]  <TASK>
+> [    7.144774]  xhci_map_urb_for_dma+0x14c/0x2b0
+> [    7.144783]  usb_hcd_submit_urb+0x98/0xc70
+> [    7.144785]  ? __slab_free+0xbf/0x310
+> [    7.144789]  ? usb_control_msg+0xfc/0x140
+> [    7.144792]  usb_submit_urb+0x24f/0x6c0
+> [    7.144797]  bcm5974_start_traffic+0x4c/0xa0 [bcm5974]
+> [    7.144801]  bcm5974_open+0x44/0x90 [bcm5974]
+> [    7.144803]  input_open_device+0x8d/0xe0
+> [    7.144806]  evdev_open+0x1cc/0x200
+> [    7.144809]  chrdev_open+0xc4/0x240
+> [    7.144813]  ? cdev_device_add+0x90/0x90
+> [    7.144815]  do_dentry_open+0x157/0x380
+> [    7.144819]  vfs_open+0x2d/0x30
+> [    7.144823]  path_openat+0xb5b/0x12b0
+> [    7.144826]  ? page_add_file_rmap+0x81/0x300
+> [    7.144829]  ? filemap_map_pages+0x148/0x7a0
+> [    7.144833]  do_filp_open+0xb6/0x160
+> [    7.144836]  ? __check_object_size+0x128/0x160
+> [    7.144840]  do_sys_openat2+0x9b/0x160
+> [    7.144842]  __x64_sys_openat+0x56/0x90
+> [    7.144844]  do_syscall_64+0x59/0x80
+> [    7.144848]  ? irqentry_exit_to_user_mode+0x9/0x20
+> [    7.144850]  ? irqentry_exit+0x33/0x40
+> [    7.144852]  ? exc_page_fault+0x87/0x170
+> [    7.144854]  ? asm_exc_page_fault+0x8/0x30
+> [    7.144858]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [    7.144861] RIP: 0033:0x7f76974096eb
+> [    7.144864] Code: 25 00 00 41 00 3d 00 00 41 00 74 4b 64 8b 04 25 18 00 00
+> 00 85 c0 75 67 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00
+> f0 ff ff 0f 87 91 00 00 00 48 8b 54 24 28 64 48 2b 14 25
+> [    7.144866] RSP: 002b:00007ffff8b30d00 EFLAGS: 00000246 ORIG_RAX:
+> 0000000000000101
+> [    7.144868] RAX: ffffffffffffffda RBX: 0000000000000000 RCX:
+> 00007f76974096eb
+> [    7.144870] RDX: 0000000000080902 RSI: 0000558ac9a4b030 RDI:
+> 00000000ffffff9c
+> [    7.144871] RBP: 0000558ac9a4b030 R08: 0000000000000000 R09:
+> 0000000000000000
+> [    7.144872] R10: 0000000000000000 R11: 0000000000000246 R12:
+> 0000000000080902
+> [    7.144873] R13: 00007ffff8b30da0 R14: 0000558ac9925570 R15:
+> 0000558ac992557a
+> [    7.144875]  </TASK>
+> [    7.144876] ---[ end trace 0000000000000000 ]---
 
-Athough device is not unconfigured, it is better to avoid device
-hanging to be able to operate. Even bluetooth can be previously
-turned off.
-On the other hand, this is not important if usb device is going to
-be bound again (normal behavior), i.e. with usbip.
+For more details check this thread or the bugzilla ticket, it has a
+second comment already from the reporter.
 
-Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
----
-V3 -> V4:
-- Reorder quirk entries to be in numerical order according to the vendor
-ID and product ID.
-- Add patch version information.
-V2 -> V3:
-- Change subject (Bluetooth: btusb: CSR chip hangs when unbound ->
-USB: core: skip unconfiguration if device doesn't support it).
-- Improve quirk checking.
-- Allow to test quirk interactively.
-V1 -> V2:
-- Use quirk feature for the exception.
+Anyway, to get this tracked:
 
- Documentation/admin-guide/kernel-parameters.txt |  2 ++
- drivers/usb/core/message.c                      | 12 +++++++++---
- drivers/usb/core/quirks.c                       |  6 ++++++
- include/linux/usb/quirks.h                      |  3 +++
- 4 files changed, 20 insertions(+), 3 deletions(-)
+#regzbot introduced: v5.17..v5.18-rc4
+#regzbot from: Satadru Pramanik <satadru@umich.edu>
+#regzbot title: input/usb/???: bcm5974 trackpad causes error: xhci_hcd
+rejecting DMA map of vmalloc memory
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215890
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 3f1cc5e317ed..71651b888d14 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6183,6 +6183,8 @@
- 					pause after every control message);
- 				o = USB_QUIRK_HUB_SLOW_RESET (Hub needs extra
- 					delay after resetting its port);
-+				p = USB_QUIRK_SKIP_UNCONFIGURE (device doesn't
-+					support unconfigure);
- 			Example: quirks=0781:5580:bk,0a5c:5834:gij
- 
- 	usbhid.mousepoll=
-diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-index 4d59d927ae3e..9c6cd0c75f4f 100644
---- a/drivers/usb/core/message.c
-+++ b/drivers/usb/core/message.c
-@@ -2108,9 +2108,15 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
- 	}
- 	kfree(new_interfaces);
- 
--	ret = usb_control_msg_send(dev, 0, USB_REQ_SET_CONFIGURATION, 0,
--				   configuration, 0, NULL, 0,
--				   USB_CTRL_SET_TIMEOUT, GFP_NOIO);
-+	if (configuration == 0 && !cp
-+			&& (dev->quirks & USB_QUIRK_SKIP_UNCONFIGURE)) {
-+		dev_warn(&dev->dev, "device is not unconfigured!\n");
-+		ret = 0;
-+	} else
-+		ret = usb_control_msg_send(dev, 0, USB_REQ_SET_CONFIGURATION, 0,
-+					   configuration, 0, NULL, 0,
-+					   USB_CTRL_SET_TIMEOUT, GFP_NOIO);
-+
- 	if (ret && cp) {
- 		/*
- 		 * All the old state is gone, so what else can we do?
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index d3c14b5ed4a1..7c86c8d61570 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -138,6 +138,9 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
- 			case 'o':
- 				flags |= USB_QUIRK_HUB_SLOW_RESET;
- 				break;
-+			case 'p':
-+				flags |= USB_QUIRK_SKIP_UNCONFIGURE;
-+				break;
- 			/* Ignore unrecognized flag characters */
- 			}
- 		}
-@@ -394,6 +397,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	/* ELMO L-12F document camera */
- 	{ USB_DEVICE(0x09a1, 0x0028), .driver_info = USB_QUIRK_DELAY_CTRL_MSG },
- 
-+	/* CSR Bluetooth */
-+	{ USB_DEVICE(0x0a12, 0x0001), .driver_info = USB_QUIRK_SKIP_UNCONFIGURE },
-+
- 	/* Broadcom BCM92035DGROM BT dongle */
- 	{ USB_DEVICE(0x0a5c, 0x2021), .driver_info = USB_QUIRK_RESET_RESUME },
- 
-diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
-index eeb7c2157c72..79cb0616f394 100644
---- a/include/linux/usb/quirks.h
-+++ b/include/linux/usb/quirks.h
-@@ -72,4 +72,7 @@
- /* device has endpoints that should be ignored */
- #define USB_QUIRK_ENDPOINT_IGNORE		BIT(15)
- 
-+/* device doesn't support unconfigure. */
-+#define USB_QUIRK_SKIP_UNCONFIGURE		BIT(16)
-+
- #endif /* __LINUX_USB_QUIRKS_H */
--- 
-2.35.1
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
