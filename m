@@ -2,59 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BB051ADE5
-	for <lists+linux-usb@lfdr.de>; Wed,  4 May 2022 21:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31A351AE2B
+	for <lists+linux-usb@lfdr.de>; Wed,  4 May 2022 21:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238945AbiEDTkm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 May 2022 15:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
+        id S1377605AbiEDTrU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 May 2022 15:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbiEDTkl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 15:40:41 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31363299A;
-        Wed,  4 May 2022 12:37:04 -0700 (PDT)
+        with ESMTP id S1377638AbiEDTrT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 15:47:19 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00244D9EE
+        for <linux-usb@vger.kernel.org>; Wed,  4 May 2022 12:43:39 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id x23so1922784pff.9
+        for <linux-usb@vger.kernel.org>; Wed, 04 May 2022 12:43:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651693025; x=1683229025;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=Jf6tngzF3V71emQN/niHDC62BLbJwpJBRPwYIfhp48s=;
-  b=qR92w7CKCligRE4DAXeGE21xODByXgcd6KR5izmtNC1IdC+0jotvmrdj
-   f0TdKWuTL8IigaCyg4109nun2ITj4r3WgcFMVYpUDgGbRh+47KRkiIlv1
-   s5k4HMpabQvB8hF5mVXGo5BK+lksdDzgzfAm53wZxqYdr46Wk4PxlHZIe
-   Y=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 04 May 2022 12:37:04 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 12:37:04 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 4 May 2022 12:37:04 -0700
-Received: from hu-mrana-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 4 May 2022 12:37:03 -0700
-From:   Mayank Rana <quic_mrana@quicinc.com>
-To:     <peter.chen@kernel.org>, <balbi@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <Thinh.Nguyen@synopsys.com>, <John.Youn@synopsys.com>,
-        <quic_jackp@quicinc.com>, <quic_wcheng@quicinc.com>,
-        Mayank Rana <quic_mrana@quicinc.com>
-Subject: [PATCH] usb: dwc3: Fix ep0 handling when getting reset while doing control transfer
-Date:   Wed, 4 May 2022 12:36:41 -0700
-Message-ID: <1651693001-29891-1-git-send-email-quic_mrana@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RQ5+Z93YtWEK5xXREhrhRleXnskqFAblQsxgrgprxiY=;
+        b=PWTj7QFNwdFF2OE0C4xFUgoIvDGn2+dYizGm/ZxeTyJ+Iz/tyIN+jbKS/JUP74dMIB
+         W7u3atVP0GNPWpIF5TIzABeYYT/Et9n+I/Ppab3jaBr0jw2QDopw+U1E91lEzpAOCQFs
+         xQr1OFa2NKNeyWLt6H4cI0w0eWAyTF94chl/w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RQ5+Z93YtWEK5xXREhrhRleXnskqFAblQsxgrgprxiY=;
+        b=ssnoXDRSp2peDKDz6754w1Vj+ViWoCQtwybXPYoYc6709BqHLZYIY6OdytrKtVyak1
+         r2kuv/PukTgCYcboQmfM6NhQJB9W96smMqwvnbFWu7QWtyR+ktiNgWhqWO5AG10r0WRI
+         bTi4XqiESClvtA27S1k6Ivgw7I5iLzuORO0ToyMTmKmhT8rwfH/+X2AEld1lRrFuESvF
+         QFoBmIoVodBW8Jewjnl/JyCgBbQsvNH85wHrQS+7vXefHrRfXPqVcgQuYdQ0Ul/0+4yc
+         LgxjtBKeoKCwdJvXsRVc7SbSLUzHrOaK+33wxCHEyTzPFeHCuIySG8dcG2WXjDm4xsfs
+         pi/A==
+X-Gm-Message-State: AOAM533o+GQmkI46SBALfcztMQ+D3/7/OIwSrJDuAZph3cexaLeDfB1/
+        SWaesKY6fN/wWBsYkyOjnK3IjQ==
+X-Google-Smtp-Source: ABdhPJxMOUaGN1HZweue295reBywbQJPuhTeE52Ky8jS8qudgy4bxd3bAxIpi3n4Zjg11NpOxjxBqg==
+X-Received: by 2002:a63:91c9:0:b0:3ab:11e6:4ff9 with SMTP id l192-20020a6391c9000000b003ab11e64ff9mr17952537pge.121.1651693419276;
+        Wed, 04 May 2022 12:43:39 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d12-20020a170902654c00b0015e8d4eb24dsm8677848pln.151.2022.05.04.12.43.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 12:43:38 -0700 (PDT)
+Date:   Wed, 4 May 2022 12:43:37 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     David Gow <davidgow@google.com>
+Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        alsa-devel@alsa-project.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Bradley Grove <linuxdrivers@attotech.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        Christian Brauner <brauner@kernel.org>,
+        Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Chris Zankel <chris@zankel.net>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hulk Robot <hulkci@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        John Keeping <john@metanate.com>,
+        Juergen Gross <jgross@suse.com>, Kalle Valo <kvalo@kernel.org>,
+        Keith Packard <keithp@keithp.com>, keyrings@vger.kernel.org,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, llvm@lists.linux.dev,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Louis Peens <louis.peens@corigine.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Rich Felker <dalias@aerifal.cx>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        SHA-cyfmac-dev-list@infineon.com,
+        Simon Horman <simon.horman@corigine.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
+        xen-devel@lists.xenproject.org,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Subject: Re: [PATCH 03/32] flex_array: Add Kunit tests
+Message-ID: <202205041220.4BAF15F6B4@keescook>
+References: <20220504014440.3697851-1-keescook@chromium.org>
+ <20220504014440.3697851-4-keescook@chromium.org>
+ <CABVgOSn62JTxaX9BW8w8jRxOpf_vgxpW-s=amwo8PCotiZTjig@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABVgOSn62JTxaX9BW8w8jRxOpf_vgxpW-s=amwo8PCotiZTjig@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,127 +171,169 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-According to the databook ep0 should be in setup phase during reset.
-If host issues reset between control transfers, ep0 will be  in an
-invalid state. Fix this by issuing stall and restart on ep0 if it
-is not in setup phase.
+On Wed, May 04, 2022 at 11:00:38AM +0800, David Gow wrote:
+> On Wed, May 4, 2022 at 9:47 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > Add tests for the new flexible array structure helpers. These can be run
+> > with:
+> >
+> >   make ARCH=um mrproper
+> >   ./tools/testing/kunit/kunit.py config
+> 
+> Nit: it shouldn't be necessary to run kunit.py config separately:
+> kunit.py run will configure the kernel if necessary.
 
-Also SW needs to complete pending control transfer and setup core for
-next setup stage as per data book. Hence check ep0 state during reset
-interrupt handling and make sure active transfers on ep0 out/in
-endpoint are stopped by queuing ENDXFER command for that endpoint and
-restart ep0 out again to receive next setup packet.
+Ah yes, I think you mentioned this before. I'll adjust the commit log.
 
-Signed-off-by: Mayank Rana <quic_mrana@quicinc.com>
----
- drivers/usb/dwc3/ep0.c    | 11 ++++++++---
- drivers/usb/dwc3/gadget.c | 27 +++++++++++++++++++++++++--
- drivers/usb/dwc3/gadget.h |  2 ++
- 3 files changed, 35 insertions(+), 5 deletions(-)
+> 
+> >   ./tools/testing/kunit/kunit.py run flex_array
+> >
+> > Cc: David Gow <davidgow@google.com>
+> > Cc: kunit-dev@googlegroups.com
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> 
+> This looks pretty good to me: it certainly worked on the different
+> setups I tried (um, x86_64, x86_64+KASAN).
+> 
+> A few minor nitpicks inline, mostly around minor config-y things, or
+> things which weren't totally clear on my first read-through.
+> 
+> Hopefully one day, with the various stubbing features or something
+> similar, we'll be able to check against allocation failures in
+> flex_dup(), too, but otherwise nothing seems too obviously missing.
+> 
+> Reviewed-by: David Gow <davidgow@google.com>
 
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index 1064be5..9b6ebc3 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -218,7 +218,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
- 	return ret;
- }
- 
--static void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
-+void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
- {
- 	struct dwc3_ep		*dep;
- 
-@@ -1087,13 +1087,18 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
- 	__dwc3_ep0_do_control_status(dwc, dwc->eps[direction]);
- }
- 
--static void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
-+void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
- {
- 	struct dwc3_gadget_ep_cmd_params params;
- 	u32			cmd;
- 	int			ret;
- 
--	if (!dep->resource_index)
-+	/*
-+	 * For status/DATA OUT stage, TRB will be queued on ep0 out
-+	 * endpoint for which resource index is zero. Hence allow
-+	 * queuing ENDXFER command for ep0 out endpoint.
-+	 */
-+	if (!dep->resource_index && dep->number)
- 		return;
- 
- 	cmd = DWC3_DEPCMD_ENDTRANSFER;
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index ab725d2..82a210f 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -882,12 +882,13 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
- 		reg |= DWC3_DALEPENA_EP(dep->number);
- 		dwc3_writel(dwc->regs, DWC3_DALEPENA, reg);
- 
-+		dep->trb_dequeue = 0;
-+		dep->trb_enqueue = 0;
-+
- 		if (usb_endpoint_xfer_control(desc))
- 			goto out;
- 
- 		/* Initialize the TRB ring */
--		dep->trb_dequeue = 0;
--		dep->trb_enqueue = 0;
- 		memset(dep->trb_pool, 0,
- 		       sizeof(struct dwc3_trb) * DWC3_TRB_NUM);
- 
-@@ -2745,6 +2746,7 @@ static int __dwc3_gadget_start(struct dwc3 *dwc)
- 
- 	/* begin to receive SETUP packets */
- 	dwc->ep0state = EP0_SETUP_PHASE;
-+	dwc->ep0_bounced = false;
- 	dwc->link_state = DWC3_LINK_STATE_SS_DIS;
- 	dwc->delayed_status = false;
- 	dwc3_ep0_out_start(dwc);
-@@ -3766,6 +3768,27 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
- 	}
- 
- 	dwc3_reset_gadget(dwc);
-+
-+	/*
-+	 * From SNPS databook section 8.1.2, the EP0 should be in setup
-+	 * phase. So ensure that EP0 is in setup phase by issuing a stall
-+	 * and restart if EP0 is not in setup phase.
-+	 */
-+	if (dwc->ep0state != EP0_SETUP_PHASE) {
-+		unsigned int	dir;
-+
-+		dir = !!dwc->ep0_expect_in;
-+		if (dwc->ep0state == EP0_DATA_PHASE)
-+			dwc3_ep0_end_control_data(dwc, dwc->eps[dir]);
-+		else
-+			dwc3_ep0_end_control_data(dwc, dwc->eps[!dir]);
-+
-+		dwc->eps[0]->trb_enqueue = 0;
-+		dwc->eps[1]->trb_enqueue = 0;
-+
-+		dwc3_ep0_stall_and_restart(dwc);
-+	}
-+
- 	/*
- 	 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
- 	 * Section 4.1.2 Table 4-2, it states that during a USB reset, the SW
-diff --git a/drivers/usb/dwc3/gadget.h b/drivers/usb/dwc3/gadget.h
-index f763380..55a56cf67 100644
---- a/drivers/usb/dwc3/gadget.h
-+++ b/drivers/usb/dwc3/gadget.h
-@@ -110,6 +110,8 @@ void dwc3_gadget_giveback(struct dwc3_ep *dep, struct dwc3_request *req,
- void dwc3_ep0_interrupt(struct dwc3 *dwc,
- 		const struct dwc3_event_depevt *event);
- void dwc3_ep0_out_start(struct dwc3 *dwc);
-+void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep);
-+void dwc3_ep0_stall_and_restart(struct dwc3 *dwc);
- int __dwc3_gadget_ep0_set_halt(struct usb_ep *ep, int value);
- int dwc3_gadget_ep0_set_halt(struct usb_ep *ep, int value);
- int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
+Great; thanks for the review and testing!
+
+> 
+> -- David
+> 
+> >  lib/Kconfig.debug      |  12 +-
+> >  lib/Makefile           |   1 +
+> >  lib/flex_array_kunit.c | 523 +++++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 531 insertions(+), 5 deletions(-)
+> >  create mode 100644 lib/flex_array_kunit.c
+> >
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index 9077bb38bc93..8bae6b169c50 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -2551,11 +2551,6 @@ config OVERFLOW_KUNIT_TEST
+> >           Builds unit tests for the check_*_overflow(), size_*(), allocation, and
+> >           related functions.
+> >
+> > -         For more information on KUnit and unit tests in general please refer
+> > -         to the KUnit documentation in Documentation/dev-tools/kunit/.
+> > -
+> > -         If unsure, say N.
+> > -
+> 
+> Nit: while I'm not against removing some of this boilerplate, is it
+> better suited for a separate commit?
+
+Make sense, yes. I'll drop this for now.
+
+> 
+> >  config STACKINIT_KUNIT_TEST
+> >         tristate "Test level of stack variable initialization" if !KUNIT_ALL_TESTS
+> >         depends on KUNIT
+> > @@ -2567,6 +2562,13 @@ config STACKINIT_KUNIT_TEST
+> >           CONFIG_GCC_PLUGIN_STRUCTLEAK, CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF,
+> >           or CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL.
+> >
+> > +config FLEX_ARRAY_KUNIT_TEST
+> > +       tristate "Test flex_*() family of helper functions at runtime" if !KUNIT_ALL_TESTS
+> > +       depends on KUNIT
+> > +       default KUNIT_ALL_TESTS
+> > +       help
+> > +         Builds unit tests for flexible array copy helper functions.
+> > +
+> 
+> Nit: checkpatch warns that the description here may be insufficient:
+> WARNING: please write a help paragraph that fully describes the config symbol
+
+Yeah, I don't know anything to put here that isn't just more
+boilerplate, so I'm choosing to ignore this for now. :)
+
+> > [...]
+> > +struct normal {
+> > +       size_t  datalen;
+> > +       u32     data[];
+> > +};
+> > +
+> > +struct decl_normal {
+> > +       DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(size_t, datalen);
+> > +       DECLARE_FLEX_ARRAY_ELEMENTS(u32, data);
+> > +};
+> > +
+> > +struct aligned {
+> > +       unsigned short  datalen;
+> > +       char            data[] __aligned(__alignof__(u64));
+> > +};
+> > +
+> > +struct decl_aligned {
+> > +       DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(unsigned short, datalen);
+> > +       DECLARE_FLEX_ARRAY_ELEMENTS(char, data) __aligned(__alignof__(u64));
+> > +};
+> > +
+> > +static void struct_test(struct kunit *test)
+> > +{
+> > +       COMPARE_STRUCTS(struct normal, struct decl_normal);
+> > +       COMPARE_STRUCTS(struct aligned, struct decl_aligned);
+> > +}
+> 
+> If I understand it, the purpose of this is to ensure that structs both
+> with and without the flexible array declaration have the same memory
+> layout?
+> 
+> If so, any chance of a comment briefly stating that's the purpose (or
+> renaming this test struct_layout_test())?
+
+Yeah, good idea; I'll improve the naming.
+
+> 
+> Also, would it make sense to do the same with the struct with internal
+> padding below?
+
+Heh, yes, good point! :)
+
+> [...]
+> > +#define CHECK_COPY(ptr)                do {                                            \
+> > +       typeof(*(ptr)) *_cc_dst = (ptr);                                        \
+> > +       KUNIT_EXPECT_EQ(test, _cc_dst->induce_padding, 0);                      \
+> > +       memcpy(&padding, &_cc_dst->induce_padding + sizeof(_cc_dst->induce_padding), \
+> > +              sizeof(padding));                                                \
+> > +       /* Padding should be zero too. */                                       \
+> > +       KUNIT_EXPECT_EQ(test, padding, 0);                                      \
+> > +       KUNIT_EXPECT_EQ(test, src->count, _cc_dst->count);                      \
+> > +       KUNIT_EXPECT_EQ(test, _cc_dst->count, TEST_TARGET);                     \
+> > +       for (i = 0; i < _cc_dst->count - 1; i++) {                              \
+> > +               /* 'A' is 0x41, and here repeated in a u32. */                  \
+> 
+> Would it be simpler to just note that the magic value is 0x41, rather
+> than have it be the character 'A'?
+
+Yeah, now fixed.
+
+> [...]
+> > +       CHECK_COPY(&encap->fas);
+> > +       /* Check that items external to "fas" are zero. */
+> > +       KUNIT_EXPECT_EQ(test, encap->flags, 0);
+> > +       KUNIT_EXPECT_EQ(test, encap->junk, 0);
+> > +       kfree(encap);
+> > +#undef MAGIC_WORD
+> 
+> MAGIC_WORD isn't defined (or used) for flux_dup_test? Is it worth
+> using it (or something similar) for the 'A' / 0x14141414 and the
+> CHECK_COPY() macro?
+
+Oops, yes. Fixed.
+
+Thanks again!
+
+-Kees
+
 -- 
-2.7.4
-
+Kees Cook
