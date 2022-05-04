@@ -2,175 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FC351A4F6
-	for <lists+linux-usb@lfdr.de>; Wed,  4 May 2022 18:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8303551AC9A
+	for <lists+linux-usb@lfdr.de>; Wed,  4 May 2022 20:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353090AbiEDQMo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 4 May 2022 12:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
+        id S1376951AbiEDSWv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 May 2022 14:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353065AbiEDQMl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 12:12:41 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9422E28E32
-        for <linux-usb@vger.kernel.org>; Wed,  4 May 2022 09:09:03 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-304-235WxlwhNjKFdg4Xv28oCg-1; Wed, 04 May 2022 17:08:18 +0100
-X-MC-Unique: 235WxlwhNjKFdg4Xv28oCg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Wed, 4 May 2022 17:08:15 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Wed, 4 May 2022 17:08:15 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Kees Cook' <keescook@chromium.org>,
-        Johannes Berg <johannes@sipsolutions.net>
-CC:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Keith Packard <keithp@keithp.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        "Baowen Zheng" <baowen.zheng@corigine.com>,
+        with ESMTP id S1376743AbiEDSWq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 14:22:46 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ADB4BB8F
+        for <linux-usb@vger.kernel.org>; Wed,  4 May 2022 10:46:33 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so1884431pjf.0
+        for <linux-usb@vger.kernel.org>; Wed, 04 May 2022 10:46:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LtWHuThIe0dcxXuedbVwJNy12A4ZYyFgKdzHIm7dues=;
+        b=Vfd0Sq+Wzp1oZDscK9nncqtb62H1YcTv5jc/nrwigR2VKbA6OkaPGroKpsj3kv+sQX
+         CljNkT1bNmxMDGjq+o9fjKGuaLTIC4SyMK+odZjHhr3K0OYaEBpx/i/hY8xb5QBJQABp
+         PGTH7AkFPEj6DI0rmw/JchSqtuazrYVhS9GOo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LtWHuThIe0dcxXuedbVwJNy12A4ZYyFgKdzHIm7dues=;
+        b=wZdbWaW2mGx2mw0MfwAX8srzrZ35j4Hc/FgLBBaJ8dk+/2aboW25nvOVAsZ7EaStv9
+         D7z/xcPpanISuQVy7j3r6PPTzZ4EjGstM6YDSAdG7EuxKSaAOCmVpvsfE8tU8stXjc2x
+         11RCLhYGwffoFWwTUGyYxnhIbXBItmF43gJ04xqLH5ue+JQahhBXeZ7WLJo4Prboxaa4
+         Xc20u2C/C+CujGQIRv1rZMQU5Z2hFEY0gbJsmb2buJqD6cvA9DiyXCk/ECIR0w2VKH1f
+         b0p+UcAVyGjn20FP84Sz7pabN4j/a5/HfXS9BgwC9g/CLlm7BDWdFw5ddxKj1kQOuJNk
+         Bs+w==
+X-Gm-Message-State: AOAM532jTGNvtzD+TsflOirs4X7J5j056BpMhWcRwoWH+mxTuuIH9Xy4
+        gIWR+r/8CEJA0EWVsscUcqfLMg==
+X-Google-Smtp-Source: ABdhPJzGjN/OiaZWZXI+A5qznvKAV8N/38y/N4mbFxjfX9tWUyAGv9EtHXHEYW/GLFF2lvfgq/eYSg==
+X-Received: by 2002:a17:90b:2249:b0:1dc:7905:c4bf with SMTP id hk9-20020a17090b224900b001dc7905c4bfmr730381pjb.62.1651686392625;
+        Wed, 04 May 2022 10:46:32 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:35b6:c77b:be04:3bd5])
+        by smtp.gmail.com with UTF8SMTPSA id q26-20020a63505a000000b003aa8b87feb5sm15538347pgl.0.2022.05.04.10.46.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 10:46:32 -0700 (PDT)
+Date:   Wed, 4 May 2022 10:46:30 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Bradley Grove <linuxdrivers@attotech.com>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        Christian Brauner <brauner@kernel.org>,
-        =?iso-8859-1?Q?Christian_G=F6ttsche?= <cgzones@googlemail.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Chris Zankel <chris@zankel.net>,
-        Cong Wang <cong.wang@bytedance.com>,
-        "David Gow" <davidgow@google.com>,
-        David Howells <dhowells@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
-        Eli Cohen <elic@nvidia.com>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Eric Paris <eparis@parisplace.org>,
-        "Eugeniu Rosca" <erosca@de.adit-jv.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "Hante Meuleman" <hante.meuleman@broadcom.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hulk Robot <hulkci@huawei.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        James Morris <jmorris@namei.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        John Keeping <john@metanate.com>,
-        Juergen Gross <jgross@suse.com>, Kalle Valo <kvalo@kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        "Lars-Peter Clausen" <lars@metafoo.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        "linux1394-devel@lists.sourceforge.net" 
-        <linux1394-devel@lists.sourceforge.net>,
-        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Louis Peens <louis.peens@corigine.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Max Filippov" <jcmvbkbc@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        =?iso-8859-1?Q?Nuno_S=E1?= <nuno.sa@analog.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        "Rich Felker" <dalias@aerifal.cx>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>,
-        "wcn36xx@lists.infradead.org" <wcn36xx@lists.infradead.org>,
-        Wei Liu <wei.liu@kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        "Yang Yingliang" <yangyingliang@huawei.com>
-Subject: RE: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
-Thread-Topic: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
-Thread-Index: AQHYX80GRJFxZRupFEigWcMQWGiaSK0O4MfQ
-Date:   Wed, 4 May 2022 16:08:15 +0000
-Message-ID: <bc2efc31d25e4f42a98f0a5d7a8ad88a@AcuMS.aculab.com>
-References: <20220504014440.3697851-1-keescook@chromium.org>
- <20220504014440.3697851-3-keescook@chromium.org>
- <d3b73d80f66325fdfaf2d1f00ea97ab3db03146a.camel@sipsolutions.net>
- <202205040819.DEA70BD@keescook>
-In-Reply-To: <202205040819.DEA70BD@keescook>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_kriskura@quicinc.com,
+        quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v14 3/7] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <YnK79i3NiTdMmC98@google.com>
+References: <1650395470-31333-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1650395470-31333-4-git-send-email-quic_c_sanm@quicinc.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1650395470-31333-4-git-send-email-quic_c_sanm@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -179,47 +81,104 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Kees Cook
-> Sent: 04 May 2022 16:38
-...
-> > >     struct something *instance = NULL;
-> > >     int rc;
-> > >
-> > >     rc = mem_to_flex_dup(&instance, byte_array, count, GFP_KERNEL);
-> > >     if (rc)
-> > >         return rc;
-> >
-> > This seems rather awkward, having to set it to NULL, then checking rc
-> > (and possibly needing a separate variable for it), etc.
+On Wed, Apr 20, 2022 at 12:41:06AM +0530, Sandeep Maheswaram wrote:
+> During suspend read the status of all port and set hs phy mode
+> based on current speed. Use this hs phy mode to configure wakeup
+> interrupts in qcom glue driver.
 > 
-> I think the errno return is completely required. I had an earlier version
-> of this that was much more like a drop-in replacement for memcpy that
-> would just truncate or panic, and when I had it all together, I could
-> just imagine hearing Linus telling me to start over because it was unsafe
-> (truncation may be just as bad as overflow) and disruptive ("never BUG"),
-> and that it should be recoverable. So, I rewrote it all to return a
-> __must_check errno.
+> Check wakeup-source property for dwc3 core node to set the
+> wakeup capability. Drop the device_init_wakeup call from
+> runtime suspend and resume.
 > 
-> Requiring instance to be NULL is debatable, but I feel pretty strongly
-> about it because it does handle a class of mistakes (resource leaks),
-> and it's not much of a burden to require a known-good starting state.
+> Also check during suspend if any wakeup capable devices are
+> connected to the controller (directly or through hubs), if there
+> are none set a flag to indicate that the PHY is powered
+> down during suspend.
+> 
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> ---
+> v14:
+> Used device_children_wakeup_capable instead of usb_wakeup_enabled_descendants.
+> 
+> v13:
+> Changed dwc3_set_phy_speed_mode to dwc3_check_phy_speed_mode.
+> Removed device_init_wakeup calls from dwc3_runtime_suspend and dwc3_runtime_resume
+> as we have a new dt property wakeup-source.
+> 
+> 
+>  drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
+>  drivers/usb/dwc3/core.h |  4 ++++
+>  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
+>  3 files changed, 48 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 1170b80..898aa66 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -32,6 +32,7 @@
+>  #include <linux/usb/gadget.h>
+>  #include <linux/usb/of.h>
+>  #include <linux/usb/otg.h>
+> +#include <linux/usb/hcd.h>
+>  
+>  #include "core.h"
+>  #include "gadget.h"
+> @@ -1723,6 +1724,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, dwc);
+>  	dwc3_cache_hwparams(dwc);
+> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
+>  
+>  	spin_lock_init(&dwc->lock);
+>  	mutex_init(&dwc->mutex);
+> @@ -1865,6 +1867,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  {
+>  	unsigned long	flags;
+>  	u32 reg;
+> +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
+>  
+>  	switch (dwc->current_dr_role) {
+>  	case DWC3_GCTL_PRTCAP_DEVICE:
+> @@ -1877,10 +1880,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  		dwc3_core_exit(dwc);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg)) {
+> -			dwc3_core_exit(dwc);
+> -			break;
+> -		}
+> +		dwc3_check_phy_speed_mode(dwc);
+>  
+>  		/* Let controller to suspend HSPHY before PHY driver suspends */
+>  		if (dwc->dis_u2_susphy_quirk ||
+> @@ -1896,6 +1896,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  
+>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
+>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+> +
+> +		if (!PMSG_IS_AUTO(msg)) {
+> +			if (device_may_wakeup(dwc->dev) &&
+> +			    device_children_wakeup_capable(&hcd->self.root_hub->dev)) {
+> +				dwc->phy_power_off = false;
+> +			} else {
+> +				dwc->phy_power_off = true;
+> +				dwc3_core_exit(dwc);
 
-Why not make it look like malloc() since it seems to be malloc().
-That gives a much better calling convention.
-Passing pointers and integers by reference can generate horrid code.
-(Mostly because it stops the compiler keeping values in registers.)
+I found that shutting the PHYs down during suspend leads to high power
+consumption of a downstream hub (about 80mW vs 15mW when the PHYs are
+not shut down).
 
-If you want the type information inside the 'function'
-use a #define so that the use is:
+It would be interesting to know if this also impacts other non-hub
+peripherals. Unfortunately I can't test that, the hub on my system is
+soldered to the board.
 
-	mem_to_flex_dup(instance, byte_array, count, GFP_KERNEL);
-	if (!instance)
-		return ...
-(or use ERR_PTR() etc).
+I understand that shutting the PHYs down might be beneficial in terms
+of power on some systems, however on those I'm looking at we'd strongly
+prefer to save the 65mW of power consumed by the hub, rather than
+whatever smaller amount of power that is saved by powering down the
+PHYs.
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Could we introduce a sysfs attribute (or some other sort of knob) to
+allow the admin to configure whether the PHYs should remain on or off
+during suspend? That is assuming that it is actually desirable to power
+them off on some systems.
