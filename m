@@ -2,154 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7CD519702
-	for <lists+linux-usb@lfdr.de>; Wed,  4 May 2022 07:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71ECE519739
+	for <lists+linux-usb@lfdr.de>; Wed,  4 May 2022 08:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344712AbiEDFqy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 May 2022 01:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
+        id S238246AbiEDGKt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 May 2022 02:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbiEDFqv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 01:46:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545CD2610B;
-        Tue,  3 May 2022 22:43:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7F9360B6B;
-        Wed,  4 May 2022 05:43:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1EF2C385A5;
-        Wed,  4 May 2022 05:42:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651642995;
-        bh=JrTxy6eXsiDtGM/F/9OTUVdSC11/W1yM6qcTiJhEEWY=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=ptNmZdYs+o6KHSEb902G1QgyncrLgIYxwRjyZ9+W9VTxnFGJHKAdTcbe0JtEXzd4l
-         aYwCxztA+GFA6BxNwpRJ+fwdrhYF+K4ZZZLdzPKi8lBBWFO/VNZwdIAlyDMFIxmOWz
-         hAmvQ+5DrbHNQghYSGB1afStWvfnMlPcYreVpeGPzS9YPA/9Y4p/yFDlQcLqjzbi/7
-         oTPIz0yt7M1rWvdVDxqtNaenj2/snIMXH2fVjjBqgI4xeMRFMaS+uomXQ38nO6fIxg
-         l9QT60aMp2PNBolRmvUG9+MmaPk4GD+QjG/dwTaQmabfDmxvYb7M7hfSFb2fcWpc9I
-         jV5YMv8gNlmpA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, wcn36xx@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        alsa-devel@alsa-project.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Baowen Zheng <baowen.zheng@corigine.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Bradley Grove <linuxdrivers@attotech.com>,
-        brcm80211-dev-list.pdl@broadcom.com,
-        Christian Brauner <brauner@kernel.org>,
-        Christian =?utf-8?Q?G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Chris Zankel <chris@zankel.net>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Gow <davidgow@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hulk Robot <hulkci@huawei.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        James Morris <jmorris@namei.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        John Keeping <john@metanate.com>,
-        Juergen Gross <jgross@suse.com>,
-        Keith Packard <keithp@keithp.com>, keyrings@vger.kernel.org,
-        kunit-dev@googlegroups.com,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        llvm@lists.linux.dev, Louis Peens <louis.peens@corigine.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nuno =?utf-8?Q?S=C3=A1?= <nuno.sa@analog.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Rich Felker <dalias@aerifal.cx>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        SHA-cyfmac-dev-list@infineon.com,
-        Simon Horman <simon.horman@corigine.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Wei Liu <wei.liu@kernel.org>, xen-devel@lists.xenproject.org,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Subject: Re: [PATCH 10/32] wcn36xx: Use mem_to_flex_dup() with struct wcn36xx_hal_ind_msg
-References: <20220504014440.3697851-1-keescook@chromium.org>
-        <20220504014440.3697851-11-keescook@chromium.org>
-Date:   Wed, 04 May 2022 08:42:46 +0300
-In-Reply-To: <20220504014440.3697851-11-keescook@chromium.org> (Kees Cook's
-        message of "Tue, 3 May 2022 18:44:19 -0700")
-Message-ID: <8735hpc0q1.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        with ESMTP id S232965AbiEDGKs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 02:10:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F83A14006
+        for <linux-usb@vger.kernel.org>; Tue,  3 May 2022 23:07:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651644431;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oRGhmg2aMfbkHCiA7thR3kzGbcbMmfJadqOzJikcDNY=;
+        b=GdXg7quhGpj1l9LvB4sG8t32b3jhZFxAhuVng7ayky+G7x00GGXwahsC2S6Iagd1eWFyzH
+        8VBcyOY9mDtekcBxVuqCjY/PTaA8mcijZXfdejdeGyhxp0K5bEsyQmiObH+5JDVeyCfwBn
+        vWf3mF431CEFJj0XmRTKn3ZG2jOswSw=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-498-4M_Vf20gNWOf0hgpVYKZBg-1; Wed, 04 May 2022 02:07:10 -0400
+X-MC-Unique: 4M_Vf20gNWOf0hgpVYKZBg-1
+Received: by mail-qv1-f69.google.com with SMTP id kd30-20020a056214401e00b0045a96ed0d4aso273536qvb.17
+        for <linux-usb@vger.kernel.org>; Tue, 03 May 2022 23:07:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=oRGhmg2aMfbkHCiA7thR3kzGbcbMmfJadqOzJikcDNY=;
+        b=S3dUj2naf0pmpm2SZJK/V4SrT0EnG4uXxY45ZkRYYHZeij8oj4Avgh2/Vj2GIy5cdf
+         pa3bQffyZhPa9oBvba2yu15HAabS50wnuFMf2Hb5GbkasazV6AeQ4ylpkGYlL6wM2tMv
+         3UVd1U7SZxc3aLJQ6/8t0BC2xd8suIHcRNp5DKi13l7IcJyx8X5HE/tIG9Z4s+Sg0Fr1
+         C/mFw7vpZMHOkgQj5ThpofATaA1xxtBdZ0IVpT5iYhlnRtqjEsbV95PXjTxCA17ACDqh
+         jPXVN1q1buGwFxlVZVJ8lycq4XqpfYnA5Hk18u5Lic8L84LUGjgUIM2roFdE5au7ZCM+
+         LU8A==
+X-Gm-Message-State: AOAM5335+PiwGMQhu9xsOPT276nQXBERGCSQUuJagmhPByuaR6rx6sDR
+        MS5kFCUB03syRDC2g6Lz1fyK4vg9G/ZylwuGGVP/uOrTicKWzunwSKEppKf8weCAsNKoTgXtdat
+        Hycu0G8JPZaFYMOJnDl2vZ8MLcBwJFnwA/uyk
+X-Received: by 2002:a05:622a:5d0:b0:2e1:d430:a5c9 with SMTP id d16-20020a05622a05d000b002e1d430a5c9mr18165666qtb.639.1651644429912;
+        Tue, 03 May 2022 23:07:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzyT9at3dyy49p7ygtqjnn3iZ98Q0x4cm/Pp83Gf0Q+fARZTC8s2PlCNURpWSkS9OWbeTV6qGIoQ3krclAffyI=
+X-Received: by 2002:a05:622a:5d0:b0:2e1:d430:a5c9 with SMTP id
+ d16-20020a05622a05d000b002e1d430a5c9mr18165653qtb.639.1651644429660; Tue, 03
+ May 2022 23:07:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220503153057.105128-1-jtornosm@redhat.com> <E493EAE9-2F12-468E-BFBF-24809D78526E@holtmann.org>
+In-Reply-To: <E493EAE9-2F12-468E-BFBF-24809D78526E@holtmann.org>
+From:   Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Date:   Wed, 4 May 2022 08:06:58 +0200
+Message-ID: <CABk-BGu1V2RM8BvpVic-CzJoY9rrCz0+sqnsQ-6R=7cH6cUo5A@mail.gmail.com>
+Subject: Re: [PATCH] USB: core: skip unconfiguration if device doesn't support it
+To:     Marcel Holtmann <marcel@holtmann.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -157,41 +74,129 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
+Hello Marcel,
 
-> As part of the work to perform bounds checking on all memcpy() uses,
-> replace the open-coded a deserialization of bytes out of memory into a
-> trailing flexible array by using a flex_array.h helper to perform the
-> allocation, bounds checking, and copying.
+These devices are working perfectly, I haven't detected any wrong
+bluetooth issues.
+It is only related to usb unbind/bind operation, which is needed for
+example for usbip, but I think it is not very used at the user level
+normally. lNow, with the quirk, usbip is working for these devices.
+
+I have checked 3 different devices (dongle USB 2.0 EDR, dongle USB 4.0
+Trust and another one USB 4.0 unknown), with CSR chip and the same
+result, that is, after unbinding they can not be bound again. The
+sampling is not very large but it is 3 out of three
+The first commented device is old so I guess unbind/bind operation is
+not working for a long time (or from the beginning).
+
+Thanks
+
+Best regards
+Jos=C3=A9 Ignacio
+
+On Tue, May 3, 2022 at 8:45 PM Marcel Holtmann <marcel@holtmann.org> wrote:
 >
-> Cc: Loic Poulain <loic.poulain@linaro.org>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: wcn36xx@lists.infradead.org
-> Cc: linux-wireless@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Hi Jose,
+>
+> > Bluetooth Dongles with CSR chip (i.e. USB Bluetooth V4.0 Dongle by
+> > Trust) hang when they are unbound from 'unbind' sysfs entry and
+> > can not be bound again.
+> >
+> > The reason is CSR chip hangs when usb configuration command with
+> > index 0 (used to unconfigure) is sent during disconnection.
+> >
+> > To avoid this unwanted result, it is necessary not to send this
+> > command for CSR chip, so a new quirk has been created.
+> >
+> > Athough device is not unconfigured, it is better to avoid device
+> > hanging to be able to operate. Even bluetooth can be previously
+> > turned off.
+> > On the other hand, this is not important if usb device is going to
+> > be bound again (normal behavior), i.e. with usbip.
+> >
+> > Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+> > ---
+> > Documentation/admin-guide/kernel-parameters.txt |  2 ++
+> > drivers/usb/core/message.c                      | 12 +++++++++---
+> > drivers/usb/core/quirks.c                       |  6 ++++++
+> > include/linux/usb/quirks.h                      |  3 +++
+> > 4 files changed, 20 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Document=
+ation/admin-guide/kernel-parameters.txt
+> > index 3f1cc5e317ed..71651b888d14 100644
+> > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > @@ -6183,6 +6183,8 @@
+> >                                       pause after every control message=
+);
+> >                               o =3D USB_QUIRK_HUB_SLOW_RESET (Hub needs=
+ extra
+> >                                       delay after resetting its port);
+> > +                             p =3D USB_QUIRK_SKIP_UNCONFIGURE (device =
+doesn't
+> > +                                     support unconfigure);
+> >                       Example: quirks=3D0781:5580:bk,0a5c:5834:gij
+> >
+> >       usbhid.mousepoll=3D
+> > diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+> > index 4d59d927ae3e..9c6cd0c75f4f 100644
+> > --- a/drivers/usb/core/message.c
+> > +++ b/drivers/usb/core/message.c
+> > @@ -2108,9 +2108,15 @@ int usb_set_configuration(struct usb_device *dev=
+, int configuration)
+> >       }
+> >       kfree(new_interfaces);
+> >
+> > -     ret =3D usb_control_msg_send(dev, 0, USB_REQ_SET_CONFIGURATION, 0=
+,
+> > -                                configuration, 0, NULL, 0,
+> > -                                USB_CTRL_SET_TIMEOUT, GFP_NOIO);
+> > +     if (configuration =3D=3D 0 && !cp
+> > +                     && (dev->quirks & USB_QUIRK_SKIP_UNCONFIGURE)) {
+> > +             dev_warn(&dev->dev, "device is not unconfigured!\n");
+> > +             ret =3D 0;
+> > +     } else
+> > +             ret =3D usb_control_msg_send(dev, 0, USB_REQ_SET_CONFIGUR=
+ATION, 0,
+> > +                                        configuration, 0, NULL, 0,
+> > +                                        USB_CTRL_SET_TIMEOUT, GFP_NOIO=
+);
+> > +
+> >       if (ret && cp) {
+> >               /*
+> >                * All the old state is gone, so what else can we do?
+> > diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+> > index d3c14b5ed4a1..7d42fdc7404c 100644
+> > --- a/drivers/usb/core/quirks.c
+> > +++ b/drivers/usb/core/quirks.c
+> > @@ -138,6 +138,9 @@ static int quirks_param_set(const char *value, cons=
+t struct kernel_param *kp)
+> >                       case 'o':
+> >                               flags |=3D USB_QUIRK_HUB_SLOW_RESET;
+> >                               break;
+> > +                     case 'p':
+> > +                             flags |=3D USB_QUIRK_SKIP_UNCONFIGURE;
+> > +                             break;
+> >                       /* Ignore unrecognized flag characters */
+> >                       }
+> >               }
+> > @@ -510,6 +513,9 @@ static const struct usb_device_id usb_quirk_list[] =
+=3D {
+> >       /* INTEL VALUE SSD */
+> >       { USB_DEVICE(0x8086, 0xf1a5), .driver_info =3D USB_QUIRK_RESET_RE=
+SUME },
+> >
+> > +     /* CSR Bluetooth */
+> > +     { USB_DEVICE(0x0a12, 0x0001), .driver_info =3D USB_QUIRK_SKIP_UNC=
+ONFIGURE },
+> > +
+>
+> NAK. These are billion of devices that are today working correctly. You a=
+re not telling these devices they are broken now.
+>
+> Regards
+>
+> Marcel
+>
 
-[...]
-
-> --- a/drivers/net/wireless/ath/wcn36xx/smd.h
-> +++ b/drivers/net/wireless/ath/wcn36xx/smd.h
-> @@ -46,8 +46,8 @@ struct wcn36xx_fw_msg_status_rsp {
->  
->  struct wcn36xx_hal_ind_msg {
->  	struct list_head list;
-> -	size_t msg_len;
-> -	u8 msg[];
-> +	DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(size_t, msg_len);
-> +	DECLARE_FLEX_ARRAY_ELEMENTS(u8, msg);
-
-This affects readability quite a lot and tbh I don't like it. Isn't
-there any simpler way to solve this?
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
