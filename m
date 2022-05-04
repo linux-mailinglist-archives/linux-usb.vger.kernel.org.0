@@ -2,152 +2,237 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0EC651B184
-	for <lists+linux-usb@lfdr.de>; Wed,  4 May 2022 23:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72C151B386
+	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 01:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378941AbiEDWDX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 May 2022 18:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
+        id S236655AbiEDXfh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 May 2022 19:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238179AbiEDWDV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 18:03:21 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A89A4CD4E
-        for <linux-usb@vger.kernel.org>; Wed,  4 May 2022 14:59:43 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id w17so4687846ybh.9
-        for <linux-usb@vger.kernel.org>; Wed, 04 May 2022 14:59:43 -0700 (PDT)
+        with ESMTP id S1384000AbiEDXHc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 19:07:32 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EE65FF0B
+        for <linux-usb@vger.kernel.org>; Wed,  4 May 2022 15:59:29 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id r1-20020a1c2b01000000b00394398c5d51so1670962wmr.2
+        for <linux-usb@vger.kernel.org>; Wed, 04 May 2022 15:59:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rmJxiEP7m5MkHAr9riUqfx3uT8FiWx1lLvenswbOwJo=;
-        b=QoiC7QZe2hJyujp1ZRg0nlXjXopykN2j/DeYH65TBWATXUktJf0x/kyffuuacsI/Xo
-         3U/WGyV+fixlajIQ09GKt1DZZYpxMas0dWaDYCL8jonCJtMRr4CSZtyBZVh8caz3Zhfm
-         KLVYZqsNmH6MjXnLA95998XCfsQEg4LoRnNmHuqp/sQ2AApgVFWMqqZBdroSiC1gbSmN
-         F4COMU/J9YGu52LHRSSP9wDA3f+g3bnizNxpCHxuTE9h/gJ7KhKhsdH72IujMMikVg4I
-         fP3vyeXEvVrVnkAX/oRVPo4TmV6M5W4ptTtqSYXWLDxsKe5hoIl7+BOBmDpgqE7s/ubD
-         8xlA==
+         :cc:content-transfer-encoding;
+        bh=qfWwXZWPvxEE3w1uLnkzPlrx6nJaZSmQ1gbsC3kCZlI=;
+        b=fMehx6+pldeupaypGl5lGMLh8Blc5Pb964suvnwujkOTfmhEds0USznV5iIpAmDMiQ
+         3bX5ovLiBcm+P+Qjkm7S30sNoAIneyphU/3HUmg8FgNya3x4Ys+vGWu+B9CwMsbZwixV
+         5hhw5d61RXfF0ZuA9a19yWLWnmsownsAlvxGOq/bh+zf+KCchfsYUSjN3DbkCogRNiil
+         4sZMBBy0wN3DJWJ3HV3y9RTPrsOy6eZO4wbIVzlw9cfeY3DYzhWrMs9JJuoIK2/rWVPl
+         SzHF6XACCrgzPRUtq8fL5afcNflV6Vriy9o5VdAvBNuxRLNvKxX70jkd0hURqNp4X2R8
+         1xwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rmJxiEP7m5MkHAr9riUqfx3uT8FiWx1lLvenswbOwJo=;
-        b=HjXi0/hOG/SC4yDggxbg7enB5n0lt5QUUjs8OOdmNsiKowvv5AlcV3qYGa8K7u0Yvm
-         3VEJXUQAH3wXsuNqrLjYDNVMsn3+dSMzkitTMO1abcHrUKoyLusOoF5dKAh15ZUqlwW/
-         KjzCC8IOijJ4PON8NKeGVi2AkDNCSP4LMCG5b+dQ03XH55Vif/7E1/azdM7Ltqg7sHVy
-         hBoA0SCzV3W6HZhvE7jXGylr/0QQw0veP7XoBxMJ9m3iQnCYmFqdNS+S2BOSoJ9i5ZR/
-         HyWJ62b6SYFcJVcz/LE/zjMeGrDVY7gqZ1IqXF+AWtrOw9bdidHTSRJ/z3kuqhARI/e9
-         5gAw==
-X-Gm-Message-State: AOAM5327vLfivoGdoHlU0UghxNkh1wLm5JkhcZ6vEAw+Klj8xhoPrr4Z
-        hZZJ8QmLApiwa3MTfha+93YZ6Yo6FtWFwr73HQWDvQ==
-X-Google-Smtp-Source: ABdhPJws0kFu4uk8m+EBRW3/56Ag/4uZ6hdskWay/lA/R4RBYkLUb5oUPb5cyXOdcEWwAD5EvFRWUXI3Mh6lxHFGeY0=
-X-Received: by 2002:a25:bcc7:0:b0:648:d728:d39 with SMTP id
- l7-20020a25bcc7000000b00648d7280d39mr19634791ybm.514.1651701582183; Wed, 04
- May 2022 14:59:42 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qfWwXZWPvxEE3w1uLnkzPlrx6nJaZSmQ1gbsC3kCZlI=;
+        b=Lq5HZIAertkRzMTZdZDMAsarBgo53Jd5WKa9nFA0SJDtde7QuLRJZX+mxj/hhYmhq7
+         O/LERUEQxYnJ4qoYdjrNIMh+Mt8ovBLcEgq90n7jbTypWh6p5I3oCSvH1N89PjUWyGI4
+         rhAMAMYUskoUHxeJGdtfpCTSTrkO8zKm42HEt8gVS94M5EIv6wnaaibzwY8J+pr5LUQJ
+         7hb4tkh8f4u+f0aVnNU7VkSFZ32cmHdx0tXr7yEZCxdjuhfH7UEIcIAvPLx3/WLYM802
+         xfMCoLZj3uRYXKLTja34ZJuSN4vqsZk+Pnju5nT173SHEmTygeahc1vsIAZqYd7e0ppr
+         JZtQ==
+X-Gm-Message-State: AOAM5327ZakoQNSeR8+gfX/3RxlnvvFD0OFxcUpINHR3QwQHbUfSqWaL
+        DzP3pc4UO0e2/tRthzElLu1GDU2FLKNpmZO9QNfu
+X-Google-Smtp-Source: ABdhPJzn8kCki7g2xrksVPCE2X0dMoSQ5GNrlnQWJqU+8a/RnZE5ShgkUyQvDBvdRa4kG7oifCsX28YouBnWU5DkxR0=
+X-Received: by 2002:a05:600c:4fc9:b0:394:4317:1aa4 with SMTP id
+ o9-20020a05600c4fc900b0039443171aa4mr1477643wmq.179.1651705059031; Wed, 04
+ May 2022 15:57:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-19-arnd@kernel.org>
- <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com> <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 4 May 2022 23:59:30 +0200
-Message-ID: <CACRpkdZNryYkidvdKuT57RM3fz6_X+3oOzF5xaOZd+TyScfUsw@mail.gmail.com>
-Subject: Re: [PATCH 18/48] ARM: pxa: hx4700: use gpio descriptors for audio
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+References: <20220504014440.3697851-1-keescook@chromium.org> <20220504014440.3697851-29-keescook@chromium.org>
+In-Reply-To: <20220504014440.3697851-29-keescook@chromium.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 4 May 2022 18:57:28 -0400
+Message-ID: <CAHC9VhT5Y=ENiSyb=S-NVbGX63sLOv4nVuR_GS-yww6tiz0wYA@mail.gmail.com>
+Subject: Re: [PATCH 28/32] selinux: Use mem_to_flex_dup() with xfrm and sidtab
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        netdev@vger.kernel.org, selinux@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        alsa-devel@alsa-project.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Bradley Grove <linuxdrivers@attotech.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        Christian Brauner <brauner@kernel.org>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Chris Zankel <chris@zankel.net>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Gow <davidgow@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Hulk Robot <hulkci@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        John Keeping <john@metanate.com>,
+        Juergen Gross <jgross@suse.com>, Kalle Valo <kvalo@kernel.org>,
+        Keith Packard <keithp@keithp.com>, keyrings@vger.kernel.org,
+        kunit-dev@googlegroups.com,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, llvm@lists.linux.dev,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Louis Peens <louis.peens@corigine.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rich Felker <dalias@aerifal.cx>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        SHA-cyfmac-dev-list@infineon.com,
+        Simon Horman <simon.horman@corigine.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
+        xen-devel@lists.xenproject.org,
+        Yang Yingliang <yangyingliang@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 2, 2022 at 9:08 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> On Sun, May 1, 2022 at 11:41 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> >
-> > (...)
-> > > +static struct gpiod_lookup_table hx4700_audio_gpio_table = {
-> > > +       .dev_id = "hx4700-audio",
-> > > +       .table = {
-> > > +               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
-> > > +                           "earphone-ndet", GPIO_ACTIVE_HIGH),
-> >
-> > This looks wrong. The n in nDET in the end of the name of the GPIO line
-> > means active low does it not?
-> >
-> > What I usually do when I see this is to properly set it to
-> > GPIO_ACTIVE_LOW in the descriptor table, then invert the logic
-> > where it's getting used.
-> >
-> > Also rename to earphone-det instead of -ndet
+On Tue, May 3, 2022 at 9:57 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> Thanks for taking a look! I changed it now, but I don't know if
-> I got the correct number of inversions in the end. How does this look?
+> As part of the work to perform bounds checking on all memcpy() uses,
+> replace the open-coded a deserialization of bytes out of memory into a
+> trailing flexible array by using a flex_array.h helper to perform the
+> allocation, bounds checking, and copying:
+>
+>     struct xfrm_sec_ctx
+>     struct sidtab_str_cache
+>
+> Cc: Steffen Klassert <steffen.klassert@secunet.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: Stephen Smalley <stephen.smalley.work@gmail.com>
+> Cc: Eric Paris <eparis@parisplace.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Xiu Jianfeng <xiujianfeng@huawei.com>
+> Cc: "Christian G=C3=B6ttsche" <cgzones@googlemail.com>
+> Cc: netdev@vger.kernel.org
+> Cc: selinux@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/uapi/linux/xfrm.h    | 4 ++--
+>  security/selinux/ss/sidtab.c | 9 +++------
+>  security/selinux/xfrm.c      | 7 ++-----
+>  3 files changed, 7 insertions(+), 13 deletions(-)
+>
+> diff --git a/include/uapi/linux/xfrm.h b/include/uapi/linux/xfrm.h
+> index 65e13a099b1a..4a6fa2beff6a 100644
+> --- a/include/uapi/linux/xfrm.h
+> +++ b/include/uapi/linux/xfrm.h
+> @@ -31,9 +31,9 @@ struct xfrm_id {
+>  struct xfrm_sec_ctx {
+>         __u8    ctx_doi;
+>         __u8    ctx_alg;
+> -       __u16   ctx_len;
+> +       __DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(__u16, ctx_len);
+>         __u32   ctx_sid;
+> -       char    ctx_str[0];
+> +       __DECLARE_FLEX_ARRAY_ELEMENTS(char, ctx_str);
+>  };
 
-Looks wrong, you can just invert the argument to any statement of set_value()
-after tagging respective line as active low. Then gpilob will do a second
-inversion.
+While I like the idea of this in principle, I'd like to hear about the
+testing you've done on these patches.  A previous flex array
+conversion in the audit uapi headers ended up causing a problem with
+GCC12 and SWIG; while it was a SWIG problem and not a kernel header
+problem that was thin consolation for those with broken builds.
 
-> +               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
-> +                           "earphone-det", GPIO_ACTIVE_LOW),
-> +               GPIO_LOOKUP("gpio-pxa", GPIO107_HX4700_SPK_nSD,
-> +                           "spk-sd", GPIO_ACTIVE_LOW),
+> diff --git a/security/selinux/ss/sidtab.c b/security/selinux/ss/sidtab.c
+> index a54b8652bfb5..a9d434e8cff7 100644
+> --- a/security/selinux/ss/sidtab.c
+> +++ b/security/selinux/ss/sidtab.c
+> @@ -23,8 +23,8 @@ struct sidtab_str_cache {
+>         struct rcu_head rcu_member;
+>         struct list_head lru_member;
+>         struct sidtab_entry *parent;
+> -       u32 len;
+> -       char str[];
+> +       DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(u32, len);
+> +       DECLARE_FLEX_ARRAY_ELEMENTS(char, str);
+>  };
+>
+>  #define index_to_sid(index) ((index) + SECINITSID_NUM + 1)
 
-So those two have switched polarity.
-
-> @@ -81,14 +79,14 @@ static const struct snd_soc_ops hx4700_ops = {
->  static int hx4700_spk_power(struct snd_soc_dapm_widget *w,
->                             struct snd_kcontrol *k, int event)
->  {
-> -       gpio_set_value(GPIO107_HX4700_SPK_nSD, !!SND_SOC_DAPM_EVENT_ON(event));
-> +       gpiod_set_value(gpiod_spk_sd, !!SND_SOC_DAPM_EVENT_ON(event));
-
-Thus drop one ! in front of the expression, just !SND_SOC_DAPM_EVENT_ON(event)
-
-> -       gpio_set_value(GPIO92_HX4700_HP_DRIVER, !!SND_SOC_DAPM_EVENT_ON(event));
-> +       gpiod_set_value(gpiod_hp_driver, !!SND_SOC_DAPM_EVENT_ON(event));
-
-But not this.
-
-> +       gpiod_spk_sd = devm_gpiod_get(&pdev->dev, "spk-sd", GPIOD_OUT_LOW);
-
-These initial values don't seem to be set in the old code you could
-just use GPIOD_ASIS as flag to make sure the new code behaves
-the same.
-
-Yours,
-Linus Walleij
+--=20
+paul-moore.com
