@@ -2,152 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE1F519842
-	for <lists+linux-usb@lfdr.de>; Wed,  4 May 2022 09:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA865198FA
+	for <lists+linux-usb@lfdr.de>; Wed,  4 May 2022 09:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345536AbiEDHeQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 May 2022 03:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
+        id S245680AbiEDH5V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 May 2022 03:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345509AbiEDHeI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 03:34:08 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345C82647;
-        Wed,  4 May 2022 00:30:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=VhRMkWupHGEpu4hR7M12B8TWP/ZW0H0fx/g6wrBtOIU=;
-        t=1651649432; x=1652859032; b=lT+BoT7kzbehmIS4CE6tmnrNCaaMxC4ZC6lWOapcFoPAPDK
-        ivwD9L+TNY4ukXj7zmgHhbTz3x6Tc3SV0Eclg4IivKdtaoIhIPmv3/kOG1Hs3stt+sZYyGkiO9+6V
-        owmtPBnbKGrLhWnYlDrLZEDw7uo6wXChACSfuAQl/hfOCjl4lXTzOPy4xr/HkQRVd5xeST21zUOg+
-        eagjwkTPt+DkjP546h0kleKkFB8GmTwBSqL/1KvlDT1O2/wVtM3Zp6oqDYk5TVAlYnS1nsm9DdJwT
-        c18ih50SkMX+SiLKowBo4knf4fyHVmT3WXccgI5g7BaPwsULbewodpDd7UmE1G9w==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1nm9RJ-001wsH-EM;
-        Wed, 04 May 2022 09:28:49 +0200
-Message-ID: <c31c1752cf6393319f5c7abd178ef43e0fbec5c1.camel@sipsolutions.net>
-Subject: Re: [PATCH 12/32] cfg80211: Use mem_to_flex_dup() with struct
- cfg80211_bss_ies
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Kees Cook <keescook@chromium.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        alsa-devel@alsa-project.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Baowen Zheng <baowen.zheng@corigine.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Bradley Grove <linuxdrivers@attotech.com>,
-        brcm80211-dev-list.pdl@broadcom.com,
-        Christian Brauner <brauner@kernel.org>,
-        Christian =?ISO-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Chris Zankel <chris@zankel.net>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Gow <davidgow@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hulk Robot <hulkci@huawei.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        James Morris <jmorris@namei.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        John Keeping <john@metanate.com>,
-        Juergen Gross <jgross@suse.com>, Kalle Valo <kvalo@kernel.org>,
-        Keith Packard <keithp@keithp.com>, keyrings@vger.kernel.org,
-        kunit-dev@googlegroups.com,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        llvm@lists.linux.dev, Loic Poulain <loic.poulain@linaro.org>,
-        Louis Peens <louis.peens@corigine.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Rich Felker <dalias@aerifal.cx>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        SHA-cyfmac-dev-list@infineon.com,
-        Simon Horman <simon.horman@corigine.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
-        xen-devel@lists.xenproject.org,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Date:   Wed, 04 May 2022 09:28:46 +0200
-In-Reply-To: <20220504014440.3697851-13-keescook@chromium.org>
-References: <20220504014440.3697851-1-keescook@chromium.org>
-         <20220504014440.3697851-13-keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S237497AbiEDH5T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 03:57:19 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2047.outbound.protection.outlook.com [40.107.100.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC9A15701;
+        Wed,  4 May 2022 00:53:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YWSTRdJTXrKhJWqQY0l+hbSwZVNmQBqdsRURnG+hPd3ZF942YECNRbK08GYspSs1cV878nrcisEYvz+VlAwKfpCfPzsKoVbIvD4V9waX9d2RSoLsUe36T/mLUIxh6KBrhqCCvrQ8Ua+ZMlX2tB6IubRRNA5hMzY7z+UkkLPR8IhTOU99ue3CfoBfs8ylVLyRY5PM35MIKsvUJViiJ32ipsqCklVNHbzsZk6Y+/8urNV12USBi8Z07ALyufmgElGCE9uSONIj/88CpptbTUj2Q1vCdWX5i5yMR/yg/fmLvTWVU5Vl0OEgyaJgENZia8ggjl42XGM9wtqyYRc5CuoIVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FKXEeDDylN8dFZqdaIZbAZP1J8V+oOvfmUZ3X6oziT4=;
+ b=aW8IBftq5uXHO8rK78HvFQ67yw9VmGcxi4ZKDTK0KT0NNzJIUMVgwMxNmyn7hR6jL8nhAgePX4svNqtfrg3vATeBM+7YMjAC4VbIxqED6qc5uN5OuzAHyt8OGx7jEJgurW6h5nrx38Zfp0nesOfLZxowpl2v9c2nuQlwc5xKKtQqjAQGCGxZ3LRU0axaCfhzWLfx6vo6hy6RrARLregXBOWEvKBZ8iuWzeOXpvt5CGX5PCvnsV694j57DXsfwxoXDRiSbRzi2YUUoMOwBxEptKhC+WfpNbUKN/eEj/khZpvMIVfhmnQ0s5PWSV7SsujkGosHJ7J+F1Avbnxvn7SzgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=xilinx.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FKXEeDDylN8dFZqdaIZbAZP1J8V+oOvfmUZ3X6oziT4=;
+ b=JC71agcX3+bVCSZ+ujbNZw1GEtxSDho/fMrSBzwCb5zQ5ytUNKB6p12SvHJlm5v/f1vNc0JxOOHUPpwQ+qZv2RyYmUw3jIW6ICQEzWLtjSev9LK5JxAyh+8MbXUkvxeqUJIuhUhvtlSbi5SZGezI8SkiT270ycfPXGidRQDvOSY=
+Received: from SA0PR11CA0013.namprd11.prod.outlook.com (2603:10b6:806:d3::18)
+ by CY4PR02MB2536.namprd02.prod.outlook.com (2603:10b6:903:71::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.26; Wed, 4 May
+ 2022 07:53:40 +0000
+Received: from SN1NAM02FT0050.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:d3:cafe::a6) by SA0PR11CA0013.outlook.office365.com
+ (2603:10b6:806:d3::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13 via Frontend
+ Transport; Wed, 4 May 2022 07:53:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0050.mail.protection.outlook.com (10.97.5.121) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5227.15 via Frontend Transport; Wed, 4 May 2022 07:53:39 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Wed, 4 May 2022 00:53:38 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Wed, 4 May 2022 00:53:38 -0700
+Envelope-to: git@xilinx.com,
+ gregkh@linuxfoundation.org,
+ balbi@kernel.org,
+ robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org,
+ linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Received: from [10.140.6.18] (port=46956 helo=xhdlakshmis40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <piyush.mehta@xilinx.com>)
+        id 1nm9pJ-000B5T-Q9; Wed, 04 May 2022 00:53:38 -0700
+From:   Piyush Mehta <piyush.mehta@xilinx.com>
+To:     <gregkh@linuxfoundation.org>, <balbi@kernel.org>,
+        <radheys@xilinx.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <michal.simek@xilinx.com>,
+        <manish.narani@xilinx.com>
+CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
+        <sivadur@xilinx.com>, Piyush Mehta <piyush.mehta@xilinx.com>
+Subject: [PATCH 0/2] usb: dwc3: xilinx: Add gpio-reset support
+Date:   Wed, 4 May 2022 13:23:07 +0530
+Message-ID: <20220504075309.6244-1-piyush.mehta@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 55f3ca62-e9af-45dd-e549-08da2da333aa
+X-MS-TrafficTypeDiagnostic: CY4PR02MB2536:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR02MB2536AE3DE8015D864BAB4C37D4C39@CY4PR02MB2536.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 995iVR33dnTE68o9vh8zOUaj5GwUBscJTrOzAlWgr85GbcAE3FcDkc+qeEBeaeLfrVaROsqNrb0ip1ZXlflkTnIBZvAtNs2gi7mw+u6m3lcsBPvedm+B0+Bf+QVrdH8CRXAVpvxgJsru9aUg5yaOA8Difk08dU+1uLu8Ras7AFoe9GR9YUYu6eCpDTnlUDF3TeKu8oFvDkMq7dD/eD+KaRa5UixLPOwMV/rAH18qk/wH0xQohoSQjEOMSr/Cb3t1BwXnRj2TI7r34K4tZ5P0k9hLcgURwEPKC/kt4k96kq77URSIPb+X3VEQJLKr9NDUCWPoSfEol8y0Q1su8byzy5tP/rrMAynoWAKYnRLGSDu+WIxVhoYN15WUiqAihBF7J8xIzsmE8T3x/BYPFv/5qQPkZNIlN09ADH8FRehvrjqUperVAbZFEtaWXbvX4212ps6OS/mpgWFE9U1XdiGF5Zc/ONeAOt2T4MwVX/mNCoV1cvy4HFhZKLvvtF25kjyNljIi6sPQzfME9tp9/tOVpnfNDloMSaEhJk/SjXclZ+311cfJldEmmxAL6dGGVVa14imyeOjFYbJsehzZK8qZm6aVHQma75Fc9Zhm6mZALLCwjOu7dvQB2sAmuN+dAA0mFHHBcjAwK5bMRHDC+svK5RNgFwYxh7RT5TIlV5m3j8WpxI67rbk0vldr3WKnxztMHwfkiffS8BI97pUWM8XQkJncAk3Go7lU8IR3hVMlheU=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(4744005)(8936002)(44832011)(4326008)(508600001)(9786002)(5660300002)(82310400005)(356005)(7636003)(2906002)(40460700003)(6666004)(54906003)(110136005)(107886003)(316002)(186003)(6636002)(336012)(36756003)(2616005)(426003)(47076005)(36860700001)(1076003)(70586007)(70206006)(8676002)(26005)(7696005)(102446001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2022 07:53:39.5322
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55f3ca62-e9af-45dd-e549-08da2da333aa
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0050.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB2536
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -155,41 +115,23 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2022-05-03 at 18:44 -0700, Kees Cook wrote:
-> 
-> @@ -2277,7 +2274,7 @@ cfg80211_update_notlisted_nontrans(struct wiphy *wiphy,
->  	size_t ielen = len - offsetof(struct ieee80211_mgmt,
->  				      u.probe_resp.variable);
->  	size_t new_ie_len;
-> -	struct cfg80211_bss_ies *new_ies;
-> +	struct cfg80211_bss_ies *new_ies = NULL;
->  	const struct cfg80211_bss_ies *old;
->  	u8 cpy_len;
->  
-> @@ -2314,8 +2311,7 @@ cfg80211_update_notlisted_nontrans(struct wiphy *wiphy,
->  	if (!new_ie)
->  		return;
->  
-> -	new_ies = kzalloc(sizeof(*new_ies) + new_ie_len, GFP_ATOMIC);
-> -	if (!new_ies)
-> +	if (mem_to_flex_dup(&new_ies, new_ie, new_ie_len, GFP_ATOMIC))
->  		goto out_free;
->  
->  	pos = new_ie;
-> @@ -2333,10 +2329,8 @@ cfg80211_update_notlisted_nontrans(struct wiphy *wiphy,
->  	memcpy(pos, mbssid + cpy_len, ((ie + ielen) - (mbssid + cpy_len)));
->  
->  	/* update ie */
-> -	new_ies->len = new_ie_len;
->  	new_ies->tsf = le64_to_cpu(mgmt->u.probe_resp.timestamp);
->  	new_ies->from_beacon = ieee80211_is_beacon(mgmt->frame_control);
-> -	memcpy(new_ies->data, new_ie, new_ie_len);
+These series of patches adds gpio-reset support in the dwc3-xilinx
+glue driver.
 
-This introduces a bug, "new_ie" is modified between the kzalloc() and
-the memcpy(), but you've moved the memcpy() into the allocation. In
-fact, new_ie is completely freshly kzalloc()'ed at this point. So you
-need to change the ordering here, but since new_ie is freed pretty much
-immediately, we can probably just build the stuff directly inside
-new_ies->data, though then of course we cannot use your helper anymore?
+The optional property added in dwc3-xilinx Linux binding document
+and based on the 'reset-gpios' property dwc3-xilinx driver trigger
+the GPIO ulpi-phy reset.
 
-johannes
+This reset is specific to the zynqMp.
+
+Piyush Mehta (2):
+  dt-bindings: usb: dwc3-xilinx: add optional property reset-gpios
+  usb: dwc3: xilinx: Add gpio-reset support
+
+ Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml |  4 ++++
+ drivers/usb/dwc3/dwc3-xilinx.c                         | 17 +++++++++++++++++
+ 2 files changed, 21 insertions(+)
+
+-- 
+2.7.4
+
