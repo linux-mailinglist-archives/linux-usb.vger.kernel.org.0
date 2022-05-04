@@ -2,54 +2,251 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07FAE51A389
-	for <lists+linux-usb@lfdr.de>; Wed,  4 May 2022 17:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC9C51A396
+	for <lists+linux-usb@lfdr.de>; Wed,  4 May 2022 17:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352091AbiEDPUh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 May 2022 11:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
+        id S1352151AbiEDPV1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 May 2022 11:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232760AbiEDPUd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 11:20:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C42C419C0E
-        for <linux-usb@vger.kernel.org>; Wed,  4 May 2022 08:16:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651677415;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Mi1A3ReNa36HNC0SRDW2IFs7qSLNUw4P2PtvbE52ntA=;
-        b=aPTHqgixQGABW0Aig+Iqiqe3WJl0DUbT89uliXuFPLCa2PVfQ/Osb3f4hG/t5PHOmKTIiM
-        XksfZBrm6fG+RtqP6raVK2Hqv+xWfEZQ+ks3DkqnOQfr0oPebcYTj7zEg4XFDk2uKxjq3o
-        btaoBfpT9EPSSjiwWxyLeKl1MBCnF7s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-145--Y-THeSePXS3x0xAQQuJ7Q-1; Wed, 04 May 2022 11:16:52 -0400
-X-MC-Unique: -Y-THeSePXS3x0xAQQuJ7Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S1352122AbiEDPVW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 11:21:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270F643AE4;
+        Wed,  4 May 2022 08:17:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F28E397968A;
-        Wed,  4 May 2022 15:16:52 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.192.125])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2AF2B403D193;
-        Wed,  4 May 2022 15:16:49 +0000 (UTC)
-From:   Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org
-Cc:     marcel@holtmann.org,
-        Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Subject: [PATCH v5] USB: core: skip unconfiguration if device doesn't support it
-Date:   Wed,  4 May 2022 17:16:47 +0200
-Message-Id: <20220504151647.471885-1-jtornosm@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD063B8269F;
+        Wed,  4 May 2022 15:17:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 373AAC385A5;
+        Wed,  4 May 2022 15:17:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651677463;
+        bh=/TElw+eJLqLZJfiH+wgcHcLpwRKNjBsKkGVEQia8krA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r2EKwrBPc+6tZUWBhSzhnQBRbc05hZb7TQkoWLFCHnEdKXJw3pmkGfZGmnrehNIzt
+         w4JzS33+2EMoGBnnb9xtS1/Spopuhywsv347T3+6LyYHbgpE6CtvE0AFq5B7fBqPyX
+         5MqWaHUdzYaViNaxBlBJK+ptIdjAAYkruP0EWQGDllsuxMmiP7mRJFbecq0YUstgiD
+         RpxbR+x5+dC5Tuv+76tsVvvXax+z+1tbQ0BeM8qtcsvnJHNnSQ0TrXHhc3n1lnDWSu
+         S6G8rlCBvr55hWxhdkIt/elBXUAB3x5zutaGRQmaLr3G+4d2Cx6Eo/yp43Szdk/NKp
+         Cfc4hXpr4p5Ow==
+Date:   Wed, 4 May 2022 16:17:17 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Bradley Grove <linuxdrivers@attotech.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        Christian Brauner <brauner@kernel.org>,
+        Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Chris Zankel <chris@zankel.net>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Gow <davidgow@google.com>,
+        David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hulk Robot <hulkci@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        John Keeping <john@metanate.com>,
+        Juergen Gross <jgross@suse.com>, Kalle Valo <kvalo@kernel.org>,
+        Keith Packard <keithp@keithp.com>, keyrings@vger.kernel.org,
+        kunit-dev@googlegroups.com,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, llvm@lists.linux.dev,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Louis Peens <louis.peens@corigine.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Rich Felker <dalias@aerifal.cx>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        SHA-cyfmac-dev-list@infineon.com,
+        Simon Horman <simon.horman@corigine.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Tom Rix <trix@redhat.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
+        xen-devel@lists.xenproject.org,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Subject: Re: [PATCH 20/32] ASoC: sigmadsp: Use mem_to_flex_dup() with struct
+ sigmadsp_data
+Message-ID: <YnKY/V8spurPzaMA@sirena.org.uk>
+Mail-Followup-To: Kees Cook <keescook@chromium.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>, Andy Lavr <andy.lavr@gmail.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Bradley Grove <linuxdrivers@attotech.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        Christian Brauner <brauner@kernel.org>,
+        Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Chris Zankel <chris@zankel.net>,
+        Cong Wang <cong.wang@bytedance.com>, Daniel Axtens <dja@axtens.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Gow <davidgow@google.com>,
+        David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eli Cohen <elic@nvidia.com>, Eric Dumazet <edumazet@google.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hulk Robot <hulkci@huawei.com>, Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        John Keeping <john@metanate.com>, Juergen Gross <jgross@suse.com>,
+        Kalle Valo <kvalo@kernel.org>, Keith Packard <keithp@keithp.com>,
+        keyrings@vger.kernel.org, kunit-dev@googlegroups.com,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>, Leon Romanovsky <leon@kernel.org>,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, llvm@lists.linux.dev,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Louis Peens <louis.peens@corigine.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Max Filippov <jcmvbkbc@gmail.com>, Mimi Zohar <zohar@linux.ibm.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Paul Moore <paul@paul-moore.com>,
+        Rich Felker <dalias@aerifal.cx>, Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        SHA-cyfmac-dev-list@infineon.com,
+        Simon Horman <simon.horman@corigine.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>, Tom Rix <trix@redhat.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
+        xen-devel@lists.xenproject.org,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+References: <20220504014440.3697851-1-keescook@chromium.org>
+ <20220504014440.3697851-21-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WsBvT7ldclzXuz86"
+Content-Disposition: inline
+In-Reply-To: <20220504014440.3697851-21-keescook@chromium.org>
+X-Cookie: Mother is the invention of necessity.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,108 +254,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some devices like Bluetooth Dongles with CSR chip (i.e. USB
-Bluetooth V4.0 Dongle by Trust) hang when they are unbound from
-'unbind' sysfs entry and can not be bound again.
 
-For these devices, CSR chip hangs when usb configuration command
-with index 0 (used to unconfigure) is sent during disconnection.
+--WsBvT7ldclzXuz86
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-To avoid this unwanted result, it is necessary not to send this
-command, so a new quirk has been created. By default, quirk is
-not applied for any device and needs to be enabled by user.
+On Tue, May 03, 2022 at 06:44:29PM -0700, Kees Cook wrote:
 
-For these devices, athough device is not unconfigured, it is
-better to avoid device hanging to be able to operate. Even
-bluetooth can be previously turned off.
-On the other hand, this is not important if usb device is going to
-be bound again (normal behavior), i.e. with usbip.
+> As part of the work to perform bounds checking on all memcpy() uses,
+> replace the open-coded a deserialization of bytes out of memory into a
+> trailing flexible array by using a flex_array.h helper to perform the
+> allocation, bounds checking, and copying.
 
-Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
----
-V4 -> V5:
-- By default, quirk is not applied for any device and needs to be enabled
-by user if necessary.
-V3 -> V4:
-- Reorder quirk entries to be in numerical order according to the vendor
-ID and product ID.
-- Add patch version information.
-V2 -> V3:
-- Change subject (Bluetooth: btusb: CSR chip hangs when unbound ->
-USB: core: skip unconfiguration if device doesn't support it).
-- Improve quirk checking.
-- Allow to test quirk interactively.
-V1 -> V2:
-- Use quirk feature for the exception.
+Acked-by: Mark Brown <broonie@kernel.org>
 
- Documentation/admin-guide/kernel-parameters.txt |  2 ++
- drivers/usb/core/message.c                      | 12 +++++++++---
- drivers/usb/core/quirks.c                       |  3 +++
- include/linux/usb/quirks.h                      |  3 +++
- 4 files changed, 17 insertions(+), 3 deletions(-)
+--WsBvT7ldclzXuz86
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 3f1cc5e317ed..71651b888d14 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6183,6 +6183,8 @@
- 					pause after every control message);
- 				o = USB_QUIRK_HUB_SLOW_RESET (Hub needs extra
- 					delay after resetting its port);
-+				p = USB_QUIRK_SKIP_UNCONFIGURE (device doesn't
-+					support unconfigure);
- 			Example: quirks=0781:5580:bk,0a5c:5834:gij
- 
- 	usbhid.mousepoll=
-diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-index 4d59d927ae3e..9c6cd0c75f4f 100644
---- a/drivers/usb/core/message.c
-+++ b/drivers/usb/core/message.c
-@@ -2108,9 +2108,15 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
- 	}
- 	kfree(new_interfaces);
- 
--	ret = usb_control_msg_send(dev, 0, USB_REQ_SET_CONFIGURATION, 0,
--				   configuration, 0, NULL, 0,
--				   USB_CTRL_SET_TIMEOUT, GFP_NOIO);
-+	if (configuration == 0 && !cp
-+			&& (dev->quirks & USB_QUIRK_SKIP_UNCONFIGURE)) {
-+		dev_warn(&dev->dev, "device is not unconfigured!\n");
-+		ret = 0;
-+	} else
-+		ret = usb_control_msg_send(dev, 0, USB_REQ_SET_CONFIGURATION, 0,
-+					   configuration, 0, NULL, 0,
-+					   USB_CTRL_SET_TIMEOUT, GFP_NOIO);
-+
- 	if (ret && cp) {
- 		/*
- 		 * All the old state is gone, so what else can we do?
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index d3c14b5ed4a1..f4cdf85a9eb6 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -138,6 +138,9 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
- 			case 'o':
- 				flags |= USB_QUIRK_HUB_SLOW_RESET;
- 				break;
-+			case 'p':
-+				flags |= USB_QUIRK_SKIP_UNCONFIGURE;
-+				break;
- 			/* Ignore unrecognized flag characters */
- 			}
- 		}
-diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
-index eeb7c2157c72..79cb0616f394 100644
---- a/include/linux/usb/quirks.h
-+++ b/include/linux/usb/quirks.h
-@@ -72,4 +72,7 @@
- /* device has endpoints that should be ignored */
- #define USB_QUIRK_ENDPOINT_IGNORE		BIT(15)
- 
-+/* device doesn't support unconfigure. */
-+#define USB_QUIRK_SKIP_UNCONFIGURE		BIT(16)
-+
- #endif /* __LINUX_USB_QUIRKS_H */
--- 
-2.35.1
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJymP0ACgkQJNaLcl1U
+h9BOTAf/ZD8yoDRekvioENLYy8dN3NXa5AWr7w113Lw6amX9IH8PkZBk9MuYaDgS
+lyEL/dF+NQH1EG1pD8OqTodb2FRk6p2BmOqGHZamS0MgHy+d4s7a66k1YkGIKh1O
+8m5wnvOKz3Fk2HYUDyLrx+sOQL3a9Pp0Qh1JdRiAsXXyc6GyJwrC5vR/TbFMyfFd
+yDpPiY/nMzIqHfWGSIhIy2K+Fl9WzSdcTDasOELxcxGPYhdJbxgT/WoRcOTc/5l1
+gNGLh0quw//dri/kQ0Y9YwSNbjiZjy/ZPVbQ2WxIGlmhcmbavI9j6S4iDwgZzTpY
+B0dknkr+kOxX7zlsqhHYQ6guFBtrCw==
+=XAoD
+-----END PGP SIGNATURE-----
+
+--WsBvT7ldclzXuz86--
