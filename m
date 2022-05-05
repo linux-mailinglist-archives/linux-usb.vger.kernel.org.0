@@ -2,396 +2,308 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582E551BF86
-	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 14:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 701C251C07A
+	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 15:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358810AbiEEMj2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 May 2022 08:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
+        id S1354239AbiEENXD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 May 2022 09:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241182AbiEEMj0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 08:39:26 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2067.outbound.protection.outlook.com [40.107.236.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B058D1CB22;
-        Thu,  5 May 2022 05:35:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cz40xfO7pIei0inxNtrO2Yv/hLgrwGh3Lktbx1XtCAMJzgFs1qXISJzNWbzTLslkwfcCJqE4WRPAdXGrpTXhnNHHDXW8EelK81HVxZh5//4m0ZbWvpve1sw6pMHyxbIx3IUYykNvlOg/KoqEiI9MA9rg1KeE85EcbWO0q4Ja9HhvCSRsokAwAM1ZZ4XC1RZgxASddhDRly3il9oQOrGInydpy1X0EZ973GeTxLBcZBJQhhon7SpGDOvtZwU7kyH4kaOOkYOwB+siTjuUDYKFgGMMSQ4X1CzerHqVvHUeeA/UVuhUs4SD4TnGDTFqRULGTfvQG7EXnBm7oSrFADpRTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8ui8n65mj6//UTxpL4OFOoze2jApSsueO6kcNSTuqJ8=;
- b=jEeKlEMUbEY765fKisa6ZmtkNx27MhKmR5zLegJnR/QZ/7H/aPTnwPH4eqJznOFcoEJOm4e6xP5xFJpNbaCBfUCygQrBjeZss6EmApsOVnbWdDkJZ0Vo2itX/uJJPeiLXgEx5xN9TzTPRmuEYVghe5UbZBk6ffHtMXzOKeCJ50b6slh2Rz2rEm7qvj36plo0xe37Pq51VC29Duo0b5/VAJqpA3dDiXpYDZ2ITZ7Izci2Ct7/2re24jPeJdBT6KY03JYJQXSvY5+4D584u7h/RJafzBEHlE35LrUVQ0ZQAzg1+/CRVzM0Vm67G/EoY2A/zm/0YBkJkCCtfsY42X308w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sierrawireless.com; dmarc=pass action=none
- header.from=sierrawireless.com; dkim=pass header.d=sierrawireless.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sierrawireless.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8ui8n65mj6//UTxpL4OFOoze2jApSsueO6kcNSTuqJ8=;
- b=TB6KdftUl5iLGutkWS1tEhwHqiPu8v6H4MlGmUnHXMlh9j7tnGyecrxEBfQ53dDI1f4lIlnxeSPpbRFox/Vrw+3+aj+Gju+SPxxFlGPX4Mossjgvi1aSu43aSdMgAC/jHf+tyQpEt/JDy2LmP+ziwTC5XNl5Nmpfs9lI2fHbjp0=
-Received: from BL0PR02MB4451.namprd02.prod.outlook.com (2603:10b6:208:4a::21)
- by BN0PR02MB8125.namprd02.prod.outlook.com (2603:10b6:408:164::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.14; Thu, 5 May
- 2022 12:35:41 +0000
-Received: from BL0PR02MB4451.namprd02.prod.outlook.com
- ([fe80::9554:c948:1ea9:eb09]) by BL0PR02MB4451.namprd02.prod.outlook.com
- ([fe80::9554:c948:1ea9:eb09%4]) with mapi id 15.20.5206.024; Thu, 5 May 2022
- 12:35:41 +0000
-From:   Ethan Yang <etyang@sierrawireless.com>
-To:     Johan Hovold <johan@kernel.org>,
-        =?gb2312?B?8KnT7iCX7g==?= <ipis.yang@gmail.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Glen Chiang <GChiang@sierrawireless.com>
-Subject: RE: [PATCH v3] usb: serial: qcserial: add support for Sierra Wireless
- EM7590
-Thread-Topic: [PATCH v3] usb: serial: qcserial: add support for Sierra
- Wireless EM7590
-Thread-Index: AQHYWGmU2PKBqwatWEOu3HMMpcoMAK0QNhEAgAALGaA=
-Date:   Thu, 5 May 2022 12:35:41 +0000
-Message-ID: <BL0PR02MB4451F88B384BA9D7FCE6A7C3ABC29@BL0PR02MB4451.namprd02.prod.outlook.com>
-References: <YmYvPXeqQzyms91m@kroah.com>
- <20220425055840.5693-1-etyang@sierrawireless.com>
- <YnO1NHWCFCIfydBI@hovoldconsulting.com>
-In-Reply-To: <YnO1NHWCFCIfydBI@hovoldconsulting.com>
-Accept-Language: en-CA, zh-TW, en-US
-Content-Language: en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=sierrawireless.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5c8fa854-9b46-40ee-0599-08da2e93c463
-x-ms-traffictypediagnostic: BN0PR02MB8125:EE_
-x-ld-processed: 08059a4c-2486-43dd-89e3-3a747e0dcbe8,ExtAddr
-x-microsoft-antispam-prvs: <BN0PR02MB812500ABCA15FC2E64D8408BABC29@BN0PR02MB8125.namprd02.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lDXCUSHlwOsUaNiYZ/FOGSAjYicL0KcrYitJmwnPj+oHqh3QpqUODFeYWcd1zmau3bU9hvvr4TxLyPsrDu+hA30+rX9p3PL7yjNfkHc83D9wQM6BUE0O2ZxPs05mM73CpObaguinwSCLLARFwF90g3B/L074gwYG/czMjGolkh+sDUeFt6jUWcr+aPLyxeeXF3/E2Ae/hzYyAnYMd8kh9ZHQAB+gluYonyNbpH0GjSDeWNVoj1hX6fKG772WItM95M2F8Q6DZuDqyIi6kmfny92KW6TPufgfGFvYA5eNC3YqEDAo8GryekQc85qV3jRerKEdi/y3qaY/aTnLo8skdDppGL1mN8VW32nfl1Gk9vffnEnYC2ex2mDunq1g+kSaAo6i6gSzslk/0UwNpKcfQKIKw/6Bz39ePp66LyCBSRjI49yugTdOLZVMfkZQz4upcZQcXPBNT8SWFZkN4b1B1kzXdGKuNfK6cD18DrvIm4AKc1cH72wfJtLWaJ0sz6vKdVhmoly3xDb1CMU0EB+VyBJMjsbDTrJP1Ed9WhrFJcZFG9cZSBkVhM7dwgMGzMI9tNb9dmlxIXsOUwPMqXmegfkaHov+122QIicKj2wtk5T2h+flFD10ApHKAjpFoDPrxhEc2tCkbU4/Ztw70Or+ourHqdaMqi0idU9rVBIBXMsef1/mONAKyGdYgNEYWLoUnHGIwk/beVkUxI3M/YDhqQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR02MB4451.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(5660300002)(55016003)(4744005)(66476007)(76116006)(66946007)(110136005)(54906003)(186003)(33656002)(8936002)(107886003)(52536014)(26005)(9686003)(38070700005)(38100700002)(2906002)(122000001)(86362001)(6506007)(53546011)(7696005)(4326008)(66556008)(64756008)(316002)(66446008)(8676002)(99936003)(71200400001)(508600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?RXlXeXh1cmVLUlNLejhpK2lJMVc4ajJwWlczZXJBd2UvVlQzdll4VnNVR3dI?=
- =?gb2312?B?ak5tenAxUkVwKzZPRWRkLzRTdFRueW5WNDgwcVgwZXdocTlFdHhGM01YMWZ1?=
- =?gb2312?B?d0FDZEtlRWIvdjIvc2ZwSEh2b1NHQlQzSUpEV3F5V0VyT1cvMU5XcUlSTGpJ?=
- =?gb2312?B?d0NybWJaQXZIZ1hvY1NueC93VVVjQmRocHgxenJXbkhnaHJPOHRPNlFWSzhn?=
- =?gb2312?B?amJzcG5HdzZKOGhkUUlQbXVESGsrZVhIWm82cEN1SGtOZVF4ZjRydG40MU1O?=
- =?gb2312?B?VlJyL3hocUFjRHZSUk9kUnpOUHFyRDVZWlMrTG43RXZYTUhOWnFxWlEzaFIz?=
- =?gb2312?B?UE9nRlNwZnFFYWVzODhWU0pBdy9pNFpNclE1SXBwU0FUcGRJT2NGbEttMFpr?=
- =?gb2312?B?SmFPWDFXT0R2VVNabzVlN2tWWERRcU1uMVk5ZFltM29WSmNRYytQWExQMmFE?=
- =?gb2312?B?QVNZR05VQXBNR0hUUjUvWFZZRExJWlArWE5IUEtsbTlLeEIremx1cXN0S0tP?=
- =?gb2312?B?WVBtQ094dU5FV2s5SnhzNDQ4dVV6cUlISTdTekpmWS90dVVXVkVzaEszZitI?=
- =?gb2312?B?dVIyRWFTelRIL1lGa0VGcFR6V3YwYkdZKzVibFhqVlRmbjZhSnd3SXlkcXJv?=
- =?gb2312?B?R0J0djNMcmpjaUROVy9IUExydTRvUnJOUGg4Ujdpd3cyZTB6UU1WZkNsb05w?=
- =?gb2312?B?NUVpc3JYZ0psWFpPdkIwWU1wS2h4OHhsaDhQN2JodG9TSzlzOFZZeGh0b2JM?=
- =?gb2312?B?aklBWFZhVnBQVENyVGhvMys2YytYalkwSVdPMld5SWtha3lVMjJJOFdVeEFt?=
- =?gb2312?B?MGVHQ2pSU2xsVVJHS2c2b1RCK0psQTZHNGlrRGtlc2MxZTVqRXYwVldZUmZW?=
- =?gb2312?B?U2tpKytzQ2NoYjRvODYrSHRoSzkyQ0ZxNXhNWXFsUVJBM3lzMEMvZnJ1bW8x?=
- =?gb2312?B?Z2R3RmFrM1o0T1M0cDQ3ZHNqQzFubU5zRDF0aDcyd0ZKd1hKRTRCNUEvTTFI?=
- =?gb2312?B?VzRPNitjdUNZRG1qZGg4Q1Vvdmk4OEJITWNNME5aV29oNGlRVVFsZ0QxSElG?=
- =?gb2312?B?c3FrZDNqWXVsOU9YRHd6akc4bnFuVi9IQ3JzR0FoVlBqTzJycGFnZTJIL1d6?=
- =?gb2312?B?c1k1Y0dJM3p2YnpDVnp2T0NkWjVqNDZwYkJEVXgyZkFQQm4vblF0RDJSbFNE?=
- =?gb2312?B?ZmE0SThEaU91QXVyNGdTVVFhdjhJUjBKcnlDZFpHbXowdExRRGxVNWQzL2F4?=
- =?gb2312?B?WjNHVjZ5UGFkVGxBYnRRUDF1a3V4UU5aMGNYUkRBOVJlU2RJUXRsNEpsbE1C?=
- =?gb2312?B?VW5FWktOTXczaWJJNENRWHUvd2NMZTMyUERqQk9MWUM4dURyWDVUTld6VGNP?=
- =?gb2312?B?czl0VTlZZnh1M1hiQjBrek1Pb0pMVUFGWWt1MTBPVXhnUktyZ3NHT0FEMVRL?=
- =?gb2312?B?cWZzRnNJOWoxNFRUWFdBVjlpOHpYU3dJUU81cEJIaWtyTVI3a25lRXljUTZC?=
- =?gb2312?B?VEFNeFpOdU95eFJYcDlGalJ2R2RqWUtpZjc2R3BVL2l2bVBaMTlpNEw5M1Fm?=
- =?gb2312?B?bzVvZGVxNzdwRk1vY0hPWXBKaXFwS2pXUUprcHl0ckJ2UnhQeEhJdGRYVG5B?=
- =?gb2312?B?eE9GQVNFaFEzRnFuK25OclluZnZEa0N1aitCM3hqdEo2cDhBRkpsVnJRYWlz?=
- =?gb2312?B?dUNpdHBscjZGcXNkK2xDei9JbGZwakVIaFFjdEFSTkF0andzY2ZKei9saWl2?=
- =?gb2312?B?M2JYaC9sZm13YW9sbzZhNFVha0pIalVmbkF3S21KYW9oeE1HaFg4cWo5bC9H?=
- =?gb2312?B?STYrV1h1cW90NlpXN0cvdGxiY1o0MVB1TzVaVFowZW05aEp2azJBZDJ4WldD?=
- =?gb2312?B?VmwyUjdHWjZSdEo4MGttekVyOEFsYis1UTdSWW9UeVgvVTFjenpBYXR6eUxt?=
- =?gb2312?B?SFVIZnFwT0R1VU9pQkgzeHZuaWcyTzg5c05rcjJ2SkpVbmtMODJVMmJTMzRl?=
- =?gb2312?B?VlMxbGpuVnJUSnhSZXJCc1pDTXBBK2R3N1RxOUpBdmNTMzdhRlArTEttM292?=
- =?gb2312?B?S2VIWEcwZ3U3Nlh3bEtsTjJ3M2hlUDdGMjcwUmt1YlVRQ21ScXZqR1BISG9S?=
- =?gb2312?B?ZGN3cHJ2QW1Ld1BtYU0ybGtOTG9pUVRZSXFaSXJLQ0N2bWd6VWNORitDKzJP?=
- =?gb2312?B?cUZaK0dnRVdFODJDSGdQTllPWHh6M0VPZVFTeWRCZm1DOEZXeGdaWDdXcGcw?=
- =?gb2312?B?bGtYNzliTW4xRFpIcDVlYzY4KzNmQzVjN1JiREtvREVBbUFscVBTa1gwSWxh?=
- =?gb2312?B?TXN3cWxLYy8yVXE0dEpnZzN0bEpyd3dQTHFpQ2s1NmpyZkhTeUVpSFZjb0lJ?=
- =?gb2312?Q?2yXaVScre789IAs0=3D?=
-Content-Type: multipart/mixed;
-        boundary="_003_BL0PR02MB4451F88B384BA9D7FCE6A7C3ABC29BL0PR02MB4451namp_"
+        with ESMTP id S236579AbiEENW6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 09:22:58 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE58542EC9;
+        Thu,  5 May 2022 06:19:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=WOqM4DKEC8qEB5Nc8Asp0yMdSAPt0BrvJUl7fGL2K2o=;
+        t=1651756758; x=1652966358; b=VlPjU//FNXa2+XxsG73YHHulvZS9LU1Ok/2Gr9U1udS3ClE
+        gggIn61BX96CpB7Ev+Na+syeXPKWxqroWgqIhhVP9CcvNs+ZUeF9ru4Hgk5+IJYQFsVqZ/jpcfF6b
+        +cYxGWJCtu7d22kSwdnXxhbbkUvm0YOS0PSvMRyuLmd3/IUHs69f64s5/PkDAYh6/9dg+xKKoqLkL
+        MK7v/u3ZQBkLUUCMZ8d2YxNKjC2UIKIbu17RYhSwkQTUP9KyJG8aVfpDoZD+Pj7tFfaRoDSTF49fC
+        dWqQ6DUUZRcVUBWBnlwDbyxvb4M45fmuQnwHrqOAL+nt+iG9j3PRoD0+FZJ2Jyjg==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nmbLD-002nmQ-2E;
+        Thu, 05 May 2022 15:16:23 +0200
+Message-ID: <970a674df04271b5fd1971b495c6b11a996c20c2.camel@sipsolutions.net>
+Subject: Re: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Keith Packard <keithp@keithp.com>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        alsa-devel@alsa-project.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Bradley Grove <linuxdrivers@attotech.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        Christian Brauner <brauner@kernel.org>,
+        Christian =?ISO-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Chris Zankel <chris@zankel.net>,
+        Cong Wang <cong.wang@bytedance.com>,
+        David Gow <davidgow@google.com>,
+        David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hulk Robot <hulkci@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        John Keeping <john@metanate.com>,
+        Juergen Gross <jgross@suse.com>, Kalle Valo <kvalo@kernel.org>,
+        keyrings@vger.kernel.org, kunit-dev@googlegroups.com,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, llvm@lists.linux.dev,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Louis Peens <louis.peens@corigine.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Rich Felker <dalias@aerifal.cx>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        SHA-cyfmac-dev-list@infineon.com,
+        Simon Horman <simon.horman@corigine.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
+        xen-devel@lists.xenproject.org,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Date:   Thu, 05 May 2022 15:16:19 +0200
+In-Reply-To: <202205040819.DEA70BD@keescook>
+References: <20220504014440.3697851-1-keescook@chromium.org>
+         <20220504014440.3697851-3-keescook@chromium.org>
+         <d3b73d80f66325fdfaf2d1f00ea97ab3db03146a.camel@sipsolutions.net>
+         <202205040819.DEA70BD@keescook>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-X-OriginatorOrg: sierrawireless.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR02MB4451.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c8fa854-9b46-40ee-0599-08da2e93c463
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 May 2022 12:35:41.5928
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 08059a4c-2486-43dd-89e3-3a747e0dcbe8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: p+2st/TQpIrnWMBHbbGfFDW58CAq1/5V5DU212Wx0oNL/iQ7VsxYgCzfS7nvzg3WgG9mQH3gJRK3ES1zIM/4ovXN57RxC36C9BrESoXhddI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR02MB8125
+Content-Transfer-Encoding: 8bit
+X-malware-bazaar: not-scanned
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---_003_BL0PR02MB4451F88B384BA9D7FCE6A7C3ABC29BL0PR02MB4451namp_
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+On Wed, 2022-05-04 at 08:38 -0700, Kees Cook wrote:
+> 
+> It seemed like requiring a structure be rearranged to take advantage of
+> the "automatic layout introspection" wasn't very friendly. On the other
+> hand, looking at the examples, most of them are already neighboring
+> members. Hmmm.
 
-SGkgSm9oYW4sDQoNCkhlcmUgaXMgdGhlIGNoYW5nZSBsb2c6DQpUbyByZXZpc2UgdGhlIGNvcnJl
-Y3QgY29tcG9zaXRpb24gZm9yIFFETC9BUFAgbW9kZS4NCjExOTk6YzA4MCBpcyBmb3IgUURMLCBh
-bmQgMTE5OTpjMDgxIGlzIGZvciBBUFAgbW9kZS4NCg0KSSBhbHNvIGVuY2xvc2UgdGhlIGxzdXNi
-IC12IG91dHB1dCBmb3IgYm90aCBjb21wb3NpdGlvbnMuDQoNClRoYW5rcywNCkV0aGFuDQoNCi0t
-LS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBKb2hhbiBIb3ZvbGQgPGpvaGFuQGtlcm5l
-bC5vcmc+IA0KU2VudDogVGh1cnNkYXksIE1heSA1LCAyMDIyIDE5OjMwDQpUbzog8KnT7iCX7iA8
-aXBpcy55YW5nQGdtYWlsLmNvbT4NCkNjOiBncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZzsgbGlu
-dXgtdXNiQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgR2xl
-biBDaGlhbmcgPEdDaGlhbmdAc2llcnJhd2lyZWxlc3MuY29tPjsgRXRoYW4gWWFuZyA8ZXR5YW5n
-QHNpZXJyYXdpcmVsZXNzLmNvbT4NClN1YmplY3Q6IFJlOiBbUEFUQ0ggdjNdIHVzYjogc2VyaWFs
-OiBxY3NlcmlhbDogYWRkIHN1cHBvcnQgZm9yIFNpZXJyYSBXaXJlbGVzcyBFTTc1OTANCg0KT24g
-TW9uLCBBcHIgMjUsIDIwMjIgYXQgMDE6NTg6NDBQTSArMDgwMCwgaXBpcy55YW5nQGdtYWlsLmNv
-bSB3cm90ZToNCj4gRnJvbTogRXRoYW4gWWFuZyA8ZXR5YW5nQHNpZXJyYXdpcmVsZXNzLmNvbT4N
-Cj4gDQo+IGFkZCBzdXBwb3J0IGZvciBTaWVycmEgV2lyZWxlc3MgRU03NTkwIDB4YzA4MC8weGMw
-ODEgY29tcG9zaXRpb25zDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBFdGhhbiBZYW5nIDxldHlhbmdA
-c2llcnJhd2lyZWxlc3MuY29tPg0KPiAtLS0NCg0KUGxlYXNlIGluY2x1ZGUgYSBzaG9ydCBjaGFu
-Z2Vsb2cgaGVyZSAoYWZ0ZXIgdGhlIC0tLSkgd2hlbiB1cGRhdGluZyBwYXRjaGVzLg0KDQpQbGVh
-c2UgYWxzbyBpbmNsdWRlIHRoZSBvdXRwdXQgb2YgdXNiLWRldmljZXMgKG9yIGxzdXNiIC12KSBm
-b3IgdGhlc2UgdHdvIGNvbXBvc2l0aW9ucyBmb3IgY29tcGxldGVuZXNzLg0KDQpKb2hhbg0K
+A lot of them are, and many could be, though not all.
 
---_003_BL0PR02MB4451F88B384BA9D7FCE6A7C3ABC29BL0PR02MB4451namp_
-Content-Type: text/plain; name="c081.txt"
-Content-Description: c081.txt
-Content-Disposition: attachment; filename="c081.txt"; size=9915;
-	creation-date="Thu, 05 May 2022 12:12:47 GMT";
-	modification-date="Thu, 05 May 2022 12:35:39 GMT"
-Content-Transfer-Encoding: base64
+> > or so? The long and duplicated DECLARE_FLEX_ARRAY_ELEMENTS_COUNT and
+> > DECLARE_FLEX_ARRAY_ELEMENTS seems a bit tedious to me, at least in cases
+> > where the struct layout is not the most important thing (or it's already
+> > at the end anyway).
+> 
+> The names aren't great, but I wanted to distinguish "elements" as the
+> array not the count. Yay naming.
 
-ZXRoYW5AZXRoYW4tTGF0aXR1ZGUtNzI4MDp+L3dvcmsvbXBibC81MTY0L01CUExfUjIxX0I1MTY0
-L0RyaXZlcnMvVVNCJCBsc3VzYiAtdiAtZCAxMTk5Og0KDQpCdXMgMDAyIERldmljZSAwMDM6IElE
-IDExOTk6YzA4MSBTaWVycmEgV2lyZWxlc3MsIEluYy4NCkRldmljZSBEZXNjcmlwdG9yOg0KICBi
-TGVuZ3RoICAgICAgICAgICAgICAgIDE4DQogIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDENCiAg
-YmNkVVNCICAgICAgICAgICAgICAgMy4yMA0KICBiRGV2aWNlQ2xhc3MgICAgICAgICAgMjM5IE1p
-c2NlbGxhbmVvdXMgRGV2aWNlDQogIGJEZXZpY2VTdWJDbGFzcyAgICAgICAgIDIgPw0KICBiRGV2
-aWNlUHJvdG9jb2wgICAgICAgICAxIEludGVyZmFjZSBBc3NvY2lhdGlvbg0KICBiTWF4UGFja2V0
-U2l6ZTAgICAgICAgICA5DQogIGlkVmVuZG9yICAgICAgICAgICAweDExOTkgU2llcnJhIFdpcmVs
-ZXNzLCBJbmMuDQogIGlkUHJvZHVjdCAgICAgICAgICAweGMwODENCiAgYmNkRGV2aWNlICAgICAg
-ICAgICAgNS4wNA0KICBpTWFudWZhY3R1cmVyICAgICAgICAgICAxIFNpZXJyYSBXaXJlbGVzcywg
-SW5jb3Jwb3JhdGVkDQogIGlQcm9kdWN0ICAgICAgICAgICAgICAgIDIgU2llcnJhIFdpcmVsZXNz
-IEVNNzU5MCBNb2JpbGUgQnJvYWRiYW5kIEFkYXB0ZXINCiAgaVNlcmlhbCAgICAgICAgICAgICAg
-ICAgMyAwMTIzNDU2Nzg5QUJDREVGDQogIGJOdW1Db25maWd1cmF0aW9ucyAgICAgIDENCiAgQ29u
-ZmlndXJhdGlvbiBEZXNjcmlwdG9yOg0KICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDkNCiAg
-ICBiRGVzY3JpcHRvclR5cGUgICAgICAgICAyDQogICAgd1RvdGFsTGVuZ3RoICAgICAgICAgIDI4
-Mg0KICAgIGJOdW1JbnRlcmZhY2VzICAgICAgICAgIDUNCiAgICBiQ29uZmlndXJhdGlvblZhbHVl
-ICAgICAxDQogICAgaUNvbmZpZ3VyYXRpb24gICAgICAgICAgNCBkaWFnLG5tZWEsbW9kZW0sbWJp
-bQ0KICAgIGJtQXR0cmlidXRlcyAgICAgICAgIDB4YTANCiAgICAgIChCdXMgUG93ZXJlZCkNCiAg
-ICAgIFJlbW90ZSBXYWtldXANCiAgICBNYXhQb3dlciAgICAgICAgICAgICAgMjI0bUENCiAgICBJ
-bnRlcmZhY2UgRGVzY3JpcHRvcjoNCiAgICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDkNCiAg
-ICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDQNCiAgICAgIGJJbnRlcmZhY2VOdW1iZXIgICAg
-ICAgIDANCiAgICAgIGJBbHRlcm5hdGVTZXR0aW5nICAgICAgIDANCiAgICAgIGJOdW1FbmRwb2lu
-dHMgICAgICAgICAgIDINCiAgICAgIGJJbnRlcmZhY2VDbGFzcyAgICAgICAyNTUgVmVuZG9yIFNw
-ZWNpZmljIENsYXNzDQogICAgICBiSW50ZXJmYWNlU3ViQ2xhc3MgICAgMjU1IFZlbmRvciBTcGVj
-aWZpYyBTdWJjbGFzcw0KICAgICAgYkludGVyZmFjZVByb3RvY29sICAgICA0OA0KICAgICAgaUlu
-dGVyZmFjZSAgICAgICAgICAgICAgMA0KICAgICAgRW5kcG9pbnQgRGVzY3JpcHRvcjoNCiAgICAg
-ICAgYkxlbmd0aCAgICAgICAgICAgICAgICAgNw0KICAgICAgICBiRGVzY3JpcHRvclR5cGUgICAg
-ICAgICA1DQogICAgICAgIGJFbmRwb2ludEFkZHJlc3MgICAgIDB4MDEgIEVQIDEgT1VUDQogICAg
-ICAgIGJtQXR0cmlidXRlcyAgICAgICAgICAgIDINCiAgICAgICAgICBUcmFuc2ZlciBUeXBlICAg
-ICAgICAgICAgQnVsaw0KICAgICAgICAgIFN5bmNoIFR5cGUgICAgICAgICAgICAgICBOb25lDQog
-ICAgICAgICAgVXNhZ2UgVHlwZSAgICAgICAgICAgICAgIERhdGENCiAgICAgICAgd01heFBhY2tl
-dFNpemUgICAgIDB4MDQwMCAgMXggMTAyNCBieXRlcw0KICAgICAgICBiSW50ZXJ2YWwgICAgICAg
-ICAgICAgICAwDQogICAgICAgIGJNYXhCdXJzdCAgICAgICAgICAgICAgIDANCiAgICAgIEVuZHBv
-aW50IERlc2NyaXB0b3I6DQogICAgICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDcNCiAgICAg
-ICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgNQ0KICAgICAgICBiRW5kcG9pbnRBZGRyZXNzICAg
-ICAweDgxICBFUCAxIElODQogICAgICAgIGJtQXR0cmlidXRlcyAgICAgICAgICAgIDINCiAgICAg
-ICAgICBUcmFuc2ZlciBUeXBlICAgICAgICAgICAgQnVsaw0KICAgICAgICAgIFN5bmNoIFR5cGUg
-ICAgICAgICAgICAgICBOb25lDQogICAgICAgICAgVXNhZ2UgVHlwZSAgICAgICAgICAgICAgIERh
-dGENCiAgICAgICAgd01heFBhY2tldFNpemUgICAgIDB4MDQwMCAgMXggMTAyNCBieXRlcw0KICAg
-ICAgICBiSW50ZXJ2YWwgICAgICAgICAgICAgICAwDQogICAgICAgIGJNYXhCdXJzdCAgICAgICAg
-ICAgICAgIDANCiAgICBJbnRlcmZhY2UgRGVzY3JpcHRvcjoNCiAgICAgIGJMZW5ndGggICAgICAg
-ICAgICAgICAgIDkNCiAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDQNCiAgICAgIGJJbnRl
-cmZhY2VOdW1iZXIgICAgICAgIDINCiAgICAgIGJBbHRlcm5hdGVTZXR0aW5nICAgICAgIDANCiAg
-ICAgIGJOdW1FbmRwb2ludHMgICAgICAgICAgIDMNCiAgICAgIGJJbnRlcmZhY2VDbGFzcyAgICAg
-ICAyNTUgVmVuZG9yIFNwZWNpZmljIENsYXNzDQogICAgICBiSW50ZXJmYWNlU3ViQ2xhc3MgICAg
-MjU1IFZlbmRvciBTcGVjaWZpYyBTdWJjbGFzcw0KICAgICAgYkludGVyZmFjZVByb3RvY29sICAg
-ICA5Ng0KICAgICAgaUludGVyZmFjZSAgICAgICAgICAgICAgMA0KICAgICAgKiogVU5SRUNPR05J
-WkVEOiAgMDUgMjQgMDAgMTAgMDENCiAgICAgICoqIFVOUkVDT0dOSVpFRDogIDA1IDI0IDAxIDAw
-IDAwDQogICAgICAqKiBVTlJFQ09HTklaRUQ6ICAwNCAyNCAwMiAwMg0KICAgICAgKiogVU5SRUNP
-R05JWkVEOiAgMDUgMjQgMDYgMDAgMDANCiAgICAgIEVuZHBvaW50IERlc2NyaXB0b3I6DQogICAg
-ICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDcNCiAgICAgICAgYkRlc2NyaXB0b3JUeXBlICAg
-ICAgICAgNQ0KICAgICAgICBiRW5kcG9pbnRBZGRyZXNzICAgICAweDgzICBFUCAzIElODQogICAg
-ICAgIGJtQXR0cmlidXRlcyAgICAgICAgICAgIDMNCiAgICAgICAgICBUcmFuc2ZlciBUeXBlICAg
-ICAgICAgICAgSW50ZXJydXB0DQogICAgICAgICAgU3luY2ggVHlwZSAgICAgICAgICAgICAgIE5v
-bmUNCiAgICAgICAgICBVc2FnZSBUeXBlICAgICAgICAgICAgICAgRGF0YQ0KICAgICAgICB3TWF4
-UGFja2V0U2l6ZSAgICAgMHgwMDBhICAxeCAxMCBieXRlcw0KICAgICAgICBiSW50ZXJ2YWwgICAg
-ICAgICAgICAgICA5DQogICAgICAgIGJNYXhCdXJzdCAgICAgICAgICAgICAgIDANCiAgICAgIEVu
-ZHBvaW50IERlc2NyaXB0b3I6DQogICAgICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDcNCiAg
-ICAgICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgNQ0KICAgICAgICBiRW5kcG9pbnRBZGRyZXNz
-ICAgICAweDgyICBFUCAyIElODQogICAgICAgIGJtQXR0cmlidXRlcyAgICAgICAgICAgIDINCiAg
-ICAgICAgICBUcmFuc2ZlciBUeXBlICAgICAgICAgICAgQnVsaw0KICAgICAgICAgIFN5bmNoIFR5
-cGUgICAgICAgICAgICAgICBOb25lDQogICAgICAgICAgVXNhZ2UgVHlwZSAgICAgICAgICAgICAg
-IERhdGENCiAgICAgICAgd01heFBhY2tldFNpemUgICAgIDB4MDQwMCAgMXggMTAyNCBieXRlcw0K
-ICAgICAgICBiSW50ZXJ2YWwgICAgICAgICAgICAgICAwDQogICAgICAgIGJNYXhCdXJzdCAgICAg
-ICAgICAgICAgIDANCiAgICAgIEVuZHBvaW50IERlc2NyaXB0b3I6DQogICAgICAgIGJMZW5ndGgg
-ICAgICAgICAgICAgICAgIDcNCiAgICAgICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgNQ0KICAg
-ICAgICBiRW5kcG9pbnRBZGRyZXNzICAgICAweDAyICBFUCAyIE9VVA0KICAgICAgICBibUF0dHJp
-YnV0ZXMgICAgICAgICAgICAyDQogICAgICAgICAgVHJhbnNmZXIgVHlwZSAgICAgICAgICAgIEJ1
-bGsNCiAgICAgICAgICBTeW5jaCBUeXBlICAgICAgICAgICAgICAgTm9uZQ0KICAgICAgICAgIFVz
-YWdlIFR5cGUgICAgICAgICAgICAgICBEYXRhDQogICAgICAgIHdNYXhQYWNrZXRTaXplICAgICAw
-eDA0MDAgIDF4IDEwMjQgYnl0ZXMNCiAgICAgICAgYkludGVydmFsICAgICAgICAgICAgICAgMA0K
-ICAgICAgICBiTWF4QnVyc3QgICAgICAgICAgICAgICAwDQogICAgSW50ZXJmYWNlIERlc2NyaXB0
-b3I6DQogICAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA5DQogICAgICBiRGVzY3JpcHRvclR5
-cGUgICAgICAgICA0DQogICAgICBiSW50ZXJmYWNlTnVtYmVyICAgICAgICAzDQogICAgICBiQWx0
-ZXJuYXRlU2V0dGluZyAgICAgICAwDQogICAgICBiTnVtRW5kcG9pbnRzICAgICAgICAgICAzDQog
-ICAgICBiSW50ZXJmYWNlQ2xhc3MgICAgICAgMjU1IFZlbmRvciBTcGVjaWZpYyBDbGFzcw0KICAg
-ICAgYkludGVyZmFjZVN1YkNsYXNzICAgIDI1NSBWZW5kb3IgU3BlY2lmaWMgU3ViY2xhc3MNCiAg
-ICAgIGJJbnRlcmZhY2VQcm90b2NvbCAgICAgNjQNCiAgICAgIGlJbnRlcmZhY2UgICAgICAgICAg
-ICAgIDANCiAgICAgICoqIFVOUkVDT0dOSVpFRDogIDA1IDI0IDAwIDEwIDAxDQogICAgICAqKiBV
-TlJFQ09HTklaRUQ6ICAwNSAyNCAwMSAwMCAwMA0KICAgICAgKiogVU5SRUNPR05JWkVEOiAgMDQg
-MjQgMDIgMDINCiAgICAgICoqIFVOUkVDT0dOSVpFRDogIDA1IDI0IDA2IDAwIDAwDQogICAgICBF
-bmRwb2ludCBEZXNjcmlwdG9yOg0KICAgICAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA3DQog
-ICAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDUNCiAgICAgICAgYkVuZHBvaW50QWRkcmVz
-cyAgICAgMHg4NSAgRVAgNSBJTg0KICAgICAgICBibUF0dHJpYnV0ZXMgICAgICAgICAgICAzDQog
-ICAgICAgICAgVHJhbnNmZXIgVHlwZSAgICAgICAgICAgIEludGVycnVwdA0KICAgICAgICAgIFN5
-bmNoIFR5cGUgICAgICAgICAgICAgICBOb25lDQogICAgICAgICAgVXNhZ2UgVHlwZSAgICAgICAg
-ICAgICAgIERhdGENCiAgICAgICAgd01heFBhY2tldFNpemUgICAgIDB4MDAwYSAgMXggMTAgYnl0
-ZXMNCiAgICAgICAgYkludGVydmFsICAgICAgICAgICAgICAgOQ0KICAgICAgICBiTWF4QnVyc3Qg
-ICAgICAgICAgICAgICAwDQogICAgICBFbmRwb2ludCBEZXNjcmlwdG9yOg0KICAgICAgICBiTGVu
-Z3RoICAgICAgICAgICAgICAgICA3DQogICAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDUN
-CiAgICAgICAgYkVuZHBvaW50QWRkcmVzcyAgICAgMHg4NCAgRVAgNCBJTg0KICAgICAgICBibUF0
-dHJpYnV0ZXMgICAgICAgICAgICAyDQogICAgICAgICAgVHJhbnNmZXIgVHlwZSAgICAgICAgICAg
-IEJ1bGsNCiAgICAgICAgICBTeW5jaCBUeXBlICAgICAgICAgICAgICAgTm9uZQ0KICAgICAgICAg
-IFVzYWdlIFR5cGUgICAgICAgICAgICAgICBEYXRhDQogICAgICAgIHdNYXhQYWNrZXRTaXplICAg
-ICAweDA0MDAgIDF4IDEwMjQgYnl0ZXMNCiAgICAgICAgYkludGVydmFsICAgICAgICAgICAgICAg
-MA0KICAgICAgICBiTWF4QnVyc3QgICAgICAgICAgICAgICAwDQogICAgICBFbmRwb2ludCBEZXNj
-cmlwdG9yOg0KICAgICAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA3DQogICAgICAgIGJEZXNj
-cmlwdG9yVHlwZSAgICAgICAgIDUNCiAgICAgICAgYkVuZHBvaW50QWRkcmVzcyAgICAgMHgwMyAg
-RVAgMyBPVVQNCiAgICAgICAgYm1BdHRyaWJ1dGVzICAgICAgICAgICAgMg0KICAgICAgICAgIFRy
-YW5zZmVyIFR5cGUgICAgICAgICAgICBCdWxrDQogICAgICAgICAgU3luY2ggVHlwZSAgICAgICAg
-ICAgICAgIE5vbmUNCiAgICAgICAgICBVc2FnZSBUeXBlICAgICAgICAgICAgICAgRGF0YQ0KICAg
-ICAgICB3TWF4UGFja2V0U2l6ZSAgICAgMHgwNDAwICAxeCAxMDI0IGJ5dGVzDQogICAgICAgIGJJ
-bnRlcnZhbCAgICAgICAgICAgICAgIDANCiAgICAgICAgYk1heEJ1cnN0ICAgICAgICAgICAgICAg
-MA0KICAgIEludGVyZmFjZSBBc3NvY2lhdGlvbjoNCiAgICAgIGJMZW5ndGggICAgICAgICAgICAg
-ICAgIDgNCiAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgMTENCiAgICAgIGJGaXJzdEludGVy
-ZmFjZSAgICAgICAgMTINCiAgICAgIGJJbnRlcmZhY2VDb3VudCAgICAgICAgIDINCiAgICAgIGJG
-dW5jdGlvbkNsYXNzICAgICAgICAgIDIgQ29tbXVuaWNhdGlvbnMNCiAgICAgIGJGdW5jdGlvblN1
-YkNsYXNzICAgICAgMTQNCiAgICAgIGJGdW5jdGlvblByb3RvY29sICAgICAgIDANCiAgICAgIGlG
-dW5jdGlvbiAgICAgICAgICAgICAgIDANCiAgICBJbnRlcmZhY2UgRGVzY3JpcHRvcjoNCiAgICAg
-IGJMZW5ndGggICAgICAgICAgICAgICAgIDkNCiAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAg
-IDQNCiAgICAgIGJJbnRlcmZhY2VOdW1iZXIgICAgICAgMTINCiAgICAgIGJBbHRlcm5hdGVTZXR0
-aW5nICAgICAgIDANCiAgICAgIGJOdW1FbmRwb2ludHMgICAgICAgICAgIDENCiAgICAgIGJJbnRl
-cmZhY2VDbGFzcyAgICAgICAgIDIgQ29tbXVuaWNhdGlvbnMNCiAgICAgIGJJbnRlcmZhY2VTdWJD
-bGFzcyAgICAgMTQNCiAgICAgIGJJbnRlcmZhY2VQcm90b2NvbCAgICAgIDANCiAgICAgIGlJbnRl
-cmZhY2UgICAgICAgICAgICAgIDYgTUJJTSBDb250cm9sDQogICAgICBDREMgSGVhZGVyOg0KICAg
-ICAgICBiY2RDREMgICAgICAgICAgICAgICAxLjEwDQogICAgICBDREMgVW5pb246DQogICAgICAg
-IGJNYXN0ZXJJbnRlcmZhY2UgICAgICAgIDEyDQogICAgICAgIGJTbGF2ZUludGVyZmFjZSAgICAg
-ICAgIDEzDQogICAgICBDREMgTUJJTToNCiAgICAgICAgYmNkTUJJTVZlcnNpb24gICAgICAgMS4w
-MA0KICAgICAgICB3TWF4Q29udHJvbE1lc3NhZ2UgICA0MDk2DQogICAgICAgIGJOdW1iZXJGaWx0
-ZXJzICAgICAgIDMyDQogICAgICAgIGJNYXhGaWx0ZXJTaXplICAgICAgIDEyOA0KICAgICAgICB3
-TWF4U2VnbWVudFNpemUgICAgICAyMDQ4DQogICAgICAgIGJtTmV0d29ya0NhcGFiaWxpdGllcyAw
-eDIwDQogICAgICAgICAgOC1ieXRlIG50YiBpbnB1dCBzaXplDQogICAgICBVTlJFQ09HTklaRUQg
-Q0RDOiAgMDggMjQgMWMgMDAgMDEgNDAgZGMgMDUNCiAgICAgIEVuZHBvaW50IERlc2NyaXB0b3I6
-DQogICAgICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDcNCiAgICAgICAgYkRlc2NyaXB0b3JU
-eXBlICAgICAgICAgNQ0KICAgICAgICBiRW5kcG9pbnRBZGRyZXNzICAgICAweDg2ICBFUCA2IElO
-DQogICAgICAgIGJtQXR0cmlidXRlcyAgICAgICAgICAgIDMNCiAgICAgICAgICBUcmFuc2ZlciBU
-eXBlICAgICAgICAgICAgSW50ZXJydXB0DQogICAgICAgICAgU3luY2ggVHlwZSAgICAgICAgICAg
-ICAgIE5vbmUNCiAgICAgICAgICBVc2FnZSBUeXBlICAgICAgICAgICAgICAgRGF0YQ0KICAgICAg
-ICB3TWF4UGFja2V0U2l6ZSAgICAgMHgwMDQwICAxeCA2NCBieXRlcw0KICAgICAgICBiSW50ZXJ2
-YWwgICAgICAgICAgICAgICA5DQogICAgICAgIGJNYXhCdXJzdCAgICAgICAgICAgICAgIDANCiAg
-ICBJbnRlcmZhY2UgRGVzY3JpcHRvcjoNCiAgICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDkN
-CiAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDQNCiAgICAgIGJJbnRlcmZhY2VOdW1iZXIg
-ICAgICAgMTMNCiAgICAgIGJBbHRlcm5hdGVTZXR0aW5nICAgICAgIDANCiAgICAgIGJOdW1FbmRw
-b2ludHMgICAgICAgICAgIDANCiAgICAgIGJJbnRlcmZhY2VDbGFzcyAgICAgICAgMTAgQ0RDIERh
-dGENCiAgICAgIGJJbnRlcmZhY2VTdWJDbGFzcyAgICAgIDAgVW51c2VkDQogICAgICBiSW50ZXJm
-YWNlUHJvdG9jb2wgICAgICAyDQogICAgICBpSW50ZXJmYWNlICAgICAgICAgICAgICAwDQogICAg
-SW50ZXJmYWNlIERlc2NyaXB0b3I6DQogICAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA5DQog
-ICAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgICA0DQogICAgICBiSW50ZXJmYWNlTnVtYmVyICAg
-ICAgIDEzDQogICAgICBiQWx0ZXJuYXRlU2V0dGluZyAgICAgICAxDQogICAgICBiTnVtRW5kcG9p
-bnRzICAgICAgICAgICAyDQogICAgICBiSW50ZXJmYWNlQ2xhc3MgICAgICAgIDEwIENEQyBEYXRh
-DQogICAgICBiSW50ZXJmYWNlU3ViQ2xhc3MgICAgICAwIFVudXNlZA0KICAgICAgYkludGVyZmFj
-ZVByb3RvY29sICAgICAgMg0KICAgICAgaUludGVyZmFjZSAgICAgICAgICAgICAgNyBNQklNIERh
-dGENCiAgICAgIEVuZHBvaW50IERlc2NyaXB0b3I6DQogICAgICAgIGJMZW5ndGggICAgICAgICAg
-ICAgICAgIDcNCiAgICAgICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgNQ0KICAgICAgICBiRW5k
-cG9pbnRBZGRyZXNzICAgICAweDhlICBFUCAxNCBJTg0KICAgICAgICBibUF0dHJpYnV0ZXMgICAg
-ICAgICAgICAyDQogICAgICAgICAgVHJhbnNmZXIgVHlwZSAgICAgICAgICAgIEJ1bGsNCiAgICAg
-ICAgICBTeW5jaCBUeXBlICAgICAgICAgICAgICAgTm9uZQ0KICAgICAgICAgIFVzYWdlIFR5cGUg
-ICAgICAgICAgICAgICBEYXRhDQogICAgICAgIHdNYXhQYWNrZXRTaXplICAgICAweDA0MDAgIDF4
-IDEwMjQgYnl0ZXMNCiAgICAgICAgYkludGVydmFsICAgICAgICAgICAgICAgMA0KICAgICAgICBi
-TWF4QnVyc3QgICAgICAgICAgICAgICA2DQogICAgICBFbmRwb2ludCBEZXNjcmlwdG9yOg0KICAg
-ICAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA3DQogICAgICAgIGJEZXNjcmlwdG9yVHlwZSAg
-ICAgICAgIDUNCiAgICAgICAgYkVuZHBvaW50QWRkcmVzcyAgICAgMHgwZiAgRVAgMTUgT1VUDQog
-ICAgICAgIGJtQXR0cmlidXRlcyAgICAgICAgICAgIDINCiAgICAgICAgICBUcmFuc2ZlciBUeXBl
-ICAgICAgICAgICAgQnVsaw0KICAgICAgICAgIFN5bmNoIFR5cGUgICAgICAgICAgICAgICBOb25l
-DQogICAgICAgICAgVXNhZ2UgVHlwZSAgICAgICAgICAgICAgIERhdGENCiAgICAgICAgd01heFBh
-Y2tldFNpemUgICAgIDB4MDQwMCAgMXggMTAyNCBieXRlcw0KICAgICAgICBiSW50ZXJ2YWwgICAg
-ICAgICAgICAgICAwDQogICAgICAgIGJNYXhCdXJzdCAgICAgICAgICAgICAgIDINCkJpbmFyeSBP
-YmplY3QgU3RvcmUgRGVzY3JpcHRvcjoNCiAgYkxlbmd0aCAgICAgICAgICAgICAgICAgNQ0KICBi
-RGVzY3JpcHRvclR5cGUgICAgICAgIDE1DQogIHdUb3RhbExlbmd0aCAgICAgICAgICAgMjINCiAg
-Yk51bURldmljZUNhcHMgICAgICAgICAgMg0KICBVU0IgMi4wIEV4dGVuc2lvbiBEZXZpY2UgQ2Fw
-YWJpbGl0eToNCiAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA3DQogICAgYkRlc2NyaXB0b3JU
-eXBlICAgICAgICAxNg0KICAgIGJEZXZDYXBhYmlsaXR5VHlwZSAgICAgIDINCiAgICBibUF0dHJp
-YnV0ZXMgICAweDAwMDAyMTFlDQogICAgICBMaW5rIFBvd2VyIE1hbmFnZW1lbnQgKExQTSkgU3Vw
-cG9ydGVkDQogIFN1cGVyU3BlZWQgVVNCIERldmljZSBDYXBhYmlsaXR5Og0KICAgIGJMZW5ndGgg
-ICAgICAgICAgICAgICAgMTANCiAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgIDE2DQogICAgYkRl
-dkNhcGFiaWxpdHlUeXBlICAgICAgMw0KICAgIGJtQXR0cmlidXRlcyAgICAgICAgIDB4MDANCiAg
-ICB3U3BlZWRzU3VwcG9ydGVkICAgMHgwMDBmDQogICAgICBEZXZpY2UgY2FuIG9wZXJhdGUgYXQg
-TG93IFNwZWVkICgxTWJwcykNCiAgICAgIERldmljZSBjYW4gb3BlcmF0ZSBhdCBGdWxsIFNwZWVk
-ICgxMk1icHMpDQogICAgICBEZXZpY2UgY2FuIG9wZXJhdGUgYXQgSGlnaCBTcGVlZCAoNDgwTWJw
-cykNCiAgICAgIERldmljZSBjYW4gb3BlcmF0ZSBhdCBTdXBlclNwZWVkICg1R2JwcykNCiAgICBi
-RnVuY3Rpb25hbGl0eVN1cHBvcnQgICAxDQogICAgICBMb3dlc3QgZnVsbHktZnVuY3Rpb25hbCBk
-ZXZpY2Ugc3BlZWQgaXMgRnVsbCBTcGVlZCAoMTJNYnBzKQ0KICAgIGJVMURldkV4aXRMYXQgICAg
-ICAgICAgIDAgbWljcm8gc2Vjb25kcw0KICAgIGJVMkRldkV4aXRMYXQgICAgICAgICAgIDAgbWlj
-cm8gc2Vjb25kcw0KRGV2aWNlIFN0YXR1czogICAgIDB4MDAwMA0KICAoQnVzIFBvd2VyZWQp
+:-)
 
---_003_BL0PR02MB4451F88B384BA9D7FCE6A7C3ABC29BL0PR02MB4451namp_
-Content-Type: text/plain; name="c080.txt"
-Content-Description: c080.txt
-Content-Disposition: attachment; filename="c080.txt"; size=2260;
-	creation-date="Thu, 05 May 2022 12:33:38 GMT";
-	modification-date="Thu, 05 May 2022 12:35:40 GMT"
-Content-Transfer-Encoding: base64
+> However, perhaps the solution is to have _both_. i.e using
+> BOUNDED_FLEX_ARRAY(count_type, count_name, array_type, array_name) for
+> the "neighboring" case, and the DECLARE...{ELEMENTS,COUNT} for the
+> "split" case.
 
-ZXRoYW5AZXRoYW4tTGF0aXR1ZGUtNzI4MDp+L3dvcmsvbXBibC81MTY0L01CUExfUjIxX0I1MTY0
-L0RyaXZlcnMvVVNCJCBsc3VzYiAtdiAtZCAxMTk5Og0KDQpCdXMgMDAxIERldmljZSAwMDU6IElE
-IDExOTk6YzA4MCBTaWVycmEgV2lyZWxlc3MsIEluYy4NCkNvdWxkbid0IG9wZW4gZGV2aWNlLCBz
-b21lIGluZm9ybWF0aW9uIHdpbGwgYmUgbWlzc2luZw0KRGV2aWNlIERlc2NyaXB0b3I6DQogIGJM
-ZW5ndGggICAgICAgICAgICAgICAgMTgNCiAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgMQ0KICBi
-Y2RVU0IgICAgICAgICAgICAgICAyLjAwDQogIGJEZXZpY2VDbGFzcyAgICAgICAgICAgIDAgKERl
-ZmluZWQgYXQgSW50ZXJmYWNlIGxldmVsKQ0KICBiRGV2aWNlU3ViQ2xhc3MgICAgICAgICAwDQog
-IGJEZXZpY2VQcm90b2NvbCAgICAgICAgIDANCiAgYk1heFBhY2tldFNpemUwICAgICAgICA2NA0K
-ICBpZFZlbmRvciAgICAgICAgICAgMHgxMTk5IFNpZXJyYSBXaXJlbGVzcywgSW5jLg0KICBpZFBy
-b2R1Y3QgICAgICAgICAgMHhjMDgwDQogIGJjZERldmljZSAgICAgICAgICAgIDAuMDANCiAgaU1h
-bnVmYWN0dXJlciAgICAgICAgICAgMSBTaWVycmEgV2lyZWxlc3MsIEluY29ycG9yYXRlZA0KICBp
-UHJvZHVjdCAgICAgICAgICAgICAgICAyIFNpZXJyYSBXaXJlbGVzcyBFTTc1OTAgTW9iaWxlIEJy
-b2FkYmFuZCBBZGFwdGVyDQogIGlTZXJpYWwgICAgICAgICAgICAgICAgIDMgMDEyMzQ1Njc4OUFC
-Q0RFRg0KICBiTnVtQ29uZmlndXJhdGlvbnMgICAgICAxDQogIENvbmZpZ3VyYXRpb24gRGVzY3Jp
-cHRvcjoNCiAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA5DQogICAgYkRlc2NyaXB0b3JUeXBl
-ICAgICAgICAgMg0KICAgIHdUb3RhbExlbmd0aCAgICAgICAgICAgMzINCiAgICBiTnVtSW50ZXJm
-YWNlcyAgICAgICAgICAxDQogICAgYkNvbmZpZ3VyYXRpb25WYWx1ZSAgICAgMQ0KICAgIGlDb25m
-aWd1cmF0aW9uICAgICAgICAgIDANCiAgICBibUF0dHJpYnV0ZXMgICAgICAgICAweGEwDQogICAg
-ICAoQnVzIFBvd2VyZWQpDQogICAgICBSZW1vdGUgV2FrZXVwDQogICAgTWF4UG93ZXIgICAgICAg
-ICAgICAgICAgMm1BDQogICAgSW50ZXJmYWNlIERlc2NyaXB0b3I6DQogICAgICBiTGVuZ3RoICAg
-ICAgICAgICAgICAgICA5DQogICAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgICA0DQogICAgICBi
-SW50ZXJmYWNlTnVtYmVyICAgICAgICAwDQogICAgICBiQWx0ZXJuYXRlU2V0dGluZyAgICAgICAw
-DQogICAgICBiTnVtRW5kcG9pbnRzICAgICAgICAgICAyDQogICAgICBiSW50ZXJmYWNlQ2xhc3Mg
-ICAgICAgMjU1IFZlbmRvciBTcGVjaWZpYyBDbGFzcw0KICAgICAgYkludGVyZmFjZVN1YkNsYXNz
-ICAgIDI1NSBWZW5kb3IgU3BlY2lmaWMgU3ViY2xhc3MNCiAgICAgIGJJbnRlcmZhY2VQcm90b2Nv
-bCAgICAyNTUgVmVuZG9yIFNwZWNpZmljIFByb3RvY29sDQogICAgICBpSW50ZXJmYWNlICAgICAg
-ICAgICAgICAwDQogICAgICBFbmRwb2ludCBEZXNjcmlwdG9yOg0KICAgICAgICBiTGVuZ3RoICAg
-ICAgICAgICAgICAgICA3DQogICAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDUNCiAgICAg
-ICAgYkVuZHBvaW50QWRkcmVzcyAgICAgMHg4MSAgRVAgMSBJTg0KICAgICAgICBibUF0dHJpYnV0
-ZXMgICAgICAgICAgICAyDQogICAgICAgICAgVHJhbnNmZXIgVHlwZSAgICAgICAgICAgIEJ1bGsN
-CiAgICAgICAgICBTeW5jaCBUeXBlICAgICAgICAgICAgICAgTm9uZQ0KICAgICAgICAgIFVzYWdl
-IFR5cGUgICAgICAgICAgICAgICBEYXRhDQogICAgICAgIHdNYXhQYWNrZXRTaXplICAgICAweDAy
-MDAgIDF4IDUxMiBieXRlcw0KICAgICAgICBiSW50ZXJ2YWwgICAgICAgICAgICAgICAwDQogICAg
-ICBFbmRwb2ludCBEZXNjcmlwdG9yOg0KICAgICAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA3
-DQogICAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDUNCiAgICAgICAgYkVuZHBvaW50QWRk
-cmVzcyAgICAgMHgwMSAgRVAgMSBPVVQNCiAgICAgICAgYm1BdHRyaWJ1dGVzICAgICAgICAgICAg
-Mg0KICAgICAgICAgIFRyYW5zZmVyIFR5cGUgICAgICAgICAgICBCdWxrDQogICAgICAgICAgU3lu
-Y2ggVHlwZSAgICAgICAgICAgICAgIE5vbmUNCiAgICAgICAgICBVc2FnZSBUeXBlICAgICAgICAg
-ICAgICAgRGF0YQ0KICAgICAgICB3TWF4UGFja2V0U2l6ZSAgICAgMHgwMjAwICAxeCA1MTIgYnl0
-ZXMNCiAgICAgICAgYkludGVydmFsICAgICAgICAgICAgICAgMA==
+Seems reasonable to me.
 
---_003_BL0PR02MB4451F88B384BA9D7FCE6A7C3ABC29BL0PR02MB4451namp_--
+> And DECLARE_FLEX_ARRAY_ELEMENTS could actually be expanded to include
+> the count_name too, so both methods could be "forward portable" to a
+> future where C grew the syntax for bounded flex arrays.
+
+I guess I don't see that happening :)
+
+> > This seems rather awkward, having to set it to NULL, then checking rc
+> > (and possibly needing a separate variable for it), etc.
+> 
+> I think the errno return is completely required. I had an earlier version
+> of this that was much more like a drop-in replacement for memcpy that
+> would just truncate or panic, 
+> 
+
+Oh, I didn't mean to imply it should truncate or panic or such - but if
+it returns a pointer it can still be an ERR_PTR() or NULL instead of
+having this separate indication, which even often confuses static type
+checkers since they don't always see the "errno == 0 <=> ptr != NULL"
+relation.
+
+So not saying you shouldn't have any error return - clearly you need
+that, just saying that I'm not sure that having the two separated is
+great.
+
+
+> Requiring instance to be NULL is debatable, but I feel pretty strongly
+> about it because it does handle a class of mistakes (resource leaks),
+> and it's not much of a burden to require a known-good starting state.
+
+Yeah, dunno, I guess I'm slightly more on the side of not requiring it,
+since we don't do the same for kmalloc() etc. and probably really
+wouldn't want to add kmalloc_s() that does it ;-)
+
+I mean, you _could_ go there:
+
+int kmalloc_s(void **ptr, size_t size, gfp_t gfp)
+{
+  void *ret;
+
+  if (*ptr)
+    return -EINVAL;
+
+  ret = kmalloc(size, gfp);
+  if (!ret)
+    return -ENOMEM;
+  *ptr = ret;
+  return 0;  
+}
+
+right? But we don't really do that, and I'm not sure it'd be a win if
+done over the whole code base.
+
+So I'm not really sure why this aspect here should need to be different,
+except of course that you already need the input argument for the magic.
+
+But we could still have (this prototype is theoretical, of course, it
+cannot be implemented in C):
+
+void *mem_to_flex_dup(void *ptr, const void *data, size_t elements,
+                      gfp_t gfp);
+
+
+which isn't really that much better though.
+
+And btw, while I was writing it down I was looking to see if it should
+be "size_t elements" or "size_t len" (like memcpy), it took me some time
+to figure out, and I was looking at the examples:
+
+ 1) most of them actually use __u8 or some variant thereof, so you
+    could probably add an even simpler macro like
+       BOUNDED_FLEX_DATA(int, bytes, data)
+    which has the u8 type internally.
+
+ 2) Unless I'm confusing myself, you got the firewire change wrong,
+    because __mem_to_flex_dup takes the "elements_count", but the
+    memcpy() there wasn't multiplied by the sizeof(element)? Or maybe
+    the fact that it was declared as __u32 header[0] is wrong, and it
+    should be __u8, but it's all very confusing, and I'm really not
+    sure about this at all.
+
+
+
+One "perhaps you'll laugh me out of the room" suggestion might be to
+actually be able to initialize the whole thing too?
+
+
+mydata = flex_struct_alloc(mydata, GFP_KERNEL,
+                           variable_data, variable_len,
+                           .member = 1,
+                           .another = 2);
+
+(the ordering can't really be otherwise since you have to use
+__VA_ARGS__).
+
+That might reduce some more code too, though I guess it's quite some
+additional magic ... :)
+
+
+> > but still, honestly, I don't like it. As APIs go, it feels a bit
+> > cumbersome and awkward to use, and you really need everyone to use this,
+> > and not say "uh what, I'll memcpy() instead".
+> 
+> Sure, and I have tried to get it down as small as possible. The earlier
+> "just put all the member names in every call" version was horrid. :P
+
+:-D
+
+> I
+> realize it's more work to check errno, but the memcpy() API we've all
+> been trained to use is just plain dangerous. I don't think it's
+> unreasonable to ask people to retrain themselves to avoid it. All that
+> said, yes, I want it to be as friendly as possible.
+> 
+> > Maybe there should also be a realloc() version of it?
+> 
+> Sure! Seems reasonable. I'd like to see the code pattern for this
+> though. Do you have any examples?
+
+I was going to point to struct cfg80211_bss_ies, but I realize now
+they're RCU-managed, so we never resize them anyway ... So maybe it's
+less common than I thought it might be.
+
+I suppose you know better since you converted a lot of stuff already :-)
+
+johannes
