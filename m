@@ -2,146 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01A051BB40
-	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 10:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6A551BC4F
+	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 11:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241824AbiEEJBO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 May 2022 05:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41848 "EHLO
+        id S1348604AbiEEJnr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 May 2022 05:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351731AbiEEJAz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 05:00:55 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE5849F18;
-        Thu,  5 May 2022 01:57:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651741021; x=1683277021;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=V7sjjm49a0/QUz6WLYHMRbDzxjsAIpjkcvIhcXa4mU4=;
-  b=HEbHQLix8+eg2kC3eiLENNWLugLy5RhX9BcJgkAwSK+wKxmMCjGLxTZu
-   lDP2yhspRHONqJSC/RilGDmGEgC03axzXBXnvTahn3eu/8ZBwNQjeZJ80
-   GhWTCDq6zwp0/n0l93JseoaDD9mfvjRNpNCbqnjF1sQEMpzu00d3Xom9s
-   s=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 05 May 2022 01:57:01 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 01:57:00 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 5 May 2022 01:57:00 -0700
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 5 May 2022 01:56:53 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [v15 6/6] usb: dwc3: qcom: Keep power domain on to retain controller status
-Date:   Thu, 5 May 2022 14:26:13 +0530
-Message-ID: <1651740973-7944-7-git-send-email-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
-References: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
+        with ESMTP id S240726AbiEEJnq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 05:43:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1B52B1BC
+        for <linux-usb@vger.kernel.org>; Thu,  5 May 2022 02:40:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED4026119C
+        for <linux-usb@vger.kernel.org>; Thu,  5 May 2022 09:40:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4DF45C385A4
+        for <linux-usb@vger.kernel.org>; Thu,  5 May 2022 09:40:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651743606;
+        bh=9F189vkMhVx8NOx1qOodw7tuc8NDlgHY+VeKmKI6e1c=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=oMzh+YPuVWqCsfTPFjq/uaJc6QLZ9Ycw3Oprt7lUbK6sjkYNxeGYJeXMQhpp8d683
+         0dTfrZRYNXw3WXJQGhL1/UZ8g6Im+LejCgce03WacSj+G1rXrZuveuklRfatv4EgFH
+         J8o7Xt+MIRH02A4ZYfCOVcy3EvOD3rCx0vkvYrCqKgjqi9GHP7TXrofgMHXe/LI0VJ
+         FezaVrmYnwu4+hSbgpQlExikPewKq8u6d2SOeiUSABt2iA8q1bFby1XBs8DPYO5gU3
+         Ynafwnpq98GxzyilaeWt8G5zHISkB5R81xYZTiGqQd5Yz2Doq55A5JRHtM34ifb7x6
+         ayrbGD4++sFzw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 28283C05FD5; Thu,  5 May 2022 09:40:06 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215906] DMAR fault when connected usb hub (xhci_hcd)
+Date:   Thu, 05 May 2022 09:40:06 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: regressions@leemhuis.info
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-215906-208809-Zb7Q5gXvYB@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215906-208809@https.bugzilla.kernel.org/>
+References: <bug-215906-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215906
 
-Keep the power domain always on during runtime suspend or if the
-controller supports wakeup in order to retain controller status
-and to support wakeup from devices.
+The Linux kernel's regression tracker (Thorsten Leemhuis) (regressions@leem=
+huis.info) changed:
 
-Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
- drivers/usb/dwc3/dwc3-qcom.c | 23 ++++++++++++++++-------
- 1 file changed, 16 insertions(+), 7 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |regressions@leemhuis.info
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 9804a19..1f9589a 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -17,6 +17,7 @@
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/phy/phy.h>
-+#include <linux/pm_domain.h>
- #include <linux/usb/of.h>
- #include <linux/reset.h>
- #include <linux/iopoll.h>
-@@ -718,12 +719,13 @@ dwc3_qcom_create_urs_usb_platdev(struct device *dev)
- 
- static int dwc3_qcom_probe(struct platform_device *pdev)
- {
--	struct device_node	*np = pdev->dev.of_node;
--	struct device		*dev = &pdev->dev;
--	struct dwc3_qcom	*qcom;
--	struct resource		*res, *parent_res = NULL;
--	int			ret, i;
--	bool			ignore_pipe_clk;
-+	struct device_node *np = pdev->dev.of_node;
-+	struct device *dev = &pdev->dev;
-+	struct dwc3_qcom *qcom;
-+	struct resource	*res, *parent_res = NULL;
-+	int ret, i;
-+	bool ignore_pipe_clk;
-+	struct generic_pm_domain *genpd;
- 
- 	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
- 	if (!qcom)
-@@ -732,6 +734,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, qcom);
- 	qcom->dev = &pdev->dev;
- 
-+	genpd = pd_to_genpd(qcom->dev->pm_domain);
-+
- 	if (has_acpi_companion(dev)) {
- 		qcom->acpi_pdata = acpi_device_get_match_data(dev);
- 		if (!qcom->acpi_pdata) {
-@@ -839,7 +843,12 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto interconnect_exit;
- 
--	device_init_wakeup(&pdev->dev, 1);
-+	genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
-+
-+	if (device_may_wakeup(&qcom->dwc3->dev)) {
-+		genpd->flags |= GENPD_FLAG_ALWAYS_ON;
-+		device_init_wakeup(&pdev->dev, true);
-+	}
- 	qcom->is_suspended = false;
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
--- 
-2.7.4
+--- Comment #2 from The Linux kernel's regression tracker (Thorsten Leemhui=
+s) (regressions@leemhuis.info) ---
+I wanted to add this issue to the regression tracking and poke the maintain=
+ers,
+but noticed there is a patch that is being backported right now that might =
+or
+might not be related (not my area of expertise):
+https://lore.kernel.org/all/20220504153117.726462014@linuxfoundation.org/
 
+It's already in 5.18-rc5; could somebody please give it a quick try before I
+proceed with my initial plan?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
