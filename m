@@ -2,243 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7313E51C83A
-	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 20:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA3851C875
+	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 20:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383317AbiEESsY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 May 2022 14:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
+        id S243733AbiEES5P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 May 2022 14:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383261AbiEESsD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 14:48:03 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBA75799D
-        for <linux-usb@vger.kernel.org>; Thu,  5 May 2022 11:39:19 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d17so5237602plg.0
-        for <linux-usb@vger.kernel.org>; Thu, 05 May 2022 11:39:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bIDYG8oUb6Mu7NvJ6XCyJeRsH11vzTSCPCwxqfuBo6Q=;
-        b=TAsZfcIzZ1Euc/qIeEg34BQq2COz7cgqBz00GoicuXUNf9pdGcbnWHwxzUdfUr95G6
-         aZkeIr2DXfy8REqoWNWUrHkDO72sG3i0jXoJwl1ByCdJe4nI3ufTivSeF9XGTyVfZSBt
-         E8X9FJkYlIIwFcdiPVlMoWZYSaWqjlfPLGIK0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bIDYG8oUb6Mu7NvJ6XCyJeRsH11vzTSCPCwxqfuBo6Q=;
-        b=4UrbY9FIwCwr4vRyu6hs8R0VaGldzq3DztFeisZVqfN442dOZw8LpxklFvWmyzbmSb
-         NkR68R2TltVoEor4PV2YFnpzQCGH7JTlZVxV+VvBf/kXw3o7cvtJYTFpjH/2Ew8Bwxk4
-         nCVgcWL5MTiXAUvQFiyhlvZww0b7bRMnRMPOZ8J4GmEvahq04/MT00k0ptFQVY33VnEI
-         KsQx03O4m3ij1WcKtd1NIzZRNmGkPnw9F2fuIa+44Xb5WjBUgAny+ptIKHvf/3owWnl+
-         XuqM0llxvpoPYdTjRl9G7aFDZsS8ct8mJ/XvjXbai2Q3TcojKXPpXGbxy7WX+AIia8EK
-         Qyxg==
-X-Gm-Message-State: AOAM531qrFu5+6AqOHwLRm2eXKDsPahSL0QJIvu4LweuwM2ylC/pr0K5
-        9/je/I9z4hSBQi4WUIIiRV5I4A==
-X-Google-Smtp-Source: ABdhPJwhJknux9s/+qFqH2XgmMgiW2vZym5kO8XlabzZGnT4KBaHxWpUmQRgMpcqhaJmjVSWVeT9nQ==
-X-Received: by 2002:a17:902:c78b:b0:15c:e5dc:4f63 with SMTP id w11-20020a170902c78b00b0015ce5dc4f63mr28835867pla.90.1651775959148;
-        Thu, 05 May 2022 11:39:19 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f10-20020a170902860a00b0015e8d4eb1fcsm1871783plo.70.2022.05.05.11.39.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 11:39:18 -0700 (PDT)
-Date:   Thu, 5 May 2022 11:39:17 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        with ESMTP id S1344001AbiEES5O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 14:57:14 -0400
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE6E387BF;
+        Thu,  5 May 2022 11:53:31 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id B9686100D5874;
+        Thu,  5 May 2022 20:53:28 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 853AD11760D; Thu,  5 May 2022 20:53:28 +0200 (CEST)
+Date:   Thu, 5 May 2022 20:53:28 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
-        netdev@vger.kernel.org, selinux@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        alsa-devel@alsa-project.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Baowen Zheng <baowen.zheng@corigine.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Bradley Grove <linuxdrivers@attotech.com>,
-        brcm80211-dev-list.pdl@broadcom.com,
-        Christian Brauner <brauner@kernel.org>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Chris Zankel <chris@zankel.net>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Gow <davidgow@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Hulk Robot <hulkci@huawei.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        James Morris <jmorris@namei.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        John Keeping <john@metanate.com>,
-        Juergen Gross <jgross@suse.com>, Kalle Valo <kvalo@kernel.org>,
-        Keith Packard <keithp@keithp.com>, keyrings@vger.kernel.org,
-        kunit-dev@googlegroups.com,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, llvm@lists.linux.dev,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Louis Peens <louis.peens@corigine.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rich Felker <dalias@aerifal.cx>,
-        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
         Russell King <linux@armlinux.org.uk>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        SHA-cyfmac-dev-list@infineon.com,
-        Simon Horman <simon.horman@corigine.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
-        xen-devel@lists.xenproject.org,
-        Yang Yingliang <yangyingliang@huawei.com>
-Subject: Re: [PATCH 28/32] selinux: Use mem_to_flex_dup() with xfrm and sidtab
-Message-ID: <202205051124.6D80ABAE32@keescook>
-References: <20220504014440.3697851-1-keescook@chromium.org>
- <20220504014440.3697851-29-keescook@chromium.org>
- <CAHC9VhT5Y=ENiSyb=S-NVbGX63sLOv4nVuR_GS-yww6tiz0wYA@mail.gmail.com>
- <20220504234324.GA12556@embeddedor>
- <CAHC9VhRJC4AxeDsGpdphfJD4WzgaeBsdONHnixBzft5u_cE-Dw@mail.gmail.com>
+        Ferry Toth <fntoth@gmail.com>
+Subject: Re: [PATCH net-next v2 5/7] usbnet: smsc95xx: Forward PHY interrupts
+ to PHY driver to avoid polling
+Message-ID: <20220505185328.GA14123@wunner.de>
+References: <cover.1651574194.git.lukas@wunner.de>
+ <c6b7f4e4a17913d2f2bc4fe722df0804c2d6fea7.1651574194.git.lukas@wunner.de>
+ <20220505113207.487861b2@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHC9VhRJC4AxeDsGpdphfJD4WzgaeBsdONHnixBzft5u_cE-Dw@mail.gmail.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220505113207.487861b2@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 04, 2022 at 11:14:42PM -0400, Paul Moore wrote:
-> On Wed, May 4, 2022 at 7:34 PM Gustavo A. R. Silva
-> <gustavoars@kernel.org> wrote:
-> >
-> > Hi Paul,
-> >
-> > On Wed, May 04, 2022 at 06:57:28PM -0400, Paul Moore wrote:
-> > > On Tue, May 3, 2022 at 9:57 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > [..]
-> >
-> > > > +++ b/include/uapi/linux/xfrm.h
-> > > > @@ -31,9 +31,9 @@ struct xfrm_id {
-> > > >  struct xfrm_sec_ctx {
-> > > >         __u8    ctx_doi;
-> > > >         __u8    ctx_alg;
-> > > > -       __u16   ctx_len;
-> > > > +       __DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(__u16, ctx_len);
-> > > >         __u32   ctx_sid;
-> > > > -       char    ctx_str[0];
-> > > > +       __DECLARE_FLEX_ARRAY_ELEMENTS(char, ctx_str);
-> > > >  };
-> > >
-> > > While I like the idea of this in principle, I'd like to hear about the
-> > > testing you've done on these patches.  A previous flex array
-> > > conversion in the audit uapi headers ended up causing a problem with
-> >
-> > I'm curious about which commit caused those problems...?
+On Thu, May 05, 2022 at 11:32:07AM -0700, Jakub Kicinski wrote:
+> On Tue, 3 May 2022 15:15:05 +0200 Lukas Wunner wrote:
+> > @@ -608,11 +618,20 @@ static void smsc95xx_status(struct usbnet *dev, struct urb *urb)
+> >  	intdata = get_unaligned_le32(urb->transfer_buffer);
+> >  	netif_dbg(dev, link, dev->net, "intdata: 0x%08X\n", intdata);
+> >  
+> > +	/* USB interrupts are received in softirq (tasklet) context.
+> > +	 * Switch to hardirq context to make genirq code happy.
+> > +	 */
+> > +	local_irq_save(flags);
+> > +	__irq_enter_raw();
+> > +
+> >  	if (intdata & INT_ENP_PHY_INT_)
+> > -		;
+> > +		generic_handle_domain_irq(pdata->irqdomain, PHY_HWIRQ);
+> >  	else
+> >  		netdev_warn(dev->net, "unexpected interrupt, intdata=0x%08X\n",
+> >  			    intdata);
+> > +
+> > +	__irq_exit_raw();
+> > +	local_irq_restore(flags);
 > 
-> Commit ed98ea2128b6 ("audit: replace zero-length array with
-> flexible-array member"), however, as I said earlier, the problem was
-> actually with SWIG, it just happened to be triggered by the kernel
-> commit.  There was a brief fedora-devel mail thread about the problem,
-> see the link below:
+> IRQ maintainers could you cast your eyes over this?
 > 
-> * https://www.spinics.net/lists/fedora-devel/msg297991.html
+> Full patch:
+> 
+> https://lore.kernel.org/all/c6b7f4e4a17913d2f2bc4fe722df0804c2d6fea7.1651574194.git.lukas@wunner.de/
 
-Wow, that's pretty weird -- it looks like SWIG was scraping the headers
-to build its conversions? I assume SWIG has been fixed now?
+This is basically identical to what drivers/net/usb/lan78xx.c does
+in lan78xx_status(), except I'm passing the hw irq instead of the
+linux irq to genirq code, thereby avoiding the overhead of a
+radix_tree_lookup().
 
-> To reiterate, I'm supportive of changes like this, but I would like to
-> hear how it was tested to ensure there are no unexpected problems with
-> userspace.  If there are userspace problems it doesn't mean we can't
-> make changes like this, it just means we need to ensure that the
-> userspace issues are resolved first.
+generic_handle_domain_irq() warns unconditionally on !in_irq(),
+unlike handle_irq_desc(), which constrains the warning to
+handle_enforce_irqctx() (i.e. x86 APIC, arm GIC/GICv3).
+Perhaps that's an oversight in generic_handle_domain_irq(),
+unless __irq_resolve_mapping() becomes unsafe outside in_irq()
+for some reason...
 
-Well, as this is the first and only report of any problems with [0] -> []
-conversions (in UAPI or anywhere) that I remember seeing, and they've
-been underway since at least v5.9, I hadn't been doing any new testing.
+In any case the unconditional in_irq() necessitates __irq_enter_raw()
+here.
 
-So, for this case, I guess I should ask what tests you think would be
-meaningful here? Anything using #include should be fine:
-https://codesearch.debian.net/search?q=linux%2Fxfrm.h&literal=1&perpkg=1
-Which leaves just this, which may be doing something weird:
+And there's no _safe variant() of generic_handle_domain_irq()
+(unlike generic_handle_irq_safe() which was recently added by
+509853f9e1e7), hence the necessity of an explicit local_irq_save().
 
-libabigail_2.0-1/tests/data/test-diff-filter/test-PR27569-v0.abi
-        </data-member>
-        <data-member access="public" layout-offset-in-bits="128">
-          <var-decl name="seq_hi" type-id="3f1a6b60" visibility="default" filepath="include/uapi/linux/xfrm.h" line="97" column="1"/>
-        </data-member>
-        <data-member access="public" layout-offset-in-bits="160">
+Thanks,
 
-But I see that SWIG doesn't show up in a search for linux/audit.h:
-https://codesearch.debian.net/search?q=linux%2Faudit.h&literal=1&perpkg=1
-
-So this may not be a sufficient analysis...
-
--- 
-Kees Cook
+Lukas
