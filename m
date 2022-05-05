@@ -2,67 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E28751BF44
-	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 14:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8011B51BF84
+	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 14:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349522AbiEEMeS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 May 2022 08:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
+        id S1377299AbiEEMjf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 May 2022 08:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234283AbiEEMeQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 08:34:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98A44B1C6
-        for <linux-usb@vger.kernel.org>; Thu,  5 May 2022 05:30:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 628FB61D47
-        for <linux-usb@vger.kernel.org>; Thu,  5 May 2022 12:30:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C3054C385A8
-        for <linux-usb@vger.kernel.org>; Thu,  5 May 2022 12:30:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651753834;
-        bh=NHeud+jzScDdPDnx8QFSGCAdyqBZTnUJExwr24YcxKM=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=dprvxHKnmCQydIsl1ulRsZvWJJ1D1fT7Q5mfnc95m6rG7Xj2ZrT+SxMKvb46791h+
-         uMWd1BUnLlV/tskYw9jYFlt4eBwejSzkO4xGsfEOPEcdf07veWVM7qTL/ptu25YwKZ
-         ZkOKr+nil4NiAbWnWLEmlUsT/c+w9MsWXtCBVw7aB+uVC4mSAD0v5F9MLdYlBYIIt0
-         feRAtlaK7jCGOrMDUeZ//PTNlJfv3bDamJu3to7DU+G0VU5IhigYuspPu22RRY2O4g
-         3nlCDw6sKC/IfNGWrAFF1ltEyJKllx2VwEAB1nhHFNRHsJ2oxyXWJZGpsRoE3E2P0v
-         T6sHhuXPMdwhg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id A5B65C05FCE; Thu,  5 May 2022 12:30:34 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215906] DMAR fault when connected usb hub (xhci_hcd)
-Date:   Thu, 05 May 2022 12:30:34 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: qba100@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215906-208809-6M25bzMOmH@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215906-208809@https.bugzilla.kernel.org/>
-References: <bug-215906-208809@https.bugzilla.kernel.org/>
+        with ESMTP id S1377290AbiEEMjc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 08:39:32 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B42DC1CB22
+        for <linux-usb@vger.kernel.org>; Thu,  5 May 2022 05:35:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651754148;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RS4amHKFC2hR6qrKmmBh73jfjEHv3w9nMH/29xiCJdc=;
+        b=Af/a8FFrcT4lp6ddlAd7J8X/qQNbBiGdNUZPFTv4AOP3Bd1xWgKDgroALTk1P6bccaZnyz
+        ybUBTrXakXnR8gMVhHgbTTXsVHMrl6Jbo3Hq8e9SgVntNyilRqjD7J8DjnhusfYcR8jOTy
+        BD9u9hezVcsc5RHCKO78Xzeu68Gueqk=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-1-xz0t26sMPcG1p5l1se-Mqw-1; Thu, 05 May 2022 08:35:40 -0400
+X-MC-Unique: xz0t26sMPcG1p5l1se-Mqw-1
+Received: by mail-qv1-f70.google.com with SMTP id d13-20020a05621421cd00b0045a99874ae5so3062598qvh.14
+        for <linux-usb@vger.kernel.org>; Thu, 05 May 2022 05:35:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RS4amHKFC2hR6qrKmmBh73jfjEHv3w9nMH/29xiCJdc=;
+        b=JbcLQMSydlYnx/sUXwEmPNSlkNJA4l4yfUIdue3dxxprDuoxfVbx4cQ/rz45IoV52g
+         SqQvn9LXP47mdmgPU3jh7+eQSUgVuvcnI6I3VNCdSEWzZRkR5vGuHMNXSOKQuvZulKVu
+         b5BFkzjP7mvPsx304wFsPgfsbyWy0FKrfxeElVRnZFIBne9wp43nrTzCFBfWjlTvWDFB
+         c0vzeL2h9qgk69Ssc+XVVCeuhcRlqwRy9m4njF3uL8g6RqH66xlV+6HiVcxVTsGpdpKn
+         gKo1uWDadKywg2ILbolF+WWGc0Zra4rXxSIB1AD+kGVOAou16s3z3bVntAWyCjrAMltB
+         /q8g==
+X-Gm-Message-State: AOAM531hzMpQLT18CdGgGfUPbpKYRy5hZxM+6VFAmVDuJ2H4lPceMzYo
+        2xryyKbrd5EcKFNjq2ooRTpMvjMgFPGr6TyeMlC/bpfX+dW0ngJenE86oZktfzBVefG7AVm6OxB
+        kQYEFjgx6k/q8OOAMof0oHAo7z5Y8W/B6A1ml
+X-Received: by 2002:a37:2f04:0:b0:663:397d:7051 with SMTP id v4-20020a372f04000000b00663397d7051mr19423355qkh.333.1651754139702;
+        Thu, 05 May 2022 05:35:39 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwlZY+biANEBjRNYdU9IE8OzsAWOCeXZCdcOLSd0WIZ9Fjpw8HafKC585JgXs8BlU79mxrh+T42RVKNT0bOmPc=
+X-Received: by 2002:a37:2f04:0:b0:663:397d:7051 with SMTP id
+ v4-20020a372f04000000b00663397d7051mr19423337qkh.333.1651754139452; Thu, 05
+ May 2022 05:35:39 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220504083612.143463-1-jtornosm@redhat.com> <6A6E8A20-1994-44AD-981A-C8CF472541AC@holtmann.org>
+ <15f82796-fa82-fa26-ed38-f0785f39f87e@suse.com> <CABk-BGt8dFKkRvFZHpJnkHyObZ2G3D102zvyEFjVYjaFVRiQdg@mail.gmail.com>
+ <50d48f9e-d7b1-a05a-5fbf-2c0461b540ef@suse.com>
+In-Reply-To: <50d48f9e-d7b1-a05a-5fbf-2c0461b540ef@suse.com>
+From:   Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Date:   Thu, 5 May 2022 14:35:28 +0200
+Message-ID: <CABk-BGte-1t-DQ0CUDbzy9u+5UVKcsA0WhZU57mq6WyWsP5gmQ@mail.gmail.com>
+Subject: Re: [PATCH v4] USB: core: skip unconfiguration if device doesn't
+ support it
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,14 +78,50 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215906
+Hello Oliver,
 
---- Comment #3 from Piotr Pi=C3=B3rkowski (qba100@gmail.com) ---
-I built myself this kernel 5.18-rc5 (with ubuntu default config), but the
-problem still exists
+No worries, as you said, Bjorn has provided a perfect test.
 
---=20
-You may reply to this email to add a comment.
+Yes, I have considered but I have thought that a clean and fast
+solution is enough, that is, suspending everything from the driver,
+because a new configuration is going to be applied when binding again
+from local or remote.
+Device reset may have other implications and as you commented soft
+unbinding is not a common operation at least without binding again.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Best regards
+Jos=C3=A9 Ignacio
+
+On Thu, May 5, 2022 at 2:07 PM Oliver Neukum <oneukum@suse.com> wrote:
+>
+>
+>
+> On 05.05.22 13:15, Jose Ignacio Tornos Martinez wrote:
+> > Hello Oliver,
+> >
+> > Of course, I am working with usbip to remotize usb devices, that is
+> > the reason why unbind/bind is needed and with the btusb devices that I
+> > have, it was not working.
+> >
+> >
+>
+> Hi,
+>
+> sorry for being unclear. I was not referring to positive
+> knowledge about the devices you are testing with.
+> I was having dark thoughts about the other devices
+> they are sharing an ID with.
+> But Bjorn's testing has resolved that. In that case
+> we can indeed not penalize the compliant devices
+> for the broken ones.
+>
+> One question, though. Your approach of simply doing
+> nothing if config 0 is to be selected again is a bit
+> brutal. Have you considered resetting the device
+> and stopping the reenumeration right as a config
+> is supposed to be chosen?
+>
+>     Regards
+>         Oliver
+>
+
