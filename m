@@ -2,194 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9205A51B68C
-	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 05:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A4751B7BC
+	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 08:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241152AbiEEDaM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 May 2022 23:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
+        id S244073AbiEEGIQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 May 2022 02:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233705AbiEEDaI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 May 2022 23:30:08 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6B046142;
-        Wed,  4 May 2022 20:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651721190; x=1683257190;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DQloA0TCiN38ioMIhdGNrdCQLLrPM/29rtE0QgulDZs=;
-  b=WAZZkbksnYZ6dafe7ue54AzNfU1vPWOnDtqFWvDqhXX0e5Q1OH3lNg4E
-   e5NbLvxcgC1SA/zy7io6Mbi4+MeGKSzHkVMCzp7Q6fcoQx1js5yFGnnso
-   aPuD+rfA6XR8sbmBCqPcckZj45DQdSpi3YUpcd/UpEkeDgSvm/gX9d4PJ
-   I=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 04 May 2022 20:26:29 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 20:26:29 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 4 May 2022 20:26:29 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 4 May 2022 20:26:22 -0700
-Date:   Thu, 5 May 2022 08:56:18 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_kriskura@quicinc.com>,
-        <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v14 3/7] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <20220505032618.GC4640@hu-pkondeti-hyd.qualcomm.com>
-References: <1650395470-31333-1-git-send-email-quic_c_sanm@quicinc.com>
- <1650395470-31333-4-git-send-email-quic_c_sanm@quicinc.com>
- <YnK79i3NiTdMmC98@google.com>
+        with ESMTP id S230306AbiEEGIN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 02:08:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07F8366A5;
+        Wed,  4 May 2022 23:04:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 766EA61C03;
+        Thu,  5 May 2022 06:04:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6FEC385BC;
+        Thu,  5 May 2022 06:04:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651730673;
+        bh=gGag8LcvVDzOYjY7vVQNICNRVUATqvouUQ3T9qB8Y4k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IzeX2fl3N2x2kryaheKunqUXxhYq2EKW3EevzAcRMispu7pOGu+LIVB4gtA4lt47H
+         kuw8arO+PfbPq7WQnALg8Llzkb+hKwtvB/sYTsnK/90IacYZCB6DJZ5ZQJOsJ5C1F3
+         TeSHzM+uYa+G41zdiYBmFF25L9TEm88hz+cFkf+LED+1kXeRmilzEAvsC7hDnbfjGn
+         7+T7Dj+o9VKBm1U6ge16L5XMEd+1ntq34MUjLp9fn2cdJO958LQytdZ8prNLl0PmNR
+         JJUBc01v6sbgWXUsh3IWA1bR3+vxPlhbpLgI0/bOseW+q4bkkad+M4ksyG11vuvJyh
+         VmRMQT8XoxC+g==
+Received: by mail-wm1-f49.google.com with SMTP id q20so2010918wmq.1;
+        Wed, 04 May 2022 23:04:33 -0700 (PDT)
+X-Gm-Message-State: AOAM532KYwJ4kV4x0ust3FQTY5P7lDLmdAqa0ZHF8tckDNZFQ3EHpIll
+        agg4oXhlxqv95Hv8yxNuanYbXaFOameqvZcXfEI=
+X-Google-Smtp-Source: ABdhPJxJJBc6IXeb9FDBUjhMgPRC02W3Kaja9XP7Gl4879zHpOvDa2WCA8GypEt4poAHxn+t5qvz/Rnv+5FUxU+6qJI=
+X-Received: by 2002:a05:600c:4f0f:b0:394:54c1:f5b3 with SMTP id
+ l15-20020a05600c4f0f00b0039454c1f5b3mr3065513wmq.33.1651730671693; Wed, 04
+ May 2022 23:04:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YnK79i3NiTdMmC98@google.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-19-arnd@kernel.org>
+ <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com>
+ <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com> <CACRpkdZNryYkidvdKuT57RM3fz6_X+3oOzF5xaOZd+TyScfUsw@mail.gmail.com>
+In-Reply-To: <CACRpkdZNryYkidvdKuT57RM3fz6_X+3oOzF5xaOZd+TyScfUsw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 5 May 2022 08:04:14 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0y0tVZODpp+GSf0EkMPWbbvMqA-4kNf0NJMc0M2=2WHw@mail.gmail.com>
+Message-ID: <CAK8P3a0y0tVZODpp+GSf0EkMPWbbvMqA-4kNf0NJMc0M2=2WHw@mail.gmail.com>
+Subject: Re: [PATCH 18/48] ARM: pxa: hx4700: use gpio descriptors for audio
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 04, 2022 at 10:46:30AM -0700, Matthias Kaehlcke wrote:
-> On Wed, Apr 20, 2022 at 12:41:06AM +0530, Sandeep Maheswaram wrote:
-> > During suspend read the status of all port and set hs phy mode
-> > based on current speed. Use this hs phy mode to configure wakeup
-> > interrupts in qcom glue driver.
-> > 
-> > Check wakeup-source property for dwc3 core node to set the
-> > wakeup capability. Drop the device_init_wakeup call from
-> > runtime suspend and resume.
-> > 
-> > Also check during suspend if any wakeup capable devices are
-> > connected to the controller (directly or through hubs), if there
-> > are none set a flag to indicate that the PHY is powered
-> > down during suspend.
-> > 
-> > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > ---
-> > v14:
-> > Used device_children_wakeup_capable instead of usb_wakeup_enabled_descendants.
-> > 
-> > v13:
-> > Changed dwc3_set_phy_speed_mode to dwc3_check_phy_speed_mode.
-> > Removed device_init_wakeup calls from dwc3_runtime_suspend and dwc3_runtime_resume
-> > as we have a new dt property wakeup-source.
-> > 
-> > 
-> >  drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
-> >  drivers/usb/dwc3/core.h |  4 ++++
-> >  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
-> >  3 files changed, 48 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > index 1170b80..898aa66 100644
-> > --- a/drivers/usb/dwc3/core.c
-> > +++ b/drivers/usb/dwc3/core.c
-> > @@ -32,6 +32,7 @@
-> >  #include <linux/usb/gadget.h>
-> >  #include <linux/usb/of.h>
-> >  #include <linux/usb/otg.h>
-> > +#include <linux/usb/hcd.h>
-> >  
-> >  #include "core.h"
-> >  #include "gadget.h"
-> > @@ -1723,6 +1724,7 @@ static int dwc3_probe(struct platform_device *pdev)
-> >  
-> >  	platform_set_drvdata(pdev, dwc);
-> >  	dwc3_cache_hwparams(dwc);
-> > +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
-> >  
-> >  	spin_lock_init(&dwc->lock);
-> >  	mutex_init(&dwc->mutex);
-> > @@ -1865,6 +1867,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+On Wed, May 4, 2022 at 11:59 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Mon, May 2, 2022 at 9:08 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> > On Sun, May 1, 2022 at 11:41 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > >
+> > > (...)
+> > > > +static struct gpiod_lookup_table hx4700_audio_gpio_table = {
+> > > > +       .dev_id = "hx4700-audio",
+> > > > +       .table = {
+> > > > +               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
+> > > > +                           "earphone-ndet", GPIO_ACTIVE_HIGH),
+> > >
+> > > This looks wrong. The n in nDET in the end of the name of the GPIO line
+> > > means active low does it not?
+> > >
+> > > What I usually do when I see this is to properly set it to
+> > > GPIO_ACTIVE_LOW in the descriptor table, then invert the logic
+> > > where it's getting used.
+> > >
+> > > Also rename to earphone-det instead of -ndet
+> >
+> > Thanks for taking a look! I changed it now, but I don't know if
+> > I got the correct number of inversions in the end. How does this look?
+>
+> Looks wrong, you can just invert the argument to any statement of set_value()
+> after tagging respective line as active low. Then gpilob will do a second
+> inversion.
+>
+> > +               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
+> > +                           "earphone-det", GPIO_ACTIVE_LOW),
+> > +               GPIO_LOOKUP("gpio-pxa", GPIO107_HX4700_SPK_nSD,
+> > +                           "spk-sd", GPIO_ACTIVE_LOW),
+>
+> So those two have switched polarity.
+>
+> > @@ -81,14 +79,14 @@ static const struct snd_soc_ops hx4700_ops = {
+> >  static int hx4700_spk_power(struct snd_soc_dapm_widget *w,
+> >                             struct snd_kcontrol *k, int event)
 > >  {
-> >  	unsigned long	flags;
-> >  	u32 reg;
-> > +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
-> >  
-> >  	switch (dwc->current_dr_role) {
-> >  	case DWC3_GCTL_PRTCAP_DEVICE:
-> > @@ -1877,10 +1880,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >  		dwc3_core_exit(dwc);
-> >  		break;
-> >  	case DWC3_GCTL_PRTCAP_HOST:
-> > -		if (!PMSG_IS_AUTO(msg)) {
-> > -			dwc3_core_exit(dwc);
-> > -			break;
-> > -		}
-> > +		dwc3_check_phy_speed_mode(dwc);
-> >  
-> >  		/* Let controller to suspend HSPHY before PHY driver suspends */
-> >  		if (dwc->dis_u2_susphy_quirk ||
-> > @@ -1896,6 +1896,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >  
-> >  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
-> >  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> > +
-> > +		if (!PMSG_IS_AUTO(msg)) {
-> > +			if (device_may_wakeup(dwc->dev) &&
-> > +			    device_children_wakeup_capable(&hcd->self.root_hub->dev)) {
-> > +				dwc->phy_power_off = false;
-> > +			} else {
-> > +				dwc->phy_power_off = true;
-> > +				dwc3_core_exit(dwc);
-> 
-> I found that shutting the PHYs down during suspend leads to high power
-> consumption of a downstream hub (about 80mW vs 15mW when the PHYs are
-> not shut down).
-> 
-> It would be interesting to know if this also impacts other non-hub
-> peripherals. Unfortunately I can't test that, the hub on my system is
-> soldered to the board.
-> 
-> I understand that shutting the PHYs down might be beneficial in terms
-> of power on some systems, however on those I'm looking at we'd strongly
-> prefer to save the 65mW of power consumed by the hub, rather than
-> whatever smaller amount of power that is saved by powering down the
-> PHYs.
-> 
-> Could we introduce a sysfs attribute (or some other sort of knob) to
-> allow the admin to configure whether the PHYs should remain on or off
-> during suspend? That is assuming that it is actually desirable to power
-> them off on some systems.
+> > -       gpio_set_value(GPIO107_HX4700_SPK_nSD, !!SND_SOC_DAPM_EVENT_ON(event));
+> > +       gpiod_set_value(gpiod_spk_sd, !!SND_SOC_DAPM_EVENT_ON(event));
+>
+> Thus drop one ! in front of the expression, just !SND_SOC_DAPM_EVENT_ON(event)
 
-The result may vary across SoCs also. The current proposal is to keep PHY
-powered during system suspend if any of the downstream USB devices are enabled
-for wakeup. This also includes USB2/USB3 root hub. If one wants to keep PHY
-always powered on even when no device is attached, they can do so by enabling
-wakeup (echo enabled > /sys/bus/usb/devices/usbX/power/wakeup). This is anyway
-needed if you want to detect a peripheral attach during system suspend.
+Ok, done. But I still leave the extra 'invert=1' in hs_jack_pin[], right?
 
-Thanks,
-Pavan
+/* Headphones jack detection DAPM pin */
+static struct snd_soc_jack_pin hs_jack_pin[] = {
+        {
+                .pin    = "Headphone Jack",
+                .mask   = SND_JACK_HEADPHONE,
+        },
+        {
+                .pin    = "Speaker",
+                /* disable speaker when hp jack is inserted */
+                .mask   = SND_JACK_HEADPHONE,
+                .invert = 1,
+        },
+};
+
+> > +       gpiod_spk_sd = devm_gpiod_get(&pdev->dev, "spk-sd", GPIOD_OUT_LOW);
+>
+> These initial values don't seem to be set in the old code you could
+> just use GPIOD_ASIS as flag to make sure the new code behaves
+> the same.
+
+Ok.
+
+        Arnd
