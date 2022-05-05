@@ -2,168 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663E851C3CA
-	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 17:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2959C51C3D4
+	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 17:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381246AbiEEPZg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 May 2022 11:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
+        id S1381280AbiEEP0r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 May 2022 11:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232495AbiEEPZd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 11:25:33 -0400
-X-Greylist: delayed 338 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 May 2022 08:21:52 PDT
-Received: from elaine.keithp.com (home.keithp.com [63.227.221.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91427554A8;
-        Thu,  5 May 2022 08:21:52 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by elaine.keithp.com (Postfix) with ESMTP id 373F23F3296A;
-        Thu,  5 May 2022 08:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=keithp.com; s=mail;
-        t=1651763774; bh=O3aXJOWYxVTqOu3VmcXxOiZZOhMrUjqY/t6cXMT24+E=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=M3zB+WUy+cYZq4HgtgtbfmLljWbRpIeJ5Zkg9r1D71YqvPlgOkiQ4tXheXCRGUa8+
-         RMuby4CqFAMCoPUIrwdzYTZDTf78io+RFFo6OcdGBDUFDZRaGhZfKKcTtwdj7WCFy4
-         6tn6om4NwF6owZoCYEHNTlN4dA5iODmOFbhrxNDmu4q/fHHXFfSRYzNqzWEthWHBp3
-         hB3E0o3k1G8NwFJfKh9rQpVZYZLwPg6CF6he0rk/+KFPQLpotGYN+CgB1L7QQOYecl
-         ymeV9rACfLcKoB95CZdy6K628IEeM8t07ROlSN+X9O0IbQydzX/BQ3xj9k+MYZwzPf
-         UxJC+uQh0iuJw==
-X-Virus-Scanned: Debian amavisd-new at keithp.com
-Received: from elaine.keithp.com ([127.0.0.1])
-        by localhost (elaine.keithp.com [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id AExLuWAu_LJ4; Thu,  5 May 2022 08:16:13 -0700 (PDT)
-Received: from keithp.com (koto.keithp.com [192.168.11.2])
-        by elaine.keithp.com (Postfix) with ESMTPSA id 046443F32465;
-        Thu,  5 May 2022 08:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=keithp.com; s=mail;
-        t=1651763773; bh=O3aXJOWYxVTqOu3VmcXxOiZZOhMrUjqY/t6cXMT24+E=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=krSTvH+KcMYcsYiJs+brgDawkHD6ep7gtAt/7ImbSH+PVnVS6n5TIWQoiUP+PjBfQ
-         TTV9zZEzFSNSLzQmSsEIJT24ancVfic/4tw1+i19H4UqIv2Soci174vL3i+L8WgOn3
-         3GAVx4Wwdu1vRPL7EVqx5qPLOOTreMDXIScBgNd+X5AcHfMZWw538tPrPoKpSSqHZH
-         dCLZclbzdDsdQUL6m86l3cbny8WccVcefFqv7gslHwR8P3ZsfbW/X+4PLXD3hTeyro
-         XMqcEagdrGN5NURX0L6R0oPpkf8LkkkUJo0DYZf6b68EQ+TuLV1TgvwIq/q3gwMiYO
-         4YgvEK7vCGplw==
-Received: by keithp.com (Postfix, from userid 1000)
-        id 4874D1E601B9; Thu,  5 May 2022 08:16:12 -0700 (PDT)
-From:   Keith Packard <keithp@keithp.com>
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        Kees Cook <keescook@chromium.org>
-Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        alsa-devel@alsa-project.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Baowen Zheng <baowen.zheng@corigine.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Bradley Grove <linuxdrivers@attotech.com>,
-        brcm80211-dev-list.pdl@broadcom.com,
-        Christian Brauner <brauner@kernel.org>,
-        Christian =?utf-8?Q?G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Chris Zankel <chris@zankel.net>,
-        Cong Wang <cong.wang@bytedance.com>,
-        David Gow <davidgow@google.com>,
-        David Howells <dhowells@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hulk Robot <hulkci@huawei.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        James Morris <jmorris@namei.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        John Keeping <john@metanate.com>,
-        Juergen Gross <jgross@suse.com>, Kalle Valo <kvalo@kernel.org>,
-        keyrings@vger.kernel.org, kunit-dev@googlegroups.com,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, llvm@lists.linux.dev,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Louis Peens <louis.peens@corigine.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
+        with ESMTP id S1381270AbiEEP0n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 11:26:43 -0400
+Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA850562CA
+        for <linux-usb@vger.kernel.org>; Thu,  5 May 2022 08:23:03 -0700 (PDT)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9d:7e00:0:0:0:1])
+        (authenticated bits=0)
+        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 245FMp1u091510
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Thu, 5 May 2022 16:22:52 +0100
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9d:7e02:9be5:c549:1a72:4709])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 245FMjj5762752
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Thu, 5 May 2022 17:22:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1651764166; bh=63C87RZb7Ur060W9Klcu3dMlMcFoGX3woga+AFazxm8=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=Iuonc04X4iWT1kPk5zj4iA+cF61uMIxKx8HEPorIHl+KeVilkqxPv7ll+stmOR74D
+         9+ups83jYRKZRh2HvPNxOL6byzQb5bycVN2uXRXaX1NSgx/yv/LhuPz5tHXdXmM9qT
+         5TTVc1jTvXRM1yDZyWOnhdN2eAM7Adfgq653e9CI=
+Received: (nullmailer pid 62898 invoked by uid 1000);
+        Thu, 05 May 2022 15:22:45 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Oliver Neukum <oneukum@suse.com>,
         Marcel Holtmann <marcel@holtmann.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nuno =?utf-8?Q?S=C3=A1?= <nuno.sa@analog.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Rich Felker <dalias@aerifal.cx>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        SHA-cyfmac-dev-list@infineon.com,
-        Simon Horman <simon.horman@corigine.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>,
-        wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
-        xen-devel@lists.xenproject.org,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Subject: Re: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
-In-Reply-To: <970a674df04271b5fd1971b495c6b11a996c20c2.camel@sipsolutions.net>
-References: <20220504014440.3697851-1-keescook@chromium.org>
- <20220504014440.3697851-3-keescook@chromium.org>
- <d3b73d80f66325fdfaf2d1f00ea97ab3db03146a.camel@sipsolutions.net>
- <202205040819.DEA70BD@keescook>
- <970a674df04271b5fd1971b495c6b11a996c20c2.camel@sipsolutions.net>
-Date:   Thu, 05 May 2022 08:16:11 -0700
-Message-ID: <871qx8qabo.fsf@keithp.com>
+        Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4] USB: core: skip unconfiguration if device doesn't
+ support it
+Organization: m
+References: <20220504083612.143463-1-jtornosm@redhat.com>
+        <6A6E8A20-1994-44AD-981A-C8CF472541AC@holtmann.org>
+        <15f82796-fa82-fa26-ed38-f0785f39f87e@suse.com>
+        <87levgkyjy.fsf@miraculix.mork.no>
+        <YnPb04ynkSTlhg4H@rowland.harvard.edu>
+Date:   Thu, 05 May 2022 17:22:45 +0200
+In-Reply-To: <YnPb04ynkSTlhg4H@rowland.harvard.edu> (Alan Stern's message of
+        "Thu, 5 May 2022 10:14:43 -0400")
+Message-ID: <875ymkknqy.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.5 at canardo
+X-Virus-Status: Clean
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -171,45 +65,60 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Alan Stern <stern@rowland.harvard.edu> writes:
 
-Johannes Berg <johannes@sipsolutions.net> writes:
+> Please pardon me for butting in, but I don't see how this tests the=20
+> condition that Jose is worried about.
+..
+> And presumably the device is working again.  However, none of this shows=
+=20
+> what happens when the device is unconfigured.  To test that, you would=20
+> have to do:
+>
+> 	echo 0 >/sys/bus/usb/devices/1-8/bConfigurationValue
+> 	echo 1 >/sys/bus/usb/devices/1-8/bConfigurationValue
+>
+> and then see if the device continues to work.
 
-> Yeah, dunno, I guess I'm slightly more on the side of not requiring it,
-> since we don't do the same for kmalloc() etc. and probably really
-> wouldn't want to add kmalloc_s() that does it ;-)
+Ah, sorry. Scanned briefly, saw "bind", and assumed too much.  Making an
+ass out of... you know.
 
-I suspect the number of bugs this catches will be small, but they'll be
-in places where the flow of control is complicated. What we want is to
-know that there's no "real" value already present. I'd love it if we
-could make the macro declare a new name (yeah, I know, mixing
-declarations and code).
+Actually I didn't understand the part about unconfiguration since I
+can't see how that would happen during normal usage?  Anyway,
+unconfiguring also works for me:
 
-Of course, we could also end up with people writing a wrapping macro
-that sets the variable to NULL before invoking the underlying macro...
+canardo:/tmp# hciconfig hci0
+hci0:   Type: Primary  Bus: USB
+        BD Address: 00:1A:7D:DA:71:15  ACL MTU: 310:10  SCO MTU: 64:8
+        UP RUNNING=20
+        RX bytes:660 acl:0 sco:0 events:43 errors:0
+        TX bytes:2178 acl:0 sco:0 commands:43 errors:0
 
-=2D-=20
-=2Dkeith
+canardo:/tmp# echo 0 >/sys/bus/usb/devices/1-8/bConfigurationValue
+canardo:/tmp# hciconfig hci0
+Can't get device info: No such device
+canardo:/tmp# echo 1 >/sys/bus/usb/devices/1-8/bConfigurationValue
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Not entirely sure how to validate that "everything" works at this point?
+I can use the rfcomm session the adapter usually handles and also run
+lescan after this.  So I guess both BLE and BDR works.
 
-iQIzBAEBCAAdFiEEw4O3eCVWE9/bQJ2R2yIaaQAAABEFAmJz6jsACgkQ2yIaaQAA
-ABGQAg/+NFgE01jSUQAsZc8G2KY9qfifpQ5rzrWtedUNXoOhcAo33tvPHnED0AxP
-Q4MXv/X4TRCTOD/5aBjZeKgy9I9G2jYbZq9iYf5uaD9zIECpE5XyznDZzo15cWBE
-B+W7olq9dqiARf6CuwNpYCjB8zv2ubR42c+faTCJNM63owpN9xpGT/7OEbE0HoKg
-TawmusqNU2nOkT82kjh1iVoK0BbmPSATiKkCH9ZpUVQYOQvsyieFtAlQREms/pip
-ccnHssDAaV1dgAg2NlKDzU30XA3rIIsfX+v3Bh+CWoj77Az7IO8+/V+nmNm5GHyy
-bs8LUQY3Z7/otHyGVfjVN9eU6LcEvstr7tOPLWxF0h+YxJk12uKhUZnmt4NisYrL
-uOcx/MC4y6tx9+kdn1U5KoV+O/ekhW/N/WwYcE6YUYZeol3Ahpve77B7uzLbwyOj
-TMLF83DtVqGLwl1y5mdKUfdeUeYhVMYo+eaq0ChKHdYdKj9ra2BaL1oiTc3lKqVW
-FdHX7C9qLA4LsTzfuDiEQDOrnwMDXhvtQrysTOjlQLIcivarCfxIKQw0co8Vubug
-sceCDXCr5qY2cCr51YqbDSVqEXK5Dos7IGlIyIlZH0YCktIbgOGTEPZDcidplXy2
-LWWWFIK6Viz1AgjSRxRU24qmTbFCFLZdboKDuzsCHG8HDByLmNM=
-=BTwc
------END PGP SIGNATURE-----
---=-=-=--
+And the counters count something:
+
+canardo:/tmp# hciconfig hci0
+hci0:   Type: Primary  Bus: USB
+        BD Address: 00:1A:7D:DA:71:15  ACL MTU: 310:10  SCO MTU: 64:8
+        UP RUNNING=20
+        RX bytes:3883 acl:40 sco:0 events:81 errors:0
+        TX bytes:2518 acl:19 sco:0 commands:50 errors:0
+
+
+I can see an error like this logged every time I unconfigure the device:
+
+Bluetooth: hci0: urb 00000000e66a2492 failed to resubmit (2)
+
+There is nothing else logged in kernel log
+
+
+Bj=C3=B8rn
