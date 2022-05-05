@@ -2,162 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A4751B7BC
-	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 08:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910ED51B7F9
+	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 08:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244073AbiEEGIQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 May 2022 02:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
+        id S244400AbiEEGe5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 May 2022 02:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiEEGIN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 02:08:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07F8366A5;
-        Wed,  4 May 2022 23:04:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 766EA61C03;
-        Thu,  5 May 2022 06:04:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6FEC385BC;
-        Thu,  5 May 2022 06:04:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651730673;
-        bh=gGag8LcvVDzOYjY7vVQNICNRVUATqvouUQ3T9qB8Y4k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IzeX2fl3N2x2kryaheKunqUXxhYq2EKW3EevzAcRMispu7pOGu+LIVB4gtA4lt47H
-         kuw8arO+PfbPq7WQnALg8Llzkb+hKwtvB/sYTsnK/90IacYZCB6DJZ5ZQJOsJ5C1F3
-         TeSHzM+uYa+G41zdiYBmFF25L9TEm88hz+cFkf+LED+1kXeRmilzEAvsC7hDnbfjGn
-         7+T7Dj+o9VKBm1U6ge16L5XMEd+1ntq34MUjLp9fn2cdJO958LQytdZ8prNLl0PmNR
-         JJUBc01v6sbgWXUsh3IWA1bR3+vxPlhbpLgI0/bOseW+q4bkkad+M4ksyG11vuvJyh
-         VmRMQT8XoxC+g==
-Received: by mail-wm1-f49.google.com with SMTP id q20so2010918wmq.1;
-        Wed, 04 May 2022 23:04:33 -0700 (PDT)
-X-Gm-Message-State: AOAM532KYwJ4kV4x0ust3FQTY5P7lDLmdAqa0ZHF8tckDNZFQ3EHpIll
-        agg4oXhlxqv95Hv8yxNuanYbXaFOameqvZcXfEI=
-X-Google-Smtp-Source: ABdhPJxJJBc6IXeb9FDBUjhMgPRC02W3Kaja9XP7Gl4879zHpOvDa2WCA8GypEt4poAHxn+t5qvz/Rnv+5FUxU+6qJI=
-X-Received: by 2002:a05:600c:4f0f:b0:394:54c1:f5b3 with SMTP id
- l15-20020a05600c4f0f00b0039454c1f5b3mr3065513wmq.33.1651730671693; Wed, 04
- May 2022 23:04:31 -0700 (PDT)
+        with ESMTP id S244380AbiEEGe4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 02:34:56 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E20811162
+        for <linux-usb@vger.kernel.org>; Wed,  4 May 2022 23:31:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651732278; x=1683268278;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zjn33QgR0ko4S6iCUDwease4Iru7c5OBfLDQ23sFajs=;
+  b=C6yF6eukQ+KyWF+VTdBTSL9EIXPIvo7mxHk288PibMWccOqg9XUkaQlC
+   Mi/tCHTHtj1St0IwLQ6/T0fKbWcIdTQqwQV9bLLdLIkC4TAGMsnZi4dxl
+   KoxvnVYeRaBNnWHjYslbmOHD+1d3G6rWUAueULrNIYCBE0X6NVSNvxbkJ
+   8OFP97bZLO7fmEXot8zQxHuAjgHKeW+lL/YUEiqU5ZilfBEziCow0u3SS
+   49eTa7nxQAEkLxHiG8m1eGNZGP8ohscAMH0JixNbNnuCcyfnJXRsvF3gT
+   5XzL6zu87Lj0/dr/Nvz78xnjpLWK2jE9iTehrzeGYo7ac0nXyYo600Amo
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="266857243"
+X-IronPort-AV: E=Sophos;i="5.91,200,1647327600"; 
+   d="scan'208";a="266857243"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 23:29:14 -0700
+X-IronPort-AV: E=Sophos;i="5.91,200,1647327600"; 
+   d="scan'208";a="563093882"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 23:29:11 -0700
+Received: by lahna (sSMTP sendmail emulation); Thu, 05 May 2022 09:29:08 +0300
+Date:   Thu, 5 May 2022 09:29:08 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH 0/5] thunderbolt: Add support for XDomain lane bonding
+Message-ID: <YnNutBuOzsc1tzyY@lahna>
+References: <20220426112540.6053-1-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-19-arnd@kernel.org>
- <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com>
- <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com> <CACRpkdZNryYkidvdKuT57RM3fz6_X+3oOzF5xaOZd+TyScfUsw@mail.gmail.com>
-In-Reply-To: <CACRpkdZNryYkidvdKuT57RM3fz6_X+3oOzF5xaOZd+TyScfUsw@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 5 May 2022 08:04:14 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0y0tVZODpp+GSf0EkMPWbbvMqA-4kNf0NJMc0M2=2WHw@mail.gmail.com>
-Message-ID: <CAK8P3a0y0tVZODpp+GSf0EkMPWbbvMqA-4kNf0NJMc0M2=2WHw@mail.gmail.com>
-Subject: Re: [PATCH 18/48] ARM: pxa: hx4700: use gpio descriptors for audio
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426112540.6053-1-mika.westerberg@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 4, 2022 at 11:59 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Mon, May 2, 2022 at 9:08 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> > On Sun, May 1, 2022 at 11:41 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> > >
-> > > (...)
-> > > > +static struct gpiod_lookup_table hx4700_audio_gpio_table = {
-> > > > +       .dev_id = "hx4700-audio",
-> > > > +       .table = {
-> > > > +               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
-> > > > +                           "earphone-ndet", GPIO_ACTIVE_HIGH),
-> > >
-> > > This looks wrong. The n in nDET in the end of the name of the GPIO line
-> > > means active low does it not?
-> > >
-> > > What I usually do when I see this is to properly set it to
-> > > GPIO_ACTIVE_LOW in the descriptor table, then invert the logic
-> > > where it's getting used.
-> > >
-> > > Also rename to earphone-det instead of -ndet
-> >
-> > Thanks for taking a look! I changed it now, but I don't know if
-> > I got the correct number of inversions in the end. How does this look?
->
-> Looks wrong, you can just invert the argument to any statement of set_value()
-> after tagging respective line as active low. Then gpilob will do a second
-> inversion.
->
-> > +               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
-> > +                           "earphone-det", GPIO_ACTIVE_LOW),
-> > +               GPIO_LOOKUP("gpio-pxa", GPIO107_HX4700_SPK_nSD,
-> > +                           "spk-sd", GPIO_ACTIVE_LOW),
->
-> So those two have switched polarity.
->
-> > @@ -81,14 +79,14 @@ static const struct snd_soc_ops hx4700_ops = {
-> >  static int hx4700_spk_power(struct snd_soc_dapm_widget *w,
-> >                             struct snd_kcontrol *k, int event)
-> >  {
-> > -       gpio_set_value(GPIO107_HX4700_SPK_nSD, !!SND_SOC_DAPM_EVENT_ON(event));
-> > +       gpiod_set_value(gpiod_spk_sd, !!SND_SOC_DAPM_EVENT_ON(event));
->
-> Thus drop one ! in front of the expression, just !SND_SOC_DAPM_EVENT_ON(event)
+On Tue, Apr 26, 2022 at 02:25:35PM +0300, Mika Westerberg wrote:
+> Hi all,
+> 
+> So far connecting two Thunderbolt/USB4 domains (hosts) the high-speed link
+> has been using a single lane. The reason for this was simplicity and also
+> the fact that the host DMA was not able to go over the 20 Gbit/s even if
+> the lanes were bonded. However, Intel Alder Lake and beyond actually can go
+> higher than that so now it makes more sense to take advantage of the lane
+> bonding. The USB4 Inter-Domain Service specification describes the
+> protocol and this patch series implements it for the Linux Thunderbolt/USB4
+> driver.
+> 
+> If both sides (hosts) of the link announce supporting this, we will
+> establish bonded link. This is only possible on systems with software based
+> connection manager (so Intel Alder Lake and beyond).
+> 
+> Mika Westerberg (5):
+>   thunderbolt: Add debug logging when lane is enabled/disabled
+>   thunderbolt: Move tb_port_state() prototype to correct place
+>   thunderbolt: Split setting link width and lane bonding into own functions
+>   thunderbolt: Ignore port locked error in tb_port_wait_for_link_width()
+>   thunderbolt: Add support for XDomain lane bonding
 
-Ok, done. But I still leave the extra 'invert=1' in hs_jack_pin[], right?
-
-/* Headphones jack detection DAPM pin */
-static struct snd_soc_jack_pin hs_jack_pin[] = {
-        {
-                .pin    = "Headphone Jack",
-                .mask   = SND_JACK_HEADPHONE,
-        },
-        {
-                .pin    = "Speaker",
-                /* disable speaker when hp jack is inserted */
-                .mask   = SND_JACK_HEADPHONE,
-                .invert = 1,
-        },
-};
-
-> > +       gpiod_spk_sd = devm_gpiod_get(&pdev->dev, "spk-sd", GPIOD_OUT_LOW);
->
-> These initial values don't seem to be set in the old code you could
-> just use GPIOD_ASIS as flag to make sure the new code behaves
-> the same.
-
-Ok.
-
-        Arnd
+Series applied to thunderbolt.git/next.
