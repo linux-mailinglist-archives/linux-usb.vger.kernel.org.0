@@ -2,177 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0886351BD12
-	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 12:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF0651BD6C
+	for <lists+linux-usb@lfdr.de>; Thu,  5 May 2022 12:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245305AbiEEKZr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 May 2022 06:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
+        id S1352070AbiEEKuT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 May 2022 06:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235681AbiEEKZp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 06:25:45 -0400
-Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.109.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE4A4C43D
-        for <linux-usb@vger.kernel.org>; Thu,  5 May 2022 03:22:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1651746124;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8TDl0x7QKVM5gk8Jlym8MmsZwQgTTn/BdzS96aktyio=;
-        b=grPl25JnXCe88eboTC05HXQK91UVEbecODaIPRf9LLEFN+UI7ARtHVczKHKEUlnrN5pqHZ
-        bqe1OlBuBZY3gxaXQM98QASvVvFmSymNuZZ2tCs16yWaWR8xbGRZy5jZ0FBVlTchRESiBp
-        F1EErcMPxwhwqZOHTyO09CQU33GeD/U=
-Received: from EUR02-VE1-obe.outbound.protection.outlook.com
- (mail-ve1eur02lp2053.outbound.protection.outlook.com [104.47.6.53]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-39-9P1OMw0kNdmBcpD3ZP_BxQ-1; Thu, 05 May 2022 12:22:00 +0200
-X-MC-Unique: 9P1OMw0kNdmBcpD3ZP_BxQ-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CndbVo2+MkoZWyCpZn64QRnZGh8ubWdd4xgp9A9dMZYp9tdxBnz2MvX7wxbQqCGRRvDnIHMTmMopZKJR2hGDAr0sUkbqyTma6KGVHfqBVWTOxhzwmy/Yc7EVsjIBJ5UE4iOL+yTCcH1SaNJVnix4y/o+DjslkZmOidiUPjm4eqZmYIpPvHS43n2JN7bNGhBocP2dazauseOmb4isgW80c1EA7aVAgEf5YZTLKW2YJWFjoOr0ZEux83lbMcRgo0Le48uXmCL2+bXrcRKZbFL7YXJhZLfV9CbW8v6eNLd0/YrWQrGhPZgl/mrP2fT71V+Dg2hDTbiwgicDHmVeDsn7Kw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xzekpFy6m6e8CBsvnZHf8l8gigy4t5miXQzyot4HjQA=;
- b=kSXWvKFR2/r7OpBFnJvMl968Tr7PqY2wUPh29Qk+BK0DGdAxsfT1WJIHn855MUvJazYn3oPA87468wDxuy8FZYaVAvq98C3fUVpy4IhVME9yPupI6SP5ot2ig58X3bQbtixEkOKMRPz1CPDt8+1bBS+nu51y0iDcYxPSbK6gIEkqG0qwNPEVDqwDyPUDu8P6W4VxtAWv86PX9s+j8dbAaZ5qL3jMAb+bA1voyCtNrYxhAqN/NGKA3U9N7c0vmst+PIxjv4VAe9cIoL0/Gpt5eL2sBpbJ2pHnzwK2FvU0PUIBOO3YIW0D+7/7NAwyYOtvWe6+kA/Lin/ZDU1KIiYqOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16) by DB7PR04MB5482.eurprd04.prod.outlook.com
- (2603:10a6:10:85::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.25; Thu, 5 May
- 2022 10:21:58 +0000
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::8c82:19c5:ce96:491b]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::8c82:19c5:ce96:491b%4]) with mapi id 15.20.5206.027; Thu, 5 May 2022
- 10:21:58 +0000
-Message-ID: <4d30b811-b452-cbf0-a3e3-00e400ba76ef@suse.com>
-Date:   Thu, 5 May 2022 12:21:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] Add USB_QUIRK_NO_LPM USB_QUIRK_RESET_RESUME quirks for
- Dell usb gen 2 device to not fail during enumeration.
-Content-Language: en-US
-To:     monish.kumar.r@intel.com, gregkh@linuxfoundation.org,
-        olebowle@gmx.com, oneukum@suse.com, vpalatin@chromium.org,
-        wangjm221@gmail.com, chris.chiu@canonical.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-CC:     abhijeet.rao@intel.com
-References: <20220505101459.7804-1-monish.kumar.r@intel.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20220505101459.7804-1-monish.kumar.r@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: AM6P194CA0005.EURP194.PROD.OUTLOOK.COM
- (2603:10a6:209:90::18) To VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 64215c63-ec8f-45bd-cc9f-08da2e8115ff
-X-MS-TrafficTypeDiagnostic: DB7PR04MB5482:EE_
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-Microsoft-Antispam-PRVS: <DB7PR04MB548216DC208177E4DAB92BD8C7C29@DB7PR04MB5482.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S9WQ+1poojCmF4Pf4Wvbf8niUrOtMZXt9fea/aBF88h9VQfmrjxG/ojS5XKER2/IblVyTkMjZ7KCHWJQVSKx+NvMJgEdO6B531RNK/S+4I+s8TWVbeiaLfNM8nNfxLsg8TpwVQhtSbKp8L25NKVjoQiuxqnKenKvSeEofBhYpaGwgdHcVry5fBGex3l4Ar7hhij9SG9FBhUO/t18fnvb2AuHaOV8lguXyHcevNQC09CjZAkLxtfRVbiaPdI4iwINatHgsGErcuuX2ccdxf0xab/G4+7nbEIw6GZS334xBPnxPjo/PX+tXv7yJYDIZjmr11JO/eKGe53xIOQIjuQ4GQecRtmg3/1gbwfY9CzaZ1ZZJFhf1kfz934Kl8ZgQTjj839DpW/OIO2qt4qjn0vUUQz8IX8K7ESPMnl8Jzg0tiG6IG6nDWSJJ1ePimh+ExvbbLdKpI9CrLh9f4U+lkbge0uYyTq53XnU0pf28ktAgiz9x2tJc3eXgjIJPrS6gvUMlVXdNNQU5LB8sZppFNLg84e286PlmZa3iPj5HdC0dR2ays9qc4JgpB5+XvkyfiEzmwH+pFUxlOYv8SyELfen4Yylh0wMbWg58aNx05qf9J324WRMJYTYJFqdKWPn2bxCvE6Wu649c/af5DzDNSmJ87xIKm7kgdwoXJ4AKq2oaS1V1ar9ikvuxjmErN0DjuADHLIaXylSkWHG6cmCm17QVpdDBhxLcNZtdHDDY0aPQKc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(31696002)(2616005)(38100700002)(66946007)(8676002)(66476007)(66556008)(4326008)(36756003)(8936002)(186003)(2906002)(316002)(5660300002)(6486002)(53546011)(508600001)(6512007)(31686004)(6506007)(6666004)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SkHcT2jgZPGmcifVHuqYWlaH3KNBxVbc+V0BFz00vQltrkR7IAyC+Dq+sYsT?=
- =?us-ascii?Q?36KA0Kq883fLWVeSLUOYWkJlGJE4CE0umC2UJsL8pl/5KJIz40xpX1tNOAe6?=
- =?us-ascii?Q?WYx0gQQAS7/jAE9NuYAqJ9ElZ2X6GaU4ABB70uen/eRp+yennzMG2CdF0QX1?=
- =?us-ascii?Q?omA++uLP2LJAALRLYtolgZc7pyfk0Xadwz0AIZRmGybnSc63xZrD2hcyeqdk?=
- =?us-ascii?Q?q1eKc/6FQK5Rn9ZU9OVR6GYubMg/KKwVBbgCcCko+lecisJc88Hmytk7T86w?=
- =?us-ascii?Q?mczpVz9R1ZT8L+lGlB8IgtOBRjZc/H6pnoERRKID+VSQ7PO0Ea/S75LufRmq?=
- =?us-ascii?Q?BBSiBSXI1A7p4PJ+k23gHuTnicUTNrS+I5UU1nCB0lmRvQBmAKyeQ99L6cKt?=
- =?us-ascii?Q?/1WYXjHAhspmjl6z7rVZ4u1YrWvyGBRnA+mwEwr0F8S21Tktg4Mmsf6TjA97?=
- =?us-ascii?Q?oKu+LmVUzc9uEj09GhnrxiuOfJ0F6DJHcQ12XbfhkrX6M82p3rEX0DVYvaSL?=
- =?us-ascii?Q?c6BI0jcGOeWjChcuO6lm3coAYJonP0EQI9b0FAfd0sOTLmt9BWtRTzaqplZE?=
- =?us-ascii?Q?oGtJ7QhNA8S5h44lU2IO9o+GRGWs5T8XaaLgOfgGJn179tmVaN5Fr6GccZyx?=
- =?us-ascii?Q?v2U327462I8f9c3dPf3LN4lrutP30AXBbKF68frlLnNM/9M0TCX2nl1LZTcO?=
- =?us-ascii?Q?xD7BRJUAGtZqOTUVnnylSjwTuQ6aTEgnQtn80TGwNMacdMPwqz65kuSiLsQq?=
- =?us-ascii?Q?MlmkyYpfBcMDyLJwDcxOyK/qI6GbGJ75IUMKHGYQegR/uW9ZMxUlup6qRlMG?=
- =?us-ascii?Q?LxSIoyjmRkjVzQd/gJLrxlozIDmIL+5N079r5H7aw0kxK8Eb4toP6uBy2U3Q?=
- =?us-ascii?Q?/PwD7nYGSXyVc05D6/ebT0M2m2KHiLmK3i6aabNOvB1HZjWOfWg3MgSA+pCc?=
- =?us-ascii?Q?v6mVBxqrtUzHcWhvbZU1DAsmKNtUNXsK6csXhhoSSdfm8pkhwN4d4QPAWxyy?=
- =?us-ascii?Q?YJQKlzylHppiekbaoqEq9yygS8/3bKpAjI1UALsabskEY7h+Sf1PC8LnAOUs?=
- =?us-ascii?Q?T/dFaqBhfqWEnY2shNvzUD80UCbXnRIqUz08cGt73CW71NFTEYU1u2oqlgYo?=
- =?us-ascii?Q?LXsP0cWIek4TGa1oXqQjV5yqZRcEAoqT3wq/UmaoA/vnhWvMFq+WaTMHbVKl?=
- =?us-ascii?Q?sLZaYYHIoohWU7WzCqicPiFoo1nnD1nanFbK7wjm1TYgTLv5kkDbHfwZ5+VM?=
- =?us-ascii?Q?h9dT6qOXpl6IgDcEPQ9j8R4k8lLi6zmdgjw+EYoCsqACutWzlyTYEmutcwg2?=
- =?us-ascii?Q?CJOOPF6PlTK3wI45hobXYO8UiyIvXVwnyDpPYEq2I8SoLdcruQiuhbJm/STm?=
- =?us-ascii?Q?BGANcsFoNQlE/CqMHDg6EagikaZsEJALdIM2AzuRvFhHdDbWIcE/02Tbik2o?=
- =?us-ascii?Q?WFREtxzDN3zJxvs+zgKMLVmOZb7jyi9pSPovshK0Y7E82q3cei/VcIq5+OxG?=
- =?us-ascii?Q?lys+M6oDbjIQgvR0aQII6C7s/xIz5i1qWZQ4i/zS2fwxFlLnOq5Y5WTLB1Kk?=
- =?us-ascii?Q?YijuE5KWMAh7jib+YFIhgSasgNSCr5mEB9VOTdbb31+Qb0EIfyKP6z1aTjtc?=
- =?us-ascii?Q?S5SD06v8xCCXNhn/+Kr/40tAC+sr/r1qqQO/HnKJFmosQ1p68x4PM/gf6u2B?=
- =?us-ascii?Q?B8Q9MhMa6Nd+ujc92o4XDRXI7WQatk4ymV79Qz7zNga9VMZUJHI7wS32bpbX?=
- =?us-ascii?Q?aA80Rf0Pe2LLzvON2w+LgU8r/q2gu7gaA4zkCgmjWigdzMk5yygenVxdQW0t?=
-X-MS-Exchange-AntiSpam-MessageData-1: xHp1fel7PMXdBw==
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64215c63-ec8f-45bd-cc9f-08da2e8115ff
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2022 10:21:58.2497
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Utu2CgSVnUuByOmwNObCPCklPgFd3SCH/sfSrALYJK9VXSIIhzbmYRwhji9OKEHUNmcNmQi2K5zkxeMpfep1nA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5482
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S234216AbiEEKuQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 May 2022 06:50:16 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EA915FD0
+        for <linux-usb@vger.kernel.org>; Thu,  5 May 2022 03:46:36 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220505104631euoutp02d751df66b3b5a497fba827571c8e645e~sL67hfQW92535025350euoutp02U
+        for <linux-usb@vger.kernel.org>; Thu,  5 May 2022 10:46:31 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220505104631euoutp02d751df66b3b5a497fba827571c8e645e~sL67hfQW92535025350euoutp02U
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651747591;
+        bh=mg/NUpBY85tB1dAupvcSEb0snLTPuulD/LMLPpTmxfA=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=AbZhCDn8x5mthXKDm2QEAcqwFUvkgZ+ku/L/kiLkvHrNHYQILbJIW3DG0nw8Ma0cs
+         +ZgndOTdL4RlAT64Q2CB6vDh9PgHxjkHxXjcYeggDK4ad3Uc2odLraDXUgYM8djol9
+         9Hh/ezizFRAMPXKXC7agPNWrKTw3vuculGlW/H+A=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220505104630eucas1p12367c46d6e73cf19feef790433066908~sL665S-HR2131621316eucas1p1g;
+        Thu,  5 May 2022 10:46:30 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 15.EF.10260.60BA3726; Thu,  5
+        May 2022 11:46:30 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220505104630eucas1p1e3797aef5ed7f54f861bf3622b542713~sL66c4r_60413904139eucas1p1W;
+        Thu,  5 May 2022 10:46:30 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220505104630eusmtrp2b83a1c239c554e2cc4e88e625085293a~sL66cNN8o1534715347eusmtrp2Z;
+        Thu,  5 May 2022 10:46:30 +0000 (GMT)
+X-AuditID: cbfec7f5-bf3ff70000002814-0e-6273ab06046b
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 93.9D.09404.60BA3726; Thu,  5
+        May 2022 11:46:30 +0100 (BST)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220505104629eusmtip1c1d8e969f99ec7f9de3c014dc1f84093~sL66FQA6M1420014200eusmtip1W;
+        Thu,  5 May 2022 10:46:29 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] usb: dwc2: gadget: don't reset gadget's driver->bus
+Date:   Thu,  5 May 2022 12:46:18 +0200
+Message-Id: <20220505104618.22729-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLIsWRmVeSWpSXmKPExsWy7djP87psq4uTDOY+1rJoXryezaLx1152
+        i8u75rBZzDi/j8li0bJWZou1R+6yW0z4fYHNgd1j/9w17B6z7/5g9OjbsorRY8v+z4wenzfJ
+        BbBGcdmkpOZklqUW6dslcGXMWmBS8JS/4vLaz8wNjPt5uxg5OSQETCTa3k9i72Lk4hASWMEo
+        sW3ZYVYI5wujxJ2WH2wQzmdGiav/FjPBtKxq6IRKLGeUmDLjOjtcy/Tni9hAqtgEDCW63naB
+        2SICCRJHNr9nBrGZBbYySuz47dnFyMEhLOAise+ZCEiYRUBVYv6/O2AlvAK2En2Hv0Itk5dY
+        veEAM8h8CYFGDok/K2aygPRKAPUu/6UFUSMs8er4FnYIW0bi/875TBAl+RJ/ZxhDhCskrr1e
+        wwxhW0vcOfeLDaSEWUBTYv0ufYiwo8T/hm42iE4+iRtvBSHu5ZOYtG06M0SYV6KjTQiiWk1i
+        1vF1cDsPXrgENdxD4sqjSSwgtpBArMTyS2/ZJjDKzULYtYCRcRWjeGppcW56arFxXmq5XnFi
+        bnFpXrpecn7uJkZgCjj97/jXHYwrXn3UO8TIxMF4iFGCg1lJhNd5aUGSEG9KYmVValF+fFFp
+        TmrxIUZpDhYlcd7kzA2JQgLpiSWp2ampBalFMFkmDk6pBqaak8VXegXPPJh8ZtKH1vMRj4OO
+        vYpS79g6Pefmb5ZrUxeU8GwJ+D1JgVEp/86Bv1Vzj/iev7xV6Mzem48v3jwT//5USYH85lVX
+        llx43GcXxhBgtnHl3fg7LxZMu/Hs7N+Vfg2r/y/syGFR7Njx0kTpbjPbycvnnynvkI6a963f
+        RKb7ZcY2zYnOzLpLjmQkzfq1t/LY7KbaM/JRy2eIHZZ8dKx6afcF6Wh9T5aqZcL1p87MFE36
+        upC17mtDo9nnl7571FkWrbxpEfSXNTIo7eo2HjZ2m9/bvve/Wvk2xkxfdO9Lk7cX7qqt3HJd
+        40eO58EUnfuLLzyonBUVcn33zQ/3bL7/2rFjUcRnbwNlT89ZBdpKLMUZiYZazEXFiQAgdz8h
+        cAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOLMWRmVeSWpSXmKPExsVy+t/xu7psq4uTDLr3C1o0L17PZtH4ay+7
+        xeVdc9gsZpzfx2SxaFkrs8XaI3fZLSb8vsDmwO6xf+4ado/Zd38wevRtWcXosWX/Z0aPz5vk
+        Alij9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DJm
+        LTApeMpfcXntZ+YGxv28XYycHBICJhKrGjrZuhi5OIQEljJKdP5/xwSRkJE4Oa2BFcIWlvhz
+        rQuq6BOjxJGfv1hAEmwChhJdb0ESnBwiAkkS15+cZgEpYhbYziix9EU/cxcjB4ewgIvEvmci
+        IDUsAqoS8//dYQaxeQVsJfoOf4VaJi+xesMB5gmMPAsYGVYxiqSWFuem5xYb6RUn5haX5qXr
+        JefnbmIEhuC2Yz+37GBc+eqj3iFGJg7GQ4wSHMxKIrzOSwuShHhTEiurUovy44tKc1KLDzGa
+        Au2byCwlmpwPjIK8knhDMwNTQxMzSwNTSzNjJXFez4KORCGB9MSS1OzU1ILUIpg+Jg5OqQYm
+        2Vs+r/envj32Y8mRL0vjW68qGRum8SkUFRkIvP9n/PteECNr4poHP/gnmi5d8Si2NSdEs/nu
+        46sML9viA9uY816bfdn0abbmfV6LQ0FfWjZPDNtu5uFtv2xLseukHZu3yE5dVTij2jwmfF3X
+        mpsmujdPGIk9ePC5Pihu72qZ5BU2i3U//LrTPHHWbp6l15ivOCz9rPT24cEvXPFnNgSsywzm
+        D771fulJg91doruWtM3U+Zc5TX/Z+SOchS9ffNz9ubA2purava+MYtqPcvliUo7zm4i9N5hY
+        8sa+w2qt4tZiGck4OZVEyzDlIjZGNck/rfzqLHe/qz9+3/79n/nFY5a+mlfsJl0Uiu+0fXR6
+        ixJLcUaioRZzUXEiADm9YNfKAgAA
+X-CMS-MailID: 20220505104630eucas1p1e3797aef5ed7f54f861bf3622b542713
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220505104630eucas1p1e3797aef5ed7f54f861bf3622b542713
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220505104630eucas1p1e3797aef5ed7f54f861bf3622b542713
+References: <CGME20220505104630eucas1p1e3797aef5ed7f54f861bf3622b542713@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+UDC driver should not touch gadget's driver internals, especially it
+should not reset driver->bus. This wasn't harmful so far, but since
+commit fc274c1e9973 ("USB: gadget: Add a new bus for gadgets") gadget
+subsystem got it's own bus and messing with ->bus triggers the
+following NULL pointer dereference:
 
+dwc2 12480000.hsotg: bound driver g_ether
+8<--- cut here ---
+Unable to handle kernel NULL pointer dereference at virtual address 00000000
+[00000000] *pgd=00000000
+Internal error: Oops: 5 [#1] SMP ARM
+Modules linked in: ...
+CPU: 0 PID: 620 Comm: modprobe Not tainted 5.18.0-rc5-next-20220504 #11862
+Hardware name: Samsung Exynos (Flattened Device Tree)
+PC is at module_add_driver+0x44/0xe8
+LR is at sysfs_do_create_link_sd+0x84/0xe0
+...
+Process modprobe (pid: 620, stack limit = 0x(ptrval))
+...
+ module_add_driver from bus_add_driver+0xf4/0x1e4
+ bus_add_driver from driver_register+0x78/0x10c
+ driver_register from usb_gadget_register_driver_owner+0x40/0xb4
+ usb_gadget_register_driver_owner from do_one_initcall+0x44/0x1e0
+ do_one_initcall from do_init_module+0x44/0x1c8
+ do_init_module from load_module+0x19b8/0x1b9c
+ load_module from sys_finit_module+0xdc/0xfc
+ sys_finit_module from ret_fast_syscall+0x0/0x54
+Exception stack(0xf1771fa8 to 0xf1771ff0)
+...
+dwc2 12480000.hsotg: new device is high-speed
+---[ end trace 0000000000000000 ]---
 
-On 05.05.22 12:14, monish.kumar.r@intel.com wrote:
-> From: Monish Kumar R <monish.kumar.r@intel.com>
->
-> Signed-off-by: Monish Kumar R <monish.kumar.r@intel.com>
-> ---
->  drivers/usb/core/quirks.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-> index 97b44a68668a..257ac37464e8 100644
-> --- a/drivers/usb/core/quirks.c
-> +++ b/drivers/usb/core/quirks.c
-> @@ -515,6 +515,10 @@ static const struct usb_device_id usb_quirk_list[] =
-=3D {
-> =20
->  	/* INTEL VALUE SSD */
->  	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info =3D USB_QUIRK_RESET_RESUME }=
-,
->        =20
-> +	/*DELL USB GEN2 */
-> +	{ USB_DEVICE(0x413c, 0xb062), .driver_info =3D USB_QUIRK_NO_LPM },
-> +	{ USB_DEVICE(0x413c, 0xb062), .driver_info =3D USB_QUIRK_RESET_RESUME }=
-,
-> =20
->
+Fix this by removing driver->bus entry reset.
 
-Hi,
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+ drivers/usb/dwc2/gadget.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-could you please
-
-1) keep the list in nummerical order from lowest device ID to largest
-2) combine both quirks with a binary OR
-3) provide a short reason for this patch like "found in own testing" or
-"reported on list"
-
-=C2=A0=C2=A0=C2=A0 Regards
-=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 Oliver
-=C2=A0
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index eee3504397e6..fe2a58c75861 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -4544,7 +4544,6 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,
+ 
+ 	WARN_ON(hsotg->driver);
+ 
+-	driver->driver.bus = NULL;
+ 	hsotg->driver = driver;
+ 	hsotg->gadget.dev.of_node = hsotg->dev->of_node;
+ 	hsotg->gadget.speed = USB_SPEED_UNKNOWN;
+-- 
+2.17.1
 
