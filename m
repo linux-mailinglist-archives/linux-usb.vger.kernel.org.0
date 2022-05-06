@@ -2,240 +2,250 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1808551DD72
-	for <lists+linux-usb@lfdr.de>; Fri,  6 May 2022 18:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B606851DDC7
+	for <lists+linux-usb@lfdr.de>; Fri,  6 May 2022 18:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443703AbiEFQUT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 May 2022 12:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56644 "EHLO
+        id S1443871AbiEFQrp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 May 2022 12:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350965AbiEFQUS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 May 2022 12:20:18 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE20DBC85
-        for <linux-usb@vger.kernel.org>; Fri,  6 May 2022 09:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651853794; x=1683389794;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=aLZECGEma6e8axsukOqTeSv3Th1TWba2cXpXfEVYvz0=;
-  b=iukhjpy6BeJwrcRFseBHNI/oNuLLhT0rspSRg9srQ+STo+SIncofHnLN
-   14XRCoTb6+OxREYAgIK8MpRXtSK/5TEcufSsTtSUu5BCdB8SlHwd+LzWJ
-   Xd8aoTuMYp3GajZfrHHLtbvPycSckeXh+I9KOMyvlqlWTsgrqjam6sZqB
-   8dBc3AJKE51J+OVGkCXNPyPaB28ibrKl2DYTK9/2lH/5ln0iy4dw40lPC
-   FhxqLWhOuh4v5H+xYockhJWJp9HSgjLWUzLU/HhCf5p+2VyNhqG6af4nb
-   JeL8knPf1rBuyFISw2zb7HFSWMNAxEWG3D2F/eJ2yrayHn8vR0ASGUjGj
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="354941606"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="354941606"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 09:16:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="632992879"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmsmga004.fm.intel.com with ESMTP; 06 May 2022 09:16:33 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <stern@rowland.harvard.edu>, <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH] usb: Avoid extra usb SET_SEL requests when enabling link power management
-Date:   Fri,  6 May 2022 19:18:07 +0300
-Message-Id: <20220506161807.3369439-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1443874AbiEFQrn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 May 2022 12:47:43 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AB06D4F1
+        for <linux-usb@vger.kernel.org>; Fri,  6 May 2022 09:43:58 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id k1so7960170pll.4
+        for <linux-usb@vger.kernel.org>; Fri, 06 May 2022 09:43:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bh6CSxzg+6JEuytBMw9j2GAuoj8y6isr1C8LlTE1oj0=;
+        b=Wz5z/M4s4vEelC1rO7cvaON/5FHKnFmJUoy9cc/K0NCPWdiNWFx7lnSZCQI8WNZgRR
+         oU5QrhdRhNqo7EbI18EeYzFv9eBZvL/FWHQ386cV0Kqgw0omywbeyeU1VKkDnV1eSsxX
+         XkwwaphhHcbe5+IVaU1X4s7tc0XwptOkfXx0A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bh6CSxzg+6JEuytBMw9j2GAuoj8y6isr1C8LlTE1oj0=;
+        b=NkrgdPMgujL+HWRGF6t3RGzGyR4m4fyUEUc/vpByD9PaxdM0IHePUalvVOOsF72tJ5
+         ipTdcdYgWhzGK+LkDndXTOj7Q0DB+MAwvNQ+uXT+FmFxgFM/WtcpDDQU7TvPirXdlqIw
+         ++Y8BrOgbzDO+A54yqq2TJD6f5P3Edd32XMJRl4zvpCtPMER6AiDfeYaXiXh+lnIbI9k
+         gTb1ZYzCfq2cT6jyvw8faexP9iE6ZpvcoQ9fnMauBRlWLMP/Ca9sUhA0euXYMNxkn4Jo
+         DYronLG27fns9Xu+M3Z58FOQcK8HVqZHlOgCi0Ah+MURnSiSRgFeqGrXNA6+tlRJrTGp
+         +FSQ==
+X-Gm-Message-State: AOAM532e3YdoYEjpuTC/yTUYe7ZTDEGgVvG019dqZbLzWTtDL1O8XsYA
+        1Cs2H+MSFWPmQ4MJ7XoOqJKpvQ==
+X-Google-Smtp-Source: ABdhPJxF4L/wGCp4qcxZiMgtimiFuwwc7nuYDpCZz76X/jycgdjKkXzFHiicexTd65Ug7W5tdFP2rQ==
+X-Received: by 2002:a17:903:94:b0:15c:f928:a373 with SMTP id o20-20020a170903009400b0015cf928a373mr4651954pld.26.1651855437956;
+        Fri, 06 May 2022 09:43:57 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:5605:d5cd:699b:1b26])
+        by smtp.gmail.com with UTF8SMTPSA id c14-20020a170902848e00b0015e8d4eb205sm1969908plo.79.2022.05.06.09.43.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 09:43:57 -0700 (PDT)
+Date:   Fri, 6 May 2022 09:43:55 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_kriskura@quicinc.com, quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v14 3/7] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <YnVQS5twzZ/q1iWu@google.com>
+References: <1650395470-31333-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1650395470-31333-4-git-send-email-quic_c_sanm@quicinc.com>
+ <YnK79i3NiTdMmC98@google.com>
+ <20220505032618.GC4640@hu-pkondeti-hyd.qualcomm.com>
+ <YnP/PZViq1u0f2yl@google.com>
+ <20220506030107.GD4640@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220506030107.GD4640@hu-pkondeti-hyd.qualcomm.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The host needs to tell the device the exit latencies using the SET_SEL
-request before device initiated link powermanagement can be enabled.
+On Fri, May 06, 2022 at 08:31:07AM +0530, Pavan Kondeti wrote:
+> On Thu, May 05, 2022 at 09:45:49AM -0700, Matthias Kaehlcke wrote:
+> > On Thu, May 05, 2022 at 08:56:18AM +0530, Pavan Kondeti wrote:
+> > > On Wed, May 04, 2022 at 10:46:30AM -0700, Matthias Kaehlcke wrote:
+> > > > On Wed, Apr 20, 2022 at 12:41:06AM +0530, Sandeep Maheswaram wrote:
+> > > > > During suspend read the status of all port and set hs phy mode
+> > > > > based on current speed. Use this hs phy mode to configure wakeup
+> > > > > interrupts in qcom glue driver.
+> > > > > 
+> > > > > Check wakeup-source property for dwc3 core node to set the
+> > > > > wakeup capability. Drop the device_init_wakeup call from
+> > > > > runtime suspend and resume.
+> > > > > 
+> > > > > Also check during suspend if any wakeup capable devices are
+> > > > > connected to the controller (directly or through hubs), if there
+> > > > > are none set a flag to indicate that the PHY is powered
+> > > > > down during suspend.
+> > > > > 
+> > > > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > > > > ---
+> > > > > v14:
+> > > > > Used device_children_wakeup_capable instead of usb_wakeup_enabled_descendants.
+> > > > > 
+> > > > > v13:
+> > > > > Changed dwc3_set_phy_speed_mode to dwc3_check_phy_speed_mode.
+> > > > > Removed device_init_wakeup calls from dwc3_runtime_suspend and dwc3_runtime_resume
+> > > > > as we have a new dt property wakeup-source.
+> > > > > 
+> > > > > 
+> > > > >  drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
+> > > > >  drivers/usb/dwc3/core.h |  4 ++++
+> > > > >  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
+> > > > >  3 files changed, 48 insertions(+), 13 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > > > > index 1170b80..898aa66 100644
+> > > > > --- a/drivers/usb/dwc3/core.c
+> > > > > +++ b/drivers/usb/dwc3/core.c
+> > > > > @@ -32,6 +32,7 @@
+> > > > >  #include <linux/usb/gadget.h>
+> > > > >  #include <linux/usb/of.h>
+> > > > >  #include <linux/usb/otg.h>
+> > > > > +#include <linux/usb/hcd.h>
+> > > > >  
+> > > > >  #include "core.h"
+> > > > >  #include "gadget.h"
+> > > > > @@ -1723,6 +1724,7 @@ static int dwc3_probe(struct platform_device *pdev)
+> > > > >  
+> > > > >  	platform_set_drvdata(pdev, dwc);
+> > > > >  	dwc3_cache_hwparams(dwc);
+> > > > > +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
+> > > > >  
+> > > > >  	spin_lock_init(&dwc->lock);
+> > > > >  	mutex_init(&dwc->mutex);
+> > > > > @@ -1865,6 +1867,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > > >  {
+> > > > >  	unsigned long	flags;
+> > > > >  	u32 reg;
+> > > > > +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
+> > > > >  
+> > > > >  	switch (dwc->current_dr_role) {
+> > > > >  	case DWC3_GCTL_PRTCAP_DEVICE:
+> > > > > @@ -1877,10 +1880,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > > >  		dwc3_core_exit(dwc);
+> > > > >  		break;
+> > > > >  	case DWC3_GCTL_PRTCAP_HOST:
+> > > > > -		if (!PMSG_IS_AUTO(msg)) {
+> > > > > -			dwc3_core_exit(dwc);
+> > > > > -			break;
+> > > > > -		}
+> > > > > +		dwc3_check_phy_speed_mode(dwc);
+> > > > >  
+> > > > >  		/* Let controller to suspend HSPHY before PHY driver suspends */
+> > > > >  		if (dwc->dis_u2_susphy_quirk ||
+> > > > > @@ -1896,6 +1896,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > > >  
+> > > > >  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
+> > > > >  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+> > > > > +
+> > > > > +		if (!PMSG_IS_AUTO(msg)) {
+> > > > > +			if (device_may_wakeup(dwc->dev) &&
+> > > > > +			    device_children_wakeup_capable(&hcd->self.root_hub->dev)) {
+> > > > > +				dwc->phy_power_off = false;
+> > > > > +			} else {
+> > > > > +				dwc->phy_power_off = true;
+> > > > > +				dwc3_core_exit(dwc);
+> > > > 
+> > > > I found that shutting the PHYs down during suspend leads to high power
+> > > > consumption of a downstream hub (about 80mW vs 15mW when the PHYs are
+> > > > not shut down).
+> > > > 
+> > > > It would be interesting to know if this also impacts other non-hub
+> > > > peripherals. Unfortunately I can't test that, the hub on my system is
+> > > > soldered to the board.
+> > > > 
+> > > > I understand that shutting the PHYs down might be beneficial in terms
+> > > > of power on some systems, however on those I'm looking at we'd strongly
+> > > > prefer to save the 65mW of power consumed by the hub, rather than
+> > > > whatever smaller amount of power that is saved by powering down the
+> > > > PHYs.
+> > > > 
+> > > > Could we introduce a sysfs attribute (or some other sort of knob) to
+> > > > allow the admin to configure whether the PHYs should remain on or off
+> > > > during suspend? That is assuming that it is actually desirable to power
+> > > > them off on some systems.
+> > > 
+> > > The result may vary across SoCs also. The current proposal is to keep PHY
+> > > powered during system suspend if any of the downstream USB devices are enabled
+> > > for wakeup. This also includes USB2/USB3 root hub. If one wants to keep PHY
+> > > always powered on even when no device is attached, they can do so by enabling
+> > > wakeup (echo enabled > /sys/bus/usb/devices/usbX/power/wakeup). This is anyway
+> > > needed if you want to detect a peripheral attach during system suspend.
+> > 
+> > My concern is that it is not evident for an admin what causes the high power
+> > consumption of the USB client (if they detect/localize it in the first place),
+> > and even less that wakeup needs to be enabled to mitigate it.
+> > 
+> > Why can't we just put the PHYs in suspend, rather than taking the controller
+> > down completely during suspend?
+> 
+> Agreed and I also have the same question.
+> 
+> I don't know the background on why DWC3 chooses to power down the PHY(s)
+> during system suspend. Probably it is beneficial in some board designs.
+> Atleast this patch series provides a way to wakeup the USB from system
+> suspend, which also can be used not to power down the PHY(s). If all the users
+> of DWC3 agree that powering down the PHY is bad, then we can do something
+> about it.
 
-The exit latency values do not change after enumeration, it's enough
-to set them once. So do like Windows 10 and issue the SET_SEL request
-once just before setting the configuration.
+I came across this commit while doing a bit of archeology:
 
-This is also the sequence described in USB 3.2 specs "9.1.2 Bus
-enumeration". SET_SEL is issued once before the Set Configuration
-request, and won't be cleared by the Set Configuration,
-Set Interface or ClearFeature (STALL) requests.
+  commit c4a5153e87fdf6805f63ff57556260e2554155a5
+  Author: Manu Gautam <mgautam@codeaurora.org>
+  Date:   Thu Jan 18 16:54:30 2018 +0530
 
-Only warm reset, hot reset, set Address 0 clears the exit latencies.
-See USB 3.2 section 9.4.14 Table 9-10 Device parameters and events
+  usb: dwc3: core: Power-off core/PHYs on system_suspend in host mode
 
-Add udev->lpm_devinit_allow, and set it if SET_SEL was successful.
-If not set, then don't try to enable device initiated LPM
+  Commit 689bf72c6e0d ("usb: dwc3: Don't reinitialize core during
+  host bus-suspend/resume") updated suspend/resume routines to not
+  power_off and reinit PHYs/core for host mode.
+  It broke platforms that rely on DWC3 core to power_off PHYs to
+  enter low power state on system suspend.
 
-We used to issue a SET_SEL request every time lpm is enabled for either
-U1 or U2 link states, meaning a SET_SEL was issued twice after every
-Set Configuration and Set Interface requests, easily accumulating to
-over 15 SET_SEL requets during a USB3 webcam enumeration.
+  Perform dwc3_core_exit/init only during host mode system_suspend/
+  resume to addresses power regression from above mentioned patch
+  and also allow USB session to stay connected across
+  runtime_suspend/resume in host mode. While at it also replace
+  existing checks for HOST only dr_mode with current_dr_role to
+  have similar core driver behavior for both Host-only and DRD+Host
+  configurations.
 
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/core/hub.c | 60 +++++++++++++++---------------------------
- include/linux/usb.h    |  2 ++
- 2 files changed, 23 insertions(+), 39 deletions(-)
+  Fixes: 689bf72c6e0d ("usb: dwc3: Don't reinitialize core during host bus-suspend/resume")
+  Reviewed-by: Roger Quadros <rogerq@ti.com>
+  Signed-off-by: Manu Gautam <mgautam@codeaurora.org>
+  Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 7781b2d31473..1af50eb3765e 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -3946,7 +3946,7 @@ static const char * const usb3_lpm_names[]  = {
-  * This function will fail if the SEL or PEL values for udev are greater than
-  * the maximum allowed values for the link state to be enabled.
-  */
--static int usb_req_set_sel(struct usb_device *udev, enum usb3_link_state state)
-+static int usb_req_set_sel(struct usb_device *udev)
- {
- 	struct usb_set_sel_req *sel_values;
- 	unsigned long long u1_sel;
-@@ -3955,7 +3955,7 @@ static int usb_req_set_sel(struct usb_device *udev, enum usb3_link_state state)
- 	unsigned long long u2_pel;
- 	int ret;
- 
--	if (udev->state != USB_STATE_CONFIGURED)
-+	if (!udev->parent || udev->speed < USB_SPEED_SUPER || !udev->lpm_capable)
- 		return 0;
- 
- 	/* Convert SEL and PEL stored in ns to us */
-@@ -3972,34 +3972,14 @@ static int usb_req_set_sel(struct usb_device *udev, enum usb3_link_state state)
- 	 * latency for the link state, and could start a device-initiated
- 	 * U1/U2 when the exit latencies are too high.
- 	 */
--	if ((state == USB3_LPM_U1 &&
--				(u1_sel > USB3_LPM_MAX_U1_SEL_PEL ||
--				 u1_pel > USB3_LPM_MAX_U1_SEL_PEL)) ||
--			(state == USB3_LPM_U2 &&
--			 (u2_sel > USB3_LPM_MAX_U2_SEL_PEL ||
--			  u2_pel > USB3_LPM_MAX_U2_SEL_PEL))) {
--		dev_dbg(&udev->dev, "Device-initiated %s disabled due to long SEL %llu us or PEL %llu us\n",
--				usb3_lpm_names[state], u1_sel, u1_pel);
-+	if (u1_sel > USB3_LPM_MAX_U1_SEL_PEL ||
-+	    u1_pel > USB3_LPM_MAX_U1_SEL_PEL ||
-+	    u2_sel > USB3_LPM_MAX_U2_SEL_PEL ||
-+	    u2_pel > USB3_LPM_MAX_U2_SEL_PEL) {
-+		dev_dbg(&udev->dev, "Device-initiated U1/U2 disabled due to long SEL or PEL\n");
- 		return -EINVAL;
- 	}
- 
--	/*
--	 * If we're enabling device-initiated LPM for one link state,
--	 * but the other link state has a too high SEL or PEL value,
--	 * just set those values to the max in the Set SEL request.
--	 */
--	if (u1_sel > USB3_LPM_MAX_U1_SEL_PEL)
--		u1_sel = USB3_LPM_MAX_U1_SEL_PEL;
--
--	if (u1_pel > USB3_LPM_MAX_U1_SEL_PEL)
--		u1_pel = USB3_LPM_MAX_U1_SEL_PEL;
--
--	if (u2_sel > USB3_LPM_MAX_U2_SEL_PEL)
--		u2_sel = USB3_LPM_MAX_U2_SEL_PEL;
--
--	if (u2_pel > USB3_LPM_MAX_U2_SEL_PEL)
--		u2_pel = USB3_LPM_MAX_U2_SEL_PEL;
--
- 	/*
- 	 * usb_enable_lpm() can be called as part of a failed device reset,
- 	 * which may be initiated by an error path of a mass storage driver.
-@@ -4021,6 +4001,10 @@ static int usb_req_set_sel(struct usb_device *udev, enum usb3_link_state state)
- 			sel_values, sizeof *(sel_values),
- 			USB_CTRL_SET_TIMEOUT);
- 	kfree(sel_values);
-+
-+	if (ret > 0)
-+		udev->lpm_devinit_allow = 1;
-+
- 	return ret;
- }
- 
-@@ -4136,6 +4120,9 @@ static bool usb_device_may_initiate_lpm(struct usb_device *udev,
- 	unsigned int sel;		/* us */
- 	int i, j;
- 
-+	if (!udev->lpm_devinit_allow)
-+		return false;
-+
- 	if (state == USB3_LPM_U1)
- 		sel = DIV_ROUND_UP(udev->u1_params.sel, 1000);
- 	else if (state == USB3_LPM_U2)
-@@ -4184,7 +4171,7 @@ static bool usb_device_may_initiate_lpm(struct usb_device *udev,
- static void usb_enable_link_state(struct usb_hcd *hcd, struct usb_device *udev,
- 		enum usb3_link_state state)
- {
--	int timeout, ret;
-+	int timeout;
- 	__u8 u1_mel = udev->bos->ss_cap->bU1devExitLat;
- 	__le16 u2_mel = udev->bos->ss_cap->bU2DevExitLat;
- 
-@@ -4196,17 +4183,6 @@ static void usb_enable_link_state(struct usb_hcd *hcd, struct usb_device *udev,
- 			(state == USB3_LPM_U2 && u2_mel == 0))
- 		return;
- 
--	/*
--	 * First, let the device know about the exit latencies
--	 * associated with the link state we're about to enable.
--	 */
--	ret = usb_req_set_sel(udev, state);
--	if (ret < 0) {
--		dev_warn(&udev->dev, "Set SEL for device-initiated %s failed.\n",
--				usb3_lpm_names[state]);
--		return;
--	}
--
- 	/* We allow the host controller to set the U1/U2 timeout internally
- 	 * first, so that it can change its schedule to account for the
- 	 * additional latency to send data to a device in a lower power
-@@ -4486,6 +4462,11 @@ static int hub_handle_remote_wakeup(struct usb_hub *hub, unsigned int port,
- 	return 0;
- }
- 
-+static int usb_req_set_sel(struct usb_device *udev)
-+{
-+	return 0;
-+}
-+
- #endif	/* CONFIG_PM */
- 
- /*
-@@ -5011,6 +4992,7 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
- 			udev->lpm_capable = usb_device_supports_lpm(udev);
- 			udev->lpm_disable_count = 1;
- 			usb_set_lpm_parameters(udev);
-+			usb_req_set_sel(udev);
- 		}
- 	}
- 
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 60bee864d897..f7a9914fc97f 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -584,6 +584,7 @@ struct usb3_lpm_parameters {
-  * @authenticated: Crypto authentication passed
-  * @wusb: device is Wireless USB
-  * @lpm_capable: device supports LPM
-+ * @lpm_devinit_allow: Allow USB3 device initiated LPM, exit latency is in range
-  * @usb2_hw_lpm_capable: device can perform USB2 hardware LPM
-  * @usb2_hw_lpm_besl_capable: device can perform USB2 hardware BESL LPM
-  * @usb2_hw_lpm_enabled: USB2 hardware LPM is enabled
-@@ -666,6 +667,7 @@ struct usb_device {
- 	unsigned authenticated:1;
- 	unsigned wusb:1;
- 	unsigned lpm_capable:1;
-+	unsigned lpm_devinit_allow:1;
- 	unsigned usb2_hw_lpm_capable:1;
- 	unsigned usb2_hw_lpm_besl_capable:1;
- 	unsigned usb2_hw_lpm_enabled:1;
--- 
-2.25.1
 
+So apparently powering off the core and PHYs is needed on some
+platforms.
+
+We could introduce a DT property that indicates that keeping the core/PHYs
+on is supported. Another hint could be the fact that the controller is
+marked as wakeup capable, however that would still power the core/PHYs
+down if the 'wakeup-source' property isn't set for a controller that is
+technically wakeup capable.
