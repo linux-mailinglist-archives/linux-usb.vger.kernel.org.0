@@ -2,85 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CEF51D195
-	for <lists+linux-usb@lfdr.de>; Fri,  6 May 2022 08:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9D651D1B5
+	for <lists+linux-usb@lfdr.de>; Fri,  6 May 2022 08:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386339AbiEFGtd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 May 2022 02:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
+        id S1387293AbiEFG7h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 May 2022 02:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382501AbiEFGtZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 May 2022 02:49:25 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF2212A98
-        for <linux-usb@vger.kernel.org>; Thu,  5 May 2022 23:45:42 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id g23so7593457edy.13
-        for <linux-usb@vger.kernel.org>; Thu, 05 May 2022 23:45:42 -0700 (PDT)
+        with ESMTP id S1383031AbiEFG7f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 May 2022 02:59:35 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F4D1F63C
+        for <linux-usb@vger.kernel.org>; Thu,  5 May 2022 23:55:53 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 6so5393421pgb.13
+        for <linux-usb@vger.kernel.org>; Thu, 05 May 2022 23:55:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QsLmijEooSiXfbLfva7oeI6L4KtnWX5pjKwE7m2Q6CM=;
-        b=HLY18bGtl3gXLNmbQUg99B1iBQLAwTI73xDls7bmlM7Atl1v7DmFE2PcTvy7fRqWv3
-         cVhBk4+6E7fhI09kT9VcDaHgJEs7KhTzCOS/sSCWmLq4aaxu0dUWkcWIEIDKsruo1S8z
-         xhK+foqGRyepaKwC0aGsRiehU6B0IVGHpEnIeA5aN90KrxEd+Ia/da5kznhDU/kMrSPd
-         jhUdlfcEUJOtuSA7modVtdyfgruNGmXYgarew9GNKSSuv4JnBenYLBYvd+mgwbKgWhhB
-         PuMJcztI0/op/SKdzU/gFZKbXROKSUWhKeGavhMaGOpomqJHv63pRFmhEuDjF9icILzv
-         N2sw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=D4NXdd3YqkdO3IMXdjbzk+SiXyDFtdTRliIhRaIF0uU=;
+        b=csOcQIqCeppAw0bnbA0PAK/KLSkBNEXJGvbbRFUL5u1FD8EeshJ8vsm100ssR6Ppxn
+         usAcP8u5hf++Ngp/PQREyHwtTO1BXYNFWbPhngnUM5A7eYKdOxSqyxRYDf4yMnDC/8NM
+         ij7hJ/5HT+HSdWf/+sNGuOS5UEvbAIu00uFL7dGUbAKptzl/2/7aMt5b9n+BggK+0n5E
+         a6NEub1mlV0DxGT5mVJxfUZ1rvWIVQVJK1R9UspPKKAZrXXjJMlImCJB5TvpKyb9IdM+
+         aaR5Lro6szV2wpztncRzcZLhUGBOd2xR1lxDeN17+mqBaLt70aw0kMBFWLa9/rM2UTcg
+         +ing==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QsLmijEooSiXfbLfva7oeI6L4KtnWX5pjKwE7m2Q6CM=;
-        b=7VrjZVMtJotWI+QO8rf+nMUNpg7ybPsW5C7DVRkzLIBKvd/chX7CPiM+JX2TaUg+XG
-         tnPXdWa6Khj1WmKccFt1jG2PpBoqZFUE0gM408yqslXnT2SGvHnDnbgSBxZK3km+0QgJ
-         NblbY1qLBVgX/NrlX8lkmsFEs3aT5eORYNysX2rH5HFHESG3boq1FyB0QJ1U6RI6K1hX
-         veL+sSyQysVkOKVN4i0o1MmTY5kRbzozA/bQBciS9uhxn/MG/IpOdpsur/lC0+x2RoIZ
-         iN7a83Y0UN4WLHy3/yWH5q9T46UgK4xi3E0q5guWENE2aqjscPAAYXbtbHtYiz8oeXS2
-         sq3g==
-X-Gm-Message-State: AOAM530x+gG6iF3PG4GsizrNZxHXNSdGg7UJdxgZaB5WMgVpjoj4H0go
-        /nlMTyu6E4Sqbu03VL9TKvxzfQ==
-X-Google-Smtp-Source: ABdhPJxZSxVy7lcii5HWt3fudazIdSvFNLjs69lmR7PSXhsciOPsOqCmWLg28bfmdgjVADr51/ochQ==
-X-Received: by 2002:a05:6402:1115:b0:427:e77b:a70e with SMTP id u21-20020a056402111500b00427e77ba70emr1983121edv.320.1651819541183;
-        Thu, 05 May 2022 23:45:41 -0700 (PDT)
-Received: from [192.168.0.222] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y5-20020a50f1c5000000b0042617ba63afsm1850341edl.57.2022.05.05.23.45.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 23:45:40 -0700 (PDT)
-Message-ID: <584df17c-3ffc-4290-a2dd-c803987dccfe@linaro.org>
-Date:   Fri, 6 May 2022 08:45:39 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=D4NXdd3YqkdO3IMXdjbzk+SiXyDFtdTRliIhRaIF0uU=;
+        b=jOvs6xwThpFACiJTRDnz5Gnznq2/V4TiX/7KMJ6zMAL6tDLrp3flg49tE9dcZezd1c
+         IwAfLnXlq7ZdV/ZvYUj03R8bWucXqxeX3L8JtzJdQN/obKIdOR7JM1BdRC+ILDi07c6a
+         qlQ9xLvZ6aMPvzfIuLf9631ei/figroRYqbYAkv7vVsmUlW9SPrnOS1GEQDaKj85C5+F
+         5D7bDWQlibOZXgHCO83YFcXPMCgwnkTMxTgjUVXykYLprumeO9wZCYuy6r4soBdgpH9C
+         SRzLKCIIL0/twWBwoO9m1sLPsrpaNsDhI4h1w++Q2ZVVjF3pcqXhuWpC9zcD3iSiWkGm
+         IaUw==
+X-Gm-Message-State: AOAM533MuThdk/uG05jViVUsVNMH1VpdnLKDhqXzQIHrq9BbOTo969VY
+        JdSKVQgHIYKRIf3jzCBxSiid1F2vaTCk
+X-Google-Smtp-Source: ABdhPJwtcPALIBrmTItLjcphWrDRFNx0TIk+f7DOIPALma//Tvoi/Vyk1N3h9fQS2zZjkCfYSZ8U4g==
+X-Received: by 2002:a65:6a4c:0:b0:39c:f169:b54a with SMTP id o12-20020a656a4c000000b0039cf169b54amr1651752pgu.384.1651820152757;
+        Thu, 05 May 2022 23:55:52 -0700 (PDT)
+Received: from thinkpad ([117.207.26.33])
+        by smtp.gmail.com with ESMTPSA id y19-20020aa78f33000000b0050dc76281b0sm2568308pfr.138.2022.05.05.23.55.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 23:55:52 -0700 (PDT)
+Date:   Fri, 6 May 2022 12:25:46 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] ARM: dts: qcom: sdx65: Add USB3 and PHY support
+Message-ID: <20220506065546.GA17659@thinkpad>
+References: <1651482395-29443-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1651482395-29443-4-git-send-email-quic_rohiagar@quicinc.com>
+ <YnQtQ7Il95bfrif9@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH RFC v5 6/6] usb: dwc3: dwc3-exynos: add host init
-Content-Language: en-US
-To:     Daehwan Jung <dh10.jung@samsung.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Juergen Gross <jgross@suse.com>, Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        "open list:DESIGNWARE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>, sc.suh@samsung.com,
-        taehyun.cho@samsung.com, jh0801.jung@samsung.com,
-        eomji.oh@samsung.com
-References: <1651818679-10594-1-git-send-email-dh10.jung@samsung.com>
- <CGME20220506063340epcas2p4c9d88670f9be952f3637e3a545a7d1da@epcas2p4.samsung.com>
- <1651818679-10594-7-git-send-email-dh10.jung@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1651818679-10594-7-git-send-email-dh10.jung@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YnQtQ7Il95bfrif9@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,194 +76,23 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 06/05/2022 08:31, Daehwan Jung wrote:
-> This is for xHCI Host Controller driver on Exynos SOC.
-
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-
-> It registers vendor ops before loading xhci platform driver.
-
-It does not explain why do you need it, why do you do it, what is this
-going to achieve or give us.
-
+On Thu, May 05, 2022 at 10:02:11PM +0200, Greg KH wrote:
+> On Mon, May 02, 2022 at 02:36:34PM +0530, Rohit Agarwal wrote:
+> > Add devicetree nodes for enabling USB3 controller, Qcom QMP PHY and
+> > SNPS HS PHY on SDX65.
+> > 
+> > Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+> > ---
+> >  arch/arm/boot/dts/qcom-sdx65.dtsi | 83 +++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 83 insertions(+)
 > 
-> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> ---
->  drivers/usb/dwc3/dwc3-exynos.c | 100 ++++++++++++++++++++++++++++++++-
->  1 file changed, 99 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
-> index 0ecf20eeceee..c22ea5cd6ab0 100644
-> --- a/drivers/usb/dwc3/dwc3-exynos.c
-> +++ b/drivers/usb/dwc3/dwc3-exynos.c
-> @@ -17,6 +17,12 @@
->  #include <linux/of_platform.h>
->  #include <linux/regulator/consumer.h>
->  
-> +#include "core.h"
-> +
-> +#if IS_ENABLED(CONFIG_USB_XHCI_EXYNOS)
+> Does not apply to my tree :(
 
-This symbol does not exist at this point, so your patch does not look
-like correctly ordered.
+DTS patches are supposed to go through ARCH trees. So Bjorn will pick it
+through linux-qcom.
 
-> +int xhci_exynos_register_vendor_ops(void);
-> +#endif
-> +
->  #define DWC3_EXYNOS_MAX_CLOCKS	4
->  
->  struct dwc3_exynos_driverdata {
-> @@ -27,6 +33,7 @@ struct dwc3_exynos_driverdata {
->  
->  struct dwc3_exynos {
->  	struct device		*dev;
-> +	struct dwc3		*dwc;
->  
->  	const char		**clk_names;
->  	struct clk		*clks[DWC3_EXYNOS_MAX_CLOCKS];
-> @@ -46,12 +53,81 @@ static int dwc3_exynos_remove_child(struct device *dev, void *unused)
->  	return 0;
->  }
->  
-> +#if IS_ENABLED(CONFIG_USB_XHCI_EXYNOS)
-> +static int dwc3_exynos_host_init(struct dwc3_exynos *exynos)
-> +{
-> +	struct dwc3		*dwc = exynos->dwc;
-> +	struct device		*dev = exynos->dev;
-> +	struct platform_device	*xhci;
-> +	struct resource		*res;
-> +	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
-> +	int			ret = 0;
-> +
-> +	/* Configuration xhci resources */
-> +	xhci_exynos_register_vendor_ops();
+Thanks,
+Mani
 
-Why this is always being called? Runtime features should not be added
-like that.
-
-> +
-> +	res = platform_get_resource(dwc3_pdev, IORESOURCE_MEM, 0);
-> +	if (!res) {
-> +		dev_err(dev, "missing memory resource\n");
-> +		return -ENODEV;
-> +	}
-> +	dwc->xhci_resources[0].start = res->start;
-> +	dwc->xhci_resources[0].end = dwc->xhci_resources[0].start +
-> +					DWC3_XHCI_REGS_END;
-> +	dwc->xhci_resources[0].flags = res->flags;
-> +	dwc->xhci_resources[0].name = res->name;
-> +
-> +	res = platform_get_resource(dwc3_pdev, IORESOURCE_IRQ, 0);
-> +	if (!res) {
-> +		dev_err(dev, "missing irq resource\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	dwc->xhci_resources[1].start = dwc->irq_gadget;
-> +	dwc->xhci_resources[1].end = dwc->irq_gadget;
-> +	dwc->xhci_resources[1].flags = res->flags;
-> +	dwc->xhci_resources[1].name = res->name;
-> +
-> +	xhci = platform_device_alloc("xhci-hcd", PLATFORM_DEVID_AUTO);
-> +	if (!xhci) {
-> +		dev_err(dwc->dev, "couldn't allocate xHCI device\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	xhci->dev.parent	= dwc->dev;
-
-Remove any duplicates spaces/tabs which should not be in the code (no
-need for indenting '=').
-
-> +	ret = dma_set_mask_and_coherent(&xhci->dev, DMA_BIT_MASK(36));
-> +	if (ret) {
-> +		pr_err("xhci dma set mask ret = %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = platform_device_add_resources(xhci, dwc->xhci_resources,
-> +						DWC3_XHCI_RESOURCES_NUM);
-
-But this should be properly indented, how checkpatch asks.
-
-> +	if (ret) {
-> +		dev_err(dwc->dev, "couldn't add resources to xHCI device\n");
-> +		goto err;
-> +	}
-> +
-> +	ret = platform_device_add(xhci);
-> +	if (ret) {
-> +		dev_err(dwc->dev, "couldn't add xHCI device\n");
-> +		goto err;
-> +	}
-> +
-> +	return 0;
-> +err:
-> +	platform_device_put(xhci);
-> +	return ret;
-> +}
-> +#endif
-> +
->  static int dwc3_exynos_probe(struct platform_device *pdev)
->  {
->  	struct dwc3_exynos	*exynos;
->  	struct device		*dev = &pdev->dev;
-> -	struct device_node	*node = dev->of_node;
-> +	struct device_node	*node = dev->of_node, *dwc3_np;
->  	const struct dwc3_exynos_driverdata *driver_data;
-> +	struct platform_device *dwc3_pdev;
->  	int			i, ret;
->  
->  	exynos = devm_kzalloc(dev, sizeof(*exynos), GFP_KERNEL);
-> @@ -109,6 +185,12 @@ static int dwc3_exynos_probe(struct platform_device *pdev)
->  		goto vdd10_err;
->  	}
->  
-> +	dwc3_np = of_get_compatible_child(node, "snps,dwc3");
-> +	if (!dwc3_np) {
-> +		dev_err(dev, "failed to find dwc3 core child!\n");
-
-Please keep messages consistent with other, so start with capital letter
-and do not shout.
-
-> +		goto vdd33_err;
-> +	}
-> +
->  	if (node) {
->  		ret = of_platform_populate(node, NULL, NULL, dev);
->  		if (ret) {
-> @@ -121,6 +203,22 @@ static int dwc3_exynos_probe(struct platform_device *pdev)
->  		goto populate_err;
->  	}
->  
-> +	dwc3_pdev = of_find_device_by_node(dwc3_np);
-> +	exynos->dwc = platform_get_drvdata(dwc3_pdev);
-
-Driver should not poke into its child. You violate device layering here.
-No, no. This is a glue driver, not a "let's do something inside DWC3"
-driver.
-
-> +	if (!exynos->dwc) {
-> +		ret = -EPROBE_DEFER;
-> +		dev_err(dev, "failed to get dwc3 core node!\n");
-
-Again no reason for shouting.
-
-> +		goto populate_err;
-> +	}
-> +
-> +#if IS_ENABLED(CONFIG_USB_XHCI_EXYNOS)
-> +	/* USB host initialization. */
-> +	ret = dwc3_exynos_host_init(exynos);
-> +	if (ret) {
-> +		dev_err(dev, "USB host pre-initialization fail!\n");
-> +		goto populate_err;
-> +	}
-> +#endif
->  	return 0;
->  
->  populate_err:
-
-
-Best regards,
-Krzysztof
+-- 
+மணிவண்ணன் சதாசிவம்
