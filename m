@@ -2,50 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C1051D608
-	for <lists+linux-usb@lfdr.de>; Fri,  6 May 2022 12:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6079151D615
+	for <lists+linux-usb@lfdr.de>; Fri,  6 May 2022 12:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391076AbiEFK7J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 May 2022 06:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
+        id S1391108AbiEFLCa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 May 2022 07:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345838AbiEFK7H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 May 2022 06:59:07 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B69C2BD5
-        for <linux-usb@vger.kernel.org>; Fri,  6 May 2022 03:55:22 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id i66-20020a6bb845000000b00657bac76fb4so4738939iof.15
-        for <linux-usb@vger.kernel.org>; Fri, 06 May 2022 03:55:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=VWNiasscwCqH7BEFBzi0QOwSUo6R9CLeT0qes+0SG9E=;
-        b=CXaryT65xKcLml7wzXgUFn4AUJ7k5Cgf7HeVoiDlhU082EE2alOxWDkOkKbV2g4/Po
-         GG12IbgKPeP8iVrI9qfARoPU4VszyE0DElB4vmzBwnnJjs36ht13QlX3jwiebO81DBiV
-         Dd9z9CSVKHAnI0Vzs7kVMMB3sIIepvi6pzniEvWhWXTUopQ/nEwBr9JooEjDywVNIsAv
-         dk28mZ2L/0LVwb3RuCs8/KLAsbLuGmHpfbA0Ggrl8ReZ7MkrlCft1YObxPm7rkSzogfC
-         I2vQPrJ05MPmby7fzZbG6ralJSanT0c5Cxt7/tI3MEv4sMPdXwZwYbDCIKF/Q2fa7xse
-         awVg==
-X-Gm-Message-State: AOAM531oJ9IEeJZe8OkANfRS2CJoY9GYRulJny0dQ0B6FngCbdY9L4on
-        gJXLIxuq9QNuniGXDQAH4warNBSaUyZ+Pg8fVoQEPIvq4BWB
-X-Google-Smtp-Source: ABdhPJxEryT1hVNVWW0lWDHfBTf58UOdnvjRmcxRPvEyAQV/MUT/cgJWkxFnEU/F1ZSqb9+Hnk3ZVrLnOwlxe77SRu4Dgve+LxF1
-MIME-Version: 1.0
-X-Received: by 2002:a92:bf12:0:b0:2c6:7aaa:9ff2 with SMTP id
- z18-20020a92bf12000000b002c67aaa9ff2mr1063676ilh.224.1651834521806; Fri, 06
- May 2022 03:55:21 -0700 (PDT)
-Date:   Fri, 06 May 2022 03:55:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e66c2805de55b15a@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in driver_register
-From:   syzbot <syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rafael@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        with ESMTP id S1391105AbiEFLC3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 May 2022 07:02:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517E81F614;
+        Fri,  6 May 2022 03:58:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD90461BB6;
+        Fri,  6 May 2022 10:58:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38CA5C385AE;
+        Fri,  6 May 2022 10:58:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651834726;
+        bh=wGkjYK+Q3/CWC/Vo7gfKw8naKn70zntYWDbUwNfSiuM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tVZoGX5fPJjH70QTpNeAjArJAayUKcJ09Js+S7NxoctUpKgibefflt6GaBjp+GOp/
+         g9ahxBYP73eMsMncs4j1NA+ERq8cB61LkoyCrjZ5mm1/OBByAOb7Tafu0azvL9ArOB
+         qoS3tsehKaQhYmSC3ueB8NSLxspqYxG3wEQGbwnouWohYHdmsQKsNXFw4a9pSpHrIa
+         wbGgK0fsWV5RvAb8OAxb91NBV73KO+cfWhV3qIOFAhlXh29fos9atargGnr/u07nJS
+         +c5k9WJKiHMRfH53sqdgmJ/rvhN2Kd24kfyN+ivM1LXGgn2Ufqn3GWzppF+G7Bnqbv
+         HjX7slXKnCoNw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmvfX-009RKN-IV; Fri, 06 May 2022 11:58:43 +0100
+Date:   Fri, 06 May 2022 11:58:43 +0100
+Message-ID: <87tua36i70.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Ferry Toth <fntoth@gmail.com>
+Subject: Re: [PATCH net-next v2 5/7] usbnet: smsc95xx: Forward PHY interrupts to PHY driver to avoid polling
+In-Reply-To: <20220505185328.GA14123@wunner.de>
+References: <cover.1651574194.git.lukas@wunner.de>
+        <c6b7f4e4a17913d2f2bc4fe722df0804c2d6fea7.1651574194.git.lukas@wunner.de>
+        <20220505113207.487861b2@kernel.org>
+        <20220505185328.GA14123@wunner.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lukas@wunner.de, kuba@kernel.org, tglx@linutronix.de, davem@davemloft.net, pabeni@redhat.com, netdev@vger.kernel.org, linux-usb@vger.kernel.org, steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com, oneukum@suse.com, andre.edich@microchip.com, linux@rempel-privat.de, martyn.welch@collabora.com, ghojda@yo2urs.ro, chf.fritz@googlemail.com, LinoSanfilippo@gmx.de, p.rosenberger@kunbus.com, hkallweit1@gmail.com, andrew@lunn.ch, linux@armlinux.org.uk, fntoth@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,162 +83,70 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Thu, 05 May 2022 19:53:28 +0100,
+Lukas Wunner <lukas@wunner.de> wrote:
+> 
+> On Thu, May 05, 2022 at 11:32:07AM -0700, Jakub Kicinski wrote:
+> > On Tue, 3 May 2022 15:15:05 +0200 Lukas Wunner wrote:
+> > > @@ -608,11 +618,20 @@ static void smsc95xx_status(struct usbnet *dev, struct urb *urb)
+> > >  	intdata = get_unaligned_le32(urb->transfer_buffer);
+> > >  	netif_dbg(dev, link, dev->net, "intdata: 0x%08X\n", intdata);
+> > >  
+> > > +	/* USB interrupts are received in softirq (tasklet) context.
+> > > +	 * Switch to hardirq context to make genirq code happy.
+> > > +	 */
+> > > +	local_irq_save(flags);
+> > > +	__irq_enter_raw();
+> > > +
+> > >  	if (intdata & INT_ENP_PHY_INT_)
+> > > -		;
+> > > +		generic_handle_domain_irq(pdata->irqdomain, PHY_HWIRQ);
+> > >  	else
+> > >  		netdev_warn(dev->net, "unexpected interrupt, intdata=0x%08X\n",
+> > >  			    intdata);
+> > > +
+> > > +	__irq_exit_raw();
+> > > +	local_irq_restore(flags);
+> > 
+> > IRQ maintainers could you cast your eyes over this?
+> > 
+> > Full patch:
+> > 
+> > https://lore.kernel.org/all/c6b7f4e4a17913d2f2bc4fe722df0804c2d6fea7.1651574194.git.lukas@wunner.de/
+> 
+> This is basically identical to what drivers/net/usb/lan78xx.c does
+> in lan78xx_status(), except I'm passing the hw irq instead of the
+> linux irq to genirq code, thereby avoiding the overhead of a
+> radix_tree_lookup().
+> 
+> generic_handle_domain_irq() warns unconditionally on !in_irq(),
+> unlike handle_irq_desc(), which constrains the warning to
+> handle_enforce_irqctx() (i.e. x86 APIC, arm GIC/GICv3).
+> Perhaps that's an oversight in generic_handle_domain_irq(),
+> unless __irq_resolve_mapping() becomes unsafe outside in_irq()
+> for some reason...
+> 
+> In any case the unconditional in_irq() necessitates __irq_enter_raw()
+> here.
+> 
+> And there's no _safe variant() of generic_handle_domain_irq()
+> (unlike generic_handle_irq_safe() which was recently added by
+> 509853f9e1e7), hence the necessity of an explicit local_irq_save().
 
-syzbot found the following issue on:
+Please don't directly use __irq_enter_raw() and similar things
+directly in driver code (it doesn't do anything related to RCU, for
+example, which could be problematic if used in arbitrary contexts).
+Given how infrequent this interrupt is, I'd rather you use something
+similar to what lan78xx is doing, and be done with it.
 
-HEAD commit:    a2673d570bd6 usb: gadget: uvc: track frames in format entr..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1100a2f8f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d7b232ec3adf5c8d
-dashboard link: https://syzkaller.appspot.com/bug?extid=dc7c3ca638e773db07f6
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+And since this is a construct that seems to be often repeated, why
+don't you simply make the phy interrupt handling available over a
+smp_call_function() interface, which would always put you in the
+correct context and avoid faking things up?
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Thanks,
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+	M.
 
-==================================================================
-BUG: KASAN: use-after-free in driver_find drivers/base/driver.c:223 [inline]
-BUG: KASAN: use-after-free in driver_register+0x34d/0x3a0 drivers/base/driver.c:164
-Read of size 8 at addr ffff88810f8cd0c8 by task syz-executor.0/8326
-
-CPU: 0 PID: 8326 Comm: syz-executor.0 Not tainted 5.18.0-rc5-syzkaller-00112-ga2673d570bd6 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- driver_find drivers/base/driver.c:223 [inline]
- driver_register+0x34d/0x3a0 drivers/base/driver.c:164
- usb_gadget_register_driver_owner+0xfb/0x1e0 drivers/usb/gadget/udc/core.c:1546
- raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
- raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f7b05256ea7
-Code: 3c 1c 48 f7 d8 49 39 c4 72 b8 e8 34 54 02 00 85 c0 78 bd 48 83 c4 08 4c 89 e0 5b 41 5c c3 0f 1f 44 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f7b049cb098 EFLAGS: 00000246
- ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f7b049cc110 RCX: 00007f7b05256ea7
-RDX: 0000000000000000 RSI: 0000000000005501 RDI: 0000000000000003
-RBP: 0000000000000003 R08: 000000000000ffff R09: 000000000000000b
-R10: 00007f7b049cb140 R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000020000000 R15: 0000000000000000
- </TASK>
-
-Allocated by task 8324:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- ____kasan_kmalloc mm/kasan/common.c:515 [inline]
- __kasan_kmalloc+0x81/0xa0 mm/kasan/common.c:524
- kmalloc include/linux/slab.h:581 [inline]
- kzalloc include/linux/slab.h:714 [inline]
- bus_add_driver+0xd4/0x630 drivers/base/bus.c:602
- driver_register+0x220/0x3a0 drivers/base/driver.c:171
- usb_gadget_register_driver_owner+0xfb/0x1e0 drivers/usb/gadget/udc/core.c:1546
- raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
- raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Freed by task 8326:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x10f/0x190 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1728 [inline]
- slab_free_freelist_hook mm/slub.c:1754 [inline]
- slab_free mm/slub.c:3510 [inline]
- kfree+0xc1/0x4f0 mm/slub.c:4552
- kobject_cleanup lib/kobject.c:673 [inline]
- kobject_release lib/kobject.c:704 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x1c8/0x540 lib/kobject.c:721
- driver_find drivers/base/driver.c:221 [inline]
- driver_register+0x1e3/0x3a0 drivers/base/driver.c:164
- usb_gadget_register_driver_owner+0xfb/0x1e0 drivers/usb/gadget/udc/core.c:1546
- raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
- raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The buggy address belongs to the object at ffff88810f8cd000
- which belongs to the cache kmalloc-256 of size 256
-The buggy address is located 200 bytes inside of
- 256-byte region [ffff88810f8cd000, ffff88810f8cd100)
-
-The buggy address belongs to the physical page:
-page:ffffea00043e3300 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x10f8cc
-head:ffffea00043e3300 order:1 compound_mapcount:0 compound_pincount:0
-flags: 0x200000000010200(slab|head|node=0|zone=2)
-raw: 0200000000010200 ffffea000433cb00 dead000000000005 ffff888100041b40
-raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 206, tgid 206 (kworker/u4:3), ts 5899855484, free_ts 0
- prep_new_page mm/page_alloc.c:2441 [inline]
- get_page_from_freelist+0x1373/0x27b0 mm/page_alloc.c:4182
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5408
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2272
- alloc_slab_page mm/slub.c:1799 [inline]
- allocate_slab+0x26c/0x3c0 mm/slub.c:1944
- new_slab mm/slub.c:2004 [inline]
- ___slab_alloc+0x95a/0x1010 mm/slub.c:3005
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3092
- slab_alloc_node mm/slub.c:3183 [inline]
- slab_alloc mm/slub.c:3225 [inline]
- kmem_cache_alloc_trace+0x2fd/0x3b0 mm/slub.c:3256
- kmalloc include/linux/slab.h:581 [inline]
- kzalloc include/linux/slab.h:714 [inline]
- set_kthread_struct+0xc5/0x250 kernel/kthread.c:117
- copy_process+0x332c/0x6db0 kernel/fork.c:2161
- kernel_clone+0xe7/0xab0 kernel/fork.c:2639
- kernel_thread+0xb5/0xf0 kernel/fork.c:2691
- call_usermodehelper_exec_work kernel/umh.c:174 [inline]
- call_usermodehelper_exec_work+0xcc/0x180 kernel/umh.c:160
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2ef/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffff88810f8ccf80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88810f8cd000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88810f8cd080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                              ^
- ffff88810f8cd100: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88810f8cd180: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+Without deviation from the norm, progress is not possible.
