@@ -2,97 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC4F51E0BB
-	for <lists+linux-usb@lfdr.de>; Fri,  6 May 2022 23:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B2151E15E
+	for <lists+linux-usb@lfdr.de>; Fri,  6 May 2022 23:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444270AbiEFVKr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 May 2022 17:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
+        id S1444577AbiEFVw5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 May 2022 17:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444243AbiEFVKq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 May 2022 17:10:46 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B816F481
-        for <linux-usb@vger.kernel.org>; Fri,  6 May 2022 14:07:02 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id e5so7030230pgc.5
-        for <linux-usb@vger.kernel.org>; Fri, 06 May 2022 14:07:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to;
-        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
-        b=iE9UxHskNYHOO3H6FjKnavEf/Vjcp2jY3sbm6CS/ddTi0T1p6m5/UtB6ZYUa6tFOB2
-         Ig8MnUmvdShFqU/t2V3sf0VxI8F53A5RIByqyjJykSn8ieXmDiZN6wT5vQH17OT9KbV4
-         Wh6XO1gXfmv4kNjTEU5onYMXqtZZ759010DMiwUoke6171scdH4NQYAQ2WJmXpXeG4Hx
-         8WzegUtGwAYUuhUrXXfSp/zkWruEJ7Z5A5TDKpIT1zEJL+9Sg719xYm6kAzxSW7LmgU3
-         rMPBwREKO585DxQEooB8vVmb1j5yZMIcxbhHz4sA3NqN5AJHa06hHhGOrrSvcrwggGhf
-         VOhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to;
-        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
-        b=Ug9sO1+QQJEu+E2J4uAPsKjDcVhG520uQ2RTwoYVofz1YA7TA9fugLHrjKCEb30njm
-         wIjUqcQ+SnOJlzelfBIHKoVEb+y9C91PXH3uCSS04hcirFnQo2uZjeNAQAas6/HD0/V5
-         D54UVXFr88MFzve5zi9N1tWte6gi5WgTYzaDQ4HQ3f5yruksduxKHpPNavIx0suEG4PZ
-         q6C0hWXmkUFBeF/Ur6B9IYFkGE2wUQk+3EsEXD8LGTSFuqfrWsDskRU6lAIf6MJ0Jael
-         pdFLtb2COz17gJMas95Ki2A0zDghTKHXSFkgSpQL6afkcp+QvVATgHPU2DhaSUhET3dv
-         JdUw==
-X-Gm-Message-State: AOAM533Sx/6tr1CS1B3fB73W62IpR1q36g1Fzz4AqbPlfWMvTm0rCJ59
-        H6pVwFZBj8Ka31vURjLBMeG7d3G7YwFQ7Dip3g==
-X-Google-Smtp-Source: ABdhPJxA4tMTEq7P/0jtu2Ff22tn6HCkzNtMoobPUYPQu2Irf9FYCU0bHU5vCBrv2yRsX8AKw6Ct5aygp3lg0aibY4c=
-X-Received: by 2002:a63:6984:0:b0:398:8db9:7570 with SMTP id
- e126-20020a636984000000b003988db97570mr4188221pgc.373.1651871221680; Fri, 06
- May 2022 14:07:01 -0700 (PDT)
+        with ESMTP id S1344136AbiEFVw4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 May 2022 17:52:56 -0400
+Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2300B637D
+        for <linux-usb@vger.kernel.org>; Fri,  6 May 2022 14:49:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
+        s=Selector; t=1651873751; i=@motorola.com;
+        bh=jQKLjU/fOePuh6eJw6WV6aqRmcV99GWsM2H3CyiipNk=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=ecWkBFeUCgFfuz0yW3RFwvjgPCjLz8tZcmcsAbRqJb8hHahlkbkJsuYmayjBcls9o
+         WXJUbmJL6BR09fx3pp1FmRk+PIOSILa2SIiP/qvKT+VB+sQbfBLr785dFpNg/+8yVC
+         Hd8sEcmq2q8tKvy3U+dGl8MH+/2lgqOHE28NsJAQY+ItsusrsQn1eI2NyTy63WrJxz
+         Z/7SkIrLs6xC5AlhhkxQeBbMesJFBO2cawa9jQnkcBM5qV2PgbP3oyUiWcIhPa3m5s
+         Kf8IlcGS4FBSbCaZ7o6vVry3QGx8vshj0xAkeFKT2EjbDLDD9YqWRQj6Qc4nqHSqPt
+         wZzLIwjH82b+g==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrJIsWRWlGSWpSXmKPExsWS8eKJuO616aV
+  JBrd+y1oca3vCbrFq6k4Wi22nf7NadE5cwm6xaFkrs8WJybEWn07tZLb48aeP2YHDY3bHTFaP
+  Tas62Tw2v+hm9uj/a+DxeZNcAGsUa2ZeUn5FAmvG+jULmQu2s1W8/vuZvYFxMmsXIyeHkMAMJ
+  olZr6u7GLmA7MVMEo82L2EDSbAIqEhsvH+EGcRmE1CTWPB6FZgtIqAlcezLV3aQBmaBy4wSMz
+  duZQRJCAv4SjzZuxnM5hVQlrjY85MFYuoEJomrNxayQyQEJU7OfMICYjMDTbrx7yVTFyMHkC0
+  tsfwfB0iYU8BY4n/vUvYJjLyzkHTMQtIxC6FjASPzKkarpKLM9IyS3MTMHF1DAwNdQ0MTXTMT
+  XWMDvcQq3US90mLd1MTiEl0jvcTyYr3U4mK94src5JwUvbzUkk2MwBBPKXKQ28G4bdVPvUOMk
+  hxMSqK8LTalSUJ8SfkplRmJxRnxRaU5qcWHGGU4OJQkeP9PBsoJFqWmp1akZeYA4w0mLcHBoy
+  TC2zcRKM1bXJCYW5yZDpE6xagoJc5rMw0oIQCSyCjNg2uDxfglRlkpYV5GBgYGIZ6C1KLczBJ
+  U+VeM4hyMSsK8YiBTeDLzSuCmvwJazAS0+GMA2OKSRISUVAOTeffxqHAPgbSj0/jsfh+tO3Sc
+  4WV/S2CRO8MavcXs373vThLQ1+RU5T5SlfJbYT3PV+30jdrGv5QW7f0jXv06YK7ihY9+P00f/
+  HTZXadhxRNvLch38rZg642VJqL8mfHVaxhcti9coFDX8qUrqvhj0Qqhd6eZnpjILe67vEqk4Z
+  nF6sbZS8t5+a8JKD+/0dthca057ZzYJ803DfERvffUeS9vSJTKPPm1VL75adKL9QGfT9mr9J3
+  N2nsx4bg1q/OPx+kOGxQls1o9o2YUfEnwzutxVIo4z7LSWWpbDNM7FpEOLely9es/dr0tf3xP
+  XkEmxk38aB5T4CvFko9OoQoxvDaTPNKcJk6VSlorq8RSnJFoqMVcVJwIANurn/hsAwAA
+X-Env-Sender: w36195@motorola.com
+X-Msg-Ref: server-13.tower-715.messagelabs.com!1651873750!32244!1
+X-Originating-IP: [104.232.228.23]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.86.4; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 18964 invoked from network); 6 May 2022 21:49:10 -0000
+Received: from unknown (HELO va32lpfpp03.lenovo.com) (104.232.228.23)
+  by server-13.tower-715.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 6 May 2022 21:49:10 -0000
+Received: from va32lmmrp01.lenovo.com (va32lmmrp01.mot.com [10.62.177.113])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by va32lpfpp03.lenovo.com (Postfix) with ESMTPS id 4Kw42t0ydBz50WfL;
+        Fri,  6 May 2022 21:49:10 +0000 (UTC)
+Received: from p1g3 (unknown [10.45.4.252])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: w36195)
+        by va32lmmrp01.lenovo.com (Postfix) with ESMTPSA id 4Kw42s5r35zf6f0;
+        Fri,  6 May 2022 21:49:09 +0000 (UTC)
+Date:   Fri, 6 May 2022 16:49:01 -0500
+From:   Dan Vacura <w36195@motorola.com>
+To:     Michael Grzeschik <mgr@pengutronix.de>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-usb@vger.kernel.org, balbi@kernel.org,
+        paul.elder@ideasonboard.com, kernel@pengutronix.de,
+        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH 3/5] usb: gadget: uvc: increase worker prio to WQ_HIGHPRI
+Message-ID: <YnWXzZdEXrED6bMW@p1g3>
+References: <20220402233914.3625405-1-m.grzeschik@pengutronix.de>
+ <20220402233914.3625405-4-m.grzeschik@pengutronix.de>
+ <Yl8fwdOuxYDVrujW@pendragon.ideasonboard.com>
+ <YmwzxIV5/a+ZNLXI@p1g3>
+ <20220429200137.GE7671@pengutronix.de>
+ <20220502090003.GH7671@pengutronix.de>
 MIME-Version: 1.0
-Received: by 2002:ac4:9906:0:b0:4ba:807b:b8f3 with HTTP; Fri, 6 May 2022
- 14:07:00 -0700 (PDT)
-Reply-To: warren001buffett@gmail.com
-In-Reply-To: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
-References: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
-From:   Warren Buffett <guidayema@gmail.com>
-Date:   Fri, 6 May 2022 21:07:00 +0000
-Message-ID: <CAD_xG_rvFPU0i04q43u4Eqz-KE8g9V=rM_WOZ+=1a4JauU5OEQ@mail.gmail.com>
-Subject: Fwd: My name is Warren Buffett, an American businessman.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:544 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4990]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [guidayema[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220502090003.GH7671@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-My name is Warren Buffett, an American businessman and investor I have
-something important to discuss with you.
+Hi Michael,
 
-Mr. Warren Buffett
-warren001buffett@gmail.com
-Chief Executive Officer: Berkshire Hathaway
-aphy/Warren-Edward-Buffett
+On Mon, May 02, 2022 at 11:00:03AM +0200, Michael Grzeschik wrote:
+> Hi Dan,
+> 
+> On Fri, Apr 29, 2022 at 10:01:37PM +0200, Michael Grzeschik wrote:
+> > On Fri, Apr 29, 2022 at 01:51:48PM -0500, Dan Vacura wrote:
+> > > Thanks for this change it improves the performance with the DWC3
+> > > controller on QCOM chips in an Android 5.10 kernel. I haven't tested the
+> > > scatter/gather path, so memcpy was used here via
+> > > uvc_video_encode_isoc(). I was able to get around 30% improvement (fps
+> > > on host side). I did modify the alloc to only set the WQ_HIGHPRI flag.
+> 
+> I missed to ask you to try the WQ_CPU_INTENSIVE flag. It would be
+> interesting if you can see further improvement.
+
+I had some time to test this flag and I couldn't find any discernible
+difference with it set or not.
+
+Regards,
+
+Dan
