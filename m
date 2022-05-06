@@ -2,144 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E633651E025
-	for <lists+linux-usb@lfdr.de>; Fri,  6 May 2022 22:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682AB51E04F
+	for <lists+linux-usb@lfdr.de>; Fri,  6 May 2022 22:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345749AbiEFUeW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 May 2022 16:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
+        id S1443694AbiEFUxV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 May 2022 16:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352891AbiEFUeU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 May 2022 16:34:20 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id F329F1A39E
-        for <linux-usb@vger.kernel.org>; Fri,  6 May 2022 13:30:33 -0700 (PDT)
-Received: (qmail 54883 invoked by uid 1000); 6 May 2022 16:30:33 -0400
-Date:   Fri, 6 May 2022 16:30:33 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [v15 3/6] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <YnWFaSXJJ8T7IYtl@rowland.harvard.edu>
-References: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
- <1651740973-7944-4-git-send-email-quic_kriskura@quicinc.com>
- <YnRUPxBZB55TPmf2@google.com>
- <a83dea08-0920-17e6-ec1c-f9d8a490a08d@quicinc.com>
- <20220506051448.GE4640@hu-pkondeti-hyd.qualcomm.com>
- <YnVD+ltiQhKE+jPf@google.com>
- <YnVSIvwXsKySg33M@google.com>
- <YnVmXmG+6emL4nxv@rowland.harvard.edu>
- <YnVs7kSkpjUBWc5w@google.com>
+        with ESMTP id S1443630AbiEFUxT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 May 2022 16:53:19 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB616D3B0
+        for <linux-usb@vger.kernel.org>; Fri,  6 May 2022 13:49:34 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id z18so9354248iob.5
+        for <linux-usb@vger.kernel.org>; Fri, 06 May 2022 13:49:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i5UQSzJb8UwAh3CW7OsDcAz2qHiyzDfNd6Nodt6XzGQ=;
+        b=nIEoXiEcuK0JQ1ZGg9gcfBRNA3jbEynNIgUxeckZdl0+FiFzqujVAhGWz2mVgoVjjG
+         EXR2ddqA4KDA33O7rYY3aYE+P+4KbfAwR3lVLA0IMl5Fsh7saG6Xdpf4s+SiFAbaBJx0
+         bxbnsa6V3hKXdC6z4O2xXefZCbAlVwMGP49EJabRe6bZooiGNiu7pK5inilFajGtl0So
+         454UfHGxHRQZhUxP+2Dhv6gDXrJ0qEi4d+Fwbyi+3qOQTcwMjlvnXe8drTq1+ZdkL3rr
+         FJob5pV8oLQ35246o2OSpkBlGEuJ6+9UbOx8PM3YB50KTAFuhI3SNNE7VS5dueZq4Ir8
+         O/ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i5UQSzJb8UwAh3CW7OsDcAz2qHiyzDfNd6Nodt6XzGQ=;
+        b=jbhKnrZnzp6U6C3zxVsUFtYNzM2o4a+OQrWsMt3qvckhSrngN8+85rINWu9f+PaBFs
+         +kL+frAlM6tvluwU8lOjApbov1OOjsESRXWgpHCSV5pbQb9oJl5bL41do72HMPokIkJG
+         YPy62ztuG+W771bLKjZHVrWAGsoL1uobw9Ir7PeGgjOIG1JpcF0SP3E7Xb0iNeAi6eP1
+         tMyxGtwfjXtSXtcC0IPQ0tGUvsCQn2IVhKuGdybOf2cu+IOc44UHcEg9vPjR5Kb7sJLV
+         rN45cXJ1I7pQ2iODiHNjXmOuvzVaGRa9p5cEQlq6najY2t0nnZVZ3uLhouaCrGI9l/Yt
+         7vTw==
+X-Gm-Message-State: AOAM532LpCYBRcZDZ/DFrjGh1d00XoPhgMy0w6OELWUBQgtDhyuHknDQ
+        Qe4cY39zxda7nXzlDV6CJMiLh60EEnSerPWTjkLpJ3M+
+X-Google-Smtp-Source: ABdhPJylETGrZCAuM6RZeJ82Nb4NXPf0ex02y767+74h0obDGrhQQqnC/LXhkUfi9jyQuVa5O9zScYpqlN7/ZnW1hx8=
+X-Received: by 2002:a05:6638:40a7:b0:32b:8f56:d126 with SMTP id
+ m39-20020a05663840a700b0032b8f56d126mr2212000jam.107.1651870174342; Fri, 06
+ May 2022 13:49:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnVs7kSkpjUBWc5w@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <CAAMvbhGURWPbHUw5gOirJer7-+VwWFL4tTtiSYSJW=3y1G92mw@mail.gmail.com>
+ <YnPcWuhpFrqjeIIs@rowland.harvard.edu> <CAAMvbhHsUL6gQ365wZW4J8RCbnhwEt0RDUc5NA4=RSS2bjnK_A@mail.gmail.com>
+ <YnUyHu7o7OPawXZG@rowland.harvard.edu>
+In-Reply-To: <YnUyHu7o7OPawXZG@rowland.harvard.edu>
+From:   James Dutton <james.dutton@gmail.com>
+Date:   Fri, 6 May 2022 21:48:58 +0100
+Message-ID: <CAAMvbhGqKF3gVE=MNJ6AXeJCe2F0u13_6W2akuJcP0bx_PSwWw@mail.gmail.com>
+Subject: Re: usb disk drive disconnect making readonly
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 06, 2022 at 11:46:06AM -0700, Matthias Kaehlcke wrote:
-> On Fri, May 06, 2022 at 02:18:06PM -0400, Alan Stern wrote:
-> > [CC: list drastically reduced]
-> > 
-> > On Fri, May 06, 2022 at 09:51:46AM -0700, Matthias Kaehlcke wrote:
-> > > I found this, as I commented on the other thread:
-> > > 
-> > >   commit c4a5153e87fdf6805f63ff57556260e2554155a5
-> > >   Author: Manu Gautam <mgautam@codeaurora.org>
-> > >   Date:   Thu Jan 18 16:54:30 2018 +0530
-> > > 
-> > >   usb: dwc3: core: Power-off core/PHYs on system_suspend in host mode
-> > > 
-> > >   Commit 689bf72c6e0d ("usb: dwc3: Don't reinitialize core during
-> > >   host bus-suspend/resume") updated suspend/resume routines to not
-> > >   power_off and reinit PHYs/core for host mode.
-> > >   It broke platforms that rely on DWC3 core to power_off PHYs to
-> > >   enter low power state on system suspend.
-> > > 
-> > >   Perform dwc3_core_exit/init only during host mode system_suspend/
-> > >   resume to addresses power regression from above mentioned patch
-> > >   and also allow USB session to stay connected across
-> > >   runtime_suspend/resume in host mode. While at it also replace
-> > >   existing checks for HOST only dr_mode with current_dr_role to
-> > >   have similar core driver behavior for both Host-only and DRD+Host
-> > >   configurations.
-> > > 
-> > >   Fixes: 689bf72c6e0d ("usb: dwc3: Don't reinitialize core during host bus-suspend/resume")
-> > >   Reviewed-by: Roger Quadros <rogerq@ti.com>
-> > >   Signed-off-by: Manu Gautam <mgautam@codeaurora.org>
-> > >   Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
-> > > 
-> > > 
-> > > So apparently powering off the core and PHYs is needed on some
-> > > platforms.
-> > > 
-> > > Let's move forward with the core/PHYs off for now and try to
-> > > come up with a solution (e.g. a DT property that indicates
-> > > that the core/PHYs can remain powererd) in a separate
-> > > patch/series.
-> > 
-> > Isn't it true that if you power off the PHY, the controller will be 
-> > unable to detect resume requests from attached devices? Similarly, won't 
-> > the controller will be unable to detect plug and unplug events on the 
-> > root hub?
-> > 
-> > Doesn't this mean that if wakeup is enabled on the root hub or any of 
-> > the devices downstream from a root-hub port, the port's PHY must remain 
-> > powered during suspend?
-> 
-> Yes.
-> 
-> Currently the core/PHYs are always powered off during suspend in host mode:
-> 
-> static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> {
-> 	...
-> 
-> 	switch (dwc->current_dr_role) {
-> 	case DWC3_GCTL_PRTCAP_HOST:
-> 		if (!PMSG_IS_AUTO(msg)) {
-> 			dwc3_core_exit(dwc);
-> 			break;
-> 		}
-> 
-> 	...
-> }
-> 
-> With that I would expect wakeup to be broken for all dwc3. I'm a bit confused
-> though, since dwc3-imx8mp.c seems to support wakeup and the driver landed
-> after the above patch ...
-> 
-> This series intends to change the above code to something like this:
-> 
-> 	if (!PMSG_IS_AUTO(msg)) {
-> 	       if (device_may_wakeup(dwc->dev) &&
-> 	                       device_wakeup_path(dwc->dev)) {
-> 	               dwc->phy_power_off = false;
-> 	       } else {
-> 	               dwc->phy_power_off = true;
-> 	               dwc3_core_exit(dwc);
-> 	       }
-> 	}
+On Fri, 6 May 2022 at 15:35, Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > Hi Alan,
+> >
+> > Here are some log messages. I suspect the storage device is going into
+> > some sort of sleep mode, and the kernel does not seem to be able to
+> > wake it up again.
+> > The device is a USB to NVME adapter. Using the chip: Realtek RTL9210
+> > The log is perfectly normal up until the 2nd line below onwards:
+> ...
+>
+> That log isn't sufficient.
+>
+> It would be a big help if instead of sending your kernel log file, you send
+> the output of the "dmesg" program.  And don't send just the part
+> starting where the problem begins; we need to see what happened before
+> that as well.
+>
+> In addition, it would help if you enable USB debugging before the
+> problem occurs:
+>
+>         echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
+>
 
-> i.e. the core/PHYs would only be powered down if wakeup is disabled or no
-> wakeup capable devices are connected. With that plug/unplug events still
-> wouldn't be detected.
+Hi,
 
-Indeed.  Shouldn't the "&&" and "||"?  That is, don't you want to leave 
-the core and PHY powered if wakeup is enabled for the root hub or for 
-any devices beneath it?
+I will try to get some more logs the next time it happens.
+dmesg is not available. As the disk has essentially failed at that
+point, nothing works (no keyboard input), so the only way I have got
+any useful output has been with rsyslog over the network, and then
+show the syslog output on that remote machine.
 
-It would be simpler to leave the core and PHY powered whenever wakeup is 
-enabled for the controller itself, regardless of the status of the root 
-hub and downstream devices.  Users might not like this so much if the 
-default setting is to enable wakeup for the controller always.  Still, 
-it's an easy solution.
+Kind Regards
 
-Alan Stern
+James
