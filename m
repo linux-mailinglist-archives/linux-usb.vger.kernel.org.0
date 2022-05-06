@@ -2,178 +2,240 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FA551DC95
-	for <lists+linux-usb@lfdr.de>; Fri,  6 May 2022 17:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1808551DD72
+	for <lists+linux-usb@lfdr.de>; Fri,  6 May 2022 18:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443191AbiEFPzM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 May 2022 11:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
+        id S1443703AbiEFQUT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 May 2022 12:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443179AbiEFPzL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 May 2022 11:55:11 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE015A5A2
-        for <linux-usb@vger.kernel.org>; Fri,  6 May 2022 08:51:24 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so11163958pjb.3
-        for <linux-usb@vger.kernel.org>; Fri, 06 May 2022 08:51:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QjBqmMkmUcAMteJnBmmBn9QwTnggo7cn/NEd2Zx55+0=;
-        b=W4DvYNiShQEw5Df/QqOsE3u6o78JjUjVH4ZFW7H+i08QfF6dpLk3ArQQaZeDmwp1Vf
-         iZ5ibY6qjvrAJ6NGXtv/O+5C3FJOM5ebArCvQvUqJhZsldESB/nDcwCMt6uZWBRoj2vg
-         Qw/IbW+Dvxo9/3BMiasCzJ1stnKwjTr9O3p1A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QjBqmMkmUcAMteJnBmmBn9QwTnggo7cn/NEd2Zx55+0=;
-        b=Z2uJJECfU/MoOf5RFtNt3W4av3T9qzXAR0WZpOfldJetFVjLb/8CTS0HMrM8LacbrW
-         xruGPYoafrUu0OKKduyEvcZGCCGqcpM9D3/aVCaV2VBXNJQAzKH9Wo4mxrgjEh3ZdrrD
-         cNIMnHG1mdTw9Yh2eZ5E8RbzPxrxkhehuqscIow0DPIPuG5FqYvikU//0lwrYBWhkrxc
-         rqpRPpmlRPyBV7vK137kpaGa/LEfyieSTJKiALet0oLULhwK8GbXG6wLKB6WaaQr/ONe
-         mWtU0gw+o23rRKOa8Nfo3356NWMCn5llPG8jdzfiLMVCn9aJGsAMSTWXGCi3aG+3hSSL
-         t2qA==
-X-Gm-Message-State: AOAM532JYmIirCefjKAM6ro2GrlYGGb/aeyGT70O8C6QBCUUrVMZwwSr
-        BAdo0UwdkiyCLabKnf+HZBcAyw==
-X-Google-Smtp-Source: ABdhPJyho+6NNnFxpnW1GNoxoFsMysiiMDWcCS6WEGttMo1EG7E5PizLKyh+VxpCy0upBflJeUKWFg==
-X-Received: by 2002:a17:902:c14a:b0:15b:9c29:935a with SMTP id 10-20020a170902c14a00b0015b9c29935amr4306895plj.2.1651852283888;
-        Fri, 06 May 2022 08:51:23 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:5605:d5cd:699b:1b26])
-        by smtp.gmail.com with UTF8SMTPSA id e15-20020a17090301cf00b0015e8d4eb24esm2013771plh.152.2022.05.06.08.51.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 08:51:23 -0700 (PDT)
-Date:   Fri, 6 May 2022 08:51:22 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_vpulyala@quicinc.com,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: Re: [v15 3/6] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <YnVD+ltiQhKE+jPf@google.com>
-References: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
- <1651740973-7944-4-git-send-email-quic_kriskura@quicinc.com>
- <YnRUPxBZB55TPmf2@google.com>
- <a83dea08-0920-17e6-ec1c-f9d8a490a08d@quicinc.com>
- <20220506051448.GE4640@hu-pkondeti-hyd.qualcomm.com>
+        with ESMTP id S1350965AbiEFQUS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 May 2022 12:20:18 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE20DBC85
+        for <linux-usb@vger.kernel.org>; Fri,  6 May 2022 09:16:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651853794; x=1683389794;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aLZECGEma6e8axsukOqTeSv3Th1TWba2cXpXfEVYvz0=;
+  b=iukhjpy6BeJwrcRFseBHNI/oNuLLhT0rspSRg9srQ+STo+SIncofHnLN
+   14XRCoTb6+OxREYAgIK8MpRXtSK/5TEcufSsTtSUu5BCdB8SlHwd+LzWJ
+   Xd8aoTuMYp3GajZfrHHLtbvPycSckeXh+I9KOMyvlqlWTsgrqjam6sZqB
+   8dBc3AJKE51J+OVGkCXNPyPaB28ibrKl2DYTK9/2lH/5ln0iy4dw40lPC
+   FhxqLWhOuh4v5H+xYockhJWJp9HSgjLWUzLU/HhCf5p+2VyNhqG6af4nb
+   JeL8knPf1rBuyFISw2zb7HFSWMNAxEWG3D2F/eJ2yrayHn8vR0ASGUjGj
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="354941606"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="354941606"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 09:16:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="632992879"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by fmsmga004.fm.intel.com with ESMTP; 06 May 2022 09:16:33 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <stern@rowland.harvard.edu>, <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH] usb: Avoid extra usb SET_SEL requests when enabling link power management
+Date:   Fri,  6 May 2022 19:18:07 +0300
+Message-Id: <20220506161807.3369439-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220506051448.GE4640@hu-pkondeti-hyd.qualcomm.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 06, 2022 at 10:44:48AM +0530, Pavan Kondeti wrote:
-> On Fri, May 06, 2022 at 10:41:01AM +0530, Krishna Kurapati PSSNV wrote:
-> > 
-> > On 5/6/2022 4:18 AM, Matthias Kaehlcke wrote:
-> > >On Thu, May 05, 2022 at 02:26:10PM +0530, Krishna Kurapati wrote:
-> > >>From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > >>
-> > >>During suspend read the status of all port and set hs phy mode
-> > >>based on current speed. Use this hs phy mode to configure wakeup
-> > >>interrupts in qcom glue driver.
-> > >>
-> > >>Check wakeup-source property for dwc3 core node to set the
-> > >>wakeup capability. Drop the device_init_wakeup call from
-> > >>runtime suspend and resume.
-> > >>
-> > >>Also check during suspend if any wakeup capable devices are
-> > >>connected to the controller (directly or through hubs), if there
-> > >>are none set a flag to indicate that the PHY is powered
-> > >>down during suspend.
-> > >>
-> > >>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > >>Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> > >>---
-> > >>  drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
-> > >>  drivers/usb/dwc3/core.h |  4 ++++
-> > >>  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
-> > >>  3 files changed, 48 insertions(+), 13 deletions(-)
-> > >>
-> > >>diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > >>index 950e238..cf377f5 100644
-> > >>--- a/drivers/usb/dwc3/core.c
-> > >>+++ b/drivers/usb/dwc3/core.c
-> > >>@@ -33,6 +33,7 @@
-> > >>  #include <linux/usb/gadget.h>
-> > >>  #include <linux/usb/of.h>
-> > >>  #include <linux/usb/otg.h>
-> > >>+#include <linux/usb/hcd.h>
-> > >This is not needed anymore
-> > >
-> > >>  #include "core.h"
-> > >>  #include "gadget.h"
-> > >>@@ -1787,6 +1788,7 @@ static int dwc3_probe(struct platform_device *pdev)
-> > >>  	platform_set_drvdata(pdev, dwc);
-> > >>  	dwc3_cache_hwparams(dwc);
-> > >>+	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
-> > >>  	spin_lock_init(&dwc->lock);
-> > >>  	mutex_init(&dwc->mutex);
-> > >>@@ -1936,6 +1938,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > >>  {
-> > >>  	unsigned long	flags;
-> > >>  	u32 reg;
-> > >>+	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
-> > >This isn't used anymore, delete it
-> > My bad, Will fix this in next version.
-> > >>  	switch (dwc->current_dr_role) {
-> > >>  	case DWC3_GCTL_PRTCAP_DEVICE:
-> > >>@@ -1948,10 +1951,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > >>  		dwc3_core_exit(dwc);
-> > >>  		break;
-> > >>  	case DWC3_GCTL_PRTCAP_HOST:
-> > >>-		if (!PMSG_IS_AUTO(msg)) {
-> > >>-			dwc3_core_exit(dwc);
-> > >>-			break;
-> > >>-		}
-> > >>+		dwc3_check_phy_speed_mode(dwc);
-> > >>  		/* Let controller to suspend HSPHY before PHY driver suspends */
-> > >>  		if (dwc->dis_u2_susphy_quirk ||
-> > >>@@ -1967,6 +1967,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > >>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
-> > >>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> > >>+
-> > >>+		if (!PMSG_IS_AUTO(msg)) {
-> > >>+			if (device_may_wakeup(dwc->dev) &&
-> > >>+					device_wakeup_path(dwc->dev)) {
-> > >nit: the indentation is odd, align it with device_may_wakeup()?
-> > Sure, Will take care of it.
-> > >>+				dwc->phy_power_off = false;
-> > >>+			} else {
-> > >>+				dwc->phy_power_off = true;
-> > >>+				dwc3_core_exit(dwc);
-> > >As commented earlier, taking the controller and PHYs completely down causes a
-> > >significant power draw in some USB clients. Let's clarify what the specific
-> > >benefits are of doing dwc3_core_exit() vs. entering a low power mode.
-> > Sure, once we come to a conclusion on this, I will refresh the patches.
-> 
-> I think, Matthias is asking you to clarify in the commit description. we can
-> even quote Matthias observations.
+The host needs to tell the device the exit latencies using the SET_SEL
+request before device initiated link powermanagement can be enabled.
 
-Actually I would like to have a discussion about the benefits of powering down
-the controller and PHYs vs. entering a low power state. Maybe there are good
-reasons for powering everything down (e.g. significant power savings), but
-as we have seen there are also significant downsides, so let's make sure
-we understand both.
+The exit latency values do not change after enumeration, it's enough
+to set them once. So do like Windows 10 and issue the SET_SEL request
+once just before setting the configuration.
+
+This is also the sequence described in USB 3.2 specs "9.1.2 Bus
+enumeration". SET_SEL is issued once before the Set Configuration
+request, and won't be cleared by the Set Configuration,
+Set Interface or ClearFeature (STALL) requests.
+
+Only warm reset, hot reset, set Address 0 clears the exit latencies.
+See USB 3.2 section 9.4.14 Table 9-10 Device parameters and events
+
+Add udev->lpm_devinit_allow, and set it if SET_SEL was successful.
+If not set, then don't try to enable device initiated LPM
+
+We used to issue a SET_SEL request every time lpm is enabled for either
+U1 or U2 link states, meaning a SET_SEL was issued twice after every
+Set Configuration and Set Interface requests, easily accumulating to
+over 15 SET_SEL requets during a USB3 webcam enumeration.
+
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/core/hub.c | 60 +++++++++++++++---------------------------
+ include/linux/usb.h    |  2 ++
+ 2 files changed, 23 insertions(+), 39 deletions(-)
+
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 7781b2d31473..1af50eb3765e 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -3946,7 +3946,7 @@ static const char * const usb3_lpm_names[]  = {
+  * This function will fail if the SEL or PEL values for udev are greater than
+  * the maximum allowed values for the link state to be enabled.
+  */
+-static int usb_req_set_sel(struct usb_device *udev, enum usb3_link_state state)
++static int usb_req_set_sel(struct usb_device *udev)
+ {
+ 	struct usb_set_sel_req *sel_values;
+ 	unsigned long long u1_sel;
+@@ -3955,7 +3955,7 @@ static int usb_req_set_sel(struct usb_device *udev, enum usb3_link_state state)
+ 	unsigned long long u2_pel;
+ 	int ret;
+ 
+-	if (udev->state != USB_STATE_CONFIGURED)
++	if (!udev->parent || udev->speed < USB_SPEED_SUPER || !udev->lpm_capable)
+ 		return 0;
+ 
+ 	/* Convert SEL and PEL stored in ns to us */
+@@ -3972,34 +3972,14 @@ static int usb_req_set_sel(struct usb_device *udev, enum usb3_link_state state)
+ 	 * latency for the link state, and could start a device-initiated
+ 	 * U1/U2 when the exit latencies are too high.
+ 	 */
+-	if ((state == USB3_LPM_U1 &&
+-				(u1_sel > USB3_LPM_MAX_U1_SEL_PEL ||
+-				 u1_pel > USB3_LPM_MAX_U1_SEL_PEL)) ||
+-			(state == USB3_LPM_U2 &&
+-			 (u2_sel > USB3_LPM_MAX_U2_SEL_PEL ||
+-			  u2_pel > USB3_LPM_MAX_U2_SEL_PEL))) {
+-		dev_dbg(&udev->dev, "Device-initiated %s disabled due to long SEL %llu us or PEL %llu us\n",
+-				usb3_lpm_names[state], u1_sel, u1_pel);
++	if (u1_sel > USB3_LPM_MAX_U1_SEL_PEL ||
++	    u1_pel > USB3_LPM_MAX_U1_SEL_PEL ||
++	    u2_sel > USB3_LPM_MAX_U2_SEL_PEL ||
++	    u2_pel > USB3_LPM_MAX_U2_SEL_PEL) {
++		dev_dbg(&udev->dev, "Device-initiated U1/U2 disabled due to long SEL or PEL\n");
+ 		return -EINVAL;
+ 	}
+ 
+-	/*
+-	 * If we're enabling device-initiated LPM for one link state,
+-	 * but the other link state has a too high SEL or PEL value,
+-	 * just set those values to the max in the Set SEL request.
+-	 */
+-	if (u1_sel > USB3_LPM_MAX_U1_SEL_PEL)
+-		u1_sel = USB3_LPM_MAX_U1_SEL_PEL;
+-
+-	if (u1_pel > USB3_LPM_MAX_U1_SEL_PEL)
+-		u1_pel = USB3_LPM_MAX_U1_SEL_PEL;
+-
+-	if (u2_sel > USB3_LPM_MAX_U2_SEL_PEL)
+-		u2_sel = USB3_LPM_MAX_U2_SEL_PEL;
+-
+-	if (u2_pel > USB3_LPM_MAX_U2_SEL_PEL)
+-		u2_pel = USB3_LPM_MAX_U2_SEL_PEL;
+-
+ 	/*
+ 	 * usb_enable_lpm() can be called as part of a failed device reset,
+ 	 * which may be initiated by an error path of a mass storage driver.
+@@ -4021,6 +4001,10 @@ static int usb_req_set_sel(struct usb_device *udev, enum usb3_link_state state)
+ 			sel_values, sizeof *(sel_values),
+ 			USB_CTRL_SET_TIMEOUT);
+ 	kfree(sel_values);
++
++	if (ret > 0)
++		udev->lpm_devinit_allow = 1;
++
+ 	return ret;
+ }
+ 
+@@ -4136,6 +4120,9 @@ static bool usb_device_may_initiate_lpm(struct usb_device *udev,
+ 	unsigned int sel;		/* us */
+ 	int i, j;
+ 
++	if (!udev->lpm_devinit_allow)
++		return false;
++
+ 	if (state == USB3_LPM_U1)
+ 		sel = DIV_ROUND_UP(udev->u1_params.sel, 1000);
+ 	else if (state == USB3_LPM_U2)
+@@ -4184,7 +4171,7 @@ static bool usb_device_may_initiate_lpm(struct usb_device *udev,
+ static void usb_enable_link_state(struct usb_hcd *hcd, struct usb_device *udev,
+ 		enum usb3_link_state state)
+ {
+-	int timeout, ret;
++	int timeout;
+ 	__u8 u1_mel = udev->bos->ss_cap->bU1devExitLat;
+ 	__le16 u2_mel = udev->bos->ss_cap->bU2DevExitLat;
+ 
+@@ -4196,17 +4183,6 @@ static void usb_enable_link_state(struct usb_hcd *hcd, struct usb_device *udev,
+ 			(state == USB3_LPM_U2 && u2_mel == 0))
+ 		return;
+ 
+-	/*
+-	 * First, let the device know about the exit latencies
+-	 * associated with the link state we're about to enable.
+-	 */
+-	ret = usb_req_set_sel(udev, state);
+-	if (ret < 0) {
+-		dev_warn(&udev->dev, "Set SEL for device-initiated %s failed.\n",
+-				usb3_lpm_names[state]);
+-		return;
+-	}
+-
+ 	/* We allow the host controller to set the U1/U2 timeout internally
+ 	 * first, so that it can change its schedule to account for the
+ 	 * additional latency to send data to a device in a lower power
+@@ -4486,6 +4462,11 @@ static int hub_handle_remote_wakeup(struct usb_hub *hub, unsigned int port,
+ 	return 0;
+ }
+ 
++static int usb_req_set_sel(struct usb_device *udev)
++{
++	return 0;
++}
++
+ #endif	/* CONFIG_PM */
+ 
+ /*
+@@ -5011,6 +4992,7 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+ 			udev->lpm_capable = usb_device_supports_lpm(udev);
+ 			udev->lpm_disable_count = 1;
+ 			usb_set_lpm_parameters(udev);
++			usb_req_set_sel(udev);
+ 		}
+ 	}
+ 
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 60bee864d897..f7a9914fc97f 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -584,6 +584,7 @@ struct usb3_lpm_parameters {
+  * @authenticated: Crypto authentication passed
+  * @wusb: device is Wireless USB
+  * @lpm_capable: device supports LPM
++ * @lpm_devinit_allow: Allow USB3 device initiated LPM, exit latency is in range
+  * @usb2_hw_lpm_capable: device can perform USB2 hardware LPM
+  * @usb2_hw_lpm_besl_capable: device can perform USB2 hardware BESL LPM
+  * @usb2_hw_lpm_enabled: USB2 hardware LPM is enabled
+@@ -666,6 +667,7 @@ struct usb_device {
+ 	unsigned authenticated:1;
+ 	unsigned wusb:1;
+ 	unsigned lpm_capable:1;
++	unsigned lpm_devinit_allow:1;
+ 	unsigned usb2_hw_lpm_capable:1;
+ 	unsigned usb2_hw_lpm_besl_capable:1;
+ 	unsigned usb2_hw_lpm_enabled:1;
+-- 
+2.25.1
+
