@@ -2,86 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2D851E6F5
-	for <lists+linux-usb@lfdr.de>; Sat,  7 May 2022 14:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A7251E7CB
+	for <lists+linux-usb@lfdr.de>; Sat,  7 May 2022 16:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384830AbiEGMlV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 7 May 2022 08:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
+        id S237718AbiEGObG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 7 May 2022 10:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349598AbiEGMlT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 7 May 2022 08:41:19 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD9541F94
-        for <linux-usb@vger.kernel.org>; Sat,  7 May 2022 05:37:32 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id v59so17167587ybi.12
-        for <linux-usb@vger.kernel.org>; Sat, 07 May 2022 05:37:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JUhgclDR3XBkbKooh+LIAZ5rgGQDmCxwnx2kPnqoYMA=;
-        b=KCyiITVKgMi69PaUxMUe8kgt1g0I/YT1BNqXQ8g8jDYzoI10RIuW4XJdIAw+WABgPz
-         sIoqAXB0wg2Fv4K4xa+UIk01I93aMUAh5zwWez9Y9woJgUGlFSInLIx46fZ5Gg1s601e
-         a5i4HOw7TQkJg5Maw+WvNt0vTtgrsC6dMYDUfidiIqwE2Susa4bkzpuGE1IWxOsZTINs
-         CB1T7vFcyxbamcJuoqj4cYj6aPJPj79FjZ60m16yN0qOI1to8EcKMqSlW8ohYQOIT3XX
-         Y47JhHbhAM6byKlmpEHLlDWi3VANQBbeKYdvgbjI2HE4GR8wATeJNEQhXZFHSEQQgNal
-         1RtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JUhgclDR3XBkbKooh+LIAZ5rgGQDmCxwnx2kPnqoYMA=;
-        b=Ge+wWRHyvB4FjqwqEpar3nIy3GlWaRIKgkc/z1Q36SGjAZcGI7MnmSUAkc0sfkj1qF
-         2TaB8sp+EmUn8ke3qiGPi29oNwJXPRbU+i13rXwnny0+FncD9qva28P3hKqaxBfi5e++
-         vg+fgVkppcTpRNIsEN1W8DifEXDZa4QCvgF7kHLRDY2FJDjSYomi5PwJnTz1nPX+K3pV
-         65c6qKBerOuQ6LPAK+EDABd6YKJGLm0bIevLPNxYsDHhbBrBfF4a/L/b3ZArbiq4nGUv
-         b3olLWr74agLfhiC4L83PaermSz3gWB9wy71GpL6dYhSVufiW76QHhzTSCdRAmMeXrw4
-         9deQ==
-X-Gm-Message-State: AOAM531/5LVgBBX544f8L44Yb/2h+Td7NUl67O+bZj7JGt3dqY60HkrG
-        eJ0SV1Tcaqh7DNep2dhWDUE5eQqSyI23eSkIKpM1uA==
-X-Google-Smtp-Source: ABdhPJzwJpXEUtAZEUc6bZUPoenoZ5sebSG72if0MOZ/TMe4dt5l953VkaeLr4GysoaOw6EpMxKFJUOEIy1GTdxXArc=
-X-Received: by 2002:a25:e684:0:b0:645:d429:78e9 with SMTP id
- d126-20020a25e684000000b00645d42978e9mr6256768ybh.369.1651927052069; Sat, 07
- May 2022 05:37:32 -0700 (PDT)
+        with ESMTP id S234096AbiEGObF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 7 May 2022 10:31:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97722DFC;
+        Sat,  7 May 2022 07:27:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79108608C3;
+        Sat,  7 May 2022 14:27:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6414AC385A5;
+        Sat,  7 May 2022 14:27:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651933637;
+        bh=8jXCjBGJJPxlr9V8Zv0vyc5vMNnF06uj4+zEg0fhpsc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A3vs/lC4UGjixwmTZ9Oc+ZggDjdz1Rio+dfRcyFx7B9JZjuC7EHZZPCA20XyTJCu9
+         YCpuNVkfTX/txbkqNDZISV9INKPVYCJjLXJTUnJP1Va2ekU3OnXEAjfu91Z5UwOT+K
+         it/aFKi6szvE0V0mqKFCApv/KF/ECV+RzSz2dQsc=
+Date:   Sat, 7 May 2022 16:27:14 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     andreyknvl@gmail.com, balbi@kernel.org, jj251510319013@gmail.com,
+        stern@rowland.harvard.edu, jannh@google.com, Julia.Lawall@inria.fr,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+Subject: Re: [PATCH] usb: gadget: fix race when gadget driver register via
+ ioctl
+Message-ID: <YnaBwkhIxZ1wtIQX@kroah.com>
+References: <20220507120851.29948-1-schspa@gmail.com>
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-41-arnd@kernel.org>
-In-Reply-To: <20220419163810.2118169-41-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 7 May 2022 14:37:20 +0200
-Message-ID: <CACRpkdbHGXfAKiN1sNTrLzRd5Qk-jerhcfvDo8FG=Zq94Dv19g@mail.gmail.com>
-Subject: Re: [PATCH 40/48] ARM: pxa: tosa: use gpio lookup for battery
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     robert.jarzmik@free.fr, linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        alsa-devel@alsa-project.org, Sebastian Reichel <sre@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220507120851.29948-1-schspa@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,30 +53,81 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 6:44 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Sat, May 07, 2022 at 08:08:51PM +0800, Schspa Shi wrote:
+> The usb_gadget_register_driver doesn't have inside locks to protect the
+> driver, and If there is two threads are registered at the same time via
+> the ioctl syscall, the system will crash as syzbot reported.
+> 
+> Call trace as:
+>   driver_register+0x220/0x3a0 drivers/base/driver.c:171
+>   usb_gadget_register_driver_owner+0xfb/0x1e0
+>     drivers/usb/gadget/udc/core.c:1546
+>   raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
+>   raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
+> 
+> This routine allows two processes to register the same driver instance
+> via ioctl syscall. which lead to a race condition.
+> 
+> We can fix it by adding a driver_lock to avoid double register.
+> 
+> Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+> Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
+> 
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
+> ---
+>  drivers/usb/gadget/legacy/raw_gadget.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+> index b3be8db1ff63..d7ff9c2b5397 100644
+> --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> @@ -155,7 +155,9 @@ struct raw_dev {
+>  	spinlock_t			lock;
+>  
+>  	const char			*udc_name;
+> +	/* Protected by driver_lock for reentrant registration */
+>  	struct usb_gadget_driver	driver;
+> +	struct mutex			driver_lock;
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The battery driver uses a lot of GPIO lines, hardcoded from a
-> machine header file.
->
-> Change it to use a gpiod lookup table instead.
->
-> Reviewed-by: Sebastian Reichel <sre@kernel.org>
-> Acked-by: Sebastian Reichel <sre@kernel.org>
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Why are you adding another lock here?  What's wrong with the existing
+lock in this structure that requires an additional one?
 
-Oh, I've been iterating a patch for the Tosa charging code
-going down in MFD ans ASoC and all:
-https://lore.kernel.org/linux-arm-kernel/20220125003741.492954-1-linus.walleij@linaro.org/
+>  
+>  	/* Reference to misc device: */
+>  	struct device			*dev;
+> @@ -188,6 +190,8 @@ static struct raw_dev *dev_new(void)
+>  	spin_lock_init(&dev->lock);
+>  	init_completion(&dev->ep0_done);
+>  	raw_event_queue_init(&dev->queue);
+> +	mutex_init(&dev->driver_lock);
+> +
+>  	return dev;
+>  }
+>  
+> @@ -398,7 +402,9 @@ static int raw_release(struct inode *inode, struct file *fd)
+>  	spin_unlock_irqrestore(&dev->lock, flags);
+>  
+>  	if (unregister) {
+> +		mutex_lock(&dev->driver_lock);
+>  		ret = usb_gadget_unregister_driver(&dev->driver);
+> +		mutex_unlock(&dev->driver_lock);
+>  		if (ret != 0)
+>  			dev_err(dev->dev,
+>  				"usb_gadget_unregister_driver() failed with %d\n",
+> @@ -510,7 +516,9 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
+>  	}
+>  	spin_unlock_irqrestore(&dev->lock, flags);
+>  
+> +	mutex_lock(&dev->driver_lock);
+>  	ret = usb_gadget_register_driver(&dev->driver);
+> +	mutex_unlock(&dev->driver_lock);
 
-I just rebased this on v5.18-rc1 and resent with collected ACKs.
+How can unregister race with register?
 
-Please take a look at it, and see if you rather take that patch,
-at some point I realized I had to go pretty deep around the
-legacy code in different subsystems because the MFD device
-us spawning a GPIO chip...
+What ioctl is causing this race?  What userspace program is doing this?
+Only one userspace program should be accessing this at once, right?
 
-Yours,
-Linus Walleij
+confused,
+
+greg k-h
