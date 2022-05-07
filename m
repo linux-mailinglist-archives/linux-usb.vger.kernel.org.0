@@ -2,36 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A9251E803
-	for <lists+linux-usb@lfdr.de>; Sat,  7 May 2022 17:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3AF51E832
+	for <lists+linux-usb@lfdr.de>; Sat,  7 May 2022 17:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376402AbiEGPKo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 7 May 2022 11:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S1376454AbiEGPkK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 7 May 2022 11:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238432AbiEGPKo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 7 May 2022 11:10:44 -0400
+        with ESMTP id S239120AbiEGPkE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 7 May 2022 11:40:04 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id DB8D5237E8
-        for <linux-usb@vger.kernel.org>; Sat,  7 May 2022 08:06:56 -0700 (PDT)
-Received: (qmail 74041 invoked by uid 1000); 7 May 2022 11:06:55 -0400
-Date:   Sat, 7 May 2022 11:06:55 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id ED44D24BD8
+        for <linux-usb@vger.kernel.org>; Sat,  7 May 2022 08:36:16 -0700 (PDT)
+Received: (qmail 74593 invoked by uid 1000); 7 May 2022 11:36:16 -0400
+Date:   Sat, 7 May 2022 11:36:16 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Schspa Shi <schspa@gmail.com>, andreyknvl@gmail.com,
-        balbi@kernel.org, jj251510319013@gmail.com, jannh@google.com,
-        Julia.Lawall@inria.fr, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
-Subject: Re: [PATCH] usb: gadget: fix race when gadget driver register via
- ioctl
-Message-ID: <YnaLDxcaCGMmETuP@rowland.harvard.edu>
-References: <20220507120851.29948-1-schspa@gmail.com>
- <YnaBwkhIxZ1wtIQX@kroah.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        USB mailing list <linux-usb@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: Re: [PATCH 4/4] USB: gadget: Add a new bus for gadgets
+Message-ID: <YnaR8LaaPTdLTiok@rowland.harvard.edu>
+References: <YjeEbHL8ITkW692W@rowland.harvard.edu>
+ <YmKt3kH+85kjzdbL@kroah.com>
+ <YmSc29YZvxgT5fEJ@rowland.harvard.edu>
+ <YmSo6fU1FlNq8cOZ@rowland.harvard.edu>
+ <YmSpKpnWR8WWEk/p@rowland.harvard.edu>
+ <YmSpdxaDNeC2BBOf@rowland.harvard.edu>
+ <alpine.DEB.2.22.394.2205031209030.681336@ramsan.of.borg>
+ <YnFCEn45XwDWM/9Y@rowland.harvard.edu>
+ <CAMuHMdVDK0W0T3=+2c1E6wtwy5JTUemTGYyj3PFuVUhK++AzrA@mail.gmail.com>
+ <YnFO0Qr8RY7peFCg@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnaBwkhIxZ1wtIQX@kroah.com>
+In-Reply-To: <YnFO0Qr8RY7peFCg@rowland.harvard.edu>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
@@ -41,91 +49,131 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 07, 2022 at 04:27:14PM +0200, Greg KH wrote:
-> On Sat, May 07, 2022 at 08:08:51PM +0800, Schspa Shi wrote:
-> > The usb_gadget_register_driver doesn't have inside locks to protect the
-> > driver, and If there is two threads are registered at the same time via
-> > the ioctl syscall, the system will crash as syzbot reported.
+On Tue, May 03, 2022 at 11:48:33AM -0400, Alan Stern wrote:
+> On Tue, May 03, 2022 at 05:27:08PM +0200, Geert Uytterhoeven wrote:
+> > Hi Alan,
 > > 
-> > Call trace as:
-> >   driver_register+0x220/0x3a0 drivers/base/driver.c:171
-> >   usb_gadget_register_driver_owner+0xfb/0x1e0
-> >     drivers/usb/gadget/udc/core.c:1546
-> >   raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
-> >   raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
-> > 
-> > This routine allows two processes to register the same driver instance
-> > via ioctl syscall. which lead to a race condition.
-> > 
-> > We can fix it by adding a driver_lock to avoid double register.
-> > 
-> > Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
-> > Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
-> > 
-> > Signed-off-by: Schspa Shi <schspa@gmail.com>
-> > ---
-> >  drivers/usb/gadget/legacy/raw_gadget.c | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-> > index b3be8db1ff63..d7ff9c2b5397 100644
-> > --- a/drivers/usb/gadget/legacy/raw_gadget.c
-> > +++ b/drivers/usb/gadget/legacy/raw_gadget.c
-> > @@ -155,7 +155,9 @@ struct raw_dev {
-> >  	spinlock_t			lock;
-> >  
-> >  	const char			*udc_name;
-> > +	/* Protected by driver_lock for reentrant registration */
-> >  	struct usb_gadget_driver	driver;
-> > +	struct mutex			driver_lock;
-> 
-> Why are you adding another lock here?  What's wrong with the existing
-> lock in this structure that requires an additional one?
-> 
-> >  
-> >  	/* Reference to misc device: */
-> >  	struct device			*dev;
-> > @@ -188,6 +190,8 @@ static struct raw_dev *dev_new(void)
-> >  	spin_lock_init(&dev->lock);
-> >  	init_completion(&dev->ep0_done);
-> >  	raw_event_queue_init(&dev->queue);
-> > +	mutex_init(&dev->driver_lock);
-> > +
-> >  	return dev;
-> >  }
-> >  
-> > @@ -398,7 +402,9 @@ static int raw_release(struct inode *inode, struct file *fd)
-> >  	spin_unlock_irqrestore(&dev->lock, flags);
-> >  
-> >  	if (unregister) {
-> > +		mutex_lock(&dev->driver_lock);
-> >  		ret = usb_gadget_unregister_driver(&dev->driver);
-> > +		mutex_unlock(&dev->driver_lock);
-> >  		if (ret != 0)
-> >  			dev_err(dev->dev,
-> >  				"usb_gadget_unregister_driver() failed with %d\n",
-> > @@ -510,7 +516,9 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
-> >  	}
-> >  	spin_unlock_irqrestore(&dev->lock, flags);
-> >  
-> > +	mutex_lock(&dev->driver_lock);
-> >  	ret = usb_gadget_register_driver(&dev->driver);
-> > +	mutex_unlock(&dev->driver_lock);
-> 
-> How can unregister race with register?
-> 
-> What ioctl is causing this race?  What userspace program is doing this?
-> Only one userspace program should be accessing this at once, right?
+> > On Tue, May 3, 2022 at 5:14 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > On Tue, May 03, 2022 at 12:14:30PM +0200, Geert Uytterhoeven wrote:
+> > > > On Sat, 23 Apr 2022, Alan Stern wrote:
+> > > > > This patch adds a "gadget" bus and uses it for registering gadgets and
+> > > > > their drivers.  From now on, bindings will be managed by the driver
+> > > > > core rather than through ad-hoc manipulations in the UDC core.
+> > > > >
+> > > > > As part of this change, the driver_pending_list is removed.  The UDC
+> > > > > core won't need to keep track of unbound drivers for later binding,
+> > > > > because the driver core handles all of that for us.
+> > > > >
+> > > > > However, we do need one new feature: a way to prevent gadget drivers
+> > > > > from being bound to more than one gadget at a time.  The existing code
+> > > > > does this automatically, but the driver core doesn't -- it's perfectly
+> > > > > happy to bind a single driver to all the matching devices on the bus.
+> > > > > The patch adds a new bitflag to the usb_gadget_driver structure for
+> > > > > this purpose.
+> > > > >
+> > > > > A nice side effect of this change is a reduction in the total lines of
+> > > > > code, since now the driver core will do part of the work that the UDC
+> > > > > used to do.
+> > > > >
+> > > > > A possible future patch could add udc devices to the gadget bus, say
+> > > > > as a separate device type.
+> > > > >
+> > > > > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> > > >
+> > > > Thanks for your patch, which is now commit fc274c1e997314bf ("USB:
+> > > > gadget: Add a new bus for gadgets") in usb-next.
+> > > >
+> > > > This patch cause a regression on the Renesas Salvator-XS development
+> > > > board, as R-Car H3 has multiple USB gadget devices:
+> > >
+> > > Then these gadgets ought to have distinct names in order to avoid the
+> > > conflict below:
 
-These questions are on the right track.
+Geert:
 
-The problem here is not insufficient locking.  The problem is that 
-dev->state does not have a special state to indicate that the driver is 
-being registered.
-
-Before calling usb_gadget_register_driver(), while still holding 
-dev->lock, the code should change dev->state to STATE_DEV_REGISTERING.  
-Then no race can occur, because the second thread to acquire the 
-spinlock will see that dev->state is not equal to STATE_DEV_INITIALIZED.
+Can you test the patch below?  It ought to fix the problem (although it 
+might end up causing other problems down the line...)
 
 Alan Stern
+
+
+Index: usb-devel/drivers/usb/gadget/udc/core.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/udc/core.c
++++ usb-devel/drivers/usb/gadget/udc/core.c
+@@ -12,6 +12,7 @@
+ #include <linux/module.h>
+ #include <linux/device.h>
+ #include <linux/list.h>
++#include <linux/idr.h>
+ #include <linux/err.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/sched/task_stack.h>
+@@ -23,6 +24,8 @@
+ 
+ #include "trace.h"
+ 
++static DEFINE_IDA(gadget_id_numbers);
++
+ static struct bus_type gadget_bus_type;
+ 
+ /**
+@@ -1248,7 +1251,6 @@ static void usb_udc_nop_release(struct d
+ void usb_initialize_gadget(struct device *parent, struct usb_gadget *gadget,
+ 		void (*release)(struct device *dev))
+ {
+-	dev_set_name(&gadget->dev, "gadget");
+ 	INIT_WORK(&gadget->work, usb_gadget_state_work);
+ 	gadget->dev.parent = parent;
+ 
+@@ -1304,12 +1306,21 @@ int usb_add_gadget(struct usb_gadget *ga
+ 	usb_gadget_set_state(gadget, USB_STATE_NOTATTACHED);
+ 	udc->vbus = true;
+ 
++	ret = ida_alloc(&gadget_id_numbers, GFP_KERNEL);
++	if (ret < 0)
++		goto err_del_udc;
++	gadget->id_number = ret;
++	dev_set_name(&gadget->dev, "gadget.%d", ret);
++
+ 	ret = device_add(&gadget->dev);
+ 	if (ret)
+-		goto err_del_udc;
++		goto err_free_id;
+ 
+ 	return 0;
+ 
++ err_free_id:
++	ida_free(&gadget_id_numbers, gadget->id_number);
++
+  err_del_udc:
+ 	flush_work(&gadget->work);
+ 	device_del(&udc->dev);
+@@ -1417,6 +1428,7 @@ void usb_del_gadget(struct usb_gadget *g
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_REMOVE);
+ 	flush_work(&gadget->work);
+ 	device_del(&gadget->dev);
++	ida_free(&gadget_id_numbers, gadget->id_number);
+ 	device_unregister(&udc->dev);
+ }
+ EXPORT_SYMBOL_GPL(usb_del_gadget);
+Index: usb-devel/include/linux/usb/gadget.h
+===================================================================
+--- usb-devel.orig/include/linux/usb/gadget.h
++++ usb-devel/include/linux/usb/gadget.h
+@@ -386,6 +386,7 @@ struct usb_gadget_ops {
+  * @lpm_capable: If the gadget max_speed is FULL or HIGH, this flag
+  *	indicates that it supports LPM as per the LPM ECN & errata.
+  * @irq: the interrupt number for device controller.
++ * @id_number: a unique ID number for ensuring that gadget names are distinct
+  *
+  * Gadgets have a mostly-portable "gadget driver" implementing device
+  * functions, handling all usb configurations and interfaces.  Gadget
+@@ -446,6 +447,7 @@ struct usb_gadget {
+ 	unsigned			connected:1;
+ 	unsigned			lpm_capable:1;
+ 	int				irq;
++	int				id_number;
+ };
+ #define work_to_gadget(w)	(container_of((w), struct usb_gadget, work))
+ 
