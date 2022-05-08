@@ -2,157 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA01E51EB5A
-	for <lists+linux-usb@lfdr.de>; Sun,  8 May 2022 06:08:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A9851EC12
+	for <lists+linux-usb@lfdr.de>; Sun,  8 May 2022 09:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbiEHEMj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 May 2022 00:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
+        id S230095AbiEHHqC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 May 2022 03:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbiEHEMg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 May 2022 00:12:36 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8892F65C5;
-        Sat,  7 May 2022 21:08:47 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id q8so11910010oif.13;
-        Sat, 07 May 2022 21:08:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T4C7pw2UqFNMIYwxozglWAGOAmcOcvlLh88gU1vpfoA=;
-        b=jYENx5k2/qpGwDiw/lT7nx5Vxbl/bxsdC3SUNpWhVAOJwT1rcBU2P2Y8EsEEoWSbyE
-         bohhgpf5LV1RVt+Db1UwUB+jMk40kiStPW4xKb7VI+n1I7/9lBkqr5o2pezJi0ekgHsH
-         AVuq96MwNRdQ1JaM4SO5M2h3pf33h1yYuhKSa3svF7so7mK4i+CLNAcy9yUG7xetDyf/
-         KJ58yQwx61ucKMqBGrcSo86SyU2xVSc3ySBWkKkc4A5Ce28BeWXXI8Ji00r9DFaTn2CD
-         60WzgujUB5WOPQpepeDC2Re6JWJkcB6YfGZGZj4J871XlMMt6Vs/PbOefLRoPSqkTu9/
-         CNsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T4C7pw2UqFNMIYwxozglWAGOAmcOcvlLh88gU1vpfoA=;
-        b=aP8b/cDeLRAo6uI3VVhRGqdk4LtykT4utWxt1GAUNaB1ngwGT7HeC4dC6HG1tz/L4R
-         t3TEOfzLCN5RQKfsv0gAAFk3C3WS+dKhWn/MaEmXUgpVqgGWw4pSrqzyyqvceb+B0WzY
-         dVn6AhSgnKWzeOs19fJFZvUEUKx7ehJ8GE5vjU3Vml76kEzgaitbx3UcElcr6tLAQPL3
-         51p75xisFuVvXllNVAdmUhtOA7mBbU2kwI9S7HTAxVDUip8KnefyzLF6pMxhQ4YE64Pi
-         mD1xfzZRE1HwnBC6QYnw/dDGqDDlEshu45w5CpDNpDi6BWesAk3ZsX2aze+hjVXnHO7u
-         J9ZA==
-X-Gm-Message-State: AOAM530eBcSquoe6sVVOg4q9NeVfjiX7uHmdS8AZFIVPuLEYKq3kIk/O
-        kSrGFLValL47JYLTBpw5H0Nz2Kv83q1ljqZrnj0=
-X-Google-Smtp-Source: ABdhPJw05UPTsJo+Ci3YzMlQVxqtTKjNkx4I8254ZAZoF2yVSHxs4fL/QTKuKbbMBYUrJUnzFEQsV9O0lENjSSXNhKw=
-X-Received: by 2002:a05:6808:bd4:b0:326:c2e8:2d1e with SMTP id
- o20-20020a0568080bd400b00326c2e82d1emr182033oik.52.1651982926664; Sat, 07 May
- 2022 21:08:46 -0700 (PDT)
+        with ESMTP id S229756AbiEHHqB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 May 2022 03:46:01 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8169B655E
+        for <linux-usb@vger.kernel.org>; Sun,  8 May 2022 00:42:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651995732; x=1683531732;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hOQ9MHxMSJrDh/DcpNO8rYJJp/QXev+xbqmUfZLfxag=;
+  b=JzaGqweovsz22njoGS8IHoV535xAK4ny+rgM2mWS5v4p8yDja5yrskpn
+   Ej1H63I9nOSMWxZzh6xEyCdG73PdgnrbtMXFvpPCZq5dWiQeKC/j3v9dA
+   1KAuWR2vOmq31AT8c4A6jiqJFLWBE/aIoKjpAnh3qq0m4SermCzp/ThCA
+   FVtYj1fC+Q/B341Ik6+FGCOlCreD9kumDlgWje1pWVUcKyW4mvYlafGyC
+   HfEo9/eZ1SmOkfgClIKaDtgRG86TDgmnpkpE8ji+09clQBGs0CtkfSNoX
+   xTGkq1ZYqYN8b2f3Vi6FsO3ZyPPNPZtUNEw0UgMeSxAku51mbZJR+EkdT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="249346994"
+X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
+   d="scan'208";a="249346994"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 00:42:00 -0700
+X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
+   d="scan'208";a="633598959"
+Received: from ccdjpclinux26.jer.intel.com (HELO localhost) ([10.12.48.253])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 00:41:58 -0700
+Date:   Sun, 8 May 2022 10:51:36 +0300
+From:   Gil Fine <gil.fine@intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Gil Fine <gil.fine@intel.com>, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, lukas@wunner.de
+Subject: Re: [PATCH 2/5] thunderbolt: CLx disable before system suspend only
+ if previously enabled
+Message-ID: <20220508075135.GC19479@ccdjLinux26>
+References: <20220501203321.19021-1-gil.fine@intel.com>
+ <20220501203321.19021-3-gil.fine@intel.com>
+ <Ym+p02MdXKkusMFR@lahna>
 MIME-Version: 1.0
-References: <CAMA88TrcHZH7vw8W4Jh+NCQJvpe3wQM-4k46MnDQC9agna4XJg@mail.gmail.com>
- <20220507160243.35304-1-schspa@gmail.com> <Ynay6XK+ZUWtvfbH@rowland.harvard.edu>
-In-Reply-To: <Ynay6XK+ZUWtvfbH@rowland.harvard.edu>
-From:   Schspa Shi <schspa@gmail.com>
-Date:   Sun, 8 May 2022 12:08:35 +0800
-Message-ID: <CAMA88Tr3pX4UjJ0ezSs9kFcKFY4HvyetHTTgFVc=O643SXE1sQ@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: gadget: fix race when gadget driver register via ioctl
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Julia.Lawall@inria.fr, andreyknvl@gmail.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, jannh@google.com,
-        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ym+p02MdXKkusMFR@lahna>
+Organization: Intel Israel Jerusalem (IDPj /IDCj) Har Hotzvim, HaMarpe Street
+ 9, Zip code 9777409
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Alan Stern <stern@rowland.harvard.edu> writes:
+Hi Mika,
 
-> On Sun, May 08, 2022 at 12:02:43AM +0800, Schspa Shi wrote:
->> The usb_gadget_register_driver can be called multi time by to
->> threads via USB_RAW_IOCTL_RUN ioctl syscall, which will lead
->> to multiple registrations.
->>
->> Call trace:
->>   driver_register+0x220/0x3a0 drivers/base/driver.c:171
->>   usb_gadget_register_driver_owner+0xfb/0x1e0
->>     drivers/usb/gadget/udc/core.c:1546
->>   raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
->>   raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
->>   ioctl USB_RAW_IOCTL_RUN
->>
->> This routine allows two processes to register the same driver instance
->> via ioctl syscall. which lead to a race condition.
->>
->> We can fix it by adding a new STATE_DEV_REGISTERING device state to
->> avoid double register.
->
-> Are you sure that this patch will fix the problem found by syzbot?  That
-> is, are you sure that the problem really was caused by two threads
-> registering the same driver concurrently?
->
+On Mon, May 02, 2022 at 12:52:19PM +0300, Mika Westerberg wrote:
+> Hi Gil,
+> 
+> On Sun, May 01, 2022 at 11:33:18PM +0300, Gil Fine wrote:
+> > Disable CLx before system suspended only if previously was enabled.
+> > Also fix few typos.
+> 
+> Can you make that a separate patch?
 
-Yes, from the console log from syzbot.
-T8324 alloced driver_private was released by T8326.
+Sure, will do.
+-- 
+Thanks,
+Gil
+---------------------------------------------------------------------
+Intel Israel (74) Limited
 
-> The fact that the error was "use after free" suggests that the problem
-> might be something else.  It looks like one of the threads was trying to
-> access the driver structure after the other thread had done something
-> that caused it to be deallocated, which suggests an error in reference
-> counting.
->
+This e-mail and any attachments may contain confidential material for
+the sole use of the intended recipient(s). Any review or distribution
+by others is strictly prohibited. If you are not the intended
+recipient, please contact the sender and delete all copies.
 
-The direct cause of this place is because of the refcount error, but the
-root cause is still caused by multiple registrations
-
-Please refer to the following scenarios.
-
-           T1                                  T2
-------------------------------------------------------------------
-usb_gadget_register_driver_owner
-  driver_register                    driver_register
-    driver_find                       driver_find
-    bus_add_driver                    bus_add_driver
-      priv alloced                     <context switch>
-      drv->p = priv;
-      <schedule out>
-      kobject_init_and_add // refcount = 1;
-   //couldn't find an available UDC or it's busy
-   <context switch>
-                                       priv alloced
-                                       drv->priv = priv;
-                                       kobject_init_and_add
-                                         ---> refcount = 1 <------
-                                       // register success
-                                       <context switch>
-===================== another ioctl/process ======================
-                                      driver_register
-                                       driver_find
-                                        k = kset_find_obj()
-                                         ---> refcount = 2 <------
-                                        <context out>
-   driver_unregister
-   // drv->p become T2's priv
-   ---> refcount = 1 <------
-   <context switch>
-                                        kobject_put(k)
-                                         ---> refcount = 0 <------
-                                        return priv->driver;
-                                        --------UAF here----------
-
-There will be UAF in this scenario.
-And all the logs reported by syzbot can be matched to this scenario.
-
-> Yes, this could be caused by two threads both registering the same
-> driver.  But the evidence doesn't prove that this is what happened, as
-> far as I can see.
->
-> Alan Stern
->
-
-BRs
-
-Schspa Shi
