@@ -2,176 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B8C51F1F5
-	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 00:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A1C51F222
+	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 03:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233373AbiEHWwl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 May 2022 18:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
+        id S231964AbiEIB3D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 May 2022 21:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiEHWwj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 May 2022 18:52:39 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8523896
-        for <linux-usb@vger.kernel.org>; Sun,  8 May 2022 15:48:47 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nnphl-0002uI-J1; Mon, 09 May 2022 00:48:45 +0200
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nnphj-0001Bd-Mc; Mon, 09 May 2022 00:48:43 +0200
-Date:   Mon, 9 May 2022 00:48:43 +0200
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        paul.elder@ideasonboard.com, kernel@pengutronix.de,
-        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH 2/5] usb: gadget: uvc: calculate the number of request
- depending on framesize
-Message-ID: <20220508224843.GA22426@pengutronix.de>
-References: <20220402233914.3625405-1-m.grzeschik@pengutronix.de>
- <20220402233914.3625405-3-m.grzeschik@pengutronix.de>
- <Yl8ftLtM4hOIVf/s@pendragon.ideasonboard.com>
+        with ESMTP id S233966AbiEHXzM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 May 2022 19:55:12 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C6A63F8;
+        Sun,  8 May 2022 16:51:21 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id z18so13694333iob.5;
+        Sun, 08 May 2022 16:51:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jvGYRgc/B1cVUQHYWbyzOUJsJsb2JybLUg0MtrNHLxU=;
+        b=gzCU6N4K+RH0gJYDOFzdClMUoqs+sC5dLzprBeR0gAh2NBdsFoIUDmtm6UrsHl1C22
+         hhvvyVwkcr85Bem8HAES8601Svm4cXUnKRpqZoX8B82AmRxwtFFhe+5rEgd2+b5IsAVc
+         Ehjr2JxnbzsUtzOTCQt7zyUweMkWn98QmUIOyiJXmdSGJjb7Y2Vt2HHaF5zHjCVr5HeS
+         C99xRgPNO6MydfVvHXf3vQvagErptsjIu4JbDRnLo1RFgGcMU4ziuIJU/ac6wD3Pxt6R
+         /muL6QOrnANd9gjDvltFI7JhWsuPEeGkS8/eevwKXB3U+H9nokx36TkYQHhfUaB7A7yh
+         U4LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jvGYRgc/B1cVUQHYWbyzOUJsJsb2JybLUg0MtrNHLxU=;
+        b=1DcziIkBiYwJrYGc7DosG5IlHAOiDx906xdl/iMsWX/e0fk2Mmq8cgFnFG2rpxmkYI
+         p55cExKOmlGGBULvH+wYJqHDnRQVobX+MIBKCfvCGAUg9QHmla5CDYIOKvW0NVIU1TTD
+         fOyOltTCPVHYt0EcjYIjLUWrIdY4gx8zZZSsp8HX+NYytT35HG2b1+DxPtsa75d0oENM
+         HXqoAyf05EegINk0ybyIbuXOvWhs8r7e26WjhlO0qKpsY7W1WSNgX7eahM2DAqqfvjx0
+         uUEPg91S4wzO6UHdBdU7LK6vLj4TOVLjS/DZ5NtD9MF0QO5zyhNm78PKXQMEAJJRhJIN
+         UcNw==
+X-Gm-Message-State: AOAM533yBk3gcMvsz4ysDqzsta9vtIBQbZqp3L14P50bfYuAAqWl2Uz9
+        3qpM8H2fJpVDz6l/F2Os2uWHGno6olyilfB9QY8=
+X-Google-Smtp-Source: ABdhPJwwPq9wn3ToVdj7TM4CBY43GWLA0vghTvzHEPJnEJWTSpaC+IvmSDLcXNrhXJOAZnPYA62+yHm5rItxqhEhuos=
+X-Received: by 2002:a05:6638:168f:b0:32d:8105:7646 with SMTP id
+ f15-20020a056638168f00b0032d81057646mr630122jat.9.1652053880413; Sun, 08 May
+ 2022 16:51:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qMm9M+Fa2AknHoGS"
-Content-Disposition: inline
-In-Reply-To: <Yl8ftLtM4hOIVf/s@pendragon.ideasonboard.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 00:17:37 up 39 days, 10:47, 56 users,  load average: 0.03, 0.08,
- 0.11
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YnfVEcOWO63uIGs5@rowland.harvard.edu> <20220508150247.38204-1-schspa@gmail.com>
+In-Reply-To: <20220508150247.38204-1-schspa@gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 9 May 2022 01:51:09 +0200
+Message-ID: <CA+fCnZexPtGYX0kiwpA3-vgRbqbw0hk-fRpz9jUZrykJj-HN=w@mail.gmail.com>
+Subject: Re: [PATCH v3] usb: gadget: fix race when gadget driver register via ioctl
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     stern@rowland.harvard.edu, Julia Lawall <Julia.Lawall@inria.fr>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jann Horn <jannh@google.com>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---qMm9M+Fa2AknHoGS
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Laurent,
-
-On Tue, Apr 19, 2022 at 11:46:44PM +0300, Laurent Pinchart wrote:
->Thank you for the patch.
+On Sun, May 8, 2022 at 5:03 PM Schspa Shi <schspa@gmail.com> wrote:
 >
->On Sun, Apr 03, 2022 at 01:39:11AM +0200, Michael Grzeschik wrote:
->> The current limitation of possible number of requests being handled is
->> dependent on the gadget speed. It makes more sense to depend on the
->> typical frame size when calculating the number of requests. This patch
->> is changing this and is using the previous limits as boundaries for
->> reasonable minimum and maximum number of requests.
+> The usb_gadget_register_driver can be called multi time by to
+> threads via USB_RAW_IOCTL_RUN ioctl syscall, which will lead
+> to multiple registrations.
 >
->What are typical values you get for the number of requests in your use
->cases with this change ?
-
-With this patch, for a 4k Video stream I get usually sizes of 3127808
-bytes and 64 requests. With 1080p sizes is 800768 bytes and with this
-patch I get 56 request.
-
->Could you mention them in the commit message ?
-
-Yes, I will add them in the comment of v2.
-
->> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->> ---
->>  drivers/usb/gadget/function/uvc_queue.c | 15 ++++++++++-----
->>  1 file changed, 10 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadge=
-t/function/uvc_queue.c
->> index cfa0ac4adb04d5..2a091cf07981e1 100644
->> --- a/drivers/usb/gadget/function/uvc_queue.c
->> +++ b/drivers/usb/gadget/function/uvc_queue.c
->> @@ -44,7 +44,8 @@ static int uvc_queue_setup(struct vb2_queue *vq,
->>  {
->>  	struct uvc_video_queue *queue =3D vb2_get_drv_priv(vq);
->>  	struct uvc_video *video =3D container_of(queue, struct uvc_video, queu=
-e);
->> -	struct usb_composite_dev *cdev =3D video->uvc->func.config->cdev;
->> +	unsigned int req_size;
->> +	unsigned int nreq;
->>
->>  	if (*nbuffers > UVC_MAX_VIDEO_BUFFERS)
->>  		*nbuffers =3D UVC_MAX_VIDEO_BUFFERS;
->> @@ -53,10 +54,14 @@ static int uvc_queue_setup(struct vb2_queue *vq,
->>
->>  	sizes[0] =3D video->imagesize;
->>
->> -	if (cdev->gadget->speed < USB_SPEED_SUPER)
->> -		video->uvc_num_requests =3D 4;
->> -	else
->> -		video->uvc_num_requests =3D 64;
->> +	req_size =3D video->ep->maxpacket
->> +		 * max_t(unsigned int, video->ep->maxburst, 1)
->> +		 * (video->ep->mult);
->> +
->> +	nreq =3D DIV_ROUND_UP(DIV_ROUND_UP(sizes[0], 2), req_size);
+> Call trace:
+>   driver_register+0x220/0x3a0 drivers/base/driver.c:171
+>   usb_gadget_register_driver_owner+0xfb/0x1e0
+>     drivers/usb/gadget/udc/core.c:1546
+>   raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
+>   raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
+>   ioctl USB_RAW_IOCTL_RUN
 >
->Where does the division by 2 come from ?
-
-That is a good question. I think that I used it as a tool to
-come into the range inbetween 4 and 64 requests for 1080p video
-streaming. Since the framesizes where more likely to run into
-the 64 requests to be allocated.
-
->> +	nreq =3D min_t(unsigned int, nreq, 64);
->> +	nreq =3D max_t(unsigned int, nreq, 4);
+> This routine allows two processes to register the same driver instance
+> via ioctl syscall. which lead to a race condition.
 >
->You can use clamp():
+> Please refer to the following scenarios.
 >
->	video->uvc_num_requests =3D clamp(nreq, 4U, 64U);
+>            T1                                  T2
+> ------------------------------------------------------------------
+> usb_gadget_register_driver_owner
+>   driver_register                    driver_register
+>     driver_find                       driver_find
+>     bus_add_driver                    bus_add_driver
+>       priv alloced                     <context switch>
+>       drv->p = priv;
+>       <schedule out>
+>       kobject_init_and_add // refcount = 1;
+>    //couldn't find an available UDC or it's busy
+>    <context switch>
+>                                        priv alloced
+>                                        drv->priv = priv;
+>                                        kobject_init_and_add
+>                                          ---> refcount = 1 <------
+>                                        // register success
+>                                        <context switch>
+> ===================== another ioctl/process ======================
+>                                       driver_register
+>                                        driver_find
+>                                         k = kset_find_obj()
+>                                          ---> refcount = 2 <------
+>                                         <context out>
+>    driver_unregister
+>    // drv->p become T2's priv
+>    ---> refcount = 1 <------
+>    <context switch>
+>                                         kobject_put(k)
+>                                          ---> refcount = 0 <------
+>                                         return priv->driver;
+>                                         --------UAF here----------
+>
+> There will be UAF in this scenario.
+>
+> We can fix it by adding a new STATE_DEV_REGISTERING device state to
+> avoid double register.
+>
+> Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+> Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
+>
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
+>
+> ---
+>
+> Changelog:
+> v1 -> v2:
+>         - Add a STATE_DEV_REGISTERING as Alan Stern suggested.
+> v2 -> v3:
+>         - Adjust STATE_DEV_REGISTERING position to reflect the actual
+>           order in which the states occur.
+>         - Add the fault scenarios to comments.
+> ---
+>  drivers/usb/gadget/legacy/raw_gadget.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+> index b3be8db1ff63..241740024c50 100644
+> --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> @@ -145,6 +145,7 @@ enum dev_state {
+>         STATE_DEV_INVALID = 0,
+>         STATE_DEV_OPENED,
+>         STATE_DEV_INITIALIZED,
+> +       STATE_DEV_REGISTERING,
+>         STATE_DEV_RUNNING,
+>         STATE_DEV_CLOSED,
+>         STATE_DEV_FAILED
+> @@ -508,6 +509,7 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
+>                 ret = -EINVAL;
+>                 goto out_unlock;
+>         }
+> +       dev->state = STATE_DEV_REGISTERING;
+>         spin_unlock_irqrestore(&dev->lock, flags);
+>
+>         ret = usb_gadget_register_driver(&dev->driver);
+> --
+> 2.24.3 (Apple Git-128)
+>
 
-Thanks! I fixed that for v2.
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
 
->> +	video->uvc_num_requests =3D nreq;
->>
->>  	return 0;
->>  }
+Thanks, Schspa!
 
-Regards,
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---qMm9M+Fa2AknHoGS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmJ4SMcACgkQC+njFXoe
-LGTm4xAAjvFldAhTOXhlxxEMqwWaoperDW+p9VMIT69pMcoO+UC40WZ73uZQwQ1Y
-xaueHJncopQxd7AP767uJ85GgIw76/qdRg+R9IPrH3wdXFrpblVoE1m26o69wRRf
-qcC4e/eiS8ynOD1HYbdnUYL9WO6PLd0Ywb6O7rG945989j4CmFskIZfkvyhGUwJT
-DHaaO8uMpxKWaNQI4zP9Hg4AtgFGtc/COOyMsCpKqOzYiIyv9cn3KjMQAqVWlT8k
-2GTP5309MPBzw6ZjyA4p2u+teOhlZyIR8bncnI8gPk623yVjVdlzmoV/rzhI38E7
-fTSiQ/sDcv0CXciW4lsvHWHyLFYV+aPALEj4F+xxkGl7B6FX9isxAQQ3JozIr0Ln
-9USKlfSdJ+xw7gvaHK+srIbH30G/MR4on8bx0RvYV4Ln0rGq0ejqJgyEOPTLPV6J
-eP6fSBSigVhGTF/hkljUoGQthCqMfRUxwlwtCV4Ut/yhrJddAIOZHhITzu/OI0Qn
-MDtQM7woW1yTceOw3AmV66KW8M4slXgEihbw+AhEzqeIaehwokJKuviRUKADwISQ
-m3BZxTN0T0xP/C2Tww3Fjw1B/tT/MwOJpq7IWDNfqOqPDe0ichZQJMdCMciMAwcz
-z7E9rW3qX6GzYVVfhR/aIiTUvrtdB85UuD8ffKgD/nl7oMuSJ3Y=
-=70cw
------END PGP SIGNATURE-----
-
---qMm9M+Fa2AknHoGS--
+Thanks for the review, Alan!
