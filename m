@@ -2,89 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A9851EC12
-	for <lists+linux-usb@lfdr.de>; Sun,  8 May 2022 09:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7490451ED61
+	for <lists+linux-usb@lfdr.de>; Sun,  8 May 2022 14:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiEHHqC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 May 2022 03:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51400 "EHLO
+        id S232642AbiEHMQf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 May 2022 08:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiEHHqB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 May 2022 03:46:01 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8169B655E
-        for <linux-usb@vger.kernel.org>; Sun,  8 May 2022 00:42:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651995732; x=1683531732;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hOQ9MHxMSJrDh/DcpNO8rYJJp/QXev+xbqmUfZLfxag=;
-  b=JzaGqweovsz22njoGS8IHoV535xAK4ny+rgM2mWS5v4p8yDja5yrskpn
-   Ej1H63I9nOSMWxZzh6xEyCdG73PdgnrbtMXFvpPCZq5dWiQeKC/j3v9dA
-   1KAuWR2vOmq31AT8c4A6jiqJFLWBE/aIoKjpAnh3qq0m4SermCzp/ThCA
-   FVtYj1fC+Q/B341Ik6+FGCOlCreD9kumDlgWje1pWVUcKyW4mvYlafGyC
-   HfEo9/eZ1SmOkfgClIKaDtgRG86TDgmnpkpE8ji+09clQBGs0CtkfSNoX
-   xTGkq1ZYqYN8b2f3Vi6FsO3ZyPPNPZtUNEw0UgMeSxAku51mbZJR+EkdT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="249346994"
-X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
-   d="scan'208";a="249346994"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 00:42:00 -0700
-X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
-   d="scan'208";a="633598959"
-Received: from ccdjpclinux26.jer.intel.com (HELO localhost) ([10.12.48.253])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 00:41:58 -0700
-Date:   Sun, 8 May 2022 10:51:36 +0300
-From:   Gil Fine <gil.fine@intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Gil Fine <gil.fine@intel.com>, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: Re: [PATCH 2/5] thunderbolt: CLx disable before system suspend only
- if previously enabled
-Message-ID: <20220508075135.GC19479@ccdjLinux26>
-References: <20220501203321.19021-1-gil.fine@intel.com>
- <20220501203321.19021-3-gil.fine@intel.com>
- <Ym+p02MdXKkusMFR@lahna>
+        with ESMTP id S232201AbiEHMQb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 May 2022 08:16:31 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960B9DF05;
+        Sun,  8 May 2022 05:12:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652011961; x=1683547961;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=6rnWEHeEX+XKODlHAQn1lzCSCnz29X+Ks2qhyPPDDlk=;
+  b=p5kvMr0BY7Nslsq9VXgjRqG7s+zzwNJVc27km0xyGuJ4WpCZ0xZ6n9Dq
+   zfJES12Q0GtrnqtqLi7VwX4XgIckAvJcgZHEIbP2cPEf3Rz8A/bZtZlol
+   zOOSHhEylAMxpt1BpUNkIgiNJKMuzdA98zeLoFsApgTTa4qrFL1O7mjUu
+   4=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 08 May 2022 05:12:40 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 05:12:40 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 8 May 2022 05:12:39 -0700
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 8 May 2022 05:12:33 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Doug Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wesley Cheng <wcheng@codeaurora.org>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [v3 0/3] Add QCOM SNPS PHY overriding params support
+Date:   Sun, 8 May 2022 17:42:24 +0530
+Message-ID: <1652011947-18575-1-git-send-email-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ym+p02MdXKkusMFR@lahna>
-Organization: Intel Israel Jerusalem (IDPj /IDCj) Har Hotzvim, HaMarpe Street
- 9, Zip code 9777409
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mika,
+Added support for overriding tuning parameters in QCOM SNPS PHY
+from device tree.
 
-On Mon, May 02, 2022 at 12:52:19PM +0300, Mika Westerberg wrote:
-> Hi Gil,
-> 
-> On Sun, May 01, 2022 at 11:33:18PM +0300, Gil Fine wrote:
-> > Disable CLx before system suspended only if previously was enabled.
-> > Also fix few typos.
-> 
-> Can you make that a separate patch?
+changes in v3:
+Added support for phy tuning paramters to be represented in bps and
+corresponding register values to be written are obtained by traversing
+through data map declared in the driver.
 
-Sure, will do.
+changes in v2:
+Reading the individual fields in each overriding register from device tree.
+
+Krishna Kurapati (2):
+  phy: qcom-snps: Add support for overriding phy tuning parameters
+  arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280 IDP device
+
+Sandeep Maheswaram (1):
+  dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy override params
+    bindings
+
+ .../bindings/phy/qcom,usb-snps-femto-v2.yaml       |  87 +++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |   6 +
+ drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c      | 252 ++++++++++++++++++++-
+ 3 files changed, 343 insertions(+), 2 deletions(-)
+
 -- 
-Thanks,
-Gil
----------------------------------------------------------------------
-Intel Israel (74) Limited
-
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
+2.7.4
 
