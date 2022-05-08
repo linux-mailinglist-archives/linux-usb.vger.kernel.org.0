@@ -2,137 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8172751EDC0
-	for <lists+linux-usb@lfdr.de>; Sun,  8 May 2022 15:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6F451EE0E
+	for <lists+linux-usb@lfdr.de>; Sun,  8 May 2022 16:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbiEHN14 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 May 2022 09:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
+        id S233835AbiEHOit (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 May 2022 10:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233354AbiEHN1x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 May 2022 09:27:53 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA588DE96;
-        Sun,  8 May 2022 06:23:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652016235; x=1683552235;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=psDk1P7wyWAseUdXJBcbmzY0aYvncXmFOfzhn5uJ3xM=;
-  b=CBl6C+MjWo6RpG+uN45nt+uxA2QpFIisUL1dofsw5/uOUg/6ZDhTFUXO
-   3UKx4vQvG+Apex924ZVBTbyfSRVrmLSg7awiI3TP8rBzWDtEASHJ05KZd
-   K4jlHVsIrt1evdCfJzfS7pBFpHW/TFbBIbn276kTTMMhr5/VAPKbHthfl
-   1eBJs9MOGvIFnjiGhpigDhpZ3UOfjovsuUrpw3wdeNfUatmv+qdOnmn9l
-   OBq+K96vltH1IlpKy0C6Z+f8zpXy6Y4JhZYwFgiaQR35ElUO+vxOEYrIb
-   8xYlLU6745OsMT83HIMWn6YhlNrDrUX9zDZl7gAhF19nJnXhC/zMh3qjt
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="267678969"
-X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
-   d="scan'208";a="267678969"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 06:23:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
-   d="scan'208";a="622565927"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 08 May 2022 06:23:50 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nngt4-000FVH-16;
-        Sun, 08 May 2022 13:23:50 +0000
-Date:   Sun, 8 May 2022 21:22:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wesley Cheng <wcheng@codeaurora.org>
-Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_vpulyala@quicinc.com,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: Re: [v3 2/3] phy: qcom-snps: Add support for overriding phy tuning
- parameters
-Message-ID: <202205082118.cd3B5WOH-lkp@intel.com>
-References: <1652011947-18575-3-git-send-email-quic_kriskura@quicinc.com>
+        with ESMTP id S230012AbiEHOis (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 May 2022 10:38:48 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 027C8DFFD
+        for <linux-usb@vger.kernel.org>; Sun,  8 May 2022 07:34:57 -0700 (PDT)
+Received: (qmail 98159 invoked by uid 1000); 8 May 2022 10:34:57 -0400
+Date:   Sun, 8 May 2022 10:34:57 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     Julia.Lawall@inria.fr, andreyknvl@gmail.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, jannh@google.com,
+        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2] usb: gadget: fix race when gadget driver register via
+ ioctl
+Message-ID: <YnfVEcOWO63uIGs5@rowland.harvard.edu>
+References: <CAMA88TrcHZH7vw8W4Jh+NCQJvpe3wQM-4k46MnDQC9agna4XJg@mail.gmail.com>
+ <20220507160243.35304-1-schspa@gmail.com>
+ <Ynay6XK+ZUWtvfbH@rowland.harvard.edu>
+ <CAMA88Tr3pX4UjJ0ezSs9kFcKFY4HvyetHTTgFVc=O643SXE1sQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1652011947-18575-3-git-send-email-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMA88Tr3pX4UjJ0ezSs9kFcKFY4HvyetHTTgFVc=O643SXE1sQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krishna,
+On Sun, May 08, 2022 at 12:08:35PM +0800, Schspa Shi wrote:
+> Alan Stern <stern@rowland.harvard.edu> writes:
+> >
+> > Are you sure that this patch will fix the problem found by syzbot?  That
+> > is, are you sure that the problem really was caused by two threads
+> > registering the same driver concurrently?
+> >
+> 
+> Yes, from the console log from syzbot.
+> T8324 alloced driver_private was released by T8326.
 
-Thank you for the patch! Perhaps something to improve:
+That is a smoking gun.
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on krzk/for-next linus/master v5.18-rc5 next-20220506]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> > The fact that the error was "use after free" suggests that the problem
+> > might be something else.  It looks like one of the threads was trying to
+> > access the driver structure after the other thread had done something
+> > that caused it to be deallocated, which suggests an error in reference
+> > counting.
+> >
+> 
+> The direct cause of this place is because of the refcount error, but the
+> root cause is still caused by multiple registrations
+> 
+> Please refer to the following scenarios.
+> 
+>            T1                                  T2
+> ------------------------------------------------------------------
+> usb_gadget_register_driver_owner
+>   driver_register                    driver_register
+>     driver_find                       driver_find
+>     bus_add_driver                    bus_add_driver
+>       priv alloced                     <context switch>
+>       drv->p = priv;
+>       <schedule out>
+>       kobject_init_and_add // refcount = 1;
+>    //couldn't find an available UDC or it's busy
+>    <context switch>
+>                                        priv alloced
+>                                        drv->priv = priv;
+>                                        kobject_init_and_add
+>                                          ---> refcount = 1 <------
+>                                        // register success
+>                                        <context switch>
+> ===================== another ioctl/process ======================
+>                                       driver_register
+>                                        driver_find
+>                                         k = kset_find_obj()
+>                                          ---> refcount = 2 <------
+>                                         <context out>
+>    driver_unregister
+>    // drv->p become T2's priv
+>    ---> refcount = 1 <------
+>    <context switch>
+>                                         kobject_put(k)
+>                                          ---> refcount = 0 <------
+>                                         return priv->driver;
+>                                         --------UAF here----------
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Kurapati/Add-QCOM-SNPS-PHY-overriding-params-support/20220508-201506
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220508/202205082118.cd3B5WOH-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4f3771418951e9e3fcb6357959dbd668cdb54fb1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Krishna-Kurapati/Add-QCOM-SNPS-PHY-overriding-params-support/20220508-201506
-        git checkout 4f3771418951e9e3fcb6357959dbd668cdb54fb1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/phy/
+It looks like you've got T2 calling driver_register and driver_find 
+twice, but the overall idea is pretty clear.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> There will be UAF in this scenario.
+> And all the logs reported by syzbot can be matched to this scenario.
 
-All warnings (new ones prefixed by >>):
+And in any case it is obvious that the patch is necessary.  (Although I 
+would have put the new state before the RUNNING state, to reflect the 
+actual order in which the states occur.)
 
-   drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c: In function 'phy_read_param_override_seq':
->> drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c:530:33: warning: variable 'hsphy' set but not used [-Wunused-but-set-variable]
-     530 |         struct qcom_snps_hsphy *hsphy;
-         |                                 ^~~~~
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-
-vim +/hsphy +530 drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
-
-   524	
-   525	static void phy_read_param_override_seq(struct device *dev)
-   526	{
-   527		struct device_node *node = dev->of_node;
-   528		s32 val;
-   529		int ret, i;
- > 530		struct qcom_snps_hsphy *hsphy;
-   531		struct override_param_map *cfg = (struct override_param_map* ) of_device_get_match_data(dev);
-   532		hsphy = dev_get_drvdata(dev);
-   533	
-   534		for (i = 0; i < ARRAY_SIZE(phy_seq_props); i++) {
-   535			ret = of_property_read_s32(node, phy_seq_props[i], &val);
-   536			if (!ret)
-   537				hsphy_override_param_update_val(cfg[i], val, &update_seq_cfg[i]);
-   538		}
-   539	}
-   540	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Alan Stern
