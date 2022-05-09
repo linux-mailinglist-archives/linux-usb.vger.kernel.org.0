@@ -2,41 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FB951FF39
-	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 16:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E45851FF58
+	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 16:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236719AbiEIOMj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 May 2022 10:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
+        id S236931AbiEIOS5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 May 2022 10:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236737AbiEIOMh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 10:12:37 -0400
+        with ESMTP id S237012AbiEIOS4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 10:18:56 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9BF072A0A43
-        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 07:08:42 -0700 (PDT)
-Received: (qmail 124650 invoked by uid 1000); 9 May 2022 10:08:41 -0400
-Date:   Mon, 9 May 2022 10:08:41 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 48DB32B275D
+        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 07:15:02 -0700 (PDT)
+Received: (qmail 124832 invoked by uid 1000); 9 May 2022 10:15:01 -0400
+Date:   Mon, 9 May 2022 10:15:01 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [v15 3/6] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <YnkgaagoaYK7LkCq@rowland.harvard.edu>
-References: <1651740973-7944-4-git-send-email-quic_kriskura@quicinc.com>
- <YnRUPxBZB55TPmf2@google.com>
- <a83dea08-0920-17e6-ec1c-f9d8a490a08d@quicinc.com>
- <20220506051448.GE4640@hu-pkondeti-hyd.qualcomm.com>
- <YnVD+ltiQhKE+jPf@google.com>
- <YnVSIvwXsKySg33M@google.com>
- <YnVmXmG+6emL4nxv@rowland.harvard.edu>
- <YnVs7kSkpjUBWc5w@google.com>
- <YnWFaSXJJ8T7IYtl@rowland.harvard.edu>
- <20220509033238.GA9170@hu-pkondeti-hyd.qualcomm.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        USB mailing list <linux-usb@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: Re: [PATCH 4/4] USB: gadget: Add a new bus for gadgets
+Message-ID: <Ynkh5eKtfxU+AyZX@rowland.harvard.edu>
+References: <YmSc29YZvxgT5fEJ@rowland.harvard.edu>
+ <YmSo6fU1FlNq8cOZ@rowland.harvard.edu>
+ <YmSpKpnWR8WWEk/p@rowland.harvard.edu>
+ <YmSpdxaDNeC2BBOf@rowland.harvard.edu>
+ <alpine.DEB.2.22.394.2205031209030.681336@ramsan.of.borg>
+ <YnFCEn45XwDWM/9Y@rowland.harvard.edu>
+ <CAMuHMdVDK0W0T3=+2c1E6wtwy5JTUemTGYyj3PFuVUhK++AzrA@mail.gmail.com>
+ <YnFO0Qr8RY7peFCg@rowland.harvard.edu>
+ <YnaR8LaaPTdLTiok@rowland.harvard.edu>
+ <CAMuHMdUpOiHHMktPk_-NauDW2ufvGThnkFU7Pok376pM6OEyYw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220509033238.GA9170@hu-pkondeti-hyd.qualcomm.com>
+In-Reply-To: <CAMuHMdUpOiHHMktPk_-NauDW2ufvGThnkFU7Pok376pM6OEyYw@mail.gmail.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
@@ -46,73 +49,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 09, 2022 at 09:02:38AM +0530, Pavan Kondeti wrote:
-> On Fri, May 06, 2022 at 04:30:33PM -0400, Alan Stern wrote:
-> > On Fri, May 06, 2022 at 11:46:06AM -0700, Matthias Kaehlcke wrote:
-> > > Currently the core/PHYs are always powered off during suspend in host mode:
-> > > 
-> > > static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > {
-> > > 	...
-> > > 
-> > > 	switch (dwc->current_dr_role) {
-> > > 	case DWC3_GCTL_PRTCAP_HOST:
-> > > 		if (!PMSG_IS_AUTO(msg)) {
-> > > 			dwc3_core_exit(dwc);
-> > > 			break;
-> > > 		}
-> > > 
-> > > 	...
-> > > }
-> > > 
-> > > With that I would expect wakeup to be broken for all dwc3. I'm a bit confused
-> > > though, since dwc3-imx8mp.c seems to support wakeup and the driver landed
-> > > after the above patch ...
-> > > 
-> > > This series intends to change the above code to something like this:
-> > > 
-> > > 	if (!PMSG_IS_AUTO(msg)) {
-> > > 	       if (device_may_wakeup(dwc->dev) &&
-> > > 	                       device_wakeup_path(dwc->dev)) {
-> > > 	               dwc->phy_power_off = false;
-> > > 	       } else {
-> > > 	               dwc->phy_power_off = true;
-> > > 	               dwc3_core_exit(dwc);
-> > > 	       }
-> > > 	}
-> > 
-> > > i.e. the core/PHYs would only be powered down if wakeup is disabled or no
-> > > wakeup capable devices are connected. With that plug/unplug events still
-> > > wouldn't be detected.
-> > 
-> > Indeed.  Shouldn't the "&&" and "||"?  That is, don't you want to leave 
-> > the core and PHY powered if wakeup is enabled for the root hub or for 
-> > any devices beneath it?
-> > 
-> > It would be simpler to leave the core and PHY powered whenever wakeup is 
-> > enabled for the controller itself, regardless of the status of the root 
-> > hub and downstream devices.  Users might not like this so much if the 
-> > default setting is to enable wakeup for the controller always.  Still, 
-> > it's an easy solution.
-> > 
-> At this point it is not clear if all boards that has DWC3 controller can
-> support wakeup capability or not. Thats why we have introduced a wakeup device
-> tree property based on which we advertise our wakeup capability.
+On Mon, May 09, 2022 at 09:46:25AM +0200, Geert Uytterhoeven wrote:
+> > Geert:
+> >
+> > Can you test the patch below?  It ought to fix the problem (although it
 > 
-> device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node,
-> "wakeup-source"));
+> Thanks!
 > 
-> Hence the && condition to make sure that we support wakeup and our children
-> needs it.
+> root@h3-salvator-xs:~# ls -l /sys/bus/gadget/devices/
+> total 0
+> lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.0 ->
+> ../../../devices/platform/soc/e659c000.usb/gadget.0
+> lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.1 ->
+> ../../../devices/platform/soc/ee020000.usb/gadget.1
+> lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.2 ->
+> ../../../devices/platform/soc/e6590000.usb/gadget.2
+> 
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> 
+> LGTM, so
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Oh, I see.  I misread the code above, thinking that dwc->dev referred to 
-the root hub.  It doesn't; it refers to the controller.  Sorry for the 
-mistake.
+Thanks!
 
-BTW, if there's any trouble with getting device_wakeup_path() to work 
-the way you want, you could consider instead calling 
-usb_wakeup_enabled_descendants() on the root hub.  This function returns 
-a count of the number of wakeup-enabled USB devices at or below the 
-device you pass to it.
+> > might end up causing other problems down the line...)
+> 
+> Can you please elaborate? I'm not too familiar with UBS gadgets.
+
+I was concerned about the fact that changing the name of a file, 
+directory, or symbolic link in sysfs means changing a user API, and so 
+it might cause some existing programs to fail.  That would be a 
+regression.
+
+Perhaps the best way to work around the problem is to leave the name set 
+to "gadget" if the ID number is 0, while adding the ID number on to the 
+name if the value is > 0.  What do you think?
 
 Alan Stern
