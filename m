@@ -2,102 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3489851FCD1
-	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 14:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7323551FD5E
+	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 14:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234447AbiEIMcc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 May 2022 08:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
+        id S234910AbiEIMwB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 May 2022 08:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234513AbiEIMcb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 08:32:31 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CDD2725D1
-        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 05:28:36 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id w4so19186616wrg.12
-        for <linux-usb@vger.kernel.org>; Mon, 09 May 2022 05:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=oxwEnL8tYbpZa93pTl+04/zezbNDACZhddwdl89j/+juWscKypVaLXadWCeH/GMhPb
-         iq5W32P3VuG1D+IxSNtyeOqeDY6AAreVCq6kGRFQj7uKO0FuLB3vGaDDzHm75exwlFla
-         oJIUrYf5XsqxkiiMpEdh1Q9KM855CDl8xMBiD9pXNNoI+3+LKZnPfMXToiHiQ9UvtNm8
-         J+CfhpqXdKNS/1VpTsPLMAT5FYI6eArkZkIZ6b5HIay2BDbEeu21ILuzDiQZR/E/Rz6B
-         oF4AI1BDOjsjksMI/DqR6QB97HoJ2xs3CzUBcEE1+97Yggugcbn0TvzwJ7EjSC63gfEY
-         SQgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=Cnr+8GI95kvur8oqciJjd1ptbeX+Akn5hSuNn+nfc4suroo1b1y05r0/l5rvzOhbt6
-         1tQYd5I6E1fjEggX9C/YrvMKU8OWPO/PAVSeV6UCbK1+wuMeoVbxM9bjBlaPmBOgezOS
-         IZy7nArHbnOehbEpe9dXE7gQh4imGQOSnBjVBojhXs2oFc9oEUbr+hBayKob7wPkz23B
-         hMSut6pbIKO2TZxcTXNObISkh5x31Mb0D+lcn+IOEUjFuc9pNr3zcG+ofatC80YtcdiC
-         0o8YkQ+asOQFNX8eby1fG3E+yXBHTjKse6N8lWhf0f3Q9mePBTTc1XnLc1sjztC9FXQd
-         uBAw==
-X-Gm-Message-State: AOAM533+GYXGf6ak1DMzsDMuzg7m9FJoPYExkjsYOubpZiqtMhAKG9OM
-        YPk5ljjHenFJ2KVGK5QCkLG91NCcRM39JKI04Rs=
-X-Google-Smtp-Source: ABdhPJwq/Ls1ob1HQVAyK91/BvyAxSlSlPo5toShElpE3hNSmYJfXZ/287hQ4BZb+eqX1BL1fSihPscEAHAhmrVA00Q=
-X-Received: by 2002:a5d:6d04:0:b0:20c:52de:9ce4 with SMTP id
- e4-20020a5d6d04000000b0020c52de9ce4mr14514237wrq.572.1652099314841; Mon, 09
- May 2022 05:28:34 -0700 (PDT)
+        with ESMTP id S234884AbiEIMwA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 08:52:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AF62A374C
+        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 05:48:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9709061381
+        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 12:48:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89CA4C385AB;
+        Mon,  9 May 2022 12:48:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652100486;
+        bh=IZZeOeTtaC1GMYef/o3FJgyucWuTJ+ZYcjVNnN/7DwQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VVoCBcoi/mLfiYW1V/aBIwrh2ZqcJKGL2FyZtHLJIhixHXW+ECWhNXRhCX0UPJUQU
+         CAfW7BtsUw5rGRp3VPw/hOVSRfuYpIp1nAwvRZ1ylwAT1OSjkNJFQMBM/64573kS/B
+         TgZa98wib2j6kvOA2S7noHvK7tqXKnBsL2QegKL4=
+Date:   Mon, 9 May 2022 14:48:02 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     linux-usb@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>
+Subject: Re: [PATCH v3 1/4] usb: gadget: f_mass_storage: fix warning of
+ -Werror=unused-but-set-variable
+Message-ID: <YnkNgqNBlYkKJNtg@kroah.com>
+References: <1652097288-19909-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1652097288-19909-2-git-send-email-quic_linyyuan@quicinc.com>
 MIME-Version: 1.0
-Received: by 2002:a5d:6409:0:0:0:0:0 with HTTP; Mon, 9 May 2022 05:28:33 -0700 (PDT)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <khanadbul01@gmail.com>
-Date:   Mon, 9 May 2022 05:28:33 -0700
-Message-ID: <CALr78wWw=o8tKQxWT0f3NTWUiUDKuiYgVNW0s2CputB4_Fqwmg@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:42c listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4899]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dravasmith27[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [khanadbul01[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [khanadbul01[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1652097288-19909-2-git-send-email-quic_linyyuan@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+On Mon, May 09, 2022 at 07:54:45PM +0800, Linyu Yuan wrote:
+> When add gcc W=1 compile flag, it report following error,
+> In function 'invalidate_sub':
+> error: variable 'rc' set but not used [-Werror=unused-but-set-variable],
+> 
+> Add a __maybe_unused property.
+> 
+> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> ---
+> v3: new add
+> 
+>  drivers/usb/gadget/function/f_mass_storage.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+> index 3a77bca..a688538 100644
+> --- a/drivers/usb/gadget/function/f_mass_storage.c
+> +++ b/drivers/usb/gadget/function/f_mass_storage.c
+> @@ -926,7 +926,7 @@ static void invalidate_sub(struct fsg_lun *curlun)
+>  {
+>  	struct file	*filp = curlun->filp;
+>  	struct inode	*inode = file_inode(filp);
+> -	unsigned long	rc;
+> +	unsigned long	__maybe_unused rc;
+
+That is almost never the correct solution here, sorry.  Fix this up
+properly.
+
+And W=1 really is not a valid thing to care about, right?
+
+thanks,
+
+>  	rc = invalidate_mapping_pages(inode->i_mapping, 0, -1);
+
+Why not properly handle the error?
+
+thanks,
+
+greg k-h
