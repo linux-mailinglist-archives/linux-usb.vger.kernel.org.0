@@ -2,54 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA9352060F
-	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 22:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDDF52072F
+	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 23:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiEIUnh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 May 2022 16:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
+        id S231489AbiEIV7L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 May 2022 17:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiEIUnc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 16:43:32 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6E4285AE7
-        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 13:39:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652128777; x=1683664777;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=aj8OXXl8wbmEI/H4les34JnK8XHXh5KHzkg5YxKs5Uo=;
-  b=AaKyrXznaOq7bGVByNgf6cVj1ViURSC4ILlBcHmF0GQUtH0DSu/nL1CM
-   x2m7Kl9X2SyOyiZOiGqnZCa8AcW+qxnQH0bg7lGuqLVyyb9Sos9XJwf+Y
-   s7s9bzVPp6g/g5s268uIid6uPhXZ1eCuNN7P4mq8t7YnfWJu5pNozrFtR
-   ahzmqnDAgqAjo6MIYeZmv8xwZdBrAWrXGqoTxyIe3d/tQM89dAtgk09YR
-   APgrQiyCq+1v2Xx5y1YPINBKAdutgbYS+iHBVNLW8e80PsDONHcBJifXQ
-   41tAwLzxAidMRV1kB6RFxR9dgjVC1XXGKZkXhxIhEL6EDQvJlkEiWbMoQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="269301524"
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="269301524"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 13:39:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="738339152"
-Received: from ccdjpclinux26.jer.intel.com ([10.12.48.253])
-  by orsmga005.jf.intel.com with ESMTP; 09 May 2022 13:39:35 -0700
-From:   Gil Fine <gil.fine@intel.com>
-To:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     gil.fine@intel.com, linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: [PATCH 2/2] thunderbolt: Add KUnit test for buffer allocation for device without DisplayPort adaptors
-Date:   Mon,  9 May 2022 23:49:04 +0300
-Message-Id: <20220509204904.8936-3-gil.fine@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220509204904.8936-1-gil.fine@intel.com>
-References: <20220509204904.8936-1-gil.fine@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S231331AbiEIV66 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 17:58:58 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010142D9EEB
+        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 14:51:43 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2f7d621d1caso159832187b3.11
+        for <linux-usb@vger.kernel.org>; Mon, 09 May 2022 14:51:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AvO3ygd/UqQBdhP/KL3f8qnTPDYPqb0azYvzR8YOfT8=;
+        b=R3Bl52ygNd7YCtVGI1Dw5zkcyKwpLE8CGq7E2JVCvhEmmiwnJ4wmVpVM4hlSvlECuc
+         OQDjh4PbkC9KiRGsYt0AXq17RBizWsfzpjBDi44Q8JKJVglwWIHC0BYVTNq/nQC/gYia
+         I4x5J+hUljknRIc8rVa8KUkLegjNrIQsTA4RjmG7enjhjU7pf9lmdlt0hY4Xx2xd7Eud
+         CbDnUZubySlms7d+G+FN3irKBt4FdgSC6BgxnsVCA3QRtieNX4s3giofwSk9qxOPcB/H
+         bqwRhSvS+2yebAoixhhQ2quEtBR3/WErNLr/69uUN0Bm818iDpAErl2YPNBfXBbMM2zy
+         eOIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AvO3ygd/UqQBdhP/KL3f8qnTPDYPqb0azYvzR8YOfT8=;
+        b=stMohJOlypJ4whMml0eRoW2rsrm5tGCOLaXNalETPmAxFEI8BywIuexdrMO62/RuyL
+         rePBLSUJfQvscAXTavQ4XoCcFkTA8mWVTAaI0tlNp6kWc6q39neoiBzhenztgwVST7p4
+         OYSuG5fSo5LXFPFMaWgrxVzIH70+jMLvgRwtTgajxCFOQ6P/b3m6r07Zjnz5EckDuj4l
+         geKpWtNNNREgjq6TJX73KgK9Ex88ujRPhsllI1to7R6/xtDXiEPUvMeEVzyRBHeJ+iLl
+         O7rdDrD9d05zDjcbXomZv6M+bt0/tcU7GfQt+A4AoKsLlPrzjvvg7/jhiNOcFyDAlBnH
+         d7RQ==
+X-Gm-Message-State: AOAM530djSvsT5hJipdDph8fLD7f5OTcdc2nRLpx3U+awpVOd+9ISEWK
+        o7iAExlRtGdSSJUQbwIFZl2jzJbFwUoeDXYId4amSQ==
+X-Google-Smtp-Source: ABdhPJz66qKQ182cMfzUcfRuUB+ezFafeLeHufnODn96xLMf/SFpFj0VGuEdSlO2r018rYSvQhdo92Derlajd83ax3s=
+X-Received: by 2002:a0d:e5c6:0:b0:2f8:c866:7af9 with SMTP id
+ o189-20020a0de5c6000000b002f8c8667af9mr16673482ywe.268.1652133101967; Mon, 09
+ May 2022 14:51:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220421074204.1284072-1-hch@lst.de> <CACRpkdbdKBfmXGdyTm3T-MFAK30N-z4KH0k8eD8F7xaYUbDDhA@mail.gmail.com>
+ <Ynk2wjRyH05uEJiO@shell.armlinux.org.uk>
+In-Reply-To: <Ynk2wjRyH05uEJiO@shell.armlinux.org.uk>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 9 May 2022 23:51:29 +0200
+Message-ID: <CACRpkdYVrPt_GHt19pT2BQZJ08QrS87XfvU-aWVibzP2qBSV2g@mail.gmail.com>
+Subject: Re: fully convert arm to use dma-direct
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Christoph Hellwig <hch@lst.de>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,138 +78,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Here we add KUnit test to test the buffer allocation for device without DP adaptors.
+On Mon, May 9, 2022 at 5:44 PM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
 
-Signed-off-by: Gil Fine <gil.fine@intel.com>
----
- drivers/thunderbolt/test.c | 92 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 92 insertions(+)
+> Assabet is what needs testing for that, or one of the SA1110 machines.
+> I'm away from home on my boat (and have been for the last two and a bit
+> weeks) so can't test. Sorry.
 
-diff --git a/drivers/thunderbolt/test.c b/drivers/thunderbolt/test.c
-index 66b6e665e96f..99b30f2624fc 100644
---- a/drivers/thunderbolt/test.c
-+++ b/drivers/thunderbolt/test.c
-@@ -341,6 +341,47 @@ static struct tb_switch *alloc_dev_with_dpin(struct kunit *test,
- 	return sw;
- }
- 
-+static struct tb_switch *alloc_dev_without_dp(struct kunit *test,
-+					      struct tb_switch *parent,
-+					      u64 route, bool bonded)
-+{
-+	struct tb_switch *sw;
-+	int i;
-+
-+	sw = alloc_dev_default(test, parent, route, bonded);
-+	if (!sw)
-+		return NULL;
-+	/*
-+	 * Device with:
-+	 * 2x USB4 Adapters (adapters 1,2 and 3,4),
-+	 * 1x PCIe Upstream (adapter 9),
-+	 * 1x PCIe Downstream (adapter 10),
-+	 * 1x USB3 Upstream (adapter 16),
-+	 * 1x USB3 Downstream (adapter 17)
-+	 */
-+	for (i = 5; i <= 8; i++)
-+		sw->ports[i].disabled = true;
-+
-+	for (i = 11; i <= 14; i++)
-+		sw->ports[i].disabled = true;
-+
-+	sw->ports[13].cap_adap = 0;
-+	sw->ports[14].cap_adap = 0;
-+
-+	for (i = 18; i <= 19; i++)
-+		sw->ports[i].disabled = true;
-+
-+	sw->generation = 4;
-+	sw->credit_allocation = true;
-+	sw->max_usb3_credits = 109;
-+	sw->min_dp_aux_credits = 0;
-+	sw->min_dp_main_credits = 0;
-+	sw->max_pcie_credits = 30;
-+	sw->max_dma_credits = 1;
-+
-+	return sw;
-+}
-+
- static struct tb_switch *alloc_dev_usb4(struct kunit *test,
- 					struct tb_switch *parent,
- 					u64 route, bool bonded)
-@@ -1996,6 +2037,56 @@ static void tb_test_credit_alloc_pcie(struct kunit *test)
- 	tb_tunnel_free(tunnel);
- }
- 
-+static void tb_test_credit_alloc_without_dp(struct kunit *test)
-+{
-+	struct tb_switch *host, *dev;
-+	struct tb_port *up, *down;
-+	struct tb_tunnel *tunnel;
-+	struct tb_path *path;
-+
-+	host = alloc_host_usb4(test);
-+	dev = alloc_dev_without_dp(test, host, 0x1, true);
-+
-+	/*
-+	 * The device has no DP therefore baMinDPmain = baMinDPaux = 0
-+	 *
-+	 * Create PCIe path with buffers less than baMaxPCIe.
-+	 *
-+	 * For a device with buffers configurations:
-+	 * baMaxUSB3 = 109
-+	 * baMinDPaux = 0
-+	 * baMinDPmain = 0
-+	 * baMaxPCIe = 30
-+	 * baMaxHI = 1
-+	 * Remaining Buffers = Total - (CP + DP) = 120 - (2 + 0) = 118
-+	 * PCIe Credits = Max(6, Min(baMaxPCIe, Remaining Buffers - baMaxUSB3)
-+	 *		= Max(6, Min(30, 9) = 9
-+	 */
-+	down = &host->ports[8];
-+	up = &dev->ports[9];
-+	tunnel = tb_tunnel_alloc_pci(NULL, up, down);
-+	KUNIT_ASSERT_TRUE(test, tunnel != NULL);
-+	KUNIT_ASSERT_EQ(test, tunnel->npaths, (size_t)2);
-+
-+	/* PCIe downstream path */
-+	path = tunnel->paths[0];
-+	KUNIT_ASSERT_EQ(test, path->path_length, 2);
-+	KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 0U);
-+	KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 7U);
-+	KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 0U);
-+	KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 9U);
-+
-+	/* PCIe upstream path */
-+	path = tunnel->paths[1];
-+	KUNIT_ASSERT_EQ(test, path->path_length, 2);
-+	KUNIT_EXPECT_EQ(test, path->hops[0].nfc_credits, 0U);
-+	KUNIT_EXPECT_EQ(test, path->hops[0].initial_credits, 7U);
-+	KUNIT_EXPECT_EQ(test, path->hops[1].nfc_credits, 0U);
-+	KUNIT_EXPECT_EQ(test, path->hops[1].initial_credits, 64U);
-+
-+	tb_tunnel_free(tunnel);
-+}
-+
- static void tb_test_credit_alloc_dp(struct kunit *test)
- {
- 	struct tb_switch *host, *dev;
-@@ -2709,6 +2800,7 @@ static struct kunit_case tb_test_cases[] = {
- 	KUNIT_CASE(tb_test_credit_alloc_legacy_not_bonded),
- 	KUNIT_CASE(tb_test_credit_alloc_legacy_bonded),
- 	KUNIT_CASE(tb_test_credit_alloc_pcie),
-+	KUNIT_CASE(tb_test_credit_alloc_without_dp),
- 	KUNIT_CASE(tb_test_credit_alloc_dp),
- 	KUNIT_CASE(tb_test_credit_alloc_usb3),
- 	KUNIT_CASE(tb_test_credit_alloc_dma),
--- 
-2.17.1
+Hm I actually have an Assabet, but I never even powered it up. I'm
+on parental leave for another week but after that I could actually
+try to get that machine up, but it'd be a bit late for this merge window
+indeed.
 
----------------------------------------------------------------------
-Intel Israel (74) Limited
-
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
-
+BR
+Linus Walleij
