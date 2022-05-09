@@ -2,51 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A6C5205BE
-	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 22:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A08520607
+	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 22:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiEIUYz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 May 2022 16:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
+        id S229699AbiEIUnW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 May 2022 16:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiEIUYg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 16:24:36 -0400
+        with ESMTP id S229499AbiEIUnV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 16:43:21 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03AE24DC53
-        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 13:07:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F661E0588
+        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 13:39:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652126867; x=1683662867;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=tJ5iWQ6NMhVxpk1xivim5DEY7YBLb9RD8AZG6WZfYEA=;
-  b=iLLN4C4IESGCSjqidtM5RdjU2cMOLWj2HXT1uHZh93OpGixGUPHJJAbb
-   dbjD+YmL0bm3RwHdoNA/T3MifryboD1JbFdIRbKXpkrkqjfu+wMi/LB5x
-   3ooJQrFhjqBTZQ4Y/lJFJUrNFiXsw0dXGlyCzx89P5RLgefM1WhHTczVQ
-   8h2naE+FdWhIJzY0clz6oz8wM1LBJObhrbxFal7YlxyCxZfGGNM6O53eJ
-   Ug+NUXMuhKqnszQbxQQwDM9wSxUgdfQOcb0Q8SdAGxGN7tYO2eoAfdw1q
-   cX53aXmDN2ui/t0kQRgJ3pixbxlAKZAVpkMx5eiinG+HOHsGrkp+EKdgj
+  t=1652128767; x=1683664767;
+  h=from:to:cc:subject:date:message-id;
+  bh=P4aU4HhEZ0WkGmE7zRNvDsiu8O63lxVkzR+rkokn7hM=;
+  b=FrriinD0aI6F+95X1s6pzCrZda5gIC9Lw9i2irCPLVGE4AbX1Fh07lg4
+   l/TsMUA/WRbHpPUO4vFmTZAZXebFtB19cZ5ldFeDl/EqWpdwFgW0BZUfm
+   W04NC2B+b4NtFWdpob8oxafiXaa3rzilGFuMJKGXz3F8/Be0EcTHnp1Un
+   myUA0ZPN7QaHTVvuxfRFobiQ2TvTFX3Ro6l/AmHe8WIe1Q128grMlKfLg
+   FtIUns/yvTyvdEnbLEFAjhtyPmq3/aGpo5bagD3xmN9jWP/7WUQCc9xm9
+   FyY6aUisQ+uCCmbAT0VuHtIWHn8vU1GgRwoJ4pq0XKkIOvI59/yaSK+Y8
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="249692955"
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="249699653"
 X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="249692955"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 13:07:47 -0700
+   d="scan'208";a="249699653"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 13:39:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="710688914"
+   d="scan'208";a="738339121"
 Received: from ccdjpclinux26.jer.intel.com ([10.12.48.253])
-  by fmsmga001.fm.intel.com with ESMTP; 09 May 2022 13:07:45 -0700
+  by orsmga005.jf.intel.com with ESMTP; 09 May 2022 13:39:24 -0700
 From:   Gil Fine <gil.fine@intel.com>
 To:     andreas.noever@gmail.com, michael.jamet@intel.com,
         mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
 Cc:     gil.fine@intel.com, linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: [PATCH 6/6] thunderbolt: Change TMU mode to HiFi uni-directional once DisplayPort tunneled
-Date:   Mon,  9 May 2022 23:16:56 +0300
-Message-Id: <20220509201656.502-7-gil.fine@intel.com>
+Subject: [PATCH 0/2] thunderbolt: Fix buffers allocation for device without DisplayPort adaptors
+Date:   Mon,  9 May 2022 23:49:02 +0300
+Message-Id: <20220509204904.8936-1-gil.fine@intel.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220509201656.502-1-gil.fine@intel.com>
-References: <20220509201656.502-1-gil.fine@intel.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,128 +54,20 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Here we configure TMU mode to HiFi uni-directional once DP tunnel
-is created. This is due to accuracy requirement for DP tunneling
-as appears in CM guide 1.0, section 7.3.2.
-Due to Intel hardware limitation, once we changed the TMU mode to HiFi
-uni-directional (when DP tunnel exists), we don't change TMU mode back to
-normal uni-directional, even if DP tunnel is torn down later.
+For the case of device without DP adaptors, we calculate incorrectly the
+buffers allocation. Here we fix the calculation for this case.
+In addition, we add a KUnit test for this case.
 
-Signed-off-by: Gil Fine <gil.fine@intel.com>
----
- drivers/thunderbolt/tb.c  | 28 ++++++++++++++++++++++++++++
- drivers/thunderbolt/tb.h  |  5 +++++
- drivers/thunderbolt/tmu.c | 14 ++++++++++++++
- 3 files changed, 47 insertions(+)
+Gil Fine (2):
+  thunderbolt: Fix buffers allocation for device without DisplayPort
+    adaptors
+  thunderbolt: Add KUnit test for buffer allocation for device without
+    DisplayPort adaptors
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 4f74789dd1be..bedabc407ab2 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -50,6 +50,8 @@ struct tb_hotplug_event {
- };
- 
- static void tb_handle_hotplug(struct work_struct *work);
-+static void tb_enable_tmu_1st_child(struct tb *tb,
-+				    enum tb_switch_tmu_rate rate);
- 
- static void tb_queue_hotplug(struct tb *tb, u64 route, u8 port, bool unplug)
- {
-@@ -118,6 +120,13 @@ static void tb_switch_discover_tunnels(struct tb_switch *sw,
- 		switch (port->config.type) {
- 		case TB_TYPE_DP_HDMI_IN:
- 			tunnel = tb_tunnel_discover_dp(tb, port, alloc_hopids);
-+			/*
-+			 * In case of DP tunnel exists, change TMU mode to
-+			 * HiFi for CL0s to work.
-+			 */
-+			if (tunnel)
-+				tb_enable_tmu_1st_child(tb,
-+						TB_SWITCH_TMU_RATE_HIFI);
- 			break;
- 
- 		case TB_TYPE_PCIE_DOWN:
-@@ -235,6 +244,19 @@ static int tb_enable_tmu(struct tb_switch *sw)
- 	return tb_switch_tmu_enable(sw);
- }
- 
-+/*
-+ * Once a DP tunnel exists in the domain, we set the TMU mode so that
-+ * it meets the accuracy requirements and also enables CLx entry (CL0s).
-+ * We set the TMU mode of the first depth router(s) for CL0s to work.
-+ */
-+static void tb_enable_tmu_1st_child(struct tb *tb, enum tb_switch_tmu_rate rate)
-+{
-+	struct tb_sw_tmu_config tmu = { .rate = rate };
-+
-+	device_for_each_child(&tb->root_switch->dev, &tmu,
-+			      tb_switch_tmu_config_enable);
-+}
-+
- /**
-  * tb_find_unused_port() - return the first inactive port on @sw
-  * @sw: Switch to find the port on
-@@ -985,6 +1007,12 @@ static void tb_tunnel_dp(struct tb *tb)
- 
- 	list_add_tail(&tunnel->list, &tcm->tunnel_list);
- 	tb_reclaim_usb3_bandwidth(tb, in, out);
-+	/*
-+	 * In case of DP tunnel exists, change TMU mode to
-+	 * HiFi for CL0s to work.
-+	 */
-+	tb_enable_tmu_1st_child(tb, TB_SWITCH_TMU_RATE_HIFI);
-+
- 	return;
- 
- err_free:
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index a16fffba9dd2..3dbd9d919d5f 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -110,6 +110,10 @@ struct tb_switch_tmu {
- 	enum tb_switch_tmu_rate rate_request;
- };
- 
-+struct tb_sw_tmu_config {
-+	enum tb_switch_tmu_rate rate;
-+};
-+
- enum tb_clx {
- 	TB_CLX_DISABLE,
- 	/* CL0s and CL1 are enabled and supported together */
-@@ -934,6 +938,7 @@ int tb_switch_tmu_enable(struct tb_switch *sw);
- void tb_switch_tmu_configure(struct tb_switch *sw,
- 			     enum tb_switch_tmu_rate rate,
- 			     bool unidirectional);
-+int tb_switch_tmu_config_enable(struct device *dev, void *data);
- /**
-  * tb_switch_tmu_is_enabled() - Checks if the specified TMU mode is enabled
-  * @sw: Router whose TMU mode to check
-diff --git a/drivers/thunderbolt/tmu.c b/drivers/thunderbolt/tmu.c
-index e822ab90338b..b8ff9f64a71e 100644
---- a/drivers/thunderbolt/tmu.c
-+++ b/drivers/thunderbolt/tmu.c
-@@ -727,6 +727,20 @@ int tb_switch_tmu_enable(struct tb_switch *sw)
- 	return tb_switch_tmu_set_time_disruption(sw, false);
- }
- 
-+int tb_switch_tmu_config_enable(struct device *dev, void *data)
-+{
-+	if (tb_is_switch(dev)) {
-+		struct tb_switch *sw = tb_to_switch(dev);
-+		struct tb_sw_tmu_config *tmu = data;
-+
-+		tb_switch_tmu_configure(sw, tmu->rate, tb_switch_is_clx_enabled(sw, TB_CL1));
-+		if (tb_switch_tmu_enable(sw))
-+			tb_sw_dbg(sw, "Fail switching TMU to HiFi for 1st depth router\n");
-+	}
-+
-+	return 0;
-+}
-+
- /**
-  * tb_switch_tmu_configure() - Configure the TMU rate and directionality
-  * @sw: Router whose mode to change
+ drivers/thunderbolt/test.c   | 92 ++++++++++++++++++++++++++++++++++++
+ drivers/thunderbolt/tunnel.c |  7 ++-
+ 2 files changed, 97 insertions(+), 2 deletions(-)
+
 -- 
 2.17.1
 
