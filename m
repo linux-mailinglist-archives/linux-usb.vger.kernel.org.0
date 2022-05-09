@@ -2,150 +2,460 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C42751FA5D
-	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 12:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D7351FA91
+	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 12:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiEIKvR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 May 2022 06:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
+        id S231475AbiEIK5f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 May 2022 06:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbiEIKur (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 06:50:47 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2F12229CB
-        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 03:46:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652093164; x=1683629164;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fGy4BHaibkEWIiCQTkP5rqs5MJxFAxQjwU/NNrJdp0I=;
-  b=O+VN/6qh8kpBQNoUxRPqkxPd4fsPqlZ5Mlw/ExswlF8LCWp/Ljk61xY1
-   1jGX7FQ2Szw7Cxsqrzc3/D7d+uIno7pyqqxeeoKGxSlssR1phpFmELMWO
-   nPc4H1joNL3IX5rxYDAhV7FhegUFfm8H+jAbYweugsCZ44MuiK5x6ppBe
-   cAtsUTazP+I2TD1fCeIEBHjhfSarLk8faWKRbsx9Fad0xNSy2cFzHujDH
-   ESvpGS7GHn8y/ZcZNXRph53ooT3cBsFI+HnrPookX7LFeqGL6LSVrIBfw
-   KhZiK1uNxPzq8WRKY8Req7a+OwJPFXNjCDVSKgTLgUX+Zu5+eGEkA6DNq
+        with ESMTP id S231451AbiEIK5a (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 06:57:30 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B0B1D5739
+        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 03:53:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1652093615; x=1683629615;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=A3194mi1GV+YG66HDRkh7GUfgk1ts6DfZLKUeb0FEhQ=;
+  b=k7mQ8GZ8/Zxp2QWWqA0JZL+F9ZkqIFi/N9YXlrdGgarIN84+sMtp/etz
+   KrXGU7gWCLEQ6yTKLFcLzN2EHyF3X25Uiqb+mh6FxHgj+PfJafYgIle1K
+   N0498+0WEob1EsTj4t9UCfrim2lgITFJf8r9iQLYcQsvgPRlYoTC0c2xP
+   1HH5/5R/cVwD0kMuLj6m0oS+7p7qzwMQGMqFPGPwCTLQO2YzNAktsYmG2
+   U7JX9W9jAz+FG/XSCEqUO5h9K+9dcfZyCSC7MLpjOGoGwLh/G8Coh9vfw
+   pW6JDWBPIo+ajKNTZfuB4Jz+RwZKu1F/IA5Dt1EmsL+1+CVjyOkZ+eeUi
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.91,211,1647298800"; 
+   d="scan'208";a="23751530"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 09 May 2022 12:53:32 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 09 May 2022 12:53:32 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 09 May 2022 12:53:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1652093612; x=1683629612;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=A3194mi1GV+YG66HDRkh7GUfgk1ts6DfZLKUeb0FEhQ=;
+  b=nnJ1ZBhdQ8PbBKlHJ04avQMBy07AnjNV6UrjK4Q24f1fUO76d2DPCvuD
+   wJs2enDDSkFcb31RTMgswrZUqpy0S96KCICpXau4HoaTKtjJN1JaQiuit
+   QxzDqrflREk8I1BaqCSmh/clrVaOmj49VuVBgLfWJedK+7PTZX1eLqzFQ
+   CMgaFvLPQTrYVLVVu1sKsZg/24jOm/2F0LBOPGmC47ZHUzpjA3ro2PAaF
+   c1mo9ZKlD0AWvH3xtACA4tCZHtsxYSc1NBv5dv+20bO7qCN6/XwFlKton
+   LbTw5lumrZSJ8vmsIi5jalzFdRlqrgMFdFx0QpbwKvIBxVM5fwD4OXCT0
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="294236131"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="294236131"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 03:46:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="696410822"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 09 May 2022 03:45:58 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1no0tp-000GQu-Ra;
-        Mon, 09 May 2022 10:45:57 +0000
-Date:   Mon, 9 May 2022 18:45:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: Re: [PATCH v2] usb: gadget: update DECLARE_USB_FUNCTION(_INIT) macro
-Message-ID: <202205091809.29x90X9b-lkp@intel.com>
-References: <1652077685-30622-1-git-send-email-quic_linyyuan@quicinc.com>
+X-IronPort-AV: E=Sophos;i="5.91,211,1647298800"; 
+   d="scan'208";a="23751529"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 09 May 2022 12:53:31 +0200
+Received: from steina-w.localnet (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id DDED9280070;
+        Mon,  9 May 2022 12:53:30 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Peter Chen <peter.chen@kernel.org>, Jun Li <jun.li@nxp.com>
+Cc:     Peter Chen <hzpeterchen@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: (EXT) RE: (EXT) RE: (EXT) RE: (EXT) Re: [RFC 1/1] usb: chipidea: ci_hdrc_imx: disable runtime pm for HSIC interface
+Date:   Mon, 09 May 2022 12:53:30 +0200
+Message-ID: <1793103.atdPhlSkOF@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <PA4PR04MB96402FC5407EE75EE77D27BF89C69@PA4PR04MB9640.eurprd04.prod.outlook.com>
+References: <20220302094239.3075014-1-alexander.stein@ew.tq-group.com> <1792784.atdPhlSkOF@steina-w> <PA4PR04MB96402FC5407EE75EE77D27BF89C69@PA4PR04MB9640.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652077685-30622-1-git-send-email-quic_linyyuan@quicinc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URI_HEX autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Linyu,
+Am Montag, 9. Mai 2022, 10:16:44 CEST schrieb Jun Li:
+> > -----Original Message-----
+> > From: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > Sent: Friday, May 6, 2022 3:38 PM
+> > To: Peter Chen <peter.chen@kernel.org>; Jun Li <jun.li@nxp.com>
+> > Cc: Peter Chen <hzpeterchen@gmail.com>; Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org>; Shawn Guo <shawnguo@kernel.org>; Sascha
+> > Hauer <s.hauer@pengutronix.de>; Fabio Estevam <festevam@gmail.com>;
+> > Pengutronix Kernel Team <kernel@pengutronix.de>; dl-linux-imx
+> > <linux-imx@nxp.com>; USB list <linux-usb@vger.kernel.org>;
+> > linux-arm-kernel@lists.infradead.org
+> > Subject: Re: (EXT) RE: (EXT) RE: (EXT) Re: [RFC 1/1] usb: chipidea:
+> > ci_hdrc_imx: disable runtime pm for HSIC interface
+> >=20
+> > Am Freitag, 6. Mai 2022, 09:09:22 CEST schrieb Jun Li:
+> > > > -----Original Message-----
+> > > > From: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > > Sent: Wednesday, May 4, 2022 3:06 PM
+> > > > To: Peter Chen <peter.chen@kernel.org>; Jun Li <jun.li@nxp.com>
+> > > > Cc: Peter Chen <hzpeterchen@gmail.com>; Greg Kroah-Hartman
+> > > > <gregkh@linuxfoundation.org>; Shawn Guo <shawnguo@kernel.org>;
+> > > > Sascha Hauer <s.hauer@pengutronix.de>; Fabio Estevam
+> > > > <festevam@gmail.com>; Pengutronix Kernel Team
+> > > > <kernel@pengutronix.de>; dl-linux-imx <linux-imx@nxp.com>; USB list
+> > > > <linux-usb@vger.kernel.org>; linux-arm-kernel@lists.infradead.org
+> > > > Subject: Re: (EXT) RE: (EXT) Re: [RFC 1/1] usb: chipidea: ci_hdrc_i=
+mx:
+> > > > disable runtime pm for HSIC interface
+> > > >=20
+> > > > Helllo,
+> > > >=20
+> > > > Am Dienstag, 12. April 2022, 13:36:55 CEST schrieb Jun Li:
+> > > > > > -----Original Message-----
+> > > > > > From: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > > > > Sent: Monday, April 11, 2022 9:52 PM
+> > > > > > To: Peter Chen <peter.chen@kernel.org>; Jun Li <jun.li@nxp.com>
+> > > > > > Cc: Peter Chen <hzpeterchen@gmail.com>; Greg Kroah-Hartman
+> > > > > > <gregkh@linuxfoundation.org>; Shawn Guo <shawnguo@kernel.org>;
+> > > > > > Sascha Hauer <s.hauer@pengutronix.de>; Fabio Estevam
+> > > > > > <festevam@gmail.com>; Pengutronix Kernel Team
+> > > > > > <kernel@pengutronix.de>; dl-linux-imx <linux-imx@nxp.com>; USB
+> > > > > > list <linux-usb@vger.kernel.org>;
+> > > > > > linux-arm-kernel@lists.infradead.org
+> > > > > > Subject: Re: (EXT) RE: (EXT) Re: [RFC 1/1] usb: chipidea:
+> > > > > > ci_hdrc_imx:
+> > > > > > disable runtime pm for HSIC interface
+> > > > > >=20
+> > > > > > Hi,
+> > > > > >=20
+> > > > > > Am Samstag, 9. April 2022, 06:49:54 CEST schrieb Jun Li:
+> > > > > > > > -----Original Message-----
+> > > > > > > > From: Peter Chen <peter.chen@kernel.org>
+> > > > > > > > Sent: Saturday, April 9, 2022 10:20 AM
+> > > > > > > > To: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > > > > > > Cc: Peter Chen <hzpeterchen@gmail.com>; Greg Kroah-Hartman
+> > > > > > > > <gregkh@linuxfoundation.org>; Shawn Guo
+> > > > > > > > <shawnguo@kernel.org>; Sascha Hauer
+> > > > > > > > <s.hauer@pengutronix.de>; Fabio Estevam
+> > > > > > > > <festevam@gmail.com>; Pengutronix Kernel Team
+> > > > > > > > <kernel@pengutronix.de>; dl-linux-imx <linux-imx@nxp.com>;
+> > > > > > > > USB list <linux-usb@vger.kernel.org>;
+> > > > > > > > linux-arm-kernel@lists.infradead.org
+> > > > > > > > Subject: Re: (EXT) Re: [RFC 1/1] usb: chipidea: ci_hdrc_imx:
+> > > > > > > > disable runtime pm for HSIC interface
+> > > > > > > >=20
+> > > > > > > > On 22-03-29 10:14:36, Alexander Stein wrote:
+> > > > > > > > > Hello Peter,
+> > > > > > > > >=20
+> > > > > > > > > Am Dienstag, 15. M=E4rz 2022, 02:23:23 CEST schrieb Peter=
+=20
+Chen:
+> > > > > > > > > > On Wed, Mar 2, 2022 at 5:42 PM Alexander Stein
+> > > > > > > > > >=20
+> > > > > > > > > > <alexander.stein@ew.tq-group.com> wrote:
+> > > > > > > > > > > With the add of power-domain support in commit
+> > > > > > > > > > > 02f8eb40ef7b
+> > > >=20
+> > > > ("ARM:
+> > > > > > > > dts:
+> > > > > > > > > > > imx7s: Add power domain for imx7d HSIC") runtime
+> > > > > > > > > > > suspend will disable the power-domain. This prevents
+> > > > > > > > > > > IRQs to occur when a new device is attached on a
+> > > > > > > > > > > downstream
+> >=20
+> > hub.
+> >=20
+> > > > > > > > > > > Signed-off-by: Alexander Stein
+> > > > > > > > > > > <alexander.stein@ew.tq-group.com>
+> > > > > > > > > > > ---
+> > > > > > > > > > > Our board TQMa7x + MBa7x (i.MX7 based) uses a HSIC
+> > > > > > > > > > > link to mounted
+> > > > > > > >=20
+> > > > > > > > USB HUB
+> > > > > > > >=20
+> > > > > > > > > > > on usbh device. Cold plugging an USB mass storage
+> > > > > > > > > > > device is working
+> > > > > > > >=20
+> > > > > > > > fine.
+> > > > > > > >=20
+> > > > > > > > > > > But once the last non-HUB device is disconnected the
+> > > > > > > > > > > ci_hdrc device
+> > > > > > > >=20
+> > > > > > > > goes
+> > > > > > > >=20
+> > > > > > > > > > > into runtime suspend.
+> > > > > > > > > >=20
+> > > > > > > > > > Would you please show the difference between cold boot
+> > > > > > > > > > and runtime suspend after disconnecting the last USB
+> > > > > > > > > > device?
+> > > > > > > > > >=20
+> > > > > > > > > > - Power domain on/off status for HUB device
+> > > > > > > > > > - Runtime suspend status at /sys entry for HUB device
+> > > > > > > > > > - "/sys/..power/wakeup" /sys entry  for HUB device
+> > > > > > > > >=20
+> > > > > > > > > I hope I got all entries you requested.
+> > > > > > > > >=20
+> > > > > > > > > For reference this is the bus topology:
+> > > > > > > > > lsusb -t
+> > > > > > > > > /:  Bus 02.Port 1: Dev 1, Class=3Droot_hub,
+> > > > > > > > > Driver=3Dci_hdrc/1p, 480M
+> > > > > > > > > /:  Bus 01.Port 1: Dev 1, Class=3Droot_hub,
+> > > > > > > > > Driver=3Dci_hdrc/1p, 480M
+> > > > > > > > >=20
+> > > > > > > > >     |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p=
+, 480M
+> > > > > > > > >     |
+> > > > > > > > >         |__ Port 2: Dev 3, If 0, Class=3DMass Storage,
+> > > > > > > > >=20
+> > > > > > > > > Driver=3Dusb-storage,
+> > > > > > > >=20
+> > > > > > > > 480M
+> > > > > > > >=20
+> > > > > > > > > Bus 2 is a different connector and doesn't matter here.
+> > > > > > > > > I'm disconnecting
+> > > > > > > >=20
+> > > > > > > > 'Dev
+> > > > > > > >=20
+> > > > > > > > > 3' in this scenario.
+> > > > > > > > >=20
+> > > > > > > > > After boot up with the bus as shown above:
+> > > > > > > > > $ cat /sys/bus/usb/devices/1-1/power/wakeup
+> > > > > > > > > disabled
+> > > > > > > > > $ cat /sys/bus/usb/devices/1-1/power/runtime_status
+> > > > > > > > > active
+> > > > > > > > > $ cat
+> > > > > > > > > /sys/kernel/debug/pm_genpd/usb-hsic-phy/current_state
+> > > > > > > > > on
+> > > > > > > > >=20
+> > > > > > > > > After disconnecting Dev 3 from the bus ('usb 1-1.2: USB
+> > > > > > > > > disconnect, device number 3' in dmesg) the status changes
+> > > > > > > > > as follows (without the patch):
+> > > > > > > > > $ cat /sys/bus/usb/devices/1-1/power/wakeup
+> > > > > > > > > disabled
+> > > > > > > > > $ cat /sys/bus/usb/devices/1-1/power/runtime_status
+> > > > > > > > > suspended
+> > > > > > > > > $ cat
+> > > > > > > > > /sys/kernel/debug/pm_genpd/usb-hsic-phy/current_state
+> > > > > > > > > off-0
+> > > > > > > > >=20
+> > > > > > > > > For the record, when applying the posted patch this
+> > > > > > > > > changes
+> > > > > > > > > into:
+> > > > > > > > > $ cat /sys/bus/usb/devices/1-1/power/wakeup
+> > > > > > > > > disabled
+> > > > > > > > > $ cat /sys/bus/usb/devices/1-1/power/runtime_status
+> > > > > > > > > suspended
+> > > > > > > > > $ cat
+> > > > > > > > > /sys/kernel/debug/pm_genpd/usb-hsic-phy/current_state
+> > > > > > > > > on
+> > > > > > > >=20
+> > > > > > > > Okay, I think the problem here is the power domain for USB
+> > > > > > > > controller is off at runtime, but USB controller/PHY needs
+> > > > > > > > to detect the USB wakeup signal at runtime, so the USB
+> > > > > > > > controller/PHY's power domain should be not off. The proper
+> > > > > > > > change may keep power domain on at runtime, and the power
+> > > > > > > > domain
+> > > >=20
+> > > > could be off at system suspend.
+> > > >=20
+> > > > > > > Can this "hsic phy power domain off breaks wakeup" be confirm=
+ed?
+> > > > > > > Like with some hack to move hsic phy power domain on some
+> > > > > > > other device
+> > > > > > > node:
+> > > > > > >=20
+> > > > > > > non-usb-node {
+> > > > > > >=20
+> > > > > > >         ...
+> > > > > > >         power-domains =3D <&pgc_hsic_phy>;
+> > > > > > >         status =3D "okay";
+> > > > > > >=20
+> > > > > > > };
+> > > > > > >=20
+> > > > > > > Just make sure this non-usb-node to be runtime active when do
+> > > > > > > hsic hub test.
+> > > > > >=20
+> > > > > > Thanks for that suggestion. I apparently does work. Using the
+> > > > > > this small patch
+> > > > > >=20
+> > > > > > --->8---
+> > > > > > diff --git a/arch/arm/boot/dts/imx7-mba7.dtsi
+> > > > > > b/arch/arm/boot/dts/imx7- mba7.dtsi index
+> > > > > > b05f662aa87b..cba2f9efa17e
+> > > > > > 100644
+> > > > > > --- a/arch/arm/boot/dts/imx7-mba7.dtsi
+> > > > > > +++ b/arch/arm/boot/dts/imx7-mba7.dtsi
+> > > > > > @@ -580,6 +580,7 @@ &uart3 {
+> > > > > >=20
+> > > > > >         assigned-clocks =3D <&clks IMX7D_UART3_ROOT_SRC>;
+> > > > > >         assigned-clock-parents =3D <&clks IMX7D_OSC_24M_CLK>;
+> > > > > >         status =3D "okay";
+> > > > > >=20
+> > > > > > +       power-domains =3D <&pgc_hsic_phy>;
+> > > > > >=20
+> > > > > >  };
+> > > > > > =20
+> > > > > >  &uart4 {
+> > > > > >=20
+> > > > > > --->8---
+> > > > > >=20
+> > > > > > The HSIC power domain is also attached to to uart3.
+> > > > > >=20
+> > > > > > $ cat /sys/kernel/debug/pm_genpd/usb-hsic-phy/devices
+> > > > > > /devices/platform/soc/30800000.bus/30800000.spba-bus/30880000.se
+> > > > > > rial /devices/platform/soc/30800000.bus/30b30000.usb
+> > > > > > /devices/platform/soc/30800000.bus/30b30000.usb/ci_hdrc.1
+> > > > > > $ cat /sys/kernel/debug/pm_genpd/usb-hsic-phy/current_state
+> > > > > > on
+> > > > > > $ echo on >
+> > > > > > /sys/devices/platform/soc/30800000.bus/30800000.spba-bus/
+> > > > > > 30880000.serial/power/control
+> > > > > > $ lsusb -t
+> > > > > > /:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dci_hdrc/1p,
+> > > > > > 480M
+> > > > > > /:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dci_hdrc/1p,
+> > > > > > 480M
+> > > > > >=20
+> > > > > >     |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
+> > > > > >     |
+> > > > > >         |__ Port 2: Dev 3, If 0, Class=3DMass Storage, Driver=
+=3D,
+> > > > > >=20
+> > > > > > 480M
+> > > > > >=20
+> > > > > > [USB
+> > > > > >=20
+> > > > > > disconnect] $ cat
+> > > > > > /sys/kernel/debug/pm_genpd/usb-hsic-phy/current_state
+> > > > > > on
+> > > > >=20
+> > > > > Just want to be sure this was done with hdrc imx runtime PM enabl=
+ed.
+> > > > >=20
+> > > > > > [USB reconnect]
+> > > > > > $ lsusb -t
+> > > > > > /:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dci_hdrc/1p,
+> > > > > > 480M
+> > > > > > /:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dci_hdrc/1p,
+> > > > > > 480M
+> > > > > >=20
+> > > > > >     |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
+> > > > > >     |
+> > > > > >         |__ Port 2: Dev 4, If 0, Class=3DMass Storage, Driver=
+=3D,
+> > > > > >=20
+> > > > > > 480M
+> > > > > >=20
+> > > > > > Hot plug detecting still works as you can see the USB device
+> > > > > > number increased.
+> > > > > >=20
+> > > > > > For the records, there is no difference to this patch in
+> > > > > > removing the power domain from USB HSIC device. I just wanted to
+> > > > > > keep the diff small.
+> > > > >=20
+> > > > > This is good enough to confirm this, thanks.
+> > > > >=20
+> > > > > I don't have a HW with HSIC enabled for test, and I am not sure
+> > > > > the initial state of power domain is on, can something like below
+> > > > > deserve a
+> > > >=20
+> > > > try?
+> > > >=20
+> > > > > diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
+> > > > > index
+> > > > > 3cb123016b3e..f5467ef18e33 100644
+> > > > > --- a/drivers/soc/imx/gpcv2.c
+> > > > > +++ b/drivers/soc/imx/gpcv2.c
+> > > > > @@ -416,6 +416,7 @@ static const struct imx_pgc_domain
+> > > > > imx7_pgc_domains[] =3D { [IMX7_POWER_DOMAIN_USB_HSIC_PHY] =3D {
+> > > > >=20
+> > > > >                 .genpd =3D {
+> > > > >                =20
+> > > > >                         .name      =3D "usb-hsic-phy",
+> > > > >=20
+> > > > > +                       .flags     =3D GENPD_FLAG_RPM_ALWAYS_ON,
+> > > > >=20
+> > > > >                 },
+> > > > >                 .bits  =3D {
+> > > > >                =20
+> > > > >                         .pxx =3D IMX7_USB_HSIC_PHY_SW_Pxx_REQ, @@
+> > > > >=20
+> > > > > -930,7
+> > > > >=20
+> > > > > +931,7 @@ static int imx_pgc_domain_probe(struct platform_device
+> > > > > *pdev) regmap_update_bits(domain->regmap, GPC_PGC_CPU_MAPPING,
+> > > > > domain->bits.map, domain->bits.map);
+> > > > >=20
+> > > > > -       ret =3D pm_genpd_init(&domain->genpd, NULL, true);
+> > > > > +       ret =3D pm_genpd_init(&domain->genpd, NULL,
+> > > > > + !(domain->genpd.flags &
+> > > > > GENPD_FLAG_RPM_ALWAYS_ON)); if (ret) {
+> > > > >=20
+> > > > >                 dev_err(domain->dev, "Failed to init power
+> > > > >                 domain\n");
+> > > > >                 goto out_domain_unmap;
+> > > >=20
+> > > > This does indeed the trick. But AFAICS the downside is that the
+> > > > powerdomain is enabled, even if USB is not used. Not sure if this is
+> > > > acceptable though.
+> > >=20
+> > > I think GENPD_FLAG_RPM_ALWAYS_ON is the right thing to do if the HSIC
+> > > port need the power domain on to detect remote wakeup, what's the
+> > > exact meaning of "USB is not used"?
+> >=20
+> > Exactly, GENPD_FLAG_RPM_ALWAYS_ON is the right thing to to iff the HSIC
+> > port needs the powerdomain. But what about the case when HSIC is not
+> > enabled at all? That's what I meant by "USB is not used".
+> > AFAICS setting GENPD_FLAG_RPM_ALWAYS_ON enables the powerdomain
+> > unconditionally from any user.
+>=20
+> If HSIC is not enabled at all, seems the power domain of it will not be
+> touched by kernel, so there maybe mismatch between the actual HW state and
+> the SW state, but this is another topic.
+>=20
+> For this HSIC case, a second thought I think the better solution maybe
+> correct the power domain to its right user, since this power domain
+> is for phy, so:
+>=20
+> diff --git a/arch/arm/boot/dts/imx7s.dtsi b/arch/arm/boot/dts/imx7s.dtsi
+> index 008e3da460f1..039eed79d2e7 100644
+> --- a/arch/arm/boot/dts/imx7s.dtsi
+> +++ b/arch/arm/boot/dts/imx7s.dtsi
+> @@ -120,6 +120,7 @@ usbphynop3: usbphynop3 {
+>                 compatible =3D "usb-nop-xceiv";
+>                 clocks =3D <&clks IMX7D_USB_HSIC_ROOT_CLK>;
+>                 clock-names =3D "main_clk";
+> +               power-domains =3D <&pgc_hsic_phy>;
+>                 #phy-cells =3D <0>;
+>         };
+>=20
+> @@ -1153,7 +1154,6 @@ usbh: usb@30b30000 {
+>                                 compatible =3D "fsl,imx7d-usb",
+> "fsl,imx27-usb"; reg =3D <0x30b30000 0x200>;
+>                                 interrupts =3D <GIC_SPI 40
+> IRQ_TYPE_LEVEL_HIGH>; -                               power-domains =3D
+> <&pgc_hsic_phy>;
+>                                 clocks =3D <&clks IMX7D_USB_CTRL_CLK>;
+>                                 fsl,usbphy =3D <&usbphynop3>;
+>                                 fsl,usbmisc =3D <&usbmisc3 0>;
+>=20
+> Could you please try if this can work for you as well?
 
-Thank you for the patch! Yet something to improve:
+This does indeed work as well. If you both disable 'usbh' and 'usbphynop3',=
+=20
+the power domain is switched off as well.
+I'll create a proper patch for this.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on balbi-usb/testing/next peter-chen-usb/for-usb-next v5.18-rc6 next-20220506]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Linyu-Yuan/usb-gadget-update-DECLARE_USB_FUNCTION-_INIT-macro/20220509-144542
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: x86_64-randconfig-a011-20220509 (https://download.01.org/0day-ci/archive/20220509/202205091809.29x90X9b-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/5c9f589ea23bf995436cde6bd39f1c5b2cc1ec4f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Linyu-Yuan/usb-gadget-update-DECLARE_USB_FUNCTION-_INIT-macro/20220509-144542
-        git checkout 5c9f589ea23bf995436cde6bd39f1c5b2cc1ec4f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   ld: drivers/usb/gadget/function/f_sourcesink.o: in function `sslb_modinit':
->> drivers/usb/gadget/function/f_sourcesink.c:1270: multiple definition of `init_module'; drivers/usb/gadget/function/f_loopback.o:drivers/usb/gadget/function/f_loopback.c:586: first defined here
-   ld: drivers/usb/gadget/function/f_sourcesink.o: in function `sslb_modexit':
->> drivers/usb/gadget/function/f_sourcesink.c:1283: multiple definition of `cleanup_module'; drivers/usb/gadget/function/f_loopback.o:drivers/usb/gadget/function/f_loopback.c:586: first defined here
+Alexander
 
 
-vim +1270 drivers/usb/gadget/function/f_sourcesink.c
 
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1245  
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1246  static struct usb_function_instance *source_sink_alloc_inst(void)
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1247  {
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1248  	struct f_ss_opts *ss_opts;
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1249  
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1250  	ss_opts = kzalloc(sizeof(*ss_opts), GFP_KERNEL);
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1251  	if (!ss_opts)
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1252  		return ERR_PTR(-ENOMEM);
-25d8015177ae7ba drivers/usb/gadget/f_sourcesink.c          Andrzej Pietrasiewicz     2013-11-07  1253  	mutex_init(&ss_opts->lock);
-9890e33013fae0d drivers/usb/gadget/f_sourcesink.c          Andrzej Pietrasiewicz     2013-04-18  1254  	ss_opts->func_inst.free_func_inst = source_sink_free_instance;
-25d8015177ae7ba drivers/usb/gadget/f_sourcesink.c          Andrzej Pietrasiewicz     2013-11-07  1255  	ss_opts->isoc_interval = GZERO_ISOC_INTERVAL;
-25d8015177ae7ba drivers/usb/gadget/f_sourcesink.c          Andrzej Pietrasiewicz     2013-11-07  1256  	ss_opts->isoc_maxpacket = GZERO_ISOC_MAXPACKET;
-25d8015177ae7ba drivers/usb/gadget/f_sourcesink.c          Andrzej Pietrasiewicz     2013-11-07  1257  	ss_opts->bulk_buflen = GZERO_BULK_BUFLEN;
-0d6c3d96678d115 drivers/usb/gadget/function/f_sourcesink.c Peter Chen                2015-11-19  1258  	ss_opts->bulk_qlen = GZERO_SS_BULK_QLEN;
-0d6c3d96678d115 drivers/usb/gadget/function/f_sourcesink.c Peter Chen                2015-11-19  1259  	ss_opts->iso_qlen = GZERO_SS_ISO_QLEN;
-25d8015177ae7ba drivers/usb/gadget/f_sourcesink.c          Andrzej Pietrasiewicz     2013-11-07  1260  
-25d8015177ae7ba drivers/usb/gadget/f_sourcesink.c          Andrzej Pietrasiewicz     2013-11-07  1261  	config_group_init_type_name(&ss_opts->func_inst.group, "",
-25d8015177ae7ba drivers/usb/gadget/f_sourcesink.c          Andrzej Pietrasiewicz     2013-11-07  1262  				    &ss_func_type);
-25d8015177ae7ba drivers/usb/gadget/f_sourcesink.c          Andrzej Pietrasiewicz     2013-11-07  1263  
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1264  	return &ss_opts->func_inst;
-544aca39e670421 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1265  }
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1266  DECLARE_USB_FUNCTION(SourceSink, source_sink_alloc_inst,
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1267  		source_sink_alloc_func);
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1268  
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1269  static int __init sslb_modinit(void)
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23 @1270  {
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1271  	int ret;
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1272  
-5c9f589ea23bf99 drivers/usb/gadget/function/f_sourcesink.c Linyu Yuan                2022-05-09  1273  	ret = usb_function_register(&SourceSink_usb_func);
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1274  	if (ret)
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1275  		return ret;
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1276  	ret = lb_modinit();
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1277  	if (ret)
-5c9f589ea23bf99 drivers/usb/gadget/function/f_sourcesink.c Linyu Yuan                2022-05-09  1278  		usb_function_unregister(&SourceSink_usb_func);
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1279  	return ret;
-544aca39e670421 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1280  }
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1281  static void __exit sslb_modexit(void)
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1282  {
-5c9f589ea23bf99 drivers/usb/gadget/function/f_sourcesink.c Linyu Yuan                2022-05-09 @1283  	usb_function_unregister(&SourceSink_usb_func);
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1284  	lb_modexit();
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1285  }
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1286  module_init(sslb_modinit);
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1287  module_exit(sslb_modexit);
-cf9a08ae5aece88 drivers/usb/gadget/f_sourcesink.c          Sebastian Andrzej Siewior 2012-12-23  1288  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
