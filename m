@@ -2,185 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E1451FE2D
-	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 15:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FB951FF39
+	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 16:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235755AbiEIN1v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 May 2022 09:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
+        id S236719AbiEIOMj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 May 2022 10:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235895AbiEIN1l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 09:27:41 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384E31E251A;
-        Mon,  9 May 2022 06:23:28 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id bu29so23828707lfb.0;
-        Mon, 09 May 2022 06:23:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=1K2obVx3YG8QEPrenU4QI5guJQ8Phbo/6yP70JTaawU=;
-        b=ctuOdHCyg4DfJDMuVyrfXjafqsIBGrPq9u27BiBAquJftMSjYFJ55Dztcsr8bNMn0w
-         oeM//L+QbMc5cqR/YL4ZYXu9SspJYNvQLipuO/dxUV/COK7qJD4YPieEuwN+Da6gnICg
-         tiL5ifQOF61sLM7j5k+TfKf3keD2QE9+mfbjkcLau1uokLQ0TJXXWGRj10hWZc6mNTCY
-         ZiPlrCXkxh/d8AP+hVzj144bdbLZ6gunWEeo3XTOHdZMf+1T4Dk4fDvhUDM82hKq6q3x
-         a24gfPwl0eQuynyAnF+v9tUB7WbmPEsnBDi3opOHoOjQkJbqyH8fYmRySBDQ1lHi3t+I
-         lY6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=1K2obVx3YG8QEPrenU4QI5guJQ8Phbo/6yP70JTaawU=;
-        b=mIkc0TZp+d1LwPecfcRJtDyH8BAqmNXPw1gYvuKs2yAX+y/qu14tJVn5mKfiCdAUiD
-         J1PqhiIjZpmt4I41YmLtpvg+xbziJgzNGHXGMiOFa6DvXp7/eZptbtwLH2IAhvwlPCxS
-         NabvguI5sndh9CnuM7+Nbt5RqzIBU1d3G0QPTQgzq002Of+D7T6HGgaawOrPEptXXb3P
-         eUYjlsTq3r2LFbCvBBF+mq0oXHqqNcckY+cE/SOi0e0PXu5RldMDfIevfXgKBHyWePHP
-         0sgqvfjsdEogwf9f3gIvaQlDCS3kpPAdvafbIWiQQWGKMr+zn7KSbobrxskZHZW/vLap
-         5kFg==
-X-Gm-Message-State: AOAM530ONvoAN48p67Wf1oX/vzg/HnhHcWEtfhjcp+b/GIzlzZTrFcLh
-        BlXgCeuNzxRrgAUVOGngXGI=
-X-Google-Smtp-Source: ABdhPJy54uNV0a0Y5a5xZUhU6QHCMVecZmAJ2frVW6KAYppShjM44jXuH8rdrMemcTVYgMIiSG1E7g==
-X-Received: by 2002:ac2:4c49:0:b0:473:ca4f:9345 with SMTP id o9-20020ac24c49000000b00473ca4f9345mr12622420lfk.203.1652102606387;
-        Mon, 09 May 2022 06:23:26 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id h5-20020a056512338500b0047255d2111csm1941442lfg.75.2022.05.09.06.23.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 06:23:25 -0700 (PDT)
-Subject: Re: [PATCH v3 00/21] xen: simplify frontend side ring setup
-To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-integrity@vger.kernel.org, linux-pci@vger.kernel.org
-Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        =?UTF-8?Q?Roger_Pau_Monn=c3=a9?= <roger.pau@citrix.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20220505081640.17425-1-jgross@suse.com>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <409fb110-646a-2973-aff3-c97fdfb9bfbc@gmail.com>
-Date:   Mon, 9 May 2022 16:23:24 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        with ESMTP id S236737AbiEIOMh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 10:12:37 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9BF072A0A43
+        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 07:08:42 -0700 (PDT)
+Received: (qmail 124650 invoked by uid 1000); 9 May 2022 10:08:41 -0400
+Date:   Mon, 9 May 2022 10:08:41 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [v15 3/6] usb: dwc3: core: Host wake up support from system
+ suspend
+Message-ID: <YnkgaagoaYK7LkCq@rowland.harvard.edu>
+References: <1651740973-7944-4-git-send-email-quic_kriskura@quicinc.com>
+ <YnRUPxBZB55TPmf2@google.com>
+ <a83dea08-0920-17e6-ec1c-f9d8a490a08d@quicinc.com>
+ <20220506051448.GE4640@hu-pkondeti-hyd.qualcomm.com>
+ <YnVD+ltiQhKE+jPf@google.com>
+ <YnVSIvwXsKySg33M@google.com>
+ <YnVmXmG+6emL4nxv@rowland.harvard.edu>
+ <YnVs7kSkpjUBWc5w@google.com>
+ <YnWFaSXJJ8T7IYtl@rowland.harvard.edu>
+ <20220509033238.GA9170@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
-In-Reply-To: <20220505081640.17425-1-jgross@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509033238.GA9170@hu-pkondeti-hyd.qualcomm.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, May 09, 2022 at 09:02:38AM +0530, Pavan Kondeti wrote:
+> On Fri, May 06, 2022 at 04:30:33PM -0400, Alan Stern wrote:
+> > On Fri, May 06, 2022 at 11:46:06AM -0700, Matthias Kaehlcke wrote:
+> > > Currently the core/PHYs are always powered off during suspend in host mode:
+> > > 
+> > > static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > {
+> > > 	...
+> > > 
+> > > 	switch (dwc->current_dr_role) {
+> > > 	case DWC3_GCTL_PRTCAP_HOST:
+> > > 		if (!PMSG_IS_AUTO(msg)) {
+> > > 			dwc3_core_exit(dwc);
+> > > 			break;
+> > > 		}
+> > > 
+> > > 	...
+> > > }
+> > > 
+> > > With that I would expect wakeup to be broken for all dwc3. I'm a bit confused
+> > > though, since dwc3-imx8mp.c seems to support wakeup and the driver landed
+> > > after the above patch ...
+> > > 
+> > > This series intends to change the above code to something like this:
+> > > 
+> > > 	if (!PMSG_IS_AUTO(msg)) {
+> > > 	       if (device_may_wakeup(dwc->dev) &&
+> > > 	                       device_wakeup_path(dwc->dev)) {
+> > > 	               dwc->phy_power_off = false;
+> > > 	       } else {
+> > > 	               dwc->phy_power_off = true;
+> > > 	               dwc3_core_exit(dwc);
+> > > 	       }
+> > > 	}
+> > 
+> > > i.e. the core/PHYs would only be powered down if wakeup is disabled or no
+> > > wakeup capable devices are connected. With that plug/unplug events still
+> > > wouldn't be detected.
+> > 
+> > Indeed.  Shouldn't the "&&" and "||"?  That is, don't you want to leave 
+> > the core and PHY powered if wakeup is enabled for the root hub or for 
+> > any devices beneath it?
+> > 
+> > It would be simpler to leave the core and PHY powered whenever wakeup is 
+> > enabled for the controller itself, regardless of the status of the root 
+> > hub and downstream devices.  Users might not like this so much if the 
+> > default setting is to enable wakeup for the controller always.  Still, 
+> > it's an easy solution.
+> > 
+> At this point it is not clear if all boards that has DWC3 controller can
+> support wakeup capability or not. Thats why we have introduced a wakeup device
+> tree property based on which we advertise our wakeup capability.
+> 
+> device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node,
+> "wakeup-source"));
+> 
+> Hence the && condition to make sure that we support wakeup and our children
+> needs it.
 
-On 05.05.22 11:16, Juergen Gross wrote:
+Oh, I see.  I misread the code above, thinking that dwc->dev referred to 
+the root hub.  It doesn't; it refers to the controller.  Sorry for the 
+mistake.
 
-Hello Juergen.
+BTW, if there's any trouble with getting device_wakeup_path() to work 
+the way you want, you could consider instead calling 
+usb_wakeup_enabled_descendants() on the root hub.  This function returns 
+a count of the number of wakeup-enabled USB devices at or below the 
+device you pass to it.
 
-
-
-> Many Xen PV frontends share similar code for setting up a ring page
-> (allocating and granting access for the backend) and for tearing it
-> down.
->
-> Create new service functions doing all needed steps in one go.
->
-> This requires all frontends to use a common value for an invalid
-> grant reference in order to make the functions idempotent.
->
-> Changes in V3:
-> - new patches 1 and 2, comments addressed
->
-> Changes in V2:
-> - new patch 9 and related changes in patches 10-18
->
-> Juergen Gross (21):
->    xen: update grant_table.h
->    xen/grant-table: never put a reserved grant on the free list
->    xen/blkfront: switch blkfront to use INVALID_GRANT_REF
->    xen/netfront: switch netfront to use INVALID_GRANT_REF
->    xen/scsifront: remove unused GRANT_INVALID_REF definition
->    xen/usb: switch xen-hcd to use INVALID_GRANT_REF
->    xen/drm: switch xen_drm_front to use INVALID_GRANT_REF
->    xen/sound: switch xen_snd_front to use INVALID_GRANT_REF
->    xen/dmabuf: switch gntdev-dmabuf to use INVALID_GRANT_REF
->    xen/shbuf: switch xen-front-pgdir-shbuf to use INVALID_GRANT_REF
->    xen: update ring.h
->    xen/xenbus: add xenbus_setup_ring() service function
->    xen/blkfront: use xenbus_setup_ring() and xenbus_teardown_ring()
->    xen/netfront: use xenbus_setup_ring() and xenbus_teardown_ring()
->    xen/tpmfront: use xenbus_setup_ring() and xenbus_teardown_ring()
->    xen/drmfront: use xenbus_setup_ring() and xenbus_teardown_ring()
->    xen/pcifront: use xenbus_setup_ring() and xenbus_teardown_ring()
->    xen/scsifront: use xenbus_setup_ring() and xenbus_teardown_ring()
->    xen/usbfront: use xenbus_setup_ring() and xenbus_teardown_ring()
->    xen/sndfront: use xenbus_setup_ring() and xenbus_teardown_ring()
->    xen/xenbus: eliminate xenbus_grant_ring()
-
-
-For the patches that touch PV display (#07, #16), PV sound (#08, #20) 
-and shared buffer framework used by both frontends (#10):
-
-Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-
-
-Also I didn't see any issues with these frontends while testing on Arm64 
-based board.
-So, you can also add:
-
-[Arm64 only]
-Tested-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-
-
-Thanks!
-
-
->
->   drivers/block/xen-blkfront.c                |  57 +++----
->   drivers/char/tpm/xen-tpmfront.c             |  18 +--
->   drivers/gpu/drm/xen/xen_drm_front.h         |   9 --
->   drivers/gpu/drm/xen/xen_drm_front_evtchnl.c |  43 ++----
->   drivers/net/xen-netfront.c                  |  85 ++++-------
->   drivers/pci/xen-pcifront.c                  |  19 +--
->   drivers/scsi/xen-scsifront.c                |  31 +---
->   drivers/usb/host/xen-hcd.c                  |  65 ++------
->   drivers/xen/gntdev-dmabuf.c                 |  13 +-
->   drivers/xen/grant-table.c                   |  12 +-
->   drivers/xen/xen-front-pgdir-shbuf.c         |  18 +--
->   drivers/xen/xenbus/xenbus_client.c          |  82 +++++++---
->   include/xen/grant_table.h                   |   2 -
->   include/xen/interface/grant_table.h         | 161 ++++++++++++--------
->   include/xen/interface/io/ring.h             |  19 ++-
->   include/xen/xenbus.h                        |   4 +-
->   sound/xen/xen_snd_front_evtchnl.c           |  44 ++----
->   sound/xen/xen_snd_front_evtchnl.h           |   9 --
->   18 files changed, 287 insertions(+), 404 deletions(-)
->
--- 
-Regards,
-
-Oleksandr Tyshchenko
-
+Alan Stern
