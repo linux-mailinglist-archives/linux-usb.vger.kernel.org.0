@@ -2,149 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C772A51F6A8
-	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 10:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA6A51F729
+	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 10:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232816AbiEIIMK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 May 2022 04:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
+        id S230250AbiEIItM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 May 2022 04:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233897AbiEIHud (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 03:50:33 -0400
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A2617CC87;
-        Mon,  9 May 2022 00:46:38 -0700 (PDT)
-Received: by mail-qt1-f174.google.com with SMTP id hf18so10439352qtb.0;
-        Mon, 09 May 2022 00:46:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3XPGjru+uW0hOeRykS42TNYyIx8ZkoC8DFG5cF+O4o4=;
-        b=41F9GyWZlsfocB5MenQJl7d0bF5bQN5+OHhw7IwhQxihHqhhYlAwOGtex2kpjR0nap
-         3KGJyib2NQ5zz1sidV1zAHrPdoPy3m2SNZKaCBT9W38BBGzrA1tciu2RylX2SteqAllA
-         LLehhLi/JSu34sDMJ/AaPp6Zkhr7pYzq2WN3PaMe65tShsZni2Fw1RR3wKMxtmo1fY6h
-         ge6NTGekiWrRiRN4KMseD4yqI/ErHE5DvVy7b66yV8g6bEv6Od4TFvfCvislmTHz4quo
-         Dqx11FZoM1WEuPg1p1+f8qanvEPJtnJnb074yBcVtZMAhtiewu5SdbV/t/N7rLKEVQFU
-         9SpA==
-X-Gm-Message-State: AOAM531ngeJfEyi/zsqFB7W0egtP9qBf3rw2rEG70Zf6DPfEbA0a5+81
-        JCeZiiUYHQrqBCmtE5GLjyaaJDlcoISUqQ==
-X-Google-Smtp-Source: ABdhPJy4TyR1k/BcB6Il7OOSsz4Ai0gOSQz4I1J9xfUsRwEOEjElDVeCSVQEoRs/W1+8J27CkS5Y7Q==
-X-Received: by 2002:a05:622a:13d2:b0:2f3:d2aa:7c5a with SMTP id p18-20020a05622a13d200b002f3d2aa7c5amr7638987qtk.155.1652082397698;
-        Mon, 09 May 2022 00:46:37 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id o12-20020ac8554c000000b002f39b99f6a8sm6913691qtr.66.2022.05.09.00.46.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 00:46:37 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2f83983782fso134895587b3.6;
-        Mon, 09 May 2022 00:46:37 -0700 (PDT)
-X-Received: by 2002:a81:9b0c:0:b0:2f4:c522:7d3c with SMTP id
- s12-20020a819b0c000000b002f4c5227d3cmr12831128ywg.316.1652082396821; Mon, 09
- May 2022 00:46:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <YjeEbHL8ITkW692W@rowland.harvard.edu> <YmKt3kH+85kjzdbL@kroah.com>
- <YmSc29YZvxgT5fEJ@rowland.harvard.edu> <YmSo6fU1FlNq8cOZ@rowland.harvard.edu>
- <YmSpKpnWR8WWEk/p@rowland.harvard.edu> <YmSpdxaDNeC2BBOf@rowland.harvard.edu>
- <alpine.DEB.2.22.394.2205031209030.681336@ramsan.of.borg> <YnFCEn45XwDWM/9Y@rowland.harvard.edu>
- <CAMuHMdVDK0W0T3=+2c1E6wtwy5JTUemTGYyj3PFuVUhK++AzrA@mail.gmail.com>
- <YnFO0Qr8RY7peFCg@rowland.harvard.edu> <YnaR8LaaPTdLTiok@rowland.harvard.edu>
-In-Reply-To: <YnaR8LaaPTdLTiok@rowland.harvard.edu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 9 May 2022 09:46:25 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUpOiHHMktPk_-NauDW2ufvGThnkFU7Pok376pM6OEyYw@mail.gmail.com>
-Message-ID: <CAMuHMdUpOiHHMktPk_-NauDW2ufvGThnkFU7Pok376pM6OEyYw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] USB: gadget: Add a new bus for gadgets
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        USB mailing list <linux-usb@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+        with ESMTP id S236495AbiEIIRw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 04:17:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6191ECBA4
+        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 01:13:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C86626148F
+        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 08:11:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 37484C385A8
+        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 08:11:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652083883;
+        bh=iGAQEflcGGwuNHgsLLd3Eo/FXC987CRymiL4ofz1P0M=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=kawX0gq5VWNB776q35r+85FxW8lOp3lSoGtDPUCyhDqdjvxWUXyPAPDKn85DH2m/M
+         RLvpfhuoO3j6OUPNTa2aeuYt5pLWSNtut+VKo8biAjAD+cgN0uy1RAnCWdZjXvoVNH
+         pUJPXwSa+8JW9k10GCIstgTSJlfO5xHFIU78uU6d1WbJblUP6vNcPWOh0M7VX1llyJ
+         +rignvgZ4sLG5dc/+iw+Ekf2axi2oKzefZtDt/Yh6f3OnA+hktUYhFpRNeR/7dbWvb
+         UCImE/Yz0+3hw/IdSkT4m2MB61WRDQOSUMlCd5VbvmRgrju25rp/xQwEPWBj0s+fZe
+         o8o6WKghHKo3Q==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id E3C78C05FD0; Mon,  9 May 2022 08:11:22 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215906] DMAR fault when connected usb hub (xhci_hcd)
+Date:   Mon, 09 May 2022 08:11:22 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-215906-208809-PcnO6toeMQ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215906-208809@https.bugzilla.kernel.org/>
+References: <bug-215906-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215906
 
-On Sat, May 7, 2022 at 5:36 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> On Tue, May 03, 2022 at 11:48:33AM -0400, Alan Stern wrote:
-> > On Tue, May 03, 2022 at 05:27:08PM +0200, Geert Uytterhoeven wrote:
-> > > On Tue, May 3, 2022 at 5:14 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > > On Tue, May 03, 2022 at 12:14:30PM +0200, Geert Uytterhoeven wrote:
-> > > > > On Sat, 23 Apr 2022, Alan Stern wrote:
-> > > > > > This patch adds a "gadget" bus and uses it for registering gadgets and
-> > > > > > their drivers.  From now on, bindings will be managed by the driver
-> > > > > > core rather than through ad-hoc manipulations in the UDC core.
-> > > > > >
-> > > > > > As part of this change, the driver_pending_list is removed.  The UDC
-> > > > > > core won't need to keep track of unbound drivers for later binding,
-> > > > > > because the driver core handles all of that for us.
-> > > > > >
-> > > > > > However, we do need one new feature: a way to prevent gadget drivers
-> > > > > > from being bound to more than one gadget at a time.  The existing code
-> > > > > > does this automatically, but the driver core doesn't -- it's perfectly
-> > > > > > happy to bind a single driver to all the matching devices on the bus.
-> > > > > > The patch adds a new bitflag to the usb_gadget_driver structure for
-> > > > > > this purpose.
-> > > > > >
-> > > > > > A nice side effect of this change is a reduction in the total lines of
-> > > > > > code, since now the driver core will do part of the work that the UDC
-> > > > > > used to do.
-> > > > > >
-> > > > > > A possible future patch could add udc devices to the gadget bus, say
-> > > > > > as a separate device type.
-> > > > > >
-> > > > > > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> > > > >
-> > > > > Thanks for your patch, which is now commit fc274c1e997314bf ("USB:
-> > > > > gadget: Add a new bus for gadgets") in usb-next.
-> > > > >
-> > > > > This patch cause a regression on the Renesas Salvator-XS development
-> > > > > board, as R-Car H3 has multiple USB gadget devices:
-> > > >
-> > > > Then these gadgets ought to have distinct names in order to avoid the
-> > > > conflict below:
->
-> Geert:
->
-> Can you test the patch below?  It ought to fix the problem (although it
+Mathias Nyman (mathias.nyman@linux.intel.com) changed:
 
-Thanks!
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |mathias.nyman@linux.intel.c
+                   |                            |om
 
-root@h3-salvator-xs:~# ls -l /sys/bus/gadget/devices/
-total 0
-lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.0 ->
-../../../devices/platform/soc/e659c000.usb/gadget.0
-lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.1 ->
-../../../devices/platform/soc/ee020000.usb/gadget.1
-lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.2 ->
-../../../devices/platform/soc/e6590000.usb/gadget.2
+--- Comment #6 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+[  +0,229229] xhci_hcd 0000:04:00.0: WARNING: Host System Error
 
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+The xHC controller reports a catastrophic error, and sets HSE bit.
 
-LGTM, so
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+For PCI xHC controllers the spec lists possible causes as:
+host controller PCI parity error, PCI Master Abort, PCI Target Abort.
+But DMA issues also possible cause, especially as log shows  DMAR
+problems right after this.
 
-> might end up causing other problems down the line...)
+Any chance you could bisect this on upstream kernel?
 
-Can you please elaborate? I'm not too familiar with UBS gadgets.
+--=20
+You may reply to this email to add a comment.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+You are receiving this mail because:
+You are watching the assignee of the bug.=
