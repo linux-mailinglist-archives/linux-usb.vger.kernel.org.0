@@ -2,116 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7117951F379
-	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 06:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C29651F3F1
+	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 07:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbiEIE27 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 May 2022 00:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
+        id S230044AbiEIFkt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 May 2022 01:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234646AbiEIESx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 00:18:53 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9BA92333
-        for <linux-usb@vger.kernel.org>; Sun,  8 May 2022 21:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652069701; x=1683605701;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jTfufmF6i5+qo6t8l5nRFq79CoUEn3vDLDzGJqccZms=;
-  b=DAsSHOB+PHkpKdLjy0S2JHuAruVGAYovCdMywh7rb2EMLMjXRi6nBaEL
-   bW9DBzt84bfmztNqlPEzHaWPm2ZsvMZvKv6GEDz3DXRlVvUP+2SKmlpCH
-   Wxq0diRh5utnIsHYycBQy5aBPNjmnMzTQeAShkc7CXv91mi2WS4E5YHGF
-   k=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 08 May 2022 21:14:23 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 21:14:22 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 8 May 2022 21:14:20 -0700
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 8 May 2022 21:14:18 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Jack Pham <quic_jackp@quicinc.com>,
-        "Linyu Yuan" <quic_linyyuan@quicinc.com>
-Subject: [PATCH] usb: gadget: update DECLARE_USB_FUNCTION(_INIT) macro
-Date:   Mon, 9 May 2022 12:14:13 +0800
-Message-ID: <1652069653-6961-1-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S234188AbiEIFeU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 01:34:20 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2080381A3;
+        Sun,  8 May 2022 22:30:26 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nnvyO-0007xl-7n; Mon, 09 May 2022 07:30:20 +0200
+Message-ID: <cbf8a730-a169-f2e9-3041-e530dfe42ad6@leemhuis.info>
+Date:   Mon, 9 May 2022 07:30:19 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: regression v5.13..v5.15: USB hub stopped working -- DMAR fault
+ when connected usb hub
+Content-Language: en-US
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     =?UTF-8?Q?Piotr_Pi=c3=b3rkowski?= <qba100@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <237660ea-794e-8347-4e1a-869ccef9ba3c@leemhuis.info>
+In-Reply-To: <237660ea-794e-8347-4e1a-869ccef9ba3c@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1652074227;303e07b4;
+X-HE-SMSGID: 1nnvyO-0007xl-7n
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Take DECLARE_USB_FUNCTION_INIT(ffs, ffs_alloc_inst, ffs_alloc) as example,
-it will generate function ffsmod_init/ffsmod_exit()
-and variable ffsusb_func.
+Hi, this is your Linux kernel regression tracker.
 
-Add possible character '_' in the macro which will generate
-function/variable name in common format, ffs_mod_init/ffs_mod_exit()
-and ffs_usb_func.
+@kernel developers: you might want to consider ignoring this, the
+reporter provided additional information in the ticket and it looks a
+lot like it's not a regression. For details see:
+https://bugzilla.kernel.org/show_bug.cgi?id=215906#c4
 
-It will apply to all gadget functions which use this macro.
+Sorry for the noise.
 
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
- include/linux/usb/composite.h | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Ciao, Thorsten
 
-diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-index 9d27622..0eac583 100644
---- a/include/linux/usb/composite.h
-+++ b/include/linux/usb/composite.h
-@@ -611,7 +611,7 @@ int usb_add_config_only(struct usb_composite_dev *cdev,
- void usb_remove_function(struct usb_configuration *c, struct usb_function *f);
- 
- #define DECLARE_USB_FUNCTION(_name, _inst_alloc, _func_alloc)		\
--	static struct usb_function_driver _name ## usb_func = {		\
-+	static struct usb_function_driver _name ## _usb_func = {	\
- 		.name = __stringify(_name),				\
- 		.mod  = THIS_MODULE,					\
- 		.alloc_inst = _inst_alloc,				\
-@@ -621,16 +621,16 @@ void usb_remove_function(struct usb_configuration *c, struct usb_function *f);
- 
- #define DECLARE_USB_FUNCTION_INIT(_name, _inst_alloc, _func_alloc)	\
- 	DECLARE_USB_FUNCTION(_name, _inst_alloc, _func_alloc)		\
--	static int __init _name ## mod_init(void)			\
-+	static int __init _name ## _mod_init(void)			\
- 	{								\
--		return usb_function_register(&_name ## usb_func);	\
-+		return usb_function_register(&_name ## _usb_func);	\
- 	}								\
--	static void __exit _name ## mod_exit(void)			\
-+	static void __exit _name ## _mod_exit(void)			\
- 	{								\
--		usb_function_unregister(&_name ## usb_func);		\
-+		usb_function_unregister(&_name ## _usb_func);		\
- 	}								\
--	module_init(_name ## mod_init);					\
--	module_exit(_name ## mod_exit)
-+	module_init(_name ## _mod_init);				\
-+	module_exit(_name ## _mod_exit)
- 
- /* messaging utils */
- #define DBG(d, fmt, args...) \
--- 
-2.7.4
-
+On 05.05.22 15:31, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker.
+> 
+> I noticed a regression report in bugzilla.kernel.org that afaics nobody
+> acted upon since it was reported about a week ago. That's why I decided
+> to forward it to a few maintainers and mailing lists. To quote from
+> https://bugzilla.kernel.org/show_bug.cgi?id=215906 :
+> 
+>> Since kernel 5.15 (with kernel 5.13 I see no problem) I have a problem with my USB hub. The device stops working shortly after starting the system.
+>> In dmesg log I see DMAR fault on usb controller
+>>
+>>
+>> [kwi27 22:03] usb 5-1.2: new high-speed USB device number 3 using xhci_hcd
+>> [  +0,100440] usb 5-1.2: New USB device found, idVendor=1a40, idProduct=0101, bcdDevice= 1.11
+>> [  +0,000004] usb 5-1.2: New USB device strings: Mfr=0, Product=1, SerialNumber=0
+>> [  +0,000002] usb 5-1.2: Product: USB 2.0 Hub
+>> [  +0,001002] hub 5-1.2:1.0: USB hub found
+>> [  +0,000133] hub 5-1.2:1.0: 4 ports detected
+>> [  +0,702453] usb 5-1.2.2: new full-speed USB device number 4 using xhci_hcd
+>> [  +0,471198] usb 5-1.2.2: New USB device found, idVendor=047f, idProduct=c025, bcdDevice= 1.35
+>> [  +0,000004] usb 5-1.2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>> [  +0,000002] usb 5-1.2.2: Product: Plantronics C320-M
+>> [  +0,000001] usb 5-1.2.2: Manufacturer: Plantronics
+>> [  +0,000001] usb 5-1.2.2: SerialNumber: B13D8BE491B04E73AEB4C95E162DBE2B
+>> [  +0,255862] mc: Linux media interface: v0.10
+>> [  +0,001057] input: Plantronics Plantronics C320-M as /devices/pci0000:00/0000:00:1c.5/0000:04:00.0/usb5/5-1/5-1.2/5-1.2.2/5-1.2.2:1.3/0003:047F:C025.0004/input/input21
+>> [  +0,060275] plantronics 0003:047F:C025.0004: input,hiddev1,hidraw3: USB HID v1.11 Device [Plantronics Plantronics C320-M] on usb-0000:04:00.0-1.2.2/input3
+>> [  +0,859655] usb 5-1.2.2: Warning! Unlikely big volume range (=8192), cval->res is probably wrong.
+>> [  +0,000003] usb 5-1.2.2: [11] FU [Sidetone Playback Volume] ch = 1, val = 0/8192/1
+>> [  +0,584234] usbcore: registered new interface driver snd-usb-audio
+>> [  +0,229229] xhci_hcd 0000:04:00.0: WARNING: Host System Error
+>> [  +0,000014] DMAR: DRHD: handling fault status reg 2
+>> [  +0,000004] DMAR: [DMA Read NO_PASID] Request device [04:00.0] fault addr 0xfffca000 [fault reason 0x06] PTE Read access is not set
+>> [  +0,031993] xhci_hcd 0000:04:00.0: Host halt failed, -110
+>> [kwi27 22:04] xhci_hcd 0000:04:00.0: xHCI host not responding to stop endpoint command.
+>> [  +0,000003] xhci_hcd 0000:04:00.0: USBSTS: HSE EINT
+>> [  +0,032011] xhci_hcd 0000:04:00.0: Host halt failed, -110
+>> [  +0,000002] xhci_hcd 0000:04:00.0: xHCI host controller not responding, assume dead
+>> [  +0,000017] xhci_hcd 0000:04:00.0: HC died; cleaning up
+>> [  +0,000042] usb 5-1: USB disconnect, device number 2
+>> [  +0,000003] usb 5-1.2: USB disconnect, device number 3
+>> [  +0,000002] usb 5-1.2.2: USB disconnect, device number 4
+>> [  +0,000114] usb 5-1.2.2: 1:0: usb_set_interface failed (-110)
+>> [  +0,000016] usb 5-1.2.2: 1:1: usb_set_interface failed (-19)
+>> [  +0,000011] usb 5-1.2.2: 1:0: usb_set_interface failed (-19)
+> See the ticket for details and further comments. According to the latest
+> one the problem is still present in 5.18-rc5.
+> 
+> Was this issue discussed or even addressed somewhere already? Or does
+> anyone at least have a good idea what might be causing this problem?
+> @reporter: If neither is the case, you most likely will need to perform
+> a bisection with git to identify the change causing the problem.
+> 
+> Anyway, could one of the kernel developers among the recipients please
+> help with this? BTW, I was unsure where to send this to the DMA/IOMMU
+> maintainers or the USB/xhci maintainers. I settled for the latter; I
+> apologize in advance if that was the wrong choice.
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> 
+> P.S.: As the Linux kernel's regression tracker I defsdal with a lot of
+> reports and sometimes miss something important when writing mails like
+> this. If that's the case here, don't hesitate to tell me in a public
+> reply, it's in everyone's interest to set the public record straight.
+> 
+> P.P.S: to get this tracked by the the Linux kernel regression tracking bot:
+> 
+> #regzbot introduced: v5.13..v5.15
+> #regzbot from: Piotr Piórkowski <qba100@gmail.com>
+> #regzbot title: usb/dma/iommu/???: USB hub stopped working -- DMAR fault
+> when connected usb hub
+> #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215906
+> #regzbot monitor:
+> https://lore.kernel.org/all/bug-215906-208809@https.bugzilla.kernel.org%2F/
