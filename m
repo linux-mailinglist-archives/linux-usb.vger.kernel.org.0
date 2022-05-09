@@ -2,176 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A1C51F222
-	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 03:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE5751F227
+	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 03:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbiEIB3D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 May 2022 21:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
+        id S232563AbiEIB3R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 May 2022 21:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233966AbiEHXzM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 May 2022 19:55:12 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C6A63F8;
-        Sun,  8 May 2022 16:51:21 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id z18so13694333iob.5;
-        Sun, 08 May 2022 16:51:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jvGYRgc/B1cVUQHYWbyzOUJsJsb2JybLUg0MtrNHLxU=;
-        b=gzCU6N4K+RH0gJYDOFzdClMUoqs+sC5dLzprBeR0gAh2NBdsFoIUDmtm6UrsHl1C22
-         hhvvyVwkcr85Bem8HAES8601Svm4cXUnKRpqZoX8B82AmRxwtFFhe+5rEgd2+b5IsAVc
-         Ehjr2JxnbzsUtzOTCQt7zyUweMkWn98QmUIOyiJXmdSGJjb7Y2Vt2HHaF5zHjCVr5HeS
-         C99xRgPNO6MydfVvHXf3vQvagErptsjIu4JbDRnLo1RFgGcMU4ziuIJU/ac6wD3Pxt6R
-         /muL6QOrnANd9gjDvltFI7JhWsuPEeGkS8/eevwKXB3U+H9nokx36TkYQHhfUaB7A7yh
-         U4LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jvGYRgc/B1cVUQHYWbyzOUJsJsb2JybLUg0MtrNHLxU=;
-        b=1DcziIkBiYwJrYGc7DosG5IlHAOiDx906xdl/iMsWX/e0fk2Mmq8cgFnFG2rpxmkYI
-         p55cExKOmlGGBULvH+wYJqHDnRQVobX+MIBKCfvCGAUg9QHmla5CDYIOKvW0NVIU1TTD
-         fOyOltTCPVHYt0EcjYIjLUWrIdY4gx8zZZSsp8HX+NYytT35HG2b1+DxPtsa75d0oENM
-         HXqoAyf05EegINk0ybyIbuXOvWhs8r7e26WjhlO0qKpsY7W1WSNgX7eahM2DAqqfvjx0
-         uUEPg91S4wzO6UHdBdU7LK6vLj4TOVLjS/DZ5NtD9MF0QO5zyhNm78PKXQMEAJJRhJIN
-         UcNw==
-X-Gm-Message-State: AOAM533yBk3gcMvsz4ysDqzsta9vtIBQbZqp3L14P50bfYuAAqWl2Uz9
-        3qpM8H2fJpVDz6l/F2Os2uWHGno6olyilfB9QY8=
-X-Google-Smtp-Source: ABdhPJwwPq9wn3ToVdj7TM4CBY43GWLA0vghTvzHEPJnEJWTSpaC+IvmSDLcXNrhXJOAZnPYA62+yHm5rItxqhEhuos=
-X-Received: by 2002:a05:6638:168f:b0:32d:8105:7646 with SMTP id
- f15-20020a056638168f00b0032d81057646mr630122jat.9.1652053880413; Sun, 08 May
- 2022 16:51:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <YnfVEcOWO63uIGs5@rowland.harvard.edu> <20220508150247.38204-1-schspa@gmail.com>
-In-Reply-To: <20220508150247.38204-1-schspa@gmail.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Mon, 9 May 2022 01:51:09 +0200
-Message-ID: <CA+fCnZexPtGYX0kiwpA3-vgRbqbw0hk-fRpz9jUZrykJj-HN=w@mail.gmail.com>
-Subject: Re: [PATCH v3] usb: gadget: fix race when gadget driver register via ioctl
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     stern@rowland.harvard.edu, Julia Lawall <Julia.Lawall@inria.fr>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jann Horn <jannh@google.com>,
-        Wei Ming Chen <jj251510319013@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+        with ESMTP id S235820AbiEIAyJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 May 2022 20:54:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC8165CA
+        for <linux-usb@vger.kernel.org>; Sun,  8 May 2022 17:50:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA77A60F18
+        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 00:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 252BBC385A4
+        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 00:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652057416;
+        bh=xEmQGqefMHlEIT9LfgB8RZ2fP2ScRiBSOWsrHX6zU6U=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=FoxJqcVUXkNzlEf7vNfAo8fSi8ejg4mSWj6KZatGbY/z00qhRnEB/AAZGlLc1ZgYQ
+         Q8D5diTHAiqdlduvzEmQldacA0dzq6Mg2tK3k3XeTLtT3g+Oyb0jXu7nNLfd5wKgh0
+         49GDU77AaXexhaxrzDSaXBqu2EIboGazISBVUMUMX0iu0b4rKy3FE2G0aFZF9y6Q16
+         JM6ImDfOkouaulwAbnTc+9rV+cr82QJFlxNAGhRy5SgL+Op1M8JbzVTueTmlMPECr0
+         7RC9329NZ8Qy9eorEMFVyhUGi1DjcADdMu6dUHMwBNFjLYky0n5/unQjxlfSAHEsj4
+         erGsGDnhBJlRQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 08E4FC05F98; Mon,  9 May 2022 00:50:16 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
+ xhci_hcd rejecting DMA map of vmalloc memory
+Date:   Mon, 09 May 2022 00:50:15 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: satadru@umich.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215890-208809-tpTkptwWXM@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
+References: <bug-215890-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, May 8, 2022 at 5:03 PM Schspa Shi <schspa@gmail.com> wrote:
->
-> The usb_gadget_register_driver can be called multi time by to
-> threads via USB_RAW_IOCTL_RUN ioctl syscall, which will lead
-> to multiple registrations.
->
-> Call trace:
->   driver_register+0x220/0x3a0 drivers/base/driver.c:171
->   usb_gadget_register_driver_owner+0xfb/0x1e0
->     drivers/usb/gadget/udc/core.c:1546
->   raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
->   raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
->   ioctl USB_RAW_IOCTL_RUN
->
-> This routine allows two processes to register the same driver instance
-> via ioctl syscall. which lead to a race condition.
->
-> Please refer to the following scenarios.
->
->            T1                                  T2
-> ------------------------------------------------------------------
-> usb_gadget_register_driver_owner
->   driver_register                    driver_register
->     driver_find                       driver_find
->     bus_add_driver                    bus_add_driver
->       priv alloced                     <context switch>
->       drv->p = priv;
->       <schedule out>
->       kobject_init_and_add // refcount = 1;
->    //couldn't find an available UDC or it's busy
->    <context switch>
->                                        priv alloced
->                                        drv->priv = priv;
->                                        kobject_init_and_add
->                                          ---> refcount = 1 <------
->                                        // register success
->                                        <context switch>
-> ===================== another ioctl/process ======================
->                                       driver_register
->                                        driver_find
->                                         k = kset_find_obj()
->                                          ---> refcount = 2 <------
->                                         <context out>
->    driver_unregister
->    // drv->p become T2's priv
->    ---> refcount = 1 <------
->    <context switch>
->                                         kobject_put(k)
->                                          ---> refcount = 0 <------
->                                         return priv->driver;
->                                         --------UAF here----------
->
-> There will be UAF in this scenario.
->
-> We can fix it by adding a new STATE_DEV_REGISTERING device state to
-> avoid double register.
->
-> Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
-> Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
->
-> Signed-off-by: Schspa Shi <schspa@gmail.com>
->
-> ---
->
-> Changelog:
-> v1 -> v2:
->         - Add a STATE_DEV_REGISTERING as Alan Stern suggested.
-> v2 -> v3:
->         - Adjust STATE_DEV_REGISTERING position to reflect the actual
->           order in which the states occur.
->         - Add the fault scenarios to comments.
-> ---
->  drivers/usb/gadget/legacy/raw_gadget.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-> index b3be8db1ff63..241740024c50 100644
-> --- a/drivers/usb/gadget/legacy/raw_gadget.c
-> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
-> @@ -145,6 +145,7 @@ enum dev_state {
->         STATE_DEV_INVALID = 0,
->         STATE_DEV_OPENED,
->         STATE_DEV_INITIALIZED,
-> +       STATE_DEV_REGISTERING,
->         STATE_DEV_RUNNING,
->         STATE_DEV_CLOSED,
->         STATE_DEV_FAILED
-> @@ -508,6 +509,7 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
->                 ret = -EINVAL;
->                 goto out_unlock;
->         }
-> +       dev->state = STATE_DEV_REGISTERING;
->         spin_unlock_irqrestore(&dev->lock, flags);
->
->         ret = usb_gadget_register_driver(&dev->driver);
-> --
-> 2.24.3 (Apple Git-128)
->
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+--- Comment #3 from Satadru Pramanik (satadru@umich.edu) ---
+the same issue exists with 5.18-rc6.
 
-Thanks, Schspa!
 
-Thanks for the review, Alan!
+
+[    6.585246] ------------[ cut here ]------------
+[    6.585248] xhci_hcd 0000:00:14.0: rejecting DMA map of vmalloc memory
+[    6.585260] WARNING: CPU: 2 PID: 944 at include/linux/dma-mapping.h:326
+usb_hcd_map_urb_for_dma+0x4c4/0x4f0
+[    6.585266] Modules linked in: applesmc(+) intel_rapl_common
+x86_pkg_temp_thermal intel_powerclamp kvm_intel kvm rapl snd_hda_codec_cirr=
+us
+snd_hda_codec_generic ledtrig_audio snd_hda_codec_hdmi snd_hda_intel btusb
+snd_intel_dspcfg snd_intel_sdw_acpi btrtl sch_fq_codel snd_hda_codec btbcm
+intel_cstate btintel snd_hda_core btmtk snd_seq_midi snd_hwdep
+snd_seq_midi_event snd_pcm wl(POE) cmdlinepart bluetooth snd_rawmidi snd_seq
+snd_seq_device spi_nor snd_timer ecdh_generic ecc efi_pstore joydev snd mtd
+mei_me input_leds bcm5974 cfg80211 apple_mfi_fastcharge mei soundcore sbs(+)
+acpi_als industrialio_triggered_buffer sbshc kfifo_buf industrialio apple_g=
+mux
+mac_hid apple_bl facetimehd(OE) videobuf2_dma_sg videobuf2_memops
+videobuf2_v4l2 videobuf2_common videodev mc coretemp ipmi_devintf
+ipmi_msghandler msr parport_pc ppdev lp parport ip_tables x_tables autofs4
+zfs(POE) zunicode(POE) zzstd(OE) zlua(OE) zavl(POE) icp(POE) zcommon(POE)
+znvpair(POE) spl(OE) z3fold lz4 lz4_compress
+[    6.585333]  hid_logitech_hidpp hid_apple hid_logitech_dj hid_generic us=
+bhid
+hid uas i915 usb_storage nouveau mxm_wmi wmi drm_buddy i2c_algo_bit
+drm_ttm_helper ttm drm_dp_helper cec rc_core drm_kms_helper syscopyarea
+sysfillrect spi_intel_platform sysimgblt crct10dif_pclmul crc32_pclmul
+fb_sys_fops ghash_clmulni_intel aesni_intel spi_intel nvme crypto_simd i2c_=
+i801
+cryptd drm nvme_core i2c_smbus thunderbolt lpc_ich xhci_pci xhci_pci_renesas
+video
+[    6.585365] CPU: 2 PID: 944 Comm: systemd-udevd Tainted: P           OE=
+=20=20=20=20
+5.18.0-051800rc6-generic #202205082130
+[    6.585367] Hardware name: Apple Inc. MacBookPro11,3/Mac-2BD1B31983FE166=
+3,
+BIOS 432.60.3.0.0 10/27/2021
+[    6.585369] RIP: 0010:usb_hcd_map_urb_for_dma+0x4c4/0x4f0
+[    6.585372] Code: 50 c6 05 19 8e 89 01 01 4d 85 f6 75 03 4d 8b 32 4c 89 =
+d7
+e8 ae 36 ef ff 4c 89 f2 48 c7 c7 38 00 05 a2 48 89 c6 e8 d2 94 37 00 <0f> 0=
+b e9
+58 ff ff ff 48 8b 05 ce 56 49 01 e9 ad fe ff ff 48 8b 05
+[    6.585374] RSP: 0018:ffffaa6e8c883a28 EFLAGS: 00010282
+[    6.585377] RAX: 0000000000000000 RBX: 0000000000000000 RCX:
+0000000000000027
+[    6.585378] RDX: ffff9443ef2a05a8 RSI: 0000000000000001 RDI:
+ffff9443ef2a05a0
+[    6.585380] RBP: ffffaa6e8c883a60 R08: 0000000000000000 R09:
+00000000a2fe3bc8
+[    6.585381] R10: ffffffffffffffff R11: 0000000000000001 R12:
+ffff944085dc30c0
+[    6.585382] R13: ffff944080d90000 R14: ffff944081566bd0 R15:
+00000000000001de
+[    6.585384] FS:  00007fc26cbd88c0(0000) GS:ffff9443ef280000(0000)
+knlGS:0000000000000000
+[    6.585386] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    6.585388] CR2: 00005561b2f6f2f8 CR3: 000000010643a006 CR4:
+00000000001706e0
+[    6.585390] Call Trace:
+[    6.585391]  <TASK>
+[    6.585394]  xhci_map_urb_for_dma+0x149/0x170
+[    6.585399]  usb_hcd_submit_urb+0x81/0x300
+[    6.585402]  usb_submit_urb+0x254/0x6d0
+[    6.585406]  bcm5974_start_traffic+0x4c/0xa0 [bcm5974]
+[    6.585410]  bcm5974_open+0x45/0x90 [bcm5974]
+[    6.585413]  input_open_device+0x8d/0xe0
+[    6.585418]  evdev_open+0x1cc/0x200
+[    6.585421]  chrdev_open+0xc4/0x240
+[    6.585425]  ? cdev_device_add+0x90/0x90
+[    6.585428]  do_dentry_open+0x157/0x380
+[    6.585432]  vfs_open+0x2d/0x30
+[    6.585434]  do_open+0x207/0x460
+[    6.585437]  ? path_init+0x2c2/0x3f0
+[    6.585439]  path_openat+0x10f/0x2b0
+[    6.585442]  do_filp_open+0xb2/0x160
+[    6.585445]  ? __check_object_size+0x1a/0x20
+[    6.585448]  ? alloc_fd+0xb9/0x170
+[    6.585452]  do_sys_openat2+0x9c/0x160
+[    6.585455]  __x64_sys_openat+0x55/0x90
+[    6.585458]  do_syscall_64+0x59/0x80
+[    6.585462]  ? irqentry_exit_to_user_mode+0x9/0x20
+[    6.585465]  ? irqentry_exit+0x35/0x40
+[    6.585467]  ? exc_page_fault+0x87/0x180
+[    6.585470]  ? asm_exc_page_fault+0x8/0x30
+[    6.585472]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[    6.585475] RIP: 0033:0x7fc26d36a6eb
+[    6.585477] Code: 25 00 00 41 00 3d 00 00 41 00 74 4b 64 8b 04 25 18 00 =
+00
+00 85 c0 75 67 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3=
+d 00
+f0 ff ff 0f 87 91 00 00 00 48 8b 54 24 28 64 48 2b 14 25
+[    6.585479] RSP: 002b:00007ffc55bb8980 EFLAGS: 00000246 ORIG_RAX:
+0000000000000101
+[    6.585481] RAX: ffffffffffffffda RBX: 0000000000000000 RCX:
+00007fc26d36a6eb
+[    6.585482] RDX: 0000000000080902 RSI: 00005561b4d8f8f0 RDI:
+00000000ffffff9c
+[    6.585484] RBP: 00005561b4d8f8f0 R08: 0000000000000000 R09:
+0000000000000000
+[    6.585485] R10: 0000000000000000 R11: 0000000000000246 R12:
+0000000000080902
+[    6.585486] R13: 00007ffc55bb8a20 R14: 00005561b4d9f2a0 R15:
+00005561b4d9f2aa
+[    6.585489]  </TASK>
+[    6.585490] ---[ end trace 0000000000000000 ]---
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
