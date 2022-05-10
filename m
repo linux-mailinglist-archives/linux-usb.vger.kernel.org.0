@@ -2,146 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB3D520AB3
-	for <lists+linux-usb@lfdr.de>; Tue, 10 May 2022 03:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEEC9520ACF
+	for <lists+linux-usb@lfdr.de>; Tue, 10 May 2022 03:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234245AbiEJBfB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 May 2022 21:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S234036AbiEJBs7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 May 2022 21:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbiEJBe6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 21:34:58 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B29A1B79C
-        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 18:31:00 -0700 (PDT)
+        with ESMTP id S232990AbiEJBs5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 21:48:57 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEB6289BDC;
+        Mon,  9 May 2022 18:45:02 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id e5so13454236pgc.5;
+        Mon, 09 May 2022 18:45:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652146261; x=1683682261;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1BXGTaOcEAu6jDr1XNLsbih6XrhF0HfOCZOa/vZF9jA=;
-  b=ndNZx6VMYJ/WQXpcCOEfG4x449iWtl23qP4g6o2REtSq4aIS/cB5/kRk
-   TzUE8yop4bJKojxR4EP2l4+AkkHoDjzi4nrR8k5Wmfhak82CtY185QvYM
-   GjwB/4/Onh+L12YM9uG9xbbqnaA0hZYSJJHKv7pO79xbOifT5A1BZRNeJ
-   w=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 May 2022 18:31:00 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 18:31:00 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 9 May 2022 18:31:00 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 9 May 2022 18:30:58 -0700
-Date:   Tue, 10 May 2022 07:00:54 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-CC:     Alan Stern <stern@rowland.harvard.edu>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [v15 3/6] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <20220510013054.GA24800@hu-pkondeti-hyd.qualcomm.com>
-References: <YnVD+ltiQhKE+jPf@google.com>
- <YnVSIvwXsKySg33M@google.com>
- <YnVmXmG+6emL4nxv@rowland.harvard.edu>
- <YnVs7kSkpjUBWc5w@google.com>
- <YnWFaSXJJ8T7IYtl@rowland.harvard.edu>
- <20220509033238.GA9170@hu-pkondeti-hyd.qualcomm.com>
- <YnkgaagoaYK7LkCq@rowland.harvard.edu>
- <20220509142341.GA28596@hu-pkondeti-hyd.qualcomm.com>
- <YnkmV1wyC8fwBdub@rowland.harvard.edu>
- <20220510011602.GA16769@hu-pkondeti-hyd.qualcomm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220510011602.GA16769@hu-pkondeti-hyd.qualcomm.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=nP61nKy/ZPvS3vrbOJaB+tc2rmY8ROtm0Xppu8VLlno=;
+        b=DCH/WQHYliiBOM5qtU28mWlxYWa0xEhfYgyUf43q9BDAmCFxHJfCZi/pZarlHfGJoY
+         UqhtZdkilfcKTzRuNdpO6n1i3LHWiGKt6FNX6KLh6Ec4/grUGWdpmjoYWt9+OrJrcK3o
+         rAIYDZlGzNFBsbpO5VdnE8SIjw484E7uyIEp92r/rXF2UolFc3Tx3Ua0lpEeJyGBV4dP
+         /E+RJI0tEyvx/20IPKLFFEvwzGtU+wr/E1lxfdIXjc81WiXHEhpLjv4CE4lJvMgDtANJ
+         sFSjwA9ttKUKEn96X8v4eQgkvHx2NiZvnt8OLaPF2SC14/6kfZxcPWPHUXmFzDod0zYt
+         E0YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=nP61nKy/ZPvS3vrbOJaB+tc2rmY8ROtm0Xppu8VLlno=;
+        b=2VUjVz3m9zB2L901MpNcYDFqHJD/fW8DWi4fRFY/ZXHZQDitW+a1H6VDNEkGcdLlqy
+         eeIAwFTqT4x19u4N9w9PnY37tzNoYxy1aBi5JJu8CVTN242cvBtCRvarlErq/JQaw2cG
+         Zg1JWtvOnWjITwQP/v16tBplVMt6zP1CUiszvSefnvsUXB4iY0ytlKvoh4TLT7NM/ryj
+         N/RYAH7duI9d2QALXtB2yQcdZPQZ92GETp0iklGPFvqY80XCPJdzR69A+m7IctIEBPlh
+         UwDeeGKxKerUL0sX+8VbRKOiE4QamNSqUKWAcaBjjjOjAAswFx9b5F2hl0/VCjJhB0UN
+         xj6w==
+X-Gm-Message-State: AOAM532R/1qGAumTfTRirZG887tlIz0FwnuwJPSaza21pxIGHZrLABV8
+        I8bircdI0zi7geNuBxDUem91gRvpFKo=
+X-Google-Smtp-Source: ABdhPJwzT/+uJ2WTtLY2nkbyUT0PnbYSh7AqMNOP0QKEmBYONx6/3TFc58YIa9s0ov22A+8PSn8wnw==
+X-Received: by 2002:a63:68c4:0:b0:3c6:c9a6:e316 with SMTP id d187-20020a6368c4000000b003c6c9a6e316mr5139838pgc.399.1652147101507;
+        Mon, 09 May 2022 18:45:01 -0700 (PDT)
+Received: from localhost.localdomain ([49.216.43.238])
+        by smtp.gmail.com with ESMTPSA id x186-20020a627cc3000000b0050dc7628134sm9590075pfc.14.2022.05.09.18.44.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 09 May 2022 18:45:00 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, matthias.bgg@gmail.com
+Cc:     cy_huang@richtek.com, bryan_huang@richtek.com,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: typec: tcpci_mt6360: Update for BMC PHY setting
+Date:   Tue, 10 May 2022 09:44:52 +0800
+Message-Id: <1652147092-19255-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 10, 2022 at 06:46:02AM +0530, Pavan Kondeti wrote:
-> On Mon, May 09, 2022 at 10:33:59AM -0400, Alan Stern wrote:
-> > On Mon, May 09, 2022 at 07:53:41PM +0530, Pavan Kondeti wrote:
-> > > On Mon, May 09, 2022 at 10:08:41AM -0400, Alan Stern wrote:
-> > > > BTW, if there's any trouble with getting device_wakeup_path() to work 
-> > > > the way you want, you could consider instead calling 
-> > > > usb_wakeup_enabled_descendants() on the root hub.  This function returns 
-> > > > a count of the number of wakeup-enabled USB devices at or below the 
-> > > > device you pass to it.
-> > > > 
-> > > 
-> > > This series [1] started with usb_wakeup_enabled_descendants() actually. one
-> > > of the problem with this API is that we have to call this on both USB2.0 and
-> > > USB3.0 root hubs. Do you think we can have a wrapper function like
-> > > usb_hcd_wakeup_enabled_descendants() that accepts hcd as an argument and
-> > > internally call usb_wakeup_enabled_descendants() on both root hubs and return
-> > > the result.
-> > 
-> > Sure you can.  Feel free to write such a function and add it to hcd.c.  
-> > Ideally it should work for host controllers with any number of root 
-> > hubs, just adding up the number of wakeup-enabled descendants for all of 
-> > them.
-> > 
-> Thanks Alan for the suggestion. Does the below diff looks good?
-> 
-> Thanks,
-> Pavan
-> 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index c9443aa..f707f9b 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -2704,6 +2704,19 @@ int usb_hcd_is_primary_hcd(struct usb_hcd *hcd)
->  }
->  EXPORT_SYMBOL_GPL(usb_hcd_is_primary_hcd);
->  
-> +unsigned int usb_hcd_wakeup_enabled_descendants(struct usb_hcd *hcd)
-> +{
-> +	unsigned int nr_wakeup;
-> +
-> +	nr_wakeup = usb_wakeup_enabled_descendants(hcd->self.root_hub);
-> +
-> +	if (hcd->shared_hcd)
-> +		nr_wakeup += usb_wakeup_enabled_descendants(hcd->shared_hcd->self.root_hub);
-> +
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-btw, should we add an else block here to take care of companion controllers
-associcated if any. Can you pls tell us if it is possible that we have all
-the below cases together? should the companion check be done only when
-shared_hcd is not present?
+Update MT6360 BMC PHY Tx/Rx setting for the compatibility.
 
-- primary HCD (USB2.0, EHCI/XHCI)
-- secondary HCD (USB3.0 XHCI)
-- hs_companion (USB2.0 companion) for OHCI/UHCI
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+---
+Hi,
 
-unsigned int usb_hcd_wakeup_enabled_descendants(struct usb_hcd *hcd)
-{
-	unsigned int nr_wakeup;
+Recently, there's some USBPD MT6360 IOP issue from the user.
+From our RD's comment, BMC PHY Tx/Rx setting need to be updated for
+the compatibility issue.
+---
+ drivers/usb/typec/tcpm/tcpci_mt6360.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-	nr_wakeup = usb_wakeup_enabled_descendants(hcd->self.root_hub);
+diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+index f1bd9e0..8a952ea 100644
+--- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
++++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+@@ -15,6 +15,9 @@
+ 
+ #include "tcpci.h"
+ 
++#define MT6360_REG_PHYCTRL1	0x80
++#define MT6360_REG_PHYCTRL3	0x82
++#define MT6360_REG_PHYCTRL7	0x86
+ #define MT6360_REG_VCONNCTRL1	0x8C
+ #define MT6360_REG_MODECTRL2	0x8F
+ #define MT6360_REG_SWRESET	0xA0
+@@ -22,6 +25,8 @@
+ #define MT6360_REG_DRPCTRL1	0xA2
+ #define MT6360_REG_DRPCTRL2	0xA3
+ #define MT6360_REG_I2CTORST	0xBF
++#define MT6360_REG_PHYCTRL11	0xCA
++#define MT6360_REG_RXCTRL1	0xCE
+ #define MT6360_REG_RXCTRL2	0xCF
+ #define MT6360_REG_CTDCTRL2	0xEC
+ 
+@@ -106,6 +111,27 @@ static int mt6360_tcpc_init(struct tcpci *tcpci, struct tcpci_data *tdata)
+ 	if (ret)
+ 		return ret;
+ 
++	/* BMC PHY */
++	ret = mt6360_tcpc_write16(regmap, MT6360_REG_PHYCTRL1, 0x3A70);
++	if (ret)
++		return ret;
++
++	ret = regmap_write(regmap, MT6360_REG_PHYCTRL3,  0x82);
++	if (ret)
++		return ret;
++
++	ret = regmap_write(regmap, MT6360_REG_PHYCTRL7, 0x36);
++	if (ret)
++		return ret;
++
++	ret = mt6360_tcpc_write16(regmap, MT6360_REG_PHYCTRL11, 0x3C60);
++	if (ret)
++		return ret;
++
++	ret = regmap_write(regmap, MT6360_REG_RXCTRL1, 0xE8);
++	if (ret)
++		return ret;
++
+ 	/* Set shipping mode off, AUTOIDLE on */
+ 	return regmap_write(regmap, MT6360_REG_MODECTRL2, 0x7A);
+ }
+-- 
+2.7.4
 
-	if (hcd->shared_hcd)
-		nr_wakeup += usb_wakeup_enabled_descendants(hcd->shared_hcd->self.root_hub);
-	else if (hcd->self.hs_companion)
-		nr_wakeup += usb_wakeup_enabled_descendants(hcd->self.hs_companion->root_hub);
-
-	return nr_wakeup;
-}
-
-Thanks,
-Pavan
