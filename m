@@ -2,135 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEC9520ACF
-	for <lists+linux-usb@lfdr.de>; Tue, 10 May 2022 03:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABBB520C35
+	for <lists+linux-usb@lfdr.de>; Tue, 10 May 2022 05:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234036AbiEJBs7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 May 2022 21:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
+        id S235696AbiEJDmH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 May 2022 23:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232990AbiEJBs5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 21:48:57 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEB6289BDC;
-        Mon,  9 May 2022 18:45:02 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id e5so13454236pgc.5;
-        Mon, 09 May 2022 18:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=nP61nKy/ZPvS3vrbOJaB+tc2rmY8ROtm0Xppu8VLlno=;
-        b=DCH/WQHYliiBOM5qtU28mWlxYWa0xEhfYgyUf43q9BDAmCFxHJfCZi/pZarlHfGJoY
-         UqhtZdkilfcKTzRuNdpO6n1i3LHWiGKt6FNX6KLh6Ec4/grUGWdpmjoYWt9+OrJrcK3o
-         rAIYDZlGzNFBsbpO5VdnE8SIjw484E7uyIEp92r/rXF2UolFc3Tx3Ua0lpEeJyGBV4dP
-         /E+RJI0tEyvx/20IPKLFFEvwzGtU+wr/E1lxfdIXjc81WiXHEhpLjv4CE4lJvMgDtANJ
-         sFSjwA9ttKUKEn96X8v4eQgkvHx2NiZvnt8OLaPF2SC14/6kfZxcPWPHUXmFzDod0zYt
-         E0YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=nP61nKy/ZPvS3vrbOJaB+tc2rmY8ROtm0Xppu8VLlno=;
-        b=2VUjVz3m9zB2L901MpNcYDFqHJD/fW8DWi4fRFY/ZXHZQDitW+a1H6VDNEkGcdLlqy
-         eeIAwFTqT4x19u4N9w9PnY37tzNoYxy1aBi5JJu8CVTN242cvBtCRvarlErq/JQaw2cG
-         Zg1JWtvOnWjITwQP/v16tBplVMt6zP1CUiszvSefnvsUXB4iY0ytlKvoh4TLT7NM/ryj
-         N/RYAH7duI9d2QALXtB2yQcdZPQZ92GETp0iklGPFvqY80XCPJdzR69A+m7IctIEBPlh
-         UwDeeGKxKerUL0sX+8VbRKOiE4QamNSqUKWAcaBjjjOjAAswFx9b5F2hl0/VCjJhB0UN
-         xj6w==
-X-Gm-Message-State: AOAM532R/1qGAumTfTRirZG887tlIz0FwnuwJPSaza21pxIGHZrLABV8
-        I8bircdI0zi7geNuBxDUem91gRvpFKo=
-X-Google-Smtp-Source: ABdhPJwzT/+uJ2WTtLY2nkbyUT0PnbYSh7AqMNOP0QKEmBYONx6/3TFc58YIa9s0ov22A+8PSn8wnw==
-X-Received: by 2002:a63:68c4:0:b0:3c6:c9a6:e316 with SMTP id d187-20020a6368c4000000b003c6c9a6e316mr5139838pgc.399.1652147101507;
-        Mon, 09 May 2022 18:45:01 -0700 (PDT)
-Received: from localhost.localdomain ([49.216.43.238])
-        by smtp.gmail.com with ESMTPSA id x186-20020a627cc3000000b0050dc7628134sm9590075pfc.14.2022.05.09.18.44.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 09 May 2022 18:45:00 -0700 (PDT)
-From:   cy_huang <u0084500@gmail.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, matthias.bgg@gmail.com
-Cc:     cy_huang@richtek.com, bryan_huang@richtek.com,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: typec: tcpci_mt6360: Update for BMC PHY setting
-Date:   Tue, 10 May 2022 09:44:52 +0800
-Message-Id: <1652147092-19255-1-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S235727AbiEJDkk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 23:40:40 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E83A1AF11;
+        Mon,  9 May 2022 20:36:07 -0700 (PDT)
+X-UUID: 997e40054d824b18a0d998b419c6c56e-20220510
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:8f55eb27-f67a-449c-9bfd-f3b5ec79c8bb,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:8
+X-CID-META: VersionHash:faefae9,CLOUDID:227234b3-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 997e40054d824b18a0d998b419c6c56e-20220510
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1199608047; Tue, 10 May 2022 11:36:03 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 10 May 2022 11:36:02 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 10 May 2022 11:36:02 +0800
+Message-ID: <0fed7d2383c1b8367d22fe4f2cccf91b207e14e5.camel@mediatek.com>
+Subject: Re: [PATCH v2 3/4] arm64: dts: mediatek: mt8195: add efuse node and
+ cells
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Fabien Parent <fparent@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Macpaul Lin <macpaul.lin@gmail.com>
+Date:   Tue, 10 May 2022 11:36:02 +0800
+In-Reply-To: <6e26f483-f4b6-0d0f-7cca-cfa19a39b10a@mediatek.com>
+References: <20220128062902.26273-1-chunfeng.yun@mediatek.com>
+         <20220128062902.26273-3-chunfeng.yun@mediatek.com>
+         <YgY3qvAy5lW1tEdG@kroah.com>
+         <6e26f483-f4b6-0d0f-7cca-cfa19a39b10a@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+On Wed, 2022-02-16 at 17:38 +0800, Macpaul Lin wrote:
+> 
+> On 2/11/22 6:17 PM, Greg Kroah-Hartman wrote:
+> > On Fri, Jan 28, 2022 at 02:29:01PM +0800, Chunfeng Yun wrote:
+> > > Add efuse node and cells used by t-phy to fix the bit shift issue
+> > > 
+> > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > ---
+> > > v2: use hw auto load for u2phy which has no this issue
+> > > 
+> > > Note:
+> > > 
+> > >   depend on the reviewing patch:
+> > > 
+> > > [v9,3/3] arm64: dts: Add mediatek SoC mt8195 and evaluation board
+> > > 
+https://urldefense.com/v3/__https://patchwork.kernel.org/patch/12711296__;!!CTRNKA9wMg0ARbw!0Jg8kLN4kBw0LcbiAH1HYTq2uQ5VwiD-CE8yoFBD7oApn8YNSdmVpwSdY1q2C7LvY6c$
+> > 
+> > As I don't have that in my tree, I can only take the first 2
+> > patches
+> > here now, thanks.
+> > 
+> > greg k-h
+> > 
+> > _______________________________________________
+> > Linux-mediatek mailing list
+> > Linux-mediatek@lists.infradead.org
+> > 
 
-Update MT6360 BMC PHY Tx/Rx setting for the compatibility.
+Tested-by: Macpaul Lin <macpaul.lin@mediatek.com>
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
-Hi,
+This patch has been
+tested with:
+ - "for-next" branch in MediaTek tree [1].
 
-Recently, there's some USBPD MT6360 IOP issue from the user.
-From our RD's comment, BMC PHY Tx/Rx setting need to be updated for
-the compatibility issue.
----
- drivers/usb/typec/tcpm/tcpci_mt6360.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git 
+ - added more debug log to confirm efuse probing status at my local.
+  -
+If probe success, it won't show any log.
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-index f1bd9e0..8a952ea 100644
---- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
-+++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-@@ -15,6 +15,9 @@
- 
- #include "tcpci.h"
- 
-+#define MT6360_REG_PHYCTRL1	0x80
-+#define MT6360_REG_PHYCTRL3	0x82
-+#define MT6360_REG_PHYCTRL7	0x86
- #define MT6360_REG_VCONNCTRL1	0x8C
- #define MT6360_REG_MODECTRL2	0x8F
- #define MT6360_REG_SWRESET	0xA0
-@@ -22,6 +25,8 @@
- #define MT6360_REG_DRPCTRL1	0xA2
- #define MT6360_REG_DRPCTRL2	0xA3
- #define MT6360_REG_I2CTORST	0xBF
-+#define MT6360_REG_PHYCTRL11	0xCA
-+#define MT6360_REG_RXCTRL1	0xCE
- #define MT6360_REG_RXCTRL2	0xCF
- #define MT6360_REG_CTDCTRL2	0xEC
- 
-@@ -106,6 +111,27 @@ static int mt6360_tcpc_init(struct tcpci *tcpci, struct tcpci_data *tdata)
- 	if (ret)
- 		return ret;
- 
-+	/* BMC PHY */
-+	ret = mt6360_tcpc_write16(regmap, MT6360_REG_PHYCTRL1, 0x3A70);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(regmap, MT6360_REG_PHYCTRL3,  0x82);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(regmap, MT6360_REG_PHYCTRL7, 0x36);
-+	if (ret)
-+		return ret;
-+
-+	ret = mt6360_tcpc_write16(regmap, MT6360_REG_PHYCTRL11, 0x3C60);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(regmap, MT6360_REG_RXCTRL1, 0xE8);
-+	if (ret)
-+		return ret;
-+
- 	/* Set shipping mode off, AUTOIDLE on */
- 	return regmap_write(regmap, MT6360_REG_MODECTRL2, 0x7A);
- }
--- 
-2.7.4
+Thanks
+Macpaul Lin
 
