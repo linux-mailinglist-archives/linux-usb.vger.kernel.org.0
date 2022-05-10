@@ -2,75 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CDDF52072F
-	for <lists+linux-usb@lfdr.de>; Mon,  9 May 2022 23:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5163D520A8D
+	for <lists+linux-usb@lfdr.de>; Tue, 10 May 2022 03:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbiEIV7L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 May 2022 17:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
+        id S234154AbiEJBUJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 May 2022 21:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbiEIV66 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 17:58:58 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010142D9EEB
-        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 14:51:43 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2f7d621d1caso159832187b3.11
-        for <linux-usb@vger.kernel.org>; Mon, 09 May 2022 14:51:43 -0700 (PDT)
+        with ESMTP id S233104AbiEJBUF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 May 2022 21:20:05 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E1F18B944
+        for <linux-usb@vger.kernel.org>; Mon,  9 May 2022 18:16:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AvO3ygd/UqQBdhP/KL3f8qnTPDYPqb0azYvzR8YOfT8=;
-        b=R3Bl52ygNd7YCtVGI1Dw5zkcyKwpLE8CGq7E2JVCvhEmmiwnJ4wmVpVM4hlSvlECuc
-         OQDjh4PbkC9KiRGsYt0AXq17RBizWsfzpjBDi44Q8JKJVglwWIHC0BYVTNq/nQC/gYia
-         I4x5J+hUljknRIc8rVa8KUkLegjNrIQsTA4RjmG7enjhjU7pf9lmdlt0hY4Xx2xd7Eud
-         CbDnUZubySlms7d+G+FN3irKBt4FdgSC6BgxnsVCA3QRtieNX4s3giofwSk9qxOPcB/H
-         bqwRhSvS+2yebAoixhhQ2quEtBR3/WErNLr/69uUN0Bm818iDpAErl2YPNBfXBbMM2zy
-         eOIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AvO3ygd/UqQBdhP/KL3f8qnTPDYPqb0azYvzR8YOfT8=;
-        b=stMohJOlypJ4whMml0eRoW2rsrm5tGCOLaXNalETPmAxFEI8BywIuexdrMO62/RuyL
-         rePBLSUJfQvscAXTavQ4XoCcFkTA8mWVTAaI0tlNp6kWc6q39neoiBzhenztgwVST7p4
-         OYSuG5fSo5LXFPFMaWgrxVzIH70+jMLvgRwtTgajxCFOQ6P/b3m6r07Zjnz5EckDuj4l
-         geKpWtNNNREgjq6TJX73KgK9Ex88ujRPhsllI1to7R6/xtDXiEPUvMeEVzyRBHeJ+iLl
-         O7rdDrD9d05zDjcbXomZv6M+bt0/tcU7GfQt+A4AoKsLlPrzjvvg7/jhiNOcFyDAlBnH
-         d7RQ==
-X-Gm-Message-State: AOAM530djSvsT5hJipdDph8fLD7f5OTcdc2nRLpx3U+awpVOd+9ISEWK
-        o7iAExlRtGdSSJUQbwIFZl2jzJbFwUoeDXYId4amSQ==
-X-Google-Smtp-Source: ABdhPJz66qKQ182cMfzUcfRuUB+ezFafeLeHufnODn96xLMf/SFpFj0VGuEdSlO2r018rYSvQhdo92Derlajd83ax3s=
-X-Received: by 2002:a0d:e5c6:0:b0:2f8:c866:7af9 with SMTP id
- o189-20020a0de5c6000000b002f8c8667af9mr16673482ywe.268.1652133101967; Mon, 09
- May 2022 14:51:41 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652145369; x=1683681369;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Tq7FZOBw/NOz5ZuobKUeTYTFITdwEhq/Eh1md5SNUW4=;
+  b=ggF50HVckFre6xVNnxnaW/BaeuBGVEqKCTlxX7i8r6ctopC1axKS4HZG
+   rHiq5mH6IFHHoGlbhpeSt05uix9DlkMIjR01XCYpkwYk9q96T4j/OLEE1
+   4+uVdTVKI0sFEORHT1PSMrGyZaU76r65J6aK6IXOafbCdIus+qwnd5iVY
+   c=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 09 May 2022 18:16:08 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 18:16:08 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 9 May 2022 18:16:08 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 9 May 2022 18:16:06 -0700
+Date:   Tue, 10 May 2022 06:46:02 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [v15 3/6] usb: dwc3: core: Host wake up support from system
+ suspend
+Message-ID: <20220510011602.GA16769@hu-pkondeti-hyd.qualcomm.com>
+References: <20220506051448.GE4640@hu-pkondeti-hyd.qualcomm.com>
+ <YnVD+ltiQhKE+jPf@google.com>
+ <YnVSIvwXsKySg33M@google.com>
+ <YnVmXmG+6emL4nxv@rowland.harvard.edu>
+ <YnVs7kSkpjUBWc5w@google.com>
+ <YnWFaSXJJ8T7IYtl@rowland.harvard.edu>
+ <20220509033238.GA9170@hu-pkondeti-hyd.qualcomm.com>
+ <YnkgaagoaYK7LkCq@rowland.harvard.edu>
+ <20220509142341.GA28596@hu-pkondeti-hyd.qualcomm.com>
+ <YnkmV1wyC8fwBdub@rowland.harvard.edu>
 MIME-Version: 1.0
-References: <20220421074204.1284072-1-hch@lst.de> <CACRpkdbdKBfmXGdyTm3T-MFAK30N-z4KH0k8eD8F7xaYUbDDhA@mail.gmail.com>
- <Ynk2wjRyH05uEJiO@shell.armlinux.org.uk>
-In-Reply-To: <Ynk2wjRyH05uEJiO@shell.armlinux.org.uk>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 9 May 2022 23:51:29 +0200
-Message-ID: <CACRpkdYVrPt_GHt19pT2BQZJ08QrS87XfvU-aWVibzP2qBSV2g@mail.gmail.com>
-Subject: Re: fully convert arm to use dma-direct
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Christoph Hellwig <hch@lst.de>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YnkmV1wyC8fwBdub@rowland.harvard.edu>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,17 +74,67 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 9, 2022 at 5:44 PM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
+On Mon, May 09, 2022 at 10:33:59AM -0400, Alan Stern wrote:
+> On Mon, May 09, 2022 at 07:53:41PM +0530, Pavan Kondeti wrote:
+> > On Mon, May 09, 2022 at 10:08:41AM -0400, Alan Stern wrote:
+> > > BTW, if there's any trouble with getting device_wakeup_path() to work 
+> > > the way you want, you could consider instead calling 
+> > > usb_wakeup_enabled_descendants() on the root hub.  This function returns 
+> > > a count of the number of wakeup-enabled USB devices at or below the 
+> > > device you pass to it.
+> > > 
+> > 
+> > This series [1] started with usb_wakeup_enabled_descendants() actually. one
+> > of the problem with this API is that we have to call this on both USB2.0 and
+> > USB3.0 root hubs. Do you think we can have a wrapper function like
+> > usb_hcd_wakeup_enabled_descendants() that accepts hcd as an argument and
+> > internally call usb_wakeup_enabled_descendants() on both root hubs and return
+> > the result.
+> 
+> Sure you can.  Feel free to write such a function and add it to hcd.c.  
+> Ideally it should work for host controllers with any number of root 
+> hubs, just adding up the number of wakeup-enabled descendants for all of 
+> them.
+> 
+Thanks Alan for the suggestion. Does the below diff looks good?
 
-> Assabet is what needs testing for that, or one of the SA1110 machines.
-> I'm away from home on my boat (and have been for the last two and a bit
-> weeks) so can't test. Sorry.
+Thanks,
+Pavan
 
-Hm I actually have an Assabet, but I never even powered it up. I'm
-on parental leave for another week but after that I could actually
-try to get that machine up, but it'd be a bit late for this merge window
-indeed.
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index c9443aa..f707f9b 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -2704,6 +2704,19 @@ int usb_hcd_is_primary_hcd(struct usb_hcd *hcd)
+ }
+ EXPORT_SYMBOL_GPL(usb_hcd_is_primary_hcd);
+ 
++unsigned int usb_hcd_wakeup_enabled_descendants(struct usb_hcd *hcd)
++{
++	unsigned int nr_wakeup;
++
++	nr_wakeup = usb_wakeup_enabled_descendants(hcd->self.root_hub);
++
++	if (hcd->shared_hcd)
++		nr_wakeup += usb_wakeup_enabled_descendants(hcd->shared_hcd->self.root_hub);
++
++	return nr_wakeup;
++}
++EXPORT_SYMBOL_GPL(usb_hcd_wakeup_enabled_descendants);
++
+ int usb_hcd_find_raw_port_number(struct usb_hcd *hcd, int port1)
+ {
+ 	if (!hcd->driver->find_raw_port_number)
+diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+index 1886e81..a5d561b 100644
+--- a/include/linux/usb/hcd.h
++++ b/include/linux/usb/hcd.h
+@@ -474,6 +474,7 @@ extern void usb_remove_hcd(struct usb_hcd *hcd);
+ extern int usb_hcd_find_raw_port_number(struct usb_hcd *hcd, int port1);
+ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
+ 			    dma_addr_t dma, size_t size);
++extern unsigned int usb_hcd_wakeup_enabled_descendants(struct usb_hcd *hcd);
+ 
+ struct platform_device;
+ extern void usb_hcd_platform_shutdown(struct platform_device *dev);
 
-BR
-Linus Walleij
