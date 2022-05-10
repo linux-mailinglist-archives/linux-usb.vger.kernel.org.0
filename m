@@ -2,118 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 324B15222E3
-	for <lists+linux-usb@lfdr.de>; Tue, 10 May 2022 19:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F125225DC
+	for <lists+linux-usb@lfdr.de>; Tue, 10 May 2022 22:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245690AbiEJRjw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 May 2022 13:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
+        id S229791AbiEJUut (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 May 2022 16:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243060AbiEJRjv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 May 2022 13:39:51 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B325F63;
-        Tue, 10 May 2022 10:35:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652204153; x=1683740153;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=r8ZcV1vuUcmf0/igLjZxMrCayIbyMQkN9WHg1UvKdEo=;
-  b=G7dRNKVFa30ytU44Y9h0fTme10Y/LSMkJzKcUt3vrqS5kvJ1ot/oS8mZ
-   FdwNDsu6Cn1H3JmmGfHPWY+LK8TlsuVu1oTLF2NOLA3Fq6bwSUVqjkqyb
-   v9HldPJigTu4WYX8kbnwMwlawXHqkUuliP9tuzayxBivShHrLVACJegkm
-   Q=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 10 May 2022 10:35:52 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 10:35:51 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 10 May 2022 10:35:51 -0700
-Received: from [10.216.55.79] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 10 May
- 2022 10:35:45 -0700
-Message-ID: <7ef88262-4292-3077-00a1-dc06b2483b10@quicinc.com>
-Date:   Tue, 10 May 2022 23:05:42 +0530
+        with ESMTP id S229491AbiEJUur (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 May 2022 16:50:47 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F337F1C115
+        for <linux-usb@vger.kernel.org>; Tue, 10 May 2022 13:50:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 56E3DCE2023
+        for <linux-usb@vger.kernel.org>; Tue, 10 May 2022 20:50:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 95779C385C8
+        for <linux-usb@vger.kernel.org>; Tue, 10 May 2022 20:50:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652215840;
+        bh=dz3PZ1ONioSkYIHn4qYv0JiQySSXRvelnMN6/xNa6HE=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=R+LQT+Kcpc52wAxdm2A+JKTlF6Euxvde91W7Rub1Y5T1+Rnfygger2ufu+AOsHeLv
+         +Yiio6zcoufHOPuQmxFSqbWbSsg/SlWnyFVCBTa+L5ERr1SdAc/bNOYZJvpzZKhEFM
+         iq8N2Vouc1q301jJ8muKf5g78j95NLQRwPuMGqpinId4cmIWm4FjkSzr2HCIAu/jlW
+         iREjVuV2eTjctmTxRzgd4eF6z1v/Tr2uuWwn5cj1lbQXvCtADkbgL/8NCi1XVPiAsV
+         g2e5XZ7VUytILGyE4WRWVnGlyevggPJczrVzavnvPvu3oa+l7h9QpoMY7vzuF4yPUe
+         QoVzgTzfDhRyw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 74C83CC13AF; Tue, 10 May 2022 20:50:40 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
+ xhci_hcd rejecting DMA map of vmalloc memory
+Date:   Tue, 10 May 2022 20:50:40 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: satadru@umich.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215890-208809-HJx1Rs5PDP@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
+References: <bug-215890-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [v3 3/3] arm64: dts: qcom: sc7280: Update SNPS Phy params for
- SC7280 IDP device
-Content-Language: en-US
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Doug Anderson" <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <quic_ppratap@quicinc.com>,
-        <quic_vpulyala@quicinc.com>
-References: <1652011947-18575-1-git-send-email-quic_kriskura@quicinc.com>
- <1652011947-18575-4-git-send-email-quic_kriskura@quicinc.com>
- <20220509032005.GJ4640@hu-pkondeti-hyd.qualcomm.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20220509032005.GJ4640@hu-pkondeti-hyd.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
 
-On 5/9/2022 8:50 AM, Pavan Kondeti wrote:
-> Hi Krishna,
->
-> On Sun, May 08, 2022 at 05:42:27PM +0530, Krishna Kurapati wrote:
->> Overriding the SNPS Phy tuning parameters for SC7280 IDP device.
->>
->> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> index 5eb6689..ad85ffb 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> @@ -325,6 +325,12 @@
->>   	vdda-pll-supply = <&vreg_l10c_0p8>;
->>   	vdda33-supply = <&vreg_l2b_3p0>;
->>   	vdda18-supply = <&vreg_l1c_1p8>;
->> +	qcom,hs-rise-fall-time-bps = <0>;
->> +	qcom,squelch-detector-bps = <(-2090)>;
->> +	qcom,hs-disconnect-bps = <1743>;
->> +	qcom,hs-amplitude-bps = <1780>;
->> +	qcom,hs-crossover-voltage = <(-31)>;
->> +	qcom,hs-output-impedance = <2600>;
->>   };
-> Is this an example change or do we see any HS electrical compliance failures
-> on SC7280 IDP that will get fixed with these override sequence?
->
-> Thanks,
-> Pavan
+--- Comment #5 from Satadru Pramanik (satadru@umich.edu) ---
+5.18-rc1 has the same issue...
 
-Hi Pavan,
+Is it worth bisecting between 5.17 ad 5.18-rc1?
 
-These results were based on compliance testing results.
+Maybe there are obvious suspect commits to start with?
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
