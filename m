@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC44521E97
-	for <lists+linux-usb@lfdr.de>; Tue, 10 May 2022 17:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632C252203F
+	for <lists+linux-usb@lfdr.de>; Tue, 10 May 2022 17:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244648AbiEJPcB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 May 2022 11:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
+        id S1346873AbiEJP67 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 May 2022 11:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346174AbiEJPbi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 May 2022 11:31:38 -0400
+        with ESMTP id S1347979AbiEJP62 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 May 2022 11:58:28 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4ADCF506D5
-        for <linux-usb@vger.kernel.org>; Tue, 10 May 2022 08:24:25 -0700 (PDT)
-Received: (qmail 164510 invoked by uid 1000); 10 May 2022 11:24:24 -0400
-Date:   Tue, 10 May 2022 11:24:24 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3677DE7320
+        for <linux-usb@vger.kernel.org>; Tue, 10 May 2022 08:51:29 -0700 (PDT)
+Received: (qmail 165588 invoked by uid 1000); 10 May 2022 11:51:29 -0400
+Date:   Tue, 10 May 2022 11:51:29 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Felipe Balbi <balbi@kernel.org>,
         USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [v15 3/6] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <YnqDqD0CU8euoe6B@rowland.harvard.edu>
-References: <YnVSIvwXsKySg33M@google.com>
- <YnVmXmG+6emL4nxv@rowland.harvard.edu>
- <YnVs7kSkpjUBWc5w@google.com>
- <YnWFaSXJJ8T7IYtl@rowland.harvard.edu>
- <20220509033238.GA9170@hu-pkondeti-hyd.qualcomm.com>
- <YnkgaagoaYK7LkCq@rowland.harvard.edu>
- <20220509142341.GA28596@hu-pkondeti-hyd.qualcomm.com>
- <YnkmV1wyC8fwBdub@rowland.harvard.edu>
- <20220510011602.GA16769@hu-pkondeti-hyd.qualcomm.com>
- <20220510013054.GA24800@hu-pkondeti-hyd.qualcomm.com>
+Subject: [PATCH] USB: gadget: Add ID numbers to gadget names
+Message-ID: <YnqKAXKyp9Vq/pbn@rowland.harvard.edu>
+References: <CAMuHMdVDK0W0T3=+2c1E6wtwy5JTUemTGYyj3PFuVUhK++AzrA@mail.gmail.com>
+ <YnFO0Qr8RY7peFCg@rowland.harvard.edu>
+ <YnaR8LaaPTdLTiok@rowland.harvard.edu>
+ <CAMuHMdUpOiHHMktPk_-NauDW2ufvGThnkFU7Pok376pM6OEyYw@mail.gmail.com>
+ <Ynkh5eKtfxU+AyZX@rowland.harvard.edu>
+ <CAMuHMdVi6jCi=tRBNjBodVcA48ygiqPACQcmHx+1HRYnArJ9tQ@mail.gmail.com>
+ <YnktokC8Uk9j53yO@rowland.harvard.edu>
+ <YnlAAxT5Lq0NvxX0@kroah.com>
+ <YnlFl0M0FRzhxwpK@rowland.harvard.edu>
+ <YnoZva+tZa8Ix+aI@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510013054.GA24800@hu-pkondeti-hyd.qualcomm.com>
+In-Reply-To: <YnoZva+tZa8Ix+aI@kroah.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
@@ -46,28 +46,108 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 10, 2022 at 07:00:54AM +0530, Pavan Kondeti wrote:
-> btw, should we add an else block here to take care of companion controllers
-> associcated if any. Can you pls tell us if it is possible that we have all
-> the below cases together? should the companion check be done only when
-> shared_hcd is not present?
-> 
-> - primary HCD (USB2.0, EHCI/XHCI)
-> - secondary HCD (USB3.0 XHCI)
-> - hs_companion (USB2.0 companion) for OHCI/UHCI
-> 
-> unsigned int usb_hcd_wakeup_enabled_descendants(struct usb_hcd *hcd)
-> {
-> 	unsigned int nr_wakeup;
-> 
-> 	nr_wakeup = usb_wakeup_enabled_descendants(hcd->self.root_hub);
-> 
-> 	if (hcd->shared_hcd)
-> 		nr_wakeup += usb_wakeup_enabled_descendants(hcd->shared_hcd->self.root_hub);
-> 	else if (hcd->self.hs_companion)
-> 		nr_wakeup += usb_wakeup_enabled_descendants(hcd->self.hs_companion->root_hub);
+Putting USB gadgets on a new bus of their own encounters a problem
+when multiple gadgets are present: They all have the same name!  The
+driver core fails with a "sys: cannot create duplicate filename" error
+when creating any of the /sys/bus/gadget/devices/<gadget-name>
+symbolic links after the first.
 
-No, this is wrong.  Companion controllers do not contribute to the 
-descendant count.  You should ignore them.
+This patch fixes the problem by adding a ".N" suffix to each gadget's
+name when the gadget is registered (where N is a unique ID number),
+thus making the names distinct.
 
-Alan Stern
+Reported-and-tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
+
+---
+
+
+[as1980]
+
+
+ drivers/usb/gadget/udc/core.c |   16 ++++++++++++++--
+ include/linux/usb/gadget.h    |    2 ++
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+Index: usb-devel/drivers/usb/gadget/udc/core.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/udc/core.c
++++ usb-devel/drivers/usb/gadget/udc/core.c
+@@ -12,6 +12,7 @@
+ #include <linux/module.h>
+ #include <linux/device.h>
+ #include <linux/list.h>
++#include <linux/idr.h>
+ #include <linux/err.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/sched/task_stack.h>
+@@ -23,6 +24,8 @@
+ 
+ #include "trace.h"
+ 
++static DEFINE_IDA(gadget_id_numbers);
++
+ static struct bus_type gadget_bus_type;
+ 
+ /**
+@@ -1248,7 +1251,6 @@ static void usb_udc_nop_release(struct d
+ void usb_initialize_gadget(struct device *parent, struct usb_gadget *gadget,
+ 		void (*release)(struct device *dev))
+ {
+-	dev_set_name(&gadget->dev, "gadget");
+ 	INIT_WORK(&gadget->work, usb_gadget_state_work);
+ 	gadget->dev.parent = parent;
+ 
+@@ -1304,12 +1306,21 @@ int usb_add_gadget(struct usb_gadget *ga
+ 	usb_gadget_set_state(gadget, USB_STATE_NOTATTACHED);
+ 	udc->vbus = true;
+ 
++	ret = ida_alloc(&gadget_id_numbers, GFP_KERNEL);
++	if (ret < 0)
++		goto err_del_udc;
++	gadget->id_number = ret;
++	dev_set_name(&gadget->dev, "gadget.%d", ret);
++
+ 	ret = device_add(&gadget->dev);
+ 	if (ret)
+-		goto err_del_udc;
++		goto err_free_id;
+ 
+ 	return 0;
+ 
++ err_free_id:
++	ida_free(&gadget_id_numbers, gadget->id_number);
++
+  err_del_udc:
+ 	flush_work(&gadget->work);
+ 	device_del(&udc->dev);
+@@ -1417,6 +1428,7 @@ void usb_del_gadget(struct usb_gadget *g
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_REMOVE);
+ 	flush_work(&gadget->work);
+ 	device_del(&gadget->dev);
++	ida_free(&gadget_id_numbers, gadget->id_number);
+ 	device_unregister(&udc->dev);
+ }
+ EXPORT_SYMBOL_GPL(usb_del_gadget);
+Index: usb-devel/include/linux/usb/gadget.h
+===================================================================
+--- usb-devel.orig/include/linux/usb/gadget.h
++++ usb-devel/include/linux/usb/gadget.h
+@@ -386,6 +386,7 @@ struct usb_gadget_ops {
+  * @lpm_capable: If the gadget max_speed is FULL or HIGH, this flag
+  *	indicates that it supports LPM as per the LPM ECN & errata.
+  * @irq: the interrupt number for device controller.
++ * @id_number: a unique ID number for ensuring that gadget names are distinct
+  *
+  * Gadgets have a mostly-portable "gadget driver" implementing device
+  * functions, handling all usb configurations and interfaces.  Gadget
+@@ -446,6 +447,7 @@ struct usb_gadget {
+ 	unsigned			connected:1;
+ 	unsigned			lpm_capable:1;
+ 	int				irq;
++	int				id_number;
+ };
+ #define work_to_gadget(w)	(container_of((w), struct usb_gadget, work))
+ 
