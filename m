@@ -2,163 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CD7522DDE
-	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 10:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99992522E4C
+	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 10:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241368AbiEKIGg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 May 2022 04:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S243631AbiEKI0V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 May 2022 04:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238154AbiEKIGc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 04:06:32 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC9A2EA30
-        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 01:06:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652256391; x=1683792391;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=porYyl8VNrOzZeHdyiV5AF5EAJm516jQ3RCzcG8Qhss=;
-  b=G8Zcve561rUxxBYUl40Tu4INZ6/eu65PPEjcQfx/DyJ4kbaT7xB9lJ2H
-   qcTD7buAx9QCOo28YyFNzYUP/njC1Z/zX4faTWWfTpSRI6COGpFlqYpOS
-   brgeQgrqzIINe7tSpEYDVoaX6xW/WpSbeTiADoFnlWwy0/j4Y4x0u03Cz
-   iBFIdyWqOxUVLYdI/UhgHPFnUHBdZ6zigI1w9gRdU4oW7fseT8tmWrwlX
-   nXTzWgmswl/frwe3+0XB/UfxPTndVBB/BcRsy3yZWzzq8w6b3D+EI/v7l
-   RaTXSjoccTaU0ZTHX97B5ePkCMsicE1j3zTMOcInfh5qD5hFMq9dtFGPL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="251677162"
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="251677162"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 01:06:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="711387380"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 11 May 2022 01:06:26 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 11 May 2022 11:06:26 +0300
-Date:   Wed, 11 May 2022 11:06:26 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Sanket Goswami <Sanket.Goswami@amd.com>
-Cc:     gregkh@linuxfoundation.org, ajayg@nvidia.com,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/2] ucsi_ccg: Do not hardcode interrupt polarity and type
-Message-ID: <YntugjJfM2FiYNgQ@kuha.fi.intel.com>
-References: <20220510052437.3212186-1-Sanket.Goswami@amd.com>
- <20220510052437.3212186-3-Sanket.Goswami@amd.com>
- <Ynts6+QeiWT7tL3I@kuha.fi.intel.com>
+        with ESMTP id S243697AbiEKI0K (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 04:26:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B07D344C6
+        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 01:26:05 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1nohfX-0003Yh-VX; Wed, 11 May 2022 10:26:03 +0200
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1nohfX-0005cK-Kp; Wed, 11 May 2022 10:26:03 +0200
+Date:   Wed, 11 May 2022 10:26:03 +0200
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH] usb: hub: port: add sysfs entry to switch port power
+Message-ID: <20220511082603.GD27481@pengutronix.de>
+References: <20220510231317.1874608-1-m.grzeschik@pengutronix.de>
+ <YntM+r+rE4AC6SXt@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="EY/WZ/HvNxOox07X"
 Content-Disposition: inline
-In-Reply-To: <Ynts6+QeiWT7tL3I@kuha.fi.intel.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YntM+r+rE4AC6SXt@kroah.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 10:25:21 up 41 days, 20:55, 74 users,  load average: 0.16, 0.13,
+ 0.16
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 11, 2022 at 10:59:42AM +0300, Heikki Krogerus wrote:
-> On Tue, May 10, 2022 at 10:54:37AM +0530, Sanket Goswami wrote:
-> > The current implementation supports only Level trigger with ACTIVE HIGH.
-> > Some of the AMD platforms have different PD firmware implementation which
-> > needs different polarity. This patch checks the polarity and type based
-> > on the device properties set and registers the interrupt handler
-> > accordingly.
-> > 
-> > Signed-off-by: Sanket Goswami <Sanket.Goswami@amd.com>
-> > ---
-> >  drivers/usb/typec/ucsi/ucsi_ccg.c | 11 +++++++++--
-> >  1 file changed, 9 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> > index 7585599bacfd..0db935bd8473 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> > @@ -20,6 +20,7 @@
-> >  
-> >  #include <asm/unaligned.h>
-> >  #include "ucsi.h"
-> > +#define INTR_POL_TYPE	BIT(0)
-> >  
-> >  enum enum_fw_mode {
-> >  	BOOT,   /* bootloader */
-> > @@ -1324,6 +1325,8 @@ static int ucsi_ccg_probe(struct i2c_client *client,
-> >  	struct device *dev = &client->dev;
-> >  	struct ucsi_ccg *uc;
-> >  	int status;
-> > +	/* Keep the IRQ type and polarity default as Level trigger Active High */
-> > +	int irqtype = IRQF_TRIGGER_HIGH;
-> >  
-> >  	uc = devm_kzalloc(dev, sizeof(*uc), GFP_KERNEL);
-> >  	if (!uc)
-> > @@ -1366,8 +1369,12 @@ static int ucsi_ccg_probe(struct i2c_client *client,
-> >  
-> >  	ucsi_set_drvdata(uc->ucsi, uc);
-> >  
-> > +	status = (uintptr_t)device_get_match_data(dev);
-> > +	if (status & INTR_POL_TYPE)
-> > +		irqtype = IRQF_TRIGGER_FALLING;
-> > +
-> >  	status = request_threaded_irq(client->irq, NULL, ccg_irq_handler,
-> > -				      IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
-> > +				      IRQF_ONESHOT | irqtype,
-> >  				      dev_name(dev), uc);
-> 
-> Please note that you would need to update ccg_restart() as well, but
-> there is something else wrong here...
-> 
-> >  	if (status < 0) {
-> >  		dev_err(uc->dev, "request_threaded_irq failed - %d\n", status);
-> > @@ -1419,7 +1426,7 @@ static const struct i2c_device_id ucsi_ccg_device_id[] = {
-> >  MODULE_DEVICE_TABLE(i2c, ucsi_ccg_device_id);
-> >  
-> >  static const struct acpi_device_id amd_i2c_ucsi_match[] = {
-> > -	{"AMDI0042"},
-> > +	{"AMDI0042", INTR_POL_TYPE},
-> >  	{}
-> >  };
-> 
-> This should not be necessary. That information comes from the ACPI
-> tables.
-> 
-> I don't think that you need to set the polarity/level flags at all in
-> case of ACPI. I'll double check that, but if that is the case, then you
-> need to make the case where the device is not ACPI enumerated the
-> special case instead.
 
-Actually, can you just test if this works for you:
+--EY/WZ/HvNxOox07X
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 6db7c8ddd51cd..f13c10e815d7d 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -1251,8 +1251,7 @@ static int ccg_restart(struct ucsi_ccg *uc)
-        }
- 
-        status = request_threaded_irq(uc->irq, NULL, ccg_irq_handler,
--                                     IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
--                                     dev_name(dev), uc);
-+                                     IRQF_ONESHOT, dev_name(dev), uc);
-        if (status < 0) {
-                dev_err(dev, "request_threaded_irq failed - %d\n", status);
-                return status;
-@@ -1367,8 +1366,7 @@ static int ucsi_ccg_probe(struct i2c_client *client,
-        ucsi_set_drvdata(uc->ucsi, uc);
- 
-        status = request_threaded_irq(client->irq, NULL, ccg_irq_handler,
--                                     IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
--                                     dev_name(dev), uc);
-+                                     IRQF_ONESHOT, dev_name(dev), uc);
-        if (status < 0) {
-                dev_err(uc->dev, "request_threaded_irq failed - %d\n", status);
-                goto out_ucsi_destroy;
+On Wed, May 11, 2022 at 07:43:22AM +0200, Greg KH wrote:
+>On Wed, May 11, 2022 at 01:13:17AM +0200, Michael Grzeschik wrote:
+>> This patch adds an sysfs switch to enable/disable a port on an power
+>> switchable hub. It also ensures that the associated device gets
+>> disconnected from the logical usb tree.
+>>
+>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>> ---
+>>  drivers/usb/core/port.c | 47 +++++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 47 insertions(+)
+>
+>No Documentation/ABI/ update as well?  That means I can't take this
+>change or even properly review it :(
 
-thanks,
+I knew that I missed something. Will add it in v2.
 
--- 
-heikki
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--EY/WZ/HvNxOox07X
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmJ7cxsACgkQC+njFXoe
+LGRrKhAAiZK+EsQmHFyLkS1jyPyyUgWIHAxpiYyTxoE6uGMq8iKF528pJSzqhnJa
+v6O3pRo+BZCjAOpHQGRoxzoubCAzKHAq+mzy+O1M9rlviZ6ITb0zJZsLjJ6mr8B/
+PPYaR6degWp1e0u6K3Vbf9s93yBjapy0CmiOZZ0SoPdz8Fl7YLkhWtN0kl5I2bCz
+sD6XkwFFe2/FuaQnOv/kyLOeAxsvprpA1+RcOzRKh6SBexGYvEdQd/r/AYd4JII0
+d22TYK5QiGV70JkfFqxbmP0jZzVJGQpQKjG/3cAKd15n3eWgzLiclQbBdQq1L4nK
+AKocuAFUpgIvN6gSvcGk/7SSyeV6Md5dyHZ/2qFa/SPHpQus5TWVNaGpWZSD/3J2
+cHfP9I4t7SZxB3Zd9GVvbIVpKohlNidiI4Zo1B99X71pyJrRXx3noWYtviGJQyEa
+Qjhta3nhK2T8X3WQ2v3yLMkrJl625ub+v0UxUQegAgt9jsRe2utu0+VC4z0Hrntu
+avOcf8x5n/lifeqGWlpt1kcKzFMyktfjIFSXX8LPwx5JI5JA36IUr3LO79lmewLa
+MINT9V8aP++CZZLvxOQB18Qe5b8lWdrwFkCqE9y+zS5S03BB+/2Q4OCcDPiNoyxz
+mJsGqySKPgF4IiaF+6zp+sjvyIicASQ4n7p5b2izAsL7VMMinls=
+=RGZy
+-----END PGP SIGNATURE-----
+
+--EY/WZ/HvNxOox07X--
