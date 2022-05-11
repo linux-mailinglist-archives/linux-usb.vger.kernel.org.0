@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5AD15234C8
+	by mail.lfdr.de (Postfix) with ESMTP id 09D865234C6
 	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 15:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244385AbiEKN4n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 May 2022 09:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36858 "EHLO
+        id S244222AbiEKN4k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 May 2022 09:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244352AbiEKN4T (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 09:56:19 -0400
+        with ESMTP id S244371AbiEKN4W (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 09:56:22 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A2A38A
-        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 06:56:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC201EEDA
+        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 06:56:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652277378; x=1683813378;
+  t=1652277380; x=1683813380;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=DqPAPw8qgQY+R2Ioy5u5gNT27Lof2P8GFRvoRMzp6kM=;
-  b=nFnWKhBCZ1RLE9qutxanPLqo8McfEwgez21Y16AveOOE2RIwnK1WtodG
-   oJLF3T9GW+YvrhLqLzsqqY6hHv34OiD0qt1x19PCafWlPZPL2zhxiQSHB
-   D+YXhks2jibpwUuHvrNcbkltLXzsBQhKEmzV6Qv5e3WUqquWOWFhJzEca
-   nyPRhGQR1hm0IQHkul4GVOC8Gta89n1YRjED9ZzWNqhpfx9XQOqv0mlB6
-   NNm50Fsjs6jg8TOS5E7BDUUuzDTfw+uIK4n9o9Q4LQ8guAQRqKDiZban5
-   K2v0jOb82qRCYPVkiHvVB81qas1gu/KW6d6vuhpHStE0wte/xiaAeSS4h
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="249599704"
+  bh=g34ni762V7ZNpKT1kr6emy3LlL/db6fdQrXnmpTZEYw=;
+  b=JSwFVtEjGrLb/B+N7HFPubnf0x41ypcsNTdq3UifuLHKBJQE49+5jWDu
+   reN/9M6qaivV9UQblWts/6ZIcBEQ5XTwt8DnTMplYR2a1w3JT3pxxPaM6
+   D7PZKxD1/LGRUSzYDN3NLXsbV50y1+PNPnVTcBDeNQOzsyu6T/hkd4JdH
+   Oshs+DWCuvVkjn6bDOzM07Qhm5ev4Z+2uF/TD4KOzQ+91GjUTlOLfXLb6
+   MWuh9naLtW6vg13V9/4GYZefZrTxLECC3WcjUskSIYQ7TtjOY0KIIIeU9
+   TVwbnK38glGQDuXe09rMivwIBUe7jImkFTEvdY5gX1vJDfMWvbWnCuZug
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="249599711"
 X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="249599704"
+   d="scan'208";a="249599711"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 06:56:17 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 06:56:20 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="553332018"
+   d="scan'208";a="553332023"
 Received: from ccdjpclinux26.jer.intel.com ([10.12.48.253])
-  by orsmga002.jf.intel.com with ESMTP; 11 May 2022 06:56:15 -0700
+  by orsmga002.jf.intel.com with ESMTP; 11 May 2022 06:56:18 -0700
 From:   Gil Fine <gil.fine@intel.com>
 To:     andreas.noever@gmail.com, michael.jamet@intel.com,
         mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
 Cc:     gil.fine@intel.com, linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: [PATCH v3 2/6] thunderbolt: CLx disable before system suspend only if previously enabled
-Date:   Wed, 11 May 2022 17:05:45 +0300
-Message-Id: <20220511140549.10571-3-gil.fine@intel.com>
+Subject: [PATCH v3 3/6] thunderbolt: Fix typos in CLx enabling
+Date:   Wed, 11 May 2022 17:05:46 +0300
+Message-Id: <20220511140549.10571-4-gil.fine@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220511140549.10571-1-gil.fine@intel.com>
 References: <20220511140549.10571-1-gil.fine@intel.com>
@@ -57,30 +57,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Disable CLx before system suspended only if previously was enabled.
+Fix few typos in CLx enabling.
 
 Signed-off-by: Gil Fine <gil.fine@intel.com>
 ---
- drivers/thunderbolt/switch.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/thunderbolt/switch.c | 2 +-
+ drivers/thunderbolt/tmu.c    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index ac87e8b50e52..549523c9a543 100644
+index 549523c9a543..42b7daaf9c4d 100644
 --- a/drivers/thunderbolt/switch.c
 +++ b/drivers/thunderbolt/switch.c
-@@ -3063,8 +3063,10 @@ void tb_switch_suspend(struct tb_switch *sw, bool runtime)
- 	 * Actually only needed for Titan Ridge but for simplicity can be
- 	 * done for USB4 device too as CLx is re-enabled at resume.
- 	 */
--	if (tb_switch_disable_clx(sw, TB_CL0S))
--		tb_sw_warn(sw, "failed to disable CLx on upstream port\n");
-+	if (tb_switch_is_clx_enabled(sw)) {
-+		if (tb_switch_disable_clx(sw, TB_CL0S))
-+			tb_sw_warn(sw, "failed to disable CLx on upstream port\n");
-+	}
- 
- 	err = tb_plug_events_active(sw, false);
- 	if (err)
+@@ -3485,7 +3485,7 @@ static int tb_switch_enable_cl0s(struct tb_switch *sw)
+  * to improve performance. CLx is enabled only if both sides of the link
+  * support CLx, and if both sides of the link are not configured as two
+  * single lane links and only if the link is not inter-domain link. The
+- * complete set of conditions is descibed in CM Guide 1.0 section 8.1.
++ * complete set of conditions is described in CM Guide 1.0 section 8.1.
+  *
+  * Return: Returns 0 on success or an error code on failure.
+  */
+diff --git a/drivers/thunderbolt/tmu.c b/drivers/thunderbolt/tmu.c
+index e4a07a26f693..b656659d02fb 100644
+--- a/drivers/thunderbolt/tmu.c
++++ b/drivers/thunderbolt/tmu.c
+@@ -606,7 +606,7 @@ int tb_switch_tmu_enable(struct tb_switch *sw)
+ /**
+  * tb_switch_tmu_configure() - Configure the TMU rate and directionality
+  * @sw: Router whose mode to change
+- * @rate: Rate to configure Off/LowRes/HiFi
++ * @rate: Rate to configure Off/Normal/HiFi
+  * @unidirectional: If uni-directional (bi-directional otherwise)
+  *
+  * Selects the rate of the TMU and directionality (uni-directional or
 -- 
 2.17.1
 
