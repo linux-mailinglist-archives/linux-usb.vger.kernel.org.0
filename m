@@ -2,155 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD6C522E82
-	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 10:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC89522F56
+	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 11:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237730AbiEKIgO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 May 2022 04:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
+        id S240606AbiEKJ0X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 May 2022 05:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243869AbiEKIfy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 04:35:54 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BA01A40B9
-        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 01:34:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652258077; x=1683794077;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xPBuiMUOqJUBtshCWZs+iqYo4xvFqh80c5mMpe7CIxg=;
-  b=VphPoYgtDFE4um9kDst3Lvx9QhyHZ89R6Trw71EpkF05N4OECUSzTBD8
-   AC0r1nf8MFliuNe7X1GqLXKC8EjltFAR3BUby9HT4TgnvAPL+PZtgczeV
-   ppaS3U0gYsF6LCLvRcB2gM2j+vF32CyaEcxSntDvLwfQd7EvBOu69xqtw
-   neHcWEmu2Nlemo4QiW7HPqxfWM5g/vuW4PtjWDXpD1rIjqbmkdFrHEl7d
-   hGRWxlQkUmY9uXzFMAnx/t9ocqEkuDBFlniq+P4QOLfiisHHMydQgMSwV
-   IK4JxDgjITlNRNSgmJA2K5VnqtamlzrU6mGdkw6aiyPaIz1lAHLobRSS1
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="332671233"
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="332671233"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 01:34:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="739119313"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 11 May 2022 01:34:35 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nohnm-000IuA-JL;
-        Wed, 11 May 2022 08:34:34 +0000
-Date:   Wed, 11 May 2022 16:33:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-usb@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, gregkh@linuxfoundation.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH] usb: hub: port: add sysfs entry to switch port power
-Message-ID: <202205111601.PmB3PwmE-lkp@intel.com>
-References: <20220510231317.1874608-1-m.grzeschik@pengutronix.de>
+        with ESMTP id S240551AbiEKJ0U (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 05:26:20 -0400
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E81E28E19;
+        Wed, 11 May 2022 02:26:18 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id AB73F2804233C;
+        Wed, 11 May 2022 11:26:16 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 9C65B2E9C3B; Wed, 11 May 2022 11:26:16 +0200 (CEST)
+Date:   Wed, 11 May 2022 11:26:16 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Ferry Toth <fntoth@gmail.com>
+Subject: Re: [PATCH net-next v2 5/7] usbnet: smsc95xx: Forward PHY interrupts
+ to PHY driver to avoid polling
+Message-ID: <20220511092616.GA22613@wunner.de>
+References: <cover.1651574194.git.lukas@wunner.de>
+ <c6b7f4e4a17913d2f2bc4fe722df0804c2d6fea7.1651574194.git.lukas@wunner.de>
+ <20220505113207.487861b2@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510231317.1874608-1-m.grzeschik@pengutronix.de>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220505113207.487861b2@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael,
+Hi Jakub,
 
-I love your patch! Yet something to improve:
+On Thu, May 05, 2022 at 11:32:07AM -0700, Jakub Kicinski wrote:
+> On Tue, 3 May 2022 15:15:05 +0200 Lukas Wunner wrote:
+> > @@ -608,11 +618,20 @@ static void smsc95xx_status(struct usbnet *dev, struct urb *urb)
+> >  	intdata = get_unaligned_le32(urb->transfer_buffer);
+> >  	netif_dbg(dev, link, dev->net, "intdata: 0x%08X\n", intdata);
+> >  
+> > +	/* USB interrupts are received in softirq (tasklet) context.
+> > +	 * Switch to hardirq context to make genirq code happy.
+> > +	 */
+> > +	local_irq_save(flags);
+> > +	__irq_enter_raw();
+> > +
+> >  	if (intdata & INT_ENP_PHY_INT_)
+> > -		;
+> > +		generic_handle_domain_irq(pdata->irqdomain, PHY_HWIRQ);
+> >  	else
+> >  		netdev_warn(dev->net, "unexpected interrupt, intdata=0x%08X\n",
+> >  			    intdata);
+> > +
+> > +	__irq_exit_raw();
+> > +	local_irq_restore(flags);
+> 
+> IRQ maintainers could you cast your eyes over this?
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on v5.18-rc6 next-20220510]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Thomas applied 792ea6a074ae ("genirq: Remove WARN_ON_ONCE() in
+generic_handle_domain_irq()") tonight:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Grzeschik/usb-hub-port-add-sysfs-entry-to-switch-port-power/20220511-071411
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: arc-vdk_hs38_smp_defconfig (https://download.01.org/0day-ci/archive/20220511/202205111601.PmB3PwmE-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/19efde40be7597697c54241a120f812d5864b677
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Michael-Grzeschik/usb-hub-port-add-sysfs-entry-to-switch-port-power/20220511-071411
-        git checkout 19efde40be7597697c54241a120f812d5864b677
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/usb/core/
+http://git.kernel.org/tip/tip/c/792ea6a074ae
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+That allows me to drop the controversial __irq_enter_raw().
 
-All errors (new ones prefixed by >>):
+Jakub, do you want me to resend the full series (all 7 patches)
+or should I send only patch [5/7] in-reply-to this one here?
+Or do you prefer applying all patches except [5/7] and have me
+resend that single patch?
 
-   drivers/usb/core/port.c: In function 'port_power_store':
->> drivers/usb/core/port.c:42:17: error: implicit declaration of function 'usb_remote_wakeup' [-Werror=implicit-function-declaration]
-      42 |                 usb_remote_wakeup(hdev);
-         |                 ^~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+Let me know what your preferred modus operandi is.
 
+Thanks,
 
-vim +/usb_remote_wakeup +42 drivers/usb/core/port.c
-
-    19	
-    20	static ssize_t port_power_store(struct device *dev, struct device_attribute *attr,
-    21				    const char *buf, size_t count)
-    22	{
-    23		struct usb_port *port_dev = to_usb_port(dev);
-    24		struct usb_device *udev = port_dev->child;
-    25		struct usb_device *hdev = to_usb_device(dev->parent->parent);
-    26		struct usb_hub *hub = usb_hub_to_struct_hub(hdev);
-    27		int port1 = port_dev->portnum;
-    28		bool value;
-    29		int rc = 0;
-    30	
-    31		if (!hub)
-    32			return -EINVAL;
-    33	
-    34		if (hub->in_reset)
-    35			return -EBUSY;
-    36	
-    37		rc = strtobool(buf, &value);
-    38		if (rc)
-    39			return rc;
-    40	
-    41		if (value)
-  > 42			usb_remote_wakeup(hdev);
-    43	
-    44		rc = usb_hub_set_port_power(hdev, hub, port1, value);
-    45		if (rc)
-    46			return rc;
-    47	
-    48		if (!value) {
-    49			usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_C_CONNECTION);
-    50			if (!port_dev->is_superspeed)
-    51				usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_C_ENABLE);
-    52	
-    53			if (udev) {
-    54				port_dev->child = NULL;
-    55				usb_disconnect(&udev);
-    56			}
-    57		}
-    58	
-    59		if (!rc)
-    60			rc = count;
-    61	
-    62		return rc;
-    63	}
-    64	static DEVICE_ATTR_WO(port_power);
-    65	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Lukas
