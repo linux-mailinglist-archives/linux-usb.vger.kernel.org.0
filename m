@@ -2,101 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A01523198
-	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 13:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40B2523304
+	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 14:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235558AbiEKL26 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 May 2022 07:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
+        id S235191AbiEKMVj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 May 2022 08:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbiEKL24 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 07:28:56 -0400
-Received: from mxout01.lancloud.ru (mxout01.lancloud.ru [45.84.86.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D211CFF3;
-        Wed, 11 May 2022 04:28:50 -0700 (PDT)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru 53A1F20CDA45
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH] Additions to the list of devices that can be used for
- Lenovo Pass-thru feature
-To:     David Ober <dober6023@gmail.com>, <linux-usb@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <davem@davemloft.net>,
-        <hayeswang@realtek.com>, <aaron.ma@canonical.com>
-CC:     <mpearson@lenovo.com>, <dober@lenovo.com>
-References: <20220511093826.245118-1-dober6023@gmail.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <472e0ce0-b18a-c2b7-f7d2-288993962f45@omp.ru>
-Date:   Wed, 11 May 2022 14:28:45 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S239244AbiEKMVg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 08:21:36 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CAF119900
+        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 05:21:27 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 0532532001AB;
+        Wed, 11 May 2022 08:21:24 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 11 May 2022 08:21:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1652271684; x=1652358084; bh=mn64guT9g2
+        /Vsk9QltAQj2QtP8J4kXQX7/AXKKU+LjQ=; b=Gqa1zE1MrqYkwfrP1D7mhyhhe3
+        hAefL6AVzxFlNoTFIms8frs56s5PGM/JaotxKRVPyxNYWSnaGg5PjR+Nh3pan89i
+        67RrVhyGs35Jg4ewkCPSzrtBbpT9Qg6ujReJ+rAuqY4Kqbyk9zTTAYmkVXZVbW3W
+        q2dcBnUS3BGJ+cnXAiLSMqErT7UuUiPE8Enuq/CzYi7+GUD50VZhgxRIpIeFm+kR
+        aprR72EfJsmK3yO8dLJVhkqrPP8CcwsE8P9z0a4ZWNa1Od5vr3ggHsPJd5OMoe5U
+        UIcBWK87USeHYw7UdKI0+xxx4Sm6FOD7hZAjpE8ha3Pk52t4MrT2YZhFuoAw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1652271684; x=
+        1652358084; bh=mn64guT9g2/Vsk9QltAQj2QtP8J4kXQX7/AXKKU+LjQ=; b=F
+        is8YWB6PUOQd592hWu7Kp7UZxd6jVduRHtajij2teDxD6zgwgCH6qNVtGRjClMq/
+        nWdeSm6syJq6UdbH+WlPRguAs/iwPCZFBVS3ghaFDmLbZehTJ6n+7IEX+GV/H3pN
+        j3NMsJpyonu/N743W5SVcty9DKcSgtPvNIorYjcnuQJzCQQY+uG46nqosnr7czJf
+        pPYvrHDVqpIK5N77Idbc29xVEPqyJxnnB+7lTYjW3wx5/oGWF1CNIqeIb9c6tOaE
+        NAAJSK+oq4hvEy+oNFD2IHz1o0wOgXEqD6j6sCyj2tt1mnYczX41/R95nsslwK7K
+        4qp+fi5VwySUaUUnMjzQw==
+X-ME-Sender: <xms:RKp7Yt16qzb79GFKRjMX2Mq8szlQjS7tNjXWUXOwWGHoHsu6dm2PrQ>
+    <xme:RKp7YkH6F4nyZzg9hekmoZTfnjMW7OZJvEDfvl6QTxUjpZ4DF4JXdsPt_EJwpSSfp
+    oDc7nMHTwFbow>
+X-ME-Received: <xmr:RKp7Yt5LWPObKZm4MT1dXuzarOoFf6Sqw_fJmjaJFMseLCfig21oe4-GpZCECjmdRgmpE2Yq6sapeA9GSLYGCyaabYRuEiPt>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgeehgdegkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesthdtre
+    dttddtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheq
+    necuggftrfgrthhtvghrnhepgeehueehgfdtledutdelkeefgeejteegieekheefudeiff
+    dvudeffeelvedttddvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:RKp7Yq0tTaq4JhiYUb7-5zjq97FMAALeQ1D6MWwWyAvjHD4Yrx6JlA>
+    <xmx:RKp7YgGlpTclyNBaWzpBzBI7V3ftRGFScX3yzLcf6uAEIxpYZYrhJg>
+    <xmx:RKp7Yr_DmP-ipUBrLlsv1jxJ1a7OXU6J2BlgZLLo715CGQ_6Yy0ghw>
+    <xmx:RKp7YlTxxUKqa-FAHkOZUFAPTveNg-vBlc28e3AkQ7_CvM6tv6waaw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 11 May 2022 08:21:23 -0400 (EDT)
+Date:   Wed, 11 May 2022 14:21:20 +0200
+From:   Greg KH <greg@kroah.com>
+To:     bugzilla-daemon@kernel.org
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [Bug 215967] New: Kernel build fails if CONFIG_REGULATOR is unset
+Message-ID: <YnuqQAb2CIRyfZPX@kroah.com>
+References: <bug-215967-208809@https.bugzilla.kernel.org/>
 MIME-Version: 1.0
-In-Reply-To: <20220511093826.245118-1-dober6023@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bug-215967-208809@https.bugzilla.kernel.org/>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
-
-On 5/11/22 12:38 PM, David Ober wrote:
-
-> net: usb: r8152: Add in new Devices that are supported for Mac-Passthru
-
-   This should be in the subject.
-
-> Lenovo Thunderbolt 4 Dock, and other Lenovo USB Docks are using the original
-> Realtek USB ethernet Vendor and Product IDs
-> If the Network device is Realtek verify that it is on a Lenovo USB hub
-> before enabling the passthru feature
+On Wed, May 11, 2022 at 07:44:39AM +0000, bugzilla-daemon@kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=215967
 > 
-> This also adds in the device IDs for the Lenovo USB Dongle and one other
-> USB-C dock
+>             Bug ID: 215967
+>            Summary: Kernel build fails if CONFIG_REGULATOR is unset
+>            Product: Drivers
+>            Version: 2.5
+>     Kernel Version: 5.10.114
+>           Hardware: All
+>                 OS: Linux
+>               Tree: Mainline
+>             Status: NEW
+>           Severity: normal
+>           Priority: P1
+>          Component: USB
+>           Assignee: drivers_usb@kernel-bugs.kernel.org
+>           Reporter: trallala@onlinehome.de
+>         Regression: No
 > 
-> Signed-off-by: David Ober <dober6023@gmail.com>
-> ---
->  drivers/net/usb/r8152.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index c2da3438387c..7d43c772b85d 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-[...]
-> @@ -9644,10 +9647,19 @@ static int rtl8152_probe(struct usb_interface *intf,
->  
->  	if (le16_to_cpu(udev->descriptor.idVendor) == VENDOR_ID_LENOVO) {
->  		switch (le16_to_cpu(udev->descriptor.idProduct)) {
-> +		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
-> +		case DEVICE_ID_THINKPAD_USB_C_DONGLE:
->  		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
->  		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
->  			tp->lenovo_macpassthru = 1;
->  		}
-> +        }
+> Compilation of "drivers/usb/phy/phy-generic.c" fails reproducible if
+> CONFIG_REGULATOR is unset, because function "devm_regulator_get_exclusive" is
+> undeclared but nevertheless used.
+> The offending patch propably is commit 03e607cbb2931374db1825f371e9c7f28526d3f4
+> upstream
 
-   Indent with tabs please.
+Can you please send this information to the stable@vger.kernel.org
+mailing list and we will work on it there?
 
-> +	else if ((le16_to_cpu(udev->descriptor.idVendor) == VENDOR_ID_REALTEK) &&
+thanks,
 
-   The preceding } should be on the same line.
-
-> +                 (le16_to_cpu(udev->parent->descriptor.idVendor) == VENDOR_ID_LENOVO)) {
-
-   Indent with tabs please.
-
-[...]
-
-MBR, Sergey
+greg k-h
