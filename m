@@ -2,161 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02DD5234F3
-	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 16:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A74052350A
+	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 16:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244334AbiEKODd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 May 2022 10:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
+        id S232603AbiEKOJa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 May 2022 10:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239915AbiEKODb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 10:03:31 -0400
-Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBDA6222A;
-        Wed, 11 May 2022 07:03:25 -0700 (PDT)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9d:7e00:0:0:0:1])
-        (authenticated bits=0)
-        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 24BE2s8Q339080
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Wed, 11 May 2022 15:02:56 +0100
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9d:7e02:9be5:c549:1a72:4709])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 24BE2mkY1776500
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Wed, 11 May 2022 16:02:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1652277769; bh=DHWph95rimkwGjzf97VFn8lFh4hE7zrtoxEu4vReoe0=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=BBzpCAY9guLewJjoSiJcAJIlQFnkS63/PJ7y9EogVY0fa5Xcw5OFNB7VsgvboMcRP
-         21IRRZKzYjuYNMx10pHLaFN/KMyrAeYdHkkkMWbQ/Tjpy00kGEnvMYS8g/uz5iLU4H
-         WvTIh5Uu9PKj9E8dQTUlozOa3kOI0vfA2oCMgID0=
-Received: (nullmailer pid 343687 invoked by uid 1000);
-        Wed, 11 May 2022 14:02:48 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     David Ober <dober6023@gmail.com>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, hayeswang@realtek.com, aaron.ma@canonical.com,
-        mpearson@lenovo.com, dober@lenovo.com
-Subject: Re: [PATCH v2] net: usb: r8152: Add in new Devices that are
- supported for Mac-Passthru
-Organization: m
-References: <20220511133926.246464-1-dober6023@gmail.com>
-Date:   Wed, 11 May 2022 16:02:48 +0200
-In-Reply-To: <20220511133926.246464-1-dober6023@gmail.com> (David Ober's
-        message of "Wed, 11 May 2022 09:39:26 -0400")
-Message-ID: <874k1wdv5j.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S244412AbiEKOJ2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 10:09:28 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 316A769B78
+        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 07:09:26 -0700 (PDT)
+Received: (qmail 197697 invoked by uid 1000); 11 May 2022 10:09:26 -0400
+Date:   Wed, 11 May 2022 10:09:26 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] usb: hub: port: add sysfs entry to switch port power
+Message-ID: <YnvDlhlcVGoerhLz@rowland.harvard.edu>
+References: <20220510231317.1874608-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.5 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510231317.1874608-1-m.grzeschik@pengutronix.de>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-David Ober <dober6023@gmail.com> writes:
+On Wed, May 11, 2022 at 01:13:17AM +0200, Michael Grzeschik wrote:
+> This patch adds an sysfs switch to enable/disable a port on an power
+> switchable hub. It also ensures that the associated device gets
+> disconnected from the logical usb tree.
 
-> Lenovo Thunderbolt 4 Dock, and other Lenovo USB Docks are using the origi=
-nal
-> Realtek USB ethernet Vendor and Product IDs
-> If the Network device is Realtek verify that it is on a Lenovo USB hub
-> before enabling the passthru feature
->
-> This also adds in the device IDs for the Lenovo USB Dongle and one other
-> USB-C dock
->
-> Signed-off-by: David Ober <dober6023@gmail.com>
+This says what the patch does.  It does not explain why the patch was 
+written or why anybody would want to switch the power on a hub's port.
+
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 > ---
->  drivers/net/usb/r8152.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index c2da3438387c..c32b9bf90baa 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -771,6 +771,9 @@ enum rtl8152_flags {
->  };
->=20=20
->  #define DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2	0x3082
-> +#define DEVICE_ID_THINKPAD_THUNDERBOLT4_DOCK_GEN1	0x8153
+>  drivers/usb/core/port.c | 47 +++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+> 
+> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+> index d5bc36ca5b1f77..abc618d87888f3 100644
+> --- a/drivers/usb/core/port.c
+> +++ b/drivers/usb/core/port.c
+> @@ -17,6 +17,52 @@ static int usb_port_block_power_off;
+>  
+>  static const struct attribute_group *port_dev_group[];
+>  
+> +static ssize_t port_power_store(struct device *dev, struct device_attribute *attr,
+> +			    const char *buf, size_t count)
+> +{
+> +	struct usb_port *port_dev = to_usb_port(dev);
+> +	struct usb_device *udev = port_dev->child;
+> +	struct usb_device *hdev = to_usb_device(dev->parent->parent);
+> +	struct usb_hub *hub = usb_hub_to_struct_hub(hdev);
+> +	int port1 = port_dev->portnum;
+> +	bool value;
+> +	int rc = 0;
+> +
+> +	if (!hub)
+> +		return -EINVAL;
+> +
+> +	if (hub->in_reset)
+> +		return -EBUSY;
 
+What point is there in doing this test?  The value of hub->in_reset may 
+change an instant later.  Unless you acquire the hub's lock first.
+For that matter, you should be holding the hub's lock while you call 
+usb_hub_to_struct_hub() -- unless you don't care if the hub gets 
+disconnected while this routine is running.  Or if udev does.
 
-We used to have a macro named PRODUCT_ID_RTL8153 for this magic number,
-but it was removed in 2014:
+> +
+> +	rc = strtobool(buf, &value);
+> +	if (rc)
+> +		return rc;
+> +
+> +	if (value)
+> +		usb_remote_wakeup(hdev);
 
-commit 662412d14bfa6a672626e4470cab73b75c8b42f0
-Author: hayeswang <hayeswang@realtek.com>
-Date:   Thu Nov 6 12:47:40 2014 +0800
+Why call usb_remote_wakeup()?  The function was not intended to be used 
+this way; it was meant to be used when a device sends a wakeup request.  
+Furthermore, nothing prevents the hub from going back into runtime 
+suspend the moment this function completes.
 
-    r8152: remove the definitions of the PID
-=20=20=20=20
-    The PIDs are only used in the id table, so the definitions are
-    unnacessary. Remove them wouldn't have confusion.
-=20=20=20=20
-    Signed-off-by: Hayes Wang <hayeswang@realtek.com>
-    Signed-off-by: David S. Miller <davem@davemloft.net>
+If you want to bring a USB device out of runtime suspend, call 
+usb_autoresume_device().  And then don't forget to call 
+usb_autosuspend_device() when you're done with it.
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index cf1b8a7a4c77..66b139a8b6ca 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -461,11 +461,7 @@ enum rtl8152_flags {
-=20
- /* Define these values to match your device */
- #define VENDOR_ID_REALTEK              0x0bda
--#define PRODUCT_ID_RTL8152             0x8152
--#define PRODUCT_ID_RTL8153             0x8153
--
- #define VENDOR_ID_SAMSUNG              0x04e8
--#define PRODUCT_ID_SAMSUNG             0xa101
-=20
- #define MCU_TYPE_PLA                   0x0100
- #define MCU_TYPE_USB                   0x0000
-@@ -3898,9 +3894,9 @@ static void rtl8152_disconnect(struct usb_interface *=
-intf)
-=20
- /* table of devices that work with this driver */
- static struct usb_device_id rtl8152_table[] =3D {
--       {USB_DEVICE(VENDOR_ID_REALTEK, PRODUCT_ID_RTL8152)},
--       {USB_DEVICE(VENDOR_ID_REALTEK, PRODUCT_ID_RTL8153)},
--       {USB_DEVICE(VENDOR_ID_SAMSUNG, PRODUCT_ID_SAMSUNG)},
-+       {USB_DEVICE(VENDOR_ID_REALTEK, 0x8152)},
-+       {USB_DEVICE(VENDOR_ID_REALTEK, 0x8153)},
-+       {USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101)},
-        {}
- };
-=20
+> +
+> +	rc = usb_hub_set_port_power(hdev, hub, port1, value);
+> +	if (rc)
+> +		return rc;
 
+You probably should acquire the port's lock before doing this.  
+Otherwise some other thread might be doing something else to the port at 
+the same time.
 
-Re-introducing it as  DEVICE_ID_THINKPAD_THUNDERBOLT4_DOCK_GEN1 is
-confusing/obfuscating in several ways:
+> +
+> +	if (!value) {
+> +		usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_C_CONNECTION);
+> +		if (!port_dev->is_superspeed)
+> +			usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_C_ENABLE);
+> +
+> +		if (udev) {
+> +			port_dev->child = NULL;
 
- - the same value is now used two places in the driver, but only one of
-   those places use the macro
-=20=20
- - the name indicates that this is somehow unique to a specific Thinkpad
-   product, which it obviously isn't.  It's one of the most common
-   device IDs for ethernet USB dongles at the moment, used by any number
-   of vendors
+That assignment is not necessary; usb_disconnect() will take care of it.
 
- - the attempt to treat these devices differently based on the parent
-   vendor will cause confusion for anyone connecting any of these
-   dongles to a Lenovo hub.  This will match so much more than one
-   specific dock product
+> +			usb_disconnect(&udev);
+> +		}
+> +	}
 
-
-I beleive I've said this before, but these policies would have been much
-better handled in userspace with the system mac address being a resource
-made available by some acpi driver. But whatever.  I look forward to
-seeing the FCC unlock logic for Lenovo X55 modems added to the
-drivers/bus/mhi/host/pci_generic.c driver.
-
-=20=20
-Bj=C3=B8rn
+Alan Stern
