@@ -2,93 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 643B1523B00
-	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 18:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57BB523C52
+	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 20:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345237AbiEKQ6z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 May 2022 12:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S1346140AbiEKSQo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 May 2022 14:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345231AbiEKQ6x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 12:58:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FD513C4D6
-        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 09:58:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1621AB82527
-        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 16:58:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB9EC340EE;
-        Wed, 11 May 2022 16:58:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652288329;
-        bh=MFyx3jlHxGnYLx6AEw97nvbi0segfIJE7X5BQtNQ52k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mh1n+FJ/x030Bk7iqG6nkPtfhmvGsScfwsP+uCwYMK+HWKHpgRywdG0wK91wrq7fE
-         FFBSQa/1/sPoAUOvXGWE+N6LaH+aSPO1V6PaKJGr7BV5QYp3reVKsKaAWU/i/pgWmT
-         Yr+H7/igt2cXhV+eaY7JWaCMO6frPKR7x0WRH+Fw=
-Date:   Wed, 11 May 2022 18:58:46 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: gadget: Add ID numbers to gadget names
-Message-ID: <YnvrRnHZpAm8+QSG@kroah.com>
-References: <YnaR8LaaPTdLTiok@rowland.harvard.edu>
- <CAMuHMdUpOiHHMktPk_-NauDW2ufvGThnkFU7Pok376pM6OEyYw@mail.gmail.com>
- <Ynkh5eKtfxU+AyZX@rowland.harvard.edu>
- <CAMuHMdVi6jCi=tRBNjBodVcA48ygiqPACQcmHx+1HRYnArJ9tQ@mail.gmail.com>
- <YnktokC8Uk9j53yO@rowland.harvard.edu>
- <YnlAAxT5Lq0NvxX0@kroah.com>
- <YnlFl0M0FRzhxwpK@rowland.harvard.edu>
- <YnoZva+tZa8Ix+aI@kroah.com>
- <YnqKAXKyp9Vq/pbn@rowland.harvard.edu>
- <YnvTnHhW/RN+I42i@kroah.com>
+        with ESMTP id S1346136AbiEKSQn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 14:16:43 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4A92B198
+        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 11:16:41 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id j6so5640932ejc.13
+        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 11:16:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Fhxc5z1KE0Dsp8lGsAgqT5RMsvfNxtef/xd2f9hMnCs=;
+        b=nIm2GVngEEk3Lg9AJjVcCmfvkEXavOLYacnJORi28B8FAVBQMNOp30PKVzqwK4+if3
+         FCjffb9+3YM0w5R2S8CShqzFkx34N/wXw+e3+pm3t3fYy2ThWqU9xY6EX4Z4YR551AOg
+         RpGy3/kSgMq2OPHqh89Q/qQkCkCv5l6RYIN8sSkG+2bU2A7AAqmZJkzzUlh5Gd7bXYuN
+         IzDiNp6+bPtMK30jiZWf/QN9Zy/Rv3HgoZvjJ/UBcoFQco361sOh9nABKb7REI47zQwi
+         FifZqKJSFOCzhZfBlcnBuKsF7J8cOQ+V2F4Bfvd5DxxGOciT5f8mok3Bw/L5Maez5HlE
+         NoIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Fhxc5z1KE0Dsp8lGsAgqT5RMsvfNxtef/xd2f9hMnCs=;
+        b=fS+f++uY9+Y0poGvbUXFJkjnisl6kvEerGKVdOWCc6laruhlk82T4O3h/J3R5hTPPk
+         eYFxT2SM/Re02P+SVYBWRTZ/y0TpzGdU/qsK5YXhVLMiNhJ67ok9wPa0uGW6bTRVYPOk
+         PPr3dGb1sjxzp8qAu26ULBNJ8pIaGj/Ax5h73m9+MS6iWbKcNEXxLmfqt8/WGPOiWrQN
+         5SqHR0W032pypos5PoA7GSrO2LEb1uqPtLHfCRjnz+sizqF69KhzMzbpjNj05KkERi6S
+         E2Gb6CGUjx/pmUDO+cnIWAaqy48lemB/s/77JM6tApkdt1Ms8sSDlf0FZE5NOH6An2Fw
+         DwoQ==
+X-Gm-Message-State: AOAM533xNPxj52OOTK6rG/gPQ+ZQCCb3LKSdJXbkCZ9xKBrFp27MlFWA
+        aNkERezRG9Wm3MnQQNJo/RpVEw==
+X-Google-Smtp-Source: ABdhPJx+CJK78zsG3tde6KKXb/fX4e9dE8ABsOUrj+MY0Vc4ravZJADycaEa0z4YWMjmQF5Dr+yZSA==
+X-Received: by 2002:a17:906:6a1b:b0:6f4:a9b8:e027 with SMTP id qw27-20020a1709066a1b00b006f4a9b8e027mr26045450ejc.222.1652292999566;
+        Wed, 11 May 2022 11:16:39 -0700 (PDT)
+Received: from [192.168.0.155] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id i1-20020a170906250100b006f3ef214e59sm1206628ejb.191.2022.05.11.11.16.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 11:16:36 -0700 (PDT)
+Message-ID: <857a1475-6697-89a9-98e6-b1dad8b917ac@linaro.org>
+Date:   Wed, 11 May 2022 20:16:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnvTnHhW/RN+I42i@kroah.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [v4 0/3] Add QCOM SNPS PHY overriding params support
+Content-Language: en-US
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com
+References: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 11, 2022 at 05:17:48PM +0200, Greg KH wrote:
-> On Tue, May 10, 2022 at 11:51:29AM -0400, Alan Stern wrote:
-> > Putting USB gadgets on a new bus of their own encounters a problem
-> > when multiple gadgets are present: They all have the same name!  The
-> > driver core fails with a "sys: cannot create duplicate filename" error
-> > when creating any of the /sys/bus/gadget/devices/<gadget-name>
-> > symbolic links after the first.
-> > 
-> > This patch fixes the problem by adding a ".N" suffix to each gadget's
-> > name when the gadget is registered (where N is a unique ID number),
-> > thus making the names distinct.
-> > 
-> > Reported-and-tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-> > 
-> > ---
-> > 
-> > 
-> > [as1980]
-> 
-> Thanks, let me run this through the Android test suite first.  You can
-> see the results here:
-> 	https://android-review.googlesource.com/c/kernel/common/+/2095109
-> 
-> I'll let you know how it goes as I do not know if you are not logged in
-> if you can see the test results or not, gerrit is odd...
+On 11/05/2022 17:26, Krishna Kurapati wrote:
+> Added support for overriding tuning parameters in QCOM SNPS PHY
+> from device tree.
 
-All passed, so I'll go queue this up now, thanks!
+Please use proper PATCH title. The easiest is to use git format-patch to
+create proper patches.
 
-greg k-h
+Best regards,
+Krzysztof
