@@ -2,120 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE61523471
-	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 15:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4895234C7
+	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 15:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243919AbiEKNje (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 May 2022 09:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
+        id S244325AbiEKN4l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 May 2022 09:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbiEKNjd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 09:39:33 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28401BDAED;
-        Wed, 11 May 2022 06:39:31 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id k2so1989450qtp.1;
-        Wed, 11 May 2022 06:39:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aWOO/quq1svhOVB6+WysSQZaYh0NuG1Dcmlsc91McHI=;
-        b=SM2ng3Wy3NqTJv3b7WlYGryPauwIw9941UW8KaAOlF7Jis4RMwHN47k0bWFNIi6IQ6
-         DhpxQ/9QjKpGhaUBP/551fjuZcFfoLZpiUQFfgmVAUiXR7oRPVrIFZMxkipn6XVlQPQR
-         /YvuszDsfAejdhi4XPPgfALqYHYVeT0R8ZgWC69qx8hV3jaeIu5XINkgW/1SwbxXJL2r
-         8PQOowvLuduc7Aw3YPVjx8g0oL9Kzp6qvS8o7bjJHdGW/sfMI09zaUpcp1oHp0ZB2EhA
-         lZ9mYNoNmOtfAfXz6z33AfjS5ditaLl6HVKNRUdBHbpwTWiHVauUNbTL88lpM4TC+FMj
-         YeYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aWOO/quq1svhOVB6+WysSQZaYh0NuG1Dcmlsc91McHI=;
-        b=AFaxV2AFUFoiAQ7NYvmhrduDrA21lGtQeBTgOIIFwNmZD9+bt0MXKZUH6NrBCT4p2g
-         yecrchLmxSZ9p1Tap0cNSvGcbWgQEzD62VyR04HfqrHRALxxJk8JB3VvHul0z00IAhPd
-         /9quP5gXUpb18Ir4jemB/As0qyqChJefwc/kU+096dIBONqBsUU44sTr1+8QGXEmnJTb
-         3NXFTV38MkSs3fE0z5HU5S9T0ryKeuSbn2k1gUR4se6XxkWo0kudfWM7dwlhcXMNZPpG
-         YI6P5CG8B6LtXBKKlNQoBBpViqH7AajWT+Pj1u4WuvKe7r6vmCgP2oI2YmviswZ2nDeQ
-         LIDQ==
-X-Gm-Message-State: AOAM532jj1lw8STQb4zm0FHveeVERlEiWfcVAMb+FG4/YD44VwAkS+0D
-        OFCaVgNlhuFxFg8za7zAGaAXRFs+5V3jgGy1
-X-Google-Smtp-Source: ABdhPJw89bZlWhdg5K92STGDxWd9niCTUY79Xob2uXPfEiy3zrtjb+1ATlk9YeI2Xr/Vq3Yu2fYqgQ==
-X-Received: by 2002:ac8:5a4f:0:b0:2f3:ddac:fe60 with SMTP id o15-20020ac85a4f000000b002f3ddacfe60mr11447348qta.90.1652276370837;
-        Wed, 11 May 2022 06:39:30 -0700 (PDT)
-Received: from debian.lan ([98.97.182.206])
-        by smtp.gmail.com with ESMTPSA id k14-20020a05620a414e00b0069fc2a7e7a5sm1277026qko.75.2022.05.11.06.39.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 06:39:30 -0700 (PDT)
-From:   David Ober <dober6023@gmail.com>
-To:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, hayeswang@realtek.com, aaron.ma@canonical.com
-Cc:     mpearson@lenovo.com, dober@lenovo.com,
-        David Ober <dober6023@gmail.com>
-Subject: [PATCH v2] net: usb: r8152: Add in new Devices that are supported for Mac-Passthru
-Date:   Wed, 11 May 2022 09:39:26 -0400
-Message-Id: <20220511133926.246464-1-dober6023@gmail.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S244341AbiEKN4O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 09:56:14 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD1717049
+        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 06:56:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652277373; x=1683813373;
+  h=from:to:cc:subject:date:message-id;
+  bh=PaknoUT219cpZbAZZlDWnGCpzV7TGSELBMEXj22/aQ4=;
+  b=jY3IsCzixpnx0QNjS3ml/xtoZjdxLRhWSO40VbwGqfZ6//mt7PkPPxeM
+   ql7/islMG5a5hjj/prOyQsLApbse9P81EplXGe0c/pUKxZ+iVlzxsMYR0
+   yNW/oC+BTNyfBin/SPNnI9vL1ySUDeaLPTpa+eEEQ9nAhZL4PzlBVQ0M2
+   zLKpOuPf/UlySpMpLn4MxWHcXC/+oxX9AxA6BVgrKAlY8Zveg5UMRN28A
+   IHu5nDyUoX8VlvbqAooFlbaXd30i6TQACKK9+rMLav8hH6EklGIvcjiAG
+   vQ4Cz41eKQjbF0wZXMnau3W2F/e5Ee1DBcYYUXWfqPLLrHWveQZ1P2l/6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="249599682"
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="249599682"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 06:56:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
+   d="scan'208";a="553332010"
+Received: from ccdjpclinux26.jer.intel.com ([10.12.48.253])
+  by orsmga002.jf.intel.com with ESMTP; 11 May 2022 06:56:11 -0700
+From:   Gil Fine <gil.fine@intel.com>
+To:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
+Cc:     gil.fine@intel.com, linux-usb@vger.kernel.org, lukas@wunner.de
+Subject: [PATCH v3 0/6] thunderbolt: CL1 support for USB4 and Titan Ridge
+Date:   Wed, 11 May 2022 17:05:43 +0300
+Message-Id: <20220511140549.10571-1-gil.fine@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Lenovo Thunderbolt 4 Dock, and other Lenovo USB Docks are using the original
-Realtek USB ethernet Vendor and Product IDs
-If the Network device is Realtek verify that it is on a Lenovo USB hub
-before enabling the passthru feature
+v1 can be found here:
+  https://lore.kernel.org/linux-usb/20220501203321.19021-1-gil.fine@intel.com/
+v2 can be found here:
+  https://lore.kernel.org/linux-usb/20220509201656.502-1-gil.fine@intel.com/
 
-This also adds in the device IDs for the Lenovo USB Dongle and one other
-USB-C dock
+Changes in v3:
+* Fix to support the case of enabling CL1 entry after resume
+  from runtime PM (if CL1 suppported in the connected device)
 
-Signed-off-by: David Ober <dober6023@gmail.com>
----
- drivers/net/usb/r8152.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Changes in v2:
+* Handle CL1 and CL0s together since on the hardware level they are
+  supported and enabled together
+* Use device_for_each_child() to set TMU mode of host router's 1st
+  children
+* Use FIELD_x macros from include/linux/bitfield.h
+* Split single patch into two for clarity
+* Fix commit message
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index c2da3438387c..c32b9bf90baa 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -771,6 +771,9 @@ enum rtl8152_flags {
- };
- 
- #define DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2	0x3082
-+#define DEVICE_ID_THINKPAD_THUNDERBOLT4_DOCK_GEN1	0x8153
-+#define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3		0x3062
-+#define DEVICE_ID_THINKPAD_USB_C_DONGLE		0x720c
- #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
- 
- struct tally_counter {
-@@ -9644,11 +9647,20 @@ static int rtl8152_probe(struct usb_interface *intf,
- 
- 	if (le16_to_cpu(udev->descriptor.idVendor) == VENDOR_ID_LENOVO) {
- 		switch (le16_to_cpu(udev->descriptor.idProduct)) {
-+		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
-+		case DEVICE_ID_THINKPAD_USB_C_DONGLE:
- 		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
- 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
- 			tp->lenovo_macpassthru = 1;
- 		}
- 	}
-+	else if ((le16_to_cpu(udev->descriptor.idVendor) == VENDOR_ID_REALTEK) &&
-+		(le16_to_cpu(udev->parent->descriptor.idVendor) == VENDOR_ID_LENOVO)) {
-+		switch (le16_to_cpu(udev->descriptor.idProduct)) {
-+		case DEVICE_ID_THINKPAD_THUNDERBOLT4_DOCK_GEN1:
-+			tp->lenovo_macpassthru = 1;
-+		}
-+	}
- 
- 	if (le16_to_cpu(udev->descriptor.bcdDevice) == 0x3011 && udev->serial &&
- 	    (!strcmp(udev->serial, "000001000000") ||
+In this series of patches, first, we address several issues in the CL0s
+implementation.
+Then, we add support for a second low power state of the
+link: CL1. Low power states (called collectively CLx) are used to reduce
+transmitter and receiver power when a high-speed lane is idle.
+We enable it, if both sides of the link support it, and only for the
+first hop router (i.e. the first device that connected to the
+host router). This is needed for better thermal management.
+CL1 improves power management that was intoduced by CL0s.
+Also, we add support of dynamic change of TMU mode to HiFi uni-directional
+once DisplayPort tunnel is created.
+This enables CL0s while DP tunnel exists.
+Due to Intel hardware limitation, once we changed the TMU mode to HiFi
+uni-directional (when DP tunnel exists), we don't change TMU mode back
+to normal uni-directional, even if DP tunnel is torn down later.
+Though, after sleep or runtime PM resume, the TMU is changed to normal
+uni-directional (if CLx suppported in the connected device) to enable
+CL1 entry.
+
+Gil Fine (6):
+  thunderbolt: Silently ignore CLx enabling in case CLx is not supported
+  thunderbolt: CLx disable before system suspend only if previously
+    enabled
+  thunderbolt: Fix typos in CLx enabling
+  thunderbolt: Change downstream router's TMU rate in both TMU uni/bidir
+    mode
+  thunderbolt: Add CL1 support for USB4 and Titan Ridge routers
+  thunderbolt: Change TMU mode to HiFi uni-directional once DisplayPort
+    tunneled
+
+ drivers/thunderbolt/switch.c  |  91 ++++++++--------
+ drivers/thunderbolt/tb.c      |  83 +++++++++++---
+ drivers/thunderbolt/tb.h      |  51 +++++----
+ drivers/thunderbolt/tb_regs.h |   6 ++
+ drivers/thunderbolt/tmu.c     | 198 ++++++++++++++++++++++++++++------
+ 5 files changed, 322 insertions(+), 107 deletions(-)
+
 -- 
-2.30.2
+2.17.1
+
+---------------------------------------------------------------------
+Intel Israel (74) Limited
+
+This e-mail and any attachments may contain confidential material for
+the sole use of the intended recipient(s). Any review or distribution
+by others is strictly prohibited. If you are not the intended
+recipient, please contact the sender and delete all copies.
 
