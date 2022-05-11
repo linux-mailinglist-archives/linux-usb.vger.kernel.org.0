@@ -2,104 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8AF523749
-	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 17:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47CEA523759
+	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 17:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343741AbiEKP1M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 May 2022 11:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S1343730AbiEKPag (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 May 2022 11:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343732AbiEKP1L (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 11:27:11 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284386899E;
-        Wed, 11 May 2022 08:27:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652282826; x=1683818826;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=nDdsGNSABgPgv16pjFs6lstj1kB67sexwger0ikV6uw=;
-  b=FKiY5M4v5WeeGDT6qcVvNv9ryROW+ReKZ6doe9a3ve/M3MLWdzWqQN3L
-   S7rX/7Tof71ZgG1MKcRIWuntnSHQpZFzZ69uEMLr7o7OgfqYKwbZcNzG8
-   Zyn82YVxdzAO+tLkR8Tev9yqWiHkaRRHtX5guFXkzrHuY/Z0lKv2xyXhG
-   M=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 May 2022 08:27:05 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 08:27:05 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 11 May 2022 08:27:05 -0700
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 11 May 2022 08:26:59 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Doug Anderson" <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [v4 3/3] arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280 IDP device
-Date:   Wed, 11 May 2022 20:56:33 +0530
-Message-ID: <1652282793-5580-4-git-send-email-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
-References: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
+        with ESMTP id S1343711AbiEKPae (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 11:30:34 -0400
+Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092CB21551E
+        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 08:30:32 -0700 (PDT)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9d:7e00:0:0:0:1])
+        (authenticated bits=0)
+        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 24BFUCjv341625
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Wed, 11 May 2022 16:30:13 +0100
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9d:7e02:9be5:c549:1a72:4709])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 24BFU6xk1786704
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Wed, 11 May 2022 17:30:06 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1652283006; bh=6HAmgC7gvqAC1QW7WFidRJCmZN+wg27UcaabMFiwfzs=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=RyH4MxmBpGQ6UoIz1uON6b6oL/PUpV+j74K4um6hRPS/DlPF0u95dDXcvtrXgA4Q1
+         kApV0e/+sWyA6E4T6pI5rZYPbloLn95odU+92t7gL96LqY4Y8SyRFgF2at3hCpRWIh
+         6iiBOvhOhmfrtpSd/zdWzOkSLyoGcLf98DXh+dQk=
+Received: (nullmailer pid 346479 invoked by uid 1000);
+        Wed, 11 May 2022 15:30:06 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     stable@vger.kernel.org
+Cc:     Greg KH <greg@kroah.com>, bugzilla-daemon@kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [Bug 215967] New: Kernel build fails if CONFIG_REGULATOR is unset
+Organization: m
+References: <bug-215967-208809@https.bugzilla.kernel.org/>
+        <YnuqQAb2CIRyfZPX@kroah.com>
+Date:   Wed, 11 May 2022 17:30:06 +0200
+In-Reply-To: <YnuqQAb2CIRyfZPX@kroah.com> (Greg KH's message of "Wed, 11 May
+        2022 14:21:20 +0200")
+Message-ID: <87wnesccjl.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.5 at canardo
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Overriding the SNPS Phy tuning parameters for SC7280 IDP device.
+Greg KH <greg@kroah.com> writes:
+> On Wed, May 11, 2022 at 07:44:39AM +0000, bugzilla-daemon@kernel.org wrot=
+e:
+>
+>> Compilation of "drivers/usb/phy/phy-generic.c" fails reproducible if
+>> CONFIG_REGULATOR is unset, because function "devm_regulator_get_exclusiv=
+e" is
+>> undeclared but nevertheless used.
+>> The offending patch propably is commit 03e607cbb2931374db1825f371e9c7f28=
+526d3f4
+>> upstream
+>
+> Can you please send this information to the stable@vger.kernel.org
+> mailing list and we will work on it there?
 
-Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+Please backport commit 51dfb6ca3728 ("regulator: consumer: Add missing
+stubs to regulator/consumer.h") to v5.10 stable and older stable
+releases where 03e607cbb2931374db1825f371e9c7f28526d3f4 is backported
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index 5eb6689..bb18f45 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -325,6 +325,12 @@
- 	vdda-pll-supply = <&vreg_l10c_0p8>;
- 	vdda33-supply = <&vreg_l2b_3p0>;
- 	vdda18-supply = <&vreg_l1c_1p8>;
-+	qcom,hs-rise-fall-time-bps = <0>;
-+	qcom,squelch-detector-bps = <(-2090)>;
-+	qcom,hs-disconnect-bps = <1743>;
-+	qcom,hs-amplitude-bps = <1780>;
-+	qcom,hs-crossover-voltage-mv = <(-31)>;
-+	qcom,hs-output-impedance-mohm = <2600>;
- };
- 
- &usb_1_qmpphy {
--- 
-2.7.4
 
+
+Bj=C3=B8rn
