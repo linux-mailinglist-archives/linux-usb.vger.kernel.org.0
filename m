@@ -2,79 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E44522BDA
-	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 07:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8FE522BDB
+	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 07:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238819AbiEKFo2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 May 2022 01:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
+        id S230421AbiEKFod (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 May 2022 01:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237350AbiEKFoZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 01:44:25 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33B2244F1C
-        for <linux-usb@vger.kernel.org>; Tue, 10 May 2022 22:44:24 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id DB2D6320034E;
-        Wed, 11 May 2022 01:44:23 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 11 May 2022 01:44:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1652247863; x=1652334263; bh=/MXybowLOi
-        fvFgtfiMyGphzlj4TW9KlsVno87yDDiCU=; b=PUDL0Bb3BadLxz748pXbCAQp3O
-        tFEsz9ayyrmkGaiBpM9KRc0hZ3TKzACMZq1G8YtXaRPuF3lcuoLBQjj4uOaE2sEA
-        /QrPY2vHpHJXaHHS6vQFQnES50aos0qmD+UStg/u+ilnBQULvNRmOCrpub02H4hI
-        fsirZi7HmCDDoGDODKU4vJCAXMswwV99D1LaPK/4u9b8xiiHhWzAX2W5K8uWNKVk
-        U9QaXqFkYf4Qc1DoEYemKsOsVL8Rze//0OUagQwTcNvg5z+Beae3rWQ5opU9CWem
-        cksNbCWnIzkzsh1x99b4IR04j/aYpN3AOLNE3ODRnmi/7vsIHMlGPydK1zMA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1652247863; x=
-        1652334263; bh=/MXybowLOifvFgtfiMyGphzlj4TW9KlsVno87yDDiCU=; b=n
-        a+CJ6xp5gFDZf00w6uYFtXjmfx2oiqrmjRPSDLHp5Oa+lao/93UqnY66qC7euRYB
-        Qea6ZNP/3r3uSSA9LPCatTgcpiRMBi99Q4+m1oZx5ppoxTGUA2PQFDdF3KJeCTvv
-        3R/rfN0TR1yBnXC7XfTbYCE4+NbZnl6YzULzORdUVOiH0XLRyDxvwO1OjOsR0vPj
-        TQD0sHLqlTJ3K0ZoFe0T1rkQ9Lc2Rv6coDwa6VseAACnIy4vP4x/4y+hsCgrkjVV
-        GGKyFgYs42k3EkLkz64QydnBF+5+XiLN5aXTtg8lwaiojs2GCDvvgXpJ+wuC6MK5
-        QmJpVpBYs5Ju1n174YZtg==
-X-ME-Sender: <xms:N017YmOjyjKZtjE2sPCBl1xkoqr8eePSd95vgqV_guJt4DXyEwvgfQ>
-    <xme:N017Yk-fTHAduUxLlfEdiTXy7Ial3lnNf9sY5RcysYNv0YlyO0UwLDxyT36mssWSs
-    pwDXK5GLa7NEQ>
-X-ME-Received: <xmr:N017YtQm9f31SwbUJnFzcHUBMeSCpDDSWjepAXCBR44AnJARJoz9CoAWCbDbLyB-TDhPVo92-L6vffiFRp8S0yltRSGVvj0r>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgeeggdeljecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesthdtre
-    dttddtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheq
-    necuggftrfgrthhtvghrnhepgeehueehgfdtledutdelkeefgeejteegieekheefudeiff
-    dvudeffeelvedttddvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:N017Ymtsl0qlTw4IacEPkQzUqbi7Kj3xjHnAEObJALmamHAnqEvRBQ>
-    <xmx:N017YucPycYszWceJQKi3r5aKGZiSVMjOJJd1ndjhY0J2fvPAmCZmA>
-    <xmx:N017Yq3rv8OgY3MF8GvBNTO5Rsokagu8HQBwcH3Kijj9Zp3wfu2C9g>
-    <xmx:N017YvqS-QKg9anznVMfLv_pV5SfHJIyUifBKZRd0r-FgVyfMsLssA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 11 May 2022 01:44:22 -0400 (EDT)
-Date:   Wed, 11 May 2022 07:44:20 +0200
-From:   Greg KH <greg@kroah.com>
-To:     bugzilla-daemon@kernel.org
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
+        with ESMTP id S239352AbiEKFo2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 01:44:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE54244F1C
+        for <linux-usb@vger.kernel.org>; Tue, 10 May 2022 22:44:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C20B0616E8
+        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 05:44:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 31A72C385DB
+        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 05:44:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652247867;
+        bh=OsdFX9ube3gQu7MAiOi9gA44saYU+V3GC4ROt5yp+D8=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=flbN0sspG2oRpPg/JyicEJauMpw7tzFI1kjGvi6ttG/rKpNB5n4tgO0uEXWulWA+7
+         XsJCexh6cOYMO4DctCYMg1sBa1s+btk1xzMdKEEy2zSd9R5pkAJsfQPi4uy6WkEXnr
+         tF505V1JnJtqTx2Yns84eQQ1jiYYgmtXJuvW8/5Co5smTBr4LkGSZinXG7rcPz8rkT
+         ZTqbJA7DcEoAsELpGpz8an9DlOXlv9A4unqjE2Isv+p8dwQw646s9TyVlnQSucAvAq
+         xlzmxRe24S/53EiZyhFjZmoF0vuJ47Ir1wwaNHy3nQ07xjK0Es0T7zybMoxLdlsHbw
+         T+oTBcDF2Xm4Q==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 0FF88CC13B2; Wed, 11 May 2022 05:44:27 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
  xhci_hcd rejecting DMA map of vmalloc memory
-Message-ID: <YntNNINiPP1WCHoU@kroah.com>
+Date:   Wed, 11 May 2022 05:44:26 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: greg@kroah.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215890-208809-s1haoj2Uc6@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
 References: <bug-215890-208809@https.bugzilla.kernel.org/>
- <bug-215890-208809-HJx1Rs5PDP@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bug-215890-208809-HJx1Rs5PDP@https.bugzilla.kernel.org/>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,15 +71,23 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
+
+--- Comment #6 from Greg Kroah-Hartman (greg@kroah.com) ---
 On Tue, May 10, 2022 at 08:50:40PM +0000, bugzilla-daemon@kernel.org wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=215890
-> 
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
+>=20
 > --- Comment #5 from Satadru Pramanik (satadru@umich.edu) ---
 > 5.18-rc1 has the same issue...
-> 
+>=20
 > Is it worth bisecting between 5.17 ad 5.18-rc1?
-> 
+>=20
 > Maybe there are obvious suspect commits to start with?
 
 Yes, please bisect.
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
