@@ -2,191 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9EA35234CC
-	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 15:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E02DD5234F3
+	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 16:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244374AbiEKN4t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 May 2022 09:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
+        id S244334AbiEKODd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 May 2022 10:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233422AbiEKN42 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 09:56:28 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4CC245AD
-        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 06:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652277387; x=1683813387;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=+TRL0uHBAyz8TejRaUdGNfAO2e3pjyP4MTiVBcya6g8=;
-  b=R6cI5sTvO8aAkz6qxb0+H/SXYyTeAoIr8606JGOzeJiwNfVcCNYDMuxQ
-   cpgLvrw1RRo2V1ZHWqnwm2X837U9r4DcJCiGL31fZqIV2UAjzhsTaMpkT
-   POe3Df7UBX6iJp+YCpeXHc6wYuDY6hjjRnulWtyrTmsJxN7JU3Jswukuy
-   auag32fWzTEz5VRY3WpccfNTreLdcQ3cI1miodIpESoCcwGMvp6JZBNgl
-   x6flPsFn4Ohvx5avejf+yuGHlIwcmbGVwTllG89z7XoBg13Ns4+Ec2dF7
-   w//Nz/qIcxp6vhkAKbSQs61Sl/SqESLaTYo3TqXc+35TMhJbX/zYKoz2Q
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="249599730"
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="249599730"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 06:56:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="553332036"
-Received: from ccdjpclinux26.jer.intel.com ([10.12.48.253])
-  by orsmga002.jf.intel.com with ESMTP; 11 May 2022 06:56:24 -0700
-From:   Gil Fine <gil.fine@intel.com>
-To:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     gil.fine@intel.com, linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: [PATCH v3 6/6] thunderbolt: Change TMU mode to HiFi uni-directional once DisplayPort tunneled
-Date:   Wed, 11 May 2022 17:05:49 +0300
-Message-Id: <20220511140549.10571-7-gil.fine@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220511140549.10571-1-gil.fine@intel.com>
-References: <20220511140549.10571-1-gil.fine@intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S239915AbiEKODb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 10:03:31 -0400
+Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBDA6222A;
+        Wed, 11 May 2022 07:03:25 -0700 (PDT)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9d:7e00:0:0:0:1])
+        (authenticated bits=0)
+        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 24BE2s8Q339080
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Wed, 11 May 2022 15:02:56 +0100
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9d:7e02:9be5:c549:1a72:4709])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 24BE2mkY1776500
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Wed, 11 May 2022 16:02:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1652277769; bh=DHWph95rimkwGjzf97VFn8lFh4hE7zrtoxEu4vReoe0=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=BBzpCAY9guLewJjoSiJcAJIlQFnkS63/PJ7y9EogVY0fa5Xcw5OFNB7VsgvboMcRP
+         21IRRZKzYjuYNMx10pHLaFN/KMyrAeYdHkkkMWbQ/Tjpy00kGEnvMYS8g/uz5iLU4H
+         WvTIh5Uu9PKj9E8dQTUlozOa3kOI0vfA2oCMgID0=
+Received: (nullmailer pid 343687 invoked by uid 1000);
+        Wed, 11 May 2022 14:02:48 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     David Ober <dober6023@gmail.com>
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        davem@davemloft.net, hayeswang@realtek.com, aaron.ma@canonical.com,
+        mpearson@lenovo.com, dober@lenovo.com
+Subject: Re: [PATCH v2] net: usb: r8152: Add in new Devices that are
+ supported for Mac-Passthru
+Organization: m
+References: <20220511133926.246464-1-dober6023@gmail.com>
+Date:   Wed, 11 May 2022 16:02:48 +0200
+In-Reply-To: <20220511133926.246464-1-dober6023@gmail.com> (David Ober's
+        message of "Wed, 11 May 2022 09:39:26 -0400")
+Message-ID: <874k1wdv5j.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.5 at canardo
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Here we configure TMU mode to HiFi uni-directional once DP tunnel
-is created. This is due to accuracy requirement for DP tunneling
-as appears in CM guide 1.0, section 7.3.2.
-Due to Intel hardware limitation, once we changed the TMU mode to HiFi
-uni-directional (when DP tunnel exists), we don't change TMU mode back to
-normal uni-directional, even if DP tunnel is torn down later.
+David Ober <dober6023@gmail.com> writes:
 
-Signed-off-by: Gil Fine <gil.fine@intel.com>
----
- drivers/thunderbolt/tb.c  | 28 ++++++++++++++++++++++++++++
- drivers/thunderbolt/tb.h  |  5 +++++
- drivers/thunderbolt/tmu.c | 14 ++++++++++++++
- 3 files changed, 47 insertions(+)
+> Lenovo Thunderbolt 4 Dock, and other Lenovo USB Docks are using the origi=
+nal
+> Realtek USB ethernet Vendor and Product IDs
+> If the Network device is Realtek verify that it is on a Lenovo USB hub
+> before enabling the passthru feature
+>
+> This also adds in the device IDs for the Lenovo USB Dongle and one other
+> USB-C dock
+>
+> Signed-off-by: David Ober <dober6023@gmail.com>
+> ---
+>  drivers/net/usb/r8152.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+> index c2da3438387c..c32b9bf90baa 100644
+> --- a/drivers/net/usb/r8152.c
+> +++ b/drivers/net/usb/r8152.c
+> @@ -771,6 +771,9 @@ enum rtl8152_flags {
+>  };
+>=20=20
+>  #define DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2	0x3082
+> +#define DEVICE_ID_THINKPAD_THUNDERBOLT4_DOCK_GEN1	0x8153
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index f512197e719b..d0f85a8c56de 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -50,6 +50,8 @@ struct tb_hotplug_event {
+
+We used to have a macro named PRODUCT_ID_RTL8153 for this magic number,
+but it was removed in 2014:
+
+commit 662412d14bfa6a672626e4470cab73b75c8b42f0
+Author: hayeswang <hayeswang@realtek.com>
+Date:   Thu Nov 6 12:47:40 2014 +0800
+
+    r8152: remove the definitions of the PID
+=20=20=20=20
+    The PIDs are only used in the id table, so the definitions are
+    unnacessary. Remove them wouldn't have confusion.
+=20=20=20=20
+    Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+    Signed-off-by: David S. Miller <davem@davemloft.net>
+
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index cf1b8a7a4c77..66b139a8b6ca 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -461,11 +461,7 @@ enum rtl8152_flags {
+=20
+ /* Define these values to match your device */
+ #define VENDOR_ID_REALTEK              0x0bda
+-#define PRODUCT_ID_RTL8152             0x8152
+-#define PRODUCT_ID_RTL8153             0x8153
+-
+ #define VENDOR_ID_SAMSUNG              0x04e8
+-#define PRODUCT_ID_SAMSUNG             0xa101
+=20
+ #define MCU_TYPE_PLA                   0x0100
+ #define MCU_TYPE_USB                   0x0000
+@@ -3898,9 +3894,9 @@ static void rtl8152_disconnect(struct usb_interface *=
+intf)
+=20
+ /* table of devices that work with this driver */
+ static struct usb_device_id rtl8152_table[] =3D {
+-       {USB_DEVICE(VENDOR_ID_REALTEK, PRODUCT_ID_RTL8152)},
+-       {USB_DEVICE(VENDOR_ID_REALTEK, PRODUCT_ID_RTL8153)},
+-       {USB_DEVICE(VENDOR_ID_SAMSUNG, PRODUCT_ID_SAMSUNG)},
++       {USB_DEVICE(VENDOR_ID_REALTEK, 0x8152)},
++       {USB_DEVICE(VENDOR_ID_REALTEK, 0x8153)},
++       {USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101)},
+        {}
  };
- 
- static void tb_handle_hotplug(struct work_struct *work);
-+static void tb_enable_tmu_1st_child(struct tb *tb,
-+				    enum tb_switch_tmu_rate rate);
- 
- static void tb_queue_hotplug(struct tb *tb, u64 route, u8 port, bool unplug)
- {
-@@ -118,6 +120,13 @@ static void tb_switch_discover_tunnels(struct tb_switch *sw,
- 		switch (port->config.type) {
- 		case TB_TYPE_DP_HDMI_IN:
- 			tunnel = tb_tunnel_discover_dp(tb, port, alloc_hopids);
-+			/*
-+			 * In case of DP tunnel exists, change TMU mode to
-+			 * HiFi for CL0s to work.
-+			 */
-+			if (tunnel)
-+				tb_enable_tmu_1st_child(tb,
-+						TB_SWITCH_TMU_RATE_HIFI);
- 			break;
- 
- 		case TB_TYPE_PCIE_DOWN:
-@@ -235,6 +244,19 @@ static int tb_enable_tmu(struct tb_switch *sw)
- 	return tb_switch_tmu_enable(sw);
- }
- 
-+/*
-+ * Once a DP tunnel exists in the domain, we set the TMU mode so that
-+ * it meets the accuracy requirements and also enables CLx entry (CL0s).
-+ * We set the TMU mode of the first depth router(s) for CL0s to work.
-+ */
-+static void tb_enable_tmu_1st_child(struct tb *tb, enum tb_switch_tmu_rate rate)
-+{
-+	struct tb_sw_tmu_config tmu = { .rate = rate };
-+
-+	device_for_each_child(&tb->root_switch->dev, &tmu,
-+			      tb_switch_tmu_config_enable);
-+}
-+
- /**
-  * tb_find_unused_port() - return the first inactive port on @sw
-  * @sw: Switch to find the port on
-@@ -985,6 +1007,12 @@ static void tb_tunnel_dp(struct tb *tb)
- 
- 	list_add_tail(&tunnel->list, &tcm->tunnel_list);
- 	tb_reclaim_usb3_bandwidth(tb, in, out);
-+	/*
-+	 * In case of DP tunnel exists, change TMU mode to
-+	 * HiFi for CL0s to work.
-+	 */
-+	tb_enable_tmu_1st_child(tb, TB_SWITCH_TMU_RATE_HIFI);
-+
- 	return;
- 
- err_free:
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index a16fffba9dd2..3dbd9d919d5f 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -110,6 +110,10 @@ struct tb_switch_tmu {
- 	enum tb_switch_tmu_rate rate_request;
- };
- 
-+struct tb_sw_tmu_config {
-+	enum tb_switch_tmu_rate rate;
-+};
-+
- enum tb_clx {
- 	TB_CLX_DISABLE,
- 	/* CL0s and CL1 are enabled and supported together */
-@@ -934,6 +938,7 @@ int tb_switch_tmu_enable(struct tb_switch *sw);
- void tb_switch_tmu_configure(struct tb_switch *sw,
- 			     enum tb_switch_tmu_rate rate,
- 			     bool unidirectional);
-+int tb_switch_tmu_config_enable(struct device *dev, void *data);
- /**
-  * tb_switch_tmu_is_enabled() - Checks if the specified TMU mode is enabled
-  * @sw: Router whose TMU mode to check
-diff --git a/drivers/thunderbolt/tmu.c b/drivers/thunderbolt/tmu.c
-index e822ab90338b..b8ff9f64a71e 100644
---- a/drivers/thunderbolt/tmu.c
-+++ b/drivers/thunderbolt/tmu.c
-@@ -727,6 +727,20 @@ int tb_switch_tmu_enable(struct tb_switch *sw)
- 	return tb_switch_tmu_set_time_disruption(sw, false);
- }
- 
-+int tb_switch_tmu_config_enable(struct device *dev, void *data)
-+{
-+	if (tb_is_switch(dev)) {
-+		struct tb_switch *sw = tb_to_switch(dev);
-+		struct tb_sw_tmu_config *tmu = data;
-+
-+		tb_switch_tmu_configure(sw, tmu->rate, tb_switch_is_clx_enabled(sw, TB_CL1));
-+		if (tb_switch_tmu_enable(sw))
-+			tb_sw_dbg(sw, "Fail switching TMU to HiFi for 1st depth router\n");
-+	}
-+
-+	return 0;
-+}
-+
- /**
-  * tb_switch_tmu_configure() - Configure the TMU rate and directionality
-  * @sw: Router whose mode to change
--- 
-2.17.1
+=20
 
----------------------------------------------------------------------
-Intel Israel (74) Limited
 
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
+Re-introducing it as  DEVICE_ID_THINKPAD_THUNDERBOLT4_DOCK_GEN1 is
+confusing/obfuscating in several ways:
 
+ - the same value is now used two places in the driver, but only one of
+   those places use the macro
+=20=20
+ - the name indicates that this is somehow unique to a specific Thinkpad
+   product, which it obviously isn't.  It's one of the most common
+   device IDs for ethernet USB dongles at the moment, used by any number
+   of vendors
+
+ - the attempt to treat these devices differently based on the parent
+   vendor will cause confusion for anyone connecting any of these
+   dongles to a Lenovo hub.  This will match so much more than one
+   specific dock product
+
+
+I beleive I've said this before, but these policies would have been much
+better handled in userspace with the system mac address being a resource
+made available by some acpi driver. But whatever.  I look forward to
+seeing the FCC unlock logic for Lenovo X55 modems added to the
+drivers/bus/mhi/host/pci_generic.c driver.
+
+=20=20
+Bj=C3=B8rn
