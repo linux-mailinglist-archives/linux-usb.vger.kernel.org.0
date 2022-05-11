@@ -2,187 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D7B523C58
-	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 20:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2F9523D78
+	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 21:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346155AbiEKSTw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 May 2022 14:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
+        id S1346980AbiEKTas (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 May 2022 15:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343825AbiEKSTv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 14:19:51 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091D4140431
-        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 11:19:50 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id kq17so5724595ejb.4
-        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 11:19:49 -0700 (PDT)
+        with ESMTP id S1346979AbiEKTan (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 15:30:43 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87002300E3;
+        Wed, 11 May 2022 12:30:20 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id c62so3007608vsc.10;
+        Wed, 11 May 2022 12:30:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bGPi3sym2sxZNuq8XM44v+EhEVtJACn3fgf26OWgsSM=;
-        b=xIyjh3l1EuCFk77BXzR8OmHseKLWjA3L+QFx7Esfu1gCdNNOljH4U8pzyTmTAfeUPl
-         R1xQUxezEvy+2+R+WygC1u2eMVN10z2qzL9fm+aycu03bP7hbHKUCGl7b9pRwgDhevkE
-         TmVH35KEAxXFUG4Z3TsTQZ2Zmm8zcl3aQZeJG/JQxZym8rsuDJQZN+8/AdTJEoCfOGb0
-         e3g3pickNN5IzL8ph/3ZgmYaBRwlUY+N17yFU6NPUAWiMkTZ0T0W7yNGtX5lrdvFtQ2e
-         7DXMB8yVaylPGxPzidZzahyxjDf3+funYGQx83vBwa7p0FMRVtXHj9FS+yaGBirFt04g
-         21qA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=850TGJyEAn7HrNOjcaANAGbrun1ZcUWVKibbUsgM30E=;
+        b=LvM5YAP886GR4Nf7l4ggm/a+d6QdikkRTeoher5BMcVlV2LcvS8fSfvFKckPvGUWrG
+         YdlFW0sqQp3/xxAOHQiIGUGWFgsDprIzlwh22iBZDPURl2wvvJikmlVMvznTk15wcAc9
+         RxYEWFX6Pw3i1amAsGFbBqQPLSYTK4BUDwsSEpx2Eww+KjdcS+Qj3HeZgv2lJaLlyGwS
+         hDpKfeJEVCzNuXu9qhb40TdMDPBNfbPy7Os/sjslQzUZT8xV43pVic9QuPEmtY/KRjYJ
+         vxfNvrBFr0xk00B53fH64ejvBMxpU8+ttq8qj7XxFWprw/4GMoUmX8hB7iJs/hlFoZvh
+         9CnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=bGPi3sym2sxZNuq8XM44v+EhEVtJACn3fgf26OWgsSM=;
-        b=8EEuv7AB/p4iF67Sg3S+DD0EJ/eddIY0nxHx3DZ9xDP2WSfiVct6/bQ0mBvThq5EM/
-         B6cgBOxm/zG2Gja+IqbaM5JoYdSjQRVFTXzKcS6CYLW53yDDVNyPykKiiVRbuPmuedoC
-         f+dBgpui9ir9Z2udBtzIjh6Y6V1FQxMOW2HRpYHeLHslOTAska2L2eS1dEoqza42X0uR
-         9Xqqtpvu6A5SzFpW4SLwvIjelKt5udrW+7Ftvywsqk9NXv6QjLT3FB2/JglWsEqe+4tS
-         0Un2teTtFhq51i0ct2kWjdka2FXDT9vojJeXtbTwxVAQ1od2gxAj2IE/gsasurfpvC1u
-         QZGA==
-X-Gm-Message-State: AOAM532YCAJ38TJ6nlo1VlS7izfLSD4sIuwZpZU7hVOYx4JF61mvIulN
-        jfmhJq39DfawebQzg3TTyiU2Ow==
-X-Google-Smtp-Source: ABdhPJw66c9o+JFuSuktSAYjNSClBUHjxcCrVhgRBUlsQkLLo9gay5LhgxMMS79bGlogG5dtbdtSXw==
-X-Received: by 2002:a17:907:72ce:b0:6f4:d139:c2b1 with SMTP id du14-20020a17090772ce00b006f4d139c2b1mr26220333ejc.563.1652293188527;
-        Wed, 11 May 2022 11:19:48 -0700 (PDT)
-Received: from [192.168.0.155] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id a11-20020a17090682cb00b006f3ef214db4sm1223826ejy.26.2022.05.11.11.19.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 11:19:47 -0700 (PDT)
-Message-ID: <d296720d-ccbe-27f0-8ba1-9653af25dd52@linaro.org>
-Date:   Wed, 11 May 2022 20:19:46 +0200
+        bh=850TGJyEAn7HrNOjcaANAGbrun1ZcUWVKibbUsgM30E=;
+        b=jgYn+QeRvCNIQMnXHlh1bQHt+Jmyh3VOyamM3Zz7Y8cOIpfsI0q06Y70KhCE0RylEF
+         RAJpvjBtzbbeFrUSzmazmTWVeYvdIg545tE5lj0m85SkzLittLfp1hX7GeICnkaoC5MF
+         QrLJ7P+3bdt7X62B0BH2zOOzNkmRCzigzL38lQ1u1WN4KvqFPj3KAndSabu5+5onPlGm
+         hDmM/afSqFLelcXtGIavqDD6Jz3NpMYhqENJnNOs9RKgoTqslkS+KDcoNB7nAuiSYV/3
+         ogiZnoKitGfYlLURhfgO3bE+eXSqD2tHIQF9F6luqP57v4WRANsocDOpZISITjePjzWb
+         hbug==
+X-Gm-Message-State: AOAM532QTOh9kbbhJfYSDgDjwkccQ5+lfgTHckfUamtt7d68gS6p/FHT
+        KUTQxTI7qNm/WKaB7goHihADHIu5eiIcWg8R
+X-Google-Smtp-Source: ABdhPJz9jeYU+ttzjSYUyZHI+x2UxOgb+QW4lCamjb54+DZF644JdfUJG04vo+n9kau4c0hde4Gi9g==
+X-Received: by 2002:a67:fd04:0:b0:32d:7265:8221 with SMTP id f4-20020a67fd04000000b0032d72658221mr15305146vsr.53.1652297419899;
+        Wed, 11 May 2022 12:30:19 -0700 (PDT)
+Received: from debian.lan ([98.97.182.206])
+        by smtp.gmail.com with ESMTPSA id f11-20020a056122044b00b0034e6f1fd042sm370176vkk.12.2022.05.11.12.30.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 12:30:19 -0700 (PDT)
+From:   David Ober <dober6023@gmail.com>
+To:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        davem@davemloft.net, hayeswang@realtek.com, aaron.ma@canonical.com
+Cc:     markpearson@lenovo.com, dober@lenovo.com,
+        David Ober <dober6023@gmail.com>
+Subject: [PATCH v3] net: usb: r8152: Add in new Devices that are supported for Mac-Passthru
+Date:   Wed, 11 May 2022 15:30:15 -0400
+Message-Id: <20220511193015.248364-1-dober6023@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [v4 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
- override params bindings
-Content-Language: en-US
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-References: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
- <1652282793-5580-2-git-send-email-quic_kriskura@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1652282793-5580-2-git-send-email-quic_kriskura@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/05/2022 17:26, Krishna Kurapati wrote:
-> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> 
-> Add device tree bindings for SNPS phy tuning parameters.
-> 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 87 ++++++++++++++++++++++
->  1 file changed, 87 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-> index 1ce251d..70efffe 100644
-> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-> @@ -53,6 +53,93 @@ properties:
->    vdda33-supply:
->      description: phandle to the regulator 3.3V supply node.
->  
-> +  qcom,hs-disconnect-bps:
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +    description:
-> +      This adjusts the voltage level for the threshold used to
-> +      detect a disconnect event at the host. Possible values are.
-> +      The values defined are in multiples of basis points (1bp = 0.01%).
+Lenovo Thunderbolt 4 Dock, and other Lenovo USB Docks are using the
+original Realtek USB ethernet Vendor and Product IDs
+If the Network device is Realtek verify that it is on a Lenovo USB hub
+before enabling the passthru feature
 
-This means there is some minimum and maximum (100%)?
+This also adds in the device IDs for the Lenovo USB Dongle and one other
+USB-C dock
 
-> +      The hardware accepts only discrete values. The value closest to the
-> +      provided input will be chosen as the override value for this param.
-> +
-> +  qcom,squelch-detector-bps:
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +    description:
-> +      This adjusts the voltage level for the threshold used to
-> +      detect valid high-speed data.
-> +      The values defined are in multiples of basis points (1bp = 0.01%).
-> +      The hardware accepts only discrete values. The value closest to the
-> +      provided input will be chosen as the override value for this param.
-> +
-> +  qcom,hs-amplitude-bps:
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +    description:
-> +      This adjusts the high-speed DC level voltage.
-> +      The values defined are in multiples of basis points (1bp = 0.01%).
-> +      The hardware accepts only discrete values. The value closest to the
-> +      provided input will be chosen as the override value for this param.
-> +
-> +  qcom,pre-emphasis-duration-bps:
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +    description:
-> +      This signal controls the duration for which the
-> +      HS pre-emphasis current is sourced onto DP<#> or DM<#>.
-> +      The HS Transmitter pre-emphasis duration is defined in terms of
-> +      unit amounts. One unit of pre-emphasis duration is approximately
-> +      650 ps and is defined as 1X pre-emphasis duration.
-> +      The values defined are in multiples of basis points (1bp = 0.01%).
-> +      The hardware accepts only discrete values. The value closest to the
-> +      provided input will be chosen as the override value for this param.
-> +
-> +  qcom,pre-emphasis-amplitude-bps:
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +    description:
-> +      This signal controls the amount of current sourced to
-> +      DP<#> and DM<#> after a J-to-K or K-to-J transition.
-> +      The HS Transmitter pre-emphasis current is defined in terms of unit
-> +      amounts. One unit amount is approximately 2 mA and is defined as
-> +      1X pre-emphasis current.
-> +      The values defined are in multiples of basis points (1bp = 0.01%).
-> +      The hardware accepts only discrete values. The value closest to the
-> +      provided input will be chosen as the override value for this param.
-> +
-> +  qcom,hs-rise-fall-time-bps:
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +    description:
-> +      This adjusts the rise/fall times of the high-speed waveform.
-> +      The values defined are in multiples of basis points (1bp = 0.01%).
-> +      The hardware accepts only discrete values. The value closest to the
-> +      provided input will be chosen as the override value for this param.
-> +
-> +  qcom,hs-crossover-voltage-mv:
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +    description:
-> +      This adjusts the voltage at which the DP<#> and DM<#>
-> +      signals cross while transmitting in HS mode.
-> +      The values defined are in milli volts. The hardware accepts only
-> +      discrete values. The value closest to the provided input will be
-> +      chosen as the override value for this param.
-> +
-> +  qcom,hs-output-impedance-mohm:
-> +    $ref: /schemas/types.yaml#/definitions/int32
+Signed-off-by: David Ober <dober6023@gmail.com>
+---
+ drivers/net/usb/r8152.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Here and in other places, please use standard units. See
-dtschema/schemas/property-units.yaml in dtschema repo.
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index c2da3438387c..482f54625411 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -771,6 +771,8 @@ enum rtl8152_flags {
+ };
+ 
+ #define DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2	0x3082
++#define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3		0x3062
++#define DEVICE_ID_THINKPAD_USB_C_DONGLE			0x720c
+ #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
+ 
+ struct tally_counter {
+@@ -9644,10 +9646,18 @@ static int rtl8152_probe(struct usb_interface *intf,
+ 
+ 	if (le16_to_cpu(udev->descriptor.idVendor) == VENDOR_ID_LENOVO) {
+ 		switch (le16_to_cpu(udev->descriptor.idProduct)) {
++		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
++		case DEVICE_ID_THINKPAD_USB_C_DONGLE:
+ 		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
+ 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
+ 			tp->lenovo_macpassthru = 1;
+ 		}
++	} else if ((le16_to_cpu(udev->descriptor.idVendor) == VENDOR_ID_REALTEK) &&
++		   (le16_to_cpu(udev->parent->descriptor.idVendor) == VENDOR_ID_LENOVO)) {
++		switch (le16_to_cpu(udev->descriptor.idProduct)) {
++		case 0x8153:
++			tp->lenovo_macpassthru = 1;
++		}
+ 	}
+ 
+ 	if (le16_to_cpu(udev->descriptor.bcdDevice) == 0x3011 && udev->serial &&
+-- 
+2.30.2
 
-
-Best regards,
-Krzysztof
