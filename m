@@ -2,231 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1430F523062
-	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 12:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A01523198
+	for <lists+linux-usb@lfdr.de>; Wed, 11 May 2022 13:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241260AbiEKKMM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 May 2022 06:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
+        id S235558AbiEKL26 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 May 2022 07:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241058AbiEKKL6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 06:11:58 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36DD219351;
-        Wed, 11 May 2022 03:11:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652263917; x=1683799917;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qT65tmCMfEijFl2TpJ4TUU4guEKfSaXmRy66uEBzzr4=;
-  b=gNbXcXavBUiUaKwMxkj3cq9N0J2CTPbttXn9nM/Ing3Y3ujIVjRJ0zsU
-   HSX2tSJq/0eiT5XW/wUkUV0faQgP9c+oSsfhOWbYsI0NSn92h8VfUWG0s
-   3gNfv7Pjn11Ix5KAiK35gZ/KosDUf1MVTetxjCsGX3/ZqUtvOnuMbNbAD
-   zD7qdsuPS2+jyl4z8dNuPK6sbj93xhD4k8P4k8mwXoVu/tp2eA6AS1cTT
-   Cl/yWZmrY9gQ1CjIfbrhhouNOcDzlX3xSnTFM0XsRsKvzaOQmNotwxJpn
-   8Wf4V5WtQo8jSMlkow+IuA8KUUif/jp14pQl3ADcWp+oTpsIg4Wo6XI88
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="269590606"
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="269590606"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:11:56 -0700
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="594049570"
-Received: from meliyahx-mobl2.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.32.210])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:11:52 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Oliver Neukum <oneukum@suse.com>,
-        Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 1/5] tty/termbits: remove #ifdef CMSPAR that is always defined
-Date:   Wed, 11 May 2022 13:11:35 +0300
-Message-Id: <20220511101139.5306-2-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220511101139.5306-1-ilpo.jarvinen@linux.intel.com>
-References: <20220511101139.5306-1-ilpo.jarvinen@linux.intel.com>
+        with ESMTP id S233763AbiEKL24 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 07:28:56 -0400
+Received: from mxout01.lancloud.ru (mxout01.lancloud.ru [45.84.86.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D211CFF3;
+        Wed, 11 May 2022 04:28:50 -0700 (PDT)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru 53A1F20CDA45
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH] Additions to the list of devices that can be used for
+ Lenovo Pass-thru feature
+To:     David Ober <dober6023@gmail.com>, <linux-usb@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <davem@davemloft.net>,
+        <hayeswang@realtek.com>, <aaron.ma@canonical.com>
+CC:     <mpearson@lenovo.com>, <dober@lenovo.com>
+References: <20220511093826.245118-1-dober6023@gmail.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <472e0ce0-b18a-c2b7-f7d2-288993962f45@omp.ru>
+Date:   Wed, 11 May 2022 14:28:45 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220511093826.245118-1-dober6023@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-CMSPAR is defined by all architectures.
+Hello!
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/char/pcmcia/synclink_cs.c   | 2 --
- drivers/tty/amiserial.c             | 2 --
- drivers/tty/serial/8250/8250_port.c | 2 --
- drivers/tty/serial/jsm/jsm_cls.c    | 6 ------
- drivers/tty/serial/jsm/jsm_neo.c    | 6 ------
- drivers/tty/serial/sunsu.c          | 2 --
- drivers/usb/class/cdc-acm.h         | 8 --------
- drivers/usb/serial/ark3116.c        | 3 +--
- drivers/usb/serial/whiteheat.c      | 4 ----
- 9 files changed, 1 insertion(+), 34 deletions(-)
+On 5/11/22 12:38 PM, David Ober wrote:
 
-diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
-index 78baba55a8b5..c20f2cb784e8 100644
---- a/drivers/char/pcmcia/synclink_cs.c
-+++ b/drivers/char/pcmcia/synclink_cs.c
-@@ -1432,10 +1432,8 @@ static void mgslpc_change_params(MGSLPC_INFO *info, struct tty_struct *tty)
- 			info->params.parity = ASYNC_PARITY_ODD;
- 		else
- 			info->params.parity = ASYNC_PARITY_EVEN;
--#ifdef CMSPAR
- 		if (cflag & CMSPAR)
- 			info->params.parity = ASYNC_PARITY_SPACE;
--#endif
- 	}
- 
- 	/* calculate number of jiffies to transmit a full
-diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
-index 533d02b38e02..afb2d373dd47 100644
---- a/drivers/tty/amiserial.c
-+++ b/drivers/tty/amiserial.c
-@@ -588,10 +588,8 @@ static void change_speed(struct tty_struct *tty, struct serial_state *info,
- 	}
- 	if (!(cflag & PARODD))
- 		cval |= UART_LCR_EPAR;
--#ifdef CMSPAR
- 	if (cflag & CMSPAR)
- 		cval |= UART_LCR_SPAR;
--#endif
- 
- 	/* Determine divisor based on baud rate */
- 	baud = tty_get_baud_rate(tty);
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 5591f18f2ea9..78b6dedc43e6 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -2620,10 +2620,8 @@ static unsigned char serial8250_compute_lcr(struct uart_8250_port *up,
- 	}
- 	if (!(c_cflag & PARODD))
- 		cval |= UART_LCR_EPAR;
--#ifdef CMSPAR
- 	if (c_cflag & CMSPAR)
- 		cval |= UART_LCR_SPAR;
--#endif
- 
- 	return cval;
- }
-diff --git a/drivers/tty/serial/jsm/jsm_cls.c b/drivers/tty/serial/jsm/jsm_cls.c
-index 444f233ebd1f..046b624e5f71 100644
---- a/drivers/tty/serial/jsm/jsm_cls.c
-+++ b/drivers/tty/serial/jsm/jsm_cls.c
-@@ -723,14 +723,8 @@ static void cls_param(struct jsm_channel *ch)
- 	if (!(ch->ch_c_cflag & PARODD))
- 		lcr |= UART_LCR_EPAR;
- 
--	/*
--	 * Not all platforms support mark/space parity,
--	 * so this will hide behind an ifdef.
--	 */
--#ifdef CMSPAR
- 	if (ch->ch_c_cflag & CMSPAR)
- 		lcr |= UART_LCR_SPAR;
--#endif
- 
- 	if (ch->ch_c_cflag & CSTOPB)
- 		lcr |= UART_LCR_STOP;
-diff --git a/drivers/tty/serial/jsm/jsm_neo.c b/drivers/tty/serial/jsm/jsm_neo.c
-index 110696cdaa1d..0cf586c10688 100644
---- a/drivers/tty/serial/jsm/jsm_neo.c
-+++ b/drivers/tty/serial/jsm/jsm_neo.c
-@@ -997,14 +997,8 @@ static void neo_param(struct jsm_channel *ch)
- 	if (!(ch->ch_c_cflag & PARODD))
- 		lcr |= UART_LCR_EPAR;
- 
--	/*
--	 * Not all platforms support mark/space parity,
--	 * so this will hide behind an ifdef.
--	 */
--#ifdef CMSPAR
- 	if (ch->ch_c_cflag & CMSPAR)
- 		lcr |= UART_LCR_SPAR;
--#endif
- 
- 	if (ch->ch_c_cflag & CSTOPB)
- 		lcr |= UART_LCR_STOP;
-diff --git a/drivers/tty/serial/sunsu.c b/drivers/tty/serial/sunsu.c
-index c31389114b86..fff50b5b82eb 100644
---- a/drivers/tty/serial/sunsu.c
-+++ b/drivers/tty/serial/sunsu.c
-@@ -798,10 +798,8 @@ sunsu_change_speed(struct uart_port *port, unsigned int cflag,
- 		cval |= UART_LCR_PARITY;
- 	if (!(cflag & PARODD))
- 		cval |= UART_LCR_EPAR;
--#ifdef CMSPAR
- 	if (cflag & CMSPAR)
- 		cval |= UART_LCR_SPAR;
--#endif
- 
- 	/*
- 	 * Work around a bug in the Oxford Semiconductor 952 rev B
-diff --git a/drivers/usb/class/cdc-acm.h b/drivers/usb/class/cdc-acm.h
-index 3aa7f0a3ad71..d26ecd15be60 100644
---- a/drivers/usb/class/cdc-acm.h
-+++ b/drivers/usb/class/cdc-acm.h
-@@ -7,14 +7,6 @@
-  *
-  */
- 
--/*
-- * CMSPAR, some architectures can't have space and mark parity.
-- */
--
--#ifndef CMSPAR
--#define CMSPAR			0
--#endif
--
- /*
-  * Major and minor numbers.
-  */
-diff --git a/drivers/usb/serial/ark3116.c b/drivers/usb/serial/ark3116.c
-index c0e4df87ff22..39eaa7b97c40 100644
---- a/drivers/usb/serial/ark3116.c
-+++ b/drivers/usb/serial/ark3116.c
-@@ -208,10 +208,9 @@ static void ark3116_set_termios(struct tty_struct *tty,
- 		lcr |= UART_LCR_PARITY;
- 	if (!(cflag & PARODD))
- 		lcr |= UART_LCR_EPAR;
--#ifdef CMSPAR
- 	if (cflag & CMSPAR)
- 		lcr |= UART_LCR_SPAR;
--#endif
-+
- 	/* handshake control */
- 	hcr = (cflag & CRTSCTS) ? 0x03 : 0x00;
- 
-diff --git a/drivers/usb/serial/whiteheat.c b/drivers/usb/serial/whiteheat.c
-index 06aad0d727dd..332fb92ae575 100644
---- a/drivers/usb/serial/whiteheat.c
-+++ b/drivers/usb/serial/whiteheat.c
-@@ -30,10 +30,6 @@
- #include <linux/usb/ezusb.h>
- #include "whiteheat.h"			/* WhiteHEAT specific commands */
- 
--#ifndef CMSPAR
--#define CMSPAR 0
--#endif
--
- /*
-  * Version Information
-  */
--- 
-2.30.2
+> net: usb: r8152: Add in new Devices that are supported for Mac-Passthru
 
+   This should be in the subject.
+
+> Lenovo Thunderbolt 4 Dock, and other Lenovo USB Docks are using the original
+> Realtek USB ethernet Vendor and Product IDs
+> If the Network device is Realtek verify that it is on a Lenovo USB hub
+> before enabling the passthru feature
+> 
+> This also adds in the device IDs for the Lenovo USB Dongle and one other
+> USB-C dock
+> 
+> Signed-off-by: David Ober <dober6023@gmail.com>
+> ---
+>  drivers/net/usb/r8152.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+> index c2da3438387c..7d43c772b85d 100644
+> --- a/drivers/net/usb/r8152.c
+> +++ b/drivers/net/usb/r8152.c
+[...]
+> @@ -9644,10 +9647,19 @@ static int rtl8152_probe(struct usb_interface *intf,
+>  
+>  	if (le16_to_cpu(udev->descriptor.idVendor) == VENDOR_ID_LENOVO) {
+>  		switch (le16_to_cpu(udev->descriptor.idProduct)) {
+> +		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
+> +		case DEVICE_ID_THINKPAD_USB_C_DONGLE:
+>  		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
+>  		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
+>  			tp->lenovo_macpassthru = 1;
+>  		}
+> +        }
+
+   Indent with tabs please.
+
+> +	else if ((le16_to_cpu(udev->descriptor.idVendor) == VENDOR_ID_REALTEK) &&
+
+   The preceding } should be on the same line.
+
+> +                 (le16_to_cpu(udev->parent->descriptor.idVendor) == VENDOR_ID_LENOVO)) {
+
+   Indent with tabs please.
+
+[...]
+
+MBR, Sergey
