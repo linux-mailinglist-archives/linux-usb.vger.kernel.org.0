@@ -2,104 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3861E524E56
-	for <lists+linux-usb@lfdr.de>; Thu, 12 May 2022 15:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99AE524E87
+	for <lists+linux-usb@lfdr.de>; Thu, 12 May 2022 15:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354439AbiELNck (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 May 2022 09:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
+        id S1354538AbiELNo0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 May 2022 09:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354446AbiELNcj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 May 2022 09:32:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BFE1356AC
-        for <linux-usb@vger.kernel.org>; Thu, 12 May 2022 06:32:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S1354431AbiELNoZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 May 2022 09:44:25 -0400
+X-Greylist: delayed 323 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 May 2022 06:44:23 PDT
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B615DE40;
+        Thu, 12 May 2022 06:44:23 -0700 (PDT)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F04960FE4
-        for <linux-usb@vger.kernel.org>; Thu, 12 May 2022 13:32:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0C675C34114
-        for <linux-usb@vger.kernel.org>; Thu, 12 May 2022 13:32:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652362358;
-        bh=eH0hDTys1uDOZQzWWkGfGatgzJVjBCZe/wt/+zf+ur4=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=s7v7JiksRcFJPnyWF+cQ5OWgk+ZH7ZmAMljsRsk/stVk3ca5Q8sCnCKJ7cx6trle+
-         mdtKN9yvfztxl4m9Bf2nxDMFxH5deUlK3LegfD7OFHuxwQ9pO356CzGevSbQ0n7vho
-         rkl4flhwtpuThF/s4np9yMIEInDruajXT8SnkswBtkDYrLaz3ejGmSPrl713OTQka6
-         Lab65JlJgEuNUpRm/N1YVgKYQu5ub+5xwpAQLO9BRnqiEL8BiEauPQogGIcn8lcslS
-         7iKjfmj5uOkUBUDcPBq+3W4RZRtYNdsqa01DptV+eYF4iYZ6wi2lQUcVzY/kYSbpvP
-         8353pQq73iXjw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id E8320C05FD2; Thu, 12 May 2022 13:32:37 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215967] Kernel build fails if CONFIG_REGULATOR is unset
-Date:   Thu, 12 May 2022 13:32:37 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: greg@kroah.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215967-208809-pOhNKW9L4H@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215967-208809@https.bugzilla.kernel.org/>
-References: <bug-215967-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4KzXtP5sJsz9scQ;
+        Thu, 12 May 2022 15:38:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mail.msdigital.de;
+        s=MBO0001; t=1652362736;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6cZLIKwXMZcfNRh7YQ7kuTKx6Fg9bbjG5TtEQMO/3Gw=;
+        b=C80xKZemj5G1+Pde0EHQsE6YZp5IaJh+4smg1LGJbcUw/Ozpp0bJ/U7v+JCnZyvqtg+WxR
+        3/Go4zNo1VKPg7wG4SpIrLe1wUIoTVmPT8ZbxQXnrovKs009IiG/egd4qWZYmhGsyrhJ1L
+        Yz5mwHArOgzk/MnavelS5jp8R8ILGgQYWx8Eq40SlBkfcj4JXYKREF3lFNFm4h8cZWlsd1
+        nJCksm1UdPrNn6yKJVtW/HWqqzGJKIMA0dJlf2sLpL8Tx+HzWSInYMckhDsZ663+BizNOk
+        KnoSskY2cPjyi5JrBjdRx+2KsBKcUVyiqrzmC+kLY7U7sjwd1PIPGbHvMFlvAA==
+Message-ID: <dfaa54ab-1b03-7aec-5927-d52a4233e56a@msdigital.de>
+Date:   Thu, 12 May 2022 15:38:47 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Language: de-DE
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marian Postevca <posteuca@mutex.one>
+From:   Maximilian Senftleben <kernel@mail.msdigital.de>
+Subject: PROBLEM: No static MAC address for usb gadget ethernet via kernel
+ parameter any more.
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215967
+[1.] One line summary of the problem:
 
---- Comment #3 from Greg Kroah-Hartman (greg@kroah.com) ---
-On Wed, May 11, 2022 at 05:30:06PM +0200, Bj=C3=B8rn Mork wrote:
-> Greg KH <greg@kroah.com> writes:
-> > On Wed, May 11, 2022 at 07:44:39AM +0000, bugzilla-daemon@kernel.org wr=
-ote:
-> >
-> >> Compilation of "drivers/usb/phy/phy-generic.c" fails reproducible if
-> >> CONFIG_REGULATOR is unset, because function "devm_regulator_get_exclus=
-ive"
-> is
-> >> undeclared but nevertheless used.
-> >> The offending patch propably is commit
-> 03e607cbb2931374db1825f371e9c7f28526d3f4
-> >> upstream
-> >
-> > Can you please send this information to the stable@vger.kernel.org
-> > mailing list and we will work on it there?
->=20
-> Please backport commit 51dfb6ca3728 ("regulator: consumer: Add missing
-> stubs to regulator/consumer.h") to v5.10 stable and older stable
-> releases where 03e607cbb2931374db1825f371e9c7f28526d3f4 is backported
+No static MAC address for usb gadget ethernet via kernel boot parameter 
+any more.
 
-Now queued up, thanks.
+[2.] Full description of the problem/report:
 
-greg k-h
+In 5.15. and before we were able to set a static MAC address for the usb 
+gadget ethernet connection using kernel parameters "g_ether.dev_addr" 
+and "g_ether.host_addr".
+Since 5.16. and more concrete after commit 
+890d5b40908bfd1a79be018d2d297cf9df60f4ee, this is no longer possible, 
+and a random MAC address is assigned.
+(Possible Regression)
 
---=20
-You may reply to this email to add a comment.
+[3.] Keywords (i.e., modules, networking, kernel):
+usb, gadget, mac, g_ether
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+[4.] Kernel information
+[4.1.] Kernel version (from /proc/version):
+Linux version 5.17.4-141174-ge11818a6ec02 (ms@local) 
+(arm-v7a-linux-gnueabihf-gcc (OSELAS.Toolchain-2020.08.0 10-20200822) 
+10.2.1 20200822, GNU ld (GNU Binutils) 2.35) #14 SMP Thu May 12 13:51:50 
+CEST 2022
+[4.2.] Kernel .config file:
+-
+
+[5.] Most recent kernel version which did not have the bug:
+5.15
+
+[6.] Output of Oops.. message (if applicable) with symbolic information 
+resolved (see Documentation/admin-guide/bug-hunting.rst)
+-
+
+[7.] A small shell script or example program which triggers the problem 
+(if possible)
+-
+
+[8.] Environment
+-
+
+[9.] Other notes, patches, fixes, workarounds:
+
+In 5.17.4 reverting said commit 890d5b40908bfd1a79be018d2d297cf9df60f4ee 
+did resolve the issue for me.
+
