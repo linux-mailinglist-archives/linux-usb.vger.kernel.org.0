@@ -2,45 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A878524709
-	for <lists+linux-usb@lfdr.de>; Thu, 12 May 2022 09:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7833B524715
+	for <lists+linux-usb@lfdr.de>; Thu, 12 May 2022 09:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351028AbiELHdN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 May 2022 03:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
+        id S1351068AbiELHhm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 May 2022 03:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiELHdI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 May 2022 03:33:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA76036E1E;
-        Thu, 12 May 2022 00:33:06 -0700 (PDT)
+        with ESMTP id S1351064AbiELHhk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 May 2022 03:37:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738513136F;
+        Thu, 12 May 2022 00:37:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18DE561EAC;
-        Thu, 12 May 2022 07:33:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AF99C385B8;
-        Thu, 12 May 2022 07:33:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1DE761EBD;
+        Thu, 12 May 2022 07:37:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD938C385B8;
+        Thu, 12 May 2022 07:37:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652340785;
-        bh=ddtYkLWi+bM8tkL0qc0h+qJ4uhi+fLy4+YkKK0LtHbg=;
+        s=korg; t=1652341058;
+        bh=offqsrhcg16fhLMHDbpmTPitcqGYTsd1JU4xNXPf3Qo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wV27bUBQBIbBOYhuWHfMGmWDf7fuQPVKdZ14av7tNkdFYnl/u2lO8ebA0WaB2htok
-         RVGNf9JnIoMk73NIyBGm/6aWdJWmVPV8Le+xz/YmhGh3W+OLz5yrdEIamtGtpnEQLN
-         n+BkrZw/qyYzJok9jcempbZproDgzQU9LJ827Wi8=
-Date:   Thu, 12 May 2022 09:33:02 +0200
+        b=D3yAILK35ZPK89IZFGaz6LKyO6D5AuiuQibqsyUdXS46CrpYGGAZPf6w+QkFWbnGn
+         bMwPRK4lL4kfXqKkhmcQ+rReWyQEIABgsAPIOh5ztmxG+otROgByEL1iJJKUOcB4zD
+         6B0hwuarGijSNDRTFP7l2Mq7fb7QjYVBgEbeY+tA=
+Date:   Thu, 12 May 2022 09:37:35 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Albert Wang <albertccwang@google.com>
-Cc:     balbi@kernel.org, quic_jackp@quicinc.com, badhri@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Move null pinter check after
- window closed
-Message-ID: <Yny4LgeQ+r6w0vhJ@kroah.com>
-References: <20220512043739.1234857-1-albertccwang@google.com>
+To:     "guanjing (D)" <guanjing6@huawei.com>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] usb: dwc3: include extcon.h to fix compile error
+Message-ID: <Yny5P5ECkBPiu8YV@kroah.com>
+References: <20220510082029.197841-1-guanjing6@huawei.com>
+ <YnoiOlkzvJKs/NN8@kroah.com>
+ <9aebc16b-cf94-3c13-6bc6-e5a3ad88547f@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220512043739.1234857-1-albertccwang@google.com>
+In-Reply-To: <9aebc16b-cf94-3c13-6bc6-e5a3ad88547f@huawei.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -51,74 +52,20 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 12, 2022 at 12:37:39PM +0800, Albert Wang wrote:
-> After inspecting further, we do see the locking is implicit, with the
-> main gotcha being the unlock/re-lock. That creates a window for a race
-> to happen. This change moves the NULL check to be adjacent to where
-> to it's used and after the window is "closed".
+On Wed, May 11, 2022 at 10:05:56AM +0800, guanjing (D) wrote:
+> Thanks for your reply, when CONFIG_EXTCON is "m", we will see these build
+> error.
 > 
-> Fixes: 26288448120b ("usb: dwc3: gadget: Fix null pointer exception")
 > 
-> Signed-off-by: Albert Wang <albertccwang@google.com>
-> ---
->  drivers/usb/dwc3/gadget.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
+> Fixes: 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is
+> present")
 > 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 19477f4bbf54..fda58951cf27 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -3366,14 +3366,19 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
->  	struct dwc3		*dwc = dep->dwc;
->  	bool			no_started_trb = true;
->  
-> -	if (!dep->endpoint.desc)
-> -		return no_started_trb;
-> -
-> +	/*
-> +	 * This function eventually leads to dwc3_giveback() which unlocks
-> +	 * the dwc->lock and relocks afterwards. This actually creates a
-> +	 * a window for a race to happen.
-> +	 */
->  	dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
->  
->  	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
->  		goto out;
->  
-> +	if (!dep->endpoint.desc)
-> +		return no_started_trb;
-> +
->  	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
->  		list_empty(&dep->started_list) &&
->  		(list_empty(&dep->pending_list) || status == -EXDEV))
-> -- 
-> 2.36.0.550.gb090851708-goog
 > 
+> I have pasted the config file in the attachment.
 
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+Your .config builds just fine for me here.  Are you sure you are working
+with a clean tree?
 
 thanks,
 
-greg k-h's patch email bot
+greg k-h
