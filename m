@@ -2,145 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2D5524208
-	for <lists+linux-usb@lfdr.de>; Thu, 12 May 2022 03:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B8B5242B0
+	for <lists+linux-usb@lfdr.de>; Thu, 12 May 2022 04:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiELBaN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 May 2022 21:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
+        id S244099AbiELCXJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 May 2022 22:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiELBaI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 21:30:08 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C89154B3F;
-        Wed, 11 May 2022 18:30:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652319006; x=1683855006;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FmzxLobn0K8eUJokt43bdYb1Kp6hZ00M7lRWrjyhUwY=;
-  b=SKeOnlZmmXRXW1DKAasjKtvf6ApCGk+x3DLPODK8l0L+JabxLMnFJfzp
-   m7UVKz3uculOAPYDdc64yIkSIEj3KpWJR9tKlmnn5h5qZrvWsoUgrfDVl
-   SLhrv4GOGlWmIZj+HEvqItztlQypeWYlMk534fxnCb61TeSqkKXnI9BbR
-   x5zgwbY4B6CZGGBKL9dZTagQvSb14XMVDA/GXpWMgVv0W2MWFUuVRfIYF
-   57sM0W2rw+IqipldUXxK2G5dChfh3rSH+aPd2tP5Csj/IvSbtlPMBPBQi
-   LL2cHJK6GRX1ZnLwMc7oo5GwUDtuuIghxvpVa8wnTEXLDxga2TOvaT0Qw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="330460649"
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="330460649"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 18:30:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="542554715"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 11 May 2022 18:29:58 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1noxeQ-000Jmk-2Z;
-        Thu, 12 May 2022 01:29:58 +0000
-Date:   Thu, 12 May 2022 09:29:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: Re: [v4 2/3] phy: qcom-snps: Add support for overriding phy tuning
- parameters
-Message-ID: <202205120931.JrA2orb3-lkp@intel.com>
-References: <1652282793-5580-3-git-send-email-quic_kriskura@quicinc.com>
+        with ESMTP id S241340AbiELCWy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 May 2022 22:22:54 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD98160BB3
+        for <linux-usb@vger.kernel.org>; Wed, 11 May 2022 19:21:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652322103; x=1683858103;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=20L31Nlazx6nhkiuM3q4ezm9X5iwHJCR665uiml9yVI=;
+  b=Nhm29djl/8ilAhubm6Ci+HpLrmkhfHpIahOdj3CeiXdsfRSlv4IYs3Zt
+   jS33pJjtZh5M+RQWOY9mWKAAq5hlE2XVJ3PZIeNkFBeXrdbeGqAEoGFJs
+   ntUM1WQ421qjROT9owjbPpkv3f1Yh4CpKdCp4E6lkB/tyuaQl+oZR6fFy
+   Y=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 11 May 2022 19:21:40 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 19:21:40 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 11 May 2022 19:21:40 -0700
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 11 May 2022 19:21:38 -0700
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH] usb: gadget: make f_loopback/f_sourcesink standalone
+Date:   Thu, 12 May 2022 10:21:34 +0800
+Message-ID: <1652322094-20698-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652282793-5580-3-git-send-email-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krishna,
+First remove lb_modinit() and lb_modexit() call from f_sourcesink as both
+function belong to f_loopback.c, also there is no need to export
+disable_endpoints() from f_sourcesink, change it to static type.
 
-Thank you for the patch! Yet something to improve:
+After first step, we can use DECLARE_USB_FUNCTION_INIT() macro in
+f_sourcesink to create module init/exit function implicit as it only
+register/unregister one usb function driver.
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on krzk/for-next linus/master v5.18-rc6 next-20220511]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+In f_loopback disable_loopback() function, just add two usb_ep_disable()
+call, it will safe to remove original disable_endpoints() call
+which belong to f_sourcesink, and it also safe to use macro
+DECLARE_USB_FUNCTION_INIT() for module init/exit purpose.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Kurapati/Add-QCOM-SNPS-PHY-overriding-params-support/20220511-232858
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: riscv-randconfig-r033-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120931.JrA2orb3-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/48c46f24873c92d3e16904af9e654962d0b923f1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Krishna-Kurapati/Add-QCOM-SNPS-PHY-overriding-params-support/20220511-232858
-        git checkout 48c46f24873c92d3e16904af9e654962d0b923f1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Now it is safe to remove function prototype of lb_modinit(),
+lb_modexit() and disable_endpoints() from g_zero.h.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Change Makefile to build f_loopback/f_sourcesink as standalone module.
 
-All errors (new ones prefixed by >>):
+Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+---
+ drivers/usb/gadget/function/Makefile       |  4 ++--
+ drivers/usb/gadget/function/f_loopback.c   | 23 +++++++++++------------
+ drivers/usb/gadget/function/f_sourcesink.c | 24 ++----------------------
+ drivers/usb/gadget/function/g_zero.h       |  8 --------
+ 4 files changed, 15 insertions(+), 44 deletions(-)
 
->> drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c:541:29: error: initializing 'struct override_param_map *' with an expression of type 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           struct override_param_map *cfg = of_device_get_match_data(dev);
-                                      ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +541 drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
-
-   534	
-   535	static void qcom_snps_hsphy_read_override_param_seq(struct device *dev)
-   536	{
-   537		struct device_node *node = dev->of_node;
-   538		s32 val;
-   539		int ret, i;
-   540		struct qcom_snps_hsphy *hsphy;
- > 541		struct override_param_map *cfg = of_device_get_match_data(dev);
-   542	
-   543		hsphy = dev_get_drvdata(dev);
-   544	
-   545		for (i = 0; i < ARRAY_SIZE(phy_seq_props); i++) {
-   546			ret = of_property_read_s32(node, phy_seq_props[i], &val);
-   547			if (!ret) {
-   548				dev_dbg(&hsphy->phy->dev, "Read param: %s val: %d\n",
-   549							phy_seq_props[i], val);
-   550				qcom_snps_hsphy_override_param_update_val(cfg[i], val,
-   551							&hsphy->update_seq_cfg[i]);
-   552			}
-   553		}
-   554	}
-   555	
-
+diff --git a/drivers/usb/gadget/function/Makefile b/drivers/usb/gadget/function/Makefile
+index 5d3a6cf..6d01495 100644
+--- a/drivers/usb/gadget/function/Makefile
++++ b/drivers/usb/gadget/function/Makefile
+@@ -9,8 +9,8 @@ ccflags-y			+= -I$(srctree)/drivers/usb/gadget/udc/
+ # USB Functions
+ usb_f_acm-y			:= f_acm.o
+ obj-$(CONFIG_USB_F_ACM)		+= usb_f_acm.o
+-usb_f_ss_lb-y			:= f_loopback.o f_sourcesink.o
+-obj-$(CONFIG_USB_F_SS_LB)	+= usb_f_ss_lb.o
++obj-$(CONFIG_USB_F_SS_LB)	+= f_loopback.o
++obj-$(CONFIG_USB_F_SS_LB)	+= f_sourcesink.o
+ obj-$(CONFIG_USB_U_SERIAL)	+= u_serial.o
+ usb_f_serial-y			:= f_serial.o
+ obj-$(CONFIG_USB_F_SERIAL)	+= usb_f_serial.o
+diff --git a/drivers/usb/gadget/function/f_loopback.c b/drivers/usb/gadget/function/f_loopback.c
+index ae41f55..77fbed0 100644
+--- a/drivers/usb/gadget/function/f_loopback.c
++++ b/drivers/usb/gadget/function/f_loopback.c
+@@ -296,9 +296,18 @@ static void loopback_complete(struct usb_ep *ep, struct usb_request *req)
+ static void disable_loopback(struct f_loopback *loop)
+ {
+ 	struct usb_composite_dev	*cdev;
++	int			value;
+ 
+ 	cdev = loop->function.config->cdev;
+-	disable_endpoints(cdev, loop->in_ep, loop->out_ep, NULL, NULL);
++
++	value = usb_ep_disable(loop->in_ep);
++	if (value < 0)
++		DBG(cdev, "disable %s --> %d\n", loop->in_ep->name, value);
++
++	value = usb_ep_disable(loop->out_ep);
++	if (value < 0)
++		DBG(cdev, "disable %s --> %d\n", loop->out_ep->name, value);
++
+ 	VDBG(cdev, "%s disabled\n", loop->function.name);
+ }
+ 
+@@ -583,16 +592,6 @@ static struct usb_function_instance *loopback_alloc_instance(void)
+ 
+ 	return  &lb_opts->func_inst;
+ }
+-DECLARE_USB_FUNCTION(Loopback, loopback_alloc_instance, loopback_alloc);
+-
+-int __init lb_modinit(void)
+-{
+-	return usb_function_register(&Loopbackusb_func);
+-}
+-
+-void __exit lb_modexit(void)
+-{
+-	usb_function_unregister(&Loopbackusb_func);
+-}
++DECLARE_USB_FUNCTION_INIT(Loopback, loopback_alloc_instance, loopback_alloc);
+ 
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/usb/gadget/function/f_sourcesink.c b/drivers/usb/gadget/function/f_sourcesink.c
+index 6803cd6..9441285 100644
+--- a/drivers/usb/gadget/function/f_sourcesink.c
++++ b/drivers/usb/gadget/function/f_sourcesink.c
+@@ -301,7 +301,7 @@ static void disable_ep(struct usb_composite_dev *cdev, struct usb_ep *ep)
+ 		DBG(cdev, "disable %s --> %d\n", ep->name, value);
+ }
+ 
+-void disable_endpoints(struct usb_composite_dev *cdev,
++static void disable_endpoints(struct usb_composite_dev *cdev,
+ 		struct usb_ep *in, struct usb_ep *out,
+ 		struct usb_ep *iso_in, struct usb_ep *iso_out)
+ {
+@@ -1263,27 +1263,7 @@ static struct usb_function_instance *source_sink_alloc_inst(void)
+ 
+ 	return &ss_opts->func_inst;
+ }
+-DECLARE_USB_FUNCTION(SourceSink, source_sink_alloc_inst,
++DECLARE_USB_FUNCTION_INIT(SourceSink, source_sink_alloc_inst,
+ 		source_sink_alloc_func);
+ 
+-static int __init sslb_modinit(void)
+-{
+-	int ret;
+-
+-	ret = usb_function_register(&SourceSinkusb_func);
+-	if (ret)
+-		return ret;
+-	ret = lb_modinit();
+-	if (ret)
+-		usb_function_unregister(&SourceSinkusb_func);
+-	return ret;
+-}
+-static void __exit sslb_modexit(void)
+-{
+-	usb_function_unregister(&SourceSinkusb_func);
+-	lb_modexit();
+-}
+-module_init(sslb_modinit);
+-module_exit(sslb_modexit);
+-
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/usb/gadget/function/g_zero.h b/drivers/usb/gadget/function/g_zero.h
+index 98b8462..23f55e7 100644
+--- a/drivers/usb/gadget/function/g_zero.h
++++ b/drivers/usb/gadget/function/g_zero.h
+@@ -62,12 +62,4 @@ struct f_lb_opts {
+ 	int				refcnt;
+ };
+ 
+-void lb_modexit(void);
+-int lb_modinit(void);
+-
+-/* common utilities */
+-void disable_endpoints(struct usb_composite_dev *cdev,
+-		struct usb_ep *in, struct usb_ep *out,
+-		struct usb_ep *iso_in, struct usb_ep *iso_out);
+-
+ #endif /* __G_ZERO_H */
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.7.4
+
