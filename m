@@ -2,101 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C27524E11
-	for <lists+linux-usb@lfdr.de>; Thu, 12 May 2022 15:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1ABD524E55
+	for <lists+linux-usb@lfdr.de>; Thu, 12 May 2022 15:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354186AbiELNTt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 May 2022 09:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
+        id S1354444AbiELNcj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 May 2022 09:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353697AbiELNTs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 May 2022 09:19:48 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BA7250EAC
-        for <linux-usb@vger.kernel.org>; Thu, 12 May 2022 06:19:46 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-e93bbb54f9so6532961fac.12
-        for <linux-usb@vger.kernel.org>; Thu, 12 May 2022 06:19:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rnW1lNdXaHOrseNx+8VZQkCoh4hVp7eYD17JDIqBNtY=;
-        b=oi7x1SH011n4JulssPJJ4GDfjqKYhSYQ0T1tiXB9tvhOy5Mdy+Z2PCzNAsF/7iEFCB
-         ukYsBCXrB1SmnFjtouzUbdnGqEvBkCgNZ6K2pDdf9JUPG+14CPagbSXalfyEgPFuJ4Bq
-         mXBGFNv1v8gnl+euHb+kBd3WEpGNNxHVvhWTyHlBXlUdlUsadWCM/Y6QowcbTg+Ijk7U
-         rJVnJVj8st0ixwA+ZgS20uf/eDSDjA/9RKZXa8/aFYaMNnd/cdcNMU+eXVXdez2BFjaO
-         adWE499AXKAD9+6tdp+EsvjFRq0Gtr3Ctt7xvI4uC8zJ9UXKQYgVs00vMMHTwynaf55c
-         RNcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rnW1lNdXaHOrseNx+8VZQkCoh4hVp7eYD17JDIqBNtY=;
-        b=62qOELrcmcnYrurSkV0MtjFb0xIxzcaIzzYlnR90Lht1bz+UDp+zH5WDGkc8XUA6y+
-         NMwtVk1DS1EsAS5cENkorFosFxBKssNwWI0vcGHCB41qv9VQUlecs/srjaS9QzC48mlz
-         B3ghbfrTH7UvPRhVJTb+PmJtvLQ+PEjPt1wdnIwBcHvAXggEAodSl5m4/ZVgUNeIol92
-         9ozHyJb4l/4dcwFFk0aDgcLCGgeGfgpUbzamiAIr+drmtPRNI9KZt4eLNQFe+kyy/UEh
-         Y3KWR7mIfqYUZ6UIPP5f3REOfw3OLy2Um9wC2H9SA2P0KgkvxR/pY5Skr7OHkBSQUikq
-         aysg==
-X-Gm-Message-State: AOAM530Lf2u3SOQzjHTEpek991h1nqOpkGSiLdd3fpjJUuRsSQxyYGGN
-        cnczfeGaf+N5e7UU95UTigNJJSB2STUQazf6KViwjQ==
-X-Google-Smtp-Source: ABdhPJzJ9UCZzyIr9uCRxfqtNYldmP9u2JwxV1+G+hxFwMYyTA5WI0Koxn2yjLH38Pjz4Dugu1UDn8pxJ9yV+0b+L+A=
-X-Received: by 2002:a05:6870:b61e:b0:ec:a426:bab5 with SMTP id
- cm30-20020a056870b61e00b000eca426bab5mr5478149oab.163.1652361585876; Thu, 12
- May 2022 06:19:45 -0700 (PDT)
+        with ESMTP id S1354338AbiELNcg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 May 2022 09:32:36 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B425D131F2B;
+        Thu, 12 May 2022 06:32:35 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 4334C32002D8;
+        Thu, 12 May 2022 09:32:34 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 12 May 2022 09:32:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1652362353; x=
+        1652448753; bh=TWjr3IjUSG7EQPHiuRD8Jyjrf2Ne+S+SPNmY1waQIN0=; b=g
+        WCF5iKNFVrgApTtZJY+3QbOm+Lcd16NBu0LvBJeeNJw+0UwJA+pP38XAz1WTizpR
+        ZLQTSUZaS0II+Lzxp0p10528VcfoVe3Yyp/tMaXsGfaK3X0dxZxA4G6m5WfIu3Nh
+        NPvp49S5RSpBU2Femfmm9/s9I+bfBSAOy4kLd/JVzOmK/xX7ypzjvlI7CXaUNuDj
+        5IqTC0Xop0XK0tvRUCNODf/whGXSFNTqXI4S3CoYxvqWhDZueOrWrndUvwBk2nBp
+        w8LA3xBjlCuLB+8sgPOUN4ryU0L3zQhmZc9fzbo3XCalyKG8PTFElqrcgMEKE/lW
+        ePn5FAGsrkhXhc4OcStzQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1652362353; x=1652448753; bh=TWjr3IjUSG7EQ
+        PHiuRD8Jyjrf2Ne+S+SPNmY1waQIN0=; b=mB+XOu4pKQmg+mB/NHcdAmC1hpU1b
+        yJtrkWxUrPgFD9fF4bAUOhyRbmzElnkJN2ptWS0gjSlWClZkK+AgoL0h1UOFBwLx
+        1p0ViiAldJVcVFF3BMi8Bq6LiS23vB2v+EYQz6FcfWS6bveCsjsKgifC4K3SPviH
+        G3J5U4L+1kccnpyjiqMIOfOs9VFidEGdGaf8F31ijHguGFsRvnyEXAOgOzsxDV7V
+        A0WTBEp7rODnLgHlqYulIKr3QCTF58UuItlSKyqyLcVuT8idczwGqsVSc3Pc+kxZ
+        bog+c2H5+otRpv1pOj6hkrh3e2uISAcvltA2EMYBQdu6mr9lmf3DinKjg==
+X-ME-Sender: <xms:cQx9Yp-EmaRILQSXdtEgAYE-sCb8Zs84lfL-yLYpYo6IxFi_agQzew>
+    <xme:cQx9YtttDm-Hqia2B-I_Wt61mmjvwzPyjOrdzPYKDhHrdPBNyQofYqcnGJdMTf-LW
+    31bsxDCvSu_7Q>
+X-ME-Received: <xmr:cQx9YnDgG2eR6FOWShVdrhPTCL_7ll8ppO_qGdh681UKOBYE2Nn-OxjVgn7ev8KpcSzGYiaAWy1ifkBIucVA7RTJU9uoPljs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgeejgdeifecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggugfgjsehtke
+    ertddttddunecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhm
+    qeenucggtffrrghtthgvrhhnpeelheehudduueeggeejgfehueduffehveeukefgkeeufe
+    eltdejteeiuedtkeekleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgr
+    ihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:cQx9Ytebpj45E86a7Jirvfwn1Dyhgyt2uHtzqT4TiScC8G8yhJ_nng>
+    <xmx:cQx9YuNIa7XKLMxHEZEqv7hOSamvesoQEA2Bj4GVIXxaNjwOzli1aQ>
+    <xmx:cQx9YvmWVC4htSzi2aGsD6GJzir4tkvbtdicm1BvCH7IELvxsKV5MA>
+    <xmx:cQx9YqBPfWGTahld9a71qXHYaaCClIaeT0DqkM-RddL6UgTNErm41A>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 12 May 2022 09:32:32 -0400 (EDT)
+Date:   Thu, 12 May 2022 15:32:30 +0200
+From:   Greg KH <greg@kroah.com>
+To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Cc:     stable@vger.kernel.org, bugzilla-daemon@kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [Bug 215967] New: Kernel build fails if CONFIG_REGULATOR is unset
+Message-ID: <Yn0MbpKBi++ooGI9@kroah.com>
+References: <bug-215967-208809@https.bugzilla.kernel.org/>
+ <YnuqQAb2CIRyfZPX@kroah.com>
+ <87wnesccjl.fsf@miraculix.mork.no>
 MIME-Version: 1.0
-References: <0000000000004c57c005b0fc4114@google.com> <000000000000b15b3505d7d9e8ca@google.com>
-In-Reply-To: <000000000000b15b3505d7d9e8ca@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 12 May 2022 15:19:34 +0200
-Message-ID: <CACT4Y+YOJU91CLaNhFosG7koHPpz8U38nurXyboXb_9gGw=Fgg@mail.gmail.com>
-Subject: Re: [syzbot] INFO: task hung in usb_get_descriptor
-To:     syzbot <syzbot+31ae6d17d115e980fd14@syzkaller.appspotmail.com>
-Cc:     brouer@redhat.com, coreteam@netfilter.org, davem@davemloft.net,
-        edumazet@google.com, eman.mohamed@rofaidarealestate.com,
-        gregkh@linuxfoundation.org, gustavoars@kernel.org,
-        hdanton@sina.com, ingrassia@epigenesys.com, johan@kernel.org,
-        kaber@trash.net, kadlec@blackhole.kfki.hu,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mathias.nyman@linux.intel.com, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, pablo@netfilter.org,
-        skhan@linuxfoundation.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87wnesccjl.fsf@miraculix.mork.no>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 12 Feb 2022 at 23:43, syzbot
-<syzbot+31ae6d17d115e980fd14@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit 363eaa3a450abb4e63bd6e3ad79d1f7a0f717814
-> Author: Shuah Khan <skhan@linuxfoundation.org>
-> Date:   Tue Mar 30 01:36:51 2021 +0000
->
->     usbip: synchronize event handler with sysfs code paths
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1616e872700000
-> start commit:   4fa56ad0d12e Merge tag 'for-linus' of git://git.kernel.org..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=144ecdb0be3abc07
-> dashboard link: https://syzkaller.appspot.com/bug?extid=31ae6d17d115e980fd14
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12548d11d00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ec77e9d00000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: usbip: synchronize event handler with sysfs code paths
+On Wed, May 11, 2022 at 05:30:06PM +0200, Bjørn Mork wrote:
+> Greg KH <greg@kroah.com> writes:
+> > On Wed, May 11, 2022 at 07:44:39AM +0000, bugzilla-daemon@kernel.org wrote:
+> >
+> >> Compilation of "drivers/usb/phy/phy-generic.c" fails reproducible if
+> >> CONFIG_REGULATOR is unset, because function "devm_regulator_get_exclusive" is
+> >> undeclared but nevertheless used.
+> >> The offending patch propably is commit 03e607cbb2931374db1825f371e9c7f28526d3f4
+> >> upstream
+> >
+> > Can you please send this information to the stable@vger.kernel.org
+> > mailing list and we will work on it there?
+> 
+> Please backport commit 51dfb6ca3728 ("regulator: consumer: Add missing
+> stubs to regulator/consumer.h") to v5.10 stable and older stable
+> releases where 03e607cbb2931374db1825f371e9c7f28526d3f4 is backported
 
-Based on subsystem and commit subject looks legit:
+Now queued up, thanks.
 
-#syz fix: usbip: synchronize event handler with sysfs code paths
+greg k-h
