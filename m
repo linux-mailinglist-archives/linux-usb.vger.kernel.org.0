@@ -2,232 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35380525D8D
-	for <lists+linux-usb@lfdr.de>; Fri, 13 May 2022 10:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8498B525D65
+	for <lists+linux-usb@lfdr.de>; Fri, 13 May 2022 10:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378220AbiEMI3Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 May 2022 04:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
+        id S1378212AbiEMI3T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 May 2022 04:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiEMI3Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 May 2022 04:29:24 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09393291CF5;
-        Fri, 13 May 2022 01:29:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652430564; x=1683966564;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=R3lDYtnHrNPVHv2um+g488BAuAfzyGmmPeOLDwrFMDk=;
-  b=NCv6jc9LDNSRY/w6LCgp3MAUHlaQSfyEAisz9kykzQhXyEQOdAZEygi8
-   OoXCn2OI+1xxJ418SzcgjwDS7KuI6rVDqAb9vGMiifM8YC9/I+3luSwl9
-   /kixXX7IOAZmgn628dpTp3HEb8I7BEkm+iLGCm0/GNVQgHokYDN1YwTf+
-   0DZEnK23DM+KUkmBLEPcr2GCHuVQqejS7sBDMnCN4Zh7Cw9ct8KWyv+4k
-   Ee5ira948eFQw34BT8ZowuoAogEdJlUr5x6WjxEejkJ8fzpxuwQVkep46
-   FOzhv1JTGSzK4xxtlIVClyEGZE3HwmsKpXid5Utl7DwsS7HN/IfH41BiF
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="270385178"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="270385178"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 01:29:23 -0700
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="567107469"
-Received: from huberth-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.34.58])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 01:29:20 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 1/5] tty: remove CMSPAR ifdefs
-Date:   Fri, 13 May 2022 11:29:02 +0300
-Message-Id: <20220513082906.11096-2-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220513082906.11096-1-ilpo.jarvinen@linux.intel.com>
-References: <20220513082906.11096-1-ilpo.jarvinen@linux.intel.com>
+        with ESMTP id S1378210AbiEMI3S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 May 2022 04:29:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5A72A7C36
+        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 01:29:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80C9DB82CD2
+        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 08:29:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2D113C34118
+        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 08:29:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652430555;
+        bh=5hFe1QzyIXIoOLqzafBqQ5HRfAteapn3n0hQ6AFHOKg=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=kYDxbsdMrhnvFgZ1z1/0xOaOsDI3Wdd8inUsvnfi4B2pQ//3Q1Mm9MtZJF2FV0qgV
+         XiGvG3MqIYBzoDLEKQF/h9V3iIJQQW0q1eO6Ry5J/wZkp4uO6DD3CZ4SVFZKRF+hsy
+         rzi56IRIM4fnOiu7YTmKGIbBVDKHePyiAUUyTab1N8K/ry9QoX7aR7rtRuZX6gktgE
+         D7zLvqUOBxb/zPmZxorPU7PDFD5JXL3xZwB2idxhMbEhggFHeMcBqcbluf2wHbGQ2P
+         OeSD8wD4vREDQ7M/NmW4yL2RAHiUFAQQMszsmNQIcYPKeKuWUU6seyhXiP+6Fr69Ft
+         BkojF41jchzbA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 0027BCC13B1; Fri, 13 May 2022 08:29:14 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214021] The USB devices fail to be detected during boot
+Date:   Fri, 13 May 2022 08:29:14 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: kishon@ti.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214021-208809-T0Q6ke7CjI@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214021-208809@https.bugzilla.kernel.org/>
+References: <bug-214021-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-CMSPAR is defined by all architectures since commit 6bf08cb246b5
-("[PATCH] Add CMSPAR to termbits.h for powerpc and alpha").
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214021
 
-Reviewed-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/char/pcmcia/synclink_cs.c   | 2 --
- drivers/tty/amiserial.c             | 2 --
- drivers/tty/serial/8250/8250_port.c | 2 --
- drivers/tty/serial/jsm/jsm_cls.c    | 6 ------
- drivers/tty/serial/jsm/jsm_neo.c    | 6 ------
- drivers/tty/serial/sunsu.c          | 2 --
- drivers/usb/class/cdc-acm.h         | 8 --------
- drivers/usb/serial/ark3116.c        | 3 +--
- drivers/usb/serial/whiteheat.c      | 4 ----
- 9 files changed, 1 insertion(+), 34 deletions(-)
+--- Comment #27 from kishon (kishon@ti.com) ---
+The patches are already in GregKH tree
 
-diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
-index 78baba55a8b5..c20f2cb784e8 100644
---- a/drivers/char/pcmcia/synclink_cs.c
-+++ b/drivers/char/pcmcia/synclink_cs.c
-@@ -1432,10 +1432,8 @@ static void mgslpc_change_params(MGSLPC_INFO *info, struct tty_struct *tty)
- 			info->params.parity = ASYNC_PARITY_ODD;
- 		else
- 			info->params.parity = ASYNC_PARITY_EVEN;
--#ifdef CMSPAR
- 		if (cflag & CMSPAR)
- 			info->params.parity = ASYNC_PARITY_SPACE;
--#endif
- 	}
- 
- 	/* calculate number of jiffies to transmit a full
-diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
-index 533d02b38e02..afb2d373dd47 100644
---- a/drivers/tty/amiserial.c
-+++ b/drivers/tty/amiserial.c
-@@ -588,10 +588,8 @@ static void change_speed(struct tty_struct *tty, struct serial_state *info,
- 	}
- 	if (!(cflag & PARODD))
- 		cval |= UART_LCR_EPAR;
--#ifdef CMSPAR
- 	if (cflag & CMSPAR)
- 		cval |= UART_LCR_SPAR;
--#endif
- 
- 	/* Determine divisor based on baud rate */
- 	baud = tty_get_baud_rate(tty);
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 5591f18f2ea9..78b6dedc43e6 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -2620,10 +2620,8 @@ static unsigned char serial8250_compute_lcr(struct uart_8250_port *up,
- 	}
- 	if (!(c_cflag & PARODD))
- 		cval |= UART_LCR_EPAR;
--#ifdef CMSPAR
- 	if (c_cflag & CMSPAR)
- 		cval |= UART_LCR_SPAR;
--#endif
- 
- 	return cval;
- }
-diff --git a/drivers/tty/serial/jsm/jsm_cls.c b/drivers/tty/serial/jsm/jsm_cls.c
-index 444f233ebd1f..046b624e5f71 100644
---- a/drivers/tty/serial/jsm/jsm_cls.c
-+++ b/drivers/tty/serial/jsm/jsm_cls.c
-@@ -723,14 +723,8 @@ static void cls_param(struct jsm_channel *ch)
- 	if (!(ch->ch_c_cflag & PARODD))
- 		lcr |= UART_LCR_EPAR;
- 
--	/*
--	 * Not all platforms support mark/space parity,
--	 * so this will hide behind an ifdef.
--	 */
--#ifdef CMSPAR
- 	if (ch->ch_c_cflag & CMSPAR)
- 		lcr |= UART_LCR_SPAR;
--#endif
- 
- 	if (ch->ch_c_cflag & CSTOPB)
- 		lcr |= UART_LCR_STOP;
-diff --git a/drivers/tty/serial/jsm/jsm_neo.c b/drivers/tty/serial/jsm/jsm_neo.c
-index 110696cdaa1d..0cf586c10688 100644
---- a/drivers/tty/serial/jsm/jsm_neo.c
-+++ b/drivers/tty/serial/jsm/jsm_neo.c
-@@ -997,14 +997,8 @@ static void neo_param(struct jsm_channel *ch)
- 	if (!(ch->ch_c_cflag & PARODD))
- 		lcr |= UART_LCR_EPAR;
- 
--	/*
--	 * Not all platforms support mark/space parity,
--	 * so this will hide behind an ifdef.
--	 */
--#ifdef CMSPAR
- 	if (ch->ch_c_cflag & CMSPAR)
- 		lcr |= UART_LCR_SPAR;
--#endif
- 
- 	if (ch->ch_c_cflag & CSTOPB)
- 		lcr |= UART_LCR_STOP;
-diff --git a/drivers/tty/serial/sunsu.c b/drivers/tty/serial/sunsu.c
-index c31389114b86..fff50b5b82eb 100644
---- a/drivers/tty/serial/sunsu.c
-+++ b/drivers/tty/serial/sunsu.c
-@@ -798,10 +798,8 @@ sunsu_change_speed(struct uart_port *port, unsigned int cflag,
- 		cval |= UART_LCR_PARITY;
- 	if (!(cflag & PARODD))
- 		cval |= UART_LCR_EPAR;
--#ifdef CMSPAR
- 	if (cflag & CMSPAR)
- 		cval |= UART_LCR_SPAR;
--#endif
- 
- 	/*
- 	 * Work around a bug in the Oxford Semiconductor 952 rev B
-diff --git a/drivers/usb/class/cdc-acm.h b/drivers/usb/class/cdc-acm.h
-index 3aa7f0a3ad71..d26ecd15be60 100644
---- a/drivers/usb/class/cdc-acm.h
-+++ b/drivers/usb/class/cdc-acm.h
-@@ -7,14 +7,6 @@
-  *
-  */
- 
--/*
-- * CMSPAR, some architectures can't have space and mark parity.
-- */
--
--#ifndef CMSPAR
--#define CMSPAR			0
--#endif
--
- /*
-  * Major and minor numbers.
-  */
-diff --git a/drivers/usb/serial/ark3116.c b/drivers/usb/serial/ark3116.c
-index c0e4df87ff22..39eaa7b97c40 100644
---- a/drivers/usb/serial/ark3116.c
-+++ b/drivers/usb/serial/ark3116.c
-@@ -208,10 +208,9 @@ static void ark3116_set_termios(struct tty_struct *tty,
- 		lcr |= UART_LCR_PARITY;
- 	if (!(cflag & PARODD))
- 		lcr |= UART_LCR_EPAR;
--#ifdef CMSPAR
- 	if (cflag & CMSPAR)
- 		lcr |= UART_LCR_SPAR;
--#endif
-+
- 	/* handshake control */
- 	hcr = (cflag & CRTSCTS) ? 0x03 : 0x00;
- 
-diff --git a/drivers/usb/serial/whiteheat.c b/drivers/usb/serial/whiteheat.c
-index 06aad0d727dd..332fb92ae575 100644
---- a/drivers/usb/serial/whiteheat.c
-+++ b/drivers/usb/serial/whiteheat.c
-@@ -30,10 +30,6 @@
- #include <linux/usb/ezusb.h>
- #include "whiteheat.h"			/* WhiteHEAT specific commands */
- 
--#ifndef CMSPAR
--#define CMSPAR 0
--#endif
--
- /*
-  * Version Information
-  */
--- 
-2.30.2
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=3D=
+usb-testing&id=3Da44623d9279086c89f631201d993aa332f7c9e66
 
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=3D=
+usb-testing&id=3Db7a4f9b5d0e4b6dd937678c546c0b322dd1a4054
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
