@@ -2,561 +2,262 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36992525907
-	for <lists+linux-usb@lfdr.de>; Fri, 13 May 2022 02:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BDC7525A72
+	for <lists+linux-usb@lfdr.de>; Fri, 13 May 2022 05:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359753AbiEMAm5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 May 2022 20:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
+        id S1376910AbiEMD6b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 May 2022 23:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359746AbiEMAmv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 May 2022 20:42:51 -0400
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id E4C58606C3;
-        Thu, 12 May 2022 17:42:46 -0700 (PDT)
-Received: from jleng.ambarella.net (unknown [180.169.129.130])
-        by mail-app4 (Coremail) with SMTP id cS_KCgAnkCNbqX1ioFMWAA--.23475S2;
-        Fri, 13 May 2022 08:42:08 +0800 (CST)
-From:   3090101217@zju.edu.cn
-To:     gregkh@linuxfoundation.org, corbet@lwn.net,
-        laurent.pinchart@ideasonboard.com, balbi@kernel.org,
-        rdunlap@infradead.org, mchehab+huawei@kernel.org, bilbao@vt.edu
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Jing Leng <jleng@ambarella.com>
-Subject: [PATCH v3] usb: gadget: uvc: add bulk transfer support
-Date:   Fri, 13 May 2022 08:42:01 +0800
-Message-Id: <20220513004201.25563-1-3090101217@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220512094236.10937-1-3090101217@zju.edu.cn>
-References: <20220512094236.10937-1-3090101217@zju.edu.cn>
-X-CM-TRANSID: cS_KCgAnkCNbqX1ioFMWAA--.23475S2
-X-Coremail-Antispam: 1UD129KBjvAXoWfXr18GrW7GFWUur4kAr1DZFb_yoW8Zr4fXo
-        WUXFs8W3W8Zr1rX3Z3Cr1vg3y5Ar4Ikrn8tws8Gr45W3W0v39Iq343Ja18WF43uF47tFyk
-        Gw10qrs8Was5Ka45n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UjIYCTnIWjp_UUUOr7k0a2IF6w4kM7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0
-        x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj4
-        1l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0
-        I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWlnxkEFVCFx7IYxxCE
-        VcI25VAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lw4CEc2x0rV
-        AKj4xxMxkIecxEwVAFwVWDMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
-        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
-        AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
-        80aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI
-        43ZEXa7IU5_gA7UUUUU==
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIJBVNG3GtTDQAAsx
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S1353234AbiEMD63 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 May 2022 23:58:29 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0277B61284;
+        Thu, 12 May 2022 20:58:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652414307; x=1683950307;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ncB+8XgICxsWrmIQFS+DFHIYDncUBCYudRXyg37O6lc=;
+  b=WzyrJJ0QnXNIkCOouDpZ9vuAmKjJGhio675Wdu7HZgXX+bKLfzT3eXMg
+   U9vuJjslAUo6JqqcmeqefVWIhnDsj6EAt4VmLvxrsaiMF90JSpdl5JRs2
+   MVndaBCPdz9aZHmdCIuuOo7r3DzIk6OHvackBRezlj4z/IVg9xMv1t+vI
+   M=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 12 May 2022 20:58:26 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 20:58:27 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 12 May 2022 20:58:26 -0700
+Received: from [10.216.41.245] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 12 May
+ 2022 20:58:19 -0700
+Message-ID: <4124392b-a40f-c204-f9b0-68c3b22dd652@quicinc.com>
+Date:   Fri, 13 May 2022 09:28:16 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [v16 2/5] usb: dwc3: core: Host wake up support from system
+ suspend
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+References: <1652379802-8318-1-git-send-email-quic_kriskura@quicinc.com>
+ <1652379802-8318-3-git-send-email-quic_kriskura@quicinc.com>
+ <Yn2M5hrah78jro1C@google.com>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <Yn2M5hrah78jro1C@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
 
-The video data endpoint of uvc can be implemented as either an
-isochronous or a bulk endpoint.
+On 5/13/2022 4:10 AM, Matthias Kaehlcke wrote:
+> On Thu, May 12, 2022 at 11:53:19PM +0530, Krishna Kurapati wrote:
+>> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>
+>> During suspend read the status of all port and set hs phy mode
+>> based on current speed. Use this hs phy mode to configure wakeup
+>> interrupts in qcom glue driver.
+>>
+>> Check wakeup-source property for dwc3 core node to set the
+>> wakeup capability. Drop the device_init_wakeup call from
+>> runtime suspend and resume.
+>>
+>> Also check during suspend if any wakeup capable devices are
+>> connected to the controller (directly or through hubs), if there
+>> are none set a flag to indicate that the PHY is powered
+>> down during suspend.
+>>
+>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/core.c | 30 +++++++++++++++++-------------
+>>   drivers/usb/dwc3/core.h |  4 ++++
+>>   drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
+>>   3 files changed, 45 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 01115df..8bcabc5 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -1785,6 +1785,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>>   
+>>   	platform_set_drvdata(pdev, dwc);
+>>   	dwc3_cache_hwparams(dwc);
+>> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
+>>   
+>>   	spin_lock_init(&dwc->lock);
+>>   	mutex_init(&dwc->mutex);
+>> @@ -1946,10 +1947,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>>   		dwc3_core_exit(dwc);
+>>   		break;
+>>   	case DWC3_GCTL_PRTCAP_HOST:
+>> -		if (!PMSG_IS_AUTO(msg)) {
+>> -			dwc3_core_exit(dwc);
+>> -			break;
+>> -		}
+>> +		dwc3_check_phy_speed_mode(dwc);
+>>   
+>>   		/* Let controller to suspend HSPHY before PHY driver suspends */
+>>   		if (dwc->dis_u2_susphy_quirk ||
+>> @@ -1965,6 +1963,15 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>>   
+>>   		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
+>>   		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+>> +
+>> +		if (!PMSG_IS_AUTO(msg)) {
+>> +			if (device_may_wakeup(dwc->dev))
+> I think this should be device_can_wakeup(), i.e. hardware capability instead of
+> device policy. A drawback of powering the PHYs off is that it causes a high
+> power consumption of certain peripherals if VBUS is still supplied, so this
+> should be limited to platforms where the PHYs must be powered off (using wakeup
+> capability as a proxy for now).
+Thnaks Mathias for the review. Will make this change in the next patchset.
+>> +				dwc->phy_power_off = false;
+>> +			else {
+>> +				dwc->phy_power_off = true;
+>> +				dwc3_core_exit(dwc);
+>> +			}
+>> +		}
+>>   		break;
+>>   	case DWC3_GCTL_PRTCAP_OTG:
+>>   		/* do nothing during runtime_suspend */
+>> @@ -2008,11 +2015,12 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+>>   		break;
+>>   	case DWC3_GCTL_PRTCAP_HOST:
+>>   		if (!PMSG_IS_AUTO(msg)) {
+>> -			ret = dwc3_core_init_for_resume(dwc);
+>> -			if (ret)
+>> -				return ret;
+>> -			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+>> -			break;
+>> +			if (dwc->phy_power_off) {
+>> +				ret = dwc3_core_init_for_resume(dwc);
+>> +				if (ret)
+>> +					return ret;
+>> +				dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+>> +			}
+>>   		}
+>>   		/* Restore GUSB2PHYCFG bits that were modified in suspend */
+>>   		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+>> @@ -2084,8 +2092,6 @@ static int dwc3_runtime_suspend(struct device *dev)
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> -	device_init_wakeup(dev, true);
+>> -
+>>   	return 0;
+>>   }
+>>   
+>> @@ -2094,8 +2100,6 @@ static int dwc3_runtime_resume(struct device *dev)
+>>   	struct dwc3     *dwc = dev_get_drvdata(dev);
+>>   	int		ret;
+>>   
+>> -	device_init_wakeup(dev, false);
+>> -
+>>   	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
+>>   	if (ret)
+>>   		return ret;
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index 81c486b..37397a8 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -1155,6 +1155,9 @@ struct dwc3 {
+>>   
+>>   	bool			phys_ready;
+>>   
+>> +	unsigned int            hs_phy_mode;
+>> +	bool			phy_power_off;
+>> +
+>>   	struct ulpi		*ulpi;
+>>   	bool			ulpi_ready;
+>>   
+>> @@ -1539,6 +1542,7 @@ int dwc3_core_soft_reset(struct dwc3 *dwc);
+>>   #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+>>   int dwc3_host_init(struct dwc3 *dwc);
+>>   void dwc3_host_exit(struct dwc3 *dwc);
+>> +void dwc3_check_phy_speed_mode(struct dwc3 *dwc);
+>>   #else
+>>   static inline int dwc3_host_init(struct dwc3 *dwc)
+>>   { return 0; }
+>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+>> index f56c30c..e19b40a 100644
+>> --- a/drivers/usb/dwc3/host.c
+>> +++ b/drivers/usb/dwc3/host.c
+>> @@ -12,6 +12,7 @@
+>>   #include <linux/platform_device.h>
+>>   
+>>   #include "core.h"
+>> +#include "../host/xhci.h"
+>>   
+>>   static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+>>   					int irq, char *name)
+>> @@ -136,3 +137,26 @@ void dwc3_host_exit(struct dwc3 *dwc)
+>>   {
+>>   	platform_device_unregister(dwc->xhci);
+>>   }
+>> +
+>> +void dwc3_check_phy_speed_mode(struct dwc3 *dwc)
+>> +{
+>> +	int i, num_ports;
+>> +	u32 reg;
+>> +	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
+>> +	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
+>> +
+>> +	dwc->hs_phy_mode = 0;
+>> +
+>> +	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
+>> +
+>> +	num_ports = HCS_MAX_PORTS(reg);
+>> +	for (i = 0; i < num_ports; i++) {
+>> +		reg = readl(&xhci_hcd->op_regs->port_status_base + i * NUM_PORT_REGS);
+>> +		if (reg & PORT_PE) {
+>> +			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
+>> +				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_HS;
+>> +			else if (DEV_LOWSPEED(reg))
+>> +				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_LS;
+>> +		}
+>> +	}
+>> +}
+> I anticipate that it might raise concerns from maintainers that
+> dwc3_check_phy_speed_mode() accesses xHCI data structures and
+> registers directly. Could there be a generic HCD API that provides
+> this functionality (if implemented by the specific HCD)?
 
-The transmission speed of bulk mode is faster than isochronous mode.
-I tested the speed with cdns3 (USB 3.2 Gen1), it's difficult to reach
-2 Gbps in the isochronous mode, and it can exceed 4 Gbps in the bulk
-mode.
+Hi Mathias, we are not sure if there is any such API present currently.
 
-A VideoStreaming interface with isochronous endpoints must have alternate
-settings that can be used to change certain characteristics of the
-interface and underlying endpoint(s). A typical use of alternate settings
-is to provide a way to change the bandwidth requirements an active
-isochronous pipe imposes on the USB.
+Hi Alan, can you help suggest any API (if present) that we can reuse 
+here to avoid
 
-A VideoStreaming interface containing a bulk endpoint for streaming shall
-support only alternate setting zero. Additional alternate settings
-containing bulk endpoints are not permitted in a device that is compliant
-with the Video Class specification.
-
-In user space, isochronous/bulk modes are handled a little differently:
-
-1. APP prepares buffers and streams when it receives an UVC_EVENT_STREAMON
-message in the isochronous mode, but APP should do them when it receives a
-SET_CUR request of UVC_VS_COMMIT_CONTROL due to no UVC_EVENT_STREAMON
-message reported from the kernel in the bulk mode (Do them only once).
-
-2. In Addition, APP should set the value of dwMaxPayloadTransferSize to
-streaming_maxpacket in the isochronous mode or streaming_bulk_mult * 1024
-in the bulk mode.
-
-Here shows an example of the configfs differences:
-  if [ $BULK -eq 1 ]; then
-      echo 128 > functions/$FUNC/streaming_bulk_mult
-  else
-      echo 1024 > functions/$FUNC/streaming_maxpacket
-  fi
-
-Signed-off-by: Jing Leng <jleng@ambarella.com>
----
-ChangeLog v2->v3:
-- Mistakenly deleted the definition of i and USBDHDR when porting from my workdir.
-- Reported-by: kernel test robot <lkp@intel.com>
-ChangeLog v1->v2:
-- Handle imagesize in uvc_v4l2_set_format. If it's not handled,
-- switching from low resolution to high resolution will fail to play.
----
- .../ABI/testing/configfs-usb-gadget-uvc       |   1 +
- Documentation/usb/gadget-testing.rst          |   4 +
- drivers/usb/gadget/function/f_uvc.c           | 248 ++++++++++++------
- drivers/usb/gadget/function/u_uvc.h           |   1 +
- drivers/usb/gadget/function/uvc_configfs.c    |   2 +
- drivers/usb/gadget/function/uvc_queue.c       |   4 +-
- drivers/usb/gadget/function/uvc_v4l2.c        |   8 +
- 7 files changed, 186 insertions(+), 82 deletions(-)
-
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-index 889ed45be4ca..52ca04a619ff 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-@@ -7,6 +7,7 @@ Description:	UVC function directory
- 		streaming_maxburst	0..15 (ss only)
- 		streaming_maxpacket	1..1023 (fs), 1..3072 (hs/ss)
- 		streaming_interval	1..16
-+		streaming_bulk_mult	0..0x3fffffU
- 		===================	=============================
- 
- What:		/config/usb-gadget/gadget/functions/uvc.name/control
-diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
-index c6d034abce3a..2cbe3e2e05c3 100644
---- a/Documentation/usb/gadget-testing.rst
-+++ b/Documentation/usb/gadget-testing.rst
-@@ -787,6 +787,10 @@ The uvc function provides these attributes in its function directory:
- 	streaming_maxpacket maximum packet size this endpoint is capable of
- 			    sending or receiving when this configuration is
- 			    selected
-+	streaming_bulk_mult Multiples to configure max_payload_size. If it's
-+			    0, the transport mode is isochronous; otherwise
-+			    the transport mode is bulk and max_payload_size
-+			    is equal to streaming_bulk_mult * 1024.
- 	=================== ================================================
- 
- There are also "control" and "streaming" subdirectories, each of which contain
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 71bb5e477dba..2c54b482a902 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -30,6 +30,8 @@
- #include "uvc_v4l2.h"
- #include "uvc_video.h"
- 
-+#define USBDHDR(p) ((struct usb_descriptor_header *)(p))
-+
- unsigned int uvc_gadget_trace_param;
- module_param_named(trace, uvc_gadget_trace_param, uint, 0644);
- MODULE_PARM_DESC(trace, "Trace level bitmask");
-@@ -178,19 +180,19 @@ static struct usb_ss_ep_comp_descriptor uvc_ss_streaming_comp = {
- 	 */
- };
- 
--static const struct usb_descriptor_header * const uvc_fs_streaming[] = {
-+static const struct usb_descriptor_header *uvc_fs_streaming[] = {
- 	(struct usb_descriptor_header *) &uvc_streaming_intf_alt1,
- 	(struct usb_descriptor_header *) &uvc_fs_streaming_ep,
- 	NULL,
- };
- 
--static const struct usb_descriptor_header * const uvc_hs_streaming[] = {
-+static const struct usb_descriptor_header *uvc_hs_streaming[] = {
- 	(struct usb_descriptor_header *) &uvc_streaming_intf_alt1,
- 	(struct usb_descriptor_header *) &uvc_hs_streaming_ep,
- 	NULL,
- };
- 
--static const struct usb_descriptor_header * const uvc_ss_streaming[] = {
-+static const struct usb_descriptor_header *uvc_ss_streaming[] = {
- 	(struct usb_descriptor_header *) &uvc_streaming_intf_alt1,
- 	(struct usb_descriptor_header *) &uvc_ss_streaming_ep,
- 	(struct usb_descriptor_header *) &uvc_ss_streaming_comp,
-@@ -251,9 +253,12 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
- 
- void uvc_function_setup_continue(struct uvc_device *uvc)
- {
-+	struct f_uvc_opts *opts = fi_to_f_uvc_opts(uvc->func.fi);
- 	struct usb_composite_dev *cdev = uvc->func.config->cdev;
- 
--	usb_composite_setup_continue(cdev);
-+	/* delayed_status in bulk mode is 0, so it doesn't need to continue. */
-+	if (!opts->streaming_bulk_mult)
-+		usb_composite_setup_continue(cdev);
- }
- 
- static int
-@@ -278,6 +283,7 @@ uvc_function_set_alt(struct usb_function *f, unsigned interface, unsigned alt)
- 	struct usb_composite_dev *cdev = f->config->cdev;
- 	struct v4l2_event v4l2_event;
- 	struct uvc_event *uvc_event = (void *)&v4l2_event.u.data;
-+	struct f_uvc_opts *opts = fi_to_f_uvc_opts(f->fi);
- 	int ret;
- 
- 	uvcg_info(f, "%s(%u, %u)\n", __func__, interface, alt);
-@@ -310,49 +316,72 @@ uvc_function_set_alt(struct usb_function *f, unsigned interface, unsigned alt)
- 	if (interface != uvc->streaming_intf)
- 		return -EINVAL;
- 
--	/* TODO
--	if (usb_endpoint_xfer_bulk(&uvc->desc.vs_ep))
--		return alt ? -EINVAL : 0;
--	*/
-+	if (opts->streaming_bulk_mult) {
-+		switch (alt) {
-+		case 0:
-+			if (uvc->state != UVC_STATE_CONNECTED)
-+				return 0;
- 
--	switch (alt) {
--	case 0:
--		if (uvc->state != UVC_STATE_STREAMING)
--			return 0;
-+			if (!uvc->video.ep)
-+				return -EINVAL;
- 
--		if (uvc->video.ep)
-+			uvcg_info(f, "reset UVC\n");
- 			usb_ep_disable(uvc->video.ep);
- 
--		memset(&v4l2_event, 0, sizeof(v4l2_event));
--		v4l2_event.type = UVC_EVENT_STREAMOFF;
--		v4l2_event_queue(&uvc->vdev, &v4l2_event);
--
--		uvc->state = UVC_STATE_CONNECTED;
--		return 0;
-+			ret = config_ep_by_speed(f->config->cdev->gadget,
-+					&(uvc->func), uvc->video.ep);
-+			if (ret)
-+				return ret;
-+			usb_ep_enable(uvc->video.ep);
- 
--	case 1:
--		if (uvc->state != UVC_STATE_CONNECTED)
-+			memset(&v4l2_event, 0, sizeof(v4l2_event));
-+			v4l2_event.type = UVC_EVENT_STREAMOFF;
-+			v4l2_event_queue(&uvc->vdev, &v4l2_event);
- 			return 0;
- 
--		if (!uvc->video.ep)
-+		default:
- 			return -EINVAL;
-+		}
-+	} else {
-+		switch (alt) {
-+		case 0:
-+			if (uvc->state != UVC_STATE_STREAMING)
-+				return 0;
-+
-+			if (uvc->video.ep)
-+				usb_ep_disable(uvc->video.ep);
-+
-+			memset(&v4l2_event, 0, sizeof(v4l2_event));
-+			v4l2_event.type = UVC_EVENT_STREAMOFF;
-+			v4l2_event_queue(&uvc->vdev, &v4l2_event);
- 
--		uvcg_info(f, "reset UVC\n");
--		usb_ep_disable(uvc->video.ep);
-+			uvc->state = UVC_STATE_CONNECTED;
-+			return 0;
- 
--		ret = config_ep_by_speed(f->config->cdev->gadget,
--				&(uvc->func), uvc->video.ep);
--		if (ret)
--			return ret;
--		usb_ep_enable(uvc->video.ep);
-+		case 1:
-+			if (uvc->state != UVC_STATE_CONNECTED)
-+				return 0;
- 
--		memset(&v4l2_event, 0, sizeof(v4l2_event));
--		v4l2_event.type = UVC_EVENT_STREAMON;
--		v4l2_event_queue(&uvc->vdev, &v4l2_event);
--		return USB_GADGET_DELAYED_STATUS;
-+			if (!uvc->video.ep)
-+				return -EINVAL;
- 
--	default:
--		return -EINVAL;
-+			uvcg_info(f, "reset UVC\n");
-+			usb_ep_disable(uvc->video.ep);
-+
-+			ret = config_ep_by_speed(f->config->cdev->gadget,
-+					&(uvc->func), uvc->video.ep);
-+			if (ret)
-+				return ret;
-+			usb_ep_enable(uvc->video.ep);
-+
-+			memset(&v4l2_event, 0, sizeof(v4l2_event));
-+			v4l2_event.type = UVC_EVENT_STREAMON;
-+			v4l2_event_queue(&uvc->vdev, &v4l2_event);
-+			return USB_GADGET_DELAYED_STATUS;
-+
-+		default:
-+			return -EINVAL;
-+		}
- 	}
- }
- 
-@@ -593,62 +622,96 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 	unsigned int max_packet_size;
- 	struct usb_ep *ep;
- 	struct f_uvc_opts *opts;
-+	int i = 0;
- 	int ret = -EINVAL;
- 
- 	uvcg_info(f, "%s()\n", __func__);
- 
- 	opts = fi_to_f_uvc_opts(f->fi);
--	/* Sanity check the streaming endpoint module parameters.
--	 */
--	opts->streaming_interval = clamp(opts->streaming_interval, 1U, 16U);
--	opts->streaming_maxpacket = clamp(opts->streaming_maxpacket, 1U, 3072U);
--	opts->streaming_maxburst = min(opts->streaming_maxburst, 15U);
--
--	/* For SS, wMaxPacketSize has to be 1024 if bMaxBurst is not 0 */
--	if (opts->streaming_maxburst &&
--	    (opts->streaming_maxpacket % 1024) != 0) {
--		opts->streaming_maxpacket = roundup(opts->streaming_maxpacket, 1024);
--		uvcg_info(f, "overriding streaming_maxpacket to %d\n",
--			  opts->streaming_maxpacket);
--	}
- 
--	/* Fill in the FS/HS/SS Video Streaming specific descriptors from the
--	 * module parameters.
--	 *
--	 * NOTE: We assume that the user knows what they are doing and won't
--	 * give parameters that their UDC doesn't support.
--	 */
--	if (opts->streaming_maxpacket <= 1024) {
--		max_packet_mult = 1;
--		max_packet_size = opts->streaming_maxpacket;
--	} else if (opts->streaming_maxpacket <= 2048) {
--		max_packet_mult = 2;
--		max_packet_size = opts->streaming_maxpacket / 2;
-+	/* Handle different transfer mode for stream endpoints */
-+	if (opts->streaming_bulk_mult) {
-+		uvc_fs_streaming_ep.bmAttributes = USB_ENDPOINT_XFER_BULK;
-+		uvc_hs_streaming_ep.bmAttributes = uvc_fs_streaming_ep.bmAttributes;
-+		uvc_ss_streaming_ep.bmAttributes = uvc_fs_streaming_ep.bmAttributes;
-+
-+		opts->streaming_maxburst = min(opts->streaming_maxburst, 15U);
-+
-+		uvc_fs_streaming_ep.wMaxPacketSize = cpu_to_le16(64);
-+		uvc_fs_streaming_ep.bInterval = 0;
-+
-+		uvc_hs_streaming_ep.wMaxPacketSize = cpu_to_le16(512);
-+		uvc_hs_streaming_ep.bInterval = 0;
-+
-+		uvc_ss_streaming_ep.wMaxPacketSize = cpu_to_le16(1024);
-+		uvc_ss_streaming_ep.bInterval = 0;
-+
-+		uvc_ss_streaming_comp.bmAttributes = 0;
-+		uvc_ss_streaming_comp.bMaxBurst = opts->streaming_maxburst;
-+		uvc_ss_streaming_comp.wBytesPerInterval = 0;
-+
-+		uvc->video.max_payload_size = opts->streaming_bulk_mult * 1024;
- 	} else {
--		max_packet_mult = 3;
--		max_packet_size = opts->streaming_maxpacket / 3;
--	}
-+		uvc_fs_streaming_ep.bmAttributes = USB_ENDPOINT_SYNC_ASYNC
-+						| USB_ENDPOINT_XFER_ISOC;
-+		uvc_hs_streaming_ep.bmAttributes = uvc_fs_streaming_ep.bmAttributes;
-+		uvc_ss_streaming_ep.bmAttributes = uvc_fs_streaming_ep.bmAttributes;
-+
-+		/* Sanity check the streaming endpoint module parameters.
-+		 */
-+		opts->streaming_interval = clamp(opts->streaming_interval, 1U, 16U);
-+		opts->streaming_maxpacket = clamp(opts->streaming_maxpacket, 1U, 3072U);
-+		opts->streaming_maxburst = min(opts->streaming_maxburst, 15U);
-+
-+		/* For SS, wMaxPacketSize has to be 1024 if bMaxBurst is not 0 */
-+		if (opts->streaming_maxburst &&
-+			(opts->streaming_maxpacket % 1024) != 0) {
-+			opts->streaming_maxpacket = roundup(opts->streaming_maxpacket, 1024);
-+			uvcg_info(f, "overriding streaming_maxpacket to %d\n",
-+				opts->streaming_maxpacket);
-+		}
- 
--	uvc_fs_streaming_ep.wMaxPacketSize =
--		cpu_to_le16(min(opts->streaming_maxpacket, 1023U));
--	uvc_fs_streaming_ep.bInterval = opts->streaming_interval;
-+		/* Fill in the FS/HS/SS Video Streaming specific descriptors from the
-+		 * module parameters.
-+		 *
-+		 * NOTE: We assume that the user knows what they are doing and won't
-+		 * give parameters that their UDC doesn't support.
-+		 */
-+
-+		if (opts->streaming_maxpacket <= 1024) {
-+			max_packet_mult = 0;
-+			max_packet_size = opts->streaming_maxpacket;
-+		} else if (opts->streaming_maxpacket <= 2048) {
-+			max_packet_mult = 1;
-+			max_packet_size = opts->streaming_maxpacket / 2;
-+		} else {
-+			max_packet_mult = 2;
-+			max_packet_size = opts->streaming_maxpacket / 3;
-+		}
- 
--	uvc_hs_streaming_ep.wMaxPacketSize =
--		cpu_to_le16(max_packet_size | ((max_packet_mult - 1) << 11));
-+		uvc_fs_streaming_ep.wMaxPacketSize =
-+			cpu_to_le16(min(opts->streaming_maxpacket, 1023U));
-+		uvc_fs_streaming_ep.bInterval = opts->streaming_interval;
- 
--	/* A high-bandwidth endpoint must specify a bInterval value of 1 */
--	if (max_packet_mult > 1)
--		uvc_hs_streaming_ep.bInterval = 1;
--	else
--		uvc_hs_streaming_ep.bInterval = opts->streaming_interval;
-+		uvc_hs_streaming_ep.wMaxPacketSize =
-+			cpu_to_le16(max_packet_size | (max_packet_mult << 11));
-+		/* A high-bandwidth endpoint must specify a bInterval value of 1 */
-+		if (max_packet_mult > 0)
-+			uvc_hs_streaming_ep.bInterval = 1;
-+		else
-+			uvc_hs_streaming_ep.bInterval = opts->streaming_interval;
-+
-+		uvc_ss_streaming_ep.wMaxPacketSize = cpu_to_le16(max_packet_size);
-+		uvc_ss_streaming_ep.bInterval = opts->streaming_interval;
- 
--	uvc_ss_streaming_ep.wMaxPacketSize = cpu_to_le16(max_packet_size);
--	uvc_ss_streaming_ep.bInterval = opts->streaming_interval;
--	uvc_ss_streaming_comp.bmAttributes = max_packet_mult - 1;
--	uvc_ss_streaming_comp.bMaxBurst = opts->streaming_maxburst;
--	uvc_ss_streaming_comp.wBytesPerInterval =
--		cpu_to_le16(max_packet_size * max_packet_mult *
--			    (opts->streaming_maxburst + 1));
-+		uvc_ss_streaming_comp.bmAttributes = max_packet_mult;
-+		uvc_ss_streaming_comp.bMaxBurst = opts->streaming_maxburst;
-+		uvc_ss_streaming_comp.wBytesPerInterval =
-+			cpu_to_le16(max_packet_size * (max_packet_mult + 1) *
-+				(opts->streaming_maxburst + 1));
-+
-+		uvc->video.max_payload_size = 0;
-+	}
- 
- 	/* Allocate endpoints. */
- 	ep = usb_ep_autoconfig(cdev->gadget, &uvc_control_ep);
-@@ -662,7 +725,7 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 		ep = usb_ep_autoconfig_ss(cdev->gadget, &uvc_ss_streaming_ep,
- 					  &uvc_ss_streaming_comp);
- 	else if (gadget_is_dualspeed(cdev->gadget))
--		ep = usb_ep_autoconfig(cdev->gadget, &uvc_hs_streaming_ep);
-+		ep = usb_ep_autoconfig_ss(cdev->gadget, &uvc_hs_streaming_ep, NULL);
- 	else
- 		ep = usb_ep_autoconfig(cdev->gadget, &uvc_fs_streaming_ep);
- 
-@@ -703,6 +766,28 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 	uvc->streaming_intf = ret;
- 	opts->streaming_interface = ret;
- 
-+	/* Handle different transfer mode for descriptors */
-+	i = 0;
-+	if (opts->streaming_bulk_mult) {
-+		uvc_streaming_intf_alt0.bNumEndpoints = 1;
-+	} else {
-+		uvc_streaming_intf_alt0.bNumEndpoints = 0;
-+
-+		uvc_fs_streaming[i] = USBDHDR(&uvc_streaming_intf_alt1);
-+		uvc_hs_streaming[i] = USBDHDR(&uvc_streaming_intf_alt1);
-+		uvc_ss_streaming[i] = USBDHDR(&uvc_streaming_intf_alt1);
-+		++i;
-+	}
-+	uvc_fs_streaming[i] = USBDHDR(&uvc_fs_streaming_ep);
-+	uvc_hs_streaming[i] = USBDHDR(&uvc_hs_streaming_ep);
-+	uvc_ss_streaming[i] = USBDHDR(&uvc_ss_streaming_ep);
-+	++i;
-+	uvc_fs_streaming[i] = NULL;
-+	uvc_hs_streaming[i] = NULL;
-+	uvc_ss_streaming[i] = USBDHDR(&uvc_ss_streaming_comp);
-+	++i;
-+	uvc_ss_streaming[i] = NULL;
-+
- 	/* Copy descriptors */
- 	f->fs_descriptors = uvc_copy_descriptors(uvc, USB_SPEED_FULL);
- 	if (IS_ERR(f->fs_descriptors)) {
-@@ -866,6 +951,7 @@ static struct usb_function_instance *uvc_alloc_inst(void)
- 
- 	opts->streaming_interval = 1;
- 	opts->streaming_maxpacket = 1024;
-+	opts->streaming_bulk_mult = 0;
- 
- 	ret = uvcg_attach_configfs(opts);
- 	if (ret < 0) {
-diff --git a/drivers/usb/gadget/function/u_uvc.h b/drivers/usb/gadget/function/u_uvc.h
-index 9a01a7d4f17f..5607a239d55e 100644
---- a/drivers/usb/gadget/function/u_uvc.h
-+++ b/drivers/usb/gadget/function/u_uvc.h
-@@ -24,6 +24,7 @@ struct f_uvc_opts {
- 	unsigned int					streaming_interval;
- 	unsigned int					streaming_maxpacket;
- 	unsigned int					streaming_maxburst;
-+	unsigned int					streaming_bulk_mult;
- 
- 	unsigned int					control_interface;
- 	unsigned int					streaming_interface;
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 77d64031aa9c..9b08e7b25168 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -2422,6 +2422,7 @@ UVC_ATTR(f_uvc_opts_, cname, cname)
- UVCG_OPTS_ATTR(streaming_interval, streaming_interval, 16);
- UVCG_OPTS_ATTR(streaming_maxpacket, streaming_maxpacket, 3072);
- UVCG_OPTS_ATTR(streaming_maxburst, streaming_maxburst, 15);
-+UVCG_OPTS_ATTR(streaming_bulk_mult, streaming_bulk_mult, 0x3fffffU);
- 
- #undef UVCG_OPTS_ATTR
- 
-@@ -2429,6 +2430,7 @@ static struct configfs_attribute *uvc_attrs[] = {
- 	&f_uvc_opts_attr_streaming_interval,
- 	&f_uvc_opts_attr_streaming_maxpacket,
- 	&f_uvc_opts_attr_streaming_maxburst,
-+	&f_uvc_opts_attr_streaming_bulk_mult,
- 	NULL,
- };
- 
-diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-index 2cda982f3765..98d0e933b5e1 100644
---- a/drivers/usb/gadget/function/uvc_queue.c
-+++ b/drivers/usb/gadget/function/uvc_queue.c
-@@ -135,7 +135,9 @@ int uvcg_queue_init(struct uvc_video_queue *queue, struct device *dev, enum v4l2
- 	queue->queue.buf_struct_size = sizeof(struct uvc_buffer);
- 	queue->queue.ops = &uvc_queue_qops;
- 	queue->queue.lock = lock;
--	if (cdev->gadget->sg_supported) {
-+
-+	/* UDC supports scatter gather and transfer mode isn't bulk. */
-+	if (cdev->gadget->sg_supported && !video->max_payload_size) {
- 		queue->queue.mem_ops = &vb2_dma_sg_memops;
- 		queue->use_sg = 1;
- 	} else {
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index a2c78690c5c2..767f1a2ace04 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -119,6 +119,14 @@ uvc_v4l2_set_format(struct file *file, void *fh, struct v4l2_format *fmt)
- 	bpl = format->bpp * fmt->fmt.pix.width / 8;
- 	imagesize = bpl ? bpl * fmt->fmt.pix.height : fmt->fmt.pix.sizeimage;
- 
-+	/*
-+	 * Bulk mode only allocates memory once, so user should give the
-+	 * maximum image size in all formats and kernel should not decrease
-+	 * the imagesize.
-+	 */
-+	if (video->max_payload_size && imagesize < fmt->fmt.pix.sizeimage)
-+		imagesize = fmt->fmt.pix.sizeimage;
-+
- 	video->fcc = format->fcc;
- 	video->bpp = format->bpp;
- 	video->width = fmt->fmt.pix.width;
--- 
-2.17.1
+xhci registers and structs here in dwc3.
 
