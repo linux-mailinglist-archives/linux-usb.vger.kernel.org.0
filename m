@@ -2,83 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D373526274
-	for <lists+linux-usb@lfdr.de>; Fri, 13 May 2022 14:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5D25262F4
+	for <lists+linux-usb@lfdr.de>; Fri, 13 May 2022 15:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380489AbiEMM6E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 May 2022 08:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        id S1380663AbiEMNVU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 May 2022 09:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380483AbiEMM6C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 May 2022 08:58:02 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893849B198
-        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 05:57:58 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id w4so11307777wrg.12
-        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 05:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cU4ZtNl2vEtEVH/Lak30VWKkW5zSu+7jhI7ooziHVxo=;
-        b=hY7RshcVZtZ0WoJs33dta6NDd8NbGGJgoY7ZVCt1MeX0kX/Xj3Lur613Or1JybyFNm
-         1HZ68gzAyuZJ8HOhwzUYP2bCfyxQ3UjhIhkwG50UoTionya9gp2Lp4+3JXKF5s9OXTad
-         rtkkhgzPeqz0KXuiSklUoKWKV7iFh885UjegJnXpUGHMq0GfXN1SzZwNVOCpUZQvmUAl
-         wZVv/mwulIFZpoVx+IaJq/yTsvsiD6UHDTj6qw8PTVLML5IPn0FdBM9nRLhQC9e2aKAB
-         /u01OAXzCFlE6Lf25zxbalQ7Q0ZuFUrf1H9RfwLN2zlEoQ/ShPfPWcIgEmgvSF9B8Pws
-         Vwrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cU4ZtNl2vEtEVH/Lak30VWKkW5zSu+7jhI7ooziHVxo=;
-        b=DbChzED2Oke6Nm6PVqC/30iu627q3KPr1DwI4YwXpcWof90WP7NiLeYSRKEES5AFJ3
-         4AEd0u1DQLnvnXvUWvirOyR0EWrnk7GBOdh8iciLbh0owQhu9STCtEzNnzxt5DDHfhJd
-         z2a61g6QHgyCbnZDD6hD+OJ0e+wa2w66t0OjOiA1mYGGirD4dbHWUZFz9Jg4/+OMwXer
-         r1Bkyq1uaRS3aiVgG6lz4Xy7o1QIsTS+D+JA1snvHKviJYTx8kSAJk+BkUTOwfZx4iN6
-         8dblaz8EHSL0wfc62bEawLolSoyt3abv5on8k1G0v1s5wTLUylzLcZzcnDm66k5pe94C
-         1jxg==
-X-Gm-Message-State: AOAM531WA4eULhcy85HUx1YugTgQLJwwSURNNvoL3nfp6/iDv4Fq+76D
-        oMUxwwgsF4OrU67VO5k1KOHAGQ==
-X-Google-Smtp-Source: ABdhPJzDRMdFOUy5RI8IXI6VfHQuWSfZtMpfsZMkCc8yuVYUOfKov2JEFDGTvRzp8Wcd+aX5lCvZjQ==
-X-Received: by 2002:a5d:5012:0:b0:20a:d9a9:44dc with SMTP id e18-20020a5d5012000000b0020ad9a944dcmr3858584wrt.627.1652446677102;
-        Fri, 13 May 2022 05:57:57 -0700 (PDT)
-Received: from [192.168.0.172] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d11-20020adfa34b000000b0020c86a9f33bsm2731239wrb.18.2022.05.13.05.57.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 05:57:56 -0700 (PDT)
-Message-ID: <8f0d4127-7e66-cf50-21c9-99680f737e30@linaro.org>
-Date:   Fri, 13 May 2022 14:57:55 +0200
+        with ESMTP id S1380659AbiEMNVN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 May 2022 09:21:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280633C4B6
+        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 06:21:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0ABA62046
+        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 13:21:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 24922C34114
+        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 13:21:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652448072;
+        bh=HM1g2apgtx73y48H9boShiKwX9l++gaN7id6LBiCaJ0=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=mFDuJNblY0WjOuDnvQ2Fgp0QEnGOvCJTWisImF+iTt/A/sUjMyx2KmbI3PI07OuKW
+         HTq8IGMLTVNdkn/f5kgi5H4orIJkEFSchIBKFosV4TNvKf1yn1f76TJ4XL200ggxCU
+         chsxtT6GG6p1aZJGfsSyeNpjeMu7AoO1Uy1o5bmzllbY7YDyZna1K+cMu5s+yluUuW
+         /oB1z4O5PyoDQIkno86UDhHNza3OxtJmy26bvD+K8+B3YB85dKzR5HwGobyRilBphn
+         78Eq5SUsCnKqXdD23SLI8PmPLp/Jy/z/azFdsuADvwERpwibh2eBJr7PDuLYOX7Fu9
+         pp8+rK5rPozhQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 1131BC05FF5; Fri, 13 May 2022 13:21:12 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
+ xhci_hcd rejecting DMA map of vmalloc memory
+Date:   Fri, 13 May 2022 13:21:11 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-215890-208809-T3xPepZzC2@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
+References: <bug-215890-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/3] dt-bindings: usb: atmel: Add Microchip LAN966x
- compatible string
-Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220513105850.310375-1-herve.codina@bootlin.com>
- <20220513105850.310375-3-herve.codina@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220513105850.310375-3-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,31 +71,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13/05/2022 12:58, Herve Codina wrote:
-> The USB device controller available in the Microchip LAN966x SOC
-> is the same IP as the one present in the SAMA5D3 SOC.
-> 
-> Add the LAN966x compatible string and set the SAMA5D3 compatible
-> string as a fallback for the LAN966x.
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
->  Documentation/devicetree/bindings/usb/atmel-usb.txt | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/atmel-usb.txt b/Documentation/devicetree/bindings/usb/atmel-usb.txt
-> index f512f0290728..a6fab7d63f37 100644
-> --- a/Documentation/devicetree/bindings/usb/atmel-usb.txt
-> +++ b/Documentation/devicetree/bindings/usb/atmel-usb.txt
-> @@ -87,6 +87,9 @@ Required properties:
->  	       "atmel,at91sam9g45-udc"
->  	       "atmel,sama5d3-udc"
->  	       "microchip,sam9x60-udc"
-> +	       "microchip,lan996x-udc"
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
 
-No wildcards please, especially that it closely fits previous wildcard
-(lan996x includes lan9960 which looks a lot like sam9x60...)
+Mathias Nyman (mathias.nyman@linux.intel.com) changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |mathias.nyman@linux.intel.c
+                   |                            |om
 
-Best regards,
-Krzysztof
+--- Comment #11 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+Could it be that bcm5974 driver just forgot to set the URB_NO_TRANSFER_DMA_=
+MAP
+flag in urb transfer_flags?
+
+If the usb driver does the allocation and dma mapping, and sets
+urb->transfer_dma
+then it should set that flag. Otherwise usbcore will map the DMA address.
+
+Documentation/driver-api/usb/dma.rst:
+
+- URBs have an additional "transfer_dma" field, as well as a transfer_flags
+  bit saying if it's valid.  (Control requests also have "setup_dma", but
+  drivers must not use it.)
+
+- "usbcore" will map this DMA address, if a DMA-aware driver didn't do
+  it first and set ``URB_NO_TRANSFER_DMA_MAP``.  HCDs
+  don't manage dma mappings for URBs.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
