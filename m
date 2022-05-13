@@ -2,179 +2,205 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61389525F28
-	for <lists+linux-usb@lfdr.de>; Fri, 13 May 2022 12:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA40525FDB
+	for <lists+linux-usb@lfdr.de>; Fri, 13 May 2022 12:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379235AbiEMKAK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 May 2022 06:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
+        id S1379452AbiEMKc6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 May 2022 06:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354709AbiEMKAJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 May 2022 06:00:09 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595FF2AA2C1
-        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 03:00:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652436008; x=1683972008;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/ByyPEPwL4Pi8oLwsSNx0cf+iljVc05NKuvcbgA//2s=;
-  b=J7GHsP2Gs7p/xty5b/Z/aLVZy9KzOfgqPRqUgoooOAU6BIh+U+teZ965
-   n50qiqCWtsHXFiJwiKMH5dq4J0Ep/XG6xnf9xS6uhtYx3jzTzAjXrazMy
-   Sqv31LjjvIA6bmlR8zmTks4oX0T6CrwGC3U8+c49Iy7hpOLe4PUhgF70G
-   ikhL2rUh36Lxs5guCm5vR8asnv27QSyAez0UE4y4w6nWlheiA5sNna8j1
-   5iGkDyhH2T8bE9CSITEdCjUYYqeVAiLsuuNB53lTsOToRIeoihW85O0cq
-   bj44bHGnG9Vzl0HDvArlk8RuTIyLndKTM/1MghqRXF9ByV/0QLub1HAGo
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="250168189"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="250168189"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 03:00:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="712335782"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 13 May 2022 03:00:05 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 13 May 2022 13:00:05 +0300
-Date:   Fri, 13 May 2022 13:00:04 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Goswami, Sanket" <Sanket.Goswami@amd.com>
-Cc:     gregkh@linuxfoundation.org, ajayg@nvidia.com,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/2] ucsi_ccg: Do not hardcode interrupt polarity and type
-Message-ID: <Yn4sJER+AXFru92X@kuha.fi.intel.com>
-References: <20220510052437.3212186-1-Sanket.Goswami@amd.com>
- <20220510052437.3212186-3-Sanket.Goswami@amd.com>
- <Ynts6+QeiWT7tL3I@kuha.fi.intel.com>
- <YntugjJfM2FiYNgQ@kuha.fi.intel.com>
- <9dee017e-eedf-4bbd-7c60-33587b1b523f@amd.com>
+        with ESMTP id S1355585AbiEMKc5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 May 2022 06:32:57 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F73C9ED9
+        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 03:32:55 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id s11so5645215edy.6
+        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 03:32:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=O6FiHPs6TyRR3hcZC36X6uXYX5doF+6brHiz72Bmp3Y=;
+        b=ESeWu6hBSMOQJBwvo98owd3dc9xTpa8qMO8//YKXHXjKIGYKVo1JsZBsr6njl8ehSu
+         7E1K+hGXZtM2f9CE3cbGjof/WV4EeK9S3SwF2jFtH+1afXmrnnCG/m/TFRosldC1dzWE
+         WedDyoMKeks19xDflSrq+4Lb4tbSwRJlFibN7/nxnKkcAJs/8FxuNqxnE4XRZU9pHnJ7
+         JM4np+n5LBPtvfY53RW7yyQA3Hi75fahXxsFnjbTUtIIxFXYgF2S2PMu2mvZ8Ge0cXwj
+         50/0sMzC+4ZHJQmdQHlZTZmbnp6vvML/MgMuPyLPXdtR6IwLZ8ydrhWtTncdxn5sLF0y
+         a9sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=O6FiHPs6TyRR3hcZC36X6uXYX5doF+6brHiz72Bmp3Y=;
+        b=QtBW6RANZBOCPgcrpjehJkMpAA/HDEgXxsMYogIbKRjaCVgqMqYi/RiB2ifYqY6pUQ
+         ZGxWa4Q3bu3k0OGsiOf8EV16HqhhhuHoJOiC2QDPISOZ9dXD3k271wUfMiSWUh6ud0AT
+         rdqOC9eVzfLL6DsVUeEibcTB5GWBnTtEC0S/yc+rmtBfUS0Pau73cdgVpN6FZzauIOBv
+         3ykkBW87jexPljz8K+dCewbOgZ0NQV9QlCEd91mQrCPspqa8+AV3fdc3NI+cqD5ooXaz
+         ol/mA53xN32dH2AxElbS6eBTPdLRL1bZBArh/oiWAuNtY7gOUH9UFAzoLQNKFTiGfmho
+         trDQ==
+X-Gm-Message-State: AOAM5328ksV5bsfeFzCroxcYV0xla4AmESIINeadEiWID/jQfwfGs6Rg
+        P7g92A/gniceo+IeY5V4/FWBAg==
+X-Google-Smtp-Source: ABdhPJxnxBRqoRRtonBw76pxckczcwui8tR3W20OfcDi/UUxotwJDJc16TYmbr5VAXgcERSaecmHyQ==
+X-Received: by 2002:aa7:ca0d:0:b0:428:90ee:322c with SMTP id y13-20020aa7ca0d000000b0042890ee322cmr30383575eds.100.1652437973639;
+        Fri, 13 May 2022 03:32:53 -0700 (PDT)
+Received: from [192.168.0.171] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id gv2-20020a1709072bc200b006f3ef214df5sm636959ejc.91.2022.05.13.03.32.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 03:32:53 -0700 (PDT)
+Message-ID: <5f7dfcba-7e65-4f54-8699-e44ce11e216e@linaro.org>
+Date:   Fri, 13 May 2022 12:32:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9dee017e-eedf-4bbd-7c60-33587b1b523f@amd.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [v4 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
+ override params bindings
+Content-Language: en-US
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+References: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
+ <1652282793-5580-2-git-send-email-quic_kriskura@quicinc.com>
+ <d296720d-ccbe-27f0-8ba1-9653af25dd52@linaro.org>
+ <3abbb26f-9396-d024-67f6-f24f7db3408d@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3abbb26f-9396-d024-67f6-f24f7db3408d@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 12, 2022 at 10:53:25PM +0530, Goswami, Sanket wrote:
-> Hi Heikki,
+On 13/05/2022 09:33, Krishna Kurapati PSSNV wrote:
 > 
-> On 11-May-22 13:36, Heikki Krogerus wrote:
-> > On Wed, May 11, 2022 at 10:59:42AM +0300, Heikki Krogerus wrote:
-> >> On Tue, May 10, 2022 at 10:54:37AM +0530, Sanket Goswami wrote:
-> >>> The current implementation supports only Level trigger with ACTIVE HIGH.
-> >>> Some of the AMD platforms have different PD firmware implementation which
-> >>> needs different polarity. This patch checks the polarity and type based
-> >>> on the device properties set and registers the interrupt handler
-> >>> accordingly.
-> >>>
-> >>> Signed-off-by: Sanket Goswami <Sanket.Goswami@amd.com>
-> >>> ---
-> >>>  drivers/usb/typec/ucsi/ucsi_ccg.c | 11 +++++++++--
-> >>>  1 file changed, 9 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >>> index 7585599bacfd..0db935bd8473 100644
-> >>> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >>> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >>> @@ -20,6 +20,7 @@
-> >>>  
-> >>>  #include <asm/unaligned.h>
-> >>>  #include "ucsi.h"
-> >>> +#define INTR_POL_TYPE	BIT(0)
-> >>>  
-> >>>  enum enum_fw_mode {
-> >>>  	BOOT,   /* bootloader */
-> >>> @@ -1324,6 +1325,8 @@ static int ucsi_ccg_probe(struct i2c_client *client,
-> >>>  	struct device *dev = &client->dev;
-> >>>  	struct ucsi_ccg *uc;
-> >>>  	int status;
-> >>> +	/* Keep the IRQ type and polarity default as Level trigger Active High */
-> >>> +	int irqtype = IRQF_TRIGGER_HIGH;
-> >>>  
-> >>>  	uc = devm_kzalloc(dev, sizeof(*uc), GFP_KERNEL);
-> >>>  	if (!uc)
-> >>> @@ -1366,8 +1369,12 @@ static int ucsi_ccg_probe(struct i2c_client *client,
-> >>>  
-> >>>  	ucsi_set_drvdata(uc->ucsi, uc);
-> >>>  
-> >>> +	status = (uintptr_t)device_get_match_data(dev);
-> >>> +	if (status & INTR_POL_TYPE)
-> >>> +		irqtype = IRQF_TRIGGER_FALLING;
-> >>> +
-> >>>  	status = request_threaded_irq(client->irq, NULL, ccg_irq_handler,
-> >>> -				      IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
-> >>> +				      IRQF_ONESHOT | irqtype,
-> >>>  				      dev_name(dev), uc);
-> >>
-> >> Please note that you would need to update ccg_restart() as well, but
-> >> there is something else wrong here...
-> >>
-> >>>  	if (status < 0) {
-> >>>  		dev_err(uc->dev, "request_threaded_irq failed - %d\n", status);
-> >>> @@ -1419,7 +1426,7 @@ static const struct i2c_device_id ucsi_ccg_device_id[] = {
-> >>>  MODULE_DEVICE_TABLE(i2c, ucsi_ccg_device_id);
-> >>>  
-> >>>  static const struct acpi_device_id amd_i2c_ucsi_match[] = {
-> >>> -	{"AMDI0042"},
-> >>> +	{"AMDI0042", INTR_POL_TYPE},
-> >>>  	{}
-> >>>  };
-> >>
-> >> This should not be necessary. That information comes from the ACPI
-> >> tables.
-> >>
-> >> I don't think that you need to set the polarity/level flags at all in
-> >> case of ACPI. I'll double check that, but if that is the case, then you
-> >> need to make the case where the device is not ACPI enumerated the
-> >> special case instead.
-> > 
-> > Actually, can you just test if this works for you:
-> > 
-> > diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> > index 6db7c8ddd51cd..f13c10e815d7d 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> > @@ -1251,8 +1251,7 @@ static int ccg_restart(struct ucsi_ccg *uc)
-> >         }
-> >  
-> >         status = request_threaded_irq(uc->irq, NULL, ccg_irq_handler,
-> > -                                     IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
-> > -                                     dev_name(dev), uc);
-> > +                                     IRQF_ONESHOT, dev_name(dev), uc);
+> On 5/11/2022 11:49 PM, Krzysztof Kozlowski wrote:
+>> On 11/05/2022 17:26, Krishna Kurapati wrote:
+>>> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>>
+>>> Add device tree bindings for SNPS phy tuning parameters.
+>>>
+>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>> ---
+>>>   .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 87 ++++++++++++++++++++++
+>>>   1 file changed, 87 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>>> index 1ce251d..70efffe 100644
+>>> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>>> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>>> @@ -53,6 +53,93 @@ properties:
+>>>     vdda33-supply:
+>>>       description: phandle to the regulator 3.3V supply node.
+>>>   
+>>> +  qcom,hs-disconnect-bps:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This adjusts the voltage level for the threshold used to
+>>> +      detect a disconnect event at the host. Possible values are.
+>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>> This means there is some minimum and maximum (100%)?
+>>
+>>> +      The hardware accepts only discrete values. The value closest to the
+>>> +      provided input will be chosen as the override value for this param.
+>>> +
+>>> +  qcom,squelch-detector-bps:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This adjusts the voltage level for the threshold used to
+>>> +      detect valid high-speed data.
+>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>>> +      The hardware accepts only discrete values. The value closest to the
+>>> +      provided input will be chosen as the override value for this param.
+>>> +
+>>> +  qcom,hs-amplitude-bps:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This adjusts the high-speed DC level voltage.
+>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>>> +      The hardware accepts only discrete values. The value closest to the
+>>> +      provided input will be chosen as the override value for this param.
+>>> +
+>>> +  qcom,pre-emphasis-duration-bps:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This signal controls the duration for which the
+>>> +      HS pre-emphasis current is sourced onto DP<#> or DM<#>.
+>>> +      The HS Transmitter pre-emphasis duration is defined in terms of
+>>> +      unit amounts. One unit of pre-emphasis duration is approximately
+>>> +      650 ps and is defined as 1X pre-emphasis duration.
+>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>>> +      The hardware accepts only discrete values. The value closest to the
+>>> +      provided input will be chosen as the override value for this param.
+>>> +
+>>> +  qcom,pre-emphasis-amplitude-bps:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This signal controls the amount of current sourced to
+>>> +      DP<#> and DM<#> after a J-to-K or K-to-J transition.
+>>> +      The HS Transmitter pre-emphasis current is defined in terms of unit
+>>> +      amounts. One unit amount is approximately 2 mA and is defined as
+>>> +      1X pre-emphasis current.
+>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>>> +      The hardware accepts only discrete values. The value closest to the
+>>> +      provided input will be chosen as the override value for this param.
+>>> +
+>>> +  qcom,hs-rise-fall-time-bps:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This adjusts the rise/fall times of the high-speed waveform.
+>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>>> +      The hardware accepts only discrete values. The value closest to the
+>>> +      provided input will be chosen as the override value for this param.
+>>> +
+>>> +  qcom,hs-crossover-voltage-mv:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>> +    description:
+>>> +      This adjusts the voltage at which the DP<#> and DM<#>
+>>> +      signals cross while transmitting in HS mode.
+>>> +      The values defined are in milli volts. The hardware accepts only
+>>> +      discrete values. The value closest to the provided input will be
+>>> +      chosen as the override value for this param.
+>>> +
+>>> +  qcom,hs-output-impedance-mohm:
+>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>> Here and in other places, please use standard units. See
+>> dtschema/schemas/property-units.yaml in dtschema repo.
+>>
+>>
+>> Best regards,
+>> Krzysztof
 > 
-> For AMD platforms, this change is not require as we are not doing firmware
-> download using driver.
-
-It really does not matter if your platform does not require this -
-other platforms still need it.
-
-Add a function where you handle the irq request, for example
-ccg_request_irq(), and then just call that function in both places.
-
-> >         if (status < 0) {
-> >                 dev_err(dev, "request_threaded_irq failed - %d\n", status);
-> >                 return status;
-> > @@ -1367,8 +1366,7 @@ static int ucsi_ccg_probe(struct i2c_client *client,
-> >         ucsi_set_drvdata(uc->ucsi, uc);
-> >  
-> >         status = request_threaded_irq(client->irq, NULL, ccg_irq_handler,
-> > -                                     IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
-> > -                                     dev_name(dev), uc);
-> > +                                     IRQF_ONESHOT, dev_name(dev), uc);
+> Hi Krzystof, thanks for the input.
 > 
-> Thanks for this suggestion, I have validated the same on AMD platforms and it is
-> functional. Will re-spin the new patch series with this change.
+> I see there are microvolt and microohm units present in 
+> schemas/property-units.yaml
+> 
+> Would it be possible to add bps (basis point) to the list of standard 
+> units if it makes sense to use it ?
 
-thanks,
+There is already 'percent' so 'bp' could be as well, makes sense to me.
+I can send a patch for it and we'll see what Rob says.
 
--- 
-heikki
+
+Best regards,
+Krzysztof
