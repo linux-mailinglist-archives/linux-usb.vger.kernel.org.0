@@ -2,205 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA40525FDB
-	for <lists+linux-usb@lfdr.de>; Fri, 13 May 2022 12:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA816525FF5
+	for <lists+linux-usb@lfdr.de>; Fri, 13 May 2022 12:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379452AbiEMKc6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 May 2022 06:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
+        id S1379518AbiEMKhc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 May 2022 06:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355585AbiEMKc5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 May 2022 06:32:57 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F73C9ED9
-        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 03:32:55 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id s11so5645215edy.6
-        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 03:32:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=O6FiHPs6TyRR3hcZC36X6uXYX5doF+6brHiz72Bmp3Y=;
-        b=ESeWu6hBSMOQJBwvo98owd3dc9xTpa8qMO8//YKXHXjKIGYKVo1JsZBsr6njl8ehSu
-         7E1K+hGXZtM2f9CE3cbGjof/WV4EeK9S3SwF2jFtH+1afXmrnnCG/m/TFRosldC1dzWE
-         WedDyoMKeks19xDflSrq+4Lb4tbSwRJlFibN7/nxnKkcAJs/8FxuNqxnE4XRZU9pHnJ7
-         JM4np+n5LBPtvfY53RW7yyQA3Hi75fahXxsFnjbTUtIIxFXYgF2S2PMu2mvZ8Ge0cXwj
-         50/0sMzC+4ZHJQmdQHlZTZmbnp6vvML/MgMuPyLPXdtR6IwLZ8ydrhWtTncdxn5sLF0y
-         a9sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=O6FiHPs6TyRR3hcZC36X6uXYX5doF+6brHiz72Bmp3Y=;
-        b=QtBW6RANZBOCPgcrpjehJkMpAA/HDEgXxsMYogIbKRjaCVgqMqYi/RiB2ifYqY6pUQ
-         ZGxWa4Q3bu3k0OGsiOf8EV16HqhhhuHoJOiC2QDPISOZ9dXD3k271wUfMiSWUh6ud0AT
-         rdqOC9eVzfLL6DsVUeEibcTB5GWBnTtEC0S/yc+rmtBfUS0Pau73cdgVpN6FZzauIOBv
-         3ykkBW87jexPljz8K+dCewbOgZ0NQV9QlCEd91mQrCPspqa8+AV3fdc3NI+cqD5ooXaz
-         ol/mA53xN32dH2AxElbS6eBTPdLRL1bZBArh/oiWAuNtY7gOUH9UFAzoLQNKFTiGfmho
-         trDQ==
-X-Gm-Message-State: AOAM5328ksV5bsfeFzCroxcYV0xla4AmESIINeadEiWID/jQfwfGs6Rg
-        P7g92A/gniceo+IeY5V4/FWBAg==
-X-Google-Smtp-Source: ABdhPJxnxBRqoRRtonBw76pxckczcwui8tR3W20OfcDi/UUxotwJDJc16TYmbr5VAXgcERSaecmHyQ==
-X-Received: by 2002:aa7:ca0d:0:b0:428:90ee:322c with SMTP id y13-20020aa7ca0d000000b0042890ee322cmr30383575eds.100.1652437973639;
-        Fri, 13 May 2022 03:32:53 -0700 (PDT)
-Received: from [192.168.0.171] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id gv2-20020a1709072bc200b006f3ef214df5sm636959ejc.91.2022.05.13.03.32.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 03:32:53 -0700 (PDT)
-Message-ID: <5f7dfcba-7e65-4f54-8699-e44ce11e216e@linaro.org>
-Date:   Fri, 13 May 2022 12:32:51 +0200
+        with ESMTP id S1379459AbiEMKha (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 May 2022 06:37:30 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620F560ABF;
+        Fri, 13 May 2022 03:37:29 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id D492C68B05; Fri, 13 May 2022 12:37:24 +0200 (CEST)
+Date:   Fri, 13 May 2022 12:37:24 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-usb@vger.kernel.org,
+        bugzilla-daemon@kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Satadru Pramanik <satadru@umich.edu>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Henrik Rydberg <rydberg@bitmath.org>
+Subject: Re: [Bug 215890] New: Regression in 5.18: bcm5974 trackpad causes
+ error: xhci_hcd rejecting DMA map of vmalloc memory
+Message-ID: <20220513103724.GA2289@lst.de>
+References: <bug-215890-208809@https.bugzilla.kernel.org/> <76e24afa-ad7d-bf6d-d610-df61851b3e2b@leemhuis.info> <8365ac4b-c45a-dbff-eed1-8ccc88a8d02f@leemhuis.info>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [v4 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
- override params bindings
-Content-Language: en-US
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-References: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
- <1652282793-5580-2-git-send-email-quic_kriskura@quicinc.com>
- <d296720d-ccbe-27f0-8ba1-9653af25dd52@linaro.org>
- <3abbb26f-9396-d024-67f6-f24f7db3408d@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3abbb26f-9396-d024-67f6-f24f7db3408d@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8365ac4b-c45a-dbff-eed1-8ccc88a8d02f@leemhuis.info>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13/05/2022 09:33, Krishna Kurapati PSSNV wrote:
+On Fri, May 13, 2022 at 10:24:34AM +0200, Thorsten Leemhuis wrote:
+> On 04.05.22 10:42, Thorsten Leemhuis wrote:
+> > 
+> > Linux-Input developers, do you have any idea what might be causing the
+> > problem outline below? It's a post 5.17 regression in mainline that was
+> > reported to bugzilla.kernel.org about a week ago, but didn't even get a
+> > single reply. Might be some other subsystem that is causing it, not sure.
+> > 
+> > On 27.04.22 00:42, bugzilla-daemon@kernel.org wrote:
+> >> https://bugzilla.kernel.org/show_bug.cgi?id=215890
 > 
-> On 5/11/2022 11:49 PM, Krzysztof Kozlowski wrote:
->> On 11/05/2022 17:26, Krishna Kurapati wrote:
->>> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>>
->>> Add device tree bindings for SNPS phy tuning parameters.
->>>
->>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>> ---
->>>   .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 87 ++++++++++++++++++++++
->>>   1 file changed, 87 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>> index 1ce251d..70efffe 100644
->>> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>> @@ -53,6 +53,93 @@ properties:
->>>     vdda33-supply:
->>>       description: phandle to the regulator 3.3V supply node.
->>>   
->>> +  qcom,hs-disconnect-bps:
->>> +    $ref: /schemas/types.yaml#/definitions/int32
->>> +    description:
->>> +      This adjusts the voltage level for the threshold used to
->>> +      detect a disconnect event at the host. Possible values are.
->>> +      The values defined are in multiples of basis points (1bp = 0.01%).
->> This means there is some minimum and maximum (100%)?
->>
->>> +      The hardware accepts only discrete values. The value closest to the
->>> +      provided input will be chosen as the override value for this param.
->>> +
->>> +  qcom,squelch-detector-bps:
->>> +    $ref: /schemas/types.yaml#/definitions/int32
->>> +    description:
->>> +      This adjusts the voltage level for the threshold used to
->>> +      detect valid high-speed data.
->>> +      The values defined are in multiples of basis points (1bp = 0.01%).
->>> +      The hardware accepts only discrete values. The value closest to the
->>> +      provided input will be chosen as the override value for this param.
->>> +
->>> +  qcom,hs-amplitude-bps:
->>> +    $ref: /schemas/types.yaml#/definitions/int32
->>> +    description:
->>> +      This adjusts the high-speed DC level voltage.
->>> +      The values defined are in multiples of basis points (1bp = 0.01%).
->>> +      The hardware accepts only discrete values. The value closest to the
->>> +      provided input will be chosen as the override value for this param.
->>> +
->>> +  qcom,pre-emphasis-duration-bps:
->>> +    $ref: /schemas/types.yaml#/definitions/int32
->>> +    description:
->>> +      This signal controls the duration for which the
->>> +      HS pre-emphasis current is sourced onto DP<#> or DM<#>.
->>> +      The HS Transmitter pre-emphasis duration is defined in terms of
->>> +      unit amounts. One unit of pre-emphasis duration is approximately
->>> +      650 ps and is defined as 1X pre-emphasis duration.
->>> +      The values defined are in multiples of basis points (1bp = 0.01%).
->>> +      The hardware accepts only discrete values. The value closest to the
->>> +      provided input will be chosen as the override value for this param.
->>> +
->>> +  qcom,pre-emphasis-amplitude-bps:
->>> +    $ref: /schemas/types.yaml#/definitions/int32
->>> +    description:
->>> +      This signal controls the amount of current sourced to
->>> +      DP<#> and DM<#> after a J-to-K or K-to-J transition.
->>> +      The HS Transmitter pre-emphasis current is defined in terms of unit
->>> +      amounts. One unit amount is approximately 2 mA and is defined as
->>> +      1X pre-emphasis current.
->>> +      The values defined are in multiples of basis points (1bp = 0.01%).
->>> +      The hardware accepts only discrete values. The value closest to the
->>> +      provided input will be chosen as the override value for this param.
->>> +
->>> +  qcom,hs-rise-fall-time-bps:
->>> +    $ref: /schemas/types.yaml#/definitions/int32
->>> +    description:
->>> +      This adjusts the rise/fall times of the high-speed waveform.
->>> +      The values defined are in multiples of basis points (1bp = 0.01%).
->>> +      The hardware accepts only discrete values. The value closest to the
->>> +      provided input will be chosen as the override value for this param.
->>> +
->>> +  qcom,hs-crossover-voltage-mv:
->>> +    $ref: /schemas/types.yaml#/definitions/int32
->>> +    description:
->>> +      This adjusts the voltage at which the DP<#> and DM<#>
->>> +      signals cross while transmitting in HS mode.
->>> +      The values defined are in milli volts. The hardware accepts only
->>> +      discrete values. The value closest to the provided input will be
->>> +      chosen as the override value for this param.
->>> +
->>> +  qcom,hs-output-impedance-mohm:
->>> +    $ref: /schemas/types.yaml#/definitions/int32
->> Here and in other places, please use standard units. See
->> dtschema/schemas/property-units.yaml in dtschema repo.
->>
->>
->> Best regards,
->> Krzysztof
+> FYI, the reporter bisected this regression down to f5ff79fddf0e
+> ("dma-mapping: remove CONFIG_DMA_REMAP"). CCing Christoph, who authored
+> that change (I wonder if it just exposed an existing bug, but well,
+> that's up for you to discuss).
 > 
-> Hi Krzystof, thanks for the input.
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 > 
-> I see there are microvolt and microohm units present in 
-> schemas/property-units.yaml
+> P.S.: As the Linux kernel's regression tracker I deal with a lot of
+> reports and sometimes miss something important when writing mails like
+> this. If that's the case here, don't hesitate to tell me in a public
+> reply, it's in everyone's interest to set the public record straight.
 > 
-> Would it be possible to add bps (basis point) to the list of standard 
-> units if it makes sense to use it ?
+> #regzbot introduced: f5ff79fddf0efecca538046b5cc20fb3ded2
 
-There is already 'percent' so 'bp' could be as well, makes sense to me.
-I can send a patch for it and we'll see what Rob says.
+Well, this just uncovered an existing bug in the driver.  You can not
+just dma map memory returned from dma_alloc_coherent, and this driver
+would already get vmalloc memory on arm/arm64 platforms anyway, we
+now just do the same on x86 as well.
 
-
-Best regards,
-Krzysztof
