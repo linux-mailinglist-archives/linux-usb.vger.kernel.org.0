@@ -2,65 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D279525FD1
-	for <lists+linux-usb@lfdr.de>; Fri, 13 May 2022 12:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B51526055
+	for <lists+linux-usb@lfdr.de>; Fri, 13 May 2022 12:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379517AbiEMKhn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 May 2022 06:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
+        id S1379558AbiEMKkT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 May 2022 06:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237341AbiEMKhm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 May 2022 06:37:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520A260AAC
-        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 03:37:41 -0700 (PDT)
+        with ESMTP id S1344990AbiEMKkS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 May 2022 06:40:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514082878F1;
+        Fri, 13 May 2022 03:40:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15A04B82D74
-        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 10:37:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CF0CEC34114
-        for <linux-usb@vger.kernel.org>; Fri, 13 May 2022 10:37:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D639560BD4;
+        Fri, 13 May 2022 10:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3351EC34118;
+        Fri, 13 May 2022 10:40:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652438258;
-        bh=2JR+k0daEbp4PbyrbCIS/pJJ97vE4vZ6HxuurWw4exI=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=CXxpKiZJ1yoV98ZuOjmTTkfCpPkE0H/LNdDYEYZt2n3gJ18OStCRbX7njXuIXOXMn
-         8dsvnAZdZm7YhnTqnZQp5Jty3BQOGxGfG3U7K0PCMfiSyVODJkIw3ZG/BzySYLVaxi
-         AQHjNJ+aXAP/xjXWUqZnF28Kq/auDiKIQKRfo22xJ3mXanOqWhxrdFGjJ3g9aOt3rZ
-         s3PXUPXzkcWsjLn5cQjVcjxacP63c8/mUuBkc43WN3t8Vxnhb1dZDtMo7OXojbJzMm
-         ngxDLLMcriNha6QQKuhvRZrGwEZtZ8PYIZ7SLUHiruhv8x9dqMn6hlmdl23a+mOrL9
-         oFZNGLMlTUTuA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id BD517CC13B1; Fri, 13 May 2022 10:37:38 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
- xhci_hcd rejecting DMA map of vmalloc memory
-Date:   Fri, 13 May 2022 10:37:38 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: hch@lst.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215890-208809-pejxoC7N5j@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
-References: <bug-215890-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        s=k20201202; t=1652438416;
+        bh=w70scybEJH1nL6/MKcUPce/sdlRZTexlC2RJSFDc+z4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=VMr7KegNknNioDV69uZXeN66fhfiHkGGUqpJu+e1Ss3j8rm11u4tmKCNFy1RFCSw6
+         zXdxIdQWqPuOf1pUg1KvNiCVU74+avy6e57jo+4AnoS4WgOWMwkU+HxZjWMD3ORD0W
+         ID3APp8qhh2lF2PmrfyPpnI567yIKDxllvev48rve8ySNLM7dBZTuRIXh387M17tvd
+         Zeg1L92pMDuSgylGpHSX/x8xl9cMbsUIwHTDclKaC4N/RPgQjOZM4NClHCHond8Sns
+         1m+W7K4B+x3STW1H98EJ0w2H6do8ZsgYIxlr1T0Lng7uk/Xw3TN/NStShOHSsuzdu1
+         c4GJTtJK8hPrQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0A231F03934;
+        Fri, 13 May 2022 10:40:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3 0/7] Polling be gone on LAN95xx
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165243841603.19214.4066003517532596557.git-patchwork-notify@kernel.org>
+Date:   Fri, 13 May 2022 10:40:16 +0000
+References: <cover.1652343655.git.lukas@wunner.de>
+In-Reply-To: <cover.1652343655.git.lukas@wunner.de>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        edumazet@google.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, steve.glendinning@shawell.net,
+        UNGLinuxDriver@microchip.com, oneukum@suse.com,
+        andre.edich@microchip.com, linux@rempel-privat.de,
+        martyn.welch@collabora.com, ghojda@yo2urs.ro,
+        chf.fritz@googlemail.com, LinoSanfilippo@gmx.de,
+        p.rosenberger@kunbus.com, hkallweit1@gmail.com, andrew@lunn.ch,
+        linux@armlinux.org.uk, fntoth@gmail.com
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,42 +63,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
+Hello:
 
---- Comment #9 from Christoph Hellwig (hch@lst.de) ---
-On Fri, May 13, 2022 at 10:24:34AM +0200, Thorsten Leemhuis wrote:
-> On 04.05.22 10:42, Thorsten Leemhuis wrote:
-> >=20
-> > Linux-Input developers, do you have any idea what might be causing the
-> > problem outline below? It's a post 5.17 regression in mainline that was
-> > reported to bugzilla.kernel.org about a week ago, but didn't even get a
-> > single reply. Might be some other subsystem that is causing it, not sur=
-e.
-> >=20
-> > On 27.04.22 00:42, bugzilla-daemon@kernel.org wrote:
-> >> https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
->=20
-> FYI, the reporter bisected this regression down to f5ff79fddf0e
-> ("dma-mapping: remove CONFIG_DMA_REMAP"). CCing Christoph, who authored
-> that change (I wonder if it just exposed an existing bug, but well,
-> that's up for you to discuss).
->=20
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->=20
-> P.S.: As the Linux kernel's regression tracker I deal with a lot of
-> reports and sometimes miss something important when writing mails like
-> this. If that's the case here, don't hesitate to tell me in a public
-> reply, it's in everyone's interest to set the public record straight.
->=20
-> #regzbot introduced: f5ff79fddf0efecca538046b5cc20fb3ded2
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Well, this just uncovered an existing bug in the driver.  You can not
-just dma map memory returned from dma_alloc_coherent, and this driver
-would already get vmalloc memory on arm/arm64 platforms anyway, we
-now just do the same on x86 as well.
+On Thu, 12 May 2022 10:42:00 +0200 you wrote:
+> Do away with link status polling on LAN95xx USB Ethernet
+> and rely on interrupts instead, thereby reducing bus traffic,
+> CPU overhead and improving interface bringup latency.
+> 
+> Link to v2:
+> https://lore.kernel.org/netdev/cover.1651574194.git.lukas@wunner.de/
+> 
+> [...]
 
---=20
-You may reply to this email to add a comment.
+Here is the summary with links:
+  - [net-next,v3,1/7] usbnet: Run unregister_netdev() before unbind() again
+    https://git.kernel.org/netdev/net-next/c/d1408f6b4dd7
+  - [net-next,v3,2/7] usbnet: smsc95xx: Don't clear read-only PHY interrupt
+    https://git.kernel.org/netdev/net-next/c/3108871f1922
+  - [net-next,v3,3/7] usbnet: smsc95xx: Don't reset PHY behind PHY driver's back
+    https://git.kernel.org/netdev/net-next/c/14021da69811
+  - [net-next,v3,4/7] usbnet: smsc95xx: Avoid link settings race on interrupt reception
+    https://git.kernel.org/netdev/net-next/c/8960f878e39f
+  - [net-next,v3,5/7] usbnet: smsc95xx: Forward PHY interrupts to PHY driver to avoid polling
+    https://git.kernel.org/netdev/net-next/c/1ce8b37241ed
+  - [net-next,v3,6/7] net: phy: smsc: Cache interrupt mask
+    https://git.kernel.org/netdev/net-next/c/7e8b617eb93f
+  - [net-next,v3,7/7] net: phy: smsc: Cope with hot-removal in interrupt handler
+    https://git.kernel.org/netdev/net-next/c/1e7b81edebc1
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
