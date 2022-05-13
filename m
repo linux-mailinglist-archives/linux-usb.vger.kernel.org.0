@@ -2,101 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B51526055
-	for <lists+linux-usb@lfdr.de>; Fri, 13 May 2022 12:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DD0526053
+	for <lists+linux-usb@lfdr.de>; Fri, 13 May 2022 12:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379558AbiEMKkT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 May 2022 06:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
+        id S1379578AbiEMKr5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 May 2022 06:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344990AbiEMKkS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 May 2022 06:40:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514082878F1;
-        Fri, 13 May 2022 03:40:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D639560BD4;
-        Fri, 13 May 2022 10:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3351EC34118;
-        Fri, 13 May 2022 10:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652438416;
-        bh=w70scybEJH1nL6/MKcUPce/sdlRZTexlC2RJSFDc+z4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=VMr7KegNknNioDV69uZXeN66fhfiHkGGUqpJu+e1Ss3j8rm11u4tmKCNFy1RFCSw6
-         zXdxIdQWqPuOf1pUg1KvNiCVU74+avy6e57jo+4AnoS4WgOWMwkU+HxZjWMD3ORD0W
-         ID3APp8qhh2lF2PmrfyPpnI567yIKDxllvev48rve8ySNLM7dBZTuRIXh387M17tvd
-         Zeg1L92pMDuSgylGpHSX/x8xl9cMbsUIwHTDclKaC4N/RPgQjOZM4NClHCHond8Sns
-         1m+W7K4B+x3STW1H98EJ0w2H6do8ZsgYIxlr1T0Lng7uk/Xw3TN/NStShOHSsuzdu1
-         c4GJTtJK8hPrQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0A231F03934;
-        Fri, 13 May 2022 10:40:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1379329AbiEMKr4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 May 2022 06:47:56 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C3A23EB4B;
+        Fri, 13 May 2022 03:47:53 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 5EC4D68B05; Fri, 13 May 2022 12:47:49 +0200 (CEST)
+Date:   Fri, 13 May 2022 12:47:49 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-usb@vger.kernel.org,
+        bugzilla-daemon@kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Satadru Pramanik <satadru@umich.edu>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Henrik Rydberg <rydberg@bitmath.org>
+Subject: Re: [Bug 215890] New: Regression in 5.18: bcm5974 trackpad causes
+ error: xhci_hcd rejecting DMA map of vmalloc memory
+Message-ID: <20220513104749.GA2634@lst.de>
+References: <bug-215890-208809@https.bugzilla.kernel.org/> <76e24afa-ad7d-bf6d-d610-df61851b3e2b@leemhuis.info> <8365ac4b-c45a-dbff-eed1-8ccc88a8d02f@leemhuis.info> <20220513103724.GA2289@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/7] Polling be gone on LAN95xx
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165243841603.19214.4066003517532596557.git-patchwork-notify@kernel.org>
-Date:   Fri, 13 May 2022 10:40:16 +0000
-References: <cover.1652343655.git.lukas@wunner.de>
-In-Reply-To: <cover.1652343655.git.lukas@wunner.de>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        edumazet@google.com, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, steve.glendinning@shawell.net,
-        UNGLinuxDriver@microchip.com, oneukum@suse.com,
-        andre.edich@microchip.com, linux@rempel-privat.de,
-        martyn.welch@collabora.com, ghojda@yo2urs.ro,
-        chf.fritz@googlemail.com, LinoSanfilippo@gmx.de,
-        p.rosenberger@kunbus.com, hkallweit1@gmail.com, andrew@lunn.ch,
-        linux@armlinux.org.uk, fntoth@gmail.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513103724.GA2289@lst.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 12 May 2022 10:42:00 +0200 you wrote:
-> Do away with link status polling on LAN95xx USB Ethernet
-> and rely on interrupts instead, thereby reducing bus traffic,
-> CPU overhead and improving interface bringup latency.
+On Fri, May 13, 2022 at 12:37:24PM +0200, Christoph Hellwig wrote:
+> > #regzbot introduced: f5ff79fddf0efecca538046b5cc20fb3ded2
 > 
-> Link to v2:
-> https://lore.kernel.org/netdev/cover.1651574194.git.lukas@wunner.de/
-> 
-> [...]
+> Well, this just uncovered an existing bug in the driver.  You can not
+> just dma map memory returned from dma_alloc_coherent, and this driver
+> would already get vmalloc memory on arm/arm64 platforms anyway, we
+> now just do the same on x86 as well.
 
-Here is the summary with links:
-  - [net-next,v3,1/7] usbnet: Run unregister_netdev() before unbind() again
-    https://git.kernel.org/netdev/net-next/c/d1408f6b4dd7
-  - [net-next,v3,2/7] usbnet: smsc95xx: Don't clear read-only PHY interrupt
-    https://git.kernel.org/netdev/net-next/c/3108871f1922
-  - [net-next,v3,3/7] usbnet: smsc95xx: Don't reset PHY behind PHY driver's back
-    https://git.kernel.org/netdev/net-next/c/14021da69811
-  - [net-next,v3,4/7] usbnet: smsc95xx: Avoid link settings race on interrupt reception
-    https://git.kernel.org/netdev/net-next/c/8960f878e39f
-  - [net-next,v3,5/7] usbnet: smsc95xx: Forward PHY interrupts to PHY driver to avoid polling
-    https://git.kernel.org/netdev/net-next/c/1ce8b37241ed
-  - [net-next,v3,6/7] net: phy: smsc: Cache interrupt mask
-    https://git.kernel.org/netdev/net-next/c/7e8b617eb93f
-  - [net-next,v3,7/7] net: phy: smsc: Cope with hot-removal in interrupt handler
-    https://git.kernel.org/netdev/net-next/c/1e7b81edebc1
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+From a quick look through the trace it seems somehow
+usb_hcd_map_urb_for_dma tries to create another DMA mapping for a buffer
+allocated from usb_alloc_coherent that uses a dma coherent allocation
+below.  It really needs to use the dma address returned from
+usb_alloc_coherent instead of trying to map the URB again.  But I don't
+have the slightest idea of why that only happens for this particular
+setup, and I really need some helpe from the usb folks to untangle it
