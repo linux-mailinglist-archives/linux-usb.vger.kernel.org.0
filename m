@@ -2,180 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5992526F89
-	for <lists+linux-usb@lfdr.de>; Sat, 14 May 2022 09:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0571C52704E
+	for <lists+linux-usb@lfdr.de>; Sat, 14 May 2022 11:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbiENGYo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 May 2022 02:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
+        id S231440AbiENJgR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 May 2022 05:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbiENGYh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 May 2022 02:24:37 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27C95F7C;
-        Fri, 13 May 2022 23:24:35 -0700 (PDT)
+        with ESMTP id S231454AbiENJf4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 May 2022 05:35:56 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA72E90;
+        Sat, 14 May 2022 02:35:55 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id u23so18238652lfc.1;
+        Sat, 14 May 2022 02:35:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652509475; x=1684045475;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CTPKV5/3XbPVVsmMfjikShM7ViVrOedVu3KK+AOri88=;
-  b=WOhoiUbJORohS/GZKozszJzqGqKc13KzcLtHzoK+6AmBJnabt48skTNe
-   wkSRFvC2H9GzfYS9sw2JCrmEjM63fOXc4kOcN4z4vzNQGUpKOwEWftJ/7
-   HMR3JYOTPhVvUh2vUsxq5CgNhyFbgOJhpKOp54CTtHB5kBDfMLWTfRFZP
-   w=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 May 2022 23:24:35 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 23:24:34 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 13 May 2022 23:24:34 -0700
-Received: from [10.216.22.253] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 13 May
- 2022 23:24:27 -0700
-Message-ID: <972ac516-efac-54d6-febc-1b180ec36d4b@quicinc.com>
-Date:   Sat, 14 May 2022 11:54:22 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [v4 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
- override params bindings
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9bON5I8dBLTli09gYDVRZAOvbSHuOcYBnAT6sWpt8v0=;
+        b=KEkFaNttl7V7FEihDHHSSuU636QWKiLfXshYdyn8lq3aLqum/xm8JVHSrRKzlldw+R
+         o1rc5KRqfjJmzpQ2qBSVLqiSS+GqOPBRZbkSQxgxj05gQ9IarKQ9Mxq2ZYXs1+ZWrTcw
+         dpTqeVpKBTEoaV8pGCb4wcDUpMSmZ6lZW99/KANy++8jxAIOZYLhw0it/iS0HyhIpQ++
+         my6QM9lPKl4QjQHj3/w3Kz00KfMnrqFwSd41CqYQR0K5ZUYijiX5hZ4gPjJ7zWu+O1we
+         kxm+cqzQjSAyoqZo43ZzSRa3hQfHN4m1EAsGD7rKtYx3saxCQLXsKlSDnF/MjHuvSEl5
+         u16A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9bON5I8dBLTli09gYDVRZAOvbSHuOcYBnAT6sWpt8v0=;
+        b=vUSuOUv60FTX3fPNao1p7oqL1DkBRKbcgfm6yiV6+IAH4jEcBTp2JNoulMZjJO64db
+         BqC2AsBXsXMQNasDHXRcus9CgOFkOYdcYQB1DP89+3afZyg4Jr789rXDd9JccalJJz+Z
+         1WNlE0UvbHjOdjuHHFRYxBty9Va4cZXcoU8BrhySHPhBd8ozWJDTrezTfI28mgnfCSUS
+         bSf74qWVGWP9KJaPZbZ19MWQSdaPDOgx1fST29FFcSEq5O0HnqGyAC4CsxREZAa4NxPt
+         eV889Ma7JnLaapQWtszF94zj3vSkJ3W8/Rb8Gc4MvEHNwpUUzSYIpCixO2LNjLzSy9kH
+         +VXA==
+X-Gm-Message-State: AOAM533UfHL9cM+P3oWmcxmUzl9c3JqJzaCRaPyviUFsGhXZtnM/u1DJ
+        4GTIYEM7EfflVfxxhir1f5znSLfIvbvzpw==
+X-Google-Smtp-Source: ABdhPJzu4j4jzb+I5ffVkHkC1IPaeSod8S923nLoNM+nFx0WOGl7Zp1ZdW9e7Xi3pO/Vc2LsRQ9uNg==
+X-Received: by 2002:ac2:48a4:0:b0:471:fc7f:b54d with SMTP id u4-20020ac248a4000000b00471fc7fb54dmr6376200lfg.538.1652520953758;
+        Sat, 14 May 2022 02:35:53 -0700 (PDT)
+Received: from [192.168.1.103] ([31.173.80.11])
+        by smtp.gmail.com with ESMTPSA id d7-20020a05651221c700b0047255d210f0sm660466lft.31.2022.05.14.02.35.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 May 2022 02:35:52 -0700 (PDT)
+Subject: Re: [PATCH 3/3] ARM: dts: lan966x: Add UDPHS support
+To:     Herve Codina <herve.codina@bootlin.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Vinod Koul" <vkoul@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>
-References: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
- <1652282793-5580-2-git-send-email-quic_kriskura@quicinc.com>
- <d296720d-ccbe-27f0-8ba1-9653af25dd52@linaro.org>
- <9644d608-4ab9-ed0d-50fb-0016e4331361@quicinc.com>
- <5b32cecf-873a-6367-df87-1b8d45e63cec@linaro.org>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <5b32cecf-873a-6367-df87-1b8d45e63cec@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20220513105850.310375-1-herve.codina@bootlin.com>
+ <20220513105850.310375-4-herve.codina@bootlin.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <4436479e-c0ef-4962-7ad3-2b8b80e1643a@gmail.com>
+Date:   Sat, 14 May 2022 12:35:51 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <20220513105850.310375-4-herve.codina@bootlin.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello!
 
-On 5/12/2022 4:00 PM, Krzysztof Kozlowski wrote:
-> On 12/05/2022 07:57, Krishna Kurapati PSSNV wrote:
->> On 5/11/2022 11:49 PM, Krzysztof Kozlowski wrote:
->>> On 11/05/2022 17:26, Krishna Kurapati wrote:
->>>> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>>>
->>>> Add device tree bindings for SNPS phy tuning parameters.
->>>>
->>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>>> ---
->>>>    .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 87 ++++++++++++++++++++++
->>>>    1 file changed, 87 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>>> index 1ce251d..70efffe 100644
->>>> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>>> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>>> @@ -53,6 +53,93 @@ properties:
->>>>      vdda33-supply:
->>>>        description: phandle to the regulator 3.3V supply node.
->>>>    
->>>> +  qcom,hs-disconnect-bps:
->>>> +    $ref: /schemas/types.yaml#/definitions/int32
->>>> +    description:
->>>> +      This adjusts the voltage level for the threshold used to
->>>> +      detect a disconnect event at the host. Possible values are.
->>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
->>> This means there is some minimum and maximum (100%)?
->> Hi Krzystof,
->>
->> Yes there are max and min for each parameter (not necessarily 0%/100%)
->>
->> As an example if we take squelch detector threshold, the register value
->> vs actual percentage changer as per data book is as follows :
->>
->> % change in voltage    |     corresponding reg value
->>
->>    -20.90%                        |    7
->>    -15.60%                        |    6
->> -10.30%                         |    5
->> -5.30%                           |    4
->> 0%                                  |    3
->> 5.30%                            |    2
->> 10.60%                          |    1
->> 15.90%                          |    0
->>
->> Here the min and max are 15.9% to -20.9%
->>
->> The min and max differ for each parameter and might not be necessarily
->> 0% and 100%
-> Then it seems possible to define minimum and maximum values - please add
-> them ("minimum: xxxx").
->
->
-> Best regards,
-> Krzysztof
+On 5/13/22 1:58 PM, Herve Codina wrote:
 
-Hi Krzysztof,
+> Add UDPHS (the USB High Speed Device Port controller) support.
+> The UDPHS IP present in the lan966x SOC is the same as the one
+> present in the SAMA5D3 SOC
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> ---
+>  arch/arm/boot/dts/lan966x.dtsi | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
+> index 7d2869648050..4c09f3166d27 100644
+> --- a/arch/arm/boot/dts/lan966x.dtsi
+> +++ b/arch/arm/boot/dts/lan966x.dtsi
+> @@ -211,6 +211,17 @@ can0: can@e081c000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		udc: udphs@e0808000 {
 
-  Sorry for the late reply, missed this mail.
+   Shouldn't it be:
 
-Currently, these values have a fixed maximum and minimum. But if these 
-limits change in the
+		udphs: udc@e0808000 {
 
-future (say on a per target basis) , would it be appropriate to add them 
-here in bindings file ?
+(as the node names should be generic)?
 
-Also in the driver file for sc7280 target, we have added parameter 
-mapping : (map b/w register value
+[...]
 
-and bps passed from device tree). For squelch detector, it is as follows:
-
-+static struct override_param squelch_det_threshold_sc7280[] = {
-+	OVERRIDE_PARAM(-2090, 7),
-+	OVERRIDE_PARAM(-1560, 6),
-+	OVERRIDE_PARAM(-1030, 5),
-+	OVERRIDE_PARAM(-530, 4),
-+	OVERRIDE_PARAM(0, 3),
-+	OVERRIDE_PARAM(530, 2),
-+	OVERRIDE_PARAM(1060, 1),
-+	OVERRIDE_PARAM(1590, 0),
-+};
-
-And the code is written such that if we give a bps value in dt greater than max value in
-table, we would automatically choose max value. And if we provide bps value lesser than
-minimum value, we would choose the min value.
-
-So, would it be appropriate to add the min and max in dt-bindings when there is a
-slight chance of them changing in the future ?
-
-Would like to know your thoughts on this,
-
-Thanks,
-Krishna,
-
+MBR, Sergey
