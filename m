@@ -2,196 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9FE15273C6
-	for <lists+linux-usb@lfdr.de>; Sat, 14 May 2022 21:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E275273D4
+	for <lists+linux-usb@lfdr.de>; Sat, 14 May 2022 21:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234956AbiENTlv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 May 2022 15:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
+        id S234710AbiENTwb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 May 2022 15:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232750AbiENTls (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 May 2022 15:41:48 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B54C1CB2F
-        for <linux-usb@vger.kernel.org>; Sat, 14 May 2022 12:41:46 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id u23so19766563lfc.1
-        for <linux-usb@vger.kernel.org>; Sat, 14 May 2022 12:41:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=t6bJEDO0j/dRfFq4rPjW4+ykP3n6Msmi35RTgOoZ07M=;
-        b=Kl7f6ZAzoxQ4Jd8/+V19vqhkpkPjmEHVoVrK51Kv1LDfYNnBINfKrX6YUx+89iVSjx
-         0Kcyr9hxefFJxiH9uBIlQ+2ta82hisNj12PIGV3cHbR1/w26ovilmYOUt8ypxwv3NlnK
-         7rgtbKaHc9Pg8u9Vb1vJPocjJuzp1fyfnx9QauxFkXLwNYdyTQOgSUUnUt6CgB87i3D+
-         2vqb8TR/qrrGbGRYgNPH3tRTl7crlEA7gLHGfXCI/kF4yCAIZlgT0iSnALmSmbAiZCQi
-         o/wXQ6rT542gdyMTiHD8Cyg3DrMI+wT2KBj30BenDrZW3ofC6Vq4qwJIBXRYI6MTCX5I
-         oIkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=t6bJEDO0j/dRfFq4rPjW4+ykP3n6Msmi35RTgOoZ07M=;
-        b=QX3njc7pvbcldjplRLuXLss87cmaCeJnyr2TryCvocnM6gzC0wTztZLMo0L5I1L1+W
-         5EWFnu+1a8jAB4dE9mx9wToHm8y1dTEbxJU62Q0Gl9h9T5sZ5QWOfMcFUUmik1/4VGqX
-         zOcV9imf8UEI1v4fZuEtIHN79xybJWl3eeX0ZpS++C24tFOFpfsXHrzvWHUmUlzNDWws
-         xzDZMsJ55GpTNLDOQ+m12r/ujn9U3hb+xoZUgCIWer3CWSlHczHsf7ey8lV78qwOyzpJ
-         DdmEkXH10BFYosmq4BlMV9boSLRcBY9kocM2vhgQ5REmgOjBg8GiJyVkeCidI5m67gbI
-         7JeA==
-X-Gm-Message-State: AOAM531rnz9fVj8JY1g01i5nZ/CaAw46U2YZpu6E2TlgWCU6Cd/8nxnp
-        8LKfDBsnxLLjycu8nsZ+m615GA==
-X-Google-Smtp-Source: ABdhPJxHu3S+WGwVzKJZUxwzhTiHR4uLT/Zh8n+qQPda4WwCCELQ3QGV2iDBNb6lJiozLzyiQW2ksA==
-X-Received: by 2002:a05:6512:12c9:b0:473:c33e:a65b with SMTP id p9-20020a05651212c900b00473c33ea65bmr7771309lfg.285.1652557304862;
-        Sat, 14 May 2022 12:41:44 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id c2-20020ac25302000000b004778d417c49sm78333lfh.290.2022.05.14.12.41.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 May 2022 12:41:44 -0700 (PDT)
-Message-ID: <f8d8be37-3e2f-c1fc-37d6-b1e0bfa875ce@linaro.org>
-Date:   Sat, 14 May 2022 21:41:42 +0200
+        with ESMTP id S232256AbiENTwa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 May 2022 15:52:30 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 29BE126571
+        for <linux-usb@vger.kernel.org>; Sat, 14 May 2022 12:52:26 -0700 (PDT)
+Received: (qmail 70657 invoked by uid 1000); 14 May 2022 15:52:25 -0400
+Date:   Sat, 14 May 2022 15:52:25 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Michael Grzeschik <mgr@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] usb: hub: port: add sysfs entry to switch port power
+Message-ID: <YoAIeQJAvFBs6YNq@rowland.harvard.edu>
+References: <20220510231317.1874608-1-m.grzeschik@pengutronix.de>
+ <YnvDlhlcVGoerhLz@rowland.harvard.edu>
+ <20220511203727.GG27481@pengutronix.de>
+ <YnxgvcOIVMWhDbi9@rowland.harvard.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [v4 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
- override params bindings
-Content-Language: en-US
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com
-References: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
- <1652282793-5580-2-git-send-email-quic_kriskura@quicinc.com>
- <d296720d-ccbe-27f0-8ba1-9653af25dd52@linaro.org>
- <9644d608-4ab9-ed0d-50fb-0016e4331361@quicinc.com>
- <5b32cecf-873a-6367-df87-1b8d45e63cec@linaro.org>
- <972ac516-efac-54d6-febc-1b180ec36d4b@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <972ac516-efac-54d6-febc-1b180ec36d4b@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnxgvcOIVMWhDbi9@rowland.harvard.edu>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 14/05/2022 08:24, Krishna Kurapati PSSNV wrote:
-> 
-> On 5/12/2022 4:00 PM, Krzysztof Kozlowski wrote:
->> On 12/05/2022 07:57, Krishna Kurapati PSSNV wrote:
->>> On 5/11/2022 11:49 PM, Krzysztof Kozlowski wrote:
->>>> On 11/05/2022 17:26, Krishna Kurapati wrote:
->>>>> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>>>>
->>>>> Add device tree bindings for SNPS phy tuning parameters.
->>>>>
->>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>>>> ---
->>>>>    .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 87 ++++++++++++++++++++++
->>>>>    1 file changed, 87 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>>>> index 1ce251d..70efffe 100644
->>>>> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>>>> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>>>> @@ -53,6 +53,93 @@ properties:
->>>>>      vdda33-supply:
->>>>>        description: phandle to the regulator 3.3V supply node.
->>>>>    
->>>>> +  qcom,hs-disconnect-bps:
->>>>> +    $ref: /schemas/types.yaml#/definitions/int32
->>>>> +    description:
->>>>> +      This adjusts the voltage level for the threshold used to
->>>>> +      detect a disconnect event at the host. Possible values are.
->>>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
->>>> This means there is some minimum and maximum (100%)?
->>> Hi Krzystof,
->>>
->>> Yes there are max and min for each parameter (not necessarily 0%/100%)
->>>
->>> As an example if we take squelch detector threshold, the register value
->>> vs actual percentage changer as per data book is as follows :
->>>
->>> % change in voltage    |     corresponding reg value
->>>
->>>    -20.90%                        |    7
->>>    -15.60%                        |    6
->>> -10.30%                         |    5
->>> -5.30%                           |    4
->>> 0%                                  |    3
->>> 5.30%                            |    2
->>> 10.60%                          |    1
->>> 15.90%                          |    0
->>>
->>> Here the min and max are 15.9% to -20.9%
->>>
->>> The min and max differ for each parameter and might not be necessarily
->>> 0% and 100%
->> Then it seems possible to define minimum and maximum values - please add
->> them ("minimum: xxxx").
->>
->>
->> Best regards,
->> Krzysztof
-> 
-> Hi Krzysztof,
-> 
->   Sorry for the late reply, missed this mail.
-> 
-> Currently, these values have a fixed maximum and minimum. But if these 
-> limits change in the
-> 
-> future (say on a per target basis) , would it be appropriate to add them 
-> here in bindings file ?
+On Wed, May 11, 2022 at 09:19:57PM -0400, Alan Stern wrote:
+> On Wed, May 11, 2022 at 10:37:27PM +0200, Michael Grzeschik wrote:
 
-Per "target" you mean compatible? Then yes, the same as customizing
-number of interrupts, clocks etc.
+> > > > +		if (udev) {
+> > > > +			port_dev->child = NULL;
+> > > 
+> > > That assignment is not necessary; usb_disconnect() will take care of it.
+> > 
+> > Here are two things that are in play.
+> > 
+> > First I have to set port_dev->child = NULL before calling
+> > usb_disconnect. Otherwise the following automatic hub_suspend call (in
+> > case this was the last operational port of the hub) will print the
+> > message "device x-y not suspended yet" and will fail the hub to
+> > suspend.
+> > 
+> > When calling usb_autoresume_device(udev) instead and before calling
+> > usb_disconnect, this is no longer the case. The hub will be succesfully
+> > suspended.
+> > 
+> > The second thing is the assignment. I still have to explicitly assign NULL to
+> > port_dev->child. Otherwise a following enable of this port via this sysfs will
+> > run into an hub_event with the usb_disonnect for the device on that port. But
+> > this will spit out a ugly traceback leading with the following error:
+> > 
+> > [   21.718574] usb 2-1.1: USB disconnect, device number -1
+> > 
+> > [   21.719100] Unable to handle kernel paging request at virtual address 96d628cc24e2e078
+> > [   21.719807] Mem abort info:
+> > [   21.720065]   ESR = 0x96000044
+> > [   21.720348]   EC = 0x25: DABT (current EL), IL = 32 bits
+> > [   21.720827]   SET = 0, FnV = 0
+> > [   21.721109]   EA = 0, S1PTW = 0
+> > [   21.721447]   FSC = 0x04: level 0 translation fault
+> > [   21.721891] Data abort info:
+> > [   21.722157]   ISV = 0, ISS = 0x00000044
+> > [   21.722505]   CM = 0, WnR = 1
+> > [   21.722779] [96d628cc24e2e078] address between user and kernel address ranges
+> > [   21.723429] Internal error: Oops: 96000044 [#1] PREEMPT SMP
+> > [   21.723927] Modules linked in: uio_pdrv_genirq fuse
+> > [   21.724380] CPU: 0 PID: 58 Comm: kworker/0:3 Not tainted 5.18.0-rc6+ #93
+> > [   21.724977] Hardware name: Radxa ROCK3 Model A (DT)
+> > [   21.725412] Workqueue: usb_hub_wq hub_event
+> > [   21.725802] pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > [   21.726419] pc : usb_disable_endpoint+0x7c/0xdc
+> > [   21.726832] lr : usb_disable_device_endpoints+0xbc/0xe0
+> > [   21.727301] sp : ffffffc009b33b30
+> > [   21.727597] x29: ffffffc009b33b30 x28: ffffff8003ad4ed8 x27: 0000000000000001
+> > [   21.728239] x26: ffffff8004344928 x25: 0000000000000000 x24: ffffffc0096eb8e0
+> > [   21.728885] x23: ffffff80043448a8 x22: ffffff8003961800 x21: 0000000000000001
+> > [   21.729527] x20: 96d628cc24e2e034 x19: ffffff8004344800 x18: ffffffffffffffff
+> > [   21.730168] x17: 0000000000000001 x16: 0000000000000001 x15: ffffffc089b33857
+> > [   21.730810] x14: 0000000000000000 x13: 312d207265626d75 x12: 6e20656369766564
+> > [   21.731452] x11: 00000000fffff7ff x10: 00000000fffff7ff x9 : ffffffc00871b8dc
+> > [   21.732093] x8 : 000000000000bfe8 x7 : ffffffc009b33a38 x6 : 0000000000000001
+> > [   21.732733] x5 : ffffffc009569000 x4 : ffffffc009569050 x3 : ffffff8004344878
+> > [   21.733374] x2 : 0000000000000001 x1 : 000000000000008f x0 : 0000000000000001
+> > [   21.734015] Call trace:
+> > [   21.734235]  usb_disable_endpoint+0x7c/0xdc
+> > [   21.734616]  usb_disable_device_endpoints+0xbc/0xe0
+> > [   21.735054]  usb_disable_device+0x1c0/0x260
+> > [   21.735432]  usb_disconnect+0x108/0x300
+> > [   21.735778]  hub_event+0x1378/0x19c0
+> > [   21.736102]  process_one_work+0x220/0x49c
+> > [   21.736469]  worker_thread+0x154/0x450
+> > [   21.736810]  kthread+0xfc/0x110
+> > [   21.737096]  ret_from_fork+0x10/0x20
+> > [   21.737429] Code: f941c474 340001e0 f901c47f b4ffff14 (b900469f)
+> > [   21.737970] ---[ end trace 0000000000000000 ]---
+> > 
+> > Did I miss something?
+> 
+> No: You found a real bug in the hub driver!  usb_disconnect() really 
+> is supposed to set port_dev->child to NULL at some point, but it 
+> doesn't.  In fact, port_dev->child never gets set back to NULL (except 
+> in the trivial case where a newly attached device fails to initialize 
+> and enumerate).
+> 
+> I'll work on a patch to fix this, and I'll CC: you when it's ready.
 
-> 
-> Also in the driver file for sc7280 target, we have added parameter 
-> mapping : (map b/w register value
-> 
-> and bps passed from device tree). For squelch detector, it is as follows:
-> 
-> +static struct override_param squelch_det_threshold_sc7280[] = {
-> +	OVERRIDE_PARAM(-2090, 7),
-> +	OVERRIDE_PARAM(-1560, 6),
-> +	OVERRIDE_PARAM(-1030, 5),
-> +	OVERRIDE_PARAM(-530, 4),
-> +	OVERRIDE_PARAM(0, 3),
-> +	OVERRIDE_PARAM(530, 2),
-> +	OVERRIDE_PARAM(1060, 1),
-> +	OVERRIDE_PARAM(1590, 0),
-> +};
-> 
-> And the code is written such that if we give a bps value in dt greater than max value in
-> table, we would automatically choose max value. And if we provide bps value lesser than
-> minimum value, we would choose the min value.
-> 
-> So, would it be appropriate to add the min and max in dt-bindings when there is a
-> slight chance of them changing in the future ?
+I take it back.  This isn't a bug; it's a mistake in the way you called 
+usb_disconnect().  Your patch did:
 
-The kernel behavior should not matter here, because the bindings are
-about the hardware. Therefore if hardware comes with maximum/minimum
-values, it would be better to document them here.
+		if (udev) {
+			port_dev->child = NULL;
+			usb_disconnect(&udev);
+		}
 
+The argument to usb_disconnect() is supposed to be &port_dev->child, not 
+&udev.  You can see near the end of the function that it sets *pdev to 
+NULL; this is where port_dev->child gets cleared.
 
-Best regards,
-Krzysztof
+Not incidentally, usb_disconnect() requires that you hold hdev's device 
+lock when you call it (this is mentioned in the kerneldoc, although the 
+requirement that pdev points to port_dev->child isn't -- the kerneldoc 
+for that function could stand to be improved).
+
+Alan Stern
