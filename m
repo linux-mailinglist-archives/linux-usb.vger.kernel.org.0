@@ -2,51 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB6C526F0E
-	for <lists+linux-usb@lfdr.de>; Sat, 14 May 2022 09:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5992526F89
+	for <lists+linux-usb@lfdr.de>; Sat, 14 May 2022 09:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231772AbiENE6K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 May 2022 00:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
+        id S232067AbiENGYo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 May 2022 02:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231734AbiENE6J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 May 2022 00:58:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA33A13E87;
-        Fri, 13 May 2022 21:58:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BB7860916;
-        Sat, 14 May 2022 04:58:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA38C340EE;
-        Sat, 14 May 2022 04:58:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652504286;
-        bh=epxD0Fni6rDH5DxTcJVfH0oSw+2tFWYNhIgBfWoXG0Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D5z1L7mioZm73TFB/SaL2h2kxspfblVB9qPg+9ENbCIucIgJRY5zhBI/bUv/OQc/W
-         4giSCKzd+nsdKe/7ZOCAQceUJKK9AD2gtEtGi6MtYueR4tBiI2dUvSMI2UcC0EY+dr
-         nql9mormbRxQzHY/4hUYn8CwLMJgWvY4SV+1KT6c0y2txNiip8vuxeweE1BPJwl1NX
-         X9syHo/fepjxJr19TWsIEU+eCvfYPgPogRGIs66yK/9UfE1H7R6Bt7sj/YazhJ2/zJ
-         pwGrzdp4kWR9oh1nsbdI9CNfuyqmrqnT7t8D8yL3yyQ/13yW8Fe+9pqhVxnvArOZxq
-         +K5e5JEioy9Lw==
-Date:   Sat, 14 May 2022 12:57:57 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     pawell@cadence.com, rogerq@kernel.org, a-govindraju@ti.com,
-        linux-usb@vger.kernel.org, jun.li@nxp.com, lznuaa@gmail.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 1/1] usb: cdns3: allocate TX FIFO size according to
- composite EP number
-Message-ID: <20220514045757.GA572253@Peter>
-References: <20220509164055.1815081-1-Frank.Li@nxp.com>
+        with ESMTP id S232052AbiENGYh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 May 2022 02:24:37 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27C95F7C;
+        Fri, 13 May 2022 23:24:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652509475; x=1684045475;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CTPKV5/3XbPVVsmMfjikShM7ViVrOedVu3KK+AOri88=;
+  b=WOhoiUbJORohS/GZKozszJzqGqKc13KzcLtHzoK+6AmBJnabt48skTNe
+   wkSRFvC2H9GzfYS9sw2JCrmEjM63fOXc4kOcN4z4vzNQGUpKOwEWftJ/7
+   HMR3JYOTPhVvUh2vUsxq5CgNhyFbgOJhpKOp54CTtHB5kBDfMLWTfRFZP
+   w=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 May 2022 23:24:35 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 23:24:34 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 13 May 2022 23:24:34 -0700
+Received: from [10.216.22.253] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 13 May
+ 2022 23:24:27 -0700
+Message-ID: <972ac516-efac-54d6-febc-1b180ec36d4b@quicinc.com>
+Date:   Sat, 14 May 2022 11:54:22 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509164055.1815081-1-Frank.Li@nxp.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [v4 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
+ override params bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        "Vinod Koul" <vkoul@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>
+References: <1652282793-5580-1-git-send-email-quic_kriskura@quicinc.com>
+ <1652282793-5580-2-git-send-email-quic_kriskura@quicinc.com>
+ <d296720d-ccbe-27f0-8ba1-9653af25dd52@linaro.org>
+ <9644d608-4ab9-ed0d-50fb-0016e4331361@quicinc.com>
+ <5b32cecf-873a-6367-df87-1b8d45e63cec@linaro.org>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <5b32cecf-873a-6367-df87-1b8d45e63cec@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,202 +82,100 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22-05-09 11:40:55, Frank Li wrote:
-> Some devices have USB compositions which may require multiple endpoints.
-> To get better performance, need bigger CDNS3_EP_BUF_SIZE.
-> 
-> But bigger CDNS3_EP_BUF_SIZE may exceed total hardware FIFO size when
-> multiple endpoints.
-> 
-> By introducing the check_config() callback, calculate CDNS3_EP_BUF_SIZE.
-> 
-> Move CDNS3_EP_BUF_SIZE into cnds3_device: ep_buf_size
-> Combine CDNS3_EP_ISO_SS_BURST and CDNS3_EP_ISO_HS_MULT into
-> cnds3_device:ep_iso_burst
-> 
-> Using a simple algorithm to calculate ep_buf_size.
-> ep_buf_size = ep_iso_burst = (onchip_buffers - 2k) / (number of IN EP +
-> 1).
-> 
-> Test at 8qxp:
-> 
-> 	Gadget			ep_buf_size
-> 
-> 	RNDIS:				5
-> 	RNDIS+ACM:			3
-> 	Mass Storage + NCM + ACM	2
-> 
-> Previous CDNS3_EP_BUF_SIZE is 4, RNDIS + ACM will be failure because
-> exceed FIFO memory.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 
-Acked-by: Peter Chen <peter.chen@kernel.org>
+On 5/12/2022 4:00 PM, Krzysztof Kozlowski wrote:
+> On 12/05/2022 07:57, Krishna Kurapati PSSNV wrote:
+>> On 5/11/2022 11:49 PM, Krzysztof Kozlowski wrote:
+>>> On 11/05/2022 17:26, Krishna Kurapati wrote:
+>>>> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>>>
+>>>> Add device tree bindings for SNPS phy tuning parameters.
+>>>>
+>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>>> ---
+>>>>    .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 87 ++++++++++++++++++++++
+>>>>    1 file changed, 87 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>>>> index 1ce251d..70efffe 100644
+>>>> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>>>> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+>>>> @@ -53,6 +53,93 @@ properties:
+>>>>      vdda33-supply:
+>>>>        description: phandle to the regulator 3.3V supply node.
+>>>>    
+>>>> +  qcom,hs-disconnect-bps:
+>>>> +    $ref: /schemas/types.yaml#/definitions/int32
+>>>> +    description:
+>>>> +      This adjusts the voltage level for the threshold used to
+>>>> +      detect a disconnect event at the host. Possible values are.
+>>>> +      The values defined are in multiples of basis points (1bp = 0.01%).
+>>> This means there is some minimum and maximum (100%)?
+>> Hi Krzystof,
+>>
+>> Yes there are max and min for each parameter (not necessarily 0%/100%)
+>>
+>> As an example if we take squelch detector threshold, the register value
+>> vs actual percentage changer as per data book is as follows :
+>>
+>> % change in voltage    |     corresponding reg value
+>>
+>>    -20.90%                        |    7
+>>    -15.60%                        |    6
+>> -10.30%                         |    5
+>> -5.30%                           |    4
+>> 0%                                  |    3
+>> 5.30%                            |    2
+>> 10.60%                          |    1
+>> 15.90%                          |    0
+>>
+>> Here the min and max are 15.9% to -20.9%
+>>
+>> The min and max differ for each parameter and might not be necessarily
+>> 0% and 100%
+> Then it seems possible to define minimum and maximum values - please add
+> them ("minimum: xxxx").
+>
+>
+> Best regards,
+> Krzysztof
 
-Peter
-> ---
-> Change from v8 to v9
->  fix typo in commit message
->  move max value check before cdns3_ep_onchip_buffer_reserve()
->  remove priv_dev->ep_buf_size = 1 and priv_dev->ep_iso_burst = 1;
-> 
-> Change from v2 to v8:
->  mistake pump version to v8
-> Change from v1 to v2:
->  Add safe check for mult, buffering and maxburst
-> 
->  drivers/usb/cdns3/cdns3-gadget.c | 47 +++++++++++++++++++++++++++++---
->  drivers/usb/cdns3/cdns3-gadget.h |  9 ++++--
->  2 files changed, 49 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index 1f3b4a1422126..3a3f323d9ce79 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -2050,7 +2050,7 @@ int cdns3_ep_config(struct cdns3_endpoint *priv_ep, bool enable)
->  	u8 mult = 0;
->  	int ret;
->  
-> -	buffering = CDNS3_EP_BUF_SIZE - 1;
-> +	buffering = priv_dev->ep_buf_size - 1;
->  
->  	cdns3_configure_dmult(priv_dev, priv_ep);
->  
-> @@ -2069,7 +2069,7 @@ int cdns3_ep_config(struct cdns3_endpoint *priv_ep, bool enable)
->  		break;
->  	default:
->  		ep_cfg = EP_CFG_EPTYPE(USB_ENDPOINT_XFER_ISOC);
-> -		mult = CDNS3_EP_ISO_HS_MULT - 1;
-> +		mult = priv_dev->ep_iso_burst - 1;
->  		buffering = mult + 1;
->  	}
->  
-> @@ -2085,14 +2085,14 @@ int cdns3_ep_config(struct cdns3_endpoint *priv_ep, bool enable)
->  		mult = 0;
->  		max_packet_size = 1024;
->  		if (priv_ep->type == USB_ENDPOINT_XFER_ISOC) {
-> -			maxburst = CDNS3_EP_ISO_SS_BURST - 1;
-> +			maxburst = priv_dev->ep_iso_burst - 1;
->  			buffering = (mult + 1) *
->  				    (maxburst + 1);
->  
->  			if (priv_ep->interval > 1)
->  				buffering++;
->  		} else {
-> -			maxburst = CDNS3_EP_BUF_SIZE - 1;
-> +			maxburst = priv_dev->ep_buf_size - 1;
->  		}
->  		break;
->  	default:
-> @@ -2107,6 +2107,10 @@ int cdns3_ep_config(struct cdns3_endpoint *priv_ep, bool enable)
->  	else
->  		priv_ep->trb_burst_size = 16;
->  
-> +	mult = min_t(u8, mult, EP_CFG_MULT_MAX);
-> +	buffering = min_t(u8, buffering, EP_CFG_BUFFERING_MAX);
-> +	maxburst = min_t(u8, maxburst, EP_CFG_MAXBURST_MAX);
-> +
->  	/* onchip buffer is only allocated before configuration */
->  	if (!priv_dev->hw_configured_flag) {
->  		ret = cdns3_ep_onchip_buffer_reserve(priv_dev, buffering + 1,
-> @@ -2970,6 +2974,40 @@ static int cdns3_gadget_udc_stop(struct usb_gadget *gadget)
->  	return 0;
->  }
->  
-> +/**
-> + * cdns3_gadget_check_config - ensure cdns3 can support the USB configuration
-> + * @gadget: pointer to the USB gadget
-> + *
-> + * Used to record the maximum number of endpoints being used in a USB composite
-> + * device. (across all configurations)  This is to be used in the calculation
-> + * of the TXFIFO sizes when resizing internal memory for individual endpoints.
-> + * It will help ensured that the resizing logic reserves enough space for at
-> + * least one max packet.
-> + */
-> +static int cdns3_gadget_check_config(struct usb_gadget *gadget)
-> +{
-> +	struct cdns3_device *priv_dev = gadget_to_cdns3_device(gadget);
-> +	struct usb_ep *ep;
-> +	int n_in = 0;
-> +	int total;
-> +
-> +	list_for_each_entry(ep, &gadget->ep_list, ep_list) {
-> +		if (ep->claimed && (ep->address & USB_DIR_IN))
-> +			n_in++;
-> +	}
-> +
-> +	/* 2KB are reserved for EP0, 1KB for out*/
-> +	total = 2 + n_in + 1;
-> +
-> +	if (total > priv_dev->onchip_buffers)
-> +		return -ENOMEM;
-> +
-> +	priv_dev->ep_buf_size = priv_dev->ep_iso_burst =
-> +			(priv_dev->onchip_buffers - 2) / (n_in + 1);
-> +
-> +	return 0;
-> +}
-> +
->  static const struct usb_gadget_ops cdns3_gadget_ops = {
->  	.get_frame = cdns3_gadget_get_frame,
->  	.wakeup = cdns3_gadget_wakeup,
-> @@ -2978,6 +3016,7 @@ static const struct usb_gadget_ops cdns3_gadget_ops = {
->  	.udc_start = cdns3_gadget_udc_start,
->  	.udc_stop = cdns3_gadget_udc_stop,
->  	.match_ep = cdns3_gadget_match_ep,
-> +	.check_config = cdns3_gadget_check_config,
->  };
->  
->  static void cdns3_free_all_eps(struct cdns3_device *priv_dev)
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.h b/drivers/usb/cdns3/cdns3-gadget.h
-> index c5660f2c4293f..fbe4a8e3aa897 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.h
-> +++ b/drivers/usb/cdns3/cdns3-gadget.h
-> @@ -562,15 +562,18 @@ struct cdns3_usb_regs {
->  /* Max burst size (used only in SS mode). */
->  #define EP_CFG_MAXBURST_MASK	GENMASK(11, 8)
->  #define EP_CFG_MAXBURST(p)	(((p) << 8) & EP_CFG_MAXBURST_MASK)
-> +#define EP_CFG_MAXBURST_MAX	15
->  /* ISO max burst. */
->  #define EP_CFG_MULT_MASK	GENMASK(15, 14)
->  #define EP_CFG_MULT(p)		(((p) << 14) & EP_CFG_MULT_MASK)
-> +#define EP_CFG_MULT_MAX		2
->  /* ISO max burst. */
->  #define EP_CFG_MAXPKTSIZE_MASK	GENMASK(26, 16)
->  #define EP_CFG_MAXPKTSIZE(p)	(((p) << 16) & EP_CFG_MAXPKTSIZE_MASK)
->  /* Max number of buffered packets. */
->  #define EP_CFG_BUFFERING_MASK	GENMASK(31, 27)
->  #define EP_CFG_BUFFERING(p)	(((p) << 27) & EP_CFG_BUFFERING_MASK)
-> +#define EP_CFG_BUFFERING_MAX	15
->  
->  /* EP_CMD - bitmasks */
->  /* Endpoint reset. */
-> @@ -1094,9 +1097,6 @@ struct cdns3_trb {
->  #define CDNS3_ENDPOINTS_MAX_COUNT	32
->  #define CDNS3_EP_ZLP_BUF_SIZE		1024
->  
-> -#define CDNS3_EP_BUF_SIZE		4	/* KB */
-> -#define CDNS3_EP_ISO_HS_MULT		3
-> -#define CDNS3_EP_ISO_SS_BURST		3
->  #define CDNS3_MAX_NUM_DESCMISS_BUF	32
->  #define CDNS3_DESCMIS_BUF_SIZE		2048	/* Bytes */
->  #define CDNS3_WA2_NUM_BUFFERS		128
-> @@ -1333,6 +1333,9 @@ struct cdns3_device {
->  	/*in KB */
->  	u16				onchip_buffers;
->  	u16				onchip_used_size;
-> +
-> +	u16				ep_buf_size;
-> +	u16				ep_iso_burst;
->  };
->  
->  void cdns3_set_register_bit(void __iomem *ptr, u32 mask);
-> -- 
-> 2.35.1
-> 
+Hi Krzysztof,
 
--- 
+  Sorry for the late reply, missed this mail.
+
+Currently, these values have a fixed maximum and minimum. But if these 
+limits change in the
+
+future (say on a per target basis) , would it be appropriate to add them 
+here in bindings file ?
+
+Also in the driver file for sc7280 target, we have added parameter 
+mapping : (map b/w register value
+
+and bps passed from device tree). For squelch detector, it is as follows:
+
++static struct override_param squelch_det_threshold_sc7280[] = {
++	OVERRIDE_PARAM(-2090, 7),
++	OVERRIDE_PARAM(-1560, 6),
++	OVERRIDE_PARAM(-1030, 5),
++	OVERRIDE_PARAM(-530, 4),
++	OVERRIDE_PARAM(0, 3),
++	OVERRIDE_PARAM(530, 2),
++	OVERRIDE_PARAM(1060, 1),
++	OVERRIDE_PARAM(1590, 0),
++};
+
+And the code is written such that if we give a bps value in dt greater than max value in
+table, we would automatically choose max value. And if we provide bps value lesser than
+minimum value, we would choose the min value.
+
+So, would it be appropriate to add the min and max in dt-bindings when there is a
+slight chance of them changing in the future ?
+
+Would like to know your thoughts on this,
 
 Thanks,
-Peter Chen
+Krishna,
 
