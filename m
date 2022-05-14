@@ -2,118 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0571C52704E
-	for <lists+linux-usb@lfdr.de>; Sat, 14 May 2022 11:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44164527125
+	for <lists+linux-usb@lfdr.de>; Sat, 14 May 2022 15:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbiENJgR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 May 2022 05:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
+        id S232411AbiENNKA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 May 2022 09:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiENJf4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 May 2022 05:35:56 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA72E90;
-        Sat, 14 May 2022 02:35:55 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id u23so18238652lfc.1;
-        Sat, 14 May 2022 02:35:55 -0700 (PDT)
+        with ESMTP id S232409AbiENNJ7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 May 2022 09:09:59 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3C324976
+        for <linux-usb@vger.kernel.org>; Sat, 14 May 2022 06:09:57 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id be20so12899956edb.12
+        for <linux-usb@vger.kernel.org>; Sat, 14 May 2022 06:09:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9bON5I8dBLTli09gYDVRZAOvbSHuOcYBnAT6sWpt8v0=;
-        b=KEkFaNttl7V7FEihDHHSSuU636QWKiLfXshYdyn8lq3aLqum/xm8JVHSrRKzlldw+R
-         o1rc5KRqfjJmzpQ2qBSVLqiSS+GqOPBRZbkSQxgxj05gQ9IarKQ9Mxq2ZYXs1+ZWrTcw
-         dpTqeVpKBTEoaV8pGCb4wcDUpMSmZ6lZW99/KANy++8jxAIOZYLhw0it/iS0HyhIpQ++
-         my6QM9lPKl4QjQHj3/w3Kz00KfMnrqFwSd41CqYQR0K5ZUYijiX5hZ4gPjJ7zWu+O1we
-         kxm+cqzQjSAyoqZo43ZzSRa3hQfHN4m1EAsGD7rKtYx3saxCQLXsKlSDnF/MjHuvSEl5
-         u16A==
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=ZsxzBeDHPDudppaH7m9Qmlnh5FEP11JaUD+knYKJFYQ=;
+        b=qdawVVPbguZp23j3pYTgyx5NNdrsiqhzSdzk/0HU3RTymjZ4W3oTtvm7db87vdQdCW
+         dslCGd8edjoF+1wkrEskDKnblrahzpVcjStHmSL33LI2YxciQ75ZoZNA/DBD4366sTOs
+         LRUH2dfCn6nGnnrsyNl1p0CqVWTi3FJoZ9+jjrrKzlww+nyjBm3ExwU2BDCM8+BbQPdJ
+         EjZ4ADqR49V5c48P2/rJgbeuyqx/kUJM0hk8AMMHmqUpOKn9XstnelvEeE0y5UwjAN80
+         btXFxPerJEFwrzC4taZKQP8SK2Pt/IZMlEJz6aO1lpAToUkUe9q4H8uJKsnZzXl9hNfO
+         ip3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9bON5I8dBLTli09gYDVRZAOvbSHuOcYBnAT6sWpt8v0=;
-        b=vUSuOUv60FTX3fPNao1p7oqL1DkBRKbcgfm6yiV6+IAH4jEcBTp2JNoulMZjJO64db
-         BqC2AsBXsXMQNasDHXRcus9CgOFkOYdcYQB1DP89+3afZyg4Jr789rXDd9JccalJJz+Z
-         1WNlE0UvbHjOdjuHHFRYxBty9Va4cZXcoU8BrhySHPhBd8ozWJDTrezTfI28mgnfCSUS
-         bSf74qWVGWP9KJaPZbZ19MWQSdaPDOgx1fST29FFcSEq5O0HnqGyAC4CsxREZAa4NxPt
-         eV889Ma7JnLaapQWtszF94zj3vSkJ3W8/Rb8Gc4MvEHNwpUUzSYIpCixO2LNjLzSy9kH
-         +VXA==
-X-Gm-Message-State: AOAM533UfHL9cM+P3oWmcxmUzl9c3JqJzaCRaPyviUFsGhXZtnM/u1DJ
-        4GTIYEM7EfflVfxxhir1f5znSLfIvbvzpw==
-X-Google-Smtp-Source: ABdhPJzu4j4jzb+I5ffVkHkC1IPaeSod8S923nLoNM+nFx0WOGl7Zp1ZdW9e7Xi3pO/Vc2LsRQ9uNg==
-X-Received: by 2002:ac2:48a4:0:b0:471:fc7f:b54d with SMTP id u4-20020ac248a4000000b00471fc7fb54dmr6376200lfg.538.1652520953758;
-        Sat, 14 May 2022 02:35:53 -0700 (PDT)
-Received: from [192.168.1.103] ([31.173.80.11])
-        by smtp.gmail.com with ESMTPSA id d7-20020a05651221c700b0047255d210f0sm660466lft.31.2022.05.14.02.35.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 May 2022 02:35:52 -0700 (PDT)
-Subject: Re: [PATCH 3/3] ARM: dts: lan966x: Add UDPHS support
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220513105850.310375-1-herve.codina@bootlin.com>
- <20220513105850.310375-4-herve.codina@bootlin.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <4436479e-c0ef-4962-7ad3-2b8b80e1643a@gmail.com>
-Date:   Sat, 14 May 2022 12:35:51 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=ZsxzBeDHPDudppaH7m9Qmlnh5FEP11JaUD+knYKJFYQ=;
+        b=T7Cwsl8BYzN4ST2b7xPt7WEkx0wTAluPUf2AZESloXetqa+fQIiyXPOQRfG4ZleEva
+         UytkDpXCIQzYqJn+GpycJTPU/RikqXOyzE6nBK9g4Tdmri5uzHfMI5PAfzFq0Wtc19vM
+         jcDJ6z9LbTdUI+gidJFTrRCg3DpEpAiLtiU8pW8clkJUPPoMvOtHXTmbeCO3Vz4jzHgG
+         SX0310PnRYYpAgABzhSL+S69ZztMfLz5f2sTCAUwq23+zW+uaLSRfCX1ZvrF8jbYdik7
+         RrMtx3zHynu5BsnYUJpHu8AURYG5movaQGkJ0chxAEaS1oWk2tFI+EdodqyCGtWifzUY
+         xVBA==
+X-Gm-Message-State: AOAM53115dOIKS1Li4/PILp6/UO7u/u96YnkS3t/5FGu8tvE7jRPxC6V
+        3JvwtEwmw0OtbZaIxw3BtsrYMofWSBcCpg+7Aaw=
+X-Google-Smtp-Source: ABdhPJxrxjyO9Sf9HbD0G8I2AJym4uDNRy2ZZQ9XPw5ZpIL3AHezowARBg5PQ+m3tWfVeu90Lu0W1QFqGjOV4c3qaGw=
+X-Received: by 2002:a05:6402:424d:b0:428:bf2b:b13e with SMTP id
+ g13-20020a056402424d00b00428bf2bb13emr3700201edb.306.1652533796128; Sat, 14
+ May 2022 06:09:56 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220513105850.310375-4-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: mrsrosefrank7@gmail.com
+Received: by 2002:a17:907:d13:0:0:0:0 with HTTP; Sat, 14 May 2022 06:09:55
+ -0700 (PDT)
+From:   oscar luise <oscarluise25@gmail.com>
+Date:   Sat, 14 May 2022 13:09:55 +0000
+X-Google-Sender-Auth: 8cGRzHpos-ylZgLMmPZt4VS8IIo
+Message-ID: <CAA1wdeGKGOccryqw5+sPd5t+GDqhu4A_qBHg4+XJiJeN-t7rzg@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.3 required=5.0 tests=ADVANCE_FEE_4_NEW,BAYES_50,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,HK_SCAM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:531 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4998]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mrsrosefrank7[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [oscarluise25[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.5 HK_SCAM No description available.
+        *  2.3 ADVANCE_FEE_4_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+Am Barrister Oscar Luise,My late client Engineer Victor left over in
+his ATM account the sum of =E2=82=AC 2.7Million can I present you as his ne=
+xt
+of kin to enable the bank to re-issue the ATM card.
 
-On 5/13/22 1:58 PM, Herve Codina wrote:
-
-> Add UDPHS (the USB High Speed Device Port controller) support.
-> The UDPHS IP present in the lan966x SOC is the same as the one
-> present in the SAMA5D3 SOC
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
->  arch/arm/boot/dts/lan966x.dtsi | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-> index 7d2869648050..4c09f3166d27 100644
-> --- a/arch/arm/boot/dts/lan966x.dtsi
-> +++ b/arch/arm/boot/dts/lan966x.dtsi
-> @@ -211,6 +211,17 @@ can0: can@e081c000 {
->  			status = "disabled";
->  		};
->  
-> +		udc: udphs@e0808000 {
-
-   Shouldn't it be:
-
-		udphs: udc@e0808000 {
-
-(as the node names should be generic)?
-
-[...]
-
-MBR, Sergey
+Regards
