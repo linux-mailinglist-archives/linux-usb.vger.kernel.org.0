@@ -2,178 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D64452732B
-	for <lists+linux-usb@lfdr.de>; Sat, 14 May 2022 18:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BCAD527382
+	for <lists+linux-usb@lfdr.de>; Sat, 14 May 2022 20:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234477AbiENQvT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 May 2022 12:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
+        id S231752AbiENSzL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 May 2022 14:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234455AbiENQvS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 May 2022 12:51:18 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A88E65DF;
-        Sat, 14 May 2022 09:51:17 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id d19so19350027lfj.4;
-        Sat, 14 May 2022 09:51:17 -0700 (PDT)
+        with ESMTP id S229472AbiENSzJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 May 2022 14:55:09 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B462B7DA;
+        Sat, 14 May 2022 11:55:08 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24EFC8oQ016834;
+        Sat, 14 May 2022 18:54:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=vzJtN8L43ZDs28cd5Sm23sqPSRdBaBvSHXpgRzPOfCU=;
+ b=LbORFxYE8ownyCYZ6vldV48hi4dODapB3tOFx0e8PoLTX1Ev7GJLWfH1WYkqJ/zJcIaT
+ KLeWmDyZOmV+P0sZNapGzRqVzDI2gpAKtOe5zbh1tp6tCMqaO0tVoiQdsa3GOI05+ium
+ azvaPt9iPnlzpaLglrNTIN5CWxw4BTwjzWNBvC0oCd9W+traeXSBEu2L0hMas1V59Xx/
+ A7x9r8WPBnHPIHOf2nXd07EKu+bAlyKb0gOY6f0v5oLTCxo0NCBL0z0ZVk5tuwU4Yk+h
+ Et4Gde4t3EheBMzXRfWy1o+yZQj1DSk0mDzydEZe4+O8n33amwP3+aOgEtMiZP1s4p2E Bg== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g24aa8pbq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 14 May 2022 18:54:53 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24EIot0X006924;
+        Sat, 14 May 2022 18:54:51 GMT
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2042.outbound.protection.outlook.com [104.47.51.42])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22v0n74r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 14 May 2022 18:54:51 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WEIo+24c8A3VpgZej1dx9KTmnz4ExfyR/YGb3TtvlRpFs4QeVNEa4p7tmp8w4V6C+Uxd1ShPvTxtYj+tITg05vOsUOfELN5d8IG2JtKCcGV73h0U0xBVwGNSfHG8rrGBFpVByI6zZiItaD6+PqEPTX03TAz7f8Ed3fs5KgReF+8Y45hi1YBumQ7ZoStmPvK5ALk/vUWST7mB7x8PTGpLtYIzmMYma+20/AvwSSBaSI9G0oC7IS9Lxi+68tKEG9kF3IxE93y7MZcyCD2zHW0YKBr5kXCUQ8RVXtvkNdaMBQgOh2qeTuAYCF0G28XYtjTOdp+mh4FehZf1eXrG6E6YzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vzJtN8L43ZDs28cd5Sm23sqPSRdBaBvSHXpgRzPOfCU=;
+ b=SRZyUf1T5hm1xIWrvytyaB9QAAMzxHTwYpiHY47JCDlUzj9briPyD2Zxde+qjR3qW6tgSkOG+E4ctBW4amHN9J9lwd/EhOev7XfPGQ3JtQi9XkalxDMg8sLzcKBtgGEmas+V4OKCWEGwQEVzDXL1c1VZlZqLMtaEcH79UCi9n9A9x8d05giIFSLLcxIAvwLkvUSBQqUral9h+O6ejQAAsByydzfpEkCbWq5kdi2ZL90dB0ER8mQnjkAJklMPFbc3b6bE08EqreBINRvlt5yHg5SENXkf8vMuOGV0+HjZ43vIpLrO0uXmR7EArZoHF6APBEe7zfQR64pAbquHg26ICw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to;
-        bh=pS1wtzs1IwDDz2mD9jlYi8ZaLWHZtdCebfHrT1hZXBo=;
-        b=OfAgFgrL+gGwZNOmkEHt31hAez5ZveQYLav4JgJ7tWsKIRdYPiypkwXpHCnzbKV9f0
-         LBaFX7a5KwBDW+gXtcAqMXXLPLmb8G54IA125cVr5AdCJEHvbxYQ3RALtYgik9e90Svv
-         qDDPlLnlftQanfSsJ62ZfCDnlBX37z5KNPmPx7GXjxOyCJDsXRPig7FUudup6FlmcGVg
-         RkXq7NgU+INdXeICViOC8AqqUbCEPoCMsuozzxlSPL+KLoGVd+AtBkzX5s6pRv1ydYma
-         otllMj6zNzfJN/wvwEooGj6O9seN2ww28ouKpxBdEZ54t/QMdv+7c+9pjIq1M9HF2BJd
-         glew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to;
-        bh=pS1wtzs1IwDDz2mD9jlYi8ZaLWHZtdCebfHrT1hZXBo=;
-        b=yA4SxuzWsbGQmvahWgfChjo4vlWF+o4b8uXHq7xnmQ2ruRkBIcORm/5DeN4jNDdUXm
-         GNycJ44+Vl4mokzx3mfy83DyrYZD7UrTSDGCfwnAlTKARLXJtXgJ6+1oUNFc0dOecRYv
-         yohvhm2gO3MceUYZrdJyT3pONEEGlKYaMaZz3TMyT2urAgGvdq9MgnKAj+Y+/X0TyhnV
-         kS1j6nmgCAguFgV0Vc3I4iJLtGqtpWx2Tdw31Y4LnE1VLJas9PMKOvPboU/GIpK/rk0n
-         OI+CAtRgIErleOjYMAinKrkCiEHZE966Ptg3z51n3kd8XkqBt22vPwO/uQ8pBouw5JIn
-         VW8w==
-X-Gm-Message-State: AOAM5331zyVrwdiCzBVKPKNwg1SJ5LPNHx+3j4hlwZ+rb9oxGWLmFk+x
-        +6u+ujdpXHga/WDUFTNWBeA=
-X-Google-Smtp-Source: ABdhPJznPOMZRHAkML7VWPie0XfpP1Fe/NYk1Tpritfm+qrnp71p9+LpOkAGvUwIRNktdBlyQ6HLqw==
-X-Received: by 2002:a19:914b:0:b0:472:10c:84ae with SMTP id y11-20020a19914b000000b00472010c84aemr7030255lfj.572.1652547075248;
-        Sat, 14 May 2022 09:51:15 -0700 (PDT)
-Received: from [192.168.1.11] ([217.117.245.216])
-        by smtp.gmail.com with ESMTPSA id v5-20020ac25925000000b0047255d211a2sm756385lfi.209.2022.05.14.09.51.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 May 2022 09:51:14 -0700 (PDT)
-Message-ID: <ebf3adc8-3e33-7ef3-e74d-29a32640972f@gmail.com>
-Date:   Sat, 14 May 2022 19:51:12 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read
- errors
-Content-Language: en-US
-To:     David Kahurani <k.kahurani@gmail.com>, netdev@vger.kernel.org
-Cc:     syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com,
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vzJtN8L43ZDs28cd5Sm23sqPSRdBaBvSHXpgRzPOfCU=;
+ b=iG9JU5I2WO/19DHmQvSyL/UuL6ZUDi+ybe1gDH+0SzY+4opH6HmZEnp1beYZx4SfuNB+beCbj6dy9c5YLKN6K7JE1xPDWMZyBOLPBTmeOIIFE3IK+H9srFkqjfioAxARd/h6pvErdgpepLkj5oEH/G3hiyarThfZ21YQcHXB+iI=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by DM5PR10MB1898.namprd10.prod.outlook.com
+ (2603:10b6:3:10e::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Sat, 14 May
+ 2022 18:54:49 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::c053:117c:bd99:89ba]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::c053:117c:bd99:89ba%5]) with mapi id 15.20.5250.013; Sat, 14 May 2022
+ 18:54:49 +0000
+Date:   Sat, 14 May 2022 21:54:25 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     David Kahurani <k.kahurani@gmail.com>, netdev@vger.kernel.org,
+        syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com,
         davem@davemloft.net, jgg@ziepe.ca, kuba@kernel.org,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         phil@philpotter.co.uk, syzkaller-bugs@googlegroups.com,
-        arnd@arndb.de, dan.carpenter@oracle.com
+        arnd@arndb.de
+Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read
+ errors
+Message-ID: <20220514185425.GI4009@kadam>
 References: <20220514133234.33796-1-k.kahurani@gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220514133234.33796-1-k.kahurani@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------0cILCLmmlWJTpGId7T5QmWPf"
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <ebf3adc8-3e33-7ef3-e74d-29a32640972f@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ebf3adc8-3e33-7ef3-e74d-29a32640972f@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNAP275CA0058.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4f::6)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cae2dc1d-672e-4af3-4192-08da35db38be
+X-MS-TrafficTypeDiagnostic: DM5PR10MB1898:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR10MB1898B969E2B3227F0F9AEC8E8ECD9@DM5PR10MB1898.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EgSHdEggApg6lA042UgZ7uDs2TyxHYc4skaB6fyIlu5blXO2UBsev065YlM1lrcouW6L3vHTRAZaP1j6ngBN0Icq134E8mCC5fGMIYlfa5mXVNmMH8a3Jqh8dlthHVQsdNMpIr4MWuLY8tuewwyRQf1R+Vo7mMaiF+hbR8Sq9LOsX/LrT9hz+muNPKawc3GgvglkS/ijIOvLmcZZ0p0HXInit8ATB9rs/iky0L6BvRDDoRIRs3I4AAQ+wwosBys1R8aVcO914f+j2J1AeIPTC3NHl62/6LpO3KpJ3ip0UTcaboF1//l5tIJYAR0B//LWheO6BA3sbIHdQas3+wbkEy1mNktmiPmtx0dkv6ptUhVUVIkW0bYmkxsCCjcQkPH5S3WkNKiD9Ms0UFk1LQj+wACWUL6JFWmRWc7zDCjF4zpceRyL8fNQsQuAuJx2lum5PjxynzDHJxO0iI4wclvTA0mMc74RemLKtAXx0wiLMlWFYnfkXpSZq+3LE/AvCbDzTOvNZLwMZFOGaXmcFsUes/V/r0yywk06ziKeps1yc2uCEAwaKMYK6Dx0QvawC32FKGNnJV/lAwFDsBGZE6N0g6v3n8vXKrQZCONmTvmWn9CNNoErmxwb3Oj7zRIcHMCwVfAQVbXIq/+y7I8xt9E95Ldw56Zbar0xU+KOK2uQXVM0UC9Vk+F42W0cHmYJwFL26Ai0lF4FFjj5k8Zx3WowAA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(8936002)(52116002)(6486002)(9686003)(2906002)(1076003)(186003)(45080400002)(7416002)(508600001)(5660300002)(38100700002)(6666004)(38350700002)(86362001)(33656002)(44832011)(33716001)(4744005)(4326008)(66556008)(66946007)(66476007)(8676002)(6916009)(316002)(6512007)(6506007)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vYQU3mrStjNQwVptu84OYglmZRl/780hvEm93pHV07GMAGkEi4a2tKEpD1se?=
+ =?us-ascii?Q?xvyYAjxFS6FRo9yITC3Gp5mecLl3u1KLhah48lZSQLvcYNsHQCJKPpc5/mkj?=
+ =?us-ascii?Q?OgfVonIaKl/feqOe5rpyDPNFDRg7N76sS1IHnDTVgQLsFnR0HbD0TlOVrrA4?=
+ =?us-ascii?Q?AAqFVRRvU25xIz2mLWf+gZaA/j18G+42Kgxi3vRW6RSu2uaIdwzLplD5tAcp?=
+ =?us-ascii?Q?+YxNsE1V5krNWFjwedJgXiZRI/EuZKwqxm4UiJEluL5DVg/krOjJulTpYiBs?=
+ =?us-ascii?Q?83nsah4cXcq42RMr0rku94cEbjfzLIIXMCoaExUWdyRv+K4qJnkATUUicI2B?=
+ =?us-ascii?Q?xyM+7v9CnKoxbUOwBO+Ci62fjBMokapSU+DMFoXTSXschw5F55h1JjxKe0RX?=
+ =?us-ascii?Q?hQtgAohzgDZkMlh41LXHxW3hdL4t7YJRPOxl3sMTpu6MvjtJwnx/2hjj5rDl?=
+ =?us-ascii?Q?yrrHpN+yZS7DBxxuVsglluU6+zVA171yxl+QtYcWj6cmPha/H8Bt0cEh66yO?=
+ =?us-ascii?Q?sD0i/a9EkwUpmsshypetUSbRWEfURLReBp81wEW4bQZX+ITbcntxJbESyhr3?=
+ =?us-ascii?Q?/zhqsomFC0WrQRVfGZcfa0W3lJHHMiaulSQAN5bTYQlLVHwfYeZ2gSIpFh9z?=
+ =?us-ascii?Q?FhLlXFdeTviDsTT9DMqyABYMPsUM7fBPku+nX8tTdM8D4/s2OFrN1uHtg/ew?=
+ =?us-ascii?Q?1nmczxQbWuDJDU0Ale4ZyYFuBdTko05b0LxBAR6kui9Cg8xyjyf4AyfoIQVO?=
+ =?us-ascii?Q?cpJvsSvCye/4S+mXGrcBTGJbSeIgAb0/hv/C5norkNFXa5wT8/JdQKtB4K6N?=
+ =?us-ascii?Q?NvxTfeZ1rQlLjWAzwSZz3v88a4KLWLf1+Sghn7iNyQAY2c+NGhnWrE4Rqmmp?=
+ =?us-ascii?Q?JK+rcOVP1J/yjme+2UY4DKmOerbZ9r7jQmP2ZtKaDV98aSrP7Hy03C1cKa47?=
+ =?us-ascii?Q?er8/hmnrUcHnkX0gsWKzupAKeggCMdCF7wTywpmO+QIy9oVxH/CXTMdyUfUD?=
+ =?us-ascii?Q?wx4/Wv2aKhSVqL6QZqS1no1C+oPovpwKjvZdO31Gv7H1mim5egkonr0XwGS5?=
+ =?us-ascii?Q?6kAice9BtVFEC1a3dy0HiWAyZY9WjJMw6U5YuOs6pMPcKbw6PII3Lk0wWVNT?=
+ =?us-ascii?Q?grEYujjc5IoWO0bI4yLgdPVCtfy1WVH4+nfmmw4m9PBKJ8g8SNEgBJwc1B4k?=
+ =?us-ascii?Q?4uESazm+QJxCC8xkSrKAOfs++2WNmq0/3LHyrp9TS/+5UMFKNtgQIIBJuVf5?=
+ =?us-ascii?Q?nDFljcWT6e9jCZRT6PaDmwaYuUjiqB6OjsjYX41I2fDN8KwIA9AUmmjRsLkh?=
+ =?us-ascii?Q?AIn5U23LLiegSBOU3C/ze9Np13a72ekh1TSocyQ75OYBXTU0kPA7VoHNTuCH?=
+ =?us-ascii?Q?t7112Z2jT13T5sFL1r9l3VIHka6F1pHyBOrQqZ5wXdo6PA9qIsY/w23EfS1a?=
+ =?us-ascii?Q?Ayw4jlzwBlsfVEeIH+1NuQ0x9LBXVwZdl0MhRNviNkuvWQ0ww9eUJRkKLybl?=
+ =?us-ascii?Q?+BxkjynsxVk5k4+O0l3xip7eEK5/IrxOHkoS/r7M8OFyXmo/VD1kNwD7aDY9?=
+ =?us-ascii?Q?a4NSzPguAwguzrq1ZpnRqg03aMFQzU/6HDVCNVIzlT+lOAVA1G4kOpbYWX8s?=
+ =?us-ascii?Q?E7Km0BdQT/FaR2Qp5VDjl8UTKpbHFFglKXD0dGqZArXjppsP76VEtcYnrZKs?=
+ =?us-ascii?Q?N8ton0Y48raMwALaqJO+MfvAQcOABA2TkPP0S0C4ZxTkUOcXJdE6fY/1NCa+?=
+ =?us-ascii?Q?laM1KAl5NuvJMoS5MNq2MePySjyOH8Q=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cae2dc1d-672e-4af3-4192-08da35db38be
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2022 18:54:49.4792
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Gz+Lt+jAMh4hwdgaBBBXbLc6pFKr6YXgYJx0+XfrMucRgw87cMAFq2nN0Oyw2L40NxoLjLfLA6VcAGuT51FJmBbVYrsSQXQFS3XUCN6dyXk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1898
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-05-14_02:2022-05-13,2022-05-14 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0
+ suspectscore=0 mlxlogscore=916 adultscore=0 phishscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205140097
+X-Proofpoint-ORIG-GUID: 5DBRJfWNoc5N2t5HBl5uQLpv5une_yl_
+X-Proofpoint-GUID: 5DBRJfWNoc5N2t5HBl5uQLpv5une_yl_
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------0cILCLmmlWJTpGId7T5QmWPf
-Content-Type: multipart/mixed; boundary="------------0P0tWxYVtMRXZyKgCjwtnX00";
- protected-headers="v1"
-From: Pavel Skripkin <paskripkin@gmail.com>
-To: David Kahurani <k.kahurani@gmail.com>, netdev@vger.kernel.org
-Cc: syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com,
- davem@davemloft.net, jgg@ziepe.ca, kuba@kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- phil@philpotter.co.uk, syzkaller-bugs@googlegroups.com, arnd@arndb.de,
- dan.carpenter@oracle.com
-Message-ID: <ebf3adc8-3e33-7ef3-e74d-29a32640972f@gmail.com>
-Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read
- errors
-References: <20220514133234.33796-1-k.kahurani@gmail.com>
-In-Reply-To: <20220514133234.33796-1-k.kahurani@gmail.com>
+On Sat, May 14, 2022 at 07:51:12PM +0300, Pavel Skripkin wrote:
+> And you can send new version as reply using --in-reply= option of git
+> send-email. It helps a lot with finding previous version, since all version
+> are linked in one thread
 
---------------0P0tWxYVtMRXZyKgCjwtnX00
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+This is discouraged these days.  It makes for long confusing threads.
+But more importantly, it apparently messes up patchwork.
 
-SGkgRGF2aWQsDQoNCk9uIDUvMTQvMjIgMTY6MzIsIERhdmlkIEthaHVyYW5pIHdyb3RlOg0K
-PiBSZWFkcyB0aGF0IGFyZSBsZXNzZXIgdGhhbiB0aGUgcmVxdWVzdGVkIHNpemUgbGVhZCB0
-byB1bmluaXQtdmFsdWUgYnVncy4NCj4gSW4gdGhpcyBwYXJ0aWN1bGFyIGNhc2UgYSB2YXJp
-YWJsZSB3aGljaCB3YXMgc3VwcG9zZWQgdG8gYmUgaW5pdGlhbGl6ZWQNCj4gYWZ0ZXIgYSBy
-ZWFkIGlzIGxlZnQgdW5pbml0aWFsaXplZCBhZnRlciBhIHBhcnRpYWwgcmVhZC4NCj4gDQo+
-IFF1YWxpZnkgc3VjaCByZWFkcyBhcyBlcnJvcnMgYW5kIGhhbmRsZSB0aGVtIGNvcnJlY3Rs
-eSBhbmQgd2hpbGUgYXQgaXQNCj4gY29udmVydCB0aGUgcmVhZGVyIGZ1bmN0aW9ucyB0byBy
-ZXR1cm4gemVybyBvbiBzdWNjZXNzIGZvciBlYXNpZXIgZXJyb3INCj4gaGFuZGxpbmcuDQo+
-IA0KPiBGaXhlczogZTJjYTkwYzI3NmUxICgiYXg4ODE3OV8xNzhhOiBBU0lYIEFYODgxNzlf
-MTc4QSBVU0IgMy4wLzIuMCB0byBnaWdhYml0IGV0aGVybmV0IGFkYXB0ZXIgZHJpdmVyIikN
-Cj4gU2lnbmVkLW9mZi1ieTogRGF2aWQgS2FodXJhbmkgPGsua2FodXJhbmlAZ21haWwuY29t
-Pg0KPiBSZXBvcnRlZC1hbmQtdGVzdGVkLWJ5OiBzeXpib3QrZDNkYmRmMzFmYmU5ZDhmNWYz
-MTFAc3l6a2FsbGVyLmFwcHNwb3RtYWlsLmNvbQ0KPiAtLS0NCg0KPC0tLSBoZXJlICgqKQ0K
-DQo+ICAgZHJpdmVycy9uZXQvdXNiL2F4ODgxNzlfMTc4YS5jIHwgMjgxICsrKysrKysrKysr
-KysrKysrKysrKysrKysrLS0tLS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAyMjcgaW5zZXJ0
-aW9ucygrKSwgNTQgZGVsZXRpb25zKC0pDQo+IA0KDQpJIGRvbid0IHNlZSBhbnkgZXJyb3Ig
-aW4gdGhhdCBwYXRjaCwgYnV0IEkgaGFkIHRvIGZpbmQgcHJldmlvdXMgdmVyc2lvbnMgDQpv
-ZiB0aGF0IHBhdGNoIGluIG15IGluYm94Lg0KDQpVc3VhbGx5IG5ldyB2ZXJzaW9ucyBvZiBz
-aW5nbGUgcGF0Y2hlcyBhcmUgbGlua2VkIGluIG9uZSB0aHJlYWQgYW5kIGhhdmUgDQphIHZl
-cnNpb24gbnVtYmVyIGluIGEgdGl0bGUuIFlvdSBjYW4gZ2VuZXJhdGUgcGF0Y2ggd2l0aCB2
-ZXJzaW9uIHVzaW5nIA0KLXYgb3B0aW9uIG9mIGdpdCBmb3JtYXQtcGF0Y2ggbGlrZToNCg0K
-JCBnaXQgZm9ybWF0LXBhdGNoIC12MiBIRUFEfg0KDQpBbmQgeW91IGNhbiBzZW5kIG5ldyB2
-ZXJzaW9uIGFzIHJlcGx5IHVzaW5nIC0taW4tcmVwbHk9IG9wdGlvbiBvZiBnaXQgDQpzZW5k
-LWVtYWlsLiBJdCBoZWxwcyBhIGxvdCB3aXRoIGZpbmRpbmcgcHJldmlvdXMgdmVyc2lvbiwg
-c2luY2UgYWxsIA0KdmVyc2lvbiBhcmUgbGlua2VkIGluIG9uZSB0aHJlYWQNCg0KQW5kIGFs
-bCB1cGRhdGVzIGZyb20gdmVyc2lvbiB0byB2ZXJzaW9uIHNob3VsZCBiZSBwdXQgdW5kZXIg
-LS0tICgqKSwgDQpzaW5jZSBpdCdzIGhhcmQgdG8gcmVtZW1iZXIgd2h5IHByZXZpb3VzIHZl
-cnNpb24gd2FzIHJlamVjdGVkLg0KDQoNCj4gIAkJanRpbWVvdXQgPSBqaWZmaWVzICsgZGVs
-YXk7DQo+ICAJCWRvIHsNCj4gLQkJCWF4ODgxNzlfcmVhZF9jbWQoZGV2LCBBWF9BQ0NFU1Nf
-TUFDLCBBWF9TUk9NX0NNRCwNCj4gLQkJCQkJIDEsIDEsICZidWYpOw0KPiArCQkJcmV0ID0g
-YXg4ODE3OV9yZWFkX2NtZChkZXYsIEFYX0FDQ0VTU19NQUMsIEFYX1NST01fQ01ELA0KPiAr
-CQkJCQkgICAgICAgMSwgMSwgJmJ1Zik7DQo+ICsJCQlpZiAocmV0KSB7DQo+ICsJCQkJbmV0
-ZGV2X2RiZyhkZXYtPm5ldCwNCj4gKwkJCQkJICAgIkZhaWxlZCB0byByZWFkIFNST01fQ01E
-OiAlZFxuIiwNCj4gKwkJCQkJICAgcmV0KTsNCj4gKwkJCQlyZXR1cm4gcmV0Ow0KPiArCQkJ
-fQ0KPiAgDQo+ICAJCQlpZiAodGltZV9hZnRlcihqaWZmaWVzLCBqdGltZW91dCkpDQo+ICAJ
-CQkJcmV0dXJuIC1FSU5WQUw7DQo+ICANCj4gIAkJfSB3aGlsZSAoYnVmICYgRUVQX0JVU1kp
-Ow0KDQpJIHRoaW5rLCB0aGlzIGNoYW5nZSBtaWdodCBiZSBkYW5nZXJvdXMuIE1heWJlIGl0
-IHNob3VsZCBiZSBkb25lIGluIHRoZSANCnNhbWUgd2F5IGFzIGluIGFzaXggZHJpdmVyIFsx
-XS4gQ29kZSBwb2xscyBmb3Igc29tZSByZWdpc3RlciBhZnRlciBhIA0Kd3JpdGUgYW5kIG1h
-eWJlIG5vbi1mYXRhbCByZWFkIGVycm9yIG1pZ2h0IG9jY3VyIGhlcmUuDQoNCkp1c3QgbXkg
-dGhvdWdodHMsIEkgZG9uJ3Qga25vdyBhbnl0aGluZyBhYm91dCB0aGF0IGRldmljZSA6KQ0K
-DQoNCj4gKwkJcmV0ID0gYXg4ODE3OV9yZWFkX2NtZChkZXYsIEFYX0FDQ0VTU19NQUMsIEFY
-X05PREVfSUQsIEVUSF9BTEVOLA0KPiArCQkJCSAgICAgICBFVEhfQUxFTiwgbWFjKTsNCj4g
-Kw0KPiArCQlpZiAocmV0KQ0KPiArCQkJbmV0ZGV2X2RiZyhkZXYtPm5ldCwgIkZhaWxlZCB0
-byByZWFkIE5PREVfSUQ6ICVkIiwgcmV0KTsNCj4gKwkJZWxzZQ0KPiArCQkJbmV0aWZfZGJn
-KGRldiwgaWZ1cCwgZGV2LT5uZXQsDQo+ICsJCQkJICAiTUFDIGFkZHJlc3MgcmVhZCBmcm9t
-IEFTSVggY2hpcCIpOw0KDQpNYXliZSBhbHNvIHVzZSBgbmV0aWZfZGJnYCBoZXJlPy4uLiBU
-aGVyZSBzaG91bGQgYmUgYSByZWFzb24gd2h5IGl0IHdhcyANCnVzZWQgaGVyZSBpbiB0aGUg
-Zmlyc3QgcGxhY2UuIE9yIHNob3VsZCBub3QgOikNCg0KQW55d2F5LCBpZiBzb21lb25lIHdp
-bGwgc2F5IHRoYXQgYmFpbGluZyBvdXQgZnJvbSB3aGlsZSBsb29wIG9uIGFueSANCmVycm9y
-IGlzIE9LIGZlZWwgZnJlZSB0byBhZGQNCg0KUmV2aWV3ZWQtYnk6IFBhdmVsIFNrcmlwa2lu
-IDxwYXNrcmlwa2luQGdtYWlsLmNvbT4NCg0KDQoNClsxXSANCmh0dHBzOi8vZWxpeGlyLmJv
-b3RsaW4uY29tL2xpbnV4L2xhdGVzdC9zb3VyY2UvZHJpdmVycy9uZXQvdXNiL2FzaXhfY29t
-bW9uLmMjTDc4DQoNCg0KV2l0aCByZWdhcmRzLA0KUGF2ZWwgU2tyaXBraW4NCg==
+regards,
+dan carpenter
 
---------------0P0tWxYVtMRXZyKgCjwtnX00--
-
---------------0cILCLmmlWJTpGId7T5QmWPf
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmJ/3gAFAwAAAAAACgkQbk1w61LbBA0W
-mw/+O76ErrFXVhA2Lpz+tCEplaWuszzrd553T7IlHED3aVE4p0qtyIv8LYjn+mE9D+3KAOfOuI+t
-BqkX7KR85/mgbxBQrYFCxrnD+192FBKBoGqKRMhi4gpmeiMpvzYyY8YJGMMg5cHWk4JpmXnq0FtV
-HHBpIg+4jSmrBzyVWVN7x5QETVXT3Qfc3zBPTIqsm3nvu7yIqV8fUBTFxLPKavITv/jwCsCw3cFk
-/ucVUOuhDKaKrD9Ux21C1Q5VXm5Z7CiGg9bmUimcI7ipuAWo1wlWEAkp6oyO2QySk7L9KFBpSz0V
-IumgGN6BsHb4e5oDd9PQvxLqdK0TpuZB2EMmeZQBY9iDPnwCiB1HXR5fzrsLC06ZoYIKvfeb3JFy
-4w2VZcM3ZpImjpi7aMG6nOofjC27mLBE9yP9dpV4rEjkKJbNQLFkkAI06qDT1Sz0EGPeYJGDdaTp
-hzP+k4Nd1q95yOEjzwlbjP+m9QSMSSS2jLmKTfJj8YJpawaJDt0n1hjSrZboc9PM52cERy0soJtN
-p3m3xuI0Gsjpo9HWxdcSeus/XaOVPOO76beJaKdL2ddLHgZOJibY/mk4nOh7pUrlJpn3LbDuxs7u
-tXhSrK5hXUFwW8w3coib+WYz9aDlY84U3W0EVWka2FgPYNCD8fxywWSy58xV4YoUytqJNHzaQyCu
-+Vg=
-=Pfq8
------END PGP SIGNATURE-----
-
---------------0cILCLmmlWJTpGId7T5QmWPf--
