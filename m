@@ -2,138 +2,213 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E275273D4
-	for <lists+linux-usb@lfdr.de>; Sat, 14 May 2022 21:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6F05273EB
+	for <lists+linux-usb@lfdr.de>; Sat, 14 May 2022 22:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234710AbiENTwb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 May 2022 15:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        id S235077AbiENUWD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 May 2022 16:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232256AbiENTwa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 May 2022 15:52:30 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 29BE126571
-        for <linux-usb@vger.kernel.org>; Sat, 14 May 2022 12:52:26 -0700 (PDT)
-Received: (qmail 70657 invoked by uid 1000); 14 May 2022 15:52:25 -0400
-Date:   Sat, 14 May 2022 15:52:25 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH] usb: hub: port: add sysfs entry to switch port power
-Message-ID: <YoAIeQJAvFBs6YNq@rowland.harvard.edu>
-References: <20220510231317.1874608-1-m.grzeschik@pengutronix.de>
- <YnvDlhlcVGoerhLz@rowland.harvard.edu>
- <20220511203727.GG27481@pengutronix.de>
- <YnxgvcOIVMWhDbi9@rowland.harvard.edu>
+        with ESMTP id S235062AbiENUWC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 May 2022 16:22:02 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3F424945
+        for <linux-usb@vger.kernel.org>; Sat, 14 May 2022 13:21:59 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id m23so13997286ljc.0
+        for <linux-usb@vger.kernel.org>; Sat, 14 May 2022 13:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Y5VRY1Vg5U7FZOYxaP3jhw1GgftqMUz+kaXgWZO/zzo=;
+        b=a9IbvRUaYC8Wc0vyxgFwHAxgU9mSVnhYPrySypKYv+QMWSeS0lIY4wxVjb/+x54LWq
+         Ldc1cXpfGj905mcwbZhrOB2SdRWkkkJTcN8XmsLxZM3o1iVoUToVGPQqNwOLRWQqNkFV
+         hvbA4emBw/8q79PftXEPsH+kSyqRfafhujdgE+P8fJGteGOcK7xMkyuufwBAw8bIrRFa
+         gJuSbkhJHloXm+OQ9D+IZ7DsfUCXfPkNBD+eHfglA2cDMFd0vT8MnG+Zmj8mMlPJwnb4
+         yTLeFaHM+EYpglB82UoRIxyn6Isw1Z9/jYS70nsrx3FRo+XYLmINHoUjvQQkh8OJSE4S
+         gzNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Y5VRY1Vg5U7FZOYxaP3jhw1GgftqMUz+kaXgWZO/zzo=;
+        b=mmhXzFtb8kIs4eeisJi0YG6VvtZY7UFvgC3UPoiBOdu8KYmgnZ7sXyrp3nNjaxd8is
+         QwURpA/e1itQ+MUgL5f9zO89TdE2qcrOyWqFY9lEaq696JPHU4Vod0brCZuOHREhE0Fn
+         Dz1J/ZInaXdHbSaST7WYvQQbSuld0PwnBJL3k2yESEikePD1+N0C8QpExBI0RryTfXvj
+         0r1x7kSDwLxMwg3Ot6Ev4jMjWqkBawsmj/mog2Asu60uNfA0t944CSC+CH/S6s9eCzjZ
+         80U0S71NQ793kfXRpjQUmE9t+iIJ9F2y75EwwtvgaJvGGCGjgPz6kMrRiVjqJ/qmzt+w
+         Mj6w==
+X-Gm-Message-State: AOAM530gkiQ7DOw2nQfuK7NrIFjwwa5qzM3ZTcbBZsjkJ+ltgYBMyKgl
+        E/PZmO0bOKMnp377yKsLEAM/qg==
+X-Google-Smtp-Source: ABdhPJzLyuqdkaQnJF2ClXg0Jx1DgHwKnG2ziP/ISkfSmc674JtqB4hc3nDy/CLvL1Xr59yD6peNiw==
+X-Received: by 2002:a05:651c:98d:b0:250:976b:4a0e with SMTP id b13-20020a05651c098d00b00250976b4a0emr6642090ljq.494.1652559718267;
+        Sat, 14 May 2022 13:21:58 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z2-20020a2e9b82000000b0024f3d1daeaesm942625lji.54.2022.05.14.13.21.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 May 2022 13:21:57 -0700 (PDT)
+Message-ID: <567d135b-3d40-9958-e000-1357020b5650@linaro.org>
+Date:   Sat, 14 May 2022 22:21:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnxgvcOIVMWhDbi9@rowland.harvard.edu>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 3/3] dt-bindings: usb: add documentation for aspeed udc
+Content-Language: en-US
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Li Yang <leoyang.li@nxp.com>
+Cc:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>
+References: <20220513065728.857722-1-neal_liu@aspeedtech.com>
+ <20220513065728.857722-4-neal_liu@aspeedtech.com>
+ <da78aaf6-c9ae-d591-fdc4-723f097ace2c@linaro.org>
+ <HK0PR06MB3202679A7FABAF7D0D045F0880CA9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <HK0PR06MB3202679A7FABAF7D0D045F0880CA9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 11, 2022 at 09:19:57PM -0400, Alan Stern wrote:
-> On Wed, May 11, 2022 at 10:37:27PM +0200, Michael Grzeschik wrote:
-
-> > > > +		if (udev) {
-> > > > +			port_dev->child = NULL;
-> > > 
-> > > That assignment is not necessary; usb_disconnect() will take care of it.
-> > 
-> > Here are two things that are in play.
-> > 
-> > First I have to set port_dev->child = NULL before calling
-> > usb_disconnect. Otherwise the following automatic hub_suspend call (in
-> > case this was the last operational port of the hub) will print the
-> > message "device x-y not suspended yet" and will fail the hub to
-> > suspend.
-> > 
-> > When calling usb_autoresume_device(udev) instead and before calling
-> > usb_disconnect, this is no longer the case. The hub will be succesfully
-> > suspended.
-> > 
-> > The second thing is the assignment. I still have to explicitly assign NULL to
-> > port_dev->child. Otherwise a following enable of this port via this sysfs will
-> > run into an hub_event with the usb_disonnect for the device on that port. But
-> > this will spit out a ugly traceback leading with the following error:
-> > 
-> > [   21.718574] usb 2-1.1: USB disconnect, device number -1
-> > 
-> > [   21.719100] Unable to handle kernel paging request at virtual address 96d628cc24e2e078
-> > [   21.719807] Mem abort info:
-> > [   21.720065]   ESR = 0x96000044
-> > [   21.720348]   EC = 0x25: DABT (current EL), IL = 32 bits
-> > [   21.720827]   SET = 0, FnV = 0
-> > [   21.721109]   EA = 0, S1PTW = 0
-> > [   21.721447]   FSC = 0x04: level 0 translation fault
-> > [   21.721891] Data abort info:
-> > [   21.722157]   ISV = 0, ISS = 0x00000044
-> > [   21.722505]   CM = 0, WnR = 1
-> > [   21.722779] [96d628cc24e2e078] address between user and kernel address ranges
-> > [   21.723429] Internal error: Oops: 96000044 [#1] PREEMPT SMP
-> > [   21.723927] Modules linked in: uio_pdrv_genirq fuse
-> > [   21.724380] CPU: 0 PID: 58 Comm: kworker/0:3 Not tainted 5.18.0-rc6+ #93
-> > [   21.724977] Hardware name: Radxa ROCK3 Model A (DT)
-> > [   21.725412] Workqueue: usb_hub_wq hub_event
-> > [   21.725802] pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [   21.726419] pc : usb_disable_endpoint+0x7c/0xdc
-> > [   21.726832] lr : usb_disable_device_endpoints+0xbc/0xe0
-> > [   21.727301] sp : ffffffc009b33b30
-> > [   21.727597] x29: ffffffc009b33b30 x28: ffffff8003ad4ed8 x27: 0000000000000001
-> > [   21.728239] x26: ffffff8004344928 x25: 0000000000000000 x24: ffffffc0096eb8e0
-> > [   21.728885] x23: ffffff80043448a8 x22: ffffff8003961800 x21: 0000000000000001
-> > [   21.729527] x20: 96d628cc24e2e034 x19: ffffff8004344800 x18: ffffffffffffffff
-> > [   21.730168] x17: 0000000000000001 x16: 0000000000000001 x15: ffffffc089b33857
-> > [   21.730810] x14: 0000000000000000 x13: 312d207265626d75 x12: 6e20656369766564
-> > [   21.731452] x11: 00000000fffff7ff x10: 00000000fffff7ff x9 : ffffffc00871b8dc
-> > [   21.732093] x8 : 000000000000bfe8 x7 : ffffffc009b33a38 x6 : 0000000000000001
-> > [   21.732733] x5 : ffffffc009569000 x4 : ffffffc009569050 x3 : ffffff8004344878
-> > [   21.733374] x2 : 0000000000000001 x1 : 000000000000008f x0 : 0000000000000001
-> > [   21.734015] Call trace:
-> > [   21.734235]  usb_disable_endpoint+0x7c/0xdc
-> > [   21.734616]  usb_disable_device_endpoints+0xbc/0xe0
-> > [   21.735054]  usb_disable_device+0x1c0/0x260
-> > [   21.735432]  usb_disconnect+0x108/0x300
-> > [   21.735778]  hub_event+0x1378/0x19c0
-> > [   21.736102]  process_one_work+0x220/0x49c
-> > [   21.736469]  worker_thread+0x154/0x450
-> > [   21.736810]  kthread+0xfc/0x110
-> > [   21.737096]  ret_from_fork+0x10/0x20
-> > [   21.737429] Code: f941c474 340001e0 f901c47f b4ffff14 (b900469f)
-> > [   21.737970] ---[ end trace 0000000000000000 ]---
-> > 
-> > Did I miss something?
+On 13/05/2022 17:39, Neal Liu wrote:
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Sent: Friday, May 13, 2022 5:07 PM
+>> To: Neal Liu <neal_liu@aspeedtech.com>; Greg Kroah-Hartman
+>> <gregkh@linuxfoundation.org>; Rob Herring <robh+dt@kernel.org>;
+>> Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Joel Stanley
+>> <joel@jms.id.au>; Andrew Jeffery <andrew@aj.id.au>; Felipe Balbi
+>> <balbi@kernel.org>; Sumit Semwal <sumit.semwal@linaro.org>; Christian
+>> König <christian.koenig@amd.com>; Geert Uytterhoeven <geert@linux-
+>> m68k.org>; Li Yang <leoyang.li@nxp.com>
+>> Cc: linux-aspeed@lists.ozlabs.org; linux-usb@vger.kernel.org;
+>> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+>> kernel@vger.kernel.org; linux-media@vger.kernel.org; dri-
+>> devel@lists.freedesktop.org; linaro-mm-sig@lists.linaro.org; BMC-SW <BMC-
+>> SW@aspeedtech.com>
+>> Subject: Re: [PATCH 3/3] dt-bindings: usb: add documentation for aspeed
+>> udc
+>>
+>> On 13/05/2022 08:57, Neal Liu wrote:
+>>> Add device tree binding documentation for the Aspeed USB2.0 Device
+>>> Controller.
+>>>
+>>> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+>>> ---
+>>>  .../devicetree/bindings/usb/aspeed,udc.yaml   | 52
+>> +++++++++++++++++++
+>>>  1 file changed, 52 insertions(+)
+>>>  create mode 100644
+>>> Documentation/devicetree/bindings/usb/aspeed,udc.yaml
+>>
+>> Please name the file as first compatible, so "aspeed,ast2600-udc.yaml"
 > 
-> No: You found a real bug in the hub driver!  usb_disconnect() really 
-> is supposed to set port_dev->child to NULL at some point, but it 
-> doesn't.  In fact, port_dev->child never gets set back to NULL (except 
-> in the trivial case where a newly attached device fails to initialize 
-> and enumerate).
+> Okay, I could rename it for next patch if you preferred.
+> But there are lots of yaml files which are not named as first compatible.
+
+Yes, I know, I quite likely I also produced such bindings, but a
+specific name is rather preferred. Otherwise you will have a difficult
+naming choice when your next Aspeed UDC requires new bindings file
+because of some differences (not yet known now).
+
 > 
-> I'll work on a patch to fix this, and I'll CC: you when it's ready.
+>>
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/aspeed,udc.yaml
+>>> b/Documentation/devicetree/bindings/usb/aspeed,udc.yaml
+>>> new file mode 100644
+>>> index 000000000000..d1d2f77d1c54
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/usb/aspeed,udc.yaml
+>>> @@ -0,0 +1,52 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) # Copyright
+>>> +(c) 2020 Facebook Inc.
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/usb/aspeed,udc.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: ASPEED USB 2.0 Device Controller
+>>> +
+>>> +maintainers:
+>>> +  - Neal Liu <neal_liu@aspeedtech.com>
+>>> +
+>>> +description: |+
+>>> +  The ASPEED USB 2.0 Device Controller implements 1 control endpoint
+>>> +and
+>>> +  4 generic endpoints for AST260x.
+>>> +
+>>> +  Supports independent DMA channel for each generic endpoint.
+>>> +  Supports 32/256 stages descriptor mode for all generic endpoints.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - aspeed,ast2600-udc
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  clocks:
+>>> +    maxItems: 1
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>
+>> No child properties? No ports or any other devices? No usb-hcd.yaml?
+> 
+> Aspeed udc only has 1 port, no need extra properties for now.
 
-I take it back.  This isn't a bug; it's a mistake in the way you called 
-usb_disconnect().  Your patch did:
+OK
 
-		if (udev) {
-			port_dev->child = NULL;
-			usb_disconnect(&udev);
-		}
+> 
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - clocks
+>>> +  - interrupts
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/clock/aspeed-clock.h>
+>>> +    udc: udc@1e6a2000 {
+>>
+>> Node name: usb
+>  
+> "udc" is more recognizable than "usb" I think. "usb" is too general, can be various like host or device.
 
-The argument to usb_disconnect() is supposed to be &port_dev->child, not 
-&udev.  You can see near the end of the function that it sets *pdev to 
-NULL; this is where port_dev->child gets cleared.
+It's still required by schema for most of USB host controllers. Existing
+USB device controllers use usb as well (except Atmel mentioning gadget)
+Generic name is also expected by Devicetree spec and "udc" is not on a
+list of examples of generic names (usb is).
 
-Not incidentally, usb_disconnect() requires that you hold hdev's device 
-lock when you call it (this is mentioned in the kerneldoc, although the 
-requirement that pdev points to port_dev->child isn't -- the kerneldoc 
-for that function could stand to be improved).
 
-Alan Stern
+Best regards,
+Krzysztof
