@@ -2,90 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6F05273EB
-	for <lists+linux-usb@lfdr.de>; Sat, 14 May 2022 22:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2EDC527808
+	for <lists+linux-usb@lfdr.de>; Sun, 15 May 2022 16:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235077AbiENUWD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 May 2022 16:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45926 "EHLO
+        id S237220AbiEOO1V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 May 2022 10:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235062AbiENUWC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 May 2022 16:22:02 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3F424945
-        for <linux-usb@vger.kernel.org>; Sat, 14 May 2022 13:21:59 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id m23so13997286ljc.0
-        for <linux-usb@vger.kernel.org>; Sat, 14 May 2022 13:21:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Y5VRY1Vg5U7FZOYxaP3jhw1GgftqMUz+kaXgWZO/zzo=;
-        b=a9IbvRUaYC8Wc0vyxgFwHAxgU9mSVnhYPrySypKYv+QMWSeS0lIY4wxVjb/+x54LWq
-         Ldc1cXpfGj905mcwbZhrOB2SdRWkkkJTcN8XmsLxZM3o1iVoUToVGPQqNwOLRWQqNkFV
-         hvbA4emBw/8q79PftXEPsH+kSyqRfafhujdgE+P8fJGteGOcK7xMkyuufwBAw8bIrRFa
-         gJuSbkhJHloXm+OQ9D+IZ7DsfUCXfPkNBD+eHfglA2cDMFd0vT8MnG+Zmj8mMlPJwnb4
-         yTLeFaHM+EYpglB82UoRIxyn6Isw1Z9/jYS70nsrx3FRo+XYLmINHoUjvQQkh8OJSE4S
-         gzNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Y5VRY1Vg5U7FZOYxaP3jhw1GgftqMUz+kaXgWZO/zzo=;
-        b=mmhXzFtb8kIs4eeisJi0YG6VvtZY7UFvgC3UPoiBOdu8KYmgnZ7sXyrp3nNjaxd8is
-         QwURpA/e1itQ+MUgL5f9zO89TdE2qcrOyWqFY9lEaq696JPHU4Vod0brCZuOHREhE0Fn
-         Dz1J/ZInaXdHbSaST7WYvQQbSuld0PwnBJL3k2yESEikePD1+N0C8QpExBI0RryTfXvj
-         0r1x7kSDwLxMwg3Ot6Ev4jMjWqkBawsmj/mog2Asu60uNfA0t944CSC+CH/S6s9eCzjZ
-         80U0S71NQ793kfXRpjQUmE9t+iIJ9F2y75EwwtvgaJvGGCGjgPz6kMrRiVjqJ/qmzt+w
-         Mj6w==
-X-Gm-Message-State: AOAM530gkiQ7DOw2nQfuK7NrIFjwwa5qzM3ZTcbBZsjkJ+ltgYBMyKgl
-        E/PZmO0bOKMnp377yKsLEAM/qg==
-X-Google-Smtp-Source: ABdhPJzLyuqdkaQnJF2ClXg0Jx1DgHwKnG2ziP/ISkfSmc674JtqB4hc3nDy/CLvL1Xr59yD6peNiw==
-X-Received: by 2002:a05:651c:98d:b0:250:976b:4a0e with SMTP id b13-20020a05651c098d00b00250976b4a0emr6642090ljq.494.1652559718267;
-        Sat, 14 May 2022 13:21:58 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z2-20020a2e9b82000000b0024f3d1daeaesm942625lji.54.2022.05.14.13.21.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 May 2022 13:21:57 -0700 (PDT)
-Message-ID: <567d135b-3d40-9958-e000-1357020b5650@linaro.org>
-Date:   Sat, 14 May 2022 22:21:56 +0200
+        with ESMTP id S237157AbiEOO1K (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 May 2022 10:27:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B312A26D;
+        Sun, 15 May 2022 07:27:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F45DB80CFA;
+        Sun, 15 May 2022 14:27:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B83FEC385B8;
+        Sun, 15 May 2022 14:27:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652624827;
+        bh=nDUjVQrVdv4GW477qujXZY3cFAwB5uBxzIt6AfcP7lI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=lkXSBWFbOcy6Bve1L1Hi4GtW8wVrnbgBWlndYqNEgAasFtrZZntqQBz9awmDWc+nY
+         87bydvn44EpxOI3mV5D15CHsBQzv9/5Etf/KSEdWrAR/RWPzyV/gUEa1g29a5c8JXF
+         bOT3t4y4vKO5D1hqcGHP7knPIH9UQY+ykvOg0S5M=
+Date:   Sun, 15 May 2022 16:27:04 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 5.18-rc7
+Message-ID: <YoENuIsPvWwfh3F7@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 3/3] dt-bindings: usb: add documentation for aspeed udc
-Content-Language: en-US
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Li Yang <leoyang.li@nxp.com>
-Cc:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-References: <20220513065728.857722-1-neal_liu@aspeedtech.com>
- <20220513065728.857722-4-neal_liu@aspeedtech.com>
- <da78aaf6-c9ae-d591-fdc4-723f097ace2c@linaro.org>
- <HK0PR06MB3202679A7FABAF7D0D045F0880CA9@HK0PR06MB3202.apcprd06.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <HK0PR06MB3202679A7FABAF7D0D045F0880CA9@HK0PR06MB3202.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -94,121 +49,77 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13/05/2022 17:39, Neal Liu wrote:
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Friday, May 13, 2022 5:07 PM
->> To: Neal Liu <neal_liu@aspeedtech.com>; Greg Kroah-Hartman
->> <gregkh@linuxfoundation.org>; Rob Herring <robh+dt@kernel.org>;
->> Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Joel Stanley
->> <joel@jms.id.au>; Andrew Jeffery <andrew@aj.id.au>; Felipe Balbi
->> <balbi@kernel.org>; Sumit Semwal <sumit.semwal@linaro.org>; Christian
->> KÃ¶nig <christian.koenig@amd.com>; Geert Uytterhoeven <geert@linux-
->> m68k.org>; Li Yang <leoyang.li@nxp.com>
->> Cc: linux-aspeed@lists.ozlabs.org; linux-usb@vger.kernel.org;
->> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
->> kernel@vger.kernel.org; linux-media@vger.kernel.org; dri-
->> devel@lists.freedesktop.org; linaro-mm-sig@lists.linaro.org; BMC-SW <BMC-
->> SW@aspeedtech.com>
->> Subject: Re: [PATCH 3/3] dt-bindings: usb: add documentation for aspeed
->> udc
->>
->> On 13/05/2022 08:57, Neal Liu wrote:
->>> Add device tree binding documentation for the Aspeed USB2.0 Device
->>> Controller.
->>>
->>> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
->>> ---
->>>  .../devicetree/bindings/usb/aspeed,udc.yaml   | 52
->> +++++++++++++++++++
->>>  1 file changed, 52 insertions(+)
->>>  create mode 100644
->>> Documentation/devicetree/bindings/usb/aspeed,udc.yaml
->>
->> Please name the file as first compatible, so "aspeed,ast2600-udc.yaml"
-> 
-> Okay, I could rename it for next patch if you preferred.
-> But there are lots of yaml files which are not named as first compatible.
+The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
 
-Yes, I know, I quite likely I also produced such bindings, but a
-specific name is rather preferred. Otherwise you will have a difficult
-naming choice when your next Aspeed UDC requires new bindings file
-because of some differences (not yet known now).
+  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
 
-> 
->>
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/aspeed,udc.yaml
->>> b/Documentation/devicetree/bindings/usb/aspeed,udc.yaml
->>> new file mode 100644
->>> index 000000000000..d1d2f77d1c54
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/usb/aspeed,udc.yaml
->>> @@ -0,0 +1,52 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) # Copyright
->>> +(c) 2020 Facebook Inc.
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/usb/aspeed,udc.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: ASPEED USB 2.0 Device Controller
->>> +
->>> +maintainers:
->>> +  - Neal Liu <neal_liu@aspeedtech.com>
->>> +
->>> +description: |+
->>> +  The ASPEED USB 2.0 Device Controller implements 1 control endpoint
->>> +and
->>> +  4 generic endpoints for AST260x.
->>> +
->>> +  Supports independent DMA channel for each generic endpoint.
->>> +  Supports 32/256 stages descriptor mode for all generic endpoints.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - aspeed,ast2600-udc
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  clocks:
->>> +    maxItems: 1
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>
->> No child properties? No ports or any other devices? No usb-hcd.yaml?
-> 
-> Aspeed udc only has 1 port, no need extra properties for now.
+are available in the Git repository at:
 
-OK
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.18-rc7
 
-> 
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - clocks
->>> +  - interrupts
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    #include <dt-bindings/clock/aspeed-clock.h>
->>> +    udc: udc@1e6a2000 {
->>
->> Node name: usb
->  
-> "udc" is more recognizable than "usb" I think. "usb" is too general, can be various like host or device.
+for you to fetch changes up to 757b9f6e6a2070043e5f215ff4afe350ecfb2bf7:
 
-It's still required by schema for most of USB host controllers. Existing
-USB device controllers use usb as well (except Atmel mentioning gadget)
-Generic name is also expected by Devicetree spec and "udc" is not on a
-list of examples of generic names (usb is).
+  Merge tag 'usb-serial-5.18-rc7' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial (2022-05-13 08:29:40 +0200)
 
+----------------------------------------------------------------
+USB fixes for 5.18-rc7
 
-Best regards,
-Krzysztof
+Here are some small fixes for reported issues with some USB drivers.
+They include:
+	- xhci fixes for xhci-mtk platform driver
+	- typec driver fixes for reported problems.
+	- cdc-wdm read-stuck fix
+	- gadget driver fix for reported race condition
+	- new usb-serial driver ids
+
+All of these have been in linux-next with no reported problems.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+ChiYuan Huang (1):
+      usb: typec: tcpci_mt6360: Update for BMC PHY setting
+
+Chunfeng Yun (2):
+      usb: xhci-mtk: fix fs isoc's transfer error
+      usb: xhci-mtk: remove bandwidth budget table
+
+Dan Vacura (1):
+      usb: gadget: uvc: allow for application to cleanly shutdown
+
+Ethan Yang (1):
+      USB: serial: qcserial: add support for Sierra Wireless EM7590
+
+Greg Kroah-Hartman (1):
+      Merge tag 'usb-serial-5.18-rc7' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial
+
+Schspa Shi (1):
+      usb: gadget: fix race when gadget driver register via ioctl
+
+Scott Chen (1):
+      USB: serial: pl2303: add device id for HP LM930 Display
+
+Sergey Ryazanov (1):
+      usb: cdc-wdm: fix reading stuck on device close
+
+Sven Schwermer (2):
+      USB: serial: option: add Fibocom L610 modem
+      USB: serial: option: add Fibocom MA510 modem
+
+Uwe Kleine-König (1):
+      usb: typec: tcpci: Don't skip cleanup in .remove() on error
+
+ drivers/usb/class/cdc-wdm.c            |  1 +
+ drivers/usb/gadget/function/f_uvc.c    | 25 ++++++++++
+ drivers/usb/gadget/function/uvc.h      |  2 +
+ drivers/usb/gadget/function/uvc_v4l2.c |  3 +-
+ drivers/usb/gadget/legacy/raw_gadget.c |  2 +
+ drivers/usb/host/xhci-mtk-sch.c        | 90 +++++++---------------------------
+ drivers/usb/host/xhci-mtk.h            |  2 -
+ drivers/usb/serial/option.c            |  4 ++
+ drivers/usb/serial/pl2303.c            |  1 +
+ drivers/usb/serial/pl2303.h            |  1 +
+ drivers/usb/serial/qcserial.c          |  2 +
+ drivers/usb/typec/tcpm/tcpci.c         |  2 +-
+ drivers/usb/typec/tcpm/tcpci_mt6360.c  | 26 ++++++++++
+ 13 files changed, 86 insertions(+), 75 deletions(-)
