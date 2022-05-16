@@ -2,41 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3700D5285AA
-	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 15:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF71528579
+	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 15:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbiEPNnk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 May 2022 09:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
+        id S238473AbiEPNgY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 May 2022 09:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiEPNng (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 09:43:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B823340EE
-        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 06:43:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1FE161365
-        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 13:43:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B66EBC385AA;
-        Mon, 16 May 2022 13:43:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652708614;
-        bh=diBchLKdXVlzsP63niN5h9ZnKGAoIru/HrR6p2lmP9w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=x6OXYrU2XKclVmIziaNsxus0wNoCO1MK0VHCW3BBcNcMfutLUHlAChJRFy2zALEA+
-         WcnAAdOEbBCSvTT2Qsaq/2py8bHMwwvCmGi8Fua4+dRvnT4agRFvOXut4ZU0lEIO7k
-         LItKtMkmnKZOfIGNs3y0YG+oQ6hQLKXRr97mHSS0=
-Date:   Mon, 16 May 2022 15:43:31 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Gil Fine <gil.fine@intel.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org, lukas@wunner.de
+        with ESMTP id S243171AbiEPNgH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 09:36:07 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7829A6417
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 06:36:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652708165; x=1684244165;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3bKSV4s7ZRIO5vNS6FIh4Y4t9LeY3PflvooftgNVejU=;
+  b=XQxV1kz7AG2uC2NfspcB5tk4pdZybK6SEAXxWEvU7Z56b9JvqfLDq3HK
+   rUTPyN/Q0fmaT3jXtw8XTSG6cSFDesOvG0bV7Gl8eH0DFlyQ/g/09Xn3n
+   CwRFQIqWtuh0PCsU7ug8FlCfY+9y40i3n4dxunrvC9B/NWD9y55KDM+7Q
+   N20Pd+9MQbKU6GqpuX6bOlc8HEMWIgZcRFQJ1kdnc5YDypuM44Ex9gCI6
+   Tw79sVNUIm+ZDI2CCge+//mSoIMcCEjC0dejeYu5A/OBZw1ZdhvFAhCT5
+   ylfLOlj4qogrH5e1Kg/6GxD4e3TvZOmq85UW+UNy9bldrSA7j/3CdbtLP
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="357241589"
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="357241589"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 06:36:04 -0700
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="568320948"
+Received: from ccdjpclinux26.jer.intel.com (HELO localhost) ([10.12.48.253])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 06:36:01 -0700
+Date:   Mon, 16 May 2022 16:45:48 +0300
+From:   Gil Fine <gil.fine@intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Gil Fine <gil.fine@intel.com>, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, lukas@wunner.de
 Subject: Re: [PATCH v3 6/6] thunderbolt: Change TMU mode to HiFi
  uni-directional once DisplayPort tunneled
-Message-ID: <YoJVA4JRZgZs89Wy@kroah.com>
+Message-ID: <20220516134548.GF8368@ccdjLinux26>
 References: <20220511140549.10571-1-gil.fine@intel.com>
  <20220511140549.10571-7-gil.fine@intel.com>
  <Yn4qld89AVEd3cRD@lahna>
@@ -46,14 +54,16 @@ References: <20220511140549.10571-1-gil.fine@intel.com>
  <YoIajuneoVCCcfGZ@lahna>
  <20220516132141.GE8368@ccdjLinux26>
  <YoJPchm9UufxrC6+@lahna>
- <20220516134548.GF8368@ccdjLinux26>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220516134548.GF8368@ccdjLinux26>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <YoJPchm9UufxrC6+@lahna>
+Organization: Intel Israel Jerusalem (IDPj /IDCj) Har Hotzvim, HaMarpe Street
+ 9, Zip code 9777409
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,12 +71,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 16, 2022 at 04:45:48PM +0300, Gil Fine wrote:
-> This e-mail and any attachments may contain confidential material for
-> the sole use of the intended recipient(s). Any review or distribution
-> by others is strictly prohibited. If you are not the intended
-> recipient, please contact the sender and delete all copies.
+On Mon, May 16, 2022 at 04:19:46PM +0300, Mika Westerberg wrote:
+> Hi Gil,
 > 
+> On Mon, May 16, 2022 at 04:21:41PM +0300, Gil Fine wrote:
+> > > So instead I suggest to put the device_for_each_child() in tmu.c and
+> > > then the tb_switch_tmu_config_enable() static right above it. Please
+> > > also name the resulting API function consistently.
+> > 
+> > OK, got you and fixed that.
+> > Please let me know when you think that I can send out the v4 series.
+> 
+> You can send it whenever you want but I think it can go to v5.20 and not
+> v5.19 since I was planning to send out my pull request for Greg
+> tomorrow. I can pick it up after v5.19-rc1 is released.
 
-Now deleted.  This footer is not compatible with kernel development,
-sorry.
+Ohh I see, I was hoping to meet v5.19
+Can't you send it also as part of your your pull request tomorrow?
+Or it is not mature enough yet...?
+
+-- 
+Thanks,
+Gil
+---------------------------------------------------------------------
+Intel Israel (74) Limited
+
+This e-mail and any attachments may contain confidential material for
+the sole use of the intended recipient(s). Any review or distribution
+by others is strictly prohibited. If you are not the intended
+recipient, please contact the sender and delete all copies.
+
