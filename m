@@ -2,284 +2,211 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6D55283D5
-	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 14:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4195283F8
+	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 14:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233922AbiEPMF5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 May 2022 08:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
+        id S235801AbiEPMQy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 May 2022 08:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232404AbiEPMFz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 08:05:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57B892253B
-        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 05:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652702753;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vG/ZLIgl/6sRfeOy7UnubeHdfQCIjGvrLP2A/YOFXi0=;
-        b=VhTygivKNjbu1PQFjj58mwgy1eDopNGWtMEp4DswvYY9k7O0SDzKcaiZC1FsDC3/P+LKuf
-        I/1RBEDPd0pSht9SxxOvqbmV6dZT+Ewog8BrzszT7Oxn/TJppqAtg6DMoVmBEWqfgs+QF1
-        nnD3EInc1hQDiXdy4qJ4K06Y2AkFx0A=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-203-DWk5plQUP2WR1pO50-U9tw-1; Mon, 16 May 2022 08:05:51 -0400
-X-MC-Unique: DWk5plQUP2WR1pO50-U9tw-1
-Received: by mail-ed1-f70.google.com with SMTP id l18-20020aa7d952000000b0042ab7be9adaso1032250eds.21
-        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 05:05:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vG/ZLIgl/6sRfeOy7UnubeHdfQCIjGvrLP2A/YOFXi0=;
-        b=B9x+E9MRvaJt0Tjna9/up0bcEVy8Ql6Vwn+veReN0kFoUdQRWBaVWWkI6Bm/z8bWtU
-         dFGaeOQnfSZ9yuOth2vC9UiGeewmf8mvmHHET3KSZO9HS0Wu1ms3C1qep6aWwuibWtkk
-         23wfcDrGL7HZlISwCZoF4I9Z37D9rZc+fgnbQ5e2qgqmtLesi/HuqiI+Q7Q+VY/plXd3
-         cc/8IgrUkssXT4QmMlJ9yFhl+YEFMc/YEw1x1NJGBvdJQGTpaQs2mdpN1BQdUBWxntYY
-         smQmrAyui46uMY0vIIqv8IGYl4HdmJZtpS7VivbCsDs0dV6nZ9CRpHQEwNpfOoSaScJ9
-         zoag==
-X-Gm-Message-State: AOAM533IhAIHsuyAmx4gxZPavDjhSGZ9B3Iu6nK1cuBxfgOwOmG8qo3M
-        twDU2aXXF1yjp366N2chc1zBG8ODzxbFd6NkLwllB7zIj6tnYBr6xtg4SjStCJYVsQ+2b/hcpPp
-        GRxSSctZMLWK07HWo1wsH
-X-Received: by 2002:a05:6402:b8f:b0:42a:be5d:7a94 with SMTP id cf15-20020a0564020b8f00b0042abe5d7a94mr769296edb.150.1652702750688;
-        Mon, 16 May 2022 05:05:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyAN7T+5N/B7gyP+ujGejIQ5hVeT1KxXFDW1cynVLgUOmc51xLNbcUysPS1+TQF7PAajXo6tA==
-X-Received: by 2002:a05:6402:b8f:b0:42a:be5d:7a94 with SMTP id cf15-20020a0564020b8f00b0042abe5d7a94mr769267edb.150.1652702750470;
-        Mon, 16 May 2022 05:05:50 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id jl6-20020a17090775c600b006fd6f7b3c84sm3646784ejc.46.2022.05.16.05.05.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 05:05:49 -0700 (PDT)
-Message-ID: <63a9c130-a302-3fec-fcbc-e18c3918ae75@redhat.com>
-Date:   Mon, 16 May 2022 14:05:48 +0200
+        with ESMTP id S229697AbiEPMQy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 08:16:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3634A2BB20
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 05:16:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C59926117E
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 12:16:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 32710C34115
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 12:16:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652703410;
+        bh=s1wNz6oRaNBa3ABuXA4cR2neFwJ56ly+GDpuutrLJQQ=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Y7GezqL+zrMBW3hYhioBMicZuv3CX5P1qb0YAWhqP5+11xnOEwAOjkY2WyMLUHk7i
+         HnS9UdSdxoubGBSOcAJx0LOd3lDS0Q5JB1DO3eWVklcBesmmI+PXsMpuewTLGI8kkO
+         8CxyLpXjNv9Wf0Z1hb/5IQ3WBWTN2cGL4Va+oq8fJgmZSCJ1vyb0Ag6tJsnfzo0SOA
+         l9HvI5HvvETSb/BeD2n8O/ciNO2uwXlBln33IZtH4XxP+J/cYFHakHulL3aUztT1TL
+         aL73GAIGGU7cSZwkshsrgEtuos4gkeZdJwcHBuN59rd/I82tAxdrDslhY3pxIUpQC3
+         H01Pe8obkkL3g==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 1B739CC13AF; Mon, 16 May 2022 12:16:50 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
+ xhci_hcd rejecting DMA map of vmalloc memory
+Date:   Mon, 16 May 2022 12:16:49 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: satadru@umich.edu
+X-Bugzilla-Status: REOPENED
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215890-208809-PZ7ANB3lh4@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
+References: <bug-215890-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 2/5] drm: Add HPD state to
- drm_connector_oob_hotplug_event()
-Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
-References: <20220502165316.4167199-1-bjorn.andersson@linaro.org>
- <20220502165316.4167199-3-bjorn.andersson@linaro.org>
- <YoI0wx/LPK4ZrUFf@kuha.fi.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YoI0wx/LPK4ZrUFf@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
 
-On 5/16/22 13:25, Heikki Krogerus wrote:
-> +Hans
-> 
-> Hans, do you have any comments?
+--- Comment #19 from Satadru Pramanik (satadru@umich.edu) ---
+I'm not sure what changed, but it is working on the ubuntu mainline build of
+5.18-rc7.
 
-Thanks for the ping, this looks good to me:
+The aforementioned patch is not in there.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+There is a dma-buf patch in 5.18-rc7, but I can't tell if that would make a
+difference here.
 
-Regards,
+The bcm5974 driver is definitely loaded without errors:
 
-Hans
+satadru@mbp113 ~$ lsusb -tv
+/:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/6p, 5000M
+    ID 1d6b:0003 Linux Foundation 3.0 root hub
+    |__ Port 4: Dev 2, If 0, Class=3DMass Storage, Driver=3Dusb-storage, 50=
+00M
+        ID 05ac:8406 Apple, Inc. Internal Memory Card Reader
+/:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/14p, 480M
+    ID 1d6b:0002 Linux Foundation 2.0 root hub
+    |__ Port 8: Dev 2, If 0, Class=3DHub, Driver=3Dhub/3p, 12M
+        ID 0a5c:4500 Broadcom Corp. BCM2046B1 USB 2.0 Hub (part of BCM2046
+Bluetooth)
+        |__ Port 3: Dev 6, If 3, Class=3DApplication Specific Interface, Dr=
+iver=3D,
+12M
+            ID 05ac:8289 Apple, Inc. Bluetooth Host Controller
+        |__ Port 3: Dev 6, If 1, Class=3DWireless, Driver=3Dbtusb, 12M
+            ID 05ac:8289 Apple, Inc. Bluetooth Host Controller
+        |__ Port 3: Dev 6, If 2, Class=3DVendor Specific Class, Driver=3Dbt=
+usb, 12M
+            ID 05ac:8289 Apple, Inc. Bluetooth Host Controller
+        |__ Port 3: Dev 6, If 0, Class=3DVendor Specific Class, Driver=3Dbt=
+usb, 12M
+            ID 05ac:8289 Apple, Inc. Bluetooth Host Controller
+    |__ Port 12: Dev 3, If 0, Class=3DHuman Interface Device, Driver=3Dusbh=
+id, 12M
+        ID 05ac:0262 Apple, Inc.=20
+    |__ Port 12: Dev 3, If 1, Class=3DHuman Interface Device, Driver=3Dusbh=
+id, 12M
+        ID 05ac:0262 Apple, Inc.=20
+    |__ Port 12: Dev 3, If 2, Class=3DHuman Interface Device, Driver=3Dbcm5=
+974, 12M
+        ID 05ac:0262 Apple, Inc.=20
+satadru@mbp113 ~$ modinfo bcm5974
+filename:=20=20=20=20=20=20
+/lib/modules/5.18.0-051800rc7-generic/kernel/drivers/input/mouse/bcm5974.ko
+license:        GPL
+description:    Apple USB BCM5974 multitouch driver
+author:         Henrik Rydberg
+srcversion:     0BB7AB5EB48AF28F1C4CD31
+alias:          usb:v05ACp0274d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0273d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0272d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0292d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0291d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0290d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp025Bd*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp025Ad*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0259d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0264d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0263d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0262d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0254d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0253d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0252d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp024Ed*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp024Dd*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp024Cd*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp024Bd*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp024Ad*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0249d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0247d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0246d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0245d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0244d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0243d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0242d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0241d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0240d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp023Fd*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0238d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0237d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0236d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0232d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0231d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0230d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0225d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0224d*dc*dsc*dp*ic03isc*ip02in*
+alias:          usb:v05ACp0223d*dc*dsc*dp*ic03isc*ip02in*
+depends:=20=20=20=20=20=20=20=20
+retpoline:      Y
+intree:         Y
+name:           bcm5974
+vermagic:       5.18.0-051800rc7-generic SMP preempt mod_unload modversions=
+=20
+sig_id:         PKCS#7
+signer:         Build time autogenerated kernel key
+sig_key:        16:26:F9:99:B7:74:1B:1E:3D:8C:FA:BD:74:AD:55:7A:E7:0C:0C:4A
+sig_hashalgo:   sha512
+signature:      02:8D:46:9D:9B:6C:A3:D9:E5:A2:CD:30:02:E3:DA:1A:DD:E8:89:89:
+                2B:A3:94:E2:DE:2F:FF:0A:D4:3F:78:AE:28:D2:59:5A:4C:9D:E2:4F:
+                82:28:97:49:0B:12:9B:6C:DB:AC:25:F0:3B:11:8C:9D:8C:23:19:B0:
+                DC:64:DC:00:01:2A:61:19:59:8F:D6:DA:2A:33:BC:0B:E3:81:76:2F:
+                42:C0:F6:9C:8C:95:29:F9:1B:66:83:F5:5D:05:CF:81:F9:F8:06:5A:
+                EB:53:1D:8F:50:6F:38:47:A9:AA:43:A9:A4:F5:27:B4:EC:5F:C4:3A:
+                E9:2D:BD:45:99:92:55:88:80:42:37:1A:A0:EB:AE:27:AD:73:AD:78:
+                B7:6C:C6:C6:6C:51:8C:81:40:C2:16:26:BC:61:D5:36:90:C5:AD:C1:
+                AF:77:48:61:16:3B:49:61:DD:2C:EA:A3:5E:F1:47:0F:41:5A:AC:8C:
+                4B:6F:60:74:23:38:5D:8A:6E:74:27:B3:A5:FA:09:E5:6E:3E:CD:42:
+                66:5E:2F:53:47:96:33:4E:70:2C:23:D9:E1:52:39:5D:52:11:BF:51:
+                E2:67:89:29:0D:8A:04:8D:B4:51:DD:38:BE:D1:B7:8B:55:32:B8:18:
+                FB:E1:C2:50:A6:58:99:EC:31:F1:99:70:B6:D9:C3:96:48:04:01:06:
+                E0:7A:99:B4:D4:B6:70:46:32:BE:38:0C:54:CA:99:DB:04:55:58:DD:
+                3D:F6:A9:65:19:AF:7C:82:DC:99:8C:BC:AB:41:3A:11:97:9D:36:97:
+                ED:2D:DC:C0:37:3F:8F:7B:84:08:81:B4:96:0E:88:D5:58:BB:F8:D4:
+                06:B9:92:F6:80:88:A8:28:E5:A6:04:59:C6:CD:1B:B8:E0:52:17:80:
+                0D:93:D4:6D:70:98:67:1B:96:79:5B:46:3D:62:DD:98:DE:DF:5A:37:
+                6F:69:C4:9E:11:97:93:96:D4:4B:97:F4:FA:75:08:EB:F0:43:9E:44:
+                9A:CE:C4:35:D3:91:74:B0:95:F9:81:BA:AD:FC:BF:70:7E:87:5F:D4:
+                F8:20:56:89:BD:BE:0B:B0:C3:71:A5:31:AD:0E:B2:58:27:A3:42:6D:
+                93:04:DC:D9:FA:91:AE:C3:05:2C:64:E1:47:1F:C0:2E:24:9E:E3:3C:
+                76:1B:A0:D4:F4:1E:30:E8:0E:0A:B6:BB:79:E0:4B:88:20:27:DA:06:
+                84:DB:AF:21:A1:9D:F3:07:DD:BF:99:4A:DC:8D:06:BD:6C:37:C9:05:
+                D8:1A:52:53:31:E5:AC:92:1E:D9:1C:1A:60:2F:8E:55:8A:1F:A2:A2:
+                A4:3B:46:B5:26:A7:E6:8C:BE:FC:E5:4F
+parm:           debug:Activate debugging output (int)
+satadru@mbp113 ~$ sudo dmesg | grep bcm5974
+[    6.167200] input: bcm5974 as
+/devices/pci0000:00/0000:00:14.0/usb1/1-12/1-12:1.2/input/input9
+[    6.182558] usbcore: registered new interface driver bcm5974
+satadru@mbp113 ~$
 
+--=20
+You may reply to this email to add a comment.
 
-> 
-> On Mon, May 02, 2022 at 09:53:13AM -0700, Bjorn Andersson wrote:
->> In some implementations, such as the Qualcomm platforms, the display
->> driver has no way to query the current HPD state and as such it's
->> impossible to distinguish between disconnect and attention events.
->>
->> Add a parameter to drm_connector_oob_hotplug_event() to pass the HPD
->> state.
->>
->> Also push the test for unchanged state in the displayport altmode driver
->> into the i915 driver, to allow other drivers to act upon each update.
->>
->> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->> ---
->>
->> Changes since v3:
->> - Transition to drm_connector_status instead of custom hpd_state 
->>
->>  drivers/gpu/drm/drm_connector.c          |  6 ++++--
->>  drivers/gpu/drm/i915/display/intel_dp.c  | 17 ++++++++++++++---
->>  drivers/gpu/drm/i915/i915_drv.h          |  3 +++
->>  drivers/usb/typec/altmodes/displayport.c | 10 +++-------
->>  include/drm/drm_connector.h              |  6 ++++--
->>  5 files changed, 28 insertions(+), 14 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
->> index 1c48d162c77e..e86c69f0640f 100644
->> --- a/drivers/gpu/drm/drm_connector.c
->> +++ b/drivers/gpu/drm/drm_connector.c
->> @@ -2794,6 +2794,7 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
->>  /**
->>   * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
->>   * @connector_fwnode: fwnode_handle to report the event on
->> + * @status: hot plug detect logical state
->>   *
->>   * On some hardware a hotplug event notification may come from outside the display
->>   * driver / device. An example of this is some USB Type-C setups where the hardware
->> @@ -2803,7 +2804,8 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
->>   * This function can be used to report these out-of-band events after obtaining
->>   * a drm_connector reference through calling drm_connector_find_by_fwnode().
->>   */
->> -void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
->> +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
->> +				     enum drm_connector_status status)
->>  {
->>  	struct drm_connector *connector;
->>  
->> @@ -2812,7 +2814,7 @@ void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
->>  		return;
->>  
->>  	if (connector->funcs->oob_hotplug_event)
->> -		connector->funcs->oob_hotplug_event(connector);
->> +		connector->funcs->oob_hotplug_event(connector, status);
->>  
->>  	drm_connector_put(connector);
->>  }
->> diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
->> index e4a79c11fd25..56cc023f7bbd 100644
->> --- a/drivers/gpu/drm/i915/display/intel_dp.c
->> +++ b/drivers/gpu/drm/i915/display/intel_dp.c
->> @@ -4951,15 +4951,26 @@ static int intel_dp_connector_atomic_check(struct drm_connector *conn,
->>  	return intel_modeset_synced_crtcs(state, conn);
->>  }
->>  
->> -static void intel_dp_oob_hotplug_event(struct drm_connector *connector)
->> +static void intel_dp_oob_hotplug_event(struct drm_connector *connector,
->> +				       enum drm_connector_status hpd_state)
->>  {
->>  	struct intel_encoder *encoder = intel_attached_encoder(to_intel_connector(connector));
->>  	struct drm_i915_private *i915 = to_i915(connector->dev);
->> +	bool hpd_high = hpd_state == connector_status_connected;
->> +	unsigned int hpd_pin = encoder->hpd_pin;
->> +	bool need_work = false;
->>  
->>  	spin_lock_irq(&i915->irq_lock);
->> -	i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
->> +	if (hpd_high != test_bit(hpd_pin, &i915->hotplug.oob_hotplug_last_state)) {
->> +		i915->hotplug.event_bits |= BIT(hpd_pin);
->> +
->> +		__assign_bit(hpd_pin, &i915->hotplug.oob_hotplug_last_state, hpd_high);
->> +		need_work = true;
->> +	}
->>  	spin_unlock_irq(&i915->irq_lock);
->> -	queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
->> +
->> +	if (need_work)
->> +		queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
->>  }
->>  
->>  static const struct drm_connector_funcs intel_dp_connector_funcs = {
->> diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
->> index 24111bf42ce0..96c088bb5522 100644
->> --- a/drivers/gpu/drm/i915/i915_drv.h
->> +++ b/drivers/gpu/drm/i915/i915_drv.h
->> @@ -135,6 +135,9 @@ struct i915_hotplug {
->>  	/* Whether or not to count short HPD IRQs in HPD storms */
->>  	u8 hpd_short_storm_enabled;
->>  
->> +	/* Last state reported by oob_hotplug_event for each encoder */
->> +	unsigned long oob_hotplug_last_state;
->> +
->>  	/*
->>  	 * if we get a HPD irq from DP and a HPD irq from non-DP
->>  	 * the non-DP HPD could block the workqueue on a mode config
->> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
->> index c1d8c23baa39..9360ca177c7d 100644
->> --- a/drivers/usb/typec/altmodes/displayport.c
->> +++ b/drivers/usb/typec/altmodes/displayport.c
->> @@ -59,7 +59,6 @@ struct dp_altmode {
->>  	struct typec_displayport_data data;
->>  
->>  	enum dp_state state;
->> -	bool hpd;
->>  
->>  	struct mutex lock; /* device lock */
->>  	struct work_struct work;
->> @@ -143,10 +142,8 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
->>  		if (!ret)
->>  			dp->state = DP_STATE_CONFIGURE;
->>  	} else {
->> -		if (dp->hpd != hpd) {
->> -			drm_connector_oob_hotplug_event(dp->connector_fwnode);
->> -			dp->hpd = hpd;
->> -		}
->> +		drm_connector_oob_hotplug_event(dp->connector_fwnode,
->> +						hpd ? connector_status_connected : connector_status_disconnected);
->>  	}
->>  
->>  	return ret;
->> @@ -573,8 +570,7 @@ void dp_altmode_remove(struct typec_altmode *alt)
->>  	cancel_work_sync(&dp->work);
->>  
->>  	if (dp->connector_fwnode) {
->> -		if (dp->hpd)
->> -			drm_connector_oob_hotplug_event(dp->connector_fwnode);
->> +		drm_connector_oob_hotplug_event(dp->connector_fwnode, connector_status_disconnected);
->>  
->>  		fwnode_handle_put(dp->connector_fwnode);
->>  	}
->> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
->> index 3ac4bf87f257..886aa1861ed9 100644
->> --- a/include/drm/drm_connector.h
->> +++ b/include/drm/drm_connector.h
->> @@ -1141,7 +1141,8 @@ struct drm_connector_funcs {
->>  	 * This will get called when a hotplug-event for a drm-connector
->>  	 * has been received from a source outside the display driver / device.
->>  	 */
->> -	void (*oob_hotplug_event)(struct drm_connector *connector);
->> +	void (*oob_hotplug_event)(struct drm_connector *connector,
->> +				  enum drm_connector_status status);
->>  
->>  	/**
->>  	 * @debugfs_init:
->> @@ -1749,7 +1750,8 @@ drm_connector_is_unregistered(struct drm_connector *connector)
->>  		DRM_CONNECTOR_UNREGISTERED;
->>  }
->>  
->> -void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode);
->> +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
->> +				     enum drm_connector_status status);
->>  const char *drm_get_connector_type_name(unsigned int connector_type);
->>  const char *drm_get_connector_status_name(enum drm_connector_status status);
->>  const char *drm_get_subpixel_order_name(enum subpixel_order order);
->> -- 
->> 2.35.1
-> 
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
