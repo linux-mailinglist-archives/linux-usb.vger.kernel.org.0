@@ -2,193 +2,309 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE485292C6
-	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 23:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A74F5294C5
+	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 01:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237813AbiEPVUd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 May 2022 17:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        id S1350235AbiEPXNu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 May 2022 19:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbiEPVU3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 17:20:29 -0400
-X-Greylist: delayed 435 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 May 2022 14:20:26 PDT
-Received: from mr6.vodafonemail.de (mr6.vodafonemail.de [145.253.228.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCB4BC5;
-        Mon, 16 May 2022 14:20:26 -0700 (PDT)
-Received: from smtp.vodafone.de (unknown [10.0.0.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mr6.vodafonemail.de (Postfix) with ESMTPS id 4L2Bmh2NDXz1y4G;
-        Mon, 16 May 2022 21:13:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arcor.de;
-        s=vfde-mb-mr2-21dec; t=1652735588;
-        bh=c2yAvcHcSj4dUkmFeZGNgbY/Zr4/FRmi0kowp9kl5As=;
-        h=Date:From:To:Subject:Message-ID:References:Content-Type:
-         In-Reply-To:From;
-        b=XjS+kcBheCKHYm9fVkAS18q706TH9fEVqzg/BwdXJizn9c9+vNy51Ig6H5LggrEV4
-         SHjDrdddt568nFg122oi6+gcXpHLNquJ+OpL3EY5+iGETlR/aKFh76hFGLe4t4i37H
-         e9uw93udBg9Icqu1GFIoHbDjC51JX9KVJAHVNRJ8=
-Received: from arcor.de (p3ee2cafe.dip0.t-ipconnect.de [62.226.202.254])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp.vodafone.de (Postfix) with ESMTPSA id 4L2BmR1dLvzHnJ7;
-        Mon, 16 May 2022 21:12:51 +0000 (UTC)
-Date:   Mon, 16 May 2022 23:12:44 +0200
-From:   Reinhard Speyerer <rspmn@arcor.de>
-To:     Carl =?utf-8?B?WWluKOaut+W8oOaIkCk=?= <carl.yin@quectel.com>
-Cc:     "johan@kernel.org" <johan@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] USB: serial: option: add Quectel BG95 modem
-Message-ID: <YoK+TH6MzR89SEdo@arcor.de>
-References: <TYZPR06MB4270136AEC3FB06E20F6503486CF9@TYZPR06MB4270.apcprd06.prod.outlook.com>
+        with ESMTP id S1347247AbiEPXNt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 19:13:49 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D238D4552B
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 16:13:46 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id x23so15373411pff.9
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 16:13:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5H3z629Hzfk43FPeQ6l/HvvBwzEkP6gG3fYwPQ2Js60=;
+        b=jhIu5fQgzwPiId/ZxVydKq1h+XIxL2F7FxjE6RLbLjB/hi59yOcqn8ZQzey53AkfLE
+         7+wBDQR3CM6K7jvai1Sv0qU0Tt2NUOhf9Cm37Kv2CCO/OsXB6c2BByySQQTZsFDgXPCV
+         Z1zcA7QhHnof/elpjpaLLtOrIfLm8UczZCpMg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5H3z629Hzfk43FPeQ6l/HvvBwzEkP6gG3fYwPQ2Js60=;
+        b=qurV70RzTzi1fDKFBRhURikuqVsANB5RckngnxuHsfAQRXwm6ZNR2NlbynUnyfgS16
+         NJe0gU4Oplzgsx1j3OKTL8ShbUv4RYTCcg6ynf7KCuoJNiA2ToNAoWcvsfKob75L/Vfs
+         yIvIn8O2/Suwb3/C+Jcyr5VCV/a31Te5s+Kl/xzSL/mmReQDnNd7QK28dMP27D6uh+5V
+         hffBvotBPEBWS+rDzZ8Ojq2fubPrJX7CXM7EYh6e+jbN7I/aVUm0WwMKqd4a/15/5Wpt
+         Qyv9GJInxm6Qbn+mKBsP+LqBa9iKBYgWWO4d4zV3V8l7G0LCFz9sH3TG0gPNq/b56R3T
+         NNFg==
+X-Gm-Message-State: AOAM530k6oZd6ASEGZxqU02GQJlNcNXQgpXlEHriW7MEim/cQ0gtJgGd
+        +gH5qAA5F+fIpYYFzMCElmkupg==
+X-Google-Smtp-Source: ABdhPJwwnz9S624j2DyMnf5Z0FuaroubFYKYyHv08Qz90vcyybDrg5YFj61CBAtNHDlIP5z3XyNLVQ==
+X-Received: by 2002:a63:8ac7:0:b0:3aa:fa62:5a28 with SMTP id y190-20020a638ac7000000b003aafa625a28mr17119678pgd.400.1652742826365;
+        Mon, 16 May 2022 16:13:46 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:641e:de1c:873b:321e])
+        by smtp.gmail.com with UTF8SMTPSA id q16-20020a170902dad000b0015e8d4eb26fsm7992100plx.185.2022.05.16.16.13.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 16:13:45 -0700 (PDT)
+Date:   Mon, 16 May 2022 16:13:44 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [v16 2/5] usb: dwc3: core: Host wake up support from system
+ suspend
+Message-ID: <YoLaqDCNK0St8qsB@google.com>
+References: <1652379802-8318-1-git-send-email-quic_kriskura@quicinc.com>
+ <1652379802-8318-3-git-send-email-quic_kriskura@quicinc.com>
+ <Yn2M5hrah78jro1C@google.com>
+ <4124392b-a40f-c204-f9b0-68c3b22dd652@quicinc.com>
+ <20220516044327.GA19209@hu-pkondeti-hyd.qualcomm.com>
+ <20220516150445.GB19209@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYZPR06MB4270136AEC3FB06E20F6503486CF9@TYZPR06MB4270.apcprd06.prod.outlook.com>
-X-purgate-type: clean
-X-purgate: clean
-X-purgate-size: 5677
-X-purgate-ID: 155817::1652735587-000004C0-15F19267/0/0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220516150445.GB19209@hu-pkondeti-hyd.qualcomm.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 16, 2022 at 06:10:17AM +0000, Carl Yin(殷张成) wrote:
-> The BG95 modem has 2 USB configurations that are configurable via the AT
-> command AT+QCFGEXT="usbnet",["ecm"|"modem"] which make the modem enumerate
-> with the following interfaces, respectively:
-> 
-> "modem": Diag + GNSS + Modem + Modem
-> "ecm"  : DIAG + GNSS + Modem + ECM
+On Mon, May 16, 2022 at 08:34:45PM +0530, Pavan Kondeti wrote:
+> On Mon, May 16, 2022 at 10:13:27AM +0530, Pavan Kondeti wrote:
+> > On Fri, May 13, 2022 at 09:28:16AM +0530, Krishna Kurapati PSSNV wrote:
+> > > 
+> > > On 5/13/2022 4:10 AM, Matthias Kaehlcke wrote:
+> > > >On Thu, May 12, 2022 at 11:53:19PM +0530, Krishna Kurapati wrote:
+> > > >>From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > > >>
+> > > >>During suspend read the status of all port and set hs phy mode
+> > > >>based on current speed. Use this hs phy mode to configure wakeup
+> > > >>interrupts in qcom glue driver.
+> > > >>
+> > > >>Check wakeup-source property for dwc3 core node to set the
+> > > >>wakeup capability. Drop the device_init_wakeup call from
+> > > >>runtime suspend and resume.
+> > > >>
+> > > >>Also check during suspend if any wakeup capable devices are
+> > > >>connected to the controller (directly or through hubs), if there
+> > > >>are none set a flag to indicate that the PHY is powered
+> > > >>down during suspend.
+> > > >>
+> > > >>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > > >>Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> > > >>---
+> > > >>  drivers/usb/dwc3/core.c | 30 +++++++++++++++++-------------
+> > > >>  drivers/usb/dwc3/core.h |  4 ++++
+> > > >>  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
+> > > >>  3 files changed, 45 insertions(+), 13 deletions(-)
+> > > >>
+> > > >>diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > > >>index 01115df..8bcabc5 100644
+> > > >>--- a/drivers/usb/dwc3/core.c
+> > > >>+++ b/drivers/usb/dwc3/core.c
+> > > >>@@ -1785,6 +1785,7 @@ static int dwc3_probe(struct platform_device *pdev)
+> > > >>  	platform_set_drvdata(pdev, dwc);
+> > > >>  	dwc3_cache_hwparams(dwc);
+> > > >>+	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
+> > > >>  	spin_lock_init(&dwc->lock);
+> > > >>  	mutex_init(&dwc->mutex);
+> > > >>@@ -1946,10 +1947,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > >>  		dwc3_core_exit(dwc);
+> > > >>  		break;
+> > > >>  	case DWC3_GCTL_PRTCAP_HOST:
+> > > >>-		if (!PMSG_IS_AUTO(msg)) {
+> > > >>-			dwc3_core_exit(dwc);
+> > > >>-			break;
+> > > >>-		}
+> > > >>+		dwc3_check_phy_speed_mode(dwc);
+> > > >>  		/* Let controller to suspend HSPHY before PHY driver suspends */
+> > > >>  		if (dwc->dis_u2_susphy_quirk ||
+> > > >>@@ -1965,6 +1963,15 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > >>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
+> > > >>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+> > > >>+
+> > > >>+		if (!PMSG_IS_AUTO(msg)) {
+> > > >>+			if (device_may_wakeup(dwc->dev))
+> > > >I think this should be device_can_wakeup(), i.e. hardware capability instead of
+> > > >device policy. A drawback of powering the PHYs off is that it causes a high
+> > > >power consumption of certain peripherals if VBUS is still supplied, so this
+> > > >should be limited to platforms where the PHYs must be powered off (using wakeup
+> > > >capability as a proxy for now).
+> > > Thnaks Mathias for the review. Will make this change in the next patchset.
+> > > >>+				dwc->phy_power_off = false;
+> > > >>+			else {
+> > > >>+				dwc->phy_power_off = true;
+> > > >>+				dwc3_core_exit(dwc);
+> > > >>+			}
+> > > >>+		}
+> > > >>  		break;
+> > > >>  	case DWC3_GCTL_PRTCAP_OTG:
+> > > >>  		/* do nothing during runtime_suspend */
+> > > >>@@ -2008,11 +2015,12 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+> > > >>  		break;
+> > > >>  	case DWC3_GCTL_PRTCAP_HOST:
+> > > >>  		if (!PMSG_IS_AUTO(msg)) {
+> > > >>-			ret = dwc3_core_init_for_resume(dwc);
+> > > >>-			if (ret)
+> > > >>-				return ret;
+> > > >>-			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+> > > >>-			break;
+> > > >>+			if (dwc->phy_power_off) {
+> > > >>+				ret = dwc3_core_init_for_resume(dwc);
+> > > >>+				if (ret)
+> > > >>+					return ret;
+> > > >>+				dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+> > > >>+			}
+> > > >>  		}
+> > > >>  		/* Restore GUSB2PHYCFG bits that were modified in suspend */
+> > > >>  		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+> > > >>@@ -2084,8 +2092,6 @@ static int dwc3_runtime_suspend(struct device *dev)
+> > > >>  	if (ret)
+> > > >>  		return ret;
+> > > >>-	device_init_wakeup(dev, true);
+> > > >>-
+> > > >>  	return 0;
+> > > >>  }
+> > > >>@@ -2094,8 +2100,6 @@ static int dwc3_runtime_resume(struct device *dev)
+> > > >>  	struct dwc3     *dwc = dev_get_drvdata(dev);
+> > > >>  	int		ret;
+> > > >>-	device_init_wakeup(dev, false);
+> > > >>-
+> > > >>  	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
+> > > >>  	if (ret)
+> > > >>  		return ret;
+> > > >>diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > > >>index 81c486b..37397a8 100644
+> > > >>--- a/drivers/usb/dwc3/core.h
+> > > >>+++ b/drivers/usb/dwc3/core.h
+> > > >>@@ -1155,6 +1155,9 @@ struct dwc3 {
+> > > >>  	bool			phys_ready;
+> > > >>+	unsigned int            hs_phy_mode;
+> > > >>+	bool			phy_power_off;
+> > > >>+
+> > > >>  	struct ulpi		*ulpi;
+> > > >>  	bool			ulpi_ready;
+> > > >>@@ -1539,6 +1542,7 @@ int dwc3_core_soft_reset(struct dwc3 *dwc);
+> > > >>  #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+> > > >>  int dwc3_host_init(struct dwc3 *dwc);
+> > > >>  void dwc3_host_exit(struct dwc3 *dwc);
+> > > >>+void dwc3_check_phy_speed_mode(struct dwc3 *dwc);
+> > > >>  #else
+> > > >>  static inline int dwc3_host_init(struct dwc3 *dwc)
+> > > >>  { return 0; }
+> > > >>diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> > > >>index f56c30c..e19b40a 100644
+> > > >>--- a/drivers/usb/dwc3/host.c
+> > > >>+++ b/drivers/usb/dwc3/host.c
+> > > >>@@ -12,6 +12,7 @@
+> > > >>  #include <linux/platform_device.h>
+> > > >>  #include "core.h"
+> > > >>+#include "../host/xhci.h"
+> > > >>  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+> > > >>  					int irq, char *name)
+> > > >>@@ -136,3 +137,26 @@ void dwc3_host_exit(struct dwc3 *dwc)
+> > > >>  {
+> > > >>  	platform_device_unregister(dwc->xhci);
+> > > >>  }
+> > > >>+
+> > > >>+void dwc3_check_phy_speed_mode(struct dwc3 *dwc)
+> > > >>+{
+> > > >>+	int i, num_ports;
+> > > >>+	u32 reg;
+> > > >>+	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
+> > > >>+	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
+> > > >>+
+> > > >>+	dwc->hs_phy_mode = 0;
+> > > >>+
+> > > >>+	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
+> > > >>+
+> > > >>+	num_ports = HCS_MAX_PORTS(reg);
+> > > >>+	for (i = 0; i < num_ports; i++) {
+> > > >>+		reg = readl(&xhci_hcd->op_regs->port_status_base + i * NUM_PORT_REGS);
+> > > >>+		if (reg & PORT_PE) {
+> > > >>+			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
+> > > >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_HS;
+> > > >>+			else if (DEV_LOWSPEED(reg))
+> > > >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_LS;
+> > > >>+		}
+> > > >>+	}
+> > > >>+}
+> > > >I anticipate that it might raise concerns from maintainers that
+> > > >dwc3_check_phy_speed_mode() accesses xHCI data structures and
+> > > >registers directly. Could there be a generic HCD API that provides
+> > > >this functionality (if implemented by the specific HCD)?
+> > > 
+> > > Hi Mathias, we are not sure if there is any such API present currently.
+> > > 
+> > > Hi Alan, can you help suggest any API (if present) that we can reuse here to
+> > > avoid
+> > > 
+> > > xhci registers and structs here in dwc3.
+> > > 
+> > 
+> > We can probably do something like below to query the speed. This avoids adding
+> > another API and does not touch the underlying registers.
+> > 
+> > Pls define enum usb_device_speed usb2_speed in dwc3 structure.
+> > 
+> > diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> > index f29a264..fed1c58 100644
+> > --- a/drivers/usb/dwc3/host.c
+> > +++ b/drivers/usb/dwc3/host.c
+> > @@ -9,9 +9,29 @@
+> >  
+> >  #include <linux/acpi.h>
+> >  #include <linux/platform_device.h>
+> > +#include <linux/usb.h>
+> >  
+> >  #include "core.h"
+> >  
+> > +void dwc3_update_hs_phy_speed(struct dwc3 *dwc)
+> > +{
+> > +	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
+> > +	struct usb_device *udev;
+> > +
+> > +	/*
+> > +	 * It is possible to query the speed of all children of
+> > +	 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
+> > +	 * currently supports only 1 port per controller. So
+> > +	 * this is sufficient.
+> > +	 */
+> > +	udev = usb_hub_find_child(hcd->self.root_hub, 1);
+> > +
+> > +	if (udev)
+> > +		dwc->usb2_speed = udev->speed;
+> > +	else
+> > +		dwc->usb2_speed = USB_SPEED_UNKNOWN;
+> > +}
+> > +
+> >  static int dwc3_host_get_irq(struct dwc3 *dwc)
+> >  {
+> >  	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
+> > 
+> > 
+> I am also thinking why dwc core needs to cache usb2_speed since dwc3-qcom glue
+> driver is the only sole user. We also require it only during suspend and does
+> not bother about dwc::usb2_speed correctness outside suspend. Lets move this
+> to dwc3-qcom suspend routines where we have to rely on USB2 speed for
+> configuring the D+/D- interrupt.
 
-Hi Carl,
-
-what about the AT+QCFGEXT="usbnet","rmnet" configuration available on
-several firmware versions which makes the BG95 enumerate as
-Diag + GNSS + Modem + QMI:
-
-T:  Bus=02 Lev=02 Prnt=06 Port=01 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=0700 Rev= 0.00
-S:  Manufacturer=Quectel, Incorporated
-S:  Product=Quectel LPWA Module
-S:  SerialNumber=xxxxxxxx
-C:* #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-> 
-> A detailed description of the USB configuration for each mode follows:
-> 
-> +QCFGEXT: "usbnet","modem"
-> -------------------------
-> T:  Bus=01 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=0700 Rev= 0.00
-> S:  Manufacturer=Quectel, Incorporated
-> S:  Product=Quectel LPWA Module
-> S:  SerialNumber=884328a2
-> C:* #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=option
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> +QCFGEXT: "usbnet","ecm"
-> -----------------------
-> T:  Bus=01 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  4 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=0700 Rev= 0.00
-> S:  Manufacturer=Quectel, Incorporated
-> S:  Product=Quectel LPWA Module
-> S:  SerialNumber=884328a2
-> C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-> A:  FirstIf#= 3 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> I:  If#= 4 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> I:* If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> Signed-off-by: Carl Yin <carl.yin@quectel.com>
-> ---
->  drivers/usb/serial/option.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 152ad8826..f91b2a67d 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
->  #define QUECTEL_PRODUCT_RM500Q			0x0800
->  #define QUECTEL_PRODUCT_EC200S_CN		0x6002
->  #define QUECTEL_PRODUCT_EC200T			0x6026
-> +#define QUECTEL_PRODUCT_BG95			0x0700
->  
->  #define CMOTECH_VENDOR_ID			0x16d8
->  #define CMOTECH_PRODUCT_6001			0x6001
-> @@ -1143,6 +1144,10 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = ZLP },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG95, 0xff, 0xff, 0xff),
-> +	  .driver_info = ZLP },
-
-Could you please add a RSVD(3) flag to the driver_info here to avoid
-that the option driver incorrectly binds to the QMI interface?
-
-Regards,
-Reinhard
-
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG95, 0xff, 0xfe, 0xff),
-> +	  .driver_info = ZLP },
->  
->  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
->  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
-> -- 
-> 2.17.1
-> 
+I like both of your suggestions. If something like dwc3_update_hs_phy_speed()
+works properly here we should have finally sorted out all the layering issues
+Felipe was unhappy about.
