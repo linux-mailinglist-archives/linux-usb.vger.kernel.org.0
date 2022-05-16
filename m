@@ -2,251 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC8152832F
-	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 13:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD2852835D
+	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 13:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241389AbiEPL01 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 May 2022 07:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
+        id S243238AbiEPLgV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 May 2022 07:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243175AbiEPL0F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 07:26:05 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FC8D138;
-        Mon, 16 May 2022 04:26:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652700364; x=1684236364;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rtKBn5k5pHF1j/ZQ6DlaX8fzQPJ8ryUBgGQCXLcd+aQ=;
-  b=QhGri0gxb9ElwskUxG1wxy4S68rKylj0eXJ9kY+DDZtXf0Uxr/TudIYs
-   ZMfAMl1RfYxISFtIuH9skqvsHOYWY0GN5RXabG1cueodCJKz9ySqeezYJ
-   0h6qpZIpm/548TNPCTFVrbqpmxZbh5Wya5Z7sqR8jsGm6bQUOfQ0vl3pQ
-   0UPA8J4eEd3x9rUuNfWOxyNuvNjZFvExca2/9kkiu0ZEH2fVE3JodFf4I
-   jzTlPIy4j016YLC9XrYRAezwGWIUYYWFV+pagxS7JLyD534GQCE1P2D3v
-   kWJ/OWOtaEreUKLRbPpK3kFJQ0f5Q77KLGAw9psfnIMpRXMe9MihDIEVK
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="258372247"
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="258372247"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 04:26:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="713324156"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 16 May 2022 04:25:55 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 16 May 2022 14:25:55 +0300
-Date:   Mon, 16 May 2022 14:25:55 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 2/5] drm: Add HPD state to
- drm_connector_oob_hotplug_event()
-Message-ID: <YoI0wx/LPK4ZrUFf@kuha.fi.intel.com>
-References: <20220502165316.4167199-1-bjorn.andersson@linaro.org>
- <20220502165316.4167199-3-bjorn.andersson@linaro.org>
+        with ESMTP id S243295AbiEPLfk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 07:35:40 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0374538DB4
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 04:35:08 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id k126-20020a1ca184000000b003943fd07180so8445144wme.3
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 04:35:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=p0rgIQMbrFiYsgcjoFDoepTtn20KjWcRTBgi8tJw9xw=;
+        b=EP2TdXabYG332lC6IQzUMr2ULmKLrDB4KGdp8I6SWNs04aBaf3I6jszrlcZgGB8yIa
+         o7kis32F+jau35chRkGfeHadrRjA6u0RXPmxldOhSa0cHxAKCPBUAC0FxKW87xFy2g8S
+         EbPe9HLWE8k7NgQ9ZsrQEenZXDxFkE/00UVL3LFfDVJHCxfWTh+a8uUL8jJr/aK+2kyw
+         EZhsW5F3T47H+M5fXNsIO7+W4X8WK+k9IHlSluvAYA2I+Sy9YUoekPvZbfy40IPlFZYo
+         tJp+n3nWpqAcXoMYWJqM/Pn+WHRcGzh/A2QQrzaeqdAHrLJEWFmaPObt9TvGCViseifg
+         ysCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=p0rgIQMbrFiYsgcjoFDoepTtn20KjWcRTBgi8tJw9xw=;
+        b=6A7GDW+u4eP4F2a1mh8dXjZIUhMo9yXZO5JzUyry8d+qzkqgpVRthmeS4hEuYe+0tI
+         8qZbsjesccUCBxNuxlFlteoPiG9Wko4HyyTl4Q6+2vwm2JGQNX+52lnybX6wlOjGFb0z
+         HYa5iBOPzwXrwejBFP/qz5UATWFqqzsTiToFGblaCdV3xI2xUM3Ooe4nBxSFNbck+2Sq
+         TIEjLvXpOOU/jHb1alB+NanRQ9CekhAeH7Bj/3CfRhaEzNbIyGRC8PGhmBoDtZSHQfqx
+         5sFTMV1nu43ZOfLD75UI1qKqj/YYYo2jGnHevTeQUUjmYOWnakl5eo8HP1WgCXfE3xD0
+         H4RA==
+X-Gm-Message-State: AOAM530FktOwsOaEfeg4qyFGanBX4IAB9Wr/TsJNP1bhmKwzufn3JILk
+        Dy5bNfCHkMK8pQ6pm/cfGLgd+w==
+X-Google-Smtp-Source: ABdhPJwvr0l6PJJkDzfVHiRQJgiJsClLA678PoHTLNXsEYIPazSWO4idGkNNFLNsvnExx5k3OJUorw==
+X-Received: by 2002:a05:600c:ad2:b0:394:22e1:ebcf with SMTP id c18-20020a05600c0ad200b0039422e1ebcfmr26715670wmr.181.1652700906530;
+        Mon, 16 May 2022 04:35:06 -0700 (PDT)
+Received: from arch-thunder (a109-49-33-111.cpe.netcabo.pt. [109.49.33.111])
+        by smtp.gmail.com with ESMTPSA id j25-20020adfa799000000b0020c5253d8dbsm9334014wrc.39.2022.05.16.04.35.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 04:35:06 -0700 (PDT)
+Date:   Mon, 16 May 2022 12:35:03 +0100
+From:   Rui Miguel Silva <rui.silva@linaro.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH] usb: isp1760: Fix out-of-bounds array access
+Message-ID: <20220516113503.5ewp65vqp3yworvh@arch-thunder>
+References: <20220516091424.391209-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220502165316.4167199-3-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220516091424.391209-1-linus.walleij@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-+Hans
+Hey Linus,
+Thanks for the patch.
 
-Hans, do you have any comments?
+On Mon, May 16, 2022 at 11:14:24AM +0200, Linus Walleij wrote:
+> Running the driver through kasan gives an interesting splat:
+> 
+>   BUG: KASAN: global-out-of-bounds in isp1760_register+0x180/0x70c
+>   Read of size 20 at addr f1db2e64 by task swapper/0/1
+>   (...)
+>   isp1760_register from isp1760_plat_probe+0x1d8/0x220
+>   (...)
+> 
+> This happens because the loop reading the regmap fields for the
+> different ISP1760 variants look like this:
+> 
+>   for (i = 0; i < HC_FIELD_MAX; i++) { ... }
+> 
+> Meaning it expects the arrays to be at least HC_FIELD_MAX - 1 long.
+> 
+> However the arrays isp1760_hc_reg_fields[], isp1763_hc_reg_fields[],
+> isp1763_hc_volatile_ranges[] and isp1763_dc_volatile_ranges[] are
+> dynamically sized during compilation.
+> 
+> Fix this by putting an empty assignment to the [HC_FIELD_MAX]
+> and [DC_FIELD_MAX] array member at the end of each array.
+> This will make the array one member longer than it needs to be,
+> but avoids the risk of overwriting whatever is inside
+> [HC_FIELD_MAX - 1] and is simple and intuitive to read. Also
+> add comments explaining what is going on.
+> 
+> Fixes: 1da9e1c06873 ("usb: isp1760: move to regmap for register access")
+> Cc: stable@vger.kernel.org
+> Cc: Rui Miguel Silva <rui.silva@linaro.org>
 
-On Mon, May 02, 2022 at 09:53:13AM -0700, Bjorn Andersson wrote:
-> In some implementations, such as the Qualcomm platforms, the display
-> driver has no way to query the current HPD state and as such it's
-> impossible to distinguish between disconnect and attention events.
-> 
-> Add a parameter to drm_connector_oob_hotplug_event() to pass the HPD
-> state.
-> 
-> Also push the test for unchanged state in the displayport altmode driver
-> into the i915 driver, to allow other drivers to act upon each update.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Very good catch. Thanks for fixing this.
+
+Reviewed-by: Rui Miguel Silva <rui.silva@linaro.org>
+
+Cheers,
+   Rui
+
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
+> Found while testing to compile the Vexpress kernel into the
+> vmalloc area in some experimental patches, curiously it did not
+> manifest before, I guess we were lucky with padding
+> etc.
+> ---
+>  drivers/usb/isp1760/isp1760-core.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> Changes since v3:
-> - Transition to drm_connector_status instead of custom hpd_state 
-> 
->  drivers/gpu/drm/drm_connector.c          |  6 ++++--
->  drivers/gpu/drm/i915/display/intel_dp.c  | 17 ++++++++++++++---
->  drivers/gpu/drm/i915/i915_drv.h          |  3 +++
->  drivers/usb/typec/altmodes/displayport.c | 10 +++-------
->  include/drm/drm_connector.h              |  6 ++++--
->  5 files changed, 28 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-> index 1c48d162c77e..e86c69f0640f 100644
-> --- a/drivers/gpu/drm/drm_connector.c
-> +++ b/drivers/gpu/drm/drm_connector.c
-> @@ -2794,6 +2794,7 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
->  /**
->   * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
->   * @connector_fwnode: fwnode_handle to report the event on
-> + * @status: hot plug detect logical state
->   *
->   * On some hardware a hotplug event notification may come from outside the display
->   * driver / device. An example of this is some USB Type-C setups where the hardware
-> @@ -2803,7 +2804,8 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
->   * This function can be used to report these out-of-band events after obtaining
->   * a drm_connector reference through calling drm_connector_find_by_fwnode().
->   */
-> -void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
-> +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
-> +				     enum drm_connector_status status)
->  {
->  	struct drm_connector *connector;
+> diff --git a/drivers/usb/isp1760/isp1760-core.c b/drivers/usb/isp1760/isp1760-core.c
+> index d1d9a7d5da17..af88f4fe00d2 100644
+> --- a/drivers/usb/isp1760/isp1760-core.c
+> +++ b/drivers/usb/isp1760/isp1760-core.c
+> @@ -251,6 +251,8 @@ static const struct reg_field isp1760_hc_reg_fields[] = {
+>  	[HW_DM_PULLDOWN]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 2, 2),
+>  	[HW_DP_PULLDOWN]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 1, 1),
+>  	[HW_DP_PULLUP]		= REG_FIELD(ISP176x_HC_OTG_CTRL, 0, 0),
+> +	/* Make sure the array is sized properly during compilation */
+> +	[HC_FIELD_MAX]		= {},
+>  };
 >  
-> @@ -2812,7 +2814,7 @@ void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
->  		return;
+>  static const struct reg_field isp1763_hc_reg_fields[] = {
+> @@ -321,6 +323,8 @@ static const struct reg_field isp1763_hc_reg_fields[] = {
+>  	[HW_DM_PULLDOWN_CLEAR]	= REG_FIELD(ISP1763_HC_OTG_CTRL_CLEAR, 2, 2),
+>  	[HW_DP_PULLDOWN_CLEAR]	= REG_FIELD(ISP1763_HC_OTG_CTRL_CLEAR, 1, 1),
+>  	[HW_DP_PULLUP_CLEAR]	= REG_FIELD(ISP1763_HC_OTG_CTRL_CLEAR, 0, 0),
+> +	/* Make sure the array is sized properly during compilation */
+> +	[HC_FIELD_MAX]		= {},
+>  };
 >  
->  	if (connector->funcs->oob_hotplug_event)
-> -		connector->funcs->oob_hotplug_event(connector);
-> +		connector->funcs->oob_hotplug_event(connector, status);
+>  static const struct regmap_range isp1763_hc_volatile_ranges[] = {
+> @@ -405,6 +409,8 @@ static const struct reg_field isp1761_dc_reg_fields[] = {
+>  	[DC_CHIP_ID_HIGH]	= REG_FIELD(ISP176x_DC_CHIPID, 16, 31),
+>  	[DC_CHIP_ID_LOW]	= REG_FIELD(ISP176x_DC_CHIPID, 0, 15),
+>  	[DC_SCRATCH]		= REG_FIELD(ISP176x_DC_SCRATCH, 0, 15),
+> +	/* Make sure the array is sized properly during compilation */
+> +	[DC_FIELD_MAX]		= {},
+>  };
 >  
->  	drm_connector_put(connector);
->  }
-> diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
-> index e4a79c11fd25..56cc023f7bbd 100644
-> --- a/drivers/gpu/drm/i915/display/intel_dp.c
-> +++ b/drivers/gpu/drm/i915/display/intel_dp.c
-> @@ -4951,15 +4951,26 @@ static int intel_dp_connector_atomic_check(struct drm_connector *conn,
->  	return intel_modeset_synced_crtcs(state, conn);
->  }
+>  static const struct regmap_range isp1763_dc_volatile_ranges[] = {
+> @@ -458,6 +464,8 @@ static const struct reg_field isp1763_dc_reg_fields[] = {
+>  	[DC_CHIP_ID_HIGH]	= REG_FIELD(ISP1763_DC_CHIPID_HIGH, 0, 15),
+>  	[DC_CHIP_ID_LOW]	= REG_FIELD(ISP1763_DC_CHIPID_LOW, 0, 15),
+>  	[DC_SCRATCH]		= REG_FIELD(ISP1763_DC_SCRATCH, 0, 15),
+> +	/* Make sure the array is sized properly during compilation */
+> +	[DC_FIELD_MAX]		= {},
+>  };
 >  
-> -static void intel_dp_oob_hotplug_event(struct drm_connector *connector)
-> +static void intel_dp_oob_hotplug_event(struct drm_connector *connector,
-> +				       enum drm_connector_status hpd_state)
->  {
->  	struct intel_encoder *encoder = intel_attached_encoder(to_intel_connector(connector));
->  	struct drm_i915_private *i915 = to_i915(connector->dev);
-> +	bool hpd_high = hpd_state == connector_status_connected;
-> +	unsigned int hpd_pin = encoder->hpd_pin;
-> +	bool need_work = false;
->  
->  	spin_lock_irq(&i915->irq_lock);
-> -	i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
-> +	if (hpd_high != test_bit(hpd_pin, &i915->hotplug.oob_hotplug_last_state)) {
-> +		i915->hotplug.event_bits |= BIT(hpd_pin);
-> +
-> +		__assign_bit(hpd_pin, &i915->hotplug.oob_hotplug_last_state, hpd_high);
-> +		need_work = true;
-> +	}
->  	spin_unlock_irq(&i915->irq_lock);
-> -	queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
-> +
-> +	if (need_work)
-> +		queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
->  }
->  
->  static const struct drm_connector_funcs intel_dp_connector_funcs = {
-> diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
-> index 24111bf42ce0..96c088bb5522 100644
-> --- a/drivers/gpu/drm/i915/i915_drv.h
-> +++ b/drivers/gpu/drm/i915/i915_drv.h
-> @@ -135,6 +135,9 @@ struct i915_hotplug {
->  	/* Whether or not to count short HPD IRQs in HPD storms */
->  	u8 hpd_short_storm_enabled;
->  
-> +	/* Last state reported by oob_hotplug_event for each encoder */
-> +	unsigned long oob_hotplug_last_state;
-> +
->  	/*
->  	 * if we get a HPD irq from DP and a HPD irq from non-DP
->  	 * the non-DP HPD could block the workqueue on a mode config
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index c1d8c23baa39..9360ca177c7d 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -59,7 +59,6 @@ struct dp_altmode {
->  	struct typec_displayport_data data;
->  
->  	enum dp_state state;
-> -	bool hpd;
->  
->  	struct mutex lock; /* device lock */
->  	struct work_struct work;
-> @@ -143,10 +142,8 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
->  		if (!ret)
->  			dp->state = DP_STATE_CONFIGURE;
->  	} else {
-> -		if (dp->hpd != hpd) {
-> -			drm_connector_oob_hotplug_event(dp->connector_fwnode);
-> -			dp->hpd = hpd;
-> -		}
-> +		drm_connector_oob_hotplug_event(dp->connector_fwnode,
-> +						hpd ? connector_status_connected : connector_status_disconnected);
->  	}
->  
->  	return ret;
-> @@ -573,8 +570,7 @@ void dp_altmode_remove(struct typec_altmode *alt)
->  	cancel_work_sync(&dp->work);
->  
->  	if (dp->connector_fwnode) {
-> -		if (dp->hpd)
-> -			drm_connector_oob_hotplug_event(dp->connector_fwnode);
-> +		drm_connector_oob_hotplug_event(dp->connector_fwnode, connector_status_disconnected);
->  
->  		fwnode_handle_put(dp->connector_fwnode);
->  	}
-> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-> index 3ac4bf87f257..886aa1861ed9 100644
-> --- a/include/drm/drm_connector.h
-> +++ b/include/drm/drm_connector.h
-> @@ -1141,7 +1141,8 @@ struct drm_connector_funcs {
->  	 * This will get called when a hotplug-event for a drm-connector
->  	 * has been received from a source outside the display driver / device.
->  	 */
-> -	void (*oob_hotplug_event)(struct drm_connector *connector);
-> +	void (*oob_hotplug_event)(struct drm_connector *connector,
-> +				  enum drm_connector_status status);
->  
->  	/**
->  	 * @debugfs_init:
-> @@ -1749,7 +1750,8 @@ drm_connector_is_unregistered(struct drm_connector *connector)
->  		DRM_CONNECTOR_UNREGISTERED;
->  }
->  
-> -void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode);
-> +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
-> +				     enum drm_connector_status status);
->  const char *drm_get_connector_type_name(unsigned int connector_type);
->  const char *drm_get_connector_status_name(enum drm_connector_status status);
->  const char *drm_get_subpixel_order_name(enum subpixel_order order);
+>  static const struct regmap_config isp1763_dc_regmap_conf = {
 > -- 
 > 2.35.1
-
--- 
-heikki
+> 
