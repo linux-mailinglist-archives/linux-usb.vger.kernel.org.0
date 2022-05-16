@@ -2,66 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD2852835D
-	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 13:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2273528368
+	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 13:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243238AbiEPLgV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 May 2022 07:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
+        id S243260AbiEPLj4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 May 2022 07:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243295AbiEPLfk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 07:35:40 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0374538DB4
-        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 04:35:08 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id k126-20020a1ca184000000b003943fd07180so8445144wme.3
-        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 04:35:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=p0rgIQMbrFiYsgcjoFDoepTtn20KjWcRTBgi8tJw9xw=;
-        b=EP2TdXabYG332lC6IQzUMr2ULmKLrDB4KGdp8I6SWNs04aBaf3I6jszrlcZgGB8yIa
-         o7kis32F+jau35chRkGfeHadrRjA6u0RXPmxldOhSa0cHxAKCPBUAC0FxKW87xFy2g8S
-         EbPe9HLWE8k7NgQ9ZsrQEenZXDxFkE/00UVL3LFfDVJHCxfWTh+a8uUL8jJr/aK+2kyw
-         EZhsW5F3T47H+M5fXNsIO7+W4X8WK+k9IHlSluvAYA2I+Sy9YUoekPvZbfy40IPlFZYo
-         tJp+n3nWpqAcXoMYWJqM/Pn+WHRcGzh/A2QQrzaeqdAHrLJEWFmaPObt9TvGCViseifg
-         ysCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=p0rgIQMbrFiYsgcjoFDoepTtn20KjWcRTBgi8tJw9xw=;
-        b=6A7GDW+u4eP4F2a1mh8dXjZIUhMo9yXZO5JzUyry8d+qzkqgpVRthmeS4hEuYe+0tI
-         8qZbsjesccUCBxNuxlFlteoPiG9Wko4HyyTl4Q6+2vwm2JGQNX+52lnybX6wlOjGFb0z
-         HYa5iBOPzwXrwejBFP/qz5UATWFqqzsTiToFGblaCdV3xI2xUM3Ooe4nBxSFNbck+2Sq
-         TIEjLvXpOOU/jHb1alB+NanRQ9CekhAeH7Bj/3CfRhaEzNbIyGRC8PGhmBoDtZSHQfqx
-         5sFTMV1nu43ZOfLD75UI1qKqj/YYYo2jGnHevTeQUUjmYOWnakl5eo8HP1WgCXfE3xD0
-         H4RA==
-X-Gm-Message-State: AOAM530FktOwsOaEfeg4qyFGanBX4IAB9Wr/TsJNP1bhmKwzufn3JILk
-        Dy5bNfCHkMK8pQ6pm/cfGLgd+w==
-X-Google-Smtp-Source: ABdhPJwvr0l6PJJkDzfVHiRQJgiJsClLA678PoHTLNXsEYIPazSWO4idGkNNFLNsvnExx5k3OJUorw==
-X-Received: by 2002:a05:600c:ad2:b0:394:22e1:ebcf with SMTP id c18-20020a05600c0ad200b0039422e1ebcfmr26715670wmr.181.1652700906530;
-        Mon, 16 May 2022 04:35:06 -0700 (PDT)
-Received: from arch-thunder (a109-49-33-111.cpe.netcabo.pt. [109.49.33.111])
-        by smtp.gmail.com with ESMTPSA id j25-20020adfa799000000b0020c5253d8dbsm9334014wrc.39.2022.05.16.04.35.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 04:35:06 -0700 (PDT)
-Date:   Mon, 16 May 2022 12:35:03 +0100
-From:   Rui Miguel Silva <rui.silva@linaro.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: Re: [PATCH] usb: isp1760: Fix out-of-bounds array access
-Message-ID: <20220516113503.5ewp65vqp3yworvh@arch-thunder>
-References: <20220516091424.391209-1-linus.walleij@linaro.org>
+        with ESMTP id S236194AbiEPLjz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 07:39:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580AADF55
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 04:39:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14029B810D8
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 11:39:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A8186C34115
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 11:39:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652701191;
+        bh=EpTFKjeOKGw3OcF7V0zYGBKlV1YDjRRF7edKkm7TQ5w=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=C8cWGZda/zVTcQKaQm0tY/ueicxi0jyn2bpLXjm2rQEV918DJ7Bfvg1qUUuqLucvI
+         /B9uLD5RSuuKSq++GfiOKc6CtABVhEmvkwhx0FfnCSJGDBFoi0XALCiNTTbwz7POp2
+         iKfuwkCk737gFoR4uhParfTdGDfyJyA2B6bERuGyExHoMY+TaCSHr97hD5C9az6Eqt
+         +TF8cjDND8Tg5UgYfZXDKvfryzWbdCj6wjbnVmAIyIj1ypoF2JnsMV+2swemadYrPw
+         V9hz+MKH3lhwHhzw9vhZZ57yfsvVeeX8I9nAMKcu79I9Y8VBtka37V90bqzAESVg3i
+         PODXVJsIosROA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 96740C05FD2; Mon, 16 May 2022 11:39:51 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
+ xhci_hcd rejecting DMA map of vmalloc memory
+Date:   Mon, 16 May 2022 11:39:51 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: satadru@umich.edu
+X-Bugzilla-Status: REOPENED
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-215890-208809-TaBrz5NQfC@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
+References: <bug-215890-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220516091424.391209-1-linus.walleij@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,98 +71,22 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hey Linus,
-Thanks for the patch.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
 
-On Mon, May 16, 2022 at 11:14:24AM +0200, Linus Walleij wrote:
-> Running the driver through kasan gives an interesting splat:
-> 
->   BUG: KASAN: global-out-of-bounds in isp1760_register+0x180/0x70c
->   Read of size 20 at addr f1db2e64 by task swapper/0/1
->   (...)
->   isp1760_register from isp1760_plat_probe+0x1d8/0x220
->   (...)
-> 
-> This happens because the loop reading the regmap fields for the
-> different ISP1760 variants look like this:
-> 
->   for (i = 0; i < HC_FIELD_MAX; i++) { ... }
-> 
-> Meaning it expects the arrays to be at least HC_FIELD_MAX - 1 long.
-> 
-> However the arrays isp1760_hc_reg_fields[], isp1763_hc_reg_fields[],
-> isp1763_hc_volatile_ranges[] and isp1763_dc_volatile_ranges[] are
-> dynamically sized during compilation.
-> 
-> Fix this by putting an empty assignment to the [HC_FIELD_MAX]
-> and [DC_FIELD_MAX] array member at the end of each array.
-> This will make the array one member longer than it needs to be,
-> but avoids the risk of overwriting whatever is inside
-> [HC_FIELD_MAX - 1] and is simple and intuitive to read. Also
-> add comments explaining what is going on.
-> 
-> Fixes: 1da9e1c06873 ("usb: isp1760: move to regmap for register access")
-> Cc: stable@vger.kernel.org
-> Cc: Rui Miguel Silva <rui.silva@linaro.org>
+Satadru Pramanik (satadru@umich.edu) changed:
 
-Very good catch. Thanks for fixing this.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|RESOLVED                    |REOPENED
+         Resolution|CODE_FIX                    |---
 
-Reviewed-by: Rui Miguel Silva <rui.silva@linaro.org>
+--- Comment #18 from Satadru Pramanik (satadru@umich.edu) ---
+I just tested the Ubuntu mainline build... Maybe I accidentally used the ol=
+der
+fixed kernel I built. The fix should definitely land to fix this properly.
 
-Cheers,
-   Rui
+--=20
+You may reply to this email to add a comment.
 
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> Found while testing to compile the Vexpress kernel into the
-> vmalloc area in some experimental patches, curiously it did not
-> manifest before, I guess we were lucky with padding
-> etc.
-> ---
->  drivers/usb/isp1760/isp1760-core.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/usb/isp1760/isp1760-core.c b/drivers/usb/isp1760/isp1760-core.c
-> index d1d9a7d5da17..af88f4fe00d2 100644
-> --- a/drivers/usb/isp1760/isp1760-core.c
-> +++ b/drivers/usb/isp1760/isp1760-core.c
-> @@ -251,6 +251,8 @@ static const struct reg_field isp1760_hc_reg_fields[] = {
->  	[HW_DM_PULLDOWN]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 2, 2),
->  	[HW_DP_PULLDOWN]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 1, 1),
->  	[HW_DP_PULLUP]		= REG_FIELD(ISP176x_HC_OTG_CTRL, 0, 0),
-> +	/* Make sure the array is sized properly during compilation */
-> +	[HC_FIELD_MAX]		= {},
->  };
->  
->  static const struct reg_field isp1763_hc_reg_fields[] = {
-> @@ -321,6 +323,8 @@ static const struct reg_field isp1763_hc_reg_fields[] = {
->  	[HW_DM_PULLDOWN_CLEAR]	= REG_FIELD(ISP1763_HC_OTG_CTRL_CLEAR, 2, 2),
->  	[HW_DP_PULLDOWN_CLEAR]	= REG_FIELD(ISP1763_HC_OTG_CTRL_CLEAR, 1, 1),
->  	[HW_DP_PULLUP_CLEAR]	= REG_FIELD(ISP1763_HC_OTG_CTRL_CLEAR, 0, 0),
-> +	/* Make sure the array is sized properly during compilation */
-> +	[HC_FIELD_MAX]		= {},
->  };
->  
->  static const struct regmap_range isp1763_hc_volatile_ranges[] = {
-> @@ -405,6 +409,8 @@ static const struct reg_field isp1761_dc_reg_fields[] = {
->  	[DC_CHIP_ID_HIGH]	= REG_FIELD(ISP176x_DC_CHIPID, 16, 31),
->  	[DC_CHIP_ID_LOW]	= REG_FIELD(ISP176x_DC_CHIPID, 0, 15),
->  	[DC_SCRATCH]		= REG_FIELD(ISP176x_DC_SCRATCH, 0, 15),
-> +	/* Make sure the array is sized properly during compilation */
-> +	[DC_FIELD_MAX]		= {},
->  };
->  
->  static const struct regmap_range isp1763_dc_volatile_ranges[] = {
-> @@ -458,6 +464,8 @@ static const struct reg_field isp1763_dc_reg_fields[] = {
->  	[DC_CHIP_ID_HIGH]	= REG_FIELD(ISP1763_DC_CHIPID_HIGH, 0, 15),
->  	[DC_CHIP_ID_LOW]	= REG_FIELD(ISP1763_DC_CHIPID_LOW, 0, 15),
->  	[DC_SCRATCH]		= REG_FIELD(ISP1763_DC_SCRATCH, 0, 15),
-> +	/* Make sure the array is sized properly during compilation */
-> +	[DC_FIELD_MAX]		= {},
->  };
->  
->  static const struct regmap_config isp1763_dc_regmap_conf = {
-> -- 
-> 2.35.1
-> 
+You are receiving this mail because:
+You are watching the assignee of the bug.=
