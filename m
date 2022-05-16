@@ -2,65 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 060F3528010
-	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 10:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A525280A1
+	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 11:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241940AbiEPItZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 May 2022 04:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
+        id S230469AbiEPJQs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 May 2022 05:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbiEPItU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 04:49:20 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B132511A18
-        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 01:49:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652690959; x=1684226959;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=SPeB9+885bF67n2Q89OWpfMsrOXzmW/uB5SRGx8rIBg=;
-  b=REupJjaQYC5jJNP8LeHRpUxkpDiuIOiH5gwAqoCCl7a/ahOhtK/e4BHI
-   1Q0eDiaoh9koanCa/2ddkbuAiCMQCxwiJn6L3eOKlM/Ysp14u+jhmAFEo
-   dDzJT59v3zzS/E7mj6iWqNHZJ6b/qhDpCXsEj+0+s+ybH4yHaaSMI6Iyx
-   g6HRIWptrAsg/jec1Ij2veFEA4xpbTmuFUtPF/v46cSatAuCuy69BoliD
-   bF801kEY7zDTDIDjGRSFnH/+vFCHdOccmxet4LVcA6a1nr0gni4ZgTSIT
-   KqqbEqXDc2C46tS+zReo3gzsBP9MnGtGiR61Oh+ONtSUjhmrihZsLiz4f
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="251282665"
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="251282665"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 01:49:19 -0700
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="544267967"
-Received: from ccdjpclinux26.jer.intel.com (HELO localhost) ([10.12.48.253])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 01:49:16 -0700
-Date:   Mon, 16 May 2022 11:59:03 +0300
-From:   Gil Fine <gil.fine@intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Gil Fine <gil.fine@intel.com>, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: Re: [PATCH v3 6/6] thunderbolt: Change TMU mode to HiFi
- uni-directional once DisplayPort tunneled
-Message-ID: <20220516085903.GC8368@ccdjLinux26>
-References: <20220511140549.10571-1-gil.fine@intel.com>
- <20220511140549.10571-7-gil.fine@intel.com>
- <Yn4qld89AVEd3cRD@lahna>
- <20220515202746.GA8368@ccdjLinux26>
- <YoIMh0Di7QtALQ/Z@lahna>
+        with ESMTP id S241436AbiEPJQe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 05:16:34 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA95C22B3E
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 02:16:31 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id h29so24675440lfj.2
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 02:16:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YtsGQypIAViopoYzHifgjhQ7LfkQrx2vEG1boAc+HPU=;
+        b=kEsPT1AbY0PwOUERQxkG/RWh2QZQTzHttEf2IINRMqoILIbaOwykgbDPzlYa5Fp/YS
+         lApXjekjZixuCk/wGwH4QbjjvHYZxL26uLEh4/DICaw12oKzk/p1UM05U8/sQ8GdvYB9
+         YBgXsInvc0uUt94l4SK62mly05LKK/9CCH/ZwqiLuDkk0/16p/ZX38t21cvle3iqL2dr
+         94nO6zaiABAjYdQ4oGFgxbmmuIZBgiZepgIh5NM6GDZjtvqiQBz6wmY6wYH45BtF9Boa
+         2stdr4XSnPB89r3Ob2iJ6AF5D0E99VwJmXJj1RQf85uaaGVY5PEh+NHOd9PX46b8ZD8e
+         j4Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YtsGQypIAViopoYzHifgjhQ7LfkQrx2vEG1boAc+HPU=;
+        b=kpfnZ2I52qg959f8TFix8QXhemxYi3M4+fFhVio0C9C7Cje1/H50GHXMSqVKXwaq2M
+         PP14+On93rQK0msyUMzgUM97t1eEfzpqySsTl7S+bLgRGIsFCbVIePQ8+tzL4+TAigcH
+         Rs8yKnridOgCjuBxKlqagJLsc2We4ROnFXf/ky9W3R3VK9HnRhAy/n4WWMi9O3R/e73F
+         BycfHsRxiExBiaoZyvONsgt5kF7YfkvSTpJVAnCiWzeeyOPgpMIwZ+n9uv0rV2DBMVsX
+         /AOPJrBBr4A656nFt2ePFlMIz0D+RLKGoOs7F7uvvcMclpk+wgbRiPpgDod5VTIca842
+         47SA==
+X-Gm-Message-State: AOAM531vlyiAapgr70/KkZif/gyLC5Q23mE9lXz+PiOnUX2lQ3+hMarF
+        TOKFmppO60WDHqfxhn+sC7R9/A==
+X-Google-Smtp-Source: ABdhPJwx7w09+cwemCsM2VoYbPtntL8dgFRwE2dglk/1iBkv+l5wV9EGQEyqqT7K08/szaSzTWKkpA==
+X-Received: by 2002:a05:6512:33a7:b0:473:ea35:e1d6 with SMTP id i7-20020a05651233a700b00473ea35e1d6mr12771652lfg.369.1652692590276;
+        Mon, 16 May 2022 02:16:30 -0700 (PDT)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id t6-20020a056512208600b0047255d21145sm1251798lfr.116.2022.05.16.02.16.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 02:16:29 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, Rui Miguel Silva <rui.silva@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: [PATCH] usb: isp1760: Fix out-of-bounds array access
+Date:   Mon, 16 May 2022 11:14:24 +0200
+Message-Id: <20220516091424.391209-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <YoIMh0Di7QtALQ/Z@lahna>
-Organization: Intel Israel Jerusalem (IDPj /IDCj) Har Hotzvim, HaMarpe Street
- 9, Zip code 9777409
-User-Agent: Mutt/1.9.4 (2018-02-28)
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,79 +69,86 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mika,
+Running the driver through kasan gives an interesting splat:
 
-On Mon, May 16, 2022 at 11:34:15AM +0300, Mika Westerberg wrote:
-> Hi Gil,
-> =
+  BUG: KASAN: global-out-of-bounds in isp1760_register+0x180/0x70c
+  Read of size 20 at addr f1db2e64 by task swapper/0/1
+  (...)
+  isp1760_register from isp1760_plat_probe+0x1d8/0x220
+  (...)
 
-> On Sun, May 15, 2022 at 11:27:46PM +0300, Gil Fine wrote:
-> > > > +int tb_switch_tmu_config_enable(struct device *dev, void *data)
-> > > =
+This happens because the loop reading the regmap fields for the
+different ISP1760 variants look like this:
 
-> > > Also can we please make it take some real type and not something
-> > > arbitrary?
-> > You mean the names, right?
-> > Something like:
-> > int tb_switch_tmu_config_enable(struct device *parent, void *rate)
-> > If so, yes, I will
-> =
+  for (i = 0; i < HC_FIELD_MAX; i++) { ... }
 
-> I mean use a real type, not void *.
-> =
+Meaning it expects the arrays to be at least HC_FIELD_MAX - 1 long.
 
-> > > =
+However the arrays isp1760_hc_reg_fields[], isp1763_hc_reg_fields[],
+isp1763_hc_volatile_ranges[] and isp1763_dc_volatile_ranges[] are
+dynamically sized during compilation.
 
-> > > Can it be const too?
-> > IIUC, it shall be a function pointer with specified signature otherwise=
- it will fail
-> > at compilation
-> =
+Fix this by putting an empty assignment to the [HC_FIELD_MAX]
+and [DC_FIELD_MAX] array member at the end of each array.
+This will make the array one member longer than it needs to be,
+but avoids the risk of overwriting whatever is inside
+[HC_FIELD_MAX - 1] and is simple and intuitive to read. Also
+add comments explaining what is going on.
 
-> Okay then I suggest to make a reasonable "API" function that handles
-> all this internally that does not take arbitrary pointers. Remember to
-> document it in kernel-doc too.
+Fixes: 1da9e1c06873 ("usb: isp1760: move to regmap for register access")
+Cc: stable@vger.kernel.org
+Cc: Rui Miguel Silva <rui.silva@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Found while testing to compile the Vexpress kernel into the
+vmalloc area in some experimental patches, curiously it did not
+manifest before, I guess we were lucky with padding
+etc.
+---
+ drivers/usb/isp1760/isp1760-core.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-This is a function pointer that shall be passed to device_for_each_child()
-And it has to be defined as:
-
-int (*fn)(struct device *dev, void *data)
-
-Similar as here e.g.:
-
-static int remove_retimer(struct device *dev, void *data)
-{
-=BB=B7=B7=B7=B7=B7=B7=B7struct tb_retimer *rt =3D tb_to_retimer(dev);
-=BB=B7=B7=B7=B7=B7=B7=B7struct tb_port *port =3D data;
-
-=BB=B7=B7=B7=B7=B7=B7=B7if (rt && rt->port =3D=3D port)
-=BB=B7=B7=B7=B7=B7=B7=B7=BB=B7=B7=B7=B7=B7=B7=B7tb_retimer_remove(rt);
-=BB=B7=B7=B7=B7=B7=B7=B7return 0;
-}
-
-void tb_retimer_remove_all(struct tb_port *port)
-{
-=BB=B7=B7=B7=B7=B7=B7=B7struct usb4_port *usb4;
-
-=BB=B7=B7=B7=B7=B7=B7=B7usb4 =3D port->usb4;
-=BB=B7=B7=B7=B7=B7=B7=B7if (usb4)
-=BB=B7=B7=B7=B7=B7=B7=B7=BB=B7=B7=B7=B7=B7=B7=B7device_for_each_child_rever=
-se(&usb4->dev, port,
-=BB=B7=B7=B7=B7=B7=B7=B7=BB=B7=B7=B7=B7=B7=B7=B7=BB=B7=B7=B7=B7=B7=B7=B7=BB=
-=B7=B7=B7=B7=B7=B7=B7=BB=B7=B7=B7=B7=B7=B7=B7      remove_retimer);
-}
-
-So not sure I get you...
-
--- =
-
-Thanks,
-Gil
----------------------------------------------------------------------
-Intel Israel (74) Limited
-
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
+diff --git a/drivers/usb/isp1760/isp1760-core.c b/drivers/usb/isp1760/isp1760-core.c
+index d1d9a7d5da17..af88f4fe00d2 100644
+--- a/drivers/usb/isp1760/isp1760-core.c
++++ b/drivers/usb/isp1760/isp1760-core.c
+@@ -251,6 +251,8 @@ static const struct reg_field isp1760_hc_reg_fields[] = {
+ 	[HW_DM_PULLDOWN]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 2, 2),
+ 	[HW_DP_PULLDOWN]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 1, 1),
+ 	[HW_DP_PULLUP]		= REG_FIELD(ISP176x_HC_OTG_CTRL, 0, 0),
++	/* Make sure the array is sized properly during compilation */
++	[HC_FIELD_MAX]		= {},
+ };
+ 
+ static const struct reg_field isp1763_hc_reg_fields[] = {
+@@ -321,6 +323,8 @@ static const struct reg_field isp1763_hc_reg_fields[] = {
+ 	[HW_DM_PULLDOWN_CLEAR]	= REG_FIELD(ISP1763_HC_OTG_CTRL_CLEAR, 2, 2),
+ 	[HW_DP_PULLDOWN_CLEAR]	= REG_FIELD(ISP1763_HC_OTG_CTRL_CLEAR, 1, 1),
+ 	[HW_DP_PULLUP_CLEAR]	= REG_FIELD(ISP1763_HC_OTG_CTRL_CLEAR, 0, 0),
++	/* Make sure the array is sized properly during compilation */
++	[HC_FIELD_MAX]		= {},
+ };
+ 
+ static const struct regmap_range isp1763_hc_volatile_ranges[] = {
+@@ -405,6 +409,8 @@ static const struct reg_field isp1761_dc_reg_fields[] = {
+ 	[DC_CHIP_ID_HIGH]	= REG_FIELD(ISP176x_DC_CHIPID, 16, 31),
+ 	[DC_CHIP_ID_LOW]	= REG_FIELD(ISP176x_DC_CHIPID, 0, 15),
+ 	[DC_SCRATCH]		= REG_FIELD(ISP176x_DC_SCRATCH, 0, 15),
++	/* Make sure the array is sized properly during compilation */
++	[DC_FIELD_MAX]		= {},
+ };
+ 
+ static const struct regmap_range isp1763_dc_volatile_ranges[] = {
+@@ -458,6 +464,8 @@ static const struct reg_field isp1763_dc_reg_fields[] = {
+ 	[DC_CHIP_ID_HIGH]	= REG_FIELD(ISP1763_DC_CHIPID_HIGH, 0, 15),
+ 	[DC_CHIP_ID_LOW]	= REG_FIELD(ISP1763_DC_CHIPID_LOW, 0, 15),
+ 	[DC_SCRATCH]		= REG_FIELD(ISP1763_DC_SCRATCH, 0, 15),
++	/* Make sure the array is sized properly during compilation */
++	[DC_FIELD_MAX]		= {},
+ };
+ 
+ static const struct regmap_config isp1763_dc_regmap_conf = {
+-- 
+2.35.1
 
