@@ -2,75 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BA5527D22
-	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 07:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DB3527D37
+	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 07:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239883AbiEPFpd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 May 2022 01:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
+        id S239994AbiEPFyK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 May 2022 01:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239892AbiEPFpc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 01:45:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5125C1055E
-        for <linux-usb@vger.kernel.org>; Sun, 15 May 2022 22:45:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652679930;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PbHBwtWG6KCcH6kfap+X/3LjIb+3C13uUejN0vnS9ZY=;
-        b=QeW14LVJp/SFV0S+9EOFw28mgOlBBpWrXhTQtQyP52ELQZl2rTISwO1s8fVqMrRYPhtyqQ
-        m50gTHjm74Ejw5YhJXrZWyHkLQYruOJchXTKsOyketzfIPwDZxm1gG7bbT/cwJvSKGSbPi
-        F3lqTGJzk1J9ivmIQi88xQfxKY6Hlo0=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-496-46OkVINkN_OZdG254G6psQ-1; Mon, 16 May 2022 01:45:28 -0400
-X-MC-Unique: 46OkVINkN_OZdG254G6psQ-1
-Received: by mail-qk1-f198.google.com with SMTP id 124-20020a370982000000b006a0a716249bso10577050qkj.10
-        for <linux-usb@vger.kernel.org>; Sun, 15 May 2022 22:45:28 -0700 (PDT)
+        with ESMTP id S230477AbiEPFyI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 01:54:08 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E9517052
+        for <linux-usb@vger.kernel.org>; Sun, 15 May 2022 22:54:06 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id f4so11084542lfu.12
+        for <linux-usb@vger.kernel.org>; Sun, 15 May 2022 22:54:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iQu4lukAu6aND/lSxHXOC9CQZKXgScz0FZajkncufEw=;
+        b=WOTncPc2v5NZjRnTIJIh4IXO1dj9ckDUzbSMpFADqaVVFteQj9TEczbboaO7BSW2/s
+         XISBzIocyQtoLTgR7gWJ/xy+YDxJlUaAAnAbtnBo+Ja4yyTkPE3dNrqwQyJL1N6Lt4H0
+         ++LYr9UXQs5/Qplz1Zqp2mpf5Mt3r7P9Z9O4UHYmkTLk3lPXMJ1Bwkihocd9f4kVWpdk
+         3IzpmTfXxrlrmJeAStqS0d+5hFCtGcTIYjrwdLrzg/HL53pH2ksHGVkx5ljLbGLK0EZE
+         n33jLIToD1mvWSg0ZTsItxhaHXXnCYpgLBJ7kwzcMxk9kRkJfIChVs5xPxBONi0DnCfU
+         rI9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PbHBwtWG6KCcH6kfap+X/3LjIb+3C13uUejN0vnS9ZY=;
-        b=o2QwtZ7zWno6qLKMRYS3scJV/vYqqblrv9XiGUyRhyOpMXEGS7xPmgoNejY8FCe9JR
-         WrDb8R2a7qOtVNgB2nNwx9NIdBfYiy9wZV7bBSOsjScz6KpxRLdg3uaQMAYxBC2h85sJ
-         8kFYzkxs4FH/YQnkWTOa40OubHpx0fQw+a90brpKfMUByFcp8DZKwlFy5CyrNl4wUUXz
-         G1vZJloxuO3ZX+MyfIb/fE12UJrMSjUaVE5YSkvRcftotv29d7wY2waP0Hol42NkdazV
-         FM9jhHfXY/KmQQeFA45gOdanGtOM4gfKNTr6HDrA5+OsX8NGb49L77+AbiOPg1KWHBqX
-         bIcA==
-X-Gm-Message-State: AOAM533g18oecr8HsJFC5dFwtyirjK/bH8RtadccpeZLaO29SSLLlMib
-        lzMmjn/GK68uqMT7lBKyyTzp4O7oHrKqtT/z5l/r7uRu3jYrug6ZbVTjKOEg4iaKaZebsDEU/kQ
-        h5D03y1sz8/bDITptv+fS4wA2CjSTMx92zRls
-X-Received: by 2002:a05:622a:351:b0:2f3:d8e4:529f with SMTP id r17-20020a05622a035100b002f3d8e4529fmr14135653qtw.123.1652679927923;
-        Sun, 15 May 2022 22:45:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxpCUv4pnrOBS9JkzzIB0Du6/4EJhDQb/1uX60y+Po+fXEkJp0vHsyXcs/iskKm/YtlahvnzRGuLDEK2nPvS00=
-X-Received: by 2002:a05:622a:351:b0:2f3:d8e4:529f with SMTP id
- r17-20020a05622a035100b002f3d8e4529fmr14135646qtw.123.1652679927718; Sun, 15
- May 2022 22:45:27 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iQu4lukAu6aND/lSxHXOC9CQZKXgScz0FZajkncufEw=;
+        b=Qs6HmnISZqu5RJ450wC3Kl2Joesfpsv2rAzroUqMjufe3S2vHVgIH9iHKm/pH/JRA9
+         kl+5aUojtzb3L/1UlUaCijCiL8R+r6HSnYKqcD30/9jq/ENcHWc/7jU6q/BN5O7XTh6H
+         Db8sy4Z8JMojpaWmjFJVw8yUgz/QmF546P8x3SAK0W0YbQs62HCFSrHFRoY/yz3qPM/a
+         HYT9vv6THTSCSn2Lc8uyXYfW0HqNpZT0fiJrXboT8xDY02XeU9c9ov0GiIxQlrhZ4ape
+         Viuj69qDpTvnopkhIwvmKtupM3q7xCBfEK4atJO7g+IE3YVH0fOM+Gy8fD/LsBFZm9A7
+         aYrQ==
+X-Gm-Message-State: AOAM532MVlUlWiiap7dBbKL+l7vObhZ/hSW5gDD0WN2dPRuSpAGBXCRX
+        GYud5HlDu9RRJyyTRnFff+22ZQ==
+X-Google-Smtp-Source: ABdhPJxDB/Sa5OHAguWRCgpV67m8ipVKXudtdyV00vw1QteYiiQh9fRXMYiofl5SGOVzWKsH/Wkjhg==
+X-Received: by 2002:a05:6512:228d:b0:473:f729:3219 with SMTP id f13-20020a056512228d00b00473f7293219mr12132861lfu.428.1652680445339;
+        Sun, 15 May 2022 22:54:05 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id m20-20020a2e9114000000b0024f3d1daeb5sm1384293ljg.61.2022.05.15.22.54.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 22:54:04 -0700 (PDT)
+Message-ID: <3499cca2-1d7b-12f5-adbe-0c9b279cc51a@linaro.org>
+Date:   Mon, 16 May 2022 07:54:03 +0200
 MIME-Version: 1.0
-References: <20220504151647.471885-1-jtornosm@redhat.com> <Ynzz6Jh5OeEikvfh@kroah.com>
- <CABk-BGte9qHwmdqCU6oZ9-E3LvOqcMf3z46e00hypNdD_hPxPQ@mail.gmail.com>
- <Yn5mliJq+7W8khe9@rowland.harvard.edu> <Yn5nc2mSHrdy/8h6@kroah.com>
- <Yn5qerFAcHP3scAZ@rowland.harvard.edu> <87zgjl8okv.fsf@miraculix.mork.no>
-In-Reply-To: <87zgjl8okv.fsf@miraculix.mork.no>
-From:   Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Date:   Mon, 16 May 2022 07:45:16 +0200
-Message-ID: <CABk-BGszGzn-ZCKMTmr9uJd2zxhdB6WtZ8AoNd5dLjhzQew2xg@mail.gmail.com>
-Subject: Re: [PATCH v5] USB: core: skip unconfiguration if device doesn't
- support it
-To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Marcel Holtmann <marcel@holtmann.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 3/3] dt-bindings: usb: add documentation for aspeed udc
+Content-Language: en-US
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Li Yang <leoyang.li@nxp.com>
+Cc:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>
+References: <20220513065728.857722-1-neal_liu@aspeedtech.com>
+ <20220513065728.857722-4-neal_liu@aspeedtech.com>
+ <da78aaf6-c9ae-d591-fdc4-723f097ace2c@linaro.org>
+ <HK0PR06MB3202679A7FABAF7D0D045F0880CA9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <567d135b-3d40-9958-e000-1357020b5650@linaro.org>
+ <HK0PR06MB32020539063F8A7C5D56E0B980CF9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <HK0PR06MB32020539063F8A7C5D56E0B980CF9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,39 +95,20 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I have just tested usbreset program (without my previous patch):
+On 16/05/2022 03:59, Neal Liu wrote:
+>>> Okay, I could rename it for next patch if you preferred.
+>>> But there are lots of yaml files which are not named as first compatible.
+>>
+>> Yes, I know, I quite likely I also produced such bindings, but a specific name is
+>> rather preferred. Otherwise you will have a difficult naming choice when your
+>> next Aspeed UDC requires new bindings file because of some differences (not
+>> yet known now).
+>>
+> We can rename the bindings if next Aspeed UDC needs, don't you think?
+> Currently, Aspeed has no requirement.
 
-$ hciconfig
-hci0:    Type: Primary  Bus: USB
-    BD Address: 00:1A:7D:DA:71:13  ACL MTU: 310:10  SCO MTU: 64:8
-    UP RUNNING
-    RX bytes:696 acl:0 sco:0 events:49 errors:0
-    TX bytes:3168 acl:0 sco:0 commands:49 errors:0
-< scanning is working from Bluetooth Settings from GNOME >
-$ echo 0 >/sys/bus/usb/devices/1-3/bConfigurationValue
-$ ./usbreset 001/003
-Resetting CSR8510 A10 ... ok
-$ echo 1 >/sys/bus/usb/devices/1-3/bConfigurationValue
-< it takes a while>
-bash: echo: write error: Connection timed out
-$
+So just use proper name from the beginning....
 
-Unfortunately, it is not solving the issue and I get the same result.
-I will try to identify the device or the situation in some way.
 
-Best regards
-Jos=C3=A9 Ignacio
-
-On Fri, May 13, 2022 at 5:01 PM Bj=C3=B8rn Mork <bjorn@mork.no> wrote:
->
-> Alan Stern <stern@rowland.harvard.edu> writes:
->
-> > (Greg, did that program or something like it ever get added to the
-> > usbutils package?)
->
-> (your) usbreset.c was added to usbutils in 2016 :-)
->
->
-> Bj=C3=B8rn
->
-
+Best regards,
+Krzysztof
