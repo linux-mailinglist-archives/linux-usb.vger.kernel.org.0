@@ -2,104 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCF3528100
-	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 11:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234A3528128
+	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 12:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235826AbiEPJry (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 May 2022 05:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
+        id S233968AbiEPKCX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 May 2022 06:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239105AbiEPJrq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 05:47:46 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880BA34BAD
-        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 02:47:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652694463; x=1684230463;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5aBSh5NNsmM6Y+Erkw3alDpuMf7gN9xnpmUH4vMUUHg=;
-  b=WUybIePvztXiVv77rIz05drcv4/yioBe3A3rdvQhkwmFaRGU27EKp4OA
-   wQqqPWrrhuqTVv200JPOfwcWPclz9WZAPcUwj3zJtxM1dcK/YDxHiVAiU
-   OB8FwpjUHfq9OCetAJF11wT2kTvaCvb/DqCkNMUu2NhDAhvTKhYeyofM3
-   KqH2ixRw5HVl+YzAzw05DQocomaBu6GSrzV3QAg+gcMECYl+CHW8ljd+q
-   WWwm/0d0jJAPMlM2lAjiMTX2S7zf0+1eIPO1HtHeZSeYt1O4+KLmaWPBC
-   JOnegfaX+oD3tNhmY2D45LcPR54xOhnKGTp6GzaXMckWSLb1YI4SuEfRN
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="252854299"
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="252854299"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 02:47:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="816313233"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmsmga006.fm.intel.com with ESMTP; 16 May 2022 02:47:39 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 1/1] xhci: Don't defer primary roothub registration if there is only one roothub
-Date:   Mon, 16 May 2022 12:48:50 +0300
-Message-Id: <20220516094850.19788-2-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220516094850.19788-1-mathias.nyman@linux.intel.com>
-References: <20220516094850.19788-1-mathias.nyman@linux.intel.com>
+        with ESMTP id S230185AbiEPKCX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 06:02:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3C638BC
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 03:02:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0443AB80F1A
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 10:02:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A1599C3411E
+        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 10:02:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652695339;
+        bh=DLim5gcnetNzlVC1Ju6PWjn5yftxJYdO7PyrR1eYyTw=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=ZiiKPnWb3LNb5T8U9MoMh9wjSO+zTPrBqyTCz3Mt7Ow9vExA7nwvcDDljh7pEy1zd
+         LZaR9PE/H8SarE1UxbEmNV/Z07OIAzaSaJUGkzG6yr5oa6A7XPrvV+iV8vgFcrn4T6
+         deQqCcAGMtnQqnLcMBlHPTFXWcoDt+gG2mm6q/28oz38kQprPfWcKLR+Y0yrTQFwGV
+         lTdAzXkFkQeabwh+2NddrsxjOnf2i6c57wDO6T+JihPoXCEdaQryvrQ9pny30SyDFM
+         1vaRqndDO3FpZJ17+4VARkfjdbrcFAv3hlEqbU6VbwEfF8ZsQlEciZ1Sutzrxs0IVs
+         Yc7mggYiMp0Kw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 8ACD6C05FD0; Mon, 16 May 2022 10:02:19 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210425] Plugging in or unplugging power cord while system is
+ suspended does not trigger updates
+Date:   Mon, 16 May 2022 10:02:19 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: andrew.co@free.fr
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-210425-208809-ykdeBBMWZG@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
+References: <bug-210425-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The support for xHCI controllers with only one roothub, and the code
-to defer primary roothub registation until second roothub got merged
-to usb-next for 5.19 at the same time.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
 
-commit 873f323618c2 ("xhci: prepare for operation w/o shared hcd")
-commit b7a4f9b5d0e4 ("xhci: Set HCD flag to defer primary roothub
-registration")
+--- Comment #13 from Adrien (andrew.co@free.fr) ---
+same problem on 5.15.38
 
-These got merged in such a way that the flag to defer primary roothub
-registration is set even for xHC controllers with just one roothub.
+--=20
+You may reply to this email to add a comment.
 
-Fix this by setting the defer flag in a codepath taken only if we have
-two roothubs
-
-Fixes: 873f323618c2 ("xhci: prepare for operation w/o shared hcd")
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index d957eac59ab3..f0ab63138016 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -696,8 +696,6 @@ int xhci_run(struct usb_hcd *hcd)
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 			"Finished %s for main hcd", __func__);
- 
--	set_bit(HCD_FLAG_DEFER_RH_REGISTER, &hcd->flags);
--
- 	xhci_create_dbc_dev(xhci);
- 
- 	xhci_debugfs_init(xhci);
-@@ -705,6 +703,8 @@ int xhci_run(struct usb_hcd *hcd)
- 	if (xhci_has_one_roothub(xhci))
- 		return xhci_run_finished(xhci);
- 
-+	set_bit(HCD_FLAG_DEFER_RH_REGISTER, &hcd->flags);
-+
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(xhci_run);
--- 
-2.25.1
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
