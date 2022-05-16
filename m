@@ -2,67 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771E0528400
-	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 14:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EF05284E8
+	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 15:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241183AbiEPMSE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 May 2022 08:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
+        id S243588AbiEPNEL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 May 2022 09:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiEPMSD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 08:18:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E6D2BB20
-        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 05:18:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE9A6B80E87
-        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 12:18:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7BFC8C385B8
-        for <linux-usb@vger.kernel.org>; Mon, 16 May 2022 12:17:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652703479;
-        bh=1Il1sTL8Pw5YGNBpIwAqHWOkpLsTC6VchCusRwI9Ikk=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=jfK+AsW89iPsL+QRWU507EBb/6kDaNIfKNOnyPKoHMICGpwaLmJ855bX4iVsbrdZT
-         mLwECPFtRy4ZXkR4+NIjQfg92tVEbcj9iAb96oEJ//BXf6kB0XxuhSG4C2ZCFW+6kg
-         igMQ+bcO+V/JoBVn0e4HTSwCJFjt53qV1hAkS09Ta1c7mzXPj+lgQD2/LmejT1/tMo
-         sBS5dQLpFC7UUa/oyitUYozgw3oAkxR0DPjlj4F6E/J9Ybyi++k4/zg2lZDnTOrWlU
-         fiSvnY/ONmO6iZJJWBIvHFxSLFYWMguL8xvQob7bWzHloOYUGUbt1WUaALnPA+quqy
-         hpvoO9bS+uIuw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 6B33DC05FD2; Mon, 16 May 2022 12:17:59 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
- xhci_hcd rejecting DMA map of vmalloc memory
-Date:   Mon, 16 May 2022 12:17:59 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: satadru@umich.edu
-X-Bugzilla-Status: REOPENED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215890-208809-K3LOnodIrO@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
-References: <bug-215890-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S233172AbiEPNEJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 09:04:09 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825CA39B8B;
+        Mon, 16 May 2022 06:04:07 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L1zs45YMrzGq0p;
+        Mon, 16 May 2022 21:01:12 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 21:04:05 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 16 May
+ 2022 21:04:05 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+CC:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
+Subject: [PATCH -next] usb: typec: ucsi: fix return value check in ucsi_acpi_probe()
+Date:   Mon, 16 May 2022 21:15:27 +0800
+Message-ID: <20220516131527.999909-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,32 +48,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
+If memremap() fails, it never returns NULL. Replace NULL check
+with IS_ERR().
 
---- Comment #20 from Satadru Pramanik (satadru@umich.edu) ---
-sudo libinput list-devices also shows the correct information:
+Fixes: cdc3d2abf438 ("usb: typec: ucsi: acpi: Map the mailbox with memremap()")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/usb/typec/ucsi/ucsi_acpi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Device:           bcm5974
-Kernel:           /dev/input/event9
-Group:            6
-Seat:             seat0, default
-Size:             107x75mm
-Capabilities:     pointer gesture
-Tap-to-click:     disabled
-Tap-and-drag:     enabled
-Tap drag lock:    disabled
-Left-handed:      disabled
-Nat.scrolling:    disabled
-Middle emulation: disabled
-Calibration:      n/a
-Scroll methods:   *two-finger edge=20
-Click methods:    button-areas *clickfinger=20
-Disable-w-typing: enabled
-Accel profiles:   flat *adaptive
-Rotation:         n/a
+diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+index 7455e3aff2be..8873c1644a29 100644
+--- a/drivers/usb/typec/ucsi/ucsi_acpi.c
++++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+@@ -133,8 +133,8 @@ static int ucsi_acpi_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	ua->base = devm_memremap(&pdev->dev, res->start, resource_size(res), MEMREMAP_WB);
+-	if (!ua->base)
+-		return -ENOMEM;
++	if (IS_ERR(ua->base))
++		return PTR_ERR(ua->base);
+ 
+ 	ret = guid_parse(UCSI_DSM_UUID, &ua->guid);
+ 	if (ret)
+-- 
+2.25.1
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
