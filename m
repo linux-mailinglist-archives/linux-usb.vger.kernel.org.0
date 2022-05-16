@@ -2,295 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C90B527CF0
-	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 06:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36BA5527D22
+	for <lists+linux-usb@lfdr.de>; Mon, 16 May 2022 07:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234961AbiEPEnm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 May 2022 00:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
+        id S239883AbiEPFpd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 May 2022 01:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbiEPEnl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 00:43:41 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBBCE01C;
-        Sun, 15 May 2022 21:43:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652676219; x=1684212219;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LoEwo+56RJWTSRR7kvkAiIrV9qtWnBkWe/fa0SRyMlE=;
-  b=K/01o9cUM3OSAKBII6yGJeKSqp4tSGGWj23t2rxM0SUOoc2GPfaqKyh0
-   p7kPhcrxL+SIjytvD49Mv5qU+dFmvnFlBUUHRh9+up7NFFG5sihGfiuTm
-   jQZfhl31IIZdkaO5Ha1EUkeZz0yKc6fZt9ToiJda7+2nnGfXVtDqP6+FP
-   M=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 May 2022 21:43:38 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 21:43:37 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 15 May 2022 21:43:36 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 15 May 2022 21:43:30 -0700
-Date:   Mon, 16 May 2022 10:13:27 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-CC:     Matthias Kaehlcke <mka@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: Re: [v16 2/5] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <20220516044327.GA19209@hu-pkondeti-hyd.qualcomm.com>
-References: <1652379802-8318-1-git-send-email-quic_kriskura@quicinc.com>
- <1652379802-8318-3-git-send-email-quic_kriskura@quicinc.com>
- <Yn2M5hrah78jro1C@google.com>
- <4124392b-a40f-c204-f9b0-68c3b22dd652@quicinc.com>
+        with ESMTP id S239892AbiEPFpc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 01:45:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5125C1055E
+        for <linux-usb@vger.kernel.org>; Sun, 15 May 2022 22:45:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652679930;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PbHBwtWG6KCcH6kfap+X/3LjIb+3C13uUejN0vnS9ZY=;
+        b=QeW14LVJp/SFV0S+9EOFw28mgOlBBpWrXhTQtQyP52ELQZl2rTISwO1s8fVqMrRYPhtyqQ
+        m50gTHjm74Ejw5YhJXrZWyHkLQYruOJchXTKsOyketzfIPwDZxm1gG7bbT/cwJvSKGSbPi
+        F3lqTGJzk1J9ivmIQi88xQfxKY6Hlo0=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-496-46OkVINkN_OZdG254G6psQ-1; Mon, 16 May 2022 01:45:28 -0400
+X-MC-Unique: 46OkVINkN_OZdG254G6psQ-1
+Received: by mail-qk1-f198.google.com with SMTP id 124-20020a370982000000b006a0a716249bso10577050qkj.10
+        for <linux-usb@vger.kernel.org>; Sun, 15 May 2022 22:45:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PbHBwtWG6KCcH6kfap+X/3LjIb+3C13uUejN0vnS9ZY=;
+        b=o2QwtZ7zWno6qLKMRYS3scJV/vYqqblrv9XiGUyRhyOpMXEGS7xPmgoNejY8FCe9JR
+         WrDb8R2a7qOtVNgB2nNwx9NIdBfYiy9wZV7bBSOsjScz6KpxRLdg3uaQMAYxBC2h85sJ
+         8kFYzkxs4FH/YQnkWTOa40OubHpx0fQw+a90brpKfMUByFcp8DZKwlFy5CyrNl4wUUXz
+         G1vZJloxuO3ZX+MyfIb/fE12UJrMSjUaVE5YSkvRcftotv29d7wY2waP0Hol42NkdazV
+         FM9jhHfXY/KmQQeFA45gOdanGtOM4gfKNTr6HDrA5+OsX8NGb49L77+AbiOPg1KWHBqX
+         bIcA==
+X-Gm-Message-State: AOAM533g18oecr8HsJFC5dFwtyirjK/bH8RtadccpeZLaO29SSLLlMib
+        lzMmjn/GK68uqMT7lBKyyTzp4O7oHrKqtT/z5l/r7uRu3jYrug6ZbVTjKOEg4iaKaZebsDEU/kQ
+        h5D03y1sz8/bDITptv+fS4wA2CjSTMx92zRls
+X-Received: by 2002:a05:622a:351:b0:2f3:d8e4:529f with SMTP id r17-20020a05622a035100b002f3d8e4529fmr14135653qtw.123.1652679927923;
+        Sun, 15 May 2022 22:45:27 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxpCUv4pnrOBS9JkzzIB0Du6/4EJhDQb/1uX60y+Po+fXEkJp0vHsyXcs/iskKm/YtlahvnzRGuLDEK2nPvS00=
+X-Received: by 2002:a05:622a:351:b0:2f3:d8e4:529f with SMTP id
+ r17-20020a05622a035100b002f3d8e4529fmr14135646qtw.123.1652679927718; Sun, 15
+ May 2022 22:45:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <4124392b-a40f-c204-f9b0-68c3b22dd652@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220504151647.471885-1-jtornosm@redhat.com> <Ynzz6Jh5OeEikvfh@kroah.com>
+ <CABk-BGte9qHwmdqCU6oZ9-E3LvOqcMf3z46e00hypNdD_hPxPQ@mail.gmail.com>
+ <Yn5mliJq+7W8khe9@rowland.harvard.edu> <Yn5nc2mSHrdy/8h6@kroah.com>
+ <Yn5qerFAcHP3scAZ@rowland.harvard.edu> <87zgjl8okv.fsf@miraculix.mork.no>
+In-Reply-To: <87zgjl8okv.fsf@miraculix.mork.no>
+From:   Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Date:   Mon, 16 May 2022 07:45:16 +0200
+Message-ID: <CABk-BGszGzn-ZCKMTmr9uJd2zxhdB6WtZ8AoNd5dLjhzQew2xg@mail.gmail.com>
+Subject: Re: [PATCH v5] USB: core: skip unconfiguration if device doesn't
+ support it
+To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Marcel Holtmann <marcel@holtmann.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 13, 2022 at 09:28:16AM +0530, Krishna Kurapati PSSNV wrote:
-> 
-> On 5/13/2022 4:10 AM, Matthias Kaehlcke wrote:
-> >On Thu, May 12, 2022 at 11:53:19PM +0530, Krishna Kurapati wrote:
-> >>From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> >>
-> >>During suspend read the status of all port and set hs phy mode
-> >>based on current speed. Use this hs phy mode to configure wakeup
-> >>interrupts in qcom glue driver.
-> >>
-> >>Check wakeup-source property for dwc3 core node to set the
-> >>wakeup capability. Drop the device_init_wakeup call from
-> >>runtime suspend and resume.
-> >>
-> >>Also check during suspend if any wakeup capable devices are
-> >>connected to the controller (directly or through hubs), if there
-> >>are none set a flag to indicate that the PHY is powered
-> >>down during suspend.
-> >>
-> >>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> >>Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> >>---
-> >>  drivers/usb/dwc3/core.c | 30 +++++++++++++++++-------------
-> >>  drivers/usb/dwc3/core.h |  4 ++++
-> >>  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
-> >>  3 files changed, 45 insertions(+), 13 deletions(-)
-> >>
-> >>diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> >>index 01115df..8bcabc5 100644
-> >>--- a/drivers/usb/dwc3/core.c
-> >>+++ b/drivers/usb/dwc3/core.c
-> >>@@ -1785,6 +1785,7 @@ static int dwc3_probe(struct platform_device *pdev)
-> >>  	platform_set_drvdata(pdev, dwc);
-> >>  	dwc3_cache_hwparams(dwc);
-> >>+	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
-> >>  	spin_lock_init(&dwc->lock);
-> >>  	mutex_init(&dwc->mutex);
-> >>@@ -1946,10 +1947,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >>  		dwc3_core_exit(dwc);
-> >>  		break;
-> >>  	case DWC3_GCTL_PRTCAP_HOST:
-> >>-		if (!PMSG_IS_AUTO(msg)) {
-> >>-			dwc3_core_exit(dwc);
-> >>-			break;
-> >>-		}
-> >>+		dwc3_check_phy_speed_mode(dwc);
-> >>  		/* Let controller to suspend HSPHY before PHY driver suspends */
-> >>  		if (dwc->dis_u2_susphy_quirk ||
-> >>@@ -1965,6 +1963,15 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
-> >>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> >>+
-> >>+		if (!PMSG_IS_AUTO(msg)) {
-> >>+			if (device_may_wakeup(dwc->dev))
-> >I think this should be device_can_wakeup(), i.e. hardware capability instead of
-> >device policy. A drawback of powering the PHYs off is that it causes a high
-> >power consumption of certain peripherals if VBUS is still supplied, so this
-> >should be limited to platforms where the PHYs must be powered off (using wakeup
-> >capability as a proxy for now).
-> Thnaks Mathias for the review. Will make this change in the next patchset.
-> >>+				dwc->phy_power_off = false;
-> >>+			else {
-> >>+				dwc->phy_power_off = true;
-> >>+				dwc3_core_exit(dwc);
-> >>+			}
-> >>+		}
-> >>  		break;
-> >>  	case DWC3_GCTL_PRTCAP_OTG:
-> >>  		/* do nothing during runtime_suspend */
-> >>@@ -2008,11 +2015,12 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
-> >>  		break;
-> >>  	case DWC3_GCTL_PRTCAP_HOST:
-> >>  		if (!PMSG_IS_AUTO(msg)) {
-> >>-			ret = dwc3_core_init_for_resume(dwc);
-> >>-			if (ret)
-> >>-				return ret;
-> >>-			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> >>-			break;
-> >>+			if (dwc->phy_power_off) {
-> >>+				ret = dwc3_core_init_for_resume(dwc);
-> >>+				if (ret)
-> >>+					return ret;
-> >>+				dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> >>+			}
-> >>  		}
-> >>  		/* Restore GUSB2PHYCFG bits that were modified in suspend */
-> >>  		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
-> >>@@ -2084,8 +2092,6 @@ static int dwc3_runtime_suspend(struct device *dev)
-> >>  	if (ret)
-> >>  		return ret;
-> >>-	device_init_wakeup(dev, true);
-> >>-
-> >>  	return 0;
-> >>  }
-> >>@@ -2094,8 +2100,6 @@ static int dwc3_runtime_resume(struct device *dev)
-> >>  	struct dwc3     *dwc = dev_get_drvdata(dev);
-> >>  	int		ret;
-> >>-	device_init_wakeup(dev, false);
-> >>-
-> >>  	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
-> >>  	if (ret)
-> >>  		return ret;
-> >>diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> >>index 81c486b..37397a8 100644
-> >>--- a/drivers/usb/dwc3/core.h
-> >>+++ b/drivers/usb/dwc3/core.h
-> >>@@ -1155,6 +1155,9 @@ struct dwc3 {
-> >>  	bool			phys_ready;
-> >>+	unsigned int            hs_phy_mode;
-> >>+	bool			phy_power_off;
-> >>+
-> >>  	struct ulpi		*ulpi;
-> >>  	bool			ulpi_ready;
-> >>@@ -1539,6 +1542,7 @@ int dwc3_core_soft_reset(struct dwc3 *dwc);
-> >>  #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
-> >>  int dwc3_host_init(struct dwc3 *dwc);
-> >>  void dwc3_host_exit(struct dwc3 *dwc);
-> >>+void dwc3_check_phy_speed_mode(struct dwc3 *dwc);
-> >>  #else
-> >>  static inline int dwc3_host_init(struct dwc3 *dwc)
-> >>  { return 0; }
-> >>diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> >>index f56c30c..e19b40a 100644
-> >>--- a/drivers/usb/dwc3/host.c
-> >>+++ b/drivers/usb/dwc3/host.c
-> >>@@ -12,6 +12,7 @@
-> >>  #include <linux/platform_device.h>
-> >>  #include "core.h"
-> >>+#include "../host/xhci.h"
-> >>  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
-> >>  					int irq, char *name)
-> >>@@ -136,3 +137,26 @@ void dwc3_host_exit(struct dwc3 *dwc)
-> >>  {
-> >>  	platform_device_unregister(dwc->xhci);
-> >>  }
-> >>+
-> >>+void dwc3_check_phy_speed_mode(struct dwc3 *dwc)
-> >>+{
-> >>+	int i, num_ports;
-> >>+	u32 reg;
-> >>+	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
-> >>+	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
-> >>+
-> >>+	dwc->hs_phy_mode = 0;
-> >>+
-> >>+	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
-> >>+
-> >>+	num_ports = HCS_MAX_PORTS(reg);
-> >>+	for (i = 0; i < num_ports; i++) {
-> >>+		reg = readl(&xhci_hcd->op_regs->port_status_base + i * NUM_PORT_REGS);
-> >>+		if (reg & PORT_PE) {
-> >>+			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
-> >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_HS;
-> >>+			else if (DEV_LOWSPEED(reg))
-> >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_LS;
-> >>+		}
-> >>+	}
-> >>+}
-> >I anticipate that it might raise concerns from maintainers that
-> >dwc3_check_phy_speed_mode() accesses xHCI data structures and
-> >registers directly. Could there be a generic HCD API that provides
-> >this functionality (if implemented by the specific HCD)?
-> 
-> Hi Mathias, we are not sure if there is any such API present currently.
-> 
-> Hi Alan, can you help suggest any API (if present) that we can reuse here to
-> avoid
-> 
-> xhci registers and structs here in dwc3.
-> 
+I have just tested usbreset program (without my previous patch):
 
-We can probably do something like below to query the speed. This avoids adding
-another API and does not touch the underlying registers.
+$ hciconfig
+hci0:    Type: Primary  Bus: USB
+    BD Address: 00:1A:7D:DA:71:13  ACL MTU: 310:10  SCO MTU: 64:8
+    UP RUNNING
+    RX bytes:696 acl:0 sco:0 events:49 errors:0
+    TX bytes:3168 acl:0 sco:0 commands:49 errors:0
+< scanning is working from Bluetooth Settings from GNOME >
+$ echo 0 >/sys/bus/usb/devices/1-3/bConfigurationValue
+$ ./usbreset 001/003
+Resetting CSR8510 A10 ... ok
+$ echo 1 >/sys/bus/usb/devices/1-3/bConfigurationValue
+< it takes a while>
+bash: echo: write error: Connection timed out
+$
 
-Pls define enum usb_device_speed usb2_speed in dwc3 structure.
+Unfortunately, it is not solving the issue and I get the same result.
+I will try to identify the device or the situation in some way.
 
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index f29a264..fed1c58 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -9,9 +9,29 @@
- 
- #include <linux/acpi.h>
- #include <linux/platform_device.h>
-+#include <linux/usb.h>
- 
- #include "core.h"
- 
-+void dwc3_update_hs_phy_speed(struct dwc3 *dwc)
-+{
-+	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
-+	struct usb_device *udev;
-+
-+	/*
-+	 * It is possible to query the speed of all children of
-+	 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
-+	 * currently supports only 1 port per controller. So
-+	 * this is sufficient.
-+	 */
-+	udev = usb_hub_find_child(hcd->self.root_hub, 1);
-+
-+	if (udev)
-+		dwc->usb2_speed = udev->speed;
-+	else
-+		dwc->usb2_speed = USB_SPEED_UNKNOWN;
-+}
-+
- static int dwc3_host_get_irq(struct dwc3 *dwc)
- {
- 	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
+Best regards
+Jos=C3=A9 Ignacio
 
+On Fri, May 13, 2022 at 5:01 PM Bj=C3=B8rn Mork <bjorn@mork.no> wrote:
+>
+> Alan Stern <stern@rowland.harvard.edu> writes:
+>
+> > (Greg, did that program or something like it ever get added to the
+> > usbutils package?)
+>
+> (your) usbreset.c was added to usbutils in 2016 :-)
+>
+>
+> Bj=C3=B8rn
+>
 
-Thanks,
-Pavan
