@@ -2,273 +2,313 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F75529F49
-	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 12:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B406529F8D
+	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 12:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344051AbiEQKUZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 May 2022 06:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S234952AbiEQKgd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 May 2022 06:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344074AbiEQKUN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 May 2022 06:20:13 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6255B2E9D4
-        for <linux-usb@vger.kernel.org>; Tue, 17 May 2022 03:18:52 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220517101847euoutp02a5a545a9f337ec18d1dc59e0d6b5ace1~v3SJgb_x50739207392euoutp02i
-        for <linux-usb@vger.kernel.org>; Tue, 17 May 2022 10:18:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220517101847euoutp02a5a545a9f337ec18d1dc59e0d6b5ace1~v3SJgb_x50739207392euoutp02i
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652782728;
-        bh=l6/a9s2hL4R6Kmm4X7zRBw1dsohVxPnNWaJjPgdOnRg=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=LEkZxnu2GBCeVUCYX/gkdvoKIDXfXIcGLPckMLlOe8ktXmhZuMZk51b4RYZfebdST
-         kQot7DR+Ucsn1cIk5YU3AB5rrgnWrGEDvhmUPktLtcLgb79pjMffjXysAXjrITDqxq
-         PO6ZmFw/pW24KyraTxJo11ahKfKMvCIP77fCTOAQ=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220517101847eucas1p2ccc010e672657944b81e5043c6ab6edd~v3SI4vs_22411024110eucas1p25;
-        Tue, 17 May 2022 10:18:47 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 3E.BB.09887.78673826; Tue, 17
-        May 2022 11:18:47 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99~v3SIRtwxp0044400444eucas1p2b;
-        Tue, 17 May 2022 10:18:46 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220517101846eusmtrp1b138d4496aa1750fdba379c42f101b28~v3SIQigzY1249912499eusmtrp1T;
-        Tue, 17 May 2022 10:18:46 +0000 (GMT)
-X-AuditID: cbfec7f4-45bff7000000269f-72-628376873eb6
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 57.32.09522.68673826; Tue, 17
-        May 2022 11:18:46 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220517101845eusmtip1c080cec6daca5e80e055ab6eea13d63c~v3SHMqqLN0115901159eusmtip1z;
-        Tue, 17 May 2022 10:18:45 +0000 (GMT)
-Message-ID: <a5315a8a-32c2-962f-f696-de9a26d30091@samsung.com>
-Date:   Tue, 17 May 2022 12:18:45 +0200
+        with ESMTP id S1344635AbiEQKgN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 May 2022 06:36:13 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2045.outbound.protection.outlook.com [40.107.244.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3D86306;
+        Tue, 17 May 2022 03:36:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kIb8qIvYc+JVTq7tj9f81Zu3+iyh0AdDHDrzY+FfNn0I62nJrp5C2w9pQerXRBGN7bbMue6gFbLtZgWfkPAHrO10its6muqShYENQkuo2LsZNebzpwPqENiCpdrx8Tnh9AOehxRs/7qLvaSBjxsMbu+Zdg8pAsNTdtVrRYaCLv7AMwdME7OTIZSN/7HzQU8ICkzKPebYEuCtFn+Z3rlTZeLZEynGMma+SsOZ1asGo17Wuk6ydVvntpX+NEKpFNhG3vPe4+YKI+6CeY04H7/bW0ahJeO2vTLLeN5WtZ8iQhRMZ8UtJm8K5gniqaCbpOyNpgSE+B4gMjZI9o4oWcZYvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rkpzoLaixMLUs6HnmfelBDKKBMPCzwn924FVEOtKEMI=;
+ b=M6nv5PRrzwuQ3fmZH1oShq4HeAaJY8lLdSRgV5dSOLVSCMEaQ1RQGV5ftB3Seh22AbuBsr44Sw0vHSaIl0ly7ntMIZHKve87tkR4uiQanaoak0aJzmow9AjOW3LHR7O9dlbE+58WnOQh3LSJNRmcHYNhaRfUI+zqmAPEoAorUvKl8yPHHgBFJTG50AKizxL9QUxe4AJaErOgECzy2d3jo0jMUyMzRU4QBp6xpPVVO5EyuAEFGbW2WoT9sb0VvJYRbtHfIsQcSFA3yXfok7wirgcTFsN+JF2/BGOf6Hqsz+ptO1yfof8HpPoLbp6StM31lGnjj7o/0TV6G1wJEADV5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=xilinx.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rkpzoLaixMLUs6HnmfelBDKKBMPCzwn924FVEOtKEMI=;
+ b=gt02sQ/m89M+JT43X/19IGYjKHDB2w/+Dmpi1OrKDtS6wGqhwKkwwq4K7Xyv3ERVYhMXL1gh27SU59DHiC2dGkaBm5ZVL4GjfNNgbKbb+GRoVi0BDTLbS4DPGS2F63y1l06CXC0OsyxT9dNKr2qvIy6yTfNnV5BMLVbRCJMDC1o=
+Received: from DM6PR12CA0027.namprd12.prod.outlook.com (2603:10b6:5:1c0::40)
+ by DM5PR02MB3814.namprd02.prod.outlook.com (2603:10b6:4:b3::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Tue, 17 May
+ 2022 10:36:09 +0000
+Received: from DM3NAM02FT012.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:1c0:cafe::e7) by DM6PR12CA0027.outlook.office365.com
+ (2603:10b6:5:1c0::40) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18 via Frontend
+ Transport; Tue, 17 May 2022 10:36:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT012.mail.protection.outlook.com (10.13.5.125) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5250.13 via Frontend Transport; Tue, 17 May 2022 10:36:09 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 17 May 2022 03:36:08 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 17 May 2022 03:36:08 -0700
+Envelope-to: gregkh@linuxfoundation.org,
+ mka@chromium.org,
+ dianders@chromium.org,
+ stern@rowland.harvard.edu,
+ robh+dt@kernel.org,
+ frowand.list@gmail.com,
+ mathias.nyman@intel.com,
+ balbi@kernel.org,
+ linux-usb@vger.kernel.org,
+ ravisadineni@chromium.org,
+ rogerq@kernel.org,
+ linux-kernel@vger.kernel.org,
+ hadess@hadess.net,
+ swboyd@chromium.org,
+ devicetree@vger.kernel.org,
+ krzk@kernel.org,
+ peter.chen@kernel.org,
+ guozhengkui@vivo.com,
+ kishon@ti.com,
+ jun.li@nxp.com,
+ peter.chen@nxp.com,
+ Thinh.Nguyen@synopsys.com
+Received: from [10.254.241.50] (port=57504)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1nquYi-0006He-5T; Tue, 17 May 2022 03:36:08 -0700
+Message-ID: <894ea48c-7962-320e-e177-9652701c72fe@xilinx.com>
+Date:   Tue, 17 May 2022 12:36:03 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH net-next v3 5/7] usbnet: smsc95xx: Forward PHY
- interrupts to PHY driver to avoid polling
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v21 0/3] usb: misc: Add onboard_usb_hub driver
 Content-Language: en-US
-To:     Lukas Wunner <lukas@wunner.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
-        Andre Edich <andre.edich@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Gabriel Hojda <ghojda@yo2urs.ro>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        Ferry Toth <fntoth@gmail.com>,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+CC:     Doug Anderson <dianders@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <748ac44eeb97b209f66182f3788d2a49d7bc28fe.1652343655.git.lukas@wunner.de>
+        Peter Chen <peter.chen@kernel.org>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Li Jun <jun.li@nxp.com>, Peter Chen <peter.chen@nxp.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+References: <20220217184254.4141705-1-mka@chromium.org>
+ <CAD=FV=XswQj+L6rRuWH-PdoGp9vVsWKTwz1bFM_fagy55tKqEg@mail.gmail.com>
+ <YmGetA6Huz4Sj/RL@google.com> <YmffM2XuCiOghOLU@kroah.com>
+From:   Michal Simek <michal.simek@xilinx.com>
+In-Reply-To: <YmffM2XuCiOghOLU@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Se0xTVxzOuff29tKl5FqcnCm4pQ7MjEMecztkzrnF6d1mjHsmmuFWyh0y
-        oO1acExm1hRbpS6miEOozBUmFAob2nQNLg5LQSqCVl7GMsrAUsXysoDzlY1ZLm789+V7/L7f
-        7+RQuOgHcjmVIcthlTJJlpgUEPa2B1dePLi3IDVefU6AynUePnJ7nTi66eknUbn7AIH8bTf4
-        6P7JFhK5j2twVDlVykNu92k+umo/wkMjddUYKnU3YaiyWosj5/e/A9Q6ayHQ6K0VaKhLT6A2
-        0zKk99WSyKT1E+ivjnGACqYDGHpU1EVuimR6rnXhTKP3FGBstR6MOWv08pk7wd2MyZrL+A3F
-        fMZqKSSZVs8wYM42zmDMwP0qwEw19ZGMZzKAM3MFPQTTYOsjmBnryh2iXYINaWxWxl5WuW7j
-        Z4I9g02XgMKVmHey7DKhBiVr9CCMgvRLsMVWytMDASWiawBs1w3jIUFEzwJo+iOOE2YAdNQM
-        8J4kHNZhkhPMAHaaAwvxIICN6l4y5BLSG2Fzced8gqBj4FHHKMbxS2B72QgRwk/TqXB8vG++
-        LoKWwTGPZd6P05Gwf+RHLDR0KW0H0PCAC+B0Ow/azyeHMEknQP2E/nEZRYXRH0NjZRpneRYW
-        /HoC5zatEsALzUkc3gw9YxaCwxEw4LLxORwFO4q/I0JjIC2Hf5cu2PPgtbH6hTGvwoErD+eb
-        cPoF2PDbOo5+AwYdgziXDIfXJ5ZwC4TDo/bjC7QQHtKJOHcsNLp++a+z+Wo3bgBi46InMS46
-        3bjoFOP/vSZAWEAkm6vKTmdViTL2qziVJFuVK0uPk8qzreDxD+74xzXbCMyBYJwTYBRwAkjh
-        4qXC+Dx1qkiYJvl6H6uUf6rMzWJVTrCCIsSRQmnGaYmITpfksJksq2CVT1SMCluuxlQK+fob
-        WPl0SuGjhp+jE99Bvd0TjvdKzsRc0nTkJW0Zvfiu7ZtWneKjU323r69+eah+bqcjyfp+maTy
-        tpu6+Imvc9d0/srtjT1SeDcqZvfdIbw73+VdpTdksGtbttkzv9z/TP6HPK1+6/PJ/skDvsOX
-        R2Lf3tz5LYXJ9dluaUXNF69NbS9M/Xxy5q3MZWGaHfdW30k5Zmg1nyh5qm5f0ZHw2uQS30/U
-        68OahFjhmS3RDeff1LBEc1p/9qHDVb313rmy/dqUQpes6UJ58KZbUWFyEjWz93r0rxQlb4t+
-        Dm0wD38QeChNibpVcW5wp3/9Vu2fuu5NhsGI+Lq1OQbRQV+q6li1mFDtkSSswZUqyb/HdIi9
-        MAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMKsWRmVeSWpSXmKPExsVy+t/xu7ptZc1JBgffKlnMabvJbnH+7iFm
-        i2c3b7FZzDnfwmLx9Ngjdosf8w6zWZyf3sRssej9DFaL8+c3sFtc2NbHavFk9TImixnn9zFZ
-        LFrWymxxaOpeRosjX1axWLx4Lm3x4GIXi8WxBWIWXY9XslksaH3KYvHt9BtGi+ZPr5gsfk+8
-        yOYg7nH52kVmjx13lzB6bFl5k8lj56y77B4fPsZ5LNhU6vF0wmR2j02rOtk8jtx8yOixc8dn
-        Jo87P5Yyerzfd5XN4+a7V8we/5svs3is33KVxePzJrkAoSg9m6L80pJUhYz84hJbpWhDCyM9
-        Q0sLPSMTSz1DY/NYKyNTJX07m5TUnMyy1CJ9uwS9jHv7TjEWHDeqmDfzLEsD4zStLkZODgkB
-        E4kDmx6ydTFycQgJLGWUWLBgNQtEQkbi5LQGVghbWOLPtS6ooveMEnum/GUGSfAK2EkcnHwG
-        rIhFQFVi0oEXTBBxQYmTM58ADeLgEBVIkjhymB8kLCyQJ3G6+Q1YObOAuMStJ/OZQGaKCGxj
-        lPj4/QfYAmaB86wSr+bdAxskJFAn0TGvkQ3EZhMwlOh6C3IFBwenQJjErEUpEIPMJLq2djFC
-        2PISzVtnM09gFJqF5IxZSPbNQtIyC0nLAkaWVYwiqaXFuem5xYZ6xYm5xaV56XrJ+bmbGIGp
-        Z9uxn5t3MM579VHvECMTB+MhRgkOZiURXoOKhiQh3pTEyqrUovz4otKc1OJDjKbAsJjILCWa
-        nA9Mfnkl8YZmBqaGJmaWBqaWZsZK4ryeBR2JQgLpiSWp2ampBalFMH1MHJxSDUzcz911nn/M
-        KvDt3vXyp+JbiUuLo8TeOFu07nyxdsrqcqWj1zYYiRc7Zr9SXDj5a+CjZa6Fe8+8LubfzZz5
-        IfGtulkPt+W2nwf4Tv69K3KrRI5/TpLQp092r7r/h5f++R/Ju/rAmoKbr6f1repj6Zh7ccth
-        vqf7NSxkV70oDw3WuRKX+UL43VJNT+9JV966lSqfWaAzf/J7BoOKq/+n3XHgsJ4bpPKFK1Tr
-        tP+7c/0bzux5MTtgdtXqKN+KrWJrwpxdowt7nVO/c8Vk12k9lRWpv3DR7p+hxRrlhH2JnLd2
-        HDricCZ2l4X3ldqeZRN3cCfeK9m292uilZTxhc+LOLKYeKbxT339rptP7M5pbZcbSizFGYmG
-        WsxFxYkAe4vwfcYDAAA=
-X-CMS-MailID: 20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99
-References: <cover.1652343655.git.lukas@wunner.de>
-        <748ac44eeb97b209f66182f3788d2a49d7bc28fe.1652343655.git.lukas@wunner.de>
-        <CGME20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99@eucas1p2.samsung.com>
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1f876358-2c42-46bb-a559-08da37f10e4a
+X-MS-TrafficTypeDiagnostic: DM5PR02MB3814:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR02MB3814E3E664A7B686869B7B43C6CE9@DM5PR02MB3814.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tl5xoVUUDW+Xfk6OSrjB5h1FGdTeHv+5Abxl/z3PPl2DYciYrUG6IDsJ7qKqZh0PckosR5PWB0qDm21+QY9KUjQhc1sVCk4HlfPaMKbTq4tY8huhUtoshj/A2qSutIsAbPymO00DbPZneuBrDQ00Cv7213iUcjZL0QPxp9yPon5ZwTC69Rgs4t3C4sWBKkkvmJSk/DNRlxz/GCETDosit/o8X2UtdQrG9J9opKbgXP63/E06S9z4f8nv/fk7Y0JbaT9qnaMxDnnMT7WFZz2C4XizPTOw8tbGbdLKLpFthk7TkKRkXXclJd6LyFVQSZrzkF4i1t6YwEfHyP5ixB8Sg9BbSlL2wYrrKAsw13D01kPMTpKMMSsSumhP3n/KQScvL2qLKNKB/TW5KhW/2cw85yAhJby8XwVLii4sP6lRcvsP+Bv28tHv9rr9obnjFE5s1jnu+CF023g/vBqd8HU0aF0wSjnlYUL4cRITf51CZ2mIEFedNqLrJJ+Qb45s4jmDEvKNqOMPtemljL4O8/gve0KJDwkhFuSynojnZu334o7tFKGXTLCa7e7tY874IN1NVvptRIigQHWyi/6thXhRakHJro2dazN6Tz7iYG+o42ukq6eujvGruwERpcFAbKjzkcaT581MFmD8ugxO0lTgA1rAHanNxOQGgQRpUppemloQ1nQV+7KKb9QFF8hxaV1TJhs3tvbbdXRQm1fc6GO3cQxDynI62GRJji5GuBH2ALI=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(508600001)(47076005)(53546011)(82310400005)(6666004)(8936002)(26005)(356005)(316002)(7416002)(83380400001)(110136005)(54906003)(36860700001)(36756003)(40460700003)(9786002)(8676002)(7636003)(4326008)(2616005)(70586007)(70206006)(5660300002)(44832011)(2906002)(31686004)(31696002)(336012)(186003)(426003)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 10:36:09.1984
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1f876358-2c42-46bb-a559-08da37f10e4a
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT012.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB3814
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Lukas,
+Hi Greg,
 
-On 12.05.2022 10:42, Lukas Wunner wrote:
-> Link status of SMSC LAN95xx chips is polled once per second, even though
-> they're capable of signaling PHY interrupts through the MAC layer.
->
-> Forward those interrupts to the PHY driver to avoid polling.  Benefits
-> are reduced bus traffic, reduced CPU overhead and quicker interface
-> bringup.
->
-> Polling was introduced in 2016 by commit d69d16949346 ("usbnet:
-> smsc95xx: fix link detection for disabled autonegotiation").
-> Back then, the LAN95xx driver neglected to enable the ENERGYON interrupt,
-> hence couldn't detect link-up events when auto-negotiation was disabled.
-> The proper solution would have been to enable the ENERGYON interrupt
-> instead of polling.
->
-> Since then, PHY handling was moved from the LAN95xx driver to the SMSC
-> PHY driver with commit 05b35e7eb9a1 ("smsc95xx: add phylib support").
-> That PHY driver is capable of link detection with auto-negotiation
-> disabled because it enables the ENERGYON interrupt.
->
-> Note that signaling interrupts through the MAC layer not only works with
-> the integrated PHY, but also with an external PHY, provided its
-> interrupt pin is attached to LAN95xx's nPHY_INT pin.
->
-> In the unlikely event that the interrupt pin of an external PHY is
-> attached to a GPIO of the SoC (or not connected at all), the driver can
-> be amended to retrieve the irq from the PHY's of_node.
->
-> To forward PHY interrupts to phylib, it is not sufficient to call
-> phy_mac_interrupt().  Instead, the PHY's interrupt handler needs to run
-> so that PHY interrupts are cleared.  That's because according to page
-> 119 of the LAN950x datasheet, "The source of this interrupt is a level.
-> The interrupt persists until it is cleared in the PHY."
->
-> https://www.microchip.com/content/dam/mchp/documents/UNG/ProductDocuments/DataSheets/LAN950x-Data-Sheet-DS00001875D.pdf
->
-> Therefore, create an IRQ domain with a single IRQ for the PHY.  In the
-> future, the IRQ domain may be extended to support the 11 GPIOs on the
-> LAN95xx.
->
-> Normally the PHY interrupt should be masked until the PHY driver has
-> cleared it.  However masking requires a (sleeping) USB transaction and
-> interrupts are received in (non-sleepable) softirq context.  I decided
-> not to mask the interrupt at all (by using the dummy_irq_chip's noop
-> ->irq_mask() callback):  The USB interrupt endpoint is polled in 1 msec
-> intervals and normally that's sufficient to wake the PHY driver's IRQ
-> thread and have it clear the interrupt.  If it does take longer, worst
-> thing that can happen is the IRQ thread is woken again.  No big deal.
->
-> Because PHY interrupts are now perpetually enabled, there's no need to
-> selectively enable them on suspend.  So remove all invocations of
-> smsc95xx_enable_phy_wakeup_interrupts().
->
-> In smsc95xx_resume(), move the call of phy_init_hw() before
-> usbnet_resume() (which restarts the status URB) to ensure that the PHY
-> is fully initialized when an interrupt is handled.
->
-> Tested-by: Oleksij Rempel <o.rempel@pengutronix.de> # LAN9514/9512/9500
-> Tested-by: Ferry Toth <fntoth@gmail.com> # LAN9514
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch> # from a PHY perspective
-> Cc: Andre Edich <andre.edich@microchip.com>
+On 4/26/22 14:01, Greg Kroah-Hartman wrote:
+> On Thu, Apr 21, 2022 at 11:13:08AM -0700, Matthias Kaehlcke wrote:
+>> Hi,
+>>
+>> On Thu, Apr 07, 2022 at 12:41:22PM -0700, Doug Anderson wrote:
+>>> Hi,
+>>>
+>>> On Thu, Feb 17, 2022 at 10:43 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+>>>>
+>>>> This series adds:
+>>>> - the onboard_usb_hub_driver
+>>>> - glue in the generic HCD code to create and destroy the
+>>>>    onboard_usb_hub platform devices if needed
+>>>> - device tree changes that add RTS5411 entries for the QCA SC7180
+>>>>    based boards trogdor and lazor
+>>>> - a couple of stubs for platform device functions to avoid
+>>>>    unresolved symbols with certain kernel configs
+>>>>
+>>>> The main issue the driver addresses is that a USB hub needs to be
+>>>> powered before it can be discovered. For discrete onboard hubs (an
+>>>> example for such a hub is the Realtek RTS5411) this is often solved
+>>>> by supplying the hub with an 'always-on' regulator, which is kind
+>>>> of a hack. Some onboard hubs may require further initialization
+>>>> steps, like changing the state of a GPIO or enabling a clock, which
+>>>> requires even more hacks. This driver creates a platform device
+>>>> representing the hub which performs the necessary initialization.
+>>>> Currently it only supports switching on a single regulator, support
+>>>> for multiple regulators or other actions can be added as needed.
+>>>> Different initialization sequences can be supported based on the
+>>>> compatible string.
+>>>>
+>>>> Besides performing the initialization the driver can be configured
+>>>> to power the hub off during system suspend. This can help to extend
+>>>> battery life on battery powered devices which have no requirements
+>>>> to keep the hub powered during suspend. The driver can also be
+>>>> configured to leave the hub powered when a wakeup capable USB device
+>>>> is connected when suspending, and power it off otherwise.
+>>>>
+>>>> Changes in v21:
+>>>> - dropped patch 'driver core: Export device_is_bound()'
+>>>> - refactored _find_onboard_hub()
+>>>> - removed 'onboard_hub_dev' symlinks from USB devices
+>>>> - dropped patch 'arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub'
+>>>>    (will be sent separately)
+>>>> - rebased series on v5.17-rc4
+>>>>
+>>>> Changes in v20:
+>>>> - addressed review comments from Stephen
+>>>> - changed DT node names for hubs
+>>>>
+>>>> Changes in v19:
+>>>> - added VID:PID pairs and compatible strings for RTS5414 hub
+>>>> - updated comments with RTS5411 USB versions to reflect those
+>>>>    reported/supported by the hub
+>>>> - rebased series on v5.16
+>>>>
+>>>> Changes in v18:
+>>>> - introduced hidden Kconfig option to align module vs. builtin
+>>>>    choice with CONFIG_USB (thanks Doug!)
+>>>> - added patch 'driver core: Export device_is_bound()'
+>>>> - also adjust device tree of pompom rev1
+>>>> - dropped the following patches, which aren't needed anymore by this
+>>>>    series (though they might still be useful on their own):
+>>>>    - usb: Specify dependencies on USB_XHCI_PLATFORM with 'depends on'
+>>>>    - arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM
+>>>>    - ARM: configs: Explicitly enable USB_XHCI_PLATFORM where needed
+>>>>
+>>>> Changes in v17:
+>>>> - rebased on top of v5.16-rc1
+>>>> - moved creation of onboard_hub platform devices from xhci_platform
+>>>>    to the generic HCD code
+>>>> - addressed review comments for the onboard_hub driver
+>>>> - moved Kconfig/defconfig changes to the end of the series. The
+>>>>    onboard_hub driver doesn't depend on XHCI_PLATFORM anymore,
+>>>>    hence these changes aren't really required for the driver, but
+>>>>    they still seem to be a worthwhile improvement
+>>>>
+>>>> Changes in v16:
+>>>> - added patch 'ARM: configs: Explicitly enable USB_XHCI_PLATFORM
+>>>>    where needed' to keep arm32 defconfigs effectively unchanged
+>>>>
+>>>> Changes in v15:
+>>>> - adjusted dependencies of USB_DWC3_CORE to make sure it can only
+>>>>    be enabled when at least one of USB_DWC3_HOST, USB_DWC3_GADGET
+>>>>    or USB_DWC3_DUAL_ROLE is selectable
+>>>>
+>>>> Changes in v14:
+>>>> - rebased on top of v5.14-rc1
+>>>> - dropped DT binding patch which landed in v5.13
+>>>>
+>>>> Changes in v13:
+>>>> - added patch "usb: Specify dependency on USB_XHCI_PLATFORM with
+>>>>    'depends on'" to the series to avoid Kconfig conflicts
+>>>> - added patch "arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM"
+>>>>    to the series to keep effective defconfig unchanged
+>>>>
+>>>> Changes in v12:
+>>>> - onboard_hub driver: use IS_ENABLED(CONFIG_USB_ONBOARD_HUB_MODULE)
+>>>>    in onboard_hub.h to also check for the driver built as module
+>>>> - onboard_hub_driver: include onboard_hub.h again to make sure there
+>>>>    are prototype declarations for the public functions
+>>>>
+>>>> Changes in v11:
+>>>> - support multiple onboard hubs connected to the same parent
+>>>> - don't include ‘onboard_hub.h’ from the onboard hub driver
+>>>>
+>>>> Changes in v10:
+>>>> - always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
+>>>> - keep 'regulator-boot-on' property for pp3300_hub
+>>>>
+>>>> Changes in v9:
+>>>> - added dependency on ONBOARD_USB_HUB (or !ONBOARD_USB_HUB) to
+>>>>    USB_PLATFORM_XHCI
+>>>>
+>>>> Changes in v7:
+>>>> - updated DT binding
+>>>> - series rebased on qcom/arm64-for-5.13
+>>>>
+>>>> Changes in v6:
+>>>> - updated summary
+>>>>
+>>>> Changes in v5:
+>>>> - cover letter added
+>>>>
+>>>> Matthias Kaehlcke (3):
+>>>>    of/platform: Add stubs for of_platform_device_create/destroy()
+>>>>    usb: misc: Add onboard_usb_hub driver
+>>>>    usb: core: hcd: Create platform devices for onboard hubs in probe()
+>>>>
+>>>>   .../sysfs-bus-platform-onboard-usb-hub        |   8 +
+>>>>   MAINTAINERS                                   |   7 +
+>>>>   drivers/usb/core/hcd.c                        |   6 +
+>>>>   drivers/usb/misc/Kconfig                      |  23 +
+>>>>   drivers/usb/misc/Makefile                     |   1 +
+>>>>   drivers/usb/misc/onboard_usb_hub.c            | 510 ++++++++++++++++++
+>>>>   include/linux/of_platform.h                   |  22 +-
+>>>>   include/linux/usb/hcd.h                       |   1 +
+>>>>   include/linux/usb/onboard_hub.h               |  18 +
+>>>>   9 files changed, 592 insertions(+), 4 deletions(-)
+>>>>   create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub
+>>>>   create mode 100644 drivers/usb/misc/onboard_usb_hub.c
+>>>>   create mode 100644 include/linux/usb/onboard_hub.h
+>>>
+>>> With v5.18-rc1 out the door, I wonder if it's a good time to look at
+>>> this series again. Are there any hidden blockers that it's waiting
+>>> for?
+>>
+>> Greg, please let me know if any further changes are needed or if this
+>> series can be landed.
+> 
+> After 21 different versions, there's nothing left for me to object to,
+> so I'll go queue it up.  Thanks for sticking with it.
 
-This patch landed in the recent linux next-20220516 as commit 
-1ce8b37241ed ("usbnet: smsc95xx: Forward PHY interrupts to PHY driver to 
-avoid polling"). Unfortunately it breaks smsc95xx usb ethernet operation 
-after system suspend-resume cycle. On the Odroid XU3 board I got the 
-following warning in the kernel log:
+I just checked linux-next and this series is still not there. Are you going to 
+merge it or are you waiting for v22?
 
-# time rtcwake -s10 -mmem
-rtcwake: wakeup from "mem" using /dev/rtc0 at Tue May 17 09:16:07 2022
-PM: suspend entry (deep)
-Filesystems sync: 0.001 seconds
-Freezing user space processes ... (elapsed 0.002 seconds) done.
-OOM killer disabled.
-Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
-printk: Suspending console(s) (use no_console_suspend to debug)
-smsc95xx 4-1.1:1.0 eth0: entering SUSPEND2 mode
-smsc95xx 4-1.1:1.0 eth0: Failed to read reg index 0x00000114: -113
-smsc95xx 4-1.1:1.0 eth0: Error reading MII_ACCESS
-smsc95xx 4-1.1:1.0 eth0: __smsc95xx_mdio_read: MII is busy
-------------[ cut here ]------------
-WARNING: CPU: 2 PID: 73 at drivers/net/phy/phy.c:946 
-phy_state_machine+0x98/0x28c
-Modules linked in: snd_soc_hdmi_codec snd_soc_odroid governor_passive 
-snd_soc_i2s exynos_bus snd_soc_idma snd_soc_s3c_dma exynosdrm 
-analogix_dp snd_soc_max98090 snd_soc_core ac97_bus snd_pcm_dmaengine 
-snd_pcm clk_s2mps11 rtc_s5m snd_timer snd soundcore ina2xx exynos_gsc 
-pwm_samsung exynos_adc s5p_jpeg ohci_exynosv4l2_mem2mem phy_exynos_usb2 
-panfrost ehci_exynos s5p_mfc drm_shmem_helper videobuf2_dma_contig 
-videobuf2_memops videobuf2_v4l2 videobuf2_common gpu_sched videodev mc 
-exynos_ppmu exynos5422_dmc exynos_nocp s5p_sss rtc_s3c exynos_rng 
-s3c2410_wdt s5p_cec pwm_fan
-CPU: 2 PID: 73 Comm: kworker/2:1 Tainted: G        W 
-5.18.0-rc6-01433-g1ce8b37241ed #5040
-Hardware name: Samsung Exynos (Flattened Device Tree)
-Workqueue: events_power_efficient phy_state_machine
-  unwind_backtrace from show_stack+0x10/0x14
-  show_stack from dump_stack_lvl+0x40/0x4c
-  dump_stack_lvl from __warn+0xc8/0x13c
-  __warn from warn_slowpath_fmt+0x5c/0xb4
-  warn_slowpath_fmt from phy_state_machine+0x98/0x28c
-  phy_state_machine from process_one_work+0x1ec/0x4cc
-  process_one_work from worker_thread+0x58/0x54c
-  worker_thread from kthread+0xd0/0xec
-  kthread from ret_from_fork+0x14/0x2c
-Exception stack(0xf0aa9fb0 to 0xf0aa9ff8)
-...
----[ end trace 0000000000000000 ]---
-
-It looks that the driver's suspend/resume operations might need some 
-adjustments. After the system suspend/resume cycle the driver is not 
-operational anymore. Reverting the $subject patch on top of linux 
-next-20220516 restores ethernet operation after system suspend/resume.
-
-> ---
-> Only change since v2:
->   * Drop call to __irq_enter_raw() which worked around a warning in
->     generic_handle_domain_irq().  That warning is gone since
->     792ea6a074ae (queued on tip.git/irq/urgent).
->     (Marc Zyngier, Thomas Gleixner)
->
->   drivers/net/usb/smsc95xx.c | 113 ++++++++++++++++++++-----------------
->   1 file changed, 61 insertions(+), 52 deletions(-)
-
- > ...
-
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+Thanks,
+Michal
 
