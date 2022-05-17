@@ -2,128 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3D4529DFF
-	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 11:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FBF529E3F
+	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 11:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244753AbiEQJ21 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 May 2022 05:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
+        id S233559AbiEQJlB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 May 2022 05:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244785AbiEQJ1o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 May 2022 05:27:44 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A8734671
-        for <linux-usb@vger.kernel.org>; Tue, 17 May 2022 02:27:42 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id s3so6416497edr.9
-        for <linux-usb@vger.kernel.org>; Tue, 17 May 2022 02:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+Bea/1kwLPLMANr+6NgNy10zL15qCdn8qnw++x3HnA0=;
-        b=xxLnCXUtEW5fxRgMioDY8NGbWM9/b6UlHcv6nb802IcZMqXMZnlsH7sTGmYs4jsctE
-         xW49eFdgQrsXgFx7PlGWtCuNZcRGs3ZL9uWiBSYncRqIJKerZUZqANnLcM3I8W+8Yaqj
-         NZeycqJAJWo3Tzu16FCKekXrJhffsOyltk5OYNTJxO2jERiswpdGmtqUSgmRhnv36DLU
-         UWYVfm/b9+ipT06qw2JU8WFEeATDOMbPZ7sLmcwDuzO6mWi82XEkeeJmY9XRbIhqmuyE
-         hYDGcwrp84Xf8Yh2IjL3XAUYzRJRXcneS3OEpIlTulw3YNRoyv/LE6gWoZJP5UPAq9b8
-         Arxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+Bea/1kwLPLMANr+6NgNy10zL15qCdn8qnw++x3HnA0=;
-        b=snFtbvYLXCmIsX7sRj5E8VZPOjhP8sGJu3QeYVJPcXR1gZFBC03Z4CTNj0Kr8vCqrc
-         enRucdOliEOUHdRupQ+8IJ6JWJUcGKKbYwfBRqYM/u14RHMEQYYgpoWXnJDiUflOggSG
-         e6Vo75N6HTUt6EWiU89Nwkge5VdOKQL1btVROTkOm3JvnfCS5pkV+xr2ow56ZixBebwC
-         Z5hA2rVg/Oy8ONo6nN6e+Tgkpew0ez8j0VLNIIziVCkdbIrOUpFp+yaXV1SofszkDSK1
-         LwzR0jvNoRWkD+8M4sNiKGcvRdPaEunhyHE7f/Qs1tCvOA89BilGEdKDIgFaldcBmB/f
-         /C6w==
-X-Gm-Message-State: AOAM532/0psYTngMD+QecuqvxsmORLYzroc7YcQxlTuIv3hncSc+zo7e
-        eg26VwI6LkK2ydLxqFtu8h7zmA==
-X-Google-Smtp-Source: ABdhPJxkK6D609wnZyhOBBPss88JqHb2/WL6V+Dfu3UdhY5WiudqXoWhoDjLezs3xugslmugvV3ttw==
-X-Received: by 2002:aa7:d8c2:0:b0:42a:b9fa:bad8 with SMTP id k2-20020aa7d8c2000000b0042ab9fabad8mr7136657eds.304.1652779661183;
-        Tue, 17 May 2022 02:27:41 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id mm8-20020a170906cc4800b006f3ef214df0sm807181ejb.86.2022.05.17.02.27.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 02:27:40 -0700 (PDT)
-Message-ID: <3bdb65cd-cdad-6e10-c921-5ec3a9b4c9dd@linaro.org>
-Date:   Tue, 17 May 2022 11:27:39 +0200
+        with ESMTP id S245104AbiEQJlA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 May 2022 05:41:00 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4633D48F;
+        Tue, 17 May 2022 02:40:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652780458; x=1684316458;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4LPo/fqfv4brQeDZi/w/on11+gURa50LBTaOEz91bA0=;
+  b=T0YJG1Vb8/2nPWxM5KFyElCRWD/4MGvGgDqeKK/iknHbEZIuE6un0IDw
+   GZ0H3NWnv2jlwZvfgZqNYy1KK296ArKHyzj0cTdQ9Dwki4N0Gw9g/mbbP
+   kTjHW4q7YWj0kc3ybXEH0KqN2eiTlYH8uyWMlc2CjfDtXHDYFsfth/7Aa
+   bhBq2X5GOVSxj6PHDR7T735I8b4rmwZa6AXFqAEjWrd0GRlOupz71MowG
+   DE4dyUnETuDsxY1WhBum8y0f0xsHHdU/VoohAPSBBbUyg50R9bgrbWMy3
+   Wmce9sfmsMEcAXUTpkwsXlljS3Q47rGPjknJC2XN2oML+EyFcpT5gXhF3
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="253179278"
+X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
+   d="scan'208";a="253179278"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 02:40:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
+   d="scan'208";a="713778250"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 17 May 2022 02:40:55 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 May 2022 12:40:54 +0300
+Date:   Tue, 17 May 2022 12:40:54 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH -next] usb: typec: ucsi: fix return value check in
+ ucsi_acpi_probe()
+Message-ID: <YoNtppG+XCAP5LW6@kuha.fi.intel.com>
+References: <20220516131527.999909-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 00/13] dt-bindings/arm64: dts: qcom: minor cleanups with
- DT schema
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>, arm-soc <soc@kernel.org>
-References: <20220504131923.214367-1-krzysztof.kozlowski@linaro.org>
- <CAMuHMdVc3kShpp8wieX1SSA8-37m8PbxpqKRs5+gxz8Dm6QwsA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMuHMdVc3kShpp8wieX1SSA8-37m8PbxpqKRs5+gxz8Dm6QwsA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516131527.999909-1-yangyingliang@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 17/05/2022 11:19, Geert Uytterhoeven wrote:
-> On Wed, May 4, 2022 at 5:13 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->> The patches are independent, so they can be picked up as is (or everything
->> through Qualcomm SoC tree).
->>
->> Best regards,
->> Krzysztof
->>
->> Krzysztof Kozlowski (13):
->>   dt-bindings: soc: qcom: aoss: document qcom,sm8450-aoss-qmp
->>   dt-bindings: soc: qcom: qcom,smd-rpm: add power-controller
->>   dt-bindings: usb: qcom,dwc3: add IPQ8074, MSM8994, QCS404 and SM6125
->>   dt-bindings: usb: qcom,dwc3: fix clock matching
->>   arm64: dts: qcom: add missing AOSS QMP compatible fallback
->>   arm64: dts: qcom: correct DWC3 node names and unit addresses
->>   arm64: dts: qcom: ipq8074: add dedicated qcom,ipq8074-dwc3 compatible
->>   arm64: dts: qcom: msm8994: add dedicated qcom,msm8994-dwc3 compatible
->>   arm64: dts: qcom: sm6125: add dedicated qcom,sm6125-dwc3 compatible
->>   arm64: dts: qcom: qcs404: add dedicated qcom,qcs404-dwc3 compatible
->>   arm64: dts: qcom: msm8996: add clock-names to DWC3 USB node
->>   arm64: dts: qcom: align DWC3 USB clocks with DT schema
->>   arm64: dts: qcom: align DWC3 USB interrupts with DT schema
+On Mon, May 16, 2022 at 09:15:27PM +0800, Yang Yingliang wrote:
+> If memremap() fails, it never returns NULL. Replace NULL check
+> with IS_ERR().
+
+There's already a fix pending for this:
+https://patchwork.kernel.org/project/linux-usb/patch/YnjaDBXLmwouCB3M@kili/
+
+thanks,
+
+> Fixes: cdc3d2abf438 ("usb: typec: ucsi: acpi: Map the mailbox with memremap()")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/usb/typec/ucsi/ucsi_acpi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Looks like all but the first two were applied to usb-next by Greg,
-> causing conflicts with the soc/for-next tree.
+> diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> index 7455e3aff2be..8873c1644a29 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> @@ -133,8 +133,8 @@ static int ucsi_acpi_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	ua->base = devm_memremap(&pdev->dev, res->start, resource_size(res), MEMREMAP_WB);
+> -	if (!ua->base)
+> -		return -ENOMEM;
+> +	if (IS_ERR(ua->base))
+> +		return PTR_ERR(ua->base);
+>  
+>  	ret = guid_parse(UCSI_DSM_UUID, &ua->guid);
+>  	if (ret)
 
-Also this one was not applied:
-arm64: dts: qcom: add missing AOSS QMP compatible fallback
-
-However I did not get any conflict message...
-
-The DTS patches should not go via Greg's tree. They are sent together so
-there will be no warnings from Rob's bot. This is a common practice for
-dt-binding fixes.
-
-Bjorn,
-Any preference from you? Shall I send missing three patches to you?
-
-What about conflicts with Greg's tree?
-
-
-Best regards,
-Krzysztof
+-- 
+heikki
