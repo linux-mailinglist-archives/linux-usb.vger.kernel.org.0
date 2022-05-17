@@ -2,54 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48A152A61B
-	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 17:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7471B52A682
+	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 17:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349900AbiEQPXE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 May 2022 11:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
+        id S1350069AbiEQP03 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 May 2022 11:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234922AbiEQPXA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 May 2022 11:23:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B93C3153F;
-        Tue, 17 May 2022 08:22:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D570E61465;
-        Tue, 17 May 2022 15:22:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B33C385B8;
-        Tue, 17 May 2022 15:22:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652800977;
-        bh=NkPPZQlulZyYFxcr14FJfM4TxekosEMQzC9py7Up9Rs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b8RbvEYE61pgRvH8LA7dZZeoWsIiy6vaaucwau767Ops/o1TtFDkn3wsF/slV8Cun
-         2L/S69iRGAjfBo5BTWGYLQwvhHfCzfBN+MPE25utRF6KO0ePrMw6VdFV+kKIwL+qY2
-         SNUyW3ZvXGjYoqJAD8k0opJIk1D1M4LFwPQfPzkr1AZNktrZmGnvi7XXaQNZn0HusN
-         XfdhFJupt91vAzXHQt7dBfyc7uvY/+zHXWnYF9m92FjDncwXPkVWhApaoiV4c16IUx
-         //MLEXTa70foqBJdy7Qs4WJ0Fzm1S/qlvrYY5n4f7nUtQMJdszpgDrQEmdtY71rR6P
-         72LDrYq0beQpQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nqz2H-0001PP-Et; Tue, 17 May 2022 17:22:57 +0200
-Date:   Tue, 17 May 2022 17:22:57 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Robert Eckelmann <longnoserob@gmail.com>
-Cc:     gregkh@linuxfoundation.org, corbet@lwn.net,
-        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: serial: io_ti: Adding Agilent E5805A support
-Message-ID: <YoO90SiFgBwrwhgK@hovoldconsulting.com>
-References: <20220514122804.05c69987@octoberrain>
+        with ESMTP id S1349892AbiEQP0C (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 May 2022 11:26:02 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92E364C0
+        for <linux-usb@vger.kernel.org>; Tue, 17 May 2022 08:26:00 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id bu29so32045953lfb.0
+        for <linux-usb@vger.kernel.org>; Tue, 17 May 2022 08:26:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=V+X+LRsejpzXZH7tsox7umkRY7xo5WQxZtVa62UBNjU=;
+        b=MAvqRFZMqTF2/qVoqgWL5T0C+ULSZS7SdHzVh6LuDRdT51k+tjmab0c7gpzsf0Ql7k
+         ReP/eAAoQU51GsQD4Bz0ywyVLUNnZh/mE3GNKvawkR7gvPqBw5mXHXDDgdkNrpfTpAs1
+         bAMk6xyeJ1g4mnjcaeSQMvlpPsF4rbwLd+zy7LuQWikYbxdBzh0GZpJaYHhJxcWDRPdr
+         liBJ3i5eBbWp55RwkiZwR+iHlOp6uft4OXTRqqT9OHhoOaU24sAJ7WOwFhn0hed1CrBs
+         PnWxpalasLu5anySlBVesTRozNRF6F1oQ8HwZT5nEhEcwxQOOhte+RNCH6dwDZuqzYvq
+         U0Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=V+X+LRsejpzXZH7tsox7umkRY7xo5WQxZtVa62UBNjU=;
+        b=3y2W5H9tz323Qswoe8td03UrAUm2uIEzVvaG8cEZ08kxGNgYizWpUZevedFWfgDeqH
+         mZZVD256lxnTkTI3Ni6dv2ZmekDnDFJqbMNnAAjWxmgJGmt+QOxJVHxcAiFlFm2yvcXB
+         xI8NZn3jT6lK8hYm6KnIBKL4tCpTyzqM+g93OfpOp9EQGhHQc611aVX0u7FgpJm/z88/
+         KqZ1syVU7lbTgkd61OCkKzx2AinzBlL5TM2jw0rfXdw5IaFw3yV4cXWeUj8Bi+JZQjWD
+         fJ2TOEBKjiCuqXYx27lyY36viblm1fxXO8xrLJO4lqEyvpR4xzG5r8wRw7wcF5hBmS4m
+         iWEA==
+X-Gm-Message-State: AOAM5313bUgq/CLorYibyd7eCYsyqI3u2fRpl0WrUSvP7rEehXpIQ/HS
+        hkbVMD1eoYoi4XWY4O3lewcg9w==
+X-Google-Smtp-Source: ABdhPJxmP1/fh87kksGIF64YeOa63xcO4AZZoPfdVcUnKNeeAX7gyD0GjdDyznBoSgv6nNdqeC5cBA==
+X-Received: by 2002:a05:6512:280e:b0:473:a0c9:5bdf with SMTP id cf14-20020a056512280e00b00473a0c95bdfmr17199543lfb.337.1652801159066;
+        Tue, 17 May 2022 08:25:59 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id v2-20020a056512348200b0047255d21124sm2221lfr.83.2022.05.17.08.25.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 08:25:57 -0700 (PDT)
+Message-ID: <1327ec95-f6b4-838d-f3f2-a115c2ab632b@linaro.org>
+Date:   Tue, 17 May 2022 17:25:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220514122804.05c69987@octoberrain>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 2/3] ARM: dts: aspeed: Add USB2.0 device controller
+ node
+Content-Language: en-US
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Li Yang <leoyang.li@nxp.com>
+Cc:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>
+References: <20220517082558.3534161-1-neal_liu@aspeedtech.com>
+ <20220517082558.3534161-3-neal_liu@aspeedtech.com>
+ <96973d1d-c52c-d190-6989-3f7996dae70b@linaro.org>
+ <HK0PR06MB32027CAC4BEE443F426F587380CE9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <0bc5ba24-5bfb-593e-cbd0-828ef44aabc5@linaro.org>
+ <HK0PR06MB320295DB0748CEFC68B73CCF80CE9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <HK0PR06MB320295DB0748CEFC68B73CCF80CE9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,89 +96,24 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 14, 2022 at 12:28:04PM +0900, Robert Eckelmann wrote:
-> Hello Johan,
-> 
-> Below is a small patch regarding the io_ti driver.
-> This patch enables the use of the Agilent E5805A USB-RS232(x4) adapter.
-> It is a relabeled Inside Out Networks Edgeport with OEM USB-ID.
+On 17/05/2022 17:21, Neal Liu wrote:
+>>>>>
+>>>>> +		udc: udc@1e6a2000 {
+>>>>
+>>>> The same as DTS in bindings - generic node name, please.
+>>>>
+>>>
+>>> Is it possible to use "udc: usb-udc@1e6a2000" to distinguish it between "vhub:
+>> usb-vhub@1e6a0000"?
+>>
+>> Possible yes :), but not recommended and not wanted. Nodes should be generic
+>> and prefixes are added only if there is no unit address. You can though use
+>> some more descriptive label.
+>>
+> "udc: usb@1e6a2000" is okay for you?
 
-Thanks for the patch. Note that anything you write here in the body of
-the will end up in the git commit message so greetings etc. should go
-below the --- line.
+Yes, it's perfect.
 
-> Signed-off-by: Robert Eckelmann <longnoserob@gmail.com>
-> ---
->  Documentation/usb/usb-serial.rst | 4 ++++
->  drivers/usb/serial/io_ti.c       | 2 ++
->  drivers/usb/serial/io_usbvend.h  | 2 +-
->  3 files changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/usb/usb-serial.rst b/Documentation/usb/usb-serial.rst
-> index 69586aeb60bb..d9cfb6cb2d07 100644
-> --- a/Documentation/usb/usb-serial.rst
-> +++ b/Documentation/usb/usb-serial.rst
-> @@ -412,6 +412,10 @@ Inside Out Networks Edgeport Driver
->         - Edgeport/4 DIN
->         - Edgeport/16 Dual
-> 
-> +  This dirver now also includes the Agilent E5805A usb-to-RS232 adapter device,
 
-typo: dirver
-
-> +  as this is a rebranded Edgeport device.
-
-But I don't we need to update the documentation here as the list isn't
-complete as is.
-
-Actually this entry appears to be for the io_edgeport driver.
-
-> +
-> +
->    For any questions or problems with this driver, please contact Greg
->    Kroah-Hartman at greg@kroah.com
-> 
-> diff --git a/drivers/usb/serial/io_ti.c b/drivers/usb/serial/io_ti.c
-> index a7b3c15957ba..2810cefa628d 100644
-> --- a/drivers/usb/serial/io_ti.c
-> +++ b/drivers/usb/serial/io_ti.c
-> @@ -166,6 +166,7 @@ static const struct usb_device_id edgeport_2port_id_table[] = {
-> 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_8S) },
-> 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416) },
-> 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416B) },
-> +	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_E5805A)},
-> 	{ }
->  };
-> 
-> @@ -204,6 +205,7 @@ static const struct usb_device_id id_table_combined[] = {
-> 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_8S) },
-> 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416) },
-> 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416B) },
-> +	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_E5805A)},
-> 	{ }
->  };
-> 
-> diff --git a/drivers/usb/serial/io_usbvend.h b/drivers/usb/serial/io_usbvend.h
-> index 52cbc353051f..3be6bce15d97 100644
-> --- a/drivers/usb/serial/io_usbvend.h
-> +++ b/drivers/usb/serial/io_usbvend.h
-> @@ -212,7 +212,7 @@
->  //
->  // Definitions for other product IDs
->  #define ION_DEVICE_ID_MT4X56USB			0x1403	// OEM device
-> -
-
-Please keep the double newline separator.
-
-> +#define ION_DEVICE_ID_E5805A			0x1A01  // OEM device (internals based on Edgeport/4?)
-
-Just say "rebranded" here too?
-
-Could you please also post the output of usb-devices (or lsusb -v) for
-this device for completeness?
-
-> 
->  #define	GENERATION_ID_FROM_USB_PRODUCT_ID(ProductId)				\
-> 			((__u16) ((ProductId >> 8) & (ION_GENERATION_MASK)))
-
-Johan
+Best regards,
+Krzysztof
