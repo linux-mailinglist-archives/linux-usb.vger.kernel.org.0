@@ -2,215 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7D652A522
-	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 16:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 805A752A53D
+	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 16:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349171AbiEQOpD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 May 2022 10:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
+        id S1349305AbiEQOvX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 May 2022 10:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344563AbiEQOpA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 May 2022 10:45:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E062E0BC;
-        Tue, 17 May 2022 07:44:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 213276160B;
-        Tue, 17 May 2022 14:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FC26C385B8;
-        Tue, 17 May 2022 14:44:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652798697;
-        bh=QZBvZjvpV6WIhybyhDD0L+yIYufi9SKnX03r87oDAZQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dpQTMtT+mo4FYSp2athdJqVRD3J0EQTdA1cFErWpD8FNo0IJxYJ1hvs8/HGk460FF
-         DKd28BiJDqNaV7MyTj1OPzEq8YkXUJq7F4mGnEihXbrL0YptinMkRKqN8f9yq/ClXx
-         pv84FxxB8uOmckDQU1Zv2++iHxbYd0ycR4adzM/U7ghzyc5SS0iVYAx8OlrCwHFDUj
-         44/zpOOGKvRHsEX2Mc8MKanCODMpCHzmu2ziV1XCknf3EkdNl0+JzalvcsknwQO86V
-         qvL2uNYAqwHwlZ42BHRbQxXLqPXrz0za4kful4RSX819iJAe7NLjLTOnQRQ9TqLr5H
-         KXwRVqyzLbG3Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nqyRV-00013D-Fu; Tue, 17 May 2022 16:44:57 +0200
-Date:   Tue, 17 May 2022 16:44:57 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Carl =?utf-8?B?WWluKOaut+W8oOaIkCk=?= <carl.yin@quectel.com>
-Cc:     Reinhard Speyerer <rspmn@arcor.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        with ESMTP id S1349339AbiEQOvI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 May 2022 10:51:08 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2118.outbound.protection.outlook.com [40.107.255.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10370DF0C;
+        Tue, 17 May 2022 07:51:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TDkXy6t0MchXRC5keI7w6F9FLn9eH5P9RIIukW9VFHw4syzVLDjDM8iz5HN70I+hdtQJRpzdLfxSsPwRROCi1VqSCpUFU8dj8DD+ot/7EEvayMyJUucgDp4EKxUPjPmzT19XBNysvYB556/+FQu1dUgz4ac78bCAVDV4qCcXSaJe3sOXq+GMIefXC1HvFq2OWReycTW2+l18gxOzdKlD3+7guvFJo8omtHpIqUPyPB8uo1qp+7Ynj9Movp2gfJU1x6s2tLPeUjKqqIDwLbIREyOcg93ZueKdRimYZjY0/kgOAzOeWE2fZkBpr+wOL2hoevFVfaEejlmmhT0gNDQsZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xF6gJBfhZ2TwswQu52ErZ3AXELISFFCOrzWgeaFVfMw=;
+ b=LSWkH8PWRnxmN4NcPm3efDSHsQIzJowiwCsHVJVRttEIwKCW45oK/a+rmQzIDabF+qtsy6ppmT4c5CRaVQCtheZZg0MpvlPjuEURQivYTBmVAG4S7e4ibth0v4muAAVcMnFjn59/IreN5yj0NLmSJlLvOLdbfl6h9IvrgQhrDA2tPgtbeFpTvHkCz53n7z+fb0BBBO5Bz/27IyWr3GCee+SlAl/W7UaMp+mSV4qRxVHakeZZKrrwV/WiFRel7qWw+iwYgGoiCzekrqV1AtrUOumE2kBKR7hohTM9P7A+LK2ahyMsLtP2qCrm+GL9wKexSQov69MFm2yvlr1cHstZoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xF6gJBfhZ2TwswQu52ErZ3AXELISFFCOrzWgeaFVfMw=;
+ b=PGij1QGkmrHYnZ7Swbpp4MbVSTY2FNTlmZhjEMpAfz0SncpzJpAQ54UO/p238lqSlvqfKdH2lRhLGfpGgy/9CKO9jNNO+HTsSTjzotBh/+IRMcLuJZFRIHnCzej93CDCXgdUsUPMMQ1CqxVRIgfJCPC6ZIuq0UQ+GZBghnPyTDdUfWJ0N3a13Wqf6XXQ0fkZflHJjLR6vGD8+ISxkpbGhv4shLPNWIvwjnACmdxGrfKlZ8K0nIob5JJrkZ+bTy1VKgfs4tJfJdbRVhPNpq2crYhz/QoW2bjskpaGnWdaeEDGKaTpl4169rv/xyaX6JVWEVIEMtkLSsGPXy5rtZ/lEA==
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
+ by KL1PR0601MB4002.apcprd06.prod.outlook.com (2603:1096:820:20::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Tue, 17 May
+ 2022 14:50:55 +0000
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::3d31:8c42:b7f1:ece8]) by HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::3d31:8c42:b7f1:ece8%7]) with mapi id 15.20.5250.018; Tue, 17 May 2022
+ 14:50:55 +0000
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?utf-8?B?Q2hyaXN0aWFuIEvDtm5pZw==?= <christian.koenig@amd.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Li Yang <leoyang.li@nxp.com>
+CC:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] USB: serial: option: add Quectel BG95 modem
-Message-ID: <YoO06aI15sGRimRo@hovoldconsulting.com>
-References: <TYZPR06MB4270471E08BF0BCDBF24722186CE9@TYZPR06MB4270.apcprd06.prod.outlook.com>
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>
+Subject: RE: [PATCH v2 2/3] ARM: dts: aspeed: Add USB2.0 device controller
+ node
+Thread-Topic: [PATCH v2 2/3] ARM: dts: aspeed: Add USB2.0 device controller
+ node
+Thread-Index: AQHYacfDGaMXzDQN90y+BFiyb1NEtq0i95eAgAAutxA=
+Date:   Tue, 17 May 2022 14:50:55 +0000
+Message-ID: <HK0PR06MB32027CAC4BEE443F426F587380CE9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <20220517082558.3534161-1-neal_liu@aspeedtech.com>
+ <20220517082558.3534161-3-neal_liu@aspeedtech.com>
+ <96973d1d-c52c-d190-6989-3f7996dae70b@linaro.org>
+In-Reply-To: <96973d1d-c52c-d190-6989-3f7996dae70b@linaro.org>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bd0bee31-6f05-4c05-4136-08da3814a5c3
+x-ms-traffictypediagnostic: KL1PR0601MB4002:EE_
+x-microsoft-antispam-prvs: <KL1PR0601MB400298149AB93C7FF8F033E180CE9@KL1PR0601MB4002.apcprd06.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 77F9ax/4f9nQMPE+gDSMLCgOP3RyeM3pu/HuCAcEv6yu/4x4i/1veY9akGpDtRm8QfMb79x6If0QHtK6krcaMA1IrEaz8dReVXVU29psVUxlyQI1+2+ezOYnPd5gvhCVUO54NuXoej9jXUBYGgaYvv0KgiBjaD4XjKAT21+Vr/rd6N/AKsDg0nmvoWOLQ+XhIgV92GSfDS5HJHGyWzjftOzD8mHDJk6zGOM1tqCAHY410xhxc7iAEAynbEPei4CE4x9T2JakiOOZJCPpZQ+oQ3AVhrNBzoQ8Iak4E8LE3C6FbImwkQ5Fj+DpIg4UJFkRUzJlVQDF8IeB0wUkRwhvLUZYHEen8emc/C7Nhen8ejmGxkUvXAxhd7x6WhQ0wja9/mOa4Zp7gTdxj6xjjHx76UeiJfILoNGB33je8dek2nP6Rt/FKj4jzvbRdJCdnB35U40+M4iSFkm2q2Lteo+BYWF87OXNsYrQRHxnprXW5eSNuUegXWN+RDSuyd+a4LzSqCCcB6CSdgaFXlH0mGgz77R5eop+k8ZtUYFF05IJVK1wNlyj/UcEDHzWreCuRp3mHM9E7nt1VJKy0WkdO+xvUzJ2cdfML5+WbFXRhBhn+Cc3twxvZkJ7249U4Vx1/HiNRueN0mOdfTBYwY+8z+TOeqt/F7W3atvvYnD304FtGJUIU3CyDBl/zm1u17h2xgJyStTojP4sHtmgAxAgSKjWyqYHa4eDa/YML4wGcc8Vtpc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(396003)(136003)(376002)(366004)(39850400004)(346002)(66446008)(66556008)(8676002)(64756008)(76116006)(66476007)(4326008)(66946007)(86362001)(38070700005)(26005)(53546011)(71200400001)(8936002)(52536014)(508600001)(110136005)(5660300002)(7416002)(55016003)(33656002)(38100700002)(54906003)(7696005)(186003)(2906002)(83380400001)(921005)(316002)(122000001)(66574015)(41300700001)(6506007)(9686003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZmJ2UUdjRGpsRHZPNVF5S1NNTzl1RFRwczVHR05kTFpZbDFXL3lZOHd4Uitl?=
+ =?utf-8?B?eW9SWU9VeXNVdXowK0ZzbXdUOUV2VHlRS1pSMTFoa0hBRkl2Y0hCZ3ZtS050?=
+ =?utf-8?B?bUl5OUlzSi9zYjZjK05RRUN1VGFRb1hOcG9ZL2RQWVhoVS9FNVY4WFZXS0xo?=
+ =?utf-8?B?RVAyQW5Iemh3T01NRFFTUk40Z1JSV2lDcXNnZGIyOW4rak9HU0ZhTlFxYnFB?=
+ =?utf-8?B?SEJ5WTE3bGtUM1M0blI3NUxmTnE0azNWUkNDdERkZmF5WExwV2lIZExtaUx5?=
+ =?utf-8?B?a0IzNlp6RWZFdTRlRyt3RGlKZno4Z2p2TDkvV1VPTWdKMExyVUU4Ni9jNjYw?=
+ =?utf-8?B?QmIvYllIK0JVUFZNenN1bTlMdUI4MEVaZ0Z0TkxiUy9pVVBKZTBVVmNvWXZQ?=
+ =?utf-8?B?VVppWTkzdi9ZRk1ha2xDbW1sYnEwMUlaMXBxSVc5NEEwSUlRL2l3NGtJT0NK?=
+ =?utf-8?B?VGlLQSswMU1ML1lGdjJzYi9LbmFnR29WRnR1ZVRub1ZNK0lKVlhtSjVjQmRo?=
+ =?utf-8?B?VDRzcVdWV1VtT2ZEZGRsaWo4OXBGaG50QVMvQ0pxbVRXSUNuU2JqS0hRU3ZN?=
+ =?utf-8?B?SDY2UHU2SW1DVTJTbjFneVVkKy9MVEN3VkdjSzlPbFVhTGVzR2VXMVR5YXZH?=
+ =?utf-8?B?RlI4MURtcXhNWTdMTndyeHNOblhMOVFLVGNRVGJMcng2SWw2MkEwY292NkpO?=
+ =?utf-8?B?ZjhLcTBVYU5HN2QwOC9SeFU0MHJSL056Tkl5M0VveEhVQVNwT2FKVHpjNXV6?=
+ =?utf-8?B?YTZ4K1lqVFU0RnBGYTgwa2txSENuQ2tqRHJJUGo5VVlmZUMwMzJJVFVmRCty?=
+ =?utf-8?B?aU5wQnVkcmgwQzRPeE9wVjUyWjhPYmxudjRsMndhejdOTGRxVWwrVktlU0Fl?=
+ =?utf-8?B?UVo5NVJSckZRbFFGbDArMDdmdmRCRTVQMENyU3UrNzJWVG9ONkEyUy9vanM0?=
+ =?utf-8?B?VkN0cTd6SlhLREdKclp5YzJGU2FtQUZ6T0MvVEhnVEtlNjVYdlZlTkN2VHV6?=
+ =?utf-8?B?Rk5FTlcybmtpbFJ2VmIwNFdCQ3ZMVUxzYjN1RTBNNkJBbW9STTNjcmxPeTlF?=
+ =?utf-8?B?UG80RmIzQUp1cHMzVTRSKzVGWnh2bE5IOW5XNTgwM2FEK3dodUZmalhxQWt2?=
+ =?utf-8?B?ZGsrNFJpcWFrdEJwM0c1TlQ1cnZUK3M2R1c5QTVlbzB0UjZIZm5kelVvMFdI?=
+ =?utf-8?B?bmFSYzZEa1lmRGxWN2V2dmUxcC9tTVE1bzB2UEFqcklDR1RMWWhabyswZkNU?=
+ =?utf-8?B?TjJINTVvb01mTlJKTVN3NUhDZHU4UXM1SUVFQ2U1ZXNpamV2UHpNbDgyOEFE?=
+ =?utf-8?B?bW12K3JqOVJIbk5tOWJ3QU05eVAzYXAzNUtrbE0rUzhhQ1oxR1NLWWY3Z0Fs?=
+ =?utf-8?B?Rk45SFAyWUNMS3JsZE9FVWVKdEx2RGR1eElLalNTU2dGdGdJL1A3SjFHMisz?=
+ =?utf-8?B?STVTYUpuejQvSEdLNHJOVHdKblJabjE2bEpiRjRPSWxEVmhNRUlGTGZoa1di?=
+ =?utf-8?B?dVpuTEp5QU16Ujl0NENzaFFLMi9KSnR6Rll5SWwybVFUS3hqQjRZRjhjL1Y0?=
+ =?utf-8?B?WDJaYW8xNjNMdUo4TWFwMkZTczZtM2VuQTFxcjRRaXNyU0VmNjZYMHY1UnV0?=
+ =?utf-8?B?QTNlMW8xdlZiUG1lMDQ0YTdLUzVydENsa2ZsTEdjVWtwM28wbjBwVThjT0ZP?=
+ =?utf-8?B?MXdlMHMxWUNIWjc3em5Zay9KU3B2SmlUOS9za3AwcjF1Wmp0bGlKclNBd0xi?=
+ =?utf-8?B?TFZ1UWJSSWthTEJvTnBFbWx0eHFkbnFEcVg2ZHdod1lnMC9obzVpNDlxQmJ4?=
+ =?utf-8?B?bjhrRC8vT3kxdjZGVUl0bXkydWZNWmhpNWI5aUxIWDI0cHlvSG4yOTcrUkJm?=
+ =?utf-8?B?YnM0K2pqb3pkcldzUjBjQUFNZmRUV2lFVmxzTlpXYk9mN3RqYlNGTis3Rnpr?=
+ =?utf-8?B?UWNadzlYOURtSUN0eDNMbjl0UmNRMkEza2oxTGZMZ0lvTElBOGJ1N1krYU1I?=
+ =?utf-8?B?MFd1TVlCTkZhUGZaNUhKdWpMVWJBTmxCQnpsZmg3b1M3ZnFtUVowdnUzeEtY?=
+ =?utf-8?B?NGI1ZmpsL0w0TjRJVjhSOUNnTDRkSlcxYnkrWFhXYzRjQmh1Q0pxeFBGcm44?=
+ =?utf-8?B?MFFVT1o1ZHdtU21aTmlZV2RPSjJFWFBWbWZzeVVZRUhCa0ZyZ0tyRDhoNHh0?=
+ =?utf-8?B?WHlveWpsOVVnTTRQTEpaYndhazBHU2ZTZ25QM0dTdnlSeXZodFd0VjJtZE8r?=
+ =?utf-8?B?UzRjRHRxVlZTbm51WnZMY01HWTlpaS9VcjNNWW55VUxWUGNxcGh6Y05sdXlR?=
+ =?utf-8?B?MXdXc2hQNU00dURDT1hBdDB2anNmZlVVaDE5dDZ5MHhoeGRDUEtzQT09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYZPR06MB4270471E08BF0BCDBF24722186CE9@TYZPR06MB4270.apcprd06.prod.outlook.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd0bee31-6f05-4c05-4136-08da3814a5c3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 May 2022 14:50:55.7728
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: llTVGPy5tpHueSXmCKpPLWoJ4nSo/551FFDdgJQNQGghuOJTl3ATYO/N58MgAthuPi8Z+L+iIaBwzjUu4Ffm8g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4002
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 17, 2022 at 01:14:34AM +0000, Carl Yin(殷张成) wrote:
-> Hi Reinhard:
->     Although BG95 supports at+qcfgext="usbnet", "rmnet", but lots of QMI message do not support, 
->     E.g WDS_START_NETWORK_INTERFACE, so "rmnet" is basically useless.
-
-Sounds like a good idea to reserve interface 3 as Reinhard suggested
-anyway for completeness.
-
-You can mention that the configuration is incomplete, but please include
-usb-devices output for also for rmnet so we have all the configurations
-in the commit message.
-
-> On Tuesday, May 17, 2022 at 05:13 AM +0000, Reinhard Speyerer wrote:
-> 
-> > On Mon, May 16, 2022 at 06:10:17AM +0000, Carl Yin(殷张成) wrote:
-> > > The BG95 modem has 2 USB configurations that are configurable via the
-> > > AT command AT+QCFGEXT="usbnet",["ecm"|"modem"] which make the
-> > modem
-> > > enumerate with the following interfaces, respectively:
-> > >
-> > > "modem": Diag + GNSS + Modem + Modem
-> > > "ecm"  : DIAG + GNSS + Modem + ECM
-> > 
-> > Hi Carl,
-> > 
-> > what about the AT+QCFGEXT="usbnet","rmnet" configuration available on
-> > several firmware versions which makes the BG95 enumerate as Diag + GNSS +
-> > Modem + QMI:
-> > 
-> > T:  Bus=02 Lev=02 Prnt=06 Port=01 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
-> > D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> > P:  Vendor=2c7c ProdID=0700 Rev= 0.00
-> > S:  Manufacturer=Quectel, Incorporated
-> > S:  Product=Quectel LPWA Module
-> > S:  SerialNumber=xxxxxxxx
-> > C:* #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
-> > I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> > E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> > E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> > E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> > E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-> > E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> > E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > 
-> > >
-> > > A detailed description of the USB configuration for each mode follows:
-> > >
-> > > +QCFGEXT: "usbnet","modem"
-> > > -------------------------
-> > > T:  Bus=01 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
-> > > D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> > > P:  Vendor=2c7c ProdID=0700 Rev= 0.00
-> > > S:  Manufacturer=Quectel, Incorporated
-> > > S:  Product=Quectel LPWA Module
-> > > S:  SerialNumber=884328a2
-> > > C:* #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
-> > > I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> > > E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> > > E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> > > E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> > > E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=option
-> > > E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> > > E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > >
-> > > +QCFGEXT: "usbnet","ecm"
-> > > -----------------------
-> > > T:  Bus=01 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  4 Spd=480  MxCh= 0
-> > > D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> > > P:  Vendor=2c7c ProdID=0700 Rev= 0.00
-> > > S:  Manufacturer=Quectel, Incorporated
-> > > S:  Product=Quectel LPWA Module
-> > > S:  SerialNumber=884328a2
-> > > C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-> > > A:  FirstIf#= 3 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
-> > > I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> > > E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> > > E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> > > E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> > > E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > I:* If#= 3 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00
-> > > Driver=cdc_ether
-> > > E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> > > I:  If#= 4 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00
-> > > Driver=cdc_ether
-> > > I:* If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00
-> > > Driver=cdc_ether
-> > > E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > >
-> > > Signed-off-by: Carl Yin <carl.yin@quectel.com>
-> > > ---
-> > >  drivers/usb/serial/option.c | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > >
-> > > diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> > > index 152ad8826..f91b2a67d 100644
-> > > --- a/drivers/usb/serial/option.c
-> > > +++ b/drivers/usb/serial/option.c
-> > > @@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
-> > >  #define QUECTEL_PRODUCT_RM500Q			0x0800
-> > >  #define QUECTEL_PRODUCT_EC200S_CN		0x6002
-> > >  #define QUECTEL_PRODUCT_EC200T			0x6026
-> > > +#define QUECTEL_PRODUCT_BG95			0x0700
-
-Please keep the defines sorted by PID.
-
-> > >  #define CMOTECH_VENDOR_ID			0x16d8
-> > >  #define CMOTECH_PRODUCT_6001			0x6001
-> > > @@ -1143,6 +1144,10 @@ static const struct usb_device_id option_ids[] = {
-> > >  	  .driver_info = ZLP },
-> > >  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID,
-> > QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
-> > >  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID,
-> > > QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
-> > > +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID,
-> > QUECTEL_PRODUCT_BG95, 0xff, 0xff, 0xff),
-> > > +	  .driver_info = ZLP },
-> > 
-> > Could you please add a RSVD(3) flag to the driver_info here to avoid that the
-> > option driver incorrectly binds to the QMI interface?
-
-> > > +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID,
-> > QUECTEL_PRODUCT_BG95, 0xff, 0xfe, 0xff),
-> > > +	  .driver_info = ZLP },
-
-Wouldn't a single entry using USB_DEVICE_INTERFACE_CLASS() be enough to
-cover all three configurations?
-
-> > >
-> > >  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
-> > >  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
-> > > --
-> > > 2.17.1
-> > >
-
-Johan
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBLcnp5c3p0b2YgS296bG93c2tp
+IDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+DQo+IFNlbnQ6IFR1ZXNkYXksIE1heSAx
+NywgMjAyMiA4OjAwIFBNDQo+IFRvOiBOZWFsIExpdSA8bmVhbF9saXVAYXNwZWVkdGVjaC5jb20+
+OyBHcmVnIEtyb2FoLUhhcnRtYW4NCj4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPjsgUm9i
+IEhlcnJpbmcgPHJvYmgrZHRAa2VybmVsLm9yZz47IEtyenlzenRvZg0KPiBLb3psb3dza2kgPGty
+enlzenRvZi5rb3psb3dza2krZHRAbGluYXJvLm9yZz47IEpvZWwgU3RhbmxleSA8am9lbEBqbXMu
+aWQuYXU+Ow0KPiBBbmRyZXcgSmVmZmVyeSA8YW5kcmV3QGFqLmlkLmF1PjsgRmVsaXBlIEJhbGJp
+IDxiYWxiaUBrZXJuZWwub3JnPjsgU3VtaXQNCj4gU2Vtd2FsIDxzdW1pdC5zZW13YWxAbGluYXJv
+Lm9yZz47IENocmlzdGlhbiBLw7ZuaWcNCj4gPGNocmlzdGlhbi5rb2VuaWdAYW1kLmNvbT47IEdl
+ZXJ0IFV5dHRlcmhvZXZlbiA8Z2VlcnRAbGludXgtbTY4ay5vcmc+Ow0KPiBMaSBZYW5nIDxsZW95
+YW5nLmxpQG54cC5jb20+DQo+IENjOiBsaW51eC1hc3BlZWRAbGlzdHMub3psYWJzLm9yZzsgbGlu
+dXgtdXNiQHZnZXIua2VybmVsLm9yZzsNCj4gZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc7IGxp
+bnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsNCj4gbGludXgta2VybmVsQHZnZXIu
+a2VybmVsLm9yZzsgbGludXgtbWVkaWFAdmdlci5rZXJuZWwub3JnOw0KPiBkcmktZGV2ZWxAbGlz
+dHMuZnJlZWRlc2t0b3Aub3JnOyBsaW5hcm8tbW0tc2lnQGxpc3RzLmxpbmFyby5vcmcNCj4gU3Vi
+amVjdDogUmU6IFtQQVRDSCB2MiAyLzNdIEFSTTogZHRzOiBhc3BlZWQ6IEFkZCBVU0IyLjAgZGV2
+aWNlIGNvbnRyb2xsZXINCj4gbm9kZQ0KPiANCj4gT24gMTcvMDUvMjAyMiAxMDoyNSwgTmVhbCBM
+aXUgd3JvdGU6DQo+ID4gQWRkIFVTQjIuMCBkZXZpY2UgY29udHJvbGxlcih1ZGMpIG5vZGUgdG8g
+ZGV2aWNlIHRyZWUgZm9yIEFTVDI2MDAuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBOZWFsIExp
+dSA8bmVhbF9saXVAYXNwZWVkdGVjaC5jb20+DQo+ID4gLS0tDQo+ID4gIGFyY2gvYXJtL2Jvb3Qv
+ZHRzL2FzcGVlZC1nNi5kdHNpIHwgMTAgKysrKysrKysrKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwg
+MTAgaW5zZXJ0aW9ucygrKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRz
+L2FzcGVlZC1nNi5kdHNpDQo+ID4gYi9hcmNoL2FybS9ib290L2R0cy9hc3BlZWQtZzYuZHRzaQ0K
+PiA+IGluZGV4IDNkNWNlOWRhNDJjMy4uNTUxNzMxM2ViMmI1IDEwMDY0NA0KPiA+IC0tLSBhL2Fy
+Y2gvYXJtL2Jvb3QvZHRzL2FzcGVlZC1nNi5kdHNpDQo+ID4gKysrIGIvYXJjaC9hcm0vYm9vdC9k
+dHMvYXNwZWVkLWc2LmR0c2kNCj4gPiBAQCAtMjk4LDYgKzI5OCwxNiBAQCB2aHViOiB1c2Itdmh1
+YkAxZTZhMDAwMCB7DQo+ID4gIAkJCXN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+ID4gIAkJfTsNCj4g
+Pg0KPiA+ICsJCXVkYzogdWRjQDFlNmEyMDAwIHsNCj4gDQo+IFRoZSBzYW1lIGFzIERUUyBpbiBi
+aW5kaW5ncyAtIGdlbmVyaWMgbm9kZSBuYW1lLCBwbGVhc2UuDQo+IA0KDQpJcyBpdCBwb3NzaWJs
+ZSB0byB1c2UgInVkYzogdXNiLXVkY0AxZTZhMjAwMCIgdG8gZGlzdGluZ3Vpc2ggaXQgYmV0d2Vl
+biAidmh1YjogdXNiLXZodWJAMWU2YTAwMDAiPw0KDQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQo+IEty
+enlzenRvZg0K
