@@ -2,237 +2,421 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C3152969B
-	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 03:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCD1529841
+	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 05:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236572AbiEQBOp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 May 2022 21:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
+        id S233686AbiEQDdL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 May 2022 23:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236359AbiEQBOn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 21:14:43 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2053.outbound.protection.outlook.com [40.107.215.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F7243ED8;
-        Mon, 16 May 2022 18:14:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ToxzxjJZeUYbaAtqqKaRKQuvxE4WIXAHsGpkv3gkBXnZbyBb3gWCuphfz6zl+GSY2F8p0nfMwAScpTvHZUdAw/UjLkZiW9xI7MY9fjGOVRCSUgKsWZGlXM9aLwMxF5aeqZtuJCdWpv0TF5yAaiOYD1j2/KkFEWumhNrN95q2/fW/KTfDqLFzUobWbrG6xznde9SHHPI07/eLPD1uch867JR7HAfsicLSRRGUwlA482BNw/VcVo5aNVdTc71Xdj53MEspkmLaCMxxgeZpRwqG3K7kqAM79T79zberC6f4pKQdwla4YQ4dsy8HicWWxhH276s5Tqh55Kwnf7xgr64Wew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d8X7LuXJ+6iqHAJpILUkOnpyl7a7+nJnLBRGNITcSqo=;
- b=Cfr3A5ZF2a7fkSTvZYBJ80khA2TwD4dar1xV2+X+0zQSt14ElCoseEZ73GkftHVpb64t3i3C13brNfMLm05D5sGVm2C8FiyCZRcb+7wt3K/yu47DLoIQ2Ns4LGTttnQLjmf3vxT0HiArq+88V7CoHi1u0Qh53p8sq1OejXtAC1rydIxyQSFObtc+3fCfK5PfM5xiru6zN35t8DN+zziRMhjLQTJLxR2+vyunWtqDGLaYxtjm+B293Xl/d6ezZvQBH0UjZPIg0L/tkeIahJyBmq6AeVSjoqrGDsuilAbqQEYx5w3GCEVha0/vf8QqSFN0Cswqw59mRTjmn0mdLFBtcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=quectel.com; dmarc=pass action=none header.from=quectel.com;
- dkim=pass header.d=quectel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quectel.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d8X7LuXJ+6iqHAJpILUkOnpyl7a7+nJnLBRGNITcSqo=;
- b=hC7Cbn1VzEdVGMGqPIGrNELfzf5OIEUYajFUYgvt84r3uX8GRt12pMbEyGZvPYvFY3FpaQRlMGr8AH34Dj4spN78LnMzI7qW9svwrnIuUAk1HOFdjl5ROq2mpbxm4R3Yadb59xTaY55DHEVrOsqTKmXneJC3J/ovIaTb1+e0r3Q=
-Received: from TYZPR06MB4270.apcprd06.prod.outlook.com (2603:1096:400:88::6)
- by SG2PR06MB2363.apcprd06.prod.outlook.com (2603:1096:4:3::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5250.18; Tue, 17 May 2022 01:14:35 +0000
-Received: from TYZPR06MB4270.apcprd06.prod.outlook.com
- ([fe80::c0e6:3fb5:f84f:244c]) by TYZPR06MB4270.apcprd06.prod.outlook.com
- ([fe80::c0e6:3fb5:f84f:244c%3]) with mapi id 15.20.5250.018; Tue, 17 May 2022
- 01:14:34 +0000
-From:   =?utf-8?B?Q2FybCBZaW4o5q635byg5oiQKQ==?= <carl.yin@quectel.com>
-To:     Reinhard Speyerer <rspmn@arcor.de>
-CC:     "johan@kernel.org" <johan@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] USB: serial: option: add Quectel BG95 modem
-Thread-Topic: [PATCH] USB: serial: option: add Quectel BG95 modem
-Thread-Index: AdhpibaBKWvappn5Qeq1VKAPHyOOPg==
-Date:   Tue, 17 May 2022 01:14:34 +0000
-Message-ID: <TYZPR06MB4270471E08BF0BCDBF24722186CE9@TYZPR06MB4270.apcprd06.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=quectel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 57ea1f5c-c126-4570-87f4-08da37a29ad0
-x-ms-traffictypediagnostic: SG2PR06MB2363:EE_
-x-microsoft-antispam-prvs: <SG2PR06MB236373FA44D3F1FCEDCFEAE086CE9@SG2PR06MB2363.apcprd06.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: b465VlrQ6pgkNxQqOyWt8xgkYnPw7SzRiGJq+tJp8gFA5lpuubJc1KVsuAH39TdQ26TuJFGIrXaDKS69ff3IxbYvv0+3Set1XcpmZN14Nujl1e0cZ+V2Pp6hMnrQXsCRk0KvrylvdFVrt7HdC8BqqGRy0MZhcB56yArMrzwziv9oXuhI0ogsdzpPdOnuAed1RQl5ndRdxVDv36Dz0scy97zKzP/I1wHjX5Qs9vXshFXvckHP3nSUgoHogsdwPsuS4zl43rST4d73d4mZoIcBTDWLe4PhizpPUH+52MNsgjvuIr9/kbP7AKVmFzx9+jF9lAHiufc9rirPjhP10+QT3VXJVyFpIOUWR2JyOTlksRY5yfYeuBvJtQ1F+iccf1fYl8Et0Gj2/OIGbSY9pxi8t4amUj6JEHV9HLdUWSNoM8Po1iqW8PwHceL9RUgArpfIFp0z829aJkuko7Sdq9IRtNn0ddcdmKd75VXsW2FAz6jT99UETRcGlCXVPm2mwSp1VovxITX1J71M2zw7Mv1SNQy8BAihK8CGm9BQFO3BvvUjLfkin01gXpYE5gdwIJGxqBFusJNgKsJftigbxrdXKYVuGLbNGCMNCPBQ1MztHI6Im0hjtYSMZuoA1loJ5+5+zLpMy84yE3L+9FJFyN7ou47iMOAavb/hcTBwtFDS6hxs6CmyQdQJDTtcsNU1oYIAGr4PXFU9jT9V9aoijDdmgg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4270.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(76116006)(6506007)(52536014)(26005)(508600001)(122000001)(66556008)(4326008)(8676002)(2906002)(86362001)(83380400001)(33656002)(54906003)(38100700002)(66446008)(66476007)(64756008)(55016003)(9686003)(8936002)(53546011)(85182001)(38070700005)(7696005)(71200400001)(186003)(316002)(66946007)(6916009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dlBCWmx0aXI0NEE5dFhUNFpDQnVTZDRnd0s3M21FWldoek9XZnRTem9UM1V2?=
- =?utf-8?B?cDE2Vmo5ejJPM0VCS2hKWitnVHhWeWU5ZEhUNTYxTytaeEZ3R2FHMWRYSUVk?=
- =?utf-8?B?Z0xRWVR4MlZSK2M2d3l2dGpQd0ZUUkdqWnpXWThveDJMS21GSUh2UWZ1V2x5?=
- =?utf-8?B?MFlMME9KbHJGMm9WZU9mUjczUkhEY2gxcG5lbjJheGx3V2ZnOC9uR1dMbzNQ?=
- =?utf-8?B?cktvbjlsV1FlaVp4Z1JSWk1OTGxuMlkvQ3M1WHpiem9RcFRtM2ozRWt6NXNW?=
- =?utf-8?B?WmZ5WEFDc3NQVjhuUlY0eFNuWVVBYUNZdFBvYU1sTVRYNlZLS0JVU0NYVzdN?=
- =?utf-8?B?S0JZVGZ6WW9kaG54TXRua0NsY1A4R1dQUkExRzl4TXY3UUovZndPMDZlNnRw?=
- =?utf-8?B?NUVSdis1WTRtWFVNc3h1b1pPQ0NQZlhCMU5pcHB4WmNlTS9HcjNuZW5iV0dF?=
- =?utf-8?B?ajNxWDhxOFR2eUQ1d3JxWVMraTNiazNQR1premVOQ210Vm1KbmswNTlBMS9u?=
- =?utf-8?B?MVl3RXQ4VXEwVi9YOGRjbUdIS1Q0ZlZ5UHZCWHQzUXJlWVdKYmRtMWlNTFhQ?=
- =?utf-8?B?Y2RtalZ3M3B1cFZCaXlCV3RSVjlKTTIvTWFVRXVkbVVERHgxRHoyUnZoY2hZ?=
- =?utf-8?B?WVRrMU9SRlMzb2NlUThGWkpSWVFGZlZaaEV4NmdZNytyWjFmTWUwWWJsN1Ew?=
- =?utf-8?B?dXpYRzBYM0N1aUY4ZmYrd2tXNllJQzNpQ0pqcWpJM1kxUFVRNGIvU0YyNEZL?=
- =?utf-8?B?TGtUSyt0bHluRzMwenQxc2hncVhJOXdjejZxTXR1dzVFZlpuOXRwVllSSkFl?=
- =?utf-8?B?WnlHMFRNS3FXZ3hReWpiYlhpT2g5L3ErQlJiUG9JcVZnenl4Uyt1SXpPRXhh?=
- =?utf-8?B?U2JuazhSUUJwWGNCMktyUy9tZHE5ME1BWGVxbWY4dTE4OTRwVnFNNllRSVZr?=
- =?utf-8?B?aXVhWmhtNjk2dEx2NUplSm5ySWtyOWdpbVAxd0g4bE5iR2Y2ZzFlTGNWS2U4?=
- =?utf-8?B?RTRjMDYxd3c1cXVuK2JzR2xlZTI0cHNiU3NyOHJ5T1hnaEJSUnZONG1RODND?=
- =?utf-8?B?SWF1R1hDRWFjb2pzTVpISlB4ODFrUkJJQ08xMVJWMFM3Rjl5VU15aTF3aVVP?=
- =?utf-8?B?TVZ2elFzbXNEUHpCNThuMHN6QXNvUFdndWgxeVVxVThheHg5cVdIRTNqd3pM?=
- =?utf-8?B?TXY2TlA5WXJBY2FHWE41MkM5QnVkM2loNkQwaXRzMWJKMFRlck1RN2M1ckZz?=
- =?utf-8?B?cGNBZlBXL3JsRkxLMTI1NjMxVlhuTG9LS3luaHdBbWlDcmdUdGsrZ25ZSVg3?=
- =?utf-8?B?RERVYnk4THVUVk1UVmdmSmQ5OXpLUmdmNGdBbU9ST3pQeWgwWURYcy9ySGJ0?=
- =?utf-8?B?REY3STk0cmhCaFFscmN1c0xDcGZvd21nZU9jRllCaWI4Zi92OXhuVDA0VVpm?=
- =?utf-8?B?LzFuOUI3R3BZTXNMMGdNVEdBYkwydUNVaUdrOUZ6Y0lNdzFTUHZsSzdla1VB?=
- =?utf-8?B?M3Q0eFRPVGxHc3ZkM1dQWWxMaFRuSFJVMHhKUzNSSVpBdmYycCs5Ym1iSEY5?=
- =?utf-8?B?emhlQUhmbUlPdmJjY0YwbTUzNTdVTkU1bnJVd09paWFGT3p2RmN1YjQxVTFF?=
- =?utf-8?B?NkNnUDVUcnpOSnBZQlNIRW80M1NabWpodkRZN014cGVON1hxbUJiUlluMXEx?=
- =?utf-8?B?S1kyb0dkRnl4d1NIaG1wNzlaSjNVY0JqRFVlcm9ROHNMSnk1S1QzQ2F1TU1u?=
- =?utf-8?B?RGplQnl1UzVPSTY1RVoyMndjOUhNQytiV2dqSmhtY1RuWGo4ZFEramc2ZW1h?=
- =?utf-8?B?a1dkUkQwUGpPYUVSZDUyY081QU1hY1MxcWtUQWFFWmErZWFZNW5hVm9kRVlN?=
- =?utf-8?B?MjdKc3V4RkhPTXRVbTA5ZkZsYjJaMzJHVUVTU2lsRndsNE1pMnFlOCtjWUdl?=
- =?utf-8?B?R2htb1RFeFMxa0ZJQitKTGtVYk5ob2ZXMys0WFM1VVVCbk43bTV4SW01MkRp?=
- =?utf-8?B?K3N0T3lGVGc3RHh6aVZMQnZtQnFDWmM5OGZpNUYvZWE3bHRTQTR1eWhUeTRs?=
- =?utf-8?B?ZUZKSk10cDdya2NiSWM3c1ZuY3lrSEdlSER0U2E0aTFaVjRRRnFjS0M1RlVK?=
- =?utf-8?B?allucjZhbnZSbXVRUDQ5SmV4K2NmdW1ZSlQvMWluOC9tamRXUVhTaUxvazh4?=
- =?utf-8?B?cXQyKytPRDU1RzRLT2Y1Vlh1dkRWRkh0d2ZoMm5NWjlPdUo3cmxmYkxkb0lM?=
- =?utf-8?B?cmV4RTlGbThrMGxkRFE3MzRkZzJRdEFBbkV1T0ZJWXVSUmsvYjhCM0dKbTB2?=
- =?utf-8?B?SnIzdmZ4MWNZWlhqNUZIRmZBbGRBVFVNbVgxSms1Rlg1VjRYRVpEQT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S232254AbiEQDdJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 May 2022 23:33:09 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64B439807;
+        Mon, 16 May 2022 20:33:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652758388; x=1684294388;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D5fyzz6rdwaKPsDIzGmTxmXHHhexwYJnUyY5uei4zH4=;
+  b=ep8I5u6VbKWYao5ghKMsWvWUjGU7E66r4VKY337Q1DXAWB8INf0EUFdL
+   3lt4jKd5s9KWO/EimoFRwLrkWzRkRW7+/gqLoYZnYaLjvzCCF8s6wEVR5
+   9Lsx4ne4+NHfNqXsIqf6roZ941t5zvJZ2/ks6QAsTOYdK+InetgAYZ4mj
+   w=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 16 May 2022 20:33:07 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 20:33:05 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 16 May 2022 20:32:45 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 16 May 2022 20:32:39 -0700
+Date:   Tue, 17 May 2022 09:02:35 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Doug Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>
+Subject: Re: [v5 2/3] phy: qcom-snps: Add support for overriding phy tuning
+ parameters
+Message-ID: <20220517033235.GC19209@hu-pkondeti-hyd.qualcomm.com>
+References: <1652723410-1630-1-git-send-email-quic_kriskura@quicinc.com>
+ <1652723410-1630-3-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-X-OriginatorOrg: quectel.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4270.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57ea1f5c-c126-4570-87f4-08da37a29ad0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 May 2022 01:14:34.7308
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 7730d043-e129-480c-b1ba-e5b6a9f476aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FGwmwYhGLhNn8hFdor5tky8pmbThygkPfa9urcGN0CC+1zSCuZ7yycvo3xVL6zc9P9HRkCQs9KNTS9DTnRBh8g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB2363
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1652723410-1630-3-git-send-email-quic_kriskura@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgUmVpbmhhcmQ6DQogICAgQWx0aG91Z2ggQkc5NSBzdXBwb3J0cyBhdCtxY2ZnZXh0PSJ1c2Ju
-ZXQiLCAicm1uZXQiLCBidXQgbG90cyBvZiBRTUkgbWVzc2FnZSBkbyBub3Qgc3VwcG9ydCwgDQog
-ICAgRS5nIFdEU19TVEFSVF9ORVRXT1JLX0lOVEVSRkFDRSwgc28gInJtbmV0IiBpcyBiYXNpY2Fs
-bHkgdXNlbGVzcy4NCg0KT24gVHVlc2RheSwgTWF5IDE3LCAyMDIyIGF0IDA1OjEzIEFNICswMDAw
-LCBSZWluaGFyZCBTcGV5ZXJlciB3cm90ZToNCg0KPiBPbiBNb24sIE1heSAxNiwgMjAyMiBhdCAw
-NjoxMDoxN0FNICswMDAwLCBDYXJsIFlpbijmrrflvKDmiJApIHdyb3RlOg0KPiA+IFRoZSBCRzk1
-IG1vZGVtIGhhcyAyIFVTQiBjb25maWd1cmF0aW9ucyB0aGF0IGFyZSBjb25maWd1cmFibGUgdmlh
-IHRoZQ0KPiA+IEFUIGNvbW1hbmQgQVQrUUNGR0VYVD0idXNibmV0IixbImVjbSJ8Im1vZGVtIl0g
-d2hpY2ggbWFrZSB0aGUNCj4gbW9kZW0NCj4gPiBlbnVtZXJhdGUgd2l0aCB0aGUgZm9sbG93aW5n
-IGludGVyZmFjZXMsIHJlc3BlY3RpdmVseToNCj4gPg0KPiA+ICJtb2RlbSI6IERpYWcgKyBHTlNT
-ICsgTW9kZW0gKyBNb2RlbQ0KPiA+ICJlY20iICA6IERJQUcgKyBHTlNTICsgTW9kZW0gKyBFQ00N
-Cj4gDQo+IEhpIENhcmwsDQo+IA0KPiB3aGF0IGFib3V0IHRoZSBBVCtRQ0ZHRVhUPSJ1c2JuZXQi
-LCJybW5ldCIgY29uZmlndXJhdGlvbiBhdmFpbGFibGUgb24NCj4gc2V2ZXJhbCBmaXJtd2FyZSB2
-ZXJzaW9ucyB3aGljaCBtYWtlcyB0aGUgQkc5NSBlbnVtZXJhdGUgYXMgRGlhZyArIEdOU1MgKw0K
-PiBNb2RlbSArIFFNSToNCj4gDQo+IFQ6ICBCdXM9MDIgTGV2PTAyIFBybnQ9MDYgUG9ydD0wMSBD
-bnQ9MDIgRGV2Iz0gIDggU3BkPTQ4MCAgTXhDaD0gMA0KPiBEOiAgVmVyPSAyLjAwIENscz0wMCg+
-aWZjICkgU3ViPTAwIFByb3Q9MDAgTXhQUz02NCAjQ2Zncz0gIDENCj4gUDogIFZlbmRvcj0yYzdj
-IFByb2RJRD0wNzAwIFJldj0gMC4wMA0KPiBTOiAgTWFudWZhY3R1cmVyPVF1ZWN0ZWwsIEluY29y
-cG9yYXRlZA0KPiBTOiAgUHJvZHVjdD1RdWVjdGVsIExQV0EgTW9kdWxlDQo+IFM6ICBTZXJpYWxO
-dW1iZXI9eHh4eHh4eHgNCj4gQzoqICNJZnM9IDQgQ2ZnIz0gMSBBdHI9ZTAgTXhQd3I9NTAwbUEN
-Cj4gSToqIElmIz0gMCBBbHQ9IDAgI0VQcz0gMiBDbHM9ZmYodmVuZC4pIFN1Yj1mZiBQcm90PWZm
-IERyaXZlcj1vcHRpb24NCj4gRTogIEFkPTgxKEkpIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZs
-PTBtcw0KPiBFOiAgQWQ9MDEoTykgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+IEk6
-KiBJZiM9IDEgQWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYgUHJvdD1mZiBEcml2
-ZXI9b3B0aW9uDQo+IEU6ICBBZD04MihJKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMN
-Cj4gRTogIEFkPTAyKE8pIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0KPiBJOiogSWYj
-PSAyIEFsdD0gMCAjRVBzPSAzIENscz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYgRHJpdmVyPW9w
-dGlvbg0KPiBFOiAgQWQ9ODMoSSkgQXRyPTAzKEludC4pIE14UFM9ICA2NCBJdmw9Mm1zDQo+IEU6
-ICBBZD04NChJKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gRTogIEFkPTAzKE8p
-IEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0KPiBJOiogSWYjPSAzIEFsdD0gMCAjRVBz
-PSAzIENscz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYgRHJpdmVyPXFtaV93d2FuDQo+IEU6ICBB
-ZD04NShJKSBBdHI9MDMoSW50LikgTXhQUz0gIDY0IEl2bD0ybXMNCj4gRTogIEFkPTg2KEkpIEF0
-cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0KPiBFOiAgQWQ9MDQoTykgQXRyPTAyKEJ1bGsp
-IE14UFM9IDUxMiBJdmw9MG1zDQo+IA0KPiA+DQo+ID4gQSBkZXRhaWxlZCBkZXNjcmlwdGlvbiBv
-ZiB0aGUgVVNCIGNvbmZpZ3VyYXRpb24gZm9yIGVhY2ggbW9kZSBmb2xsb3dzOg0KPiA+DQo+ID4g
-K1FDRkdFWFQ6ICJ1c2JuZXQiLCJtb2RlbSINCj4gPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-DQo+ID4gVDogIEJ1cz0wMSBMZXY9MDIgUHJudD0wMiBQb3J0PTAxIENudD0wMSBEZXYjPSAgMyBT
-cGQ9NDgwICBNeENoPSAwDQo+ID4gRDogIFZlcj0gMi4wMCBDbHM9MDAoPmlmYyApIFN1Yj0wMCBQ
-cm90PTAwIE14UFM9NjQgI0NmZ3M9ICAxDQo+ID4gUDogIFZlbmRvcj0yYzdjIFByb2RJRD0wNzAw
-IFJldj0gMC4wMA0KPiA+IFM6ICBNYW51ZmFjdHVyZXI9UXVlY3RlbCwgSW5jb3Jwb3JhdGVkDQo+
-ID4gUzogIFByb2R1Y3Q9UXVlY3RlbCBMUFdBIE1vZHVsZQ0KPiA+IFM6ICBTZXJpYWxOdW1iZXI9
-ODg0MzI4YTINCj4gPiBDOiogI0lmcz0gNCBDZmcjPSAxIEF0cj1lMCBNeFB3cj01MDBtQQ0KPiA+
-IEk6KiBJZiM9IDAgQWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYgUHJvdD1mZiBE
-cml2ZXI9b3B0aW9uDQo+ID4gRTogIEFkPTgxKEkpIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZs
-PTBtcw0KPiA+IEU6ICBBZD0wMShPKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4g
-PiBJOiogSWYjPSAxIEFsdD0gMCAjRVBzPSAyIENscz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYg
-RHJpdmVyPW9wdGlvbg0KPiA+IEU6ICBBZD04MihJKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2
-bD0wbXMNCj4gPiBFOiAgQWQ9MDIoTykgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+
-ID4gSToqIElmIz0gMiBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj1mZiBQcm90PWZm
-IERyaXZlcj1vcHRpb24NCj4gPiBFOiAgQWQ9ODMoSSkgQXRyPTAzKEludC4pIE14UFM9ICA2NCBJ
-dmw9Mm1zDQo+ID4gRTogIEFkPTg0KEkpIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0K
-PiA+IEU6ICBBZD0wMyhPKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gPiBJOiog
-SWYjPSA0IEFsdD0gMCAjRVBzPSAzIENscz1mZih2ZW5kLikgU3ViPWZlIFByb3Q9ZmYgRHJpdmVy
-PW9wdGlvbg0KPiA+IEU6ICBBZD04NShJKSBBdHI9MDMoSW50LikgTXhQUz0gIDY0IEl2bD0ybXMN
-Cj4gPiBFOiAgQWQ9ODYoSSkgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+ID4gRTog
-IEFkPTA0KE8pIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0KPiA+DQo+ID4gK1FDRkdF
-WFQ6ICJ1c2JuZXQiLCJlY20iDQo+ID4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gPiBUOiAg
-QnVzPTAxIExldj0wMiBQcm50PTAyIFBvcnQ9MDEgQ250PTAxIERldiM9ICA0IFNwZD00ODAgIE14
-Q2g9IDANCj4gPiBEOiAgVmVyPSAyLjAwIENscz1lZihtaXNjICkgU3ViPTAyIFByb3Q9MDEgTXhQ
-Uz02NCAjQ2Zncz0gIDENCj4gPiBQOiAgVmVuZG9yPTJjN2MgUHJvZElEPTA3MDAgUmV2PSAwLjAw
-DQo+ID4gUzogIE1hbnVmYWN0dXJlcj1RdWVjdGVsLCBJbmNvcnBvcmF0ZWQNCj4gPiBTOiAgUHJv
-ZHVjdD1RdWVjdGVsIExQV0EgTW9kdWxlDQo+ID4gUzogIFNlcmlhbE51bWJlcj04ODQzMjhhMg0K
-PiA+IEM6KiAjSWZzPSA1IENmZyM9IDEgQXRyPWUwIE14UHdyPTUwMG1BDQo+ID4gQTogIEZpcnN0
-SWYjPSAzIElmQ291bnQ9IDIgQ2xzPTAyKGNvbW0uKSBTdWI9MDAgUHJvdD0wMA0KPiA+IEk6KiBJ
-ZiM9IDAgQWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYgUHJvdD1mZiBEcml2ZXI9
-b3B0aW9uDQo+ID4gRTogIEFkPTgxKEkpIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0K
-PiA+IEU6ICBBZD0wMShPKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gPiBJOiog
-SWYjPSAxIEFsdD0gMCAjRVBzPSAyIENscz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYgRHJpdmVy
-PW9wdGlvbg0KPiA+IEU6ICBBZD04MihJKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMN
-Cj4gPiBFOiAgQWQ9MDIoTykgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+ID4gSToq
-IElmIz0gMiBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj1mZiBQcm90PWZmIERyaXZl
-cj1vcHRpb24NCj4gPiBFOiAgQWQ9ODMoSSkgQXRyPTAzKEludC4pIE14UFM9ICA2NCBJdmw9Mm1z
-DQo+ID4gRTogIEFkPTg0KEkpIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0KPiA+IEU6
-ICBBZD0wMyhPKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gPiBJOiogSWYjPSAz
-IEFsdD0gMCAjRVBzPSAxIENscz0wMihjb21tLikgU3ViPTA2IFByb3Q9MDANCj4gPiBEcml2ZXI9
-Y2RjX2V0aGVyDQo+ID4gRTogIEFkPTg1KEkpIEF0cj0wMyhJbnQuKSBNeFBTPSAgNjQgSXZsPTJt
-cw0KPiA+IEk6ICBJZiM9IDQgQWx0PSAwICNFUHM9IDAgQ2xzPTBhKGRhdGEgKSBTdWI9MDAgUHJv
-dD0wMA0KPiA+IERyaXZlcj1jZGNfZXRoZXINCj4gPiBJOiogSWYjPSA0IEFsdD0gMSAjRVBzPSAy
-IENscz0wYShkYXRhICkgU3ViPTAwIFByb3Q9MDANCj4gPiBEcml2ZXI9Y2RjX2V0aGVyDQo+ID4g
-RTogIEFkPTg2KEkpIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0KPiA+IEU6ICBBZD0w
-NChPKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gPg0KPiA+IFNpZ25lZC1vZmYt
-Ynk6IENhcmwgWWluIDxjYXJsLnlpbkBxdWVjdGVsLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVy
-cy91c2Ivc2VyaWFsL29wdGlvbi5jIHwgNSArKysrKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgNSBp
-bnNlcnRpb25zKCspDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2Ivc2VyaWFsL29w
-dGlvbi5jIGIvZHJpdmVycy91c2Ivc2VyaWFsL29wdGlvbi5jDQo+ID4gaW5kZXggMTUyYWQ4ODI2
-Li5mOTFiMmE2N2QgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2Ivc2VyaWFsL29wdGlvbi5j
-DQo+ID4gKysrIGIvZHJpdmVycy91c2Ivc2VyaWFsL29wdGlvbi5jDQo+ID4gQEAgLTI1Niw2ICsy
-NTYsNyBAQCBzdGF0aWMgdm9pZCBvcHRpb25faW5zdGF0X2NhbGxiYWNrKHN0cnVjdCB1cmIgKnVy
-Yik7DQo+ID4gICNkZWZpbmUgUVVFQ1RFTF9QUk9EVUNUX1JNNTAwUQkJCTB4MDgwMA0KPiA+ICAj
-ZGVmaW5lIFFVRUNURUxfUFJPRFVDVF9FQzIwMFNfQ04JCTB4NjAwMg0KPiA+ICAjZGVmaW5lIFFV
-RUNURUxfUFJPRFVDVF9FQzIwMFQJCQkweDYwMjYNCj4gPiArI2RlZmluZSBRVUVDVEVMX1BST0RV
-Q1RfQkc5NQkJCTB4MDcwMA0KPiA+DQo+ID4gICNkZWZpbmUgQ01PVEVDSF9WRU5ET1JfSUQJCQkw
-eDE2ZDgNCj4gPiAgI2RlZmluZSBDTU9URUNIX1BST0RVQ1RfNjAwMQkJCTB4NjAwMQ0KPiA+IEBA
-IC0xMTQzLDYgKzExNDQsMTAgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCB1c2JfZGV2aWNlX2lkIG9w
-dGlvbl9pZHNbXSA9IHsNCj4gPiAgCSAgLmRyaXZlcl9pbmZvID0gWkxQIH0sDQo+ID4gIAl7IFVT
-Ql9ERVZJQ0VfQU5EX0lOVEVSRkFDRV9JTkZPKFFVRUNURUxfVkVORE9SX0lELA0KPiBRVUVDVEVM
-X1BST0RVQ1RfRUMyMDBTX0NOLCAweGZmLCAwLCAwKSB9LA0KPiA+ICAJeyBVU0JfREVWSUNFX0FO
-RF9JTlRFUkZBQ0VfSU5GTyhRVUVDVEVMX1ZFTkRPUl9JRCwNCj4gPiBRVUVDVEVMX1BST0RVQ1Rf
-RUMyMDBULCAweGZmLCAwLCAwKSB9LA0KPiA+ICsJeyBVU0JfREVWSUNFX0FORF9JTlRFUkZBQ0Vf
-SU5GTyhRVUVDVEVMX1ZFTkRPUl9JRCwNCj4gUVVFQ1RFTF9QUk9EVUNUX0JHOTUsIDB4ZmYsIDB4
-ZmYsIDB4ZmYpLA0KPiA+ICsJICAuZHJpdmVyX2luZm8gPSBaTFAgfSwNCj4gDQo+IENvdWxkIHlv
-dSBwbGVhc2UgYWRkIGEgUlNWRCgzKSBmbGFnIHRvIHRoZSBkcml2ZXJfaW5mbyBoZXJlIHRvIGF2
-b2lkIHRoYXQgdGhlDQo+IG9wdGlvbiBkcml2ZXIgaW5jb3JyZWN0bHkgYmluZHMgdG8gdGhlIFFN
-SSBpbnRlcmZhY2U/DQo+IA0KPiBSZWdhcmRzLA0KPiBSZWluaGFyZA0KPiANCj4gPiArCXsgVVNC
-X0RFVklDRV9BTkRfSU5URVJGQUNFX0lORk8oUVVFQ1RFTF9WRU5ET1JfSUQsDQo+IFFVRUNURUxf
-UFJPRFVDVF9CRzk1LCAweGZmLCAweGZlLCAweGZmKSwNCj4gPiArCSAgLmRyaXZlcl9pbmZvID0g
-WkxQIH0sDQo+ID4NCj4gPiAgCXsgVVNCX0RFVklDRShDTU9URUNIX1ZFTkRPUl9JRCwgQ01PVEVD
-SF9QUk9EVUNUXzYwMDEpIH0sDQo+ID4gIAl7IFVTQl9ERVZJQ0UoQ01PVEVDSF9WRU5ET1JfSUQs
-IENNT1RFQ0hfUFJPRFVDVF9DTVVfMzAwKSB9LA0KPiA+IC0tDQo+ID4gMi4xNy4xDQo+ID4NCg==
+Hi Krishna,
+
+The patch looks good to me. Minor comments below.
+
+On Mon, May 16, 2022 at 11:20:09PM +0530, Krishna Kurapati wrote:
+> Add support for overriding electrical signal tuning parameters for
+> SNPS HS Phy.
+> 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c | 268 +++++++++++++++++++++++++-
+>  1 file changed, 266 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c b/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
+> index 5d20378..fa60e8d 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
+> @@ -52,6 +52,12 @@
+>  #define USB2_SUSPEND_N				BIT(2)
+>  #define USB2_SUSPEND_N_SEL			BIT(3)
+>  
+> +#define USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X0		(0x6c)
+> +#define USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X1		(0x70)
+> +#define USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X2		(0x74)
+> +#define USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X3		(0x78)
+> +#define PARAM_OVRD_MASK				0xFF
+> +
+>  #define USB2_PHY_USB_PHY_CFG0			(0x94)
+>  #define UTMI_PHY_DATAPATH_CTRL_OVERRIDE_EN	BIT(0)
+>  #define UTMI_PHY_CMN_CTRL_OVERRIDE_EN		BIT(1)
+> @@ -60,12 +66,76 @@
+>  #define REFCLK_SEL_MASK				GENMASK(1, 0)
+>  #define REFCLK_SEL_DEFAULT			(0x2 << 0)
+>  
+> +#define HS_DISCONNECT_MASK			GENMASK(2, 0)
+> +
+> +#define SQUELCH_DETECTOR_MASK			GENMASK(7, 5)
+> +
+> +#define HS_AMPLITUDE_MASK			GENMASK(3, 0)
+> +
+> +#define PREEMPHASIS_DURATION_MASK		BIT(5)
+> +
+> +#define PREEMPHASIS_AMPLITUDE_MASK		GENMASK(7, 6)
+> +
+> +#define HS_RISE_FALL_MASK			GENMASK(1, 0)
+> +
+> +#define HS_CROSSOVER_VOLTAGE_MASK		GENMASK(3, 2)
+> +
+> +#define HS_OUTPUT_IMPEDANCE_MASK		GENMASK(5, 4)
+> +
+> +#define LS_FS_OUTPUT_IMPEDANCE_MASK		GENMASK(3, 0)
+> +
+> +
+>  static const char * const qcom_snps_hsphy_vreg_names[] = {
+>  	"vdda-pll", "vdda33", "vdda18",
+>  };
+>  
+>  #define SNPS_HS_NUM_VREGS		ARRAY_SIZE(qcom_snps_hsphy_vreg_names)
+>  
+> +struct override_param {
+> +	s32	value;
+> +	u8	reg;
+> +};
+> +
+> +#define OVERRIDE_PARAM(bps, val)\
+> +{				\
+> +	.value = bps,		\
+> +	.reg = val,		\
+> +}
+> +
+> +struct override_param_map {
+> +	struct override_param *param_table;
+> +	u8 table_size;
+> +	u8 reg_offset;
+> +	u8 param_mask;
+> +};
+> +
+> +#define OVERRIDE_PARAM_MAP(table, num_elements, offset, mask)		\
+> +{									\
+> +	.param_table = table,						\
+> +	.table_size = num_elements,					\
+> +	.reg_offset = offset,						\
+> +	.param_mask = mask,						\
+> +}
+> +
+> +struct phy_override_seq {
+> +	bool	need_update;
+> +	u8	offset;
+> +	u8	value;
+> +	u8	mask;
+> +};
+> +
+> +static const char *phy_seq_props[] = {
+> +	"qcom,hs-disconnect-bp",
+> +	"qcom,squelch-detector-bp",
+> +	"qcom,hs-amplitude-bp",
+> +	"qcom,pre-emphasis-duration-bp",
+> +	"qcom,pre-emphasis-amplitude-bp",
+> +	"qcom,hs-rise-fall-time-bp",
+> +	"qcom,hs-crossover-voltage-microvolt",
+> +	"qcom,hs-output-impedance-micro-ohm",
+> +	"qcom,ls-fs-output-impedance-bp",
+> +};
+> +
+>  /**
+>   * struct qcom_snps_hsphy - snps hs phy attributes
+>   *
+> @@ -91,6 +161,7 @@ struct qcom_snps_hsphy {
+>  
+>  	bool phy_initialized;
+>  	enum phy_mode mode;
+> +	struct phy_override_seq update_seq_cfg[ARRAY_SIZE(phy_seq_props)];
+>  };
+>  
+>  static inline void qcom_snps_hsphy_write_mask(void __iomem *base, u32 offset,
+> @@ -173,10 +244,147 @@ static int qcom_snps_hsphy_set_mode(struct phy *phy, enum phy_mode mode,
+>  	return 0;
+>  }
+>  
+> +static struct override_param hs_disconnect_sc7280[] = {
+> +	OVERRIDE_PARAM(-272, 0),
+> +	OVERRIDE_PARAM(0, 1),
+> +	OVERRIDE_PARAM(317, 2),
+> +	OVERRIDE_PARAM(630, 3),
+> +	OVERRIDE_PARAM(973, 4),
+> +	OVERRIDE_PARAM(1332, 5),
+> +	OVERRIDE_PARAM(1743, 6),
+> +	OVERRIDE_PARAM(2156, 7),
+> +};
+> +
+> +static struct override_param squelch_det_threshold_sc7280[] = {
+> +	OVERRIDE_PARAM(-2090, 7),
+> +	OVERRIDE_PARAM(-1560, 6),
+> +	OVERRIDE_PARAM(-1030, 5),
+> +	OVERRIDE_PARAM(-530, 4),
+> +	OVERRIDE_PARAM(0, 3),
+> +	OVERRIDE_PARAM(530, 2),
+> +	OVERRIDE_PARAM(1060, 1),
+> +	OVERRIDE_PARAM(1590, 0),
+> +};
+> +
+> +static struct override_param hs_amplitude_sc7280[] = {
+> +	OVERRIDE_PARAM(-660, 0),
+> +	OVERRIDE_PARAM(-440, 1),
+> +	OVERRIDE_PARAM(-220, 2),
+> +	OVERRIDE_PARAM(0, 3),
+> +	OVERRIDE_PARAM(230, 4),
+> +	OVERRIDE_PARAM(440, 5),
+> +	OVERRIDE_PARAM(650, 6),
+> +	OVERRIDE_PARAM(890, 7),
+> +	OVERRIDE_PARAM(1110, 8),
+> +	OVERRIDE_PARAM(1330, 9),
+> +	OVERRIDE_PARAM(1560, 10),
+> +	OVERRIDE_PARAM(1780, 11),
+> +	OVERRIDE_PARAM(2000, 12),
+> +	OVERRIDE_PARAM(2220, 13),
+> +	OVERRIDE_PARAM(2430, 14),
+> +	OVERRIDE_PARAM(2670, 15),
+> +};
+> +
+> +static struct override_param preemphasis_duration_sc7280[] = {
+> +	OVERRIDE_PARAM(10000, 1),
+> +	OVERRIDE_PARAM(20000, 0),
+> +};
+> +
+> +static struct override_param preemphasis_amplitude_sc7280[] = {
+> +	OVERRIDE_PARAM(10000, 1),
+> +	OVERRIDE_PARAM(20000, 2),
+> +	OVERRIDE_PARAM(30000, 3),
+> +	OVERRIDE_PARAM(40000, 0),
+> +};
+> +
+> +static struct override_param hs_rise_fall_time_sc7280[] = {
+> +	OVERRIDE_PARAM(-4100, 3),
+> +	OVERRIDE_PARAM(0, 2),
+> +	OVERRIDE_PARAM(2810, 1),
+> +	OVERRIDE_PARAM(5430, 0),
+> +};
+> +
+> +static struct override_param hs_crossover_voltage_sc7280[] = {
+> +	OVERRIDE_PARAM(-31000, 1),
+> +	OVERRIDE_PARAM(0, 3),
+> +	OVERRIDE_PARAM(28000, 2),
+> +};
+> +
+> +static struct override_param hs_output_impedance_sc7280[] = {
+> +	OVERRIDE_PARAM(-2300000, 3),
+> +	OVERRIDE_PARAM(0, 2),
+> +	OVERRIDE_PARAM(2600000, 1),
+> +	OVERRIDE_PARAM(6100000, 0),
+> +};
+> +
+> +static struct override_param ls_fs_output_impedance_sc7280[] = {
+> +	OVERRIDE_PARAM(-1053, 15),
+> +	OVERRIDE_PARAM(-557, 7),
+> +	OVERRIDE_PARAM(0, 3),
+> +	OVERRIDE_PARAM(612, 1),
+> +	OVERRIDE_PARAM(1310, 0),
+> +};
+> +
+> +struct override_param_map sc7280_idp[] = {
+> +	OVERRIDE_PARAM_MAP(
+> +			hs_disconnect_sc7280,
+> +			ARRAY_SIZE(hs_disconnect_sc7280),
+> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X0,
+> +			HS_DISCONNECT_MASK),
+> +
+> +	OVERRIDE_PARAM_MAP(
+> +			squelch_det_threshold_sc7280,
+> +			ARRAY_SIZE(squelch_det_threshold_sc7280),
+> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X0,
+> +			SQUELCH_DETECTOR_MASK),
+> +
+> +	OVERRIDE_PARAM_MAP(
+> +			hs_amplitude_sc7280,
+> +			ARRAY_SIZE(hs_amplitude_sc7280),
+> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X1,
+> +			HS_AMPLITUDE_MASK),
+> +
+> +	OVERRIDE_PARAM_MAP(
+> +			preemphasis_duration_sc7280,
+> +			ARRAY_SIZE(preemphasis_duration_sc7280),
+> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X1,
+> +			PREEMPHASIS_DURATION_MASK),
+> +
+> +	OVERRIDE_PARAM_MAP(
+> +			preemphasis_amplitude_sc7280,
+> +			ARRAY_SIZE(preemphasis_amplitude_sc7280),
+> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X1,
+> +			PREEMPHASIS_AMPLITUDE_MASK),
+> +
+> +	OVERRIDE_PARAM_MAP(
+> +			hs_rise_fall_time_sc7280,
+> +			ARRAY_SIZE(hs_rise_fall_time_sc7280),
+> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X2,
+> +			HS_RISE_FALL_MASK),
+> +
+> +	OVERRIDE_PARAM_MAP(
+> +			hs_crossover_voltage_sc7280,
+> +			ARRAY_SIZE(hs_crossover_voltage_sc7280),
+> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X2,
+> +			HS_CROSSOVER_VOLTAGE_MASK),
+> +
+> +	OVERRIDE_PARAM_MAP(
+> +			hs_output_impedance_sc7280,
+> +			ARRAY_SIZE(hs_output_impedance_sc7280),
+> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X2,
+> +			HS_OUTPUT_IMPEDANCE_MASK),
+> +
+> +	OVERRIDE_PARAM_MAP(
+> +			ls_fs_output_impedance_sc7280,
+> +			ARRAY_SIZE(ls_fs_output_impedance_sc7280),
+> +			USB2_PHY_USB_PHY_HS_PHY_OVERRIDE_X3,
+> +			LS_FS_OUTPUT_IMPEDANCE_MASK),
+> +};
+> +
+
+I have cross checked with data book. All the values are looking good.
+
+>  static int qcom_snps_hsphy_init(struct phy *phy)
+>  {
+>  	struct qcom_snps_hsphy *hsphy = phy_get_drvdata(phy);
+> -	int ret;
+> +	int ret, i;
+>  
+>  	dev_vdbg(&phy->dev, "%s(): Initializing SNPS HS phy\n", __func__);
+>  
+> @@ -223,6 +431,14 @@ static int qcom_snps_hsphy_init(struct phy *phy)
+>  	qcom_snps_hsphy_write_mask(hsphy->base, USB2_PHY_USB_PHY_HS_PHY_CTRL1,
+>  					VBUSVLDEXT0, VBUSVLDEXT0);
+>  
+> +	for (i = 0; i < ARRAY_SIZE(hsphy->update_seq_cfg); i++) {
+> +		if (hsphy->update_seq_cfg[i].need_update)
+> +			qcom_snps_hsphy_write_mask(hsphy->base,
+> +					hsphy->update_seq_cfg[i].offset,
+> +					hsphy->update_seq_cfg[i].mask,
+> +					hsphy->update_seq_cfg[i].value);
+> +	}
+> +
+>  	qcom_snps_hsphy_write_mask(hsphy->base,
+>  					USB2_PHY_USB_PHY_HS_PHY_CTRL_COMMON2,
+>  					VREGBYPASS, VREGBYPASS);
+> @@ -280,7 +496,10 @@ static const struct phy_ops qcom_snps_hsphy_gen_ops = {
+>  static const struct of_device_id qcom_snps_hsphy_of_match_table[] = {
+>  	{ .compatible	= "qcom,sm8150-usb-hs-phy", },
+>  	{ .compatible	= "qcom,usb-snps-hs-5nm-phy", },
+> -	{ .compatible	= "qcom,usb-snps-hs-7nm-phy", },
+> +	{
+> +		.compatible	= "qcom,usb-snps-hs-7nm-phy",
+> +		.data		= &sc7280_idp,
+> +	},
+>  	{ .compatible	= "qcom,usb-snps-femto-v2-phy",	},
+>  	{ }
+>  };
+> @@ -291,6 +510,50 @@ static const struct dev_pm_ops qcom_snps_hsphy_pm_ops = {
+>  			   qcom_snps_hsphy_runtime_resume, NULL)
+>  };
+>  
+> +static void qcom_snps_hsphy_override_param_update_val(
+> +			const struct override_param_map map,
+> +			s32 dt_val, struct phy_override_seq *seq_entry)
+> +{
+> +	int i;
+> +
+> +	/*
+> +	 * Param table for each param is in increasing order
+> +	 * of dt values. We need to iterate over the list to
+> +	 * select the entry that has equal or the next highest value.
+> +	 */
+> +	for (i = 0 ; i < map.table_size-1; i++) {
+> +		if (map.param_table[i].value >= dt_val)
+> +			break;
+> +	}
+
+Minor nit pick:
+
+for (i = 0; i < map.table_size - 1; i++)
+
+No space is needed before ; 
+added spaces around the - operator.
+
+> +
+> +	seq_entry->need_update = true;
+> +	seq_entry->offset = map.reg_offset;
+> +	seq_entry->mask = map.param_mask;
+> +	seq_entry->value =  map.param_table[i].reg << __ffs(map.param_mask);
+> +}
+> +
+> +static void qcom_snps_hsphy_read_override_param_seq(struct device *dev)
+> +{
+> +	struct device_node *node = dev->of_node;
+> +	s32 val;
+> +	int ret, i;
+> +	struct qcom_snps_hsphy *hsphy;
+> +	struct override_param_map *cfg =
+> +		(struct override_param_map *) of_device_get_match_data(dev);
+
+Like I said before, no explicit conversion needed here. also it should be
+declared const like below
+
+const struct override_param_map *cfg = of_device_get_match_data(dev);
+
+Thanks,
+Pavan
