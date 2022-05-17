@@ -2,129 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80AE052A7FD
-	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 18:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C34452A8E9
+	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 19:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350929AbiEQQdi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 May 2022 12:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
+        id S1351346AbiEQRIa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 May 2022 13:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350923AbiEQQdh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 May 2022 12:33:37 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE004E396
-        for <linux-usb@vger.kernel.org>; Tue, 17 May 2022 09:33:36 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2fb7cb07885so161798547b3.23
-        for <linux-usb@vger.kernel.org>; Tue, 17 May 2022 09:33:36 -0700 (PDT)
+        with ESMTP id S1351335AbiEQRI2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 May 2022 13:08:28 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FB6427F1
+        for <linux-usb@vger.kernel.org>; Tue, 17 May 2022 10:08:25 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id w14so1982668lfl.13
+        for <linux-usb@vger.kernel.org>; Tue, 17 May 2022 10:08:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Nst/okWzt+1Pt7btm5FYdNUScd4Lw2KRfwoUVrWaXsw=;
-        b=NUjqy/+bSbXrnYySDW8oHLK7ZvYo8UxSan1NjQOA0bI65RPnMb9WnR8tImW6L88OHi
-         V36uWEmPNdeRafPTRd9eC+JpOr60TfgZdy3f6mTSXAZp8MyQxR1Twg85xE1SWCE/MC75
-         Fg80X4tCgEOggsX6AKjdLhvX4UPF0MEKnfv02sHr60SQ9QCLpZEfTTLp3dlkexRmhzy+
-         tCwSZJNpk++N6G+lwt4t+097KiDUTySpn9hD/KkoEITW2KP9SMs3jHNCnLEUypJRX14J
-         fcOf5HP9xcwDUhK5vMIbCeS6kGgCZKbthNoXMuwmGql1IZN+Nwv9UfWZ1EpL2cAYGk6s
-         UGjw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+A/gqNgFRPEMJXVCfWemyO0vB3lRR0Hdpr7+C1w217k=;
+        b=KuYH9SfPm08o4zERjiaMVqprd20S354P0BHLOcpenPkSkL9RTHJzEvdAonyWDqEOcY
+         K5ojBvTLJlLKWm9NijAzwmd7DPHPsm/tEOssDFMCmBnBK+/aYV1W3Lb8QCC2xF2zxyqY
+         +dNzkoaJSy0G8ddWacS4h+4b1gzr7yHU7BPNfSziVFyy6xaeRM+yV/FT7BNBMNSuh4N1
+         Jrp7KdZS7w8213reU/sq75o2O169QjfQ4l4Fy6xOclcFW8lvSD+lM5LdOBk81vLTyG3o
+         HUVkZEPH83yLnkYC+uJZATVC4QVLEv1TyLOarqlGSt36LU8V3tSbNvhVTIpuztAhTlIL
+         wBXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Nst/okWzt+1Pt7btm5FYdNUScd4Lw2KRfwoUVrWaXsw=;
-        b=0XQqO7KVQ2lFPPZvyHNbNJ3VDGTPtwaKHTztiGAhgQne9AEjRWoqW8DOj+Gg50ym0j
-         9FkmwIrI28H7IUJLL7j/7A+Q+HuorDhEcznWXLyz79xM3akK1i/12t7WZXHkwAMHMObG
-         /FahfMnF1rjB3PW4iKXQV1OC1pCWwRWADxvXPXn+wKL/HOrPKETGhgBHH49jzV2gkEcg
-         dYUr/E1Pvg64dydrPu4YJWnXjYRUnkqAZnhSVjVsVs2kOlTMSAlzZelvP1N2ZzgFODYE
-         HIjB+rEV1WTwIdOjl30j8/U6Sk4m6AbOAoJ/PIE0STUHkEko3JQ8CQl8DUMLlx0pClJb
-         H08g==
-X-Gm-Message-State: AOAM533U3GlPOtu0WNvCbcVG0Xsg1WX43GIr7oCNuY32PXpadWur/I9z
-        Vdt6IUU6hS2gs5f/F0gliz5A5PI4LFs5fbKskfA=
-X-Google-Smtp-Source: ABdhPJzQMrJAB31cWyVhMrErVTIoNbT/VAktbZdlxzhC/MUZI8Jyjq+7+cHrQz0Gq+msR06t6x8V7DPcPbfvFWxOi6c=
-X-Received: from albertccwang.ntc.corp.google.com ([2401:fa00:fc:202:e585:74ab:1a58:5276])
- (user=albertccwang job=sendgmr) by 2002:a25:d741:0:b0:64d:b05e:f263 with SMTP
- id o62-20020a25d741000000b0064db05ef263mr11319662ybg.72.1652805215997; Tue,
- 17 May 2022 09:33:35 -0700 (PDT)
-Date:   Wed, 18 May 2022 00:33:28 +0800
-Message-Id: <20220517163328.3135065-1-albertccwang@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH v4] usb: dwc3: gadget: Move null pinter check to proper place
-From:   Albert Wang <albertccwang@google.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        quic_jackp@quicinc.com
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Albert Wang <albertccwang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+A/gqNgFRPEMJXVCfWemyO0vB3lRR0Hdpr7+C1w217k=;
+        b=vbVDBSBJhSJd07hPUPzhlbPEGPtvLsK7myPImi6RN+jNULBs4SGdxzmtSVy3v842ej
+         VnTTvsFtTgXYmQC+SH4jnRcGh1gmUSZn0zDoFUaBJ5UkpHvQ2UFWHetpWGuGa0e/ZPwy
+         XexrjQkuQGiE118Q5qpCcQspYXzpzymIkuFWsw+80ZENybrZDfv719v2BlUPVkVHgpxE
+         B7/evxo6Fs1I0ldx2r5qjROh5l65gWCCOsZGb/grhyrhA92NYtdXFXsRDTq0KyIx4oTQ
+         7Uyf8NXIX4sUgmwL+eIOZpqIqmNSCXPuHkGBuLO21WWQYwn7eBLmiVchsQ1pBMrWSBt9
+         DXBg==
+X-Gm-Message-State: AOAM532UMHe3PyPw7YRuzUtPPukN6VUzXSTHjcM6UO0QoTWHHuU6lzRX
+        oSWgxg5Ue4O/l/woUYUCbR2vSQ==
+X-Google-Smtp-Source: ABdhPJyTAaGcL35nGkVaSYQS4H7pcZ+EyaR+FCeKkh/hhqsUd3BG4KFAUQ5g6KvqZn3Dej0hS0ku2Q==
+X-Received: by 2002:a05:6512:258d:b0:477:a2a3:53ba with SMTP id bf13-20020a056512258d00b00477a2a353bamr3132854lfb.468.1652807304185;
+        Tue, 17 May 2022 10:08:24 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id v2-20020ac258e2000000b0047255d211c0sm8573lfo.239.2022.05.17.10.08.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 10:08:23 -0700 (PDT)
+Message-ID: <5efdd020-3665-810c-f62d-ed3771757ada@linaro.org>
+Date:   Tue, 17 May 2022 19:08:22 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 00/13] dt-bindings/arm64: dts: qcom: minor cleanups with
+ DT schema
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>, arm-soc <soc@kernel.org>
+References: <20220504131923.214367-1-krzysztof.kozlowski@linaro.org>
+ <CAMuHMdVc3kShpp8wieX1SSA8-37m8PbxpqKRs5+gxz8Dm6QwsA@mail.gmail.com>
+ <3bdb65cd-cdad-6e10-c921-5ec3a9b4c9dd@linaro.org>
+ <YoNxoUwjJIxyAi3l@kroah.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YoNxoUwjJIxyAi3l@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When dwc3_gadget_ep_cleanup_completed_requests() called to
-dwc3_gadget_giveback() where the dwc3 lock is released, other thread is
-able to execute. In this situation, usb_ep_disable() gets the chance to
-clear endpoint descriptor pointer which leds to the null pointer
-dereference problem. So needs to move the null pointer check to a proper
-place.
+On 17/05/2022 11:57, Greg Kroah-Hartman wrote:
+> On Tue, May 17, 2022 at 11:27:39AM +0200, Krzysztof Kozlowski wrote:
+>> On 17/05/2022 11:19, Geert Uytterhoeven wrote:
+>>> On Wed, May 4, 2022 at 5:13 PM Krzysztof Kozlowski
+>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>> The patches are independent, so they can be picked up as is (or everything
+>>>> through Qualcomm SoC tree).
+>>>>
+>>>> Best regards,
+>>>> Krzysztof
+>>>>
+>>>> Krzysztof Kozlowski (13):
+>>>>   dt-bindings: soc: qcom: aoss: document qcom,sm8450-aoss-qmp
+>>>>   dt-bindings: soc: qcom: qcom,smd-rpm: add power-controller
+>>>>   dt-bindings: usb: qcom,dwc3: add IPQ8074, MSM8994, QCS404 and SM6125
+>>>>   dt-bindings: usb: qcom,dwc3: fix clock matching
+>>>>   arm64: dts: qcom: add missing AOSS QMP compatible fallback
+>>>>   arm64: dts: qcom: correct DWC3 node names and unit addresses
+>>>>   arm64: dts: qcom: ipq8074: add dedicated qcom,ipq8074-dwc3 compatible
+>>>>   arm64: dts: qcom: msm8994: add dedicated qcom,msm8994-dwc3 compatible
+>>>>   arm64: dts: qcom: sm6125: add dedicated qcom,sm6125-dwc3 compatible
+>>>>   arm64: dts: qcom: qcs404: add dedicated qcom,qcs404-dwc3 compatible
+>>>>   arm64: dts: qcom: msm8996: add clock-names to DWC3 USB node
+>>>>   arm64: dts: qcom: align DWC3 USB clocks with DT schema
+>>>>   arm64: dts: qcom: align DWC3 USB interrupts with DT schema
+>>>
+>>> Looks like all but the first two were applied to usb-next by Greg,
+>>> causing conflicts with the soc/for-next tree.
+>>
+>> Also this one was not applied:
+>> arm64: dts: qcom: add missing AOSS QMP compatible fallback
+>>
+>> However I did not get any conflict message...
+>>
+>> The DTS patches should not go via Greg's tree. They are sent together so
+>> there will be no warnings from Rob's bot. This is a common practice for
+>> dt-binding fixes.
+>>
+>> Bjorn,
+>> Any preference from you? Shall I send missing three patches to you?
+>>
+>> What about conflicts with Greg's tree?
+> 
+> If I need to revert anything from my tree, please let me know.  Trying
+> to figure out who should, and should not, take patches like this is
+> driving me crazy...
 
-Example call stack:
+Sorry for the confusion Greg. I marked preferred merging strategy in the
+cover letter. I am trying to sort it out with Bjorn. The conflict will
+hit later Linus and it is auto-solvable with decent mergetool, but for a
+human's eye it is a confusing diff.
 
-Thread#1:
-dwc3_thread_interrupt()
-  spin_lock
-  -> dwc3_process_event_buf()
-   -> dwc3_process_event_entry()
-    -> dwc3_endpoint_interrupt()
-     -> dwc3_gadget_endpoint_trbs_complete()
-      -> dwc3_gadget_ep_cleanup_completed_requests()
-       ...
-       -> dwc3_giveback()
-          spin_unlock
-          Thread#2 executes
+Some more background:
+Patches marked with "dts" prefix should always go via respective arm-soc
+maintainer, not only to reduce conflicts, but also to keep hardware
+description (Devicetree sources, DTS) separate from implementation.
+Otherwise some folks like to combine ABI-breaking changes in drivers
+together with DTS patches, so from the kernel perspective it looks like
+there is no ABI breakage. But there is, just not directly visible.
+Therefore arm-soc folks always insist on having DTS changes in separate
+branches, so this split driver-DTS is clear.
 
-Thread#2:
-configfs_composite_disconnect()
-  -> __composite_disconnect()
-   -> ffs_func_disable()
-    -> ffs_func_set_alt()
-     -> ffs_func_eps_disable()
-      -> usb_ep_disable()
-         wait for dwc3 spin_lock
-         Thread#1 released lock
-         clear endpoint.desc
-
-Fixes: 26288448120b ("usb: dwc3: gadget: Fix null pointer exception")
-Signed-off-by: Albert Wang <albertccwang@google.com>
----
- drivers/usb/dwc3/gadget.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 19477f4bbf54..7edd4a5dc6af 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -3366,14 +3366,14 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
- 	struct dwc3		*dwc = dep->dwc;
- 	bool			no_started_trb = true;
- 
--	if (!dep->endpoint.desc)
--		return no_started_trb;
--
- 	dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
- 
- 	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
- 		goto out;
- 
-+	if (!dep->endpoint.desc)
-+		return no_started_trb;
-+
- 	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
- 		list_empty(&dep->started_list) &&
- 		(list_empty(&dep->pending_list) || status == -EXDEV))
--- 
-2.36.1.124.g0e6072fb45-goog
-
+Best regards,
+Krzysztof
