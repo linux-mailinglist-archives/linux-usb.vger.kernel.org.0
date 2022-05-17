@@ -2,74 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A39552A40D
-	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 15:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7D652A522
+	for <lists+linux-usb@lfdr.de>; Tue, 17 May 2022 16:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348146AbiEQN7J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 May 2022 09:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
+        id S1349171AbiEQOpD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 May 2022 10:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345358AbiEQN6y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 May 2022 09:58:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 407F13C4A1
-        for <linux-usb@vger.kernel.org>; Tue, 17 May 2022 06:58:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652795932;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ukeO+chojejO5U66l0m6Ah065bZNkB6pLCe+hSam94Q=;
-        b=YRUf8F2s54VALEemvWXHEImUstp+0Uq6qklZ5dpC/g7BDfEwteF1bICsCfHCPIEYfLA+0q
-        qML5ByN6MCyYk75Qpi/mTadlu8aLVFpZ3MfjyBSr/cYC3nykqGjzkSXYYaKI7X4oZmXX2O
-        1q1JTMTFhqA7Ku9Sz2Udx5kgBB1N1BM=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-533-fEBvWjBhNX2cKWkxSXjGhg-1; Tue, 17 May 2022 09:58:51 -0400
-X-MC-Unique: fEBvWjBhNX2cKWkxSXjGhg-1
-Received: by mail-qt1-f199.google.com with SMTP id m6-20020ac866c6000000b002f52f9fb4edso9811232qtp.19
-        for <linux-usb@vger.kernel.org>; Tue, 17 May 2022 06:58:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ukeO+chojejO5U66l0m6Ah065bZNkB6pLCe+hSam94Q=;
-        b=F6UrpE8LblI+At9QxvZjz5U436TW2ul74wjL4WzlaqHFPH0KXLcq+XHIwBao1AmtCY
-         8EVEy8NIXzR+lXu8gVwp3/PGOB4Jm7AydG+uPLUvexC26t7JVm3vusxcgDPe++uqE3Zh
-         LJiTCTiQs8kyx9avqBOjj+pfQuGxlSUvWJaGW+CpPuBz7tu28TBWibfJrC4Xl6LYS2yH
-         PUXA6J0OSFDYfs6l2KK1J3LvvEukZLVe/rRJAgFPstXCyZSOLA01HvOOysghY7BZ0Xrr
-         whx6Msh2aOmMF7vPyQlow4UykEdbPROYFBan3V+nl+K3BpCgd3NPESLkXbmfp8ueuruX
-         mPDw==
-X-Gm-Message-State: AOAM530fOSB/h0ZA0KDbMxoe9JCIYaoySugez1tSbXsP1yYtI2J/s+bW
-        3nmt0InLBW0WDSNhNBuUmS3VYDwTD9oYlv69Z26+BM6akiQ/lTW/3pr5ZoLja3m/+C4/ID7mEJT
-        LOXj7mZj/YRyJ/M0lGWv7Vd0mhE4pHIYlSran
-X-Received: by 2002:a05:622a:1a90:b0:2f3:bb56:5a1d with SMTP id s16-20020a05622a1a9000b002f3bb565a1dmr20118410qtc.127.1652795930439;
-        Tue, 17 May 2022 06:58:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx2zBodzxHa33jTBL+UZf9iNv8rDUEnYwNDL0n44EjWpIL8v21zxIkEcOLfUSfa5FNtcd/EnSPgKvYvJ57XxPw=
-X-Received: by 2002:a05:622a:1a90:b0:2f3:bb56:5a1d with SMTP id
- s16-20020a05622a1a9000b002f3bb565a1dmr20118376qtc.127.1652795930021; Tue, 17
- May 2022 06:58:50 -0700 (PDT)
+        with ESMTP id S1344563AbiEQOpA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 May 2022 10:45:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E062E0BC;
+        Tue, 17 May 2022 07:44:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 213276160B;
+        Tue, 17 May 2022 14:44:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FC26C385B8;
+        Tue, 17 May 2022 14:44:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652798697;
+        bh=QZBvZjvpV6WIhybyhDD0L+yIYufi9SKnX03r87oDAZQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dpQTMtT+mo4FYSp2athdJqVRD3J0EQTdA1cFErWpD8FNo0IJxYJ1hvs8/HGk460FF
+         DKd28BiJDqNaV7MyTj1OPzEq8YkXUJq7F4mGnEihXbrL0YptinMkRKqN8f9yq/ClXx
+         pv84FxxB8uOmckDQU1Zv2++iHxbYd0ycR4adzM/U7ghzyc5SS0iVYAx8OlrCwHFDUj
+         44/zpOOGKvRHsEX2Mc8MKanCODMpCHzmu2ziV1XCknf3EkdNl0+JzalvcsknwQO86V
+         qvL2uNYAqwHwlZ42BHRbQxXLqPXrz0za4kful4RSX819iJAe7NLjLTOnQRQ9TqLr5H
+         KXwRVqyzLbG3Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nqyRV-00013D-Fu; Tue, 17 May 2022 16:44:57 +0200
+Date:   Tue, 17 May 2022 16:44:57 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Carl =?utf-8?B?WWluKOaut+W8oOaIkCk=?= <carl.yin@quectel.com>
+Cc:     Reinhard Speyerer <rspmn@arcor.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] USB: serial: option: add Quectel BG95 modem
+Message-ID: <YoO06aI15sGRimRo@hovoldconsulting.com>
+References: <TYZPR06MB4270471E08BF0BCDBF24722186CE9@TYZPR06MB4270.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220504151647.471885-1-jtornosm@redhat.com> <Ynzz6Jh5OeEikvfh@kroah.com>
- <CABk-BGte9qHwmdqCU6oZ9-E3LvOqcMf3z46e00hypNdD_hPxPQ@mail.gmail.com>
- <Yn5mliJq+7W8khe9@rowland.harvard.edu> <Yn5nc2mSHrdy/8h6@kroah.com>
- <Yn5qerFAcHP3scAZ@rowland.harvard.edu> <Yn5vS3cA4qP3MXfV@kroah.com> <CABk-BGshsdCNKAYa2NscR=uZKK1_JeFb+FNTthdGNsFLkzQ=Tw@mail.gmail.com>
-In-Reply-To: <CABk-BGshsdCNKAYa2NscR=uZKK1_JeFb+FNTthdGNsFLkzQ=Tw@mail.gmail.com>
-From:   Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Date:   Tue, 17 May 2022 15:58:38 +0200
-Message-ID: <CABk-BGsnx9UdC1cMninPNAhxAnnAdh-xoT7=4WKOwZ-8A9LyeQ@mail.gmail.com>
-Subject: Re: [PATCH v5] USB: core: skip unconfiguration if device doesn't
- support it
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <TYZPR06MB4270471E08BF0BCDBF24722186CE9@TYZPR06MB4270.apcprd06.prod.outlook.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,131 +59,158 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I have been trying to identify the chips that I have in some way, but
-as I do not have a big sampling or more information, it is difficult.
-And I have verified again the datasheets for CSR (Qualcomm) and they
-do not comment anything related to the problem.
+On Tue, May 17, 2022 at 01:14:34AM +0000, Carl Yin(殷张成) wrote:
+> Hi Reinhard:
+>     Although BG95 supports at+qcfgext="usbnet", "rmnet", but lots of QMI message do not support, 
+>     E.g WDS_START_NETWORK_INTERFACE, so "rmnet" is basically useless.
 
-All the devices contain this information:
-manufacturer 10
-hci_rev 22bb
-lmp_subver 22bb
-hci_ver 6 (BLUETOOTH_VER_4_0)
-And two of them contain bcdDevice=3D88.91 (Trust and unknown) and the
-other 75.58 (EDR)
-Following the code and comments to detect fakes in btusb.c, the
-devices are correct although it comments that 0x7558, 0x8891 are known
-fake bcdDevices.
-In fact, the unconfigure issue is the only problem that I have found.
+Sounds like a good idea to reserve interface 3 as Reinhard suggested
+anyway for completeness.
 
-So, I think the only solution, at least to be able to work, would be
-to add the user quirk with the patch.
-Of course, if you consider.
+You can mention that the configuration is incomplete, but please include
+usb-devices output for also for rmnet so we have all the configurations
+in the commit message.
 
-Thanks again
-
-Best regards
-Jos=C3=A9 Ignacio
-
-On Fri, May 13, 2022 at 4:58 PM Jose Ignacio Tornos Martinez
-<jtornosm@redhat.com> wrote:
->
-> >> Come to think of it, maybe there is a simple workaround.  If userspace
-> >> resets the device after it is unconfigured, there's a good chance that
-> >> will get it to start working again.  Jose, can you try this?  There is=
- a
-> >> usbreset program you can use, floating around on the web.  (Greg, did
-> >> that program or something like it ever get added to the usbutils
-> >> package?)
->
-> > Yes, it is in the usbutils package.  I don't think many distros package
-> > the prebuilt binary, but the .c file can be found here:
-> >        https://github.com/gregkh/usbutils/blob/master/usbreset.c
->
-> Of course, I can also try that way and I will comment on the result.
-> I would like to identify in some way, I have some ideas related to the
-> initial configuration but I have to research more.
-> If not possible, if there is a user workaround like this, it would be gre=
-at.
->
-> Thank you very much
->
-> Jos=C3=A9 Ignacio
->
-> On Fri, May 13, 2022 at 4:46 PM Greg KH <gregkh@linuxfoundation.org> wrot=
-e:
-> >
-> > On Fri, May 13, 2022 at 10:26:02AM -0400, Alan Stern wrote:
-> > > On Fri, May 13, 2022 at 04:13:07PM +0200, Greg KH wrote:
-> > > > On Fri, May 13, 2022 at 10:09:26AM -0400, Alan Stern wrote:
-> > > > > On Fri, May 13, 2022 at 11:50:26AM +0200, Jose Ignacio Tornos Mar=
-tinez wrote:
-> > > > > > Ok, I will try to identify the "bad" devices in some way.
-> > > > > >
-> > > > > > Thanks
-> > > > > >
-> > > > > > Jos=C3=A9 Ignacio
-> > > > > >
-> > > > > >
-> > > > > > On Thu, May 12, 2022 at 1:48 PM Greg KH <gregkh@linuxfoundation=
-.org> wrote:
-> > > > > > >
-> > > > > > > I'll drop this for now as there are no in-kernel users for th=
-is quirk
-> > > > > > > yet.  When there is a need for one, please resubmit it.
-> > > > >
-> > > > > Hold on; Greg's comment doesn't seem fair.  There are no in-kerne=
-l
-> > > > > users for this quirk because it is meant to be a user API.  (Just=
- as
-> > > > > there are no in-kernel users for read(2) -- it is there so that
-> > > > > userspace can call it).
-> > > >
-> > > > True, but the kernel calls read(2) itself as well in places, it jus=
-t
-> > > > looks a bit different, kernel_read_file()  :)
+> On Tuesday, May 17, 2022 at 05:13 AM +0000, Reinhard Speyerer wrote:
+> 
+> > On Mon, May 16, 2022 at 06:10:17AM +0000, Carl Yin(殷张成) wrote:
+> > > The BG95 modem has 2 USB configurations that are configurable via the
+> > > AT command AT+QCFGEXT="usbnet",["ecm"|"modem"] which make the
+> > modem
+> > > enumerate with the following interfaces, respectively:
 > > >
-> > > Okay, but you get the point.  :-)
+> > > "modem": Diag + GNSS + Modem + Modem
+> > > "ecm"  : DIAG + GNSS + Modem + ECM
+> > 
+> > Hi Carl,
+> > 
+> > what about the AT+QCFGEXT="usbnet","rmnet" configuration available on
+> > several firmware versions which makes the BG95 enumerate as Diag + GNSS +
+> > Modem + QMI:
+> > 
+> > T:  Bus=02 Lev=02 Prnt=06 Port=01 Cnt=02 Dev#=  8 Spd=480  MxCh= 0
+> > D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> > P:  Vendor=2c7c ProdID=0700 Rev= 0.00
+> > S:  Manufacturer=Quectel, Incorporated
+> > S:  Product=Quectel LPWA Module
+> > S:  SerialNumber=xxxxxxxx
+> > C:* #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
+> > I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> > E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> > E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> > E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> > E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+> > E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> > E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > 
 > > >
-> > > > > Jose does have users for the new quirk: Anybody with one of the b=
-ad
-> > > > > Bluetooth CSR knockoff chips.  Now I agree; it would be great if =
-there
-> > > > > was some way to identify them automatically.  But if that's not
-> > > > > possible, the only alternative is to allow userspace to set the q=
-uirk
-> > > > > flag whenever it knows the quirk is needed.
-> > > >
-> > > > Is that the case here that we know how to identify this?  I thought
-> > > > Marcel said something else was happening here.
-> > > >
-> > > > If the bluetooth developers/maintainers say this is needed for some
-> > > > devices to work properly and they will be handled in userspace some=
-how
-> > > > through a udev rule or the like, I will gladly add this.  But I tho=
-ught
-> > > > this thread died out as it was determined that this wasn't needed a=
-t
-> > > > this point in time which is why I dropped it.
+> > > A detailed description of the USB configuration for each mode follows:
 > > >
-> > > It's kind of an odd situation.  In ordinary usage the device works ok=
-ay.
-> > > But it stops working after it has been exported over usbip; that is w=
-hat
-> > > Jose wants to fix.
+> > > +QCFGEXT: "usbnet","modem"
+> > > -------------------------
+> > > T:  Bus=01 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
+> > > D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> > > P:  Vendor=2c7c ProdID=0700 Rev= 0.00
+> > > S:  Manufacturer=Quectel, Incorporated
+> > > S:  Product=Quectel LPWA Module
+> > > S:  SerialNumber=884328a2
+> > > C:* #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
+> > > I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> > > E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > > E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > > I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> > > E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > > E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > > I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> > > E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> > > E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > > E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > > I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=option
+> > > E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> > > E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > > E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 > > >
-> > > Come to think of it, maybe there is a simple workaround.  If userspac=
-e
-> > > resets the device after it is unconfigured, there's a good chance tha=
-t
-> > > will get it to start working again.  Jose, can you try this?  There i=
-s a
-> > > usbreset program you can use, floating around on the web.  (Greg, did
-> > > that program or something like it ever get added to the usbutils
-> > > package?)
-> >
-> > Yes, it is in the usbutils package.  I don't think many distros package
-> > the prebuilt binary, but the .c file can be found here:
-> >         https://github.com/gregkh/usbutils/blob/master/usbreset.c
-> >
+> > > +QCFGEXT: "usbnet","ecm"
+> > > -----------------------
+> > > T:  Bus=01 Lev=02 Prnt=02 Port=01 Cnt=01 Dev#=  4 Spd=480  MxCh= 0
+> > > D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+> > > P:  Vendor=2c7c ProdID=0700 Rev= 0.00
+> > > S:  Manufacturer=Quectel, Incorporated
+> > > S:  Product=Quectel LPWA Module
+> > > S:  SerialNumber=884328a2
+> > > C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+> > > A:  FirstIf#= 3 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
+> > > I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> > > E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > > E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > > I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> > > E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > > E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > > I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> > > E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> > > E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > > E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > > I:* If#= 3 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00
+> > > Driver=cdc_ether
+> > > E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+> > > I:  If#= 4 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00
+> > > Driver=cdc_ether
+> > > I:* If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00
+> > > Driver=cdc_ether
+> > > E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > > E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > >
+> > > Signed-off-by: Carl Yin <carl.yin@quectel.com>
+> > > ---
+> > >  drivers/usb/serial/option.c | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > >
+> > > diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> > > index 152ad8826..f91b2a67d 100644
+> > > --- a/drivers/usb/serial/option.c
+> > > +++ b/drivers/usb/serial/option.c
+> > > @@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
+> > >  #define QUECTEL_PRODUCT_RM500Q			0x0800
+> > >  #define QUECTEL_PRODUCT_EC200S_CN		0x6002
+> > >  #define QUECTEL_PRODUCT_EC200T			0x6026
+> > > +#define QUECTEL_PRODUCT_BG95			0x0700
 
+Please keep the defines sorted by PID.
+
+> > >  #define CMOTECH_VENDOR_ID			0x16d8
+> > >  #define CMOTECH_PRODUCT_6001			0x6001
+> > > @@ -1143,6 +1144,10 @@ static const struct usb_device_id option_ids[] = {
+> > >  	  .driver_info = ZLP },
+> > >  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID,
+> > QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
+> > >  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID,
+> > > QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
+> > > +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID,
+> > QUECTEL_PRODUCT_BG95, 0xff, 0xff, 0xff),
+> > > +	  .driver_info = ZLP },
+> > 
+> > Could you please add a RSVD(3) flag to the driver_info here to avoid that the
+> > option driver incorrectly binds to the QMI interface?
+
+> > > +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID,
+> > QUECTEL_PRODUCT_BG95, 0xff, 0xfe, 0xff),
+> > > +	  .driver_info = ZLP },
+
+Wouldn't a single entry using USB_DEVICE_INTERFACE_CLASS() be enough to
+cover all three configurations?
+
+> > >
+> > >  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
+> > >  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
+> > > --
+> > > 2.17.1
+> > >
+
+Johan
