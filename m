@@ -2,135 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F9952B241
-	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 08:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9998E52B3F6
+	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 09:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiERGVM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 May 2022 02:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
+        id S232421AbiERHsj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 May 2022 03:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbiERGVC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 02:21:02 -0400
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F27DEAF
-        for <linux-usb@vger.kernel.org>; Tue, 17 May 2022 23:21:01 -0700 (PDT)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 24I6790g080863;
-        Wed, 18 May 2022 14:07:10 +0800 (GMT-8)
-        (envelope-from neal_liu@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 18 May
- 2022 14:20:51 +0800
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        "Andrew Jeffery" <andrew@aj.id.au>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Li Yang" <leoyang.li@nxp.com>
-CC:     Neal Liu <neal_liu@aspeedtech.com>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 3/3] dt-bindings: usb: add documentation for aspeed udc
-Date:   Wed, 18 May 2022 14:20:43 +0800
-Message-ID: <20220518062043.1075360-4-neal_liu@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220518062043.1075360-1-neal_liu@aspeedtech.com>
-References: <20220518062043.1075360-1-neal_liu@aspeedtech.com>
+        with ESMTP id S232477AbiERHsi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 03:48:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED51AF24
+        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 00:48:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8968961445
+        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 07:48:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D9C97C385A5
+        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 07:48:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652860116;
+        bh=55RfrtidOLP6jbEcngkzL1FxIYmbbPIv/5uA7vPNk8M=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=pW9EMSGMWBc1yzOoynAfCyZ/nHJNzpOm6d1fmCZsMG4z23bN6TA71xx7kMRDQnIfm
+         umMPRY0pLn1ZZQ/k2vCurQvZ0JamCNCTKBAeYggI7GXf/yfvzoA1X2hJSZEdNCS95k
+         6Rp5uylNO+7Q6iP0V/+CpLIn8ukHLe7vkmgsAv8uHVMv0ZnJoiGHSgRfnrQ0I+wy/0
+         nDVJDntVAGQy8l8kvljp4cnTp2b6zsPjroRKLZ+uebD82SYPNtqbnWqab5eIoSpUGR
+         ptn4gwBLRYzD04ZMtYLirkAUHl07FmZEIJipoMSO9sU6BO24cAB/qS1yhmwP4yqbV/
+         78NVS3TH/2KLg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id C4A9ACC13AF; Wed, 18 May 2022 07:48:36 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
+ xhci_hcd rejecting DMA map of vmalloc memory
+Date:   Wed, 18 May 2022 07:48:36 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: regressions@leemhuis.info
+X-Bugzilla-Status: REOPENED
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215890-208809-IwB2kBJte8@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
+References: <bug-215890-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.10.10]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 24I6790g080863
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add device tree binding documentation for the Aspeed USB2.0 Device
-Controller.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
 
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/usb/aspeed,ast2600-udc.yaml      | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/aspeed,ast2600-udc.yaml
+--- Comment #21 from The Linux kernel's regression tracker (Thorsten Leemhu=
+is) (regressions@leemhuis.info) ---
+(In reply to Satadru Pramanik from comment #19)
+> I'm not sure what changed, but it is working on the ubuntu mainline build=
+ of
+> 5.18-rc7.
 
-diff --git a/Documentation/devicetree/bindings/usb/aspeed,ast2600-udc.yaml b/Documentation/devicetree/bindings/usb/aspeed,ast2600-udc.yaml
-new file mode 100644
-index 000000000000..c3b6be3d8002
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/aspeed,ast2600-udc.yaml
-@@ -0,0 +1,52 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (c) 2020 Facebook Inc.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/aspeed,ast2600-udc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ASPEED USB 2.0 Device Controller
-+
-+maintainers:
-+  - Neal Liu <neal_liu@aspeedtech.com>
-+
-+description: |+
-+  The ASPEED USB 2.0 Device Controller implements 1 control endpoint and
-+  4 generic endpoints for AST260x.
-+
-+  Supports independent DMA channel for each generic endpoint.
-+  Supports 32/256 stages descriptor mode for all generic endpoints.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - aspeed,ast2600-udc
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/aspeed-clock.h>
-+    udc: usb@1e6a2000 {
-+        compatible = "aspeed,ast2600-udc";
-+        reg = <0x1e6a2000 0x300>;
-+        interrupts = <9>;
-+        clocks = <&syscon ASPEED_CLK_GATE_USBPORT2CLK>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pinctrl_usb2bd_default>;
-+    };
--- 
-2.25.1
+Maybe I just missed a change to fix this; or some change fixed this
+accidentally (which was odd, but well, we are dealing with computers here..=
+.).
 
+Guess the matter can be considered resolved then.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
