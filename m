@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD0C52BABF
-	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 14:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0911252BA53
+	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 14:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236462AbiERMap (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 May 2022 08:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S237041AbiERMdT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 May 2022 08:33:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236553AbiERM3R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 08:29:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D34C170657;
-        Wed, 18 May 2022 05:27:57 -0700 (PDT)
+        with ESMTP id S236949AbiERMcu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 08:32:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DE514D787;
+        Wed, 18 May 2022 05:29:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFB9CB81F40;
-        Wed, 18 May 2022 12:27:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 396B4C36AE2;
-        Wed, 18 May 2022 12:27:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2627B6147D;
+        Wed, 18 May 2022 12:28:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5974AC385A5;
+        Wed, 18 May 2022 12:28:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652876870;
+        s=k20201202; t=1652876923;
         bh=0/NFO8cYx8eV49vuYrkyZNzByuqpxYe0Qj+VfRawypc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bCjqESaz4VEECBYwOXmzdci2iUXr3v3KcGBDcWFrdP15Hob4UnyxpOWzKKF4qkAA5
-         k7mB93r0A1lOxEN4C1zZCOmOD15mwztAABzRyej9Y+pxdJ/JtsxxfP1tZ3muHMS4ze
-         9LA1BcYnqR/4hPndVfCMidfamFMLIuEG+Iu6/DSNtV22CNg1Dj8KYyS6VZc6fIwpOu
-         EEqPJ+s6qExQWHVoTtJVEMoN6r+SOmaKNcbCW7EP2bwgQkb+0yMjwJQrt/Z0AcgaNs
-         A1Xr0AIFOXE8lM6lxqANFUMp6YKepdUTTFMyxcPWcTojplM0Q3KveumfTC9iJKruq3
-         KG58VGmDeVv3Q==
+        b=gqhK8r7lcjyA0MePeJhLpFkUuJ8oPXlegUQg/QxZQCyW+RnBFaXsuBybAPYzphF6+
+         3rcDlO6ZMttfQAi3wWohkn2Hvtobixnu1Iao4ilrXnDDN4fwlNPNIaFR0sqJ/BxyWN
+         wuJb3H7PJp8z7aaUF07TQY5RjSPehF/BZqPaqVTAVQkBICKEiFlLDF+XUKKBeleLih
+         uN7FNbvdieTKFgH+oQZMedfwnhAxi1e5Xba6/afHMfamIUBb9P2XpNu/d/Do2n6azf
+         Pv1Qrd3UNdTlmYQdeiuQUF9qUW3NbcxiPzv8YQbitnP+FztHiDsLHYxzKrFaFuqNCL
+         YX+pmcJl9lQRw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Schspa Shi <schspa@gmail.com>,
@@ -40,12 +40,12 @@ Cc:     Schspa Shi <schspa@gmail.com>,
         Sasha Levin <sashal@kernel.org>, balbi@kernel.org,
         jannh@google.com, Julia.Lawall@inria.fr, jj251510319013@gmail.com,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 23/23] usb: gadget: fix race when gadget driver register via ioctl
-Date:   Wed, 18 May 2022 08:26:36 -0400
-Message-Id: <20220518122641.342120-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 17/17] usb: gadget: fix race when gadget driver register via ioctl
+Date:   Wed, 18 May 2022 08:27:51 -0400
+Message-Id: <20220518122753.342758-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220518122641.342120-1-sashal@kernel.org>
-References: <20220518122641.342120-1-sashal@kernel.org>
+In-Reply-To: <20220518122753.342758-1-sashal@kernel.org>
+References: <20220518122753.342758-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
