@@ -2,70 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD5152BD81
-	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 16:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D1852BEE8
+	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 18:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238611AbiERORv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 May 2022 10:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
+        id S239301AbiERPa3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 May 2022 11:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238552AbiERORs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 10:17:48 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B42F7340D1
-        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 07:17:46 -0700 (PDT)
-Received: (qmail 190933 invoked by uid 1000); 18 May 2022 10:17:45 -0400
-Date:   Wed, 18 May 2022 10:17:45 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Li Zhengyu <lizhengyu3@huawei.com>
-Cc:     dbaryshkov@gmail.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] usb: host: ohci-tmio: Remove redundant if statement
-Message-ID: <YoUACar4I9X2oJ/A@rowland.harvard.edu>
-References: <20220518024347.213402-1-lizhengyu3@huawei.com>
+        with ESMTP id S235589AbiERPa2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 11:30:28 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91ED1A29D3;
+        Wed, 18 May 2022 08:30:27 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id i19so4498274eja.11;
+        Wed, 18 May 2022 08:30:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=eIwb4I0AwekwEpYMZmVGy6yg88acm8K/xMMngQQs0ts=;
+        b=BDVWzBwgW8nUV9ufnXuwBYEi7IYd+UCbdLMt8V1mSIrGR1YwWGZGmM8dmCh90ssZrU
+         tLT6BPrKtp/nRHm7BSf7zDX5nTwZIuPTT26KXiL/oo6RklIpiCNyVVDxaWeOMGCguOGk
+         X5w/Z+eQdJAG4n9rHESqnQjY2a2i7U5omRmm6qIsVOeggtTLKmFaDRWqrdGhfr/rZPUW
+         7Z4HjRXH+9tly+0Rk3je8nAuG62qp0OBZTWoTJFJFEuG97Y0ibV5nL/Oh0K41ppWXFZn
+         OpwOc96AX3ec2v1+f0lhbrB3jJltt9oEyf3VGgEn7Kn8u4mM+0ATVk1VVBe16AYBqTlN
+         9zeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=eIwb4I0AwekwEpYMZmVGy6yg88acm8K/xMMngQQs0ts=;
+        b=e8OeS4G+tvrtFkftWGPblqohecrOcQjxax+Oy34K7LBrhZKqYm+G/YzcaRBLrnAclN
+         8SNDRoCwEtvaz7QdzFyoJc7b/uW9Ic9DGWAOdhuajtJzAgW4/bMtJH6523fKFOoTooNj
+         4puUurqqiBoUwR88YjT6BXImv16Hp/chdrOpoi0oDGYkduMyFjHUdmpgEhbZHuklS6cU
+         lsKsD6SPdvoAZpwXgtEif3yZqy/2oO7baPyw+q3TBS5zuf1fPYNZxrdJawD6hcvUt+uA
+         t2hU66OXmL4J4CaosRl4m0gtALsWcM0WOW9I4EtyOQzA/TIrf0EDy176nI6XcjEgT52n
+         3hyQ==
+X-Gm-Message-State: AOAM532a0TXzlAJ5/pVIfBH8TqyacNfvkTYybspniKPJTVaaHs68oYQe
+        7ZV9pveMiaUti0k5Erw5wKJ3wdy5Hr1vqLQU5IX7G0PZB5o7VQ==
+X-Google-Smtp-Source: ABdhPJxsi9nMEKiVYaazPPhTBmzUAFFAp90WptYrLpDKLLw0lqq05xSIfgvppNf/eoYKuFksNbhOl9iOjrJAexnpfNc=
+X-Received: by 2002:a17:906:a219:b0:6e4:86a3:44ea with SMTP id
+ r25-20020a170906a21900b006e486a344eamr120040ejy.385.1652887826262; Wed, 18
+ May 2022 08:30:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220518024347.213402-1-lizhengyu3@huawei.com>
 In-Reply-To: <20220518024347.213402-1-lizhengyu3@huawei.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+From:   Dmitry Baryshkov <dbaryshkov@gmail.com>
+Date:   Wed, 18 May 2022 18:30:15 +0300
+Message-ID: <CALT56yO_ek55BGX4cKuTim2gWwQp7EXUFyh332MPYHPdi7xEWw@mail.gmail.com>
+Subject: Re: [PATCH -next] usb: host: ohci-tmio: Remove redundant if statement
+To:     Li Zhengyu <lizhengyu3@huawei.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 18, 2022 at 10:43:47AM +0800, Li Zhengyu wrote:
-> (ret == 0) is true when (ret) is false, so remove it.
+=D1=81=D1=80, 18 =D0=BC=D0=B0=D1=8F 2022 =D0=B3. =D0=B2 05:45, Li Zhengyu <=
+lizhengyu3@huawei.com>:
+>
+> (ret =3D=3D 0) is true when (ret) is false, so remove it.
 > Also remove unreachable code.
-> 
+>
 > Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
 > ---
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
 >  drivers/usb/host/ohci-tmio.c | 6 +-----
 >  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
+>
 > diff --git a/drivers/usb/host/ohci-tmio.c b/drivers/usb/host/ohci-tmio.c
 > index 49539b9f0e94..6bcb0cb53f7c 100644
 > --- a/drivers/usb/host/ohci-tmio.c
 > +++ b/drivers/usb/host/ohci-tmio.c
-> @@ -243,12 +243,8 @@ static int ohci_hcd_tmio_drv_probe(struct platform_device *dev)
->  	ret = usb_add_hcd(hcd, irq, 0);
->  	if (ret)
->  		goto err_add_hcd;
+> @@ -243,12 +243,8 @@ static int ohci_hcd_tmio_drv_probe(struct platform_d=
+evice *dev)
+>         ret =3D usb_add_hcd(hcd, irq, 0);
+>         if (ret)
+>                 goto err_add_hcd;
 > -
->  	device_wakeup_enable(hcd->self.controller);
-> -	if (ret == 0)
-> -		return ret;
+>         device_wakeup_enable(hcd->self.controller);
+
+I think the proper patch would be to check the return value of
+device_wakeup_enable(), so NAK.
+
+> -       if (ret =3D=3D 0)
+> -               return ret;
 > -
-> -	usb_remove_hcd(hcd);
-> +	return ret;
->  
+> -       usb_remove_hcd(hcd);
+> +       return ret;
+>
 >  err_add_hcd:
->  	tmio_stop_hc(dev);
-> -- 
+>         tmio_stop_hc(dev);
+> --
 > 2.17.1
-> 
+>
+
+
+--=20
+With best wishes
+Dmitry
