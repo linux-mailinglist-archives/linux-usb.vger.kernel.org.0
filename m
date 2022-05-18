@@ -2,53 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1DCB52B96A
-	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 14:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD0C52BABF
+	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 14:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236126AbiERMCv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 May 2022 08:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
+        id S236462AbiERMap (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 May 2022 08:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236173AbiERMCb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 08:02:31 -0400
+        with ESMTP id S236553AbiERM3R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 08:29:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90509506F7;
-        Wed, 18 May 2022 05:02:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D34C170657;
+        Wed, 18 May 2022 05:27:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00E8EB81F42;
-        Wed, 18 May 2022 12:02:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF457C385AA;
-        Wed, 18 May 2022 12:02:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFB9CB81F40;
+        Wed, 18 May 2022 12:27:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 396B4C36AE2;
+        Wed, 18 May 2022 12:27:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652875326;
-        bh=MUbcHyQvv4dKox4JvbJ9+1DW+Nh6qIMepCc4FfqqfAw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PEmdBxk/e5GBr4sSDUcpugXeOGnfB/84yii14TZBHW9oPMQAt9sXZ5fja/mOxEU7J
-         9wK3zFQwnrerUloQExGoKxMH3Dtk5c13Bn2ReaAK8AHXggDElnQzDXz9c9Nq3WbMR/
-         216tmL2URNKSrLroymJr41qTZIvuBDTSK+Uvk8fnY1IZbB24uKxkjQ7zexNrdBJgHi
-         eTtz52uKRkdofCpID3CBkPy8eODDmQeG6FveGvnCqYrWyUjfKf+iVOMcnF7daxzgkr
-         sC0ZluZnCZlmhg7pDpQC4lExVQUkOYQ/r8LXVA/YwfnhLPGFRkaRIJur4RFh2Flcdp
-         UTBoPICZK7BmA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nrINT-0003lM-Kr; Wed, 18 May 2022 14:02:07 +0200
-Date:   Wed, 18 May 2022 14:02:07 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Carl =?utf-8?B?WWluKOaut+W8oOaIkCk=?= <carl.yin@quectel.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rspmn@arcor.de" <rspmn@arcor.de>
-Subject: Re: [PATCH v2] USB: serial: option: add Quectel BG95 modem
-Message-ID: <YoTgP34e2TPr2+Go@hovoldconsulting.com>
-References: <TYZPR06MB42705166FACD6C4CD4AF9C0E86D19@TYZPR06MB4270.apcprd06.prod.outlook.com>
+        s=k20201202; t=1652876870;
+        bh=0/NFO8cYx8eV49vuYrkyZNzByuqpxYe0Qj+VfRawypc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bCjqESaz4VEECBYwOXmzdci2iUXr3v3KcGBDcWFrdP15Hob4UnyxpOWzKKF4qkAA5
+         k7mB93r0A1lOxEN4C1zZCOmOD15mwztAABzRyej9Y+pxdJ/JtsxxfP1tZ3muHMS4ze
+         9LA1BcYnqR/4hPndVfCMidfamFMLIuEG+Iu6/DSNtV22CNg1Dj8KYyS6VZc6fIwpOu
+         EEqPJ+s6qExQWHVoTtJVEMoN6r+SOmaKNcbCW7EP2bwgQkb+0yMjwJQrt/Z0AcgaNs
+         A1Xr0AIFOXE8lM6lxqANFUMp6YKepdUTTFMyxcPWcTojplM0Q3KveumfTC9iJKruq3
+         KG58VGmDeVv3Q==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Schspa Shi <schspa@gmail.com>,
+        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, balbi@kernel.org,
+        jannh@google.com, Julia.Lawall@inria.fr, jj251510319013@gmail.com,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 23/23] usb: gadget: fix race when gadget driver register via ioctl
+Date:   Wed, 18 May 2022 08:26:36 -0400
+Message-Id: <20220518122641.342120-23-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220518122641.342120-1-sashal@kernel.org>
+References: <20220518122641.342120-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYZPR06MB42705166FACD6C4CD4AF9C0E86D19@TYZPR06MB4270.apcprd06.prod.outlook.com>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,56 +60,96 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 18, 2022 at 01:04:10AM +0000, Carl Yin(殷张成) wrote:
-> The BG95 modem has 3 USB configurations that are configurable via the AT
-> command AT+QCFGEXT="usbnet",["ecm"|"modem"|"rmnet"] which make the modem
-> enumerate with the following interfaces, respectively:
-> 
-> "modem": Diag + GNSS + Modem + Modem
-> "ecm"  : Diag + GNSS + Modem + ECM
-> "rmnet": Diag + GNSS + Modem + QMI
-> 
-> A detailed description of the USB configuration for each mode follows:
+From: Schspa Shi <schspa@gmail.com>
 
-Thanks for updating the commit message and including rmnet.
+[ Upstream commit 5f0b5f4d50fa0faa8c76ef9d42a42e8d43f98b44 ]
 
-> Signed-off-by: Carl Yin <carl.yin@quectel.com>
-> ---
-> 
-> v2:
-> add at+qcfgext="usbnet","rmnet" and RSVD(3)
-> ---
->  drivers/usb/serial/option.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 152ad8826..21fb8da43 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
->  #define QUECTEL_PRODUCT_RM500Q			0x0800
->  #define QUECTEL_PRODUCT_EC200S_CN		0x6002
->  #define QUECTEL_PRODUCT_EC200T			0x6026
-> +#define QUECTEL_PRODUCT_BG95			0x0700
+The usb_gadget_register_driver can be called multi time by to
+threads via USB_RAW_IOCTL_RUN ioctl syscall, which will lead
+to multiple registrations.
 
-But you seemed to have miss my other comments. These defines should
-remain sorted numerically by PID.
+Call trace:
+  driver_register+0x220/0x3a0 drivers/base/driver.c:171
+  usb_gadget_register_driver_owner+0xfb/0x1e0
+    drivers/usb/gadget/udc/core.c:1546
+  raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
+  raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
+  ioctl USB_RAW_IOCTL_RUN
 
->  #define CMOTECH_VENDOR_ID			0x16d8
->  #define CMOTECH_PRODUCT_6001			0x6001
-> @@ -1143,6 +1144,10 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = ZLP },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG95, 0xff, 0xff, 0xff),
-> +	  .driver_info = RSVD(3) | ZLP },
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG95, 0xff, 0xfe, 0xff),
-> +	  .driver_info = ZLP },
+This routine allows two processes to register the same driver instance
+via ioctl syscall. which lead to a race condition.
 
-And here it looks like you should be able to just have a single entry
-using USB_DEVICE_INTERFACE_CLASS().
+Please refer to the following scenarios.
 
->  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
->  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
+           T1                                  T2
+------------------------------------------------------------------
+usb_gadget_register_driver_owner
+  driver_register                    driver_register
+    driver_find                       driver_find
+    bus_add_driver                    bus_add_driver
+      priv alloced                     <context switch>
+      drv->p = priv;
+      <schedule out>
+      kobject_init_and_add // refcount = 1;
+   //couldn't find an available UDC or it's busy
+   <context switch>
+                                       priv alloced
+                                       drv->priv = priv;
+                                       kobject_init_and_add
+                                         ---> refcount = 1 <------
+                                       // register success
+                                       <context switch>
+===================== another ioctl/process ======================
+                                      driver_register
+                                       driver_find
+                                        k = kset_find_obj()
+                                         ---> refcount = 2 <------
+                                        <context out>
+   driver_unregister
+   // drv->p become T2's priv
+   ---> refcount = 1 <------
+   <context switch>
+                                        kobject_put(k)
+                                         ---> refcount = 0 <------
+                                        return priv->driver;
+                                        --------UAF here----------
 
-Johan
+There will be UAF in this scenario.
+
+We can fix it by adding a new STATE_DEV_REGISTERING device state to
+avoid double register.
+
+Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+Link: https://lore.kernel.org/r/20220508150247.38204-1-schspa@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/gadget/legacy/raw_gadget.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index d86c3a36441e..3427ce37a5c5 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -145,6 +145,7 @@ enum dev_state {
+ 	STATE_DEV_INVALID = 0,
+ 	STATE_DEV_OPENED,
+ 	STATE_DEV_INITIALIZED,
++	STATE_DEV_REGISTERING,
+ 	STATE_DEV_RUNNING,
+ 	STATE_DEV_CLOSED,
+ 	STATE_DEV_FAILED
+@@ -508,6 +509,7 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
+ 		ret = -EINVAL;
+ 		goto out_unlock;
+ 	}
++	dev->state = STATE_DEV_REGISTERING;
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+ 
+ 	ret = usb_gadget_probe_driver(&dev->driver);
+-- 
+2.35.1
+
