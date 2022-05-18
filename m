@@ -2,120 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CC152C5F4
-	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 00:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EDA52C73E
+	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 01:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiERWGZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 May 2022 18:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
+        id S230301AbiERW6j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 May 2022 18:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiERWGA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 18:06:00 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F386B1666A5
-        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 15:04:16 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id y41so3358227pfw.12
-        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 15:04:16 -0700 (PDT)
+        with ESMTP id S231191AbiERW6O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 18:58:14 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F94C17DDE1
+        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 15:57:12 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2f83983782fso40119077b3.6
+        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 15:57:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/nGLK4xvSVUA2aTskL7KBthCb1HFoB9NWaLdwGSmKHI=;
-        b=BI2RBE7OtfruFWTCNYrgW7SluCI1Rz1x30/zpufzVOuVeQ01dyyAl9KN+supk4ojPw
-         GdvQYhtBojNjCzrclI30qnVPoypBgeo9+SsWAx194EvXhdWjCbQcLBkBIc6pdUknE90J
-         XxrdkfQEZ8oMyivFmEzFxb+kEYZUVIRttm6B4=
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
+        b=czYkjWVoP4p/ZkNBJUSmJBfxUUt+Y13DbrrHvBfDUk39swnu2r1R2LMB3wAsUSY8FJ
+         6ZHix6GZx2AHI61Xybet6sdcQlFElibcif9NAvmWTzz0l58WRUD1Pr+/0udl5Tub4w6J
+         meMNyRnYfYgN6d8AQA50exC5S8Br4+BjGl3igVF9bo6vnyZ0caprRk+RWxvnLby0Adqm
+         hPjkVM8mttTA162cBcx8kN6mr4q9cNJsYcLYU7yQFFkOaGBf3QJSI1TLD1TTjQK6bKO2
+         /uQaa7XB0ntetoq2a8c8ZgimsW4075bFpPpigSla9RqML/vkCGJpD6xavnQrqxd781aK
+         ZwFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/nGLK4xvSVUA2aTskL7KBthCb1HFoB9NWaLdwGSmKHI=;
-        b=ZYCjykmSLjSMyZS3hsU3fXCCZrxbr38P786J6iqwE8K6CBlFQc0iEm05UIaagY0Ap+
-         QnRqw2oNz9hV/RLOLdY/6riPVvySbkBzGn/zOXgx+NJvkYn5dP5z3djnRPlWkKPlI4qZ
-         vAbhU9igtLHqMejnCrlaQoMGmPUX9ok3cS1sxBpbfYicMSybcofJH03em0kqDlB0uEBl
-         Wi3N0E96GehbbyuYDZTh/BvVWC05mbSbjOk7sYrqenumHG7gowgDcY37c/ZtNMjrUn75
-         dnoTRQJVemkAkt6B7C8w3KW20F5Pz0MKPEQYUTEB5udq/qHj7apWX43+woqkABXUhkq/
-         UbGg==
-X-Gm-Message-State: AOAM531xuGITFX1l7IOUFoX78NlGVNX2etXhEr6uvrQSCHRbFEbxQTp7
-        lz2u6X2Yl53r6/+xukMgXHi9wA==
-X-Google-Smtp-Source: ABdhPJxXorvF4EPHY4DS+gEC8RdZC65si6o5SpHebhRG0HV11EiT/ZrxUJae2tcLmaUH8cRGnpDoXg==
-X-Received: by 2002:a05:6a00:1145:b0:4f6:3ebc:a79b with SMTP id b5-20020a056a00114500b004f63ebca79bmr1609722pfm.41.1652911456421;
-        Wed, 18 May 2022 15:04:16 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:620e:26da:4317:c2ee])
-        by smtp.gmail.com with UTF8SMTPSA id p123-20020a622981000000b0051811c2aa89sm2407750pfp.196.2022.05.18.15.04.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 15:04:15 -0700 (PDT)
-From:   Brian Norris <briannorris@chromium.org>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Dmitry Torokhov <dtor@chromium.org>,
-        linux-usb@vger.kernel.org, Doug Anderson <dianders@chromium.org>,
-        Brian Norris <briannorris@chromium.org>
-Subject: [PATCH] usb: Probe EHCI, OHCI controllers asynchronously
-Date:   Wed, 18 May 2022 15:02:51 -0700
-Message-Id: <20220518150150.1.Ie8ea0e945a9c15066237014be219eed60066d493@changeid>
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
+        b=lznVmFyc1DwJdsgW9pwEHfD0f/GlflUgSBRSAAG87RrXCyau4Ga+gey7fbaHfN03w0
+         ihrXPMxKb6wqDswk/oiegUOIynwYLx1NRirj/yXAr1+s6wB9ZjevmMNfXLC6upvQL/pq
+         kl+MOx0251556VjfEGSzZMGzTjG75ljnqdylCW1g2HxjIR2V3UXRfKRs66c03iK3Qjdu
+         /9GEil6EBK3d2e/YJLTs1i8hdngwVYuCtqlAHlCY99YtnXkug9z6An9XoeP/usNXep7c
+         as0FRkfA32n8sqnsE0S6eWqgLb+dRc8u2dK9e7qXwNf3Pmsw+MiwI0PIMLhl4urjqCmG
+         dKZQ==
+X-Gm-Message-State: AOAM533VpgyjjTle/bacdjH22wYHsJfiklP49i6VLuIfwtBylUSmSl/z
+        KvNGUOiyGSF+9UGZ+IyqUFIR43w9PCZeZwPZMDw=
+X-Google-Smtp-Source: ABdhPJwfS30wbsCjPY8UVYlWs7ui3rJia0tAtpKvKb7UJ9kvW7xj8JsSqbuzt2V828J/37SMn7X7nS55vBF2Wrce63I=
+X-Received: by 2002:a0d:ccc3:0:b0:2ff:4e0:2be5 with SMTP id
+ o186-20020a0dccc3000000b002ff04e02be5mr1833971ywd.225.1652914631436; Wed, 18
+ May 2022 15:57:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:7000:7143:0:0:0:0 with HTTP; Wed, 18 May 2022 15:57:11
+ -0700 (PDT)
+Reply-To: tonywenn@asia.com
+From:   Tony Wen <weboutloock4@gmail.com>
+Date:   Thu, 19 May 2022 06:57:11 +0800
+Message-ID: <CAE2_YrAOSJNMn2masB_R9LowQvWJNrct3SYBUk3PivGhjD0fCA@mail.gmail.com>
+Subject: engage
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:112f listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4046]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [weboutloock4[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [weboutloock4[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Dmitry Torokhov <dtor@chromium.org>
-
-initcall_debug shows that OHCI controllers take ~60ms to probe on
-Rockchip RK3399 systems:
-
-  probe of fe3a0000.usb returned 1 after 58941 usecs
-
-A few of these can add up to waste non-trivial amounts of time at boot.
-
-These host controllers don't provide resources to other drivers, so
-this shouldn't contribute to exposing race conditions.
-
-Chrome OS kernels have carried this patch on some systems for a while
-without issues. Similar patches have been merged for a variety of (e)MMC
-host controllers for similar reasons.
-
-Signed-off-by: Dmitry Torokhov <dtor@chromium.org>
-[Brian: rewrote commit message, refreshed, but retained dtor's original
- authorship ]
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
-
- drivers/usb/host/ehci-platform.c | 1 +
- drivers/usb/host/ohci-platform.c | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
-index 1115431a255d..f343967443e2 100644
---- a/drivers/usb/host/ehci-platform.c
-+++ b/drivers/usb/host/ehci-platform.c
-@@ -518,6 +518,7 @@ static struct platform_driver ehci_platform_driver = {
- 		.pm	= pm_ptr(&ehci_platform_pm_ops),
- 		.of_match_table = vt8500_ehci_ids,
- 		.acpi_match_table = ACPI_PTR(ehci_acpi_match),
-+		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
- 	}
- };
- 
-diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
-index 4a8456f12a73..47dfbfe9e519 100644
---- a/drivers/usb/host/ohci-platform.c
-+++ b/drivers/usb/host/ohci-platform.c
-@@ -334,6 +334,7 @@ static struct platform_driver ohci_platform_driver = {
- 		.name	= "ohci-platform",
- 		.pm	= &ohci_platform_pm_ops,
- 		.of_match_table = ohci_platform_ids,
-+		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
- 	}
- };
- 
--- 
-2.36.1.124.g0e6072fb45-goog
-
+Can I engage your services?
