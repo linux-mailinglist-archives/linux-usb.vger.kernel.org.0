@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BADE752B9AE
-	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 14:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DCB52B96A
+	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 14:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236077AbiERMBx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 May 2022 08:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
+        id S236126AbiERMCv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 May 2022 08:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236358AbiERMB1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 08:01:27 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AECB23177;
-        Wed, 18 May 2022 05:01:25 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 593BF1F44F9A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652875283;
-        bh=eWMO+9i9voS89Q+F8+40P0pUsammpGTwWoyawgM0xNg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Lhm/J/hXfAJ9BJFEvYcRwETBoCLYtJjqJQQ0KCGtbdsJBYbfPgAYbZjaq8Cktb2GQ
-         jnnvBMRi1Fp5XaQ2ARbA3DD3le7L828QOMEJVDVoyrihhnf3NecPbVjmBhdIfXSwql
-         xlrpC5xyXxPJaYxbqz6mrtWM0QPP/VKPqKdlpvmF2aF4rgAA0/w4E0Tb3TBlaavlV6
-         b/IMu1+Fp88Ur8Z3WPojwmmsa1Sv4FPuY0E0DTUVifvIHLCXJLW04LoD2492ptn0xp
-         lUjkeb67qxETH++3Y3SNfRaTNO+0MSwXP/bF2VPqbwUUuRB31FyZCtYBkXOvolkJCf
-         4gz0tsNkszGug==
-Message-ID: <7781eaaf-ad09-7283-dbb8-69d0fb3f1d14@collabora.com>
-Date:   Wed, 18 May 2022 14:01:20 +0200
+        with ESMTP id S236173AbiERMCb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 08:02:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90509506F7;
+        Wed, 18 May 2022 05:02:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00E8EB81F42;
+        Wed, 18 May 2022 12:02:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF457C385AA;
+        Wed, 18 May 2022 12:02:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652875326;
+        bh=MUbcHyQvv4dKox4JvbJ9+1DW+Nh6qIMepCc4FfqqfAw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PEmdBxk/e5GBr4sSDUcpugXeOGnfB/84yii14TZBHW9oPMQAt9sXZ5fja/mOxEU7J
+         9wK3zFQwnrerUloQExGoKxMH3Dtk5c13Bn2ReaAK8AHXggDElnQzDXz9c9Nq3WbMR/
+         216tmL2URNKSrLroymJr41qTZIvuBDTSK+Uvk8fnY1IZbB24uKxkjQ7zexNrdBJgHi
+         eTtz52uKRkdofCpID3CBkPy8eODDmQeG6FveGvnCqYrWyUjfKf+iVOMcnF7daxzgkr
+         sC0ZluZnCZlmhg7pDpQC4lExVQUkOYQ/r8LXVA/YwfnhLPGFRkaRIJur4RFh2Flcdp
+         UTBoPICZK7BmA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nrINT-0003lM-Kr; Wed, 18 May 2022 14:02:07 +0200
+Date:   Wed, 18 May 2022 14:02:07 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Carl =?utf-8?B?WWluKOaut+W8oOaIkCk=?= <carl.yin@quectel.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rspmn@arcor.de" <rspmn@arcor.de>
+Subject: Re: [PATCH v2] USB: serial: option: add Quectel BG95 modem
+Message-ID: <YoTgP34e2TPr2+Go@hovoldconsulting.com>
+References: <TYZPR06MB42705166FACD6C4CD4AF9C0E86D19@TYZPR06MB4270.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/2] usb: xhci-mtk: fix fs isoc's transfer error
-Content-Language: en-US
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        stable@vger.kernel.org
-References: <20220512064931.31670-1-chunfeng.yun@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220512064931.31670-1-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <TYZPR06MB42705166FACD6C4CD4AF9C0E86D19@TYZPR06MB4270.apcprd06.prod.outlook.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,36 +59,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il 12/05/22 08:49, Chunfeng Yun ha scritto:
-> Due to the scheduler allocates the optimal bandwidth for FS ISOC endpoints,
-> this may be not enough actually and causes data transfer error, so come up
-> with an estimate that is no less than the worst case bandwidth used for
-> any one mframe, but may be an over-estimate.
+On Wed, May 18, 2022 at 01:04:10AM +0000, Carl Yin(殷张成) wrote:
+> The BG95 modem has 3 USB configurations that are configurable via the AT
+> command AT+QCFGEXT="usbnet",["ecm"|"modem"|"rmnet"] which make the modem
+> enumerate with the following interfaces, respectively:
 > 
-> Fixes: 451d3912586a ("usb: xhci-mtk: update fs bus bandwidth by bw_budget_table")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> "modem": Diag + GNSS + Modem + Modem
+> "ecm"  : Diag + GNSS + Modem + ECM
+> "rmnet": Diag + GNSS + Modem + QMI
+> 
+> A detailed description of the USB configuration for each mode follows:
 
-Hello Chunfeng,
-I agree this is "a fix"... but is it the best fix?
+Thanks for updating the commit message and including rmnet.
 
-Shooting the bandwidth very high will have power consumption consequences, are
-those measurable?
-And if they are, what is the expected power consumption increase in percentage
-(and/or microamperes)? Also, out of the expected increase, have you got any
-measurement for that?
-
-Assuming that the measurement is done for one SoC, it's possible to make some
-assumption about a different part.
-
-Regards,
-Angelo
-
+> Signed-off-by: Carl Yin <carl.yin@quectel.com>
 > ---
->   drivers/usb/host/xhci-mtk-sch.c | 16 +++++++---------
->   1 file changed, 7 insertions(+), 9 deletions(-)
 > 
-> diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
-> index f3139ce7b0a9..953d2cd1d4cc 100644
-> --- a/drivers/usb/host/xhci-mtk-sch.c
-> +++ b/drivers/usb/host/xhci-mtk-sch.c
+> v2:
+> add at+qcfgext="usbnet","rmnet" and RSVD(3)
+> ---
+>  drivers/usb/serial/option.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 152ad8826..21fb8da43 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
+>  #define QUECTEL_PRODUCT_RM500Q			0x0800
+>  #define QUECTEL_PRODUCT_EC200S_CN		0x6002
+>  #define QUECTEL_PRODUCT_EC200T			0x6026
+> +#define QUECTEL_PRODUCT_BG95			0x0700
+
+But you seemed to have miss my other comments. These defines should
+remain sorted numerically by PID.
+
+>  #define CMOTECH_VENDOR_ID			0x16d8
+>  #define CMOTECH_PRODUCT_6001			0x6001
+> @@ -1143,6 +1144,10 @@ static const struct usb_device_id option_ids[] = {
+>  	  .driver_info = ZLP },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG95, 0xff, 0xff, 0xff),
+> +	  .driver_info = RSVD(3) | ZLP },
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG95, 0xff, 0xfe, 0xff),
+> +	  .driver_info = ZLP },
+
+And here it looks like you should be able to just have a single entry
+using USB_DEVICE_INTERFACE_CLASS().
+
+>  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
+>  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
+
+Johan
