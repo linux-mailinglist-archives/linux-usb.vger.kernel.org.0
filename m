@@ -2,87 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771A752C0B4
-	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 19:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0B252C227
+	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 20:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240342AbiERQgw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 May 2022 12:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
+        id S234028AbiERSNY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 May 2022 14:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240394AbiERQgD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 12:36:03 -0400
-X-Greylist: delayed 30093 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 May 2022 09:35:55 PDT
-Received: from zg8tmja5ljk3lje4ms43mwaa.icoremail.net (zg8tmja5ljk3lje4ms43mwaa.icoremail.net [209.97.181.73])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id A9901F0F;
-        Wed, 18 May 2022 09:35:54 -0700 (PDT)
+        with ESMTP id S234057AbiERSNW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 14:13:22 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF4416A246;
+        Wed, 18 May 2022 11:13:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=3KgQ3zrN3LBLM7gFu4d9St4sYVmP9yxCPwwUUX7EJ3A=; b=L
-        l7yuLxSZ5EP3U4aUM86tvoyS8fQv4Yd9snjAO1A5IDnm2qLlMyJTX9UM44Vv4o/u
-        OlkNp7qACnO1zBb3DGkn/jWf9W+5CdTnYUuPi6Jgez7PoblzyWG9X9VbN8xISX8j
-        rcn95n7/uyCHtkhcPTS1Sd13A2FbTTMDQkPvpQ0gZk=
-Received: from localhost (unknown [10.129.21.144])
-        by front02 (Coremail) with SMTP id 54FpogDn7nphIIVihK+CBg--.61907S2;
-        Thu, 19 May 2022 00:35:46 +0800 (CST)
-From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
-To:     pawell@cadence.com, gregkh@linuxfoundation.org, peter.chen@nxp.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        fuyq@stu.pku.edu.cn, Yongzhi Liu <lyz_cs@pku.edu.cn>
-Subject: [PATCH] usb: cdnsp:  Fix potential dereference of NULL pointer
-Date:   Wed, 18 May 2022 09:35:43 -0700
-Message-Id: <1652891743-110930-1-git-send-email-lyz_cs@pku.edu.cn>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652897601; x=1684433601;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=2bv8YYEomi2Pw3GsY9fZwzSE3m5nm/FOF4cSfap6sTw=;
+  b=aATq7G4lweGa/bdE0ULybxGQ5s5q4nr8poP9kkWa2rqurfKO8vPQljSN
+   ajgKkHqzsuMVQtKvXt+q3m+vbcutbw9TwIQvlnxoHVkpAU16qay3IM7Os
+   8uFMa8owsEgGQyXStZtVY2KjjlgqFABHcMwQrglAU5AArPEQrdDJhKdlH
+   U=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 May 2022 11:13:21 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 11:13:20 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 18 May 2022 11:13:20 -0700
+Received: from hu-mrana-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 18 May 2022 11:13:20 -0700
+From:   Mayank Rana <quic_mrana@quicinc.com>
+To:     <peter.chen@kernel.org>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <Thinh.Nguyen@synopsys.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, Mayank Rana <quic_mrana@quicinc.com>
+Subject: [PATCH] usb: dwc3: core: Add error log when core soft reset failed
+Date:   Wed, 18 May 2022 11:12:52 -0700
+Message-ID: <1652897572-14461-1-git-send-email-quic_mrana@quicinc.com>
 X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: 54FpogDn7nphIIVihK+CBg--.61907S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7JF45AFWxZF47GrWrAw13Jwb_yoWfXFX_Gw
-        4ruFy7tF1agFy7Aw18Cr9xWrWjkw1qvF4kXa1Igw43CFy7ur1kZryxXr4kJF1xZ3yUKr1D
-        KFyYk398uF1kAjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbx8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
-        87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4
-        CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-        Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-        0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48J
-        MxAIw28IcVCjz48v1sIEY20_Kr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
-        DUUUUU=
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEJBlPy7vIULQAOsH
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The return value of cdnsp_get_transfer_ring()
-needs to be checked to avoid use of NULL pointer
-in case of an acquisition failure.
+DWC3 controller soft reset is important operation for USB functionality.
+In case when it fails, currently there is no failure log. Hence add
+error log when core soft reset failed.
 
-Fixes: 3d8290455 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+Signed-off-by: Mayank Rana <quic_mrana@quicinc.com>
 ---
- drivers/usb/cdns3/cdnsp-ring.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/dwc3/core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-index 1b14384..9f206b9 100644
---- a/drivers/usb/cdns3/cdnsp-ring.c
-+++ b/drivers/usb/cdns3/cdnsp-ring.c
-@@ -655,6 +655,8 @@ static int cdnsp_cmd_set_deq(struct cdnsp_device *pdev,
- 	 * to reflect the new position.
- 	 */
- 	ep_ring = cdnsp_get_transfer_ring(pdev, pep, deq_state->stream_id);
-+	if (!ep_ring)
-+		return -EINVAL;
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index d28cd1a..8b87ff6 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -297,6 +297,7 @@ int dwc3_core_soft_reset(struct dwc3 *dwc)
+ 			udelay(1);
+ 	} while (--retries);
  
- 	if (cdnsp_trb_is_link(ep_ring->dequeue)) {
- 		ep_ring->deq_seg = ep_ring->deq_seg->next;
++	dev_warn(dwc->dev, "DWC3 controller soft reset failed.\n");
+ 	return -ETIMEDOUT;
+ 
+ done:
 -- 
 2.7.4
 
