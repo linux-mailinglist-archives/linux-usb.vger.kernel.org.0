@@ -2,92 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9998E52B3F6
-	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 09:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510BA52B4D6
+	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 10:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232421AbiERHsj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 May 2022 03:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
+        id S231370AbiERIVP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 May 2022 04:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232477AbiERHsi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 03:48:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED51AF24
-        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 00:48:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8968961445
-        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 07:48:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D9C97C385A5
-        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 07:48:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652860116;
-        bh=55RfrtidOLP6jbEcngkzL1FxIYmbbPIv/5uA7vPNk8M=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=pW9EMSGMWBc1yzOoynAfCyZ/nHJNzpOm6d1fmCZsMG4z23bN6TA71xx7kMRDQnIfm
-         umMPRY0pLn1ZZQ/k2vCurQvZ0JamCNCTKBAeYggI7GXf/yfvzoA1X2hJSZEdNCS95k
-         6Rp5uylNO+7Q6iP0V/+CpLIn8ukHLe7vkmgsAv8uHVMv0ZnJoiGHSgRfnrQ0I+wy/0
-         nDVJDntVAGQy8l8kvljp4cnTp2b6zsPjroRKLZ+uebD82SYPNtqbnWqab5eIoSpUGR
-         ptn4gwBLRYzD04ZMtYLirkAUHl07FmZEIJipoMSO9sU6BO24cAB/qS1yhmwP4yqbV/
-         78NVS3TH/2KLg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id C4A9ACC13AF; Wed, 18 May 2022 07:48:36 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
- xhci_hcd rejecting DMA map of vmalloc memory
-Date:   Wed, 18 May 2022 07:48:36 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: regressions@leemhuis.info
-X-Bugzilla-Status: REOPENED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215890-208809-IwB2kBJte8@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
-References: <bug-215890-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S232779AbiERIVM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 04:21:12 -0400
+X-Greylist: delayed 414 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 May 2022 01:21:08 PDT
+Received: from azure-sdnproxy-1.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 362BBDD1
+        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 01:21:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id; bh=uGJhjE0VdQZaCtd5P8DjiImSj+n7K+Kp/VzkVHM4y8g=; b=N
+        jJJo8O/wqMmlgm1EBVxj3S+q34kGyjSNBqbagtYoPsOQCnakD89Jbj6EM0PELZXP
+        RJOQ1cmHAf6CW3B2S1LCl/f+20WxRQh23f6jQ84S0yGDYQTfDnSyUjdzT2iqM0A3
+        U4GR7XfLW58RzkBa15orkLJZGGk8c8v7PDFa7sj9IY=
+Received: from localhost (unknown [10.129.21.144])
+        by front01 (Coremail) with SMTP id 5oFpogCnr7eHqoRix3JcBw--.41772S2;
+        Wed, 18 May 2022 16:12:55 +0800 (CST)
+From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
+To:     peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
+        a-govindraju@ti.com, gregkh@linuxfoundation.org,
+        felipe.balbi@linux.intel.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fuyq@stu.pku.edu.cn, Yongzhi Liu <lyz_cs@pku.edu.cn>
+Subject: [PATCH] usb: cdns3:  Fix potential dereference of NULL pointer
+Date:   Wed, 18 May 2022 01:12:50 -0700
+Message-Id: <1652861570-102489-1-git-send-email-lyz_cs@pku.edu.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: 5oFpogCnr7eHqoRix3JcBw--.41772S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7XFWkAFyxCr4rJw13XF18Xwb_yoWktrg_Cw
+        4UurZrKFW5X34UZw4DG34fG348KFsrX3WkJFsrta43CayUKr4kArW8Zr95CF1xZa18Kr1k
+        Aw1rKa1fCFsxJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK
+        6svPMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_Kr1UJr1l4I8I3I0E4IkC6x
+        0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+        zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
+        4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+        CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEJBlPy7vIULQAJsA
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
+The return value of cdns3_gadget_ep_alloc_request()
+needs to be checked to avoid use of NULL pointer
+in case of an allocation failure.
 
---- Comment #21 from The Linux kernel's regression tracker (Thorsten Leemhu=
-is) (regressions@leemhuis.info) ---
-(In reply to Satadru Pramanik from comment #19)
-> I'm not sure what changed, but it is working on the ubuntu mainline build=
- of
-> 5.18-rc7.
+Fixes: 7733f6c32e36f ("usb: cdns3: Add Cadence USB3 DRD Driver")
 
-Maybe I just missed a change to fix this; or some change fixed this
-accidentally (which was odd, but well, we are dealing with computers here..=
-.).
+Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+---
+ drivers/usb/cdns3/cdns3-gadget.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Guess the matter can be considered resolved then.
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index 5d8c982..7be328e 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -2568,6 +2568,10 @@ static int cdns3_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
+ 		struct cdns3_request *priv_req;
+ 
+ 		zlp_request = cdns3_gadget_ep_alloc_request(ep, GFP_ATOMIC);
++		if (!zlp_request) {
++			ret = -ENOMEM;
++			goto err;
++		}
+ 		zlp_request->buf = priv_dev->zlp_buf;
+ 		zlp_request->length = 0;
+ 
+@@ -2578,7 +2582,7 @@ static int cdns3_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
+ 			priv_ep->name);
+ 		ret = __cdns3_gadget_ep_queue(ep, zlp_request, gfp_flags);
+ 	}
+-
++err:
+ 	spin_unlock_irqrestore(&priv_dev->lock, flags);
+ 	return ret;
+ }
+-- 
+2.7.4
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
