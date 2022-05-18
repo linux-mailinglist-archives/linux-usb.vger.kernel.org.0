@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0911252BA53
-	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 14:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F1852BB00
+	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 14:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237041AbiERMdT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 May 2022 08:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        id S237207AbiERMeg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 May 2022 08:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236949AbiERMcu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 08:32:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DE514D787;
-        Wed, 18 May 2022 05:29:20 -0700 (PDT)
+        with ESMTP id S236914AbiERMdn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 08:33:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2CD170657;
+        Wed, 18 May 2022 05:29:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2627B6147D;
-        Wed, 18 May 2022 12:28:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5974AC385A5;
-        Wed, 18 May 2022 12:28:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B00BB81FB7;
+        Wed, 18 May 2022 12:29:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6314DC385A5;
+        Wed, 18 May 2022 12:29:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652876923;
-        bh=0/NFO8cYx8eV49vuYrkyZNzByuqpxYe0Qj+VfRawypc=;
+        s=k20201202; t=1652876968;
+        bh=1/Rns8Iy4ZRVRjDtTCqN2FCGXC7at+GDFzh5rZ7HnnY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gqhK8r7lcjyA0MePeJhLpFkUuJ8oPXlegUQg/QxZQCyW+RnBFaXsuBybAPYzphF6+
-         3rcDlO6ZMttfQAi3wWohkn2Hvtobixnu1Iao4ilrXnDDN4fwlNPNIaFR0sqJ/BxyWN
-         wuJb3H7PJp8z7aaUF07TQY5RjSPehF/BZqPaqVTAVQkBICKEiFlLDF+XUKKBeleLih
-         uN7FNbvdieTKFgH+oQZMedfwnhAxi1e5Xba6/afHMfamIUBb9P2XpNu/d/Do2n6azf
-         Pv1Qrd3UNdTlmYQdeiuQUF9qUW3NbcxiPzv8YQbitnP+FztHiDsLHYxzKrFaFuqNCL
-         YX+pmcJl9lQRw==
+        b=W9rmFGE1QFjYSwbaND1UneqmoPJSus3UBI0DR1Rdex5Y6i0nLZE779Nz9fAf5m48x
+         UBdBtCGAfK1eQdALwkeYSnCnUOHeqofth4amdX52+EeZtRaiCiwJ0zzrYDY4cvZKqQ
+         53W76Q0JicnedjduZJi8NdxMIBwySQGmOePa/pz9OCL4DDXG6hnaauIKCov0jEUnXT
+         slqwOoCvBm3xIeqUOazmCqQ0YxJYuf/uRo6LWZL147qC2b0rNQvwOA8bh6ZBsBkW7v
+         IymuUFEZhV2O2+K9DOzbPr6a/bfFRMyWKwKkp02g5ExZZCgpBoI9s1Jg76Op3IIw8E
+         LffIpyyF0N3NQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Schspa Shi <schspa@gmail.com>,
@@ -38,14 +38,14 @@ Cc:     Schspa Shi <schspa@gmail.com>,
         Andrey Konovalov <andreyknvl@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, balbi@kernel.org,
-        jannh@google.com, Julia.Lawall@inria.fr, jj251510319013@gmail.com,
+        jj251510319013@gmail.com, Julia.Lawall@inria.fr, jannh@google.com,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 17/17] usb: gadget: fix race when gadget driver register via ioctl
-Date:   Wed, 18 May 2022 08:27:51 -0400
-Message-Id: <20220518122753.342758-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 13/13] usb: gadget: fix race when gadget driver register via ioctl
+Date:   Wed, 18 May 2022 08:28:44 -0400
+Message-Id: <20220518122844.343220-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220518122753.342758-1-sashal@kernel.org>
-References: <20220518122753.342758-1-sashal@kernel.org>
+In-Reply-To: <20220518122844.343220-1-sashal@kernel.org>
+References: <20220518122844.343220-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -131,10 +131,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-index d86c3a36441e..3427ce37a5c5 100644
+index 33efa6915b91..34cecd3660bf 100644
 --- a/drivers/usb/gadget/legacy/raw_gadget.c
 +++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -145,6 +145,7 @@ enum dev_state {
+@@ -144,6 +144,7 @@ enum dev_state {
  	STATE_DEV_INVALID = 0,
  	STATE_DEV_OPENED,
  	STATE_DEV_INITIALIZED,
@@ -142,7 +142,7 @@ index d86c3a36441e..3427ce37a5c5 100644
  	STATE_DEV_RUNNING,
  	STATE_DEV_CLOSED,
  	STATE_DEV_FAILED
-@@ -508,6 +509,7 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
+@@ -507,6 +508,7 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
  		ret = -EINVAL;
  		goto out_unlock;
  	}
