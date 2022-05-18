@@ -2,59 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510BA52B4D6
-	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 10:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B4652B4D1
+	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 10:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbiERIVP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 May 2022 04:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        id S233268AbiERIbc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 May 2022 04:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232779AbiERIVM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 04:21:12 -0400
-X-Greylist: delayed 414 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 May 2022 01:21:08 PDT
-Received: from azure-sdnproxy-1.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 362BBDD1
-        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 01:21:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=uGJhjE0VdQZaCtd5P8DjiImSj+n7K+Kp/VzkVHM4y8g=; b=N
-        jJJo8O/wqMmlgm1EBVxj3S+q34kGyjSNBqbagtYoPsOQCnakD89Jbj6EM0PELZXP
-        RJOQ1cmHAf6CW3B2S1LCl/f+20WxRQh23f6jQ84S0yGDYQTfDnSyUjdzT2iqM0A3
-        U4GR7XfLW58RzkBa15orkLJZGGk8c8v7PDFa7sj9IY=
-Received: from localhost (unknown [10.129.21.144])
-        by front01 (Coremail) with SMTP id 5oFpogCnr7eHqoRix3JcBw--.41772S2;
-        Wed, 18 May 2022 16:12:55 +0800 (CST)
-From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
-To:     peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
-        a-govindraju@ti.com, gregkh@linuxfoundation.org,
-        felipe.balbi@linux.intel.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        fuyq@stu.pku.edu.cn, Yongzhi Liu <lyz_cs@pku.edu.cn>
-Subject: [PATCH] usb: cdns3:  Fix potential dereference of NULL pointer
-Date:   Wed, 18 May 2022 01:12:50 -0700
-Message-Id: <1652861570-102489-1-git-send-email-lyz_cs@pku.edu.cn>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: 5oFpogCnr7eHqoRix3JcBw--.41772S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XFWkAFyxCr4rJw13XF18Xwb_yoWktrg_Cw
-        4UurZrKFW5X34UZw4DG34fG348KFsrX3WkJFsrta43CayUKr4kArW8Zr95CF1xZa18Kr1k
-        Aw1rKa1fCFsxJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
-        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK
-        6svPMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_Kr1UJr1l4I8I3I0E4IkC6x
-        0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
-        zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
-        4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
-        CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEJBlPy7vIULQAJsA
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        with ESMTP id S233357AbiERIbJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 04:31:09 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DD665E1
+        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 01:31:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652862665; x=1684398665;
+  h=message-id:date:mime-version:to:references:from:subject:
+   in-reply-to:content-transfer-encoding;
+  bh=awhCuvr8KLRnIzUhLHzzRksXvgU+3h1JvsxArgmbOZI=;
+  b=arXH2BBh9Gnv2j7m4maSPXwHdN/+ITJDOTBWpDfapK79hT795/jp7rYX
+   ITAfB7foNsRSnKoWpQB3J8FS9QsjWUKj4njCqRxxDlTV53SewIpjJPz1m
+   1xRBcDjkvPED/JlGOIp/bQ80E3CtpzvxuPdJKNO7dbgUpovBzIkZA9sJl
+   84/qp14fWVcTo3S2AfdtqBE2UPOEOoVUZFi/DgFLJbngu6ynM41PJ7SWF
+   LfCIucBraMSciaceaYLORNRvlptcXmDKNoDIrq1hbTxx/c5E/Cj9qSBr9
+   V05kQmjHBBzOo6FDKD3konloa7glG3nXfuwqAE0628dXbqGfwUWov3gZh
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="253601841"
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="253601841"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 01:31:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="597651074"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga008.jf.intel.com with ESMTP; 18 May 2022 01:30:49 -0700
+Message-ID: <2de61edd-47ab-53ac-8c8a-8f2f6abf840e@linux.intel.com>
+Date:   Wed, 18 May 2022 11:32:11 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Content-Language: en-US
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <2dc0d93e-2ac7-3f5c-e22c-d5329ec2e7f5@omp.ru>
+ <ef9b047d-4762-6b06-e633-f51d2848f66c@omp.ru>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] usb: host: xhci: use snprintf() in xhci_decode_trb()
+In-Reply-To: <ef9b047d-4762-6b06-e633-f51d2848f66c@omp.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,41 +64,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The return value of cdns3_gadget_ep_alloc_request()
-needs to be checked to avoid use of NULL pointer
-in case of an allocation failure.
+On 17.5.2022 22.13, Sergey Shtylyov wrote:
+> Hello!
+> 
+> On 3/16/22 11:36 PM, Sergey Shtylyov wrote:
+> 
+>> Commit cbf286e8ef83 ("xhci: fix unsafe memory usage in xhci tracing")
+>> apparently missed one sprintf() call in xhci_decode_trb() -- replace
+>> it with the snprintf() call as well...
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+>> analysis tool.
+>>
+>> Fixes: cbf286e8ef83 ("xhci: fix unsafe memory usage in xhci tracing")
+>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>>
+>> ---
+>> This patch is against the 'usb-next' branch of Greg KH's 'usb.git' repo.
+> 
+>     Mathias, Greg, what's going on with this patch? It was posted 2 months ago
+> and seemingly ignored... :-/
+> 
+> MBR, Sergey
 
-Fixes: 7733f6c32e36f ("usb: cdns3: Add Cadence USB3 DRD Driver")
+Must have missed it
 
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
----
- drivers/usb/cdns3/cdns3-gadget.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+I'll queue it up for 5.20 unless Greg still picks it up for 5.19.
+Not urgent.
 
-diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-index 5d8c982..7be328e 100644
---- a/drivers/usb/cdns3/cdns3-gadget.c
-+++ b/drivers/usb/cdns3/cdns3-gadget.c
-@@ -2568,6 +2568,10 @@ static int cdns3_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
- 		struct cdns3_request *priv_req;
- 
- 		zlp_request = cdns3_gadget_ep_alloc_request(ep, GFP_ATOMIC);
-+		if (!zlp_request) {
-+			ret = -ENOMEM;
-+			goto err;
-+		}
- 		zlp_request->buf = priv_dev->zlp_buf;
- 		zlp_request->length = 0;
- 
-@@ -2578,7 +2582,7 @@ static int cdns3_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
- 			priv_ep->name);
- 		ret = __cdns3_gadget_ep_queue(ep, zlp_request, gfp_flags);
- 	}
--
-+err:
- 	spin_unlock_irqrestore(&priv_dev->lock, flags);
- 	return ret;
- }
--- 
-2.7.4
-
+-Mathias
