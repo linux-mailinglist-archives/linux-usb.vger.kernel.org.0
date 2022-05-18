@@ -2,111 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D1852BEE8
-	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 18:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771A752C0B4
+	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 19:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239301AbiERPa3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 May 2022 11:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36958 "EHLO
+        id S240342AbiERQgw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 May 2022 12:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235589AbiERPa2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 11:30:28 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91ED1A29D3;
-        Wed, 18 May 2022 08:30:27 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id i19so4498274eja.11;
-        Wed, 18 May 2022 08:30:27 -0700 (PDT)
+        with ESMTP id S240394AbiERQgD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 12:36:03 -0400
+X-Greylist: delayed 30093 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 May 2022 09:35:55 PDT
+Received: from zg8tmja5ljk3lje4ms43mwaa.icoremail.net (zg8tmja5ljk3lje4ms43mwaa.icoremail.net [209.97.181.73])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id A9901F0F;
+        Wed, 18 May 2022 09:35:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=eIwb4I0AwekwEpYMZmVGy6yg88acm8K/xMMngQQs0ts=;
-        b=BDVWzBwgW8nUV9ufnXuwBYEi7IYd+UCbdLMt8V1mSIrGR1YwWGZGmM8dmCh90ssZrU
-         tLT6BPrKtp/nRHm7BSf7zDX5nTwZIuPTT26KXiL/oo6RklIpiCNyVVDxaWeOMGCguOGk
-         X5w/Z+eQdJAG4n9rHESqnQjY2a2i7U5omRmm6qIsVOeggtTLKmFaDRWqrdGhfr/rZPUW
-         7Z4HjRXH+9tly+0Rk3je8nAuG62qp0OBZTWoTJFJFEuG97Y0ibV5nL/Oh0K41ppWXFZn
-         OpwOc96AX3ec2v1+f0lhbrB3jJltt9oEyf3VGgEn7Kn8u4mM+0ATVk1VVBe16AYBqTlN
-         9zeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=eIwb4I0AwekwEpYMZmVGy6yg88acm8K/xMMngQQs0ts=;
-        b=e8OeS4G+tvrtFkftWGPblqohecrOcQjxax+Oy34K7LBrhZKqYm+G/YzcaRBLrnAclN
-         8SNDRoCwEtvaz7QdzFyoJc7b/uW9Ic9DGWAOdhuajtJzAgW4/bMtJH6523fKFOoTooNj
-         4puUurqqiBoUwR88YjT6BXImv16Hp/chdrOpoi0oDGYkduMyFjHUdmpgEhbZHuklS6cU
-         lsKsD6SPdvoAZpwXgtEif3yZqy/2oO7baPyw+q3TBS5zuf1fPYNZxrdJawD6hcvUt+uA
-         t2hU66OXmL4J4CaosRl4m0gtALsWcM0WOW9I4EtyOQzA/TIrf0EDy176nI6XcjEgT52n
-         3hyQ==
-X-Gm-Message-State: AOAM532a0TXzlAJ5/pVIfBH8TqyacNfvkTYybspniKPJTVaaHs68oYQe
-        7ZV9pveMiaUti0k5Erw5wKJ3wdy5Hr1vqLQU5IX7G0PZB5o7VQ==
-X-Google-Smtp-Source: ABdhPJxsi9nMEKiVYaazPPhTBmzUAFFAp90WptYrLpDKLLw0lqq05xSIfgvppNf/eoYKuFksNbhOl9iOjrJAexnpfNc=
-X-Received: by 2002:a17:906:a219:b0:6e4:86a3:44ea with SMTP id
- r25-20020a170906a21900b006e486a344eamr120040ejy.385.1652887826262; Wed, 18
- May 2022 08:30:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220518024347.213402-1-lizhengyu3@huawei.com>
-In-Reply-To: <20220518024347.213402-1-lizhengyu3@huawei.com>
-From:   Dmitry Baryshkov <dbaryshkov@gmail.com>
-Date:   Wed, 18 May 2022 18:30:15 +0300
-Message-ID: <CALT56yO_ek55BGX4cKuTim2gWwQp7EXUFyh332MPYHPdi7xEWw@mail.gmail.com>
-Subject: Re: [PATCH -next] usb: host: ohci-tmio: Remove redundant if statement
-To:     Li Zhengyu <lizhengyu3@huawei.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id; bh=3KgQ3zrN3LBLM7gFu4d9St4sYVmP9yxCPwwUUX7EJ3A=; b=L
+        l7yuLxSZ5EP3U4aUM86tvoyS8fQv4Yd9snjAO1A5IDnm2qLlMyJTX9UM44Vv4o/u
+        OlkNp7qACnO1zBb3DGkn/jWf9W+5CdTnYUuPi6Jgez7PoblzyWG9X9VbN8xISX8j
+        rcn95n7/uyCHtkhcPTS1Sd13A2FbTTMDQkPvpQ0gZk=
+Received: from localhost (unknown [10.129.21.144])
+        by front02 (Coremail) with SMTP id 54FpogDn7nphIIVihK+CBg--.61907S2;
+        Thu, 19 May 2022 00:35:46 +0800 (CST)
+From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
+To:     pawell@cadence.com, gregkh@linuxfoundation.org, peter.chen@nxp.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fuyq@stu.pku.edu.cn, Yongzhi Liu <lyz_cs@pku.edu.cn>
+Subject: [PATCH] usb: cdnsp:  Fix potential dereference of NULL pointer
+Date:   Wed, 18 May 2022 09:35:43 -0700
+Message-Id: <1652891743-110930-1-git-send-email-lyz_cs@pku.edu.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: 54FpogDn7nphIIVihK+CBg--.61907S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7JF45AFWxZF47GrWrAw13Jwb_yoWfXFX_Gw
+        4ruFy7tF1agFy7Aw18Cr9xWrWjkw1qvF4kXa1Igw43CFy7ur1kZryxXr4kJF1xZ3yUKr1D
+        KFyYk398uF1kAjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbx8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
+        87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4
+        CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
+        Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
+        0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48J
+        MxAIw28IcVCjz48v1sIEY20_Kr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
+        DUUUUU=
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEJBlPy7vIULQAOsH
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=D1=81=D1=80, 18 =D0=BC=D0=B0=D1=8F 2022 =D0=B3. =D0=B2 05:45, Li Zhengyu <=
-lizhengyu3@huawei.com>:
->
-> (ret =3D=3D 0) is true when (ret) is false, so remove it.
-> Also remove unreachable code.
->
-> Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
-> ---
->  drivers/usb/host/ohci-tmio.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
->
-> diff --git a/drivers/usb/host/ohci-tmio.c b/drivers/usb/host/ohci-tmio.c
-> index 49539b9f0e94..6bcb0cb53f7c 100644
-> --- a/drivers/usb/host/ohci-tmio.c
-> +++ b/drivers/usb/host/ohci-tmio.c
-> @@ -243,12 +243,8 @@ static int ohci_hcd_tmio_drv_probe(struct platform_d=
-evice *dev)
->         ret =3D usb_add_hcd(hcd, irq, 0);
->         if (ret)
->                 goto err_add_hcd;
-> -
->         device_wakeup_enable(hcd->self.controller);
+The return value of cdnsp_get_transfer_ring()
+needs to be checked to avoid use of NULL pointer
+in case of an acquisition failure.
 
-I think the proper patch would be to check the return value of
-device_wakeup_enable(), so NAK.
+Fixes: 3d8290455 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
 
-> -       if (ret =3D=3D 0)
-> -               return ret;
-> -
-> -       usb_remove_hcd(hcd);
-> +       return ret;
->
->  err_add_hcd:
->         tmio_stop_hc(dev);
-> --
-> 2.17.1
->
+Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+---
+ drivers/usb/cdns3/cdnsp-ring.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+index 1b14384..9f206b9 100644
+--- a/drivers/usb/cdns3/cdnsp-ring.c
++++ b/drivers/usb/cdns3/cdnsp-ring.c
+@@ -655,6 +655,8 @@ static int cdnsp_cmd_set_deq(struct cdnsp_device *pdev,
+ 	 * to reflect the new position.
+ 	 */
+ 	ep_ring = cdnsp_get_transfer_ring(pdev, pep, deq_state->stream_id);
++	if (!ep_ring)
++		return -EINVAL;
+ 
+ 	if (cdnsp_trb_is_link(ep_ring->dequeue)) {
+ 		ep_ring->deq_seg = ep_ring->deq_seg->next;
+-- 
+2.7.4
 
---=20
-With best wishes
-Dmitry
