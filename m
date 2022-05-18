@@ -2,86 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0B252C227
-	for <lists+linux-usb@lfdr.de>; Wed, 18 May 2022 20:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CC152C5F4
+	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 00:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234028AbiERSNY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 May 2022 14:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
+        id S229681AbiERWGZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 May 2022 18:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234057AbiERSNW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 14:13:22 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF4416A246;
-        Wed, 18 May 2022 11:13:21 -0700 (PDT)
+        with ESMTP id S229995AbiERWGA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 18:06:00 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F386B1666A5
+        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 15:04:16 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id y41so3358227pfw.12
+        for <linux-usb@vger.kernel.org>; Wed, 18 May 2022 15:04:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652897601; x=1684433601;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=2bv8YYEomi2Pw3GsY9fZwzSE3m5nm/FOF4cSfap6sTw=;
-  b=aATq7G4lweGa/bdE0ULybxGQ5s5q4nr8poP9kkWa2rqurfKO8vPQljSN
-   ajgKkHqzsuMVQtKvXt+q3m+vbcutbw9TwIQvlnxoHVkpAU16qay3IM7Os
-   8uFMa8owsEgGQyXStZtVY2KjjlgqFABHcMwQrglAU5AArPEQrdDJhKdlH
-   U=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 May 2022 11:13:21 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 11:13:20 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 18 May 2022 11:13:20 -0700
-Received: from hu-mrana-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 18 May 2022 11:13:20 -0700
-From:   Mayank Rana <quic_mrana@quicinc.com>
-To:     <peter.chen@kernel.org>, <balbi@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <Thinh.Nguyen@synopsys.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, Mayank Rana <quic_mrana@quicinc.com>
-Subject: [PATCH] usb: dwc3: core: Add error log when core soft reset failed
-Date:   Wed, 18 May 2022 11:12:52 -0700
-Message-ID: <1652897572-14461-1-git-send-email-quic_mrana@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/nGLK4xvSVUA2aTskL7KBthCb1HFoB9NWaLdwGSmKHI=;
+        b=BI2RBE7OtfruFWTCNYrgW7SluCI1Rz1x30/zpufzVOuVeQ01dyyAl9KN+supk4ojPw
+         GdvQYhtBojNjCzrclI30qnVPoypBgeo9+SsWAx194EvXhdWjCbQcLBkBIc6pdUknE90J
+         XxrdkfQEZ8oMyivFmEzFxb+kEYZUVIRttm6B4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/nGLK4xvSVUA2aTskL7KBthCb1HFoB9NWaLdwGSmKHI=;
+        b=ZYCjykmSLjSMyZS3hsU3fXCCZrxbr38P786J6iqwE8K6CBlFQc0iEm05UIaagY0Ap+
+         QnRqw2oNz9hV/RLOLdY/6riPVvySbkBzGn/zOXgx+NJvkYn5dP5z3djnRPlWkKPlI4qZ
+         vAbhU9igtLHqMejnCrlaQoMGmPUX9ok3cS1sxBpbfYicMSybcofJH03em0kqDlB0uEBl
+         Wi3N0E96GehbbyuYDZTh/BvVWC05mbSbjOk7sYrqenumHG7gowgDcY37c/ZtNMjrUn75
+         dnoTRQJVemkAkt6B7C8w3KW20F5Pz0MKPEQYUTEB5udq/qHj7apWX43+woqkABXUhkq/
+         UbGg==
+X-Gm-Message-State: AOAM531xuGITFX1l7IOUFoX78NlGVNX2etXhEr6uvrQSCHRbFEbxQTp7
+        lz2u6X2Yl53r6/+xukMgXHi9wA==
+X-Google-Smtp-Source: ABdhPJxXorvF4EPHY4DS+gEC8RdZC65si6o5SpHebhRG0HV11EiT/ZrxUJae2tcLmaUH8cRGnpDoXg==
+X-Received: by 2002:a05:6a00:1145:b0:4f6:3ebc:a79b with SMTP id b5-20020a056a00114500b004f63ebca79bmr1609722pfm.41.1652911456421;
+        Wed, 18 May 2022 15:04:16 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:620e:26da:4317:c2ee])
+        by smtp.gmail.com with UTF8SMTPSA id p123-20020a622981000000b0051811c2aa89sm2407750pfp.196.2022.05.18.15.04.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 15:04:15 -0700 (PDT)
+From:   Brian Norris <briannorris@chromium.org>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Dmitry Torokhov <dtor@chromium.org>,
+        linux-usb@vger.kernel.org, Doug Anderson <dianders@chromium.org>,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH] usb: Probe EHCI, OHCI controllers asynchronously
+Date:   Wed, 18 May 2022 15:02:51 -0700
+Message-Id: <20220518150150.1.Ie8ea0e945a9c15066237014be219eed60066d493@changeid>
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DWC3 controller soft reset is important operation for USB functionality.
-In case when it fails, currently there is no failure log. Hence add
-error log when core soft reset failed.
+From: Dmitry Torokhov <dtor@chromium.org>
 
-Signed-off-by: Mayank Rana <quic_mrana@quicinc.com>
+initcall_debug shows that OHCI controllers take ~60ms to probe on
+Rockchip RK3399 systems:
+
+  probe of fe3a0000.usb returned 1 after 58941 usecs
+
+A few of these can add up to waste non-trivial amounts of time at boot.
+
+These host controllers don't provide resources to other drivers, so
+this shouldn't contribute to exposing race conditions.
+
+Chrome OS kernels have carried this patch on some systems for a while
+without issues. Similar patches have been merged for a variety of (e)MMC
+host controllers for similar reasons.
+
+Signed-off-by: Dmitry Torokhov <dtor@chromium.org>
+[Brian: rewrote commit message, refreshed, but retained dtor's original
+ authorship ]
+Signed-off-by: Brian Norris <briannorris@chromium.org>
 ---
- drivers/usb/dwc3/core.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index d28cd1a..8b87ff6 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -297,6 +297,7 @@ int dwc3_core_soft_reset(struct dwc3 *dwc)
- 			udelay(1);
- 	} while (--retries);
+ drivers/usb/host/ehci-platform.c | 1 +
+ drivers/usb/host/ohci-platform.c | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
+index 1115431a255d..f343967443e2 100644
+--- a/drivers/usb/host/ehci-platform.c
++++ b/drivers/usb/host/ehci-platform.c
+@@ -518,6 +518,7 @@ static struct platform_driver ehci_platform_driver = {
+ 		.pm	= pm_ptr(&ehci_platform_pm_ops),
+ 		.of_match_table = vt8500_ehci_ids,
+ 		.acpi_match_table = ACPI_PTR(ehci_acpi_match),
++		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+ 	}
+ };
  
-+	dev_warn(dwc->dev, "DWC3 controller soft reset failed.\n");
- 	return -ETIMEDOUT;
+diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+index 4a8456f12a73..47dfbfe9e519 100644
+--- a/drivers/usb/host/ohci-platform.c
++++ b/drivers/usb/host/ohci-platform.c
+@@ -334,6 +334,7 @@ static struct platform_driver ohci_platform_driver = {
+ 		.name	= "ohci-platform",
+ 		.pm	= &ohci_platform_pm_ops,
+ 		.of_match_table = ohci_platform_ids,
++		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+ 	}
+ };
  
- done:
 -- 
-2.7.4
+2.36.1.124.g0e6072fb45-goog
 
