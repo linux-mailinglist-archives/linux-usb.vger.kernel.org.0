@@ -2,44 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB6852D9A6
-	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 17:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3C752D9AD
+	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 18:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240890AbiESP7y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 May 2022 11:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
+        id S241049AbiESQBP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 May 2022 12:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233730AbiESP7x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 11:59:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD6F9E9E2;
-        Thu, 19 May 2022 08:59:52 -0700 (PDT)
+        with ESMTP id S241686AbiESQBJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 12:01:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9CAD13D
+        for <linux-usb@vger.kernel.org>; Thu, 19 May 2022 09:01:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7B67FCE25D9;
-        Thu, 19 May 2022 15:59:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6937EC385AA;
-        Thu, 19 May 2022 15:59:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D844CB82552
+        for <linux-usb@vger.kernel.org>; Thu, 19 May 2022 16:01:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 458A2C385AA;
+        Thu, 19 May 2022 16:01:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652975988;
-        bh=8nwqZ3h0TtcSyftFuwGKZD0+/DFI3JpFngKKV0LgKSI=;
+        s=korg; t=1652976065;
+        bh=iX/WwDNOjrc6Ju8JpV/Kkym2Clp0YJgF4/KbyDjYIWU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jz4f0sdeb4IlP9nc8naFEP1UTMKeNsxRSbr5DOb22WyLxuRzqzU2D3WLJvAuiHGy1
-         /08FBhmSb8OyavxHwzaTnShmLoa8exmJACyIlDO4DP6a6HwXcdU6P3hoz0KBrMbo/z
-         8LoWgIFQHkUItaxr6TTJX4elRERwMyd4d8iW7dcE=
-Date:   Thu, 19 May 2022 17:59:46 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kushagra Verma <kushagra765@outlook.com>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB / dwc3: remove the use of -ENOSYS from core.c
-Message-ID: <YoZpcqDCwoXIvI5q@kroah.com>
-References: <HK0PR01MB280106E1D78EF51A5B8ED8BFF8CE9@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
+        b=OxxsdGAojUv7bs8BAP3nuvjGjgHiu8hcb6epZ7hvmhS/r/NNxVD1hVRL0o7ez5cug
+         O6GlVrhMX+HAQA61TQ5IqJUsIA+5aoPsOIvZJ8x2DMiZUvLCOyOi42yNJ/pa+z5iXu
+         Htv4vWdFTmxLVhYCKCsd7f7uxA+ihTZswDbRsBb4=
+Date:   Thu, 19 May 2022 18:00:43 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] Thunderbolt/USB4 changes for v5.19 merge window
+Message-ID: <YoZpq2m06eWE8JoQ@kroah.com>
+References: <YoN2YpxxWTNC6C1D@lahna>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <HK0PR01MB280106E1D78EF51A5B8ED8BFF8CE9@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
+In-Reply-To: <YoN2YpxxWTNC6C1D@lahna>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -50,33 +53,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 17, 2022 at 08:22:00PM +0530, Kushagra Verma wrote:
-> This patch removes the use of -ENOSYS as it is used when users try to call a
-> syscall that doesn't exist. So, we don't need to check if 'ret == -ENOSYS'.
-
-ENOSYS is also used internally in the kernel for other things.
-
+On Tue, May 17, 2022 at 01:18:10PM +0300, Mika Westerberg wrote:
+> Hi Greg,
 > 
-> Signed-off-by: Kushagra Verma <kushagra765@outlook.com>
-> ---
->  drivers/usb/dwc3/core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 > 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index c78205c5e19f..3c1a877d5183 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1283,7 +1283,7 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
->  	dwc->usb2_generic_phy = devm_phy_get(dev, "usb2-phy");
->  	if (IS_ERR(dwc->usb2_generic_phy)) {
->  		ret = PTR_ERR(dwc->usb2_generic_phy);
-> -		if (ret == -ENOSYS || ret == -ENODEV)
-> +		if (ret == -ENODEV)
+>   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.19-rc1
 
-Did you validate that no callers can ever set this to ENOSYS?
-
-Why was this added in the first place?  What commit added it?
-
-thanks,
+Pulled and pushed out, thanks,
 
 greg k-h
