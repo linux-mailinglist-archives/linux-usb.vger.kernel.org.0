@@ -2,150 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB36452D74A
-	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 17:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D7052D77D
+	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 17:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240765AbiESPTX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 May 2022 11:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
+        id S240925AbiESP1Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 May 2022 11:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240756AbiESPTU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 11:19:20 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01olkn2080.outbound.protection.outlook.com [40.92.107.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB36D65434;
-        Thu, 19 May 2022 08:19:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OARyiAc73FyllKsEtX8kn7Sr+l4WKXheMb0OJLHUMXOmcjipdRNHnRDfW0oOfqNlsIrVY5tm4+pjmXiy+fGA9J/5Pjh+TAq21ZFcr87ppDBABCYUPkZXo59N4O4Ci1UjABl6n0u8vresKB1yILw9wKVfaqj8W+mB6Jh7sH1kR0zj4SUDcaRWJALXxuXEeGobd1OZE7dgB8FY94ZWdEpW23pS4s2+/Ohd7lzJgchVZ2rA74yRSuOvyCKI6AbiRShSB6w62J3v4CUJQnc+fEqw0IryXmXO2w6O8Y9hWDGxzDpG6IR9ZICdqfBDIlaqrL8JBgNEgLKsSQ9caYBHYousdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M+te9G9Xg9Msijh3yMdbEm0F4ZljIQ+AP4q9dHpEh7k=;
- b=UlZOSMDU/ItYFhlXqS49qOMQ/uJ3kBoPu3OPrazjGlGvJt3TDpEPqMYP8BvQAsDxJkBV5IBmj4dpZHjgOzxrEuggWAqPCGn58Pr/+IExNC2s2TiyA3CkgBjJnWTlpmI0mboXuKXDvxHpKZKQBAXwlFcnbHBrTTcJXex7vPCU0zZgEGM5L5TNgOPDaFHez1h7P7OQKapMMNODuX3/rczyjB3rqWcYx+8syF7Iv1Q3OYof4cv4/hvb2yTNPebQImdPNxfvjcrJo1xLq3IWAjzu7/ZMnMQCUhz2F1NeIxPpTCZKPP9UJ2B6IzH/2kwyIwr4WgcRcgCO6joQ1LuLjo7cfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M+te9G9Xg9Msijh3yMdbEm0F4ZljIQ+AP4q9dHpEh7k=;
- b=P7uTxjKLU4nWvRyPX8o/YUQzD/N0vEltcAu4qgiIL1dR2+V8Gpr16DbuezXqSDruZGbClZLCJYk6xpkL2q597NxkV08obsR/856AK4LQ2uxXoT33+aIRFsr4EGLfJ67naSWVLcaErkkDlgoExMgN+SzWTMNl5/wOYKUrLyEM8XygDWw7MfAQjO1J/LV0nOY9WcaCFqx0vGAi8RZlB3FjC+tAPeR29iCR68Z0wnB7nHTj93HvNuhzKGGYjR9bTRRZ5dn8GkIlrlSRW7Cp7r3IcTDLIxaF8KSWve05BnL3e8qr5B3t/tRMuboOic+m5Lj6vBqmpe64XKKuxfJYA1Qqig==
-Received: from HK0PR01MB2801.apcprd01.prod.exchangelabs.com
- (2603:1096:203:95::22) by SG2PR01MB2887.apcprd01.prod.exchangelabs.com
- (2603:1096:4:3e::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Thu, 19 May
- 2022 15:19:16 +0000
-Received: from HK0PR01MB2801.apcprd01.prod.exchangelabs.com
- ([fe80::3022:ac4d:5d89:8c7c]) by HK0PR01MB2801.apcprd01.prod.exchangelabs.com
- ([fe80::3022:ac4d:5d89:8c7c%5]) with mapi id 15.20.5273.014; Thu, 19 May 2022
- 15:19:16 +0000
-Message-ID: <HK0PR01MB2801E37A01C96911653AA65DF8D09@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
-Subject: [PATCH 3/3] USB / dwc3: Fix typos in Kconfig
-From:   Kushagra Verma <kushagra765@outlook.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 19 May 2022 20:49:10 +0530
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 
-X-TMN:  [5geVuGTe+HaWZ1csIa1z3OtIlQ91bjZV/5bFOyam+NhUbp2LXVWstiE0W/RyC6jxPd1Gjd2a584=]
-X-ClientProxiedBy: BM1PR0101CA0048.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:b00:1a::34) To HK0PR01MB2801.apcprd01.prod.exchangelabs.com
- (2603:1096:203:95::22)
-X-Microsoft-Original-Message-ID: <692366c1e30602d141b201718a665546a16f9e57.camel@outlook.com>
+        with ESMTP id S240342AbiESP1W (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 11:27:22 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F2B6FD3D;
+        Thu, 19 May 2022 08:27:21 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id u7so5949855ljd.11;
+        Thu, 19 May 2022 08:27:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=06m0spO/zzT7LU0U7Sp7nFMRUJ5YbpK+1tdhabMSTrg=;
+        b=Av2O2dirj8NHt4uyVji55uosaO+MsQVVdCzMtcCvghVkDNcAvvIUFYCAEvlowBuajK
+         G0oQoe8zLVSV5qD/9QTgpgALw6w0lU+2WQlKsfB2/vJv/qSdWBFKjjTgGAbrttWCvSmo
+         9pIFuhzbzA4lSVIkuJSLMN4rtoZorDILjvT/sewomISmLSxIIZKnraQ+dfbtZVMTRtPa
+         YDyBVQcP8zYVLfkhYe2++N/9kbnhTLW2AYIi4NnfpCy1SCaM+nV0wGpYrZ9ZmP29Trdm
+         kJT8rN7M4bDd3RWuP41mEZZwJOVg59QOBs6rqyk6wdf50Qta+UTQmWKFbNDUkOeXV0GT
+         cdGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=06m0spO/zzT7LU0U7Sp7nFMRUJ5YbpK+1tdhabMSTrg=;
+        b=PLS8hECaTyI13M3LU+JYeK+qgndW1MPsr2ck8yzhIYKx0QQcIzW0y9TncAeda4M5VX
+         Nqo1jBwGLJXHlZeZVGQLh+821WePsqXe+ud5zZPddm16dRQewEnEvgiQxOH9umpsCQne
+         wX9rUmMvX4RVdZ+PKMo0rhpo85q8/uqfWxSUWEDQxQQyd+N12zchuVcNogHux62+Qwh3
+         tKXqBYx/jM9GzaViSkYBohSUgGAMLWf2um1cjJl262S2GHghQztNMoii3lZ3s/HesseP
+         K3wup0BHENlGEmwXuM6JPsZfXPEntzKVV6kh2VVJp1A7EEgPW6Jv4K00p7IfgXfEEHm3
+         pbNw==
+X-Gm-Message-State: AOAM531mCHHMgtCbzfrRg7tuXRMVxMtDWJ65RtMtFd8ir16T6XuG3KMF
+        xjgy7k1VnYDj/5UbHXYx2Yw=
+X-Google-Smtp-Source: ABdhPJycQoMAMgwtFAuDUm9PnuToJ4JHoO7595vkZwzeXp+GxefghHeI2b/2Od+cztFaKe8TnAHULg==
+X-Received: by 2002:a2e:b5d1:0:b0:24f:331d:f9b6 with SMTP id g17-20020a2eb5d1000000b0024f331df9b6mr2988533ljn.302.1652974039835;
+        Thu, 19 May 2022 08:27:19 -0700 (PDT)
+Received: from [192.168.0.110] ([217.115.104.30])
+        by smtp.gmail.com with ESMTPSA id d3-20020a05651221c300b0047255d21155sm318812lft.132.2022.05.19.08.27.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 08:27:19 -0700 (PDT)
+Message-ID: <3da73dd6-24c3-1870-f0bc-f8040826576b@gmail.com>
+Date:   Thu, 19 May 2022 18:27:17 +0300
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d59d0d53-57ac-4e23-698f-08da39aaefdc
-X-MS-TrafficTypeDiagnostic: SG2PR01MB2887:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lQaspQ9krHdy9Xuja/yjFt2DxHFqbotsVGTEoClNz9YNIInfwa8bt77vAyce/GaTPwnLN8NuwhCzGorLrdsvMOS0cpMt/wcse6QoRDB70QCnO/jojJiEWJSpRPja39Naq4rx5ZHygCsGuPv0R+as7jFLSyUKe55F9oIIbg1wb/4ME+LUkAoTHQwYcmGClIvoQ7dvDyQT/dIPPm6xckXzSLpcWBKRioJE0KEgVCd/83Q4sbWhGsCiVhrnUhBbF4ThlmkMV/tqfHvW+LFjeILHXO12yyeIrz9PkHUIu+qfinxCDv4V0kaaHVfvL3WNXTZEGrSzp4e+s9PpfOo7eKxNQSZghdeBMs20hQML8zUKXHUwWagUJWStljLG4jB7mx5558pnU5psJ3UDafKfi6ks7UkHmC5l71KaoO/rf3EXxbDsSFdZ+tj5HtaEPwze4xPjvfT+OLmgVFqYZ+B8IAmPgr+xZywS9p2FvRGsc1RD2iMrZDJi2RTrJchvglOpPmQrvv2FYSo8OOH+Qw+s/60tGh6Puh6wWDdZKDR3k+MDXpdkILoa8kpjZAxq6r48eP+Zo8ZZbRshui9d2k+XgI+4qQ==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?US82ZDJtNndkbGRxVDZTQlJMTzFnbzJ1Uk5TYlJyZDZqcHJ0MmQ3RUtHYlpB?=
- =?utf-8?B?TTR6YldGazIvZkkySDNHQi9OYUZMVXVBbEpSNUNqRzJnMjBLNGdLSTNvS0d2?=
- =?utf-8?B?TXZaL2VMQUV1VWdiVFEwbkE3am9zdkdWelVRYThac2NEbXF6TXl5YytjbDBY?=
- =?utf-8?B?VTdqSGYrY0x1eDk5aHRYRWoxbmhZd1ZTNjFCcGIvM2hMUnhwRzdEVkZoM2cx?=
- =?utf-8?B?aWZ1b25TUEtPU1pEaTFmR2lveW1HQTZ3ek1SZ1YvV1BXZ0s4bHFoR21YdzBy?=
- =?utf-8?B?MHZJMWYzb1FUbERTYmFrbCszSDNBZ3VYTXpVYnR4S0lRa0o1N3FvYjliM3I3?=
- =?utf-8?B?ZkVUUkZnbTZmNnZHUWRQZFg4Kzh4S21pRkM2MmVSQjFBdDBaOUhKQVFydGVs?=
- =?utf-8?B?a0Q2b2tIYTRvM01kVzFiQkhxWlZNRlFmN3BhOEFSejFNZElUNGNsOG5FbDUr?=
- =?utf-8?B?R00zSHRHOWlyc2VLYkhWR01aRE55Qm1NRW9GQjk0RWd3UHM1NDYwZUVtUkxB?=
- =?utf-8?B?dHpiYzU2ZFJMcFJUSUVFNGRqZkRXcGVzTFFLcUoyWitEUTJMWmR2cGhKTmNs?=
- =?utf-8?B?Wk1GVnd0ZnFRUzE3a1FOa2I2djEwN1ZLZlhjd05RdUdIR2lvV1VwS2dyWFlS?=
- =?utf-8?B?b1M3a21YMm1TT2FOSjdnaVFRN1RUSmMzVFc3S1I4OFgrY0FhMW13Y3o1cHdu?=
- =?utf-8?B?RERNczE4YXp5WVVNTGFLeFJaQ3I2OFdsbVYxNGFlUk9xUkRZVXE1ZVRHcHB1?=
- =?utf-8?B?RUU0REI1MEhiYngyNCtSNFhibWNSSHJMclk4aTJkdU9xRGsvLzZKRzVrQktn?=
- =?utf-8?B?U1pSUy9CdjQzQkJCU09sa1A5WkUzS0hpTnhlcnU3TXRUSmE3aXRqQ2h2Nzk4?=
- =?utf-8?B?OERoUmpQOVdIcUVZaU1CVzNvOXJSenhDOVRTM1d4enBvMFZwcDhtVnFVS2dz?=
- =?utf-8?B?NDFiQ3FUditZaW9rT1JDRUJVR25aR3d4K3YzRjJPVFNLREVkQVZHZWxueXVX?=
- =?utf-8?B?aUhiOXNvWVlGaGg2SWcwRkZzSGNpaGpEQU82UlNyMmRBdDN5T0lLeGR2MnZ1?=
- =?utf-8?B?YjJVNXpvZUszalBZRWFlN3FPaVlzTGtRRnNjNU56b0V2ZjJQbmlQWUFHemdE?=
- =?utf-8?B?b0NTSGtKSHZEWnNVekFhZ2hjcmR2T1BKVERmaU8rLzZrOHVTcUVzTHM0TWkw?=
- =?utf-8?B?eFNaZmNLSDEyOVZuUEZXRHd1S0hKMi84TnlYN0FDMEJLaW1BbVFyYXdRZWdZ?=
- =?utf-8?B?dWgzdnJPSWtqekthckxleE80TDJVVSszU1EvM2l3TmJzSjFnUUcyYmoxN2pS?=
- =?utf-8?B?ZE5FU3BIekVTZGRDak9WNmNZUk9rcmkyd2JOeEMzL0NJSzdCU21XeTMxMkV1?=
- =?utf-8?B?YXRHdFpsK3RPS1F4cUR5aU9DenJlbkdDVGtybXAvUFFodEsveU9tRnU4cWdq?=
- =?utf-8?B?WEI0d3VMQ25ZbTZSb2xqbWNIY1V4WTFiVXN1VTVyaHgzeFFyR2RBU1dRenNW?=
- =?utf-8?B?VzNhN29rUFpza0czSXhBR1N3dXRCTEtSMHNTUmc2VS9OdmtVZVJYeUszamVo?=
- =?utf-8?B?NnIrajNvd2lSMjBXNzBkQVo4YTBkeENyS21QTmFSSjVwUEdWQjk5WUE4YlBL?=
- =?utf-8?B?dmQzL3FQbGhjUzBLdmtLNk5Db0dTUEp4WG40dmhNcFUxZTY3MTV2cXpJaUFS?=
- =?utf-8?B?WGZqeXJ1aHdQN0F6UEFoUmNhWXQydE9pVWU2MXQrczdsWFR5bnllQlNkTWhQ?=
- =?utf-8?B?amtGTUs2dGI0SWFCSUFyUnZMS1dTOExhaUVsQlgzT2UvSnJYRzJ3cHF6YlV0?=
- =?utf-8?B?M3lSK2kwWHFXcDZUYXVKNnovUjFZRHdDWkRFeE9PVDRjVGg1eU5GenVaV0RQ?=
- =?utf-8?B?RUR4SGpyQ2Q1Nmlsbng0RGdrUFFRL3VDWVYxaGQrS09uZlM3QW56UFZROFBx?=
- =?utf-8?B?Q2lORW1wU0dZalhtdU9YNktZUFQ5Q0RCMTY0RUEyeGtHMkxnR0d3UzltR09V?=
- =?utf-8?B?emNNeFJ0U1dKU2RYVkI2SGtIaEtGNC9LbGRmc1UxWCtBNkNYRDN0YzdGSk1W?=
- =?utf-8?Q?LJMdEo?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d59d0d53-57ac-4e23-698f-08da39aaefdc
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR01MB2801.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 15:19:15.9644
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR01MB2887
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+From:   Dmytro Bagrii <dimich.dmb@gmail.com>
+Subject: Re: [PATCH] usb: core: Call disconnect() only if it is provided by
+ driver
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220519132900.4392-1-dimich.dmb@gmail.com>
+ <YoZKFrzirES9+f39@kroah.com>
+Content-Language: en-US-large
+In-Reply-To: <YoZKFrzirES9+f39@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch fixes the following 2 typos in Kconfig:
-	1. is -> as
-	2. progammed -> programmed
+On 19.05.22 16:45, Greg KH wrote:
+> On Thu, May 19, 2022 at 04:29:00PM +0300, Dmytro Bagrii wrote:
+>> A driver may use devres allocations. Disconnect handler is not needed in
+>> this case. Allow such driver to leave .disconnect field uninitialized in
+>> struct usb_driver instead of providing empty stub function.
+>>
+>> Signed-off-by: Dmytro Bagrii <dimich.dmb@gmail.com>
+>> ---
+>>  drivers/usb/core/driver.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+>> index 355ed33a2179..d7fe440b033c 100644
+>> --- a/drivers/usb/core/driver.c
+>> +++ b/drivers/usb/core/driver.c
+>> @@ -455,7 +455,8 @@ static int usb_unbind_interface(struct device *dev)
+>>  	if (!driver->soft_unbind || udev->state == USB_STATE_NOTATTACHED)
+>>  		usb_disable_interface(udev, intf, false);
+>>  
+>> -	driver->disconnect(intf);
+>> +	if (driver->disconnect)
+>> +		driver->disconnect(intf);
+>>  
+>>  	/* Free streams */
+>>  	for (i = 0, j = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
+>> -- 
+>> 2.36.1
+>>
+> 
+> What in-kernel driver has this issue and does not have a disconnect
+> callback?
 
-Signed-off-by: Kushagra Verma <kushagra765@outlook.com>
----
- drivers/usb/dwc3/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I don't see such in-kernel USB drivers yet. I develop an out-of-tree driver
+and use devres for all initialization including controllers registration
+etc. For actions which aren't available with devm_*, e.g. URB allocation i
+use devm_add_action_or_reset() for deinit. I realized my _disconnect()
+function is empty, nothing to do there. All deinitialization is done during
+usb interface release. If i leave .disconnect field uninitialized in struct
+usb_driver, obviously i get NULL pointer dereference bug. Thus i decided
+that allowing a driver not to provide disconnect() is a good idea, as it is
+done for remove() in SPI and I2C subsystems.
 
-diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-index cd9a734522a7..03ededa86da1 100644
---- a/drivers/usb/dwc3/Kconfig
-+++ b/drivers/usb/dwc3/Kconfig
-@@ -9,7 +9,7 @@ config USB_DWC3
- 	  Say Y or M here if your system has a Dual Role SuperSpeed
- 	  USB controller based on the DesignWare USB3 IP Core.
-=20
--	  If you choose to build this driver is a dynamically linked
-+	  If you choose to build this driver as a dynamically linked
- 	  module, the module will be called dwc3.ko.
-=20
- if USB_DWC3
-@@ -165,7 +165,7 @@ config USB_DWC3_AM62
- 	default USB_DWC3
- 	help
- 	  Support TI's AM62 platforms with DesignWare Core USB3 IP.
--	  The Designware Core USB3 IP is progammed to operate in
-+	  The Designware Core USB3 IP is programmed to operate in
- 	  in USB 2.0 mode only.
- 	  Say 'Y' or 'M' here if you have one such device
- endif
---=20
-2.36.1
+-- 
+Best Regards,
+Dmytro Bagrii.
 
 
