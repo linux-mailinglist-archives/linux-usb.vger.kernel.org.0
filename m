@@ -2,94 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6CC52D3F4
-	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 15:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6BD052D4B6
+	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 15:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238761AbiESN3X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 May 2022 09:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        id S233513AbiESNq3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 May 2022 09:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236430AbiESN3W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 09:29:22 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E2CB0419;
-        Thu, 19 May 2022 06:29:21 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id u7so5529209ljd.11;
-        Thu, 19 May 2022 06:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KBTQmfyssGIfGVPdqVAcjZchb4O4iswNrB7k1hlCZgE=;
-        b=KxOheiMGI4R4OBH2DaUj7ci0hkiF/49kSrsprxpwG2C38neR3pB/+hkQWIbeb89Pa4
-         LVlPNFgFvMoG6CgoqmUl9eCN+990a6OXoefVlyVGuYJ9I7kSuf4sdBXAJXFo3PX8hMFX
-         Hk/ZigYIzFrs/Pk/pz7H1q/BBMswstrwRvA1k9/fqgIQibmAG4FmcY+iB17yAsX2ffd8
-         8rqhOZwRR3uCwjyhFr9glGLm5AmojQZoqqQM+jTnYaUzXm77hZwUwLJhsRXgq4xDNawK
-         9JMfWDTVSatCmqPTd9VwnzctYsKKnJVX9Q5qAx9zrZkdxzt4wBl+rtRGc27JYpuKARgc
-         CW5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KBTQmfyssGIfGVPdqVAcjZchb4O4iswNrB7k1hlCZgE=;
-        b=Hemh55PzDg8pmtITk3mXfQ2eB9WhOsYlZeHqWOMVi17Bp+8rzglYqrctCtB10Bqcfq
-         0zYRpznOQ9O9NXdURPYHYCtPJIlM609LxHlDlnZ6EIvhsu4iJr3CuBoYJcBO43Id37LU
-         e9HJvdEq00CaGP2/TubcWCeW1Tv6C993OglRtg00x6v2rlhL/Tynad52Fi5/pFyxcYcI
-         RbcY5RybWAucN1hdRSrndYRMzksRcUgOmk1fgodM3tV5XiJUNMu/rP8qnT8hrAyg47o8
-         QhssdML4yxfJjX5OMN55ggDzGa9mGr8HcLQRDS4M45cauVFOQxfwtmetzeo0QzXqtHpy
-         NSkA==
-X-Gm-Message-State: AOAM533spYWwIIf9/L+wusRHu6bqIW1wP53tMzCZvC2ch57zmdWwE9iv
-        XlN9sLp7VWm07Ndlzvp9y2o=
-X-Google-Smtp-Source: ABdhPJwjFMM3+aJiSQbZZeqdKcIN79u+MM8Oz5DCfwJyu0GygNK+7dqGLYSNCx1bmIPljx0hp1koCA==
-X-Received: by 2002:a2e:8696:0:b0:253:99e2:ca with SMTP id l22-20020a2e8696000000b0025399e200camr2682093lji.293.1652966959842;
-        Thu, 19 May 2022 06:29:19 -0700 (PDT)
-Received: from dimich.home ([217.115.104.30])
-        by smtp.gmail.com with ESMTPSA id u18-20020a05651220d200b00477c8127e50sm227060lfr.122.2022.05.19.06.29.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 06:29:19 -0700 (PDT)
-From:   Dmytro Bagrii <dimich.dmb@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmytro Bagrii <dimich.dmb@gmail.com>
-Subject: [PATCH] usb: core: Call disconnect() only if it is provided by driver
-Date:   Thu, 19 May 2022 16:29:00 +0300
-Message-Id: <20220519132900.4392-1-dimich.dmb@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S232686AbiESNqT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 09:46:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D77011A16;
+        Thu, 19 May 2022 06:46:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BC49B824B0;
+        Thu, 19 May 2022 13:46:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E800C385AA;
+        Thu, 19 May 2022 13:46:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652967961;
+        bh=yEGOGSMLX8dQcpA1zVM9kxp/1UhqRepO4XsAQyuPweA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AcYRar5CfyXFA1VUI76mkqjjXt7ff7bt8FjS3sYB2B4oBbqmjrOMrcatRYF3VS4Ht
+         qKurhOI66L0ebC7jKgDAqlzaq9rzRLtGIsB1XCI8yAFpZ4y0YQm0013GpRHe/kszd6
+         HcxpZiH9SHwyeuaL9vJK1087ytau4RD9ZKS9nyqg=
+Date:   Thu, 19 May 2022 15:45:58 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dmytro Bagrii <dimich.dmb@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: core: Call disconnect() only if it is provided by
+ driver
+Message-ID: <YoZKFrzirES9+f39@kroah.com>
+References: <20220519132900.4392-1-dimich.dmb@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519132900.4392-1-dimich.dmb@gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A driver may use devres allocations. Disconnect handler is not needed in
-this case. Allow such driver to leave .disconnect field uninitialized in
-struct usb_driver instead of providing empty stub function.
+On Thu, May 19, 2022 at 04:29:00PM +0300, Dmytro Bagrii wrote:
+> A driver may use devres allocations. Disconnect handler is not needed in
+> this case. Allow such driver to leave .disconnect field uninitialized in
+> struct usb_driver instead of providing empty stub function.
+> 
+> Signed-off-by: Dmytro Bagrii <dimich.dmb@gmail.com>
+> ---
+>  drivers/usb/core/driver.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+> index 355ed33a2179..d7fe440b033c 100644
+> --- a/drivers/usb/core/driver.c
+> +++ b/drivers/usb/core/driver.c
+> @@ -455,7 +455,8 @@ static int usb_unbind_interface(struct device *dev)
+>  	if (!driver->soft_unbind || udev->state == USB_STATE_NOTATTACHED)
+>  		usb_disable_interface(udev, intf, false);
+>  
+> -	driver->disconnect(intf);
+> +	if (driver->disconnect)
+> +		driver->disconnect(intf);
+>  
+>  	/* Free streams */
+>  	for (i = 0, j = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
+> -- 
+> 2.36.1
+> 
 
-Signed-off-by: Dmytro Bagrii <dimich.dmb@gmail.com>
----
- drivers/usb/core/driver.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+What in-kernel driver has this issue and does not have a disconnect
+callback?
 
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index 355ed33a2179..d7fe440b033c 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -455,7 +455,8 @@ static int usb_unbind_interface(struct device *dev)
- 	if (!driver->soft_unbind || udev->state == USB_STATE_NOTATTACHED)
- 		usb_disable_interface(udev, intf, false);
- 
--	driver->disconnect(intf);
-+	if (driver->disconnect)
-+		driver->disconnect(intf);
- 
- 	/* Free streams */
- 	for (i = 0, j = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
--- 
-2.36.1
+thanks,
 
+greg k-h
