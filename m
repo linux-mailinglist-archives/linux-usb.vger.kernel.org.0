@@ -2,93 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B41552D09D
-	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 12:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D3D52D291
+	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 14:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbiESKeU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 May 2022 06:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
+        id S235328AbiESMfJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 May 2022 08:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiESKeS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 06:34:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E989F56FA8;
-        Thu, 19 May 2022 03:34:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A6A7B82390;
-        Thu, 19 May 2022 10:34:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC9ADC385AA;
-        Thu, 19 May 2022 10:34:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652956453;
-        bh=F6lMMI9wCT7YEnfx97Rh4IvbWpUerMrAQC7i5+XZHzg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Gsp6LkeWU3bKxfM9+evAMJQEbhaccx7WAas/qFQUx2uoKdez7z8+01aQGrvr4pBHQ
-         kfbBF4NzFCeuaCgkyv/vyAST6IkaweQeDq2ItEwo+mGtZ+oASqRKbAKFJ8iIH6M1ze
-         D9MOqeP3d0BppWUzqI0aTGXRtfiCZc6KwoEw1eLU=
-Date:   Thu, 19 May 2022 12:34:10 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kushagra Verma <kushagra765@outlook.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB / image: Fix spacing issues in
- mdc800_endpoint_equals()
-Message-ID: <YoYdItGTISO4CxHC@kroah.com>
-References: <HK0PR01MB2801F1EE137B9A5196B225D1F8D09@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
+        with ESMTP id S229582AbiESMfJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 08:35:09 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E1FA5A8D;
+        Thu, 19 May 2022 05:35:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652963708; x=1684499708;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=YHAJh3IKGS8Psqr2iNcmsbRkyFCVcMSdEtJ+/KqBN6M=;
+  b=X3enqrBRNE2qqFtm9MEpi363kNIz6E0VlYLkSVHxTpTNJbsza+swMN+o
+   3k9PnARJYs+IZ2v3aiM4eqZoCndzBsVpUg28PveIStzzQqF2TvS0OuVDI
+   LwX0HONnW/bkbcalYKD46mW1DIC1eDzSSpqdckmssE4/R/vBr2MGo02im
+   s=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 19 May 2022 05:35:07 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 05:35:07 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 19 May 2022 05:35:07 -0700
+Received: from hu-harshq-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 19 May 2022 05:35:03 -0700
+From:   Harsh Agarwal <quic_harshq@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, Harsh Agarwal <quic_harshq@quicinc.com>
+Subject: [RFC 0/2] Add support for multiport controller 
+Date:   Thu, 19 May 2022 18:04:53 +0530
+Message-ID: <1652963695-10109-1-git-send-email-quic_harshq@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <HK0PR01MB2801F1EE137B9A5196B225D1F8D09@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 19, 2022 at 02:42:31PM +0530, Kushagra Verma wrote:
-> This patch fixes the following spacing issues in mdc800_endpoint_equals():
-> 	1. (Removed) Space between function name and opening parenthesis.
-> 	2. (Removed) Space between variable and opening and closing
->             parenthesis in the return statement.
-> 	3. (Added) Space between 2 function arguments.
-> 
-> This fixes multiple checkpatch warnings for this function.
-> 
-> Signed-off-by: Kushagra Verma <kushagra765@outlook.com>
-> ---
->  drivers/usb/image/mdc800.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/image/mdc800.c b/drivers/usb/image/mdc800.c
-> index fc0e22cc6fda..dc03e0e54fe0 100644
-> --- a/drivers/usb/image/mdc800.c
-> +++ b/drivers/usb/image/mdc800.c
-> @@ -220,12 +220,12 @@ static struct mdc800_data* mdc800;
->  	The USB Part of the driver
->  ****************************************************************************/
->  
-> -static int mdc800_endpoint_equals (struct usb_endpoint_descriptor *a,struct usb_endpoint_descriptor *b)
-> +static int mdc800_endpoint_equals(struct usb_endpoint_descriptor *a, struct usb_endpoint_descriptor *b)
->  {
->  	return (
-> -		   ( a->bEndpointAddress == b->bEndpointAddress )
-> -		&& ( a->bmAttributes     == b->bmAttributes     )
-> -		&& ( a->wMaxPacketSize   == b->wMaxPacketSize   )
-> +		   (a->bEndpointAddress == b->bEndpointAddress)
-> +		&& (a->bmAttributes     == b->bmAttributes)
-> +		&& (a->wMaxPacketSize   == b->wMaxPacketSize)
+Currently the DWC3 driver supports only single port controller which 
+requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
+DWC3 controller with multiple ports that can operate in host mode. Some of
+the port supports both SS+HS and other port supports only HS mode.
 
-As you can see, the original alignments was done for the specific reason
-of making this "pretty".  Your changes really do not help anything here,
-which is the primary reason to make checkpatch cleanup changes.
+This change refactors the PHY logic to support multiport controller. The 
+patches have gone through basic sanity only.
 
-So I'll leave this alone, sorry.
+For any multiport controller we would define a new node "multiport" inside
+dwc3 and then add subsequent "mport" nodes inside it for individual ports
+that it supports. Now each individual "mport" defines the PHYs that it 
+supports.
 
-thanks,
+Looking for comments/feedback on the device tree bindings. Once the 
+bindings are locked, we can further factor the code.
 
-greg k-h
+e.g.
+Consider a Dual port controller where each port supports HS+SS 
+
+multiport {
+	mp_1: mport@1 {
+		usb-phys = <usb2_phy0>, <usb3_phy0>;
+	};	
+	mp_2: mport@2 {
+		usb-phys = <usb2_phy1>, <usb3_phy1>;
+	};	
+};
+
+Harsh Agarwal (2):
+  dt-bindings: usb: dwc3: Add support for multiport related properties
+  usb: dwc3: Refactor PHY logic to support Multiport Controller
+
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |  55 +++++
+ drivers/usb/dwc3/core.c                            | 259 ++++++++++++++++-----
+ drivers/usb/dwc3/core.h                            |   8 +-
+ drivers/usb/dwc3/drd.c                             |   8 +-
+ drivers/usb/dwc3/gadget.c                          |   4 +-
+ 5 files changed, 264 insertions(+), 70 deletions(-)
+
+-- 
+2.7.4
+
