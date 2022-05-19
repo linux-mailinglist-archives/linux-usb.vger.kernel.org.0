@@ -2,46 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42AE052D9C8
-	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 18:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31D952D9E6
+	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 18:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241728AbiESQHZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 May 2022 12:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S241372AbiESQLQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 May 2022 12:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234585AbiESQHW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 12:07:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAE62FFC7;
-        Thu, 19 May 2022 09:07:21 -0700 (PDT)
+        with ESMTP id S241857AbiESQLC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 12:11:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D84C37A94
+        for <linux-usb@vger.kernel.org>; Thu, 19 May 2022 09:10:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EED5661BBA;
-        Thu, 19 May 2022 16:07:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8B5EC385AA;
-        Thu, 19 May 2022 16:07:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7C78B8255B
+        for <linux-usb@vger.kernel.org>; Thu, 19 May 2022 16:10:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F9AAC385AA;
+        Thu, 19 May 2022 16:10:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652976440;
-        bh=B1fYf54IjPeGalvH3CwBhG+qqjZDzVXczaHOH9KQrZA=;
+        s=korg; t=1652976654;
+        bh=T5s5oqX8qKbl3nyuD2KIAsd1v1LfPAJzB/wb5TuWq/A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=spOKlQjtYPG0EV9EIHDLlamGD5yCnUK+Jnxc5dKHlwKCODS1ivCVqJyQKx7K4HOgh
-         WFKg0EFtBk0EuTJ8GKhKALyPB5TWo3aDGnJGauUMhdwP0QXN7tqlrPsUlyugtS4EdF
-         5EkdjPTrPJQmf3ArYA9bdOMzAfaqx0PD8CgBhP3Y=
-Date:   Thu, 19 May 2022 18:07:17 +0200
+        b=Pb9r0hxbC9NgsB4wXCyFUb+BSWNNa2LX5j1zj6WzeRO5vC2ZQ7VgBfBPGnygz32dn
+         pmJvSNs6ftO7KLSalSnwXovz/nDMqpjgCWRzL8CUqd5fUFXA4S++zAyATM1ldtvWE+
+         6Tij9zM6mxx4nZeAXcMumPA8X3Aies7rRn1FqLE4=
+Date:   Thu, 19 May 2022 18:10:51 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yongzhi Liu <lyz_cs@pku.edu.cn>
-Cc:     peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
-        a-govindraju@ti.com, felipe.balbi@linux.intel.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        fuyq@stu.pku.edu.cn
-Subject: Re: [PATCH] usb: cdns3:  Fix potential dereference of NULL pointer
-Message-ID: <YoZrNRf5W4hLdy9N@kroah.com>
-References: <1652861570-102489-1-git-send-email-lyz_cs@pku.edu.cn>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/1] fix xhci feature merge issue in current usb-next
+Message-ID: <YoZsC1NZU6VEJdjE@kroah.com>
+References: <20220516094850.19788-1-mathias.nyman@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1652861570-102489-1-git-send-email-lyz_cs@pku.edu.cn>
+In-Reply-To: <20220516094850.19788-1-mathias.nyman@linux.intel.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,37 +49,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 18, 2022 at 01:12:50AM -0700, Yongzhi Liu wrote:
-> The return value of cdns3_gadget_ep_alloc_request()
-> needs to be checked to avoid use of NULL pointer
-> in case of an allocation failure.
+On Mon, May 16, 2022 at 12:48:49PM +0300, Mathias Nyman wrote:
+> Hi Greg
 > 
-> Fixes: 7733f6c32e36f ("usb: cdns3: Add Cadence USB3 DRD Driver")
+> Two different conflicting features touching xhci got into current usb-next
+> for 5.19
 > 
-> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
-
-Again, no blank line and use the full width for your text.
-
-> ---
->  drivers/usb/cdns3/cdns3-gadget.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+> One adds support for xHC hosts with just one roothub,
+> second adds support to defer first roothub registration until second
+> roothub is added.
 > 
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index 5d8c982..7be328e 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -2568,6 +2568,10 @@ static int cdns3_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
->  		struct cdns3_request *priv_req;
->  
->  		zlp_request = cdns3_gadget_ep_alloc_request(ep, GFP_ATOMIC);
-> +		if (!zlp_request) {
-> +			ret = -ENOMEM;
-> +			goto err;
-> +		}
+> commit 873f323618c2 ("xhci: prepare for operation w/o shared hcd")
+> commit b7a4f9b5d0e4 ("xhci: Set HCD flag to defer primary roothub
+> registration")
+> 
+> We ended up trying to defer roothub registratinog for xHC with just one
+> roothub.
+> 
+> This patch fixes the issue and goes on top of current usb-next
+> 
+> This patch shouldn't be needed for stable as the new feature to support
+> one roothub xHC isn't marked for stable either, but setting Fixes flag
+> in case someone later picks it up for stable.
+> 
+> Mathias Nyman (1):
+>   xhci: Don't defer primary roothub registration if there is only one
+>     roothub
+> 
+>  drivers/usb/host/xhci.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-How did you test this that the if the allocation fails this will clean
-up properly?
-
-thanks,
+Sorry about the merge issue, now queued up, thanks!
 
 greg k-h
