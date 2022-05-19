@@ -2,95 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81BC352DAE8
-	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 19:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D45452DAF7
+	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 19:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242399AbiESRKQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 May 2022 13:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
+        id S239778AbiESRN7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 May 2022 13:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241492AbiESRKP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 13:10:15 -0400
-Received: from zg8tmja5ljk3lje4ms43mwaa.icoremail.net (zg8tmja5ljk3lje4ms43mwaa.icoremail.net [209.97.181.73])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B59AC9C2EA;
-        Thu, 19 May 2022 10:10:10 -0700 (PDT)
+        with ESMTP id S229489AbiESRN6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 13:13:58 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C833EF38;
+        Thu, 19 May 2022 10:13:57 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id t25so10253816lfg.7;
+        Thu, 19 May 2022 10:13:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
-        In-Reply-To:References:Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID; bh=ezFqmnyejiUIENx6HLdVfUcU6CF79HiNQ3RD
-        +QDjpNs=; b=hBgePD48RofuFZGgwgFH67A/lQkKIbiSFWYxhNY+PXCIDMFLKsVa
-        ljUYLseqrknBnhlgiEFIQcMS5n0uIiXZ1ACi1HQbOXuTiS2G3zFgx/WARCEXMN66
-        lU/PXNFf27bVF+gZBaIiOQPtHYcIyjfhkbFzD8Hf+Lx6pj/sFYKa8Fw=
-Received: by ajax-webmail-front01 (Coremail) ; Fri, 20 May 2022 01:10:01
- +0800 (GMT+08:00)
-X-Originating-IP: [10.129.37.75]
-Date:   Fri, 20 May 2022 01:10:01 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5YiY5rC45b+X?= <lyz_cs@pku.edu.cn>
-To:     "greg kh" <gregkh@linuxfoundation.org>
-Cc:     pawell@cadence.com, peter.chen@nxp.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, fuyq@stu.pku.edu.cn
-Subject: Re: Re: [PATCH] usb: cdnsp:  Fix potential dereference of NULL
- pointer
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-1ea67e80-64e4-49d5-bd9f-3beeae24b9f2-pku.edu.cn
-In-Reply-To: <YoZpKzT6txHJoAxP@kroah.com>
-References: <1652891743-110930-1-git-send-email-lyz_cs@pku.edu.cn>
- <YoZpKzT6txHJoAxP@kroah.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1GeQ5CSfJvGigHltvLwr+/AMpvXxe8TkHFBpsFCMoGA=;
+        b=TdBvBWDVEWL3pcu5nLPBl1EPC9H3IL+noe3T6LeZbzPC+5+ZtDKWACysqyNI780fWM
+         EhinHkcK54Yf/Wem4gND/KaOZYrl4IN6Plq4hdKSnifZQMadrC76DEGDmLAIzJBI8G9y
+         9IEO//urXsmPhCujWmwznefmJHEbO4qxrubFZxqumGRAV/rV2+D0saKwPYQOR4rXV3ci
+         FGWCZhM0Op2SnucUsqIndcf1tkMuKplscukgF9ehlYhoowmhV4IRBo70D+sFTMY/EmHC
+         aQ9XGMtq5dOT2NzxGhrl8zJDcCXvk3BPAudrj1qJOHUDStKl1MbKNwgGNdjMX/5X1ko3
+         i94w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1GeQ5CSfJvGigHltvLwr+/AMpvXxe8TkHFBpsFCMoGA=;
+        b=S4QfKnqwfFQT002NKhcNaHzotiP1Tw42CIEDnO/wboG4u4fQNm/Vte8IPK3OCAAlwm
+         ZNom+0gkqIIU+YCbwbEVd5Z2C7if21bNxgKLie+XSZObaGC9VDs5VtMZK9eY/C4/tRfT
+         UGxiKmhR6MTZvWKwcwbmUHaeSY6A5ISeVXvD+ZvGY3WKxUpOSQHpnZrKyH4/Acceuvw/
+         YEDzBcPB+LxqVQPacnmOs//FzLpbpLZivM4CiOOowbVTiqT0yQHdYhaJWTTW1rg6i15S
+         WsUGnnxiGZAfYbKeSQOFAe+RKMXQIQeFPeRI4hi8PWoZ7bqB28HImydIU82M7H1sIEiJ
+         GS6g==
+X-Gm-Message-State: AOAM532o7vgbdfH1GgIdNWS5M2Qcjo7nlsXsgt429JpgYUVMetqqhtIx
+        8F2z7Hy6J7E3v887anGm60rx/j1rFgqoFohl
+X-Google-Smtp-Source: ABdhPJyeM7zKyblXi+FfpBs3SWxkUhNENi6qL8LyFA+FOTtWR1NBOXVw8jN+jy2LSZKo4k65BBCP+A==
+X-Received: by 2002:a05:6512:16a7:b0:445:862e:a1ba with SMTP id bu39-20020a05651216a700b00445862ea1bamr3942866lfb.85.1652980435336;
+        Thu, 19 May 2022 10:13:55 -0700 (PDT)
+Received: from [192.168.0.110] ([217.115.104.30])
+        by smtp.gmail.com with ESMTPSA id c25-20020ac25319000000b0047255d210e6sm347685lfh.21.2022.05.19.10.13.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 10:13:54 -0700 (PDT)
+Message-ID: <36a83342-6c30-73a1-7759-971d2134420a@gmail.com>
+Date:   Thu, 19 May 2022 20:13:53 +0300
 MIME-Version: 1.0
-Message-ID: <1f0d2a84.29f34.180dd4c3680.Coremail.lyz_cs@pku.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID: 5oFpogBnYuXpeYZiAaiEBw--.42304W
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwELBlPy7vKNHQABsj
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] usb: core: Call disconnect() only if it is provided by
+ driver
+Content-Language: en-US-large
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220519132900.4392-1-dimich.dmb@gmail.com>
+ <YoZKFrzirES9+f39@kroah.com> <3da73dd6-24c3-1870-f0bc-f8040826576b@gmail.com>
+ <YoZybf0hq5LmwzKY@kroah.com>
+From:   Dmytro Bagrii <dimich.dmb@gmail.com>
+In-Reply-To: <YoZybf0hq5LmwzKY@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiR3JlZyBLSCIgPGdyZWdraEBs
-aW51eGZvdW5kYXRpb24ub3JnPgo+IFNlbnQgVGltZTogMjAyMi0wNS0xOSAyMzo1ODozNSAoVGh1
-cnNkYXkpCj4gVG86ICJZb25nemhpIExpdSIgPGx5el9jc0Bwa3UuZWR1LmNuPgo+IENjOiBwYXdl
-bGxAY2FkZW5jZS5jb20sIHBldGVyLmNoZW5AbnhwLmNvbSwgbGludXgtdXNiQHZnZXIua2VybmVs
-Lm9yZywgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZywgZnV5cUBzdHUucGt1LmVkdS5jbgo+
-IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIHVzYjogY2Ruc3A6ICBGaXggcG90ZW50aWFsIGRlcmVmZXJl
-bmNlIG9mIE5VTEwgcG9pbnRlcgo+IAo+IE9uIFdlZCwgTWF5IDE4LCAyMDIyIGF0IDA5OjM1OjQz
-QU0gLTA3MDAsIFlvbmd6aGkgTGl1IHdyb3RlOgo+ID4gVGhlIHJldHVybiB2YWx1ZSBvZiBjZG5z
-cF9nZXRfdHJhbnNmZXJfcmluZygpCj4gPiBuZWVkcyB0byBiZSBjaGVja2VkIHRvIGF2b2lkIHVz
-ZSBvZiBOVUxMIHBvaW50ZXIKPiA+IGluIGNhc2Ugb2YgYW4gYWNxdWlzaXRpb24gZmFpbHVyZS4K
-PiAKPiBQbGVhc2UgdXNlIHRoZSBmdWxsIDcyIGNvbHVtbnMKPiAKPiA+IAo+ID4gRml4ZXM6IDNk
-ODI5MDQ1NSAoInVzYjogY2Ruc3A6IGNkbnMzIEFkZCBtYWluIHBhcnQgb2YgQ2FkZW5jZSBVU0JT
-U1AgRFJEIERyaXZlciIpCj4gPiAKPiA+IFNpZ25lZC1vZmYtYnk6IFlvbmd6aGkgTGl1IDxseXpf
-Y3NAcGt1LmVkdS5jbj4KPiAKPiBQbGVhc2UgZG8gbm90IHB1dCBhIGJsYW5rIGxpbmUgYmV0d2Vl
-biAiRml4ZXM6IiBhbmQgeW91ciBzaWduZWQgb2ZmIGJ5Cj4gbGluZS4KPiAKPiA+IC0tLQo+ID4g
-IGRyaXZlcnMvdXNiL2NkbnMzL2NkbnNwLXJpbmcuYyB8IDIgKysKPiA+ICAxIGZpbGUgY2hhbmdl
-ZCwgMiBpbnNlcnRpb25zKCspCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9jZG5z
-My9jZG5zcC1yaW5nLmMgYi9kcml2ZXJzL3VzYi9jZG5zMy9jZG5zcC1yaW5nLmMKPiA+IGluZGV4
-IDFiMTQzODQuLjlmMjA2YjkgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL3VzYi9jZG5zMy9jZG5z
-cC1yaW5nLmMKPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2NkbnMzL2NkbnNwLXJpbmcuYwo+ID4gQEAg
-LTY1NSw2ICs2NTUsOCBAQCBzdGF0aWMgaW50IGNkbnNwX2NtZF9zZXRfZGVxKHN0cnVjdCBjZG5z
-cF9kZXZpY2UgKnBkZXYsCj4gPiAgCSAqIHRvIHJlZmxlY3QgdGhlIG5ldyBwb3NpdGlvbi4KPiA+
-ICAJICovCj4gPiAgCWVwX3JpbmcgPSBjZG5zcF9nZXRfdHJhbnNmZXJfcmluZyhwZGV2LCBwZXAs
-IGRlcV9zdGF0ZS0+c3RyZWFtX2lkKTsKPiA+ICsJaWYgKCFlcF9yaW5nKQo+ID4gKwkJcmV0dXJu
-IC1FSU5WQUw7Cj4gCj4gSG93IGRpZCB5b3UgdGVzdCB0aGlzPwo+IAo+IERvbid0IHlvdSBuZWVk
-IHRvIHByb3Blcmx5IGNsZWFuIHVwIGFuZCBoYW5kbGUgdGhlIGhhcmR3YXJlIGlzc3VlcyBpZgo+
-IHlvdSBleGl0IGVhcmx5IGhlcmU/CgpJIGZpbmQgdGhpcyBieSBhIHN0YXRpYyBhbmFseXplciBi
-YXNlZCBvbiBmcmVxdWVuY3kgYW5kIHNpbWlsYXJpdHksIHdoaWNoIHJlcG9ydCBtYW55IG51bGwg
-cHRyIGRlcmVmIGJ1Z3MuCkluIGNkbnMzL2NkbnNwLXJpbmcuYywgSSBmaW5kIHRoYXQgd2UgdXN1
-YWxseSBjaGVjayB0aGUgcmV0dXJuIHZhbHVlIHdoZW4gY2FsbCBmdW5jdGlvbiAndXNiX2dldF9p
-bnRmZGF0YScuCklmICdkZXFfc3RhdGUtPnN0cmVhbV9pZCcgaXMgc3BlY2lhbCwgdGhlICdlcF9y
-aW5nJyBpcyBhbHNvIG51bGwuIFRoZXJlZm9yZSwgaSB0aGluayB3ZSBzaG91bGQgYWRkIG51bGwg
-Y2hlY2tzIGhlcmUuCkkgd2lsbCByZXN1Ym1pdCBhIG5ldyBwYXRjaCBpZiB5b3UgdGhpbmsgdGhl
-IGJ1ZyBpcyByZWFsLgpUaGFua3MgZm9yIHlvdXIgcmVwbHkgYW5kIGFkdmljZS4KCj4gCj4gV2l0
-aG91dCBnb29kIHRlc3RpbmcsIEkgYW0gbG9hdGggdG8gdGFrZSB0aGlzLgo+IAo+IHRoYW5rcywK
-PiAKPiBncmVnIGstaAo=
+On 19.05.22 19:38, Greg KH wrote:
+> On Thu, May 19, 2022 at 06:27:17PM +0300, Dmytro Bagrii wrote:
+>> On 19.05.22 16:45, Greg KH wrote:
+>>> On Thu, May 19, 2022 at 04:29:00PM +0300, Dmytro Bagrii wrote:
+>>>> A driver may use devres allocations. Disconnect handler is not needed in
+>>>> this case. Allow such driver to leave .disconnect field uninitialized in
+>>>> struct usb_driver instead of providing empty stub function.
+>>>>
+>>>> Signed-off-by: Dmytro Bagrii <dimich.dmb@gmail.com>
+>>>> ---
+>>>>  drivers/usb/core/driver.c | 3 ++-
+>>>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+>>>> index 355ed33a2179..d7fe440b033c 100644
+>>>> --- a/drivers/usb/core/driver.c
+>>>> +++ b/drivers/usb/core/driver.c
+>>>> @@ -455,7 +455,8 @@ static int usb_unbind_interface(struct device *dev)
+>>>>  	if (!driver->soft_unbind || udev->state == USB_STATE_NOTATTACHED)
+>>>>  		usb_disable_interface(udev, intf, false);
+>>>>  
+>>>> -	driver->disconnect(intf);
+>>>> +	if (driver->disconnect)
+>>>> +		driver->disconnect(intf);
+>>>>  
+>>>>  	/* Free streams */
+>>>>  	for (i = 0, j = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
+>>>> -- 
+>>>> 2.36.1
+>>>>
+>>>
+>>> What in-kernel driver has this issue and does not have a disconnect
+>>> callback?
+>>
+>> I don't see such in-kernel USB drivers yet.
+> 
+> Great, then all is well.  We can not make kernel changes for out-of-tree
+> drivers for obvious reasons.
+> 
+> When you submit your driver, we will be glad to consider this change.
+> But as others changed, odds are your driver is incorrect and should have
+> a disconnect call.  Unless it is a very simple driver that could be done
+> instead in userspace with usbfs/libusb?
+
+Ok, i agree, my propoposed change is premature.
+Of course, i'm checking the driver for memory, refcounts and other
+resources leakage during development and not going to publish it until make
+sure it works correctly.
+There are some limitations with libusb in my case, e.g. it is unable to
+bind existing in-tree drivers to a bus provided by hardware over USB.
+Thank you for explanation.
+
+-- 
+Best Regards,
+Dmytro Bagrii.
