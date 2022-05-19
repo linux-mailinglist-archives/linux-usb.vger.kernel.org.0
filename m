@@ -2,48 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BD052D4B6
-	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 15:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF3B52D525
+	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 15:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233513AbiESNq3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 May 2022 09:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
+        id S236553AbiESNws (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 May 2022 09:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbiESNqT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 09:46:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D77011A16;
-        Thu, 19 May 2022 06:46:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BC49B824B0;
-        Thu, 19 May 2022 13:46:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E800C385AA;
-        Thu, 19 May 2022 13:46:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652967961;
-        bh=yEGOGSMLX8dQcpA1zVM9kxp/1UhqRepO4XsAQyuPweA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AcYRar5CfyXFA1VUI76mkqjjXt7ff7bt8FjS3sYB2B4oBbqmjrOMrcatRYF3VS4Ht
-         qKurhOI66L0ebC7jKgDAqlzaq9rzRLtGIsB1XCI8yAFpZ4y0YQm0013GpRHe/kszd6
-         HcxpZiH9SHwyeuaL9vJK1087ytau4RD9ZKS9nyqg=
-Date:   Thu, 19 May 2022 15:45:58 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
+        with ESMTP id S239137AbiESNuj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 09:50:39 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9803163AF
+        for <linux-usb@vger.kernel.org>; Thu, 19 May 2022 06:50:13 -0700 (PDT)
+Received: (qmail 223673 invoked by uid 1000); 19 May 2022 09:49:30 -0400
+Date:   Thu, 19 May 2022 09:49:30 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Dmytro Bagrii <dimich.dmb@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] usb: core: Call disconnect() only if it is provided by
  driver
-Message-ID: <YoZKFrzirES9+f39@kroah.com>
+Message-ID: <YoZK6vJnAe/QgHzX@rowland.harvard.edu>
 References: <20220519132900.4392-1-dimich.dmb@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20220519132900.4392-1-dimich.dmb@gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,13 +61,10 @@ On Thu, May 19, 2022 at 04:29:00PM +0300, Dmytro Bagrii wrote:
 >  
 >  	/* Free streams */
 >  	for (i = 0, j = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
-> -- 
-> 2.36.1
-> 
 
-What in-kernel driver has this issue and does not have a disconnect
-callback?
+I'm very dubious about this change.  Disconnect routines generally do 
+more than just deallocation.
 
-thanks,
+Can you point to any drivers that would actually benefit from this?
 
-greg k-h
+Alan Stern
