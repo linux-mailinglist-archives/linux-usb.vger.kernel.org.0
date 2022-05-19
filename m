@@ -2,133 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D45452DAF7
-	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 19:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7C452DAFE
+	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 19:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239778AbiESRN7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 May 2022 13:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
+        id S242457AbiESRPX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 May 2022 13:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiESRN6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 13:13:58 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C833EF38;
-        Thu, 19 May 2022 10:13:57 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id t25so10253816lfg.7;
-        Thu, 19 May 2022 10:13:57 -0700 (PDT)
+        with ESMTP id S242456AbiESRPV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 May 2022 13:15:21 -0400
+Received: from zg8tmja5ljk3lje4ms43mwaa.icoremail.net (zg8tmja5ljk3lje4ms43mwaa.icoremail.net [209.97.181.73])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3C05442A25;
+        Thu, 19 May 2022 10:15:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1GeQ5CSfJvGigHltvLwr+/AMpvXxe8TkHFBpsFCMoGA=;
-        b=TdBvBWDVEWL3pcu5nLPBl1EPC9H3IL+noe3T6LeZbzPC+5+ZtDKWACysqyNI780fWM
-         EhinHkcK54Yf/Wem4gND/KaOZYrl4IN6Plq4hdKSnifZQMadrC76DEGDmLAIzJBI8G9y
-         9IEO//urXsmPhCujWmwznefmJHEbO4qxrubFZxqumGRAV/rV2+D0saKwPYQOR4rXV3ci
-         FGWCZhM0Op2SnucUsqIndcf1tkMuKplscukgF9ehlYhoowmhV4IRBo70D+sFTMY/EmHC
-         aQ9XGMtq5dOT2NzxGhrl8zJDcCXvk3BPAudrj1qJOHUDStKl1MbKNwgGNdjMX/5X1ko3
-         i94w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1GeQ5CSfJvGigHltvLwr+/AMpvXxe8TkHFBpsFCMoGA=;
-        b=S4QfKnqwfFQT002NKhcNaHzotiP1Tw42CIEDnO/wboG4u4fQNm/Vte8IPK3OCAAlwm
-         ZNom+0gkqIIU+YCbwbEVd5Z2C7if21bNxgKLie+XSZObaGC9VDs5VtMZK9eY/C4/tRfT
-         UGxiKmhR6MTZvWKwcwbmUHaeSY6A5ISeVXvD+ZvGY3WKxUpOSQHpnZrKyH4/Acceuvw/
-         YEDzBcPB+LxqVQPacnmOs//FzLpbpLZivM4CiOOowbVTiqT0yQHdYhaJWTTW1rg6i15S
-         WsUGnnxiGZAfYbKeSQOFAe+RKMXQIQeFPeRI4hi8PWoZ7bqB28HImydIU82M7H1sIEiJ
-         GS6g==
-X-Gm-Message-State: AOAM532o7vgbdfH1GgIdNWS5M2Qcjo7nlsXsgt429JpgYUVMetqqhtIx
-        8F2z7Hy6J7E3v887anGm60rx/j1rFgqoFohl
-X-Google-Smtp-Source: ABdhPJyeM7zKyblXi+FfpBs3SWxkUhNENi6qL8LyFA+FOTtWR1NBOXVw8jN+jy2LSZKo4k65BBCP+A==
-X-Received: by 2002:a05:6512:16a7:b0:445:862e:a1ba with SMTP id bu39-20020a05651216a700b00445862ea1bamr3942866lfb.85.1652980435336;
-        Thu, 19 May 2022 10:13:55 -0700 (PDT)
-Received: from [192.168.0.110] ([217.115.104.30])
-        by smtp.gmail.com with ESMTPSA id c25-20020ac25319000000b0047255d210e6sm347685lfh.21.2022.05.19.10.13.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 10:13:54 -0700 (PDT)
-Message-ID: <36a83342-6c30-73a1-7759-971d2134420a@gmail.com>
-Date:   Thu, 19 May 2022 20:13:53 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] usb: core: Call disconnect() only if it is provided by
- driver
-Content-Language: en-US-large
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220519132900.4392-1-dimich.dmb@gmail.com>
- <YoZKFrzirES9+f39@kroah.com> <3da73dd6-24c3-1870-f0bc-f8040826576b@gmail.com>
- <YoZybf0hq5LmwzKY@kroah.com>
-From:   Dmytro Bagrii <dimich.dmb@gmail.com>
-In-Reply-To: <YoZybf0hq5LmwzKY@kroah.com>
+        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
+        In-Reply-To:References:Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID; bh=0F58Lq5d1lNVx8JamauTGm05Ut3UmzF74cM/
+        5hgS8AE=; b=o5j+7Emzi4DhHiFqMkCQWTCur6lzKhbY+WfU1romSwpX8tFI/EgI
+        hUA7pSI4MP4sezAm8xNVpJ+S/Fjlece9hFPR/Fq6GLCKKLL2bFqKOOUFsfIZRIGD
+        i4kqJLE0Clpc9nq0O8ML+T5ULgPKoxQWYxtl4JpOLcAWr0iWLw5xalU=
+Received: by ajax-webmail-front02 (Coremail) ; Fri, 20 May 2022 01:15:07
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.129.37.75]
+Date:   Fri, 20 May 2022 01:15:07 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5YiY5rC45b+X?= <lyz_cs@pku.edu.cn>
+To:     "greg kh" <gregkh@linuxfoundation.org>
+Cc:     peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
+        a-govindraju@ti.com, felipe.balbi@linux.intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fuyq@stu.pku.edu.cn
+Subject: Re: Re: [PATCH] usb: cdns3:  Fix potential dereference of NULL
+ pointer
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn
+ mispb-1ea67e80-64e4-49d5-bd9f-3beeae24b9f2-pku.edu.cn
+In-Reply-To: <YoZrNRf5W4hLdy9N@kroah.com>
+References: <1652861570-102489-1-git-send-email-lyz_cs@pku.edu.cn>
+ <YoZrNRf5W4hLdy9N@kroah.com>
+Content-Transfer-Encoding: base64
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Message-ID: <465461c9.2a3c6.180dd50e22b.Coremail.lyz_cs@pku.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID: 54FpogC3N+cbe4Zi+T2fBg--.33161W
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwELBlPy7vKNNgACsL
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19.05.22 19:38, Greg KH wrote:
-> On Thu, May 19, 2022 at 06:27:17PM +0300, Dmytro Bagrii wrote:
->> On 19.05.22 16:45, Greg KH wrote:
->>> On Thu, May 19, 2022 at 04:29:00PM +0300, Dmytro Bagrii wrote:
->>>> A driver may use devres allocations. Disconnect handler is not needed in
->>>> this case. Allow such driver to leave .disconnect field uninitialized in
->>>> struct usb_driver instead of providing empty stub function.
->>>>
->>>> Signed-off-by: Dmytro Bagrii <dimich.dmb@gmail.com>
->>>> ---
->>>>  drivers/usb/core/driver.c | 3 ++-
->>>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
->>>> index 355ed33a2179..d7fe440b033c 100644
->>>> --- a/drivers/usb/core/driver.c
->>>> +++ b/drivers/usb/core/driver.c
->>>> @@ -455,7 +455,8 @@ static int usb_unbind_interface(struct device *dev)
->>>>  	if (!driver->soft_unbind || udev->state == USB_STATE_NOTATTACHED)
->>>>  		usb_disable_interface(udev, intf, false);
->>>>  
->>>> -	driver->disconnect(intf);
->>>> +	if (driver->disconnect)
->>>> +		driver->disconnect(intf);
->>>>  
->>>>  	/* Free streams */
->>>>  	for (i = 0, j = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
->>>> -- 
->>>> 2.36.1
->>>>
->>>
->>> What in-kernel driver has this issue and does not have a disconnect
->>> callback?
->>
->> I don't see such in-kernel USB drivers yet.
-> 
-> Great, then all is well.  We can not make kernel changes for out-of-tree
-> drivers for obvious reasons.
-> 
-> When you submit your driver, we will be glad to consider this change.
-> But as others changed, odds are your driver is incorrect and should have
-> a disconnect call.  Unless it is a very simple driver that could be done
-> instead in userspace with usbfs/libusb?
-
-Ok, i agree, my propoposed change is premature.
-Of course, i'm checking the driver for memory, refcounts and other
-resources leakage during development and not going to publish it until make
-sure it works correctly.
-There are some limitations with libusb in my case, e.g. it is unable to
-bind existing in-tree drivers to a bus provided by hardware over USB.
-Thank you for explanation.
-
--- 
-Best Regards,
-Dmytro Bagrii.
+CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiR3JlZyBLSCIgPGdyZWdr
+aEBsaW51eGZvdW5kYXRpb24ub3JnPgo+IFNlbnQgVGltZTogMjAyMi0wNS0yMCAwMDowNzoxNyAo
+RnJpZGF5KQo+IFRvOiAiWW9uZ3poaSBMaXUiIDxseXpfY3NAcGt1LmVkdS5jbj4KPiBDYzogcGV0
+ZXIuY2hlbkBrZXJuZWwub3JnLCBwYXdlbGxAY2FkZW5jZS5jb20sIHJvZ2VycUBrZXJuZWwub3Jn
+LCBhLWdvdmluZHJhanVAdGkuY29tLCBmZWxpcGUuYmFsYmlAbGludXguaW50ZWwuY29tLCBsaW51
+eC11c2JAdmdlci5rZXJuZWwub3JnLCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnLCBmdXlx
+QHN0dS5wa3UuZWR1LmNuCj4gU3ViamVjdDogUmU6IFtQQVRDSF0gdXNiOiBjZG5zMzogIEZpeCBw
+b3RlbnRpYWwgZGVyZWZlcmVuY2Ugb2YgTlVMTCBwb2ludGVyCj4gCj4gT24gV2VkLCBNYXkgMTgs
+IDIwMjIgYXQgMDE6MTI6NTBBTSAtMDcwMCwgWW9uZ3poaSBMaXUgd3JvdGU6Cj4gPiBUaGUgcmV0
+dXJuIHZhbHVlIG9mIGNkbnMzX2dhZGdldF9lcF9hbGxvY19yZXF1ZXN0KCkKPiA+IG5lZWRzIHRv
+IGJlIGNoZWNrZWQgdG8gYXZvaWQgdXNlIG9mIE5VTEwgcG9pbnRlcgo+ID4gaW4gY2FzZSBvZiBh
+biBhbGxvY2F0aW9uIGZhaWx1cmUuCj4gPiAKPiA+IEZpeGVzOiA3NzMzZjZjMzJlMzZmICgidXNi
+OiBjZG5zMzogQWRkIENhZGVuY2UgVVNCMyBEUkQgRHJpdmVyIikKPiA+IAo+ID4gU2lnbmVkLW9m
+Zi1ieTogWW9uZ3poaSBMaXUgPGx5el9jc0Bwa3UuZWR1LmNuPgo+IAo+IEFnYWluLCBubyBibGFu
+ayBsaW5lIGFuZCB1c2UgdGhlIGZ1bGwgd2lkdGggZm9yIHlvdXIgdGV4dC4KPiAKPiA+IC0tLQo+
+ID4gIGRyaXZlcnMvdXNiL2NkbnMzL2NkbnMzLWdhZGdldC5jIHwgNiArKysrKy0KPiA+ICAxIGZp
+bGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4gPiAKPiA+IGRpZmYg
+LS1naXQgYS9kcml2ZXJzL3VzYi9jZG5zMy9jZG5zMy1nYWRnZXQuYyBiL2RyaXZlcnMvdXNiL2Nk
+bnMzL2NkbnMzLWdhZGdldC5jCj4gPiBpbmRleCA1ZDhjOTgyLi43YmUzMjhlIDEwMDY0NAo+ID4g
+LS0tIGEvZHJpdmVycy91c2IvY2RuczMvY2RuczMtZ2FkZ2V0LmMKPiA+ICsrKyBiL2RyaXZlcnMv
+dXNiL2NkbnMzL2NkbnMzLWdhZGdldC5jCj4gPiBAQCAtMjU2OCw2ICsyNTY4LDEwIEBAIHN0YXRp
+YyBpbnQgY2RuczNfZ2FkZ2V0X2VwX3F1ZXVlKHN0cnVjdCB1c2JfZXAgKmVwLCBzdHJ1Y3QgdXNi
+X3JlcXVlc3QgKnJlcXVlc3QsCj4gPiAgCQlzdHJ1Y3QgY2RuczNfcmVxdWVzdCAqcHJpdl9yZXE7
+Cj4gPiAgCj4gPiAgCQl6bHBfcmVxdWVzdCA9IGNkbnMzX2dhZGdldF9lcF9hbGxvY19yZXF1ZXN0
+KGVwLCBHRlBfQVRPTUlDKTsKPiA+ICsJCWlmICghemxwX3JlcXVlc3QpIHsKPiA+ICsJCQlyZXQg
+PSAtRU5PTUVNOwo+ID4gKwkJCWdvdG8gZXJyOwo+ID4gKwkJfQo+IAo+IEhvdyBkaWQgeW91IHRl
+c3QgdGhpcyB0aGF0IHRoZSBpZiB0aGUgYWxsb2NhdGlvbiBmYWlscyB0aGlzIHdpbGwgY2xlYW4K
+PiB1cCBwcm9wZXJseT8KPiAKCkkgZmluZCB0aGlzIGJ5IGEgc3RhdGljIGFuYWx5emVyIGJhc2Vk
+IG9uIGZyZXF1ZW5jeSBhbmQgc2ltaWxhcml0eSwgd2hpY2ggcmVwb3J0IG1hbnkgbnVsbCBwdHIg
+ZGVyZWYgYnVncy4KSW4gY2RuczMvY2RuczMtZ2FkZ2V0LmMsIEkgZmluZCB0aGF0IHdlIHVzdWFs
+bHkgY2hlY2sgdGhlIHJldHVybiB2YWx1ZSB3aGVuIGNhbGwgZnVuY3Rpb24gJ2NkbnMzX2dhZGdl
+dF9lcF9hbGxvY19yZXF1ZXN0Jy4KSWYgJ3pjYWxsb2MnIGluICdjZG5zM19nYWRnZXRfZXBfYWxs
+b2NfcmVxdWVzdCcgZmFpbGVkLCB0aGUgYWxsb2NhdGlvbiB3aWxsIHJldHVybiBudWxsLiBUaGVy
+ZWZvcmUsIGkgdGhpbmsgd2Ugc2hvdWxkIGFkZCBudWxsIGNoZWNrcyBoZXJlLgpJIHdpbGwgcmVz
+dWJtaXQgYSBuZXcgcGF0Y2ggaWYgeW91IHRoaW5rIHRoZSBidWcgaXMgcmVhbC4KVGhhbmtzIGZv
+ciB5b3VyIHJlcGx5IGFuZCBhZHZpY2UuCgo+IHRoYW5rcywKPiAKPiBncmVnIGstaAo=
