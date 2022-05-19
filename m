@@ -2,71 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F1452C991
-	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 04:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA4A52C9BE
+	for <lists+linux-usb@lfdr.de>; Thu, 19 May 2022 04:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbiESCGM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 May 2022 22:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47642 "EHLO
+        id S232844AbiESCTW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 May 2022 22:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbiESCGL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 22:06:11 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB97119FBD;
-        Wed, 18 May 2022 19:06:07 -0700 (PDT)
-Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L3Y953SvwzhZCp;
-        Thu, 19 May 2022 10:05:29 +0800 (CST)
-Received: from huawei.com (10.67.174.157) by kwepemi500014.china.huawei.com
- (7.221.188.232) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 19 May
- 2022 10:06:05 +0800
-From:   Li Zhengyu <lizhengyu3@huawei.com>
-To:     <dbaryshkov@gmail.com>
-CC:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] usb: host: ohci-tmio: Fix unchecked return value for device_wakeup_enable
-Date:   Thu, 19 May 2022 10:04:34 +0800
-Message-ID: <20220519020434.31575-1-lizhengyu3@huawei.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.157]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500014.china.huawei.com (7.221.188.232)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S230457AbiESCTU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 May 2022 22:19:20 -0400
+X-Greylist: delayed 124 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 May 2022 19:19:19 PDT
+Received: from alexa-out-tai-02.qualcomm.com (alexa-out-tai-02.qualcomm.com [103.229.16.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAB5C3D1B;
+        Wed, 18 May 2022 19:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652926760; x=1684462760;
+  h=from:to:cc:subject:date:message-id;
+  bh=1K5Kj0q4VA0uHycgXAZpiHxXiJ3BZne5cwNBKL+zDRg=;
+  b=j0Rr3aWVOKzf8sfCk8/nd/ZmaZTfVpOgfE0FGQQW/1a45NOd4sWpdN3S
+   VvgP/Q8FkMWVTdokTFpZGtHPJ47RpS9W2T0l1GxBbfoGw7j7U5rHScL+M
+   52FYo9xnBLpslLGGFZ9pTEzz7DwyhAsxkeoYk48bIZTGPC0eMeNBzf5pj
+   s=;
+Received: from ironmsg02-tai.qualcomm.com ([10.249.140.7])
+  by alexa-out-tai-02.qualcomm.com with ESMTP; 19 May 2022 10:17:13 +0800
+X-QCInternal: smtphost
+Received: from cbsp-sh-gv.ap.qualcomm.com (HELO cbsp-sh-gv.qualcomm.com) ([10.231.249.68])
+  by ironmsg02-tai.qualcomm.com with ESMTP; 19 May 2022 10:17:09 +0800
+Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 3922021)
+        id C3CD44A36; Thu, 19 May 2022 10:17:07 +0800 (CST)
+From:   Tao Wang <quic_wat@quicinc.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     quic_wat@quicinc.com
+Subject: [PATCH] usb: xhci: save hcd_priv memory of shared_hcd
+Date:   Thu, 19 May 2022 10:17:01 +0800
+Message-Id: <1652926622-85047-1-git-send-email-quic_wat@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The return value of device_wakeup_enable() is unchecked, as the result
-usb_remove_hcd() is unreachable even if device_wakeup_enable() is failed.
+The shared_hcd->hcd_priv is not used in xhci, so not
+need to malloc hcd priv memory for shared_hcd.
 
-Fixes: 78c73414f4f6 ("USB: ohci: add support for tmio-ohci cell")
-
-Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
+Signed-off-by: Tao Wang <quic_wat@quicinc.com>
 ---
- drivers/usb/host/ohci-tmio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/xhci-plat.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/usb/host/ohci-tmio.c b/drivers/usb/host/ohci-tmio.c
-index 49539b9f0e94..8148dc90c066 100644
---- a/drivers/usb/host/ohci-tmio.c
-+++ b/drivers/usb/host/ohci-tmio.c
-@@ -244,7 +244,7 @@ static int ohci_hcd_tmio_drv_probe(struct platform_device *dev)
- 	if (ret)
- 		goto err_add_hcd;
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 01dcfd7..a27dd3a 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -336,6 +336,11 @@ static int xhci_plat_probe(struct platform_device *pdev)
+ 	device_set_wakeup_capable(&pdev->dev, true);
  
--	device_wakeup_enable(hcd->self.controller);
-+	ret = device_wakeup_enable(hcd->self.controller);
- 	if (ret == 0)
- 		return ret;
- 
+ 	xhci->main_hcd = hcd;
++	/*
++	 * The shared_hcd->hcd_priv is not used in xhci,
++	 * so not need to malloc hcd priv memory for shared_hcd.
++	 */
++	driver->hcd_priv_size = 0;
+ 	xhci->shared_hcd = __usb_create_hcd(driver, sysdev, &pdev->dev,
+ 			dev_name(&pdev->dev), hcd);
+ 	if (!xhci->shared_hcd) {
 -- 
-2.17.1
+2.7.4
 
