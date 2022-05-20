@@ -2,92 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093BE52EAD6
-	for <lists+linux-usb@lfdr.de>; Fri, 20 May 2022 13:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D8052EAFF
+	for <lists+linux-usb@lfdr.de>; Fri, 20 May 2022 13:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348563AbiETLb6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 May 2022 07:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
+        id S1348639AbiETLkF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 May 2022 07:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348546AbiETLbz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 May 2022 07:31:55 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65D635A83
-        for <linux-usb@vger.kernel.org>; Fri, 20 May 2022 04:31:50 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id gi33so6579148ejc.3
-        for <linux-usb@vger.kernel.org>; Fri, 20 May 2022 04:31:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0NvptFqrj7j0InVdvvMmgqzBzN84J9LRB794rQxkFdY=;
-        b=re4Sm8tWAvFHp6bKgAYMf09Z79Kgi3OEdhOIiBZ7/Rn2QXbgu5Ly14y4/nQN7Y/aTo
-         VlgbB9yG7Rlr2cuoabCyBxc2bGDLVKK0lXBLnASl6zsHCcOeA+1KzIBeqFsR+y75i5XZ
-         XvFFiPa9GJ2QyyaAdSmJuFi5RyYukwsFD78F77Gu/KxBhoXO8QeL/xhxXqgh8n2pVQ16
-         5uSsdoWXuRrwj+2ip8smJzRExeR9DRqgQ7nZOdTto/19ei6AXbORk/Mx4Jr1TH0FheIZ
-         Rjk53cTk2OReyJUGfCv97XHsZ5d+q5q5c0jA2xxlOnKUomCD8mRuslxc9zsWStq2ZrCv
-         ptCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0NvptFqrj7j0InVdvvMmgqzBzN84J9LRB794rQxkFdY=;
-        b=a0ZyB1w5+NMikwoZk56B2ihBfoVlMhaNEBknwyqGvpYL9eaDenQ+afRlAyd1zlEyB7
-         LuckTlfNWWGh5+0gtqteyYo/cnCUczUtSh4l/Zr61di0nHjaedGkVGJA1BakDMqzA6vH
-         T1yTCKjGdXndsgnsJldxz68aMzTb5Cefd/GMaDIhfWPvWcKAJbQsHIkwHOKaR7uHAlTG
-         /s8xb1uEhHHIKM+XT+R1XjzRb24H1dP6rQvhNM6TD2YxV4aO0aW6UByn1BOyr5BkgJh4
-         dZRvtO+tiB9Qut6Y2+7L51zeIqGfQfwP023sKl3d4HWrVFdeMfWmo+7LFVfw7/xxGDPX
-         AgQg==
-X-Gm-Message-State: AOAM5300+tXWPNosc/ofpiYyOSshy2dPHXeK3IIm4S0CkplQFKBFsPs6
-        /kEaUwWxR+6gtIEOCytx8WkFB5L7ps5z7SlB01aGcg==
-X-Google-Smtp-Source: ABdhPJyAADo7d4aXCmDNCVnTVXprJXf99iw8JPsCwtJN6tP2yH5Av5Yx22hVAD/QFIma8grUrwXZC/mCf6Av3T8PJbw=
-X-Received: by 2002:a17:907:6eab:b0:6fe:b5e2:7b0e with SMTP id
- sh43-20020a1709076eab00b006feb5e27b0emr1053811ejc.736.1653046309443; Fri, 20
- May 2022 04:31:49 -0700 (PDT)
+        with ESMTP id S1348759AbiETLjk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 May 2022 07:39:40 -0400
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2224315E629;
+        Fri, 20 May 2022 04:39:31 -0700 (PDT)
+Received: from relay5-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::225])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 7AAF6CABA7;
+        Fri, 20 May 2022 11:34:36 +0000 (UTC)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3974B1C0009;
+        Fri, 20 May 2022 11:34:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653046468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=t1RpCyOt9vJRwKKZzMrNpG1QDdfyBUk2YTX9dVi8KKY=;
+        b=Wcv2GBx4h6bBjBzJJdSS+4fp72OcI+2Tee3mT8kqifTa+CgH64T0l9F1N+HCSwYgXMt/XU
+        1mQlR4x6eCs8CGmkef2yNz1vxLNhgclH9+fi8MhIqSPG52me/Del76AttyXF4bP5dhf82U
+        ulvNLRDEKpq4REfbrBk2opMcYhS5/FQh6XmjT/D+bBpfNrYMupvHDoS5xXULqRGyHnsCn7
+        FVybCaG+3VjOJmI7w0VGs6BJaAiEYXwn0qhIGp856pbl9ri6eLgTFsivh6RcM5yTgv2qA7
+        WP1p0YkRiSYNi9BhReSFhQazp9AuMkfrzD8ZSsC701ZJ0He/bNeXZMORIDhcag==
+Date:   Fri, 20 May 2022 13:34:26 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/3] dt-bindings: usb: atmel: Add Microchip LAN966x
+ compatible string
+Message-ID: <20220520133426.3b4728ae@bootlin.com>
+In-Reply-To: <8f0d4127-7e66-cf50-21c9-99680f737e30@linaro.org>
+References: <20220513105850.310375-1-herve.codina@bootlin.com>
+        <20220513105850.310375-3-herve.codina@bootlin.com>
+        <8f0d4127-7e66-cf50-21c9-99680f737e30@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220519211411.2200720-1-robh@kernel.org>
-In-Reply-To: <20220519211411.2200720-1-robh@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 20 May 2022 13:31:38 +0200
-Message-ID: <CAMRc=McjvTE27BMbN-_W+Fdd7CJcswZQYsB-4N8cj=WfAQ9QOQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Fix properties without any type
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        chrome-platform@lists.linux.dev,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, linux-pci@vger.kernel.org,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-serial@vger.kernel.org,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,46 +70,63 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 19, 2022 at 11:14 PM Rob Herring <robh@kernel.org> wrote:
->
-> Now that the schema tools can extract type information for all
-> properties (in order to decode dtb files), finding properties missing
-> any type definition is fairly trivial though not yet automated.
->
-> Fix the various property schemas which are missing a type. Most of these
-> tend to be device specific properties which don't have a vendor prefix.
-> A vendor prefix is how we normally ensure a type is defined.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../arm/hisilicon/controller/hip04-bootwrapper.yaml       | 5 +++--
->  .../bindings/display/bridge/toshiba,tc358768.yaml         | 1 +
->  .../devicetree/bindings/display/panel/panel-timing.yaml   | 5 +++++
->  .../bindings/display/panel/raydium,rm67191.yaml           | 1 +
->  .../bindings/display/panel/samsung,s6e8aa0.yaml           | 1 +
->  .../devicetree/bindings/gpio/fairchild,74hc595.yaml       | 1 +
->  .../devicetree/bindings/input/google,cros-ec-keyb.yaml    | 1 +
->  .../devicetree/bindings/input/matrix-keymap.yaml          | 4 ++++
->  Documentation/devicetree/bindings/media/i2c/adv7604.yaml  | 3 ++-
->  Documentation/devicetree/bindings/mux/reg-mux.yaml        | 8 ++++++--
->  Documentation/devicetree/bindings/net/cdns,macb.yaml      | 1 +
->  Documentation/devicetree/bindings/net/ingenic,mac.yaml    | 1 +
->  .../devicetree/bindings/net/ti,davinci-mdio.yaml          | 1 +
->  .../devicetree/bindings/net/wireless/ti,wlcore.yaml       | 2 ++
->  .../devicetree/bindings/pci/snps,dw-pcie-ep.yaml          | 6 ++++--
->  Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml   | 2 ++
->  .../devicetree/bindings/pinctrl/canaan,k210-fpioa.yaml    | 2 ++
->  Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml | 1 +
->  .../devicetree/bindings/power/supply/battery.yaml         | 7 ++++++-
->  .../devicetree/bindings/power/supply/charger-manager.yaml | 1 +
->  Documentation/devicetree/bindings/rng/st,stm32-rng.yaml   | 1 +
->  Documentation/devicetree/bindings/serial/8250.yaml        | 1 +
->  .../devicetree/bindings/sound/audio-graph-card2.yaml      | 3 +++
->  .../devicetree/bindings/sound/imx-audio-hdmi.yaml         | 3 +++
->  Documentation/devicetree/bindings/usb/smsc,usb3503.yaml   | 1 +
->  25 files changed, 55 insertions(+), 8 deletions(-)
->
+On Fri, 13 May 2022 14:57:55 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-For GPIO:
+> On 13/05/2022 12:58, Herve Codina wrote:
+> > The USB device controller available in the Microchip LAN966x SOC
+> > is the same IP as the one present in the SAMA5D3 SOC.
+> >=20
+> > Add the LAN966x compatible string and set the SAMA5D3 compatible
+> > string as a fallback for the LAN966x.
+> >=20
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/atmel-usb.txt | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/usb/atmel-usb.txt b/Docu=
+mentation/devicetree/bindings/usb/atmel-usb.txt
+> > index f512f0290728..a6fab7d63f37 100644
+> > --- a/Documentation/devicetree/bindings/usb/atmel-usb.txt
+> > +++ b/Documentation/devicetree/bindings/usb/atmel-usb.txt
+> > @@ -87,6 +87,9 @@ Required properties:
+> >  	       "atmel,at91sam9g45-udc"
+> >  	       "atmel,sama5d3-udc"
+> >  	       "microchip,sam9x60-udc"
+> > +	       "microchip,lan996x-udc" =20
+>=20
+> No wildcards please, especially that it closely fits previous wildcard
+> (lan996x includes lan9960 which looks a lot like sam9x60...)
+>=20
 
-Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Well, first, I made a mistake. It should be lan966x instead of lan996x.
+
+This family is composed of the LAN9662 and the LAN9668 SOCs.
+
+Related to the wilcard, lan966x is used in several bindings for common
+parts used by both SOCs:
+- microchip,lan966x-gck
+- microchip,lan966x-cpu-syscon
+- microchip,lan966x-switch
+- microchip,lan966x-miim
+- microchip,lan966x-serdes
+- microchip,lan966x-pinctrl
+
+I think it makes sense to keep 'microchip,lan966x-udc' for the USB
+device controller (same controller on LAN9662 and LAN9668) and so
+keeping the same rules as for other common parts.
+
+Regards,
+Herv=C3=A9
+
+>=20
+> Best regards,
+> Krzysztof
+
+
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
