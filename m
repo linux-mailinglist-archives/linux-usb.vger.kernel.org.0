@@ -2,94 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA68E52EBB0
-	for <lists+linux-usb@lfdr.de>; Fri, 20 May 2022 14:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D642B52EBFD
+	for <lists+linux-usb@lfdr.de>; Fri, 20 May 2022 14:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347594AbiETMMW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 May 2022 08:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46594 "EHLO
+        id S239950AbiETMV7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 May 2022 08:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237237AbiETMMV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 May 2022 08:12:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E707214640B;
-        Fri, 20 May 2022 05:12:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F1A8B82B3F;
-        Fri, 20 May 2022 12:12:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E6ADC385A9;
-        Fri, 20 May 2022 12:12:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653048738;
-        bh=JP/UIl4KDxvbN8nMb/Ta3j84yv1AshL7YzWZ8cVWRJg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qTfnD6uxQAihQw+ANRC/4C0eftfr7QqZ8/EArV9KB59sYiLvJ06MBnrzQOYfpEeoV
-         yY9JV5GTJw7AWvszciiVeIqB67wM6feJakrE4uEN5SuORswCG/j5MGd6XD3+vAxHTb
-         AojdJ4oilNJKnuNCAPslnI7kVardar4y87EkXrnHAFVuLd8bQ682+YZ7GWlhMQ/qD7
-         y1y9oOLKypP1s26pX0LIGQLuShF/0z/dMWvvgf0azuXCx06A2PPNRKdokzsJxqi1MY
-         sPejm6GqaQo4EFwaBh6ABEVyREj+9vNKcMS8Xu7ZhwSeH6eLydjS/ZGy9bDctdzGI2
-         /ZXPfzR4THuOg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ns1UQ-00065o-BQ; Fri, 20 May 2022 14:12:18 +0200
-Date:   Fri, 20 May 2022 14:12:18 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial updates for 5.19-rc1
-Message-ID: <YoeFosQDeA5fQqCw@hovoldconsulting.com>
+        with ESMTP id S1349291AbiETMVt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 May 2022 08:21:49 -0400
+X-Greylist: delayed 2803 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 20 May 2022 05:21:16 PDT
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2724C406;
+        Fri, 20 May 2022 05:21:13 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 89441FF810;
+        Fri, 20 May 2022 12:21:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653049272;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P9/j3N/5Wrep8nEVTKpfSVpG01w0RrIsJwIuJSpfUqk=;
+        b=RfW0rjzcmmERfR5djFuVWqGNNOXEXZH64WSz4zF6bNV8PZOupWqEnejx3YHzGPR+ANVyqf
+        u1X+8G40M4FtwDyht1zoabB49i3jwiatJroTJKQsi8taz+RmQUh7KOjlv3g7H4mwsBkOEX
+        E/2xcdCNRM5z9JO4Qlm5sMWl3Px7hdyoPqweUk79/uJg6x8eq86WoxsWxi9VL98gUDG6wv
+        wt0+qMRqFXeArB91COg4rAgJAMcC6yoywoHCtjeNU8H2BTfoF1zFcuBdcf1kk46rzz6dOu
+        K1/VdbzH87ALHDx9nJLW3gvFjxdEVBf1JMUA+bWEM3Kl7OnBLa1FtUBEnu2L1A==
+Date:   Fri, 20 May 2022 14:21:09 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/3] dt-bindings: usb: atmel: Add Microchip LAN966x
+ compatible string
+Message-ID: <20220520142109.57b84da2@bootlin.com>
+In-Reply-To: <b087c34f-0e2f-edd0-a738-3ffc2853a41b@linaro.org>
+References: <20220513105850.310375-1-herve.codina@bootlin.com>
+        <20220513105850.310375-3-herve.codina@bootlin.com>
+        <8f0d4127-7e66-cf50-21c9-99680f737e30@linaro.org>
+        <20220520133426.3b4728ae@bootlin.com>
+        <b087c34f-0e2f-edd0-a738-3ffc2853a41b@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
+Hi Krzysztof,
 
-  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
+On Fri, 20 May 2022 13:40:13 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-are available in the Git repository at:
+> On 20/05/2022 13:34, Herve Codina wrote:
+> > On Fri, 13 May 2022 14:57:55 +0200
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> >  =20
+> >> On 13/05/2022 12:58, Herve Codina wrote: =20
+> >>> The USB device controller available in the Microchip LAN966x SOC
+> >>> is the same IP as the one present in the SAMA5D3 SOC.
+> >>>
+> >>> Add the LAN966x compatible string and set the SAMA5D3 compatible
+> >>> string as a fallback for the LAN966x.
+> >>>
+> >>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> >>> ---
+> >>>  Documentation/devicetree/bindings/usb/atmel-usb.txt | 3 +++
+> >>>  1 file changed, 3 insertions(+)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/usb/atmel-usb.txt b/Do=
+cumentation/devicetree/bindings/usb/atmel-usb.txt
+> >>> index f512f0290728..a6fab7d63f37 100644
+> >>> --- a/Documentation/devicetree/bindings/usb/atmel-usb.txt
+> >>> +++ b/Documentation/devicetree/bindings/usb/atmel-usb.txt
+> >>> @@ -87,6 +87,9 @@ Required properties:
+> >>>  	       "atmel,at91sam9g45-udc"
+> >>>  	       "atmel,sama5d3-udc"
+> >>>  	       "microchip,sam9x60-udc"
+> >>> +	       "microchip,lan996x-udc"   =20
+> >>
+> >> No wildcards please, especially that it closely fits previous wildcard
+> >> (lan996x includes lan9960 which looks a lot like sam9x60...)
+> >> =20
+> >=20
+> > Well, first, I made a mistake. It should be lan966x instead of lan996x.
+> >=20
+> > This family is composed of the LAN9662 and the LAN9668 SOCs.
+> >=20
+> > Related to the wilcard, lan966x is used in several bindings for common
+> > parts used by both SOCs:
+> > - microchip,lan966x-gck
+> > - microchip,lan966x-cpu-syscon
+> > - microchip,lan966x-switch
+> > - microchip,lan966x-miim
+> > - microchip,lan966x-serdes
+> > - microchip,lan966x-pinctrl =20
+>=20
+> And for new bindings I pointed that it is not preferred, so already few
+> other started using specific compatible.
+>=20
+> >=20
+> > I think it makes sense to keep 'microchip,lan966x-udc' for the USB
+> > device controller (same controller on LAN9662 and LAN9668) and so
+> > keeping the same rules as for other common parts. =20
+>=20
+> Having wildcard was rather a mistake and we already started correcting
+> it, so keeping the "mistake" neither gives you consistency, nor
+> correctness...
+>=20
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.19-rc1
+I think that the "family" compatible should be present.
+This one allows to define the common parts in the common
+.dtsi file (lan966x.dtsi in our case).
 
-for you to fetch changes up to 33b7af2f459df453feb0d44628d820c47fefe7a8:
+What do you think about:
+- microchip,lan9662-udc
+- microchip,lan9668-udc
+- microchip,lan966-udc  <-- Family
 
-  USB: serial: option: add Quectel BG95 modem (2022-05-19 08:03:32 +0200)
+lan966 is defined as the family compatible string since (1) in
+bindings/arm/atmel-at91.yaml and in Documentation/arm/microchip.rst
 
-----------------------------------------------------------------
-USB-serial updates for 5.19-rc1
+(1) https://lore.kernel.org/all/20211004105926.5696-1-kavyasree.kotagiri@mi=
+crochip.com/
 
-Here are the USB-serial updates for 5.19-rc1, including:
+Regards,
+Herve
 
- - a workaround for pl2303 devices with unexpected bcdUSB
- - a new modem device id
-
-Included is also a printk clean up.
-
-All but the modem-id commit have been in linux-next with no reported
-issues.
-
-----------------------------------------------------------------
-Carl Yin(殷张成) (1):
-      USB: serial: option: add Quectel BG95 modem
-
-Daniels Umanovskis (1):
-      USB: serial: ftdi_sio: clean up printk format specifier
-
-Johan Hovold (1):
-      USB: serial: pl2303: fix type detection for odd device
-
- drivers/usb/serial/ftdi_sio.c | 2 +-
- drivers/usb/serial/option.c   | 2 ++
- drivers/usb/serial/pl2303.c   | 3 +++
- 3 files changed, 6 insertions(+), 1 deletion(-)
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
