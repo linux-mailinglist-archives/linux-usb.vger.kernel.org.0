@@ -2,210 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CEA52E483
-	for <lists+linux-usb@lfdr.de>; Fri, 20 May 2022 07:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D022352E53D
+	for <lists+linux-usb@lfdr.de>; Fri, 20 May 2022 08:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345639AbiETFpv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 May 2022 01:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
+        id S1345980AbiETGqu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 May 2022 02:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244615AbiETFpt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 May 2022 01:45:49 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2110.outbound.protection.outlook.com [40.107.255.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A52209;
-        Thu, 19 May 2022 22:45:43 -0700 (PDT)
+        with ESMTP id S1345969AbiETGqp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 May 2022 02:46:45 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01olkn2064.outbound.protection.outlook.com [40.92.107.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD5B66C9D;
+        Thu, 19 May 2022 23:46:42 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=niFjM8YbY4m3CUE7ujQyRxX5hsdWenkyw0cet5IxuVC+O2QyxjMxfsA+eH2Z8yFGfrUeYJi4xKEIMs73h2C8pAS4vtclYY5dMpgsl7IVyKWZanjvv3LA/pKinAWy71ZFCcoH0wlOuPuIn6QJVE3d2EdiVchm2I6j2PtWrdFQbl2rwADD86NwAfcI3c5gfWBXN5SnhT/Y2SdSJHj6UFDyD9lt3VyIEaONBkjldkvnfu8IiYGKz2RRFqTsm2KB4982IUdXf0OO/XNj1uFiVPDbw95OgjBNNnOB/ZT3Gp4op05pcJ4OZhfCdr+Svf0N5yv5PeBcdETEjK7X0221YH4QRw==
+ b=chj9pIW8niPEnZ1mo3zhI8XxkMFhbGu6JD1LkiQOlxxitWi53GGbS7dZIsTiNcVXpnboJNP6b8qcBfnZphr0tlRSvMJn7OwBoj9oegsT95TH/vzGzx2TagkV1eGKUPbtdafJRlff+I7Gqgkfb9n+LNL4wSkVMBHPLCLIGtbdiI1R5gdSQit62EcwLC3zc9pfDW5s+d6erYm2ZGpl3/mn9rWQEQkQ2PKRGcem3Pj4FpKEASB4C7WR7VOndjCT10MlGbpWoNYaXnCLIQsRxi6585Ce3HfC6Nk8fIowg4KiwvEXQJHozINjJxR0CW5iKXnpImN795kxsEZ+5X8cj0kVCA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ljO8CJS+yM/tLyDvLfiVabQz2qI4j658vwVPehB8lNM=;
- b=WR8oGIux4SWAPg9pouUQKko4mBHOCWXCc9jl0XggY+s+40F9XmZkGV5MYCYJfE7uWsQzryaVn2k0TdzhSPmZEQHz/dXN0ta+qf/K+y5LcOFg7nr1RtpfQbKa5EqIloa1EwrXCRWNAJ5uqa+2Bp9ym4aKTbPZJoxGVl4cf/Um6x6+S59CXQuV5KHfGKQH2cwpWW+ghGb5sFrNNUUpO9sysYeRm2qo6O8olEkQOCWmP2EBsJ8U5F8I6dsjJTiF43bE9xaOZ3D+99NDVKgOhvFPj4UVsLyZpM3b2VCxXqEAcFyXOobHI71DJdne0M2qNBFDbVDqmhDrKDcrU3PmBsYo4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ bh=XziYBHDPc+2JjPpkzPRiKlsQSW5pa9Mu4jcW/KiywAY=;
+ b=IrfdSKn6mxPFamumXfKli4Zq/imWL5yyp2D26wHPp6EqSelfvFjTm30tRlPlnpEPn0qD1XLkChZJvywqtetXrj59iHb52n/7JEoJXPsP6YN4mpLAdnHxtTT4z2lpjUlSko5inHTM6QGVnQSVyCwv3ima6cddfSgTtwPfpJRBqdIwSayAOdVJ+UPdUMkUwcZ+Ygx207+mtMo4btS6DEGnkQJCGQ5botbqAbbnJb0V5AsfD2Ksf3rc1WSpzYi35NADipcfEME1lX0OJh/j/cJnMK94NdpHljFRQSItxN+Y8gv/J32Dhgw6RoZEreHWvh43o05aaA2I9CfWp6N0y3R0Hw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ljO8CJS+yM/tLyDvLfiVabQz2qI4j658vwVPehB8lNM=;
- b=G1WsazcxNIjScT09FluApgjQd6eRk8e2fMppYp5T3nhDyytJJK2xbqHi1OfnCPcmlKeX/RMtPKFwgfnlck/Pc5f9bCdovXFEnxwnpzI19ALJRHFywazw9uJZs58Xedd0ah+HCmlAr7/7vVAFzpQ/PYMcnJAH1NA5f5zTtK7dd/b0gBxzliKQ7Htb9gQ02xygD1A4unZmo33PuM6B55KE7MEbr7/FRbTXZtiKmgLcwHHZSrD9vNLnJPRJDo/XqV9LIfTeq8coMeYQmZpEo+Z9fnLRKF6bNzNTqcL5QyJ3+nAobNIJhbeA0XgYb3//aasdQ9rR5xyZ0kU70pBD8NzmAA==
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
- by KL1PR0601MB3782.apcprd06.prod.outlook.com (2603:1096:820:1f::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.17; Fri, 20 May
- 2022 05:45:36 +0000
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::3d31:8c42:b7f1:ece8]) by HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::3d31:8c42:b7f1:ece8%7]) with mapi id 15.20.5250.020; Fri, 20 May 2022
- 05:45:36 +0000
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?iso-8859-1?Q?Christian_K=F6nig?= <christian.koenig@amd.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Li Yang <leoyang.li@nxp.com>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-        kernel test robot <lkp@intel.com>
-Subject: RE: [PATCH v3 1/3] usb: gadget: add Aspeed ast2600 udc driver
-Thread-Topic: [PATCH v3 1/3] usb: gadget: add Aspeed ast2600 udc driver
-Thread-Index: AQHYan9t0ehEszq6CEa8UANcF9oVAa0mXPUAgACwUECAADcBgIAAAEow
-Date:   Fri, 20 May 2022 05:45:36 +0000
-Message-ID: <HK0PR06MB3202D08237C96D4766B070F580D39@HK0PR06MB3202.apcprd06.prod.outlook.com>
-References: <20220518062043.1075360-1-neal_liu@aspeedtech.com>
- <20220518062043.1075360-2-neal_liu@aspeedtech.com>
- <YoZoouI4EbnNYE6h@kroah.com>
- <HK0PR06MB32020AEF88CFFD4296762B2880D39@HK0PR06MB3202.apcprd06.prod.outlook.com>
- <YocqrTHm29g9qU69@kroah.com>
-In-Reply-To: <YocqrTHm29g9qU69@kroah.com>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ec1c8d04-0746-4bfa-3b7f-08da3a23f6cf
-x-ms-traffictypediagnostic: KL1PR0601MB3782:EE_
-x-microsoft-antispam-prvs: <KL1PR0601MB3782335351BDB737868FDAAE80D39@KL1PR0601MB3782.apcprd06.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wUEMrGYT2DrXntZ1RBuIdeU+ahMfE0dir6pLGA/Og8vTYTC/1anJAxEOtYxF3yDZ24rkBcLGsQXo9u6uhZ2Ydz6kmNHpZq3WVL/mblWpddH05/IqNQWrXC84gJ2u0SyPCeZveCJ2J9lLwXCiZeCix4s06anFCYpH01k8WkxJrT2K257/inZqSp8LQd/xTmKzyEvinn5nSq7tLJRkImJ5Ty2X7W0hw8sqkTU2D/r9WoensxBwPCXWAD7Zb8Fh00VHXT+aCqkxJl3vrsMsPyVugmvcKBtUQeTKb9jlUDOFweGdLHIPVMlzvQ3VjcnZ5wbqpO2xeE8ZvanHcG1AO99q57dbdde/fsT32s19c7jK2HyTK/kTqqH4kcYjW48OA98SMLS/J/kF1DyFu9wGnFzjm2HgjrMP/iiVtWSMlklZ+PlrPM9rMeXQTFxzav+jgtxdwaOllDNGDifhndrIzMW3NGWkoJ7mg2pAN4pmzfq8K7cu1vRNLEJ42hoavDRvbI1yQCb+5LbJZ/VfXEyBPty73qh9C50U73xfgQxrrZ/U4WRbBN16lq77DBrl2M5/0gJiSrvbgIgdIaSXz6MBcyq69DvX37emjSyH7Y+0HaSGrZFKm36vPE2ZqB2H7PBHP4dLKKDm3Bl97J0h1GDJG7/9jwA7AJt4K422Ci+viA1h8I2lvrd6iNZo33WOy0xpriUpC27Vjjxql7gZroQ3HMUjOQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(376002)(39850400004)(136003)(346002)(396003)(366004)(8676002)(4326008)(66476007)(66556008)(52536014)(83380400001)(76116006)(55016003)(5660300002)(7416002)(2906002)(316002)(64756008)(122000001)(38100700002)(86362001)(66946007)(38070700005)(66446008)(7696005)(8936002)(6506007)(186003)(53546011)(66574015)(54906003)(6916009)(26005)(71200400001)(508600001)(33656002)(9686003)(41300700001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?/WvZngISpBZYnm44zam4RTk4E4yN5qv39QnwMyg0v+hXQYMb9NBNhdA9ac?=
- =?iso-8859-1?Q?kPEctjFViAEmUX/TNS6OkZ4YYqp3XdLDEFfw/+MJIh5+hHkCOJwe0NOL+h?=
- =?iso-8859-1?Q?+ruElvXBI4BcSaboAi5FuMqW/x2FMSLggkP1YPremoyfprA6F+MOFAKrx8?=
- =?iso-8859-1?Q?Gm9t6G7fCwkQNqV6Tgn11s9ktrpMXMVW39yrCyhnajx2Tv3l/rCFWVIl3f?=
- =?iso-8859-1?Q?2tLaRwknzzmDeAP8/PPllK4fKkzkg3QzvYaVeD+dzU3g1x5gRTfhlm4QVV?=
- =?iso-8859-1?Q?GUdSOsuwgNYgv/WHYnxAWxgBIujpVm4c2a9sT6IJ6Rjqv2TycUMzsKpC3x?=
- =?iso-8859-1?Q?1SXIDu7KeUomxWwxOHIAFQCW40m3wLwAanGZkfmlnQH6rB37cy8SGdNCmh?=
- =?iso-8859-1?Q?3w2/Ec1v1FBJfCnL7U3iabOz9aa2I0Ozgx81lRx4NP/hDjPekb6XwcGqrJ?=
- =?iso-8859-1?Q?Hp5kzOl2rIPuxZYJin4pF6JPC23ZWgR68ePjHRYSBStxm2BiTsxBqTnHVN?=
- =?iso-8859-1?Q?uSycDxGyJJ+HrvzYboJgvVhF3dQxixXB9KKQdSkSI3LmPs9p/eh5VZ+S4y?=
- =?iso-8859-1?Q?phNg4eGf+ZnvUiPpKlCnSWbezCSnRSIrvqGb5DyuFXBdIG7i+3LuIfUGdX?=
- =?iso-8859-1?Q?D8tOtUfKDvW5z5vNVeZGoE7urhA0ZCjqqLjfcEW/iIQJ8YlaI+QiWosqGX?=
- =?iso-8859-1?Q?cUaZ5lz0sS5emZU8mWmQ45ZOCU4Ez8wpN5ZG9g79o4KpdRJCS98cChDvI1?=
- =?iso-8859-1?Q?N+yA+Sx0CKKJsf4U8rbEpx1AJcP2BauRnyIq9bOn3s7UjQQJFyECe2+dWv?=
- =?iso-8859-1?Q?/nDlNrX+v5aooejmPsSeHfQquHQawuNDtFeG5sD4d5PRsaxeAu7+jM0MnJ?=
- =?iso-8859-1?Q?ydY9f3U98Wc80Kj591HCrSSPYnJdg8C7H2TELYrSRC9asytf2zWpEQmZTZ?=
- =?iso-8859-1?Q?Hcq3Wza8+qYwxcgVPq2hbV4svdH8jCwVT5Gt1JZ3Q3VHg/lBU1BQzNAY7u?=
- =?iso-8859-1?Q?WT1M9SYFOcybMJoKyrsFtNc5NaQmyjSgMY/9GUxHLc9rivc9XztfD/rGf3?=
- =?iso-8859-1?Q?s9eVUO9ZKIf2xilJhGOZZWqZg0Ll+HGtF7tAAGBoa/u5mFS7Mdhc1qqsqg?=
- =?iso-8859-1?Q?YPVs3O6zDydxv6JeMNRENkDILjx8y/Nsyt6+YkiOoczB3sQQG6HwAQlar/?=
- =?iso-8859-1?Q?nDh3o0CR9XOLlN29uPWQf6+8JsHXEyQas8mmML1sJ3UfY+UXcV8vADbQAg?=
- =?iso-8859-1?Q?1mG4Qfp3M8B5S3LgJc3Gyuy3bTRsmhViQi1wyz2khvoNt3aWayQ690KgyF?=
- =?iso-8859-1?Q?Zv/r3XtU2RCx28b4husQGyBtv9p9H3de1CIz0dNI0ntoFJzT9/IRTi/S4G?=
- =?iso-8859-1?Q?ft7vnL10UTVC2CSMLMDYExWEecg7zbyvVScSM/PGR7j9IWFgrFzlebBHwa?=
- =?iso-8859-1?Q?lLQMwaQCQ8k2KdE0ADwNzPjgvT204kx3lIPKwM4PmVPfqqYk7Y445oWf2D?=
- =?iso-8859-1?Q?X83Fdo45Csd4owVGw0iEMQCnCwnpbBsAe6o2hTMOcU/65OSQqcUzSHXaMi?=
- =?iso-8859-1?Q?9nq8fTaZUQEUx83WciYdFnfJZFNQ0Rf2De8Omf0iJF6bZ4Wa376mTrJ9rI?=
- =?iso-8859-1?Q?INY00P0Sh4KMPuDL/hVEA4TDnZ9V+3ZoKIC+lxIJhfaaMyoAntyOUM7484?=
- =?iso-8859-1?Q?tKx+rLQd3YYcpIRBTvZ25+24lhG0SgUSFt5V26CZqceh2qvEHZn3pPy1Dw?=
- =?iso-8859-1?Q?cy6JJMq+lwXKZ6TelRx5PUYl10Axe8saRU2WIMpWcJzdwOAhpxP9ZhETaz?=
- =?iso-8859-1?Q?qw3WNLLLMA=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
+ bh=XziYBHDPc+2JjPpkzPRiKlsQSW5pa9Mu4jcW/KiywAY=;
+ b=uakP2cqMfJxZU0ZNLnEvgdLL1F78JINkkctk0t10rFlU2RMwfIHq4PWYvFgBADphjd4P7BWD8DJCJUszaswdgddiVYRuDus44lj39rvd6C0ZSGFTL8P8VLJ22LSk+/cLauJy6ekTwpSgW30hySpf7KIWOOzPm3lVXCXW6rFitPR9IyROTcKBwSPOKpWHwrJSNfLZR+VoilGzVEvVPWy7M89KZFTxdPYC5Vs21/Rj2h/TdhfY7R6io3aCgj7vOexoKoNSA/nLKfxMXd7wHFz7ZLIHyyp91xeKeT/zKr5wLipIj9G2p/CXxoAHuYFzH/JcIrvVViz2hX5jbHtMHYQ/EA==
+Received: from HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:95::22) by SG2PR01MB3000.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:70::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15; Fri, 20 May
+ 2022 06:46:39 +0000
+Received: from HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ ([fe80::3022:ac4d:5d89:8c7c]) by HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ ([fe80::3022:ac4d:5d89:8c7c%5]) with mapi id 15.20.5273.017; Fri, 20 May 2022
+ 06:46:37 +0000
+Message-ID: <HK0PR01MB2801E9A6A53F346BC3436845F8D39@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
+Subject: Re: [PATCH] USB / dwc3: remove the use of -ENOSYS from core.c
+From:   Kushagra Verma <kushagra765@outlook.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 20 May 2022 12:16:29 +0530
+In-Reply-To: <YoZpcqDCwoXIvI5q@kroah.com>
+References: <HK0PR01MB280106E1D78EF51A5B8ED8BFF8CE9@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
+         <YoZpcqDCwoXIvI5q@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 
+X-TMN:  [+gMTWbktvRIZoHg/lJ/bB9bBF08SClM3IKeGYneXxvmjFoRcguOnl8oOPqsnZBHo]
+X-ClientProxiedBy: PN0PR01CA0013.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:4f::18) To HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:95::22)
+X-Microsoft-Original-Message-ID: <cdc3a785376cb702ed735d118187b446d5f777cc.camel@outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 766a88de-a875-4bcb-5366-08da3a2c7cd3
+X-MS-TrafficTypeDiagnostic: SG2PR01MB3000:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FHejsEgLWvt9YIPpupObRJ0POa/RHWGweyD4YkpUHnfJ0eix1xY67YHujfvpZi0jZfb2q2t5wn4AzV5G7YiDwTp5VONxHjkjnxnUlvRhYCkUMStj+FJ36ra2IWWNntJ2EC6bKhop4eSywDZnf9uJpdxW/V/OpPkmotjqPHPBDmRn6Mh/U++0QpBFx/9WW6J59PfkPiw6SXPwXdchPsKdHB61Tnds2FWXEuELhNuZwVgQ8kmRBoPgDKszH5JEACfpBvIhG9vHMA/u9R9pkT5jkn+JgKc8GQ6PUozaXX/OzBHW8XiCchSvuc7GlQWFY4PJrE2Z9UJTMA0tdBpCCHqFkMbg2isjPwdOlGWVFp9yanMhBT7MaTW0hdTKOCfT5EfY6Fad0RefwO+KXph/zpS3eTN+hwjZsVsHx0x1+KmeZeqxxovF9mNl7goeUPX86u4o2FuefQKIcaeViaiIE86Xx3AxMABGAcG/9L13Aqs5tWm5c2XKJRkC0zMYW/SS/s3oH04wK27aCGRWXLcZl1FZ2r9eQQPAwIe4vhlVz0DyMYo2nYWmdiJ1Ffw3R6OyxVoiZbP6MuN0yWJdAcJvz5P9Eg==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eEgwYXY1bCtKTy94dW9jaGllT0xOQlg3ZE9JVHdtaUxLcUw2R2taT1hlemdZ?=
+ =?utf-8?B?dFA4ME0rZTUxS3RvZ1BxNVRQeXJXNFJEU05qKzJMVEJYWUc0MXF3Z0VFLzBK?=
+ =?utf-8?B?WUVJNTdMTjh5MDV6RTc4WlgveHg2eXhkKzVnL0ZWTmxwTk1CTFpzS0NSUTVu?=
+ =?utf-8?B?S3Z3Tms5R3VMOFJydW95a21aYno1SDVNVCs1QVFTbVpvMlVmMnBsTU5PVFR2?=
+ =?utf-8?B?cW4vT1NQaTlBejMyc3lOeUlmUXB4czZWTlgxTVVUeUpWeXNMQjU0RXg5SDV3?=
+ =?utf-8?B?elJ6SFlXMXE0c25rd2xxc1NYQVNneVpjYWFtbkM1akk4T0FTVzdYaEhtWTYv?=
+ =?utf-8?B?U24xeXVCRlhwZkVMQU9vQ3VwM203OWREay9tajI2QU1BdDVKbHQ5ZTVrdkxp?=
+ =?utf-8?B?cnBsRklOdlgrU2l0WnBVS0F4ZEF6dHVmK1gvRmRZK3pabFQ2dm16dVVQbVhE?=
+ =?utf-8?B?dnBieVpaaE1aSW9wOVpBaVF1YmhZRzBvd3l4YmpUdU5MYzgwNWlNUWM4U1Rw?=
+ =?utf-8?B?dllEbWNlZVQrOWNORUQ2dnRFelZYTzYyR1l2WUNkNUdMN2pjYlErejZTMlJL?=
+ =?utf-8?B?aitQdVltalRlSG9ZRDkwZnN6T29mbFhDbkZHUGd0T1laNWNGV21RZXJYOWFa?=
+ =?utf-8?B?SDFUb0FLa0tSRWk2TlBMZ1dKUUp6bU9pMjVIY3NJNUZybER0VnVONmxybm8w?=
+ =?utf-8?B?RzBDU3dGNUx1bWNod0ZLTWtHc0Q0cW1GVlk2ekdnSE9GeFQwMGhoREQyM28r?=
+ =?utf-8?B?ZVZRczZSSy9semw0SFVwYWY1NnNVUjkzdkhvU2FXMTRIQVRKNFlXQTVaM2Nh?=
+ =?utf-8?B?UitPVjB1UnhSemJvbkExNjAvUnJ0aVpGditrTi9MVTExWnl4S1lzSTlxQlNE?=
+ =?utf-8?B?SGFMOW1MbTJHVDJsck5HSmhIVmFpQmNXVlpGT1A3MW5NVlVsdXl6TDFDWWV0?=
+ =?utf-8?B?WE1xYWNDckl6akpXVkgza25xS3JJNWphV0tiS0QxVkdhbGEvOHVCV2lxK0I5?=
+ =?utf-8?B?VTYvYWJhVDdIZjl6RlNvNjMzalRSL05qZmN4aWVBWFJqNXdYeThCdklLOEpF?=
+ =?utf-8?B?MXhpNVBJdURjTTUvNm9GYjVnTmNTeDQrbFovUFlvOHVlUFNqRDBVTEtOdTMr?=
+ =?utf-8?B?M3lDOWJ2YXVORC9DaFA1OUN0OTRROVZ2a1Q4OEJnZTZpanVHRXZTMDc0c3R4?=
+ =?utf-8?B?THVuQWNNb0FnRHYvZHI5ekZUbVlVaXlRN3BidjdMUVN2Mnp2RTJxMkRybEhX?=
+ =?utf-8?B?OUMwblpOMzNMZlFUb0V0QS9QZ0xZQ1ViRmFFTTBHeUkwbnlTNHhzb256dkZr?=
+ =?utf-8?B?ZDhKMmFGODRQUzJCTzBaR1IycU1tZm5mRnRvd2lJV2xyZU9NUHZCNDN6TWxZ?=
+ =?utf-8?B?eHFNYy9DeVVOVmk4SmMwbXJWdVp6QmY3c0IrM2MzUGFpTzErZGsrWGx0TlI0?=
+ =?utf-8?B?aTJtcmJCT092Wmx4MWdxclBRRlQreWtSS1NPUGNDTEFJWGs5dEFFakJ4b3ps?=
+ =?utf-8?B?eUpGdkdxakFJTXptS21WR1FKM1B4bEdIbGI0TGhNVlFKQXptK2FuWVp5VUND?=
+ =?utf-8?B?Q1hrbWR5bDFNRWEvV0pUTjZmdU4rY0ZZWVo5VnlIUHRvbGlhaHZyODRjclpP?=
+ =?utf-8?B?OXo4d2hvbFdmYlRtZ0FhMXdzd29WbDJZbDk3azhkdzNmbmZYSUloODg2QlBn?=
+ =?utf-8?B?SW5zQ3NUa2J2UFJwN210NGNUaHBSWXJCM2l2N2dZQWdpOStwMHMzTURKbWtr?=
+ =?utf-8?B?Qm16NHgzTkhGZUE0NXVyNkFPZ2JGVWhZcitWUFM2UTE1Z0JpR1JuSzBNWmFl?=
+ =?utf-8?B?L01Gazh2V0NudEZsWGIyUitONWo4YXZKdUFOeVlJNXVVRjJoTWs0TktXZVZB?=
+ =?utf-8?B?WEI3Z09rTS9QR2ZLUzNNejlqM2E0LzMxSWlzYWxmWmRmVXpOcTJTZEc2cHRL?=
+ =?utf-8?B?RVZLMDNyZkRJZHlwaDFsOTZnM2lCQjJZRVRJNkRJdUhabE5UK1paOFdTMklj?=
+ =?utf-8?B?L1haS25NOHdqRjBTWHJqMCs1UjZTc3lhaHpOa2cycnpIYnowZG02a01CV01B?=
+ =?utf-8?Q?OLG6Gw?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 766a88de-a875-4bcb-5366-08da3a2c7cd3
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR01MB2801.apcprd01.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec1c8d04-0746-4bfa-3b7f-08da3a23f6cf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2022 05:45:36.5076
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2022 06:46:37.7136
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5D5UuLA0/oAuipIr+HK3CMBa9BS0YUWX8XMm/jJXIUZDCs6GJ5NOuoaFtSzgvJ8PRHGkSXwyCFCgwZADBbgRpw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB3782
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR01MB3000
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> -----Original Message-----
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: Friday, May 20, 2022 1:44 PM
-> To: Neal Liu <neal_liu@aspeedtech.com>
-> Cc: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
-> <krzysztof.kozlowski+dt@linaro.org>; Joel Stanley <joel@jms.id.au>; Andre=
-w
-> Jeffery <andrew@aj.id.au>; Felipe Balbi <balbi@kernel.org>; Sumit Semwal
-> <sumit.semwal@linaro.org>; Christian K=F6nig <christian.koenig@amd.com>;
-> Geert Uytterhoeven <geert@linux-m68k.org>; Li Yang <leoyang.li@nxp.com>;
-> linux-aspeed@lists.ozlabs.org; linux-usb@vger.kernel.org;
-> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
-> linux-kernel@vger.kernel.org; linux-media@vger.kernel.org;
-> dri-devel@lists.freedesktop.org; linaro-mm-sig@lists.linaro.org; kernel t=
-est
-> robot <lkp@intel.com>
-> Subject: Re: [PATCH v3 1/3] usb: gadget: add Aspeed ast2600 udc driver
+On Thu, 2022-05-19 at 17:59 +0200, Greg KH wrote:
+> On Tue, May 17, 2022 at 08:22:00PM +0530, Kushagra Verma wrote:
+> > This patch removes the use of -ENOSYS as it is used when users try
+> > to call a
+> > syscall that doesn't exist. So, we don't need to check if 'ret =3D=3D -
+> > ENOSYS'.
 >=20
-> On Fri, May 20, 2022 at 02:29:36AM +0000, Neal Liu wrote:
-> > > -----Original Message-----
-> > > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Sent: Thursday, May 19, 2022 11:56 PM
-> > > To: Neal Liu <neal_liu@aspeedtech.com>
-> > > Cc: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
-> > > <krzysztof.kozlowski+dt@linaro.org>; Joel Stanley <joel@jms.id.au>;
-> > > Andrew Jeffery <andrew@aj.id.au>; Felipe Balbi <balbi@kernel.org>;
-> > > Sumit Semwal <sumit.semwal@linaro.org>; Christian K=F6nig
-> > > <christian.koenig@amd.com>; Geert Uytterhoeven
-> > > <geert@linux-m68k.org>; Li Yang <leoyang.li@nxp.com>;
-> > > linux-aspeed@lists.ozlabs.org; linux-usb@vger.kernel.org;
-> > > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
-> > > linux-kernel@vger.kernel.org; linux-media@vger.kernel.org;
-> > > dri-devel@lists.freedesktop.org; linaro-mm-sig@lists.linaro.org;
-> > > kernel test robot <lkp@intel.com>
-> > > Subject: Re: [PATCH v3 1/3] usb: gadget: add Aspeed ast2600 udc
-> > > driver
-> > >
-> > > On Wed, May 18, 2022 at 02:20:41PM +0800, Neal Liu wrote:
-> > > > Aspeed udc is compliant with USB2.0, supports USB High Speed and
-> > > > Full Speed, backward compatible with USB1.1.
-> > > >
-> > > > Supports independent DMA channel for each generic endpoint.
-> > > > Supports 32/256 stages descriptor mode for all generic endpoints.
-> > > >
-> > > > This driver supports full functionality including single/multiple
-> > > > stages descriptor mode, and exposes 1 UDC gadget driver.
-> > > >
-> > > > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > >
-> > > The kernel test robot did not report that you needed to add a new
-> > > driver :(
-> >
-> > I had received auto build test WARNING on usb/usb-testing reported from
-> kernel test robot.
-> > It still mentioned that if the issue is fixed, I can kindly add this ta=
-g.
-> > Would you prefer not to add this tag for the first coming driver?
+> ENOSYS is also used internally in the kernel for other things.
 >=20
-> Please do not add tags that do not make sense to.
+> >=20
+> > Signed-off-by: Kushagra Verma <kushagra765@outlook.com>
+> > ---
+> > =C2=A0drivers/usb/dwc3/core.c | 4 ++--
+> > =C2=A01 file changed, 2 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index c78205c5e19f..3c1a877d5183 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -1283,7 +1283,7 @@ static int dwc3_core_get_phy(struct dwc3
+> > *dwc)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dwc->usb2_generic_phy =
+=3D devm_phy_get(dev, "usb2-phy");
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ERR(dwc->usb2_ge=
+neric_phy)) {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D PTR_ERR(dwc->usb2_generic_phy);
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0if (ret =3D=3D -ENOSYS || ret =3D=3D -ENODEV)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0if (ret =3D=3D -ENODEV)
+>=20
+> Did you validate that no callers can ever set this to ENOSYS?
+Yes, I think no callers should ever set ret to ENOSYS unless it comes under=
+ the other things ENOSYS is used for.
+>=20
+> Why was this added in the first place?=C2=A0 What commit added it?
+This was added by commit 57303488cd37d ("usb: dwc3: adapt dwc3 core to use =
+Generic PHY Framework").
 >=20
 > thanks,
 >=20
 > greg k-h
 
-Okay, I'll remove it as you suggested.
-Thanks
+Thanks,
+
+Kushagra
 
