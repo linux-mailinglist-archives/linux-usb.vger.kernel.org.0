@@ -2,231 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A7852FC47
-	for <lists+linux-usb@lfdr.de>; Sat, 21 May 2022 14:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3774752FCF3
+	for <lists+linux-usb@lfdr.de>; Sat, 21 May 2022 15:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243275AbiEUMDx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 May 2022 08:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
+        id S243637AbiEUNpA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 May 2022 09:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239289AbiEUMDt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 May 2022 08:03:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA53E393C2;
-        Sat, 21 May 2022 05:03:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F42060B10;
-        Sat, 21 May 2022 12:03:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C82EAC385A9;
-        Sat, 21 May 2022 12:03:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653134624;
-        bh=YM5DKeCTB5HQbOoCwtl03Mo0hTo1psvio2W2JuRy1VY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r+Z5Qbvnzdqx4iyIsyprDVrcn3TLFQm5AjFHbOe4AzH0vufySiSygpAZNEPHlBNrG
-         /YnjEE3Yuo472HoH7x2IAnaVZVGS66bnDIYxpnAEfjGZxVDyIgbFL2CJgsieATCzo7
-         Cj/Y71S+96cERy5vmrYdtprwVaOAxAkXSRwiJxc23ohApnbrytAA6PFgfMz1oObtBy
-         ClWMkU8uok4u/WbsNkDksK8ztPdNBK/pGiWLM1I/ghecYGmLNQmdBUsQNmK2EKf2Mc
-         FnocTTnbEiGKxp6xdmqHC4/4qo83I5VmTPQaywqEBsysN3Edifhz/JUdJIU9Ytf1GP
-         /P9vG6Urn812g==
-Date:   Sat, 21 May 2022 14:03:40 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     frank zago <frank@zago.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] i2c: ch341: add I2C MFD cell driver for the CH341
-Message-ID: <YojVHBofkBOFVYap@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        frank zago <frank@zago.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20220401023306.79532-1-frank@zago.net>
- <20220401023306.79532-4-frank@zago.net>
+        with ESMTP id S238598AbiEUNo6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 May 2022 09:44:58 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A2E7DE29;
+        Sat, 21 May 2022 06:44:57 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-f189b07f57so13243384fac.1;
+        Sat, 21 May 2022 06:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=81spVghcZ1b5INr6qvaKCcFhE6aDceL23pFyCnpeyd8=;
+        b=cFb/+uZVt5A2eDRFqr6mbDYCejXwBZGT/Sx0wVvFw+Rp+PZ1C+eEv36CdOPLCR6xaN
+         Rwph8NqLVvjx1YRR3R7qyH96aPSQcoOs8CPZL2bnlaAUlp3TkGS9T8SR0trwss9RJcU8
+         tQkL9w/njja8xuOceNQamMMf9c1jl183krYYXQMMU/qYB5oSWpXUBrTPiW32tQPsIrGa
+         pgHLJdPYvrnBCGGYDdLoYaiOv09s4R9/P3bztYKm5+CmJa6400tiWfYehOBgnKH9cZG2
+         Ni4fxwQmWXAJMQ+K7zvyGpO4aCe+SG+aDq5btVVBw/35aYSm1/glEWo2MCdT46hSbdpt
+         Iadw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=81spVghcZ1b5INr6qvaKCcFhE6aDceL23pFyCnpeyd8=;
+        b=w7JBG3e/YHErFE8oVHxxslDgEt1RDtbiVTv/RpB+cHGwdjk4DJ2f9mdq+nc1J+vIz6
+         K2TuzqSucPSP2azM/WuQe6zXNXFw1rjLuC9U9+CpKjHzJ8fTFUKL2x/0r/syMuGHXfs4
+         sTXnZP2jV+/miDlAhfav1b2VLG8pevNRMPRz/ZTrHTR9u12YTd4A1xSNSssN4upGTHPE
+         y24T9uIxH5AVBO3rcjh0CSMouYa7zLhBU8CCuSajfKRzs8HQflIuM102E9GyEGBhyvvu
+         4l0rD8OAAJb1k10WtAWeJoMkUzS0N7H+MeUp5VFkNmXEWuMRs9q5V6kBR0kp6nqO4DZH
+         /Nrw==
+X-Gm-Message-State: AOAM530uILJZDp1QKjyUbVCYdkSHB24DweHjnJnVIH7OFX9XsYuOkA5C
+        woDB8Ac/4CNE55O9kES/X1IVEZ4fAz55ww==
+X-Google-Smtp-Source: ABdhPJwcWAm8eF8epLhg82PB80IgXiUiv7K412i+CXEqjbI/LZyUKUt13QvLtk0c7IZqR6QKuLPF3w==
+X-Received: by 2002:a05:6870:f149:b0:dd:f3b0:986d with SMTP id l9-20020a056870f14900b000ddf3b0986dmr8671712oac.148.1653140697050;
+        Sat, 21 May 2022 06:44:57 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 184-20020aca05c1000000b0032698578409sm2284562oif.38.2022.05.21.06.44.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 May 2022 06:44:56 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2cecb83a-ebf2-0f48-e542-8d099c92048d@roeck-us.net>
+Date:   Sat, 21 May 2022 06:44:54 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="H4Fcr/HIYyvCKkRR"
-Content-Disposition: inline
-In-Reply-To: <20220401023306.79532-4-frank@zago.net>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] usb: typec: tcpm: fix typo in comment
+Content-Language: en-US
+To:     Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     kernel-janitors@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220521111145.81697-52-Julia.Lawall@inria.fr>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220521111145.81697-52-Julia.Lawall@inria.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 5/21/22 04:11, Julia Lawall wrote:
+> Spelling mistake (triple letters) in comment.
+> Detected with the help of Coccinelle.
+> 
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
---H4Fcr/HIYyvCKkRR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Hi Frank,
+> 
+> ---
+>   drivers/usb/typec/tcpm/tcpm.c |    2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 3bc2f4ebd1fe..7039383eac6d 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -471,7 +471,7 @@ struct tcpm_port {
+>   
+>   	/*
+>   	 * When set, port requests PD_P_SNK_STDBY_MW upon entering SNK_DISCOVERY and
+> -	 * the actual currrent limit after RX of PD_CTRL_PSRDY for PD link,
+> +	 * the actual current limit after RX of PD_CTRL_PSRDY for PD link,
+>   	 * SNK_READY for non-pd link.
+>   	 */
+>   	bool slow_charger_loop;
+> 
 
-I am not super familiar with USB drivers, so mostly some high level
-review questions first:
-
-On Thu, Mar 31, 2022 at 09:33:06PM -0500, frank zago wrote:
-> The I2C interface can run at 4 different speeds. This driver currently
-> only offer 100MHz. Tested with a variety of I2C sensors, and the IIO
-
-100kHz.
-
-> subsystem.
->=20
-> Signed-off-by: frank zago <frank@zago.net>
-
-=2E..
-
-> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-> index a1bae59208e3..db9797345ad5 100644
-> --- a/drivers/i2c/busses/Kconfig
-> +++ b/drivers/i2c/busses/Kconfig
-> @@ -1199,6 +1199,16 @@ config I2C_RCAR
-> =20
->  comment "External I2C/SMBus adapter drivers"
-> =20
-> +config I2C_CH341
-> +	tristate "CH341 USB to I2C support"
-> +	select MFD_CH341
-
-Hmm, it selects a symbol which depends on USB. Not good AFAIK. I think
-this driver should depend on MFD_CH341.
-
-> +	help
-> +	  If you say yes to this option, I2C support will be included for the
-> +	  WCH CH341, a USB to I2C/SPI/GPIO interface.
-> +
-> +	  This driver can also be built as a module.  If so, the module
-> +	  will be called i2c-ch341.
-> +
->  config I2C_DIOLAN_U2C
->  	tristate "Diolan U2C-12 USB adapter"
->  	depends on USB
-
-=2E..
-
-> diff --git a/drivers/i2c/busses/i2c-ch341.c b/drivers/i2c/busses/i2c-ch34=
-1.c
-> new file mode 100644
-> index 000000000000..3da11e358976
-> --- /dev/null
-> +++ b/drivers/i2c/busses/i2c-ch341.c
-> @@ -0,0 +1,331 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * I2C cell driver for the CH341A, CH341B and CH341T.
-> + *
-> + * Copyright 2022, Frank Zago
-> + * Copyright (c) 2016 Tse Lun Bien
-> + * Copyright (c) 2014 Marco Gittler
-> + * Copyright (C) 2006-2007 Till Harbaum (Till@Harbaum.org)
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/types.h>
-> +#include <linux/usb.h>
-> +
-> +#include <linux/i2c.h>
-> +
-> +#include <linux/mfd/ch341.h>
-
-Please sort the includes. No need for emtpy lines.
-
-> +
-> +/* I2C bus speed. Speed selection is not implemented. */
-> +#define CH341_I2C_20KHZ  0
-> +#define CH341_I2C_100KHZ 1
-> +#define CH341_I2C_400KHZ 2
-> +#define CH341_I2C_750KHZ 3
-> +
-> +/* I2C chip commands */
-> +#define CH341_CMD_I2C_STREAM 0xAA
-> +#define CH341_CMD_I2C_STM_END 0x00
-> +
-> +#define CH341_CMD_I2C_STM_STA 0x74
-> +#define CH341_CMD_I2C_STM_STO 0x75
-> +#define CH341_CMD_I2C_STM_OUT 0x80
-> +#define CH341_CMD_I2C_STM_IN 0xC0
-> +#define CH341_CMD_I2C_STM_SET 0x60
-> +
-> +/*
-> + * The maximum request size is 4096 bytes, both for reading and
-> + * writing, split in up to 128 32-byte segments. The I2C stream must
-> + * start and stop in each 32-byte segment. Reading must also be split,
-> + * with up to 32-byte per segment.
-> + */
-> +#define SEG_COUNT 128
-
-You mean between every 32 bytes, there is a START and STOP condition on
-the bus? Then, the maximum message size is 32 byte only, sadly. Or did I
-misunderstand?
-
-Can the driver send an arbitrary number of messages within one transfer?
-E.g. write, read, read, write, read? All connected with a REPEATED START
-and not with STOP and START?
-
-=2E..
-
-> +static u32 ch341_i2c_func(struct i2c_adapter *adap)
-> +{
-> +	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
-> +}
-
-Have you also tested zero length messages AKA SMBus Quick commands?
-
-=2E..
-
-> +
-> +MODULE_AUTHOR("Various");
-
-Please name the relevant authors. Only the ones which directly worked
-on this driver.
-
-> +MODULE_DESCRIPTION("CH341 USB to I2C");
-> +MODULE_LICENSE("GPL");
-
-SPDX header says "GPL v2".
-
-So much for now, thanks for your submission!
-
-   Wolfram
-
-
---H4Fcr/HIYyvCKkRR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKI1RcACgkQFA3kzBSg
-KbZK9g/+Mu+GYUFTtwq+Qc6zzfGI+m6UN29ptl8vCL2v59XpLItqJdhtjzMIxq+O
-nWEy1W9THhJVHRSQXeMUE9QLh2k1sdf4LuFgd4JOERxkJkuMZoMpr1y+0U5zJnL1
-laZSWLOi6uDrG3gvn2Oz48w02Fd3wIeQBIiV/Ts1t0xRQ6dh2gGUw5Pyl/jIFIj3
-alpQ6yrr06XA8MGnnBDn6IkoQoTZRwyDovQFYiqANCtSAWTnimqNXn9rqq3VP49Q
-bAs96eKvedC67D07tfS0PR1BzSyse+b5ZY+0wupYwRxn0RcK9qSP9Ik3U2CHxdks
-WKCRjUMh1+RGPX62lAgj+vzTO+JkchabQj4WgiEqo4T7ib5wpnTPDfdcG6ier0fr
-Jt7NvA+KsvolkOFOfosnHMELePD7+6GXl96DL/AAeXcp1qX+PmLNCBnRXX4IelYA
-ZxpkEzDbB5bPFhNcZq7ueiu8Ld0RfKwwbqaDa6yymIFBU2jTonnRVtdxfpJsWT98
-eb8qRh9l719RGNE6V+zfyxtEScr+tTs8M11uxd+241xy03DvANoLK7fFP9o5eLQk
-ZNStkV8n4OL8FPTm8553qz049CZK6tNYp8JfZfGvA51RtHiSeqtPe5JNFK4lRcuU
-0PyIHjTeb/eMe7sU5ySIJ4uEoawPEotsbEM2EM7MKqZW8m3Ka6A=
-=Cgps
------END PGP SIGNATURE-----
-
---H4Fcr/HIYyvCKkRR--
