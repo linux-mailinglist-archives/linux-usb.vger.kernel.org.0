@@ -2,184 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4926F52F770
-	for <lists+linux-usb@lfdr.de>; Sat, 21 May 2022 03:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D3A52F7D7
+	for <lists+linux-usb@lfdr.de>; Sat, 21 May 2022 05:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354316AbiEUB6f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 May 2022 21:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
+        id S1354416AbiEUDDZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 May 2022 23:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239135AbiEUB6b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 May 2022 21:58:31 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFCF15F6C0;
-        Fri, 20 May 2022 18:58:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653098310; x=1684634310;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DrWDg9joVp2dABARq0RhykWRXTcxvZJXfd8ePCmsTW0=;
-  b=KlwufDRPyR7kImVQBqWLXX6PFnzV/3OPbDzM7YP88cfOvxiRxAjRopsg
-   KTE6v0XCQyQ4PTMfEHvI3SBPT/zRMph/0pGmzYTLsQk427ivkBT8+ukKv
-   F8rvsn/vrF9Qhx1zdGS51u6WzV98i9di3OQNLXdtikvpqjFNl1aSVJpGP
-   7xp3czWnGcq+aAvQ15eHh/IqgzuPs2jBjC/CpLnL/olxqd6qWm3y1Lv2R
-   NgRVGeJrEc9u21PyCCKbKkQEphQlbOqU92JYRsXgPOo2uv9unax8g1q/A
-   S7tdoWs/0Jfg8hbTT/ePeyRT2Cv5OgcXKAXNlIJXHsRRIfvQb6TZx2HLg
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="298102845"
-X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="298102845"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 18:58:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="546969294"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 20 May 2022 18:58:23 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsENq-0005lm-Q8;
-        Sat, 21 May 2022 01:58:22 +0000
-Date:   Sat, 21 May 2022 09:57:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S1348794AbiEUDDS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 May 2022 23:03:18 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404DF195BCB
+        for <linux-usb@vger.kernel.org>; Fri, 20 May 2022 20:03:17 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id z3-20020a9d7a43000000b0060b0365a9c6so183995otm.2
+        for <linux-usb@vger.kernel.org>; Fri, 20 May 2022 20:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iXC9iZNjKmQ1eM7aHBeF/bE9C630CTpntf6Q84d5u6o=;
+        b=hmJCr2aIfOiTE4SJ8sFjyWEHTBHGRPk3e87aK4iDcFte9TsADuQj/obm9fXKfGOfz3
+         hzJd7BiWkAZ4YkiaeIc84hveESITKP3lpGHjOGlKoTssgOWy1NhVYOXe+tw++V+gSgIa
+         RBg3DXclV7LE6uvzxnh+7k/+KsbfUqNKPjIoBg7oUnLqnpRIOESe+/xhzZ9vyPIzYN9w
+         vG42WtbHZNPsA6pZSe9eyHtk/bcOcdHGIrZKXeIxLeuXhd2Cq+Mc8yWxHmpi/MTpXAjt
+         sR3ABM7JnfpKRCZUidrDY7Zxf8wejXbFKEehwyVjd5Y+UQTxVkoqnGMSmGbFvLdiMuOc
+         NDPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iXC9iZNjKmQ1eM7aHBeF/bE9C630CTpntf6Q84d5u6o=;
+        b=OqQbi+jOqCrCyDVWVqHe9S3GtqzV2iNHluwksCBTC7Fj2oYpR1BjhlDoEOaBncERLL
+         VkAdhWKzurFU+5o4WuHW+v8vFqPv+Ig4EcilATS+DQFXychGythhjZobeyd8iM0DjtnT
+         qlTTu9bUM9ZUu4cKZyCtRHA15eWgMulXDYUy3jWA7LpHPCMVuvnq99RkW2Eyd9cHLMu4
+         Xqt3c7Z69/T4H4gDa9GGemhM6rNSqOle/dQ6cqiA+dfK3B4CW/u6t+iPNK0yVLUfCUEp
+         8ElR5YX0cLH7t7qQMg80gT4s5N/vySx7gtzvlaIVUuvyCuqAqmE13nPdZRmN+RGRKuLB
+         1heQ==
+X-Gm-Message-State: AOAM533VpWAN4ebdy2Y9DInKFgcTBRWjPq9FfwaUu3V8g0LFUhPc3naz
+        gmK/ppliOEqc2BOSaomzC4MTag==
+X-Google-Smtp-Source: ABdhPJzf33hk+36nmQpALrQdURXvyXLsraIvq6uXSq7USAyA6BEgzR4igq3aDtnHAlZc/FbBD7CWmA==
+X-Received: by 2002:a05:6830:4d0:b0:60b:401:69df with SMTP id s16-20020a05683004d000b0060b040169dfmr110098otd.289.1653102196547;
+        Fri, 20 May 2022 20:03:16 -0700 (PDT)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id b7-20020a4aac87000000b0035eb4e5a6d6sm1848596oon.44.2022.05.20.20.03.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 20:03:16 -0700 (PDT)
+Date:   Fri, 20 May 2022 20:05:33 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Harsh Agarwal <quic_harshq@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Li Yang <leoyang.li@nxp.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Neal Liu <neal_liu@aspeedtech.com>,
-        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v4 1/3] usb: gadget: add Aspeed ast2600 udc driver
-Message-ID: <202205210945.hUK3CONa-lkp@intel.com>
-References: <20220520090617.2225080-2-neal_liu@aspeedtech.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com
+Subject: Re: [RFC 1/2] dt-bindings: usb: dwc3: Add support for multiport
+ related properties
+Message-ID: <YohW/W3Mk0J0AKVt@ripper>
+References: <1652963695-10109-1-git-send-email-quic_harshq@quicinc.com>
+ <1652963695-10109-2-git-send-email-quic_harshq@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220520090617.2225080-2-neal_liu@aspeedtech.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1652963695-10109-2-git-send-email-quic_harshq@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Neal,
+On Thu 19 May 05:34 PDT 2022, Harsh Agarwal wrote:
 
-I love your patch! Perhaps something to improve:
+> Added support for multiport, mport, num-ssphy and num-hsphy
+> properties. These properties are used to support devices having
+> a multiport controller.
+> 
+> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on robh/for-next v5.18-rc7 next-20220520]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Please do run dt_binding_check on your bindings, even though they are
+RFCs.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Neal-Liu/add-Aspeed-udc-driver-for-ast2600/20220520-170904
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220521/202205210945.hUK3CONa-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/19f3e863ea1b55f570db57febb96c6e8cb39c145
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Neal-Liu/add-Aspeed-udc-driver-for-ast2600/20220520-170904
-        git checkout 19f3e863ea1b55f570db57febb96c6e8cb39c145
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/ drivers/usb/gadget/udc/
+> ---
+>  .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index f4471f8..39c61483 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -341,6 +341,35 @@ properties:
+>        This port is used with the 'usb-role-switch' property  to connect the
+>        dwc3 to type C connector.
+>  
+> +  multiport:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Why are you inventing an of_graph lookalike here?
 
-All warnings (new ones prefixed by >>):
+> +    description:
+> +      If a single USB controller supports multiple ports, then it's referred to as
+> +      a multiport controller. Each port of the multiport controller can support
+> +      either High Speed or Super Speed or both and have their own PHY phandles. Each
+> +      port is represented by "mport" node and all the "mport" nodes are grouped
+> +      together inside the "multiport" node where individual "mport" node defines the
+> +      PHYs supported by that port.
+> +    required:
+> +      - mport
+> +
+> +  num-hsphy:
+> +    description: Total number of HS-PHYs defined by the multiport controller.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 
->> drivers/usb/gadget/udc/aspeed_udc.c:310:11: warning: comparison of address of 'ep->queue' equal to a null pointer is always false [-Wtautological-pointer-compare]
-           if (&ep->queue == NULL)
-                ~~~~^~~~~    ~~~~
->> drivers/usb/gadget/udc/aspeed_udc.c:967:7: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
-                   if (len < ep->ep.maxpacket) {
-                       ^~~
-   drivers/usb/gadget/udc/aspeed_udc.c:908:9: note: initialize the variable 'len' to silence this warning
-           u16 len;
-                  ^
-                   = 0
->> drivers/usb/gadget/udc/aspeed_udc.c:1011:7: warning: variable 'epnum' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-           case USB_RECIP_INTERFACE:
-                ^~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/usb/ch9.h:67:30: note: expanded from macro 'USB_RECIP_INTERFACE'
-   #define USB_RECIP_INTERFACE             0x01
-                                           ^~~~
-   drivers/usb/gadget/udc/aspeed_udc.c:1021:16: note: uninitialized use occurs here
-           ep = &udc->ep[epnum];
-                         ^~~~~
-   drivers/usb/gadget/udc/aspeed_udc.c:1007:7: warning: variable 'epnum' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-           case USB_RECIP_DEVICE:
-                ^~~~~~~~~~~~~~~~
-   include/uapi/linux/usb/ch9.h:66:27: note: expanded from macro 'USB_RECIP_DEVICE'
-   #define USB_RECIP_DEVICE                0x00
-                                           ^~~~
-   drivers/usb/gadget/udc/aspeed_udc.c:1021:16: note: uninitialized use occurs here
-           ep = &udc->ep[epnum];
-                         ^~~~~
-   drivers/usb/gadget/udc/aspeed_udc.c:1002:11: note: initialize the variable 'epnum' to silence this warning
-           u16 epnum;
-                    ^
-                     = 0
->> drivers/usb/gadget/udc/aspeed_udc.c:1096:6: warning: variable 'rc' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (udc->driver) {
-               ^~~~~~~~~~~
-   drivers/usb/gadget/udc/aspeed_udc.c:1108:6: note: uninitialized use occurs here
-           if (rc >= 0)
-               ^~
-   drivers/usb/gadget/udc/aspeed_udc.c:1096:2: note: remove the 'if' if its condition is always true
-           if (udc->driver) {
-           ^~~~~~~~~~~~~~~~~
-   drivers/usb/gadget/udc/aspeed_udc.c:1039:8: note: initialize the variable 'rc' to silence this warning
-           int rc;
-                 ^
-                  = 0
-   5 warnings generated.
+I'm expecting that you wont' have any superspeed-only ports. As such
+this number would imply be the number of ports listed under the node.
 
+> +
+> +  num-ssphy:
+> +    description: Total number of SS-PHYs defined by the multiport controller.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 
-vim +310 drivers/usb/gadget/udc/aspeed_udc.c
+Can you please explain why it's necessary to specify usb_nop_phy?
+Wouldn't it be possible to omit the phy in the case of a HS-only port?
+In which case this could just be calculated as well.
 
-   304	
-   305	static void ast_udc_nuke(struct ast_udc_ep *ep, int status)
-   306	{
-   307		int count = 0;
-   308	
-   309		/* Sanity check */
- > 310		if (&ep->queue == NULL)
-   311			return;
-   312	
-   313		while (!list_empty(&ep->queue)) {
-   314			struct ast_udc_request *req;
-   315	
-   316			req = list_entry(ep->queue.next, struct ast_udc_request,
-   317					 queue);
-   318			ast_udc_done(ep, req, status);
-   319			count++;
-   320		}
-   321	
-   322		if (count)
-   323			EP_DBG(ep, "Nuked %d request(s)\n", count);
-   324	}
-   325	
+Regards,
+Bjorn
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +
+> +  mport:
+> +    description: Each mport node represents one port of the multiport controller.
+> +    patternProperties: "^mport@[0-9a-f]+$"
+> +    oneOf:
+> +       - required:
+> +         - usb-phy
+> +       - required:
+> +          - phys
+> +          - phy-names
+> +
+>  unevaluatedProperties: false
+>  
+>  required:
+> @@ -369,4 +398,30 @@ examples:
+>        snps,dis_u2_susphy_quirk;
+>        snps,dis_enblslpm_quirk;
+>      };
+> +  - |
+> +    usb@4a000000 {
+> +      compatible = "snps,dwc3";
+> +      reg = <0x4a000000 0xcfff>;
+> +      interrupts = <0 92 4>;
+> +
+> +      multiport {
+> +
+> +	MP_1: mport@1 {
+> +          usb-phy = <&usb2_phy0>, <&usb3_phy0>;
+> +	};
+> +
+> +	MP_2: mport@2 {
+> +          usb-phy = <&usb2_phy1>, <&usb3_phy1>;
+> +	};
+> +
+> +	MP_3: mport@3 {
+> +          usb-phy = <&usb2_phy2>, <&usb_nop_phy>;
+> +	};
+> +
+> +	MP_4: mport@4 {
+> +          usb-phy = <&usb2_phy3>, <&usb_nop_phy>;
+> +	};
+> +
+> +      };
+> +    };
+>  ...
+> -- 
+> 2.7.4
+> 
