@@ -2,78 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3212052FD5D
-	for <lists+linux-usb@lfdr.de>; Sat, 21 May 2022 16:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754E652FD84
+	for <lists+linux-usb@lfdr.de>; Sat, 21 May 2022 17:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355272AbiEUOhh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 May 2022 10:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
+        id S244741AbiEUPDv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 May 2022 11:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355267AbiEUOhf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 May 2022 10:37:35 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D5B68334
-        for <linux-usb@vger.kernel.org>; Sat, 21 May 2022 07:37:33 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id c19so5602180lfv.5
-        for <linux-usb@vger.kernel.org>; Sat, 21 May 2022 07:37:33 -0700 (PDT)
+        with ESMTP id S244629AbiEUPDt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 May 2022 11:03:49 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E48791540
+        for <linux-usb@vger.kernel.org>; Sat, 21 May 2022 08:03:45 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id y32so18749231lfa.6
+        for <linux-usb@vger.kernel.org>; Sat, 21 May 2022 08:03:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HghIPP/c/aNOhyZD5DNeCeHaqeDM1vYhEBVF/dCUtJg=;
-        b=oOY/fR+Tg45kSSTWNzGLslHiFzBjURbO53hujaFIrpEgLFCAvIpJnp5BoQq5PIMRhf
-         OY9GPgX/PKaap9Ln9tq2mXRabiwBKmP7DOIwg9+gzXwRnOXKp5U4/TMxoYWHWL3ELWHn
-         h0qsL03lBRz3QqmfshuCJBDCKAKhKNz4dTasz6/b5XQzFZfzi1ArJAZotoprBzncCnmO
-         z3gudk2yJUtNm6wd4gGj1FYYj6jST3WHm7PiFIcrdLC8D+DQKaYlGlCvCet478IksISc
-         8AWSZLKpccr4teHCrqEW8S6Q0aIS2spAv3fm9lNetDuwoU+W64QSiC3aCqFzXAPGoN2A
-         BVfA==
+        bh=4qCtL0+bm+n7u/HXMR/ejdT6S5mFrpV8yho83BhRO5s=;
+        b=y5RaZjFHrW8w0QDRcNsylDIFb53EJ2po4JTV2FpNAdkAYoZdu1qF5axrhsPQuGATng
+         IRhb46WEpzowjRCtShPff9kYW6hHmeuNWcNUVWWram5Vsu13pwjOphSj50HlavWfE75o
+         fl8HJqVUjSx8QbwUjbHsCAWiX5BauC0NO2ZKYDPS4ebr9JVbKM3hZESP+xBd6W4RKh33
+         MjPK1gRmYo1vuibvD7RGvzYvB0fQWdgtoSLYcw2VHu54BnbEvJcolLEa1EoGN8BAPKCL
+         xL8v5PmCr8qaYJ68UOqWoeB4NePuVP6tv4mkCntQBpW2qZmf/QlRL9lcpkc3pjzue05U
+         zOAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=HghIPP/c/aNOhyZD5DNeCeHaqeDM1vYhEBVF/dCUtJg=;
-        b=2h7LXMd+CM1YQY8ad/XYSgQ3Rkv5zmh+LtMa7cnqwKAH5UUXwQYMDaVmmqsZ++w0by
-         27M8swxnLA9WdfBKucHt4egs277i0AYx/6zMMb1PmX4ypd6OiA2eRrZqZCNkO4AJzTrQ
-         WQEnQc2AQBx9/MJn1c7p4J9vqsN5C11C2SVBpedd0HbLSBcu3NPVf0aD8mjgBzwAau9J
-         ukknm9y0S4ikrTvHRxm4+ydSeqmEnPsz1kzRLdtyPxS9lf03wvpcGrYp/udVC3U0hDs0
-         cvtQT8YTDjPMdFl8mNrUyDKOPa5ttFckw7M/VMRh4FY/Aeu79ZKQtsMYIKsuUJUj/kDt
-         0hwQ==
-X-Gm-Message-State: AOAM533lZtHc7TAq74OlW278netSnaqskfvMdG0cBcRH8kXH0S70HI4l
-        OHi5W8e5OvhkLKVYqvqtFneNug==
-X-Google-Smtp-Source: ABdhPJw+1Sc2rMKqGmba/fJgsYKnwtgpoYhIctxY2xn2jtIRw+LPGvUXaOxbXQ82y6OLLszeHRUBRQ==
-X-Received: by 2002:ac2:4a6c:0:b0:478:51fd:f8ee with SMTP id q12-20020ac24a6c000000b0047851fdf8eemr5607074lfp.208.1653143852027;
-        Sat, 21 May 2022 07:37:32 -0700 (PDT)
+        bh=4qCtL0+bm+n7u/HXMR/ejdT6S5mFrpV8yho83BhRO5s=;
+        b=0LSPscsGAPBgfkHCREMaJKt+vHR2Gp5XJlc0OrHnystpl2aIntHpM+cPyiCJvNcLGd
+         TzQqxWoRnGcefx0XlTeB6nUN4+FkHTHfcyLNnMuyinKRhtiRD+O0doJENzEniFIsWzCm
+         7k9qbfIkvbuz7nlmHi44qVuVuiuLMEFokICCBN0cArVKPUwwQ5JLlAKLxclNgHl6j0br
+         O/TflCE6N2kLQw6OP+yUOXhAfG6gkJB14Z5REf7xYb5DLqVfzxjmgw9WOm6r6WfPr46f
+         o6IbwRoTIGulbUc8PYD/hLp1FzK2hsa0YtLfob5mEJACFWtAqCQoAqI2dgc/Xcg1sOMZ
+         r+bA==
+X-Gm-Message-State: AOAM5316LKxdTEiFn7VuT0MyuGeqdwcFxWMmFE+5ACfPpr+5v5veJkO9
+        7S8lbq38fVIN60AbSpk7XRsFUg==
+X-Google-Smtp-Source: ABdhPJxtHDtDb6cleVJCc0ulh0XswzEKTSNzq7RDBh7mwPl4obmqj7ZYfKIcfiHfX3+2J00L6fmtSQ==
+X-Received: by 2002:ac2:4f0c:0:b0:477:cb8e:bd8b with SMTP id k12-20020ac24f0c000000b00477cb8ebd8bmr5791149lfr.209.1653145423865;
+        Sat, 21 May 2022 08:03:43 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id d25-20020ac244d9000000b0047255d21165sm1079376lfm.148.2022.05.21.07.37.30
+        by smtp.gmail.com with ESMTPSA id p20-20020ac24ed4000000b0047255d210easm1087910lfr.25.2022.05.21.08.03.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 May 2022 07:37:31 -0700 (PDT)
-Message-ID: <27dbb8c4-834e-2c2a-431f-05558fe56561@linaro.org>
-Date:   Sat, 21 May 2022 16:37:30 +0200
+        Sat, 21 May 2022 08:03:43 -0700 (PDT)
+Message-ID: <6ae55a29-0b29-f53c-c9bd-fae929f3caf7@linaro.org>
+Date:   Sat, 21 May 2022 17:03:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH 2/3] dt-bindings: usb: atmel: Add Microchip LAN9662
- compatible string
+Subject: Re: [PATCH] dt-bindings: Fix properties without any type
 Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>,
+To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220520152335.352537-1-herve.codina@bootlin.com>
- <20220520152335.352537-3-herve.codina@bootlin.com>
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
+        linux-input@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-media@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+References: <20220519211411.2200720-1-robh@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220520152335.352537-3-herve.codina@bootlin.com>
+In-Reply-To: <20220519211411.2200720-1-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,18 +98,184 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20/05/2022 17:23, Herve Codina wrote:
-> The USB device controller available in the Microchip LAN9662 SOC
-> is the same IP as the one present in the SAMA5D3 SOC.
+On 19/05/2022 23:14, Rob Herring wrote:
+> Now that the schema tools can extract type information for all
+> properties (in order to decode dtb files), finding properties missing
+> any type definition is fairly trivial though not yet automated.
 > 
-> Add the LAN9662 compatible string and set the SAMA5D3 compatible
-> string as a fallback for the LAN9662.
+> Fix the various property schemas which are missing a type. Most of these
+> tend to be device specific properties which don't have a vendor prefix.
+> A vendor prefix is how we normally ensure a type is defined.
 > 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../arm/hisilicon/controller/hip04-bootwrapper.yaml       | 5 +++--
+>  .../bindings/display/bridge/toshiba,tc358768.yaml         | 1 +
+>  .../devicetree/bindings/display/panel/panel-timing.yaml   | 5 +++++
+>  .../bindings/display/panel/raydium,rm67191.yaml           | 1 +
+>  .../bindings/display/panel/samsung,s6e8aa0.yaml           | 1 +
+>  .../devicetree/bindings/gpio/fairchild,74hc595.yaml       | 1 +
+>  .../devicetree/bindings/input/google,cros-ec-keyb.yaml    | 1 +
+>  .../devicetree/bindings/input/matrix-keymap.yaml          | 4 ++++
+>  Documentation/devicetree/bindings/media/i2c/adv7604.yaml  | 3 ++-
+>  Documentation/devicetree/bindings/mux/reg-mux.yaml        | 8 ++++++--
+>  Documentation/devicetree/bindings/net/cdns,macb.yaml      | 1 +
+>  Documentation/devicetree/bindings/net/ingenic,mac.yaml    | 1 +
+>  .../devicetree/bindings/net/ti,davinci-mdio.yaml          | 1 +
+>  .../devicetree/bindings/net/wireless/ti,wlcore.yaml       | 2 ++
+>  .../devicetree/bindings/pci/snps,dw-pcie-ep.yaml          | 6 ++++--
+>  Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml   | 2 ++
+>  .../devicetree/bindings/pinctrl/canaan,k210-fpioa.yaml    | 2 ++
+>  Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml | 1 +
+>  .../devicetree/bindings/power/supply/battery.yaml         | 7 ++++++-
+>  .../devicetree/bindings/power/supply/charger-manager.yaml | 1 +
+>  Documentation/devicetree/bindings/rng/st,stm32-rng.yaml   | 1 +
+>  Documentation/devicetree/bindings/serial/8250.yaml        | 1 +
+>  .../devicetree/bindings/sound/audio-graph-card2.yaml      | 3 +++
+>  .../devicetree/bindings/sound/imx-audio-hdmi.yaml         | 3 +++
+>  Documentation/devicetree/bindings/usb/smsc,usb3503.yaml   | 1 +
+>  25 files changed, 55 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/hisilicon/controller/hip04-bootwrapper.yaml b/Documentation/devicetree/bindings/arm/hisilicon/controller/hip04-bootwrapper.yaml
+> index 7378159e61df..483caf0ce25b 100644
+> --- a/Documentation/devicetree/bindings/arm/hisilicon/controller/hip04-bootwrapper.yaml
+> +++ b/Documentation/devicetree/bindings/arm/hisilicon/controller/hip04-bootwrapper.yaml
+> @@ -17,14 +17,15 @@ properties:
+>        - const: hisilicon,hip04-bootwrapper
+>  
+>    boot-method:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>      description: |
+>        Address and size of boot method.
+>        [0]: bootwrapper physical address
+>        [1]: bootwrapper size
+>        [2]: relocation physical address
+>        [3]: relocation size
+> -    minItems: 1
+> -    maxItems: 2
+> +    minItems: 2
+> +    maxItems: 4
+>  
+>  required:
+>    - compatible
+> diff --git a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
+> index 3bd670b8e5cd..0b6f5bef120f 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
+> @@ -58,6 +58,7 @@ properties:
+>  
+>              properties:
+>                data-lines:
+> +                $ref: /schemas/types.yaml#/definitions/uint32
+>                  enum: [ 16, 18, 24 ]
+>  
+>        port@1:
+> diff --git a/Documentation/devicetree/bindings/display/panel/panel-timing.yaml b/Documentation/devicetree/bindings/display/panel/panel-timing.yaml
+> index 7749de95ee40..229e3b36ee29 100644
+> --- a/Documentation/devicetree/bindings/display/panel/panel-timing.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/panel-timing.yaml
+> @@ -146,6 +146,7 @@ properties:
+>        Horizontal sync pulse.
+>        0 selects active low, 1 selects active high.
+>        If omitted then it is not used by the hardware
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>      enum: [0, 1]
+>  
+>    vsync-active:
+> @@ -153,6 +154,7 @@ properties:
+>        Vertical sync pulse.
+>        0 selects active low, 1 selects active high.
+>        If omitted then it is not used by the hardware
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>      enum: [0, 1]
+>  
+>    de-active:
+> @@ -160,6 +162,7 @@ properties:
+>        Data enable.
+>        0 selects active low, 1 selects active high.
+>        If omitted then it is not used by the hardware
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>      enum: [0, 1]
+>  
+>    pixelclk-active:
+> @@ -169,6 +172,7 @@ properties:
+>        sample data on rising edge.
+>        Use 1 to drive pixel data on rising edge and
+>        sample data on falling edge
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>      enum: [0, 1]
+>  
+>    syncclk-active:
+> @@ -179,6 +183,7 @@ properties:
+>        sample sync on rising edge of pixel clock.
+>        Use 1 to drive sync on rising edge and
+>        sample sync on falling edge of pixel clock
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>      enum: [0, 1]
+>  
+>    interlaced:
+> diff --git a/Documentation/devicetree/bindings/display/panel/raydium,rm67191.yaml b/Documentation/devicetree/bindings/display/panel/raydium,rm67191.yaml
+> index 745dd247c409..617aa8c8c03a 100644
+> --- a/Documentation/devicetree/bindings/display/panel/raydium,rm67191.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/raydium,rm67191.yaml
+> @@ -24,6 +24,7 @@ properties:
+>  
+>    dsi-lanes:
+>      description: Number of DSI lanes to be used must be <3> or <4>
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>      enum: [3, 4]
+>  
+>    v3p3-supply:
+> diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6e8aa0.yaml b/Documentation/devicetree/bindings/display/panel/samsung,s6e8aa0.yaml
+> index ca959451557e..1cdc91b3439f 100644
+> --- a/Documentation/devicetree/bindings/display/panel/samsung,s6e8aa0.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/samsung,s6e8aa0.yaml
+> @@ -36,6 +36,7 @@ properties:
+>  
+>    init-delay:
+>      description: delay after initialization sequence [ms]
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>  
+>    panel-width-mm:
+>      description: physical panel width [mm]
+> diff --git a/Documentation/devicetree/bindings/gpio/fairchild,74hc595.yaml b/Documentation/devicetree/bindings/gpio/fairchild,74hc595.yaml
+> index 5fe19fa5f67c..a99e7842ca17 100644
+> --- a/Documentation/devicetree/bindings/gpio/fairchild,74hc595.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/fairchild,74hc595.yaml
+> @@ -26,6 +26,7 @@ properties:
+>      const: 2
+>  
+>    registers-number:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>      description: Number of daisy-chained shift registers
+>  
+>    enable-gpios:
+> diff --git a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> index e8f137abb03c..aa61fe64be63 100644
+> --- a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> +++ b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> @@ -31,6 +31,7 @@ properties:
+>      type: boolean
+>  
+>    function-row-physmap:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>      minItems: 1
+>      maxItems: 15
+>      description: |
+> diff --git a/Documentation/devicetree/bindings/input/matrix-keymap.yaml b/Documentation/devicetree/bindings/input/matrix-keymap.yaml
+> index 6699d5e32dca..9f703bb51e12 100644
+> --- a/Documentation/devicetree/bindings/input/matrix-keymap.yaml
+> +++ b/Documentation/devicetree/bindings/input/matrix-keymap.yaml
+> @@ -27,6 +27,10 @@ properties:
+>        column and linux key-code. The 32-bit big endian cell is packed as:
+>            row << 24 | column << 16 | key-code
+>  
+> +  linux,no-autorepeat:
+> +    type: boolean
+> +    description: Disable keyrepeat
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
+This should be rather a separate patch - it's documenting a missing
+property, not only a type.
 
 Best regards,
 Krzysztof
