@@ -2,107 +2,346 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3774752FCF3
-	for <lists+linux-usb@lfdr.de>; Sat, 21 May 2022 15:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE06352FD21
+	for <lists+linux-usb@lfdr.de>; Sat, 21 May 2022 16:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243637AbiEUNpA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 May 2022 09:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
+        id S1355047AbiEUOIV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 May 2022 10:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238598AbiEUNo6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 May 2022 09:44:58 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A2E7DE29;
-        Sat, 21 May 2022 06:44:57 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-f189b07f57so13243384fac.1;
-        Sat, 21 May 2022 06:44:57 -0700 (PDT)
+        with ESMTP id S1355026AbiEUOIU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 May 2022 10:08:20 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3985D5DE46;
+        Sat, 21 May 2022 07:08:19 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id i24so9938325pfa.7;
+        Sat, 21 May 2022 07:08:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=date:from:to:subject:message-id:mime-version
          :content-transfer-encoding;
-        bh=81spVghcZ1b5INr6qvaKCcFhE6aDceL23pFyCnpeyd8=;
-        b=cFb/+uZVt5A2eDRFqr6mbDYCejXwBZGT/Sx0wVvFw+Rp+PZ1C+eEv36CdOPLCR6xaN
-         Rwph8NqLVvjx1YRR3R7qyH96aPSQcoOs8CPZL2bnlaAUlp3TkGS9T8SR0trwss9RJcU8
-         tQkL9w/njja8xuOceNQamMMf9c1jl183krYYXQMMU/qYB5oSWpXUBrTPiW32tQPsIrGa
-         pgHLJdPYvrnBCGGYDdLoYaiOv09s4R9/P3bztYKm5+CmJa6400tiWfYehOBgnKH9cZG2
-         Ni4fxwQmWXAJMQ+K7zvyGpO4aCe+SG+aDq5btVVBw/35aYSm1/glEWo2MCdT46hSbdpt
-         Iadw==
+        bh=DR5VXAV46ZNrSUvYSzBBdYi4NqIK6+wyFDnsClAzea8=;
+        b=YVk7W004WXd0BSeloz4SJsjaQlhDy4/cr1nhQchP54+vTXICvGLorc77k7b32WCtiY
+         oaxAov9gQXknWuZFTKfar97SGW61tn7tmDZqCEmyIgEXSWIv9Jsaqz706MBWFHbOLieC
+         knXGQz9J/pMh5KeidcZJblvKW3AVNbBhj2Dmw12mQSaLRdDaa1BY6VtDA9DHB3U95yX4
+         Pfrops2IMNowERyu/Q0jw+4pkVesKrzpyr0Z+Z40vKs4KkwOq3UvTNNPMkPNxl+twpyJ
+         ZCih8l+iFHk8N2YL7Teu5dagscaTVTJui3b3izB1X2TI3Ye9ihjf5YANhTMsmn7SmnW5
+         qVDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
          :content-transfer-encoding;
-        bh=81spVghcZ1b5INr6qvaKCcFhE6aDceL23pFyCnpeyd8=;
-        b=w7JBG3e/YHErFE8oVHxxslDgEt1RDtbiVTv/RpB+cHGwdjk4DJ2f9mdq+nc1J+vIz6
-         K2TuzqSucPSP2azM/WuQe6zXNXFw1rjLuC9U9+CpKjHzJ8fTFUKL2x/0r/syMuGHXfs4
-         sTXnZP2jV+/miDlAhfav1b2VLG8pevNRMPRz/ZTrHTR9u12YTd4A1xSNSssN4upGTHPE
-         y24T9uIxH5AVBO3rcjh0CSMouYa7zLhBU8CCuSajfKRzs8HQflIuM102E9GyEGBhyvvu
-         4l0rD8OAAJb1k10WtAWeJoMkUzS0N7H+MeUp5VFkNmXEWuMRs9q5V6kBR0kp6nqO4DZH
-         /Nrw==
-X-Gm-Message-State: AOAM530uILJZDp1QKjyUbVCYdkSHB24DweHjnJnVIH7OFX9XsYuOkA5C
-        woDB8Ac/4CNE55O9kES/X1IVEZ4fAz55ww==
-X-Google-Smtp-Source: ABdhPJwcWAm8eF8epLhg82PB80IgXiUiv7K412i+CXEqjbI/LZyUKUt13QvLtk0c7IZqR6QKuLPF3w==
-X-Received: by 2002:a05:6870:f149:b0:dd:f3b0:986d with SMTP id l9-20020a056870f14900b000ddf3b0986dmr8671712oac.148.1653140697050;
-        Sat, 21 May 2022 06:44:57 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 184-20020aca05c1000000b0032698578409sm2284562oif.38.2022.05.21.06.44.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 May 2022 06:44:56 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2cecb83a-ebf2-0f48-e542-8d099c92048d@roeck-us.net>
-Date:   Sat, 21 May 2022 06:44:54 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] usb: typec: tcpm: fix typo in comment
-Content-Language: en-US
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     kernel-janitors@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        bh=DR5VXAV46ZNrSUvYSzBBdYi4NqIK6+wyFDnsClAzea8=;
+        b=JB4V5EsHuBMBPNiUsVXvbeiRK1pX/LX8frdSWrhQvn0SC2A5MB0Te3AH+7VCb0qPb1
+         Tg5Zv1pZlSgvsTz4/g8uoAwSoL22y1jZn9LDSR7omF9b9amLcLInSjg/5nMdzmY6jkLX
+         fOKXr95uqlSgyBV6B9t7jcVGbE9gdACQBvTTO80fp6LiTgOv8Zb1ewcI4SdtUHmhKB60
+         VGlf87vqp4Sp/QlfI1zKwM+2Tyi1lmnHMHz9bI+L3s/QFlJk3RiskOq9/F/lewPkDyJe
+         cmI92KdqXuIy3doYTCdgUOH2R3rTKGRACcdBJ20DPOXprGfYCNqgqrLmXxv7J+Bf9ADf
+         LB9g==
+X-Gm-Message-State: AOAM5324/iCw6yEUHtT1gy2+4DlH71+L+4QLNvKR1jOOIHpLNgWAzC+6
+        41gy0dmsD+54qe5fPveoCg==
+X-Google-Smtp-Source: ABdhPJyDNdKp/dUUBsSOxK/CxADv5smFfLmHu4jn9nURvJIdXXX7P0f0IBfxT6dm8yLzHT8CDEYSKw==
+X-Received: by 2002:a65:690a:0:b0:3f6:1815:f542 with SMTP id s10-20020a65690a000000b003f61815f542mr13019044pgq.275.1653142098581;
+        Sat, 21 May 2022 07:08:18 -0700 (PDT)
+Received: from octoberrain (p0109759-vcngn.kngw.nt.ngn.ppp.ocn.ne.jp. [61.210.74.190])
+        by smtp.gmail.com with ESMTPSA id q6-20020a17090a1b0600b001df7612950dsm3813773pjq.7.2022.05.21.07.08.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 May 2022 07:08:18 -0700 (PDT)
+Date:   Sat, 21 May 2022 23:08:08 +0900
+From:   Robert Eckelmann <longnoserob@gmail.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220521111145.81697-52-Julia.Lawall@inria.fr>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220521111145.81697-52-Julia.Lawall@inria.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: [PATCH v2] usb: serial: io_ti: Adding Agilent E5805A support
+Message-ID: <20220521230808.30931eca@octoberrain>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/21/22 04:11, Julia Lawall wrote:
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
-> 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+This patch adds support for Agilent E5805A (rebranded ION Edgeport/4) to
+io_ti.
 
-> 
-> ---
->   drivers/usb/typec/tcpm/tcpm.c |    2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 3bc2f4ebd1fe..7039383eac6d 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -471,7 +471,7 @@ struct tcpm_port {
->   
->   	/*
->   	 * When set, port requests PD_P_SNK_STDBY_MW upon entering SNK_DISCOVERY and
-> -	 * the actual currrent limit after RX of PD_CTRL_PSRDY for PD link,
-> +	 * the actual current limit after RX of PD_CTRL_PSRDY for PD link,
->   	 * SNK_READY for non-pd link.
->   	 */
->   	bool slow_charger_loop;
-> 
+Signed-off-by: Robert Eckelmann <longnoserob@gmail.com>
+---
+output of lsusb -v (with Serial-Number of the device anonymized):
+
+Bus 001 Device 024: ID 1608:1a01 Inside Out Networks [hex] E5805A USB/RS232 - 4 Port
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.10
+  bDeviceClass          255 Vendor Specific Class
+  bDeviceSubClass         0 
+  bDeviceProtocol       255 
+  bMaxPacketSize0         8
+  idVendor           0x1608 Inside Out Networks [hex]
+  idProduct          0x1a01 
+  bcdDevice            0.01
+  iManufacturer           1 Agilent Technologies
+  iProduct                2 E5805A USB/RS232 - 4 Port
+  iSerial                 3 S12345678-0
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0035
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0 
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           5
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass      0 
+      bInterfaceProtocol    255 
+      iInterface              0 
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x87  EP 7 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval               1
+
+Bus 001 Device 025: ID 1608:1a01 Inside Out Networks [hex] E5805A USB/RS232 - 4 Port
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.10
+  bDeviceClass          255 Vendor Specific Class
+  bDeviceSubClass         0 
+  bDeviceProtocol       255 
+  bMaxPacketSize0         8
+  idVendor           0x1608 Inside Out Networks [hex]
+  idProduct          0x1a01 
+  bcdDevice            0.01
+  iManufacturer           1 Agilent Technologies
+  iProduct                2 E5805A USB/RS232 - 4 Port
+  iSerial                 3 S12345678-1
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0035
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0 
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           5
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass      0 
+      bInterfaceProtocol    255 
+      iInterface              0 
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x87  EP 7 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval               1
+
+Bus 001 Device 022: ID 1608:0281 Inside Out Networks [hex] 
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.10
+  bDeviceClass            9 Hub
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 Full speed (or root) hub
+  bMaxPacketSize0         8
+  idVendor           0x1608 Inside Out Networks [hex]
+  idProduct          0x0281 
+  bcdDevice            1.51
+  iManufacturer           0 
+  iProduct                0 
+  iSerial                 0 
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0019
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0 
+    bmAttributes         0xa0
+      (Bus Powered)
+      Remote Wakeup
+    MaxPower              100mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         9 Hub
+      bInterfaceSubClass      0 
+      bInterfaceProtocol      0 Full speed (or root) hub
+      iInterface              0 
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0001  1x 1 bytes
+        bInterval             255
+
+
+
+Changes in v2:
+  - removed documentation change
+  - improvements to spaceing in io_usbvend.h
+  - rephrasing comment in io_usbvend.h
+
+ drivers/usb/serial/io_ti.c      | 2 ++
+ drivers/usb/serial/io_usbvend.h | 1 +
+ 2 files changed, 3 insertions(+)
+
+diff --git a/drivers/usb/serial/io_ti.c b/drivers/usb/serial/io_ti.c
+index a7b3c15957ba..ff0d05f45fce 100644
+--- a/drivers/usb/serial/io_ti.c
++++ b/drivers/usb/serial/io_ti.c
+@@ -166,6 +166,7 @@ static const struct usb_device_id edgeport_2port_id_table[] = {
+ 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_8S) },
+ 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416) },
+ 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416B) },
++	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_E5805A)},
+ 	{ }
+ };
+ 
+@@ -204,6 +205,7 @@ static const struct usb_device_id id_table_combined[] = {
+ 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_8S) },
+ 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416) },
+ 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416B) },
++	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_E5805A)},
+ 	{ }
+ };
+ 
+diff --git a/drivers/usb/serial/io_usbvend.h b/drivers/usb/serial/io_usbvend.h
+index 52cbc353051f..879ef755898f 100644
+--- a/drivers/usb/serial/io_usbvend.h
++++ b/drivers/usb/serial/io_usbvend.h
+@@ -213,6 +213,7 @@
+ // Definitions for other product IDs
+ #define ION_DEVICE_ID_MT4X56USB			0x1403	// OEM device
+ 
++#define ION_DEVICE_ID_E5805A			0x1A01  // OEM device (rebranded Edgeport/4)
+ 
+ #define	GENERATION_ID_FROM_USB_PRODUCT_ID(ProductId)				\
+ 			((__u16) ((ProductId >> 8) & (ION_GENERATION_MASK)))
+-- 
+2.36.1
 
