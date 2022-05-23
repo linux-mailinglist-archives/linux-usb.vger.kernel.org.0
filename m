@@ -2,115 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C032E530ECE
-	for <lists+linux-usb@lfdr.de>; Mon, 23 May 2022 15:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B06530FC3
+	for <lists+linux-usb@lfdr.de>; Mon, 23 May 2022 15:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235402AbiEWMZ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 May 2022 08:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
+        id S235529AbiEWMfq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 May 2022 08:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235333AbiEWMZ5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 May 2022 08:25:57 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A7DFF8;
-        Mon, 23 May 2022 05:25:56 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-e93bbb54f9so18162327fac.12;
-        Mon, 23 May 2022 05:25:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=m/GTLwoTiTehcRS4r9a+ERLbn5bIsSAK2Ky6sWKNN9Q=;
-        b=X9NwGgiKvXtec91ZzOnkufErn3M0W3j43DhaRGzCbkq/qD1FRySacAImN5za9zzXBs
-         nEpusZvVSel5YQARUYBRXKtfLRREDu+vbQeP/qcFMLRbEWrayDZ/1nu5bmocHhWjPcgc
-         Vp1RlMwcC2h47c1hbfGhAdS/eMPxG/mIu3/FvSLNGIt7jYYUwP+82q34nlR6gTcujIzt
-         CeNe76rj+jHEaxojHtrjUlIF36Q48+kPwckuDeYcvecJ83ksdOiZI2/w3jhRTgkx5L8b
-         +j21+0U5M3TX2tWyUmFQst62CgDS6BBmhBi1ABsD4zdH/W9ItBlSj+rFASPxi8Imrnvd
-         b7mQ==
-X-Gm-Message-State: AOAM530BEQIcxIRgELZfLotGHFYVwJ6cWNNcHSyUQQ1pN2weGaCZHbh3
-        HS+eyl3RKzHsl5liaFe5xA==
-X-Google-Smtp-Source: ABdhPJyakI0goXn872cMHPFcb39rYcWU/v/szd30xaKjCwB1d4ycwJxN1SyKvhnnoyGPlYMPK/+eZA==
-X-Received: by 2002:a05:6870:538f:b0:e1:def7:7640 with SMTP id h15-20020a056870538f00b000e1def77640mr11205240oan.34.1653308755763;
-        Mon, 23 May 2022 05:25:55 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x14-20020a05683000ce00b0060603221261sm3946145oto.49.2022.05.23.05.25.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 05:25:55 -0700 (PDT)
-Received: (nullmailer pid 1362443 invoked by uid 1000);
-        Mon, 23 May 2022 12:25:54 -0000
-Date:   Mon, 23 May 2022 07:25:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Harsh Agarwal <quic_harshq@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com
-Subject: Re: [RFC 1/2] dt-bindings: usb: dwc3: Add support for multiport
- related properties
-Message-ID: <20220523122554.GA416176-robh@kernel.org>
-References: <1652963695-10109-1-git-send-email-quic_harshq@quicinc.com>
- <1652963695-10109-2-git-send-email-quic_harshq@quicinc.com>
+        with ESMTP id S235464AbiEWMfk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 May 2022 08:35:40 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5E74A3FF;
+        Mon, 23 May 2022 05:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=HFRXkAfAkeNHzojaiwx1HIgyydx/mKu2GUIJbJkteCg=; b=PHcz0LG058nJsHHT0YNh3u51JI
+        BQ22T9empnCea/7Yx7vI+ButTmgElMc1CJvJwefci9iDEnWOgCQmjM9nDY7FK9MqwlrsZ3Q1Kit1/
+        4KjwGWkESsJ1353yKNBoT5kUWeZFInKC3oAUrYcPs3YZW525gi+JdySzdAMinR/F+QCc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nt7Gr-003ysh-JL; Mon, 23 May 2022 14:34:49 +0200
+Date:   Mon, 23 May 2022 14:34:49 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ferry Toth <fntoth@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
+Subject: Re: [PATCH net-next v3 5/7] usbnet: smsc95xx: Forward PHY interrupts
+ to PHY driver to avoid polling
+Message-ID: <Yot/ad/Ch7iGYnGB@lunn.ch>
+References: <cover.1652343655.git.lukas@wunner.de>
+ <748ac44eeb97b209f66182f3788d2a49d7bc28fe.1652343655.git.lukas@wunner.de>
+ <CGME20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99@eucas1p2.samsung.com>
+ <a5315a8a-32c2-962f-f696-de9a26d30091@samsung.com>
+ <20220519190841.GA30869@wunner.de>
+ <31baa38c-b2c7-10cd-e9cd-eee140f01788@samsung.com>
+ <20220523094343.GA7237@wunner.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1652963695-10109-2-git-send-email-quic_harshq@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220523094343.GA7237@wunner.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 19, 2022 at 06:04:54PM +0530, Harsh Agarwal wrote:
-> Added support for multiport, mport, num-ssphy and num-hsphy
-> properties. These properties are used to support devices having
-> a multiport controller.
-> 
-> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
-> ---
->  .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index f4471f8..39c61483 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -341,6 +341,35 @@ properties:
->        This port is used with the 'usb-role-switch' property  to connect the
->        dwc3 to type C connector.
->  
-> +  multiport:
-> +    description:
-> +      If a single USB controller supports multiple ports, then it's referred to as
-> +      a multiport controller. Each port of the multiport controller can support
-> +      either High Speed or Super Speed or both and have their own PHY phandles. Each
-> +      port is represented by "mport" node and all the "mport" nodes are grouped
-> +      together inside the "multiport" node where individual "mport" node defines the
-> +      PHYs supported by that port.
-> +    required:
-> +      - mport
-> +
-> +  num-hsphy:
-> +    description: Total number of HS-PHYs defined by the multiport controller.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  num-ssphy:
-> +    description: Total number of SS-PHYs defined by the multiport controller.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
+> --- a/drivers/net/phy/phy_device.c
+> +++ b/drivers/net/phy/phy_device.c
+> @@ -283,8 +283,11 @@ static __maybe_unused int mdio_bus_phy_suspend(struct device *dev)
+>  	 * may call phy routines that try to grab the same lock, and that may
+>  	 * lead to a deadlock.
+>  	 */
+> -	if (phydev->attached_dev && phydev->adjust_link)
+> +	if (phydev->attached_dev && phydev->adjust_link) {
+> +		if (phy_interrupt_is_valid(phydev))
+> +			synchronize_irq(phydev->irq);
+>  		phy_stop_machine(phydev);
+> +	}
 
-These seem redundant. Can't you count ports/phys?
+What is this hunk trying to achieve? As far as i know, interrupts have
+not been disabled. So as soon as the call to synchronize_irq()
+finishes, could well be another interrupt happens.
 
-> +
-> +  mport:
-> +    description: Each mport node represents one port of the multiport controller.
-> +    patternProperties: "^mport@[0-9a-f]+$"
-
-Think about how the USB device binding fits into this. A hub vs. 
-multiple root ports doesn't seem much different.
-
-Rob
+	  Andrew
