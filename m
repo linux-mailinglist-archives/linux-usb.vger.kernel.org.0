@@ -2,172 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6360A530DFE
-	for <lists+linux-usb@lfdr.de>; Mon, 23 May 2022 12:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5900530E53
+	for <lists+linux-usb@lfdr.de>; Mon, 23 May 2022 12:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbiEWJoV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 May 2022 05:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
+        id S234173AbiEWKli (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 May 2022 06:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233892AbiEWJoC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 May 2022 05:44:02 -0400
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDFE18352;
-        Mon, 23 May 2022 02:43:46 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id EC68010045C16;
-        Mon, 23 May 2022 11:43:43 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id CC43171D1E; Mon, 23 May 2022 11:43:43 +0200 (CEST)
-Date:   Mon, 23 May 2022 11:43:43 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
-        Andre Edich <andre.edich@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Gabriel Hojda <ghojda@yo2urs.ro>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        Ferry Toth <fntoth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
-Subject: Re: [PATCH net-next v3 5/7] usbnet: smsc95xx: Forward PHY interrupts
- to PHY driver to avoid polling
-Message-ID: <20220523094343.GA7237@wunner.de>
-References: <cover.1652343655.git.lukas@wunner.de>
- <748ac44eeb97b209f66182f3788d2a49d7bc28fe.1652343655.git.lukas@wunner.de>
- <CGME20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99@eucas1p2.samsung.com>
- <a5315a8a-32c2-962f-f696-de9a26d30091@samsung.com>
- <20220519190841.GA30869@wunner.de>
- <31baa38c-b2c7-10cd-e9cd-eee140f01788@samsung.com>
+        with ESMTP id S234149AbiEWKld (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 May 2022 06:41:33 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B321FCD3;
+        Mon, 23 May 2022 03:41:31 -0700 (PDT)
+X-UUID: ac3bb96778304b76954e3a77611c3639-20220523
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:f7afc3b3-b3da-4622-8916-f5f1dc78bc6a,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:2a19b09,CLOUDID:47323ae3-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: ac3bb96778304b76954e3a77611c3639-20220523
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 746527836; Mon, 23 May 2022 18:41:27 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 23 May 2022 18:41:26 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 23 May 2022 18:41:25 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 23 May 2022 18:41:25 +0800
+Message-ID: <40eb8f7ed5b5d6dc3aeb5b82e04986049a2e47f3.camel@mediatek.com>
+Subject: Re: [PATCH 1/4] dt-bindings: usb: mtk-xhci: add support 'resets'
+ property
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Date:   Mon, 23 May 2022 18:41:25 +0800
+In-Reply-To: <20220523090449.14430-1-chunfeng.yun@mediatek.com>
+References: <20220523090449.14430-1-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <31baa38c-b2c7-10cd-e9cd-eee140f01788@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 19, 2022 at 11:22:36PM +0200, Marek Szyprowski wrote:
-> On 19.05.2022 21:08, Lukas Wunner wrote:
-> > Taking a step back though, I'm wondering if there's a bigger problem here:
-> > This is a USB device, so we stop receiving interrupts once the Interrupt
-> > Endpoint is no longer polled.  But what if a PHY's interrupt is attached
-> > to a GPIO of the SoC and that interrupt is raised while the system is
-> > suspending?  The interrupt handler may likewise try to reach an
-> > inaccessible (suspended) device.
-> >
-> > The right thing to do would probably be to signal wakeup.  But the
-> > PHY drivers' irq handlers instead schedule the phy_state_machine().
-> > Perhaps we need something like the following at the top of
-> > phy_state_machine():
-> >
-> > 	if (phydev->suspended) {
-> > 		pm_wakeup_dev_event(&phydev->mdio.dev, 0, true);
-> > 		return;
-> > 	}
-> >
-> > However, phydev->suspended is set at the *bottom* of phy_suspend(),
-> > it would have to be set at the *top* of mdio_bus_phy_suspend()
-> > for the above to be correct.  Hmmm...
+On Mon, 2022-05-23 at 17:04 +0800, Chunfeng Yun wrote:
+> Add 'resets' property to support IP reset usually by top pericfg.
 > 
-> Well, your concern sounds valid, but I don't have a board with such hw 
-> configuration, so I cannot really test.
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> xhci.yaml
+> index 084d7135b2d9..892718459d25 100644
+> --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+> @@ -113,6 +113,9 @@ properties:
+>    vbus-supply:
+>      description: Regulator of USB VBUS5v
+>  
+> +  resets:
+> +    maxItems: 1
+> +
+>    usb3-lpm-capable: true
+>  
+>    usb2-lpm-disable: true
 
-I'm torn whether I should submit the quick fix in my last e-mail
-or attempt to address the deeper issue.  The quick fix would ensure
-v5.19-rc1 isn't broken, but if possible I'd rather address the deeper
-issue...
+Hello Chunfeng,
 
-Below is another patch.  Would you mind testing if it fixes the problem
-for you?  It's a replacement for the patch in my last e-mail and seeks
-to fix the problem for all drivers, not just smsc95xx.  If you don't
-have time to test it, let me know and I'll just submit the quick fix
-in my previous e-mail.
+Which soc we will use this reset?
+I am upstreaming another series for system clock reset.
+I think you should add how to use for this series base on [1].
 
-BTW, getting a PHY interrupt on suspend seems like a corner case to me,
-so I'm amazed you found this and seem to be able to reproduce it 100%.
-Out of curiosity, is this a CI test you're performing?
+[1]: 
+https://lore.kernel.org/linux-clk/5067ec46-7a82-6b7b-5b07-3102cfaefbf6@collabora.com/T/#m5b6abb9bd2109e4ed9a1a3eeee6e7976892cb8c2
 
-Thanks,
+BRs,
+Rex
 
-Lukas
-
--- >8 --
-
-diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
-index ef62f357b76d..c2442c38d312 100644
---- a/drivers/net/phy/phy.c
-+++ b/drivers/net/phy/phy.c
-@@ -31,6 +31,7 @@
- #include <linux/io.h>
- #include <linux/uaccess.h>
- #include <linux/atomic.h>
-+#include <linux/suspend.h>
- #include <net/netlink.h>
- #include <net/genetlink.h>
- #include <net/sock.h>
-@@ -976,6 +977,25 @@ static irqreturn_t phy_interrupt(int irq, void *phy_dat)
- 	struct phy_driver *drv = phydev->drv;
- 	irqreturn_t ret;
- 
-+	if (IS_ENABLED(CONFIG_PM_SLEEP) &&
-+	    (phydev->mdio.dev.power.is_prepared ||
-+	     phydev->mdio.dev.power.is_suspended)) {
-+		struct net_device *netdev = phydev->attached_dev;
-+
-+		if (netdev) {
-+			struct device *parent = netdev->dev.parent;
-+
-+			if (netdev->wol_enabled)
-+				pm_system_wakeup();
-+			else if (device_may_wakeup(&netdev->dev))
-+				pm_wakeup_dev_event(&netdev->dev, 0, true);
-+			else if (parent && device_may_wakeup(parent))
-+				pm_wakeup_dev_event(parent, 0, true);
-+		}
-+
-+		return IRQ_HANDLED;
-+	}
-+
- 	mutex_lock(&phydev->lock);
- 	ret = drv->handle_interrupt(phydev);
- 	mutex_unlock(&phydev->lock);
-diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 431a8719c635..da6d70ddf167 100644
---- a/drivers/net/phy/phy_device.c
-+++ b/drivers/net/phy/phy_device.c
-@@ -283,8 +283,11 @@ static __maybe_unused int mdio_bus_phy_suspend(struct device *dev)
- 	 * may call phy routines that try to grab the same lock, and that may
- 	 * lead to a deadlock.
- 	 */
--	if (phydev->attached_dev && phydev->adjust_link)
-+	if (phydev->attached_dev && phydev->adjust_link) {
-+		if (phy_interrupt_is_valid(phydev))
-+			synchronize_irq(phydev->irq);
- 		phy_stop_machine(phydev);
-+	}
- 
- 	if (!mdio_bus_phy_may_suspend(phydev))
- 		return 0;
