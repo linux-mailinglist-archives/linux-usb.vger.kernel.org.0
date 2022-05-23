@@ -2,116 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFAB530C27
-	for <lists+linux-usb@lfdr.de>; Mon, 23 May 2022 11:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BDF530C3E
+	for <lists+linux-usb@lfdr.de>; Mon, 23 May 2022 11:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232305AbiEWI4Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 May 2022 04:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
+        id S232446AbiEWJDY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 May 2022 05:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232300AbiEWI4O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 May 2022 04:56:14 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDA9B7FE;
-        Mon, 23 May 2022 01:56:04 -0700 (PDT)
-X-UUID: 06f49cb5f32b4d2297c06a9166530d90-20220523
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:fbc0daff-b31d-4f7e-a043-af2a02a861df,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:2a19b09,CLOUDID:dc28467a-5ef6-470b-96c9-bdb8ced32786,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 06f49cb5f32b4d2297c06a9166530d90-20220523
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 984592553; Mon, 23 May 2022 16:55:59 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 23 May 2022 16:55:56 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 23 May 2022 16:55:52 +0800
-Message-ID: <e48b8f9194df9add1849a50186570f30f086262f.camel@mediatek.com>
-Subject: Re: [PATCH 1/2] usb: xhci-mtk: fix fs isoc's transfer error
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC:     Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        <stable@vger.kernel.org>
-Date:   Mon, 23 May 2022 16:55:52 +0800
-In-Reply-To: <7781eaaf-ad09-7283-dbb8-69d0fb3f1d14@collabora.com>
-References: <20220512064931.31670-1-chunfeng.yun@mediatek.com>
-         <7781eaaf-ad09-7283-dbb8-69d0fb3f1d14@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S232334AbiEWJDX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 May 2022 05:03:23 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB1E443E6
+        for <linux-usb@vger.kernel.org>; Mon, 23 May 2022 02:03:22 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id m188so5432112vsm.2
+        for <linux-usb@vger.kernel.org>; Mon, 23 May 2022 02:03:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=SUWQMmwZSct1NUq5pHL/uGOr0m/f9iWjJQkP63QJuAY=;
+        b=SBQ7DoRX5gke2Q/mjE+5kshDm2ZXV5BSYmR3xP+RX3pizdNdkCqCxwZrCgfW6Q6k4a
+         AKhYxKrlrZgoBKIk666rQM60dgh96ZLXCodT9cE8VCfRB5eeOqIicLv7+kpMq6cTQ8c8
+         ejMQHBueujEz4f2ca2RGM/qT1ARLSRToVZg652lvR6HAxp89cw3HP4bGZlMJKEG+QAvm
+         r86VM89JrzA6yRZke0E3dver/UrlZjAUmxTIZo36unDem/m6AJKkjagAlJH3Ciznu6ds
+         yUnVQimunM33yRnSjP9MkOG+sWZDqgmT2sKDVG99aI77xfneLLNxzdBeyLvNZxS9taTj
+         u92w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=SUWQMmwZSct1NUq5pHL/uGOr0m/f9iWjJQkP63QJuAY=;
+        b=QLkfsgQ3AQpakkr6zQNUmvfTdc1mKNsPjW9l45DaE9uiJ1nQ1zHuzcizsg77cGP0Rh
+         UXmrLpKsqCCUuGcR0uvsEwpHQ9LI7iFuOBjkanQa5/D1aUciKW2EIUUDSX8FOusW66+1
+         SSW5SoEc8KtX/5HuCV8EI3AS2cB14rLrc4kNsoscaPBRCrbD3NVsoPVGpgixQofuDm1T
+         CwYxyTn67wEN0yyDaBR2LiA1hgFbXLayOQN/kEaSLW2sM13ZSRxwcYsZ4o/S1ims3OgW
+         uIsRoUkBwoCwbfvdo3y1LMTDLsgpkc6x9Kf88yhNnjSyEoD237P0o438vqmrBem4f1Fr
+         Xjfg==
+X-Gm-Message-State: AOAM53134+6lgVCv7LjfKVl01eUih2vnSFGt4tIhhZHP8CiqakpSMtUY
+        cbF5weq3GgZggWt/GvB8CCjIk9ZCp+KEFbHwLj8=
+X-Google-Smtp-Source: ABdhPJwMg466ObMsD3WrTt8zEdOs/0VcOJ/Yk/gB2CP4n7eyAnjpKdhcr4ygj6r3b4Kyj2NIG6DIoZDQ+8V3K7C6UJU=
+X-Received: by 2002:a05:6102:23d9:b0:335:e916:b99d with SMTP id
+ x25-20020a05610223d900b00335e916b99dmr7336394vsr.70.1653296601763; Mon, 23
+ May 2022 02:03:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:612c:1095:b0:2ba:f7f:f651 with HTTP; Mon, 23 May 2022
+ 02:03:21 -0700 (PDT)
+Reply-To: jub47823@gmail.com
+From:   Julian Bikarm <kodjoafanou2001@gmail.com>
+Date:   Mon, 23 May 2022 09:03:21 +0000
+Message-ID: <CALgh3en0h6bgLUPfRkvH1jy0X-S3RY9AJiKQuw+2X7O994kH+Q@mail.gmail.com>
+Subject: Please can i have your attention
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e2e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4989]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [jub47823[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [kodjoafanou2001[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [kodjoafanou2001[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2022-05-18 at 14:01 +0200, AngeloGioacchino Del Regno wrote:
-> Il 12/05/22 08:49, Chunfeng Yun ha scritto:
-> > Due to the scheduler allocates the optimal bandwidth for FS ISOC
-> > endpoints,
-> > this may be not enough actually and causes data transfer error, so
-> > come up
-> > with an estimate that is no less than the worst case bandwidth used
-> > for
-> > any one mframe, but may be an over-estimate.
-> > 
-> > Fixes: 451d3912586a ("usb: xhci-mtk: update fs bus bandwidth by
-> > bw_budget_table")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> 
-> Hello Chunfeng,
-> I agree this is "a fix"... but is it the best fix?
-> 
-> Shooting the bandwidth very high will have power consumption
-> consequences, are
-> those measurable?
-This is usually limited into one interval; e.g. the last interval
-transfers 8 bytes in fact, but I assume it may transfer 188 bytes, I
-think the consumption increase can be ignored.
+Dear ,
 
-> And if they are, what is the expected power consumption increase in
-> percentage
-> (and/or microamperes)? Also, out of the expected increase, have you
-> got any
-> measurement for that?
-> 
-> Assuming that the measurement is done for one SoC, it's possible to
-> make some
-> assumption about a different part.
-> 
-> Regards,
-> Angelo
-> 
-> > ---
-> >   drivers/usb/host/xhci-mtk-sch.c | 16 +++++++---------
-> >   1 file changed, 7 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/drivers/usb/host/xhci-mtk-sch.c
-> > b/drivers/usb/host/xhci-mtk-sch.c
-> > index f3139ce7b0a9..953d2cd1d4cc 100644
-> > --- a/drivers/usb/host/xhci-mtk-sch.c
-> > +++ b/drivers/usb/host/xhci-mtk-sch.c
 
+Please can I have your attention and possibly help me for humanity's
+sake please. I am writing this message with a heavy heart filled with
+sorrows and sadness.
+
+Please if you can respond, i have an issue that i will be most
+grateful if you could help me deal with it please.
+
+Julian
