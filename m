@@ -2,511 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFC55305CC
-	for <lists+linux-usb@lfdr.de>; Sun, 22 May 2022 22:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6B75307CE
+	for <lists+linux-usb@lfdr.de>; Mon, 23 May 2022 04:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245659AbiEVUSB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 22 May 2022 16:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48676 "EHLO
+        id S1353160AbiEWCtw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 22 May 2022 22:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233422AbiEVUR7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 May 2022 16:17:59 -0400
-Received: from mail.mutex.one (mail.mutex.one [62.77.152.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2001436695;
-        Sun, 22 May 2022 13:17:57 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id CE2D816C006C;
-        Sun, 22 May 2022 23:17:54 +0300 (EEST)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fXd59JdzWtS6; Sun, 22 May 2022 23:17:54 +0300 (EEST)
-From:   Marian Postevca <posteuca@mutex.one>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1653250674; bh=ZankfS5MIMjTEgPBst3Scd31RiAckWZN6APLJFt3AY4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ZVes3qHlEwxeNgg9KdJQwv8IgSildxPF7Nmf6ozAMav2heaOjuJSTiammU8hnvs54
-         cppdP77da4R578kh7LUF6DcyLohOqV82VWonvV2abF3AaBEdcMOYi9lGgra5qyppdg
-         zrPD1I/a4Sp7QLwQxhhpsXZVrWlgHri7L4A4r0Uk=
-To:     Maximilian Senftleben <kernel@mail.msdigital.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: PROBLEM: No static MAC address for usb gadget ethernet via
- kernel parameter any more.
-In-Reply-To: <83b013eb-b320-f397-0ecc-f4824f3f45b9@msdigital.de>
-References: <dfaa54ab-1b03-7aec-5927-d52a4233e56a@msdigital.de>
- <6c0eb462-3fab-473d-8989-b56e5748e5f7@mutex.one>
- <83b013eb-b320-f397-0ecc-f4824f3f45b9@msdigital.de>
-Date:   Sun, 22 May 2022 23:17:40 +0300
-Message-ID: <874k1htj8b.fsf@mutex.one>
+        with ESMTP id S1348956AbiEWCtv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 May 2022 22:49:51 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FC0377EC
+        for <linux-usb@vger.kernel.org>; Sun, 22 May 2022 19:49:50 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id z7-20020a17090abd8700b001df78c7c209so16241117pjr.1
+        for <linux-usb@vger.kernel.org>; Sun, 22 May 2022 19:49:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to;
+        bh=zTKXjFyRE+Nc4Dr+S5HU+FS3SDiyFTkb3++5FsHW3bU=;
+        b=BQZ2NCCzaJdqo55X5qB/AgZLMnc4q++W7UcaeyYAy3vJwG2AzvJdk7iZd5p5pquxA7
+         ow+cg0EOUxYCp8cGleuwTwibKF3QfP2d3kiajJdEtQD/Lwfoju2G1Q2NJb3G22BxVXpl
+         xy84hSZYs/zxXWJx931tuFWHASZuM7pIbCV+c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to;
+        bh=zTKXjFyRE+Nc4Dr+S5HU+FS3SDiyFTkb3++5FsHW3bU=;
+        b=ZYUg6hz9l12jdGNx3uktBfse6f6mlF3oo9Pn2S9WxIhYn/YoIj7p8xQivwM2civbYk
+         Bsr7IznEl5JvsuoQI+SMpPcDT+bYjp8g/HhWF0v4cbNNkMElawaKkYoItHvIDBVPfhlf
+         PdLV9OwOmqmQnjFFZci++uW9n6NkFuvpL8IqJGT6yRTMgP4qg1eMZIcB7XXLaqYOg/iV
+         IvLTtegxMHXaerumseTjVI2raV20Cu0+Tn5y4xIYQdGDIz/Roa83AwuNtPunlG8T+maO
+         OT2HoczSN7nSk1OzfIsezc8phjes/UNZQ10uzj/JqQBul2RbXf+3Sa4LvAXo+5m0HOfq
+         iIVQ==
+X-Gm-Message-State: AOAM533ByP1oJbVj2EOuUfO+tG8E3zwUyIefSNLFE/PMy8+2/qR71dbY
+        XnG1sJEw7METmoDY7m+/0XCRMQ==
+X-Google-Smtp-Source: ABdhPJz1RAJWzHiwcUEg/FyBEvw09bRS+vR8DrIAWO9b18TJJkWNnVbJ4rXPq2JELmyBEbKaC/d1zA==
+X-Received: by 2002:a17:903:2143:b0:162:15c2:e4c6 with SMTP id s3-20020a170903214300b0016215c2e4c6mr6344493ple.100.1653274189493;
+        Sun, 22 May 2022 19:49:49 -0700 (PDT)
+Received: from ?IPV6:2600:8802:b00:4a48:7d80:5130:9847:28b6? ([2600:8802:b00:4a48:7d80:5130:9847:28b6])
+        by smtp.gmail.com with ESMTPSA id z14-20020aa79f8e000000b0050dc762818bsm5931287pfr.101.2022.05.22.19.49.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 May 2022 19:49:49 -0700 (PDT)
+Message-ID: <f0191c77-d3da-b304-4f6a-b2cae517057b@broadcom.com>
+Date:   Sun, 22 May 2022 19:49:48 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: gadget: bdc: fix typo in comment
+To:     Julia Lawall <Julia.Lawall@inria.fr>,
+        Al Cooper <alcooperx@gmail.com>
+Cc:     kernel-janitors@vger.kernel.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220521111145.81697-92-Julia.Lawall@inria.fr>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <20220521111145.81697-92-Julia.Lawall@inria.fr>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000cc7a0b05dfa4e456"
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Maximilian Senftleben <kernel@mail.msdigital.de> writes:
+--000000000000cc7a0b05dfa4e456
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> - During debugging and testing we noticed that while 
-> "dev_set_mac_address" used to set "addr_assign_type" to NET_ADDR_SET, 
-> the mentioned commit directly sets "addr_assign_type" to NET_ADDR_RANDOM 
-> and the called "eth_hw_addr_set" does not modify the type afterwards.
-> If I change line 874 "net->addr_assign_type = NET_ADDR_RANDOM;" to 
-> "net->addr_assign_type = NET_ADDR_SET;" then the issue seems to be solved.
 
-Are you using systemd on the system where this issue is visible?
-I managed to reproduce it only on systemd-systems.
-It seems that systemd, by default, will try to give a persistent
-MAC address to ethernet interfaces that have a random MAC address.
 
-That is why "net->addr_assign_type = NET_ADDR_SET" fixes the issue,
-systemd sees that the interface doesn't have a random MAC address and
-leaves the one set by the kernel(in your case the one set on the command
-line), but if it sees that the interface has a random MAC address it
-will change the address from the one supplied on the command line, to
-some internal MAC address that systemd generated.
+On 5/21/2022 4:11 AM, Julia Lawall wrote:
+> Spelling mistake (triple letters) in comment.
+> Detected with the help of Coccinelle.
+> 
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-If you are using systemd you can workaround this issue with the
-following systemd link file:
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-[Match]
-OriginalName=usb*
+--000000000000cc7a0b05dfa4e456
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-[Link]
-MACAddressPolicy=none
-
-You can put the file in /etc/systemd/network/90-bridge.link
-And then reboot the system.
-
-I will send a patch that fixes this issue completely. But in the
-meantime please let me know if the workaround solves the issue for you.
->
-> - Regarding bootargs and defconfig, we encountered the issue with our 
-> custom board and some own/modified drivers and additional patches, which 
-> might make it difficult to reproduce the issue outside of our setup.
->
-> bootargs:
-> "root=ubi0:userspace0 ubi.mtd=ubi_volumes rootfstype=ubifs 
-> consoleblank=0 vt.global_cursor_default=0 console=ttyS0 
-> g_ether.dev_addr=46:A2:73:A9:44:56 g_ether.host_addr=46:A2:73:A9:44:55"
->
-> defconfig:
->
-> CONFIG_KERNEL_XZ=y
-> CONFIG_SYSVIPC=y
-> CONFIG_NO_HZ=y
-> CONFIG_HIGH_RES_TIMERS=y
-> CONFIG_PREEMPT_VOLUNTARY=y
-> CONFIG_IKCONFIG=y
-> CONFIG_IKCONFIG_PROC=y
-> CONFIG_LOG_BUF_SHIFT=18
-> CONFIG_CGROUPS=y
-> CONFIG_RELAY=y
-> CONFIG_BOOT_CONFIG=y
-> CONFIG_EXPERT=y
-> CONFIG_PERF_EVENTS=y
-> # CONFIG_SLUB_DEBUG is not set
-> # CONFIG_COMPAT_BRK is not set
-> CONFIG_ARCH_MULTI_V6=y
-> CONFIG_ARCH_MXC=y
-> CONFIG_SOC_IMX6Q=y
-> # CONFIG_HARDEN_BRANCH_HISTORY is not set
-> CONFIG_ARM_ERRATA_814220=y
-> CONFIG_SMP=y
-> CONFIG_SCHED_MC=y
-> CONFIG_HAVE_ARM_ARCH_TIMER=y
-> CONFIG_HOTPLUG_CPU=y
-> CONFIG_ARM_PSCI=y
-> CONFIG_HIGHMEM=y
-> CONFIG_ZBOOT_ROM_TEXT=0
-> CONFIG_ZBOOT_ROM_BSS=0
-> CONFIG_CMDLINE="noinitrd console=ttymxc0,115200"
-> CONFIG_CPU_FREQ=y
-> CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
-> CONFIG_ARM_IMX6Q_CPUFREQ=y
-> CONFIG_CPU_IDLE=y
-> CONFIG_VFP=y
-> CONFIG_NEON=y
-> # CONFIG_SUSPEND is not set
-> CONFIG_PM=y
-> CONFIG_PM_DEBUG=y
-> CONFIG_ACMEINC_SPI_CLRC663=y
-> # CONFIG_MXC_GPU_VIV is not set
-> CONFIG_U_DMA_BUF=y
-> CONFIG_MXC_VPU=y
-> CONFIG_WILC_SDIO=y
-> # CONFIG_SECCOMP is not set
-> CONFIG_NET=y
-> CONFIG_PACKET=y
-> CONFIG_UNIX=y
-> CONFIG_INET=y
-> CONFIG_IP_PNP=y
-> CONFIG_IP_PNP_DHCP=y
-> CONFIG_MPTCP=y
-> CONFIG_NETFILTER=y
-> # CONFIG_NETFILTER_EGRESS is not set
-> CONFIG_BRIDGE=y
-> CONFIG_CFG80211=y
-> # CONFIG_CFG80211_DEFAULT_PS is not set
-> CONFIG_CFG80211_DEBUGFS=y
-> CONFIG_CFG80211_WEXT=y
-> CONFIG_MAC80211=y
-> CONFIG_MAC80211_DEBUGFS=y
-> CONFIG_RFKILL=y
-> CONFIG_RFKILL_INPUT=y
-> CONFIG_PCI=y
-> CONFIG_UEVENT_HELPER=y
-> CONFIG_DEVTMPFS=y
-> CONFIG_DEVTMPFS_MOUNT=y
-> # CONFIG_STANDALONE is not set
-> CONFIG_EXTRA_FIRMWARE="mchp/wilc1000_wifi_firmware.bin 
-> imx/sdma/sdma-imx6q.bin vpu_fw_imx6d.bin brcm/brcmfmac43455-sdio.bin 
-> brcm/brcmfmac43455-sdio.acmeinc,imx6q-doorvision.txt vpu_fw_imx6q.bin"
-> CONFIG_EXTRA_FIRMWARE_DIR="drivers/base/firmware_loader/builtin"
-> CONFIG_IMX_WEIM=y
-> CONFIG_CONNECTOR=y
-> CONFIG_MTD=y
-> CONFIG_MTD_CMDLINE_PARTS=y
-> CONFIG_MTD_BLOCK=y
-> CONFIG_MTD_CFI=y
-> CONFIG_MTD_JEDECPROBE=y
-> CONFIG_MTD_CFI_INTELEXT=y
-> CONFIG_MTD_CFI_AMDSTD=y
-> CONFIG_MTD_CFI_STAA=y
-> CONFIG_MTD_DATAFLASH=y
-> CONFIG_MTD_SST25L=y
-> CONFIG_MTD_RAW_NAND=y
-> CONFIG_MTD_NAND_GPMI_NAND=y
-> CONFIG_MTD_SPI_NOR=y
-> CONFIG_MTD_UBI=y
-> CONFIG_MTD_UBI_FASTMAP=y
-> CONFIG_MTD_UBI_BLOCK=y
-> CONFIG_BLK_DEV_LOOP=y
-> CONFIG_BLK_DEV_RAM=y
-> CONFIG_BLK_DEV_RAM_SIZE=65536
-> CONFIG_EEPROM_AT24=y
-> CONFIG_EEPROM_AT25=y
-> CONFIG_SCSI=y
-> # CONFIG_SCSI_PROC_FS is not set
-> CONFIG_BLK_DEV_SD=y
-> # CONFIG_BLK_DEV_BSG is not set
-> CONFIG_SCSI_CONSTANTS=y
-> CONFIG_SCSI_LOGGING=y
-> CONFIG_SCSI_SCAN_ASYNC=y
-> # CONFIG_SCSI_LOWLEVEL is not set
-> CONFIG_NETDEVICES=y
-> # CONFIG_NET_VENDOR_3COM is not set
-> # CONFIG_NET_VENDOR_ADAPTEC is not set
-> # CONFIG_NET_VENDOR_AGERE is not set
-> # CONFIG_NET_VENDOR_ALACRITECH is not set
-> # CONFIG_NET_VENDOR_ALTEON is not set
-> # CONFIG_NET_VENDOR_AMAZON is not set
-> # CONFIG_NET_VENDOR_AMD is not set
-> # CONFIG_NET_VENDOR_AQUANTIA is not set
-> # CONFIG_NET_VENDOR_ARC is not set
-> # CONFIG_NET_VENDOR_ASIX is not set
-> # CONFIG_NET_VENDOR_ATHEROS is not set
-> # CONFIG_NET_VENDOR_BROADCOM is not set
-> # CONFIG_NET_VENDOR_CADENCE is not set
-> # CONFIG_NET_VENDOR_CAVIUM is not set
-> # CONFIG_NET_VENDOR_CHELSIO is not set
-> # CONFIG_NET_VENDOR_CIRRUS is not set
-> # CONFIG_NET_VENDOR_CISCO is not set
-> # CONFIG_NET_VENDOR_CORTINA is not set
-> # CONFIG_NET_VENDOR_DEC is not set
-> # CONFIG_NET_VENDOR_DLINK is not set
-> # CONFIG_NET_VENDOR_EMULEX is not set
-> # CONFIG_NET_VENDOR_ENGLEDER is not set
-> # CONFIG_NET_VENDOR_EZCHIP is not set
-> # CONFIG_NET_VENDOR_FARADAY is not set
-> # CONFIG_NET_VENDOR_GOOGLE is not set
-> # CONFIG_NET_VENDOR_HISILICON is not set
-> # CONFIG_NET_VENDOR_HUAWEI is not set
-> # CONFIG_NET_VENDOR_INTEL is not set
-> # CONFIG_NET_VENDOR_MARVELL is not set
-> # CONFIG_NET_VENDOR_MELLANOX is not set
-> # CONFIG_NET_VENDOR_MICREL is not set
-> # CONFIG_NET_VENDOR_MICROCHIP is not set
-> # CONFIG_NET_VENDOR_MICROSEMI is not set
-> # CONFIG_NET_VENDOR_MYRI is not set
-> # CONFIG_NET_VENDOR_NI is not set
-> # CONFIG_NET_VENDOR_NATSEMI is not set
-> # CONFIG_NET_VENDOR_NETERION is not set
-> # CONFIG_NET_VENDOR_NETRONOME is not set
-> # CONFIG_NET_VENDOR_NVIDIA is not set
-> # CONFIG_NET_VENDOR_OKI is not set
-> # CONFIG_NET_VENDOR_PACKET_ENGINES is not set
-> # CONFIG_NET_VENDOR_PENSANDO is not set
-> # CONFIG_NET_VENDOR_QLOGIC is not set
-> # CONFIG_NET_VENDOR_BROCADE is not set
-> # CONFIG_NET_VENDOR_QUALCOMM is not set
-> # CONFIG_NET_VENDOR_RDC is not set
-> # CONFIG_NET_VENDOR_REALTEK is not set
-> # CONFIG_NET_VENDOR_RENESAS is not set
-> # CONFIG_NET_VENDOR_ROCKER is not set
-> # CONFIG_NET_VENDOR_SAMSUNG is not set
-> # CONFIG_NET_VENDOR_SEEQ is not set
-> # CONFIG_NET_VENDOR_SILAN is not set
-> # CONFIG_NET_VENDOR_SIS is not set
-> # CONFIG_NET_VENDOR_SOLARFLARE is not set
-> # CONFIG_NET_VENDOR_SMSC is not set
-> # CONFIG_NET_VENDOR_SOCIONEXT is not set
-> # CONFIG_NET_VENDOR_STMICRO is not set
-> # CONFIG_NET_VENDOR_SUN is not set
-> # CONFIG_NET_VENDOR_SYNOPSYS is not set
-> # CONFIG_NET_VENDOR_TEHUTI is not set
-> # CONFIG_NET_VENDOR_TI is not set
-> # CONFIG_NET_VENDOR_VERTEXCOM is not set
-> # CONFIG_NET_VENDOR_VIA is not set
-> # CONFIG_NET_VENDOR_WIZNET is not set
-> # CONFIG_NET_VENDOR_XILINX is not set
-> CONFIG_DP83867_PHY=y
-> CONFIG_USB_USBNET=y
-> # CONFIG_WLAN_VENDOR_ADMTEK is not set
-> # CONFIG_WLAN_VENDOR_ATH is not set
-> # CONFIG_WLAN_VENDOR_ATMEL is not set
-> CONFIG_BRCMFMAC=y
-> # CONFIG_WLAN_VENDOR_CISCO is not set
-> # CONFIG_WLAN_VENDOR_INTEL is not set
-> # CONFIG_WLAN_VENDOR_INTERSIL is not set
-> # CONFIG_WLAN_VENDOR_MARVELL is not set
-> # CONFIG_WLAN_VENDOR_MEDIATEK is not set
-> # CONFIG_WLAN_VENDOR_MICROCHIP is not set
-> # CONFIG_WLAN_VENDOR_RALINK is not set
-> # CONFIG_WLAN_VENDOR_REALTEK is not set
-> # CONFIG_WLAN_VENDOR_RSI is not set
-> # CONFIG_WLAN_VENDOR_ST is not set
-> # CONFIG_WLAN_VENDOR_TI is not set
-> # CONFIG_WLAN_VENDOR_ZYDAS is not set
-> # CONFIG_WLAN_VENDOR_QUANTENNA is not set
-> CONFIG_INPUT_EVDEV=y
-> CONFIG_KEYBOARD_GPIO=y
-> CONFIG_KEYBOARD_IMX=y
-> # CONFIG_MOUSE_PS2 is not set
-> CONFIG_INPUT_TOUCHSCREEN=y
-> CONFIG_TOUCHSCREEN_EDT_FT5X06=y
-> CONFIG_INPUT_MISC=y
-> # CONFIG_SERIO_SERPORT is not set
-> # CONFIG_LEGACY_PTYS is not set
-> CONFIG_SERIAL_IMX=y
-> CONFIG_SERIAL_IMX_CONSOLE=y
-> # CONFIG_SERIAL_IMX_EARLYCON is not set
-> CONFIG_SERIAL_FSL_LPUART=y
-> CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
-> # CONFIG_I2C_COMPAT is not set
-> CONFIG_I2C_CHARDEV=y
-> CONFIG_I2C_MUX_GPIO=y
-> # CONFIG_I2C_HELPER_AUTO is not set
-> CONFIG_I2C_GPIO=y
-> CONFIG_I2C_IMX=y
-> CONFIG_SPI=y
-> CONFIG_SPI_FSL_QUADSPI=y
-> CONFIG_SPI_IMX=y
-> CONFIG_SPI_SPIDEV=y
-> CONFIG_PINCTRL_MICROCHIP_SGPIO=y
-> CONFIG_GPIO_SYSFS=y
-> CONFIG_GPIO_MXC=y
-> CONFIG_GPIO_PCA953X=y
-> CONFIG_POWER_RESET=y
-> CONFIG_POWER_RESET_SYSCON=y
-> CONFIG_POWER_RESET_SYSCON_POWEROFF=y
-> CONFIG_POWER_SUPPLY=y
-> CONFIG_SENSORS_GPIO_FAN=y
-> CONFIG_SENSORS_IIO_HWMON=y
-> CONFIG_CPU_THERMAL=y
-> CONFIG_IMX_THERMAL=y
-> CONFIG_WATCHDOG=y
-> CONFIG_RN5T618_WATCHDOG=y
-> CONFIG_IMX2_WDT=y
-> CONFIG_MFD_RN5T618=y
-> CONFIG_REGULATOR=y
-> CONFIG_REGULATOR_FIXED_VOLTAGE=y
-> CONFIG_REGULATOR_ANATOP=y
-> CONFIG_REGULATOR_GPIO=y
-> CONFIG_REGULATOR_RN5T618=y
-> # CONFIG_MEDIA_CEC_SUPPORT is not set
-> CONFIG_MEDIA_SUPPORT=y
-> CONFIG_MEDIA_SUBDRV_AUTOSELECT=y
-> # CONFIG_DVB_NET is not set
-> # CONFIG_DVB_DYNAMIC_MINORS is not set
-> # CONFIG_RADIO_ADAPTERS is not set
-> CONFIG_V4L_PLATFORM_DRIVERS=y
-> CONFIG_VIDEO_MUX=y
-> CONFIG_V4L_MEM2MEM_DRIVERS=y
-> CONFIG_VIDEO_CODA=y
-> CONFIG_VIDEO_IMX_PXP=y
-> CONFIG_VIDEO_MEM2MEM_DEINTERLACE=y
-> CONFIG_VIDEO_IMX219=y
-> CONFIG_VIDEO_IMX415=y
-> CONFIG_IMX_IPUV3_CORE=y
-> CONFIG_DRM=y
-> CONFIG_DRM_PANEL_SIMPLE=y
-> CONFIG_DRM_LVDS_CODEC=y
-> CONFIG_DRM_IMX=y
-> CONFIG_DRM_IMX_PARALLEL_DISPLAY=y
-> CONFIG_DRM_IMX_TVE=y
-> CONFIG_DRM_IMX_LDB=y
-> CONFIG_DRM_IMX_HDMI=y
-> CONFIG_DRM_ETNAVIV=y
-> CONFIG_DRM_MXSFB=y
-> CONFIG_FB=y
-> CONFIG_FB_MODE_HELPERS=y
-> CONFIG_LCD_CLASS_DEVICE=y
-> CONFIG_LCD_PLATFORM=y
-> CONFIG_BACKLIGHT_PWM=y
-> CONFIG_BACKLIGHT_GPIO=y
-> CONFIG_FRAMEBUFFER_CONSOLE=y
-> CONFIG_LOGO=y
-> # CONFIG_LOGO_LINUX_MONO is not set
-> # CONFIG_LOGO_LINUX_VGA16 is not set
-> # CONFIG_LOGO_LINUX_CLUT224 is not set
-> CONFIG_SOUND=y
-> CONFIG_SND=y
-> CONFIG_SND_VERBOSE_PRINTK=y
-> CONFIG_SND_DEBUG=y
-> CONFIG_SND_DEBUG_VERBOSE=y
-> # CONFIG_SND_PCI is not set
-> # CONFIG_SND_USB is not set
-> CONFIG_SND_SOC=y
-> CONFIG_SND_SOC_FSL_ASRC=y
-> CONFIG_SND_SOC_FSL_SPDIF=y
-> CONFIG_SND_IMX_SOC=y
-> CONFIG_SND_SOC_IMX_ZL38060=y
-> CONFIG_SND_SOC_FSL_ASOC_CARD=y
-> CONFIG_SND_SOC_TLV320AIC3X_I2C=y
-> CONFIG_SND_SIMPLE_CARD=y
-> CONFIG_SND_AUDIO_GRAPH_CARD=y
-> CONFIG_USB=y
-> CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-> CONFIG_USB_EHCI_HCD=y
-> CONFIG_USB_CHIPIDEA=y
-> CONFIG_USB_CHIPIDEA_UDC=y
-> CONFIG_USB_CHIPIDEA_HOST=y
-> CONFIG_NOP_USB_XCEIV=y
-> CONFIG_USB_MXS_PHY=y
-> CONFIG_USB_GADGET=y
-> CONFIG_USB_ETH=y
-> CONFIG_MMC=y
-> CONFIG_MMC_SDHCI=y
-> CONFIG_MMC_SDHCI_PLTFM=y
-> CONFIG_MMC_SDHCI_ESDHC_IMX=y
-> CONFIG_NEW_LEDS=y
-> CONFIG_LEDS_CLASS=y
-> CONFIG_LEDS_GPIO=y
-> CONFIG_LEDS_PWM=y
-> CONFIG_LEDS_TRIGGERS=y
-> CONFIG_LEDS_TRIGGER_TIMER=y
-> CONFIG_LEDS_TRIGGER_ONESHOT=y
-> CONFIG_LEDS_TRIGGER_HEARTBEAT=y
-> CONFIG_LEDS_TRIGGER_BACKLIGHT=y
-> CONFIG_LEDS_TRIGGER_GPIO=y
-> CONFIG_RTC_CLASS=y
-> CONFIG_RTC_INTF_DEV_UIE_EMUL=y
-> CONFIG_RTC_DRV_PCF8563=y
-> CONFIG_RTC_DRV_MXC=y
-> CONFIG_RTC_DRV_MXC_V2=y
-> CONFIG_RTC_DRV_SNVS=y
-> CONFIG_DMADEVICES=y
-> CONFIG_FSL_EDMA=y
-> CONFIG_IMX_SDMA=y
-> CONFIG_MXS_DMA=y
-> # CONFIG_VIRTIO_MENU is not set
-> CONFIG_STAGING=y
-> CONFIG_STAGING_MEDIA=y
-> CONFIG_VIDEO_IMX_MEDIA=y
-> CONFIG_COMMON_CLK_PWM=y
-> CONFIG_IMX_GPCV2_PM_DOMAINS=y
-> CONFIG_IIO=y
-> CONFIG_VF610_ADC=y
-> CONFIG_OPT3001=y
-> CONFIG_VCNL4000=y
-> CONFIG_VCNL4200=y
-> CONFIG_MPL3115=y
-> CONFIG_PWM=y
-> CONFIG_PWM_FSL_FTM=y
-> CONFIG_PWM_IMX27=y
-> CONFIG_RAS=y
-> CONFIG_NVMEM_IMX_OCOTP=y
-> CONFIG_NVMEM_SNVS_LPGPR=y
-> CONFIG_MUX_MMIO=y
-> CONFIG_VALIDATE_FS_PARSER=y
-> CONFIG_QUOTA=y
-> CONFIG_QUOTA_NETLINK_INTERFACE=y
-> # CONFIG_PRINT_QUOTA_WARNING is not set
-> CONFIG_AUTOFS4_FS=y
-> CONFIG_FUSE_FS=y
-> CONFIG_MSDOS_FS=y
-> CONFIG_VFAT_FS=y
-> CONFIG_JFFS2_FS=y
-> CONFIG_JFFS2_FS_WBUF_VERIFY=y
-> CONFIG_JFFS2_COMPRESSION_OPTIONS=y
-> CONFIG_UBIFS_FS=y
-> CONFIG_SQUASHFS=y
-> CONFIG_NFS_FS=y
-> CONFIG_NFS_V3_ACL=y
-> CONFIG_NFS_V4=y
-> CONFIG_ROOT_NFS=y
-> CONFIG_NLS_DEFAULT="cp437"
-> CONFIG_NLS_CODEPAGE_437=y
-> CONFIG_NLS_CODEPAGE_850=y
-> CONFIG_NLS_ASCII=y
-> CONFIG_NLS_ISO8859_1=y
-> CONFIG_NLS_ISO8859_15=y
-> CONFIG_NLS_UTF8=y
-> CONFIG_SECURITYFS=y
-> CONFIG_LSM="yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
-> CONFIG_CRYPTO_ECDH=y
-> CONFIG_CRYPTO_SEQIV=y
-> CONFIG_CRYPTO_SHA1=y
-> CONFIG_CRYPTO_DES=y
-> CONFIG_CRYPTO_DEV_FSL_CAAM=y
-> CONFIG_CRYPTO_DEV_SAHARA=y
-> CONFIG_CRC_CCITT=y
-> CONFIG_CRC_T10DIF=y
-> CONFIG_CRC_ITU_T=y
-> CONFIG_CRC7=y
-> CONFIG_LIBCRC32C=y
-> CONFIG_CMA_SIZE_MBYTES=64
-> CONFIG_FONTS=y
-> CONFIG_FONT_8x8=y
-> CONFIG_FONT_8x16=y
-> CONFIG_PRINTK_TIME=y
-> # CONFIG_DEBUG_BUGVERBOSE is not set
-> CONFIG_MAGIC_SYSRQ=y
-> CONFIG_DEBUG_FS=y
-> CONFIG_PANIC_TIMEOUT=1
-> # CONFIG_SCHED_DEBUG is not set
-> CONFIG_PROVE_LOCKING=y
-> # CONFIG_RCU_TRACE is not set
-> # CONFIG_FTRACE is not set
->
->
->
-> Am 17.05.2022 um 20:55 schrieb Marian Postevca:
->> 12 May 2022 16:39:02 Maximilian Senftleben<kernel@mail.msdigital.de>:
->>
->>> [1.] One line summary of the problem:
->>>
->>> No static MAC address for usb gadget ethernet via kernel boot parameter any more.
->>>
->>> [2.] Full description of the problem/report:
->>>
->>> In 5.15. and before we were able to set a static MAC address for the usb gadget ethernet connection using kernel parameters "g_ether.dev_addr" and "g_ether.host_addr".
->>> Since 5.16. and more concrete after commit 890d5b40908bfd1a79be018d2d297cf9df60f4ee, this is no longer possible, and a random MAC address is assigned.
->>> (Possible Regression)
->>>
->>> [3.] Keywords (i.e., modules, networking, kernel):
->>> usb, gadget, mac, g_ether
->>>
->>> [4.] Kernel information
->>> [4.1.] Kernel version (from /proc/version):
->>> Linux version 5.17.4-141174-ge11818a6ec02 (ms@local) (arm-v7a-linux-gnueabihf-gcc (OSELAS.Toolchain-2020.08.0 10-20200822) 10.2.1 20200822, GNU ld (GNU Binutils) 2.35) #14 SMP Thu May 12 13:51:50 CEST 2022
->>> [4.2.] Kernel .config file:
->>> -
->> Could you please send the kernel .config file and kernel command line with which you reproduce this issue?
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDHG7gDNoanCGtqaNhjANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMTAyMjIwNjU3MTBaFw0yMjA5MDUwNzA3MjNaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEAu10WSl35INx8Ma97NH54zM3XKzx8Lo/KErWP5HPBtIxzYjBL20TDg9Jmnnbs
+rZjwEVNKY30HiBRJcooDpalBATQpdw3kdYEgojrrXjVz4a+YaWhLbV0OwQ54QAkwKsdYTnuUX0B4
+YLYGuUBDXYkcFWZv5BiAF4L97ClbTnUUCry8bhV9SP8b/tbivOhWUSjHLsQ9gEjuLhVId3Xgs9dA
+TtoyOTJVs6HDth0+/13gxSrB3BwSY4wtw7EPHshswD1fzSV1fZf7QUQedadjH8BMBaKKseIieb6M
+bhjsippX2btWEJOuUFS5RkK5HFFkzcGtIQd+gltZHQHohAcopF+cSwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUIDZLMN77
+IWw6rnhSvGm2V4nv3AowDQYJKoZIhvcNAQELBQADggEBADVdzyh3BQZiABHSdL7LQPNr6/6OQwg7
+65j9Ggyr2Rdl2RnQIifKtGGodVlJ8e9XCYt5rCNU8PriYstIk4jlMJp6SziSN0CLE+A+FujmTqZJ
+X8vEct7sdLXqdlBvR23TLvnkxbS3RwED7FDDTxpIv5j87o78e+wrZOPvDskdrYXVWGUu23xmd2IS
+kYMLAXNeGrVe6HovEKCJPw07+B35iJvwdpZBXiti5hFa3q1L0+K5nGMpceIrj4dOOkSNB2ipHR6H
+Q5HbB0UbWMkRv1PYpxf5eMjyDqxNigsE2JIFa1nk8ckA8hoTKbypCoALjcSuNqdZZyOnMBSKguHJ
+Zz4bBBwxggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxx
+u4AzaGpwhramjYYwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIGQvJgg2MxWbKi8p
+sBhsQ6oSe9jXtFWqLQyIZ6G+DBpDMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIyMDUyMzAyNDk0OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBOX6tNrNnfwQkLC454PtX25VZpdmIl8saU
+xcFbpxR/jRsdIzdWTaDejENoS9sN2o7QLtgt8fGpMeUIPymWIRpWC4OTfHl821RhnpOhY81bXqLA
+njQqoVrSwbOG3JcisXXciUCOpomoGrgBUJNjz3hLjv90x9Rz/jxMIs0wZ4hYBL7UVs5UppmrNBn2
+HpAJFCHSfBPdd+9HwbB4lOSzE7d7kH/OG5vn1eykwzjCVi58Y0TZWH2lyLzftsDJTu0v2qljXKKU
+CzJnBm/CLgUKa9JxShGaredG2Bpe07TJ0mILpIJBfg8rHsxmrtjZm+FouI+rJQt4LbsWUFBUuw6X
+Fx1P
+--000000000000cc7a0b05dfa4e456--
