@@ -2,105 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BDF530C3E
-	for <lists+linux-usb@lfdr.de>; Mon, 23 May 2022 11:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D36530D79
+	for <lists+linux-usb@lfdr.de>; Mon, 23 May 2022 12:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232446AbiEWJDY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 May 2022 05:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
+        id S232549AbiEWJFC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 May 2022 05:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbiEWJDX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 May 2022 05:03:23 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB1E443E6
-        for <linux-usb@vger.kernel.org>; Mon, 23 May 2022 02:03:22 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id m188so5432112vsm.2
-        for <linux-usb@vger.kernel.org>; Mon, 23 May 2022 02:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=SUWQMmwZSct1NUq5pHL/uGOr0m/f9iWjJQkP63QJuAY=;
-        b=SBQ7DoRX5gke2Q/mjE+5kshDm2ZXV5BSYmR3xP+RX3pizdNdkCqCxwZrCgfW6Q6k4a
-         AKhYxKrlrZgoBKIk666rQM60dgh96ZLXCodT9cE8VCfRB5eeOqIicLv7+kpMq6cTQ8c8
-         ejMQHBueujEz4f2ca2RGM/qT1ARLSRToVZg652lvR6HAxp89cw3HP4bGZlMJKEG+QAvm
-         r86VM89JrzA6yRZke0E3dver/UrlZjAUmxTIZo36unDem/m6AJKkjagAlJH3Ciznu6ds
-         yUnVQimunM33yRnSjP9MkOG+sWZDqgmT2sKDVG99aI77xfneLLNxzdBeyLvNZxS9taTj
-         u92w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=SUWQMmwZSct1NUq5pHL/uGOr0m/f9iWjJQkP63QJuAY=;
-        b=QLkfsgQ3AQpakkr6zQNUmvfTdc1mKNsPjW9l45DaE9uiJ1nQ1zHuzcizsg77cGP0Rh
-         UXmrLpKsqCCUuGcR0uvsEwpHQ9LI7iFuOBjkanQa5/D1aUciKW2EIUUDSX8FOusW66+1
-         SSW5SoEc8KtX/5HuCV8EI3AS2cB14rLrc4kNsoscaPBRCrbD3NVsoPVGpgixQofuDm1T
-         CwYxyTn67wEN0yyDaBR2LiA1hgFbXLayOQN/kEaSLW2sM13ZSRxwcYsZ4o/S1ims3OgW
-         uIsRoUkBwoCwbfvdo3y1LMTDLsgpkc6x9Kf88yhNnjSyEoD237P0o438vqmrBem4f1Fr
-         Xjfg==
-X-Gm-Message-State: AOAM53134+6lgVCv7LjfKVl01eUih2vnSFGt4tIhhZHP8CiqakpSMtUY
-        cbF5weq3GgZggWt/GvB8CCjIk9ZCp+KEFbHwLj8=
-X-Google-Smtp-Source: ABdhPJwMg466ObMsD3WrTt8zEdOs/0VcOJ/Yk/gB2CP4n7eyAnjpKdhcr4ygj6r3b4Kyj2NIG6DIoZDQ+8V3K7C6UJU=
-X-Received: by 2002:a05:6102:23d9:b0:335:e916:b99d with SMTP id
- x25-20020a05610223d900b00335e916b99dmr7336394vsr.70.1653296601763; Mon, 23
- May 2022 02:03:21 -0700 (PDT)
+        with ESMTP id S232475AbiEWJE7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 May 2022 05:04:59 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267E444769;
+        Mon, 23 May 2022 02:04:58 -0700 (PDT)
+X-UUID: 8eef51b088b4493db3de7bb4d64ed402-20220523
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:fb2be12e-0503-4c2e-b0ce-cc0e9d503364,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:2a19b09,CLOUDID:05aa36e3-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 8eef51b088b4493db3de7bb4d64ed402-20220523
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1561290479; Mon, 23 May 2022 17:04:53 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 23 May 2022 17:04:52 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 23 May 2022 17:04:50 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Mathias Nyman" <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Subject: [PATCH 1/4] dt-bindings: usb: mtk-xhci: add support 'resets' property
+Date:   Mon, 23 May 2022 17:04:46 +0800
+Message-ID: <20220523090449.14430-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:612c:1095:b0:2ba:f7f:f651 with HTTP; Mon, 23 May 2022
- 02:03:21 -0700 (PDT)
-Reply-To: jub47823@gmail.com
-From:   Julian Bikarm <kodjoafanou2001@gmail.com>
-Date:   Mon, 23 May 2022 09:03:21 +0000
-Message-ID: <CALgh3en0h6bgLUPfRkvH1jy0X-S3RY9AJiKQuw+2X7O994kH+Q@mail.gmail.com>
-Subject: Please can i have your attention
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e2e listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4989]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [jub47823[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [kodjoafanou2001[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [kodjoafanou2001[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear ,
+Add 'resets' property to support IP reset usually by top pericfg.
 
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+ Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Please can I have your attention and possibly help me for humanity's
-sake please. I am writing this message with a heavy heart filled with
-sorrows and sadness.
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+index 084d7135b2d9..892718459d25 100644
+--- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+@@ -113,6 +113,9 @@ properties:
+   vbus-supply:
+     description: Regulator of USB VBUS5v
+ 
++  resets:
++    maxItems: 1
++
+   usb3-lpm-capable: true
+ 
+   usb2-lpm-disable: true
+-- 
+2.18.0
 
-Please if you can respond, i have an issue that i will be most
-grateful if you could help me deal with it please.
-
-Julian
