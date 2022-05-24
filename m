@@ -2,67 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B935330AA
-	for <lists+linux-usb@lfdr.de>; Tue, 24 May 2022 20:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56AB533349
+	for <lists+linux-usb@lfdr.de>; Wed, 25 May 2022 00:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235825AbiEXSsv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 May 2022 14:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
+        id S242076AbiEXWKa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 May 2022 18:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240424AbiEXSst (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 May 2022 14:48:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23171EC72
-        for <linux-usb@vger.kernel.org>; Tue, 24 May 2022 11:48:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61001B81B85
-        for <linux-usb@vger.kernel.org>; Tue, 24 May 2022 18:48:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E4D53C34115
-        for <linux-usb@vger.kernel.org>; Tue, 24 May 2022 18:48:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653418124;
-        bh=Pz0ShCPZf2G50TpuIu85SsX4QI1fHj2Y8oO8zjjm4b4=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=M2OxRFs7WcwL/mpGVl4I9M5aaY0IGte1/DR+mouiGxwr+48KfhZjst1kPgf9+2MKP
-         0jgxfPSz0euiudpLeK8qaa2+diTCbOoA2boNOJVInqXeh82LVn+k3UuXAOJCw2gC68
-         FiCmuhaMhsCCLsa6FZkskKCa1g4y1mKHh3pBGnsEzS/XjvrVrRQr0SRX9/a9UjcIo2
-         ZqtWrevQ6EQwgfdygiaJi8EF+lxtZZdNiO0mRYjS8IXf4D+Am0n7OcKtqeD6tXay/6
-         5JoSiCCs9G7qh9YnUu3dyvvqqqcT08sRyB35mfAJeGZyFphmKe6oSKPdEzY2atVQWN
-         FgtQsStkJW7AQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id C1585C05FD4; Tue, 24 May 2022 18:48:44 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216020] drivers/usb/ folder compilation with allyesconfig fails
-Date:   Tue, 24 May 2022 18:48:44 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216020-208809-PT2UEOc0F4@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216020-208809@https.bugzilla.kernel.org/>
-References: <bug-216020-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S242052AbiEXWK1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 May 2022 18:10:27 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B2182156
+        for <linux-usb@vger.kernel.org>; Tue, 24 May 2022 15:10:25 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id pq9-20020a17090b3d8900b001df622bf81dso3406176pjb.3
+        for <linux-usb@vger.kernel.org>; Tue, 24 May 2022 15:10:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Y7QkV8r/KLZMiTae8DdBEkpYYSnvZxhbdkPijh+HR0w=;
+        b=WGePzYWOS0TR2PwNiWKrPbOkDbWSJFzcli09MrtLdjM6gINy9pwQ7ML+/MSYlyfsfN
+         wj+piMgpir2ZDOJVYO3mHg1qZMUqIv+RAdIgb/vcFZgdejrhpZUpht2+viWpIsEuOb4h
+         5LyFFA3gByMPURP66ILdd8t9aYw4zEjxlEELk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Y7QkV8r/KLZMiTae8DdBEkpYYSnvZxhbdkPijh+HR0w=;
+        b=bg+JRfQfh5h8yBikcDoliG4ERmKH1Sd29HThzZ/iZHCIP3Swu0q087CkmyJB29/8ax
+         RmKLH1VwOaqq9d0UpkH8CKFx21P9NEw0vRxBJVoXDOO210tRCm7noiPxVHnjljZvZ0+L
+         fHXLIL8uhT3BRpq4EuMZCzH+DHKp7tlr+gpBAaqhmFChJZZw5RYkuATd+o7i2ukDcUrW
+         HGLyP6/Rv90uIFbOBfZ9+ek3SaiAAWRC/N+kEFSiS98HW0zljG3ziJTMV5MhQhEa0q+T
+         gh803++xWRZMzBX7JEitl7KdVTUhhldPKL+c7tBcQBia01LcFcJSvjI2vRaav+ejw36u
+         0ikA==
+X-Gm-Message-State: AOAM532HbquKaQVKkEYOQtPJ6WSRcmxM/McFVaSw3i6PlnwmBDOmyxp+
+        Gd0OND1sIBln3Dq2qfNyI/Cpaw==
+X-Google-Smtp-Source: ABdhPJwwFaSFsAx87UW6m4AZL2Z81scAqlljR5FX8fSUBRTjAd0skm5/+NQYrCW4zuduzXs90Pblmw==
+X-Received: by 2002:a17:903:10c:b0:161:f1fb:fb18 with SMTP id y12-20020a170903010c00b00161f1fbfb18mr23230070plc.78.1653430224770;
+        Tue, 24 May 2022 15:10:24 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:4d83:f549:9abd:427])
+        by smtp.gmail.com with UTF8SMTPSA id k6-20020a170902d58600b0015ea95948ebsm7683120plh.134.2022.05.24.15.10.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 15:10:24 -0700 (PDT)
+Date:   Tue, 24 May 2022 15:10:22 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [PATCH v17 4/5] usb: dwc3: qcom: Configure wakeup interrupts
+ during suspend
+Message-ID: <Yo1XzhTTxzRiNN8O@google.com>
+References: <1653387228-28110-1-git-send-email-quic_kriskura@quicinc.com>
+ <1653387228-28110-5-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1653387228-28110-5-git-send-email-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,24 +80,78 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216020
+On Tue, May 24, 2022 at 03:43:47PM +0530, Krishna Kurapati wrote:
+> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> 
+> Configure DP/DM line interrupts based on the USB2 device attached to
+> the root hub port. When HS/FS device is connected, configure the DP line
+> as falling edge to detect both disconnect and remote wakeup scenarios. When
+> LS device is connected, configure DM line as falling edge to detect both
+> disconnect and remote wakeup. When no device is connected, configure both
+> DP and DM lines as rising edge to detect HS/HS/LS device connect scenario.
+> 
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 
---- Comment #3 from Alan Stern (stern@rowland.harvard.edu) ---
-The warnings about ene_ub6250.c are accurate.  The driver uses (EntryOffset=
- %
-512) to index a 512-byte buffer and dereferences a 16-bit value at that
-location, without checking for proper alignment.  It then dereferences anot=
-her
-16-bit value located 10 bytes farther on, without checking for overflow.
+With the addition of dwc3_qcom_update_usb2_speed() the patch has changed a
+bit since my review, I'm generally on board with the direction this is going,
+but please remove my R-B tag for now.
 
-Not having the specs for this type of device, I don't know how this is mean=
-t to
-work.  Perhaps EntryOffset % 512 is always supposed to be 0.  But perhaps n=
-ot,
-so I don't want to make any hasty changes.
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 74 ++++++++++++++++++++++++++++++++++++++------
+>  1 file changed, 65 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 7352124..5d5db62 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -20,7 +20,8 @@
+>  #include <linux/usb/of.h>
+>  #include <linux/reset.h>
+>  #include <linux/iopoll.h>
+> -
+> +#include <linux/usb/hcd.h>
+> +#include <linux/usb.h>
+>  #include "core.h"
+>  
+>  /* USB QSCRATCH Hardware registers */
+> @@ -296,11 +297,37 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
+>  	icc_put(qcom->icc_path_apps);
+>  }
+>  
+> -static void dwc3_qcom_enable_wakeup_irq(int irq)
+> +enum usb_device_speed dwc3_qcom_update_usb2_speed(struct dwc3_qcom *qcom)
+> +{
+> +	struct dwc3	*dwc = platform_get_drvdata(qcom->dwc3);
+> +	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
+> +	struct usb_device *udev;
+> +	enum usb_device_speed usb2_speed;
 
---=20
-You may reply to this email to add a comment.
+nit: dwc and hcd are indented to align, udev and usb2_speed not. Either align
+the indentation or not, but don't be inconsistent. My vote goes for removing
+the alignment.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+> +
+> +	/*
+> +	 * It is possible to query the speed of all children of
+> +	 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
+> +	 * currently supports only 1 port per controller. So
+> +	 * this is sufficient.
+> +	 */
+> +	udev = usb_hub_find_child(hcd->self.root_hub, 1);
+> +
+> +	if (udev)
+> +		usb2_speed = udev->speed;
+> +	else
+> +		usb2_speed = USB_SPEED_UNKNOWN;
+> +
+> +	return usb2_speed;
+
+nit: you could get away without 'usb2_speed':
+
+	if (!udev)
+		return USB_SPEED_UNKNOWN;
+
+	return udev->speed;
+
