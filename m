@@ -2,102 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1430053287B
-	for <lists+linux-usb@lfdr.de>; Tue, 24 May 2022 13:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BC75329F4
+	for <lists+linux-usb@lfdr.de>; Tue, 24 May 2022 14:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236484AbiEXLEO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 May 2022 07:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
+        id S237117AbiEXMEg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 May 2022 08:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232964AbiEXLEH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 May 2022 07:04:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FF28DDC8
-        for <linux-usb@vger.kernel.org>; Tue, 24 May 2022 04:04:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653390246; x=1684926246;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8KjEU11ZmTKXvx3YSoM8Zsew3OTmXhw8zgGrfWDS6A4=;
-  b=ANvXTnQo3UjhsvmHjUCJbawASsgTpoedK6a2M4WzYZYPoznn4djCYChf
-   WyzoP+NVJUpP45b83zjOGoS1UtlFwWLLiYu+VqRcoRIWWKxOnR0O6XyRX
-   fQxwOjW73HFdZbKMLvC3Z7CCtVwp34CkHdCAp9huNipOJs4fLjq/fTp4Y
-   4qVBgVL5nJiZhdQDQIBihkaRiFoxrsIjUBnADf2oh97y9bLcFh/fSAK6f
-   DLIa+ci2WIdoTgfoV4XsJS5CKvb/YKI00z+gdK94TJDarvwfvIQELMOUs
-   YuNeuFKPDbsoLc7PgMLhLd9D9UkJXNMzlLy4+rK9ebPr8H2x5tvJ5rj1Z
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273611212"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="273611212"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 04:04:05 -0700
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="641896486"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 04:04:03 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 24 May 2022 14:04:01 +0300
-Date:   Tue, 24 May 2022 14:04:01 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Stefan Hoffmeister <stefan.hoffmeister@gmail.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: Thunderbolt: One missing DisplayPort?
-Message-ID: <Yoy7oXpMugFFmfBP@lahna>
-References: <CALhB_QNhzHkf4Yw6TqZAbCisMK6TBy8ecw0M_Sq=EQXPN728fg@mail.gmail.com>
- <Yoy5m3Aa6QwVcFhf@kuha.fi.intel.com>
+        with ESMTP id S229456AbiEXMEf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 May 2022 08:04:35 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630F263BE6;
+        Tue, 24 May 2022 05:04:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=FDMqJ1ar0VBezZroqZXXZVzCZTQJATq6WMczpwjWn8E=; b=OzOAhC6DEud+BQjvfvXTlzCxeh
+        4TSi9LuN4aYHbhHqTeOrq1Kbj4mzZoz6qs/popVEL4FnV2y/8msePhQzFrc3R3eNZsztiijUvZxFq
+        +aHPQYVRTBI7hvW87USWDjIXYj8R5x4xEkQX8t9570aSB0N6oewq5RaaA/rpG1MMgtmM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ntTGS-00460A-DW; Tue, 24 May 2022 14:03:52 +0200
+Date:   Tue, 24 May 2022 14:03:52 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Lukas Wunner <lukas@wunner.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ferry Toth <fntoth@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
+Subject: Re: [PATCH net-next v3 5/7] usbnet: smsc95xx: Forward PHY interrupts
+ to PHY driver to avoid polling
+Message-ID: <YozJqD5bhg31gjz7@lunn.ch>
+References: <cover.1652343655.git.lukas@wunner.de>
+ <748ac44eeb97b209f66182f3788d2a49d7bc28fe.1652343655.git.lukas@wunner.de>
+ <CGME20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99@eucas1p2.samsung.com>
+ <a5315a8a-32c2-962f-f696-de9a26d30091@samsung.com>
+ <20220519190841.GA30869@wunner.de>
+ <31baa38c-b2c7-10cd-e9cd-eee140f01788@samsung.com>
+ <20220523094343.GA7237@wunner.de>
+ <Yowv95s7g7Ou5U8J@lunn.ch>
+ <2f612dd0-ac30-4860-ef1b-bbb180da21af@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yoy5m3Aa6QwVcFhf@kuha.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <2f612dd0-ac30-4860-ef1b-bbb180da21af@samsung.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On Tue, May 24, 2022 at 01:55:23PM +0300, Heikki Krogerus wrote:
-> +Mika
+On Tue, May 24, 2022 at 08:16:23AM +0200, Marek Szyprowski wrote:
+> On 24.05.2022 03:08, Andrew Lunn wrote:
+> >> @@ -976,6 +977,25 @@ static irqreturn_t phy_interrupt(int irq, void *phy_dat)
+> >>   	struct phy_driver *drv = phydev->drv;
+> >>   	irqreturn_t ret;
+> >>   
+> >> +	if (IS_ENABLED(CONFIG_PM_SLEEP) &&
+> >> +	    (phydev->mdio.dev.power.is_prepared ||
+> >> +	     phydev->mdio.dev.power.is_suspended)) {
+> >> +		struct net_device *netdev = phydev->attached_dev;
+> >> +
+> >> +		if (netdev) {
+> >> +			struct device *parent = netdev->dev.parent;
+> >> +
+> >> +			if (netdev->wol_enabled)
+> >> +				pm_system_wakeup();
+> >> +			else if (device_may_wakeup(&netdev->dev))
+> >> +				pm_wakeup_dev_event(&netdev->dev, 0, true);
+> >> +			else if (parent && device_may_wakeup(parent))
+> >> +				pm_wakeup_dev_event(parent, 0, true);
+> >> +		}
+> >> +
+> >> +		return IRQ_HANDLED;
+> > I'm not sure you can just throw the interrupt away. There have been
+> > issues with WoL, where the WoL signal has been applied to a PMC, not
+> > an actual interrupt. Yet the PHY driver assumes it is an
+> > interrupt. And in order for WoL to work correctly, it needs the
+> > interrupt handler to be called. We said the hardware is broken, WoL
+> > cannot work for that setup.
+> >
+> > Here you have correct hardware, but you are throwing the interrupt
+> > away, which will have the same result. So i think you need to abort
+> > the suspend, get the bus working again, and call the interrupt
+> > handler. If this is a WoL interrupt you are supposed to be waking up
+> > anyway.
 > 
-> On Fri, May 20, 2022 at 12:22:50PM +0200, Stefan Hoffmeister wrote:
-> > I am trying to diagnose a problem where I get video output on
-> > Thunderbolt on one DisplayPort, but no output on the second
-> > DisplayPort.
-> > 
-> > I would love to turn on all the (kernel-level) logging output that
-> > there is, but do not know how to do that.
-> > 
-> > Basically, on a Dell Inspiron 16 Plus (7610) laptop with Thunderbolt
-> > 4, I am running Fedora Linux 36 with kernel 5.17+.
-> > 
-> > Connecting that laptop to a Thunderbolt docking station (Intel
-> > Thunderbolt 3 chip inside),
-> > with two screens attached via DisplayPort, I get only one screen up and running.
-> > 
-> > I'd like to discover more about this apparent error mode, because
-> > attaching a different TB3
-> > setup works fine. I am looking for some means to enable logging or to
-> > get debugging insight.
-> > 
-> > Generally speaking, I suspect that this specific Dell laptop
-> > (configuration) has some challenges
-> > in the BIOS, and with Thunderbolt in general, but am totally blind to
-> > what is going on.
-> > 
-> > This system offers potential for fun, this being a hybrid PRIME
-> > configuration, with an Intel iGPU passing through to an Nvidia dGPU
-> > which seems to be the only wired-up way to get DisplayPort output.
+> This hardware doesn't support wake-on-lan. It looks somehow that it 
+> manages to throw an interrupt just a moment before the power regulator 
+> for the whole usb bus is cut off.
 
-In that system all the tunneling is done by the firmware so there is
-really not much you can debug on the kernel side. You can add
-"thunderbolt.dyndbg" in the command line to get more verbose logging but
-I doubt it reveals anything useful.
+Your hardware might not support WOL, but this is generic code. It
+needs to work for all hardware.
 
-How do you connect the monitors to the dock and what dock it is?
+As for this hardware, if it does not support WOL, why are interrupts
+still enabled?
+
+      Andrew
