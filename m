@@ -2,126 +2,209 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8467B532AC4
-	for <lists+linux-usb@lfdr.de>; Tue, 24 May 2022 15:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3284532CA0
+	for <lists+linux-usb@lfdr.de>; Tue, 24 May 2022 16:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237531AbiEXNDT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 May 2022 09:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
+        id S238414AbiEXOxV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 May 2022 10:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237522AbiEXNDR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 May 2022 09:03:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DB9968F9E
-        for <linux-usb@vger.kernel.org>; Tue, 24 May 2022 06:03:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653397391;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VuA+hQIP5NuMWzKci8Ce7ATCFxGvl8XcBeLDZ4SQZrw=;
-        b=Xb+D9eUA/cAvD2E4+VfGAFE004kxNmi85GWwlATNQZmtCYYwOPXk8a4/bUwftWi4sneb9B
-        cnDALIKT9LGSoLXv7hHgolR3Fn3bv7jJG+nYCBrL+BO/SztBRQR6eulXA4OLic9DNQXDjR
-        kTcDwRgzryvhIFgW3d20KKcKKTFkwjE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-594-iZLwKlJpOteNBhWs_z36eg-1; Tue, 24 May 2022 09:03:10 -0400
-X-MC-Unique: iZLwKlJpOteNBhWs_z36eg-1
-Received: by mail-wm1-f72.google.com with SMTP id e9-20020a05600c4e4900b00394779649b1so1271358wmq.3
-        for <linux-usb@vger.kernel.org>; Tue, 24 May 2022 06:03:10 -0700 (PDT)
+        with ESMTP id S238410AbiEXOxU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 May 2022 10:53:20 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F676EC46;
+        Tue, 24 May 2022 07:53:18 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id h8so21179953ljb.6;
+        Tue, 24 May 2022 07:53:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=YenQcjheBrq0vv9z1vB/LB15hlmj+OsSMNFzna6+wL8=;
+        b=f2eatNVnpDlgjVI+sKNIjUG7rZmVJPVfKKR377sj1ESjXWwjc4Ql6lrzmZ05oKsGrS
+         0QDBHhdy0HLUY9wqsM8COMbyVOdzXTbaz29vT8J6+30jtCR4oUY1PRGDW0FyBABp/ZRI
+         tfWiXBQlqNSPqV1kr5PR4LgOW4NJ0b0hzd+spvs7mLim9+oysGb9n/fKUnELgTPeNcy6
+         HYRbetussPG4t9M/9Za6CF2nUYKqHzAYX3IkiZWQTF8Fvr0ZjJH58o5ILJBCRoUIl5tU
+         /ZjwyBPQHzA03vT6sdHbQUZEOdTZx4mCO0ltsMBsoz4ctXgINcnr5OnM5KYGm28U/uuG
+         ZZZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=VuA+hQIP5NuMWzKci8Ce7ATCFxGvl8XcBeLDZ4SQZrw=;
-        b=hE6GMoP6JzKOHVjPKu/l3ybT7e2351sZjHysq7RSg03rlG03hk3iktr6VYkCfsj+ZP
-         AbWZS9pxaTr0WKi9jHZVz0TyiQ0un43TOuyTydPwxBkojvpsxDwH4GNUZGVwExSt8oA9
-         W8SI8BBEYaJWVoufcb07MHjHibuGn3hgTFf+EZhSOjs6qfWSeFCRHff+KHsGEFpcL7f8
-         KCkET+kBahzN/924MGIqwAHNTczA57O8YK1FglwjII3PaoSNEr/uM733K4fgzKoefriw
-         U3HnntowsY2NpZB9n5pWrVzDzr1XYM5k9IgwdbXXLJXzH92UuAg1zmqXd9URoWopZC+k
-         5qZw==
-X-Gm-Message-State: AOAM531gto05NLwbDHKoTYDQU9F9qne+CaeeU1BvmSpnfeNP0okH2/ip
-        WjUJWOs+GM7j4V9EsCEeV2GAw40WdO67RkNpbMWVjcfyq8z5rhjyIJgBv1jTNWT6BkA05DuyItZ
-        zBG8PR1YzEeQOAOV3Wmz/
-X-Received: by 2002:a05:6000:184d:b0:20f:e9a0:dad6 with SMTP id c13-20020a056000184d00b0020fe9a0dad6mr5473134wri.317.1653397388921;
-        Tue, 24 May 2022 06:03:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy6FGiz36BIprlRrTIAV1mNT8gxPmWO8Z7EZuutiOcqaDrFguXdDtGyDfOJNR44VniSl70yKQ==
-X-Received: by 2002:a05:6000:184d:b0:20f:e9a0:dad6 with SMTP id c13-20020a056000184d00b0020fe9a0dad6mr5473116wri.317.1653397388723;
-        Tue, 24 May 2022 06:03:08 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-112-184.dyn.eolo.it. [146.241.112.184])
-        by smtp.gmail.com with ESMTPSA id g17-20020adfbc91000000b0020e6c51f070sm12972975wrh.112.2022.05.24.06.03.08
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=YenQcjheBrq0vv9z1vB/LB15hlmj+OsSMNFzna6+wL8=;
+        b=ygqeS415cxJt+t8yntl6iJU2Nra8Czn4pF0frJOHNERt5t+hAgKcZeZCBZJQUivoga
+         ot0koUMwmmIJqlxR89lhGz1WkaIjQfj2SWnNJFTUPAWAzdAhmDGQ7ugCvH0r31J4Q/IE
+         rsJuO6q5MatBBJrWzcEsKw7f/SBMYJLGepFOuXZHRv4EZc5y6zXr6NP7msduPUWuM86O
+         EHXHNugN0vvmbPBpdcI9E4sOuzvIfkc54OXBhTapnnpJw22rgcAn3fdiAAB7kf6KTYrr
+         g1FVA0rD9+i85jRQ1hTuE+BUFcpJrSs7X8AiNSZvDeVhYOO1SbBxBC7t3X8cyufsMR/I
+         ooyg==
+X-Gm-Message-State: AOAM530EQApe3phoRb/KT4zLxlAW/5JntaIh+ZHCceo7FihHeO5YjB/M
+        sNHNqzWznO4FWnMEU115Jhx1FZ94FrM=
+X-Google-Smtp-Source: ABdhPJx9HIBj7mCgZF6m00YPHRr+ZtN7LNnkn7WA1r6PphNGx1354jokVLnabinYAdRiJ1g4zrXZRA==
+X-Received: by 2002:a05:651c:1a06:b0:253:eacb:14e5 with SMTP id by6-20020a05651c1a0600b00253eacb14e5mr6502248ljb.29.1653403996941;
+        Tue, 24 May 2022 07:53:16 -0700 (PDT)
+Received: from crux (31-208-31-147.cust.bredband2.com. [31.208.31.147])
+        by smtp.gmail.com with ESMTPSA id z4-20020a056512370400b0047255d211easm2565186lfr.281.2022.05.24.07.53.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 06:03:08 -0700 (PDT)
-Message-ID: <6dc4367dc75d3f7baf9f61e2691045066b3716e1.camel@redhat.com>
-Subject: Re: [PATCH] r8152: Return true/false (not 1/0) from bool functions
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Date:   Tue, 24 May 2022 15:03:07 +0200
-In-Reply-To: <20220524093733.9537-1-jiapeng.chong@linux.alibaba.com>
-References: <20220524093733.9537-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 24 May 2022 07:53:16 -0700 (PDT)
+Date:   Tue, 24 May 2022 16:53:13 +0200
+From:   Artur Bujdoso <artur.bujdoso@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: octeon-usb: move driver out of staging
+Message-ID: <YozxWT9veRJloyDD@crux>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2022-05-24 at 17:37 +0800, Jiapeng Chong wrote:
-> Return statements in functions returning bool should use true/false
-> instead of 1/0.
-> 
-> Clean the following coccicheck warning:
-> 
-> ./drivers/net/usb/r8152.c:9579:10-11: WARNING: return of 0/1 in function
-> 'rtl8152_supports_lenovo_macpassthru' with return type bool.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/net/usb/r8152.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 7389d6ef8569..7b7704b4b500 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -9576,15 +9576,15 @@ static bool rtl8152_supports_lenovo_macpassthru(struct usb_device *udev)
->  		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
->  		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
->  		case DEVICE_ID_THINKPAD_USB_C_DONGLE:
-> -			return 1;
-> +			return true;
->  		}
->  	} else if (vendor_id == VENDOR_ID_REALTEK && parent_vendor_id == VENDOR_ID_LENOVO) {
->  		switch (product_id) {
->  		case 0x8153:
-> -			return 1;
-> +			return true;
->  		}
->  	}
-> -	return 0;
-> +	return false;
->  }
->  
->  static int rtl8152_probe(struct usb_interface *intf,
+The code is sparse clean and as you replied 8th Apr the original
+is fine, checkpatch has only warnings.
 
-This looks like net-next material, and net-next is currently closed,
-please resubmit in ~2weeks specifying the target tree in the subj.
+Signed-off-by: Artur Bujdoso <artur.bujdoso@gmail.com>
+---
+ arch/mips/configs/cavium_octeon_defconfig             |  2 +-
+ drivers/staging/Kconfig                               |  2 --
+ drivers/staging/Makefile                              |  1 -
+ drivers/staging/octeon-usb/Kconfig                    | 11 -----------
+ drivers/staging/octeon-usb/Makefile                   |  2 --
+ drivers/staging/octeon-usb/TODO                       |  8 --------
+ drivers/usb/host/Kconfig                              | 10 ++++++++++
+ drivers/usb/host/Makefile                             |  1 +
+ drivers/{staging/octeon-usb => usb/host}/octeon-hcd.c |  0
+ drivers/{staging/octeon-usb => usb/host}/octeon-hcd.h |  0
+ 10 files changed, 12 insertions(+), 25 deletions(-)
+ delete mode 100644 drivers/staging/octeon-usb/Kconfig
+ delete mode 100644 drivers/staging/octeon-usb/Makefile
+ delete mode 100644 drivers/staging/octeon-usb/TODO
+ rename drivers/{staging/octeon-usb => usb/host}/octeon-hcd.c (100%)
+ rename drivers/{staging/octeon-usb => usb/host}/octeon-hcd.h (100%)
 
-Thanks
-
-Paolo
+diff --git a/arch/mips/configs/cavium_octeon_defconfig b/arch/mips/configs/cavium_octeon_defconfig
+index b6695367aa33..97ceaf080c0c 100644
+--- a/arch/mips/configs/cavium_octeon_defconfig
++++ b/arch/mips/configs/cavium_octeon_defconfig
+@@ -134,7 +134,7 @@ CONFIG_RTC_CLASS=y
+ CONFIG_RTC_DRV_DS1307=y
+ CONFIG_STAGING=y
+ CONFIG_OCTEON_ETHERNET=y
+-CONFIG_OCTEON_USB=y
++CONFIG_USB_OCTEON_HCD=y
+ # CONFIG_IOMMU_SUPPORT is not set
+ CONFIG_RAS=y
+ CONFIG_EXT4_FS=y
+diff --git a/drivers/staging/Kconfig b/drivers/staging/Kconfig
+index 0a993c47273e..3bd80f9695ac 100644
+--- a/drivers/staging/Kconfig
++++ b/drivers/staging/Kconfig
+@@ -42,8 +42,6 @@ source "drivers/staging/rts5208/Kconfig"
+ 
+ source "drivers/staging/octeon/Kconfig"
+ 
+-source "drivers/staging/octeon-usb/Kconfig"
+-
+ source "drivers/staging/vt6655/Kconfig"
+ 
+ source "drivers/staging/vt6656/Kconfig"
+diff --git a/drivers/staging/Makefile b/drivers/staging/Makefile
+index 2800ab9b2d1d..1d9ae39fea14 100644
+--- a/drivers/staging/Makefile
++++ b/drivers/staging/Makefile
+@@ -11,7 +11,6 @@ obj-$(CONFIG_R8712U)		+= rtl8712/
+ obj-$(CONFIG_R8188EU)		+= r8188eu/
+ obj-$(CONFIG_RTS5208)		+= rts5208/
+ obj-$(CONFIG_OCTEON_ETHERNET)	+= octeon/
+-obj-$(CONFIG_OCTEON_USB)	+= octeon-usb/
+ obj-$(CONFIG_VT6655)		+= vt6655/
+ obj-$(CONFIG_VT6656)		+= vt6656/
+ obj-$(CONFIG_VME_BUS)		+= vme_user/
+diff --git a/drivers/staging/octeon-usb/Kconfig b/drivers/staging/octeon-usb/Kconfig
+deleted file mode 100644
+index 6a5d842ee0f2..000000000000
+--- a/drivers/staging/octeon-usb/Kconfig
++++ /dev/null
+@@ -1,11 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-config OCTEON_USB
+-	tristate "Cavium Networks Octeon USB support"
+-	depends on CAVIUM_OCTEON_SOC && USB
+-	help
+-	  This driver supports USB host controller on some Cavium
+-	  Networks' products in the Octeon family.
+-
+-	  To compile this driver as a module, choose M here. The module
+-	  will be called octeon-hcd.
+-
+diff --git a/drivers/staging/octeon-usb/Makefile b/drivers/staging/octeon-usb/Makefile
+deleted file mode 100644
+index 9873a0130ad5..000000000000
+--- a/drivers/staging/octeon-usb/Makefile
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-obj-${CONFIG_OCTEON_USB} := octeon-hcd.o
+diff --git a/drivers/staging/octeon-usb/TODO b/drivers/staging/octeon-usb/TODO
+deleted file mode 100644
+index 2b29acca5caa..000000000000
+--- a/drivers/staging/octeon-usb/TODO
++++ /dev/null
+@@ -1,8 +0,0 @@
+-This driver is functional and has been tested on EdgeRouter Lite,
+-D-Link DSR-1000N and EBH5600 evaluation board with USB mass storage.
+-
+-TODO:
+-	- kernel coding style
+-	- checkpatch warnings
+-
+-Contact: Aaro Koskinen <aaro.koskinen@iki.fi>
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index 57ca5f97a3dc..4acf3987bfd2 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -306,6 +306,16 @@ config USB_EHCI_MV
+ 	  Dova, Armada 370 and Armada XP. See "Support for Marvell EBU
+ 	  on-chip EHCI USB controller" for those.
+ 
++config USB_OCTEON_HCD
++	tristate "Cavium Networks Octeon USB support"
++	depends on CAVIUM_OCTEON_SOC && USB
++	help
++	  This driver supports USB host controller on some Cavium
++	  Networks' products in the Octeon family.
++
++	  To compile this driver as a module, choose M here. The module
++	  will be called octeon-hcd.
++
+ config USB_CNS3XXX_EHCI
+ 	bool "Cavium CNS3XXX EHCI Module (DEPRECATED)"
+ 	depends on ARCH_CNS3XXX || COMPILE_TEST
+diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
+index 2948983618fb..2c8a61be7e46 100644
+--- a/drivers/usb/host/Makefile
++++ b/drivers/usb/host/Makefile
+@@ -63,6 +63,7 @@ obj-$(CONFIG_USB_OHCI_HCD_S3C2410)	+= ohci-s3c2410.o
+ obj-$(CONFIG_USB_OHCI_HCD_LPC32XX)	+= ohci-nxp.o
+ obj-$(CONFIG_USB_OHCI_HCD_PXA27X)	+= ohci-pxa27x.o
+ obj-$(CONFIG_USB_OHCI_HCD_DAVINCI)	+= ohci-da8xx.o
++obj-$(CONFIG_USB_OCTEON_HCD)	+= octeon-hcd.o
+ 
+ obj-$(CONFIG_USB_UHCI_HCD)	+= uhci-hcd.o
+ obj-$(CONFIG_USB_FHCI_HCD)	+= fhci.o
+diff --git a/drivers/staging/octeon-usb/octeon-hcd.c b/drivers/usb/host/octeon-hcd.c
+similarity index 100%
+rename from drivers/staging/octeon-usb/octeon-hcd.c
+rename to drivers/usb/host/octeon-hcd.c
+diff --git a/drivers/staging/octeon-usb/octeon-hcd.h b/drivers/usb/host/octeon-hcd.h
+similarity index 100%
+rename from drivers/staging/octeon-usb/octeon-hcd.h
+rename to drivers/usb/host/octeon-hcd.h
+-- 
+2.30.2
 
