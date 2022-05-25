@@ -1,126 +1,187 @@
 Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C185339A8
-	for <lists+linux-usb@lfdr.de>; Wed, 25 May 2022 11:13:47 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id D7D27533C96
+	for <lists+linux-usb@lfdr.de>; Wed, 25 May 2022 14:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233875AbiEYJNp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 May 2022 05:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
+        id S239239AbiEYM1l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 May 2022 08:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238226AbiEYJNP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 May 2022 05:13:15 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753AB7037E
-        for <linux-usb@vger.kernel.org>; Wed, 25 May 2022 02:09:39 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-f2bb84f9edso2160001fac.10
-        for <linux-usb@vger.kernel.org>; Wed, 25 May 2022 02:09:39 -0700 (PDT)
+        with ESMTP id S242040AbiEYM1j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 May 2022 08:27:39 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BEB6D860;
+        Wed, 25 May 2022 05:27:37 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24PCEOIB025732;
+        Wed, 25 May 2022 12:27:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=FVfWxrg+A9x2htVI2DL3x6SWcwxX9rAjcKAxaaTPdio=;
+ b=HLfzRoq8E95dsWu05sImLvR9w9GKsS1m0ZlOsI60YnVVKmUJUnfkfDA1OiERNQt1PLfQ
+ JM0InDDxVyoVpCIa+g6d2gcFu+RmusYtcGPjuDzYqHxakAfNwIVdU9/aiBL72MAXshCX
+ UPVf7eUJn9OKwQEY+FlfwQgJX/uNQl/wmQU0e2Uzo3QAYKyFwuhKMSKMovhwShg0YZo0
+ 61nxlLUz6I0Qf4L+Zh28XnCqAUS+nwvKemg+7JX8l78Kj7t8bwId5TfLW2mbr3IllMzN
+ wa1D33yk+jYF/yVIue6S6gA/Zfq/pwKobXavn4Jyjxfw9KA2eEd7yo8yohMZlY0Njl9X Vg== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g93tdsyda-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 May 2022 12:27:33 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24PCALvQ034393;
+        Wed, 25 May 2022 12:27:31 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2173.outbound.protection.outlook.com [104.47.58.173])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g93x5p5q8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 May 2022 12:27:31 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FP/suaReyv8Ss84wmNdeNYGdcNNe97wVHlDoVu7qFkqbkZvTXAbTi/nhAffaiKqQLiY3gOuZE/P/9P4PW3/I5y1E2AYKmAWRKGYQHJtlF85QAOpqAszMuqY9ejovZ7Xt0/JpvMqXT+D8AP6ybHQZtFsRwbExk++6ARB4KnYcgUFmdsXYnmG0FfVUr/rF8isVn3cUlg/ZnZ26ptotVddsC4y+cACoH5/4B8tAxm8eaXdrKzskokJvG8a9KwAwBo0ZlZskABfsvfyl+ofVoPd229fSYXs6u2YVYcHhydDDLgnnjU1tPQOWt3HFXKOh2C4SM2Tx4BXuEe99QXqxjUJkqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FVfWxrg+A9x2htVI2DL3x6SWcwxX9rAjcKAxaaTPdio=;
+ b=P41h/UKmRGsFwfloeRdH5ERY2MksO8upRPw8qJGpuFx1P7KOMWLK/vy6IZHMpJevxEa6Sa3LSdO/IVGLVK06nALnpTkR3OUz/hYHGnyw3Gp085ZKvdouspDY/6sdcUn304vI0C9MytkVpXFdUcZuTnctNGYXvwcfevLQQe2GpbRGv//8ifCKS1nxNveg/+3hMvlVDFngkVCsr2Yw9mhCsDAAgWx8IoQSqi39pPTbO7hz/mtmv75NYMoI/s8JCjOCoz/69sKXVs+HcOI36HD5j0o42anPfGHRW3XA/ykqNmHe17uzm2xWz0N5j+hteu/epZyfcqxVftzipPIMFJuevg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=dFTKEpXIrM/6g2eGl0g5bix+Dct0RGMmKqZaXtoxR6o=;
-        b=q0XAaEK+pLmEpxHnL195LN3Lt4sGy6+Ceauak0M6Axuus80GSU/AhaEISs7y9KBCL0
-         P4JnIZ4uQX3amDcEJikl0g8HtMZ2IOTxB1rTY9QxGx6nNuRbulKNR+/rD9RV0dazI+4v
-         Al+TSA4HrGu/YlH9NNchrJZPG6YP/8Hfu56GUWbJHhKpbDDDmr8Zgn458+X6FDpNMu7W
-         fCzh4qdFgZ4Wf1Is0b4QYLFb3eO2W6zg92i0m8+Ugfg3He3HEXon6fsjmdphHv+ko0ts
-         KY7VC6lXkswN25k0f/mifYOnqjrjWM5ODz2dR+IUBfXBCLSri+jcIYXrjQLY+bsnbG9F
-         d+NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=dFTKEpXIrM/6g2eGl0g5bix+Dct0RGMmKqZaXtoxR6o=;
-        b=lT+XkrETs8K3vymg6IpuX6DLv2d9B1hQc3IUGKJes8ZVkOSc+0Cm6f8uiwlf630pPH
-         njNl6VFvYHT5jbVI0uEJ0EcYZ/gv/ifTk3012q5pcfN7jTW60OL0fVU01NRY/02Bq7Qi
-         6J70U7ryH2iAKgenlWhcZHeg7IRwJGO3TGvyrTiLugwPL+zEI2ab9r7J4HVtCyH9D3oS
-         jNOOt5X45uq2nhp4vQzEzv4TDcOj9RqlgPpa3Kdny03OVKRoS5tewOEAkAVHqntUJJ8s
-         +T4VLuPog8ej9BkUT3B1ofJPKpJ7NUhsXxH9F8ZwBVBt7oSGJM+jVH5r2YXTp9Z8ROi7
-         i7wA==
-X-Gm-Message-State: AOAM530H4EDpfRMTCj4He1EXHD7L/DMs3WAH56/4yxIyjilj9x9d5uAX
-        txiTXMvdt1NQWAne0q2Qaka1qOQvxI3ce5EppBc=
-X-Google-Smtp-Source: ABdhPJxSaE0FXo2491MyDiF5SuiszE8mCoLxYQ2/tD6N8nUPbDsEuoGNmu4nR84mMv9txIH9Ii5ead0e6fmume8PxgE=
-X-Received: by 2002:a05:6870:5703:b0:f2:c3a5:e514 with SMTP id
- k3-20020a056870570300b000f2c3a5e514mr750716oap.32.1653469778810; Wed, 25 May
- 2022 02:09:38 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FVfWxrg+A9x2htVI2DL3x6SWcwxX9rAjcKAxaaTPdio=;
+ b=h+2ZaWfwRNom8XSpEzuop4jJFUF90edyme7sFRUSjux/xUO/QFqzZGABpW6H8BfukwBfiUfWWB8cUsRWEi8hdZaOah9wjVPf382JdHvEM9wl2MEh1af3j1nJ87KAwWeJ9PgVDusChlKhXY859t340J3Y6rLyJl9Hx7UNIRL0XEs=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by DM6PR10MB2843.namprd10.prod.outlook.com
+ (2603:10b6:5:62::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.19; Wed, 25 May
+ 2022 12:27:30 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::86f:81ba:9951:5a7e]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::86f:81ba:9951:5a7e%2]) with mapi id 15.20.5273.023; Wed, 25 May 2022
+ 12:27:29 +0000
+Date:   Wed, 25 May 2022 15:27:20 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Valentina Manea <valentina.manea.m@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] USB: usbip: clean up mixed use of _irq() and _irqsave()
+Message-ID: <Yo4gqLPtHO6XKMLn@kili>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-ClientProxiedBy: LO4P123CA0031.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:151::18) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-Received: by 2002:a05:6820:548:0:0:0:0 with HTTP; Wed, 25 May 2022 02:09:38
- -0700 (PDT)
-From:   Mrs Cristina Campbell <cristtinacampbell@gmail.com>
-Date:   Wed, 25 May 2022 10:09:38 +0100
-Message-ID: <CAArciVpRj-TQjSNYypFOP8+2f25Yp9tW13-RnubasKwizARnNQ@mail.gmail.com>
-Subject: Kun je me helpen?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.5 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c469d41b-c236-4ceb-c239-08da3e49ef78
+X-MS-TrafficTypeDiagnostic: DM6PR10MB2843:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB28438AF780FF9C6832A1971F8ED69@DM6PR10MB2843.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /hMCakNO+aKqPQWA9difK9+8kJmtjCXmbHRMHp6ffVpaJqBd5L/hQQ0YuOCjuDUiW9TIb98MyLvDB82PF17xjV0D7HT90C/bemqLls0N2I5vetnHZVXC3b6t/qVs59vPsrP58aGseyAholnK29smT+F61HgZwRVUvjWBNJwqYOoHLU6to98nZTSd5jObsaL44Bu11cOyFzMFTt+uInQxspUFNyo28ESi9tTpBKasU/c/f6JhjoUXICz+1BgzqIz0HT5LsFWtLW4vPw8CrOckuAdb475rA/qltatVI7OcLRCq7h5oXlsmnihw8mKGR51CoGg5OJfvZNajh1RpyS6H7fe4ocl3wcExzfmc3jf7gQJ4V440eyyc/VMO4hvv9KncTn9o/QN2VxFX7fwthStDutXElBbOgTR1Cqc8w9QIu4ywmReW3w9wbUJlRu+hHaLhH8AuGvJcrMbVAXVqmcvSc0E5MqD71ig6N4U9K9z2zBuF0qKwEu4V6+PEgQznaUopSHGIPKRtT/V+yDRXxDjODbah9SrCX6JI9tO9cs5D3nDJgPNHl941rlStFqWW4LCqULAtWGPodDQnzH92Bmh7memfUUB28ok3+W6Bq7OWSBImj+DNx2G291T4/dwp8UU+PzNyai27yqQCjFp+AjYpWLgHS49qrx73PPxPUwlhODth+BXjaO0TIQpf+7WjT44Vi7Cl5ANIoeSjfpY66Yhn7A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(6666004)(52116002)(54906003)(86362001)(316002)(6916009)(508600001)(6506007)(4326008)(33716001)(83380400001)(2906002)(66946007)(66476007)(66556008)(6512007)(5660300002)(9686003)(8936002)(186003)(26005)(6486002)(8676002)(44832011)(38100700002)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Ks2lEWFGaUBM2Lk94rHJ632Jb8ixHM4USOjBYGpFXLUF0ezerUqyp+U7pxel?=
+ =?us-ascii?Q?BtIlkn4HhVhGCgMq5j9ahq2Ck8NqwHl3BJvJVShf3q3xh7Hu6B3Ut7TTq72L?=
+ =?us-ascii?Q?qvsym6aO7UIvruY+hc/cCMD8i6XegHiAcPOccEyUj+KX4crYQvehDzsyiD69?=
+ =?us-ascii?Q?8JmcEZCrVO3KR7ogBzVcOLbPHIMDWqI9/E9Ot5n9+ZY1F8i7L99GVvcVmjzd?=
+ =?us-ascii?Q?WBkjdIiKVkrUPz8CeWx9EERWs2gIHgaP4dxyUnLJjWezH/vaUR42mO4zidPL?=
+ =?us-ascii?Q?jdOjDOR88B/hWJ5DaTEvs94SSZzWlswQGO8rYaaUHaAFTXVDffG+uQnWkrsh?=
+ =?us-ascii?Q?gs4N4BNTw5LBOwdS18hJHY6x1SxyeCZt0V9M5+t9EbJvk9stEqo0Ub8aruJJ?=
+ =?us-ascii?Q?crVET7xW8ZultCUZsdhg/grFtmDBQXhTIuPS6IEuHdU2vNeniLxsNGcL1tuK?=
+ =?us-ascii?Q?g+E8H9eQ6aLE8klunB6HzT5h7OexxIaSbJX54riCvtiLsvERmEEGyL6WOl7k?=
+ =?us-ascii?Q?p/2V7927diNj37UAsfTz0CtpuTnEQvu97Aih7AisH/C/lgBppGSn8IO4sisD?=
+ =?us-ascii?Q?9t4fw1uXpb7XIeJ7Kxa/Kl2mkohJItzpEqj1EoqNwUk9xvywOdb9mtwF7ux5?=
+ =?us-ascii?Q?5uyLHmDoBBwHsDQ/e6ai25AEbL8pmqclJ+7dW5g3FT/LsLwmj/wjRVcqOrBo?=
+ =?us-ascii?Q?mCCAgaosGo6Xhb3dUDH0wNN9YZssw8r5UVZJmitbqQFDnua4LLoDPNodmONx?=
+ =?us-ascii?Q?r4lbrdwf46guQhRhwiJfRdzm/joJfxwykN/X6Qs2H0Bwqh8roWQrx3eDED56?=
+ =?us-ascii?Q?dNFiJ+3/XOvBakhI856cM0v85n2rZSWFs3Yd+AqoxYnH3d3sRjGq9gkuLrGp?=
+ =?us-ascii?Q?x/fp5fHk4RMvtG988lnRl6cVwVXjqAh+CrcCycIEiwyXdDDnEloZp8XoGI1g?=
+ =?us-ascii?Q?niZEsV1P9XTi2xGQ+3xH+VYR3dhDfe/Hd2xNgdkufli+bnWBhedCAPOaOoQ6?=
+ =?us-ascii?Q?kHeIuQRgvFkVoc2gltVNJKEIUuOdG/ACe+en+E7MuT0mN6lVvjkZKthpQYJo?=
+ =?us-ascii?Q?F/DA5Yp8GPS3gUTFpaEVntdUG1N8cmP7Gp0uKlxsANUFhO9JpW5wiIwiGTlM?=
+ =?us-ascii?Q?WCMrXNLS5aEH23eIX3Zm6MsxKYF8MD38UmDiGySJi/3ivmqv1oAXPgjCtGOc?=
+ =?us-ascii?Q?JwfZM/wIPuLBbkv2x9BZ7fQOlCv4bT+UJhElKxMHn9y2CeO+aPIwWQu2DqiK?=
+ =?us-ascii?Q?2fXOhJuXYfrCXrlrxdvF383UUMcri0hDuy+v6q+fo8Nhb9jQwRXDFwFe3vdY?=
+ =?us-ascii?Q?///x+l8a5odk9YqxgwTJytM4vh5YGgUtidmvM6ZM9c852HnFEgcYA9jKP8zU?=
+ =?us-ascii?Q?kSsXXVrblTt9cW1zE4gnxM3ShAP7zGJuJhYabdpIBSHy4a7FYPIY4fk7oU6B?=
+ =?us-ascii?Q?pyradgRlubtYLt+uY0EUIyOcYghmn7hCnsJP5DBofkGJ3oCY8EqrooriEdju?=
+ =?us-ascii?Q?w1zmMqq23M2lTLXZ4e88VnfLvw1FPadAFed/lcSPljvBhtoedLrZeHTqIiyI?=
+ =?us-ascii?Q?yHYfTq7qoAv03SrbD7gJANoHhsejwdiVBAxX2lOz8b9cXfUEh0CxF6/qriDB?=
+ =?us-ascii?Q?xIUHrPKBZjqojaZ1I/r9a9e0+ZyL6O/4dqgDS4Iw8nBzB30jf1eRrKh9wnrQ?=
+ =?us-ascii?Q?iwNelCveFMhGft0yqO7I6PchaBX2HjfwEgrNW/ISkSAvEmjKZgcpiAKZU0EC?=
+ =?us-ascii?Q?TwOdD+S6kl216vrKCluqpRmVhXoADxM=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c469d41b-c236-4ceb-c239-08da3e49ef78
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2022 12:27:29.8799
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Jb5195GtL6j/A8Ey/y/edI4E7ID8+ymia8haygBNs2KnTE2KvqEEuz4rJjWIh8T6wp1uVDkzh8FCrjFoC/difg7f0UjuL7S5gYi0SQsGDIE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB2843
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.874
+ definitions=2022-05-25_03:2022-05-25,2022-05-25 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 bulkscore=0
+ suspectscore=0 mlxlogscore=999 adultscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2205250062
+X-Proofpoint-GUID: rhEa4leU8C0R-wcUreSiDf3ybpEkQ6nC
+X-Proofpoint-ORIG-GUID: rhEa4leU8C0R-wcUreSiDf3ybpEkQ6nC
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Beste geliefde,
+It generally doesn't make sense to use _irq() and _irqsave() in the same
+function because either some of the callers have disabled IRQs or they
+haven't.  In this case, the v_recv_cmd_submit() appears to always be
+called with IRQs enabled so the code works fine.  That means I could
+convert it to either _irq() or _irqsave() but I chose to use _irqsave()
+because it's more conservative and easier to review.
 
-Lees dit alstublieft langzaam en aandachtig door, want het is
-misschien wel een van de belangrijkste e-mails die u ooit krijgt. Ik
-ben mevrouw Cristina Campbell, ik was getrouwd met wijlen Edward
-Campbell. Hij werkte vroeger voor Shell Petroleum Development Company
-London en was ook een doorgewinterde aannemer in de regio Oost-Azi=C3=AB.
-Hij stierf op donderdag 31 juli 2003 in Parijs. We waren zeven jaar
-getrouwd zonder kind.
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/usb/usbip/vudc_rx.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Terwijl je dit leest, wil ik niet dat je medelijden met me hebt, want
-ik geloof dat iedereen op een dag zal sterven. Er is bij mij
-slokdarmkanker vastgesteld en mijn dokter vertelde me dat ik het niet
-lang zou volhouden vanwege mijn gecompliceerde gezondheidsproblemen.
+diff --git a/drivers/usb/usbip/vudc_rx.c b/drivers/usb/usbip/vudc_rx.c
+index 1e8a23d92cb4..d4a2f30a7580 100644
+--- a/drivers/usb/usbip/vudc_rx.c
++++ b/drivers/usb/usbip/vudc_rx.c
+@@ -104,18 +104,18 @@ static int v_recv_cmd_submit(struct vudc *udc,
+ 	if (pdu->base.direction == USBIP_DIR_IN)
+ 		address |= USB_DIR_IN;
+ 
+-	spin_lock_irq(&udc->lock);
++	spin_lock_irqsave(&udc->lock, flags);
+ 	urb_p->ep = vudc_find_endpoint(udc, address);
+ 	if (!urb_p->ep) {
+ 		/* we don't know the type, there may be isoc data! */
+ 		dev_err(&udc->pdev->dev, "request to nonexistent endpoint");
+-		spin_unlock_irq(&udc->lock);
++		spin_unlock_irqrestore(&udc->lock, flags);
+ 		usbip_event_add(&udc->ud, VUDC_EVENT_ERROR_TCP);
+ 		ret = -EPIPE;
+ 		goto free_urbp;
+ 	}
+ 	urb_p->type = urb_p->ep->type;
+-	spin_unlock_irq(&udc->lock);
++	spin_unlock_irqrestore(&udc->lock, flags);
+ 
+ 	urb_p->new = 1;
+ 	urb_p->seqnum = pdu->base.seqnum;
+-- 
+2.35.1
 
-Ik wil dat God mij genadig is en mijn ziel accepteert, dus ik heb
-besloten om aalmoezen te geven aan
-liefdadigheidsorganisaties/kerken/boeddhistische
-tempels/moskee/moederloze baby's/minder bevoorrechte en weduwen omdat
-ik wil dat dit een van de laatste goede daden is Ik doe op aarde
-voordat ik sterf. Tot nu toe heb ik geld uitgedeeld aan een aantal
-liefdadigheidsorganisaties in Schotland, Wales, Panama, Finland en
-Griekenland. Nu mijn gezondheid zo achteruit is gegaan, kan ik dit
-zelf niet meer.
-
-Ik heb ooit leden van mijn familie gevraagd om een =E2=80=8B=E2=80=8Bvan mi=
-jn
-rekeningen te sluiten en het geld dat ik daar heb te verdelen aan
-liefdadigheidsorganisaties in Oostenrijk, Nederland, Duitsland, Itali=C3=AB
-en Zwitserland, ze weigerden en hielden het geld voor zichzelf. Daarom
-vertrouw ik het niet ze niet meer, omdat ze niet lijken te strijden
-met wat ik voor hen heb achtergelaten. Het laatste van mijn geld
-waarvan niemand weet, is de enorme contante storting van zes miljoen
-Amerikaanse dollars $ 6.000.000,00 die ik heb bij een bank in Thailand
-waar ik het fonds heb gestort. Ik wil dat u dit fonds gebruikt voor
-liefdadigheidsprogramma's en de mensheid in uw land steunt, als u maar
-oprecht bent.
-
-Ik nam deze beslissing omdat ik geen kind heb dat dit geld zal erven,
-ik ben niet bang voor de dood, daarom weet ik waar ik heen ga. Ik weet
-dat ik in de boezem van de Heer zal zijn. Zodra ik uw antwoord heb
-ontvangen, zal ik u de contactpersoon van de Bank bezorgen en u een
-machtigingsbrief geven die u als oorspronkelijke begunstigde van dit
-fonds in staat stelt om dit liefdadigheidsprogramma onmiddellijk in uw
-land te starten.
-
-Alleen een leven voor anderen is een leven dat de moeite waard is. Ik
-wil dat je altijd voor me bidt. Elke vertraging in je antwoord zal me
-ruimte geven om een =E2=80=8B=E2=80=8Bandere persoon voor hetzelfde doel te=
- zoeken.
-Als u niet ge=C3=AFnteresseerd bent, neem dan alstublieft contact met mij
-op. Je kunt me bereiken met of reageren op mijn priv=C3=A9-e-mailadres:
-(cristinacampel@outlook.com).
-
-Bedankt,
-Hoogachtend,
-Mevrouw Cristina Campbell
-E-mail; cristinacampel@outlook.com
