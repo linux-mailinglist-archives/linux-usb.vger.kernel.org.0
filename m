@@ -2,116 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD98E534016
-	for <lists+linux-usb@lfdr.de>; Wed, 25 May 2022 17:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C55B53401D
+	for <lists+linux-usb@lfdr.de>; Wed, 25 May 2022 17:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245049AbiEYPNB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 May 2022 11:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
+        id S243550AbiEYPNb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 May 2022 11:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245068AbiEYPMx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 May 2022 11:12:53 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE15AFB27
-        for <linux-usb@vger.kernel.org>; Wed, 25 May 2022 08:12:51 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id i74so14973638ioa.4
-        for <linux-usb@vger.kernel.org>; Wed, 25 May 2022 08:12:51 -0700 (PDT)
+        with ESMTP id S245146AbiEYPNY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 May 2022 11:13:24 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D193B225A
+        for <linux-usb@vger.kernel.org>; Wed, 25 May 2022 08:13:21 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id q2so5612645ils.0
+        for <linux-usb@vger.kernel.org>; Wed, 25 May 2022 08:13:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0bQnxjKs1pIJTlibykKQy+NCTN/zN06hUmrppkpIOS4=;
-        b=AccCEGTCaYA5vbnwf8qeKJXaaVYCTcXqtW09HSCF7NRrSJMEqNwbUzPBeW8Ei9plUD
-         Mb+azUUjPI4Hu+fjoZZr5khoKMQqr8d9KDsyFk4dKfOoFSd36O0IfiSijchtD2CNbqWl
-         aExNpRtbCT0PzvO1Y/sQnsLMTjyGCUSkkmkvw=
+        bh=GdVXDiBTvDsGSp4gN7P3+qWOHyyVf7qzlb5UHFgMfDQ=;
+        b=b4wHeygbsIeo4NVYzDdomfgzLiq/t/x5cyEzlGM6NAz1ILFgOtx9BtuNP861SjtiDx
+         nd/T3BZbDVrpQLQR10r4IgScjxztwfsRk126/1HGktqLvFD4pRgpad52yH1Bwq2aL3Qz
+         JAgAnsp2jjHnawnIlW8F51Tj8iRrEZr+f8gnA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=0bQnxjKs1pIJTlibykKQy+NCTN/zN06hUmrppkpIOS4=;
-        b=JcmbLUcroG4qBOSdONQNhblJ47Pawcdw5HGBeAi9E5S9Gc6tt+SrhDzQaAglIxc8AW
-         QwFAx4xKOjbK/U7KYizl95HXfSoBb9x/xQEKTMjXiE+JJ/uVTLWKJTPYY/2TCeOuV8SR
-         /QrSizMW2zoTwnPYXKXMRmbzVWSyKP1pa8fHmunI0onRDinXuIo4EmM0i99O+qptW63g
-         GuAspb0daXybjsiZbOPAPACpRD0lB1TmanoUGD+1Ic1r+X+Q35j66jdQASAsVXbrVi8g
-         /H2N6y32u2g7OmaAZ403mYVyyCfR+EUzcZvwoBs6KWLm2hWYcnYpA4OcvbdmsQHaWUA3
-         yGMg==
-X-Gm-Message-State: AOAM532qMqFgppRcVNVSYKqVSZvGL7PgRJu9SWizjYCZH1wDtJ4G+BIo
-        Bz3IV6qSDSWxg3EpGuq/oy+aCg==
-X-Google-Smtp-Source: ABdhPJzy5M5hjOTuZdP/RuCmpjy8lT7iHrjZQ7qALqzx6xhWxBPw2nnkRYaRXbCOETkjLNqsjTZAfg==
-X-Received: by 2002:a05:6638:2042:b0:32b:c513:21b2 with SMTP id t2-20020a056638204200b0032bc51321b2mr16864739jaj.90.1653491571341;
-        Wed, 25 May 2022 08:12:51 -0700 (PDT)
+        bh=GdVXDiBTvDsGSp4gN7P3+qWOHyyVf7qzlb5UHFgMfDQ=;
+        b=574KW9yeqV1/jNmmBGkTOGcROzRU+MOqGFI7a92Uuhj26dMjw0vXCxnXWIpR7RM4TU
+         EPESfru4iyqyP4Oc7b8TD2GwbqtTsDKjosW6QmbDiUAGvPl8u6edcLs/CDOdZyBGivRW
+         qSIZNaniQCNlu3DPXXW+t2kdCwst5vBuc9E6PKxlnvCEbsX3LOyyIlXmdmxxSCscfyGt
+         e8pKheDmFJxiG7DPFC9ptsdl/7WbFARmkIJGlvq4oYsrsrw1znpTXNUPbQXA2hSYVt20
+         9AF27/NzCqR14urj16Q468tEQKdAJoCrUxwaU52NC6cQfJQZV8HB1bdgTG8/gnpPKLX9
+         PRHw==
+X-Gm-Message-State: AOAM530pwA2qVBT6PWaf1Xyk/+yagXwojyJh1B9d4NlZImKB18+7oNI6
+        WQvqoh/O8iu0lERVzCS52nBu7w==
+X-Google-Smtp-Source: ABdhPJw7noa1HtR4Ak6KYzkBU2fFGxwdHHwQ2YkMao3TZhxjvPlXMjXcupLi+OzrR1Dd7utepFGtJg==
+X-Received: by 2002:a92:cbd0:0:b0:2d1:48cb:1739 with SMTP id s16-20020a92cbd0000000b002d148cb1739mr16227573ilq.10.1653491601136;
+        Wed, 25 May 2022 08:13:21 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id a9-20020a921a09000000b002d1d8de99e7sm745107ila.40.2022.05.25.08.12.50
+        by smtp.gmail.com with ESMTPSA id o30-20020a056602125e00b0065dc93eae5dsm5725027iou.7.2022.05.25.08.13.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 08:12:50 -0700 (PDT)
-Subject: Re: [PATCH] USB: usbip: clean up mixed use of _irq() and _irqsave()
+        Wed, 25 May 2022 08:13:20 -0700 (PDT)
+Subject: Re: [PATCH] usbip: vudc: Don't enable IRQs prematurely
 To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
         Valentina Manea <valentina.manea.m@gmail.com>,
+        Igor Kotrasinski <i.kotrasinsk@samsung.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <Yo4gqLPtHO6XKMLn@kili>
+References: <Yo4hVWcZNYzKEkIQ@kili>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <5a66600c-f8b6-de5d-44ad-4f6f0eb3934d@linuxfoundation.org>
-Date:   Wed, 25 May 2022 09:12:49 -0600
+Message-ID: <3f9926ac-9586-522e-e70b-d524b7cd19cd@linuxfoundation.org>
+Date:   Wed, 25 May 2022 09:13:19 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <Yo4gqLPtHO6XKMLn@kili>
+In-Reply-To: <Yo4hVWcZNYzKEkIQ@kili>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/25/22 6:27 AM, Dan Carpenter wrote:
-> It generally doesn't make sense to use _irq() and _irqsave() in the same
-> function because either some of the callers have disabled IRQs or they
-> haven't.  In this case, the v_recv_cmd_submit() appears to always be
-> called with IRQs enabled so the code works fine.  That means I could
-> convert it to either _irq() or _irqsave() but I chose to use _irqsave()
-> because it's more conservative and easier to review.
+On 5/25/22 6:30 AM, Dan Carpenter wrote:
+> This code does:
+> 
+> 	spin_unlock_irq(&udc->ud.lock);
+> 	spin_unlock_irqrestore(&udc->lock, flags);
+> 
+> which does not make sense.  In theory, the first unlock could enable
+> IRQs and then the second _irqrestore could disable them again.  There
+> would be a brief momemt where IRQs were enabled improperly.
+> 
+> In real life, however, this function is always called with IRQs enabled
+> and the bug does not affect runtime.
 > 
 > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 > ---
->   drivers/usb/usbip/vudc_rx.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/usbip/vudc_rx.c b/drivers/usb/usbip/vudc_rx.c
-> index 1e8a23d92cb4..d4a2f30a7580 100644
-> --- a/drivers/usb/usbip/vudc_rx.c
-> +++ b/drivers/usb/usbip/vudc_rx.c
-> @@ -104,18 +104,18 @@ static int v_recv_cmd_submit(struct vudc *udc,
->   	if (pdu->base.direction == USBIP_DIR_IN)
->   		address |= USB_DIR_IN;
->   
-> -	spin_lock_irq(&udc->lock);
-> +	spin_lock_irqsave(&udc->lock, flags);
->   	urb_p->ep = vudc_find_endpoint(udc, address);
->   	if (!urb_p->ep) {
->   		/* we don't know the type, there may be isoc data! */
->   		dev_err(&udc->pdev->dev, "request to nonexistent endpoint");
-> -		spin_unlock_irq(&udc->lock);
-> +		spin_unlock_irqrestore(&udc->lock, flags);
->   		usbip_event_add(&udc->ud, VUDC_EVENT_ERROR_TCP);
->   		ret = -EPIPE;
->   		goto free_urbp;
->   	}
->   	urb_p->type = urb_p->ep->type;
-> -	spin_unlock_irq(&udc->lock);
-> +	spin_unlock_irqrestore(&udc->lock, flags);
->   
->   	urb_p->new = 1;
->   	urb_p->seqnum = pdu->base.seqnum;
+> An alternative fix would be to make changes below and also change the
+> outside _irqsave/_irqrestore() to just _irq().  However, that's more
+> invasive and riskier with no upside.
 > 
 
 Thank you for the patch.
