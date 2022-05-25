@@ -2,72 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30E75342E9
-	for <lists+linux-usb@lfdr.de>; Wed, 25 May 2022 20:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3CF534540
+	for <lists+linux-usb@lfdr.de>; Wed, 25 May 2022 22:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiEYSVn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 May 2022 14:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
+        id S245275AbiEYUsb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 May 2022 16:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343692AbiEYSVl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 May 2022 14:21:41 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11142AFAEC;
-        Wed, 25 May 2022 11:21:40 -0700 (PDT)
+        with ESMTP id S236068AbiEYUsY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 May 2022 16:48:24 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C158BB2258
+        for <linux-usb@vger.kernel.org>; Wed, 25 May 2022 13:48:22 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id l32so4232072ybe.12
+        for <linux-usb@vger.kernel.org>; Wed, 25 May 2022 13:48:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653502900; x=1685038900;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=gj7SYDoBtZDEnx2ObhP/ClinHJPnWLTIbNluq8OfXK4=;
-  b=a8gtYca5VYFmW8qcSyBXqLP+uWQSEkiAiNrngjUpwp3y/9TivOWQ90/H
-   TQIo0Q2oOgwSnyaKEhe/racnDfrEaTDZOzcryUnH30XBiITzeuMwP4NGJ
-   P41QGCJQc/SyPz0vECOABu0gOvvBlK0FehrDlYLT2+yIdMiwJmvEnRqt+
-   c=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 May 2022 11:21:38 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 11:21:38 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 25 May 2022 11:21:10 -0700
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 25 May 2022 11:21:04 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v18 5/5] usb: dwc3: qcom: Keep power domain on to retain controller status
-Date:   Wed, 25 May 2022 23:50:26 +0530
-Message-ID: <1653502826-24256-6-git-send-email-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1653502826-24256-1-git-send-email-quic_kriskura@quicinc.com>
-References: <1653502826-24256-1-git-send-email-quic_kriskura@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=+uyh4vUIYntN7Mid2B5fbgguOxBR2RiHnKBh7A4r37I=;
+        b=MIznAoP29XHGMZwK2XaORcuFYY4KHU3SiD37YZr3IksbwEszYFwRGI6NMOaIsgw3Rc
+         MNWUak9e2Pk5zm0JPp6szTBpWptBOFEsDKaXw1mzZOTFcRGcvyjOwqdtF8UB9EvyuuJZ
+         fMICjT1+KZ7bxeE9NTTU8LESXRGeqFThSri55TjzyU4r+qSYB8KRkbeHsWYNf08X2bEy
+         pryupL2ykuBV+sygnkk+fqajrVN1/45XJT6UIDBI/J4JIiO7GZW4kaISjbo9xtOnIbu3
+         /lAT2wlHOnLDqj2MsvwscUqPgxRkbuhwflLse0VSR01xDxZYapbGb527uMRlqnyfWWDn
+         3l8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=+uyh4vUIYntN7Mid2B5fbgguOxBR2RiHnKBh7A4r37I=;
+        b=xFMh1YA3mAh7Im/kWUhQahshC3gmrQJ0n9HEugTr5NkZtHhS3zR1HIfEdcLBQ5hr8X
+         ixpGRKbxtUL89sueIbiMIYl/0YuASB0NwwRSBQMDJxpRiNHKdiDAUthlL5KHVNV1SBL0
+         pbKmSjkxEmJF7cqNFvyeyjtuJdoVPQKmow9CyfZWEQd9M3J4wJu0Md4ExCcqEaRCgwuw
+         M+TmdUkyt8Ggk/10h7NagBvJzGfzYDynqOZ2FNs9t+YsYA+dAS1HFF7iv92XbnMdr5Yq
+         KywQtaxSordQ69wgK2lkPziDfjSB0gyljj8E3C8yqVni+cioykWWsIQLoSkGBVY5MYkG
+         t+Nw==
+X-Gm-Message-State: AOAM530cG30UP15QwfOcCwJe0KcpgYVFmVrIdyAMTSeueL/1blnA8d0i
+        0yb7XQ/RWoHv/WIJaH0xOQzJkGB3BOYbNXjf/Rc=
+X-Google-Smtp-Source: ABdhPJygDnPWuNyLLxTk2B3Kv8LEKih1+m2wVtTUpsrNi1Bs8nM6GPylqvWzkD99kDlHZJJaie6GrPKCBIwCtXokpK8=
+X-Received: by 2002:a05:6902:1023:b0:64f:39e7:ef05 with SMTP id
+ x3-20020a056902102300b0064f39e7ef05mr31533397ybt.126.1653511701867; Wed, 25
+ May 2022 13:48:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Received: by 2002:a05:7110:3682:b0:17b:2b7b:c035 with HTTP; Wed, 25 May 2022
+ 13:48:21 -0700 (PDT)
+From:   Colina Fernando <colinafernando724@gmail.com>
+Date:   Wed, 25 May 2022 22:48:21 +0200
+Message-ID: <CAP7Hh1-EL6tqrQsO0De_QJ1avJao_roXNeVStyzCoPtO9q14fg@mail.gmail.com>
+Subject: Bitte kontaktaufnahme Erforderlich !!! Please Contact Required !!!
+To:     contact@firstdiamondbk.com
+Cc:     info@firstdiamondbk.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,79 +66,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Guten Tag,
 
-If dwc3 is wakeup capable, keep the power domain always ON so that
-wakeup from system suspend can be supported. Otherwise, keep the
-power domain ON only during runtime suspend to support wakeup from
-runtime suspend.
+Ich habe mich nur gefragt, ob Sie meine vorherige E-Mail bekommen
 
-Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
- drivers/usb/dwc3/dwc3-qcom.c | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+haben ?
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 56ecee0..2f5b5ae 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -17,6 +17,7 @@
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/phy/phy.h>
-+#include <linux/pm_domain.h>
- #include <linux/usb/of.h>
- #include <linux/reset.h>
- #include <linux/iopoll.h>
-@@ -756,12 +757,13 @@ dwc3_qcom_create_urs_usb_platdev(struct device *dev)
- 
- static int dwc3_qcom_probe(struct platform_device *pdev)
- {
--	struct device_node	*np = pdev->dev.of_node;
--	struct device		*dev = &pdev->dev;
--	struct dwc3_qcom	*qcom;
--	struct resource		*res, *parent_res = NULL;
--	int			ret, i;
--	bool			ignore_pipe_clk;
-+	struct device_node *np = pdev->dev.of_node;
-+	struct device *dev = &pdev->dev;
-+	struct dwc3_qcom *qcom;
-+	struct resource	*res, *parent_res = NULL;
-+	int ret, i;
-+	bool ignore_pipe_clk;
-+	struct generic_pm_domain *genpd;
- 
- 	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
- 	if (!qcom)
-@@ -770,6 +772,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, qcom);
- 	qcom->dev = &pdev->dev;
- 
-+	genpd = pd_to_genpd(qcom->dev->pm_domain);
-+
- 	if (has_acpi_companion(dev)) {
- 		qcom->acpi_pdata = acpi_device_get_match_data(dev);
- 		if (!qcom->acpi_pdata) {
-@@ -877,7 +881,17 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto interconnect_exit;
- 
--	device_init_wakeup(&pdev->dev, 1);
-+	if (device_can_wakeup(&qcom->dwc3->dev)) {
-+		/*
-+		 * Setting GENPD_FLAG_ALWAYS_ON flag takes care of keeping
-+		 * GEMPD on in both RT suspend and System suspend cases.
-+		 */
-+		genpd->flags |= GENPD_FLAG_ALWAYS_ON;
-+		device_init_wakeup(&pdev->dev, true);
-+	} else {
-+		genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
-+	}
-+
- 	qcom->is_suspended = false;
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
--- 
-2.7.4
+Ich habe versucht, Sie per E-Mail zu erreichen.
 
+Kommen Sie bitte schnell zu mir zur=C3=BCck, es ist sehr wichtig.
+
+Danke
+
+Fernando Colina
+
+colinafernando724@gmail.com
+
+
+
+
+----------------------------------
+
+
+
+
+Good Afternoon,
+
+I was just wondering if you got my Previous E-mail
+have ?
+
+I tried to reach you by E-mail.
+
+Please come back to me quickly, it is very Important.
+
+Thanks
+
+Fernando Colina
+
+colinafernando724@gmail.com
