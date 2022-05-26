@@ -2,48 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98824534EAE
-	for <lists+linux-usb@lfdr.de>; Thu, 26 May 2022 13:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A621F534F68
+	for <lists+linux-usb@lfdr.de>; Thu, 26 May 2022 14:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235974AbiEZL6A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 May 2022 07:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
+        id S1344761AbiEZMki (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 May 2022 08:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbiEZL56 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 May 2022 07:57:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AABC8BEA;
-        Thu, 26 May 2022 04:57:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F03A617C6;
-        Thu, 26 May 2022 11:57:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5B8DC385A9;
-        Thu, 26 May 2022 11:57:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653566274;
-        bh=4GT9ilcb7JZ8sIp7AhBecbMSZKHvxeTbFXr8jNh8npQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aFNQjOjg/2aXhrZftksqSBQTEQx84bG5R9V2oc5Drdtd4w2koD5jQ6GaDSpew54Py
-         GuDQotLPVY8eiF9iPYl2vQ2gtnl6yuamCMj3u0DT/RyvYsXWRu5nlFG1v7wWCJd5Wq
-         ja86LSQGq76wUmDKUV/2Bb5t0DaJ0QDyjnNrXyJc=
-Date:   Thu, 26 May 2022 13:57:51 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mychaela Falconia <mychaela.falconia@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: Revisiting unwanted auto-assertion of DTR & RTS on serial port
- open
-Message-ID: <Yo9rP49RB3oP7gZe@kroah.com>
-References: <CA+uuBqZWHy80_kV30jmXiGpohyuxHa1obPGpi-oOWsAbufBZ5g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+uuBqZWHy80_kV30jmXiGpohyuxHa1obPGpi-oOWsAbufBZ5g@mail.gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S240043AbiEZMkh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 May 2022 08:40:37 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C1D2F020;
+        Thu, 26 May 2022 05:40:36 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id y66so1979716oia.1;
+        Thu, 26 May 2022 05:40:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=8QQi9UAdNLHLfBvhZVbeEVs5brcL+rQG9Px5mSwS5Fc=;
+        b=STvQ6hlCLk+S2RsJy789msnRZ+D6U1Q2AoQbneMprIdFT6d7DyRqLdY3DZIKWi2ZyJ
+         rYqdHKBpxT36FYpm1ltGd6A+V9NAYE2AX+3dYWI+LT984aXUbKy6dL873MdP1zaStK3N
+         qpqEo1kQO43Ttey2/1RI/0uHFgMf2Rz7xD2m9mapFXZWuHMgZU4QH8QBykK+wxvnkYA4
+         Ki9l6hz//0hVb0jaQlARQuIYgRW5PGGEzUJ5IGlYF8ldZgSvrEveUNbqi8QP0dF+Zc7A
+         Jr1y8wzqvKdGddlnwCI/27OW4jJGxKGv1KuG3lQTEJAojAbceX8Yz7g7wc3avphm3zEE
+         D3oQ==
+X-Gm-Message-State: AOAM532jlPAdNLzOOBGlNbkbr/uP9Q0lfcJH6VLwXYU4HEO3xX3wZCLZ
+        A/RFbEiQgAZBBPMCk4N0ZA==
+X-Google-Smtp-Source: ABdhPJzSEnsODeFXU35jwjUC1neJG1165yxNM0C9AuIQwkdwRBKk9KKxp3vy0jylqao/4eNol/as0g==
+X-Received: by 2002:aca:6c5:0:b0:325:5bce:bbc1 with SMTP id 188-20020aca06c5000000b003255bcebbc1mr1002134oig.221.1653568835402;
+        Thu, 26 May 2022 05:40:35 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p8-20020a056870a54800b000f169cbbb32sm565161oal.43.2022.05.26.05.40.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 05:40:34 -0700 (PDT)
+Received: (nullmailer pid 3797151 invoked by uid 1000);
+        Thu, 26 May 2022 12:40:33 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Harsh Agarwal <quic_harshq@quicinc.com>
+Cc:     quic_pkondeti@quicinc.com, Philipp Zabel <p.zabel@pengutronix.de>,
+        quic_ppratap@quicinc.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <1653560029-6937-2-git-send-email-quic_harshq@quicinc.com>
+References: <1653560029-6937-1-git-send-email-quic_harshq@quicinc.com> <1653560029-6937-2-git-send-email-quic_harshq@quicinc.com>
+Subject: Re: [RFC v2 1/2] dt-bindings: usb: dwc3: Add support for multiport related properties
+Date:   Thu, 26 May 2022 07:40:33 -0500
+Message-Id: <1653568833.732260.3797150.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,113 +65,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 26, 2022 at 12:26:03AM -0800, Mychaela Falconia wrote:
-> Hello Linux serial and usb-serial maintainers,
+On Thu, 26 May 2022 15:43:48 +0530, Harsh Agarwal wrote:
+> Added support for multiport, mport, num-ssphy and num-hsphy
+> properties. These properties are used to support devices having
+> a multiport controller.
 > 
-> I am the hardware engineer who fought here unsuccessfully a year and a
-> half ago to add Linux support for serial hardware devices in which DTR
-> and/or RTS modem control signals have been repurposed for non-standard
-> uses.  On such hw devices it is very often the case that DTR and RTS
-> may be asserted ONLY when explicitly requested by specialized
-> userspace applications that go with the hw (by way of TIOCMBIS ioctl,
-> often followed by a delay and TIOCMBIC to produce a pulse), and NOT at
-> any other times - in particular, it must be possible to open the
-> serial port for byte Rx/Tx communication with the target device
-> _without_ that open syscall unstoppably asserting DTR & RTS right
-> there and then.  Here is the previous round of discussion:
+> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+> ---
+>  .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
 > 
-> https://lore.kernel.org/linux-serial/X8iuCXYhOBVMGvXv@localhost/T/
-> 
-> I am now revisiting this issue and making another attempt to get this
-> capability added to Linux.  The new development is that I have tested
-> the corresponding feature in FreeBSD, and found it to work correctly -
-> thus FreeBSD is now the first (and so far only) Unix-style OS in the
-> world that features an actually working, usable fix for the 1970s UNIX
-> design bug of unstoppably asserting DTR & RTS on serial port open.
-> Wouldn't it be good for Linux to follow suit?
-> 
-> The feature in question was added to FreeBSD quite recently:
-> 
-> https://reviews.freebsd.org/D20031
-> 
-> The above link was provided by Johan here a year and a half ago, in
-> the previous round of this battle.  However, only now I have had a
-> chance to test FreeBSD's implementation on actual hardware, and
-> confirm that it actually works as required for signal-repurposing hw
-> applications.
-> 
-> The diff that appears on the FreeBSD review page above only adds one
-> new termios flag, CNO_RTSDTR added to cflags.  Johan was proposing
-> implementing a similar new termios flag in Linux - however, there is a
-> crucial difference between what Johan was proposing for Linux vs what
-> is actually implemented in FreeBSD, and it's the difference between
-> usable and unusable.
-> 
-> FreeBSD's counterpart to Linux ttyUSBx is ttyUx or cuaUx devices.
-> However, FreeBSD also has .init and .lock devices which don't exist in
-> Linux, and it's the .init device that makes their newly added
-> CNO_RTSDTR feature actually work in a usable manner.  If you have a
-> serial device that absolutely does not tolerate unwanted assertions of
-> DTR/RTS, not even for one nanosecond, under FreeBSD you can make it
-> work as follows (using cuaU0 as example here):
-> 
-> Step 1: open /dev/cuaU0.init (the .init suffix is crucial) and perform
-> the ioctl setting CNO_RTSDTR on this initial-state device.  This step
-> can be done with stty command.  These .init devices have the special
-> property that opening one does NOT cause modem control lines to be
-> asserted, unlike the regular ttyXX or cuaXX device.
-> 
-> Step 2: once the previous step is done, you can open the regular
-> /dev/cuaU0 device for communication, and no unwanted DTR/RTS assertion
-> will happen.
-> 
-> Johan's proposal for Linux was superficially similar: he proposed
-> adding a similar new termios flag.  But because Linux does not have
-> any counterpart to FreeBSD's .init devices, a termios flag won't work
-> for this purpose in Linux, it would create a chicken-and-egg problem:
-> one would need to open the serial port first in order to set the
-> termios flag, and this very act would cause DTR & RTS to be asserted,
-> causing irreparable damage: electrocution, setting off explosives, use
-> your imagination for how these signals could be wired to do highly
-> damaging actions.
-> 
-> Out of various methods that were discussed here a year and a half ago,
-> only the sysfs approach would produce a user capability match to what
-> FreeBSD now provides.  The termios flag idea is a dead end, unless
-> this community feels that FreeBSD's ttyXX.init and ttyXX.lock should
-> also be replicated in Linux in full.  Another sensible way would be to
-> define a new open flag, such as O_NODTR, or reuse/abuse an existing
-> flag like O_DIRECT which currently does nothing for tty devices - but
-> people have objected that this approach would be limited to custom
-> userspace programs, precluding the use of echo, cat etc.
-> 
-> I now argue for the sysfs attribute approach.  Johan had a patch (he
-> made it, but didn't fight for it because he really preferred the
-> termios flag instead) adding a /sys/class/tty/ttyXXX/nordy attribute -
-> setting this attribute to 1 would suppress automatic assertion of DTR
-> and RTS on serial port open.  One could argue that a better name for
-> this new sysfs attribute would be something like
-> /sys/class/tty/ttyXXX/manual_dtr_rts - but I'll be happy no matter how
-> it's named, as long as the essential functionality remains.
-> 
-> This sysfs attribute would produce the same fundamental workflow as
-> currently exists in FreeBSD.  In FreeBSD one needs to open
-> /dev/cuaXX.init, do the necessary ioctl, then close that fd and open
-> another path (/dev/cuaXX) to do the actual serial communication.  With
-> the proposed sysfs attribute, the same fundamental workflow will apply
-> here: open the sysfs path, do the necessary attribute write, then
-> close the sysfs fd and open /dev/ttyXXX for the actual communication.
-> In both cases the preliminary step (/dev/cuaXX.init in FreeBSD, sysfs
-> path in my proposal for Linux) can be done from the shell, or it can
-> be incorporated into custom userspace sw that works with the custom hw
-> device.
-> 
-> I can dig up Johan's old patch adding the nordy attribute, update it
-> for current HEAD, and formally resubmit it - would the maintainers be
-> agreeable to such course?
 
-Please rebase and resubmit it and we will be glad to consider it.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-thanks,
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:366:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:367:10: [warning] wrong indentation: expected 11 but found 9 (indentation)
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:369:11: [warning] wrong indentation: expected 11 but found 10 (indentation)
 
-greg k-h
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:86.27-89.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@1: node has a unit name, but no reg or ranges property
+Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:91.27-93.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@2: node has a unit name, but no reg or ranges property
+Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:95.27-97.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@3: node has a unit name, but no reg or ranges property
+Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:99.27-101.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@4: node has a unit name, but no reg or ranges property
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.example.dtb: usb@4a000000: multiport: 'mport' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
