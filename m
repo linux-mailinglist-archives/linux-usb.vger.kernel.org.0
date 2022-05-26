@@ -2,54 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A883534D92
-	for <lists+linux-usb@lfdr.de>; Thu, 26 May 2022 12:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98824534EAE
+	for <lists+linux-usb@lfdr.de>; Thu, 26 May 2022 13:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344503AbiEZKtm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 May 2022 06:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
+        id S235974AbiEZL6A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 May 2022 07:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346086AbiEZKtk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 May 2022 06:49:40 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0FBCEB89
-        for <linux-usb@vger.kernel.org>; Thu, 26 May 2022 03:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653562179; x=1685098179;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=lggRQY48TRxA/ZrYW99zA1j1zqJyccov+vd5bCTuFj8=;
-  b=a8m4hQ3MMTO0FCISyt9ZsQGfCg8Lv2f2xIU58YVNjWta8823Jlw0qiCl
-   W08v88yHZUrhn+/5489WcuQ8WTPzlK/APNR2cHAmWm7/O1Kzd1SwuPx4T
-   I2QrkiOTouNHzBGJks3t/GCzHIf3YwhezkZ8Fk9NzkdB67Q1/bwvM40KT
-   kg1XdG1SvNKTkL6xXbZ3yWqFewhst2MTFw2Daxi+ZpYGU3HT0P6nsrUgy
-   6jAtYod5h/mrdTjw1TcLdLR2ZKjzVqnMxEvSmo8tvNZMAN9Rh4nL0FCth
-   AlHk7mibW35HEGW3y6hRJCXBoShkRB2bk2TEc4XDCI8QnR5cTFc6gIDAb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="274223380"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="274223380"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 03:49:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="704474320"
-Received: from ccdjpclinux26.jer.intel.com ([10.12.48.253])
-  by orsmga004.jf.intel.com with ESMTP; 26 May 2022 03:49:37 -0700
-From:   Gil Fine <gil.fine@intel.com>
-To:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     gil.fine@intel.com, linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: [PATCH v4 6/6] thunderbolt: Change TMU mode to HiFi uni-directional once DisplayPort tunneled
-Date:   Thu, 26 May 2022 13:59:21 +0300
-Message-Id: <20220526105921.17214-7-gil.fine@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220526105921.17214-1-gil.fine@intel.com>
-References: <20220526105921.17214-1-gil.fine@intel.com>
+        with ESMTP id S230317AbiEZL56 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 May 2022 07:57:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AABC8BEA;
+        Thu, 26 May 2022 04:57:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F03A617C6;
+        Thu, 26 May 2022 11:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5B8DC385A9;
+        Thu, 26 May 2022 11:57:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1653566274;
+        bh=4GT9ilcb7JZ8sIp7AhBecbMSZKHvxeTbFXr8jNh8npQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aFNQjOjg/2aXhrZftksqSBQTEQx84bG5R9V2oc5Drdtd4w2koD5jQ6GaDSpew54Py
+         GuDQotLPVY8eiF9iPYl2vQ2gtnl6yuamCMj3u0DT/RyvYsXWRu5nlFG1v7wWCJd5Wq
+         ja86LSQGq76wUmDKUV/2Bb5t0DaJ0QDyjnNrXyJc=
+Date:   Thu, 26 May 2022 13:57:51 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mychaela Falconia <mychaela.falconia@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: Revisiting unwanted auto-assertion of DTR & RTS on serial port
+ open
+Message-ID: <Yo9rP49RB3oP7gZe@kroah.com>
+References: <CA+uuBqZWHy80_kV30jmXiGpohyuxHa1obPGpi-oOWsAbufBZ5g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+uuBqZWHy80_kV30jmXiGpohyuxHa1obPGpi-oOWsAbufBZ5g@mail.gmail.com>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,109 +51,113 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Here we configure TMU mode to HiFi uni-directional once DP tunnel
-is created. This is due to accuracy requirement for DP tunneling
-as appears in CM guide 1.0, section 7.3.2.
-Due to Intel hardware limitation, once we changed the TMU mode to HiFi
-uni-directional (when DP tunnel exists), we don't change TMU mode back to
-normal uni-directional, even if DP tunnel is torn down later.
+On Thu, May 26, 2022 at 12:26:03AM -0800, Mychaela Falconia wrote:
+> Hello Linux serial and usb-serial maintainers,
+> 
+> I am the hardware engineer who fought here unsuccessfully a year and a
+> half ago to add Linux support for serial hardware devices in which DTR
+> and/or RTS modem control signals have been repurposed for non-standard
+> uses.  On such hw devices it is very often the case that DTR and RTS
+> may be asserted ONLY when explicitly requested by specialized
+> userspace applications that go with the hw (by way of TIOCMBIS ioctl,
+> often followed by a delay and TIOCMBIC to produce a pulse), and NOT at
+> any other times - in particular, it must be possible to open the
+> serial port for byte Rx/Tx communication with the target device
+> _without_ that open syscall unstoppably asserting DTR & RTS right
+> there and then.  Here is the previous round of discussion:
+> 
+> https://lore.kernel.org/linux-serial/X8iuCXYhOBVMGvXv@localhost/T/
+> 
+> I am now revisiting this issue and making another attempt to get this
+> capability added to Linux.  The new development is that I have tested
+> the corresponding feature in FreeBSD, and found it to work correctly -
+> thus FreeBSD is now the first (and so far only) Unix-style OS in the
+> world that features an actually working, usable fix for the 1970s UNIX
+> design bug of unstoppably asserting DTR & RTS on serial port open.
+> Wouldn't it be good for Linux to follow suit?
+> 
+> The feature in question was added to FreeBSD quite recently:
+> 
+> https://reviews.freebsd.org/D20031
+> 
+> The above link was provided by Johan here a year and a half ago, in
+> the previous round of this battle.  However, only now I have had a
+> chance to test FreeBSD's implementation on actual hardware, and
+> confirm that it actually works as required for signal-repurposing hw
+> applications.
+> 
+> The diff that appears on the FreeBSD review page above only adds one
+> new termios flag, CNO_RTSDTR added to cflags.  Johan was proposing
+> implementing a similar new termios flag in Linux - however, there is a
+> crucial difference between what Johan was proposing for Linux vs what
+> is actually implemented in FreeBSD, and it's the difference between
+> usable and unusable.
+> 
+> FreeBSD's counterpart to Linux ttyUSBx is ttyUx or cuaUx devices.
+> However, FreeBSD also has .init and .lock devices which don't exist in
+> Linux, and it's the .init device that makes their newly added
+> CNO_RTSDTR feature actually work in a usable manner.  If you have a
+> serial device that absolutely does not tolerate unwanted assertions of
+> DTR/RTS, not even for one nanosecond, under FreeBSD you can make it
+> work as follows (using cuaU0 as example here):
+> 
+> Step 1: open /dev/cuaU0.init (the .init suffix is crucial) and perform
+> the ioctl setting CNO_RTSDTR on this initial-state device.  This step
+> can be done with stty command.  These .init devices have the special
+> property that opening one does NOT cause modem control lines to be
+> asserted, unlike the regular ttyXX or cuaXX device.
+> 
+> Step 2: once the previous step is done, you can open the regular
+> /dev/cuaU0 device for communication, and no unwanted DTR/RTS assertion
+> will happen.
+> 
+> Johan's proposal for Linux was superficially similar: he proposed
+> adding a similar new termios flag.  But because Linux does not have
+> any counterpart to FreeBSD's .init devices, a termios flag won't work
+> for this purpose in Linux, it would create a chicken-and-egg problem:
+> one would need to open the serial port first in order to set the
+> termios flag, and this very act would cause DTR & RTS to be asserted,
+> causing irreparable damage: electrocution, setting off explosives, use
+> your imagination for how these signals could be wired to do highly
+> damaging actions.
+> 
+> Out of various methods that were discussed here a year and a half ago,
+> only the sysfs approach would produce a user capability match to what
+> FreeBSD now provides.  The termios flag idea is a dead end, unless
+> this community feels that FreeBSD's ttyXX.init and ttyXX.lock should
+> also be replicated in Linux in full.  Another sensible way would be to
+> define a new open flag, such as O_NODTR, or reuse/abuse an existing
+> flag like O_DIRECT which currently does nothing for tty devices - but
+> people have objected that this approach would be limited to custom
+> userspace programs, precluding the use of echo, cat etc.
+> 
+> I now argue for the sysfs attribute approach.  Johan had a patch (he
+> made it, but didn't fight for it because he really preferred the
+> termios flag instead) adding a /sys/class/tty/ttyXXX/nordy attribute -
+> setting this attribute to 1 would suppress automatic assertion of DTR
+> and RTS on serial port open.  One could argue that a better name for
+> this new sysfs attribute would be something like
+> /sys/class/tty/ttyXXX/manual_dtr_rts - but I'll be happy no matter how
+> it's named, as long as the essential functionality remains.
+> 
+> This sysfs attribute would produce the same fundamental workflow as
+> currently exists in FreeBSD.  In FreeBSD one needs to open
+> /dev/cuaXX.init, do the necessary ioctl, then close that fd and open
+> another path (/dev/cuaXX) to do the actual serial communication.  With
+> the proposed sysfs attribute, the same fundamental workflow will apply
+> here: open the sysfs path, do the necessary attribute write, then
+> close the sysfs fd and open /dev/ttyXXX for the actual communication.
+> In both cases the preliminary step (/dev/cuaXX.init in FreeBSD, sysfs
+> path in my proposal for Linux) can be done from the shell, or it can
+> be incorporated into custom userspace sw that works with the custom hw
+> device.
+> 
+> I can dig up Johan's old patch adding the nordy attribute, update it
+> for current HEAD, and formally resubmit it - would the maintainers be
+> agreeable to such course?
 
-Signed-off-by: Gil Fine <gil.fine@intel.com>
----
- drivers/thunderbolt/tb.c  | 13 +++++++++++++
- drivers/thunderbolt/tb.h  |  2 ++
- drivers/thunderbolt/tmu.c | 29 +++++++++++++++++++++++++++++
- 3 files changed, 44 insertions(+)
+Please rebase and resubmit it and we will be glad to consider it.
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index f512197e719b..482079a75fbb 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -118,6 +118,13 @@ static void tb_switch_discover_tunnels(struct tb_switch *sw,
- 		switch (port->config.type) {
- 		case TB_TYPE_DP_HDMI_IN:
- 			tunnel = tb_tunnel_discover_dp(tb, port, alloc_hopids);
-+			/*
-+			 * In case of DP tunnel exists, change host router's
-+			 * 1st children TMU mode to HiFi for CL0s to work.
-+			 */
-+			if (tunnel)
-+				tb_switch_enable_tmu_1st_child(tb->root_switch,
-+						TB_SWITCH_TMU_RATE_HIFI);
- 			break;
- 
- 		case TB_TYPE_PCIE_DOWN:
-@@ -985,6 +992,12 @@ static void tb_tunnel_dp(struct tb *tb)
- 
- 	list_add_tail(&tunnel->list, &tcm->tunnel_list);
- 	tb_reclaim_usb3_bandwidth(tb, in, out);
-+	/*
-+	 * In case of DP tunnel exists, change host router's 1st children
-+	 * TMU mode to HiFi for CL0s to work.
-+	 */
-+	tb_switch_enable_tmu_1st_child(tb->root_switch, TB_SWITCH_TMU_RATE_HIFI);
-+
- 	return;
- 
- err_free:
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index a16fffba9dd2..d781dd282465 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -934,6 +934,8 @@ int tb_switch_tmu_enable(struct tb_switch *sw);
- void tb_switch_tmu_configure(struct tb_switch *sw,
- 			     enum tb_switch_tmu_rate rate,
- 			     bool unidirectional);
-+void tb_switch_enable_tmu_1st_child(struct tb_switch *sw,
-+				    enum tb_switch_tmu_rate rate);
- /**
-  * tb_switch_tmu_is_enabled() - Checks if the specified TMU mode is enabled
-  * @sw: Router whose TMU mode to check
-diff --git a/drivers/thunderbolt/tmu.c b/drivers/thunderbolt/tmu.c
-index e822ab90338b..626aca3124b1 100644
---- a/drivers/thunderbolt/tmu.c
-+++ b/drivers/thunderbolt/tmu.c
-@@ -742,3 +742,32 @@ void tb_switch_tmu_configure(struct tb_switch *sw,
- 	sw->tmu.unidirectional_request = unidirectional;
- 	sw->tmu.rate_request = rate;
- }
-+
-+static int tb_switch_tmu_config_enable(struct device *dev, void *rate)
-+{
-+	if (tb_is_switch(dev)) {
-+		struct tb_switch *sw = tb_to_switch(dev);
-+
-+		tb_switch_tmu_configure(sw, *(enum tb_switch_tmu_rate *)rate,
-+					tb_switch_is_clx_enabled(sw, TB_CL1));
-+		if (tb_switch_tmu_enable(sw))
-+			tb_sw_dbg(sw, "fail switching TMU mode for 1st depth router\n");
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * tb_switch_enable_tmu_1st_child - Configure and enable TMU for 1st chidren
-+ * @sw: The router to configure and enable it's children TMU
-+ * @rate: Rate of the TMU to configure the router's chidren to
-+ *
-+ * Configures and enables the TMU mode of 1st depth children of the specified
-+ * router to the specified rate.
-+ */
-+void tb_switch_enable_tmu_1st_child(struct tb_switch *sw,
-+				    enum tb_switch_tmu_rate rate)
-+{
-+	device_for_each_child(&sw->dev, &rate,
-+			      tb_switch_tmu_config_enable);
-+}
--- 
-2.17.1
+thanks,
 
----------------------------------------------------------------------
-Intel Israel (74) Limited
-
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
-
+greg k-h
