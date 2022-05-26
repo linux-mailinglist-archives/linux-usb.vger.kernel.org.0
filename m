@@ -2,91 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1EF534FBA
-	for <lists+linux-usb@lfdr.de>; Thu, 26 May 2022 15:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F46535041
+	for <lists+linux-usb@lfdr.de>; Thu, 26 May 2022 15:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347434AbiEZNCC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 May 2022 09:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
+        id S1345268AbiEZNz7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 May 2022 09:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236276AbiEZNCB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 May 2022 09:02:01 -0400
-Received: from out199-13.us.a.mail.aliyun.com (out199-13.us.a.mail.aliyun.com [47.90.199.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4603FCFE22;
-        Thu, 26 May 2022 06:02:00 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VESMMfK_1653570115;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VESMMfK_1653570115)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 26 May 2022 21:01:56 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     andreas.noever@gmail.com
-Cc:     michael.jamet@intel.com, mika.westerberg@linux.intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] thunderbolt: Fix some kernel-doc comments
-Date:   Thu, 26 May 2022 21:01:54 +0800
-Message-Id: <20220526130154.89745-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        with ESMTP id S229922AbiEZNz6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 May 2022 09:55:58 -0400
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860446B67E;
+        Thu, 26 May 2022 06:55:56 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id C2000280D406E;
+        Thu, 26 May 2022 15:55:54 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id AC8B12ED8D5; Thu, 26 May 2022 15:55:54 +0200 (CEST)
+Date:   Thu, 26 May 2022 15:55:54 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ferry Toth <fntoth@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
+Subject: Re: [PATCH net-next v3 5/7] usbnet: smsc95xx: Forward PHY interrupts
+ to PHY driver to avoid polling
+Message-ID: <20220526135554.GA22214@wunner.de>
+References: <cover.1652343655.git.lukas@wunner.de>
+ <748ac44eeb97b209f66182f3788d2a49d7bc28fe.1652343655.git.lukas@wunner.de>
+ <CGME20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99@eucas1p2.samsung.com>
+ <a5315a8a-32c2-962f-f696-de9a26d30091@samsung.com>
+ <20220519190841.GA30869@wunner.de>
+ <31baa38c-b2c7-10cd-e9cd-eee140f01788@samsung.com>
+ <20220523094343.GA7237@wunner.de>
+ <Yowv95s7g7Ou5U8J@lunn.ch>
+ <2f612dd0-ac30-4860-ef1b-bbb180da21af@samsung.com>
+ <YozJqD5bhg31gjz7@lunn.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YozJqD5bhg31gjz7@lunn.ch>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Remove some warnings found by running scripts/kernel-doc,
-which is caused by using 'make W=1'.
+On Tue, May 24, 2022 at 02:03:52PM +0200, Andrew Lunn wrote:
+> As for this hardware, if it does not support WOL, why are interrupts
+> still enabled?
 
-drivers/thunderbolt/ctl.c:701: warning: expecting prototype for
-tb_cfg_start(). Prototype was for tb_ctl_start() instead
-drivers/thunderbolt/ctl.c:722: warning: expecting prototype for
-tb_ctrl_stop(). Prototype was for tb_ctl_stop() instead
-drivers/thunderbolt/ctl.c:930: warning: expecting prototype for
-tb_cfg_write(). Prototype was for tb_cfg_write_raw() instead
+LAN95xx chips do support WoL and will signal a USB wake event.
+But whether that actually results in resume from system sleep
+depends on the capabilities of the SoC and its USB host controller.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/thunderbolt/ctl.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+LAN95xx supports a variety of wake options (WoL, PHY Energy Detect, ...)
+and can use either its integrated SMSC PHY or an external PHY.
+I'm not sure all wake options will work with arbitrary external PHYs.
 
-diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
-index e92c658dba1c..e5ede5debfb0 100644
---- a/drivers/thunderbolt/ctl.c
-+++ b/drivers/thunderbolt/ctl.c
-@@ -694,7 +694,7 @@ void tb_ctl_free(struct tb_ctl *ctl)
- }
- 
- /**
-- * tb_cfg_start() - start/resume the control channel
-+ * tb_ctl_start() - start/resume the control channel
-  * @ctl: Control channel to start
-  */
- void tb_ctl_start(struct tb_ctl *ctl)
-@@ -710,7 +710,7 @@ void tb_ctl_start(struct tb_ctl *ctl)
- }
- 
- /**
-- * tb_ctrl_stop() - pause the control channel
-+ * tb_ctl_stop() - pause the control channel
-  * @ctl: Control channel to stop
-  *
-  * All invocations of ctl->callback will have finished after this method
-@@ -912,7 +912,7 @@ struct tb_cfg_result tb_cfg_read_raw(struct tb_ctl *ctl, void *buffer,
- }
- 
- /**
-- * tb_cfg_write() - write from buffer into config space
-+ * tb_cfg_write_raw() - write from buffer into config space
-  * @ctl: Pointer to the control channel
-  * @buffer: Data to write
-  * @route: Route string of the router
--- 
-2.20.1.7.g153144c
+If WoL or Wake on PHY Energy Detect is not used, we just program the
+LAN95xx to enter a deeper power state which results in the respective
+wake events being ignored.  As a result, interrupts may be left enabled
+even though they're not used as a wakeup source.  The phylib doesn't
+provide an API to selectively disable or enable interrupts, other than
+phy_stop() and phy_start(), which does a lot more.
 
+The patch I've submitted today treats such unnecessarily enabled
+interrupts leniently:  It will not signal wakeup if that wasn't enabled
+and just remembers that an interrupt occurred.  The interrupt will be
+replayed upon resume and that's it.
+
+Thanks,
+
+Lukas
