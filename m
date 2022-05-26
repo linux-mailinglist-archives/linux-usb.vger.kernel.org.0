@@ -2,43 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB66A534A66
-	for <lists+linux-usb@lfdr.de>; Thu, 26 May 2022 08:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30846534A67
+	for <lists+linux-usb@lfdr.de>; Thu, 26 May 2022 08:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345594AbiEZGds (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 May 2022 02:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
+        id S1346202AbiEZGdx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 May 2022 02:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344030AbiEZGdq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 May 2022 02:33:46 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2075.outbound.protection.outlook.com [40.107.220.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED197BDA3B
-        for <linux-usb@vger.kernel.org>; Wed, 25 May 2022 23:33:45 -0700 (PDT)
+        with ESMTP id S1344030AbiEZGdw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 May 2022 02:33:52 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2078.outbound.protection.outlook.com [40.107.96.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D45BCEB3
+        for <linux-usb@vger.kernel.org>; Wed, 25 May 2022 23:33:51 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Dw4so5ktgN4eRcDj3qcWaQEU1knqI4VDQCBnxMwG0qDGFcvhTtx20uMmEytr7NGfDmDmbds5xvbzmb3HEddKWYiilHZG7ZIcZfi6WjQfvsnBdW9mswU40rIWRmkCVteGEsaEGIvbO1G35+3i2Jo70NI+7JW5cxtfHsK+Xl/hEvc5YPHS5H0/lAVz1ssmJXd2LKejkMzNB4D8DhPYYYceL46UTTzAZh3VB7nbqCTauCrW9VFg42Ltj7nPge6vHBLA5qKQwOhhZ6De2oFs0C8BkzB2PWulbCAU/DXjbWJ0t8k4q6HV2aDmDCLR2sLqS6dPcEK5GwyI3NIiD+3NJrpN/w==
+ b=UwC63fes3tIS1l+xkStnGbVd96lXGGHslthwXD8CrtdC7DVepLLHzGU+VV9grIKbJWFAUrz/TeDoDttoUcO2p9T4VZmjWzBhw62lMFikkd3Ys6u7FmHm1sdOA1wJHPoc8h8gxeq3MNLkqgr/f9JX+OIlQhffd0eSCyIv13f6gqsU72ReEezN9nlWkmjNteBXnfF3xTd3tTGTfLnh9kDoTVYH0aqO6vVLXbrujdK6VOLRCU4lcP4LiQIglTOU+53tXN3Cdv0JjumXCah47WJ6JHf4JYX7yRbjVfGfl2tPxSOFwayed0ZRZWcC8dEwhCn0IT3A5pdJSipy9cvO4vIMmA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m9OxxCwxesQmIzaDVCsz3uq/Vpl9wIhVNx52wEMbYTY=;
- b=R74KxZXtTPlHBKkdrKdBsJ7A2BSgfC12YEwRTRfIyY6qPqWt5U+hIYNYFwLEyTzAYl36h1O07e42KzrO+YnPVxWLDeBrqJqT3aRzdISYkZWz2uRsW066sU0ZC+z9okZN/+StlpGfM4kMwpQ7aKBBlI80ayLihTBwh5AAolNvxPFhtLxYc/FDOVsW5hrwDAUu8MMFuxzkiWPXirm0ORrzKuB/48h0hqaHzpInWNZ3yP0VAjOrMJAh1PaKpNs9QAxWOLX4+4LYnIz9ijROfsgxVtEJj0QTZQZ+9Bw8HftUoYnfuaS/LuC3iAqFDcCbthbnQ6nauPxoM9ZSKQK8V4lhog==
+ bh=LmEsoRbBdexEgJw9xlXei1eDUq5s0NsqIVxlfCTThGA=;
+ b=bF/h1pJc6yPRUHh8KU4MSc7AD+pEioXL8PEmSdEpLkpMCfyCRDfmD2rgpAUVX1Be9+xiYhDo/gnpS1ql4p0qPF3fTJdeMFMBKTy+qcgRcrGl56H6DvzKbGREJQcaWx9txW/MDwl/LHFlpGKJe9npgE8CElxvaTkWbVQ/w39woc+7O84kQ1VyXHlsFeD/sQedJKjNS9VxOci+ev/gkOwMw+Xjp0IHGU1iqAdBcusN/lWJalDr303d22GksypBslDbS3c1zHcy6WOBOLZRdE2y/6rKOheks1cpeuLCr+iW2Ght8rzqcTfygFGhEu5nUajJ0Ivs3TgzK4GX/xto04RBBQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m9OxxCwxesQmIzaDVCsz3uq/Vpl9wIhVNx52wEMbYTY=;
- b=ObZvBj2qyvWjcnvy++UXPXY6CTJt6kR6OgqIkAzmE71h5p4azMPVvYH3iap72WXqYlMkLwm0zZUSHidxdJDDAyd8s+B5/bResJoaoJSuZ6PInK8Ql690O+i/n96bYKDYcnjtEsZSrlI2MP41w8n78A3h8yH3eYmoXrb6BoGGRtw=
-Received: from MW4P222CA0017.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::22)
- by DM6PR12MB5568.namprd12.prod.outlook.com (2603:10b6:5:20c::8) with
+ bh=LmEsoRbBdexEgJw9xlXei1eDUq5s0NsqIVxlfCTThGA=;
+ b=nPhdl+eHzbmiPAC/ShbH2ntvu3KDo3zlJrt+s6DS8kq+aDfLGKq1xB1hWb21h5TvpY3a/lHB2gShp43dT7YKhNE/XGB+KZWTdw5dqAWQOTIo9qvcgqSEzmbY0dhYtgDV0Hf9VWLzZl3Qxi8I7EbrbDrJT7n37mp9QEbhuo2O5ok=
+Received: from MW4PR03CA0355.namprd03.prod.outlook.com (2603:10b6:303:dc::30)
+ by SN6PR12MB5696.namprd12.prod.outlook.com (2603:10b6:805:e9::28) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Thu, 26 May
- 2022 06:33:42 +0000
-Received: from CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:114:cafe::cf) by MW4P222CA0017.outlook.office365.com
- (2603:10b6:303:114::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.19; Thu, 26 May
+ 2022 06:33:49 +0000
+Received: from CO1NAM11FT048.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:dc:cafe::9) by MW4PR03CA0355.outlook.office365.com
+ (2603:10b6:303:dc::30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13 via Frontend
- Transport; Thu, 26 May 2022 06:33:42 +0000
+ Transport; Thu, 26 May 2022 06:33:48 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -46,20 +46,20 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT027.mail.protection.outlook.com (10.13.174.224) with Microsoft SMTP
+ CO1NAM11FT048.mail.protection.outlook.com (10.13.175.148) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5293.13 via Frontend Transport; Thu, 26 May 2022 06:33:41 +0000
+ 15.20.5293.13 via Frontend Transport; Thu, 26 May 2022 06:33:48 +0000
 Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 26 May
- 2022 01:33:38 -0500
+ 2022 01:33:45 -0500
 From:   Sanket Goswami <Sanket.Goswami@amd.com>
 To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
         <ajayg@nvidia.com>, <linux-usb@vger.kernel.org>
 CC:     Sanket Goswami <Sanket.Goswami@amd.com>
-Subject: [PATCH v3 1/2] ucsi_ccg: Do not hardcode interrupt polarity and type
-Date:   Thu, 26 May 2022 12:03:04 +0530
-Message-ID: <20220526063305.3144352-2-Sanket.Goswami@amd.com>
+Subject: [PATCH v3 2/2] ucsi_ccg: ACPI based I2c client enumeration for AMD ASICs
+Date:   Thu, 26 May 2022 12:03:05 +0530
+Message-ID: <20220526063305.3144352-3-Sanket.Goswami@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220526063305.3144352-1-Sanket.Goswami@amd.com>
 References: <20220526063305.3144352-1-Sanket.Goswami@amd.com>
@@ -71,24 +71,24 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 03cb9fd5-65c6-4a4a-5249-08da3ee1ad3d
-X-MS-TrafficTypeDiagnostic: DM6PR12MB5568:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB55680241CE53855C3BDC5B7D9CD99@DM6PR12MB5568.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: bd6532ec-0ee1-4605-8f25-08da3ee1b12b
+X-MS-TrafficTypeDiagnostic: SN6PR12MB5696:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR12MB569667A2E4478CE9B2B94E1F9CD99@SN6PR12MB5696.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CIfwGZod3eCAjfe1fi24r95h6zUAc7gUNOTzcI9QyaDjtAQwI4HE94mccJ5NV4LIbMztAoRW856v/y6q70xJPcSJQn/QLndijCJ6jnXjBDKevykfj2W1O1/DoZq6ELvaixpzAm6zKFk5tTRvjEXFi77EYrQBazwFUbzVRD1LcsyZ8m19tWJzR8hiFELlaJ5prYrOjw7VSXQ8IJkSH0XsC99nizatK5ItDWBzdoaN4exYSogKfmVHXKxinVHIexxKRoNdbPOmRCtbzMW6ZzOWPxTfq6jezMyh6kMcwV/9Ps1FKd1GGSQmL/k6LlOQzyLvs05O8FfQmh3BetytBIoBePYz2eGMQol901znbSJK+H+ZOjC9kuyxuSdv7YnmreX5Y9u/32WnJQgnOsueoe6m39WJc2HSZeG02l3XWQGhOvxU+YFTm0rm25OqWYeqJ8PEbQWFL/VobFeAtQtSF4bpZJRBWACZvsq1wBgLmiaD2cXWUI3rt0LTcq0+pONyijoJZGhoI9w9FzJj6wQ2VTbceYKJexMFrpurrXA3EZ6msp54SSjCiMviER6U4qCVxAf0h11mwDedxntYcIUNseJ/gqCU2d63kCFbAkI1d35QhGqiP3W1aNU7TltI28DBPlSl8m73pZaCClPgYTMyTRpUET5p+K5aTzyxJTyucaYQFxG9VaGVYog+QVgjUPYMSSM6gK8LcAEc5cWGAQEYDGfSiQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(6666004)(2616005)(2906002)(1076003)(36860700001)(40460700003)(508600001)(47076005)(8676002)(83380400001)(86362001)(16526019)(336012)(186003)(426003)(110136005)(26005)(316002)(7696005)(5660300002)(8936002)(70586007)(70206006)(36756003)(4326008)(82310400005)(356005)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 0/aFKhTgjW+PnaFc31uBBKvcfBNdl2MIPC+/lOyIbXwUvEvMYe1nWO8rVqLz9sWDeXvkJwRgYTyFmbsZl3084JgR82cyw8xZZepxW33ClIoutvo9qe68prFdM0h2oOo27tQCxlL2E/9GTTJkzu8uciF8eTvio/IGq1Jy4o80VdZR5ITet/6g1WsKkcNJDXyceSGF4yoLqLlW0npha4E6kE9hCK7UnKEfduwSuBxzYGlBFU/BVFKVmDi5piHfaH0qWu0FxCzIHVlroUEyU2GQRoZB1ug+Rv4TDYm9zn4W6Y5fEXPt4ZPsvc9guPWt7QVKli3R+OzeOwWPXLgZWT8hOEdYMagFEIOYWvpBADUCMFGNAqhiy+ZpgmsuIY+OliTFuAiwfyzVdq/YvxiXkfcYLQ7T9XTJvkqNegMvVI14J1r0hr+xVdbyJTdBfv/ZS8MOgBFV+aXu8/UTpn2i3pD7fpXQesrw5tCR3r/JBO+z2CMFZNntFcTpulEW319cv+waTY3Wbm2AxE2YJMOSCQ4HQ8JB+x9ea7TEuWq073gxjFPcnxPslx5DQBwtO7ds3TKELf6Gl0fjB68Pw3BBOUAjLBqmQSWa92zX5GkOL5NGOT4gn8L6pF/lpF0QopqJfhrS1Nqohpc6oPMWxhAsKU4qkVzXKkKqOd09TCe9F5pfNit4rqXJPmShRxEWz5/lvHCeeXakAD7Ykk615wB5xt/bIA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(36756003)(36860700001)(186003)(16526019)(316002)(6666004)(40460700003)(110136005)(7696005)(356005)(70586007)(508600001)(86362001)(26005)(70206006)(2906002)(2616005)(4326008)(1076003)(5660300002)(8936002)(81166007)(336012)(82310400005)(426003)(47076005)(8676002)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2022 06:33:41.9668
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2022 06:33:48.5457
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03cb9fd5-65c6-4a4a-5249-08da3ee1ad3d
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd6532ec-0ee1-4605-8f25-08da3ee1b12b
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT048.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB5568
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB5696
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -99,81 +99,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The current implementation supports only Level trigger with ACTIVE HIGH,
-which is overriding level and polarity set by the ACPI table, hence
-implement the common utility function to manage irq requests.
+Some of the AMD platforms have Cypress CCGX PD controller connected
+to system I2C i.e designware I2C controller. Added support to enumerate
+the CCGX client by adding ACPI ID to the firmware.
 
 Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Signed-off-by: Sanket Goswami <Sanket.Goswami@amd.com>
 ---
 Changes in v3:
-- Implemented the new routine ccg_request_irq to handle irq requests
-  including ACPI based device check.
+- Swap the patch 1 and 2 to achieve required functionality.
 
 Changes in v2:
-- Implemented the new routine ccg_request_irq to handle irq requests. 
+- No change.
 
- drivers/usb/typec/ucsi/ucsi_ccg.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 6db7c8ddd51c..0707a7156299 100644
+index 0707a7156299..5c0bf48be766 100644
 --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
 +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -627,6 +627,16 @@ static irqreturn_t ccg_irq_handler(int irq, void *data)
- 	return IRQ_HANDLED;
- }
+@@ -1423,6 +1423,12 @@ static const struct i2c_device_id ucsi_ccg_device_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, ucsi_ccg_device_id);
  
-+static int ccg_request_irq(struct ucsi_ccg *uc)
-+{
-+	unsigned long flags = IRQF_ONESHOT;
++static const struct acpi_device_id amd_i2c_ucsi_match[] = {
++	{"AMDI0042"},
++	{}
++};
++MODULE_DEVICE_TABLE(acpi, amd_i2c_ucsi_match);
 +
-+	if (!has_acpi_companion(uc->dev))
-+		flags |= IRQF_TRIGGER_HIGH;
-+
-+	return request_threaded_irq(uc->irq, NULL, ccg_irq_handler, flags, dev_name(uc->dev), uc);
-+}
-+
- static void ccg_pm_workaround_work(struct work_struct *pm_work)
+ static int ucsi_ccg_resume(struct device *dev)
  {
- 	ccg_irq_handler(0, container_of(pm_work, struct ucsi_ccg, pm_work));
-@@ -1250,9 +1260,7 @@ static int ccg_restart(struct ucsi_ccg *uc)
- 		return status;
- 	}
- 
--	status = request_threaded_irq(uc->irq, NULL, ccg_irq_handler,
--				      IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
--				      dev_name(dev), uc);
-+	status = ccg_request_irq(uc);
- 	if (status < 0) {
- 		dev_err(dev, "request_threaded_irq failed - %d\n", status);
- 		return status;
-@@ -1331,6 +1339,7 @@ static int ucsi_ccg_probe(struct i2c_client *client,
- 
- 	uc->dev = dev;
- 	uc->client = client;
-+	uc->irq = client->irq;
- 	mutex_init(&uc->lock);
- 	init_completion(&uc->complete);
- 	INIT_WORK(&uc->work, ccg_update_firmware);
-@@ -1366,16 +1375,12 @@ static int ucsi_ccg_probe(struct i2c_client *client,
- 
- 	ucsi_set_drvdata(uc->ucsi, uc);
- 
--	status = request_threaded_irq(client->irq, NULL, ccg_irq_handler,
--				      IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
--				      dev_name(dev), uc);
-+	status = ccg_request_irq(uc);
- 	if (status < 0) {
- 		dev_err(uc->dev, "request_threaded_irq failed - %d\n", status);
- 		goto out_ucsi_destroy;
- 	}
- 
--	uc->irq = client->irq;
--
- 	status = ucsi_register(uc->ucsi);
- 	if (status)
- 		goto out_free_irq;
+ 	struct i2c_client *client = to_i2c_client(dev);
+@@ -1464,6 +1470,7 @@ static struct i2c_driver ucsi_ccg_driver = {
+ 		.name = "ucsi_ccg",
+ 		.pm = &ucsi_ccg_pm,
+ 		.dev_groups = ucsi_ccg_groups,
++		.acpi_match_table = amd_i2c_ucsi_match,
+ 	},
+ 	.probe = ucsi_ccg_probe,
+ 	.remove = ucsi_ccg_remove,
 -- 
 2.25.1
 
