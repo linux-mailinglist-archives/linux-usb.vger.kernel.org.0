@@ -2,110 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF85534A8D
-	for <lists+linux-usb@lfdr.de>; Thu, 26 May 2022 08:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED152534BB9
+	for <lists+linux-usb@lfdr.de>; Thu, 26 May 2022 10:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbiEZGzM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 May 2022 02:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
+        id S245425AbiEZI0I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 May 2022 04:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346314AbiEZGzA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 May 2022 02:55:00 -0400
-Received: from mail.mutex.one (mail.mutex.one [62.77.152.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854E54924C;
-        Wed, 25 May 2022 23:54:58 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id 313DE16C0268;
-        Thu, 26 May 2022 09:54:56 +0300 (EEST)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ViELkY5qTegR; Thu, 26 May 2022 09:54:55 +0300 (EEST)
-From:   Marian Postevca <posteuca@mutex.one>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1653548095; bh=5Ouxq8SyXbf5NqqTqb9cLhuUiQ5WZxGNrJ5nYwDNAVs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=iEF+Eh4PY3o639B92mFGAVPUKvvyryD1A+VIodK5I2ESuE3Nxbc3yhhv03tKQxVRV
-         6V/dllXCRrSpvDCVv11YLdQCAVefV4W3uzI/kO3cXfWssFl01tvGUqTuF/RgK9P/RY
-         z7cz0vUMokiiAK8rmmXXKbmqV74wbOOgLfvNd1ow=
-To:     Maximilian Senftleben <kernel@mail.msdigital.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: PROBLEM: No static MAC address for usb gadget ethernet via
- kernel parameter any more.
-In-Reply-To: <5ad210a8-a834-607e-351c-83ff23e23f5a@mail.msdigital.de>
-References: <dfaa54ab-1b03-7aec-5927-d52a4233e56a@msdigital.de>
- <6c0eb462-3fab-473d-8989-b56e5748e5f7@mutex.one>
- <83b013eb-b320-f397-0ecc-f4824f3f45b9@msdigital.de>
- <874k1htj8b.fsf@mutex.one>
- <5ad210a8-a834-607e-351c-83ff23e23f5a@mail.msdigital.de>
-Date:   Thu, 26 May 2022 09:54:53 +0300
-Message-ID: <87tu9cpyv6.fsf@mutex.one>
+        with ESMTP id S229590AbiEZI0F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 May 2022 04:26:05 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCD9C1EF7;
+        Thu, 26 May 2022 01:26:04 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id y141so1682078ybe.13;
+        Thu, 26 May 2022 01:26:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=cF4F8fR9RrLCIQgZCm7I0h1IGLH3ZvWS9O1N9K+Bhcc=;
+        b=J9owjAjNOol3qvL5fD+FxkvWvvyyr+fiKj7zP3vK75HA/GCrK7W11JyqnBi5ZYFVpk
+         OPzoeeDMcwCL6BHvgHHOjMTARiBVYRJPYeVRrytgasE2ujRVr6LbO1L9a07jaJ/Tp1cx
+         soAnUj1Gori1RT2qxbN/jQFit0h1AJluuAEyHnkbvH5DTfbmIeveVtK5c99giLBtvQdG
+         9r2gJPnCczkdRXWFedOT+vROpPdVx6aIp5Zpp0r6uAL71JO8et2JHA2KjNBcBkTe8gA2
+         WVmBfLMykaOKiEDGecR89P6YhukXLAY6BRkNke5yfY3dVARrA7XLoQzFp+MDuUfLQBoy
+         rwWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=cF4F8fR9RrLCIQgZCm7I0h1IGLH3ZvWS9O1N9K+Bhcc=;
+        b=wLRAb0aVot9eyZorpxCWy4UJK9/IrwkHeo57OC3tVq7GEZ0gYjrWOBRWSvb52zXxVp
+         cUfxb53SYRtctR6hzlEaq+s6mg220ZA9UtlM4wCaUF/fiaKXmLQdoozJVI3WMCEPoZxa
+         kUnPW22758eXgGVLHCBxMjthJFLK9DFSi2bOzuHR3ScFOi07HBQBjacduXcQi9PJYrhO
+         qUB1yTTOJCyBhMc7elT4JEJ0Ct+FppMPLjeHg7UK8cLFjp5XSq1cMuBgMbj2pYPSuson
+         H1RqdfVJXNeMsvbZxU3iOvubEWiciHpNlNOIZ+Y0HVNvQEOe+BwBHC3N2z5HSAnAqsS2
+         WMYA==
+X-Gm-Message-State: AOAM5333H8IvLf8xuc1A8GLC06LJxTvD/i9doQ8tmKNSYKG/7r3qrtHR
+        OGKSTOjYnKd6pq4sRSlMFGwns08hlrUXygelidXfo6hQ
+X-Google-Smtp-Source: ABdhPJxFrXUPBbpkcE38MScAMAlvnteEOgB59zBjsulMMo/RVSVP+6slaOR6NvJf0UOWtB9QL3SRibyz3h5P4yLLHrM=
+X-Received: by 2002:a25:ada5:0:b0:64f:59d3:960e with SMTP id
+ z37-20020a25ada5000000b0064f59d3960emr27762448ybi.401.1653553564005; Thu, 26
+ May 2022 01:26:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+Received: by 2002:a05:7000:7aa7:0:0:0:0 with HTTP; Thu, 26 May 2022 01:26:03
+ -0700 (PDT)
+From:   Mychaela Falconia <mychaela.falconia@gmail.com>
+Date:   Thu, 26 May 2022 00:26:03 -0800
+Message-ID: <CA+uuBqZWHy80_kV30jmXiGpohyuxHa1obPGpi-oOWsAbufBZ5g@mail.gmail.com>
+Subject: Revisiting unwanted auto-assertion of DTR & RTS on serial port open
+To:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Maximilian Senftleben <kernel@mail.msdigital.de> writes:
+Hello Linux serial and usb-serial maintainers,
 
-Could you test if this patch fixes the issue for you?
-Should apply without problems on kernel 5.17.
----
- drivers/usb/gadget/function/u_ether.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+I am the hardware engineer who fought here unsuccessfully a year and a
+half ago to add Linux support for serial hardware devices in which DTR
+and/or RTS modem control signals have been repurposed for non-standard
+uses.  On such hw devices it is very often the case that DTR and RTS
+may be asserted ONLY when explicitly requested by specialized
+userspace applications that go with the hw (by way of TIOCMBIS ioctl,
+often followed by a delay and TIOCMBIC to produce a pulse), and NOT at
+any other times - in particular, it must be possible to open the
+serial port for byte Rx/Tx communication with the target device
+_without_ that open syscall unstoppably asserting DTR & RTS right
+there and then.  Here is the previous round of discussion:
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 6f5d45ef2e39a..b5bf51cdc3c8f 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -775,9 +775,14 @@ struct eth_dev *gether_setup_name(struct usb_gadget *g,
- 	dev->qmult = qmult;
- 	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
- 
--	if (get_ether_addr(dev_addr, addr))
-+	if (get_ether_addr(dev_addr, addr)) {
-+		net->addr_assign_type = NET_ADDR_RANDOM;
- 		dev_warn(&g->dev,
- 			"using random %s ethernet address\n", "self");
-+	}
-+	else {
-+		net->addr_assign_type = NET_ADDR_SET;
-+	}
- 	eth_hw_addr_set(net, addr);
- 	if (get_ether_addr(host_addr, dev->host_mac))
- 		dev_warn(&g->dev,
-@@ -835,6 +840,9 @@ struct net_device *gether_setup_name_default(const char *netname)
- 	INIT_LIST_HEAD(&dev->tx_reqs);
- 	INIT_LIST_HEAD(&dev->rx_reqs);
- 
-+	/* by default we always have a random MAC address */
-+	net->addr_assign_type = NET_ADDR_RANDOM;
-+
- 	skb_queue_head_init(&dev->rx_frames);
- 
- 	/* network device setup */
-@@ -871,7 +879,6 @@ int gether_register_netdev(struct net_device *net)
- 	dev = netdev_priv(net);
- 	g = dev->gadget;
- 
--	net->addr_assign_type = NET_ADDR_RANDOM;
- 	eth_hw_addr_set(net, dev->dev_mac);
- 
- 	status = register_netdev(net);
-@@ -912,6 +919,7 @@ int gether_set_dev_addr(struct net_device *net, const char *dev_addr)
- 	if (get_ether_addr(dev_addr, new_addr))
- 		return -EINVAL;
- 	memcpy(dev->dev_mac, new_addr, ETH_ALEN);
-+	net->addr_assign_type = NET_ADDR_SET;
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(gether_set_dev_addr);
--- 
-2.35.1
+https://lore.kernel.org/linux-serial/X8iuCXYhOBVMGvXv@localhost/T/
 
+I am now revisiting this issue and making another attempt to get this
+capability added to Linux.  The new development is that I have tested
+the corresponding feature in FreeBSD, and found it to work correctly -
+thus FreeBSD is now the first (and so far only) Unix-style OS in the
+world that features an actually working, usable fix for the 1970s UNIX
+design bug of unstoppably asserting DTR & RTS on serial port open.
+Wouldn't it be good for Linux to follow suit?
+
+The feature in question was added to FreeBSD quite recently:
+
+https://reviews.freebsd.org/D20031
+
+The above link was provided by Johan here a year and a half ago, in
+the previous round of this battle.  However, only now I have had a
+chance to test FreeBSD's implementation on actual hardware, and
+confirm that it actually works as required for signal-repurposing hw
+applications.
+
+The diff that appears on the FreeBSD review page above only adds one
+new termios flag, CNO_RTSDTR added to cflags.  Johan was proposing
+implementing a similar new termios flag in Linux - however, there is a
+crucial difference between what Johan was proposing for Linux vs what
+is actually implemented in FreeBSD, and it's the difference between
+usable and unusable.
+
+FreeBSD's counterpart to Linux ttyUSBx is ttyUx or cuaUx devices.
+However, FreeBSD also has .init and .lock devices which don't exist in
+Linux, and it's the .init device that makes their newly added
+CNO_RTSDTR feature actually work in a usable manner.  If you have a
+serial device that absolutely does not tolerate unwanted assertions of
+DTR/RTS, not even for one nanosecond, under FreeBSD you can make it
+work as follows (using cuaU0 as example here):
+
+Step 1: open /dev/cuaU0.init (the .init suffix is crucial) and perform
+the ioctl setting CNO_RTSDTR on this initial-state device.  This step
+can be done with stty command.  These .init devices have the special
+property that opening one does NOT cause modem control lines to be
+asserted, unlike the regular ttyXX or cuaXX device.
+
+Step 2: once the previous step is done, you can open the regular
+/dev/cuaU0 device for communication, and no unwanted DTR/RTS assertion
+will happen.
+
+Johan's proposal for Linux was superficially similar: he proposed
+adding a similar new termios flag.  But because Linux does not have
+any counterpart to FreeBSD's .init devices, a termios flag won't work
+for this purpose in Linux, it would create a chicken-and-egg problem:
+one would need to open the serial port first in order to set the
+termios flag, and this very act would cause DTR & RTS to be asserted,
+causing irreparable damage: electrocution, setting off explosives, use
+your imagination for how these signals could be wired to do highly
+damaging actions.
+
+Out of various methods that were discussed here a year and a half ago,
+only the sysfs approach would produce a user capability match to what
+FreeBSD now provides.  The termios flag idea is a dead end, unless
+this community feels that FreeBSD's ttyXX.init and ttyXX.lock should
+also be replicated in Linux in full.  Another sensible way would be to
+define a new open flag, such as O_NODTR, or reuse/abuse an existing
+flag like O_DIRECT which currently does nothing for tty devices - but
+people have objected that this approach would be limited to custom
+userspace programs, precluding the use of echo, cat etc.
+
+I now argue for the sysfs attribute approach.  Johan had a patch (he
+made it, but didn't fight for it because he really preferred the
+termios flag instead) adding a /sys/class/tty/ttyXXX/nordy attribute -
+setting this attribute to 1 would suppress automatic assertion of DTR
+and RTS on serial port open.  One could argue that a better name for
+this new sysfs attribute would be something like
+/sys/class/tty/ttyXXX/manual_dtr_rts - but I'll be happy no matter how
+it's named, as long as the essential functionality remains.
+
+This sysfs attribute would produce the same fundamental workflow as
+currently exists in FreeBSD.  In FreeBSD one needs to open
+/dev/cuaXX.init, do the necessary ioctl, then close that fd and open
+another path (/dev/cuaXX) to do the actual serial communication.  With
+the proposed sysfs attribute, the same fundamental workflow will apply
+here: open the sysfs path, do the necessary attribute write, then
+close the sysfs fd and open /dev/ttyXXX for the actual communication.
+In both cases the preliminary step (/dev/cuaXX.init in FreeBSD, sysfs
+path in my proposal for Linux) can be done from the shell, or it can
+be incorporated into custom userspace sw that works with the custom hw
+device.
+
+I can dig up Johan's old patch adding the nordy attribute, update it
+for current HEAD, and formally resubmit it - would the maintainers be
+agreeable to such course?
+
+Sincerely,
+Mychaela Falconia (she/her)
+Custom hardware design engineer,
+designing hw specifically for use with FOSS operating systems
