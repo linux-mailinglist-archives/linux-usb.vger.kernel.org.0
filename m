@@ -2,76 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F148B5361F7
-	for <lists+linux-usb@lfdr.de>; Fri, 27 May 2022 14:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 724C1535C61
+	for <lists+linux-usb@lfdr.de>; Fri, 27 May 2022 11:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240256AbiE0MHw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 May 2022 08:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S1350370AbiE0JB3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 May 2022 05:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353661AbiE0MGK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 May 2022 08:06:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC53166887;
-        Fri, 27 May 2022 04:55:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F37BF61E07;
-        Fri, 27 May 2022 11:55:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2485C385A9;
-        Fri, 27 May 2022 11:55:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653652512;
-        bh=WpanfLAOGrD7hytn+v8GPcDOtNTViLE3XXQJ7O55lwE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=btxJrZ+6li3ZjV5RvC7RFXUxYkiojd7rpXq8tr+Q502eeAZuhEqcElveXUoIPawJ7
-         FUAlX9Sf216lnv0VsYwgIB97iPY9XQ9vYyjp28QHONbfwntdAb9e5Fr/wIgead/0df
-         FmqZPGLQ87sLKLoLaJKq0e2I/gJ5yN8m8pU0eHvI=
-Date:   Fri, 27 May 2022 10:52:26 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     keliu <liuke94@huawei.com>
-Cc:     peter.chen@kernel.org, balbi@kernel.org,
-        heikki.krogerus@linux.intel.com, mdevaev@gmail.com,
-        maze@google.com, ruslan.bilovol@gmail.com, phil@raspberrypi.com,
-        libaokun1@huawei.com, dan.carpenter@oracle.com,
-        akpm@linux-foundation.org, brauner@kernel.org,
-        songmuchun@bytedance.com, dh10.jung@samsung.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: usb: Directly use ida_alloc()/free()
-Message-ID: <YpCRSojxnKwFbs8Q@kroah.com>
-References: <20220527090800.2881397-1-liuke94@huawei.com>
+        with ESMTP id S1350635AbiE0JAN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 May 2022 05:00:13 -0400
+Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8135FF02;
+        Fri, 27 May 2022 01:56:31 -0700 (PDT)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9d:7e00:0:0:0:1])
+        (authenticated bits=0)
+        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 24R8u9Tn990091
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Fri, 27 May 2022 09:56:11 +0100
+Received: from miraculix.mork.no ([IPv6:2a01:799:961:910a:a293:6d6e:8bbf:c204])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 24R8u3412440897
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Fri, 27 May 2022 10:56:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1653641764; bh=DfYbl65Hbc+w0fV0PhHCU3PRq4eV+RpSwpj8SfFkR0k=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=azjOw1m0AJ8he7++0//SPx2has70sZYBFLyinkAm9p3ohNj3Qf1doid7zYZQR2Akd
+         5qPAQaOo+1jJ4dBd9lWy00nPsDytsxpsr/ZqCvHSb+BmT9EgleVL6iruqog8G5/mSB
+         iEYNlcVo/bOP1iwp/eXIrFFAiC+nR3sfAgY6qEOA=
+Received: (nullmailer pid 891541 invoked by uid 1000);
+        Fri, 27 May 2022 08:55:58 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Carlo Lobrano <c.lobrano@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] net: usb: qmi_wwan: add Telit 0x1250 composition
+Organization: m
+References: <20220527082906.321165-1-c.lobrano@gmail.com>
+Date:   Fri, 27 May 2022 10:55:58 +0200
+In-Reply-To: <20220527082906.321165-1-c.lobrano@gmail.com> (Carlo Lobrano's
+        message of "Fri, 27 May 2022 10:29:06 +0200")
+Message-ID: <874k1bs6ap.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220527090800.2881397-1-liuke94@huawei.com>
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.5 at canardo
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 27, 2022 at 09:08:00AM +0000, keliu wrote:
-> Use ida_alloc()/ida_free() instead of deprecated
-> ida_simple_get()/ida_simple_remove() .
-> 
-> Signed-off-by: keliu <liuke94@huawei.com>
+Carlo Lobrano <c.lobrano@gmail.com> writes:
 
-I need a real name here, one that you use to sign legal documents.
+> Add support for Telit LN910Cx 0x1250 composition
+>
+> 0x1250: rmnet, tty, tty, tty, tty
+>
+> Signed-off-by: Carlo Lobrano <c.lobrano@gmail.com>
 
-> ---
->  drivers/usb/chipidea/core.c             | 6 +++---
->  drivers/usb/gadget/function/f_hid.c     | 6 +++---
->  drivers/usb/gadget/function/f_printer.c | 6 +++---
->  drivers/usb/gadget/function/rndis.c     | 4 ++--
->  drivers/usb/typec/class.c               | 8 ++++----
+Thanks
 
-Please break this up into one-per-driver.
-
-thanks,
-
-greg k-h
+Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
