@@ -2,60 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22268535D46
-	for <lists+linux-usb@lfdr.de>; Fri, 27 May 2022 11:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A182535D59
+	for <lists+linux-usb@lfdr.de>; Fri, 27 May 2022 11:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350558AbiE0JMf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 May 2022 05:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
+        id S1350441AbiE0JZY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 May 2022 05:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350555AbiE0JMT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 May 2022 05:12:19 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BE264F8
-        for <linux-usb@vger.kernel.org>; Fri, 27 May 2022 02:10:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653642617; x=1685178617;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H1r4MvbypCFUiGqJIkEqwMWo7reehqMexPKvcKB+iz4=;
-  b=FX3sNbgk7TOeR+wdVx0QWuTV9ciYb54PJFHpUW58CpLJUIHXCzHHHLAe
-   z1rP15u6l43CgLiufM/gpVbtzf2O1VurPx4RYidsDQLOGoPbyUPcu0SsE
-   fsBaiiEWvy95PmnvJzo5VuFSQUlcSTTr8T03+h3Hy96pM8VDlecBaN5N8
-   Y5aNjceCQlquQnpuJXp55DlStrzmSX1dNeJdQQax/1uHq17O1AxRoOK8P
-   wuIR7xHarnDwobZQCK0NKJpkFonUnRGo16AHgqPfnC+eaRTFRQXu4VMKm
-   WD8FwcaIrrl4mJxSLReoD2ava189KdTdsYTFrFoQWCV0LkVWiMO18yvEJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="254922796"
-X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
-   d="scan'208";a="254922796"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 02:10:17 -0700
-X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
-   d="scan'208";a="746833929"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 02:10:15 -0700
-Received: by lahna (sSMTP sendmail emulation); Fri, 27 May 2022 12:10:11 +0300
-Date:   Fri, 27 May 2022 12:10:11 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Stefan Hoffmeister <stefan.hoffmeister@gmail.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: Thunderbolt: One missing DisplayPort?
-Message-ID: <YpCVc6eYkpmjP9AF@lahna>
-References: <CALhB_QNhzHkf4Yw6TqZAbCisMK6TBy8ecw0M_Sq=EQXPN728fg@mail.gmail.com>
- <Yoy5m3Aa6QwVcFhf@kuha.fi.intel.com>
- <Yoy7oXpMugFFmfBP@lahna>
- <CALhB_QM9SHJt+15pEVHEH_kourb-1Xbd68O1p_XLxOmWB4HAfw@mail.gmail.com>
+        with ESMTP id S239243AbiE0JZU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 May 2022 05:25:20 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5656F6882
+        for <linux-usb@vger.kernel.org>; Fri, 27 May 2022 02:25:19 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id z19-20020a05660200d300b0066583f8cf2eso2491788ioe.2
+        for <linux-usb@vger.kernel.org>; Fri, 27 May 2022 02:25:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Bioz4H7go5J90Q3ZEufZq+kViXZ5tT6di1K26jNf73s=;
+        b=BhjLPKXELlyVlrlOh3rrub0EEfUzw+l4mv4h9XAszRCc9SNPRE3p3Afth7aeR46szD
+         7Ux+/8npZj6Yy66dfUsNSnhbQYXCx0O8ra3fnEyjfYaLNL3a5He5AjUQGRtzaCOH/RMC
+         vnLfx3XelH6u92HvIxRyQRCf36rEzSH98nVbHFIxPX7wCc4OlqaVZ1TNQRVRWNyo85dN
+         TXhQdt4iyy/Z+gTIvOqPmjR6Vc0v6TTmeuNLP1l8cLnJ4E0aYGBbVtEoSZinBKw5APL3
+         Qdzii1oq92jmHoccEMiWaCcHJK9pyuLk0dDJm0d6d43g6FKq+fpFn8ErcQd2qp8FBTGi
+         +suQ==
+X-Gm-Message-State: AOAM531kgbgZ1BKGktbFX8HwoVec6UcrDW4qW8Qd+tyW4GwcN9zFNprd
+        5TrK49c0qjP1ZIa1YEYRL1HderqJtJcdH6EzzlP449AOfXD/
+X-Google-Smtp-Source: ABdhPJwU9+oPb5euZt6EIixTC316LnS7lGlY8wHMCd2LT/iyjaYKsY+BGzV/qzUuWp7h7I8Nl0xv+2yBUkS3lYmP/g5katOSesCO
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALhB_QM9SHJt+15pEVHEH_kourb-1Xbd68O1p_XLxOmWB4HAfw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_PDS_PRO_TLD,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:ca4a:0:b0:2d3:1817:49b0 with SMTP id
+ q10-20020a92ca4a000000b002d3181749b0mr1751787ilo.258.1653643519221; Fri, 27
+ May 2022 02:25:19 -0700 (PDT)
+Date:   Fri, 27 May 2022 02:25:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008c664105dffae2eb@google.com>
+Subject: [syzbot] WARNING in driver_unregister
+From:   syzbot <syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rafael@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,119 +53,80 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hello,
 
-On Fri, May 27, 2022 at 08:24:31AM +0200, Stefan Hoffmeister wrote:
-> Hi,
-> 
-> On Tue, May 24, 2022 at 1:04 PM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > Hi,
-> >
-> > On Tue, May 24, 2022 at 01:55:23PM +0300, Heikki Krogerus wrote:
-> > > +Mika
-> > >
-> > > On Fri, May 20, 2022 at 12:22:50PM +0200, Stefan Hoffmeister wrote:
-> > > > I am trying to diagnose a problem where I get video output on
-> > > > Thunderbolt on one DisplayPort, but no output on the second
-> > > > DisplayPort.
-> > > >
-> > > > I would love to turn on all the (kernel-level) logging output that
-> > > > there is, but do not know how to do that.
-> > > >
-> > > > Basically, on a Dell Inspiron 16 Plus (7610) laptop with Thunderbolt
-> > > > 4, I am running Fedora Linux 36 with kernel 5.17+.
-> > > >
-> > > > Connecting that laptop to a Thunderbolt docking station (Intel
-> > > > Thunderbolt 3 chip inside),
-> > > > with two screens attached via DisplayPort, I get only one screen up and running.
-> > > >
-> > > > I'd like to discover more about this apparent error mode, because
-> > > > attaching a different TB3
-> > > > setup works fine. I am looking for some means to enable logging or to
-> > > > get debugging insight.
-> > > >
-> > > > Generally speaking, I suspect that this specific Dell laptop
-> > > > (configuration) has some challenges
-> > > > in the BIOS, and with Thunderbolt in general, but am totally blind to
-> > > > what is going on.
-> > > >
-> > > > This system offers potential for fun, this being a hybrid PRIME
-> > > > configuration, with an Intel iGPU passing through to an Nvidia dGPU
-> > > > which seems to be the only wired-up way to get DisplayPort output.
-> >
-> > In that system all the tunneling is done by the firmware so there is
-> > really not much you can debug on the kernel side. You can add
-> > "thunderbolt.dyndbg" in the command line to get more verbose logging but
-> > I doubt it reveals anything useful.
-> >
-> > How do you connect the monitors to the dock and what dock it is?
-> 
-> The dock is an i-tec Thunderbolt3/USB-C Dual DisplayPort 4K Docking
-> Station + Power Delivery 85W
-> (https://i-tec.pro/en/produkt/tb3cdualdpdockpd-2/). This dock exposes
-> two DisplayPort outs, to which I have connected one 2.5K screen and
-> one 4K screen "natively", for running at 60 Hz. According to lspci
-> from the "broken" Dell 7610 (BIOS version 1.7.0) the dock looks like
-> this:
-> 
-> [stefan@fedora ~]$ lspci -vt
-> -[0000:00]-+-00.0  Intel Corporation 11th Gen Core Processor Host
-> Bridge/DRAM Registers
->           +-01.0-[01]--+-00.0  NVIDIA Corporation GA106M [GeForce RTX
-> 3060 Mobile / Max-Q]
->           |            \-00.1  NVIDIA Corporation Device 228e
->           +-02.0  Intel Corporation TigerLake-H GT1 [UHD Graphics]
->           +-04.0  Intel Corporation TigerLake-LP Dynamic Tuning
-> Processor Participant
->           +-06.0-[02]----00.0  KIOXIA Corporation Device 0001
->           +-07.0-[03-3a]----00.0-[04-05]----02.0-[05]----00.0  Intel
-> Corporation JHL7540 Thunderbolt 3 USB Controller [Titan Ridge DD 2018]
->           +-08.0  Intel Corporation GNA Scoring Accelerator module
-> ...
-> 
-> For reference, when I attach a Dell XPS 9360 (also on Fedora 36),
-> which works perfectly (both screens at expected resolution and refresh
-> rate), I get this output
-> 
-> [stefan@xps13 ~]# lspci -vt
-> -[0000:00]-+-00.0  Intel Corporation Xeon E3-1200 v6/7th Gen Core
-> Processor Host Bridge/DRAM Registers
->           +-02.0  Intel Corporation HD Graphics 620
->           +-04.0  Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen
-> Core Processor Thermal Subsystem
->           +-14.0  Intel Corporation Sunrise Point-LP USB 3.0 xHCI Controller
->           +-14.2  Intel Corporation Sunrise Point-LP Thermal subsystem
->           +-15.0  Intel Corporation Sunrise Point-LP Serial IO I2C
-> Controller #0
->           +-15.1  Intel Corporation Sunrise Point-LP Serial IO I2C
-> Controller #1
->           +-16.0  Intel Corporation Sunrise Point-LP CSME HECI #1
->           +-1c.0-[01-39]----00.0-[02-39]--+-00.0-[03]----00.0  Intel
-> Corporation DSL6340 Thunderbolt 3 NHI [Alpine Ridge 2C 2015]
->           |
-> +-01.0-[04-38]----00.0-[05-38]----02.0-[06]----00.0  Intel Corporation
-> JHL7540 Thunderbolt 3 USB Controller [Titan Ridge DD 2018]
->           |                               \-02.0-[39]--
->           +-1c.4-[3a]----00.0  Intel Corporation Wi-Fi 6 AX200
->  ...
-> 
-> On the broken Dell 7610 (BIOS version 1.7.0), everything else on the
-> dock works fine - the NIC, USB ports (forwarding to the next hub,
-> too), power delivery.
-> 
-> Even any single one of the screens alone works fine, in isolation and
-> solitude, on any of the dock DisplayPort outs (turning dock on/off in
-> between). Only with both screens attached, only the "first" screen
-> seems to be detected (and "first" really seems to translate to the
-> physical DisplayPort out next to the power input socket on the dock).
+syzbot found the following issue on:
 
-OK, I think this is not a Thunderbolt issue but rather related to
-graphics so I would try to ask from the graphics folks if they have any
-ideas what might be the issue or how to debug further. There is not much
-the Linux Thunderbolt driver does here because it is the firmware that
-creates these tunnels, and I think it works here as expected.
+HEAD commit:    97fa5887cf28 USB: new quirk for Dell Gen 2 devices
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=170ebdc3f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d7b232ec3adf5c8d
+dashboard link: https://syzkaller.appspot.com/bug?extid=02b16343704b3af1667e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1124ad81f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d6004df00000
 
-Probably dri-devel@lists.freedesktop.org is a good mailing list to ask
-graphics related help.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com
+
+kobject_add_internal failed for raw-gadget with -EEXIST, don't try to register things with the same name in the same directory.
+UDC core: USB Raw Gadget: driver registration failed: -17
+misc raw-gadget: fail, usb_gadget_register_driver returned -17
+------------[ cut here ]------------
+Unexpected driver unregister!
+WARNING: CPU: 0 PID: 1308 at drivers/base/driver.c:194 driver_unregister drivers/base/driver.c:194 [inline]
+WARNING: CPU: 0 PID: 1308 at drivers/base/driver.c:194 driver_unregister+0x8c/0xb0 drivers/base/driver.c:191
+Modules linked in:
+CPU: 0 PID: 1308 Comm: syz-executor314 Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:driver_unregister drivers/base/driver.c:194 [inline]
+RIP: 0010:driver_unregister+0x8c/0xb0 drivers/base/driver.c:191
+Code: 68 4c 89 e7 e8 65 b9 db fe 48 89 ef e8 fd a0 ff ff 5d 41 5c e9 75 fa 78 fe e8 70 fa 78 fe 48 c7 c7 80 7a 81 86 e8 12 96 ee 02 <0f> 0b 5d 41 5c e9 5a fa 78 fe e8 75 93 ad fe eb 96 e8 6e 93 ad fe
+RSP: 0018:ffffc90001087a78 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff88811d184050 RCX: 0000000000000000
+RDX: ffff88810902d580 RSI: ffffffff812bdce8 RDI: fffff52000210f41
+RBP: ffff88811d184098 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff812b86be R11: 0000000000000000 R12: 0000000000000000
+R13: ffff88811d184008 R14: ffff88811d05b1a8 R15: ffff8881008456a0
+FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fea994ab2d0 CR3: 0000000007825000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ usb_gadget_unregister_driver+0x48/0x70 drivers/usb/gadget/udc/core.c:1590
+ raw_release+0x18a/0x290 drivers/usb/gadget/legacy/raw_gadget.c:401
+ __fput+0x277/0x9d0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:37 [inline]
+ do_exit+0xaff/0x2980 kernel/exit.c:795
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:925
+ get_signal+0x22df/0x24c0 kernel/signal.c:2864
+ arch_do_signal_or_restart+0x82/0x20f0 arch/x86/kernel/signal.c:867
+ exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
+ exit_to_user_mode_prepare+0x156/0x200 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fea99520a57
+Code: Unable to access opcode bytes at RIP 0x7fea99520a2d.
+RSP: 002b:00007fea994aa258 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffef RBX: 00007fea994ab2d0 RCX: 00007fea99520a57
+RDX: 0000000000000000 RSI: 0000000000005501 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 000000000000ffff R09: 000000000000000b
+R10: 00007fea994aa300 R11: 0000000000000246 R12: 00007fea995a55e0
+R13: 00007fea994aa2a0 R14: 00007fea994ac400 R15: 0000000000000003
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
