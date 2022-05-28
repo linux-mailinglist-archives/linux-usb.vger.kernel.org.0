@@ -2,196 +2,421 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6E8536D69
-	for <lists+linux-usb@lfdr.de>; Sat, 28 May 2022 17:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F52D536D73
+	for <lists+linux-usb@lfdr.de>; Sat, 28 May 2022 17:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232045AbiE1PCS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 May 2022 11:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
+        id S237296AbiE1POR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 May 2022 11:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237033AbiE1PCQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 May 2022 11:02:16 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6FF17075
-        for <linux-usb@vger.kernel.org>; Sat, 28 May 2022 08:02:14 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id k184-20020a6bbac1000000b0065aeedd4ba8so4237985iof.20
-        for <linux-usb@vger.kernel.org>; Sat, 28 May 2022 08:02:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=nR6Y/jrwWnlGdn4UloS/R/H0u6Pl7U01+gd1axF8MeA=;
-        b=YCtjY/JmGU8e9TeL7uyK4b3d80fsyS4LWPNnTZ0EHroExrm/dCRGR1qe6ezMIwpecR
-         JPm4XpFSfbDIgvX8IspEWk2pipuiTPGDzB0Xd06r0/hYKO2q9KGH7Q2sdonv4JWQDHjX
-         LpBnmyZlVl8aXNvxpTGjhjMJKBLC6bxnVBcZz8f4kTxnewA7aOih+C6bXhFpv22rFUuO
-         EFCVW0sEtZ/WrUNMYejE9H0vk/w1D3KZ+Rtdb1D8P7awIV/OHJazcOEs0L9taZE9KLr7
-         pDkN2fUqRH0O5mtE7sB2YA4E27z7Ik6JjZ0gqUA1y+/OFxoDcNASDDA+UqNDBY++5J9L
-         Nn/w==
-X-Gm-Message-State: AOAM530paCy7lJnZERNe6IjURYCJBRj9DWbZ/Pvmi6J2WjcyDD61QfZn
-        SfCLXIkXMawalCUexObpEgds5/Dwzj6WmPqU3uqGoe2ZhMSB
-X-Google-Smtp-Source: ABdhPJwKEkMt64vcoB2wz1pW0VF5iJH3m/cRe7NQg/SQeNKvxZrm1Mqrjz/QdAyAHnvT92N0r7togNjEoF6hv3zWfhUXUdAEZXzy
+        with ESMTP id S237153AbiE1POP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 May 2022 11:14:15 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C80B1658D
+        for <linux-usb@vger.kernel.org>; Sat, 28 May 2022 08:14:11 -0700 (PDT)
+Received: from pop-os.home ([90.11.191.102])
+        by smtp.orange.fr with ESMTPA
+        id uy8mnuDxQ6rrEuy8mnJluk; Sat, 28 May 2022 17:14:10 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 28 May 2022 17:14:10 +0200
+X-ME-IP: 90.11.191.102
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     tglx@linutronix.de,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH] USB: Follow-up to SPDX GPL-2.0+ identifiers addition - remove now useless comments
+Date:   Sat, 28 May 2022 17:13:56 +0200
+Message-Id: <5c6c58772ada0fd95434c669b79428bd610c0084.1653750820.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Received: by 2002:a6b:e814:0:b0:660:d496:d2d2 with SMTP id
- f20-20020a6be814000000b00660d496d2d2mr15136406ioh.147.1653750133685; Sat, 28
- May 2022 08:02:13 -0700 (PDT)
-Date:   Sat, 28 May 2022 08:02:13 -0700
-In-Reply-To: <YpI1g7/sZVYKz5Hn@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004403a805e013b52c@google.com>
-Subject: Re: [syzbot] WARNING in driver_unregister
-From:   syzbot <syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com>
-To:     andreyknvl@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+All these files have been updated in the commit given in the Fixes: tag
+below.
 
-syzbot tried to test the proposed patch but the build/boot failed:
+When the SPDX-License-Identifier: has been added, the corresponding text at
+the beginning of the files has not been deleted.
+All these texts are about GPL-2.0+, with different variation in the
+wording.
 
-KASAN: null-ptr-deref Read in ida_free
+Remove these now useless lines to save some LoC.
 
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
-BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
-BUG: KASAN: null-ptr-deref in ida_free+0x1b6/0x2e0 lib/idr.c:510
-Read of size 8 at addr 0000000000000000 by task syz-fuzzer/1284
+Fixes: 5fd54ace4721 ("USB: add SPDX identifiers to all remaining files in drivers/usb/")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ include/linux/usb/c67x00.h        | 15 ---------------
+ include/linux/usb/composite.h     | 14 --------------
+ include/linux/usb/ehci_def.h      | 14 --------------
+ include/linux/usb/ehci_pdriver.h  | 14 --------------
+ include/linux/usb/g_hid.h         | 14 --------------
+ include/linux/usb/hcd.h           | 14 --------------
+ include/linux/usb/musb-ux500.h    | 10 ----------
+ include/linux/usb/net2280.h       | 14 --------------
+ include/linux/usb/ohci_pdriver.h  | 14 --------------
+ include/linux/usb/otg-fsm.h       | 17 ++---------------
+ include/linux/usb/phy_companion.h | 10 ----------
+ include/linux/usb/rndis_host.h    | 14 --------------
+ include/linux/usb/usb338x.h       | 11 -----------
+ include/linux/usb/usbnet.h        | 14 --------------
+ 14 files changed, 2 insertions(+), 187 deletions(-)
 
-CPU: 1 PID: 1284 Comm: syz-fuzzer Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_report mm/kasan/report.c:432 [inline]
- kasan_report.cold+0x61/0x1c6 mm/kasan/report.c:491
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read include/linux/instrumented.h:71 [inline]
- test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
- ida_free+0x1b6/0x2e0 lib/idr.c:510
- dev_free+0xdb/0x6e0 drivers/usb/gadget/legacy/raw_gadget.c:209
- kref_put include/linux/kref.h:65 [inline]
- raw_release+0x219/0x290 drivers/usb/gadget/legacy/raw_gadget.c:421
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:164
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
- exit_to_user_mode_prepare+0x1f7/0x200 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x49dfbb
-Code: e8 aa 4b fc ff eb 88 cc cc cc cc cc cc cc cc e8 bb 8f fc ff 48 8b 7c 24 10 48 8b 74 24 18 48 8b 54 24 20 48 8b 44 24 08 0f 05 <48> 3d 01 f0 ff ff 76 20 48 c7 44 24 28 ff ff ff ff 48 c7 44 24 30
-RSP: 002b:000000c0002fb5f0 EFLAGS: 00000206 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 000000c00001e000 RCX: 000000000049dfbb
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000006
-RBP: 000000c0002fb630 R08: 0000000000000001 R09: 000000c0002fb650
-R10: 000000c0002fb5dc R11: 0000000000000206 R12: 000000c0002fb5e8
-R13: 0000000000203000 R14: 000000c0000001a0 R15: 00007f1aab9f437e
- </TASK>
-==================================================================
-
-
-Warning: Permanently added '10.128.1.74' (ECDSA) to the list of known hosts.
-2022/05/28 15:01:17 fuzzer started
-2022/05/28 15:01:17 connecting to host at 10.128.0.163:44569
-2022/05/28 15:01:17 checking machine...
-2022/05/28 15:01:17 checking revisions...
-syzkaller login: [   28.730807][ T1284] ==================================================================
-[   28.732309][ T1284] BUG: KASAN: null-ptr-deref in ida_free+0x1b6/0x2e0
-[   28.733500][ T1284] Read of size 8 at addr 0000000000000000 by task syz-fuzzer/1284
-[   28.734813][ T1284] 
-[   28.735363][ T1284] CPU: 1 PID: 1284 Comm: syz-fuzzer Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28-dirty #0
-[   28.737366][ T1284] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-[   28.738920][ T1284] Call Trace:
-[   28.739425][ T1284]  <TASK>
-[   28.739871][ T1284]  dump_stack_lvl+0xcd/0x134
-[   28.740555][ T1284]  kasan_report.cold+0x61/0x1c6
-[   28.741239][ T1284]  ? ida_free+0x1b6/0x2e0
-[   28.741875][ T1284]  kasan_check_range+0x13d/0x180
-[   28.742577][ T1284]  ida_free+0x1b6/0x2e0
-[   28.743209][ T1284]  ? ida_destroy+0x3b0/0x3b0
-[   28.743995][ T1284]  ? rcu_read_lock_sched_held+0x3a/0x70
-[   28.744853][ T1284]  ? kfree+0x36b/0x4f0
-[   28.745531][ T1284]  dev_free+0xdb/0x6e0
-[   28.746110][ T1284]  ? _raw_spin_unlock_irqrestore+0x38/0x70
-[   28.747069][ T1284]  raw_release+0x219/0x290
-[   28.747719][ T1284]  __fput+0x277/0x9d0
-[   28.748344][ T1284]  ? gadget_unbind+0xd0/0xd0
-[   28.749014][ T1284]  task_work_run+0xdd/0x1a0
-[   28.749693][ T1284]  exit_to_user_mode_prepare+0x1f7/0x200
-[   28.750523][ T1284]  syscall_exit_to_user_mode+0x19/0x60
-[   28.751641][ T1284]  do_syscall_64+0x42/0xb0
-[   28.756063][ T1284]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   28.761951][ T1284] RIP: 0033:0x49dfbb
-[   28.765827][ T1284] Code: e8 aa 4b fc ff eb 88 cc cc cc cc cc cc cc cc e8 bb 8f fc ff 48 8b 7c 24 10 48 8b 74 24 18 48 8b 54 24 20 48 8b 44 24 08 0f 05 <48> 3d 01 f0 ff ff 76 20 48 c7 44 24 28 ff ff ff ff 48 c7 44 24 30
-[   28.785433][ T1284] RSP: 002b:000000c0002fb5f0 EFLAGS: 00000206 ORIG_RAX: 0000000000000003
-[   28.793837][ T1284] RAX: 0000000000000000 RBX: 000000c00001e000 RCX: 000000000049dfbb
-[   28.801799][ T1284] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000006
-[   28.809765][ T1284] RBP: 000000c0002fb630 R08: 0000000000000001 R09: 000000c0002fb650
-[   28.817720][ T1284] R10: 000000c0002fb5dc R11: 0000000000000206 R12: 000000c0002fb5e8
-[   28.825672][ T1284] R13: 0000000000203000 R14: 000000c0000001a0 R15: 00007f1aab9f437e
-[   28.833636][ T1284]  </TASK>
-[   28.836678][ T1284] ==================================================================
-[   28.844826][ T1284] Kernel panic - not syncing: panic_on_warn set ...
-[   28.851483][ T1284] CPU: 1 PID: 1284 Comm: syz-fuzzer Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28-dirty #0
-[   28.862730][ T1284] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-[   28.872864][ T1284] Call Trace:
-[   28.876128][ T1284]  <TASK>
-[   28.879041][ T1284]  dump_stack_lvl+0xcd/0x134
-[   28.883617][ T1284]  panic+0x2d7/0x636
-[   28.887498][ T1284]  ? panic_print_sys_info.part.0+0x10b/0x10b
-[   28.893461][ T1284]  ? ida_free+0x1b6/0x2e0
-[   28.897951][ T1284]  end_report.part.0+0x3f/0x7c
-[   28.902699][ T1284]  kasan_report.cold+0x93/0x1c6
-[   28.907540][ T1284]  ? ida_free+0x1b6/0x2e0
-[   28.911848][ T1284]  kasan_check_range+0x13d/0x180
-[   28.916765][ T1284]  ida_free+0x1b6/0x2e0
-[   28.921001][ T1284]  ? ida_destroy+0x3b0/0x3b0
-[   28.925850][ T1284]  ? rcu_read_lock_sched_held+0x3a/0x70
-[   28.931386][ T1284]  ? kfree+0x36b/0x4f0
-[   28.935444][ T1284]  dev_free+0xdb/0x6e0
-[   28.939501][ T1284]  ? _raw_spin_unlock_irqrestore+0x38/0x70
-[   28.946270][ T1284]  raw_release+0x219/0x290
-[   28.951563][ T1284]  __fput+0x277/0x9d0
-[   28.955538][ T1284]  ? gadget_unbind+0xd0/0xd0
-[   28.960121][ T1284]  task_work_run+0xdd/0x1a0
-[   28.964752][ T1284]  exit_to_user_mode_prepare+0x1f7/0x200
-[   28.970391][ T1284]  syscall_exit_to_user_mode+0x19/0x60
-[   28.975939][ T1284]  do_syscall_64+0x42/0xb0
-[   28.980357][ T1284]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   28.986259][ T1284] RIP: 0033:0x49dfbb
-[   28.990166][ T1284] Code: e8 aa 4b fc ff eb 88 cc cc cc cc cc cc cc cc e8 bb 8f fc ff 48 8b 7c 24 10 48 8b 74 24 18 48 8b 54 24 20 48 8b 44 24 08 0f 05 <48> 3d 01 f0 ff ff 76 20 48 c7 44 24 28 ff ff ff ff 48 c7 44 24 30
-[   29.009849][ T1284] RSP: 002b:000000c0002fb5f0 EFLAGS: 00000206 ORIG_RAX: 0000000000000003
-[   29.018247][ T1284] RAX: 0000000000000000 RBX: 000000c00001e000 RCX: 000000000049dfbb
-[   29.026199][ T1284] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000006
-[   29.034157][ T1284] RBP: 000000c0002fb630 R08: 0000000000000001 R09: 000000c0002fb650
-[   29.042160][ T1284] R10: 000000c0002fb5dc R11: 0000000000000206 R12: 000000c0002fb5e8
-[   29.050128][ T1284] R13: 0000000000203000 R14: 000000c0000001a0 R15: 00007f1aab9f437e
-[   29.058093][ T1284]  </TASK>
-[   29.061162][ T1284] Kernel Offset: disabled
-[   29.065471][ T1284] Rebooting in 86400 seconds..
-
-
-
-Tested on:
-
-commit:         97fa5887 USB: new quirk for Dell Gen 2 devices
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d7b232ec3adf5c8d
-dashboard link: https://syzkaller.appspot.com/bug?extid=02b16343704b3af1667e
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=10cc0d03f00000
+diff --git a/include/linux/usb/c67x00.h b/include/linux/usb/c67x00.h
+index 2fc39e3b7281..45e0757e58f3 100644
+--- a/include/linux/usb/c67x00.h
++++ b/include/linux/usb/c67x00.h
+@@ -3,21 +3,6 @@
+  * usb_c67x00.h: platform definitions for the Cypress C67X00 USB chip
+  *
+  * Copyright (C) 2006-2008 Barco N.V.
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+- * MA  02110-1301  USA.
+  */
+ 
+ #ifndef _LINUX_USB_C67X00_H
+diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+index 9d2762279286..43ac3fa760db 100644
+--- a/include/linux/usb/composite.h
++++ b/include/linux/usb/composite.h
+@@ -3,20 +3,6 @@
+  * composite.h -- framework for usb gadgets which are composite devices
+  *
+  * Copyright (C) 2006-2008 David Brownell
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+  */
+ 
+ #ifndef	__LINUX_USB_COMPOSITE_H
+diff --git a/include/linux/usb/ehci_def.h b/include/linux/usb/ehci_def.h
+index c892c5bc6638..fbabadd3b372 100644
+--- a/include/linux/usb/ehci_def.h
++++ b/include/linux/usb/ehci_def.h
+@@ -1,20 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ /*
+  * Copyright (c) 2001-2002 by David Brownell
+- *
+- * This program is free software; you can redistribute it and/or modify it
+- * under the terms of the GNU General Public License as published by the
+- * Free Software Foundation; either version 2 of the License, or (at your
+- * option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful, but
+- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+- * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+- * for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software Foundation,
+- * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  */
+ 
+ #ifndef __LINUX_USB_EHCI_DEF_H
+diff --git a/include/linux/usb/ehci_pdriver.h b/include/linux/usb/ehci_pdriver.h
+index 89fc901e778f..0f1b166f5aa0 100644
+--- a/include/linux/usb/ehci_pdriver.h
++++ b/include/linux/usb/ehci_pdriver.h
+@@ -1,20 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ /*
+  * Copyright (C) 2012 Hauke Mehrtens <hauke@hauke-m.de>
+- *
+- * This program is free software; you can redistribute it and/or modify it
+- * under the terms of the GNU General Public License as published by the
+- * Free Software Foundation; either version 2 of the License, or (at your
+- * option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful, but
+- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+- * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+- * for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software Foundation,
+- * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  */
+ 
+ #ifndef __USB_CORE_EHCI_PDRIVER_H
+diff --git a/include/linux/usb/g_hid.h b/include/linux/usb/g_hid.h
+index 7581e488c237..d56bfedeb079 100644
+--- a/include/linux/usb/g_hid.h
++++ b/include/linux/usb/g_hid.h
+@@ -3,20 +3,6 @@
+  * g_hid.h -- Header file for USB HID gadget driver
+  *
+  * Copyright (C) 2010 Fabien Chouteau <fabien.chouteau@barco.com>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  */
+ 
+ #ifndef __LINUX_USB_G_HID_H
+diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+index 2c1fc9212cf2..37ccb31b1d40 100644
+--- a/include/linux/usb/hcd.h
++++ b/include/linux/usb/hcd.h
+@@ -1,20 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ /*
+  * Copyright (c) 2001-2002 by David Brownell
+- *
+- * This program is free software; you can redistribute it and/or modify it
+- * under the terms of the GNU General Public License as published by the
+- * Free Software Foundation; either version 2 of the License, or (at your
+- * option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful, but
+- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+- * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+- * for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software Foundation,
+- * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  */
+ 
+ #ifndef __USB_CORE_HCD_H
+diff --git a/include/linux/usb/musb-ux500.h b/include/linux/usb/musb-ux500.h
+index c4b7ad9850ca..d60dcfc56b5a 100644
+--- a/include/linux/usb/musb-ux500.h
++++ b/include/linux/usb/musb-ux500.h
+@@ -1,16 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ /*
+  * Copyright (C) 2013 ST-Ericsson AB
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+  */
+ 
+ #ifndef __MUSB_UX500_H__
+diff --git a/include/linux/usb/net2280.h b/include/linux/usb/net2280.h
+index 08b85caecfaf..f29fe6a1f415 100644
+--- a/include/linux/usb/net2280.h
++++ b/include/linux/usb/net2280.h
+@@ -5,20 +5,6 @@
+  *
+  * Copyright (C) 2002 NetChip Technology, Inc. (http://www.netchip.com)
+  * Copyright (C) 2003 David Brownell
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  */
+ 
+ #ifndef __LINUX_USB_NET2280_H
+diff --git a/include/linux/usb/ohci_pdriver.h b/include/linux/usb/ohci_pdriver.h
+index 7eb16cf587ee..2447c78b1766 100644
+--- a/include/linux/usb/ohci_pdriver.h
++++ b/include/linux/usb/ohci_pdriver.h
+@@ -1,20 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ /*
+  * Copyright (C) 2012 Hauke Mehrtens <hauke@hauke-m.de>
+- *
+- * This program is free software; you can redistribute it and/or modify it
+- * under the terms of the GNU General Public License as published by the
+- * Free Software Foundation; either version 2 of the License, or (at your
+- * option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful, but
+- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+- * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+- * for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software Foundation,
+- * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  */
+ 
+ #ifndef __USB_CORE_OHCI_PDRIVER_H
+diff --git a/include/linux/usb/otg-fsm.h b/include/linux/usb/otg-fsm.h
+index 784659d4dc99..6135d076c53d 100644
+--- a/include/linux/usb/otg-fsm.h
++++ b/include/linux/usb/otg-fsm.h
+@@ -1,19 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0+
+-/* Copyright (C) 2007,2008 Freescale Semiconductor, Inc.
+- *
+- * This program is free software; you can redistribute  it and/or modify it
+- * under  the terms of  the GNU General  Public License as published by the
+- * Free Software Foundation;  either version 2 of the  License, or (at your
+- * option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful, but
+- * WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+- * General Public License for more details.
+- *
+- * You should have received a copy of the  GNU General Public License along
+- * with this program; if not, write  to the Free Software Foundation, Inc.,
+- * 675 Mass Ave, Cambridge, MA 02139, USA.
++/*
++ * Copyright (C) 2007,2008 Freescale Semiconductor, Inc.
+  */
+ 
+ #ifndef __LINUX_USB_OTG_FSM_H
+diff --git a/include/linux/usb/phy_companion.h b/include/linux/usb/phy_companion.h
+index 263196f05015..862aaeca2319 100644
+--- a/include/linux/usb/phy_companion.h
++++ b/include/linux/usb/phy_companion.h
+@@ -3,18 +3,8 @@
+  * phy-companion.h -- phy companion to indicate the comparator part of PHY
+  *
+  * Copyright (C) 2012 Texas Instruments Incorporated - https://www.ti.com
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+  *
+  * Author: Kishon Vijay Abraham I <kishon@ti.com>
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+  */
+ 
+ #ifndef __DRIVERS_PHY_COMPANION_H
+diff --git a/include/linux/usb/rndis_host.h b/include/linux/usb/rndis_host.h
+index cc42db51bbba..489cfb1d00f6 100644
+--- a/include/linux/usb/rndis_host.h
++++ b/include/linux/usb/rndis_host.h
+@@ -2,20 +2,6 @@
+ /*
+  * Host Side support for RNDIS Networking Links
+  * Copyright (C) 2005 by David Brownell
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  */
+ 
+ #ifndef	__LINUX_USB_RNDIS_HOST_H
+diff --git a/include/linux/usb/usb338x.h b/include/linux/usb/usb338x.h
+index 20020c1336d5..70a7e3cdb3c9 100644
+--- a/include/linux/usb/usb338x.h
++++ b/include/linux/usb/usb338x.h
+@@ -6,17 +6,6 @@
+  * Copyright (C) 2002 NetChip Technology, Inc. (http://www.netchip.com)
+  * Copyright (C) 2003 David Brownell
+  * Copyright (C) 2014 Ricardo Ribalda - Qtechnology/AS
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+  */
+ 
+ #ifndef __LINUX_USB_USB338X_H
+diff --git a/include/linux/usb/usbnet.h b/include/linux/usb/usbnet.h
+index 1b4d72d5e891..4f5608cbd9ab 100644
+--- a/include/linux/usb/usbnet.h
++++ b/include/linux/usb/usbnet.h
+@@ -4,20 +4,6 @@
+  *
+  * Copyright (C) 2000-2005 by David Brownell <dbrownell@users.sourceforge.net>
+  * Copyright (C) 2003-2005 David Hollis <dhollis@davehollis.com>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  */
+ 
+ #ifndef	__LINUX_USB_USBNET_H
+-- 
+2.34.1
 
