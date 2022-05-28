@@ -2,52 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6CD536DD6
-	for <lists+linux-usb@lfdr.de>; Sat, 28 May 2022 19:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A0A536DEB
+	for <lists+linux-usb@lfdr.de>; Sat, 28 May 2022 19:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238781AbiE1RCQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 May 2022 13:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
+        id S238843AbiE1RSL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 May 2022 13:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238709AbiE1RCO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 May 2022 13:02:14 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FF82719
-        for <linux-usb@vger.kernel.org>; Sat, 28 May 2022 10:02:13 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id h9-20020a056e021d8900b002d39d3d2367so92088ila.3
-        for <linux-usb@vger.kernel.org>; Sat, 28 May 2022 10:02:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=YqLzJ9cfv6TjkWrL8fe4QzMNaUzL13j6Pk/KrOYdA2Q=;
-        b=i5HGtohqPbj7Wf5xMSn3Sfa9LJtFkEcOsOUvHfZN0SATZCX8qkyn/NcWqtvcExBR+d
-         47+eivWH68dGUEFp6ZvkBJxJF2MRoBxxulP6IVB0TNEtF35Ip82qIFdHTkyX/slzuyZp
-         Sgsu1hNb0Xfkpb2QlV/L9RtvSx5+EOmg/dg0e31sxGldZxVGytNmZGxVgaU4tIJNqZ39
-         XNeJL3oXz5Igxt6cs2dlwByVGO/3AHV12bUaQ+F6SADBQi4pfnjy/ZwuoFfLfPbSLyZr
-         jWkLlviyqgT1Yc1aRDscg44/WPPtHanUy0nTgZr1C1VHbS5YwxeBpLA/6ZKuwGz7dRW2
-         aLVQ==
-X-Gm-Message-State: AOAM533fR6LS9bYmjKabLcLxWB9ZwgH6vpBQJhaWstZclp65kzac6676
-        zvzLhXw077DkmXJl7pbuVzSSlokECzW6oEUWovjZ5dzWGtyY
-X-Google-Smtp-Source: ABdhPJxujxKADyUZGJq2Vo5tm/+llNn8BeB8yVRk6VqktuH0OdrQqmlphMWK0s7rpkiI5OJxG1/meI6MXc7BOjPlwVpwBR/O5WEa
+        with ESMTP id S238811AbiE1RSK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 May 2022 13:18:10 -0400
+X-Greylist: delayed 178 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 28 May 2022 10:18:09 PDT
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C59F396
+        for <linux-usb@vger.kernel.org>; Sat, 28 May 2022 10:18:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1653757926;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=hX3oNfX/LBsPkhqcaUTqr8w7jyshppkZkYksGZs2mRQ=;
+    b=RZD8ixGqijF9dm0B3LjkKPlTJRPcLSeBKjsCSc7eleJSt20VF8WrXl/ZwoIcqJaEGu
+    jW/udxgCjNGeXAvfYNBE1hwX8p/4oPvYkSgdlFRh5RlVD2M4ga34ahJ0nvWwo96n2mTC
+    MFuB1sTEQW5YXPXua8wX9dt4bH8mUPDaYoXxaTddECtXCzC9aSr14CCOBNTFdPzdmEIW
+    x2jHpvwoTc12LC/n29AoR+PQ7Pblf37fVG0yY4ouyPPzyF6GdF2qIDalbyGXhvkqe1si
+    E6W3LkuAe8AeqgAm0DwvT1QzyBqR8Yfdnxwxe9Ha/ul3q08tksIZD7xCgVTt4TE9Tnf+
+    ZKeQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVORvLd4SsytBXQ7UOGqRde+a0fyL2mYw2"
+X-RZG-CLASS-ID: mo00
+Received: from droid..
+    by smtp.strato.de (RZmta 47.45.0 AUTH)
+    with ESMTPSA id 9056edy4SHC6cYZ
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sat, 28 May 2022 19:12:06 +0200 (CEST)
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: [PATCH] usb: dwc3: pci: Restore line lost in merge conflict resolution
+Date:   Sat, 28 May 2022 19:09:13 +0200
+Message-Id: <20220528170913.9240-1-stephan@gerhold.net>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9bda:0:b0:668:5cb0:d91e with SMTP id
- d26-20020a5d9bda000000b006685cb0d91emr2710722ion.92.1653757332647; Sat, 28
- May 2022 10:02:12 -0700 (PDT)
-Date:   Sat, 28 May 2022 10:02:12 -0700
-In-Reply-To: <YpJNQN6++raKTXS5@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005b7a1b05e0156265@google.com>
-Subject: Re: [syzbot] WARNING in driver_unregister
-From:   syzbot <syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com>
-To:     andreyknvl@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,67 +56,38 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Commit 582ab24e096f ("usb: dwc3: pci: Set "linux,phy_charger_detect"
+property on some Bay Trail boards") added a new swnode similar to the
+existing ones for boards where the PHY handles charger detection.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-WARNING in driver_unregister
+Unfortunately, the "linux,sysdev_is_parent" property got lost in the
+merge conflict resolution of commit ca9400ef7f67 ("Merge 5.17-rc6 into
+usb-next"). Now dwc3_pci_intel_phy_charger_detect_properties is the
+only swnode in dwc3-pci that is missing "linux,sysdev_is_parent".
 
-------------[ cut here ]------------
-Unexpected driver unregister!
-WARNING: CPU: 0 PID: 2335 at drivers/base/driver.c:194 driver_unregister drivers/base/driver.c:194 [inline]
-WARNING: CPU: 0 PID: 2335 at drivers/base/driver.c:194 driver_unregister+0x8c/0xb0 drivers/base/driver.c:191
-Modules linked in:
-CPU: 0 PID: 2335 Comm: syz-executor.0 Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:driver_unregister drivers/base/driver.c:194 [inline]
-RIP: 0010:driver_unregister+0x8c/0xb0 drivers/base/driver.c:191
-Code: 68 4c 89 e7 e8 65 b9 db fe 48 89 ef e8 fd a0 ff ff 5d 41 5c e9 75 fa 78 fe e8 70 fa 78 fe 48 c7 c7 80 7a 81 86 e8 12 96 ee 02 <0f> 0b 5d 41 5c e9 5a fa 78 fe e8 75 93 ad fe eb 96 e8 6e 93 ad fe
-RSP: 0018:ffffc9000267fa78 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff888118006050 RCX: 0000000000000000
-RDX: ffff888114fe8000 RSI: ffffffff812bdce8 RDI: fffff520004cff41
-RBP: ffff888118006098 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff812b86be R11: 0000000000000000 R12: 0000000000000000
-R13: ffff888118006008 R14: ffff88811785e7a8 R15: ffff888100219ca0
-FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fc6f40b3718 CR3: 0000000007825000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- usb_gadget_unregister_driver+0x48/0x70 drivers/usb/gadget/udc/core.c:1590
- raw_release+0x18b/0x290 drivers/usb/gadget/legacy/raw_gadget.c:412
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:164
- exit_task_work include/linux/task_work.h:37 [inline]
- do_exit+0xaff/0x2980 kernel/exit.c:795
- do_group_exit+0xd2/0x2f0 kernel/exit.c:925
- get_signal+0x22df/0x24c0 kernel/signal.c:2864
- arch_do_signal_or_restart+0x82/0x20f0 arch/x86/kernel/signal.c:867
- exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
- exit_to_user_mode_prepare+0x156/0x200 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fc6f417f0e9
-Code: Unable to access opcode bytes at RIP 0x7fc6f417f0bf.
-RSP: 002b:00007fc6f40b3218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-RAX: fffffffffffffe00 RBX: 00007fc6f4292108 RCX: 00007fc6f417f0e9
-RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007fc6f4292108
-RBP: 00007fc6f4292100 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fc6f429210c
-R13: 00007ffd64cd846f R14: 00007fc6f40b3300 R15: 0000000000022000
- </TASK>
+It does not seem to cause any obvious functional issues, but it's
+certainly unintended so restore the line to make the properties
+consistent again.
 
+Cc: stable@vger.kernel.org
+Fixes: ca9400ef7f67 ("Merge 5.17-rc6 into usb-next")
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+---
+ drivers/usb/dwc3/dwc3-pci.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Tested on:
-
-commit:         97fa5887 USB: new quirk for Dell Gen 2 devices
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=16effa13f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d7b232ec3adf5c8d
-dashboard link: https://syzkaller.appspot.com/bug?extid=02b16343704b3af1667e
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=13e750ddf00000
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index ba51de7dd760..6b018048fe2e 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -127,6 +127,7 @@ static const struct property_entry dwc3_pci_intel_phy_charger_detect_properties[
+ 	PROPERTY_ENTRY_STRING("dr_mode", "peripheral"),
+ 	PROPERTY_ENTRY_BOOL("snps,dis_u2_susphy_quirk"),
+ 	PROPERTY_ENTRY_BOOL("linux,phy_charger_detect"),
++	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
+ 	{}
+ };
+ 
+-- 
+2.36.1
 
