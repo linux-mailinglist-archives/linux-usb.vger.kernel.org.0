@@ -2,217 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4524536DBE
-	for <lists+linux-usb@lfdr.de>; Sat, 28 May 2022 18:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6CD536DD6
+	for <lists+linux-usb@lfdr.de>; Sat, 28 May 2022 19:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238336AbiE1Q0o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 May 2022 12:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
+        id S238781AbiE1RCQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 May 2022 13:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238334AbiE1Q0n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 May 2022 12:26:43 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4A1F1DF3F
-        for <linux-usb@vger.kernel.org>; Sat, 28 May 2022 09:26:41 -0700 (PDT)
-Received: (qmail 128830 invoked by uid 1000); 28 May 2022 12:26:40 -0400
-Date:   Sat, 28 May 2022 12:26:40 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com>
-Cc:     andreyknvl@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in driver_unregister
-Message-ID: <YpJNQN6++raKTXS5@rowland.harvard.edu>
-References: <YpI1g7/sZVYKz5Hn@rowland.harvard.edu>
- <0000000000004403a805e013b52c@google.com>
+        with ESMTP id S238709AbiE1RCO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 May 2022 13:02:14 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FF82719
+        for <linux-usb@vger.kernel.org>; Sat, 28 May 2022 10:02:13 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id h9-20020a056e021d8900b002d39d3d2367so92088ila.3
+        for <linux-usb@vger.kernel.org>; Sat, 28 May 2022 10:02:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=YqLzJ9cfv6TjkWrL8fe4QzMNaUzL13j6Pk/KrOYdA2Q=;
+        b=i5HGtohqPbj7Wf5xMSn3Sfa9LJtFkEcOsOUvHfZN0SATZCX8qkyn/NcWqtvcExBR+d
+         47+eivWH68dGUEFp6ZvkBJxJF2MRoBxxulP6IVB0TNEtF35Ip82qIFdHTkyX/slzuyZp
+         Sgsu1hNb0Xfkpb2QlV/L9RtvSx5+EOmg/dg0e31sxGldZxVGytNmZGxVgaU4tIJNqZ39
+         XNeJL3oXz5Igxt6cs2dlwByVGO/3AHV12bUaQ+F6SADBQi4pfnjy/ZwuoFfLfPbSLyZr
+         jWkLlviyqgT1Yc1aRDscg44/WPPtHanUy0nTgZr1C1VHbS5YwxeBpLA/6ZKuwGz7dRW2
+         aLVQ==
+X-Gm-Message-State: AOAM533fR6LS9bYmjKabLcLxWB9ZwgH6vpBQJhaWstZclp65kzac6676
+        zvzLhXw077DkmXJl7pbuVzSSlokECzW6oEUWovjZ5dzWGtyY
+X-Google-Smtp-Source: ABdhPJxujxKADyUZGJq2Vo5tm/+llNn8BeB8yVRk6VqktuH0OdrQqmlphMWK0s7rpkiI5OJxG1/meI6MXc7BOjPlwVpwBR/O5WEa
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000004403a805e013b52c@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:9bda:0:b0:668:5cb0:d91e with SMTP id
+ d26-20020a5d9bda000000b006685cb0d91emr2710722ion.92.1653757332647; Sat, 28
+ May 2022 10:02:12 -0700 (PDT)
+Date:   Sat, 28 May 2022 10:02:12 -0700
+In-Reply-To: <YpJNQN6++raKTXS5@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005b7a1b05e0156265@google.com>
+Subject: Re: [syzbot] WARNING in driver_unregister
+From:   syzbot <syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com>
+To:     andreyknvl@gmail.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 28, 2022 at 08:02:13AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot tried to test the proposed patch but the build/boot failed:
-> 
-> KASAN: null-ptr-deref Read in ida_free
-> 
-> ==================================================================
-> BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
-> BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
-> BUG: KASAN: null-ptr-deref in ida_free+0x1b6/0x2e0 lib/idr.c:510
-> Read of size 8 at addr 0000000000000000 by task syz-fuzzer/1284
-> 
-> CPU: 1 PID: 1284 Comm: syz-fuzzer Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28-dirty #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  print_report mm/kasan/report.c:432 [inline]
->  kasan_report.cold+0x61/0x1c6 mm/kasan/report.c:491
->  check_region_inline mm/kasan/generic.c:183 [inline]
->  kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
->  instrument_atomic_read include/linux/instrumented.h:71 [inline]
->  test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
->  ida_free+0x1b6/0x2e0 lib/idr.c:510
+Hello,
 
-Oops.  I shouldn't try to deallocate an ID number that was never allocated 
-in the first place.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in driver_unregister
 
-Alan Stern
+------------[ cut here ]------------
+Unexpected driver unregister!
+WARNING: CPU: 0 PID: 2335 at drivers/base/driver.c:194 driver_unregister drivers/base/driver.c:194 [inline]
+WARNING: CPU: 0 PID: 2335 at drivers/base/driver.c:194 driver_unregister+0x8c/0xb0 drivers/base/driver.c:191
+Modules linked in:
+CPU: 0 PID: 2335 Comm: syz-executor.0 Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:driver_unregister drivers/base/driver.c:194 [inline]
+RIP: 0010:driver_unregister+0x8c/0xb0 drivers/base/driver.c:191
+Code: 68 4c 89 e7 e8 65 b9 db fe 48 89 ef e8 fd a0 ff ff 5d 41 5c e9 75 fa 78 fe e8 70 fa 78 fe 48 c7 c7 80 7a 81 86 e8 12 96 ee 02 <0f> 0b 5d 41 5c e9 5a fa 78 fe e8 75 93 ad fe eb 96 e8 6e 93 ad fe
+RSP: 0018:ffffc9000267fa78 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff888118006050 RCX: 0000000000000000
+RDX: ffff888114fe8000 RSI: ffffffff812bdce8 RDI: fffff520004cff41
+RBP: ffff888118006098 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff812b86be R11: 0000000000000000 R12: 0000000000000000
+R13: ffff888118006008 R14: ffff88811785e7a8 R15: ffff888100219ca0
+FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fc6f40b3718 CR3: 0000000007825000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ usb_gadget_unregister_driver+0x48/0x70 drivers/usb/gadget/udc/core.c:1590
+ raw_release+0x18b/0x290 drivers/usb/gadget/legacy/raw_gadget.c:412
+ __fput+0x277/0x9d0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:37 [inline]
+ do_exit+0xaff/0x2980 kernel/exit.c:795
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:925
+ get_signal+0x22df/0x24c0 kernel/signal.c:2864
+ arch_do_signal_or_restart+0x82/0x20f0 arch/x86/kernel/signal.c:867
+ exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
+ exit_to_user_mode_prepare+0x156/0x200 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fc6f417f0e9
+Code: Unable to access opcode bytes at RIP 0x7fc6f417f0bf.
+RSP: 002b:00007fc6f40b3218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+RAX: fffffffffffffe00 RBX: 00007fc6f4292108 RCX: 00007fc6f417f0e9
+RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007fc6f4292108
+RBP: 00007fc6f4292100 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fc6f429210c
+R13: 00007ffd64cd846f R14: 00007fc6f40b3300 R15: 0000000000022000
+ </TASK>
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 97fa5887cf28
 
-Index: usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/legacy/raw_gadget.c
-+++ usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -11,6 +11,7 @@
- #include <linux/ctype.h>
- #include <linux/debugfs.h>
- #include <linux/delay.h>
-+#include <linux/idr.h>
- #include <linux/kref.h>
- #include <linux/miscdevice.h>
- #include <linux/module.h>
-@@ -36,6 +37,9 @@ MODULE_LICENSE("GPL");
- 
- /*----------------------------------------------------------------------*/
- 
-+static DEFINE_IDA(driver_id_numbers);
-+#define DRIVER_DRIVER_NAME_LENGTH_MAX	32
-+
- #define RAW_EVENT_QUEUE_SIZE	16
- 
- struct raw_event_queue {
-@@ -160,6 +164,9 @@ struct raw_dev {
- 	/* Reference to misc device: */
- 	struct device			*dev;
- 
-+	/* Make driver names unique */
-+	int				driver_id_number;
-+
- 	/* Protected by lock: */
- 	enum dev_state			state;
- 	bool				gadget_registered;
-@@ -188,6 +195,7 @@ static struct raw_dev *dev_new(void)
- 	spin_lock_init(&dev->lock);
- 	init_completion(&dev->ep0_done);
- 	raw_event_queue_init(&dev->queue);
-+	dev->driver_id_number = -1;
- 	return dev;
- }
- 
-@@ -198,6 +206,9 @@ static void dev_free(struct kref *kref)
- 
- 	kfree(dev->udc_name);
- 	kfree(dev->driver.udc_name);
-+	kfree(dev->driver.driver.name);
-+	if (dev->driver_id_number >= 0)
-+		ida_free(&driver_id_numbers, dev->driver_id_number);
- 	if (dev->req) {
- 		if (dev->ep0_urb_queued)
- 			usb_ep_dequeue(dev->gadget->ep0, dev->req);
-@@ -421,6 +432,7 @@ static int raw_ioctl_init(struct raw_dev
- 	struct usb_raw_init arg;
- 	char *udc_driver_name;
- 	char *udc_device_name;
-+	char *driver_driver_name;
- 	unsigned long flags;
- 
- 	if (copy_from_user(&arg, (void __user *)value, sizeof(arg)))
-@@ -439,36 +451,44 @@ static int raw_ioctl_init(struct raw_dev
- 		return -EINVAL;
- 	}
- 
-+	ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
-+	if (ret < 0)
-+		return ret;
-+	dev->driver_id_number = ret;
-+
-+	driver_driver_name = kmalloc(DRIVER_DRIVER_NAME_LENGTH_MAX, GFP_KERNEL);
-+	if (!driver_driver_name) {
-+		ret = -ENOMEM;
-+		goto out_free_driver_id_number;
-+	}
-+	snprintf(driver_driver_name, DRIVER_DRIVER_NAME_LENGTH_MAX,
-+				DRIVER_NAME ".%d", dev->driver_id_number);
-+
- 	udc_driver_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
--	if (!udc_driver_name)
--		return -ENOMEM;
-+	if (!udc_driver_name) {
-+		ret = -ENOMEM;
-+		goto out_free_driver_driver_name;
-+	}
- 	ret = strscpy(udc_driver_name, &arg.driver_name[0],
- 				UDC_NAME_LENGTH_MAX);
--	if (ret < 0) {
--		kfree(udc_driver_name);
--		return ret;
--	}
-+	if (ret < 0)
-+		goto out_free_udc_driver_name;
- 	ret = 0;
- 
- 	udc_device_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
- 	if (!udc_device_name) {
--		kfree(udc_driver_name);
--		return -ENOMEM;
-+		ret = -ENOMEM;
-+		goto out_free_udc_driver_name;
- 	}
- 	ret = strscpy(udc_device_name, &arg.device_name[0],
- 				UDC_NAME_LENGTH_MAX);
--	if (ret < 0) {
--		kfree(udc_driver_name);
--		kfree(udc_device_name);
--		return ret;
--	}
-+	if (ret < 0)
-+		goto out_free_udc_device_name;
- 	ret = 0;
- 
- 	spin_lock_irqsave(&dev->lock, flags);
- 	if (dev->state != STATE_DEV_OPENED) {
- 		dev_dbg(dev->dev, "fail, device is not opened\n");
--		kfree(udc_driver_name);
--		kfree(udc_device_name);
- 		ret = -EINVAL;
- 		goto out_unlock;
- 	}
-@@ -483,14 +503,24 @@ static int raw_ioctl_init(struct raw_dev
- 	dev->driver.suspend = gadget_suspend;
- 	dev->driver.resume = gadget_resume;
- 	dev->driver.reset = gadget_reset;
--	dev->driver.driver.name = DRIVER_NAME;
-+	dev->driver.driver.name = driver_driver_name;
- 	dev->driver.udc_name = udc_device_name;
- 	dev->driver.match_existing_only = 1;
- 
- 	dev->state = STATE_DEV_INITIALIZED;
-+	spin_unlock_irqrestore(&dev->lock, flags);
-+	return ret;
- 
- out_unlock:
- 	spin_unlock_irqrestore(&dev->lock, flags);
-+out_free_udc_device_name:
-+	kfree(udc_device_name);
-+out_free_udc_driver_name:
-+	kfree(udc_driver_name);
-+out_free_driver_driver_name:
-+	kfree(driver_driver_name);
-+out_free_driver_id_number:
-+	ida_free(&driver_id_numbers, dev->driver_id_number);
- 	return ret;
- }
- 
+Tested on:
+
+commit:         97fa5887 USB: new quirk for Dell Gen 2 devices
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=16effa13f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d7b232ec3adf5c8d
+dashboard link: https://syzkaller.appspot.com/bug?extid=02b16343704b3af1667e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=13e750ddf00000
+
