@@ -2,224 +2,331 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F10536D54
-	for <lists+linux-usb@lfdr.de>; Sat, 28 May 2022 16:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC314536D62
+	for <lists+linux-usb@lfdr.de>; Sat, 28 May 2022 16:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236729AbiE1Op0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 May 2022 10:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
+        id S236966AbiE1O7j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 May 2022 10:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbiE1OpZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 May 2022 10:45:25 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 20D26175BE
-        for <linux-usb@vger.kernel.org>; Sat, 28 May 2022 07:45:24 -0700 (PDT)
-Received: (qmail 126954 invoked by uid 1000); 28 May 2022 10:45:23 -0400
-Date:   Sat, 28 May 2022 10:45:23 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     syzbot <syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com>,
-        andreyknvl@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in driver_unregister
-Message-ID: <YpI1g7/sZVYKz5Hn@rowland.harvard.edu>
-References: <YpEi/sbT/R/0yKzo@rowland.harvard.edu>
- <000000000000f9e65705e003513a@google.com>
- <YpFEc5zeFK0AXa2q@rowland.harvard.edu>
- <YpIQzJQzd93cWq4M@kroah.com>
+        with ESMTP id S236917AbiE1O7i (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 May 2022 10:59:38 -0400
+Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C1DEE09
+        for <linux-usb@vger.kernel.org>; Sat, 28 May 2022 07:59:34 -0700 (PDT)
+Received: from pop-os.home ([90.11.191.102])
+        by smtp.orange.fr with ESMTPA
+        id uxucnzi3ok3ICuxucniOfF; Sat, 28 May 2022 16:59:32 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 28 May 2022 16:59:32 +0200
+X-ME-IP: 90.11.191.102
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     tglx@linutronix.de,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH] USB: Follow-up to SPDX identifiers addition - remove now useless comments
+Date:   Sat, 28 May 2022 16:59:17 +0200
+Message-Id: <0266c8467148794219b69b7bf8a8dd968a89ad24.1653749875.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YpIQzJQzd93cWq4M@kroah.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 28, 2022 at 02:08:44PM +0200, Greg KH wrote:
-> On Fri, May 27, 2022 at 05:36:51PM -0400, Alan Stern wrote:
-> > On Fri, May 27, 2022 at 12:29:08PM -0700, syzbot wrote:
-> > > Hello,
-> > > 
-> > > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> > > WARNING in sysfs_create_file_ns
-> > > 
-> > > really_probe: driver_sysfs_add(gadget.0) failed
-> > > ------------[ cut here ]------------
-> > > WARNING: CPU: 0 PID: 2361 at fs/sysfs/file.c:351 sysfs_create_file_ns+0x131/0x1c0 fs/sysfs/file.c:351
-> > > Modules linked in:
-> > > CPU: 0 PID: 2361 Comm: syz-executor.0 Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28-dirty #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > > RIP: 0010:sysfs_create_file_ns+0x131/0x1c0 fs/sysfs/file.c:351
-> > > Code: e9 03 80 3c 01 00 75 7f 8b 4c 24 38 4d 89 e9 48 89 ee 48 8b 7b 30 44 8b 44 24 48 e8 e9 fa ff ff 41 89 c5 eb 0d e8 cf 7c 9d ff <0f> 0b 41 bd ea ff ff ff e8 c2 7c 9d ff 48 b8 00 00 00 00 00 fc ff
-> > > RSP: 0018:ffffc900028ffca0 EFLAGS: 00010293
-> > 
-> > Here's some extra detail, taken from the console log:
-> > 
-> > [   98.336685][ T2361] really_probe: driver_sysfs_add(gadget.0) failed
-> > [   98.336836][ T2360] sysfs: cannot create duplicate filename '/bus/gadget/drivers/dummy_udc'
-> > [   98.343498][ T2361] ------------[ cut here ]------------
-> > [   98.352154][ T2360] CPU: 1 PID: 2360 Comm: syz-executor.0 Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28-dirty #0
-> > [   98.357802][ T2361] WARNING: CPU: 0 PID: 2361 at fs/sysfs/file.c:351 sysfs_create_file_ns+0x131/0x1c0
-> > 
-> > Simultaneous splats from two different threads trying to add drivers with 
-> > the same name suggests there might be a concurrency bug in the sysfs 
-> > filesystem.  This sort of thing should be an error but it shouldn't bring 
-> > the kernel to its knees.
-> 
-> It's not bringing anything down, it's just giving you a big fat warning
-> that the developer did something wrong and it should be fixed.  The
-> kernel should keep working just fine after this.
-> 
-> > Greg, do you know anyone who could take a look at this?  I don't know much 
-> > about sysfs.
-> 
-> It's not a sysfs thing, it's a "we should not register the same driver
-> name multiple times" thing, so that subsystem needs to be fixed to make
-> this always a unique name.
+All these files have been updated in the commit given in the Fixes: tag
+below.
 
-Okay, here's an attempt at a real fix.
+When the SPDX-License-Identifier: has been added, the corresponding text at
+the beginning of the files has not been deleted.
+All these texts are about GPL-2.0, with different variation in the wording.
 
-Alan Stern
+Remove these now useless lines to save some LoC.
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 97fa5887cf28
+Fixes: 5fd54ace4721 ("USB: add SPDX identifiers to all remaining files in drivers/usb/")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ include/linux/usb/audio-v2.h      |  3 ---
+ include/linux/usb/audio.h         |  3 ---
+ include/linux/usb/cdc-wdm.h       |  4 ----
+ include/linux/usb/cdc.h           |  4 ----
+ include/linux/usb/gadget.h        |  2 --
+ include/linux/usb/input.h         |  4 ----
+ include/linux/usb/isp1301.h       | 10 ----------
+ include/linux/usb/m66592.h        | 14 --------------
+ include/linux/usb/of.h            |  2 --
+ include/linux/usb/r8a66597.h      | 14 --------------
+ include/linux/usb/serial.h        |  5 -----
+ include/linux/usb/storage.h       |  2 --
+ include/linux/usb/tegra_usb_phy.h | 10 ----------
+ include/linux/usb/ulpi.h          |  4 ----
+ include/linux/usb/xhci-dbgp.h     |  4 ----
+ 15 files changed, 85 deletions(-)
 
-Index: usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/legacy/raw_gadget.c
-+++ usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -11,6 +11,7 @@
- #include <linux/ctype.h>
- #include <linux/debugfs.h>
- #include <linux/delay.h>
-+#include <linux/idr.h>
- #include <linux/kref.h>
- #include <linux/miscdevice.h>
- #include <linux/module.h>
-@@ -36,6 +37,9 @@ MODULE_LICENSE("GPL");
+diff --git a/include/linux/usb/audio-v2.h b/include/linux/usb/audio-v2.h
+index 8fc2abd7aecb..ca796dc1a984 100644
+--- a/include/linux/usb/audio-v2.h
++++ b/include/linux/usb/audio-v2.h
+@@ -2,9 +2,6 @@
+ /*
+  * Copyright (c) 2010 Daniel Mack <daniel@caiaq.de>
+  *
+- * This software is distributed under the terms of the GNU General Public
+- * License ("GPL") version 2, as published by the Free Software Foundation.
+- *
+  * This file holds USB constants and structures defined
+  * by the USB Device Class Definition for Audio Devices in version 2.0.
+  * Comments below reference relevant sections of the documents contained
+diff --git a/include/linux/usb/audio.h b/include/linux/usb/audio.h
+index 170acd500ea1..0747b24a1a7c 100644
+--- a/include/linux/usb/audio.h
++++ b/include/linux/usb/audio.h
+@@ -6,9 +6,6 @@
+  * Developed for Thumtronics by Grey Innovation
+  * Ben Williamson <ben.williamson@greyinnovation.com>
+  *
+- * This software is distributed under the terms of the GNU General Public
+- * License ("GPL") version 2, as published by the Free Software Foundation.
+- *
+  * This file holds USB constants and structures defined
+  * by the USB Device Class Definition for Audio Devices.
+  * Comments below reference relevant sections of that document:
+diff --git a/include/linux/usb/cdc-wdm.h b/include/linux/usb/cdc-wdm.h
+index 9f5a51f79ba5..85417f00a89a 100644
+--- a/include/linux/usb/cdc-wdm.h
++++ b/include/linux/usb/cdc-wdm.h
+@@ -3,10 +3,6 @@
+  * USB CDC Device Management subdriver
+  *
+  * Copyright (c) 2012  Bjørn Mork <bjorn@mork.no>
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU General Public License
+- * version 2 as published by the Free Software Foundation.
+  */
  
- /*----------------------------------------------------------------------*/
+ #ifndef __LINUX_USB_CDC_WDM_H
+diff --git a/include/linux/usb/cdc.h b/include/linux/usb/cdc.h
+index 35d784cf32a4..0af0db51bc89 100644
+--- a/include/linux/usb/cdc.h
++++ b/include/linux/usb/cdc.h
+@@ -3,10 +3,6 @@
+  * USB CDC common helpers
+  *
+  * Copyright (c) 2015 Oliver Neukum <oneukum@suse.com>
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU General Public License
+- * version 2 as published by the Free Software Foundation.
+  */
+ #ifndef __LINUX_USB_CDC_H
+ #define __LINUX_USB_CDC_H
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index 3ad58b7a0824..dc3092cea99e 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -10,8 +10,6 @@
+  *
+  * (C) Copyright 2002-2004 by David Brownell
+  * All Rights Reserved.
+- *
+- * This software is licensed under the GNU GPL version 2.
+  */
  
-+static DEFINE_IDA(driver_id_numbers);
-+#define DRIVER_DRIVER_NAME_LENGTH_MAX	32
-+
- #define RAW_EVENT_QUEUE_SIZE	16
+ #ifndef __LINUX_USB_GADGET_H
+diff --git a/include/linux/usb/input.h b/include/linux/usb/input.h
+index 974befa72ac0..5e759b2cf551 100644
+--- a/include/linux/usb/input.h
++++ b/include/linux/usb/input.h
+@@ -1,10 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+  * Copyright (C) 2005 Dmitry Torokhov
+- *
+- * This program is free software; you can redistribute it and/or modify it
+- * under the terms of the GNU General Public License version 2 as published by
+- * the Free Software Foundation.
+  */
  
- struct raw_event_queue {
-@@ -160,6 +164,9 @@ struct raw_dev {
- 	/* Reference to misc device: */
- 	struct device			*dev;
+ #ifndef __LINUX_USB_INPUT_H
+diff --git a/include/linux/usb/isp1301.h b/include/linux/usb/isp1301.h
+index dedb3b2473e8..fa986b926a12 100644
+--- a/include/linux/usb/isp1301.h
++++ b/include/linux/usb/isp1301.h
+@@ -3,16 +3,6 @@
+  * NXP ISP1301 USB transceiver driver
+  *
+  * Copyright (C) 2012 Roland Stigge <stigge@antcom.de>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; version 2 of the License.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+  */
  
-+	/* Make driver names unique */
-+	int				driver_id_number;
-+
- 	/* Protected by lock: */
- 	enum dev_state			state;
- 	bool				gadget_registered;
-@@ -198,6 +205,8 @@ static void dev_free(struct kref *kref)
+ #ifndef __LINUX_USB_ISP1301_H
+diff --git a/include/linux/usb/m66592.h b/include/linux/usb/m66592.h
+index 2dfe68183495..5f04de2b47fd 100644
+--- a/include/linux/usb/m66592.h
++++ b/include/linux/usb/m66592.h
+@@ -3,20 +3,6 @@
+  * M66592 driver platform data
+  *
+  * Copyright (C) 2009  Renesas Solutions Corp.
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; version 2 of the License.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+- *
+  */
  
- 	kfree(dev->udc_name);
- 	kfree(dev->driver.udc_name);
-+	kfree(dev->driver.driver.name);
-+	ida_free(&driver_id_numbers, dev->driver_id_number);
- 	if (dev->req) {
- 		if (dev->ep0_urb_queued)
- 			usb_ep_dequeue(dev->gadget->ep0, dev->req);
-@@ -421,6 +430,7 @@ static int raw_ioctl_init(struct raw_dev
- 	struct usb_raw_init arg;
- 	char *udc_driver_name;
- 	char *udc_device_name;
-+	char *driver_driver_name;
- 	unsigned long flags;
+ #ifndef __LINUX_USB_M66592_H
+diff --git a/include/linux/usb/of.h b/include/linux/usb/of.h
+index dba55ccb9b53..98487fd7ab11 100644
+--- a/include/linux/usb/of.h
++++ b/include/linux/usb/of.h
+@@ -1,8 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+  * OF helpers for usb devices.
+- *
+- * This file is released under the GPLv2
+  */
  
- 	if (copy_from_user(&arg, (void __user *)value, sizeof(arg)))
-@@ -439,36 +449,44 @@ static int raw_ioctl_init(struct raw_dev
- 		return -EINVAL;
- 	}
+ #ifndef __LINUX_USB_OF_H
+diff --git a/include/linux/usb/r8a66597.h b/include/linux/usb/r8a66597.h
+index c0753d026bbf..f0fa7ddadbaa 100644
+--- a/include/linux/usb/r8a66597.h
++++ b/include/linux/usb/r8a66597.h
+@@ -5,20 +5,6 @@
+  * Copyright (C) 2009  Renesas Solutions Corp.
+  *
+  * Author : Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; version 2 of the License.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+- *
+  */
  
-+	ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
-+	if (ret < 0)
-+		return ret;
-+	dev->driver_id_number = ret;
-+
-+	driver_driver_name = kmalloc(DRIVER_DRIVER_NAME_LENGTH_MAX, GFP_KERNEL);
-+	if (!driver_driver_name) {
-+		ret = -ENOMEM;
-+		goto out_free_driver_id_number;
-+	}
-+	snprintf(driver_driver_name, DRIVER_DRIVER_NAME_LENGTH_MAX,
-+				DRIVER_NAME ".%d", dev->driver_id_number);
-+
- 	udc_driver_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
--	if (!udc_driver_name)
--		return -ENOMEM;
-+	if (!udc_driver_name) {
-+		ret = -ENOMEM;
-+		goto out_free_driver_driver_name;
-+	}
- 	ret = strscpy(udc_driver_name, &arg.driver_name[0],
- 				UDC_NAME_LENGTH_MAX);
--	if (ret < 0) {
--		kfree(udc_driver_name);
--		return ret;
--	}
-+	if (ret < 0)
-+		goto out_free_udc_driver_name;
- 	ret = 0;
+ #ifndef __LINUX_USB_R8A66597_H
+diff --git a/include/linux/usb/serial.h b/include/linux/usb/serial.h
+index 16ea5a4cc586..8ea319f89e1f 100644
+--- a/include/linux/usb/serial.h
++++ b/include/linux/usb/serial.h
+@@ -4,11 +4,6 @@
+  *
+  *	Copyright (C) 1999 - 2012
+  *	    Greg Kroah-Hartman (greg@kroah.com)
+- *
+- *	This program is free software; you can redistribute it and/or modify
+- *	it under the terms of the GNU General Public License as published by
+- *	the Free Software Foundation; version 2 of the License.
+- *
+  */
  
- 	udc_device_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
- 	if (!udc_device_name) {
--		kfree(udc_driver_name);
--		return -ENOMEM;
-+		ret = -ENOMEM;
-+		goto out_free_udc_driver_name;
- 	}
- 	ret = strscpy(udc_device_name, &arg.device_name[0],
- 				UDC_NAME_LENGTH_MAX);
--	if (ret < 0) {
--		kfree(udc_driver_name);
--		kfree(udc_device_name);
--		return ret;
--	}
-+	if (ret < 0)
-+		goto out_free_udc_device_name;
- 	ret = 0;
+ #ifndef __LINUX_USB_SERIAL_H
+diff --git a/include/linux/usb/storage.h b/include/linux/usb/storage.h
+index e0240f864548..2827ce72e502 100644
+--- a/include/linux/usb/storage.h
++++ b/include/linux/usb/storage.h
+@@ -9,8 +9,6 @@
+  *
+  * This file contains definitions taken from the
+  * USB Mass Storage Class Specification Overview
+- *
+- * Distributed under the terms of the GNU GPL, version two.
+  */
  
- 	spin_lock_irqsave(&dev->lock, flags);
- 	if (dev->state != STATE_DEV_OPENED) {
- 		dev_dbg(dev->dev, "fail, device is not opened\n");
--		kfree(udc_driver_name);
--		kfree(udc_device_name);
- 		ret = -EINVAL;
- 		goto out_unlock;
- 	}
-@@ -483,14 +501,24 @@ static int raw_ioctl_init(struct raw_dev
- 	dev->driver.suspend = gadget_suspend;
- 	dev->driver.resume = gadget_resume;
- 	dev->driver.reset = gadget_reset;
--	dev->driver.driver.name = DRIVER_NAME;
-+	dev->driver.driver.name = driver_driver_name;
- 	dev->driver.udc_name = udc_device_name;
- 	dev->driver.match_existing_only = 1;
+ /* Storage subclass codes */
+diff --git a/include/linux/usb/tegra_usb_phy.h b/include/linux/usb/tegra_usb_phy.h
+index d3e65eb9e16f..46e73584b6e6 100644
+--- a/include/linux/usb/tegra_usb_phy.h
++++ b/include/linux/usb/tegra_usb_phy.h
+@@ -1,16 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+  * Copyright (C) 2010 Google, Inc.
+- *
+- * This software is licensed under the terms of the GNU General Public
+- * License version 2, as published by the Free Software Foundation, and
+- * may be copied, distributed, and modified under those terms.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+  */
  
- 	dev->state = STATE_DEV_INITIALIZED;
-+	spin_unlock_irqrestore(&dev->lock, flags);
-+	return ret;
+ #ifndef __TEGRA_USB_PHY_H
+diff --git a/include/linux/usb/ulpi.h b/include/linux/usb/ulpi.h
+index 36c2982780ad..5050f502c1ed 100644
+--- a/include/linux/usb/ulpi.h
++++ b/include/linux/usb/ulpi.h
+@@ -3,10 +3,6 @@
+  * ulpi.h -- ULPI defines and function prorotypes
+  *
+  * Copyright (C) 2010 Nokia Corporation
+- *
+- * This software is distributed under the terms of the GNU General
+- * Public License ("GPL") as published by the Free Software Foundation,
+- * version 2 of that License.
+  */
  
- out_unlock:
- 	spin_unlock_irqrestore(&dev->lock, flags);
-+out_free_udc_device_name:
-+	kfree(udc_device_name);
-+out_free_udc_driver_name:
-+	kfree(udc_driver_name);
-+out_free_driver_driver_name:
-+	kfree(driver_driver_name);
-+out_free_driver_id_number:
-+	ida_free(&driver_id_numbers, dev->driver_id_number);
- 	return ret;
- }
+ #ifndef __LINUX_USB_ULPI_H
+diff --git a/include/linux/usb/xhci-dbgp.h b/include/linux/usb/xhci-dbgp.h
+index 01fe768873f9..171fd74b1cfc 100644
+--- a/include/linux/usb/xhci-dbgp.h
++++ b/include/linux/usb/xhci-dbgp.h
+@@ -5,10 +5,6 @@
+  * Copyright (C) 2016 Intel Corporation
+  *
+  * Author: Lu Baolu <baolu.lu@linux.intel.com>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License version 2 as
+- * published by the Free Software Foundation.
+  */
  
+ #ifndef __LINUX_XHCI_DBGP_H
+-- 
+2.34.1
+
