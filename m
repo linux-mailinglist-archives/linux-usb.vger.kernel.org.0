@@ -2,374 +2,246 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4626E537062
-	for <lists+linux-usb@lfdr.de>; Sun, 29 May 2022 10:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 759785370FB
+	for <lists+linux-usb@lfdr.de>; Sun, 29 May 2022 14:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiE2Iwh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 May 2022 04:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
+        id S230054AbiE2MrI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 May 2022 08:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiE2Iwf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 May 2022 04:52:35 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7144147AF1
-        for <linux-usb@vger.kernel.org>; Sun, 29 May 2022 01:52:34 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-f2cd424b9cso10829737fac.7
-        for <linux-usb@vger.kernel.org>; Sun, 29 May 2022 01:52:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yu0vVEQ1Jx4TmcDnPCAdLl01ekF+KaqqFzND4WPD6q4=;
-        b=pLSfGkFRKOdoHqp3Q7Fd7SACSF/9gpqs4CQqG/EA3/8MAwDKpE6qzD8Mi9n//pzbpE
-         4MN0IRtiHVIk0rpeNkuvzNqEITTbMLls2oc9zvTTsAMnSFYWsDyMTqHhGhcMCsNB7bT9
-         UNtLd8JgwHe+LdHTdAQ+Prfhc+ktuI0+9QAVTNDe1a0pFAv8vj9zOrDhQqMkgWAHXP6X
-         k+R9O7akw7nlZDtYtukUgkqAYGDWdSaY2Vwz3LJMNRbEyFzk6vaomsmOWrwr1aI/Y24H
-         kFF6/oXgvDChje+6tQ7+bEE+peXZ6AUASs/ZT/MvIBWmZDpeYWKri9EPLSlCKkV4bPDt
-         GY1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yu0vVEQ1Jx4TmcDnPCAdLl01ekF+KaqqFzND4WPD6q4=;
-        b=NvJYEPrwaAc+l3vA7Ua49Queq7mMZe3+gCD+JYYsN0z/PbYm0sVtpHjxL1r+9SGC+/
-         acyfxM9WorxoC0sflei1qlOLM0pW6Ww9XyJnA0Ub6vQeDnR6FGIVFU4jR4+o/rSDgjZn
-         GsiJLLmZ3AhnVkiLrDdxUN1jVT55QATMiypRoutjxuFMEAGjg+PJ+PDTHiPs+k31dFqO
-         ndHHiecTQjywVs9+paTthSwpncAtGVVMS2aCYd/vhA6JsATQsFpRHKyE0RciWHa+oRhP
-         BcMQDATeWO+Z7y+v9rY26W9FTl9xO6XZaff94eNaG7GMFv14MGEgIOgnV6d9smES3dQp
-         YEIg==
-X-Gm-Message-State: AOAM5325cAhyb5tsE7QtRUjIQn2/2rim4pPXiX+QSrvqGVXWxS4w9h7n
-        3N1Q63ySIKqXr/bKNegLROLeKkmWaHwVJ2zj1jI=
-X-Google-Smtp-Source: ABdhPJzlcGp+g2JguAslbNNetfOmTDpUChH371lj/70OEzVbirOOzMASu+MS44IzUxJNLSehlo2iqfcbD+TgIVvXxBI=
-X-Received: by 2002:a05:6870:4250:b0:f2:be0e:96fb with SMTP id
- v16-20020a056870425000b000f2be0e96fbmr7621035oac.216.1653814353683; Sun, 29
- May 2022 01:52:33 -0700 (PDT)
+        with ESMTP id S230002AbiE2MrI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 May 2022 08:47:08 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id BAC4F3B3EF
+        for <linux-usb@vger.kernel.org>; Sun, 29 May 2022 05:47:05 -0700 (PDT)
+Received: (qmail 146412 invoked by uid 1000); 29 May 2022 08:47:04 -0400
+Date:   Sun, 29 May 2022 08:47:04 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com>
+Cc:     Julia.Lawall@inria.fr, andreyknvl@gmail.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, jannh@google.com,
+        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rafael@kernel.org, sashal@kernel.org,
+        schspa@gmail.com, stable@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in driver_register
+Message-ID: <YpNrSABPtB5eDC+m@rowland.harvard.edu>
+References: <000000000000e66c2805de55b15a@google.com>
+ <000000000000db349d05e01cffa8@google.com>
 MIME-Version: 1.0
-References: <20220528073445.50066-1-c.lobrano@gmail.com> <CAGRyCJG93qP=Baui6DfizrV6SjHoRNNbLnPjeWBy-mUVS=Yexw@mail.gmail.com>
-In-Reply-To: <CAGRyCJG93qP=Baui6DfizrV6SjHoRNNbLnPjeWBy-mUVS=Yexw@mail.gmail.com>
-From:   Carlo Lobrano <c.lobrano@gmail.com>
-Date:   Sun, 29 May 2022 10:50:45 +0200
-Message-ID: <CA+KuA8cHDMHA4xJt-CWnmmB4LnPBa+y7gN6az06c6DUs0aVa4g@mail.gmail.com>
-Subject: Re: [PATCH] usb: serial: option Add Telit LN910Cx 0x1250 composition
-To:     Daniele Palmas <dnlplm@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000db349d05e01cffa8@google.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Daniele
+On Sat, May 28, 2022 at 07:07:19PM -0700, syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
+> 
+> HEAD commit:    d3fde8ff50ab Add linux-next specific files for 20220527
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=154faf23f00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=ccb8d66fc9489ef
+> dashboard link: https://syzkaller.appspot.com/bug?extid=dc7c3ca638e773db07f6
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17315ad6f00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12087513f00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: use-after-free in driver_find drivers/base/driver.c:293 [inline]
+> BUG: KASAN: use-after-free in driver_register+0x352/0x3a0 drivers/base/driver.c:233
+> Read of size 8 at addr ffff88807813bec8 by task syz-executor372/10628
+> 
+> CPU: 1 PID: 10628 Comm: syz-executor372 Not tainted 5.18.0-next-20220527-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
+>  print_report mm/kasan/report.c:429 [inline]
+>  kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+>  driver_find drivers/base/driver.c:293 [inline]
+>  driver_register+0x352/0x3a0 drivers/base/driver.c:233
+>  usb_gadget_register_driver_owner+0xfb/0x1e0 drivers/usb/gadget/udc/core.c:1558
+>  raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:515 [inline]
+>  raw_ioctl+0x188d/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1222
+>  vfs_ioctl fs/ioctl.c:51 [inline]
 
+This sounds a lot like the "WARNING in driver_unregister" bug.  Let's see
+if the same fix works.
 
-On Sat, 28 May 2022 at 23:56, Daniele Palmas <dnlplm@gmail.com> wrote:
->
-> Hi Carlo,
->
-> Il giorno sab 28 mag 2022 alle ore 22:24 Carlo Lobrano
-> <c.lobrano@gmail.com> ha scritto:
-> >
-> > Add support for Telit LN910Cx 0x1250 composition
-> >
-> > 0x1250: rmnet, tty, tty, tty, tty
-> >
-> > Signed-off-by: Carlo Lobrano <c.lobrano@gmail.com>
-> > ---
-> >
-> > Hello,
-> >
-> > here is the lsusb output, thanks.
-> >
-> > Bus 001 Device 002: ID 1bc7:1250 Telit Wireless Solutions LE910C1-EU
-> > Device Descriptor:
-> >   bLength                18
-> >   bDescriptorType         1
-> >   bcdUSB               2.00
-> >   bDeviceClass            0
-> >   bDeviceSubClass         0
-> >   bDeviceProtocol         0
-> >   bMaxPacketSize0        64
-> >   idVendor           0x1bc7 Telit Wireless Solutions
-> >   idProduct          0x1250
-> >   bcdDevice            3.18
-> >   iManufacturer           1 Android
-> >   iProduct                2 LE910C1-EU
-> >   iSerial                 3 0123456789ABCDEF
-> >   bNumConfigurations      1
-> >   Configuration Descriptor:
-> >     bLength                 9
-> >     bDescriptorType         2
-> >     wTotalLength       0x00eb
-> >     bNumInterfaces          5
-> >     bConfigurationValue     1
-> >     iConfiguration          0
-> >     bmAttributes         0x80
-> >       (Bus Powered)
-> >     MaxPower              500mA
-> >     Interface Descriptor:
-> >       bLength                 9
-> >       bDescriptorType         4
-> >       bInterfaceNumber        0
-> >       bAlternateSetting       0
-> >       bNumEndpoints           3
-> >       bInterfaceClass       255 Vendor Specific Class
-> >       bInterfaceSubClass    255 Vendor Specific Subclass
-> >       bInterfaceProtocol    255 Vendor Specific Protocol
-> >       iInterface              0
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x82  EP 2 IN
-> >         bmAttributes            3
-> >           Transfer Type            Interrupt
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x0008  1x 8 bytes
-> >         bInterval               9
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x81  EP 1 IN
-> >         bmAttributes            2
-> >           Transfer Type            Bulk
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x0200  1x 512 bytes
-> >         bInterval               0
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x01  EP 1 OUT
-> >         bmAttributes            2
-> >           Transfer Type            Bulk
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x0200  1x 512 bytes
-> >         bInterval               0
-> >     Interface Descriptor:
-> >       bLength                 9
-> >       bDescriptorType         4
-> >       bInterfaceNumber        1
-> >       bAlternateSetting       0
-> >       bNumEndpoints           3
-> >       bInterfaceClass       255 Vendor Specific Class
-> >       bInterfaceSubClass      0
-> >       bInterfaceProtocol      0
-> >       iInterface              0
-> >       ** UNRECOGNIZED:  05 24 00 10 01
-> >       ** UNRECOGNIZED:  05 24 01 00 00
-> >       ** UNRECOGNIZED:  04 24 02 02
-> >       ** UNRECOGNIZED:  05 24 06 00 00
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x84  EP 4 IN
-> >         bmAttributes            3
-> >           Transfer Type            Interrupt
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x000a  1x 10 bytes
-> >         bInterval               9
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x83  EP 3 IN
-> >         bmAttributes            2
-> >           Transfer Type            Bulk
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x0200  1x 512 bytes
-> >         bInterval               0
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x02  EP 2 OUT
-> >         bmAttributes            2
-> >           Transfer Type            Bulk
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x0200  1x 512 bytes
-> >         bInterval               0
-> >     Interface Descriptor:
-> >       bLength                 9
-> >       bDescriptorType         4
-> >       bInterfaceNumber        2
-> >       bAlternateSetting       0
-> >       bNumEndpoints           3
-> >       bInterfaceClass       255 Vendor Specific Class
-> >       bInterfaceSubClass      0
-> >       bInterfaceProtocol      0
-> >       iInterface              0
-> >       ** UNRECOGNIZED:  05 24 00 10 01
-> >       ** UNRECOGNIZED:  05 24 01 00 00
-> >       ** UNRECOGNIZED:  04 24 02 02
-> >       ** UNRECOGNIZED:  05 24 06 00 00
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x86  EP 6 IN
-> >         bmAttributes            3
-> >           Transfer Type            Interrupt
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x000a  1x 10 bytes
-> >         bInterval               9
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x85  EP 5 IN
-> >         bmAttributes            2
-> >           Transfer Type            Bulk
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x0200  1x 512 bytes
-> >         bInterval               0
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x03  EP 3 OUT
-> >         bmAttributes            2
-> >           Transfer Type            Bulk
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x0200  1x 512 bytes
-> >         bInterval               0
-> >     Interface Descriptor:
-> >       bLength                 9
-> >       bDescriptorType         4
-> >       bInterfaceNumber        3
-> >       bAlternateSetting       0
-> >       bNumEndpoints           3
-> >       bInterfaceClass       255 Vendor Specific Class
-> >       bInterfaceSubClass      0
-> >       bInterfaceProtocol      0
-> >       iInterface              0
-> >       ** UNRECOGNIZED:  05 24 00 10 01
-> >       ** UNRECOGNIZED:  05 24 01 00 00
-> >       ** UNRECOGNIZED:  04 24 02 02
-> >       ** UNRECOGNIZED:  05 24 06 00 00
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x88  EP 8 IN
-> >         bmAttributes            3
-> >           Transfer Type            Interrupt
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x000a  1x 10 bytes
-> >         bInterval               9
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x87  EP 7 IN
-> >         bmAttributes            2
-> >           Transfer Type            Bulk
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x0200  1x 512 bytes
-> >         bInterval               0
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x04  EP 4 OUT
-> >         bmAttributes            2
-> >           Transfer Type            Bulk
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x0200  1x 512 bytes
-> >         bInterval               0
-> >     Interface Descriptor:
-> >       bLength                 9
-> >       bDescriptorType         4
-> >       bInterfaceNumber        4
-> >       bAlternateSetting       0
-> >       bNumEndpoints           3
-> >       bInterfaceClass       255 Vendor Specific Class
-> >       bInterfaceSubClass      0
-> >       bInterfaceProtocol      0
-> >       iInterface              0
-> >       ** UNRECOGNIZED:  05 24 00 10 01
-> >       ** UNRECOGNIZED:  05 24 01 00 00
-> >       ** UNRECOGNIZED:  04 24 02 02
-> >       ** UNRECOGNIZED:  05 24 06 00 00
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x8a  EP 10 IN
-> >         bmAttributes            3
-> >           Transfer Type            Interrupt
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x000a  1x 10 bytes
-> >         bInterval               9
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x89  EP 9 IN
-> >         bmAttributes            2
-> >           Transfer Type            Bulk
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x0200  1x 512 bytes
-> >         bInterval               0
-> >       Endpoint Descriptor:
-> >         bLength                 7
-> >         bDescriptorType         5
-> >         bEndpointAddress     0x05  EP 5 OUT
-> >         bmAttributes            2
-> >           Transfer Type            Bulk
-> >           Synch Type               None
-> >           Usage Type               Data
-> >         wMaxPacketSize     0x0200  1x 512 bytes
-> >         bInterval               0
-> > Device Qualifier (for other device speed):
-> >   bLength                10
-> >   bDescriptorType         6
-> >   bcdUSB               2.00
-> >   bDeviceClass            0
-> >   bDeviceSubClass         0
-> >   bDeviceProtocol         0
-> >   bMaxPacketSize0        64
-> >   bNumConfigurations      1
-> > Device Status:     0x0000
-> >   (Bus Powered)
-> >
-> > ---
-> >  drivers/usb/serial/option.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> > index 152ad882657d..a0bfc9a187d8 100644
-> > --- a/drivers/usb/serial/option.c
-> > +++ b/drivers/usb/serial/option.c
-> > @@ -1255,6 +1255,8 @@ static const struct usb_device_id option_ids[] = {
-> >           .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
-> >         { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1203, 0xff),    /* Telit LE910Cx (RNDIS) */
-> >           .driver_info = NCTRL(2) | RSVD(3) },
-> > +       { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1250, 0xff),    /* Telit LE910Cx (rmnet) */
-> > +         .driver_info = NCTRL(0) },
->
-> Thanks for adding support for Telit composition 0x1250!
->
-> Note, though, that interface 0 is rmnet that does not need NCTRL, but RSVD.
->
-> Regards,
-> Daniele
->
-> >         { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1204, 0xff),    /* Telit LE910Cx (MBIM) */
-> >           .driver_info = NCTRL(0) | RSVD(1) },
-> >         { USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_LE910_USBCFG4),
-> > --
-> > 2.32.0
-> >
+Alan Stern
 
-you are right, thanks for notice it. I will send the v2 asap
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 97fa5887cf28
 
-Carlo
+Index: usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/legacy/raw_gadget.c
++++ usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -11,6 +11,7 @@
+ #include <linux/ctype.h>
+ #include <linux/debugfs.h>
+ #include <linux/delay.h>
++#include <linux/idr.h>
+ #include <linux/kref.h>
+ #include <linux/miscdevice.h>
+ #include <linux/module.h>
+@@ -36,6 +37,9 @@ MODULE_LICENSE("GPL");
+ 
+ /*----------------------------------------------------------------------*/
+ 
++static DEFINE_IDA(driver_id_numbers);
++#define DRIVER_DRIVER_NAME_LENGTH_MAX	32
++
+ #define RAW_EVENT_QUEUE_SIZE	16
+ 
+ struct raw_event_queue {
+@@ -145,6 +149,7 @@ enum dev_state {
+ 	STATE_DEV_INVALID = 0,
+ 	STATE_DEV_OPENED,
+ 	STATE_DEV_INITIALIZED,
++	STATE_DEV_REGISTERING,
+ 	STATE_DEV_RUNNING,
+ 	STATE_DEV_CLOSED,
+ 	STATE_DEV_FAILED
+@@ -160,6 +165,9 @@ struct raw_dev {
+ 	/* Reference to misc device: */
+ 	struct device			*dev;
+ 
++	/* Make driver names unique */
++	int				driver_id_number;
++
+ 	/* Protected by lock: */
+ 	enum dev_state			state;
+ 	bool				gadget_registered;
+@@ -188,6 +196,7 @@ static struct raw_dev *dev_new(void)
+ 	spin_lock_init(&dev->lock);
+ 	init_completion(&dev->ep0_done);
+ 	raw_event_queue_init(&dev->queue);
++	dev->driver_id_number = -1;
+ 	return dev;
+ }
+ 
+@@ -198,6 +207,9 @@ static void dev_free(struct kref *kref)
+ 
+ 	kfree(dev->udc_name);
+ 	kfree(dev->driver.udc_name);
++	kfree(dev->driver.driver.name);
++	if (dev->driver_id_number >= 0)
++		ida_free(&driver_id_numbers, dev->driver_id_number);
+ 	if (dev->req) {
+ 		if (dev->ep0_urb_queued)
+ 			usb_ep_dequeue(dev->gadget->ep0, dev->req);
+@@ -421,6 +433,7 @@ static int raw_ioctl_init(struct raw_dev
+ 	struct usb_raw_init arg;
+ 	char *udc_driver_name;
+ 	char *udc_device_name;
++	char *driver_driver_name;
+ 	unsigned long flags;
+ 
+ 	if (copy_from_user(&arg, (void __user *)value, sizeof(arg)))
+@@ -439,36 +452,44 @@ static int raw_ioctl_init(struct raw_dev
+ 		return -EINVAL;
+ 	}
+ 
++	ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
++	if (ret < 0)
++		return ret;
++	dev->driver_id_number = ret;
++
++	driver_driver_name = kmalloc(DRIVER_DRIVER_NAME_LENGTH_MAX, GFP_KERNEL);
++	if (!driver_driver_name) {
++		ret = -ENOMEM;
++		goto out_free_driver_id_number;
++	}
++	snprintf(driver_driver_name, DRIVER_DRIVER_NAME_LENGTH_MAX,
++				DRIVER_NAME ".%d", dev->driver_id_number);
++
+ 	udc_driver_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
+-	if (!udc_driver_name)
+-		return -ENOMEM;
++	if (!udc_driver_name) {
++		ret = -ENOMEM;
++		goto out_free_driver_driver_name;
++	}
+ 	ret = strscpy(udc_driver_name, &arg.driver_name[0],
+ 				UDC_NAME_LENGTH_MAX);
+-	if (ret < 0) {
+-		kfree(udc_driver_name);
+-		return ret;
+-	}
++	if (ret < 0)
++		goto out_free_udc_driver_name;
+ 	ret = 0;
+ 
+ 	udc_device_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
+ 	if (!udc_device_name) {
+-		kfree(udc_driver_name);
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto out_free_udc_driver_name;
+ 	}
+ 	ret = strscpy(udc_device_name, &arg.device_name[0],
+ 				UDC_NAME_LENGTH_MAX);
+-	if (ret < 0) {
+-		kfree(udc_driver_name);
+-		kfree(udc_device_name);
+-		return ret;
+-	}
++	if (ret < 0)
++		goto out_free_udc_device_name;
+ 	ret = 0;
+ 
+ 	spin_lock_irqsave(&dev->lock, flags);
+ 	if (dev->state != STATE_DEV_OPENED) {
+ 		dev_dbg(dev->dev, "fail, device is not opened\n");
+-		kfree(udc_driver_name);
+-		kfree(udc_device_name);
+ 		ret = -EINVAL;
+ 		goto out_unlock;
+ 	}
+@@ -483,14 +504,24 @@ static int raw_ioctl_init(struct raw_dev
+ 	dev->driver.suspend = gadget_suspend;
+ 	dev->driver.resume = gadget_resume;
+ 	dev->driver.reset = gadget_reset;
+-	dev->driver.driver.name = DRIVER_NAME;
++	dev->driver.driver.name = driver_driver_name;
+ 	dev->driver.udc_name = udc_device_name;
+ 	dev->driver.match_existing_only = 1;
+ 
+ 	dev->state = STATE_DEV_INITIALIZED;
++	spin_unlock_irqrestore(&dev->lock, flags);
++	return ret;
+ 
+ out_unlock:
+ 	spin_unlock_irqrestore(&dev->lock, flags);
++out_free_udc_device_name:
++	kfree(udc_device_name);
++out_free_udc_driver_name:
++	kfree(udc_driver_name);
++out_free_driver_driver_name:
++	kfree(driver_driver_name);
++out_free_driver_id_number:
++	ida_free(&driver_id_numbers, dev->driver_id_number);
+ 	return ret;
+ }
+ 
+@@ -508,6 +539,7 @@ static int raw_ioctl_run(struct raw_dev
+ 		ret = -EINVAL;
+ 		goto out_unlock;
+ 	}
++	dev->state = STATE_DEV_REGISTERING;
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+ 
+ 	ret = usb_gadget_register_driver(&dev->driver);
+
