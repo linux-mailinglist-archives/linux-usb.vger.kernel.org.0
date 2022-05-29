@@ -2,38 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6095372D2
-	for <lists+linux-usb@lfdr.de>; Mon, 30 May 2022 00:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6855372D0
+	for <lists+linux-usb@lfdr.de>; Mon, 30 May 2022 00:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbiE2WjB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 May 2022 18:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
+        id S231428AbiE2WjA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 May 2022 18:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbiE2Wi5 (ORCPT
+        with ESMTP id S231285AbiE2Wi5 (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Sun, 29 May 2022 18:38:57 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18D45A15C
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EF85A15D
         for <linux-usb@vger.kernel.org>; Sun, 29 May 2022 15:38:55 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mgr@pengutronix.de>)
-        id 1nvRYj-0001Q2-Ad; Mon, 30 May 2022 00:38:53 +0200
+        id 1nvRYj-0001Q5-Ad; Mon, 30 May 2022 00:38:53 +0200
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <mgr@pengutronix.de>)
-        id 1nvRYi-005L6W-Uq; Mon, 30 May 2022 00:38:51 +0200
+        id 1nvRYj-005L6f-G2; Mon, 30 May 2022 00:38:52 +0200
 Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <mgr@pengutronix.de>)
-        id 1nvRYg-000Rcp-Fs; Mon, 30 May 2022 00:38:50 +0200
+        id 1nvRYg-000Rcs-GO; Mon, 30 May 2022 00:38:50 +0200
 From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
 To:     linux-usb@vger.kernel.org
 Cc:     balbi@kernel.org, paul.elder@ideasonboard.com,
         kieran.bingham@ideasonboard.com, nicolas@ndufresne.ca,
         laurent.pinchart@ideasonboard.com, kernel@pengutronix.de
-Subject: [PATCH v2 1/3] usb: gadget: uvc: calculate the number of request depending on framesize
-Date:   Mon, 30 May 2022 00:38:46 +0200
-Message-Id: <20220529223848.105914-2-m.grzeschik@pengutronix.de>
+Subject: [PATCH v2 2/3] usb: gadget: uvc: increase worker prio to WQ_HIGHPRI
+Date:   Mon, 30 May 2022 00:38:47 +0200
+Message-Id: <20220529223848.105914-3-m.grzeschik@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220529223848.105914-1-m.grzeschik@pengutronix.de>
 References: <20220529223848.105914-1-m.grzeschik@pengutronix.de>
@@ -52,65 +52,99 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The current limitation of possible number of requests being handled is
-dependent on the gadget speed. It makes more sense to depend on the
-typical frame size when calculating the number of requests. This patch
-is changing this and is using the previous limits as boundaries for
-reasonable minimum and maximum number of requests.
-
-For a 1080p jpeg encoded video stream with a maximum imagesize of
-e.g. 800kB with a maxburst of 8 and an multiplier of 1 the resulting
-number of requests is calculated to 49.
-
-        800768         1
-nreqs = ------ * -------------- ~= 49
-          2      (1024 * 8 * 1)
+Likewise to the uvcvideo hostside driver, this patch is changing the
+simple workqueue to an async_wq with higher priority. This ensures that
+the worker will not be scheduled away while the video stream is handled.
 
 Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
 ---
-v1 -> v2: - using clamp instead of min/max
-          - added calculation example to description
-	  - commented the additional division by two in the code
+v1 -> v2: - added destroy_workqueue in uvc_function_unbind
+          - reworded comment above allow_workqueue
 
- drivers/usb/gadget/function/uvc_queue.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ drivers/usb/gadget/function/f_uvc.c     | 4 ++++
+ drivers/usb/gadget/function/uvc.h       | 1 +
+ drivers/usb/gadget/function/uvc_v4l2.c  | 2 +-
+ drivers/usb/gadget/function/uvc_video.c | 9 +++++++--
+ 4 files changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-index d25edc3d2174e1..eb9bd9d32cd056 100644
---- a/drivers/usb/gadget/function/uvc_queue.c
-+++ b/drivers/usb/gadget/function/uvc_queue.c
-@@ -44,7 +44,8 @@ static int uvc_queue_setup(struct vb2_queue *vq,
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 0334c8a414e9b9..02e0caecaada1a 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -891,9 +891,13 @@ static void uvc_function_unbind(struct usb_configuration *c,
  {
- 	struct uvc_video_queue *queue = vb2_get_drv_priv(vq);
- 	struct uvc_video *video = container_of(queue, struct uvc_video, queue);
--	struct usb_composite_dev *cdev = video->uvc->func.config->cdev;
-+	unsigned int req_size;
-+	unsigned int nreq;
+ 	struct usb_composite_dev *cdev = c->cdev;
+ 	struct uvc_device *uvc = to_uvc(f);
++	struct uvc_video *video = &uvc->video;
  
- 	if (*nbuffers > UVC_MAX_VIDEO_BUFFERS)
- 		*nbuffers = UVC_MAX_VIDEO_BUFFERS;
-@@ -53,10 +54,16 @@ static int uvc_queue_setup(struct vb2_queue *vq,
+ 	uvcg_info(f, "%s()\n", __func__);
  
- 	sizes[0] = video->imagesize;
- 
--	if (cdev->gadget->speed < USB_SPEED_SUPER)
--		video->uvc_num_requests = 4;
--	else
--		video->uvc_num_requests = 64;
-+	req_size = video->ep->maxpacket
-+		 * max_t(unsigned int, video->ep->maxburst, 1)
-+		 * (video->ep->mult);
++	if (video->async_wq)
++		destroy_workqueue(video->async_wq);
 +
-+	/* We divide by two, to increase the chance to run
-+	 * into fewer requests for smaller framesizes.
-+	 */
-+	nreq = DIV_ROUND_UP(DIV_ROUND_UP(sizes[0], 2), req_size);
-+	nreq = clamp(nreq, 4U, 64U);
-+	video->uvc_num_requests = nreq;
+ 	device_remove_file(&uvc->vdev.dev, &dev_attr_function_name);
+ 	video_unregister_device(&uvc->vdev);
+ 	v4l2_device_unregister(&uvc->v4l2_dev);
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+index 9eec104b3666ad..2bc43ce20e25a5 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -87,6 +87,7 @@ struct uvc_video {
+ 	struct usb_ep *ep;
  
- 	return 0;
+ 	struct work_struct pump;
++	struct workqueue_struct *async_wq;
+ 
+ 	/* Frame parameters */
+ 	u8 bpp;
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index a2c78690c5c288..9b1488f7abd736 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -170,7 +170,7 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l2_buffer *b)
+ 		return ret;
+ 
+ 	if (uvc->state == UVC_STATE_STREAMING)
+-		schedule_work(&video->pump);
++		queue_work(video->async_wq, &video->pump);
+ 
+ 	return ret;
  }
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index a9bb4553db847e..9a9101851bc1e8 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -277,7 +277,7 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+ 	spin_unlock_irqrestore(&video->req_lock, flags);
+ 
+ 	if (uvc->state == UVC_STATE_STREAMING)
+-		schedule_work(&video->pump);
++		queue_work(video->async_wq, &video->pump);
+ }
+ 
+ static int
+@@ -478,7 +478,7 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
+ 
+ 	video->req_int_count = 0;
+ 
+-	schedule_work(&video->pump);
++	queue_work(video->async_wq, &video->pump);
+ 
+ 	return ret;
+ }
+@@ -492,6 +492,11 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
+ 	spin_lock_init(&video->req_lock);
+ 	INIT_WORK(&video->pump, uvcg_video_pump);
+ 
++	/* Allocate a work queue for asynchronous video pump handler. */
++	video->async_wq = alloc_workqueue("uvcvideo", WQ_UNBOUND | WQ_HIGHPRI, 0);
++	if (!video->async_wq)
++		return -EINVAL;
++
+ 	video->uvc = uvc;
+ 	video->fcc = V4L2_PIX_FMT_YUYV;
+ 	video->bpp = 16;
 -- 
 2.30.2
 
