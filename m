@@ -2,60 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A47538696
-	for <lists+linux-usb@lfdr.de>; Mon, 30 May 2022 19:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B6F5386F7
+	for <lists+linux-usb@lfdr.de>; Mon, 30 May 2022 20:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239673AbiE3RJO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 May 2022 13:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
+        id S238334AbiE3SCi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 May 2022 14:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237650AbiE3RJM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 May 2022 13:09:12 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2763F59956
-        for <linux-usb@vger.kernel.org>; Mon, 30 May 2022 10:09:11 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-f2a4c51c45so15037316fac.9
-        for <linux-usb@vger.kernel.org>; Mon, 30 May 2022 10:09:11 -0700 (PDT)
+        with ESMTP id S232840AbiE3SCh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 May 2022 14:02:37 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D41A2049
+        for <linux-usb@vger.kernel.org>; Mon, 30 May 2022 11:02:35 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id v19so7193370edd.4
+        for <linux-usb@vger.kernel.org>; Mon, 30 May 2022 11:02:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3pPgLSe0hAiUkDeapON9X9XhXqKwvlbha3rD5980Slg=;
-        b=KlCDIygRoDdJLTnC3YaeKwYRz3sSNjR8UO7T8XU4vU3AyYyeuG+cCY2JdYivqOAbv2
-         DWWAyjrD2XFkhSCT6o4UZ3kGYMRgCFsv2OJozGiOwoVfsD9A0h/E/aPMSDnkFnx+EW0O
-         j86K6+1f6r0luUxRPwgqB4YFZpc9nwsxdlHMEEznYnuVGWI7ZAetXmocWNz0Qd0TO0KL
-         BDTxfMK9hocvDatFgqIYkXGvwAvcovpkSNAkr4iJFjgniWWhV+6OrF7vbopZhgyFFh53
-         /+ocMw8VD9hW7dLZR2r/MRGh0lqwFtVhjqYNrbdhW4wG7FCoYrqPbVKk0TVT4jtBfI3F
-         ZiTg==
+         :cc:content-transfer-encoding;
+        bh=1DXhStYiillvE4HfCLpclmo42laGHhWdYeKNbq2XZDI=;
+        b=k9mvX94m1/GxgTlYolwVw8gECUgPGfPzzH7RdWe2Gh2oQQTc5tLMXHfGDJXYDQQFlD
+         wTbbm7oGLA7yU85mXsqUisWJ9JZ82+Tc3O4eaXnOWVZH7xEVH6pKxziyzZv3ETse+/jh
+         wN6J+aeETGUCppgXT8ADN4nP56feHaFY5D76BJDfUjJ2VGKDkdb5+/PvVg82cgQL7f//
+         t8mG2lCBjXEcCm1DQCE16bfJCkgrhrS5fagKeq0tXkhYwUw5GYTRTUz/wZDHGw01Oj2L
+         Rv34xN0Y0DEnv26MEpu39O+MeoglG6H2Br6x4p3CImEfu90srQ/2hqDi/m6mbqqBGYH6
+         LyTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3pPgLSe0hAiUkDeapON9X9XhXqKwvlbha3rD5980Slg=;
-        b=qaqzVFzw3FICtx7VDfHyPsEbvHJxIE93W2kRTXaY7A2OIi6NAe5wcd5sIREY+PUCuS
-         apHWoZOoN3788KChozyRz9wNGT0brrb/OX7pMtBuKzClUmPxx8A/KMQuWfbvAYWwfLoj
-         0lukl3B8xRnxmHwT01To1Ufum4CqrKuyYK71EIF/htZitxzymz+iFUV+67PCgGv6LBRk
-         aDobxz+IODlBxl09ioonbwqUq04xwKlsNkBhky1EDuMo/US6krGj+1dB2+eyueDv5PJ4
-         iUK3vE8lbDrJIx95aLXeHjLyi6RtBltZA7RulAgwhDzlgFXb7RP+nQYg+dbJU1lfVTzD
-         +cZw==
-X-Gm-Message-State: AOAM532rm9e7C5R5/+2X+EVOe1qk+eqO+NWIIWbmEGkx4R3ScY7wAuNm
-        aIiRRlskZYNZZEBzwE86ywjxqZguG52YKnVzPrJkIdhdZ+g=
-X-Google-Smtp-Source: ABdhPJynATd2XDhJOcjctXN/rF6wfMkZpEXSA2U2go77lRiHAdqlshmANp/pacGpOneVuXT4refFZtToJZWJZMKKj6o=
-X-Received: by 2002:a05:6870:3509:b0:f3:44ea:f034 with SMTP id
- k9-20020a056870350900b000f344eaf034mr1640591oah.216.1653930550373; Mon, 30
- May 2022 10:09:10 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1DXhStYiillvE4HfCLpclmo42laGHhWdYeKNbq2XZDI=;
+        b=hQ7tpCr2cuW3DlPbHGv6mUHw6Qx0YQ9e0fiuR05h6k/uFuqY4mOp28K2yP6sEQLeeD
+         rbyk+bcC5F3e1nVeuKSflLIaP0sa4rphrv5HOrxVErvBgPEHfoI2NTjXCs7PaRIQt71P
+         g2gyov39Ny0YvjQ3UFZvPbDACzpqK9TUYg+Vq8Hm8zMLDwhc89IlfEMb9UQrS5nom3xB
+         LUC43P5Cwo5Wr7TIY9toRVppukuWdPpPm32Ni+8rMfG6cXhInNdDn8ez7N9kP5AMMazE
+         bTXMSNPjBUbpg/R2fDu9I09Ho9WkbWJMIKr3IYRw0+dhjiSeqOftEBiZE5i5mu4cLEYC
+         AN0w==
+X-Gm-Message-State: AOAM530hxLm/yKdk5Ehg5M3Gkl8lnceTrv2SZ0a0v57+e3Lj/SmqD/ok
+        TbuqOGK+KG3fatRz0/jJJV4SNGiSOsxKBluhfcw=
+X-Google-Smtp-Source: ABdhPJwXLNPv9AekalcZ7pGYA//i6Ta40+UM6ad3vgJgyLZ2z0MgBjQN6ncX8+BeW5vi6ydIwWvOPAwQNJSwJ3asHo4=
+X-Received: by 2002:a05:6402:34d4:b0:42b:35e5:fc78 with SMTP id
+ w20-20020a05640234d400b0042b35e5fc78mr50021614edc.372.1653933753849; Mon, 30
+ May 2022 11:02:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220530090003.351702-1-c.lobrano@gmail.com> <CAGRyCJHZA2WB=qPh8-HD6VMTHs2xWApbtQTLLSngVzm=S7XqFA@mail.gmail.com>
-In-Reply-To: <CAGRyCJHZA2WB=qPh8-HD6VMTHs2xWApbtQTLLSngVzm=S7XqFA@mail.gmail.com>
-From:   Carlo Lobrano <c.lobrano@gmail.com>
-Date:   Mon, 30 May 2022 19:07:21 +0200
-Message-ID: <CA+KuA8cOuqnNyG8HQ-e=9XjL6reA_ZtohBdXHVWi5oSuDwXzRw@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: serial: Add support for Telit LN910Cx 0x1250 composition
-To:     Daniele Palmas <dnlplm@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>
+References: <CALhB_QNhzHkf4Yw6TqZAbCisMK6TBy8ecw0M_Sq=EQXPN728fg@mail.gmail.com>
+ <Yoy5m3Aa6QwVcFhf@kuha.fi.intel.com> <Yoy7oXpMugFFmfBP@lahna>
+ <CALhB_QM9SHJt+15pEVHEH_kourb-1Xbd68O1p_XLxOmWB4HAfw@mail.gmail.com>
+ <YpCVc6eYkpmjP9AF@lahna> <CALhB_QP8SPqubq-eBNa1BTMuy3kCA65OuajOeJGt5DB9jDRKKg@mail.gmail.com>
+ <ce969e3b4a6ed04584fdecd3234578bd87d52594.camel@gmail.com>
+In-Reply-To: <ce969e3b4a6ed04584fdecd3234578bd87d52594.camel@gmail.com>
+From:   Stefan Hoffmeister <stefan.hoffmeister@gmail.com>
+Date:   Mon, 30 May 2022 20:02:22 +0200
+Message-ID: <CALhB_QPsVRDv2PdsyDXS8WYr_BVv4XQikp3OCqd8u+H00JkUgQ@mail.gmail.com>
+Subject: Re: Thunderbolt: One missing DisplayPort?
+To:     =?UTF-8?Q?Tomasz_Mo=C5=84?= <desowin@gmail.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -66,62 +71,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Daniele,
+On Mon, May 30, 2022 at 10:33 AM Tomasz Mo=C5=84 <desowin@gmail.com> wrote:
+>
+> On Sun, 2022-05-29 at 21:51 +0200, Stefan Hoffmeister wrote:
+> > I have managed to wedge the system into a state where it does not
+> > know about Thunderbolt, and now, on what I presume to be USB-C only
 
-On Mon, 30 May 2022 at 17:31, Daniele Palmas <dnlplm@gmail.com> wrote:
->
-> Hi Carlo,
->
-> Il giorno lun 30 mag 2022 alle ore 15:53 Carlo Lobrano
-> <c.lobrano@gmail.com> ha scritto:
-> >
-> > 0x1250: rmnet, tty, tty, tty, tty
-> >
-> > Signed-off-by: Carlo Lobrano <c.lobrano@gmail.com>
-> > ---
-> >
-> > v2: use RSVD in place of NCTRL for interface 0 (rmnet)
-> >
-> >  drivers/usb/serial/option.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> > index 152ad882657d..cd9aa61ec801 100644
-> > --- a/drivers/usb/serial/option.c
-> > +++ b/drivers/usb/serial/option.c
-> > @@ -1275,6 +1275,8 @@ static const struct usb_device_id option_ids[] = {
-> >           .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
-> >         { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1231, 0xff),    /* Telit LE910Cx (RNDIS) */
-> >           .driver_info = NCTRL(2) | RSVD(3) },
-> > +       { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1250, 0xff),    /* Telit LE910Cx (rmnet) */
-> > +         .driver_info = RSVD(0) },
->
-> The content of the patch looks good, but the subject needs to be
-> fixed, since the composition does not belong to "LN910Cx", but
-> "LE910Cx": sorry for not having noticed that in v1.
->
-> Since you are there, it would be also preferred to have the prefix as:
->
-> USB: serial: option: ....
->
-> and maybe it could be worth adding something more in the body than
-> only the single composition, e.g.
->
-> Add support for...
->
-> Thanks,
-> Daniele
->
-> >         { USB_DEVICE(TELIT_VENDOR_ID, 0x1260),
-> >           .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
-> >         { USB_DEVICE(TELIT_VENDOR_ID, 0x1261),
-> > --
-> > 2.25.1
-> >
+> Could you please tell how did you wedge the system into a state where
+> it does not know about Thunderbolt?
 
-thank you for your review. There is definitely a typo in modem's name,
-and I also agree with your other notes.
-I will update the patch with what you suggested
+I was thinking of going the "find a bad-enough good cable" route as
+mentioned by Mika, but then I discovered that I possess only
+* a Thunderbolt cable
+* a 100W power delivery cable (which to my surprise still does what
+appears to be USB 2.0)
+and that it was the weekend.
 
-Thanks,
-Carlo
+Incidentally I had been poking at the "Dell Client Configuration
+Toolkit" (hardly advertised) previously - which, at least in its
+RedHat 8 incarnation, will destroy anything related to openssl (in
+particular sudoers) through ldconfig on Fedora 36 in a native
+installation, with much fun ensuing given a disabled root account. But
+I digress.
+
+The "Dell Client Configuration Toolkit" gives you command-line access
+to the BIOS on modern (2018+) Dell boxes; this exposes a BIOS
+configuration option (not visible / recognizable in the BIOS UI) to
+set "ThunderboltPorts" to "Disabled". Setting that to "Enabled" didn't
+make the laptop explode, so "Disabled" apparently reconfigured /
+forced the onboard TB4 Intel controller to forget everything about
+Thunderbolt, ending up with plain USB-C at revision 1.2 (pretty old).
+
+Net observable effect: "only the first screen works on Thunderbolt" we go t=
+o
+* Windows 11 can do "2.5K@60 Hz + 4K @ 30 Hz", and
+* Linux can do a slightly _flakey_"2.5K + 4K @ 60 Hz".
+
+I like a stable 60 Hz screen refresh rate (enabled by native
+Thunderbolt bandwidth)
