@@ -2,167 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39605538131
-	for <lists+linux-usb@lfdr.de>; Mon, 30 May 2022 16:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F385384BA
+	for <lists+linux-usb@lfdr.de>; Mon, 30 May 2022 17:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239627AbiE3OO1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 May 2022 10:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
+        id S241158AbiE3PWD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 May 2022 11:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240581AbiE3OMX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 May 2022 10:12:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B88C9E52A5;
-        Mon, 30 May 2022 06:43:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C6E9B80D83;
-        Mon, 30 May 2022 13:42:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22821C3411E;
-        Mon, 30 May 2022 13:42:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918162;
-        bh=x4B8zV580+azv9vAE3GUqPaunN3G/DT9gCW5iU7BFrQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oM4olH1TiNqqzik2850SNFLatZbXcFlqLgbnCsxmwmLvC5zTezvC4hQH870yyGi+7
-         FFNifitfw78O0YZk4CnrWF4cwleRmDH9MT/yfy+bveoGDxz8VYsrnb90HODVAeyVig
-         4wMpr6iGobcHARW3lhYG03s1AeotWEgjYieRdNFpPzsNn1uZVOkupQE8baW0NgO4SI
-         m7BZaNUo29QnuPeV+uHbVmDkJ33XWNfiLkGZy0SXbJPLe9YhyL4vULxSvlxghk8BQx
-         SXpFVKvObAqUy0o7fLP224RgIKhrDjPgL7OIHLy7bEEPOwXN5w9a9rzlhTsfS4vtey
-         AZB6a29WRNb1A==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lukas Wunner <lukas@wunner.de>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Ferry Toth <fntoth@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, steve.glendinning@shawell.net,
-        UNGLinuxDriver@microchip.com, linux@rempel-privat.de,
-        colin.king@intel.com, paskripkin@gmail.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 082/109] usbnet: Run unregister_netdev() before unbind() again
-Date:   Mon, 30 May 2022 09:37:58 -0400
-Message-Id: <20220530133825.1933431-82-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530133825.1933431-1-sashal@kernel.org>
-References: <20220530133825.1933431-1-sashal@kernel.org>
+        with ESMTP id S242996AbiE3PUz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 May 2022 11:20:55 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBE11862B4
+        for <linux-usb@vger.kernel.org>; Mon, 30 May 2022 07:22:59 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id s19so3543148ioa.6
+        for <linux-usb@vger.kernel.org>; Mon, 30 May 2022 07:22:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=XJqXgw0Qi4Ge6Q57wB4GlvotoYnhUuSq68y9152a6AE=;
+        b=Uon8wdSqHAkD3+idsDwqsw5/RYE9GUuamAt3cXARqV3NAeDaGTFSLoXs/G0hoAHt+5
+         codSJJxeeG8vzFjwPvQIVi8pQwh8BHkUEnJ12EbeOHHixGjwXNoKXbv093UEgoEUQfeX
+         Wod0GKDhAdiR/Ye/ytirv8v0lLWuUvpQJix1wPyUwccxWGh+xUage9MXo7G5h4Fk521r
+         DI2oe8/v8oseOn3Ob0K+CIOBqiMgej7MNHpUOxL774B1gIBhklt7oanUcWy5rMkcHIBO
+         DPJxFGRqOeAdN5gDE89YSbgO4qUovR5BE7nFCFMjyJGWrnHFIj5hKg5UUE4gd+cXFCdp
+         hO1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=XJqXgw0Qi4Ge6Q57wB4GlvotoYnhUuSq68y9152a6AE=;
+        b=QD/b9UhOaarpRnUjDvzi7lOlUt14+hqduCH8dH9xDjjvdPBCIrUqo9meEsOC9znrVg
+         vwN9+MNpEnZtuPvVZcdMdLD1wRT7/MOR8P5wS6HMrRCXCrz1jgAySNEZ6g5jkdD77eMR
+         l7k7TtC578ea0Oi9i4g7A7U6Ekdoemx+dRMzhmx+lO2hVPHxPk/u0t1EOHvDLiSuqZWs
+         /AzIqjxZiUjDdvq0i8+xQUhBILT90SAWN5wo//u6xbId6p/60VTDgpniq5tHYw2D7VYg
+         pvtgDZCFdIOGLbFOTwHKuJfMUuHGpm/fCaaGHu2hCh/LL9CexT7JYHtfZfWabbCrtfd6
+         x3cA==
+X-Gm-Message-State: AOAM531DS1PF0URxrNaN0Y2DEpensydP94J9oSp2ey9GVE2uR0O95ffH
+        EtwrbjeED0hXZ9HmwUX1Cl8W1we8aRL3ZjIPUro=
+X-Google-Smtp-Source: ABdhPJwtvJ+07dKTyr7TpOGjLPDpnwsexIyHiV/hfgzfTPNlT+ipRRN6pgsw9s1i3X6T+BTCXU16HSeeuxtReVm1TBY=
+X-Received: by 2002:a05:6638:498e:b0:32e:be76:f908 with SMTP id
+ cv14-20020a056638498e00b0032ebe76f908mr20858880jab.66.1653920570933; Mon, 30
+ May 2022 07:22:50 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6622:f06:0:0:0:0 with HTTP; Mon, 30 May 2022 07:22:50
+ -0700 (PDT)
+Reply-To: barristerbenjamin221@gmail.com
+From:   Attorney Amadou <koadaidrissa1@gmail.com>
+Date:   Mon, 30 May 2022 07:22:50 -0700
+Message-ID: <CAOh7+P_+cJJknP6BJXj8NWX7nn8nkbA=aoSG2t49pestA9PG0g@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d41 listed in]
+        [list.dnswl.org]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [koadaidrissa1[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [barristerbenjamin221[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [koadaidrissa1[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Lukas Wunner <lukas@wunner.de>
-
-[ Upstream commit d1408f6b4dd78fb1b9e26bcf64477984e5f85409 ]
-
-Commit 2c9d6c2b871d ("usbnet: run unbind() before unregister_netdev()")
-sought to fix a use-after-free on disconnect of USB Ethernet adapters.
-
-It turns out that a different fix is necessary to address the issue:
-https://lore.kernel.org/netdev/18b3541e5372bc9b9fc733d422f4e698c089077c.1650177997.git.lukas@wunner.de/
-
-So the commit was not necessary.
-
-The commit made binding and unbinding of USB Ethernet asymmetrical:
-Before, usbnet_probe() first invoked the ->bind() callback and then
-register_netdev().  usbnet_disconnect() mirrored that by first invoking
-unregister_netdev() and then ->unbind().
-
-Since the commit, the order in usbnet_disconnect() is reversed and no
-longer mirrors usbnet_probe().
-
-One consequence is that a PHY disconnected (and stopped) in ->unbind()
-is afterwards stopped once more by unregister_netdev() as it closes the
-netdev before unregistering.  That necessitates a contortion in ->stop()
-because the PHY may only be stopped if it hasn't already been
-disconnected.
-
-Reverting the commit allows making the call to phy_stop() unconditional
-in ->stop().
-
-Tested-by: Oleksij Rempel <o.rempel@pengutronix.de> # LAN9514/9512/9500
-Tested-by: Ferry Toth <fntoth@gmail.com> # LAN9514
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Acked-by: Oliver Neukum <oneukum@suse.com>
-Cc: Martyn Welch <martyn.welch@collabora.com>
-Cc: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/asix_devices.c | 6 +-----
- drivers/net/usb/smsc95xx.c     | 3 +--
- drivers/net/usb/usbnet.c       | 6 +++---
- 3 files changed, 5 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index bd8f8619ad6f..396505396a2e 100644
---- a/drivers/net/usb/asix_devices.c
-+++ b/drivers/net/usb/asix_devices.c
-@@ -799,11 +799,7 @@ static int ax88772_stop(struct usbnet *dev)
- {
- 	struct asix_common_private *priv = dev->driver_priv;
- 
--	/* On unplugged USB, we will get MDIO communication errors and the
--	 * PHY will be set in to PHY_HALTED state.
--	 */
--	if (priv->phydev->state != PHY_HALTED)
--		phy_stop(priv->phydev);
-+	phy_stop(priv->phydev);
- 
- 	return 0;
- }
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index eb0d325e92b7..4e39e4345084 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -1217,8 +1217,7 @@ static int smsc95xx_start_phy(struct usbnet *dev)
- 
- static int smsc95xx_stop(struct usbnet *dev)
- {
--	if (dev->net->phydev)
--		phy_stop(dev->net->phydev);
-+	phy_stop(dev->net->phydev);
- 
- 	return 0;
- }
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index a33d7fb82a00..af2bbaff2478 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1614,9 +1614,6 @@ void usbnet_disconnect (struct usb_interface *intf)
- 		   xdev->bus->bus_name, xdev->devpath,
- 		   dev->driver_info->description);
- 
--	if (dev->driver_info->unbind)
--		dev->driver_info->unbind(dev, intf);
--
- 	net = dev->net;
- 	unregister_netdev (net);
- 
-@@ -1624,6 +1621,9 @@ void usbnet_disconnect (struct usb_interface *intf)
- 
- 	usb_scuttle_anchored_urbs(&dev->deferred);
- 
-+	if (dev->driver_info->unbind)
-+		dev->driver_info->unbind(dev, intf);
-+
- 	usb_kill_urb(dev->interrupt);
- 	usb_free_urb(dev->interrupt);
- 	kfree(dev->padding_pkt);
--- 
-2.35.1
-
+SGVsbG8gZGVhciBmcmllbmQuDQoNClBsZWFzZSBJIHdpbGwgbG92ZSB0byBkaXNjdXNzIHNvbWV0
+aGluZyB2ZXJ5IGltcG9ydGFudCB3aXRoIHlvdSwgSQ0Kd2lsbCBhcHByZWNpYXRlIGl0IGlmIHlv
+dSBncmFudCBtZSBhdWRpZW5jZS4NCg0KU2luY2VyZWx5Lg0KQmFycmlzdGVyIEFtYWRvdSBCZW5q
+YW1pbiBFc3EuDQouLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4NCuimquaEm+OB
+quOCi+WPi+S6uuOAgeOBk+OCk+OBq+OBoeOBr+OAgg0KDQrnp4Hjga/jgYLjgarjgZ/jgajpnZ7l
+uLjjgavph43opoHjgarjgZPjgajjgavjgaTjgYTjgaboqbHjgZflkIjjgYbjga7jgYzlpKflpb3j
+gY3jgafjgZnjgIHjgYLjgarjgZ/jgYznp4HjgavogbTooYbjgpLkuI7jgYjjgabjgY/jgozjgozj
+gbDnp4Hjga/jgZ3jgozjgpLmhJ/orJ3jgZfjgb7jgZnjgIINCg0K5b+D44GL44KJ44CCDQrjg5Dj
+g6rjgrnjgr/jg7zjgqLjg57jg4njgqXjg5njg7Pjgrjjg6Pjg5/jg7NFc3HjgIINCg==
