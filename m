@@ -2,59 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AAFA537D04
-	for <lists+linux-usb@lfdr.de>; Mon, 30 May 2022 15:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8B7537C49
+	for <lists+linux-usb@lfdr.de>; Mon, 30 May 2022 15:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237734AbiE3Nhg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 May 2022 09:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
+        id S237051AbiE3NbR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 May 2022 09:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238182AbiE3NgK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 May 2022 09:36:10 -0400
+        with ESMTP id S237238AbiE3NaP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 May 2022 09:30:15 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E64986CF;
-        Mon, 30 May 2022 06:29:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1D3562C4;
+        Mon, 30 May 2022 06:26:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E26FDB80D89;
-        Mon, 30 May 2022 13:29:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BA96C3411C;
-        Mon, 30 May 2022 13:29:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917391;
-        bh=67f36S+4rjT+JdsrzBc14AqQKTdEkAdczFOtEskmpRI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f4TkQrnqFbA414/oVIi7K9Wxu9EcpZ8cm2kNnEIb7oPzCwLvZ6WJ6SGG20oATPmNe
-         KSJcq3ZbstAsoF+6Ku/AEAVFlCjcyOQi2gsv0qP7nSVjpq+uuxImSFnFdddUs72YsE
-         AhvQBY8VOvjfpeZTFBVbyR6jc3DJ8y/3ZaIX2DyH7rUcbjXOR3kLiXcT8TvhwNbNqg
-         uevFeBX2vw8c00+NZC8Yw3WmJjPZbWlfXGL8bL9Wzl1I6251TA/pFf60YMnyQ7p6Gx
-         3c1Ndvh2WkOTwirrfGzi2yweKebWFkE/dVcgY2hWEpOkhXKjYfrZsP9FmgHUwpQDdq
-         jJOIIsjF4Q4EA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lukas Wunner <lukas@wunner.de>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Ferry Toth <fntoth@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, steve.glendinning@shawell.net,
-        UNGLinuxDriver@microchip.com, linux@rempel-privat.de,
-        colin.king@intel.com, paskripkin@gmail.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 118/159] usbnet: Run unregister_netdev() before unbind() again
-Date:   Mon, 30 May 2022 09:23:43 -0400
-Message-Id: <20220530132425.1929512-118-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530132425.1929512-1-sashal@kernel.org>
-References: <20220530132425.1929512-1-sashal@kernel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42F60B80AE8;
+        Mon, 30 May 2022 13:26:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A194C3411A;
+        Mon, 30 May 2022 13:26:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1653917211;
+        bh=jQxRXVeofHNHJwXBNCoacrIHt+NDfKthlcM1Aw4nXmY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vD8SBMIjmxM38Xn4OgWF+oRNE7kkCCqOEA/RtpNj4VpZMwBqSnuN8t4aXTDN2DLF2
+         Kd+jrbeI7pQBZ6x5chNP8Ko4jHdzA3AiMwrz24iemd3kOWEwI+jSUDhcPEOldzAHV4
+         GAhUz4VaspsGax0FgN5cAnxtA1u5gK6/1E1aFTZQ=
+Date:   Mon, 30 May 2022 15:26:47 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Mychaela N. Falconia" <falcon@freecalypso.org>
+Cc:     Johan Hovold <johan@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        mychaela.falconia@gmail.com
+Subject: Re: [PATCH 0/6] serial ports: add ability to suppress raising DTR &
+ RTS on open
+Message-ID: <YpTGF1dh2RafcFT2@kroah.com>
+References: <20220527222703.BA4D3374020E@freecalypso.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220527222703.BA4D3374020E@freecalypso.org>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,104 +52,122 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Lukas Wunner <lukas@wunner.de>
+On Fri, May 27, 2022 at 10:27:03PM +0000, Mychaela N. Falconia wrote:
+> Back in 1970s UNIX a poor design decision was made regarding serial port
+> handling; this bad design has been codified into standards (POSIX, SUS)
+> and persists into present-day Linux.
 
-[ Upstream commit d1408f6b4dd78fb1b9e26bcf64477984e5f85409 ]
+Odd that you state it this way, as this IS the RS-232 standard
+requirement that was released in 1968, so codifying it into the POSIX
+standard and using it in Linux today was a good thing so that we can use
+Linux on hardware built for the standard.
 
-Commit 2c9d6c2b871d ("usbnet: run unbind() before unregister_netdev()")
-sought to fix a use-after-free on disconnect of USB Ethernet adapters.
+To ignore the public, accepted, standard is to become an operating
+system that does not follow the standard, which would not be a good
+thing at all.
 
-It turns out that a different fix is necessary to address the issue:
-https://lore.kernel.org/netdev/18b3541e5372bc9b9fc733d422f4e698c089077c.1650177997.git.lukas@wunner.de/
+> In 2021 FreeBSD 13.0 became the
+> first Unix-style OS to fix the problem; the present patch series aims
+> to implement a similar solution in Linux.
 
-So the commit was not necessary.
+Again, this is not a "problem", it is a "let us use these pins for
+something that they were not designed to be used for" type of thing.
+You are wanting to ignore the well known and very common standard of the
+past 53 years because you wish to reuse a UART pin as a GPIO pin, which
+is not any sort of standardized thing at all.
 
-The commit made binding and unbinding of USB Ethernet asymmetrical:
-Before, usbnet_probe() first invoked the ->bind() callback and then
-register_netdev().  usbnet_disconnect() mirrored that by first invoking
-unregister_netdev() and then ->unbind().
+> The root of the problem is the POSIX/SUS-codified design decision to
+> always automatically assert both DTR and RTS modem control signals on
+> the initial open of a serial port, without giving userspace any ability
+> to say "no, please don't do it".
 
-Since the commit, the order in usbnet_disconnect() is reversed and no
-longer mirrors usbnet_probe().
+Again, that is the standard, why wouldn't you want to do that?  To not
+do that would be to break interoperability with millions of devices out
+there (remember modems?)
 
-One consequence is that a PHY disconnected (and stopped) in ->unbind()
-is afterwards stopped once more by unregister_netdev() as it closes the
-netdev before unregistering.  That necessitates a contortion in ->stop()
-because the PHY may only be stopped if it hasn't already been
-disconnected.
+> This design is flawed on a fundamental
+> philosophical level: an OS kernel needs to provide a mechanism for
+> applications to operate on hardware, rather than insert its own mind
+> in the middle.  If a user wishes to open any kind of hardware device
+> and perform arbitrary operations on that device, the kernel needs to
+> allow this access unobstructed, provided that the user has the necessary
+> permissions.  If the user is asking to merely open a hardware device,
+> but the kernel refuses to provide such "simple open" access without
+> mandatorily imposing some specific hardware action along with that
+> open, this behaviour needs to be considered a defect, a design bug.
 
-Reverting the commit allows making the call to phy_stop() unconditional
-in ->stop().
+Again, this is not a design bug, but the requirement that the OS follow
+the 50+ year old documented and accepted standard for this hardware
+interface.  This is designed properly.
 
-Tested-by: Oleksij Rempel <o.rempel@pengutronix.de> # LAN9514/9512/9500
-Tested-by: Ferry Toth <fntoth@gmail.com> # LAN9514
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Acked-by: Oliver Neukum <oneukum@suse.com>
-Cc: Martyn Welch <martyn.welch@collabora.com>
-Cc: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/asix_devices.c | 6 +-----
- drivers/net/usb/smsc95xx.c     | 3 +--
- drivers/net/usb/usbnet.c       | 6 +++---
- 3 files changed, 5 insertions(+), 10 deletions(-)
+> Because the design bug is codified in POSIX, SUS etc, it cannot be
+> simply fixed - a change to default behaviour would violate standards
+> and break bazillion existing applications.  Instead the only possible
+> solutions at this point in time have to take the form of creative
+> workarounds - and by necessity, such creative workarounds should NOT
+> be expected to be "pretty" or architecturally clean.  The
+> architecturally-clean boat has sailed a few decades ago - in the
+> present time, non-pretty workarounds are required.
 
-diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index 38e47a93fb83..5b5eb630c4b7 100644
---- a/drivers/net/usb/asix_devices.c
-+++ b/drivers/net/usb/asix_devices.c
-@@ -795,11 +795,7 @@ static int ax88772_stop(struct usbnet *dev)
- {
- 	struct asix_common_private *priv = dev->driver_priv;
- 
--	/* On unplugged USB, we will get MDIO communication errors and the
--	 * PHY will be set in to PHY_HALTED state.
--	 */
--	if (priv->phydev->state != PHY_HALTED)
--		phy_stop(priv->phydev);
-+	phy_stop(priv->phydev);
- 
- 	return 0;
- }
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index 4ef61f6b85df..edf0492ad489 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -1243,8 +1243,7 @@ static int smsc95xx_start_phy(struct usbnet *dev)
- 
- static int smsc95xx_stop(struct usbnet *dev)
- {
--	if (dev->net->phydev)
--		phy_stop(dev->net->phydev);
-+	phy_stop(dev->net->phydev);
- 
- 	return 0;
- }
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 9a6450f796dc..36b24ec11650 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1616,9 +1616,6 @@ void usbnet_disconnect (struct usb_interface *intf)
- 		   xdev->bus->bus_name, xdev->devpath,
- 		   dev->driver_info->description);
- 
--	if (dev->driver_info->unbind)
--		dev->driver_info->unbind(dev, intf);
--
- 	net = dev->net;
- 	unregister_netdev (net);
- 
-@@ -1626,6 +1623,9 @@ void usbnet_disconnect (struct usb_interface *intf)
- 
- 	usb_scuttle_anchored_urbs(&dev->deferred);
- 
-+	if (dev->driver_info->unbind)
-+		dev->driver_info->unbind(dev, intf);
-+
- 	usb_kill_urb(dev->interrupt);
- 	usb_free_urb(dev->interrupt);
- 	kfree(dev->padding_pkt);
--- 
-2.35.1
+Again, you are wanting a workaround for a limitation of your hardware
+design, not a limitation of the RS-232 standard.  You are creating
+non-compliant hardware and wish to control it in a way the hardware was
+not originally intended to be controlled.
 
+And that's fine, but don't speak of it as if we somehow messed up 53
+years ago and no one has noticed it since then.  That's just
+condencending to all of us who have maintained and worked with this
+codebase and standard for these 50+ years.
+
+On a personal note, I've been working on UARTs and RS-232 since "only"
+1992 on a paid basis, and I have never heard of anyone objecting to this
+portion of the RS-232 standard in a way to make it sound like it was
+designed incorrectly this way.  But then again, I've only been doing
+this for 30 years now, maybe I'm too new at this :)
+
+> The solution implemented in FreeBSD relies on a feature of that OS
+> which does not exist in Linux: initial-state devices.
+
+Linux dropped those a long time ago for good reasons, let's not revisit
+that design decision again please.
+
+> There is also one other possibility: there exist some hardware devices
+> in which a USB-serial converter chip and the application circuit behind
+> that chip (which repurposes DTR & RTS for non-standard uses) are
+> integrated into a single monolithic device, with a custom USB VID:PID
+> identifying the hardware device as a whole.  Because they are custom
+> ID codes not known at all to "naive" OS kernels, adding Linux support
+> for any such hw device will necessarily require adding knowledge of
+> that custom VID:PID to the appropriate USB-serial driver - and if it
+> is *known* that this paricular hardware device is wired in such a way
+> that requires the manual_rtsdtr flag to be set, then it makes the most
+> sense for the USB-serial driver to set the flag in the device-specific
+> quirk.  The present patch series adds support for one such device.
+> 
+> Mychaela N. Falconia (6):
+>   tty: add port flag to suppress raising DTR & RTS on open
+>   serial: core: add sysfs attribute to suppress raising DTR & RTS on
+>     open
+>   serial: core: fully suppress raising DTR & RTS on open if
+>     manual_rtsdtr
+>   USB: serial: add sysfs attribute to suppress raising DTR & RTS on open
+>   USB: serial: ftdi_sio: pass port to quirk port_probe functions
+>   USB: serial: ftdi_sio: add support for FreeCalypso DUART28C adapter
+
+From what I recall with the original patch series, Johan is the author
+of these, not you.  Rebasing and forwarding on is great, but please
+never drop original authorship of patches, that's just rude, and in
+some cases, ripe for legal worries.
+
+Can you fix that all up, tone down the "this is all wrong" verbage, and
+properly resend the series as a joined patch series (your emails are not
+threaded properly at all and our tools can not find them correct, just
+use 'git send-email' and that would solve it.) and then after the merge
+window, I'll reconsider this series.
+
+Also please document what has changed since Johan's original submission
+to now, and why it should now be accepted when it was rejected then.
+
+thanks,
+
+greg k-h
