@@ -2,63 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C339538610
-	for <lists+linux-usb@lfdr.de>; Mon, 30 May 2022 18:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A47538696
+	for <lists+linux-usb@lfdr.de>; Mon, 30 May 2022 19:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240384AbiE3QXt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 May 2022 12:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
+        id S239673AbiE3RJO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 May 2022 13:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234818AbiE3QXr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 May 2022 12:23:47 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008F46EC61;
-        Mon, 30 May 2022 09:23:45 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2ff90e0937aso114802037b3.4;
-        Mon, 30 May 2022 09:23:45 -0700 (PDT)
+        with ESMTP id S237650AbiE3RJM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 May 2022 13:09:12 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2763F59956
+        for <linux-usb@vger.kernel.org>; Mon, 30 May 2022 10:09:11 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-f2a4c51c45so15037316fac.9
+        for <linux-usb@vger.kernel.org>; Mon, 30 May 2022 10:09:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=46VWBOlr2Q10J4uNUqOsDzjv71tB9nOR1aoShrrJj8s=;
-        b=nlDWdy0+JaFCCiuSIOpaGeqEdor2THCNTBsbFPbf9JXiXmkKQe3b04tEM1EJOJxTRQ
-         pDc1VKCy2Kbna1ERFcqUqrGJyyeQyBu20dhuTsOsPbersNCsrA6k3s1TaYrb7FWVru0m
-         Mz0VR8KHR03wiDr7p+Lv86M7vK48dQza/Ar91KfKzu2E8GjQWHtVcTxANeP8MlKGUGPO
-         l5lkM80nEWf69C+OkMpf3JxhR9pJHb/F1wazE4WNFptNOodYMQnpRILrxIiay2mJA549
-         S4sAmU1RSPl+QOInyWXxG4+18l8W2b1gBfXZ12rpNlzwmcgw43/Kq1/2Vu9BXMItdVPu
-         8nTw==
+        bh=3pPgLSe0hAiUkDeapON9X9XhXqKwvlbha3rD5980Slg=;
+        b=KlCDIygRoDdJLTnC3YaeKwYRz3sSNjR8UO7T8XU4vU3AyYyeuG+cCY2JdYivqOAbv2
+         DWWAyjrD2XFkhSCT6o4UZ3kGYMRgCFsv2OJozGiOwoVfsD9A0h/E/aPMSDnkFnx+EW0O
+         j86K6+1f6r0luUxRPwgqB4YFZpc9nwsxdlHMEEznYnuVGWI7ZAetXmocWNz0Qd0TO0KL
+         BDTxfMK9hocvDatFgqIYkXGvwAvcovpkSNAkr4iJFjgniWWhV+6OrF7vbopZhgyFFh53
+         /+ocMw8VD9hW7dLZR2r/MRGh0lqwFtVhjqYNrbdhW4wG7FCoYrqPbVKk0TVT4jtBfI3F
+         ZiTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=46VWBOlr2Q10J4uNUqOsDzjv71tB9nOR1aoShrrJj8s=;
-        b=l5OWuvqhLYOBic/RoBXWqSQedfmh8EycR+Ft4hLUTpjbX3TEEpVL5UtOnk34UkDRYN
-         51Vdb5QI9QEfZYrQYtHb8pNXHMKp8AuFZCB//Q2gBXJEyONp5Wu5qr3ee18GJC2ImEUF
-         KCNEuXhvubl3SmM9dXfh7+WSOqoY3BsZOAOki7inlFHMel08fMyVLISu0fM4T6yFw8Jt
-         ntUWLasydm+KvRGVmszibZpjh25ZymqHF+v0m0ub7g4+a+YT2rfXfGK518aiNhm9LiRg
-         6GbQOExjdt2yuMkBcxu4vq8uLFnQTy4Hs+eIko1ypLqxkbc3Iuk6LsSUTwE3PZYvIZwp
-         qjcg==
-X-Gm-Message-State: AOAM5338COd3j5OD1g+9sPELSiZuhT36cnkQVWpWJv+6T25d8rLcaY+L
-        dfjH2wkanCdlElYxZdd+ijui47alFWGA4p6jj8s=
-X-Google-Smtp-Source: ABdhPJyBWZGb6qcnhQo0AdDGYSN+rv+xHTzIU1WYuoAMkg6AwUlUA2xV2ay5hlfUeZWZQbV+FX+Jd3GqM4T5+gZieew=
-X-Received: by 2002:a81:99c6:0:b0:300:5ac0:3295 with SMTP id
- q189-20020a8199c6000000b003005ac03295mr28647428ywg.14.1653927825222; Mon, 30
- May 2022 09:23:45 -0700 (PDT)
+        bh=3pPgLSe0hAiUkDeapON9X9XhXqKwvlbha3rD5980Slg=;
+        b=qaqzVFzw3FICtx7VDfHyPsEbvHJxIE93W2kRTXaY7A2OIi6NAe5wcd5sIREY+PUCuS
+         apHWoZOoN3788KChozyRz9wNGT0brrb/OX7pMtBuKzClUmPxx8A/KMQuWfbvAYWwfLoj
+         0lukl3B8xRnxmHwT01To1Ufum4CqrKuyYK71EIF/htZitxzymz+iFUV+67PCgGv6LBRk
+         aDobxz+IODlBxl09ioonbwqUq04xwKlsNkBhky1EDuMo/US6krGj+1dB2+eyueDv5PJ4
+         iUK3vE8lbDrJIx95aLXeHjLyi6RtBltZA7RulAgwhDzlgFXb7RP+nQYg+dbJU1lfVTzD
+         +cZw==
+X-Gm-Message-State: AOAM532rm9e7C5R5/+2X+EVOe1qk+eqO+NWIIWbmEGkx4R3ScY7wAuNm
+        aIiRRlskZYNZZEBzwE86ywjxqZguG52YKnVzPrJkIdhdZ+g=
+X-Google-Smtp-Source: ABdhPJynATd2XDhJOcjctXN/rF6wfMkZpEXSA2U2go77lRiHAdqlshmANp/pacGpOneVuXT4refFZtToJZWJZMKKj6o=
+X-Received: by 2002:a05:6870:3509:b0:f3:44ea:f034 with SMTP id
+ k9-20020a056870350900b000f344eaf034mr1640591oah.216.1653930550373; Mon, 30
+ May 2022 10:09:10 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7000:7aa7:0:0:0:0 with HTTP; Mon, 30 May 2022 09:23:44
- -0700 (PDT)
-In-Reply-To: <CAHp75VeQzY+Pfru4LSgv+fqya-2F7G21TjaVsybCqQBSD8NeUw@mail.gmail.com>
-References: <20220527222709.1AC8837401F1@freecalypso.org> <CAHp75VeQzY+Pfru4LSgv+fqya-2F7G21TjaVsybCqQBSD8NeUw@mail.gmail.com>
-From:   Mychaela Falconia <mychaela.falconia@gmail.com>
-Date:   Mon, 30 May 2022 08:23:44 -0800
-Message-ID: <CA+uuBqbP8BkXCgVn9vmTb-3PoCtp1NS1eLKq2T49jwM6_=DH4A@mail.gmail.com>
-Subject: Re: [PATCH 1/6] tty: add port flag to suppress raising DTR & RTS on open
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20220530090003.351702-1-c.lobrano@gmail.com> <CAGRyCJHZA2WB=qPh8-HD6VMTHs2xWApbtQTLLSngVzm=S7XqFA@mail.gmail.com>
+In-Reply-To: <CAGRyCJHZA2WB=qPh8-HD6VMTHs2xWApbtQTLLSngVzm=S7XqFA@mail.gmail.com>
+From:   Carlo Lobrano <c.lobrano@gmail.com>
+Date:   Mon, 30 May 2022 19:07:21 +0200
+Message-ID: <CA+KuA8cOuqnNyG8HQ-e=9XjL6reA_ZtohBdXHVWi5oSuDwXzRw@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: serial: Add support for Telit LN910Cx 0x1250 composition
+To:     Daniele Palmas <dnlplm@gmail.com>
 Cc:     Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>
+        linux-usb <linux-usb@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -70,37 +66,62 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Andy Shevchenko wrote:
+Hi Daniele,
 
-> Which version of POSIX and SUS standards are in consideration?
+On Mon, 30 May 2022 at 17:31, Daniele Palmas <dnlplm@gmail.com> wrote:
+>
+> Hi Carlo,
+>
+> Il giorno lun 30 mag 2022 alle ore 15:53 Carlo Lobrano
+> <c.lobrano@gmail.com> ha scritto:
+> >
+> > 0x1250: rmnet, tty, tty, tty, tty
+> >
+> > Signed-off-by: Carlo Lobrano <c.lobrano@gmail.com>
+> > ---
+> >
+> > v2: use RSVD in place of NCTRL for interface 0 (rmnet)
+> >
+> >  drivers/usb/serial/option.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> > index 152ad882657d..cd9aa61ec801 100644
+> > --- a/drivers/usb/serial/option.c
+> > +++ b/drivers/usb/serial/option.c
+> > @@ -1275,6 +1275,8 @@ static const struct usb_device_id option_ids[] = {
+> >           .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
+> >         { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1231, 0xff),    /* Telit LE910Cx (RNDIS) */
+> >           .driver_info = NCTRL(2) | RSVD(3) },
+> > +       { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1250, 0xff),    /* Telit LE910Cx (rmnet) */
+> > +         .driver_info = RSVD(0) },
+>
+> The content of the patch looks good, but the subject needs to be
+> fixed, since the composition does not belong to "LN910Cx", but
+> "LE910Cx": sorry for not having noticed that in v1.
+>
+> Since you are there, it would be also preferred to have the prefix as:
+>
+> USB: serial: option: ....
+>
+> and maybe it could be worth adding something more in the body than
+> only the single composition, e.g.
+>
+> Add support for...
+>
+> Thanks,
+> Daniele
+>
+> >         { USB_DEVICE(TELIT_VENDOR_ID, 0x1260),
+> >           .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
+> >         { USB_DEVICE(TELIT_VENDOR_ID, 0x1261),
+> > --
+> > 2.25.1
+> >
 
-I admit my ignorance - but I've always been told that the behaviour
-of always unconditionally asserting both DTR & RTS on serial port open
-is mandated by both POSIX and SUS, which is why all Unix-style OSes
-have been following this behaviour up until 2021-04, when FreeBSD 13.0
-became the world's first Unix-style OS to provide an *option* for
-users to opt out (on a per-serial-device basis) of this standards-
-mandated behaviour.
+thank you for your review. There is definitely a typo in modem's name,
+and I also agree with your other notes.
+I will update the patch with what you suggested
 
-> Is it only the USB class of devices that are affected or do we have
-> examples on other buses?
-
-In my own use case, it is only USB: my hw device is one where a
-USB-serial chip (FT2232D in my case) and the circuit that repurposes
-DTR & RTS outputs from one of the UARTs (FT2232D Channel B in my case)
-are inseparably integrated on the same PCB, with a custom USB VID:PID
-identifying the device as a whole.  However, I have been told that in
-order to be acceptable into Linux mainline, the proposed solution has
-to work for all similarly affected parties and not just my device,
-hence I am also considering a "generic" case where a custom hw device
-would have an old-fashioned RS-232 electrical interface and could be
-connected to "any" serial port.
-
-> Logically I would put them otherwise, first to check a custom flag and
-> then the existence of the callback.
-
-I can make this change in the next version of my patch series, once I
-get a clarification from Greg as to the correct way to denote the
-chain of authorship and revision.
-
-M~
+Thanks,
+Carlo
