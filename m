@@ -2,110 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281975392EE
-	for <lists+linux-usb@lfdr.de>; Tue, 31 May 2022 16:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0A85393C8
+	for <lists+linux-usb@lfdr.de>; Tue, 31 May 2022 17:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244329AbiEaOJB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 May 2022 10:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42272 "EHLO
+        id S1345583AbiEaPSI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 May 2022 11:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235298AbiEaOI7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 May 2022 10:08:59 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837DB65406
-        for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 07:08:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654006136; x=1685542136;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WN47rHoAXHvgyILYaQvp8gy0/D9WefpkWMOCdtHNamc=;
-  b=N1EW3wzS6ct95GdIm/lQtQY6aMw5n4sKyRBOcdHeHSpiSiJM72m3t2no
-   +sXWE0/1fepIIB7GoE3xLgsuqNVVH/Q9wZ13gKqiV3PYaOr4dmhuvFbbf
-   Hg/OSXhHxhius3C7a5HkshH0yFjkfrXcadHmAr1A75O5iipp1FjGny50W
-   Y=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 31 May 2022 07:08:56 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 07:08:56 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 31 May 2022 07:08:55 -0700
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 31 May 2022 07:08:53 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>,
-        Michael Wu <michael@allwinnertech.com>,
-        "John Keeping" <john@metanate.com>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v2 2/2] usb: gadget: f_fs: change ep->ep safe in ffs_epfile_io()
-Date:   Tue, 31 May 2022 22:08:39 +0800
-Message-ID: <1654006119-23869-3-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1654006119-23869-1-git-send-email-quic_linyyuan@quicinc.com>
-References: <1654006119-23869-1-git-send-email-quic_linyyuan@quicinc.com>
+        with ESMTP id S1344803AbiEaPSI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 May 2022 11:18:08 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4463D633B2;
+        Tue, 31 May 2022 08:18:07 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-e5e433d66dso18768924fac.5;
+        Tue, 31 May 2022 08:18:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hw6HT0YhpU0Nzy8vat+zVfd+GtraoN/T8IMTFBgNYMw=;
+        b=tfpoIRS1tMPtFNgOICSK7AYhNogSMAX3agLq5ALRg2t6691S2BkybUiLpqGv9CoCBQ
+         NQ63ZUSj+Q8GkI5hAqca1Tgsl1463g78wDsGiOkvw7CZAM523LAM6X06DLztlUmBHXcz
+         Q7jE9MfI/Tk/B/HZkXQJk6dwOXlg/H2iSXYfVm07iE9XqiD94jaqcTfjYt28eZWllvDE
+         q6C9d4wW5AjkxkPZInEktBPw+QNCrV6b/aRldihBn4+NvCrRU/Kh8xuFMhBR4kvvGUzP
+         2MVsI/A2icmInI1ZCVUtmD5mxwP7D/A23wmmqGqmH+1l752WQ2mL5cEx74pKRPDzh/lh
+         4KKg==
+X-Gm-Message-State: AOAM532YFK3Va58YsfA07XqwG7UQIAbaBPE7LRJDTLEdru8onxaP+qaD
+        +5pQsXnzG9x7L0C2EBM16fY8q4X85Q==
+X-Google-Smtp-Source: ABdhPJw6/muc28+MxomD6dKLajsUp3//40HWkOp4KAueSb0Cb/n2QUlgd7og+IQhsYKbhLoeM4vkrQ==
+X-Received: by 2002:a05:6870:c583:b0:f2:e92f:e1c4 with SMTP id ba3-20020a056870c58300b000f2e92fe1c4mr11835783oab.48.1654010286550;
+        Tue, 31 May 2022 08:18:06 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id la13-20020a056871410d00b000f33f8b7603sm2518321oab.17.2022.05.31.08.18.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 08:18:06 -0700 (PDT)
+Received: (nullmailer pid 1781709 invoked by uid 1000);
+        Tue, 31 May 2022 15:18:05 -0000
+Date:   Tue, 31 May 2022 10:18:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: snps,dwc3: Add missing 'dma-coherent'
+ property
+Message-ID: <20220531151805.GD1742958-robh@kernel.org>
+References: <20220526014118.2872057-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526014118.2872057-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In ffs_epfile_io(), when read/write data in blocking mode, it will wait
-the completion in interruptible mode, if task receive a signal, it will
-terminate the wait, at same time, if function unbind occurs,
-ffs_func_unbind() will kfree all eps, ffs_epfile_io() still try to
-dequeue request by dereferencing ep which may become invalid.
+On Wed, May 25, 2022 at 08:41:18PM -0500, Rob Herring wrote:
+> The 'unevaluatedProperties' schema checks is not fully working and doesn't
+> catch some cases where there's a $ref to another schema. A fix is pending,
+> but results in new warnings in examples.
+> 
+> Some DWC3 implementations such as Xilinx are hooked up coherently and need
+> to set the 'dma-coherent' property.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Fix it by add ep spinlock and will not dereference ep if it is not valid.
-
-Reviewed-by: John Keeping <john@metanate.com>
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
-v2: add Reviewed-by from John keeping
-
- drivers/usb/gadget/function/f_fs.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index d4d8940..9bf9287 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -1077,6 +1077,11 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
- 		spin_unlock_irq(&epfile->ffs->eps_lock);
- 
- 		if (wait_for_completion_interruptible(&io_data->done)) {
-+			spin_lock_irq(&epfile->ffs->eps_lock);
-+			if (epfile->ep != ep) {
-+				ret = -ESHUTDOWN;
-+				goto error_lock;
-+			}
- 			/*
- 			 * To avoid race condition with ffs_epfile_io_complete,
- 			 * dequeue the request first then check
-@@ -1084,6 +1089,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
- 			 * condition with req->complete callback.
- 			 */
- 			usb_ep_dequeue(ep->ep, req);
-+			spin_unlock_irq(&epfile->ffs->eps_lock);
- 			wait_for_completion(&io_data->done);
- 			interrupted = io_data->status < 0;
- 		}
--- 
-2.7.4
-
+Applied, thanks.
