@@ -2,129 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8AD35397CE
-	for <lists+linux-usb@lfdr.de>; Tue, 31 May 2022 22:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5F45397D9
+	for <lists+linux-usb@lfdr.de>; Tue, 31 May 2022 22:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347680AbiEaUKy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 May 2022 16:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
+        id S1347693AbiEaUPL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 May 2022 16:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244956AbiEaUKx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 May 2022 16:10:53 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1AD972B8;
-        Tue, 31 May 2022 13:10:52 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-e656032735so19899168fac.0;
-        Tue, 31 May 2022 13:10:52 -0700 (PDT)
+        with ESMTP id S1347377AbiEaUPD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 May 2022 16:15:03 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A4178913
+        for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 13:15:01 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id x62so7202604ede.10
+        for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 13:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oFtwwjCwLQncprSW0uxMAdDJMdxwLty5X6vUURCLEwk=;
+        b=ITMWpvDnZ+RR0dXG8wMy2xR2rl4TYKiJPd4P2ee+6b+YSNrXIfd5C5/sxHiIaiV8l/
+         Rr8j5rbfZJQdWDicbqJLULlJ8a1LPJtojDk9pZRk5GN9Grou5i7tAHjAOnAm+43fQbft
+         AItTPaS/anUqkjrgHeA8gWiVTOnJVpyYwkX4kWPrZRx3KFfTtM/N/iDSPeACILsT4aQf
+         M3SWSLCBTTSyyMcH3BloOhEZjIv4V9qKLVXjfngWe+ZrAh5pvVrbUk/ZDUnhXwaHIcji
+         8VSjsm3e2xhEeVQO89RSDtV5LDweV0ruYx2PZwybiDHSYQi1HJRfQptttYSjG2nvuBwD
+         fRkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=syZte8VMFYIrvqwLV7B4xdi4mb5JASYHy9v3uwzX/Uk=;
-        b=U0n4phY9WYv/Ni/EFKG0Ln0XCOsYFnsrJOHXOHEtpVKYwQD9OywNiY6rHKGW4K/Flb
-         CxucKzGvJ7u8XttPgsw1kR2hgg/Ixq5pI0O4r1p9dJWUpdautE0wq2RvEWocUD4GLzb9
-         zAW7DMn/mhPSXsR+PQYXP4ty/Lwil9sRBoPf6H5C5pxS/UUgPF2Gavdjzs+4C3HACbia
-         fIuzQoZZlOFJqQ+J1iLPaQjQ+t0OoVZw6IcKAlcB4ZD2sJtNXeZvTeh6zK25sRtg7TTJ
-         3Dr/IL61XdbbEx+vqRuEzJSteP4MVojjXwFuzo3iiNv1W97pt0Ph+QfGoorA7Nh714tP
-         zsOQ==
-X-Gm-Message-State: AOAM531zHfUBLVO3hZXVxaniEUbhJGnKOhYmKilAQrjroOExtad8YlgG
-        BzG9Ooz5vUAl3tAq+XQQvQ==
-X-Google-Smtp-Source: ABdhPJwuGMM5LGvvT0reg6w0YES9zGykPNIMnjPS+0QJgmckJRbrz66grBPVW056W4xldPyHkoNpmw==
-X-Received: by 2002:a05:6870:c22c:b0:f5:701f:16d9 with SMTP id z44-20020a056870c22c00b000f5701f16d9mr3094306oae.35.1654027851564;
-        Tue, 31 May 2022 13:10:51 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bg41-20020a05680817a900b0032617532120sm6521539oib.48.2022.05.31.13.10.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 13:10:51 -0700 (PDT)
-Received: (nullmailer pid 2201482 invoked by uid 1000);
-        Tue, 31 May 2022 20:10:50 -0000
-Date:   Tue, 31 May 2022 15:10:50 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Harsh Agarwal <quic_harshq@quicinc.com>
-Cc:     quic_pkondeti@quicinc.com, Philipp Zabel <p.zabel@pengutronix.de>,
-        quic_ppratap@quicinc.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [RFC v2 1/2] dt-bindings: usb: dwc3: Add support for multiport
- related properties
-Message-ID: <20220531201050.GD1808817-robh@kernel.org>
-References: <1653560029-6937-1-git-send-email-quic_harshq@quicinc.com>
- <1653560029-6937-2-git-send-email-quic_harshq@quicinc.com>
- <1653568833.732260.3797150.nullmailer@robh.at.kernel.org>
- <33ce11bd-abc4-0e59-4637-e8133818e0f6@quicinc.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oFtwwjCwLQncprSW0uxMAdDJMdxwLty5X6vUURCLEwk=;
+        b=w4UXHTMba6sgmqSzCmuuhx9h5b6ohBx3l6uCQz+BCrWOVYEoixvLz/bQI2oZNLdWGk
+         dzQNlicC2x6hEkhtlh7jTiN7bYfpG3SUkkUxMoXSs74BsB1OVOuGQjvZKaHnRlSeNOBH
+         4nX9RdTsCAAxlluhoDcaO7CsmYauyu4hOITS0xqKYiAV1UwYKIvX7xmh9a9R06YJ3lcg
+         Htxpol/Hr9F3zdMFk4+Z+ta9eo8MOqtibjFUNqHYTijomK9YIvRVfJjQvsFKmorEo71W
+         LPtB7ccbIf8iY/UOmTqOctc7x+90V/kZL/Kw0mo0FhdEmh6ySe7XdmyBklr97Sd1BKrp
+         t6Yg==
+X-Gm-Message-State: AOAM532BS3EZVIGkjgfsnw9WTjFdbjdN58y+JQ0guj6ykGrxrOuP/jum
+        bv2xwH6deqyLiuqAC8/hGHSeFg==
+X-Google-Smtp-Source: ABdhPJxh3X5a34X2qfUbuwM7ahlfxQCxIkomDGMgER9D0LcMD1yvEUBK+ewRUPxHTf67kQQv6tje2Q==
+X-Received: by 2002:aa7:d481:0:b0:42d:d5fd:f963 with SMTP id b1-20020aa7d481000000b0042dd5fdf963mr10752639edr.209.1654028100222;
+        Tue, 31 May 2022 13:15:00 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id i24-20020a170906091800b006ff05d4726esm5251077ejd.50.2022.05.31.13.14.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 13:14:59 -0700 (PDT)
+Message-ID: <33a797d7-ca60-5153-2ba1-3a909fcc5965@linaro.org>
+Date:   Tue, 31 May 2022 22:14:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33ce11bd-abc4-0e59-4637-e8133818e0f6@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 10/14] dt-bindings: power: supply: Add Mediatek MT6370
+ Charger binding documentation
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de
+Cc:     cy_huang@richtek.com, alice_chen@richtek.com,
+        chiaen_wu@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org
+References: <20220531104211.17106-1-peterwu.pub@gmail.com>
+ <20220531104211.17106-2-peterwu.pub@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220531104211.17106-2-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 27, 2022 at 04:30:34PM +0530, Harsh Agarwal wrote:
+On 31/05/2022 12:42, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
 > 
-> On 5/26/2022 6:10 PM, Rob Herring wrote:
-> > On Thu, 26 May 2022 15:43:48 +0530, Harsh Agarwal wrote:
-> > > Added support for multiport, mport, num-ssphy and num-hsphy
-> > > properties. These properties are used to support devices having
-> > > a multiport controller.
-> > > 
-> > > Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
-> > > ---
-> > >   .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
-> > >   1 file changed, 55 insertions(+)
-> > > 
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > 
-> > yamllint warnings/errors:
-> > ./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:366:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
-> > ./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:367:10: [warning] wrong indentation: expected 11 but found 9 (indentation)
-> > ./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:369:11: [warning] wrong indentation: expected 11 but found 10 (indentation)
-> > 
-> > dtschema/dtc warnings/errors:
-> > Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:86.27-89.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@1: node has a unit name, but no reg or ranges property
-> > Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:91.27-93.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@2: node has a unit name, but no reg or ranges property
-> > Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:95.27-97.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@3: node has a unit name, but no reg or ranges property
-> > Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:99.27-101.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@4: node has a unit name, but no reg or ranges property
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.example.dtb: usb@4a000000: multiport: 'mport' is a required property
-> > 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > 
-> > doc reference errors (make refcheckdocs):
-> > 
-> > See https://patchwork.ozlabs.org/patch/
-> > 
-> > This check can fail if there are any dependencies. The base for a patch
-> > series is generally the most recent rc1.
-> > 
-> > If you already ran 'make dt_binding_check' and didn't see the above
-> > error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> > date:
-> > 
-> > pip3 install dtschema --upgrade
-> > 
-> > Please check and re-submit.
-> Indentation error I have rectified in my RFC v2.
-> Regarding below warnings
+
+Subject - remove "binding documentation". It's already implied by prefix.
+
+> Add Mediatek MT6370 Charger binding documentation.
 > 
-> "Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:86.27-89.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@1: node has a unit name, but no reg or ranges property"
-> Here the mport expects no "reg" or ranges" property as of now. Only thing that is mandated is either the USB-PHY phandles using "usb-phy" or the Generic PHY declaration using "phy" and "phy-names"
-> Can you please suggest to mask these warnings or do I need to add something else ?
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+>  .../power/supply/mediatek,mt6370-charger.yaml | 60 +++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+> new file mode 100644
+> index 000000000000..9d5c4487ca9c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/mediatek,mt6370-charger.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek MT6370 Battery Charger
+> +
+> +maintainers:
+> +  - ChiaEn Wu <chiaen_wu@richtek.com>
+> +
+> +description: |
+> +  This module is part of the MT6370 MFD device.
+> +  Provides Battery Charger, Boost for OTG devices and BC1.2 detection.
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt6370-charger
+> +
+> +  interrupts:
+> +    description: |
+> +      Specify what irqs are needed to be handled by MT6370 Charger driver. IRQ
+> +      "MT6370_IRQ_CHG_MIVR", "MT6370_IRQ_ATTACH" and "MT6370_IRQ_OVPCTRL_UVP_D"
+> +      are required.
+> +    items:
+> +      - description: BC1.2 done irq for mt6370 charger
+> +      - description: usb plug in irq for mt6370 charger
+> +      - description: mivr irq for mt6370 charger
 
-A unit-address requires 'reg' or 'ranges' and vice-versa. So you need 
-'reg'.
+s/for mt6370 charger//
+in each item
 
-However, usb-hcd.yaml already defines what child nodes are for USB 
-hosts. Whatever you do here needs to be compatible with that.
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: attach_i
+> +      - const: uvp_d_evt
+> +      - const: mivr
+> +
+> +  io-channels:
+> +    description: |
+> +      Use ADC channel to read vbus, ibus, ibat, etc., info. Ibus ADC channel
+> +      is required.
 
-Rob
+Constraints (e.g. maxItems) are needed.
+
+> +
+> +  usb-otg-vbus:
+
+Let's keep the same name as in MT6360:
+
+usb-otg-vbus-regulator
+> +    type: object
+> +    description: OTG boost regulator.
+> +    $ref: /schemas/regulator/regulator.yaml#
+> +
+> +    properties:
+> +      enable-gpio:
+> +        maxItems: 1
+> +        description: |
+> +          Specify a valid 'enable' gpio for the regulator and it's optional
+
+This description is pointless - does not bring any more information. You
+repeat the schema. Please, avoid such descriptions.
+
+> +
+> +required:
+> +  - compatible
+> +  - interrupts
+> +  - interrupt-names
+> +  - io-channels
+> +
+> +additionalProperties: false
+
+
+How about example? Or is it going to be in MFD schema?
+
+
+Best regards,
+Krzysztof
