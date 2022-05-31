@@ -2,108 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA895391BB
-	for <lists+linux-usb@lfdr.de>; Tue, 31 May 2022 15:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 239F0539206
+	for <lists+linux-usb@lfdr.de>; Tue, 31 May 2022 15:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344715AbiEaNVf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 May 2022 09:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
+        id S1344879AbiEaNuo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 May 2022 09:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344691AbiEaNVb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 May 2022 09:21:31 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A232395DCE;
-        Tue, 31 May 2022 06:21:29 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id k187so13199844oif.1;
-        Tue, 31 May 2022 06:21:29 -0700 (PDT)
+        with ESMTP id S233818AbiEaNuk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 May 2022 09:50:40 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1564EDCA
+        for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 06:50:38 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id x17so9726132wrg.6
+        for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 06:50:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ks9vTtzXL1NzJuLhvcv/lBf9sH/I8oroEcUXJQecJiY=;
+        b=xtZHSA3K85YeP1R8TqJTezh1l7AboO67QnJbxmUxYsSKR3b9HMFsTp1QD4TVZvKYD1
+         HykwJkz0IW4fwjPH1Z0l9xH3Oif1Qyz4EObPsiwZXnAXo/kCZCKI8eI5xsuJ7HgXtaXN
+         igvkGmpchkyuuMO2tdAR159F7tqSL4KCQk76eOzZ0gnvace+L6L/D7RGtYizyiAxNH/H
+         U1OOXHiLwvj0PnjQ9PmyWuR1utFiONwi7NGx9h2FLtpNKsKkOyd7zUg6Z7fPPuvzo2+J
+         OzV184qkC3Q1grDw1sZEiE1et3kV/ow2A5Uy2HR/6AQuE2OaglwYGrTIwCVgkLMJpI+J
+         hYNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=n2YWFk0y3q/d7S62mzm/mupBj+kGA49hA3r4JP1ldJU=;
-        b=UqsmQS/PhlikB+EugfjiGGPxJwTfuBvKe2jER/nsjc57mx4xPj5HLoF1CHBopg693H
-         ac3hEBnR5zeGnGTgcjHjY/etY9fY8T2K/2rmycMu2YqC1a/QtWr1CrdrkOv/kkVrfwlT
-         Id9GMrwWI+bH5nNgbNpeuftaJKh1UjkJQmaRbe93RKpoyiwPrfVZedfCqhLO/K8mE9HY
-         PGtQLvOI0GrrG5Nb2Mc/AM1cAg9aUx8skQPhess86mtvkozKKcoKbDWmh7v11OSSsh/Q
-         uVi0vrSJzUxKzbDRO+gFzyIr2RdFSs8/i48Y4LMU1uUd2r1Q5oVFV5bwRJ+d4FMDFqkN
-         pJKw==
-X-Gm-Message-State: AOAM531R3t5D31yQh+W+kQa3tRLBHWXiMIzr6D5JeQK9/vNvxLfeiKN7
-        ab2PJ081+bzXdSfYZ9HqLw==
-X-Google-Smtp-Source: ABdhPJw/uns3WPs2X+MsfGF5nr1CcrWwKzdKVdZtYl2nRuFZii2epEbochmc6fHJTtwW1+OebjuDSA==
-X-Received: by 2002:a05:6808:10d1:b0:32b:a63b:fdda with SMTP id s17-20020a05680810d100b0032ba63bfddamr12450526ois.257.1654003288954;
-        Tue, 31 May 2022 06:21:28 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w11-20020a0568080d4b00b0032b4ae1fc2csm5715934oik.21.2022.05.31.06.21.28
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ks9vTtzXL1NzJuLhvcv/lBf9sH/I8oroEcUXJQecJiY=;
+        b=ZcCtuzmLE1/KaJ1uOJCyK7nQWvQKoTYYUhfevml4cAuxTGKelgK9unH14uXOA/KcBm
+         jzw2lcgmAiBPTpQmq0IQfhHMM5jSsPAE1zvrPoYadY35ngeGMq5zADUbN4Z2O8mnFEzs
+         DgqPCefWml/VszZFSQHRgavPd7EVbf5EpOQaQKoPU092PAxNZ64p8eX+I8aC+fDyvwpM
+         flkYIa9VG4XZkPcs9fxYnv5CxKYCI4EQvIivDnis1hOc8/hN3ZhSx+lWaiX6VY5othHP
+         8DP2ccv4qhfGzTkXhc5G1gEmRRLwqCJoCjii4EJ8aaoKB8hId9PwinYbT1OoZLx3qen6
+         yvkQ==
+X-Gm-Message-State: AOAM5303DpMs3BquZz3bbBpp7V6a9hjk46nwpRzonMm+jP71swGTWaTf
+        BNe6cXTsj5HFS5Hj16MZ597Vkw==
+X-Google-Smtp-Source: ABdhPJzh0ABvRvzeW4VNDfDT+jgXlefhQRDjukiBBkCf5v7KqylLxZRg6Qya21tyLqyBuT1Kzn3OQA==
+X-Received: by 2002:a5d:6f1d:0:b0:20f:ff40:263f with SMTP id ay29-20020a5d6f1d000000b0020fff40263fmr25172992wrb.626.1654005037132;
+        Tue, 31 May 2022 06:50:37 -0700 (PDT)
+Received: from localhost.localdomain ([88.160.162.107])
+        by smtp.gmail.com with ESMTPSA id l11-20020a05600c1d0b00b00394351e35edsm2404806wms.26.2022.05.31.06.50.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 06:21:28 -0700 (PDT)
-Received: (nullmailer pid 1610158 invoked by uid 1000);
-        Tue, 31 May 2022 13:21:25 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Harsh Agarwal <quic_harshq@quicinc.com>
-Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        quic_ppratap@quicinc.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        quic_jackp@quicinc.com
-In-Reply-To: <1653985217-20953-2-git-send-email-quic_harshq@quicinc.com>
-References: <1653985217-20953-1-git-send-email-quic_harshq@quicinc.com> <1653985217-20953-2-git-send-email-quic_harshq@quicinc.com>
-Subject: Re: [PATCH 1/3] dt-bindings: usb: dwc3: Add support for multiport related properties
-Date:   Tue, 31 May 2022 08:21:25 -0500
-Message-Id: <1654003285.276061.1610157.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Tue, 31 May 2022 06:50:36 -0700 (PDT)
+From:   Fabien Parent <fparent@baylibre.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, qii.wang@mediatek.com, matthias.bgg@gmail.com,
+        jic23@kernel.org, chaotian.jing@mediatek.com,
+        ulf.hansson@linaro.org, srinivas.kandagatla@linaro.org,
+        chunfeng.yun@mediatek.com, broonie@kernel.org,
+        wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Fabien Parent <fparent@baylibre.com>
+Subject: [PATCH 00/17] Add support for MT8365 EVK board
+Date:   Tue, 31 May 2022 15:50:09 +0200
+Message-Id: <20220531135026.238475-1-fparent@baylibre.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 31 May 2022 13:50:15 +0530, Harsh Agarwal wrote:
-> Added support for multiport, mport, num-ssphy and num-hsphy
-> properties. These properties are used to support devices having
-> a multiport controller.
-> 
-> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
-> ---
->  .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
-> 
+This patch series adds support for the MT8365 EVK board.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This series has dependencies on the following series:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=646256
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=646091
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=646083
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=646081
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=646076
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=646068
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=646020
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=646052
+https://lore.kernel.org/r/20220504091923.2219-2-rex-bc.chen@mediatek.com 
+https://lore.kernel.org/r/20220512062622.31484-2-chunfeng.yun@mediatek.com 
+https://lore.kernel.org/r/20220512062622.31484-1-chunfeng.yun@mediatek.com
+https://lore.kernel.org/r/20220524115019.97246-1-angelogioacchino.delregno@collabora.com
+https://lore.kernel.org/all/20220127015857.9868-1-biao.huang@mediatek.com/
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:366:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
-./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:367:10: [warning] wrong indentation: expected 11 but found 9 (indentation)
-./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:369:11: [warning] wrong indentation: expected 11 but found 10 (indentation)
+Fabien Parent (17):
+  dt-bindings: i2c: i2c-mt65xx: add binding for MT8365 SoC
+  dt-bindings: memory: add mt8365 SoC binding documentation
+  dt-bindings: mmc: mtk-sd: add bindings for MT8365 SoC
+  dt-bindings: arm: mediatek: Add binding for mt8365-evk board
+  dt-bindings: dma: mediatek,uart-dma: add MT8365 bindings
+  dt-bindings: iio: adc: mediatek: add MT8365 SoC bindings
+  dt-bindings: nvmem: mediatek,efuse: add MT8365 bindings
+  dt-bindings: watchdog: mtk-wdt: Add MT8365 SoC bindings
+  dt-bindings: spi: mt65xx: add MT8365 SoC bindings
+  dt-bindings: serial: mediatek: add MT8365 bindings
+  dt-bindings: phy: mediatek,dsi-phy: Add MT8365 SoC bindings
+  dt-bindings: phy: mediatek,tphy: add MT8365 SoC bindings
+  dt-bindings: usb: mediatek,mtu3: add MT8365 SoC bindings
+  dt-bindings: usb: mediatek,mtk-xhci: add MT8365 SoC bindings
+  arm64: dts: mediatek: add mt6357 device-tree
+  arm64: dts: mediatek: add mt8365 device-tree
+  arm64: dts: mediatek: add mt8365-evk board device-tree
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:86.27-89.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@1: node has a unit name, but no reg or ranges property
-Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:91.27-93.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@2: node has a unit name, but no reg or ranges property
-Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:95.27-97.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@3: node has a unit name, but no reg or ranges property
-Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:99.27-101.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@4: node has a unit name, but no reg or ranges property
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.example.dtb: usb@4a000000: multiport: 'mport' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+ .../devicetree/bindings/arm/mediatek.yaml     |    4 +
+ .../bindings/dma/mediatek,uart-dma.yaml       |    1 +
+ .../devicetree/bindings/i2c/i2c-mt65xx.yaml   |    4 +
+ .../iio/adc/mediatek,mt2701-auxadc.yaml       |    1 +
+ .../mediatek,smi-common.yaml                  |    6 +
+ .../memory-controllers/mediatek,smi-larb.yaml |    6 +
+ .../devicetree/bindings/mmc/mtk-sd.yaml       |    3 +
+ .../bindings/nvmem/mediatek,efuse.yaml        |    1 +
+ .../bindings/phy/mediatek,dsi-phy.yaml        |    4 +
+ .../bindings/phy/mediatek,tphy.yaml           |    1 +
+ .../bindings/serial/mediatek,uart.yaml        |    1 +
+ .../bindings/spi/mediatek,spi-mt65xx.yaml     |    1 +
+ .../bindings/usb/mediatek,mtk-xhci.yaml       |    1 +
+ .../bindings/usb/mediatek,mtu3.yaml           |    1 +
+ .../devicetree/bindings/watchdog/mtk-wdt.txt  |    1 +
+ arch/arm64/boot/dts/mediatek/Makefile         |    1 +
+ arch/arm64/boot/dts/mediatek/mt6357.dtsi      |  272 +++++
+ arch/arm64/boot/dts/mediatek/mt8365-evk.dts   |  578 +++++++++
+ arch/arm64/boot/dts/mediatek/mt8365.dtsi      | 1047 +++++++++++++++++
+ 19 files changed, 1934 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt6357.dtsi
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+-- 
+2.36.1
 
