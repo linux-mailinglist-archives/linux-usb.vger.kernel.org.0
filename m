@@ -2,34 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 669EF538AA7
-	for <lists+linux-usb@lfdr.de>; Tue, 31 May 2022 06:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA43538CCB
+	for <lists+linux-usb@lfdr.de>; Tue, 31 May 2022 10:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243861AbiEaEhx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 May 2022 00:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
+        id S244806AbiEaIXt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 May 2022 04:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243854AbiEaEhu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 May 2022 00:37:50 -0400
-Received: from freecalypso.org (freecalypso.org [195.154.163.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6B362BDC;
-        Mon, 30 May 2022 21:37:49 -0700 (PDT)
-Received: by freecalypso.org (Postfix, from userid 1001)
-        id DFBA4374025F; Tue, 31 May 2022 04:37:17 +0000 (UTC)
-From:   "Mychaela N. Falconia" <falcon@freecalypso.org>
-To:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        mychaela.falconia@gmail.com
-Subject: [PATCH v2 6/6] USB: serial: ftdi_sio: add support for FreeCalypso
- DUART28C adapter
-In-Reply-To: <20220531043356.8CAB637401A9@freecalypso.org>
-References: <20220531043356.8CAB637401A9@freecalypso.org>
-Message-Id: <20220531043717.DFBA4374025F@freecalypso.org>
-Date:   Tue, 31 May 2022 04:37:17 +0000 (UTC)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        with ESMTP id S244693AbiEaIXp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 May 2022 04:23:45 -0400
+Received: from mail.onlinesuccesses.pl (mail.onlinesuccesses.pl [198.244.150.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A6D33A0F
+        for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 01:23:44 -0700 (PDT)
+Received: by mail.onlinesuccesses.pl (Postfix, from userid 1002)
+        id 4213FA51D2; Tue, 31 May 2022 08:16:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onlinesuccesses.pl;
+        s=mail; t=1653985106;
+        bh=nE8HqilgMh4dy7+Z8ksfg7Bc9rmPeQtYFq3/3YR2ODU=;
+        h=Date:From:To:Subject:From;
+        b=ohgNwUeyBJkZDqWS1fBrbmzwtndgTk1xcMUuGbYbmY+JO6Y+Kgvh34DvwUwoiX6DF
+         QL8Ctk6BTu6f5NT4LL0/+AgNUNWvep6DpiHr41p/CNc6zLgu/XjJutG1QMzBU4ongf
+         g3E+VcgHc6RbBbpc261LN1neIL+asyqpfomST8gYgwZCHCY7qqZNvrIwFV5DRMLcxD
+         W+pdS0XU6JSQZ1UcPv3dZv/9pJEsbqDXgQ1/mxXSIQwcf1+yHj7fc5NeenLzRVpia2
+         EJ+zR6JXFoHgLPO3tEFCJyhgWkJoaIuKLNN1g4LC8lPzCGoDWX9D+J8QUy5nnCDkQ1
+         uNXAP8MpGIGzg==
+Received: by mail.onlinesuccesses.pl for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 08:15:36 GMT
+Message-ID: <20220531064501-0.1.4l.1dc4n.0.0qux5ni0aj@onlinesuccesses.pl>
+Date:   Tue, 31 May 2022 08:15:36 GMT
+From:   "Wiktor Zielonko" <wiktor.zielonko@onlinesuccesses.pl>
+To:     <linux-usb@vger.kernel.org>
+Subject: Ruch z pierwszej pozycji w Google
+X-Mailer: mail.onlinesuccesses.pl
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -37,103 +46,22 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-FreeCalypso DUART28C is an FT2232D-based USB to dual UART adapter
-with a special quirk: Channel B RTS and DTR outputs (BDBUS2 and BDBUS4
-on the chip) have been repurposed to drive PWON and RESET controls
-on Calypso targets.  The circuit is wired such that BDBUS[24] high
-(RTS/DTR inactive) is the normal state with Iota VRPC controls
-NOT activated, whereas BDBUS[24] low (RTS or DTR active) turn ON
-the corresponding open drain control signal drivers.
+Dzie=C5=84 dobry,=20
 
-A special ftdi_sio driver quirk is needed in order to suppress
-automatic assertion of DTR & RTS on device open: this device's
-special PWON and RESET control drivers MUST NOT be activated
-when the port is ordinarily opened for plain serial communication,
-instead they must only be activated when a special userspace
-application explicitly requests such activation with a TIOCMBIS ioctl.
-These special userspace applications are responsible for making the
-needed pulse with a TIOCMBIS, delay, TIOCMBIC sequence.
+jaki=C5=9B czas temu zg=C5=82osi=C5=82a si=C4=99 do nas firma, kt=C3=B3re=
+j strona internetowa nie pozycjonowa=C5=82a si=C4=99 wysoko w wyszukiwarc=
+e Google.=20
 
-The special quirk is conditionalized on the DUART28C adapter's custom
-USB ID, and is further limited to FT2232D Channel B only: Channel A
-is wired normally, with the chip's ADBUS2 and ADBUS4 outputs
-actually being RTS and DTR rather than something else.
+Na podstawie wykonanego przez nas audytu SEO zoptymalizowali=C5=9Bmy tre=C5=
+=9Bci na stronie pod k=C4=85tem wcze=C5=9Bniej opracowanych s=C5=82=C3=B3=
+w kluczowych. Nasz wewn=C4=99trzny system codziennie analizuje prawid=C5=82=
+owe dzia=C5=82anie witryny.  Dzi=C4=99ki indywidualnej strategii, firma z=
+dobywa coraz wi=C4=99cej Klient=C3=B3w. =20
 
-Signed-off-by: Mychaela N. Falconia <falcon@freecalypso.org>
----
- drivers/usb/serial/ftdi_sio.c     | 25 +++++++++++++++++++++++++
- drivers/usb/serial/ftdi_sio_ids.h |  1 +
- 2 files changed, 26 insertions(+)
+Czy chcieliby Pa=C5=84stwo zwi=C4=99kszy=C4=87 liczb=C4=99 os=C3=B3b odwi=
+edzaj=C4=85cych stron=C4=99 internetow=C4=85 firmy? M=C3=B3g=C5=82bym prz=
+edstawi=C4=87 ofert=C4=99?=20
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index 6523a36dcc45..f62d9f804c73 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -97,6 +97,7 @@ static int   ftdi_stmclite_probe(struct usb_serial *serial);
- static int   ftdi_8u2232c_probe(struct usb_serial *serial);
- static void  ftdi_USB_UIRT_setup(struct usb_serial_port *port);
- static void  ftdi_HE_TIRA1_setup(struct usb_serial_port *port);
-+static void  ftdi_duart28c_setup(struct usb_serial_port *port);
- 
- static const struct ftdi_sio_quirk ftdi_jtag_quirk = {
- 	.probe	= ftdi_jtag_probe,
-@@ -122,6 +123,10 @@ static const struct ftdi_sio_quirk ftdi_8u2232c_quirk = {
- 	.probe	= ftdi_8u2232c_probe,
- };
- 
-+static const struct ftdi_sio_quirk ftdi_duart28c_quirk = {
-+	.port_probe = ftdi_duart28c_setup,
-+};
-+
- /*
-  * The 8U232AM has the same API as the sio except for:
-  * - it can support MUCH higher baudrates; up to:
-@@ -1050,6 +1055,8 @@ static const struct usb_device_id id_table_combined[] = {
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
- 	{ USB_DEVICE(FTDI_VID, FTDI_FALCONIA_JTAG_UNBUF_PID),
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-+	{ USB_DEVICE(FTDI_VID, FTDI_FALCONIA_DUART28C_PID),
-+		.driver_info = (kernel_ulong_t)&ftdi_duart28c_quirk },
- 	{ }					/* Terminating entry */
- };
- 
-@@ -2372,6 +2379,24 @@ static int ftdi_stmclite_probe(struct usb_serial *serial)
- 	return 0;
- }
- 
-+/*
-+ * FreeCalypso DUART28C is an FT2232D-based USB to dual UART adapter
-+ * with a special quirk: Channel B RTS and DTR outputs (BDBUS2 and BDBUS4
-+ * on the chip) have been repurposed to drive PWON and RESET controls.
-+ *
-+ * Only Channel B is subject to the quirk - Channel A needs to retain
-+ * standard POSIX/SUS behaviour.
-+ */
-+static void ftdi_duart28c_setup(struct usb_serial_port *port)
-+{
-+	struct usb_serial *serial = port->serial;
-+	struct usb_interface *intf = serial->interface;
-+	int ifnum = intf->cur_altsetting->desc.bInterfaceNumber;
-+
-+	if (ifnum == 1)
-+		tty_port_set_nordy(&port->port, true);
-+}
-+
- static void ftdi_sio_port_remove(struct usb_serial_port *port)
- {
- 	struct ftdi_private *priv = usb_get_serial_port_data(port);
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-index d1a9564697a4..6ff2509e54a2 100644
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -45,6 +45,7 @@
-  */
- #define FTDI_FALCONIA_JTAG_BUF_PID	0x7150
- #define FTDI_FALCONIA_JTAG_UNBUF_PID	0x7151
-+#define FTDI_FALCONIA_DUART28C_PID	0x7152
- 
- /* Sienna Serial Interface by Secyourit GmbH */
- #define FTDI_SIENNA_PID		0x8348
--- 
-2.9.0
 
+Pozdrawiam serdecznie,
+Wiktor Zielonko
