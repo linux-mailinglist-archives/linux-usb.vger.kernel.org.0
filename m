@@ -2,181 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 041E5538FF8
-	for <lists+linux-usb@lfdr.de>; Tue, 31 May 2022 13:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90341538FFF
+	for <lists+linux-usb@lfdr.de>; Tue, 31 May 2022 13:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232441AbiEaLpE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 May 2022 07:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50026 "EHLO
+        id S1343913AbiEaLpt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 May 2022 07:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343887AbiEaLpC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 May 2022 07:45:02 -0400
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037C48217E
-        for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 04:45:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=OUwNO3mUXfe674vwbPSZcbPd11bRcflPUhs3srz3epA=; b=OE9Kl
-        w5JPIpyjXlQPedEpnUfsjyKvj55xvyRgig8FCggG1fSRHnIvMHRqBedrndbTWnM0IMqDqjIU57ZHT
-        +lyJyaUWhXLxqQakwcwWDiUockHnp/5UFsLDRRn1G8n7xxVCI1iDZvXBv63eJ8Y4neQmSBUALPeS2
-        bXgO1Gzx+/kfIooMXDX1e+SrnTGvHpecAryVrbCu31HjD/6vgdKbTtZ2yaf7U1Mv0BDrBfgtdmAVP
-        vxNvhpXHLxQpJQ2CFMgbls576R/W3DG9W3AF1OBXdxnqmemGUsE1GCB+498zKsO82tAqDb8MCaMtR
-        0anYPZPMj5bddv8CmxJfxZDXY2pIA==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1nw0Ir-000756-SY; Tue, 31 May 2022 12:44:49 +0100
-Date:   Tue, 31 May 2022 12:44:48 +0100
-From:   John Keeping <john@metanate.com>
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        with ESMTP id S1343911AbiEaLpi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 May 2022 07:45:38 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C0B8DDFF
+        for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 04:45:36 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id e2so18347309wrc.1
+        for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 04:45:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m7wMZQlqIVLxhzJ4d1t/ELkzaXc9kr5ySRrjRBJot3E=;
+        b=SGhJnZz0e2Odbkv884INRKwNwnjTSyzmQ+ewY47ETUW1pGmWomFBE5igGYmCZIrnJZ
+         766uTQ0g81Z8kZ9qQjDpa8eKFCQ0lgvUofA5hlqAjFdXvJzz5XLtoeIX/+W5nKerLOAx
+         nIs19QVBXD2CzaVwHj0ZSrtKXNRs8FiaTA2zcbQaZduEbYl8X1pN43TSOAk+Boj0zd6W
+         jKeqOqAEkxL3Kp4J3Dh97veJm/82yN3t87/CTAPqLY+GNpYxfAAMgrRNBnhhjCnjMlZd
+         Es+Zp9ARBC2GHoywC4RkW/1ByOZTupcZndlU9elkwJun8uAmiOGZo9natKlk7kn1uyYn
+         sexQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m7wMZQlqIVLxhzJ4d1t/ELkzaXc9kr5ySRrjRBJot3E=;
+        b=ktlMwzr1i4+KofRYFad6d/KJAJJSfnbONsW8imfoFc5nPyL5dThoGjkgA7Bj8boT0q
+         vs+Ov+jsNsUA0hXOvUMbZue/FhWIivv0UFSHupVidEw/wrqfp9xFcSpveeI+7a1vXjX0
+         xy+Q5VOPZawurJ2BGGx8nx5HEv16TDqP63KhulzVYAYaaeFhIJKO6sssVpJCGO/zZNha
+         V7OmH4e9+7V2MpbZGsZ6gOVJnrzHx3I/AAZ2jiDl92Kj1JN7ru8MbpYSV7WrzowegdPo
+         /Eb6s7hVavjQzwYvHVu0tzusNWeF5ELDYKnO0ca21O5UMHD5Re5MUAvYpse7t6ifzctK
+         TP2A==
+X-Gm-Message-State: AOAM531R1M8PwuUwgovI52xwWSbhtZ4V2vWl/wEfecRPK0b5WqLXYx4e
+        7Ke3wXi4pmE2Bi5EhCzYPsyRfg==
+X-Google-Smtp-Source: ABdhPJzaigv2LfXPVBVdkqcThmw+HR5X3hxrRPPBc8aVHnRmWua+xDAK+a8kKwJwCgT+2Qc7sfGc8g==
+X-Received: by 2002:a05:6000:2cd:b0:20f:d035:84f8 with SMTP id o13-20020a05600002cd00b0020fd03584f8mr38402854wry.263.1653997535368;
+        Tue, 31 May 2022 04:45:35 -0700 (PDT)
+Received: from localhost.localdomain ([88.160.162.107])
+        by smtp.gmail.com with ESMTPSA id e15-20020a056000178f00b002102f2fac37sm7695660wrg.51.2022.05.31.04.45.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 04:45:34 -0700 (PDT)
+From:   Fabien Parent <fparent@baylibre.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Michael Wu <michael@allwinnertech.com>
-Subject: Re: [PATCH v1 1/2] usb: gadget: ffs: change ep->status safe in
- ffs_epfile_io()
-Message-ID: <YpX/sILPw90Uvq+S@donbot>
-References: <1653989775-14267-1-git-send-email-quic_linyyuan@quicinc.com>
- <1653989775-14267-2-git-send-email-quic_linyyuan@quicinc.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Fabien Parent <fparent@baylibre.com>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND 1/2] dt-bindings: usb: mediatek,mtu3: add binding for MT8195 SoC
+Date:   Tue, 31 May 2022 13:45:25 +0200
+Message-Id: <20220531114526.144275-1-fparent@baylibre.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1653989775-14267-2-git-send-email-quic_linyyuan@quicinc.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 31, 2022 at 05:36:14PM +0800, Linyu Yuan wrote:
-> If a task read/write data in blocking mode, it will wait the completion
-> in ffs_epfile_io(), if function unbind occurs, ffs_func_unbind() will
-> kfree ffs ep, once the task wake up, it still dereference the ffs ep to
-> obtain the request status.
-> 
-> Fix it by moving the request status to io_data which is stack-safe.
-> 
-> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+Add binding to support the mtu3 driver on the MT8195 SoC.
 
-One minor issue below, but otherwise I like this approach and it will
-help solving a similar issue on the AIO path which I spotted while
-looking into this (ffs_func_unbind() calls ffs_func_eps_disable()
-setting epfile->ep = NULL before draining the completion workqueue where
-ffs_user_copy_worker() relies on epfile->ep being non-null).
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
+---
+ Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-> ---
->  drivers/usb/gadget/function/f_fs.c | 32 +++++++++++++++++---------------
->  1 file changed, 17 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index 4585ee3..dcba835 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -122,8 +122,6 @@ struct ffs_ep {
->  	struct usb_endpoint_descriptor	*descs[3];
->  
->  	u8				num;
-> -
-> -	int				status;	/* P: epfile->mutex */
->  };
->  
->  struct ffs_epfile {
-> @@ -227,6 +225,9 @@ struct ffs_io_data {
->  	bool use_sg;
->  
->  	struct ffs_data *ffs;
-> +
-> +	int status;
-> +	struct completion done;
->  };
->  
->  struct ffs_desc_helper {
-> @@ -707,12 +708,12 @@ static const struct file_operations ffs_ep0_operations = {
->  
->  static void ffs_epfile_io_complete(struct usb_ep *_ep, struct usb_request *req)
->  {
-> +	struct ffs_io_data *io_data = req->context;
-> +
->  	ENTER();
-> -	if (req->context) {
-> -		struct ffs_ep *ep = _ep->driver_data;
-> -		ep->status = req->status ? req->status : req->actual;
-> -		complete(req->context);
-> -	}
-> +
-> +	io_data->status = req->status ? req->status : req->actual;
-> +	complete(&io_data->done);
->  }
->  
->  static ssize_t ffs_copy_to_iter(void *data, int data_len, struct iov_iter *iter)
-> @@ -1050,7 +1051,6 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
->  		WARN(1, "%s: data_len == -EINVAL\n", __func__);
->  		ret = -EINVAL;
->  	} else if (!io_data->aio) {
-> -		DECLARE_COMPLETION_ONSTACK(done);
->  		bool interrupted = false;
->  
->  		req = ep->req;
-> @@ -1066,7 +1066,8 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
->  
->  		io_data->buf = data;
->  
-> -		req->context  = &done;
-> +		init_completion(&io_data->done);
-> +		req->context  = io_data;
->  		req->complete = ffs_epfile_io_complete;
->  
->  		ret = usb_ep_queue(ep->ep, req, GFP_ATOMIC);
-> @@ -1075,7 +1076,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
->  
->  		spin_unlock_irq(&epfile->ffs->eps_lock);
->  
-> -		if (wait_for_completion_interruptible(&done)) {
-> +		if (wait_for_completion_interruptible(&io_data->done)) {
->  			/*
->  			 * To avoid race condition with ffs_epfile_io_complete,
->  			 * dequeue the request first then check
-> @@ -1083,17 +1084,18 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
->  			 * condition with req->complete callback.
->  			 */
->  			usb_ep_dequeue(ep->ep, req);
-> -			wait_for_completion(&done);
-> -			interrupted = ep->status < 0;
-> +			wait_for_completion(&io_data->done);
-> +			interrupted = true;
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+index df766f8de872..37b02a841dc4 100644
+--- a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+@@ -25,6 +25,7 @@ properties:
+           - mediatek,mt8173-mtu3
+           - mediatek,mt8183-mtu3
+           - mediatek,mt8192-mtu3
++          - mediatek,mt8195-mtu3
+       - const: mediatek,mtu3
+ 
+   reg:
+-- 
+2.36.1
 
-This is a change in behaviour - shouldn't this be:
-
-	interrupted = io_data->status;
-
-?
-
-Otherwise data is lost unnecessarily if the request completes
-successfully in the small window between cancellation and being
-dequeued.
-
->  		}
->  
->  		if (interrupted)
->  			ret = -EINTR;
-> -		else if (io_data->read && ep->status > 0)
-> -			ret = __ffs_epfile_read_data(epfile, data, ep->status,
-> +		else if (io_data->read && io_data->status > 0)
-> +			ret = __ffs_epfile_read_data(epfile, data, io_data->status,
->  						     &io_data->data);
->  		else
-> -			ret = ep->status;
-> +			ret = io_data->status;
-> +
->  		goto error_mutex;
->  	} else if (!(req = usb_ep_alloc_request(ep->ep, GFP_ATOMIC))) {
->  		ret = -ENOMEM;
-> -- 
-> 2.7.4
-> 
