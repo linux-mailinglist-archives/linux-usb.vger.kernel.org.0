@@ -2,105 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF05F53956E
-	for <lists+linux-usb@lfdr.de>; Tue, 31 May 2022 19:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11CCA5395DC
+	for <lists+linux-usb@lfdr.de>; Tue, 31 May 2022 20:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346540AbiEaR0u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 May 2022 13:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
+        id S1346816AbiEaSGU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 May 2022 14:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiEaR0t (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 May 2022 13:26:49 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07461117
-        for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 10:26:48 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id t5so18497356edc.2
-        for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 10:26:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CuAIH/d+CNy1WfxRpJPOJHterOgDe4/um8X6G8iiMyk=;
-        b=i7BIciSs8m91MKdHBWcJ5bM0gwP8T4Z9mss/v4IkDnAHWm/vaxJ38d17bwiilUuZUx
-         P5bdHotLwvkUNEqjYcizkM+jmX6L+Jm3+GRm8I9OG4P2lecY4mMaCLJNaFu9f5IAMV9k
-         dwdDt2gFePxkpl583j73tMzTdfgBnqKhIiVFaBRiCXyTkIKSJ/3kIAGlHceNNQNE2RVh
-         fP/06P9vjuqFzlkjtjIfsGUp4Wuesc/Fle06t4hiWh07CNphfvI9goCcodDw+IpxUJ5b
-         H3CNut/StLJ/kNFTIVkuIM3xTRpcjsss9I6licJW9jyydr6CIrauq6RzVuA4BpBqdy49
-         KdyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CuAIH/d+CNy1WfxRpJPOJHterOgDe4/um8X6G8iiMyk=;
-        b=8HyP6D8JxaBvvNQP6NT41/Q/PfR8uIXC9OFSl5Zys+BLY8+P0UQGqu69sO7H4V4Sht
-         8XM4cNjbHPkKZIE+sixb6Edwaz6PRPYPBScjr0CVqicn8pMEaZPTtY0K/fSFFnP33j1N
-         n+d+z/w6SEl5t0VBh3CHmEcuupn1xZXVrTE537v5mKvmal9AvXsYPMwDXw9GzuD63RR9
-         PAHGj1JnneXaqdahhf4Cdjj57yaFgawJD2UiT4xi6aSjAukI0fFZyBe5MoGaSijw5g/y
-         BrL5KwDSq8ECiNTVSy/gdLXRWwvxrJdYc8C8HS1Wl77BGVBV+7TnMpCwx5dU6wCi31pm
-         2iqA==
-X-Gm-Message-State: AOAM532qUmc1Ws9cWuXhFsacBrdv1lkfAL+Z3Mw0O2bt46qeSdriKAQj
-        QaipK8eYJwdlNl9fxgC1fmhG/u+2UWbeOi0qg/0=
-X-Google-Smtp-Source: ABdhPJwWdJDoM/DiZtip3f/xE4zCg9QB3h9fXzNxECexKmuwXc7+ZE8WCFRyHoGXIYsDFOkmIaHJm6vZfCKVUL0YQds=
-X-Received: by 2002:a05:6402:5193:b0:428:414d:e20d with SMTP id
- q19-20020a056402519300b00428414de20dmr65418582edd.173.1654018006963; Tue, 31
- May 2022 10:26:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220531102301.13435-1-c.lobrano@gmail.com>
-In-Reply-To: <20220531102301.13435-1-c.lobrano@gmail.com>
-From:   Daniele Palmas <dnlplm@gmail.com>
-Date:   Tue, 31 May 2022 19:26:35 +0200
-Message-ID: <CAGRyCJEwpzLyCVwbE42CMrYtZGxwk_3VWa3C8BgsK-uwsjr+Mw@mail.gmail.com>
-Subject: Re: [PATCH v3] USB: serial: option: Add Telit LE910Cx 0x1250 composition
-To:     Carlo Lobrano <c.lobrano@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>,
+        with ESMTP id S1346014AbiEaSGT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 May 2022 14:06:19 -0400
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8911E85EE4
+        for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 11:06:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=bM+v0cuzWPnPeBa6OogQD6DSUxz3WdXkviU68+bBlIQ=; b=veDCK
+        uWOhXhx2jQc5Xao90ut/7uJekHyyUnDpgtEG8IhGSYrC0pdDRp6ZIGNjGTHj+GGN90tpsURlK8u60
+        UUA5spiWyBkh6+ryIoDJJHLCx2/RRQmLPHgpz0unJqJH19AEfoX1WwxjlDWcRgArhF6SJsKQCl/6r
+        jD42XNJBeVt3p6arwrdGYbA8ssig3zW0EXJZfXiZx64K2txVbxk+gVm59/sfxefVFROZZPYJzisLm
+        tl3ZstmdRCqcryJK9N1J7mzYiPW5e85dFYXkPl8dXhFkthM3kQ7aKIGWIW4+AG4A/qwEXl1Xc8omt
+        6KsauGaGorgo/U/An+HDFgRk0qJ7w==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1nw6Fs-0004q7-N7; Tue, 31 May 2022 19:06:08 +0100
+Date:   Tue, 31 May 2022 19:06:07 +0100
+From:   John Keeping <john@metanate.com>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        linux-usb@vger.kernel.org, Michael Wu <michael@allwinnertech.com>
+Subject: Re: [PATCH v2 1/2] usb: gadget: f_fs: change ep->status safe in
+ ffs_epfile_io()
+Message-ID: <YpZZD/l1/hDXIqde@donbot>
+References: <1654006119-23869-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1654006119-23869-2-git-send-email-quic_linyyuan@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1654006119-23869-2-git-send-email-quic_linyyuan@quicinc.com>
+X-Authenticated: YES
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il giorno mar 31 mag 2022 alle ore 12:23 Carlo Lobrano
-<c.lobrano@gmail.com> ha scritto:
->
-> Add support for the following Telit LE910Cx composition:
->
-> 0x1250: rmnet, tty, tty, tty, tty
->
-> Signed-off-by: Carlo Lobrano <c.lobrano@gmail.com>
+On Tue, May 31, 2022 at 10:08:38PM +0800, Linyu Yuan wrote:
+> If a task read/write data in blocking mode, it will wait the completion
+> in ffs_epfile_io(), if function unbind occurs, ffs_func_unbind() will
+> kfree ffs ep, once the task wake up, it still dereference the ffs ep to
+> obtain the request status.
+> 
+> Fix it by moving the request status to io_data which is stack-safe.
+> 
+> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 
-Reviewed-by: Daniele Palmas <dnlplm@gmail.com>
-
-Thanks,
-Daniele
-
-> ---
-> v3: - fix subject prefix and modem name (s/LN910Cx/LE910Cx)
->     - more descriptive e-mail content
-> v2: use RSVD in place of NCTRL for interface 0 (rmnet)
->
->  drivers/usb/serial/option.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 152ad882657d..cd9aa61ec801 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -1275,6 +1275,8 @@ static const struct usb_device_id option_ids[] = {
->           .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
->         { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1231, 0xff),    /* Telit LE910Cx (RNDIS) */
->           .driver_info = NCTRL(2) | RSVD(3) },
-> +       { USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1250, 0xff),    /* Telit LE910Cx (rmnet) */
-> +         .driver_info = RSVD(0) },
->         { USB_DEVICE(TELIT_VENDOR_ID, 0x1260),
->           .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
->         { USB_DEVICE(TELIT_VENDOR_ID, 0x1261),
-> --
-> 2.25.1
->
+Reviewed-by: John Keeping <john@metanate.com>
