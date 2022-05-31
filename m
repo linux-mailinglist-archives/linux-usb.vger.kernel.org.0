@@ -2,124 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C12538EB8
-	for <lists+linux-usb@lfdr.de>; Tue, 31 May 2022 12:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFF5538EBD
+	for <lists+linux-usb@lfdr.de>; Tue, 31 May 2022 12:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242710AbiEaKVN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 May 2022 06:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S245616AbiEaKXP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 May 2022 06:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234399AbiEaKVL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 May 2022 06:21:11 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA5C8DDFF;
-        Tue, 31 May 2022 03:21:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653992470; x=1685528470;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lxEFp44JsX/JOoOGTIBZIgRYdAkFBgaUx4lYxSNdtkU=;
-  b=dIzb6zsQznD2vyLggpktwF7uTHbuR6u5GMLS/G3iVRSriJqm0s+k47PV
-   Nf+G9750/koUDq0Il5BqF8rxpRXZU68NmI8Q7GeES26T+WJRhHuu/Zl/v
-   H7sYEmIzoSRuQCygZe9V1UKQ00B6sRtAqEuSo1PcIY9SC+jxSCfGQfyjM
-   iLOLPvWZoMFIUXbBDTND7QN4b4Ae1k3rQWxFeNjlhitv803JYW6OeQt/B
-   f9lgv3mBpa7Y1g767lfP75o9dL64ep7Qakj2Bbws8xgWDhccFx6rPIL3J
-   kAUkBJdmk4SM0QMSaW7VII0X/0SkL0OCEY851JwupJXg3Hcyt+DP8m4Yk
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="272783031"
-X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
-   d="scan'208";a="272783031"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 03:21:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
-   d="scan'208";a="632977245"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 31 May 2022 03:21:07 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nvyzq-0002be-Gg;
-        Tue, 31 May 2022 10:21:06 +0000
-Date:   Tue, 31 May 2022 18:20:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Harsh Agarwal <quic_harshq@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_jackp@quicinc.com, Harsh Agarwal <quic_harshq@quicinc.com>
-Subject: Re: [PATCH 2/3] usb: phy: Add devm_of_usb_get_phy_by_phandle
-Message-ID: <202205311838.eFoNSZzZ-lkp@intel.com>
-References: <1653985217-20953-3-git-send-email-quic_harshq@quicinc.com>
+        with ESMTP id S245439AbiEaKXO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 May 2022 06:23:14 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5225585EE9
+        for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 03:23:13 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id s23so13608152iog.13
+        for <linux-usb@vger.kernel.org>; Tue, 31 May 2022 03:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8L0KmYGjKZ0kAibn+cW4rBl30abrm7aN2sGXSHCJRuk=;
+        b=RQBMrNKJ3dnEv3H9N0Gc6U9pD/fwlO/re7oFeDq31jBGgB8+MpkOXbTb722rAERITN
+         t068CzpPOX1lkJlpL3NDPztpg+JlBB6KxT/1Uiok1DHFoUatONiwmUnwzxpY8H+48l1v
+         xqhYWoLYMq2TR8veIEPUDFXjJP7xNGXV0dqBvcZXnS87VON+PfdiChPwXwKef9KOJima
+         4Qspeeo/iOAHl2lHDj9Alln5Afz39XQxsMrTJW8M98qXlbbZGSXzxm58f6SSVG2qshrj
+         0ZVFk/32qbYdJR9OcoO83VerokSjfcgeyQG9ERkwp8G55z85mA1Ro8KsO80J8Lx+dR/B
+         uPJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8L0KmYGjKZ0kAibn+cW4rBl30abrm7aN2sGXSHCJRuk=;
+        b=OXjvkRWYU8qE10QejKyWyw2AruWsD6SKQfdvKJe+Ee3DweySJnee4nB4tha4gBTHha
+         1fFv0FPnktp3R3jivMXvDfiqSPpTNfcprLAyLw8DVPL2cq4x/VPFGjJwVLl8Jf3DIyTs
+         ZrVCaus8wl7ayD04g6F26oEYQPXBdA2zq8z99FT8ZKRzSkCOfo3To+BBUZuUNPuJQNiy
+         nuUQXvZ1c6Jl1KRSG20KRsu5sOGMVEBRbXmFan6MlZY7yRYvS6nJsW32voifBxbrU+sk
+         FwNJHXOCSk3tKJitljQqlbSMo13HDQNbACuKNZxCJnzGklyjlEPIJn5yXAmYiN2mGw8S
+         mKJg==
+X-Gm-Message-State: AOAM533V5ntaeZR7B8l7hvCtv2f4zwbkET2V0NB4XTkPxjOKqTX0FFYh
+        Vj+KabQ4rczwjt0hMU+iNYM=
+X-Google-Smtp-Source: ABdhPJx6YfUdQhVy658v24NM4WKcHM5Nt0aOsnNeTyf83nsu+aKFCdrrTtk+xwgDTXggbCZ4jmnohg==
+X-Received: by 2002:a05:6602:2e0d:b0:64f:8bfd:a83 with SMTP id o13-20020a0566022e0d00b0064f8bfd0a83mr25011137iow.200.1653992592639;
+        Tue, 31 May 2022 03:23:12 -0700 (PDT)
+Received: from LABDL-ITC-SW03.tmt.telital.com (static-82-85-31-68.clienti.tiscali.it. [82.85.31.68])
+        by smtp.gmail.com with ESMTPSA id cp11-20020a056638480b00b00330c4762d44sm3382114jab.53.2022.05.31.03.23.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 03:23:12 -0700 (PDT)
+From:   Carlo Lobrano <c.lobrano@gmail.com>
+To:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
+        Carlo Lobrano <c.lobrano@gmail.com>
+Subject: [PATCH v3] USB: serial: option: Add Telit LE910Cx 0x1250 composition
+Date:   Tue, 31 May 2022 12:23:01 +0200
+Message-Id: <20220531102301.13435-1-c.lobrano@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1653985217-20953-3-git-send-email-quic_harshq@quicinc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Harsh,
+Add support for the following Telit LE910Cx composition:
 
-Thank you for the patch! Perhaps something to improve:
+0x1250: rmnet, tty, tty, tty, tty
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on robh/for-next v5.18 next-20220531]
-[cannot apply to balbi-usb/testing/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Signed-off-by: Carlo Lobrano <c.lobrano@gmail.com>
+---
+v3: - fix subject prefix and modem name (s/LN910Cx/LE910Cx)
+    - more descriptive e-mail content
+v2: use RSVD in place of NCTRL for interface 0 (rmnet)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Harsh-Agarwal/Add-support-for-multiport-controller/20220531-162337
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: csky-defconfig (https://download.01.org/0day-ci/archive/20220531/202205311838.eFoNSZzZ-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7af1d0e696ec2ddf574df10e3bf3799299b8061a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Harsh-Agarwal/Add-support-for-multiport-controller/20220531-162337
-        git checkout 7af1d0e696ec2ddf574df10e3bf3799299b8061a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash drivers/usb/phy/
+ drivers/usb/serial/option.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/usb/otg.h:14,
-                    from include/linux/usb/of.h:12,
-                    from drivers/usb/phy/of.c:9:
->> include/linux/usb/phy.h:257:16: warning: 'ERR_PTR' is static but used in inline function 'devm_of_usb_get_phy_by_phandle' which is not static
-     257 |         return ERR_PTR(-ENXIO);
-         |                ^~~~~~~
-
-
-vim +257 include/linux/usb/phy.h
-
-   253	
-   254	extern inline struct usb_phy *devm_of_usb_get_phy_by_phandle(struct device *dev,
-   255		const char *phandle, u8 index, struct device_node *lookup_node)
-   256	{
- > 257		return ERR_PTR(-ENXIO);
-   258	}
-   259	
-
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 152ad882657d..cd9aa61ec801 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1275,6 +1275,8 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1231, 0xff),	/* Telit LE910Cx (RNDIS) */
+ 	  .driver_info = NCTRL(2) | RSVD(3) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1250, 0xff),	/* Telit LE910Cx (rmnet) */
++	  .driver_info = RSVD(0) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1260),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1261),
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
