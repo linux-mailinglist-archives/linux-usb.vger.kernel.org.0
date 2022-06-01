@@ -2,141 +2,227 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36FB453A345
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jun 2022 12:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBA053A4F3
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jun 2022 14:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240387AbiFAKvt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jun 2022 06:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
+        id S1352629AbiFAM26 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jun 2022 08:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348534AbiFAKvo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jun 2022 06:51:44 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEB8D98
-        for <linux-usb@vger.kernel.org>; Wed,  1 Jun 2022 03:51:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654080702; x=1685616702;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UneFKKJZEQo2/GIxKmYMApTnsdSynfUlQL+Ze2cvPt0=;
-  b=Zhigi45n7mlisydEkuDz/i96KU9msmNS08gNau1bXiM4gQt2JJEog5XJ
-   REsK87kmF+7AC0VA0FRX328uXE1G2q4F/4jx/PlOr0aenoIzF/vAjGOAR
-   f1jw9wkA6YvupEF+KysizN3SNhsEvbXx3mqzyouJ5FzLivMheT1RNTJof
-   cpg7jtl+jAafFHMw1I7Zp7W0e98RjnTYzLFPbzz7ZliwM/TJvT+5rLEGH
-   6q1YyDgKzi7kDNEf/ZQBclX6/tPy67oM4NHqCCXg49YHPsTOssvub3efA
-   CW5T9bjkvJzODHR4QQwwxIpM9WSRPbESObI/daskdqXJcplYbH7BkjoeE
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="275556776"
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="275556776"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 03:51:41 -0700
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="707005092"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 03:51:39 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 01 Jun 2022 13:51:36 +0300
-Date:   Wed, 1 Jun 2022 13:51:36 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Stefan Hoffmeister <stefan.hoffmeister@gmail.com>
-Cc:     Tomasz =?utf-8?Q?Mo=C5=84?= <desowin@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: Thunderbolt: One missing DisplayPort?
-Message-ID: <YpdEuAIRABoad0eU@lahna>
-References: <Yoy5m3Aa6QwVcFhf@kuha.fi.intel.com>
- <Yoy7oXpMugFFmfBP@lahna>
- <CALhB_QM9SHJt+15pEVHEH_kourb-1Xbd68O1p_XLxOmWB4HAfw@mail.gmail.com>
- <YpCVc6eYkpmjP9AF@lahna>
- <CALhB_QP8SPqubq-eBNa1BTMuy3kCA65OuajOeJGt5DB9jDRKKg@mail.gmail.com>
- <ce969e3b4a6ed04584fdecd3234578bd87d52594.camel@gmail.com>
- <YpSUSk9u5z3ueufa@lahna>
- <CALhB_QNh3vMn2+6H41MC_O0sKPfjiVrPeqmvpnLk=tuHUPQGdg@mail.gmail.com>
- <YpXhg6wPtotRk6c2@lahna>
- <CALhB_QOCJfxoDpNmRi-YEKozeAh4PMZeVy3avhzR7jVcvWfXYg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALhB_QOCJfxoDpNmRi-YEKozeAh4PMZeVy3avhzR7jVcvWfXYg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S231806AbiFAM25 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jun 2022 08:28:57 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155C67CDF3;
+        Wed,  1 Jun 2022 05:28:56 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id i66so2395584oia.11;
+        Wed, 01 Jun 2022 05:28:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=LHSRYKuTnwOMke2x9XwbTQBLinxgu/62OUN1oQHV6q0=;
+        b=25Apz8DYaRrh8d7cVB/NjiQrnCexGStESpqNh4XHQ0Xi72w0Eu8JAJq5e/XZsA9hs/
+         5kf38Ys2CIH1fHVIuFu1JkfhikRqPt8zYdBkMoV2cDwTEK5pCyKCKNwWtv8yiPC/Ax5/
+         hPpuIGYMTR2Q3tocJCn6e9xYWHIQ9NiWfspxMIB6uhI7hYnZ0qYBgF1Kz5P2ghx6WPE4
+         KCtHGmnQtKEMZ+ra3LKAjFiopMT8e86berY2e/ol53t1CNc4LOwg6fRH3Ce+mHDqBlOV
+         wRA/p5cdH54ZXepn89FPTbCF9X9BRYvUl3zAt1v8DCfJUaA21KzOOXZX4E5a1sPNlcFf
+         M7ng==
+X-Gm-Message-State: AOAM532s01zmTfqiHHDOnXy1Oez4GhnNq+tHXmWOzwGEf51bv/NlKH00
+        1CEJ6FVgQuJ47Gagmr83kw==
+X-Google-Smtp-Source: ABdhPJwuoXbP8R22WIyBV8c1qr54ohrFgkptunPLBMQVK65aIjekLqgYmvfG41EJIeD2H271W9MKUA==
+X-Received: by 2002:a05:6808:1387:b0:32b:1e76:e60 with SMTP id c7-20020a056808138700b0032b1e760e60mr14932861oiw.172.1654086535221;
+        Wed, 01 Jun 2022 05:28:55 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f12-20020a05680814cc00b0032b99637366sm880056oiw.25.2022.06.01.05.28.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 05:28:54 -0700 (PDT)
+Received: (nullmailer pid 3753218 invoked by uid 1000);
+        Wed, 01 Jun 2022 12:28:53 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-phy@lists.infradead.org,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        quic_ppratap@quicinc.com, Rob Herring <robh+dt@kernel.org>,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        quic_vpulyala@quicinc.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <1654066564-20518-2-git-send-email-quic_kriskura@quicinc.com>
+References: <1654066564-20518-1-git-send-email-quic_kriskura@quicinc.com> <1654066564-20518-2-git-send-email-quic_kriskura@quicinc.com>
+Subject: Re: [PATCH v8 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy override params bindings
+Date:   Wed, 01 Jun 2022 07:28:53 -0500
+Message-Id: <1654086533.981346.3753217.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On Tue, May 31, 2022 at 09:45:55PM +0200, Stefan Hoffmeister wrote:
-> What could be reasons that the second tunnel is not established on the
-> Dell? I read somewhere that Intel hands off the firmware to vendors
-> (Dell) who then customize it for their systems? Could the vendor have
-> made bad customizations / configurations of that package while
-> integrating it?
-
-Probably not a firmware issue.
-
-> I would imagine that plugging in a DisplayPort cable makes the dock
-> (firmware) signal something to the notebook (TB firmware) and a
-> negotiation will take place. That negotiation fails, otherwise the
-> tunnel would be established, and remain established? Is there a means
-> to trace the negotiation?
-
-It is all done in firmware but when you plug in DisplayPort cable to the
-dock, it generates a hotplug event for that DP OUT adapter and this will
-then be handled by the firmware connection manager by establishing a DP
-tunnel (if it finds resources).
-
-> FWIW, I have read the phrase "insufficent provision of GPU Interfaces
-> to the TB port" (sic, on Reddit), and a lengthy related post at
-> https://www.dell.com/community/XPS/Understanding-Thunderbolt-docks-GPU-bandwidth-and-GPU-interfaces/td-p/7678776
-> which I will not pretend to understand.
+On Wed, 01 Jun 2022 12:26:02 +0530, Krishna Kurapati wrote:
+> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 > 
-> What I wonder about is whether the "GPU interfaces" situation would be
-> reliably discoverable by inspecting ... something ... anything?
+> Add device tree bindings for SNPS phy tuning parameters.
 > 
-> Anyway, my impression, from a layering point of view, is that on the
-> stack (my imagination!)
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 96 ++++++++++++++++++++++
+>  1 file changed, 96 insertions(+)
 > 
-> * notebook hardware
-> * firmware (BIOS, Thunderbolt firmware / connection manager, ...)
-> * Linux thunderbolt driver
-> * Linux graphics drivers: drm / kms (i915 / nvidia / nouveau)
-> 
-> the graphics drivers are not involved when it comes to building /
-> maintaining the Thunderbolt(!) tunnel?
 
-Correct.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> I am also reading "Thunderbolt Alternate Mode encapsulates DisplayPort
-> Alternate Mode". To my ears this sounds like "wrap the raw DisplayPort
-> Alternate Mode bitstream", just with more bandwidth. Pure "DisplayPort
-> Alternate Mode" I can force with success by way of disabling
-> Thunderbolt in the BIOS (at the expense of bandwidth -> bad refresh
-> rate). And "DisplayPort Alternate Mode" gives me _both_ screens,
-> apparently very much scraping along at the max protocol bandwidth,
-> with the 4K screen going black (out of sync?) every once in a while.
-> 
-> Sorry for my rambling, this is an area where I have no expertise.
-> 
-> Anyway, if those graphics drivers are involved for _Thunderbolt_,
-> please do tell me, and I'll venture over to dri-devel.
+yamllint warnings/errors:
 
-In case of firmware based connection manager, the Thunderbolt driver
-does not do much. Pretty much just the PCIe tunnel authorization and
-power management things (and P2P).
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,hs-rise-fall-time-bp: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	Additional properties are not allowed ('maximum', 'minimum' were unexpected)
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,hs-rise-fall-time-bp: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,hs-rise-fall-time-bp: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,ls-fs-output-impedance-bp: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	Additional properties are not allowed ('maximum', 'minimum' were unexpected)
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,ls-fs-output-impedance-bp: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,ls-fs-output-impedance-bp: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,pre-emphasis-amplitude-bp: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	Additional properties are not allowed ('maximum', 'minimum' were unexpected)
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,pre-emphasis-amplitude-bp: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,pre-emphasis-amplitude-bp: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,squelch-detector-bp: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	Additional properties are not allowed ('maximum', 'minimum' were unexpected)
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,squelch-detector-bp: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,squelch-detector-bp: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,hs-disconnect-bp: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	Additional properties are not allowed ('maximum', 'minimum' were unexpected)
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,hs-disconnect-bp: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,hs-disconnect-bp: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,hs-amplitude-bp: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	Additional properties are not allowed ('maximum', 'minimum' were unexpected)
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,hs-amplitude-bp: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,hs-amplitude-bp: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,pre-emphasis-duration-bp: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	Additional properties are not allowed ('maximum', 'minimum' were unexpected)
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,pre-emphasis-duration-bp: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,pre-emphasis-duration-bp: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: ignoring, error in schema: properties: qcom,hs-rise-fall-time-bp
+Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.example.dtb:0:0: /example-0/phy@88e2000: failed to match any schema with compatible: ['qcom,sm8150-usb-hs-phy']
 
-IIRC this non-working system had a discrete (NVIDIA?) GPU? It may be
-that routing it to the DP IN adapters in the Thunderbolt host router
-requires something we don't implement in Linux side yet.
+doc reference errors (make refcheckdocs):
 
-> And given what I see above, is that still "Thunderbolt 4 Certified"
-> ("Two 4K displays") in the case of the Dell Inspiron 7610?
+See https://patchwork.ozlabs.org/patch/
 
-This I don't know I would expect Dell testing this, at least with their
-own dock.
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
