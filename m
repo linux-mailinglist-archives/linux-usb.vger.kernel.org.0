@@ -2,62 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15F7539F1D
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jun 2022 10:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4B553A072
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jun 2022 11:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241487AbiFAIP4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jun 2022 04:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
+        id S1351095AbiFAJcN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jun 2022 05:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiFAIPz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jun 2022 04:15:55 -0400
-Received: from mail.analyzingidea.com (mail.analyzingidea.com [80.211.176.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523158AE74
-        for <linux-usb@vger.kernel.org>; Wed,  1 Jun 2022 01:15:54 -0700 (PDT)
-Received: by mail.analyzingidea.com (Postfix, from userid 1001)
-        id 2A242A26F8; Wed,  1 Jun 2022 09:15:49 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=analyzingidea.com;
-        s=mail; t=1654071350;
-        bh=ttLtL96PXeE3npFWnIfxQS9DSqJ2tboGLsO0fJwyRQM=;
-        h=Date:From:To:Subject:From;
-        b=I0Tv636UCLnnRLBuZ20mdmfNF8v2TGWcWtDhUocf4tUI3AfstdBxQpQxcn8EIIXzs
-         rXze5MHzIETWgVYL9VFnz2N+aJ+V5Q4Ilho2cABKp07REnXtTkAWs5kVPLeV94hRlk
-         4bgKUAb7eHeEDzP2z3yrT2fLegdASvGwjnFPQz3hA3cuOp0+djk+AAe0H78MWtqfVx
-         2gVAwSU1Mf565XASEUPa287UPJLKL86bl4qIsZzYOQcbwreHuWkccD7h99VddgUjWJ
-         RyWlsfuCoRBjlftFdLHCPxyReyZI7hdghiqOruoIzsbfjCQ1b2fw1SRSNKDhYo3oLd
-         TeIrN974n5B3g==
-Received: by mail.analyzingidea.com for <linux-usb@vger.kernel.org>; Wed,  1 Jun 2022 08:15:49 GMT
-Message-ID: <20220601074500-0.1.31.avfk.0.rq4adgm9i3@analyzingidea.com>
-Date:   Wed,  1 Jun 2022 08:15:49 GMT
-From:   "Liam Zamorano" <liam.zamorano@analyzingidea.com>
-To:     <linux-usb@vger.kernel.org>
-Subject: Servicio de la flota
-X-Mailer: mail.analyzingidea.com
+        with ESMTP id S1351075AbiFAJcL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jun 2022 05:32:11 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2C28A04D
+        for <linux-usb@vger.kernel.org>; Wed,  1 Jun 2022 02:32:09 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id x62so1336638ede.10
+        for <linux-usb@vger.kernel.org>; Wed, 01 Jun 2022 02:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9rLHj//9k/15fypiFbMELs3ChxXWRGpeQMJrEmUMxUs=;
+        b=QIpbmzzYJ0HAltV9KIinq7hcn1/hnXtpRXtMmZG9J7qu9J+yvPLSDMoa7T1mF07mXK
+         H0apr2OZxGQd0U1WCKeMv8lb+Fm0H/mDYSMtRdWizypZAKluo8iAZmIxB1zzo1cgkxVD
+         8FqROBoannHWns4ltnEoaFMetuFzZVnMg34x8TBZHDiL1S+h+agEWmJXOJBPr45zEleE
+         wIN4pLzhGLnCkSJ6swE6lcLnjUX895KzSJg8xs9oTGRBgvcXRQgxWZs0dfq2tVdBw1lA
+         e+iovxTxiCiSptWs6zjF6xpsc90sU1LjwN9TwlBSRUrniu3cN+/+/2A8nwrc4UNO1Pv1
+         qyIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9rLHj//9k/15fypiFbMELs3ChxXWRGpeQMJrEmUMxUs=;
+        b=ywcnz8/Os0NDTswBj3MmigjQaN3CulFxHDl0NCKMwUc6DaRAR5OH9SqFEDWnQH5AKE
+         3rX8UEQzU1m23+vzBsTjyYY94o0nk5hC012nPutA7g4ezvxHHjrjKUD+5jiQGq3vDM4e
+         ToWWz/Qyj7IPy4dWTr9wzdmDjcg4W/22sEAWIssyeUF2TZp04Y4CHyPDX9mlncvc0KiQ
+         YBlGgSF0MqBP1ARfizYb66neSqWGceV6uklywVSdZqUcjJxuYp/7haLRAgDTyytnjJph
+         grr97NTAhHy4lbAEqVRWgc26poPrDn4IIq2Ype5R/ojwmxHOBlFvVabl+E9Pe8TWvjwi
+         Rpcg==
+X-Gm-Message-State: AOAM533s7xSSxEF/AfHZWm7Z/NufCfENui4qX0JKIuU/862HTbKVRU20
+        5+C6Ylf0M5Unh+GovFSH7bbdIw==
+X-Google-Smtp-Source: ABdhPJxIaNQdmdCizYbGGHKjK+me0jgNnS5X6cMWDDf2h3DFwSO74zQhHh65gXy+skv8i/8hh9yGoQ==
+X-Received: by 2002:a05:6402:e9f:b0:41c:df21:b113 with SMTP id h31-20020a0564020e9f00b0041cdf21b113mr69039921eda.217.1654075928172;
+        Wed, 01 Jun 2022 02:32:08 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id i23-20020a1709061e5700b00708a2ae7620sm102525ejj.67.2022.06.01.02.32.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 02:32:07 -0700 (PDT)
+Message-ID: <efdbb151-8213-d1e7-a935-0e857947d450@linaro.org>
+Date:   Wed, 1 Jun 2022 11:32:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.5 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 00/17] Add support for MT8365 EVK board
+Content-Language: en-US
+To:     Fabien Parent <fparent@baylibre.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        qii.wang@mediatek.com, matthias.bgg@gmail.com, jic23@kernel.org,
+        chaotian.jing@mediatek.com, ulf.hansson@linaro.org,
+        srinivas.kandagatla@linaro.org, chunfeng.yun@mediatek.com,
+        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20220531135026.238475-1-fparent@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220531135026.238475-1-fparent@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Buenos d=C3=ADas:
+On 31/05/2022 15:50, Fabien Parent wrote:
+> This patch series adds support for the MT8365 EVK board.
+> 
+> This series has dependencies on the following series:
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646256
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646091
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646083
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646081
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646076
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646068
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646020
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=646052
+> https://lore.kernel.org/r/20220504091923.2219-2-rex-bc.chen@mediatek.com 
+> https://lore.kernel.org/r/20220512062622.31484-2-chunfeng.yun@mediatek.com 
+> https://lore.kernel.org/r/20220512062622.31484-1-chunfeng.yun@mediatek.com
+> https://lore.kernel.org/r/20220524115019.97246-1-angelogioacchino.delregno@collabora.com
+> https://lore.kernel.org/all/20220127015857.9868-1-biao.huang@mediatek.com/
 
-Le escribo para hablarle sobre una de las mejores herramientas GPS en el =
-mercado.
-
-La herramienta, que me gustar=C3=ADa presentarle brevemente, dispone de m=
-uchas funciones =C3=BAtiles para su trabajo, que optimizan los procesos d=
-e transporte y le ayudan a realizar tareas de campo de manera m=C3=A1s ef=
-iciente.
-
-=C2=BFQuiere conocer los detalles?
+Eh... and how we are supposed to test or apply this? Such dependencies
+could mean none of automated tools will pick it up, so your patchset has
+to wait till dependencies got merged.
 
 
-Atentamente,
-Liam Zamorano
+Best regards,
+Krzysztof
