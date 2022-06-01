@@ -2,422 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFDD53A2DE
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jun 2022 12:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FB453A345
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jun 2022 12:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352165AbiFAKlM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jun 2022 06:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45562 "EHLO
+        id S240387AbiFAKvt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jun 2022 06:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352151AbiFAKlK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jun 2022 06:41:10 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD857E1E5
-        for <linux-usb@vger.kernel.org>; Wed,  1 Jun 2022 03:41:06 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id f21so2822254ejh.11
-        for <linux-usb@vger.kernel.org>; Wed, 01 Jun 2022 03:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YnwlxkEskig5qSEZkf1OUJFDCbLfIauiQR7owBPAAo8=;
-        b=o3oy882DW5XoM121QxgLAIqDZmLSK6/PrEQb4XvQeRV0EbxfAnEYajgac3QLI9FcMp
-         4SF5C5oNQogqHKHnGl1RjMphuthUgorSKRQaD3mLQrEnRwutFisd/3XW2m/RJCzJ0+1v
-         tkp0rArEAuR2Tk4/dlGSFfTxR/sxOC1Cdk3lvFAiSzaUJCoeqQvk34iQ3YtoEwYP9jQC
-         vqMMi5q+lDHqZkOawknPynNZ7RJd/5GHehRkUcT7oK0EPZ21LSkvWGONymsEa+4JEP7i
-         qjK82e59DvTe0ppOR5EgGlx6B82dcRv5j9w7gCLxi/yDXx5qJ39cTI5FpLvoPg4bTzNf
-         MbMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YnwlxkEskig5qSEZkf1OUJFDCbLfIauiQR7owBPAAo8=;
-        b=V5BncsKY8KpVQ+p1W5VOmW8215FWTNjHZQ8eSlpwSr3UGRieLfLwkt8tZmkNp7HnQs
-         kAoc9/fvxLkQHbilyYobZ7KCF/UAogYdrPtkmAKyeDk9rWi5go7yWNXfMM+JitS1FQoD
-         3X0T3/qCJ4EVbBcddP861wWfIfN3m6JbXMebMGGcQpvPoYcH/5bJ9SCHgTGj1jnnGTOb
-         6QaFzumAjqWt+kz7hTCCgF0AlWY6JZBJCC0a+7uYM6QPLzKLLdgXCoIAw3JWx+tkMS3E
-         Jw/elY2Y0lnxmCvrqJmfgAJ1qET2ljuuwO1/rAb6N/baNFv1elr/TX0FjnNSVdg6PdpQ
-         Rtaw==
-X-Gm-Message-State: AOAM531sf/GLwJA2XHbTxM+JKllMQBafH+v+YYUmiE0sM0mtCvT9ujao
-        9xIliV/ubQnK49mwJ6aFGIS9Aw==
-X-Google-Smtp-Source: ABdhPJyobmFzrAd7aGPFPzNizVmWKEMaqJL/SVLVJ4JJ7gg9SZs/2Gv6F8acA22LJi7CFkPE62rb6g==
-X-Received: by 2002:a17:907:9805:b0:6f4:fe0e:5547 with SMTP id ji5-20020a170907980500b006f4fe0e5547mr56262621ejc.426.1654080064935;
-        Wed, 01 Jun 2022 03:41:04 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id b17-20020a50e791000000b0042ac2705444sm774652edn.58.2022.06.01.03.41.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 03:41:04 -0700 (PDT)
-Message-ID: <72329bd9-3d8d-a18c-236d-8a84e5dcc455@linaro.org>
-Date:   Wed, 1 Jun 2022 12:41:03 +0200
+        with ESMTP id S1348534AbiFAKvo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jun 2022 06:51:44 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEB8D98
+        for <linux-usb@vger.kernel.org>; Wed,  1 Jun 2022 03:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654080702; x=1685616702;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UneFKKJZEQo2/GIxKmYMApTnsdSynfUlQL+Ze2cvPt0=;
+  b=Zhigi45n7mlisydEkuDz/i96KU9msmNS08gNau1bXiM4gQt2JJEog5XJ
+   REsK87kmF+7AC0VA0FRX328uXE1G2q4F/4jx/PlOr0aenoIzF/vAjGOAR
+   f1jw9wkA6YvupEF+KysizN3SNhsEvbXx3mqzyouJ5FzLivMheT1RNTJof
+   cpg7jtl+jAafFHMw1I7Zp7W0e98RjnTYzLFPbzz7ZliwM/TJvT+5rLEGH
+   6q1YyDgKzi7kDNEf/ZQBclX6/tPy67oM4NHqCCXg49YHPsTOssvub3efA
+   CW5T9bjkvJzODHR4QQwwxIpM9WSRPbESObI/daskdqXJcplYbH7BkjoeE
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="275556776"
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="275556776"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 03:51:41 -0700
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="707005092"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 03:51:39 -0700
+Received: by lahna (sSMTP sendmail emulation); Wed, 01 Jun 2022 13:51:36 +0300
+Date:   Wed, 1 Jun 2022 13:51:36 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Stefan Hoffmeister <stefan.hoffmeister@gmail.com>
+Cc:     Tomasz =?utf-8?Q?Mo=C5=84?= <desowin@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: Thunderbolt: One missing DisplayPort?
+Message-ID: <YpdEuAIRABoad0eU@lahna>
+References: <Yoy5m3Aa6QwVcFhf@kuha.fi.intel.com>
+ <Yoy7oXpMugFFmfBP@lahna>
+ <CALhB_QM9SHJt+15pEVHEH_kourb-1Xbd68O1p_XLxOmWB4HAfw@mail.gmail.com>
+ <YpCVc6eYkpmjP9AF@lahna>
+ <CALhB_QP8SPqubq-eBNa1BTMuy3kCA65OuajOeJGt5DB9jDRKKg@mail.gmail.com>
+ <ce969e3b4a6ed04584fdecd3234578bd87d52594.camel@gmail.com>
+ <YpSUSk9u5z3ueufa@lahna>
+ <CALhB_QNh3vMn2+6H41MC_O0sKPfjiVrPeqmvpnLk=tuHUPQGdg@mail.gmail.com>
+ <YpXhg6wPtotRk6c2@lahna>
+ <CALhB_QOCJfxoDpNmRi-YEKozeAh4PMZeVy3avhzR7jVcvWfXYg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 17/17] arm64: dts: mediatek: add mt8365-evk board
- device-tree
-Content-Language: en-US
-To:     Fabien Parent <fparent@baylibre.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        qii.wang@mediatek.com, matthias.bgg@gmail.com, jic23@kernel.org,
-        chaotian.jing@mediatek.com, ulf.hansson@linaro.org,
-        srinivas.kandagatla@linaro.org, chunfeng.yun@mediatek.com,
-        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <20220531135026.238475-1-fparent@baylibre.com>
- <20220531135026.238475-18-fparent@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220531135026.238475-18-fparent@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALhB_QOCJfxoDpNmRi-YEKozeAh4PMZeVy3avhzR7jVcvWfXYg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 31/05/2022 15:50, Fabien Parent wrote:
-> Add device-tree for the MT8365-EVK board. The MT8365 EVK board
-> has the following IOs:
-> * DPI <-> HDMI bridge and HDMI connector.
-> * 2 audio jack
-> * 1 USB Type-A Host port
-> * 2 UART to USB port
-> * 1 battery connector
-> * 1 eMMC
-> * 1 SD card
-> * 2 camera connectors
-> * 1 M.2 slot for connectivity
-> * 1 DSI connector + touchscreen connector
-> * RPI compatible header
-> * 1 Ethernet port
+Hi,
 
-Thank you for your patch. There is something to discuss/improve.
+On Tue, May 31, 2022 at 09:45:55PM +0200, Stefan Hoffmeister wrote:
+> What could be reasons that the second tunnel is not established on the
+> Dell? I read somewhere that Intel hands off the firmware to vendors
+> (Dell) who then customize it for their systems? Could the vendor have
+> made bad customizations / configurations of that package while
+> integrating it?
 
+Probably not a firmware issue.
+
+> I would imagine that plugging in a DisplayPort cable makes the dock
+> (firmware) signal something to the notebook (TB firmware) and a
+> negotiation will take place. That negotiation fails, otherwise the
+> tunnel would be established, and remain established? Is there a means
+> to trace the negotiation?
+
+It is all done in firmware but when you plug in DisplayPort cable to the
+dock, it generates a hotplug event for that DP OUT adapter and this will
+then be handled by the firmware connection manager by establishing a DP
+tunnel (if it finds resources).
+
+> FWIW, I have read the phrase "insufficent provision of GPU Interfaces
+> to the TB port" (sic, on Reddit), and a lengthy related post at
+> https://www.dell.com/community/XPS/Understanding-Thunderbolt-docks-GPU-bandwidth-and-GPU-interfaces/td-p/7678776
+> which I will not pretend to understand.
 > 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> ---
->  arch/arm64/boot/dts/mediatek/Makefile       |   1 +
->  arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 578 ++++++++++++++++++++
->  2 files changed, 579 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+> What I wonder about is whether the "GPU interfaces" situation would be
+> reliably discoverable by inspecting ... something ... anything?
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-> index c7d4636a2cb7..02a9f784358e 100644
-> --- a/arch/arm64/boot/dts/mediatek/Makefile
-> +++ b/arch/arm64/boot/dts/mediatek/Makefile
-> @@ -40,4 +40,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-demo.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
-> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8365-evk.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> new file mode 100644
-> index 000000000000..8f472caa06a3
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> @@ -0,0 +1,578 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2021 BayLibre, SAS.
-> + * Author: Fabien Parent <fparent@baylibre.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/pinctrl/mt8365-pinfunc.h>
-> +#include "mt8365.dtsi"
-> +#include "mt6357.dtsi"
-> +
-> +/ {
-> +	model = "MediaTek MT8365 Open Platform EVK";
-> +	compatible = "mediatek,mt8365-evk", "mediatek,mt8365";
-> +
-> +	aliases {
-> +		serial0 = &uart0;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:921600n8";
-> +	};
-> +
-> +	connector {
-> +		compatible = "hdmi-connector";
-> +		label = "hdmi";
-> +		type = "a";
-> +
-> +		port {
-> +			hdmi_connector_in: endpoint {
-> +				remote-endpoint = <&hdmi_connector_out>;
-> +			};
-> +		};
-> +	};
-> +
-> +	firmware {
-> +		optee {
-> +			compatible = "linaro,optee-tz";
-> +			method = "smc";
-> +		};
-> +	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +		input-name = "gpio-keys";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&gpio_keys>;
-> +
-> +		volume-up {
+> Anyway, my impression, from a layering point of view, is that on the
+> stack (my imagination!)
+> 
+> * notebook hardware
+> * firmware (BIOS, Thunderbolt firmware / connection manager, ...)
+> * Linux thunderbolt driver
+> * Linux graphics drivers: drm / kms (i915 / nvidia / nouveau)
+> 
+> the graphics drivers are not involved when it comes to building /
+> maintaining the Thunderbolt(!) tunnel?
 
-key-volume-up, volume-up-key or key-0
+Correct.
 
-> +			gpios = <&pio 24 GPIO_ACTIVE_LOW>;
-> +			label = "volume_up";
-> +			linux,code = <KEY_VOLUMEUP>;
-> +			wakeup-source;
-> +			debounce-interval = <15>;
-> +		};
-> +	};
-> +
-> +	memory@40000000 {
-> +		device_type = "memory";
-> +		reg = <0 0x40000000 0 0xc0000000>;
-> +	};
-> +
-> +	usb_otg_vbus: regulator-2 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "otg_vbus";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		gpio = <&pio 16 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +	};
-> +
-> +	reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		/* 12 MiB reserved for OP-TEE (BL32)
-> +		 * +-----------------------+ 0x43e0_0000
-> +		 * |      SHMEM 2MiB       |
-> +		 * +-----------------------+ 0x43c0_0000
-> +		 * |        | TA_RAM  8MiB |
-> +		 * + TZDRAM +--------------+ 0x4340_0000
-> +		 * |        | TEE_RAM 2MiB |
-> +		 * +-----------------------+ 0x4320_0000
-> +		 */
-> +		optee_reserved: optee@43200000 {
-> +			no-map;
-> +			reg = <0 0x43200000 0 0x00c00000>;
-> +		};
-> +	};
-> +};
-> +
-> +&cpu0 {
-> +	proc-supply = <&mt6357_vproc_reg>;
-> +	sram-supply = <&mt6357_vsram_proc_reg>;
-> +};
-> +
-> +&cpu1 {
-> +	proc-supply = <&mt6357_vproc_reg>;
-> +	sram-supply = <&mt6357_vsram_proc_reg>;
-> +};
-> +
-> +&cpu2 {
-> +	proc-supply = <&mt6357_vproc_reg>;
-> +	sram-supply = <&mt6357_vsram_proc_reg>;
-> +};
-> +
-> +&cpu3 {
-> +	proc-supply = <&mt6357_vproc_reg>;
-> +	sram-supply = <&mt6357_vsram_proc_reg>;
-> +};
-> +
-> +&dpi0 {
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&dpi_func_pins>;
-> +	pinctrl-1 = <&dpi_idle_pins>;
-> +	assigned-clocks = <&topckgen CLK_TOP_DPI0_SEL>;
-> +	assigned-clock-parents = <&topckgen CLK_TOP_LVDSPLL_D4>;
-> +
-> +	/*
-> +	 * Ethernet and HDMI are sharing pins.
-> +	 * Only one can be enabled at a time and require the physical switch
-> +	 * SW2101 to be set on DPI position
-> +	 */
-> +	status = "okay";
-> +
-> +	port {
-> +		dpi_out: endpoint {
-> +			remote-endpoint = <&it66121_in>;
-> +		};
-> +	};
-> +};
-> +
-> +&ethernet {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&ethernet_pins>;
-> +	phy-handle = <&eth_phy>;
-> +	phy-mode = "rmii";
-> +	mac-address = [00 00 00 00 00 00];
-> +
-> +	/*
-> +	 * Ethernet and HDMI are sharing pins.
-> +	 * Only one can be enabled at a time and require the physical switch
-> +	 * SW2101 to be set on LAN position
-> +	 */
-> +	status = "disabled";
-> +
-> +	mdio {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		eth_phy: ethernet-phy@0 {
-> +			reg = <0>;
-> +		};
-> +	};
-> +};
-> +
-> +&i2c1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&i2c1_pins>;
-> +	clock-frequency = <100000>;
-> +	status = "okay";
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
+> I am also reading "Thunderbolt Alternate Mode encapsulates DisplayPort
+> Alternate Mode". To my ears this sounds like "wrap the raw DisplayPort
+> Alternate Mode bitstream", just with more bandwidth. Pure "DisplayPort
+> Alternate Mode" I can force with success by way of disabling
+> Thunderbolt in the BIOS (at the expense of bandwidth -> bad refresh
+> rate). And "DisplayPort Alternate Mode" gives me _both_ screens,
+> apparently very much scraping along at the max protocol bandwidth,
+> with the 4K screen going black (out of sync?) every once in a while.
+> 
+> Sorry for my rambling, this is an area where I have no expertise.
+> 
+> Anyway, if those graphics drivers are involved for _Thunderbolt_,
+> please do tell me, and I'll venture over to dri-devel.
 
-You defined address/size in DTSI.
+In case of firmware based connection manager, the Thunderbolt driver
+does not do much. Pretty much just the PCIe tunnel authorization and
+power management things (and P2P).
 
-> +
-> +	it66121hdmitx: hdmi@4c {
-> +		compatible = "ite,it66121";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&ite_pins>;
-> +		vcn33-supply = <&mt6357_vibr_reg>;
-> +		vcn18-supply = <&mt6357_vsim2_reg>;
-> +		vrf12-supply = <&mt6357_vrf12_reg>;
-> +		reset-gpios = <&pio 69 GPIO_ACTIVE_LOW>;
-> +		interrupts-extended = <&pio 68 IRQ_TYPE_LEVEL_LOW>;
-> +		#sound-dai-cells = <0>;
-> +		reg = <0x4c>;
+IIRC this non-working system had a discrete (NVIDIA?) GPU? It may be
+that routing it to the DP IN adapters in the Thunderbolt host router
+requires something we don't implement in Linux side yet.
 
-Put reg after compatible.
+> And given what I see above, is that still "Thunderbolt 4 Certified"
+> ("Two 4K displays") in the case of the Dell Inspiron 7610?
 
-> +
-> +		ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			port@0 {
-> +				reg = <0>;
-> +
-> +				it66121_in: endpoint {
-> +					bus-width = <12>;
-> +					remote-endpoint = <&dpi_out>;
-> +				};
-> +			};
-> +
-> +			port@1 {
-> +				reg = <1>;
-> +
-> +				hdmi_connector_out: endpoint {
-> +					remote-endpoint = <&hdmi_connector_in>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&mmc0 {
-> +	status = "okay";
-
-Status okay goes to the end. In some nodes you keep that style, in some
-not. Confusing.
-
-> +	pinctrl-names = "default", "state_uhs";
-> +	pinctrl-0 = <&mmc0_pins_default>;
-> +	pinctrl-1 = <&mmc0_pins_uhs>;
-> +	bus-width = <8>;
-> +	max-frequency = <200000000>;
-> +	cap-mmc-highspeed;
-> +	mmc-hs200-1_8v;
-> +	mmc-hs400-1_8v;
-> +	cap-mmc-hw-reset;
-> +	no-sdio;
-> +	no-sd;
-> +	hs400-ds-delay = <0x12012>;
-> +	vmmc-supply = <&mt6357_vemc_reg>;
-> +	vqmmc-supply = <&mt6357_vio18_reg>;
-> +	assigned-clocks = <&topckgen CLK_TOP_MSDC50_0_SEL>;
-> +	assigned-clock-parents = <&topckgen CLK_TOP_MSDCPLL>;
-> +	non-removable;
-> +};
-> +
-> +&mmc1 {
-> +	pinctrl-names = "default", "state_uhs";
-> +	pinctrl-0 = <&mmc1_pins_default>;
-> +	pinctrl-1 = <&mmc1_pins_uhs>;
-> +	cd-gpios = <&pio 76 GPIO_ACTIVE_LOW>;
-> +	bus-width = <4>;
-> +	max-frequency = <200000000>;
-> +	cap-sd-highspeed;
-> +	sd-uhs-sdr50;
-> +	sd-uhs-sdr104;
-> +	vmmc-supply = <&mt6357_vmch_reg>;
-> +	vqmmc-supply = <&mt6357_vio18_reg>;
-> +	status = "okay";
-> +};
-> +
-> +&mt6357_pmic {
-> +	interrupt-parent = <&pio>;
-> +	interrupts = <145 IRQ_TYPE_LEVEL_HIGH>;
-> +	interrupt-controller;
-> +	#interrupt-cells = <2>;
-> +};
-> +
-> +&mt6357_vibr_reg {
-> +	regulator-always-on;
-> +};
-> +
-> +/* Needed by MSDC1 */
-> +&mt6357_vmc_reg {
-> +	regulator-always-on;
-> +};
-> +
-> +&mt6357_vrf12_reg {
-> +	regulator-always-on;
-> +};
-> +
-> +&mt6357_vsim2_reg {
-> +	regulator-always-on;
-> +};
-> +
-> +&mt6357keys {
-> +	power-key {
-> +		label = "power";
-> +		linux,keycodes = <KEY_POWER>;
-> +		wakeup-source;
-> +	};
-> +
-> +	volume-down {
-
-volume-down-key
-
-> +		label = "volume_down";
-> +		linux,keycodes = <KEY_VOLUMEDOWN>;
-
-
-Best regards,
-Krzysztof
+This I don't know I would expect Dell testing this, at least with their
+own dock.
