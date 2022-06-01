@@ -2,53 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FEED53B010
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 00:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5677953AF7A
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 00:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbiFAVSW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jun 2022 17:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
+        id S231987AbiFAWHs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jun 2022 18:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbiFAVSV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jun 2022 17:18:21 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71E66B7DD
-        for <linux-usb@vger.kernel.org>; Wed,  1 Jun 2022 14:18:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654118299; x=1685654299;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=SxZ8oAyQcloLr4MItHNwRib2OfGTG5BD7+AARjsiOwg=;
-  b=MIz0x+VRxa6FSj7cV9FJH8BwgdkFtTp9rZK3LeoVpPFFuDzNnHEfYcNW
-   zt8UUGL0p/+reIPI2+i5gNlYTjpxC1LOlBlZpy160JFEwWFSUGDrppqAW
-   cPoC+j/Czo47JW8BLJLP0uYpiYsKFQ/ywBnieJY0D86WttaEX6oiHlnM/
-   Q=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Jun 2022 14:18:19 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 14:18:19 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 1 Jun 2022 14:18:18 -0700
-Received: from [10.110.23.84] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 1 Jun 2022
- 14:18:18 -0700
-Message-ID: <a1eb1ca1-7253-2c4a-960c-82d0f435ae41@quicinc.com>
-Date:   Wed, 1 Jun 2022 14:18:16 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 0/6] usb: dwc3: gadget: Rework pullup
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        with ESMTP id S231970AbiFAWHo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jun 2022 18:07:44 -0400
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A48B22735E
+        for <linux-usb@vger.kernel.org>; Wed,  1 Jun 2022 15:07:36 -0700 (PDT)
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id EDC7B409FD;
+        Wed,  1 Jun 2022 22:07:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1654121256; bh=byJPFYZMznhVUM8qU4rzeihjpdvEsHg0HD98G/JQ85E=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=OuT2sZYSWRT9+yc9WqpsREXuHjA+X1nwPeDxo5vk7LWj4zh3ohU2mm/8/ekUlGNmh
+         LFNj8tQrrkANxd2DKiXkYvatv2z1WX2wOt3wY6ZpXzmFe73wbEHLcmocxXn0YSFlmQ
+         Kg7fGKS2lI64XIYq0md5z1VgbfXbsTp3Jbds0z6XmnxJcrLy1+1TB4oF8ruXgNS0Y5
+         XJE6x/WN9l8JOK56+EL6sRX1nLIFPz5qrsXPVL/4fR3DNg2tvOrmb9Ur46WuCFDy5h
+         NlMW48HED7zxnNhItjI/kZwak2pocb2MHDuI0J3twU9XTfINewnZ5/eEq/dovtZ2Al
+         NhS24jQrbXwtQ==
+Received: from o365relay-in.synopsys.com (sv2-o365relay3.synopsys.com [10.202.1.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 4C473A025B;
+        Wed,  1 Jun 2022 22:07:34 +0000 (UTC)
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id E86114006B;
+        Wed,  1 Jun 2022 22:07:33 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="ZM++6WtU";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XOkR7cZGkWbfyKL0QdNhqp4OjArshgHaZAR05lHbMuDBo0dnST/DUNqwSrG86Ww9bN26ZSvR/yji4Y9IOe3Fwk2H4vFPvQOxvbBKyY7K630rwqXlH8S9IVDV+0N3wk9uHPOKCKpl928+z2MEJc9bMS/AGXm7qrEhFYssy2UAiIsspy1bMWbWi6j821RPr/WelYU7weK+q0Pua4Ebk6SkuZGsD5Pic0Lu3jm082Ob52IPZJyUZlJgYcMFdc9qIae1nc9pGyByFIu53B8Fwo86VuxrDNUrvU92q7SULHhlTeyaz4CfmJVpFLmb7nrwYi4jLtGhOzMkqJpjVryxTDHJjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=byJPFYZMznhVUM8qU4rzeihjpdvEsHg0HD98G/JQ85E=;
+ b=Bp2XkDiDL8qS3xKf74GFRbHQOSA2TYMU2x4xLXVRNdTJHcsVCTb0Iw2lozBCIVEf0nPvlQg3C0yX4V+tnWavj0YKtcMj5DClTSpJpXJITM1TnymbrvX/PS+LP/2QR7RXyy47wlNIRnzUNI4TfetmmBTtKISpaPAL2IzHVBDohYvVgh2M1gF8Z3ORTJ8FR1yOEqPuk3g9l5ZhBLyUBPDqY3bspJyBO2QkncDm5e1wjWPb8vOptOdsHHY/V5W++U8lytWbgrjW8TL2h0tgu/hukDDqfEQViuNy5AAUerEjfsNGVuYsHsi+NmoA4JNntz55xn476W5TtzAUnFROwefsug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=byJPFYZMznhVUM8qU4rzeihjpdvEsHg0HD98G/JQ85E=;
+ b=ZM++6WtUNG+rWTd9EvOD+464OlycYbIlcmbC7WOJUKc65eVMDwAXjh1zaQM7MCAAXue9u9ylZQNp/umYQ/tl1WOfRssr7iXWHxPJEDSe/d/1vYNeFz9p00Oj7l/CJfBfF1j/gdyCSoZ2sK6+B9tZkROm5OGe+b2NlCyAulbqRr8=
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
+ by MN0PR12MB6001.namprd12.prod.outlook.com (2603:10b6:208:37d::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Wed, 1 Jun
+ 2022 22:07:28 +0000
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::91c7:7e6b:d663:a349]) by BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::91c7:7e6b:d663:a349%7]) with mapi id 15.20.5314.012; Wed, 1 Jun 2022
+ 22:07:28 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
 CC:     John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH 0/6] usb: dwc3: gadget: Rework pullup
+Thread-Topic: [PATCH 0/6] usb: dwc3: gadget: Rework pullup
+Thread-Index: AQHYVe/SnOT1IryojUCTvpGnMrnu860CtucAgCRnpACABkB7AIAAEd8AgAKjB4CAAG6HgIAKy+QAgAANvwA=
+Date:   Wed, 1 Jun 2022 22:07:28 +0000
+Message-ID: <c9d43622-71ee-d3e8-190e-6948a97f102e@synopsys.com>
 References: <cover.1650593829.git.Thinh.Nguyen@synopsys.com>
  <14105f3b-aa09-1fd5-48f4-9f15eec2473e@quicinc.com>
  <aa9e6681-76f1-357c-b01c-64576b5faee8@quicinc.com>
@@ -56,251 +87,297 @@ References: <cover.1650593829.git.Thinh.Nguyen@synopsys.com>
  <3b3e4d7f-d993-628d-c3c0-aa104127223a@quicinc.com>
  <7e4e9e74-c7f2-e4f1-577d-45b0e3be9ac0@quicinc.com>
  <4988ed34-04a4-060a-ccef-f57790f76a2b@synopsys.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <4988ed34-04a4-060a-ccef-f57790f76a2b@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <a1eb1ca1-7253-2c4a-960c-82d0f435ae41@quicinc.com>
+In-Reply-To: <a1eb1ca1-7253-2c4a-960c-82d0f435ae41@quicinc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synopsys.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 383224ae-6236-4b30-d7f9-08da441b1e12
+x-ms-traffictypediagnostic: MN0PR12MB6001:EE_
+x-microsoft-antispam-prvs: <MN0PR12MB6001580A0352435EC5F308D4AADF9@MN0PR12MB6001.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0Q0r4MgjgpEPzvLK4XeAlpCkXsn+8USsz0QHmiBZ9YhpeFMQBguTx3VCca6VsEkKUZRqKVr9E4YUt5sHBYBIHGleuwL8dqPllAEeRtooomFaOlvtdljvGcBt8If1j9VOgNz4v80ASkebKFv/1tbfdecv1W4udoFeSisqeBNyCd7uwYRfygL5CwXMKvo+ZdEEqrSgB5TNNimOqHLDbgkcuAKuPLTY0n2VnFamCUsxE/Gtg8qK6kEYKfO/PvYE/wOi1xYHUVzwrwT/Udi18+igpPZ1JHIMtB6kEnVP0rQkv76c0P/PsH4yyZS/iNQUYw3nTBlTCTQP8vhurnOtEZQgLDg3vT9GFJQGlmFoOSvZMiMA9ROsEkMvzSAxUZULT8s+XZcuKZb7dY1sLKWOKS0Ipcx0eBA27vQNA2IrJZmnNVh3Jg3AkYo5GW8zFiuJqmTp8gQZAnG1FzmWEicneRNoEHke5QH/x65Cz/how0w0LLktvQeLzwPFn9Q57Fcc9v6O72XYUUc6/QYsjXXOUzVkgtI5cV5AlJ5NS75SLcMCUOAd8UISlWZVdbBiJNI91OWrm+DSzOZP4P6wJBWgoTf286aZ2O0pe4D3L8AO+ghqk45+3l/KyWJmUqX0W/qk2/sMPOrK9gVH8/HpgbRZHzU0gDy4sYjRv8YqKw7MuciB/Q/aPuINDTxuv9sDTaWwpJW4nzWC21OE1FFiHYfPcTH7Ina9P2rLTbGBOjEz1bKQlRlBE8VlGCwDki6Dr7x6MadOmlaNf58Fdg8A+rPyHeUh6A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(84040400005)(53546011)(2906002)(6506007)(6512007)(26005)(107886003)(2616005)(186003)(83380400001)(71200400001)(5660300002)(6486002)(30864003)(8936002)(36756003)(31686004)(8676002)(76116006)(38070700005)(122000001)(86362001)(31696002)(66946007)(66556008)(64756008)(66476007)(4326008)(66446008)(38100700002)(508600001)(110136005)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cWtucFRJL3FzTzY2SmRXUzFhd01MaW1nVTBySmNtdUJmY0J5MThtQzlKMzl2?=
+ =?utf-8?B?aVZaWVFpSWl0RkxOaEpVSnE4cFNzc1pZL1N6dWRZeFQrOGFseVFwZFl1SXFT?=
+ =?utf-8?B?VCtlWEllTDU0NndKZVIxTFlIaTZWQWVqYjFUUHBGSDZoMXdkcDJxR05Cc1o3?=
+ =?utf-8?B?dTNXZ1BLTDc5VGtkVkF5QU1udjIwZXF6MDM0VW9WYVZjVnIrbWVveTNEemhH?=
+ =?utf-8?B?UFd2YlJ3eUxDVjV0dEdSMDVScG9YWHhubXkxdkJ3QnBPOC9pTEtDZXRaWUVn?=
+ =?utf-8?B?S0Nwb3djMmRheTRZejVMWi9oMzZ5WXhFam5yQTdxbFpoSlQ4S2d3Vzh0TEpU?=
+ =?utf-8?B?SG4xT0JTRk5IeGdXZXNzcWViTlpGVXl3Wi9DSjJvcVNWNXVkQlNabVpac1RY?=
+ =?utf-8?B?NGhzbXVxN2RwZEVWd29BQXZid2Yra0N2S2E4UGhpYStrbkhzOTlGVVg5cElS?=
+ =?utf-8?B?NjBTWS92ZUVpa2ZFRzkxeXV5YWJuVk94elZCZHdOUWVVeVhSUmdWdXBhbFhm?=
+ =?utf-8?B?dHZpNnEyTDFGRWFoL1ZCRUlrVFZiTEd0aU1zc1lyWnRYVFB5anRsejZnTUdB?=
+ =?utf-8?B?QjFnZjhHZnpJanE1S3c2RkY1RXM4NmRBVkJPTGJiemw0a29qaUdLV3FYb004?=
+ =?utf-8?B?bjRpNDIvMENnbnNGbllPTVNCRGUwVzJ4T0ZmdldRVUp6OFdKNzBoNFFiNG80?=
+ =?utf-8?B?VCt5R3BMQU9QaFNRMTl1TWVTd1ZqZGRSRWFTSVA3WnIzbzluWHVCYTlTcS9L?=
+ =?utf-8?B?SGgzeDA2eHI3Y05RY0NZMUJHM3k5cEFlR013aGoxcnVHMjJUajM2dlZiaUxK?=
+ =?utf-8?B?eHJKSjFTVURGb2laSC94TE0rZlRUSHExQzdkVHVtaHpYeUVuSWk4V1NCUnFO?=
+ =?utf-8?B?dW55YlcyZ085ZFNIeHpadXkyU2EyZWRReUYzeEpzc3dnRmdENlFuVVRLTlRx?=
+ =?utf-8?B?Rlk4bTBiZFpRQkk3dy9GenZHRDQrd2dXZmVhNjFjQmplcU1FSkxIN0RPRkRQ?=
+ =?utf-8?B?NlJwYWhVTDVHUmNkUFdEVm9MVzY5TkVBYXdHM0taTTNkWlFhbERMak8zakwz?=
+ =?utf-8?B?cS85NVo2SlFMd0N1cElFQ1JmNXk0RmtnWUZJbkgrS1E1U1NCbUIyZldGNG9o?=
+ =?utf-8?B?bmdRa2F1L2dIMnpDdHpNTHluT0E0c2VMVG5RUytpd2NlKzhKdkVsSkU1bko1?=
+ =?utf-8?B?VG9YNEZQNXBWaHhGNXphcVYweXVkcmQzZE0xZHJiZXlwOGhHREJGS0JBKzJv?=
+ =?utf-8?B?L0xIYzl2ajRjSlArZGVPd0pseW9UajB0a2VDUjh5bFhzbFRxbU5mV0xhR3FJ?=
+ =?utf-8?B?aXBkMEhzd0h4MEpVTTZ1YjZ4RTBuR2hrWXBQYk5iR2Z2QWZGSUJDL2xmd05k?=
+ =?utf-8?B?NG5uMFBSY1RxOTJqRThCcVFMMERWL1E1YVg3enpEVFRJVUZNMjNwdndyZGd0?=
+ =?utf-8?B?YmVKdnVmcmRER0NPZkZUbVZUYUR0UWhOQ1MxQU0rTXJBRmEzdThHYnNYRmx5?=
+ =?utf-8?B?RWQ4UTBNODExaUlkNE9uSW1FT0FMT2dUeExFZlBKelFIdVFHVmJxR0xtSEpV?=
+ =?utf-8?B?TEJ1ZU5zUGprdWtNMmFuUk8wR1UyMVlzQlg4R1FLMEhqdlhOTlNhYVc2M1Y2?=
+ =?utf-8?B?MUVEbVdTUk4zdWZTQzdybUtHVHRWOWJZSzBnaGRmOW1iN0dIaU1KbVBRazdG?=
+ =?utf-8?B?dW1zcjJnZ1g0bFFaRzgxdFloVzErc0grd01yZ1R3WlB1eVpoaDVYaDVoVlR2?=
+ =?utf-8?B?RmFSTUljS3Z1bEJWOXl2T2VaZ0VvWXpsUmQ1UGRMRm9sZXZ0REhIZnNQanJy?=
+ =?utf-8?B?cWhCVXdTVHk0M203bFBER0NXTWpXTmI2aTIyeng5QWhTb0hEeVJXSXJBNkpH?=
+ =?utf-8?B?clo4TXJEMVZTMHVuM2JvclV1TmQxNllZUkZYeCtwUmVKNzNJNkNjSW1QTlYv?=
+ =?utf-8?B?Uit2bmVZc2ZlNTVIblJ0emUzdW5TTjB6OTlWZWVoS1dKaUFwaVMzWmwwWmNZ?=
+ =?utf-8?B?NThOMzNQU2Uzc3A5Q0hURXZlb3NURXJQLzdDS3hXeVVTdVgxWHZCR2duSisv?=
+ =?utf-8?B?L3VJeWpzcTcxQzNyQjFlOGJ6S1M5TEdrdFZFWWFab0VrYkhuanRiTEh3NHFt?=
+ =?utf-8?B?dnQzR3hFRFZCUFIxYnF3UVFBOHlZbzFySnZjVFBoL3U3cEtzbGx0L1VNcjhZ?=
+ =?utf-8?B?S09TT1hYdzloN3BEZmVqVWk3THlyWGorbTFuRE9qeE9heDBOaGJCeVJMVWY3?=
+ =?utf-8?B?TmdoeThkdlRjWWYyVXdoUGVYTEZEUlcvREw5V1VyYVlYZWpvNW5oL0VVa21L?=
+ =?utf-8?B?enoyS2dHYSs2cnk2SGoxOUZzUGpDVHpHWVhwMDlQbysvZE8vM1ErZz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <464A2C4F594EC0468FC34666E905180B@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 383224ae-6236-4b30-d7f9-08da441b1e12
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2022 22:07:28.5547
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Rhb3WXE+O2LdHTsVo1BPZp6YTo8mqcOl/48JKT76CdpOyywqxKBAUu0qNP15FEyeEX8oIeixNQy+UKF5Z/F3Qg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6001
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh,
-
-On 5/25/2022 5:25 PM, Thinh Nguyen wrote:
-> Wesley Cheng wrote:
->> Hi Thinh,
->>
->> On 5/23/2022 6:34 PM, Wesley Cheng wrote:
->>> Hi Thinh,
->>>
->>> Welcome back! :)
->>>
->>> On 5/23/2022 5:30 PM, Thinh Nguyen wrote:
->>>> Wesley Cheng wrote:
->>>>> Hi Thinh,
->>>>>
->>>>> On 4/26/2022 2:05 PM, Wesley Cheng wrote:
->>>>>> Hi Thinh,
->>>>>>
->>>>>> On 4/21/2022 7:22 PM, Thinh Nguyen wrote:
->>>>>>> This series cleanup and enhance dwc3 pullup() handling to cover
->>>>>>> different
->>>>>>> corner cases.
->>>>>>>
->>>>>>> Would be great to have some Tested-by before picking this series up.
->>>>>>> Thanks!
->>>>>>>
->>>>>>>
->>>>>>> Thinh Nguyen (6):
->>>>>>>      usb: dwc3: gadget: Prevent repeat pullup()
->>>>>>>      usb: dwc3: gadget: Refactor pullup()
->>>>>>>      usb: dwc3: gadget: Don't modify GEVNTCOUNT in pullup()
->>>>>>>      usb: dwc3: ep0: Don't prepare beyond Setup stage
->>>>>>>      usb: dwc3: gadget: Only End Transfer for ep0 data phase
->>>>>>>      usb: dwc3: gadget: Delay issuing End Transfer
->>>>>>>
->>>>>>>     drivers/usb/dwc3/ep0.c    |   2 +-
->>>>>>>     drivers/usb/dwc3/gadget.c | 126
->>>>>>> ++++++++++++++++++++------------------
->>>>>>>     2 files changed, 69 insertions(+), 59 deletions(-)
->>>>>>>
->>>>>>>
->>>>>>> base-commit: 5c29e864999763baec9eedb9ea5bd557aa4cbd77
->>>>>>
->>>>>> Thanks for this series.  Running the tests w/ the changes now and will
->>>>>> debug if I run into any issues.  I will need to run the previous test
->>>>>> cases I had as well, since the change removes the GEVNTCOUNT clearing
->>>>>> during pullup disable (this was added for some controller halt
->>>>>> failures).
->>>>>>
->>>>>
->>>>> Going to summarize some of the things I've found so far:
->>>>> 1.  DWC3_EP_DELAY_STOP flag set for EPs:
->>>>> The test case being run will have usb ep dequeue running closely in
->>>>> parallel to soft disconnect.  There is a chance that we run into
->>>>> controller halt due to active EPs, since we are not
->>>>> waiting/synchronizing for DWC3_EP_DELAY_STOP to be cleared or complete.
->>>>
->>>> I sent an update. Can you test it out?
->>>>
->>>>>
->>>>> Attached thinh_newest_delayed_status_causing_ep_stop_delay_flag.txt
->>>>> - Force device crash if run/stop routine fails w/ -ETIMEDOUT.
->>>>
->>>> Can you clarify here? Did you force the crash or did the crash occur due
->>>> to the change?
->>>>
->>> Just injecting a kernel panic if there is an -ETIMEDOUT condition
->>> during run/stop clear.  The end of the traces will be at the point of
->>> which the error occurred.
->>>
->>>>> - There is a situation where a function will return delayed_status, and
->>>>> we can see "timed out waiting for SETUP phase" print during pullup
->>>>> disable.
->>>>
->>>> It should be fine that the warning gets printed. The programming guide
->>>> suggested that the driver should wait for all the control transfers to
->>>> complete. This deviates from the programming guide. If it happens often
->>>> enough, we may need to increase the timeout.
->>>>
->>> Yes, agreed.
->>>
->>>>>
->>>>> 2.  Controller halt failure due to non-zero GEVNTCOUNT
->>>>> So with this patch series, and removing the GEVNTCOUNT clearing, I'm
->>>>> running into controller halt failures again.  When I printed the
->>>>> GEVNTCOUNT register at the time of failure, it showed that there were
->>>>> several pending events.
->>>>
->>>> Do you have the log for this? What's the IO delay for each register read
->>>> on your platform? I suspect that the polling for halt status is too
->>>> quick, we may need to add some delay between polls.
->>>>
->>> Will try to collect a log for you after adding the new changes (if I
->>> run into this).  I tried to increase the number of loops as well, but
->>> that didn't help.
->>>
->> I think the reason for the non-zero GEVNTCOUNT is probably due to the
->> fact that we're still getting EP0 events:
->>
->> [ 3548.040859][T20051] dwc3 a600000.dwc3: unexpected direction for Data
->> Phase
->> [ 3548.061282][T20051] dwc3 a600000.dwc3: unexpected direction for Data
->> Phase
->> [ 3548.071429][T20051] dwc3 a600000.dwc3: unexpected direction for Data
->> Phase
->> [ 3548.083499][T20051] dwc3 a600000.dwc3: unexpected direction for Data
->> Phase
->> [ 3548.095546][T20051] dwc3 a600000.dwc3: unexpected direction for Data
->> Phase
->> [ 3548.105820][T20051] dwc3 a600000.dwc3: unexpected direction for Data
->> Phase
->> [ 3548.122027][ T2189] dwc3_gadget_run_stop: pullups_connected = 0
->> [ 3548.156770][ T2189] GEVENT COUNT = 8
->>
->> In the changes proposed, you're blocking the inspect setup API if
->> !dwc->connected, but due to ret = -EINVAL, the exit routine will go and
->> issue a stall and restart on EP0.  I think your main intention was just
->> to ignore it, correct?
->>
-> 
-> No, not just ignoring it. The intention is that while polling for the
-> halted state, the driver will continue to service any interrupt
-> generated by the controller. If it's a control transfer, then the
-> controller will respond with a STALL and rejects any new control
-> transfer and setup a new TRB for the next setup stage. The interrupt
-> handler will clear the GEVNTCOUNT while polling for halted state. The
-> expectation here is to poll for the halted state long enough for the
-> interrupt handler to come and clear the GEVNTCOUNT before the timeout.
-> 
-> Looks like somehow the polling for the halted state block the irq
-> handler:
-> 
-> [ 3548.117872285       0xff828a6ab]   dbg_gadget_giveback: ep7in: req ffffff8041575600 length 0/65536 zsI ==> -108
-> [ 3548.120646816       0xff82976c3]   dbg_send_ep_cmd: ep8in: cmd 'End Transfer' [110c08] params 00000000 00000000 00000000 --> status: Successful
-> 
-> There's a 30ms gap here. Probably during the polling? (would be good to
-> have more register read/write tracepoints)
-> 
-> [ 3548.151314473       0xff83272d7]   event (080001c0): ep0out: Endpoint Command Complete
-> [ 3548.151760931       0xff8329451]   event (080001c0): ep0out: Endpoint Command Complete
-> [ 3548.152104577       0xff832ae18]   event (080001c0): ep0out: Endpoint Command Complete
-> [ 3548.152452441       0xff832c82e]   event (080001c0): ep0out: Endpoint Command Complete
-> [ 3548.152842702       0xff832e574]   event (080001c0): ep0out: Endpoint Command Complete
-> [ 3548.153250150       0xff8330403]   event (080001c0): ep0out: Endpoint Command Complete
-> [ 3548.153657285       0xff833228b]   event (080001c0): ep0out: Endpoint Command Complete
-> 
-> 
-> Can you add msleep(1) in between the polling:
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index ee8e8974302d..9c0d61a2dd82 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -2814,6 +2814,8 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
->          dwc3_gadget_dctl_write_safe(dwc, reg);
->   
->          do {
-> +               msleep(1);
-> +
->                  reg = dwc3_readl(dwc->regs, DWC3_DSTS);
->                  reg &= DWC3_DSTS_DEVCTRLHLT;
->          } while (--timeout && !(!is_on ^ !reg));
-> 
-> 
-> (If this works, we can slightly modify this logic to save 1ms)
-> 
-> BTW, is there a problem with enabling other tracepoint events? I have to
-> make some guesses when reading the log.
-> 
-
-With the test I'm running, I have to make some changes to hook into the 
-DWC3 tracepoints we have and save it into a different logging mechanism 
-we have.  The default ftrace is being routed to a different path while 
-this test is running.
-
-I'll see if I can add some reg reads/writes logs.
-
-With the current changes (I've also seen this w/o the latest msleep() 
-change), I'm getting into a situation where there is a controller halt. 
-  In this case though, GEVNTCNT is 0, but I think what is happening is 
-that we are interweaving pullup enable and pullup disable calls, and 
-some pullup enable sequences are failing, which lead to the next pullup 
-disable to fail halting of the controller.
-
-if (dwc->pullups_connected == is_on)
-         return 0;
-
-If the pullup disable routine is running the run/stop path, and USB 
-gadget attempts to call pullup enable, this IF condition will allow the 
-pullup enable to continue.  This is because pullups_connected is set to 
-FALSE before the controller halt polling, so 0->1 transition is valid.
-
-I'm not sure how most USB composite devices behave, but I don't think 
-most will retry if the pullup enable returns an error. (?)  I say this 
-because we can modify the IF condition to block the subsequent pullup 
-enable call, if we have not yet finished the controller halt.
-
-In the snippet below, we can see that, we disabled the run/stop bit and 
-halted the controller shortly after receiving the RESET event.  This 
-means that the dwc3 gadget stop was called, and EP0 was disabled as well 
-(flags were also cleared).  This is leading to the CONNDONE event to 
-then re-do the start config, as EP0 is not "enabled."  I think that is 
-not the expected sequence.
-
-[ 3899.673491795       0x118aae3bf1]   dbg_send_ep_cmd: ep0out: cmd 'Set 
-Endpoint Configuration' [401] params 00001000 00000500 00000000 --> 
-status: Successful
-[ 3899.673534504       0x118aae3f25]   dbg_send_ep_cmd: ep0in: cmd 'Set 
-Endpoint Configuration' [401] params 00001000 02000500 00000000 --> 
-status: Successful
-[ 3899.673584920       0x118aae42ed]   dbg_send_ep_cmd: ep0out: cmd 
-'Start Transfer' [406] params 00000000 efffa000 00000000 --> status: 
-Successful
-[ 3899.700573][T24732] dwc3_gadget_run_stop: pullups_connected = 1
-
-[ 3899.744634556       0x118ac313a7]   event (00030601): Suspend [U3]
-[ 3899.838616483       0x118ade9c4d]   event (00000101): Reset [U0]
-
-[ 3899.922413][ T2186] dwc3_gadget_run_stop: pullups_connected = 0
-
-[ 3900.147395911       0x118b3912c0]   event (00000201): Connection Done 
-[U0]
-[ 3900.147486276       0x118b391988]   dbg_send_ep_cmd: ep0out: cmd 
-'Start New Configuration' [409] params 00000000 00000000 00000000 --> 
-status: Successful
-[ 3900.147535234       0x118b391d34]   dbg_send_ep_cmd: ep0out: cmd 'Set 
-Endpoint Transfer Resource' [402] params 00000001 00000000 00000000 --> 
-status: Successful
-
-Thanks
-Wesley Cheng
+SGkgV2VzbGV5LA0KDQpXZXNsZXkgQ2hlbmcgd3JvdGU6DQo+IEhpIFRoaW5oLA0KPiANCj4gT24g
+NS8yNS8yMDIyIDU6MjUgUE0sIFRoaW5oIE5ndXllbiB3cm90ZToNCj4+IFdlc2xleSBDaGVuZyB3
+cm90ZToNCj4+PiBIaSBUaGluaCwNCj4+Pg0KPj4+IE9uIDUvMjMvMjAyMiA2OjM0IFBNLCBXZXNs
+ZXkgQ2hlbmcgd3JvdGU6DQo+Pj4+IEhpIFRoaW5oLA0KPj4+Pg0KPj4+PiBXZWxjb21lIGJhY2sh
+IDopDQo+Pj4+DQo+Pj4+IE9uIDUvMjMvMjAyMiA1OjMwIFBNLCBUaGluaCBOZ3V5ZW4gd3JvdGU6
+DQo+Pj4+PiBXZXNsZXkgQ2hlbmcgd3JvdGU6DQo+Pj4+Pj4gSGkgVGhpbmgsDQo+Pj4+Pj4NCj4+
+Pj4+PiBPbiA0LzI2LzIwMjIgMjowNSBQTSwgV2VzbGV5IENoZW5nIHdyb3RlOg0KPj4+Pj4+PiBI
+aSBUaGluaCwNCj4+Pj4+Pj4NCj4+Pj4+Pj4gT24gNC8yMS8yMDIyIDc6MjIgUE0sIFRoaW5oIE5n
+dXllbiB3cm90ZToNCj4+Pj4+Pj4+IFRoaXMgc2VyaWVzIGNsZWFudXAgYW5kIGVuaGFuY2UgZHdj
+MyBwdWxsdXAoKSBoYW5kbGluZyB0byBjb3Zlcg0KPj4+Pj4+Pj4gZGlmZmVyZW50DQo+Pj4+Pj4+
+PiBjb3JuZXIgY2FzZXMuDQo+Pj4+Pj4+Pg0KPj4+Pj4+Pj4gV291bGQgYmUgZ3JlYXQgdG8gaGF2
+ZSBzb21lIFRlc3RlZC1ieSBiZWZvcmUgcGlja2luZyB0aGlzIHNlcmllcw0KPj4+Pj4+Pj4gdXAu
+DQo+Pj4+Pj4+PiBUaGFua3MhDQo+Pj4+Pj4+Pg0KPj4+Pj4+Pj4NCj4+Pj4+Pj4+IFRoaW5oIE5n
+dXllbiAoNik6DQo+Pj4+Pj4+PiDCoMKgwqDCoCB1c2I6IGR3YzM6IGdhZGdldDogUHJldmVudCBy
+ZXBlYXQgcHVsbHVwKCkNCj4+Pj4+Pj4+IMKgwqDCoMKgIHVzYjogZHdjMzogZ2FkZ2V0OiBSZWZh
+Y3RvciBwdWxsdXAoKQ0KPj4+Pj4+Pj4gwqDCoMKgwqAgdXNiOiBkd2MzOiBnYWRnZXQ6IERvbid0
+IG1vZGlmeSBHRVZOVENPVU5UIGluIHB1bGx1cCgpDQo+Pj4+Pj4+PiDCoMKgwqDCoCB1c2I6IGR3
+YzM6IGVwMDogRG9uJ3QgcHJlcGFyZSBiZXlvbmQgU2V0dXAgc3RhZ2UNCj4+Pj4+Pj4+IMKgwqDC
+oMKgIHVzYjogZHdjMzogZ2FkZ2V0OiBPbmx5IEVuZCBUcmFuc2ZlciBmb3IgZXAwIGRhdGEgcGhh
+c2UNCj4+Pj4+Pj4+IMKgwqDCoMKgIHVzYjogZHdjMzogZ2FkZ2V0OiBEZWxheSBpc3N1aW5nIEVu
+ZCBUcmFuc2Zlcg0KPj4+Pj4+Pj4NCj4+Pj4+Pj4+IMKgwqDCoCBkcml2ZXJzL3VzYi9kd2MzL2Vw
+MC5jwqDCoMKgIHzCoMKgIDIgKy0NCj4+Pj4+Pj4+IMKgwqDCoCBkcml2ZXJzL3VzYi9kd2MzL2dh
+ZGdldC5jIHwgMTI2DQo+Pj4+Pj4+PiArKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0t
+LS0tLQ0KPj4+Pj4+Pj4gwqDCoMKgIDIgZmlsZXMgY2hhbmdlZCwgNjkgaW5zZXJ0aW9ucygrKSwg
+NTkgZGVsZXRpb25zKC0pDQo+Pj4+Pj4+Pg0KPj4+Pj4+Pj4NCj4+Pj4+Pj4+IGJhc2UtY29tbWl0
+OiA1YzI5ZTg2NDk5OTc2M2JhZWM5ZWVkYjllYTViZDU1N2FhNGNiZDc3DQo+Pj4+Pj4+DQo+Pj4+
+Pj4+IFRoYW5rcyBmb3IgdGhpcyBzZXJpZXMuwqAgUnVubmluZyB0aGUgdGVzdHMgdy8gdGhlIGNo
+YW5nZXMgbm93IGFuZA0KPj4+Pj4+PiB3aWxsDQo+Pj4+Pj4+IGRlYnVnIGlmIEkgcnVuIGludG8g
+YW55IGlzc3Vlcy7CoCBJIHdpbGwgbmVlZCB0byBydW4gdGhlIHByZXZpb3VzDQo+Pj4+Pj4+IHRl
+c3QNCj4+Pj4+Pj4gY2FzZXMgSSBoYWQgYXMgd2VsbCwgc2luY2UgdGhlIGNoYW5nZSByZW1vdmVz
+IHRoZSBHRVZOVENPVU5UDQo+Pj4+Pj4+IGNsZWFyaW5nDQo+Pj4+Pj4+IGR1cmluZyBwdWxsdXAg
+ZGlzYWJsZSAodGhpcyB3YXMgYWRkZWQgZm9yIHNvbWUgY29udHJvbGxlciBoYWx0DQo+Pj4+Pj4+
+IGZhaWx1cmVzKS4NCj4+Pj4+Pj4NCj4+Pj4+Pg0KPj4+Pj4+IEdvaW5nIHRvIHN1bW1hcml6ZSBz
+b21lIG9mIHRoZSB0aGluZ3MgSSd2ZSBmb3VuZCBzbyBmYXI6DQo+Pj4+Pj4gMS7CoCBEV0MzX0VQ
+X0RFTEFZX1NUT1AgZmxhZyBzZXQgZm9yIEVQczoNCj4+Pj4+PiBUaGUgdGVzdCBjYXNlIGJlaW5n
+IHJ1biB3aWxsIGhhdmUgdXNiIGVwIGRlcXVldWUgcnVubmluZyBjbG9zZWx5IGluDQo+Pj4+Pj4g
+cGFyYWxsZWwgdG8gc29mdCBkaXNjb25uZWN0LsKgIFRoZXJlIGlzIGEgY2hhbmNlIHRoYXQgd2Ug
+cnVuIGludG8NCj4+Pj4+PiBjb250cm9sbGVyIGhhbHQgZHVlIHRvIGFjdGl2ZSBFUHMsIHNpbmNl
+IHdlIGFyZSBub3QNCj4+Pj4+PiB3YWl0aW5nL3N5bmNocm9uaXppbmcgZm9yIERXQzNfRVBfREVM
+QVlfU1RPUCB0byBiZSBjbGVhcmVkIG9yDQo+Pj4+Pj4gY29tcGxldGUuDQo+Pj4+Pg0KPj4+Pj4g
+SSBzZW50IGFuIHVwZGF0ZS4gQ2FuIHlvdSB0ZXN0IGl0IG91dD8NCj4+Pj4+DQo+Pj4+Pj4NCj4+
+Pj4+PiBBdHRhY2hlZCB0aGluaF9uZXdlc3RfZGVsYXllZF9zdGF0dXNfY2F1c2luZ19lcF9zdG9w
+X2RlbGF5X2ZsYWcudHh0DQo+Pj4+Pj4gLSBGb3JjZSBkZXZpY2UgY3Jhc2ggaWYgcnVuL3N0b3Ag
+cm91dGluZSBmYWlscyB3LyAtRVRJTUVET1VULg0KPj4+Pj4NCj4+Pj4+IENhbiB5b3UgY2xhcmlm
+eSBoZXJlPyBEaWQgeW91IGZvcmNlIHRoZSBjcmFzaCBvciBkaWQgdGhlIGNyYXNoDQo+Pj4+PiBv
+Y2N1ciBkdWUNCj4+Pj4+IHRvIHRoZSBjaGFuZ2U/DQo+Pj4+Pg0KPj4+PiBKdXN0IGluamVjdGlu
+ZyBhIGtlcm5lbCBwYW5pYyBpZiB0aGVyZSBpcyBhbiAtRVRJTUVET1VUIGNvbmRpdGlvbg0KPj4+
+PiBkdXJpbmcgcnVuL3N0b3AgY2xlYXIuwqAgVGhlIGVuZCBvZiB0aGUgdHJhY2VzIHdpbGwgYmUg
+YXQgdGhlIHBvaW50IG9mDQo+Pj4+IHdoaWNoIHRoZSBlcnJvciBvY2N1cnJlZC4NCj4+Pj4NCj4+
+Pj4+PiAtIFRoZXJlIGlzIGEgc2l0dWF0aW9uIHdoZXJlIGEgZnVuY3Rpb24gd2lsbCByZXR1cm4N
+Cj4+Pj4+PiBkZWxheWVkX3N0YXR1cywgYW5kDQo+Pj4+Pj4gd2UgY2FuIHNlZSAidGltZWQgb3V0
+IHdhaXRpbmcgZm9yIFNFVFVQIHBoYXNlIiBwcmludCBkdXJpbmcgcHVsbHVwDQo+Pj4+Pj4gZGlz
+YWJsZS4NCj4+Pj4+DQo+Pj4+PiBJdCBzaG91bGQgYmUgZmluZSB0aGF0IHRoZSB3YXJuaW5nIGdl
+dHMgcHJpbnRlZC4gVGhlIHByb2dyYW1taW5nIGd1aWRlDQo+Pj4+PiBzdWdnZXN0ZWQgdGhhdCB0
+aGUgZHJpdmVyIHNob3VsZCB3YWl0IGZvciBhbGwgdGhlIGNvbnRyb2wgdHJhbnNmZXJzIHRvDQo+
+Pj4+PiBjb21wbGV0ZS4gVGhpcyBkZXZpYXRlcyBmcm9tIHRoZSBwcm9ncmFtbWluZyBndWlkZS4g
+SWYgaXQgaGFwcGVucw0KPj4+Pj4gb2Z0ZW4NCj4+Pj4+IGVub3VnaCwgd2UgbWF5IG5lZWQgdG8g
+aW5jcmVhc2UgdGhlIHRpbWVvdXQuDQo+Pj4+Pg0KPj4+PiBZZXMsIGFncmVlZC4NCj4+Pj4NCj4+
+Pj4+Pg0KPj4+Pj4+IDIuwqAgQ29udHJvbGxlciBoYWx0IGZhaWx1cmUgZHVlIHRvIG5vbi16ZXJv
+IEdFVk5UQ09VTlQNCj4+Pj4+PiBTbyB3aXRoIHRoaXMgcGF0Y2ggc2VyaWVzLCBhbmQgcmVtb3Zp
+bmcgdGhlIEdFVk5UQ09VTlQgY2xlYXJpbmcsIEknbQ0KPj4+Pj4+IHJ1bm5pbmcgaW50byBjb250
+cm9sbGVyIGhhbHQgZmFpbHVyZXMgYWdhaW4uwqAgV2hlbiBJIHByaW50ZWQgdGhlDQo+Pj4+Pj4g
+R0VWTlRDT1VOVCByZWdpc3RlciBhdCB0aGUgdGltZSBvZiBmYWlsdXJlLCBpdCBzaG93ZWQgdGhh
+dCB0aGVyZSB3ZXJlDQo+Pj4+Pj4gc2V2ZXJhbCBwZW5kaW5nIGV2ZW50cy4NCj4+Pj4+DQo+Pj4+
+PiBEbyB5b3UgaGF2ZSB0aGUgbG9nIGZvciB0aGlzPyBXaGF0J3MgdGhlIElPIGRlbGF5IGZvciBl
+YWNoIHJlZ2lzdGVyDQo+Pj4+PiByZWFkDQo+Pj4+PiBvbiB5b3VyIHBsYXRmb3JtPyBJIHN1c3Bl
+Y3QgdGhhdCB0aGUgcG9sbGluZyBmb3IgaGFsdCBzdGF0dXMgaXMgdG9vDQo+Pj4+PiBxdWljaywg
+d2UgbWF5IG5lZWQgdG8gYWRkIHNvbWUgZGVsYXkgYmV0d2VlbiBwb2xscy4NCj4+Pj4+DQo+Pj4+
+IFdpbGwgdHJ5IHRvIGNvbGxlY3QgYSBsb2cgZm9yIHlvdSBhZnRlciBhZGRpbmcgdGhlIG5ldyBj
+aGFuZ2VzIChpZiBJDQo+Pj4+IHJ1biBpbnRvIHRoaXMpLsKgIEkgdHJpZWQgdG8gaW5jcmVhc2Ug
+dGhlIG51bWJlciBvZiBsb29wcyBhcyB3ZWxsLCBidXQNCj4+Pj4gdGhhdCBkaWRuJ3QgaGVscC4N
+Cj4+Pj4NCj4+PiBJIHRoaW5rIHRoZSByZWFzb24gZm9yIHRoZSBub24temVybyBHRVZOVENPVU5U
+IGlzIHByb2JhYmx5IGR1ZSB0byB0aGUNCj4+PiBmYWN0IHRoYXQgd2UncmUgc3RpbGwgZ2V0dGlu
+ZyBFUDAgZXZlbnRzOg0KPj4+DQo+Pj4gWyAzNTQ4LjA0MDg1OV1bVDIwMDUxXSBkd2MzIGE2MDAw
+MDAuZHdjMzogdW5leHBlY3RlZCBkaXJlY3Rpb24gZm9yIERhdGENCj4+PiBQaGFzZQ0KPj4+IFsg
+MzU0OC4wNjEyODJdW1QyMDA1MV0gZHdjMyBhNjAwMDAwLmR3YzM6IHVuZXhwZWN0ZWQgZGlyZWN0
+aW9uIGZvciBEYXRhDQo+Pj4gUGhhc2UNCj4+PiBbIDM1NDguMDcxNDI5XVtUMjAwNTFdIGR3YzMg
+YTYwMDAwMC5kd2MzOiB1bmV4cGVjdGVkIGRpcmVjdGlvbiBmb3IgRGF0YQ0KPj4+IFBoYXNlDQo+
+Pj4gWyAzNTQ4LjA4MzQ5OV1bVDIwMDUxXSBkd2MzIGE2MDAwMDAuZHdjMzogdW5leHBlY3RlZCBk
+aXJlY3Rpb24gZm9yIERhdGENCj4+PiBQaGFzZQ0KPj4+IFsgMzU0OC4wOTU1NDZdW1QyMDA1MV0g
+ZHdjMyBhNjAwMDAwLmR3YzM6IHVuZXhwZWN0ZWQgZGlyZWN0aW9uIGZvciBEYXRhDQo+Pj4gUGhh
+c2UNCj4+PiBbIDM1NDguMTA1ODIwXVtUMjAwNTFdIGR3YzMgYTYwMDAwMC5kd2MzOiB1bmV4cGVj
+dGVkIGRpcmVjdGlvbiBmb3IgRGF0YQ0KPj4+IFBoYXNlDQo+Pj4gWyAzNTQ4LjEyMjAyN11bIFQy
+MTg5XSBkd2MzX2dhZGdldF9ydW5fc3RvcDogcHVsbHVwc19jb25uZWN0ZWQgPSAwDQo+Pj4gWyAz
+NTQ4LjE1Njc3MF1bIFQyMTg5XSBHRVZFTlQgQ09VTlQgPSA4DQo+Pj4NCj4+PiBJbiB0aGUgY2hh
+bmdlcyBwcm9wb3NlZCwgeW91J3JlIGJsb2NraW5nIHRoZSBpbnNwZWN0IHNldHVwIEFQSSBpZg0K
+Pj4+ICFkd2MtPmNvbm5lY3RlZCwgYnV0IGR1ZSB0byByZXQgPSAtRUlOVkFMLCB0aGUgZXhpdCBy
+b3V0aW5lIHdpbGwgZ28gYW5kDQo+Pj4gaXNzdWUgYSBzdGFsbCBhbmQgcmVzdGFydCBvbiBFUDAu
+wqAgSSB0aGluayB5b3VyIG1haW4gaW50ZW50aW9uIHdhcyBqdXN0DQo+Pj4gdG8gaWdub3JlIGl0
+LCBjb3JyZWN0Pw0KPj4+DQo+Pg0KPj4gTm8sIG5vdCBqdXN0IGlnbm9yaW5nIGl0LiBUaGUgaW50
+ZW50aW9uIGlzIHRoYXQgd2hpbGUgcG9sbGluZyBmb3IgdGhlDQo+PiBoYWx0ZWQgc3RhdGUsIHRo
+ZSBkcml2ZXIgd2lsbCBjb250aW51ZSB0byBzZXJ2aWNlIGFueSBpbnRlcnJ1cHQNCj4+IGdlbmVy
+YXRlZCBieSB0aGUgY29udHJvbGxlci4gSWYgaXQncyBhIGNvbnRyb2wgdHJhbnNmZXIsIHRoZW4g
+dGhlDQo+PiBjb250cm9sbGVyIHdpbGwgcmVzcG9uZCB3aXRoIGEgU1RBTEwgYW5kIHJlamVjdHMg
+YW55IG5ldyBjb250cm9sDQo+PiB0cmFuc2ZlciBhbmQgc2V0dXAgYSBuZXcgVFJCIGZvciB0aGUg
+bmV4dCBzZXR1cCBzdGFnZS4gVGhlIGludGVycnVwdA0KPj4gaGFuZGxlciB3aWxsIGNsZWFyIHRo
+ZSBHRVZOVENPVU5UIHdoaWxlIHBvbGxpbmcgZm9yIGhhbHRlZCBzdGF0ZS4gVGhlDQo+PiBleHBl
+Y3RhdGlvbiBoZXJlIGlzIHRvIHBvbGwgZm9yIHRoZSBoYWx0ZWQgc3RhdGUgbG9uZyBlbm91Z2gg
+Zm9yIHRoZQ0KPj4gaW50ZXJydXB0IGhhbmRsZXIgdG8gY29tZSBhbmQgY2xlYXIgdGhlIEdFVk5U
+Q09VTlQgYmVmb3JlIHRoZSB0aW1lb3V0Lg0KPj4NCj4+IExvb2tzIGxpa2Ugc29tZWhvdyB0aGUg
+cG9sbGluZyBmb3IgdGhlIGhhbHRlZCBzdGF0ZSBibG9jayB0aGUgaXJxDQo+PiBoYW5kbGVyOg0K
+Pj4NCj4+IFsgMzU0OC4xMTc4NzIyODXCoMKgwqDCoMKgwqAgMHhmZjgyOGE2YWJdwqDCoCBkYmdf
+Z2FkZ2V0X2dpdmViYWNrOiBlcDdpbjogcmVxDQo+PiBmZmZmZmY4MDQxNTc1NjAwIGxlbmd0aCAw
+LzY1NTM2IHpzSSA9PT4gLTEwOA0KPj4gWyAzNTQ4LjEyMDY0NjgxNsKgwqDCoMKgwqDCoCAweGZm
+ODI5NzZjM13CoMKgIGRiZ19zZW5kX2VwX2NtZDogZXA4aW46IGNtZCAnRW5kDQo+PiBUcmFuc2Zl
+cicgWzExMGMwOF0gcGFyYW1zIDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAwIC0tPiBzdGF0dXM6
+DQo+PiBTdWNjZXNzZnVsDQo+Pg0KPj4gVGhlcmUncyBhIDMwbXMgZ2FwIGhlcmUuIFByb2JhYmx5
+IGR1cmluZyB0aGUgcG9sbGluZz8gKHdvdWxkIGJlIGdvb2QgdG8NCj4+IGhhdmUgbW9yZSByZWdp
+c3RlciByZWFkL3dyaXRlIHRyYWNlcG9pbnRzKQ0KPj4NCj4+IFsgMzU0OC4xNTEzMTQ0NzPCoMKg
+wqDCoMKgwqAgMHhmZjgzMjcyZDddwqDCoCBldmVudCAoMDgwMDAxYzApOiBlcDBvdXQ6DQo+PiBF
+bmRwb2ludCBDb21tYW5kIENvbXBsZXRlDQo+PiBbIDM1NDguMTUxNzYwOTMxwqDCoMKgwqDCoMKg
+IDB4ZmY4MzI5NDUxXcKgwqAgZXZlbnQgKDA4MDAwMWMwKTogZXAwb3V0Og0KPj4gRW5kcG9pbnQg
+Q29tbWFuZCBDb21wbGV0ZQ0KPj4gWyAzNTQ4LjE1MjEwNDU3N8KgwqDCoMKgwqDCoCAweGZmODMy
+YWUxOF3CoMKgIGV2ZW50ICgwODAwMDFjMCk6IGVwMG91dDoNCj4+IEVuZHBvaW50IENvbW1hbmQg
+Q29tcGxldGUNCj4+IFsgMzU0OC4xNTI0NTI0NDHCoMKgwqDCoMKgwqAgMHhmZjgzMmM4MmVdwqDC
+oCBldmVudCAoMDgwMDAxYzApOiBlcDBvdXQ6DQo+PiBFbmRwb2ludCBDb21tYW5kIENvbXBsZXRl
+DQo+PiBbIDM1NDguMTUyODQyNzAywqDCoMKgwqDCoMKgIDB4ZmY4MzJlNTc0XcKgwqAgZXZlbnQg
+KDA4MDAwMWMwKTogZXAwb3V0Og0KPj4gRW5kcG9pbnQgQ29tbWFuZCBDb21wbGV0ZQ0KPj4gWyAz
+NTQ4LjE1MzI1MDE1MMKgwqDCoMKgwqDCoCAweGZmODMzMDQwM13CoMKgIGV2ZW50ICgwODAwMDFj
+MCk6IGVwMG91dDoNCj4+IEVuZHBvaW50IENvbW1hbmQgQ29tcGxldGUNCj4+IFsgMzU0OC4xNTM2
+NTcyODXCoMKgwqDCoMKgwqAgMHhmZjgzMzIyOGJdwqDCoCBldmVudCAoMDgwMDAxYzApOiBlcDBv
+dXQ6DQo+PiBFbmRwb2ludCBDb21tYW5kIENvbXBsZXRlDQo+Pg0KPj4NCj4+IENhbiB5b3UgYWRk
+IG1zbGVlcCgxKSBpbiBiZXR3ZWVuIHRoZSBwb2xsaW5nOg0KPj4NCj4+IGRpZmYgLS1naXQgYS9k
+cml2ZXJzL3VzYi9kd2MzL2dhZGdldC5jIGIvZHJpdmVycy91c2IvZHdjMy9nYWRnZXQuYw0KPj4g
+aW5kZXggZWU4ZTg5NzQzMDJkLi45YzBkNjFhMmRkODIgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJz
+L3VzYi9kd2MzL2dhZGdldC5jDQo+PiArKysgYi9kcml2ZXJzL3VzYi9kd2MzL2dhZGdldC5jDQo+
+PiBAQCAtMjgxNCw2ICsyODE0LDggQEAgc3RhdGljIGludCBkd2MzX2dhZGdldF9ydW5fc3RvcChz
+dHJ1Y3QgZHdjMw0KPj4gKmR3YywgaW50IGlzX29uLCBpbnQgc3VzcGVuZCkNCj4+IMKgwqDCoMKg
+wqDCoMKgwqAgZHdjM19nYWRnZXRfZGN0bF93cml0ZV9zYWZlKGR3YywgcmVnKTsNCj4+IMKgIMKg
+wqDCoMKgwqDCoMKgwqAgZG8gew0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgbXNs
+ZWVwKDEpOw0KPj4gKw0KPj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmVnID0g
+ZHdjM19yZWFkbChkd2MtPnJlZ3MsIERXQzNfRFNUUyk7DQo+PiDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCByZWcgJj0gRFdDM19EU1RTX0RFVkNUUkxITFQ7DQo+PiDCoMKgwqDCoMKg
+wqDCoMKgIH0gd2hpbGUgKC0tdGltZW91dCAmJiAhKCFpc19vbiBeICFyZWcpKTsNCj4+DQo+Pg0K
+Pj4gKElmIHRoaXMgd29ya3MsIHdlIGNhbiBzbGlnaHRseSBtb2RpZnkgdGhpcyBsb2dpYyB0byBz
+YXZlIDFtcykNCj4+DQo+PiBCVFcsIGlzIHRoZXJlIGEgcHJvYmxlbSB3aXRoIGVuYWJsaW5nIG90
+aGVyIHRyYWNlcG9pbnQgZXZlbnRzPyBJIGhhdmUgdG8NCj4+IG1ha2Ugc29tZSBndWVzc2VzIHdo
+ZW4gcmVhZGluZyB0aGUgbG9nLg0KPj4NCj4gDQo+IFdpdGggdGhlIHRlc3QgSSdtIHJ1bm5pbmcs
+IEkgaGF2ZSB0byBtYWtlIHNvbWUgY2hhbmdlcyB0byBob29rIGludG8gdGhlDQo+IERXQzMgdHJh
+Y2Vwb2ludHMgd2UgaGF2ZSBhbmQgc2F2ZSBpdCBpbnRvIGEgZGlmZmVyZW50IGxvZ2dpbmcgbWVj
+aGFuaXNtDQo+IHdlIGhhdmUuwqAgVGhlIGRlZmF1bHQgZnRyYWNlIGlzIGJlaW5nIHJvdXRlZCB0
+byBhIGRpZmZlcmVudCBwYXRoIHdoaWxlDQo+IHRoaXMgdGVzdCBpcyBydW5uaW5nLg0KPiANCj4g
+SSdsbCBzZWUgaWYgSSBjYW4gYWRkIHNvbWUgcmVnIHJlYWRzL3dyaXRlcyBsb2dzLg0KPiANCj4g
+V2l0aCB0aGUgY3VycmVudCBjaGFuZ2VzIChJJ3ZlIGFsc28gc2VlbiB0aGlzIHcvbyB0aGUgbGF0
+ZXN0IG1zbGVlcCgpDQo+IGNoYW5nZSksIEknbSBnZXR0aW5nIGludG8gYSBzaXR1YXRpb24gd2hl
+cmUgdGhlcmUgaXMgYSBjb250cm9sbGVyIGhhbHQuDQo+IMKgSW4gdGhpcyBjYXNlIHRob3VnaCwg
+R0VWTlRDTlQgaXMgMCwgYnV0IEkgdGhpbmsgd2hhdCBpcyBoYXBwZW5pbmcgaXMNCj4gdGhhdCB3
+ZSBhcmUgaW50ZXJ3ZWF2aW5nIHB1bGx1cCBlbmFibGUgYW5kIHB1bGx1cCBkaXNhYmxlIGNhbGxz
+LCBhbmQNCj4gc29tZSBwdWxsdXAgZW5hYmxlIHNlcXVlbmNlcyBhcmUgZmFpbGluZywgd2hpY2gg
+bGVhZCB0byB0aGUgbmV4dCBwdWxsdXANCj4gZGlzYWJsZSB0byBmYWlsIGhhbHRpbmcgb2YgdGhl
+IGNvbnRyb2xsZXIuDQoNCkhvdyBjYW4gdGhlIHB1bGx1cCgpIGVuYWJsZSBmYWlsPyBUaGVyZSBz
+aG91bGQgYmUgYSBzb2Z0IHJlc2V0IGlmDQp0aGVyZSdzIHB1bGx1cCgpIGVuYWJsZSwgd2hpY2gg
+c2hvdWxkIHJlc2V0IHRoZSBjb250cm9sbGVyLiBEbyB5b3UgaGF2ZQ0KdGhlIGRyaXZlciBsb2cg
+Zm9yIHRoYXQgZmFpbHVyZT8NCg0KPiANCj4gaWYgKGR3Yy0+cHVsbHVwc19jb25uZWN0ZWQgPT0g
+aXNfb24pDQo+IMKgwqDCoMKgwqDCoMKgIHJldHVybiAwOw0KPiANCj4gSWYgdGhlIHB1bGx1cCBk
+aXNhYmxlIHJvdXRpbmUgaXMgcnVubmluZyB0aGUgcnVuL3N0b3AgcGF0aCwgYW5kIFVTQg0KPiBn
+YWRnZXQgYXR0ZW1wdHMgdG8gY2FsbCBwdWxsdXAgZW5hYmxlLCB0aGlzIElGIGNvbmRpdGlvbiB3
+aWxsIGFsbG93IHRoZQ0KPiBwdWxsdXAgZW5hYmxlIHRvIGNvbnRpbnVlLsKgIFRoaXMgaXMgYmVj
+YXVzZSBwdWxsdXBzX2Nvbm5lY3RlZCBpcyBzZXQgdG8NCj4gRkFMU0UgYmVmb3JlIHRoZSBjb250
+cm9sbGVyIGhhbHQgcG9sbGluZywgc28gMC0+MSB0cmFuc2l0aW9uIGlzIHZhbGlkLg0KDQpXaHkg
+aXMgaXQgbm90IHByb3RlY3RlZD8gVGhlIGNhbGxlciBvZiBwdWxsdXAoKSBzaG91bGQgcHJldmVu
+dCB0aGUNCmludGVyd2VhdmluZyBvZiB0aGUgcHVsbHVwIGNhbGxzLiBBIHB1bGx1cCgpIHNob3Vs
+ZCBiZSBjb21wbGV0ZWQgYmVmb3JlDQp0aGUgbmV4dCBjYWxsLiBGcm9tIHdoYXQgSSBzZWUsIHRo
+ZSBjYWxsZXIgb2YgdGhpcyBwdWxsdXAoKQ0KKHVzYl9nYWRnZXRfY29ubmVjdC9kaXNjb25uZWN0
+IGluIHVkYy9jb3JlLmMpIGhhbmRsZXMgaXQgcHJvcGVybHkgd2l0aCBhDQptdXRleCBpbiBnYWRn
+ZXQgYmluZGluZyBhbmQgc3lzZnMgY29ubmVjdC4NCg0KPiANCj4gSSdtIG5vdCBzdXJlIGhvdyBt
+b3N0IFVTQiBjb21wb3NpdGUgZGV2aWNlcyBiZWhhdmUsIGJ1dCBJIGRvbid0IHRoaW5rDQo+IG1v
+c3Qgd2lsbCByZXRyeSBpZiB0aGUgcHVsbHVwIGVuYWJsZSByZXR1cm5zIGFuIGVycm9yLiAoPynC
+oCBJIHNheSB0aGlzDQo+IGJlY2F1c2Ugd2UgY2FuIG1vZGlmeSB0aGUgSUYgY29uZGl0aW9uIHRv
+IGJsb2NrIHRoZSBzdWJzZXF1ZW50IHB1bGx1cA0KPiBlbmFibGUgY2FsbCwgaWYgd2UgaGF2ZSBu
+b3QgeWV0IGZpbmlzaGVkIHRoZSBjb250cm9sbGVyIGhhbHQuDQoNClRoZSBjb21wb3NpdGUgZGV2
+aWNlIHVzZXMgdGhlIHVkYyBjb3JlIGFwaSwgc28gaXQgc2hvdWxkIGJlIHByb3RlY3RlZC4NCg0K
+PiANCj4gSW4gdGhlIHNuaXBwZXQgYmVsb3csIHdlIGNhbiBzZWUgdGhhdCwgd2UgZGlzYWJsZWQg
+dGhlIHJ1bi9zdG9wIGJpdCBhbmQNCj4gaGFsdGVkIHRoZSBjb250cm9sbGVyIHNob3J0bHkgYWZ0
+ZXIgcmVjZWl2aW5nIHRoZSBSRVNFVCBldmVudC7CoCBUaGlzDQo+IG1lYW5zIHRoYXQgdGhlIGR3
+YzMgZ2FkZ2V0IHN0b3Agd2FzIGNhbGxlZCwgYW5kIEVQMCB3YXMgZGlzYWJsZWQgYXMgd2VsbA0K
+PiAoZmxhZ3Mgd2VyZSBhbHNvIGNsZWFyZWQpLsKgIFRoaXMgaXMgbGVhZGluZyB0byB0aGUgQ09O
+TkRPTkUgZXZlbnQgdG8NCj4gdGhlbiByZS1kbyB0aGUgc3RhcnQgY29uZmlnLCBhcyBFUDAgaXMg
+bm90ICJlbmFibGVkLiLCoCBJIHRoaW5rIHRoYXQgaXMNCj4gbm90IHRoZSBleHBlY3RlZCBzZXF1
+ZW5jZS4NCg0KSWYgdGhlIHB1bGx1cCgpIGRpc2FibGUgY29tcGxldGVkIHN1Y2Nlc3NmdWxseSwg
+dGhlbiB0aGUgZGV2aWNlIGlzDQpoYWx0ZWQgYW5kIHJlbWFpbnMgZGlzY29ubmVjdGVkLiBUaGUg
+Y29ubmRvbmUgZXZlbnQgZG9lc24ndCBjb25uZWN0IHRoZQ0KZGV2aWNlIGJhY2sgdW5sZXNzIHRo
+ZXJlJ3MgcHVsbHVwIGVuYWJsZS4gVGhlIG5leHQgcHVsbHVwKCkgZW5hYmxlIHdpbGwNCnJlLWlu
+aXRpYWxpemUgdGhlIGRldmljZSBhZ2FpbiBhZnRlciBhIHNvZnQgcmVzZXQuDQoNCj4gDQo+IFsg
+Mzg5OS42NzM0OTE3OTXCoMKgwqDCoMKgwqAgMHgxMThhYWUzYmYxXcKgwqAgZGJnX3NlbmRfZXBf
+Y21kOiBlcDBvdXQ6IGNtZCAnU2V0DQo+IEVuZHBvaW50IENvbmZpZ3VyYXRpb24nIFs0MDFdIHBh
+cmFtcyAwMDAwMTAwMCAwMDAwMDUwMCAwMDAwMDAwMCAtLT4NCj4gc3RhdHVzOiBTdWNjZXNzZnVs
+DQo+IFsgMzg5OS42NzM1MzQ1MDTCoMKgwqDCoMKgwqAgMHgxMThhYWUzZjI1XcKgwqAgZGJnX3Nl
+bmRfZXBfY21kOiBlcDBpbjogY21kICdTZXQNCj4gRW5kcG9pbnQgQ29uZmlndXJhdGlvbicgWzQw
+MV0gcGFyYW1zIDAwMDAxMDAwIDAyMDAwNTAwIDAwMDAwMDAwIC0tPg0KPiBzdGF0dXM6IFN1Y2Nl
+c3NmdWwNCj4gWyAzODk5LjY3MzU4NDkyMMKgwqDCoMKgwqDCoCAweDExOGFhZTQyZWRdwqDCoCBk
+Ymdfc2VuZF9lcF9jbWQ6IGVwMG91dDogY21kDQo+ICdTdGFydCBUcmFuc2ZlcicgWzQwNl0gcGFy
+YW1zIDAwMDAwMDAwIGVmZmZhMDAwIDAwMDAwMDAwIC0tPiBzdGF0dXM6DQo+IFN1Y2Nlc3NmdWwN
+Cj4gWyAzODk5LjcwMDU3M11bVDI0NzMyXSBkd2MzX2dhZGdldF9ydW5fc3RvcDogcHVsbHVwc19j
+b25uZWN0ZWQgPSAxDQo+IA0KPiBbIDM4OTkuNzQ0NjM0NTU2wqDCoMKgwqDCoMKgIDB4MTE4YWMz
+MTNhN13CoMKgIGV2ZW50ICgwMDAzMDYwMSk6IFN1c3BlbmQgW1UzXQ0KPiBbIDM4OTkuODM4NjE2
+NDgzwqDCoMKgwqDCoMKgIDB4MTE4YWRlOWM0ZF3CoMKgIGV2ZW50ICgwMDAwMDEwMSk6IFJlc2V0
+IFtVMF0NCj4gDQo+IFsgMzg5OS45MjI0MTNdWyBUMjE4Nl0gZHdjM19nYWRnZXRfcnVuX3N0b3A6
+IHB1bGx1cHNfY29ubmVjdGVkID0gMA0KPiANCj4gWyAzOTAwLjE0NzM5NTkxMcKgwqDCoMKgwqDC
+oCAweDExOGIzOTEyYzBdwqDCoCBldmVudCAoMDAwMDAyMDEpOiBDb25uZWN0aW9uIERvbmUNCj4g
+W1UwXQ0KPiBbIDM5MDAuMTQ3NDg2Mjc2wqDCoMKgwqDCoMKgIDB4MTE4YjM5MTk4OF3CoMKgIGRi
+Z19zZW5kX2VwX2NtZDogZXAwb3V0OiBjbWQNCj4gJ1N0YXJ0IE5ldyBDb25maWd1cmF0aW9uJyBb
+NDA5XSBwYXJhbXMgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgLS0+DQo+IHN0YXR1czogU3Vj
+Y2Vzc2Z1bA0KPiBbIDM5MDAuMTQ3NTM1MjM0wqDCoMKgwqDCoMKgIDB4MTE4YjM5MWQzNF3CoMKg
+IGRiZ19zZW5kX2VwX2NtZDogZXAwb3V0OiBjbWQgJ1NldA0KPiBFbmRwb2ludCBUcmFuc2ZlciBS
+ZXNvdXJjZScgWzQwMl0gcGFyYW1zIDAwMDAwMDAxIDAwMDAwMDAwIDAwMDAwMDAwIC0tPg0KPiBz
+dGF0dXM6IFN1Y2Nlc3NmdWwNCj4gDQoNCkknbSBub3QgY2xlYXIgd2hhdCdzIHRoZSBmYWlsdXJl
+IGhlcmUuIFlvdSBub3RlZCB0aGF0IHB1bGx1cCgpIGVuYWJsZQ0KZmFpbHMgbm93LCBidXQgSSBk
+b24ndCBzZWUgaXQuIENhbiB5b3UgaGVscCBjbGFyaWZ5IGZ1cnRoZXIuDQoNClRoYW5rcywNClRo
+aW5oDQo=
