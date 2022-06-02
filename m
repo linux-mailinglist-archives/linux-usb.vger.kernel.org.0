@@ -2,112 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE9853BED7
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 21:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2948653BEE1
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 21:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238657AbiFBTei (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jun 2022 15:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
+        id S238667AbiFBTfs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jun 2022 15:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238669AbiFBTeg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 15:34:36 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3042C1BB
-        for <linux-usb@vger.kernel.org>; Thu,  2 Jun 2022 12:34:33 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id y15so872442ljc.0
-        for <linux-usb@vger.kernel.org>; Thu, 02 Jun 2022 12:34:33 -0700 (PDT)
+        with ESMTP id S238645AbiFBTfq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 15:35:46 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B092237E5
+        for <linux-usb@vger.kernel.org>; Thu,  2 Jun 2022 12:35:44 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id o6so225058plg.2
+        for <linux-usb@vger.kernel.org>; Thu, 02 Jun 2022 12:35:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=Wpd7jRxiqf1UoJVhhFGdx6OtnuRlT2pIlGm7mG0GH9s=;
-        b=eftqPpOUcOnajOopK+mBns+Dt3IEfQ//winUfaCQH+Mbv0/wDcNQsjByy1JISccaxh
-         wfSYf2gasNVF3sxfWwR2kAlWxFVZQuLf/UfzKFbnYW/CCxUfKxMAVM6WSpsDOa4gXcGW
-         Mwl35GT/2YNRZ0K/VBg2VBIDz4IqxvGHXVj3cZ7Ap9ctDzJd0Wy8DMdbxzKvdHZwa3Fn
-         Qm0Ij81qg2ql5TJlQ3Zkk4UG7j/JVZfhvUIkfNcrEthRAYE57dCV/NBbhQWe0/vPw7IV
-         7mr9PBs3B7j6Q+tYTA/IT4R54E8VEDigiaDMM6ngbGYDmAJFzG+1Xav9ALYZ67SgW+cD
-         UI4A==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cx/w23z3LclUVeD0RGwvqrmhkO0x9NOq8RLmyjTtPOM=;
+        b=lYVfR+YOq3qnx85Svvnsb2n7uiC27e2K2siHC/xyiklXI2m0N0FdTE4teMxk2RBxmm
+         8ifjjL4B7GGGUjzg261ufFGrAeYN06AC7Np+7rv8QsII/6wMLAcdEcIEGvhQIdMewr4M
+         kojvmoOEF9+Nen9ZvBM5a4t7oP6Ly0/7s5G6E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=Wpd7jRxiqf1UoJVhhFGdx6OtnuRlT2pIlGm7mG0GH9s=;
-        b=ItngqdGXfzmFXCj5o1NMj+L21RmJnAekGf2gbHi2zNvJ6OcDdDbvPm9Ma0Xj7FOVIp
-         4RusFSyZbhac+OrjVvecmIJBQuVQEOPcf5lZzqz4zDR/C8OIkKrSgVFgepjhaXUyulsz
-         etfTOeMXozK9mU40HnKriPpAbAk/wEtO+/6NYV8r3plI1kPDK/TfJvbR0m1wc2rqWQzX
-         f2LGoU7v+s/2NiTDUCVIjQTkUfRQ+6DmEV9P+YXwKaAS8kT1qYxqDueDLYQ+aoUBUKD8
-         vUCemgp41Sp0PFPpSVIrCiGE5LIs5mTeBM3L6QX4CN4xlkzUaH7XaJslh8x3iTuTqvcE
-         nh6Q==
-X-Gm-Message-State: AOAM530y7or9HGy/uKYi+9fj4v681SDF+qYOWcaEBFSXT+Spmv1HEHiD
-        lGJo4+hD/mdZMLHztU12GWk=
-X-Google-Smtp-Source: ABdhPJzErFgUNfXALJgRLbI/6Skfpd6wWnHn6F4GYpQOREy+AIbvVMUMdlkfTB8XrGW8mCshTlTY1w==
-X-Received: by 2002:a2e:a447:0:b0:249:5d85:aa54 with SMTP id v7-20020a2ea447000000b002495d85aa54mr42747654ljn.528.1654198470953;
-        Thu, 02 Jun 2022 12:34:30 -0700 (PDT)
-Received: from [192.168.1.168] (078088109026.wroclaw.vectranet.pl. [78.88.109.26])
-        by smtp.gmail.com with ESMTPSA id c21-20020a056512105500b00477932b5d8bsm1172895lfb.199.2022.06.02.12.34.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 12:34:29 -0700 (PDT)
-Message-ID: <92ab08fe65c12d6159966bdd7d2c4215044a00ff.camel@gmail.com>
-Subject: Re: Thunderbolt: One missing DisplayPort?
-From:   Tomasz =?UTF-8?Q?Mo=C5=84?= <desowin@gmail.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Stefan Hoffmeister <stefan.hoffmeister@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Date:   Thu, 02 Jun 2022 21:34:27 +0200
-In-Reply-To: <YpSUSk9u5z3ueufa@lahna>
-References: <CALhB_QNhzHkf4Yw6TqZAbCisMK6TBy8ecw0M_Sq=EQXPN728fg@mail.gmail.com>
-         <Yoy5m3Aa6QwVcFhf@kuha.fi.intel.com> <Yoy7oXpMugFFmfBP@lahna>
-         <CALhB_QM9SHJt+15pEVHEH_kourb-1Xbd68O1p_XLxOmWB4HAfw@mail.gmail.com>
-         <YpCVc6eYkpmjP9AF@lahna>
-         <CALhB_QP8SPqubq-eBNa1BTMuy3kCA65OuajOeJGt5DB9jDRKKg@mail.gmail.com>
-         <ce969e3b4a6ed04584fdecd3234578bd87d52594.camel@gmail.com>
-         <YpSUSk9u5z3ueufa@lahna>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cx/w23z3LclUVeD0RGwvqrmhkO0x9NOq8RLmyjTtPOM=;
+        b=1gCrthEIRf8ZuGLmG+cZMZ6tfUUuvJhP3JbZsKfqbuUEFfOb48SeVBk++NcPcBBrjM
+         1xLRmSEhpNDULO2c0LFzC34xZ3+k+qsx41IFDfYFmgvusvuSKNd82LbiGXkhLjvPug7p
+         8fAaHS9rDkgeELBwJEEUwCehBz/jzFIIft0TR5vrmewZaqZYylCXTQE+ddZlfwsIxW33
+         1ebQgmOpn1rZo45IODQ60S6lyC1Kw+3WJgGpDTJCZeQ4ULjkk68E6LBChty9vwHAc7aZ
+         j9bYKxOkUV0sn8B/mfvmt9HevW4Ppz7S9q0OgMnioN7Q+ythW04bt17eZDDEIyGDnTrK
+         6eXQ==
+X-Gm-Message-State: AOAM530noCBEz7TM+gZXL46oEbNj2HxLEVj3RZ2bJSn22NPOpBNvBaRk
+        UI04XMPTw97aXBPhj3O5Pa6LYw==
+X-Google-Smtp-Source: ABdhPJxE722AkWZmxdhlAA/lfEu+HZH5UVTLDBfMV3ZCHmXDg3l6lmRd50aXEJM5XF73P7Xl/H8gLA==
+X-Received: by 2002:a17:902:ed53:b0:166:3e43:7522 with SMTP id y19-20020a170902ed5300b001663e437522mr5530822plb.170.1654198543994;
+        Thu, 02 Jun 2022 12:35:43 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:51d0:66d6:2fb5:b395])
+        by smtp.gmail.com with UTF8SMTPSA id m12-20020a170902d18c00b001616e19537esm3809964plb.213.2022.06.02.12.35.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 12:35:43 -0700 (PDT)
+Date:   Thu, 2 Jun 2022 12:35:42 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <YpkRDi2m7cLaKYEf@google.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 2022-05-30 at 12:54 +0300, Mika Westerberg wrote:
-> On Mon, May 30, 2022 at 10:33:06AM +0200, Tomasz Mo=C5=84 wrote:
-> > On Sun, 2022-05-29 at 21:51 +0200, Stefan Hoffmeister wrote:
-> > > I have managed to wedge the system into a state where it does not
-> > > know about Thunderbolt, and now, on what I presume to be USB-C only
-> > > ("usb_typec_revision" =3D=3D 1.2? Seems ... low?), both DisplayPort
-> > > outputs on the docking station are now active, and I do get
-> > > meaningful entries from the DRM subsystem (and hence X). I am half-
-> > > way happy: I want exactly that over Thunderbolt for the bandwidth ;)
-> >=20
-> > Could you please tell how did you wedge the system into a state where
-> > it does not know about Thunderbolt?
-> >=20
-> > > Now, when I unwedge the system to enable Thunderbolt again
-> >=20
-> > I am curious about the wedge/unwedge procedure.
->=20
-> Probably just connecting the dock using non-Thunderbolt Type-C cable.
-> That will enter USB (+DP altmode) or so instead of Thunderbolt altmode.
+Hi Krishna,
 
-How do I determine that the cable is non-Thunderbolt Type-C?
+with this version I see xHCI errors on my SC7180 based system, like
+these:
 
-I have tried with two different brands 1m USB Type-C cables that are
-not advertised as Thunderbolt. Both cables are electronically marked
-and 5A capable. When the docking station is connected using these
-cables, it operates in Thunderbolt mode.
+[   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
 
-If the device was operating in USB (+DP altmode), I assume that boltctl
-would show that the docking station status as disconnected?
+[  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
 
-Can I read the cable EMCA details in Linux?
+After resume a downstream hub isn't enumerated again.
 
-Best Regards,
-Tomasz Mo=C5=84
+So far I didn't see those with v13, but I aso saw the first error with
+v16.
+
+I can do some more digging next week.
+
+On Thu, Jun 02, 2022 at 01:54:34PM +0530, Krishna Kurapati wrote:
+> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> 
+> Check wakeup-source property for dwc3 core node to set the
+> wakeup capability. Drop the device_init_wakeup call from
+> runtime suspend and resume.
+> 
+> If the dwc3 is wakeup capable, don't power down the USB PHY(s).
+> The glue drivers are expected to take care of configuring the
+> additional wakeup settings if needed based on the dwc3 wakeup
+> capability status. In some SOC designs, powering off the PHY is
+> resulting in higher leakage, so this patch save power on such boards.
+> 
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> ---
+>  drivers/usb/dwc3/core.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index e027c04..b99d3c2 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1787,6 +1787,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, dwc);
+>  	dwc3_cache_hwparams(dwc);
+> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
+>  
+>  	spin_lock_init(&dwc->lock);
+>  	mutex_init(&dwc->mutex);
+> @@ -1948,7 +1949,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  		dwc3_core_exit(dwc);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg)) {
+> +		if (!PMSG_IS_AUTO(msg) && !device_can_wakeup(dwc->dev)) {
+>  			dwc3_core_exit(dwc);
+>  			break;
+>  		}
+> @@ -2009,7 +2010,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+>  		spin_unlock_irqrestore(&dwc->lock, flags);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg)) {
+> +		if (!PMSG_IS_AUTO(msg) && !device_can_wakeup(dwc->dev)) {
+>  			ret = dwc3_core_init_for_resume(dwc);
+>  			if (ret)
+>  				return ret;
+> @@ -2086,8 +2087,6 @@ static int dwc3_runtime_suspend(struct device *dev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	device_init_wakeup(dev, true);
+> -
+>  	return 0;
+>  }
+>  
+> @@ -2096,8 +2095,6 @@ static int dwc3_runtime_resume(struct device *dev)
+>  	struct dwc3     *dwc = dev_get_drvdata(dev);
+>  	int		ret;
+>  
+> -	device_init_wakeup(dev, false);
+> -
+>  	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
+>  	if (ret)
+>  		return ret;
+> -- 
+> 2.7.4
+> 
