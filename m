@@ -2,86 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C8F53BF3F
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 22:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4D853C066
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 23:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239084AbiFBUCt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jun 2022 16:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
+        id S229634AbiFBVfD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jun 2022 17:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239073AbiFBUCm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 16:02:42 -0400
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Jun 2022 13:02:31 PDT
-Received: from smtp687out9.mel.oss-core.net (smtp687out9.mel.oss-core.net [210.50.216.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8940D101D
-        for <linux-usb@vger.kernel.org>; Thu,  2 Jun 2022 13:02:31 -0700 (PDT)
-X-IPAS-Result: =?us-ascii?q?A2AQcwDRFZli/7NplnpaGQEBAQEBAQ0eCwYBAQEBAQEBA?=
- =?us-ascii?q?QEBAQECAQEBAQEBAQEBAQEBCwkJgUYCgToCAQEBAaQ9hxkbgiWJYwsBAQEhM?=
- =?us-ascii?q?AQBAYR4AQFZBYRzJjcGDgECBAEBAQEDAgMBAQEBAQEDAQEGAQEBAQEBBgSBH?=
- =?us-ascii?q?IUvRoZUIAcBgVYBDgEehXUBAaxugTMNdIRZFIIQBAqCc4E7AgEBAQEBAYlBh?=
- =?us-ascii?q?V99gRCBWII4AYV9g0CCLgSSRoQjBBs7AyEVGDQSgSFFLAEIBgYHCgUyBgIMG?=
- =?us-ascii?q?BQEAhMSUx0CEgwKHA5UGQwPAxIDEQEHAgsSCBUsCAMCAwgDAgMuAgMYCQcKA?=
- =?us-ascii?q?x0ICgoSEhAUAgQGDR4LCAMZHy0JAgQOA0MICwoDEQQDExgLFggQBAYDCS8NK?=
- =?us-ascii?q?AsDFA8BBgMGAgUFAQMgAxQDBScHAyEHCyYNDQQjHQMDBSYDAgIbBwICAwIGF?=
- =?us-ascii?q?wYCAnEKKA0IBAgEDBAdJRMFAgcxBQQvAh4EBQYRCQIWAgYEBQIEBBYCAhIIA?=
- =?us-ascii?q?ggnGwcWNhkBBQ5PBgsJIRwJIBEFBhYDI3MFSA8pNTkGfA+uUpBAnjMKg04FK?=
- =?us-ascii?q?QeBCQeeSTGDYwGXEhEBJ4FXi1SWaKgSgRiBf3AVggiBHFAonRCBEAIGCwEBA?=
- =?us-ascii?q?wmPCgEB?=
-IronPort-Data: A9a23:zXSVHqxZGmmFF9+9T5t6t+e+xCrEfRIJ4+MujC+fZmUNrF6WrkUHn
- WdLWDyFbvfZZWb2KYojaY+w90oDvJPUnNVlSwM6/lhgHilAwSbnLYrAchuoV8+xwmwvaGo9s
- q3yv/GZdJhcokcxIn5BC5C5xZVG/fjgqoHUVaiVY0ideSc+EH170Uw7wbZj6mJVqYHR7z2l6
- IuaT/L3YDdJ6xYsWo7Dw/vewP/HlK2aVAIw5jTSV9gS1LPtvyV94KYkGE2EByCQrr+4sQKNb
- 72rILmRpgs19vq2Yz+vuu6TnkYiGtY+MeUS45Zbc/DKv/RMmsA9+r4CF/YYQ0sMsRGUz+BL7
- 4VNspu1Vxh8a8UgmMxFO/VZOx5fG+hkp5DpDVKWlpHK7SUqcVO1ma8oVRxue9RAp6AuXjAmG
- f8wcVjhajiCgeyx6LeyTOV9wM8kKaEHOatP4Ck9k26FVJ7KR7jlUaKJ3dwJjQ0Vqe1NXsT1f
- e9COBlWOUGojxpnfw1/5IgFtOOpgGTvNiBDonqLqqctpWve1gp81P7qKtW9RzCRbZwPxAPB+
- zqDpjykR0hFZZqE1TPD7Xi2gebDlyr9VMQUGaH+/+MCbECv+1H/wSY+DTOTycRVQGbnMz6DA
- yT4IhYTkJU=
-IronPort-HdrOrdr: A9a23:cip3LKCA9d0Kn7rlHenP55DYdb4zR+YMi2TDsHofdfU1SKClfq
- +V/cjzuSWetN9uYhEdcLm7UcG9qBXnm6KdirN6AV7NZmTbhFc=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="5.91,272,1647262800"; 
-   d="scan'208";a="82056741"
-Received: from 122-150-105-179.sta.wbroadband.net.au (HELO WIN-J7GFDBAO51J) ([122.150.105.179])
-  by smtp687.mel.oss-core.net with ESMTP; 03 Jun 2022 06:01:25 +1000
-From:   "Martin Otamori" <info@mandy.com>
-Subject: Acknowledge this message
-To:     <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8bit
-Reply-To: <okkmart68@gmail.com>
-Date:   Thu, 2 Jun 2022 13:01:22 -0700
-Message-Id: <2022020613012052016987EB-E0CB2F84A8@mandy.com>
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_LOW,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?122.150.105.179>]
-        * -0.7 RCVD_IN_DNSWL_LOW RBL: Sender listed at https://www.dnswl.org/,
-        *       low trust
-        *      [210.50.216.236 listed in list.dnswl.org]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [122.150.105.179 listed in zen.spamhaus.org]
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [okkmart68[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *******
+        with ESMTP id S230031AbiFBVe6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 17:34:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3893A1BA
+        for <linux-usb@vger.kernel.org>; Thu,  2 Jun 2022 14:34:56 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1nwsT1-0003wy-0i; Thu, 02 Jun 2022 23:34:55 +0200
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1nwsT0-0001bZ-4U; Thu, 02 Jun 2022 23:34:54 +0200
+Date:   Thu, 2 Jun 2022 23:34:54 +0200
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v2] usb: hub: port: add sysfs entry to switch port power
+Message-ID: <20220602213454.GC26638@pengutronix.de>
+References: <20220602012731.2942309-1-m.grzeschik@pengutronix.de>
+ <YpjLusnGk8ZBlGGd@rowland.harvard.edu>
+ <20220602145918.GB26638@pengutronix.de>
+ <YpkMi9Se0Unxq1SS@rowland.harvard.edu>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="V88s5gaDVPzZ0KCq"
+Content-Disposition: inline
+In-Reply-To: <YpkMi9Se0Unxq1SS@rowland.harvard.edu>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I will give you more details as soon as you acknowledge this message.
-Thank you.
-Martin Otamori.
 
+--V88s5gaDVPzZ0KCq
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jun 02, 2022 at 03:16:27PM -0400, Alan Stern wrote:
+>On Thu, Jun 02, 2022 at 04:59:18PM +0200, Michael Grzeschik wrote:
+>> On Thu, Jun 02, 2022 at 10:39:54AM -0400, Alan Stern wrote:
+>> > You might want to disable the new sysfs file (don't create it or have =
+it
+>> > return -EOPNOTSUPP) if the hub doesn't support per-port power switchin=
+g.
+>>
+>> Is it possible to read out if this feature is not working by the hub?
+>
+>Actually, I don't think so.  You can get some information about ganged
+>power switching, and there's the hub_is_port_power_switchable() test, but
+>that's all.  The situation is discussed in section 11.11 (Hub Port Power
+>Control) of the USB-2.0 spec.
+
+I think we can skip this check then, since this sysfs file could still
+work with hubs, that do not support port power switching by at least
+disabling the port connection.
+
+>> The most hubs, that I was working with, did not really toggle the vbus,
+>> because the physical logic to switch a regulator was completely missing
+>> in the hardware. But with removing the other PORT_FEATURES the hub
+>> behaved like the port is just not powered any more.
+>
+>Yes, that's how most hubs work.  There are a few, however, which really do
+>switch port Vbus power on and off.
+>
+>> Because of that; I am currently curious if we just should rename that
+>> property to something more generic like "enable" or "disable". So that
+>> as the real vbus power switching is missing, the hubs port switching
+>> does still function like intended.
+>
+>That makes sense.  But the question arises, does this patch really do what
+>you want?
+>
+>The patch description talks about the need to disable devices or
+>re-enumerate them.  You can disable a device right now by writing -1 to
+>the bConfigurationValue sysfs file, and you can force a device to be
+>re-enumerated by resetting it (using the USBDEVFS_RESET usbfs ioctl).
+>
+>About the only thing you can't currently do is actually turn off power to
+>the port.  This patch will allow users to do that, but only if the hub
+>supports power switching.
+>
+>(Okay, there's one other thing: The patch also allows users to disable a
+>port, so that devices plugged into that port get ignored.  Maybe that's
+>what you really had in mind...?)
+
+Yes, that is what I had in mind. If you agree, I would still keep the
+name "port_power" since it is the main function, but skip the
+hub_is_port_power_switchable check.
+
+>> > Finally, you should add a test to port_event() in hub.c, probably where
+>> > the pm_runtime_active() check is.  If the port is powered off, return
+>> > before doing any of the warm_reset or connect_change processing.
+>>
+>> I don't understand jet why this is needed. In all my tests, the hubs
+>> port was just not functioning any more. Regardless if the hub
+>> was capable of real vbus switching or not. Just as described above.
+>> Is it possible that this is already handled correctly because of the
+>> other cleared port_features I mentioned?
+>
+>The USB spec does say that hubs should ignore connections to ports whose
+>port_power feature flag is off.  The test I suggested was meant as a "just
+>in case" sort of thing, for hubs that don't comply with the spec's
+>requirement.  In the end it may not be necessary, and it can be done in a
+>separate patch.
+
+Agreed.
+
+>> In v3 I will also add port_power_show to make it possible for the
+>> userspace to read out the current port status but returning the
+>> value of test_bit(port1, hub->power_bits);.
+>
+>Good idea; I should have thought of it.
+
+:)
+
+Thanks,
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--V88s5gaDVPzZ0KCq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmKZLPsACgkQC+njFXoe
+LGSkKQ/+K1qBUSburkVgvkph8vlWh2BSDahGay0Rr7+rtRlN3/LdJlkGkVeHIUpL
+d4MJIGpiD28yfeQOzo7L/HOtcea7sszCFQCuQUjXo+EDt8b0JRXikjRHuQvfJr4X
+HNj+LOknPW8bU0SBzgJl7Y4Bs/sNq3/8iIZCGeO6WHv2werxAMUhor7i1pqLVeQZ
++BAwXKago1+1UqWt8Rp0UVV6AMOvIQPPcjaMNU6JJ4AWru0IkxOKAFUJcmE8noMg
+n7aA7fovwT2a56LAgUVI1QnoP6C4vvgmp5GF8jcJmamDoRwwVjXhUp3QXIhygmUF
+M/iOyj6Xa51Hy023ifDmiI6IzYvbdtBTmwQ7dQgD0UmHSAUFO8TXGPdpQfGy7XBr
+KTseCB1RAsRO4nKq6xwdPsvmknhleWugte51wojrj2edc+cACZWW2YNs0+7w81do
+2zFJg6bMn0JloaXHcuyjbZmc4P9igZFTyVkEuXYS9egTl51B0DM/uH5e4PBFTgi8
+tTnhFfGD9X9wOZswd9crnP3IAK0nUEKxWFGg9kLSOxmrvUMAEJcwm9sBgLC4ErvZ
+xka1ZzW2rmx3wv9z4JDGTdoba11jVHJX2iwb5rrDt+d+cRua+fWf4Nvn1xhrfeoq
+mFXmSuoLOJ/dfWIgi5HpxnukjFLHzTMSK4fQoo8spPiYCIXunqE=
+=gUWQ
+-----END PGP SIGNATURE-----
+
+--V88s5gaDVPzZ0KCq--
