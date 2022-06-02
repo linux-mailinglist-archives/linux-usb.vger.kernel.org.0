@@ -2,179 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FBF053B175
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 04:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E66553B1F3
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 05:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233174AbiFBB1m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jun 2022 21:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        id S233418AbiFBDMK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jun 2022 23:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233172AbiFBB1l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jun 2022 21:27:41 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0956DF0B
-        for <linux-usb@vger.kernel.org>; Wed,  1 Jun 2022 18:27:37 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nwZcd-0000Lw-Cz; Thu, 02 Jun 2022 03:27:35 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nwZcd-005wLF-AI; Thu, 02 Jun 2022 03:27:33 +0200
-Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nwZcb-00CLRa-8T; Thu, 02 Jun 2022 03:27:33 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        kernel@pengutronix.de
-Subject: [PATCH v2] usb: hub: port: add sysfs entry to switch port power
-Date:   Thu,  2 Jun 2022 03:27:31 +0200
-Message-Id: <20220602012731.2942309-1-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S230042AbiFBDMJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jun 2022 23:12:09 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5880D6468;
+        Wed,  1 Jun 2022 20:12:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654139527; x=1685675527;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=Fqb1rLwALt9B/XEIVuY7RwJFeSWWl0+fx5RlwDO1SsI=;
+  b=JwBa8ZcPreKKf0A1hjhh+rc04utceSgmRvbqro4GXSKDJ5ad/2lQaQLK
+   wqfsYfbW9IN6SMT5H5N4zeIEviHCHs85svT8TIgurtKGhYJXvF8vu4w5P
+   tuWEeJsk0L4P8GaNtqIZCJ4Rp/p7h/b/aQYb4valfGpP3f3R3CC2PIlat
+   E=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Jun 2022 20:12:06 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 20:12:06 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 1 Jun 2022 20:12:06 -0700
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 1 Jun 2022 20:12:00 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH v19 0/5] USB DWC3 host wake up support from system suspend
+Date:   Thu, 2 Jun 2022 08:41:50 +0530
+Message-ID: <1654139515-8177-1-git-send-email-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In some cases the port of an hub needs to be disabled or switched off
-and on again. E.g. when the connected device needs to be re-enumerated.
-Or it needs to be explicitly disabled while the rest of the usb tree
-stays working.
+Avoiding phy powerdown in host mode when dwc3 is wakeup capable, so that
+it can be wake up by devices. Keep usb30_prim gdsc active to retain
+controller status during suspend/resume.
 
-For this purpose this patch adds an sysfs switch to enable/disable the
-port on any hub. In the case the hub is supporting power switching, the
-power line will be disabled to the connected device.
+Changes in v19:
+Fixed wc3 driver code changes.
 
-When the port gets disabled, the associated device gets disconnected and
-removed from the logical usb tree. No further device will be enumerated
-on that port until the port gets enabled again.
+Changes in v18:
+Fixed minor nit picks in v17 reported by Matthias.
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Changes in v17:
+Moved the speed check to glue driver.
+Powering down phy's solely based on dwc3 wakeup capability.
+Configuring the interrupt functions appropriately.
 
----
-v1 -> v2:
-         - improved patch description
-	 - moved usb_hub_set_port_power to end of function
-	 - renamed value to set
-         - removed udev variable
-         - added usb_set_configuration set to -1 before removing device
-         - calling autosuspend of udev before usb_disconnect, ensuring hub_suspend succeeds
-         - removed port_dev->child = NULL assignment
-         - directly returning count on no failure success
-         - removed test for hub->in_reset
-	 - using usb_autopm_get_interface/usb_autopm_put_interface around hub handling
-	 - locking usb_disconnect call
-	 - using &port_dev->child instead of local udev pointer
-	 - added Documentation/ABI
+Changes in v16:
+Added changes to power down the phy's during suspend only if dwc3
+is not wakeup capable.
 
- Documentation/ABI/testing/sysfs-bus-usb | 13 +++++++
- drivers/usb/core/port.c                 | 49 +++++++++++++++++++++++++
- 2 files changed, 62 insertions(+)
+Changes in v15:
+Added patch to enable wakeup for xhci-plat based on children wakeup status.
+Used device_wakeup_path instead of device_children_wakeup_capable
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
-index 7efe31ed3a25c7..9c87ca50bcab79 100644
---- a/Documentation/ABI/testing/sysfs-bus-usb
-+++ b/Documentation/ABI/testing/sysfs-bus-usb
-@@ -253,6 +253,19 @@ Description:
- 		only if the system firmware is capable of describing the
- 		connection between a port and its connector.
- 
-+What:		/sys/bus/usb/devices/.../<hub_interface>/port<X>/port_power
-+Date:		June 2022
-+Contact:	Michael Grzeschik <m.grzeschik@pengutronix.de>
-+Description:
-+		To disable or enable a hub port the sysfs file port_power exists
-+		for each hub port. When disabling the hub port it is unusable anymore,
-+		which means no enumeration will take place on this port until enabled again.
-+
-+		When disabling the port set (<hubdev-portX>/port_power to 0) the
-+		USB_PORT_FEAT_C_CONNECTION, USB_PORT_FEAT_POWER and (for high speed hubs) the
-+		USB_PORT_FEAT_C_ENABLE port features are cleared. It all gets reversed when the
-+		port will be enabled again (set <hubdev-portX>/port_power to 1).
-+
- What:		/sys/bus/usb/devices/.../power/usb2_lpm_l1_timeout
- Date:		May 2013
- Contact:	Mathias Nyman <mathias.nyman@linux.intel.com>
-diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-index d5bc36ca5b1f77..3e707db88291e9 100644
---- a/drivers/usb/core/port.c
-+++ b/drivers/usb/core/port.c
-@@ -17,6 +17,54 @@ static int usb_port_block_power_off;
- 
- static const struct attribute_group *port_dev_group[];
- 
-+static ssize_t port_power_store(struct device *dev, struct device_attribute *attr,
-+			    const char *buf, size_t count)
-+{
-+	struct usb_port *port_dev = to_usb_port(dev);
-+	struct usb_device *hdev = to_usb_device(dev->parent->parent);
-+	struct usb_hub *hub = usb_hub_to_struct_hub(hdev);
-+	struct usb_interface *intf = to_usb_interface(hub->intfdev);
-+	int port1 = port_dev->portnum;
-+	bool set;
-+	int rc;
-+
-+	if (!hub)
-+		return -EINVAL;
-+
-+	rc = strtobool(buf, &set);
-+	if (rc)
-+		return rc;
-+
-+	rc = usb_autopm_get_interface(intf);
-+	if (rc < 0)
-+		return rc;
-+
-+	if (!set) {
-+		usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_C_CONNECTION);
-+		if (!port_dev->is_superspeed)
-+			usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_C_ENABLE);
-+
-+		if (port_dev->child) {
-+			usb_set_configuration(port_dev->child, -1);
-+			usb_autosuspend_device(port_dev->child);
-+			usb_lock_device(hdev);
-+			usb_disconnect(&port_dev->child);
-+			usb_unlock_device(hdev);
-+		}
-+	}
-+
-+	rc = usb_hub_set_port_power(hdev, hub, port1, set);
-+	if (rc) {
-+		usb_autopm_put_interface(intf);
-+		return rc;
-+	}
-+
-+	usb_autopm_put_interface(intf);
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(port_power);
-+
- static ssize_t location_show(struct device *dev,
- 			     struct device_attribute *attr, char *buf)
- {
-@@ -153,6 +201,7 @@ static struct attribute *port_dev_attrs[] = {
- 	&dev_attr_location.attr,
- 	&dev_attr_quirks.attr,
- 	&dev_attr_over_current_count.attr,
-+	&dev_attr_port_power.attr,
- 	NULL,
- };
- 
+Changes in v14:
+Added patch for device_children_wakeup_capable.
+Used device_children_wakeup_capable instead of usb_wakeup_enabled_descendants.
+Fixed minor nit picks in v13 reported by Matthias.
+
+Changes in v13:
+Moved the dt bindings patch to start.
+Changed dwc3_set_phy_speed_mode to dwc3_check_phy_speed_mode.
+Check wakep-source property for dwc3 core node to set the
+wakeup capability. Drop the device_init_wakeup call from
+runtime suspend and resume.
+Added GENPD_FLAG_RPM_ALWAYS_ON and set GENPD_FLAG_ALWAYS_ON if
+wakeup is supported.
+
+Changes in v12:
+Squashed PATCH 1/5 and 2/5 of v11.
+Added dt bindings and device tree entry for wakeup-source property
+for dwc3 core node.
+Dropped redundant phy_set_mode call.
+
+
+Changes in v11:
+Moving back to v8 version
+https://patchwork.kernel.org/project/linux-arm-msm/cover/1624882097-23265-1-git-send-email-sanm@codeaurora.org
+as we are getting interrupts during suspend
+when enabling both DP hs phy irq and DM hs phy irq.
+Moved the set phy mode function to dwc3/core.c from xhci-plat.c
+We didn't find any other option other than accessing xhci from dwc.
+
+Changes in v10:
+PATCH 1/6: Change device_set_wakeup_capable to device_set_wakeup_enable
+PATCH 2/6: Remove redundant else part in dwc3_resume_common
+PATCH 4/6: Change the irg flags
+PATCH 5/6: Set flag GENPD_FLAG_ALWAYS_ON
+PATCH 6/6: Remove disable interrupts function and enable
+interrupts in probe.
+
+
+Changes in v9:
+Checking with device_may_makeup property instead of phy_power_off flag.
+Changed the IRQ flags and removed hs_phy_mode variable.
+
+Changes in v8:
+Moved the dwc3 suspend quirk code in dwc3/host.c to xhci-plat.c
+Checking phy_power_off flag instead of usb_wakeup_enabled_descendants 
+to keep gdsc active.
+
+Changes in v7:
+Change in commit text and message in PATCH 1/5 and PATCH 5/5
+as per Matthias suggestion.
+Added curly braces for if and else if sections in PATCH 4/5.
+
+Changes in v6:
+Addressed comments in host.c and core.c
+Separated the patches in dwc3-qcom.c to make it simple.
+Dropped wakeup-source change as it is not related to this series.
+
+Changes in v5:
+Added phy_power_off flag to check presence of wakeup capable devices.
+Dropped patch[v4,4/5] as it is present linux-next.
+Addressed comments in host.c and dwc3-qcom.c.
+
+Changes in v4:
+Addressed Matthias comments raised in v3.
+
+Changes in v3:
+Removed need_phy_for_wakeup flag and by default avoiding phy powerdown.
+Addressed Matthias comments and added entry for DEV_SUPERSPEED.
+Added suspend_quirk in dwc3 host and moved the dwc3_set_phy_speed_flags.
+Added wakeup-source dt entry and reading in dwc-qcom.c glue driver.
+
+Changes in v2:
+Dropped the patch in clock to set GENPD_FLAG_ACTIVE_WAKEUP flag and 
+setting in usb dwc3 driver.
+Separated the core patch and glue driver patch.
+Made need_phy_for_wakeup flag part of dwc structure and 
+hs_phy_flags as unsgined int.
+Adrressed the comment on device_init_wakeup call.
+Corrected offset for reading portsc register.
+Added pacth to support wakeup in xo shutdown case.
+
+Sandeep Maheswaram (5):
+  dt-bindings: usb: dwc3: Add wakeup-source property support
+  usb: dwc3: core: Host wake up support from system suspend
+  usb: dwc3: qcom: Add helper functions to enable,disable wake irqs
+  usb: dwc3: qcom: Configure wakeup interrupts during suspend
+  usb: dwc3: qcom: Keep power domain on to retain controller status
+
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |   5 +
+ drivers/usb/dwc3/core.c                            |  10 +-
+ drivers/usb/dwc3/dwc3-qcom.c                       | 140 +++++++++++++++------
+ 3 files changed, 108 insertions(+), 47 deletions(-)
+
 -- 
-2.30.2
+2.7.4
 
