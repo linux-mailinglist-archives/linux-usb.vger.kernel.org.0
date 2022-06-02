@@ -2,82 +2,217 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6F853B536
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 10:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D80753B55B
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 10:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbiFBIf2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jun 2022 04:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
+        id S232525AbiFBIr7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jun 2022 04:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiFBIf0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 04:35:26 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2476C1FD9E2;
-        Thu,  2 Jun 2022 01:35:25 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id l204so7103074ybf.10;
-        Thu, 02 Jun 2022 01:35:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=fyv5qXxzRNlKcviUT5bygdy56T+SSeZ5/D4qh4GaJ0A=;
-        b=qh3siJ0ZDSNbxxC4A4CsxhfazOwNXCJwRuTjBIKb3jsLY0Gq1yx3fW8iJeV1sjIj8B
-         z/ffvyWHo+mt/46cfhhJk0/dHa8bF22XEMNbLklweze5HaMcSWyP5E4UMXDIQCGRWg6J
-         l6ySKFNBJHuyZezDl6q2iu4Q7BBx34ivlbasf4AukcHYTrCDphbhISrYsBNnVbDsYSgd
-         Ztj25La3vbV61aml3p+GRbIbAhvRA/uIVNTFlH7JCNInmfFlvgKYldXAoVzvibYV05pR
-         CEX7etZUYaM3/A3J2QfUoojtvsZFZGRjI9yFWTz2pINn8QpxfKT5gxJ00LplH+Kew6i0
-         wn5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=fyv5qXxzRNlKcviUT5bygdy56T+SSeZ5/D4qh4GaJ0A=;
-        b=lXZzx6P4mq78qpscjM245Zpup7gDIMZhQGpI0qk89TuBGSDMlpsdRaU3K7Gq7fQCuq
-         cO/cJDl2ogRv2tXWPzLy+IgvEZBHHORcQvbE1Uu4lxJCF/1xYEVJgibduiJQysmi5xNL
-         uIiGFlFjEKP1N3xjgpRizTix5MMdOI/WWeExNHCeRvuUTyLgrtOCLNrJXXPI84buI7MD
-         ImKwu6+bzE+P0A0UyvHYchLwVZ4hdvl4bRXnUWcxBM3qwWwjpkldE07cN6ptLIUaHbb7
-         z8WnvzETrLGN5+O18KAaCxpKz1dlzYb2FL0971TimgAjvPe/t0T0hHk35y6O+p81YSzN
-         AF6g==
-X-Gm-Message-State: AOAM531jY3ogoLBZojZzgXgVRBQ+SQ5ASTtwq8vxP/hVxBDPP8aA+yv2
-        r9avlEAu9OBYL9figWg+Aeal3yYsj1KWI5rvHlhMIGfT
-X-Google-Smtp-Source: ABdhPJxH6XEghFHDdpos+Xl2mWZyzTjeqluvnrO3eIGlg1FS01vOR1J8dLdTBrMHRSpjEtnHIhUKVnkuiOvZbJ/AlGA=
-X-Received: by 2002:a25:945:0:b0:65c:e3e8:b04 with SMTP id u5-20020a250945000000b0065ce3e80b04mr4091820ybm.441.1654158924403;
- Thu, 02 Jun 2022 01:35:24 -0700 (PDT)
+        with ESMTP id S232008AbiFBIr6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 04:47:58 -0400
+Received: from mail.toniclab.ru (unknown [194.187.149.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724E1BFC
+        for <linux-usb@vger.kernel.org>; Thu,  2 Jun 2022 01:47:54 -0700 (PDT)
+Received: from post.toniclab.ru (localhost [127.0.0.1])
+        by mail.toniclab.ru (Postfix) with ESMTPSA id 4A503154E58;
+        Thu,  2 Jun 2022 11:47:51 +0300 (MSK)
 MIME-Version: 1.0
-Received: by 2002:a05:7000:7aa7:0:0:0:0 with HTTP; Thu, 2 Jun 2022 01:35:23
- -0700 (PDT)
-In-Reply-To: <dbec85f5-7b28-3d0b-6b39-bd4296a49a70@kernel.org>
-References: <20220531043356.8CAB637401A9@freecalypso.org> <20220531043655.DDF783740232@freecalypso.org>
- <dbec85f5-7b28-3d0b-6b39-bd4296a49a70@kernel.org>
-From:   Mychaela Falconia <mychaela.falconia@gmail.com>
-Date:   Thu, 2 Jun 2022 00:35:23 -0800
-Message-ID: <CA+uuBqacb3X+km-3EtdRxaWi0FvxZWCv8RpCo-+qaNkT-=JAgw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] serial: core: add sysfs attribute to suppress
- ready signalling on open
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 02 Jun 2022 11:47:50 +0300
+From:   Yuri <info@toniclab.ru>
+To:     Greg KH <greg@kroah.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: /dev/ttyUSB0 file disappears on Ubuntu 22.04
+In-Reply-To: <YphShbNo8cTU65Qj@kroah.com>
+References: <4b9e024d14c40cba7c04d5879ae64866@toniclab.ru>
+ <YphShbNo8cTU65Qj@kroah.com>
+User-Agent: Roundcube Webmail/1.4.9
+Message-ID: <6391aa3d842029344835b4b085390a2e@toniclab.ru>
+X-Sender: info@toniclab.ru
+Organization: TonicLab
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,RCVD_IN_PBL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Jiri Slaby wrote:
+Thanks for a quick reply, Greg. No, no error here. No matter when I 
+execute this on my PC under Ubuntu 22.04
 
-> s@ttyS0@ttyS<x>@
-> [...]
-> sysfs_emit()? (Even if I know %d won't overflow PAGE_SIZE :P.)
+ls -l /dev/ttyUSB*
 
-Thanks for the feedback - saving it for v3 of my patch series.
+I get this
 
-Any comments, positive or negative, on the principal/philosophical
-idea behind this proposed patch series?
+ls: cannot access '/dev/ttyUSB*': No such file or directory
 
-M~
+I made this log after attaching and removing the device. Here's dmesg 
+output
+
+[ 2276.613198] usb 2-1.5: new full-speed USB device number 5 using 
+ehci-pci
+[ 2276.727502] usb 2-1.5: New USB device found, idVendor=0403, 
+idProduct=6001, bcdDevice= 6.00
+[ 2276.727511] usb 2-1.5: New USB device strings: Mfr=1, Product=2, 
+SerialNumber=3
+[ 2276.727514] usb 2-1.5: Product: USB Serial
+[ 2276.727516] usb 2-1.5: Manufacturer: FTDI
+[ 2276.727518] usb 2-1.5: SerialNumber: FT0KKBIF
+[ 2276.729550] ftdi_sio 2-1.5:1.0: FTDI USB Serial Device converter 
+detected
+[ 2276.729626] usb 2-1.5: Detected FT232RL
+[ 2276.730487] usb 2-1.5: FTDI USB Serial Device converter now attached 
+to ttyUSB0
+[ 3173.152415] usb 2-1.5: USB disconnect, device number 5
+[ 3173.152974] ftdi_sio ttyUSB0: FTDI USB Serial Device converter now 
+disconnected from ttyUSB0
+[ 3173.153005] ftdi_sio 2-1.5:1.0: device disconnected
+[ 3182.847132] kauditd_printk_skb: 1 callbacks suppressed
+[ 3396.861511] usb 2-1.5: new full-speed USB device number 6 using 
+ehci-pci
+[ 3396.975858] usb 2-1.5: New USB device found, idVendor=0403, 
+idProduct=6001, bcdDevice= 6.00
+[ 3396.975866] usb 2-1.5: New USB device strings: Mfr=1, Product=2, 
+SerialNumber=3
+[ 3396.975870] usb 2-1.5: Product: USB Serial
+[ 3396.975872] usb 2-1.5: Manufacturer: FTDI
+[ 3396.975874] usb 2-1.5: SerialNumber: FT0KKBIF
+[ 3396.978651] ftdi_sio 2-1.5:1.0: FTDI USB Serial Device converter 
+detected
+[ 3396.978714] usb 2-1.5: Detected FT232RL
+[ 3396.979568] usb 2-1.5: FTDI USB Serial Device converter now attached 
+to ttyUSB0
+[ 3553.309826] usb 2-1.5: USB disconnect, device number 6
+[ 3553.310371] ftdi_sio ttyUSB0: FTDI USB Serial Device converter now 
+disconnected from ttyUSB0
+[ 3553.310404] ftdi_sio 2-1.5:1.0: device disconnected
+
+
+And here's the syslog output echoing log above
+
+Jun  2 10:41:54 qgs-comp kernel: [ 3173.152415] usb 2-1.5: USB 
+disconnect, device number 5
+Jun  2 10:41:54 qgs-comp kernel: [ 3173.152974] ftdi_sio ttyUSB0: FTDI 
+USB Serial Device converter now disconnected from ttyUSB0
+Jun  2 10:41:54 qgs-comp kernel: [ 3173.153005] ftdi_sio 2-1.5:1.0: 
+device disconnected
+Jun  2 10:42:02 qgs-comp systemd[1786]: Started Application launched by 
+gnome-shell.
+Jun  2 10:42:03 qgs-comp libreoffice-writer.desktop[7821]: Warning: 
+failed to launch javaldx - java may not function correctly
+Jun  2 10:42:04 qgs-comp kernel: [ 3182.847132] kauditd_printk_skb: 1 
+callbacks suppressed
+Jun  2 10:42:04 qgs-comp kernel: [ 3182.847137] audit: type=1400 
+audit(1654155724.011:126): apparmor="ALLOWED" operation="file_mmap" 
+profile="libreoffice-soffice" name="/tmp/.glQ6PDw2" pid=7839 
+comm="soffice.bin" requested_mask="m" denied_mask="m" fsuid=1000 
+ouid=1000
+Jun  2 10:42:04 qgs-comp kernel: [ 3183.137037] audit: type=1400 
+audit(1654155724.303:127): apparmor="ALLOWED" operation="connect" 
+profile="libreoffice-soffice" name="/run/user/1000/at-spi/bus_1" 
+pid=7838 comm="soffice.bin" requested_mask="wr" denied_mask="wr" 
+fsuid=1000 ouid=1000
+Jun  2 10:42:04 qgs-comp kernel: [ 3183.137207] audit: type=1400 
+audit(1654155724.303:128): apparmor="ALLOWED" operation="file_perm" 
+profile="libreoffice-soffice" name="/run/user/1000/at-spi/bus_1" 
+pid=7838 comm="soffice.bin" requested_mask="r" denied_mask="r" 
+fsuid=1000 ouid=1000
+Jun  2 10:42:04 qgs-comp kernel: [ 3183.137218] audit: type=1400 
+audit(1654155724.303:129): apparmor="ALLOWED" operation="file_perm" 
+profile="libreoffice-soffice" name="/run/user/1000/at-spi/bus_1" 
+pid=7838 comm="soffice.bin" requested_mask="r" denied_mask="r" 
+fsuid=1000 ouid=1000
+Jun  2 10:42:14 qgs-comp systemd[1786]: 
+app-gnome-libreoffice\x2dwriter-7821.scope: Consumed 3.025s CPU time.
+Jun  2 10:45:38 qgs-comp kernel: [ 3396.861511] usb 2-1.5: new 
+full-speed USB device number 6 using ehci-pci
+Jun  2 10:45:38 qgs-comp kernel: [ 3396.975858] usb 2-1.5: New USB 
+device found, idVendor=0403, idProduct=6001, bcdDevice= 6.00
+Jun  2 10:45:38 qgs-comp kernel: [ 3396.975866] usb 2-1.5: New USB 
+device strings: Mfr=1, Product=2, SerialNumber=3
+Jun  2 10:45:38 qgs-comp kernel: [ 3396.975870] usb 2-1.5: Product: USB 
+Serial
+Jun  2 10:45:38 qgs-comp kernel: [ 3396.975872] usb 2-1.5: Manufacturer: 
+FTDI
+Jun  2 10:45:38 qgs-comp kernel: [ 3396.975874] usb 2-1.5: SerialNumber: 
+FT0KKBIF
+Jun  2 10:45:38 qgs-comp kernel: [ 3396.978651] ftdi_sio 2-1.5:1.0: FTDI 
+USB Serial Device converter detected
+Jun  2 10:45:38 qgs-comp kernel: [ 3396.978714] usb 2-1.5: Detected 
+FT232RL
+Jun  2 10:45:38 qgs-comp kernel: [ 3396.979568] usb 2-1.5: FTDI USB 
+Serial Device converter now attached to ttyUSB0
+Jun  2 10:45:38 qgs-comp mtp-probe: checking bus 2, device 6: 
+"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.5"
+Jun  2 10:45:38 qgs-comp mtp-probe: bus: 2, device: 6 was not an MTP 
+device
+Jun  2 10:45:38 qgs-comp systemd-udevd[7907]: 2-1.5: Failed to 
+create/update device symlink '/dev/ttyUSB0', ignoring: File exists
+Jun  2 10:45:38 qgs-comp snapd[938]: hotplug.go:199: hotplug device add 
+event ignored, enable experimental.hotplug
+Jun  2 10:45:38 qgs-comp mtp-probe: checking bus 2, device 6: 
+"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.5"
+Jun  2 10:45:38 qgs-comp mtp-probe: bus: 2, device: 6 was not an MTP 
+device
+Jun  2 10:45:40 qgs-comp ModemManager[1055]: <info>  [base-manager] 
+couldn't check support for device 
+'/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.5': not supported by 
+any plugin
+Jun  2 10:45:47 qgs-comp kernel: [ 3406.230869] [UFW BLOCK] IN=enp5s0 
+OUT= MAC=01:00:5e:00:00:01:c4:6e:1f:70:4f:f4:08:00 SRC=192.168.0.1 
+DST=224.0.0.1 LEN=32 TOS=0x00 PREC=0xC0 TTL=1 ID=0 DF PROTO=2
+Jun  2 10:46:34 qgs-comp systemd[1786]: Started Application launched by 
+gnome-shell.
+Jun  2 10:46:34 qgs-comp systemd[1786]: Started VTE child process 7940 
+launched by gnome-terminal-server process 5736.
+Jun  2 10:46:34 qgs-comp gnome-shell[2070]: Can't update stage views 
+actor <unnamed>[<MetaWindowGroup>:0x55cea707c320] is on because it needs 
+an allocation.
+Jun  2 10:46:34 qgs-comp gnome-shell[2070]: Can't update stage views 
+actor <unnamed>[<MetaWindowActorX11>:0x55ceb6917ed0] is on because it 
+needs an allocation.
+Jun  2 10:46:34 qgs-comp gnome-shell[2070]: Can't update stage views 
+actor <unnamed>[<MetaSurfaceActorX11>:0x55cea8afc6c0] is on because it 
+needs an allocation.
+Jun  2 10:46:37 qgs-comp systemd[1786]: Started Application launched by 
+gnome-shell.
+Jun  2 10:46:37 qgs-comp systemd[1786]: Started VTE child process 7958 
+launched by gnome-terminal-server process 5736.
+Jun  2 10:46:37 qgs-comp gnome-shell[2070]: Can't update stage views 
+actor <unnamed>[<MetaWindowGroup>:0x55cea707c320] is on because it needs 
+an allocation.
+Jun  2 10:46:37 qgs-comp gnome-shell[2070]: Can't update stage views 
+actor <unnamed>[<MetaWindowActorX11>:0x55cea8e32360] is on because it 
+needs an allocation.
+Jun  2 10:46:37 qgs-comp gnome-shell[2070]: Can't update stage views 
+actor <unnamed>[<MetaSurfaceActorX11>:0x55cea8afca40] is on because it 
+needs an allocation.
+Jun  2 10:48:14 qgs-comp kernel: [ 3553.309826] usb 2-1.5: USB 
+disconnect, device number 6
+Jun  2 10:48:14 qgs-comp kernel: [ 3553.310371] ftdi_sio ttyUSB0: FTDI 
+USB Serial Device converter now disconnected from ttyUSB0
+Jun  2 10:48:14 qgs-comp kernel: [ 3553.310404] ftdi_sio 2-1.5:1.0: 
+device disconnected
+
+
+No problems on the same PC working under Ubuntu 18.04 and 16.04 
+whatsoever:
+
+ls -l /dev/ttyUSB*
+crw-rw---- 1 root dialout 188, 0 Jun  2 10:36 /dev/ttyUSB0
+
+
+> 
+> I do not see it going away.
+> 
+> Are you sure it is gone?  Any further log messages?
+> 
+> thanks,
+> 
+> greg k-h
