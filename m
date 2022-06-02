@@ -2,103 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A7953BE88
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 21:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE9853BED7
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 21:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238504AbiFBTQe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jun 2022 15:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
+        id S238657AbiFBTei (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jun 2022 15:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238489AbiFBTQa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 15:16:30 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id C2AA32C679
-        for <linux-usb@vger.kernel.org>; Thu,  2 Jun 2022 12:16:27 -0700 (PDT)
-Received: (qmail 279939 invoked by uid 1000); 2 Jun 2022 15:16:27 -0400
-Date:   Thu, 2 Jun 2022 15:16:27 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v2] usb: hub: port: add sysfs entry to switch port power
-Message-ID: <YpkMi9Se0Unxq1SS@rowland.harvard.edu>
-References: <20220602012731.2942309-1-m.grzeschik@pengutronix.de>
- <YpjLusnGk8ZBlGGd@rowland.harvard.edu>
- <20220602145918.GB26638@pengutronix.de>
+        with ESMTP id S238669AbiFBTeg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 15:34:36 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3042C1BB
+        for <linux-usb@vger.kernel.org>; Thu,  2 Jun 2022 12:34:33 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id y15so872442ljc.0
+        for <linux-usb@vger.kernel.org>; Thu, 02 Jun 2022 12:34:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=Wpd7jRxiqf1UoJVhhFGdx6OtnuRlT2pIlGm7mG0GH9s=;
+        b=eftqPpOUcOnajOopK+mBns+Dt3IEfQ//winUfaCQH+Mbv0/wDcNQsjByy1JISccaxh
+         wfSYf2gasNVF3sxfWwR2kAlWxFVZQuLf/UfzKFbnYW/CCxUfKxMAVM6WSpsDOa4gXcGW
+         Mwl35GT/2YNRZ0K/VBg2VBIDz4IqxvGHXVj3cZ7Ap9ctDzJd0Wy8DMdbxzKvdHZwa3Fn
+         Qm0Ij81qg2ql5TJlQ3Zkk4UG7j/JVZfhvUIkfNcrEthRAYE57dCV/NBbhQWe0/vPw7IV
+         7mr9PBs3B7j6Q+tYTA/IT4R54E8VEDigiaDMM6ngbGYDmAJFzG+1Xav9ALYZ67SgW+cD
+         UI4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=Wpd7jRxiqf1UoJVhhFGdx6OtnuRlT2pIlGm7mG0GH9s=;
+        b=ItngqdGXfzmFXCj5o1NMj+L21RmJnAekGf2gbHi2zNvJ6OcDdDbvPm9Ma0Xj7FOVIp
+         4RusFSyZbhac+OrjVvecmIJBQuVQEOPcf5lZzqz4zDR/C8OIkKrSgVFgepjhaXUyulsz
+         etfTOeMXozK9mU40HnKriPpAbAk/wEtO+/6NYV8r3plI1kPDK/TfJvbR0m1wc2rqWQzX
+         f2LGoU7v+s/2NiTDUCVIjQTkUfRQ+6DmEV9P+YXwKaAS8kT1qYxqDueDLYQ+aoUBUKD8
+         vUCemgp41Sp0PFPpSVIrCiGE5LIs5mTeBM3L6QX4CN4xlkzUaH7XaJslh8x3iTuTqvcE
+         nh6Q==
+X-Gm-Message-State: AOAM530y7or9HGy/uKYi+9fj4v681SDF+qYOWcaEBFSXT+Spmv1HEHiD
+        lGJo4+hD/mdZMLHztU12GWk=
+X-Google-Smtp-Source: ABdhPJzErFgUNfXALJgRLbI/6Skfpd6wWnHn6F4GYpQOREy+AIbvVMUMdlkfTB8XrGW8mCshTlTY1w==
+X-Received: by 2002:a2e:a447:0:b0:249:5d85:aa54 with SMTP id v7-20020a2ea447000000b002495d85aa54mr42747654ljn.528.1654198470953;
+        Thu, 02 Jun 2022 12:34:30 -0700 (PDT)
+Received: from [192.168.1.168] (078088109026.wroclaw.vectranet.pl. [78.88.109.26])
+        by smtp.gmail.com with ESMTPSA id c21-20020a056512105500b00477932b5d8bsm1172895lfb.199.2022.06.02.12.34.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 12:34:29 -0700 (PDT)
+Message-ID: <92ab08fe65c12d6159966bdd7d2c4215044a00ff.camel@gmail.com>
+Subject: Re: Thunderbolt: One missing DisplayPort?
+From:   Tomasz =?UTF-8?Q?Mo=C5=84?= <desowin@gmail.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Stefan Hoffmeister <stefan.hoffmeister@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Date:   Thu, 02 Jun 2022 21:34:27 +0200
+In-Reply-To: <YpSUSk9u5z3ueufa@lahna>
+References: <CALhB_QNhzHkf4Yw6TqZAbCisMK6TBy8ecw0M_Sq=EQXPN728fg@mail.gmail.com>
+         <Yoy5m3Aa6QwVcFhf@kuha.fi.intel.com> <Yoy7oXpMugFFmfBP@lahna>
+         <CALhB_QM9SHJt+15pEVHEH_kourb-1Xbd68O1p_XLxOmWB4HAfw@mail.gmail.com>
+         <YpCVc6eYkpmjP9AF@lahna>
+         <CALhB_QP8SPqubq-eBNa1BTMuy3kCA65OuajOeJGt5DB9jDRKKg@mail.gmail.com>
+         <ce969e3b4a6ed04584fdecd3234578bd87d52594.camel@gmail.com>
+         <YpSUSk9u5z3ueufa@lahna>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220602145918.GB26638@pengutronix.de>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 04:59:18PM +0200, Michael Grzeschik wrote:
-> On Thu, Jun 02, 2022 at 10:39:54AM -0400, Alan Stern wrote:
-> > You might want to disable the new sysfs file (don't create it or have it
-> > return -EOPNOTSUPP) if the hub doesn't support per-port power switching.
-> 
-> Is it possible to read out if this feature is not working by the hub?
+On Mon, 2022-05-30 at 12:54 +0300, Mika Westerberg wrote:
+> On Mon, May 30, 2022 at 10:33:06AM +0200, Tomasz Mo=C5=84 wrote:
+> > On Sun, 2022-05-29 at 21:51 +0200, Stefan Hoffmeister wrote:
+> > > I have managed to wedge the system into a state where it does not
+> > > know about Thunderbolt, and now, on what I presume to be USB-C only
+> > > ("usb_typec_revision" =3D=3D 1.2? Seems ... low?), both DisplayPort
+> > > outputs on the docking station are now active, and I do get
+> > > meaningful entries from the DRM subsystem (and hence X). I am half-
+> > > way happy: I want exactly that over Thunderbolt for the bandwidth ;)
+> >=20
+> > Could you please tell how did you wedge the system into a state where
+> > it does not know about Thunderbolt?
+> >=20
+> > > Now, when I unwedge the system to enable Thunderbolt again
+> >=20
+> > I am curious about the wedge/unwedge procedure.
+>=20
+> Probably just connecting the dock using non-Thunderbolt Type-C cable.
+> That will enter USB (+DP altmode) or so instead of Thunderbolt altmode.
 
-Actually, I don't think so.  You can get some information about ganged 
-power switching, and there's the hub_is_port_power_switchable() test, but 
-that's all.  The situation is discussed in section 11.11 (Hub Port Power 
-Control) of the USB-2.0 spec.
+How do I determine that the cable is non-Thunderbolt Type-C?
 
-> The most hubs, that I was working with, did not really toggle the vbus,
-> because the physical logic to switch a regulator was completely missing
-> in the hardware. But with removing the other PORT_FEATURES the hub
-> behaved like the port is just not powered any more.
+I have tried with two different brands 1m USB Type-C cables that are
+not advertised as Thunderbolt. Both cables are electronically marked
+and 5A capable. When the docking station is connected using these
+cables, it operates in Thunderbolt mode.
 
-Yes, that's how most hubs work.  There are a few, however, which really do 
-switch port Vbus power on and off.
+If the device was operating in USB (+DP altmode), I assume that boltctl
+would show that the docking station status as disconnected?
 
-> Because of that; I am currently curious if we just should rename that
-> property to something more generic like "enable" or "disable". So that
-> as the real vbus power switching is missing, the hubs port switching
-> does still function like intended.
+Can I read the cable EMCA details in Linux?
 
-That makes sense.  But the question arises, does this patch really do what 
-you want?
-
-The patch description talks about the need to disable devices or 
-re-enumerate them.  You can disable a device right now by writing -1 to 
-the bConfigurationValue sysfs file, and you can force a device to be 
-re-enumerated by resetting it (using the USBDEVFS_RESET usbfs ioctl).
-
-About the only thing you can't currently do is actually turn off power to 
-the port.  This patch will allow users to do that, but only if the hub 
-supports power switching.
-
-(Okay, there's one other thing: The patch also allows users to disable a 
-port, so that devices plugged into that port get ignored.  Maybe that's 
-what you really had in mind...?)
-
-> > Finally, you should add a test to port_event() in hub.c, probably where
-> > the pm_runtime_active() check is.  If the port is powered off, return
-> > before doing any of the warm_reset or connect_change processing.
-> 
-> I don't understand jet why this is needed. In all my tests, the hubs
-> port was just not functioning any more. Regardless if the hub
-> was capable of real vbus switching or not. Just as described above.
-> Is it possible that this is already handled correctly because of the
-> other cleared port_features I mentioned?
-
-The USB spec does say that hubs should ignore connections to ports whose
-port_power feature flag is off.  The test I suggested was meant as a "just 
-in case" sort of thing, for hubs that don't comply with the spec's 
-requirement.  In the end it may not be necessary, and it can be done in a 
-separate patch.
-
-> In v3 I will also add port_power_show to make it possible for the
-> userspace to read out the current port status but returning the
-> value of test_bit(port1, hub->power_bits);.
-
-Good idea; I should have thought of it.
-
-Alan Stern
+Best Regards,
+Tomasz Mo=C5=84
