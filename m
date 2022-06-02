@@ -2,197 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223FA53B691
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 12:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6BAC53B762
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 12:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233378AbiFBKGe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jun 2022 06:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
+        id S233646AbiFBKhF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jun 2022 06:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiFBKGa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 06:06:30 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF08C2ACB65;
-        Thu,  2 Jun 2022 03:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654164389; x=1685700389;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Tpy1h6rxcXVO9xLL8s23Z2+kWlBjSZ7Dkplh6lZNrSI=;
-  b=jxeztFlVDxqMPufxkg830hVNjbUK6n2pu2bCVpTW+4ZjnwTMGtuncTNf
-   GhFhKdapMrTPcaykZbhqoPtFy6ifQaNxjAimvSscRk2IU2zHb/5LXNs8R
-   KXGQUqjnEPPfwSAwSTzTruG0eWjGMWq7L/VDmlRPpYetsUJSi31N08r8t
-   TCQhoM0SnwtF5Qn5EDXWZ2LPqjyL9VpPQzdpacTjypZru2W6NX/ko+F1R
-   y4QutXyEscNSl0guHKcHPJIGj8RhBO+RMDaFdKXn8r+NmvEPkoIKwgxbL
-   PDufiz0VANk7uuXTK2wSqzeLVLtEoV3ID+R/OZmbDc+XyXdCjm8W2fwDf
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="338946096"
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="338946096"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 03:06:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="582020563"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 02 Jun 2022 03:06:21 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwhie-0004xf-QH;
-        Thu, 02 Jun 2022 10:06:20 +0000
-Date:   Thu, 2 Jun 2022 18:05:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de
-Cc:     kbuild-all@lists.01.org, cy_huang@richtek.com,
-        alice_chen@richtek.com, chiaen_wu@richtek.com,
-        peterwu.pub@gmail.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Subject: Re: [RESEND 13/14] leds: flashlight: mt6370: Add Mediatek MT6370
- flashlight support
-Message-ID: <202206021739.LZjU7zjg-lkp@intel.com>
-References: <20220531111900.19422-14-peterwu.pub@gmail.com>
+        with ESMTP id S233665AbiFBKhE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 06:37:04 -0400
+Received: from out28-101.mail.aliyun.com (out28-101.mail.aliyun.com [115.124.28.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A5425D5E5;
+        Thu,  2 Jun 2022 03:37:00 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08130035|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0585089-0.000138415-0.941353;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047199;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.NxvzAQ0_1654166207;
+Received: from 192.168.220.136(mailfrom:michael@allwinnertech.com fp:SMTPD_---.NxvzAQ0_1654166207)
+          by smtp.aliyun-inc.com(33.38.168.99);
+          Thu, 02 Jun 2022 18:36:57 +0800
+Message-ID: <f2e4f523-9d56-9b5d-cc8e-c9d2c3660996@allwinnertech.com>
+Date:   Thu, 2 Jun 2022 18:36:47 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531111900.19422-14-peterwu.pub@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] usb: f_fs: Fix crash during gadget function switching
+Content-Language: en-US
+To:     John Keeping <john@metanate.com>
+Cc:     quic_linyyuan@quicinc.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, axboe@kernel.dk,
+        quic_pkondeti@quicinc.com, wcheng@codeaurora.org,
+        quic_ugoswami@quicinc.com, andrew_gabbasov@mentor.com,
+        plr.vincent@gmail.com, gustavoars@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        allwinner-opensource-support@allwinnertech.com
+References: <20220510080105.126146-1-michael@allwinnertech.com>
+ <YpUJkxWBNuZiW7Xk@donbot>
+From:   Michael Wu <michael@allwinnertech.com>
+In-Reply-To: <YpUJkxWBNuZiW7Xk@donbot>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi ChiaEn,
+On 5/31/2022 2:14 AM, John Keeping wrote:
+> On Tue, May 10, 2022 at 04:01:05PM +0800, Michael Wu wrote:
+>> On arm64 android12 and possibly other platforms, during the usb gadget
+>> function switching procedure (e.g. from mtp to midi), a synchronization
+>> issue could occur, which causes an use-after-free panic as shown below:
+> 
+> I assume this is the path through ffs_epfile_io() with !io_data->aio.
+> It looks like there is no check there for epfile->ep == ep which the
+> other paths do check.
+> 
+> Does the patch below fix the problem without needing to add a new
+> completion?
+> 
 
-Thank you for the patch! Perhaps something to improve:
+Hi John,
+Thanks for your suggestion. I've tested your patch and it did work -- 
+When my issue occurs, (epfile->ep != ep) is satisfied, and the error is 
+handled.
 
-[auto build test WARNING on pavel-leds/for-next]
-[also build test WARNING on lee-mfd/for-mfd-next lee-backlight/for-backlight-next v5.18 next-20220602]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/ChiaEn-Wu/Add-Mediatek-MT6370-PMIC-support/20220531-211432
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: nios2-allyesconfig (https://download.01.org/0day-ci/archive/20220602/202206021739.LZjU7zjg-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/805a8af17c769562ec4b85e9b7d2669d004fe3a6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review ChiaEn-Wu/Add-Mediatek-MT6370-PMIC-support/20220531-211432
-        git checkout 805a8af17c769562ec4b85e9b7d2669d004fe3a6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/gpu/drm/v3d/ drivers/leds/ sound/core/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/device.h:15,
-                    from include/linux/leds.h:12,
-                    from include/linux/led-class-flash.h:11,
-                    from drivers/leds/flash/leds-mt6370-flash.c:8:
-   drivers/leds/flash/leds-mt6370-flash.c: In function 'mt6370_led_probe':
->> drivers/leds/flash/leds-mt6370-flash.c:591:17: warning: format '%lu' expects argument of type 'long unsigned int', but argument 3 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-     591 |                 "No child node or node count over max led number %lu\n", count);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/leds/flash/leds-mt6370-flash.c:590:17: note: in expansion of macro 'dev_err'
-     590 |                 dev_err(&pdev->dev,
-         |                 ^~~~~~~
-   drivers/leds/flash/leds-mt6370-flash.c:591:68: note: format string is defined here
-     591 |                 "No child node or node count over max led number %lu\n", count);
-         |                                                                  ~~^
-         |                                                                    |
-         |                                                                    long unsigned int
-         |                                                                  %u
+> -- >8 --
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -1084,16 +1084,22 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+>                           */
+>                          usb_ep_dequeue(ep->ep, req);
+>                          wait_for_completion(&done);
+> -                       interrupted = ep->status < 0;
+> +                       interrupted = true;
+>                  }
+>   
+> -               if (interrupted)
+> +               spin_lock_irq(&epfile->ffs->eps_lock);
+> +               if (epfile->ep != ep)
+> +                       ret = -ESHUTDOWN;
+> +               else if (interrupted && ep->status < 0)
+>                          ret = -EINTR;
+> -               else if (io_data->read && ep->status > 0)
+> -                       ret = __ffs_epfile_read_data(epfile, data, ep->status,
+> -                                                    &io_data->data);
+>                  else
+>                          ret = ep->status;
+> +               spin_unlock_irq(&epfile->ffs->eps_lock);
+> +
+> +               if (io_data->read && ret > 0)
+> +                       ret = __ffs_epfile_read_data(epfile, data, ret,
+> +                                                    &io_data->data);
+> +
+>                  goto error_mutex;
+>          } else if (!(req = usb_ep_alloc_request(ep->ep, GFP_ATOMIC))) {
+>                  ret = -ENOMEM;
+Tested-by: Michael Wu <michael@allwinnertech.com>
 
 
-vim +591 drivers/leds/flash/leds-mt6370-flash.c
+I also tested Linyu's patch [1][2]. It also works.
+Is there a preference on these solutions?
 
-   580	
-   581	static int mt6370_led_probe(struct platform_device *pdev)
-   582	{
-   583		struct mt6370_priv *priv;
-   584		struct fwnode_handle *child;
-   585		size_t count;
-   586		int i = 0, ret;
-   587	
-   588		count = device_get_child_node_count(&pdev->dev);
-   589		if (!count || count > MT6370_MAX_LEDS) {
-   590			dev_err(&pdev->dev,
- > 591			"No child node or node count over max led number %lu\n", count);
-   592			return -EINVAL;
-   593		}
-   594	
-   595		priv = devm_kzalloc(&pdev->dev, struct_size(priv, leds, count),
-   596				    GFP_KERNEL);
-   597		if (!priv)
-   598			return -ENOMEM;
-   599	
-   600		priv->leds_count = count;
-   601		priv->dev = &pdev->dev;
-   602		mutex_init(&priv->lock);
-   603	
-   604		priv->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-   605		if (!priv->regmap) {
-   606			dev_err(&pdev->dev, "Failed to get parent regmap\n");
-   607			return -ENODEV;
-   608		}
-   609	
-   610		device_for_each_child_node(&pdev->dev, child) {
-   611			struct mt6370_led *led = priv->leds + i;
-   612			struct led_init_data init_data = { .fwnode = child, };
-   613	
-   614			led->priv = priv;
-   615			ret = mt6370_init_common_properties(led, &init_data);
-   616			if (ret)
-   617				goto out_flash_release;
-   618	
-   619			ret = mt6370_init_flash_properties(led, &init_data);
-   620	
-   621			if (ret)
-   622				goto out_flash_release;
-   623	
-   624			ret = mt6370_led_register(&pdev->dev, led, &init_data);
-   625			if (ret)
-   626				goto out_flash_release;
-   627	
-   628			i++;
-   629		}
-   630	
-   631		platform_set_drvdata(pdev, priv);
-   632		return 0;
-   633	
-   634	out_flash_release:
-   635		mt6370_v4l2_flash_release(priv);
-   636		return ret;
-   637	}
-   638	
+
+[1] 
+https://lore.kernel.org/linux-usb/1654056916-2062-2-git-send-email-quic_linyyuan@quicinc.com/
+[2] 
+https://lore.kernel.org/linux-usb/1654056916-2062-3-git-send-email-quic_linyyuan@quicinc.com/
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+Michael Wu
