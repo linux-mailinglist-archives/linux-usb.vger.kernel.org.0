@@ -2,203 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AAA53B976
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 15:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A8553BA44
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 15:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235239AbiFBNJT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jun 2022 09:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
+        id S235640AbiFBN6E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jun 2022 09:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbiFBNJR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 09:09:17 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A706D13C4DA;
-        Thu,  2 Jun 2022 06:09:16 -0700 (PDT)
+        with ESMTP id S231286AbiFBN6A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 09:58:00 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAD0793B2;
+        Thu,  2 Jun 2022 06:57:58 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id n10so10158719ejk.5;
+        Thu, 02 Jun 2022 06:57:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654175356; x=1685711356;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5USZXaGXafMmZRCNGTL/y9r+1CJyT2qx7/K0xHXdLyA=;
-  b=sH3M7xElzEvdFx6VIMC4SIDjdXACVcz0j9VNOu0WAP+QaGpOIhWecA+U
-   c0g/y8XTBq7OlgZijSEbRv4CFd6xnrPTz1vQInQsXnPmBBNY8NG+S4GBO
-   MYFicK2eG0jTkU/Cip+eLKSi6OS2nYPRC4wdzfKFKrWEQ+44/r6OM9IyN
-   0=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 02 Jun 2022 06:09:16 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 06:09:16 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 2 Jun 2022 06:09:15 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 2 Jun 2022 06:09:09 -0700
-Date:   Thu, 2 Jun 2022 18:39:05 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v20 0/5] USB DWC3 host wake up support from system suspend
-Message-ID: <20220602130905.GC2521@hu-pkondeti-hyd.qualcomm.com>
-References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=lCjXd1DtLAOiKDUVepuP3tVKlqmoM9phz1lypZW4eiM=;
+        b=eKXUR7kiBU80Kt1ivUsBYC1Vp5ABsZgOFlwcUTfYnL3EYaoBLLC4llE6qNCbLYkoPK
+         yV/E9DUt2ifgfA2Nbk6ykWpgQhfm9txSuz+Z9LmYA2e0QtK14BpQdaIg86EMFNfuUWkx
+         hMXNoGeRpp7Hw5ALo7uCiIN/Vg+bFN+64MnxIrSs4784P1udBgejLUQnnHasBXCy/VJv
+         Hraq92Husrz3Xf7aLdubPKJuxySVXpGPA0CZZLKoHOr29+EvAoDaQOSqIfuA/pA2wdFl
+         oxnZHqbsTfLFBaxgW2BGhnhwkC0uMC12x04YUFSe3zvFWWisWKPD/j9A/tTeJZTOCSWO
+         kQFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lCjXd1DtLAOiKDUVepuP3tVKlqmoM9phz1lypZW4eiM=;
+        b=NWuso4ZzJ2XIOREiQvXrUw/xeTo07Z3fHySVFA9TDeKu07xHWPceLUwXEDFYALRl0S
+         uaeG7QzPp1TeVgLicOtPL8nwiXYTN3cgFBJrLk69g/Mx7HPVHkUb7rNoEPXj1qvDL4nv
+         oJaMJPPL/vAxZkKZv3B4ffi8V0TmuCV2SdURfhKLPZ/qGDXIes5HimrFntNNtz13e5zM
+         rkFSzx1v5Og1dZIrjRBTGpLPyUiVgR4nbuJehcnrg/yNqwr2SL18Vmvxwhr4yPzsD0u8
+         Y6QD6XDuj+bMSIQSRzwDVROxrZl4VAPwwt/izuS1JBcd5cAxpsi+DVO7mGdbD+ccmghI
+         yLwg==
+X-Gm-Message-State: AOAM5316Gy/jrnPFisdF0TmIb9D8QZ3WQg76+w3E9C+Cel0YmpXYq7K+
+        tOdhpMRUbSgymgoHxR4FF/WmYF9ZwQ9AeQW+Rb0=
+X-Google-Smtp-Source: ABdhPJw17vPxP2UwrASUkgWE75bkBumiXi0yzz2upgIbMhdhBA7mECqviI1+XnRf2zU0lOm4Q01q8wM9WsX0p02cGPY=
+X-Received: by 2002:a17:907:6e04:b0:6f4:d6f3:c72a with SMTP id
+ sd4-20020a1709076e0400b006f4d6f3c72amr4545345ejc.636.1654178277156; Thu, 02
+ Jun 2022 06:57:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220531102809.11976-1-peterwu.pub@gmail.com> <20220531102809.11976-8-peterwu.pub@gmail.com>
+ <CAHp75VdUQqihr=AX-wEUD05jY1ReL63hMCL+eaqmjkN8CsS_Vg@mail.gmail.com> <CA+hk2fasiriGHepNjsnPCqTMJOgAEbVHACmWrDRZY7cHPcOQqA@mail.gmail.com>
+In-Reply-To: <CA+hk2fasiriGHepNjsnPCqTMJOgAEbVHACmWrDRZY7cHPcOQqA@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 2 Jun 2022 15:57:19 +0200
+Message-ID: <CAHp75Vf=ATRfaaaGFuuPHuQj6wTjnRPBw4W5WYfgYuUP-A-L=g@mail.gmail.com>
+Subject: Re: [PATCH 07/14] leds: flashlight: mt6370: Add Mediatek MT6370
+ flashlight support
+To:     szuni chen <szunichen@gmail.com>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>, cy_huang@richtek.com,
+        alice_chen@richtek.com, chiaen_wu@richtek.com,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 01:54:32PM +0530, Krishna Kurapati wrote:
-> Avoiding phy powerdown in host mode when dwc3 is wakeup capable, so that
-> it can be wake up by devices. Keep usb30_prim gdsc active to retain
-> controller status during suspend/resume.
-> 
-> Changes in v20:
-> Fixed nitpicks in dwc3 qcom driver.
-> Fixed code changes in dwc3 core driver.
-> 
-> Changes in v19:
-> Fixed dwc3 driver code changes.
-> 
-> Changes in v18:
-> Fixed minor nit picks in v17 reported by Matthias.
-> 
-> Changes in v17:
-> Moved the speed check to glue driver.
-> Powering down phy's solely based on dwc3 wakeup capability.
-> Configuring the interrupt functions appropriately.
-> 
-> Changes in v16:
-> Added changes to power down the phy's during suspend only if dwc3
-> is not wakeup capable.
-> 
-> Changes in v15:
-> Added patch to enable wakeup for xhci-plat based on children wakeup status.
-> Used device_wakeup_path instead of device_children_wakeup_capable
-> 
-> Changes in v14:
-> Added patch for device_children_wakeup_capable.
-> Used device_children_wakeup_capable instead of usb_wakeup_enabled_descendants.
-> Fixed minor nit picks in v13 reported by Matthias.
-> 
-> Changes in v13:
-> Moved the dt bindings patch to start.
-> Changed dwc3_set_phy_speed_mode to dwc3_check_phy_speed_mode.
-> Check wakep-source property for dwc3 core node to set the
-> wakeup capability. Drop the device_init_wakeup call from
-> runtime suspend and resume.
-> Added GENPD_FLAG_RPM_ALWAYS_ON and set GENPD_FLAG_ALWAYS_ON if
-> wakeup is supported.
-> 
-> Changes in v12:
-> Squashed PATCH 1/5 and 2/5 of v11.
-> Added dt bindings and device tree entry for wakeup-source property
-> for dwc3 core node.
-> Dropped redundant phy_set_mode call.
-> 
-> 
-> Changes in v11:
-> Moving back to v8 version
-> https://patchwork.kernel.org/project/linux-arm-msm/cover/1624882097-23265-1-git-send-email-sanm@codeaurora.org
-> as we are getting interrupts during suspend
-> when enabling both DP hs phy irq and DM hs phy irq.
-> Moved the set phy mode function to dwc3/core.c from xhci-plat.c
-> We didn't find any other option other than accessing xhci from dwc.
-> 
-> Changes in v10:
-> PATCH 1/6: Change device_set_wakeup_capable to device_set_wakeup_enable
-> PATCH 2/6: Remove redundant else part in dwc3_resume_common
-> PATCH 4/6: Change the irg flags
-> PATCH 5/6: Set flag GENPD_FLAG_ALWAYS_ON
-> PATCH 6/6: Remove disable interrupts function and enable
-> interrupts in probe.
-> 
-> 
-> Changes in v9:
-> Checking with device_may_makeup property instead of phy_power_off flag.
-> Changed the IRQ flags and removed hs_phy_mode variable.
-> 
-> Changes in v8:
-> Moved the dwc3 suspend quirk code in dwc3/host.c to xhci-plat.c
-> Checking phy_power_off flag instead of usb_wakeup_enabled_descendants 
-> to keep gdsc active.
-> 
-> Changes in v7:
-> Change in commit text and message in PATCH 1/5 and PATCH 5/5
-> as per Matthias suggestion.
-> Added curly braces for if and else if sections in PATCH 4/5.
-> 
-> Changes in v6:
-> Addressed comments in host.c and core.c
-> Separated the patches in dwc3-qcom.c to make it simple.
-> Dropped wakeup-source change as it is not related to this series.
-> 
-> Changes in v5:
-> Added phy_power_off flag to check presence of wakeup capable devices.
-> Dropped patch[v4,4/5] as it is present linux-next.
-> Addressed comments in host.c and dwc3-qcom.c.
-> 
-> Changes in v4:
-> Addressed Matthias comments raised in v3.
-> 
-> Changes in v3:
-> Removed need_phy_for_wakeup flag and by default avoiding phy powerdown.
-> Addressed Matthias comments and added entry for DEV_SUPERSPEED.
-> Added suspend_quirk in dwc3 host and moved the dwc3_set_phy_speed_flags.
-> Added wakeup-source dt entry and reading in dwc-qcom.c glue driver.
-> 
-> Changes in v2:
-> Dropped the patch in clock to set GENPD_FLAG_ACTIVE_WAKEUP flag and 
-> setting in usb dwc3 driver.
-> Separated the core patch and glue driver patch.
-> Made need_phy_for_wakeup flag part of dwc structure and 
-> hs_phy_flags as unsgined int.
-> Adrressed the comment on device_init_wakeup call.
-> Corrected offset for reading portsc register.
-> Added pacth to support wakeup in xo shutdown case.
-> 
-> Sandeep Maheswaram (5):
->   dt-bindings: usb: dwc3: Add wakeup-source property support
->   usb: dwc3: core: Host wake up support from system suspend
->   usb: dwc3: qcom: Add helper functions to enable,disable wake irqs
->   usb: dwc3: qcom: Configure wakeup interrupts during suspend
->   usb: dwc3: qcom: Keep power domain on to retain controller status
-> 
->  .../devicetree/bindings/usb/snps,dwc3.yaml         |   5 +
->  drivers/usb/dwc3/core.c                            |   9 +-
->  drivers/usb/dwc3/dwc3-qcom.c                       | 140 +++++++++++++++------
->  3 files changed, 108 insertions(+), 46 deletions(-)
-> 
+On Thu, Jun 2, 2022 at 2:07 PM szuni chen <szunichen@gmail.com> wrote:
+> Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B46=E6=
+=9C=881=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=885:57=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+> > On Tue, May 31, 2022 at 1:32 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote=
+:
 
-This series looks good to me. I think it is ready for merge unless Felipe has
-any concerns.
+...
 
-Thanks,
-Pavan
+> > > +       const char * const states[] =3D { "off", "keep", "on" };
+> > > +       const char *str;
+> > > +       int ret;
+> > > +
+> > > +       if (!fwnode_property_read_string(init_data->fwnode,
+> > > +                                        "default-state", &str)) {
+> > > +               ret =3D match_string(states, ARRAY_SIZE(states), str)=
+;
+> > > +               if (ret < 0)
+> > > +                       ret =3D STATE_OFF;
+> > > +
+> > > +               led->default_state =3D ret;
+> > > +       }
+> >
+> > fwnode_property_match_string()?
+> Sorry, but I think the use of this function is different from my target.
+> I want to read the string of the "default-state" property and figure
+> out if the string is in the states array.
+> But the fwnode_property_match_string aimed to figure out if the state
+> in the property array.
+> One is a property array and another one is a state array.
+
+Ah, indeed. Nevertheless you may reduce the code base by doing like
+the following (I wonder what your code do if there is no default-state
+property):
+
+  led->default_state =3D STATE_OFF; // it's by default off since
+kzalloc(), so I don't see why we need this line at all.
+
+  fwnode_property_read_string(init_data->fwnode, "default-state", &str);
+  ret =3D match_string(states, ARRAY_SIZE(states), str);
+  if (ret >=3D 0)
+    led->default_state =3D ret;
+
+
+--=20
+With Best Regards,
+Andy Shevchenko
