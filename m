@@ -2,105 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82D953B76F
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 12:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C34B353B799
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 13:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233969AbiFBKjx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jun 2022 06:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
+        id S234029AbiFBLJF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jun 2022 07:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233961AbiFBKjw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 06:39:52 -0400
-Received: from out28-170.mail.aliyun.com (out28-170.mail.aliyun.com [115.124.28.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C952B12E8
-        for <linux-usb@vger.kernel.org>; Thu,  2 Jun 2022 03:39:44 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.108735|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0278941-0.000402114-0.971704;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047199;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.NxwOw2L_1654166370;
-Received: from 192.168.220.136(mailfrom:michael@allwinnertech.com fp:SMTPD_---.NxwOw2L_1654166370)
-          by smtp.aliyun-inc.com(33.37.88.87);
-          Thu, 02 Jun 2022 18:39:41 +0800
-Message-ID: <0732d4f3-5359-0d9d-94b9-66a7403dc7d8@allwinnertech.com>
-Date:   Thu, 2 Jun 2022 18:39:30 +0800
+        with ESMTP id S230498AbiFBLJC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 07:09:02 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9D6DF8B;
+        Thu,  2 Jun 2022 04:09:01 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id u18so4261310plb.3;
+        Thu, 02 Jun 2022 04:09:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ljficFq1TqFxNaV2DG3n6rqDMBYzY/gkLq9ouzEtTaQ=;
+        b=jT+T3JHRJceQAjGn40OoIF8zldPKDKs+vXpivUThmbTV6l7HJEVQqfSiVyyUKxcIRA
+         V1HV7307/DOObfVUmwyeawW8JmDNoQ6kbipK6x3akH6tSKydRJA3mWBRNpsvAPWLK8GR
+         MyepNKbmiN70nrV7QO1BMSjFbFB1DSWDwQhTbpvdlMwuRcvFHCiChKokjBSTND5DZAb4
+         qdYPxztobSEv4XYQAkx5sdWwLTx5gtO93vEBCmqH2OjmG2K4gzG/8p7IUvq6l+BlM+rK
+         KtdJDmheNHCUlz1jO3BE4BcBmGINHcsEhvTbRHgmH1wLO/MmskeHXPYbo4W1pIqIdzJA
+         iB9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ljficFq1TqFxNaV2DG3n6rqDMBYzY/gkLq9ouzEtTaQ=;
+        b=y55h19+Gv1D/Kw47jqUysBxxNQSvgz3Ul5CgzQxGaCG3GUls5Mpv78K/zNhJKkjPaK
+         5NfkiI8MTVNzYgAiDslFMrOKIRP9mLlmIlncNB5WU7qvQBIIYoAKbEgc7PPyKsIRdu7V
+         cQvT4LrOpYpXEUC0BO9hgTE+yw2R0++QjUbEN4OmG33uuDhkineUXIhisMagtL2Hph8e
+         mUtJxDB80dCexj8SsFfxPo3iy+VHBd2CnQ6KUrd9WX8EdaIehFfeeCUTsl1WVfeon2iH
+         T6KmhbJPw7PYhOvhMkzhhQ1VFwkAa91ZlBGTv1tyvkGuKJjgAJBb/N4zoDyIGTL4Q5zj
+         oXeg==
+X-Gm-Message-State: AOAM531fCzFa4r7sCtXwkUCZvm5CdgmOQ6X9G8iDl9j8YsndTNyPx2AP
+        LGH/lQITj7fvEYHskbEAmFFEAd4cJnREbXtqHxo=
+X-Google-Smtp-Source: ABdhPJxnuVXQZP/neu33d1v8iS5bCLA/4Mw1vTXrJFlvdHEk2teNKvhgpMW7hCkYRlQXPUs/CSXBeQ==
+X-Received: by 2002:a17:902:b698:b0:158:faee:442f with SMTP id c24-20020a170902b69800b00158faee442fmr4447431pls.75.1654168140661;
+        Thu, 02 Jun 2022 04:09:00 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id h15-20020a17090a470f00b001df51dd0c93sm5694200pjg.1.2022.06.02.04.08.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 04:09:00 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vitaly Bordug <vitb@kernel.crashing.org>,
+        Stefan Roese <sr@denx.de>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] usb: host: Fix refcount leak in ehci_hcd_ppc_of_probe
+Date:   Thu,  2 Jun 2022 15:08:49 +0400
+Message-Id: <20220602110849.58549-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3 2/2] usb: gadget: f_fs: change ep->ep safe in
- ffs_epfile_io()
-Content-Language: en-US
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, John Keeping <john@metanate.com>
-References: <1654056916-2062-1-git-send-email-quic_linyyuan@quicinc.com>
- <1654056916-2062-3-git-send-email-quic_linyyuan@quicinc.com>
-From:   Michael Wu <michael@allwinnertech.com>
-In-Reply-To: <1654056916-2062-3-git-send-email-quic_linyyuan@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/1/2022 12:15 PM, Linyu Yuan wrote:
-> In ffs_epfile_io(), when read/write data in blocking mode, it will wait
-> the completion in interruptible mode, if task receive a signal, it will
-> terminate the wait, at same time, if function unbind occurs,
-> ffs_func_unbind() will kfree all eps, ffs_epfile_io() still try to
-> dequeue request by dereferencing ep which may become invalid.
-> 
-> Fix it by add ep spinlock and will not dereference ep if it is not valid.
-> 
-> Reported-by: Michael Wu <michael@allwinnertech.com>
-> Reviewed-by: John Keeping <john@metanate.com>
-> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
-> ---
-> v2: add Reviewed-by from John keeping
-> v3: add Reported-by from Michael Wu
-> 
->   drivers/usb/gadget/function/f_fs.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index d4d8940..9bf9287 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -1077,6 +1077,11 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
->   		spin_unlock_irq(&epfile->ffs->eps_lock);
->   
->   		if (wait_for_completion_interruptible(&io_data->done)) {
-> +			spin_lock_irq(&epfile->ffs->eps_lock);
-> +			if (epfile->ep != ep) {
-> +				ret = -ESHUTDOWN;
-> +				goto error_lock;
-> +			}
->   			/*
->   			 * To avoid race condition with ffs_epfile_io_complete,
->   			 * dequeue the request first then check
-> @@ -1084,6 +1089,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
->   			 * condition with req->complete callback.
->   			 */
->   			usb_ep_dequeue(ep->ep, req);
-> +			spin_unlock_irq(&epfile->ffs->eps_lock);
->   			wait_for_completion(&io_data->done);
->   			interrupted = io_data->status < 0;
->   		}
+of_find_compatible_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-Tested-by: Michael Wu <michael@allwinnertech.com>
+Fixes: 796bcae7361c ("USB: powerpc: Workaround for the PPC440EPX USBH_23 errata [take 3]")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/usb/host/ehci-ppc-of.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I've tested Linyu's patches [PATCH v3 1/2] [PATCH v3 2/2]. I believe it 
-fixes the bug I reported.
-
-What's more, John's solution [1] also works in my tests. It looks 
-simpler. I'm not sure if it's as complete as Linyu's solution.
-
-
-[1] https://lore.kernel.org/linux-usb/YpUJkxWBNuZiW7Xk@donbot/
-
-
+diff --git a/drivers/usb/host/ehci-ppc-of.c b/drivers/usb/host/ehci-ppc-of.c
+index 6bbaee74f7e7..28a19693c19f 100644
+--- a/drivers/usb/host/ehci-ppc-of.c
++++ b/drivers/usb/host/ehci-ppc-of.c
+@@ -148,6 +148,7 @@ static int ehci_hcd_ppc_of_probe(struct platform_device *op)
+ 		} else {
+ 			ehci->has_amcc_usb23 = 1;
+ 		}
++		of_node_put(np);
+ 	}
+ 
+ 	if (of_get_property(dn, "big-endian", NULL)) {
 -- 
-Regards,
-Michael Wu
+2.25.1
+
