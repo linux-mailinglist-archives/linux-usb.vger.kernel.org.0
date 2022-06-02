@@ -2,139 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F33C53B34B
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 08:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C04FD53B357
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 08:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbiFBGCu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jun 2022 02:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
+        id S230357AbiFBGHT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jun 2022 02:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiFBGCt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 02:02:49 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6917416581
-        for <linux-usb@vger.kernel.org>; Wed,  1 Jun 2022 23:02:48 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id CE8905C00CF;
-        Thu,  2 Jun 2022 02:02:47 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 02 Jun 2022 02:02:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1654149767; x=1654236167; bh=uqIrpoNZaL
-        MNuwgv9q9PXfD1ZXggGNxlFLf8pXo3iXM=; b=YY2+LJVtwwGPtmgna1ET1Xg/aa
-        tAJ72BQXVPCMfAeGjZUIK16O93TW90b2o2tTEnFLOZDhQgiGjSBjycEPcvm+91zU
-        Mpv28K3XgjlBZ0udBKa81YxJPTFSDSqNjk+2b9c8pHuKwh4TxzT7yF7t/XOfxfRL
-        vvjo6gQoDIbR3B6yNnyW/VcYP+h/V8sK9Mn3MK/I5GWD6bAUHfdMijkIYRMr6KOd
-        O20iAPXL5iZzUesJmcR4NK4ZabbbHa+7q78KnNLzhyF1sM4jFYCojFCGj+WKNavz
-        2yWnhjvOfmAUcek+JtSRBjyfgZm58w6g9xYvUapD0HvhSe0EhZ0XPYWnajMA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1654149767; x=1654236167; bh=uqIrpoNZaLMNuwgv9q9PXfD1ZXgg
-        GNxlFLf8pXo3iXM=; b=zL/jB0aOiwPT3TQDtJwDxpE/VY6Zym+2iMoB0+EmYoiu
-        phE5SMjIBjh9jswk78YX//G2v0+Xn2XG0mAXlSirhvLjdkZD8YTxF9D/5NdUdWQQ
-        QCGHGuUuH8QqTPlCfLvtkCrKj/FxPO7o9S+gv4TcIjmW7XcwoAsXbsh8vwm7yvAl
-        uKcivPZ7maPLNHphJljzQiJvLIcF6KGKr5d4hA+lOydQVNnNO/+R4gSv9EGeITiJ
-        o3hKpK7kcElFuLAUy+KS2GBFb2lvrhSenO3WWcVtULbrz5LEUc8WoN0mECJuJLWC
-        iQ1u+NFz56QLSKVAwZleMbFD1cr+kuBPC+92btuFbw==
-X-ME-Sender: <xms:h1KYYqDGSI7wNfX23WlZXSe-u8AmeQgI0QseL2leyCJ_-r16gBlRnw>
-    <xme:h1KYYkhu5hrzau2BZ-mF14psbEKSjTxGFHkvY3ttcgBxpIWuo21PLTBe4VIhIcLVB
-    mjf1fIArth8JA>
-X-ME-Received: <xmr:h1KYYtn88YzdBbHgzAWthKTIt5aVHC6z2hWfjIuphuqL1x0f3TF6l1JDFD60sndYKZORlNbWjBHX0yzFroZZPT8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrledugdelkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesthdtre
-    dttddtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheq
-    necuggftrfgrthhtvghrnhepheeltdekueegueetgfefhfekieeiieejvdejveeuffegfe
-    elieduffekleeuffeknecuffhomhgrihhnpehtohhnihgtlhgrsgdrrhhunecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:h1KYYowKI_dW2uY5EPEDlHCKmJdAzztZdcAmQOAF8CS-cMQPctBpuA>
-    <xmx:h1KYYvQJuRIWpYzHB7QLPcE3zoJba9Ska0PrWtoU9IR3IWALyIlJBA>
-    <xmx:h1KYYjYRkX2yKmWUr51ZsHinYXTifOF0BRoWPJoAgnS7CQ3wGqEPMg>
-    <xmx:h1KYYqfhFxCWiWz56lX-smC2G4EYPCBx4CzSQYvEwgVPcdsNokpS0Q>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 2 Jun 2022 02:02:46 -0400 (EDT)
-Date:   Thu, 2 Jun 2022 08:02:45 +0200
-From:   Greg KH <greg@kroah.com>
-To:     "TonicLab.ru" <info@toniclab.ru>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: /dev/ttyUSB0 file disappears on Ubuntu 22.04
-Message-ID: <YphShbNo8cTU65Qj@kroah.com>
-References: <4b9e024d14c40cba7c04d5879ae64866@toniclab.ru>
+        with ESMTP id S230348AbiFBGHS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 02:07:18 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BA4C8BDB;
+        Wed,  1 Jun 2022 23:07:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654150028; x=1685686028;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fACQvi/i8TUwWPnJfsD9SOnQn1pBxmzqzJNVcJqEbc4=;
+  b=CDG+3f54QN+9VXH0fuJZnRrZ4TLoypuSXcA6hl4phzNe9bh6qZ5YpgaG
+   3o4I5xE6iRWDLTHb6MvH7R90HfXIKPFTBcIgz5/0Uiq3zZ9o6m6P6VM1F
+   CLOWJfKLndvamCYfGgxz4eSsQ3m+r7cBVheMfi4FMP6HPbatolgpTIj2C
+   I=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Jun 2022 23:07:08 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 23:07:07 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 1 Jun 2022 23:07:07 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 1 Jun 2022 23:07:01 -0700
+Date:   Thu, 2 Jun 2022 11:36:57 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [PATCH v19 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <20220602060657.GD20979@hu-pkondeti-hyd.qualcomm.com>
+References: <1654139515-8177-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654139515-8177-3-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <4b9e024d14c40cba7c04d5879ae64866@toniclab.ru>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1654139515-8177-3-git-send-email-quic_kriskura@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 07:37:45PM +0300, TonicLab.ru wrote:
-> Hi all,
+Hi Krishna,
+
+On Thu, Jun 02, 2022 at 08:41:52AM +0530, Krishna Kurapati wrote:
+> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 > 
-> This problem appeared on a freshly installed Ubuntu 22.04 desktop. Not sure
-> I need to post this here.
+> Check wakeup-source property for dwc3 core node to set the
+> wakeup capability. Drop the device_init_wakeup call from
+> runtime suspend and resume.
 > 
-> When I'm attaching a ftdi device into usb everything looks great but there's
-> no /dev/ttyUSB0 file. Seems it created and then disappeared. I tried to
-> remove brltty package (as some recommends on the net) but it didn't help.
-> The same ftdi device works on older Ubuntu version w/o any problems.
+> If the dwc3 is wakeup capable, don't power down the USB PHY(s).
+> The glue drivers are expected to take care of configuring the
+> additional wakeup settings if needed based on the dwc3 wakeup
+> capability status. In some SOC designs, powering off the PHY is
+> resulting in higher leakage, so this patch save power on such boards.
 > 
-> I'm having this in syslog:
-> Jun  1 16:58:09 qgs-comp kernel: [  538.642086] usb 2-1.5: new full-speed
-> USB device number 5 using ehci-pci
-> Jun  1 16:58:10 qgs-comp kernel: [  538.756437] usb 2-1.5: New USB device
-> found, idVendor=0403, idProduct=6001, bcdDevice= 6.00
-> Jun  1 16:58:10 qgs-comp kernel: [  538.756445] usb 2-1.5: New USB device
-> strings: Mfr=1, Product=2, SerialNumber=3
-> Jun  1 16:58:10 qgs-comp kernel: [  538.756448] usb 2-1.5: Product: USB
-> Serial
-> Jun  1 16:58:10 qgs-comp kernel: [  538.756450] usb 2-1.5: Manufacturer:
-> FTDI
-> Jun  1 16:58:10 qgs-comp kernel: [  538.756452] usb 2-1.5: SerialNumber:
-> FT0KKBIF
-> Jun  1 16:58:10 qgs-comp kernel: [  538.759677] ftdi_sio 2-1.5:1.0: FTDI USB
-> Serial Device converter detected
-> Jun  1 16:58:10 qgs-comp kernel: [  538.759713] usb 2-1.5: Detected FT232RL
-> Jun  1 16:58:10 qgs-comp kernel: [  538.760546] usb 2-1.5: FTDI USB Serial
-> Device converter now attached to ttyUSB0
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> ---
+>  drivers/usb/dwc3/core.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index e027c04..c9d7fe3 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1787,6 +1787,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, dwc);
+>  	dwc3_cache_hwparams(dwc);
+> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
+>  
+>  	spin_lock_init(&dwc->lock);
+>  	mutex_init(&dwc->mutex);
+> @@ -1948,7 +1949,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  		dwc3_core_exit(dwc);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg)) {
+> +		if (!PMSG_IS_AUTO(msg) && !device_can_wakeup(dwc->dev)) {
+>  			dwc3_core_exit(dwc);
+>  			break;
+>  		}
+> @@ -2009,12 +2010,11 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+>  		spin_unlock_irqrestore(&dwc->lock, flags);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg)) {
+> +		if (!PMSG_IS_AUTO(msg) && !device_can_wakeup(dwc->dev)) {
+>  			ret = dwc3_core_init_for_resume(dwc);
+>  			if (ret)
+>  				return ret;
+>  			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+> -			break;
+>  		}
 
-It was created here.
+We should break here for the case the device does not support wakeup and
+PM transition is system suspend. See the suspend block above where we break
+correctly.
 
-> Jun  1 16:58:01 qgs-comp colord-sane: message repeated 2 times: [
-> io/hpmud/musb.c 2101: Invalid usb_open: Permission denied]
-> Jun  1 16:58:10 qgs-comp mtp-probe: checking bus 2, device 5:
-> "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.5"
-> Jun  1 16:58:10 qgs-comp mtp-probe: bus: 2, device: 5 was not an MTP device
-> Jun  1 16:58:10 qgs-comp systemd-udevd[5394]: 2-1.5: Failed to create/update
-> device symlink '/dev/ttyUSB0', ignoring: File exists
-
-See it's still there.
-
-> Jun  1 16:58:10 qgs-comp snapd[942]: hotplug.go:199: hotplug device add
-> event ignored, enable experimental.hotplug
-> Jun  1 16:58:10 qgs-comp mtp-probe: checking bus 2, device 5:
-> "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.5"
-> Jun  1 16:58:10 qgs-comp mtp-probe: bus: 2, device: 5 was not an MTP device
-> Jun  1 16:58:10 qgs-comp colord-sane: io/hpmud/musb.c 2101: Invalid
-> usb_open: Permission denied
-
-I do not see it going away.
-
-Are you sure it is gone?  Any further log messages?
-
-thanks,
-
-greg k-h
+Thanks,
+Pavan
