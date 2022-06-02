@@ -2,91 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A6153B567
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 10:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F4053B5DC
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jun 2022 11:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbiFBIuW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jun 2022 04:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
+        id S232923AbiFBJSX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jun 2022 05:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbiFBIuV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 04:50:21 -0400
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04801F32;
-        Thu,  2 Jun 2022 01:50:21 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id q21so5559945wra.2;
-        Thu, 02 Jun 2022 01:50:20 -0700 (PDT)
+        with ESMTP id S231402AbiFBJSU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 05:18:20 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDE053701;
+        Thu,  2 Jun 2022 02:18:18 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id me5so8233104ejb.2;
+        Thu, 02 Jun 2022 02:18:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0d9LPcPl2z82dxOAeBz8oaTNCeFfF1mrJ8xfIO9HyHE=;
+        b=lfLh9e2Zec+kRfUbieDqxaSJGfE2gK5tVDQL4/AlpgVcAAIBNipxqiaQ9KaF31NRoL
+         p4XLfqqfzJDaVnItedh+uY7WOZo9GWfO9EDs7Kwtb9g1ep7F/2s8jmC8C+5HKoB8mmqm
+         5+MnNkvj0n3QFu1KLRgu4qmE4FZpPqT/FxCabwWRio16T/tBO5n8YQs39umvhQZU1izc
+         kmND1i4pFf63FZslDTQd5TX2paKc+iavMXEEIfxzCgFARk5C9xBN1i2j5XO5tazLpbL3
+         wIlyYfmxX1H8YiEs73O3/gKRJfzGSjM99weIY/3wRiXAWXYqSVXb5yR9RaF0dJyLJck3
+         HKTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gmY8ywIJ8F2I38doLeHcwbGV1/5/O2stuxqKMcaXVis=;
-        b=IKt1rHDhLOyK2xwDnmUX7aKyP+cjdv+4hf9VZO4LSXCTIddKluVRG8hsp8TFsd7io4
-         p+FXmu1JPjw6P8Cv0Y9uMbIRbUxF51xSi+9WifNiaXbs8bLj6Y64PqyCU0/5B7uk1wFE
-         04Gzm479qUnurg8NK2OJkVAn0Q++MDhgZHhpRnmzmclbxX54z/T78ztb9jUbsUu2Cxb6
-         JLSzuqtZgwfH8jycSjCHU28AjPTAMkmCN8pfWtneM+za7SuNIXFnn6TVZHYB57P4CvTG
-         aZyimkQiMMCf7DG6GfpT1t/CEF1r8Fts33AmIpTVECcduHcARTocRrZeEjdQchcPxaTc
-         UnmA==
-X-Gm-Message-State: AOAM5320TWGsLTz6q3INwMjCC7+hguR5GsSssM/+XENeLboqla+kegn4
-        bjQS1V3fjmI0/nbV2jAfLG4=
-X-Google-Smtp-Source: ABdhPJyRfwLpUe0vnTrnAcYsmqjA/G9rcoe2XN7lRPH+iDnSXvJ0+K30sLG5fOGdSpB+uFEoN1ylIQ==
-X-Received: by 2002:a5d:6da4:0:b0:20f:ea39:6660 with SMTP id u4-20020a5d6da4000000b0020fea396660mr2745962wrs.209.1654159819440;
-        Thu, 02 Jun 2022 01:50:19 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id f6-20020a05600c154600b00397402ae674sm8959918wmg.11.2022.06.02.01.50.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 01:50:18 -0700 (PDT)
-Message-ID: <22ccc180-a3ab-77cf-a771-00113e712ac4@kernel.org>
-Date:   Thu, 2 Jun 2022 10:50:17 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0d9LPcPl2z82dxOAeBz8oaTNCeFfF1mrJ8xfIO9HyHE=;
+        b=cyeok4LVFsdO0DNXsuUE0UImQfxvFOwMGCPhdctFrhGtkhqzr9JLqijDHPEW7Z+lFv
+         t7pXhQjnasw3UTDqdmp/tfCKcFkYupsS4eIMdctFOHIPZ2LcRR6bZBgImHeOjMyljmM/
+         pYN/JbtDRmIi7uTBBgMuLBR8JoIcT5LjO+T/KWZf2RY9+ep7Q/jiER7+KFEzqCWhDbQP
+         I+xFeMDq+N3ZDDCcxJLoGVZl4kPg4UW9BZc4FNEx+yk+Ma1lMvJwUMG6aN4mHn5CJez6
+         ai4rULChngwaunakkHLAGlv6YjOcbk6JONzdtOrKRH7WFmgkByrO7/nKTEylVc6Uo3WH
+         6wrA==
+X-Gm-Message-State: AOAM5301P6DGapNiS7JRDlVh4DtJhOJsWnwmkv1/pXkv8nDEA5CuyIF0
+        biwhgRFBbzFoTFKBJ319hdqCC5dDpmSiYJopJFg=
+X-Google-Smtp-Source: ABdhPJxRg1MZXl/SkbIUuNBrRuGNQldHFdLPZxE+GhC/BiCEKh8oflGlAj5dFnKQFyQ9Ns7hxKjhAhvcKy/fq3rTsjo=
+X-Received: by 2002:a17:907:6e04:b0:6f4:d6f3:c72a with SMTP id
+ sd4-20020a1709076e0400b006f4d6f3c72amr3415411ejc.636.1654161497069; Thu, 02
+ Jun 2022 02:18:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 2/6] serial: core: add sysfs attribute to suppress
- ready signalling on open
-Content-Language: en-US
-To:     Mychaela Falconia <mychaela.falconia@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>,
+References: <20220531102809.11976-1-peterwu.pub@gmail.com> <20220531102809.11976-7-peterwu.pub@gmail.com>
+ <CAHp75Vd8taco19vsDmBcCv8euV1SvwSiY5=P9oMkA6zWsjwXxg@mail.gmail.com> <20220602062643.GA13824@cyhuang-hp-elitebook-840-g3.rt>
+In-Reply-To: <20220602062643.GA13824@cyhuang-hp-elitebook-840-g3.rt>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 2 Jun 2022 11:17:40 +0200
+Message-ID: <CAHp75Vd-n=oLnhRCK=pR5ybOZbC6BKXrE2jRdwDbH90E4KYFGA@mail.gmail.com>
+Subject: Re: [PATCH 06/14] leds: mt6370: Add Mediatek MT6370 Indicator support
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20220531043356.8CAB637401A9@freecalypso.org>
- <20220531043655.DDF783740232@freecalypso.org>
- <dbec85f5-7b28-3d0b-6b39-bd4296a49a70@kernel.org>
- <CA+uuBqacb3X+km-3EtdRxaWi0FvxZWCv8RpCo-+qaNkT-=JAgw@mail.gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <CA+uuBqacb3X+km-3EtdRxaWi0FvxZWCv8RpCo-+qaNkT-=JAgw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>, cy_huang@richtek.com,
+        alice_chen@richtek.com, chiaen_wu@richtek.com,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 02. 06. 22, 10:35, Mychaela Falconia wrote:
-> Jiri Slaby wrote:
-> 
->> s@ttyS0@ttyS<x>@
->> [...]
->> sysfs_emit()? (Even if I know %d won't overflow PAGE_SIZE :P.)
-> 
-> Thanks for the feedback - saving it for v3 of my patch series.
-> 
-> Any comments, positive or negative, on the principal/philosophical
-> idea behind this proposed patch series?
+On Thu, Jun 2, 2022 at 8:27 AM ChiYuan Huang <u0084500@gmail.com> wrote:
+> On Wed, Jun 01, 2022 at 11:48:58AM +0200, Andy Shevchenko wrote:
+> > On Tue, May 31, 2022 at 1:16 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
 
-Neutral. As long as you break no currently supported devices.
+...
 
-I've just noticed the double negative "!tty_port_nordy()" on both calls 
-of that function. I guess there was already a discussion about the 
-naming, but wouldn't it make more sense to dub it like tty_port_do_rtscts()?
+> > What indicator?
+> It's RGB curent sink type LED driver (maximum supported current is only 24mA).
 
-thanks,
+Make your commit messages a slightly more verbose.
+
+...
+
+> > > +#include <linux/of.h>
+> >
+> > Are you sure this is the correct header? Seems you need
+> > mod_devicetable.h instead.
+> >
+> It's the correct header and be used for the struct 'of_device_id'.
+
+Nope. Run the following command
+$ git grep -n 'struct of_device_id {' -- include/linux/
+
+...
+
+> > > +struct mt6370_priv {
+> > > +       struct mutex lock;
+> >
+> > Do you use regmap locking?
+> >
+> MFD regmap register already the access lock.
+>
+> This lock is just to guarantee only one user can access the RGB register
+> part.
+>
+> Sorry, from the comment, do you want us to rename or remove this lock?
+
+My point is, since you have two locks, explain why you need each of them.
+
+> > > +       struct device *dev;
+> >
+> > > +       struct regmap *regmap;
+> >
+> > > +       struct regmap_field *fields[F_MAX_FIELDS];
+> > > +       const struct reg_field *reg_fields;
+> > > +       const struct linear_range *ranges;
+> > > +       struct reg_cfg *reg_cfgs;
+> > > +       unsigned int leds_count;
+> > > +       unsigned int leds_active;
+> > > +       bool is_mt6372;
+> > > +       struct mt6370_led leds[];
+> > > +};
+
+
 -- 
-js
-suse labs
+With Best Regards,
+Andy Shevchenko
