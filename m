@@ -2,74 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E2753C16C
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jun 2022 02:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33E053C341
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jun 2022 04:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232960AbiFCAZM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jun 2022 20:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
+        id S233345AbiFCCOt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jun 2022 22:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiFCAZL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 20:25:11 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9D9AC31394
-        for <linux-usb@vger.kernel.org>; Thu,  2 Jun 2022 17:25:10 -0700 (PDT)
-Received: (qmail 286967 invoked by uid 1000); 2 Jun 2022 20:25:09 -0400
-Date:   Thu, 2 Jun 2022 20:25:09 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v2] usb: hub: port: add sysfs entry to switch port power
-Message-ID: <YplU5dHLZdQDGMh1@rowland.harvard.edu>
-References: <20220602012731.2942309-1-m.grzeschik@pengutronix.de>
- <YpjLusnGk8ZBlGGd@rowland.harvard.edu>
- <20220602145918.GB26638@pengutronix.de>
- <YpkMi9Se0Unxq1SS@rowland.harvard.edu>
- <20220602213454.GC26638@pengutronix.de>
+        with ESMTP id S230193AbiFCCOs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jun 2022 22:14:48 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA97D369C0;
+        Thu,  2 Jun 2022 19:14:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654222486; x=1685758486;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=qSqyxUGSBvwO+iIfAgD4DbrPTpHhtxYDB+NXlueOkUk=;
+  b=FVkQ0V12NyiFVyHN9vd4v30bvUZN8xdEs+484mCSZkfRZURB4bnHNx+P
+   S7Tpp5Cd1XyfSzxiW13oRMDvUdmRmMLqcKjSJrGa4WpIZmwvOwPzHZWYd
+   8v6qm/+GEXdL2oucUam0YG0ygn1p9hnuU2ej2n2CG2AhNC1QFIrRWJACJ
+   Y=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 02 Jun 2022 19:14:45 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 19:14:45 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 2 Jun 2022 19:14:44 -0700
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 2 Jun 2022 19:14:44 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <krzysztof.kozlowski+dt@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <gregkh@linuxfoundation.org>,
+        <bjorn.andersson@linaro.org>, <kishon@ti.com>,
+        <robh+dt@kernel.org>, <agross@kernel.org>, <vkoul@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_jackp@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH] dt-bindings: Update QCOM USB subsystem maintainer information
+Date:   Thu, 2 Jun 2022 19:14:32 -0700
+Message-ID: <20220603021432.13365-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220602213454.GC26638@pengutronix.de>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 11:34:54PM +0200, Michael Grzeschik wrote:
-> On Thu, Jun 02, 2022 at 03:16:27PM -0400, Alan Stern wrote:
-> > On Thu, Jun 02, 2022 at 04:59:18PM +0200, Michael Grzeschik wrote:
-> > > Because of that; I am currently curious if we just should rename that
-> > > property to something more generic like "enable" or "disable". So that
-> > > as the real vbus power switching is missing, the hubs port switching
-> > > does still function like intended.
-> > 
-> > That makes sense.  But the question arises, does this patch really do what
-> > you want?
-> > 
-> > The patch description talks about the need to disable devices or
-> > re-enumerate them.  You can disable a device right now by writing -1 to
-> > the bConfigurationValue sysfs file, and you can force a device to be
-> > re-enumerated by resetting it (using the USBDEVFS_RESET usbfs ioctl).
-> > 
-> > About the only thing you can't currently do is actually turn off power to
-> > the port.  This patch will allow users to do that, but only if the hub
-> > supports power switching.
-> > 
-> > (Okay, there's one other thing: The patch also allows users to disable a
-> > port, so that devices plugged into that port get ignored.  Maybe that's
-> > what you really had in mind...?)
-> 
-> Yes, that is what I had in mind. If you agree, I would still keep the
-> name "port_power" since it is the main function, but skip the
-> hub_is_port_power_switchable check.
+Update devicetree binding files with the proper maintainer, and updated
+contact email.
 
-I favor the more generic name.  "disable" will be more understandable for 
-users than "port_power", if the file doesn't actually control the bus 
-power.
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+---
+ Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml | 2 +-
+ Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml       | 2 +-
+ .../devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml         | 2 +-
+ .../devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml  | 2 +-
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml            | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-Alan Stern
+diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
+index 60dc27834e1d..b078009ed509 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
+@@ -8,7 +8,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+ title: Qualcomm QMP USB3 DP PHY controller
+ 
+ maintainers:
+-  - Manu Gautam <mgautam@codeaurora.org>
++  - Wesley Cheng <quic_wcheng@quicinc.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
+index 0ab3dad3f121..d68ab49345b8 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
+@@ -8,7 +8,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+ title: Qualcomm QUSB2 phy controller
+ 
+ maintainers:
+-  - Manu Gautam <mgautam@codeaurora.org>
++  - Wesley Cheng <quic_wcheng@quicinc.com>
+ 
+ description:
+   QUSB2 controller supports LS/FS/HS usb connectivity on Qualcomm chipsets.
+diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+index 1ce251de0855..7a0e6a9854da 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+@@ -7,7 +7,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+ title: Qualcomm Synopsys Femto High-Speed USB PHY V2
+ 
+ maintainers:
+-  - Wesley Cheng <wcheng@codeaurora.org>
++  - Wesley Cheng <quic_wcheng@quicinc.com>
+ 
+ description: |
+   Qualcomm High-Speed USB PHY
+diff --git a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+index 12ed98c28aaa..dbe78cd4adba 100644
+--- a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: The Qualcomm PMIC VBUS output regulator driver
+ 
+ maintainers:
+-  - Wesley Cheng <wcheng@codeaurora.org>
++  - Wesley Cheng <quic_wcheng@quicinc.com>
+ 
+ description: |
+   This regulator driver controls the VBUS output by the Qualcomm PMIC.  This
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index e336fe2e03cc..749e1963ddbb 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm SuperSpeed DWC3 USB SoC controller
+ 
+ maintainers:
+-  - Manu Gautam <mgautam@codeaurora.org>
++  - Wesley Cheng <quic_wcheng@quicinc.com>
+ 
+ properties:
+   compatible:
