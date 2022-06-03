@@ -2,121 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B7B53CC5D
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jun 2022 17:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B58D53CC76
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jun 2022 17:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241467AbiFCPgY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jun 2022 11:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
+        id S245638AbiFCPmZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jun 2022 11:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiFCPgX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jun 2022 11:36:23 -0400
-Received: from mail.mutex.one (mail.mutex.one [62.77.152.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C5544A1C;
-        Fri,  3 Jun 2022 08:36:21 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id 9820B16C0076;
-        Fri,  3 Jun 2022 18:36:19 +0300 (EEST)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id kEP0ZE0wriDL; Fri,  3 Jun 2022 18:36:18 +0300 (EEST)
-From:   Marian Postevca <posteuca@mutex.one>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1654270578; bh=xpkzoKD+3NFGKOGZdS4+dLZEOE2yrpd76uIagdM6p7Y=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DT6HKYmZev2nPfWOf69FkYUiJbBxdpyessDtjcuP2bZLYYFw3G5PGHRCAQAhQSyYS
-         KC3VREYxmTSOQfS0QpHQceDNDEDmf9NQD4OHmGbReH3wR/TTXdeSwMVK2iJLGP1wmP
-         OqZBjxRJfNhCY1YhxQcTYjQCbnEnqM8N2GU4rFQA=
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Marian Postevca <posteuca@mutex.one>, stable@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: u_ether: fix regression in setting fixed MAC address
-Date:   Fri,  3 Jun 2022 18:34:59 +0300
-Message-Id: <20220603153459.32722-1-posteuca@mutex.one>
+        with ESMTP id S245624AbiFCPmX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jun 2022 11:42:23 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 77E7AA46F
+        for <linux-usb@vger.kernel.org>; Fri,  3 Jun 2022 08:42:19 -0700 (PDT)
+Received: (qmail 304861 invoked by uid 1000); 3 Jun 2022 11:42:19 -0400
+Date:   Fri, 3 Jun 2022 11:42:19 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     syzbot <syzbot+dd3c97de244683533381@syzkaller.appspotmail.com>,
+        gregkh@linuxfoundation.org, hdanton@sina.com, lenb@kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rafael.j.wysocki@intel.com, rafael@kernel.org, rjw@rjwysocki.net,
+        syzkaller-bugs@googlegroups.com, linux-usb@vger.kernel.org
+Subject: Re: [syzbot] general protection fault in __device_attach
+Message-ID: <Ypor265BTdnmgwpM@rowland.harvard.edu>
+References: <000000000000bb7f1c05da29b601@google.com>
+ <00000000000010b7d305e08837c8@google.com>
+ <YpnqpMYcokTwCB6u@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YpnqpMYcokTwCB6u@smile.fi.intel.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In systemd systems setting a fixed MAC address through
-the "dev_addr" module argument fails systematically.
-When checking the MAC address after the interface is created
-it always has the same but different MAC address to the one
-supplied as argument.
+On Fri, Jun 03, 2022 at 02:04:04PM +0300, Andy Shevchenko wrote:
+> On Fri, Jun 03, 2022 at 03:02:07AM -0700, syzbot wrote:
+> > syzbot has bisected this issue to:
+> > 
+> > commit a9c4cf299f5f79d5016c8a9646fa1fc49381a8c1
+> > Author: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Date:   Fri Jun 18 13:41:27 2021 +0000
+> > 
+> >     ACPI: sysfs: Use __ATTR_RO() and __ATTR_RW() macros
+> 
+> Hmm... It's not obvious at all how this change can alter the behaviour so
+> drastically. device_add() is called from USB core with intf->dev.name == NULL
+> by some reason. A-ha, seems like fault injector, which looks like
+> 
+> 	dev_set_name(&intf->dev, "%d-%s:%d.%d", dev->bus->busnum,
+> 		     dev->devpath, configuration, ifnum);
+> 
+> missed the return code check.
+> 
+> But I'm not familiar with that code at all, adding Linux USB ML and Alan.
 
-This is partially caused by systemd which by default will
-set an internally generated permanent MAC address for interfaces
-that are marked as having a randomly generated address.
+I can't see any connection between this bug and acpi/sysfs.c.  Is it a 
+bad bisection?
 
-Commit 890d5b40908bfd1a ("usb: gadget: u_ether: fix race in
-setting MAC address in setup phase") didn't take into account
-the fact that the interface must be marked as having a set
-MAC address when it's set as module argument.
+It looks like you're right about dev_set_name() failing.  In fact, the 
+kernel appears to be littered with calls to that routine which do not 
+check the return code (the entire subtree below drivers/usb/ contains 
+only _one_ call that does check the return code!).  The function doesn't 
+have any __must_check annotation, and its kerneldoc doesn't mention the 
+return code or the possibility of a failure.
 
-Fixed by marking the interface with NET_ADDR_SET when
-the "dev_addr" module argument is supplied.
+Apparently the assumption is that if dev_set_name() fails then 
+device_add() later on will also fail, and the problem will be detected 
+then.
 
-Fixes: 890d5b40908bfd1a ("usb: gadget: u_ether: fix race in setting MAC address in setup phase")
-Cc: stable@vger.kernel.org
-Signed-off-by: Marian Postevca <posteuca@mutex.one>
----
- drivers/usb/gadget/function/u_ether.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+So now what should happen when device_add() for an interface fails in 
+usb_set_configuration()?  I guess the interface should be deleted; 
+otherwise we have the possibility that people might still try to access 
+it via usbfs, as in the syzbot test run.  Same goes for the 
+of_device_is_available() check.
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 6f5d45ef2e39a..f51694f29de92 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -775,9 +775,13 @@ struct eth_dev *gether_setup_name(struct usb_gadget *g,
- 	dev->qmult = qmult;
- 	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
- 
--	if (get_ether_addr(dev_addr, addr))
-+	if (get_ether_addr(dev_addr, addr)) {
-+		net->addr_assign_type = NET_ADDR_RANDOM;
- 		dev_warn(&g->dev,
- 			"using random %s ethernet address\n", "self");
-+	} else {
-+		net->addr_assign_type = NET_ADDR_SET;
-+	}
- 	eth_hw_addr_set(net, addr);
- 	if (get_ether_addr(host_addr, dev->host_mac))
- 		dev_warn(&g->dev,
-@@ -844,6 +848,10 @@ struct net_device *gether_setup_name_default(const char *netname)
- 
- 	eth_random_addr(dev->dev_mac);
- 	pr_warn("using random %s ethernet address\n", "self");
-+
-+	/* by default we always have a random MAC address */
-+	net->addr_assign_type = NET_ADDR_RANDOM;
-+
- 	eth_random_addr(dev->host_mac);
- 	pr_warn("using random %s ethernet address\n", "host");
- 
-@@ -871,7 +879,6 @@ int gether_register_netdev(struct net_device *net)
- 	dev = netdev_priv(net);
- 	g = dev->gadget;
- 
--	net->addr_assign_type = NET_ADDR_RANDOM;
- 	eth_hw_addr_set(net, dev->dev_mac);
- 
- 	status = register_netdev(net);
-@@ -912,6 +919,7 @@ int gether_set_dev_addr(struct net_device *net, const char *dev_addr)
- 	if (get_ether_addr(dev_addr, new_addr))
- 		return -EINVAL;
- 	memcpy(dev->dev_mac, new_addr, ETH_ALEN);
-+	net->addr_assign_type = NET_ADDR_SET;
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(gether_set_dev_addr);
--- 
-2.35.1
+Fixing that will be a little painful.  Right now there are plenty of 
+places in the USB core that aren't prepared to cope with a non-existent 
+interface.
 
+Alan Stern
