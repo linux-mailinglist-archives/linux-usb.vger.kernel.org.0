@@ -2,45 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C7C53C99A
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jun 2022 13:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A6053CAD6
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jun 2022 15:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244108AbiFCLwc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jun 2022 07:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
+        id S241622AbiFCNpT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jun 2022 09:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241403AbiFCLwb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jun 2022 07:52:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A7320BF4
-        for <linux-usb@vger.kernel.org>; Fri,  3 Jun 2022 04:52:30 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nx5qu-0007F3-JW; Fri, 03 Jun 2022 13:52:28 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nx5qu-006DAJ-S8; Fri, 03 Jun 2022 13:52:27 +0200
-Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nx5qs-0091fD-Vb; Fri, 03 Jun 2022 13:52:26 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+        with ESMTP id S239454AbiFCNpS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jun 2022 09:45:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3C3F6E
+        for <linux-usb@vger.kernel.org>; Fri,  3 Jun 2022 06:45:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 164A1B8233C
+        for <linux-usb@vger.kernel.org>; Fri,  3 Jun 2022 13:45:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D7690C385B8
+        for <linux-usb@vger.kernel.org>; Fri,  3 Jun 2022 13:45:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654263914;
+        bh=fg00axE7VkFXGJRhFRy1L4dzK82NJpj8zebYYpQ0PZs=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=tzdQvyYOoZ2CD73/3EU49GiZS0vt6XrYjfZgdK7PzuHQv8YoOrpakayhjDNrrMeER
+         XZ/cG/WvPxqxGztA35tE2WmrhT707VGFsiZRiCIEQyFsUTvUJXGAJvY9TDwFEVDfhb
+         1tjo5dhno8ZaRxYkHHcTNq5B4wid8EbDH1wh7EHNcs6Jk8yJb6lwoyy9yXYyMG4wFe
+         tawLtnHum3QiyvwFh3uix9tKDtyDJXgNjWnNjOSJ4FZ4oWIK7nIbGmE8V1jqNw6vI+
+         6UxOkXTiu8NANX3QUOV66DNj9FxEQsPl3a3dwaVtsPof0pQmfkbFMZyNAoePm+32X8
+         7KQlqizSOAyhg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id C4FF5CAC6E2; Fri,  3 Jun 2022 13:45:14 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
-Cc:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        kernel@pengutronix.de
-Subject: [PATCH v3] usb: hub: port: add sysfs entry to switch port power
-Date:   Fri,  3 Jun 2022 13:52:22 +0200
-Message-Id: <20220603115222.2151283-1-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+Subject: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
+ xhci_hcd rejecting DMA map of vmalloc memory
+Date:   Fri, 03 Jun 2022 13:45:14 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: satadru@umich.edu
+X-Bugzilla-Status: REOPENED
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-215890-208809-6C647UyTaI@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
+References: <bug-215890-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,152 +71,22 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In some cases the port of an hub needs to be disabled or switched off
-and on again. E.g. when the connected device needs to be re-enumerated.
-Or it needs to be explicitly disabled while the rest of the usb tree
-stays working.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
 
-For this purpose this patch adds an sysfs switch to enable/disable the
-port on any hub. In the case the hub is supporting power switching, the
-power line will be disabled to the connected device.
+Satadru Pramanik (satadru@umich.edu) changed:
 
-When the port gets disabled, the associated device gets disconnected and
-removed from the logical usb tree. No further device will be enumerated
-on that port until the port gets enabled again.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|RESOLVED                    |REOPENED
+         Resolution|OBSOLETE                    |---
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+--- Comment #23 from Satadru Pramanik (satadru@umich.edu) ---
+Building 5.18.1, this issue is rearing its ugly head again.
 
----
-v1 -> v2:
-         - improved patch description
-         - moved usb_hub_set_port_power to end of function
-         - renamed value to set
-         - removed udev variable
-         - added usb_set_configuration set to -1 before removing device
-         - calling autosuspend of udev before usb_disconnect, ensuring hub_suspend succeeds
-         - removed port_dev->child = NULL assignment
-         - directly returning count on no failure success
-         - removed test for hub->in_reset
-         - using usb_autopm_get_interface/usb_autopm_put_interface around hub handling
-         - locking usb_disconnect call
-         - using &port_dev->child instead of local udev pointer
-         - added Documentation/ABI
+Mathias Nyman could we get that patch added to the driver please?
 
-v2 -> v3:
-         - renamed sysfs file to disable instead of port_power
-         - added disable_show function to read out the current port state
-         - moved usb_lock/unlock_device near put/get_interface
-         - removed unnecessary usb_set_configuration of port_dev->child before disconnect
-         - removed unnecessary usb_autosuspend of port_dev->child before disconnect
-         - moved clearing of port_feature flags to be done after usb_hub_set_port_power
-         - checking for hub->disconnected after locking hdev
-         - updated the ABI documentation
+--=20
+You may reply to this email to add a comment.
 
- Documentation/ABI/testing/sysfs-bus-usb | 11 +++++
- drivers/usb/core/port.c                 | 61 +++++++++++++++++++++++++
- 2 files changed, 72 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
-index 7efe31ed3a25c7..d907123ac5d0f9 100644
---- a/Documentation/ABI/testing/sysfs-bus-usb
-+++ b/Documentation/ABI/testing/sysfs-bus-usb
-@@ -253,6 +253,17 @@ Description:
- 		only if the system firmware is capable of describing the
- 		connection between a port and its connector.
- 
-+What:		/sys/bus/usb/devices/.../<hub_interface>/port<X>/disable
-+Date:		June 2022
-+Contact:	Michael Grzeschik <m.grzeschik@pengutronix.de>
-+Description:
-+		This file controls the state to USB ports, including
-+		Vbus power output (but only on hubs that support
-+		power switching -- most hubs don't support it). When
-+		turning a port off, the port is unusable: Devices
-+		attached to the port will not be detected, initialized,
-+		or enumerated.
-+
- What:		/sys/bus/usb/devices/.../power/usb2_lpm_l1_timeout
- Date:		May 2013
- Contact:	Mathias Nyman <mathias.nyman@linux.intel.com>
-diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-index d5bc36ca5b1f77..8343590c3800f8 100644
---- a/drivers/usb/core/port.c
-+++ b/drivers/usb/core/port.c
-@@ -17,6 +17,66 @@ static int usb_port_block_power_off;
- 
- static const struct attribute_group *port_dev_group[];
- 
-+static ssize_t disable_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
-+{
-+	struct usb_port *port_dev = to_usb_port(dev);
-+	struct usb_device *hdev = to_usb_device(dev->parent->parent);
-+	struct usb_hub *hub = usb_hub_to_struct_hub(hdev);
-+	int port1 = port_dev->portnum;
-+	bool state = test_bit(port1, hub->power_bits);
-+
-+	return sprintf(buf, "%s\n", state ? "0" : "1");
-+}
-+
-+static ssize_t disable_store(struct device *dev, struct device_attribute *attr,
-+			    const char *buf, size_t count)
-+{
-+	struct usb_port *port_dev = to_usb_port(dev);
-+	struct usb_device *hdev = to_usb_device(dev->parent->parent);
-+	struct usb_hub *hub = usb_hub_to_struct_hub(hdev);
-+	struct usb_interface *intf = to_usb_interface(hub->intfdev);
-+	int port1 = port_dev->portnum;
-+	bool set;
-+	int rc;
-+
-+	if (!hub)
-+		return -EINVAL;
-+
-+	rc = strtobool(buf, &set);
-+	if (rc)
-+		return rc;
-+
-+	rc = usb_autopm_get_interface(intf);
-+	if (rc < 0)
-+		return rc;
-+
-+	usb_lock_device(hdev);
-+	if (unlikely(hub->disconnected))
-+		goto out_hdev_lock;
-+
-+	if (set && port_dev->child)
-+		usb_disconnect(&port_dev->child);
-+
-+	rc = usb_hub_set_port_power(hdev, hub, port1, !set);
-+
-+	if (set) {
-+		usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_C_CONNECTION);
-+		if (!port_dev->is_superspeed)
-+			usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_C_ENABLE);
-+	}
-+
-+	if (!rc)
-+		rc = count;
-+
-+out_hdev_lock:
-+	usb_unlock_device(hdev);
-+	usb_autopm_put_interface(intf);
-+
-+	return rc;
-+}
-+static DEVICE_ATTR_RW(disable);
-+
- static ssize_t location_show(struct device *dev,
- 			     struct device_attribute *attr, char *buf)
- {
-@@ -153,6 +213,7 @@ static struct attribute *port_dev_attrs[] = {
- 	&dev_attr_location.attr,
- 	&dev_attr_quirks.attr,
- 	&dev_attr_over_current_count.attr,
-+	&dev_attr_disable.attr,
- 	NULL,
- };
- 
--- 
-2.30.2
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
