@@ -2,91 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A6053CAD6
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jun 2022 15:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F15353CB41
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jun 2022 16:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241622AbiFCNpT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jun 2022 09:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
+        id S235957AbiFCODH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jun 2022 10:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239454AbiFCNpS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jun 2022 09:45:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3C3F6E
-        for <linux-usb@vger.kernel.org>; Fri,  3 Jun 2022 06:45:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 164A1B8233C
-        for <linux-usb@vger.kernel.org>; Fri,  3 Jun 2022 13:45:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D7690C385B8
-        for <linux-usb@vger.kernel.org>; Fri,  3 Jun 2022 13:45:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654263914;
-        bh=fg00axE7VkFXGJRhFRy1L4dzK82NJpj8zebYYpQ0PZs=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=tzdQvyYOoZ2CD73/3EU49GiZS0vt6XrYjfZgdK7PzuHQv8YoOrpakayhjDNrrMeER
-         XZ/cG/WvPxqxGztA35tE2WmrhT707VGFsiZRiCIEQyFsUTvUJXGAJvY9TDwFEVDfhb
-         1tjo5dhno8ZaRxYkHHcTNq5B4wid8EbDH1wh7EHNcs6Jk8yJb6lwoyy9yXYyMG4wFe
-         tawLtnHum3QiyvwFh3uix9tKDtyDJXgNjWnNjOSJ4FZ4oWIK7nIbGmE8V1jqNw6vI+
-         6UxOkXTiu8NANX3QUOV66DNj9FxEQsPl3a3dwaVtsPof0pQmfkbFMZyNAoePm+32X8
-         7KQlqizSOAyhg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id C4FF5CAC6E2; Fri,  3 Jun 2022 13:45:14 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
- xhci_hcd rejecting DMA map of vmalloc memory
-Date:   Fri, 03 Jun 2022 13:45:14 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: satadru@umich.edu
-X-Bugzilla-Status: REOPENED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-215890-208809-6C647UyTaI@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
-References: <bug-215890-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S244772AbiFCOC6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jun 2022 10:02:58 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352EF25C65;
+        Fri,  3 Jun 2022 07:02:57 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id g184so7308267pgc.1;
+        Fri, 03 Jun 2022 07:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lISSvWak6FLRrO5psSLs6i76bhB1ZmPsSb/17A5+cjY=;
+        b=hTSUCHd4eqE/1RDHL5S1oKpSN5h9bqgrO29tfXVGaKvp9x1/Z4ByT9XMzKKptzqGLY
+         oyfY0K1HQZX2lVTpm57VOYoOoipmY+D536vd5rWWB9+5ew2w2modqlK6G4bT3y/GErbB
+         qZ/KeSFbiQZra88y6VdoUUkkOAQBCCYBVh0nuvZ3N1v0IkBFz6xawSjJj7Zgb1obJ8V1
+         5qkoNXvybmeuS/QZwnjGcpYQ9TuVJlgnEm25XqK19WndRB4dIcJgZ6qEYrbcrAiw8OQ+
+         k/RQnYB44SZxrUuwbjif6AUTBco2HS7QNQR1N60WNVM4bLtpFzmJChEO7SqlRHZpHYp4
+         N55A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lISSvWak6FLRrO5psSLs6i76bhB1ZmPsSb/17A5+cjY=;
+        b=Y6sZapYOPHdWvCl+wpJSCDyG/TegVZbywcMyFfDbt8c/L9CMyIEy2w+/WISVz0rxZL
+         84AAg8PK9XTpMZdpjKUjgbFG8RvyLqQtTh/IUbCle88QZi5GacTKfcjcp/a6Oo45iKPy
+         w5/lALaAgpkNmcrKqsF7am5lXoX0UYpNGH69EyqPkN1IW+YMisEHZtIOewgr2asKVzci
+         l+5kSY6fiaqas50mdAYTI6n1/54QQr5YVkQwoSIyQhThIv5arBglEdsg1501GDM8tbR0
+         39qaQ3DIYQGC7wWm3y0XWKWXrF+brUa8LzIZymqEH4klKagOwkhz0EliPeXOaO23yfsF
+         QqfQ==
+X-Gm-Message-State: AOAM531m9Dym9q8LRh91AF/WYK/GhLZI0PTOeC5rAxiFyskgZa1bnqwB
+        riMCD6j9VCKYp4seAnqORBaBGF7ZJR6Ceer/GxY=
+X-Google-Smtp-Source: ABdhPJwF39VJUjteEaNSomtjgRS2NA4E8u+f699LKEL1nW4tuICTZMM2rpl0BX0JHb6OmDIb7bRmvw==
+X-Received: by 2002:a05:6a00:2396:b0:51b:de97:7efe with SMTP id f22-20020a056a00239600b0051bde977efemr4521830pfc.8.1654264976753;
+        Fri, 03 Jun 2022 07:02:56 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id n36-20020a635924000000b003faebbb772esm5663265pgb.25.2022.06.03.07.02.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 07:02:56 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Roland Stigge <stigge@antcom.de>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: lpc32xx_udc: Fix refcount leak in lpc32xx_udc_probe
+Date:   Fri,  3 Jun 2022 18:02:44 +0400
+Message-Id: <20220603140246.64529-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
+of_node_put() will check NULL pointer.
 
-Satadru Pramanik (satadru@umich.edu) changed:
+Fixes: 24a28e428351 ("USB: gadget driver for LPC32xx")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/usb/gadget/udc/lpc32xx_udc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|OBSOLETE                    |---
+diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
+index 6117ae8e7242..cea10cdb83ae 100644
+--- a/drivers/usb/gadget/udc/lpc32xx_udc.c
++++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
+@@ -3016,6 +3016,7 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	udc->isp1301_i2c_client = isp1301_get_client(isp1301_node);
++	of_node_put(isp1301_node);
+ 	if (!udc->isp1301_i2c_client) {
+ 		return -EPROBE_DEFER;
+ 	}
+-- 
+2.25.1
 
---- Comment #23 from Satadru Pramanik (satadru@umich.edu) ---
-Building 5.18.1, this issue is rearing its ugly head again.
-
-Mathias Nyman could we get that patch added to the driver please?
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
