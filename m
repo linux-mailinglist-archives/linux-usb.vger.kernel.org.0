@@ -2,117 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C172B53D4F6
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jun 2022 04:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 109C253D5A6
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jun 2022 07:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350292AbiFDCzO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jun 2022 22:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
+        id S232447AbiFDFcI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Jun 2022 01:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbiFDCzN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jun 2022 22:55:13 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172381EAC3;
-        Fri,  3 Jun 2022 19:55:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654311312; x=1685847312;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ED43jslFhlsHXIzRJK0vY5xln1pin1QES+QgTYUzm0I=;
-  b=XRXeLSNT8dYGkUF4h281apYTXLAgsrs0EuuyGOEJ6UmT7Fyrwv+8FSor
-   xvGDjt7fTGEPt6sLAPgzG/MzN/TrYmxMwQXb7FpmzkPJkqxeRdKBYkYww
-   qCxIWxdg6wPizjdEwOrrlTj3TGyomywxVbGqrnkGTHX2qvhturLYvmdm1
-   o=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 03 Jun 2022 19:55:12 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 19:55:11 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 3 Jun 2022 19:55:11 -0700
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 3 Jun 2022 19:55:08 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <stable@vger.kernel.org>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Michael Wu <michael@allwinnertech.com>,
-        "John Keeping" <john@metanate.com>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v4 2/2] usb: gadget: f_fs: change ep->ep safe in ffs_epfile_io()
-Date:   Sat, 4 Jun 2022 10:54:55 +0800
-Message-ID: <1654311295-9700-3-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1654311295-9700-1-git-send-email-quic_linyyuan@quicinc.com>
-References: <1654311295-9700-1-git-send-email-quic_linyyuan@quicinc.com>
+        with ESMTP id S230285AbiFDFcH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Jun 2022 01:32:07 -0400
+Received: from mail.toniclab.ru (unknown [194.187.149.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE8865B0
+        for <linux-usb@vger.kernel.org>; Fri,  3 Jun 2022 22:32:00 -0700 (PDT)
+Received: from post.toniclab.ru (localhost [127.0.0.1])
+        by mail.toniclab.ru (Postfix) with ESMTPSA id BA232154F65;
+        Sat,  4 Jun 2022 08:31:56 +0300 (MSK)
 MIME-Version: 1.0
+Date:   Sat, 04 Jun 2022 08:31:56 +0300
+From:   Yuri <info@toniclab.ru>
+To:     Greg KH <greg@kroah.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: /dev/ttyUSB0 file disappears on Ubuntu 22.04
+In-Reply-To: <Ypmt2EdQIvTmKEyW@kroah.com>
+References: <4b9e024d14c40cba7c04d5879ae64866@toniclab.ru>
+ <YphShbNo8cTU65Qj@kroah.com> <6391aa3d842029344835b4b085390a2e@toniclab.ru>
+ <Ypmt2EdQIvTmKEyW@kroah.com>
+User-Agent: Roundcube Webmail/1.4.9
+Message-ID: <e663ff3440913f0465264063151bb3a1@toniclab.ru>
+X-Sender: info@toniclab.ru
+Organization: TonicLab
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,RCVD_IN_PBL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In ffs_epfile_io(), when read/write data in blocking mode, it will wait
-the completion in interruptible mode, if task receive a signal, it will
-terminate the wait, at same time, if function unbind occurs,
-ffs_func_unbind() will kfree all eps, ffs_epfile_io() still try to
-dequeue request by dereferencing ep which may become invalid.
+>> 
+>> ls: cannot access '/dev/ttyUSB*': No such file or directory
+> 
+> Is the device node actually there?
+> 
+> What does /dev/serial/ contain?
+> 
 
-Fix it by add ep spinlock and will not dereference ep if it is not valid.
+After I have a ftdi device attached I have
 
-Cc: <stable@vger.kernel.org> # 5.15
-Reported-by: Michael Wu <michael@allwinnertech.com>
-Tested-by: Michael Wu <michael@allwinnertech.com>
-Reviewed-by: John Keeping <john@metanate.com>
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
-v2: add Reviewed-by from John keeping
-v3: add Reported-by from Michael Wu
-v4: add Tested-by from Michael Wu
-    cc stable kernel
+cd /dev/serial ; ls -LR
 
- drivers/usb/gadget/function/f_fs.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+.:
+by-id
+by-path
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 3958c60..b0c046a 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -1077,6 +1077,11 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
- 		spin_unlock_irq(&epfile->ffs->eps_lock);
- 
- 		if (wait_for_completion_interruptible(&io_data->done)) {
-+			spin_lock_irq(&epfile->ffs->eps_lock);
-+			if (epfile->ep != ep) {
-+				ret = -ESHUTDOWN;
-+				goto error_lock;
-+			}
- 			/*
- 			 * To avoid race condition with ffs_epfile_io_complete,
- 			 * dequeue the request first then check
-@@ -1084,6 +1089,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
- 			 * condition with req->complete callback.
- 			 */
- 			usb_ep_dequeue(ep->ep, req);
-+			spin_unlock_irq(&epfile->ffs->eps_lock);
- 			wait_for_completion(&io_data->done);
- 			interrupted = io_data->status < 0;
- 		}
--- 
-2.7.4
+./by-id:
+ls: cannot access './by-id/usb-FTDI_USB_Serial_FT0KKBIF-if00-port0': No 
+such file or directory
+usb-FTDI_USB_Serial_FT0KKBIF-if00-port0
 
+./by-path:
+ls: cannot access './by-path/pci-0000:00:1d.0-usb-0:1.5:1.0-port0': No 
+such file or directory
+pci-0000:00:1d.0-usb-0:1.5:1.0-port0
+
+So the folders and links are there but there's no /dev/ttyUSB0 file
+
+>> No problems on the same PC working under Ubuntu 18.04 and 16.04 
+>> whatsoever:
+>> 
+>> ls -l /dev/ttyUSB*
+>> crw-rw---- 1 root dialout 188, 0 Jun  2 10:36 /dev/ttyUSB0
+> 
+> I think you are going to have to contact ubuntu for this issue and get
+> support from them as it's their kernel and overall system configuration
+> here, the kernel looks like it is working just fine.
+
+Thanks for advice. Already opened a bug report on launchpad.
