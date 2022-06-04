@@ -2,265 +2,249 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2480A53D3B5
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jun 2022 00:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA51C53D4D0
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jun 2022 04:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbiFCWwy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jun 2022 18:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
+        id S1350140AbiFDCMl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jun 2022 22:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiFCWwx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jun 2022 18:52:53 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507BDDE96
-        for <linux-usb@vger.kernel.org>; Fri,  3 Jun 2022 15:52:50 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nxG9v-00067Q-RZ; Sat, 04 Jun 2022 00:52:47 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nxG9v-006Ind-0J; Sat, 04 Jun 2022 00:52:45 +0200
-Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1nxG9s-004Zzi-Fa; Sat, 04 Jun 2022 00:52:44 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        kernel@pengutronix.de
-Subject: [PATCH v4] usb: hub: port: add sysfs entry to switch port power
-Date:   Sat,  4 Jun 2022 00:52:42 +0200
-Message-Id: <20220603225242.1090944-1-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S1348625AbiFDCMl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jun 2022 22:12:41 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E814036E38;
+        Fri,  3 Jun 2022 19:12:38 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id h1so7973729plf.11;
+        Fri, 03 Jun 2022 19:12:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=W4St/F4CTvqxuMtRF4L13yrP2FI+M/ORmtQh78TiIRU=;
+        b=G8YfO1FqgnjM20P+1jptrNj1+C/m4ku53Qd6UCxTE0twhThSwLHRDOhC6mRDz/EDCB
+         5P4B2jLUZNMMfgBvj8fYqfbVqEEe6uu4PJparK4C0sPKA7A7OXd1tLYXbtMs7BqXMvbe
+         Uif4JFn3Yo0pnwYl+9fjr3Qxk6HzE5GRU1v7DVtofcqsh2MLw+wJxHiILhAXTG1EPgi2
+         XeCGWqwqA7WdDG/m+WlRPfizXYr+qCdTdNrdwxqK0lueU4cvCM7qsn4rCESDsyEm+3S6
+         zgK7pJCrRAE7TAPAiA48KVKAVPDXcYzfqxqW4ZsqOjcIrrbeGE6p+FnjM40fqSTasYf9
+         zk7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=W4St/F4CTvqxuMtRF4L13yrP2FI+M/ORmtQh78TiIRU=;
+        b=GD3ewX/xpdXKpLkPm953Yd1h/vd8hz3KK+52hdpNmqFj09YEDQphwMVfuFhLpJA63u
+         ROhzN62Ax2MtqBWYxAAjK2aZEW0T3Ce4U9vNm96Md+t+qbirPxEMqy61STJCcnS0yyRI
+         3td8jf369LqqAm/jispck4wA8gACSVWCfoaPXRaq6co9mA+1VJnon+p8NE2wY4BKhjox
+         oBJQK7KMQTm4pB3R9kTI0w5T65R5QOe24dL3TVAgpRiHxc/4lCIdU6V3pNoQXkJHEAjV
+         +hBy7sqmXUkO1XSZObwSKTRM1iwDGGH3RgFIrKT1n4OzAnOEogT4GpbDzFLWiKLoRERf
+         VYxg==
+X-Gm-Message-State: AOAM530wn0PViYLQcx0AKTY+F0AbY33qIPoTVUH5VdY7h3Pj3BKADQE9
+        K6K0b4YOYw39aIuj+72VYN4=
+X-Google-Smtp-Source: ABdhPJws4RZq2V+vrAuPzoIS2DTabQAjru9avwA9pJiuOQyAlpUB7UFd0wXCTc7SA/TplVlkkHMr+g==
+X-Received: by 2002:a17:902:d2c7:b0:162:4f0a:c790 with SMTP id n7-20020a170902d2c700b001624f0ac790mr4540624plc.110.1654308758085;
+        Fri, 03 Jun 2022 19:12:38 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id gb23-20020a17090b061700b001d95c09f877sm5819278pjb.35.2022.06.03.19.12.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 19:12:37 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Rhett Aultman <rhett.aultman@samsara.com>
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>, wg@grandegger.com,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-can@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] can: gs_usb: gs_usb_open/close( ) fix memory leak
+Date:   Sat,  4 Jun 2022 11:11:45 +0900
+Message-Id: <20220604021145.55484-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <alpine.DEB.2.22.394.2206031547001.1630869@thelappy>
+References: <alpine.DEB.2.22.394.2206031547001.1630869@thelappy>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In some cases the port of an hub needs to be disabled or switched off
-and on again. E.g. when the connected device needs to be re-enumerated.
-Or it needs to be explicitly disabled while the rest of the usb tree
-stays working.
++CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
++CC: linux-usb@vger.kernel.org
 
-For this purpose this patch adds an sysfs switch to enable/disable the
-port on any hub. In the case the hub is supporting power switching, the
-power line will be disabled to the connected device.
+Rhett Aultman <rhett.aultman@samsara.com> writes:
+> The gs_usb driver appears to suffer from a malady common to many USB CAN
+> adapter drivers in that it performs usb_alloc_coherent( ) to allocate a
+> number of USB request blocks (URBs) for RX, and then later relies on
+> usb_kill_anchored_urbs( ) to free them, but this doesn't actually free
+> them.  As a result, this may be leaking DMA memory that's been used by the
+> driver.
+>
+> This commit is an adaptation of the techniques found in the esd_usb2 driver
+> where a similar design pattern led to a memory leak.  It explicitly frees
+> the RX URBs and their DMA memory via a call to usb_free_coherent( ).  Since
+> the RX URBs were allocated in the gs_can_open( ), we remove them in
+> gs_can_close( ) rather than in the disconnect function as was done in
+> esd_usb2.
 
-When the port gets disabled, the associated device gets disconnected and
-removed from the logical usb tree. No further device will be enumerated
-on that port until the port gets enabled again.
+Right. To be frank, I think that there is a gap in the current URB
+interface. If you do a simple kmalloc(), you can just set
+URB_FREE_BUFFER in urb::transfer_flags. usb_kill_anchored_urbs() would
+then eventually call urb_destroy() and automatically free it for you.
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+As far as I understand, I am not aware of equivalent mechanism to
+automatically call usb_free_coherent() in the case that the driver
+uses DMA memory. And I think that this is the root cause of this
+"malady".
 
+For me, the natural fix would be:
+
+diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+index 33d62d7e3929..1460fdac0b18 100644
+--- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -22,6 +22,9 @@ static void urb_destroy(struct kref *kref)
+ 
+        if (urb->transfer_flags & URB_FREE_BUFFER)
+                kfree(urb->transfer_buffer);
++       else if (urb->transfer_flags & URB_FREE_COHERENT)
++               usb_free_coherent(urb->dev, urb->transfer_buffer_length,
++                                 urb->transfer_buffer, urb->transfer_dma);
+ 
+        kfree(urb);
+ }
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 200b7b79acb5..dfc348d56fed 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1328,6 +1328,7 @@ extern int usb_disabled(void);
+ #define URB_NO_INTERRUPT       0x0080  /* HINT: no non-error interrupt
+                                         * needed */
+ #define URB_FREE_BUFFER                0x0100  /* Free transfer buffer with the URB */
++#define URB_FREE_COHERENT      0x0200  /* Free DMA memory of transfer buffer */
+ 
+ /* The following flags are used internally by usbcore and HCDs */
+ #define URB_DIR_IN             0x0200  /* Transfer from device to host */
 ---
-v1 -> v2:
-         - improved patch description
-         - moved usb_hub_set_port_power to end of function
-         - renamed value to set
-         - removed udev variable
-         - added usb_set_configuration set to -1 before removing device
-         - calling autosuspend of udev before usb_disconnect, ensuring hub_suspend succeeds
-         - removed port_dev->child = NULL assignment
-         - directly returning count on no failure success
-         - removed test for hub->in_reset
-         - using usb_autopm_get_interface/usb_autopm_put_interface around hub handling
-         - locking usb_disconnect call
-         - using &port_dev->child instead of local udev pointer
-         - added Documentation/ABI
 
-v2 -> v3:
-         - renamed sysfs file to disable instead of port_power
-         - added disable_show function to read out the current port state
-         - moved usb_lock/unlock_device near put/get_interface
-         - removed unnecessary usb_set_configuration of port_dev->child before disconnect
-         - removed unnecessary usb_autosuspend of port_dev->child before disconnect
-         - moved clearing of port_feature flags to be done after usb_hub_set_port_power
-         - checking for hub->disconnected after locking hdev
-         - updated the ABI documentation
-v3 -> v4:
-         - exporting hub_port_status + port_is_power_on
-         - changed disable_show from using test_bit(port1, hub->power_bits) to new exported functions
-	 - renamed set variable to disabled
-	 - rephrased documentation
-	 - removed initial check for hub
+After doing this, drivers only have to add the URB_FREE_COHERENT flag
+and voila!
 
- Documentation/ABI/testing/sysfs-bus-usb | 11 ++++
- drivers/usb/core/hub.c                  |  4 +-
- drivers/usb/core/hub.h                  |  3 +
- drivers/usb/core/port.c                 | 83 +++++++++++++++++++++++++
- 4 files changed, 99 insertions(+), 2 deletions(-)
+Reusing URB_NO_TRANSFER_DMA_MAP to force a call to usb_free_coherent()
+would be a bad idea because it would result in a double free for all
+the drivers which correctly free their DMA memory. This is why above
+snippet introduces a new URB_FREE_COHERENT flag.
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
-index 7efe31ed3a25c7..568103d3376ee7 100644
---- a/Documentation/ABI/testing/sysfs-bus-usb
-+++ b/Documentation/ABI/testing/sysfs-bus-usb
-@@ -253,6 +253,17 @@ Description:
- 		only if the system firmware is capable of describing the
- 		connection between a port and its connector.
- 
-+What:		/sys/bus/usb/devices/.../<hub_interface>/port<X>/disable
-+Date:		June 2022
-+Contact:	Michael Grzeschik <m.grzeschik@pengutronix.de>
-+Description:
-+		This file controls the state of a USB port, including
-+		Vbus power output (but only on hubs that support
-+		power switching -- most hubs don't support it). If
-+		a port is disabled, the port is unusable: Devices
-+		attached to the port will not be detected, initialized,
-+		or enumerated.
-+
- What:		/sys/bus/usb/devices/.../power/usb2_lpm_l1_timeout
- Date:		May 2013
- Contact:	Mathias Nyman <mathias.nyman@linux.intel.com>
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 1460857026e069..759576df908e93 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -613,7 +613,7 @@ static int hub_ext_port_status(struct usb_hub *hub, int port1, int type,
- 	return ret;
- }
- 
--static int hub_port_status(struct usb_hub *hub, int port1,
-+int hub_port_status(struct usb_hub *hub, int port1,
- 		u16 *status, u16 *change)
- {
- 	return hub_ext_port_status(hub, port1, HUB_PORT_STATUS,
-@@ -3074,7 +3074,7 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
- }
- 
- /* Check if a port is power on */
--static int port_is_power_on(struct usb_hub *hub, unsigned portstatus)
-+int port_is_power_on(struct usb_hub *hub, unsigned int portstatus)
- {
- 	int ret = 0;
- 
-diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
-index 22ea1f4f2d66d7..a9f0d78be09ba7 100644
---- a/drivers/usb/core/hub.h
-+++ b/drivers/usb/core/hub.h
-@@ -121,6 +121,9 @@ extern int hub_port_debounce(struct usb_hub *hub, int port1,
- 		bool must_be_connected);
- extern int usb_clear_port_feature(struct usb_device *hdev,
- 		int port1, int feature);
-+extern int hub_port_status(struct usb_hub *hub, int port1,
-+		u16 *status, u16 *change);
-+extern int port_is_power_on(struct usb_hub *hub, unsigned int portstatus);
- 
- static inline bool hub_is_port_power_switchable(struct usb_hub *hub)
- {
-diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-index d5bc36ca5b1f77..609ff1ea331b23 100644
---- a/drivers/usb/core/port.c
-+++ b/drivers/usb/core/port.c
-@@ -17,6 +17,88 @@ static int usb_port_block_power_off;
- 
- static const struct attribute_group *port_dev_group[];
- 
-+static ssize_t disable_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
-+{
-+	struct usb_port *port_dev = to_usb_port(dev);
-+	struct usb_device *hdev = to_usb_device(dev->parent->parent);
-+	struct usb_hub *hub = usb_hub_to_struct_hub(hdev);
-+	struct usb_interface *intf = to_usb_interface(hub->intfdev);
-+	int port1 = port_dev->portnum;
-+	u16 portstatus, unused;
-+	bool disabled;
-+	int rc;
-+
-+	rc = usb_autopm_get_interface(intf);
-+	if (rc < 0)
-+		return rc;
-+
-+	usb_lock_device(hdev);
-+	if (unlikely(hub->disconnected)) {
-+		rc = -ENODEV;
-+		goto out_hdev_lock;
-+	}
-+
-+	hub_port_status(hub, port1, &portstatus, &unused);
-+	disabled = !port_is_power_on(hub, portstatus);
-+
-+out_hdev_lock:
-+	usb_unlock_device(hdev);
-+	usb_autopm_put_interface(intf);
-+
-+	if (rc)
-+		return rc;
-+
-+	return sprintf(buf, "%s\n", disabled ? "1" : "0");
-+}
-+
-+static ssize_t disable_store(struct device *dev, struct device_attribute *attr,
-+			    const char *buf, size_t count)
-+{
-+	struct usb_port *port_dev = to_usb_port(dev);
-+	struct usb_device *hdev = to_usb_device(dev->parent->parent);
-+	struct usb_hub *hub = usb_hub_to_struct_hub(hdev);
-+	struct usb_interface *intf = to_usb_interface(hub->intfdev);
-+	int port1 = port_dev->portnum;
-+	bool disabled;
-+	int rc;
-+
-+	rc = strtobool(buf, &disabled);
-+	if (rc)
-+		return rc;
-+
-+	rc = usb_autopm_get_interface(intf);
-+	if (rc < 0)
-+		return rc;
-+
-+	usb_lock_device(hdev);
-+	if (unlikely(hub->disconnected)) {
-+		rc = -ENODEV;
-+		goto out_hdev_lock;
-+	}
-+
-+	if (disabled && port_dev->child)
-+		usb_disconnect(&port_dev->child);
-+
-+	rc = usb_hub_set_port_power(hdev, hub, port1, !disabled);
-+
-+	if (disabled) {
-+		usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_C_CONNECTION);
-+		if (!port_dev->is_superspeed)
-+			usb_clear_port_feature(hdev, port1, USB_PORT_FEAT_C_ENABLE);
-+	}
-+
-+	if (!rc)
-+		rc = count;
-+
-+out_hdev_lock:
-+	usb_unlock_device(hdev);
-+	usb_autopm_put_interface(intf);
-+
-+	return rc;
-+}
-+static DEVICE_ATTR_RW(disable);
-+
- static ssize_t location_show(struct device *dev,
- 			     struct device_attribute *attr, char *buf)
- {
-@@ -153,6 +235,7 @@ static struct attribute *port_dev_attrs[] = {
- 	&dev_attr_location.attr,
- 	&dev_attr_quirks.attr,
- 	&dev_attr_over_current_count.attr,
-+	&dev_attr_disable.attr,
- 	NULL,
- };
- 
--- 
-2.30.2
+Maybe I missed something obvious, but if so, I would like to
+understand what is wrong in above approach.
 
+> 
+> For more information, see the following:
+> * https://www.spinics.net/lists/linux-can/msg08203.html
+> * https://github.com/torvalds/linux
+>     928150fad41 (can: esd_usb2: fix memory leak)
+> 
+> From: Rhett Aultman <rhett.aultman@samsara.com>
+
+Nitpick: the From tag is redundant. You already have it in the e-mail
+header. It is relevant to explicitly add the From tag when picking
+someone's else patch, but if the author and the signer are the same,
+you are good to go without.
+
+> Signed-off-by: Rhett Aultman <rhett.aultman@samsara.com>
+> ---
+>  drivers/net/can/usb/gs_usb.c | 23 +++++++++++++++++++++--
+>  1 file changed, 21 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+> index b29ba9138866..d3a658b444b5 100644
+> --- a/drivers/net/can/usb/gs_usb.c
+> +++ b/drivers/net/can/usb/gs_usb.c
+> @@ -268,6 +268,8 @@ struct gs_can {
+> 
+>  	struct usb_anchor tx_submitted;
+>  	atomic_t active_tx_urbs;
+> +	void *rxbuf[GS_MAX_RX_URBS];
+> +	dma_addr_t rxbuf_dma[GS_MAX_RX_URBS];
+
+I do not like how the driver has to keep in a local array a reference
+to all DMA allocated memory. All this information is redundant because
+already present in the URB. So I really hope that we can fix it on the
+URB API side and remove such complexity on the driver side.
+
+>  };
+> 
+>  /* usb interface struct */
+> @@ -742,6 +744,7 @@ static int gs_can_open(struct net_device *netdev)
+>  		for (i = 0; i < GS_MAX_RX_URBS; i++) {
+>  			struct urb *urb;
+>  			u8 *buf;
+> +			dma_addr_t buf_dma;
+> 
+>  			/* alloc rx urb */
+>  			urb = usb_alloc_urb(0, GFP_KERNEL);
+> @@ -752,7 +755,7 @@ static int gs_can_open(struct net_device *netdev)
+>  			buf = usb_alloc_coherent(dev->udev,
+>  						 dev->parent->hf_size_rx,
+>  						 GFP_KERNEL,
+> -						 &urb->transfer_dma);
+> +						 &buf_dma);
+>  			if (!buf) {
+>  				netdev_err(netdev,
+>  					   "No memory left for USB buffer\n");
+> @@ -760,6 +763,8 @@ static int gs_can_open(struct net_device *netdev)
+>  				return -ENOMEM;
+>  			}
+> 
+> +			urb->transfer_dma = buf_dma;
+> +
+>  			/* fill, anchor, and submit rx urb */
+>  			usb_fill_bulk_urb(urb,
+>  					  dev->udev,
+> @@ -781,10 +786,17 @@ static int gs_can_open(struct net_device *netdev)
+>  					   "usb_submit failed (err=%d)\n", rc);
+> 
+>  				usb_unanchor_urb(urb);
+> +				usb_free_coherent(dev->udev,
+> +						  sizeof(struct gs_host_frame),
+> +						  buf,
+> +						  buf_dma);
+>  				usb_free_urb(urb);
+>  				break;
+>  			}
+> 
+> +			dev->rxbuf[i] = buf;
+> +			dev->rxbuf_dma[i] = buf_dma;
+> +
+>  			/* Drop reference,
+>  			 * USB core will take care of freeing it
+>  			 */
+> @@ -842,13 +854,20 @@ static int gs_can_close(struct net_device *netdev)
+>  	int rc;
+>  	struct gs_can *dev = netdev_priv(netdev);
+>  	struct gs_usb *parent = dev->parent;
+> +	unsigned int i;
+> 
+>  	netif_stop_queue(netdev);
+> 
+>  	/* Stop polling */
+>  	parent->active_channels--;
+> -	if (!parent->active_channels)
+> +	if (!parent->active_channels) {
+>  		usb_kill_anchored_urbs(&parent->rx_submitted);
+> +		for (i = 0; i < GS_MAX_RX_URBS; i++)
+> +			usb_free_coherent(dev->udev,
+> +					  sizeof(struct gs_host_frame),
+> +					  dev->rxbuf[i],
+> +					  dev->rxbuf_dma[i]);
+> +	}
+> 
+>  	/* Stop sending URBs */
+>  	usb_kill_anchored_urbs(&dev->tx_submitted);
+> -- 
+> 2.30.2
+> 
