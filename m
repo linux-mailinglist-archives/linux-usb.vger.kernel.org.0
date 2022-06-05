@@ -2,139 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF4353DDA9
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Jun 2022 20:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B520353DEF5
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jun 2022 01:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346931AbiFESb3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Jun 2022 14:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
+        id S242272AbiFEXdd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Jun 2022 19:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236164AbiFESb2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Jun 2022 14:31:28 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11CF912AAF;
-        Sun,  5 Jun 2022 11:31:27 -0700 (PDT)
+        with ESMTP id S1351815AbiFEXda (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Jun 2022 19:33:30 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA36C26AF4
+        for <linux-usb@vger.kernel.org>; Sun,  5 Jun 2022 16:33:29 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id h5so17740970wrb.0
+        for <linux-usb@vger.kernel.org>; Sun, 05 Jun 2022 16:33:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654453887; x=1685989887;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xHQW/DoGQUs+0ZrxEQ1m+x/wIrTBq1nQRjID76ZhMk0=;
-  b=iP16Cec5Ggg8tQj2jV8ZTfhHF8beWLBfHGque7rJlCjdOiQy1vDcmoAK
-   3IfN+x3U7nXqYB1yt57/oQPJf7yKRqG8mHLybokVtsfy6kQlvy0yxEsZd
-   V6nrQ881AfLWpCPoR5E/f8cZYFSI45pupsYgzsqLhbzKVNcM1N4dlgnOC
-   U=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 Jun 2022 11:31:26 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 11:31:26 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 5 Jun 2022 11:31:26 -0700
-Received: from [10.216.59.27] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 5 Jun 2022
- 11:31:22 -0700
-Message-ID: <62c0b6ac-240c-e581-7bc3-9357dc619d4c@quicinc.com>
-Date:   Mon, 6 Jun 2022 00:01:19 +0530
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=hzqCG52SPEe4tQY/Tt070sXpLEE5srR/6HSZh6AwAPo=;
+        b=kYqyTELNv74MY0+Xtsf1lfj7zVGpOEbEQXrg+C/90Mms9oiDDoR1tAGfsH8wjin1au
+         YgEibdYFsC3ZX5fD3ZTrbFmbUnOpr2QIubv1+FRg642AmsgEU7LFuDOzvCU8SrQo9uVc
+         ANsX9cHR3AzEewxi1sIvXUoaPTeYqv+2Rr+WwQ4SIg93A7YMlS/dL93POpl3GQL8wbq0
+         PYcTfhT2s+YV+U+JG3Ased41N76s52gmJ8jiCBg7Ax2sUve8NNNgMFY+pegOkd1ur6+T
+         LdPia7q6wNFPzAz/tX5zACpBCXsVxa66UTUf4H0pWTFHakZKiEbv0L32pINnRW88WSQ1
+         6gmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=hzqCG52SPEe4tQY/Tt070sXpLEE5srR/6HSZh6AwAPo=;
+        b=Y0iSBKuk64U2Hq1YIOD9sK0S+kWmehv/3BJT6olOk7Q3tn4BRecC5uNzS+L2LPz5D5
+         +pX32t9+pkfI+jk90Sr9PDnfDqFkESlj6Aap4MIRhIf+sPOujRGlq0s66LvjHnMeq0wN
+         OwIDs7KtTgXEIy7J+vGvKfFcweFw9QrQ5KWMXvQuLi/GnO23osZqm5Eew8d3Cu4S8AW+
+         dvC7p3rR1UZQgTZinSQm3x/CVXcANisupippmpKkPsM8ogcPBQzyr0WD/uWznEU4sM6R
+         gfks8plD/MHuTz35U7FDbihtNtB8FTjKPQepJpRk9yiy7qHc4ZaBuaqQwo1m3fIgoylq
+         abhw==
+X-Gm-Message-State: AOAM5303taUiAQHgogfGlY2B8kfVcKpkwWyXDVX/gu9fypTbziiX2+L2
+        o0k4UtXYQJ/4lt1LPjZTGCn1bHt7OFMvkg0j5oU=
+X-Google-Smtp-Source: ABdhPJx05vkg/25slKFEQFCOcyfbvjg4JjNZFII0Ku3f/Gnu+Tw5+Fxv0/0emaesTDl49gfm20FsSYTWpw96OZmltzk=
+X-Received: by 2002:adf:dd52:0:b0:213:bb11:2fde with SMTP id
+ u18-20020adfdd52000000b00213bb112fdemr14778741wrm.467.1654472008195; Sun, 05
+ Jun 2022 16:33:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [RFC v2 1/2] dt-bindings: usb: dwc3: Add support for multiport
- related properties
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <quic_pkondeti@quicinc.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <quic_ppratap@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <1653560029-6937-1-git-send-email-quic_harshq@quicinc.com>
- <1653560029-6937-2-git-send-email-quic_harshq@quicinc.com>
- <1653568833.732260.3797150.nullmailer@robh.at.kernel.org>
- <33ce11bd-abc4-0e59-4637-e8133818e0f6@quicinc.com>
- <20220531201050.GD1808817-robh@kernel.org>
-From:   Harsh Agarwal <quic_harshq@quicinc.com>
-In-Reply-To: <20220531201050.GD1808817-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6020:5b8d:b0:19a:1ddd:b4f with HTTP; Sun, 5 Jun 2022
+ 16:33:27 -0700 (PDT)
+Reply-To: mrmichaeldoku@hotmail.com
+From:   mr michael <md22334d@gmail.com>
+Date:   Sun, 5 Jun 2022 23:33:27 +0000
+Message-ID: <CA+6A211ud5NH2G_+uu26KkANKe6w8HCvQ+uyrrd45zBvifEkSA@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:441 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5227]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [md22334d[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Greetings,
 
-On 6/1/2022 1:40 AM, Rob Herring wrote:
-> On Fri, May 27, 2022 at 04:30:34PM +0530, Harsh Agarwal wrote:
->> On 5/26/2022 6:10 PM, Rob Herring wrote:
->>> On Thu, 26 May 2022 15:43:48 +0530, Harsh Agarwal wrote:
->>>> Added support for multiport, mport, num-ssphy and num-hsphy
->>>> properties. These properties are used to support devices having
->>>> a multiport controller.
->>>>
->>>> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
->>>> ---
->>>>    .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
->>>>    1 file changed, 55 insertions(+)
->>>>
->>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>>
->>> yamllint warnings/errors:
->>> ./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:366:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
->>> ./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:367:10: [warning] wrong indentation: expected 11 but found 9 (indentation)
->>> ./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:369:11: [warning] wrong indentation: expected 11 but found 10 (indentation)
->>>
->>> dtschema/dtc warnings/errors:
->>> Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:86.27-89.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@1: node has a unit name, but no reg or ranges property
->>> Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:91.27-93.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@2: node has a unit name, but no reg or ranges property
->>> Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:95.27-97.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@3: node has a unit name, but no reg or ranges property
->>> Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:99.27-101.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@4: node has a unit name, but no reg or ranges property
->>> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.example.dtb: usb@4a000000: multiport: 'mport' is a required property
->>> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>>
->>> doc reference errors (make refcheckdocs):
->>>
->>> See https://patchwork.ozlabs.org/patch/
->>>
->>> This check can fail if there are any dependencies. The base for a patch
->>> series is generally the most recent rc1.
->>>
->>> If you already ran 'make dt_binding_check' and didn't see the above
->>> error(s), then make sure 'yamllint' is installed and dt-schema is up to
->>> date:
->>>
->>> pip3 install dtschema --upgrade
->>>
->>> Please check and re-submit.
->> Indentation error I have rectified in my RFC v2.
->> Regarding below warnings
->>
->> "Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:86.27-89.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@1: node has a unit name, but no reg or ranges property"
->> Here the mport expects no "reg" or ranges" property as of now. Only thing that is mandated is either the USB-PHY phandles using "usb-phy" or the Generic PHY declaration using "phy" and "phy-names"
->> Can you please suggest to mask these warnings or do I need to add something else ?
-> A unit-address requires 'reg' or 'ranges' and vice-versa. So you need
-> 'reg'.
->
-> However, usb-hcd.yaml already defines what child nodes are for USB
-> hosts. Whatever you do here needs to be compatible with that.
-Thanks for the info.
-"@" is not actually a requirement for mport.
-We can name them as "mport1" instead of "mport@1".
-Now I do not see this reg, ranges warnings in latest PS v2
->
-> Rob
+With due respect to your person, I need your cooperation in
+transferring the sum of $11.3million to your private account where
+this money can be shared between us. The money has been here in our
+bank lying dormant for years without anybody coming for the claim.
+
+By indicating your interest I will send you the full details on how
+the business will be executed.
+
+Best regards,
+Mr. Michael Doku.
