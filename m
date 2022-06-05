@@ -2,146 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55DDC53D933
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Jun 2022 04:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B294B53D938
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Jun 2022 04:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345201AbiFECQK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Jun 2022 22:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
+        id S1344415AbiFECR4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Jun 2022 22:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiFECQJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Jun 2022 22:16:09 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7CA186E2;
-        Sat,  4 Jun 2022 19:16:08 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id s12so9652071plp.0;
-        Sat, 04 Jun 2022 19:16:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=x7HCq/JX0wzy3/jD50x+yfjA7pAVtCDavxjeNjonqrU=;
-        b=o5sCfVjc37aJds4agqc1B3n5KuciOVffY31uoJd5gU1Sfnl6qdrrDnYnCww66MZokX
-         ZZxgeu1m4epiJhqvz5USL6BFuxN1/8zyv8Z5ALYB7dgS30JOtfkToYm9oPIBDY59G36t
-         rDme279dqhpU8jJ8G5q753i0dkbG1XollJ4yIkLda34Yxg2uu0IwMbzqKLkw8bLWsTqa
-         WQEgVcNJCiJriUYVomcwCWIiQIL1oHTrOJAA/Qni+LN41UCPvfdRIXkM9tTpgachcPjz
-         +eVnAj0gOfU7JRZG57ujvmKm2j4mwEIJEGNRfX3ake/tVl62ZrrXbsGIRDz2tkvXBSxH
-         tPnw==
+        with ESMTP id S239486AbiFECRz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Jun 2022 22:17:55 -0400
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4891A82F;
+        Sat,  4 Jun 2022 19:17:53 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-e93bbb54f9so15214105fac.12;
+        Sat, 04 Jun 2022 19:17:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=x7HCq/JX0wzy3/jD50x+yfjA7pAVtCDavxjeNjonqrU=;
-        b=Bi8Gh0v0XguVr/N6Dry0In4wIJJPj4dxEbOTKPv/RCHaa913f72DF8sAkIejeJG4QC
-         /0n5VMEt2oA0gqqiG3eBwJ7ZVOrKc/nbl9dUZ+9gaCacPz3qIVDn5VTIHoYxFmr0MAe2
-         +DvROddG1NMBa6vY3ybQKabqPBO6aj2Ix7kpjA5W3miGhsh4zo6uk24mMiIR9qq7gbd3
-         3im18DuYzgU4XSOAzarYBu4YGhoFThUKenzXb39rt39oDdNG6HkQbQIo1ycHCe995rYm
-         Tu2AZ9eNOD1xQSLCDhwI9BOqbu8VyHZo3eT9JF6uuCIPaT9qvh+fmd69dsbsDTD1ISZt
-         D1IA==
-X-Gm-Message-State: AOAM533jYntdZAHxWt6H4tdCMpKjzSO2odCb3iBV4fTGVhKHWAFyrYxp
-        eKHDAyvQgDixFeKXnZobGgY=
-X-Google-Smtp-Source: ABdhPJwWoDh3ZZrWn22Cih3ALuvTEMd/QoWYb5Kq1Z+/wWVJ/oEFFoCAZQbNeblMfYwud4pMR1gGow==
-X-Received: by 2002:a17:90a:4a03:b0:1df:4583:cb26 with SMTP id e3-20020a17090a4a0300b001df4583cb26mr53675859pjh.173.1654395368012;
-        Sat, 04 Jun 2022 19:16:08 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c20600b0016211344809sm7934506pll.72.2022.06.04.19.16.05
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=lQ4WDAfIbQoDCBB4B+MAW+ijNY272OTmgCMkNTc+Uvc=;
+        b=bh43+VMw6g+mPjOJ60pNM4ZIZQ6mF1d9TZ9gGWo4WVWj3/xdCJneORFY3NCNXDMdfY
+         LKLIRwfdC8u/YwOvSRKONZuLPPaUrwCh4zshKG7lfNEkegy0JL9/kkMcRBP9UuxOZrm2
+         iW8QO3gm5sLfFTO6rqaXdV4kEX4QpqQf4iZ+xgebyCcLZXRFt712u72PAKJkueAkZONc
+         4kZ/UCN6A5rPJBh/z7VRgqXE1b3CuZoNnnyyaHV/Wvaz9cR+wMKMhOI6ymvsqrHxk/oH
+         waRPp00zRrTs4Dk5RAvu1GPlOI1/B/5ZgiNV0uGvTWnAzrmYl90a6EhCtvf9GMDZLFAO
+         dj3g==
+X-Gm-Message-State: AOAM5319N8Qx3MXx5inJldCUxyO7TBcsMS7FbqXxFrsuNxHJCd/fkC8V
+        w0cg3josQSC4pjjUxtSi4A==
+X-Google-Smtp-Source: ABdhPJzU8BDDcCbf/hdWWbHSyuiipZ4q19linmO5W5eMQ60JU5K7XyQVF6AYRByp35JPWgvTN+vLBA==
+X-Received: by 2002:a05:6870:ec90:b0:f3:4c28:5acf with SMTP id eo16-20020a056870ec9000b000f34c285acfmr16846652oab.28.1654395472806;
+        Sat, 04 Jun 2022 19:17:52 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k84-20020aca3d57000000b0032e2599df3dsm5731389oia.10.2022.06.04.19.17.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jun 2022 19:16:07 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Rhett Aultman <rhett.aultman@samsara.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, wg@grandegger.com,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sat, 04 Jun 2022 19:17:52 -0700 (PDT)
+Received: (nullmailer pid 3371067 invoked by uid 1000);
+        Sun, 05 Jun 2022 02:17:50 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Harsh Agarwal <quic_harshq@quicinc.com>
+Cc:     ahalaney@redhat.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-can@vger.kernel.org, linux-usb@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [RFC PATCH v2] usb: urb: add new transfer flag URB_FREE_COHERENT
-Date:   Sun,  5 Jun 2022 11:15:55 +0900
-Message-Id: <20220605021555.214346-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220604144157.208849-1-mailhol.vincent@wanadoo.fr>
-References: <20220604144157.208849-1-mailhol.vincent@wanadoo.fr>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Felipe Balbi <balbi@kernel.org>
+In-Reply-To: <1654276362-28930-2-git-send-email-quic_harshq@quicinc.com>
+References: <1654276362-28930-1-git-send-email-quic_harshq@quicinc.com> <1654276362-28930-2-git-send-email-quic_harshq@quicinc.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: usb: dwc3: Add support for multiport related properties
+Date:   Sat, 04 Jun 2022 21:17:50 -0500
+Message-Id: <1654395470.146119.3371066.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When allocating URB memory with kmalloc(), drivers can simply set the
-URB_FREE_BUFFER flag in urb::transfer_flags and that way, the memory
-will be freed in the background when killing the URB (for example with
-usb_kill_anchored_urbs()).
+On Fri, 03 Jun 2022 22:42:40 +0530, Harsh Agarwal wrote:
+> Added support for multiport, mport, num_usb2_phy and num_usb3_phy
+> properties. These properties are used to support devices having
+> a multiport controller.
+> 
+> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+> ---
+>  .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+> 
 
-However, there are no equivalent mechanism when allocating DMA memory
-(with usb_alloc_coherent()).
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-This patch adds a new flag: URB_FREE_COHERENT. Setting this flag will
-cause the kernel to automatically call usb_free_coherent() on the
-transfer buffer when the URB is killed, similarly to how
-URB_FREE_BUFFER triggers a call to kfree().
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:366:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:367:10: [warning] wrong indentation: expected 11 but found 9 (indentation)
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:369:11: [warning] wrong indentation: expected 11 but found 10 (indentation)
 
-In order to have all the flags in numerical order, URB_DIR_IN is
-renumbered from 0x0200 to 0x0400 so that URB_FREE_COHERENT can reuse
-value 0x0200.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.example.dtb: usb@4a000000: multiport: 'mport' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
 
-CC: Alan Stern <stern@rowland.harvard.edu>
-CC: Rhett Aultman <rhett.aultman@samsara.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-Hi Rhett Aultman,
+doc reference errors (make refcheckdocs):
 
-I put the code snippet I previously sent into a patch. It is not
-tested (this is why I post it as RFC). Please feel free to add this to
-your series.
+See https://patchwork.ozlabs.org/patch/
 
-** Changelog **
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-v1 -> v2:
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-  * Renumber URB_DIR_IN for 0x0200 to 0x0400 in order to keep all the
-    flags in numerical order.
----
- drivers/usb/core/urb.c | 3 +++
- include/linux/usb.h    | 3 ++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+pip3 install dtschema --upgrade
 
-diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-index 33d62d7e3929..1460fdac0b18 100644
---- a/drivers/usb/core/urb.c
-+++ b/drivers/usb/core/urb.c
-@@ -22,6 +22,9 @@ static void urb_destroy(struct kref *kref)
- 
- 	if (urb->transfer_flags & URB_FREE_BUFFER)
- 		kfree(urb->transfer_buffer);
-+	else if (urb->transfer_flags & URB_FREE_COHERENT)
-+		usb_free_coherent(urb->dev, urb->transfer_buffer_length,
-+				  urb->transfer_buffer, urb->transfer_dma);
- 
- 	kfree(urb);
- }
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 60bee864d897..945d68ea1d76 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -1328,9 +1328,10 @@ extern int usb_disabled(void);
- #define URB_NO_INTERRUPT	0x0080	/* HINT: no non-error interrupt
- 					 * needed */
- #define URB_FREE_BUFFER		0x0100	/* Free transfer buffer with the URB */
-+#define URB_FREE_COHERENT	0x0200  /* Free DMA memory of transfer buffer */
- 
- /* The following flags are used internally by usbcore and HCDs */
--#define URB_DIR_IN		0x0200	/* Transfer from device to host */
-+#define URB_DIR_IN		0x0400	/* Transfer from device to host */
- #define URB_DIR_OUT		0
- #define URB_DIR_MASK		URB_DIR_IN
- 
--- 
-2.35.1
+Please check and re-submit.
 
