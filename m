@@ -2,113 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D3F53DB0D
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Jun 2022 11:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB82E53DB91
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Jun 2022 15:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237979AbiFEJkN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Jun 2022 05:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
+        id S242936AbiFENb4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Jun 2022 09:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245219AbiFEJkJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Jun 2022 05:40:09 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C274D637;
-        Sun,  5 Jun 2022 02:40:08 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id s12so10055213plp.0;
-        Sun, 05 Jun 2022 02:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=pA78VroF9WPZrSnfSVpCOb6xs8kbWqUSkVd+dTFpkE8=;
-        b=AX8tCS/bv0ghkCoUwzqdtUczLZhpSL1RZROKTaYjn15yKnmpxKI83KvB4PR2dIGqrf
-         UymfNMy3kQXC6qvhS0X+yWig1TkHKm8AEelDuVP10LwMdgN3HR+GUuUOefzKj+jU2cOm
-         W07hR1cZ8YHTs+U+Ki/lxf0YHcNMEPv5zG5WunT5yW7tBlU5BYf2f9ecLt/6umys0QnT
-         t39wzplIBSbE/l/dTkGpIEUykyZ6n2Ev+lqOF8SVKPJRzV6fA3vJQysxEXA8EuVZRrR2
-         MBDRl+kJwTgPqtY1FdRkyVFaodGF6DyifNPVejEIw539wy9BRbl5kz7NkMQvHxU6b8l2
-         IKig==
+        with ESMTP id S231650AbiFENby (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Jun 2022 09:31:54 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C0935846;
+        Sun,  5 Jun 2022 06:31:52 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id x75so5868106qkb.12;
+        Sun, 05 Jun 2022 06:31:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pA78VroF9WPZrSnfSVpCOb6xs8kbWqUSkVd+dTFpkE8=;
-        b=B4lzinzSkTNZYcErT1x+W/aEFAbrcQ7LE8e4WhKtzhdjVC+KEMiVfFwn5DIlBdkrRW
-         eG8xJw2aU1ifIp4wpxZLfbiiJgM4dSgt/6QhqFtuenNqKsnrxEhHzup54DriZTD8HaHY
-         xH5LXM4XIkLfo2YPZTv0aztkumR5JT8wYJnUGz7PcLcxZIi8oFWVue6ugmY3706o2DS3
-         FFuTDzN9jGv/9nrJqBo94MsXm5A6R+5m6bXzqdizcDL7tT5iyp1wX7iAfPajx1+Xz1V+
-         XXZegv7cNHhUq1OAv2zcuftI1ufNqiHrTx03KTDPpasfzY3TnPX14H31rdzTrXe+aEbu
-         nGwg==
-X-Gm-Message-State: AOAM530UDkFlNTiMxsQARVO4hCW5CXpZjd7RdsCGFZL/lh2vZfpjgItM
-        Go+cGd0HhPFqDMkY2coZ8E4fynna74A=
-X-Google-Smtp-Source: ABdhPJz185UhvLjGwS3QxpUQdOrj5N8HeYobXdOeUqqOWRBP/yAcQ0sNXhqdw/OsOdF1vCw48Lplzg==
-X-Received: by 2002:a17:90b:314a:b0:1e8:5362:5620 with SMTP id ip10-20020a17090b314a00b001e853625620mr7582214pjb.9.1654422006103;
-        Sun, 05 Jun 2022 02:40:06 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-21.three.co.id. [180.214.233.21])
-        by smtp.gmail.com with ESMTPSA id i13-20020a170902c94d00b0016362da9a03sm8415725pla.245.2022.06.05.02.40.03
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6blk1zWjTfRbXW7KJFjVY/jp2csjnWRYFdcTz82ZD7I=;
+        b=6QyxyWhCzgYo3Z/WlrPnxxq2EAvOzvncD6jY0c4atO8NRmnBOcfcU2ZK+2b/i+65kv
+         2qjeC9uXMoGaI0rI+hfe9QkJqd2L2qKy5HUCyd3fyMXbN5Dktjhn9V7FnDptRqg7YDZE
+         /39idy8zDvZOG+vibVzITCozfixk8KWLL10Ms3mrkO6Le4FWTeXCpKRJv1fAP5sAcJi7
+         pn2ZoXrh185m6zMLllEwCatgB9DfItJSu3CbWQxApwRledqLqhUKpMGcnvgqcUmG0VGQ
+         FcIM0AxUJ7plviOjRPVQFtZrqjA+aZr+ZMML8WjAczre180Yl0qsCXisFMFc9waG6oX3
+         i4IQ==
+X-Gm-Message-State: AOAM530f/WLLcAWKFG26KIBax1+Eq0ATHSBODed4kn/nc/GIyUNP5XKc
+        oR21Mv4vXb3IwCS4JDx09mX63E1ff8xZBQ==
+X-Google-Smtp-Source: ABdhPJxyPriFtfQBMJdLEIBuEyHonyaXljDVWGtghfxaxZgpfPiRseCObq/jvtPAyn4JRau1g/mUXA==
+X-Received: by 2002:a05:620a:142f:b0:6a6:b667:49e0 with SMTP id k15-20020a05620a142f00b006a6b66749e0mr1362358qkj.167.1654435911580;
+        Sun, 05 Jun 2022 06:31:51 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id s18-20020a05620a29d200b006a6a904c0a5sm4045329qkp.107.2022.06.05.06.31.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 02:40:05 -0700 (PDT)
-Message-ID: <dea883bb-8938-5b07-0a13-92e8029414e8@gmail.com>
-Date:   Sun, 5 Jun 2022 16:40:02 +0700
+        Sun, 05 Jun 2022 06:31:51 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id r82so21432567ybc.13;
+        Sun, 05 Jun 2022 06:31:50 -0700 (PDT)
+X-Received: by 2002:a05:6902:a:b0:65c:b38e:6d9f with SMTP id
+ l10-20020a056902000a00b0065cb38e6d9fmr20826776ybh.36.1654435910661; Sun, 05
+ Jun 2022 06:31:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] docs: usb: fix literal block marker in usbmon
- verification example
-Content-Language: en-US
-To:     Justin Swartz <justin.swartz@risingedge.co.za>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-usb@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220604155431.23246-1-justin.swartz@risingedge.co.za>
- <5f00819a-cd52-a2c7-77de-28a4649c33dd@gmail.com>
- <f2943c036e1dd403052dcbd09ac4eeae@risingedge.co.za>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <f2943c036e1dd403052dcbd09ac4eeae@risingedge.co.za>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220302033716.31272-1-nizhen@uniontech.com>
+In-Reply-To: <20220302033716.31272-1-nizhen@uniontech.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 5 Jun 2022 15:31:39 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWcFcX-g_XJaMcy7U1FR==2s_CDAVmBGz9rPTP96wX4GQ@mail.gmail.com>
+Message-ID: <CAMuHMdWcFcX-g_XJaMcy7U1FR==2s_CDAVmBGz9rPTP96wX4GQ@mail.gmail.com>
+Subject: Re: [PATCH] USB: host: isp116x: check return value after calling platform_get_resource()
+To:     Zhen Ni <nizhen@uniontech.com>
+Cc:     ok@artecdesign.ee, Greg KH <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/5/22 15:58, Justin Swartz wrote:
-> On 2022-06-05 10:39, Bagas Sanjaya wrote:
->> On 6/4/22 22:54, Justin Swartz wrote:
->>> The "Verify that bus sockets are present" example was not properly
->>> formatted due to a typo in the literal block marker.
->>>
->>
->> Missing second colon?
-> 
-> That is correct.
-> 
-> 
->>> -Verify that bus sockets are present:
->>> +Verify that bus sockets are present::
->>>
->>>      # ls /sys/kernel/debug/usb/usbmon
->>>      0s  0u  1s  1t  1u  2s  2t  2u  3s  3t  3u  4s  4t  4u
->>
->> Otherwise, the literal block rendered correctly.
-> 
-> The block is not rendered correctly without the second colon.
-> See: https://docs.kernel.org/usb/usbmon.html
+Hi Zhen,
 
-Thanks for the explanation.
+On Wed, Mar 2, 2022 at 11:38 PM Zhen Ni <nizhen@uniontech.com> wrote:
+> It will cause null-ptr-deref if platform_get_resource() returns NULL,
+> we need check the return value.
+>
+> Signed-off-by: Zhen Ni <nizhen@uniontech.com>
 
-I mean that for the literal block part, it renders correctly with
-the second colon (which this patch is about), so the documentation
-error is fixed (although not reported by Sphinx when performing
-htmldocs build).
+Thanks for your patch, which is now commit 134a3408c2d3f7e2
+("USB: host: isp116x: check return value after calling
+platform_get_resource()") upstream.
 
-So for this patch, I gave
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> --- a/drivers/usb/host/isp116x-hcd.c
+> +++ b/drivers/usb/host/isp116x-hcd.c
+> @@ -1541,10 +1541,12 @@ static int isp116x_remove(struct platform_device *pdev)
+>
+>         iounmap(isp116x->data_reg);
+>         res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> -       release_mem_region(res->start, 2);
+> +       if (res)
+> +               release_mem_region(res->start, 2);
+>         iounmap(isp116x->addr_reg);
+>         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -       release_mem_region(res->start, 2);
+> +       if (res)
+> +               release_mem_region(res->start, 2);
+>
+>         usb_put_hcd(hcd);
+>         return 0;
 
--- 
-An old man doll... just what I always wanted! - Clara
+Please note that platform_get_resource() cannot return NULL here,
+as this is the .remove() callback.  If we get here, .probe() has
+already verified the pointers.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
