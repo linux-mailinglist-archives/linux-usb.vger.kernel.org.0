@@ -2,141 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA9753EB6D
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jun 2022 19:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C0653E9AA
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jun 2022 19:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240658AbiFFP0E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jun 2022 11:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
+        id S240800AbiFFPc4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jun 2022 11:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240619AbiFFPZy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jun 2022 11:25:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE801CD36C;
-        Mon,  6 Jun 2022 08:25:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E155961545;
-        Mon,  6 Jun 2022 15:25:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F13A5C341D1;
-        Mon,  6 Jun 2022 15:25:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654529149;
-        bh=QMD8XSxVTt5rMt1QS7PnIMdO/7mrai1uKEVRc/zSrng=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pkhb51qqLs419Rmod7Jvmn+fG8oFjkUt34SQDdy8Lp8zxyEz2PVawgQmePW5czFn6
-         L46wfDpGrSQqegZX+WWdcVTbXXOnik+jXuEEEuJmcGHalj5q2p2IS969zhjBnrcPB1
-         qMrFwiJ7X1IUknEMW2363ri672vyF5fK8ot5DdD0uJ9WZPgrrfOq+IFyJmG/XzJHZS
-         CKwurPxtDZ9WKFqwqV827zh50nGPXFr2I38RZfhGKzAsNBUChqNu7s8zvBjk0NeKZm
-         awaa9WafXrNRUHmG/CL0sPIFIhD9Gb5TrG4UIn7onmV2QYupi1i2TJCMGEbYGFHVPL
-         QbVFhV6u+FIVg==
-Received: from mchehab by mail.kernel.org with local (Exim 4.95)
-        (envelope-from <mchehab@kernel.org>)
-        id 1nyEby-0012Oz-3f;
-        Mon, 06 Jun 2022 16:25:46 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 04/23] dt-bindings: reset: update st,stih407-powerdown.yaml references
-Date:   Mon,  6 Jun 2022 16:25:26 +0100
-Message-Id: <debdd5a9a1bfa0cf1c7e9c45da32edbc2ac2d10a.1654529011.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1654529011.git.mchehab@kernel.org>
-References: <cover.1654529011.git.mchehab@kernel.org>
+        with ESMTP id S240874AbiFFPa7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jun 2022 11:30:59 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB1436325
+        for <linux-usb@vger.kernel.org>; Mon,  6 Jun 2022 08:30:55 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 94CB75C01F2;
+        Mon,  6 Jun 2022 11:30:36 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 06 Jun 2022 11:30:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1654529436; x=1654615836; bh=egOSofGKO/
+        lFAvwIylp1s1OXwun29h9+WmHE20Wg7AU=; b=oyyV7pmJ/DoEWPmmQAyrFgPLkY
+        t4K76a7iTBSz5wqLutwa1FgLj6yxfgtIYql4Af67EpJICLTZQ2ROXpCRtGe23a16
+        5EecNT6yiE5E1kYMHADuhFkLOimg7U+gFGRCxgORS+41kYqyXnCUCqu/S5fuG/DN
+        vbR0YAFVJ0HpdA2mLIwX/eYaAfg+Cc7GCrggtIcqpiJ1sm6s5HY9txKt6PDIpDaQ
+        3+9idrlJdJAEtd/f5zExuSQU52UZMj7MP9zNIbXRKOKiOP5Y5OENS8LPp7IxUWLs
+        eq/AY739NOeSOmoxM2oHQDYEdUsCTPUKy0r5QATNUT0dowMP3tsb1ZtEZu0A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1654529436; x=1654615836; bh=egOSofGKO/lFAvwIylp1s1OXwun2
+        9h9+WmHE20Wg7AU=; b=BZh+ftbg6zYMmeMXgnSm6wHUFL+m3oKbPvl7ZR2CYbpN
+        8Kmec+vKpq41AQkhFMu2IGbaSNetIGQhXoAkVjNGNTcXUkVMmKb/orBr3o9MaCrR
+        SzSAr/WFeYVbf/I6d55Gcr1/EAzKZ21ddylFOxOXVlil+4tQejZ9BKp8oSOhWhy8
+        Qn20z0nTKH8j4LPc+Elc69ALPHAPvEhy/xApX0wk/shEqaWFo7qahuXY3U7wrUPO
+        Pf66ERbmUS8wtcxXKeGK3UX6fmqSizDiZk6QtWWKvaF8gCOUAa0F1FDQriF0sdZ8
+        8FCDP4pg7KOqOd16yTYl3NvFzncBr5//mhTCY2++Ag==
+X-ME-Sender: <xms:nB2eYiNQ2m1o2Ef01VoYTH1LCHEzmc0BM2W5WBh3PyBC13nCiXAj1g>
+    <xme:nB2eYg-tLWx0DXDQ1UckcQ2IqEXF-EpKbGRIaiuJx-FSMeAOk3XkJSPqMUR2e09aL
+    SlUAZztlg_aFA>
+X-ME-Received: <xmr:nB2eYpSBIpzrNXrNf5cH05mElBBpd0jMtwtYo1oeigI4GXN5_IWrk08BMQIcAEaml5Ne6sgvuTkIC_7kFO27g9ic5wkEmlLO>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddtvddgkeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
+    ertddttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhm
+    qeenucggtffrrghtthgvrhhnpeegheeuhefgtdeluddtleekfeegjeetgeeikeehfeduie
+    ffvddufeefleevtddtvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:nB2eYiuQb4w0To6QbK--cuo903HhycQNXsO98YNsAMUR-eQtEZO8SQ>
+    <xmx:nB2eYqfI7nQdA0O-dQWkjIwOdTZ3hZsNFtVzDz5nDExWfrY9P-oFBA>
+    <xmx:nB2eYm0VzJ4UYGe0Rj67kT7NhArOatNPL9vzC1Lvq_ODDUV1eQa7hQ>
+    <xmx:nB2eYrqjVdc3YeqTsThbG3DrJnUCAgK7ADjZp4bjtbgFEjEk4ubxAQ>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 6 Jun 2022 11:30:36 -0400 (EDT)
+Date:   Mon, 6 Jun 2022 17:30:34 +0200
+From:   Greg KH <greg@kroah.com>
+To:     bugzilla-daemon@kernel.org
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [Bug 216085] New: MCS9990 not maximum speed USB 2.0
+Message-ID: <Yp4dmhYXmlag/QuD@kroah.com>
+References: <bug-216085-208809@https.bugzilla.kernel.org/>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bug-216085-208809@https.bugzilla.kernel.org/>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Changeset 2ca065dc9468 ("dt-bindings: reset: st,sti-powerdown: Convert to yaml")
-renamed: Documentation/devicetree/bindings/reset/st,sti-powerdown.txt
-to: Documentation/devicetree/bindings/reset/st,stih407-powerdown.yaml.
+On Mon, Jun 06, 2022 at 03:20:20PM +0000, bugzilla-daemon@kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=216085
+> 
+>             Bug ID: 216085
+>            Summary: MCS9990 not maximum speed USB 2.0
+>            Product: Drivers
+>            Version: 2.5
+>     Kernel Version: All
+>           Hardware: All
+>                 OS: Linux
+>               Tree: Mainline
+>             Status: NEW
+>           Severity: normal
+>           Priority: P1
+>          Component: USB
+>           Assignee: drivers_usb@kernel-bugs.kernel.org
+>           Reporter: khseal@yandex.ru
+>         Regression: No
+> 
+> Created attachment 301107
+>   --> https://bugzilla.kernel.org/attachment.cgi?id=301107&action=edit
+> Ubuntu low speed.
 
-Update the cross-references accordingly.
-
-Fixes: 2ca065dc9468 ("dt-bindings: reset: st,sti-powerdown: Convert to yaml")
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
-
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1654529011.git.mchehab@kernel.org/
-
- Documentation/devicetree/bindings/phy/phy-stih407-usb.txt | 2 +-
- Documentation/devicetree/bindings/usb/dwc3-st.txt         | 2 +-
- Documentation/devicetree/bindings/usb/ehci-st.txt         | 2 +-
- Documentation/devicetree/bindings/usb/ohci-st.txt         | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/phy/phy-stih407-usb.txt b/Documentation/devicetree/bindings/phy/phy-stih407-usb.txt
-index de6a706abcdb..35f03df00130 100644
---- a/Documentation/devicetree/bindings/phy/phy-stih407-usb.txt
-+++ b/Documentation/devicetree/bindings/phy/phy-stih407-usb.txt
-@@ -9,7 +9,7 @@ Required properties:
- - resets		: list of phandle and reset specifier pairs. There should be two entries, one
- 			  for the whole phy and one for the port
- - reset-names		: list of reset signal names. Should be "global" and "port"
--See: Documentation/devicetree/bindings/reset/st,sti-powerdown.txt
-+See: Documentation/devicetree/bindings/reset/st,stih407-powerdown.yaml
- See: Documentation/devicetree/bindings/reset/reset.txt
- 
- Example:
-diff --git a/Documentation/devicetree/bindings/usb/dwc3-st.txt b/Documentation/devicetree/bindings/usb/dwc3-st.txt
-index bf73de0d5b4a..4aa368447b1e 100644
---- a/Documentation/devicetree/bindings/usb/dwc3-st.txt
-+++ b/Documentation/devicetree/bindings/usb/dwc3-st.txt
-@@ -13,7 +13,7 @@ Required properties:
-  - resets	: list of phandle and reset specifier pairs. There should be two entries, one
- 		  for the powerdown and softreset lines of the usb3 IP
-  - reset-names	: list of reset signal names. Names should be "powerdown" and "softreset"
--See: Documentation/devicetree/bindings/reset/st,sti-powerdown.txt
-+See: Documentation/devicetree/bindings/reset/st,stih407-powerdown.yaml
- See: Documentation/devicetree/bindings/reset/reset.txt
- 
-  - #address-cells, #size-cells : should be '1' if the device has sub-nodes
-diff --git a/Documentation/devicetree/bindings/usb/ehci-st.txt b/Documentation/devicetree/bindings/usb/ehci-st.txt
-index 065c91d955ad..d6f2bdee20fc 100644
---- a/Documentation/devicetree/bindings/usb/ehci-st.txt
-+++ b/Documentation/devicetree/bindings/usb/ehci-st.txt
-@@ -17,7 +17,7 @@ See: Documentation/devicetree/bindings/clock/clock-bindings.txt
-  - resets		: phandle + reset specifier pairs to the powerdown and softreset lines
- 			  of the USB IP
-  - reset-names		: should be "power" and "softreset"
--See: Documentation/devicetree/bindings/reset/st,sti-powerdown.txt
-+See: Documentation/devicetree/bindings/reset/st,stih407-powerdown.yaml
- See: Documentation/devicetree/bindings/reset/reset.txt
- 
- Example:
-diff --git a/Documentation/devicetree/bindings/usb/ohci-st.txt b/Documentation/devicetree/bindings/usb/ohci-st.txt
-index 44c998c16f85..1c735573abc0 100644
---- a/Documentation/devicetree/bindings/usb/ohci-st.txt
-+++ b/Documentation/devicetree/bindings/usb/ohci-st.txt
-@@ -15,7 +15,7 @@ See: Documentation/devicetree/bindings/clock/clock-bindings.txt
- 
-  - resets		: phandle to the powerdown and reset controller for the USB IP
-  - reset-names		: should be "power" and "softreset".
--See: Documentation/devicetree/bindings/reset/st,sti-powerdown.txt
-+See: Documentation/devicetree/bindings/reset/st,stih407-powerdown.yaml
- See: Documentation/devicetree/bindings/reset/reset.txt
- 
- Example:
--- 
-2.36.1
-
+Please contact Ubuntu for support with their kernel releases.
