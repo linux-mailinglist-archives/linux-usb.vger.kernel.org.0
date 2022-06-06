@@ -2,96 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617D453DF51
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jun 2022 03:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8188853DF73
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jun 2022 03:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351948AbiFFB2q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Jun 2022 21:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
+        id S1352023AbiFFBnU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Jun 2022 21:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348931AbiFFB2p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Jun 2022 21:28:45 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94B36562;
-        Sun,  5 Jun 2022 18:28:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=v2/b5FqxV2iRhS1Ykan9Lwjt+zRuUcpsfnrGF+r1rwo=; b=ahtDNE/A9/2Pzy2ITsWjUxwbex
-        4iUrMeJfGWfXjeG0gSwGcbTtXtdOX4F2c8Nkv9fpscSwVzdT0JJl1Vg9UdaHn5+hXcDItYdoyxiey
-        +QvwzIs4ulACjTMF0Fk+1kJBPDCITFsirVPIQVkeZf/KsgEJIHD8RXT2IOPfkZFxQ5es=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ny1XL-005hL6-Hk; Mon, 06 Jun 2022 03:28:07 +0200
-Date:   Mon, 6 Jun 2022 03:28:07 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
-        Andre Edich <andre.edich@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Gabriel Hojda <ghojda@yo2urs.ro>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ferry Toth <fntoth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
-Subject: Re: [PATCH net-next v3 5/7] usbnet: smsc95xx: Forward PHY interrupts
- to PHY driver to avoid polling
-Message-ID: <Yp1YJ3lHTFFdRb6P@lunn.ch>
-References: <cover.1652343655.git.lukas@wunner.de>
- <748ac44eeb97b209f66182f3788d2a49d7bc28fe.1652343655.git.lukas@wunner.de>
- <CGME20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99@eucas1p2.samsung.com>
- <a5315a8a-32c2-962f-f696-de9a26d30091@samsung.com>
- <20220519190841.GA30869@wunner.de>
- <31baa38c-b2c7-10cd-e9cd-eee140f01788@samsung.com>
- <20220523094343.GA7237@wunner.de>
- <Yowv95s7g7Ou5U8J@lunn.ch>
- <20220524121341.GA10702@wunner.de>
+        with ESMTP id S233230AbiFFBnT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Jun 2022 21:43:19 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D4637018;
+        Sun,  5 Jun 2022 18:43:19 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id v3-20020a17090a0c8300b001e862664a08so2760843pja.5;
+        Sun, 05 Jun 2022 18:43:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gaObAl1davpaWK8mfs4rknFImeJO0Clxwne4OGIVgnU=;
+        b=OKywvTXZJO3SG4a0nthNnL4RJKayjxIy4VqGQNXyA5WGzGVyYnLAmb/MfD6eBz5+3A
+         BJMs9CNxsLB4gDHOH0e3DC8dv8vwmnVgogm+Kv3o7EW4ql1GqbzAVC+Zgy6UOGRLAeyu
+         LfL0A9bczBftYg7Evec/fXsqieN3772yekCwz/oKM8Q8s60SiBNimhdGZjuXcDQkxZ5D
+         dDXed9jZ13uUEhPYcCIl8jAaxg+EvY4zzREzuGQyaG+DmMjvjTU0ZmDGPIzHipFsTsmE
+         VP+yihqfX3Pb5e6WGB40g0c2EBSn4I2o4gYXogtZz66Zs5x+z6uP+mix/KwQuC4DyZz9
+         9xdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gaObAl1davpaWK8mfs4rknFImeJO0Clxwne4OGIVgnU=;
+        b=wEsfOuR/50CVKCxfxgyddAEnyrpgA+2ZgPUdVxlLTy98nLlwRbB4fNoFdH/JRWfkrr
+         9heO+gDo6VdBQOtJQ9Y5IctZPilIRHSnmeNcmh8araFtISyPsbkysL9UwpMf0nsSN5D4
+         AV9KyPijTaRYUVufsLd7b9c4eo0oyZ81xIb3PCR3J1TCrQLOWuKUe4y15p9Z/cZe4eTF
+         ReMAZSQfhvmHQbN1Wf3TvjLzI3k/JE5eFx+840L8HDXBc7OLyHT3kIi1p13baOyxsVrt
+         xuCTSomBRoGuqXu6vHdCb9o/I4gnt/WJghqtSMyXymewDj+K4fsfXiSoRbPDexOdQy7v
+         C4Aw==
+X-Gm-Message-State: AOAM530CKafeAqFFbVafae43NfSQgscXMTQTKkuDvwFtvY/A8wMrbTDL
+        q+E4qYFx+xxVDAiM+UmpgKs=
+X-Google-Smtp-Source: ABdhPJwlYWzXXakJW+sH4spMPRqGoEX14QImNoPI26mASw6g+PMMrv6OzjRiOUQSjhhECufVRP+fRw==
+X-Received: by 2002:a17:902:f710:b0:15f:165f:b50b with SMTP id h16-20020a170902f71000b0015f165fb50bmr22467940plo.158.1654479798701;
+        Sun, 05 Jun 2022 18:43:18 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id s8-20020a056a001c4800b005183cf12184sm9299315pfw.133.2022.06.05.18.43.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 18:43:18 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] USB: serial: Remove redundant NULL check before release_firmware() call
+Date:   Mon,  6 Jun 2022 01:43:15 +0000
+Message-Id: <20220606014315.290533-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524121341.GA10702@wunner.de>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> mdio_bus_phy_resume() does trigger the state machine via
-> phy_start_machine(), so link state changes *are* detected after wakeup.
-> 
-> But you're saying that's not sufficient and you really want the
-> PHY driver's IRQ handler to be called, do I understand that correctly?
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-It is an interrupt, so i would expect the handler to be called. I've
-never looked deeply how the kernel handles this, but maybe there is
-some core support for this. The kernel does know about wake up
-interrupts. The interesting bit is how do you defer the interrupt
-until you have enough of the system running again you can actually
-service the interrupt.
+release_firmware() checks for NULL pointers internally so checking
+before calling it is redundant.
 
-PHY interrupts mostly are level, not edge, because there are multiple
-sources of interrupts within the PHY. So you do need to clear the
-interrupt source, or you are going to get a storm, as you pointed out.
-But being a level might actually help you. It fires once to get you
-out of sleep, and then fires again when the interrupt controller is
-resumed and is enabled.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/usb/serial/mxuport.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-	  Andrew
+diff --git a/drivers/usb/serial/mxuport.c b/drivers/usb/serial/mxuport.c
+index eb45a9b0005c..eb9090ab900f 100644
+--- a/drivers/usb/serial/mxuport.c
++++ b/drivers/usb/serial/mxuport.c
+@@ -1109,8 +1109,7 @@ static int mxuport_probe(struct usb_serial *serial,
+ 	 */
+ 	usb_set_serial_data(serial, (void *)id->driver_info);
+ out:
+-	if (fw_p)
+-		release_firmware(fw_p);
++	release_firmware(fw_p);
+ 	return err;
+ }
  
+-- 
+2.25.1
+
+
