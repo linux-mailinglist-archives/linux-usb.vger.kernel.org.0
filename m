@@ -2,96 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9AC53E01D
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jun 2022 05:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C507953E0CF
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jun 2022 08:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352320AbiFFDd6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Jun 2022 23:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S229544AbiFFF0e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jun 2022 01:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233696AbiFFDdx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Jun 2022 23:33:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5425237A38;
-        Sun,  5 Jun 2022 20:33:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C755C60EDE;
-        Mon,  6 Jun 2022 03:33:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 18083C341C0;
-        Mon,  6 Jun 2022 03:33:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654486430;
-        bh=TI4P18/3vyoUu1YoM1I93ZEGQv/UWUtMjgpV3is+1kU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=tFJZusU1hxG2s1CJAu/uiv0E+bAvVegQhojDIoAHyJhGf2CpfQHdYfd63OYaXP0/3
-         tl9nzWxkaafABij8lqsZ5MrgoRiCJkmKhT6mUps3kQJJUcarzBWjvqhX+nnzU7KuuH
-         M1sITb9nLev16/CnmDOBLDR9sft1NqYa56mDK6TYh+XhuSxzBGaz00U17pkjsv1ykO
-         1xbqro3byn4WFq2ZXjDSp5Mx6gkf+iadKrRgaEInhfU6CUJOoXak/Exda99R6yHsRc
-         ZpeQ/WkQ7MtuWXRB2kZKovQ5cRR+ulL6ulkGtXTJWKxLQIUAMOP2Du9HlLMaTPj68u
-         6fltf6QTe+EWQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E9551E737F0;
-        Mon,  6 Jun 2022 03:33:49 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229527AbiFFF0d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jun 2022 01:26:33 -0400
+Received: from out198-10.us.a.mail.aliyun.com (out198-10.us.a.mail.aliyun.com [47.90.198.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4669F5D00
+        for <linux-usb@vger.kernel.org>; Sun,  5 Jun 2022 22:02:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1948032|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_enroll_verification|0.00892731-0.00169371-0.989379;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047199;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.Nzy42wM_1654490995;
+Received: from 192.168.220.136(mailfrom:michael@allwinnertech.com fp:SMTPD_---.Nzy42wM_1654490995)
+          by smtp.aliyun-inc.com(33.45.69.145);
+          Mon, 06 Jun 2022 12:50:42 +0800
+Message-ID: <b5836e57-165b-e90f-8a5a-90867cfe2c6c@allwinnertech.com>
+Date:   Mon, 6 Jun 2022 12:49:55 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] dt-bindings: Fix properties without any type
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <165448642995.20111.10251737230487275413.git-patchwork-notify@kernel.org>
-Date:   Mon, 06 Jun 2022 03:33:49 +0000
-References: <20220519211411.2200720-1-robh@kernel.org>
-In-Reply-To: <20220519211411.2200720-1-robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, krzk+dt@kernel.org,
-        thierry.reding@gmail.com, sam@ravnborg.org,
-        linus.walleij@linaro.org, brgl@bgdev.pl, dmitry.torokhov@gmail.com,
-        bleung@chromium.org, groeck@chromium.org, mchehab@kernel.org,
-        peda@axentia.se, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, kvalo@kernel.org, bhelgaas@google.com,
-        sre@kernel.org, mpm@selenic.com, herbert@gondor.apana.org.au,
-        gregkh@linuxfoundation.org, broonie@kernel.org, mripard@kernel.org,
-        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
-        linux-input@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 2/2] usb: gadget: f_fs: change ep->ep safe in
+ ffs_epfile_io()
+Content-Language: en-US
+To:     John Keeping <john@metanate.com>
+Cc:     Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1654056916-2062-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1654056916-2062-3-git-send-email-quic_linyyuan@quicinc.com>
+ <0732d4f3-5359-0d9d-94b9-66a7403dc7d8@allwinnertech.com>
+ <Ypi10OWth6Rd08n9@donbot>
+From:   Michael Wu <michael@allwinnertech.com>
+In-Reply-To: <Ypi10OWth6Rd08n9@donbot>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This patch was applied to chrome-platform/linux.git (for-next)
-by Rob Herring <robh@kernel.org>:
-
-On Thu, 19 May 2022 16:14:11 -0500 you wrote:
-> Now that the schema tools can extract type information for all
-> properties (in order to decode dtb files), finding properties missing
-> any type definition is fairly trivial though not yet automated.
+On 6/2/2022 9:06 PM, John Keeping wrote:
+> On Thu, Jun 02, 2022 at 06:39:30PM +0800, Michael Wu wrote:
+>> Tested-by: Michael Wu <michael@allwinnertech.com>
+>>
+>> I've tested Linyu's patches [PATCH v3 1/2] [PATCH v3 2/2]. I believe it
+>> fixes the bug I reported.
+>>
+>> What's more, John's solution [1] also works in my tests. It looks simpler.
+>> I'm not sure if it's as complete as Linyu's solution.
 > 
-> Fix the various property schemas which are missing a type. Most of these
-> tend to be device specific properties which don't have a vendor prefix.
-> A vendor prefix is how we normally ensure a type is defined.
+> It's not as comprehensive, let's focus on this thread.
 > 
-> [...]
 
-Here is the summary with links:
-  - dt-bindings: Fix properties without any type
-    https://git.kernel.org/chrome-platform/c/4e71ed985389
+No problem. Thank you.
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Regards,
+Michael Wu
