@@ -2,182 +2,783 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8959453E7CF
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jun 2022 19:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 416EC53E9B4
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jun 2022 19:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237721AbiFFMsP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jun 2022 08:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
+        id S238274AbiFFNFX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jun 2022 09:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237718AbiFFMsO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jun 2022 08:48:14 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B1F2228F;
-        Mon,  6 Jun 2022 05:48:13 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2569PSDb003670;
-        Mon, 6 Jun 2022 12:39:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=mzoLE1PbtRsuOiEM9z9fQ5vpTZBc7ax0h8g634BqWUw=;
- b=qojsxE3/eqexqnP11dCmtR2McvQCDFYa9hrijZqF31Gir1vrGUG7Quz+6fLcznaFikea
- a6lRt4gsbmwnZQMfRQV6ydvFV2uvoK5v43jHpor1PkHyQ29OK8NKIhPI8lolw5wzW5ah
- q5/oi0iGU3J8FovP0DyWHPRY4gTwpb+v1O9xpd/6jnLDnIDGqGHPgHq18pkwUpZBdHys
- 1cPNYqa+1Hw7LyUrRfAqzm01wSu7XTVG6ptzeoATSyoM2pnipNTwp9P091E55YSqjfes
- pe0gwTv9Q/YEh7+I/mXzMT/WSQWIigv0TkPEtnzq7ULR/jmfZyEH82/6sA6Af2vYOiz0 NA== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ghexe8btc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 06 Jun 2022 12:39:05 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 256CGDh5005066;
-        Mon, 6 Jun 2022 12:39:05 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2105.outbound.protection.outlook.com [104.47.55.105])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gfwu7m6tb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 06 Jun 2022 12:39:05 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R9s/uBwOHFtQhXJhjnszTSAXK+ooDS818BKEy/NJIm4H1cNJP+4QbderqCeAC7NguncE38XKTCGYxq1Vc7sIHOI747uv7rwskYdfTu9+3L5tPcuhHj7q6aJu8kqqGsJkHfoU5Nb7uYfEXA57qcAiLFmwYvTS2tGI7v0adhnhu3zA2TIOq1efwSdzJaKzT6dgOYprVEAhfsg0lqilu0lizY48DaMkP1pW8f5a2GNbzRB//ilAQ7D48M7Zwqcxpz/Bezkur490VhPIL1hvxsgo1GXXpsvsHDDbNAnDEC9NmhGIyriuDf5W6SL6jQa41YkDx1jL0Wn6lmBZIaNHvdWD8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mzoLE1PbtRsuOiEM9z9fQ5vpTZBc7ax0h8g634BqWUw=;
- b=bw1YWi/xCMQGWqKXNpPg0b6j10ZEFS4exLSxTAmtZLDEmHN/QfhuWu5KzzHQpH5O9W7pCZqQmp1RvGeHMM52aCjuJfZAwdXrOk+yZiyAVsiyjsHkiZp56jVuATA2MIdLNk7AUeAh9H7HUGR6wT34naLUj4ny+WjZmcOc1cyOabgonBxEMxh/mDxtlgbE/20Ltuvn4BgmNlthJDllMcOcFV5z7Zb8ihVTlEFLACkYlMgnWyJ2R35VgZWh4pE8mrac17wXgDdGD0ypM2D4vl0By7KFtmxKa2a81pPrwGZsl68xDtobA4F1bXXeVMAZRAdG1HfMN7D/ML7bxxvXKal9BQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mzoLE1PbtRsuOiEM9z9fQ5vpTZBc7ax0h8g634BqWUw=;
- b=LQnna/k/X+YUSppwnuZEE9PCs0z/fJtRt8PkHLn5UFmmpA7VUtVwCI+ITXdFSZkcHEL/KzJCe+bYk8omP9ElsCJtRedBlf0AReoBIIb3Hbu9pHYM+T75Zz6Gmk9RUYL6V4TwShPaK5gCwpct12MWQXGrxB42ttR3IEGG4DWAwvU=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by BL0PR10MB2771.namprd10.prod.outlook.com
- (2603:10b6:208:7b::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.15; Mon, 6 Jun
- 2022 12:39:02 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5314.019; Mon, 6 Jun 2022
- 12:39:02 +0000
-Date:   Mon, 6 Jun 2022 15:38:39 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        syzbot <syzbot+dd3c97de244683533381@syzkaller.appspotmail.com>,
-        hdanton@sina.com, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rafael.j.wysocki@intel.com,
-        rafael@kernel.org, rjw@rjwysocki.net,
-        syzkaller-bugs@googlegroups.com, linux-usb@vger.kernel.org
-Subject: Re: [syzbot] general protection fault in __device_attach
-Message-ID: <20220606123839.GW2146@kadam>
-References: <000000000000bb7f1c05da29b601@google.com>
- <00000000000010b7d305e08837c8@google.com>
- <YpnqpMYcokTwCB6u@smile.fi.intel.com>
- <Ypor265BTdnmgwpM@rowland.harvard.edu>
- <YpouRmanvCQeKA3S@kroah.com>
- <Ypow1LRZ3Hau36ci@rowland.harvard.edu>
- <Ypoyy/stICFdHauR@kroah.com>
- <CACT4Y+bBWrLRwiowaWk8o4+XAtCHxxJiEQfiSkgM3BDut9atAw@mail.gmail.com>
+        with ESMTP id S238328AbiFFNFV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jun 2022 09:05:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5FF237A15
+        for <linux-usb@vger.kernel.org>; Mon,  6 Jun 2022 06:04:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654520673;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KmLC5ubGvZsJtnoDwiPb040o/HjveLriUpNT/ErB8Q4=;
+        b=LPpmM11Ay680WuQx2EAheFA6YiQXp3qp0/2ogB3XJCWH4mbDmyJ6Bus8/ZsVxHdJgAnWvL
+        hf4J46qOZ2/1c8WxBmn/6Ktw5zVijVf9dapls3HtDmOMzc9Rx5Y23GAJzp7iWEBVYKsFlM
+        S336hip/ch9kqH1SLQPp7AI30B+V81g=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-169-EbC6pl_6NSOt5gtWQKU-Ew-1; Mon, 06 Jun 2022 09:04:32 -0400
+X-MC-Unique: EbC6pl_6NSOt5gtWQKU-Ew-1
+Received: by mail-qk1-f199.google.com with SMTP id j11-20020a37c24b000000b006a6bd97578aso2047914qkm.15
+        for <linux-usb@vger.kernel.org>; Mon, 06 Jun 2022 06:04:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KmLC5ubGvZsJtnoDwiPb040o/HjveLriUpNT/ErB8Q4=;
+        b=o/ozjsQAhlYUElJ2g3va/qjWZmYjGETa0/kMfkIHxorkz+wB0RmQthhqPInWIHsNDw
+         BQysEmhIpgO1F7EaCEljd1AJI3smtmpafNz5RsjazA58mju5snCUd556q8+sIUr/3V3y
+         psc295qZrXgBMaxAyhFQ96xaedj67YstnbSRhhkdoCTteA/RmFRmR6KF1MQ/KmoQLIFD
+         fw8oEclnuhJHdZbkuIZEdrcfXuZu822WVV6UVN49p/K9G7fO2piXhHeriCAwxGA7xVsX
+         tehAYF8pfiaqDfKlI5pJU8ZbfsOgF6CDR0Y5N9rh2DWjeyJD1UdhREo+rMLF3jU1Ur6d
+         b1wQ==
+X-Gm-Message-State: AOAM530QTKV8yTLcMih5ZMEzfJZS9v9y5DzynelfKsUqY7Fom2+keU3K
+        mN8MtmhAcJijhBh9iBnGSrDpCYNpGDRiOtT9f01KOa4QIVeZLMnqs48gllC9VlNPC0anLEMCIJb
+        j48nh9twMSYL8i5RwdiK4
+X-Received: by 2002:a05:622a:5c6:b0:304:b3d8:4ce with SMTP id d6-20020a05622a05c600b00304b3d804cemr18203131qtb.633.1654520670824;
+        Mon, 06 Jun 2022 06:04:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxf8UF9hMtdOpHMbIOcJNNBn52yz7ntP4+s1wtRwcpE+bq2R8yajX/Ou+cvd8l1HbrPiPum3g==
+X-Received: by 2002:a05:622a:5c6:b0:304:b3d8:4ce with SMTP id d6-20020a05622a05c600b00304b3d804cemr18203066qtb.633.1654520670349;
+        Mon, 06 Jun 2022 06:04:30 -0700 (PDT)
+Received: from halaneylaptop ([2600:1700:1ff0:d0e0::48])
+        by smtp.gmail.com with ESMTPSA id ay28-20020a05622a229c00b00304ecf35b50sm1996421qtb.97.2022.06.06.06.04.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 06:04:29 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 08:04:26 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Harsh Agarwal <quic_harshq@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_jackp@quicinc.com
+Subject: Re: [PATCH 3/3] usb: dwc3: Refactor PHY logic to support Multiport
+ Controller
+Message-ID: <20220606130426.zcblqxuscpn4p6hm@halaneylaptop>
+References: <1653985217-20953-1-git-send-email-quic_harshq@quicinc.com>
+ <1653985217-20953-4-git-send-email-quic_harshq@quicinc.com>
+ <20220601195311.xvyqzez247djomcr@halaneylaptop>
+ <365b8a54-5177-d728-5a95-dc561c1971ef@quicinc.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACT4Y+bBWrLRwiowaWk8o4+XAtCHxxJiEQfiSkgM3BDut9atAw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JN2P275CA0004.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:3::16)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 223c68ac-a1a6-4e45-8b37-08da47b988c7
-X-MS-TrafficTypeDiagnostic: BL0PR10MB2771:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR10MB27712A01833A9A4EA08D82298EA29@BL0PR10MB2771.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kVUFdzJG21l+ndYERKoh+h+Z09O60YAcPP3IJ0Sy6ukS9URn3H4rgtv/0tSO/VeQtifzuOKklqKQXosJs3K2mX7CBfePq8qVotkUhLS7xq59AV8l4Bi2mxYSGnIk5MEJaezJ2I283Wp4C8UNPjk6iwed3rrzvMFrfansFmHGK0GrP/wO9gwDBaC06W050LUzOko2kqglFLSZKDViYK0x8/zAP+I2mDIPUaBC+6oE/c4NueGh0B7jvWeI9LsrsnqJxZSFE3/Z1FfrxjJB6aO7JANUNUvf/9e5tfKCBI72BmfDxzY14FnZw+/piBC7YWDQdWuJG7eE8CrG/oQlhXpotG2+hxYdAuDJOQ41EnDILEFX2T1cXqEOR88gnrvFWMWvOrhMEDrLsATs3f+D3F+xgpknqdxrNxOPai2l4m0M4+c8EvnNTdhKBQZ54cu+Bl6qltsG4qk2ZtPiwUm7whHaO6yMS0sev1gfPW3W9QMPy6fiCJtQZdCCKidsspyGf8fsVCN6QNDfIWdKXl/vJWl6/ExTffQLzqocGPF4qCxQmiy0zLMw8mP5SWqZc+BPCdfQ85dG8bsV2U47NOprdAUsZXXB2Jvu0hiQhtwo68UXDLY0dmgrtkkfS7UvJvfUcIji71cAuR3XohXnZTHNsiUKueoSawunK+VGIFSXjjTWd/01BKRIpCsg+QRJ8WZx2lZ1pu4VITqBnE1ynhr48J0rtZQkZyvqaCQkAf5SjpSt51XkoKR5YYJrYai8Jwu9vTS9kRx4OxKOB8wWPcKfAxUmAIQPPOSYgUIBcCvD7GajisE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(8936002)(7416002)(6506007)(66946007)(66556008)(9686003)(4744005)(186003)(38100700002)(1076003)(6666004)(508600001)(966005)(44832011)(6512007)(26005)(5660300002)(38350700002)(6486002)(4326008)(54906003)(8676002)(316002)(66476007)(2906002)(6916009)(86362001)(33656002)(52116002)(33716001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P3E/zmTKKU61ALlh9qq53cK+KsxLXu010Jnhsc+UsFG0yzRfKidpPnGgOGYt?=
- =?us-ascii?Q?1Js0hN6euCcE7uc4uSjj2fj1c8BYkZY3Wf0r6CgQDMiyqA/0eMCNgpwPsdnR?=
- =?us-ascii?Q?l7jNZWhyLY5GBMtAEMMuY/onWXYo6zHMSkOQij7OypdWiqww8cwYSuFX1gYT?=
- =?us-ascii?Q?xAhEcA6nR+8tPvbzlXQicMtxxSezIstvRMdSMOq5qawzArepb49Y0u6zZp5Y?=
- =?us-ascii?Q?Dn7JVIj1h2sVDeLWLS/a9A2Q9c1Y7P2AIbu3ZsdhmW4VF0qwmTblION4xwoC?=
- =?us-ascii?Q?qBVed5WkVz8j6yrvEzdtiv8eaCPJTYKoWbB+PFkO/ZwgjBYAULXc1unYZILl?=
- =?us-ascii?Q?6wWRUTxQME1AB0io8M9ah7BJjsakSvBbvs+gJzOmS3I3xiAr9xYvY0nicAWK?=
- =?us-ascii?Q?PACrmdkZJTwCmEXWfe3DNRBwmLjtgBdBCGZ8rs6/YgLAQCfDIJ9P+a9I2sDp?=
- =?us-ascii?Q?fVnBqXg2Hwe45Pq/NtZkM4Tu0ojTQwuNvHDqweBtIYirQZH6UCsiDqIZbByJ?=
- =?us-ascii?Q?+G3bjEOUaPK+MhdDj6D/QZ/2scZx22s2wixRKdf6WQIuEjNO3K9WxREEKPHV?=
- =?us-ascii?Q?+FToc3j5Y/QStlsQDsU6m3IK8zyvLzWNpsw9ll7U52k/ri274j0uJQ+jb0GS?=
- =?us-ascii?Q?tXn2rE+yjvH0wLKdT+DKj0+rhOwuWiDkbpbnCDrI6ESAjNsdV1XE0HRcrg5r?=
- =?us-ascii?Q?Y3bA2aBSoDHk/l4dSaBhaXQAJBMsrmJGm0WhXDjSrxWNa6/iQ7XzAW/nSV0D?=
- =?us-ascii?Q?Q0BtW8D7K9zRdh+fKzZY+MeY9FoN2IWKv7XQJv3F3Msf7NxBmh9/AuAcbw37?=
- =?us-ascii?Q?hrOF1zIqMZQ8AWoo0JdZZK+w8NK+fTwfsef7cIvzTFYGbRTp+7kI9u4zISyr?=
- =?us-ascii?Q?H1XvbCVq8mtwHpmbLHxb8Jmx8iZu02J+K16epAOkb0wBejIin87sqlDBmsR4?=
- =?us-ascii?Q?HYAcoeFEV6jhBc/BJOcEJ8VZe66kPRX6fDKD4+NOMW67f8U8k4Km2UF6hz4b?=
- =?us-ascii?Q?pBwBavyw1BcF3jWVGNnWM1B6LijqtqK/II92AarKCz6H5UG/iO4O5vMYD7uJ?=
- =?us-ascii?Q?wHmsG/YFvBlIxYM7LnHS5aBfNnTAIUACmfIDGISNMTt2xIrfa+5J0TWAE3k6?=
- =?us-ascii?Q?/yOErUda8gE5yXaSKDg1Fy6qSAMcbQ0R4a74xxw146vroduRCBAuXwjFbNsF?=
- =?us-ascii?Q?FaynI47vap0x+xs/5Dw/t0FKpm91P92/xNADSxxNdO7vpc9JjiuyG+pQUX5+?=
- =?us-ascii?Q?Aycx9A7TRp3zOgTFRvFBWcBlBifWYnr4fBYe+53rB/S2P3gTPvgRgtHPjC/0?=
- =?us-ascii?Q?HF1H9cYIs0r86NIivUfRviUikgz3FfEaa3kE3ZFD1yZ63ICSUySnppQdm90m?=
- =?us-ascii?Q?rHdh+SYf3EuUvPGWsxdLjSUoWZnfXMeNBSzxGwmHf6WrR1aVwZN7YTcYJlJf?=
- =?us-ascii?Q?HgTTSj+jYcmvH6JVmTZdpq8P4jW9prj6bR1536jIcoy9QR2uQQdGZ5Q1c3iG?=
- =?us-ascii?Q?wQI7cc36GE1vIbQFW8xv2zGFb1AnP/htVZhrH3AAsz3OOjIr3byRcBA3xqde?=
- =?us-ascii?Q?FE7GcmFcwks1KyhdO1DF3kck59ulo6IiA45mX9RIiUlfOWe8fQEe40odb49G?=
- =?us-ascii?Q?Y/bswzfer82Qvtvdtmj0OQsR/67pE3uH6obNV+DCesrGsprVu6LI6u0iv7Ad?=
- =?us-ascii?Q?nEX1w/9wiKE91w5MhJfUbu3lH+HBNOvR058oQWgus8lpKvcEPrm+rHOJjQyL?=
- =?us-ascii?Q?ArxfHa4Hyif9TiBRlT5SxcBBWdc1Yj4=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 223c68ac-a1a6-4e45-8b37-08da47b988c7
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 12:39:02.5333
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BCu1+G0di9Z8Lt7xFCK5nwVyIz3D1O7uUQ7V3kDX7TEAa8eu77nadxfcxXwBZCF3JO3GB9Yu5z14IMUoFvD6Kxb/EZsUh6VIW4XM06yaVHE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR10MB2771
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
- definitions=2022-06-06_04:2022-06-02,2022-06-06 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=999
- adultscore=0 bulkscore=0 mlxscore=0 suspectscore=0 malwarescore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206060057
-X-Proofpoint-GUID: US79jBR1Okx6VGFzX-oFqaIeMf7ecGb1
-X-Proofpoint-ORIG-GUID: US79jBR1Okx6VGFzX-oFqaIeMf7ecGb1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <365b8a54-5177-d728-5a95-dc561c1971ef@quicinc.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jun 04, 2022 at 10:32:46AM +0200, 'Dmitry Vyukov' via syzkaller-bugs wrote:
-> On Fri, 3 Jun 2022 at 18:12, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > But again, is this a "real and able to be triggered from userspace"
-> > problem, or just fault-injection-induced?
+On Sun, Jun 05, 2022 at 11:51:38PM +0530, Harsh Agarwal wrote:
 > 
-> Then this is something to fix in the fault injection subsystem.
-> Testing systems shouldn't be reporting false positives.
-> What allocations cannot fail in real life? Is it <=page_size?
+> On 6/2/2022 1:23 AM, Andrew Halaney wrote:
+> > On Tue, May 31, 2022 at 01:50:17PM +0530, Harsh Agarwal wrote:
+> > > Currently the DWC3 driver supports only single port controller
+> > > which requires at most 2 PHYs ie HS and SS PHYs.
+> > > 
+> > > But some SOCs have a "multiport" USB DWC3 controller where a
+> > > single controller supports multiple ports and each port have
+> > > their own PHYs. Refactor PHY logic to support the same.
+> > > 
+> > > Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+> > > ---
+> > >   drivers/usb/dwc3/core.c   | 400 +++++++++++++++++++++++++++++++++-------------
+> > >   drivers/usb/dwc3/core.h   |  12 +-
+> > >   drivers/usb/dwc3/drd.c    |  16 +-
+> > >   drivers/usb/dwc3/gadget.c |   4 +-
+> > >   4 files changed, 305 insertions(+), 127 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > > index 5734219..5cc799e 100644
+> > > --- a/drivers/usb/dwc3/core.c
+> > > +++ b/drivers/usb/dwc3/core.c
+> > > @@ -120,7 +120,7 @@ static void __dwc3_set_mode(struct work_struct *work)
+> > >   {
+> > >   	struct dwc3 *dwc = work_to_dwc(work);
+> > >   	unsigned long flags;
+> > > -	int ret;
+> > > +	int i, ret;
+> > >   	u32 reg;
+> > >   	mutex_lock(&dwc->mutex);
+> > > @@ -189,10 +189,13 @@ static void __dwc3_set_mode(struct work_struct *work)
+> > >   		if (ret) {
+> > >   			dev_err(dwc->dev, "failed to initialize host\n");
+> > >   		} else {
+> > > -			if (dwc->usb2_phy)
+> > > -				otg_set_vbus(dwc->usb2_phy->otg, true);
+> > > -			phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+> > > -			phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+> > > +			for (i = 0; i < dwc->num_usb2_phy; i++) {
+> > > +				if (dwc->usb2_phy[i])
+> > > +					otg_set_vbus(dwc->usb2_phy[i]->otg, true);
+> > > +				phy_set_mode(dwc->usb2_generic_phy[i], PHY_MODE_USB_HOST);
+> > > +			}
+> > > +			for (i = 0; i < dwc->num_usb3_phy; i++)
+> > > +				phy_set_mode(dwc->usb3_generic_phy[i], PHY_MODE_USB_HOST);
+> > >   			if (dwc->dis_split_quirk) {
+> > >   				reg = dwc3_readl(dwc->regs, DWC3_GUCTL3);
+> > >   				reg |= DWC3_GUCTL3_SPLITDISABLE;
+> > > @@ -205,10 +208,10 @@ static void __dwc3_set_mode(struct work_struct *work)
+> > >   		dwc3_event_buffers_setup(dwc);
+> > > -		if (dwc->usb2_phy)
+> > > -			otg_set_vbus(dwc->usb2_phy->otg, false);
+> > > -		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_DEVICE);
+> > > -		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_DEVICE);
+> > > +		if (dwc->usb2_phy[0])
+> > > +			otg_set_vbus(dwc->usb2_phy[0]->otg, false);
+> > > +		phy_set_mode(dwc->usb2_generic_phy[0], PHY_MODE_USB_DEVICE);
+> > > +		phy_set_mode(dwc->usb3_generic_phy[0], PHY_MODE_USB_DEVICE);
+> > >   		ret = dwc3_gadget_init(dwc);
+> > >   		if (ret)
+> > > @@ -656,6 +659,7 @@ static int dwc3_core_ulpi_init(struct dwc3 *dwc)
+> > >    */
+> > >   static int dwc3_phy_setup(struct dwc3 *dwc)
+> > >   {
+> > > +	int i;
+> > >   	unsigned int hw_mode;
+> > >   	u32 reg;
+> > > @@ -716,7 +720,8 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
+> > >   	if (dwc->dis_del_phy_power_chg_quirk)
+> > >   		reg &= ~DWC3_GUSB3PIPECTL_DEPOCHANGE;
+> > > -	dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
+> > > +	for (i = 0; i < dwc->num_usb3_phy; i++)
+> > > +		dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(i), reg);
+> > >   	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+> > > @@ -730,7 +735,8 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
+> > >   		} else if (dwc->hsphy_interface &&
+> > >   				!strncmp(dwc->hsphy_interface, "ulpi", 4)) {
+> > >   			reg |= DWC3_GUSB2PHYCFG_ULPI_UTMI;
+> > > -			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
+> > > +			for (i = 0; i < dwc->num_usb2_phy; i++)
+> > > +				dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
+> > >   		} else {
+> > >   			/* Relying on default value. */
+> > >   			if (!(reg & DWC3_GUSB2PHYCFG_ULPI_UTMI))
+> > > @@ -787,7 +793,8 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
+> > >   	if (dwc->dis_u2_freeclk_exists_quirk)
+> > >   		reg &= ~DWC3_GUSB2PHYCFG_U2_FREECLK_EXISTS;
+> > > -	dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
+> > > +	for (i = 0; i < dwc->num_usb2_phy; i++)
+> > > +		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
+> > >   	return 0;
+> > >   }
+> > > @@ -826,17 +833,23 @@ static void dwc3_clk_disable(struct dwc3 *dwc)
+> > >   static void dwc3_core_exit(struct dwc3 *dwc)
+> > >   {
+> > > +	int i;
+> > >   	dwc3_event_buffers_cleanup(dwc);
+> > > -	usb_phy_shutdown(dwc->usb2_phy);
+> > > -	usb_phy_shutdown(dwc->usb3_phy);
+> > > -	phy_exit(dwc->usb2_generic_phy);
+> > > -	phy_exit(dwc->usb3_generic_phy);
+> > > +	for (i = 0; i < dwc->num_usb2_phy; i++) {
+> > > +		usb_phy_shutdown(dwc->usb2_phy[i]);
+> > > +		usb_phy_set_suspend(dwc->usb2_phy[i], 1);
+> > > +		phy_exit(dwc->usb2_generic_phy[i]);
+> > > +		phy_power_off(dwc->usb2_generic_phy[i]);
+> > > +	}
+> > > +
+> > > +	for (i = 0; i < dwc->num_usb3_phy; i++) {
+> > > +		usb_phy_shutdown(dwc->usb3_phy[i]);
+> > > +		usb_phy_set_suspend(dwc->usb3_phy[i], 1);
+> > > +		phy_exit(dwc->usb3_generic_phy[i]);
+> > > +		phy_power_off(dwc->usb3_generic_phy[i]);
+> > > +	}
+> > > -	usb_phy_set_suspend(dwc->usb2_phy, 1);
+> > > -	usb_phy_set_suspend(dwc->usb3_phy, 1);
+> > > -	phy_power_off(dwc->usb2_generic_phy);
+> > > -	phy_power_off(dwc->usb3_generic_phy);
+> > >   	dwc3_clk_disable(dwc);
+> > >   	reset_control_assert(dwc->reset);
+> > >   }
+> > > @@ -1039,7 +1052,7 @@ static int dwc3_core_init(struct dwc3 *dwc)
+> > >   {
+> > >   	unsigned int		hw_mode;
+> > >   	u32			reg;
+> > > -	int			ret;
+> > > +	int			ret, i;
+> > >   	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+> > > @@ -1067,16 +1080,24 @@ static int dwc3_core_init(struct dwc3 *dwc)
+> > >   		dwc->phys_ready = true;
+> > >   	}
+> > > -	usb_phy_init(dwc->usb2_phy);
+> > > -	usb_phy_init(dwc->usb3_phy);
+> > > -	ret = phy_init(dwc->usb2_generic_phy);
+> > > -	if (ret < 0)
+> > > -		goto err0a;
+> > > +	for (i = 0; i < dwc->num_usb2_phy; i++)
+> > > +		usb_phy_init(dwc->usb2_phy[i]);
+> > > +	for (i = 0; i < dwc->num_usb3_phy; i++)
+> > > +		usb_phy_init(dwc->usb3_phy[i]);
+> > > -	ret = phy_init(dwc->usb3_generic_phy);
+> > > -	if (ret < 0) {
+> > > -		phy_exit(dwc->usb2_generic_phy);
+> > > -		goto err0a;
+> > > +	for (i = 0; i < dwc->num_usb2_phy; i++) {
+> > > +		ret = phy_init(dwc->usb2_generic_phy[i]);
+> > > +		if (ret < 0)
+> > > +			goto err0a;
+> > Should we clean up the prior phys that did not fail? There's a couple
+> > loops where that question stands in this patch.
+> I am just keeping the Generic PHY implementation as is.
+> Earlier also we were cleaning up the HS PHY incase
+> SS PHY fails, so keeping the same for Multiport.
+> For you please point out if you find any major concern here?
+
+Earlier, there was only one usb2_generic_phy/usb3_generic_phy, so if
+phy_init(usb2_generic_phy) returned an error, it wasn't initialized, and
+it did not need a matching call to phy_exit(usb2_generic_phy).
+
+That is being called though ifthe superspeed phy fails since the
+highspeed one did successfully init, so things are cleaned up in the
+old cases.
+
+My point now is that, say with 4 highspeed phys, the 3rd one fails.
+i.e. phy_init(usb2_generic_phy[i]) where i == 2. In that case we don't
+ever call phy_exit() on the first two phys. I wouldn't say it is a
+major concern, but cleanup here is not fully done.
+
+You could do something like this to do clean it all up, kind of annoying
+though:
+
+	for (i = 0; i < dwc->num_usb2_phy; i++) {
+		ret = phy_init(dwc->usb2_generic_phy[i]);
+		if (ret < 0) {
+			/* clean up prior phys we initialized */
+			for (j = 0; j < i; j++)
+				phy_exit(usb2_generic_phy[j]);
+			goto err0a;
+		}
+	}
+
+Thanks,
+Andrew
+
 > 
-
-Apparently in 2014, anything less than *EIGHT?!!* pages succeeded!
-
-https://lwn.net/Articles/627419/
-
-I have been on the look out since that article and never seen anyone
-mention it changing.  I think we should ignore that and say that
-anything over PAGE_SIZE can fail.  Possibly we could go smaller than
-PAGE_SIZE...
-
-regards,
-dan carpenter
+> > > +	}
+> > > +
+> > > +	for (i = 0; i < dwc->num_usb3_phy; i++) {
+> > > +		ret = phy_init(dwc->usb3_generic_phy[i]);
+> > > +		if (ret < 0) {
+> > > +			for (i = 0; i < dwc->num_usb2_phy; i++)
+> > > +				phy_exit(dwc->usb2_generic_phy[i]);
+> > > +			goto err0a;
+> > > +		}
+> > >   	}
+> > >   	ret = dwc3_core_soft_reset(dwc);
+> > > @@ -1086,15 +1107,19 @@ static int dwc3_core_init(struct dwc3 *dwc)
+> > >   	if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD &&
+> > >   	    !DWC3_VER_IS_WITHIN(DWC3, ANY, 194A)) {
+> > >   		if (!dwc->dis_u3_susphy_quirk) {
+> > > -			reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
+> > > -			reg |= DWC3_GUSB3PIPECTL_SUSPHY;
+> > > -			dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
+> > > +			for (i = 0; i < dwc->num_usb3_phy; i++) {
+> > > +				reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(i));
+> > > +				reg |= DWC3_GUSB3PIPECTL_SUSPHY;
+> > > +				dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(i), reg);
+> > > +			}
+> > >   		}
+> > >   		if (!dwc->dis_u2_susphy_quirk) {
+> > > -			reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+> > > -			reg |= DWC3_GUSB2PHYCFG_SUSPHY;
+> > > -			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
+> > > +			for (i = 0; i < dwc->num_usb2_phy; i++) {
+> > > +				reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(i));
+> > > +				reg |= DWC3_GUSB2PHYCFG_SUSPHY;
+> > > +				dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
+> > > +			}
+> > >   		}
+> > >   	}
+> > > @@ -1113,15 +1138,19 @@ static int dwc3_core_init(struct dwc3 *dwc)
+> > >   	dwc3_set_incr_burst_type(dwc);
+> > > -	usb_phy_set_suspend(dwc->usb2_phy, 0);
+> > > -	usb_phy_set_suspend(dwc->usb3_phy, 0);
+> > > -	ret = phy_power_on(dwc->usb2_generic_phy);
+> > > -	if (ret < 0)
+> > > -		goto err2;
+> > > +	for (i = 0; i < dwc->num_usb2_phy; i++) {
+> > > +		usb_phy_set_suspend(dwc->usb2_phy[i], 0);
+> > > +		ret = phy_power_on(dwc->usb2_generic_phy[i]);
+> > > +		if (ret < 0)
+> > > +			goto err2;
+> > > +	}
+> > > -	ret = phy_power_on(dwc->usb3_generic_phy);
+> > > -	if (ret < 0)
+> > > -		goto err3;
+> > > +	for (i = 0; i < dwc->num_usb3_phy; i++) {
+> > > +		usb_phy_set_suspend(dwc->usb3_phy[i], 0);
+> > > +		ret = phy_power_on(dwc->usb3_generic_phy[i]);
+> > > +		if (ret < 0)
+> > > +			goto err3;
+> > > +	}
+> > >   	ret = dwc3_event_buffers_setup(dwc);
+> > >   	if (ret) {
+> > > @@ -1229,20 +1258,29 @@ static int dwc3_core_init(struct dwc3 *dwc)
+> > >   	return 0;
+> > >   err4:
+> > > -	phy_power_off(dwc->usb3_generic_phy);
+> > > +	for (i = 0; i < dwc->num_usb3_phy; i++)
+> > > +		phy_power_off(dwc->usb3_generic_phy[i]);
+> > >   err3:
+> > > -	phy_power_off(dwc->usb2_generic_phy);
+> > > +	for (i = 0; i < dwc->num_usb2_phy; i++)
+> > > +		phy_power_off(dwc->usb2_generic_phy[i]);
+> > >   err2:
+> > > -	usb_phy_set_suspend(dwc->usb2_phy, 1);
+> > > -	usb_phy_set_suspend(dwc->usb3_phy, 1);
+> > > +	for (i = 0; i < dwc->num_usb2_phy; i++)
+> > > +		usb_phy_set_suspend(dwc->usb2_phy[i], 1);
+> > > +	for (i = 0; i < dwc->num_usb3_phy; i++)
+> > > +		usb_phy_set_suspend(dwc->usb3_phy[i], 1);
+> > >   err1:
+> > > -	usb_phy_shutdown(dwc->usb2_phy);
+> > > -	usb_phy_shutdown(dwc->usb3_phy);
+> > > -	phy_exit(dwc->usb2_generic_phy);
+> > > -	phy_exit(dwc->usb3_generic_phy);
+> > > +	for (i = 0; i < dwc->num_usb2_phy; i++) {
+> > > +		usb_phy_shutdown(dwc->usb2_phy[i]);
+> > > +		phy_exit(dwc->usb2_generic_phy[i]);
+> > > +	}
+> > > +
+> > > +	for (i = 0; i < dwc->num_usb3_phy; i++) {
+> > > +		usb_phy_shutdown(dwc->usb3_phy[i]);
+> > > +		phy_exit(dwc->usb3_generic_phy[i]);
+> > > +	}
+> > >   err0a:
+> > >   	dwc3_ulpi_exit(dwc);
+> > > @@ -1251,53 +1289,172 @@ static int dwc3_core_init(struct dwc3 *dwc)
+> > >   	return ret;
+> > >   }
+> > > -static int dwc3_core_get_phy(struct dwc3 *dwc)
+> > > +static struct usb_phy *dwc3_core_get_phy_by_handle_with_node(struct device *dev,
+> > > +	const char *phandle, u8 index, struct device_node *lookup_node)
+> > > +{
+> > > +	struct device_node *node;
+> > > +	struct usb_phy	*phy;
+> > > +
+> > > +	node = of_parse_phandle(lookup_node, phandle, index);
+> > > +	if (!node) {
+> > > +		dev_err(dev, "failed to get %s phandle in %pOF node\n", phandle,
+> > > +			dev->of_node);
+> > > +		return ERR_PTR(-ENODEV);
+> > > +	}
+> > > +	phy = devm_usb_get_phy_by_node(dev, node, NULL);
+> > > +	of_node_put(node);
+> > > +	return phy;
+> > > +}
+> > > +
+> > > +static int dwc3_count_phys(struct dwc3 *dwc, struct device_node *lookup_node)
+> > > +{
+> > > +	int count;
+> > > +
+> > > +	count = of_count_phandle_with_args(lookup_node, "phys", NULL);
+> > > +
+> > > +	if (count == -ENOENT)
+> > > +		count = of_count_phandle_with_args(lookup_node, "usb-phy", NULL);
+> > > +
+> > > +	if (count == 1) {
+> > > +		dwc->num_usb2_phy++;
+> > > +	} else if (count == 2) {
+> > > +		dwc->num_usb2_phy++;
+> > > +		dwc->num_usb3_phy++;
+> > > +	} else {
+> > > +		return count;
+> > > +	}
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int dwc3_extract_num_phys(struct dwc3 *dwc)
+> > > +{
+> > > +	struct device_node	*ports, *port;
+> > > +	int			ret;
+> > > +
+> > > +	/* Find if any "multiport" child is present inside DWC3*/
+> > Nit, space after DWC3
+> Done
+> > 
+> > > +	for_each_available_child_of_node(dwc->dev->of_node, ports) {
+> > > +		if (!strcmp(ports->name, "multiport"))
+> > > +			break;
+> > > +	}
+> > > +	if (!ports) {
+> > > +		dwc->num_usb2_phy = 1;
+> > > +		dwc->num_usb3_phy = 1;
+> > > +	} else {
+> > > +		for_each_available_child_of_node(ports, port) {
+> > > +			ret  = dwc3_count_phys(dwc, port);
+> > > +			if (ret)
+> > > +				return ret;
+> > > +		}
+> > > +	}
+> > > +	dev_info(dwc->dev, "Num of HS and SS PHY are %u %u\n", dwc->num_usb2_phy,
+> > > +									dwc->num_usb3_phy);
+> > > +
+> > > +	dwc->usb2_phy = devm_kzalloc(dwc->dev,
+> > > +		sizeof(*dwc->usb2_phy) * dwc->num_usb2_phy, GFP_KERNEL);
+> > > +	if (!dwc->usb2_phy)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	dwc->usb3_phy = devm_kzalloc(dwc->dev,
+> > > +		sizeof(*dwc->usb3_phy) * dwc->num_usb3_phy, GFP_KERNEL);
+> > > +	if (!dwc->usb3_phy)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	dwc->usb2_generic_phy = devm_kzalloc(dwc->dev,
+> > > +		sizeof(*dwc->usb2_generic_phy) * dwc->num_usb2_phy, GFP_KERNEL);
+> > > +	if (!dwc->usb2_generic_phy)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	dwc->usb3_generic_phy = devm_kzalloc(dwc->dev,
+> > > +		sizeof(*dwc->usb3_generic_phy) * dwc->num_usb3_phy, GFP_KERNEL);
+> > > +	if (!dwc->usb3_generic_phy)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int dwc3_core_get_phy_by_node(struct dwc3 *dwc,
+> > > +		struct device_node *lookup_node, int i)
+> > >   {
+> > >   	struct device		*dev = dwc->dev;
+> > > -	struct device_node	*node = dev->of_node;
+> > > -	int ret;
+> > > +	int			ret;
+> > > -	if (node) {
+> > > -		dwc->usb2_phy = devm_usb_get_phy_by_phandle(dev, "usb-phy", 0);
+> > > -		dwc->usb3_phy = devm_usb_get_phy_by_phandle(dev, "usb-phy", 1);
+> > > +	if (lookup_node) {
+> > > +		dwc->usb2_phy[i] = devm_of_usb_get_phy_by_phandle(dev,
+> > > +								"usb-phy", 0, lookup_node);
+> > > +		dwc->usb3_phy[i] = devm_of_usb_get_phy_by_phandle(dev,
+> > > +								"usb-phy", 1, lookup_node);
+> > >   	} else {
+> > > -		dwc->usb2_phy = devm_usb_get_phy(dev, USB_PHY_TYPE_USB2);
+> > > -		dwc->usb3_phy = devm_usb_get_phy(dev, USB_PHY_TYPE_USB3);
+> > > +		dwc->usb2_phy[i] = devm_usb_get_phy(dev, USB_PHY_TYPE_USB2);
+> > > +		dwc->usb3_phy[i] = devm_usb_get_phy(dev, USB_PHY_TYPE_USB3);
+> > >   	}
+> > > -	if (IS_ERR(dwc->usb2_phy)) {
+> > > -		ret = PTR_ERR(dwc->usb2_phy);
+> > > +	if (IS_ERR(dwc->usb2_phy[i])) {
+> > > +		ret = PTR_ERR(dwc->usb2_phy[i]);
+> > >   		if (ret == -ENXIO || ret == -ENODEV)
+> > > -			dwc->usb2_phy = NULL;
+> > > +			dwc->usb2_phy[i] = NULL;
+> > >   		else
+> > >   			return dev_err_probe(dev, ret, "no usb2 phy configured\n");
+> > >   	}
+> > > -	if (IS_ERR(dwc->usb3_phy)) {
+> > > -		ret = PTR_ERR(dwc->usb3_phy);
+> > > +	if (IS_ERR(dwc->usb3_phy[i])) {
+> > > +		ret = PTR_ERR(dwc->usb3_phy[i]);
+> > >   		if (ret == -ENXIO || ret == -ENODEV)
+> > > -			dwc->usb3_phy = NULL;
+> > > +			dwc->usb3_phy[i] = NULL;
+> > >   		else
+> > >   			return dev_err_probe(dev, ret, "no usb3 phy configured\n");
+> > >   	}
+> > > -	dwc->usb2_generic_phy = devm_phy_get(dev, "usb2-phy");
+> > > -	if (IS_ERR(dwc->usb2_generic_phy)) {
+> > > -		ret = PTR_ERR(dwc->usb2_generic_phy);
+> > > -		if (ret == -ENOSYS || ret == -ENODEV)
+> > > -			dwc->usb2_generic_phy = NULL;
+> > > +	dwc->usb2_generic_phy[i] = devm_of_phy_get(dev, lookup_node, "usb2-phy");
+> > > +	if (IS_ERR(dwc->usb2_generic_phy[i])) {
+> > > +		ret = PTR_ERR(dwc->usb2_generic_phy[i]);
+> > > +		if (ret == -ENODEV)
+> > I think this can be -ENOSYS if !CONFIG_GENERIC_PHY
+> For now, I have added it back
+> > 
+> > > +			dwc->usb2_generic_phy[i] = NULL;
+> > >   		else
+> > >   			return dev_err_probe(dev, ret, "no usb2 phy configured\n");
+> > >   	}
+> > > -	dwc->usb3_generic_phy = devm_phy_get(dev, "usb3-phy");
+> > > -	if (IS_ERR(dwc->usb3_generic_phy)) {
+> > > -		ret = PTR_ERR(dwc->usb3_generic_phy);
+> > > -		if (ret == -ENOSYS || ret == -ENODEV)
+> > > -			dwc->usb3_generic_phy = NULL;
+> > > +	dwc->usb3_generic_phy[i] = devm_of_phy_get(dev, lookup_node, "usb3-phy");
+> > > +	if (IS_ERR(dwc->usb3_generic_phy[i])) {
+> > > +		ret = PTR_ERR(dwc->usb3_generic_phy[i]);
+> > > +		if (ret == -ENODEV)
+> > > +			dwc->usb3_generic_phy[i] = NULL;
+> > >   		else
+> > >   			return dev_err_probe(dev, ret, "no usb3 phy configured\n");
+> > >   	}
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int dwc3_core_get_phy(struct dwc3 *dwc)
+> > > +{
+> > > +	struct device		*dev = dwc->dev;
+> > > +	struct device_node	*node = dev->of_node;
+> > > +	struct device_node	*ports, *port;
+> > > +	int ret, i = 0;
+> > > +
+> > > +	ret = dwc3_extract_num_phys(dwc);
+> > > +	if (ret) {
+> > > +		dev_err(dwc->dev, "Unable to extract number of PHYs\n");
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	/* Find if any "multiport" child is present inside DWC3*/
+> > Nit, space after DWC3
+> Done
+> > 
+> > > +	for_each_available_child_of_node(node, ports) {
+> > > +		if (!strcmp(ports->name, "multiport"))
+> > > +			break;
+> > > +	}
+> > > +
+> > > +	if (!ports) {
+> > > +		ret = dwc3_core_get_phy_by_node(dwc, node, 0);
+> > > +		if (ret)
+> > > +			return ret;
+> > > +	} else {
+> > > +		for_each_available_child_of_node(ports, port) {
+> > > +			ret = dwc3_core_get_phy_by_node(dwc, port, i);
+> > > +			if (ret)
+> > > +				return ret;
+> > > +			i++;
+> > > +		}
+> > > +	}
+> > >   	return 0;
+> > >   }
+> > > @@ -1305,16 +1462,16 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
+> > >   static int dwc3_core_init_mode(struct dwc3 *dwc)
+> > >   {
+> > >   	struct device *dev = dwc->dev;
+> > > -	int ret;
+> > > +	int i, ret;
+> > >   	switch (dwc->dr_mode) {
+> > >   	case USB_DR_MODE_PERIPHERAL:
+> > >   		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
+> > > -		if (dwc->usb2_phy)
+> > > -			otg_set_vbus(dwc->usb2_phy->otg, false);
+> > > -		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_DEVICE);
+> > > -		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_DEVICE);
+> > > +		if (dwc->usb2_phy[0])
+> > > +			otg_set_vbus(dwc->usb2_phy[0]->otg, false);
+> > > +		phy_set_mode(dwc->usb2_generic_phy[0], PHY_MODE_USB_DEVICE);
+> > > +		phy_set_mode(dwc->usb3_generic_phy[0], PHY_MODE_USB_DEVICE);
+> > >   		ret = dwc3_gadget_init(dwc);
+> > >   		if (ret)
+> > > @@ -1323,10 +1480,15 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
+> > >   	case USB_DR_MODE_HOST:
+> > >   		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+> > > -		if (dwc->usb2_phy)
+> > > -			otg_set_vbus(dwc->usb2_phy->otg, true);
+> > > -		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+> > > -		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+> > > +		for (i = 0; i < dwc->num_usb3_phy; i++) {
+> > > +			if (dwc->usb2_phy[i])
+> > > +				otg_set_vbus(dwc->usb2_phy[i]->otg, true);
+> > > +			phy_set_mode(dwc->usb2_generic_phy[i], PHY_MODE_USB_HOST);
+> > > +		}
+> > > +
+> > > +
+> > > +		for (i = 0; i < dwc->num_usb3_phy; i++)
+> > > +			phy_set_mode(dwc->usb3_generic_phy[i], PHY_MODE_USB_HOST);
+> > >   		ret = dwc3_host_init(dwc);
+> > >   		if (ret)
+> > > @@ -1674,7 +1836,7 @@ static int dwc3_probe(struct platform_device *pdev)
+> > >   	struct resource		*res, dwc_res;
+> > >   	struct dwc3		*dwc;
+> > > -	int			ret;
+> > > +	int			ret, i;
+> > >   	void __iomem		*regs;
+> > > @@ -1839,15 +2001,18 @@ static int dwc3_probe(struct platform_device *pdev)
+> > >   	dwc3_debugfs_exit(dwc);
+> > >   	dwc3_event_buffers_cleanup(dwc);
+> > > -	usb_phy_shutdown(dwc->usb2_phy);
+> > > -	usb_phy_shutdown(dwc->usb3_phy);
+> > > -	phy_exit(dwc->usb2_generic_phy);
+> > > -	phy_exit(dwc->usb3_generic_phy);
+> > > -
+> > > -	usb_phy_set_suspend(dwc->usb2_phy, 1);
+> > > -	usb_phy_set_suspend(dwc->usb3_phy, 1);
+> > > -	phy_power_off(dwc->usb2_generic_phy);
+> > > -	phy_power_off(dwc->usb3_generic_phy);
+> > > +	for (i = 0; i < dwc->num_usb2_phy; i++) {
+> > > +		usb_phy_shutdown(dwc->usb2_phy[i]);
+> > > +		usb_phy_set_suspend(dwc->usb2_phy[i], 1);
+> > > +		phy_exit(dwc->usb2_generic_phy[i]);
+> > > +		phy_power_off(dwc->usb2_generic_phy[i]);
+> > > +	}
+> > > +	for (i = 0; i < dwc->num_usb3_phy; i++) {
+> > > +		usb_phy_shutdown(dwc->usb3_phy[i]);
+> > > +		usb_phy_set_suspend(dwc->usb3_phy[i], 1);
+> > > +		phy_exit(dwc->usb3_generic_phy[i]);
+> > > +		phy_power_off(dwc->usb3_generic_phy[i]);
+> > > +	}
+> > >   	dwc3_ulpi_exit(dwc);
+> > > @@ -1929,6 +2094,7 @@ static int dwc3_core_init_for_resume(struct dwc3 *dwc)
+> > >   static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > >   {
+> > > +	int i;
+> > >   	unsigned long	flags;
+> > >   	u32 reg;
+> > > @@ -1951,17 +2117,21 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > >   		/* Let controller to suspend HSPHY before PHY driver suspends */
+> > >   		if (dwc->dis_u2_susphy_quirk ||
+> > >   		    dwc->dis_enblslpm_quirk) {
+> > > -			reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+> > > -			reg |=  DWC3_GUSB2PHYCFG_ENBLSLPM |
+> > > -				DWC3_GUSB2PHYCFG_SUSPHY;
+> > > -			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
+> > > -
+> > > -			/* Give some time for USB2 PHY to suspend */
+> > > -			usleep_range(5000, 6000);
+> > > +			for (i = 0; i < dwc->num_usb2_phy; i++) {
+> > > +				reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(i));
+> > > +				reg |=  DWC3_GUSB2PHYCFG_ENBLSLPM |
+> > > +					DWC3_GUSB2PHYCFG_SUSPHY;
+> > > +				dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
+> > > +
+> > > +				/* Give some time for USB2 PHY to suspend */
+> > > +				usleep_range(5000, 6000);
+> > > +			}
+> > >   		}
+> > > -		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
+> > > -		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+> > > +		for (i = 0; i < dwc->num_usb2_phy; i++)
+> > > +			phy_pm_runtime_put_sync(dwc->usb2_generic_phy[i]);
+> > > +		for (i = 0; i < dwc->num_usb3_phy; i++)
+> > > +			phy_pm_runtime_put_sync(dwc->usb3_generic_phy[i]);
+> > >   		break;
+> > >   	case DWC3_GCTL_PRTCAP_OTG:
+> > >   		/* do nothing during runtime_suspend */
+> > > @@ -1989,7 +2159,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > >   static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+> > >   {
+> > >   	unsigned long	flags;
+> > > -	int		ret;
+> > > +	int		i, ret;
+> > >   	u32		reg;
+> > >   	switch (dwc->current_dr_role) {
+> > > @@ -2012,17 +2182,21 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+> > >   			break;
+> > >   		}
+> > >   		/* Restore GUSB2PHYCFG bits that were modified in suspend */
+> > > -		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+> > > -		if (dwc->dis_u2_susphy_quirk)
+> > > -			reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
+> > > +		for (i = 0; i < dwc->num_usb2_phy; i++) {
+> > > +			reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(i));
+> > > +			if (dwc->dis_u2_susphy_quirk)
+> > > +				reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
+> > > -		if (dwc->dis_enblslpm_quirk)
+> > > -			reg &= ~DWC3_GUSB2PHYCFG_ENBLSLPM;
+> > > +			if (dwc->dis_enblslpm_quirk)
+> > > +				reg &= ~DWC3_GUSB2PHYCFG_ENBLSLPM;
+> > > -		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
+> > > +			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i), reg);
+> > > +		}
+> > > -		phy_pm_runtime_get_sync(dwc->usb2_generic_phy);
+> > > -		phy_pm_runtime_get_sync(dwc->usb3_generic_phy);
+> > > +		for (i = 0; i < dwc->num_usb2_phy; i++)
+> > > +			phy_pm_runtime_get_sync(dwc->usb2_generic_phy[i]);
+> > > +		for (i = 0; i < dwc->num_usb3_phy; i++)
+> > > +			phy_pm_runtime_get_sync(dwc->usb3_generic_phy[i]);
+> > >   		break;
+> > >   	case DWC3_GCTL_PRTCAP_OTG:
+> > >   		/* nothing to do on runtime_resume */
+> > > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > > index 81c486b..c169bf1 100644
+> > > --- a/drivers/usb/dwc3/core.h
+> > > +++ b/drivers/usb/dwc3/core.h
+> > > @@ -1020,6 +1020,8 @@ struct dwc3_scratchpad_array {
+> > >    * @usb_psy: pointer to power supply interface.
+> > >    * @usb2_phy: pointer to USB2 PHY
+> > >    * @usb3_phy: pointer to USB3 PHY
+> > > + * @num_usb2_phy: Number of HS ports controlled by the core
+> > > + * @num_dsphy: Number of SS ports controlled by the core
+> > s/num_dsphy/num_usb3_phy/
+> Done
+> > 
+> > >    * @usb2_generic_phy: pointer to USB2 PHY
+> > >    * @usb3_generic_phy: pointer to USB3 PHY
+> > >    * @phys_ready: flag to indicate that PHYs are ready
+> > > @@ -1147,11 +1149,13 @@ struct dwc3 {
+> > >   	struct reset_control	*reset;
+> > > -	struct usb_phy		*usb2_phy;
+> > > -	struct usb_phy		*usb3_phy;
+> > > +	struct usb_phy		**usb2_phy;
+> > > +	struct usb_phy		**usb3_phy;
+> > > +	u32			num_usb2_phy;
+> > > +	u32			num_usb3_phy;
+> > > -	struct phy		*usb2_generic_phy;
+> > > -	struct phy		*usb3_generic_phy;
+> > > +	struct phy		**usb2_generic_phy;
+> > > +	struct phy		**usb3_generic_phy;
+> > >   	bool			phys_ready;
+> > > diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+> > > index 039bf24..404643f 100644
+> > > --- a/drivers/usb/dwc3/drd.c
+> > > +++ b/drivers/usb/dwc3/drd.c
+> > > @@ -384,10 +384,10 @@ void dwc3_otg_update(struct dwc3 *dwc, bool ignore_idstatus)
+> > >   		if (ret) {
+> > >   			dev_err(dwc->dev, "failed to initialize host\n");
+> > >   		} else {
+> > > -			if (dwc->usb2_phy)
+> > > -				otg_set_vbus(dwc->usb2_phy->otg, true);
+> > > -			if (dwc->usb2_generic_phy)
+> > > -				phy_set_mode(dwc->usb2_generic_phy,
+> > > +			if (dwc->usb2_phy[0])
+> > > +				otg_set_vbus(dwc->usb2_phy[0]->otg, true);
+> > > +			if (dwc->usb2_generic_phy[0])
+> > > +				phy_set_mode(dwc->usb2_generic_phy[0],
+> > >   					     PHY_MODE_USB_HOST);
+> > >   		}
+> > >   		break;
+> > > @@ -398,10 +398,10 @@ void dwc3_otg_update(struct dwc3 *dwc, bool ignore_idstatus)
+> > >   		dwc3_event_buffers_setup(dwc);
+> > >   		spin_unlock_irqrestore(&dwc->lock, flags);
+> > > -		if (dwc->usb2_phy)
+> > > -			otg_set_vbus(dwc->usb2_phy->otg, false);
+> > > -		if (dwc->usb2_generic_phy)
+> > > -			phy_set_mode(dwc->usb2_generic_phy,
+> > > +		if (dwc->usb2_phy[0])
+> > > +			otg_set_vbus(dwc->usb2_phy[0]->otg, false);
+> > > +		if (dwc->usb2_generic_phy[0])
+> > > +			phy_set_mode(dwc->usb2_generic_phy[0],
+> > >   				     PHY_MODE_USB_DEVICE);
+> > >   		ret = dwc3_gadget_init(dwc);
+> > >   		if (ret)
+> > > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > > index 00427d1..e3b2a17 100644
+> > > --- a/drivers/usb/dwc3/gadget.c
+> > > +++ b/drivers/usb/dwc3/gadget.c
+> > > @@ -2872,8 +2872,8 @@ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
+> > >   	union power_supply_propval	val = {0};
+> > >   	int				ret;
+> > > -	if (dwc->usb2_phy)
+> > > -		return usb_phy_set_power(dwc->usb2_phy, mA);
+> > > +	if (dwc->usb2_phy[0])
+> > > +		return usb_phy_set_power(dwc->usb2_phy[0], mA);
+> > >   	if (!dwc->usb_psy)
+> > >   		return -EOPNOTSUPP;
+> > > -- 
+> > > 2.7.4
+> > > 
+> 
 
